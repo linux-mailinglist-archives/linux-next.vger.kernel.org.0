@@ -2,65 +2,69 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EE19446158
-	for <lists+linux-next@lfdr.de>; Fri,  5 Nov 2021 10:25:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD8EF446166
+	for <lists+linux-next@lfdr.de>; Fri,  5 Nov 2021 10:34:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232572AbhKEJ1r (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 5 Nov 2021 05:27:47 -0400
-Received: from foss.arm.com ([217.140.110.172]:57440 "EHLO foss.arm.com"
+        id S232546AbhKEJhV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 5 Nov 2021 05:37:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46068 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232546AbhKEJ1q (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 5 Nov 2021 05:27:46 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C2A3E2F;
-        Fri,  5 Nov 2021 02:25:06 -0700 (PDT)
-Received: from [10.57.45.134] (unknown [10.57.45.134])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9C7503F7B4;
-        Fri,  5 Nov 2021 02:25:05 -0700 (PDT)
-Subject: Re: linux-next: build failure in Linus' tree
+        id S230175AbhKEJhV (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 5 Nov 2021 05:37:21 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C24D46120E;
+        Fri,  5 Nov 2021 09:34:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1636104882;
+        bh=ryWKPdIthphOv1QYb6csNjfCJLapv+hZN1ZYnQ/shn4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Hung7XssMexOBvIUIadlPg5BQ9vK6i5Oos+9Kn3rIq+u7oTH1B+E6EnSafZctfzDP
+         g4U3TCsrNxOFmhOpRq1+FdompopqdvqW/CnzvGj9VXNyxjLkFA243x5g8iMs6MdJTp
+         XIPpj8vJzJ6XkFal6LL7AfwVmFv90n/P+qxXrVhmsejEG8qWxtskgkQ12vjH2X1xvU
+         GdfX1qDGCnLlCI/B7WFb4CPHVP54tMmNhxHXvTLo/EzET6vYDMaZ/Urs0P17uE+rjh
+         /gWwDQI/QrXa0OdOml2FWGvDDShqGXJ1409jOitSug99GEf1Ir5PMvTwe6wyDjYldk
+         koZ3W3q19NDgA==
+Date:   Fri, 5 Nov 2021 09:34:37 +0000
+From:   Will Deacon <will@kernel.org>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@kernel.org>
-References: <20211105155457.770efec2@canb.auug.org.au>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-Message-ID: <83c53b7b-611a-19fa-8779-ec223166a9fd@arm.com>
-Date:   Fri, 5 Nov 2021 09:25:04 +0000
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.14.0
+        Mark Rutland <mark.rutland@arm.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        "Steven Rostedt (VMware)" <rostedt@goodmis.org>
+Subject: Re: linux-next: manual merge of the arm64 tree with Linus' tree
+Message-ID: <20211105093437.GB32036@willie-the-truck>
+References: <20211104093208.0380c1f2@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20211105155457.770efec2@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211104093208.0380c1f2@canb.auug.org.au>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
-
-
-On 05/11/2021 04:54, Stephen Rothwell wrote:
+On Thu, Nov 04, 2021 at 09:32:08AM +1100, Stephen Rothwell wrote:
 > Hi all,
 > 
-> In Linus' tree, today's linux-next build (arm64 allmodconfig) failed
-> like this:
+> Today's linux-next merge of the arm64 tree got conflicts in:
 > 
-> ERROR: modpost: "this_cpu_has_cap" [drivers/hwtracing/coresight/coresight-trbe.ko] undefined!
+>   arch/arm64/include/asm/stacktrace.h
+>   arch/arm64/kernel/stacktrace.c
 > 
-> Caused by commit
+> between commit:
 > 
->    8a1065127d95 ("coresight: trbe: Add infrastructure for Errata handling")
+>   cd9bc2c92588 ("arm64: Recover kretprobe modified return address in stacktrace")
 > 
+> from Linus' tree and commit:
+> 
+>   552e196d88e5 ("arm64: ftrace: use HAVE_FUNCTION_GRAPH_RET_ADDR_PTR")
+> 
+> from the arm64 tree.
 
-Thanks for the report. We are aware of this issue and
-a fix is queued, which should soon hit the trees.
+D'oh, having realised this conflict last week, I completely forgot about
+it when queuing that fix from Mark. I'll just drop it and wait until -rc1.
 
-[0] https://lkml.kernel.org/r/20211103221256.725080-1-suzuki.poulose@arm.com
+Cheers,
 
-
-Kind regards
-Suzuki
-
+Will

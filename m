@@ -2,101 +2,145 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E1A7446311
-	for <lists+linux-next@lfdr.de>; Fri,  5 Nov 2021 13:00:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55388446A8A
+	for <lists+linux-next@lfdr.de>; Fri,  5 Nov 2021 22:27:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232813AbhKEMDA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 5 Nov 2021 08:03:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49804 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231852AbhKEMC7 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 5 Nov 2021 08:02:59 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14FCFC061714
-        for <linux-next@vger.kernel.org>; Fri,  5 Nov 2021 05:00:20 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id f8so32391613edy.4
-        for <linux-next@vger.kernel.org>; Fri, 05 Nov 2021 05:00:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=pcnnj//hupwk7SQwMIWvx0t9fgh62n4W8QNorpT6OJY=;
-        b=Jma07cKAEI4TW7czLObhnkthaFhVT+2kwa9LD5ImDhkYPWguWkxLTqBX/RlULT0WtY
-         ldRQdTVQj935EIYVjo1+QbKJOAxzxgHp25NvSCMcx9NtXleoaw6CJpcrLdeEFI8u+Rcq
-         cgeRDTpOpfT/6RH7yzrFJr4XyvAjpdDcBgBlNttcwRxdDw1exAbRSrZWT22lkpGTRVcg
-         NZ08Dcx7LIs0Mu1l/qfy8ugJAtSI+1fhZgpjls0n24PC9kfGtrSjIwq4EAupDUC0wATo
-         csGpZ0iJEYed4Vk01EqItBIg0RhwFP2d8NDWzwNIwbU6PDYLwATnjIoS3ib9h/9s/kTX
-         tGFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=pcnnj//hupwk7SQwMIWvx0t9fgh62n4W8QNorpT6OJY=;
-        b=vGKFpQcXhvCkWjLUBhlsxzG92q6hJlGEjQdidf2n2ENQcE4rAyPHlA8DHdsQEy6dVW
-         dQYhh1AP7NKN0IJMSyr8PaS7ipXU/7Zu17PyNrVSn84qxCtIiGZJPNyccJfiuA0Ky6Wy
-         kJYPFT/cXph0f33H6S4/GZS3FifrLrxjKt4xTm9T6CNfAZDAKkx7PGmha4nlVNdwJOtS
-         7hYr57lHDGTmoyY+BSmkTeKt1caeEDRJXoObJiEQXcmYk2bu7VdalkY2n+nc06JjXzvd
-         qe9/Bedl8U90JchCZLKDZTrcuHXWC4kI/UzjfPlyEcujBGvZoGLEIAsylnVwfnGAsdWk
-         h6lg==
-X-Gm-Message-State: AOAM5313wHpCC3cEfEUeB3AT67dch6n5sVOBMyYlfNGypYCmY3SN/9q1
-        4QBkJJE6uHgWCpIwJeUDGV19qCXvXDu9N+G2JU9j9w==
-X-Google-Smtp-Source: ABdhPJwJddqHmQFI3QxfmHl88Y1SrBi0RlvXFvHY6FSHCvF2r+VYBojJN06trFSpxswQm2bWmTxNUBEG072RwJxO+4M=
-X-Received: by 2002:a17:906:c302:: with SMTP id s2mr70650723ejz.499.1636113616961;
- Fri, 05 Nov 2021 05:00:16 -0700 (PDT)
+        id S231443AbhKEV3s (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 5 Nov 2021 17:29:48 -0400
+Received: from a8-73.smtp-out.amazonses.com ([54.240.8.73]:36411 "EHLO
+        a8-73.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229894AbhKEV3s (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 5 Nov 2021 17:29:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1636147627;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+        bh=nA5EcgBTrT0kHNVoUBhDgAUWVJ60y8pGdfCNhRpD5n4=;
+        b=KVXhGHCC8y3nVsEy3TBFQC5MQ0Pwhxrne0mCSoMDUMQDq2SEjDp4YSmnZgMpRCHx
+        QO5m/3xRjrg0b36StcVBs/rJtzc/YnzT5zAbohqb24GuoSqjFg65Va4CnU0aPPsaGp8
+        Vw/efZ+erMALbH8tzwgbri46nGOcZv49ohpgwOz4=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1636147627;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+        bh=nA5EcgBTrT0kHNVoUBhDgAUWVJ60y8pGdfCNhRpD5n4=;
+        b=eTPyx6mGckK6AHqeKuQ4EfG3U0hD7DuLMYUou2Q9gB2ySn6JDDu84MZiy4buA01E
+        F8SEH/mbaz+aKAMylIp7H6nnt5tEXWPXCZ1ucBskY+pXNKuBZxdu7AelWSYDwoTyPiG
+        iq3+aR0fL0LJDiaq+t2L6KU4yVFyOPxLlV6K0o0g=
+From:   lkft@linaro.org
+To:     lkft@linaro.org
+Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        linux-next@vger.kernel.org, shuah@kernel.org
+Subject: [REGRESSION] lkft kselftest for next-20211105
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 5 Nov 2021 17:30:06 +0530
-Message-ID: <CA+G9fYvPOHh_O4qtU=GKktTxR_G8tjFXjTsecSp2gTkHKeujSA@mail.gmail.com>
-Subject: parisc: stacktrace.c:25:21: error: implicit declaration of function '__kernel_text_address'
-To:     linux-parisc@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Helge Deller <deller@gmx.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Message-ID: <0100017cf1ff84d4-d3b765bb-c7a4-4fa9-be76-f9a38b57fd3b-000000@email.amazonses.com>
+Date:   Fri, 5 Nov 2021 21:27:07 +0000
+Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
+X-SES-Outgoing: 2021.11.05-54.240.8.73
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-[Please ignore this email if it is already reported ]
+## Build
+* kernel: 5.15.0
+* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+* git branch: master
+* git commit: b477ae38e81579a32caca7f4fb428275cb6b46c1
+* git describe: next-20211105
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20211105
 
-Regression found on parisc gcc-8/9/10 and gcc-11 built with defconfig
-Following build warnings / errors reported on linux next 20211105.
+## Regressions (compared to next-20211104)
+* i386, kselftest-net
+  - net.fib-onlink-tests.sh
+  - net.so_txtime.sh
 
-metadata:
-    git_describe: next-20211105
-    git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-    git_short_log: b477ae38e815 (\"Add linux-next specific files for 20211105\")
-    target_arch: parisc
-    toolchain: gcc-11
+* qemu_i386, kselftest-rtc
+  - rtc.rtctest
 
-build error :
---------------
-<stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [-Wcpp]
-arch/parisc/kernel/stacktrace.c: In function 'walk_stackframe':
-arch/parisc/kernel/stacktrace.c:25:21: error: implicit declaration of
-function '__kernel_text_address'
-[-Werror=implicit-function-declaration]
-   25 |                 if (__kernel_text_address(info.ip))
-      |                     ^~~~~~~~~~~~~~~~~~~~~
-cc1: some warnings being treated as errors
-make[3]: *** [scripts/Makefile.build:288:
-arch/parisc/kernel/stacktrace.o] Error 1
 
 Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-build link:
------------
-https://builds.tuxbuild.com/20U3L7IKgdLoEJQrfGdwlmczMDy/build.log
 
-build config:
--------------
-https://builds.tuxbuild.com/20U3L7IKgdLoEJQrfGdwlmczMDy/config
+## Fixes (compared to next-20211104)
+* qemu_arm, kselftest-timers
+  - timers.rtcpie
 
-# To install tuxmake on your system globally
-# sudo pip3 install -U tuxmake
-tuxmake --runtime podman --target-arch parisc --toolchain gcc-11
---kconfig defconfig
+* qemu_x86_64, kselftest-rtc
+  - rtc.rtctest
 
+
+## Test result summary
+total: 3111, pass: 1811, fail: 267, skip: 1033, xfail: 0
+
+## Build Summary
+
+## Test suites summary
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-lkdtm
+* kselftest-membarrier
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
 
 --
 Linaro LKFT

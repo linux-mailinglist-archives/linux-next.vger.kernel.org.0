@@ -2,177 +2,128 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 432AD445FA6
-	for <lists+linux-next@lfdr.de>; Fri,  5 Nov 2021 07:15:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2B03445FAA
+	for <lists+linux-next@lfdr.de>; Fri,  5 Nov 2021 07:17:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230488AbhKEGSD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 5 Nov 2021 02:18:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57366 "EHLO
+        id S231236AbhKEGUL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 5 Nov 2021 02:20:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbhKEGSD (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 5 Nov 2021 02:18:03 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35FA7C061714;
-        Thu,  4 Nov 2021 23:15:23 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HlqxL30X6z4xdL;
-        Fri,  5 Nov 2021 17:15:17 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1636092921;
-        bh=ABu42RiFT1taPHynORs6qxyIrsgHaPYvXtuZnDvLm28=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Phd/GLBGSIR5NA6U4OcbR4wyh40bYgco8LL429cImCmDIf0vz8USNvPLk2qJ5FD6p
-         pvfgD1rACbzSWc9IssJ45dmK8dw0d2rBhX2clDU05+79FbN3X2PhUFSmaYe7R/Us5j
-         RBLCybZssKNtLiIu9PBS57vjQ1Xpt6WBmjvH4SoYkdcePqfzTZxDeqy/ge+GP6qnxh
-         MVcz8w4Pmml1mJ033rzesx9tfUYtJLCKmgvSyqnr0iOTpwSN3uK3bSD6LNKQqPjN5z
-         BfTOpRZwlQiPkzbnyKGK1ahxgxqv8KX4gQqUNLIUcB1kQ5CnuQDvGAkogZE41Xjz7W
-         Iv4D7yeBZwmXw==
-Date:   Fri, 5 Nov 2021 17:15:17 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dave Airlie <airlied@linux.ie>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Subject: Re: linux-next: build failure after merge of the drm-misc tree
-Message-ID: <20211105171517.287de894@canb.auug.org.au>
-In-Reply-To: <20211101194223.749197c5@canb.auug.org.au>
-References: <20211015202648.258445ef@canb.auug.org.au>
-        <20211101194223.749197c5@canb.auug.org.au>
+        with ESMTP id S229456AbhKEGUJ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 5 Nov 2021 02:20:09 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D5C0C061714
+        for <linux-next@vger.kernel.org>; Thu,  4 Nov 2021 23:17:30 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id j9so7597462pgh.1
+        for <linux-next@vger.kernel.org>; Thu, 04 Nov 2021 23:17:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=40IFsXBNxGkQMBbPUYU6my0Mc4BiVKEJumQBuYWuRNI=;
+        b=V9fiJu9kgizN+vUzKQ8MY1LAQM6A9eBQBY6XIc1hhZrWJEww6lvBolXS3upRFsZNQt
+         XyVJA9hUhmpDBi0qAwYNsFcr6LphXYEdC4uqU4+OEwOyfCljh3SsjAYQ7ftH4xjz6gcr
+         Y7Gj1rqGF2kO2OvR/au3R1wZ99gDyBLY6DzBjCLdsRpWd5XDXroHq6lIdL9Uixc4i2Ax
+         GzzF2loFWCvo+BMw60SXahigsDOLmhJ68qUBxXW4wEoWTrVP5H+KFX/VPvJeXe0/+8du
+         C0CKPYE1Xg+iyZETTrbrnkUvE0dN21o4qrRX6+/rNohkUTvvycA+PcHptoYf6sMJHUA8
+         jeGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=40IFsXBNxGkQMBbPUYU6my0Mc4BiVKEJumQBuYWuRNI=;
+        b=NOjvBJeIpYNaV9ZMcLDsPNx23yvJ4Uy3o6q/JcoTwE7CXZFU/PyrDdBw3HFFcMABKz
+         MG57DhFJHbOJSdu8JJIqAA1joWQHGblzaHl4NPhvr4oobk0q15r3ZMRbnwRwpLwDY10V
+         z2Xh92oD3MsssbH8Y8Xb3rxqcYECuERKBY2rA/0Xjs2Xx9m5Tpd0z6biGfwB2GguKMge
+         JbY+ECstAS1NsZqtV3lwYJTqJNBbRD//UFl46GXOgcBZEJpFECYmRzTxNqz+VuIGvS1w
+         fKU25x90H9VR6L1tNu4wdbIpoN7LC5U0s6CmEYG9ssy+RbPS2AJ8P4l1xKnE+U2qFE36
+         7XJg==
+X-Gm-Message-State: AOAM531dr5j0Acu1lW0qimplQig0RbYbxyu84UoUSG2JYgpvHp7jvmt5
+        u4ldcb/C2CnrcJbdXkfWDZJtEvn08s+l6mfi
+X-Google-Smtp-Source: ABdhPJywy+WYDRYRKXzt3UTMCVM+yrhCTdpHZgQjn/7byGusNzDn+Kb0Korp4x5L6sK5GxBJ3hm1qg==
+X-Received: by 2002:a63:6c44:: with SMTP id h65mr40008827pgc.423.1636093049683;
+        Thu, 04 Nov 2021 23:17:29 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id d17sm6308367pfo.40.2021.11.04.23.17.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Nov 2021 23:17:29 -0700 (PDT)
+Message-ID: <6184cc79.1c69fb81.11afa.5f82@mx.google.com>
+Date:   Thu, 04 Nov 2021 23:17:29 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/f1z=jp8ned0U5MhcxSkEu39";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: v5.15-10251-g42298a382ab9
+X-Kernelci-Report-Type: test
+Subject: next/pending-fixes baseline: 399 runs,
+ 1 regressions (v5.15-10251-g42298a382ab9)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/f1z=jp8ned0U5MhcxSkEu39
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/pending-fixes baseline: 399 runs, 1 regressions (v5.15-10251-g42298a38=
+2ab9)
 
-Hi all,
+Regressions Summary
+-------------------
 
-On Mon, 1 Nov 2021 19:42:23 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> On Fri, 15 Oct 2021 20:26:48 +1100 Stephen Rothwell <sfr@canb.auug.org.au=
-> wrote:
-> >
-> > After merging the drm-misc tree, today's linux-next build (arm
-> > multi_v7_defconfig) failed like this:
-> >=20
-> > drivers/gpu/drm/drm_modeset_lock.c:111:29: error: conflicting types for=
- '__stack_depot_save'
-> >   111 | static depot_stack_handle_t __stack_depot_save(void)
-> >       |                             ^~~~~~~~~~~~~~~~~~
-> > In file included from include/linux/page_ext.h:7,
-> >                  from include/linux/mm.h:25,
-> >                  from include/linux/kallsyms.h:13,
-> >                  from include/linux/bpf.h:20,
-> >                  from include/linux/bpf-cgroup.h:5,
-> >                  from include/linux/cgroup-defs.h:22,
-> >                  from include/linux/cgroup.h:28,
-> >                  from include/linux/memcontrol.h:13,
-> >                  from include/linux/swap.h:9,
-> >                  from include/linux/suspend.h:5,
-> >                  from include/linux/regulator/consumer.h:35,
-> >                  from include/linux/i2c.h:18,
-> >                  from include/drm/drm_crtc.h:28,
-> >                  from include/drm/drm_atomic.h:31,
-> >                  from drivers/gpu/drm/drm_modeset_lock.c:24:
-> > include/linux/stackdepot.h:18:22: note: previous declaration of '__stac=
-k_depot_save' was here
-> >    18 | depot_stack_handle_t __stack_depot_save(unsigned long *entries,
-> >       |                      ^~~~~~~~~~~~~~~~~~
-> >=20
-> > Caused by commit
-> >=20
-> >   cd06ab2fd48f ("drm/locking: add backtrace for locking contended locks=
- without backoff")
-> >=20
-> > This may only have been revealed because of another fix I have had to
-> > apply today.
-> >=20
-> > I have applied the following patch for today.
-> >=20
-> > From: Stephen Rothwell <sfr@canb.auug.org.au>
-> > Date: Fri, 15 Oct 2021 20:17:52 +1100
-> > Subject: [PATCH] drm/locking: fix for name conflict
-> >=20
-> > Fixes: cd06ab2fd48f ("drm/locking: add backtrace for locking contended =
-locks without backoff")
-> > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > ---
-> >  drivers/gpu/drm/drm_modeset_lock.c | 6 +++---
-> >  1 file changed, 3 insertions(+), 3 deletions(-)
-> >=20
-> > diff --git a/drivers/gpu/drm/drm_modeset_lock.c b/drivers/gpu/drm/drm_m=
-odeset_lock.c
-> > index 4d32b61fa1fd..ee36dd20900d 100644
-> > --- a/drivers/gpu/drm/drm_modeset_lock.c
-> > +++ b/drivers/gpu/drm/drm_modeset_lock.c
-> > @@ -79,7 +79,7 @@
-> >  static DEFINE_WW_CLASS(crtc_ww_class);
-> > =20
-> >  #if IS_ENABLED(CONFIG_DRM_DEBUG_MODESET_LOCK)
-> > -static noinline depot_stack_handle_t __stack_depot_save(void)
-> > +static noinline depot_stack_handle_t __drm_stack_depot_save(void)
-> >  {
-> >  	unsigned long entries[8];
-> >  	unsigned int n;
-> > @@ -108,7 +108,7 @@ static void __stack_depot_print(depot_stack_handle_=
-t stack_depot)
-> >  	kfree(buf);
-> >  }
-> >  #else /* CONFIG_DRM_DEBUG_MODESET_LOCK */
-> > -static depot_stack_handle_t __stack_depot_save(void)
-> > +static depot_stack_handle_t __drm_stack_depot_save(void)
-> >  {
-> >  	return 0;
-> >  }
-> > @@ -317,7 +317,7 @@ static inline int modeset_lock(struct drm_modeset_l=
-ock *lock,
-> >  		ret =3D 0;
-> >  	} else if (ret =3D=3D -EDEADLK) {
-> >  		ctx->contended =3D lock;
-> > -		ctx->stack_depot =3D __stack_depot_save();
-> > +		ctx->stack_depot =3D __drm_stack_depot_save();
-> >  	}
-> > =20
-> >  	return ret;
->=20
-> This has reappeared today.  I don't know what happened to the drm-misc
-> tree over the weeked :-(
->=20
-> I have reapplied the above fix.
+platform             | arch  | lab          | compiler | defconfig        |=
+ regressions
+---------------------+-------+--------------+----------+------------------+=
+------------
+meson-g12b-odroid-n2 | arm64 | lab-baylibre | gcc-10   | defconfig+crypto |=
+ 1          =
 
-So the above drm-misc commit is now in the drm tree, but its fix up
-commit vanished from the drm-misc tree over the past weekend :-(
 
---=20
-Cheers,
-Stephen Rothwell
+  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
+v5.15-10251-g42298a382ab9/plan/baseline/
 
---Sig_/f1z=jp8ned0U5MhcxSkEu39
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+  Test:     baseline
+  Tree:     next
+  Branch:   pending-fixes
+  Describe: v5.15-10251-g42298a382ab9
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      42298a382ab96bf39f529d88eccda07ee0048436 =
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGEy/UACgkQAVBC80lX
-0GwLYgf/YsXemq1FgUmgNNpY1yHPV39pjn7pDRTmtxoFSEa4Fo61slx+DkE9qeRm
-PSH5cAobM2bk8Ir8cG2iuqR2J0A2j1lzwh/FTX0YShmB5sPxYz9NQ1S+Oe8lTUc7
-uhuRJPj/4CDimckFkiYjF5Nwlim0E7sOSapBuFW7RBzcMhRWlXn7foF6xc385mUi
-pQvxiE6TIHzq8NgaFwNyvs9ouVz1dchou+phRXX187ENX958+YHYl9QZLJJ8MMjJ
-kHk+pMN3md6pGWLsu34t1/+9aAqG1aVKChPgRVRotwmKZMj/lJAIrmxE6Is6gdpY
-eVQOAtHXzcLJkDujD2OSOo+RIyHEqQ==
-=q40p
------END PGP SIGNATURE-----
 
---Sig_/f1z=jp8ned0U5MhcxSkEu39--
+Test Regressions
+---------------- =
+
+
+
+platform             | arch  | lab          | compiler | defconfig        |=
+ regressions
+---------------------+-------+--------------+----------+------------------+=
+------------
+meson-g12b-odroid-n2 | arm64 | lab-baylibre | gcc-10   | defconfig+crypto |=
+ 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/618496acef7f86ae5b3358e4
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.15-10251=
+-g42298a382ab9/arm64/defconfig+crypto/gcc-10/lab-baylibre/baseline-meson-g1=
+2b-odroid-n2.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.15-10251=
+-g42298a382ab9/arm64/defconfig+crypto/gcc-10/lab-baylibre/baseline-meson-g1=
+2b-odroid-n2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/618496acef7f86ae5b335=
+8e5
+        new failure (last pass: v5.15-7822-g1fca2beef9c6) =
+
+ =20

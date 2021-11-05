@@ -2,123 +2,132 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ABEA445C72
-	for <lists+linux-next@lfdr.de>; Thu,  4 Nov 2021 23:56:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57EFA445D99
+	for <lists+linux-next@lfdr.de>; Fri,  5 Nov 2021 02:51:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231322AbhKDW67 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 4 Nov 2021 18:58:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45778 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232025AbhKDW67 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 4 Nov 2021 18:58:59 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15CFEC061714;
-        Thu,  4 Nov 2021 15:56:20 -0700 (PDT)
+        id S229945AbhKEByJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 4 Nov 2021 21:54:09 -0400
+Received: from gandalf.ozlabs.org ([150.107.74.76]:46787 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229806AbhKEByJ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 4 Nov 2021 21:54:09 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HlfBl1gqGz4xd8;
-        Fri,  5 Nov 2021 09:56:15 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Hlk4t0ZkWz4xbP;
+        Fri,  5 Nov 2021 12:51:25 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1636066576;
-        bh=grcmNFBX6Zg8EjXAyRbS7cvifulEVMPhW4wGYPqFZpo=;
-        h=Date:From:To:Cc:Subject:From;
-        b=FpJBo9U2tgsR3Gxadiz2PIAO1+/NOW7HC0GSYz9svyzJx4iih7DHRgNc+IaUnwjZg
-         UZOcL2DBZDNJoK8ovwUc3hSGiS7d6dMORrMem261SnZl1FiuAx4r1zV524RgcC8Xk1
-         didyKvcdoWknhV9kR1Jf3wlFweCqapNSDlKQ3tBa2vEZWU1iMh9nS5jw238HBTk1kl
-         sDTBqnRBtNImyVw86OssrDTjE7ZETZ5LsmTRZnm6XC/YGhqfQLlFoC3b2wX8GojUxo
-         8jTl0wLJ2s8vvCumS1ksNGuvcJBltCDNX8VVBtEaXxTycmIcYSAkdEAkjKnWpbnb7Q
-         aqBFGXe2UGwYA==
-Date:   Fri, 5 Nov 2021 09:56:14 +1100
+        s=201702; t=1636077089;
+        bh=2lOyapLlzAgrwNZPiurVfK316EULLqggli6pFQMqWI8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=jgpzdLEIFcN6zPmEM1joby9HCnYZCANFqtS8W/5jejxAjNWSmGFWpsxSoXBtjnTPF
+         Tui2ddzquLLlL3Wsumc9Wm8YMpE21zZugxHREPCWAu70PcX2Ulo1/DT7jXtb8b5/UK
+         sh/JixoPWkM6lX5bJUPyTwcGnq1XZxFQe6RAekZZZjQ8b01e5VfjtsM1qNN/deDD51
+         RtLSaN8M5+m9Zj+IX3YnB35vFjv2rgWt6s1y2x+LFG3DCckqmshj3XTtWpbsXHyRyu
+         dU15fu2cvqC+WGokSEYIPsjx6jdbcpTp1pZBYKePPeFQ1/EneAq6YqsYYzW05dQ1oL
+         i5WRqc0FFvS6Q==
+Date:   Fri, 5 Nov 2021 12:51:22 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Bjorn Helgaas <bhelgaas@google.com>
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Marc Zyngier <maz@kernel.org>, Joerg Roedel <jroedel@suse.de>,
-        Robin Murphy <robin.murphy@arm.com>,
+To:     Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the pci tree
-Message-ID: <20211105095614.6bc6fc96@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Matthew Auld <matthew.auld@intel.com>
+Subject: Re: linux-next: manual merge of the char-misc tree with the
+ drm-intel tree
+Message-ID: <20211105125122.21d336ac@canb.auug.org.au>
+In-Reply-To: <20211028182753.56b6a174@canb.auug.org.au>
+References: <20211028182753.56b6a174@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/qdt613cmfmMZgU7Svgtyos_";
+Content-Type: multipart/signed; boundary="Sig_/1he=p4nehQe6V5iBAMGQAGk";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/qdt613cmfmMZgU7Svgtyos_
+--Sig_/1he=p4nehQe6V5iBAMGQAGk
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the pci tree, today's linux-next build (x86_64 allmodconfig)
-failed like this:
+On Thu, 28 Oct 2021 18:27:53 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>=20
+> Today's linux-next merge of the char-misc tree got a conflict in:
+>=20
+>   drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c
+>=20
+> between commit:
+>=20
+>   5740211ea442 ("drm/i915/dmabuf: fix broken build")
+>=20
+> from the drm-intel tree and commit:
+>=20
+>   16b0314aa746 ("dma-buf: move dma-buf symbols into the DMA_BUF module na=
+mespace")
+>=20
+> from the char-misc tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+> --=20
+> Cheers,
+> Stephen Rothwell
+>=20
+> diff --cc drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c
+> index a45d0ec2c5b6,abb854281347..000000000000
+> --- a/drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c
+> +++ b/drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c
+> @@@ -12,13 -13,8 +13,15 @@@
+>   #include "i915_gem_object.h"
+>   #include "i915_scatterlist.h"
+>  =20
+>  +#if defined(CONFIG_X86)
+>  +#include <asm/smp.h>
+>  +#else
+>  +#define wbinvd_on_all_cpus() \
+>  +	pr_warn(DRIVER_NAME ": Missing cache flush in %s\n", __func__)
+>  +#endif
+>  +
+> + MODULE_IMPORT_NS(DMA_BUF);
+> +=20
+>   I915_SELFTEST_DECLARE(static bool force_different_devices;)
+>  =20
+>   static struct drm_i915_gem_object *dma_buf_to_obj(struct dma_buf *buf)
 
-drivers/iommu/apple-dart.c: In function 'apple_dart_get_resv_regions':
-drivers/iommu/apple-dart.c:762:2: error: implicit declaration of function '=
-iommu_dma_get_resv_regions'; did you mean 'iommu_get_resv_regions'? [-Werro=
-r=3Dimplicit-function-declaration]
-  762 |  iommu_dma_get_resv_regions(dev, head);
-      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~
-      |  iommu_get_resv_regions
-
-Caused by commit
-
-  946d619fa25f ("iommu/dart: Exclude MSI doorbell from PCIe device IOVA ran=
-ge")
-
-Unfortunately, the linux/dma-iommu.h include was removed by commit
-
-  b2b2781a9755 ("iommu/dart: Clean up IOVA cookie crumbs")
-
-which is now in Linus' tree.
-
-I have added this merge fixup for today:
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Fri, 5 Nov 2021 09:51:19 +1100
-Subject: [PATCH] iommu/dart: restore include of linux/dma-iommu.h
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/iommu/apple-dart.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/iommu/apple-dart.c b/drivers/iommu/apple-dart.c
-index b7265a8e9540..565ef5598811 100644
---- a/drivers/iommu/apple-dart.c
-+++ b/drivers/iommu/apple-dart.c
-@@ -15,6 +15,7 @@
- #include <linux/bitfield.h>
- #include <linux/clk.h>
- #include <linux/dev_printk.h>
-+#include <linux/dma-iommu.h>
- #include <linux/dma-mapping.h>
- #include <linux/err.h>
- #include <linux/interrupt.h>
---=20
-2.33.0
+This is now a conflict between the drm-intel tree and Linux' tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/qdt613cmfmMZgU7Svgtyos_
+--Sig_/1he=p4nehQe6V5iBAMGQAGk
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGEZQ4ACgkQAVBC80lX
-0Gy78AgAhesX5qd981QechtQbh6vkMpBaEJTO6DBC23V9UXnZUbqcs/wbP/0Jtlz
-YSWkhU6cHhS8FWnr591+T/fB9lq/lE5TmOisUWC5WlwkXBiEXnEVFZ/vYLR1iIh0
-4OPpgBOSbZu4efKENIBwb9p7E7Mh7Ldc9nc14BWIbdd3e47DKs7qjJbvO/bx+/nM
-qnEDqs418R5XiLqdqpfhHkeT2lVlEYXsoFZHsb2FRQO3cgtc+vPDk8/zshQdg7Jl
-Lh37uTUszSlg86XKdG9b762gowadLnLzxEbf4L5seUPD4+f3Z5MJD0+Y2msbekbl
-wX3dy8H5JEJukE5URb2f5Bh6vp/SYw==
-=yQqQ
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGEjhoACgkQAVBC80lX
+0GwH4Af/V9J988QeNptA56hLZgn3wchP6cRFnhcMG6FT3+kxwo97+wludh3alREX
+wFaD54Ta2NyV6cWgkLzf+jb+r4BqhRDNSuCi6/MZEv1U9rc0w95om6/xrn+GGcKx
+g30RFwahGjDIjiEbCVLm2IS2gJWMBVDyMAqugKjdmrJFR/ewdUjv9vXrwFR39W8w
+IWiVZ2wHNUsO8rBD3U/KJYuN6C+dXf/Cs9aohd2UhG/5/6x+yQWMdjvmrSlIWU+g
+d7/zZKTnkzGaxCXt+L6k3yKHv0MSpTugQdb4sCVB4spjuP+1UPzF/83agDqwIbzw
+xlfjQo+C1Z5jRRT+CINSHSU8aNIxAA==
+=z6S2
 -----END PGP SIGNATURE-----
 
---Sig_/qdt613cmfmMZgU7Svgtyos_--
+--Sig_/1he=p4nehQe6V5iBAMGQAGk--

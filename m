@@ -2,109 +2,228 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6831244628E
-	for <lists+linux-next@lfdr.de>; Fri,  5 Nov 2021 12:13:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02FC344630D
+	for <lists+linux-next@lfdr.de>; Fri,  5 Nov 2021 12:57:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232112AbhKELQT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 5 Nov 2021 07:16:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:55646 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232113AbhKELQR (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 5 Nov 2021 07:16:17 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1636110817;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4L8AX+w4Ke7CRvZlZWNnuwq05ggdhTDpEkQn90YoaUI=;
-        b=ETxQO7lTOOnfw0QZbGRZe94WKz7BHwxphep0yKL3lLB9H4yGEknuCqj5BohBiYFgPDRECG
-        GvG1IuYHnCOajkaJxgpXEDRqQ42votD6wLIm445MyPic3RH1Cokus+kx2b5fqIt5LmFYVp
-        kWvli9bewJ+sRLkIHVLoucnKqLtgAl0=
-Received: from mail-yb1-f200.google.com (mail-yb1-f200.google.com
- [209.85.219.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-459-cxl4dEgfPlu0Xi6COITIJw-1; Fri, 05 Nov 2021 07:13:36 -0400
-X-MC-Unique: cxl4dEgfPlu0Xi6COITIJw-1
-Received: by mail-yb1-f200.google.com with SMTP id w5-20020a25ac05000000b005c55592df4dso4712867ybi.12
-        for <linux-next@vger.kernel.org>; Fri, 05 Nov 2021 04:13:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=4L8AX+w4Ke7CRvZlZWNnuwq05ggdhTDpEkQn90YoaUI=;
-        b=MQwUTV3ZtTTfUOI5sT8PpwHEu1ItpFzx48OqPO2LZcIJWPAWSJ/RueZilvjh+Wb8w9
-         vBwdV48W+U/dscS34jS4EFrkLGicjdcL902uW5s1XG+16AmIDtAFa5a2wSb70qRhUYjL
-         RIwLCARNizS3tcENJyDDWkJq4Oi6IGKOVroqYqzdDJxDq1UMB5PRb5ZmJjGowBFmYq9n
-         zn1rQQaBpaaeS3zLjDnUEp4CIzir2FM3mABwgCUT2xCQlDwzVoU1nvfcCuLdXOE+qfm8
-         U+gWTqdLf0QM0DSUbTwNyhppQ46eu0XuOpDFHc4R0soKUJdr3pExbrLLhvjiatP7/Rff
-         zBMw==
-X-Gm-Message-State: AOAM530nOnwoOkClrW8PGnSXnf5BEzQ3R3gCqzECGlUCH+gUKfaD1361
-        2h+FEFRw5s4U5Dp/6aKKmHWJGCkorTPMMYudpYFN8kfurmLUzQ77z7iqcN5thT+yDEV9s2iG8yS
-        dShO7ThG6qF+SbqGUjxt1LEp+1ektWv714WBA5w==
-X-Received: by 2002:a25:b9cc:: with SMTP id y12mr40238509ybj.153.1636110816232;
-        Fri, 05 Nov 2021 04:13:36 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwGfbLlFgufRWMb5+uWNgX/+6tRc/bcxOQyuxeETqdgetXoJntR9Gi/r7ki1/xNipfvY/9Efcsm2BSJbU6sLOg=
-X-Received: by 2002:a25:b9cc:: with SMTP id y12mr40238481ybj.153.1636110816070;
- Fri, 05 Nov 2021 04:13:36 -0700 (PDT)
+        id S232788AbhKEMAa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 5 Nov 2021 08:00:30 -0400
+Received: from wout5-smtp.messagingengine.com ([64.147.123.21]:44801 "EHLO
+        wout5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231852AbhKEMA3 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 5 Nov 2021 08:00:29 -0400
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id CD5943200C46;
+        Fri,  5 Nov 2021 07:57:48 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Fri, 05 Nov 2021 07:57:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm1; bh=GXv8uTQQMC84AFsDfN1s4dkYTlk
+        J+uJwixHFe05xs5A=; b=G9vj57WOaV98UrEPEj0k756GLwtGvkKCgNeWfJYlzLO
+        8p3n1moUFQLu8Rgc3PImQElOxqG8OlB9CcsncF9nRDlvtZI0McDLOiAd1iUZCkos
+        sH4jgzv99x23szWPoI7Btceq7RG8gGnTC7jVF5cbG4m+fEqcHTgqPoCW0Ow2XhEa
+        ugUqIy8CaZRBN+MgV25uG90nTExvnz1kgQZhzK7ZdNTyV7BkAMZelYssKmjk90dX
+        bw9KNQywnYNrCfC/iLGCIaL04KxA6GKOA6CZqrW6dlUr9CcuHmegnkfUeM5wU5tl
+        hti53I7VSUyUJR2A+LM8g7uYKSeIWGeS3nsJ0afBv2Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=GXv8uT
+        QQMC84AFsDfN1s4dkYTlkJ+uJwixHFe05xs5A=; b=heQkImP7etvn9nYSz4a+vX
+        KS10HYncfm65v6J74cBSPuraY2HdAyUI88i6bEEL1D7nSczbdalb1IUOjyVocyBA
+        B6Wox3qo2EH2WOQO6HfBRbil3kBFvk8tpvRwAI0+Cua+u5Q2lFtbzziXYF31jdVr
+        JXM6wN49ouljb537NLE8rHpIbnCiyj8VDG1UDeh0UgVtUWMTzMjZjbmVVWDfp27q
+        afTR7yU61RqP+mCTPIkSGJDV/lg06TuUai1mx00ms7vyX8pYvOvXXnDmpCzgBcmd
+        iktyEYJP1u0gyKIgjP6V3/+PWcGYf8WNoubmFN86k9rdsLce/qjvY4C6ANXg9v6A
+        ==
+X-ME-Sender: <xms:OxyFYTz9_K8EJfG6WNKMucHsQTV85gIeC1kOEV5Cjr6noLJJyFJ1Hg>
+    <xme:OxyFYbTWgf0T39im5a6pICEfC3xPdSPm255dQFtpwds8poWzhRFwFFqVSp9S537b0
+    zVEOTAvYovmRTxvqOU>
+X-ME-Received: <xmr:OxyFYdV6fpR3rC45oQ_yUpLF-BiSBXMoIibqBxB7w-xoaD4HImftM_yUomDiiDiKYSK_xvkNK7QElH9gUNo8bgGrRXd125dfl1FWg2gs>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrtdeigdefvdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihimhgv
+    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
+    gvrhhnpeelkeeghefhuddtleejgfeljeffheffgfeijefhgfeufefhtdevteegheeiheeg
+    udenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrg
+    igihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:OxyFYdgWdROWw882YshFuN4RvocnR07SK_xcHxoh449QPLVRqPNv7g>
+    <xmx:OxyFYVCOxBbf9Ozi6E8hFC10wu0PAaKOMiYpmx8qKXMvCJxlA2XDHg>
+    <xmx:OxyFYWIUM1zbwaVAg62wgoVTkvq2JorCdGzAUVCX1Np4qpEjacdaDg>
+    <xmx:PByFYZ3CRXHVFGNcxR6gpkkXMoo6m5nChbNS1Kar2blgGR2s-DLBhw>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 5 Nov 2021 07:57:47 -0400 (EDT)
+Date:   Fri, 5 Nov 2021 12:57:45 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Jani Nikula <jani.nikula@intel.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Dave Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+Subject: Re: linux-next: build failure after merge of the drm-misc tree
+Message-ID: <20211105115745.pg2a33quk63l4434@gilmour>
+References: <20211015202648.258445ef@canb.auug.org.au>
+ <20211101194223.749197c5@canb.auug.org.au>
+ <20211105171517.287de894@canb.auug.org.au>
+ <874k8qampc.fsf@intel.com>
 MIME-Version: 1.0
-References: <YYIHXGSb2O5va0vA@T590> <85F2E9AC-385F-4BCA-BD3C-7A093442F87F@kernel.dk>
- <CAHj4cs-pTYoksSQDjfFpK13Xtg0jB6EOvhfOZu5cDHowZa=ueg@mail.gmail.com> <f95deb32-59a0-1fc1-b7b2-92583a5ef4de@kernel.dk>
-In-Reply-To: <f95deb32-59a0-1fc1-b7b2-92583a5ef4de@kernel.dk>
-From:   Yi Zhang <yi.zhang@redhat.com>
-Date:   Fri, 5 Nov 2021 19:13:24 +0800
-Message-ID: <CAHj4cs_HyO5yJvP-2ZGZynioBeFWvmBS63PSo=W24+h0dBm1rg@mail.gmail.com>
-Subject: Re: [bug report] WARNING: CPU: 1 PID: 1386 at block/blk-mq-sched.c:432
- blk_mq_sched_insert_request+0x54/0x178
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Ming Lei <ming.lei@redhat.com>,
-        Steffen Maier <maier@linux.ibm.com>,
-        linux-block <linux-block@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="vkojbrwivjvcbsco"
+Content-Disposition: inline
+In-Reply-To: <874k8qampc.fsf@intel.com>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Nov 4, 2021 at 3:03 AM Jens Axboe <axboe@kernel.dk> wrote:
->
-> On 11/2/21 10:00 PM, Yi Zhang wrote:
-> >>>
-> >>> Hello Jens,
-> >>>
-> >>> I guess the issue could be the following code run without grabbing
-> >>> ->q_usage_counter from blk_mq_alloc_request() and blk_mq_alloc_reques=
-t_hctx().
-> >>>
-> >>> .rq_flags       =3D q->elevator ? RQF_ELV : 0,
-> >>>
-> >>> then elevator is switched to real one from none, and check on q->elev=
-ator
-> >>> becomes not consistent.
-> >>
-> >> Indeed, that=E2=80=99s where I was going with this. I have a patch, te=
-sting it locally but it=E2=80=99s getting late. Will send it out tomorrow. =
-The nice benefit is that it allows dropping the weird ref get on plug flush=
-, and batches getting the refs as well.
-> >>
+
+--vkojbrwivjvcbsco
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi,
+
+On Fri, Nov 05, 2021 at 01:03:43PM +0200, Jani Nikula wrote:
+> On Fri, 05 Nov 2021, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> > Hi all,
 > >
-> > Hi Jens
-> > Here is the log in case you still need it. :)
->
-> Can you retry with the updated for-next pulled into -git?
+> > On Mon, 1 Nov 2021 19:42:23 +1100 Stephen Rothwell <sfr@canb.auug.org.a=
+u> wrote:
+> >>
+> >> On Fri, 15 Oct 2021 20:26:48 +1100 Stephen Rothwell <sfr@canb.auug.org=
+=2Eau> wrote:
+> >> >
+> >> > After merging the drm-misc tree, today's linux-next build (arm
+> >> > multi_v7_defconfig) failed like this:
+> >> >=20
+> >> > drivers/gpu/drm/drm_modeset_lock.c:111:29: error: conflicting types =
+for '__stack_depot_save'
+> >> >   111 | static depot_stack_handle_t __stack_depot_save(void)
+> >> >       |                             ^~~~~~~~~~~~~~~~~~
+> >> > In file included from include/linux/page_ext.h:7,
+> >> >                  from include/linux/mm.h:25,
+> >> >                  from include/linux/kallsyms.h:13,
+> >> >                  from include/linux/bpf.h:20,
+> >> >                  from include/linux/bpf-cgroup.h:5,
+> >> >                  from include/linux/cgroup-defs.h:22,
+> >> >                  from include/linux/cgroup.h:28,
+> >> >                  from include/linux/memcontrol.h:13,
+> >> >                  from include/linux/swap.h:9,
+> >> >                  from include/linux/suspend.h:5,
+> >> >                  from include/linux/regulator/consumer.h:35,
+> >> >                  from include/linux/i2c.h:18,
+> >> >                  from include/drm/drm_crtc.h:28,
+> >> >                  from include/drm/drm_atomic.h:31,
+> >> >                  from drivers/gpu/drm/drm_modeset_lock.c:24:
+> >> > include/linux/stackdepot.h:18:22: note: previous declaration of '__s=
+tack_depot_save' was here
+> >> >    18 | depot_stack_handle_t __stack_depot_save(unsigned long *entri=
+es,
+> >> >       |                      ^~~~~~~~~~~~~~~~~~
+> >> >=20
+> >> > Caused by commit
+> >> >=20
+> >> >   cd06ab2fd48f ("drm/locking: add backtrace for locking contended lo=
+cks without backoff")
+> >> >=20
+> >> > This may only have been revealed because of another fix I have had to
+> >> > apply today.
+> >> >=20
+> >> > I have applied the following patch for today.
+> >> >=20
+> >> > From: Stephen Rothwell <sfr@canb.auug.org.au>
+> >> > Date: Fri, 15 Oct 2021 20:17:52 +1100
+> >> > Subject: [PATCH] drm/locking: fix for name conflict
+> >> >=20
+> >> > Fixes: cd06ab2fd48f ("drm/locking: add backtrace for locking contend=
+ed locks without backoff")
+> >> > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> >> > ---
+> >> >  drivers/gpu/drm/drm_modeset_lock.c | 6 +++---
+> >> >  1 file changed, 3 insertions(+), 3 deletions(-)
+> >> >=20
+> >> > diff --git a/drivers/gpu/drm/drm_modeset_lock.c b/drivers/gpu/drm/dr=
+m_modeset_lock.c
+> >> > index 4d32b61fa1fd..ee36dd20900d 100644
+> >> > --- a/drivers/gpu/drm/drm_modeset_lock.c
+> >> > +++ b/drivers/gpu/drm/drm_modeset_lock.c
+> >> > @@ -79,7 +79,7 @@
+> >> >  static DEFINE_WW_CLASS(crtc_ww_class);
+> >> > =20
+> >> >  #if IS_ENABLED(CONFIG_DRM_DEBUG_MODESET_LOCK)
+> >> > -static noinline depot_stack_handle_t __stack_depot_save(void)
+> >> > +static noinline depot_stack_handle_t __drm_stack_depot_save(void)
+> >> >  {
+> >> >  	unsigned long entries[8];
+> >> >  	unsigned int n;
+> >> > @@ -108,7 +108,7 @@ static void __stack_depot_print(depot_stack_hand=
+le_t stack_depot)
+> >> >  	kfree(buf);
+> >> >  }
+> >> >  #else /* CONFIG_DRM_DEBUG_MODESET_LOCK */
+> >> > -static depot_stack_handle_t __stack_depot_save(void)
+> >> > +static depot_stack_handle_t __drm_stack_depot_save(void)
+> >> >  {
+> >> >  	return 0;
+> >> >  }
+> >> > @@ -317,7 +317,7 @@ static inline int modeset_lock(struct drm_modese=
+t_lock *lock,
+> >> >  		ret =3D 0;
+> >> >  	} else if (ret =3D=3D -EDEADLK) {
+> >> >  		ctx->contended =3D lock;
+> >> > -		ctx->stack_depot =3D __stack_depot_save();
+> >> > +		ctx->stack_depot =3D __drm_stack_depot_save();
+> >> >  	}
+> >> > =20
+> >> >  	return ret;
+> >>=20
+> >> This has reappeared today.  I don't know what happened to the drm-misc
+> >> tree over the weeked :-(
+> >>=20
+> >> I have reapplied the above fix.
+> >
+> > So the above drm-misc commit is now in the drm tree, but its fix up
+> > commit vanished from the drm-misc tree over the past weekend :-(
+>=20
+> Cc: drm-misc maintainers.
+>=20
+> We normally point drm-misc/for-linux-next at drm-misc-next, *except* to
+> drm-misc-next-fixes during the merge window. This is because
+> drm-misc-next already starts accumulating stuff that's headed to one
+> release later, e.g. currently v5.17. I think that's part of the reason.
 
-Hi Jens
+Indeed
 
-Sorry for the delay, the issue cannot be reproduced now.
+> I probably should have pushed c4f08d7246a5 ("drm/locking: fix
+> __stack_depot_* name conflict") to drm-misc-next-fixes.
+>=20
+> There's still something funny going on, because the drm-misc-next pull
+> request [1] isn't part of the drm pull request for v5.16 [2]. Is there
+> going to be another drm pull?
 
->
-> --
-> Jens Axboe
->
+The last drm-misc-next PR for some reason didn't got logged into
+patchwork, and Dave missed it.
 
+We found out yesterday, and he pulled it today so I assume there will be
+a second PR with that last PR and today's drm-misc-next-fixes PR.
 
---=20
-Best Regards,
-  Yi Zhang
+Maxime
 
+--vkojbrwivjvcbsco
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYYUcOQAKCRDj7w1vZxhR
+xU+MAP4hgo9+qBCiI/qme/i6DPqP4+Y2ORFyGlUEBuEar1UvwgEAtP1vY7VT12Fi
+2bs9GPcW2eHwXfRgz2UMaIg32SZO7wM=
+=oApB
+-----END PGP SIGNATURE-----
+
+--vkojbrwivjvcbsco--

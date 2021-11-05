@@ -2,83 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5973A445F37
-	for <lists+linux-next@lfdr.de>; Fri,  5 Nov 2021 05:55:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9E48445F3A
+	for <lists+linux-next@lfdr.de>; Fri,  5 Nov 2021 06:03:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbhKEE5j (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 5 Nov 2021 00:57:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40052 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbhKEE5j (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 5 Nov 2021 00:57:39 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EA2AC061714;
-        Thu,  4 Nov 2021 21:55:00 -0700 (PDT)
+        id S231441AbhKEFGQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 5 Nov 2021 01:06:16 -0400
+Received: from gandalf.ozlabs.org ([150.107.74.76]:52593 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229620AbhKEFGP (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 5 Nov 2021 01:06:15 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Hlp8g0FKhz4xdW;
-        Fri,  5 Nov 2021 15:54:58 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HlpLb3nW1z4xdS;
+        Fri,  5 Nov 2021 16:03:35 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1636088099;
-        bh=tlaLmczFVmVr9iNjno5jS9HDvbVxdlwBmZqZQWHD+0c=;
+        s=201702; t=1636088615;
+        bh=KAnftFTYKZKLaWVz0NosDDCPLOwuWearAd5PtMUQLTY=;
         h=Date:From:To:Cc:Subject:From;
-        b=TTdg67ifg50099hnBkIzC+ze0ABzWRMKxWDequ93HnOEhK2xYv+WcaJ/txhw5zX5y
-         xb7MfpiIAfLgH2R5wbopbww4GjcniJjzPpUFUq07dF8vukkXG5oBocoo7gz6gb6Cwz
-         GzSZOJzyyQKUwCVealTQyTKOa4otkto5d4U9dbF8RK+tFM2EQJQDD2PxR1JXQrfjRg
-         unWFb1zZXOzt5sKNZrf3X791RzaTGEKaqCLjrGeZ331D3L3FtwlJr1cCLUY6w9vpc7
-         uwbG9bhmIb5XHO5Ss6BL/za06m1HIQDxVdulDh0v6E0SXMk7tyC7u16ygpO10f0gge
-         HYLP7w/30n5Lw==
-Date:   Fri, 5 Nov 2021 15:54:57 +1100
+        b=MqSUB1jMxipGNHqhnBBkXpmxAGv5Vu1vO9u6uzHbe5I0KDtCgviQ+MSOi3nPY6O1r
+         nw6ntUpvnVIhkjBcUcJr0E35i2AhTsxG83bWM4WyE0kR8j3yEt3VLLZWjbQz7LmPV5
+         GQYVy/5osWOiNU3+IyASScOIatwsJCowvi+jbGbKxd8JdynSf7ml29b/n08y+DveSY
+         XP3xotrP3RiaNaecTe2wkdI2p1zW7wZZoFwFar9rj/ehvvsr/nQQ1Jqqm1tLYA8AOe
+         TuQWJNSPdPGtND9zABDVelG+N9mKyU07T0msTPy1aouVs8qFElgvCvcCzkD6I3Y4hY
+         74mAbfCBu1kzg==
+Date:   Fri, 5 Nov 2021 16:03:33 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+To:     Mischa Jonker <mjonker@synopsys.com>
+Cc:     Vineet Gupta <vgupta@synopsys.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure in Linus' tree
-Message-ID: <20211105155457.770efec2@canb.auug.org.au>
+Subject: linux-next: build warnings in Linus' tree
+Message-ID: <20211105160333.01346f08@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/lJNtsGB5RtfhF_+0ErTAu0_";
+Content-Type: multipart/signed; boundary="Sig_/c484L6881F.0/D/Qa1/zfQO";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/lJNtsGB5RtfhF_+0ErTAu0_
+--Sig_/c484L6881F.0/D/Qa1/zfQO
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-In Linus' tree, today's linux-next build (arm64 allmodconfig) failed
-like this:
+After merging the origin tree, today's linux-next build (arc
+haps_hs_smp_defconfig+kselftest) produced these warnings:
 
-ERROR: modpost: "this_cpu_has_cap" [drivers/hwtracing/coresight/coresight-t=
-rbe.ko] undefined!
+arch/arc/include/asm/perf_event.h:126:27: warning: 'arc_pmu_cache_map' defi=
+ned but not used [-Wunused-const-variable=3D]
+arch/arc/include/asm/perf_event.h:91:27: warning: 'arc_pmu_ev_hw_map' defin=
+ed but not used [-Wunused-const-variable=3D]
 
-Caused by commit
+Introduced by commit
 
-  8a1065127d95 ("coresight: trbe: Add infrastructure for Errata handling")
+  0dd450fe13da ("ARC: Add perf support for ARC700 cores")
+
+The 2 static arrays should be moved into arch/arc/kernel/perf_event.c
+(the only place that uses them).  We get the warning because perf_event.h
+is also included by arch/arc/kernel/unaligned.c.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/lJNtsGB5RtfhF_+0ErTAu0_
+--Sig_/c484L6881F.0/D/Qa1/zfQO
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGEuSEACgkQAVBC80lX
-0Gw/tggAopKMqnMrCYyKCAkrRgzHqeOZe4V5Cj1gcOyk6UgBx6uQT17HIw4D7KlV
-I2dYppgisiIKWA8ge7DtNyihCizKBaLc7DC9ZV0L4bNYIB2W9mS0/d9RUdUAZ202
-8zSHn32aGT8B25WJGmTRRJSnfiY8on2A3fwKmYQTzfFcU/fz3fKsuJSiyEjOK5C0
-g1pjjEDRP6SXUgC9HbOwXoLfiR0R2nlGitNLvG8xAXgvDA4C7wkEADrujx5rs+Rg
-p/NG/3+EYfXolZdeu96vP2fWYFsDGSpxqmRxhE6OBcxKxG29vHZ033XDDXV0GWqM
-qp3mJZBQ5NRFhUqxfxmXcjhvlieVTw==
-=XuMU
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGEuyUACgkQAVBC80lX
+0GwmWQf9GDPQKtkGn6MtsaP3OkaWq2aQvfYDvN06a4ocENsJwGbBP8jFcgkLwv1Y
+pcCr82+26AAajot2H2X25pJIC11DPHdhTgvT+Lxs82vNn8V4J8NrJUpFm8X9t155
+8HkF3LxXWMs8oOFTqJbtdRyHxNLVjUSHiA8Tdw4BO2g/GxBSLxG94MmzlPNPrOrh
+vLJoPq/RjeJxy7SBemOoG+gMofM8SOcsMz4Epzu6v7Vw+is1lCtUiuukSoScHOb1
+uzgwCFQVGheQ6h6xeFYfvPoJmwqq3VKdFNRosbtsgtzw+4Fv9JzPndiIfLtTzGZ1
+UTsjWEti8+rYpT+71y+XQ/4ACDt+Tw==
+=JZcG
 -----END PGP SIGNATURE-----
 
---Sig_/lJNtsGB5RtfhF_+0ErTAu0_--
+--Sig_/c484L6881F.0/D/Qa1/zfQO--

@@ -2,93 +2,152 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88C2D4481F4
-	for <lists+linux-next@lfdr.de>; Mon,  8 Nov 2021 15:36:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ECF6449BC9
+	for <lists+linux-next@lfdr.de>; Mon,  8 Nov 2021 19:40:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239635AbhKHOjN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 8 Nov 2021 09:39:13 -0500
-Received: from bedivere.hansenpartnership.com ([96.44.175.130]:34186 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239345AbhKHOjM (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 8 Nov 2021 09:39:12 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1636382188;
-        bh=IBn03kSx71PpsPJ1UryAfIE+kp3JtlAboO+OQbDdBAA=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=icE1+ZMb3eEvGvpETfVA3cXLZwkAmwxp4wXqYxFEn+BRkUs4SXzOGPOJw4aACBJAS
-         dGje+UEa2cqxpU83SZqF11d5WfUkilzQ0ekBAZUL6WbdlV8vSWnE5dKcdwTJatp8HM
-         3UdlkRfoX6TALzmuH9RBuvmK7Vl/sr+vkodQx5sI=
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 2197A1280ABF;
-        Mon,  8 Nov 2021 09:36:28 -0500 (EST)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id ugb07iMR027K; Mon,  8 Nov 2021 09:36:28 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1636382188;
-        bh=IBn03kSx71PpsPJ1UryAfIE+kp3JtlAboO+OQbDdBAA=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=icE1+ZMb3eEvGvpETfVA3cXLZwkAmwxp4wXqYxFEn+BRkUs4SXzOGPOJw4aACBJAS
-         dGje+UEa2cqxpU83SZqF11d5WfUkilzQ0ekBAZUL6WbdlV8vSWnE5dKcdwTJatp8HM
-         3UdlkRfoX6TALzmuH9RBuvmK7Vl/sr+vkodQx5sI=
-Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4300:c551::527])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 80C6A1280AB8;
-        Mon,  8 Nov 2021 09:36:27 -0500 (EST)
-Message-ID: <5c624bf7869e3fd8382498929261504d7fe22c1b.camel@HansenPartnership.com>
-Subject: Re: linux-next: build warning after merge of the scsi-mkp tree
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Bart Van Assche <bvanassche@acm.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Date:   Mon, 08 Nov 2021 09:36:18 -0500
-In-Reply-To: <20211108110333.79f735e0@canb.auug.org.au>
-References: <20211019074119.6e180896@canb.auug.org.au>
-         <20211108110333.79f735e0@canb.auug.org.au>
-Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-oKw+Ooyu2hbSimwozIL6"
-User-Agent: Evolution 3.34.4 
+        id S235347AbhKHSna (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 8 Nov 2021 13:43:30 -0500
+Received: from a8-29.smtp-out.amazonses.com ([54.240.8.29]:48965 "EHLO
+        a8-29.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235876AbhKHSn3 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 8 Nov 2021 13:43:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1636396842;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+        bh=zlgYv3PRuqihfmEq0tcYc2yH196N8NTvfbT/Leq3UpI=;
+        b=NcJq+M608myNGTFfAhi6s0zw311kQj85apY4k9JeeR6euunJvyU0zvzUXXV4Fzfj
+        gztUrqWP7DyAuI6dJTzLOtEWbrLfjMUSSCev674zt9htpwHG3YkHCwHnPfkrpLxCDuA
+        iaWEqr88m/k0NnCu43Yu/rSysrB1gTxopOfmntTY=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1636396842;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+        bh=zlgYv3PRuqihfmEq0tcYc2yH196N8NTvfbT/Leq3UpI=;
+        b=jcNVWxwhcX9b6P+D1txkGcHYFndfufBqx+DHA15h8hyb3jFDg6PaoOH/+RrTjwh+
+        /Ug0asua3XerUJjHKXGprnnAdxvuvn/HfKdb+lLvVyvzErZSKFhxiILRwaDIIVhIjkK
+        5pyCq6DLdVsijIf6Og486WLYkij1m1n8rVOL+ePg=
+From:   lkft@linaro.org
+To:     lkft@linaro.org
+Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        linux-next@vger.kernel.org, shuah@kernel.org
+Subject: [REGRESSION] lkft kselftest for next-20211108
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Message-ID: <0100017d00da3bdb-667be892-94a5-4fbb-9f7f-d2fd77eb11b0-000000@email.amazonses.com>
+Date:   Mon, 8 Nov 2021 18:40:42 +0000
+Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
+X-SES-Outgoing: 2021.11.08-54.240.8.29
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+## Build
+* kernel: 5.15.0
+* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+* git branch: master
+* git commit: e844ee04dee0cf1b6d97183c12266c7726d73636
+* git describe: next-20211108
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20211108
 
---=-oKw+Ooyu2hbSimwozIL6
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+## Regressions (compared to next-20211106)
+* i386, kselftest-net
+  - net.tls
+  - net.tls.tls.12_aes_gcm.send_then_sendfile
+  - net.tls.tls.12_chacha.send_then_sendfile
+  - net.tls.tls.13_aes_gcm.send_then_sendfile
+  - net.tls.tls.13_chacha.send_then_sendfile
+  - net.tls.tls.13_sm4_ccm.send_then_sendfile
+  - net.tls.tls.13_sm4_gcm.send_then_sendfile
 
-On Mon, 2021-11-08 at 11:06 +1100, Stephen Rothwell wrote:
-[...]
-> BTW, James, I tried to use your HansenPartnership.com email address,
-> but the DNS is giving SERVER FAIL errors for it ...
+* qemu_x86_64, kselftest-cgroup
+  - cgroup.test_freezer
+  - cgroup.test_freezer.test_cgfreezer_ptrace
 
-Should be fixed now.  An update in debian testing changed the way
-dnssec works with bind9 and effectively caused a roll of my zone
-signing key (or more accurately moved me from a separated ZSK KSK pair
-to a combined key).  Anyway, since there was no DS record for the new
-key the whole domain broke.  I've now fixed the delegation and it's
-working again.
-
-James
-
+* qemu_x86_64, kselftest-rtc
+  - rtc.rtctest
 
 
---=-oKw+Ooyu2hbSimwozIL6
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
------BEGIN PGP SIGNATURE-----
 
-iHUEABMIAB0WIQTnYEDbdso9F2cI+arnQslM7pishQUCYYk14gAKCRDnQslM7pis
-hdDjAQDwzw9mEZS6uJdX0MONrSezQK4qKEmoclXZOd0GJslvWwD9FjxRjRYAjR92
-nsZ9nfZrYfieeousV1xHdRnHhXVnywI=
-=WXeh
------END PGP SIGNATURE-----
+## Fixes (compared to next-20211106)
+* qemu_arm, kselftest-zram
+  - zram.zram.sh
 
---=-oKw+Ooyu2hbSimwozIL6--
 
+## Test result summary
+total: 3085, pass: 1794, fail: 274, skip: 1017, xfail: 0
+
+## Build Summary
+
+## Test suites summary
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-lkdtm
+* kselftest-membarrier
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+
+--
+Linaro LKFT
+https://lkft.linaro.org

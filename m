@@ -2,140 +2,148 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C503344AEE6
-	for <lists+linux-next@lfdr.de>; Tue,  9 Nov 2021 14:39:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20B1E44B0A0
+	for <lists+linux-next@lfdr.de>; Tue,  9 Nov 2021 16:46:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231160AbhKINmX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 9 Nov 2021 08:42:23 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:33057 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234981AbhKINmW (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 9 Nov 2021 08:42:22 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HpTc517clz4xbc;
-        Wed, 10 Nov 2021 00:39:33 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1636465174;
-        bh=EB45jjDPR8bRPHUY2PFX+Xr70gTyQt9MZRx3eiXmAIE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=UYUzHUBwCzbEUDYBBJPvspkA0no75gujDtj/VnpVB83w9PIDCp+8WlRSCDfB3+FjC
-         jr4ixhq62/fOJ4luvb+apdga9o0Kop0lCs8fJuu4cO9IRxewVM2B3qpUVB59M2rL+W
-         PwAXNO3ftt+VrTc+WnXOMvubdR2e2bX1k8SvPAEWK8ku7LhwdHj0OCCA/P0d0WpVrC
-         HUiRPuGcoQEflXEhkeSYDpAYBRCYXTPHzyvjHjq1Z0pWZbQV6jk85Q4HfjbgvGDnGP
-         vS5NB8Ggklr4l/xCoN+WiwlAD++eT//K0YZ3RDQlxcuwVm7fJQvwmTdsmBt0n46gdC
-         mQK4ds9RCQ7mw==
-Date:   Wed, 10 Nov 2021 00:39:32 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Paul Mackerras <paulus@samba.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Scott Wood <oss@buserror.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Uwe =?UTF-8?B?S2xlaW5lLUvDtm5p?= =?UTF-8?B?Zw==?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: Re: powerpc: mcu_mpc8349emitx.c:189:13: error: unused variable
- 'ret' [-Werror=unused-variable]
-Message-ID: <20211110003932.51a605ef@canb.auug.org.au>
-In-Reply-To: <CA+G9fYvviLKpT7a-1ZDmVp8YN8cCG0ixLpxv2uSubtsw-CkZCQ@mail.gmail.com>
-References: <CA+G9fYvviLKpT7a-1ZDmVp8YN8cCG0ixLpxv2uSubtsw-CkZCQ@mail.gmail.com>
+        id S235926AbhKIPta (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 9 Nov 2021 10:49:30 -0500
+Received: from a8-35.smtp-out.amazonses.com ([54.240.8.35]:56201 "EHLO
+        a8-35.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236469AbhKIPta (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 9 Nov 2021 10:49:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1636472803;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+        bh=TcrJl4Zk7c8c3GmhON+9wbI3TbFUO0qSB4q+4TXC3aY=;
+        b=aNl2yDXDYuDVzy05X6V3z7g1dugWBLHcOVyZtHVe3LgUFGgzyJHEaHHnG7x70jen
+        8qHh0If6t/TfEkHGlDYcWZ4pk33YqALbpkqE9Tz6nRmXPBd3Hd0TMvE/G6mZSmZNDcr
+        mzbevfy0FpSLYhIxS3C7Bhg0A0e7jr6Zfigep1LQ=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1636472803;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+        bh=TcrJl4Zk7c8c3GmhON+9wbI3TbFUO0qSB4q+4TXC3aY=;
+        b=RoGA9mW07i9lPPLJxJjeTPfqZMCj9YM9bXzDeHDSDOZAuU1vC8omzsys3LMo0j6r
+        AK/IbTzURLKkvduQpHqxJFhu1GeGjBSvqKDjFhXLxhdox/M1jsHpW1eJrvN3I6SPKRT
+        hG0XTBsazS9xnXc18KKTHl6uqBhr6nvzlnY+LFcQ=
+From:   lkft@linaro.org
+To:     lkft@linaro.org
+Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        linux-next@vger.kernel.org, shuah@kernel.org
+Subject: [REGRESSION] lkft kselftest for next-20211109
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/dtUNaDO71cbSSM4a5=2bJ82";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Message-ID: <0100017d05614f56-6cd94894-2f72-4412-85d0-f007d5f8d7ff-000000@email.amazonses.com>
+Date:   Tue, 9 Nov 2021 15:46:43 +0000
+Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
+X-SES-Outgoing: 2021.11.09-54.240.8.35
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/dtUNaDO71cbSSM4a5=2bJ82
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+## Build
+* kernel: 5.15.0
+* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+* git branch: master
+* git commit: c8109c2ba35e9bfd8a55087ffb1f42cc0dcf71e6
+* git describe: next-20211109
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20211109
 
-Hi Naresh,
+## Regressions (compared to next-20211108)
+* i386, kselftest-net
+  - net.gro.sh
 
-On Tue, 9 Nov 2021 18:37:48 +0530 Naresh Kamboju <naresh.kamboju@linaro.org=
-> wrote:
->
-> [Please ignore this email if it is already reported ]
->=20
-> Regression found on powerpc gcc-8/9/10 and gcc-11 built with ppc6xx_defco=
-nfig
-> Following build warnings / errors reported on linux next 20211109.
->=20
-> metadata:
->     git_describe: next-20211109
->     git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
->     git_short_log: c8109c2ba35e (\"Add linux-next specific files for 2021=
-1109\")
->     target_arch: powerpc
->     toolchain: gcc-11
->=20
-> build error :
-> --------------
-> <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [-W=
-cpp]
-> arch/powerpc/platforms/83xx/mcu_mpc8349emitx.c: In function 'mcu_remove':
-> arch/powerpc/platforms/83xx/mcu_mpc8349emitx.c:189:13: error: unused
-> variable 'ret' [-Werror=3Dunused-variable]
->   189 |         int ret;
->       |             ^~~
-> cc1: all warnings being treated as errors
-> make[4]: *** [scripts/Makefile.build:288:
-> arch/powerpc/platforms/83xx/mcu_mpc8349emitx.o] Error 1
-> make[4]: Target '__build' not remade because of errors.
-> make[3]: *** [scripts/Makefile.build:571: arch/powerpc/platforms/83xx] Er=
-ror 2
->=20
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
->=20
-> build link:
-> -----------
-> https://builds.tuxbuild.com/20fICxLPRCpcISasoGwKGICBELv/build.log
->=20
-> build config:
-> -------------
-> https://builds.tuxbuild.com/20fICxLPRCpcISasoGwKGICBELv/config
->=20
-> # To install tuxmake on your system globally
-> # sudo pip3 install -U tuxmake
-> tuxmake --runtime podman --target-arch powerpc --toolchain gcc-11
-> --kconfig ppc6xx_defconfig
->=20
->=20
-> --
-> Linaro LKFT
-> https://lkft.linaro.org
+* x15, kselftest-rtc
+  - rtc.rtctest.rtc.alarm_alm_set
+  - rtc.rtctest.rtc.alarm_alm_set_minute
+  - rtc.rtctest.rtc.alarm_wkalm_set
+  - rtc.rtctest.rtc.date_read
 
-Caused by commit
+* x86, kselftest-net
+  - net.gro.sh
 
-  5d354dc35ebb ("powerpc/83xx/mpc8349emitx: Make mcu_gpiochip_remove() retu=
-rn void")
 
-that is now in Linus' tree.
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
---=20
-Cheers,
-Stephen Rothwell
 
---Sig_/dtUNaDO71cbSSM4a5=2bJ82
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+## Fixes (compared to next-20211108)
+* i386, kselftest-net
+  - net.tls
+  - net.tls.tls.12_aes_gcm.send_then_sendfile
+  - net.tls.tls.12_chacha.send_then_sendfile
+  - net.tls.tls.13_aes_gcm.send_then_sendfile
+  - net.tls.tls.13_chacha.send_then_sendfile
+  - net.tls.tls.13_sm4_ccm.send_then_sendfile
+  - net.tls.tls.13_sm4_gcm.send_then_sendfile
 
------BEGIN PGP SIGNATURE-----
+* i386, kselftest-rtc
+  - rtc.rtctest
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGKehQACgkQAVBC80lX
-0Gw2jwgAi+V3loC+NLTzrpFxCXSjNprWeoVXI3ToJaT0/vQ/cMsIZb6mONSXQbwd
-7yYuZ5imLl49d1LYfx4HImyUzvIukxyrrB8loOe4ZhAmns5k6uOBk3bw75TRupBj
-YmxeGZWoL4cv9ZmVD1ukSQlXiCDqZ1/lKDCah8Jh/dHEAbO4Ax27MukiEWLZuk+b
-3l86jBtgAk2JbohUnCB5ms4JKCwCV7K0tvL9AFUEIwgjegXbEEQA9vdUP6KSQWpe
-zwtiRAGdIeq+UTZjNIbexze+p2OGUv2x0hPHv2dh63mbkUiCXQ1WZQtWU/QyadIr
-xN6KBQXdJ3/4fNfpJAWsBzfxa/Tj7Q==
-=70cK
------END PGP SIGNATURE-----
+* qemu_x86_64, kselftest-cgroup
+  - cgroup.test_freezer
+  - cgroup.test_freezer.test_cgfreezer_ptrace
 
---Sig_/dtUNaDO71cbSSM4a5=2bJ82--
+
+## Test result summary
+total: 2965, pass: 1817, fail: 249, skip: 899, xfail: 0
+
+## Build Summary
+
+## Test suites summary
+* kselftest-android
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-lkdtm
+* kselftest-membarrier
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+
+--
+Linaro LKFT
+https://lkft.linaro.org

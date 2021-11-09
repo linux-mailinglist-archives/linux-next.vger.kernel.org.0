@@ -2,107 +2,70 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C2C944AC2C
-	for <lists+linux-next@lfdr.de>; Tue,  9 Nov 2021 12:00:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 944B844AC4D
+	for <lists+linux-next@lfdr.de>; Tue,  9 Nov 2021 12:09:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239340AbhKILDf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 9 Nov 2021 06:03:35 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:44512 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245567AbhKILDM (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 9 Nov 2021 06:03:12 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id CA7AD218B0;
-        Tue,  9 Nov 2021 11:00:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1636455625; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BZH5tP3Blxs0l/FkD7PofF9MPbMEWtCzxQETbZ1kcLE=;
-        b=b9TmF+Nv9U+zjo2qWonwJdTbtYXocQGTSNQAdLHrRWsLw/LoVwUcyX4xOuxFmLVm/+CeYd
-        6pQPIrHjq7iXMpi51P9UTQoOJthOFtKHRZfr8z9/piu+pCg476U9+bQVsSZBKTqzrvGh1A
-        SJkWu+3SJPFCgPismia1njocTIhWU1A=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1636455625;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BZH5tP3Blxs0l/FkD7PofF9MPbMEWtCzxQETbZ1kcLE=;
-        b=E+RMqx3smZFFkRS6lt0rLJeuKtnSQliRfpUXgVEEO8zejKa9UGlQnIpQ7kTSTRpAp7JCbs
-        hfVyPcVY0SW26NAw==
-Received: from quack2.suse.cz (unknown [10.100.200.198])
-        by relay2.suse.de (Postfix) with ESMTP id B7929A3B83;
-        Tue,  9 Nov 2021 11:00:25 +0000 (UTC)
-Received: by quack2.suse.cz (Postfix, from userid 1000)
-        id 3D8D51E14ED; Tue,  9 Nov 2021 12:00:25 +0100 (CET)
-Date:   Tue, 9 Nov 2021 12:00:25 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Jan Kara <jack@suse.cz>, Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-fsdevel@vger.kernel.org,
+        id S239399AbhKILMm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 9 Nov 2021 06:12:42 -0500
+Received: from mga11.intel.com ([192.55.52.93]:1931 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229998AbhKILMm (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 9 Nov 2021 06:12:42 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10162"; a="229887611"
+X-IronPort-AV: E=Sophos;i="5.87,220,1631602800"; 
+   d="scan'208";a="229887611"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2021 03:09:44 -0800
+X-IronPort-AV: E=Sophos;i="5.87,220,1631602800"; 
+   d="scan'208";a="503463235"
+Received: from stkachen-mobl3.ger.corp.intel.com (HELO localhost) ([10.251.216.106])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2021 03:09:40 -0800
+From:   Jani Nikula <jani.nikula@intel.com>
+To:     Daniel Vetter <daniel@ffwll.ch>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Dave Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: Tree for Nov 9
-Message-ID: <20211109110025.GB5955@quack2.suse.cz>
-References: <20211109135449.7850eac3@canb.auug.org.au>
- <20211109135543.00b9f6a4@canb.auug.org.au>
- <alpine.DEB.2.22.394.2111091051380.2669071@ramsan.of.borg>
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+Subject: Re: linux-next: build failure after merge of the drm-misc tree
+In-Reply-To: <YYo8axRhW/zFQUgW@phenom.ffwll.local>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20211015202648.258445ef@canb.auug.org.au> <20211101194223.749197c5@canb.auug.org.au> <20211105171517.287de894@canb.auug.org.au> <874k8qampc.fsf@intel.com> <20211106133314.42e3e308@canb.auug.org.au> <87zgqd6alj.fsf@intel.com> <YYo8axRhW/zFQUgW@phenom.ffwll.local>
+Date:   Tue, 09 Nov 2021 13:09:38 +0200
+Message-ID: <87ilx160wd.fsf@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.22.394.2111091051380.2669071@ramsan.of.borg>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue 09-11-21 10:58:01, Geert Uytterhoeven wrote:
-> 	Hi Jan,
-> 
-> As lore doesn't seem to have the original patch, I'm replying here.
-> 
-> On Tue, 9 Nov 2021, Stephen Rothwell wrote:
-> > Merging ext3/for_next (39a464de961f udf: Fix crash after seekdir)
-> 
-> noreply@ellerman.id.au reported for m68k/allmodconfig:
-> fs/udf/dir.c:78:18: error: cast from pointer to integer of different size [-Werror=pointer-to-int-cast]
-> fs/udf/dir.c:211:23: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]
-> 
-> The actual code does:
-> 
->         * Did our position change since last readdir (likely lseek was
->         * called)? We need to verify the position correctly points at the
->         * beginning of some dir entry so that the directory parsing code does
->         * not get confused. Since UDF does not have any reliable way of
->         * identifying beginning of dir entry (names are under user control),
->         * we need to scan the directory from the beginning.
->         */
->        if (ctx->pos != (loff_t)file->private_data) {
->                emit_pos = nf_pos;
->                nf_pos = 0;
->        }
-> 
-> and:
-> 
->        /* Store position where we've ended */
->        file->private_data = (void *)ctx->pos;
-> 
-> Obviously this is not going to fly on 32-bit systems, as
-> file->private_data is 32-bit or 64-bit unsigned long, but ctx->pos is
-> always 64-bit loff_t.
-> 
-> I do not know if UDF supports files larger than 4 GiB (DVDs can be
-> larger).
-> If it doesn't, you need intermediate casts to uintptr_t.
-> If it does, you need a different solution.
+On Tue, 09 Nov 2021, Daniel Vetter <daniel@ffwll.ch> wrote:
+> On Tue, Nov 09, 2021 at 09:40:08AM +0200, Jani Nikula wrote:
+>> On Sat, 06 Nov 2021, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>> > Hi Jani,
+>> >
+>> > On Fri, 05 Nov 2021 13:03:43 +0200 Jani Nikula <jani.nikula@intel.com> wrote:
+>> >>
+>> >> I probably should have pushed c4f08d7246a5 ("drm/locking: fix
+>> >> __stack_depot_* name conflict") to drm-misc-next-fixes.
+>> >
+>> > Please do so as builds will start failing otherwise :-(
+>> 
+>> Thomas/Maxime/Maarten, okay to cherry-pick that to drm-misc-next-fixes?
+>
+> Yeah just do, for drm-misc this is considered in committer purview. I
+> think we should add a section to the docs about "What if a patch is in the
+> wrong branch" which tells you to just cherry-pick -x or whatever.
 
-Yeah, thanks for the heads up. I've noticed the warning from 0-day as well
-and realized this is a real problem on 32-bit systems. UDF does support
-dirs larger than 4G in principle (although practically anything larger than
-say 1MB is probably unusable due to linear directory structure :). Anyway,
-I'm working on a fix.
+Done.
 
-								Honza
+BR,
+Jani.
+
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Jani Nikula, Intel Open Source Graphics Center

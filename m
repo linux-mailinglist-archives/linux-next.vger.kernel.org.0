@@ -2,148 +2,88 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20B1E44B0A0
-	for <lists+linux-next@lfdr.de>; Tue,  9 Nov 2021 16:46:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AF1D44B511
+	for <lists+linux-next@lfdr.de>; Tue,  9 Nov 2021 23:01:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235926AbhKIPta (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 9 Nov 2021 10:49:30 -0500
-Received: from a8-35.smtp-out.amazonses.com ([54.240.8.35]:56201 "EHLO
-        a8-35.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236469AbhKIPta (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 9 Nov 2021 10:49:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1636472803;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=TcrJl4Zk7c8c3GmhON+9wbI3TbFUO0qSB4q+4TXC3aY=;
-        b=aNl2yDXDYuDVzy05X6V3z7g1dugWBLHcOVyZtHVe3LgUFGgzyJHEaHHnG7x70jen
-        8qHh0If6t/TfEkHGlDYcWZ4pk33YqALbpkqE9Tz6nRmXPBd3Hd0TMvE/G6mZSmZNDcr
-        mzbevfy0FpSLYhIxS3C7Bhg0A0e7jr6Zfigep1LQ=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1636472803;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=TcrJl4Zk7c8c3GmhON+9wbI3TbFUO0qSB4q+4TXC3aY=;
-        b=RoGA9mW07i9lPPLJxJjeTPfqZMCj9YM9bXzDeHDSDOZAuU1vC8omzsys3LMo0j6r
-        AK/IbTzURLKkvduQpHqxJFhu1GeGjBSvqKDjFhXLxhdox/M1jsHpW1eJrvN3I6SPKRT
-        hG0XTBsazS9xnXc18KKTHl6uqBhr6nvzlnY+LFcQ=
-From:   lkft@linaro.org
-To:     lkft@linaro.org
-Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
-        linux-next@vger.kernel.org, shuah@kernel.org
-Subject: [REGRESSION] lkft kselftest for next-20211109
+        id S241871AbhKIWDu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 9 Nov 2021 17:03:50 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:60173 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237422AbhKIWDu (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 9 Nov 2021 17:03:50 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Hphkk3wnRz4xcs;
+        Wed, 10 Nov 2021 09:01:02 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1636495262;
+        bh=gPoCdXlZOINUlff1BfQ0QkaxsNu2JReJnrP+cxNPL9U=;
+        h=Date:From:To:Cc:Subject:From;
+        b=OvGdg4reE8aIw3OnZW75XvhA9Qq4JTmaKKwGazeJkHLGxUtCN/zYgus25VlToZ2fn
+         nwn7U2e7a0Xt270MagJ03ikbGUZOcj9+EuYyxCgiZ8TvhXWgPBF14n9ycwRzph4bKp
+         NMPo8ch3S3MW03Ws8X8dsoEnLbE9zPYAsKYuNVrDmD0q1gLnoy31Hce4If26+Lb7IB
+         TIZYA9cwny6ad6hZCc/HaU7ia36wC1A5jApjRuoH/6BN+zLfXbxnf56eZOeFVe7CjG
+         b3dw+Rc9vVsty2aFeKwNUoGKbcHUFaacGWyX8yAbnMnt78r0/NywAi2wqZILdVbOk8
+         T1HJonItMec5Q==
+Date:   Wed, 10 Nov 2021 09:01:00 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Evan Quan <evan.quan@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the amdgpu tree
+Message-ID: <20211110090100.5855c861@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-Message-ID: <0100017d05614f56-6cd94894-2f72-4412-85d0-f007d5f8d7ff-000000@email.amazonses.com>
-Date:   Tue, 9 Nov 2021 15:46:43 +0000
-Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2021.11.09-54.240.8.35
+Content-Type: multipart/signed; boundary="Sig_/btjRkP.Pn3zD81HIUv490Wx";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-## Build
-* kernel: 5.15.0
-* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-* git branch: master
-* git commit: c8109c2ba35e9bfd8a55087ffb1f42cc0dcf71e6
-* git describe: next-20211109
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20211109
+--Sig_/btjRkP.Pn3zD81HIUv490Wx
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-## Regressions (compared to next-20211108)
-* i386, kselftest-net
-  - net.gro.sh
+Hi all,
 
-* x15, kselftest-rtc
-  - rtc.rtctest.rtc.alarm_alm_set
-  - rtc.rtctest.rtc.alarm_alm_set_minute
-  - rtc.rtctest.rtc.alarm_wkalm_set
-  - rtc.rtctest.rtc.date_read
+In commit
 
-* x86, kselftest-net
-  - net.gro.sh
+  d6874a709faa ("drm/amdgpu: fix uvd crash on Polaris12 during driver unloa=
+ding")
 
+Fixes tag
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+  Fixes: cdccf1ffe1a3 ("drm/amdgpu: Fix crash on device remove/driver unloa=
+d")
 
+has these problem(s):
 
-## Fixes (compared to next-20211108)
-* i386, kselftest-net
-  - net.tls
-  - net.tls.tls.12_aes_gcm.send_then_sendfile
-  - net.tls.tls.12_chacha.send_then_sendfile
-  - net.tls.tls.13_aes_gcm.send_then_sendfile
-  - net.tls.tls.13_chacha.send_then_sendfile
-  - net.tls.tls.13_sm4_ccm.send_then_sendfile
-  - net.tls.tls.13_sm4_gcm.send_then_sendfile
+  - Target SHA1 does not exist
 
-* i386, kselftest-rtc
-  - rtc.rtctest
+Maybe you meant
 
-* qemu_x86_64, kselftest-cgroup
-  - cgroup.test_freezer
-  - cgroup.test_freezer.test_cgfreezer_ptrace
+Fixes: d82e2c249c8f ("drm/amdgpu: Fix crash on device remove/driver unload")
 
+--=20
+Cheers,
+Stephen Rothwell
 
-## Test result summary
-total: 2965, pass: 1817, fail: 249, skip: 899, xfail: 0
+--Sig_/btjRkP.Pn3zD81HIUv490Wx
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-## Build Summary
+-----BEGIN PGP SIGNATURE-----
 
-## Test suites summary
-* kselftest-android
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-lkdtm
-* kselftest-membarrier
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGK75wACgkQAVBC80lX
+0Gzb0Af+Ovv2AxlPoG/1FUJT4gs9qSQ9A8cUK3cXujXpRCQOfUqozNEY0AuEJrtf
+vwnw3N1PLmPyHRlRZMtmW7zzlLZvR9/JXkF72eKbU38foUPeCNKWtj40FwiVfd6M
+Y5B2io41ABpYnhnmuUVaQDy94VTHDfxLSupyRtZWjh+hwzpwu4ImmsMb5m83rK4X
+vnYYTXuqecc+5eb+ScKFtpFII1nT2HmNNTZFXUVHFAZaRpCjUoQcwqoC7dvCQENK
+YPjrOVe0kdd1y42ykbonatuZhzrlbcg1FHfVQFoZzv2krEZdCJjJIbA+4cD9IkOz
+wI66j4sp29Buw21AWG7wz/JYVDbHXQ==
+=4cNA
+-----END PGP SIGNATURE-----
 
---
-Linaro LKFT
-https://lkft.linaro.org
+--Sig_/btjRkP.Pn3zD81HIUv490Wx--

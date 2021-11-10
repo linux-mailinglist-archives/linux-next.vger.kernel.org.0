@@ -2,134 +2,115 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1250144C66D
-	for <lists+linux-next@lfdr.de>; Wed, 10 Nov 2021 18:49:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 488E244CB7D
+	for <lists+linux-next@lfdr.de>; Wed, 10 Nov 2021 22:57:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232198AbhKJRv6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 10 Nov 2021 12:51:58 -0500
-Received: from a8-35.smtp-out.amazonses.com ([54.240.8.35]:37895 "EHLO
-        a8-35.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232621AbhKJRvn (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Wed, 10 Nov 2021 12:51:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1636566534;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=RZV+9ipNbCOKdoSrryloxAvl0oPRCjNlkpARxfUHKjU=;
-        b=EeTrq4fO2/W/JTyfNyUXmpPl0h9ZgtyXz2yhS1KTp3i/K6eBc+AAGnZRZd4pV4F7
-        SY2AF52DHnFKcQ0fEaw28vBElXauWU2fWADDD/k70JPeAI58VbGEf9IRJzexi1LLmu2
-        OQd+KgcdpQBSEx3+FJtt8oJZrk/LRVmD1yVec8OA=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1636566534;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=RZV+9ipNbCOKdoSrryloxAvl0oPRCjNlkpARxfUHKjU=;
-        b=Lnydkd3I/gKAnpMed9iN3/8ok959ZqS65rp1/4iteOiXS1ze/5Z1WT/OLWypS3Sz
-        zpw8JrXs+VDrgPlJ+AH12vfLw4v6zJgCQBkuLJlYIZ/qKsNPpaKywHqae0PrDK9q8ro
-        AP0jfIiRnm01xtDzeS/8SQk6SsfVV/loZc4p+3sY=
-From:   lkft@linaro.org
-To:     lkft@linaro.org
-Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
-        linux-next@vger.kernel.org, shuah@kernel.org
-Subject: [REGRESSION] lkft kselftest for next-20211110
+        id S233497AbhKJWAj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 10 Nov 2021 17:00:39 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:56667 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233218AbhKJWAj (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 10 Nov 2021 17:00:39 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HqJcY3V0dz4xbw;
+        Thu, 11 Nov 2021 08:57:49 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1636581470;
+        bh=LXaLTfNPSqg2YHBBxx7bwVvYha2FAuo39XdXtM+fUYo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=M+Zm8IfTXJ1gonVsRzgYwys8g/fxWeGmBUUcKIzUeiEw1HhP6yMM5DPl4zEmQFEra
+         HP5eBo6SbufNr3Nqd1QliRPhXwlObNMyrsT5GCQlD6wIs6Fp24upEpRVtude7qp+QH
+         PSWHpSSMRd/VmAFsO8lgx1xNdEu2RVfZJhQfl8pDoP+VpuG0IHGjTrk+Zen15smm4T
+         RcLkG4o8nQ5QM2gF44Zpup2Q9yi4P3e3p7DUoFwsUVn+0lRTZMq/VbZ/BWGfx/PWCO
+         DMIk+1c2jwpNQCHXcDWtrB0s3U8BMG+fimSjkoKU9tBFWYyMRgvrt8S6NcUXr8k9y5
+         Xl8xfajUctXlg==
+Date:   Thu, 11 Nov 2021 08:57:46 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Steve French <smfrench@gmail.com>,
+        CIFS <linux-cifs@vger.kernel.org>
+Cc:     "Paulo Alcantara (SUSE)" <pc@cjr.nz>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the cifs tree
+Message-ID: <20211111085746.46746d4f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-Message-ID: <0100017d0af7884c-bc757cde-b905-462c-a9f1-c0f61647f3c2-000000@email.amazonses.com>
-Date:   Wed, 10 Nov 2021 17:48:54 +0000
-Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2021.11.10-54.240.8.35
+Content-Type: multipart/signed; boundary="Sig_/MG692s2akANc1mz/MXD1yu.";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-## Build
-* kernel: 5.15.0
-* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-* git branch: master
-* git commit: 73e5c18006f5e1f7d35d1e996609eaff6536ae5e
-* git describe: next-20211110
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20211110
+--Sig_/MG692s2akANc1mz/MXD1yu.
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-## Regressions (compared to next-20211109)
-* qemu_arm, kselftest-cgroup
-  - cgroup.test_freezer
-  - cgroup.test_freezer.test_cgfreezer_migrate
+Hi all,
 
-* qemu_arm, kselftest-zram
-  - zram.zram.sh
+After merging the cifs tree, today's linux-next build (powerpc
+ppc64_defconfig) failed like this:
 
+<stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [-Wcp=
+p]
+fs/cifs/connect.c: In function 'clean_demultiplex_info':
+fs/cifs/connect.c:841:2: error: stray '#' in program
+  841 | +#ifdef CONFIG_CIFS_DFS_UPCALL
+      |  ^
+fs/cifs/connect.c:841:3: error: 'ifdef' undeclared (first use in this funct=
+ion)
+  841 | +#ifdef CONFIG_CIFS_DFS_UPCALL
+      |   ^~~~~
+fs/cifs/connect.c:841:3: note: each undeclared identifier is reported only =
+once for each function it appears in
+fs/cifs/connect.c:841:8: error: expected ';' before 'CONFIG_CIFS_DFS_UPCALL'
+  841 | +#ifdef CONFIG_CIFS_DFS_UPCALL
+      |        ^~~~~~~~~~~~~~~~~~~~~~~
+      |        ;
+fs/cifs/connect.c:843:15: error: 'struct TCP_Server_Info' has no member nam=
+ed 'leaf_fullpath'
+  843 | + kfree(server->leaf_fullpath);
+      |               ^~
+fs/cifs/connect.c:844:2: error: stray '#' in program
+  844 | +#endif
+      |  ^
+fs/cifs/connect.c:844:3: error: 'endif' undeclared (first use in this funct=
+ion); did you mean 'gendisk'?
+  844 | +#endif
+      |   ^~~~~
+      |   gendisk
+fs/cifs/connect.c:844:8: error: expected ';' before 'kfree'
+  844 | +#endif
+      |        ^
+      |        ;
+  845 |  kfree(server);
+      |  ~~~~~ =20
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Caused by commit
 
+  58b90aa95977 ("cifs: support nested dfs links over reconnect")
 
-## Fixes (compared to next-20211109)
-* i386, kselftest-net
-  - net.gro.sh
+I have used the cifs tree from next-20211110 for today.
 
-* x86, kselftest-rtc
-  - rtc.rtctest
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/MG692s2akANc1mz/MXD1yu.
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-## Test result summary
-total: 3153, pass: 1975, fail: 270, skip: 908, xfail: 0
+-----BEGIN PGP SIGNATURE-----
 
-## Build Summary
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGMQFoACgkQAVBC80lX
+0GxcVgf/VqLLX6dRvrQSGIHQROWHyxWiosq8IrD1VNT4CxFwaSLYdzyCNCfLiAvS
+GXnSEOwSc8ncJCs6I/qZ5ZOG8Sjop3l9gIPdGPlX02VcEVttt2j0Dp5Zagkkdbi5
+tPVlnzl4qLXov1EZ+9SlF05BhMQZECuxP64egqHzCCnzTXO+C19qdJb52LauF+t4
+mogShRKreQv6M9/hPljc5FhgyYCFQehzJrY9WfyN92wrBDPrcwDtwgwTZlj9Gdyy
+WXQ31rb76Otif9WtdG05Dv0zRorUl1kzkIjm1HblBeid+J54CA1ZwHxgqoF++FLc
+vbUqn0W6aHx7Ke/dr2Hi4CootV0xUg==
+=HZ7Z
+-----END PGP SIGNATURE-----
 
-## Test suites summary
-* kselftest-android
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-lkdtm
-* kselftest-membarrier
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-
---
-Linaro LKFT
-https://lkft.linaro.org
+--Sig_/MG692s2akANc1mz/MXD1yu.--

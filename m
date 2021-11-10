@@ -2,60 +2,134 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB8B344C122
-	for <lists+linux-next@lfdr.de>; Wed, 10 Nov 2021 13:20:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1250144C66D
+	for <lists+linux-next@lfdr.de>; Wed, 10 Nov 2021 18:49:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231511AbhKJMXa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 10 Nov 2021 07:23:30 -0500
-Received: from mail.kernel.org ([198.145.29.99]:56064 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231371AbhKJMXa (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 10 Nov 2021 07:23:30 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 82C9361260;
-        Wed, 10 Nov 2021 12:20:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636546842;
-        bh=UrdBpADFfFHOSeO47GMEckEv90RwEREP5PvrOPjFpac=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=Qgbdu3+cqWcg30ewY9pVTZ8NSE2CnR5qqlT8tzwXsjk5KNvsfE1TyQlaF6HSA6ZDh
-         OLWoUYBW4jyStRFDUOcyjkHaSwS0aCJFFK0tp9Z+jNTLOQSrXyBhOYOQ+rGk8TCZMR
-         BTAfXTHJ+DcX/Ztn7pJ9YxkKVCM6bpHgVNTjZk+x1UcYd6TE22aNpm8b409iICZ0Ix
-         /cK0MTR2SwCEtG4cdV8KekSkRcx+5XE8RgSJjsmemcy9S7zWl4Vn6BEsCpHKECXy5y
-         FPQIi/JBPGX1ZtzQFRoDLpVHWjjVPwQRwEg00bJo8JGno/QWKqwR8Oy7yg9ylcmwDW
-         ab79SuEAyijzA==
-Date:   Wed, 10 Nov 2021 13:20:39 +0100 (CET)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     =?ISO-8859-15?Q?Thomas_Wei=DFschuh?= <linux@weissschuh.net>
-cc:     linux-input@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
-Subject: Re: [PATCH] mod_devicetable: fix kdocs for ishtp_device_id
-In-Reply-To: <20211110121655.675664-1-linux@weissschuh.net>
-Message-ID: <nycvar.YFH.7.76.2111101320170.12554@cbobk.fhfr.pm>
-References: <20211110150639.7db57ae2@canb.auug.org.au> <20211110121655.675664-1-linux@weissschuh.net>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        id S232198AbhKJRv6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 10 Nov 2021 12:51:58 -0500
+Received: from a8-35.smtp-out.amazonses.com ([54.240.8.35]:37895 "EHLO
+        a8-35.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232621AbhKJRvn (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Wed, 10 Nov 2021 12:51:43 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1636566534;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+        bh=RZV+9ipNbCOKdoSrryloxAvl0oPRCjNlkpARxfUHKjU=;
+        b=EeTrq4fO2/W/JTyfNyUXmpPl0h9ZgtyXz2yhS1KTp3i/K6eBc+AAGnZRZd4pV4F7
+        SY2AF52DHnFKcQ0fEaw28vBElXauWU2fWADDD/k70JPeAI58VbGEf9IRJzexi1LLmu2
+        OQd+KgcdpQBSEx3+FJtt8oJZrk/LRVmD1yVec8OA=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1636566534;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+        bh=RZV+9ipNbCOKdoSrryloxAvl0oPRCjNlkpARxfUHKjU=;
+        b=Lnydkd3I/gKAnpMed9iN3/8ok959ZqS65rp1/4iteOiXS1ze/5Z1WT/OLWypS3Sz
+        zpw8JrXs+VDrgPlJ+AH12vfLw4v6zJgCQBkuLJlYIZ/qKsNPpaKywHqae0PrDK9q8ro
+        AP0jfIiRnm01xtDzeS/8SQk6SsfVV/loZc4p+3sY=
+From:   lkft@linaro.org
+To:     lkft@linaro.org
+Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        linux-next@vger.kernel.org, shuah@kernel.org
+Subject: [REGRESSION] lkft kselftest for next-20211110
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 7bit
+Message-ID: <0100017d0af7884c-bc757cde-b905-462c-a9f1-c0f61647f3c2-000000@email.amazonses.com>
+Date:   Wed, 10 Nov 2021 17:48:54 +0000
+Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
+X-SES-Outgoing: 2021.11.10-54.240.8.35
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, 10 Nov 2021, Thomas Weißschuh wrote:
+## Build
+* kernel: 5.15.0
+* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+* git branch: master
+* git commit: 73e5c18006f5e1f7d35d1e996609eaff6536ae5e
+* git describe: next-20211110
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20211110
 
-> The kdocs were copied from another device_id struct and not adapted.
-> 
-> Fixes: fa443bc3c1e4 ("HID: intel-ish-hid: add support for MODULE_DEVICE_TABLE()")
-> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+## Regressions (compared to next-20211109)
+* qemu_arm, kselftest-cgroup
+  - cgroup.test_freezer
+  - cgroup.test_freezer.test_cgfreezer_migrate
 
-I've added
+* qemu_arm, kselftest-zram
+  - zram.zram.sh
 
-	Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
 
-and applied, thanks.
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
--- 
-Jiri Kosina
-SUSE Labs
 
+## Fixes (compared to next-20211109)
+* i386, kselftest-net
+  - net.gro.sh
+
+* x86, kselftest-rtc
+  - rtc.rtctest
+
+
+## Test result summary
+total: 3153, pass: 1975, fail: 270, skip: 908, xfail: 0
+
+## Build Summary
+
+## Test suites summary
+* kselftest-android
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-lkdtm
+* kselftest-membarrier
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+
+--
+Linaro LKFT
+https://lkft.linaro.org

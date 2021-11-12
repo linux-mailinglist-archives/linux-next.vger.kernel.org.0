@@ -2,159 +2,124 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A329644E128
-	for <lists+linux-next@lfdr.de>; Fri, 12 Nov 2021 05:41:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A778A44E242
+	for <lists+linux-next@lfdr.de>; Fri, 12 Nov 2021 08:10:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbhKLEoI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 11 Nov 2021 23:44:08 -0500
-Received: from a8-97.smtp-out.amazonses.com ([54.240.8.97]:54157 "EHLO
-        a8-97.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229632AbhKLEoH (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Thu, 11 Nov 2021 23:44:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1636692076;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=W20TFG4w+tRIkLpq7755BMSDD217hMPQKNsm86Vq5xQ=;
-        b=fR1VGE8Ul+YQJDcplwpxy1NflLj88aZ00NZNOc9g/9RmzZpC5OksZMajSvlIOcKW
-        dsLBGPH5QhiP0uxJyqDZIhFM8keVTQSZ1Sj12/zNnS6mTMX4eYK8HTSBAafEBEsv5fP
-        PfTuPSpBBEl40Pn5xk1P11j88j29eiYjSxaIsFKU=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1636692076;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=W20TFG4w+tRIkLpq7755BMSDD217hMPQKNsm86Vq5xQ=;
-        b=GzPNsZOO7T3T6BYpNHHdmIwQ8nHNxt+TkQWL4sREj1hK5e+rHaN6CeP978QYnwk0
-        5yB5xWSdN3AKFFhxkHtBnPfnfdiW/4rsp4xXBwfT29ffs4arwnIdhji8vxaIk2o8/Lq
-        38FJ2T8tzdUW55PIcKm7vSfN3dmRzIjXFfXtKD0g=
-From:   lkft@linaro.org
-To:     lkft@linaro.org
-Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
-        linux-next@vger.kernel.org, shuah@kernel.org
-Subject: [REGRESSION] lkft kselftest for next-20211111
+        id S231179AbhKLHNl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 12 Nov 2021 02:13:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54460 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230464AbhKLHNk (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 12 Nov 2021 02:13:40 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB5BC061766
+        for <linux-next@vger.kernel.org>; Thu, 11 Nov 2021 23:10:50 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id np3so6000667pjb.4
+        for <linux-next@vger.kernel.org>; Thu, 11 Nov 2021 23:10:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=1R0ZfW86s5/ZA1rUzbEGphvm46h5lMO3Io9ndGuZQS8=;
+        b=haX7/UK8AoONR3cPBPM6Y3YjOOW4c+aF5aVORXqFBFJBtJV1yu0D/PBkZ9tJKhPuMd
+         Pom1PXysolwd3dGCnt9TrvjanAzSCPJ53ZiT8rESeYQLNdceCm4qQeOoNfafrikSuODv
+         x7T5YeGLTSmoD/LVn0N4iUd2dIshjCLPoppWRunws1e/izbtA80DGiGMYStx4dmWAaOD
+         k1GIrLZH1IQn12ZEBtEd3h3ESJcWbKYQe54OpLLkVM8VNp3GUc8oFizvjFOLIfRWFJL1
+         N2d8yXXjVqbcEtdXqPnG4W6VMZbOI8g+dewIrPRZdnnPoS15PSib3X1JcYT1SkWwfDfI
+         rXHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=1R0ZfW86s5/ZA1rUzbEGphvm46h5lMO3Io9ndGuZQS8=;
+        b=G6HhRCIdgKZmxsqlXJrUMbt9btMR6kqeDRHlwchaYpmbBCOQO+V+BNErD9yGd134wl
+         NW9SS6XNtQEG8C8hmKji6igyWh7UILKEARJ3X90yxrsvNg/ebeBohjNuZo+DluF+0eVj
+         y3GhjU4paibqIy2xFnq7eRKkRHSfY8BvpPFSzmtvYsvMkiSvUoOZMGg5it4Or37p3Zi4
+         BqZYYXCPTerVC0JxcUM/FRhpBs8Qp4XXEnuF5d1EIvptaQJX/c5NHM5QZFwdDFO5G6IQ
+         DOjOOJHqUcady2P+JNYw/0sOF6uv7ULHxUageJMjUXfBRxzvG+e9UvVqY83DgO2tdQgr
+         JUYQ==
+X-Gm-Message-State: AOAM530x/WRxviDaHZRiLa/zhRBhpIgQ/juL6q1gmtW+CjR8grUjchEt
+        /J/0ZXnjtqfOZ5a8Ha/11jCqDkVEoS2q8h+v
+X-Google-Smtp-Source: ABdhPJy/vU0s9BOY8c5jYu8O0qTEzwUrbpRZ5ESkzThxH0VpR42rePM6T1g8gCcj3fE7q/kHu3pjCQ==
+X-Received: by 2002:a17:90a:df14:: with SMTP id gp20mr33722752pjb.186.1636701050007;
+        Thu, 11 Nov 2021 23:10:50 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id a3sm5638202pfv.5.2021.11.11.23.10.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Nov 2021 23:10:49 -0800 (PST)
+Message-ID: <618e1379.1c69fb81.c049.0805@mx.google.com>
+Date:   Thu, 11 Nov 2021 23:10:49 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-Message-ID: <0100017d127326f5-e9164eca-4e7b-4493-9d49-81dd38deff7d-000000@email.amazonses.com>
-Date:   Fri, 12 Nov 2021 04:41:16 +0000
-Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2021.11.12-54.240.8.97
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: next-20211112
+X-Kernelci-Report-Type: test
+Subject: next/master baseline: 644 runs, 1 regressions (next-20211112)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-## Build
-* kernel: 5.15.0
-* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-* git branch: master
-* git commit: ad8be4fa6e8149ba6ea21fdf0089e8254437b3c8
-* git describe: next-20211111
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20211111
+next/master baseline: 644 runs, 1 regressions (next-20211112)
 
-## Regressions (compared to next-20211110)
-* i386, kselftest-rtc
-  - rtc.rtctest
+Regressions Summary
+-------------------
 
-* x86, kselftest-rtc
-  - rtc.rtctest
+platform             | arch  | lab          | compiler | defconfig | regres=
+sions
+---------------------+-------+--------------+----------+-----------+-------=
+-----
+meson-gxl-s905d-p230 | arm64 | lab-baylibre | clang-13 | defconfig | 1     =
+     =
 
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
+211112/plan/baseline/
+
+  Test:     baseline
+  Tree:     next
+  Branch:   master
+  Describe: next-20211112
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      f2e19fd15bd7cba347ce50be71955f5cd28a6019 =
 
 
-## Fixes (compared to next-20211110)
-* dragonboard-410c, kselftest-rtc
-  - rtc.rtctest.rtc.uie_read
 
-* qemu_arm, kselftest-cgroup
-  - cgroup.test_freezer
-  - cgroup.test_freezer.test_cgfreezer_migrate
-
-* qemu_arm, kselftest-rtc
-  - rtc.rtctest
-
-* qemu_i386, kselftest-rtc
-  - rtc.rtctest
-
-* x15, kselftest-rtc
-  - rtc.rtctest.rtc.alarm_alm_set
-  - rtc.rtctest.rtc.alarm_alm_set_minute
-  - rtc.rtctest.rtc.alarm_wkalm_set
-  - rtc.rtctest.rtc.date_read
+Test Regressions
+---------------- =
 
 
-## Test result summary
-total: 2714, pass: 1618, fail: 231, skip: 865, xfail: 0
 
-## Build Summary
+platform             | arch  | lab          | compiler | defconfig | regres=
+sions
+---------------------+-------+--------------+----------+-----------+-------=
+-----
+meson-gxl-s905d-p230 | arm64 | lab-baylibre | clang-13 | defconfig | 1     =
+     =
 
-## Test suites summary
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-lkdtm
-* kselftest-membarrier
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
 
---
-Linaro LKFT
-https://lkft.linaro.org
+  Details:     https://kernelci.org/test/plan/id/618de258bbf7bd35ff3358f6
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    clang-13 (Debian clang version 13.0.1-++20211105082911+21620=
+0aff268-1~exp1~20211105203443.23)
+  Plain log:   https://storage.kernelci.org//next/master/next-20211112/arm6=
+4/defconfig/clang-13/lab-baylibre/baseline-meson-gxl-s905d-p230.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20211112/arm6=
+4/defconfig/clang-13/lab-baylibre/baseline-meson-gxl-s905d-p230.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/618de258bbf7bd35ff335=
+8f7
+        new failure (last pass: next-20211111) =
+
+ =20

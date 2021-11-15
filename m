@@ -2,138 +2,107 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E7BC4516A4
-	for <lists+linux-next@lfdr.de>; Mon, 15 Nov 2021 22:33:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3702D451783
+	for <lists+linux-next@lfdr.de>; Mon, 15 Nov 2021 23:30:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240714AbhKOVgn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 15 Nov 2021 16:36:43 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:48357 "EHLO
+        id S236696AbhKOWcz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 15 Nov 2021 17:32:55 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:34893 "EHLO
         gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348988AbhKOVNx (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 15 Nov 2021 16:13:53 -0500
+        with ESMTP id S1350231AbhKOWUZ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 15 Nov 2021 17:20:25 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HtML51WvXz4xbM;
-        Tue, 16 Nov 2021 08:10:53 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HtNpQ6gV0z4xcC;
+        Tue, 16 Nov 2021 09:17:02 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1637010653;
-        bh=ouiiKAgaax/jlItXSm8ObRYTMiRsdExBEOmVlnBfIQM=;
+        s=201702; t=1637014623;
+        bh=7cUctgxZBS6/N20u0anh9V5IsZ0iPrrFRpTs8tw8GJ4=;
         h=Date:From:To:Cc:Subject:From;
-        b=HnD1g3K2B1MU5DiQBVhfliUnlQEYvOT5A7/8RSAwX0zaveoPqWRsSZT5lR/b/6aVS
-         oBG4KEBjOp+V76S2C5vGw+aCs4ikElZ30GZIVVP6LjFgTxx7JOw9YFgfmVnaSB36eb
-         B8I9F2X7sxTASncyOCRn/TU9QvRM27u8vC4jJcP5BYw3kvVsHcchi4RsSf9jK7bEZj
-         UXbaK21kTTxXvOrRi9lSP/FD/QgnzURwH9KJpaZuvY6XsZ8IeHtz/LroUuJmres9Nd
-         fwx5645A0NRQS44+Lo9DIo7/4H+vKq4FnCY7nLAuvbCcIf6PQtwcufZ78uzwtLS95J
-         Yt4F9RA0ET0Kg==
-Date:   Tue, 16 Nov 2021 08:10:51 +1100
+        b=lQNjYrO1cE2hBfL3itZQIwpriLdB+rpfaz+5EXAXeaoqEivXgsXImGHgyJjCNPzz1
+         IHH3C1fH34NRln8SfYADIwvwWGZRpzF4DJ15hRAaZApb3Vv660GuL8IAx5EIXHU7rE
+         PdwD2U2gUMQgZO0y2HtUbm6K3nEL8JwPid/R7AD3u6n4qZax8vExQjfN5xyfI12FWS
+         Kp2R13RkU3L1HgE+VNRI+w9k37DdSmJtZkG/TH//8j/ooKl/CXBOny5z4FEDl+xBro
+         SCgvtN78HmCdRzxQUyhTOp8FOpMXpvqb+i9opMWq1azJ2WeeDBmfcUmmJ1MfbS6zDr
+         BT6pFSd7jjEpw==
+Date:   Tue, 16 Nov 2021 09:17:02 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Dillon Min <dillon.minfei@gmail.com>,
+To:     Steve French <smfrench@gmail.com>,
+        CIFS <linux-cifs@vger.kernel.org>
+Cc:     chiminghao <chi.minghao@zte.com.cn>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tags need some work in the v4l-dvb-next tree
-Message-ID: <20211116081051.2066724f@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the cifs tree
+Message-ID: <20211116091702.3e2c4550@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/9pFV1GLELZsjSIUBnHqras3";
+Content-Type: multipart/signed; boundary="Sig_/8OU1EBP8FYM4_smUQbePUaG";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/9pFV1GLELZsjSIUBnHqras3
+--Sig_/8OU1EBP8FYM4_smUQbePUaG
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-In commit
+After merging the cifs tree, today's linux-next build (powerpc
+ppc64_defconfig) failed like this:
 
-  d9fbdedc56ea ("media: stm32-dma2d: fix compile-testing failed")
+In file included from fs/cifs/dns_resolve.c:18:
+fs/cifs/cifsglob.h: In function 'cifs_get_tlink':
+fs/cifs/cifsglob.h:1169:14: error: passing argument 1 of 'atomic_inc' from =
+incompatible pointer type [-Werror=3Dincompatible-pointer-types]
+ 1169 |   atomic_inc(&tlink->tl_count);
+      |              ^~~~~~~~~~~~~~~~
+      |              |
+      |              refcount_t * {aka struct refcount_struct *}
+In file included from include/linux/atomic.h:82,
+                 from include/linux/cpumask.h:13,
+                 from include/linux/smp.h:13,
+                 from include/linux/lockdep.h:14,
+                 from include/linux/spinlock.h:62,
+                 from include/linux/mmzone.h:8,
+                 from include/linux/gfp.h:6,
+                 from include/linux/slab.h:15,
+                 from fs/cifs/dns_resolve.c:15:
+include/linux/atomic/atomic-instrumented.h:179:22: note: expected 'atomic_t=
+ *' but argument is of type 'refcount_t *' {aka 'struct refcount_struct *'}
+  179 | atomic_inc(atomic_t *v)
+      |            ~~~~~~~~~~^
 
-Fixes tag
+and lots more similar ...
 
-  Fixes: bff6e3e2f4c9 ("media: stm32-dma2d: STM32 DMA2D driver")
+Caused by commit
 
-has these problem(s):
+  ef242296e441 ("fs:cifs: convert from atomic_t to refcount_t on tlink->tl_=
+count")
 
-  - Target SHA1 does not exist
+Please write, review, test (repeat) and, only then, publish. :-(
 
-Maybe you meant
-
-Fixes: 002e8f0d5927 ("media: stm32-dma2d: STM32 DMA2D driver")
-
-In commit
-
-  147907e93224 ("media: stm32-dma2d: fix compile errors when W=3D1")
-
-Fixes tag
-
-  Fixes: bff6e3e2f4c9 ("media: stm32-dma2d: STM32 DMA2D driver")
-
-has these problem(s):
-
-  - Target SHA1 does not exist
-
-Maybe you meant
-
-Fixes: 002e8f0d5927 ("media: stm32-dma2d: STM32 DMA2D driver")
-
-In commit
-
-  22f2cac62dea ("media: atomisp-ov2680: properly set the vts value")
-
-Fixes tag
-
-  Fixes: 62b984359b6f ("media: atomisp-ov2680: Fix ov2680_set_fmt() messing=
- up high exposure settings")
-
-has these problem(s):
-
-  - Target SHA1 does not exist
-
-Maybe you meant
-
-Fixes: 29400b5063db ("media: atomisp-ov2680: Fix ov2680_set_fmt() messing u=
-p high exposure settings")
-
-In commit
-
-  d9916e7c87c9 ("media: atomisp-ov2680: initialize return var")
-
-Fixes tag
-
-  Fixes: 6b5b60687ada ("media: atomisp-ov2680: Save/restore exposure and ga=
-in over sensor power-down")
-
-has these problem(s):
-
-  - Target SHA1 does not exist
-
-Maybe you meant
-
-Fixes: 4ed2caf85337 ("media: atomisp-ov2680: Save/restore exposure and gain=
- over sensor power-down")
+I have used the cifs tree from next-20211115 for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/9pFV1GLELZsjSIUBnHqras3
+--Sig_/8OU1EBP8FYM4_smUQbePUaG
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGSzNsACgkQAVBC80lX
-0GxDlAf+LujFZn1TAWIT0Zuck5bYoMjMOi2Lo1RZ7VBpl6WVi8W18pSWRiOp5ymq
-KN4aRwYXHUGBfv46FMPmeTCO5mgrKAbEigVoHcsAWtzoA9XSJTrP1z+maV1qFpHb
-uJiKZ7VyXBoUlRZUQyYQCcOB83FhivjjB0Z7UvM9VOBR2EnONqDKu6cO97zp9UEE
-2Ksr/Oc2J8aZ4K8Mnwpn0yTDboA7lFpIUCW8kW8gsTwsJQLIV+6RJu4Zz3zE1kC8
-sa+tOXQeBYSut0LkqaredFZxoZYzHOcVBg3mh05DD+RAtYEi6/gIDEgMJPwQUvnX
-2XPsqxdvsTPN0o/MGhLwglWR2ut0+w==
-=EJpY
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGS3F4ACgkQAVBC80lX
+0Gwl7wf/fkkYyUfQl2BCCbBUhVHjlIigMz/u91Z+nugFkijukO6d00ef5TcemlM+
+HwTZWmsakV0AdtwBa3tIGY+4NFy1xpSMsGoBjhbcS9pQAXnkVzxa1OTtync2nGUZ
+8M5z4LrKd+FmVZYqA3w3ekvDCQBZkbchrwBVEU+hurl8XUVrOFrFo7eO7KfFR74s
+kGzIRVf/wrKD4RI0f0pDTyEjUKWyxX4O6YKDhPDHzPBQVs2VWaUSYuDOyAmlfmOZ
+pIA5EcPW1C56c7ntFPvw+U9tP6jsKpzP3ajVmal9UcVk0+LAezAK74llJlSDHd9F
+Wla1vfjpLmqsTnwqPHlsQw4IJsjp+g==
+=xtMQ
 -----END PGP SIGNATURE-----
 
---Sig_/9pFV1GLELZsjSIUBnHqras3--
+--Sig_/8OU1EBP8FYM4_smUQbePUaG--

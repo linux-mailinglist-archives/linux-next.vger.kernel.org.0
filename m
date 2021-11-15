@@ -2,79 +2,110 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0000B451937
-	for <lists+linux-next@lfdr.de>; Tue, 16 Nov 2021 00:14:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 374A1451A99
+	for <lists+linux-next@lfdr.de>; Tue, 16 Nov 2021 00:37:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231455AbhKOXQZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 15 Nov 2021 18:16:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36520 "EHLO
+        id S1355287AbhKOXkm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 15 Nov 2021 18:40:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350184AbhKOVap (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 15 Nov 2021 16:30:45 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C1DDC02982A;
-        Mon, 15 Nov 2021 13:15:57 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HtMRq5Vgwz4xbM;
-        Tue, 16 Nov 2021 08:15:51 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1637010952;
-        bh=2PQkiML75nH5gTjFrmbLQEay2Mw4j+3cq9G3Vz10pxw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=VBc38h/i+Jm+bhlGc95+AwVfhnsZQgPY96byZGfuKrOaXBDZ8g5SJAY+Kx9EGGW22
-         +7l1dJ3pTy5JNcmvcSKfRTfN2Tmw8Jx9nR1WtbCaOSEaXTuNHitHRS2BylHFEyDh/C
-         eWKYzVw1/3FR1ykc46WHM9mMhwsjGEFyj7iJOD4X/5cjuygUz/b8gX2pak/3iZWJRJ
-         2PrrTKtpd8wTHHZJhTVusprsErLDSgZ489KPQfG8En7FU/nJzjU1THDg775IuHpdwx
-         /HC7RAxPypJPytxArt4ZrBrdfF55CBqZj/CxVS2bPQrBsGFlszgM1J2rSxXo8QpPIj
-         JNCPuhqFO4Rgw==
-Date:   Tue, 16 Nov 2021 08:15:50 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commits in the leds tree
-Message-ID: <20211116081550.7cb196bd@canb.auug.org.au>
+        with ESMTP id S1354803AbhKOXid (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 15 Nov 2021 18:38:33 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE9D5C061228;
+        Mon, 15 Nov 2021 14:36:03 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id f18so47602540lfv.6;
+        Mon, 15 Nov 2021 14:36:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=L7wjMKym1iMd/x5Kjut5c6PDKNIJ9EL2VN54UvWJZZw=;
+        b=Yjkbgh+oa5zveEDmy8P/BF/Usf0QRAps1N9OyxvzOIUe5ljjrZVDNCZzfEqqtSiuzU
+         c+2kGosVC4yd8YJSunfnje7x0hPNBm9ER5gQQhibfMv28F8ttittB0rqt+1jJh2ZyRrE
+         mKmG2Su8n6jxLhJ6WvYSjSr5+Er3Jb5XtOaLLiiktmogpg7RJP7G382KZlw/EJKYL8Gx
+         MturHg0r/SvTt/NhA6OX9Wu0E1jfdiKy8QQ+iilMqzQFdejBwUENhDbszBB3PmU/qpu1
+         pgGpKVCkwDSCQ9UFdZohWGWndgxvArLEWSOqXiT6GawDLDs2dvsdLKpqm6gUPG6SnC/0
+         s/Pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=L7wjMKym1iMd/x5Kjut5c6PDKNIJ9EL2VN54UvWJZZw=;
+        b=CI7WORYe9JrJHq7ZDeJtFvAkGSvzFLT5TBoCo11/1n9v+8XPRFi0tWgBpBzTqB3XeX
+         3YxtjM5e+6ZkYdivyzy8+5xSiojmjSgmJI7ZWlVaBmzf+DmRBTydv9x1+i81X9btVYB3
+         RN6lBfDvtGzETbLRVjdLApAJclxo6trU0xRBS1T7gfvtr+670Jf4/mdviMit/qMbwDUi
+         09pWGuAl1q6HDQDb6HOI3GtSI64XYGRscuYFmoMXOHx421ZJk2Q5cvv+isVkeFbvvwYT
+         gVR9tTp/xTH6YrnOuqEVLo5E0PkxVPXrnwv4Hg/EL5cQ//MIzhoMH/nKPpaR7OVwcLLB
+         YNsQ==
+X-Gm-Message-State: AOAM5335pKPoOWjJ95LOvRXnzpRXZVNpqT/sAOrCqeEwgqMpQFPrqoMu
+        1hYEBNDSuIGKMJ84pNMcvSRFIrdF3bQFXkABSnGzB7QK
+X-Google-Smtp-Source: ABdhPJx00ms+KXlRHKdrUHVbotkSm9uTYFm1ZRh275XxGQRY2Og5BB+xGAXcP8M4mLt+G6y6pQezE0i5D/X0bAA2onA=
+X-Received: by 2002:ac2:5ddb:: with SMTP id x27mr1999679lfq.595.1637015761909;
+ Mon, 15 Nov 2021 14:36:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/yalkpAx+/PzSTyn4mysE06u";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <20211116091702.3e2c4550@canb.auug.org.au>
+In-Reply-To: <20211116091702.3e2c4550@canb.auug.org.au>
+From:   Steve French <smfrench@gmail.com>
+Date:   Mon, 15 Nov 2021 16:35:51 -0600
+Message-ID: <CAH2r5mu6qbpFc23DtDj_pAD1zF9foJ5bSocGQiOzEurZ4ULYFQ@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the cifs tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     CIFS <linux-cifs@vger.kernel.org>,
+        chiminghao <chi.minghao@zte.com.cn>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/yalkpAx+/PzSTyn4mysE06u
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+patch removed pending author fix
 
-Hi all,
+On Mon, Nov 15, 2021 at 4:17 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> After merging the cifs tree, today's linux-next build (powerpc
+> ppc64_defconfig) failed like this:
+>
+> In file included from fs/cifs/dns_resolve.c:18:
+> fs/cifs/cifsglob.h: In function 'cifs_get_tlink':
+> fs/cifs/cifsglob.h:1169:14: error: passing argument 1 of 'atomic_inc' from incompatible pointer type [-Werror=incompatible-pointer-types]
+>  1169 |   atomic_inc(&tlink->tl_count);
+>       |              ^~~~~~~~~~~~~~~~
+>       |              |
+>       |              refcount_t * {aka struct refcount_struct *}
+> In file included from include/linux/atomic.h:82,
+>                  from include/linux/cpumask.h:13,
+>                  from include/linux/smp.h:13,
+>                  from include/linux/lockdep.h:14,
+>                  from include/linux/spinlock.h:62,
+>                  from include/linux/mmzone.h:8,
+>                  from include/linux/gfp.h:6,
+>                  from include/linux/slab.h:15,
+>                  from fs/cifs/dns_resolve.c:15:
+> include/linux/atomic/atomic-instrumented.h:179:22: note: expected 'atomic_t *' but argument is of type 'refcount_t *' {aka 'struct refcount_struct *'}
+>   179 | atomic_inc(atomic_t *v)
+>       |            ~~~~~~~~~~^
+>
+> and lots more similar ...
+>
+> Caused by commit
+>
+>   ef242296e441 ("fs:cifs: convert from atomic_t to refcount_t on tlink->tl_count")
+>
+> Please write, review, test (repeat) and, only then, publish. :-(
+>
+> I have used the cifs tree from next-20211115 for today.
+>
+> --
+> Cheers,
+> Stephen Rothwell
 
-Commits
 
-  2f61f240215d ("leds: led-core: Update fwnode with device_set_node")
-  5b9fbb94ff5a ("leds: tca6507: use swap() to make code cleaner")
 
-are missing a Signed-off-by from their committer.
+-- 
+Thanks,
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/yalkpAx+/PzSTyn4mysE06u
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGSzgYACgkQAVBC80lX
-0Gw/6gf/fbGNVaKgSz7HPYXsJoBOl5YyUGA+KxZjbrQkxxWU5lpfyph9l21taopV
-INM80jYDSX8lXtJEEMalsynwo+RVPgUDM82COzLK9PEhT2Z8P4SIEVOKPw8FCpTe
-i5Ei3JiF6mntFQPJMA/ns9JzEeyCbFVEgb0Y8WVQR8/BJ/Nlt12TRP04uncilVkI
-947yoeh7IhCTK9t+q1O4ucBgFXbEycoM3crTQ+KkOjtm1AMvbYUQnW4nD3buRyPj
-m4pdzILifmq8U1R2OWKfoPO5NdjG3FiRLSQLPPYYH33jUNBAOmsZnXWgsK2tJY4d
-DhCIrI8vJFUl2/6sXzvqBhlf+gVaug==
-=nAmJ
------END PGP SIGNATURE-----
-
---Sig_/yalkpAx+/PzSTyn4mysE06u--
+Steve

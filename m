@@ -2,177 +2,138 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B4364503D0
-	for <lists+linux-next@lfdr.de>; Mon, 15 Nov 2021 12:51:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E7BC4516A4
+	for <lists+linux-next@lfdr.de>; Mon, 15 Nov 2021 22:33:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230288AbhKOLyB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 15 Nov 2021 06:54:01 -0500
-Received: from a8-73.smtp-out.amazonses.com ([54.240.8.73]:36823 "EHLO
-        a8-73.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230507AbhKOLxv (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Mon, 15 Nov 2021 06:53:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1636977055;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=2sOxstCPxU8JYsUhjb8YwfmDiSauQSrcxs3m2oHBKz0=;
-        b=q2qAHaz0imLpwZOeEo4KYPW02wPHM3YLaKjDDQcuX0V4YAqdqwyS+YkId6O2wp4B
-        jyxqEVKjCteIyUVT1K+/Dlfc222nNi62W9NEhnHxri+Oc9lac5HaascPKzlLiXkxYlE
-        GKsFTNNw+nyZawg8n5Ngd93IkyyUHNVxFBKmTjRM=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1636977055;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=2sOxstCPxU8JYsUhjb8YwfmDiSauQSrcxs3m2oHBKz0=;
-        b=jbMg+RP+v8imA6McXM/ZzcwDwv2UOsbXGZPpmHik+jnNTF7jknLEUx68cJ4OEy9J
-        3HoJmyEpMsXiHYL4OgkxG/qnejGqb6lVYQgFqWjYS1QR9INevGWC57MSsZD3Ls1k+lj
-        +Vs/oTSZhlXwUHrGlvsvwGDriNKj+pJTnIpjX0Iw=
-From:   lkft@linaro.org
-To:     lkft@linaro.org
-Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
-        linux-next@vger.kernel.org, shuah@kernel.org
-Subject: [REGRESSION] lkft kselftest for next-20211115
+        id S240714AbhKOVgn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 15 Nov 2021 16:36:43 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:48357 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348988AbhKOVNx (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 15 Nov 2021 16:13:53 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HtML51WvXz4xbM;
+        Tue, 16 Nov 2021 08:10:53 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1637010653;
+        bh=ouiiKAgaax/jlItXSm8ObRYTMiRsdExBEOmVlnBfIQM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=HnD1g3K2B1MU5DiQBVhfliUnlQEYvOT5A7/8RSAwX0zaveoPqWRsSZT5lR/b/6aVS
+         oBG4KEBjOp+V76S2C5vGw+aCs4ikElZ30GZIVVP6LjFgTxx7JOw9YFgfmVnaSB36eb
+         B8I9F2X7sxTASncyOCRn/TU9QvRM27u8vC4jJcP5BYw3kvVsHcchi4RsSf9jK7bEZj
+         UXbaK21kTTxXvOrRi9lSP/FD/QgnzURwH9KJpaZuvY6XsZ8IeHtz/LroUuJmres9Nd
+         fwx5645A0NRQS44+Lo9DIo7/4H+vKq4FnCY7nLAuvbCcIf6PQtwcufZ78uzwtLS95J
+         Yt4F9RA0ET0Kg==
+Date:   Tue, 16 Nov 2021 08:10:51 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Dillon Min <dillon.minfei@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tags need some work in the v4l-dvb-next tree
+Message-ID: <20211116081051.2066724f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-Message-ID: <0100017d236f9420-9dd4f543-4071-4eec-98f0-2d4a0c0a1e73-000000@email.amazonses.com>
-Date:   Mon, 15 Nov 2021 11:50:54 +0000
-Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2021.11.15-54.240.8.73
+Content-Type: multipart/signed; boundary="Sig_/9pFV1GLELZsjSIUBnHqras3";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-## Build
-* kernel: 5.15.0
-* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-* git branch: master
-* git commit: 09bd48c4acfa9069ca7517ea27fcc17689ad0f2e
-* git describe: next-20211115
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20211115
+--Sig_/9pFV1GLELZsjSIUBnHqras3
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-## Regressions (compared to next-20211112)
-* i386, kselftest-net
-  - net.tls
-  - net.tls.tls.12_aes_gcm.send_then_sendfile
-  - net.tls.tls.12_chacha.send_then_sendfile
-  - net.tls.tls.13_aes_gcm.send_then_sendfile
-  - net.tls.tls.13_chacha.send_then_sendfile
-  - net.tls.tls.13_sm4_ccm.send_then_sendfile
-  - net.tls.tls.13_sm4_gcm.send_then_sendfile
+Hi all,
 
-* qemu_arm, kselftest-zram
-  - zram.zram.sh
+In commit
 
-* qemu_x86_64, kselftest-kvm
-  - kvm.rseq_test
+  d9fbdedc56ea ("media: stm32-dma2d: fix compile-testing failed")
 
-* x15, kselftest-cgroup
-  - cgroup.test_freezer
-  - cgroup.test_freezer.test_cgfreezer_ptrace
+Fixes tag
 
-* x15, kselftest-rtc
-  - rtc.rtctest
+  Fixes: bff6e3e2f4c9 ("media: stm32-dma2d: STM32 DMA2D driver")
 
-* x86, kselftest-net
-  - net.gro.sh
+has these problem(s):
 
+  - Target SHA1 does not exist
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Maybe you meant
 
+Fixes: 002e8f0d5927 ("media: stm32-dma2d: STM32 DMA2D driver")
 
-## Fixes (compared to next-20211112)
-* i386, kselftest-net
-  - net.so_txtime.sh
+In commit
 
-* qemu_arm, kselftest-rtc
-  - rtc.rtctest
+  147907e93224 ("media: stm32-dma2d: fix compile errors when W=3D1")
 
-* qemu_i386, kselftest-rtc
-  - rtc.rtctest
+Fixes tag
 
-* qemu_x86_64, kselftest-rtc
-  - rtc.rtctest
+  Fixes: bff6e3e2f4c9 ("media: stm32-dma2d: STM32 DMA2D driver")
 
-* x86, kselftest-net
-  - net.ip_defrag.sh
+has these problem(s):
 
-* x86, kselftest-rtc
-  - rtc.rtctest
+  - Target SHA1 does not exist
 
+Maybe you meant
 
-## Test result summary
-total: 3250, pass: 1984, fail: 296, skip: 970, xfail: 0
+Fixes: 002e8f0d5927 ("media: stm32-dma2d: STM32 DMA2D driver")
 
-## Build Summary
+In commit
 
-## Test suites summary
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-lkdtm
-* kselftest-membarrier
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
+  22f2cac62dea ("media: atomisp-ov2680: properly set the vts value")
 
---
-Linaro LKFT
-https://lkft.linaro.org
+Fixes tag
+
+  Fixes: 62b984359b6f ("media: atomisp-ov2680: Fix ov2680_set_fmt() messing=
+ up high exposure settings")
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: 29400b5063db ("media: atomisp-ov2680: Fix ov2680_set_fmt() messing u=
+p high exposure settings")
+
+In commit
+
+  d9916e7c87c9 ("media: atomisp-ov2680: initialize return var")
+
+Fixes tag
+
+  Fixes: 6b5b60687ada ("media: atomisp-ov2680: Save/restore exposure and ga=
+in over sensor power-down")
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: 4ed2caf85337 ("media: atomisp-ov2680: Save/restore exposure and gain=
+ over sensor power-down")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/9pFV1GLELZsjSIUBnHqras3
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGSzNsACgkQAVBC80lX
+0GxDlAf+LujFZn1TAWIT0Zuck5bYoMjMOi2Lo1RZ7VBpl6WVi8W18pSWRiOp5ymq
+KN4aRwYXHUGBfv46FMPmeTCO5mgrKAbEigVoHcsAWtzoA9XSJTrP1z+maV1qFpHb
+uJiKZ7VyXBoUlRZUQyYQCcOB83FhivjjB0Z7UvM9VOBR2EnONqDKu6cO97zp9UEE
+2Ksr/Oc2J8aZ4K8Mnwpn0yTDboA7lFpIUCW8kW8gsTwsJQLIV+6RJu4Zz3zE1kC8
+sa+tOXQeBYSut0LkqaredFZxoZYzHOcVBg3mh05DD+RAtYEi6/gIDEgMJPwQUvnX
+2XPsqxdvsTPN0o/MGhLwglWR2ut0+w==
+=EJpY
+-----END PGP SIGNATURE-----
+
+--Sig_/9pFV1GLELZsjSIUBnHqras3--

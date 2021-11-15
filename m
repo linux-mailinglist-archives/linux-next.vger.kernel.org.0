@@ -2,296 +2,270 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDFD644FF3C
-	for <lists+linux-next@lfdr.de>; Mon, 15 Nov 2021 08:32:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A44744FFEF
+	for <lists+linux-next@lfdr.de>; Mon, 15 Nov 2021 09:18:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229763AbhKOHfD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 15 Nov 2021 02:35:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44540 "EHLO
+        id S229917AbhKOIVL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 15 Nov 2021 03:21:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbhKOHew (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 15 Nov 2021 02:34:52 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38031C061746
-        for <linux-next@vger.kernel.org>; Sun, 14 Nov 2021 23:31:54 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id b13so13769667plg.2
-        for <linux-next@vger.kernel.org>; Sun, 14 Nov 2021 23:31:54 -0800 (PST)
+        with ESMTP id S231600AbhKOIUf (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 15 Nov 2021 03:20:35 -0500
+Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F698C061746;
+        Mon, 15 Nov 2021 00:17:38 -0800 (PST)
+Received: by mail-ua1-x92d.google.com with SMTP id w23so10177532uao.5;
+        Mon, 15 Nov 2021 00:17:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=VGCcV3B8MrQdWXvsbd9gcBRn8T1+sReUv14LQ6MYfYk=;
-        b=Lrml7L+I1ZcVXx5SDL1NmiyUyDw2mZiTPj5NSUbYPtT6qPi0azVWmwN2puWVz/MJ5y
-         ZJA0Ksqhqv6zhj0j6mQBUY4lRtQlKtmx/NdXwfikOljiEnpxYFre2aX5y/ouqSOT0XTJ
-         bnOEaZqqnGmQxZKt6OXdi0unnDayTVtQHqbUF3lpv5n9hsJM6xuGfqRNfFM0oE0CLKYR
-         tUkQB+e7QQLJrAlpH4p1LMMP2nPFKvytir3zIROQy4Z2GMcQf1DmTnWXYT5/7B4G6mew
-         5nYJvlyLhnUzO+6IIrh3CwnXf7MkMGtNgvHxfqWetSmL2UkAjf8jO9h5Xtyg/U//fzij
-         jopQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=By5p3l+jvofWAWLaVcfc5GGtkfLeIUKs4HOwKe1fAbQ=;
+        b=o+MwRDcIniziU8P5DIs8Mw1EpQFSmOrSRj2SdSxBx5nQIGrDhxE1WpelTOIpA4NJss
+         ScK3MoCOrKp8mCmC/njdlOqnsYHZ7fpWf22jksyERImZrD2j82UQnZ8tH/FW30fT9bEw
+         pQj5TaLwbrlSUsc6l7PI9btf6SS8tiMnPGPQGzV4FTJ+TaW8WWr8OAZnM9pSxVuHxRZS
+         6LNJ5UCzjtcUvxWAQ0PsM+CoZWgQN69C9LjLv+E0U+EYcQqusXZqEBpabYlUFXFJsuc7
+         2SfZ/K96GYc1R8nrGXiC3atiCSlvpUtfk+3/AHDexrAzOpPrjS3Ts7kM5zIq9p3elSxG
+         yTTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=VGCcV3B8MrQdWXvsbd9gcBRn8T1+sReUv14LQ6MYfYk=;
-        b=cvFMTDLATQ5VbLT1zlkS5/DBfV11hyIdV+6FZ7na1ysu9MeOIs1lCZP0ohIPhT2rms
-         +2WY+hEpzshXXLKFvueoMtiU64fToxahz/+zahmT7/NKtkWMCBAUFNzHz6zZrRuLuxHf
-         rEDLAoTJnSOKEllYLz4ofc/GB6w8Hk0OvQZOR5FsCeakyHVNTgEXvukggFPXkCu7VaJn
-         fcHFl6RYatt1z3FqasSa3/tnkt4LXXMt3Ie+1y5wN3IttwyLHs92ImJuFiVdtILF/vYS
-         d7gHkm6LLN6WEb+H/hnsoaqb5fLijO7HNAXy1FlJvUe/GANkWilwiAba7PTLpi8hSc6v
-         eetQ==
-X-Gm-Message-State: AOAM530WXndDS2D7n7rL1o8sErXg0PqWJw5uJCiNZTRVrsG1pXs/1+Ht
-        bkCUis8Rql7TVXMxq5Bb8CSrlogMveWgYF1N
-X-Google-Smtp-Source: ABdhPJwKffunO7hLD1PDf7YhQqQfEvCFbx0qgI9Y4ImEiLjK6NZL6/OAkg1rE/b5d3JbHxESPyXkDA==
-X-Received: by 2002:a17:90b:1650:: with SMTP id il16mr40977108pjb.242.1636961513523;
-        Sun, 14 Nov 2021 23:31:53 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id s2sm19193780pjs.56.2021.11.14.23.31.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 Nov 2021 23:31:53 -0800 (PST)
-Message-ID: <61920ce9.1c69fb81.2a5c1.763c@mx.google.com>
-Date:   Sun, 14 Nov 2021 23:31:53 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=By5p3l+jvofWAWLaVcfc5GGtkfLeIUKs4HOwKe1fAbQ=;
+        b=DhTkv8Lx6KhYd75x6yCId514tm38rda966gUlRHYMTMDma2m7ngjOzYOO0DempukMK
+         l8Dvjl26T5Hei2SrsjRqKPu9aFHWYOTTyxdtTvFTzH4u6ahdKrvxtp0IaBrYEvEGjA4F
+         pIZLlftjSp9w4UGeDyNOBc7SknIPF6T1xv3eZLtOx95zZRpPyc2Zkj0Bax2Il2KelfFT
+         JKaryV5HHdaRwPb76geNO+qbB7xMXxxxqWnJrKP1oFfPbCRxsCZ/cLLSaVdbgtMw2GNf
+         6jx2LTAvKfFQWJ4+PYfzPpoF1XntoYtWMXzBWKUg5a3+FM5rAElxLbe3BQF9hcUvFnJF
+         D3mw==
+X-Gm-Message-State: AOAM530vx90zsMHtXJ5SuioogIS/fDVrQKP98okBBiA0GhAleu9EeCdQ
+        5dvDWWZGJFmy/kYQ8eBHuwqa7xFNq+jWlvkXe9U=
+X-Google-Smtp-Source: ABdhPJwFUsFJGu/gCVF5SWWbPfhqhjOI0GwyDbuiYTOf/NdNTyxvnsUkr/Up3XP+GRhPN+hr/fRC9qHFdnrMwANqQZE=
+X-Received: by 2002:ab0:39cf:: with SMTP id g15mr57149296uaw.0.1636964257513;
+ Mon, 15 Nov 2021 00:17:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: next-20211115
-X-Kernelci-Report-Type: test
-Subject: next/master baseline: 783 runs, 6 regressions (next-20211115)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+References: <CAMhs-H8ShoaYiFOOzJaGC68nZz=V365RXN_Kjuj=fPFENGJiiw@mail.gmail.com>
+ <20211109224138.GA1180875@bhelgaas> <CAMhs-H9zpjg64Y-VAdM16FXwwzObB1+npDcGXD484hXzyEPtdg@mail.gmail.com>
+In-Reply-To: <CAMhs-H9zpjg64Y-VAdM16FXwwzObB1+npDcGXD484hXzyEPtdg@mail.gmail.com>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Mon, 15 Nov 2021 09:17:26 +0100
+Message-ID: <CAMhs-H8C5i5RFiMw49ukmNaAeDQzzBd3SK+4TGi9z39_81TrOA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] MIPS: cm/cpc: export some missing symbols to be
+ able to use them from driver code
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Yanteng Si <siyanteng01@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>, kw@linux.com,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        chenhuacai@kernel.org, sterlingteng@gmail.com,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master baseline: 783 runs, 6 regressions (next-20211115)
-
-Regressions Summary
--------------------
-
-platform             | arch  | lab           | compiler | defconfig        =
-            | regressions
----------------------+-------+---------------+----------+------------------=
-------------+------------
-beagle-xm            | arm   | lab-baylibre  | clang-13 | multi_v7_defconfi=
-g           | 1          =
-
-meson-gxbb-p200      | arm64 | lab-baylibre  | gcc-10   | defconfig+CON...B=
-IG_ENDIAN=3Dy | 2          =
-
-meson-gxbb-p200      | arm64 | lab-baylibre  | gcc-10   | defconfig+ima    =
-            | 1          =
-
-meson-gxl-s905d-p230 | arm64 | lab-baylibre  | clang-13 | defconfig+CON..._=
-64K_PAGES=3Dy | 1          =
-
-rk3288-veyron-jaq    | arm   | lab-collabora | gcc-10   | multi_v7_defc...C=
-ONFIG_SMP=3Dn | 1          =
-
-
-  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
-211115/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   master
-  Describe: next-20211115
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      09bd48c4acfa9069ca7517ea27fcc17689ad0f2e =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform             | arch  | lab           | compiler | defconfig        =
-            | regressions
----------------------+-------+---------------+----------+------------------=
-------------+------------
-beagle-xm            | arm   | lab-baylibre  | clang-13 | multi_v7_defconfi=
-g           | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6191d3527a2675c41833593e
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    clang-13 (Debian clang version 13.0.1-++20211105082911+21620=
-0aff268-1~exp1~20211105203443.23)
-  Plain log:   https://storage.kernelci.org//next/master/next-20211115/arm/=
-multi_v7_defconfig/clang-13/lab-baylibre/baseline-beagle-xm.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20211115/arm/=
-multi_v7_defconfig/clang-13/lab-baylibre/baseline-beagle-xm.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6191d3527a2675c418335=
-93f
-        failing since 18 days (last pass: next-20211026, first fail: next-2=
-0211027) =
-
- =
-
-
-
-platform             | arch  | lab           | compiler | defconfig        =
-            | regressions
----------------------+-------+---------------+----------+------------------=
-------------+------------
-meson-gxbb-p200      | arm64 | lab-baylibre  | gcc-10   | defconfig+CON...B=
-IG_ENDIAN=3Dy | 2          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6191cf1e5ed3afea2d3358f0
-
-  Results:     4 PASS, 2 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20211115/arm6=
-4/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-10/lab-baylibre/baseline-meson-gx=
-bb-p200.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20211115/arm6=
-4/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-10/lab-baylibre/baseline-meson-gx=
-bb-p200.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64be/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.dmesg.alert: https://kernelci.org/test/case/id/6191cf1e5ed3afe=
-a2d3358f4
-        new failure (last pass: next-20211111)
-        12 lines
-
-    2021-11-15T03:08:01.928952  kern  <8>[   44.451533] <LAVA_SIGNAL_TESTCA=
-SE TEST_CASE_ID=3Dalert RESULT=3Dfail UNITS=3Dlines MEASUREMENT=3D12>
-    2021-11-15T03:08:01.930374  :alert : Mem abort info:   =
-
-
-  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/6191cf1e5ed3afe=
-a2d3358f5
-        new failure (last pass: next-20211111)
-        2 lines
-
-    2021-11-15T03:08:01.936489  kern  :alert :   ESR =3D 0x96000045
-    2021-11-15T03:08:01.937683  kern  :alert :   EC =3D 0x25: DABT (current=
- EL), IL =3D 32 bits
-    2021-11-15T03:08:01.939013  kern  :alert :   SET =3D 0, FnV =3D 0
-    2021-11-15T03:08:01.940228  kern  :alert :   EA =3D 0, S1PTW =3D 0
-    2021-11-15T03:08:01.941439  kern  :alert :   FSC =3D 0x05: level 1 <8>[=
-   44.480146] <LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Demerg RESULT=3Dfail UNIT=
-S=3Dlines MEASUREMENT=3D2>
-    2021-11-15T03:08:01.942712  translation fault<8>[   44.487810] <LAVA_SI=
-GNAL_ENDRUN 0_dmesg 1075186_1.5.2.4.1>
-    2021-11-15T03:08:01.943939  =
-
-    2021-11-15T03:08:01.945141  kern  :alert : Data abort info:   =
-
- =
-
-
-
-platform             | arch  | lab           | compiler | defconfig        =
-            | regressions
----------------------+-------+---------------+----------+------------------=
-------------+------------
-meson-gxbb-p200      | arm64 | lab-baylibre  | gcc-10   | defconfig+ima    =
-            | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6191d2dedca61db63a3358e1
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+ima
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20211115/arm6=
-4/defconfig+ima/gcc-10/lab-baylibre/baseline-meson-gxbb-p200.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20211115/arm6=
-4/defconfig+ima/gcc-10/lab-baylibre/baseline-meson-gxbb-p200.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6191d2dedca61db63a335=
-8e2
-        new failure (last pass: next-20211112) =
-
- =
-
-
-
-platform             | arch  | lab           | compiler | defconfig        =
-            | regressions
----------------------+-------+---------------+----------+------------------=
-------------+------------
-meson-gxl-s905d-p230 | arm64 | lab-baylibre  | clang-13 | defconfig+CON..._=
-64K_PAGES=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6191d68b8f9fae4a7d3358e5
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
-  Compiler:    clang-13 (Debian clang version 13.0.1-++20211105082911+21620=
-0aff268-1~exp1~20211105203443.23)
-  Plain log:   https://storage.kernelci.org//next/master/next-20211115/arm6=
-4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-13/lab-baylibre/baseline-meson=
--gxl-s905d-p230.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20211115/arm6=
-4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-13/lab-baylibre/baseline-meson=
--gxl-s905d-p230.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6191d68b8f9fae4a7d335=
-8e6
-        new failure (last pass: next-20211112) =
-
- =
-
-
-
-platform             | arch  | lab           | compiler | defconfig        =
-            | regressions
----------------------+-------+---------------+----------+------------------=
-------------+------------
-rk3288-veyron-jaq    | arm   | lab-collabora | gcc-10   | multi_v7_defc...C=
-ONFIG_SMP=3Dn | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6191d57a688ffa107d3358ea
-
-  Results:     69 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20211115/arm/=
-multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-10/lab-collabora/baseline-rk3288-veyr=
-on-jaq.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20211115/arm/=
-multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-10/lab-collabora/baseline-rk3288-veyr=
-on-jaq.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.cros-ec-keyb-probed: https://kernelci.org/test/case/id/=
-6191d57a688ffa107d335929
-        new failure (last pass: next-20211112)
-
-    2021-11-15T03:35:05.165181  /lava-4984827/1/../bin/lava-test-case<8>[  =
- 14.145582] <LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Dcros-ec-keyb-probed RESULT=
-=3Dfail>   =
-
- =20
+On Wed, Nov 10, 2021 at 7:00 AM Sergio Paracuellos
+<sergio.paracuellos@gmail.com> wrote:
+>
+> On Tue, Nov 9, 2021 at 11:41 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> >
+> > [+cc Arnd]
+> >
+> > On Sun, Nov 07, 2021 at 08:00:56AM +0100, Sergio Paracuellos wrote:
+> > > On Sat, Oct 30, 2021 at 7:38 AM Sergio Paracuellos
+> > > <sergio.paracuellos@gmail.com> wrote:
+> > > > On Sat, Oct 30, 2021 at 7:21 AM Sergio Paracuellos
+> > > > <sergio.paracuellos@gmail.com> wrote:
+> > > > > On Fri, Oct 29, 2021 at 10:27 PM Sergio Paracuellos
+> > > > > <sergio.paracuellos@gmail.com> wrote:
+> > > > > > On Fri, Oct 29, 2021 at 9:47 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > > > > > On Fri, Oct 29, 2021 at 09:37:53PM +0200, Sergio Paracuellos wrote:
+> > > > > > > > On Fri, Oct 29, 2021 at 8:49 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> >
+> > > > > > > > > One way might be to implement a
+> > > > > > > > > pcibios_root_bridge_prepare() for mips and put the
+> > > > > > > > > setup_cm_memory_region() stuff in there.  It's not
+> > > > > > > > > *ideal* because that's a strong/weak function
+> > > > > > > > > arrangement that doesn't allow for multiple host
+> > > > > > > > > bridges, but that's probably not an issue here.
+> > > > > > > > >
+> > > > > > > > > If we can't do that, I think making it bool is probably
+> > > > > > > > > the right answer, but it would be worth a brief comment
+> > > > > > > > > in the commit log to explain the issue.
+> > > > > > > >
+> > > > > > > > Do you mean to implement 'pcibios_root_bridge_prepare()'
+> > > > > > > > for MIPS ralink? I guess this means to parse device tree
+> > > > > > > > and so on only to get memory range addresses to be added
+> > > > > > > > to the MIPS I/O coherence regions to make things work and
+> > > > > > > > then re-parse it again in the driver to do the proper PCI
+> > > > > > > > setup... We end up in an arch generic driver but at the
+> > > > > > > > end this controller is only present in ralink MIPS, so I
+> > > > > > > > am not sure that implementing
+> > > > > > > > 'pcibios_root_bridge_prepare()' is worthy here... I can
+> > > > > > > > explore and try to implement it if you think that it
+> > > > > > > > really makes sense... but, IMHO if this is the case, just
+> > > > > > > > making it bool looks like the correct thing to do.
+> > > > > > >
+> > > > > > > It should be trivial to put the contents of
+> > > > > > > setup_cm_memory_region() into a ralink function called
+> > > > > > > pcibios_root_bridge_prepare().
+> > > > > > >
+> > > > > > > pcibios_root_bridge_prepare() is called with the same
+> > > > > > > "struct pci_host_bridge *" argument as
+> > > > > > > setup_cm_memory_region(), and it's called slightly later, so
+> > > > > > > the window resources are already set up, so no DT parsing is
+> > > > > > > required.  It looks like a simple move and rename to me.
+> > > > > >
+> > > > > > I see. Thanks Bjorn. I will try the approach during the
+> > > > > > weekend and report if it works.
+> > > > >
+> > > > > I have tested the change from 'setup_cm_memory_region()' code
+> > > > > into 'pcibios_root_bridge_prepare()' just by moving and renaming
+> > > > > it from the PCIe controller code. The function is properly being
+> > > > > called.  However, it looks like at that point, windows are not
+> > > > > setup yet (no windows present at all in bridge->windows) so the
+> > > > > system is not able to get the IORESOURCE_MEM resource to set up
+> > > > > the IO coherency unit and the PCI failed to start:
+> > > > >
+> > > > > [   16.785359] mt7621-pci 1e140000.pcie: host bridge /pcie@1e140000 ranges:
+> > > > > [   16.798719] mt7621-pci 1e140000.pcie:   No bus range found for
+> > > > > /pcie@1e140000, using [bus 00-ff]
+> > > > > [   16.816248] mt7621-pci 1e140000.pcie:      MEM
+> > > > > 0x0060000000..0x006fffffff -> 0x0060000000
+> > > > > [   16.861310] mt7621-pci 1e140000.pcie:       IO
+> > > > > 0x001e160000..0x001e16ffff -> 0x0000000000
+> > > > > [   17.179230] mt7621-pci 1e140000.pcie: PCIE0 enabled
+> > > > > [   17.188954] mt7621-pci 1e140000.pcie: PCIE1 enabled
+> > > > > [   17.198678] mt7621-pci 1e140000.pcie: PCIE2 enabled
+> > > > > [   17.208415] Cannot get memory resource
+> > > > > [   17.215884] mt7621-pci 1e140000.pcie: Scanning root bridge failed
+> > > > > [   17.228454] mt7621-pci: probe of 1e140000.pcie failed with error -22
+> > > > >
+> > > > > FWIW, when the function is called, I have also tried to set up
+> > > > > hardcoded addresses. Doing that the IO coherency unit was
+> > > > > properly set up and PCI properly worked (expected). So, using
+> > > > > this 'pcibios_root_bridge_prepare()' funcion looks like a
+> > > > > possible way to go but we need the addresses properly being
+> > > > > passed into the function.  I've also tried to list
+> > > > > 'bridge->dma_ranges' and get resources from there instead of
+> > > > > using the not already setup 'bridge->windows'. There is nothing
+> > > > > inside that list also. 'bridge->bus->resources' is also empty...
+> > > > > Am I missing something? I was expecting the bridge passed around
+> > > > > to be the same that was in PCIe controller code, and it seems it
+> > > > > is (I printed the bridge pointer itself in driver code before
+> > > > > calling 'mt7621_pcie_register_host()' and in
+> > > > > 'pcibios_root_bridge_prepare()' at the begging of the function
+> > > > > and the pointer is the same) but windows and other stuff are not
+> > > > > already present there...
+> > > >
+> > > > Looking into [0] it looks like resources are temporarily removed
+> > > > from the list just before call 'pcibios_root_bridge_prepare()'.
+> > > > Hence the behaviour I am seeing when trying to get them...
+> > > >
+> > > > [0]:
+> > > > https://elixir.bootlin.com/linux/latest/source/drivers/pci/probe.c#L915
+> > >
+> > > Can you explain to me, why are resources temporarily removed from
+> > > the 'bridge->windows' list?
+> > >
+> > > Would moving that list split to be done after
+> > > 'pcibios_root_bridge_prepare()' is called a possibility?
+> >
+> > I don't know why the windows are managed that way.  That was added by
+> > 37d6a0a6f470 ("PCI: Add pci_register_host_bridge() interface").   I
+> > cc'd Arnd just in case he remembers, but that was a long time ago.
+>
+> Thanks, 2016 is not so far to already remember why things were done :)).
+>
+> >
+> > I don't see any use of bridge->windows in any of the
+> > pcibios_root_bridge_prepare() functions.  It doesn't *look* like it
+> > should be used until the coalesce/add code near the end.
+>
+> I checked them also, and nobody uses 'bridge->windows' there but all the
+> information is already there from dt parsing process when the
+> 'pci_register_host_bridge()'
+> is called and we are putting temporally in a 'resources' list to add
+> again all of them at the end.
+> All the calls before 'pcibios_root_bridge_prepare()' don't do anything
+> related with windows
+> either, that's why I asked to move the split after calling it since,
+> at a first glance, it does not
+> look harmful. Let's wait for Arnd explanation about why things are
+> being doing in this way
+> and if is this a possible way to proceed.
+>
+> Best regards,
+>      Sergio Paracuellos
+>
+> >
+> > > diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
+> > > index 4289030b0fff..2132df91ad8b 100644
+> > > --- a/drivers/pci/probe.c
+> > > +++ b/drivers/pci/probe.c
+> > > @@ -891,8 +891,6 @@ static int pci_register_host_bridge(struct
+> > > pci_host_bridge *bridge)
+> > >
+> > >         bridge->bus = bus;
+> > >
+> > > -       /* Temporarily move resources off the list */
+> > > -       list_splice_init(&bridge->windows, &resources);
+> > >         bus->sysdata = bridge->sysdata;
+> > >         bus->msi = bridge->msi;
+> > >         bus->ops = bridge->ops;
+> > > @@ -916,6 +914,8 @@ static int pci_register_host_bridge(struct
+> > > pci_host_bridge *bridge)
+> > >         if (err)
+> > >                 goto free;
+> > >
+> > > +       /* Temporarily move resources off the list */
+> > > +       list_splice_init(&bridge->windows, &resources);
+> > >         err = device_add(&bridge->dev);
+> > >         if (err) {
+> > >                 put_device(&bridge->dev);
+> > >
+> > > Obviously doing this works and windows are passed into mips ralink
+> > > specific 'pcibios_root_bridge_prepare()' and the PCIe subsystem is
+> > > properly working.
+> > >
+> > > The advantages I see to this approach are that doing in this way lets us to:
+> > > - Remove specific mips code from the driver controller.
+> > > - Allow the driver to be compile tested for any architecture.
+> > >
+> > > And the changes would be the following patches:
+> > > 1) Small 'drivers/pci/probe.c' change.
+> > > 2) Move mips specific code into 'arch/mips/ralink/mt76721.c' (since
+> > > other mips ralink stuff haven't got IO coherency units) to be inside
+> > > 'pcibios_root_bridge_prepare()'.
+> > > 3) Add MODULE_LICENSE macro to the PCIe controller driver to avoid
+> > > complaints when the driver is compiled as a module .
+> > > 4) Update PCIe controller driver's Kconfig to avoid MIPS COMPILE_TEST
+> > > conditional and completely enable it for COMPILE_TEST.
+
+I have sent this just to a clear image of a possible way to go:
+
+https://lkml.org/lkml/2021/11/15/48
+
+Thanks,
+    Sergio Paracuellos
+
+> > >
+> > > When you have time, please, let me know your thoughts about this.
+> > >
+> > > Thanks in advance for your time.
+> > >
+> > > Best regards,
+> > >     Sergio Paracuellos

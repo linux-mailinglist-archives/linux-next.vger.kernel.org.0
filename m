@@ -2,107 +2,79 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3702D451783
-	for <lists+linux-next@lfdr.de>; Mon, 15 Nov 2021 23:30:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0000B451937
+	for <lists+linux-next@lfdr.de>; Tue, 16 Nov 2021 00:14:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236696AbhKOWcz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 15 Nov 2021 17:32:55 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:34893 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350231AbhKOWUZ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 15 Nov 2021 17:20:25 -0500
+        id S231455AbhKOXQZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 15 Nov 2021 18:16:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36520 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350184AbhKOVap (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 15 Nov 2021 16:30:45 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C1DDC02982A;
+        Mon, 15 Nov 2021 13:15:57 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HtNpQ6gV0z4xcC;
-        Tue, 16 Nov 2021 09:17:02 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HtMRq5Vgwz4xbM;
+        Tue, 16 Nov 2021 08:15:51 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1637014623;
-        bh=7cUctgxZBS6/N20u0anh9V5IsZ0iPrrFRpTs8tw8GJ4=;
+        s=201702; t=1637010952;
+        bh=2PQkiML75nH5gTjFrmbLQEay2Mw4j+3cq9G3Vz10pxw=;
         h=Date:From:To:Cc:Subject:From;
-        b=lQNjYrO1cE2hBfL3itZQIwpriLdB+rpfaz+5EXAXeaoqEivXgsXImGHgyJjCNPzz1
-         IHH3C1fH34NRln8SfYADIwvwWGZRpzF4DJ15hRAaZApb3Vv660GuL8IAx5EIXHU7rE
-         PdwD2U2gUMQgZO0y2HtUbm6K3nEL8JwPid/R7AD3u6n4qZax8vExQjfN5xyfI12FWS
-         Kp2R13RkU3L1HgE+VNRI+w9k37DdSmJtZkG/TH//8j/ooKl/CXBOny5z4FEDl+xBro
-         SCgvtN78HmCdRzxQUyhTOp8FOpMXpvqb+i9opMWq1azJ2WeeDBmfcUmmJ1MfbS6zDr
-         BT6pFSd7jjEpw==
-Date:   Tue, 16 Nov 2021 09:17:02 +1100
+        b=VBc38h/i+Jm+bhlGc95+AwVfhnsZQgPY96byZGfuKrOaXBDZ8g5SJAY+Kx9EGGW22
+         +7l1dJ3pTy5JNcmvcSKfRTfN2Tmw8Jx9nR1WtbCaOSEaXTuNHitHRS2BylHFEyDh/C
+         eWKYzVw1/3FR1ykc46WHM9mMhwsjGEFyj7iJOD4X/5cjuygUz/b8gX2pak/3iZWJRJ
+         2PrrTKtpd8wTHHZJhTVusprsErLDSgZ489KPQfG8En7FU/nJzjU1THDg775IuHpdwx
+         /HC7RAxPypJPytxArt4ZrBrdfF55CBqZj/CxVS2bPQrBsGFlszgM1J2rSxXo8QpPIj
+         JNCPuhqFO4Rgw==
+Date:   Tue, 16 Nov 2021 08:15:50 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Steve French <smfrench@gmail.com>,
-        CIFS <linux-cifs@vger.kernel.org>
-Cc:     chiminghao <chi.minghao@zte.com.cn>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the cifs tree
-Message-ID: <20211116091702.3e2c4550@canb.auug.org.au>
+Subject: linux-next: Signed-off-by missing for commits in the leds tree
+Message-ID: <20211116081550.7cb196bd@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/8OU1EBP8FYM4_smUQbePUaG";
+Content-Type: multipart/signed; boundary="Sig_/yalkpAx+/PzSTyn4mysE06u";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/8OU1EBP8FYM4_smUQbePUaG
+--Sig_/yalkpAx+/PzSTyn4mysE06u
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the cifs tree, today's linux-next build (powerpc
-ppc64_defconfig) failed like this:
+Commits
 
-In file included from fs/cifs/dns_resolve.c:18:
-fs/cifs/cifsglob.h: In function 'cifs_get_tlink':
-fs/cifs/cifsglob.h:1169:14: error: passing argument 1 of 'atomic_inc' from =
-incompatible pointer type [-Werror=3Dincompatible-pointer-types]
- 1169 |   atomic_inc(&tlink->tl_count);
-      |              ^~~~~~~~~~~~~~~~
-      |              |
-      |              refcount_t * {aka struct refcount_struct *}
-In file included from include/linux/atomic.h:82,
-                 from include/linux/cpumask.h:13,
-                 from include/linux/smp.h:13,
-                 from include/linux/lockdep.h:14,
-                 from include/linux/spinlock.h:62,
-                 from include/linux/mmzone.h:8,
-                 from include/linux/gfp.h:6,
-                 from include/linux/slab.h:15,
-                 from fs/cifs/dns_resolve.c:15:
-include/linux/atomic/atomic-instrumented.h:179:22: note: expected 'atomic_t=
- *' but argument is of type 'refcount_t *' {aka 'struct refcount_struct *'}
-  179 | atomic_inc(atomic_t *v)
-      |            ~~~~~~~~~~^
+  2f61f240215d ("leds: led-core: Update fwnode with device_set_node")
+  5b9fbb94ff5a ("leds: tca6507: use swap() to make code cleaner")
 
-and lots more similar ...
-
-Caused by commit
-
-  ef242296e441 ("fs:cifs: convert from atomic_t to refcount_t on tlink->tl_=
-count")
-
-Please write, review, test (repeat) and, only then, publish. :-(
-
-I have used the cifs tree from next-20211115 for today.
+are missing a Signed-off-by from their committer.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/8OU1EBP8FYM4_smUQbePUaG
+--Sig_/yalkpAx+/PzSTyn4mysE06u
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGS3F4ACgkQAVBC80lX
-0Gwl7wf/fkkYyUfQl2BCCbBUhVHjlIigMz/u91Z+nugFkijukO6d00ef5TcemlM+
-HwTZWmsakV0AdtwBa3tIGY+4NFy1xpSMsGoBjhbcS9pQAXnkVzxa1OTtync2nGUZ
-8M5z4LrKd+FmVZYqA3w3ekvDCQBZkbchrwBVEU+hurl8XUVrOFrFo7eO7KfFR74s
-kGzIRVf/wrKD4RI0f0pDTyEjUKWyxX4O6YKDhPDHzPBQVs2VWaUSYuDOyAmlfmOZ
-pIA5EcPW1C56c7ntFPvw+U9tP6jsKpzP3ajVmal9UcVk0+LAezAK74llJlSDHd9F
-Wla1vfjpLmqsTnwqPHlsQw4IJsjp+g==
-=xtMQ
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGSzgYACgkQAVBC80lX
+0Gw/6gf/fbGNVaKgSz7HPYXsJoBOl5YyUGA+KxZjbrQkxxWU5lpfyph9l21taopV
+INM80jYDSX8lXtJEEMalsynwo+RVPgUDM82COzLK9PEhT2Z8P4SIEVOKPw8FCpTe
+i5Ei3JiF6mntFQPJMA/ns9JzEeyCbFVEgb0Y8WVQR8/BJ/Nlt12TRP04uncilVkI
+947yoeh7IhCTK9t+q1O4ucBgFXbEycoM3crTQ+KkOjtm1AMvbYUQnW4nD3buRyPj
+m4pdzILifmq8U1R2OWKfoPO5NdjG3FiRLSQLPPYYH33jUNBAOmsZnXWgsK2tJY4d
+DhCIrI8vJFUl2/6sXzvqBhlf+gVaug==
+=nAmJ
 -----END PGP SIGNATURE-----
 
---Sig_/8OU1EBP8FYM4_smUQbePUaG--
+--Sig_/yalkpAx+/PzSTyn4mysE06u--

@@ -2,152 +2,144 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C03D452B1F
-	for <lists+linux-next@lfdr.de>; Tue, 16 Nov 2021 07:39:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DFE1452D0E
+	for <lists+linux-next@lfdr.de>; Tue, 16 Nov 2021 09:42:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234626AbhKPGlX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 16 Nov 2021 01:41:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44262 "EHLO
+        id S232409AbhKPIpQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 16 Nov 2021 03:45:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234489AbhKPGku (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 16 Nov 2021 01:40:50 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49ED1C079794
-        for <linux-next@vger.kernel.org>; Mon, 15 Nov 2021 22:36:13 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id m14so17217047pfc.9
-        for <linux-next@vger.kernel.org>; Mon, 15 Nov 2021 22:36:13 -0800 (PST)
+        with ESMTP id S231863AbhKPIpP (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 16 Nov 2021 03:45:15 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD22C061570
+        for <linux-next@vger.kernel.org>; Tue, 16 Nov 2021 00:42:18 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id 8so5605052pfo.4
+        for <linux-next@vger.kernel.org>; Tue, 16 Nov 2021 00:42:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernelci-org.20210112.gappssmtp.com; s=20210112;
         h=message-id:date:mime-version:content-transfer-encoding:subject:to
          :from;
-        bh=VTlZYKvOvMd/lo7JaLJEgEg57ez9gVbc7FjpJPPdYxE=;
-        b=Dx+NYoeNUh2HBfH4MkVkegAM4wwZZe4FhYY+VAPvmdo1AP61crECWgfekbtbsUaqA6
-         7mmtfRcncCF/MuI8lWtC99rpfDy9PSQV4y5utPN1hzwxe2zHk4fUhBMry0zAHoRxOygE
-         6iRD1qbwALaJKiZ1S8GFq0DjPS2lAJUDeV2N0PuCKJ/DpttSUkkepM/I8iRIPWNRd+3Y
-         uUC0mU6zwQqO9ZAQM/9sSblVNIsLm529kW/Sz8HSrT6/bZ8/4v3+sZQJlBOu707tmrvj
-         Vp1FjlKF4YQCgWpacc9C/z+0aE+1MYcVe4I+5WH2g7VJU3dYz53rXHUi90bUbgofhziT
-         cx6g==
+        bh=AR/X2YFp3fNfE9mMBX7wdDJAQPFXSC5SvSL/CoGDM7c=;
+        b=5PH6zm3OHBzG97ywTNnc1lVeAEsoRmecNl/EwhbdRTUvlKIpd7uQTgx4r9vu3OVS1B
+         2V3XenpOq4FnUym5HVR6ZswC284JbybFivoncPFGY/aRP7YUnP/6pPlCIHD56ypdrohc
+         b/oAPBDYfFL0SYIRVJUorAXrxQZ8IVKP9iQO+2Y5q5YuEVdcb599sB1fJwXmNRElwSbk
+         gCSOnk2kWnfbIppHag08M6FaZTlm7Asw5e2V1g58rtteD7Z5ag7rcz4h+aEXEks3VDa4
+         esdUC0fXFEEfi2+Rencd5pHiIvwPrSPofAH3aMK4z1UF8N9zW3EjNaINXA3zLgs/RW16
+         ahag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version
          :content-transfer-encoding:subject:to:from;
-        bh=VTlZYKvOvMd/lo7JaLJEgEg57ez9gVbc7FjpJPPdYxE=;
-        b=wecZHxdPzUv6tVJY5lfpLDqvi0RNWcctkepA/4Zp4AzdUidBV2Cj3N7sY3e41PhF+R
-         YHtBBl6KX+aMe7ddxKHPxPgB/j97aLsEQjxKWlt70/ES4eM9EbwH3aRM1BSAKurOBt2X
-         VG+ueWFyuMlBs2jXNZ8iaLEyGdAzxQmkdz66mMUleKzuKfBsrcQilBnwyja4RLQi5Zx0
-         h4CPsoFQTTlEWAanYuOSYTmraoM6fPNwCaKWiRwAIZwGgWlqZux97xPOl4B+rIpw8uZt
-         Js89zvoFistdGAlNSJMqpp758jhF0f/F6ePTjYvBO5J2rAO0LtJzHeF5v4kziyTsa1vE
-         gtvQ==
-X-Gm-Message-State: AOAM530ZScfHeUVDHHluqwjNYOFsLuivbsbmeaAoV/5BphMp59kDKW5g
-        A52gyj9hySbcpM7BoFcAI7SYrUcQ6h4K1JUz
-X-Google-Smtp-Source: ABdhPJwOkT1PfbRYV/T55HY+vWUavpZLhsqswuy8MUU/Te5Hm0ZS7GmAEUowWHv99pDmSz8oA3tY0A==
-X-Received: by 2002:a63:560b:: with SMTP id k11mr3313139pgb.374.1637044571385;
-        Mon, 15 Nov 2021 22:36:11 -0800 (PST)
+        bh=AR/X2YFp3fNfE9mMBX7wdDJAQPFXSC5SvSL/CoGDM7c=;
+        b=1QtYQSpvm+YE5m+NvehxRF4hqlHrhz2Xh1OY1cM89VoZBTKdAofaUTf5re4x19MVS/
+         KLoBiyIWDXLFv8BuY5UQr8sbAEYskHtbISwiClETTy/zzxT9NkGNQeAecaV7pmDrTHUl
+         zEadFSzCHAgocDTrurGO0+ELy2ZnwRXYyI6evfQWqj3junA2rdkyKMDbx3WJbQoix7yu
+         JQDY4Ar8AhoEepxYs+paY/UN5nNZx2miTPpSjn52PwK8mpDOkHQ9Fis9V6g9FM0nt2iC
+         zBmjmAGutIyokUH+dawz3i0SXU8HUeLlHAjaYpHEr3yg5wPfw48eHkK5XfIW/kITgGRR
+         TukA==
+X-Gm-Message-State: AOAM5314JEmzHKxl8NtJhT9J1PZUmru8HMj3Bc1xFBYayNL3bgxAEs8a
+        iRfGYTn/aZuvpe+YgfRnNsi7+69ovtS1lITb
+X-Google-Smtp-Source: ABdhPJxc1zAWFBGGWU7GqEfYT4F8m3T7ZrDHsSyuSuDCkmX2UEfQEhsOW++hARaQPgkDuU58hbwTHA==
+X-Received: by 2002:a63:3543:: with SMTP id c64mr3533676pga.443.1637052136857;
+        Tue, 16 Nov 2021 00:42:16 -0800 (PST)
 Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id m127sm1741804pgm.64.2021.11.15.22.36.10
+        by smtp.gmail.com with ESMTPSA id rm1sm1815070pjb.3.2021.11.16.00.42.15
         for <linux-next@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Nov 2021 22:36:10 -0800 (PST)
-Message-ID: <6193515a.1c69fb81.6e7a9.61dd@mx.google.com>
-Date:   Mon, 15 Nov 2021 22:36:10 -0800 (PST)
+        Tue, 16 Nov 2021 00:42:16 -0800 (PST)
+Message-ID: <61936ee8.1c69fb81.dc855.574c@mx.google.com>
+Date:   Tue, 16 Nov 2021 00:42:16 -0800 (PST)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: pending-fixes
+X-Kernelci-Branch: master
 X-Kernelci-Tree: next
-X-Kernelci-Kernel: v5.16-rc1-155-g6eea4f2d44ab6
+X-Kernelci-Kernel: next-20211116
 X-Kernelci-Report-Type: build
-Subject: next/pending-fixes build: 192 builds: 7 failed, 185 passed, 16 errors,
- 146 warnings (v5.16-rc1-155-g6eea4f2d44ab6)
+Subject: next/master build: 145 builds: 9 failed, 136 passed, 182 errors,
+ 125 warnings (next-20211116)
 To:     linux-next@vger.kernel.org
 From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes build: 192 builds: 7 failed, 185 passed, 16 errors, 146 =
-warnings (v5.16-rc1-155-g6eea4f2d44ab6)
+next/master build: 145 builds: 9 failed, 136 passed, 182 errors, 125 warnin=
+gs (next-20211116)
 
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.16-rc1-155-g6eea4f2d44ab6/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20211116/
 
 Tree: next
-Branch: pending-fixes
-Git Describe: v5.16-rc1-155-g6eea4f2d44ab6
-Git Commit: 6eea4f2d44ab6ac62db299b3e73c4b9da3c7c2f2
+Branch: master
+Git Describe: next-20211116
+Git Commit: a2f3bb245883ba791e46be1f8415186dae346458
 Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
 Built: 7 unique architectures
 
 Build Failures Detected:
 
-arm64:
-    allmodconfig: (gcc-10) FAIL
-
 arm:
+    aspeed_g5_defconfig: (clang-10) FAIL
     qcom_defconfig: (gcc-10) FAIL
     rpc_defconfig: (gcc-10) FAIL
 
+i386:
+    allmodconfig: (clang-10) FAIL
+    allmodconfig: (clang-13) FAIL
+
 mips:
-    decstation_64_defconfig: (gcc-10) FAIL
     ip27_defconfig: (gcc-10) FAIL
-    ip28_defconfig: (gcc-10) FAIL
 
 x86_64:
+    allmodconfig: (clang-10) FAIL
+    x86_64_defconfig: (clang-10) FAIL
     allmodconfig: (gcc-10) FAIL
 
 Errors and Warnings Detected:
 
 arc:
-    haps_hs_smp_defconfig+kselftest (gcc-10): 3 warnings
+    haps_hs_smp_defconfig+debug (gcc-10): 1 warning
     tinyconfig (gcc-10): 1 warning
 
 arm64:
-    allmodconfig (gcc-10): 2 errors
+    allmodconfig (clang-10): 129 errors
 
 arm:
+    aspeed_g5_defconfig (clang-10): 23 errors, 8 warnings
+    aspeed_g5_defconfig (clang-13): 10 warnings
+    multi_v7_defconfig (clang-13): 10 warnings
     qcom_defconfig (gcc-10): 1 error
     rpc_defconfig (gcc-10): 2 errors
 
 i386:
+    allmodconfig (clang-13): 11 errors
+    allmodconfig (clang-10): 8 errors
 
 mips:
     32r2el_defconfig (gcc-10): 3 warnings
-    32r2el_defconfig+kselftest (gcc-10): 4 warnings
+    32r2el_defconfig+debug (gcc-10): 3 warnings
     ar7_defconfig (gcc-10): 2 warnings
     ath25_defconfig (gcc-10): 2 warnings
-    ath79_defconfig (gcc-10): 2 warnings
     bcm47xx_defconfig (gcc-10): 2 warnings
     bcm63xx_defconfig (gcc-10): 1 warning
     bigsur_defconfig (gcc-10): 1 error, 6 warnings
-    bmips_be_defconfig (gcc-10): 1 warning
-    bmips_stb_defconfig (gcc-10): 2 warnings
     capcella_defconfig (gcc-10): 2 warnings
-    cavium_octeon_defconfig (gcc-10): 1 error, 6 warnings
-    ci20_defconfig (gcc-10): 3 warnings
     cobalt_defconfig (gcc-10): 2 warnings
     cu1000-neo_defconfig (gcc-10): 2 warnings
     cu1830-neo_defconfig (gcc-10): 2 warnings
     db1xxx_defconfig (gcc-10): 1 warning
-    decstation_64_defconfig (gcc-10): 1 error, 6 warnings
     decstation_defconfig (gcc-10): 2 warnings
-    decstation_r4k_defconfig (gcc-10): 2 warnings
     e55_defconfig (gcc-10): 2 warnings
     fuloong2e_defconfig (gcc-10): 1 error, 6 warnings
     gcw0_defconfig (gcc-10): 2 warnings
-    gpr_defconfig (gcc-10): 2 warnings
     ip22_defconfig (gcc-10): 2 warnings
-    ip32_defconfig (gcc-10): 1 error, 6 warnings
-    jazz_defconfig (gcc-10): 2 warnings
     jmr3927_defconfig (gcc-10): 1 warning
     lemote2f_defconfig (gcc-10): 1 error, 6 warnings
-    loongson1b_defconfig (gcc-10): 2 warnings
     loongson1c_defconfig (gcc-10): 2 warnings
-    loongson2k_defconfig (gcc-10): 1 error, 6 warnings
-    loongson3_defconfig (gcc-10): 1 error, 6 warnings
-    malta_defconfig (gcc-10): 2 warnings
     malta_kvm_defconfig (gcc-10): 2 warnings
     malta_qemu_32r6_defconfig (gcc-10): 2 warnings
-    maltaaprp_defconfig (gcc-10): 2 warnings
     maltasmvp_defconfig (gcc-10): 2 warnings
     maltasmvp_eva_defconfig (gcc-10): 2 warnings
     maltaup_defconfig (gcc-10): 2 warnings
@@ -155,7 +147,6 @@ mips:
     mpc30x_defconfig (gcc-10): 2 warnings
     mtx1_defconfig (gcc-10): 2 warnings
     omega2p_defconfig (gcc-10): 1 warning
-    pic32mzda_defconfig (gcc-10): 2 warnings
     qi_lb60_defconfig (gcc-10): 2 warnings
     rb532_defconfig (gcc-10): 2 warnings
     rbtx49xx_defconfig (gcc-10): 2 warnings
@@ -164,51 +155,158 @@ mips:
     rt305x_defconfig (gcc-10): 2 warnings
     sb1250_swarm_defconfig (gcc-10): 1 error, 4 warnings
     tb0226_defconfig (gcc-10): 2 warnings
-    vocore2_defconfig (gcc-10): 1 warning
+    tb0287_defconfig (gcc-10): 2 warnings
     workpad_defconfig (gcc-10): 2 warnings
 
 riscv:
 
 x86_64:
+    allmodconfig (clang-10): 1 error, 2 warnings
     allmodconfig (gcc-10): 2 errors
+    allnoconfig (clang-10): 3 warnings
+    x86_64_defconfig (clang-10): 1 error
 
 Errors summary:
 
-    9    expr: syntax error: unexpected argument =E2=80=980xffffffff8000000=
+    4    expr: syntax error: unexpected argument =E2=80=980xffffffff8000000=
 0=E2=80=99
+    2    <instantiation>:2:2: error: unknown use of instruction mnemonic wi=
+thout a size suffix
     2    /usr/lib/gcc/x86_64-linux-gnu/10/plugin/include/config/i386/i386.h=
 :2500:10: fatal error: common/config/i386/i386-cpuinfo.h: No such file or d=
 irectory
-    1    include/linux/fortify-string.h:277:3: error: call to =E2=80=98__re=
-ad_overflow=E2=80=99 declared with attribute error: detected read beyond si=
-ze of object (1st parameter)
-    1    include/linux/fortify-string.h:263:4: error: call to =E2=80=98__re=
-ad_overflow=E2=80=99 declared with attribute error: detected read beyond si=
-ze of object (1st parameter)
+    1    drivers/staging/media/hantro/hantro_g2_hevc_dec.c:586:5: error: st=
+ack frame size of 1236 bytes in function 'hantro_g2_hevc_dec_run' [-Werror,=
+-Wframe-larger-than=3D]
+    1    drivers/staging/greybus/audio_topology.c:977:12: error: stack fram=
+e size (1804) exceeds limit (1024) in function 'gbaudio_tplg_create_widget'=
+ [-Werror,-Wframe-larger-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_rq_dlg_=
+calc_31.c:939:13: error: stack frame size of 1292 bytes in function 'dml_rq=
+_dlg_get_dlg_params' [-Werror,-Wframe-larger-than=3D]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_rq_dlg_=
+calc_31.c:939:13: error: stack frame size (1372) exceeds limit (1024) in fu=
+nction 'dml_rq_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_mode_vb=
+a_31.c:3952:6: error: stack frame size (2092) exceeds limit (2048) in funct=
+ion 'dml31_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-t=
+han]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn30/display_rq_dlg_=
+calc_30.c:981:13: error: stack frame size (1148) exceeds limit (1024) in fu=
+nction 'dml_rq_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_rq_dlg_=
+calc_21.c:829:13: error: stack frame size (1116) exceeds limit (1024) in fu=
+nction 'dml_rq_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vb=
+a_21.c:3518:6: error: stack frame size of 1212 bytes in function 'dml21_Mod=
+eSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than=3D]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vb=
+a_21.c:3518:6: error: stack frame size (1276) exceeds limit (1024) in funct=
+ion 'dml21_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-t=
+han]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vb=
+a_21.c:1466:13: error: stack frame size of 1148 bytes in function 'DISPCLKD=
+PPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation' =
+[-Werror,-Wframe-larger-than=3D]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vb=
+a_21.c:1466:13: error: stack frame size (1196) exceeds limit (1024) in func=
+tion 'DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanc=
+eCalculation' [-Werror,-Wframe-larger-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
+a_20v2.c:3393:6: error: stack frame size of 1436 bytes in function 'dml20v2=
+_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than=3D]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
+a_20v2.c:3393:6: error: stack frame size (1580) exceeds limit (1024) in fun=
+ction 'dml20v2_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larg=
+er-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
+a_20v2.c:1145:13: error: stack frame size of 1196 bytes in function 'dml20v=
+2_DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCal=
+culation' [-Werror,-Wframe-larger-than=3D]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
+a_20v2.c:1145:13: error: stack frame size (1276) exceeds limit (1024) in fu=
+nction 'dml20v2_DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAnd=
+PerformanceCalculation' [-Werror,-Wframe-larger-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
+a_20.c:3286:6: error: stack frame size of 1436 bytes in function 'dml20_Mod=
+eSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than=3D]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
+a_20.c:3286:6: error: stack frame size (1612) exceeds limit (1024) in funct=
+ion 'dml20_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-t=
+han]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
+a_20.c:1085:13: error: stack frame size of 1196 bytes in function 'dml20_DI=
+SPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalcula=
+tion' [-Werror,-Wframe-larger-than=3D]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
+a_20.c:1085:13: error: stack frame size (1356) exceeds limit (1024) in func=
+tion 'dml20_DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerf=
+ormanceCalculation' [-Werror,-Wframe-larger-than]
+    1    arch/arm/mm/cache-v7.S:97:2: error: instruction requires: data-bar=
+riers
+    1    arch/arm/mm/cache-v7.S:69:2: error: instruction requires: data-bar=
+riers
+    1    arch/arm/mm/cache-v7.S:68:4: error: invalid instruction
+    1    arch/arm/mm/cache-v7.S:56:4: error: instruction requires: armv6t2
+    1    arch/arm/mm/cache-v7.S:45:2: error: instruction requires: armv6t2
+    1    arch/arm/mm/cache-v7.S:431:2: error: invalid instruction
+    1    arch/arm/mm/cache-v7.S:42:2: error: instruction requires: data-bar=
+riers
+    1    arch/arm/mm/cache-v7.S:409:2: error: invalid instruction
+    1    arch/arm/mm/cache-v7.S:387:2: error: invalid instruction
+    1    arch/arm/mm/cache-v7.S:352:2: error: invalid instruction
+    1    arch/arm/mm/cache-v7.S:312:2: error: instruction requires: data-ba=
+rriers
+    1    arch/arm/mm/cache-v7.S:311:2: error: invalid instruction
+    1    arch/arm/mm/cache-v7.S:294:2: error: invalid instruction
+    1    arch/arm/mm/cache-v7.S:179:2: error: instruction requires: data-ba=
+rriers
+    1    arch/arm/mm/cache-v7.S:178:2: error: invalid instruction
+    1    arch/arm/mm/cache-v7.S:152:2: error: instruction requires: armv6t2
+    1    arch/arm/mm/cache-v7.S:149:2: error: instruction requires: armv6t2
+    1    arch/arm/mm/cache-v7.S:142:2: error: instruction requires: data-ba=
+rriers
+    1    arch/arm/mm/cache-v7.S:125:2: error: instruction requires: data-ba=
+rriers
+    1    arch/arm/mm/cache-v7.S:107:2: error: instruction requires: armv6t2
+    1    arch/arm/mm/cache-v7.S:106:2: error: instruction requires: armv6t2
     1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
 =3D0x'
     1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
 =3D0x'
+    1    arch/arm/kernel/entry-armv.S:503:4: error: invalid instruction, an=
+y one of the following would fix this:
+    1    arch/arm/kernel/entry-armv.S:499:4: error: invalid instruction, an=
+y one of the following would fix this:
     1    /tmp/kci/linux/build/../drivers/gpu/drm/panel/panel-edp.c:843: und=
 efined reference to `drm_panel_dp_aux_backlight'
 
 Warnings summary:
 
-    138  <stdin>:1559:2: warning: #warning syscall futex_waitv not implemen=
+    87   <stdin>:1559:2: warning: #warning syscall futex_waitv not implemen=
 ted [-Wcpp]
+    14   clang: warning: argument unused during compilation: '-march=3Darmv=
+6k' [-Wunused-command-line-argument]
+    10   clang: warning: argument unused during compilation: '-march=3Darmv=
+7-a' [-Wunused-command-line-argument]
+    2    clang: warning: argument unused during compilation: '-Wa,-march=3D=
+armv7-a' [-Wunused-command-line-argument]
+    2    arch/x86/lib/memset_64.o: warning: objtool: memset_erms(): can't f=
+ind starting instruction
+    2    arch/x86/lib/memcpy_64.o: warning: objtool: memcpy_erms(): can't f=
+ind starting instruction
     2    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
 e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
 ted "0,0"
     2    arch/arc/Makefile:26: ** WARNING ** CONFIG_ARC_TUNE_MCPU flag '' i=
 s unknown, fallback to ''
     1    drivers/block/paride/bpck.c:32: warning: "PC" redefined
-    1    arch/mips/boot/dts/ingenic/jz4780.dtsi:473.33-475.6: Warning (unit=
-_address_format): /nemc@13410000/efuse@d0/eth-mac-addr@0x22: unit name shou=
-ld not have leading "0x"
-    1    arch/arc/include/asm/perf_event.h:91:27: warning: 'arc_pmu_ev_hw_m=
-ap' defined but not used [-Wunused-const-variable=3D]
-    1    arch/arc/include/asm/perf_event.h:126:27: warning: 'arc_pmu_cache_=
-map' defined but not used [-Wunused-const-variable=3D]
+    1    clang: warning: argument unused during compilation: '-Wa,-march=3D=
+armv6k' [-Wunused-command-line-argument]
+    1    clang: warning: argument unused during compilation: '-Wa,-march=3D=
+armv6' [-Wunused-command-line-argument]
+    1    arch/x86/entry/entry_64.o: warning: objtool: asm_load_gs_index(): =
+can't find starting instruction
 
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
@@ -233,8 +331,8 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-32r2el_defconfig+kselftest (mips, gcc-10) =E2=80=94 PASS, 0 errors, 4 warni=
-ngs, 0 section mismatches
+32r2el_defconfig+debug (mips, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings,=
+ 0 section mismatches
 
 Warnings:
     <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
@@ -244,8 +342,21 @@ Warnings:
 0,0"
     <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
 -Wcpp]
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (x86_64, clang-10) =E2=80=94 FAIL, 1 error, 2 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    <instantiation>:2:2: error: unknown use of instruction mnemonic without=
+ a size suffix
+
+Warnings:
+    arch/x86/lib/memcpy_64.o: warning: objtool: memcpy_erms(): can't find s=
+tarting instruction
+    arch/x86/lib/memset_64.o: warning: objtool: memset_erms(): can't find s=
+tarting instruction
 
 ---------------------------------------------------------------------------=
 -----
@@ -262,21 +373,363 @@ ory
 
 ---------------------------------------------------------------------------=
 -----
-allmodconfig (arm64, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 sectio=
-n mismatches
-
-Errors:
-    include/linux/fortify-string.h:263:4: error: call to =E2=80=98__read_ov=
-erflow=E2=80=99 declared with attribute error: detected read beyond size of=
- object (1st parameter)
-    include/linux/fortify-string.h:277:3: error: call to =E2=80=98__read_ov=
-erflow=E2=80=99 declared with attribute error: detected read beyond size of=
- object (1st parameter)
+allmodconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
 
 ---------------------------------------------------------------------------=
 -----
-allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+allmodconfig (i386, clang-13) =E2=80=94 FAIL, 11 errors, 0 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    drivers/staging/greybus/audio_topology.c:977:12: error: stack frame siz=
+e (1804) exceeds limit (1024) in function 'gbaudio_tplg_create_widget' [-We=
+rror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_rq_dlg_calc_=
+21.c:829:13: error: stack frame size (1116) exceeds limit (1024) in functio=
+n 'dml_rq_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn30/display_rq_dlg_calc_=
+30.c:981:13: error: stack frame size (1148) exceeds limit (1024) in functio=
+n 'dml_rq_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_rq_dlg_calc_=
+31.c:939:13: error: stack frame size (1372) exceeds limit (1024) in functio=
+n 'dml_rq_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vba_21.=
+c:1466:13: error: stack frame size (1196) exceeds limit (1024) in function =
+'DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalc=
+ulation' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20.=
+c:1085:13: error: stack frame size (1356) exceeds limit (1024) in function =
+'dml20_DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerforman=
+ceCalculation' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vba_21.=
+c:3518:6: error: stack frame size (1276) exceeds limit (1024) in function '=
+dml21_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20v=
+2.c:1145:13: error: stack frame size (1276) exceeds limit (1024) in functio=
+n 'dml20v2_DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerfo=
+rmanceCalculation' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20.=
+c:3286:6: error: stack frame size (1612) exceeds limit (1024) in function '=
+dml20_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_mode_vba_31.=
+c:3952:6: error: stack frame size (2092) exceeds limit (2048) in function '=
+dml31_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20v=
+2.c:3393:6: error: stack frame size (1580) exceeds limit (1024) in function=
+ 'dml20v2_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-th=
+an]
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (i386, clang-10) =E2=80=94 FAIL, 8 errors, 0 warnings, 0 secti=
+on mismatches
+
+Errors:
+    drivers/staging/media/hantro/hantro_g2_hevc_dec.c:586:5: error: stack f=
+rame size of 1236 bytes in function 'hantro_g2_hevc_dec_run' [-Werror,-Wfra=
+me-larger-than=3D]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_rq_dlg_calc_=
+31.c:939:13: error: stack frame size of 1292 bytes in function 'dml_rq_dlg_=
+get_dlg_params' [-Werror,-Wframe-larger-than=3D]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20.=
+c:1085:13: error: stack frame size of 1196 bytes in function 'dml20_DISPCLK=
+DPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation'=
+ [-Werror,-Wframe-larger-than=3D]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20.=
+c:3286:6: error: stack frame size of 1436 bytes in function 'dml20_ModeSupp=
+ortAndSystemConfigurationFull' [-Werror,-Wframe-larger-than=3D]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vba_21.=
+c:1466:13: error: stack frame size of 1148 bytes in function 'DISPCLKDPPCLK=
+DCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation' [-Wer=
+ror,-Wframe-larger-than=3D]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vba_21.=
+c:3518:6: error: stack frame size of 1212 bytes in function 'dml21_ModeSupp=
+ortAndSystemConfigurationFull' [-Werror,-Wframe-larger-than=3D]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20v=
+2.c:1145:13: error: stack frame size of 1196 bytes in function 'dml20v2_DIS=
+PCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculat=
+ion' [-Werror,-Wframe-larger-than=3D]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20v=
+2.c:3393:6: error: stack frame size of 1436 bytes in function 'dml20v2_Mode=
+SupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than=3D]
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
 n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, clang-10) =E2=80=94 FAIL, 129 errors, 0 warnings, 0 se=
+ction mismatches
+
+Errors:
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:5:11: error: unknown relocation name
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:7:11: error: unknown relocation name
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:10:11: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:12:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:14:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:16:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:18:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:20:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:22:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:24:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:26:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:28:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:30:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:32:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:34:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:36:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:38:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:40:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:42:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:44:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:46:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:48:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:50:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:52:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:54:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:56:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:58:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:60:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:62:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:64:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:66:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:68:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:70:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:72:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:74:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:76:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:78:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:80:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:82:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:84:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:86:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:88:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:90:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:92:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:94:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:96:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:98:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:100:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:102:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:104:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:106:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:108:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:110:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:112:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:114:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:116:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:118:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:120:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:122:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:124:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:126:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:128:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:130:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:132:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:134:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:136:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:138:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:140:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:142:13: error: unknown relocation n=
+ame
+    144:13: error: unknown relocation name
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:146:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:148:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:150:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:152:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:154:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:156:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:158:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:160:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:162:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:164:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:166:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:168:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:170:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:172:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:174:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:176:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:178:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:180:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:182:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:184:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:186:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:188:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:190:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:192:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:194:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:196:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:198:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:200:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:202:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:204:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:206:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:208:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:210:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:212:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:214:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:216:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:218:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:220:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:222:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:224:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:226:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:228:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:230:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:232:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:234:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:236:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:238:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:240:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:242:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:244:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:246:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:248:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:250:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:252:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:254:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:256:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:258:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:261:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:263:13: error: unknown relocation n=
+ame
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -285,8 +738,36 @@ mismatches
 
 ---------------------------------------------------------------------------=
 -----
+allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, clang-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/x86/entry/entry_64.o: warning: objtool: asm_load_gs_index(): can't=
+ find starting instruction
+    arch/x86/lib/memcpy_64.o: warning: objtool: memcpy_erms(): can't find s=
+tarting instruction
+    arch/x86/lib/memset_64.o: warning: objtool: memset_erms(): can't find s=
+tarting instruction
+
+---------------------------------------------------------------------------=
+-----
 allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
 ismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, clang-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -311,8 +792,85 @@ ection mismatches
 
 ---------------------------------------------------------------------------=
 -----
+aspeed_g5_defconfig (arm, clang-10) =E2=80=94 FAIL, 23 errors, 8 warnings, =
+0 section mismatches
+
+Errors:
+    arch/arm/kernel/entry-armv.S:499:4: error: invalid instruction, any one=
+ of the following would fix this:
+    arch/arm/kernel/entry-armv.S:503:4: error: invalid instruction, any one=
+ of the following would fix this:
+    arch/arm/mm/cache-v7.S:42:2: error: instruction requires: data-barriers
+    arch/arm/mm/cache-v7.S:45:2: error: instruction requires: armv6t2
+    arch/arm/mm/cache-v7.S:56:4: error: instruction requires: armv6t2
+    arch/arm/mm/cache-v7.S:68:4: error: invalid instruction
+    arch/arm/mm/cache-v7.S:69:2: error: instruction requires: data-barriers
+    arch/arm/mm/cache-v7.S:97:2: error: instruction requires: data-barriers
+    arch/arm/mm/cache-v7.S:106:2: error: instruction requires: armv6t2
+    arch/arm/mm/cache-v7.S:107:2: error: instruction requires: armv6t2
+    arch/arm/mm/cache-v7.S:125:2: error: instruction requires: data-barriers
+    arch/arm/mm/cache-v7.S:142:2: error: instruction requires: data-barriers
+    arch/arm/mm/cache-v7.S:149:2: error: instruction requires: armv6t2
+    arch/arm/mm/cache-v7.S:152:2: error: instruction requires: armv6t2
+    arch/arm/mm/cache-v7.S:178:2: error: invalid instruction
+    arch/arm/mm/cache-v7.S:179:2: error: instruction requires: data-barriers
+    arch/arm/mm/cache-v7.S:294:2: error: invalid instruction
+    arch/arm/mm/cache-v7.S:311:2: error: invalid instruction
+    arch/arm/mm/cache-v7.S:312:2: error: instruction requires: data-barriers
+    arch/arm/mm/cache-v7.S:352:2: error: invalid instruction
+    arch/arm/mm/cache-v7.S:387:2: error: invalid instruction
+    arch/arm/mm/cache-v7.S:409:2: error: invalid instruction
+    arch/arm/mm/cache-v7.S:431:2: error: invalid instruction
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-Wa,-march=3Darmv6=
+k' [-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-Wa,-march=3Darmv7=
+-a' [-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-Wa,-march=3Darmv6=
+' [-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-Wa,-march=3Darmv7=
+-a' [-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
 aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
 ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, clang-13) =E2=80=94 PASS, 0 errors, 10 warnings, =
+0 section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
 
 ---------------------------------------------------------------------------=
 -----
@@ -327,17 +885,6 @@ tion mismatches
 ---------------------------------------------------------------------------=
 -----
 ath25_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-
----------------------------------------------------------------------------=
------
-ath79_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
 ion mismatches
 
 Warnings:
@@ -363,8 +910,8 @@ section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-bcm2835_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
+badge4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -411,74 +958,12 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-bmips_be_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
-ction mismatches
-
-Warnings:
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-
----------------------------------------------------------------------------=
------
-bmips_stb_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
-section mismatches
-
-Warnings:
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-
----------------------------------------------------------------------------=
------
 capcella_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 s=
 ection mismatches
 
 Warnings:
     <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
 -Wcpp]
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-
----------------------------------------------------------------------------=
------
-cavium_octeon_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 6 warnings,=
- 0 section mismatches
-
-Errors:
-    expr: syntax error: unexpected argument =E2=80=980xffffffff80000000=E2=
-=80=99
-
-Warnings:
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-
----------------------------------------------------------------------------=
------
-cerfcube_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-ci20_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 secti=
-on mismatches
-
-Warnings:
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-    arch/mips/boot/dts/ingenic/jz4780.dtsi:473.33-475.6: Warning (unit_addr=
-ess_format): /nemc@13410000/efuse@d0/eth-mac-addr@0x22: unit name should no=
-t have leading "0x"
     <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
 -Wcpp]
 
@@ -492,11 +977,6 @@ Warnings:
 -Wcpp]
     <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
 -Wcpp]
-
----------------------------------------------------------------------------=
------
-colibri_pxa270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -537,38 +1017,10 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-davinci_all_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
 db1xxx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
 ion mismatches
 
 Warnings:
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-
----------------------------------------------------------------------------=
------
-decstation_64_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 6 warnings,=
- 0 section mismatches
-
-Errors:
-    expr: syntax error: unexpected argument =E2=80=980xffffffff80000000=E2=
-=80=99
-
-Warnings:
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
     <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
 -Wcpp]
 
@@ -585,24 +1037,13 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-decstation_r4k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warning=
-s, 0 section mismatches
-
-Warnings:
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
+defconfig+CONFIG_ARM64_16K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -611,22 +1052,12 @@ s, 0 warnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig+crypto (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+ima (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
+defconfig+debug (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
 defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
  section mismatches
 
 ---------------------------------------------------------------------------=
@@ -654,11 +1085,6 @@ ion mismatches
 -----
 eseries_pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
  section mismatches
-
----------------------------------------------------------------------------=
------
-exynos_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -711,17 +1137,6 @@ ion mismatches
 
 ---------------------------------------------------------------------------=
 -----
-gpr_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sectio=
-n mismatches
-
-Warnings:
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-
----------------------------------------------------------------------------=
------
 h3600_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
 on mismatches
 
@@ -737,21 +1152,12 @@ tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig+kselftest (arc, gcc-10) =E2=80=94 PASS, 0 errors, 3 w=
-arnings, 0 section mismatches
+haps_hs_smp_defconfig+debug (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warni=
+ng, 0 section mismatches
 
 Warnings:
     arch/arc/Makefile:26: ** WARNING ** CONFIG_ARC_TUNE_MCPU flag '' is unk=
 nown, fallback to ''
-    arch/arc/include/asm/perf_event.h:126:27: warning: 'arc_pmu_cache_map' =
-defined but not used [-Wunused-const-variable=3D]
-    arch/arc/include/asm/perf_event.h:91:27: warning: 'arc_pmu_ev_hw_map' d=
-efined but not used [-Wunused-const-variable=3D]
 
 ---------------------------------------------------------------------------=
 -----
@@ -770,22 +1176,22 @@ on mismatches
 
 ---------------------------------------------------------------------------=
 -----
+i386_defconfig (i386, clang-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
 i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
 s, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-imote2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
 imx_v4_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-imx_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
 ection mismatches
 
 ---------------------------------------------------------------------------=
@@ -816,66 +1222,12 @@ on mismatches
 
 ---------------------------------------------------------------------------=
 -----
-ip28_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-ip32_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 6 warnings, 0 sectio=
-n mismatches
-
-Errors:
-    expr: syntax error: unexpected argument =E2=80=980xffffffff80000000=E2=
-=80=99
-
-Warnings:
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-
----------------------------------------------------------------------------=
------
-ixp4xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-jazz_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
-on mismatches
-
-Warnings:
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-
----------------------------------------------------------------------------=
------
 jmr3927_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
 tion mismatches
 
 Warnings:
     <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
 -Wcpp]
-
----------------------------------------------------------------------------=
------
-jornada720_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-keystone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -907,17 +1259,6 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-loongson1b_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
- section mismatches
-
-Warnings:
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-
----------------------------------------------------------------------------=
------
 loongson1c_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
  section mismatches
 
@@ -926,57 +1267,6 @@ Warnings:
 -Wcpp]
     <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
 -Wcpp]
-
----------------------------------------------------------------------------=
------
-loongson2k_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 6 warnings, 0 =
-section mismatches
-
-Errors:
-    expr: syntax error: unexpected argument =E2=80=980xffffffff80000000=E2=
-=80=99
-
-Warnings:
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-
----------------------------------------------------------------------------=
------
-loongson3_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 6 warnings, 0 s=
-ection mismatches
-
-Errors:
-    expr: syntax error: unexpected argument =E2=80=980xffffffff80000000=E2=
-=80=99
-
-Warnings:
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-
----------------------------------------------------------------------------=
------
-lpc18xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -995,24 +1285,8 @@ tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
-magician_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
 mainstone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
 ection mismatches
-
----------------------------------------------------------------------------=
------
-malta_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
 
 ---------------------------------------------------------------------------=
 -----
@@ -1029,17 +1303,6 @@ Warnings:
 -----
 malta_qemu_32r6_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnin=
 gs, 0 section mismatches
-
-Warnings:
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-
----------------------------------------------------------------------------=
------
-maltaaprp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
-section mismatches
 
 Warnings:
     <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
@@ -1093,11 +1356,6 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-milbeaut_m10v_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
 mini2440_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
 ction mismatches
 
@@ -1105,11 +1363,6 @@ ction mismatches
 -----
 mmp2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
 n mismatches
-
----------------------------------------------------------------------------=
------
-moxart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1145,13 +1398,50 @@ ection mismatches
 
 ---------------------------------------------------------------------------=
 -----
+multi_v5_defconfig (arm, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
 multi_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
 ction mismatches
 
 ---------------------------------------------------------------------------=
 -----
+multi_v5_defconfig (arm, clang-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
 multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
 ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, clang-13) =E2=80=94 PASS, 0 errors, 10 warnings, 0=
+ section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
 
 ---------------------------------------------------------------------------=
 -----
@@ -1165,37 +1455,7 @@ multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-10) =E2=80=
 
 ---------------------------------------------------------------------------=
 -----
-multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0=
- warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
- errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+crypto (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+ima (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
 mvebu_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-mvebu_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
 ction mismatches
 
 ---------------------------------------------------------------------------=
@@ -1215,38 +1475,13 @@ ection mismatches
 
 ---------------------------------------------------------------------------=
 -----
-nhk8815_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
 nommu_k210_sdcard_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
 nings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
 nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
 s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-omap1_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-omap2plus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1256,11 +1491,6 @@ tion mismatches
 Warnings:
     <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
 -Wcpp]
-
----------------------------------------------------------------------------=
------
-orion5x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1275,37 +1505,6 @@ tion mismatches
 ---------------------------------------------------------------------------=
 -----
 pcm027_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-pic32mzda_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
-section mismatches
-
-Warnings:
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
-
----------------------------------------------------------------------------=
------
-pleb_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-pxa168_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-pxa255-idp_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-pxa3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
 ion mismatches
 
 ---------------------------------------------------------------------------=
@@ -1423,17 +1622,7 @@ tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
-s5pv210_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
 sama5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-sama7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
 on mismatches
 
 ---------------------------------------------------------------------------=
@@ -1457,11 +1646,6 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-shannon_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
 shmobile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
 ction mismatches
 
@@ -1472,32 +1656,12 @@ ion mismatches
 
 ---------------------------------------------------------------------------=
 -----
-socfpga_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-spear13xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-spear3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-spear6xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
 spitz_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
 on mismatches
 
 ---------------------------------------------------------------------------=
 -----
-sunxi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+stm32_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
 on mismatches
 
 ---------------------------------------------------------------------------=
@@ -1513,13 +1677,24 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
+tb0287_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
 tct_hammer_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
+tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1532,42 +1707,12 @@ nown, fallback to ''
 
 ---------------------------------------------------------------------------=
 -----
-tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
 trizeps4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
 ction mismatches
 
 ---------------------------------------------------------------------------=
 -----
-u8500_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
 vdk_hs38_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-vdk_hs38_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-versatile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-vexpress_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
 ction mismatches
 
 ---------------------------------------------------------------------------=
@@ -1579,15 +1724,6 @@ tion mismatches
 -----
 viper_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
 on mismatches
-
----------------------------------------------------------------------------=
------
-vocore2_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
--Wcpp]
 
 ---------------------------------------------------------------------------=
 -----
@@ -1612,18 +1748,17 @@ ection mismatches
 
 ---------------------------------------------------------------------------=
 -----
-x86_64_defconfig+crypto (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
-gs, 0 section mismatches
+x86_64_defconfig (x86_64, clang-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 =
+section mismatches
+
+Errors:
+    <instantiation>:2:2: error: unknown use of instruction mnemonic without=
+ a size suffix
 
 ---------------------------------------------------------------------------=
 -----
-x86_64_defconfig+ima (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
-nings, 0 section mismatches
+x86_64_defconfig+debug (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1637,12 +1772,12 @@ x86_64_defconfig+x86-chromebook+kselftest (x86_64, gcc-10) =E2=80=94 PASS, =
 
 ---------------------------------------------------------------------------=
 -----
-x86_64_defconfig+x86_kvm_guest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0=
- warnings, 0 section mismatches
+xcep_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
 
 ---------------------------------------------------------------------------=
 -----
-xcep_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+zeus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
 n mismatches
 
 ---

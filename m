@@ -2,117 +2,89 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15DF44547DD
-	for <lists+linux-next@lfdr.de>; Wed, 17 Nov 2021 14:54:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79B18454F47
+	for <lists+linux-next@lfdr.de>; Wed, 17 Nov 2021 22:23:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237953AbhKQN5r (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 17 Nov 2021 08:57:47 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:44288 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbhKQN5q (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 17 Nov 2021 08:57:46 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        id S232573AbhKQV0n (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 17 Nov 2021 16:26:43 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:38841 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232415AbhKQV0m (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 17 Nov 2021 16:26:42 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 150BE1FD35;
-        Wed, 17 Nov 2021 13:54:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1637157287; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lmVYrj9bSmv1XTSzwcd/4V0mgANHB4/cgRf2N2QFAj0=;
-        b=ctPYvlE+DztX3LTIYNxQ34sSypoOozdCTskzMjgtqzrJyqULwOatGkFwV/fCKzxxCr6eIg
-        4M2dpE761nxADzXEQ0XvDUx8t9kJ7hoyiaKhG7Lj7mZ3qhe2SqXJFrmmTg7xDY1n7NDcgv
-        ohTtK0EI3RXHGIqRxp+XaSmMoPfxOUQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1637157287;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lmVYrj9bSmv1XTSzwcd/4V0mgANHB4/cgRf2N2QFAj0=;
-        b=eOEjQN7ESlJg9KXWrgY3zE69c685vfQ4HSSoJdBpX+Bo2sX4HlnOdfM716CcQuCTIzNfUN
-        MwCoKlCDQ2Vz6vBw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6CD1F13C94;
-        Wed, 17 Nov 2021 13:54:46 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id QgubFqYJlWGwaAAAMHmgww
-        (envelope-from <dkirjanov@suse.de>); Wed, 17 Nov 2021 13:54:46 +0000
-Subject: Re: include/net/gro.h:413:22: error: implicit declaration of function
- 'csum_ipv6_magic
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Netdev <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, lkft-triage@lists.linaro.org
-References: <CA+G9fYsFwhPGCmsYoBkx+LTRWqaKrzQTLedZugnK2qieyTFoxQ@mail.gmail.com>
-From:   Denis Kirjanov <dkirjanov@suse.de>
-Message-ID: <5538d955-1679-6a24-d101-11e2eb39f71b@suse.de>
-Date:   Wed, 17 Nov 2021 16:54:45 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HvbWw4wFQz4xbC;
+        Thu, 18 Nov 2021 08:23:40 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1637184220;
+        bh=r2lEfIc6Z9FG0L/36ey/V5SCOY3TzpjJDpD568xulo4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=MgRaeD7lyQjJ9KJsD2CQ5fw79jo3q9g+E2kOf1p5dcafjFng6++J+Sw0Rj3/FhJ81
+         kMxEnUZWr9VnVLH32zdc8MeA6WZBbwTaSzpZVKw6R7qJCxIviHxC2lFOatFZs1A8md
+         vs7gXQ6+te089SrurIa/o0+W6bubxVqiXAu3wxfUQSSbvfqQJs/nS68SahzYN383DO
+         tfzhSBWD6HBu1u2CBB3fVRrrOIG040KPP5RYeGyPFNstpHy2emFpIV6CIw7C4VtWjt
+         6OyrHsP6VwP8KKTCIMClZVQagRK5ZKR1TMUvpFzkreLPSktn+UAQS3FOlNidwSSg8L
+         dSFHPnKSVxl8w==
+Date:   Thu, 18 Nov 2021 08:23:39 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>
+Cc:     Paul Durrant <pdurrant@amazon.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the kvm-fixes tree
+Message-ID: <20211118082339.3c5598db@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <CA+G9fYsFwhPGCmsYoBkx+LTRWqaKrzQTLedZugnK2qieyTFoxQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: ru
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/LvEN1bAxOsL0WSHw7Dus9/b";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+--Sig_/LvEN1bAxOsL0WSHw7Dus9/b
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-11/17/21 3:47 PM, Naresh Kamboju пишет:
-> Regression found on riscv and arc gcc-11 build.
-> Following build warnings / errors reported on linux next 20211117.
-> 
-> metadata:
->      git_describe: next-20211117
->      git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
->      git_short_log: fd96a4057bd0 (\"Add linux-next specific files for 20211117\")
->      target_arch: riscv
->      toolchain: gcc-11
-> 
-> build error :
-> --------------
-> In file included from net/core/dev.c:105:
-> include/net/gro.h: In function 'ip6_gro_compute_pseudo':
-> include/net/gro.h:413:22: error: implicit declaration of function
-> 'csum_ipv6_magic'; did you mean 'csum_tcpudp_magic'?
-> [-Werror=implicit-function-declaration]
->    return ~csum_unfold(csum_ipv6_magic(&iph->saddr, &iph->daddr,
->                        ^~~~~~~~~~~~~~~
->                        csum_tcpudp_magic
-> cc1: some warnings being treated as errors
+In commit
 
-See 
-https://patchwork.kernel.org/project/netdevbpf/patch/20211117100130.2368319-1-eric.dumazet@gmail.com/
+  a31a01172ebf ("cpuid: kvm_find_kvm_cpuid_features() should be declared 's=
+tatic'")
 
-> 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> 
-> link:
-> https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/-/jobs/1790398957#L73
-> 
-> build link:
-> -----------
-> https://builds.tuxbuild.com/211schgBXkq5zjdda7io29wMONF/build.log
-> 
-> build config:
-> -------------
-> https://builds.tuxbuild.com/211schgBXkq5zjdda7io29wMONF/config
-> 
-> # To install tuxmake on your system globally
-> # sudo pip3 install -U tuxmake
-> tuxmake --runtime podman --target-arch riscv --toolchain gcc-11
-> --kconfig defconfig
-> 
+Fixes tag
+
+  Fixes: 17cd23d68fdf ("KVM: x86: Make sure KVM_CPUID_FEATURES really are K=
+VM_CPUID_FEATURES")
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: 760849b1476c ("KVM: x86: Make sure KVM_CPUID_FEATURES really are KVM=
+_CPUID_FEATURES")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/LvEN1bAxOsL0WSHw7Dus9/b
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGVctsACgkQAVBC80lX
+0GywDQf8C6HXra6t78iPzfy0iP5MGwru79ar7j2geHsn9juG4egWP/3INQk7FLbu
+m6ZT1TYodPMGpYuKmonQj87sAbGwZ4n/YidDyucvYbIvXp8SvTklC0RGB3mIxvlu
+vvA2TYeCA5YwhrDo5ug0nZX0TJxLdQatcQy6EMMgo7a+LW8imTxPzZ8pkygicXd+
+FtjK1vvfc52XB08lYL0qNjIF32mkdEBlQ6gFseCHbA6mCxCMXOuOO2zTS6rQ5wKV
+I4jhDhwyzydxhvqhY/Kbehp8N6SM3TtbaMVQSJgTyvula0/Od9U+g0LJcmAx+A9W
+80f40CzScIwjw1YtgncvEFr5v62Hpw==
+=Rdaa
+-----END PGP SIGNATURE-----
+
+--Sig_/LvEN1bAxOsL0WSHw7Dus9/b--

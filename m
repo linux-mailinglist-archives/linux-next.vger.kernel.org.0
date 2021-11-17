@@ -2,118 +2,106 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2F5A4544A0
-	for <lists+linux-next@lfdr.de>; Wed, 17 Nov 2021 11:05:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F21C845450F
+	for <lists+linux-next@lfdr.de>; Wed, 17 Nov 2021 11:35:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231603AbhKQKI2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 17 Nov 2021 05:08:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52986 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236153AbhKQKIW (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 17 Nov 2021 05:08:22 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B345DC061570
-        for <linux-next@vger.kernel.org>; Wed, 17 Nov 2021 02:05:23 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id r9-20020a7bc089000000b00332f4abf43fso3447784wmh.0
-        for <linux-next@vger.kernel.org>; Wed, 17 Nov 2021 02:05:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VQSmnrBQRiI16GECdp3OMat4LBaKuciGyFg9M/kRhI0=;
-        b=YRKMawAlDAdbPct1axOr+wCi5Y1IoNDjuSIbznBUciYscqJxnjSw85+cR2DV4Dx32h
-         TNrDd89YPteJcS3oehgIh2TH9wuev38tG46LDIw4TG/p2tJZQh9WDZuMYcMON2ILTXlW
-         rmTY+YZN0VCJiKGscFRYsHrHE6jEg7DcznVrofAPSpxTbf3VAkcSVRKE+Ha7GkENOtmp
-         g3UPY1mqqixImzDnT+r5vcPqGqSMTN15vKN7c19uIugIQj9gEYrICmZvlyoUmF1rQXI1
-         V7an0BFNZh6UmTjGUY4D2OpIi13Hu29jxu5V08Cs1+IiZPa6l+GP+gwxZsVrOLRNWYHZ
-         aHgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VQSmnrBQRiI16GECdp3OMat4LBaKuciGyFg9M/kRhI0=;
-        b=pnzCZ+6gbG8Gedca4onHGPaAaSaLtbTtgZIIWrtNMaxQDf4NRihgMOYGxCEVoawXm0
-         io6TMzvJzT6Vzolm3I1UctrDsCbMlz1y7FNFMqMHmz9BhNEI4h/RHXEBVxw4qm/osWUC
-         kHuI6nnhnDzmTR7pK+sAIVuvg6EdEF9+l3LMgWWLIamDh6XWxqaYpLnQ0cBF7Akf6oXc
-         os1kRBvT8/bDCrk9D1Gtg73vklVGDGdWOEs+iethxsNZ+jE57Loim2oDsEXgkQQTUmeB
-         45wEKYtlgWpljRAIvSAepD2NLDh8YTLxpDlAuwXMYdsPQypCiGwjkDPhIKVaX6phZ9GR
-         xEyA==
-X-Gm-Message-State: AOAM533T4N4a91u+5zp/3r0AsZoR3dkI9QCxEbmFD1RMTjrtASsadcOS
-        1aH3AKSqbGXJkMN67/d26VWaTDYWsG+eopsNF/itHw==
-X-Google-Smtp-Source: ABdhPJzbweNJ6QacPF52EsYUUxHPjTj3yJ14xpN256fN9457zzgorL/EKsqp5E88oUZl3szfCJdm8hFjfoSg7Wpvc8A=
-X-Received: by 2002:a05:600c:3ba3:: with SMTP id n35mr16775637wms.88.1637143521923;
- Wed, 17 Nov 2021 02:05:21 -0800 (PST)
+        id S234296AbhKQKiz convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-next@lfdr.de>); Wed, 17 Nov 2021 05:38:55 -0500
+Received: from mga09.intel.com ([134.134.136.24]:24522 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231862AbhKQKiy (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 17 Nov 2021 05:38:54 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10170"; a="233756630"
+X-IronPort-AV: E=Sophos;i="5.87,241,1631602800"; 
+   d="scan'208";a="233756630"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2021 02:35:56 -0800
+X-IronPort-AV: E=Sophos;i="5.87,241,1631602800"; 
+   d="scan'208";a="506858473"
+Received: from sorenthe-mobl2.ger.corp.intel.com (HELO localhost) ([10.249.254.159])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2021 02:35:53 -0800
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20211117135800.0b7072cd@canb.auug.org.au> <268ae204-efae-3081-a5dd-44fc07d048ba@infradead.org>
- <CAMuHMdUdA6cJkWWKypvn7nGQw+u=gW_oRNWB-=G8g2T3VixJFQ@mail.gmail.com>
- <CANn89iLXQWR_F6v39guPftY=jhs4XHsERifhZPOTjR3zDNkJyg@mail.gmail.com>
- <CAMuHMdXHo5boecN7Y81auC0y=_xWyNXO6tq8+U4AJq-z17F1nw@mail.gmail.com>
- <CANn89iKSZKvySL6+-gk7UGCowRoApJQmvUpYfiKChSSbxr=LYw@mail.gmail.com>
- <CANn89iLAu9QAgqS_qzZYSHLmmPdL_2uD0RSmtrq4mPgkWzV8hQ@mail.gmail.com> <CAMuHMdUy1ua+KB4XKh89huRg7a5CoNbZNZWbBRmQhzWsYF+FrA@mail.gmail.com>
-In-Reply-To: <CAMuHMdUy1ua+KB4XKh89huRg7a5CoNbZNZWbBRmQhzWsYF+FrA@mail.gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Wed, 17 Nov 2021 02:05:09 -0800
-Message-ID: <CANn89iJ4+LPyKZbrnic=YWi=10pcO+2UipdCDP-Q6VOWa1b0Fw@mail.gmail.com>
-Subject: Re: linux-next: Tree for Nov 17 (uml, no IPV6)
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+Content-Transfer-Encoding: 8BIT
+In-Reply-To: <20211117100223.52c7460a@canb.auug.org.au>
+References: <20211117100223.52c7460a@canb.auug.org.au>
+Subject: Re: linux-next: build failure after merge of the drm-intel-gt tree
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Matthew Auld <matthew.auld@intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        thomas.hellstrom@linux.intel.com, intel-gfx@lists.freedesktop.org
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+From:   Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Message-ID: <163714535048.4529.4694769143307309201@jlahtine-mobl.ger.corp.intel.com>
+User-Agent: alot/0.8.1
+Date:   Wed, 17 Nov 2021 12:35:50 +0200
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Nov 17, 2021 at 2:04 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->
-> Hi Eric,
->
-> On Wed, Nov 17, 2021 at 10:56 AM Eric Dumazet <edumazet@google.com> wrote:
-> > On Wed, Nov 17, 2021 at 1:50 AM Eric Dumazet <edumazet@google.com> wrote:
-> > > I don't know, apparently on UM, csum_ipv6_magic() is only found in
-> > > arch/x86/um/asm/checksum_32.h,
-> > > no idea why...
-> > >
-> >
-> > Oh, maybe this is the missing part :
-> >
-> > diff --git a/include/net/gro.h b/include/net/gro.h
-> > index d0e7df691a807410049508355230a4523af590a1..9c22a010369cb89f9511d78cc322be56170d7b20
-> > 100644
-> > --- a/include/net/gro.h
-> > +++ b/include/net/gro.h
-> > @@ -6,6 +6,7 @@
-> >  #include <linux/indirect_call_wrapper.h>
-> >  #include <linux/ip.h>
-> >  #include <linux/ipv6.h>
-> > +#include <net/ip6_checksum.h>
-> >  #include <linux/skbuff.h>
-> >  #include <net/udp.h>
->
-> Thanks, that fixes the ARCH=m68k m5272c3_defconfig issue for me.
->
-> Tested-by: Geert Uytterhoeven <geert@linux-m68k.org>
++ intel-gfx mailing list (Stephen, can you include this going forward?)
 
-Great, can you carry your Tested-by: on the submission itself ?
+Adding Thomas for this specific patch.
 
-Thanks !
+Regards, Joonas
 
-https://patchwork.kernel.org/project/netdevbpf/patch/20211117100130.2368319-1-eric.dumazet@gmail.com/
-
-
->
-> Gr{oetje,eeting}s,
->
->                         Geert
->
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
->
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
+Quoting Stephen Rothwell (2021-11-17 01:02:23)
+> Hi all,
+> 
+> After merging the etnaviv tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+> 
+> drivers/gpu/drm/i915/gem/i915_gem_ttm.c: In function 'vm_fault_ttm':
+> drivers/gpu/drm/i915/gem/i915_gem_ttm.c:862:9: error: too many arguments to function 'ttm_bo_vm_fault_reserved'
+>   862 |   ret = ttm_bo_vm_fault_reserved(vmf, vmf->vma->vm_page_prot,
+>       |         ^~~~~~~~~~~~~~~~~~~~~~~~
+> In file included from include/drm/ttm/ttm_bo_driver.h:42,
+>                  from drivers/gpu/drm/i915/gem/i915_gem_ttm.c:6:
+> include/drm/ttm/ttm_bo_api.h:585:12: note: declared here
+>   585 | vm_fault_t ttm_bo_vm_fault_reserved(struct vm_fault *vmf,
+>       |            ^~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> Caused by commit
+> 
+>   ebd4a8ec7799 ("drm/i915/ttm: move shrinker management into adjust_lru")
+> 
+> interacting with commit
+> 
+>   0d979509539e ("drm/ttm: remove ttm_bo_vm_insert_huge()")
+> 
+> from Linus' tree.
+> 
+> I applied the following merge fix patch.
+> 
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Wed, 17 Nov 2021 09:57:09 +1100
+> Subject: [PATCH] fix up for "drm/ttm: remove ttm_bo_vm_insert_huge()"
+> 
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  drivers/gpu/drm/i915/gem/i915_gem_ttm.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c b/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
+> index d08a270b0921..68cfe6e9ceab 100644
+> --- a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
+> +++ b/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
+> @@ -860,7 +860,7 @@ static vm_fault_t vm_fault_ttm(struct vm_fault *vmf)
+>  
+>         if (drm_dev_enter(dev, &idx)) {
+>                 ret = ttm_bo_vm_fault_reserved(vmf, vmf->vma->vm_page_prot,
+> -                                              TTM_BO_VM_NUM_PREFAULT, 1);
+> +                                              TTM_BO_VM_NUM_PREFAULT);
+>                 drm_dev_exit(idx);
+>         } else {
+>                 ret = ttm_bo_vm_dummy_page(vmf, vmf->vma->vm_page_prot);
+> -- 
+> 2.33.0
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell

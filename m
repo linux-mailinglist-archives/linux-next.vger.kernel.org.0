@@ -2,264 +2,199 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 898CB455906
-	for <lists+linux-next@lfdr.de>; Thu, 18 Nov 2021 11:26:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB928456688
+	for <lists+linux-next@lfdr.de>; Fri, 19 Nov 2021 00:47:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245231AbhKRK3U (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 18 Nov 2021 05:29:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44846 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245182AbhKRK3Q (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 18 Nov 2021 05:29:16 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A66D8C061570
-        for <linux-next@vger.kernel.org>; Thu, 18 Nov 2021 02:26:16 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id iq11so4735259pjb.3
-        for <linux-next@vger.kernel.org>; Thu, 18 Nov 2021 02:26:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=Aj01fV86d59X3p/MWGC0ju4lLb7ylqEOn3aGvMhIJu0=;
-        b=UWzi9s3ODuR5Rye2VBQ7apO+UmgOgeiVUcSd+NOnlUeTAbbwOwpFzW+ZZXDdZSr3r0
-         7eQCDLjqyZtxGTsihTVnkj3kgfsnAIe7RAGpIhJLCpCzbJDlQzwUHksRWVcq3wXImpBN
-         4MR+G8GLYpvVhQB7rFKmOpFVggx8H4/SvZo5xZTDWeDvVNTlgezs14d9Ad/2un2Y2QKT
-         0od6bS7v8NGt16VBe4MpYMvbd9YoExiPrcLQ+hN0S9yigIxqxobRx6edcJTk8WdZmzO1
-         5Qrip/u/2kROWidrOQ3ek2ObYaQnt78qzh449T38y3diB8wlKUcEnF0qeSN3LVw+wUqm
-         NrsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=Aj01fV86d59X3p/MWGC0ju4lLb7ylqEOn3aGvMhIJu0=;
-        b=Dhk29MxIz4rVlm2RMxgS4Y3LeSo/T+b1CapU/aOR7yfYL89Qjxc6R7b57adCvRGyhk
-         w+SyytxIW6+sdShciLEMOqCzqfqF/BH8KzNdYBEN1nBkSmOhDkpuCHOVcxWR3CfFvsWf
-         P+Qm/NLHLI+5j3mLvI/iM5TZgtRaspNvLTgMjqIe8rf2Wjpl0dlSmbjJqm6JHcM41cfF
-         qF58e9KLiv3Sn0jvtcXBzBtSYPK352VLM8yO09WbMHzrgxd+lvJA5S2xcHd/H/MPnyG9
-         D0uvEwrfvuLZIPDeY96ghzlGcXf5WCLIXfbJBOxKrZPeCWYCiiRiyPnRh8yR+6Ok7tD+
-         Qc/w==
-X-Gm-Message-State: AOAM533njY5B9RPUnjx1Uf9rnPoxaTCGXC6WWJ7AxuJif3zgj5UQRrQu
-        ITLVsFAySItTABCNtXsmun5lQEs0UIffPeY+
-X-Google-Smtp-Source: ABdhPJz5ap+z3fjDIQ5OBFMfE3g/Bi3GDEEGegCt4N+RuK5B5Luk2ZywGImzGOQ62sCYfdcBYhYTKA==
-X-Received: by 2002:a17:903:22c6:b0:141:fac1:b722 with SMTP id y6-20020a17090322c600b00141fac1b722mr66286466plg.23.1637231176004;
-        Thu, 18 Nov 2021 02:26:16 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id u11sm2877948pfk.152.2021.11.18.02.26.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Nov 2021 02:26:15 -0800 (PST)
-Message-ID: <61962a47.1c69fb81.16aac.861b@mx.google.com>
-Date:   Thu, 18 Nov 2021 02:26:15 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: next-20211118
-X-Kernelci-Tree: next
-X-Kernelci-Branch: master
-Subject: next/master baseline: 756 runs, 5 regressions (next-20211118)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+        id S233297AbhKRXup (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 18 Nov 2021 18:50:45 -0500
+Received: from mail.kernel.org ([198.145.29.99]:46746 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229911AbhKRXuo (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 18 Nov 2021 18:50:44 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 977FD615E3;
+        Thu, 18 Nov 2021 23:47:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1637279263;
+        bh=/PpTA8Ztzws1iG2KXKvOte1u98F6v8LSb2XI+pEpruc=;
+        h=Date:From:To:Subject:From;
+        b=qZPOqQW1xAex6LcpNyN+DDe+ZVGa8kuD5UKNoNT3GFRnknSpdXNbMzE4ThxV6LuJI
+         lo/43byxEpj4GHRynJe2GH77PyPGGCCIyi3UcaVZFnJNbkn+RD6V35RcXNd/oJvkso
+         KugtK96Sb5tdLdH104DYmCRoHwsYKAPCfAq9W2KE=
+Date:   Thu, 18 Nov 2021 15:47:43 -0800
+From:   akpm@linux-foundation.org
+To:     broonie@kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-next@vger.kernel.org, mhocko@suse.cz,
+        mm-commits@vger.kernel.org, sfr@canb.auug.org.au
+Subject:  mmotm 2021-11-18-15-47 uploaded
+Message-ID: <20211118234743.-bgoWMQfK%akpm@linux-foundation.org>
+User-Agent: s-nail v14.8.16
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master baseline: 756 runs, 5 regressions (next-20211118)
+The mm-of-the-moment snapshot 2021-11-18-15-47 has been uploaded to
 
-Regressions Summary
--------------------
+   https://www.ozlabs.org/~akpm/mmotm/
 
-platform                 | arch   | lab          | compiler | defconfig    =
-            | regressions
--------------------------+--------+--------------+----------+--------------=
-------------+------------
-qemu_arm-virt-gicv3-uefi | arm    | lab-baylibre | gcc-10   | multi_v7_defc=
-onfig+debug | 1          =
+mmotm-readme.txt says
 
-qemu_arm-virt-gicv3-uefi | arm    | lab-broonie  | gcc-10   | multi_v7_defc=
-onfig+debug | 1          =
+README for mm-of-the-moment:
 
-qemu_arm-virt-gicv3-uefi | arm    | lab-cip      | gcc-10   | multi_v7_defc=
-onfig+debug | 1          =
+https://www.ozlabs.org/~akpm/mmotm/
 
-qemu_x86_64-uefi         | x86_64 | lab-broonie  | gcc-10   | x86_64_defcon=
-fig+debug   | 1          =
+This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
+more than once a week.
 
-qemu_x86_64-uefi         | x86_64 | lab-cip      | gcc-10   | x86_64_defcon=
-fig+debug   | 1          =
+You will need quilt to apply these patches to the latest Linus release (5.x
+or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
+https://ozlabs.org/~akpm/mmotm/series
 
+The file broken-out.tar.gz contains two datestamp files: .DATE and
+.DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
+followed by the base kernel version against which this patch series is to
+be applied.
 
-  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
-211118/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   master
-  Describe: next-20211118
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      5191249f880367a4cd675825cd721a8d78f26a45 =
+This tree is partially included in linux-next.  To see which patches are
+included in linux-next, consult the `series' file.  Only the patches
+within the #NEXT_PATCHES_START/#NEXT_PATCHES_END markers are included in
+linux-next.
 
 
+A full copy of the full kernel tree with the linux-next and mmotm patches
+already applied is available through git within an hour of the mmotm
+release.  Individual mmotm releases are tagged.  The master branch always
+points to the latest release, so it's constantly rebasing.
 
-Test Regressions
----------------- =
+	https://github.com/hnaz/linux-mm
 
+The directory https://www.ozlabs.org/~akpm/mmots/ (mm-of-the-second)
+contains daily snapshots of the -mm tree.  It is updated more frequently
+than mmotm, and is untested.
 
+A git copy of this tree is also available at
 
-platform                 | arch   | lab          | compiler | defconfig    =
-            | regressions
--------------------------+--------+--------------+----------+--------------=
-------------+------------
-qemu_arm-virt-gicv3-uefi | arm    | lab-baylibre | gcc-10   | multi_v7_defc=
-onfig+debug | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6195f52e07015d012b335931
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+debug
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20211118/arm/=
-multi_v7_defconfig+debug/gcc-10/lab-baylibre/baseline-qemu_arm-virt-gicv3-u=
-efi.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20211118/arm/=
-multi_v7_defconfig+debug/gcc-10/lab-baylibre/baseline-qemu_arm-virt-gicv3-u=
-efi.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/armel/baseline/rootfs.cpio.gz =
+	https://github.com/hnaz/linux-mm
 
 
 
-  * baseline.login: https://kernelci.org/test/case/id/6195f52e07015d012b335=
-932
-        new failure (last pass: next-20211117) =
+This mmotm tree contains the following patches against 5.16-rc1:
+(patches marked "*" will be included in linux-next)
 
- =
-
-
-
-platform                 | arch   | lab          | compiler | defconfig    =
-            | regressions
--------------------------+--------+--------------+----------+--------------=
-------------+------------
-qemu_arm-virt-gicv3-uefi | arm    | lab-broonie  | gcc-10   | multi_v7_defc=
-onfig+debug | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6195f9c9aea86a66213358dc
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+debug
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20211118/arm/=
-multi_v7_defconfig+debug/gcc-10/lab-broonie/baseline-qemu_arm-virt-gicv3-ue=
-fi.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20211118/arm/=
-multi_v7_defconfig+debug/gcc-10/lab-broonie/baseline-qemu_arm-virt-gicv3-ue=
-fi.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6195f9c9aea86a6621335=
-8dd
-        new failure (last pass: next-20211117) =
-
- =
-
-
-
-platform                 | arch   | lab          | compiler | defconfig    =
-            | regressions
--------------------------+--------+--------------+----------+--------------=
-------------+------------
-qemu_arm-virt-gicv3-uefi | arm    | lab-cip      | gcc-10   | multi_v7_defc=
-onfig+debug | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6195f6604d540d6a4f3358f9
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+debug
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20211118/arm/=
-multi_v7_defconfig+debug/gcc-10/lab-cip/baseline-qemu_arm-virt-gicv3-uefi.t=
-xt
-  HTML log:    https://storage.kernelci.org//next/master/next-20211118/arm/=
-multi_v7_defconfig+debug/gcc-10/lab-cip/baseline-qemu_arm-virt-gicv3-uefi.h=
-tml
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6195f6604d540d6a4f335=
-8fa
-        new failure (last pass: next-20211117) =
-
- =
-
-
-
-platform                 | arch   | lab          | compiler | defconfig    =
-            | regressions
--------------------------+--------+--------------+----------+--------------=
-------------+------------
-qemu_x86_64-uefi         | x86_64 | lab-broonie  | gcc-10   | x86_64_defcon=
-fig+debug   | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6195efc86d22cef2a2335906
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+debug
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20211118/x86_=
-64/x86_64_defconfig+debug/gcc-10/lab-broonie/baseline-qemu_x86_64-uefi.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20211118/x86_=
-64/x86_64_defconfig+debug/gcc-10/lab-broonie/baseline-qemu_x86_64-uefi.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/x86/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6195efc86d22cef2a2335=
-907
-        new failure (last pass: next-20211117) =
-
- =
-
-
-
-platform                 | arch   | lab          | compiler | defconfig    =
-            | regressions
--------------------------+--------+--------------+----------+--------------=
-------------+------------
-qemu_x86_64-uefi         | x86_64 | lab-cip      | gcc-10   | x86_64_defcon=
-fig+debug   | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6195ef582aa5b179fc3358dc
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+debug
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20211118/x86_=
-64/x86_64_defconfig+debug/gcc-10/lab-cip/baseline-qemu_x86_64-uefi.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20211118/x86_=
-64/x86_64_defconfig+debug/gcc-10/lab-cip/baseline-qemu_x86_64-uefi.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/x86/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6195ef582aa5b179fc335=
-8dd
-        new failure (last pass: next-20211117) =
-
- =20
+  origin.patch
+* hitting-bug_on-trap-in-read_pages-mm-optimise-put_pages_list.patch
+* ipc-warn-if-trying-to-remove-ipc-object-which-is-absent.patch
+* shm-extend-forced-shm-destroy-to-support-objects-from-several-ipc-nses-simplified.patch
+* mm-emit-the-free-trace-report-before-freeing-memory-in-kmem_cache_free.patch
+* hexagon-export-raw-i-o-routines-for-modules.patch
+* hexagon-clean-up-timer-regsh.patch
+* hexagon-ignore-vmlinuxlds.patch
+* mm-kmemleak-slob-respect-slab_noleaktrace-flag.patch
+* hugetlb-fix-hugetlb-cgroup-refcounting-during-mremap.patch
+* kasan-test-silence-intentional-read-overflow-warnings.patch
+* mm-damon-dbgfs-use-__gfp_nowarn-for-user-specified-size-buffer-allocation.patch
+* mm-damon-dbgfs-fix-missed-use-of-damon_dbgfs_lock.patch
+* kmap_local-dont-assume-kmap-ptes-are-linear-arrays-in-memory.patch
+* proc-vmcore-fix-clearing-user-buffer-by-properly-using-clear_user.patch
+* mm-fix-panic-in-__alloc_pages.patch
+* hugetlb-userfaultfd-fix-reservation-restore-on-userfaultfd-error.patch
+* mm-bdi-initialize-bdi_min_ratio-when-bdi-unregister.patch
+* mm-bdi-initialize-bdi_min_ratio-when-bdi-unregister-fix.patch
+* increase-default-mlock_limit-to-8-mib.patch
+* proc-kpageflags-prevent-an-integer-overflow-in-stable_page_flags.patch
+* proc-kpageflags-do-not-use-uninitialized-struct-pages.patch
+* procfs-prevent-unpriveleged-processes-accessing-fdinfo-dir.patch
+* kthread-add-the-helper-function-kthread_run_on_cpu.patch
+* kthread-add-the-helper-function-kthread_run_on_cpu-fix.patch
+* rdma-siw-make-use-of-the-helper-function-kthread_run_on_cpu.patch
+* ring-buffer-make-use-of-the-helper-function-kthread_run_on_cpu.patch
+* rcutorture-make-use-of-the-helper-function-kthread_run_on_cpu.patch
+* trace-osnoise-make-use-of-the-helper-function-kthread_run_on_cpu.patch
+* trace-hwlat-make-use-of-the-helper-function-kthread_run_on_cpu.patch
+* ia64-module-use-swap-to-make-code-cleaner.patch
+* ia64-use-swap-to-make-code-cleaner.patch
+* ia64-fix-typo-in-a-comment.patch
+* squashfs-provides-backing_dev_info-in-order-to-disable-read-ahead.patch
+* ocfs2-use-bug_on-instead-of-if-condition-followed-by-bug.patch
+* ocfs2-reflink-deadlock-when-clone-file-to-the-same-directory-simultaneously.patch
+* ocfs2-clear-links-count-in-ocfs2_mknod-if-an-error-occurs.patch
+* ocfs2-fix-ocfs2-corrupt-when-iputting-an-inode.patch
+  mm.patch
+* mm-slab_common-use-warn-if-cache-still-has-objects-on-destroy.patch
+* mm-slab-make-slab-iterator-functions-static.patch
+* kmemleak-fix-kmemleak-false-positive-report-with-hw-tag-based-kasan-enable.patch
+* kasan-test-add-globals-left-out-of-bounds-test.patch
+* gup-avoid-multiple-user-access-locking-unlocking-in-fault_in_read-writeable.patch
+* mm-shmem-dont-truncate-page-if-memory-failure-happens.patch
+* mm-memcontrol-make-cgroup_memory_nokmem-static.patch
+* mm-page_counter-remove-an-incorrect-call-to-propagate_protected_usage.patch
+* memcg-better-bounds-on-the-memcg-stats-updates.patch
+* mm-remove-redundant-check-about-fault_flag_allow_retry-bit.patch
+* mm-remove-redundant-check-about-fault_flag_allow_retry-bit-checkpatch-fixes.patch
+* mm-rearrange-madvise-code-to-allow-for-reuse.patch
+* mm-add-a-field-to-store-names-for-private-anonymous-memory.patch
+* mm-add-anonymous-vma-name-refcounting.patch
+* mm-discard-__gfp_atomic.patch
+* selftests-uffd-allow-eintr-eagain.patch
+* vmscan-make-drop_slab_node-static.patch
+* mm-mempolicy-convert-from-atomic_t-to-refcount_t-on-mempolicy-refcnt.patch
+* mm-mempolicy-convert-from-atomic_t-to-refcount_t-on-mempolicy-refcnt-fix.patch
+* mm-migrate-fix-the-return-value-of-migrate_pages.patch
+* mm-migrate-correct-the-hugetlb-migration-stats.patch
+* mm-compaction-fix-the-migration-stats-in-trace_mm_compaction_migratepages.patch
+* mm-migratec-rework-migration_entry_wait-to-not-take-a-pageref.patch
+* mm-migrate-support-multiple-target-nodes-demotion.patch
+* mm-hwpoison-mf_mutex-for-soft-offline-and-unpoison.patch
+* mm-hwpoison-remove-mf_msg_buddy_2nd-and-mf_msg_poisoned_huge.patch
+* mm-hwpoison-fix-unpoison_memory.patch
+* mm-rmap-convert-from-atomic_t-to-refcount_t-on-anon_vma-refcount.patch
+* zsmalloc-introduce-some-helper-functions.patch
+* zsmalloc-rename-zs_stat_type-to-class_stat_type.patch
+* zsmalloc-decouple-class-actions-from-zspage-works.patch
+* zsmalloc-introduce-obj_allocated.patch
+* zsmalloc-move-huge-compressed-obj-from-page-to-zspage.patch
+* zsmalloc-remove-zspage-isolation-for-migration.patch
+* locking-rwlocks-introduce-write_lock_nested.patch
+* zsmalloc-replace-per-zpage-lock-with-pool-migrate_lock.patch
+* zsmalloc-replace-get_cpu_var-with-local_lock.patch
+* zram-use-attribute_groups.patch
+* writeback-fix-some-comment-errors.patch
+* mm-hmmc-allow-vm_mixedmap-to-work-with-hmm_range_fault.patch
+* mm-damon-unified-access_check-function-naming-rules.patch
+* mm-damon-add-age-of-region-tracepoint-support.patch
+* mm-damon-core-using-function-abs-instead-of-diff_of.patch
+* mm-damon-remove-some-no-need-func-definitions-in-damonh-file.patch
+* mm-damon-remove-some-no-need-func-definitions-in-damonh-file-fix.patch
+* mm-damon-vaddr-remove-swap_ranges-and-replace-it-with-swap.patch
+* mm-damon-schemes-add-the-validity-judgment-of-thresholds.patch
+* info-task-hung-in-generic_file_write_iter.patch
+* info-task-hung-in-generic_file_write-fix.patch
+* kernel-hung_taskc-monitor-killed-tasks.patch
+* proc-vmcore-dont-fake-reading-zeroes-on-surprise-vmcore_cb-unregistration.patch
+* proc-make-the-proc_create-stubs-static-inlines.patch
+* proc-sysctl-make-protected_-world-readable.patch
+* kstrtox-uninline-everything.patch
+* lz4-fix-lz4_decompress_safe_partial-read-out-of-bound.patch
+* checkpatch-relax-regexp-for-commit_log_long_line.patch
+* elf-fix-overflow-in-total-mapping-size-calculation.patch
+* init-mainc-silence-some-wunused-parameter-warnings.patch
+* hfsplus-fix-out-of-bounds-warnings-in-__hfsplus_setxattr.patch
+* panic-use-error_report_end-tracepoint-on-warnings.patch
+* panic-use-error_report_end-tracepoint-on-warnings-fix.patch
+* delayacct-support-swapin-delay-accounting-for-swapping-without-blkio.patch
+* configs-introduce-debugconfig-for-ci-like-setup.patch
+  linux-next.patch
+  linux-next-git-rejects.patch
+* fs-proc-store-pde-data-into-inode-i_private.patch
+* fs-proc-replace-pde_datainode-with-inode-i_private.patch
+* fs-proc-remove-pde_data.patch
+* fs-proc-use-define_proc_show_attribute-to-simplify-the-code.patch
+* lib-stackdepot-allow-optional-init-and-stack_table-allocation-by-kvmalloc.patch
+* lib-stackdepot-allow-optional-init-and-stack_table-allocation-by-kvmalloc-fix.patch
+* lib-stackdepot-allow-optional-init-and-stack_table-allocation-by-kvmalloc-fix-2.patch
+* lib-stackdepot-allow-optional-init-and-stack_table-allocation-by-kvmalloc-fixup3.patch
+  make-sure-nobodys-leaking-resources.patch
+  releasing-resources-with-children.patch
+  mutex-subsystem-synchro-test-module.patch
+  kernel-forkc-export-kernel_thread-to-modules.patch
+  workaround-for-a-pci-restoring-bug.patch

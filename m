@@ -2,109 +2,177 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E504B458192
-	for <lists+linux-next@lfdr.de>; Sun, 21 Nov 2021 04:26:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50C9D4582C3
+	for <lists+linux-next@lfdr.de>; Sun, 21 Nov 2021 10:28:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237789AbhKUD3Z (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 20 Nov 2021 22:29:25 -0500
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:54030 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237787AbhKUD3Z (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 20 Nov 2021 22:29:25 -0500
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1AL3PmCJ117153;
-        Sat, 20 Nov 2021 21:25:48 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1637465148;
-        bh=dwovKqCilm51jOCmGaV3r/XWOt+HClI9vWaQx7Ppyz8=;
-        h=Date:From:To:CC:Subject;
-        b=DxjHSyw0jT0pcScnnM8Y3+4ehnepso0TOoiBg18EWW6q/8ENNKCAq+C5BfCFEsNH3
-         epnXIKPaFdEZWn75uPaWMKlhBOpVoe5FavVhTnFdITyB4Sdfq+qOVn2jKr8okaB1v2
-         l/U/sxnZv/+Hza5tzSIpkZSKcEVkR2VLOEmM4/Dk=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1AL3PmPq017265
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sat, 20 Nov 2021 21:25:48 -0600
-Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Sat, 20
- Nov 2021 21:25:48 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Sat, 20 Nov 2021 21:25:48 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1AL3Pmj0123626;
-        Sat, 20 Nov 2021 21:25:48 -0600
-Date:   Sat, 20 Nov 2021 21:25:48 -0600
-From:   Nishanth Menon <nm@ti.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-CC:     "Raghavendra, Vignesh" <vigneshr@ti.com>, <tony@atomide.com>,
-        <kristo@kernel.org>,
-        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>
-Subject: Request: Add Transition TI Tree to linux-next
-Message-ID: <20211121032548.c56zt66ac5hjbu7j@garden>
+        id S231700AbhKUJbh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 21 Nov 2021 04:31:37 -0500
+Received: from a48-37.smtp-out.amazonses.com ([54.240.48.37]:57443 "EHLO
+        a48-37.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230459AbhKUJbh (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Sun, 21 Nov 2021 04:31:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1637486912;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+        bh=kKRWo32vrk+yuNlqww9gySJ3Rs3bcePnDdJspBNA7AQ=;
+        b=Xo2QtpGQwG+QpWsLLUZBfHkvhKxuyVAdl0N7/wNto1R2KfIJOkG6vXUwGd+60CCn
+        alK+XydtqPMiIxB/WHMt7TCeL2yCHbr/XeO64KLUzp7C9YNh0d3U/xggR6LcxbWhaIg
+        mEskzAskBTackHhD1NEaYN5B4EAl+vo1j/C+sCnY=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1637486912;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+        bh=kKRWo32vrk+yuNlqww9gySJ3Rs3bcePnDdJspBNA7AQ=;
+        b=T8MTi8r8YYbFfd6j/xar6U4dOwNvxUVtqxXG4sm4tAG3eY0iai1GoH7ksdfAaAhQ
+        Kfe82wPWogWOG8wDfIEJ4wSIJjcJLq0fmMSdIl3ATLaYEjdwxW+G/bYJ+IMcoY4ytL5
+        icn6+7rtM3AMTMprjnIV+LgwtcIqB7Rb9b+MPHQE=
+From:   lkft@linaro.org
+To:     lkft@linaro.org
+Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        linux-next@vger.kernel.org, shuah@kernel.org
+Subject: [REGRESSION] lkft kselftest for next-20211117
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xskazjy2ohcxysn3"
-Content-Disposition: inline
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Message-ID: <0100017d41d36138-496e8b33-5be4-4f63-9316-3e7be15c2fe2-000000@email.amazonses.com>
+Date:   Sun, 21 Nov 2021 09:28:31 +0000
+Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
+X-SES-Outgoing: 2021.11.21-54.240.48.37
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---xskazjy2ohcxysn3
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+## Build
+* kernel: 5.16.0-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+* git branch: master
+* git commit: fd96a4057bd015d194a4b87e7c149fc2fef3c166
+* git describe: next-20211117
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20211117
 
-Hi Stephen,
+## Regressions (compared to next-20211115)
+* dragonboard-410c, kselftest-sync
+  - sync.sync_test
 
-We have been working towards a rotating maintainership for various
-TI dts and potentially related areas that Santosh is currently
-maintaining. As part of this, my tree[1] is now integrated into the
-common effort.
+* i386, kselftest-net
+  - net.ip_defrag.sh
 
-Please replace my current tree[1] with:
+* qemu_arm, kselftest-rtc
+  - rtc.rtctest
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git#ti-next
+* qemu_arm, kselftest-timers
+  - timers.rtcpie
 
-We will follow the usual rules (GPLv2, contributer's guidelines,
-reviews, successfully tested, meant for next merge window and intent
-towards linus's tree via submaintainers) and this would be a rebased
-tree as needed.
+* qemu_x86_64, kselftest-rtc
+  - rtc.rtctest
 
-[1]
-git://git.kernel.org/pub/scm/linux/kernel/git/nmenon/linux.git#ti-k3-next (=
-ti-k3-new)
+* qemu_x86_64, kselftest-timers
+  - timers.rtcpie
 
---=20
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5=
- 849D 1736 249D
+* x86, kselftest-rtc
+  - rtc.rtctest
 
---xskazjy2ohcxysn3
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-iQIzBAABCgAdFiEE+KKGk1TrgjIXoxo03bWEnRc2JJ0FAmGZvDUACgkQ3bWEnRc2
-JJ3jFRAAnAiBqbXtaetLqGud1qLs2pdcoTs5hFCHIk3NVYHNZnhhHNaR2emEDivu
-iMizYCNuNSeSqXDe8Xv8V9uwHZDeQn3yS88RWEgbptp7h0HTJaoN+rr28NgmqWTO
-1urHj1D8os/P2uCupzWFkUzwdql2ShoncxOJk/spwctq7oVx/u3owhIyqkMJq9SS
-uko6mDg4oruziTFFLxqxwaNovolpWe7+Lxt+x7gh/u6bR+jEEV0OZtuHTBWxnxZ2
-XBc/VkcvnYp8xdo//vp3/g00BcvBbZbaN2tgomxUYomJKxuoRLH3hr0WOFvNrR/D
-yDVSsGs0sR15WsWYLbmGJJlnMjqqMW47hxYAx3kwAqNL2qhvZ93iJbuWp3l+BOtB
-FtID+95BcMAkr2D1A3MZUmEzmS1aEW/iaSlGcMrznezemC+i0xcHw5uUjbw9VAay
-u27QDC5K/ZnbYeCIoSVn/9rtsEPuUipFtZynWWGkEbE4j36kXZHp268B5xhhsTRN
-qs7SoOL2r3dwMsJ/9kZ/vm9ouE+K/5hSf6Eoy7+fOPhMOl7X8kCBi24USIMmTMot
-h4rXx5BrkLK7DLMufmAzRMmmi03zR127sfCOU5XxWS8FKi2QpGxWgvBdPfodKMCu
-T+lmrRj3fp4H9uTFlNC+mZkUpxyjzsxby+YQ8rVCBI5YakM6jf4=
-=cCe1
------END PGP SIGNATURE-----
 
---xskazjy2ohcxysn3--
+## Fixes (compared to next-20211115)
+* i386, kselftest-net
+  - net.tls
+  - net.tls.tls.12_aes_gcm.send_then_sendfile
+  - net.tls.tls.12_chacha.send_then_sendfile
+  - net.tls.tls.13_aes_gcm.send_then_sendfile
+  - net.tls.tls.13_chacha.send_then_sendfile
+  - net.tls.tls.13_sm4_ccm.send_then_sendfile
+  - net.tls.tls.13_sm4_gcm.send_then_sendfile
+
+* qemu_arm, kselftest-zram
+  - zram.zram.sh
+
+* qemu_x86_64, kselftest-kvm
+  - kvm.rseq_test
+
+* x15, kselftest-cgroup
+  - cgroup.test_freezer
+  - cgroup.test_freezer.test_cgfreezer_ptrace
+
+* x15, kselftest-net
+  - net.so_txtime.sh
+
+
+## Test result summary
+total: 3399, pass: 2048, fail: 292, skip: 1059, xfail: 0
+
+## Build Summary
+
+## Test suites summary
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-lkdtm
+* kselftest-membarrier
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+
+--
+Linaro LKFT
+https://lkft.linaro.org

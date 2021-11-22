@@ -2,75 +2,95 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EF61459682
-	for <lists+linux-next@lfdr.de>; Mon, 22 Nov 2021 22:15:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 025D5459689
+	for <lists+linux-next@lfdr.de>; Mon, 22 Nov 2021 22:17:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235045AbhKVVSL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 22 Nov 2021 16:18:11 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:46243 "EHLO
+        id S231307AbhKVVUd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 22 Nov 2021 16:20:33 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:34587 "EHLO
         gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240208AbhKVVSL (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 22 Nov 2021 16:18:11 -0500
+        with ESMTP id S229502AbhKVVUc (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 22 Nov 2021 16:20:32 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Hyg5f6ZhQz4xZ5;
-        Tue, 23 Nov 2021 08:15:02 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Hyg8M59d7z4xZ5;
+        Tue, 23 Nov 2021 08:17:23 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1637615703;
-        bh=zhyPezHqXnxv9v02FkveBpf0/1xDQr1BtUE6XwlZfjI=;
+        s=201702; t=1637615844;
+        bh=0Ea/nGzlHHDKeHVORh6NEs6b+59/DkXLK/Xllk7w01Q=;
         h=Date:From:To:Cc:Subject:From;
-        b=WI3iysxbN89oIMDw2YXZ6XQbphgVs0DFFKWppBhlrZgF+Yn4ONXQQsCW+f0lHdfHj
-         4puQK3Fw5w+8YVC+stfMmNe+DIz5EdHyeDsdsWqOWfwWYA+midtec48NRj2QosZRV2
-         I5qMO6/YKiehaXiGxOl8Yr/6+sIMKTAb2yuAHYTy9QYzfLlwVxpWRRtJfl0Z5yG0wV
-         lDr+VYntxczLitoMohRVRmwCxTfkprj1RaDvdJjODdM+N92oHzZlIij250YIfgtRbQ
-         wg+9nKRByFw6jVXeiEuiHOBulilbDAMFs14PJQm1dHN6y2jSRtGSl2c1RcTbpAOu87
-         yJoa4Zk1JilTg==
-Date:   Tue, 23 Nov 2021 08:15:01 +1100
+        b=fp+dHbw9hKEH+H3CnExICiukktyEKakcyVojT3Gfdvseu+Czx+cYWe2kzfvnCWzzB
+         jV1k/9DWShMqBvKt0e/qI7TqshQn0eRRVF4Lv9M3OWJpUQOhBWRWInnJ9xzdZe3N7g
+         RJbHKcr0TYjbG7XKA49IWY/zARlL33a0g/FaXry7RjM24gJrK1LVyskJzzF++rW+cM
+         LFNPBzAELWXyFO8Xk6Bd+L9UR+Xv8KlLXPEG9evNu5TlxhucywPp6GWDUyd3th0RDw
+         xi5XJJLWEISofwcKRIx89rMvZ60JdNZRCdXEFyth4R46HBAWEEBSbqwf1sFzUQNg1I
+         73bbL64+nUX2A==
+Date:   Tue, 23 Nov 2021 08:17:23 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "J. Bruce Fields" <bfields@fieldses.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Thomas =?UTF-8?B?V2Vpw59zY2h1aA==?= <linux@weissschuh.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the nfsd tree
-Message-ID: <20211123081501.6815bffe@canb.auug.org.au>
+Subject: linux-next: Fixes tag needs some work in the hid tree
+Message-ID: <20211123081723.4263f8c1@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ijE=guvO8lmm3eRhdsUMwvR";
+Content-Type: multipart/signed; boundary="Sig_/ntmYhIbD6.VFJiV.zy69hlb";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/ijE=guvO8lmm3eRhdsUMwvR
+--Sig_/ntmYhIbD6.VFJiV.zy69hlb
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Commit
+In commit
 
-  52e66ccaa3ca ("debug")
+  3e6a950d9836 ("HID: input: set usage type to key on keycode remap")
 
-is missing a Signed-off-by from its author and commiter.
+Fixes tag
+
+  Fixes: bcfa8d1457 ("HID: input: Add support for Programmable Buttons")
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+    Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
+    or later) just making sure it is not set (or set to "auto").
+
+Fixes tag
+
+  Fixes: f5854fad39 ("Input: hid-input - allow mapping unknown usages")
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+    Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
+    or later) just making sure it is not set (or set to "auto").
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/ijE=guvO8lmm3eRhdsUMwvR
+--Sig_/ntmYhIbD6.VFJiV.zy69hlb
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGcCFYACgkQAVBC80lX
-0Gy4RwgAkXMXKUb8AJvakEX270nMpkIHAdbrOww4yntD/P6bEOIxytc7IoYHFnto
-l0CWUizM43jiRAR1AbFk5QvyDS4c36E1f2ZUfg/aneBXIeDwr9PyKCyMoLSDGULF
-jOFRxPD9Q0FzQEB3Zpa1TmE2NnorD7vqB9nTlT025jNz8ysluX4NzYSfE+mW4k2n
-Zw6V9R5Mf+edm3pV3SPzLAtXBstYH/7uS+frubPoFbZ4hhGlOgZorFneLApFe8P6
-I3JSv6FXQ5zpzZp4gE3GMyty82O7ejo49Y5awjp62SgO9+ryvhOR0zjzKF0YrPBn
-Mnsyd+A53c3PNMK0Gwv9wr+jQbR3OA==
-=Laap
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGcCOMACgkQAVBC80lX
+0Gwfowf+IppKvrXo1/ZOxM2JEIoRdazcNpp2x0PbyXdcfo1R6IrMJ63iQeZ2IfwD
+Ke0VRnYw/oM6UxTzaBZoo0dmspDLfRVf9D3pN9KljwhNdREMshZf7j9cEkaXXjIa
+L874MGvK2RkhBjstup2eNbJ3DbHUN8JVRZ1BkMo521I5qI/8LbRJ2aB1zpBej1kc
+U+GK9VpiwgfsCwaRCii/mCp2UKozQkxnFFf182QVjPFaDXA4Kb1MSTcv37DMF75k
+AxsDDI1rcTFEWrMSB2tLaQegHRstMsE4aKzpkSFzXVSLLJ267lFAiMb51w4CsVbq
+2VFZhKLQBNGAzIqMnP3+n5gr7/fdiA==
+=Me6A
 -----END PGP SIGNATURE-----
 
---Sig_/ijE=guvO8lmm3eRhdsUMwvR--
+--Sig_/ntmYhIbD6.VFJiV.zy69hlb--

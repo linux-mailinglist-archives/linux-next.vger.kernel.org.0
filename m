@@ -2,81 +2,118 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0F3F45A962
-	for <lists+linux-next@lfdr.de>; Tue, 23 Nov 2021 17:57:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1631645A989
+	for <lists+linux-next@lfdr.de>; Tue, 23 Nov 2021 18:01:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231629AbhKWRAw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 23 Nov 2021 12:00:52 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52584 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233536AbhKWRAv (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 23 Nov 2021 12:00:51 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2A0E560F6B;
-        Tue, 23 Nov 2021 16:57:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637686663;
-        bh=MnkGe4UrT/ksLihVXxBCh7RZKPUAr5U2Cl+/95LiJUg=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=bniQWLBLthyEi53MqDu0xIFE5C1snyTZJSSKfZkuGpQpldwDFwxNa4oPnHokOob5r
-         DN4fspOkhybCzlgc+O98WnqR8FQ6HFl+iLQSXJMCxJBtF8o6VCDorYUQ0H3scUeJa7
-         dNUBhheZHuHgLDxXYah4ph3E+fsSW0VSxMzBvRHf7ChUdXvLRyDZVPnJxteyK2jgpD
-         fWoXHHoeHWxK6NsRYjW5LXxTWT8Vj9W2y0kTwKydAR30x5c/Q123o1CUrg0yHpEChW
-         Oj8+c2sSL9POSZDzcxxI2rYcnQ5URPDJDLDIYE6rFQOGwNt2J2q83rJ7a12rKPt/Ng
-         ChnoDyIM8hGqg==
-From:   Mark Brown <broonie@kernel.org>
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        heiko.carstens@de.ibm.com
-In-Reply-To: <YZzEP3S7U15bTDAI@fedora>
-References: <YZzEP3S7U15bTDAI@fedora>
-Subject: Re: [PATCH] regulator: rohm-generic: iniline stub function
-Message-Id: <163768666190.1388445.5938847019088932907.b4-ty@kernel.org>
-Date:   Tue, 23 Nov 2021 16:57:41 +0000
+        id S231530AbhKWREq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 23 Nov 2021 12:04:46 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:39342 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236804AbhKWREq (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 23 Nov 2021 12:04:46 -0500
+Date:   Tue, 23 Nov 2021 18:01:34 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1637686896;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5jFMme/04un1MC+akjG19ft3gjyZIh6NNG67wIsGBMo=;
+        b=DWS4D674L2kcCxpVr2gQnGTSt089zQTRUODvs710sbsaPBVwWxmkwNuKrbOy4wEJK0FWXr
+        viw6gpMlbmrxzNVhr93KpKqgAvWb8TX1jnwVSG1DvDw+aesfYj/H+PY/PmHS04sttfAb7R
+        /pVrAtYs5SX5tJxLDjYlft9xh4yE5RzAdIJUJ7uNZg2l4A1Ku8YSHmTImfr4ZstCAWq551
+        3hHZH54+sfMEERCJRTLCS2u7YgK6YlUrxSU70yDE/iWEGvguh2OEJDXwxor5KulIF9X3/V
+        v/tHoKbLPgJyYH1eT+tnSRW2155Wdz1aLrRPJ8NIfylnH/5XZD0IXOP4mOVP5Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1637686896;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5jFMme/04un1MC+akjG19ft3gjyZIh6NNG67wIsGBMo=;
+        b=5NQ/WwFssLtEYCocJv/AX/sNqGciWZW0BXPldn61pNctmEPKDPC4pRCTVR21gg89alilv0
+        ZVHPUVGpYAMa7bBg==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Mike Galbraith <umgwanakikbuti@gmail.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, lkft-triage@lists.linaro.org
+Subject: [PATCH v2] locking: Fixup write_lock_nested() implementation.
+Message-ID: <20211123170134.y6xb7pmpgdn4m3bn@linutronix.de>
+References: <CA+G9fYtH2JR=L0cPoOEqsEGrZW_uOJgX6qLGMe_hbLpBtjVBwA@mail.gmail.com>
+ <CAK8P3a1NhpNxWfj3gDnuf4bWK_fiE8cjcRyN7e8j95NmvOzbGw@mail.gmail.com>
+ <CAMuHMdVuoUAM-6H2BXYtUH++4yXhRCGLAdbzx2GqAJk64FYO=A@mail.gmail.com>
+ <20211123145006.bon3usz4ilhw6ymg@linutronix.de>
+ <20211123160712.fssioyabln5erx2u@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20211123160712.fssioyabln5erx2u@linutronix.de>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, 23 Nov 2021 12:36:47 +0200, Matti Vaittinen wrote:
-> The function rohm_regulator_set_voltage_sel_restricted() has a stub
-> implementation. Linux-next testing spot following:
-> 
-> include/linux/mfd/rohm-generic.h:93:12: error:
-> 'rohm_regulator_set_voltage_sel_restricted' defined but not used
-> 
-> Fix this by inlining the stub.
-> 
-> [...]
+Andrew, please merge it into:
+  locking/rwlocks: introduce write_lock_nested
+  locking-rwlocks-introduce-write_lock_nested.patch
 
-Applied to
+And if someone could test it, I get sh4 defconfig built with and without
+lockdep. x86 seems still to build, too. So it can't be that bad.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+v1=E2=80=A6v2: I noticed a typo in _raw_write_lock_nested() and decided tha=
+t it
+is no needed so now it is removed for !CONFIG_INLINE_WRITE_LOCK.
 
-Thanks!
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+---
+ include/linux/rwlock_api_smp.h | 1 -
+ kernel/locking/spinlock.c      | 4 ++++
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
-[1/1] regulator: rohm-generic: iniline stub function
-      commit: cff6f593251cdf5398dc3c57f7032b8e9dcb633e
+diff --git a/include/linux/rwlock_api_smp.h b/include/linux/rwlock_api_smp.h
+index f0c535ec4e654..dceb0a59b6927 100644
+--- a/include/linux/rwlock_api_smp.h
++++ b/include/linux/rwlock_api_smp.h
+@@ -47,7 +47,6 @@ _raw_write_unlock_irqrestore(rwlock_t *lock, unsigned lon=
+g flags)
+=20
+ #ifdef CONFIG_INLINE_WRITE_LOCK
+ #define _raw_write_lock(lock) __raw_write_lock(lock)
+-#define _raw_write_lock_nested(lock, subclass) __raw_write_lock_nested(loc=
+k, subclass)
+ #endif
+=20
+ #ifdef CONFIG_INLINE_READ_LOCK_BH
+diff --git a/kernel/locking/spinlock.c b/kernel/locking/spinlock.c
+index 996811efa6d6e..7f49baaa49793 100644
+--- a/kernel/locking/spinlock.c
++++ b/kernel/locking/spinlock.c
+@@ -301,6 +301,10 @@ void __lockfunc _raw_write_lock(rwlock_t *lock)
+ }
+ EXPORT_SYMBOL(_raw_write_lock);
+=20
++#ifndef CONFIG_DEBUG_LOCK_ALLOC
++#define __raw_write_lock_nested(lock, subclass)	__raw_write_lock(((void)(s=
+ubclass), (lock)))
++#endif
++
+ void __lockfunc _raw_write_lock_nested(rwlock_t *lock, int subclass)
+ {
+ 	__raw_write_lock_nested(lock, subclass);
+--=20
+2.34.0
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark

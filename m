@@ -2,200 +2,98 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E25A845A2F6
-	for <lists+linux-next@lfdr.de>; Tue, 23 Nov 2021 13:43:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAF5345A397
+	for <lists+linux-next@lfdr.de>; Tue, 23 Nov 2021 14:20:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236666AbhKWMqj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 23 Nov 2021 07:46:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38318 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236595AbhKWMqi (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 23 Nov 2021 07:46:38 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C57D7C061574
-        for <linux-next@vger.kernel.org>; Tue, 23 Nov 2021 04:43:30 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id v23so16511840pjr.5
-        for <linux-next@vger.kernel.org>; Tue, 23 Nov 2021 04:43:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=s/KseNrH+ZLUPHFy3h6zM4R5qC7ZV6BUQIg6fjBdGvw=;
-        b=1c+Bu31/EFIqFNAG0cVIij5p6gDNyH055d8gblbNfPFwGIyY1MFHXNl0IjiD2RvKik
-         ffaavTDkXFHWZG9pLFgM9kE1Trcn+NQQ5fjOyvjWua6QZtzgOZ2aXf4iw+w3uIuckdVh
-         efZNwi5wIp/Td/SUeo5HErlV4e4NUpUc1Y2l40rJTGOsKdj8e9tizrh4RJKjXAG8T3KN
-         XV1Dhkn6QUWYOY6Gs7xEyItyzkb1N4GPZ0bCR4MTTzoQ5a1Sbkh9iuNqfOApRdO6/iU1
-         52K4DhZDG6pW67XheC53kdSYtbvZ34AoHPjTZZKCuZeqzxEPxgNnf2JhUwQa1ijEgRNI
-         7XeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=s/KseNrH+ZLUPHFy3h6zM4R5qC7ZV6BUQIg6fjBdGvw=;
-        b=ZuLk+HD3waoAswsJRxyiIradVBdO7qzjt5GH0kZeUowxxpNSuqDNRlodb25QulsZga
-         G23Ezsi83XUGfdX+SBZuDCqQriZSTlFMjwNVqE57r7hGm5JV984/QTYPUWRPUHI011Ht
-         NcsP4b6d6Y4C/VSnYabJC2h1FCBTfepe+SDxp0STlyZMJ99FeIYyhNOXj91+m9odePK+
-         3cfD5wA31pOUvCQfCk1qs/1Fwt59ygJixIY09VONT2vJ1DzM2w1NxGB25IpU/XkKgaF/
-         meFTkrl4Tt3IuM4f9EF48svFc7ezXATIvqpHlnEYKCHVYG/YDtGjyXhcuNjMFasB12t+
-         X8Zg==
-X-Gm-Message-State: AOAM531OwH463PY6Lll5zgft3Vwp+p3rdMv7WUy1IbAw0kcpJROGi4uO
-        0lJMkHH2QXlIIh1qfxOb1paVn9NrrRmzBMva
-X-Google-Smtp-Source: ABdhPJzAj1eqPG8AYMCEJ1FnszWkO48PqOUcZY76ddXmVuWLlEyk8cDOaVdvdz8OJpYfeX2n75qVjw==
-X-Received: by 2002:a17:90b:33d0:: with SMTP id lk16mr2541369pjb.66.1637671410133;
-        Tue, 23 Nov 2021 04:43:30 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id h186sm12353564pfg.64.2021.11.23.04.43.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Nov 2021 04:43:29 -0800 (PST)
-Message-ID: <619ce1f1.1c69fb81.e0562.234d@mx.google.com>
-Date:   Tue, 23 Nov 2021 04:43:29 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        id S230134AbhKWNXW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 23 Nov 2021 08:23:22 -0500
+Received: from mout.kundenserver.de ([212.227.126.135]:48117 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234825AbhKWNXW (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 23 Nov 2021 08:23:22 -0500
+Received: from mail-wr1-f42.google.com ([209.85.221.42]) by
+ mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1M58zc-1moPmr0U2G-001B4f; Tue, 23 Nov 2021 14:20:13 +0100
+Received: by mail-wr1-f42.google.com with SMTP id b12so38929177wrh.4;
+        Tue, 23 Nov 2021 05:20:13 -0800 (PST)
+X-Gm-Message-State: AOAM531HmzQSFTWVqVgaWTzcaH0ukhr6FR3HGqHjJYKsC8Qi7WpQ/zUl
+        C0syFIzcVigBfglFBq4dHyWRhWPABUKnhx9Lppo=
+X-Google-Smtp-Source: ABdhPJwpT1iqgZ3/dEvpqaazlpfCJQIb+joipxiKMUpjkoh/lL7fOj6hF1e58ZtQ4eRqkzavbf1frnwH+VQGmHXqrGo=
+X-Received: by 2002:adf:f7c2:: with SMTP id a2mr7393084wrq.71.1637673612679;
+ Tue, 23 Nov 2021 05:20:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.16-rc2-256-g4ad0ace1d376
-X-Kernelci-Report-Type: test
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-Subject: next/pending-fixes baseline: 577 runs,
- 3 regressions (v5.16-rc2-256-g4ad0ace1d376)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+References: <CA+G9fYtH2JR=L0cPoOEqsEGrZW_uOJgX6qLGMe_hbLpBtjVBwA@mail.gmail.com>
+In-Reply-To: <CA+G9fYtH2JR=L0cPoOEqsEGrZW_uOJgX6qLGMe_hbLpBtjVBwA@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 23 Nov 2021 14:19:56 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1NhpNxWfj3gDnuf4bWK_fiE8cjcRyN7e8j95NmvOzbGw@mail.gmail.com>
+Message-ID: <CAK8P3a1NhpNxWfj3gDnuf4bWK_fiE8cjcRyN7e8j95NmvOzbGw@mail.gmail.com>
+Subject: Re: spinlock.c:306:9: error: implicit declaration of function '__raw_write_lock_nested'
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Galbraith <umgwanakikbuti@gmail.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, lkft-triage@lists.linaro.org
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:QFR7kDgsfDVE5/Y1R44YWOjmAmELgyRKIYn8qWLSlk62H3gjKF/
+ sGvCLqNIgchzlvOg1pQC2GaRsKKBdwapxT7ozfAfZWaKwvpt+OfqoNrTRmDcQFpXB8elwsv
+ cjvHGPhUnJdjSCI+NFtzDMd6Ytn8Py4wZLMdcvDd8WaukoO2ivObS//U+JMzwhq7Moa5Abl
+ FSow+B0oIv9GgptWlV6ag==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:T3aMy9ahu+o=:QbmUyLL2o9tz0g05IFRDbj
+ JJo1D8uHYqbAtA1/PLsn48FcGjyzFWe+GxCeRcyzC9st52G2JkPwUQgL6FiaY0CPYyUMAeZM5
+ VedOWv+WbQ0glDwDKcWddcC3qMZuWGSDKmvSMUEMXjOaX//kRYJT0W7o7G8uSQUYCQH9c6WyK
+ pcZEH+RJU9T/g/Kxd4ge722ZrlRLKqYmf4ccolf7914qjX97ZDkiG/h4Xphd3j9D8QMk8HO9H
+ iDDHNQgSpuDIs8yObv2IRHY+B0sXTlYkNxkcSVmuimQhrcm5YBMwQPfG5MHzVWWcS280Z1O60
+ p8cGXGcALT0AclhlHk05pYSWs3F8Q+j3Vpkx0oEiTfFcMWPcAtVhuZEri52/zj79WxQyPvEoZ
+ eF70jmt0rtoK/qWILzVV4F3SB1n4Nm+RetmpQv8SA6rzIhg9WtBJovlk78AYj49VFNxlxV0Et
+ uVLGrWQhQjrDH5sieLxvrckkzpAfSVgFV9ANi9+rO08ybW6uinblp6gkNlss8KUenY+UwSm0o
+ vAxwtB8LcQ+MQFSFhybaZSwWrG3454G0Kig6JIRrcBotXDJw2JSXPGBwDAAFAZNOixS0AZ85o
+ qK7pJEKAB7P+Spiqik6Qo5Jf2uupFxpbgy2cS/BXXlzSpSDuKY58WRzNr56K0Am+9dMq2oEPY
+ ZURqkmoKb16m4UyhmnRUU5bh8Xnp0o5dykPKsTVQKxeYsvESsLFzxiHi9ajJaDI3K05E=
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes baseline: 577 runs, 3 regressions (v5.16-rc2-256-g4ad0ac=
-e1d376)
+On Tue, Nov 23, 2021 at 12:38 PM Naresh Kamboju
+<naresh.kamboju@linaro.org> wrote:
+>
+> While building Linux next 20211123 tag for sh with gcc-11
+> following warnings / errors noticed.
 
-Regressions Summary
--------------------
+Nothing in here looks like a recent regression from either the kernel
+or gcc-11.
 
-platform             | arch  | lab          | compiler | defconfig        |=
- regressions
----------------------+-------+--------------+----------+------------------+=
-------------
-meson-g12b-odroid-n2 | arm64 | lab-baylibre | gcc-10   | defconfig+crypto |=
- 1          =
+> make --silent --keep-going --jobs=8
+> O=/home/tuxbuild/.cache/tuxmake/builds/current ARCH=sh
+> CROSS_COMPILE=sh4-linux-gnu- 'CC=sccache sh4-linux-gnu-gcc'
+> 'HOSTCC=sccache gcc'
+>   Generating include/generated/machtypes.h
+> <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+> <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [-Wcpp]
 
-meson-gxbb-p200      | arm64 | lab-baylibre | gcc-10   | defconfig+ima    |=
- 1          =
+These happen with any compiler version, someone needs to write the correct
+entry code for clone3 and hook up futex_waitv().
 
-r8a77950-salvator-x  | arm64 | lab-baylibre | gcc-10   | defconfig        |=
- 1          =
+> include/linux/sh_intc.h:100:63: warning: division 'sizeof (void *) / sizeof (void)' does not compute the number of array elements
 
+These are old bugs, they show up in any kernel version with gcc-8 or higher.
 
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v5.16-rc2-256-g4ad0ace1d376/plan/baseline/
+> fs/mpage.c:336:1: warning: the frame size of 1092 bytes is larger than
 
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v5.16-rc2-256-g4ad0ace1d376
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      4ad0ace1d3766010c2d17a606bf3f722f6a1e1a6 =
+I see these going back to gcc-6, it looks like this is caused by
+CONFIG_PAGE_SIZE_64KB.
 
-
-
-Test Regressions
----------------- =
-
-
-
-platform             | arch  | lab          | compiler | defconfig        |=
- regressions
----------------------+-------+--------------+----------+------------------+=
-------------
-meson-g12b-odroid-n2 | arm64 | lab-baylibre | gcc-10   | defconfig+crypto |=
- 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/619cabcb7d7a2c0f30f2efea
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+crypto
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.16-rc2-2=
-56-g4ad0ace1d376/arm64/defconfig+crypto/gcc-10/lab-baylibre/baseline-meson-=
-g12b-odroid-n2.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.16-rc2-2=
-56-g4ad0ace1d376/arm64/defconfig+crypto/gcc-10/lab-baylibre/baseline-meson-=
-g12b-odroid-n2.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/619cabcb7d7a2c0f30f2e=
-feb
-        new failure (last pass: v5.16-rc1-328-g11d53a03cd9e) =
-
- =
-
-
-
-platform             | arch  | lab          | compiler | defconfig        |=
- regressions
----------------------+-------+--------------+----------+------------------+=
-------------
-meson-gxbb-p200      | arm64 | lab-baylibre | gcc-10   | defconfig+ima    |=
- 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/619cb55074142a2339f2efa2
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+ima
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.16-rc2-2=
-56-g4ad0ace1d376/arm64/defconfig+ima/gcc-10/lab-baylibre/baseline-meson-gxb=
-b-p200.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.16-rc2-2=
-56-g4ad0ace1d376/arm64/defconfig+ima/gcc-10/lab-baylibre/baseline-meson-gxb=
-b-p200.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/619cb55074142a2339f2e=
-fa3
-        new failure (last pass: v5.16-rc1-328-g11d53a03cd9e) =
-
- =
-
-
-
-platform             | arch  | lab          | compiler | defconfig        |=
- regressions
----------------------+-------+--------------+----------+------------------+=
-------------
-r8a77950-salvator-x  | arm64 | lab-baylibre | gcc-10   | defconfig        |=
- 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/619cb0a202d2bd3699f2efb8
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.16-rc2-2=
-56-g4ad0ace1d376/arm64/defconfig/gcc-10/lab-baylibre/baseline-r8a77950-salv=
-ator-x.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.16-rc2-2=
-56-g4ad0ace1d376/arm64/defconfig/gcc-10/lab-baylibre/baseline-r8a77950-salv=
-ator-x.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/619cb0a202d2bd3699f2e=
-fb9
-        new failure (last pass: v5.16-rc1-328-g11d53a03cd9e) =
-
- =20
+     Arnd

@@ -2,126 +2,87 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9022B459C8F
-	for <lists+linux-next@lfdr.de>; Tue, 23 Nov 2021 08:04:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 823A8459CED
+	for <lists+linux-next@lfdr.de>; Tue, 23 Nov 2021 08:41:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231702AbhKWHHu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 23 Nov 2021 02:07:50 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:38182 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbhKWHHr (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 23 Nov 2021 02:07:47 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        id S234141AbhKWHox (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 23 Nov 2021 02:44:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52914 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234063AbhKWHox (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 23 Nov 2021 02:44:53 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1693C061574;
+        Mon, 22 Nov 2021 23:41:45 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 7233B21910;
-        Tue, 23 Nov 2021 07:04:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1637651079; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zV+ycCXSvMAUGlG3uooDj5A3Hsy4w4owD3rkqp0rJXE=;
-        b=NtpqFEVF1mp0kWCwy+N5NNjoDy37FvhAx4yQ0onKXyVO6DwKddtUQyJfze7k2yLvG97rpG
-        /DNJdnbUP2RREBtmRAHgQmSJLzj0NVBcQj61c3DSugwDIm1Vs3+GuK67po81u+UDwQTBbI
-        wgDmjQzoOlCpV7Mbwgb5QoA2KMdqCBY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1637651079;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zV+ycCXSvMAUGlG3uooDj5A3Hsy4w4owD3rkqp0rJXE=;
-        b=4Tt92RtbKcnWLklRt2ktPwYcQ3Rx2IreYNR2g3v/drXFdvhrjgeZCMQeVsnFboQe7zvyoB
-        qUtu8xZ5LdQuQqAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 587C813CEF;
-        Tue, 23 Nov 2021 07:04:39 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id bZUzFYeSnGEiWAAAMHmgww
-        (envelope-from <bp@suse.de>); Tue, 23 Nov 2021 07:04:39 +0000
-Date:   Tue, 23 Nov 2021 08:04:34 +0100
-From:   Borislav Petkov <bp@suse.de>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Hyx0l1Kcfz4xbC;
+        Tue, 23 Nov 2021 18:41:43 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1637653303;
+        bh=Ocy7eV4gtjzL1bRMCe/X7KRCYA2YFplfTlGvKoXE0vc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=TfqE6Of8KBWSGeL3g8bldYD6AmSLGHf/fkThOrDRgMuMSQq6NC5YBv3+Chkw4ndS7
+         iwxTsUj0tRJMpZPHNV2xG8nmpStmjte3QQ24fMduoedCYZKq6oaLSCbiwxwI+H73Cz
+         GWdltKmnpcFq6aE/LKsLuXx44F5VdfXhZs5cdn3WkQsRyz8vZEK+cCZ1GXLBGEG/kg
+         Nq4zfvo6IpsvZR9KOFDRQ2AW/8a3FsnG6yB9aa7dY9heM7v18PCVpkPwb6rBQxUR5A
+         kdkHk/r5fncGploFXkFYpXyiEaPxxavASogeSOEqTx57tOoz2PG+iLs8PZkZlVotOa
+         JxUtoq30ayWDg==
+Date:   Tue, 23 Nov 2021 18:41:42 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        <heiko.carstens@de.ibm.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warnings in Linus' tree
-Message-ID: <YZySgpmBcNNM2qca@zn.tnic>
-References: <20211123094419.08000327@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the regulator tree
+Message-ID: <20211123184142.50ff56c3@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211123094419.08000327@canb.auug.org.au>
+Content-Type: multipart/signed; boundary="Sig_/lz1Q7W8G6JaEtDANAvQFqr=";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Nov 23, 2021 at 09:44:19AM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Building Linus' tree, today's linux-next build (x86_64 allmodconfig)
-> produced these warnings:
-> 
-> WARNING: modpost: vmlinux.o(.text.unlikely+0x63df): Section mismatch in reference from the function prepare_command_line() to the variable .init.data:builtin_cmdline
-> The function prepare_command_line() references
-> the variable __initdata builtin_cmdline.
-> This is often because prepare_command_line lacks a __initdata 
-> annotation or the annotation of builtin_cmdline is wrong.
+--Sig_/lz1Q7W8G6JaEtDANAvQFqr=
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Doesn't trigger with my toolchain, because it simply inlines that
-function.
+Hi all,
 
-Anyway, fix is trivial, thanks for reporting.
+After merging the regulator tree, today's linux-next build (s390
+allmodconfig) failed like this:
 
----
-From 4f4226a7dce0c5b6d911574f7fa5870c4ee693ff Mon Sep 17 00:00:00 2001
-From: Borislav Petkov <bp@suse.de>
-Date: Tue, 23 Nov 2021 07:53:57 +0100
-Subject: [PATCH] x86/boot: Mark prepare_command_line() __init
+include/linux/mfd/rohm-generic.h:93:12: error: 'rohm_regulator_set_voltage_=
+sel_restricted' defined but not used [-Werror=3Dunused-function]
+cc1: all warnings being treated as errors
 
-Fix:
+Caused by commit
 
-  WARNING: modpost: vmlinux.o(.text.unlikely+0x64d0): Section mismatch in reference \
-   from the function prepare_command_line() to the variable .init.data:command_line
-  The function prepare_command_line() references
-  the variable __initdata command_line.
-  This is often because prepare_command_line lacks a __initdata
-  annotation or the annotation of command_line is wrong.
+  8b6e88555971 ("regulator: rohm-regulator: add helper for restricted volta=
+ge setting")
 
-Apparently some toolchains do different inlining decisions.
+--=20
+Cheers,
+Stephen Rothwell
 
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20211123094419.08000327@canb.auug.org.au
----
- arch/x86/kernel/setup.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--Sig_/lz1Q7W8G6JaEtDANAvQFqr=
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
-index c410be738ae7..6a190c7f4d71 100644
---- a/arch/x86/kernel/setup.c
-+++ b/arch/x86/kernel/setup.c
-@@ -742,7 +742,7 @@ dump_kernel_offset(struct notifier_block *self, unsigned long v, void *p)
- 	return 0;
- }
- 
--static char *prepare_command_line(void)
-+static char * __init prepare_command_line(void)
- {
- #ifdef CONFIG_CMDLINE_BOOL
- #ifdef CONFIG_CMDLINE_OVERRIDE
--- 
-2.29.2
+-----BEGIN PGP SIGNATURE-----
 
--- 
-Regards/Gruss,
-    Boris.
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGcmzYACgkQAVBC80lX
+0GzRXwgAkihzkBrCFKAcXr9YHlVXR9KZk0XD3FMQn6SlzU/n8Xi11JBE8d5OWVO9
+/JBk1dyv/BlK5CWISgdGmz9TGRewGYQ+BOZWYkBE/BPLI96AJJKdA7cMGt0OJllQ
+1gaxySRtRTcjta0al5Ru3/qWVLkZKZNAcZQbZrbnHk94G1TaQKdZFahwQaRAD6bo
+CFEVKWCnEaHo955cjYl3XXZVRTgyDNVoUBBtxt5xXvB6iAkwfbSd1ahNCoKliEgz
+5cRT2rqMQdYREp1Je/g+r8eUw9ygFmfjGVphbT59pLEkYpG3kB2aX3hpwMk0wn9t
+63NVFW0J/JgnkoO9Z9ADCIHiP156ug==
+=VitT
+-----END PGP SIGNATURE-----
 
-SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg
+--Sig_/lz1Q7W8G6JaEtDANAvQFqr=--

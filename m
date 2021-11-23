@@ -2,87 +2,138 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 823A8459CED
-	for <lists+linux-next@lfdr.de>; Tue, 23 Nov 2021 08:41:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB721459E21
+	for <lists+linux-next@lfdr.de>; Tue, 23 Nov 2021 09:33:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234141AbhKWHox (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 23 Nov 2021 02:44:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52914 "EHLO
+        id S234813AbhKWIg1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 23 Nov 2021 03:36:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234063AbhKWHox (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 23 Nov 2021 02:44:53 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1693C061574;
-        Mon, 22 Nov 2021 23:41:45 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Hyx0l1Kcfz4xbC;
-        Tue, 23 Nov 2021 18:41:43 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1637653303;
-        bh=Ocy7eV4gtjzL1bRMCe/X7KRCYA2YFplfTlGvKoXE0vc=;
-        h=Date:From:To:Cc:Subject:From;
-        b=TfqE6Of8KBWSGeL3g8bldYD6AmSLGHf/fkThOrDRgMuMSQq6NC5YBv3+Chkw4ndS7
-         iwxTsUj0tRJMpZPHNV2xG8nmpStmjte3QQ24fMduoedCYZKq6oaLSCbiwxwI+H73Cz
-         GWdltKmnpcFq6aE/LKsLuXx44F5VdfXhZs5cdn3WkQsRyz8vZEK+cCZ1GXLBGEG/kg
-         Nq4zfvo6IpsvZR9KOFDRQ2AW/8a3FsnG6yB9aa7dY9heM7v18PCVpkPwb6rBQxUR5A
-         kdkHk/r5fncGploFXkFYpXyiEaPxxavASogeSOEqTx57tOoz2PG+iLs8PZkZlVotOa
-         JxUtoq30ayWDg==
-Date:   Tue, 23 Nov 2021 18:41:42 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        <heiko.carstens@de.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the regulator tree
-Message-ID: <20211123184142.50ff56c3@canb.auug.org.au>
+        with ESMTP id S234780AbhKWIg0 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 23 Nov 2021 03:36:26 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12FCEC061574
+        for <linux-next@vger.kernel.org>; Tue, 23 Nov 2021 00:33:18 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id e3so88623096edu.4
+        for <linux-next@vger.kernel.org>; Tue, 23 Nov 2021 00:33:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=8xSm0htY7uzvXc6ZHPstXw3E/MOWP40sTEpcuQsBwNE=;
+        b=iP9GNaCGIVRENAj0YlyaIOOHrzmIWv8j74Xx5bHbPV1eG9ZTIfOXYsqPjR1Q86mAlg
+         zQivsH4+pLS7oaWE5XiReLSoCgwGOJI+bUxeKw2VJP8cAakS1QgoLa2sUHt9e3ycgTQO
+         PihVWevLqciK1u0PHBdmApfOGbJziQtmvySEQhsfNn1FZhDIPV1kADm1GUGZWYmrKjf7
+         n7Narq8phV6XrPBDSfCDeIiLJYaE/M9xu3CIaQUJJ7hjOYXA3JJFuV9oakw2kk4rjyeL
+         ihwzPm/Pl8tTJ8S+fElW06jWtKELROIl610I+Tz5b/8Se0/J6LD0kFJ9+XdB1qtZrre3
+         njEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=8xSm0htY7uzvXc6ZHPstXw3E/MOWP40sTEpcuQsBwNE=;
+        b=B12/vlwpw2DO+18c1nW27b/TG9hsnwHnP8hamrMdqPrHakRwpEEA6yiepQICamXlY5
+         gGLrPDp+Zbtlo4j3Vy9U8V+JeEF9S+fau3WQlwJHghxhF+NtsmmIS3w9CzXZjlgWWW1o
+         s5Q3h1RymFC5lksyTF/H2MxZRf/45YnwX/Qya6CQWv9PS5kfp4Avf126e01fI2aUYyA7
+         HuwUhPBZBnWjpxxsOEJdexaVtxj5Te0a6otXsTR6kPcinXYptUqdqtIuSV+FvTB+L0NH
+         lnG4thXSbl0ELihHVik8yDMQZWIu/hsv1Biy0PWn/YAerDMNdGvVlpeQSIu6U4U7rS1i
+         yhEw==
+X-Gm-Message-State: AOAM531L+cImP/+Vh0nZsrjf8dcNb7zu8W3yFgPddnTVlVFv+yVgKRBZ
+        pQ3UczFMfy+amwVvS5Gypt/5aXB4T8CJFCWlRCXGLg==
+X-Google-Smtp-Source: ABdhPJz4Ge/YJURetAUcaVRMXKsZ4VAQ5tJ64Viz8V3KNHbWiWXlwTZMvoKbKzl+4t7kXzzjfgOlM1Kud1SL1asAqXQ=
+X-Received: by 2002:a17:906:c302:: with SMTP id s2mr5290537ejz.499.1637656396448;
+ Tue, 23 Nov 2021 00:33:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/lz1Q7W8G6JaEtDANAvQFqr=";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 23 Nov 2021 14:03:05 +0530
+Message-ID: <CA+G9fYuNibUwficRoq-SS=6s2p+-rXUUR03nHfFbPUC8HoyLpA@mail.gmail.com>
+Subject: drivers/net/ethernet/apple/mace.c:170:34: error: assignment of
+ read-only location '*(dev->dev_addr + (sizetype)j)'
+To:     Netdev <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Hui Tang <tanghui20@huawei.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/lz1Q7W8G6JaEtDANAvQFqr=
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+While building Linux next 20211123 tag for powerpc with gcc-11
+following warnings / errors noticed.
 
-Hi all,
+make --silent --keep-going --jobs=8
+O=/home/tuxbuild/.cache/tuxmake/builds/current ARCH=powerpc
+CROSS_COMPILE=powerpc64le-linux-gnu- 'CC=sccache
+powerpc64le-linux-gnu-gcc' 'HOSTCC=sccache gcc'
+<stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [-Wcpp]
+drivers/net/ethernet/apple/mace.c: In function 'mace_probe':
+drivers/net/ethernet/apple/mace.c:170:34: error: assignment of
+read-only location '*(dev->dev_addr + (sizetype)j)'
+  170 |                 dev->dev_addr[j] = rev ? bitrev8(addr[j]): addr[j];
+      |                                  ^
+drivers/net/ethernet/apple/mace.c: In function 'mace_reset':
+drivers/net/ethernet/apple/mace.c:349:32: warning: passing argument 2
+of '__mace_set_address' discards 'const' qualifier from pointer target
+type [-Wdiscarded-qualifiers]
+  349 |     __mace_set_address(dev, dev->dev_addr);
+      |                             ~~~^~~~~~~~~~
+drivers/net/ethernet/apple/mace.c:93:62: note: expected 'void *' but
+argument is of type 'const unsigned char *'
+   93 | static void __mace_set_address(struct net_device *dev, void *addr);
+      |                                                        ~~~~~~^~~~
+drivers/net/ethernet/apple/mace.c: In function '__mace_set_address':
+drivers/net/ethernet/apple/mace.c:388:43: error: assignment of
+read-only location '*(dev->dev_addr + (sizetype)i)'
+  388 |         out_8(&mb->padr, dev->dev_addr[i] = p[i]);
+      |                                           ^
+make[5]: *** [scripts/Makefile.build:288:
+drivers/net/ethernet/apple/mace.o] Error 1
+drivers/net/ethernet/apple/bmac.c: In function 'bmac_probe':
+drivers/net/ethernet/apple/bmac.c:1287:34: error: assignment of
+read-only location '*(dev->dev_addr + (sizetype)j)'
+ 1287 |                 dev->dev_addr[j] = rev ? bitrev8(addr[j]): addr[j];
+      |                                  ^
+make[5]: *** [scripts/Makefile.build:288:
+drivers/net/ethernet/apple/bmac.o] Error 1
+make[5]: Target '__build' not remade because of errors.
+make[4]: *** [scripts/Makefile.build:571: drivers/net/ethernet/apple] Error 2
+drivers/net/ethernet/freescale/fec_mpc52xx.c: In function 'mpc52xx_fec_start':
+drivers/net/ethernet/freescale/fec_mpc52xx.c:659:39: warning: passing
+argument 2 of 'mpc52xx_fec_set_paddr' discards 'const' qualifier from
+pointer target type [-Wdiscarded-qualifiers]
+  659 |         mpc52xx_fec_set_paddr(dev, dev->dev_addr);
+      |                                    ~~~^~~~~~~~~~
+drivers/net/ethernet/freescale/fec_mpc52xx.c:102:63: note: expected
+'u8 *' {aka 'unsigned char *'} but argument is of type 'const unsigned
+char *'
+  102 | static void mpc52xx_fec_set_paddr(struct net_device *dev, u8 *mac)
+      |                                                           ~~~~^~~
+make[4]: Target '__build' not remade because of errors.
+make[3]: *** [scripts/Makefile.build:571: drivers/net/ethernet] Error 2
 
-After merging the regulator tree, today's linux-next build (s390
-allmodconfig) failed like this:
 
-include/linux/mfd/rohm-generic.h:93:12: error: 'rohm_regulator_set_voltage_=
-sel_restricted' defined but not used [-Werror=3Dunused-function]
-cc1: all warnings being treated as errors
+Build config:
+https://builds.tuxbuild.com/21J9lNXArf0rGC2zEytrVxfwmQP/config
 
-Caused by commit
 
-  8b6e88555971 ("regulator: rohm-regulator: add helper for restricted volta=
-ge setting")
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
---=20
-Cheers,
-Stephen Rothwell
+meta data:
+-----------
+    git describe: next-20211123
+    git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+    git_sha: aacdecce8147c20b01f865b4e214bb8dbe8c4af1
+    git_short_log: aacdecce8147 (\"Add linux-next specific files for 20211123\")
+    target_arch: powerpc
+    toolchain: gcc-11
 
---Sig_/lz1Q7W8G6JaEtDANAvQFqr=
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+steps to reproduce:
+tuxmake --runtime podman --target-arch powerpc --toolchain gcc-11
+--kconfig ppc6xx_defconfig
 
------BEGIN PGP SIGNATURE-----
+https://builds.tuxbuild.com/21J9lNXArf0rGC2zEytrVxfwmQP/tuxmake_reproducer.sh
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGcmzYACgkQAVBC80lX
-0GzRXwgAkihzkBrCFKAcXr9YHlVXR9KZk0XD3FMQn6SlzU/n8Xi11JBE8d5OWVO9
-/JBk1dyv/BlK5CWISgdGmz9TGRewGYQ+BOZWYkBE/BPLI96AJJKdA7cMGt0OJllQ
-1gaxySRtRTcjta0al5Ru3/qWVLkZKZNAcZQbZrbnHk94G1TaQKdZFahwQaRAD6bo
-CFEVKWCnEaHo955cjYl3XXZVRTgyDNVoUBBtxt5xXvB6iAkwfbSd1ahNCoKliEgz
-5cRT2rqMQdYREp1Je/g+r8eUw9ygFmfjGVphbT59pLEkYpG3kB2aX3hpwMk0wn9t
-63NVFW0J/JgnkoO9Z9ADCIHiP156ug==
-=VitT
------END PGP SIGNATURE-----
-
---Sig_/lz1Q7W8G6JaEtDANAvQFqr=--
+--
+Linaro LKFT
+https://lkft.linaro.org

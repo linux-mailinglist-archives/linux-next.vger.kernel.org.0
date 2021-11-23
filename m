@@ -2,98 +2,85 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AAF5345A397
-	for <lists+linux-next@lfdr.de>; Tue, 23 Nov 2021 14:20:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85E4545A521
+	for <lists+linux-next@lfdr.de>; Tue, 23 Nov 2021 15:18:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230134AbhKWNXW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 23 Nov 2021 08:23:22 -0500
-Received: from mout.kundenserver.de ([212.227.126.135]:48117 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234825AbhKWNXW (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 23 Nov 2021 08:23:22 -0500
-Received: from mail-wr1-f42.google.com ([209.85.221.42]) by
- mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1M58zc-1moPmr0U2G-001B4f; Tue, 23 Nov 2021 14:20:13 +0100
-Received: by mail-wr1-f42.google.com with SMTP id b12so38929177wrh.4;
-        Tue, 23 Nov 2021 05:20:13 -0800 (PST)
-X-Gm-Message-State: AOAM531HmzQSFTWVqVgaWTzcaH0ukhr6FR3HGqHjJYKsC8Qi7WpQ/zUl
-        C0syFIzcVigBfglFBq4dHyWRhWPABUKnhx9Lppo=
-X-Google-Smtp-Source: ABdhPJwpT1iqgZ3/dEvpqaazlpfCJQIb+joipxiKMUpjkoh/lL7fOj6hF1e58ZtQ4eRqkzavbf1frnwH+VQGmHXqrGo=
-X-Received: by 2002:adf:f7c2:: with SMTP id a2mr7393084wrq.71.1637673612679;
- Tue, 23 Nov 2021 05:20:12 -0800 (PST)
+        id S237378AbhKWOVM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 23 Nov 2021 09:21:12 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47942 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231683AbhKWOVL (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 23 Nov 2021 09:21:11 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A7F8C60698;
+        Tue, 23 Nov 2021 14:18:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1637677083;
+        bh=74Q81dtWV0c3wvFnBgiMpuz+jzF3Y0CY+3Tq7ge8Kyw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dcKq0xnuL4ZiUV1gZZ5yqmhy1iagvHhuY6zdxLEJEnf4C4BA2M+yDn3btE91byLWo
+         MzPeHAqzSy30eDLyg1vKt2OgF2pCXQXWUViSATY9fsGuR04plDew7OFEWsKD/0AWw8
+         /e5YwFKlhwFDXkx7BDeAndxxztOiuqQsFDcv1jryPM95seCRnDvuNi3Eu+3B4zUDdP
+         A8Zpc+uNxndDfZZVHEzqZfQ9d2hH17jLpv1TMcpG1B5OLg5FpC0g9/KgDbfoaSTWYw
+         IWBebUlg5pY+bf0BrYlLSxF6FQi+mUZCn1h2UnYTE/v/5lbHFJZndFiyTzgwKt87tU
+         /hUJW0E2R0HMw==
+Date:   Tue, 23 Nov 2021 14:17:58 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        "heiko.carstens@de.ibm.com" <heiko.carstens@de.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the regulator tree
+Message-ID: <YZz4FkRoiVIbfgEf@sirena.org.uk>
+References: <20211123184142.50ff56c3@canb.auug.org.au>
+ <9df5380a-3fb6-8c1b-677a-3159e99c4869@fi.rohmeurope.com>
 MIME-Version: 1.0
-References: <CA+G9fYtH2JR=L0cPoOEqsEGrZW_uOJgX6qLGMe_hbLpBtjVBwA@mail.gmail.com>
-In-Reply-To: <CA+G9fYtH2JR=L0cPoOEqsEGrZW_uOJgX6qLGMe_hbLpBtjVBwA@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 23 Nov 2021 14:19:56 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1NhpNxWfj3gDnuf4bWK_fiE8cjcRyN7e8j95NmvOzbGw@mail.gmail.com>
-Message-ID: <CAK8P3a1NhpNxWfj3gDnuf4bWK_fiE8cjcRyN7e8j95NmvOzbGw@mail.gmail.com>
-Subject: Re: spinlock.c:306:9: error: implicit declaration of function '__raw_write_lock_nested'
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Galbraith <umgwanakikbuti@gmail.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, lkft-triage@lists.linaro.org
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:QFR7kDgsfDVE5/Y1R44YWOjmAmELgyRKIYn8qWLSlk62H3gjKF/
- sGvCLqNIgchzlvOg1pQC2GaRsKKBdwapxT7ozfAfZWaKwvpt+OfqoNrTRmDcQFpXB8elwsv
- cjvHGPhUnJdjSCI+NFtzDMd6Ytn8Py4wZLMdcvDd8WaukoO2ivObS//U+JMzwhq7Moa5Abl
- FSow+B0oIv9GgptWlV6ag==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:T3aMy9ahu+o=:QbmUyLL2o9tz0g05IFRDbj
- JJo1D8uHYqbAtA1/PLsn48FcGjyzFWe+GxCeRcyzC9st52G2JkPwUQgL6FiaY0CPYyUMAeZM5
- VedOWv+WbQ0glDwDKcWddcC3qMZuWGSDKmvSMUEMXjOaX//kRYJT0W7o7G8uSQUYCQH9c6WyK
- pcZEH+RJU9T/g/Kxd4ge722ZrlRLKqYmf4ccolf7914qjX97ZDkiG/h4Xphd3j9D8QMk8HO9H
- iDDHNQgSpuDIs8yObv2IRHY+B0sXTlYkNxkcSVmuimQhrcm5YBMwQPfG5MHzVWWcS280Z1O60
- p8cGXGcALT0AclhlHk05pYSWs3F8Q+j3Vpkx0oEiTfFcMWPcAtVhuZEri52/zj79WxQyPvEoZ
- eF70jmt0rtoK/qWILzVV4F3SB1n4Nm+RetmpQv8SA6rzIhg9WtBJovlk78AYj49VFNxlxV0Et
- uVLGrWQhQjrDH5sieLxvrckkzpAfSVgFV9ANi9+rO08ybW6uinblp6gkNlss8KUenY+UwSm0o
- vAxwtB8LcQ+MQFSFhybaZSwWrG3454G0Kig6JIRrcBotXDJw2JSXPGBwDAAFAZNOixS0AZ85o
- qK7pJEKAB7P+Spiqik6Qo5Jf2uupFxpbgy2cS/BXXlzSpSDuKY58WRzNr56K0Am+9dMq2oEPY
- ZURqkmoKb16m4UyhmnRUU5bh8Xnp0o5dykPKsTVQKxeYsvESsLFzxiHi9ajJaDI3K05E=
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="VRrzslfoPwG8ZGVB"
+Content-Disposition: inline
+In-Reply-To: <9df5380a-3fb6-8c1b-677a-3159e99c4869@fi.rohmeurope.com>
+X-Cookie: A closed mouth gathers no foot.
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Nov 23, 2021 at 12:38 PM Naresh Kamboju
-<naresh.kamboju@linaro.org> wrote:
->
-> While building Linux next 20211123 tag for sh with gcc-11
-> following warnings / errors noticed.
 
-Nothing in here looks like a recent regression from either the kernel
-or gcc-11.
+--VRrzslfoPwG8ZGVB
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> make --silent --keep-going --jobs=8
-> O=/home/tuxbuild/.cache/tuxmake/builds/current ARCH=sh
-> CROSS_COMPILE=sh4-linux-gnu- 'CC=sccache sh4-linux-gnu-gcc'
-> 'HOSTCC=sccache gcc'
->   Generating include/generated/machtypes.h
-> <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-> <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [-Wcpp]
+On Tue, Nov 23, 2021 at 09:26:45AM +0000, Vaittinen, Matti wrote:
 
-These happen with any compiler version, someone needs to write the correct
-entry code for clone3 and hook up futex_waitv().
+> As a second thought - do we need such a stub function at all? I guess=20
+> anyone who is actually adding a call to the=20
+> rohm_regulator_set_voltage_sel_restricted()  helper should also have the=
+=20
+> implementation selected. Failing to do so is probably indication of an=20
+> error. Compile testing could perhaps be an exception but this is=20
+> currently not supported.
 
-> include/linux/sh_intc.h:100:63: warning: division 'sizeof (void *) / sizeof (void)' does not compute the number of array elements
+> Should I just drop the stub or make it inline? Am I overlooking something?
 
-These are old bugs, they show up in any kernel version with gcc-8 or higher.
+Dropping it does seem reasonable, I can't immediately think of a case
+where the stub would get used.  I've queued your existing patch to try
+to make sure that a fix lands tomorrow so (assuming no test issues)
+please send a removal patch on top of that.
 
-> fs/mpage.c:336:1: warning: the frame size of 1092 bytes is larger than
+--VRrzslfoPwG8ZGVB
+Content-Type: application/pgp-signature; name="signature.asc"
 
-I see these going back to gcc-6, it looks like this is caused by
-CONFIG_PAGE_SIZE_64KB.
+-----BEGIN PGP SIGNATURE-----
 
-     Arnd
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGc+BUACgkQJNaLcl1U
+h9CsHAf/Tiu3WxnlNrLesXz8FSuC52Jh6ypxWLLe4QHUpqubtGSa4dHl4OyA1UVF
+NkuGYLChPzPZGgfJA2pB5CPzyydIYiGIaEXDNMToje9D2WgDQnX/b/cbx+9AVJVB
+2Vr4I6eKh+XbXQrpaqadya3iWCK2AIl0P7Nc4hDICSvm1OiKq9K34SPLRbc+Hd60
+kttq0IP22inE4UOCQ5ODGyOcLfV7r3SS+fkqNGUC/xl0Bh5712Q8z7M6/J+px5zU
+u+6irhM5Ud7eVj+kUApDuvTgvHRmp/OUCeGHNDpZW/BECDU0mXLHnLqqjKH1L/Dx
+mVCap01SbEI924xz3xp0SNbQmINqUw==
+=486o
+-----END PGP SIGNATURE-----
+
+--VRrzslfoPwG8ZGVB--

@@ -2,89 +2,147 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53E0545AF13
-	for <lists+linux-next@lfdr.de>; Tue, 23 Nov 2021 23:30:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F2DE45AF71
+	for <lists+linux-next@lfdr.de>; Tue, 23 Nov 2021 23:52:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230191AbhKWWdt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 23 Nov 2021 17:33:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33710 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229938AbhKWWdt (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 23 Nov 2021 17:33:49 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F85C061714
-        for <linux-next@vger.kernel.org>; Tue, 23 Nov 2021 14:30:40 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id e136so1571707ybc.4
-        for <linux-next@vger.kernel.org>; Tue, 23 Nov 2021 14:30:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9LZSLFw1Wl8AbiBfHIocSEqkLLyf3Er+KsJ4COxHFyg=;
-        b=BzfXvyuslPAW/Io/nY2641n3Wxf/om+wr0w3/vtl/jsIu10/PkWYGDx0S+8T9sHdsQ
-         vMs+r4tLwDXtIjRAx9bpXyJdpG7e4WeOYigeSR8iWUwiSEsxeOiiJ6Z3ljoYqyKueSqi
-         7Yt6lUlUQeN9mfcdk6D2y2jzVyTdsrwBQWYcVLYjyFksDIr+MKXXSI7yw2PsJYe1OfzB
-         fB4YxINuG6CNAHMhrVUZua4MW36/EHiFTrxlFtiw7i2JnxBY3cSJSVaQWNhaeFW/Qv2w
-         LyJQ2fyfKJUcpAqU24MO/h2lr/e1jWwLpWJJwuJ+fnYUl2uGHfdBuAakxRcJbxEywKWz
-         Gu2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9LZSLFw1Wl8AbiBfHIocSEqkLLyf3Er+KsJ4COxHFyg=;
-        b=bvE3MdCMx37lrpFdrcrLS/mid3nlQ4483m1mMLUaVZ0r5BIUZE8/DzOwcRmrjRzaIL
-         Ww0IMIOkpRo4uhYTIrxYAJikN0C+3rnNrIWsxkMVqOjxyzZfmtOdVR9GF2T+0EAhCb+W
-         g7+Zet93R1iIQBtA5tLw/0DR6oFroE9l9lrR91U/M/E6H/6sVeK16fCDCw2QqiwkINYH
-         Vd5veJdKF1SpTbfFbUCMh0vwvMjXLgs77ugF7nLGX0i0Jy94jqAY2YZjgCMoX/d7//y7
-         W5+Az0a1NBGueDF8dCXTLcXVWyi74ipxU5IZSlzw4+m+iXDnVlE1/6vmqPCQw63X3hfR
-         esuw==
-X-Gm-Message-State: AOAM53193tMgvKhXiU0NX0SWN0yM4NFWRZGIR6tWA5whV5oJeti6nylL
-        rykjxKBVaV2CX0BvG3rsQmmqjA7N9CPqMmJ0B1m11g==
-X-Google-Smtp-Source: ABdhPJw8Qqgjgr2zjnN8FdggfNLonPT3TvIGolsrYfbjW1x6XDMjll4z7qPLYkBgmYRVPQ9CNjLfWQAg35q0yY2dE94=
-X-Received: by 2002:a25:a429:: with SMTP id f38mr10182603ybi.34.1637706639550;
- Tue, 23 Nov 2021 14:30:39 -0800 (PST)
+        id S233951AbhKWWzd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 23 Nov 2021 17:55:33 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:46377 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229574AbhKWWzd (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 23 Nov 2021 17:55:33 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HzKCS0FC6z4xR9;
+        Wed, 24 Nov 2021 09:52:19 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1637707942;
+        bh=nJ3v47D44xi4bEAxxkbK0bqu4F1ye/w5S9LdQhDunn4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=lO6/hCKdQwbOUH0oetFG7UsGnAgEIqnJOQapPnQBGFzu8nlcwbpSTESmOzrme/9m3
+         0hl8HHecNnVoZvfQx6LtrT5wOrpPUmsmBVk8TDExdJIN5N0Im3QvkVjli6yGgCvEWW
+         tIiaAVYIJJQXTB07OD/S+Mq+An0KshvUC1nIWBIXo/mLc7h88IML8yzXu34DQW9oZu
+         GaYxGuHSBM/VawRO2vBrH/tRmrwo4sMo+yMmYV7aZWdx9/6k6v9mT9bLaXrgnczRYW
+         4CltoMs7jzL4q/0Z5OrX+JZcACdXY5I0Aic+K3zBKS1VkS6KTtQ2mVJwLq+rOfW4j9
+         bSV6sMZdpBLGQ==
+Date:   Wed, 24 Nov 2021 09:52:18 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Mike Galbraith <umgwanakikbuti@gmail.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, lkft-triage@lists.linaro.org
+Subject: Re: [PATCH v2] locking: Fixup write_lock_nested() implementation.
+Message-ID: <20211124095218.4a83f39e@canb.auug.org.au>
+In-Reply-To: <20211123170134.y6xb7pmpgdn4m3bn@linutronix.de>
+References: <CA+G9fYtH2JR=L0cPoOEqsEGrZW_uOJgX6qLGMe_hbLpBtjVBwA@mail.gmail.com>
+        <CAK8P3a1NhpNxWfj3gDnuf4bWK_fiE8cjcRyN7e8j95NmvOzbGw@mail.gmail.com>
+        <CAMuHMdVuoUAM-6H2BXYtUH++4yXhRCGLAdbzx2GqAJk64FYO=A@mail.gmail.com>
+        <20211123145006.bon3usz4ilhw6ymg@linutronix.de>
+        <20211123160712.fssioyabln5erx2u@linutronix.de>
+        <20211123170134.y6xb7pmpgdn4m3bn@linutronix.de>
 MIME-Version: 1.0
-References: <20211123162635.29c8bccb@canb.auug.org.au> <CAJuCfpEvDOsNGcN9cqStx3PpoG_pJgQevvc+V6gcRrCUBa0YWA@mail.gmail.com>
- <CAJuCfpF6gyCNzkaq5QnthhV886ueFhkAJv4sJ6rtW+8Z-t0qmA@mail.gmail.com> <20211124092613.4a7d370a@canb.auug.org.au>
-In-Reply-To: <20211124092613.4a7d370a@canb.auug.org.au>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Tue, 23 Nov 2021 14:30:28 -0800
-Message-ID: <CAJuCfpEhPD6T1S1t_wBh7dWN35rNdTH+mtpb5_tPGd-8h30vfg@mail.gmail.com>
-Subject: Re: linux-next: build warning after merge of the akpm-current tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Colin Cross <ccross@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/w9K6C0uM4PeS2VBEioL/GRL";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Nov 23, 2021 at 2:26 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi Suren,
->
-> On Tue, 23 Nov 2021 11:03:47 -0800 Suren Baghdasaryan <surenb@google.com> wrote:
-> >
-> > I just posted a fix for the warning at
-> > https://lore.kernel.org/linux-next/20211123185928.2513763-1-surenb@google.com/T/#u
-> > One thing I'm not sure is that I used SHA from linux-next in the Fixes: field:
-> >
-> > Fixes: 2df148be9486 ("mm: add a field to store names for private
-> > anonymous memory")
-> >
-> > Not sure if that's acceptable. Please let me know if you want me to
-> > repost the fix without that line.
->
-> It doesn't really matter as Andrew will most likely squash this fixup
-> into the original patch.
+--Sig_/w9K6C0uM4PeS2VBEioL/GRL
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Perfect! Please let me know if anything else is needed.
-Thanks,
-Suren.
+Hi all,
 
+On Tue, 23 Nov 2021 18:01:34 +0100 Sebastian Andrzej Siewior <bigeasy@linut=
+ronix.de> wrote:
 >
-> --
-> Cheers,
-> Stephen Rothwell
+> Andrew, please merge it into:
+>   locking/rwlocks: introduce write_lock_nested
+>   locking-rwlocks-introduce-write_lock_nested.patch
+>=20
+> And if someone could test it, I get sh4 defconfig built with and without
+> lockdep. x86 seems still to build, too. So it can't be that bad.
+>=20
+> v1=E2=80=A6v2: I noticed a typo in _raw_write_lock_nested() and decided t=
+hat it
+> is no needed so now it is removed for !CONFIG_INLINE_WRITE_LOCK.
+>=20
+> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> ---
+>  include/linux/rwlock_api_smp.h | 1 -
+>  kernel/locking/spinlock.c      | 4 ++++
+>  2 files changed, 4 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/include/linux/rwlock_api_smp.h b/include/linux/rwlock_api_sm=
+p.h
+> index f0c535ec4e654..dceb0a59b6927 100644
+> --- a/include/linux/rwlock_api_smp.h
+> +++ b/include/linux/rwlock_api_smp.h
+> @@ -47,7 +47,6 @@ _raw_write_unlock_irqrestore(rwlock_t *lock, unsigned l=
+ong flags)
+> =20
+>  #ifdef CONFIG_INLINE_WRITE_LOCK
+>  #define _raw_write_lock(lock) __raw_write_lock(lock)
+> -#define _raw_write_lock_nested(lock, subclass) __raw_write_lock_nested(l=
+ock, subclass)
+>  #endif
+> =20
+>  #ifdef CONFIG_INLINE_READ_LOCK_BH
+> diff --git a/kernel/locking/spinlock.c b/kernel/locking/spinlock.c
+> index 996811efa6d6e..7f49baaa49793 100644
+> --- a/kernel/locking/spinlock.c
+> +++ b/kernel/locking/spinlock.c
+> @@ -301,6 +301,10 @@ void __lockfunc _raw_write_lock(rwlock_t *lock)
+>  }
+>  EXPORT_SYMBOL(_raw_write_lock);
+> =20
+> +#ifndef CONFIG_DEBUG_LOCK_ALLOC
+> +#define __raw_write_lock_nested(lock, subclass)	__raw_write_lock(((void)=
+(subclass), (lock)))
+> +#endif
+> +
+>  void __lockfunc _raw_write_lock_nested(rwlock_t *lock, int subclass)
+>  {
+>  	__raw_write_lock_nested(lock, subclass);
+> --=20
+> 2.34.0
+>=20
+
+I have added that patch to iinux-next today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/w9K6C0uM4PeS2VBEioL/GRL
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGdcKIACgkQAVBC80lX
+0GxcKwf8DSXSQ4vFx8KZgCNUsRDvQY9k0L1Anncmc+YDBzHVLsGNp1y16KV8RnFG
+EH3z7YUHfQXJw+IuwV+zVx4sScskhe0rsnYeevnobC9sYlBR1FWNczzXVL9l2Cy5
+VT3OOvp3pP9voolA0ESmtt2jvROTpjX0jzIbDPE/kfkAwbzeypsp7oNPKRnc/19E
+h3oVYUIRteF/Z/ix3b5WEXhByTlVyHsTtvhnifDaIMY8GwERfpsVg86s159FTpgc
+DxpjChCd5a82fz/Xu8/4FgU97YAoJi8xchXIv+xwQU3Np6Z891N4dK8blRsk4ZSJ
+4TE4qakICK1UDliAhxUa6Ec4DWnokg==
+=TnkZ
+-----END PGP SIGNATURE-----
+
+--Sig_/w9K6C0uM4PeS2VBEioL/GRL--

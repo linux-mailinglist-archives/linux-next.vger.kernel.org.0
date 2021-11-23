@@ -2,228 +2,619 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AD5145A1A5
-	for <lists+linux-next@lfdr.de>; Tue, 23 Nov 2021 12:38:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A26C45A2B4
+	for <lists+linux-next@lfdr.de>; Tue, 23 Nov 2021 13:34:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236232AbhKWLmB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 23 Nov 2021 06:42:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51284 "EHLO
+        id S235366AbhKWMiA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 23 Nov 2021 07:38:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236144AbhKWLmA (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 23 Nov 2021 06:42:00 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F267C061714
-        for <linux-next@vger.kernel.org>; Tue, 23 Nov 2021 03:38:52 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id e3so90778098edu.4
-        for <linux-next@vger.kernel.org>; Tue, 23 Nov 2021 03:38:52 -0800 (PST)
+        with ESMTP id S236764AbhKWMiA (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 23 Nov 2021 07:38:00 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C948C061574
+        for <linux-next@vger.kernel.org>; Tue, 23 Nov 2021 04:34:52 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id nh10-20020a17090b364a00b001a69adad5ebso2781050pjb.2
+        for <linux-next@vger.kernel.org>; Tue, 23 Nov 2021 04:34:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=k7G4wbjHzsKzXccXTCEbiJCCEpjCW1QL0hIAj1UZJ0k=;
-        b=sFyTJnfESXSjl/1vk4O7utsPKg4g6/BoGHBmkPmI4u4Xq2N082NtFXM/TP2ENuTFDM
-         rFCjaCZ/GKMockSfnLAf7LgyRp4kvApsbnVHGZDKIq7ZF8+BZ8EnnAyN1ikn1Gu4S9C6
-         TqMZ/UtlRO9GuAFtP/sioemENjjoQ3U3L6ZrPPn7PgNM2vDmjfKHsyRuYGxpbpZJlRje
-         Z3J6wZeCxOKntih4I0XwWvgXOapAduQPY8WFC3fam8RsAcFvk4hnpfg3BZWZ1AX86UYM
-         5qQVRTPXwM4bRFCuU8qa6lEkIfXk+D8Y7zR8LDalDZ3S2lFKK/gqUYH5uUzCtG4r1B80
-         NZOw==
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=XtpbUFFnEk2tMUyiPyERp6baEtHOIz3qPLK1nRklM4k=;
+        b=VYmwFcnF8Mo5zoFRAsAMkVx3s1gxGjjoZIkpGo4ThXYs6ZsaVSCl5wt95JRAhVC84a
+         EGxf9rmUkbX+dRfpnsQIPlhXDRtAEjfZiirPxd9vwS6sVLbIZs6qKJpGSyrYyEZsiscC
+         D5YLQVs4Q1Z5iwdWnr/+725JQBxyMbyZPrByWLHvB0R9h0R2GX+vsLovTufGqidaldYV
+         IB9eNrsCyQAXegwD2+z5/u0Gl/Lwcmxi6rr4bgtbIwlqh3NVSnKajwDsyEkv9D4kyPAS
+         hpLJ9vFGQXDShucarnDxcHsbRXGnpTbOqg+myGi5Y/CU94uXnJ6ooB4gbdr5DsLRQ9ai
+         fb5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=k7G4wbjHzsKzXccXTCEbiJCCEpjCW1QL0hIAj1UZJ0k=;
-        b=ML1O/l251/LcFJfICU0262V8Or1LNKUjeKYXMGPACLdNcTLH19OFGN10gaOdqbamFL
-         2H5cmEeHJXCGmExBMX9FxHJ5BHDZED50hsP7PU9puDw7O1Web3yIlr5XsPg4ykeQTsw5
-         ZH5b6D/Djq3EgD8jPUKf/EuLcBCIhrDO8w2q0voCShJBEGbVSOptkhc3znaNFkKxaqQ/
-         mUuZoVUwiwfIRzhpXO3nEIjRNCPIAH79YQ1lky1rZrHrk/BlEkdhmpdmi+Xb4GifLpv6
-         PrfNyaYvLbgIoPrOmLpNEhEiHCd+VpeOBtUeeiddgWchOhi+JUd+1v0DbC1ccEay1GI7
-         w0iQ==
-X-Gm-Message-State: AOAM530qHK1LU8iqOKQ7emSLtKyDK2uA7VgxkEpCCKPNIPF71XMaEJNm
-        2FpKfQyuIccV+TG6cltpnVmb0n4+A0HMOZB56RnWj5nkhJywKQ==
-X-Google-Smtp-Source: ABdhPJxYO+0qKUdkZFowci003RczNBtBqsX8ALyrTjhYPGiZRF1q0mIDJqf8mJbKEdrE4DiQJcMz/9zUG1XEqG2M3ts=
-X-Received: by 2002:a17:906:4791:: with SMTP id cw17mr6693188ejc.493.1637667530137;
- Tue, 23 Nov 2021 03:38:50 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=XtpbUFFnEk2tMUyiPyERp6baEtHOIz3qPLK1nRklM4k=;
+        b=tHhDCOJrv6tipzLfle3TBm3bfcS6SBGHN6bZlcx6i7PtT5dUeQ+UPg7KnK7lhyZ1jF
+         xQ5BFzQOcfikLgHqh9hjoTd036yTR3Hn9x/BuCtUywm4rzjRts2PxaiKs0+A/KnvX5p1
+         LZb6iSXlRCAA/8DM8vYqhrzGybFMt7EghYM7JrpehnU0yIpAt/Kchoczw+q0U3pB9g7v
+         j94II2m1OzN7CfTdRQNYi3ZxsxR+5xNfy4CeUuiHEY8ht+/ZXxE/rd41WUekyjKlC9ng
+         5pQbOQ5SGA3+67XFCfyxUof6y+J3ri/cwizEBolrsbGaUhMOntn6RvYQ9MvMtO+q1MMm
+         xaHQ==
+X-Gm-Message-State: AOAM532VEZ11279Cohxb0mC+otfYofiIOd0u1OeW9eKELPuq6YhlditZ
+        saLYvg1tUl3nc9j/3BIe9CJeR9iYnN9LToC+
+X-Google-Smtp-Source: ABdhPJweSKT7FjPMghpLs8O9jjIiTrTttCoq8YpwqAPO49RxnWkQ94mc+Dd7ivjcQ/Q9mauHK1Zu0Q==
+X-Received: by 2002:a17:90a:fe0a:: with SMTP id ck10mr2490835pjb.216.1637670891736;
+        Tue, 23 Nov 2021 04:34:51 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id mq14sm1349067pjb.54.2021.11.23.04.34.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Nov 2021 04:34:51 -0800 (PST)
+Message-ID: <619cdfeb.1c69fb81.487a5.2578@mx.google.com>
+Date:   Tue, 23 Nov 2021 04:34:51 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 23 Nov 2021 17:08:39 +0530
-Message-ID: <CA+G9fYtH2JR=L0cPoOEqsEGrZW_uOJgX6qLGMe_hbLpBtjVBwA@mail.gmail.com>
-Subject: spinlock.c:306:9: error: implicit declaration of function '__raw_write_lock_nested'
-To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Galbraith <umgwanakikbuti@gmail.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, lkft-triage@lists.linaro.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: next-20211123
+X-Kernelci-Report-Type: test
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+Subject: next/master baseline: 805 runs, 15 regressions (next-20211123)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-While building Linux next 20211123 tag for sh with gcc-11
-following warnings / errors noticed.
+next/master baseline: 805 runs, 15 regressions (next-20211123)
 
-make --silent --keep-going --jobs=8
-O=/home/tuxbuild/.cache/tuxmake/builds/current ARCH=sh
-CROSS_COMPILE=sh4-linux-gnu- 'CC=sccache sh4-linux-gnu-gcc'
-'HOSTCC=sccache gcc'
-  Generating include/generated/machtypes.h
-<stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-<stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [-Wcpp]
-In file included from arch/sh/include/asm/hw_irq.h:6,
-                 from include/linux/irq.h:594,
-                 from include/asm-generic/hardirq.h:17,
-                 from arch/sh/include/asm/hardirq.h:9,
-                 from include/linux/hardirq.h:11,
-                 from include/linux/interrupt.h:11,
-                 from include/linux/serial_core.h:13,
-                 from include/linux/serial_sci.h:6,
-                 from arch/sh/kernel/cpu/sh4a/setup-shx3.c:10:
-include/linux/sh_intc.h:100:63: warning: division 'sizeof (void *) /
-sizeof (void)' does not compute the number of array elements
-[-Wsizeof-pointer-div]
-  100 | #define _INTC_ARRAY(a) a, __same_type(a, NULL) ? 0 :
-sizeof(a)/sizeof(*a)
-      |                                                               ^
-include/linux/sh_intc.h:107:9: note: in expansion of macro '_INTC_ARRAY'
-  107 |         _INTC_ARRAY(sense_regs), _INTC_ARRAY(ack_regs), \
-      |         ^~~~~~~~~~~
-include/linux/sh_intc.h:124:15: note: in expansion of macro 'INTC_HW_DESC'
-  124 |         .hw = INTC_HW_DESC(vectors, groups, mask_regs,
-         \
-      |               ^~~~~~~~~~~~
-arch/sh/kernel/cpu/sh4a/setup-shx3.c:309:8: note: in expansion of
-macro 'DECLARE_INTC_DESC'
-  309 | static DECLARE_INTC_DESC(intc_desc, "shx3", vectors, groups,
-      |        ^~~~~~~~~~~~~~~~~
-include/linux/sh_intc.h:100:63: warning: division 'sizeof (void *) /
-sizeof (void)' does not compute the number of array elements
-[-Wsizeof-pointer-div]
-  100 | #define _INTC_ARRAY(a) a, __same_type(a, NULL) ? 0 :
-sizeof(a)/sizeof(*a)
-      |                                                               ^
-include/linux/sh_intc.h:107:34: note: in expansion of macro '_INTC_ARRAY'
-  107 |         _INTC_ARRAY(sense_regs), _INTC_ARRAY(ack_regs), \
-      |                                  ^~~~~~~~~~~
-include/linux/sh_intc.h:124:15: note: in expansion of macro 'INTC_HW_DESC'
-  124 |         .hw = INTC_HW_DESC(vectors, groups, mask_regs,
-         \
-      |               ^~~~~~~~~~~~
-arch/sh/kernel/cpu/sh4a/setup-shx3.c:309:8: note: in expansion of
-macro 'DECLARE_INTC_DESC'
-  309 | static DECLARE_INTC_DESC(intc_desc, "shx3", vectors, groups,
-      |        ^~~~~~~~~~~~~~~~~
-include/linux/sh_intc.h:100:63: warning: division 'sizeof (void *) /
-sizeof (void)' does not compute the number of array elements
-[-Wsizeof-pointer-div]
-  100 | #define _INTC_ARRAY(a) a, __same_type(a, NULL) ? 0 :
-sizeof(a)/sizeof(*a)
-      |                                                               ^
-include/linux/sh_intc.h:107:34: note: in expansion of macro '_INTC_ARRAY'
-  107 |         _INTC_ARRAY(sense_regs), _INTC_ARRAY(ack_regs), \
-      |                                  ^~~~~~~~~~~
-include/linux/sh_intc.h:124:15: note: in expansion of macro 'INTC_HW_DESC'
-  124 |         .hw = INTC_HW_DESC(vectors, groups, mask_regs,
-         \
-      |               ^~~~~~~~~~~~
-arch/sh/kernel/cpu/sh4a/setup-shx3.c:322:8: note: in expansion of
-macro 'DECLARE_INTC_DESC'
-  322 | static DECLARE_INTC_DESC(intc_desc_irq, "shx3-irq", vectors_irq, groups,
-      |        ^~~~~~~~~~~~~~~~~
-include/linux/sh_intc.h:100:63: warning: division 'sizeof (void *) /
-sizeof (void)' does not compute the number of array elements
-[-Wsizeof-pointer-div]
-  100 | #define _INTC_ARRAY(a) a, __same_type(a, NULL) ? 0 :
-sizeof(a)/sizeof(*a)
-      |                                                               ^
-include/linux/sh_intc.h:107:9: note: in expansion of macro '_INTC_ARRAY'
-  107 |         _INTC_ARRAY(sense_regs), _INTC_ARRAY(ack_regs), \
-      |         ^~~~~~~~~~~
-include/linux/sh_intc.h:124:15: note: in expansion of macro 'INTC_HW_DESC'
-  124 |         .hw = INTC_HW_DESC(vectors, groups, mask_regs,
-         \
-      |               ^~~~~~~~~~~~
-arch/sh/kernel/cpu/sh4a/setup-shx3.c:337:8: note: in expansion of
-macro 'DECLARE_INTC_DESC'
-  337 | static DECLARE_INTC_DESC(intc_desc_irl, "shx3-irl", vectors_irl, groups,
-      |        ^~~~~~~~~~~~~~~~~
-include/linux/sh_intc.h:100:63: warning: division 'sizeof (void *) /
-sizeof (void)' does not compute the number of array elements
-[-Wsizeof-pointer-div]
-  100 | #define _INTC_ARRAY(a) a, __same_type(a, NULL) ? 0 :
-sizeof(a)/sizeof(*a)
-      |                                                               ^
-include/linux/sh_intc.h:107:34: note: in expansion of macro '_INTC_ARRAY'
-  107 |         _INTC_ARRAY(sense_regs), _INTC_ARRAY(ack_regs), \
-      |                                  ^~~~~~~~~~~
-include/linux/sh_intc.h:124:15: note: in expansion of macro 'INTC_HW_DESC'
-  124 |         .hw = INTC_HW_DESC(vectors, groups, mask_regs,
-         \
-      |               ^~~~~~~~~~~~
-arch/sh/kernel/cpu/sh4a/setup-shx3.c:337:8: note: in expansion of
-macro 'DECLARE_INTC_DESC'
-  337 | static DECLARE_INTC_DESC(intc_desc_irl, "shx3-irl", vectors_irl, groups,
-      |        ^~~~~~~~~~~~~~~~~
-kernel/locking/spinlock.c: In function '_raw_write_lock_nested':
-kernel/locking/spinlock.c:306:9: error: implicit declaration of
-function '__raw_write_lock_nested'; did you mean
-'_raw_write_lock_nested'? [-Werror=implicit-function-declaration]
-  306 |         __raw_write_lock_nested(lock, subclass);
-      |         ^~~~~~~~~~~~~~~~~~~~~~~
-      |         _raw_write_lock_nested
-cc1: some warnings being treated as errors
-make[3]: *** [scripts/Makefile.build:288: kernel/locking/spinlock.o] Error 1
-make[3]: Target '__build' not remade because of errors.
-make[2]: *** [scripts/Makefile.build:571: kernel/locking] Error 2
-fs/ext4/readpage.c: In function 'ext4_mpage_readpages':
-fs/ext4/readpage.c:413:1: warning: the frame size of 1140 bytes is
-larger than 1024 bytes [-Wframe-larger-than=]
-  413 | }
-      | ^
-make[2]: Target '__build' not remade because of errors.
-make[1]: *** [Makefile:1989: kernel] Error 2
-fs/mpage.c: In function '__mpage_writepage':
-fs/mpage.c:672:1: warning: the frame size of 1156 bytes is larger than
-1024 bytes [-Wframe-larger-than=]
-  672 | }
-      | ^
-fs/mpage.c: In function 'do_mpage_readpage':
-fs/mpage.c:336:1: warning: the frame size of 1092 bytes is larger than
-1024 bytes [-Wframe-larger-than=]
-  336 | }
-      | ^
-make[1]: Target '__all' not remade because of errors.
-make: *** [Makefile:226: __sub-make] Error 2
-make: Target '__all' not remade because of errors.
+Regressions Summary
+-------------------
+
+platform                   | arch  | lab          | compiler | defconfig   =
+                 | regressions
+---------------------------+-------+--------------+----------+-------------=
+-----------------+------------
+beagle-xm                  | arm   | lab-baylibre | clang-13 | multi_v7_def=
+config           | 1          =
+
+meson-gxbb-p200            | arm64 | lab-baylibre | gcc-10   | defconfig+CO=
+N..._64K_PAGES=3Dy | 1          =
+
+meson-gxl-s905d-p230       | arm64 | lab-baylibre | gcc-10   | defconfig+cr=
+ypto             | 1          =
+
+meson-gxl-s905d-p230       | arm64 | lab-baylibre | gcc-10   | defconfig+im=
+a                | 1          =
+
+qemu_arm-virt-gicv3-uefi   | arm   | lab-baylibre | gcc-10   | multi_v7_def=
+config+debug     | 1          =
+
+qemu_arm-virt-gicv3-uefi   | arm   | lab-broonie  | gcc-10   | multi_v7_def=
+config+debug     | 1          =
+
+qemu_arm-virt-gicv3-uefi   | arm   | lab-cip      | gcc-10   | multi_v7_def=
+config+debug     | 1          =
+
+qemu_arm64-virt-gicv2-uefi | arm64 | lab-broonie  | clang-13 | defconfig+CO=
+N..._64K_PAGES=3Dy | 1          =
+
+zynqmp-zcu102              | arm64 | lab-cip      | clang-13 | defconfig+CO=
+N..._64K_PAGES=3Dy | 1          =
+
+zynqmp-zcu102              | arm64 | lab-cip      | gcc-10   | defconfig+CO=
+N..._64K_PAGES=3Dy | 1          =
+
+zynqmp-zcu102              | arm64 | lab-cip      | gcc-10   | defconfig+CO=
+N...OMIZE_BASE=3Dy | 1          =
+
+zynqmp-zcu102              | arm64 | lab-cip      | gcc-10   | defconfig+cr=
+ypto             | 1          =
+
+zynqmp-zcu102              | arm64 | lab-cip      | gcc-10   | defconfig+im=
+a                | 1          =
+
+zynqmp-zcu102              | arm64 | lab-cip      | gcc-10   | defconfig+de=
+bug              | 1          =
+
+zynqmp-zcu102              | arm64 | lab-cip      | gcc-10   | defconfig   =
+                 | 1          =
 
 
-Build config:
-https://builds.tuxbuild.com/21J9mb3wsbGi616UxQbxP3DSTGv/config
+  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
+211123/plan/baseline/
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+  Test:     baseline
+  Tree:     next
+  Branch:   master
+  Describe: next-20211123
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      aacdecce8147c20b01f865b4e214bb8dbe8c4af1 =
 
-meta data:
------------
-    git describe: next-20211123
-    git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-    git_sha: aacdecce8147c20b01f865b4e214bb8dbe8c4af1
-    git_short_log: aacdecce8147 (\"Add linux-next specific files for 20211123\")
-    target_arch: sh
-    toolchain: gcc-11
 
-steps to reproduce:
-tuxmake --runtime podman --target-arch sh --toolchain gcc-11 --kconfig
-shx3_defconfig
 
-https://builds.tuxbuild.com/21J9mb3wsbGi616UxQbxP3DSTGv/tuxmake_reproducer.sh
+Test Regressions
+---------------- =
 
---
-Linaro LKFT
-https://lkft.linaro.org
+
+
+platform                   | arch  | lab          | compiler | defconfig   =
+                 | regressions
+---------------------------+-------+--------------+----------+-------------=
+-----------------+------------
+beagle-xm                  | arm   | lab-baylibre | clang-13 | multi_v7_def=
+config           | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/619ca85c3934de60e9f2efc9
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    clang-13 (Debian clang version 13.0.1-++20211110062941+9dc7d=
+6d5e326-1~exp1~20211110183517.26)
+  Plain log:   https://storage.kernelci.org//next/master/next-20211123/arm/=
+multi_v7_defconfig/clang-13/lab-baylibre/baseline-beagle-xm.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20211123/arm/=
+multi_v7_defconfig/clang-13/lab-baylibre/baseline-beagle-xm.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-6-g8983f3b738df/armel/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/619ca85c3934de60e9f2e=
+fca
+        new failure (last pass: next-20211118) =
+
+ =
+
+
+
+platform                   | arch  | lab          | compiler | defconfig   =
+                 | regressions
+---------------------------+-------+--------------+----------+-------------=
+-----------------+------------
+meson-gxbb-p200            | arm64 | lab-baylibre | gcc-10   | defconfig+CO=
+N..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/619c9d652fe108e6aaf2efb6
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20211123/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-meson-g=
+xbb-p200.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20211123/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-meson-g=
+xbb-p200.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/619c9d652fe108e6aaf2e=
+fb7
+        new failure (last pass: next-20211118) =
+
+ =
+
+
+
+platform                   | arch  | lab          | compiler | defconfig   =
+                 | regressions
+---------------------------+-------+--------------+----------+-------------=
+-----------------+------------
+meson-gxl-s905d-p230       | arm64 | lab-baylibre | gcc-10   | defconfig+cr=
+ypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/619ca3b8520328fea9f2eff2
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20211123/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-meson-gxl-s905d-p230.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20211123/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-meson-gxl-s905d-p230.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/619ca3b8520328fea9f2e=
+ff3
+        new failure (last pass: next-20211118) =
+
+ =
+
+
+
+platform                   | arch  | lab          | compiler | defconfig   =
+                 | regressions
+---------------------------+-------+--------------+----------+-------------=
+-----------------+------------
+meson-gxl-s905d-p230       | arm64 | lab-baylibre | gcc-10   | defconfig+im=
+a                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/619ca64d670d122441f2ef9f
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20211123/arm6=
+4/defconfig+ima/gcc-10/lab-baylibre/baseline-meson-gxl-s905d-p230.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20211123/arm6=
+4/defconfig+ima/gcc-10/lab-baylibre/baseline-meson-gxl-s905d-p230.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/619ca64d670d122441f2e=
+fa0
+        new failure (last pass: next-20211118) =
+
+ =
+
+
+
+platform                   | arch  | lab          | compiler | defconfig   =
+                 | regressions
+---------------------------+-------+--------------+----------+-------------=
+-----------------+------------
+qemu_arm-virt-gicv3-uefi   | arm   | lab-baylibre | gcc-10   | multi_v7_def=
+config+debug     | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/619cab27833a67f2bcf2efa5
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+debug
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20211123/arm/=
+multi_v7_defconfig+debug/gcc-10/lab-baylibre/baseline-qemu_arm-virt-gicv3-u=
+efi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20211123/arm/=
+multi_v7_defconfig+debug/gcc-10/lab-baylibre/baseline-qemu_arm-virt-gicv3-u=
+efi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-6-g8983f3b738df/armel/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/619cab27833a67f2bcf2e=
+fa6
+        failing since 5 days (last pass: next-20211117, first fail: next-20=
+211118) =
+
+ =
+
+
+
+platform                   | arch  | lab          | compiler | defconfig   =
+                 | regressions
+---------------------------+-------+--------------+----------+-------------=
+-----------------+------------
+qemu_arm-virt-gicv3-uefi   | arm   | lab-broonie  | gcc-10   | multi_v7_def=
+config+debug     | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/619cad18b52065e3a1f2efad
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+debug
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20211123/arm/=
+multi_v7_defconfig+debug/gcc-10/lab-broonie/baseline-qemu_arm-virt-gicv3-ue=
+fi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20211123/arm/=
+multi_v7_defconfig+debug/gcc-10/lab-broonie/baseline-qemu_arm-virt-gicv3-ue=
+fi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-6-g8983f3b738df/armel/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/619cad18b52065e3a1f2e=
+fae
+        failing since 5 days (last pass: next-20211117, first fail: next-20=
+211118) =
+
+ =
+
+
+
+platform                   | arch  | lab          | compiler | defconfig   =
+                 | regressions
+---------------------------+-------+--------------+----------+-------------=
+-----------------+------------
+qemu_arm-virt-gicv3-uefi   | arm   | lab-cip      | gcc-10   | multi_v7_def=
+config+debug     | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/619cab28833a67f2bcf2efb2
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+debug
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20211123/arm/=
+multi_v7_defconfig+debug/gcc-10/lab-cip/baseline-qemu_arm-virt-gicv3-uefi.t=
+xt
+  HTML log:    https://storage.kernelci.org//next/master/next-20211123/arm/=
+multi_v7_defconfig+debug/gcc-10/lab-cip/baseline-qemu_arm-virt-gicv3-uefi.h=
+tml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-6-g8983f3b738df/armel/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/619cab28833a67f2bcf2e=
+fb3
+        failing since 5 days (last pass: next-20211117, first fail: next-20=
+211118) =
+
+ =
+
+
+
+platform                   | arch  | lab          | compiler | defconfig   =
+                 | regressions
+---------------------------+-------+--------------+----------+-------------=
+-----------------+------------
+qemu_arm64-virt-gicv2-uefi | arm64 | lab-broonie  | clang-13 | defconfig+CO=
+N..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/619cab9abbd545393af2ef9f
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    clang-13 (Debian clang version 13.0.1-++20211110062941+9dc7d=
+6d5e326-1~exp1~20211110183517.26)
+  Plain log:   https://storage.kernelci.org//next/master/next-20211123/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-13/lab-broonie/baseline-qemu_a=
+rm64-virt-gicv2-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20211123/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-13/lab-broonie/baseline-qemu_a=
+rm64-virt-gicv2-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/619cab9abbd545393af2e=
+fa0
+        new failure (last pass: next-20211118) =
+
+ =
+
+
+
+platform                   | arch  | lab          | compiler | defconfig   =
+                 | regressions
+---------------------------+-------+--------------+----------+-------------=
+-----------------+------------
+zynqmp-zcu102              | arm64 | lab-cip      | clang-13 | defconfig+CO=
+N..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/619ca743948500075df2eff6
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    clang-13 (Debian clang version 13.0.1-++20211110062941+9dc7d=
+6d5e326-1~exp1~20211110183517.26)
+  Plain log:   https://storage.kernelci.org//next/master/next-20211123/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-13/lab-cip/baseline-zynqmp-zcu=
+102.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20211123/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-13/lab-cip/baseline-zynqmp-zcu=
+102.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/619ca743948500075df2e=
+ff7
+        new failure (last pass: next-20211118) =
+
+ =
+
+
+
+platform                   | arch  | lab          | compiler | defconfig   =
+                 | regressions
+---------------------------+-------+--------------+----------+-------------=
+-----------------+------------
+zynqmp-zcu102              | arm64 | lab-cip      | gcc-10   | defconfig+CO=
+N..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/619c9d1b7df6db4a1ff2effc
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20211123/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-cip/baseline-zynqmp-zcu10=
+2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20211123/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-cip/baseline-zynqmp-zcu10=
+2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/619c9d1b7df6db4a1ff2e=
+ffd
+        new failure (last pass: next-20211118) =
+
+ =
+
+
+
+platform                   | arch  | lab          | compiler | defconfig   =
+                 | regressions
+---------------------------+-------+--------------+----------+-------------=
+-----------------+------------
+zynqmp-zcu102              | arm64 | lab-cip      | gcc-10   | defconfig+CO=
+N...OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/619c9f9baa5a8bdbe4f2efc4
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20211123/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-cip/baseline-zynqmp-zcu102=
+.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20211123/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-cip/baseline-zynqmp-zcu102=
+.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/619c9f9baa5a8bdbe4f2e=
+fc5
+        new failure (last pass: next-20211118) =
+
+ =
+
+
+
+platform                   | arch  | lab          | compiler | defconfig   =
+                 | regressions
+---------------------------+-------+--------------+----------+-------------=
+-----------------+------------
+zynqmp-zcu102              | arm64 | lab-cip      | gcc-10   | defconfig+cr=
+ypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/619ca0efcfd09a4c3ef2efe6
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20211123/arm6=
+4/defconfig+crypto/gcc-10/lab-cip/baseline-zynqmp-zcu102.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20211123/arm6=
+4/defconfig+crypto/gcc-10/lab-cip/baseline-zynqmp-zcu102.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/619ca0efcfd09a4c3ef2e=
+fe7
+        new failure (last pass: next-20211118) =
+
+ =
+
+
+
+platform                   | arch  | lab          | compiler | defconfig   =
+                 | regressions
+---------------------------+-------+--------------+----------+-------------=
+-----------------+------------
+zynqmp-zcu102              | arm64 | lab-cip      | gcc-10   | defconfig+im=
+a                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/619ca3ab520328fea9f2efdf
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20211123/arm6=
+4/defconfig+ima/gcc-10/lab-cip/baseline-zynqmp-zcu102.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20211123/arm6=
+4/defconfig+ima/gcc-10/lab-cip/baseline-zynqmp-zcu102.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/619ca3ab520328fea9f2e=
+fe0
+        new failure (last pass: next-20211118) =
+
+ =
+
+
+
+platform                   | arch  | lab          | compiler | defconfig   =
+                 | regressions
+---------------------------+-------+--------------+----------+-------------=
+-----------------+------------
+zynqmp-zcu102              | arm64 | lab-cip      | gcc-10   | defconfig+de=
+bug              | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/619ca423be36c9f862f2efab
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+debug
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20211123/arm6=
+4/defconfig+debug/gcc-10/lab-cip/baseline-zynqmp-zcu102.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20211123/arm6=
+4/defconfig+debug/gcc-10/lab-cip/baseline-zynqmp-zcu102.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/619ca423be36c9f862f2e=
+fac
+        new failure (last pass: next-20211118) =
+
+ =
+
+
+
+platform                   | arch  | lab          | compiler | defconfig   =
+                 | regressions
+---------------------------+-------+--------------+----------+-------------=
+-----------------+------------
+zynqmp-zcu102              | arm64 | lab-cip      | gcc-10   | defconfig   =
+                 | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/619ca5dc1078608670f2efb5
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20211123/arm6=
+4/defconfig/gcc-10/lab-cip/baseline-zynqmp-zcu102.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20211123/arm6=
+4/defconfig/gcc-10/lab-cip/baseline-zynqmp-zcu102.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/619ca5dc1078608670f2e=
+fb6
+        new failure (last pass: next-20211118) =
+
+ =20

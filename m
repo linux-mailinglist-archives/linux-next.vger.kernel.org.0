@@ -2,147 +2,118 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F2DE45AF71
-	for <lists+linux-next@lfdr.de>; Tue, 23 Nov 2021 23:52:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 875F645B090
+	for <lists+linux-next@lfdr.de>; Wed, 24 Nov 2021 01:10:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233951AbhKWWzd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 23 Nov 2021 17:55:33 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:46377 "EHLO
+        id S240595AbhKXANM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 23 Nov 2021 19:13:12 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:48431 "EHLO
         gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbhKWWzd (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 23 Nov 2021 17:55:33 -0500
+        with ESMTP id S230403AbhKXANK (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 23 Nov 2021 19:13:10 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HzKCS0FC6z4xR9;
-        Wed, 24 Nov 2021 09:52:19 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HzLx30whkz4xcK;
+        Wed, 24 Nov 2021 11:09:58 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1637707942;
-        bh=nJ3v47D44xi4bEAxxkbK0bqu4F1ye/w5S9LdQhDunn4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=lO6/hCKdQwbOUH0oetFG7UsGnAgEIqnJOQapPnQBGFzu8nlcwbpSTESmOzrme/9m3
-         0hl8HHecNnVoZvfQx6LtrT5wOrpPUmsmBVk8TDExdJIN5N0Im3QvkVjli6yGgCvEWW
-         tIiaAVYIJJQXTB07OD/S+Mq+An0KshvUC1nIWBIXo/mLc7h88IML8yzXu34DQW9oZu
-         GaYxGuHSBM/VawRO2vBrH/tRmrwo4sMo+yMmYV7aZWdx9/6k6v9mT9bLaXrgnczRYW
-         4CltoMs7jzL4q/0Z5OrX+JZcACdXY5I0Aic+K3zBKS1VkS6KTtQ2mVJwLq+rOfW4j9
-         bSV6sMZdpBLGQ==
-Date:   Wed, 24 Nov 2021 09:52:18 +1100
+        s=201702; t=1637712600;
+        bh=X4bEEqqhqXPwwuJUvJkcN72qA1+JmSUCFA8Yvn1FfIk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=jeF79H9Sl0KsBUD/7E5fG2dU335wZnD/dFu/SQ2hj7ZTm+PiGRPrsIERjqTbOMVe1
+         RqVbBJb09oYBhS9YHhsBRg1izzuuClJFzXkfZdL17t5jmKdn/YwLceLHIk9JkKx6hQ
+         kdVp6KychvZnF8ala37qJ8fJgE351AFseksF1HziyO0TvfpNtJXEhiMy81Tom1taFu
+         dOOAKEmX0+FLl4PjGJgUhWh4+5wx1N7FsvVXnsqZBfL8tGXKZ+LSAX4zvtPLA09a8Z
+         ijW8/onAQidGXGBfESJf0HicB46RZDFet6XYdykW3NzFL2TU2oVbZS/6siLaTWrs/V
+         Kb3r8PHRgu50Q==
+Date:   Wed, 24 Nov 2021 11:09:57 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Mike Galbraith <umgwanakikbuti@gmail.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, lkft-triage@lists.linaro.org
-Subject: Re: [PATCH v2] locking: Fixup write_lock_nested() implementation.
-Message-ID: <20211124095218.4a83f39e@canb.auug.org.au>
-In-Reply-To: <20211123170134.y6xb7pmpgdn4m3bn@linutronix.de>
-References: <CA+G9fYtH2JR=L0cPoOEqsEGrZW_uOJgX6qLGMe_hbLpBtjVBwA@mail.gmail.com>
-        <CAK8P3a1NhpNxWfj3gDnuf4bWK_fiE8cjcRyN7e8j95NmvOzbGw@mail.gmail.com>
-        <CAMuHMdVuoUAM-6H2BXYtUH++4yXhRCGLAdbzx2GqAJk64FYO=A@mail.gmail.com>
-        <20211123145006.bon3usz4ilhw6ymg@linutronix.de>
-        <20211123160712.fssioyabln5erx2u@linutronix.de>
-        <20211123170134.y6xb7pmpgdn4m3bn@linutronix.de>
+To:     Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     =?UTF-8?B?Sm9zw6k=?= Roberto de Souza <jose.souza@intel.com>,
+        Juha-Pekka =?UTF-8?B?SGVpa2tpbMOk?= 
+        <juha-pekka.heikkila@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Matt Roper <matthew.d.roper@intel.com>,
+        Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>
+Subject: linux-next: manual merge of the drm-intel-gt tree with the
+ drm-intel tree
+Message-ID: <20211124110957.18dea3f2@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/w9K6C0uM4PeS2VBEioL/GRL";
+Content-Type: multipart/signed; boundary="Sig_/wUXCq9DPBuql/7JaF56gUnb";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/w9K6C0uM4PeS2VBEioL/GRL
-Content-Type: text/plain; charset=UTF-8
+--Sig_/wUXCq9DPBuql/7JaF56gUnb
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Tue, 23 Nov 2021 18:01:34 +0100 Sebastian Andrzej Siewior <bigeasy@linut=
-ronix.de> wrote:
->
-> Andrew, please merge it into:
->   locking/rwlocks: introduce write_lock_nested
->   locking-rwlocks-introduce-write_lock_nested.patch
->=20
-> And if someone could test it, I get sh4 defconfig built with and without
-> lockdep. x86 seems still to build, too. So it can't be that bad.
->=20
-> v1=E2=80=A6v2: I noticed a typo in _raw_write_lock_nested() and decided t=
-hat it
-> is no needed so now it is removed for !CONFIG_INLINE_WRITE_LOCK.
->=20
-> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> ---
->  include/linux/rwlock_api_smp.h | 1 -
->  kernel/locking/spinlock.c      | 4 ++++
->  2 files changed, 4 insertions(+), 1 deletion(-)
->=20
-> diff --git a/include/linux/rwlock_api_smp.h b/include/linux/rwlock_api_sm=
-p.h
-> index f0c535ec4e654..dceb0a59b6927 100644
-> --- a/include/linux/rwlock_api_smp.h
-> +++ b/include/linux/rwlock_api_smp.h
-> @@ -47,7 +47,6 @@ _raw_write_unlock_irqrestore(rwlock_t *lock, unsigned l=
-ong flags)
-> =20
->  #ifdef CONFIG_INLINE_WRITE_LOCK
->  #define _raw_write_lock(lock) __raw_write_lock(lock)
-> -#define _raw_write_lock_nested(lock, subclass) __raw_write_lock_nested(l=
-ock, subclass)
->  #endif
-> =20
->  #ifdef CONFIG_INLINE_READ_LOCK_BH
-> diff --git a/kernel/locking/spinlock.c b/kernel/locking/spinlock.c
-> index 996811efa6d6e..7f49baaa49793 100644
-> --- a/kernel/locking/spinlock.c
-> +++ b/kernel/locking/spinlock.c
-> @@ -301,6 +301,10 @@ void __lockfunc _raw_write_lock(rwlock_t *lock)
->  }
->  EXPORT_SYMBOL(_raw_write_lock);
-> =20
-> +#ifndef CONFIG_DEBUG_LOCK_ALLOC
-> +#define __raw_write_lock_nested(lock, subclass)	__raw_write_lock(((void)=
-(subclass), (lock)))
-> +#endif
-> +
->  void __lockfunc _raw_write_lock_nested(rwlock_t *lock, int subclass)
->  {
->  	__raw_write_lock_nested(lock, subclass);
-> --=20
-> 2.34.0
->=20
+Today's linux-next merge of the drm-intel-gt tree got a conflict in:
 
-I have added that patch to iinux-next today.
+  drivers/gpu/drm/i915/i915_pci.c
+
+between commit:
+
+  3c542cfa8266 ("drm/i915/dg2: Tile 4 plane format support")
+
+from the drm-intel tree and commit:
+
+  a5b7ef27da60 ("drm/i915: Add struct to hold IP version")
+
+from the drm-intel-gt tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/w9K6C0uM4PeS2VBEioL/GRL
+diff --cc drivers/gpu/drm/i915/i915_pci.c
+index 69b8029da6b6,5e6795853dc3..000000000000
+--- a/drivers/gpu/drm/i915/i915_pci.c
++++ b/drivers/gpu/drm/i915/i915_pci.c
+@@@ -1042,9 -1030,8 +1042,9 @@@ static const struct intel_device_info d
+  	XE_HPM_FEATURES,
+  	XE_LPD_FEATURES,
+  	DGFX_FEATURES,
+- 	.graphics_rel =3D 55,
+- 	.media_rel =3D 55,
++ 	.graphics.rel =3D 55,
++ 	.media.rel =3D 55,
+ +	.has_4tile =3D 1,
+  	PLATFORM(INTEL_DG2),
+  	.platform_engine_mask =3D
+  		BIT(RCS0) | BIT(BCS0) |
+
+--Sig_/wUXCq9DPBuql/7JaF56gUnb
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGdcKIACgkQAVBC80lX
-0GxcKwf8DSXSQ4vFx8KZgCNUsRDvQY9k0L1Anncmc+YDBzHVLsGNp1y16KV8RnFG
-EH3z7YUHfQXJw+IuwV+zVx4sScskhe0rsnYeevnobC9sYlBR1FWNczzXVL9l2Cy5
-VT3OOvp3pP9voolA0ESmtt2jvROTpjX0jzIbDPE/kfkAwbzeypsp7oNPKRnc/19E
-h3oVYUIRteF/Z/ix3b5WEXhByTlVyHsTtvhnifDaIMY8GwERfpsVg86s159FTpgc
-DxpjChCd5a82fz/Xu8/4FgU97YAoJi8xchXIv+xwQU3Np6Z891N4dK8blRsk4ZSJ
-4TE4qakICK1UDliAhxUa6Ec4DWnokg==
-=TnkZ
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGdgtUACgkQAVBC80lX
+0GxU0Qf+PUWUrX4jQtgN0mLg/SXLooNQP3GQ2tzj8QUvnQQDNWPvuMMFy77hfimC
+z5a9/9cdIrADDTyjs2sbqSCCRmPpQ5L68Thm/ayivtwzNZlq9sAk7wa7Q2ZJwTM1
+Qfs5nxlWqHFUjS75oJM5scR5BihwB/AnC8zramdSdwJlG9shEHrbH7AqWYjachRl
+YWOkttrQo0uK/RC3L2ipSDdkrM/19/HGa6yYa2zt6hXCX5aOhGd0ZpBfbDwMlrnz
+N6mxrxCBESqBr5t2I/0Hlt8XYok/zNaYWlOg6PX9UuDtKTL8iH1zJtHVzfgN9zze
+0zjN1FpZl044j/bCg4CBWOar2M0uOw==
+=64P/
 -----END PGP SIGNATURE-----
 
---Sig_/w9K6C0uM4PeS2VBEioL/GRL--
+--Sig_/wUXCq9DPBuql/7JaF56gUnb--

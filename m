@@ -2,37 +2,57 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5335945B5E2
-	for <lists+linux-next@lfdr.de>; Wed, 24 Nov 2021 08:49:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40D3F45B7EF
+	for <lists+linux-next@lfdr.de>; Wed, 24 Nov 2021 11:00:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231886AbhKXHwd convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-next@lfdr.de>); Wed, 24 Nov 2021 02:52:33 -0500
-Received: from mout.kundenserver.de ([212.227.17.24]:60939 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbhKXHwc (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 24 Nov 2021 02:52:32 -0500
-Received: from mail-wr1-f49.google.com ([209.85.221.49]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MG9c2-1mqrNN209U-00GcUM; Wed, 24 Nov 2021 08:49:21 +0100
-Received: by mail-wr1-f49.google.com with SMTP id a9so2504952wrr.8;
-        Tue, 23 Nov 2021 23:49:21 -0800 (PST)
-X-Gm-Message-State: AOAM5327hTFj5lTUe6MOem9ame4CtlmaevHISgKvI1AgBcoipbkdJXjU
-        BckXkDdgsUXuDk8txma8qXk3YDuHLhTLtM3p5dw=
-X-Google-Smtp-Source: ABdhPJzndU3fqgHz+IlEBvZgja/JvZ0plmrmCtl+3g/SKy8I1LjmdgvW/1XQsq1r0fA5A/VYS5mqhRYmoMfd7HLtZJA=
-X-Received: by 2002:adf:d1c2:: with SMTP id b2mr16371602wrd.369.1637740161045;
- Tue, 23 Nov 2021 23:49:21 -0800 (PST)
-MIME-Version: 1.0
-References: <CA+G9fYtH2JR=L0cPoOEqsEGrZW_uOJgX6qLGMe_hbLpBtjVBwA@mail.gmail.com>
- <41206fc7-f8ce-98aa-3718-ba3e1431e320@landley.net>
-In-Reply-To: <41206fc7-f8ce-98aa-3718-ba3e1431e320@landley.net>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 24 Nov 2021 08:49:05 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3pQW59NVF=5P+ZiBjNJmnWh+iTZUHvqHBrXkHA6pMd4g@mail.gmail.com>
-Message-ID: <CAK8P3a3pQW59NVF=5P+ZiBjNJmnWh+iTZUHvqHBrXkHA6pMd4g@mail.gmail.com>
-Subject: Re: spinlock.c:306:9: error: implicit declaration of function '__raw_write_lock_nested'
-To:     Rob Landley <rob@landley.net>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        id S233351AbhKXKEE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 24 Nov 2021 05:04:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45382 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240665AbhKXKED (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 24 Nov 2021 05:04:03 -0500
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D772C06173E
+        for <linux-next@vger.kernel.org>; Wed, 24 Nov 2021 02:00:54 -0800 (PST)
+Received: by mail-qt1-x835.google.com with SMTP id t11so2089324qtw.3
+        for <linux-next@vger.kernel.org>; Wed, 24 Nov 2021 02:00:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=landley-net.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=iTip3zjoaCYhKmrHStlw/96GAieYO23jO54AgZhxXpQ=;
+        b=XAB6o0iiekLaesOj6pa3ZhCRpY24snyaj6PrzZMbSXxyUpiI9ibbLCexIDQg+duaBt
+         /DtNhPQtkaX0cv1WqdZbENlTNUv9wzLbXiB9RWo/cUAM3ZCRzAG5IEz6cnkgN+/mQ2bv
+         mJNx7Ww6C42d7nY3g7L3zkYGX1MUyoIygsj91yGDAVGOKLvU38STZSQUmFyvgGl+LcQO
+         NFQ/mbnXgG83sG3CJofvogej3iVMz6cuYsQMLstH216ptxf1/StcuHrR1RdJ1QNMy2DX
+         h83BfZXr4et0PHmJVzZ0Zxu4QSM4QAzRYLvuI01/ECkillwvD+bBa3dFrkzTCRcoVzqx
+         l/7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=iTip3zjoaCYhKmrHStlw/96GAieYO23jO54AgZhxXpQ=;
+        b=lihc02XFUkGiFp/r9sqWMjZpRspXJPttEWJsDvvIpEwqJYbQORsKrQPkHyP9DrmIgF
+         6c8IwOjquSXkj1LRnabPdx7AgtrHFZdqOM4cfV1Hf2WUdxc44NuoeBwWZBvUGHx47WLz
+         lHQDs2vUU6wUNv3XnBjDdCE9786eRr2AobG97vMBBa9j56feqyXtQ4TbGOrD4vwbj6sX
+         bJB0rMl7iY/q7mJVJAeZjIOY2ql+Su/MPEUdESPY8BLSOcetsjncV7NfIGqifqe1UKGH
+         Nal5m8RxmpnbVDE9CStPQvTxTKmCjfjLJ78ShNFcGaNqGYklBDwaRRg+NBCRzDaLRN+4
+         f1RA==
+X-Gm-Message-State: AOAM5306nU01RU6tP9mbT7Nl886XVdO+AepyKMxrEFykyxBeNmqNKRIw
+        5N0otuEzhmW2LqQup4eWGPM7vDdh3cVy1GDy
+X-Google-Smtp-Source: ABdhPJyopaP923RuI2NatMVDep88Hu69ElihFfj/a2EDSlHx3pxirUo8hwy1Xb4U0RR66Kc5jHS95Q==
+X-Received: by 2002:ac8:5781:: with SMTP id v1mr5491171qta.254.1637748053362;
+        Wed, 24 Nov 2021 02:00:53 -0800 (PST)
+Received: from ?IPv6:2607:fb90:c301:886e:6680:99ff:fe6f:cb54? ([2607:fb90:c301:886e:6680:99ff:fe6f:cb54])
+        by smtp.gmail.com with ESMTPSA id 16sm7966336qty.2.2021.11.24.02.00.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 Nov 2021 02:00:52 -0800 (PST)
+Subject: Re: spinlock.c:306:9: error: implicit declaration of function
+ '__raw_write_lock_nested'
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
         open list <linux-kernel@vger.kernel.org>,
         Linux-sh list <linux-sh@vger.kernel.org>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
@@ -41,72 +61,71 @@ Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
         Waiman Long <longman@redhat.com>,
         Boqun Feng <boqun.feng@gmail.com>,
         Minchan Kim <minchan@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
         Andrew Morton <akpm@linux-foundation.org>,
         Mike Galbraith <umgwanakikbuti@gmail.com>,
         Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
         Sergey Senozhatsky <senozhatsky@chromium.org>,
         Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, lkft-triage@lists.linaro.org,
-        =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Provags-ID: V03:K1:+hO82f4AyW48k9dnIB1FQwbpRc+xQ6uUOJIuPyeFIYm8ZJy+BjS
- SP/OTcDFI3GqfnuVQWQR24SsyT3D9D2ysC5K4DHlG6qh4Nwfxsq4qa/HlSE/MPGGvvD4ix1
- oByDn3p3QqcBaSv6O7MuO5AaZzgCGIXpBtxCo6L6zGl8HBDbGYEydVUu6pn1XPGHD/RLv7n
- BsONcwGNqZAmOsp0/df5Q==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:txDkkWbd/oQ=:77p4GEoF5Ppm4d5b9pNKbP
- HX3QdVkIdqywJaMg9o58Gjzk1LCYLLdC+CwrBtH4qRHrP3qGPkh3ooovaONZhA/pliepWk80P
- ifrmJ5Ij7bQ7FNYKq/Y1ShZetXTMgjiPOBsDedFBic1Q3VEn52Kl4Wys3bGZtAe7G8VJLATLM
- PgVoL0e67AEzk75cRNuieta+GcKSmKGXoavBzCn2GQ1DQ7ZDief4ymhcffU0xtzLG+KOjSxLe
- 1P6QnZwjzDWzs5iz+aWgL7Yctz1W00LsoXFJqS17eJK7p72QUsexBgtpDLEvXbvR1JOZNRBwN
- o8svbHKmUQ9bH/+Xf1QHgx7AZt/hFcKxyXc+BuO2yVuDXyqwU8qAasYJFzts9j2g6DFm5svYW
- hCuyWti44ZW6Np7pGQ5mXj26UsVKDv59m421JHDBqqPWnpyRsR4va1HK+MeZ2Cnit+Bi2sSS7
- NEd81ZPy9wUVInc6LpZvVzbeAmgZz4opa7cRO1entjDg45r4Unf5JaVSkgZtEC30sHWB69Y34
- nioakcyPIeXVTcbFiRX3rC5i1rTVv+k60KXtgbud5NjXTw7bufy+AV0KEyad+CCjMO1TZls7a
- G0OYorV3A08p63xYI8NyZBVj9aq8Q3SeIxPugqdTMzK4YzyeTiuokxv+gG4pqLTHH0WSCOVy8
- vv7aIcqhg3P+9CCVlFVTvJRe/VAykCMCmET8u3SMyigW1AoB6iRZ6BE0bP9mOc+Kbf0xrpSeK
- 318nIXpOzaKsbsthcqNAJnprd0qoh4OT4pkN7nRRddPa2JZmDI14L8gyhoLOVLMVZE1ysF7HB
- nFgYnQNcgjwu3pOxmbS0QRu6xfa3rhV6UJvQT7+zMQMRxpwz7E=
+        Rich Felker <dalias@libc.org>, lkft-triage@lists.linaro.org
+References: <CA+G9fYtH2JR=L0cPoOEqsEGrZW_uOJgX6qLGMe_hbLpBtjVBwA@mail.gmail.com>
+ <CAK8P3a1NhpNxWfj3gDnuf4bWK_fiE8cjcRyN7e8j95NmvOzbGw@mail.gmail.com>
+From:   Rob Landley <rob@landley.net>
+Message-ID: <8767803d-57b9-698c-ca27-d47e7117758d@landley.net>
+Date:   Wed, 24 Nov 2021 04:01:05 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+MIME-Version: 1.0
+In-Reply-To: <CAK8P3a1NhpNxWfj3gDnuf4bWK_fiE8cjcRyN7e8j95NmvOzbGw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Nov 24, 2021 at 8:31 AM Rob Landley <rob@landley.net> wrote:
-> On 11/23/21 5:38 AM, Naresh Kamboju wrote:
->
-> diff --git a/arch/sh/kernel/syscalls/syscall.tbl
-> b/arch/sh/kernel/syscalls/syscall.tbl
-> index 208f131659c5..65c3a94bff48 100644
-> --- a/arch/sh/kernel/syscalls/syscall.tbl
-> +++ b/arch/sh/kernel/syscalls/syscall.tbl
-> @@ -437,7 +437,7 @@
->  432    common  fsmount                         sys_fsmount
->  433    common  fspick                          sys_fspick
->  434    common  pidfd_open                      sys_pidfd_open
-> -# 435 reserved for clone3
-> +435    common  clone3                          sys_clone3
->  436    common  close_range                     sys_close_range
->  437    common  openat2                         sys_openat2
->  438    common  pidfd_getfd                     sys_pidfd_getfd
 
-Did you test clone3? This needs a custom wrapper on most architectures
-to have sensible calling conventions. If sh doesn't need it, that should
-be explained in the changelog text.
 
-> @@ -451,3 +451,4 @@
->  446    common  landlock_restrict_self          sys_landlock_restrict_self
->  # 447 reserved for memfd_secret
->  448    common  process_mrelease                sys_process_mrelease
-> +449    common  futex_waitv                     sys_futex_waitv
+On 11/23/21 7:19 AM, Arnd Bergmann wrote:
+> On Tue, Nov 23, 2021 at 12:38 PM Naresh Kamboju
+> <naresh.kamboju@linaro.org> wrote:
+>>
+>> While building Linux next 20211123 tag for sh with gcc-11
+>> following warnings / errors noticed.
+> 
+> Nothing in here looks like a recent regression from either the kernel
+> or gcc-11.
+> 
+>> make --silent --keep-going --jobs=8
+>> O=/home/tuxbuild/.cache/tuxmake/builds/current ARCH=sh
+>> CROSS_COMPILE=sh4-linux-gnu- 'CC=sccache sh4-linux-gnu-gcc'
+>> 'HOSTCC=sccache gcc'
+>>   Generating include/generated/machtypes.h
+>> <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+>> <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [-Wcpp]
+> 
+> These happen with any compiler version, someone needs to write the correct
+> entry code for clone3 and hook up futex_waitv().
 
-I don't know what's going on with this one, I don't actually see
-a reason why it isn't already wired up on all architectures. If we add
-this, it should probably be done for all architectures at once as a
-bugfix, but it's possible that this is intentionally only used on
-x86 and arm.
+I did a naieve "add them both to the .tbl" patch and the result booted to a
+shell prompt, but that doesn't mean much. What arch-specific entry code does
+clone3 need here? The SYSCALL_DEFINE2(clone3) in kernel/fork.c seems reasonably
+straightforward? (Unlike the #ifdef stack around the previous clone...)
 
-André, can you comment on this?
+>> include/linux/sh_intc.h:100:63: warning: division 'sizeof (void *) / sizeof (void)' does not compute the number of array elements
+> 
+> These are old bugs, they show up in any kernel version with gcc-8 or higher.
 
-      Arnd
+I looked at trying to fix that but it seems to be a compiler bug. Gcc is warning
+about an ? : else case that's dead code eliminated. It's already GOT a test
+protecting it from being evaluated...
+
+>> fs/mpage.c:336:1: warning: the frame size of 1092 bytes is larger than
+> 
+> I see these going back to gcc-6, it looks like this is caused by
+> CONFIG_PAGE_SIZE_64KB.
+
+In which case the stack size is going to be 64k as well?
+
+>      Arnd
+
+Rob

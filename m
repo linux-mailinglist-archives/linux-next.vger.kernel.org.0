@@ -2,103 +2,67 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFF6B45C758
-	for <lists+linux-next@lfdr.de>; Wed, 24 Nov 2021 15:29:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5683C45C8CC
+	for <lists+linux-next@lfdr.de>; Wed, 24 Nov 2021 16:35:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354674AbhKXOc6 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-next@lfdr.de>); Wed, 24 Nov 2021 09:32:58 -0500
-Received: from mout.kundenserver.de ([217.72.192.74]:59847 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354115AbhKXOcv (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 24 Nov 2021 09:32:51 -0500
-Received: from mail-wm1-f41.google.com ([209.85.128.41]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MpUpW-1mHyAx34ma-00pvQs; Wed, 24 Nov 2021 15:29:39 +0100
-Received: by mail-wm1-f41.google.com with SMTP id g191-20020a1c9dc8000000b0032fbf912885so2231897wme.4;
-        Wed, 24 Nov 2021 06:29:39 -0800 (PST)
-X-Gm-Message-State: AOAM530yNL3jrtHkduBFvkDR2sWhrUTZ0bzbMxhcZ9vE3yaHcMWjMBsX
-        hJG8EBnWrPTwYFQS6TbjsY2S5Vgd/thrI7Gkn20=
-X-Google-Smtp-Source: ABdhPJw9AuDVJPcPk5QwMaNIqLG+Gyph350xYhCGSeBIHw0tMZdjTjgs4734tAKvoxeRwyygv81r33HtARNOkWqIoYo=
-X-Received: by 2002:a1c:1c1:: with SMTP id 184mr15657228wmb.1.1637764179209;
- Wed, 24 Nov 2021 06:29:39 -0800 (PST)
-MIME-Version: 1.0
-References: <CAK8P3a3pQW59NVF=5P+ZiBjNJmnWh+iTZUHvqHBrXkHA6pMd4g@mail.gmail.com>
- <20211124132112.11641-1-andrealmeid@collabora.com>
-In-Reply-To: <20211124132112.11641-1-andrealmeid@collabora.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 24 Nov 2021 15:29:23 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a2BXefTw68yoZ9U0F=ASC3=EZDc5PDQCJ16MmXtynd59g@mail.gmail.com>
-Message-ID: <CAK8P3a2BXefTw68yoZ9U0F=ASC3=EZDc5PDQCJ16MmXtynd59g@mail.gmail.com>
-Subject: Re: [PATCH 1/1] futex: Wireup futex_waitv syscall
-To:     =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@collabora.com>
+        id S241381AbhKXPiW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 24 Nov 2021 10:38:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35346 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235626AbhKXPiW (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 24 Nov 2021 10:38:22 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FEF2C061574;
+        Wed, 24 Nov 2021 07:35:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description;
+        bh=HR2bPhOh6y/Sf5n3jhbYJzVMzoIIcULV90TnyCvdCuc=; b=aRhazJxBSfJbaE77TdGnnejHwm
+        dcAdMLbzN58H5/FwM3asc3PuurCBNF6Upei0LnxAyDAE4+Vyz8nU+JiwoIPsYrncPkn7lW5CIaUal
+        fBc+AEb18gLB2ixUN3Ma30q/DdvPaxu/a4Vr3YeCklnINhLEiLuaEuQbtNeZOYa3lymriJVqWfurf
+        H+jfQ3LGQ1ZglWJnFjFfWMFKnf4w3UqOfmJxPDwZbogRdBL0m68Fe/5TVYqx7/0chg0Vi3/+2+nFf
+        8C1l7pHTaBPviaNyW7JiIV6d+XAapfeHNUtQ3pKVujn8xW5GoLeriOdKHEeCvQbRC5jbU8N2d7Ah/
+        9KKhWB4A==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mpuIg-00566i-JH; Wed, 24 Nov 2021 15:35:10 +0000
+Subject: Re: linux-next: Tree for Nov 24
+ (drivers/gpu/drm/amd/display/dc/dsc/rc_calc_dpi.o)
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        David Miller <davem@davemloft.net>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        alpha <linux-alpha@vger.kernel.org>, linux-ia64@vger.kernel.org,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, Waiman Long <longman@redhat.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rob Landley <rob@landley.net>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Mike Galbraith <umgwanakikbuti@gmail.com>,
-        Will Deacon <will@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Provags-ID: V03:K1:kvvewp4q1FAJ0MpoEGLwlB/PLxdOuKA98DDx3lRTLAhAuq5r1SN
- dVZaqtNj0rA00O2+5JDEOGH8vjanLTQElNCCNl6U0Iqm8HgwM3c6UDI559OUKgPBVSABsMw
- iAIon5HwE76VX1rzX0antRkE4Q6+NGzFoQsReQkFpGViMvrKnm3yur2/LEgWNGL22CDn9bM
- OCbRa680oc4Mprhu2iDRQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:bfkJl6olqZs=:nyRsJ+I2PqfghoWMv+L5WY
- rNENJgajXYgywGXastal3DkWfSXJk+X3WrfMzc/0bRFD3a9e3yPpcGSqmdF/9nh6YDBl6Goqy
- hWpLndeoJQRsgm/UKJfaT5PYJqHq/rNwJQ4cO+S/k448jtS0JMd/ViqN/t45r39mD60tL3G0w
- oRcQEcMIVoon+6F4A1ZBvk2XLry0Cd8LkQ+uI7N1aFd5PyLFgVHi1xJ0ZSRB1S1jJiPkEcgvL
- tpNVj/4JW002slhnQdwZ4I1/TSi8WJiB/tz9xBRnFwmM/3Y9o6V+gz4Ab3Hf8664ixHIwZBW8
- Jcptb9H07gG1eBkNbxtIbJ+fVa4nnam4eFzlRMwvs5+nubM9SoB69uoadpgcE7m8nuLU7ysAi
- a7A0dxWEMVKTbQLoneg4qq98OtTugcmxVZ6csevj32vQv4AtAKNVkY9g0M2NSxsX3ugDdtK0j
- nbeC4Y6YTZpL/ohmFHsF75dmRQYjWOygCO/s8uSF+TYhfFZX9oYLvrna3gpDzsjPLjiW3Cwmc
- mfTzqhggRL8F74hHyLoQVtfbAFpLTjghxxjdHOK7WnT8SgLJklipwIQpchtIFIUOfPZsUyCL3
- E4M4TBzGBB4Rp5dbDTwW8RblHi0G/wZo44egZsybEPss3BC1iB2wdV8OPUxM89t0fIy7Pv5UC
- 7g2JaMrxohfx6xT9iTxzUh9LrrG12+77192oJL5xGuyOF/UiYfptrWJXBkTvVxuxU74xUqQsL
- wQNf6oC4eCK9+QVTko0likL3JxZuSvir3b+Itp/KoKko/mu6Tj8SA8C6jpb+DNf/YQHIuXRte
- CgfR662CM8Nv59n2Aze8QH5RY2uvk73/GxQjzH2ozp02IHJH8g=
+        Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        amd-gfx@lists.freedesktop.org,
+        DRI <dri-devel@lists.freedesktop.org>
+References: <20211124161632.1aabe7a5@canb.auug.org.au>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <4084c3ab-1467-8da6-200d-9f123c3b99ac@infradead.org>
+Date:   Wed, 24 Nov 2021 07:35:09 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
+MIME-Version: 1.0
+In-Reply-To: <20211124161632.1aabe7a5@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Nov 24, 2021 at 2:21 PM André Almeida <andrealmeid@collabora.com> wrote:
->
-> Wireup futex_waitv syscall for all remaining archs.
->
-> Signed-off-by: André Almeida <andrealmeid@collabora.com>
+On 11/23/21 9:16 PM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Changes since 20211123:
+> 
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+on i386:
 
-I double-checked that futex_waitv() doesn't need any architecture specific
-hacks, and that the list above is complete.
+ld: drivers/gpu/drm/amd/display/dc/dsc/rc_calc_dpi.o: in function `dscc_compute_dsc_parameters':
+rc_calc_dpi.c:(.text+0x31f): undefined reference to `__udivdi3'
 
-Should I take this through the asm-generic tree, or would you send it
-through the
-tip tree?
 
-        Arnd
+-- 
+~Randy

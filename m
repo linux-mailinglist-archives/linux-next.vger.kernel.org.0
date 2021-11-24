@@ -2,67 +2,93 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5683C45C8CC
-	for <lists+linux-next@lfdr.de>; Wed, 24 Nov 2021 16:35:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ECBC45C945
+	for <lists+linux-next@lfdr.de>; Wed, 24 Nov 2021 16:56:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241381AbhKXPiW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 24 Nov 2021 10:38:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35346 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235626AbhKXPiW (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 24 Nov 2021 10:38:22 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FEF2C061574;
-        Wed, 24 Nov 2021 07:35:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description;
-        bh=HR2bPhOh6y/Sf5n3jhbYJzVMzoIIcULV90TnyCvdCuc=; b=aRhazJxBSfJbaE77TdGnnejHwm
-        dcAdMLbzN58H5/FwM3asc3PuurCBNF6Upei0LnxAyDAE4+Vyz8nU+JiwoIPsYrncPkn7lW5CIaUal
-        fBc+AEb18gLB2ixUN3Ma30q/DdvPaxu/a4Vr3YeCklnINhLEiLuaEuQbtNeZOYa3lymriJVqWfurf
-        H+jfQ3LGQ1ZglWJnFjFfWMFKnf4w3UqOfmJxPDwZbogRdBL0m68Fe/5TVYqx7/0chg0Vi3/+2+nFf
-        8C1l7pHTaBPviaNyW7JiIV6d+XAapfeHNUtQ3pKVujn8xW5GoLeriOdKHEeCvQbRC5jbU8N2d7Ah/
-        9KKhWB4A==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mpuIg-00566i-JH; Wed, 24 Nov 2021 15:35:10 +0000
-Subject: Re: linux-next: Tree for Nov 24
- (drivers/gpu/drm/amd/display/dc/dsc/rc_calc_dpi.o)
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        amd-gfx@lists.freedesktop.org,
-        DRI <dri-devel@lists.freedesktop.org>
-References: <20211124161632.1aabe7a5@canb.auug.org.au>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <4084c3ab-1467-8da6-200d-9f123c3b99ac@infradead.org>
-Date:   Wed, 24 Nov 2021 07:35:09 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S241748AbhKXP7g (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 24 Nov 2021 10:59:36 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:56834 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230070AbhKXP7f (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 24 Nov 2021 10:59:35 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: tonyk)
+        with ESMTPSA id 57F7C1F45BC8
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
+        t=1637769382; bh=zz/xw7PsWQON9rmJZojHTBxXbF24yxYHqhaUVP88TKs=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=E/pte9+S/xU8DdTZ/vKpNhA3ylTQYBGSinvyN6mt+xZdQFKKHEb6Mmt84KbEzM5mZ
+         OSPyhJ6sCmssRkBBHimK6onWi+F/fiAA5Ypad79m+N+kkn6BrMI3wqjRnjC5w47i2Q
+         aPNdfcTSLCdquNNhzIMYwK9OlGuMqJafLR38PMnBjrRL+zm9bD++8vMrP9KIyqazlB
+         tbunQevunpoo7PovcVIzyk1G/rHktU5H9JEaZdZEpb0Db+mq5nCjz2SQfKauqW6Gl0
+         yoYNuJa5aw5Hl9JNwgtzD1fRyYNxpu0YlbF5Voaz4iL2LRbsvhzZ/6BwDUd1b2lpYs
+         25pmRI9iK1Hpw==
+Message-ID: <91a64059-f301-4812-56ea-38755ccae5d7@collabora.com>
+Date:   Wed, 24 Nov 2021 12:56:09 -0300
 MIME-Version: 1.0
-In-Reply-To: <20211124161632.1aabe7a5@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH 1/1] futex: Wireup futex_waitv syscall
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        David Miller <davem@davemloft.net>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        alpha <linux-alpha@vger.kernel.org>, linux-ia64@vger.kernel.org,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, Waiman Long <longman@redhat.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rob Landley <rob@landley.net>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Mike Galbraith <umgwanakikbuti@gmail.com>,
+        Will Deacon <will@kernel.org>
+References: <CAK8P3a3pQW59NVF=5P+ZiBjNJmnWh+iTZUHvqHBrXkHA6pMd4g@mail.gmail.com>
+ <20211124132112.11641-1-andrealmeid@collabora.com>
+ <CAK8P3a2BXefTw68yoZ9U0F=ASC3=EZDc5PDQCJ16MmXtynd59g@mail.gmail.com>
+From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@collabora.com>
+In-Reply-To: <CAK8P3a2BXefTw68yoZ9U0F=ASC3=EZDc5PDQCJ16MmXtynd59g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 11/23/21 9:16 PM, Stephen Rothwell wrote:
-> Hi all,
+Às 11:29 de 24/11/21, Arnd Bergmann escreveu:
+> On Wed, Nov 24, 2021 at 2:21 PM André Almeida <andrealmeid@collabora.com> wrote:
+>>
+>> Wireup futex_waitv syscall for all remaining archs.
+>>
+>> Signed-off-by: André Almeida <andrealmeid@collabora.com>
 > 
-> Changes since 20211123:
+> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 > 
+> I double-checked that futex_waitv() doesn't need any architecture specific
+> hacks, and that the list above is complete.
 
-on i386:
+Thanks!
 
-ld: drivers/gpu/drm/amd/display/dc/dsc/rc_calc_dpi.o: in function `dscc_compute_dsc_parameters':
-rc_calc_dpi.c:(.text+0x31f): undefined reference to `__udivdi3'
-
-
--- 
-~Randy
+> 
+> Should I take this through the asm-generic tree, or would you send it
+> through the
+> tip tree?
+> 
+I think that adding it to asm-generic tree make sense to me.

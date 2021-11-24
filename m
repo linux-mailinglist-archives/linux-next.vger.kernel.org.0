@@ -2,171 +2,256 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52A0445D14F
-	for <lists+linux-next@lfdr.de>; Thu, 25 Nov 2021 00:38:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B52845D162
+	for <lists+linux-next@lfdr.de>; Thu, 25 Nov 2021 00:49:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235005AbhKXXlQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 24 Nov 2021 18:41:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33336 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229799AbhKXXlP (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 24 Nov 2021 18:41:15 -0500
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29286C061574
-        for <linux-next@vger.kernel.org>; Wed, 24 Nov 2021 15:38:05 -0800 (PST)
-Received: by mail-ot1-x331.google.com with SMTP id n17-20020a9d64d1000000b00579cf677301so6732246otl.8
-        for <linux-next@vger.kernel.org>; Wed, 24 Nov 2021 15:38:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=landley-net.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=B8djMvr5C1RUpidUre9QOVwQnxy1dQwhg3YPD/0MqFM=;
-        b=3QF7kW2JIT/4nSNZtRDjMKbGYaNpcX3T1kpPpMDTuC+q9LgPlx9s3kdhJgwLjn2/Uz
-         G9AELgSDXu+BxkAcBwUUTMyNM9Onapnsuk/EdWxjlYYXYBoXzTx9k93R4cCn9K3Kw0Aw
-         8VSK9qvs2eIuNU+W1H3i9R002vmSdMji0dXDkD3WmuYUH/YyxVUPx0bcFxJ/t32Wvvqo
-         5+q1gByCF6H2aahvfU59lNSzhQddCuWz0OhGgjoMThhtlr05C4wGt55Ix5HcXD1LoL3k
-         QyQjvUx9LVlA3AiJxaICQVzPirxZYzsr8NqSY7MljJVX84+lY3b+xcSQogNsF7rmsCjs
-         FJ6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=B8djMvr5C1RUpidUre9QOVwQnxy1dQwhg3YPD/0MqFM=;
-        b=d+hSczVFdSI2GpCYubb0Cxjv9SYX/rqMqnblsNBOoJnUqmhXRMWeSaxWEm6torvJKo
-         micI4HIkxNV921y9f3Dpfr9yhMYCZ/YnPpmrLdVwKrTKnPv3wMZOHpTx6d37GnNy+M+p
-         B+u9dWBqdcMWwwQH3C5HPjfRTaTlrI8w8xZn3bnfMLhcw9FF4ffPIKhnP67ic1Z9QLIv
-         ijAIo4a8zZ5xsg1gT6omDwc3Qp9RKWWI/7JaVGALdewHCqFB3f8u9V/fqpebTz/B99Wy
-         J+gqJGgsGX+sB2GPEZmeCT3badtWoyzlR3rQj3yjs+u4EgXnUAvP8xu3CRJca8eWsoos
-         eCYg==
-X-Gm-Message-State: AOAM532hZvkNgVRYebMtpxn5bCmfcJdEZlJLzb9iDzOPGfVSQF2i+/wS
-        NVg4gKkYNM/ZdA6l/p50fZb7IA==
-X-Google-Smtp-Source: ABdhPJy9ywL4FWZwv0YFYMa2Trkll/m+Oz7OoPrI9cYJiel4kv5HfOir4I2teqkK3Fw/4dNiPPgdOQ==
-X-Received: by 2002:a9d:4f0b:: with SMTP id d11mr17210189otl.227.1637797084457;
-        Wed, 24 Nov 2021 15:38:04 -0800 (PST)
-Received: from ?IPv6:2607:fb90:c2d2:892e:8ae:f6ff:fe37:f28b? ([2607:fb90:c2d2:892e:8ae:f6ff:fe37:f28b])
-        by smtp.gmail.com with ESMTPSA id j20sm218283ota.76.2021.11.24.15.38.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Nov 2021 15:38:04 -0800 (PST)
-Subject: Re: spinlock.c:306:9: error: implicit declaration of function
- '__raw_write_lock_nested'
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Galbraith <umgwanakikbuti@gmail.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, lkft-triage@lists.linaro.org,
-        =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@collabora.com>
-References: <CA+G9fYtH2JR=L0cPoOEqsEGrZW_uOJgX6qLGMe_hbLpBtjVBwA@mail.gmail.com>
- <41206fc7-f8ce-98aa-3718-ba3e1431e320@landley.net>
- <CAK8P3a3pQW59NVF=5P+ZiBjNJmnWh+iTZUHvqHBrXkHA6pMd4g@mail.gmail.com>
-From:   Rob Landley <rob@landley.net>
-Message-ID: <7d5a5249-40ee-9a42-c6a0-a5defa3703c1@landley.net>
-Date:   Wed, 24 Nov 2021 17:38:17 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <CAK8P3a3pQW59NVF=5P+ZiBjNJmnWh+iTZUHvqHBrXkHA6pMd4g@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        id S236517AbhKXXwn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 24 Nov 2021 18:52:43 -0500
+Received: from mail.kernel.org ([198.145.29.99]:49792 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235851AbhKXXwn (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 24 Nov 2021 18:52:43 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7408E61039;
+        Wed, 24 Nov 2021 23:49:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1637797772;
+        bh=tz+Ake8weQe4zgkYxIQfqBViqFgNe0SyijOHf75M/Yk=;
+        h=Date:From:To:Subject:From;
+        b=uJOJfoq+6ia44EZMQF9N7IN/hpLw/rLpGNFfoQg0Qv3Sa+OR2Zue0atcDz57cC6SA
+         Z+7RmLrgTqacYr5J/BHSJeIX1tUd0AmzgF5jw86z6uArVqLowN0r5EB1ZXkqBv/OTP
+         RkhqZoQ76tDxHU98xHAJuCnXwDoOB9ixMwi++494=
+Date:   Wed, 24 Nov 2021 15:49:31 -0800
+From:   akpm@linux-foundation.org
+To:     broonie@kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-next@vger.kernel.org, mhocko@suse.cz,
+        mm-commits@vger.kernel.org, sfr@canb.auug.org.au
+Subject:  mmotm 2021-11-24-15-49 uploaded
+Message-ID: <20211124234931.iDJQctzrQ%akpm@linux-foundation.org>
+User-Agent: s-nail v14.8.16
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 11/24/21 1:49 AM, Arnd Bergmann wrote:
-> On Wed, Nov 24, 2021 at 8:31 AM Rob Landley <rob@landley.net> wrote:
->> On 11/23/21 5:38 AM, Naresh Kamboju wrote:
->>
->> diff --git a/arch/sh/kernel/syscalls/syscall.tbl
->> b/arch/sh/kernel/syscalls/syscall.tbl
->> index 208f131659c5..65c3a94bff48 100644
->> --- a/arch/sh/kernel/syscalls/syscall.tbl
->> +++ b/arch/sh/kernel/syscalls/syscall.tbl
->> @@ -437,7 +437,7 @@
->>  432    common  fsmount                         sys_fsmount
->>  433    common  fspick                          sys_fspick
->>  434    common  pidfd_open                      sys_pidfd_open
->> -# 435 reserved for clone3
->> +435    common  clone3                          sys_clone3
->>  436    common  close_range                     sys_close_range
->>  437    common  openat2                         sys_openat2
->>  438    common  pidfd_getfd                     sys_pidfd_getfd
-> 
-> Did you test clone3?
+The mm-of-the-moment snapshot 2021-11-24-15-49 has been uploaded to
 
-Haven't got anything that's using it (musl-libc doesn't know about it yet) but
-it looked straightforward? (Unlike the #ifdef stack around the previous clone...)
+   https://www.ozlabs.org/~akpm/mmotm/
 
-I can try building tools/testing/selftests/clone3 if you like, but for some
-reason the clone3 tests want -lcap which isn't in my cross compiler. (Because to
-test a clone system call, you need to manipulate capability bits. Of course.)
-Right, comment out the LDLIBS line in the makefile and the first 3 built, let's
-try those... Hmmm, it's saying the syscall isn't supported, because it's using
-syscall.h out of the cross compiler headers (not THIS kernel's #includes) which
-of course doesn't have it, and then clone3_selftests.h falls back to:
+mmotm-readme.txt says
 
-#ifndef __NR_clone3
-#define __NR_clone3 -1
-#endif
+README for mm-of-the-moment:
 
-Right, stick a 435 in there and... it's still skipping it. Why is it still
-skipping it... because the RUNTIME syscall is returning ENOSYS. Ok, I have to go
-stick printk() calls into the kernel. (Do I have to #define those
-#YES_I_WANT_THIS_SYSCALL_WHY_WOULDNT_I macros? Hmmm...)
+https://www.ozlabs.org/~akpm/mmotm/
 
-But yeah, you're right: the naive patch doesn't look like it actually works.
-Just shuts up the #warnings.
+This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
+more than once a week.
 
-> This needs a custom wrapper on most architectures
-> to have sensible calling conventions.
+You will need quilt to apply these patches to the latest Linus release (5.x
+or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
+https://ozlabs.org/~akpm/mmotm/series
 
-Define "sensible" in this context? It's a new 2 argument syscall? (Do you mean a
-libc wrapper?)
+The file broken-out.tar.gz contains two datestamp files: .DATE and
+.DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
+followed by the base kernel version against which this patch series is to
+be applied.
 
-> If sh doesn't need it, that should
-> be explained in the changelog text.
+This tree is partially included in linux-next.  To see which patches are
+included in linux-next, consult the `series' file.  Only the patches
+within the #NEXT_PATCHES_START/#NEXT_PATCHES_END markers are included in
+linux-next.
 
-I'm happy to try to fix stuff up, but I don't understand the objection. Does it
-do something other than what the old clone did, except without the need to pass
-more arguments than we necessarily have registers defined for? (Calls the same
-clone plumbing, which should call back into arch/sh/kernel/process_32.c already...?)
 
-The most recent clone3 arch addition was commit 59a4e0d5511b which also just
-pulled in the generic version. (Via #define NO_REALLY_I_WANT_THIS_SYSCALL rather
-than editing the tbl file? Looks like I've got some reading to do...)
+A full copy of the full kernel tree with the linux-next and mmotm patches
+already applied is available through git within an hour of the mmotm
+release.  Individual mmotm releases are tagged.  The master branch always
+points to the latest release, so it's constantly rebasing.
 
->> @@ -451,3 +451,4 @@
->>  446    common  landlock_restrict_self          sys_landlock_restrict_self
->>  # 447 reserved for memfd_secret
->>  448    common  process_mrelease                sys_process_mrelease
->> +449    common  futex_waitv                     sys_futex_waitv
-> 
-> I don't know what's going on with this one, I don't actually see
-> a reason why it isn't already wired up on all architectures.
+	https://github.com/hnaz/linux-mm
 
-Me neither, I'm just trying to stay ahead of warnings due to the encroaching
--Werror culture going on within the kernel clique.
+The directory https://www.ozlabs.org/~akpm/mmots/ (mm-of-the-second)
+contains daily snapshots of the -mm tree.  It is updated more frequently
+than mmotm, and is untested.
 
-> If we add
-> this, it should probably be done for all architectures at once as a
-> bugfix, but it's possible that this is intentionally only used on
-> x86 and arm.
-> 
-> André, can you comment on this?
+A git copy of this tree is also available at
 
-I see elsethread the second syscall got handled and is going in through another
-tree, I'll leave off on that part...
+	https://github.com/hnaz/linux-mm
 
-Rob
+
+
+This mmotm tree contains the following patches against 5.16-rc2:
+(patches marked "*" will be included in linux-next)
+
+  origin.patch
+* mm-fix-panic-in-__alloc_pages.patch
+* mm-bdi-initialize-bdi_min_ratio-when-bdi-unregister.patch
+* mm-bdi-initialize-bdi_min_ratio-when-bdi-unregister-fix.patch
+* increase-default-mlock_limit-to-8-mib.patch
+* maintainers-update-kdump-maintainers.patch
+* mailmap-update-email-address-for-guo-ren.patch
+* filemap-remove-pagehwpoison-check-from-next_uptodate_page.patch
+* proc-kpageflags-prevent-an-integer-overflow-in-stable_page_flags.patch
+* proc-kpageflags-do-not-use-uninitialized-struct-pages.patch
+* procfs-prevent-unpriveleged-processes-accessing-fdinfo-dir.patch
+* kthread-add-the-helper-function-kthread_run_on_cpu.patch
+* kthread-add-the-helper-function-kthread_run_on_cpu-fix.patch
+* rdma-siw-make-use-of-the-helper-function-kthread_run_on_cpu.patch
+* ring-buffer-make-use-of-the-helper-function-kthread_run_on_cpu.patch
+* rcutorture-make-use-of-the-helper-function-kthread_run_on_cpu.patch
+* trace-osnoise-make-use-of-the-helper-function-kthread_run_on_cpu.patch
+* trace-hwlat-make-use-of-the-helper-function-kthread_run_on_cpu.patch
+* ia64-module-use-swap-to-make-code-cleaner.patch
+* ia64-use-swap-to-make-code-cleaner.patch
+* ia64-fix-typo-in-a-comment.patch
+* scripts-spellingtxt-add-oveflow.patch
+* squashfs-provides-backing_dev_info-in-order-to-disable-read-ahead.patch
+* ocfs2-use-bug_on-instead-of-if-condition-followed-by-bug.patch
+* ocfs2-reflink-deadlock-when-clone-file-to-the-same-directory-simultaneously.patch
+* ocfs2-clear-links-count-in-ocfs2_mknod-if-an-error-occurs.patch
+* ocfs2-fix-ocfs2-corrupt-when-iputting-an-inode.patch
+* fs-ioctl-remove-unnecessary-__user-annotation.patch
+  mm.patch
+* mm-slab_common-use-warn-if-cache-still-has-objects-on-destroy.patch
+* mm-slab-make-slab-iterator-functions-static.patch
+* kmemleak-fix-kmemleak-false-positive-report-with-hw-tag-based-kasan-enable.patch
+* mm-kmemleak-alloc-gray-object-for-reserved-region-with-direct-map.patch
+* mm-defer-kmemleak-object-creation-of-module_alloc.patch
+* memory-failure-fetch-compound_head-after-pgmap_pfn_valid.patch
+* mm-page_alloc-split-prep_compound_page-into-head-and-tail-subparts.patch
+* mm-page_alloc-refactor-memmap_init_zone_device-page-init.patch
+* mm-memremap-add-zone_device-support-for-compound-pages.patch
+* device-dax-use-align-for-determining-pgoff.patch
+* device-dax-use-struct_size.patch
+* device-dax-ensure-dev_dax-pgmap-is-valid-for-dynamic-devices.patch
+* device-dax-factor-out-page-mapping-initialization.patch
+* device-dax-set-mapping-prior-to-vmf_insert_pfn_pmdpud.patch
+* device-dax-compound-devmap-support.patch
+* kasan-test-add-globals-left-out-of-bounds-test.patch
+* kasan-add-ability-to-detect-double-kmem_cache_destroy.patch
+* kasan-test-add-test-case-for-double-kmem_cache_destroy.patch
+* mmfs-split-dump_mapping-out-from-dump_page.patch
+* tools-vm-page_owner_sortc-sort-by-stacktrace-before-culling.patch
+* tools-vm-page_owner_sortc-support-sorting-by-stack-trace.patch
+* gup-avoid-multiple-user-access-locking-unlocking-in-fault_in_read-writeable.patch
+* mm-shmem-dont-truncate-page-if-memory-failure-happens.patch
+* mm-memcontrol-make-cgroup_memory_nokmem-static.patch
+* mm-page_counter-remove-an-incorrect-call-to-propagate_protected_usage.patch
+* memcg-better-bounds-on-the-memcg-stats-updates.patch
+* selftests-vm-use-swap-to-make-code-cleaner.patch
+* mm-remove-redundant-check-about-fault_flag_allow_retry-bit.patch
+* mm-remove-redundant-check-about-fault_flag_allow_retry-bit-checkpatch-fixes.patch
+* mm-rearrange-madvise-code-to-allow-for-reuse.patch
+* mm-add-a-field-to-store-names-for-private-anonymous-memory.patch
+* mm-add-a-field-to-store-names-for-private-anonymous-memory-fix.patch
+* mm-add-anonymous-vma-name-refcounting.patch
+* mm-ptep_clear-page-table-helper.patch
+* mm-page-table-check.patch
+* mm-page-table-check-fix.patch
+* x86-mm-add-x86_64-support-for-page-table-check.patch
+* mm-discard-__gfp_atomic.patch
+* mm-introduce-memalloc_retry_wait.patch
+* sysctl-change-watermark_scale_factor-max-limit-to-30%.patch
+* hugetlb-add-hugetlbnuma_stat-file.patch
+* mm-hugetlb-free-the-2nd-vmemmap-page-associated-with-each-hugetlb-page.patch
+* mm-hugetlb-replace-hugetlb_free_vmemmap_enabled-with-a-static_key.patch
+* mm-sparsemem-use-page-table-lock-to-protect-kernel-pmd-operations.patch
+* selftests-vm-add-a-hugetlb-test-case.patch
+* mm-sparsemem-move-vmemmap-related-to-hugetlb-to-config_hugetlb_page_free_vmemmap.patch
+* mm-hugepages-make-memory-size-variable-in-hugepage-mremap-selftest.patch
+* selftests-uffd-allow-eintr-eagain.patch
+* vmscan-make-drop_slab_node-static.patch
+* mm-mempolicy-convert-from-atomic_t-to-refcount_t-on-mempolicy-refcnt.patch
+* mm-mempolicy-convert-from-atomic_t-to-refcount_t-on-mempolicy-refcnt-fix.patch
+* mm-migrate-fix-the-return-value-of-migrate_pages.patch
+* mm-migrate-correct-the-hugetlb-migration-stats.patch
+* mm-compaction-fix-the-migration-stats-in-trace_mm_compaction_migratepages.patch
+* mm-migratec-rework-migration_entry_wait-to-not-take-a-pageref.patch
+* mm-migrate-support-multiple-target-nodes-demotion.patch
+* mm-migrate-add-more-comments-for-selecting-target-node-randomly.patch
+* mm-hwpoison-mf_mutex-for-soft-offline-and-unpoison.patch
+* mm-hwpoison-remove-mf_msg_buddy_2nd-and-mf_msg_poisoned_huge.patch
+* mm-hwpoison-fix-unpoison_memory.patch
+* mm-rmap-convert-from-atomic_t-to-refcount_t-on-anon_vma-refcount.patch
+* zsmalloc-introduce-some-helper-functions.patch
+* zsmalloc-rename-zs_stat_type-to-class_stat_type.patch
+* zsmalloc-decouple-class-actions-from-zspage-works.patch
+* zsmalloc-introduce-obj_allocated.patch
+* zsmalloc-move-huge-compressed-obj-from-page-to-zspage.patch
+* zsmalloc-remove-zspage-isolation-for-migration.patch
+* locking-rwlocks-introduce-write_lock_nested.patch
+* locking-rwlocks-introduce-write_lock_nested-fix.patch
+* locking-rwlocks-introduce-write_lock_nested-fix-2.patch
+* zsmalloc-replace-per-zpage-lock-with-pool-migrate_lock.patch
+* zsmalloc-replace-get_cpu_var-with-local_lock.patch
+* mm-introduce-fault_in_exact_writeable-to-probe-for-sub-page-faults.patch
+* arm64-add-support-for-sub-page-faults-user-probing.patch
+* btrfs-avoid-live-lock-in-search_ioctl-on-hardware-with-sub-page-faults.patch
+* zram-use-attribute_groups.patch
+* writeback-fix-some-comment-errors.patch
+* mm-hmmc-allow-vm_mixedmap-to-work-with-hmm_range_fault.patch
+* mm-damon-unified-access_check-function-naming-rules.patch
+* mm-damon-add-age-of-region-tracepoint-support.patch
+* mm-damon-core-using-function-abs-instead-of-diff_of.patch
+* mm-damon-remove-some-no-need-func-definitions-in-damonh-file.patch
+* mm-damon-remove-some-no-need-func-definitions-in-damonh-file-fix.patch
+* mm-damon-vaddr-remove-swap_ranges-and-replace-it-with-swap.patch
+* mm-damon-schemes-add-the-validity-judgment-of-thresholds.patch
+* info-task-hung-in-generic_file_write_iter.patch
+* info-task-hung-in-generic_file_write-fix.patch
+* kernel-hung_taskc-monitor-killed-tasks.patch
+* proc-vmcore-dont-fake-reading-zeroes-on-surprise-vmcore_cb-unregistration.patch
+* proc-make-the-proc_create-stubs-static-inlines.patch
+* proc-make-the-proc_create-stubs-static-inlines-fix.patch
+* proc-sysctl-make-protected_-world-readable.patch
+* fs-exec-replace-strlcpy-with-strscpy_pad-in-__set_task_comm.patch
+* fs-exec-replace-strncpy-with-strscpy_pad-in-__get_task_comm.patch
+* drivers-infiniband-replace-open-coded-string-copy-with-get_task_comm.patch
+* fs-binfmt_elf-replace-open-coded-string-copy-with-get_task_comm.patch
+* samples-bpf-test_overhead_kprobe_kern-replace-bpf_probe_read_kernel-with-bpf_probe_read_kernel_str-to-get-task-comm.patch
+* tools-bpf-bpftool-skeleton-replace-bpf_probe_read_kernel-with-bpf_probe_read_kernel_str-to-get-task-comm.patch
+* tools-testing-selftests-bpf-replace-open-coded-16-with-task_comm_len.patch
+* kthread-dynamically-allocate-memory-to-store-kthreads-full-name.patch
+* kstrtox-uninline-everything.patch
+* lz4-fix-lz4_decompress_safe_partial-read-out-of-bound.patch
+* checkpatch-relax-regexp-for-commit_log_long_line.patch
+* checkpatch-improve-kconfig-help-test.patch
+* elf-fix-overflow-in-total-mapping-size-calculation.patch
+* init-mainc-silence-some-wunused-parameter-warnings.patch
+* hfsplus-use-struct_group_attr-for-memcpy-region.patch
+* panic-use-error_report_end-tracepoint-on-warnings.patch
+* panic-use-error_report_end-tracepoint-on-warnings-fix.patch
+* delayacct-support-swapin-delay-accounting-for-swapping-without-blkio.patch
+* delayacct-fix-incomplete-disable-operation-when-switch-enable-to-disable.patch
+* delayacct-cleanup-flags-in-struct-task_delay_info-and-functions-use-it.patch
+* configs-introduce-debugconfig-for-ci-like-setup.patch
+  linux-next.patch
+  linux-next-git-rejects.patch
+* sysctl-add-a-new-register_sysctl_init-interface.patch
+* sysctl-move-some-boundary-constants-from-sysctlc-to-sysctl_vals.patch
+* sysctl-move-some-boundary-constants-from-sysctlc-to-sysctl_vals-fix.patch
+* hung_task-move-hung_task-sysctl-interface-to-hung_taskc.patch
+* watchdog-move-watchdog-sysctl-interface-to-watchdogc.patch
+* sysctl-make-ngroups_max-const.patch
+* sysctl-use-const-for-typically-used-max-min-proc-sysctls.patch
+* sysctl-use-sysctl_zero-to-replace-some-static-int-zero-uses.patch
+* aio-move-aio-sysctl-to-aioc.patch
+* dnotify-move-dnotify-sysctl-to-dnotifyc.patch
+* hpet-simplify-subdirectory-registration-with-register_sysctl.patch
+* i915-simplify-subdirectory-registration-with-register_sysctl.patch
+* macintosh-mac_hidc-simplify-subdirectory-registration-with-register_sysctl.patch
+* ocfs2-simplify-subdirectory-registration-with-register_sysctl.patch
+* test_sysctl-simplify-subdirectory-registration-with-register_sysctl.patch
+* inotify-simplify-subdirectory-registration-with-register_sysctl.patch
+* inotify-simplify-subdirectory-registration-with-register_sysctl-fix.patch
+* cdrom-simplify-subdirectory-registration-with-register_sysctl.patch
+* eventpoll-simplify-sysctl-declaration-with-register_sysctl.patch
+* fs-proc-store-pde-data-into-inode-i_private.patch
+* proc-remove-pde_data-completely.patch
+* lib-stackdepot-allow-optional-init-and-stack_table-allocation-by-kvmalloc.patch
+* lib-stackdepot-allow-optional-init-and-stack_table-allocation-by-kvmalloc-fix.patch
+* lib-stackdepot-allow-optional-init-and-stack_table-allocation-by-kvmalloc-fix-2.patch
+* lib-stackdepot-allow-optional-init-and-stack_table-allocation-by-kvmalloc-fixup3.patch
+  make-sure-nobodys-leaking-resources.patch
+  releasing-resources-with-children.patch
+  mutex-subsystem-synchro-test-module.patch
+  kernel-forkc-export-kernel_thread-to-modules.patch
+  workaround-for-a-pci-restoring-bug.patch

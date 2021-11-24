@@ -2,56 +2,80 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D1B045D0D8
-	for <lists+linux-next@lfdr.de>; Thu, 25 Nov 2021 00:07:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46C9345D118
+	for <lists+linux-next@lfdr.de>; Thu, 25 Nov 2021 00:18:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245432AbhKXXKp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 24 Nov 2021 18:10:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54754 "EHLO
+        id S1345414AbhKXXVN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 24 Nov 2021 18:21:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242988AbhKXXKo (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 24 Nov 2021 18:10:44 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 808CFC06173E;
-        Wed, 24 Nov 2021 15:07:34 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HzxVN0Pm9z4xYy;
-        Thu, 25 Nov 2021 10:07:23 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1637795249;
-        bh=7pRov1sIZwpusxuBiujaI38cmBz+hmwQh8SiJxJ6V4A=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=BTvkGcA6sRe76Gy1isc7w2/xkrLYnxKe2cqBq0GZkmo3MfAC6f/yy2152OFmF8hfz
-         ERp6yUMEqynlekax8tGND0PUYTdPjimS7umZwMJD2eEZzHm6xM0TCeCZystvsXoEp/
-         dOGb08CEJi0M0EKZ9GRPnCe+PY71tEutUo8DfZqK0BjfkRucFJoV5j9uqB76ejU77I
-         tGRBKn0ErgMMddWkhbwZK7yiSBERddMcgmePyxpK0lviq3ImeJm2W3PY0TXuDBx5FS
-         M0XMRHP0ACm+GBzFbMCEaC7auxJI5gaumq9uoq16TBuJyv1mTCSEe+pFI8yY/AowXU
-         AQXHNLAwb3lmA==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     =?utf-8?Q?Andr=C3=A9?= Almeida <andrealmeid@collabora.com>,
-        linux-kernel@vger.kernel.org, arnd@arndb.de, geert@linux-m68k.org,
-        monstr@monstr.eu, ysato@users.sourceforge.jp, dalias@libc.org,
-        davem@davemloft.net, chris@zankel.net, jcmvbkbc@gmail.com,
-        linux-alpha@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linuxppc-dev@lists.ozlabs.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org
-Cc:     akpm@linux-foundation.org, andrealmeid@collabora.com,
-        bigeasy@linutronix.de, boqun.feng@gmail.com,
-        linux-next@vger.kernel.org, lkft-triage@lists.linaro.org,
-        longman@redhat.com, minchan@kernel.org, mingo@redhat.com,
-        naresh.kamboju@linaro.org, peterz@infradead.org, rob@landley.net,
-        senozhatsky@chromium.org, sfr@canb.auug.org.au,
-        umgwanakikbuti@gmail.com, will@kernel.org
+        with ESMTP id S245419AbhKXXVN (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 24 Nov 2021 18:21:13 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8BE4C061574;
+        Wed, 24 Nov 2021 15:18:02 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1637795881;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kgfD0hDh4gr0XMzkR2x84BR1TQ6+tWZptmE4dSLrghY=;
+        b=X/yZX2zV8XlAus/FBu0sptVdXYWgFjt85wCwAiu6eUKJBsOkqXZw1bwG6D5eQ4y3XItSO5
+        PME1b7NJiqjCFFOLUwssxvQfdm3YwlEVkZeZq2Lvaxr9X1F9DySBoKbtptiCypU7vX0lxb
+        rLd2g2UZ9iw2md3zGsCQFZVDy+Ps1Wj2giT5og+i4j8yelPkAlnXWb1Z02Pec22ezIqgU2
+        B24yr0FzQWwSctufH3JLXvswN/Vcon5CJcGGr3lK01xAYCAI+akKbgpKk2mMxDKnUMte1X
+        HsR0U998RBH9nGgHbNTgaQPvxAzbH7/ZRc3B/1s5dnvXurNarvbbMcqz8xLFyw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1637795881;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kgfD0hDh4gr0XMzkR2x84BR1TQ6+tWZptmE4dSLrghY=;
+        b=eAA9L8IY3vpIoozSoepqegehvk44k8iiAJ19r79ZDI+VHKbA09Xcb0eAefvCuqFa/D4MxI
+        qHgBCZYVv9jhifBA==
+To:     Arnd Bergmann <arnd@arndb.de>,
+        =?utf-8?Q?Andr=C3=A9?= Almeida <andrealmeid@collabora.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        David Miller <davem@davemloft.net>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        alpha <linux-alpha@vger.kernel.org>, linux-ia64@vger.kernel.org,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, Waiman Long <longman@redhat.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rob Landley <rob@landley.net>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Mike Galbraith <umgwanakikbuti@gmail.com>,
+        Will Deacon <will@kernel.org>
 Subject: Re: [PATCH 1/1] futex: Wireup futex_waitv syscall
-In-Reply-To: <20211124132112.11641-1-andrealmeid@collabora.com>
+In-Reply-To: <CAK8P3a2BXefTw68yoZ9U0F=ASC3=EZDc5PDQCJ16MmXtynd59g@mail.gmail.com>
 References: <CAK8P3a3pQW59NVF=5P+ZiBjNJmnWh+iTZUHvqHBrXkHA6pMd4g@mail.gmail.com>
  <20211124132112.11641-1-andrealmeid@collabora.com>
-Date:   Thu, 25 Nov 2021 10:07:23 +1100
-Message-ID: <87lf1dp2z8.fsf@mpe.ellerman.id.au>
+ <CAK8P3a2BXefTw68yoZ9U0F=ASC3=EZDc5PDQCJ16MmXtynd59g@mail.gmail.com>
+Date:   Thu, 25 Nov 2021 00:18:00 +0100
+Message-ID: <87v90hjg7r.ffs@tglx>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
@@ -59,38 +83,24 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Andr=C3=A9 Almeida <andrealmeid@collabora.com> writes:
-> diff --git a/arch/powerpc/kernel/syscalls/syscall.tbl b/arch/powerpc/kern=
-el/syscalls/syscall.tbl
-> index 7bef917cc84e..15109af9d075 100644
-> --- a/arch/powerpc/kernel/syscalls/syscall.tbl
-> +++ b/arch/powerpc/kernel/syscalls/syscall.tbl
-> @@ -528,3 +528,4 @@
->  446	common	landlock_restrict_self		sys_landlock_restrict_self
->  # 447 reserved for memfd_secret
->  448	common	process_mrelease		sys_process_mrelease
-> +449	common  futex_waitv                     sys_futex_waitv
+On Wed, Nov 24 2021 at 15:29, Arnd Bergmann wrote:
+> On Wed, Nov 24, 2021 at 2:21 PM Andr=C3=A9 Almeida <andrealmeid@collabora=
+.com> wrote:
+>>
+>> Wireup futex_waitv syscall for all remaining archs.
+>>
+>> Signed-off-by: Andr=C3=A9 Almeida <andrealmeid@collabora.com>
+>
+> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+>
+> I double-checked that futex_waitv() doesn't need any architecture specific
+> hacks, and that the list above is complete.
+>
+> Should I take this through the asm-generic tree, or would you send it
+> through the tip tree?
 
-Tested-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
+Feel free to pick it up.
 
-The selftest doesn't build with old headers, I needed this:
+Thanks,
 
-diff --git a/tools/testing/selftests/futex/include/futex2test.h b/tools/tes=
-ting/selftests/futex/include/futex2test.h
-index 9d305520e849..e6422321e9d0 100644
---- a/tools/testing/selftests/futex/include/futex2test.h
-+++ b/tools/testing/selftests/futex/include/futex2test.h
-@@ -8,6 +8,10 @@
-
- #define u64_to_ptr(x) ((void *)(uintptr_t)(x))
-
-+#ifndef __NR_futex_waitv
-+#define __NR_futex_waitv 449
-+#endif
-+
- /**
-  * futex_waitv - Wait at multiple futexes, wake on any
-  * @waiters:    Array of waiters
-
-
-cheers
+        tglx

@@ -2,92 +2,111 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6723445E25C
-	for <lists+linux-next@lfdr.de>; Thu, 25 Nov 2021 22:19:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1153445E37A
+	for <lists+linux-next@lfdr.de>; Fri, 26 Nov 2021 00:41:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243346AbhKYVWZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 25 Nov 2021 16:22:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35946 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357161AbhKYVUZ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 25 Nov 2021 16:20:25 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B888C061748;
-        Thu, 25 Nov 2021 13:17:10 -0800 (PST)
+        id S1350380AbhKYXoN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 25 Nov 2021 18:44:13 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:58361 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351629AbhKYXmM (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 25 Nov 2021 18:42:12 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J0W0c00z5z4xcK;
-        Fri, 26 Nov 2021 08:17:03 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J0Z8L5nYqz4xcb;
+        Fri, 26 Nov 2021 10:38:58 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1637875025;
-        bh=93/TCBEh1nUv3zcmEX3i+bNwTuC9M5iS/EpIDsluCGo=;
+        s=201702; t=1637883539;
+        bh=MKfbgbcVcn3gQUZApNA95JIPa0dkTXjyz94Q0AneKGc=;
         h=Date:From:To:Cc:Subject:From;
-        b=coDyNvywVUkxzqcQMpgy35WqGom3b2tNMeVOmmy6+LdPr04/7Bb5HVH/GDsE65hUA
-         sUhUV7/KjPj/rfaQVcp1Qzbwbpj/b9V4pFap53CmcExqFar/8JZLoTHwKA6b07CCCl
-         bFlEFyAeF3T5CskuEuyDGuAwEGjs4omUNilG5EOqBrOhIJk6+CyrFSFKnQP5Fvh2av
-         Zip4wSdgOWPkEJ5Fi30evV2DsBEv7tZCGeZGM4kReuTOCY29fpM8tlwVhUqGQlmD9t
-         bdAKDefdp/VAWUYx3YrnNNbL6TeZLdiJ5PP1RLXtQD/7vgkFLu7+HdW2UDFdaQc4Yp
-         avNG9K7/4Wx6A==
-Date:   Fri, 26 Nov 2021 08:17:02 +1100
+        b=MyGNkeQdEQUlGkm+M25O6hI0pgRKWjoUnaMepgYt1USm02Isql5WrRTirf+qphDAV
+         rcV0Bvm8W6VnsNJk7nTFBkpXDPoKAykdVVi2a4Hojs+38hBkqd3X7y7ama6O/lHfNJ
+         o2wtLxBO89/tAeSsg+MSvfFJEB/UWIy9DtPcJSB4+QiqX1tBmV8SOdwYAUNqyVoGdu
+         Wxb0nMfviThIdyCAa8aI+U9XXC6c0NfR4o9Yd3kuSUPAgpd41PDA2BwwBAai/ltI8S
+         A1KQbUACroP31P98mXcsd5QWyhE8rQLCbaBTa/QM6EYoJtWEq/nG6c/zRBSRrllSwM
+         QcuuxEqeO4p1Q==
+Date:   Fri, 26 Nov 2021 10:38:57 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Eric Dumazet <edumazet@google.com>,
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Christoph Hellwig <hch@lst.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the tip tree
-Message-ID: <20211126081702.25133048@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Ming Lei <ming.lei@redhat.com>
+Subject: linux-next: manual merge of the block tree with Linus' tree
+Message-ID: <20211126103857.50628410@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/96InG3te3F/RN+Q_WGynJu5";
+Content-Type: multipart/signed; boundary="Sig_/anadDgOt88u9.Fa8TAFyYOe";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/96InG3te3F/RN+Q_WGynJu5
+--Sig_/anadDgOt88u9.Fa8TAFyYOe
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-In commit
+Today's linux-next merge of the block tree got a conflict in:
 
-  6b2ecb61bb10 ("x86/csum: Fix compilation error for UM")
+  block/bdev.c
 
-Fixes tag
+between commit:
 
-  Fixes: df4554cebdaa ("x86/csum: Rewrite/optimize csum_partial()")
+  efcf5932230b ("block: avoid to touch unloaded module instance when openin=
+g bdev")
 
-has these problem(s):
+from Linus' tree and commit:
 
-  - Target SHA1 does not exist
+  a1525fbf1d76 ("block: remove the GENHD_FL_HIDDEN check in blkdev_get_no_o=
+pen")
 
-Maybe you meant
+from the block tree.
 
-Fixes: d31c3c683ee6 ("x86/csum: Rewrite/optimize csum_partial()")
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/96InG3te3F/RN+Q_WGynJu5
+diff --cc block/bdev.c
+index b1d087e5e205,ae063041f291..000000000000
+--- a/block/bdev.c
++++ b/block/bdev.c
+@@@ -753,10 -753,10 +753,6 @@@ struct block_device *blkdev_get_no_open
+ =20
+  	if (!bdev)
+  		return NULL;
+- 	if ((bdev->bd_disk->flags & GENHD_FL_HIDDEN)) {
+ -	if (!try_module_get(bdev->bd_disk->fops->owner)) {
+--		put_device(&bdev->bd_device);
+--		return NULL;
+--	}
+ =20
+  	return bdev;
+  }
+
+--Sig_/anadDgOt88u9.Fa8TAFyYOe
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGf/U4ACgkQAVBC80lX
-0GwGZAgAnvA8FDnhOhCzrYbMKwgYYfnoy4hXt6h9Tw3oddjtm5yYRT9E38qhYwHO
-2gcxHdavWFu81vEjh7efUBlLy7fTjPWeiEJO2UhM+8x9qZbt7q5NMCXiPlH8ZE5y
-pRet53qPQc3fMcN9d+lwDaFKV78fw1ZuSjJGwLgvdc1tslqaDlLDyJ2stepsKc0A
-75MxLKmpkas9JXohAz9A3y26YBytx8bdhyharp4rTFq+hhj4Z3rFeyZnmMaZmuRT
-nkEDD2PPws4yw/NIcMjDHAw/MKXX/mKt3S395l4/wX2qPdMGAELzb0d+uNqTshLZ
-XhsTeKIQlTCn463L3/dfjnOcoOSyOQ==
-=D7ku
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGgHpEACgkQAVBC80lX
+0Gxj2gf+I0DkkNU/1ooEf8qak87XghJYOTyJjLzY4Tp8zVWrAkowBbqIXziBl+Xo
+C9KEfecKCwEZKVqdGovLVRrMgcFAn2gG/RyhQwijXtAw9OWv6lCWiS989NRRYB8K
+og6v9iHZVvTmPO6xBG50c4dqXb6WmJpnxrPQnRHPcRaZD0bnqtT1B+kw7ww/4xd6
+kJRT1poIFBtoZMRJxcBQIir2I0L+PX+Br3Ibg+tMSYOu7wJcrH2zZEu3a/ALJcwn
+5pHIdEEf13eO/Z3FwS62RPyntRHOsKCaGXcGmhvZ7PW2peD4pW7Ea5LGq2teEv1q
+yYCOwamuAwIhzd7bic5lC1L7wToi3g==
+=5K/m
 -----END PGP SIGNATURE-----
 
---Sig_/96InG3te3F/RN+Q_WGynJu5--
+--Sig_/anadDgOt88u9.Fa8TAFyYOe--

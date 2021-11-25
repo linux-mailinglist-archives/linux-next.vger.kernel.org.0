@@ -2,101 +2,101 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5499D45D2A6
-	for <lists+linux-next@lfdr.de>; Thu, 25 Nov 2021 02:56:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E12945D2D7
+	for <lists+linux-next@lfdr.de>; Thu, 25 Nov 2021 03:04:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345693AbhKYB7S (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 24 Nov 2021 20:59:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34350 "EHLO
+        id S231997AbhKYCHK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 24 Nov 2021 21:07:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347359AbhKYB5R (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 24 Nov 2021 20:57:17 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB738C06139E;
-        Wed, 24 Nov 2021 17:23:12 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J00W201Zhz4xbC;
-        Thu, 25 Nov 2021 12:23:09 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1637803390;
-        bh=BCmABNL8H1gx0oQrVYQp9yxanjIOM1oYqNOSzCOnkt0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=fE5gMnJpJrz0hvOAW4xispXwwer4+acawz3OFkpCL59KmPoUSKVpGVUxq56RDqjsH
-         xhL/iMIJJqPn9AYvJcR5WP9HolnUFUVe98c1Mp7uExmNNWnIo9qMRVN99vFQpbHKso
-         +vx4EwSTFTTD7DgvrG3TlFms7QZfqJLgEutT7AkbjmQ3VlBL7DuW4QSPJR0KVAp21T
-         CT6zUvYevQbYIvx4BoFCY5w1qY5nR1lvdD7O/6lcA7Tl5a2TaZavJO6Dt+xDEYAKvJ
-         lmNHeU4NL3gF5k1dLDQAo9rLQMXlWVYEfNveufJnIqyhm+HXPWjo8OB6ZzsJlcbPb7
-         4Z00HWSCS8PWg==
-Date:   Thu, 25 Nov 2021 12:23:07 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Michael S. Tsirkin" <mst@redhat.com>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the vhost tree
-Message-ID: <20211125122307.090784cb@canb.auug.org.au>
+        with ESMTP id S235157AbhKYCFK (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 24 Nov 2021 21:05:10 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D0C0C061A1A;
+        Wed, 24 Nov 2021 17:39:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:
+        Subject:Sender:Reply-To:Cc:Content-ID:Content-Description;
+        bh=qYw5RIZBYu+7TC3KjriRLSrZwn1E3iMtbuXhHAISxsY=; b=yGbXk3L+x2f8HhRmR6X1X25pSa
+        wGsZIl/Rbsf/xlDcxMSq8Wf94/PcPWJ+9mlpAoJj/EmWa1YSoGFbVKUz+wyn41B583pr36qTKlmEs
+        VO7Kom827tHmWzwmS9yw+mmeSwxmfIoWVmXLK2r5mLDJeKX2NYNT/4i8YKqVF54zBr2PkMz+Pt7qr
+        gSANvH66vibc9Bplw3++VO0sA3X0O2YvhtkyNmrNiM6+g1tgNGK5GCET5YQzLqLCJ5WRf/4n6qGsE
+        uI0L4sp/KfdfmuT4pKXL7WDs/FrcAucukzFICpMEqDDUtXc95SpzeCwZPuzuafV0wd/YLXB4wkXHE
+        m8JMl8Kg==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mq3j9-006El5-N1; Thu, 25 Nov 2021 01:39:07 +0000
+Subject: Re: mmotm 2021-11-24-15-49 uploaded (drivers/usb/host/xhci-hub.c)
+To:     akpm@linux-foundation.org, broonie@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
+        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
+        linux-usb@vger.kernel.org
+References: <20211124234931.iDJQctzrQ%akpm@linux-foundation.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <2b4fcff8-d7a0-b235-c94d-147e19738d72@infradead.org>
+Date:   Wed, 24 Nov 2021 17:39:06 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Kb2w7RwEjjM9ZSeleIAODtS";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <20211124234931.iDJQctzrQ%akpm@linux-foundation.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Kb2w7RwEjjM9ZSeleIAODtS
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 11/24/21 3:49 PM, akpm@linux-foundation.org wrote:
+> The mm-of-the-moment snapshot 2021-11-24-15-49 has been uploaded to
+> 
+>     https://www.ozlabs.org/~akpm/mmotm/
+> 
+> mmotm-readme.txt says
+> 
+> README for mm-of-the-moment:
+> 
+> https://www.ozlabs.org/~akpm/mmotm/
+> 
+> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
+> more than once a week.
+> 
+> You will need quilt to apply these patches to the latest Linus release (5.x
+> or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
+> https://ozlabs.org/~akpm/mmotm/series
+> 
 
-Hi all,
 
-After merging the vhost tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+on i386:
 
-net/vmw_vsock/virtio_transport.c:734:3: error: 'struct virtio_driver' has n=
-o member named 'suppress_used_validation'
-  734 |  .suppress_used_validation =3D true,
-      |   ^~~~~~~~~~~~~~~~~~~~~~~~
-net/vmw_vsock/virtio_transport.c:734:30: error: initialization of 'const un=
-signed int *' from 'int' makes pointer from integer without a cast [-Werror=
-=3Dint-conversion]
-  734 |  .suppress_used_validation =3D true,
-      |                              ^~~~
-net/vmw_vsock/virtio_transport.c:734:30: note: (near initialization for 'vi=
-rtio_vsock_driver.feature_table_legacy')
+../drivers/usb/host/xhci-hub.c: In function ‘xhci_create_usb3x_bos_desc’:
+./../include/linux/compiler_types.h:335:38: error: call to ‘__compiletime_assert_608’ declared with attribute error: FIELD_PREP: value too large for the field
+   _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+                                       ^
+./../include/linux/compiler_types.h:316:4: note: in definition of macro ‘__compiletime_assert’
+     prefix ## suffix();    \
+     ^~~~~~
+./../include/linux/compiler_types.h:335:2: note: in expansion of macro ‘_compiletime_assert’
+   _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+   ^~~~~~~~~~~~~~~~~~~
+../include/linux/build_bug.h:39:37: note: in expansion of macro ‘compiletime_assert’
+  #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+                                      ^~~~~~~~~~~~~~~~~~
+../include/linux/bitfield.h:49:3: note: in expansion of macro ‘BUILD_BUG_ON_MSG’
+    BUILD_BUG_ON_MSG(__builtin_constant_p(_val) ?  \
+    ^~~~~~~~~~~~~~~~
+../include/linux/bitfield.h:94:3: note: in expansion of macro ‘__BF_FIELD_CHECK’
+    __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: "); \
+    ^~~~~~~~~~~~~~~~
+../drivers/usb/host/xhci-hub.c:220:4: note: in expansion of macro ‘FIELD_PREP’
+     FIELD_PREP(USB_SSP_SUBLINK_SPEED_LSM, lane_mantissa));
+     ^~~~~~~~~~
 
-Caused by commit
 
-  f124034faa91 ("Revert "virtio_ring: validate used buffer length"")
+$ gcc --version
+gcc (SUSE Linux) 7.5.0
 
-interacting with commit
 
-  f7a36b03a732 ("vsock/virtio: suppress used length validation")
-
-from the net tree.
-
-I have reverted commit f7a36b03a732 for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/Kb2w7RwEjjM9ZSeleIAODtS
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGe5XsACgkQAVBC80lX
-0GzYYQgAhCbEXUR6I7i2zyksjS/dlHgkNADubcqjyHp8LFviUaFEi4+74lhaf0AQ
-Rww9iN2hfQtNwL1rJiBZ80g6nMDBu+Lf/lCM045XjJ7TuVN0VK09D3Bq8iUSI76v
-xD95PiXgCNHKXqNCWi6cZMJMpCb8oC/IVWRNTAjkAY+QoXmvnzYjWBXvrmKvewVT
-HzbQeoLlxp3iEsqEj+P6onmMOPULXjP0rToQ0EPxhYa/QfeenP/8/CNEypY8OTsP
-xsowaSf06ZaBuWq5LS8MKtEkO/gCl4yOvvGFFeerWOlySCCe3vk00jTgL1Hs1hYt
-Cq2WdF60fJiiX7J4GHIALNFIBZ8B/g==
-=neLn
------END PGP SIGNATURE-----
-
---Sig_/Kb2w7RwEjjM9ZSeleIAODtS--
+-- 
+~Randy

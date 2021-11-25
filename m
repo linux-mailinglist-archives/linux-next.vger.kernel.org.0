@@ -2,117 +2,116 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6736E45D5F0
-	for <lists+linux-next@lfdr.de>; Thu, 25 Nov 2021 09:06:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85CE445D656
+	for <lists+linux-next@lfdr.de>; Thu, 25 Nov 2021 09:38:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236376AbhKYIJr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 25 Nov 2021 03:09:47 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:27294 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347514AbhKYIHr (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 25 Nov 2021 03:07:47 -0500
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4J09Q83DQ0zbj72;
-        Thu, 25 Nov 2021 16:04:32 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 25 Nov 2021 16:04:35 +0800
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2308.20; Thu, 25 Nov 2021 16:04:34 +0800
-Message-ID: <bf881eaf-1fe8-c3bf-52bb-5a021b279bad@huawei.com>
-Date:   Thu, 25 Nov 2021 16:04:33 +0800
+        id S1353106AbhKYIlg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 25 Nov 2021 03:41:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37690 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353314AbhKYIjf (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 25 Nov 2021 03:39:35 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58DA9C061761
+        for <linux-next@vger.kernel.org>; Thu, 25 Nov 2021 00:36:23 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id r26so14364499lfn.8
+        for <linux-next@vger.kernel.org>; Thu, 25 Nov 2021 00:36:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ragnatech-se.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=ADRTBrUjRd1rAOanvGXkScUFM0gsVWmkuqdva+XDWDM=;
+        b=7MxVXhzOBPI1WLFJ1LYc2sbO/uR1ZYyn+KzC66T0Fs6gWZudI0M/AZPd+tqnkbfC0J
+         NSxuB+HIQ5F+KnM57b9q4JlpFUVwU5V4QVmRUvY9q9HRmZDeexkPPMC+Hh368JqngKi1
+         EHrvboah3+7sAn8AFaDzgAU3AnM5Gxsu7jbRJ9oM7bPQhySGkaELEI0I/dzTaumPuRXg
+         4y/F8ZAyDc6XWpkC5VTnNY3+SxmOONAcviuBhTU2HWfdVvlM1s9NP8M2YD1i3V0T01B4
+         I1iIe1kDDY2xXsgOcFoOg2lGK4qNOB2n+Svo86klEbYszjtUzJmYjAzzIdlM1dxJpR3b
+         hBig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=ADRTBrUjRd1rAOanvGXkScUFM0gsVWmkuqdva+XDWDM=;
+        b=a3NneNZ91v8kmj40cLjCxOr74OUuehl+g2ONHBYbgt9QhwNI8KkRBA1bSCiSFU/N2C
+         q1QvaraC8++nFEaU6BaMAYBG7kl4jg7+FAXA5Uwq2YNDeKnLbSromEzmJr6/RvV9XtVv
+         MaXtzRDX6XHP3j2JzP73YXyfZRaP5XuszEyL0Noy4fF5Fo8JI9KPtFatOS7gzPs47y+B
+         NHgqPATt0y5bIbWglek9UuFKMY/HfTw3zKv3xdex/4xV2eOfPsiCEqA6+ccoe6U7n2SA
+         TYXi1XXduBBhj2kJg1lHEc9CXJoOd/n3bsvRWRfH6m94VIShfvSsu0g1NZZlPrmyRqNf
+         yw4Q==
+X-Gm-Message-State: AOAM530rizru5V2XHV8bQ7FLVY+b61hNJ0vgAvrdw0T+n2j5nu/LuaYW
+        PnGLwzVwZhbcBX5Kj7EvG+VIMA==
+X-Google-Smtp-Source: ABdhPJyJ3FfAm0lbVXXHIYabujh2mQ2IQwaE/Ii+KLYpOULik/cHZzqrE6uXVv1twRcod1g2b+UJZw==
+X-Received: by 2002:a05:6512:230e:: with SMTP id o14mr22942804lfu.490.1637829381595;
+        Thu, 25 Nov 2021 00:36:21 -0800 (PST)
+Received: from localhost (h-46-59-88-219.A463.priv.bahnhof.se. [46.59.88.219])
+        by smtp.gmail.com with ESMTPSA id c2sm189576ljf.50.2021.11.25.00.36.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Nov 2021 00:36:21 -0800 (PST)
+Date:   Thu, 25 Nov 2021 09:36:20 +0100
+From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund@ragnatech.se>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>
+Subject: Re: linux-next: Tree for Nov 25
+ [drivers/staging/media/max96712/max96712.ko]
+Message-ID: <YZ9LBN3UeGSqRVd7@oden.dyn.berto.se>
+References: <20211125160957.4ffdeb88@canb.auug.org.au>
+ <4c2aabad-bf41-efc0-c9ba-da4a330e9015@infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [next] kasan: shadow.c:528:33: error: 'VM_DELAY_KMEMLEAK'
- undeclared
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>
-CC:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yongqiang Liu <liuyongqiang13@huawei.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Alexander Potapenko <glider@google.com>
-References: <CA+G9fYuLv7491Q2AHcaUAQ2AQeFBQgx8w0DzK95Qf6Fh9gGFfQ@mail.gmail.com>
- <20211125185313.77e20bc5@canb.auug.org.au>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <20211125185313.77e20bc5@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggeme711-chm.china.huawei.com (10.1.199.107) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <4c2aabad-bf41-efc0-c9ba-da4a330e9015@infradead.org>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+Hi Randy,
 
-On 2021/11/25 15:53, Stephen Rothwell wrote:
-> Hi Naresh,
->
-> On Thu, 25 Nov 2021 12:43:41 +0530 Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
->> [ Please ignore this email if it is already reported ]
->>
->> While building Linux next 20211125 x86 with CONFIG_KASAN=y gcc-11
->> following warnings / errors noticed.
->>
->> mm/kasan/shadow.c: In function 'kasan_module_alloc':
->> mm/kasan/shadow.c:528:33: error: 'VM_DELAY_KMEMLEAK' undeclared (first
->> use in this function); did you mean 'VM_DEFER_KMEMLEAK'?
->>    528 |                 if (vm->flags & VM_DELAY_KMEMLEAK)
->>        |                                 ^~~~~~~~~~~~~~~~~
->>        |                                 VM_DEFER_KMEMLEAK
->> mm/kasan/shadow.c:528:33: note: each undeclared identifier is reported
->> only once for each function it appears in
->> make[3]: *** [scripts/Makefile.build:288: mm/kasan/shadow.o] Error 1
->>
->> Build config:
->> https://builds.tuxbuild.com/21OjEyx87iCX9bqOwJrZdl1wFFj/config
->>
->>
->> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
->>
->> meta data:
->> -----------
->>      git describe: next-20211125
->>      git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
->>      git_sha: f81e94e91878bded599cc60f2881cfd50991aeb9
->>      git_short_log: f81e94e91878 (\"Add linux-next specific files for 20211125\")
->>      target_arch: x86
->>      toolchain: gcc-11
->>
->> steps to reproduce:
->> tuxmake --runtime podman --target-arch x86_64 --toolchain gcc-11
->> --kconfig defconfig \
->> --kconfig-add https://builds.tuxbuild.com/21OjEyx87iCX9bqOwJrZdl1wFFj/config
->>
->> https://builds.tuxbuild.com/21OjEyx87iCX9bqOwJrZdl1wFFj/tuxmake_reproducer.sh
->>
->> --
->> Linaro LKFT
->> https://lkft.linaro.org
-> Caused by commit
->
->    f61bc9ffcab1 ("mm: defer kmemleak object creation of module_alloc()")
->
-> from the akpm-current tree.  The define is VM_DEFER_KMEMLEAK :-(
-Resend a new one, sorry for missing macro change when v3 version use new 
-name.
->
+Thanks for your bug report.
+
+Sakari have fixed this problem, but it seems to be some confusion in 
+patchwork.
+
+https://patchwork.linuxtv.org/project/linux-media/patch/20211101132502.700505-1-sakari.ailus@linux.intel.com/
+
+On 2021-11-24 22:57:12 -0800, Randy Dunlap wrote:
+> On 11/24/21 9:09 PM, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > Changes since 20211124:
+> > 
+> 
+> on x86_64:
+> 
+> WARNING: unmet direct dependencies detected for VIDEO_V4L2_SUBDEV_API
+>   Depends on [n]: MEDIA_SUPPORT [=m] && VIDEO_DEV [=n] && MEDIA_CONTROLLER [=y]
+>   Selected by [m]:
+>   - VIDEO_MAX96712 [=m] && STAGING [=y] && STAGING_MEDIA [=y] && MEDIA_SUPPORT [=m] && I2C [=y] && OF_GPIO [=y]
+> 
+> and then
+> 
+> ERROR: modpost: "v4l2_ctrl_handler_free" [drivers/staging/media/max96712/max96712.ko] undefined!
+> ERROR: modpost: "v4l2_async_register_subdev" [drivers/staging/media/max96712/max96712.ko] undefined!
+> ERROR: modpost: "v4l2_ctrl_new_std_menu_items" [drivers/staging/media/max96712/max96712.ko] undefined!
+> ERROR: modpost: "v4l2_ctrl_new_std" [drivers/staging/media/max96712/max96712.ko] undefined!
+> ERROR: modpost: "v4l2_ctrl_handler_init_class" [drivers/staging/media/max96712/max96712.ko] undefined!
+> ERROR: modpost: "v4l2_fwnode_endpoint_parse" [drivers/staging/media/max96712/max96712.ko] undefined!
+> ERROR: modpost: "v4l2_async_unregister_subdev" [drivers/staging/media/max96712/max96712.ko] undefined!
+> 
+> 
+> Full randconfig file is attached.
+> 
+> -- 
+> ~Randy
+
+
+
+-- 
+Kind Regards,
+Niklas Söderlund

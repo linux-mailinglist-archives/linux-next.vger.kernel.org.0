@@ -2,445 +2,201 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E51CA45D7EE
-	for <lists+linux-next@lfdr.de>; Thu, 25 Nov 2021 11:05:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6447D45D9CF
+	for <lists+linux-next@lfdr.de>; Thu, 25 Nov 2021 13:12:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354394AbhKYKJI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 25 Nov 2021 05:09:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56038 "EHLO
+        id S1347064AbhKYMPw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 25 Nov 2021 07:15:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354430AbhKYKHI (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 25 Nov 2021 05:07:08 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D72BC0613F1
-        for <linux-next@vger.kernel.org>; Thu, 25 Nov 2021 02:02:40 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id g19so5427398pfb.8
-        for <linux-next@vger.kernel.org>; Thu, 25 Nov 2021 02:02:40 -0800 (PST)
+        with ESMTP id S1348333AbhKYMNw (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 25 Nov 2021 07:13:52 -0500
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9364C06175F
+        for <linux-next@vger.kernel.org>; Thu, 25 Nov 2021 04:10:40 -0800 (PST)
+Received: by mail-oi1-x231.google.com with SMTP id s139so12080915oie.13
+        for <linux-next@vger.kernel.org>; Thu, 25 Nov 2021 04:10:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=L4vKUH6ofrpfvMS2B0dpEO1I2Rs+MwbS7b8FsbyDaw8=;
-        b=dUIFltFe+kUY3vUyR7gAhMCWovKPJDaXNOyTOU4DCTc9QzSvpiLmlKxzIB3uAIjRIU
-         I8lfKuLAQowgWHUV1p0ARZJ6cqMkmvEEBRnyZumV7tyNpuszqXFzgSmrqheKeM7zTd6J
-         nBQ8mI4UEGcSO61MNDEBI5rIiDSqg88s71H9SFOrlmZL+N6MMdtmT0M1tnkDRh9YfuTs
-         YNs6STbOem+nSFmHc5csigya2iLB0h9O4XKaaMCXmlA01DzU13lPMzn4JJSnwsg4fGHw
-         celYA/H0heBhSGktRLoMyC9s5TWDjX1ylQkW/rcSHMYzWPvzP822UbLyPUwLAnJz9GDk
-         chXg==
+        d=landley-net.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=TvO93ObMgTYHjDl6zNqxFkX4IbiTkta5TxuIJ9/0KE0=;
+        b=uj6zTQLmvsacomfu4ja02b3+QGGKnR2VvOCjQU6GDqQ3tSfWyLurrZmiVooaYsYVzv
+         91noICmFahhM2vJXHUdCdTC86dC4J0O0xLYX4HIAwgPJ6ltgW4iNqa0B8NnE/WGJ/pyv
+         RcIQxqyNbQpST93lIaay+4v6cWXmlUDW1XMsoPw0v5MFoABHU5D6lIglCa6why1vMTKG
+         ghUkK4/sBk0AAFtwPgDTot1oh+N0ceGiI7fYmvR8pB3rI5st37sHO9UrlT3yTBbTzF9v
+         l6/R9Z6Cf57Si1tdLTZKp+N/SWdeuHs9eEu34sG7jl2pePNKba83A453HTwSGfj4ZIta
+         jAcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=L4vKUH6ofrpfvMS2B0dpEO1I2Rs+MwbS7b8FsbyDaw8=;
-        b=XsAsaYglNu7JCFVuE1AQ/6zHi8+g1cEHifybeRfmahK6ZxzaWSF5BhGzTH6Nc6WO9z
-         wSL7XdOi6syk1304X+LGWVdEt+1j0EBmwhSjGDO/e9iipdUKFAoWD9awJDmlXb0iBQak
-         B/XqAskPsZhby5wQD6D5wTG1yu6OrI1b9UoJgGf49PGhnoXyI+RmmagfPa+hzbxNnvzz
-         3DuYkpOpTcCrAA9bXj/FC2XryclD6vZhEHs75lkG91+FHXb/qR96lqEpast4rXgnmqHo
-         EmN34bktmPX6iCivDvJggQgUT7eOO27UgypmvtKBEmF4VfJ+eXvZ7DVPq65wcCvSR2LF
-         q3Cg==
-X-Gm-Message-State: AOAM531XmLXeBTVWc1eKtbDo/9s2UgeNj1e5TPNQyRHHmerNplk/m6g6
-        ZKit1Bny8o89ZmT7XKyfdT4KeWSK8r701cg+hK8=
-X-Google-Smtp-Source: ABdhPJwGJTwRL/jR2PEJfrWyKKc4dmGeMQHMmIC6Oal3Gu+2Dko++Dt340OgHVYC5S2qaBc9GhFUyQ==
-X-Received: by 2002:a63:1158:: with SMTP id 24mr15262089pgr.193.1637834559636;
-        Thu, 25 Nov 2021 02:02:39 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id g22sm2907314pfj.29.2021.11.25.02.02.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Nov 2021 02:02:39 -0800 (PST)
-Message-ID: <619f5f3f.1c69fb81.af9a5.7e5a@mx.google.com>
-Date:   Thu, 25 Nov 2021 02:02:39 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=TvO93ObMgTYHjDl6zNqxFkX4IbiTkta5TxuIJ9/0KE0=;
+        b=FS2OjQ3ZrUXelRUbTKGXyR0l/OsY4cSIft1F5tJPyHeYCgsUBquzDujeygJ0XPle+4
+         xIYJQ6BkXR8RN8Ekd3CesjDgK5UWO6F7FgOj0wDYy9hFjR4FXhWhEQ67dstTMKEGGiIA
+         KI9XXmnjkI88WzRvP4Jz1xxIFQvevFdIWg7PwtEHNuRmcBt2ZZl6EQipJRROW24gMze4
+         XEigVlDG6QVO2Wv7btUXMsTosp+EB2wWifYhmZRZAAMpEneJ6uy9+dzfiT99VPvmPfBf
+         FjL2caEDkC0AQQdrgyeKuGlkYlYZTqtX+9A9Q7zwWGqkYAPXDzVMAqbCC55ICqkfUpRW
+         MkdA==
+X-Gm-Message-State: AOAM531dyXO/8u3/+xNk2n4Gbn5e1xDw+hrCcugDwWDIAJstCU7KolOz
+        7wQij7KIGfEWJSPAx6Y3UF8JWg==
+X-Google-Smtp-Source: ABdhPJwfIBTpcnLWlUhrZerKtW/NA0YMhumz3pqkLqPb4YSPTm3bW+wCISbyS5i+PNkBiKGPcdXqkg==
+X-Received: by 2002:a05:6808:14c3:: with SMTP id f3mr14791412oiw.162.1637842240252;
+        Thu, 25 Nov 2021 04:10:40 -0800 (PST)
+Received: from ?IPv6:2607:fb90:c2ea:cdb4:6680:99ff:fe6f:cb54? ([2607:fb90:c2ea:cdb4:6680:99ff:fe6f:cb54])
+        by smtp.gmail.com with ESMTPSA id a16sm486384otj.79.2021.11.25.04.10.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 Nov 2021 04:10:39 -0800 (PST)
+Subject: Re: spinlock.c:306:9: error: implicit declaration of function
+ '__raw_write_lock_nested'
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Galbraith <umgwanakikbuti@gmail.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, lkft-triage@lists.linaro.org,
+        =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@collabora.com>
+References: <CA+G9fYtH2JR=L0cPoOEqsEGrZW_uOJgX6qLGMe_hbLpBtjVBwA@mail.gmail.com>
+ <41206fc7-f8ce-98aa-3718-ba3e1431e320@landley.net>
+ <CAK8P3a3pQW59NVF=5P+ZiBjNJmnWh+iTZUHvqHBrXkHA6pMd4g@mail.gmail.com>
+ <7d5a5249-40ee-9a42-c6a0-a5defa3703c1@landley.net>
+ <CAK8P3a0XGz=F0nPAW8T-VvfH5bPuGTNiPZ18N+Z6Sj_M_6TrPA@mail.gmail.com>
+From:   Rob Landley <rob@landley.net>
+Message-ID: <eef6670c-1fb7-2d01-72ed-258d49227de1@landley.net>
+Date:   Thu, 25 Nov 2021 06:10:54 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: next-20211125
-X-Kernelci-Report-Type: test
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-Subject: next/master baseline: 569 runs, 10 regressions (next-20211125)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+In-Reply-To: <CAK8P3a0XGz=F0nPAW8T-VvfH5bPuGTNiPZ18N+Z6Sj_M_6TrPA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master baseline: 569 runs, 10 regressions (next-20211125)
-
-Regressions Summary
--------------------
-
-platform             | arch  | lab          | compiler | defconfig         =
-           | regressions
----------------------+-------+--------------+----------+-------------------=
------------+------------
-meson-g12b-odroid-n2 | arm64 | lab-baylibre | gcc-10   | defconfig+CON..._6=
-4K_PAGES=3Dy | 1          =
-
-r8a77950-salvator-x  | arm64 | lab-baylibre | clang-13 | defconfig         =
-           | 1          =
-
-r8a77950-salvator-x  | arm64 | lab-baylibre | gcc-10   | defconfig+ima     =
-           | 1          =
-
-zynqmp-zcu102        | arm64 | lab-cip      | clang-13 | defconfig+CON..._6=
-4K_PAGES=3Dy | 1          =
-
-zynqmp-zcu102        | arm64 | lab-cip      | clang-13 | defconfig         =
-           | 1          =
-
-zynqmp-zcu102        | arm64 | lab-cip      | gcc-10   | defconfig+CON..._6=
-4K_PAGES=3Dy | 1          =
-
-zynqmp-zcu102        | arm64 | lab-cip      | gcc-10   | defconfig+crypto  =
-           | 1          =
-
-zynqmp-zcu102        | arm64 | lab-cip      | gcc-10   | defconfig+CON...OM=
-IZE_BASE=3Dy | 1          =
-
-zynqmp-zcu102        | arm64 | lab-cip      | gcc-10   | defconfig+ima     =
-           | 1          =
-
-zynqmp-zcu102        | arm64 | lab-cip      | gcc-10   | defconfig+debug   =
-           | 1          =
-
-
-  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
-211125/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   master
-  Describe: next-20211125
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      f81e94e91878bded599cc60f2881cfd50991aeb9 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform             | arch  | lab          | compiler | defconfig         =
-           | regressions
----------------------+-------+--------------+----------+-------------------=
------------+------------
-meson-g12b-odroid-n2 | arm64 | lab-baylibre | gcc-10   | defconfig+CON..._6=
-4K_PAGES=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/619f26953ea460fc0ff2efb8
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20211125/arm6=
-4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-meson-g=
-12b-odroid-n2.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20211125/arm6=
-4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-meson-g=
-12b-odroid-n2.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/619f26953ea460fc0ff2e=
-fb9
-        new failure (last pass: next-20211123) =
-
- =
-
-
-
-platform             | arch  | lab          | compiler | defconfig         =
-           | regressions
----------------------+-------+--------------+----------+-------------------=
------------+------------
-r8a77950-salvator-x  | arm64 | lab-baylibre | clang-13 | defconfig         =
-           | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/619f2ee2df23e4aaa1f2efbf
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    clang-13 (Debian clang version 13.0.1-++20211110062941+9dc7d=
-6d5e326-1~exp1~20211110183517.26)
-  Plain log:   https://storage.kernelci.org//next/master/next-20211125/arm6=
-4/defconfig/clang-13/lab-baylibre/baseline-r8a77950-salvator-x.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20211125/arm6=
-4/defconfig/clang-13/lab-baylibre/baseline-r8a77950-salvator-x.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/619f2ee2df23e4aaa1f2e=
-fc0
-        new failure (last pass: next-20211124) =
-
- =
-
-
-
-platform             | arch  | lab          | compiler | defconfig         =
-           | regressions
----------------------+-------+--------------+----------+-------------------=
------------+------------
-r8a77950-salvator-x  | arm64 | lab-baylibre | gcc-10   | defconfig+ima     =
-           | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/619f2a594463e2109ef2efcb
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+ima
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20211125/arm6=
-4/defconfig+ima/gcc-10/lab-baylibre/baseline-r8a77950-salvator-x.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20211125/arm6=
-4/defconfig+ima/gcc-10/lab-baylibre/baseline-r8a77950-salvator-x.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/619f2a594463e2109ef2e=
-fcc
-        new failure (last pass: next-20211124) =
-
- =
-
-
-
-platform             | arch  | lab          | compiler | defconfig         =
-           | regressions
----------------------+-------+--------------+----------+-------------------=
------------+------------
-zynqmp-zcu102        | arm64 | lab-cip      | clang-13 | defconfig+CON..._6=
-4K_PAGES=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/619f2c145115df8757f2efb0
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
-  Compiler:    clang-13 (Debian clang version 13.0.1-++20211110062941+9dc7d=
-6d5e326-1~exp1~20211110183517.26)
-  Plain log:   https://storage.kernelci.org//next/master/next-20211125/arm6=
-4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-13/lab-cip/baseline-zynqmp-zcu=
-102.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20211125/arm6=
-4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-13/lab-cip/baseline-zynqmp-zcu=
-102.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/619f2c145115df8757f2e=
-fb1
-        failing since 1 day (last pass: next-20211118, first fail: next-202=
-11123) =
-
- =
-
-
-
-platform             | arch  | lab          | compiler | defconfig         =
-           | regressions
----------------------+-------+--------------+----------+-------------------=
------------+------------
-zynqmp-zcu102        | arm64 | lab-cip      | clang-13 | defconfig         =
-           | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/619f2d686a6741ecf4f2efab
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    clang-13 (Debian clang version 13.0.1-++20211110062941+9dc7d=
-6d5e326-1~exp1~20211110183517.26)
-  Plain log:   https://storage.kernelci.org//next/master/next-20211125/arm6=
-4/defconfig/clang-13/lab-cip/baseline-zynqmp-zcu102.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20211125/arm6=
-4/defconfig/clang-13/lab-cip/baseline-zynqmp-zcu102.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/619f2d686a6741ecf4f2e=
-fac
-        failing since 1 day (last pass: next-20211118, first fail: next-202=
-11124) =
-
- =
-
-
-
-platform             | arch  | lab          | compiler | defconfig         =
-           | regressions
----------------------+-------+--------------+----------+-------------------=
------------+------------
-zynqmp-zcu102        | arm64 | lab-cip      | gcc-10   | defconfig+CON..._6=
-4K_PAGES=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/619f2687eb67beaa09f2efa3
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20211125/arm6=
-4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-cip/baseline-zynqmp-zcu10=
-2.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20211125/arm6=
-4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-cip/baseline-zynqmp-zcu10=
-2.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/619f2687eb67beaa09f2e=
-fa4
-        failing since 1 day (last pass: next-20211118, first fail: next-202=
-11123) =
-
- =
-
-
-
-platform             | arch  | lab          | compiler | defconfig         =
-           | regressions
----------------------+-------+--------------+----------+-------------------=
------------+------------
-zynqmp-zcu102        | arm64 | lab-cip      | gcc-10   | defconfig+crypto  =
-           | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/619f2688eb67beaa09f2efa6
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+crypto
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20211125/arm6=
-4/defconfig+crypto/gcc-10/lab-cip/baseline-zynqmp-zcu102.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20211125/arm6=
-4/defconfig+crypto/gcc-10/lab-cip/baseline-zynqmp-zcu102.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/619f2688eb67beaa09f2e=
-fa7
-        failing since 1 day (last pass: next-20211118, first fail: next-202=
-11123) =
-
- =
-
-
-
-platform             | arch  | lab          | compiler | defconfig         =
-           | regressions
----------------------+-------+--------------+----------+-------------------=
------------+------------
-zynqmp-zcu102        | arm64 | lab-cip      | gcc-10   | defconfig+CON...OM=
-IZE_BASE=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/619f27f0a3cf8122b3f2efbb
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20211125/arm6=
-4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-cip/baseline-zynqmp-zcu102=
-.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20211125/arm6=
-4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-cip/baseline-zynqmp-zcu102=
-.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/619f27f0a3cf8122b3f2e=
-fbc
-        failing since 1 day (last pass: next-20211118, first fail: next-202=
-11123) =
-
- =
-
-
-
-platform             | arch  | lab          | compiler | defconfig         =
-           | regressions
----------------------+-------+--------------+----------+-------------------=
------------+------------
-zynqmp-zcu102        | arm64 | lab-cip      | gcc-10   | defconfig+ima     =
-           | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/619f27f0bd4e52ac23f2ef9f
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+ima
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20211125/arm6=
-4/defconfig+ima/gcc-10/lab-cip/baseline-zynqmp-zcu102.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20211125/arm6=
-4/defconfig+ima/gcc-10/lab-cip/baseline-zynqmp-zcu102.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/619f27f0bd4e52ac23f2e=
-fa0
-        failing since 1 day (last pass: next-20211118, first fail: next-202=
-11123) =
-
- =
-
-
-
-platform             | arch  | lab          | compiler | defconfig         =
-           | regressions
----------------------+-------+--------------+----------+-------------------=
------------+------------
-zynqmp-zcu102        | arm64 | lab-cip      | gcc-10   | defconfig+debug   =
-           | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/619f2dcc8e0d93ba54f2efb5
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+debug
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20211125/arm6=
-4/defconfig+debug/gcc-10/lab-cip/baseline-zynqmp-zcu102.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20211125/arm6=
-4/defconfig+debug/gcc-10/lab-cip/baseline-zynqmp-zcu102.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/619f2dcc8e0d93ba54f2e=
-fb6
-        failing since 1 day (last pass: next-20211118, first fail: next-202=
-11123) =
-
- =20
+On 11/25/21 1:25 AM, Arnd Bergmann wrote:
+> On Thu, Nov 25, 2021 at 12:38 AM Rob Landley <rob@landley.net> wrote:
+>> On 11/24/21 1:49 AM, Arnd Bergmann wrote:
+>> > On Wed, Nov 24, 2021 at 8:31 AM Rob Landley <rob@landley.net> wrote:
+> 
+>> > Did you test clone3?
+>>
+>> Haven't got anything that's using it (musl-libc doesn't know about it yet) but
+>> it looked straightforward? (Unlike the #ifdef stack around the previous clone...)
+>>
+>> I can try building tools/testing/selftests/clone3 if you like, but for some
+>> reason the clone3 tests want -lcap which isn't in my cross compiler. (Because to
+>> test a clone system call, you need to manipulate capability bits. Of course.)
+>> Right, comment out the LDLIBS line in the makefile and the first 3 built, let's
+>> try those... Hmmm, it's saying the syscall isn't supported, because it's using
+>> syscall.h out of the cross compiler headers (not THIS kernel's #includes) which
+>> of course doesn't have it, and then clone3_selftests.h falls back to:
+>>
+>> #ifndef __NR_clone3
+>> #define __NR_clone3 -1
+>> #endif
+>>
+>> Right, stick a 435 in there and... it's still skipping it. Why is it still
+>> skipping it... because the RUNTIME syscall is returning ENOSYS. Ok, I have to go
+>> stick printk() calls into the kernel. (Do I have to #define those
+>> #YES_I_WANT_THIS_SYSCALL_WHY_WOULDNT_I macros? Hmmm...)
+> 
+> This specific syscall is protected by a macro so it doesn't get implicitly
+> enabled without architecture specific review for those architectures using
+> include/uapi/asm-generic/unistd.h.
+
+Sigh.
+
+>> > This needs a custom wrapper on most architectures
+>> > to have sensible calling conventions.
+>>
+>> Define "sensible" in this context? It's a new 2 argument syscall? (Do you mean a
+>> libc wrapper?)
+>>
+>> > If sh doesn't need it, that should
+>> > be explained in the changelog text.
+>>
+>> I'm happy to try to fix stuff up, but I don't understand the objection. Does it
+>> do something other than what the old clone did, except without the need to pass
+>> more arguments than we necessarily have registers defined for? (Calls the same
+>> clone plumbing, which should call back into arch/sh/kernel/process_32.c already...?)
+>>
+>> The most recent clone3 arch addition was commit 59a4e0d5511b which also just
+>> pulled in the generic version. (Via #define NO_REALLY_I_WANT_THIS_SYSCALL rather
+>> than editing the tbl file? Looks like I've got some reading to do...)
+> 
+> The best reference I could find is:
+> 
+> https://lore.kernel.org/linux-api/20190604160944.4058-2-christian@brauner.io/
+
+Does not say what the special handling is. Does not provide an example of said
+special handling. Implied that only three do NOT need special handling, two of
+which are x86 and arm, which seems... convenient.
+
+Right, let's see what "grep -r clone arch/" says:
+
+m68k/kernel/process.c is obviously overriding
+arc/include/syscalls.h has sys_clone_wrapper()
+nios2/kernel/process.c has nios2_clone()
+openrisc/kernel/entry.S has __sys_clone()
+sparc/kernel/process.c has sparce_clone()
+h8300/kernel/process.c has its own sys_clone()
+ia64/kernel/process.c has ia64_clone()
+user mode linux is just weird.
+
+So the architectures that wrap clone are m68k, arc, nios2, openrisc, sparc,
+h8300, and ia64.
+
+Implying that the ones that DON'T are alpha, arm64, hexagon, nds32, parisc,
+s390, csky, microblaze, powerpc, sh, x86, arm, mips, riscv, and xtensa.
+
+Which would mean 2/3 of architectures don't wrap clone, and thus arch/sh not
+doing so isn't unusual.
+
+> If fork() and clone() don't need special handling on arch/sh, then
+> clone3 shouldn't
+> need it either, unless the existing ones are also wrong. It looks like
+> some architectures
+> override these to avoid leaking register state from the kernel to the
+> child process.
+
+$ cd arch/sh
+
+$ grep -r clone
+tools/Makefile:# Shamelessly cloned from ARM.
+kernel/process_32.c:int copy_thread(unsigned long clone_flags, unsigned long
+usp, unsigned long arg,
+kernel/process_32.c:	if (clone_flags & CLONE_SETTLS)
+kernel/syscalls/syscall.tbl:120	common	clone				sys_clone
+kernel/syscalls/syscall.tbl:435	common	clone3				sys_clone3
+
+$ grep -r fork
+include/asm/cacheflush.h: *  - flush_cache_dup mm(mm) handles cache flushing
+when forking
+kernel/entry-common.S:	.globl	ret_from_fork
+kernel/entry-common.S:ret_from_fork:
+kernel/cpu/init.c: * state prior to hand forking the idle loop.
+kernel/process_32.c:asmlinkage void ret_from_fork(void);
+kernel/process_32.c:	p->thread.pc = (unsigned long) ret_from_fork;
+kernel/syscalls/syscall.tbl:2	common	fork				sys_fork
+kernel/syscalls/syscall.tbl:190	common	vfork				sys_vfork
+
+Hard to prove a negative, but I'm not seeing any wrappers. It's got some
+callbacks, but I think the existing plumbing is calling them already?
+
+>        Arnd
+
+Rob

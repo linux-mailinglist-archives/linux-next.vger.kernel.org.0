@@ -2,80 +2,85 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 294E345D463
-	for <lists+linux-next@lfdr.de>; Thu, 25 Nov 2021 06:41:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E204845D49A
+	for <lists+linux-next@lfdr.de>; Thu, 25 Nov 2021 07:13:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235317AbhKYFoP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 25 Nov 2021 00:44:15 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:42373 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232169AbhKYFmP (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 25 Nov 2021 00:42:15 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J06BH1y25z4xbs;
-        Thu, 25 Nov 2021 16:39:03 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1637818743;
-        bh=mGmqV9fNZ9W5jFeC/Rezztr6KtZ/RfhqyWXyOdRutJg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=uXVHX/vFalAVdvUBPXabQup/t2D1uLQinUEUqGofefBlfNS9+2NvoIBBFEq2OPzhg
-         /KHArA+ENmuxaHLUqgL9NhBnLAMRpTJfI+ODpRqz3jJlnXuAl3VM1qhhZeOtY1JG5y
-         aGKTS1D7LuQkKgUDnG4mgC2IjgFFIWd/xjjyaq2L6P3ydvgQBDX3ujOjET0gKZoQVc
-         aOFMJLZhFudSxTejQLUkTWfjm00z+pRA5iHae99EhNqCOxLjliEoVibG5iDbiMuNBX
-         J/AZJOLPUL584U+sW8mv1O8/HHj2SP3EyZbY4iuEkNfBWasBR0G4cNt18/6czhw5Nt
-         N76kcmo+DK62A==
-Date:   Thu, 25 Nov 2021 16:39:02 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Steve French <smfrench@gmail.com>
+        id S1346904AbhKYGQl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 25 Nov 2021 01:16:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33776 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347412AbhKYGOl (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 25 Nov 2021 01:14:41 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A425C061756;
+        Wed, 24 Nov 2021 22:11:30 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id c32so13556063lfv.4;
+        Wed, 24 Nov 2021 22:11:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ckjArhrzvoqqhO4y1sL844scqeyh+CAnP+plBHTM2JY=;
+        b=bKsOkXmgqwNkjj+IOrAdCgydQqWmHW6HJGaH7UFx/fwiPH1hGpWA3Mm8rUcQej4ELO
+         KnEKc3bl5AMFuN8pyIvqPrTCpv1VuGSDiSasy9sLzTrT3x/9m3H77hxFyuWqsxsR+3HL
+         iBhh0S5NiGgD0+H7tO9BOJAz0C/uBZGF6C7Wbc2x8lM4aSlxBq8bYkSNlUajrSeuWbbk
+         /7eeXD8JuON6ikYwFu5HJXCh1xRqvLbndzO56qKeWfqr+pT9fw1AdV7MIGKtdzrj1TKz
+         J4xPcFX5Ow4CgB16bQLuDHyhW5aFS7YsberdCOjQa/imGe9rgjRMz6ktcdOGjyTgJ757
+         yeVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ckjArhrzvoqqhO4y1sL844scqeyh+CAnP+plBHTM2JY=;
+        b=0u63xrbWw1d/GfrtPBX7jfJd3iQ9hYwI4X1/l8BNLy4gc7eRkEOEHqF9Q7YJsCwWEF
+         r293DXkD5Q3n1Y+kO0tfXxQ3N/aHPBADWlFKuJ+ct2wthi5ymf0mVJ4pBU5xtd4/1QpA
+         vQXK8mSLsXndGcNZ9ILsmNP7M/qDtFeIRuTv9yB3bjwCfLWrQUM3slT7AsT37sGO+oWW
+         dIWvr8E4C5Pa3BYshNddY1rZPxo1w1T7FvGYNdY4bgIko4N8R/F7NC5mNg823CDphehL
+         W3xJJM0d1vWYpXchr4mfNS/KW9pCVcwkonOh9DyMRt7DbruNvb2jv8lxS5tKyKEWOrHg
+         ww5Q==
+X-Gm-Message-State: AOAM5331nb1JMr7NnkylQfX9vysitP7zSGJl6A24el3zMv2QUO6qWnL6
+        1HMhoVLJvw48FnHKDie6+xTOOdhblKyfkvOFLtZXbY95
+X-Google-Smtp-Source: ABdhPJwuSglGA1GaLb6tWiwKtHYXhyE+pMvfHq+gndsCmYg2iObCo1MOVcmr6nmXDB+ENFKlrWQQkewpVk2rBH2XXWw=
+X-Received: by 2002:a05:6512:3fa4:: with SMTP id x36mr21235335lfa.320.1637820688059;
+ Wed, 24 Nov 2021 22:11:28 -0800 (PST)
+MIME-Version: 1.0
+References: <20211125163902.46d47238@canb.auug.org.au>
+In-Reply-To: <20211125163902.46d47238@canb.auug.org.au>
+From:   Steve French <smfrench@gmail.com>
+Date:   Thu, 25 Nov 2021 00:11:16 -0600
+Message-ID: <CAH2r5msVw-_kEF5zZDzjUbRX04Qr_UjF-64mbf1TxjA7kx3gyw@mail.gmail.com>
+Subject: Re: linux-next: Signed-off-by missing for commit in the ksmbd tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the ksmbd tree
-Message-ID: <20211125163902.46d47238@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/a9uJV6hizNB1TA4J.cd.XBW";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/a9uJV6hizNB1TA4J.cd.XBW
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+fixed
 
-Hi all,
+On Wed, Nov 24, 2021 at 11:39 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> Commits
+>
+>   a48fe999b8a6 ("ksmbd: fix memleak in get_file_stream_info()")
+>   43e65dbd9ace ("ksmbd: contain default data stream even if xattr is empty")
+>   b8d4e5a1a063 ("ksmbd: downgrade addition info error msg to debug in smb2_get_info_sec()")
+>   b7783e56d8dd ("docs: filesystem: cifs: ksmbd: Fix small layout issues")
+>   240a60f0d025 ("ksmbd: Fix an error handling path in 'smb2_sess_setup()'")
+>
+> are missing a Signed-off-by from their committer.
+>
+> --
+> Cheers,
+> Stephen Rothwell
 
-Commits
 
-  a48fe999b8a6 ("ksmbd: fix memleak in get_file_stream_info()")
-  43e65dbd9ace ("ksmbd: contain default data stream even if xattr is empty")
-  b8d4e5a1a063 ("ksmbd: downgrade addition info error msg to debug in smb2_=
-get_info_sec()")
-  b7783e56d8dd ("docs: filesystem: cifs: ksmbd: Fix small layout issues")
-  240a60f0d025 ("ksmbd: Fix an error handling path in 'smb2_sess_setup()'")
 
-are missing a Signed-off-by from their committer.
+-- 
+Thanks,
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/a9uJV6hizNB1TA4J.cd.XBW
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGfIXYACgkQAVBC80lX
-0GzMzgf+PC2AUVxbZFbpKJjhRwJe2cjZsduyM+coWzSNoA82iHQnEyWFxgcTRUcW
-bDolHvgaD4l0o8YdDp02LwxHumxG+B4Kzbuyz91nugcHjsTIL3B2VawYkeDh8jxq
-sVdG/uE/mqICh9ydf89fcfP02lnywKQDIB1hJ57cQU/1zTej3b5gcmN8jdUW/jRK
-LPpX8EoyYQz1qBF1wboV4ePpjssF5Nv/nfP+fwVgIqaWLSVbXDYuEw7t77NsEpma
-5yV1T7DZRrGVx9ke7rKbGu4Y+iPpCNVHxIuoJsneYND3RppEac8un+xbAMDpi1Qy
-i0X9HKpia8lIvk2u/84DpogBJz+6jw==
-=FhQd
------END PGP SIGNATURE-----
-
---Sig_/a9uJV6hizNB1TA4J.cd.XBW--
+Steve

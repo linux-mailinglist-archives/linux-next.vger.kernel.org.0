@@ -2,40 +2,39 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9CFC45D58E
-	for <lists+linux-next@lfdr.de>; Thu, 25 Nov 2021 08:35:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71E9B45D5CE
+	for <lists+linux-next@lfdr.de>; Thu, 25 Nov 2021 08:55:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235163AbhKYHiy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 25 Nov 2021 02:38:54 -0500
-Received: from szxga03-in.huawei.com ([45.249.212.189]:28173 "EHLO
-        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232441AbhKYHh1 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 25 Nov 2021 02:37:27 -0500
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4J08hz4ttXz8vdg;
-        Thu, 25 Nov 2021 15:32:19 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 25 Nov 2021 15:34:07 +0800
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2308.20; Thu, 25 Nov 2021 15:34:06 +0800
-Message-ID: <4d951721-caa2-f692-293d-ee8b93e62597@huawei.com>
-Date:   Thu, 25 Nov 2021 15:34:06 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [next] kasan: shadow.c:528:33: error: 'VM_DELAY_KMEMLEAK'
- undeclared
-Content-Language: en-US
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        id S238384AbhKYH6c (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 25 Nov 2021 02:58:32 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:41105 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229894AbhKYH4b (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 25 Nov 2021 02:56:31 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J099758TQz4xbs;
+        Thu, 25 Nov 2021 18:53:15 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1637826799;
+        bh=m6sipBcVTJjllE1ha3s2FeaLnzEFuD5JT7WBAgFhJfE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=SN0pN1tQiLdxjjIBmnzzGmT9w2Mm6cRc4j1UDezCutpYIdE9sJtb/KoFTBNteH7N7
+         TFp1bPXEjQg7B+DrIW6jku/LrrcEv9quR1lR1tq9vVxSFVlbm9GTY/OFMwQJs6Gg64
+         yQxmFEveynh2+4bMKaAiAy0qmYo2yLqfEzVTFcp5iyh14DlxE+6irYZbhrkoQmjsro
+         fW48a4g/jxyMUrcdnldl6fr5zg+QMxMGLXiO2IYzBfAk+nbqUiJs1sMeR39FU3BR3d
+         tgRmHqnZd9ZFNjlsjSIbkpCMQr87GXQa/GoxB0t/mq+WAKow4dK0XyhEiHoENQrkIh
+         YywmnFLQnLXuA==
+Date:   Thu, 25 Nov 2021 18:53:13 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
         open list <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>
-CC:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        linux-mm <linux-mm@kvack.org>,
         Andrew Morton <akpm@linux-foundation.org>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
         Yongqiang Liu <liuyongqiang13@huawei.com>,
         Andrey Ryabinin <ryabinin.a.a@gmail.com>,
         Dmitry Vyukov <dvyukov@google.com>,
@@ -49,62 +48,95 @@ CC:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         Alexander Potapenko <glider@google.com>
-References: <CA+G9fYuLv7491Q2AHcaUAQ2AQeFBQgx8w0DzK95Qf6Fh9gGFfQ@mail.gmail.com>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: Re: [next] kasan: shadow.c:528:33: error: 'VM_DELAY_KMEMLEAK'
+ undeclared
+Message-ID: <20211125185313.77e20bc5@canb.auug.org.au>
 In-Reply-To: <CA+G9fYuLv7491Q2AHcaUAQ2AQeFBQgx8w0DzK95Qf6Fh9gGFfQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggeme702-chm.china.huawei.com (10.1.199.98) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
+References: <CA+G9fYuLv7491Q2AHcaUAQ2AQeFBQgx8w0DzK95Qf6Fh9gGFfQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/.DyF2x5Y=NaNAowk5G14Joj";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Sorry for the missing change of VM_DEFER_KMEMLEAK.
+--Sig_/.DyF2x5Y=NaNAowk5G14Joj
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I will  add Fixes tag and resend v4.
+Hi Naresh,
 
-On 2021/11/25 15:13, Naresh Kamboju wrote:
+On Thu, 25 Nov 2021 12:43:41 +0530 Naresh Kamboju <naresh.kamboju@linaro.or=
+g> wrote:
+>
 > [ Please ignore this email if it is already reported ]
->
-> While building Linux next 20211125 x86 with CONFIG_KASAN=y gcc-11
+>=20
+> While building Linux next 20211125 x86 with CONFIG_KASAN=3Dy gcc-11
 > following warnings / errors noticed.
->
+>=20
 > mm/kasan/shadow.c: In function 'kasan_module_alloc':
 > mm/kasan/shadow.c:528:33: error: 'VM_DELAY_KMEMLEAK' undeclared (first
 > use in this function); did you mean 'VM_DEFER_KMEMLEAK'?
->    528 |                 if (vm->flags & VM_DELAY_KMEMLEAK)
->        |                                 ^~~~~~~~~~~~~~~~~
->        |                                 VM_DEFER_KMEMLEAK
+>   528 |                 if (vm->flags & VM_DELAY_KMEMLEAK)
+>       |                                 ^~~~~~~~~~~~~~~~~
+>       |                                 VM_DEFER_KMEMLEAK
 > mm/kasan/shadow.c:528:33: note: each undeclared identifier is reported
 > only once for each function it appears in
 > make[3]: *** [scripts/Makefile.build:288: mm/kasan/shadow.o] Error 1
->
+>=20
 > Build config:
 > https://builds.tuxbuild.com/21OjEyx87iCX9bqOwJrZdl1wFFj/config
->
->
+>=20
+>=20
 > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
->
+>=20
 > meta data:
 > -----------
->      git describe: next-20211125
->      git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
->      git_sha: f81e94e91878bded599cc60f2881cfd50991aeb9
->      git_short_log: f81e94e91878 (\"Add linux-next specific files for 20211125\")
->      target_arch: x86
->      toolchain: gcc-11
->
+>     git describe: next-20211125
+>     git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+>     git_sha: f81e94e91878bded599cc60f2881cfd50991aeb9
+>     git_short_log: f81e94e91878 (\"Add linux-next specific files for 2021=
+1125\")
+>     target_arch: x86
+>     toolchain: gcc-11
+>=20
 > steps to reproduce:
 > tuxmake --runtime podman --target-arch x86_64 --toolchain gcc-11
 > --kconfig defconfig \
-> --kconfig-add https://builds.tuxbuild.com/21OjEyx87iCX9bqOwJrZdl1wFFj/config
->
-> https://builds.tuxbuild.com/21OjEyx87iCX9bqOwJrZdl1wFFj/tuxmake_reproducer.sh
->
+> --kconfig-add https://builds.tuxbuild.com/21OjEyx87iCX9bqOwJrZdl1wFFj/con=
+fig
+>=20
+> https://builds.tuxbuild.com/21OjEyx87iCX9bqOwJrZdl1wFFj/tuxmake_reproduce=
+r.sh
+>=20
 > --
 > Linaro LKFT
 > https://lkft.linaro.org
-> .
+
+Caused by commit
+
+  f61bc9ffcab1 ("mm: defer kmemleak object creation of module_alloc()")
+
+from the akpm-current tree.  The define is VM_DEFER_KMEMLEAK :-(
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/.DyF2x5Y=NaNAowk5G14Joj
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGfQOkACgkQAVBC80lX
+0GwUCwf/c0EEARMBwDYIgb1onsp9z7UjATvVkcBnNVbPcZbLLqQ1ZAFNVBuYz0FY
+zR6eUDVuIinxV1f+0qNnZ+0UrlXOnVXB8dyQGQk1nuwdRO/q4yqgS/s/l3wb/tMd
+dH4hFSbCb61V8opBuQ9XykPoOkY3fpI9J0G1QMlp5FdDVWKLC6VvPE3HwtTUoAvq
+BWRDFRc8RivX0YzI2gdP+x7vi/ol4ENUyq5hjjEZhmpzyT7tozDhY894fSv+sSFa
+Wa8yJPaRDXLuyyRnLumkOrOOVzgJsWakjM73hjvzavqek+wAts8QDSKqCHt2bg2l
+a304CvmUneLHJlBru4lSBjRbGiBU4Q==
+=DEkn
+-----END PGP SIGNATURE-----
+
+--Sig_/.DyF2x5Y=NaNAowk5G14Joj--

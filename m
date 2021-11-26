@@ -2,127 +2,130 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D86BB45E708
-	for <lists+linux-next@lfdr.de>; Fri, 26 Nov 2021 06:09:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CBCA45E722
+	for <lists+linux-next@lfdr.de>; Fri, 26 Nov 2021 06:19:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbhKZFMO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 26 Nov 2021 00:12:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54238 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231657AbhKZFKO (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 26 Nov 2021 00:10:14 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0BC0C061574;
-        Thu, 25 Nov 2021 21:06:59 -0800 (PST)
+        id S1343906AbhKZFXC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 26 Nov 2021 00:23:02 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:41029 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344942AbhKZFVC (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 26 Nov 2021 00:21:02 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J0jQj6J2mz4xZ0;
-        Fri, 26 Nov 2021 16:06:53 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J0jgJ0cFCz4xcs;
+        Fri, 26 Nov 2021 16:17:48 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1637903217;
-        bh=XDXo32ilfpNP9MsyByXrlv5irAatsADgZd48jBqXTf8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=EpY8l3OtTaH82UR0Ifn3gabVgl9XadekCvC9AOgnau2U2wjw4ZWzkn/RgpHrJD9tS
-         aVJuYiN+4JaRWLfdGw7BZor9418oPyAVwvh/KIjhLijQt1PFYqMl5JIYHkb7TcldNs
-         XDzIT2f3ORpkYrMKgkqDPbvepryF1YVrgv4uds90sNxY9biU+9yyUSHdDEyqAL3VX0
-         ToGpoprQNwxz+EM0SmsYsHs1X2eGz/mHh/sPQD3VUtSOjwLliMDmByH77CNk6KZ+35
-         33pNeWbLORE0Q3/n+Zm3+4fzNnj+yseUEMOuAH3bBElYYMeBRVlyOUlJnDMM9cVmfQ
-         VmSoCnOWLY/vg==
-Date:   Fri, 26 Nov 2021 16:06:51 +1100
+        s=201702; t=1637903868;
+        bh=AAOD21El17vpcnisEbyZYdugcNxszPm2+pdvTLoenSs=;
+        h=Date:From:To:Cc:Subject:From;
+        b=nH4yWcsTdCXNmXupIskWYkBjPcwXE9qsfAe27hsTwoZ74FBzYFxRO0A+8Yp1qli/m
+         lvwaF8Oysz+ncosu51eeJ8dKOy3e3ubsOsN7c6tmTXZ0n6FUfxI8556f1kijD0In3A
+         K0O2XbwOxhEjs/XUB5TT3LV+fgMj6JTa7qERwUuQhkeiVFmibQ08yZOO3dGn7kby8O
+         nFPSOJ6Q982lF/Fl8tsur2ncJ1LgGF9DsVoebyubmzIjHc0CZ0iMoHV0bIZmZfyAGS
+         rz8aPEUaplR6Dq4WZ/iqnSVa129tuBj+sJLIK9SQp8eE8j9b3GjFIQ/n3YX2kOWuIz
+         l6Vr/2nM+g9bQ==
+Date:   Fri, 26 Nov 2021 16:17:47 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yongqiang Liu <liuyongqiang13@huawei.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Alexander Potapenko <glider@google.com>
-Subject: Re: [next] kasan: shadow.c:528:33: error: 'VM_DELAY_KMEMLEAK'
- undeclared
-Message-ID: <20211126160651.318875c3@canb.auug.org.au>
-In-Reply-To: <4d951721-caa2-f692-293d-ee8b93e62597@huawei.com>
-References: <CA+G9fYuLv7491Q2AHcaUAQ2AQeFBQgx8w0DzK95Qf6Fh9gGFfQ@mail.gmail.com>
-        <4d951721-caa2-f692-293d-ee8b93e62597@huawei.com>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: runtime warnings from qemu run
+Message-ID: <20211126161747.1f7795b0@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/SRXfIYePoVpjN.GRgC9+DIT";
+Content-Type: multipart/signed; boundary="Sig_/Pjx1zm/0SNnSj.qidH65KuZ";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/SRXfIYePoVpjN.GRgC9+DIT
-Content-Type: text/plain; charset=UTF-8
+--Sig_/Pjx1zm/0SNnSj.qidH65KuZ
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Thu, 25 Nov 2021 15:34:06 +0800 Kefeng Wang <wangkefeng.wang@huawei.com>=
- wrote:
->
-> Sorry for the missing change of VM_DEFER_KMEMLEAK.
->=20
-> I will=C2=A0 add Fixes tag and resend v4.
+My qemu boot test (pseries_le_defconfig) produces these new messages:
 
-I have applied the following patch to linux-next today:
+code-patching: test failed at line 444
+code-patching: test failed at line 447
+code-patching: test failed at line 450
+code-patching: test failed at line 453
+code-patching: test failed at line 456
+code-patching: test failed at line 461
+code-patching: test failed at line 466
+code-patching: test failed at line 471
+code-patching: test failed at line 476
+code-patching: test failed at line 493
+code-patching: test failed at line 533
+code-patching: test failed at line 536
+code-patching: test failed at line 539
+code-patching: test failed at line 542
+code-patching: test failed at line 545
+code-patching: test failed at line 553
+code-patching: test failed at line 558
+code-patching: test failed at line 563
+code-patching: test failed at line 568
+code-patching: test failed at line 585
+code-patching: test failed at line 605
+code-patching: test failed at line 609
+code-patching: test failed at line 618
+code-patching: test failed at line 619
+code-patching: test failed at line 620
+code-patching: test failed at line 629
+code-patching: test failed at line 630
+code-patching: test failed at line 631
+code-patching: test failed at line 640
+code-patching: test failed at line 641
+code-patching: test failed at line 650
+code-patching: test failed at line 651
+code-patching: test failed at line 661
+code-patching: test failed at line 665
+code-patching: test failed at line 675
+code-patching: test failed at line 676
+code-patching: test failed at line 677
+code-patching: test failed at line 687
+code-patching: test failed at line 688
+code-patching: test failed at line 689
+code-patching: test failed at line 699
+code-patching: test failed at line 700
+code-patching: test failed at line 710
+code-patching: test failed at line 711
 
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Fri, 26 Nov 2021 15:34:11 +1100
-Subject: [PATCH] mm: kasan: fix VM_DELAY_KMEMLEAK typo
+Maybe caused by commit
 
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- mm/kasan/shadow.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+  8b8a8f0ab3f5 ("powerpc/code-patching: Improve verification of patchabilit=
+y")
 
-diff --git a/mm/kasan/shadow.c b/mm/kasan/shadow.c
-index 2ade2f484562..94136f84b449 100644
---- a/mm/kasan/shadow.c
-+++ b/mm/kasan/shadow.c
-@@ -525,7 +525,7 @@ int kasan_module_alloc(void *addr, size_t size, gfp_t g=
-fp_mask)
- 		vm->flags |=3D VM_KASAN;
- 		kmemleak_ignore(ret);
-=20
--		if (vm->flags & VM_DELAY_KMEMLEAK)
-+		if (vm->flags & VM_DEFER_KMEMLEAK)
- 			kmemleak_vmalloc(vm, size, gfp_mask);
-=20
- 		return 0;
---=20
-2.33.0
+As an presumably unrelated aside, we seem to be using a bit more stack
+space as well
+
+- mount (54) used greatest stack depth: 12512 bytes left
+- mount (55) used greatest stack depth: 12032 bytes left
++ mount (54) used greatest stack depth: 10608 bytes left
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/SRXfIYePoVpjN.GRgC9+DIT
+--Sig_/Pjx1zm/0SNnSj.qidH65KuZ
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGga2sACgkQAVBC80lX
-0GynbQf/ZYlJJA3FqVItDbfu5pbGIECoZjOAcMM3Ga0RrOL2NtD2Wq4W+gqk5SEs
-3DHO4DFRwxS55HEQeEZTiuZpmRbsXCOx4Jg9EjuusGhNaN7+3sRf2KPvvDQGO+/h
-h07NjhB13pT2If6XaQYpxKhPtCnTVxvKbZgKXqNIYNtS0CZmVK5hQEKksWFJVRwJ
-UenXnR9aRDtpf9Ly6gZ/uVosHzCmk0K11ExygGGcWRK5xy9vTnn9Aw6vpxWuhvMY
-dIvY8piAFGQS5DtZwSXonR6QXHr+TQh3xWlrFNLwKgMlBi+LBWgV2yZcBeHbZ2fJ
-Sr6AtsTABhp+y/XhNjKQXf/etacESg==
-=iWb2
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGgbfsACgkQAVBC80lX
+0Gxe3Qf+LJs2R9odFCwxljo8ufJdkWzJHDIluI/jxAUeRXb11TAqLN+RpO6bFdyX
++Wt6/Ua28tiT7Uj3B6ep4RKp0hEJ+jQzEGl5UIHxVm/qQgwd53FT8L9pmfPW2hBZ
+lyHtZh1vVcB4UmFdDTKN+e2Bmbde0aDlJIb8BD09qDZprENxDZsW+HCkLmB/BO0m
+fibxR7THsGopxE4IPjxOO0kTeyqhouSefEHFYkquet2krucrLjvnqVXxzNvXVoT3
+VuFONAgO13nuEzNH5zJuTwxXaFxcASMcb/90WzpQ+K248goNZtp0BoXPib5mW1uv
+V6d6LxaaL7yEhZAAjQUPSazZWD/ycg==
+=fUXM
 -----END PGP SIGNATURE-----
 
---Sig_/SRXfIYePoVpjN.GRgC9+DIT--
+--Sig_/Pjx1zm/0SNnSj.qidH65KuZ--

@@ -2,81 +2,73 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC344462646
-	for <lists+linux-next@lfdr.de>; Mon, 29 Nov 2021 23:46:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 369154623BA
+	for <lists+linux-next@lfdr.de>; Mon, 29 Nov 2021 22:49:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234959AbhK2Wtf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 29 Nov 2021 17:49:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36384 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235071AbhK2WtI (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 29 Nov 2021 17:49:08 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9093C0698DB;
-        Mon, 29 Nov 2021 12:32:36 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S232310AbhK2Vw2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 29 Nov 2021 16:52:28 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:26005 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229863AbhK2Vu1 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Mon, 29 Nov 2021 16:50:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638222429;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RKWEfPAaTGSd6GIvVOGiefK11BQmc7X6t2OcMCJAFtA=;
+        b=Gn35YlvEf5lx5QuxXoS8ABCKR7aaT8MaHJfQ76P3/MC5RNi+zkocpIj09dTMw/yj3a1g8h
+        QepSW8e21MmrMfvE2gS9KPOLTsefJRmZW0DcbAai19BDJBHOHwebULbnvaqGXGQ/pwaym2
+        vElXHQFRB3lIZvUs1yhnPRUybmgRuCg=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-288-LzK8ijvxMuqM2qFilC9xdw-1; Mon, 29 Nov 2021 16:47:07 -0500
+X-MC-Unique: LzK8ijvxMuqM2qFilC9xdw-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J2xqM3DC2z4xPv;
-        Tue, 30 Nov 2021 07:32:30 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1638217951;
-        bh=l9w9TSvhh87po2E861l9G8UwZN2i/VH+QsHq1D21drs=;
-        h=Date:From:To:Cc:Subject:From;
-        b=fi1gpbz+M5JzVx0HugxH98Da6n0wzsxC7+YsEr0EesKnrnmBRSMIGC+nVMjrVljuV
-         p3h5qLjYKhyfoLF83swpTOFp/zWmKjiQM92+qseKRzY2o7qKsUAVETeOtB0e3skTvK
-         ibK5EW/aYcW9Llc29UogmXXcx3G4c+xb81L1UPEQo2K75AZHR7iRgommcZ7BLwPuti
-         HGlYQ1D66PeoPT2ZDUynNfQ5AuSQeoFWXlStyMhyiQ1Qj2mpvDwXSPRCvcZVXmQhxw
-         gg/SjPISgPWRldg+p5G6NSztlzd413S0UGUF7s86LXEs1/YF6lDVIGOCL4U+uRahc9
-         g8GXU2YDHQlqA==
-Date:   Tue, 30 Nov 2021 07:32:28 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     msizanoen1 <msizanoen@qtmlabs.xyz>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id EBF6781EE60;
+        Mon, 29 Nov 2021 21:47:06 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.25])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1A7D760BF1;
+        Mon, 29 Nov 2021 21:47:05 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20211130074449.0ec314a2@canb.auug.org.au>
+References: <20211130074449.0ec314a2@canb.auug.org.au>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     dhowells@redhat.com,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the net tree
-Message-ID: <20211130073228.611fa87f@canb.auug.org.au>
+Subject: Re: linux-next: Signed-off-by missing for commit in the fscache tree
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/gjR3KYURrv4BnpyKAAQne2C";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <303886.1638222425.1@warthog.procyon.org.uk>
+Date:   Mon, 29 Nov 2021 21:47:05 +0000
+Message-ID: <303887.1638222425@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/gjR3KYURrv4BnpyKAAQne2C
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-Hi all,
+> Commit
+> 
+>   f022918cb360 ("cachefiles: Add security derivation")
+> 
+> is missing a Signed-off-by from its author and committer.
+> 
+> It looks like the whole body of the commit message has gone missing?
 
-Commit
+I think I forgot to write that one.  I've posted it in a reply to that
+particular mail and also updated my git branches with it.  No code changes
+were made.
 
-  cdef485217d3 ("ipv6: fix memory leak in fib6_rule_suppress")
+David
 
-is missing a Signed-off-by from its author.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/gjR3KYURrv4BnpyKAAQne2C
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGlONwACgkQAVBC80lX
-0GwURgf9FW2bQqgeEUzIn8a/ReQAE/MbbZEtfH9PhcplmCOmwZeg3U6Ae7PfC4GF
-MVvHz7R3eSr0Amn6Vzbv5kWu3lUKe6rN56ivYyArnVe+lPdTl+xVf8XNQJFLKgTz
-VCVZ4WB+ZfvX7S52bMMoKVgN6c5ZYwULQTe/rDmk8wGh784BdHj/v5VTwECjFo+a
-PDK8CcQxVy2Z33Ka/AOaH3r5LtmpkQv3vIOQxHAl7IJNIIoYvV7QhG9CXynZlYS+
-BWEVlJiVWScl71TPxyTDIx0nVsNOyB0pZ6o66VSFaELHiEEy2VU9//nG3DXzMATA
-tVyzoSB2pxOSRgQShYMct/pP+eX4fw==
-=CJv9
------END PGP SIGNATURE-----
-
---Sig_/gjR3KYURrv4BnpyKAAQne2C--

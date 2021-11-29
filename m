@@ -2,36 +2,30 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7909F4614CC
-	for <lists+linux-next@lfdr.de>; Mon, 29 Nov 2021 13:12:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6205461A52
+	for <lists+linux-next@lfdr.de>; Mon, 29 Nov 2021 15:50:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236590AbhK2MPn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 29 Nov 2021 07:15:43 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:36192 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236408AbhK2MNm (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 29 Nov 2021 07:13:42 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id ECDB6CE10D9;
-        Mon, 29 Nov 2021 12:10:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63830C004E1;
-        Mon, 29 Nov 2021 12:10:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638187822;
-        bh=h6s+MqOMnU6klzx1xy26RnX4HKXsAzJ9VQrT/O0Ckk8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RYyJjYP9jAHgaAxUe16q2Z02mLZpoqjAKj+p/cNuahshpbsDryiEZaJGtRvl8wwoD
-         rbOcQ3OX4+6g23HBqfcoVCOTm9gcWjww/+6G2G3kXF3tZLmhdsbvElaYmIMtyWqBAE
-         LByeYOenOJY6xTvB4MnVVZzxjfK2OXlOwaAyCEXtsSZGt9kuP75PSSkwReWKvcC6dR
-         aPC8x0yrZIoEx0te2jI7tL1MLZhdMI4LE1VWN1DZYkLDiWNZwVaWV1u3L6s4oWBXy1
-         tpRURVgDSgwmMd/gfuXSbAMKb37O4tDVY3EHyLPF0jdIT2RAyFkPpJ7z2oMqazyxl3
-         f7vGNGgGZmBQg==
-Date:   Mon, 29 Nov 2021 12:10:16 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        id S237385AbhK2Oxr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 29 Nov 2021 09:53:47 -0500
+Received: from mga17.intel.com ([192.55.52.151]:53002 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1345031AbhK2Ovq (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 29 Nov 2021 09:51:46 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10182"; a="216674772"
+X-IronPort-AV: E=Sophos;i="5.87,273,1631602800"; 
+   d="scan'208";a="216674772"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2021 06:37:14 -0800
+X-IronPort-AV: E=Sophos;i="5.87,273,1631602800"; 
+   d="scan'208";a="499351229"
+Received: from eliteleevi.tm.intel.com ([10.237.54.20])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2021 06:37:11 -0800
+Date:   Mon, 29 Nov 2021 16:29:36 +0200 (EET)
+From:   Kai Vehmanen <kai.vehmanen@linux.intel.com>
+X-X-Sender: kvehmane@eliteleevi.tm.intel.com
+To:     Mark Brown <broonie@kernel.org>
+cc:     Takashi Iwai <tiwai@suse.de>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
         Liam Girdwood <lgirdwood@gmail.com>,
         Kai Vehmanen <kai.vehmanen@linux.intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
@@ -39,44 +33,31 @@ Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
 Subject: Re: linux-next: manual merge of the sound-asoc tree with the
  sound-current tree
-Message-ID: <YaTDKNOOP2I2dbI+@sirena.org.uk>
-References: <20211129113554.59416109@canb.auug.org.au>
- <s5ho8635n9g.wl-tiwai@suse.de>
+In-Reply-To: <YaTDKNOOP2I2dbI+@sirena.org.uk>
+Message-ID: <alpine.DEB.2.22.394.2111291602310.3554566@eliteleevi.tm.intel.com>
+References: <20211129113554.59416109@canb.auug.org.au> <s5ho8635n9g.wl-tiwai@suse.de> <YaTDKNOOP2I2dbI+@sirena.org.uk>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7 02160 Espoo
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="SQYlZzC3+HKaQPIe"
-Content-Disposition: inline
-In-Reply-To: <s5ho8635n9g.wl-tiwai@suse.de>
-X-Cookie: Thank god!! ... It's HENNY YOUNGMAN!!
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+Hi,
 
---SQYlZzC3+HKaQPIe
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Mon, 29 Nov 2021, Mark Brown wrote:
 
-On Mon, Nov 29, 2021 at 10:23:07AM +0100, Takashi Iwai wrote:
+> On Mon, Nov 29, 2021 at 10:23:07AM +0100, Takashi Iwai wrote:
+> 
+> > Mark, could you resolve in the latter branch?
+> 
+> I'll just leave them for now, Linus got angry about merging up fixes
+> just to resolve conflicts so if it's not an actual dependency...
 
-> Mark, could you resolve in the latter branch?
+the asoc for-5.17 branch does have all the needed changes and the 
+linux-next merged version seems ok. We've already sent many further 
+changes that touch this area of code to asoc for-5.17. Let me know if some 
+actions are needed to help.
 
-I'll just leave them for now, Linus got angry about merging up fixes
-just to resolve conflicts so if it's not an actual dependency...
-
---SQYlZzC3+HKaQPIe
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGkwycACgkQJNaLcl1U
-h9ByMAf9F8Bh4B+tyX2zPcDnge8A4Gtz/6hxjO7slkqJ28Xq5mdmYjJlorJVsN+7
-9dwRnXU5/MxfCNJtb1RLT0hD+c4G31UIeKHfe8W0Qj4Y8YuQnqe4fgRHlYCfBJ31
-K6wYIkYB2IyJiyFzCUT/7U8eNWJmF5t0NTWZj0ZLYurVxj6z3HTfp85Ua2BXQdSS
-S2BKeWr8BbOQqoSWILcV7+hdm5EOvFIwEGmN1PgX4DP1To59dEf7HCsHsJunyyzc
-n7+1rcShSPGpc6yJf+W0fCKvyad74cK+0F1ui4PDEKJSnCp6I6OaWEWb1aJlL+2Z
-jU4XcBsof5Z26bjhRHZ6BXSx7cHGzQ==
-=XwcJ
------END PGP SIGNATURE-----
-
---SQYlZzC3+HKaQPIe--
+Br, Kai

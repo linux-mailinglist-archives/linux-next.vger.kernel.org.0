@@ -2,139 +2,83 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFF91462AE1
-	for <lists+linux-next@lfdr.de>; Tue, 30 Nov 2021 04:06:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2016E462BAC
+	for <lists+linux-next@lfdr.de>; Tue, 30 Nov 2021 05:27:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbhK3DJq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 29 Nov 2021 22:09:46 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:48711 "EHLO
+        id S229773AbhK3EbO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 29 Nov 2021 23:31:14 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:35829 "EHLO
         gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232908AbhK3DJp (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 29 Nov 2021 22:09:45 -0500
+        with ESMTP id S233263AbhK3EbO (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 29 Nov 2021 23:31:14 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J36Yr0RJFz4xR9;
-        Tue, 30 Nov 2021 14:06:24 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J38Mt1tFSz4xPv;
+        Tue, 30 Nov 2021 15:27:54 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1638241586;
-        bh=9Fto66dktm+JaJ90zXYiLrZbQU8DLYWBo+foV4w+9NM=;
+        s=201702; t=1638246474;
+        bh=8evyDFzO2gzR0rGjOVplTe+JpugvCPyGAnb3mo2xeJA=;
         h=Date:From:To:Cc:Subject:From;
-        b=tEZfI1K/tOL3V3GZoo+lLIu/oYzHDPzP85Dv9Fp0hSWeeAzoPEEjojnBWwoCAH1/7
-         EbOxKZLYTTS0z8ol+Nf2WsqL/9zZ0WWrEPGzDAy5NwQJzcHMASBtlo0b0PnpjcDI5Y
-         tshP0H0h0rdgsFLnOnlmvlNfBWkVonJ4GqvViTHrvTFzHQqqw1M4y5pQ5Lsxom1tDP
-         gpgxXavGnpSSFfc4JjxG+V7Gt35zg400eDaL6Oz4SVFox4/OJA/MGfX76+8t1gYGLR
-         7qzTpjemHSkZ0R6l7LWzVWzIGs44kwWUuaURTimseeEOaq0nGponwXE3dGvbdQ9ir6
-         nnDe1WWFkZPlg==
-Date:   Tue, 30 Nov 2021 14:06:21 +1100
+        b=kfheRqiflijKcC3RLJfEj62KbdZSRtmMTyU6fTSumtSMlFDD8BHmqX5kv+wb0lkGl
+         Lzex/XF6wE25TdbLWdocSG7+bVUxLmP3R1ndjsaN0s8VK/0PRQatkdEspLf1umma7K
+         SHbKqaccmY96iawinLj1tERRz0FVNvy/D4+c7qnPrroRyPu4StpUjDgQoJ4SjE/Dmg
+         9AmrcdRWMUTdjOWJzH2pQ+NOAelG5DROW5wtYqQYbnGL1MQfgQqP6VV7vvANYN0cQd
+         0Fys7ZedrJUJhiQQbvyKV4KaPkzvn3tYSfsIqCTQtUrwmR3Fqs8TzJKAmI8Jrfd7C+
+         WGRPIdOjCKEgg==
+Date:   Tue, 30 Nov 2021 15:27:53 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc:     Alex Gaynor <alex.gaynor@gmail.com>,
-        Ayaan Zaidi <zaidi.ayaan@gmail.com>,
-        Boris-Chengbiao Zhou <bobo1239@web.de>,
-        Finn Behrens <me@kloenk.de>, Gary Guo <gary@garyguo.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Mike Leach <mike.leach@linaro.org>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>
-Subject: linux-next: manual merge of the rust tree with the coresight tree
-Message-ID: <20211130140621.29261096@canb.auug.org.au>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the fscache tree
+Message-ID: <20211130152753.6899aa0c@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/KLz+i/mIm7X77RwIZpztsHL";
+Content-Type: multipart/signed; boundary="Sig_/i..5Lr7yyir=3elaGNH6Yx0";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/KLz+i/mIm7X77RwIZpztsHL
+--Sig_/i..5Lr7yyir=3elaGNH6Yx0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the rust tree got conflicts in:
+After merging the fscache tree, today's linux-next build (arm64 defconfig)
+produced this warning:
 
-  samples/Kconfig
-  samples/Makefile
+fs/9p/vfs_addr.c: In function 'v9fs_release_page':
+fs/9p/vfs_addr.c:140:16: warning: unused variable 'inode' [-Wunused-variabl=
+e]
+  140 |  struct inode *inode =3D folio_inode(folio);
+      |                ^~~~~
 
-between commit:
+Introduced by commit
 
-  ede5bab874f5 ("coresight: syscfg: Example CoreSight configuration loadabl=
-e module")
-
-from the coresight tree and commit:
-
-  2218f3460793 ("samples: add Rust examples")
-
-from the rust tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+  12b841dc2cfd ("9p: Copy local writes to the cache when writing to the ser=
+ver")
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc samples/Kconfig
-index 22cc921ae291,8cbd6490823f..000000000000
---- a/samples/Kconfig
-+++ b/samples/Kconfig
-@@@ -241,19 -223,6 +241,21 @@@ config SAMPLE_WATCH_QUEU
-  	  Build example userspace program to use the new mount_notify(),
-  	  sb_notify() syscalls and the KEYCTL_WATCH_KEY keyctl() function.
- =20
- +config SAMPLE_CORESIGHT_SYSCFG
- +	tristate "Build example loadable module for CoreSight config"
- +	depends on CORESIGHT && m
- +	help
- +	  Build an example loadable module that adds new CoreSight features
- +	  and configuration using the CoreSight system configuration API.
- +	  This demonstrates how a user may create their own CoreSight
- +	  configurations and easily load them into the system at runtime.
- +
-+ source "samples/rust/Kconfig"
-+=20
-  endif # SAMPLES
- +
- +config HAVE_SAMPLE_FTRACE_DIRECT
- +	bool
- +
- +config HAVE_SAMPLE_FTRACE_DIRECT_MULTI
- +	bool
-diff --cc samples/Makefile
-index 1ae4de99c983,291663e56a3c..000000000000
---- a/samples/Makefile
-+++ b/samples/Makefile
-@@@ -32,4 -30,4 +32,5 @@@ obj-$(CONFIG_SAMPLE_INTEL_MEI)		+=3D mei
-  subdir-$(CONFIG_SAMPLE_WATCHDOG)	+=3D watchdog
-  subdir-$(CONFIG_SAMPLE_WATCH_QUEUE)	+=3D watch_queue
-  obj-$(CONFIG_DEBUG_KMEMLEAK_TEST)	+=3D kmemleak/
- +obj-$(CONFIG_SAMPLE_CORESIGHT_SYSCFG)	+=3D coresight/
-+ obj-$(CONFIG_SAMPLES_RUST)		+=3D rust/
-
---Sig_/KLz+i/mIm7X77RwIZpztsHL
+--Sig_/i..5Lr7yyir=3elaGNH6Yx0
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGllS0ACgkQAVBC80lX
-0Gw4GAf/SxZuoak7Ref3IZtCE3sUalYZWjborxdyqqhyma3RmXpEpwyoc3Iib5x2
-rdIKapj8cubsJrJ2ha7kpvce39nzPiA1IQj6kI33GY6HkRwjd+cNWXxtC26QZvXZ
-BNHAg1u9lfjAAil1vzr3ttPoxpgy0Pn+vKS8Qxfr2yj1yDfNYBS9/1C6TZ69d+Y8
-Vh7vVa37KYbhnLG0/MlA4fWZzk6ozkPjiIfy+lapsXQDFLX5Ywt3hRWPnKeByanI
-i4YH8sx4Zsx1i13PeKOLSvvKwCWaM7G7pfNRbhR6ejdsNU5j6jEy+DTBPOwW+0SY
-3v8J0EK0pFC4yvSWXsO0PEfdD/s4lg==
-=OMM9
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGlqEkACgkQAVBC80lX
+0GzPrQf/QettmL3mToDh6Ow9Gmbi0bu5UQdrYgcJMOwHt1XrtlnJ6bSdMQhU1TFI
+PBC62Ai0F3fs3M2D9wc1Ned/eBu1V/KAt5vioO+HYMKl01EmTREkCvRtnFsD2nKg
+6z4SAC1U5DuyzzVleO/JgtkyfBOpxsma9bOl/1QUEtwSE57bCO4US+yPZDF+7sX2
+sPQPqoSXZJoZfXgK7LSPjnP5bwwZH8AAZmNK6LHpEPTmo4Y2iTPJ+y4YPc9aGXYj
++Eo0a2bPxY7Hz2dVwWfrQSS1JP7DWFO4jDQzIcmwlc9An4hvbNFWtEQin1mm9ZOF
+m5yb86RmBFym1D00V0+6356UMMwGiw==
+=xs24
 -----END PGP SIGNATURE-----
 
---Sig_/KLz+i/mIm7X77RwIZpztsHL--
+--Sig_/i..5Lr7yyir=3elaGNH6Yx0--

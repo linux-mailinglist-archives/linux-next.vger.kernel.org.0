@@ -2,107 +2,74 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6374462F1D
-	for <lists+linux-next@lfdr.de>; Tue, 30 Nov 2021 09:58:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC416463065
+	for <lists+linux-next@lfdr.de>; Tue, 30 Nov 2021 11:00:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235157AbhK3JBx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 30 Nov 2021 04:01:53 -0500
-Received: from out2-smtp.messagingengine.com ([66.111.4.26]:58169 "EHLO
-        out2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234626AbhK3JBx (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Tue, 30 Nov 2021 04:01:53 -0500
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 874135C016C;
-        Tue, 30 Nov 2021 03:58:33 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Tue, 30 Nov 2021 03:58:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=iAST7h0cs3FmiYaQxyPYfu1DGic
-        7ID1h1xCPFc73iUM=; b=H2bOb8qPBvxRRIKAJvC7RvpXy8hhKaAw1upvu7VbNGr
-        Dp+tAf522cHOqU3kfbUNrQhLzYkjhYoxJMP4/OygXpLlnggl7pk2k5yZ+56MWFAP
-        kN6DfwQcmYr23dwZU6l/5NF/oy8tS4OJvOaV4+CCA2TdFLI8MWuZng1gTCYx2Vl1
-        PCGT4sfypXGGgPqimtTGkbHHqfDMPXKfIxS2pT1NakUJs7OioT/wHkDnJ0sI17iW
-        5T1YzXNl+AujZZDrUzvoUmxKKJxDGSNEei2ZHjemab1BlUjJVpuMjpw7X1Zw/qkK
-        fyo31P9CbPVW8GdAFO1wI/OIh0oEH86ZPE/eeS5opeA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=iAST7h
-        0cs3FmiYaQxyPYfu1DGic7ID1h1xCPFc73iUM=; b=LwFX4TRTZY6St5YOF7LaDz
-        N8vQaq0zqZUKYE3ZazYffMb6l+BCu+pi81mxQkHKxeJBSvnTUnXubayKbvUairyN
-        piknzrLQ4Jy/QMueMyl070L+uWjuxJGQ8DXRobCzaXeZfwuo3Xh+LZHhrjJ5fltz
-        MhaXtCQ5PjKPvo0nXqMxiKzDZ893hCdy9duGsNfeF5euviy6b+CYo05Hwnpayj9h
-        cJqOy18KCnXvbFQ6JA6ZWWyz8qbzouN390cUlY7SYK8WJH9f3OvSYD08MYtMwQfP
-        IMfMLMpJnw4Msvac2x+QTGxJwXUe1TUZ5phAl7JkT0rrT70dCb/vtRW+2Ob0rZ7Q
-        ==
-X-ME-Sender: <xms:uOelYW0fmTyr-7XEJLSDE6ACna-_xI-0EdQIJXQ281tuXtM7lNK_hQ>
-    <xme:uOelYZFr4CVNqq73EjDAyvi_k5lBJt1AizLsWWKLMXjTl9jBD6vGg3XZHRBSNdlqO
-    urzg2MBopPG8DSPp6I>
-X-ME-Received: <xmr:uOelYe5qPqDxrTgjB-FE7hQMm7xeFT9Pl77iIsCZw-mGRgLHj8F1JMBvLfdjD9mKhXoEjwPoUbKYpXi8frvPmoPDdfs82XpO8MA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddriedtgdduvdeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepleekgeehhfdutdeljefgleejffehfffgieejhffgueefhfdtveetgeehieeh
-    gedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
-    grgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:uOelYX3H8IoHGDknnDaTU-RlHqw6snwtx3tNrfADxLkW16-HDIrQEg>
-    <xmx:uOelYZECPwX39TyzGIqxIrA5SO9XupDHjQItcig-ONDzrwYXxhhsTw>
-    <xmx:uOelYQ_6tHTcp7VszQ9gChDIumxY6GFiHoOu4djiTkxRwDGgz5KpnQ>
-    <xmx:ueelYSMwGy-c3C-kl3V0jDUQUAgB7u9lBPCCkIFqQgxRKy2dZIle-Q>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 30 Nov 2021 03:58:32 -0500 (EST)
-Date:   Tue, 30 Nov 2021 09:58:31 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Dave Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the drm tree with the drm-misc-fixes
- tree
-Message-ID: <20211130085831.wghfw7l4qksg2dbm@houat>
-References: <20211130103353.0ab1a44f@canb.auug.org.au>
+        id S235989AbhK3KDd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 30 Nov 2021 05:03:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48732 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235885AbhK3KDc (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 30 Nov 2021 05:03:32 -0500
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA214C061574;
+        Tue, 30 Nov 2021 02:00:13 -0800 (PST)
+Received: by mail-io1-xd2d.google.com with SMTP id k21so25256936ioh.4;
+        Tue, 30 Nov 2021 02:00:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Tom78f0Z07hr5SSiGx4EFP2HEgaq9175M71AAijwfKU=;
+        b=d+l0jfFQ0yZ+rsoGH83/dJ3AaQg1DfIk2NvbfHLMbTcFjzvALY/Q4xnRvRTio/FrMP
+         3FvOLOHvTRHS3HU1rk3f5WTMq12iXt6TO2czodvJIcl+rGgphq9l64cOjOpvss3IDn0G
+         gtAGFC14O4lDuVjFCnlS5xUGRdgW/Fu3vzfOXo6ZnsSc4cgr+NeOS9ykFlxa+BoZFaDc
+         i5W+t+imVM0sDkIvBA6vStRrTeyjStbEkWy9fUk+iTJyt26KiB+0FYACkwieQJFqsK5M
+         Y9ZJ512qPdxmJ4IpTjMEwxiXW0mF9gYdYgD2UvgX0nFvyfszgYf0ccP81KJX241xk3nU
+         YDrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Tom78f0Z07hr5SSiGx4EFP2HEgaq9175M71AAijwfKU=;
+        b=jZNcmT8gkqyRYX0FEob6U7wxjI1t3wjYQXURnRCCVT44Tdm0Q8kj3W1y03i/uPhMLq
+         EnvRPt+ZFuMl/CK+Sf7VZNnBiQGH6/v74U4TxPgkFNAnWzjVTA/wN6Le58lCx7hG9aNi
+         MPO8D4K7nhPN2JHT2XVyV/9fW4+FMxZgz1kKpk0roZzmaMhpTbfK9ZWaf29S9O0L+Ss0
+         hM+8PpCbNKkLIwSHMGUVJnHQV0dC4nYLqjzAmCDNsBVk4d+9w3IMxV9lQn3fXNIroK7T
+         ROpD7J1f0xqRI3CQ4HVh5feIgPYYNnWF2opfVmxK0Lgm1VEAcJgZ79viIjpqC6+xuBUb
+         PbTg==
+X-Gm-Message-State: AOAM530HEiECCwh3asxuFCw2DyC5NvPUD/el3+7wgi33rAa+MqmeFdfD
+        HZHPeLlSkCE6yLfy6uVOres5u+dPsf53/fEVcuE=
+X-Google-Smtp-Source: ABdhPJyy3fgBe/ywHmSU52fCOnJ+LECB0cGRW1TixSQHCcEk6BYtcbEM7jcgDIzXE+q4e2NRm2k9xm52ae95WiK5EgE=
+X-Received: by 2002:a6b:b7c8:: with SMTP id h191mr52188532iof.155.1638266413423;
+ Tue, 30 Nov 2021 02:00:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="lecmpukyxl4tz6dv"
-Content-Disposition: inline
-In-Reply-To: <20211130103353.0ab1a44f@canb.auug.org.au>
+References: <20211130140621.29261096@canb.auug.org.au>
+In-Reply-To: <20211130140621.29261096@canb.auug.org.au>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Tue, 30 Nov 2021 11:00:02 +0100
+Message-ID: <CANiq72kSkv3f9xJ7BMQoTo4DmiGwwW7nMSnwvTeLnuLDQfK1Wg@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the rust tree with the coresight tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Ayaan Zaidi <zaidi.ayaan@gmail.com>,
+        Boris-Chengbiao Zhou <bobo1239@web.de>,
+        Finn Behrens <me@kloenk.de>, Gary Guo <gary@garyguo.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Mike Leach <mike.leach@linaro.org>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-
---lecmpukyxl4tz6dv
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi Stephen,
-
-On Tue, Nov 30, 2021 at 10:33:53AM +1100, Stephen Rothwell wrote:
-> Hi all,
->=20
-> Today's linux-next merge of the drm tree got a conflict in:
->=20
->   drivers/gpu/drm/vc4/vc4_kms.c
->=20
-> between commits:
->=20
->   f927767978d2 ("drm/vc4: kms: Fix return code check")
->   d354699e2292 ("drm/vc4: kms: Don't duplicate pending commit")
->=20
-> from the drm-misc-fixes tree and commit:
->=20
->   16e101051f32 ("drm/vc4: Increase the core clock based on HVS load")
->=20
-> from the drm tree.
->=20
+On Tue, Nov 30, 2021 at 4:06 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
 > I fixed it up (see below) and can carry the fix as necessary. This
 > is now fixed as far as linux-next is concerned, but any non trivial
 > conflicts should be mentioned to your upstream maintainer when your tree
@@ -110,70 +77,7 @@ On Tue, Nov 30, 2021 at 10:33:53AM +1100, Stephen Rothwell wrote:
 > with the maintainer of the conflicting tree to minimise any particularly
 > complex conflicts.
 
-Unfortunately the merge resolution isn't entirely correct :/
+ACK -- looks good to me. Thanks!
 
-There's multiple conflicts between those two branches on that file, but
-things went wrong between 16e101051f32 and 0c980a006d3f
-
-The first one changes the logic a bit for the clk_set_min_rate argument,
-and the second moves the clk_set_min_rate around.
-
-However, the merge resolution reintroduced the initial clk_set_min_rate
-call line (line 373), without changing the logic of the proper call site
-(line 396).
-
-This is the patch to fix the resolution:
-
--- >8 --
---- a/drivers/gpu/drm/vc4/vc4_kms.c	2021-11-30 08:56:28.748524275 +0100
-+++ b/drivers/gpu/drm/vc4/vc4_kms.c	2021-11-29 15:46:11.692151678 +0100
-@@ -365,14 +365,6 @@
- 		vc4_hvs_mask_underrun(dev, vc4_crtc_state->assigned_channel);
- 	}
-
--	if (vc4->hvs->hvs5) {
--		unsigned long core_rate =3D max_t(unsigned long,
--						500000000,
--						new_hvs_state->core_clock_rate);
--
--		clk_set_min_rate(hvs->core_clk, core_rate);
--	}
--
- 	for (channel =3D 0; channel < HVS_NUM_CHANNELS; channel++) {
- 		struct drm_crtc_commit *commit;
- 		int ret;
-@@ -392,8 +384,13 @@
- 		old_hvs_state->fifo_state[channel].pending_commit =3D NULL;
- 	}
-
--	if (vc4->hvs->hvs5)
--		clk_set_min_rate(hvs->core_clk, 500000000);
-+	if (vc4->hvs->hvs5) {
-+		unsigned long core_rate =3D max_t(unsigned long,
-+						500000000,
-+						new_hvs_state->core_clock_rate);
-+
-+		clk_set_min_rate(hvs->core_clk, core_rate);
-+	}
-
- 	drm_atomic_helper_commit_modeset_disables(dev, state);
--- >8 --
-
-I'm wondering though, do you have access to the drm-rerere tree? I've
-fixed up the merge yesterday to deal with this conflict and the conflict
-resolution should be stored there already.
-
-Maxime
-
---lecmpukyxl4tz6dv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYaXntwAKCRDj7w1vZxhR
-xXWnAQCWo7WQ12iqPQQIdseeco061y9zXo6Kig1tPb6yJW30XAD+LQEOgPjIdOe1
-HsHrHdec0SuLbWh5x2laV4o8spBzaQE=
-=aLcJ
------END PGP SIGNATURE-----
-
---lecmpukyxl4tz6dv--
+Cheers,
+Miguel

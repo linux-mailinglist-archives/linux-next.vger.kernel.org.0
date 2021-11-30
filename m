@@ -2,274 +2,314 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1E05462852
-	for <lists+linux-next@lfdr.de>; Tue, 30 Nov 2021 00:34:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBA5B462AC6
+	for <lists+linux-next@lfdr.de>; Tue, 30 Nov 2021 03:58:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230222AbhK2XhT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 29 Nov 2021 18:37:19 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:49821 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229922AbhK2XhS (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 29 Nov 2021 18:37:18 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S232416AbhK3DCC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 29 Nov 2021 22:02:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38458 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229996AbhK3DCB (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 29 Nov 2021 22:02:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62752C061574;
+        Mon, 29 Nov 2021 18:58:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J31rj0pbcz4xPv;
-        Tue, 30 Nov 2021 10:33:56 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1638228839;
-        bh=inXtXHv6yn3YtBnuAAzAq6r5aKIXNSazQdd6UUlmByM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=EDPAUye/rs3pl+bys5hBqUCI8EXVGofnoVzZwrn+G+I3BBAhfiXMdXuMB5/HMp+rA
-         tlH6bgsUH5kj8IqhbRDL7uHwdqCQKBUgWM996G4tu6bv1alHUIs7zLLGDdmBj3Fn/H
-         Fjq9hkziUGIZokeFtSRmHdG1lqEWounM9Rd4V1E2aGIpt4r9NMk8SXo3kLF9Q+y+Tt
-         epcz2GoKtyw+uAt1yeeVflox666gYHKLoMYiezoKgvevzo0QkoloeopsY7GOKNaVMd
-         Mis7E9aVyEa7neh6ZrBSeHF0EZcED94sdRBtotjDDUexhChq4N1FKEQ0wSqAM6Tfjh
-         RhRsc1gp9rQoQ==
-Date:   Tue, 30 Nov 2021 10:33:53 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dave Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Maxime Ripard <maxime@cerno.tech>
-Subject: linux-next: manual merge of the drm tree with the drm-misc-fixes
- tree
-Message-ID: <20211130103353.0ab1a44f@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/SRktUQT/MnVNywL02YSYaaF";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+        by ams.source.kernel.org (Postfix) with ESMTPS id E0BA0B816C3;
+        Tue, 30 Nov 2021 02:58:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CB29C53FC7;
+        Tue, 30 Nov 2021 02:58:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1638241120;
+        bh=YVAzSDQbvmL+coUypZlWzhrgWnPi6GXVCozfbiYK15U=;
+        h=Date:From:To:Subject:From;
+        b=YLW7Pg284kM3LguiCR4dA0wGv1Oja7P7Pir5+aT1/FQqldqQltHSBdKUd27bOZ2qC
+         QUg6Duy1mRo9c7AGyG8NPLI2wcpfzTLh51Rjz89tqIF+lmWexpJcFRmTe7cVZ8we9h
+         IXrDlc90qLVwCvaa1k0JhE+V7RIpbc7EMUS2Mbd8=
+Date:   Mon, 29 Nov 2021 18:58:39 -0800
+From:   akpm@linux-foundation.org
+To:     broonie@kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-next@vger.kernel.org, mhocko@suse.cz,
+        mm-commits@vger.kernel.org, sfr@canb.auug.org.au
+Subject:  mmotm 2021-11-29-18-58 uploaded
+Message-ID: <20211130025839.ZhVoO1W_7%akpm@linux-foundation.org>
+User-Agent: s-nail v14.8.16
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/SRktUQT/MnVNywL02YSYaaF
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+The mm-of-the-moment snapshot 2021-11-29-18-58 has been uploaded to
 
-Hi all,
+   https://www.ozlabs.org/~akpm/mmotm/
 
-Today's linux-next merge of the drm tree got a conflict in:
+mmotm-readme.txt says
 
-  drivers/gpu/drm/vc4/vc4_kms.c
+README for mm-of-the-moment:
 
-between commits:
+https://www.ozlabs.org/~akpm/mmotm/
 
-  f927767978d2 ("drm/vc4: kms: Fix return code check")
-  d354699e2292 ("drm/vc4: kms: Don't duplicate pending commit")
+This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
+more than once a week.
 
-from the drm-misc-fixes tree and commit:
+You will need quilt to apply these patches to the latest Linus release (5.x
+or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
+https://ozlabs.org/~akpm/mmotm/series
 
-  16e101051f32 ("drm/vc4: Increase the core clock based on HVS load")
+The file broken-out.tar.gz contains two datestamp files: .DATE and
+.DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
+followed by the base kernel version against which this patch series is to
+be applied.
 
-from the drm tree.
+This tree is partially included in linux-next.  To see which patches are
+included in linux-next, consult the `series' file.  Only the patches
+within the #NEXT_PATCHES_START/#NEXT_PATCHES_END markers are included in
+linux-next.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
 
---=20
-Cheers,
-Stephen Rothwell
+A full copy of the full kernel tree with the linux-next and mmotm patches
+already applied is available through git within an hour of the mmotm
+release.  Individual mmotm releases are tagged.  The master branch always
+points to the latest release, so it's constantly rebasing.
 
-diff --cc drivers/gpu/drm/vc4/vc4_kms.c
-index b61792d2aa65,79d4d9dd1394..000000000000
---- a/drivers/gpu/drm/vc4/vc4_kms.c
-+++ b/drivers/gpu/drm/vc4/vc4_kms.c
-@@@ -337,12 -340,21 +340,21 @@@ static void vc4_atomic_commit_tail(stru
-  	struct drm_device *dev =3D state->dev;
-  	struct vc4_dev *vc4 =3D to_vc4_dev(dev);
-  	struct vc4_hvs *hvs =3D vc4->hvs;
- -	struct drm_crtc_state *old_crtc_state;
-  	struct drm_crtc_state *new_crtc_state;
-+ 	struct vc4_hvs_state *new_hvs_state;
-  	struct drm_crtc *crtc;
-  	struct vc4_hvs_state *old_hvs_state;
- +	unsigned int channel;
-  	int i;
- =20
-+ 	old_hvs_state =3D vc4_hvs_get_old_global_state(state);
- -	if (WARN_ON(!old_hvs_state))
-++	if (WARN_ON(IS_ERR(old_hvs_state)))
-+ 		return;
-+=20
-+ 	new_hvs_state =3D vc4_hvs_get_new_global_state(state);
- -	if (WARN_ON(!new_hvs_state))
-++	if (WARN_ON(IS_ERR(new_hvs_state)))
-+ 		return;
-+=20
-  	for_each_new_crtc_in_state(state, crtc, new_crtc_state, i) {
-  		struct vc4_crtc_state *vc4_crtc_state;
- =20
-@@@ -353,32 -365,31 +365,36 @@@
-  		vc4_hvs_mask_underrun(dev, vc4_crtc_state->assigned_channel);
-  	}
- =20
-- 	old_hvs_state =3D vc4_hvs_get_old_global_state(state);
-- 	if (IS_ERR(old_hvs_state))
-- 		return;
-+ 	if (vc4->hvs->hvs5) {
-+ 		unsigned long core_rate =3D max_t(unsigned long,
-+ 						500000000,
-+ 						new_hvs_state->core_clock_rate);
-+=20
-+ 		clk_set_min_rate(hvs->core_clk, core_rate);
-+ 	}
- =20
- -	for_each_old_crtc_in_state(state, crtc, old_crtc_state, i) {
- -		struct vc4_crtc_state *vc4_crtc_state =3D
- -			to_vc4_crtc_state(old_crtc_state);
- -		unsigned int channel =3D vc4_crtc_state->assigned_channel;
- +	for (channel =3D 0; channel < HVS_NUM_CHANNELS; channel++) {
- +		struct drm_crtc_commit *commit;
-  		int ret;
- =20
- -		if (channel =3D=3D VC4_HVS_CHANNEL_DISABLED)
- +		if (!old_hvs_state->fifo_state[channel].in_use)
-  			continue;
- =20
- -		if (!old_hvs_state->fifo_state[channel].in_use)
- +		commit =3D old_hvs_state->fifo_state[channel].pending_commit;
- +		if (!commit)
-  			continue;
- =20
- -		ret =3D drm_crtc_commit_wait(old_hvs_state->fifo_state[channel].pending=
-_commit);
- +		ret =3D drm_crtc_commit_wait(commit);
-  		if (ret)
-  			drm_err(dev, "Timed out waiting for commit\n");
- +
- +		drm_crtc_commit_put(commit);
- +		old_hvs_state->fifo_state[channel].pending_commit =3D NULL;
-  	}
- =20
- +	if (vc4->hvs->hvs5)
- +		clk_set_min_rate(hvs->core_clk, 500000000);
- +
-  	drm_atomic_helper_commit_modeset_disables(dev, state);
- =20
-  	vc4_ctm_commit(vc4, state);
-@@@ -667,11 -673,19 +678,13 @@@ vc4_hvs_channels_duplicate_state(struc
- =20
-  	__drm_atomic_helper_private_obj_duplicate_state(obj, &state->base);
- =20
--=20
-  	for (i =3D 0; i < HVS_NUM_CHANNELS; i++) {
-  		state->fifo_state[i].in_use =3D old_state->fifo_state[i].in_use;
-+ 		state->fifo_state[i].fifo_load =3D old_state->fifo_state[i].fifo_load;
- -
- -		if (!old_state->fifo_state[i].pending_commit)
- -			continue;
- -
- -		state->fifo_state[i].pending_commit =3D
- -			drm_crtc_commit_get(old_state->fifo_state[i].pending_commit);
-  	}
- =20
-+ 	state->core_clock_rate =3D old_state->core_clock_rate;
-+=20
-  	return &state->base;
-  }
- =20
-@@@ -826,6 -840,76 +839,76 @@@ static int vc4_pv_muxing_atomic_check(s
-  	return 0;
-  }
- =20
-+ static int
-+ vc4_core_clock_atomic_check(struct drm_atomic_state *state)
-+ {
-+ 	struct vc4_dev *vc4 =3D to_vc4_dev(state->dev);
-+ 	struct drm_private_state *priv_state;
-+ 	struct vc4_hvs_state *hvs_new_state;
-+ 	struct vc4_load_tracker_state *load_state;
-+ 	struct drm_crtc_state *old_crtc_state, *new_crtc_state;
-+ 	struct drm_crtc *crtc;
-+ 	unsigned int num_outputs;
-+ 	unsigned long pixel_rate;
-+ 	unsigned long cob_rate;
-+ 	unsigned int i;
-+=20
-+ 	priv_state =3D drm_atomic_get_private_obj_state(state,
-+ 						      &vc4->load_tracker);
-+ 	if (IS_ERR(priv_state))
-+ 		return PTR_ERR(priv_state);
-+=20
-+ 	load_state =3D to_vc4_load_tracker_state(priv_state);
-+=20
-+ 	hvs_new_state =3D vc4_hvs_get_global_state(state);
- -	if (!hvs_new_state)
- -		return -EINVAL;
-++	if (IS_ERR(hvs_new_state))
-++		return PTR_ERR(hvs_new_state);
-+=20
-+ 	for_each_oldnew_crtc_in_state(state, crtc,
-+ 				      old_crtc_state,
-+ 				      new_crtc_state,
-+ 				      i) {
-+ 		if (old_crtc_state->active) {
-+ 			struct vc4_crtc_state *old_vc4_state =3D
-+ 				to_vc4_crtc_state(old_crtc_state);
-+ 			unsigned int channel =3D old_vc4_state->assigned_channel;
-+=20
-+ 			hvs_new_state->fifo_state[channel].fifo_load =3D 0;
-+ 		}
-+=20
-+ 		if (new_crtc_state->active) {
-+ 			struct vc4_crtc_state *new_vc4_state =3D
-+ 				to_vc4_crtc_state(new_crtc_state);
-+ 			unsigned int channel =3D new_vc4_state->assigned_channel;
-+=20
-+ 			hvs_new_state->fifo_state[channel].fifo_load =3D
-+ 				new_vc4_state->hvs_load;
-+ 		}
-+ 	}
-+=20
-+ 	cob_rate =3D 0;
-+ 	num_outputs =3D 0;
-+ 	for (i =3D 0; i < HVS_NUM_CHANNELS; i++) {
-+ 		if (!hvs_new_state->fifo_state[i].in_use)
-+ 			continue;
-+=20
-+ 		num_outputs++;
-+ 		cob_rate +=3D hvs_new_state->fifo_state[i].fifo_load;
-+ 	}
-+=20
-+ 	pixel_rate =3D load_state->hvs_load;
-+ 	if (num_outputs > 1) {
-+ 		pixel_rate =3D (pixel_rate * 40) / 100;
-+ 	} else {
-+ 		pixel_rate =3D (pixel_rate * 60) / 100;
-+ 	}
-+=20
-+ 	hvs_new_state->core_clock_rate =3D max(cob_rate, pixel_rate);
-+=20
-+ 	return 0;
-+ }
-+=20
-+=20
-  static int
-  vc4_atomic_check(struct drm_device *dev, struct drm_atomic_state *state)
-  {
+	https://github.com/hnaz/linux-mm
 
---Sig_/SRktUQT/MnVNywL02YSYaaF
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+The directory https://www.ozlabs.org/~akpm/mmots/ (mm-of-the-second)
+contains daily snapshots of the -mm tree.  It is updated more frequently
+than mmotm, and is untested.
 
------BEGIN PGP SIGNATURE-----
+A git copy of this tree is also available at
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGlY2EACgkQAVBC80lX
-0GxgDwf/Y2zmsDBVbJBKWov738mnjKysnZB7GVIAHJ0dLd3HQrFynMZoRGT6E8y3
-+BKOFt/cAj4nPy7rYPzYmCzQEF9mtuzlCoVZmF9mWKCTKq2CPuVZYlkzkRNAFpR7
-s2LCcUw44Po1IL8o10pXCGrFeFfPH0yFQc5XX0i3OS1sPunsPJg+fAAzPdN++gzQ
-79+IYfcykH36wSiprGzhJXHqqBT4drIurU9odup7mmEsySvtFUKqGeiB7jRtHuFl
-51wFPPMMXG2N4PWX6kQvMWZAdBpMtdKOeTkkZQXm96kjcdEktGuTqZAirfo4pnoO
-BlJC3jD2TwVcRgzM2uFA2KTCLS6pZw==
-=gLo3
------END PGP SIGNATURE-----
+	https://github.com/hnaz/linux-mm
 
---Sig_/SRktUQT/MnVNywL02YSYaaF--
+
+
+This mmotm tree contains the following patches against 5.16-rc3:
+(patches marked "*" will be included in linux-next)
+
+* mm-fix-panic-in-__alloc_pages.patch
+* mm-bdi-initialize-bdi_min_ratio-when-bdi-unregister.patch
+* mm-bdi-initialize-bdi_min_ratio-when-bdi-unregister-fix.patch
+* increase-default-mlock_limit-to-8-mib.patch
+* maintainers-update-kdump-maintainers.patch
+* mailmap-update-email-address-for-guo-ren.patch
+* filemap-remove-pagehwpoison-check-from-next_uptodate_page.patch
+* timers-implement-usleep_idle_range.patch
+* mm-damon-core-fix-fake-load-reports-due-to-uninterruptible-sleeps.patch
+* mm-slub-fix-endianness-bug-for-alloc-free_traces-attributes.patch
+* shmem-fix-a-race-between-shmem_unused_huge_shrink-and-shmem_evict_inode.patch
+* shmem-fix-a-race-between-shmem_unused_huge_shrink-and-shmem_evict_inode-checkpatch-fixes.patch
+* mm-memcg-relocate-mod_objcg_mlstate-get_obj_stock-and-put_obj_stock.patch
+* hugetlbfs-fix-issue-of-preallocation-of-gigantic-pages-cant-work.patch
+* proc-kpageflags-prevent-an-integer-overflow-in-stable_page_flags.patch
+* proc-kpageflags-do-not-use-uninitialized-struct-pages.patch
+* procfs-prevent-unpriveleged-processes-accessing-fdinfo-dir.patch
+* kthread-add-the-helper-function-kthread_run_on_cpu.patch
+* kthread-add-the-helper-function-kthread_run_on_cpu-fix.patch
+* rdma-siw-make-use-of-the-helper-function-kthread_run_on_cpu.patch
+* ring-buffer-make-use-of-the-helper-function-kthread_run_on_cpu.patch
+* rcutorture-make-use-of-the-helper-function-kthread_run_on_cpu.patch
+* trace-osnoise-make-use-of-the-helper-function-kthread_run_on_cpu.patch
+* trace-hwlat-make-use-of-the-helper-function-kthread_run_on_cpu.patch
+* ia64-module-use-swap-to-make-code-cleaner.patch
+* ia64-use-swap-to-make-code-cleaner.patch
+* ia64-fix-typo-in-a-comment.patch
+* scripts-spellingtxt-add-oveflow.patch
+* squashfs-provides-backing_dev_info-in-order-to-disable-read-ahead.patch
+* ocfs2-use-bug_on-instead-of-if-condition-followed-by-bug.patch
+* ocfs2-reflink-deadlock-when-clone-file-to-the-same-directory-simultaneously.patch
+* ocfs2-clear-links-count-in-ocfs2_mknod-if-an-error-occurs.patch
+* ocfs2-fix-ocfs2-corrupt-when-iputting-an-inode.patch
+* fs-ioctl-remove-unnecessary-__user-annotation.patch
+  mm.patch
+* mm-slab_common-use-warn-if-cache-still-has-objects-on-destroy.patch
+* mm-slab-make-slab-iterator-functions-static.patch
+* kmemleak-fix-kmemleak-false-positive-report-with-hw-tag-based-kasan-enable.patch
+* kmemleak-fix-kmemleak-false-positive-report-with-hw-tag-based-kasan-enable-fix.patch
+* mm-kmemleak-alloc-gray-object-for-reserved-region-with-direct-map.patch
+* mm-defer-kmemleak-object-creation-of-module_alloc.patch
+* mm-defer-kmemleak-object-creation-of-module_alloc-v4.patch
+* memory-failure-fetch-compound_head-after-pgmap_pfn_valid.patch
+* mm-page_alloc-split-prep_compound_page-into-head-and-tail-subparts.patch
+* mm-page_alloc-refactor-memmap_init_zone_device-page-init.patch
+* mm-memremap-add-zone_device-support-for-compound-pages.patch
+* device-dax-use-align-for-determining-pgoff.patch
+* device-dax-use-struct_size.patch
+* device-dax-ensure-dev_dax-pgmap-is-valid-for-dynamic-devices.patch
+* device-dax-factor-out-page-mapping-initialization.patch
+* device-dax-set-mapping-prior-to-vmf_insert_pfn_pmdpud.patch
+* device-dax-set-mapping-prior-to-vmf_insert_pfn_pmdpud-fix.patch
+* device-dax-compound-devmap-support.patch
+* kasan-test-add-globals-left-out-of-bounds-test.patch
+* kasan-add-ability-to-detect-double-kmem_cache_destroy.patch
+* kasan-test-add-test-case-for-double-kmem_cache_destroy.patch
+* mmfs-split-dump_mapping-out-from-dump_page.patch
+* tools-vm-page_owner_sortc-sort-by-stacktrace-before-culling.patch
+* tools-vm-page_owner_sortc-sort-by-stacktrace-before-culling-fix.patch
+* tools-vm-page_owner_sortc-support-sorting-by-stack-trace.patch
+* tools-vm-page_owner_sortc-add-switch-between-culling-by-stacktrace-and-txt.patch
+* gup-avoid-multiple-user-access-locking-unlocking-in-fault_in_read-writeable.patch
+* mm-shmem-dont-truncate-page-if-memory-failure-happens.patch
+* mm-mempool-use-non-atomic-__set_bit-when-possible.patch
+* mm-memcontrol-make-cgroup_memory_nokmem-static.patch
+* mm-page_counter-remove-an-incorrect-call-to-propagate_protected_usage.patch
+* memcg-better-bounds-on-the-memcg-stats-updates.patch
+* selftests-vm-use-swap-to-make-code-cleaner.patch
+* mm-remove-redundant-check-about-fault_flag_allow_retry-bit.patch
+* mm-remove-redundant-check-about-fault_flag_allow_retry-bit-checkpatch-fixes.patch
+* mm-rearrange-madvise-code-to-allow-for-reuse.patch
+* mm-add-a-field-to-store-names-for-private-anonymous-memory.patch
+* mm-add-a-field-to-store-names-for-private-anonymous-memory-fix.patch
+* mm-add-anonymous-vma-name-refcounting.patch
+* mm-ptep_clear-page-table-helper.patch
+* mm-page-table-check.patch
+* mm-page-table-check-fix.patch
+* x86-mm-add-x86_64-support-for-page-table-check.patch
+* mm-protect-free_pgtables-with-mmap_lock-write-lock-in-exit_mmap.patch
+* mm-oom_kill-allow-process_mrelease-to-run-under-mmap_lock-protection.patch
+* mm-vmalloc-alloc-gfp_nofsio-for-vmalloc.patch
+* mm-vmalloc-add-support-for-__gfp_nofail.patch
+* mm-vmalloc-be-more-explicit-about-supported-gfp-flags.patch
+* mm-allow-gfp_kernel-allocations-for-kvmalloc.patch
+* mm-make-slab-and-vmalloc-allocators-__gfp_nolockdep-aware.patch
+* mm-discard-__gfp_atomic.patch
+* mm-introduce-memalloc_retry_wait.patch
+* sysctl-change-watermark_scale_factor-max-limit-to-30%.patch
+* mm-fix-boolreturncocci-warning.patch
+* mm-page_alloc-fix-building-error-on-werror=array-compare.patch
+* mm-drop-node-from-alloc_pages_vma.patch
+* hugetlb-add-hugetlbnuma_stat-file.patch
+* hugetlb-add-hugetlbnuma_stat-file-fix.patch
+* mm-hugetlb-free-the-2nd-vmemmap-page-associated-with-each-hugetlb-page.patch
+* mm-hugetlb-replace-hugetlb_free_vmemmap_enabled-with-a-static_key.patch
+* mm-sparsemem-use-page-table-lock-to-protect-kernel-pmd-operations.patch
+* selftests-vm-add-a-hugetlb-test-case.patch
+* mm-sparsemem-move-vmemmap-related-to-hugetlb-to-config_hugetlb_page_free_vmemmap.patch
+* mm-hugepages-make-memory-size-variable-in-hugepage-mremap-selftest.patch
+* selftests-uffd-allow-eintr-eagain.patch
+* vmscan-make-drop_slab_node-static.patch
+* mm-mempolicy-convert-from-atomic_t-to-refcount_t-on-mempolicy-refcnt.patch
+* mm-mempolicy-convert-from-atomic_t-to-refcount_t-on-mempolicy-refcnt-fix.patch
+* mm-migrate-fix-the-return-value-of-migrate_pages.patch
+* mm-migrate-correct-the-hugetlb-migration-stats.patch
+* mm-migrate-correct-the-hugetlb-migration-stats-fix.patch
+* mm-compaction-fix-the-migration-stats-in-trace_mm_compaction_migratepages.patch
+* mm-migratec-rework-migration_entry_wait-to-not-take-a-pageref.patch
+* mm-migrate-support-multiple-target-nodes-demotion.patch
+* mm-migrate-add-more-comments-for-selecting-target-node-randomly.patch
+* mm-hwpoison-mf_mutex-for-soft-offline-and-unpoison.patch
+* mm-hwpoison-remove-mf_msg_buddy_2nd-and-mf_msg_poisoned_huge.patch
+* mm-hwpoison-fix-unpoison_memory.patch
+* mm-memcg-percpu-account-extra-objcg-space-to-memory-cgroups.patch
+* mm-memcg-percpu-account-extra-objcg-space-to-memory-cgroups-fix.patch
+* mm-rmap-convert-from-atomic_t-to-refcount_t-on-anon_vma-refcount.patch
+* zsmalloc-introduce-some-helper-functions.patch
+* zsmalloc-rename-zs_stat_type-to-class_stat_type.patch
+* zsmalloc-decouple-class-actions-from-zspage-works.patch
+* zsmalloc-introduce-obj_allocated.patch
+* zsmalloc-move-huge-compressed-obj-from-page-to-zspage.patch
+* zsmalloc-remove-zspage-isolation-for-migration.patch
+* locking-rwlocks-introduce-write_lock_nested.patch
+* locking-rwlocks-introduce-write_lock_nested-fix.patch
+* locking-rwlocks-introduce-write_lock_nested-fix-2.patch
+* zsmalloc-replace-per-zpage-lock-with-pool-migrate_lock.patch
+* zsmalloc-replace-get_cpu_var-with-local_lock.patch
+* mm-introduce-fault_in_exact_writeable-to-probe-for-sub-page-faults.patch
+* arm64-add-support-for-sub-page-faults-user-probing.patch
+* btrfs-avoid-live-lock-in-search_ioctl-on-hardware-with-sub-page-faults.patch
+* zram-use-attribute_groups.patch
+* writeback-fix-some-comment-errors.patch
+* mm-hmmc-allow-vm_mixedmap-to-work-with-hmm_range_fault.patch
+* mm-damon-unified-access_check-function-naming-rules.patch
+* mm-damon-add-age-of-region-tracepoint-support.patch
+* mm-damon-core-using-function-abs-instead-of-diff_of.patch
+* mm-damon-remove-some-no-need-func-definitions-in-damonh-file.patch
+* mm-damon-remove-some-no-need-func-definitions-in-damonh-file-fix.patch
+* mm-damon-vaddr-remove-swap_ranges-and-replace-it-with-swap.patch
+* mm-damon-schemes-add-the-validity-judgment-of-thresholds.patch
+* info-task-hung-in-generic_file_write_iter.patch
+* info-task-hung-in-generic_file_write-fix.patch
+* kernel-hung_taskc-monitor-killed-tasks.patch
+* proc-vmcore-dont-fake-reading-zeroes-on-surprise-vmcore_cb-unregistration.patch
+* proc-make-the-proc_create-stubs-static-inlines.patch
+* proc-make-the-proc_create-stubs-static-inlines-fix.patch
+* proc-sysctl-make-protected_-world-readable.patch
+* fs-exec-replace-strlcpy-with-strscpy_pad-in-__set_task_comm.patch
+* fs-exec-replace-strncpy-with-strscpy_pad-in-__get_task_comm.patch
+* drivers-infiniband-replace-open-coded-string-copy-with-get_task_comm.patch
+* fs-binfmt_elf-replace-open-coded-string-copy-with-get_task_comm.patch
+* samples-bpf-test_overhead_kprobe_kern-replace-bpf_probe_read_kernel-with-bpf_probe_read_kernel_str-to-get-task-comm.patch
+* tools-bpf-bpftool-skeleton-replace-bpf_probe_read_kernel-with-bpf_probe_read_kernel_str-to-get-task-comm.patch
+* tools-testing-selftests-bpf-replace-open-coded-16-with-task_comm_len.patch
+* kthread-dynamically-allocate-memory-to-store-kthreads-full-name.patch
+* kstrtox-uninline-everything.patch
+* lz4-fix-lz4_decompress_safe_partial-read-out-of-bound.patch
+* checkpatch-relax-regexp-for-commit_log_long_line.patch
+* checkpatch-improve-kconfig-help-test.patch
+* const_structscheckpatch-add-frequently-used-ops-structs.patch
+* elf-fix-overflow-in-total-mapping-size-calculation.patch
+* init-mainc-silence-some-wunused-parameter-warnings.patch
+* hfsplus-use-struct_group_attr-for-memcpy-region.patch
+* panic-use-error_report_end-tracepoint-on-warnings.patch
+* panic-use-error_report_end-tracepoint-on-warnings-fix.patch
+* delayacct-support-swapin-delay-accounting-for-swapping-without-blkio.patch
+* delayacct-fix-incomplete-disable-operation-when-switch-enable-to-disable.patch
+* delayacct-cleanup-flags-in-struct-task_delay_info-and-functions-use-it.patch
+* configs-introduce-debugconfig-for-ci-like-setup.patch
+  linux-next.patch
+* sysctl-add-a-new-register_sysctl_init-interface.patch
+* sysctl-move-some-boundary-constants-from-sysctlc-to-sysctl_vals.patch
+* sysctl-move-some-boundary-constants-from-sysctlc-to-sysctl_vals-fix.patch
+* hung_task-move-hung_task-sysctl-interface-to-hung_taskc.patch
+* watchdog-move-watchdog-sysctl-interface-to-watchdogc.patch
+* sysctl-make-ngroups_max-const.patch
+* sysctl-use-const-for-typically-used-max-min-proc-sysctls.patch
+* sysctl-use-sysctl_zero-to-replace-some-static-int-zero-uses.patch
+* aio-move-aio-sysctl-to-aioc.patch
+* dnotify-move-dnotify-sysctl-to-dnotifyc.patch
+* hpet-simplify-subdirectory-registration-with-register_sysctl.patch
+* i915-simplify-subdirectory-registration-with-register_sysctl.patch
+* macintosh-mac_hidc-simplify-subdirectory-registration-with-register_sysctl.patch
+* ocfs2-simplify-subdirectory-registration-with-register_sysctl.patch
+* test_sysctl-simplify-subdirectory-registration-with-register_sysctl.patch
+* inotify-simplify-subdirectory-registration-with-register_sysctl.patch
+* inotify-simplify-subdirectory-registration-with-register_sysctl-fix.patch
+* cdrom-simplify-subdirectory-registration-with-register_sysctl.patch
+* eventpoll-simplify-sysctl-declaration-with-register_sysctl.patch
+* firmware_loader-move-firmware-sysctl-to-its-own-files.patch
+* random-move-the-random-sysctl-declarations-to-its-own-file.patch
+* sysctl-add-helper-to-register-a-sysctl-mount-point.patch
+* sysctl-add-helper-to-register-a-sysctl-mount-point-fix.patch
+* fs-move-binfmt_misc-sysctl-to-its-own-file.patch
+* printk-move-printk-sysctl-to-printk-sysctlc.patch
+* scsi-sg-move-sg-big-buff-sysctl-to-scsi-sgc.patch
+* stackleak-move-stack_erasing-sysctl-to-stackleakc.patch
+* sysctl-share-unsigned-long-const-values.patch
+* fs-move-inode-sysctls-to-its-own-file.patch
+* fs-move-fs-stat-sysctls-to-file_tablec.patch
+* fs-move-dcache-sysctls-to-its-own-file.patch
+* sysctl-move-maxolduid-as-a-sysctl-specific-const.patch
+* fs-move-shared-sysctls-to-fs-sysctlsc.patch
+* fs-move-locking-sysctls-where-they-are-used.patch
+* fs-move-namei-sysctls-to-its-own-file.patch
+* fs-move-fs-execc-sysctls-into-its-own-file.patch
+* fs-move-pipe-sysctls-to-is-own-file.patch
+* sysctl-add-and-use-base-directory-declarer-and-registration-helper.patch
+* fs-move-namespace-sysctls-and-declare-fs-base-directory.patch
+* kernel-sysctlc-rename-sysctl_init-to-sysctl_init_bases.patch
+* printk-fix-build-warning-when-config_printk=n.patch
+* fs-coredump-move-coredump-sysctls-into-its-own-file.patch
+* kprobe-move-sysctl_kprobes_optimization-to-kprobesc.patch
+* fs-proc-store-pde-data-into-inode-i_private.patch
+* proc-remove-pde_data-completely.patch
+* lib-stackdepot-allow-optional-init-and-stack_table-allocation-by-kvmalloc.patch
+* lib-stackdepot-allow-optional-init-and-stack_table-allocation-by-kvmalloc-fix.patch
+* lib-stackdepot-allow-optional-init-and-stack_table-allocation-by-kvmalloc-fix-2.patch
+* lib-stackdepot-allow-optional-init-and-stack_table-allocation-by-kvmalloc-fixup3.patch
+  make-sure-nobodys-leaking-resources.patch
+  releasing-resources-with-children.patch
+  mutex-subsystem-synchro-test-module.patch
+  kernel-forkc-export-kernel_thread-to-modules.patch
+  workaround-for-a-pci-restoring-bug.patch

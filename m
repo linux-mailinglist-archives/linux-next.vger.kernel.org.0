@@ -2,94 +2,150 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 347B0462D18
-	for <lists+linux-next@lfdr.de>; Tue, 30 Nov 2021 07:51:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A06F462DD5
+	for <lists+linux-next@lfdr.de>; Tue, 30 Nov 2021 08:46:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233099AbhK3Gyl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 30 Nov 2021 01:54:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33324 "EHLO
+        id S234474AbhK3Htq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 30 Nov 2021 02:49:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232181AbhK3Gyl (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 30 Nov 2021 01:54:41 -0500
+        with ESMTP id S234471AbhK3Htp (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 30 Nov 2021 02:49:45 -0500
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B747CC061574;
-        Mon, 29 Nov 2021 22:51:22 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3B05C061574;
+        Mon, 29 Nov 2021 23:46:26 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J3CYN4rSLz4xQv;
-        Tue, 30 Nov 2021 17:51:20 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J3Dmw6pcSz4xR7;
+        Tue, 30 Nov 2021 18:46:24 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1638255080;
-        bh=lhL5PUUFXrK2X40tGvNjCzFWRNBeX05n6jOvo1zH29w=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=OGG3qNcBauFKetv9NJNhW2Qwq4BBVSxRNLrZTl/ITwMGen9z0t4RMPLqlam1TpfDx
-         AFrogANUKHNrFKfTbumDaHiAyblIWHjHpwxgaboSnEYrln6OUp8uOnCf6eijhl7Nty
-         hnK2+Xk50eGUjdYX/zddE/iw8yStYh53ooeRJhH3AdIk+8W1snQNC3PPEVHP+LzPpV
-         63wAi5ZsDeWR/OFqLLwVeq0giA22m8ul6KpgjrcpiGwRMDElxTSpJNQ4pVo7V+0gwd
-         K/zk/lg1QtjXXFQ6CL7X8oAE4TAKdgRDunGyBgnnQ1ee6Hf68vRn3jw36zUECHfrKE
-         nodrM02PHXzfA==
-Date:   Tue, 30 Nov 2021 17:51:19 +1100
+        s=201702; t=1638258385;
+        bh=IRJ88mg4Dj0bG6EbQHSHF+i5Z5NAYf6YkaS9fWv0Txg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=m2EbPr33VrCs6TfSz6ftDcLzMhrsdxJRhMUMrK5B8AZyHLC26LFuU+doOI/j5kXWV
+         7MpyuhpqHlS0LUTTjvWg5Yx9oQ8In8SVkc1p8iyb7pBy94sijteLzFaHgy1RoinEHf
+         FAKIzRzJC0y6mzJzSZa/I/pf7ONbjC5K061Er1xHTGQggjtAn3AcwshjpD5OgWsRWN
+         5NU7/Q2mFnANArra2UhV0lrPlOZnkjlYfK1EcQNmWqlCZMjAciLVkpahpmKtH7p0AV
+         oaVly3oOMlnW+piB3n6Rr78keS1fkBzoArsFrlGWbFNS9Zeff+4hy/Z8WgbDfqUDV3
+         mUfIg5LbukFRA==
+Date:   Tue, 30 Nov 2021 18:46:22 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Xiaoming Ni <nixiaoming@huawei.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the fscache tree
-Message-ID: <20211130175119.63d0e7aa@canb.auug.org.au>
-In-Reply-To: <20211130162311.105fcfa5@canb.auug.org.au>
-References: <20211130162311.105fcfa5@canb.auug.org.au>
+Subject: linux-next: boot failure after merge of the akpm tree
+Message-ID: <20211130184622.71be17e0@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/4dQe+d0r.Z4JHi+93mEG4nb";
+Content-Type: multipart/signed; boundary="Sig_/sz3UtG29bHJ50Xq9dByJzGA";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/4dQe+d0r.Z4JHi+93mEG4nb
+--Sig_/sz3UtG29bHJ50Xq9dByJzGA
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Tue, 30 Nov 2021 16:23:11 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->=20
-> After merging the fscache tree, today's linux-next build (htmldocs)
-> produced this warning:
->=20
-> Documentation/filesystems/caching/backend-api.rst:417: WARNING: undefined=
- label: documentation/filesystems/netfs_library.rst
->=20
-> Introduced by commit
->=20
->   b3c088faf78b ("fscache: Rewrite documentation")
+After merging the akpm tree, today's linux-next boot test (powerpc
+pseries_le_defconfig) failed like this:
 
-Also
+[    0.025828][    T0] pid_max: default: 32768 minimum: 301
+[    0.028445][    T0] Mount-cache hash table entries: 8192 (order: 0, 6553=
+6 bytes, linear)
+[    0.028636][    T0] Mountpoint-cache hash table entries: 8192 (order: 0,=
+ 65536 bytes, linear)
+[    0.055344][    T0] BUG: Unable to handle kernel data access on write at=
+ 0x2000000b7
+[    0.056649][    T0] Faulting instruction address: 0xc00000000057435c
+[    0.057458][    T0] Oops: Kernel access of bad area, sig: 11 [#1]
+[    0.057734][    T0] LE PAGE_SIZE=3D64K MMU=3DHash SMP NR_CPUS=3D2048 NUM=
+A pSeries
+[    0.058250][    T0] Modules linked in:
+[    0.058816][    T0] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.16.0-rc3=
+ #2
+[    0.059410][    T0] NIP:  c00000000057435c LR: c000000000577f54 CTR: 000=
+0000000000003
+[    0.059608][    T0] REGS: c000000002787a80 TRAP: 0380   Not tainted  (5.=
+16.0-rc3)
+[    0.059999][    T0] MSR:  8000000002009033 <SF,VEC,EE,ME,IR,DR,RI,LE>  C=
+R: 44000288  XER: 20000000
+[    0.060654][    T0] CFAR: c000000000574464 IRQMASK: 0=20
+[    0.060654][    T0] GPR00: c000000000577f54 c000000002787d20 c0000000027=
+88500 c00000000252d5e8=20
+[    0.060654][    T0] GPR04: c000000000e42500 c00000000252d5e8 00000000000=
+00000 c0000000073a02c9=20
+[    0.060654][    T0] GPR08: c000000000e42380 c000000000f89d48 c0000000027=
+4f700 ffffffffffffffff=20
+[    0.060654][    T0] GPR12: 0000000000000000 c000000002970000 00000000000=
+00000 0000000000000000=20
+[    0.060654][    T0] GPR16: 0000000002bf00d0 000000000135bfd8 00000000000=
+00000 0000000000000000=20
+[    0.060654][    T0] GPR20: c00000000252d6e8 c00000000252d740 00000000000=
+00006 0000000000000000=20
+[    0.060654][    T0] GPR24: 0000000000000000 0000000000000002 c0000000026=
+62eb8 c00000000252d5e8=20
+[    0.060654][    T0] GPR28: 00000002000000b7 c000000001004108 00000000000=
+00000 c00000000252d5c0=20
+[    0.062938][    T0] NIP [c00000000057435c] count_subheaders.part.0+0x9c/=
+0x2b0
+[    0.064395][    T0] LR [c000000000577f54] __register_sysctl_paths+0x64/0=
+x320
+[    0.065201][    T0] Call Trace:
+[    0.065521][    T0] [c000000002787dc0] [c000000000577f54] __register_sys=
+ctl_paths+0x64/0x320
+[    0.065960][    T0] [c000000002787e40] [c0000000005782a4] __register_sys=
+ctl_base+0x34/0x50
+[    0.066570][    T0] [c000000002787e60] [c0000000020259bc] sysctl_init_ba=
+ses+0x34/0x74
+[    0.066960][    T0] [c000000002787e90] [c000000002041744] proc_sys_init+=
+0x54/0x68
+[    0.067306][    T0] [c000000002787eb0] [c0000000020410dc] proc_root_init=
++0xb8/0xdc
+[    0.067763][    T0] [c000000002787ed0] [c0000000020044fc] start_kernel+0=
+x838/0x8cc
+[    0.068171][    T0] [c000000002787f90] [c00000000000d39c] start_here_com=
+mon+0x1c/0x600
+[    0.068782][    T0] Instruction dump:
+[    0.069295][    T0] f821ff61 eab40018 2c350000 418201c8 e9350000 2c29000=
+0 4182020c 3b000000=20
+[    0.069694][    T0] 3a600000 eb950018 2c3c0000 41820198 <e93c0000> 2c290=
+000 418201dc 3b200000=20
+[    0.071747][    T0] ---[ end trace df5d37c8b563422a ]---
+[    0.071967][    T0]=20
+[    1.073058][    T0] Kernel panic - not syncing: Attempted to kill the id=
+le task!
 
-Documentation/filesystems/netfs_library.rst:518: WARNING: Inline emphasis s=
-tart-string without end-string.
-Documentation/filesystems/netfs_library.rst:518: WARNING: Inline emphasis s=
-tart-string without end-string.
+Bisected to commit
+
+  f00ff38c1dfa ("sysctl: add and use base directory declarer and registrati=
+on helper")
+
+I have reverted that complete 6 patch series for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/4dQe+d0r.Z4JHi+93mEG4nb
+--Sig_/sz3UtG29bHJ50Xq9dByJzGA
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGlyecACgkQAVBC80lX
-0GzJdQgAnGS4QXC0fuUor8W+9y+6SwoqIagBratLuQpFCxPUgJBBB3rEzwtvd8K1
-btIePlBCUPucF3cPeJ6v3grxe2cm9JNlLpjaqxr43MEV0CO2BzYTsRncsE7RfDc/
-LLiPz11cn/eh/UwI7/uTIPsvJl7T5ET4KNfYjAqzBCeH+F39seA5/s21N6lNcVD+
-6rRFuyE5jrp4Da9y2+FyRMIF8MjsiT4TU9A2CANn2LGfPuyBLdk6t2WU5WbkpU7j
-PRNsgsm5uWNm4c+szLtTRzYdoO09rYuevb2GYp/knCazABpl62+MlgDaIFN3m/XO
-jBdIs30ZuIO/t7bU2n3jkVaVWg4EDA==
-=FdLT
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGl1s4ACgkQAVBC80lX
+0GyV3gf/ZFtWmMGC9oDU/MB5bKEkOtAPvAwzthwNHmq4PXTrofnI8Xk80H7jr1yC
+uDA7E/rSBTx9ssWwOqgaG1y9EpjYnKGp9RUsCJhpwdX9HP4elgKN9bkPprf1OvW+
+QPZou749BCDMh3AIhYDivCenIZGd2BcGWDTxwhqY/4yf+uTP1T0Ji/TPCydsR/1M
+TDfG9jBM5oBmXguRSLB7iijs0ASl3gpfK7lA/nY2jhwC5zNEYUproKJRGQZBnnDR
+PZhJYLUVR9FnFRUAmVuKPCxhcDfH9Ek/pdmzlHc1dOR4bd1pSK9AdxJDMzQ3Ng3C
+ONBNHLV3eNL7Y6qboCf0IdfWeJ6DUg==
+=VRm7
 -----END PGP SIGNATURE-----
 
---Sig_/4dQe+d0r.Z4JHi+93mEG4nb--
+--Sig_/sz3UtG29bHJ50Xq9dByJzGA--

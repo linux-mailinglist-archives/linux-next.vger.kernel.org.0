@@ -2,85 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82E4F462CCD
-	for <lists+linux-next@lfdr.de>; Tue, 30 Nov 2021 07:32:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 347B0462D18
+	for <lists+linux-next@lfdr.de>; Tue, 30 Nov 2021 07:51:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238580AbhK3Gfh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 30 Nov 2021 01:35:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57172 "EHLO
+        id S233099AbhK3Gyl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 30 Nov 2021 01:54:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238573AbhK3Gfg (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 30 Nov 2021 01:35:36 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BAC1C061714
-        for <linux-next@vger.kernel.org>; Mon, 29 Nov 2021 22:32:17 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id 133so16524765wme.0
-        for <linux-next@vger.kernel.org>; Mon, 29 Nov 2021 22:32:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=V13RyYqv2WhtbyDuqbbRKKzuJ+76Oi0/zKY/2heW9G4=;
-        b=LkjwFV5iWha9Gasa8L4fcbsdbHOEQq50NM0gWcGHIXvQo4TVuepOq1ElZymiHH0vkd
-         k2BQ8wziM8xKjcoHumgblrfeFGHmuiY1xG3sVJItv1WUBuaR6D2T36tr3SCyrpkRevh+
-         feBUSBwZELG7rLcuGYeKitiWiwypuu/kfG/bCsSgM/4mvlYjFIxY/FGmXspudHj1dkcq
-         pWgbyQOAnxQRmxRQlNxyt/CDKrJVYmo5OX7+PfQZdUl8qBViLDl+ZAYlAXMANlyC3HGg
-         Dy+I0OlyXdJYd738VRIOpnAE9oEGQ0amltOnigSlLtAiMKRJ2lf5YHQewxLKm1yi3eUe
-         pK2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=V13RyYqv2WhtbyDuqbbRKKzuJ+76Oi0/zKY/2heW9G4=;
-        b=3itIwVboJAt4BUMTGqzVg/diAiFsgrbiNrtI0FYTpzV7jMWE1D5QGby7MTLpdXd/rE
-         P9SedhzJYUFa6tdXQbXlZ/SIRJiw/1ZCvpiyIWkr5sAvMM3hpJKx7iDbD/U1410spnV8
-         EfrX/zuDvarrh7qGBKF6i9c2HJ+wLKDXxSbjWHJkjkLWv1yp9O5Z59WjNonahWAbFwrw
-         Tj692hBtMKChPSAIbpr3J1lPTIMmVwJJsBTxZuSDUaj0C4F7BJlJnOQN9jx8ssr8WED4
-         2mXcW6BbVx6pbJUovQd7l4XiSjktzZcPU697OUQa55CnLhhhxy7QxIWeendqIiTDxJYu
-         Zpyw==
-X-Gm-Message-State: AOAM530k2ILuddSxkB9HxxET14nHwuSju5JzaNKAS1C9LyEHQzBlsHHH
-        AQi7wvqD9ZkJt76G79NQp2RR6jqQiyNS2i1o/xqq5Q==
-X-Google-Smtp-Source: ABdhPJxh9enzmH0O96r70utD0MOPBkwb5IeIYk8bbB3QFlhjfWECIwQbjlFnezpnz7UQh5ZYrZwgnaA34q0AOQ+D/LQ=
-X-Received: by 2002:a05:600c:2117:: with SMTP id u23mr2802655wml.19.1638253935857;
- Mon, 29 Nov 2021 22:32:15 -0800 (PST)
-MIME-Version: 1.0
-References: <20211130073940.7eb0f2c1@canb.auug.org.au>
-In-Reply-To: <20211130073940.7eb0f2c1@canb.auug.org.au>
-From:   Jens Wiklander <jens.wiklander@linaro.org>
-Date:   Tue, 30 Nov 2021 07:32:04 +0100
-Message-ID: <CAHUa44G4ZBXZFN-06zuCKoU2DCPHg+j3eDWBCuhUU8ijLZMQrA@mail.gmail.com>
-Subject: Re: linux-next: Fixes tag needs some work in the tee tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Yang Li <yang.lee@linux.alibaba.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        with ESMTP id S232181AbhK3Gyl (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 30 Nov 2021 01:54:41 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B747CC061574;
+        Mon, 29 Nov 2021 22:51:22 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J3CYN4rSLz4xQv;
+        Tue, 30 Nov 2021 17:51:20 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1638255080;
+        bh=lhL5PUUFXrK2X40tGvNjCzFWRNBeX05n6jOvo1zH29w=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=OGG3qNcBauFKetv9NJNhW2Qwq4BBVSxRNLrZTl/ITwMGen9z0t4RMPLqlam1TpfDx
+         AFrogANUKHNrFKfTbumDaHiAyblIWHjHpwxgaboSnEYrln6OUp8uOnCf6eijhl7Nty
+         hnK2+Xk50eGUjdYX/zddE/iw8yStYh53ooeRJhH3AdIk+8W1snQNC3PPEVHP+LzPpV
+         63wAi5ZsDeWR/OFqLLwVeq0giA22m8ul6KpgjrcpiGwRMDElxTSpJNQ4pVo7V+0gwd
+         K/zk/lg1QtjXXFQ6CL7X8oAE4TAKdgRDunGyBgnnQ1ee6Hf68vRn3jw36zUECHfrKE
+         nodrM02PHXzfA==
+Date:   Tue, 30 Nov 2021 17:51:19 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: linux-next: build warning after merge of the fscache tree
+Message-ID: <20211130175119.63d0e7aa@canb.auug.org.au>
+In-Reply-To: <20211130162311.105fcfa5@canb.auug.org.au>
+References: <20211130162311.105fcfa5@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/4dQe+d0r.Z4JHi+93mEG4nb";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 9:39 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> In commit
->
->   9fcd8dc5d651 ("optee: Fix NULL but dereferenced coccicheck error")
->
-> Fixes tag
->
->   Fixes: 'commit 6749e69c4dad ("optee: add asynchronous notifications")'
->
-> has these problem(s):
->
->   - No SHA1 recognised
->
->
-> Please just use
->
->         git log -1 --format='Fixes: %h ("%s")' <commit>
+--Sig_/4dQe+d0r.Z4JHi+93mEG4nb
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I'm sorry. I'll fix up the commit.
+Hi all,
 
-Thanks,
-Jens
+On Tue, 30 Nov 2021 16:23:11 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>=20
+> After merging the fscache tree, today's linux-next build (htmldocs)
+> produced this warning:
+>=20
+> Documentation/filesystems/caching/backend-api.rst:417: WARNING: undefined=
+ label: documentation/filesystems/netfs_library.rst
+>=20
+> Introduced by commit
+>=20
+>   b3c088faf78b ("fscache: Rewrite documentation")
+
+Also
+
+Documentation/filesystems/netfs_library.rst:518: WARNING: Inline emphasis s=
+tart-string without end-string.
+Documentation/filesystems/netfs_library.rst:518: WARNING: Inline emphasis s=
+tart-string without end-string.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/4dQe+d0r.Z4JHi+93mEG4nb
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGlyecACgkQAVBC80lX
+0GzJdQgAnGS4QXC0fuUor8W+9y+6SwoqIagBratLuQpFCxPUgJBBB3rEzwtvd8K1
+btIePlBCUPucF3cPeJ6v3grxe2cm9JNlLpjaqxr43MEV0CO2BzYTsRncsE7RfDc/
+LLiPz11cn/eh/UwI7/uTIPsvJl7T5ET4KNfYjAqzBCeH+F39seA5/s21N6lNcVD+
+6rRFuyE5jrp4Da9y2+FyRMIF8MjsiT4TU9A2CANn2LGfPuyBLdk6t2WU5WbkpU7j
+PRNsgsm5uWNm4c+szLtTRzYdoO09rYuevb2GYp/knCazABpl62+MlgDaIFN3m/XO
+jBdIs30ZuIO/t7bU2n3jkVaVWg4EDA==
+=FdLT
+-----END PGP SIGNATURE-----
+
+--Sig_/4dQe+d0r.Z4JHi+93mEG4nb--

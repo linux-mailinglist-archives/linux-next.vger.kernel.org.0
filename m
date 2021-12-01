@@ -2,101 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3159846594D
-	for <lists+linux-next@lfdr.de>; Wed,  1 Dec 2021 23:32:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B0274659CF
+	for <lists+linux-next@lfdr.de>; Thu,  2 Dec 2021 00:28:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353639AbhLAWfW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 1 Dec 2021 17:35:22 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:38947 "EHLO
+        id S1343866AbhLAXbj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 1 Dec 2021 18:31:39 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:50433 "EHLO
         gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353660AbhLAWfV (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 1 Dec 2021 17:35:21 -0500
+        with ESMTP id S240449AbhLAXbj (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 1 Dec 2021 18:31:39 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J4DNG2r4bz4xbC;
-        Thu,  2 Dec 2021 09:31:58 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J4FdC5Y89z4xPv;
+        Thu,  2 Dec 2021 10:28:15 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1638397919;
-        bh=iRuwDkNdeN13qpkG5g/zOreQsdlthg7UtRfcCdHvVNI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=RjzdCkVHbUwmYBBE9QOCGUgFn7qjI7rNgOoOTqazl/ZdHm0pftntrGPaepBiKVhSd
-         pxrHxKK2uSyeudL0yfX8/txvzOGcqCyy9QL1/BFDajJs9odv8AwWLF+aMCydussyUm
-         ckkZW9TEzcSrRTbAdhzymnuEsrKlCWtYaXxAtUOMiTeVX/a9aQ3HSm6pXTzOId8gTh
-         jrHsk51uxCJ+ZwcN9tIlBERUBkOqZrsz0YZAOpEbdLgrNFo5OPSx0k4gVVKA98yF6f
-         acmSHuTrOtsgb4FN2jDsacxFcKNfx0Rr4CGmwB/Cm9rkEVLcK9MRvVPSJprEpc4NDx
-         6URp9Omm+pXbQ==
-Date:   Thu, 2 Dec 2021 09:31:57 +1100
+        s=201702; t=1638401296;
+        bh=HPaSMnBTtztS5JfrpBF/PhbDS6Cv227wx8hQsokeMm8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=V6j3bspcZjL15KTamk4Gf/txF3wbGHuGYSrOINo3GAbke+5wHVU9rQTVfB5Cj5w9D
+         XvNzl6Ze3CCLusuIku6uMSBZPrE7Fpf0fd9eXvhpwMtIlG3uq7KL4Xmd8cKgvtdNqy
+         bf9M6Evvq5hes0b41/z0Ea+i+5Mn4+5E6OkhNMJBx1K2mvLC26lElI2XNua4cQH8ZK
+         64oDVOBjnOObuLlkgVUSHXg7ijFg4bC/vafRPaLnf/eqzb8onfJ1rcieSV8Rizv8i+
+         dDlSxpGmgwQknH+qQhKub4J8PHTXf9V2Q2ubDqOOCWRgRLZRVHeq195kC+z4X42dzL
+         Dbm1IE4zWGOZQ==
+Date:   Thu, 2 Dec 2021 10:28:14 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Ingo Molnar <mingo@redhat.com>, "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the tip tree
-Message-ID: <20211202093157.0d49044d@canb.auug.org.au>
-In-Reply-To: <87wnko6k8z.ffs@tglx>
-References: <20211126145201.5aefa68c@canb.auug.org.au>
-        <CAK8P3a078LiivyzUiH+D--iRsQGTcQ_hy=-h7crynrbQ6ZYn6A@mail.gmail.com>
-        <20211202090540.1f22fa39@canb.auug.org.au>
-        <87zgpk6kcz.ffs@tglx>
-        <87wnko6k8z.ffs@tglx>
+Subject: linux-next: build failure after merge of the pm tree
+Message-ID: <20211202102814.793d2f67@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/GTQDfa2LPoVjoK_tEx9N22Q";
+Content-Type: multipart/signed; boundary="Sig_/DOWq+3fcZS+Rz2u=PrO=OW4";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/GTQDfa2LPoVjoK_tEx9N22Q
+--Sig_/DOWq+3fcZS+Rz2u=PrO=OW4
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Thomas,
+Hi all,
 
-On Wed, 01 Dec 2021 23:19:40 +0100 Thomas Gleixner <tglx@linutronix.de> wro=
-te:
->
-> On Wed, Dec 01 2021 at 23:17, Thomas Gleixner wrote:
->=20
-> > On Thu, Dec 02 2021 at 09:05, Stephen Rothwell wrote: =20
-> >> On Fri, 26 Nov 2021 11:01:52 +0100 Arnd Bergmann <arnd@arndb.de> wrote=
-: =20
-> >>>=20
-> >>> Thanks a lot for the report, I sent a fix now:
-> >>>=20
-> >>> https://lore.kernel.org/lkml/20211126095852.455492-1-arnd@kernel.org =
-=20
-> >>
-> >> I am still getting this failure (Arnd's fix has not been applied). =20
-> >
-> > It got applied, but due to tip maintainer confusion the next branch was
-> > not updated. Will be fixed tomorrow. =20
->=20
-> Actually now. So still today here :)
+After merging the pm tree, today's linux-next build (x86_64 allmodconfig)
+failed like this:
 
-Thanks, I have that now, so it will go into today's linux-next.
+drivers/powercap/dtpm.c: In function 'init_dtpm':
+drivers/powercap/dtpm.c:466:21: error: unused variable 'dtpm_descr' [-Werro=
+r=3Dunused-variable]
+  466 |  struct dtpm_descr *dtpm_descr;
+      |                     ^~~~~~~~~~
+cc1: all warnings being treated as errors
+
+Caused by commit
+
+  f751db8adaea ("powercap/drivers/dtpm: Disable DTPM at boot time")
+
+I have used the pm tree from next-20211201 for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/GTQDfa2LPoVjoK_tEx9N22Q
+--Sig_/DOWq+3fcZS+Rz2u=PrO=OW4
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGn990ACgkQAVBC80lX
-0GyeyAf/Y7U4lyRORTzVooMypQbcEvT1tKQTS8ME8x38AmDuy0X4q+3Atld6bWxG
-vve03VaImP/CRKk2rri1tKN8+SSUT0fzqbc29wdAYJcc+MY8/HT1e+XVja0or+92
-hiezfeDNAvAUnwqS4vFzppPw7T0pcMAzhltwWCUosvmTY1+NFq5PQeykpZP3vbg0
-m9Q21oS0k1Fp9ynicTQ1QarcmZd4LzcA2f0KRSdAx9ax4VgdFM8LqHUMpRxadiVx
-xaJWuI437cg3q5mvbZpkN1i4J2n1zalzcmhtoxVe98XyIONjxuwmsnI2NZDr2R0t
-do8wzZ7ragg1EucIA2A4ElIUlg7Dhw==
-=YpfX
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGoBQ4ACgkQAVBC80lX
+0GzD2Qf/cnXtq8RlYCHvb3uXwPjiWTQG1hAoqjyB1QdqrnIMBo7E09RhLNq+/VS5
+ORZPWsdnKRXoX+vXv2upapN5ZQOS2voIlMuMMUHWIg7oV+OrM2ZRIqvFzqV8U7Z3
+6xqVH8bYIwLk9hdxp92Iv2+6I8Lnxq4BkIczOpnivO8HPdGlD2TaYHfVPpE1zkov
+fNawG/ee2X/eZGoUqjCCZ6PxkrwcOk8QAOvgO9shZlgf/6DIoqeDjFP9JZ6MZ3gU
+QzRQKEh3nRFkCTxbIqFp+Jsrt0msg+/ra+Y94YMgBV7aRCbcwnP+HLy8TM1mYP73
+oE6UGMSyAE89Zf0XdNKwZ8kNzKredg==
+=J1IK
 -----END PGP SIGNATURE-----
 
---Sig_/GTQDfa2LPoVjoK_tEx9N22Q--
+--Sig_/DOWq+3fcZS+Rz2u=PrO=OW4--

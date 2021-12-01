@@ -2,766 +2,2827 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F7594646C0
-	for <lists+linux-next@lfdr.de>; Wed,  1 Dec 2021 06:37:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8886B464A30
+	for <lists+linux-next@lfdr.de>; Wed,  1 Dec 2021 09:52:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229971AbhLAFlJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 1 Dec 2021 00:41:09 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:36157 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231488AbhLAFlJ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 1 Dec 2021 00:41:09 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J3nsx57Cfz4xR7;
-        Wed,  1 Dec 2021 16:37:41 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1638337061;
-        bh=jacq4lRDxk0SJk0/zDUvCksxBv7K1aVFzCT5/GBLJW4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=M8KZk0SV3Y/WW/zSvB6sRZ+qBAVw0qO1ZhXXQFljJeMNNtSnc1kG5WMWaPs4rH9KP
-         b7lvuUwDGd1QjbmNHxJIcpRbs13CI54BInq44hoS+7dJiKVBwIjcyQnDQ8hlKVAlFS
-         ZAwc7DeS1LBDSSZAS5yIT3Uhj9rAIYwvaQmlDeWC/B5T2tGb4XAy9vExgvmVMjrkma
-         RdZ58VpMeBBBoE2/o2qTzhXMbNhGDQ7cFKOtS1ox9M0cqlyURJ70QoS3yBv416CJVG
-         b66qxPR+oXJQqiNOj1eQX/KAiYDGh5/njBmOPp94XP/TX0VH9ujafkGq9qpb0X5vJ/
-         pIZhnMNuzLIug==
-Date:   Wed, 1 Dec 2021 16:37:41 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Tree for Dec 1
-Message-ID: <20211201163741.5b10f466@canb.auug.org.au>
+        id S242116AbhLAI4E (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 1 Dec 2021 03:56:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53320 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236947AbhLAI4C (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 1 Dec 2021 03:56:02 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43668C061574
+        for <linux-next@vger.kernel.org>; Wed,  1 Dec 2021 00:52:42 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id nh10-20020a17090b364a00b001a69adad5ebso810106pjb.2
+        for <linux-next@vger.kernel.org>; Wed, 01 Dec 2021 00:52:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=5AwuZ4kGr8t3/0d/ZBHR9UWTgjzw+AuPEPTcnE8hRSs=;
+        b=uJmQJq0sblrtZFe1MD99THI7Pbfr8Br4G4De+Zf+FYPdJBDS3AMYO0plHIRvew3cIN
+         608baBMVv9zny0Lq5ZpHEyu1Th0lNu0vDXJvku/C3a5oZmtpHSg9rQV13PYq5qgwgZ5W
+         iQns4uuB7wzjMFARAtsq+LHRwF4L0bUVVE4daycyGkOVyFPnGe1DH9LizhKn/WQoVAK0
+         XZ0xheXmdnfB2V0kHBNKmC2ZBN6Rw9NQq8Wbpsi0HFQO3j+SPJFxzhxgoylyQrSFq8Ov
+         fDiMm04Blo/8D+Fx61WP/thaCWGVzhmEdYcwIOgyfuA19jje4lg2Z4FcTTZNJIVjOti9
+         s8qA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=5AwuZ4kGr8t3/0d/ZBHR9UWTgjzw+AuPEPTcnE8hRSs=;
+        b=MkwitEYAfR0OAAkZ1EDBVel5plObndbQ0arfCtSWgZvKomJgtT6yk3xGvm26kmcCdC
+         R8FFjNokhoTQRBdc6jvfaSOWgVmAIRd2C97GmxlI/k15MpvHbjdiVTbnQZ0GIcd7FWUu
+         PbZkSz83xjOh5hWu1hIp2Ss9wMnwG4Wea3WGcA0T0G3n4Jzgk8skW1HMh5WKSi9YIq9K
+         C+2SNzRzGiointkzma7M872lyni/ix1jvXREnbZque2FfDteMfb6xlmH1P6qkfcWVJF6
+         z5Oaaq5XLuL73PDnd/oBIuRAnS9a0f5Daa6SCUBuAvmwT9JUCG1+9pJYN9g9/AJvAOoG
+         CCvg==
+X-Gm-Message-State: AOAM530Gtc/6uLYZBIuvhREBdcqgudXuJiEfqrioNLxJ2HbF/05GPgOb
+        9sXJlBjbwOBYr62gTd3gNlrfkctI6qorK3Az
+X-Google-Smtp-Source: ABdhPJx5e2rydHloPj/pugk2ZwepQWq5hrGEMgMB708eZ0hSv8EN/l9hQliWA3ZD3ZIWRpvrqfQryw==
+X-Received: by 2002:a17:90b:4aca:: with SMTP id mh10mr5904549pjb.234.1638348759634;
+        Wed, 01 Dec 2021 00:52:39 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id h36sm18230202pgb.9.2021.12.01.00.52.39
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Dec 2021 00:52:39 -0800 (PST)
+Message-ID: <61a737d7.1c69fb81.e2762.14f1@mx.google.com>
+Date:   Wed, 01 Dec 2021 00:52:39 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/2jq=Hup3yel3xyVK5tz.XTU";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Tree: next
+X-Kernelci-Branch: master
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: next-20211201
+Subject: next/master build: 203 builds: 25 failed, 178 passed, 365 errors,
+ 128 warnings (next-20211201)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/2jq=Hup3yel3xyVK5tz.XTU
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/master build: 203 builds: 25 failed, 178 passed, 365 errors, 128 warni=
+ngs (next-20211201)
 
-Hi all,
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20211201/
 
-Changes since 20211130:
+Tree: next
+Branch: master
+Git Describe: next-20211201
+Git Commit: 048aeae86c3967f4c40666cd26f2c1eb73a4b805
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 7 unique architectures
 
-The fscache tree gained a conflict against Linus' tree.
+Build Failures Detected:
 
-The tip tree still has its build failure for which I reverted 2 commits.
+arm64:
+    allmodconfig: (clang-10) FAIL
+    defconfig+CONFIG_ARM64_64K_PAGES=3Dy: (clang-10) FAIL
+    allmodconfig: (clang-13) FAIL
 
-The gpio-brgl tree still had its build failure so I used the version from
-next-20211115.
+arm:
+    allmodconfig: (clang-10) FAIL
+    allnoconfig: (clang-10) FAIL
+    aspeed_g5_defconfig: (clang-10) FAIL
+    multi_v7_defconfig: (clang-10) FAIL
+    allmodconfig: (clang-13) FAIL
+    allmodconfig: (gcc-10) FAIL
+    aspeed_g5_defconfig: (gcc-10) FAIL
+    qcom_defconfig: (gcc-10) FAIL
+    rpc_defconfig: (gcc-10) FAIL
 
-The akpm tree still had its boot failure for which I reverted 6 commits.
-It also gained a build failure for which I applied a patch.
+i386:
+    allmodconfig: (clang-13) FAIL
 
-Non-merge commits (relative to Linus' tree): 4036
- 4605 files changed, 187261 insertions(+), 88751 deletions(-)
+mips:
+    bigsur_defconfig: (gcc-10) FAIL
+    decstation_64_defconfig: (gcc-10) FAIL
+    decstation_defconfig: (gcc-10) FAIL
+    decstation_r4k_defconfig: (gcc-10) FAIL
+    ip27_defconfig: (gcc-10) FAIL
+    ip28_defconfig: (gcc-10) FAIL
+    jazz_defconfig: (gcc-10) FAIL
+    sb1250_swarm_defconfig: (gcc-10) FAIL
 
-----------------------------------------------------------------------------
+x86_64:
+    allmodconfig: (clang-10) FAIL
+    x86_64_defconfig: (clang-10) FAIL
+    allmodconfig: (clang-13) FAIL
+    allmodconfig: (gcc-10) FAIL
 
-I have created today's linux-next tree at
-git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
-are tracking the linux-next tree using git, you should not use "git pull"
-to do so as that will try to merge the new linux-next release with the
-old one.  You should use "git fetch" and checkout or reset to the new
-master.
+Errors and Warnings Detected:
 
-You can see which trees have been included by looking in the Next/Trees
-file in the source.  There are also quilt-import.log and merge.log
-files in the Next directory.  Between each merge, the tree was built
-with a ppc64_defconfig for powerpc, an allmodconfig for x86_64, a
-multi_v7_defconfig for arm and a native build of tools/perf. After
-the final fixups (if any), I do an x86_64 modules_install followed by
-builds for x86_64 allnoconfig, powerpc allnoconfig (32 and 64 bit),
-ppc44x_defconfig, allyesconfig and pseries_le_defconfig and i386,
-arm64, sparc and sparc64 defconfig and htmldocs. And finally, a simple
-boot test of the powerpc pseries_le_defconfig kernel in qemu (with and
-without kvm enabled).
+arc:
+    haps_hs_smp_defconfig+debug (gcc-10): 1 warning
 
-Below is a summary of the state of the merge.
+arm64:
+    allmodconfig (clang-13): 3 errors, 2 warnings
+    allmodconfig (clang-10): 129 errors
+    defconfig (gcc-10): 1 warning
+    defconfig (clang-13): 7 warnings
+    defconfig+CONFIG_ARM64_16K_PAGES=3Dy (gcc-10): 1 warning
+    defconfig+CONFIG_ARM64_64K_PAGES=3Dy (clang-10): 129 errors, 2 warnings
+    defconfig+CONFIG_ARM64_64K_PAGES=3Dy (gcc-10): 1 warning
+    defconfig+CONFIG_ARM64_64K_PAGES=3Dy (clang-13): 7 warnings
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (gcc-10): 1 warning
+    defconfig+arm64-chromebook+kselftest (gcc-10): 1 warning
+    defconfig+debug (gcc-10): 1 warning
 
-I am currently merging 344 trees (counting Linus' and 94 trees of bug
-fix patches pending for the current merge release).
+arm:
+    allmodconfig (clang-13): 5 errors, 16 warnings
+    allmodconfig (clang-10): 33 errors, 16 warnings
+    allmodconfig (gcc-10): 1 error, 1 warning
+    allnoconfig (clang-10): 1 error
+    aspeed_g5_defconfig (gcc-10): 3 errors
+    aspeed_g5_defconfig (clang-10): 23 errors, 8 warnings
+    at91_dt_defconfig (gcc-10): 1 warning
+    multi_v5_defconfig (gcc-10): 1 warning
+    multi_v5_defconfig (clang-13): 2 warnings
+    multi_v5_defconfig (clang-10): 2 warnings
+    multi_v7_defconfig (clang-10): 5 errors, 8 warnings
+    multi_v7_defconfig (clang-13): 12 warnings
+    qcom_defconfig (gcc-10): 1 error
+    rpc_defconfig (gcc-10): 2 errors
+    vexpress_defconfig (gcc-10): 1 warning
 
-Stats about the size of the tree over time can be seen at
-http://neuling.org/linux-next-size.html .
+i386:
+    allmodconfig (clang-13): 13 errors, 1 warning
+    i386_defconfig (clang-13): 2 warnings
+    tinyconfig (gcc-10): 2 warnings
 
-Status of my local build tests will be at
-http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
-advice about cross compilers/configs that work, we are always open to add
-more builds.
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
+    32r2el_defconfig+debug (gcc-10): 1 warning
+    bigsur_defconfig (gcc-10): 1 error
+    cavium_octeon_defconfig (gcc-10): 1 error
+    ci20_defconfig (gcc-10): 1 warning
+    decstation_64_defconfig (gcc-10): 1 error
+    decstation_defconfig (gcc-10): 1 error
+    decstation_r4k_defconfig (gcc-10): 1 error
+    fuloong2e_defconfig (gcc-10): 1 error
+    ip32_defconfig (gcc-10): 1 error
+    jazz_defconfig (gcc-10): 2 errors
+    lemote2f_defconfig (gcc-10): 1 error
+    rm200_defconfig (gcc-10): 1 warning
+    sb1250_swarm_defconfig (gcc-10): 1 error
 
-Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
-Gortmaker for triage and bug fixes.
+riscv:
+    defconfig (gcc-10): 1 warning
+    defconfig+CONFIG_EFI=3Dn (clang-13): 2 warnings
+    rv32_defconfig (gcc-10): 1 warning
 
---=20
-Cheers,
-Stephen Rothwell
+x86_64:
+    allmodconfig (gcc-10): 2 errors
+    allmodconfig (clang-10): 1 error, 2 warnings
+    allmodconfig (clang-13): 2 errors, 15 warnings
+    tinyconfig (gcc-10): 2 warnings
+    x86_64_defconfig (clang-10): 1 error
+    x86_64_defconfig (clang-13): 2 warnings
+    x86_64_defconfig+x86_kvm_guest (gcc-10): 1 warning
 
-$ git checkout master
-$ git reset --hard stable
-Merging origin/master (f080815fdb3e Merge tag 'for-linus' of git://git.kern=
-el.org/pub/scm/virt/kvm/kvm)
-Merging fixes/fixes (d06c942efea4 Merge tag 'for_linus' of git://git.kernel=
-.org/pub/scm/linux/kernel/git/mst/vhost)
-Merging kbuild-current/fixes (e851dfae4371 Merge tag 'kgdb-5.16-rc1' of git=
-://git.kernel.org/pub/scm/linux/kernel/git/danielt/linux)
-Merging arc-current/for-curr (b9cac915c541 ARC: thread_info.h: correct two =
-typos in a comment)
-Merging arm-current/fixes (418ace9992a7 ARM: 9156/1: drop cc-option fallbac=
-ks for architecture selection)
-Merging arm64-fixes/for-next/fixes (94902d849e85 arm64: uaccess: avoid bloc=
-king within critical sections)
-Merging arm-soc-fixes/arm/fixes (383a44aec91c memory: mtk-smi: Fix a null d=
-ereference for the ostd)
-Merging drivers-memory-fixes/fixes (8c5ba21c16bd memory: mtk-smi: Fix a nul=
-l dereference for the ostd)
-Merging tee-fixes/fixes (d58071a8a76d Linux 5.16-rc3)
-Merging m68k-current/for-linus (8a3c0a74ae87 m68k: defconfig: Update defcon=
-figs for v5.15-rc1)
-Merging powerpc-fixes/fixes (5bb60ea611db powerpc/32: Fix hardlockup on vma=
-p stack overflow)
-Merging s390-fixes/fixes (a03df4546872 s390: update defconfigs)
-Merging sparc/master (05a59d79793d Merge git://git.kernel.org:/pub/scm/linu=
-x/kernel/git/netdev/net)
-Merging fscrypt-current/for-stable (80f6e3080bfc fs-verity: fix signed inte=
-ger overflow with i_size near S64_MAX)
-Merging net/master (34d8778a9437 MAINTAINERS: s390/net: add Alexandra and W=
-enjia as maintainer)
-Merging bpf/master (099f83aa2d06 mips, bpf: Fix reference to non-existing K=
-config symbol)
-Merging ipsec/master (ec3bb890817e xfrm: fix dflt policy check when there i=
-s no policy configured)
-Merging netfilter/master (619ca0d0108a selftests: add arp_ndisc_evict_nocar=
-rier to Makefile)
-Merging ipvs/master (619ca0d0108a selftests: add arp_ndisc_evict_nocarrier =
-to Makefile)
-Merging wireless-drivers/master (191587cd1a5f mt76: fix key pointer overwri=
-te in mt7921s_write_txwi/mt7663_usb_sdio_write_txwi)
-Merging mac80211/master (1eda919126b4 nl80211: reset regdom when reloading =
-regdb)
-Merging rdma-fixes/for-rc (db6169b5bac1 RDMA/rtrs: Call {get,put}_cpu_ptr t=
-o silence a debug kernel warning)
-Merging sound-current/for-linus (289047db1143 ALSA: hda/hdmi: fix HDA codec=
- entry table order for ADL-P)
-Merging sound-asoc-fixes/for-linus (c5bdc6db6060 Merge remote-tracking bran=
-ch 'asoc/for-5.15' into asoc-linus)
-Merging regmap-fixes/for-linus (459e1cd0d5ec Merge remote-tracking branch '=
-regmap/for-5.15' into regmap-linus)
-Merging regulator-fixes/for-linus (6966df483d7b regulator: Update protectio=
-n IRQ helper docs)
-Merging spi-fixes/for-linus (2143e3218a64 Merge remote-tracking branch 'spi=
-/for-5.15' into spi-linus)
-Merging pci-current/for-linus (fa55b7dcdc43 Linux 5.16-rc1)
-Merging driver-core.current/driver-core-linus (136057256686 Linux 5.16-rc2)
-Merging tty.current/tty-linus (bb1201d4b38e serial: 8250_pci: rewrite peric=
-om_do_set_divisor())
-Merging usb.current/usb-linus (d58071a8a76d Linux 5.16-rc3)
-Merging usb-gadget-fixes/fixes (e49d033bddf5 Linux 5.12-rc6)
-Merging usb-serial-fixes/usb-linus (d58071a8a76d Linux 5.16-rc3)
-Merging usb-chipidea-fixes/for-usb-fixes (f130d08a8d79 usb: chipidea: ci_hd=
-rc_imx: Also search for 'phys' phandle)
-CONFLICT (content): Merge conflict in drivers/usb/chipidea/ci_hdrc_imx.c
-Merging phy/fixes (f0ae8685b285 phy: HiSilicon: Fix copy and paste bug in e=
-rror handling)
-Merging staging.current/staging-linus (d58071a8a76d Linux 5.16-rc3)
-Merging iio-fixes/fixes-togreg (784b470728f5 iio: adc: stm32: fix null poin=
-ter on defer_probe error)
-Merging char-misc.current/char-misc-linus (d58071a8a76d Linux 5.16-rc3)
-Merging soundwire-fixes/fixes (fa55b7dcdc43 Linux 5.16-rc1)
-Merging thunderbolt-fixes/fixes (d58071a8a76d Linux 5.16-rc3)
-Merging input-current/for-linus (1d72d9f960cc Input: elantech - fix stack o=
-ut of bound access in elantech_change_report_id())
-Merging crypto-current/master (beaaaa37c664 crypto: api - Fix boot-up crash=
- when crypto manager is disabled)
-Merging vfio-fixes/for-linus (8704e8934908 vfio/pci: Fix OpRegion read)
-Merging kselftest-fixes/fixes (fa55b7dcdc43 Linux 5.16-rc1)
-Merging modules-fixes/modules-linus (0d67e332e6df module: fix clang CFI wit=
-h MODULE_UNLOAD=3Dn)
-Merging dmaengine-fixes/fixes (fa51b16d0558 dmaengine: idxd: fix calling wq=
- quiesce inside spinlock)
-Merging backlight-fixes/for-backlight-fixes (a38fd8748464 Linux 5.12-rc2)
-Merging mtd-fixes/mtd/fixes (bed96b1b5b2c mtd: rawnand: fsmc: Fix timing co=
-mputation)
-Merging mfd-fixes/for-mfd-fixes (a61f4661fba4 mfd: intel_quark_i2c_gpio: Re=
-vert "Constify static struct resources")
-Merging v4l-dvb-fixes/fixes (d40f0b133b44 media: meson-ir-tx: remove incorr=
-ect doc comment)
-Merging reset-fixes/reset/fixes (69125b4b9440 reset: tegra-bpmp: Revert Han=
-dle errors in BPMP response)
-Merging mips-fixes/mips-fixes (d58071a8a76d Linux 5.16-rc3)
-Merging at91-fixes/at91-fixes (dbe68bc9e82b ARM: dts: at91: sama7g5ek: to n=
-ot touch slew-rate for SDMMC pins)
-Merging omap-fixes/fixes (80d680fdccba ARM: dts: omap3430-sdp: Fix NAND dev=
-ice node)
-Merging kvm-fixes/master (7cfc5c653b07 KVM: fix avic_set_running for preemp=
-table kernels)
-Merging kvms390-fixes/master (0e9ff65f455d KVM: s390: preserve deliverable_=
-mask in __airqs_kick_single_vcpu)
-Merging hwmon-fixes/hwmon (0e4190d762ef hwmon: (sht4x) Fix EREMOTEIO errors)
-Merging nvdimm-fixes/libnvdimm-fixes (3dd60fb9d95d nvdimm/pmem: stop using =
-q_usage_count as external pgmap refcount)
-Merging cxl-fixes/fixes (fae8817ae804 cxl/mem: Fix memory device capacity p=
-robing)
-Merging btrfs-fixes/next-fixes (0426549c5d7d Merge branch 'misc-5.16' into =
-next-fixes)
-Merging vfs-fixes/fixes (25f54d08f12f autofs: fix wait name hash calculatio=
-n in autofs_wait())
-Merging dma-mapping-fixes/for-linus (18a3c5f7abfd Merge tag 'for_linus' of =
-git://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost)
-Merging i3c-fixes/i3c/fixes (fe07bfda2fb9 Linux 5.12-rc1)
-Merging drivers-x86-fixes/fixes (49201b90af81 platform/x86: amd-pmc: Fix s2=
-idle failures on certain AMD laptops)
-Merging samsung-krzk-fixes/fixes (4f5d06d381ba arm64: dts: exynos: drop sam=
-sung,ufs-shareability-reg-offset in ExynosAutov9)
-Merging pinctrl-samsung-fixes/fixes (fa55b7dcdc43 Linux 5.16-rc1)
-Merging devicetree-fixes/dt/linus (913d3a3f8408 dt-bindings: watchdog: sunx=
-i: fix error in schema)
-Merging scsi-fixes/fixes (7dc9fb47bc9a scsi: ufs: ufs-pci: Add support for =
-Intel ADL)
-Merging drm-fixes/drm-fixes (d58071a8a76d Linux 5.16-rc3)
-Merging amdgpu-fixes/drm-fixes (2c409ba81be2 drm/radeon: fix si_enable_smc_=
-cac() failed issue)
-Merging drm-intel-fixes/for-linux-next-fixes (61e29a0956bd drm/i915: Add su=
-pport for panels with VESA backlights with PWM enable/disable)
-Merging mmc-fixes/fixes (7dba402807a8 mmc: renesas_sdhi: initialize variabl=
-e properly when tuning)
-Merging rtc-fixes/rtc-fixes (bd33335aa93d rtc: cmos: Disable irq around dir=
-ect invocation of cmos_interrupt())
-Merging gnss-fixes/gnss-linus (136057256686 Linux 5.16-rc2)
-Merging hyperv-fixes/hyperv-fixes (1dc2f2b81a6a hv: utils: add PTP_1588_CLO=
-CK to Kconfig to fix build)
-Merging soc-fsl-fixes/fix (7e5e744183bb soc: fsl: dpio: fix qbman alignment=
- error in the virtualization context)
-Merging risc-v-fixes/fixes (298d03c2d7f1 riscv: dts: unmatched: Add gpio ca=
-rd detect to mmc-spi-slot)
-Merging pidfd-fixes/fixes (03ba0fe4d09f file: simplify logic in __close_ran=
-ge())
-Merging fpga-fixes/fixes (8bb7eca972ad Linux 5.15)
-Merging spdx/spdx-linus (fa55b7dcdc43 Linux 5.16-rc1)
-Merging gpio-brgl-fixes/gpio/for-current (d6912b1251b4 gpio: rockchip: need=
-s GENERIC_IRQ_CHIP to fix build errors)
-Merging gpio-intel-fixes/fixes (fa55b7dcdc43 Linux 5.16-rc1)
-Merging pinctrl-intel-fixes/fixes (fa55b7dcdc43 Linux 5.16-rc1)
-Merging erofs-fixes/fixes (57bbeacdbee7 erofs: fix deadlock when shrink ero=
-fs slab)
-Merging integrity-fixes/fixes (843385694721 evm: Fix a small race in init_d=
-esc())
-Merging kunit-fixes/kunit-fixes (fa55b7dcdc43 Linux 5.16-rc1)
-Merging ubifs-fixes/fixes (78c7d49f55d8 ubifs: journal: Make sure to not di=
-rty twice for auth nodes)
-Merging memblock-fixes/fixes (b5013d084e03 Merge tag '5.16-rc-part1-smb3-cl=
-ient-fixes' of git://git.samba.org/sfrench/cifs-2.6)
-Merging cel-fixes/for-rc (8bb7eca972ad Linux 5.15)
-Merging irqchip-fixes/irq/irqchip-fixes (357a9c4b79f4 irqchip/mips-gic: Use=
- bitfield helpers)
-Merging renesas-fixes/fixes (432b52eea3dc ARM: shmobile: defconfig: Restore=
- graphical consoles)
-Merging perf-current/perf/urgent (8b98436af2c0 Merge tag 'perf-tools-fixes-=
-for-v5.16-2021-11-19' of git://git.kernel.org/pub/scm/linux/kernel/git/acme=
-/linux)
-Merging efi-fixes/urgent (38fa3206bf44 efi: Change down_interruptible() in =
-virt_efi_reset_system() to down_trylock())
-Merging zstd-fixes/zstd-linus (7416cdc9b9c1 lib: zstd: Don't add -O3 to cfl=
-ags)
-Merging drm-misc-fixes/for-linux-next-fixes (6052a3110be2 drm/vc4: kms: Fix=
- previous HVS commit wait)
-Merging kbuild/for-next (7528edbafeef [for -next only] kconfig: generate in=
-clude/generated/rustc_cfg)
-Merging perf/perf/core (8ab774587903 Merge tag 'trace-v5.16-5' of git://git=
-.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace)
-Merging compiler-attributes/compiler-attributes (7c00621dcaee compiler_type=
-s: mark __compiletime_assert failure as __noreturn)
-Merging dma-mapping/for-next (9fbd8dc19aa5 dma-mapping: use 'bitmap_zalloc(=
-)' when applicable)
-Merging asm-generic/master (7efbbe6e1414 qcom_scm: hide Kconfig symbol)
-CONFLICT (content): Merge conflict in arch/riscv/Kconfig
-Merging arc/for-next (6880fa6c5660 Linux 5.15-rc1)
-Merging arm/for-next (0ce29cae5ba4 Merge branches 'devel-stable', 'misc' an=
-d 'fixes' into for-next)
-Merging arm64/for-next/core (d58071a8a76d Linux 5.16-rc3)
-Merging arm-perf/for-next/perf (e656972b6986 drivers/perf: Improve build te=
-st coverage)
-Merging arm-soc/for-next (b86314b30dee Merge branch 'arm/fixes' into for-ne=
-xt)
-Merging actions/for-next (444d018d8d38 ARM: dts: owl-s500-roseapplepi: Add =
-ATC2603C PMIC)
-Merging amlogic/for-next (c5468e3c930d arm64: dts: meson: p241: add sound s=
-upport)
-Merging aspeed/for-next (16d6dc8d8030 ARM: dts: aspeed: mtjade: Add uefi pa=
-rtition)
-Merging at91/at91-next (f3c0366411d6 ARM: dts: at91: sama7g5-ek: use blocks=
- 0 and 1 of TCB0 as cs and ce)
-Merging drivers-memory/for-next (7dda5cc4dca0 Merge branch 'mem-ctrl-next' =
-into for-next)
-Merging imx-mxs/for-next (ee4fb9b87b3c Merge branch 'imx/dt64' into for-nex=
-t)
-Merging keystone/next (cb293d3b430e Merge branch 'for_5.15/drivers-soc' int=
-o next)
-Merging mediatek/for-next (c7f6a2bf61cb Merge branch 'v5.16-next/dts64' int=
-o for-next)
-Merging mvebu/for-next (04e78a787b74 arm/arm64: dts: Enable 2.5G Ethernet p=
-ort on CN9130-CRB)
-Merging omap/for-next (92d190433bd8 Merge branch 'omap-for-v5.16/gpmc' into=
- for-next)
-Merging qcom/for-next (b287e05999e7 Merge branches 'arm64-for-5.17', 'drive=
-rs-for-5.17' and 'dts-for-5.17' into for-next)
-Merging raspberrypi/for-next (79c2b7252cc6 ARM: dts: bcm2711-rpi-400: Fix G=
-PIO expander labels)
-Merging renesas/next (168c85dfca17 Merge branch 'renesas-drivers-for-v5.17'=
- into renesas-next)
-Merging reset/reset/next (c4f5b30dda01 reset: Add of_reset_control_get_opti=
-onal_exclusive())
-Merging rockchip/for-next (e862cef6cdda Merge branch 'v5.16-armsoc/soc-fixe=
-s' into for-next)
-Merging samsung-krzk/for-next (7b8664f50180 Merge branch 'next/soc' into fo=
-r-next)
-Merging scmi/for-linux-next (ca54383f2adb Merge branch 'for-next/scmi' of g=
-it://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux into for-li=
-nux-next)
-Merging stm32/stm32-next (1149ccc5e891 ARM: dts: stm32: fix stusb1600 pinct=
-rl used on stm32mp157c-dk)
-Merging sunxi/sunxi/for-next (7c6997ef13d4 Merge branch 'sunxi/dt-for-5.17'=
- into sunxi/for-next)
-Merging tee/next (ce352be35ba0 Merge branch 'async_notif' into next)
-Merging tegra/for-next (bbd827b4de7e Merge branch for-5.16/arm64/defconfig =
-into for-next)
-Merging ti/ti-next (71907ae8e0c0 Merge branch 'ti-drivers-soc-next' into ti=
--next)
-Merging xilinx/for-next (326b5e9db528 Merge branch 'zynqmp/soc' into for-ne=
-xt)
-Merging clk/clk-next (fa55b7dcdc43 Linux 5.16-rc1)
-Merging clk-imx/for-next (9dd81021084f clk: imx8mp: Fix the parent clk of t=
-he audio_root_clk)
-Merging clk-renesas/renesas-clk (33b22d9c3272 clk: renesas: r9a07g044: Add =
-TSU clock and reset entry)
-Merging clk-samsung/for-next (bcda841f9bf2 clk: samsung: exynos850: Registe=
-r clocks early)
-Merging csky/linux-next (e21e52ad1e01 csky: Make HAVE_TCM depend on !COMPIL=
-E_TEST)
-Merging h8300/h8300-next (1ec10274d436 h8300: don't implement set_fs)
-Merging m68k/for-next (376e3fdecb0d m68k: Enable memtest functionality)
-Merging m68knommu/for-next (d58071a8a76d Linux 5.16-rc3)
-Merging microblaze/next (54b54ea061a8 microblaze: fix typo in a comment)
-Merging mips/mips-next (97ad1d89624d MIPS: TXx9: Let MACH_TX49XX select BOO=
-T_ELF32)
-Merging nds32/next (07cd7745c6f2 nds32/setup: remove unused memblock_region=
- variable in setup_memory())
-CONFLICT (content): Merge conflict in arch/nds32/Kconfig
-CONFLICT (content): Merge conflict in arch/nds32/Kbuild
-Merging nios2/for-next (7f7bc20bc41a nios2: Don't use _end for calculating =
-min_low_pfn)
-Merging openrisc/for-next (27dff9a9c247 openrisc: fix SMP tlb flush NULL po=
-inter dereference)
-Merging parisc-hd/for-next (8d88382b7436 parisc/agp: Annotate parisc agp in=
-it functions with __init)
-Merging powerpc/next (af3fdce4ab07 Revert "powerpc/code-patching: Improve v=
-erification of patchability")
-Merging soc-fsl/next (54c8b5b6f8a8 soc: fsl: dpio: rename the enqueue descr=
-iptor variable)
-Merging risc-v/for-next (fa55b7dcdc43 Linux 5.16-rc1)
-Merging s390/for-next (eae157f3498e Merge branch 'fixes' into for-next)
-Merging sh/for-next (8518e694203d sh: pgtable-3level: Fix cast to pointer f=
-rom integer of different size)
-Merging sparc-next/master (dd0d718152e4 Merge tag 'spi-fix-v5.8-rc2' of git=
-://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi)
-Merging uml/linux-next (ab6ff1fda1e8 uml: x86: add FORCE to user_constants.=
-h)
-Merging xtensa/xtensa-for-next (bd47cdb78997 xtensa: move section symbols t=
-o asm/sections.h)
-Merging pidfd/for-next (0f8821da4845 fs/namespace: Boost the mount_lock.loc=
-k owner instead of spinning on PREEMPT_RT.)
-Merging fscrypt/master (b7e072f9b77f fscrypt: improve a few comments)
-Merging fscache/fscache-next (b3c088faf78b fscache: Rewrite documentation)
-CONFLICT (content): Merge conflict in Documentation/filesystems/netfs_libra=
-ry.rst
-Merging afs/afs-next (52af7105eceb afs: Set mtime from the client for yfs c=
-reate operations)
-Merging btrfs/for-next (279373dee83e Fixup merge-to-merge conflict in lzo_c=
-ompress_pages)
-Merging ceph/master (c02cb7bdc450 ceph: add a new metric to keep track of r=
-emote object copies)
-Merging cifs/for-next (3498e7f2bb41 Merge tag '5.16-rc2-ksmbd-fixes' of git=
-://git.samba.org/ksmbd)
-Merging configfs/for-next (c42dd069be8d configfs: fix a race in configfs_lo=
-okup())
-Merging ecryptfs/next (682a8e2b41ef Merge tag 'ecryptfs-5.13-rc1-updates' o=
-f git://git.kernel.org/pub/scm/linux/kernel/git/tyhicks/ecryptfs)
-Merging erofs/dev (a0961f351d82 erofs: don't trigger WARN() when decompress=
-ion fails)
-Merging exfat/dev (a671c22ee2d3 exfat: move super block magic number to mag=
-ic.h)
-Merging ext3/for_next (a48fc69fe658 udf: Fix crash after seekdir)
-Merging ext4/dev (124e7c61deb2 ext4: fix error code saved on super block du=
-ring file system abort)
-Merging f2fs/dev (b3b2202d4299 f2fs: use iomap for direct I/O)
-Merging fsverity/fsverity (07c99001312c fs-verity: support reading signatur=
-e with ioctl)
-Merging fuse/for-next (3e2b6fdbdc9a fuse: send security context of inode on=
- file)
-Merging gfs2/for-next (cfdb9692082c gfs2: Rework gfs2_inode_lookup)
-Merging jfs/jfs-next (c48a14dca2cb JFS: fix memleak in jfs_mount)
-Merging ksmbd/ksmbd-for-next (d58071a8a76d Linux 5.16-rc3)
-Merging nfs/linux-next (064a91771f7a SUNRPC: use different lock keys for IN=
-ET6 and LOCAL)
-Merging nfs-anna/linux-next (8cfb9015280d NFS: Always provide aligned buffe=
-rs to the RPC read layers)
-Merging nfsd/nfsd-next (136057256686 Linux 5.16-rc2)
-Merging cel/for-next (b6eae261e431 NFSD: make symbol 'nfsd_notifier_lock' s=
-tatic)
-Merging ntfs3/master (52e00ea6b26e fs/ntfs3: Update valid size if -EIOCBQUE=
-UED)
-Merging orangefs/for-next (ac2c63757f4f orangefs: Fix sb refcount leak when=
- allocate sb info failed.)
-Merging overlayfs/overlayfs-next (5b0a414d06c3 ovl: fix filattr copy-up fai=
-lure)
-Merging ubifs/next (9aaa6cc099f6 ubifs: Document sysfs nodes)
-Merging v9fs/9p-next (6e195b0f7c8e 9p: fix a bunch of checkpatch warnings)
-Merging xfs/for-next (1090427bf18f xfs: remove xfs_inew_wait)
-Merging zonefs/for-next (95b115332a83 zonefs: remove redundant null bio che=
-ck)
-Merging iomap/iomap-for-next (5ad448ce2976 iomap: iomap_read_inline_data cl=
-eanup)
-Merging djw-vfs/vfs-for-next (d03ef4daf33a fs: forbid invalid project ID)
-Merging file-locks/locks-next (80d8e4d3f313 fs/locks: fix fcntl_getlk64/fcn=
-tl_setlk64 stub prototypes)
-Merging vfs/for-next (8f40da9494cf Merge branch 'misc.namei' into for-next)
-Merging printk/for-next (06cf63cb69be Merge branch 'for-5.16-fixup' into fo=
-r-next)
-Merging pci/next (bef2b1c97d77 Merge branch 'pci/errors')
-Merging pstore/for-next/pstore (a5d05b07961a pstore/ftrace: Allow immediate=
- recording)
-Merging hid/for-next (cfc95e453afd Merge branch 'for-5.16/upstream-fixes' i=
-nto for-next)
-Merging i2c/i2c/for-next (ff1da8aa15b4 Merge branch 'i2c/for-mergewindow' i=
-nto i2c/for-next)
-Merging i3c/i3c/next (a3587e2c0578 i3c: fix incorrect address slot lookup o=
-n 64-bit)
-Merging dmi/dmi-for-next (f97a2103f1a7 firmware: dmi: Move product_sku info=
- to the end of the modalias)
-Merging hwmon-staging/hwmon-next (253402129b1a hwmon: (sht4x) Add device tr=
-ee match table)
-Merging jc_docs/docs-next (065db2d90c6b docs/zh_CN: Add zh_CN/accounting/ta=
-skstats.rst)
-Merging v4l-dvb/master (1f1517fafda5 media: cx18: drop an unused macro)
-Merging v4l-dvb-next/master (8cc7a1b2aca0 media: venus: core: Fix a resourc=
-e leak in the error handling path of 'venus_probe()')
-Merging pm/linux-next (7975c7f139bb Merge branches 'acpi-power', 'acpi-dptf=
-', 'acpi-processor' and 'acpi-scan' into linux-next)
-Merging cpufreq-arm/cpufreq/arm/linux-next (3ed6dfbd3bb9 cpufreq: qcom-hw: =
-Set CPU affinity of dcvsh interrupts)
-Merging cpupower/cpupower (79a0dc5530a9 tools: cpupower: fix typo in cpupow=
-er-idle-set(1) manpage)
-Merging devfreq/devfreq-next (5cf79c293821 PM / devfreq: Strengthen check f=
-or freq_table)
-Merging opp/opp/linux-next (7ca81b690e59 dt-bindings: opp: Allow multi-word=
-ed OPP entry name)
-Merging thermal/thermal/linux-next (673c68bd4839 thermal/drivers: Add TSU d=
-river for RZ/G2L)
-Merging ieee1394/for-next (54b3bd99f094 firewire: nosy: switch from 'pci_' =
-to 'dma_' API)
-Merging dlm/next (1b9beda83e27 fs: dlm: fix build with CONFIG_IPV6 disabled)
-Merging rdma/for-next (81ff48ddda0b RDMA/bnxt_re: Use bitmap_zalloc() when =
-applicable)
-Merging net-next/master (196073f9c44b net: ixp4xx_hss: drop kfree for memor=
-y allocated with devm_kzalloc)
-Merging bpf-next/for-next (b98057ef730a Merge branch 'Add bpf_loop helper')
-CONFLICT (content): Merge conflict in Documentation/bpf/index.rst
-Merging ipsec-next/master (2e1809208a4a xfrm: Remove duplicate assignment)
-Merging mlx5-next/mlx5-next (fa55b7dcdc43 Linux 5.16-rc1)
-Merging netfilter-next/master (632cb151ca53 netfilter: ctnetlink: remove us=
-eless type conversion to bool)
-Merging ipvs-next/master (ec574d9ee5d2 net: phylink: add 1000base-KX to phy=
-link_caps_to_linkmodes())
-Merging wireless-drivers-next/master (69831173fcbb rtlwifi: rtl8192de: Styl=
-e clean-ups)
-Merging bluetooth/master (dbf6811abbfc Bluetooth: Limit duration of Remote =
-Name Resolve)
-Merging mac80211-next/master (75c5bd68b699 ieee80211: change HE nominal pac=
-ket padding value defines)
-Merging mtd/mtd/next (67bcbe202b48 mtd: core: clear out unregistered device=
-s a bit more)
-Merging nand/nand/next (f53d4c109a66 mtd: rawnand: gpmi: Add ERR007117 prot=
-ection for nfc_apply_timings)
-Merging spi-nor/spi-nor/next (228e80459960 MAINTAINERS: Add myself as SPI N=
-OR co-maintainer)
-Merging crypto/master (330507fbc9d8 crypto: des - disallow des3 in FIPS mod=
-e)
-Merging drm/drm-next (c18c8891111b Merge tag 'drm-misc-next-2021-11-18' of =
-git://anongit.freedesktop.org/drm/drm-misc into drm-next)
-CONFLICT (content): Merge conflict in drivers/gpu/drm/vc4/vc4_kms.c
-CONFLICT (content): Merge conflict in drivers/gpu/drm/i915/display/intel_dp=
-_aux_backlight.c
-Merging drm-misc/for-linux-next (c99907c723c6 dma-buf: make fence mandatory=
- for dma_resv_add_excl_fence v2)
-Merging amdgpu/drm-next (c8d265840be6 drm/amdgpu/UAPI: add new CTX OP for s=
-etting profile modes)
-CONFLICT (content): Merge conflict in drivers/gpu/drm/amd/pm/swsmu/smu_cmn.c
-Merging drm-intel/for-linux-next (74ba89c08e30 drm/i915: Fix DPT suspend/re=
-sume on !HAS_DISPLAY platforms)
-Merging drm-intel-gt/for-linux-next-gt (95d35838880f dma_fence_array: Fix P=
-ENDING_ERROR leak in dma_fence_array_signaled())
-Merging drm-tegra/drm/tegra/for-next (cef3fb370da3 drm/tegra: Mark nvdec PM=
- functions as __maybe_unused)
-CONFLICT (content): Merge conflict in drivers/gpu/drm/tegra/gem.c
-Merging drm-msm/msm-next (fee328076333 mailmap: add and update email addres=
-ses)
-Merging imx-drm/imx-drm/next (20fbfc81e390 drm/imx: imx-tve: Make use of th=
-e helper function devm_platform_ioremap_resource())
-Merging etnaviv/etnaviv/next (81fd23e2b3cc drm/etnaviv: Implement mmap as G=
-EM object function)
-Merging regmap/for-next (02d6fdecb9c3 regmap: allow to define reg_update_bi=
-ts for no bus configuration)
-Merging sound/for-next (322fa4315400 ASoC: Intel: Skylake: Use NHLT API to =
-search for blob)
-Merging sound-asoc/for-next (7be10cef0fbe ASoC: soc-pcm: tidyup soc_pcm_poi=
-nter()'s delay update method)
-CONFLICT (content): Merge conflict in sound/soc/sof/intel/hda.c
-Merging modules/modules-next (ced75a2f5da7 MAINTAINERS: Add Luis Chamberlai=
-n as modules maintainer)
-Merging input/next (fafc66387dc0 Input: wacom_i2c - clean up the query devi=
-ce fields)
-Merging block/for-next (c2626d30f312 Merge branch 'for-5.17/io_uring' into =
-for-next)
-Merging device-mapper/for-next (1b8d2789dad0 dm btree remove: fix use after=
- free in rebalance_children())
-Merging libata/for-next (6f48394cf1f3 sata_fsl: fix warning in remove_proc_=
-entry when rmmod sata_fsl)
-Merging pcmcia/pcmcia-next (e39cdacf2f66 pcmcia: i82092: fix a null pointer=
- dereference bug)
-Merging mmc/next (f9962ac595d2 mmc: sdhci-esdhc-imx: Add sdhc support for i=
-.MXRT series)
-Merging mfd/for-mfd-next (5dc6dafe6209 mfd: simple-mfd-i2c: Select MFD_CORE=
- to fix build error)
-Merging backlight/for-backlight-next (3976e974df1f video: backlight: ili932=
-0: Make ili9320_remove() return void)
-Merging battery/for-next (0838a3bfcd1b power: supply: qcom_smbb: support pm=
-8226)
-Merging regulator/for-next (59eadd2af3f7 regulator: qcom-rpmh: Add PMG1110 =
-regulators)
-Merging security/next-testing (047843bdb316 Merge branch 'landlock_lsm_v34'=
- into next-testing)
-Merging apparmor/apparmor-next (fa55b7dcdc43 Linux 5.16-rc1)
-Merging integrity/next-integrity (32ba540f3c2a evm: mark evm_fixmode as __r=
-o_after_init)
-Merging keys/keys-next (e377c31f788f integrity: Load mokx variables into th=
-e blacklist keyring)
-CONFLICT (content): Merge conflict in certs/system_keyring.c
-Merging safesetid/safesetid-next (1b8b71922919 LSM: SafeSetID: Mark safeset=
-id_initialized as __initdata)
-Merging selinux/next (6326948f940d lsm: security_task_getsecid_subj() -> se=
-curity_current_getsecid_subj())
-Merging smack/next (0934ad42bb2c smackfs: use netlbl_cfg_cipsov4_del() for =
-deleting cipso_v4_doi)
-Merging tomoyo/master (5d9f4cf36721 Merge tag 'selinux-pr-20211123' of git:=
-//git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux)
-Merging tpmdd/next (7eba41fe8c7b tpm_tis_spi: Add missing SPI ID)
-Merging watchdog/master (c738888032ff watchdog: db8500_wdt: Rename symbols)
-Merging iommu/next (86dc40c7ea9c iommu/vt-d: Fix unmap_pages support)
-Merging audit/next (fa55b7dcdc43 Linux 5.16-rc1)
-Merging devicetree/for-next (668b0ffd27ea of: base: Skip CPU nodes with "fa=
-il"/"fail-..." status)
-Merging mailbox/mailbox-for-next (97961f78e8bc mailbox: imx: support i.MX8U=
-LP S4 MU)
-Merging spi/for-next (8393961c53b3 spi: pxa2xx: Get rid of unused enable_lo=
-opback member)
-Merging tip/auto-latest (b1b6b42a35e7 Merge branch 'locking/core')
-Applying: Revert "futex: Remove futex_cmpxchg detection"
-Applying: Revert "futex: Ensure futex_atomic_cmpxchg_inatomic() is present"
-Merging clockevents/timers/drivers/next (453e2cadc97c dt-bindings: timer: t=
-pm-timer: Add imx8ulp compatible string)
-Merging edac/edac-for-next (a9e6b3819b36 dt-bindings: memory: Add entry for=
- version 3.80a)
-Merging irqchip/irq/irqchip-next (11e45471abea Merge branch irq/misc-5.16 i=
-nto irq/irqchip-next)
-Merging ftrace/for-next (a55f224ff5f2 tracing: Fix pid filtering when trigg=
-ers are attached)
-Merging rcu/rcu/next (124a6590f96c rcu/nocb: Merge rcu_spawn_cpu_nocb_kthre=
-ad() and rcu_spawn_one_nocb_kthread())
-Merging kvm/next (da1bfd52b930 KVM: x86: Drop arbitrary KVM_SOFT_MAX_VCPUS)
-Merging kvm-arm/next (5a2acbbb0179 Merge branch kvm/selftests/memslot into =
-kvmarm-master/next)
-Merging kvms390/next (3fd8417f2c72 KVM: s390: add debug statement for diag =
-318 CPNC data)
-Merging xen-tip/linux-next (00db58cf2118 xen: make HYPERVISOR_set_debugreg(=
-) always_inline)
-Merging percpu/for-next (a81a52b325ec Merge branch 'for-5.14-fixes' into fo=
-r-next)
-Merging workqueues/for-next (f9eaaa82b474 workqueue: doc: Call out the non-=
-reentrance conditions)
-Merging drivers-x86/for-next (e9ff190973df platform/x86: touchscreen_dmi: A=
-dd TrekStor SurfTab duo W1 touchscreen info)
-Merging chrome-platform/for-next (297d34e73d49 platform/chrome: cros_ec_pro=
-to: Use ec_command for check_features)
-Merging hsi/for-next (a1ee1c08fcd5 HSI: core: Fix return freed object in hs=
-i_new_client)
-Merging leds/for-next (66340b5a6f86 leds: leds-fsg: Drop FSG3 LED driver)
-Merging ipmi/for-next (29dbee57174a ipmi: Add the git repository to the MAI=
-NTAINERS file)
-Merging driver-core/driver-core-next (2043727c2882 driver core: platform: M=
-ake use of the helper function dev_err_probe())
-Merging usb/usb-next (4d012040161c Merge 5.16-rc3 into usb-next)
-Merging usb-gadget/next (e49d033bddf5 Linux 5.12-rc6)
-Merging usb-serial/usb-next (d58071a8a76d Linux 5.16-rc3)
-Merging usb-chipidea-next/for-usb-next (78665f57c3fa usb: chipidea: udc: ma=
-ke controller hardware endpoint primed)
-Merging tty/tty-next (3f19fed8d0da Documentation: add TTY chapter)
-Merging char-misc/char-misc-next (5d331b592255 Merge 5.16-rc3 into char-mis=
-c-next)
-Merging extcon/extcon-next (9e6ef3a25e5e dt-bindings: extcon: usbc-tusb320:=
- Add TUSB320L compatible string)
-Merging phy-next/next (77ba6e7ffbd8 phy: stm32: adopt dev_err_probe for reg=
-ulators)
-Merging soundwire/next (bb349fd2d580 soundwire: qcom: remove redundant vers=
-ion number read)
-Merging thunderbolt/next (d58071a8a76d Linux 5.16-rc3)
-Merging vfio/next (3bf1311f351e vfio/ccw: Convert to use vfio_register_emul=
-ated_iommu_dev())
-Merging staging/staging-next (24cd719712ae Merge 5.16-rc3 into staging-next)
-Merging iio/togreg (7d71d289e1ba iio: light: ltr501: Added ltr303 driver su=
-pport)
-Merging mux/for-next (3516bd729358 Merge tag 's390-5.11-3' of git://git.ker=
-nel.org/pub/scm/linux/kernel/git/s390/linux)
-Merging icc/icc-next (78e488c462e5 Merge branch 'icc-msm8996' into icc-next)
-Merging dmaengine/next (7eafa6eed7f1 dmaengine: ppc4xx: remove unused varia=
-ble `rval')
-Merging cgroup/for-next (8291471ea5f1 cgroup: get the wrong css for css_all=
-oc() during cgroup_init_subsys())
-Merging scsi/for-next (32f4b58cc162 Merge branch 'fixes' into for-next)
-Merging scsi-mkp/for-next (db33028647a3 scsi: Remove superfluous #include <=
-linux/async.h> directives)
-Merging vhost/linux-next (4bd5d4c69825 iommu/virtio: Support identity-mappe=
-d domains)
-Merging rpmsg/for-next (612de6839c55 Merge branches 'rpmsg-next' and 'rproc=
--next' into for-next)
-Merging gpio/for-next (7ac554888233 MAINTAINERS: Remove reference to non-ex=
-isting file)
-Merging gpio-brgl/gpio/for-next (ea708ac5bf41 gpio: xlp: Remove Netlogic XL=
-P variants)
-$ git reset --hard HEAD^
-Merging next-20211115 version of gpio-brgl
-Merging gpio-intel/for-next (be3dc15ffe64 gpiolib: acpi: Unify debug and ot=
-her messages format)
-Merging gpio-sim/gpio/gpio-sim (5065e08e4ef3 gpio: sim: fix missing unlock =
-on error in gpio_sim_config_commit_item())
-CONFLICT (content): Merge conflict in tools/testing/selftests/gpio/Makefile
-Merging pinctrl/for-next (2c1aa55d819d Merge branch 'devel' into for-next)
-Merging pinctrl-intel/for-next (db1b2a8caf5b pinctrl: cherryview: Use tempo=
-rary variable for struct device)
-Merging pinctrl-renesas/renesas-pinctrl (7c50a407b868 pinctrl: renesas: Rem=
-ove unneeded locking around sh_pfc_read() calls)
-Merging pinctrl-samsung/for-next (16dd3bb5c190 pinctrl: samsung: Make symbo=
-l 'exynos7885_pin_ctrl' static)
-Merging pwm/for-next (b6ce2af8766c pwm: img: Use only a single idiom to get=
- a runtime PM reference)
-Merging userns/for-next (5ae9497dda62 signal: requeuing undeliverable signa=
-ls)
-Merging ktest/for-next (170f4869e662 ktest.pl: Fix the logic for truncating=
- the size of the log file for email)
-Merging kselftest/next (60726e868227 selftests/ftrace: make kprobe profile =
-testcase description unique)
-Merging livepatching/for-next (cd2d68f2d6b2 Merge branch 'for-5.15/cpu-hotp=
-lug' into for-next)
-Merging coresight/next (f9809d565135 Documentation: coresight: Update cores=
-ight configuration docs)
-Merging rtc/rtc-next (fa55b7dcdc43 Linux 5.16-rc1)
-Merging nvdimm/libnvdimm-for-next (e765f13ed126 nvdimm/pmem: move dax_attri=
-bute_group from dax to pmem)
-Merging at24/at24/for-next (fa55b7dcdc43 Linux 5.16-rc1)
-Merging ntb/ntb-next (f96cb827ce49 ntb: ntb_pingpong: remove redundant init=
-ialization of variables msg_data and spad_data)
-Merging seccomp/for-next/seccomp (1e6d69c7b9cd selftests/seccomp: Report ev=
-ent mismatches more clearly)
-Merging kspp/for-next/kspp (879f756fa9bf Merge branches 'for-next/hardening=
-', 'for-next/overflow' and 'for-next/thread_info/cpu' into for-next/kspp)
-Merging kspp-gustavo/for-next/kspp (64bc5a949ae1 Merge branch 'for-linus/ks=
-pp' into for-next/kspp)
-Merging cisco/for-next (9e98c678c2d6 Linux 5.1-rc1)
-Merging gnss/gnss-next (b15c90153fd9 gnss: drop stray semicolons)
-Merging fsi/next (7cc2f34e1f4d fsi: sbefifo: Use interruptible mutex lockin=
-g)
-Merging slimbus/for-next (fa55b7dcdc43 Linux 5.16-rc1)
-Merging nvmem/for-next (42f65ea5a727 nvmem: mtk-efuse: support minimum one =
-byte access stride and granularity)
-Merging xarray/main (f2aa11fd5144 tools: Fix math.h breakage)
-Merging hyperv/hyperv-next (285f68afa8b2 x86/hyperv: Protect set_hv_tscchan=
-ge_cb() against getting preempted)
-Merging auxdisplay/auxdisplay (4daa9ff89ef2 auxdisplay: charlcd: checking f=
-or pointer reference before dereferencing)
-Merging kgdb/kgdb/for-next (b77dbc86d604 kdb: Adopt scheduler's task classi=
-fication)
-Merging hmm/hmm (6880fa6c5660 Linux 5.15-rc1)
-Merging fpga/for-next (8886a579744f fpga: region: Use standard dev_release =
-for class driver)
-Merging kunit/test (fa55b7dcdc43 Linux 5.16-rc1)
-Merging cfi/cfi/next (baaf965f9430 mtd: hyperbus: rpc-if: fix bug in rpcif_=
-hb_remove)
-Merging kunit-next/kunit (fa55b7dcdc43 Linux 5.16-rc1)
-Merging trivial/for-next (9ff9b0d392ea Merge tag 'net-next-5.10' of git://g=
-it.kernel.org/pub/scm/linux/kernel/git/netdev/net-next)
-Merging mhi/mhi-next (46827f596963 bus: mhi: pci_generic: Simplify code and=
- axe the use of a deprecated API)
-Merging memblock/for-next (e888fa7bb882 memblock: Check memory add/cap orde=
-ring)
-Merging init/init-user-pointers (38b082236e77 initramfs: use vfs_utimes in =
-do_copy)
-Merging counters/counters (e71ba9452f0b Linux 5.11-rc2)
-Merging rust/rust-next (988f45dfe7ea MAINTAINERS: Rust)
-CONFLICT (content): Merge conflict in scripts/kconfig/confdata.c
-CONFLICT (content): Merge conflict in scripts/Makefile.modfinal
-CONFLICT (content): Merge conflict in samples/Makefile
-CONFLICT (content): Merge conflict in samples/Kconfig
-CONFLICT (content): Merge conflict in Makefile
-Applying: Kbuild: fix for "kbuild: split DEBUG_CFLAGS out to scripts/Makefi=
-le.debug"
-Merging cxl/next (53989fad1286 cxl/pmem: Fix module reload vs workqueue sta=
-te)
-Merging folio/for-next (c03571399870 mm: Add functions to zero portions of =
-a folio)
-Merging bitmap/bitmap-master-5.15 (785cb064e2f8 vsprintf: rework bitmap_lis=
-t_string)
-CONFLICT (content): Merge conflict in drivers/dma/ti/edma.c
-CONFLICT (content): Merge conflict in arch/parisc/include/asm/bitops.h
-Merging zstd/zstd-next (fa55b7dcdc43 Linux 5.16-rc1)
-Merging efi/next (720dff78de36 efi: Allow efi=3Druntime)
-Merging unicode/for-next (e2a58d2d3416 unicode: only export internal symbol=
-s for the selftests)
-CONFLICT (content): Merge conflict in fs/f2fs/sysfs.c
-Merging akpm-current/current (3333af6434fb configs: introduce debug.config =
-for CI-like setup)
-$ git checkout -b akpm remotes/origin/akpm/master
-$ git rebase --onto master remotes/origin/akpm/master-base
-Merging akpm/master (0998e5c96faa lib/stackdepot: allow optional init and s=
-tack_table allocation by kvmalloc() - fixup3)
-Applying: Revert "kprobe: move sysctl_kprobes_optimization to kprobes.c"
-Applying: Revert "fs/coredump: move coredump sysctls into its own file"
-Applying: Revert "printk: fix build warning when CONFIG_PRINTK=3Dn"
-Applying: Revert "kernel/sysctl.c: rename sysctl_init() to sysctl_init_base=
-s()"
-Applying: Revert "fs: move namespace sysctls and declare fs base directory"
-Applying: Revert "sysctl: add and use base directory declarer and registrat=
-ion helper"
-Applying: firmware_loader-move-firmware-sysctl-to-its-own-files-fix-3
+Errors summary:
 
---Sig_/2jq=Hup3yel3xyVK5tz.XTU
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+    4    fs/cachefiles/io.c:489:6: error: variable 'ret' is used uninitiali=
+zed whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+    4    expr: syntax error: unexpected argument =E2=80=980xffffffff8000000=
+0=E2=80=99
+    3    net/wireless/reg.c:1137:23: error: implicit conversion from enumer=
+ation type 'enum nl80211_user_reg_hint_type' to different enumeration type =
+'enum nl80211_reg_initiator' [-Werror,-Wenum-conversion]
+    3    drivers/net/ethernet/amd/declance.c:1231:20: error: assignment of =
+read-only location =E2=80=98*(dev->dev_addr + (sizetype)i)=E2=80=99
+    3    arch/arm/kernel/entry-armv.S:503:4: error: invalid instruction, an=
+y one of the following would fix this:
+    3    arch/arm/kernel/entry-armv.S:499:4: error: invalid instruction, an=
+y one of the following would fix this:
+    2    drivers/net/ethernet/broadcom/sb1250-mac.c:2187:20: error: assignm=
+ent of read-only location =E2=80=98*(dev->dev_addr + (sizetype)i)=E2=80=99
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:98:13: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:96:13: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:94:13: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:92:13: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:90:13: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:88:13: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:86:13: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:84:13: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:82:13: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:80:13: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:7:11: error: unknown relocatio=
+n name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:78:13: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:76:13: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:74:13: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:72:13: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:70:13: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:68:13: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:66:13: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:64:13: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:62:13: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:60:13: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:5:11: error: unknown relocatio=
+n name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:58:13: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:56:13: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:54:12: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:52:12: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:50:12: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:48:12: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:46:12: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:44:12: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:42:12: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:40:12: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:38:12: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:36:12: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:34:12: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:32:12: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:30:12: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:28:12: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:26:12: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:263:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:261:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:258:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:256:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:254:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:252:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:250:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:24:12: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:248:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:246:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:244:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:242:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:240:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:238:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:236:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:234:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:232:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:230:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:22:12: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:228:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:226:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:224:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:222:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:220:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:218:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:216:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:214:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:212:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:210:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:20:12: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:208:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:206:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:204:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:202:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:200:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:198:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:196:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:194:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:192:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:190:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:18:12: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:188:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:186:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:184:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:182:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:180:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:178:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:176:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:174:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:172:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:170:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:16:12: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:168:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:166:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:164:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:162:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:160:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:158:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:156:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:154:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:152:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:150:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:14:12: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:148:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:146:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:144:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:142:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:140:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:138:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:136:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:134:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:132:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:130:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:12:12: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:128:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:126:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:124:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:122:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:120:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:118:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:116:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:114:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:112:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:110:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:10:11: error: unknown relocati=
+on name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:108:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:106:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:104:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:102:13: error: unknown relocat=
+ion name
+    2    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:100:13: error: unknown relocat=
+ion name
+    2    arch/arm/mm/cache-v7.S:97:2: error: instruction requires: data-bar=
+riers
+    2    arch/arm/mm/cache-v7.S:69:2: error: instruction requires: data-bar=
+riers
+    2    arch/arm/mm/cache-v7.S:68:4: error: invalid instruction
+    2    arch/arm/mm/cache-v7.S:56:4: error: instruction requires: armv6t2
+    2    arch/arm/mm/cache-v7.S:45:2: error: instruction requires: armv6t2
+    2    arch/arm/mm/cache-v7.S:431:2: error: invalid instruction
+    2    arch/arm/mm/cache-v7.S:42:2: error: instruction requires: data-bar=
+riers
+    2    arch/arm/mm/cache-v7.S:409:2: error: invalid instruction
+    2    arch/arm/mm/cache-v7.S:387:2: error: invalid instruction
+    2    arch/arm/mm/cache-v7.S:352:2: error: invalid instruction
+    2    arch/arm/mm/cache-v7.S:312:2: error: instruction requires: data-ba=
+rriers
+    2    arch/arm/mm/cache-v7.S:311:2: error: invalid instruction
+    2    arch/arm/mm/cache-v7.S:294:2: error: invalid instruction
+    2    arch/arm/mm/cache-v7.S:179:2: error: instruction requires: data-ba=
+rriers
+    2    arch/arm/mm/cache-v7.S:178:2: error: invalid instruction
+    2    arch/arm/mm/cache-v7.S:152:2: error: instruction requires: armv6t2
+    2    arch/arm/mm/cache-v7.S:149:2: error: instruction requires: armv6t2
+    2    arch/arm/mm/cache-v7.S:142:2: error: instruction requires: data-ba=
+rriers
+    2    arch/arm/mm/cache-v7.S:125:2: error: instruction requires: data-ba=
+rriers
+    2    arch/arm/mm/cache-v7.S:107:2: error: instruction requires: armv6t2
+    2    arch/arm/mm/cache-v7.S:106:2: error: instruction requires: armv6t2
+    2    <instantiation>:2:2: error: unknown use of instruction mnemonic wi=
+thout a size suffix
+    2    /usr/lib/gcc/x86_64-linux-gnu/10/plugin/include/config/i386/i386.h=
+:2500:10: fatal error: common/config/i386/i386-cpuinfo.h: No such file or d=
+irectory
+    1    drivers/usb/gadget/udc/at91_udc.h:174:33: error: format =E2=80=98%=
+d=E2=80=99 expects argument of type =E2=80=98int=E2=80=99, but argument 3 h=
+as type =E2=80=98struct gpio_desc *=E2=80=99 [-Werror=3Dformat=3D]
+    1    drivers/staging/greybus/audio_topology.c:977:12: error: stack fram=
+e size (1804) exceeds limit (1024) in function 'gbaudio_tplg_create_widget'=
+ [-Werror,-Wframe-larger-than]
+    1    drivers/net/ethernet/natsemi/jazzsonic.c:147:24: error: assignment=
+ of read-only location =E2=80=98*(dev->dev_addr + ((sizetype)(i * 2) + 1))=
+=E2=80=99
+    1    drivers/net/ethernet/natsemi/jazzsonic.c:146:22: error: assignment=
+ of read-only location =E2=80=98*(dev->dev_addr + (sizetype)(i * 2))=E2=80=
+=99
+    1    drivers/gpu/drm/selftests/test-drm_mm.c:372:12: error: stack frame=
+ size (1032) exceeds limit (1024) in function '__igt_reserve' [-Werror,-Wfr=
+ame-larger-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_rq_dlg_=
+calc_31.c:939:13: error: stack frame size (1372) exceeds limit (1024) in fu=
+nction 'dml_rq_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_mode_vb=
+a_31.c:3952:6: error: stack frame size (2092) exceeds limit (2048) in funct=
+ion 'dml31_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-t=
+han]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn30/display_rq_dlg_=
+calc_30.c:981:13: error: stack frame size (1148) exceeds limit (1024) in fu=
+nction 'dml_rq_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_rq_dlg_=
+calc_21.c:829:13: error: stack frame size (1116) exceeds limit (1024) in fu=
+nction 'dml_rq_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vb=
+a_21.c:3518:6: error: stack frame size (1276) exceeds limit (1024) in funct=
+ion 'dml21_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-t=
+han]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vb=
+a_21.c:1466:13: error: stack frame size (1196) exceeds limit (1024) in func=
+tion 'DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanc=
+eCalculation' [-Werror,-Wframe-larger-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
+a_20v2.c:3393:6: error: stack frame size (1580) exceeds limit (1024) in fun=
+ction 'dml20v2_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larg=
+er-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
+a_20v2.c:1145:13: error: stack frame size (1276) exceeds limit (1024) in fu=
+nction 'dml20v2_DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAnd=
+PerformanceCalculation' [-Werror,-Wframe-larger-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
+a_20.c:3286:6: error: stack frame size (1612) exceeds limit (1024) in funct=
+ion 'dml20_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-t=
+han]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
+a_20.c:1085:13: error: stack frame size (1356) exceeds limit (1024) in func=
+tion 'dml20_DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerf=
+ormanceCalculation' [-Werror,-Wframe-larger-than]
+    1    drivers/fpga/stratix10-soc.c:431:9: error: variable 'ret' is unini=
+tialized when used here [-Werror,-Wuninitialized]
+    1    crypto/wp512.c:782:13: error: stack frame size (1176) exceeds limi=
+t (1024) in function 'wp512_process_buffer' [-Werror,-Wframe-larger-than]
+    1    clang: error: unsupported argument '-mimplicit-it=3Dalways' to opt=
+ion 'Wa,'
+    1    arm-linux-gnueabihf-ld: drivers/gpu/drm/aspeed/aspeed_gfx_drv.o:(.=
+rodata+0x3c): undefined reference to `drm_gem_cma_dumb_create'
+    1    arm-linux-gnueabihf-ld: drivers/gpu/drm/aspeed/aspeed_gfx_drv.o:(.=
+rodata+0x34): undefined reference to `drm_gem_cma_prime_import_sg_table'
+    1    arch/arm/mm/proc-v7.S:169:164: error: ALT_UP() content must assemb=
+le to exactly 4 bytes
+    1    arch/arm/mm/proc-v7.S:169:147: error: expected absolute expression
+    1    arch/arm/mm/proc-v7.S:169:111: error: expected absolute expression
+    1    arch/arm/mm/cache-v7.S:423:8: error: instruction requires: data-ba=
+rriers
+    1    arch/arm/mm/cache-v7.S:401:8: error: instruction requires: data-ba=
+rriers
+    1    arch/arm/mm/cache-v7.S:372:8: error: instruction requires: data-ba=
+rriers
+    1    arch/arm/mm/cache-v7.S:344:8: error: instruction requires: data-ba=
+rriers
+    1    arch/arm/mm/cache-v7.S:321:2: error: instruction requires: data-ba=
+rriers
+    1    arch/arm/mm/cache-v7.S:286:8: error: instruction requires: data-ba=
+rriers
+    1    arch/arm/mm/cache-v7.S:172:2: error: instruction requires: data-ba=
+rriers
+    1    arch/arm/mach-mvebu/coherency_ll.S:155:2: error: instruction requi=
+res: data-barriers
+    1    arch/arm/mach-mvebu/coherency_ll.S:128:2: error: instruction requi=
+res: data-barriers
+    1    arch/arm/mach-imx/suspend-imx6.S:315:2: error: instruction require=
+s: data-barriers
+    1    arch/arm/lib/xor-neon.c:30:2: error: This code requires at least v=
+ersion 4.6 of GCC [-Werror,-W#warnings]
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
+=3D0x'
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
+=3D0x'
+    1    : error: implicit conversion from enumeration type 'enum nl80211_u=
+ser_reg_hint_type' to different enumeration type 'enum nl80211_reg_initiato=
+r' [-Werror,-Wenum-conversion]
+    1    /tmp/kci/linux/build/../drivers/gpu/drm/panel/panel-edp.c:843: und=
+efined reference to `drm_panel_dp_aux_backlight'
+    1    /tmp/kci/linux/build/../drivers/gpu/drm/aspeed/aspeed_gfx_crtc.c:1=
+87: undefined reference to `drm_fb_cma_get_gem_obj'
 
------BEGIN PGP SIGNATURE-----
+Warnings summary:
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGnCiUACgkQAVBC80lX
-0GyPWwf/cwaGX0nwLyx37ibFFXNm+XsJqgeWICeKExp5XVaphl9DucycQFFh2kIJ
-/ohw6O+UtvU+tyNci2PmS4HhnispUDTyjnIix5NSTsxPiaBarGdsCT2DnLBu6GIf
-cfeYkMIUxbStULSebjtpwjaksjM5oAHfXBqhTIJ9/InquhYGQ0XW8lKhtyov/gFd
-aBiOvBR5W3ETIK8+s8gh1lGz7sy+xuaEeotzl90cM8E8ymf0OapySvHf0hd9+rin
-haoBJde2qBDer9lQoFbe9X3YWrDh0tpQ+9am1tgqqIWvayCZkBcgVNuqq2vgr9OB
-R2VJyPWFexV4qJsq+Hcvxraz9jrTIQ==
-=RHzL
------END PGP SIGNATURE-----
+    26   clang: warning: argument unused during compilation: '-march=3Darmv=
+6k' [-Wunused-command-line-argument]
+    14   clang: warning: argument unused during compilation: '-march=3Darmv=
+7-a' [-Wunused-command-line-argument]
+    13   1 warning generated.
+    12   clang: warning: argument unused during compilation: '-Wa,-march=3D=
+armv7-a' [-Wunused-command-line-argument]
+    10   fs/9p/vfs_addr.c:140:16: warning: unused variable =E2=80=98inode=
+=E2=80=99 [-Wunused-variable]
+    7    net/wireless/reg.c:1137:23: warning: implicit conversion from enum=
+eration type 'enum nl80211_user_reg_hint_type' to different enumeration typ=
+e 'enum nl80211_reg_initiator' [-Wenum-conversion]
+    4    fs/cachefiles/io.c:440:9: note: initialize the variable 'ret' to s=
+ilence this warning
+    4    fs/9p/vfs_addr.c:140:16: warning: unused variable 'inode' [-Wunuse=
+d-variable]
+    3    drivers/fpga/stratix10-soc.c:402:9: note: initialize the variable =
+'ret' to silence this warning
+    2    include/linux/kern_levels.h:5:18: warning: format =E2=80=98%d=E2=
+=80=99 expects argument of type =E2=80=98int=E2=80=99, but argument 2 has t=
+ype =E2=80=98struct gpio_desc *=E2=80=99 [-Wformat=3D]
+    2    fs/inode.c:73:29: warning: =E2=80=98inodes_stat=E2=80=99 defined b=
+ut not used [-Wunused-variable]
+    2    fs/dcache.c:128:29: warning: =E2=80=98dentry_stat=E2=80=99 defined=
+ but not used [-Wunused-variable]
+    2    drivers/fpga/stratix10-soc.c:431:9: warning: variable 'ret' is uni=
+nitialized when used here [-Wuninitialized]
+    2    clang: warning: argument unused during compilation: '-Wa,-march=3D=
+armv6k' [-Wunused-command-line-argument]
+    2    clang: warning: argument unused during compilation: '-Wa,-march=3D=
+armv6' [-Wunused-command-line-argument]
+    2    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+    1    vmlinux.o: warning: objtool: vc_switch_off_ist()+0xdc: call to mem=
+cpy() leaves .noinstr.text section
+    1    vmlinux.o: warning: objtool: sync_regs()+0x20: call to memcpy() le=
+aves .noinstr.text section
+    1    vmlinux.o: warning: objtool: mce_setup()+0xa2: call to cpuid_eax()=
+ leaves .noinstr.text section
+    1    vmlinux.o: warning: objtool: in_task_stack()+0x13: call to task_st=
+ack_page() leaves .noinstr.text section
+    1    vmlinux.o: warning: objtool: in_entry_stack()+0x10: call to cpu_en=
+try_stack() leaves .noinstr.text section
+    1    vmlinux.o: warning: objtool: fixup_bad_iret()+0x32: call to memset=
+() leaves .noinstr.text section
+    1    vmlinux.o: warning: objtool: do_syscall_64()+0x44: call to memset(=
+) leaves .noinstr.text section
+    1    vmlinux.o: warning: objtool: do_machine_check()+0xdd: call to mce_=
+gather_info() leaves .noinstr.text section
+    1    vmlinux.o: warning: objtool: do_int80_syscall_32()+0x52: call to m=
+emset() leaves .noinstr.text section
+    1    vmlinux.o: warning: objtool: __sev_put_ghcb()+0x36: call to memcpy=
+() leaves .noinstr.text section
+    1    vmlinux.o: warning: objtool: __sev_get_ghcb()+0xa1: call to memcpy=
+() leaves .noinstr.text section
+    1    vmlinux.o: warning: objtool: __sev_es_nmi_complete()+0x5a: call to=
+ ghcb_set_sw_exit_code() leaves .noinstr.text section
+    1    vmlinux.o: warning: objtool: __do_fast_syscall_32()+0x52: call to =
+memset() leaves .noinstr.text section
+    1    fs/reiserfs/do_balan.o: warning: objtool: balance_leaf_when_delete=
+()+0x1095: stack state mismatch: cfa1=3D4+184 cfa2=3D4+176
+    1    drivers/block/paride/bpck.c:32: warning: "PC" redefined
+    1    cc1: all warnings being treated as errors
+    1    arch/x86/lib/memset_64.o: warning: objtool: memset_erms(): can't f=
+ind starting instruction
+    1    arch/x86/lib/memcpy_64.o: warning: objtool: memcpy_erms(): can't f=
+ind starting instruction
+    1    arch/mips/boot/dts/ingenic/jz4780.dtsi:473.33-475.6: Warning (unit=
+_address_format): /nemc@13410000/efuse@d0/eth-mac-addr@0x22: unit name shou=
+ld not have leading "0x"
+    1    arch/arc/Makefile:26: ** WARNING ** CONFIG_ARC_TUNE_MCPU flag '' i=
+s unknown, fallback to ''
+    1    #warning This code requires at least version 4.6 of GCC
 
---Sig_/2jq=Hup3yel3xyVK5tz.XTU--
+Section mismatches summary:
+
+    1    WARNING: modpost: vmlinux.o(.text+0x712b3): Section mismatch in re=
+ference from the function __nodes_weight() to the variable .init.data:numa_=
+nodes_parsed
+    1    WARNING: modpost: vmlinux.o(.text+0x149e17): Section mismatch in r=
+eference from the function __next_node() to the variable .init.data:numa_no=
+des_parsed
+    1    WARNING: modpost: vmlinux.o(.text+0x149dcf): Section mismatch in r=
+eference from the function __first_node() to the variable .init.data:numa_n=
+odes_parsed
+    1    WARNING: modpost: vmlinux.o(.text+0x149d94): Section mismatch in r=
+eference from the function early_get_smp_config() to the variable .init.dat=
+a:x86_init
+    1    WARNING: modpost: vmlinux.o(.text+0x149d88): Section mismatch in r=
+eference from the function early_get_smp_config() to the variable .init.dat=
+a:x86_init
+    1    WARNING: modpost: vmlinux.o(.text+0x149d48): Section mismatch in r=
+eference from the function __nodes_weight() to the variable .init.data:numa=
+_nodes_parsed
+    1    WARNING: modpost: vmlinux.o(.text+0x149ce2): Section mismatch in r=
+eference from the function test_bit() to the variable .init.data:numa_nodes=
+_parsed
+    1    WARNING: modpost: vmlinux.o(.text+0x149cce): Section mismatch in r=
+eference from the function test_bit() to the variable .init.data:numa_nodes=
+_parsed
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+debug (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, =
+0 section mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, clang-13) =E2=80=94 FAIL, 5 errors, 16 warnings, 0 secti=
+on mismatches
+
+Errors:
+    arch/arm/lib/xor-neon.c:30:2: error: This code requires at least versio=
+n 4.6 of GCC [-Werror,-W#warnings]
+    crypto/wp512.c:782:13: error: stack frame size (1176) exceeds limit (10=
+24) in function 'wp512_process_buffer' [-Werror,-Wframe-larger-than]
+    net/wireless/reg.c:1137:23: error: implicit conversion from enumeration=
+ type 'enum nl80211_user_reg_hint_type' to different enumeration type 'enum=
+ nl80211_reg_initiator' [-Werror,-Wenum-conversion]
+    drivers/gpu/drm/selftests/test-drm_mm.c:372:12: error: stack frame size=
+ (1032) exceeds limit (1024) in function '__igt_reserve' [-Werror,-Wframe-l=
+arger-than]
+    fs/cachefiles/io.c:489:6: error: variable 'ret' is used uninitialized w=
+henever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    #warning This code requires at least version 4.6 of GCC
+    fs/cachefiles/io.c:440:9: note: initialize the variable 'ret' to silenc=
+e this warning
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, clang-10) =E2=80=94 FAIL, 33 errors, 16 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    arch/arm/mm/cache-v7.S:42:2: error: instruction requires: data-barriers
+    arch/arm/mm/cache-v7.S:45:2: error: instruction requires: armv6t2
+    arch/arm/mm/cache-v7.S:56:4: error: instruction requires: armv6t2
+    arch/arm/mm/cache-v7.S:68:4: error: invalid instruction
+    arch/arm/mm/cache-v7.S:69:2: error: instruction requires: data-barriers
+    arch/arm/mm/cache-v7.S:97:2: error: instruction requires: data-barriers
+    arch/arm/mm/cache-v7.S:106:2: error: instruction requires: armv6t2
+    arch/arm/mm/cache-v7.S:107:2: error: instruction requires: armv6t2
+    arch/arm/mm/cache-v7.S:125:2: error: instruction requires: data-barriers
+    arch/arm/mm/cache-v7.S:142:2: error: instruction requires: data-barriers
+    arch/arm/mm/cache-v7.S:149:2: error: instruction requires: armv6t2
+    arch/arm/mm/cache-v7.S:152:2: error: instruction requires: armv6t2
+    arch/arm/mm/cache-v7.S:172:2: error: instruction requires: data-barriers
+    arch/arm/mm/cache-v7.S:178:2: error: invalid instruction
+    arch/arm/mm/cache-v7.S:179:2: error: instruction requires: data-barriers
+    arch/arm/mm/cache-v7.S:286:8: error: instruction requires: data-barriers
+    arch/arm/mm/cache-v7.S:294:2: error: invalid instruction
+    arch/arm/mm/cache-v7.S:311:2: error: invalid instruction
+    arch/arm/mm/cache-v7.S:312:2: error: instruction requires: data-barriers
+    arch/arm/mm/cache-v7.S:321:2: error: instruction requires: data-barriers
+    arch/arm/mm/cache-v7.S:344:8: error: instruction requires: data-barriers
+    arch/arm/mm/cache-v7.S:352:2: error: invalid instruction
+    arch/arm/mm/cache-v7.S:372:8: error: instruction requires: data-barriers
+    arch/arm/mm/cache-v7.S:387:2: error: invalid instruction
+    arch/arm/mm/cache-v7.S:401:8: error: instruction requires: data-barriers
+    arch/arm/mm/cache-v7.S:409:2: error: invalid instruction
+    arch/arm/mm/cache-v7.S:423:8: error: instruction requires: data-barriers
+    arch/arm/mm/cache-v7.S:431:2: error: invalid instruction
+    arch/arm/mach-mvebu/coherency_ll.S:128:2: error: instruction requires: =
+data-barriers
+    arch/arm/mach-mvebu/coherency_ll.S:155:2: error: instruction requires: =
+data-barriers
+    arch/arm/kernel/entry-armv.S:499:4: error: invalid instruction, any one=
+ of the following would fix this:
+    arch/arm/kernel/entry-armv.S:503:4: error: invalid instruction, any one=
+ of the following would fix this:
+    arch/arm/mach-imx/suspend-imx6.S:315:2: error: instruction requires: da=
+ta-barriers
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-Wa,-march=3Darmv6=
+k' [-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-Wa,-march=3Darmv7=
+-a' [-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-Wa,-march=3Darmv6=
+' [-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-Wa,-march=3Darmv7=
+-a' [-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-Wa,-march=3Darmv7=
+-a' [-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-Wa,-march=3Darmv7=
+-a' [-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-Wa,-march=3Darmv7=
+-a' [-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-Wa,-march=3Darmv7=
+-a' [-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, clang-13) =E2=80=94 FAIL, 3 errors, 2 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    net/wireless/reg.c:1137:23: error: implicit conversion from enumeration=
+ type 'enum nl80211_user_reg_hint_type' to different enumeration type 'enum=
+ nl80211_reg_initiator' [-Werror,-Wenum-conversion]
+    fs/cachefiles/io.c:489:6: error: variable 'ret' is used uninitialized w=
+henever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+    drivers/fpga/stratix10-soc.c:431:9: error: variable 'ret' is uninitiali=
+zed when used here [-Werror,-Wuninitialized]
+
+Warnings:
+    fs/cachefiles/io.c:440:9: note: initialize the variable 'ret' to silenc=
+e this warning
+    drivers/fpga/stratix10-soc.c:402:9: note: initialize the variable 'ret'=
+ to silence this warning
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (x86_64, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 secti=
+on mismatches
+
+Errors:
+    /usr/lib/gcc/x86_64-linux-gnu/10/plugin/include/config/i386/i386.h:2500=
+:10: fatal error: common/config/i386/i386-cpuinfo.h: No such file or direct=
+ory
+    /usr/lib/gcc/x86_64-linux-gnu/10/plugin/include/config/i386/i386.h:2500=
+:10: fatal error: common/config/i386/i386-cpuinfo.h: No such file or direct=
+ory
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (i386, clang-13) =E2=80=94 FAIL, 13 errors, 1 warning, 0 secti=
+on mismatches
+
+Errors:
+    net/wireless/reg.c:1137:23: error: implicit conversion from enumeration=
+ type 'enum nl80211_user_reg_hint_type' to different enumeration type 'enum=
+ nl80211_reg_initiator' [-Werror,-Wenum-conversion]
+    fs/cachefiles/io.c:489:6: error: variable 'ret' is used uninitialized w=
+henever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+    drivers/staging/greybus/audio_topology.c:977:12: error: stack frame siz=
+e (1804) exceeds limit (1024) in function 'gbaudio_tplg_create_widget' [-We=
+rror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_rq_dlg_calc_=
+21.c:829:13: error: stack frame size (1116) exceeds limit (1024) in functio=
+n 'dml_rq_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn30/display_rq_dlg_calc_=
+30.c:981:13: error: stack frame size (1148) exceeds limit (1024) in functio=
+n 'dml_rq_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_rq_dlg_calc_=
+31.c:939:13: error: stack frame size (1372) exceeds limit (1024) in functio=
+n 'dml_rq_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vba_21.=
+c:1466:13: error: stack frame size (1196) exceeds limit (1024) in function =
+'DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalc=
+ulation' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20.=
+c:1085:13: error: stack frame size (1356) exceeds limit (1024) in function =
+'dml20_DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerforman=
+ceCalculation' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vba_21.=
+c:3518:6: error: stack frame size (1276) exceeds limit (1024) in function '=
+dml21_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20v=
+2.c:1145:13: error: stack frame size (1276) exceeds limit (1024) in functio=
+n 'dml20v2_DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerfo=
+rmanceCalculation' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_mode_vba_31.=
+c:3952:6: error: stack frame size (2092) exceeds limit (2048) in function '=
+dml31_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20.=
+c:3286:6: error: stack frame size (1612) exceeds limit (1024) in function '=
+dml20_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20v=
+2.c:3393:6: error: stack frame size (1580) exceeds limit (1024) in function=
+ 'dml20v2_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-th=
+an]
+
+Warnings:
+    fs/cachefiles/io.c:440:9: note: initialize the variable 'ret' to silenc=
+e this warning
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (x86_64, clang-10) =E2=80=94 FAIL, 1 error, 2 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    <instantiation>:2:2: error: unknown use of instruction mnemonic without=
+ a size suffix
+
+Warnings:
+    arch/x86/lib/memcpy_64.o: warning: objtool: memcpy_erms(): can't find s=
+tarting instruction
+    arch/x86/lib/memset_64.o: warning: objtool: memset_erms(): can't find s=
+tarting instruction
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, clang-10) =E2=80=94 FAIL, 129 errors, 0 warnings, 0 se=
+ction mismatches
+
+Errors:
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:5:11: error: unknown relocation name
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:7:11: error: unknown relocation name
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:10:11: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:12:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:14:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:16:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:18:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:20:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:22:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:24:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:26:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:28:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:30:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:32:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:34:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:36:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:38:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:40:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:42:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:44:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:46:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:48:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:50:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:52:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:54:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:56:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:58:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:60:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:62:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:64:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:66:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:68:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:70:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:72:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:74:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:76:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:78:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:80:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:82:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:84:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:86:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:88:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:90:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:92:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:94:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:96:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:98:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:100:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:102:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:104:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:106:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:108:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:110:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:112:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:114:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:116:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:118:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:120:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:122:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:124:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:126:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:128:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:130:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:132:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:134:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:136:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:138:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:140:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:142:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:144:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:146:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:148:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:150:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:152:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:154:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:156:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:158:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:160:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:162:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:164:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:166:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:168:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:170:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:172:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:174:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:176:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:178:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:180:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:182:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:184:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:186:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:188:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:190:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:192:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:194:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:196:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:198:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:200:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:202:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:204:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:206:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:208:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:210:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:212:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:214:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:216:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:218:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:220:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:222:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:224:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:226:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:228:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:230:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:232:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:234:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:236:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:238:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:240:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:242:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:244:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:246:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:248:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:250:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:252:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:254:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:256:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:258:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:261:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:263:13: error: unknown relocation n=
+ame
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mi=
+smatches
+
+Errors:
+    drivers/usb/gadget/udc/at91_udc.h:174:33: error: format =E2=80=98%d=E2=
+=80=99 expects argument of type =E2=80=98int=E2=80=99, but argument 3 has t=
+ype =E2=80=98struct gpio_desc *=E2=80=99 [-Werror=3Dformat=3D]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (x86_64, clang-13) =E2=80=94 FAIL, 2 errors, 15 warnings, 0 se=
+ction mismatches
+
+Errors:
+    : error: implicit conversion from enumeration type 'enum nl80211_user_r=
+eg_hint_type' to different enumeration type 'enum nl80211_reg_initiator' [-=
+Werror,-Wenum-conversion]
+    fs/cachefiles/io.c:489:6: error: variable 'ret' is used uninitialized w=
+henever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+
+Warnings:
+    vmlinux.o: warning: objtool: do_syscall_64()+0x44: call to memset() lea=
+ves .noinstr.text section
+    vmlinux.o: warning: objtool: do_int80_syscall_32()+0x52: call to memset=
+() leaves .noinstr.text section
+    vmlinux.o: warning: objtool: __do_fast_syscall_32()+0x52: call to memse=
+t() leaves .noinstr.text section
+    vmlinux.o: warning: objtool: sync_regs()+0x20: call to memcpy() leaves =
+.noinstr.text section
+    vmlinux.o: warning: objtool: vc_switch_off_ist()+0xdc: call to memcpy()=
+ leaves .noinstr.text section
+    vmlinux.o: warning: objtool: fixup_bad_iret()+0x32: call to memset() le=
+aves .noinstr.text section
+    vmlinux.o: warning: objtool: in_task_stack()+0x13: call to task_stack_p=
+age() leaves .noinstr.text section
+    vmlinux.o: warning: objtool: in_entry_stack()+0x10: call to cpu_entry_s=
+tack() leaves .noinstr.text section
+    vmlinux.o: warning: objtool: mce_setup()+0xa2: call to cpuid_eax() leav=
+es .noinstr.text section
+    vmlinux.o: warning: objtool: do_machine_check()+0xdd: call to mce_gathe=
+r_info() leaves .noinstr.text section
+    vmlinux.o: warning: objtool: __sev_es_nmi_complete()+0x5a: call to ghcb=
+_set_sw_exit_code() leaves .noinstr.text section
+    vmlinux.o: warning: objtool: __sev_get_ghcb()+0xa1: call to memcpy() le=
+aves .noinstr.text section
+    vmlinux.o: warning: objtool: __sev_put_ghcb()+0x36: call to memcpy() le=
+aves .noinstr.text section
+    fs/reiserfs/do_balan.o: warning: objtool: balance_leaf_when_delete()+0x=
+1095: stack state mismatch: cfa1=3D4+184 cfa2=3D4+176
+    fs/cachefiles/io.c:440:9: note: initialize the variable 'ret' to silenc=
+e this warning
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(.text+0x149cce): Section mismatch in refere=
+nce from the function test_bit() to the variable .init.data:numa_nodes_pars=
+ed
+    WARNING: modpost: vmlinux.o(.text+0x149ce2): Section mismatch in refere=
+nce from the function test_bit() to the variable .init.data:numa_nodes_pars=
+ed
+    WARNING: modpost: vmlinux.o(.text+0x149d48): Section mismatch in refere=
+nce from the function __nodes_weight() to the variable .init.data:numa_node=
+s_parsed
+    WARNING: modpost: vmlinux.o(.text+0x149d88): Section mismatch in refere=
+nce from the function early_get_smp_config() to the variable .init.data:x86=
+_init
+    WARNING: modpost: vmlinux.o(.text+0x149d94): Section mismatch in refere=
+nce from the function early_get_smp_config() to the variable .init.data:x86=
+_init
+    WARNING: modpost: vmlinux.o(.text+0x149dcf): Section mismatch in refere=
+nce from the function __first_node() to the variable .init.data:numa_nodes_=
+parsed
+    WARNING: modpost: vmlinux.o(.text+0x149e17): Section mismatch in refere=
+nce from the function __next_node() to the variable .init.data:numa_nodes_p=
+arsed
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arm, clang-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section =
+mismatches
+
+Errors:
+    clang: error: unsupported argument '-mimplicit-it=3Dalways' to option '=
+Wa,'
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, clang-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+am200epdkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ar7_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 FAIL, 3 errors, 0 warnings, 0 s=
+ection mismatches
+
+Errors:
+    arm-linux-gnueabihf-ld: drivers/gpu/drm/aspeed/aspeed_gfx_drv.o:(.rodat=
+a+0x34): undefined reference to `drm_gem_cma_prime_import_sg_table'
+    arm-linux-gnueabihf-ld: drivers/gpu/drm/aspeed/aspeed_gfx_drv.o:(.rodat=
+a+0x3c): undefined reference to `drm_gem_cma_dumb_create'
+    /tmp/kci/linux/build/../drivers/gpu/drm/aspeed/aspeed_gfx_crtc.c:187: u=
+ndefined reference to `drm_fb_cma_get_gem_obj'
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, clang-10) =E2=80=94 FAIL, 23 errors, 8 warnings, =
+0 section mismatches
+
+Errors:
+    arch/arm/kernel/entry-armv.S:499:4: error: invalid instruction, any one=
+ of the following would fix this:
+    arch/arm/kernel/entry-armv.S:503:4: error: invalid instruction, any one=
+ of the following would fix this:
+    arch/arm/mm/cache-v7.S:42:2: error: instruction requires: data-barriers
+    arch/arm/mm/cache-v7.S:45:2: error: instruction requires: armv6t2
+    arch/arm/mm/cache-v7.S:56:4: error: instruction requires: armv6t2
+    arch/arm/mm/cache-v7.S:68:4: error: invalid instruction
+    arch/arm/mm/cache-v7.S:69:2: error: instruction requires: data-barriers
+    arch/arm/mm/cache-v7.S:97:2: error: instruction requires: data-barriers
+    arch/arm/mm/cache-v7.S:106:2: error: instruction requires: armv6t2
+    arch/arm/mm/cache-v7.S:107:2: error: instruction requires: armv6t2
+    arch/arm/mm/cache-v7.S:125:2: error: instruction requires: data-barriers
+    arch/arm/mm/cache-v7.S:142:2: error: instruction requires: data-barriers
+    arch/arm/mm/cache-v7.S:149:2: error: instruction requires: armv6t2
+    arch/arm/mm/cache-v7.S:152:2: error: instruction requires: armv6t2
+    arch/arm/mm/cache-v7.S:178:2: error: invalid instruction
+    arch/arm/mm/cache-v7.S:179:2: error: instruction requires: data-barriers
+    arch/arm/mm/cache-v7.S:294:2: error: invalid instruction
+    arch/arm/mm/cache-v7.S:311:2: error: invalid instruction
+    arch/arm/mm/cache-v7.S:312:2: error: instruction requires: data-barriers
+    arch/arm/mm/cache-v7.S:352:2: error: invalid instruction
+    arch/arm/mm/cache-v7.S:387:2: error: invalid instruction
+    arch/arm/mm/cache-v7.S:409:2: error: invalid instruction
+    arch/arm/mm/cache-v7.S:431:2: error: invalid instruction
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-Wa,-march=3Darmv6=
+k' [-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-Wa,-march=3Darmv7=
+-a' [-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-Wa,-march=3Darmv6=
+' [-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-Wa,-march=3Darmv7=
+-a' [-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+assabet_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+at91_dt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    include/linux/kern_levels.h:5:18: warning: format =E2=80=98%d=E2=80=99 =
+expects argument of type =E2=80=98int=E2=80=99, but argument 2 has type =E2=
+=80=98struct gpio_desc *=E2=80=99 [-Wformat=3D]
+
+---------------------------------------------------------------------------=
+-----
+ath25_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath79_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axm55xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+badge4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm2835_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm47xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm63xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+bigsur_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    drivers/net/ethernet/broadcom/sb1250-mac.c:2187:20: error: assignment o=
+f read-only location =E2=80=98*(dev->dev_addr + (sizetype)i)=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+bmips_be_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+bmips_stb_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+capcella_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+cavium_octeon_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings,=
+ 0 section mismatches
+
+Errors:
+    expr: syntax error: unexpected argument =E2=80=980xffffffff80000000=E2=
+=80=99
+
+---------------------------------------------------------------------------=
+-----
+cerfcube_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+ci20_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    arch/mips/boot/dts/ingenic/jz4780.dtsi:473.33-475.6: Warning (unit_addr=
+ess_format): /nemc@13410000/efuse@d0/eth-mac-addr@0x22: unit name should no=
+t have leading "0x"
+
+---------------------------------------------------------------------------=
+-----
+cm_x300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+cobalt_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+collie_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+corgi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cu1830-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+davinci_all_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+db1xxx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_64_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings,=
+ 0 section mismatches
+
+Errors:
+    drivers/net/ethernet/amd/declance.c:1231:20: error: assignment of read-=
+only location =E2=80=98*(dev->dev_addr + (sizetype)i)=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+decstation_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 =
+section mismatches
+
+Errors:
+    drivers/net/ethernet/amd/declance.c:1231:20: error: assignment of read-=
+only location =E2=80=98*(dev->dev_addr + (sizetype)i)=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+decstation_r4k_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings=
+, 0 section mismatches
+
+Errors:
+    drivers/net/ethernet/amd/declance.c:1231:20: error: assignment of read-=
+only location =E2=80=98*(dev->dev_addr + (sizetype)i)=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mi=
+smatches
+
+Warnings:
+    fs/9p/vfs_addr.c:140:16: warning: unused variable =E2=80=98inode=E2=80=
+=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mi=
+smatches
+
+Warnings:
+    fs/9p/vfs_addr.c:140:16: warning: unused variable =E2=80=98inode=E2=80=
+=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, clang-13) =E2=80=94 PASS, 0 errors, 7 warnings, 0 section=
+ mismatches
+
+Warnings:
+    fs/9p/vfs_addr.c:140:16: warning: unused variable 'inode' [-Wunused-var=
+iable]
+    1 warning generated.
+    net/wireless/reg.c:1137:23: warning: implicit conversion from enumerati=
+on type 'enum nl80211_user_reg_hint_type' to different enumeration type 'en=
+um nl80211_reg_initiator' [-Wenum-conversion]
+    1 warning generated.
+    drivers/fpga/stratix10-soc.c:431:9: warning: variable 'ret' is uninitia=
+lized when used here [-Wuninitialized]
+    drivers/fpga/stratix10-soc.c:402:9: note: initialize the variable 'ret'=
+ to silence this warning
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_16K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 1 warning, 0 section mismatches
+
+Warnings:
+    fs/9p/vfs_addr.c:140:16: warning: unused variable =E2=80=98inode=E2=80=
+=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-10) =E2=80=94 FAIL, 129 =
+errors, 2 warnings, 0 section mismatches
+
+Errors:
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:5:11: error: unknown relocation name
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:7:11: error: unknown relocation name
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:10:11: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:12:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:14:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:16:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:18:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:20:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:22:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:24:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:26:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:28:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:30:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:32:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:34:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:36:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:38:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:40:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:42:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:44:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:46:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:48:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:50:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:52:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:54:12: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:56:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:58:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:60:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:62:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:64:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:66:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:68:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:70:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:72:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:74:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:76:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:78:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:80:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:82:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:84:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:86:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:88:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:90:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:92:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:94:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:96:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:98:13: error: unknown relocation na=
+me
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:100:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:102:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:104:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:106:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:108:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:110:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:112:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:114:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:116:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:118:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:120:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:122:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:124:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:126:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:128:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:130:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:132:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:134:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:136:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:138:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:140:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:142:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:144:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:146:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:148:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:150:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:152:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:154:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:156:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:158:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:160:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:162:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:164:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:166:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:168:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:170:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:172:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:174:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:176:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:178:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:180:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:182:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:184:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:186:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:188:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:190:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:192:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:194:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:196:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:198:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:200:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:202:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:204:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:206:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:208:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:210:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:212:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:214:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:216:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:218:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:220:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:222:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:224:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:226:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:228:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:230:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:232:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:234:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:236:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:238:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:240:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:242:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:244:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:246:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:248:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:250:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:252:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:254:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:256:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:258:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:261:13: error: unknown relocation n=
+ame
+    arch/arm64/kvm/hyp/nvhe/hyp-reloc.S:263:13: error: unknown relocation n=
+ame
+
+Warnings:
+    fs/9p/vfs_addr.c:140:16: warning: unused variable 'inode' [-Wunused-var=
+iable]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 1 warning, 0 section mismatches
+
+Warnings:
+    fs/9p/vfs_addr.c:140:16: warning: unused variable =E2=80=98inode=E2=80=
+=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-13) =E2=80=94 PASS, 0 er=
+rors, 7 warnings, 0 section mismatches
+
+Warnings:
+    fs/9p/vfs_addr.c:140:16: warning: unused variable 'inode' [-Wunused-var=
+iable]
+    1 warning generated.
+    net/wireless/reg.c:1137:23: warning: implicit conversion from enumerati=
+on type 'enum nl80211_user_reg_hint_type' to different enumeration type 'en=
+um nl80211_reg_initiator' [-Wenum-conversion]
+    1 warning generated.
+    drivers/fpga/stratix10-soc.c:431:9: warning: variable 'ret' is uninitia=
+lized when used here [-Wuninitialized]
+    drivers/fpga/stratix10-soc.c:402:9: note: initialize the variable 'ret'=
+ to silence this warning
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 1 warning, 0 section mismatches
+
+Warnings:
+    fs/9p/vfs_addr.c:140:16: warning: unused variable =E2=80=98inode=E2=80=
+=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_EFI=3Dn (riscv, clang-13) =E2=80=94 PASS, 0 errors, 2 warn=
+ings, 0 section mismatches
+
+Warnings:
+    fs/9p/vfs_addr.c:140:16: warning: unused variable 'inode' [-Wunused-var=
+iable]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 1 warning, 0 section mismatches
+
+Warnings:
+    fs/9p/vfs_addr.c:140:16: warning: unused variable =E2=80=98inode=E2=80=
+=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+defconfig+debug (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    fs/9p/vfs_addr.c:140:16: warning: unused variable =E2=80=98inode=E2=80=
+=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+dove_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+e55_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+ep93xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+exynos_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ezx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+footbridge_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+fuloong2e_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 s=
+ection mismatches
+
+Errors:
+    expr: syntax error: unexpected argument =E2=80=980xffffffff80000000=E2=
+=80=99
+
+---------------------------------------------------------------------------=
+-----
+gcw0_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+gemini_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+gpr_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+h3600_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+hackkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+debug (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warni=
+ng, 0 section mismatches
+
+Warnings:
+    arch/arc/Makefile:26: ** WARNING ** CONFIG_ARC_TUNE_MCPU flag '' is unk=
+nown, fallback to ''
+
+---------------------------------------------------------------------------=
+-----
+hisi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+hsdk_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, clang-13) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    net/wireless/reg.c:1137:23: warning: implicit conversion from enumerati=
+on type 'enum nl80211_user_reg_hint_type' to different enumeration type 'en=
+um nl80211_reg_initiator' [-Wenum-conversion]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+debug (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+imote2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v4_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+iop32x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip22_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip27_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip28_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip32_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 sectio=
+n mismatches
+
+Errors:
+    expr: syntax error: unexpected argument =E2=80=980xffffffff80000000=E2=
+=80=99
+
+---------------------------------------------------------------------------=
+-----
+ixp4xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+jazz_defconfig (mips, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 secti=
+on mismatches
+
+Errors:
+    drivers/net/ethernet/natsemi/jazzsonic.c:146:22: error: assignment of r=
+ead-only location =E2=80=98*(dev->dev_addr + (sizetype)(i * 2))=E2=80=99
+    drivers/net/ethernet/natsemi/jazzsonic.c:147:24: error: assignment of r=
+ead-only location =E2=80=98*(dev->dev_addr + ((sizetype)(i * 2) + 1))=E2=80=
+=99
+
+---------------------------------------------------------------------------=
+-----
+jmr3927_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+jornada720_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+keystone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+lart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+lemote2f_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 se=
+ction mismatches
+
+Errors:
+    expr: syntax error: unexpected argument =E2=80=980xffffffff80000000=E2=
+=80=99
+
+---------------------------------------------------------------------------=
+-----
+loongson1b_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson1c_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpc18xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpc32xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpd270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lubbock_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+magician_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mainstone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_kvm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaaprp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_eva_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+milbeaut_m10v_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mini2440_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mmp2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+moxart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mpc30x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mps2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+mtx1_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v4t_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    include/linux/kern_levels.h:5:18: warning: format =E2=80=98%d=E2=80=99 =
+expects argument of type =E2=80=98int=E2=80=99, but argument 2 has type =E2=
+=80=98struct gpio_desc *=E2=80=99 [-Wformat=3D]
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, clang-13) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
+section mismatches
+
+Warnings:
+    net/wireless/reg.c:1137:23: warning: implicit conversion from enumerati=
+on type 'enum nl80211_user_reg_hint_type' to different enumeration type 'en=
+um nl80211_reg_initiator' [-Wenum-conversion]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, clang-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
+section mismatches
+
+Warnings:
+    net/wireless/reg.c:1137:23: warning: implicit conversion from enumerati=
+on type 'enum nl80211_user_reg_hint_type' to different enumeration type 'en=
+um nl80211_reg_initiator' [-Wenum-conversion]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, clang-10) =E2=80=94 FAIL, 5 errors, 8 warnings, 0 =
+section mismatches
+
+Errors:
+    arch/arm/kernel/entry-armv.S:499:4: error: invalid instruction, any one=
+ of the following would fix this:
+    arch/arm/kernel/entry-armv.S:503:4: error: invalid instruction, any one=
+ of the following would fix this:
+    arch/arm/mm/proc-v7.S:169:111: error: expected absolute expression
+    arch/arm/mm/proc-v7.S:169:147: error: expected absolute expression
+    arch/arm/mm/proc-v7.S:169:164: error: ALT_UP() content must assemble to=
+ exactly 4 bytes
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-Wa,-march=3Darmv7=
+-a' [-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-Wa,-march=3Darmv7=
+-a' [-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-Wa,-march=3Darmv7=
+-a' [-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-Wa,-march=3Darmv7=
+-a' [-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, clang-13) =E2=80=94 PASS, 0 errors, 12 warnings, 0=
+ section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    net/wireless/reg.c:1137:23: warning: implicit conversion from enumerati=
+on type 'enum nl80211_user_reg_hint_type' to different enumeration type 'en=
+um nl80211_reg_initiator' [-Wenum-conversion]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-10) =E2=80=94 PASS, =
+0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-10) =E2=80=
+=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0=
+ warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
+ errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+debug (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mxs_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+neponset_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+netwinder_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+nhk8815_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_sdcard_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+omap1_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+omap2plus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+omega2p_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+orion5x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+oxnas_v6_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+pcm027_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pic32mzda_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+pleb_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa168_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa255-idp_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa910_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+qcom_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section=
+ mismatches
+
+Errors:
+    /tmp/kci/linux/build/../drivers/gpu/drm/panel/panel-edp.c:843: undefine=
+d reference to `drm_panel_dp_aux_backlight'
+
+---------------------------------------------------------------------------=
+-----
+qi_lb60_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+rb532_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rbtx49xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+realview_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+rm200_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    drivers/block/paride/bpck.c:32: warning: "PC" redefined
+
+---------------------------------------------------------------------------=
+-----
+rpc_defconfig (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 section=
+ mismatches
+
+Errors:
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=3D0x'
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=3D0x'
+
+---------------------------------------------------------------------------=
+-----
+rs90_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+rt305x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rv32_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    fs/9p/vfs_addr.c:140:16: warning: unused variable =E2=80=98inode=E2=80=
+=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+s3c2410_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s3c6400_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s5pv210_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sb1250_swarm_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, =
+0 section mismatches
+
+Errors:
+    drivers/net/ethernet/broadcom/sb1250-mac.c:2187:20: error: assignment o=
+f read-only location =E2=80=98*(dev->dev_addr + (sizetype)i)=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+shannon_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+simpad_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+socfpga_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear13xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+stm32_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sunxi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+tb0219_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+tb0226_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+tb0287_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 section m=
+ismatches
+
+Warnings:
+    fs/dcache.c:128:29: warning: =E2=80=98dentry_stat=E2=80=99 defined but =
+not used [-Wunused-variable]
+    fs/inode.c:73:29: warning: =E2=80=98inodes_stat=E2=80=99 defined but no=
+t used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 section=
+ mismatches
+
+Warnings:
+    fs/dcache.c:128:29: warning: =E2=80=98dentry_stat=E2=80=99 defined but =
+not used [-Wunused-variable]
+    fs/inode.c:73:29: warning: =E2=80=98inodes_stat=E2=80=99 defined but no=
+t used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+trizeps4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+u8500_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+versatile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+vexpress_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    fs/9p/vfs_addr.c:140:16: warning: unused variable =E2=80=98inode=E2=80=
+=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+vf610m4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+viper_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+vocore2_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+workpad_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, clang-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 =
+section mismatches
+
+Errors:
+    <instantiation>:2:2: error: unknown use of instruction mnemonic without=
+ a size suffix
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
+ section mismatches
+
+Warnings:
+    net/wireless/reg.c:1137:23: warning: implicit conversion from enumerati=
+on type 'enum nl80211_user_reg_hint_type' to different enumeration type 'en=
+um nl80211_reg_initiator' [-Wenum-conversion]
+    1 warning generated.
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(.text+0x712b3): Section mismatch in referen=
+ce from the function __nodes_weight() to the variable .init.data:numa_nodes=
+_parsed
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+debug (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook+kselftest (x86_64, gcc-10) =E2=80=94 PASS, =
+0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86_kvm_guest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 1=
+ warning, 0 section mismatches
+
+Warnings:
+    fs/9p/vfs_addr.c:140:16: warning: unused variable =E2=80=98inode=E2=80=
+=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+xcep_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+zeus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---
+For more info write to <info@kernelci.org>

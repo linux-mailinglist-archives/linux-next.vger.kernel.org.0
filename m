@@ -2,38 +2,35 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BDE24658FC
-	for <lists+linux-next@lfdr.de>; Wed,  1 Dec 2021 23:17:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87CC3465907
+	for <lists+linux-next@lfdr.de>; Wed,  1 Dec 2021 23:19:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353496AbhLAWVM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 1 Dec 2021 17:21:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41990 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353498AbhLAWUm (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 1 Dec 2021 17:20:42 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 080E8C061574;
-        Wed,  1 Dec 2021 14:17:18 -0800 (PST)
+        id S1353528AbhLAWXF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 1 Dec 2021 17:23:05 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:43708 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235412AbhLAWXD (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 1 Dec 2021 17:23:03 -0500
 From:   Thomas Gleixner <tglx@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1638397036;
+        s=2020; t=1638397181;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=JEntfi+R1B0LdGVSzyc+PZLj+JC9XJ08L6abd7hjSZI=;
-        b=gjlu2BnSyIsdoFUY93w/MS/G44ArV1VpPX9nPvKuVsKJkXsdZe0D5NrSVMlp/s8yWc3qA/
-        Xn6LLYM96/sekiGyS8/WcL/R/jO7vAo8Pon5Aotq4vqO8l2TnmMNNx8i6/LmD8NrQXMTvx
-        FKK6GwdeSbpeG/FtFS7np72Zi8mqQKuo4BBhjM/GgluNZ+oveio/6KeWab1wk831B1RDvt
-        2Eu6X9iqCJ3yX76iN4DSPe2LeY2BE5qmPccGjcvbixjeN24iBHNAFPTAqpmGAG0EMd9sFs
-        025hRKxOg8+pP7D2RJZb5dXpku3kr+eLtO2dgn944UkVGCbrhtvlcZl9n6AxQQ==
+        bh=vF+vI1122M1xefgS/sOmAIhbY1QddRBIrijNYDW8GX4=;
+        b=pfhBPHNR3AtX3Ux1DwzekYHkpk8McxqO+1r1PnWFrRdm0Efin2qvGo3+JVjUit/C03R+AM
+        fOaiLydtsmIJSgeolp7ABmG4MILO2D9REQnTQH0T1XYBKa1KhL7PrhM9Up4z3O3b+wSNTO
+        4dXmWeXoBmSGJ0PMx2GO10oU/UQMyBZm2EKz5Bief+Tn2fab3MkUcgBpKdEEF7Vj50yLAL
+        mHqHMPwNblrq5K8bgewA7eJQmIKrYr1qErpXdsjZ0ivPvzVD6rPUpMJiwEXuVD6cJ6xOSo
+        H1VF8DTv4uehRe/UmBAj+rHYhWFJQMskgD8xKOL8Q5SrunLeBC2qGnXxzArSow==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1638397036;
+        s=2020e; t=1638397181;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=JEntfi+R1B0LdGVSzyc+PZLj+JC9XJ08L6abd7hjSZI=;
-        b=z3NRdTjrWa4gKapXO/e5RBnmEjy75iPzjHnOv78hif7BdRkrBb7XwnFJadjU57et3rUi2r
-        vV4vOwWaiQ+aQlCQ==
+        bh=vF+vI1122M1xefgS/sOmAIhbY1QddRBIrijNYDW8GX4=;
+        b=YPDQJA6uqJ9UHFthLEyM5wWM1bK4UK5GvGKUw8E7iY8GSEfElOWt2nxMHZV2/KaaugBVRP
+        SBcj6cSyctLpXABg==
 To:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Ingo Molnar <mingo@redhat.com>,
         "H. Peter Anvin" <hpa@zytor.com>,
@@ -42,30 +39,30 @@ Cc:     Arnd Bergmann <arnd@arndb.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
 Subject: Re: linux-next: build failure after merge of the tip tree
-In-Reply-To: <20211202090540.1f22fa39@canb.auug.org.au>
+In-Reply-To: <87zgpk6kcz.ffs@tglx>
 References: <20211126145201.5aefa68c@canb.auug.org.au>
  <CAK8P3a078LiivyzUiH+D--iRsQGTcQ_hy=-h7crynrbQ6ZYn6A@mail.gmail.com>
- <20211202090540.1f22fa39@canb.auug.org.au>
-Date:   Wed, 01 Dec 2021 23:17:16 +0100
-Message-ID: <87zgpk6kcz.ffs@tglx>
+ <20211202090540.1f22fa39@canb.auug.org.au> <87zgpk6kcz.ffs@tglx>
+Date:   Wed, 01 Dec 2021 23:19:40 +0100
+Message-ID: <87wnko6k8z.ffs@tglx>
 MIME-Version: 1.0
 Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Dec 02 2021 at 09:05, Stephen Rothwell wrote:
-> On Fri, 26 Nov 2021 11:01:52 +0100 Arnd Bergmann <arnd@arndb.de> wrote:
->> 
->> Thanks a lot for the report, I sent a fix now:
->> 
->> https://lore.kernel.org/lkml/20211126095852.455492-1-arnd@kernel.org
+On Wed, Dec 01 2021 at 23:17, Thomas Gleixner wrote:
+
+> On Thu, Dec 02 2021 at 09:05, Stephen Rothwell wrote:
+>> On Fri, 26 Nov 2021 11:01:52 +0100 Arnd Bergmann <arnd@arndb.de> wrote:
+>>> 
+>>> Thanks a lot for the report, I sent a fix now:
+>>> 
+>>> https://lore.kernel.org/lkml/20211126095852.455492-1-arnd@kernel.org
+>>
+>> I am still getting this failure (Arnd's fix has not been applied).
 >
-> I am still getting this failure (Arnd's fix has not been applied).
+> It got applied, but due to tip maintainer confusion the next branch was
+> not updated. Will be fixed tomorrow.
 
-It got applied, but due to tip maintainer confusion the next branch was
-not updated. Will be fixed tomorrow.
-
-Thanks,
-
-        tglx
+Actually now. So still today here :)

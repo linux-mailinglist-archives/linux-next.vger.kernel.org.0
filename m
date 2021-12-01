@@ -2,129 +2,166 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0CDC4644DE
-	for <lists+linux-next@lfdr.de>; Wed,  1 Dec 2021 03:26:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 825E746463F
+	for <lists+linux-next@lfdr.de>; Wed,  1 Dec 2021 06:06:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241292AbhLAC33 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 30 Nov 2021 21:29:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51378 "EHLO
+        id S241807AbhLAFJx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 1 Dec 2021 00:09:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346092AbhLAC30 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 30 Nov 2021 21:29:26 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 585A1C061574
-        for <linux-next@vger.kernel.org>; Tue, 30 Nov 2021 18:26:05 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id j6-20020a17090a588600b001a78a5ce46aso19837754pji.0
-        for <linux-next@vger.kernel.org>; Tue, 30 Nov 2021 18:26:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=p+T/s/A0Bb7ideIxi4HnU0n1FbcLj4pGMm6bWjeYUWw=;
-        b=5CRThis0ifM15sW/Zsd0ZLMtkRGO45myNoXx+5/ED11AyPOaU7XAuQsPE9oulNG6v0
-         wXcQ9BfmQ0q7P7B3oiMZYUgqeWhF82A1mns7qr9wTzQhd1hG3TEBm6qpL3RMS7JOsUEC
-         TD6ofVqh3E1C/ztxcntr/fWZzUbpnveqxK/sEvuhPMUNvbfA9FekmKqYxuGRJnfCYDID
-         QVM8PpijKdmBqnpAOmQ3UcQMslG/77jGWpGjDdCzubkFrYtxCmmbYjchwbRQ6N6Cx725
-         UISWol5ylWxhfp6GqM2CB/O0QZX0Qf9d7p9NbFcWya2vefpbSMCI8PZUxqUwy3/alNRh
-         CuwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=p+T/s/A0Bb7ideIxi4HnU0n1FbcLj4pGMm6bWjeYUWw=;
-        b=VNTCM1MPUHUiiN3c/HO2wI3au01ioARVmD46XMcvOPEmxtBdk+4SJdC3ZErvbnTzd4
-         hU+8L2+OhAz7iFDIKRtxnNagTzp8RiMiciU9c/StTe5fYhWXbLTxAxSRJSwIIwimF1kU
-         ASIaQJrAsKkWPmU6S7It0qusUt9M/39eOID8lTTLBEMnAUCzHmEyzgQ/9+QP1GCUqNQv
-         LwKwiho7z2x4QGGy/9+KWOjzIHY3178RM1tKm+4g/JFzqFxeojMYY59DdS0Mc9bJtKSY
-         L/HgElbSyXhXElczMTRoJ/sZxGiOnSvwepDyrqir+Dlwc2oQPxvzial7Hy343ECuMmJN
-         C3pw==
-X-Gm-Message-State: AOAM531FgVnTeH4p4uk5o04yUI7bFgN8f7xM10DH3iTI/jUS3yUKkRMB
-        /eCsTuRvzCt0uEasBv3xqriXBFYwi5pR+IIz
-X-Google-Smtp-Source: ABdhPJx5zItcVwG3f0xeGF4Qd9l/BDun98NkAouRVF8lFgChZnzPrhbnFY9MrXDI63/Zvl9sJGhx9A==
-X-Received: by 2002:a17:90a:eb03:: with SMTP id j3mr3609031pjz.149.1638325564767;
-        Tue, 30 Nov 2021 18:26:04 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id mu4sm4394757pjb.8.2021.11.30.18.26.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 18:26:04 -0800 (PST)
-Message-ID: <61a6dd3c.1c69fb81.156e4.d620@mx.google.com>
-Date:   Tue, 30 Nov 2021 18:26:04 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S234811AbhLAFJw (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 1 Dec 2021 00:09:52 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1701FC061574;
+        Tue, 30 Nov 2021 21:06:32 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J3n9x4sgjz4xR7;
+        Wed,  1 Dec 2021 16:06:29 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1638335190;
+        bh=tIXmFJB4Pv3ffFWXCgXpzhPi8XCIVcB/zJT8cO+Mf70=;
+        h=Date:From:To:Cc:Subject:From;
+        b=L89B5BTsvC8e0qND6rEmhcXWfLQdbwBTOL2AnkzaSa2a/+Ukg9uY1EDrGv9WJ46nD
+         8ftL4o6pUWCYeUj1P0uFdaRpA40YJf9SX28dMAfNVAYJKb9PSDn2oevNoD2P3EaH5R
+         7A9un+HlEh92QJHq7vow702+2ZDVfHMrywDS9v/+goAcIPIHDyFVxassFYXUmil+4M
+         NB/X3kXklVhG5RrF7vJkz8k/hPpfvZ0IsKIgjiQd2Jr7JNOhDMS5cgCeMdepSSBpbQ
+         u216z8DhRIQL243VbValGDSSNYFFnQxvtz4PZpQSLbHVSZ4q1emdScdBX7PjhuJeRP
+         K7cm2Hk9jrk5Q==
+Date:   Wed, 1 Dec 2021 16:06:26 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Xiaoming Ni <nixiaoming@huawei.com>,
+        Luis Chamberlain <mcgrof@kernel.org>
+Subject: linux-next: build failure after merge of the akpm tree
+Message-ID: <20211201160626.401d828d@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: next
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v5.16-rc3-294-g1df8f9137669c
-Subject: next/pending-fixes baseline: 305 runs,
- 1 regressions (v5.16-rc3-294-g1df8f9137669c)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: multipart/signed; boundary="Sig_/XI7hZZorkNhkMfJx3n5c/TS";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes baseline: 305 runs, 1 regressions (v5.16-rc3-294-g1df8f9=
-137669c)
+--Sig_/XI7hZZorkNhkMfJx3n5c/TS
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Regressions Summary
--------------------
+Hi all,
 
-platform        | arch | lab           | compiler | defconfig              =
-      | regressions
-----------------+------+---------------+----------+------------------------=
-------+------------
-bcm2836-rpi-2-b | arm  | lab-collabora | gcc-10   | multi_v7_defc...MB2_KER=
-NEL=3Dy | 1          =
+After merging the akpm tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
+drivers/base/firmware_loader/fallback_table.c:60:53: error: macro "EXPORT_S=
+YMBOL_NS_GPL" requires 2 arguments, but only 1 given
+   60 | EXPORT_SYMBOL_NS_GPL(register_firmware_config_sysctl);
+      |                                                     ^
+In file included from include/linux/linkage.h:7,
+                 from include/linux/printk.h:8,
+                 from include/asm-generic/bug.h:22,
+                 from arch/x86/include/asm/bug.h:84,
+                 from include/linux/bug.h:5,
+                 from include/linux/mmdebug.h:5,
+                 from include/linux/gfp.h:5,
+                 from include/linux/slab.h:15,
+                 from drivers/base/firmware_loader/fallback_table.c:6:
+include/linux/export.h:166: note: macro "EXPORT_SYMBOL_NS_GPL" defined here
+  166 | #define EXPORT_SYMBOL_NS_GPL(sym, ns) __EXPORT_SYMBOL(sym, "_gpl", =
+#ns)
+      |=20
+drivers/base/firmware_loader/fallback_table.c:60:1: error: data definition =
+has no type or storage class [-Werror]
+   60 | EXPORT_SYMBOL_NS_GPL(register_firmware_config_sysctl);
+      | ^~~~~~~~~~~~~~~~~~~~
+drivers/base/firmware_loader/fallback_table.c:60:1: error: type defaults to=
+ 'int' in declaration of 'EXPORT_SYMBOL_NS_GPL' [-Werror=3Dimplicit-int]
+drivers/base/firmware_loader/fallback_table.c:67:55: error: macro "EXPORT_S=
+YMBOL_NS_GPL" requires 2 arguments, but only 1 given
+   67 | EXPORT_SYMBOL_NS_GPL(unregister_firmware_config_sysctl);
+      |                                                       ^
+In file included from include/linux/linkage.h:7,
+                 from include/linux/printk.h:8,
+                 from include/asm-generic/bug.h:22,
+                 from arch/x86/include/asm/bug.h:84,
+                 from include/linux/bug.h:5,
+                 from include/linux/mmdebug.h:5,
+                 from include/linux/gfp.h:5,
+                 from include/linux/slab.h:15,
+                 from drivers/base/firmware_loader/fallback_table.c:6:
+include/linux/export.h:166: note: macro "EXPORT_SYMBOL_NS_GPL" defined here
+  166 | #define EXPORT_SYMBOL_NS_GPL(sym, ns) __EXPORT_SYMBOL(sym, "_gpl", =
+#ns)
+      |=20
+drivers/base/firmware_loader/fallback_table.c:67:1: error: data definition =
+has no type or storage class [-Werror]
+   67 | EXPORT_SYMBOL_NS_GPL(unregister_firmware_config_sysctl);
+      | ^~~~~~~~~~~~~~~~~~~~
+drivers/base/firmware_loader/fallback_table.c:67:1: error: type defaults to=
+ 'int' in declaration of 'EXPORT_SYMBOL_NS_GPL' [-Werror=3Dimplicit-int]
 
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v5.16-rc3-294-g1df8f9137669c/plan/baseline/
+Caused by commit
 
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v5.16-rc3-294-g1df8f9137669c
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      1df8f9137669ca06141f13e591960c0b860a7b06 =
+  8419b29bbf54 ("firmware_loader-move-firmware-sysctl-to-its-own-files-fix-=
+fix")
 
+I have applied the following for today.
 
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Wed, 1 Dec 2021 15:58:34 +1100
+Subject: [PATCH] firmware_loader-move-firmware-sysctl-to-its-own-files-fix-3
 
-Test Regressions
----------------- =
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/base/firmware_loader/fallback_table.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/base/firmware_loader/fallback_table.c b/drivers/base/f=
+irmware_loader/fallback_table.c
+index c3fb8292acb8..e5ac098d0742 100644
+--- a/drivers/base/firmware_loader/fallback_table.c
++++ b/drivers/base/firmware_loader/fallback_table.c
+@@ -57,13 +57,13 @@ int register_firmware_config_sysctl(void)
+ 		return -ENOMEM;
+ 	return 0;
+ }
+-EXPORT_SYMBOL_NS_GPL(register_firmware_config_sysctl);
++EXPORT_SYMBOL_NS_GPL(register_firmware_config_sysctl, FIRMWARE_LOADER_PRIV=
+ATE);
+=20
+ void unregister_firmware_config_sysctl(void)
+ {
+ 	unregister_sysctl_table(firmware_config_sysct_table_header);
+ 	firmware_config_sysct_table_header =3D NULL;
+ }
+-EXPORT_SYMBOL_NS_GPL(unregister_firmware_config_sysctl);
++EXPORT_SYMBOL_NS_GPL(unregister_firmware_config_sysctl, FIRMWARE_LOADER_PR=
+IVATE);
+=20
+ #endif /* CONFIG_SYSCTL */
+--=20
+2.33.0
 
+--=20
+Cheers,
+Stephen Rothwell
 
-platform        | arch | lab           | compiler | defconfig              =
-      | regressions
-----------------+------+---------------+----------+------------------------=
-------+------------
-bcm2836-rpi-2-b | arm  | lab-collabora | gcc-10   | multi_v7_defc...MB2_KER=
-NEL=3Dy | 1          =
+--Sig_/XI7hZZorkNhkMfJx3n5c/TS
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
 
-  Details:     https://kernelci.org/test/plan/id/61a6af6ac92da911bf18f6c9
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGnAtIACgkQAVBC80lX
+0Gx1qQf+NtczOB9oceo3OcmUOy3zCA9LGMJUcc0iayyxSsWVq2qDYDw3/hBK+tTx
+IUNY7Ss4B/VtNMzSciIkEnR2badixqP+GoM40os8FTbNm8uDJbnyo8UKxtebAmmg
+BejP7atiGFlr1+UMRbTykGhFHKXdYKGqrPyWvHfG6f2ANgzAZYwZHJ0g1V2eOpV2
+l1Qd+VL/Z24WQqRt7oSEtRv5dsTc/czrqGl9Dz03jx52n4ykL+WWBnHgT9luG2G/
+wr31o+z+GMqVyOQmnEiND9i1B+yK8pZ7JptXFOMfSkRrIbqg/oIJg8Sy/QaX1h6t
+8dYjaTFLv/m7vLB5d1KhUbqjE6qIYA==
+=RZWg
+-----END PGP SIGNATURE-----
 
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.16-rc3-2=
-94-g1df8f9137669c/arm/multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/la=
-b-collabora/baseline-bcm2836-rpi-2-b.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.16-rc3-2=
-94-g1df8f9137669c/arm/multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/la=
-b-collabora/baseline-bcm2836-rpi-2-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/61a6af6ac92da911bf18f=
-6ca
-        failing since 20 days (last pass: v5.15-rc7-176-gbfbd58926fc5, firs=
-t fail: v5.15-12053-g6f9f2ed9499c) =
-
- =20
+--Sig_/XI7hZZorkNhkMfJx3n5c/TS--

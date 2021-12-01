@@ -2,37 +2,39 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2900C4658DE
-	for <lists+linux-next@lfdr.de>; Wed,  1 Dec 2021 23:06:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BDE24658FC
+	for <lists+linux-next@lfdr.de>; Wed,  1 Dec 2021 23:17:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353268AbhLAWJT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 1 Dec 2021 17:09:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39254 "EHLO
+        id S1353496AbhLAWVM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 1 Dec 2021 17:21:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353484AbhLAWJH (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 1 Dec 2021 17:09:07 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 554DBC0613E1;
-        Wed,  1 Dec 2021 14:05:43 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J4Cnx2BJ6z4xPv;
-        Thu,  2 Dec 2021 09:05:41 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1638396342;
-        bh=3qyA6EPZ/k+73zUURyjTLztuFtvmpskxuyB/RgDSpXY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ABVWzP1Bcs4FrSIc81Sv5dcAwTqfbT3oz64tf+VWZKVB/YpUseaawjSX4wA7qvdAT
-         cHqICEMZoayXnqjba0/iaQ5L4dqE6O3jnj4a4j4KXTOMdCMNDZzOu1SEzXlDrKELma
-         p753NqILH9p5JIOmvSsai8x4ezknC7u6rDyVyckOlxTrcP0QOKLLnQAeZrYKQfu5uO
-         y3lNcYEOad+RPRopXjXNWJ9hBg/chNFT3SKWpeJmBx9Rrc/hgxe1o9nS1Bcn3fbmCp
-         v9hrMRvfQ0dBT29mbXJT00qqW+irWHK6rwF+Jx+iIY+nEJ0ztx1aKUvwpUjORwSF6R
-         rmrZTXkHln+Yg==
-Date:   Thu, 2 Dec 2021 09:05:40 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>,
+        with ESMTP id S1353498AbhLAWUm (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 1 Dec 2021 17:20:42 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 080E8C061574;
+        Wed,  1 Dec 2021 14:17:18 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1638397036;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JEntfi+R1B0LdGVSzyc+PZLj+JC9XJ08L6abd7hjSZI=;
+        b=gjlu2BnSyIsdoFUY93w/MS/G44ArV1VpPX9nPvKuVsKJkXsdZe0D5NrSVMlp/s8yWc3qA/
+        Xn6LLYM96/sekiGyS8/WcL/R/jO7vAo8Pon5Aotq4vqO8l2TnmMNNx8i6/LmD8NrQXMTvx
+        FKK6GwdeSbpeG/FtFS7np72Zi8mqQKuo4BBhjM/GgluNZ+oveio/6KeWab1wk831B1RDvt
+        2Eu6X9iqCJ3yX76iN4DSPe2LeY2BE5qmPccGjcvbixjeN24iBHNAFPTAqpmGAG0EMd9sFs
+        025hRKxOg8+pP7D2RJZb5dXpku3kr+eLtO2dgn944UkVGCbrhtvlcZl9n6AxQQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1638397036;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JEntfi+R1B0LdGVSzyc+PZLj+JC9XJ08L6abd7hjSZI=;
+        b=z3NRdTjrWa4gKapXO/e5RBnmEjy75iPzjHnOv78hif7BdRkrBb7XwnFJadjU57et3rUi2r
+        vV4vOwWaiQ+aQlCQ==
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Ingo Molnar <mingo@redhat.com>,
         "H. Peter Anvin" <hpa@zytor.com>,
         Peter Zijlstra <peterz@infradead.org>
@@ -40,72 +42,30 @@ Cc:     Arnd Bergmann <arnd@arndb.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
 Subject: Re: linux-next: build failure after merge of the tip tree
-Message-ID: <20211202090540.1f22fa39@canb.auug.org.au>
-In-Reply-To: <CAK8P3a078LiivyzUiH+D--iRsQGTcQ_hy=-h7crynrbQ6ZYn6A@mail.gmail.com>
+In-Reply-To: <20211202090540.1f22fa39@canb.auug.org.au>
 References: <20211126145201.5aefa68c@canb.auug.org.au>
-        <CAK8P3a078LiivyzUiH+D--iRsQGTcQ_hy=-h7crynrbQ6ZYn6A@mail.gmail.com>
+ <CAK8P3a078LiivyzUiH+D--iRsQGTcQ_hy=-h7crynrbQ6ZYn6A@mail.gmail.com>
+ <20211202090540.1f22fa39@canb.auug.org.au>
+Date:   Wed, 01 Dec 2021 23:17:16 +0100
+Message-ID: <87zgpk6kcz.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/uaPmmuwOfy6QSXmSWCUZ8uw";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/uaPmmuwOfy6QSXmSWCUZ8uw
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi all,
-
-On Fri, 26 Nov 2021 11:01:52 +0100 Arnd Bergmann <arnd@arndb.de> wrote:
+On Thu, Dec 02 2021 at 09:05, Stephen Rothwell wrote:
+> On Fri, 26 Nov 2021 11:01:52 +0100 Arnd Bergmann <arnd@arndb.de> wrote:
+>> 
+>> Thanks a lot for the report, I sent a fix now:
+>> 
+>> https://lore.kernel.org/lkml/20211126095852.455492-1-arnd@kernel.org
 >
-> On Fri, Nov 26, 2021 at 4:52 AM Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
-> >
-> > After merging the tip tree, today's linux-next build (sparc defconfig)
-> > failed like this:
-> >
-> > In file included from arch/sparc/include/asm/futex_32.h:4:0,
-> >                  from arch/sparc/include/asm/futex.h:7,
-> >                  from kernel/futex/futex.h:12,
-> >                  from kernel/futex/core.c:41:
-> > kernel/futex/core.c: In function 'futex_cmpxchg_value_locked':
-> > include/asm-generic/futex.h:17:2: error: implicit declaration of functi=
-on 'futex_atomic_cmpxchg_inatomic_local_generic'; did you mean 'futex_atomi=
-c_cmpxchg_inatomic_local'? [-Werror=3Dimplicit-function-declaration]
-> >   futex_atomic_cmpxchg_inatomic_local_generic(uval, uaddr, oldval, newv=
-al)
-> >   ^
-> > include/asm-generic/futex.h:17:2: note: in definition of macro 'futex_a=
-tomic_cmpxchg_inatomic'
-> >   futex_atomic_cmpxchg_inatomic_local_generic(uval, uaddr, oldval, newv=
-al)
-> >   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ =20
->=20
-> Thanks a lot for the report, I sent a fix now:
->=20
-> https://lore.kernel.org/lkml/20211126095852.455492-1-arnd@kernel.org
+> I am still getting this failure (Arnd's fix has not been applied).
 
-I am still getting this failure (Arnd's fix has not been applied).
+It got applied, but due to tip maintainer confusion the next branch was
+not updated. Will be fixed tomorrow.
 
---=20
-Cheers,
-Stephen Rothwell
+Thanks,
 
---Sig_/uaPmmuwOfy6QSXmSWCUZ8uw
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGn8bQACgkQAVBC80lX
-0Gzpnwf/TQuQ9cTH3hYjEeSGoPCK8aIZc4kiXWuyeI7FcrDXd7TUskdj+B30F1kH
-aZj24qY4d1fogfThm47r4t24lMhpCoY4pvDIU9clYPFPxkuIUeW5ysZHvIRw2AAq
-dcVGBkeQJ3uhlIzy6aUqCPDHwp8BPne5QVuq+/DXpmyQU/LUPte0xTjRuvjNtkVo
-InO1dRMvfOT+pjwoEky1mW2N4oqKQOvM06FCzP1LnGvCmuqjELoRjOxCe2oEcAia
-45CDQBN6rYRInwg7+pgX74IMw4V9cknRTTFZ9DTpuLF6RhC7TBQToKWPyZFJBGVa
-ohvcZs9oBK15i2N7BPlG42FZVULmiA==
-=2Y0+
------END PGP SIGNATURE-----
-
---Sig_/uaPmmuwOfy6QSXmSWCUZ8uw--
+        tglx

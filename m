@@ -2,107 +2,110 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28470465887
-	for <lists+linux-next@lfdr.de>; Wed,  1 Dec 2021 22:46:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2900C4658DE
+	for <lists+linux-next@lfdr.de>; Wed,  1 Dec 2021 23:06:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244758AbhLAVtT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 1 Dec 2021 16:49:19 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:44255 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352964AbhLAVsZ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 1 Dec 2021 16:48:25 -0500
+        id S1353268AbhLAWJT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 1 Dec 2021 17:09:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39254 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353484AbhLAWJH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 1 Dec 2021 17:09:07 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 554DBC0613E1;
+        Wed,  1 Dec 2021 14:05:43 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J4CKZ5gNJz4xR5;
-        Thu,  2 Dec 2021 08:44:34 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J4Cnx2BJ6z4xPv;
+        Thu,  2 Dec 2021 09:05:41 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1638395075;
-        bh=pL1g5aLwuieOmlDprmZe4BgNUXg+6/N4bWtIyP0vgEM=;
+        s=201702; t=1638396342;
+        bh=3qyA6EPZ/k+73zUURyjTLztuFtvmpskxuyB/RgDSpXY=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=QSf0VmDzEbeUjKslzmibtlgxpzNo4fLHrUuzCLCzL0/gdA0jdXme7BpnOgWCjmQuf
-         LTiHr/tPD4wfVVO9nzl4rHj1ponEiLY5kHl11Ed1flts7xkn58uuwJO9T88VOfsWNL
-         zAgTsIeChoZ57rxUqlNOac2WJ9KjMhajQekrTCGlLfNQCqCe3e099kIj7qBUG/H5yu
-         O//UYTVuw4FflcQ4ixEOWepbEGN6hGz3EyxoQ5pLpDYmY+rXeswfkDEdqLv5asG86b
-         KW02gVyewn54tFj9XWvVrl3wxVAi5lSlvKbKaC9iyLCSD1pQftN7dvkzHH19HMg/gl
-         Jm9FYOS+kE+gQ==
-Date:   Thu, 2 Dec 2021 08:44:34 +1100
+        b=ABVWzP1Bcs4FrSIc81Sv5dcAwTqfbT3oz64tf+VWZKVB/YpUseaawjSX4wA7qvdAT
+         cHqICEMZoayXnqjba0/iaQ5L4dqE6O3jnj4a4j4KXTOMdCMNDZzOu1SEzXlDrKELma
+         p753NqILH9p5JIOmvSsai8x4ezknC7u6rDyVyckOlxTrcP0QOKLLnQAeZrYKQfu5uO
+         y3lNcYEOad+RPRopXjXNWJ9hBg/chNFT3SKWpeJmBx9Rrc/hgxe1o9nS1Bcn3fbmCp
+         v9hrMRvfQ0dBT29mbXJT00qqW+irWHK6rwF+Jx+iIY+nEJ0ztx1aKUvwpUjORwSF6R
+         rmrZTXkHln+Yg==
+Date:   Thu, 2 Dec 2021 09:05:40 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Xiaoming Ni <nixiaoming@huawei.com>,
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: boot failure after merge of the akpm tree
-Message-ID: <20211202084434.7d9bde87@canb.auug.org.au>
-In-Reply-To: <YafJY3rXDYnjK/gs@bombadil.infradead.org>
-References: <20211130184622.71be17e0@canb.auug.org.au>
-        <YaZPoEHL2svLLBwS@bombadil.infradead.org>
-        <YafJY3rXDYnjK/gs@bombadil.infradead.org>
+Subject: Re: linux-next: build failure after merge of the tip tree
+Message-ID: <20211202090540.1f22fa39@canb.auug.org.au>
+In-Reply-To: <CAK8P3a078LiivyzUiH+D--iRsQGTcQ_hy=-h7crynrbQ6ZYn6A@mail.gmail.com>
+References: <20211126145201.5aefa68c@canb.auug.org.au>
+        <CAK8P3a078LiivyzUiH+D--iRsQGTcQ_hy=-h7crynrbQ6ZYn6A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/KyhLo5LQ9OZNB5jOr+dES1+";
+Content-Type: multipart/signed; boundary="Sig_/uaPmmuwOfy6QSXmSWCUZ8uw";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/KyhLo5LQ9OZNB5jOr+dES1+
+--Sig_/uaPmmuwOfy6QSXmSWCUZ8uw
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Luis,
+Hi all,
 
-On Wed, 1 Dec 2021 11:13:39 -0800 Luis Chamberlain <mcgrof@kernel.org> wrot=
-e:
+On Fri, 26 Nov 2021 11:01:52 +0100 Arnd Bergmann <arnd@arndb.de> wrote:
 >
-> On Tue, Nov 30, 2021 at 08:21:52AM -0800, Luis Chamberlain wrote:
-> > On Tue, Nov 30, 2021 at 06:46:22PM +1100, Stephen Rothwell wrote: =20
-> > > Bisected to commit
-> > >=20
-> > >   f00ff38c1dfa ("sysctl: add and use base directory declarer and regi=
-stration helper")
-> > >=20
-> > > I have reverted that complete 6 patch series for today. =20
-> >=20
-> > I'll be trying to reproduce and fix, thanks for the report! =20
+> On Fri, Nov 26, 2021 at 4:52 AM Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+> >
+> > After merging the tip tree, today's linux-next build (sparc defconfig)
+> > failed like this:
+> >
+> > In file included from arch/sparc/include/asm/futex_32.h:4:0,
+> >                  from arch/sparc/include/asm/futex.h:7,
+> >                  from kernel/futex/futex.h:12,
+> >                  from kernel/futex/core.c:41:
+> > kernel/futex/core.c: In function 'futex_cmpxchg_value_locked':
+> > include/asm-generic/futex.h:17:2: error: implicit declaration of functi=
+on 'futex_atomic_cmpxchg_inatomic_local_generic'; did you mean 'futex_atomi=
+c_cmpxchg_inatomic_local'? [-Werror=3Dimplicit-function-declaration]
+> >   futex_atomic_cmpxchg_inatomic_local_generic(uval, uaddr, oldval, newv=
+al)
+> >   ^
+> > include/asm-generic/futex.h:17:2: note: in definition of macro 'futex_a=
+tomic_cmpxchg_inatomic'
+> >   futex_atomic_cmpxchg_inatomic_local_generic(uval, uaddr, oldval, newv=
+al)
+> >   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ =20
 >=20
-> OK please try this patch, I can boot with this just fine on ppc64le:
+> Thanks a lot for the report, I sent a fix now:
 >=20
-> diff --git a/include/linux/sysctl.h b/include/linux/sysctl.h
-> index 70acd2a100fd..180adf7da785 100644
-> --- a/include/linux/sysctl.h
-> +++ b/include/linux/sysctl.h
-> @@ -201,6 +201,7 @@ static struct ctl_table _name##_base_table[] =3D {			\
->  		.mode		=3D 0555,					\
->  		.child		=3D _table,				\
->  	},								\
-> +	{ },								\
->  }
-> =20
->  extern int __register_sysctl_base(struct ctl_table *base_table);
+> https://lore.kernel.org/lkml/20211126095852.455492-1-arnd@kernel.org
 
-That fixes it for me.  I will use that in linux-next today instead of
-the reverts.
+I am still getting this failure (Arnd's fix has not been applied).
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/KyhLo5LQ9OZNB5jOr+dES1+
+--Sig_/uaPmmuwOfy6QSXmSWCUZ8uw
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGn7MIACgkQAVBC80lX
-0Gzudwf/boO5mMavAkAY/letiXOzJe3S2dyKbHVLC3hRLV9/VVkGWlt4j4thcUyd
-0KtzzenfGhuCc2jpztuT/VmCF0C1kmwKu1r9mQ1TZ6OeIWGeQEs4LF3s8N1dYb/V
-IL9lAheiP4dFZkn4ZUtAyf98IJVQCw32pPIrpCmVsoTSEJaq3MJdG4pDG31YBwRc
-eeCvccB/vv8mB/HaCxnuyqu2AEf7JOFQpuuPI0cITFQlvxMESA/YLGTBo/SNjlkV
-H3cwAIe2GxsLax7pBInQSh/rbjvCsRiX81qKyqfSEYjQfEBvhx3p5DiXHXIxAGn6
-F4DGR46+rhp1jwUdXIHpKoBZPtYdkw==
-=tQ70
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGn8bQACgkQAVBC80lX
+0Gzpnwf/TQuQ9cTH3hYjEeSGoPCK8aIZc4kiXWuyeI7FcrDXd7TUskdj+B30F1kH
+aZj24qY4d1fogfThm47r4t24lMhpCoY4pvDIU9clYPFPxkuIUeW5ysZHvIRw2AAq
+dcVGBkeQJ3uhlIzy6aUqCPDHwp8BPne5QVuq+/DXpmyQU/LUPte0xTjRuvjNtkVo
+InO1dRMvfOT+pjwoEky1mW2N4oqKQOvM06FCzP1LnGvCmuqjELoRjOxCe2oEcAia
+45CDQBN6rYRInwg7+pgX74IMw4V9cknRTTFZ9DTpuLF6RhC7TBQToKWPyZFJBGVa
+ohvcZs9oBK15i2N7BPlG42FZVULmiA==
+=2Y0+
 -----END PGP SIGNATURE-----
 
---Sig_/KyhLo5LQ9OZNB5jOr+dES1+--
+--Sig_/uaPmmuwOfy6QSXmSWCUZ8uw--

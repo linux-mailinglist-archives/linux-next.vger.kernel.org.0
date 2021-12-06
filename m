@@ -2,129 +2,91 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BDFF468FE1
-	for <lists+linux-next@lfdr.de>; Mon,  6 Dec 2021 05:50:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DE444690A5
+	for <lists+linux-next@lfdr.de>; Mon,  6 Dec 2021 08:08:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230457AbhLFExv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 5 Dec 2021 23:53:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54498 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229881AbhLFExu (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 5 Dec 2021 23:53:50 -0500
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6DDBC0613F8
-        for <linux-next@vger.kernel.org>; Sun,  5 Dec 2021 20:50:22 -0800 (PST)
-Received: by mail-pg1-x529.google.com with SMTP id s137so9313143pgs.5
-        for <linux-next@vger.kernel.org>; Sun, 05 Dec 2021 20:50:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=3Rop6q3Nx+/MmGdLNbjmxWYSsVsnzD07Bs4k8wAtRq8=;
-        b=0HL0K2wAKe3hcwgT8QvpxVpbhkJz4pViXeu5Lo4XzonYjjZE7rLLNHdIeo63uGlh0h
-         5JT/14l/1DOdhBCT26iZc4EYQrWCA3kFU48H70jfYJl8BEMX/SwmC/yqAIXskt9vK3Qb
-         DsKU5yWTf6T1cu/lr3mWG2EnPQ32NP2SaES3OUvRfQJLm8Q77oZnMjFqpow+eU9NRBRo
-         eMZM5Te2ePcdvMY74DgZs1y7KpnKSYkuQnhd7shp7yCCPDBaNKpwm3OO+IVOT+3v/ka5
-         paj/jvi6UMEx2OJmX4jCYJ42WjV8LF6YXLwFMB0pNGAg1FSzpLUOEHu0TPg9O6Gi5Ehh
-         vKHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=3Rop6q3Nx+/MmGdLNbjmxWYSsVsnzD07Bs4k8wAtRq8=;
-        b=Wcct+KqWU8UHn4VxQdUvXtZ1PU6luk9U6Ixpor1pX27/l+YcpuYJgyJxFjLr32rRdZ
-         emU5uKrgsOetyadKQoZ2/bUmTQLYddoz7pDDoYThPOuYzlJenjPTlDVJEdIO5NFAaaCH
-         HGsRwDSM7mwh9j3LGY6nUYzXS92/Gf48FPRaubE/V9aikrMfeSoW2XGPsfLXOd7vhtdE
-         jsFJZ9XgOsqk6hdLyKb6rQcAUwq3tdIVkhrcIyB2CqS7l2A7i4SG24fUmUf5J8xxMD9K
-         wUyw3Qm8jXdiwHrhazF9JAF7C5jvXAIoWEwt6hA/Z5D9fk3liovG3OD/VOnoGdIArnrN
-         Y69w==
-X-Gm-Message-State: AOAM531c7Yq5n23RU/k4ybcznesJ7SqYvUJFxi/BiBvNpWmoRHV4yjjX
-        eA7qvngwg9z617U5u7cT4BHwBkHaDKBprYEO
-X-Google-Smtp-Source: ABdhPJzhnJTlxSiIjWWqEBichcBYKXYf6Z9YG6z1pU81gDY1gTqI5ezsMIcAuoZjoVjFE5tUqQiRMg==
-X-Received: by 2002:a63:8541:: with SMTP id u62mr16856463pgd.130.1638766217134;
-        Sun, 05 Dec 2021 20:50:17 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id m76sm3578321pfd.160.2021.12.05.20.50.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Dec 2021 20:50:16 -0800 (PST)
-Message-ID: <61ad9688.1c69fb81.68eda.bc71@mx.google.com>
-Date:   Sun, 05 Dec 2021 20:50:16 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        id S238277AbhLFHMH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 6 Dec 2021 02:12:07 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:33929 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238261AbhLFHMH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 6 Dec 2021 02:12:07 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J6vfY365mz4xgq;
+        Mon,  6 Dec 2021 18:08:37 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1638774517;
+        bh=74ug/3gxfB019QMgyEoJwVlEbtheSzN665REw1NK2i0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=LDibWAtIzGieSUtIOTeWfCIwiEnFPTpC9WKUsn64NlEixffAPNfapIu8210Rqiwgs
+         XMIaT2R2PidnwVpMIMUugQ8h7TQWfYD85uDRpcp5isIbjqXqeDN5mXEWEUirY5aH7O
+         Vekrk2z5pShPsmcjMhxrNFIdNqYBg5HqaxcNrHCoov5laa1qa58zB9WSY324Txj68V
+         6FdL1qaTvamQ7i0jAyk/Fas9Te3WoneA28Xk0ljGSLJxzg3GXD/yj0ks8VSYkN6jUL
+         Zx+tNQcv+TR1RgxUrPcTcLLWyL2LWiAw8qIJ/nMVBX9zwxbWOE7El4lhoAxUetInId
+         g7j/9kcMb6oBg==
+Date:   Mon, 6 Dec 2021 18:08:36 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the fscache tree
+Message-ID: <20211206180836.45cf22cf@canb.auug.org.au>
+In-Reply-To: <20211130152753.6899aa0c@canb.auug.org.au>
+References: <20211130152753.6899aa0c@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v5.16-rc3-510-g593a87c6eb98
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-Subject: next/pending-fixes baseline: 294 runs,
- 1 regressions (v5.16-rc3-510-g593a87c6eb98)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: multipart/signed; boundary="Sig_/olqxnyn6Qcc3t0fNb2ckReG";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes baseline: 294 runs, 1 regressions (v5.16-rc3-510-g593a87=
-c6eb98)
+--Sig_/olqxnyn6Qcc3t0fNb2ckReG
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Regressions Summary
--------------------
+Hi all,
 
-platform        | arch | lab           | compiler | defconfig              =
-      | regressions
-----------------+------+---------------+----------+------------------------=
-------+------------
-bcm2836-rpi-2-b | arm  | lab-collabora | gcc-10   | multi_v7_defc...MB2_KER=
-NEL=3Dy | 1          =
+On Tue, 30 Nov 2021 15:27:53 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> After merging the fscache tree, today's linux-next build (arm64 defconfig)
+> produced this warning:
+>=20
+> fs/9p/vfs_addr.c: In function 'v9fs_release_page':
+> fs/9p/vfs_addr.c:140:16: warning: unused variable 'inode' [-Wunused-varia=
+ble]
+>   140 |  struct inode *inode =3D folio_inode(folio);
+>       |                ^~~~~
+>=20
+> Introduced by commit
+>=20
+>   12b841dc2cfd ("9p: Copy local writes to the cache when writing to the s=
+erver")
 
+Still getting this ... It will cause build failures for any config with
+CONFIG_9P_FSCACHE not set and CONFIG_WERROR set
 
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v5.16-rc3-510-g593a87c6eb98/plan/baseline/
+--=20
+Cheers,
+Stephen Rothwell
 
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v5.16-rc3-510-g593a87c6eb98
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      593a87c6eb985acbc6c7fb61da3180736626c1b1 =
+--Sig_/olqxnyn6Qcc3t0fNb2ckReG
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGttvQACgkQAVBC80lX
+0GzSFAf/ecxcFZnmXLcioNf0YPU/1gWJq0X4Ry2YBAqEUsL4j4NmV1bQWwY+nc8c
+BJoAOIvoIW1laoZbSokdQix5wa3UuiDkO4RYJIXnjSWjt1P5wfYqzNvOqdTlYfJF
+T3EbZajZijTv4jSlyLEa7GpgW9+w2ei/1eRwaYSOGTUip55XOvCXhgdp33kgTorK
+qYQUdIbxwhgIvGe0mCozsBVPPa6kztNMl/v3f6V2bQtEAf3VURx3LXuxpiEIwL24
+oBxYTwfQ5FhdlfvgSFId+NOUVySfTRizvZt6b9jjYsJGHtGAHLEhzdwacfx4/oG5
+bTtZAnTlfwP+JusIgWLwE0BFxm99vg==
+=FJT7
+-----END PGP SIGNATURE-----
 
-Test Regressions
----------------- =
-
-
-
-platform        | arch | lab           | compiler | defconfig              =
-      | regressions
-----------------+------+---------------+----------+------------------------=
-------+------------
-bcm2836-rpi-2-b | arm  | lab-collabora | gcc-10   | multi_v7_defc...MB2_KER=
-NEL=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/61ad698a325f32c0e01a94c1
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.16-rc3-5=
-10-g593a87c6eb98/arm/multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab=
--collabora/baseline-bcm2836-rpi-2-b.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.16-rc3-5=
-10-g593a87c6eb98/arm/multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab=
--collabora/baseline-bcm2836-rpi-2-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/61ad698a325f32c0e01a9=
-4c2
-        failing since 26 days (last pass: v5.15-rc7-176-gbfbd58926fc5, firs=
-t fail: v5.15-12053-g6f9f2ed9499c) =
-
- =20
+--Sig_/olqxnyn6Qcc3t0fNb2ckReG--

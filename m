@@ -2,95 +2,107 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B44A46B176
-	for <lists+linux-next@lfdr.de>; Tue,  7 Dec 2021 04:23:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECC3C46B21C
+	for <lists+linux-next@lfdr.de>; Tue,  7 Dec 2021 06:13:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234050AbhLGD0j (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 6 Dec 2021 22:26:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59246 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233915AbhLGD0j (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 6 Dec 2021 22:26:39 -0500
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9F84C061746;
-        Mon,  6 Dec 2021 19:23:09 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id f186so37051186ybg.2;
-        Mon, 06 Dec 2021 19:23:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MW07K0MrFAu2xQfDoW0bQgBPKA2ToS58ph8BV+OA0js=;
-        b=fqTDqw8WQYbT/xGm7g48YauGBVFiUdsVqnt6pfOV3d2dvIXHKjBOuRpWKewZtWoSWP
-         S5iPCkfMjN4CMXSA31GYUSde7rnihTwKcbxEQxVbZFMndOaGy73CAmWkSu1mQkfkXAIl
-         c+GRD2r3/5FWP2JLqW7iD0TXkX3dcFiQvexhlC6PIGjr4cRC6bCbhw1WeRAWyO9+a4Ql
-         ViPf2f9vR58J5b9zaFRqcX1AXgxphd9Cj/Itf5Jj4ax97O6oKY9bll0RueDE575VbGzl
-         aVzA3m4DDVCoOiTpNJxNAZ6log+MthWS3RNnNLnndOIecdQTEmA6PAUkr+hdjWQNy642
-         U5Fg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MW07K0MrFAu2xQfDoW0bQgBPKA2ToS58ph8BV+OA0js=;
-        b=5J15V5LhoEUOm6tQ9KDbazLmLWhWLzwBYt4X8JLjae8dvSmFVH6HLXqhS+oovB0IHs
-         vynUQ1tuXaDJBRiF0uaEMnemEOijkKNYjDl5WbOq4ROxLba3n9b0aVCTuJPBfOl49EbN
-         +0YcvRxYGfoul0+9//rGsMQ8pnfdK9mx03uqOuW1cv70TYAtNzBqyXQGyD47IrsK6sFu
-         eAh7gidtCThQ2iXS0/HjoZTZ3HfMmkOpE2hD4k0k9Um0WR/N2ScLCfQskgrtmqb2xFSf
-         /25F5MRVKZKcQgxHrKnUSvqbT14IyR57d2PHxfsABBWZlXyMEk5nBBi4xGTnhAKjgwIf
-         u7Nw==
-X-Gm-Message-State: AOAM533adS3pM/DiE13i7HbHnnd0g7jj6O7DhAv1VljLBd0RtOgc40JG
-        LKsfDvcWnhZTo2N1uT+LB4ccV80opX06BQNZWi4=
-X-Google-Smtp-Source: ABdhPJycHxvJtKMzj7FhQDNdExGHKoDBkSNC85yJuGrUBZACR3dT6+M2BSA9iN+WDbkAIwOrxM1suydz9DwJDfMkqOM=
-X-Received: by 2002:a25:abaa:: with SMTP id v39mr47466264ybi.367.1638847389122;
- Mon, 06 Dec 2021 19:23:09 -0800 (PST)
-MIME-Version: 1.0
-References: <20211206105530.0cd0a147@canb.auug.org.au> <20211206114348.37971224@canb.auug.org.au>
-In-Reply-To: <20211206114348.37971224@canb.auug.org.au>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 6 Dec 2021 19:22:58 -0800
-Message-ID: <CAEf4BzbiXhNk5xVQnZy11R697jmZEEQePwpSSNu+00x8hZ+Z1g@mail.gmail.com>
-Subject: Re: linux-next: build warning after merge of the bpf-next tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
+        id S229730AbhLGFRC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 7 Dec 2021 00:17:02 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:50521 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229523AbhLGFRC (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 7 Dec 2021 00:17:02 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J7T3C0T05z4xgY;
+        Tue,  7 Dec 2021 16:13:27 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1638854010;
+        bh=3+qmB/ds23kimJCqQdonk71tq0ufD8t/epgsmFU3AoA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=fQhGxMzrS133Xz++LKf/fs8kI0WWBwmHzhFLDCUp16pRBBsEyVx7sMkDmlBxP/6op
+         O5Y6xqihmxOifVhysLXv45Ti/pcTL/mu+wJaMCQCOA65frb6id11Y/nh4NT71OlaJb
+         0VYkKgXFMH8+Hx24ewVRLYVxKtVzWVs/wn6Y9NIgVqh3F4HlnWdAle4z+PtsmuZbEp
+         KP9RSN04j0s2P+Xz2IeasAG7y0to5SZ51mfpJtp+zE+rsPKOImrJdeFql9QN7TXgkI
+         O0xlku+q9N28/01iF0/qdsEpGYOpDv5czojAbEWQs5H4kuMhzMc3UvTi7wrsb8iD3U
+         +qMCh0pCwwMwA==
+Date:   Tue, 7 Dec 2021 16:13:26 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Adam Bratschi-Kaye <ark.email@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Antonio Terceiro <antonio.terceiro@linaro.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Boris-Chengbiao Zhou <bobo1239@web.de>,
+        Daniel Xu <dxu@dxuuu.xyz>,
+        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
+        Douglas Su <d0u9.su@outlook.com>, Finn Behrens <me@kloenk.de>,
+        Gary Guo <gary@garyguo.net>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>
+Subject: linux-next: manual merge of the rust tree with the kbuild tree
+Message-ID: <20211207161326.22d81aaf@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/6aFJR8PkEMnhtrWICOf5Tma";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Sun, Dec 5, 2021 at 4:44 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> On Mon, 6 Dec 2021 10:55:30 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >
-> > After merging the bpf-next tree, today's linux-next build (powerpc
-> > ppc64_defconfig) produced this warning:
-> >
-> > kernel/bpf/btf.c:6588:13: warning: 'purge_cand_cache' defined but not used [-Wunused-function]
-> >  6588 | static void purge_cand_cache(struct btf *btf)
-> >       |             ^~~~~~~~~~~~~~~~
-> >
-> > Introduced by commit
-> >
-> >   1e89106da253 ("bpf: Add bpf_core_add_cands() and wire it into bpf_core_apply_relo_insn().")
->
-> And this is a build failure for my x86_64 allmodconfig build.  So I
-> have used the bpf-next tree from next-20211202 again.
+--Sig_/6aFJR8PkEMnhtrWICOf5Tma
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-This should be fixed by [0] which I just applied to bpf-next, thanks
-for letting us know! The reason you noticed this and we didn't is
-because your version of pahole is probably older than what we use
-typically and doesn't yet support kernel module BTFs.
+Hi all,
 
-  [0] https://patchwork.kernel.org/project/netdevbpf/patch/20211207014839.6976-1-alexei.starovoitov@gmail.com/
+Today's linux-next merge of the rust tree got a conflict in:
 
+  scripts/kconfig/confdata.c
 
->
-> --
-> Cheers,
-> Stephen Rothwell
+between commit:
+
+  373c0a890520 ("[for -next only] kconfig: generate include/generated/rustc=
+_cfg")
+
+from the kbuild tree and commit:
+
+  62cb43b76df3 ("Kbuild: add Rust support")
+
+from the rust tree.
+
+I fixed it up (I basically used the latter version) and can carry the
+fix as necessary. This is now fixed as far as linux-next is concerned,
+but any non trivial conflicts should be mentioned to your upstream
+maintainer when your tree is submitted for merging.  You may also want
+to consider cooperating with the maintainer of the conflicting tree to
+minimise any particularly complex conflicts.
+
+Masahiro, you probably don't need that kbuild tree patch any more since
+the rust tree has been rebased onto v5.16-rc3.
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/6aFJR8PkEMnhtrWICOf5Tma
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGu7XYACgkQAVBC80lX
+0GykyAf7BYbSm2OGBWQjnEZ4eRk0kdL79yiyHOexVdnAId7vQCw76WLj6SlLpHEw
+E+fhL8BYGuu1duNuABaYpWS9uKrMmgGgO5TCETUM7xyJ6z2JXQlwZrv7/pRu2U93
+9x/rWRAdoQ72LHTlmja0wfWRzrggEZm9SbDnd1otdT4Db7Lb955DJVCqvxlatQES
+j1JdO5wNfLD6sc0ic3AaG2k/WB0fkyGFBWPEtTswMx84Lj0enuNMHb2YfozhZdby
+4w5OpBeDWkaaItICuvMAJVFMKN33fcZ8ms3bfuHAxIEDBhTjo5TaUhk8Wvx9HgM1
+Hk5pn0viSBTQr96cHS/ExIMg0lW8GA==
+=IGGO
+-----END PGP SIGNATURE-----
+
+--Sig_/6aFJR8PkEMnhtrWICOf5Tma--

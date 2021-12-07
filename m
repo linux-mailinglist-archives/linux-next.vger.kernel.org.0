@@ -2,165 +2,73 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F50046C10C
-	for <lists+linux-next@lfdr.de>; Tue,  7 Dec 2021 17:53:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 742F246C66C
+	for <lists+linux-next@lfdr.de>; Tue,  7 Dec 2021 22:12:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232169AbhLGQ42 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 7 Dec 2021 11:56:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51886 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230023AbhLGQ42 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 7 Dec 2021 11:56:28 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94040C061574
-        for <linux-next@vger.kernel.org>; Tue,  7 Dec 2021 08:52:57 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id u17so9846312plg.9
-        for <linux-next@vger.kernel.org>; Tue, 07 Dec 2021 08:52:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=mSbVFVAZ6CmENigyvxyjlAeabTm/F11nNpkKjMbxEu4=;
-        b=bmWmcRwRsmMMJeg9Tuhjd+udTRHa2pz5V1hKCd4fo6ZUc2jai3a+KiBnKLXVXJv1gB
-         MrhHOfthVPL2Ffwp5RcaLf0zbfRd6grXZBEEL04PH7sXfQaHSoCDf88IR4cFySM8dmJ+
-         0v4R12RuK4jACU/kVB5HvjOG0JO4rDrwknG1OJURLoMNXAVtxqWLicgypoGYB7XLsVnz
-         Kk29M7uMSOR8D3hlZoAU+nZku2h4A0Nd4k4FFvreC6fQPXrtwGCzQhGjLRH3aVA3Pe/J
-         UAel3aaWtPIGgResBcs73xIQ5aaPWzLlvOwoGyhSHug9QtF4TjnxFoVpN++q7hIwp6Pa
-         DfNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=mSbVFVAZ6CmENigyvxyjlAeabTm/F11nNpkKjMbxEu4=;
-        b=zFiFXq13+if658nTMqfFOFHlwrcL7os60JPotSOg1uv+kAUjQFP/Jwgavn1Un343/N
-         RU8rZqO4KXy7YqOv0P7KM1vAz4LMO3niMzNuEzmzGN9tLOA1Q5dcPcLpd9t+8q7jiB1v
-         J0cFeeTDv8g+pqi58KGLtMh5VCCh9m0E90wTJjZP2rwk+8mofhnyS+5aPniVfDZnV60P
-         lWRCljAUaFqisSIYpC2RxUzQ9DonKvSLKBOTsSb4j/yrHIShcY3PSq4uxkZSc+7EHIJo
-         IeGYlvu3+A/uU1UceD/XaknZ21x1ECHD8nj1Oxy+MQeoPDYDz6FIAipqFlGAeJikNI79
-         qdLw==
-X-Gm-Message-State: AOAM53255MHa7yTqJYBBfrxMiL7VLuZr3hM0GlnwVa05rQEUaIrGWR1+
-        BDkmVzQ79R3MpCgMlZzKSfGGGhYBWmG751wr
-X-Google-Smtp-Source: ABdhPJwSOz+dwnnbpwaiBLuSnh5cMPQSvDIrLQMc/KRBmuBdwGxUJILkb1bL1iaMHq0w55vyUSx37Q==
-X-Received: by 2002:a17:902:e302:b0:141:af98:b5ea with SMTP id q2-20020a170902e30200b00141af98b5eamr52113352plc.53.1638895976989;
-        Tue, 07 Dec 2021 08:52:56 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id t13sm180716pfl.214.2021.12.07.08.52.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 08:52:56 -0800 (PST)
-Message-ID: <61af9168.1c69fb81.dfbf7.0ac9@mx.google.com>
-Date:   Tue, 07 Dec 2021 08:52:56 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        id S230064AbhLGVQB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 7 Dec 2021 16:16:01 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:60897 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229812AbhLGVQA (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 7 Dec 2021 16:16:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638911549;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tijy8IJRnUTNbj2S9eoX8mcwYCPBzJ5p8C6oGn1r/G0=;
+        b=AA1kFTesg6X8yyz0QwFZRUqvO7SwjgkCG8g4YbYqlFd746zp56cWpPxDHH9E/JqZ7gEfXm
+        fe4uz1AHopuUqdTgCUxpLkpF/P68ejHw90hESiHwGnKzVxUM0fFOPB8FJTOqB0mmCc+ADR
+        Wx6qqzaTcYb9GZpOE13aCqi/tgvgwhc=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-344-MPYj1MoTMGiNUIxROE_svQ-1; Tue, 07 Dec 2021 16:12:28 -0500
+X-MC-Unique: MPYj1MoTMGiNUIxROE_svQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C731B3E746;
+        Tue,  7 Dec 2021 21:12:26 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.25])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2EE345D9C0;
+        Tue,  7 Dec 2021 21:12:25 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20211206085650.09dcb11e@canb.auug.org.au>
+References: <20211206085650.09dcb11e@canb.auug.org.au> <20211203094139.059541cd@canb.auug.org.au>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     dhowells@redhat.com, Steve French <smfrench@gmail.com>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Shyam Prasad N <sprasad@microsoft.com>,
+        Steve French <stfrench@microsoft.com>
+Subject: Re: linux-next: manual merge of the cifs tree with the fscache tree
 MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2419229.1638911544.1@warthog.procyon.org.uk>
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v5.16-rc4-196-g38a22b258a2d
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-Subject: next/pending-fixes baseline: 676 runs,
- 2 regressions (v5.16-rc4-196-g38a22b258a2d)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Date:   Tue, 07 Dec 2021 21:12:24 +0000
+Message-ID: <2419230.1638911544@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes baseline: 676 runs, 2 regressions (v5.16-rc4-196-g38a22b=
-258a2d)
+Hi Stephen,
 
-Regressions Summary
--------------------
+> >   9d0245fc6a2e ("cifs: wait for tcon resource_id before getting fscach=
+e super")
+> >   c148f8eb032f ("cifs: add server conn_id to fscache client cookie")
+> >   b1f962ba272b ("cifs: avoid use of dstaddr as key for fscache client =
+cookie")
 
-platform            | arch  | lab           | compiler | defconfig         =
-           | regressions
---------------------+-------+---------------+----------+-------------------=
------------+------------
-bcm2836-rpi-2-b     | arm   | lab-collabora | gcc-10   | multi_v7_defc...MB=
-2_KERNEL=3Dy | 1          =
+I've rebased onto -rc4 to pick up these and another patch.
 
-r8a77950-salvator-x | arm64 | lab-baylibre  | gcc-10   | defconfig+crypto  =
-           | 1          =
+David
 
-
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v5.16-rc4-196-g38a22b258a2d/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v5.16-rc4-196-g38a22b258a2d
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      38a22b258a2dd71fb3d577cc84d6a3e774d79139 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform            | arch  | lab           | compiler | defconfig         =
-           | regressions
---------------------+-------+---------------+----------+-------------------=
------------+------------
-bcm2836-rpi-2-b     | arm   | lab-collabora | gcc-10   | multi_v7_defc...MB=
-2_KERNEL=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/61af64b8de4c6993fa1a948d
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.16-rc4-1=
-96-g38a22b258a2d/arm/multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab=
--collabora/baseline-bcm2836-rpi-2-b.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.16-rc4-1=
-96-g38a22b258a2d/arm/multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab=
--collabora/baseline-bcm2836-rpi-2-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/61af64b8de4c6993fa1a9=
-48e
-        failing since 27 days (last pass: v5.15-rc7-176-gbfbd58926fc5, firs=
-t fail: v5.15-12053-g6f9f2ed9499c) =
-
- =
-
-
-
-platform            | arch  | lab           | compiler | defconfig         =
-           | regressions
---------------------+-------+---------------+----------+-------------------=
------------+------------
-r8a77950-salvator-x | arm64 | lab-baylibre  | gcc-10   | defconfig+crypto  =
-           | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/61af66e3a847f4a13d1a948e
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+crypto
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.16-rc4-1=
-96-g38a22b258a2d/arm64/defconfig+crypto/gcc-10/lab-baylibre/baseline-r8a779=
-50-salvator-x.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.16-rc4-1=
-96-g38a22b258a2d/arm64/defconfig+crypto/gcc-10/lab-baylibre/baseline-r8a779=
-50-salvator-x.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/61af66e3a847f4a13d1a9=
-48f
-        new failure (last pass: v5.16-rc2-613-g4f1db50ca947f) =
-
- =20

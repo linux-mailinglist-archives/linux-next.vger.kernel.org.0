@@ -2,84 +2,98 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9D9B470CA7
-	for <lists+linux-next@lfdr.de>; Fri, 10 Dec 2021 22:38:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19E50470CAB
+	for <lists+linux-next@lfdr.de>; Fri, 10 Dec 2021 22:39:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344495AbhLJVmb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 10 Dec 2021 16:42:31 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:34138 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243515AbhLJVmb (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 10 Dec 2021 16:42:31 -0500
+        id S236956AbhLJVmo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 10 Dec 2021 16:42:44 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:43128 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243435AbhLJVmo (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 10 Dec 2021 16:42:44 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 6BAC6CE2D3D;
-        Fri, 10 Dec 2021 21:38:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45154C00446;
-        Fri, 10 Dec 2021 21:38:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 863A0B829D9;
+        Fri, 10 Dec 2021 21:39:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FC50C00446;
+        Fri, 10 Dec 2021 21:39:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639172332;
-        bh=LV9ui+LoZ09dCLi3M8fgKyg0G4ZmmnOP+h8yd9lluKY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mRwvYATMjYz4Nm2aLuSC+YipI9kwGzq8XIk2Eg99optMxBRkpbYEGJZUkux+CoAKP
-         Ne5KJxnOLlI63dji3RFtyUq6nPQrVrFFKCIbLuUtZTrE3sS8PhePPg43i/hcXb+lIg
-         mB6WwhLdUCD3eXmdot8Uay92v5aQx1PWJfzR2SxmtTHqzSI8GEBB7nZWE+gh0rW33Q
-         iIBkR9uWSUj4VnJAxiQQwD/i0oHWJUdgh+j8Ke+8DUkZdzZ5M6zkEfZOtOoy+B0HAb
-         bWK5LHIHqEr7zIeUG4bFq5pVkDDpN3hUwapVcO5Zqm2h9k00N+tnPeI3Ph7CV4Tg9/
-         yjmVGOa/i6/pw==
-Date:   Fri, 10 Dec 2021 21:38:48 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     sfr@canb.auug.org.au, linux-next@vger.kernel.org, jeyu@kernel.org,
-        mcgrof@bombadil.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Next/Trees: update the modules tree
-Message-ID: <YbPI6Novz3ikiKEI@sirena.org.uk>
-References: <20211208195931.3369500-1-mcgrof@kernel.org>
+        s=k20201202; t=1639172346;
+        bh=rj5x0Sq4Sly57XgOOudF+v3IUpCpLwyJ7UWVTgXoc7w=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Ggudwh3MfNW9dl11dGAOCLLBzZ7RMg+BK2DwYqT9KUv/S8AISGDQHotQgfVj0K2oL
+         UhFBE6tyPuJb3h4j0cz3G/vFdlnOZrLDQu1yK637vXQW7j8Sk4mc2eMOqEKofRDFkp
+         NFc5fAF4THCnEqcXujqrra34oerfloON7ydTENtjP8MSBOaQNKZin8Udeg8EVqGwqV
+         kAeOb3AGiYEzxjmCx5Z0lW35+l7j9qwSwX2jobmmGd9+DKP0UYk9JUFcZPWUJ63Wp7
+         /lLMq84xy5QH+7kZjXx8Vqmp/yd310asDBacr4PXlciclTPs2OaW5mXshqYhJvjJsN
+         r8HWIjLzyFuVg==
+From:   broonie@kernel.org
+To:     Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: Tree for Dec 10
+Date:   Fri, 10 Dec 2021 21:39:00 +0000
+Message-Id: <20211210213900.3474100-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="bUaiORlw3qU9OGY1"
-Content-Disposition: inline
-In-Reply-To: <20211208195931.3369500-1-mcgrof@kernel.org>
-X-Cookie: One picture is worth 128K words.
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+Hi all,
 
---bUaiORlw3qU9OGY1
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Changes since 20211208:
 
-On Wed, Dec 08, 2021 at 11:59:31AM -0800, Luis Chamberlain wrote:
+The kvm tree gained a conflict with the perf tree.
 
-> pull request which was merged for v5.16-rc1. I'll queue up fixes
-> on the modules_linus branch.
+The kvm-arm tree gained a conflict with the kvm tree.
 
-> those in the modules_next branch to match parity with the same style
+The bpf tree gained a conflict with the ndevdev tree.
 
-Actually, note that your e-mail says the branches are modules_X while
-the diff says modules-X which looks like it's the correct thing:
+The nvdimm tree gained a conflict with the ext4 tree and was dropped for
+today.
 
-> -modules-fixes	git	git://git.kernel.org/pub/scm/linux/kernel/git/jeyu/linux.git#modules-linus
-> +modules-fixes	git	git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git#modules-linus
+The rust tree gained a conflict with Linus' tree.
 
-> -modules		git	git://git.kernel.org/pub/scm/linux/kernel/git/jeyu/linux.git#modules-next
-> +modules		git	git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git#modules-next
+The bitmap tree gained a conflict with the kvm tree.
 
---bUaiORlw3qU9OGY1
-Content-Type: application/pgp-signature; name="signature.asc"
+The akpm-current tree gained a conflict with the folio tree.
 
------BEGIN PGP SIGNATURE-----
+Non-merge commits (relative to Linus' tree): 5746
+ 6195 files changed, 260341 insertions(+), 117230 deletions(-)
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGzyOcACgkQJNaLcl1U
-h9At9wf/XiQIUoVnn5gjhBAUrkFwuGr8OUFGp+pgYzzr5DdsJmdxpn5zq2v+f1WN
-Nxfbob7TD633b8tLlCoiPh1ucdAFKyAyeTMZHnAuSRu11n6orjgEXhuAv7IgapOi
-MW8nWBJL1Pco4nQspBsLigNyrjxwPrb+NLAGgXcD0F1E80ohcxnGRBjxLW4xwfrO
-zf2PZKvyoZoiULFaA3LykkR1V0c7IPw1s+5KIS46D3/+IYLpEBgUZaKTb5V2Epdc
-hlX9faQH6rgK1JCVuTY9PR+FaCwPdpieMJteEmSEFVe507M81OGvzBsXtSPnFGEB
-lCp+rEZUZpDjVLQs3bSsWeC93UBgew==
-=kUqG
------END PGP SIGNATURE-----
+----------------------------------------------------------------------------
 
---bUaiORlw3qU9OGY1--
+I have created today's linux-next tree at
+git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
+are tracking the linux-next tree using git, you should not use "git pull"
+to do so as that will try to merge the new linux-next release with the
+old one.  You should use "git fetch" and checkout or reset to the new
+master.
+
+You can see which trees have been included by looking in the Next/Trees
+file in the source.  There are also quilt-import.log and merge.log
+files in the Next directory.  Between each merge, the tree was built
+with an arm64 defconfig, an allmodconfig for x86_64, a
+multi_v7_defconfig for arm and a native build of tools/perf. After the
+final fixups (if any), I do an x86_64 modules_install followed by
+builds for x86_64 allnoconfig, arm64 allnoconfig and allyesconfig, and
+i386, arm64, sparc and sparc64 defconfig and htmldocs.
+
+Below is a summary of the state of the merge.
+
+I am currently merging 346 trees (counting Linus' and 94 trees of bug
+fix patches pending for the current merge release).
+
+Stats about the size of the tree over time can be seen at
+http://neuling.org/linux-next-size.html .
+
+Status of my local build tests will be at
+http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
+advice about cross compilers/configs that work, we are always open to add
+more builds.
+
+Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
+Gortmaker for triage and bug fixes.

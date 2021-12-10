@@ -2,43 +2,45 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F18FF4700E8
-	for <lists+linux-next@lfdr.de>; Fri, 10 Dec 2021 13:43:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F91347079E
+	for <lists+linux-next@lfdr.de>; Fri, 10 Dec 2021 18:47:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241230AbhLJMq4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 10 Dec 2021 07:46:56 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:50418 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233718AbhLJMqx (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 10 Dec 2021 07:46:53 -0500
+        id S244578AbhLJRv2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 10 Dec 2021 12:51:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47636 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240786AbhLJRv2 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 10 Dec 2021 12:51:28 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE6DCC061746;
+        Fri, 10 Dec 2021 09:47:52 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id D7969CE2AB7;
-        Fri, 10 Dec 2021 12:43:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43EE1C00446;
-        Fri, 10 Dec 2021 12:43:13 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 1395ACE2BC9;
+        Fri, 10 Dec 2021 17:47:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0DC6C341C7;
+        Fri, 10 Dec 2021 17:47:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639140195;
-        bh=A4ChL5ppUoru6F95qxeChFGwc/PORJ8tiZlI5EpfhY8=;
+        s=k20201202; t=1639158469;
+        bh=BmIdMiKO1bHxAOrA+A9w4P6ev9W7GWoh8IjX7ujddm8=;
         h=From:To:Cc:Subject:Date:From;
-        b=kxW15yDviO53HrXLuueLGBt2hMS1/l0qikBUyYGxZ/Nc/xH4MmEel5774L1LaEYe5
-         Cr2j1F9Ews4jCiuPEcH2OC+iv+tmXKm1cLnXozxLbPBrE5UTrZ/O+oxSVP42Jh6hR6
-         FW3O6pxhupAVcR6JGaTYarCbAy65rFMpIkgTy0NuHpOrcphPi8m5WKQ+XjwZ5j1bQa
-         ELEvtHDJclMLMROG5u2k3erljPT7I4/j3ZZBnlGigKudLO18P+nzwCIr52aqXQqhCR
-         jax3+DnFHQt2WsCS8Bvic7PeuGaVuBfugOwVdZl+r9G0bbaBNSRjBaKgoF2mhftzYf
-         voybWZtUDZ8Sg==
+        b=ao/OUYv7n2gHb2mrq9gudYZ9kPi6m/n9no7Pl68eI8Vw82O8al2mT3P/E7Db+RIE9
+         /VdQrdDwkcAIHPOMHcB3M901xvEiYYNYv145/alcG76/sdp+v8iz6o1djVqwltdDho
+         6bahg8rq6bIQC+xbJhkk5SDEfn4fLZInf0KBopjnM5w/xQuyMQNGwNX66VeiOBEm5t
+         u7dJCxsLAAbObAtlgmWuRZDXDloSILvpWvPf8+SY8TyTnGlCwHM4wyKLn8n2OlkaTF
+         56paOg6SyeRcwf4lXdXGBjvIzoCNbVagKn7cM66WVM+gTOkxaiiBpbYR/FO07JfBph
+         g7xaSOHGIaZ+Q==
 From:   broonie@kernel.org
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the bpf-next tree with the netdev tree
-Date:   Fri, 10 Dec 2021 12:43:08 +0000
-Message-Id: <20211210124308.2030434-1-broonie@kernel.org>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Lukas Czerner <lczerner@redhat.com>,
+        Theodore Ts'o <tytso@mit.edu>
+Subject: linux-next: manual merge of the nvdimm tree with the ext4 tree
+Date:   Fri, 10 Dec 2021 17:47:40 +0000
+Message-Id: <20211210174740.2695216-1-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -48,38 +50,22 @@ X-Mailing-List: linux-next@vger.kernel.org
 
 Hi all,
 
-Today's linux-next merge of the bpf-next tree got a conflict in:
+Today's linux-next merge of the nvdimm tree got a conflict in:
 
-  tools/lib/bpf/libbpf.c
+  fs/ext4/super.c
 
-between commit:
+between at least commits:
 
-  ba05fd36b8512 ("libbpf: Perform map fd cleanup for gen_loader in case of error")
+  7edfd85b1ffd3 ("ext4: Completely separate options parsing and sb setup")
+  bdd3c50d83bf7 ("dax: remove bdev_dax_supported")
 
-from the netdev tree and commit:
+from the ext4 tree and commits:
 
-  fa5e5cc04e443 ("libbpf: Deprecate bpf_object__load_xattr()")
+  89b93a7b15f75 ("ext4: cleanup the dax handling in ext4_fill_super")
+  7b0800d00dae8 ("dax: remove dax_capable")
 
-from the bpf-next tree.
+from the nvdimm tree.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-diff --cc tools/lib/bpf/libbpf.c
-index f6faa33c80fa7,18d95c6a89fe3..0000000000000
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@@ -7263,7 -7475,7 +7475,7 @@@ static int bpf_object_load(struct bpf_o
-  	}
-  
-  	if (obj->gen_loader)
-- 		bpf_gen__init(obj->gen_loader, attr->log_level, obj->nr_programs, obj->nr_maps);
- -		bpf_gen__init(obj->gen_loader, extra_log_level);
-++		bpf_gen__init(obj->gen_loader, extra_log_level, obj->nr_programs, obj->nr_maps);
-  
-  	err = bpf_object__probe_loading(obj);
-  	err = err ? : bpf_object__load_vmlinux_btf(obj, false);
+I'm not comfortable with resolving this in something as critical as ext4
+at this point on a Friday evening with the code motion that's going on
+so I've dropped the nvdimm tree for today, I'll look again on Monday.

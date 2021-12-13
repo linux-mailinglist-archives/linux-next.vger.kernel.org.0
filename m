@@ -2,44 +2,47 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2501147376D
-	for <lists+linux-next@lfdr.de>; Mon, 13 Dec 2021 23:24:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45B7B47378B
+	for <lists+linux-next@lfdr.de>; Mon, 13 Dec 2021 23:34:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243493AbhLMWYy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 13 Dec 2021 17:24:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39112 "EHLO
+        id S243716AbhLMWdx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 13 Dec 2021 17:33:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234623AbhLMWYy (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Dec 2021 17:24:54 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC470C061574;
-        Mon, 13 Dec 2021 14:24:53 -0800 (PST)
+        with ESMTP id S243616AbhLMWdl (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Dec 2021 17:33:41 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98EB4C061574;
+        Mon, 13 Dec 2021 14:33:40 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EEA25B81221;
-        Mon, 13 Dec 2021 22:24:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80C28C34601;
-        Mon, 13 Dec 2021 22:24:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3CB5761286;
+        Mon, 13 Dec 2021 22:33:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 976F0C34605;
+        Mon, 13 Dec 2021 22:33:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639434290;
-        bh=JUsgj2dUHiE2WEeeCOTaDYRuKLPv+1NRbP0xBFDvqeU=;
+        s=k20201202; t=1639434819;
+        bh=QWibT/o9T5XkwjnFZEWKm/t6gnHe/K8YQgsfhTcy6Xc=;
         h=From:To:Cc:Subject:Date:From;
-        b=SBKSM7XRoPfNQAQO76Hn/3KlDIXxsCnN9OcKVsYSyBUpipZtLRNtXYTAdeJVPTuVh
-         KwuvNSFHczoR0cdB50J7VEm6455+2aumDjBYV/qe5tLwcMrFl3fUY6lhLtm5sxU3QT
-         /QS6ISFCz89sgS7XPUH8X2cWnc+rso0Qu1m8grrAfdU2NsRgM0NFc929Lwg28vLURC
-         xiuZg3wWSWHwQqtb0E7TvXOHYlfjsRDKgMLeNjqaA21gPci9kF9Ixc2SvhnwUovz9o
-         y35+sQ2J2p6AuQ9uv58jDulihxEtrqvt8s9uEEaEwA5BCOz10dZ+6TpVbDJeGNTelT
-         kTe9uiiwa8iXA==
+        b=H2hnG88JbSe8wtfhgs/VHUBxGFtibM0YbvefsAFiBFBm4K2xSmbyPBS4Jf3uEYOsy
+         80qqJfA5ShtjYQ4nSRU1J1BZW4uykqHPShKMa5alIMG3ZWBCvG9QSg4V6hud5iK3n4
+         BzOX4ISBrmcZfoXm5HaANgSye61EO1q4o3AEhZIOgwZxHsYXdlD3DbWevQ4vXpLruf
+         XRyeGlk2GSC/UfrJ3JBw+u1tP6WNe29RsF/weW+OhlfzXSzr9fX4YnZde12XUR4FeW
+         P6eiw+lJvb9SCN7lOuGHv8hcdpurEOH9vmTN99afo2pQMNNBp4nfVBbgMh3Yg4Yuj7
+         5LX6275C/qSMw==
 From:   broonie@kernel.org
-To:     Matthew Wilcox <willy@infradead.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc:     Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org
-Subject: linux-next: manual merge of the xarray tree with the kselftest tree
-Date:   Mon, 13 Dec 2021 22:24:43 +0000
-Message-Id: <20211213222443.474487-1-broonie@kernel.org>
+        Miguel Ojeda <ojeda@kernel.org>,
+        Sasha Levin <sashal@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@google.com>
+Subject: linux-next: manual merge of the rust tree with the origin tree
+Date:   Mon, 13 Dec 2021 22:33:34 +0000
+Message-Id: <20211213223334.692590-1-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -49,29 +52,23 @@ X-Mailing-List: linux-next@vger.kernel.org
 
 Hi all,
 
-Today's linux-next merge of the xarray tree got a conflict in:
+Today's linux-next merge of the rust tree got a conflict in:
 
-  tools/include/linux/kernel.h
+  tools/include/linux/lockdep.h
 
-between commits:
+between commit:
 
-  d6e6a27d960f9 ("tools: Fix math.h breakage")
-  066b34aa5461f ("tools: fix ARRAY_SIZE defines in tools and selftests hdrs")
+  3a49cc22d31ec ("tools/lib/lockdep: drop leftover liblockdep headers")
 
-from the kselftest and origin trees and commit:
+from the origin tree and commit:
 
-  f2aa11fd51440 ("tools: Fix math.h breakage")
+  ab4cc3d9c564d ("kallsyms: increase maximum kernel symbol length to 512")
 
-from the xarray tree.
+from the rust tree.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-diff --cc tools/include/linux/kernel.h
-index 9701e8307db02,3e8df500cfbd4..0000000000000
---- a/tools/include/linux/kernel.h
-+++ b/tools/include/linux/kernel.h
+I fixed it up by removing lockdep.h again and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.

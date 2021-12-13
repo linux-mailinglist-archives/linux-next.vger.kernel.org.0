@@ -2,43 +2,41 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11907472C75
-	for <lists+linux-next@lfdr.de>; Mon, 13 Dec 2021 13:42:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BCA5473027
+	for <lists+linux-next@lfdr.de>; Mon, 13 Dec 2021 16:09:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233998AbhLMMmB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 13 Dec 2021 07:42:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42354 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233259AbhLMMmB (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Dec 2021 07:42:01 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18733C061574;
-        Mon, 13 Dec 2021 04:42:01 -0800 (PST)
+        id S235238AbhLMPJH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 13 Dec 2021 10:09:07 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:57648 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233162AbhLMPJH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Dec 2021 10:09:07 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 68149CE0FBC;
-        Mon, 13 Dec 2021 12:41:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A38B6C34601;
-        Mon, 13 Dec 2021 12:41:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C5C46B810AC;
+        Mon, 13 Dec 2021 15:09:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30321C34602;
+        Mon, 13 Dec 2021 15:09:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639399317;
-        bh=zfeR8W3r515UfkzI0HcenzOwI90h2TOBfLchmxtgYF4=;
+        s=k20201202; t=1639408144;
+        bh=HUvAyfKpicJy9wW4Pcsd6d9ZeDEin/MVCIT1qXKAzwM=;
         h=From:To:Cc:Subject:Date:From;
-        b=lAWVRcPg0vQ6de64FcoYMdRzOaJfAzRExov8qo1xqFVSmhSHFieJru84gOHH56A2E
-         y5lMVfCD3nSY24mNy2ylsLfbtu/5UPP0LKfsWLQXeKZqYIxGuZoYwjEuLnDabLSmbw
-         iiw3zGtR0REvxMWQStfXFBek1+uIhS/2nISGXbuc7wQxgaA2qk1bpm3CgLLqBCiqJT
-         VygBmEAUcmx5gffflMg4YoOIx6T6ln4UTECtS42uMXHwJde1EF2Yy618qgoRfcUKII
-         OpCi/ywnMBL0tV6OX1P5xRvvSnlwlRInlHRQF48y5jNGUl35/gEEc5o8DBvgHe6nYZ
-         09b4etCvKNR0A==
+        b=ZRzFTkeHZKLj0xi+okug4C87XFs+ohLUFaLK6GAOSU1CTBAmS1qyCqp6UW+RxxFsf
+         W6FJ8JRBYvagtLKizF1wRUDswdSMdyLY4X2wWH27Gd1KqGwIcdfTFgAE8A1nJ7bP1W
+         3b28bZtLrilvOg/ltO77V38RuBfC1fFun0izlaZ3eHWP032VQQURCBMzNPxPPX2o5l
+         uduiLPSbSf0OoPDQm0wfUhgif9x2+TYwHUOUu5ImmynDqu3uQIXZsQVmyUW+b7sDJm
+         HC3LzJl2gD82cmbY/LZhrOLRtqJOUBWsyvazH+Z1if1e4E/kXBnpANJwUTmZqQT9Ll
+         KGXUvYiGcEaVw==
 From:   broonie@kernel.org
-To:     Chuck Lever <chuck.lever@oracle.com>
-Cc:     "J . Bruce Fields" <bfields@redhat.com>,
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Alex Deucher <alexander.deucher@amd.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the cel tree with the origin tree
-Date:   Mon, 13 Dec 2021 12:41:51 +0000
-Message-Id: <20211213124151.2045975-1-broonie@kernel.org>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Monk Liu <Monk.Liu@amd.com>, shaoyunl <shaoyun.liu@amd.com>
+Subject: linux-next: manual merge of the amdgpu tree with the drm-misc tree
+Date:   Mon, 13 Dec 2021 15:08:59 +0000
+Message-Id: <20211213150859.1208442-1-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -48,28 +46,28 @@ X-Mailing-List: linux-next@vger.kernel.org
 
 Hi all,
 
-Today's linux-next merge of the cel tree got a conflict in:
+Today's linux-next merge of the amdgpu tree got a conflict in:
 
-  fs/nfsd/nfs4state.c
+  drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
 
 between commit:
 
-  2e3f00c5f29f0 ("nfsd: improve stateid access bitmask documentation")
+  a90ad3c2afe5b ("drm/amdgpu:implement SRIOV gpu_reset (v2)")
 
-from the origin tree and commit:
+from the drm-misc tree and commit:
 
-  98beab5dca06f ("nfsd: improve stateid access bitmask documentation")
+  428890a3fec13 ("drm/amdgpu: adjust the kfd reset sequence in reset sriov function")
 
-from the cel tree.
+from the amdgpu tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when yGour tree
+conflicts should be mentioned to your upstream maintainer when your tree
 is submitted for merging.  You may also want to consider cooperating
 with the maintainer of the conflicting tree to minimise any particularly
 complex conflicts.
 
-diff --cc fs/nfsd/nfs4state.c
-index f07fe7562d4dd,3214257767743..0000000000000
---- a/fs/nfsd/nfs4state.c
-+++ b/fs/nfsd/nfs4state.c
+diff --cc drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+index cbb2bbb21f55b,4224be2413381..0000000000000
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c

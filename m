@@ -2,77 +2,84 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 914254732AD
-	for <lists+linux-next@lfdr.de>; Mon, 13 Dec 2021 18:09:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10DD64732ED
+	for <lists+linux-next@lfdr.de>; Mon, 13 Dec 2021 18:30:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238200AbhLMRJE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 13 Dec 2021 12:09:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50582 "EHLO
+        id S240723AbhLMRal (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 13 Dec 2021 12:30:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232507AbhLMRJE (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Dec 2021 12:09:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01B1EC061574;
-        Mon, 13 Dec 2021 09:09:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E4C9A61195;
-        Mon, 13 Dec 2021 17:09:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D63ADC34602;
-        Mon, 13 Dec 2021 17:09:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639415342;
-        bh=ZY1m73DqRlXHz+HFBb1Uyp1tXrtkhC+V+AX5RHWZcok=;
-        h=From:To:Cc:Subject:Date:From;
-        b=QRFgEwJYhZGtTiymHR5pC+xfO7IxtIXjej3+2kL6CsLIVy64tVGyzMRrMT9mvx/x5
-         pMZgzKYp85a7dQGZs4S4YPigiyvyUgS1+MdFOTp9U8wLlUHcQjJcBj87lWIAlNFbdf
-         H8Y8Yudbu+9pymjtlX/WRM+I+23albUgZkOCg/F0esvsTxWYMqvZCwkc6mwgMw4vb3
-         oMZ9RqGIWroMETXE3NEKoBV2qnT1HL8RaCFYpZFBQ/qWwJpsgp7GFLceyOYkxxUAPJ
-         u63GAIvT2iIOg487HyGddd9YB6XR+yRbcHOsQ8kCO8xG80+1Gb1hcvegyoly6qlxn5
-         FC4+6B/5d2ovQ==
-From:   broonie@kernel.org
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the tip tree
-Date:   Mon, 13 Dec 2021 17:08:50 +0000
-Message-Id: <20211213170850.3724776-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S237624AbhLMRal (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Dec 2021 12:30:41 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D719C06173F
+        for <linux-next@vger.kernel.org>; Mon, 13 Dec 2021 09:30:41 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id x7so12391653pjn.0
+        for <linux-next@vger.kernel.org>; Mon, 13 Dec 2021 09:30:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=JLl9NBjWhC8ycFWNbwA1xe7cz0lo/vfYPVBrYSBn0zQ=;
+        b=kHQfPRtJy95Q3BTzS0nITHh7PKHGRCYTW7MbSbqmRtJPWWv96ES5/2t3Nyx6lMjnL1
+         NmKrHkpIG5YHkWb+py2doU5OzOS1Pjt1xdAKGaKT4KeEOfDq1koiO6J+/g7iIDe8tfy/
+         Morf2+k56PdVNWRQA0ipFSu8z5LiVfu8tdNebySj/Osc0f5rVwqOmeBJFq1p2R5OgKIb
+         +Gg9VdpL3GfYrozJQWFPRlavhlmhZ1BetwAuuXB74BS6rvqTCsGp6gNUf+cU70gQZYW+
+         MbU/B7aNM+8fzfBFVyE3S5s1IMFd9HZW5PfsUxOrxYlKNFLOxjebCWfHS+QCsn46vfjd
+         DT0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=JLl9NBjWhC8ycFWNbwA1xe7cz0lo/vfYPVBrYSBn0zQ=;
+        b=PHo1zXKD/yK+7E+co6/Oxi0EiMaYc8h4McUx6sZ/6PmoKTFp5MDEsYXyHtk2v+rX8p
+         CsknK4SnTZNNFIaSyKqpwufh87nlYW+YJfgdtdD2eDfqQjWWYCK2xpJLRGYc8grLUe1j
+         hQB2uYt0sdowCWp5R8iO+7/Vnc9QenuH8MsBZmas9pMoCbvT0VMKCUxLWCvxiq1mj+k+
+         6tWAwXdC+DUwS/mNiXh5sAzu+l32kJrU/sYPs2HC8ABi3q/0yTUp3Tjh67iG3k28EX57
+         h98Pxuuggp4HeGw42fPGr4UR08d9g8Q72nhSpprwUVv89ASTmlmW1CJaJ8x0WfTdK9oK
+         DTFQ==
+X-Gm-Message-State: AOAM530vS4ExgimZ9ffvaIYg9zrpe8EWuUbTvAbqESujt2M/AXJ+Q9Cc
+        3yam+fZ7gxTjclSNu92lWO8XBO5mdgP0WA==
+X-Google-Smtp-Source: ABdhPJyB2C91wLSzzIMpfR+iEbCKqIGvUxk0irgmd2CZCEZjmCAgPiOl9dvAamgDlWeyfWdcv2KWvw==
+X-Received: by 2002:a17:90b:4c03:: with SMTP id na3mr45572990pjb.62.1639416640628;
+        Mon, 13 Dec 2021 09:30:40 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id h8sm14368696pfh.10.2021.12.13.09.30.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Dec 2021 09:30:40 -0800 (PST)
+Date:   Mon, 13 Dec 2021 17:30:36 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Sachin Sant <sachinp@linux.vnet.ibm.com>
+Cc:     kvm@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-next@vger.kernel.org
+Subject: Re: [next-20211210] Build break powerpc/kvm: unknown member wait
+Message-ID: <YbeDPEx2/DgmZExK@google.com>
+References: <496ECBB3-36F3-4F07-83B2-875F683BC446@linux.vnet.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <496ECBB3-36F3-4F07-83B2-875F683BC446@linux.vnet.ibm.com>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi all,
+On Sat, Dec 11, 2021, Sachin Sant wrote:
+> next-20211210 ( commit ea922272cbe547) powerpc build fails due to following error:
+> 
+> arch/powerpc/kvm/book3s_hv.c: In function 'kvmhv_run_single_vcpu':
+> arch/powerpc/kvm/book3s_hv.c:4591:27: error: 'struct kvm_vcpu' has no member named 'wait'
+>    prepare_to_rcuwait(&vcpu->wait);
+>                            ^~
+> arch/powerpc/kvm/book3s_hv.c:4608:23: error: 'struct kvm_vcpu' has no member named 'wait'
+>    finish_rcuwait(&vcpu->wait);
+>                        ^~ 
+> 
+> commit 510958e997217: KVM: Force PPC to define its own rcuwait object 
+> introduced the error. 
 
-After merging the tip tree, today's linux-next build (x86 allmodconfig)
-failed like this:
+This is a silent merge conflict between the above commit in the KVM tree and
+commit ecb6a7207f92 ("KVM: PPC: Book3S HV P9: Remove most of the vcore logic")
+in the PPC tree.
 
-In file included from /tmp/next/build/drivers/gpu/drm/i915/intel_device_info.h:32,
-                 from /tmp/next/build/drivers/gpu/drm/i915/gt/uc/intel_uc_fw.h:11,
-                 from /tmp/next/build/drivers/gpu/drm/i915/gt/uc/intel_uc_fw.c:11:
-/tmp/next/build/drivers/gpu/drm/i915/display/intel_display.h:643:39: error: 'struct pci_dev' declared inside parameter list will not be visible outside of this definition or declaration [-Werror]
-  643 | bool intel_modeset_probe_defer(struct pci_dev *pdev);
-      |                                       ^~~~~~~
-cc1: all warnings being treated as errors
-
-I didn't investigate too closely exactly which commit caused this and
-fixed it up as below:
-
-diff --git a/drivers/gpu/drm/i915/display/intel_display.h b/drivers/gpu/drm/i915/display/intel_display.h
-index 4b688a9727b39..377790393a855 100644
---- a/drivers/gpu/drm/i915/display/intel_display.h
-+++ b/drivers/gpu/drm/i915/display/intel_display.h
-@@ -57,6 +57,7 @@ struct intel_plane;
- struct intel_plane_state;
- struct intel_remapped_info;
- struct intel_rotation_info;
-+struct pci_dev;
- 
- enum i915_gpio {
- 	GPIOA,
+I'll send a patch for the PPC tree that is resolves the issue and is a standalone
+cleanup.

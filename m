@@ -2,41 +2,50 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED6A24730AF
-	for <lists+linux-next@lfdr.de>; Mon, 13 Dec 2021 16:38:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D522473226
+	for <lists+linux-next@lfdr.de>; Mon, 13 Dec 2021 17:45:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236144AbhLMPi0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 13 Dec 2021 10:38:26 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:44444 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232862AbhLMPiZ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Dec 2021 10:38:25 -0500
+        id S234065AbhLMQp1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 13 Dec 2021 11:45:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44864 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234892AbhLMQp0 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Dec 2021 11:45:26 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AAC1C061574;
+        Mon, 13 Dec 2021 08:45:26 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 43FCA61151;
-        Mon, 13 Dec 2021 15:38:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D29CC34602;
-        Mon, 13 Dec 2021 15:38:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 22706B80D99;
+        Mon, 13 Dec 2021 16:45:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7604DC34603;
+        Mon, 13 Dec 2021 16:45:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639409904;
-        bh=eag2UJN8uLxpr82gnTwtWUePcV9ReC6aZJXhUT3jRh8=;
+        s=k20201202; t=1639413923;
+        bh=hKfqmXe6u4vNjyIrgd9Gkjmd3Ni7szyFVG5wQnl5oLY=;
         h=From:To:Cc:Subject:Date:From;
-        b=j0ro/ekfzYwTjuG2mlgInDcXWOwpgoNICvZ/Whyay6F7DMq2bvHyX2vNkXZ+NH7uJ
-         D7rCmxc/02wPjol2Wk0QqyAc4WymR9H6rmvTIoR1xa1x+1TsAowl9EUvmLDb/4p4KJ
-         c3Ysk0eRmDo8r6qOf0EX/dyzXGzgfhPIRu40mrZholqeGiGGvXHWK7rlUHKXEphYeV
-         H0vexX/9v+7OLKcLPCexMdJqgKNaXV9evjpKQYC0mwQfJi9P2b6wEz39J+ftD3M/YR
-         B6N/OC+OEbLfJbdVCxvAlv65iCszyd7h2uF2lRhRj/ppGVlq74znA43iyQRLd0zl8/
-         NU91BdimjfHLw==
+        b=lUQpY1CsJ10ZBzipX6FV82UeH4d9wyOBYeC0bkYyTUM9xqtBJN1JYUXJnxl8k1kX1
+         C8rJrh9KDhq7LUS1Zha7Ve246SkHxMK/dowATpW/0tjWBzi9EkEOJGpJx90nQysvKz
+         6PmehDlAwPusHrmfRRVCdx3QEBzs/sD5WbgRVHqXVYbXCv1lkbHsX2zjcdVxbQCMCC
+         9WlKxiPgke4pf0gFNs0Np2yItU09iHMo3zYJTC5SWWJlryIhqNw59fbGnhhMmJnQZp
+         VF5+mArLxCJGv/cuKHCvshWdGVoCGWzewagDKM2RQ+dbk0wR2hSCHpmMPcnhYSLvZ8
+         PNQMWXTtUyYOA==
 From:   broonie@kernel.org
-To:     Fangzhi Zuo <Jerry.Zuo@amd.com>,
-        Aurabindo Pillai <aurabindo.pillai@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the etnaviv tree
-Date:   Mon, 13 Dec 2021 15:38:20 +0000
-Message-Id: <20211213153820.1588197-1-broonie@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: linux-next: manual merge of the tip tree with the arm64 tree
+Date:   Mon, 13 Dec 2021 16:45:16 +0000
+Message-Id: <20211213164517.3393671-1-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -46,86 +55,39 @@ X-Mailing-List: linux-next@vger.kernel.org
 
 Hi all,
 
-After merging the amdgpu tree, today's linux-next build (x86
-allmodconfig) failed like this:
+Today's linux-next merge of the tip tree got a conflict in:
 
-/tmp/next/build/drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_debugfs.c: In function 'dp_force_sst_set':
-/tmp/next/build/drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_debugfs.c:3248:20: error: 'struct dc_debug_options' has no member named 'set_mst_en_for_sst'
- 3248 |  adev->dm.dc->debug.set_mst_en_for_sst = val;
-      |                    ^
-/tmp/next/build/drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_debugfs.c: In function 'dp_force_sst_get':
-/tmp/next/build/drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_debugfs.c:3257:27: error: 'struct dc_debug_options' has no member named 'set_mst_en_for_sst'
- 3257 |  *val = adev->dm.dc->debug.set_mst_en_for_sst;
-      |                           ^
+  arch/arm64/kernel/perf_callchain.c
 
-Caused by commit
+between commit:
 
-  99e574ca64d3b6 ("drm/amd/display: Add Debugfs Entry to Force in SST Sequence")
+  ed876d35a1dc7 ("arm64: Make perf_callchain_kernel() use arch_stack_walk()")
 
-interacting with some of the other DRM trees.  Sadly this wasn't a new
-version of the tree so it didn't flag up for several merges I've just
-patched this out for now:
+from the arm64 tree and commit:
 
-commit 0456e621ece3c28802799f3ed1f71a63af81960c
-Author: Mark Brown <broonie@kernel.org>
-Date:   Mon Dec 13 15:26:46 2021 +0000
+  1c3430516b073 ("perf: Add wrappers for invoking guest callbacks")
 
-    amdgpu: Patch out set_mst_en_for_sst
-    
-    This breaks the build in -next due to issues with another tree:
-    
-    /tmp/next/build/drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_debugfs.c: In function 'dp_force_sst_set':
-    /tmp/next/build/drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_debugfs.c:3248:20: error: 'struct dc_debug_options' has no member named 'set_mst_en_for_sst'
-     3248 |  adev->dm.dc->debug.set_mst_en_for_sst = val;
-          |                    ^
-    /tmp/next/build/drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_debugfs.c: In function 'dp_force_sst_get':
-    /tmp/next/build/drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_debugfs.c:3257:27: error: 'struct dc_debug_options' has no member named 'set_mst_en_for_sst'
-     3257 |  *val = adev->dm.dc->debug.set_mst_en_for_sst;
-          |
-    
-    Signed-off-by: Mark Brown <broonie@kernel.org>
+from the tip tree.
 
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_debugfs.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_debugfs.c
-index 68c379ed12383..df3c615ed7943 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_debugfs.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_debugfs.c
-@@ -3237,30 +3237,6 @@ static int disable_hpd_get(void *data, u64 *val)
- DEFINE_DEBUGFS_ATTRIBUTE(disable_hpd_ops, disable_hpd_get,
- 			 disable_hpd_set, "%llu\n");
- 
--/*
-- * Force sst sequence in mst capable receiver.
-- * Example usage: echo 1 > /sys/kernel/debug/dri/0/amdgpu_dm_dp_set_mst_en_for_sst
-- */
--static int dp_force_sst_set(void *data, u64 val)
--{
--	struct amdgpu_device *adev = data;
--
--	adev->dm.dc->debug.set_mst_en_for_sst = val;
--
--	return 0;
--}
--
--static int dp_force_sst_get(void *data, u64 *val)
--{
--	struct amdgpu_device *adev = data;
--
--	*val = adev->dm.dc->debug.set_mst_en_for_sst;
--
--	return 0;
--}
--DEFINE_DEBUGFS_ATTRIBUTE(dp_set_mst_en_for_sst_ops, dp_force_sst_get,
--			 dp_force_sst_set, "%llu\n");
--
- /*
-  * Sets the DC visual confirm debug option from the given string.
-  * Example usage: echo 1 > /sys/kernel/debug/dri/0/amdgpu_visual_confirm
-@@ -3346,8 +3346,6 @@ void dtn_debugfs_init(struct amdgpu_device *adev)
- 			    adev, &mst_topo_fops);
- 	debugfs_create_file("amdgpu_dm_dtn_log", 0644, root, adev,
- 			    &dtn_log_fops);
--	debugfs_create_file("amdgpu_dm_dp_set_mst_en_for_sst", 0644, root, adev,
--				&dp_set_mst_en_for_sst_ops);
- 
- 	debugfs_create_file_unsafe("amdgpu_dm_visual_confirm", 0644, root, adev,
- 				   &visual_confirm_fops);
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+diff --cc arch/arm64/kernel/perf_callchain.c
+index e9b7d99f4e3a0,db04a55cee7e0..0000000000000
+--- a/arch/arm64/kernel/perf_callchain.c
++++ b/arch/arm64/kernel/perf_callchain.c
+@@@ -141,7 -147,9 +141,7 @@@ static bool callchain_trace(void *data
+  void perf_callchain_kernel(struct perf_callchain_entry_ctx *entry,
+  			   struct pt_regs *regs)
+  {
+- 	if (perf_guest_cbs && perf_guest_cbs->is_in_guest()) {
+ -	struct stackframe frame;
+ -
++ 	if (perf_guest_state()) {
+  		/* We don't support guest os callchain now */
+  		return;
+  	}

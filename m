@@ -2,105 +2,87 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F02794741C0
-	for <lists+linux-next@lfdr.de>; Tue, 14 Dec 2021 12:45:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC4BE474359
+	for <lists+linux-next@lfdr.de>; Tue, 14 Dec 2021 14:24:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233680AbhLNLpY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 14 Dec 2021 06:45:24 -0500
-Received: from mga02.intel.com ([134.134.136.20]:65457 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231233AbhLNLpY (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 14 Dec 2021 06:45:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639482324; x=1671018324;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uxe3KXxNRLMySeq/nzGbJAEG8Rn4M5b9I8eEfKOMvJY=;
-  b=beMzo1sh5ltrejTon79Jj7pfe9g2GVSvoSxiUEaBsMOiiyGJyGakd9w+
-   /hODa3jphF8/6+iAiOiCTC+BQNxminyRfJmGcx+W5cx7GEHiJ6HsZtNaw
-   q/TpcChalO6z0dp9NShLRNeT3YR4BOHLXbsBkRjUM8GM8LeuQg/JqeRrs
-   k35UCDHDlVnFgng5Nu4dGGYzb0V3GsAqqR1YFshvNFiTETeBjzWdcQC3O
-   Mb+/Efe1qmYgdyGu2LQ1bpVL574U6dmY/S/fFb3KI+y1UhzBPhwJRaEUf
-   P6qe0ZaH3q9J21+LJTEHJWfbEYegnC9mpXnUUTUnJJLpo+1v1xLga6gz5
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="226239055"
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="226239055"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 03:45:24 -0800
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="682024130"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 03:45:22 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1mx6EM-0066XN-QD;
-        Tue, 14 Dec 2021 13:44:26 +0200
-Date:   Tue, 14 Dec 2021 13:44:26 +0200
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     broonie@kernel.org
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: Tree for Dec 13
-Message-ID: <YbiDmp3bJr9/Uctq@smile.fi.intel.com>
-References: <20211214030215.3181149-1-broonie@kernel.org>
+        id S232127AbhLNNYC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 14 Dec 2021 08:24:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45346 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232033AbhLNNYC (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Dec 2021 08:24:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 709E7C061574;
+        Tue, 14 Dec 2021 05:24:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 113DD614D8;
+        Tue, 14 Dec 2021 13:24:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D10F5C34601;
+        Tue, 14 Dec 2021 13:23:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639488241;
+        bh=2S74gn7u7PuWik2kpPjlH1SoUisH+72JMDuC0K0kPhs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=VjZrWCHtm7QDcAG69RpSxJWayTP2do7OraInWl7qNS4pULeobTdzZwhtpXYt3Zq54
+         EuGjAfsvb51bo0vL2zCg+DSmJNO/2bGFgtobr+lm9hPemF451EwehxotTG/6zyU459
+         t1k7n0cC7c6/N1SasNx28qTLsIf5qjOmejG/7HhPxWcjfitGQ7+H2uIP57h/ca9CnB
+         GWNcGTfnqMghfOIbr7KO+vlrkfwkvdch+oFIWxvnDASv5ehc0C/KoIhImn6UZatTXC
+         K1TIdd43k/UXtkJrXoM4pH+XTFKYdy/K+J3oaDkR9MkZjXVCRDeL5PUTwv7ARF+cH1
+         LMaJpLtBHMT8w==
+From:   broonie@kernel.org
+To:     Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Ramalingam C <ramalingam.c@intel.com>,
+        Stuart Summers <stuart.summers@intel.com>,
+        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>
+Subject: linux-next: manual merge of the drm-intel-gt tree with the drm-intel tree
+Date:   Tue, 14 Dec 2021 13:23:56 +0000
+Message-Id: <20211214132356.2833931-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211214030215.3181149-1-broonie@kernel.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 03:02:15AM +0000, broonie@kernel.org wrote:
-> Hi all,
-> 
-> Non-merge commits (relative to Linus' tree): 5960
->  6555 files changed, 277265 insertions(+), 120864 deletions(-)
+Hi all,
 
-Mark, is it possible to add tags to the releases, please?
+Today's linux-next merge of the drm-intel-gt tree got a conflict in:
 
-When you do them tags are missed, I have to add them manually after my scripts
-out of a sudden switched from Linux Next base to latest used vanilla tag with
-all nice outcomes...
+  drivers/gpu/drm/i915/i915_pci.c
 
-> ----------------------------------------------------------------------------
-> 
-> I have created today's linux-next tree at
-> git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-> (patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
-> are tracking the linux-next tree using git, you should not use "git pull"
-> to do so as that will try to merge the new linux-next release with the
-> old one.  You should use "git fetch" and checkout or reset to the new
-> master.
-> 
-> You can see which trees have been included by looking in the Next/Trees
-> file in the source.  There are also quilt-import.log and merge.log
-> files in the Next directory.  Between each merge, the tree was built
-> with a defconfig for arm64, an allmodconfig for x86_64, a
-> multi_v7_defconfig for arm and a native build of tools/perf.
-> 
-> Below is a summary of the state of the merge.
-> 
-> I am currently merging 346 trees (counting Linus' and 94 trees of bug
-> fix patches pending for the current merge release).
-> 
-> Stats about the size of the tree over time can be seen at
-> http://neuling.org/linux-next-size.html .
-> 
-> Status of my local build tests will be at
-> http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
-> advice about cross compilers/configs that work, we are always open to add
-> more builds.
-> 
-> Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
-> Gortmaker for triage and bug fixes.
-> 
+between commit:
 
--- 
-With Best Regards,
-Andy Shevchenko
+  6678916dfa012 ("drm/i915: Move pipe/transcoder/abox masks under intel_device_info.display")
 
+from the drm-intel tree and commit:
 
+  c83125bb2199b ("drm/i915: Add has_64k_pages flag")
+
+from the drm-intel-gt tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+diff --cc drivers/gpu/drm/i915/i915_pci.c
+index ae36dfd77dcfa,332cb8b25e494..0000000000000
+--- a/drivers/gpu/drm/i915/i915_pci.c
++++ b/drivers/gpu/drm/i915/i915_pci.c
+@@@ -1027,6 -1015,8 +1027,7 @@@ static const struct intel_device_info x
+  	DGFX_FEATURES,
+  	PLATFORM(INTEL_XEHPSDV),
+  	.display = { },
++ 	.has_64k_pages = 1,
+ -	.pipe_mask = 0,
+  	.platform_engine_mask =
+  		BIT(RCS0) | BIT(BCS0) |
+  		BIT(VECS0) | BIT(VECS1) | BIT(VECS2) | BIT(VECS3) |

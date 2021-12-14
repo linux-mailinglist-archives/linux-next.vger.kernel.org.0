@@ -2,121 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AB9F474937
-	for <lists+linux-next@lfdr.de>; Tue, 14 Dec 2021 18:24:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 048D5474944
+	for <lists+linux-next@lfdr.de>; Tue, 14 Dec 2021 18:26:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236069AbhLNRYp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 14 Dec 2021 12:24:45 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:46078 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231625AbhLNRYp (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Dec 2021 12:24:45 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C850C61628;
-        Tue, 14 Dec 2021 17:24:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B9DDC34601;
-        Tue, 14 Dec 2021 17:24:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639502684;
-        bh=WCpdMlr09747wukXO9N7qLEZ5HbSefqpma5Yu0yVFA0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=AXNk7ZMV6JkTvVY9JrfyZ0s2cDOV1EJ7j/AES5ObUpTva9Xgr5WGqU79lJqwG9OnU
-         0x7UnaKhI1ZtN77N1TRHHK7r89CBm1VToG7xiyStzFIPCdJeqVDfCWLhf7bkR+mxMU
-         I063LBH0dH7W6Tt2HDLjDLX3XU5u3dW8UPVl8U9ny6np8M31qqTpevt0uLYmY+/5rw
-         +8iSQHhHtuNh00emPx6KEUKNYfrpPNv83jIdkvk+zR7TlZkBwgBL6Zcf883TBDMl1b
-         dntv1v1glKFeBw8abY6dKJGsrh2NGlO2UNqAbG1ondMqDFKXCHbQoHjWyV2icB2XK4
-         aHJvnsMjYigAA==
-From:   broonie@kernel.org
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Dave Jiang <dave.jiang@intel.com>,
+        id S236291AbhLNRZ7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 14 Dec 2021 12:25:59 -0500
+Received: from mga11.intel.com ([192.55.52.93]:46456 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233723AbhLNRZ7 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 14 Dec 2021 12:25:59 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="236566472"
+X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
+   d="scan'208";a="236566472"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 09:25:59 -0800
+X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
+   d="scan'208";a="604415299"
+Received: from rtwoods-mobl.amr.corp.intel.com (HELO [10.213.169.152]) ([10.213.169.152])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 09:25:58 -0800
+Subject: Re: linux-next: Tree for Dec 13 (SND_AMD_ACP_CONFIG)
+To:     Daniel Baluta <daniel.baluta@gmail.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+Cc:     Linux-ALSA <alsa-devel@alsa-project.org>,
+        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the dmaengine tree with the dmaengine-fixes tree
-Date:   Tue, 14 Dec 2021 17:24:37 +0000
-Message-Id: <20211214172437.1552740-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+References: <20211214030215.3181149-1-broonie@kernel.org>
+ <8ff9d4b2-1905-2efa-cb86-e8f6cef06ef2@infradead.org>
+ <CAEnQRZB9E4uBDuUidiJ+QJnQhGZp43jig4q93Pkw3pSr=K48YQ@mail.gmail.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Message-ID: <11ed7f0f-ad5a-cae1-035c-23e5d3736818@linux.intel.com>
+Date:   Tue, 14 Dec 2021 11:25:57 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEnQRZB9E4uBDuUidiJ+QJnQhGZp43jig4q93Pkw3pSr=K48YQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi all,
 
-Today's linux-next merge of the dmaengine tree got a conflict in:
 
-  drivers/dma/idxd/submit.c
+On 12/14/21 11:21 AM, Daniel Baluta wrote:
+> Hi Randy,
+> 
+> This should be fixed by https://github.com/thesofproject/linux/pull/3284
 
-between commit:
+no, this was precisely the change that exposed a new problem.
 
-  8affd8a4b5ce3 ("dmaengine: idxd: fix missed completion on abort path")
+https://github.com/thesofproject/linux/pull/3335 contains the suggested
+fix posted earlier. We should know tomorrow if the 0day bot finds any
+other issues.
 
-from the dmaengine-fixes tree and commit:
-
-  5d78abb6fbc97 ("dmaengine: idxd: rework descriptor free path on failure")
-
-from the dmaengine tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-diff --cc drivers/dma/idxd/submit.c
-index 83452fbbb168b,569815a84e95b..0000000000000
---- a/drivers/dma/idxd/submit.c
-+++ b/drivers/dma/idxd/submit.c
-@@@ -134,20 -120,32 +125,43 @@@ static void llist_abort_desc(struct idx
-  	spin_unlock(&ie->list_lock);
-  
-  	if (found)
-- 		complete_desc(found, IDXD_COMPLETE_ABORT);
-+ 		idxd_dma_complete_txd(found, IDXD_COMPLETE_ABORT, false);
- +
- +	/*
-- 	 * complete_desc() will return desc to allocator and the desc can be
-- 	 * acquired by a different process and the desc->list can be modified.
-- 	 * Delete desc from list so the list trasversing does not get corrupted
-- 	 * by the other process.
-++	 * completing the descriptor will return desc to allocator and
-++	 * the desc can be acquired by a different process and the
-++	 * desc->list can be modified.  Delete desc from list so the
-++	 * list trasversing does not get corrupted by the other process.
- +	 */
- +	list_for_each_entry_safe(d, t, &flist, list) {
- +		list_del_init(&d->list);
-- 		complete_desc(d, IDXD_COMPLETE_NORMAL);
-++		idxd_dma_complete_txd(d, IDXD_COMPLETE_NORMAL, false);
- +	}
-  }
-  
-+ /*
-+  * ENQCMDS typically fail when the WQ is inactive or busy. On host submission, the driver
-+  * has better control of number of descriptors being submitted to a shared wq by limiting
-+  * the number of driver allocated descriptors to the wq size. However, when the swq is
-+  * exported to a guest kernel, it may be shared with multiple guest kernels. This means
-+  * the likelihood of getting busy returned on the swq when submitting goes significantly up.
-+  * Having a tunable retry mechanism allows the driver to keep trying for a bit before giving
-+  * up. The sysfs knob can be tuned by the system administrator.
-+  */
-+ int idxd_enqcmds(struct idxd_wq *wq, void __iomem *portal, const void *desc)
-+ {
-+ 	int rc, retries = 0;
-+ 
-+ 	do {
-+ 		rc = enqcmds(portal, desc);
-+ 		if (rc == 0)
-+ 			break;
-+ 		cpu_relax();
-+ 	} while (retries++ < wq->enqcmds_retries);
-+ 
-+ 	return rc;
-+ }
-+ 
-  int idxd_submit_desc(struct idxd_wq *wq, struct idxd_desc *desc)
-  {
-  	struct idxd_device *idxd = wq->idxd;
+> 
+> Let me quickly send this to alsa-devel.
+> 
+> 
+> On Tue, Dec 14, 2021 at 12:08 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+>>
+>>
+>>
+>> On 12/13/21 19:02, broonie@kernel.org wrote:
+>>> Hi all,
+>>>
+>>> Non-merge commits (relative to Linus' tree): 5960
+>>>  6555 files changed, 277265 insertions(+), 120864 deletions(-)
+>>>
+>>> ----------------------------------------------------------------------------
+>>>
+>>
+>> on i386 or x86_64:
+>>
+>> when # CONFIG_ACPI is not set,
+>> so SND_SOC_ACPI is not set:
+>>
+>> WARNING: unmet direct dependencies detected for SND_AMD_ACP_CONFIG
+>>   Depends on [n]: SOUND [=y] && !UML && SND [=y] && SND_SOC [=y] && SND_SOC_ACPI [=n]
+>>   Selected by [y]:
+>>   - SND_SOC_AMD_ACP_COMMON [=y] && SOUND [=y] && !UML && SND [=y] && SND_SOC [=y] && X86 [=y] && PCI [=y]
+>>
+>>
+>> Full randconfig file is attached
+>>
+>> --
+>> ~Randy

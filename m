@@ -2,102 +2,90 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4412B474CC6
-	for <lists+linux-next@lfdr.de>; Tue, 14 Dec 2021 21:47:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C266C474DEA
+	for <lists+linux-next@lfdr.de>; Tue, 14 Dec 2021 23:32:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229962AbhLNUrH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 14 Dec 2021 15:47:07 -0500
-Received: from 7.mo552.mail-out.ovh.net ([188.165.59.253]:40117 "EHLO
-        7.mo552.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbhLNUrG (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Dec 2021 15:47:06 -0500
-X-Greylist: delayed 1010 seconds by postgrey-1.27 at vger.kernel.org; Tue, 14 Dec 2021 15:47:06 EST
-Received: from mxplan5.mail.ovh.net (unknown [10.109.156.148])
-        by mo552.mail-out.ovh.net (Postfix) with ESMTPS id 81EA321E5C;
-        Tue, 14 Dec 2021 20:30:14 +0000 (UTC)
-Received: from kaod.org (37.59.142.104) by DAG4EX1.mxp5.local (172.16.2.31)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Tue, 14 Dec
- 2021 21:30:13 +0100
-Authentication-Results: garm.ovh; auth=pass (GARM-104R005923756eb-fc34-4846-a5c4-8a8ce2fecfe3,
-                    8EFD5A58B5F84DDBEE409E983A0304C96EE54735) smtp.auth=clg@kaod.org
-X-OVh-ClientIp: 90.76.172.47
-Message-ID: <102e59ba-fcf0-dd85-9338-75b7ce5fbd83@kaod.org>
-Date:   Tue, 14 Dec 2021 21:30:12 +0100
+        id S231860AbhLNWch (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 14 Dec 2021 17:32:37 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:48070 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229577AbhLNWch (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Dec 2021 17:32:37 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 588C5B81B3A;
+        Tue, 14 Dec 2021 22:32:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56323C34605;
+        Tue, 14 Dec 2021 22:32:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639521155;
+        bh=M2HKluCE/kZx1ZzHL6O3FUtbfbX2HVGF4UavWiNkRvQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=fn+37mqzSWa25v23lcVXr9iuHNGQpe/1G7xxQBV6OEx+Dj7WC5yNcG+kGWwO+B0J9
+         NAT/OYo1GbSfY1HmzMHR2PX7Av1j0Zl4pDvWLBxpiFXXGfXiG0vMNm4j1o3+v7WtZj
+         pEmYE6BH9fhF2rcFNbIE54HVKswtYTZ1Lyj+3w+ypip0MbmATDCLNuyGltI40CUkKO
+         Af59SzbMlI169T69Sahk7Zv0XoljZ3i0H9aMBjQW6AQyJf36ZJ/veqoqPLQiHkM7K7
+         KT+qYgsOWHKU62x+X+ZXd57HDidp1+KiQyvQCO+gdkJbB/LYwE2K2hZ0ReUF2Rs1WR
+         BbMIf2C0Q1yQA==
+From:   broonie@kernel.org
+To:     Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: Tree for Dec 14
+Date:   Tue, 14 Dec 2021 22:32:22 +0000
+Message-Id: <20211214223228.1745315-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: linux-next: manual merge of the audit tree with the powerpc tree
-Content-Language: en-US
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Moore <paul@paul-moore.com>
-CC:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Richard Guy Briggs <rgb@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>
-References: <20211026133147.35d19e00@canb.auug.org.au>
- <87k0i0awdl.fsf@mpe.ellerman.id.au>
- <CAHC9VhTj7gn3iAOYctVRKvv_Bk1iQMrmkA8FVJtYzdvBjqFmvg@mail.gmail.com>
- <87tuh2aepp.fsf@mpe.ellerman.id.au>
- <2012df5e-62ec-06fb-9f4d-e27dde184a3f@csgroup.eu>
- <CAHC9VhRHs8Lx8+v+LHmJByxO_m330sfLWRsGDsFtQxyQ1860eg@mail.gmail.com>
- <dc5705cf-d47a-57b0-65da-2a2af8d71b19@csgroup.eu>
- <CAHC9VhQPizVLkr2+sqRCS0gS4+ZSw-AMkJM5V64-ku8AQe+QQg@mail.gmail.com>
- <1a78709f-162e-0d78-0550-4e9ef213f9c6@csgroup.eu>
-From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
-In-Reply-To: <1a78709f-162e-0d78-0550-4e9ef213f9c6@csgroup.eu>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [37.59.142.104]
-X-ClientProxiedBy: DAG3EX1.mxp5.local (172.16.2.21) To DAG4EX1.mxp5.local
- (172.16.2.31)
-X-Ovh-Tracer-GUID: 659388e9-f9c1-4eda-a9e4-44d041de7a6b
-X-Ovh-Tracer-Id: 18362864531949849449
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvuddrledtgddufeelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvfhfhjggtgfhisehtkeertddtfeejnecuhfhrohhmpeevrogurhhitggpnfgvpgfiohgrthgvrhcuoegtlhhgsehkrghougdrohhrgheqnecuggftrfgrthhtvghrnhepjeejuedutdetteeljeekudeiffehgeekhffffeejffegheefheefieduudeuheevnecuffhomhgrihhnpeguvggsihgrnhdrohhrghenucfkpheptddrtddrtddrtddpfeejrdehledrudegvddruddtgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepmhigphhlrghnhedrmhgrihhlrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpegtlhhgsehkrghougdrohhrghdprhgtphhtthhopehlihhnuhigphhptgdquggvvheslhhishhtshdrohiilhgrsghsrdhorhhg
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 12/14/21 20:32, Christophe Leroy wrote:
-> 
-> 
-> Le 14/12/2021 à 19:23, Paul Moore a écrit :
->> On Tue, Dec 14, 2021 at 12:59 PM Christophe Leroy
->> <christophe.leroy@csgroup.eu> wrote:
->>> Hello Paul,
->>>
->>> I've been trying to setup your test suite on my powerpc board but it's
->>> based on Perl and on a lot of optional Perl packages. I was able to add
->>> them one by one until some of them require some .so libraries
->>> (Pathtools-Cwd), and it seems nothing is made to allow cross building
->>> those libraries.
->>>
->>> Do you have another test suite based on C and not perl ?
->>>
->>> If not, what can I do, do you know how I can cross compile those Perl
->>> packages for PPC32 ?
->>
->> Is there no Linux distribution that supports PPC32?  I would think
->> that would be the easiest path forward, but you're the PPC32 expert -
->> not me - so I'll assume you already tried that or it didn't work for
->> other reasons.
-> 
-> There hasn't been Linux distribution supporting PPC32 for a few years
-> now. And regardless, the boards I'm running Linux on are home made
-> embedded boards, with limited amount of memory and flashdisk space and
-> no video chip, so they are hardly supported by any distributions, even
-> older ones.
+Hi all,
 
-We still have debian. you will find images under :
+News: Releases may or may not happen over the next few days since I'm
+getting a vacciene dose tomorrow.
 
-   https://cdimage.debian.org/cdimage/ports/snapshots/2021-04-17/
+Changes since 20211213:
 
-and from there, you can update to unstable, which runs fine under
-a mac99 QEMU machine.
+The drm-intel tree gained a conflict with the drm-intel-fixes tree.
 
-Cheers,
+The dmaengine tree gained a conflict with the dmaengine-fixes tree.
 
-C.
+Non-merge commits (relative to Linus' tree): 6251
+ 6873 files changed, 291130 insertions(+), 138903 deletions(-)
+
+----------------------------------------------------------------------------
+
+I have created today's linux-next tree at
+git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
+are tracking the linux-next tree using git, you should not use "git pull"
+to do so as that will try to merge the new linux-next release with the
+old one.  You should use "git fetch" and checkout or reset to the new
+master.
+
+You can see which trees have been included by looking in the Next/Trees
+file in the source.  There are also quilt-import.log and merge.log
+files in the Next directory.  Between each merge, the tree was built
+with a defconfig for arm64, an allmodconfig for x86_64, a
+multi_v7_defconfig for arm and a native build of tools/perf. After the
+final fixups (if any), I do an x86_64 modules_install followed by builds
+for x86_64 allnoconfig, arm64 allnoconfig, arm64 allyesconfig and i386,
+and arm64 and htmldocs.
+
+Below is a summary of the state of the merge.
+
+I am currently merging 346 trees (counting Linus' and 94 trees of bug
+fix patches pending for the current merge release).
+
+Stats about the size of the tree over time can be seen at
+http://neuling.org/linux-next-size.html .
+
+Status of my local build tests will be at
+http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
+advice about cross compilers/configs that work, we are always open to add
+more builds.
+
+Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
+Gortmaker for triage and bug fixes.

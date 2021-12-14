@@ -2,47 +2,41 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45B7B47378B
-	for <lists+linux-next@lfdr.de>; Mon, 13 Dec 2021 23:34:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3388473B3C
+	for <lists+linux-next@lfdr.de>; Tue, 14 Dec 2021 04:02:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243716AbhLMWdx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 13 Dec 2021 17:33:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41096 "EHLO
+        id S235107AbhLNDCX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 13 Dec 2021 22:02:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243616AbhLMWdl (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Dec 2021 17:33:41 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98EB4C061574;
-        Mon, 13 Dec 2021 14:33:40 -0800 (PST)
+        with ESMTP id S232118AbhLNDCX (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Dec 2021 22:02:23 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE4A2C061574;
+        Mon, 13 Dec 2021 19:02:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3CB5761286;
-        Mon, 13 Dec 2021 22:33:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 976F0C34605;
-        Mon, 13 Dec 2021 22:33:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2F88EB815B8;
+        Tue, 14 Dec 2021 03:02:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 315DCC34603;
+        Tue, 14 Dec 2021 03:02:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639434819;
-        bh=QWibT/o9T5XkwjnFZEWKm/t6gnHe/K8YQgsfhTcy6Xc=;
+        s=k20201202; t=1639450939;
+        bh=HRVA4L6EH/KF8FO0x/gNMH5vDkhOCikRbawIeH2EJRI=;
         h=From:To:Cc:Subject:Date:From;
-        b=H2hnG88JbSe8wtfhgs/VHUBxGFtibM0YbvefsAFiBFBm4K2xSmbyPBS4Jf3uEYOsy
-         80qqJfA5ShtjYQ4nSRU1J1BZW4uykqHPShKMa5alIMG3ZWBCvG9QSg4V6hud5iK3n4
-         BzOX4ISBrmcZfoXm5HaANgSye61EO1q4o3AEhZIOgwZxHsYXdlD3DbWevQ4vXpLruf
-         XRyeGlk2GSC/UfrJ3JBw+u1tP6WNe29RsF/weW+OhlfzXSzr9fX4YnZde12XUR4FeW
-         P6eiw+lJvb9SCN7lOuGHv8hcdpurEOH9vmTN99afo2pQMNNBp4nfVBbgMh3Yg4Yuj7
-         5LX6275C/qSMw==
+        b=o1VSquNf8EbGIBEyckGDLSlncdukveopZ1wyuwoqBcJQiR7quuWHj9+/6WwzkcYEe
+         QXjoB8iEmTcgR5msxONmK1Q3kx26IFKlZ2UHyKy37KRX2R4STkcj9mQXtJDwLlQ9GT
+         DCnc8l6qGy9r4dpgLolGIBkJsKhht5SrpSnEnhjdBLmjunmi1e9cmwMRypeAAa7t0m
+         fyL3+iFrQl3SNFKMDtsSGhQcgTNqQ4ySwKy+PoKqwJkn9SAPw5MsI8jhyl3ISfdFgR
+         D77MhyDTcD5p5TnP+/uyTQMQ0f4Mb03ggu1rSrhRPfQNJLxkDorxDv2yxkVeYiwzyO
+         kJe70czuvnfrw==
 From:   broonie@kernel.org
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Sasha Levin <sashal@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@google.com>
-Subject: linux-next: manual merge of the rust tree with the origin tree
-Date:   Mon, 13 Dec 2021 22:33:34 +0000
-Message-Id: <20211213223334.692590-1-broonie@kernel.org>
+To:     Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: Tree for Dec 13
+Date:   Tue, 14 Dec 2021 03:02:15 +0000
+Message-Id: <20211214030215.3181149-1-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -52,23 +46,37 @@ X-Mailing-List: linux-next@vger.kernel.org
 
 Hi all,
 
-Today's linux-next merge of the rust tree got a conflict in:
+Non-merge commits (relative to Linus' tree): 5960
+ 6555 files changed, 277265 insertions(+), 120864 deletions(-)
 
-  tools/include/linux/lockdep.h
+----------------------------------------------------------------------------
 
-between commit:
+I have created today's linux-next tree at
+git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
+are tracking the linux-next tree using git, you should not use "git pull"
+to do so as that will try to merge the new linux-next release with the
+old one.  You should use "git fetch" and checkout or reset to the new
+master.
 
-  3a49cc22d31ec ("tools/lib/lockdep: drop leftover liblockdep headers")
+You can see which trees have been included by looking in the Next/Trees
+file in the source.  There are also quilt-import.log and merge.log
+files in the Next directory.  Between each merge, the tree was built
+with a defconfig for arm64, an allmodconfig for x86_64, a
+multi_v7_defconfig for arm and a native build of tools/perf.
 
-from the origin tree and commit:
+Below is a summary of the state of the merge.
 
-  ab4cc3d9c564d ("kallsyms: increase maximum kernel symbol length to 512")
+I am currently merging 346 trees (counting Linus' and 94 trees of bug
+fix patches pending for the current merge release).
 
-from the rust tree.
+Stats about the size of the tree over time can be seen at
+http://neuling.org/linux-next-size.html .
 
-I fixed it up by removing lockdep.h again and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
+Status of my local build tests will be at
+http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
+advice about cross compilers/configs that work, we are always open to add
+more builds.
+
+Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
+Gortmaker for triage and bug fixes.

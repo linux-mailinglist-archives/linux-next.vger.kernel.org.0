@@ -2,81 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3388473B3C
-	for <lists+linux-next@lfdr.de>; Tue, 14 Dec 2021 04:02:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B6F0473B4C
+	for <lists+linux-next@lfdr.de>; Tue, 14 Dec 2021 04:12:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235107AbhLNDCX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 13 Dec 2021 22:02:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45972 "EHLO
+        id S232304AbhLNDMK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 13 Dec 2021 22:12:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232118AbhLNDCX (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Dec 2021 22:02:23 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE4A2C061574;
-        Mon, 13 Dec 2021 19:02:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2F88EB815B8;
-        Tue, 14 Dec 2021 03:02:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 315DCC34603;
-        Tue, 14 Dec 2021 03:02:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639450939;
-        bh=HRVA4L6EH/KF8FO0x/gNMH5vDkhOCikRbawIeH2EJRI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=o1VSquNf8EbGIBEyckGDLSlncdukveopZ1wyuwoqBcJQiR7quuWHj9+/6WwzkcYEe
-         QXjoB8iEmTcgR5msxONmK1Q3kx26IFKlZ2UHyKy37KRX2R4STkcj9mQXtJDwLlQ9GT
-         DCnc8l6qGy9r4dpgLolGIBkJsKhht5SrpSnEnhjdBLmjunmi1e9cmwMRypeAAa7t0m
-         fyL3+iFrQl3SNFKMDtsSGhQcgTNqQ4ySwKy+PoKqwJkn9SAPw5MsI8jhyl3ISfdFgR
-         D77MhyDTcD5p5TnP+/uyTQMQ0f4Mb03ggu1rSrhRPfQNJLxkDorxDv2yxkVeYiwzyO
-         kJe70czuvnfrw==
-From:   broonie@kernel.org
-To:     Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Tree for Dec 13
-Date:   Tue, 14 Dec 2021 03:02:15 +0000
-Message-Id: <20211214030215.3181149-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S232022AbhLNDMJ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Dec 2021 22:12:09 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A96CBC061574;
+        Mon, 13 Dec 2021 19:12:09 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id y9so3053679pgj.5;
+        Mon, 13 Dec 2021 19:12:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=quoR+TZ/qpdjmw0cQ/LVqVjG7Bub9Md1PQ4Qq09DCq0=;
+        b=Oc459qZZJkOYSlCEcviZfTFtW5PeeKXISKGhw1BzRWPLEk6jZh+jD/eHoSL7kyR5yC
+         zmmPTKmOHULKtkiVmSXo5btVMgp64Vb1ppMs3byI4aFl+i/x1LrGfYVVLYjTmTTYK4ac
+         81ldzWhbxn5jMvoosIl7z2GD3P/IdI8QaJBd/0oVl7HqUdRAy+6W1tVr7Esemulp48Dw
+         TJGYykC+kYX/EZR1lLGWtcsqe4kUFNXdD0hUITTHX7WrP1d7JWyke3suVHZKMslGVogw
+         oZIL/JIyqQWonCZ/El7Ck/q1hVG4DMn1/jOASlYZfdMuG6ZcgzWPqv4qtgBkagOjyKbf
+         KANQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=quoR+TZ/qpdjmw0cQ/LVqVjG7Bub9Md1PQ4Qq09DCq0=;
+        b=GeO5nSTsCLxpIoccBRi4/R8ueAfxaN26UYzoMYbnYPJ5itD3+225SKq/fziWxDQV8U
+         ztELxno7AZAibtDEdvTHItDkqnGHoDD8SEKsX/1e/qjA6FA0MTUhmH9ho3838FTB8Pwg
+         5XVy7iwiU5RiMkFQ2bc9oW6pNhbqn9sQ5yOjE+FGLYaaV2D7XgWs6zpIPd95mZtEUICn
+         ZyiqVfEEjZNG0K2ToLrqO+luSStpjiKTZq2GLpvv/STPp8TqSFrwjSEwDtQXHmHJc+bl
+         5M6U+yPbHmcbgWUR4kJNiB4PJj2ZX/XX5zgtWtZFcLhwMTGZ0JnDe6o253xDolS/y4zI
+         L0yg==
+X-Gm-Message-State: AOAM531EhtCmd/apMqeF/aNX9CSOIEO7iFFe7cvDjmRa2k11hAMmnyQL
+        iy6I8wP6BPHx8KxaQe8M7SJUS3/n/p8=
+X-Google-Smtp-Source: ABdhPJwzKHAdAmOr2NG3LeFomsLpG0Uuo10dMwvbuEwcDi4meuYIgvvnBpbtlhQsPeh95nCka5jePw==
+X-Received: by 2002:a63:8f06:: with SMTP id n6mr1901633pgd.95.1639451529088;
+        Mon, 13 Dec 2021 19:12:09 -0800 (PST)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id q2sm13825449pfj.62.2021.12.13.19.12.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Dec 2021 19:12:08 -0800 (PST)
+Message-ID: <b7f4804a-01dd-9dd9-01f1-2187a955cb13@gmail.com>
+Date:   Mon, 13 Dec 2021 19:12:05 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: linux-next: build failure after merge of the gpio-brgl tree
+Content-Language: en-US
+To:     broonie@kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Xiang wangx <wangxiang@cdjrlc.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        linux-gpio@vger.kernel.org
+References: <20211213203112.969238-1-broonie@kernel.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20211213203112.969238-1-broonie@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi all,
 
-Non-merge commits (relative to Linus' tree): 5960
- 6555 files changed, 277265 insertions(+), 120864 deletions(-)
 
-----------------------------------------------------------------------------
+On 12/13/2021 12:31 PM, broonie@kernel.org wrote:
+> Hi all,
+> 
+> After merging the gpio-brgl tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+> 
+> /tmp/next/build/drivers/gpio/gpio-bcm-kona.c:508:34: error: duplicate 'const' declaration specifier [-Werror=duplicate-decl-specifier]
+>    508 | static const struct of_device_id const bcm_kona_gpio_of_match[] = {
+>        |                                  ^~~~~
+> cc1: all warnings being treated as errors
+> 
+> Caused by commit
+> 
+>    19784a059cf47b ("gpio: bcm-kona: add const to of_device_id")
+> 
+> I used the tree from yesterday instead.
 
-I have created today's linux-next tree at
-git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
-are tracking the linux-next tree using git, you should not use "git pull"
-to do so as that will try to merge the new linux-next release with the
-old one.  You should use "git fetch" and checkout or reset to the new
-master.
-
-You can see which trees have been included by looking in the Next/Trees
-file in the source.  There are also quilt-import.log and merge.log
-files in the Next directory.  Between each merge, the tree was built
-with a defconfig for arm64, an allmodconfig for x86_64, a
-multi_v7_defconfig for arm and a native build of tools/perf.
-
-Below is a summary of the state of the merge.
-
-I am currently merging 346 trees (counting Linus' and 94 trees of bug
-fix patches pending for the current merge release).
-
-Stats about the size of the tree over time can be seen at
-http://neuling.org/linux-next-size.html .
-
-Status of my local build tests will be at
-http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
-advice about cross compilers/configs that work, we are always open to add
-more builds.
-
-Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
-Gortmaker for triage and bug fixes.
+Doh! Should have double checked the code as the diff was not giving 
+enough context. This patch should simply be dropped, not even build 
+tested by Xiang it seems.
+-- 
+Florian

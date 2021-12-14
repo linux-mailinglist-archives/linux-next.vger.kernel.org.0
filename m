@@ -2,87 +2,83 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC4BE474359
-	for <lists+linux-next@lfdr.de>; Tue, 14 Dec 2021 14:24:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8E084743DB
+	for <lists+linux-next@lfdr.de>; Tue, 14 Dec 2021 14:51:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232127AbhLNNYC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 14 Dec 2021 08:24:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45346 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232033AbhLNNYC (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Dec 2021 08:24:02 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 709E7C061574;
-        Tue, 14 Dec 2021 05:24:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 113DD614D8;
-        Tue, 14 Dec 2021 13:24:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D10F5C34601;
-        Tue, 14 Dec 2021 13:23:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639488241;
-        bh=2S74gn7u7PuWik2kpPjlH1SoUisH+72JMDuC0K0kPhs=;
-        h=From:To:Cc:Subject:Date:From;
-        b=VjZrWCHtm7QDcAG69RpSxJWayTP2do7OraInWl7qNS4pULeobTdzZwhtpXYt3Zq54
-         EuGjAfsvb51bo0vL2zCg+DSmJNO/2bGFgtobr+lm9hPemF451EwehxotTG/6zyU459
-         t1k7n0cC7c6/N1SasNx28qTLsIf5qjOmejG/7HhPxWcjfitGQ7+H2uIP57h/ca9CnB
-         GWNcGTfnqMghfOIbr7KO+vlrkfwkvdch+oFIWxvnDASv5ehc0C/KoIhImn6UZatTXC
-         K1TIdd43k/UXtkJrXoM4pH+XTFKYdy/K+J3oaDkR9MkZjXVCRDeL5PUTwv7ARF+cH1
-         LMaJpLtBHMT8w==
-From:   broonie@kernel.org
-To:     Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Ramalingam C <ramalingam.c@intel.com>,
-        Stuart Summers <stuart.summers@intel.com>,
-        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
-        <ville.syrjala@linux.intel.com>
-Subject: linux-next: manual merge of the drm-intel-gt tree with the drm-intel tree
-Date:   Tue, 14 Dec 2021 13:23:56 +0000
-Message-Id: <20211214132356.2833931-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        id S230307AbhLNNvX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 14 Dec 2021 08:51:23 -0500
+Received: from mga03.intel.com ([134.134.136.65]:42616 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230146AbhLNNvX (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 14 Dec 2021 08:51:23 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="238926066"
+X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
+   d="scan'208";a="238926066"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 05:51:23 -0800
+X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
+   d="scan'208";a="604287738"
+Received: from rtwoods-mobl.amr.corp.intel.com (HELO [10.213.169.152]) ([10.213.169.152])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 05:51:22 -0800
+Subject: Re: linux-next: Tree for Dec 13 (SND_AMD_ACP_CONFIG)
+To:     Randy Dunlap <rdunlap@infradead.org>, broonie@kernel.org,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     alsa-devel@alsa-project.org,
+        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20211214030215.3181149-1-broonie@kernel.org>
+ <8ff9d4b2-1905-2efa-cb86-e8f6cef06ef2@infradead.org>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Message-ID: <15c3b6fe-b159-6cee-be67-11f2f2dd0d04@linux.intel.com>
+Date:   Tue, 14 Dec 2021 07:51:21 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <8ff9d4b2-1905-2efa-cb86-e8f6cef06ef2@infradead.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi all,
 
-Today's linux-next merge of the drm-intel-gt tree got a conflict in:
 
-  drivers/gpu/drm/i915/i915_pci.c
+> on i386 or x86_64:
+> 
+> when # CONFIG_ACPI is not set,
+> so SND_SOC_ACPI is not set:
+> 
+> WARNING: unmet direct dependencies detected for SND_AMD_ACP_CONFIG
+>   Depends on [n]: SOUND [=y] && !UML && SND [=y] && SND_SOC [=y] && SND_SOC_ACPI [=n]
+>   Selected by [y]:
+>   - SND_SOC_AMD_ACP_COMMON [=y] && SOUND [=y] && !UML && SND [=y] && SND_SOC [=y] && X86 [=y] && PCI [=y]
+> 
+> 
+> Full randconfig file is attached
 
-between commit:
+It's probably triggered by my recent change to fix another problem.
 
-  6678916dfa012 ("drm/i915: Move pipe/transcoder/abox masks under intel_device_info.display")
+d9b994cd7641 ASoC: AMD: acp-config: fix missing dependency on SND_SOC_ACPI
 
-from the drm-intel tree and commit:
+I didn't realize SND_AMD_ACP_CONFIG was selected by other configs.
+Moving to a select seems to fix the issue reported by Randy, not sure if
+it's the right thing to do though.
 
-  c83125bb2199b ("drm/i915: Add has_64k_pages flag")
 
-from the drm-intel-gt tree.
+diff --git a/sound/soc/amd/Kconfig b/sound/soc/amd/Kconfig
+index bcfeb3fc2592..7a9e45094f37 100644
+--- a/sound/soc/amd/Kconfig
++++ b/sound/soc/amd/Kconfig
+@@ -98,7 +98,7 @@ config SND_SOC_AMD_YC_MACH
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+ config SND_AMD_ACP_CONFIG
+        tristate "AMD ACP configuration selection"
+-       depends on SND_SOC_ACPI
++       select SND_SOC_ACPI if ACPI
+        help
+         This option adds an auto detection to determine which ACP
+         driver modules to use
 
-diff --cc drivers/gpu/drm/i915/i915_pci.c
-index ae36dfd77dcfa,332cb8b25e494..0000000000000
---- a/drivers/gpu/drm/i915/i915_pci.c
-+++ b/drivers/gpu/drm/i915/i915_pci.c
-@@@ -1027,6 -1015,8 +1027,7 @@@ static const struct intel_device_info x
-  	DGFX_FEATURES,
-  	PLATFORM(INTEL_XEHPSDV),
-  	.display = { },
-+ 	.has_64k_pages = 1,
- -	.pipe_mask = 0,
-  	.platform_engine_mask =
-  		BIT(RCS0) | BIT(BCS0) |
-  		BIT(VECS0) | BIT(VECS1) | BIT(VECS2) | BIT(VECS3) |
+

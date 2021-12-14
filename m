@@ -2,109 +2,99 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42CDD4748DD
-	for <lists+linux-next@lfdr.de>; Tue, 14 Dec 2021 18:07:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B92347492A
+	for <lists+linux-next@lfdr.de>; Tue, 14 Dec 2021 18:21:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233739AbhLNRGq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 14 Dec 2021 12:06:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41986 "EHLO
+        id S230475AbhLNRVl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 14 Dec 2021 12:21:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235956AbhLNRGp (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Dec 2021 12:06:45 -0500
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CB21C06173F
-        for <linux-next@vger.kernel.org>; Tue, 14 Dec 2021 09:06:45 -0800 (PST)
-Received: by mail-ot1-x32a.google.com with SMTP id h19-20020a9d3e53000000b0056547b797b2so21538918otg.4
-        for <linux-next@vger.kernel.org>; Tue, 14 Dec 2021 09:06:45 -0800 (PST)
+        with ESMTP id S229494AbhLNRVk (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Dec 2021 12:21:40 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68D68C061574;
+        Tue, 14 Dec 2021 09:21:40 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id j140-20020a1c2392000000b003399ae48f58so16740788wmj.5;
+        Tue, 14 Dec 2021 09:21:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=IemfCDmXWx/SPnnub7QAI6IhttPGClVQvWol1/Vo8hE=;
-        b=RfVV6DnVFt1imQzcrX+WIWydNs7BF19SXFkIHEtUg1n/CkWAkas8Z4tcWA0qcqEAPn
-         igA5N73E1RtEwHAS6CeM+ooIhpZdT0yw826Tf6CocThL1ho6KQHjWocZkVD7HClqKvNr
-         cY6G4qwOvCEaLjAmOvtoU0M4H/VJuFm9HRAa0=
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Xs9607BDx2T01u5LqyPaCAPyvesOcrbFjspbhqFitRc=;
+        b=jZD4QsWD9EHLJLspQN8NnHR3EIUz/Vl4QL1JHjeRVvh/5MoYOixQoVvVBbfOl+JWbs
+         wWUlX7dhyGC6F68DWdY5nsH3O/DjCR/M+1z8L5NpGJiA8gWffbveRPGQwS3aOK7ZMfIc
+         TsmJM6aQNXvCqwFWsHQeuAoRubFg0ll5RbZvT/Kjaq12J8eGzxys1IA9ya1LVUavt2x2
+         zxB9axRsPLshtyqAT0IpO13LQWYz5yJXWW5h9VehaUQyFRzoKAmDEKj4r/Bk2mX3EWQD
+         qubt5CRWH2jvfFJaxQWlj3KUL0A0UK/52kVbhd/0jkCYakH+mVwgEzWNFPEMNoppOo2D
+         rz7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=IemfCDmXWx/SPnnub7QAI6IhttPGClVQvWol1/Vo8hE=;
-        b=Lac8ThkUyqYNE+g7prikfQ+lWT6qBPh4D7o+r41/c7BzNNErwlsimRf5KdiHpLUUCW
-         oFz/eEKTY8YQIL/gbig5Cb7+47DM6qP3SQI6qYAidWSNYcCeYwiHoB1QW6mChZTRfbvy
-         RvLSsuYoSlGNsrJV75ReOW6VcBP72rgE4QkhPMpk9nWCT0q90GiwP9SbEyVH3HfGoDtZ
-         rBNGpJ7gljNLIOGRTJGJiJ3D+pR/OVVRsc6pk8uX0NRDXmTS3dywqGYfs9lvnfdc59rX
-         9IdfHOzKyuLfHYojF2c++kr7R36fLqU13WzDpupVrvKKCkOlLvNA7jhOVfxVaxHDZmt+
-         XFpw==
-X-Gm-Message-State: AOAM530bP+O3dHEfb+p5F1TgqyRKkAeTLiRNzM7qMMkBRdhPN1zP/ofC
-        HLGzp9eN1/YubAaDK0uibptVCg==
-X-Google-Smtp-Source: ABdhPJzPXw827om0Y5Cd811nXaXL7/9e41CMccQTS2B8fiI1FTev8YKMtcA3PITQyHJiKz1ClqAf8Q==
-X-Received: by 2002:a05:6830:1d7c:: with SMTP id l28mr5241205oti.372.1639501604855;
-        Tue, 14 Dec 2021 09:06:44 -0800 (PST)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id bl33sm76949oib.47.2021.12.14.09.06.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Dec 2021 09:06:44 -0800 (PST)
-Subject: Re: linux-next: manual merge of the xarray tree with the kselftest
- tree
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     broonie@kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20211213222443.474487-1-broonie@kernel.org>
- <1dcd2d43-cf39-3b4c-49b5-138d94f34433@linuxfoundation.org>
- <YbjMLHCRXNMwp4nU@casper.infradead.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <2ee0bba7-879f-40e2-dd7d-d9b264d4d493@linuxfoundation.org>
-Date:   Tue, 14 Dec 2021 10:06:43 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Xs9607BDx2T01u5LqyPaCAPyvesOcrbFjspbhqFitRc=;
+        b=WnZ4lR3cAq26TG4gOa3pqqW4WzUxux+gmcaT91AjLpze+zCC5bH9eDhwcmvuI+fYi9
+         Y76LtTLwvSvYxO/2DoG/fS+STBHnHU//EGFSZS4543a3lZOp6fqiY09/KO08M2euOJiU
+         l7HCJOGN7+tdweJFW2SeOLMx6+gXSlwGkqIoiasMQ86pO4aEJRrjPN1obnP0NdqC+w6e
+         Uhy/uyxU4nbpURYbYRVqXswvAYZ4bBRyOi2o1Ve/C9QaNE9Zo9sZPVcBtN5jSSN2WnHh
+         D+Q1R93CX/JEiOT8rVxbFuIrBWyURYSlWwn5Izgxkal536F8JwTo6kC559XtKC3XIosI
+         sXeQ==
+X-Gm-Message-State: AOAM5302wwZch5/q5s41Ti0NqaU/Ms3K7VOZ5Q/zCSxYeVBfmrAU65GD
+        PLOhAClDdxJqohX8RzYfEpqxFFKwhQ1qVWphJBg=
+X-Google-Smtp-Source: ABdhPJz2j774LLWhSct0g9YlaoUSrM0H3bM6tJPmvkDzP75CZG4hVTgym+YAuXScBjS4vDsslvt6j2Y7q1Y1Sr3VSio=
+X-Received: by 2002:a05:600c:500a:: with SMTP id n10mr295300wmr.136.1639502499047;
+ Tue, 14 Dec 2021 09:21:39 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <YbjMLHCRXNMwp4nU@casper.infradead.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20211214030215.3181149-1-broonie@kernel.org> <8ff9d4b2-1905-2efa-cb86-e8f6cef06ef2@infradead.org>
+In-Reply-To: <8ff9d4b2-1905-2efa-cb86-e8f6cef06ef2@infradead.org>
+From:   Daniel Baluta <daniel.baluta@gmail.com>
+Date:   Tue, 14 Dec 2021 19:21:25 +0200
+Message-ID: <CAEnQRZB9E4uBDuUidiJ+QJnQhGZp43jig4q93Pkw3pSr=K48YQ@mail.gmail.com>
+Subject: Re: linux-next: Tree for Dec 13 (SND_AMD_ACP_CONFIG)
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-ALSA <alsa-devel@alsa-project.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 12/14/21 9:54 AM, Matthew Wilcox wrote:
-> On Tue, Dec 14, 2021 at 09:39:25AM -0700, Shuah Khan wrote:
->> On 12/13/21 3:24 PM, broonie@kernel.org wrote:
->>> Hi all,
->>>
->>> Today's linux-next merge of the xarray tree got a conflict in:
->>>
->>>     tools/include/linux/kernel.h
->>>
->>> between commits:
->>>
->>>     d6e6a27d960f9 ("tools: Fix math.h breakage")
->>>     066b34aa5461f ("tools: fix ARRAY_SIZE defines in tools and selftests hdrs")
->>>
->>> from the kselftest and origin trees and commit:
->>>
->>>     f2aa11fd51440 ("tools: Fix math.h breakage")
->>>
->>> from the xarray tree.
-> 
-> I've dropped that commit from the XArray tree since d6e6a27d960f9
-> was essentially f2aa11fd51440 applied to Linus' tree.  The only change
-> left in the XArray tree today is a documentation update.
-> 
->> Thank you. I will keep track of this when I send pull request.
-> 
-> As long as what you have merges cleanly against Linus' tree (and I see
-> the "conflict" -- __round_mask() is defined adjacent to ARRAY_SIZE()),
-> then it'll be fine.  You might want to rebase to a more recent Linus
-> tree to get rid of the conflict.
-> 
+Hi Randy,
 
-When I applied on rc4 base, I didn't see any problems. This is a minor
-one - I can mention this when I send my pull request. Shouldn't be a
-problem.
+This should be fixed by https://github.com/thesofproject/linux/pull/3284
 
-thanks,
--- Shuah
+Let me quickly send this to alsa-devel.
+
+
+On Tue, Dec 14, 2021 at 12:08 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+>
+>
+>
+> On 12/13/21 19:02, broonie@kernel.org wrote:
+> > Hi all,
+> >
+> > Non-merge commits (relative to Linus' tree): 5960
+> >  6555 files changed, 277265 insertions(+), 120864 deletions(-)
+> >
+> > ----------------------------------------------------------------------------
+> >
+>
+> on i386 or x86_64:
+>
+> when # CONFIG_ACPI is not set,
+> so SND_SOC_ACPI is not set:
+>
+> WARNING: unmet direct dependencies detected for SND_AMD_ACP_CONFIG
+>   Depends on [n]: SOUND [=y] && !UML && SND [=y] && SND_SOC [=y] && SND_SOC_ACPI [=n]
+>   Selected by [y]:
+>   - SND_SOC_AMD_ACP_COMMON [=y] && SOUND [=y] && !UML && SND [=y] && SND_SOC [=y] && X86 [=y] && PCI [=y]
+>
+>
+> Full randconfig file is attached
+>
+> --
+> ~Randy

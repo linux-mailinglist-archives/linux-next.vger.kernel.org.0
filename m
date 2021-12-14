@@ -2,104 +2,103 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C562474806
-	for <lists+linux-next@lfdr.de>; Tue, 14 Dec 2021 17:28:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0523F47485A
+	for <lists+linux-next@lfdr.de>; Tue, 14 Dec 2021 17:39:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231782AbhLNQ2w (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 14 Dec 2021 11:28:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60630 "EHLO
+        id S236123AbhLNQj2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 14 Dec 2021 11:39:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236199AbhLNQ1D (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Dec 2021 11:27:03 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05D67C061574;
-        Tue, 14 Dec 2021 08:27:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=uslCgpNux7UCWvRrQn0jiboSZeFlAwPdMrox4AtO3lY=; b=NA69IeRgKaAKGVIPZOXkudrLma
-        LB4GLgor00uc8BI0/pGiViJ9hCO5G31dOaMt9n5+tGiVIKu1TJRf8W16fGRo5ZYEFdlQHSCN0htZn
-        jsOofBk7FUY03UCo4Z6WxML0kucfTzx6UlJagPU+Z+piEnDtGHmRfqbXubz66BSn8RtyW8mPNHii9
-        gX7ZEdDulliKRtIaGHZP31xYwF2pmYZY6B+TPPwejwrKVCdmCleglG35v8t7k+BuYa3CkmUQ62Dfb
-        sw9nIv4AV2FGjfRkkp1e6k+UzTcFUfkG7tsgM6jvLT4RwVrQ14YvcK012oih2gbxIm+2q7eW/Waox
-        vFUvJ+NQ==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mxAdj-00DsaK-Fr; Tue, 14 Dec 2021 16:26:56 +0000
-Message-ID: <8ab0ed95-ce79-cd61-0440-20e0242b8930@infradead.org>
-Date:   Tue, 14 Dec 2021 08:26:52 -0800
+        with ESMTP id S236091AbhLNQj1 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Dec 2021 11:39:27 -0500
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 181B1C061574
+        for <linux-next@vger.kernel.org>; Tue, 14 Dec 2021 08:39:27 -0800 (PST)
+Received: by mail-ot1-x333.google.com with SMTP id n17-20020a9d64d1000000b00579cf677301so21462947otl.8
+        for <linux-next@vger.kernel.org>; Tue, 14 Dec 2021 08:39:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=A1RKIABzLXozSTYS++5X2nHFwuaAyVJUV7kAQnW/Xd0=;
+        b=D91xl2OmQ74oHpYWWwhABoBP4k1YJA4auMst9K+kAAgId5wpMHVlK/k7aGk0rsNgTZ
+         G6W5k9ZEGoWTTtfM4DNODVuEsJzADZCnPixQ/2Y6abECGOgIg80eHVlue2LxysmfPSah
+         GP/w4RvwT9XFOVgYwQgsdXpU+LyjLu7jV4efo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=A1RKIABzLXozSTYS++5X2nHFwuaAyVJUV7kAQnW/Xd0=;
+        b=pqj15JSReFdNA6p5NuWD4Eayc9X0fR5x/6phpTWfi9xVKkMcYD07sTPHt4p5Zrs+27
+         68HpflBS2Y9OEM25QUy+Rcr2UPqd5b+M0vfDXiy7ksk/I7YkIWMVngrShaBqONqvEXEW
+         9Hq9WYYi1kipowwMlORPqtV52+FvTM17fzIt6+Kn5vN7eKcfcm1TeS5eiBNzvXRDJkrx
+         yYvOBLsSQ37HoqQfxQauY+/EG5bFJxKjNakl001u4AtEkLhOKtjh8uPgNxDBUQ0PmBSw
+         CjW5P2ybn0y57I8L0q34ThycKHAY5c3W+p7mNA8cHtlBEJYB7EnRETguqP7nFxQvB/1E
+         kY+Q==
+X-Gm-Message-State: AOAM5339pRwZ3sHO07Hc/dtbVsX0lTmIX+wqefjM3/JbURt8XL8hnwdD
+        F0ODuAJ3FOb7gOf7uCB+TAcWblN4kg2+Nw==
+X-Google-Smtp-Source: ABdhPJz1b/E9tBP/pB4bUKn2ekqxvbKXfIAzaBvJQMlh60PGDAN1MGP18Ag/jAVnbMNq0n1H/1vbpA==
+X-Received: by 2002:a9d:7459:: with SMTP id p25mr5038261otk.247.1639499966418;
+        Tue, 14 Dec 2021 08:39:26 -0800 (PST)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id j5sm64501oou.23.2021.12.14.08.39.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Dec 2021 08:39:26 -0800 (PST)
+Subject: Re: linux-next: manual merge of the xarray tree with the kselftest
+ tree
+To:     broonie@kernel.org, Matthew Wilcox <willy@infradead.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20211213222443.474487-1-broonie@kernel.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <1dcd2d43-cf39-3b4c-49b5-138d94f34433@linuxfoundation.org>
+Date:   Tue, 14 Dec 2021 09:39:25 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: linux-next: Tree for Dec 13 (SND_AMD_ACP_CONFIG)
+In-Reply-To: <20211213222443.474487-1-broonie@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        broonie@kernel.org,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     alsa-devel@alsa-project.org,
-        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20211214030215.3181149-1-broonie@kernel.org>
- <8ff9d4b2-1905-2efa-cb86-e8f6cef06ef2@infradead.org>
- <15c3b6fe-b159-6cee-be67-11f2f2dd0d04@linux.intel.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <15c3b6fe-b159-6cee-be67-11f2f2dd0d04@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi--
-
-On 12/14/21 05:51, Pierre-Louis Bossart wrote:
+On 12/13/21 3:24 PM, broonie@kernel.org wrote:
+> Hi all,
 > 
+> Today's linux-next merge of the xarray tree got a conflict in:
 > 
->> on i386 or x86_64:
->>
->> when # CONFIG_ACPI is not set,
->> so SND_SOC_ACPI is not set:
->>
->> WARNING: unmet direct dependencies detected for SND_AMD_ACP_CONFIG
->>   Depends on [n]: SOUND [=y] && !UML && SND [=y] && SND_SOC [=y] && SND_SOC_ACPI [=n]
->>   Selected by [y]:
->>   - SND_SOC_AMD_ACP_COMMON [=y] && SOUND [=y] && !UML && SND [=y] && SND_SOC [=y] && X86 [=y] && PCI [=y]
->>
->>
->> Full randconfig file is attached
+>    tools/include/linux/kernel.h
 > 
-> It's probably triggered by my recent change to fix another problem.
+> between commits:
 > 
-> d9b994cd7641 ASoC: AMD: acp-config: fix missing dependency on SND_SOC_ACPI
+>    d6e6a27d960f9 ("tools: Fix math.h breakage")
+>    066b34aa5461f ("tools: fix ARRAY_SIZE defines in tools and selftests hdrs")
 > 
-> I didn't realize SND_AMD_ACP_CONFIG was selected by other configs.
-> Moving to a select seems to fix the issue reported by Randy, not sure if
-> it's the right thing to do though.
+> from the kselftest and origin trees and commit:
 > 
-
-That works. You can add my Ack if you want to push this patch.
-Thanks.
-
-Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
-
+>    f2aa11fd51440 ("tools: Fix math.h breakage")
 > 
-> diff --git a/sound/soc/amd/Kconfig b/sound/soc/amd/Kconfig
-> index bcfeb3fc2592..7a9e45094f37 100644
-> --- a/sound/soc/amd/Kconfig
-> +++ b/sound/soc/amd/Kconfig
-> @@ -98,7 +98,7 @@ config SND_SOC_AMD_YC_MACH
+> from the xarray tree.
 > 
->  config SND_AMD_ACP_CONFIG
->         tristate "AMD ACP configuration selection"
-> -       depends on SND_SOC_ACPI
-> +       select SND_SOC_ACPI if ACPI
->         help
->          This option adds an auto detection to determine which ACP
->          driver modules to use
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 > 
+> diff --cc tools/include/linux/kernel.h
+> index 9701e8307db02,3e8df500cfbd4..0000000000000
+> --- a/tools/include/linux/kernel.h
+> +++ b/tools/include/linux/kernel.h
 > 
 
--- 
-~Randy
+Thank you. I will keep track of this when I send pull request.
+
+thanks,
+-- Shuah

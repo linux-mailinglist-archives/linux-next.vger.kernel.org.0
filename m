@@ -2,92 +2,117 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 139FC475BC0
-	for <lists+linux-next@lfdr.de>; Wed, 15 Dec 2021 16:21:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFAAB475C85
+	for <lists+linux-next@lfdr.de>; Wed, 15 Dec 2021 17:00:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243891AbhLOPVz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 15 Dec 2021 10:21:55 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:46794 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243856AbhLOPVy (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 15 Dec 2021 10:21:54 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 357FDB81FBE;
-        Wed, 15 Dec 2021 15:21:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2423AC33CF2;
-        Wed, 15 Dec 2021 15:20:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639581615;
-        bh=iV9y8WX18pADcC4QTmY9Es2S3Ox/ct9sA+YFJ4++suE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=I5zy0R1xSIP7q6y3HNK8lmGyXjkmA88xqFMM8bEynhZp1VapNobnTQM7R90JsBDqL
-         yQ4oXr20idIdtI+4vz7oW/32vhuQoj8f9lN7dTOmG8lVTyC1bk6gKYqzvxh0Wu/jqs
-         LBba4gf+X0fpVFeWihIYFYK1NrAxrjKoJrYT+FqYhESUMcKHHhCVayrnVi/vvX1O5F
-         wFpS86A23mRlDcOV8wHhjf8S7VS4/Gt3ncfVA4r7iJ8yor3OVnV6PVFozoqRIW2VMr
-         yG7oabIHTWDiJLcPeQ3i52UYG0qalcHex/0H6KYbfoUqhrCH9ANL/ebaZkVe7VmlB5
-         0SPm5bsla1BDg==
-Date:   Wed, 15 Dec 2021 20:50:04 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Marcel Ziswiler <marcel.ziswiler@toradex.com>
-Cc:     "kishon@ti.com" <kishon@ti.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
-        "tharvey@gateworks.com" <tharvey@gateworks.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "hongxing.zhu@nxp.com" <hongxing.zhu@nxp.com>
-Subject: Re: linux-next: build failure after merge of the phy-next tree
-Message-ID: <YboHpPfynVmOP+ac@matsya>
-References: <20211215134915.3622957-1-broonie@kernel.org>
- <82dcdd84d9111dcde3fb43504ffec5592e2c8356.camel@toradex.com>
+        id S244337AbhLOP7w (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 15 Dec 2021 10:59:52 -0500
+Received: from mout.perfora.net ([74.208.4.196]:44183 "EHLO mout.perfora.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232587AbhLOP7v (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 15 Dec 2021 10:59:51 -0500
+X-Greylist: delayed 783 seconds by postgrey-1.27 at vger.kernel.org; Wed, 15 Dec 2021 10:59:51 EST
+Received: from localhost.localdomain ([194.191.235.54]) by mrelay.perfora.net
+ (mreueus003 [74.208.5.2]) with ESMTPSA (Nemesis) id 0MLePl-1mxF7p3NJb-000tVI;
+ Wed, 15 Dec 2021 16:30:51 +0100
+From:   Marcel Ziswiler <marcel@ziswiler.com>
+To:     linux-phy@lists.infradead.org
+Cc:     linux-imx@nxp.com, linux-next@vger.kernel.org,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Mark Brown <broonie@kernel.org>, linux-pci@vger.kernel.org,
+        Tim Harvey <tharvey@gateworks.com>,
+        linux-kernel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Richard Zhu <hongxing.zhu@nxp.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>
+Subject: [PATCH] phy: freescale: pcie: fix building for x86_64 as a module
+Date:   Wed, 15 Dec 2021 16:30:36 +0100
+Message-Id: <20211215153037.688885-1-marcel@ziswiler.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <82dcdd84d9111dcde3fb43504ffec5592e2c8356.camel@toradex.com>
+X-Provags-ID: V03:K1:/cHhHSs4N+2DNJ5wTLoubYD0rUh2l5oYb3aX9HXa0UVqu9pMzMH
+ x28Ezyml0wRYEPJv55bAaYjT+GdEyE0EyrLF5WXgnYvHdA46RWoxI5rFwvao8GE/Z0Ko8Wn
+ zHYpeRMGj4Oez1fAUsPK6WdyDVU06FLWr/izt4+nhuLOghlYZmREkXYt9P3HEp+IMegRn+/
+ 7cpvofDSXIf8K/oJxQ23Q==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:j9pVH4IC4Ko=:L/0+fEZ1sh5vEjL38EdZNa
+ ZdUk5+nc3/JZMH9e65FYO4YxeSpeV8Q9/wFTvh+KJ26lcOzDG2P736wCK8BXCOIrkrcS/Lk00
+ UwlXBpZvpsu0qxxleOV7c4NRNGbVu/OG3/x6QSh85ZizqUqRXnQ34qv9lOxScCA78UkhcC09N
+ SlKWoj67Ade6nkH81iD2m5M0WkQyC69VFDlMVPCphfhlyN9XMvsp1wRGZUGP2Ob/8MNlTny9p
+ Z0soAHNOZQi8NJg33mqTjVuluF8BNf7gkrD+b+w/mRO5whvIhOLx7ACap6gpMn4yKNrLcUxag
+ 6qHkoAei7cAd4AAsBneQp4kqny5u++sBSXAXUNsNbu7vXspVVx7I8tajJDUmFJqIdlFL73AWi
+ SvVrRWYsplHIXM3wXkrFd3fH0b+ungUzj8NBRegOsECr/ZH8CCdLT8nW/5fvPoIFJc78U5O9/
+ Qiaena3e6vwsK3kWZD9NpXgt4f8ppecDciHoWWVIeWSmCL14z7L7UPDZuXTcGGXYOOTzWZCyy
+ ixQoIazO2B5Pq1iML6BxUtFKLRwZdLO/n184pUWrBqnnWg9Mkg36wEDP3P9YTXuG/YYD+oAdo
+ cAioKSkOYXG5T5Nd4EjSCDh1rx7Zvj84wU5iUExWycoEj5tgC5pKft0RCNFNUTr3J4TKpk5CU
+ UEL5q03GWPRgkv/N5MJQkO6lFrnc/8IJHAy32E/6a3N5kRoWi0cwbBHVQbZXkoJ5eB1A=
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 15-12-21, 14:14, Marcel Ziswiler wrote:
-> On Wed, 2021-12-15 at 13:49 +0000, broonie@kernel.org wrote:
-> > Hi all,
-> > 
-> > After merging the phy-next tree, today's linux-next build (x86_64
-> > allmodconfig) failed like this:
-> 
-> I admit I never tried building any of this as a module. I assume neither did Richard (now on CC) or anybody
-> else.
-> 
-> > /tmp/next/build/drivers/phy/freescale/phy-fsl-imx8m-pcie.c: In function 'imx8_pcie_phy_init':
-> > /tmp/next/build/drivers/phy/freescale/phy-fsl-imx8m-pcie.c:41:37: error: implicit declaration of function
-> > 'FIELD_PREP' [-Werror=implicit-function-declaration]
-> 
-> Hm, that should come from include/linux/bitfield.h. However, that seems not explicitly included. Likely, in the
-> module case it no longer finds it. That's a problem.
-> 
-> >    41 | #define IMX8MM_GPR_PCIE_REF_CLK_EXT FIELD_PREP(IMX8MM_GPR_PCIE_REF_CLK_SEL, 0x2)
-> >       |                                     ^~~~~~~~~~
-> > /tmp/next/build/drivers/phy/freescale/phy-fsl-imx8m-pcie.c:85:7: note: in expansion of macro
-> > 'IMX8MM_GPR_PCIE_REF_CLK_EXT'
-> >    85 |       IMX8MM_GPR_PCIE_REF_CLK_EXT :
-> >       |       ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > cc1: all warnings being treated as errors
-> > 
-> > Caused by commit
-> > 
-> >   1aa97b002258a190d77 ("phy: freescale: pcie: Initialize the imx8 pcie standalone phy driver")
-> > 
-> > I have used the phy-next tree from yesterday.
-> 
-> Yes, I also noticed it having been applied there now.
-> 
-> Anyway, let me cook up a fix for this. Thanks for reporting.
+From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-I have fixed it up: https://lore.kernel.org/all/20211215060834.921617-1-vkoul@kernel.org/
+x86_64 allmodconfig build failed like this:
 
-will push now
+/tmp/next/build/drivers/phy/freescale/phy-fsl-imx8m-pcie.c: In function
+ 'imx8_pcie_phy_init':
+/tmp/next/build/drivers/phy/freescale/phy-fsl-imx8m-pcie.c:41:37:
+ error: implicit declaration of function 'FIELD_PREP'
+ [-Werror=implicit-function-declaration]
+   41 | #define IMX8MM_GPR_PCIE_REF_CLK_EXT FIELD_PREP(IMX8MM_GPR_PCIE_
+REF_CLK_SEL, 0x2)
+      |                                     ^~~~~~~~~~
+/tmp/next/build/drivers/phy/freescale/phy-fsl-imx8m-pcie.c:85:7: note:
+ in expansion of macro 'IMX8MM_GPR_PCIE_REF_CLK_EXT'
+   85 |       IMX8MM_GPR_PCIE_REF_CLK_EXT :
+      |       ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
 
+Fix this by explicitly including linux/bitfield.h.
+
+While at it sort includes alphabethically and add a new line before the
+dt-bindings one as usually done.
+
+Fixes: 1aa97b002258a190d77
+("phy: freescale: pcie: Initialize the imx8 pcie standalone phy driver")
+Reported-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+
+---
+
+ drivers/phy/freescale/phy-fsl-imx8m-pcie.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/phy/freescale/phy-fsl-imx8m-pcie.c b/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
+index f6502463d49a..f1eb03ba25d6 100644
+--- a/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
++++ b/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
+@@ -3,10 +3,11 @@
+  * Copyright 2021 NXP
+  */
+ 
++#include <linux/bitfield.h>
+ #include <linux/clk.h>
++#include <linux/delay.h>
+ #include <linux/io.h>
+ #include <linux/iopoll.h>
+-#include <linux/delay.h>
+ #include <linux/mfd/syscon.h>
+ #include <linux/mfd/syscon/imx7-iomuxc-gpr.h>
+ #include <linux/module.h>
+@@ -14,6 +15,7 @@
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
+ #include <linux/reset.h>
++
+ #include <dt-bindings/phy/phy-imx8-pcie.h>
+ 
+ #define IMX8MM_PCIE_PHY_CMN_REG061	0x184
 -- 
-~Vinod
+2.33.1
+

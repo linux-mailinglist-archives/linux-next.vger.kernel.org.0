@@ -2,68 +2,77 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7917E4760AE
-	for <lists+linux-next@lfdr.de>; Wed, 15 Dec 2021 19:27:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41C314760E6
+	for <lists+linux-next@lfdr.de>; Wed, 15 Dec 2021 19:41:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238758AbhLOS1E (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 15 Dec 2021 13:27:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50506 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231138AbhLOS1D (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 15 Dec 2021 13:27:03 -0500
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C9BAC061574
-        for <linux-next@vger.kernel.org>; Wed, 15 Dec 2021 10:27:01 -0800 (PST)
-Received: by mail-pg1-x52a.google.com with SMTP id f125so20897353pgc.0
-        for <linux-next@vger.kernel.org>; Wed, 15 Dec 2021 10:27:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=S43wuhF84zAFVgufRiBJZEXix+hDDmY8OZs20psE0qo=;
-        b=K/+RtBzfould0BFDz0VbwJeZ3XqodLz7azoCXEzz0yfMB2p2M90hq6I+4cpSHS6/xu
-         QbMK3pFRn1tCK9HTBfvUo43E1yF1rMDItAgXaVsB4ZFzkED/3wKc82F0ulDwpa9wVTua
-         niqAE7qS5YeHMXDdJkib0AB3q4sBfG5AbXjvzQXg8C2TOnDmMxFJR7MexeSAiOCeqL5x
-         UqT8CwKDkJ0Ee4hQSA4RkAP/axecuM/CzKn4QT5kb+EdH8H0lJZx3a6x851IcI+5ElWW
-         HvZQKrxoCBd6QAUwHUrZI83viEV6VLrJGZVlam9ns5N2tXO3YYPREc6+YivMo6f2Tp3s
-         jjWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=S43wuhF84zAFVgufRiBJZEXix+hDDmY8OZs20psE0qo=;
-        b=eXYVlOetc/11p0XV1xmmJctUqsf9u0zie0jRLhYgXkjKVDlhC5qmKKFLpZnMFgZumR
-         RY+56BqyNiLiQddEv74c3uYXlL220mFewpKJ7Dt21AOAi7/uqilIe9kq8xShqUTFfkSV
-         jeDvxYkSM8TJFZBxEso/8HGFi3plmOc0projQNVL/q0nBOYv+31HAizvOoF3W7b4psdk
-         p9RRxsgmFVGH/4U86RR+5yFV9xxwJwl+jUIn2RZkR2ruHBffBn78201MZ9OKNjHKDMKe
-         VRis5GPJQi45bkp3XPB3UW77WsTQMQOYYFoEMcl9UNTuogEbAcQSMxgNXMf6bDhG6Ac4
-         LBEw==
-X-Gm-Message-State: AOAM531OvNclNXypXxIgC1iEt878QVPBpQD7/xWjYrpDynpDWfOFrpTk
-        ZktS7XJ2kErP7bEsIwzwl/RzSkSy4/NH0hYIjd8=
-X-Google-Smtp-Source: ABdhPJzK9R4ASADJiZhcFWpmmSc2fMtB7YX3geIloYrmwJ+V+lARdg8PkQ665bLAJDEKt43J57E2ht/fT2BLTebPkYk=
-X-Received: by 2002:a63:4f42:: with SMTP id p2mr9002049pgl.381.1639592821005;
- Wed, 15 Dec 2021 10:27:01 -0800 (PST)
+        id S1343883AbhLOSlK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 15 Dec 2021 13:41:10 -0500
+Received: from mga18.intel.com ([134.134.136.126]:22549 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234977AbhLOSlJ (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 15 Dec 2021 13:41:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639593669; x=1671129669;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ApidIX6nwQUZTYZQJExSqeAHWvjA68F4rXo5Gp4mB4Q=;
+  b=d/21i3cWr1wgBuzo7Yl40hRFyehyM8NXNCzkK53gRnkQg9g1XtQ7oKTI
+   mHJjwY/IikHDk7UZsRUYNEDjkrpPPL+7Ou2XTxVVGO6EQMy3vT+Cjb/Va
+   djqVnxbJtyQowZbfHTAWPLgE8MH2+HLQaBcH0Y2AshcZOnwepyYCf0ZRu
+   OlF1LPHOmSexnvaMVGva8hEGC4O/zmsIQd0aq9cZnad7PWhXytW1blshN
+   HyHCJ7bsWne3HyYOdPNgK308zPkTJM/217diMRg3AGEr6iOV1B3goVclH
+   UbpWYCJOc+TIewqumqwwk0oxZkXTZW5ndtXgcAfrb8kNxIaYkSGdykYA/
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="226165287"
+X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
+   d="scan'208";a="226165287"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 10:41:09 -0800
+X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
+   d="scan'208";a="505936654"
+Received: from smile.fi.intel.com ([10.237.72.184])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 10:41:07 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1mxZCG-006jkN-1H;
+        Wed, 15 Dec 2021 20:40:12 +0200
+Date:   Wed, 15 Dec 2021 20:40:11 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: Tree for Dec 14
+Message-ID: <Ybo2i0lmD2kx/cg6@smile.fi.intel.com>
+References: <20211214223228.1745315-1-broonie@kernel.org>
+ <YboPz454GCe6ZA7g@smile.fi.intel.com>
+ <Yboui5aym4eB6oP8@sirena.org.uk>
 MIME-Version: 1.0
-Received: by 2002:a05:7300:304f:b0:43:1d75:2c1b with HTTP; Wed, 15 Dec 2021
- 10:27:00 -0800 (PST)
-Reply-To: mr.mohamedzaki6@gmail.com
-From:   "mr.mohamedzaki6" <wilsonkazeem876@gmail.com>
-Date:   Wed, 15 Dec 2021 10:27:00 -0800
-Message-ID: <CAOx7ANen9SVa+Ho_6e7HuvOMrqnTnUp7+WTXooK4Ufudgt4oYg@mail.gmail.com>
-Subject: Please I Need Your Help
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yboui5aym4eB6oP8@sirena.org.uk>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Greetings in the name of our creator Allah the most Merciful,
+On Wed, Dec 15, 2021 at 06:06:03PM +0000, Mark Brown wrote:
+> On Wed, Dec 15, 2021 at 05:54:55PM +0200, Andy Shevchenko wrote:
 
-I am Mr. Mohamed Zaki, I have US$7.2 Million Dollars will be moved on
-your name as the beneficiary of my late client, I need your help to
-receive this money into your Bank Account. get back to me through this
- Email address  (mr.mohamedzaki6@gmail.com) Your quick response will
-be highly appreciated.
+> > The other issue I have noticed is that gpio-intel branches [1] are out of the
+> > merge. I haven't got any email about any issues with them.
+> 
+> > Do you have the latest and greatest list of repositories to merge?
+> 
+> You can see in the merge log that it's getting skipped due to an issue
+> with the previous tree (which also has a build failure causing me to
+> need to revert it) upsetting the script.
 
-Thank you.
+Yes, I see now. But as far as I know my repo doesn't have issues (neither
+compilation nor merge), or at least nobody so far informed me about.
 
-Mr.Mohamed Zaki
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

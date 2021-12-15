@@ -2,117 +2,87 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFAAB475C85
-	for <lists+linux-next@lfdr.de>; Wed, 15 Dec 2021 17:00:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C916475C66
+	for <lists+linux-next@lfdr.de>; Wed, 15 Dec 2021 16:56:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244337AbhLOP7w (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 15 Dec 2021 10:59:52 -0500
-Received: from mout.perfora.net ([74.208.4.196]:44183 "EHLO mout.perfora.net"
+        id S244250AbhLOPzx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 15 Dec 2021 10:55:53 -0500
+Received: from mga17.intel.com ([192.55.52.151]:35328 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232587AbhLOP7v (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 15 Dec 2021 10:59:51 -0500
-X-Greylist: delayed 783 seconds by postgrey-1.27 at vger.kernel.org; Wed, 15 Dec 2021 10:59:51 EST
-Received: from localhost.localdomain ([194.191.235.54]) by mrelay.perfora.net
- (mreueus003 [74.208.5.2]) with ESMTPSA (Nemesis) id 0MLePl-1mxF7p3NJb-000tVI;
- Wed, 15 Dec 2021 16:30:51 +0100
-From:   Marcel Ziswiler <marcel@ziswiler.com>
-To:     linux-phy@lists.infradead.org
-Cc:     linux-imx@nxp.com, linux-next@vger.kernel.org,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Mark Brown <broonie@kernel.org>, linux-pci@vger.kernel.org,
-        Tim Harvey <tharvey@gateworks.com>,
-        linux-kernel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Richard Zhu <hongxing.zhu@nxp.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>
-Subject: [PATCH] phy: freescale: pcie: fix building for x86_64 as a module
-Date:   Wed, 15 Dec 2021 16:30:36 +0100
-Message-Id: <20211215153037.688885-1-marcel@ziswiler.com>
-X-Mailer: git-send-email 2.33.1
+        id S244245AbhLOPzw (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 15 Dec 2021 10:55:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639583752; x=1671119752;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RRsWa48y/byo17HMgXnE4YpysdyN8WNOzyMTAo/9P/k=;
+  b=Jy0JwEYTOhS1LkUlbN1dVhHEHdwTCUhSyL/ck3BOoa5/lRaJRE6yomNh
+   bjzuwTcLyDkEcFIJMJZv2Oqo3vhkBILMCK6AHocV8sNthS1VEL6SnQOUM
+   007k3Pxb4eJ6m4bCHn+n6axvrNA0GaO8OWr3nr3VGmUs/uc/dvvH1OSgF
+   izOP3JcwSvz23G6HrczRbftNjmj755zAhvuEY7nnTMnVOCJWWOicRdPpt
+   WiioeZ1wnSLCWZPT8nY4cmzY2+tkvgyFLZuHCG59Bgz8xGEAc//1BhL5a
+   uw83dczyRiKnZO847OwMBPtDf8kQLjhh4UlSz/rd83mG49I0SzI4+rU2R
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10198"; a="219940220"
+X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
+   d="scan'208";a="219940220"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 07:55:52 -0800
+X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
+   d="scan'208";a="465647970"
+Received: from smile.fi.intel.com ([10.237.72.184])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 07:55:51 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1mxWcJ-006fgn-H6;
+        Wed, 15 Dec 2021 17:54:55 +0200
+Date:   Wed, 15 Dec 2021 17:54:55 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     broonie@kernel.org
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: Tree for Dec 14
+Message-ID: <YboPz454GCe6ZA7g@smile.fi.intel.com>
+References: <20211214223228.1745315-1-broonie@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:/cHhHSs4N+2DNJ5wTLoubYD0rUh2l5oYb3aX9HXa0UVqu9pMzMH
- x28Ezyml0wRYEPJv55bAaYjT+GdEyE0EyrLF5WXgnYvHdA46RWoxI5rFwvao8GE/Z0Ko8Wn
- zHYpeRMGj4Oez1fAUsPK6WdyDVU06FLWr/izt4+nhuLOghlYZmREkXYt9P3HEp+IMegRn+/
- 7cpvofDSXIf8K/oJxQ23Q==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:j9pVH4IC4Ko=:L/0+fEZ1sh5vEjL38EdZNa
- ZdUk5+nc3/JZMH9e65FYO4YxeSpeV8Q9/wFTvh+KJ26lcOzDG2P736wCK8BXCOIrkrcS/Lk00
- UwlXBpZvpsu0qxxleOV7c4NRNGbVu/OG3/x6QSh85ZizqUqRXnQ34qv9lOxScCA78UkhcC09N
- SlKWoj67Ade6nkH81iD2m5M0WkQyC69VFDlMVPCphfhlyN9XMvsp1wRGZUGP2Ob/8MNlTny9p
- Z0soAHNOZQi8NJg33mqTjVuluF8BNf7gkrD+b+w/mRO5whvIhOLx7ACap6gpMn4yKNrLcUxag
- 6qHkoAei7cAd4AAsBneQp4kqny5u++sBSXAXUNsNbu7vXspVVx7I8tajJDUmFJqIdlFL73AWi
- SvVrRWYsplHIXM3wXkrFd3fH0b+ungUzj8NBRegOsECr/ZH8CCdLT8nW/5fvPoIFJc78U5O9/
- Qiaena3e6vwsK3kWZD9NpXgt4f8ppecDciHoWWVIeWSmCL14z7L7UPDZuXTcGGXYOOTzWZCyy
- ixQoIazO2B5Pq1iML6BxUtFKLRwZdLO/n184pUWrBqnnWg9Mkg36wEDP3P9YTXuG/YYD+oAdo
- cAioKSkOYXG5T5Nd4EjSCDh1rx7Zvj84wU5iUExWycoEj5tgC5pKft0RCNFNUTr3J4TKpk5CU
- UEL5q03GWPRgkv/N5MJQkO6lFrnc/8IJHAy32E/6a3N5kRoWi0cwbBHVQbZXkoJ5eB1A=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211214223228.1745315-1-broonie@kernel.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+On Tue, Dec 14, 2021 at 10:32:22PM +0000, broonie@kernel.org wrote:
+> Hi all,
+> 
+> News: Releases may or may not happen over the next few days since I'm
+> getting a vacciene dose tomorrow.
+> 
+> Changes since 20211213:
 
-x86_64 allmodconfig build failed like this:
+> The drm-intel tree gained a conflict with the drm-intel-fixes tree.
+> 
+> The dmaengine tree gained a conflict with the dmaengine-fixes tree.
+> 
+> Non-merge commits (relative to Linus' tree): 6251
+>  6873 files changed, 291130 insertions(+), 138903 deletions(-)
 
-/tmp/next/build/drivers/phy/freescale/phy-fsl-imx8m-pcie.c: In function
- 'imx8_pcie_phy_init':
-/tmp/next/build/drivers/phy/freescale/phy-fsl-imx8m-pcie.c:41:37:
- error: implicit declaration of function 'FIELD_PREP'
- [-Werror=implicit-function-declaration]
-   41 | #define IMX8MM_GPR_PCIE_REF_CLK_EXT FIELD_PREP(IMX8MM_GPR_PCIE_
-REF_CLK_SEL, 0x2)
-      |                                     ^~~~~~~~~~
-/tmp/next/build/drivers/phy/freescale/phy-fsl-imx8m-pcie.c:85:7: note:
- in expansion of macro 'IMX8MM_GPR_PCIE_REF_CLK_EXT'
-   85 |       IMX8MM_GPR_PCIE_REF_CLK_EXT :
-      |       ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-cc1: all warnings being treated as errors
+Thanks, I see tags now.
 
-Fix this by explicitly including linux/bitfield.h.
+The other issue I have noticed is that gpio-intel branches [1] are out of the
+merge. I haven't got any email about any issues with them.
 
-While at it sort includes alphabethically and add a new line before the
-dt-bindings one as usually done.
+Do you have the latest and greatest list of repositories to merge?
 
-Fixes: 1aa97b002258a190d77
-("phy: freescale: pcie: Initialize the imx8 pcie standalone phy driver")
-Reported-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+[1]: For example in next-20211203
 
----
+e24d0a695952 Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/andy/linux-gpio-intel.git
 
- drivers/phy/freescale/phy-fsl-imx8m-pcie.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/phy/freescale/phy-fsl-imx8m-pcie.c b/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
-index f6502463d49a..f1eb03ba25d6 100644
---- a/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
-+++ b/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
-@@ -3,10 +3,11 @@
-  * Copyright 2021 NXP
-  */
- 
-+#include <linux/bitfield.h>
- #include <linux/clk.h>
-+#include <linux/delay.h>
- #include <linux/io.h>
- #include <linux/iopoll.h>
--#include <linux/delay.h>
- #include <linux/mfd/syscon.h>
- #include <linux/mfd/syscon/imx7-iomuxc-gpr.h>
- #include <linux/module.h>
-@@ -14,6 +15,7 @@
- #include <linux/platform_device.h>
- #include <linux/regmap.h>
- #include <linux/reset.h>
-+
- #include <dt-bindings/phy/phy-imx8-pcie.h>
- 
- #define IMX8MM_PCIE_PHY_CMN_REG061	0x184
 -- 
-2.33.1
+With Best Regards,
+Andy Shevchenko
+
 

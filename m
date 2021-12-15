@@ -2,70 +2,91 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 176AC4761AB
-	for <lists+linux-next@lfdr.de>; Wed, 15 Dec 2021 20:25:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09DC947657D
+	for <lists+linux-next@lfdr.de>; Wed, 15 Dec 2021 23:16:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344234AbhLOTZ2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 15 Dec 2021 14:25:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35766 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344233AbhLOTZ1 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 15 Dec 2021 14:25:27 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA993C061574;
-        Wed, 15 Dec 2021 11:25:24 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639596323;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9KT7JY3Ys8b/8L35+SOW16m9hH70RGmEctiRxYgxc0o=;
-        b=JtPW/xveQu3FbzczfH2uHSkiYkMm5v37tPc+2fllWFZIQNy8B4c1ZxvzpkooR4JhWSeKXd
-        Z269HOXQrZLCXqBCRlrBh1OJvK9VqBcGVAMhK0X7VXyNSN0/cef5VXwJDum854rZEEAgdA
-        Ukg5Xena3yMwqeyz3sKCD8/vz20BOGgAWzeQt2Ks/7zPiNaq0Fz/qQ6goJaBiF17FxRHbI
-        pJISb3qltI9u+AndtzXgIbxafa4Ni6niUv+bvMxfjefF24u2skIWML13kPcypl2KHPY5D5
-        5EV1nAB6PLIKDNUQfdUTO6MfBdpaZPDHE4oT6eURN3gv4ZdWzKxUMf6ne8uv3g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639596323;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9KT7JY3Ys8b/8L35+SOW16m9hH70RGmEctiRxYgxc0o=;
-        b=GwPn0D2VOJ/OVkzz9WbHxXH0EAnlcu9SWihSxjAZHweJ0ePHW0MZMrKzyLKnOUh6ctCaHc
-        ReLnGf0BLmHq8ECw==
-To:     Randy Dunlap <rdunlap@infradead.org>, broonie@kernel.org,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
+        id S229924AbhLOWQY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 15 Dec 2021 17:16:24 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:36996 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229472AbhLOWQY (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 15 Dec 2021 17:16:24 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DE6261B16;
+        Wed, 15 Dec 2021 22:16:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55837C36AE3;
+        Wed, 15 Dec 2021 22:16:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639606583;
+        bh=1hSjeBr9VK09A920ZiCqpUGXz/tcRcEu0B3NSFSN9Sg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=VzvfjufzjFK5OQlfhq7RCUUT8gtWoFrpXlWOciHQRyIxO3kO27skF7qJ1kp+Alzvb
+         Doj1QNkm96LgEmNwVcgEqojrhR9s/qNj0NawAjtkU4WX3Re1nykPtiKV7m5Ds1hwDh
+         dHfu1sgdbCn3pXeCr2aftkjBeY3wtatDf5mAhj6Jjup6D8lf6CEs/5bOjvVHocdmvB
+         K0Gf3DiUc8VeZHTCxEyenTKzCO9P2W0lBsReLGnbWisl4tgkoRbQFTfoFBZDGQcutN
+         103eA4jQiRtfoBEG6JoxAEYxq6t2Fop3ZsEOqDs8TKWDYGq7NqchQNQ52bx1WTHhnS
+         fujEzQaNL6KsQ==
+From:   broonie@kernel.org
+To:     Linux Next Mailing List <linux-next@vger.kernel.org>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: Tree for Dec 14 (arch/x86/kernel/apic/msi.o)
-In-Reply-To: <c916e22d-5b97-9cdc-486f-64d06d82cef9@infradead.org>
-References: <20211214223228.1745315-1-broonie@kernel.org>
- <c916e22d-5b97-9cdc-486f-64d06d82cef9@infradead.org>
-Date:   Wed, 15 Dec 2021 20:25:22 +0100
-Message-ID: <87lf0lr7q5.ffs@tglx>
+Subject: linux-next: Tree for Dec 15
+Date:   Wed, 15 Dec 2021 22:16:19 +0000
+Message-Id: <20211215221619.822904-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Dec 14 2021 at 17:49, Randy Dunlap wrote:
-> On 12/14/21 14:32, broonie@kernel.org wrote:
->> Hi all,
->> 
->> News: Releases may or may not happen over the next few days since I'm
->> getting a vacciene dose tomorrow.
->> 
->> Changes since 20211213:
->> 
->
-> on x86_64:
->
-> ld: arch/x86/kernel/apic/msi.o: in function `arch_restore_msi_irqs':
-> msi.c:(.text+0x245): undefined reference to `xen_initdom_restore_msi'
+Hi all,
 
-Fixed. Arnd sent a patch already.
+News: I had a vaccine dose today so no guarantees about releases at
+least tomorrow depending on side effects.
 
-Thanks,
+Changes since 20211214:
 
-        tglx
+The kvm tree gained a conflict.
+
+The phy-next tree gained a build failure and I used the version from
+yesterday.
+
+Non-merge commits (relative to Linus' tree): 6683
+ 7239 files changed, 321081 insertions(+), 155400 deletions(-)
+
+----------------------------------------------------------------------------
+
+I have created today's linux-next tree at
+git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
+are tracking the linux-next tree using git, you should not use "git pull"
+to do so as that will try to merge the new linux-next release with the
+old one.  You should use "git fetch" and checkout or reset to the new
+master.
+
+You can see which trees have been included by looking in the Next/Trees
+file in the source.  There are also quilt-import.log and merge.log
+files in the Next directory.  Between each merge, the tree was built
+with a defconfig for arm64, an allmodconfig for x86_64, a
+multi_v7_defconfig for arm and a native build of tools/perf. After the
+final fixups (if any), I do an x86_64 modules_install followed by builds
+for x86_64 allnoconfig, arm64 allnoconfig, arm64 allyesconfig and i386,
+and arm64 and htmldocs.
+
+Below is a summary of the state of the merge.
+
+I am currently merging 347 trees (counting Linus' and 94 trees of bug
+fix patches pending for the current merge release).
+
+Stats about the size of the tree over time can be seen at
+http://neuling.org/linux-next-size.html .
+
+Status of my local build tests will be at
+http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
+advice about cross compilers/configs that work, we are always open to add
+more builds.
+
+Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
+Gortmaker for triage and bug fixes.

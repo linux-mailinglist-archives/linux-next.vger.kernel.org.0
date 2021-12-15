@@ -2,87 +2,89 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C916475C66
-	for <lists+linux-next@lfdr.de>; Wed, 15 Dec 2021 16:56:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8B3D476037
+	for <lists+linux-next@lfdr.de>; Wed, 15 Dec 2021 19:07:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244250AbhLOPzx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 15 Dec 2021 10:55:53 -0500
-Received: from mga17.intel.com ([192.55.52.151]:35328 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244245AbhLOPzw (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 15 Dec 2021 10:55:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639583752; x=1671119752;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=RRsWa48y/byo17HMgXnE4YpysdyN8WNOzyMTAo/9P/k=;
-  b=Jy0JwEYTOhS1LkUlbN1dVhHEHdwTCUhSyL/ck3BOoa5/lRaJRE6yomNh
-   bjzuwTcLyDkEcFIJMJZv2Oqo3vhkBILMCK6AHocV8sNthS1VEL6SnQOUM
-   007k3Pxb4eJ6m4bCHn+n6axvrNA0GaO8OWr3nr3VGmUs/uc/dvvH1OSgF
-   izOP3JcwSvz23G6HrczRbftNjmj755zAhvuEY7nnTMnVOCJWWOicRdPpt
-   WiioeZ1wnSLCWZPT8nY4cmzY2+tkvgyFLZuHCG59Bgz8xGEAc//1BhL5a
-   uw83dczyRiKnZO847OwMBPtDf8kQLjhh4UlSz/rd83mG49I0SzI4+rU2R
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10198"; a="219940220"
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="219940220"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 07:55:52 -0800
-X-IronPort-AV: E=Sophos;i="5.88,207,1635231600"; 
-   d="scan'208";a="465647970"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2021 07:55:51 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1mxWcJ-006fgn-H6;
-        Wed, 15 Dec 2021 17:54:55 +0200
-Date:   Wed, 15 Dec 2021 17:54:55 +0200
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     broonie@kernel.org
+        id S238648AbhLOSGO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 15 Dec 2021 13:06:14 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:34108 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238548AbhLOSGN (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 15 Dec 2021 13:06:13 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 67D4BB8204E;
+        Wed, 15 Dec 2021 18:06:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77039C36AE2;
+        Wed, 15 Dec 2021 18:06:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639591571;
+        bh=8Vukks1X4DUWPbSz+K9uq/FbIbt5tKotx6wmBIKGRfU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=erarZoMxOT2M7a+BV9BL0KV6RKrY+lgtoXf9lA0ibUKkb3D+rzFNPizrbzNQ47PRb
+         csY5p1FwGjzBO1aYx2wR9x12ppspxOs3IK2nv3C5cnci9YB370tQ8j/uKWVZKtJf6L
+         SJka1mgeRyjRkKeLOnMWQ7yELXL1uXGeXlCp+Lv6lTu770GKVsDyYZjsuNgIHlJBV1
+         K5hH8WZD6tXCYHtUJOt57RUOoBe0gOUEk+oKQUvk3GRkGwTOMoHwLWRBriASakazbY
+         9aPBKo1NSxHPaXSB9kSMKxHkMPZRACm+j+5kgrYURA3FEzpP/v/VhKvKgbpCqMz5ol
+         Nx5cKHPgMjNhA==
+Date:   Wed, 15 Dec 2021 18:06:03 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Subject: Re: linux-next: Tree for Dec 14
-Message-ID: <YboPz454GCe6ZA7g@smile.fi.intel.com>
+Message-ID: <Yboui5aym4eB6oP8@sirena.org.uk>
 References: <20211214223228.1745315-1-broonie@kernel.org>
+ <YboPz454GCe6ZA7g@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="SoLG3GS5cOfv0PWZ"
 Content-Disposition: inline
-In-Reply-To: <20211214223228.1745315-1-broonie@kernel.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <YboPz454GCe6ZA7g@smile.fi.intel.com>
+X-Cookie: No solicitors.
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 10:32:22PM +0000, broonie@kernel.org wrote:
-> Hi all,
-> 
-> News: Releases may or may not happen over the next few days since I'm
-> getting a vacciene dose tomorrow.
-> 
-> Changes since 20211213:
 
-> The drm-intel tree gained a conflict with the drm-intel-fixes tree.
-> 
-> The dmaengine tree gained a conflict with the dmaengine-fixes tree.
-> 
-> Non-merge commits (relative to Linus' tree): 6251
->  6873 files changed, 291130 insertions(+), 138903 deletions(-)
+--SoLG3GS5cOfv0PWZ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Thanks, I see tags now.
+On Wed, Dec 15, 2021 at 05:54:55PM +0200, Andy Shevchenko wrote:
 
-The other issue I have noticed is that gpio-intel branches [1] are out of the
-merge. I haven't got any email about any issues with them.
+Please note that due to people replying with random bug reports against
+the actual code in -next replying to the -next message isn't a super
+good way of getting my attention you can get lost in the noise.
 
-Do you have the latest and greatest list of repositories to merge?
+> Thanks, I see tags now.
 
-[1]: For example in next-20211203
+I fixed the bug with the script, it doesn't check for errors when
+tagging unfortunately.
 
-e24d0a695952 Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/andy/linux-gpio-intel.git
+> The other issue I have noticed is that gpio-intel branches [1] are out of the
+> merge. I haven't got any email about any issues with them.
 
+> Do you have the latest and greatest list of repositories to merge?
 
--- 
-With Best Regards,
-Andy Shevchenko
+You can see in the merge log that it's getting skipped due to an issue
+with the previous tree (which also has a build failure causing me to
+need to revert it) upsetting the script.
 
+--SoLG3GS5cOfv0PWZ
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmG6LooACgkQJNaLcl1U
+h9AC2gf9G3fxaP3PBpfPy0TJpRqzg4J1rHvS77ZvBusgqVOAgrMTzoazdIddWY2b
+edjZrppaZmRg2t76RzZ50eEfcdLZoPDP/MqIoBW6fmgPcmAExfj2i4KlZqeWH035
+8LxP5G+92fv6j4DY2CXDm7HC3QCySc/8SUDgP8ebO1U8K5NeXbhalZyDgJVGVoj+
+VIkDvumbcVwzUuVDc3WGJRcm1lwaFVt46RuF9fdE0A2Tg4xvseZ9xtGpyOqJZsku
+Q+CUJZg63uXxDYtMZfADZqBFdFgIvyhaNiJaPvV1kk+256nKczMYwR2+LIZDtLYg
+vIOkQiw+MsaSkd/vD99kSDXm/Nkz5A==
+=/AdQ
+-----END PGP SIGNATURE-----
+
+--SoLG3GS5cOfv0PWZ--

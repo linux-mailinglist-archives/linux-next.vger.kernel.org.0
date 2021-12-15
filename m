@@ -2,43 +2,42 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48961475970
-	for <lists+linux-next@lfdr.de>; Wed, 15 Dec 2021 14:11:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF8F64759E6
+	for <lists+linux-next@lfdr.de>; Wed, 15 Dec 2021 14:49:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231842AbhLONKs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 15 Dec 2021 08:10:48 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:51102 "EHLO
+        id S229828AbhLONtW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 15 Dec 2021 08:49:22 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:36960 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233297AbhLONKr (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 15 Dec 2021 08:10:47 -0500
+        with ESMTP id S231757AbhLONtW (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 15 Dec 2021 08:49:22 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B091AB81EE1;
-        Wed, 15 Dec 2021 13:10:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9817BC34604;
-        Wed, 15 Dec 2021 13:10:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1FA2BB81E3B;
+        Wed, 15 Dec 2021 13:49:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F46BC34604;
+        Wed, 15 Dec 2021 13:49:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639573844;
-        bh=cSCHf08gNddSPudJMuHhsja3lVVsLg6htioa9itM0kg=;
+        s=k20201202; t=1639576159;
+        bh=MHb2RVE2XhMhLizrM9DPGP4G+eHIf59bdEW2yRL97O0=;
         h=From:To:Cc:Subject:Date:From;
-        b=rqpMEzO4BPigITRsCG3cE7IjJQAdbqfFpwM2mlK0tb6a3ZOHeUT+rFKHu4tTqnBAn
-         OSznOAsGaePpqjUxqw7mVCIo0P56W1JXjVcPjZs1zBmpXatW6lpUu8z/SuII7gKGRn
-         0n5W131UJFUVIbm/zvNyeSgD2MGi5iKOOGRwlXVJGbqz0T7fB3bcSAkplpowfoTOGh
-         XjsqcMtE6d53cvrXvGvxtViPiEXzce/M9DgRGdYJNAvL1mOOqEOY3WnC0yYuE7mAvA
-         Z3s85YGIeooGyJylTQs4j0AJNPCqy+0oSrLT2IOhJeYmZmITLDdeojcW6X3Fn3XsN3
-         SvofUVtQF3vdg==
+        b=YW7Yv/a/OxGN8cjnMVgDaZK5bJxOX3A4i9YJzvhNtnPLW4avUSoyWhzZQeHs9oN0h
+         IWHhtZU445W4LNo6VIpHVtFHk8ID0ZsYqko1ox4Ti0J7PwAheG3B63/2glLB0D5SjR
+         uCE7Phm218dVQi+nbBhTp6yQpR6k33QaufcQQLDslKhazuU/5St+YefNq2ZNThTeqs
+         twDxBDrWz57ZyDG6VjVTLSxyvDGx+6aU0B8S/R3gEGPreEVCp+YSwFxh9EzDpFyyWq
+         RTGMwikNhbQCb6yQmx7KEb1VcXIB5RfQmVeRZEqu07Wl2gHRMyqPpimwO2DveGesD9
+         fbTwf6hB5GuHA==
 From:   broonie@kernel.org
-To:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>
-Cc:     Alexey Kardashevskiy <aik@ozlabs.ru>,
+To:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Tim Harvey <tharvey@gateworks.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "Maciej S . Szmigiero" <maciej.szmigiero@oracle.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Sean Christopherson <seanjc@google.com>
-Subject: linux-next: manual merge of the kvm tree with the kvm tree
-Date:   Wed, 15 Dec 2021 13:10:33 +0000
-Message-Id: <20211215131033.2541027-1-broonie@kernel.org>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the phy-next tree
+Date:   Wed, 15 Dec 2021 13:49:15 +0000
+Message-Id: <20211215134915.3622957-1-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -48,62 +47,20 @@ X-Mailing-List: linux-next@vger.kernel.org
 
 Hi all,
 
-Today's linux-next merge of the kvm tree got a conflict in:
+After merging the phy-next tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-  arch/powerpc/kvm/book3s_hv.c
+/tmp/next/build/drivers/phy/freescale/phy-fsl-imx8m-pcie.c: In function 'imx8_pcie_phy_init':
+/tmp/next/build/drivers/phy/freescale/phy-fsl-imx8m-pcie.c:41:37: error: implicit declaration of function 'FIELD_PREP' [-Werror=implicit-function-declaration]
+   41 | #define IMX8MM_GPR_PCIE_REF_CLK_EXT FIELD_PREP(IMX8MM_GPR_PCIE_REF_CLK_SEL, 0x2)
+      |                                     ^~~~~~~~~~
+/tmp/next/build/drivers/phy/freescale/phy-fsl-imx8m-pcie.c:85:7: note: in expansion of macro 'IMX8MM_GPR_PCIE_REF_CLK_EXT'
+   85 |       IMX8MM_GPR_PCIE_REF_CLK_EXT :
+      |       ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
 
-between commit:
+Caused by commit
 
-  511d25d6b789f ("KVM: PPC: Book3S: Suppress warnings when allocating too big memory slots")
+  1aa97b002258a190d77 ("phy: freescale: pcie: Initialize the imx8 pcie standalone phy driver")
 
-from the kvm tree and commits:
-
-  537a17b314930 ("KVM: Let/force architectures to deal with arch specific memslot data")
-  eaaaed137eccb ("KVM: PPC: Avoid referencing userspace memory region in memslot updates")
-
-from the kvm tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-diff --cc arch/powerpc/kvm/book3s_hv.c
-index f64e45d6c0f4c,51e1c29a6fa08..0000000000000
---- a/arch/powerpc/kvm/book3s_hv.c
-+++ b/arch/powerpc/kvm/book3s_hv.c
-@@@ -4866,21 -4854,17 +4866,22 @@@ static void kvmppc_core_free_memslot_hv
-  }
-  
-  static int kvmppc_core_prepare_memory_region_hv(struct kvm *kvm,
-- 					struct kvm_memory_slot *slot,
-- 					const struct kvm_userspace_memory_region *mem,
-- 					enum kvm_mr_change change)
-+ 				const struct kvm_memory_slot *old,
-+ 				struct kvm_memory_slot *new,
-+ 				enum kvm_mr_change change)
-  {
-- 	unsigned long npages = mem->memory_size >> PAGE_SHIFT;
-- 
-  	if (change == KVM_MR_CREATE) {
-- 		unsigned long size = array_size(npages, sizeof(*slot->arch.rmap));
- -		new->arch.rmap = vzalloc(array_size(new->npages,
- -					  sizeof(*new->arch.rmap)));
-++		unsigned long size = array_size(new->npages,
-++						sizeof(*new->arch.rmap));
- +
- +		if ((size >> PAGE_SHIFT) > totalram_pages())
- +			return -ENOMEM;
- +
-- 		slot->arch.rmap = vzalloc(size);
-- 		if (!slot->arch.rmap)
-++		new->arch.rmap = vzalloc(size);
-+ 		if (!new->arch.rmap)
-  			return -ENOMEM;
-+ 	} else if (change != KVM_MR_DELETE) {
-+ 		new->arch.rmap = old->arch.rmap;
-  	}
-  
-  	return 0;
+I have used the phy-next tree from yesterday.

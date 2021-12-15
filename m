@@ -2,89 +2,68 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8B3D476037
-	for <lists+linux-next@lfdr.de>; Wed, 15 Dec 2021 19:07:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7917E4760AE
+	for <lists+linux-next@lfdr.de>; Wed, 15 Dec 2021 19:27:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238648AbhLOSGO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 15 Dec 2021 13:06:14 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:34108 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238548AbhLOSGN (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 15 Dec 2021 13:06:13 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 67D4BB8204E;
-        Wed, 15 Dec 2021 18:06:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77039C36AE2;
-        Wed, 15 Dec 2021 18:06:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639591571;
-        bh=8Vukks1X4DUWPbSz+K9uq/FbIbt5tKotx6wmBIKGRfU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=erarZoMxOT2M7a+BV9BL0KV6RKrY+lgtoXf9lA0ibUKkb3D+rzFNPizrbzNQ47PRb
-         csY5p1FwGjzBO1aYx2wR9x12ppspxOs3IK2nv3C5cnci9YB370tQ8j/uKWVZKtJf6L
-         SJka1mgeRyjRkKeLOnMWQ7yELXL1uXGeXlCp+Lv6lTu770GKVsDyYZjsuNgIHlJBV1
-         K5hH8WZD6tXCYHtUJOt57RUOoBe0gOUEk+oKQUvk3GRkGwTOMoHwLWRBriASakazbY
-         9aPBKo1NSxHPaXSB9kSMKxHkMPZRACm+j+5kgrYURA3FEzpP/v/VhKvKgbpCqMz5ol
-         Nx5cKHPgMjNhA==
-Date:   Wed, 15 Dec 2021 18:06:03 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: Tree for Dec 14
-Message-ID: <Yboui5aym4eB6oP8@sirena.org.uk>
-References: <20211214223228.1745315-1-broonie@kernel.org>
- <YboPz454GCe6ZA7g@smile.fi.intel.com>
+        id S238758AbhLOS1E (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 15 Dec 2021 13:27:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50506 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231138AbhLOS1D (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 15 Dec 2021 13:27:03 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C9BAC061574
+        for <linux-next@vger.kernel.org>; Wed, 15 Dec 2021 10:27:01 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id f125so20897353pgc.0
+        for <linux-next@vger.kernel.org>; Wed, 15 Dec 2021 10:27:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=S43wuhF84zAFVgufRiBJZEXix+hDDmY8OZs20psE0qo=;
+        b=K/+RtBzfould0BFDz0VbwJeZ3XqodLz7azoCXEzz0yfMB2p2M90hq6I+4cpSHS6/xu
+         QbMK3pFRn1tCK9HTBfvUo43E1yF1rMDItAgXaVsB4ZFzkED/3wKc82F0ulDwpa9wVTua
+         niqAE7qS5YeHMXDdJkib0AB3q4sBfG5AbXjvzQXg8C2TOnDmMxFJR7MexeSAiOCeqL5x
+         UqT8CwKDkJ0Ee4hQSA4RkAP/axecuM/CzKn4QT5kb+EdH8H0lJZx3a6x851IcI+5ElWW
+         HvZQKrxoCBd6QAUwHUrZI83viEV6VLrJGZVlam9ns5N2tXO3YYPREc6+YivMo6f2Tp3s
+         jjWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=S43wuhF84zAFVgufRiBJZEXix+hDDmY8OZs20psE0qo=;
+        b=eXYVlOetc/11p0XV1xmmJctUqsf9u0zie0jRLhYgXkjKVDlhC5qmKKFLpZnMFgZumR
+         RY+56BqyNiLiQddEv74c3uYXlL220mFewpKJ7Dt21AOAi7/uqilIe9kq8xShqUTFfkSV
+         jeDvxYkSM8TJFZBxEso/8HGFi3plmOc0projQNVL/q0nBOYv+31HAizvOoF3W7b4psdk
+         p9RRxsgmFVGH/4U86RR+5yFV9xxwJwl+jUIn2RZkR2ruHBffBn78201MZ9OKNjHKDMKe
+         VRis5GPJQi45bkp3XPB3UW77WsTQMQOYYFoEMcl9UNTuogEbAcQSMxgNXMf6bDhG6Ac4
+         LBEw==
+X-Gm-Message-State: AOAM531OvNclNXypXxIgC1iEt878QVPBpQD7/xWjYrpDynpDWfOFrpTk
+        ZktS7XJ2kErP7bEsIwzwl/RzSkSy4/NH0hYIjd8=
+X-Google-Smtp-Source: ABdhPJzK9R4ASADJiZhcFWpmmSc2fMtB7YX3geIloYrmwJ+V+lARdg8PkQ665bLAJDEKt43J57E2ht/fT2BLTebPkYk=
+X-Received: by 2002:a63:4f42:: with SMTP id p2mr9002049pgl.381.1639592821005;
+ Wed, 15 Dec 2021 10:27:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="SoLG3GS5cOfv0PWZ"
-Content-Disposition: inline
-In-Reply-To: <YboPz454GCe6ZA7g@smile.fi.intel.com>
-X-Cookie: No solicitors.
+Received: by 2002:a05:7300:304f:b0:43:1d75:2c1b with HTTP; Wed, 15 Dec 2021
+ 10:27:00 -0800 (PST)
+Reply-To: mr.mohamedzaki6@gmail.com
+From:   "mr.mohamedzaki6" <wilsonkazeem876@gmail.com>
+Date:   Wed, 15 Dec 2021 10:27:00 -0800
+Message-ID: <CAOx7ANen9SVa+Ho_6e7HuvOMrqnTnUp7+WTXooK4Ufudgt4oYg@mail.gmail.com>
+Subject: Please I Need Your Help
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+Greetings in the name of our creator Allah the most Merciful,
 
---SoLG3GS5cOfv0PWZ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I am Mr. Mohamed Zaki, I have US$7.2 Million Dollars will be moved on
+your name as the beneficiary of my late client, I need your help to
+receive this money into your Bank Account. get back to me through this
+ Email address  (mr.mohamedzaki6@gmail.com) Your quick response will
+be highly appreciated.
 
-On Wed, Dec 15, 2021 at 05:54:55PM +0200, Andy Shevchenko wrote:
+Thank you.
 
-Please note that due to people replying with random bug reports against
-the actual code in -next replying to the -next message isn't a super
-good way of getting my attention you can get lost in the noise.
-
-> Thanks, I see tags now.
-
-I fixed the bug with the script, it doesn't check for errors when
-tagging unfortunately.
-
-> The other issue I have noticed is that gpio-intel branches [1] are out of the
-> merge. I haven't got any email about any issues with them.
-
-> Do you have the latest and greatest list of repositories to merge?
-
-You can see in the merge log that it's getting skipped due to an issue
-with the previous tree (which also has a build failure causing me to
-need to revert it) upsetting the script.
-
---SoLG3GS5cOfv0PWZ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmG6LooACgkQJNaLcl1U
-h9AC2gf9G3fxaP3PBpfPy0TJpRqzg4J1rHvS77ZvBusgqVOAgrMTzoazdIddWY2b
-edjZrppaZmRg2t76RzZ50eEfcdLZoPDP/MqIoBW6fmgPcmAExfj2i4KlZqeWH035
-8LxP5G+92fv6j4DY2CXDm7HC3QCySc/8SUDgP8ebO1U8K5NeXbhalZyDgJVGVoj+
-VIkDvumbcVwzUuVDc3WGJRcm1lwaFVt46RuF9fdE0A2Tg4xvseZ9xtGpyOqJZsku
-Q+CUJZg63uXxDYtMZfADZqBFdFgIvyhaNiJaPvV1kk+256nKczMYwR2+LIZDtLYg
-vIOkQiw+MsaSkd/vD99kSDXm/Nkz5A==
-=/AdQ
------END PGP SIGNATURE-----
-
---SoLG3GS5cOfv0PWZ--
+Mr.Mohamed Zaki

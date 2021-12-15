@@ -2,84 +2,70 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D36714760F6
-	for <lists+linux-next@lfdr.de>; Wed, 15 Dec 2021 19:43:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 176AC4761AB
+	for <lists+linux-next@lfdr.de>; Wed, 15 Dec 2021 20:25:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233662AbhLOSnw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 15 Dec 2021 13:43:52 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:48720 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235259AbhLOSnw (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 15 Dec 2021 13:43:52 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D0C1CB8207C;
-        Wed, 15 Dec 2021 18:43:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0E7DC36AE3;
-        Wed, 15 Dec 2021 18:43:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639593829;
-        bh=0CChQAveQgYabA/A7L2N5fVkhXrekErzoIEpsSSqaFc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Mvdk8AuVVE8PACwmSlN8LjRY3Sg0RHH2QCZqdgxy39asB2LdlHtmDweDPwhxrrGwT
-         MkVkIgdQu/sQ9tDxzHwt+SFBhRTzOrcDy8G06Mzp+5JT/zxfABv3+/E4ksUjUjdQQ4
-         8IOSOERRvoagQu+86Ya6n8No5v1RWhqdS3qMKe153FiygdGr9Tq/5y9WZgdLjew0ZC
-         5COtoJWdp3URB5ZKTAUj2MaBaPpicZ/ID3SdQxFKtUPGxQi2XHwZIj0I/nJuMHtTP0
-         8P8ZHjfSu6yDCB8kmEy+MnYIIttq8CIi9tgp+Csjl4QdhZmGtuekMhBS3Vw2dmvghn
-         u3nA3lCfHKYKw==
-Date:   Wed, 15 Dec 2021 18:43:45 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: Tree for Dec 14
-Message-ID: <Ybo3Yad2Jm0+sN+c@sirena.org.uk>
+        id S1344234AbhLOTZ2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 15 Dec 2021 14:25:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35766 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344233AbhLOTZ1 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 15 Dec 2021 14:25:27 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA993C061574;
+        Wed, 15 Dec 2021 11:25:24 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1639596323;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9KT7JY3Ys8b/8L35+SOW16m9hH70RGmEctiRxYgxc0o=;
+        b=JtPW/xveQu3FbzczfH2uHSkiYkMm5v37tPc+2fllWFZIQNy8B4c1ZxvzpkooR4JhWSeKXd
+        Z269HOXQrZLCXqBCRlrBh1OJvK9VqBcGVAMhK0X7VXyNSN0/cef5VXwJDum854rZEEAgdA
+        Ukg5Xena3yMwqeyz3sKCD8/vz20BOGgAWzeQt2Ks/7zPiNaq0Fz/qQ6goJaBiF17FxRHbI
+        pJISb3qltI9u+AndtzXgIbxafa4Ni6niUv+bvMxfjefF24u2skIWML13kPcypl2KHPY5D5
+        5EV1nAB6PLIKDNUQfdUTO6MfBdpaZPDHE4oT6eURN3gv4ZdWzKxUMf6ne8uv3g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1639596323;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9KT7JY3Ys8b/8L35+SOW16m9hH70RGmEctiRxYgxc0o=;
+        b=GwPn0D2VOJ/OVkzz9WbHxXH0EAnlcu9SWihSxjAZHweJ0ePHW0MZMrKzyLKnOUh6ctCaHc
+        ReLnGf0BLmHq8ECw==
+To:     Randy Dunlap <rdunlap@infradead.org>, broonie@kernel.org,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: Tree for Dec 14 (arch/x86/kernel/apic/msi.o)
+In-Reply-To: <c916e22d-5b97-9cdc-486f-64d06d82cef9@infradead.org>
 References: <20211214223228.1745315-1-broonie@kernel.org>
- <YboPz454GCe6ZA7g@smile.fi.intel.com>
- <Yboui5aym4eB6oP8@sirena.org.uk>
- <Ybo2i0lmD2kx/cg6@smile.fi.intel.com>
+ <c916e22d-5b97-9cdc-486f-64d06d82cef9@infradead.org>
+Date:   Wed, 15 Dec 2021 20:25:22 +0100
+Message-ID: <87lf0lr7q5.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="T88+xw8PeA6oWNd1"
-Content-Disposition: inline
-In-Reply-To: <Ybo2i0lmD2kx/cg6@smile.fi.intel.com>
-X-Cookie: No solicitors.
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+On Tue, Dec 14 2021 at 17:49, Randy Dunlap wrote:
+> On 12/14/21 14:32, broonie@kernel.org wrote:
+>> Hi all,
+>> 
+>> News: Releases may or may not happen over the next few days since I'm
+>> getting a vacciene dose tomorrow.
+>> 
+>> Changes since 20211213:
+>> 
+>
+> on x86_64:
+>
+> ld: arch/x86/kernel/apic/msi.o: in function `arch_restore_msi_irqs':
+> msi.c:(.text+0x245): undefined reference to `xen_initdom_restore_msi'
 
---T88+xw8PeA6oWNd1
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Fixed. Arnd sent a patch already.
 
-On Wed, Dec 15, 2021 at 08:40:11PM +0200, Andy Shevchenko wrote:
-> On Wed, Dec 15, 2021 at 06:06:03PM +0000, Mark Brown wrote:
+Thanks,
 
-> > You can see in the merge log that it's getting skipped due to an issue
-> > with the previous tree (which also has a build failure causing me to
-> > need to revert it) upsetting the script.
-
-> Yes, I see now. But as far as I know my repo doesn't have issues (neither
-> compilation nor merge), or at least nobody so far informed me about.
-
-Like I say it's an issue with the *previous* tree which upsets the
-script.
-
---T88+xw8PeA6oWNd1
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmG6N2AACgkQJNaLcl1U
-h9C4hAf+MqdXBRWywGGuLiRGM11ckMW4s4cZHK997CGsh6br+KZJVOCGQ/7evnjV
-+8eRBY2tEYicyQEOrknjuNACLeoGyiU9uGBReDKO06rLefMg4EAPT3D/g1Dng27l
-/pzQQnUbHmXzyv0kSl7n3DHSH7seqhs2ooCCSAhrjQWk4z96BKe6E65YnjFNW7vu
-BLGQxw31QsSshsr0b+ROTAq3/DLIAGG+uFOBlSokKpiD9tnPvXUJD+tJ0jiXVY5o
-qeju8g8JH2EOIuqNzkEKpv+jg7coLihIU5URIf66I7fTw/g0ckKXKx1Hf9DN99JL
-g0s2PleL6bbzfkyKFB5d90P8gw4Tuw==
-=4AZG
------END PGP SIGNATURE-----
-
---T88+xw8PeA6oWNd1--
+        tglx

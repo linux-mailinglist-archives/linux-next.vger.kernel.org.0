@@ -2,110 +2,200 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 660DF478046
-	for <lists+linux-next@lfdr.de>; Fri, 17 Dec 2021 00:05:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6B624780EE
+	for <lists+linux-next@lfdr.de>; Fri, 17 Dec 2021 00:53:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236531AbhLPXFB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 16 Dec 2021 18:05:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51838 "EHLO
+        id S230070AbhLPXxn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 16 Dec 2021 18:53:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236960AbhLPXFA (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 16 Dec 2021 18:05:00 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 322B1C06173F
-        for <linux-next@vger.kernel.org>; Thu, 16 Dec 2021 15:05:00 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id r11so1056447edd.9
-        for <linux-next@vger.kernel.org>; Thu, 16 Dec 2021 15:05:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=GJ64TcgksQc3C6D3xtvHzgt3iSOg6McffYMs3O8prrE=;
-        b=Z63xJiB3Ei8LRcpyHm+qEbadN02vR/u6ZMgg4wLoJE0RBSk+pzm39iXdJq7Pkoaym3
-         MMbyLdHN9fgCKEgRW4gBwD50fE8DWWE5hHjRyN0UQFAaVIVWqcxkIU5nQIJ9R0LC/A3/
-         8DMJt3Z7EQE/YKXLzc4ymVMUg1kH6LZ7B4bfgPC0zRoszkE1AdnT06n7mcKaFMsVpf7m
-         wOkbgLJOmEd3n4TDlCDbofS10/+OnLap04+VhPnPjJlTRGFXqUIzrGNVVnayQAcTLbqy
-         0tIGF7c19QMMGwLX8zMSbau5pEABlonMGEkPVmBSNiw9spvZiECzEoTvVPc/vToSHvw0
-         lTBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=GJ64TcgksQc3C6D3xtvHzgt3iSOg6McffYMs3O8prrE=;
-        b=61+xyXIQifAyAl/RLHH3IRK0YbCVizygNUtLSVdze35bzvL1jC3r4nGQhbB2sVonkV
-         KeRrfCOz7oC+/3RxUogbMVOYxUQfutDJn3RntM7wvGIJ2feezNLZEW7pK4iFQ+a2AWzX
-         E8kfTTleNw6evUsFXLHSrfGcZq7pflRBFoCKmLujhqkS3YHRclmdgDE6ieQO7ZyZH0Me
-         aYOA+a82kp4GW13BtJ2Kk/VUJoHn5klXdN7tqbfRWh+P0izLGhV0NYW74ds/slg2EUFh
-         s4+X221KPUxryQfLX4rqHlrKfFfCWxwxeb/NgNlp3MzpGTHf9eEA+E2gBJLvDjnUyx98
-         T0zQ==
-X-Gm-Message-State: AOAM532Wk/YvFojSxutOPKMunWeIUJA5iqHtbVTtzkkP7cKCILMLEndi
-        idGD/fhpssXYWmTWwkn6jDP3A2cqiviOm94kNeCZ
-X-Google-Smtp-Source: ABdhPJx3SFGGswhmmu2r1dzkr+eLURRkoUYw4sDxRVomPchgoioBKl7e14g/fwAEf2396aEHS44SLD69T09wvRp1j0Y=
-X-Received: by 2002:a17:907:e8e:: with SMTP id ho14mr268357ejc.12.1639695898735;
- Thu, 16 Dec 2021 15:04:58 -0800 (PST)
-MIME-Version: 1.0
-References: <20211026133147.35d19e00@canb.auug.org.au> <87k0i0awdl.fsf@mpe.ellerman.id.au>
- <CAHC9VhTj7gn3iAOYctVRKvv_Bk1iQMrmkA8FVJtYzdvBjqFmvg@mail.gmail.com>
- <87tuh2aepp.fsf@mpe.ellerman.id.au> <2012df5e-62ec-06fb-9f4d-e27dde184a3f@csgroup.eu>
- <CAHC9VhRHs8Lx8+v+LHmJByxO_m330sfLWRsGDsFtQxyQ1860eg@mail.gmail.com>
- <dc5705cf-d47a-57b0-65da-2a2af8d71b19@csgroup.eu> <CAHC9VhQPizVLkr2+sqRCS0gS4+ZSw-AMkJM5V64-ku8AQe+QQg@mail.gmail.com>
- <1a78709f-162e-0d78-0550-4e9ef213f9c6@csgroup.eu> <102e59ba-fcf0-dd85-9338-75b7ce5fbd83@kaod.org>
- <5f83d1fe-4e6e-1d08-b0c2-aec8ee852065@csgroup.eu>
-In-Reply-To: <5f83d1fe-4e6e-1d08-b0c2-aec8ee852065@csgroup.eu>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Thu, 16 Dec 2021 18:04:47 -0500
-Message-ID: <CAHC9VhTcV6jn4z7uGXZb=RZ5k7W4KW1vnoAUMHN6Zhkxsw1Xpg@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the audit tree with the powerpc tree
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     =?UTF-8?Q?C=C3=A9dric_Le_Goater?= <clg@kaod.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Richard Guy Briggs <rgb@redhat.com>,
+        with ESMTP id S230057AbhLPXxn (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 16 Dec 2021 18:53:43 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6CBBC061574;
+        Thu, 16 Dec 2021 15:53:42 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JFTTc2VdLz4xd4;
+        Fri, 17 Dec 2021 10:53:40 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1639698820;
+        bh=tREWjUB7Lo11JMZ2tyf9VLjqdQ4MvuTTGIoWhPSRTQA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=hWHVsmzlxSP3QqjZ1R7sFjbvCrB6qZ5V+pawC+VIzrwFpWrbIAMRxylmXJ1Qmd+wb
+         Wl8fqA+f2qwjVnbz2hNJHNcqGVnEiCJhEnOXmkZSBolHTw9XIvY7cZbklAjnJgtVn1
+         IV8DSOC3Zd170rP3gzwRU4JG6FL6K9B6CdmQX/lSIQzL7fi7OD7E9wQjU8wP2ftQdO
+         yRMORfInw2pHx/x53aBm4bEdvypt+2YuiX+kujS33S3VRNnOlZvCiPxw7ZL2lLYdZ9
+         P7VBfVRTSPLYD3smtWV2Yh+EyYrA8jPYTMVseakYJE+9ExSi4mCNarhVLe5fPqpSO9
+         Aur4oj+rIJaLw==
+Date:   Fri, 17 Dec 2021 10:53:38 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Shawn Guo <shawnguo@kernel.org>
+Cc:     Yunus Bas <y.bas@phytec.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warnings after merge of the imx-mxs tree
+Message-ID: <20211217105338.315a26b3@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/CbBJ=od0GYrWNE5.T6v=+Tc";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 4:08 AM Christophe Leroy
-<christophe.leroy@csgroup.eu> wrote:
-> Thanks C=C3=A9dric, I've now been able to install debian PPC32 port of DE=
-BIAN
-> 11 on QEMU and run the tests.
->
-> I followed instructions in file README.md provided in the test suite.
-> I also modified tests/Makefile to force MODE :=3D 32
->
-> I've got a lot of failures, am I missing some options in the kernel or
-> something ?
->
-> Running as   user    root
->          with context root:::
->          on   system
+--Sig_/CbBJ=od0GYrWNE5.T6v=+Tc
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-While SELinux is not required for audit, I don't think I've ever run
-it on system without SELinux.  In theory the audit-testsuite shouldn't
-rely on SELinux being present (other than the SELinux specific tests
-of course), but I'm not confident enough to say that the test suite
-will run without problem without SELinux.
+Hi all,
 
-If it isn't too difficult, I would suggest enabling SELinux in your
-kernel build and ensuring the necessary userspace, policy, etc. is
-installed.  You don't need to worry about getting it all running
-correctly; the audit-testsuite should pass with SELinux in permissive
-mode.
+After merging the imx-mxs tree, today's linux-next build (arm
+multi_v7_defconfig) produced this warning:
 
-If you're still seeing all these failures after trying that let us know.
+arch/arm/boot/dts/imx6qdl-phytec-mira-peb-wlbt-05.dtsi:50.3-13: Warning (re=
+g_format): /soc/bus@2100000/mmc@2198000/wifi@1:reg: property has invalid le=
+ngth (4 bytes) (#address-cells =3D=3D 2, #size-cells =3D=3D 1)
+arch/arm/boot/dts/imx6dl-phytec-mira-rdk-nand.dtb: Warning (pci_device_reg)=
+: Failed prerequisite 'reg_format'
+arch/arm/boot/dts/imx6dl-phytec-mira-rdk-nand.dtb: Warning (pci_device_bus_=
+num): Failed prerequisite 'reg_format'
+arch/arm/boot/dts/imx6dl-phytec-mira-rdk-nand.dtb: Warning (i2c_bus_reg): F=
+ailed prerequisite 'reg_format'
+arch/arm/boot/dts/imx6dl-phytec-mira-rdk-nand.dtb: Warning (spi_bus_reg): F=
+ailed prerequisite 'reg_format'
+arch/arm/boot/dts/imx6qdl-phytec-mira-peb-wlbt-05.dtsi:48.16-51.4: Warning =
+(avoid_default_addr_size): /soc/bus@2100000/mmc@2198000/wifi@1: Relying on =
+default #address-cells value
+arch/arm/boot/dts/imx6qdl-phytec-mira-peb-wlbt-05.dtsi:48.16-51.4: Warning =
+(avoid_default_addr_size): /soc/bus@2100000/mmc@2198000/wifi@1: Relying on =
+default #size-cells value
+arch/arm/boot/dts/imx6qdl-phytec-mira-peb-wlbt-05.dtsi:50.3-13: Warning (re=
+g_format): /soc/bus@2100000/mmc@2198000/wifi@1:reg: property has invalid le=
+ngth (4 bytes) (#address-cells =3D=3D 2, #size-cells =3D=3D 1)
+arch/arm/boot/dts/imx6q-phytec-mira-rdk-emmc.dtb: Warning (pci_device_reg):=
+ Failed prerequisite 'reg_format'
+arch/arm/boot/dts/imx6q-phytec-mira-rdk-emmc.dtb: Warning (pci_device_bus_n=
+um): Failed prerequisite 'reg_format'
+arch/arm/boot/dts/imx6q-phytec-mira-rdk-emmc.dtb: Warning (i2c_bus_reg): Fa=
+iled prerequisite 'reg_format'
+arch/arm/boot/dts/imx6q-phytec-mira-rdk-emmc.dtb: Warning (spi_bus_reg): Fa=
+iled prerequisite 'reg_format'
+arch/arm/boot/dts/imx6qdl-phytec-mira-peb-wlbt-05.dtsi:48.16-51.4: Warning =
+(avoid_default_addr_size): /soc/bus@2100000/mmc@2198000/wifi@1: Relying on =
+default #address-cells value
+arch/arm/boot/dts/imx6qdl-phytec-mira-peb-wlbt-05.dtsi:48.16-51.4: Warning =
+(avoid_default_addr_size): /soc/bus@2100000/mmc@2198000/wifi@1: Relying on =
+default #size-cells value
+arch/arm/boot/dts/imx6qdl-phytec-mira-peb-wlbt-05.dtsi:50.3-13: Warning (re=
+g_format): /soc/bus@2100000/mmc@2198000/wifi@1:reg: property has invalid le=
+ngth (4 bytes) (#address-cells =3D=3D 2, #size-cells =3D=3D 1)
+arch/arm/boot/dts/imx6q-phytec-mira-rdk-nand.dtb: Warning (pci_device_reg):=
+ Failed prerequisite 'reg_format'
+arch/arm/boot/dts/imx6q-phytec-mira-rdk-nand.dtb: Warning (pci_device_bus_n=
+um): Failed prerequisite 'reg_format'
+arch/arm/boot/dts/imx6q-phytec-mira-rdk-nand.dtb: Warning (i2c_bus_reg): Fa=
+iled prerequisite 'reg_format'
+arch/arm/boot/dts/imx6q-phytec-mira-rdk-nand.dtb: Warning (spi_bus_reg): Fa=
+iled prerequisite 'reg_format'
+arch/arm/boot/dts/imx6qdl-phytec-mira-peb-wlbt-05.dtsi:48.16-51.4: Warning =
+(avoid_default_addr_size): /soc/bus@2100000/mmc@2198000/wifi@1: Relying on =
+default #address-cells value
+arch/arm/boot/dts/imx6qdl-phytec-mira-peb-wlbt-05.dtsi:48.16-51.4: Warning =
+(avoid_default_addr_size): /soc/bus@2100000/mmc@2198000/wifi@1: Relying on =
+default #size-cells value
+arch/arm/boot/dts/imx6qdl-phytec-mira-peb-wlbt-05.dtsi:50.3-13: Warning (re=
+g_format): /soc/bus@2100000/mmc@2198000/wifi@1:reg: property has invalid le=
+ngth (4 bytes) (#address-cells =3D=3D 2, #size-cells =3D=3D 1)
+arch/arm/boot/dts/imx6qp-phytec-mira-rdk-nand.dtb: Warning (pci_device_reg)=
+: Failed prerequisite 'reg_format'
+arch/arm/boot/dts/imx6qp-phytec-mira-rdk-nand.dtb: Warning (pci_device_bus_=
+num): Failed prerequisite 'reg_format'
+arch/arm/boot/dts/imx6qp-phytec-mira-rdk-nand.dtb: Warning (i2c_bus_reg): F=
+ailed prerequisite 'reg_format'
+arch/arm/boot/dts/imx6qp-phytec-mira-rdk-nand.dtb: Warning (spi_bus_reg): F=
+ailed prerequisite 'reg_format'
+arch/arm/boot/dts/imx6qdl-phytec-mira-peb-wlbt-05.dtsi:48.16-51.4: Warning =
+(avoid_default_addr_size): /soc/bus@2100000/mmc@2198000/wifi@1: Relying on =
+default #address-cells value
+arch/arm/boot/dts/imx6qdl-phytec-mira-peb-wlbt-05.dtsi:48.16-51.4: Warning =
+(avoid_default_addr_size): /soc/bus@2100000/mmc@2198000/wifi@1: Relying on =
+default #size-cells value
+arch/arm/boot/dts/imx6ul-phytec-segin-peb-wlbt-05.dtsi:86.3-13: Warning (re=
+g_format): /soc/bus@2100000/mmc@2194000/wifi@1:reg: property has invalid le=
+ngth (4 bytes) (#address-cells =3D=3D 2, #size-cells =3D=3D 1)
+arch/arm/boot/dts/imx6ul-phytec-segin-ff-rdk-nand.dtb: Warning (pci_device_=
+reg): Failed prerequisite 'reg_format'
+arch/arm/boot/dts/imx6ul-phytec-segin-ff-rdk-nand.dtb: Warning (pci_device_=
+bus_num): Failed prerequisite 'reg_format'
+arch/arm/boot/dts/imx6ul-phytec-segin-ff-rdk-nand.dtb: Warning (i2c_bus_reg=
+): Failed prerequisite 'reg_format'
+arch/arm/boot/dts/imx6ul-phytec-segin-ff-rdk-nand.dtb: Warning (spi_bus_reg=
+): Failed prerequisite 'reg_format'
+arch/arm/boot/dts/imx6ul-phytec-segin-peb-wlbt-05.dtsi:84.16-87.4: Warning =
+(avoid_default_addr_size): /soc/bus@2100000/mmc@2194000/wifi@1: Relying on =
+default #address-cells value
+arch/arm/boot/dts/imx6ul-phytec-segin-peb-wlbt-05.dtsi:84.16-87.4: Warning =
+(avoid_default_addr_size): /soc/bus@2100000/mmc@2194000/wifi@1: Relying on =
+default #size-cells value
+arch/arm/boot/dts/imx6ul-phytec-segin-peb-wlbt-05.dtsi:86.3-13: Warning (re=
+g_format): /soc/bus@2100000/mmc@2194000/wifi@1:reg: property has invalid le=
+ngth (4 bytes) (#address-cells =3D=3D 2, #size-cells =3D=3D 1)
+arch/arm/boot/dts/imx6ull-phytec-segin-lc-rdk-nand.dtb: Warning (pci_device=
+_reg): Failed prerequisite 'reg_format'
+arch/arm/boot/dts/imx6ull-phytec-segin-lc-rdk-nand.dtb: Warning (pci_device=
+_bus_num): Failed prerequisite 'reg_format'
+arch/arm/boot/dts/imx6ull-phytec-segin-lc-rdk-nand.dtb: Warning (i2c_bus_re=
+g): Failed prerequisite 'reg_format'
+arch/arm/boot/dts/imx6ull-phytec-segin-lc-rdk-nand.dtb: Warning (spi_bus_re=
+g): Failed prerequisite 'reg_format'
+arch/arm/boot/dts/imx6ul-phytec-segin-peb-wlbt-05.dtsi:84.16-87.4: Warning =
+(avoid_default_addr_size): /soc/bus@2100000/mmc@2194000/wifi@1: Relying on =
+default #address-cells value
+arch/arm/boot/dts/imx6ul-phytec-segin-peb-wlbt-05.dtsi:84.16-87.4: Warning =
+(avoid_default_addr_size): /soc/bus@2100000/mmc@2194000/wifi@1: Relying on =
+default #size-cells value
+arch/arm/boot/dts/imx6ul-phytec-segin-peb-wlbt-05.dtsi:86.3-13: Warning (re=
+g_format): /soc/bus@2100000/mmc@2194000/wifi@1:reg: property has invalid le=
+ngth (4 bytes) (#address-cells =3D=3D 2, #size-cells =3D=3D 1)
+arch/arm/boot/dts/imx6ull-phytec-segin-ff-rdk-nand.dtb: Warning (pci_device=
+_reg): Failed prerequisite 'reg_format'
+arch/arm/boot/dts/imx6ull-phytec-segin-ff-rdk-nand.dtb: Warning (pci_device=
+_bus_num): Failed prerequisite 'reg_format'
+arch/arm/boot/dts/imx6ull-phytec-segin-ff-rdk-nand.dtb: Warning (i2c_bus_re=
+g): Failed prerequisite 'reg_format'
+arch/arm/boot/dts/imx6ull-phytec-segin-ff-rdk-nand.dtb: Warning (spi_bus_re=
+g): Failed prerequisite 'reg_format'
+arch/arm/boot/dts/imx6ul-phytec-segin-peb-wlbt-05.dtsi:84.16-87.4: Warning =
+(avoid_default_addr_size): /soc/bus@2100000/mmc@2194000/wifi@1: Relying on =
+default #address-cells value
+arch/arm/boot/dts/imx6ul-phytec-segin-peb-wlbt-05.dtsi:84.16-87.4: Warning =
+(avoid_default_addr_size): /soc/bus@2100000/mmc@2194000/wifi@1: Relying on =
+default #size-cells value
 
-> # Test 3 got: "256" (backlog_wait_time_actual_reset/test at line 151)
-> #   Expected: "0"
-> #  backlog_wait_time_actual_reset/test line 151 is: ok( $result, 0 );
->   # Was an event found?
+Presumably introduced by commit
 
-...
+  0c3a5101ba31 ("ARM: dts: imx6: phytec: Add PEB-WLBT-05 support")
 
 --=20
-paul moore
-www.paul-moore.com
+Cheers,
+Stephen Rothwell
+
+--Sig_/CbBJ=od0GYrWNE5.T6v=+Tc
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmG70YIACgkQAVBC80lX
+0Gyy1gf/f0hGpsGPoXnNSr0XV3BJxaxEmV3iGNManCWY55nYR+f8dHgs4GcDw8zz
+4BmK5wADPeh+2L/0SKkwys2nZM+fjfSvoKF9dZHt4rFVdtKvuQJ9AoH5DbaujVjK
+b1CJca4mXJJccAeIz2EmWdnKDelulm4KzOPucvbb0SjTFbUfytrxW4JCqqjQnq1Z
+V3vYyAEa6L4GQHoqN0IhCHX033kNKq8w+Hlcw2Ly4W09VrYyn+yW3YThg8aRpf81
+sa8IvCwmh4Y2Du/fSFRYhGUkm36NOzQKEDGEVlo8VmnftArRMfVQmXShZbQZYNDb
+pKQ2Ho87C0+r2hwBajZOznsFyhGkSw==
+=8Ke+
+-----END PGP SIGNATURE-----
+
+--Sig_/CbBJ=od0GYrWNE5.T6v=+Tc--

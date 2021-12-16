@@ -2,47 +2,50 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4714477BB2
-	for <lists+linux-next@lfdr.de>; Thu, 16 Dec 2021 19:43:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53395477BE8
+	for <lists+linux-next@lfdr.de>; Thu, 16 Dec 2021 19:50:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231980AbhLPSnU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 16 Dec 2021 13:43:20 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:60973 "EHLO
+        id S240771AbhLPSuG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 16 Dec 2021 13:50:06 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:56889 "EHLO
         gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbhLPSnT (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 16 Dec 2021 13:43:19 -0500
+        with ESMTP id S240821AbhLPStv (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 16 Dec 2021 13:49:51 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JFLbV1zSyz4xRC;
-        Fri, 17 Dec 2021 05:43:18 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JFLkz18tqz4xj8;
+        Fri, 17 Dec 2021 05:49:47 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1639680198;
-        bh=dQJSvdmNGsE7TZTWfD5000m7y9ZDvqEBJYgKBseryxM=;
+        s=201702; t=1639680589;
+        bh=ri32OcPWxF/ph9vWE05JKMD+Xqy5EcsRkLKNmhTvVSg=;
         h=Date:From:To:Cc:Subject:From;
-        b=Ee8rUx/0ZOdG0bkBn6RBJ88wBJSupF1IJtvgBtTO2lksgnsdqGql6qBj7/TYAhAfn
-         0s+qspqwp1TTU+9vtmOyUyqpJrXU7ME3C5Fvutcp5yCt/eS2OEg36Wllfrz1PjdrVU
-         1sxJdOVy68DZUXL63invjY7g5RyY6Cz0OnNONaWF6Pt4qBuWaikN+KXJ5a/zVAiJjQ
-         tM3gDXrGa33NaHPOud3f4RRGcHmOMNz04+/7Q1KmH9S1eUEHUDVYENcpUWOUgenQoD
-         +lMnI5zj5wiOuas3Q6oUmVusRTIpzK5YBXFQ5jd4Ps5T6QnV6dT9s1wMmieCUk1N6z
-         GIA+1jO3iiwhw==
-Date:   Fri, 17 Dec 2021 05:43:17 +1100
+        b=HYObuM+/23I1NOe+vmePN2aXpdla5bYsGdlLv9dh9yn3DoWIyjdC9WDTQAlOpiTSF
+         64ypA4QNAtNc1OE1nrLGC0AbZdKCxc/BNWTdAc23dLYjVwFzqmnJolIz5qjQvKhTxu
+         HWtgtpu46cXVNKwpdZ/2wdbeOFxx0fZFcW8zFphcHZA3uBQj9gcNZBu6nAL0W7kuBA
+         ctp6Dl2zmHQPXVAgFgJw2e1uc9LZx/BQh6yc3iYOApmYaQVfJUrF1hJeWLFPvfSQGY
+         gF7VzeWBraEG8KhRGcZCCA6rkw8WMosXMCUfSnOTlPMTCKRj+cjirUKIPdydbVnKN0
+         yJ4NDBHXfFQfA==
+Date:   Fri, 17 Dec 2021 05:49:46 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Dario Binacchi <dariobin@libero.it>,
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Stefan Roese <sr@denx.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the input tree
-Message-ID: <20211217054317.130ae2b7@canb.auug.org.au>
+Subject: linux-next: Fixes tag needs some work in the tip tree
+Message-ID: <20211217054946.4b58f7d2@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/XRC89kKUq0mz4dh.wvj8L2j";
+Content-Type: multipart/signed; boundary="Sig_/n5j6P=/7fZJHpiu_lN4y54b";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/XRC89kKUq0mz4dh.wvj8L2j
+--Sig_/n5j6P=/7fZJHpiu_lN4y54b
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -50,51 +53,38 @@ Hi all,
 
 In commit
 
-  61368d5cd2d2 ("Input: ti_am335x_tsc - fix STEPCONFIG setup for Z2")
+  83dbf898a2d4 ("PCI/MSI: Mask MSI-X vectors only on success")
 
 Fixes tag
 
-  Fixes: 8c896308fea ("input: ti_am335x_adc: use only FIFO0 and clean up a =
-little")
+  Fixes: aa8092c1d1f1 ("PCI/MSI: Mask all unused MSI-X entries")
 
 has these problem(s):
 
-  - SHA1 should be at least 12 digits long
+  - Target SHA1 does not exist
 
-In commit
+Maybe you meant
 
-  9d941aace809 ("Input: ti_am335x_tsc - set ADCREFM for X configuration")
-
-Fixes tag
-
-  Fixes: 1b8be32e691 ("Input: add support for TI Touchscreen controller")
-
-has these problem(s):
-
-  - SHA1 should be at least 12 digits long
-
-For the future, these can be fixed by setting core.abbrev to 12 (or more)
-or (for git v2.11 or later) just making sure it is not set (or set to
-"auto").
+Fixes: 7d5ec3d36123 ("PCI/MSI: Mask all unused MSI-X entries")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/XRC89kKUq0mz4dh.wvj8L2j
+--Sig_/n5j6P=/7fZJHpiu_lN4y54b
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmG7iMUACgkQAVBC80lX
-0GxojQgAgWiPZZGYwN0419zQvYSew6l8VnnVGELAbJni9c81W7wfOd9W0JOMznZs
-z6uROA07jXThPEIrpnMv7cr60/huRuVM+7KQf8E+lm5lflDjhhBL6B96c7RdlqBR
-I5B55PrlHno9MOwn/3MV5+23drhL9Gqjs7ZVBhjuDs0TQ7+qcNcMHSoyQ+YySlfp
-t/bnpSv26DujyHQGvI9RrZcbj+ObgdXhJdwMRzfETut+iZJzb9DU1t9e4meFueQl
-Vela5NERNQMyxMoEryCIKMnBOGzPaQEp7mDsjlWw+WD/jaiRZCpCmijDELPClTce
-NjQuqf3tH/ygrrpDIJsvKroliqaeEA==
-=Lm2p
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmG7ikoACgkQAVBC80lX
+0GwGpwf+NHx8F16lIfUdCy97PTqKuyLALdX0HKo8zAMFuUvRWCrpqlJeUPg0G418
+P3Uef6hqv2D0auQ5P3s09ulynspPUqAv6cYoaKB5XV+z0hA0Av2f9f/Dw2NOIal7
+rX+XoCbNNJrmnMM4slBhHAzE3pkdXJ/R4DlPvkuWyEt2zw8FebaAlH3sdJ6IW1yT
+a5IhtC2AeX6NnUFC+HQIge29nt9NDel+Xnmub/iXnpCRig5ue3fhMpInr7BQk8dF
+sKiv1ci53AvNJ2saT6VQxFltYmsmHSHTWsPWSd1qsTVPeM038P5wFcagw5CR+djj
+t/6YICQQvckJB7vk6wOih+Ap/iscEg==
+=3Bru
 -----END PGP SIGNATURE-----
 
---Sig_/XRC89kKUq0mz4dh.wvj8L2j--
+--Sig_/n5j6P=/7fZJHpiu_lN4y54b--

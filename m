@@ -2,91 +2,117 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09DC947657D
-	for <lists+linux-next@lfdr.de>; Wed, 15 Dec 2021 23:16:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE64A4768C8
+	for <lists+linux-next@lfdr.de>; Thu, 16 Dec 2021 04:42:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229924AbhLOWQY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 15 Dec 2021 17:16:24 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:36996 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbhLOWQY (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 15 Dec 2021 17:16:24 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DE6261B16;
-        Wed, 15 Dec 2021 22:16:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55837C36AE3;
-        Wed, 15 Dec 2021 22:16:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639606583;
-        bh=1hSjeBr9VK09A920ZiCqpUGXz/tcRcEu0B3NSFSN9Sg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=VzvfjufzjFK5OQlfhq7RCUUT8gtWoFrpXlWOciHQRyIxO3kO27skF7qJ1kp+Alzvb
-         Doj1QNkm96LgEmNwVcgEqojrhR9s/qNj0NawAjtkU4WX3Re1nykPtiKV7m5Ds1hwDh
-         dHfu1sgdbCn3pXeCr2aftkjBeY3wtatDf5mAhj6Jjup6D8lf6CEs/5bOjvVHocdmvB
-         K0Gf3DiUc8VeZHTCxEyenTKzCO9P2W0lBsReLGnbWisl4tgkoRbQFTfoFBZDGQcutN
-         103eA4jQiRtfoBEG6JoxAEYxq6t2Fop3ZsEOqDs8TKWDYGq7NqchQNQ52bx1WTHhnS
-         fujEzQaNL6KsQ==
-From:   broonie@kernel.org
-To:     Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Tree for Dec 15
-Date:   Wed, 15 Dec 2021 22:16:19 +0000
-Message-Id: <20211215221619.822904-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        id S231271AbhLPDmE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 15 Dec 2021 22:42:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35810 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229905AbhLPDmD (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 15 Dec 2021 22:42:03 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20E43C061574
+        for <linux-next@vger.kernel.org>; Wed, 15 Dec 2021 19:42:03 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id e3so82874697edu.4
+        for <linux-next@vger.kernel.org>; Wed, 15 Dec 2021 19:42:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=D5vroQmbiOUSX8kzvh85MrZRewy28SouUuDaYvVL1xk=;
+        b=jubXd+Iye/GbEdaLEL8jENHjJPcuwy3ld5c//PM/dePq7JdfiK8OYbt7aFdfLGlc7Q
+         5+nXPyZwD3D+51JO1uuxCrtHufwdTHOwwErFBEtuLZ3uPdNFwQFcKJyrjpHAPY9fXn0l
+         7QLk86MDhYc++nhye3j8a/K4dknggq6fdw+/mLfReDyzeuMMlRLviF8oYOCuWiBiolgL
+         7IMvt50arqf7fnEfIVZ/plX78dASqyABVTSMnOfsMUcRTUzupxbZZdGDHUPHG6EC8/H3
+         3hVa4JNMU1nrMd/pox9PUrVnCJQkF/hT+4y6OTnnrnHEisCFgwI1P5/GI+UuFddvl2ql
+         p8AQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=D5vroQmbiOUSX8kzvh85MrZRewy28SouUuDaYvVL1xk=;
+        b=PhMsnAA4f/6r/yYUU5UqoFIhEAR1yqTaEWtdjOlteaIh6TxlH1FBkX0eSxZ4pgM4hl
+         aGqWzdarb4gHctPajNCsVWEsNdM+76K6R5WcEXWgPFqlTFQVhNLR924mzmog3IUtM1Fr
+         UWivoYVo0ClHkfUCKOmUnG+HS1TFKhMBEfpo1/+HDR8Hh4G6TbQraxeTuQD15hU4U3q6
+         ZZZfh1Sjtk5ujXhkM5zRS0qT8fRFzrpvZ3IqZg9nLoXj9SNqCVRxIId2OpePotseaiu8
+         NvKpH9ZI99ONRHBwx70NGLE74o/COwwpRuVjdbpkXXS9CA/8HqDq2KGeL6MwUZz9Qkf0
+         PIsw==
+X-Gm-Message-State: AOAM531xBh8AXmmBv2hzwI8lwgpi92gCt9/z2AuCDIsfeyYvqU+yvfiQ
+        67gw0e3YHm6JldHg69CHvqfxcqfpw5oltCXYsvVpsw==
+X-Google-Smtp-Source: ABdhPJwEpp+aPuprraQp/ygrjtR8hkWKmLdkWmyM1VFRInXjfWgoaAiaB0HvoGHFeDsCC6LH5KyxzlJVMwTJ4T3vfxA=
+X-Received: by 2002:a17:906:c148:: with SMTP id dp8mr7141488ejc.736.1639626121392;
+ Wed, 15 Dec 2021 19:42:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 16 Dec 2021 09:11:50 +0530
+Message-ID: <CA+G9fYsy+ekg90TEcXZPN+89GD7rZSsACZvF8i2foN8msHjqmA@mail.gmail.com>
+Subject: [next] arm: dtbs/imx6ulz-bsh-smm-m2.dts', needed by '__dtbs_install'.
+To:     open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Markus Niebel <Markus.Niebel@ew.tq-group.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        "Ariel D'Alessandro" <ariel.dalessandro@collabora.com>,
+        Luca Weiss <luca@z3ntu.xyz>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi all,
+[ Please ignore this email if it is already reported ]
 
-News: I had a vaccine dose today so no guarantees about releases at
-least tomorrow depending on side effects.
+While building Linux next 20211215 arm defconfig dtbs with gcc-8/9/10/11
+following warnings / errors noticed.
+* arm, build
+  - gcc-10-defconfig
+  - gcc-10-imx_v6_v7_defconfig
+  - gcc-11-defconfig
+  - gcc-11-imx_v6_v7_defconfig
+  - gcc-8-defconfig
+  - gcc-8-imx_v6_v7_defconfig
+  - gcc-9-defconfig
+  - gcc-9-imx_v6_v7_defconfig
 
-Changes since 20211214:
+make --silent --keep-going --jobs=8
+O=/home/tuxbuild/.cache/tuxmake/builds/current \
+ ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- 'CC=sccache
+arm-linux-gnueabihf-gcc' \
+ 'HOSTCC=sccache gcc' dtbs_install \
+ INSTALL_DTBS_PATH=/home/tuxbuild/.cache/tuxmake/builds/current/dtbsinstall/dtbs
 
-The kvm tree gained a conflict.
+make[2]: *** No rule to make target
+'/home/tuxbuild/.cache/tuxmake/builds/current/dtbsinstall/dtbs/imx6ulz-bsh-smm-m2.dts',
+needed by '__dtbs_install'.
+make[2]: Target '__dtbs_install' not remade because of errors.
+make[1]: *** [Makefile:1465: dtbs_install] Error 2
 
-The phy-next tree gained a build failure and I used the version from
-yesterday.
 
-Non-merge commits (relative to Linus' tree): 6683
- 7239 files changed, 321081 insertions(+), 155400 deletions(-)
+meta data:
+-----------
+    git describe: next-20211215
+    git_repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+    git_sha: 93bf6eee76c0e716f6b32de690b1c52991547bb4
+    git_short_log: 93bf6eee76c0 (\"Add linux-next specific files for 20211215\")
+    target_arch: arm
+    toolchain: gcc-11
 
-----------------------------------------------------------------------------
+steps to reproduce:
+# To install tuxmake on your system globally:
+# sudo pip3 install -U tuxmake
 
-I have created today's linux-next tree at
-git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
-are tracking the linux-next tree using git, you should not use "git pull"
-to do so as that will try to merge the new linux-next release with the
-old one.  You should use "git fetch" and checkout or reset to the new
-master.
+tuxmake --runtime podman --target-arch arm --toolchain gcc-11
+--kconfig defconfig
 
-You can see which trees have been included by looking in the Next/Trees
-file in the source.  There are also quilt-import.log and merge.log
-files in the Next directory.  Between each merge, the tree was built
-with a defconfig for arm64, an allmodconfig for x86_64, a
-multi_v7_defconfig for arm and a native build of tools/perf. After the
-final fixups (if any), I do an x86_64 modules_install followed by builds
-for x86_64 allnoconfig, arm64 allnoconfig, arm64 allyesconfig and i386,
-and arm64 and htmldocs.
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Below is a summary of the state of the merge.
+build log:
+https://builds.tuxbuild.com/22LD3lFkujTbdIk5l92UpxMvBWx/
 
-I am currently merging 347 trees (counting Linus' and 94 trees of bug
-fix patches pending for the current merge release).
-
-Stats about the size of the tree over time can be seen at
-http://neuling.org/linux-next-size.html .
-
-Status of my local build tests will be at
-http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
-advice about cross compilers/configs that work, we are always open to add
-more builds.
-
-Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
-Gortmaker for triage and bug fixes.
+--
+Linaro LKFT
+https://lkft.linaro.org

@@ -2,81 +2,104 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 407BD477C04
-	for <lists+linux-next@lfdr.de>; Thu, 16 Dec 2021 19:54:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DD08477C9A
+	for <lists+linux-next@lfdr.de>; Thu, 16 Dec 2021 20:34:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236321AbhLPSyU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 16 Dec 2021 13:54:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51140 "EHLO
+        id S236852AbhLPTeS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 16 Dec 2021 14:34:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233598AbhLPSyU (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 16 Dec 2021 13:54:20 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF5DAC061574;
-        Thu, 16 Dec 2021 10:54:19 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S230188AbhLPTeR (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 16 Dec 2021 14:34:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96F87C061574;
+        Thu, 16 Dec 2021 11:34:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JFLrB1KPbz4xbd;
-        Fri, 17 Dec 2021 05:54:17 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1639680858;
-        bh=rLK4SY40uEkvmL/uH6UGQ2pLfiEP4TAdDBOu9EJHYgo=;
-        h=Date:From:To:Cc:Subject:From;
-        b=GAMpsRxlze5WkPWtOutexbQya4q0PKWw/V5z2f1H8j8ehzXTqUjN+XbdPZjzsG1rS
-         f2GQNDd9OP5TQP5eju0ZDK+ruKOxuFxgzhC3pVrNKhlvNQslU+ph6UdJyvuyN7zCOF
-         uxJLF69y7XhNqa4Rah4ljSiamTyilpduuxgvHX6z6wkbjYuUjlo9L4NE1nJVKmLCnp
-         jVTQVpjsrfhAlIQXK/SS7iRFubUvcvnyAZgSsCXZJQp0cKlD+v+f7aR5yPlKaItAtJ
-         QrkUBpbqOeYF01FL0tPN2PtKQ27VQ23W/b3GHyk0YUfapgh/Yp2Qd4vVp1D9yss5Ff
-         Ah7E506QXbAxg==
-Date:   Fri, 17 Dec 2021 05:54:17 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the kvms390 tree
-Message-ID: <20211217055417.49872d28@canb.auug.org.au>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 371AA61F3E;
+        Thu, 16 Dec 2021 19:34:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62B82C36AE2;
+        Thu, 16 Dec 2021 19:34:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639683256;
+        bh=lgGHjrtLPdvcwNTckAr7sscwionCHV5hIcqHkdrFjA8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=pJJXY/mV5VsENX+LABzCAvLc7F1qijfiO11ZZbyGYQdj1Q+61paVfV6fAkkRhkIJN
+         r0t17Y3LNxUf1VA4oLHnc8EqZKeV6e6b0wbxy1gKq92pS3l4Mgpa+HZb5bnblwEGcI
+         rhra4SzhzWEJpmoMSVWoMc5tmTPC1wT32HHGWyC6+fqh28f9kea3/Dpw03mSL92Dza
+         oSOphQWWvJA8x87Ak+19NbaUrHDN23STPSGtG04tR2KVaWTPSsjnbQUWqxq2Hw55Wi
+         bTdFyF0OXhRIq3u/4zegFLevPoSth/8G2WF9eaSv+bL3sQ2beeyHwjqbJWKoQslgGn
+         raLHpE7kzcJBA==
+From:   broonie@kernel.org
+To:     "Eric W . Biederman" <ebiederm@xmission.com>
+Cc:     Chuck Lever <chuck.lever@oracle.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        NeilBrown <neilb@suse.de>
+Subject: linux-next: manual merge of the userns tree with the cel tree
+Date:   Thu, 16 Dec 2021 19:34:12 +0000
+Message-Id: <20211216193412.2441434-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/TgdSFJHLklbt7vqQE=jzBTe";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/TgdSFJHLklbt7vqQE=jzBTe
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
 Hi all,
 
-Commits
+Today's linux-next merge of the userns tree got a conflict in:
 
-  697a708e3106 ("KVM: s390: gaccess: Cleanup access to guest pages")
-  7619a23b4788 ("KVM: s390: gaccess: Refactor access address range check")
-  782f8be3c167 ("KVM: s390: gaccess: Refactor gpa and length calculation")
+  fs/nfsd/nfssvc.c
 
-are missing a Signed-off-by from their committer.
+between commit:
 
---=20
-Cheers,
-Stephen Rothwell
+  cfb05a7336741 ("NFSD: narrow nfsd_mutex protection in nfsd thread")
 
---Sig_/TgdSFJHLklbt7vqQE=jzBTe
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+from the cel tree and commit:
 
------BEGIN PGP SIGNATURE-----
+  ca3574bd653ab ("exit: Rename module_put_and_exit to module_put_and_kthread_exit")
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmG7i1kACgkQAVBC80lX
-0Gzu7Qf+KhAGIJocPFlEw9o88pefN6cFUUqgE8kek5sYXJFzsCG0ng+1XLWVg7HL
-2tvk8vZx44vo7QYjr/E1RM1OLkj/Taor3nkxznwPNSHOMSGgwxZdqS5Fl3rMyGk7
-8WRB0aWJpnF3V8BSjrN2gOixpGBpkX8s+0CvjBf9YZ0oT6yKVjZNTsLGHuS7gWLY
-iZiHooGmAczNZXF3V8hP8OrJD+TY3X0i0ogEfcP7yiIZemD9JiFk1TWL99NxOcMF
-BbUdV7TKQQXyCiOBa4+s7Lan2ZRAKOZgJVaCOF8rOWX918+F+RraXcsO8tDGZqQ3
-6K+qBFp0x98Fm2pJT1Uyhy+urRZqug==
-=GPCn
------END PGP SIGNATURE-----
+from the userns tree.
 
---Sig_/TgdSFJHLklbt7vqQE=jzBTe--
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+diff --cc fs/nfsd/nfssvc.c
+index 14c1ef6f8cc74,5ce9f14318c4e..0000000000000
+--- a/fs/nfsd/nfssvc.c
++++ b/fs/nfsd/nfssvc.c
+@@@ -977,25 -982,11 +977,25 @@@ out
+  	/* Release the thread */
+  	svc_exit_thread(rqstp);
+  
+ -	nfsd_destroy(net);
+ +	/* We need to drop a ref, but may not drop the last reference
+ +	 * without holding nfsd_mutex, and we cannot wait for nfsd_mutex as that
+ +	 * could deadlock with nfsd_shutdown_threads() waiting for us.
+ +	 * So three options are:
+ +	 * - drop a non-final reference,
+ +	 * - get the mutex without waiting
+ +	 * - sleep briefly andd try the above again
+ +	 */
+ +	while (!svc_put_not_last(nn->nfsd_serv)) {
+ +		if (mutex_trylock(&nfsd_mutex)) {
+ +			nfsd_put(net);
+ +			mutex_unlock(&nfsd_mutex);
+ +			break;
+ +		}
+ +		msleep(20);
+ +	}
+  
+  	/* Release module */
+- 	module_put_and_exit(0);
+ -	mutex_unlock(&nfsd_mutex);
++ 	module_put_and_kthread_exit(0);
+  	return 0;
+  }
+  

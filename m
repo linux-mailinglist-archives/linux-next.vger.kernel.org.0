@@ -2,95 +2,99 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D387477211
-	for <lists+linux-next@lfdr.de>; Thu, 16 Dec 2021 13:43:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DA6D47727E
+	for <lists+linux-next@lfdr.de>; Thu, 16 Dec 2021 14:01:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236879AbhLPMn2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 16 Dec 2021 07:43:28 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:49038 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236878AbhLPMn2 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 16 Dec 2021 07:43:28 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S231903AbhLPNA7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 16 Dec 2021 08:00:59 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:53889 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232041AbhLPNA6 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 16 Dec 2021 08:00:58 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D92FD61D91;
-        Thu, 16 Dec 2021 12:43:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A69A0C36AE3;
-        Thu, 16 Dec 2021 12:43:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639658607;
-        bh=T+/eGeLJ2ZTmFQV2tYX+uvVjjBJjduRCV4T8gY3fi88=;
-        h=From:To:Cc:Subject:Date:From;
-        b=l+6zahUnLZO+LXkM9aOyJBUgMtgR16TwB/iZBzUODMpsLaA8oZBnKWpIZg2Ic1rXe
-         dJ1PeDnC6yD5rAElRjtzqQ5ohlQbmuVYFoOj0OkmO3AhledUXkBxx6RXdLj+heMkKu
-         542uxKs2eRDQDTzFqL9gvrgLPmFZ81c2uhv8mEQNJrtxXQHENDGxkTVSXESYeDQ34U
-         wNCzpuePtsGfldvHIup5mwIPtbluvRvvNxxy4d90YR/lEuSJIIp5xO2qU2AyA1NIJj
-         7Z89W6hLUtiIblOecLY9Arw8nSuO1pgEtTjciwaeN2PnVzKm+MHVh8WIcfIJ/10DaQ
-         f0gTLDxAI8NEA==
-From:   broonie@kernel.org
-To:     Steve French <smfrench@gmail.com>,
-        CIFS <linux-cifs@vger.kernel.org>
-Cc:     David Howells <dhowells@redhat.com>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JFC0T21zWz4xRB;
+        Fri, 17 Dec 2021 00:00:57 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1639659657;
+        bh=oyle89FM3w5oZcH8w5oNb+WkBQPyqp9LhUgHOy9z+x0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=vAT3Uqq27D/xSvAajPN1/JCY40zk44WJg3G9Utj5HPV+U2i5xijPMUhrhcXEswZ5X
+         +NHhXldI42TQftAnpc/a4v7LVn55mZiac95HtoL/PKjrtbkWy4grJesYHfU1T2Eg24
+         Bys9x27JgTO38o4RNlXCTY4XMDOcbGkHo1vJ1h6mot6iO/4YiCNj8EO/zcTpI8sdB/
+         cOFnBVlJnXY66lPtn9nE6IA6jpRmry9+qguTZbcoUkYSr8n7ViQStj/pA1oMHVnY8I
+         q0zIZaskKTR7LrUI8jNGCPUIQu8mn/GbIvsAPrOJzQJLKJcTHAYr4c6H6n6Ze3FY5M
+         qs79RtZmJHumg==
+Date:   Fri, 17 Dec 2021 00:00:56 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>
+Cc:     Dmitry Osipenko <digetx@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Shyam Prasad N <sprasad@microsoft.com>,
-        Steve French <stfrench@microsoft.com>
-Subject: linux-next: manual merge of the cifs tree with the fscache tree
-Date:   Thu, 16 Dec 2021 12:43:17 +0000
-Message-Id: <20211216124317.4143405-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the sound-asoc-fixes tree
+Message-ID: <20211217000056.54aa1e81@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/FPN.Oo7yRtDzSXiQNL12xPc";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+--Sig_/FPN.Oo7yRtDzSXiQNL12xPc
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
 Hi all,
 
-Today's linux-next merge of the cifs tree got a conflict in:
+In commit
 
-  fs/cifs/inode.c
+  db635ba4fadf ("ASoC: tegra: Restore headphones jack name on Nyan Big")
 
-between commit:
+Fixes tag
 
-  830c476f5eb82 ("cifs: Support fscache indexing rewrite (untested)")
+  Fixes: cc8f70f ("ASoC: tegra: Unify ASoC machine drivers")
 
-from the fscache tree and commit:
+has these problem(s):
 
-  68f87ec9c1ce3 ("cifs: ignore resource_id while getting fscache super cookie")
+  - SHA1 should be at least 12 digits long
 
-from the cifs tree.
+In commit
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+  d341b427c3c3 ("ASoC: tegra: Add DAPM switches for headphones and mic jack=
+")
 
-diff --cc fs/cifs/inode.c
-index dc2fe76450b96,279622e4eb1c2..0000000000000
---- a/fs/cifs/inode.c
-+++ b/fs/cifs/inode.c
-@@@ -1372,20 -1370,6 +1367,7 @@@ iget_no_retry
-  		iget_failed(inode);
-  		inode = ERR_PTR(rc);
-  	}
- +
-- 	if (!rc) {
-- 		/*
-- 		 * The cookie is initialized from volume info returned above.
-- 		 * Inside cifs_fscache_get_super_cookie it checks
-- 		 * that we do not get super cookie twice.
-- 		 */
-- 		rc = cifs_fscache_get_super_cookie(tcon);
-- 		if (rc < 0) {
-- 			iget_failed(inode);
-- 			inode = ERR_PTR(rc);
-- 		}
-- 	}
-- 
-  out:
-  	kfree(path);
-  	free_xid(xid);
+Fixes tag
+
+  Fixes: cc8f70f ("ASoC: tegra: Unify ASoC machine drivers")
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+
+This can be fixed in future by setting core.abbrev to 12 (or more) or (for
+git v2.11 or later) just making sure it is not set (or set to "auto").
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/FPN.Oo7yRtDzSXiQNL12xPc
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmG7OIgACgkQAVBC80lX
+0GxkRAf/TDZp4hOVy2Wl4dEWLj6IGMXwRfP7JKfW0DlaKY0Gss+Hv45wjrBMxvZH
+lWWgf6sy0wI1xcQYwt5ehLWQR6juOpwxi5uTUfNAEsARWL3dCi79zWB2pL31yjrM
+zunEzDWsDwzWrBXCgWnj9aZzq6y/wqwsu4YvLX6qphmHxjLOpK5LFuqSWyUclmEv
+BUfRSUefGWF3HQxYLYehjElL7kEDm4Rcy/VxKBNTPXK3a2m5nQT+Bwww7Gj2ckmq
+Im9gGmYZbHIlJt8VmaA55FTAr+rCVEAj7BMLTfVdrlcEDwKlzcSqIv2jrK/2x4Rt
+vzEfP3dR4DAQRd2mx6EKOhLnA/3NxQ==
+=1sJx
+-----END PGP SIGNATURE-----
+
+--Sig_/FPN.Oo7yRtDzSXiQNL12xPc--

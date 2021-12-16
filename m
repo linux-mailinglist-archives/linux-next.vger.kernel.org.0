@@ -2,86 +2,96 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A51C477B60
-	for <lists+linux-next@lfdr.de>; Thu, 16 Dec 2021 19:19:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16FE7477B64
+	for <lists+linux-next@lfdr.de>; Thu, 16 Dec 2021 19:20:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233310AbhLPSTf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 16 Dec 2021 13:19:35 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:43409 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240607AbhLPSTe (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 16 Dec 2021 13:19:34 -0500
+        id S236116AbhLPSUy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 16 Dec 2021 13:20:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43454 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240617AbhLPSUx (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 16 Dec 2021 13:20:53 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADB5DC061574;
+        Thu, 16 Dec 2021 10:20:51 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JFL3z6XlBz4xdH;
-        Fri, 17 Dec 2021 05:19:27 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JFL5W0PJJz4xRC;
+        Fri, 17 Dec 2021 05:20:47 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1639678768;
-        bh=APSRQCXA7zGeC454xcwaCyr4Rz1w4rEGAWDwrZ8GwVE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=LR+TQvfDnrJqYARFn8sQ32x1kLXXndOmO8wMuKlGrDSlFZZhNmhV+81sGqX4dC1mE
-         cx/B/EzALpMKPcL0IRQjbJi+FAkjrdEr9SI7j7HPrVfk60qnIBTJo0FeamKI8KXZam
-         aou6BAXDsuq4QpQcSfkSn7k8OgHl1BmUo4EFUIYYXk88KfC6l5mCAgfPqMxmzJMleN
-         S08zktsAn1WPKyJn+NlbJKaodeA7Q4O9tZfcz7jREdQVIqB//qGR/z8E9r7Lkq17Zd
-         UFVcoYtIBJNinYUaQC2Xl2IfvhS5Xue7RNQ0d9z8gHZwKGeRym4pd/ANCZFxl5GckW
-         MQ/P9u36WDx8g==
-Date:   Fri, 17 Dec 2021 05:19:27 +1100
+        s=201702; t=1639678847;
+        bh=cwW1GNemnFM2ClOGTVorwhD3nm7PjCegHZv+igwtO3c=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=p+qsUg6qjPA4Z4DZ0PU2mQOJkjBtBrbyGWVKj/cU3bsu2dGfhejAZkGL5WHh/qPfs
+         Mz7F6sWQ7c9xlZNWIIPJ7SdeNxnMvPC6AUtXmO8JSf3FsVcxbTh1jUXBBg1gTWRiur
+         TAdtisD3UeUjEYtsuu1j97ZFej3g+FtnCd1nrzkm9SaiZ67vHQQF8YzFCAhBhE5UX/
+         mPdn5RBo8u13AzoQf1OydUVG8b37q41o47p3K7CeYcfdSmd46dMNwsgaNPHq7QwQks
+         vH4r+NmEdOA5w7KWupjXlJ3UIeA24yy2HYew7qfM3hPJ40W2aSoiED8C/Spklegv1T
+         voy1zYB0le/Lw==
+Date:   Fri, 17 Dec 2021 05:20:46 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Marc Zyngier <maz@kernel.org>
 Cc:     Wudi Wang <wangwudi@hisilicon.com>,
         Shaokun Zhang <zhangshaokun@hisilicon.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the irqchip tree
-Message-ID: <20211217051927.68516ed4@canb.auug.org.au>
+Subject: Re: linux-next: Fixes tag needs some work in the irqchip tree
+Message-ID: <20211217052046.619006b8@canb.auug.org.au>
+In-Reply-To: <20211217051927.68516ed4@canb.auug.org.au>
+References: <20211217051927.68516ed4@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/IPGiXoaoMdJugU.pgum0Zmb";
+Content-Type: multipart/signed; boundary="Sig_/oCvk0FrW7wWY9Ad.EooqWgR";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/IPGiXoaoMdJugU.pgum0Zmb
+--Sig_/oCvk0FrW7wWY9Ad.EooqWgR
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-In commit
+On Fri, 17 Dec 2021 05:19:27 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> In commit
+>=20
+>   d094b4332232 ("irqchip/irq-gic-v3-its.c: Force synchronisation when iss=
+uing INVALL")
+>=20
+> Fixes tag
+>=20
+>   Fixes: cc2d3216f53 ("irqchip: GICv3: ITS command queue")
+>=20
+> has these problem(s):
+>=20
+>   - SHA1 should be at least 12 digits long
+>     Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
+>     or later) just making sure it is not set (or set to "auto").
 
-  d094b4332232 ("irqchip/irq-gic-v3-its.c: Force synchronisation when issui=
-ng INVALL")
-
-Fixes tag
-
-  Fixes: cc2d3216f53 ("irqchip: GICv3: ITS command queue")
-
-has these problem(s):
-
-  - SHA1 should be at least 12 digits long
-    Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
-    or later) just making sure it is not set (or set to "auto").
+That commit is actually in the irqchip-fixes tree, sorry.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/IPGiXoaoMdJugU.pgum0Zmb
+--Sig_/oCvk0FrW7wWY9Ad.EooqWgR
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmG7gy8ACgkQAVBC80lX
-0Gy/gggAggBNwVXYldXN5t+pZgEmOuKyqq6PAiefWXy5Ym3ESyX/KvAwrAo0YrqH
-0wcbag872nrxV7cNptuxiohyc9WBqinJvtnoMaOuvLAeh/khaQEl5g96F7aFEYtp
-WCiQbLkR9GRGVKuxGCivJGEZLjURD+c02nktBXSEW3+sEVj/xlW0kPMt7vBEocDL
-X3rJVgMkQY9kyw5DRXXBPqBM0UKFFUnPAcy+OSx/bXQUO0e0Na7c52B1LCUFB6dS
-JEZ2w6BUlpTr2ZRgGeMZYbanyNAqhNV02uXhsRbpqpy4lhl8ySkqyR4+p70Ow6Sj
-ffO+PiV2iP4Rx/Byljs+qbpOueFdBA==
-=mQOg
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmG7g34ACgkQAVBC80lX
+0GzNTwf/SaehyLxbkN7dfWve6gGkw0f2RXFRJQRK8L2UfHROox8I0W6aX4zyXlDc
+vnm3mRg04fXa+ORNmg0G5Hm2agUG3/xsWzo6QdTecbd1+vjIhApuFiDU1fEULEYd
+wW0FGq79Y5spXOwwON+v4MXf6M1j1vgL00H4/uQt5IlgySjooG8bDNYv21pNBy2x
+GcUd0xGf2RpacSgoKkBPIq+wX32wOuEZc6FpKxikFkad5wEH+6p2s+MtPuI2/yHH
+I8Y1qB2JYkn2gJxSiyvpnIdD1yi+Koq9+6TLVBnF0j7eBGefwYMrUj01arE4UbUA
+wbNvLoR6VPQAhezMaLL+76uDXso+Sw==
+=Qx8F
 -----END PGP SIGNATURE-----
 
---Sig_/IPGiXoaoMdJugU.pgum0Zmb--
+--Sig_/oCvk0FrW7wWY9Ad.EooqWgR--

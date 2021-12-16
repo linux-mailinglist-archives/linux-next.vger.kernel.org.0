@@ -2,104 +2,125 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 740714768E6
-	for <lists+linux-next@lfdr.de>; Thu, 16 Dec 2021 05:01:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA7E447693C
+	for <lists+linux-next@lfdr.de>; Thu, 16 Dec 2021 05:47:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231292AbhLPEA6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 15 Dec 2021 23:00:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39914 "EHLO
+        id S233637AbhLPEr3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 15 Dec 2021 23:47:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231279AbhLPEA5 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 15 Dec 2021 23:00:57 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80298C06173E
-        for <linux-next@vger.kernel.org>; Wed, 15 Dec 2021 20:00:57 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id e3so82992238edu.4
-        for <linux-next@vger.kernel.org>; Wed, 15 Dec 2021 20:00:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=QJxb1JEGPxD4yEQCGU0VH/KYdWKAlFiltK8ynZyYUQA=;
-        b=PaAuuOgRuo5PIJnrVTOrmg6Jkd8Ntl40deiptCEo9RMXKl43NoIfJd/ZdAHr4bdA3L
-         NM3I6vIAJXV8uxfSHOxAsbLR/xUOaLsNKx0bcL9d3VUgtN3gAcRQQbVOzlf0Xi67N5ch
-         ll+tEYeCMCHa5VwwH+/XO6Wf8LqUTa3siIcc42AmNt7Ta7elFJc5wuixKLwZqKEmDGT6
-         D1EcuTLmf/nTmSYu7IIM0HB7n+YNLiVDbNmrBvSZjTpv6fbJYk06JiiJX5V1Xc07z6+A
-         h+4+lJd+vnqbsiyzjWmeAgO++GEQOSJauGiAsf4ZOpYHIj4ur+Macxdxlk7HN5XXAmBc
-         zzqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=QJxb1JEGPxD4yEQCGU0VH/KYdWKAlFiltK8ynZyYUQA=;
-        b=CE2OLva69xSKZEKSn70CQTuoBKN2ZopgKwCypXnOF8dckj8Koh4ThaM5kwxPIyb9Q8
-         AmHGIa/hpsJ7gyvXbGEJ4F6VFiLC6pAeVvw1ohb287m5Q0JzS7gxpvBVcINMyTtoonll
-         BNnOxURq3UY4b3K89mYTmRehoJbHPk+Wj/Z5famlTuAmgZbv9smmy4ONyFmbihOaqkeG
-         p+Emq1fc5SMALB/pCLlZl/wdIadrSSTtQtw4YrUR4CzEvrUhHoyU0jeq2l+gzjELzjN/
-         a4S5e/BpZnqfglT0y5p1/bbwPQhZqoMEkFBBCom6VWKNUFB3/2HsLtmJOoSBcLZpPzUR
-         BvqQ==
-X-Gm-Message-State: AOAM530XHNd2gAoEf/d4KdpLCOaVQo770bl3v82O8P61qmTIIRD7HXJK
-        xqwXi1QkmlIicpkRcfHcF+gVJDMzOXJQlKP4yYNi8Q==
-X-Google-Smtp-Source: ABdhPJyPrcl3loEFxLvFPSTGUV5QfkxLlPEtFHW/nLOy8LNGAqrJHf7uKMveYGOI+40h/R25xGzvRIZb34kWGjD9J9U=
-X-Received: by 2002:a05:6402:4312:: with SMTP id m18mr18403124edc.273.1639627255989;
- Wed, 15 Dec 2021 20:00:55 -0800 (PST)
+        with ESMTP id S233601AbhLPEr3 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 15 Dec 2021 23:47:29 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 204F0C061574;
+        Wed, 15 Dec 2021 20:47:29 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JF02x44Tsz4xdH;
+        Thu, 16 Dec 2021 15:47:21 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1639630043;
+        bh=zKmSZMNPIgiKwlgxADX1iohJOULkY/c5F13cvNewuTo=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=ZOfTD0BXcFIqxxhRpzTV/vMyHKeJ6QMD5XrWvygvwdTwcKLdcj666kD9hEDcN5evE
+         BrywrRaQCOYOxSbLOuMbxe/JKNds06k4E2oISYNNxz5+go3ZaHQQMwTbO4J5F9Z9aH
+         7qSVZrPWTizTPbNBY6sCgmuxqtw6N5DNGI11U7FcnRQ1r22LCMABfbEr7b9l48msqv
+         jjUYecdtaXQfTrdtpVjrNmCGg9z8+Bw5XXbn88Npts4bHEyh/vP7YzTvZh/MMWDN2l
+         SrGtTpxvZhMvgyak91KLPosyH6CzeSwXQEVvepecURWwxuH3N/Shh9HUkf49jaVFRo
+         gCBUP8jNLfSzw==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     broonie@kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        KVM <kvm@vger.kernel.org>
+Cc:     Alexey Kardashevskiy <aik@ozlabs.ru>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "Maciej S . Szmigiero" <maciej.szmigiero@oracle.com>,
+        Sean Christopherson <seanjc@google.com>
+Subject: Re: linux-next: manual merge of the kvm tree with the kvm tree
+In-Reply-To: <20211215131033.2541027-1-broonie@kernel.org>
+References: <20211215131033.2541027-1-broonie@kernel.org>
+Date:   Thu, 16 Dec 2021 15:47:12 +1100
+Message-ID: <87wnk5kvfz.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 16 Dec 2021 09:30:44 +0530
-Message-ID: <CA+G9fYt-k1daHarGoXKz7uYvsAcDMNM2bk7jRcYBNf0sRE=+LQ@mail.gmail.com>
-Subject: [next] arm64: efi-rt-wrapper.S:8: Error: unknown mnemonic `bti' --
- `bti c'
-To:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Mark Brown <broonie@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-[ Please ignore this email if it is already reported ]
+broonie@kernel.org writes:
+> Hi all,
+>
+> Today's linux-next merge of the kvm tree got a conflict in:
+>
+>   arch/powerpc/kvm/book3s_hv.c
+>
+> between commit:
+>
+>   511d25d6b789f ("KVM: PPC: Book3S: Suppress warnings when allocating too big memory slots")
+>
+> from the kvm tree and commits:
 
-While building Linux next 20211215 arm64 defconfig with gcc-8
-following warnings / errors noticed.
-and gcc-9, gcc-10 and gcc-11 builds pass.
+That's from the powerpc tree.
 
-make --silent --keep-going --jobs=8
-O=/home/tuxbuild/.cache/tuxmake/builds/current \
-  ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- \
-  CROSS_COMPILE_COMPAT=arm-linux-gnueabihf- \
-  'CC=sccache aarch64-linux-gnu-gcc' \
-  'HOSTCC=sccache gcc'
+>   537a17b314930 ("KVM: Let/force architectures to deal with arch specific memslot data")
+>   eaaaed137eccb ("KVM: PPC: Avoid referencing userspace memory region in memslot updates")
+>
+> from the kvm tree.
+>
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-/builds/linux/arch/arm64/kernel/efi-rt-wrapper.S: Assembler messages:
-/builds/linux/arch/arm64/kernel/efi-rt-wrapper.S:8: Error: unknown
-mnemonic `bti' -- `bti c'
-make[3]: *** [/builds/linux/scripts/Makefile.build:411:
-arch/arm64/kernel/efi-rt-wrapper.o] Error 1
+Thanks.
+
+Paolo, if you want to avoid the conflict going to Linus, I have that
+commit (and others) in a topic branch here (based on rc2):
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/log/?h=topic/ppc-kvm
 
 
-meta data:
------------
-    git describe: next-20211215
-    git_repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-    git_sha: 93bf6eee76c0e716f6b32de690b1c52991547bb4
-    git_short_log: 93bf6eee76c0 (\"Add linux-next specific files for 20211215\")
-    target_arch: arm64
-    toolchain: gcc-8
+cheers
 
-steps to reproduce:
-# To install tuxmake on your system globally:
-# sudo pip3 install -U tuxmake
 
-tuxmake --runtime podman --target-arch arm64 --toolchain gcc-8
---kconfig defconfig
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-build log:
-https://builds.tuxbuild.com/22LCvXNzzZHquxsEYJUxEGe1kHW/
-
---
-Linaro LKFT
-https://lkft.linaro.org
+> diff --cc arch/powerpc/kvm/book3s_hv.c
+> index f64e45d6c0f4c,51e1c29a6fa08..0000000000000
+> --- a/arch/powerpc/kvm/book3s_hv.c
+> +++ b/arch/powerpc/kvm/book3s_hv.c
+> @@@ -4866,21 -4854,17 +4866,22 @@@ static void kvmppc_core_free_memslot_hv
+>   }
+>   
+>   static int kvmppc_core_prepare_memory_region_hv(struct kvm *kvm,
+> - 					struct kvm_memory_slot *slot,
+> - 					const struct kvm_userspace_memory_region *mem,
+> - 					enum kvm_mr_change change)
+> + 				const struct kvm_memory_slot *old,
+> + 				struct kvm_memory_slot *new,
+> + 				enum kvm_mr_change change)
+>   {
+> - 	unsigned long npages = mem->memory_size >> PAGE_SHIFT;
+> - 
+>   	if (change == KVM_MR_CREATE) {
+> - 		unsigned long size = array_size(npages, sizeof(*slot->arch.rmap));
+>  -		new->arch.rmap = vzalloc(array_size(new->npages,
+>  -					  sizeof(*new->arch.rmap)));
+> ++		unsigned long size = array_size(new->npages,
+> ++						sizeof(*new->arch.rmap));
+>  +
+>  +		if ((size >> PAGE_SHIFT) > totalram_pages())
+>  +			return -ENOMEM;
+>  +
+> - 		slot->arch.rmap = vzalloc(size);
+> - 		if (!slot->arch.rmap)
+> ++		new->arch.rmap = vzalloc(size);
+> + 		if (!new->arch.rmap)
+>   			return -ENOMEM;
+> + 	} else if (change != KVM_MR_DELETE) {
+> + 		new->arch.rmap = old->arch.rmap;
+>   	}
+>   
+>   	return 0;

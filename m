@@ -2,121 +2,184 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EC41478B56
-	for <lists+linux-next@lfdr.de>; Fri, 17 Dec 2021 13:26:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 731E7478B9B
+	for <lists+linux-next@lfdr.de>; Fri, 17 Dec 2021 13:39:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236274AbhLQM0r (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 17 Dec 2021 07:26:47 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:55171 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbhLQM0q (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 17 Dec 2021 07:26:46 -0500
+        id S231658AbhLQMj5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 17 Dec 2021 07:39:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45504 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230114AbhLQMj5 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 17 Dec 2021 07:39:57 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F30EAC061574;
+        Fri, 17 Dec 2021 04:39:56 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JFpBX16Thz4xgr;
-        Fri, 17 Dec 2021 23:26:44 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JFpTk0jjTz4xbr;
+        Fri, 17 Dec 2021 23:39:54 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1639744004;
-        bh=n55WYm3Kkk9VniZa6wLs4zNFMLAVbXlaOc9QQH8RsQs=;
-        h=Date:From:To:Cc:Subject:From;
-        b=AVW1cRbFtBC8Odoj0imrt7/ZDDtE/WBes5TFAJdUYtc9DzN1dCWYrNR38mbvEQqtY
-         LMJ6pElQx/NyMTVKgUadbKyrCrP9D+JBWAOyOSDMJN8fCNKCol+kkM0vW1pxY6hs0Q
-         hOW70BL2Ij+v+Tzpx3rXsw5vfKLCn2GM6EUrz/B6C6VSnsSTh14nWRFj8LQ5yZMUaB
-         LzNZma2ie0vX1PkfEljNmRyqoo7IvS95CIVqOO8Q/k0tQDmLMjVFbXCdwfxlXnGl5O
-         dDIMguLnj3EBqcdjmMrlB4Y2UMOsIeVToOI/NUI7OMYyygb3raFPj0/NSbBEqCNjFd
-         WHBR/WI7ayljw==
-Date:   Fri, 17 Dec 2021 23:26:41 +1100
+        s=201702; t=1639744795;
+        bh=nsJIk8BV4J9cx49eUDdaldIhENhHvqO2ucZI2RNmU6Q=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=czenW1I+e5ejS2wybZTdTiabdQozsunHn6tCOabXRJMW/AwwYEd9OjQpRvQgeFOV2
+         NhaLYIDZY/RKrkfiwkzBTfywU54KdxOUm9krxBt0egsDWZN05LWhzOeVn20eL6eKKp
+         MWLp3KI9PB2XJT8/4cUGVupmVg20A/F6gmB7uOcnsws4foYLVGf9R9csJFrxSV/kvY
+         820S7Of9ZJChg/iFu8nt3we39wttn2ff1pE01D574SnMy4uHOl94Wfre3XZzLxjof3
+         gYwhb2/zPxCPe/4P+h+ZSwuaLl9sve9ZbC1R0Kn1q6mWn2OsSKD9lAQYvqGPIDESKX
+         nSh/wa9AQVVew==
+Date:   Fri, 17 Dec 2021 23:39:53 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Michal Hocko <mhocko@suse.com>,
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the akpm-current tree
-Message-ID: <20211217232641.0148710c@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Waiman Long <longman@redhat.com>
+Subject: Re: linux-next: manual merge of the akpm-current tree with the slab
+ tree
+Message-ID: <20211217233953.28062c5b@canb.auug.org.au>
+In-Reply-To: <20211203181951.79618878@canb.auug.org.au>
+References: <20211203181951.79618878@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/.d4b.TwFU=_K8EIepP8oTuV";
+Content-Type: multipart/signed; boundary="Sig_/ott/_LIrJC2ztXbfGcPesLO";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/.d4b.TwFU=_K8EIepP8oTuV
+--Sig_/ott/_LIrJC2ztXbfGcPesLO
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the akpm-current tree, today's linux-next build (powerpc
-ppc64_defconfig) failed like this:
+On Fri, 3 Dec 2021 18:19:51 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>
+> Today's linux-next merge of the akpm-current tree got a conflict in:
+>=20
+>   mm/memcontrol.c
+>=20
+> between commit:
+>=20
+>   eefa12e18a92 ("mm/memcg: Convert slab objcgs from struct page to struct=
+ slab")
+>=20
+> from the slab tree and commit:
+>=20
+>   93e959c235eb ("mm/memcg: relocate mod_objcg_mlstate(), get_obj_stock() =
+and put_obj_stock()")
+>=20
+> from the akpm-current tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+> diff --cc mm/memcontrol.c
+> index 522fff11d6d1,69d4fdafbb80..000000000000
+> --- a/mm/memcontrol.c
+> +++ b/mm/memcontrol.c
+> @@@ -2816,10 -2769,63 +2769,63 @@@ retry
+>    */
+>   #define OBJCGS_CLEAR_MASK	(__GFP_DMA | __GFP_RECLAIMABLE | __GFP_ACCOUN=
+T)
+>  =20
+> + /*
+> +  * Most kmem_cache_alloc() calls are from user context. The irq disable=
+/enable
+> +  * sequence used in this case to access content from object stock is sl=
+ow.
+> +  * To optimize for user context access, there are now two object stocks=
+ for
+> +  * task context and interrupt context access respectively.
+> +  *
+> +  * The task context object stock can be accessed by disabling preemptio=
+n only
+> +  * which is cheap in non-preempt kernel. The interrupt context object s=
+tock
+> +  * can only be accessed after disabling interrupt. User context code can
+> +  * access interrupt object stock, but not vice versa.
+> +  */
+> + static inline struct obj_stock *get_obj_stock(unsigned long *pflags)
+> + {
+> + 	struct memcg_stock_pcp *stock;
+> +=20
+> + 	if (likely(in_task())) {
+> + 		*pflags =3D 0UL;
+> + 		preempt_disable();
+> + 		stock =3D this_cpu_ptr(&memcg_stock);
+> + 		return &stock->task_obj;
+> + 	}
+> +=20
+> + 	local_irq_save(*pflags);
+> + 	stock =3D this_cpu_ptr(&memcg_stock);
+> + 	return &stock->irq_obj;
+> + }
+> +=20
+> + static inline void put_obj_stock(unsigned long flags)
+> + {
+> + 	if (likely(in_task()))
+> + 		preempt_enable();
+> + 	else
+> + 		local_irq_restore(flags);
+> + }
+> +=20
+> + /*
+> +  * mod_objcg_mlstate() may be called with irq enabled, so
+> +  * mod_memcg_lruvec_state() should be used.
+> +  */
+> + static inline void mod_objcg_mlstate(struct obj_cgroup *objcg,
+> + 				     struct pglist_data *pgdat,
+> + 				     enum node_stat_item idx, int nr)
+> + {
+> + 	struct mem_cgroup *memcg;
+> + 	struct lruvec *lruvec;
+> +=20
+> + 	rcu_read_lock();
+> + 	memcg =3D obj_cgroup_memcg(objcg);
+> + 	lruvec =3D mem_cgroup_lruvec(memcg, pgdat);
+> + 	mod_memcg_lruvec_state(lruvec, idx, nr);
+> + 	rcu_read_unlock();
+> + }
+> +=20
+>  -int memcg_alloc_page_obj_cgroups(struct page *page, struct kmem_cache *=
+s,
+>  -				 gfp_t gfp, bool new_page)
+>  +int memcg_alloc_slab_cgroups(struct slab *slab, struct kmem_cache *s,
+>  +				 gfp_t gfp, bool new_slab)
+>   {
+>  -	unsigned int objects =3D objs_per_slab_page(s, page);
+>  +	unsigned int objects =3D objs_per_slab(s, slab);
+>   	unsigned long memcg_data;
+>   	void *vec;
+>  =20
 
-mm/vmalloc.c: In function '__vmalloc_area_node':
-mm/vmalloc.c:2983:11: error: implicit declaration of function 'memalloc_nof=
-s_save' [-Werror=3Dimplicit-function-declaration]
- 2983 |   flags =3D memalloc_nofs_save();
-      |           ^~~~~~~~~~~~~~~~~~
-mm/vmalloc.c:2985:11: error: implicit declaration of function 'memalloc_noi=
-o_save' [-Werror=3Dimplicit-function-declaration]
- 2985 |   flags =3D memalloc_noio_save();
-      |           ^~~~~~~~~~~~~~~~~~
-mm/vmalloc.c:2995:3: error: implicit declaration of function 'memalloc_nofs=
-_restore' [-Werror=3Dimplicit-function-declaration]
- 2995 |   memalloc_nofs_restore(flags);
-      |   ^~~~~~~~~~~~~~~~~~~~~
-mm/vmalloc.c:2997:3: error: implicit declaration of function 'memalloc_noio=
-_restore' [-Werror=3Dimplicit-function-declaration]
- 2997 |   memalloc_noio_restore(flags);
-      |   ^~~~~~~~~~~~~~~~~~~~~
-
-Caused by commit
-
-  0256fe4b2ffb ("mm/vmalloc: alloc GFP_NO{FS,IO} for vmalloc")
-
-I have applied the following fix patch.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Fri, 17 Dec 2021 23:15:05 +1100
-Subject: [PATCH] mm/vmalloc: alloc GFP_NO{FS,IO} for vmalloc fix
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- mm/vmalloc.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index 01eabaf5417b..eb6e527a6b77 100644
---- a/mm/vmalloc.c
-+++ b/mm/vmalloc.c
-@@ -38,6 +38,7 @@
- #include <linux/pgtable.h>
- #include <linux/uaccess.h>
- #include <linux/hugetlb.h>
-+#include <linux/sched/mm.h>
- #include <asm/tlbflush.h>
- #include <asm/shmparam.h>
-=20
---=20
-2.33.0
+This is now a conflict between the slab tree and Linus' tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/.d4b.TwFU=_K8EIepP8oTuV
+--Sig_/ott/_LIrJC2ztXbfGcPesLO
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmG8ggEACgkQAVBC80lX
-0GyuTAgAjAd3s2Ua8CLXkTCJFPpMOesE0CSKDbq0oEEcIbMCBBVhO5gYiz+n8M6l
-PoKYPnaPVOrjwKKklE5WwRNSG9vPzg0R0aytWje5Q4nwa8zeqMjmWMkRJd8vzozG
-Vs5jeUvjQ83vFx3T54g/1ByuTjuTOqvjB/kJypzdqEYgxz3susAwSuIdrDOveREw
-frQN6RqbtcZjgp5oKg9IDs8xYLs4da1AXS7sq5WrYoXZRoAwtH9eGsPJmhLiCGxr
-3es6XoUyK2tShuN56VUIFG5rDssm26P5NLDy74PPLak3+42hNnl8Z048HUxF2rtB
-hEM+6PQylkQMMxRvvW7kbMHlDhrFqQ==
-=Wxc3
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmG8hRkACgkQAVBC80lX
+0Gzbqwf/Zb+TF7hmPvSyL6VuEMvxGp+ytUa0OwTS7gT0FjfDjhWTJJXY/eAD1Xe/
+cAEEuPAeHEGLHMEKFI/Yq1rms8TQhgx907ZoFJycZ/61+noxhvYgYQ6YAlfnpPjQ
+RkMoHsnNdAIc7jPVyZysPJQxk54W3ZfNYERlMn+bKGQQre/Myow7ApnJYQCgUELF
+/QNkB75wleo+ZccqlDc3ed8NhzoPiqkS6AZEV3U/Syg7vQfJZTlBpGdAE9HbulLO
+stwrUy5o3HS7NRmnCzV3nyUFwEXlmTUhlEk8O7GRFcbjGQOvgndq8F2B4jUVTF1p
+5hCTivtYggppTWSqaTi448Fa+KYh0Q==
+=FavT
 -----END PGP SIGNATURE-----
 
---Sig_/.d4b.TwFU=_K8EIepP8oTuV--
+--Sig_/ott/_LIrJC2ztXbfGcPesLO--

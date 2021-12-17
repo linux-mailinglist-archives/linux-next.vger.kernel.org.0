@@ -2,184 +2,70 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 731E7478B9B
-	for <lists+linux-next@lfdr.de>; Fri, 17 Dec 2021 13:39:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0FE1478C0A
+	for <lists+linux-next@lfdr.de>; Fri, 17 Dec 2021 14:11:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231658AbhLQMj5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 17 Dec 2021 07:39:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45504 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230114AbhLQMj5 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 17 Dec 2021 07:39:57 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F30EAC061574;
-        Fri, 17 Dec 2021 04:39:56 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S234043AbhLQNLV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 17 Dec 2021 08:11:21 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:52528 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236582AbhLQNLU (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Fri, 17 Dec 2021 08:11:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639746679;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jNOaUvWea5kATXBHygu3umLKedY5WoVPmiTsNULIomc=;
+        b=eutRWopsIoJSjQ86tSWkwc33xA3ox0lz30pRqqz8W4GvPyShWTcCAI/81oRI+8hPTkXiCV
+        haxYoOOTEqDLmXlc0YVrqE6+b4hxBODWlUmRybqo/MlHx/5Kqmb4mXmylQkdBFWSAe1yFL
+        bRybdzIZGS0kbXm9Jo/OTGIUkGVN0+c=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-397-mBW6hOCIMnWqASeITQ6bQw-1; Fri, 17 Dec 2021 08:11:16 -0500
+X-MC-Unique: mBW6hOCIMnWqASeITQ6bQw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JFpTk0jjTz4xbr;
-        Fri, 17 Dec 2021 23:39:54 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1639744795;
-        bh=nsJIk8BV4J9cx49eUDdaldIhENhHvqO2ucZI2RNmU6Q=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=czenW1I+e5ejS2wybZTdTiabdQozsunHn6tCOabXRJMW/AwwYEd9OjQpRvQgeFOV2
-         NhaLYIDZY/RKrkfiwkzBTfywU54KdxOUm9krxBt0egsDWZN05LWhzOeVn20eL6eKKp
-         MWLp3KI9PB2XJT8/4cUGVupmVg20A/F6gmB7uOcnsws4foYLVGf9R9csJFrxSV/kvY
-         820S7Of9ZJChg/iFu8nt3we39wttn2ff1pE01D574SnMy4uHOl94Wfre3XZzLxjof3
-         gYwhb2/zPxCPe/4P+h+ZSwuaLl9sve9ZbC1R0Kn1q6mWn2OsSKD9lAQYvqGPIDESKX
-         nSh/wa9AQVVew==
-Date:   Fri, 17 Dec 2021 23:39:53 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5C856801962;
+        Fri, 17 Dec 2021 13:11:14 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.122])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C6DF7101F6D4;
+        Fri, 17 Dec 2021 13:11:12 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <CALF+zO=zDrRzPkpgjRQNYbxQ8j3qNVJjo9Ub=tCqFtT32sr-KQ@mail.gmail.com>
+References: <CALF+zO=zDrRzPkpgjRQNYbxQ8j3qNVJjo9Ub=tCqFtT32sr-KQ@mail.gmail.com> <20211217113507.76f852f2@canb.auug.org.au>
+To:     Anna Schumaker <Anna.Schumaker@netapp.com>
+Cc:     dhowells@redhat.com, Stephen Rothwell <sfr@canb.auug.org.au>,
+        David Wysochanski <dwysocha@redhat.com>,
+        Trond Myklebust <trondmy@gmail.com>,
+        NFS Mailing List <linux-nfs@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Waiman Long <longman@redhat.com>
-Subject: Re: linux-next: manual merge of the akpm-current tree with the slab
- tree
-Message-ID: <20211217233953.28062c5b@canb.auug.org.au>
-In-Reply-To: <20211203181951.79618878@canb.auug.org.au>
-References: <20211203181951.79618878@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the nfs-anna tree with the fscache tree
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ott/_LIrJC2ztXbfGcPesLO";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1957082.1639746671.1@warthog.procyon.org.uk>
+Date:   Fri, 17 Dec 2021 13:11:11 +0000
+Message-ID: <1957083.1639746671@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/ott/_LIrJC2ztXbfGcPesLO
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+David Wysochanski <dwysocha@redhat.com> wrote:
 
-Hi all,
+> Anna, feel free to drop these from your tree to avoid the conflicts
+> with the rest of your tree and dhowells fscache-rewrite patchset.
 
-On Fri, 3 Dec 2021 18:19:51 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> Today's linux-next merge of the akpm-current tree got a conflict in:
->=20
->   mm/memcontrol.c
->=20
-> between commit:
->=20
->   eefa12e18a92 ("mm/memcg: Convert slab objcgs from struct page to struct=
- slab")
->=20
-> from the slab tree and commit:
->=20
->   93e959c235eb ("mm/memcg: relocate mod_objcg_mlstate(), get_obj_stock() =
-and put_obj_stock()")
->=20
-> from the akpm-current tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->=20
-> diff --cc mm/memcontrol.c
-> index 522fff11d6d1,69d4fdafbb80..000000000000
-> --- a/mm/memcontrol.c
-> +++ b/mm/memcontrol.c
-> @@@ -2816,10 -2769,63 +2769,63 @@@ retry
->    */
->   #define OBJCGS_CLEAR_MASK	(__GFP_DMA | __GFP_RECLAIMABLE | __GFP_ACCOUN=
-T)
->  =20
-> + /*
-> +  * Most kmem_cache_alloc() calls are from user context. The irq disable=
-/enable
-> +  * sequence used in this case to access content from object stock is sl=
-ow.
-> +  * To optimize for user context access, there are now two object stocks=
- for
-> +  * task context and interrupt context access respectively.
-> +  *
-> +  * The task context object stock can be accessed by disabling preemptio=
-n only
-> +  * which is cheap in non-preempt kernel. The interrupt context object s=
-tock
-> +  * can only be accessed after disabling interrupt. User context code can
-> +  * access interrupt object stock, but not vice versa.
-> +  */
-> + static inline struct obj_stock *get_obj_stock(unsigned long *pflags)
-> + {
-> + 	struct memcg_stock_pcp *stock;
-> +=20
-> + 	if (likely(in_task())) {
-> + 		*pflags =3D 0UL;
-> + 		preempt_disable();
-> + 		stock =3D this_cpu_ptr(&memcg_stock);
-> + 		return &stock->task_obj;
-> + 	}
-> +=20
-> + 	local_irq_save(*pflags);
-> + 	stock =3D this_cpu_ptr(&memcg_stock);
-> + 	return &stock->irq_obj;
-> + }
-> +=20
-> + static inline void put_obj_stock(unsigned long flags)
-> + {
-> + 	if (likely(in_task()))
-> + 		preempt_enable();
-> + 	else
-> + 		local_irq_restore(flags);
-> + }
-> +=20
-> + /*
-> +  * mod_objcg_mlstate() may be called with irq enabled, so
-> +  * mod_memcg_lruvec_state() should be used.
-> +  */
-> + static inline void mod_objcg_mlstate(struct obj_cgroup *objcg,
-> + 				     struct pglist_data *pgdat,
-> + 				     enum node_stat_item idx, int nr)
-> + {
-> + 	struct mem_cgroup *memcg;
-> + 	struct lruvec *lruvec;
-> +=20
-> + 	rcu_read_lock();
-> + 	memcg =3D obj_cgroup_memcg(objcg);
-> + 	lruvec =3D mem_cgroup_lruvec(memcg, pgdat);
-> + 	mod_memcg_lruvec_state(lruvec, idx, nr);
-> + 	rcu_read_unlock();
-> + }
-> +=20
->  -int memcg_alloc_page_obj_cgroups(struct page *page, struct kmem_cache *=
-s,
->  -				 gfp_t gfp, bool new_page)
->  +int memcg_alloc_slab_cgroups(struct slab *slab, struct kmem_cache *s,
->  +				 gfp_t gfp, bool new_slab)
->   {
->  -	unsigned int objects =3D objs_per_slab_page(s, page);
->  +	unsigned int objects =3D objs_per_slab(s, slab);
->   	unsigned long memcg_data;
->   	void *vec;
->  =20
+Would it help to take some bits through my tree?  (Or, at least, alter my NFS
+patches)
 
-This is now a conflict between the slab tree and Linus' tree.
+David
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/ott/_LIrJC2ztXbfGcPesLO
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmG8hRkACgkQAVBC80lX
-0Gzbqwf/Zb+TF7hmPvSyL6VuEMvxGp+ytUa0OwTS7gT0FjfDjhWTJJXY/eAD1Xe/
-cAEEuPAeHEGLHMEKFI/Yq1rms8TQhgx907ZoFJycZ/61+noxhvYgYQ6YAlfnpPjQ
-RkMoHsnNdAIc7jPVyZysPJQxk54W3ZfNYERlMn+bKGQQre/Myow7ApnJYQCgUELF
-/QNkB75wleo+ZccqlDc3ed8NhzoPiqkS6AZEV3U/Syg7vQfJZTlBpGdAE9HbulLO
-stwrUy5o3HS7NRmnCzV3nyUFwEXlmTUhlEk8O7GRFcbjGQOvgndq8F2B4jUVTF1p
-5hCTivtYggppTWSqaTi448Fa+KYh0Q==
-=FavT
------END PGP SIGNATURE-----
-
---Sig_/ott/_LIrJC2ztXbfGcPesLO--

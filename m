@@ -2,106 +2,142 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 120B94784D6
-	for <lists+linux-next@lfdr.de>; Fri, 17 Dec 2021 07:17:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 611354784E8
+	for <lists+linux-next@lfdr.de>; Fri, 17 Dec 2021 07:29:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233195AbhLQGRO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 17 Dec 2021 01:17:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42420 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230405AbhLQGRN (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 17 Dec 2021 01:17:13 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16F0BC061574;
-        Thu, 16 Dec 2021 22:17:13 -0800 (PST)
+        id S233238AbhLQG3m (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 17 Dec 2021 01:29:42 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:41543 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232073AbhLQG3l (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 17 Dec 2021 01:29:41 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JFf056MXRz4xgr;
-        Fri, 17 Dec 2021 17:17:09 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JFfGN2Hg3z4xd4;
+        Fri, 17 Dec 2021 17:29:32 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1639721831;
-        bh=Sxk9pSOVUWGlx6aw6yoTNNFNvpVzVzRtcwo+ZsVFB70=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=iMwRibMOpoWYaQhnUxJvEW0Z2LgsS5nvAXjUqoIHnj0BW0F3acUydDBHX3Q18D3Gn
-         PJsMArtmLjTEq+lPFLzDcm+vYbNbToEwLQHc7vRXJD+vw4Lu2MwLuBpQxGT0Mz8sVd
-         88ZLLmm5CKNsDda12kVZ570KJZtaU0S+eIbVoOz26SGALJQfE+pi0qC2nNfH6eSi4e
-         f8odj4E7JxRx1H58rPGvDH40K9mptJm9Uq50l/nwEYHRR5dXgFrmezpK3BU1uEIpL1
-         ULs3OS+u467DdhU+RATh+tqMN9+rSRaS1/X4wb4JCKTAxfHgcbZOn5GlC8NIXE58rz
-         zc2Iqg8REo7Nw==
-Date:   Fri, 17 Dec 2021 17:17:09 +1100
+        s=201702; t=1639722579;
+        bh=PyKtBzR8c50cKGocDdxfifUNGLAEUQhPnkXBDZyrg4w=;
+        h=Date:From:To:Cc:Subject:From;
+        b=bp5xB5rmc0ORNIz0UvkioJquiNJ5eOxSiEg896tMt5iWPiNXyzIRNJr7/ybSV0k6k
+         uWEAJZMABdPPCnDeoBd7RYHvNmuJZ4t5ogcSz7w21AAcAzxkUEzQFGJDGAmJi0tpb0
+         RcATTrCOtWOYN1aN/6bcJckk5TSJZqjT0X2IdEOgerdObeIkT9x/KjzVbeTwhu2DvA
+         6CrUdSE2kaCcauEbYUhvxY/jdk54SHuh9mu0H6B0fsUgYfSxwP84b+6osxt9fBOtUk
+         uIxN5BsIwOfOxZhPEu5Idm3R3bc8W/xhvtpycxZsoVXtDiLqYbxCTky28TqPS1yqKr
+         CbPk3DXTxs8sg==
+Date:   Fri, 17 Dec 2021 17:29:31 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     broonie@kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>,
-        Xiang wangx <wangxiang@cdjrlc.com>,
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Huan Feng <huan.feng@starfivetech.com>,
+        Kiran Kumar S <kiran.kumar1.s@intel.com>,
+        Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        linux-gpio@vger.kernel.org
-Subject: Re: linux-next: build failure after merge of the gpio-brgl tree
-Message-ID: <20211217171709.622cbb1d@canb.auug.org.au>
-In-Reply-To: <b7f4804a-01dd-9dd9-01f1-2187a955cb13@gmail.com>
-References: <20211213203112.969238-1-broonie@kernel.org>
-        <b7f4804a-01dd-9dd9-01f1-2187a955cb13@gmail.com>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the pinctrl tree with the arm-soc tree
+Message-ID: <20211217172931.01c24d4b@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/JMOMWxIWYEyzJYbLZ/l4LtD";
+Content-Type: multipart/signed; boundary="Sig_/HD1C4JCz8G1vcelywszRg2x";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/JMOMWxIWYEyzJYbLZ/l4LtD
+--Sig_/HD1C4JCz8G1vcelywszRg2x
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Mon, 13 Dec 2021 19:12:05 -0800 Florian Fainelli <f.fainelli@gmail.com> =
-wrote:
->
-> On 12/13/2021 12:31 PM, broonie@kernel.org wrote:
-> > Hi all,
-> >=20
-> > After merging the gpio-brgl tree, today's linux-next build (x86_64
-> > allmodconfig) failed like this:
-> >=20
-> > /tmp/next/build/drivers/gpio/gpio-bcm-kona.c:508:34: error: duplicate '=
-const' declaration specifier [-Werror=3Dduplicate-decl-specifier]
-> >    508 | static const struct of_device_id const bcm_kona_gpio_of_match[=
-] =3D {
-> >        |                                  ^~~~~
-> > cc1: all warnings being treated as errors
-> >=20
-> > Caused by commit
-> >=20
-> >    19784a059cf47b ("gpio: bcm-kona: add const to of_device_id")
-> >=20
-> > I used the tree from yesterday instead. =20
->=20
-> Doh! Should have double checked the code as the diff was not giving
-> enough context. This patch should simply be dropped, not even build
-> tested by Xiang it seems.
+Today's linux-next merge of the pinctrl tree got conflicts in:
 
-Today, I have reverted that commit.  Please remove or revert it ASAP.
+  drivers/pinctrl/Kconfig
+  drivers/pinctrl/Makefile
+
+between commit:
+
+  ec648f6b7686 ("pinctrl: starfive: Add pinctrl driver for StarFive SoCs")
+
+from the arm-soc tree and commits:
+
+  12422af8194d ("pinctrl: Add Intel Thunder Bay pinctrl driver")
+  b124c8bd50c7 ("pinctrl: Sort Kconfig and Makefile entries alphabetically")
+
+from the pinctrl tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/JMOMWxIWYEyzJYbLZ/l4LtD
+diff --cc drivers/pinctrl/Kconfig
+index 0d5b61e4c21e,c27c9ee89f0e..000000000000
+--- a/drivers/pinctrl/Kconfig
++++ b/drivers/pinctrl/Kconfig
+diff --cc drivers/pinctrl/Makefile
+index f5bdd6b209a6,6be6c3fc6663..000000000000
+--- a/drivers/pinctrl/Makefile
++++ b/drivers/pinctrl/Makefile
+@@@ -30,26 -39,16 +39,17 @@@ obj-$(CONFIG_PINCTRL_OXNAS)	+=3D pinctrl-
+  obj-$(CONFIG_PINCTRL_PALMAS)	+=3D pinctrl-palmas.o
+  obj-$(CONFIG_PINCTRL_PIC32)	+=3D pinctrl-pic32.o
+  obj-$(CONFIG_PINCTRL_PISTACHIO)	+=3D pinctrl-pistachio.o
++ obj-$(CONFIG_PINCTRL_RK805)	+=3D pinctrl-rk805.o
+  obj-$(CONFIG_PINCTRL_ROCKCHIP)	+=3D pinctrl-rockchip.o
+  obj-$(CONFIG_PINCTRL_SINGLE)	+=3D pinctrl-single.o
+- obj-$(CONFIG_PINCTRL_SX150X)	+=3D pinctrl-sx150x.o
+- obj-$(CONFIG_ARCH_TEGRA)	+=3D tegra/
+- obj-$(CONFIG_PINCTRL_XWAY)	+=3D pinctrl-xway.o
+- obj-$(CONFIG_PINCTRL_LANTIQ)	+=3D pinctrl-lantiq.o
+- obj-$(CONFIG_PINCTRL_LPC18XX)	+=3D pinctrl-lpc18xx.o
+- obj-$(CONFIG_PINCTRL_TB10X)	+=3D pinctrl-tb10x.o
++ obj-$(CONFIG_PINCTRL_STMFX) 	+=3D pinctrl-stmfx.o
+  obj-$(CONFIG_PINCTRL_ST) 	+=3D pinctrl-st.o
+ +obj-$(CONFIG_PINCTRL_STARFIVE)	+=3D pinctrl-starfive.o
+- obj-$(CONFIG_PINCTRL_STMFX) 	+=3D pinctrl-stmfx.o
+- obj-$(CONFIG_PINCTRL_ZYNQ)	+=3D pinctrl-zynq.o
++ obj-$(CONFIG_PINCTRL_SX150X)	+=3D pinctrl-sx150x.o
++ obj-$(CONFIG_PINCTRL_TB10X)	+=3D pinctrl-tb10x.o
++ obj-$(CONFIG_PINCTRL_THUNDERBAY) +=3D pinctrl-thunderbay.o
+  obj-$(CONFIG_PINCTRL_ZYNQMP)	+=3D pinctrl-zynqmp.o
+- obj-$(CONFIG_PINCTRL_INGENIC)	+=3D pinctrl-ingenic.o
+- obj-$(CONFIG_PINCTRL_RK805)	+=3D pinctrl-rk805.o
+- obj-$(CONFIG_PINCTRL_OCELOT)	+=3D pinctrl-ocelot.o
+- obj-$(CONFIG_PINCTRL_MICROCHIP_SGPIO)	+=3D pinctrl-microchip-sgpio.o
+- obj-$(CONFIG_PINCTRL_EQUILIBRIUM)   +=3D pinctrl-equilibrium.o
+- obj-$(CONFIG_PINCTRL_K210)	+=3D pinctrl-k210.o
+- obj-$(CONFIG_PINCTRL_KEEMBAY)	+=3D pinctrl-keembay.o
++ obj-$(CONFIG_PINCTRL_ZYNQ)	+=3D pinctrl-zynq.o
+ =20
+  obj-y				+=3D actions/
+  obj-$(CONFIG_ARCH_ASPEED)	+=3D aspeed/
+
+--Sig_/HD1C4JCz8G1vcelywszRg2x
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmG8K2UACgkQAVBC80lX
-0Gx85AgAiXE/zaVw9y3mL9K0gEfhwhW9iaulOhjVMO1gjRtGKyYfNhaf3V8U5qEF
-4LrcFceFSeu/O6TmuVWsVzE+40059NIf53/7GieKp76M4lR6C4FwgF0zgGRPHL53
-7WGwcW4AVX2RmTWcyLuyayLJuJ4e6eRVlFvpfPkgBHxSaLYB1bDoiUDTAB1QlWme
-bR3oJ9/CLU6nElBJ7jwBIFJ+xaW5QF4WXqZ2ohSvGjE73BYVHP/zR9gqEIPuiMU2
-V6PEnGxGe/fY88cIneLxXGM2lxATQbWDU9T1rXNaj4zVz3l6PB73PVobkuQDwrX7
-uYLJTQkpYhBPor2VNCntWH2GMGhz/Q==
-=Ad90
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmG8LksACgkQAVBC80lX
+0GxP6Qf/c1I1xsfjER99HnkzpIjmyBgjuRuszMG5rZEh39DOdOQJ8Nvz/wNTXDi0
+qYO691MJMg7sg0OipR50Hsjrx1Mjy3mLxH6ausyuVAFQWdjME1zCKBCuvc636bdT
+Tsz3Jejfb8EqBtAvQATBqiIYYboReheDefNuK6cPXof08Hx3I0QUw1SU+lldRpC4
+j2L26Es8yWo7xP3RNdaNzTD+VcVAOv7+dcUtsLCz1ZYFbvbdNiNp8S6tzWduf96Z
+wvNJeykTVwbj6T7MOHVRSxwrNlJxS9QimgDv5v1iR+SmL9di1cEWkv4YaKM0ET0G
+h3N2i5+UiorRK9YIdOj+og0RAYItDA==
+=cfYN
 -----END PGP SIGNATURE-----
 
---Sig_/JMOMWxIWYEyzJYbLZ/l4LtD--
+--Sig_/HD1C4JCz8G1vcelywszRg2x--

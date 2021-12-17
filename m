@@ -2,118 +2,105 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A66794783E8
-	for <lists+linux-next@lfdr.de>; Fri, 17 Dec 2021 05:19:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D1BD4784D1
+	for <lists+linux-next@lfdr.de>; Fri, 17 Dec 2021 07:11:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231653AbhLQETG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 16 Dec 2021 23:19:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44428 "EHLO
+        id S233170AbhLQGLm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 17 Dec 2021 01:11:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229874AbhLQETF (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 16 Dec 2021 23:19:05 -0500
+        with ESMTP id S230405AbhLQGLl (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 17 Dec 2021 01:11:41 -0500
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4556BC061574;
-        Thu, 16 Dec 2021 20:19:05 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70AECC061574;
+        Thu, 16 Dec 2021 22:11:41 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JFbMq3bGSz4xd4;
-        Fri, 17 Dec 2021 15:19:02 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JFdsk4XXLz4xd4;
+        Fri, 17 Dec 2021 17:11:38 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1639714743;
-        bh=yp0Ur0rx7YNSHB/zptC4hYpq036nZ3WtqihqjHB1tGs=;
-        h=Date:From:To:Cc:Subject:From;
-        b=ssC4Rr3KiYVZ7xbm9EV7NgpDdNvK8mLuC9HXi2LWzue7+FZRSiuzhOflmdg8/RIoP
-         yEAoF2P/HlVOjl8fSbwh4tBpLKTvEweA+Js42kmHwWqXgEg3nnd0iZMwhsBnLPZDMO
-         wdGBwuJr1+sfToaUTLhkDj1QcB96iWLAu2orZ8AnU3btGrIDkVpfqULoPgeFObnYnD
-         VadSCEX5Eup0CJXD8cG3KhJy6itFP34leo05AY+e0A7aLeb+z/LbH7VXGjzF5ADonK
-         CIzGB0ZJfZe+9IP0U6stMiSjgiPF65K4V7qlj+ppg/0VlCMgdLTtuoYcq6/tQwSjMO
-         Zcj/Awh86mftQ==
-Date:   Fri, 17 Dec 2021 15:19:02 +1100
+        s=201702; t=1639721499;
+        bh=Za/01V58nQo09u7OF+a0FvV7p4G/Co3VNwo5n7//oKg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=e5ixP0Z1YeWWwmOxEBf4SdIbxyofHMFQm4r5QI+NB8Kso6OIgSQhAZPyMFau+p8rf
+         ekXUtgVZtYuQfKLBLScTRiBGFs+UaaqASMfunv2xdeG8OU15f1W735ZKolKjwgvQ8B
+         5dOCvEVZlf9fyY8p6wMNKRjEdwNZqoI4QLlUzm0uifwAKO/Tyj0m65lg9GNN+js4mp
+         DmKDrhkSpda1g4AGXDFOOJxP5q1EgoKmmKPGy7rKaBjhZsCAWKAFgLWQVApx72C78R
+         uhoLLDBG8HueE1RxeqLnKN+PiSoziNuMpimkSvxTp5CCG1TWt5tSkrj7NC7JFNCAPu
+         bwO5lXFGg2rMQ==
+Date:   Fri, 17 Dec 2021 17:11:36 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christoffer Dall <cdall@cs.columbia.edu>,
-        Marc Zyngier <maz@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Quentin Perret <qperret@google.com>
-Subject: linux-next: manual merge of the kvm-arm tree with the kvm tree
-Message-ID: <20211217151902.2ae43d1f@canb.auug.org.au>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Kent Gibson <warthog618@gmail.com>,
+        Li Zhijian <lizhijian@cn.fujitsu.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the gpio-sim tree with the
+ gpio-brgl-fixes tree
+Message-ID: <20211217171136.613b02d3@canb.auug.org.au>
+In-Reply-To: <20211116103924.3a26ba23@canb.auug.org.au>
+References: <20211116103924.3a26ba23@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/GUwPDrOjltl_sEP2d_WZhqs";
+Content-Type: multipart/signed; boundary="Sig_/8r4jz=pFV_Fr_+RTffJGt/I";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/GUwPDrOjltl_sEP2d_WZhqs
+--Sig_/8r4jz=pFV_Fr_+RTffJGt/I
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the kvm-arm tree got a conflict in:
+On Tue, 16 Nov 2021 10:39:24 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> Today's linux-next merge of the gpio-sim tree got a conflict in:
+>=20
+>   tools/testing/selftests/gpio/Makefile
+>=20
+> between commits:
+>=20
+>   92a59d7f381d ("selftests: gpio: fix gpio compiling error")
+>   4f4d0af7b2d9 ("selftests: gpio: restore CFLAGS options")
+>=20
+> from the gpio-brgl-fixes tree and commits:
+>=20
+>   79d93060a28e ("selftests: gpio: provide a helper for reading chip info")
+>   60283bc9fceb ("selftests: gpio: add a helper for reading GPIO line name=
+s")
+>=20
+> from the gpio-sim tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-  arch/arm64/kvm/arm.c
-
-between commit:
-
-  27592ae8dbe4 ("KVM: Move wiping of the kvm->vcpus array to common code")
-
-from the kvm tree and commit:
-
-  52b28657ebd7 ("KVM: arm64: pkvm: Unshare guest structs during teardown")
-
-from the kvm-arm tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
+This is now a conflict between the gpio-brgl tree and Linus' tree.
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc arch/arm64/kvm/arm.c
-index 7385bbdfdc42,6057f3c5aafe..000000000000
---- a/arch/arm64/kvm/arm.c
-+++ b/arch/arm64/kvm/arm.c
-@@@ -179,7 -181,15 +179,9 @@@ void kvm_arch_destroy_vm(struct kvm *kv
- =20
-  	kvm_vgic_destroy(kvm);
- =20
- -	for (i =3D 0; i < KVM_MAX_VCPUS; ++i) {
- -		if (kvm->vcpus[i]) {
- -			kvm_vcpu_destroy(kvm->vcpus[i]);
- -			kvm->vcpus[i] =3D NULL;
- -		}
- -	}
- -	atomic_set(&kvm->online_vcpus, 0);
- +	kvm_destroy_vcpus(kvm);
-+=20
-+ 	kvm_unshare_hyp(kvm, kvm + 1);
-  }
- =20
-  int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
-
---Sig_/GUwPDrOjltl_sEP2d_WZhqs
+--Sig_/8r4jz=pFV_Fr_+RTffJGt/I
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmG8D7YACgkQAVBC80lX
-0GzSXgf/R6Xx9mnLIXjZlcoQKleXRwbNv28RwZWo1wBigNpv5ITzTYWKPfRk4VWm
-Hwz6QvLyrq66Sq1v3/i/84ivbqqXlIMApRQJrhf8HzfSKSUFvVoCTHf85Kjr9uhF
-sg0DE2t2A8iDuYigW9a+ABuGgggTNjCMN3rYsiVf6ITVzhXl+FEqIyvbzB3IVXhT
-BG+PibeY3lWUULjQ+CrZVeYC/qz9V9+mei4MUcZaGekerVxZ8zX8Rp8AKX35Rc/B
-KrHnctwF6XwXZF09zHMYRFnzyXlTARZKjMSyeVJyzTgbi09BIy/SgEyvlG45IDb+
-bittel+ZmOShhMldlrRx/FTwGvfiEQ==
-=1UaZ
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmG8KhkACgkQAVBC80lX
+0GzN6wf9GhM4xpYIOfwBoRup3596AgstRrIRLS6bPOqSDCnU4LWsnEBIVBv1HXAQ
++5BQD2lXbuenU5SRtDlqesXsx08EaX32DycReJ/ySQc+Gslxa801OotDqgm+W5JF
+bd/MoHl1g4RJ4Il9Xp6esbMx1W1/po8fRwC8g2WP37wvcUwDhNYx6S0+m3n1XvoZ
+ZxrkqfQdqU7E7n+zKfttd0pNsLIY21jTeONeBvdg+jufUfWhGDsdiK5WLAsIvMmN
+vtUIG7cGRQslX979OOEexoZQyQJAxOsPxiucHdvJw6s5sIuX0v4bLd3364W+k8HO
+983AZE0+aJZYPGTa1wOSz7+CQdTMng==
+=IChE
 -----END PGP SIGNATURE-----
 
---Sig_/GUwPDrOjltl_sEP2d_WZhqs--
+--Sig_/8r4jz=pFV_Fr_+RTffJGt/I--

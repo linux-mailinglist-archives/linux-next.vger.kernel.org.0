@@ -2,71 +2,75 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 460DB47963D
-	for <lists+linux-next@lfdr.de>; Fri, 17 Dec 2021 22:25:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F301F479695
+	for <lists+linux-next@lfdr.de>; Fri, 17 Dec 2021 22:53:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229569AbhLQVZk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 17 Dec 2021 16:25:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55828 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbhLQVZk (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 17 Dec 2021 16:25:40 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B248C061574;
-        Fri, 17 Dec 2021 13:25:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=S7LXRSQEkoRerRyKuK4DAJnCEMjCVJDDgaO1V4T78uY=; b=P1roXXq4nnOui4pnY9nhlOZbvU
-        uIrx2mlyHxL/qh/pgwAlIk7O0jQxKJ/K/k9W1RxNTLJAvO4zyBM8T1hScoULtK0A9GnoVFS443HGh
-        2+RXvZI2TlJ7YwbzWzDeVxSocZNQR+P2nqiw3vJs0xrBqkBZjDkfqpQU3i4IW6MOT4sHJvtjk3NY7
-        zF6YUKAnN/6usrtpfP+/Xp3L+D+va08D99w2cbdxCzd3tpCwxSlYDcSTqNP5Nb5M9g+s5s3HnMe8L
-        fcvHBm8g+GvdV4apyn3hsZDcMJtU/id40K/hNUXWWpFOFYR3EYTZANCtYNKYOHqfIL2JAhp4XMjzN
-        k7q3viyw==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1myKjP-001xcR-Hw; Fri, 17 Dec 2021 21:25:35 +0000
-Message-ID: <eff1f8d6-ec12-42c7-d869-8fbd9e3a560d@infradead.org>
-Date:   Fri, 17 Dec 2021 13:25:30 -0800
+        id S230242AbhLQVxi convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-next@lfdr.de>); Fri, 17 Dec 2021 16:53:38 -0500
+Received: from mail-pj1-f42.google.com ([209.85.216.42]:51735 "EHLO
+        mail-pj1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230211AbhLQVxi (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 17 Dec 2021 16:53:38 -0500
+Received: by mail-pj1-f42.google.com with SMTP id v16so3419375pjn.1;
+        Fri, 17 Dec 2021 13:53:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=OSouNAXKfQ8rN33RQ1qzlpM1z5+txx2hdojNvqQ2iiA=;
+        b=PradlHJUTwS73dO0RntQab/fPAZ3DjFaFu6KNghZnSJDf/RyuYCD8k5EntbWZzAtuB
+         jwTLuNiTdZHuUjNU5RKwQTws2VfffXawpvRLmikslhHQYlDPNYDRE5K4TQRfy2wvEBgz
+         maNbEdGfsl7j9NDtUZ5PLvvu+eVboztVJIo0Vf4Q0eRuQG/hILv++VSFH1Sph0iJXLdm
+         P/whMlCe7ChhNF60w+gidRpd3LWNIr0Mrs9BILn/9pUbcxzgt/SkPIqwmn8gOhLjFjH0
+         s9U+qo9cOleWy7/au+7/WuKahHfyJ9FScdtbFhSFhbrwdm1ZdT6UUE3ln+eqohUZfQ7r
+         iYGA==
+X-Gm-Message-State: AOAM5330SYmT7oitayGLPRc2jUiRgCdHaWcVDrOfdOaRJEpra+asyxRO
+        p21ffb28qpzs73pW9e1RaDqAs+5ivVXoeUENYKc=
+X-Google-Smtp-Source: ABdhPJx1Zgynh4wUXHAumH4LM1mHoQULX+g2DiYYo478GOP+yyTFHo3EgCd7tYqK0eyI3a6CjCxf6rAt/dVCYOJdy8c=
+X-Received: by 2002:a17:902:7609:b0:148:daa5:8133 with SMTP id
+ k9-20020a170902760900b00148daa58133mr4904314pll.48.1639778017978; Fri, 17 Dec
+ 2021 13:53:37 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: linux-next: Tree for Dec 17
- (drivers/reset/reset-starfive-jh7100.c)
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
+References: <20211218003339.0061dcb4@canb.auug.org.au> <eff1f8d6-ec12-42c7-d869-8fbd9e3a560d@infradead.org>
+In-Reply-To: <eff1f8d6-ec12-42c7-d869-8fbd9e3a560d@infradead.org>
+From:   Emil Renner Berthing <kernel@esmil.dk>
+Date:   Fri, 17 Dec 2021 22:53:26 +0100
+Message-ID: <CANBLGcynOdjJDS45YwMPZQ+MuYHf4w-rQ5GixokLyvuZ4ZM4vQ@mail.gmail.com>
+Subject: Re: linux-next: Tree for Dec 17 (drivers/reset/reset-starfive-jh7100.c)
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        Arnd Bergmann <arnd@kernel.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Philipp Zabel <p.zabel@pengutronix.de>
-References: <20211218003339.0061dcb4@canb.auug.org.au>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20211218003339.0061dcb4@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+Hi Randy,
 
+On Fri, 17 Dec 2021 at 22:48, Randy Dunlap <rdunlap@infradead.org> wrote:
+> On 12/17/21 05:33, Stephen Rothwell wrote:
+> > Hi all,
+> >
+> > Changes since 20211216:
+> >
+>
+> on i386:
+>
+> ../drivers/reset/reset-starfive-jh7100.c: In function ‘jh7100_reset_update’:
+> ../drivers/reset/reset-starfive-jh7100.c:81:10: error: implicit declaration of function ‘readq’; did you mean ‘readl’? [-Werror=implicit-function-declaration]
+>   value = readq(reg_assert);
+>           ^~~~~
+> ../drivers/reset/reset-starfive-jh7100.c:86:2: error: implicit declaration of function ‘writeq’; did you mean ‘writel’? [-Werror=implicit-function-declaration]
+>   writeq(value, reg_assert);
+>   ^~~~~~
 
-On 12/17/21 05:33, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Changes since 20211216:
-> 
+Yes, It needs to include <linux/io-64-nonatomic-lo-hi.h> for compile
+testing to work on 32bit architectures without readq.
 
-on i386:
+Arnd: Do I just send a patch or do I redo the pull-request?
 
-../drivers/reset/reset-starfive-jh7100.c: In function ‘jh7100_reset_update’:
-../drivers/reset/reset-starfive-jh7100.c:81:10: error: implicit declaration of function ‘readq’; did you mean ‘readl’? [-Werror=implicit-function-declaration]
-  value = readq(reg_assert);
-          ^~~~~
-../drivers/reset/reset-starfive-jh7100.c:86:2: error: implicit declaration of function ‘writeq’; did you mean ‘writel’? [-Werror=implicit-function-declaration]
-  writeq(value, reg_assert);
-  ^~~~~~
-
-
--- 
-~Randy
+/Emil

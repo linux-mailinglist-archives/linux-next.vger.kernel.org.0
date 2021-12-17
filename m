@@ -2,99 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD8D34785D6
-	for <lists+linux-next@lfdr.de>; Fri, 17 Dec 2021 09:02:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61F7D4785E5
+	for <lists+linux-next@lfdr.de>; Fri, 17 Dec 2021 09:05:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233041AbhLQICj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 17 Dec 2021 03:02:39 -0500
-Received: from mout.kundenserver.de ([217.72.192.75]:60699 "EHLO
+        id S230156AbhLQIFx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 17 Dec 2021 03:05:53 -0500
+Received: from mout.kundenserver.de ([212.227.126.130]:39047 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233035AbhLQICj (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 17 Dec 2021 03:02:39 -0500
-Received: from mail-wr1-f51.google.com ([209.85.221.51]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MSLlu-1n4hnR3TGi-00Sf1C; Fri, 17 Dec 2021 09:02:37 +0100
-Received: by mail-wr1-f51.google.com with SMTP id q16so2438034wrg.7;
-        Fri, 17 Dec 2021 00:02:37 -0800 (PST)
-X-Gm-Message-State: AOAM532GNI3eMLc5igCo7uLR4reDcAEsBUTezFMXnsOzI8oxrv1BP5ol
-        sOMy77166X7HwC8ZCn0bv4eEwbdJgrsste1HwG8=
-X-Google-Smtp-Source: ABdhPJzJeZFelU3godOJegozbjx0Hr/mKwWf6NtOOet6yAUN3rA9EeAB8H/WKKVCvEXO51VDSBIZnrbM6ODS+aiK/Ic=
-X-Received: by 2002:a05:6000:1aca:: with SMTP id i10mr1465626wry.407.1639728157042;
- Fri, 17 Dec 2021 00:02:37 -0800 (PST)
+        with ESMTP id S229895AbhLQIFx (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 17 Dec 2021 03:05:53 -0500
+Received: from mail-wm1-f46.google.com ([209.85.128.46]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MWAaw-1n0sK51xAg-00XeeE; Fri, 17 Dec 2021 09:05:51 +0100
+Received: by mail-wm1-f46.google.com with SMTP id z4-20020a1c7e04000000b0032fb900951eso3445568wmc.4;
+        Fri, 17 Dec 2021 00:05:51 -0800 (PST)
+X-Gm-Message-State: AOAM530UVPFTHLswgmMlvfOQdY3XtPQR7F+LlL/WvkZAGqwMu7efbnzw
+        tcNlVOeg2iuCti4BmlPGBtBWWTtVfnNHpmBnmfY=
+X-Google-Smtp-Source: ABdhPJy65SCV/45HP97WdNkIb8aOc/tC51kdFuMAYYfjjY+omPz7xCE5EUN4u430rKPc1GQNd/dsFVZ1zf74TMYWY0g=
+X-Received: by 2002:a7b:c007:: with SMTP id c7mr8595362wmb.82.1639728351135;
+ Fri, 17 Dec 2021 00:05:51 -0800 (PST)
 MIME-Version: 1.0
-References: <20211217172931.01c24d4b@canb.auug.org.au>
-In-Reply-To: <20211217172931.01c24d4b@canb.auug.org.au>
+References: <20211217110720.21e8020b@canb.auug.org.au>
+In-Reply-To: <20211217110720.21e8020b@canb.auug.org.au>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 17 Dec 2021 09:02:21 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a2c508kcaSj2-fKdTkN+ojTtZa9+reHLM4QEadX_EBUQQ@mail.gmail.com>
-Message-ID: <CAK8P3a2c508kcaSj2-fKdTkN+ojTtZa9+reHLM4QEadX_EBUQQ@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the pinctrl tree with the arm-soc tree
+Date:   Fri, 17 Dec 2021 09:05:35 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a09aESjUa6Fj9O+EvAfXKqoKwtUePf+Ujun0fLiDxUyxQ@mail.gmail.com>
+Message-ID: <CAK8P3a09aESjUa6Fj9O+EvAfXKqoKwtUePf+Ujun0fLiDxUyxQ@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the fscache tree with the asm-generic tree
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        ARM <linux-arm-kernel@lists.infradead.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Huan Feng <huan.feng@starfivetech.com>,
-        Kiran Kumar S <kiran.kumar1.s@intel.com>,
-        Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>,
+Cc:     David Howells <dhowells@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
+        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:4oUBFFqlwiSIa1ypbolba4zFKzclW88FiKDg2eLl5NRvMDDGSlb
- nbJkyG17yY6UDdldCaKCnM4zdJ2xYvBv7oNhaSrbSCz9DBkEygA3KhmFuXKy7ZzLISMjjEV
- lg2Rd78UyiqMzYiI4TlIVDZdJ2aLNkXKjrM95LXvmUUYl6nkBNkgZK61F1iSAiQQLIjMvNi
- ZQJC4DgQ2Cat53Nk/1lDg==
+X-Provags-ID: V03:K1:v9Pxe2VTMcCYRKYBvrgssU9eg8gqM2M7dyWpIekzxcE5amqgD03
+ HGZn7dQ7o7wjqNlDTBjtM5XELt9vXSonxNQT+Pa3IkFjViwg3RA2OYTOnN8R2ZbPOfQTaOb
+ KBlwlWAhTfV7X7aX6ItPE8aqAkniPmoD7UG9H8CqA9si2vFb8U/N1Oh3BpjdVb74MvuASQu
+ z21hy8Zf/ovc/KH1mKbWw==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:4Q9jytcTBbI=:V9WLnEGijd5AFXRjIl1keG
- LS7fjWG9wsPhe0wI/fgzjgOHCFzfBodwhzAMDJM7E4xjan04GZjT77nRFHG+fj303dgwcShRz
- Y2k5vEdxIhCeqCYt+HtfLiEJjYFGsC4JyaNBqakVhPP1Yjh+s/a05WPUWKeTaQnxxx9REaK/+
- eTSTNpuxxvLmHKeRUL+S6Iuly18d6bw/NxfgueUS1y66la1RB5FAMj/Goh4Rcm0ukVPnTuJI7
- vyW1U+Z80pcJ/0IZZypw54p0BQEeh2e1PyVVUicbRrOs4jJPxaxrCbxlaLbIMnlT8lwhqNjnX
- valVUsW20Q0XlyMC8id60gD508I3ZCUODV0Ppx4GdSBemdKwN+2El90NAA6LaMTD0X0qAY7Lz
- snVDsh76AwO2XJm86HlG6i6T/lh3e8RKJ70x/atzB5CD4dEJ3H7posIKu2rXoeACTeh1k52U/
- AqvOAMbgWiH6ZUiE78agCL0K85YGV0kAKCxA1Tjjq4KHoFD44MYEPVBo0qCpGpkyH8YMgSBLm
- QjmmAqne+jw+tode5M8XHSP+dkL/QQL3X58rKStTWTjMKBPomW4mWmmBIfrorZ1VQPr4X3+kt
- gSe8TxCeDjTQ/d/donj8RhzBVlKPxQ6/Cc/qp9aCUUmXxATlf/XSjXRap+7vAtbnWanJYVf0k
- LwMmrFkKntD241/niPrZnKyOjX0zY6jAD+P8V0SWdSqZfnE89GVl6QSko0jWZV92dko24eyhh
- 4NheJIF5AbZataeYRF/jBEyqxGlWQ4AsDKWusgE1KEqoOyt5PSX6/q9Q7vc1NXkGMyX7aYIio
- rtmxGVfaf260Rm4ealCe9PwUBSqIIWoBxLebJ+VKOJEg/eFGn8=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:zQrd28kpvc4=:YCRUT/ROEQLcbC836Kqj4Y
+ fr5qaDSv+C/rfrwx8+zI+klkF+8MGqnnOsHAiE4Tle+gwLhL+cgQGeys+pS+fuDQmCtEsBBKT
+ 3a8QqEFIOMtOoz6rlS0tv/ZLJxal2dr2CSOpvTUzeCrdMaXC6rkx1vFX20aKjVYrHNkN6dEy1
+ CE4IUwGfiCCZLC0Wkz2NG89n0SNZqinjX7WVTwlmuCJGVcm79sui0UUfcSd5zEZuI51KFaole
+ Z46pHORysE2xEVXilCLk27QFe4pZgn2Wn60UY6KQbmCSvOKV+0vFevju6Jq7RoYf7aRRtgnxt
+ 78XIaWSLW8vdqjSfYmZZWzLCAGWOPxf3t7hMNGcKQWn7ZKNYXC2w4NgHK/sBiBX4ty3lLOGJo
+ Y6mr6Ry6osaTrGkkgoiE7J5NxUid8cfOOH5B6zAxTVxCqbuZwW6BcOxsQF58YOyL3o9WMbqp+
+ PeABUDUylSBd1STTh0n+oIja+ZIL9My6LR0eK8cruij2VoMkcfyv/723hlfaxs30rOHdJ802e
+ k+emdxc+zQVwjsbIexLVex8nhgh05ZCik39PwfqkmgQJ6gDk3rOr0qpIDKhD66WxYJNX7tD1g
+ GzQNSRcUdb3HcSR3ok+MqTAQmsBdr91suNUJ9qbwxF77osGU7CkpcvAtAD8WU5N+5z3MeqAqV
+ Ko9D1YTBC4uD7qOJywTgn9501wC+A8l6AFTxCIaQT0zS50PV7Woh71vIfP6rPKiCFXCCjUsfo
+ KvVw+u2HZ8jqrY/9ngQ0c46NCrzamQDHNo/VqbX+N2IbWVDM+E+Arpcscvbw0S1Wj5ZlvQklM
+ 6EEpJ8Eubz8VmgVUe3q8w03dMcqS5ySNJIPAPvHo7CSUHcpS9g=
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 7:29 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+On Fri, Dec 17, 2021 at 1:07 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 >
 > Hi all,
 >
-> Today's linux-next merge of the pinctrl tree got conflicts in:
+> Today's linux-next merge of the fscache tree got a conflict in:
 >
->   drivers/pinctrl/Kconfig
->   drivers/pinctrl/Makefile
+>   Documentation/filesystems/caching/fscache.rst
 >
-> between commit:
+> between commits:
 >
->   ec648f6b7686 ("pinctrl: starfive: Add pinctrl driver for StarFive SoCs")
+>   d881c06e0890 ("Documentation, arch: Remove leftovers from fscache/cachefiles histograms")
+>   5c61c384095a ("Documentation, arch, fs: Remove leftovers from fscache object list")
 >
-> from the arm-soc tree and commits:
+> from the asm-generic tree and commit:
 >
->   12422af8194d ("pinctrl: Add Intel Thunder Bay pinctrl driver")
->   b124c8bd50c7 ("pinctrl: Sort Kconfig and Makefile entries alphabetically")
+>   ac1c0f96f4c0 ("fscache: Rewrite documentation")
 >
-> from the pinctrl tree.
+> from the fscache tree.
 >
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+> I fixed it up (I just used the latter version) and can carry the fix as
+> necessary. This is now fixed as far as linux-next is concerned, but any
+> non trivial conflicts should be mentioned to your upstream maintainer
+> when your tree is submitted for merging.  You may also want to consider
+> cooperating with the maintainer of the conflicting tree to minimise any
+> particularly complex conflicts.
 
-Thanks, looks good. There are potentially three or four new SoC families
-in the arm/newsoc branch (this is the first one I merged), so I expect to see
-a few additional conflicts like this against pinctrl/clk/irqchip, but
-they should
-all be trivial.
+Hi Alexandre,
 
-        Arnd
+There are three conflicts between these two patches and the fscache tree,
+which apparently has some of the same changes, plus more.
+
+I would suggest I drop both of the above from the asm-generic tree, and
+you rebase them on top of the latest fscache tree so David can pick up
+whatever is left from your changes.
+
+       Arnd

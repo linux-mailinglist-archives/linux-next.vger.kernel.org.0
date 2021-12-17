@@ -2,117 +2,124 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B5FD47926C
-	for <lists+linux-next@lfdr.de>; Fri, 17 Dec 2021 18:07:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D62E94794E8
+	for <lists+linux-next@lfdr.de>; Fri, 17 Dec 2021 20:38:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239651AbhLQRHU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 17 Dec 2021 12:07:20 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:57858 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239649AbhLQRHU (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Fri, 17 Dec 2021 12:07:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639760839;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2+WRMJfHlXftJ9YeoYXvWKoQ/evPaqEvHg4A06Tryvs=;
-        b=g6jzlncyysZwniBw6OvSxPpYehBt7fIKm0NOjpEKa+g5g0nRT4/5jj0rYuSf9Wm+tPHfR6
-        ZeC8YkF04IJPICKMJByOpByri79iaViy/GAPkqSxLO3Jkk7s/btKTALMftRaqgj8+E8oY7
-        zRRM0J1sClDS0k4Yr+n5vVQixeYPfmU=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-217-DDqa_lPRMz-zo3OwIq4pQw-1; Fri, 17 Dec 2021 12:07:18 -0500
-X-MC-Unique: DDqa_lPRMz-zo3OwIq4pQw-1
-Received: by mail-wr1-f69.google.com with SMTP id f13-20020adfe90d000000b001a15c110077so809352wrm.8
-        for <linux-next@vger.kernel.org>; Fri, 17 Dec 2021 09:07:18 -0800 (PST)
+        id S236835AbhLQTiN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 17 Dec 2021 14:38:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59526 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233592AbhLQTiN (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 17 Dec 2021 14:38:13 -0500
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA9B8C061574;
+        Fri, 17 Dec 2021 11:38:12 -0800 (PST)
+Received: by mail-lj1-x235.google.com with SMTP id p8so4977840ljo.5;
+        Fri, 17 Dec 2021 11:38:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GW23enkVkLelgnifB0VDqCJ+lagCiFCUWHfynyjBCOc=;
+        b=j4ev1owoREKlmXuli8yHkc54BJjYwfiEdH/03ThwFx+ksgmmulzIawFoLt0t1EhN8+
+         0A6HbxysmmONZGq+pwkYvkpYUbs4dzwtD+g9osqT6IqUIQXWSZE5rZ37OYUJ1Xo9zvST
+         4FcTufN1YY2mprVvUAkQsOSJbKSkpTFHoL/h8pPmnBnsV2oFYAKA6zlVv+DO9g0kGt62
+         Fj3fNdLToKZyKBrSrpX2ie5N2ZXeb4OhyeiPSTVucNx8OiOMS58oa8q9Eqe8Vll3vBgs
+         r25f3WDCJjJ6MP4SjeZeTxcCxd2ASzV2xPDxY3cyNxTMqlCwrAhMhb6nKdIScnb0r3Se
+         1IOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=2+WRMJfHlXftJ9YeoYXvWKoQ/evPaqEvHg4A06Tryvs=;
-        b=0fj4cbIK2plZA+SUdnE2bYHE1iWDgIukubuVeBHKHDtIfwfNbQNcEUyb91Vw72eCjB
-         TIRo92BudIwEeJvJtJUiMGAKEijs/9EEVg2+zvpdnrmuS+59Bjb2d0/fCYqTMDc+/8gg
-         szn2VJK1UryYKmu3nrVZJCHa7CtvavneMJfwvWb63F9+s94/RA74QYlwWYJaxukTM9Dm
-         M1ElLjSIo8u7peTGXI5RxN4wckDquBgZUv/JYlGEv2K1bOQ6/kHOQDszC2qDo1ip5V/A
-         1aH3bl8zocgx7DryShhi9nx8c4nPMTTPq0Izu1gIEGbgB+JuXiS3ImLmhNaugQrlL9Os
-         lC3Q==
-X-Gm-Message-State: AOAM530YHSsmuHtjdsYeKUQlX71/s9l1/c9S0UqZoDqRUxcMOUpEKnm3
-        sTCcTk2MROfwGaYVCuAsHopPO4dUuzTDOcOP9Id+ByEisrFPerkMHdCwR99q0ubfbK1ViRBziut
-        Y60nG2rPuuyJxNknxVdLoTw==
-X-Received: by 2002:a05:6000:1d1:: with SMTP id t17mr3197094wrx.569.1639760837288;
-        Fri, 17 Dec 2021 09:07:17 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzPrYWvecakOGWsrLS6D0tWwhJI2tzgqzCBikFjyuarJQEgYziFKpjwXCffRMF6yVCr1Gcj9A==
-X-Received: by 2002:a05:6000:1d1:: with SMTP id t17mr3197082wrx.569.1639760837095;
-        Fri, 17 Dec 2021 09:07:17 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312::ac3? ([2001:b07:6468:f312::ac3])
-        by smtp.googlemail.com with ESMTPSA id s8sm9077955wra.9.2021.12.17.09.07.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Dec 2021 09:07:16 -0800 (PST)
-Message-ID: <6e2518c1-78d0-8103-69ea-40a625259ef8@redhat.com>
-Date:   Fri, 17 Dec 2021 18:07:15 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GW23enkVkLelgnifB0VDqCJ+lagCiFCUWHfynyjBCOc=;
+        b=3HofODWhjQdF8D3WPLv2lpgTZxkDslDXC6WO4D4KGYWfVOUwbXr3X4rnj8gxBPPnFa
+         +qy+e7pF7Xgs+UApnmLAqO6F+KwvDn2Ehqr4vXKOf7OLl9W3UgtQeJFC7zMKtuGDy1X5
+         eMcL35WJ3B4aaHESscq846B9Ia2Loaye5F+C8ET2SsxOMdwAvUend69YSfch6spohYTw
+         O98ntMBN+GlbchfXoq0mniQEjmA3r8v78Wr7HgQImp4wZs24MchXB7+zapP1r/UQbx0X
+         kJz4PmxP5mKpTVHL0DBdMulVcgYMpjbmteDbsd+Es2KLZY5vwXgQJ9r9WdxwP3aTA9/F
+         XEDw==
+X-Gm-Message-State: AOAM532LBq6iFWaH/vcE43+E6JWSNNu6J1kLAdfP9wa6pclNSBXedbtx
+        UgMQlmgMhvwGeKG36QXIy+0KVEZXBsrZpC/O1lVWQh3i
+X-Google-Smtp-Source: ABdhPJxnzbFle2KJ/winhKxA0sMz+f6aJ9pCL0hM9136+/dhFni1htCAHQ1xxnjhgmXXkSlutMKdzI2rMc77Ogk3Uus=
+X-Received: by 2002:a05:651c:154a:: with SMTP id y10mr3932487ljp.314.1639769890970;
+ Fri, 17 Dec 2021 11:38:10 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: linux-next: manual merge of the kvm tree with the kvm tree
-Content-Language: en-US
-To:     Michael Ellerman <mpe@ellerman.id.au>, broonie@kernel.org,
-        KVM <kvm@vger.kernel.org>
-Cc:     Alexey Kardashevskiy <aik@ozlabs.ru>,
+References: <20211216124317.4143405-1-broonie@kernel.org>
+In-Reply-To: <20211216124317.4143405-1-broonie@kernel.org>
+From:   Steve French <smfrench@gmail.com>
+Date:   Fri, 17 Dec 2021 13:38:00 -0600
+Message-ID: <CAH2r5muO9aTksvqD9v+sOQ2z-Xp3Rzbi9mPtfc0ad57jZG5aFw@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the cifs tree with the fscache tree
+To:     broonie@kernel.org
+Cc:     CIFS <linux-cifs@vger.kernel.org>,
+        David Howells <dhowells@redhat.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "Maciej S . Szmigiero" <maciej.szmigiero@oracle.com>,
-        Sean Christopherson <seanjc@google.com>
-References: <20211215131033.2541027-1-broonie@kernel.org>
- <87wnk5kvfz.fsf@mpe.ellerman.id.au>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <87wnk5kvfz.fsf@mpe.ellerman.id.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        Shyam Prasad N <sprasad@microsoft.com>,
+        Steve French <stfrench@microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 12/16/21 05:47, Michael Ellerman wrote:
-> broonie@kernel.org writes:
->> Hi all,
->>
->> Today's linux-next merge of the kvm tree got a conflict in:
->>
->>    arch/powerpc/kvm/book3s_hv.c
->>
->> between commit:
->>
->>    511d25d6b789f ("KVM: PPC: Book3S: Suppress warnings when allocating too big memory slots")
->>
->> from the kvm tree and commits:
-> 
-> That's from the powerpc tree.
-> 
->>    537a17b314930 ("KVM: Let/force architectures to deal with arch specific memslot data")
->>    eaaaed137eccb ("KVM: PPC: Avoid referencing userspace memory region in memslot updates")
->>
->> from the kvm tree.
->>
->> I fixed it up (see below) and can carry the fix as necessary. This
->> is now fixed as far as linux-next is concerned, but any non trivial
->> conflicts should be mentioned to your upstream maintainer when your tree
->> is submitted for merging.  You may also want to consider cooperating
->> with the maintainer of the conflicting tree to minimise any particularly
->> complex conflicts.
-> 
-> Thanks.
-> 
-> Paolo, if you want to avoid the conflict going to Linus, I have that
-> commit (and others) in a topic branch here (based on rc2):
-> 
->    https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/log/?h=topic/ppc-kvm
+David,
+This cifs fscache fix should be upstream soon, so you should be able
+to update the fscache series ontop of updated kernel soon
 
-Will pull, thanks!
+On Thu, Dec 16, 2021 at 6:43 AM <broonie@kernel.org> wrote:
+>
+> Hi all,
+>
+> Today's linux-next merge of the cifs tree got a conflict in:
+>
+>   fs/cifs/inode.c
+>
+> between commit:
+>
+>   830c476f5eb82 ("cifs: Support fscache indexing rewrite (untested)")
+>
+> from the fscache tree and commit:
+>
+>   68f87ec9c1ce3 ("cifs: ignore resource_id while getting fscache super cookie")
+>
+> from the cifs tree.
+>
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>
+> diff --cc fs/cifs/inode.c
+> index dc2fe76450b96,279622e4eb1c2..0000000000000
+> --- a/fs/cifs/inode.c
+> +++ b/fs/cifs/inode.c
+> @@@ -1372,20 -1370,6 +1367,7 @@@ iget_no_retry
+>                 iget_failed(inode);
+>                 inode = ERR_PTR(rc);
+>         }
+>  +
+> -       if (!rc) {
+> -               /*
+> -                * The cookie is initialized from volume info returned above.
+> -                * Inside cifs_fscache_get_super_cookie it checks
+> -                * that we do not get super cookie twice.
+> -                */
+> -               rc = cifs_fscache_get_super_cookie(tcon);
+> -               if (rc < 0) {
+> -                       iget_failed(inode);
+> -                       inode = ERR_PTR(rc);
+> -               }
+> -       }
+> -
+>   out:
+>         kfree(path);
+>         free_xid(xid);
 
-Paolo
 
+
+-- 
+Thanks,
+
+Steve

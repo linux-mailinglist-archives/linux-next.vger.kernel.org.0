@@ -2,105 +2,121 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88B3D478A3C
-	for <lists+linux-next@lfdr.de>; Fri, 17 Dec 2021 12:40:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EC41478B56
+	for <lists+linux-next@lfdr.de>; Fri, 17 Dec 2021 13:26:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235457AbhLQLk4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 17 Dec 2021 06:40:56 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:35168 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235615AbhLQLk4 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Fri, 17 Dec 2021 06:40:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639741255;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=X0AgJWYtCde0wRE4G15AOz/150w1GAh7NwKm3oYeCMg=;
-        b=X/8C3YaiLZQUBJ7Xl8A9oEa7xCxc88woSjhAR8TLM17CQ6QAYildtHOH2hzYSfHSJLKy8F
-        tnYIcj0V8miDosAnL7C1nEJf/jZoWU1EvsVR/K0PnuCwxkj2ijyhe6ct07h7TW1mErW3/K
-        nulOH7A1S9nXkNpogT1bQy4QOlw9Z+U=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-319-rNVwEeWgPsWIbBcc_IXPZA-1; Fri, 17 Dec 2021 06:40:54 -0500
-X-MC-Unique: rNVwEeWgPsWIbBcc_IXPZA-1
-Received: by mail-ed1-f69.google.com with SMTP id t2-20020a056402524200b003f7ed6cf4f1so1658465edd.21
-        for <linux-next@vger.kernel.org>; Fri, 17 Dec 2021 03:40:54 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=X0AgJWYtCde0wRE4G15AOz/150w1GAh7NwKm3oYeCMg=;
-        b=zoiurL1OtCOFMToy4FktEtfCJ9FuGxisXhsWBwxQsjwf5m1C66hxGyuj1RLqrU1Bj2
-         EtB7jl5nZ+y1uO8SOK3EbV0TmjTuNsjuXCjc2tgkfq+CiC10XADx+D0lQv3ZT+dBhdD8
-         QxHUzQasLNVUq/1MiwQZpdplKzi0hZvtfDCT54Sm/QBVHV4WSUjoU8pOKRguonc+nhr+
-         pK5IcWHcKuiZBSETrt1mzD31OYJ1iJOqoRmb23sE1j8s0vsaIVQ3xZBOhJcH1S4vMFI2
-         PbRt3Kcp/e7Tt06CFX8g4lLNqocHdY1b8arnRN2CTzsltCTGCih0QJthy1pe1iTezxhE
-         eWkg==
-X-Gm-Message-State: AOAM532fm4ugYbAJzKdWBXN0hUrd+cNBJWSRiZ/R6AWFf45mtfIedjtU
-        PYaU9YaFnm+Sos3cxqWupeIM3and4BURSYrgNef6tL2S3Y5DTBSa71Jwy8YgkQ+tMNujc+CJZAO
-        ODKv4fMM0nRZIoAWjZtDToBLnW/+yq+yAKoHvfw==
-X-Received: by 2002:a05:6402:2072:: with SMTP id bd18mr2460853edb.280.1639741252700;
-        Fri, 17 Dec 2021 03:40:52 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw45eK5HN9dZm9QJ6dhYB1cvicXLS3gMkFP24LvySJqi+UXSYhuRxoj/ScWxBQet1UoE0pILvIvnvdEhfqcN8s=
-X-Received: by 2002:a05:6402:2072:: with SMTP id bd18mr2460843edb.280.1639741252580;
- Fri, 17 Dec 2021 03:40:52 -0800 (PST)
-MIME-Version: 1.0
-References: <20211217113507.76f852f2@canb.auug.org.au>
-In-Reply-To: <20211217113507.76f852f2@canb.auug.org.au>
-From:   David Wysochanski <dwysocha@redhat.com>
-Date:   Fri, 17 Dec 2021 06:40:16 -0500
-Message-ID: <CALF+zO=zDrRzPkpgjRQNYbxQ8j3qNVJjo9Ub=tCqFtT32sr-KQ@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the nfs-anna tree with the fscache tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Anna Schumaker <Anna.Schumaker@netapp.com>,
-        Trond Myklebust <trondmy@gmail.com>,
-        NFS Mailing List <linux-nfs@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
+        id S236274AbhLQM0r (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 17 Dec 2021 07:26:47 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:55171 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229471AbhLQM0q (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 17 Dec 2021 07:26:46 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JFpBX16Thz4xgr;
+        Fri, 17 Dec 2021 23:26:44 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1639744004;
+        bh=n55WYm3Kkk9VniZa6wLs4zNFMLAVbXlaOc9QQH8RsQs=;
+        h=Date:From:To:Cc:Subject:From;
+        b=AVW1cRbFtBC8Odoj0imrt7/ZDDtE/WBes5TFAJdUYtc9DzN1dCWYrNR38mbvEQqtY
+         LMJ6pElQx/NyMTVKgUadbKyrCrP9D+JBWAOyOSDMJN8fCNKCol+kkM0vW1pxY6hs0Q
+         hOW70BL2Ij+v+Tzpx3rXsw5vfKLCn2GM6EUrz/B6C6VSnsSTh14nWRFj8LQ5yZMUaB
+         LzNZma2ie0vX1PkfEljNmRyqoo7IvS95CIVqOO8Q/k0tQDmLMjVFbXCdwfxlXnGl5O
+         dDIMguLnj3EBqcdjmMrlB4Y2UMOsIeVToOI/NUI7OMYyygb3raFPj0/NSbBEqCNjFd
+         WHBR/WI7ayljw==
+Date:   Fri, 17 Dec 2021 23:26:41 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Michal Hocko <mhocko@suse.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: linux-next: build failure after merge of the akpm-current tree
+Message-ID: <20211217232641.0148710c@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/.d4b.TwFU=_K8EIepP8oTuV";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 7:35 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> Today's linux-next merge of the nfs-anna tree got conflicts in:
->
->   fs/nfs/fscache.c
->   fs/nfs/fscache.h
->   fs/nfs/fscache-index.c
->
-> between commit:
->
->   882ff66585ec ("nfs: Convert to new fscache volume/cookie API")
->
-> from the fscache tree and commits:
->
->   e89edabcb3d4 ("NFS: Remove remaining usages of NFSDBG_FSCACHE")
->   0d20bd7faac9 ("NFS: Cleanup usage of nfs_inode in fscache interface and handle i_size properly")
->   4a0574909596 ("NFS: Rename fscache read and write pages functions")
->   3b779545aa01 ("NFS: Convert NFS fscache enable/disable dfprintks to tracepoints")
->   b9077ca60a13 ("NFS: Replace dfprintks with tracepoints in fscache read and write page functions")
->   416de7e7eeb6 ("NFS: Remove remaining dfprintks related to fscache cookies")
->   fcb692b98976 ("NFS: Use nfs_i_fscache() consistently within NFS fscache code")
->
-Anna, feel free to drop these from your tree to avoid the conflicts
-with the rest of your tree and dhowells fscache-rewrite patchset.
+--Sig_/.d4b.TwFU=_K8EIepP8oTuV
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
+After merging the akpm-current tree, today's linux-next build (powerpc
+ppc64_defconfig) failed like this:
 
-> from the nfs-anna tree.
->
-> I had no idea how to fix this all up, so I just dropped the nfs-anna
-> tree for today.   Please get together and coordinate thses changes.
->
-> --
-> Cheers,
-> Stephen Rothwell
+mm/vmalloc.c: In function '__vmalloc_area_node':
+mm/vmalloc.c:2983:11: error: implicit declaration of function 'memalloc_nof=
+s_save' [-Werror=3Dimplicit-function-declaration]
+ 2983 |   flags =3D memalloc_nofs_save();
+      |           ^~~~~~~~~~~~~~~~~~
+mm/vmalloc.c:2985:11: error: implicit declaration of function 'memalloc_noi=
+o_save' [-Werror=3Dimplicit-function-declaration]
+ 2985 |   flags =3D memalloc_noio_save();
+      |           ^~~~~~~~~~~~~~~~~~
+mm/vmalloc.c:2995:3: error: implicit declaration of function 'memalloc_nofs=
+_restore' [-Werror=3Dimplicit-function-declaration]
+ 2995 |   memalloc_nofs_restore(flags);
+      |   ^~~~~~~~~~~~~~~~~~~~~
+mm/vmalloc.c:2997:3: error: implicit declaration of function 'memalloc_noio=
+_restore' [-Werror=3Dimplicit-function-declaration]
+ 2997 |   memalloc_noio_restore(flags);
+      |   ^~~~~~~~~~~~~~~~~~~~~
 
+Caused by commit
+
+  0256fe4b2ffb ("mm/vmalloc: alloc GFP_NO{FS,IO} for vmalloc")
+
+I have applied the following fix patch.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Fri, 17 Dec 2021 23:15:05 +1100
+Subject: [PATCH] mm/vmalloc: alloc GFP_NO{FS,IO} for vmalloc fix
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ mm/vmalloc.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+index 01eabaf5417b..eb6e527a6b77 100644
+--- a/mm/vmalloc.c
++++ b/mm/vmalloc.c
+@@ -38,6 +38,7 @@
+ #include <linux/pgtable.h>
+ #include <linux/uaccess.h>
+ #include <linux/hugetlb.h>
++#include <linux/sched/mm.h>
+ #include <asm/tlbflush.h>
+ #include <asm/shmparam.h>
+=20
+--=20
+2.33.0
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/.d4b.TwFU=_K8EIepP8oTuV
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmG8ggEACgkQAVBC80lX
+0GyuTAgAjAd3s2Ua8CLXkTCJFPpMOesE0CSKDbq0oEEcIbMCBBVhO5gYiz+n8M6l
+PoKYPnaPVOrjwKKklE5WwRNSG9vPzg0R0aytWje5Q4nwa8zeqMjmWMkRJd8vzozG
+Vs5jeUvjQ83vFx3T54g/1ByuTjuTOqvjB/kJypzdqEYgxz3susAwSuIdrDOveREw
+frQN6RqbtcZjgp5oKg9IDs8xYLs4da1AXS7sq5WrYoXZRoAwtH9eGsPJmhLiCGxr
+3es6XoUyK2tShuN56VUIFG5rDssm26P5NLDy74PPLak3+42hNnl8Z048HUxF2rtB
+hEM+6PQylkQMMxRvvW7kbMHlDhrFqQ==
+=Wxc3
+-----END PGP SIGNATURE-----
+
+--Sig_/.d4b.TwFU=_K8EIepP8oTuV--

@@ -2,106 +2,99 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 718A94785B1
-	for <lists+linux-next@lfdr.de>; Fri, 17 Dec 2021 08:47:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD8D34785D6
+	for <lists+linux-next@lfdr.de>; Fri, 17 Dec 2021 09:02:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbhLQHr3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 17 Dec 2021 02:47:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34346 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbhLQHr2 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 17 Dec 2021 02:47:28 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C22EC061574;
-        Thu, 16 Dec 2021 23:47:28 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JFh0G24V4z4xbd;
-        Fri, 17 Dec 2021 18:47:26 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1639727246;
-        bh=C0aQyyBoJ0vc0jsTLBJ+s6i4ahtjhd7xmSrL0SXR4tM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=PVKFpKTqtrliIJ6ST8dGuhkI2ieeKEysX89PQQUUuaJTsDg0Gzec7chhIIYDEB5nx
-         a52tGdNfjtEkhWWbta8i9j0ZmeUTIU4SdcSEwFf+Sk8U1tJXR7jDe2MRo1iXfikKam
-         PiOKsZAZ35I941IdTPQgWaKBy+YRmrgp+AgLmylcSQVARoQoOfjPocWBsVVQfjnQ/f
-         Dx3Q2RzHBX5xn47++ZdWOdiQJGvNF8ysd1nCyTMlSjYW1S4IyhDwMN5ssx2IoNRCGF
-         0XDU7hKK2yASKjRs6S6WnKXgUcLL9fbMb7pF6wc7EMW/Vd5xXgwuVTyUEKnyjZKtTL
-         4IN0CFOmB43mg==
-Date:   Fri, 17 Dec 2021 18:47:25 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Eric W . Biederman" <ebiederm@xmission.com>
-Cc:     Mark Brown <broonie@kernel.org>,
+        id S233041AbhLQICj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 17 Dec 2021 03:02:39 -0500
+Received: from mout.kundenserver.de ([217.72.192.75]:60699 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233035AbhLQICj (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 17 Dec 2021 03:02:39 -0500
+Received: from mail-wr1-f51.google.com ([209.85.221.51]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MSLlu-1n4hnR3TGi-00Sf1C; Fri, 17 Dec 2021 09:02:37 +0100
+Received: by mail-wr1-f51.google.com with SMTP id q16so2438034wrg.7;
+        Fri, 17 Dec 2021 00:02:37 -0800 (PST)
+X-Gm-Message-State: AOAM532GNI3eMLc5igCo7uLR4reDcAEsBUTezFMXnsOzI8oxrv1BP5ol
+        sOMy77166X7HwC8ZCn0bv4eEwbdJgrsste1HwG8=
+X-Google-Smtp-Source: ABdhPJzJeZFelU3godOJegozbjx0Hr/mKwWf6NtOOet6yAUN3rA9EeAB8H/WKKVCvEXO51VDSBIZnrbM6ODS+aiK/Ic=
+X-Received: by 2002:a05:6000:1aca:: with SMTP id i10mr1465626wry.407.1639728157042;
+ Fri, 17 Dec 2021 00:02:37 -0800 (PST)
+MIME-Version: 1.0
+References: <20211217172931.01c24d4b@canb.auug.org.au>
+In-Reply-To: <20211217172931.01c24d4b@canb.auug.org.au>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 17 Dec 2021 09:02:21 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a2c508kcaSj2-fKdTkN+ojTtZa9+reHLM4QEadX_EBUQQ@mail.gmail.com>
+Message-ID: <CAK8P3a2c508kcaSj2-fKdTkN+ojTtZa9+reHLM4QEadX_EBUQQ@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the pinctrl tree with the arm-soc tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Huan Feng <huan.feng@starfivetech.com>,
+        Kiran Kumar S <kiran.kumar1.s@intel.com>,
+        Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the userns tree with the cel tree
-Message-ID: <20211217184725.6be885a1@canb.auug.org.au>
-In-Reply-To: <YbugCP144uxXvRsk@sirena.org.uk>
-References: <20211216193412.2441434-1-broonie@kernel.org>
-        <YbugCP144uxXvRsk@sirena.org.uk>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/5gplELS6X4wl.E=eU9iTRmV";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:4oUBFFqlwiSIa1ypbolba4zFKzclW88FiKDg2eLl5NRvMDDGSlb
+ nbJkyG17yY6UDdldCaKCnM4zdJ2xYvBv7oNhaSrbSCz9DBkEygA3KhmFuXKy7ZzLISMjjEV
+ lg2Rd78UyiqMzYiI4TlIVDZdJ2aLNkXKjrM95LXvmUUYl6nkBNkgZK61F1iSAiQQLIjMvNi
+ ZQJC4DgQ2Cat53Nk/1lDg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:4Q9jytcTBbI=:V9WLnEGijd5AFXRjIl1keG
+ LS7fjWG9wsPhe0wI/fgzjgOHCFzfBodwhzAMDJM7E4xjan04GZjT77nRFHG+fj303dgwcShRz
+ Y2k5vEdxIhCeqCYt+HtfLiEJjYFGsC4JyaNBqakVhPP1Yjh+s/a05WPUWKeTaQnxxx9REaK/+
+ eTSTNpuxxvLmHKeRUL+S6Iuly18d6bw/NxfgueUS1y66la1RB5FAMj/Goh4Rcm0ukVPnTuJI7
+ vyW1U+Z80pcJ/0IZZypw54p0BQEeh2e1PyVVUicbRrOs4jJPxaxrCbxlaLbIMnlT8lwhqNjnX
+ valVUsW20Q0XlyMC8id60gD508I3ZCUODV0Ppx4GdSBemdKwN+2El90NAA6LaMTD0X0qAY7Lz
+ snVDsh76AwO2XJm86HlG6i6T/lh3e8RKJ70x/atzB5CD4dEJ3H7posIKu2rXoeACTeh1k52U/
+ AqvOAMbgWiH6ZUiE78agCL0K85YGV0kAKCxA1Tjjq4KHoFD44MYEPVBo0qCpGpkyH8YMgSBLm
+ QjmmAqne+jw+tode5M8XHSP+dkL/QQL3X58rKStTWTjMKBPomW4mWmmBIfrorZ1VQPr4X3+kt
+ gSe8TxCeDjTQ/d/donj8RhzBVlKPxQ6/Cc/qp9aCUUmXxATlf/XSjXRap+7vAtbnWanJYVf0k
+ LwMmrFkKntD241/niPrZnKyOjX0zY6jAD+P8V0SWdSqZfnE89GVl6QSko0jWZV92dko24eyhh
+ 4NheJIF5AbZataeYRF/jBEyqxGlWQ4AsDKWusgE1KEqoOyt5PSX6/q9Q7vc1NXkGMyX7aYIio
+ rtmxGVfaf260Rm4ealCe9PwUBSqIIWoBxLebJ+VKOJEg/eFGn8=
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/5gplELS6X4wl.E=eU9iTRmV
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi Mark,
-
-On Thu, 16 Dec 2021 20:22:32 +0000 Mark Brown <broonie@kernel.org> wrote:
+On Fri, Dec 17, 2021 at 7:29 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 >
-> On Thu, Dec 16, 2021 at 07:34:12PM +0000, broonie@kernel.org wrote:
-> > Hi all,
-> >=20
-> > Today's linux-next merge of the userns tree got a conflict in:
-> >=20
-> >   fs/nfsd/nfssvc.c =20
->=20
-> This is also causing further build errors including but not limited to:
->=20
-> /tmp/next/build/kernel/fork.c: In function 'copy_process':
-> /tmp/next/build/kernel/fork.c:2106:4: error: label 'bad_fork_cleanup_thre=
-adgroup_lock' used but not defined
->  2106 |    goto bad_fork_cleanup_threadgroup_lock;
->       |    ^~~~
->=20
-> Partly due to vaccine side effects and partly in the interest of time
-> I'm going to use the userns tree from yesterday.
+> Hi all,
+>
+> Today's linux-next merge of the pinctrl tree got conflicts in:
+>
+>   drivers/pinctrl/Kconfig
+>   drivers/pinctrl/Makefile
+>
+> between commit:
+>
+>   ec648f6b7686 ("pinctrl: starfive: Add pinctrl driver for StarFive SoCs")
+>
+> from the arm-soc tree and commits:
+>
+>   12422af8194d ("pinctrl: Add Intel Thunder Bay pinctrl driver")
+>   b124c8bd50c7 ("pinctrl: Sort Kconfig and Makefile entries alphabetically")
+>
+> from the pinctrl tree.
+>
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-Caused by commit
+Thanks, looks good. There are potentially three or four new SoC families
+in the arm/newsoc branch (this is the first one I merged), so I expect to see
+a few additional conflicts like this against pinctrl/clk/irqchip, but
+they should
+all be trivial.
 
-  40966e316f86 ("kthread: Ensure struct kthread is present for all kthreads=
-")
-
-The label is guarded by CONFIG_NUMA, but the new goto is not.
-
-This is still failing, so I have used the userns tree from next-20211215
-for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/5gplELS6X4wl.E=eU9iTRmV
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmG8QI0ACgkQAVBC80lX
-0GzRzAgAi2xK5hclMCt9NJgpbrn0FYbp/4PqrB/UARw83oOiH1Lv8Z9jF5YYTl17
-1Smy9fNjlqEIu5k7WKnMomKKh0UoO0aZLWSnHfB1dKHtQt+8cZ09o7eqXSnUaXin
-L5xmdMWWwXsvCWzzNOAvw+bu3ckYaDbeTlLwgoSSBjnCAdnF+7mVtBgFxxpR1DBb
-YoCbN68wYJbOtjymJ2nqOSxFW9p23pecDAzBzPPa1WYVDLZKeJSoxffwQEUcK3ij
-04JFg1X9CBmCLPV67FiIfRyaKD7bKGGMlStAsQFoJ2thSFh3QmIWV8YHdH4Pa6QS
-td9Ps3AGpGcX9DgvQTHTlyxeK0o9WA==
-=XbHE
------END PGP SIGNATURE-----
-
---Sig_/5gplELS6X4wl.E=eU9iTRmV--
+        Arnd

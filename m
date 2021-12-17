@@ -2,139 +2,209 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC515478595
-	for <lists+linux-next@lfdr.de>; Fri, 17 Dec 2021 08:34:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86AD74785A5
+	for <lists+linux-next@lfdr.de>; Fri, 17 Dec 2021 08:39:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232167AbhLQHe3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 17 Dec 2021 02:34:29 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:36793 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233685AbhLQHe2 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 17 Dec 2021 02:34:28 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JFgjG5mM1z4xbd;
-        Fri, 17 Dec 2021 18:34:26 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1639726467;
-        bh=VpmjPo2ixktYtFXZ6Hllv/WQwWKoT4H3HFR60bbjaCY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=F7H26NAKpFBvS5HNlp5vRpzJoN20V3olba+BLoVYsJW41JogzYPxLnEclgIlNZ/Yo
-         Sofv+6kHkIsZRrNctYRYBLEzkhEw7fudtEsJApZPAteQdofSCf4EHSC7x8w71Ojf+x
-         Yhl7uTz1O5wspkSharNFpXHQcmpqfWkwsGWCorc/1dArn1CH5eDWt4hLYBUkY010fJ
-         kSUlNn4nz+cBHkzuXgyACcH/th2HhYPgS/DYDEDHIbAlVP9mmeGQU8dNBSPzUUynCv
-         y9pNlfZJ2KEMF5Fwh1h7id5qvJoLcbudV6UFx3zGQ6ebt2u4nbHgZ610Pq3UB0boIA
-         uCEAUbqrbazzQ==
-Date:   Fri, 17 Dec 2021 18:34:25 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Mike Christie <michael.christie@oracle.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the userns tree
-Message-ID: <20211217183425.5ace9d3c@canb.auug.org.au>
+        id S229533AbhLQHje (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 17 Dec 2021 02:39:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60824 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229525AbhLQHje (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 17 Dec 2021 02:39:34 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 212EEC061574
+        for <linux-next@vger.kernel.org>; Thu, 16 Dec 2021 23:39:34 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id fv9-20020a17090b0e8900b001a6a5ab1392so1928944pjb.1
+        for <linux-next@vger.kernel.org>; Thu, 16 Dec 2021 23:39:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=ig7ZjxrV34VwT/1cGdgO3QHZInKWAhnwWYfHbsaEpc8=;
+        b=w8zqlUY30LuDp4ea2ZMdPZ7Mk2QD2RJBFf6blEd4YJ7syzq4Atta0bv0oLBXjuG4Q6
+         9IS7bfjkC9kIGUj8RGVLhcaDoSwlCTjHuUWvZS71JvjSRXH5Tbvp4CAMWnTBNPZOJg6A
+         DANZPJRHJsMmD1T1dcqsU9c6+6/mIPu+cgf++guJb60E8G63SGZpv7z0P44rzUMvZSAA
+         TFdY8gHQ31lycDMb9cBJWo9VIg5hc1pxXdM4DUe9yRdlYyuKNFaw22uEYgnhIb+ZdZ/q
+         p2Nr1uxlu/hiO3WQTOUMnw14p8NaSrMQI6G0cEJ4STyTWjVQxC1EHLRpM4XLOPemMuoR
+         4aGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=ig7ZjxrV34VwT/1cGdgO3QHZInKWAhnwWYfHbsaEpc8=;
+        b=t/tXYZiFyOeGiGjI01kDGb4UxXlQ0OakTPnxqRKGyzVRwIIGmi+dCD1QIvmLabdEyG
+         vQYUpMixsENEyaWdcRPHsRMS2t6Tn9SmfWT/8TAfjK3oDZV05jxxxYJrMI4KAYLg91W5
+         bG4Hd6P5AzNnoIyhDzYnn6Mfq746YtHKp61QDNQMVfJeQTl9sAgnTqZUvO3HxnZ7Z8IB
+         TY3h/exI4Sv7TXQQtLRZ+5Q9+1XjNH5xcHqHbDKkdoeuM1VA2C7Tlx+h5Zc7q5H7Ca7y
+         rztEr+ZA1HdAWbmsDVRtTszWLgmokQdnrPFwuR+aSUVwl/yhu6pZjMEEGWlEoCICJDbf
+         jwEA==
+X-Gm-Message-State: AOAM533XtBIBrjLmvRn0aXHiLcof0mf+pSpZe9zvPGYf0tg2xtSkdQLC
+        DWCyYtmsbABc3KHJWWrefQR2vx9JqG4aZOyc
+X-Google-Smtp-Source: ABdhPJwoU7MtZ23AG+6f+JfQtOWMrBRoU8Xk3SgxY1fzWw9UwIeYCFaVrZdbBJbEqBaOgoQ9Wv+Yyg==
+X-Received: by 2002:a17:90b:3e85:: with SMTP id rj5mr10745054pjb.172.1639726773256;
+        Thu, 16 Dec 2021 23:39:33 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id y12sm7957890pfe.140.2021.12.16.23.39.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Dec 2021 23:39:32 -0800 (PST)
+Message-ID: <61bc3eb4.1c69fb81.127e3.7b9f@mx.google.com>
+Date:   Thu, 16 Dec 2021 23:39:32 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/_qJI_+Tq5vWe30eZvxCsKCP";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v5.16-rc5-257-g713f2fcb90ea
+X-Kernelci-Report-Type: test
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+Subject: next/pending-fixes baseline: 572 runs,
+ 3 regressions (v5.16-rc5-257-g713f2fcb90ea)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/_qJI_+Tq5vWe30eZvxCsKCP
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/pending-fixes baseline: 572 runs, 3 regressions (v5.16-rc5-257-g713f2f=
+cb90ea)
 
-Hi all,
+Regressions Summary
+-------------------
 
-After merging the userns tree, today's linux-next build (powerpc
-ppc64_defconfig) failed like this:
+platform                   | arch   | lab           | compiler | defconfig =
+                   | regressions
+---------------------------+--------+---------------+----------+-----------=
+-------------------+------------
+bcm2836-rpi-2-b            | arm    | lab-collabora | gcc-10   | multi_v7_d=
+efc...MB2_KERNEL=3Dy | 1          =
 
-ERROR: modpost: ".do_exit" [drivers/vhost/vhost.ko] undefined!
+meson-gxl-s905x-khadas-vim | arm64  | lab-baylibre  | gcc-10   | defconfig =
+                   | 1          =
 
-Caused by commit
+minnowboard-turbot-E3826   | x86_64 | lab-collabora | gcc-10   | x86_64_def=
+con...6-chromebook | 1          =
 
-  eb55e716ac1a ("exit: Stop exporting do_exit")
 
-interacting with commit
+  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
+v5.16-rc5-257-g713f2fcb90ea/plan/baseline/
 
-  bbf761db7dbb ("vhost: use user_worker to check RLIMITs")
+  Test:     baseline
+  Tree:     next
+  Branch:   pending-fixes
+  Describe: v5.16-rc5-257-g713f2fcb90ea
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      713f2fcb90ea0dcc5b638743af7df162cd56ca9a =
 
-from the vhost tree.
 
-I have added the following merge fix patch.
 
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Fri, 17 Dec 2021 18:24:30 +1100
-Subject: [PATCH] fix up for "vhost: use user_worker to check RLIMITs"
+Test Regressions
+---------------- =
 
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/vhost/vhost.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
-index 8cf259d798c0..b605a79533bb 100644
---- a/drivers/vhost/vhost.c
-+++ b/drivers/vhost/vhost.c
-@@ -374,7 +374,7 @@ static int vhost_worker(void *data)
- 	}
-=20
- 	complete(worker->exit_done);
--	do_exit(0);
-+	make_task_dead(0);
- }
-=20
- static void vhost_vq_free_iovecs(struct vhost_virtqueue *vq)
 
-This lead to:
+platform                   | arch   | lab           | compiler | defconfig =
+                   | regressions
+---------------------------+--------+---------------+----------+-----------=
+-------------------+------------
+bcm2836-rpi-2-b            | arm    | lab-collabora | gcc-10   | multi_v7_d=
+efc...MB2_KERNEL=3Dy | 1          =
 
-ERROR: modpost: ".make_task_dead" [drivers/vhost/vhost.ko] undefined!
 
-so I added the following as well.
+  Details:     https://kernelci.org/test/plan/id/61bc12646cc846aaf539711f
 
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Fri, 17 Dec 2021 18:30:09 +1100
-Subject: [PATCH] fix 2 for "vhost: use user_worker to check RLIMITs"
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.16-rc5-2=
+57-g713f2fcb90ea/arm/multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab=
+-collabora/baseline-bcm2836-rpi-2-b.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.16-rc5-2=
+57-g713f2fcb90ea/arm/multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab=
+-collabora/baseline-bcm2836-rpi-2-b.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20211210.0/armel/rootfs.cpio.gz =
 
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- kernel/exit.c | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/kernel/exit.c b/kernel/exit.c
-index 6c4b04531f17..dfa3e8f6ffeb 100644
---- a/kernel/exit.c
-+++ b/kernel/exit.c
-@@ -890,6 +890,7 @@ void __noreturn make_task_dead(int signr)
-=20
- 	do_exit(signr);
- }
-+EXPORT_SYMBOL_GPL(make_task_dead);
-=20
- SYSCALL_DEFINE1(exit, int, error_code)
- {
 
---=20
-Cheers,
-Stephen Rothwell
+  * baseline.login: https://kernelci.org/test/case/id/61bc12646cc846aaf5397=
+120
+        failing since 37 days (last pass: v5.15-rc7-176-gbfbd58926fc5, firs=
+t fail: v5.15-12053-g6f9f2ed9499c) =
 
---Sig_/_qJI_+Tq5vWe30eZvxCsKCP
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+ =
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmG8PYEACgkQAVBC80lX
-0GzV8ggAjLThx/i2X9VW9nMPe941yWnxXgcIXwYxyJJf7nOI5eZa3gXF09gowR1Z
-KSh5DCOuDM+baeeXxFr6vuUkF/vjPXL+y0+PeZSC0BG2p2waKWs11RPqCjp09Cou
-jONdtZJeqkb31C26XwBoO+qUcEjkvuPCpLXsCLC934EMGC2dUIJ/aa7AVNtAsPWF
-V9n00fgH5ZaYTCkQSqPqDIF2RtiW+W5+61ZD8zwBWPmmA1ydMZaI8cdd3E1KK3O/
-StqfhLHB09+ri1io7LwIG1SrB91lujyYxv7VBHGMC55LEDW6CgB8i4014dwyRDTh
-Czv61Bf0q50CeEmJBrHK4vQxeMQXpg==
-=A0fr
------END PGP SIGNATURE-----
 
---Sig_/_qJI_+Tq5vWe30eZvxCsKCP--
+platform                   | arch   | lab           | compiler | defconfig =
+                   | regressions
+---------------------------+--------+---------------+----------+-----------=
+-------------------+------------
+meson-gxl-s905x-khadas-vim | arm64  | lab-baylibre  | gcc-10   | defconfig =
+                   | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/61bc1e3bfd6762254739712e
+
+  Results:     5 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.16-rc5-2=
+57-g713f2fcb90ea/arm64/defconfig/gcc-10/lab-baylibre/baseline-meson-gxl-s90=
+5x-khadas-vim.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.16-rc5-2=
+57-g713f2fcb90ea/arm64/defconfig/gcc-10/lab-baylibre/baseline-meson-gxl-s90=
+5x-khadas-vim.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20211210.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/61bc1e3bfd67622=
+547397133
+        new failure (last pass: v5.16-rc5-221-g69b486b26c17)
+        2 lines
+
+    2021-12-17T05:20:40.551210  kern  :emerg : reboot: HARDWARE P<8>[   15.=
+619084] <LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Demerg RESULT=3Dfail UNITS=3Dli=
+nes MEASUREMENT=3D2>
+    2021-12-17T05:20:40.552551  ROTECTION shu<8>[   15.627554] <LAVA_SIGNAL=
+_ENDRUN 0_dmesg 1271922_1.5.2.4.1>
+    2021-12-17T05:20:40.553708  tdown (Temperature too high)
+    2021-12-17T05:20:40.554800  + set +x   =
+
+ =
+
+
+
+platform                   | arch   | lab           | compiler | defconfig =
+                   | regressions
+---------------------------+--------+---------------+----------+-----------=
+-------------------+------------
+minnowboard-turbot-E3826   | x86_64 | lab-collabora | gcc-10   | x86_64_def=
+con...6-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/61bc04eff73a10df5b397126
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+x86-chromebook
+  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.16-rc5-2=
+57-g713f2fcb90ea/x86_64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabor=
+a/baseline-minnowboard-turbot-E3826.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.16-rc5-2=
+57-g713f2fcb90ea/x86_64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabor=
+a/baseline-minnowboard-turbot-E3826.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20211210.0/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/61bc04eff73a10df5b397=
+127
+        new failure (last pass: v5.16-rc5-221-g69b486b26c17) =
+
+ =20

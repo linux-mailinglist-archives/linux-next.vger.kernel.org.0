@@ -2,138 +2,141 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C34C478544
-	for <lists+linux-next@lfdr.de>; Fri, 17 Dec 2021 07:49:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA6D9478577
+	for <lists+linux-next@lfdr.de>; Fri, 17 Dec 2021 08:13:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232217AbhLQGtA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 17 Dec 2021 01:49:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49760 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbhLQGs7 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 17 Dec 2021 01:48:59 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F95DC061574;
-        Thu, 16 Dec 2021 22:48:59 -0800 (PST)
+        id S231649AbhLQHN3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 17 Dec 2021 02:13:29 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:56395 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229503AbhLQHN2 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 17 Dec 2021 02:13:28 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JFfhk0KS4z4xd4;
-        Fri, 17 Dec 2021 17:48:54 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JFgF24gG1z4xbd;
+        Fri, 17 Dec 2021 18:13:26 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1639723734;
-        bh=gFk5/QqDd8VJz6rqZGtf1IKla5sQ6pkJ8hS21Pz6AtI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=u1ynZpLs725npANjqRPRAuAJ4CNjvdLUQ98cQcXUzD3URaknbzZe28S2f1YLwG4XW
-         b9mT/5qY5AwZIbFjauJ/ItJJ4R8xTlPgjtmPO+AbvjCRFHH2apVH8jB2wFEU67TslG
-         x/K4B5Hm2u7rRSTfLnlBzyZftnLFrGzMsKcMMnpyODgcC802u+/OhxiWNyYLSLG+qM
-         a6JCCaLqe6wDeWDQK7uX7li7UcCvV+BChg8NimR5fQBTbc1JHyKR7EkMxPAxx7GGcb
-         8AtcyjOw1HvuTRMEmbuiCiodz66bPoTIpOwSurrt00hqi9YvWaDD8R33a3+BwU9Gdk
-         HDSxRO1xFIJkQ==
-Date:   Fri, 17 Dec 2021 17:48:53 +1100
+        s=201702; t=1639725207;
+        bh=hlI7VFVsUClAsaeRSpccCujbxp8wSxxA2+7VkBPB/vg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=q8nthaHZiHADFWPZYCj3NhOkJL/Gg0Sp/v+dJhE2eEWyyA4zx7rBf0+4752VdY/L8
+         a9/+8F12kLrHJwaxzy8zFnUpTe92ZE2J4EDfys/CfYkKabIPDNS2sMsRMjo7Bdzuzw
+         SldHnlhnpQdN4et9Lgz2I69xfUKpwCBXAUTx7TE4vHT8KbZTteaKL+z/IKHnSYGx2A
+         FlJxF1ZK+BoBDrOVCflz3To6fMfvEdL1Wk9dmp7t3sPgiOTKmWOEHewhmTtbePBEt8
+         qUMp4G8BoXL0qKADffra4P9f9AR0Pm0SbfMlPr4Rd6dok3nQDwz/q8e9dldqslgNa1
+         OY3/5MUhnkLag==
+Date:   Fri, 17 Dec 2021 18:13:25 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Eric W . Biederman" <ebiederm@xmission.com>,
+To:     "Eric W. Biederman" <ebiederm@xmission.com>,
         Chuck Lever <chuck.lever@oracle.com>
-Cc:     broonie@kernel.org,
+Cc:     NeilBrown <neilb@suse.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        NeilBrown <neilb@suse.de>
-Subject: Re: linux-next: manual merge of the userns tree with the cel tree
-Message-ID: <20211217174853.752c032f@canb.auug.org.au>
-In-Reply-To: <20211216193412.2441434-1-broonie@kernel.org>
-References: <20211216193412.2441434-1-broonie@kernel.org>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the userns tree
+Message-ID: <20211217181325.4fa394c4@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/XPcCR3XZL5Mlb4khvQ+9MYm";
+Content-Type: multipart/signed; boundary="Sig_/JahM5cWo0Z7/_iCBehLHqZW";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/XPcCR3XZL5Mlb4khvQ+9MYm
+--Sig_/JahM5cWo0Z7/_iCBehLHqZW
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Thu, 16 Dec 2021 19:34:12 +0000 broonie@kernel.org wrote:
->
-> Today's linux-next merge of the userns tree got a conflict in:
->=20
->   fs/nfsd/nfssvc.c
->=20
-> between commit:
->=20
->   cfb05a7336741 ("NFSD: narrow nfsd_mutex protection in nfsd thread")
+After merging the userns tree, today's linux-next build (powerpc
+ppc64_defconfig) failed like this:
 
-This is now commit 9d3792aefdcd
+fs/lockd/svc.c: In function 'lockd':
+fs/lockd/svc.c:188:2: error: implicit declaration of function 'module_put_a=
+nd_exit'; did you mean 'module_put_and_kthread_exit'? [-Werror=3Dimplicit-f=
+unction-declaration]
+  188 |  module_put_and_exit(0);
+      |  ^~~~~~~~~~~~~~~~~~~
+      |  module_put_and_kthread_exit
+fs/lockd/svc.c:189:1: error: no return statement in function returning non-=
+void [-Werror=3Dreturn-type]
+  189 | }
+      | ^
 
-> from the cel tree and commit:
->=20
->   ca3574bd653ab ("exit: Rename module_put_and_exit to module_put_and_kthr=
-ead_exit")
->=20
-> from the userns tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->=20
-> diff --cc fs/nfsd/nfssvc.c
-> index 14c1ef6f8cc74,5ce9f14318c4e..0000000000000
-> --- a/fs/nfsd/nfssvc.c
-> +++ b/fs/nfsd/nfssvc.c
-> @@@ -977,25 -982,11 +977,25 @@@ out
->   	/* Release the thread */
->   	svc_exit_thread(rqstp);
->  =20
->  -	nfsd_destroy(net);
->  +	/* We need to drop a ref, but may not drop the last reference
->  +	 * without holding nfsd_mutex, and we cannot wait for nfsd_mutex as th=
-at
->  +	 * could deadlock with nfsd_shutdown_threads() waiting for us.
->  +	 * So three options are:
->  +	 * - drop a non-final reference,
->  +	 * - get the mutex without waiting
->  +	 * - sleep briefly andd try the above again
->  +	 */
->  +	while (!svc_put_not_last(nn->nfsd_serv)) {
->  +		if (mutex_trylock(&nfsd_mutex)) {
->  +			nfsd_put(net);
->  +			mutex_unlock(&nfsd_mutex);
->  +			break;
->  +		}
->  +		msleep(20);
->  +	}
->  =20
->   	/* Release module */
-> - 	module_put_and_exit(0);
->  -	mutex_unlock(&nfsd_mutex);
-> + 	module_put_and_kthread_exit(0);
->   	return 0;
->   }
->  =20
+Caused by commit
+
+  ca3574bd653a ("exit: Rename module_put_and_exit to module_put_and_kthread=
+_exit")
+
+interacting with commit
+
+  6b044fbaab02 ("lockd: use svc_set_num_threads() for thread start and stop=
+")
+
+from the cel tree.
+
+I have applied the following merge fix patch.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Fri, 17 Dec 2021 18:10:42 +1100
+Subject: [PATCH] fix up for "lockd: use svc_set_num_threads() for thread st=
+art
+ and stop"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ fs/lockd/svc.c             | 2 +-
+ include/linux/sunrpc/svc.h | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/fs/lockd/svc.c b/fs/lockd/svc.c
+index 4defefd89cbf..0475c5a5d061 100644
+--- a/fs/lockd/svc.c
++++ b/fs/lockd/svc.c
+@@ -185,7 +185,7 @@ lockd(void *vrqstp)
+=20
+ 	svc_exit_thread(rqstp);
+=20
+-	module_put_and_exit(0);
++	module_put_and_kthread_exit(0);
+ }
+=20
+ static int create_lockd_listener(struct svc_serv *serv, const char *name,
+diff --git a/include/linux/sunrpc/svc.h b/include/linux/sunrpc/svc.h
+index cf175d47c6b7..f35c22b3355f 100644
+--- a/include/linux/sunrpc/svc.h
++++ b/include/linux/sunrpc/svc.h
+@@ -65,7 +65,7 @@ struct svc_serv_ops {
+ 	void		(*svo_enqueue_xprt)(struct svc_xprt *);
+=20
+ 	/* optional module to count when adding threads.
+-	 * Thread function must call module_put_and_exit() to exit.
++	 * Thread function must call module_put_and_kthread_exit() to exit.
+ 	 */
+ 	struct module	*svo_module;
+ };
+--=20
+2.33.0
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/XPcCR3XZL5Mlb4khvQ+9MYm
+--Sig_/JahM5cWo0Z7/_iCBehLHqZW
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmG8MtUACgkQAVBC80lX
-0Gxfcgf/fByZMYKohnucUb30kNvtm100Zygyt0qTkGEEnnvKu1VgcTZe3UnZcGmQ
-zGVJUIi9zxPnZLX1b30hVZSW2UNwwZbBYfiv/LpXdTjvU5AWLr2tnpl1Gdan+wo3
-mWn5nRh90g3CD3xltkXNVCfEYBQDdwCRtgRA3SMl/L+BA6wx7fVVCEfYuBIp0O+T
-Aex9mb9dDZ4hraQk008k1/4LxL3ms99FMPnSsempg6Im3/3XHtCgJctFacTrlXw6
-RokpfoAsjygE2dmKKnnE8q8q2c2qv2d1u461ZneYFRc9abpiXgjwdk16O8g8Lklh
-00LKa+YuZPGb1mTsr/IDsfi0mM4QkQ==
-=PvYi
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmG8OJUACgkQAVBC80lX
+0GxrNwf/QBMkxsDRXDYDAmqvCM0oNWt88mUlkXs/Q07nNMpzkQUlpf/NdAinyWp/
+aFXXQgGG6XqHbxgtgzxB7d16aafjW5yliaKARR3mB6oX6POoWkBwu8NAVtTe1nqL
+0oxYko9gy8SxNYOlIJZuUhc9hOAnAMMyTEBkXVaYVm0iQ4XVJMg47BCiMpMkjB1F
+2lEk1VbEyuV2AZpM2XUcdasxHYW0bDnD7bpiJOAtMnHLA5qZ3pEBWFXn0jdRG+np
+Zaok3CWuaLJep0sK7zMs/ALJXTUOnoGcqTex5xkELO8vdCS5T88FyC48q7lEn7dp
+jufcQd15KiEXjsPdoPs8jHKlPqBdrA==
+=3IPH
 -----END PGP SIGNATURE-----
 
---Sig_/XPcCR3XZL5Mlb4khvQ+9MYm--
+--Sig_/JahM5cWo0Z7/_iCBehLHqZW--

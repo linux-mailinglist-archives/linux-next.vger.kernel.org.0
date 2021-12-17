@@ -2,100 +2,145 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D1AF4786D1
-	for <lists+linux-next@lfdr.de>; Fri, 17 Dec 2021 10:14:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C6B5478966
+	for <lists+linux-next@lfdr.de>; Fri, 17 Dec 2021 12:03:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234057AbhLQJOS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 17 Dec 2021 04:14:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53770 "EHLO
+        id S235215AbhLQLDf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 17 Dec 2021 06:03:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234038AbhLQJOS (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 17 Dec 2021 04:14:18 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E88ABC061574
-        for <linux-next@vger.kernel.org>; Fri, 17 Dec 2021 01:14:17 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id j21so906618edt.9
-        for <linux-next@vger.kernel.org>; Fri, 17 Dec 2021 01:14:17 -0800 (PST)
+        with ESMTP id S232148AbhLQLDe (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 17 Dec 2021 06:03:34 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E971C061574;
+        Fri, 17 Dec 2021 03:03:34 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id x15so6427476edv.1;
+        Fri, 17 Dec 2021 03:03:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=afvs9cxV6+DN35MZPZLfbWczO4mSQLSDs5fWaqi7DIg=;
-        b=secagDGADp/iY9V9ymqJ1imVzITkqRHFtVok/Y0hnWA2RupY3QFkcaURVyWWTv+rlw
-         IXoeoX3VRdQhXUWa3B24rN4trPU/jtyb2bt4EKxA/HraDA1Log9FUdI+J43CsaBcHD/S
-         pZOC5zHjN6gFfQSvJrQnjPYJawCEnDkGzHE83TS6pwvvRk6Jqnl1gyntgbmXrOQYWATZ
-         7do6hi16jWqnbOFmp/8BNueOltjMGdj4mA3WvV3Dn2xUeIk8OrTiXKWrMUyhNQR9AJV+
-         B5sSm0y7a7ysEKXkRZnF8yfgHj1pLmmG3xxWcWRLoIJINOY+sNsFgawUKNHQc4i46xSN
-         WmLg==
+        bh=qDoMAsyrmIhOeAjKc2RWkPHbxFIM7lBCTp7TztuEVSM=;
+        b=MDJ84xLUZGssdONWgL/SN10UAeKqN7bBEFx3ruzn6B3byC9hOFP3xuCpwvyrpt6IVz
+         zOiZiqDwApqetBUdv9a1ylXlirPcfUoaHkKrPvwJU2nLvOYsrwbiIH8SWJU50y3wwMMp
+         GDCsT7FHr+13NdQwA9l5damw0NDi7MSGrIjokzpoPeq+gXA3sWxksnXHsiCM3AsCsLpd
+         fUTEPj/ziYMrTtabvtfjG9PKcJvSsn42R5lS89FUCW8laTMjuhrh9rlWIVCPTAVOX1fg
+         0B52X1ha9xjYwlZQqxLd4/QNzhZfsU8p3ShTib7FzAfj/6upE63bCyOdD+NmLLBbCNYm
+         yBTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=afvs9cxV6+DN35MZPZLfbWczO4mSQLSDs5fWaqi7DIg=;
-        b=T2ZNrdjxlCARF04jaKZWmZoW8Gt8e/htmWx2jKdOBAr4xoekbNPBVn16eVRcEYRevU
-         ZovJ2rD704rhGGObZC2NDrmZYRg/WkUGWBBs4Cqwxq2OSGBqW9LVq3Y8KmIVFzl84dud
-         ozUjPQTB6HvRjFMikgNjMT1t/91+JBHu7dtmZMAHa7PFZjLg4PElIEGqgkKVSdY64nJz
-         PhqKgl5ApFFFjzsI8CTh1liouKCJ2HSyblI1N8oIrwy+8AAH/cLpJi0OjZTtTp6W1V4+
-         4Mp6hLqPnDLbkhNzjMHmG0V8x4/WMstRoX64mUj06LOAZcH1PC1lJuAkGJlSJBU0zbX6
-         iRvw==
-X-Gm-Message-State: AOAM530qQSJf5xvghFBLjjx71t5y1Y3oIQxIgI67uT+qlSeOU14zS4S+
-        FYz+KT1C8fef5dRk3Au2W+0tNXmwyUTjguziouVmsRHfrno=
-X-Google-Smtp-Source: ABdhPJzq2gKt6q7R8eSGpv1PxnR3USp3Kk2xUKw1bXXskDXAuoWKtQzCTrsiUSJQgQnyxzBgu686gNH5extokDDr6AQ=
-X-Received: by 2002:a17:906:2ac4:: with SMTP id m4mr1847936eje.734.1639732456488;
- Fri, 17 Dec 2021 01:14:16 -0800 (PST)
+        bh=qDoMAsyrmIhOeAjKc2RWkPHbxFIM7lBCTp7TztuEVSM=;
+        b=ctuIVxDMMFNh2SHLOh2Z9bRymA310BCbzaMAuHJnEGc1jwYk/TV2ZiHzNAMdVKEDzW
+         awlsCBYRvK6zK0pWqX/1pnpU4ZNBvACFVYfhADH/HSwN+nB2O4fVdhSI3t+4m8SuZrpk
+         8sO9Zrnj5YjYFaAJGl1zILzdMjkw8pMQbKqdAJLMc0vHslcrxcNexHEt9K10EJ1BfHhA
+         4vrRSqWzJlmr/6v6fIVyO0n75SChdPj6bGNt7zVbDSzHczH3O3RNC/58M3hhUXsgoPEd
+         7LUDQogcPZ7a5wWjPfAmb7GgqwEUTudGFLkvUEq+aC9ZwRdscmtzEwHfcCPE5Cx0Ay6F
+         o71g==
+X-Gm-Message-State: AOAM530RZOX2WT7EMQi5jFYCCmiARUmfKOr/TjKx91FCufLfA9+Uytue
+        6i/5QyjY1a7hbp5gb3igtvQ335xQu4UpG64oKSg=
+X-Google-Smtp-Source: ABdhPJyAJvENyGKzfsDhCwjGvbjVkd+Q0jA2QYceLQE6nq1Jktig1JBhZE+VrImWjWMGjOoN5o5JjCf3Ip+ALI540JU=
+X-Received: by 2002:a17:907:76d4:: with SMTP id kf20mr2141413ejc.44.1639739013073;
+ Fri, 17 Dec 2021 03:03:33 -0800 (PST)
 MIME-Version: 1.0
-References: <20211213203112.969238-1-broonie@kernel.org> <b7f4804a-01dd-9dd9-01f1-2187a955cb13@gmail.com>
- <20211217171709.622cbb1d@canb.auug.org.au>
-In-Reply-To: <20211217171709.622cbb1d@canb.auug.org.au>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Fri, 17 Dec 2021 10:14:05 +0100
-Message-ID: <CAMRc=McDv+dF+=5O16TRtPyph0yRNjPNybQ16Jtzkuew9GibvQ@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the gpio-brgl tree
+References: <20211217172931.01c24d4b@canb.auug.org.au>
+In-Reply-To: <20211217172931.01c24d4b@canb.auug.org.au>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 17 Dec 2021 13:02:05 +0200
+Message-ID: <CAHp75Vd9O=A9_N=KLDV2mJ2haFybNqnSL2AdByf4Pc6zjjD94w@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the pinctrl tree with the arm-soc tree
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Xiang wangx <wangxiang@cdjrlc.com>,
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Huan Feng <huan.feng@starfivetech.com>,
+        Kiran Kumar S <kiran.kumar1.s@intel.com>,
+        Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 7:17 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+On Fri, Dec 17, 2021 at 12:29 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 >
 > Hi all,
 >
-> On Mon, 13 Dec 2021 19:12:05 -0800 Florian Fainelli <f.fainelli@gmail.com> wrote:
-> >
-> > On 12/13/2021 12:31 PM, broonie@kernel.org wrote:
-> > > Hi all,
-> > >
-> > > After merging the gpio-brgl tree, today's linux-next build (x86_64
-> > > allmodconfig) failed like this:
-> > >
-> > > /tmp/next/build/drivers/gpio/gpio-bcm-kona.c:508:34: error: duplicate 'const' declaration specifier [-Werror=duplicate-decl-specifier]
-> > >    508 | static const struct of_device_id const bcm_kona_gpio_of_match[] = {
-> > >        |                                  ^~~~~
-> > > cc1: all warnings being treated as errors
-> > >
-> > > Caused by commit
-> > >
-> > >    19784a059cf47b ("gpio: bcm-kona: add const to of_device_id")
-> > >
-> > > I used the tree from yesterday instead.
-> >
-> > Doh! Should have double checked the code as the diff was not giving
-> > enough context. This patch should simply be dropped, not even build
-> > tested by Xiang it seems.
+> Today's linux-next merge of the pinctrl tree got conflicts in:
 >
-> Today, I have reverted that commit.  Please remove or revert it ASAP.
+>   drivers/pinctrl/Kconfig
+>   drivers/pinctrl/Makefile
 >
-> --
-> Cheers,
-> Stephen Rothwell
+> between commit:
+>
+>   ec648f6b7686 ("pinctrl: starfive: Add pinctrl driver for StarFive SoCs")
+>
+> from the arm-soc tree and commits:
+>
+>   12422af8194d ("pinctrl: Add Intel Thunder Bay pinctrl driver")
+>   b124c8bd50c7 ("pinctrl: Sort Kconfig and Makefile entries alphabetically")
+>
+> from the pinctrl tree.
+>
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-Done, sorry for the delay.
+Thanks!
+To me it seems like a correct fix.
 
-Bartosz
+> diff --cc drivers/pinctrl/Kconfig
+> index 0d5b61e4c21e,c27c9ee89f0e..000000000000
+> --- a/drivers/pinctrl/Kconfig
+> +++ b/drivers/pinctrl/Kconfig
+> diff --cc drivers/pinctrl/Makefile
+> index f5bdd6b209a6,6be6c3fc6663..000000000000
+> --- a/drivers/pinctrl/Makefile
+> +++ b/drivers/pinctrl/Makefile
+> @@@ -30,26 -39,16 +39,17 @@@ obj-$(CONFIG_PINCTRL_OXNAS)        += pinctrl-
+>   obj-$(CONFIG_PINCTRL_PALMAS)  += pinctrl-palmas.o
+>   obj-$(CONFIG_PINCTRL_PIC32)   += pinctrl-pic32.o
+>   obj-$(CONFIG_PINCTRL_PISTACHIO)       += pinctrl-pistachio.o
+> + obj-$(CONFIG_PINCTRL_RK805)   += pinctrl-rk805.o
+>   obj-$(CONFIG_PINCTRL_ROCKCHIP)        += pinctrl-rockchip.o
+>   obj-$(CONFIG_PINCTRL_SINGLE)  += pinctrl-single.o
+> - obj-$(CONFIG_PINCTRL_SX150X)  += pinctrl-sx150x.o
+> - obj-$(CONFIG_ARCH_TEGRA)      += tegra/
+> - obj-$(CONFIG_PINCTRL_XWAY)    += pinctrl-xway.o
+> - obj-$(CONFIG_PINCTRL_LANTIQ)  += pinctrl-lantiq.o
+> - obj-$(CONFIG_PINCTRL_LPC18XX) += pinctrl-lpc18xx.o
+> - obj-$(CONFIG_PINCTRL_TB10X)   += pinctrl-tb10x.o
+> + obj-$(CONFIG_PINCTRL_STMFX)   += pinctrl-stmfx.o
+>   obj-$(CONFIG_PINCTRL_ST)      += pinctrl-st.o
+>  +obj-$(CONFIG_PINCTRL_STARFIVE)        += pinctrl-starfive.o
+> - obj-$(CONFIG_PINCTRL_STMFX)   += pinctrl-stmfx.o
+> - obj-$(CONFIG_PINCTRL_ZYNQ)    += pinctrl-zynq.o
+> + obj-$(CONFIG_PINCTRL_SX150X)  += pinctrl-sx150x.o
+> + obj-$(CONFIG_PINCTRL_TB10X)   += pinctrl-tb10x.o
+> + obj-$(CONFIG_PINCTRL_THUNDERBAY) += pinctrl-thunderbay.o
+>   obj-$(CONFIG_PINCTRL_ZYNQMP)  += pinctrl-zynqmp.o
+> - obj-$(CONFIG_PINCTRL_INGENIC) += pinctrl-ingenic.o
+> - obj-$(CONFIG_PINCTRL_RK805)   += pinctrl-rk805.o
+> - obj-$(CONFIG_PINCTRL_OCELOT)  += pinctrl-ocelot.o
+> - obj-$(CONFIG_PINCTRL_MICROCHIP_SGPIO) += pinctrl-microchip-sgpio.o
+> - obj-$(CONFIG_PINCTRL_EQUILIBRIUM)   += pinctrl-equilibrium.o
+> - obj-$(CONFIG_PINCTRL_K210)    += pinctrl-k210.o
+> - obj-$(CONFIG_PINCTRL_KEEMBAY) += pinctrl-keembay.o
+> + obj-$(CONFIG_PINCTRL_ZYNQ)    += pinctrl-zynq.o
+>
+>   obj-y                         += actions/
+>   obj-$(CONFIG_ARCH_ASPEED)     += aspeed/
+
+
+
+-- 
+With Best Regards,
+Andy Shevchenko

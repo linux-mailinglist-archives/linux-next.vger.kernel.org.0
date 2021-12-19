@@ -2,88 +2,82 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81B1947A231
-	for <lists+linux-next@lfdr.de>; Sun, 19 Dec 2021 22:09:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B526F47A23A
+	for <lists+linux-next@lfdr.de>; Sun, 19 Dec 2021 22:14:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234666AbhLSVJv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 19 Dec 2021 16:09:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52968 "EHLO
+        id S233495AbhLSVOc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 19 Dec 2021 16:14:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233494AbhLSVJu (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 19 Dec 2021 16:09:50 -0500
+        with ESMTP id S233500AbhLSVOc (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 19 Dec 2021 16:14:32 -0500
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CADDC061574;
-        Sun, 19 Dec 2021 13:09:50 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB344C061574;
+        Sun, 19 Dec 2021 13:14:31 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JHFj52HGfz4xdH;
-        Mon, 20 Dec 2021 08:09:43 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JHFpY4szPz4xQs;
+        Mon, 20 Dec 2021 08:14:28 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1639948185;
-        bh=FssGIj1LwRP3+G663Zfjwz+rySdBA0uHSttyY5d25vI=;
+        s=201702; t=1639948470;
+        bh=r8KMglx+mt9pY6AphFbd2XBqKx9sh635jVDAqyMQi18=;
         h=Date:From:To:Cc:Subject:From;
-        b=di3BI0qbqNscDngHI8m1/iTUVcLqAo48YPM6b2RU/Pgk2/ZRUyYeosywH7CoAKiMe
-         /bp/sSJxdDJcxT98lQmgOsWusERHqE0CZSOQfUEgHYnpSFLrPrOLtS48M3RPkoL/2G
-         Mv0MIMD5tdrIKkIQf5QiqsZ4EoT9quje7xJ6Ea54WCo3QluG2hIe5bsneWmMDHHyNF
-         6V5lhjxkjNCBr5bWwsM+Jz60zXl2Jq985EBGj7Okc2Sftc0zVVhJuYiUYq479lnm8n
-         tUlXnHni8vCXdu+JYdSlrotC8il6R9x8p3htZLolhdFzqoO/qujPWb+nifCY9wMvSL
-         y4TO2arBekSOQ==
-Date:   Mon, 20 Dec 2021 08:09:42 +1100
+        b=EMHqLRHnNq0PGOKmw/m3buIKEGr/9yeYPL6GfHCzJ/H3HiK+np0AjkwFwjILry5vf
+         QXdPaJ0HydAJUht4PUkr/KFvs8RuOdCMn+WA/q3ESnr4oQNImchNJk+uLxBLGL3DvF
+         ZSwCXSB3VieuIBPoEZiEVPa3I7X7EyRVjQQuanKvetk3FLdZ4Kg2lZVV4o4myuQcA+
+         yfdnMNMXkzbi1o8w9wjDhVtZRiCOf8F4qZA/1VLTKlJNTR/lylPOjD0jFHS4uYFJF9
+         w6/yMAdsRcBuom90pSMnjyHnlQpK3+uNJRbnc5tAhDk932Rft4nFwDMrWHdjan/X9y
+         E+870iRafsoDQ==
+Date:   Mon, 20 Dec 2021 08:14:28 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Anna Schumaker <Anna.Schumaker@Netapp.com>,
-        Trond Myklebust <trondmy@gmail.com>,
-        NFS Mailing List <linux-nfs@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Borislav Petkov <bp@suse.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commits in the nfs-anna tree
-Message-ID: <20211220080942.3419e1b0@canb.auug.org.au>
+Subject: linux-next: Signed-off-by missing for commit in the tip tree
+Message-ID: <20211220081428.7184c271@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/apw/DhuIpO69.FCc/8b_al2";
+Content-Type: multipart/signed; boundary="Sig_/lfxBHGztvBGhz0fduGzys_Z";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/apw/DhuIpO69.FCc/8b_al2
+--Sig_/lfxBHGztvBGhz0fduGzys_Z
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Commits
+Commit
 
-  9db96eaaf44a ("vdpa: Consider device id larger than 31")
-  7cb22b50d812 ("virtio/vsock: fix the transport to work with VMADDR_CID_AN=
-Y")
-  d0d9066f1daa ("virtio_ring: Fix querying of maximum DMA mapping size for =
-virtio device")
-  856f8e666474 ("virtio: always enter drivers/virtio/")
-  6b7982ff16ae ("vduse: check that offset is within bounds in get_config()")
-  ba5a66b197f9 ("vdpa: check that offsets are within bounds")
-  085c1e990ab6 ("vduse: fix memory corruption in vduse_dev_ioctl()")
+  aa1701e20a84 ("x86/pkey: Fix undefined behaviour with PKRU_WD_BIT")
 
-are missing a Signed-off-by from their committer.
+is missing a Signed-off-by from its committer.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/apw/DhuIpO69.FCc/8b_al2
+--Sig_/lfxBHGztvBGhz0fduGzys_Z
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmG/n5YACgkQAVBC80lX
-0GxNJgf/c9QQtdTtoiU/waMAxcuYOUJ3amaxGAfKDKUuu83ZHlQyK0lfjCBcwYlP
-WOEz7e+lfh3orfl2l2KSztvWe2WhjKNrosQ4+euIUb1GJb4DKA1pXdtAEdNi3QWY
-MGsPbFW/Iebvf2YiYe/Cq7TAWR5AWm3UHPW4HdEs8m2ZRsPJDWao5jjfbPYlm/Jg
-Iue2+cUBUTuZ+K2a/leLOYmCEGgTmATDGpZyPK3cJVdQ+ibu+rAVQ8HcjW9XLa22
-lNRnuFarL40hLVR34D3ZzV6Nsl3hzlzk6ofOMr7kfSYxUa4nL3R2tBLYzOyyhTKd
-M/iaqBRPltxkxofWnQsaFDlbtN0uSA==
-=sRbo
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmG/oLQACgkQAVBC80lX
+0Gx1ogf9EfdO11z5AdU6IYQADwcM0Cs0+xNQPVu2AcQJ+HVHA4ZGGxeEa1YYAbro
+GCMbva9yEm9F5jAv0fB8VMDaBroknNkNMsED5B6bkzbSyCsxFuJBKuurxgVEtSu8
+9vuLVJZqrWK8hqc5fJ9dGzFFamKEmG6nFd9TLGD/rHhiGmUSYJi3Bez7V5GGA2ct
+5tqZ5pgYa8MkD4jKF85whbSMpIn7S2fRXSxmAlZJxO0hqXaH5JhgS4ereboO5Tbb
+IlzI31jRmcWh29GQ9EmIoIKwAXGSKRoRsc5S4sEyrvR8YBc1kQcGSdU4FC1+GI4Z
+pSLqSsW9g52E/0TtFkZWn7vX2meqYw==
+=zg2u
 -----END PGP SIGNATURE-----
 
---Sig_/apw/DhuIpO69.FCc/8b_al2--
+--Sig_/lfxBHGztvBGhz0fduGzys_Z--

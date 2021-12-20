@@ -2,198 +2,83 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C161947B10B
-	for <lists+linux-next@lfdr.de>; Mon, 20 Dec 2021 17:24:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 962BF47B262
+	for <lists+linux-next@lfdr.de>; Mon, 20 Dec 2021 18:54:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236342AbhLTQYD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 20 Dec 2021 11:24:03 -0500
-Received: from a8-35.smtp-out.amazonses.com ([54.240.8.35]:44271 "EHLO
-        a8-35.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232694AbhLTQYD (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Mon, 20 Dec 2021 11:24:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1640017442;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=EAWe71h8BQAmwPYFMYpGw/kfEf/sOFVhRtCqo2zdCEY=;
-        b=m9UTDw0zMkyNFPEeFwHpZd6RKzuV3DrYDrqp48LvLWvaHNb/7ZnwlRVsXWbdOPJx
-        mExa9+U2oJhB0qyMsbJw9vYt76KS4YfIHz5pRaKQRS+H9VP5F7Jbj4IRSYkdtJoLYDy
-        ve5Dz1O61DExG9qF68sqUa/mpAmHhw/t/RL5u1MY=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1640017442;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=EAWe71h8BQAmwPYFMYpGw/kfEf/sOFVhRtCqo2zdCEY=;
-        b=OHSoTmgdAsutlAgP46XX5XP3gDwWFuylrSEZP81VUtDY40FySfnrmET3znMEyq5F
-        tZp6IFWmEfCKGusP5UyPyI60D3GAEahkYVx1rBLmjJw5vUripfHE2oRscSChPA67lHv
-        9jGPhcg2ZBZWI0aImu+oZXpeiEIQB9nRzAbc9p44=
-From:   lkft@linaro.org
-To:     lkft@linaro.org
-Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
-        linux-next@vger.kernel.org, shuah@kernel.org
-Subject: [REGRESSION] lkft kselftest for v5.16-rc4-6579-gea922272cbe5
+        id S240295AbhLTRyA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 20 Dec 2021 12:54:00 -0500
+Received: from mail-wm1-f43.google.com ([209.85.128.43]:38417 "EHLO
+        mail-wm1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240286AbhLTRyA (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 20 Dec 2021 12:54:00 -0500
+Received: by mail-wm1-f43.google.com with SMTP id 85-20020a1c0058000000b00345afe7e3c0so65558wma.3;
+        Mon, 20 Dec 2021 09:53:59 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=DKriEzh7Elx5Lb6bhAsX9FpEkdQAr11Q3q/0fePZh5Y=;
+        b=tJ/H+gGfi09mKQwzVO2Maoj73E2T2FeCmn7XQV/x2QM7DEGaDJD+/FhiXq+UqvcNTS
+         /hU0pd+7R5SC2wj9FP+FJfBiEdgol8k7iRu4TLPWvqJrl12VJM9XRJSpcGoNksVHH7/P
+         WVaCtyRn4/43wg0nRoBeigtSeL6Ev3SNBrBh5foE1+a4NzQG03871FIHNvD298TvZofd
+         I1U5hPqhHLwttC4HdQS8C4LDbkYPAW7nq5MeYIBOEGrJYKIO9+vv9B0Tz2nV502ZNyfO
+         5qGBy5BohE5t6D7NGVHpgC58pXr6wVSMcairXMGpwgZJ5fpMh6a9pxpVZ/8BxishqVhp
+         Vvjw==
+X-Gm-Message-State: AOAM530ItPjMszVYMSdzJq5HZTBe4QIUHSGComyccdFZok5//A47Vmk9
+        3NShD1B1ijD97ECCPYj4tG0=
+X-Google-Smtp-Source: ABdhPJzOsPyR4Sb8GC+RVCDt5KiGwvXOYrBIBmxLvLXlhA/HVLtYdo5Xqp1NgECyZ3RGAJWPE8Ui7A==
+X-Received: by 2002:a05:600c:600c:: with SMTP id az12mr81206wmb.86.1640022838674;
+        Mon, 20 Dec 2021 09:53:58 -0800 (PST)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id bd19sm35117wmb.23.2021.12.20.09.53.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Dec 2021 09:53:58 -0800 (PST)
+Date:   Mon, 20 Dec 2021 17:53:56 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Wei Liu <wei.liu@kernel.org>, David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>
+Subject: Re: linux-next: manual merge of the hyperv tree with the net-next
+ tree
+Message-ID: <20211220175356.ozllm6jqid5zv7oe@liuwe-devbox-debian-v2>
+References: <20211220185139.034d8e15@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-Message-ID: <0100017dd8a8347c-a79028c5-7bb0-4549-acc3-7c36ac72a873-000000@email.amazonses.com>
-Date:   Mon, 20 Dec 2021 16:24:02 +0000
-Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2021.12.20-54.240.8.35
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211220185139.034d8e15@canb.auug.org.au>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-## Build
-* kernel: 5.16.0-rc4
-* git: ['https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git', 'https://gitlab.com/Linaro/lkft/mirrors/next/linux-next']
-* git branch: master
-* git commit: ea922272cbe547bdf58da2aaf240d59782c6a009
-* git describe: v5.16-rc4-6579-gea922272cbe5
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/v5.16-rc4-6579-gea922272cbe5
+On Mon, Dec 20, 2021 at 06:51:39PM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the hyperv tree got a conflict in:
+> 
+>   drivers/net/hyperv/netvsc.c
+> 
+> between commit:
+> 
+>   e9268a943998 ("hv_netvsc: Use bitmap_zalloc() when applicable")
+> 
+> from the net-next tree and commit:
+> 
+>   63cd06c67a2f ("net: netvsc: Add Isolation VM support for netvsc driver")
+> 
+> from the hyperv tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+> 
 
-## Test Regressions (compared to next-20211117)
-* dragonboard-410c, kselftest-capabilities
-  - capabilities.test_execve
+The fix looks correct to me. Thanks.
 
-* dragonboard-410c, kselftest-proc
-  - proc.proc-fsconfig-hidepid
-
-* hi6220-hikey, kselftest-timers
-  - timers.rtcpie
-  - timers.set-timer-lat
-
-* qemu_arm, kselftest-zram
-  - zram.zram.sh
-
-* x15, kselftest-capabilities
-  - capabilities.test_execve
-
-* x15, kselftest-cgroup
-  - cgroup.test_freezer
-  - cgroup.test_kill
-  - cgroup.test_kill.test_cgkill_simple
-
-* x15, kselftest-rtc
-  - rtc.rtctest.rtc.alarm_alm_set
-  - rtc.rtctest.rtc.alarm_alm_set_minute
-  - rtc.rtctest.rtc.alarm_wkalm_set
-  - rtc.rtctest.rtc.date_read
-
-* x86, kselftest-kvm
-  - kvm.vmx_pmu_msrs_test
-
-
-## Metric Regressions (compared to next-20211117)
-No metric regressions found.
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-
-## Test Fixes (compared to next-20211117)
-* dragonboard-410c, kselftest-sync
-  - sync.sync_test
-
-* qemu_arm, kselftest-timers
-  - timers.rtcpie
-
-* qemu_x86_64, kselftest-kvm
-  - kvm.set_memory_region_test
-
-* qemu_x86_64, kselftest-rtc
-  - rtc.rtctest
-
-* qemu_x86_64, kselftest-timers
-  - timers.rtcpie
-
-* x15, kselftest-core
-  - core.close_range_test
-
-* x15, kselftest-sync
-  - sync.sync_test
-
-* x86, kselftest-kvm
-  - kvm.memslot_perf_test
-
-* x86, kselftest-rtc
-  - rtc.rtctest
-
-
-## Metric Fixes (compared to next-20211117)
-No metric fixes found.
-
-## Test result summary
-total: 3939, pass: 2058, fail: 419, skip: 1462, xfail: 0
-
-## Build Summary
-
-## Test suites summary
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-lkdtm
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Wei.

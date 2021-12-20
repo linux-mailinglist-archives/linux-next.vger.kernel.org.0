@@ -2,89 +2,200 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC9C947A9DE
-	for <lists+linux-next@lfdr.de>; Mon, 20 Dec 2021 13:48:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BD7947B102
+	for <lists+linux-next@lfdr.de>; Mon, 20 Dec 2021 17:22:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231682AbhLTMsD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 20 Dec 2021 07:48:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33980 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231255AbhLTMsD (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 20 Dec 2021 07:48:03 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4987C061574;
-        Mon, 20 Dec 2021 04:48:02 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id z29so37723508edl.7;
-        Mon, 20 Dec 2021 04:48:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wRHlYhpHZvsECzL974twfMxddJZ0jbLrHI1pYPF66yc=;
-        b=CBpKqpSUY1LCo0o8pCHQv3NnMN+ruL5PSDPyhUa/LBxdJ83nRh2YukO6h4nSPFnfkJ
-         LwmsD2P1HLMDOuMqC/8CPEAKY774mKAiJzFvcFV5/SDP8jSzahwa5/ypNhdc3N3/PrV9
-         7mOKrQIv9fQ6jp3tvvRsWG6BMR4zeOOOCSwCnzBGL9B+H+Unkb5qrYaCqkaYrYIlfvl8
-         Z3v2xhym/+cNwI2ROkeiGXr4Db/Xdl4Tu/zChtZCKyFBpIALBO6mCI3hr6DZUpjK7dvy
-         U0uNeOdq2U/1Q8w6Xb9F2Iq/QXde8yGJSO86vjDimF8acw8Y2Pw53Giz5aQV9wYKhhrm
-         c9Lg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wRHlYhpHZvsECzL974twfMxddJZ0jbLrHI1pYPF66yc=;
-        b=ktdaViliZoPclPfRTGATF523Ur2pg7ENlf985EbNWZgfkPzdjXpvyJTbf+DMsf4kC/
-         85ZzgDM6Z5pSC7UaPHXxzsSOeotCZsthk6LD2y7srOTbCurVxepJ8t8TPSKLOPXJj7HY
-         hO8qJTAUjz5tqxSTCR4t3AtC4q1OQAeKRlBzxQw9s3OUXPSySX+QgFb3FBC2VL1ThQ7F
-         rASG5uKdNCC5EIjHr5yVCmWd7P6G8vGl+A/gaA+xbwN5IQ/5zMkhlikmb0flSzW2pu8m
-         xujsLIfFgVQ/KDTR/rdwqGSWZzboGOd8S4oLKyoeShO6m4cFuWhnpxGMagqko4gH5vtk
-         D5Gg==
-X-Gm-Message-State: AOAM5318kUz8LiIA+0pRiXxjl9B6iv4LOF14hhRzEbHMEBBz9GDNN6GV
-        26OJIRYWJ/nF2lHgG+WBqVmvtZq5DBRuZca7ifY=
-X-Google-Smtp-Source: ABdhPJxToRKgdz4Y5zPqp+igA2yrTZhszbtK4ONBNiMk0A68rzHzL2HyWMmly7mVtY+NRlH/MlvxPI6jKz2hWFtgnDk=
-X-Received: by 2002:a05:6402:270c:: with SMTP id y12mr15681716edd.258.1640004481331;
- Mon, 20 Dec 2021 04:48:01 -0800 (PST)
+        id S234335AbhLTQWx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 20 Dec 2021 11:22:53 -0500
+Received: from a48-37.smtp-out.amazonses.com ([54.240.48.37]:59375 "EHLO
+        a48-37.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232820AbhLTQWx (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Mon, 20 Dec 2021 11:22:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1640017372;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+        bh=JEibR2tevGf4+wxE+0v+q5WRwxA0usSlpDkfWdVeEdY=;
+        b=mL0per0Jfw7K9rEuohZYZ/YAle2NSNPol/quXl/2ng2vMx/luxlxYSjEuiLDjxij
+        N+/BcgKXhPpNsVemRiPU9bbeY3gQgYogVhslY+Q99e6n27J2SjKgp6i10K4naFkRzVb
+        +PBpc5RJ0huMhxm5qyS1PY6zhrMF0uiHz8dwW9TA=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1640017372;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+        bh=JEibR2tevGf4+wxE+0v+q5WRwxA0usSlpDkfWdVeEdY=;
+        b=dxAtyveO1wVElqkP/gnQTVs8plZ/M2uAKe6OIwoRzTBYlNILDGzAUYnS9s5t/YdL
+        Ulx+z9a+HIALeoZynfte5CYj8/XotrR0WiRD/10UGWqt3taa2syW11n689E09/QIEFs
+        5K5W/u3YEmtmGk8L8DRo9OluQkcRlt2alqozToXk=
+From:   lkft@linaro.org
+To:     lkft@linaro.org
+Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        linux-next@vger.kernel.org, shuah@kernel.org
+Subject: [REGRESSION] lkft kselftest for next-20211206
 MIME-Version: 1.0
-References: <20211220165103.0d75d56d@canb.auug.org.au>
-In-Reply-To: <20211220165103.0d75d56d@canb.auug.org.au>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 20 Dec 2021 14:46:01 +0200
-Message-ID: <CAHp75Vd0xWe8HeNp=+njJQhFqSGF-74KdZ+oXMTzmGRFQ9arzg@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the gpio-brgl tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Message-ID: <0100017dd8a72405-291bc4f0-f8da-42a1-9460-f51514c369fe-000000@email.amazonses.com>
+Date:   Mon, 20 Dec 2021 16:22:52 +0000
+Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
+X-SES-Outgoing: 2021.12.20-54.240.48.37
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 11:22 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> After merging the gpio-brgl tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
->
-> drivers/gpio/gpio-rda.c: In function 'rda_gpio_probe':
-> drivers/gpio/gpio-rda.c:200:22: error: unused variable 'np' [-Werror=unused-variable]
->   200 |  struct device_node *np = pdev->dev.of_node;
->       |                      ^~
-> cc1: all warnings being treated as errors
->
-> Caused by commit
->
->   448cf90513d9 ("gpio: Get rid of duplicate of_node assignment in the drivers")
->
-> I have used the gpio-brgl tree from next-20211217 (with the revert) for today.
+## Build
+* kernel: 5.16.0-rc4
+* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+* git branch: master
+* git commit: 5d02ef4b57f6e7d4dcba14d40cf05373a146a605
+* git describe: next-20211206
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20211206
 
-My fault, sorry. Fix patch is on the way!
+## Test Regressions (compared to next-20211117)
+* dragonboard-410c, kselftest-capabilities
+  - capabilities.test_execve
+
+* dragonboard-410c, kselftest-seccomp
+  - seccomp.seccomp_bpf
+  - seccomp.seccomp_bpf.global.user_notification_filter_empty
+
+* dragonboard-410c, kselftest-timers
+  - timers.set-timer-lat
+
+* qemu_arm, kselftest-zram
+  - zram.zram.sh
+
+* qemu_i386, kselftest-cgroup
+  - cgroup.test_freezer
+  - cgroup.test_freezer.test_cgfreezer_ptrace
+
+* qemu_i386, kselftest-rtc
+  - rtc.rtctest
+
+* qemu_x86_64, kselftest-kvm
+  - kvm.rseq_test
+
+* x15, kselftest-capabilities
+  - capabilities.test_execve
+
+* x15, kselftest-cgroup
+  - cgroup.test_freezer
+  - cgroup.test_kill
+  - cgroup.test_kill.test_cgkill_simple
+
+* x15, kselftest-rtc
+  - rtc.rtctest.rtc.alarm_alm_set
+  - rtc.rtctest.rtc.alarm_alm_set_minute
+  - rtc.rtctest.rtc.alarm_wkalm_set
+  - rtc.rtctest.rtc.date_read
+
+* x15, kselftest-timers
+  - timers.nsleep-lat
+  - timers.rtcpie
+
+* x86, kselftest-kvm
+  - kvm.vmx_pmu_msrs_test
 
 
+## Metric Regressions (compared to next-20211117)
+No metric regressions found.
 
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+
+## Test Fixes (compared to next-20211117)
+* i386, kselftest-rtc
+  - rtc.rtctest
+
+* qemu_x86_64, kselftest-timers
+  - timers.rtcpie
+
+* x15, kselftest-core
+  - core.close_range_test
+
+* x15, kselftest-rtc
+  - rtc.rtctest
+
+* x15, kselftest-sync
+  - sync.sync_test
+
+
+## Metric Fixes (compared to next-20211117)
+No metric fixes found.
+
+## Test result summary
+total: 3574, pass: 1837, fail: 405, skip: 1332, xfail: 0
+
+## Build Summary
+
+## Test suites summary
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-lkdtm
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
 
 --
-With Best Regards,
-Andy Shevchenko
+Linaro LKFT
+https://lkft.linaro.org

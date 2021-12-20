@@ -2,115 +2,98 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1571847A94F
-	for <lists+linux-next@lfdr.de>; Mon, 20 Dec 2021 13:18:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72E4747A9DA
+	for <lists+linux-next@lfdr.de>; Mon, 20 Dec 2021 13:45:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbhLTMS3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 20 Dec 2021 07:18:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55318 "EHLO
+        id S231407AbhLTMpC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 20 Dec 2021 07:45:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbhLTMS3 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 20 Dec 2021 07:18:29 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA84C061574;
-        Mon, 20 Dec 2021 04:18:29 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id y13so37369779edd.13;
-        Mon, 20 Dec 2021 04:18:29 -0800 (PST)
+        with ESMTP id S230209AbhLTMpB (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 20 Dec 2021 07:45:01 -0500
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83768C061574
+        for <linux-next@vger.kernel.org>; Mon, 20 Dec 2021 04:45:01 -0800 (PST)
+Received: by mail-yb1-xb35.google.com with SMTP id d10so28534417ybn.0
+        for <linux-next@vger.kernel.org>; Mon, 20 Dec 2021 04:45:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5MjoT1+0/DxfRaDrfHuq3G2Ro753TQHUQ3NJ1EInTB8=;
-        b=asURLhslDYv8u0hz6/SuebhiWI//nat9NpB5kq+pN2d/aqhC5+afz5SOacZPovSP66
-         7cY7zLIL7S7AZJ9Dwaqg01QDZNhcAVYpCgHycHZ5TuxttzMBSIzFB6s2OPqebRYKMte+
-         erBqtVDd3un7xI5DwnjGoqu/g2okL212HUGUlP46zHzdyPIKIUy5l+6JhnVwuYBFtb4c
-         6aqv2eAsnBdz3AMcxQfBCKSWAyF6A8wPSPOQ5bajcTPybLum+4mbNpsYEzAbLZBSP1D7
-         P0zQ6emNdMHp7ZnzrzI9nf1KViTJOB/jP/vNcWELh0W/UaNwf0CKe6dkLCKMH8H9RL9f
-         Yk9w==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bymUVH7dKBh7uCkZZEUVVQY6d2Jlj4KY+YLiw5M1EeQ=;
+        b=AKpLCtabjvqSUU+xr4cjPZd3vtcZlzKWOfawBgGQHza73eWLnwyguyGj8VkBKkU/gt
+         hKdavF3uNDsLXZbwLX1B68pl3/97PbSZDRoQ5DzaIeYDr9f8yQB5uPyABLHkWcglQVWX
+         Bk0V6ac0gnE02Dvg8itMiL1MTG3tS0GGoYUF9NNeMHlkgZOBWkxSGqFGYPQy+HQ8EjwI
+         m4efEYEUYvSsxNY60UMwKFZGxkWqEvwa5m89uLjOyubbD6IGTv0t/rOTsVQOUNvPg4QX
+         AuYQID+9B0tGYDKEwShzTNVfV05Ua5u1Fb49ttRlurEohmNzeJJOlI/AfZ/i5MngaiUa
+         GlDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=5MjoT1+0/DxfRaDrfHuq3G2Ro753TQHUQ3NJ1EInTB8=;
-        b=IixQTS0HHDwZFQde1KCsZV9NQIY5jKPEHNzQ9qZmDRSyAg7aH0H8MvU4bF2T83RYz+
-         1eFmYmuUSNwHlXSCAkykTsz+0DbcM63cXv7JDOSwvsF9xmLy92URlK3HWTs96OMHuFIh
-         11z8aGDWcui025U7yLLPKBh/RnKRoMlnvCIPuLIGdrONT17s4qNhphtdnaxUA6Q1SY1G
-         Ltxb3VVdysrmqKL9nymE7QMnK01+S2M48KE4aBYf8tzHjIYXDdiZ+yUKoUaxYaSbjuVZ
-         JBcrR6G2oglJdDUVEO4vsbmR4HRARsbSsrf2dBW2+WPe+X1igdyOKrLWyTAhjmrtbc9A
-         Lraw==
-X-Gm-Message-State: AOAM532AO+8ARaqCMtLsg7QHscqPTvmwewZjjKVQTc/XgS+kdN3oLf1w
-        pTClquxath3W0MpWwk/rk4g=
-X-Google-Smtp-Source: ABdhPJwLa4NjwySpR/porApfQAJrCybZbduz+D2HcKXFHEdJNYhPN4f3H+xMJ0pPM2T94UiqCR4raQ==
-X-Received: by 2002:a17:907:6d99:: with SMTP id sb25mr7780586ejc.540.1640002707716;
-        Mon, 20 Dec 2021 04:18:27 -0800 (PST)
-Received: from stitch.. (80.71.140.73.ipv4.parknet.dk. [80.71.140.73])
-        by smtp.gmail.com with ESMTPSA id i22sm2549481ejw.75.2021.12.20.04.18.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Dec 2021 04:18:27 -0800 (PST)
-Sender: Emil Renner Berthing <emil.renner.berthing@gmail.com>
-From:   Emil Renner Berthing <kernel@esmil.dk>
-To:     soc@kernel.org
-Cc:     Emil Renner Berthing <kernel@esmil.dk>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Subject: [PATCH -next] reset: starfive-jh7100: Fix 32bit compilation
-Date:   Mon, 20 Dec 2021 13:17:59 +0100
-Message-Id: <20211220121800.760846-1-kernel@esmil.dk>
-X-Mailer: git-send-email 2.34.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bymUVH7dKBh7uCkZZEUVVQY6d2Jlj4KY+YLiw5M1EeQ=;
+        b=cIrCLSIhwlqpoV1ARD1kbJLNIxZrQRJRapTX2hxwp4ZBLwehnFBFeq+TU2CsP6qTgE
+         saEYHTnRu4qYhSgb3pdWQ/S3TiLOyIz9KBsARxtGkEumtr+Zb/Ogq12v7EJxCtm3N3gM
+         q/Gs/v2p0ypjspGovABZSHca6lb2CxsyQzlqJspbs7zg9/c+FKuWugGK7DyRSCfL8qbS
+         mQRN1A0u6lqtj2Q1Z0qOMYvlfQsaTID2Jmbs1UwZK/yPQ1v8op53s8rnux1AAORwIL6g
+         Zw+lZmiR6NvwrECWCKcdXgVpaf+q6hVNC3fbrUGbLvnvceT6hSfhidq8S9JvCQMDg2Ob
+         yUGQ==
+X-Gm-Message-State: AOAM532x313xI6cc5naLZmVp9Wwj80lykGcXFgTZ7wug+zypB4jBbI8I
+        iyOhF/OqHBp/pcs3QomnObThR/tfjHJB2/7JR5gjiQ==
+X-Google-Smtp-Source: ABdhPJz/+WopWTog4ZtWYhnbiRxpAv7NDiRobRdqX/jKXBOCt6J4IbzAgSM6hlVmNaZGYuqY3Dy6DTneH0URBfk2qu0=
+X-Received: by 2002:a25:d685:: with SMTP id n127mr21284381ybg.523.1640004300820;
+ Mon, 20 Dec 2021 04:45:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20211220220843.735da08f@canb.auug.org.au>
+In-Reply-To: <20211220220843.735da08f@canb.auug.org.au>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Mon, 20 Dec 2021 20:44:22 +0800
+Message-ID: <CAMZfGtV=9_2N7HJNKMikj9WAhzWp1cxOtp6bSRxY7gEOCBLNhQ@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the akpm tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Armin Wolf <W_Armin@gmx.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-We need to include linux/io-64-nonatomic-lo-hi.h or readq/writeq won't
-be defined when compiling on 32bit architectures:
+On Mon, Dec 20, 2021 at 7:08 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> After merging the akpm tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+>
+> drivers/hwmon/dell-smm-hwmon.c: In function 'i8k_ioctl':
+> drivers/hwmon/dell-smm-hwmon.c:454:31: error: implicit declaration of function 'PDE_DATA'; did you mean 'NODE_DATA'? [-Werror=implicit-function-declaration]
+>   454 |  struct dell_smm_data *data = PDE_DATA(file_inode(fp));
+>       |                               ^~~~~~~~
+>       |                               NODE_DATA
+> drivers/hwmon/dell-smm-hwmon.c:454:31: error: initialization of 'struct dell_smm_data *' from 'int' makes pointer from integer without a cast [-Werror=int-conversion]
+> cc1: all warnings being treated as errors
+>
+> Caused by commit
+>
+>   2dd082773083 ("proc: remove PDE_DATA() completely")
+>
+> interacting with commit
+>
+>   073bd07205af ("hwmon: (dell-smm) Unify i8k_ioctl() and i8k_ioctl_unlocked()")
+>
+> from the hwmon-staging tree.
+>
+> I applied the following fixup patch.
+>
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Mon, 20 Dec 2021 22:04:57 +1100
+> Subject: [PATCH] fixup for "proc: remove PDE_DATA() completely"
+>
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 
-On i386:
+Thanks Stephen.
 
-../drivers/reset/reset-starfive-jh7100.c: In function ‘jh7100_reset_update’:
-../drivers/reset/reset-starfive-jh7100.c:81:10: error: implicit declaration of function ‘readq’; did you mean ‘readl’? [-Werror=implicit-function-declaration]
-  value = readq(reg_assert);
-           ^~~~~
-../drivers/reset/reset-starfive-jh7100.c:86:2: error: implicit declaration of function ‘writeq’; did you mean ‘writel’? [-Werror=implicit-function-declaration]
-  writeq(value, reg_assert);
-  ^~~~~~
-
-On m68k:
-
-drivers/reset/reset-starfive-jh7100.c:81:17: error: implicit declaration of function 'readq'; did you mean 'readb'? [-Werror=implicit-function-declaration]
-drivers/reset/reset-starfive-jh7100.c:86:9: error: implicit declaration of function 'writeq'; did you mean 'writel'? [-Werror=implicit-function-declaration]
-cc1: all warnings being treated as errors
-make[3]: *** [scripts/Makefile.build:289: drivers/reset/reset-starfive-jh7100.o] Error 1
-make[2]: *** [scripts/Makefile.build:572: drivers/reset] Error 2
-make[1]: *** [Makefile:1969: drivers] Error 2
-make: *** [Makefile:226: __sub-make] Error 2
-
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
-Fixes: 0be3a1595bf8 ("reset: starfive-jh7100: Add StarFive JH7100 reset driver")
-Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
----
- drivers/reset/reset-starfive-jh7100.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/reset/reset-starfive-jh7100.c b/drivers/reset/reset-starfive-jh7100.c
-index e28a19d271cb..fc44b2fb3e03 100644
---- a/drivers/reset/reset-starfive-jh7100.c
-+++ b/drivers/reset/reset-starfive-jh7100.c
-@@ -7,6 +7,7 @@
- 
- #include <linux/bitmap.h>
- #include <linux/io.h>
-+#include <linux/io-64-nonatomic-lo-hi.h>
- #include <linux/iopoll.h>
- #include <linux/mod_devicetable.h>
- #include <linux/platform_device.h>
--- 
-2.33.1
-
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>

@@ -2,200 +2,270 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0CE547A41E
-	for <lists+linux-next@lfdr.de>; Mon, 20 Dec 2021 05:31:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D1B847A435
+	for <lists+linux-next@lfdr.de>; Mon, 20 Dec 2021 06:11:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237450AbhLTEbk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 19 Dec 2021 23:31:40 -0500
-Received: from mail-hk2apc01lp2053.outbound.protection.outlook.com ([104.47.124.53]:17158
-        "EHLO APC01-HK2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S234032AbhLTEbk (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 19 Dec 2021 23:31:40 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DR2t3yFEf9ZyLwJbkeSChkBDzt6OJ/KQUVDSisbXu8m9QF8YsjCHRLWCQgNmqnIohfOyV+BPTTCuAC0JXVfUGipVLSgwTCrnr+52+yR4HJltcsuKnfJn/XOX236sHMtvlK9PE+f6vmF0AK6Vkit/+GSobwgH0o3zw1PLSZUGA1DDjHaY1r5OZ4+NGPqhbMXAbriNR3p1x1blCvl2xiDyDVs8Wa/9wKgjecT2LiGQNv5bqA4clGHmNqfpUIw4cuVFkQFrlpwiELjKejZHdIeXc7yT+wmKH/pNPVYtGq8HoXOUBKf1rx2Kaz8dSs05vjmfNJuxV3dGK7BAcuqLN/7UZA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=obqvwouy1Y4hNxH9wksRgxrrDVlpd1whIdbTau+fQlI=;
- b=Ppp3DToQ3/0EJ7ytiGnaV4hgNuN48gIbhVa0kgMSh+nQp3xFIfqHhTVH34F0R88zc/Njb0wMMzsuNYsL6meVGbTRkSMqHHTqN0EKIkW3C2nSczYI7kHmcYBELswJCKuBVRZAyF4pN54FhbUZLbWsWiLbabq5g4xCs+/x1zKZgMMbOTzmlJNL0FEWzEb4wTSJbpoeTSLueOLFJGEmk6jplQzDBc0FAdmBiQL3dYoTceMMn7iTAPz+EOA7dB+CGgMdkDDAWI3VeY+2cjA0nQ3GQs+8BByKAE/WOFRwES+O5ZJLldTlkzRVVQRMfIiRiAzO7uxadLBZIePGW8M2liDXzw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=obqvwouy1Y4hNxH9wksRgxrrDVlpd1whIdbTau+fQlI=;
- b=I6oSuYi1nZf2LIVFos9l5VfyADDZVV+e7RZLdkXh2M8N2SbDooXGK1MA6EUfkx0+TjskNwA7dtLg0YIHilXspxXP+kxia3Xl1CUyINvjRKkIAh8sA2Fzf3Twues3mGBhqE4d4ciOnCWi9xtlL9INHk+0cPYnTxZFc5ia5A/0Lcc=
-Received: from KL1P15301MB0343.APCP153.PROD.OUTLOOK.COM (2603:1096:820:17::13)
- by SG2P153MB0128.APCP153.PROD.OUTLOOK.COM (2603:1096:3:19::17) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4823.7; Mon, 20 Dec 2021 04:31:28 +0000
-Received: from KL1P15301MB0343.APCP153.PROD.OUTLOOK.COM
- ([fe80::7d3f:25dc:6a3a:abec]) by KL1P15301MB0343.APCP153.PROD.OUTLOOK.COM
- ([fe80::7d3f:25dc:6a3a:abec%8]) with mapi id 15.20.4844.003; Mon, 20 Dec 2021
- 04:31:27 +0000
-From:   Shyam Prasad <Shyam.Prasad@microsoft.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        David Howells <dhowells@redhat.com>
-CC:     "broonie@kernel.org" <broonie@kernel.org>,
-        Steve French <smfrench@gmail.com>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Steven French <Steven.French@microsoft.com>
-Subject: RE: [EXTERNAL] Re: linux-next: manual merge of the cifs tree with the
- fscache tree
-Thread-Topic: [EXTERNAL] Re: linux-next: manual merge of the cifs tree with
- the fscache tree
-Thread-Index: AQHX9TKhye1qL/QcOUyrdzVobsjS86w6yIEQ
-Date:   Mon, 20 Dec 2021 04:31:27 +0000
-Message-ID: <KL1P15301MB034331969F371B30AAD6642D947B9@KL1P15301MB0343.APCP153.PROD.OUTLOOK.COM>
-References: <20211216124317.4143405-1-broonie@kernel.org>
- <20211220104610.5f074aec@canb.auug.org.au>
-In-Reply-To: <20211220104610.5f074aec@canb.auug.org.au>
-Accept-Language: en-IN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=ea113c83-9174-49a1-a88a-6c3325a211e4;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2021-12-20T04:24:16Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 8c9ad012-950b-4f70-ce43-08d9c37196d9
-x-ms-traffictypediagnostic: SG2P153MB0128:EE_
-x-microsoft-antispam-prvs: <SG2P153MB01286C4D4FC1239887A3E3A5947B9@SG2P153MB0128.APCP153.PROD.OUTLOOK.COM>
-x-ms-oob-tlc-oobclassifiers: OLM:7219;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: w/BLAwMlJExAPxspCDWBes6D9/ITpkE+LGdyAMMmXwypAv1sDGUD6I+hh4mHxzH5HHHfmEwX5Q+qZaLLbAGc6v9nVDWBWUmdd3H9Lv6nFefro0Ph+Zo5QTr7WobwNS2hxvkKqIQMvyg4FTcUGoe5nwZdAthmjMw7Qw6ZjPkV1donJk/gdp7UfZu3fLaDKkdkhu0dU15BOQWPyY708bA/MlrWSVZzh+XtP06+Yci5OX/CZaD3nPUx2erHHXWE1KKQ7HtKVkedt1NbE11cvGbdi9jiUVPob/pn5k0gIZ38VSC8iXnciyhxv+xBHk4JNDPoYwaXNV95DFnQa5bUZRG4zb4T13eKRxjqYlJ/VKWc4qW3u590tLbw1tvwf8UCSOc9If3bp6YMUlV9uu7v7V9Rksy1V9cYqb3Q7BVyfxY6AIsgoBgZTeXHdtjNe+OoMoND9NCMK4mvdIpZagoPnjPAO10dJL3SMb8yzBMvlbIVWfoOwxnNC8OiN7TnKZwQtM3fqU5p910u+cwhLiD5UlP/2yO+CDuxKLx8DHrmc0Ei7TfOqxqifiKUGItRclinJTFOL3boJxOeMGrjNOrbtvHBOaTVs5v/4JXX9TxH/6OHxPsNKQTyHLL2gRqyqogO/KLnyzg28fwuPMYoDP5bcjHKEFfRr6iJ+Bc5dg5zywtKuxZRnhuRFe3a2dnes8OPVfxY8lQL6zks92+EWf4TH7wSLsUCDvgxvgBHUXDejIBkH3iLlpYBkrk5vibF745oacaA
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:KL1P15301MB0343.APCP153.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(5660300002)(6506007)(71200400001)(186003)(86362001)(8990500004)(38070700005)(316002)(7696005)(83380400001)(53546011)(9686003)(10290500003)(26005)(122000001)(2906002)(38100700002)(82950400001)(508600001)(55016003)(76116006)(66946007)(107886003)(54906003)(52536014)(33656002)(110136005)(4326008)(82960400001)(66476007)(8936002)(66556008)(66446008)(55236004)(64756008)(8676002)(20210929001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?/vFk3dMN4aH7F1TZQ0Rzr8z8GNEHULLGeiq2mEH8lkUjBihQdw6S8nH5GBOb?=
- =?us-ascii?Q?0ZcBRzWhkXOB6+y94PlA0dsG7KBNHo3dT2lHNrbRh8tLV0mNAx6sszX5HSMN?=
- =?us-ascii?Q?0pagN358mpKNN05/YS2ME15TGopMzFrq4VRGiZM98q/JiURPIOItPmH3656W?=
- =?us-ascii?Q?KMYSgo12Q7RlRHNU1HyQRTeFAKTzpFC1oO71nfglf+SKgA90nemzy10cBv8M?=
- =?us-ascii?Q?VDHcRelDHbxoY3lkIDUdtDB+P7gMqZLtdhuQfNGc4i6lVPXzLkkXhld5ZwOz?=
- =?us-ascii?Q?M3vXOlAH4sO47LbuB6QZC3Q7AhyKaomV5YDiN1bc+rqMg2FKnxAJCIvzDY3v?=
- =?us-ascii?Q?NXSsfUvxOZyzlVmu++WLVtjLzfJu2MTZv2tIh05RCSymqA8KUYC61LMtGUwJ?=
- =?us-ascii?Q?g/kwjxxdcYnpI0QQG8wqokAAYHFseUXwPiAeRHtCaF8SZrNmdVuIkftB8zx8?=
- =?us-ascii?Q?B2+kl1C69SxRkzfoSQ1zTMgX4fOMbBErFT40GSeOMO8RUVmpvsR55cJLcvcv?=
- =?us-ascii?Q?92w1jOMLIBoQIZZI1jKFmfEnRPSVN9DZmCt62F1k3OP/DIHWL0Bmy6K+7+50?=
- =?us-ascii?Q?9hLLL1XejB/Ayimfq1uMXfE36o6T3oayS8Zc3gqL3h3jSxKFi3Dksf4CPU7M?=
- =?us-ascii?Q?ZTzVRs/W6Y3mxwBDmqzW6qCwF7C4BmsdOpDzQmZq5Aell/iPsYSK/VNqgL6U?=
- =?us-ascii?Q?M/pf+ZPeO63q/tSIfvctxMPS7LzJRcUzIM7xzXKsP/8wp90wJvrC4jP5S+vi?=
- =?us-ascii?Q?oVl8Ole0HCzTWNHHXcKyNu0PouiprpRLDF02+eRe/n4lCXjCwOkiv1EuWsbC?=
- =?us-ascii?Q?mnVtZ3pNsq97KQ+oBxA6c0/FY4qMxSdWE0ZFcubi4ZfudTC3YFaN2XdK2cq3?=
- =?us-ascii?Q?R8IQfuv9CqGwzx1oQH9QplBpgBhmXrf7KW/imXnCmSlbe5eRqz77bexPb/VW?=
- =?us-ascii?Q?+vdaq98M1/uqH8CSOJgrGgHrR+3x5SOEveIHyo9NbbKfz/Mw3fg7KHHg9BQN?=
- =?us-ascii?Q?12qPfOjCN7Rr69KZEivBNxXEcW4oeY/3mMq6BUY1qFLzrUE12Crv17tQOwfs?=
- =?us-ascii?Q?wiHJ2FRRXj54A1yt/XcP+IeYES/OFSzIm08jlKDjrO10XtoGv9ylJPy1vP0q?=
- =?us-ascii?Q?JA9j3XFp5AYte38+nK6TWacy7kRgRQQOP7v9I09KZ6zv919Cdh3XQNKQQAkK?=
- =?us-ascii?Q?rGm1s9ZmXX2qSTYOniIKERcmTjwk/q5Y/PA4jVOPWXfrbIv41o1p4oW0vj4Z?=
- =?us-ascii?Q?e/5E+G+qinxX3Ie6aUzrZZj96TdDNN3cQmDqPgrjhxtbH/nwAT48kaDPD11E?=
- =?us-ascii?Q?AJDveyMrIgVlBrxUvj9Io2kFLujdM2I19NkDkbjktTVhQrPNC4kSFopJgXNw?=
- =?us-ascii?Q?tlUtwOyb0Pq3Y/f5dxRv3eBwc0CzaA+5WrEKhflZVQZduUz8RHw17fzRxlRZ?=
- =?us-ascii?Q?15+f9ghZGbQMBpjScJB6PpHuQ5Zz5CQQHP0iSEdQh59YldEJIxrmyjkfCah6?=
- =?us-ascii?Q?ZJeE4eETxO4m94rT5EjYgjLWXEwiAcdX0pcvgPy7Cm0qV3Ddxl5V3f/qPw3R?=
- =?us-ascii?Q?1M8rIa2hXKgHkuUGQ9vQLwwLlHHU1LMuPbU/ZmUc1eX2EO17N//4Cv8iBP/X?=
- =?us-ascii?Q?9sSYr08fcp+DyF4PqVmLYzE=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S229469AbhLTFLX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 20 Dec 2021 00:11:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44162 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229437AbhLTFLX (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 20 Dec 2021 00:11:23 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39EFEC061574
+        for <linux-next@vger.kernel.org>; Sun, 19 Dec 2021 21:11:23 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id x1-20020a17090a2b0100b001b103e48cfaso8031510pjc.0
+        for <linux-next@vger.kernel.org>; Sun, 19 Dec 2021 21:11:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=eriqiIHq1cKyAr3AIgRoXTwf6vD6KHMZT3EduAoDJMQ=;
+        b=iR3S5SzpKN3cccQ/37q2/1BhSbqxpvzb9EznFFB6AgCZab0kjN039MhvbPcp4PJCQ/
+         MWjf2xx6STkZNrDNz3GF4vGAV8+TN/bmsS0/t5nDnUkGxICfST7jes8qbkmv0TcQb+vC
+         LxfMfkVg3nGYSZEYTlEi0Lwz7KWZaVVlc1bSfKKx0JungjvzetGHxAtFaO2c8stT+WAy
+         0fDqCA+b7fzXMf8h8DERVCAwtyGo/jNNnPmuTtFKixcy6tSoazR8/7gs+JvGRwim1WHl
+         huE7u1Fdl5aLzRxXJLrFqrknLpGROhzVLxf327jjVCD99ZJy3Q1KHPzN8ZQFETwBaV0z
+         lEkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=eriqiIHq1cKyAr3AIgRoXTwf6vD6KHMZT3EduAoDJMQ=;
+        b=4UFeHGPtg0Jxx/lHT7KQk1E/QdxmQ83ZOpaYXM/f+qnTmouZxF1v68KjUMPVwgzs9D
+         KM+x2Bb4Usvf1CTL/FCh1eu8F6xGzLoqzKc89bDaSeGS9pvygDa9GX/mtNiGnYR3G6qe
+         ImOXCWIP4sHX1kuQg1ctIvWSWWB1i4jFVohabLM9BAEdafh0NFKf31WEzAVosi1hOKcF
+         zhc8UYnXAYbfd2PsdqHxAXJS6thhhQclW0qfQ5POumzgOeT43/wY7pYvJtlc4uaNGOzM
+         eU9ULfgMAq+c89TRDxO6irHryDCThHW37y1cD8qLre9EQklkLrk8SisU/+H+3HmGY+W5
+         SGiw==
+X-Gm-Message-State: AOAM530PzzFoCry2cGxxr/hLGR/WMluFd/8efzIP/cFLkrK60iMLnrUQ
+        /0H9PUku6a/bgYgghk9X/9wbLBrbasjUmDL0
+X-Google-Smtp-Source: ABdhPJyrc9z+fItZ2adsRW9m3+mqf+TFshi+/UgvhH3thGGxfjHQ2xCX2COJkaEI+zH76ib8XlPHUQ==
+X-Received: by 2002:a17:90a:c506:: with SMTP id k6mr18200300pjt.74.1639977081940;
+        Sun, 19 Dec 2021 21:11:21 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id t8sm16630636pfj.26.2021.12.19.21.11.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Dec 2021 21:11:21 -0800 (PST)
+Message-ID: <61c01079.1c69fb81.3332c.f0bd@mx.google.com>
+Date:   Sun, 19 Dec 2021 21:11:21 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: KL1P15301MB0343.APCP153.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8c9ad012-950b-4f70-ce43-08d9c37196d9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Dec 2021 04:31:27.6013
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 0sh2to00FtKizG9M3WV4mgrdlyYR03Hrv2lDE/Y3U2AEkvNCf7bjrCEvCMN7jet6gis+u17nZs0NlGiy8IhJhA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2P153MB0128
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v5.16-rc5-395-g46f3b5d984fa
+X-Kernelci-Report-Type: test
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+Subject: next/pending-fixes baseline: 592 runs,
+ 5 regressions (v5.16-rc5-395-g46f3b5d984fa)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+next/pending-fixes baseline: 592 runs, 5 regressions (v5.16-rc5-395-g46f3b5=
+d984fa)
 
------Original Message-----
-From: Stephen Rothwell <sfr@canb.auug.org.au>=20
-Sent: Monday, December 20, 2021 5:16 AM
-To: David Howells <dhowells@redhat.com>
-Cc: broonie@kernel.org; Steve French <smfrench@gmail.com>; CIFS <linux-cifs=
-@vger.kernel.org>; Linux Kernel Mailing List <linux-kernel@vger.kernel.org>=
-; Linux Next Mailing List <linux-next@vger.kernel.org>; Shyam Prasad <Shyam=
-.Prasad@microsoft.com>; Steven French <Steven.French@microsoft.com>
-Subject: [EXTERNAL] Re: linux-next: manual merge of the cifs tree with the =
-fscache tree
+Regressions Summary
+-------------------
 
-Hi all,
+platform                 | arch   | lab           | compiler | defconfig   =
+                 | regressions
+-------------------------+--------+---------------+----------+-------------=
+-----------------+------------
+bcm2836-rpi-2-b          | arm    | lab-collabora | gcc-10   | multi_v7_def=
+c...MB2_KERNEL=3Dy | 1          =
 
-On Thu, 16 Dec 2021 12:43:17 +0000 broonie@kernel.org wrote:
->
-> Today's linux-next merge of the cifs tree got a conflict in:
->=20
->   fs/cifs/inode.c
->=20
-> between commit:
->=20
->   830c476f5eb82 ("cifs: Support fscache indexing rewrite (untested)")
->=20
-> from the fscache tree and commit:
->=20
->   68f87ec9c1ce3 ("cifs: ignore resource_id while getting fscache super co=
-okie")
+meson-gxbb-p200          | arm64  | lab-baylibre  | gcc-10   | defconfig+CO=
+N...BIG_ENDIAN=3Dy | 1          =
 
-This is now commit
+minnowboard-turbot-E3826 | x86_64 | lab-collabora | gcc-10   | x86_64_defco=
+nfig+ima         | 1          =
 
-  b774302e8856 ("cifs: ignore resource_id while getting fscache super cooki=
-e")
+minnowboard-turbot-E3826 | x86_64 | lab-collabora | gcc-10   | x86_64_defco=
+n...ebook+amdgpu | 1          =
 
-in Linus' tree.
+minnowboard-turbot-E3826 | x86_64 | lab-collabora | gcc-10   | x86_64_defco=
+nfig+crypto      | 1          =
 
-> from the cifs tree.
->=20
-> diff --cc fs/cifs/inode.c
-> index dc2fe76450b96,279622e4eb1c2..0000000000000
-> --- a/fs/cifs/inode.c
-> +++ b/fs/cifs/inode.c
-> @@@ -1372,20 -1370,6 +1367,7 @@@ iget_no_retry
->   		iget_failed(inode);
->   		inode =3D ERR_PTR(rc);
->   	}
->  +
-> - 	if (!rc) {
-> - 		/*
-> - 		 * The cookie is initialized from volume info returned above.
-> - 		 * Inside cifs_fscache_get_super_cookie it checks
-> - 		 * that we do not get super cookie twice.
-> - 		 */
-> - 		rc =3D cifs_fscache_get_super_cookie(tcon);
-> - 		if (rc < 0) {
-> - 			iget_failed(inode);
-> - 			inode =3D ERR_PTR(rc);
-> - 		}
-> - 	}
-> -=20
->   out:
->   	kfree(path);
->   	free_xid(xid);
 
-so this is now a conflict between the fscache tree and Linus's tree.
+  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
+v5.16-rc5-395-g46f3b5d984fa/plan/baseline/
 
---=20
-Cheers,
-Stephen Rothwell
+  Test:     baseline
+  Tree:     next
+  Branch:   pending-fixes
+  Describe: v5.16-rc5-395-g46f3b5d984fa
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      46f3b5d984fa6f57b9ebe0e844bed32400286cba =
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D
-> so this is now a conflict between the fscache tree and Linus's tree.
 
-Hi David and Steve,
 
-I think one of these two branches need to be rebased. Can one of you please=
- do it?
+Test Regressions
+---------------- =
 
-Regards,
-Shyam
+
+
+platform                 | arch   | lab           | compiler | defconfig   =
+                 | regressions
+-------------------------+--------+---------------+----------+-------------=
+-----------------+------------
+bcm2836-rpi-2-b          | arm    | lab-collabora | gcc-10   | multi_v7_def=
+c...MB2_KERNEL=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/61bfe3fc0ab1d9e59d39712a
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.16-rc5-3=
+95-g46f3b5d984fa/arm/multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab=
+-collabora/baseline-bcm2836-rpi-2-b.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.16-rc5-3=
+95-g46f3b5d984fa/arm/multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab=
+-collabora/baseline-bcm2836-rpi-2-b.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20211210.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/61bfe3fc0ab1d9e59d397=
+12b
+        failing since 40 days (last pass: v5.15-rc7-176-gbfbd58926fc5, firs=
+t fail: v5.15-12053-g6f9f2ed9499c) =
+
+ =
+
+
+
+platform                 | arch   | lab           | compiler | defconfig   =
+                 | regressions
+-------------------------+--------+---------------+----------+-------------=
+-----------------+------------
+meson-gxbb-p200          | arm64  | lab-baylibre  | gcc-10   | defconfig+CO=
+N...BIG_ENDIAN=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/61bfe4b0024ef4456639714a
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.16-rc5-3=
+95-g46f3b5d984fa/arm64/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-10/lab-bayli=
+bre/baseline-meson-gxbb-p200.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.16-rc5-3=
+95-g46f3b5d984fa/arm64/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-10/lab-bayli=
+bre/baseline-meson-gxbb-p200.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20211210.0/arm64be/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/61bfe4b0024ef44566397=
+14b
+        new failure (last pass: v5.16-rc5-294-g65d84bcc1bef) =
+
+ =
+
+
+
+platform                 | arch   | lab           | compiler | defconfig   =
+                 | regressions
+-------------------------+--------+---------------+----------+-------------=
+-----------------+------------
+minnowboard-turbot-E3826 | x86_64 | lab-collabora | gcc-10   | x86_64_defco=
+nfig+ima         | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/61bfd1c07eb052457c397137
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+ima
+  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.16-rc5-3=
+95-g46f3b5d984fa/x86_64/x86_64_defconfig+ima/gcc-10/lab-collabora/baseline-=
+minnowboard-turbot-E3826.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.16-rc5-3=
+95-g46f3b5d984fa/x86_64/x86_64_defconfig+ima/gcc-10/lab-collabora/baseline-=
+minnowboard-turbot-E3826.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20211210.0/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/61bfd1c07eb052457c397=
+138
+        new failure (last pass: v5.16-rc5-294-g65d84bcc1bef) =
+
+ =
+
+
+
+platform                 | arch   | lab           | compiler | defconfig   =
+                 | regressions
+-------------------------+--------+---------------+----------+-------------=
+-----------------+------------
+minnowboard-turbot-E3826 | x86_64 | lab-collabora | gcc-10   | x86_64_defco=
+n...ebook+amdgpu | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/61bfd3bcde68d437f3397162
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+x86-chromebook+amdgpu
+  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.16-rc5-3=
+95-g46f3b5d984fa/x86_64/x86_64_defconfig+x86-chromebook+amdgpu/gcc-10/lab-c=
+ollabora/baseline-minnowboard-turbot-E3826.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.16-rc5-3=
+95-g46f3b5d984fa/x86_64/x86_64_defconfig+x86-chromebook+amdgpu/gcc-10/lab-c=
+ollabora/baseline-minnowboard-turbot-E3826.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20211210.0/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/61bfd3bcde68d437f3397=
+163
+        new failure (last pass: v5.16-rc5-257-g713f2fcb90ea) =
+
+ =
+
+
+
+platform                 | arch   | lab           | compiler | defconfig   =
+                 | regressions
+-------------------------+--------+---------------+----------+-------------=
+-----------------+------------
+minnowboard-turbot-E3826 | x86_64 | lab-collabora | gcc-10   | x86_64_defco=
+nfig+crypto      | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/61bfd56db5f67f420d39714d
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+crypto
+  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.16-rc5-3=
+95-g46f3b5d984fa/x86_64/x86_64_defconfig+crypto/gcc-10/lab-collabora/baseli=
+ne-minnowboard-turbot-E3826.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.16-rc5-3=
+95-g46f3b5d984fa/x86_64/x86_64_defconfig+crypto/gcc-10/lab-collabora/baseli=
+ne-minnowboard-turbot-E3826.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20211210.0/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/61bfd56db5f67f420d397=
+14e
+        new failure (last pass: v5.16-rc5-257-g713f2fcb90ea) =
+
+ =20

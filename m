@@ -2,158 +2,175 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B601447B68A
-	for <lists+linux-next@lfdr.de>; Tue, 21 Dec 2021 01:50:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93BE547B6AC
+	for <lists+linux-next@lfdr.de>; Tue, 21 Dec 2021 02:05:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233481AbhLUAuI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 20 Dec 2021 19:50:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57824 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232190AbhLUAuI (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 20 Dec 2021 19:50:08 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5DE0C061574;
-        Mon, 20 Dec 2021 16:50:07 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JHyXr5XjJz4xd4;
-        Tue, 21 Dec 2021 11:50:04 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1640047806;
-        bh=o7imnqc01K6O2x4L1xT595ExkFUcfmNcjumSxNKsTNQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=ISTij4Lc6XsfULDHvU77JbihwPhaCBWf/CyiyjMFIQ7T6OMRIZ/NGMglgkZU+V1/b
-         5EaQ92pEpg7Fn971jCpxLXmPwPK/Merd3AOPE432TFPbLw0dpH9MflaaruznC6Mcl2
-         wUMHuEK3mNeJ2Kc9ujwUgpvqcpoHJMHi6iVCwFbJtIGlQNfXq24sCF6KwkgHFcqUCf
-         WFK25P3FhXcSBR9WR7zw7ZFGrk8LsF97kS2ctBxA6fgF51prdi2+Q9/3j73onfkpru
-         ULRTvM3eT2B1kQ00c/sFdIHzlzApUOXRoTgAARxDjm7DU5+5xteFMpJWsmgqztinN+
-         2ScWP/X2DgY3Q==
-Date:   Tue, 21 Dec 2021 11:50:04 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Johannes Berg <johannes@sipsolutions.net>,
-        Wireless <linux-wireless@vger.kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Kalle Valo <quic_kvalo@quicinc.com>,
-        Wen Gong <quic_wgong@quicinc.com>,
-        Ayala Beker <ayala.beker@intel.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the mac80211-next tree
-Message-ID: <20211221115004.1cd6b262@canb.auug.org.au>
+        id S230380AbhLUBFF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 20 Dec 2021 20:05:05 -0500
+Received: from a8-29.smtp-out.amazonses.com ([54.240.8.29]:39611 "EHLO
+        a8-29.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229551AbhLUBFF (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Mon, 20 Dec 2021 20:05:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1640048704;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+        bh=6XIgwuvRADkn4ciQLoOHtaaDsCIpj1CIotsWiFDNO5M=;
+        b=Ernz0XqZMwHuNraHy0eVcQEFF7zjUhtlqmHi3N5QXgvB6XE1NQopx9L+R4PPuZHI
+        orF4+qr8fhHQ+ucyTePvSj96UuIH4dWddfvtSfDZq7imfjUPMiy15RfSEBaSFKhL/Un
+        QDcrxw5fiLxHBEBaOQjhRbQSpxF5nYjv4WE0eTNY=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1640048704;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+        bh=6XIgwuvRADkn4ciQLoOHtaaDsCIpj1CIotsWiFDNO5M=;
+        b=I3Ocey5Sw5f02e9hBA3RwNYnTritsTvvKe3opbw+nLKExrt3IsKsgMQ0wtCJNZYx
+        3XtQ7wojYUsiVAf9xr3FLj7eN22r/qM1WUJmWucmQG7wi9s1LjiSzoGYVpxDUFZUXP+
+        qtVuZlLTsx98P6LM+hXQmM+xk78neRJuZ76YQ2kI=
+From:   lkft@linaro.org
+To:     lkft@linaro.org
+Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        linux-next@vger.kernel.org, shuah@kernel.org
+Subject: [REGRESSION] lkft kselftest for next-20211216
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/03R.m108Y_t1hW6EI1SYrX8";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Message-ID: <0100017dda853a3b-3b264601-3389-49c0-88f5-015dce7c676e-000000@email.amazonses.com>
+Date:   Tue, 21 Dec 2021 01:05:04 +0000
+Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
+X-SES-Outgoing: 2021.12.21-54.240.8.29
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/03R.m108Y_t1hW6EI1SYrX8
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+## Build
+* kernel: 5.16.0-rc5
+* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+* git branch: master
+* git commit: fbf252e0967821ce890e23359d00c30132876014
+* git describe: next-20211216
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20211216
 
-Hi all,
+## Test Regressions (compared to next-20211117)
+* qemu_i386, kselftest-cgroup
+  - cgroup.test_freezer
+  - cgroup.test_freezer.test_cgfreezer_ptrace
 
-After merging the mac80211-next tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+* qemu_i386, kselftest-rtc
+  - rtc.rtctest
 
-drivers/net/wireless/ath/ath10k/wmi.c: In function 'ath10k_wmi_event_mgmt_r=
-x':
-drivers/net/wireless/ath/ath10k/wmi.c:2626:12: error: too few arguments to =
-function 'cfg80211_get_ies_channel_number'
- 2626 |   ies_ch =3D cfg80211_get_ies_channel_number(mgmt->u.beacon.variabl=
-e,
-      |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-In file included from include/net/mac80211.h:21,
-                 from drivers/net/wireless/ath/ath10k/htt.h:16,
-                 from drivers/net/wireless/ath/ath10k/core.h:18,
-                 from drivers/net/wireless/ath/ath10k/wmi.c:11:
-include/net/cfg80211.h:6421:5: note: declared here
- 6421 | int cfg80211_get_ies_channel_number(const u8 *ie, size_t ielen,
-      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+* x15, kselftest-capabilities
+  - capabilities.test_execve
 
-Caused by commit
+* x15, kselftest-cgroup
+  - cgroup.test_freezer
+  - cgroup.test_kill
+  - cgroup.test_kill.test_cgkill_simple
 
-  7f599aeccbd2 ("cfg80211: Use the HE operation IE to determine a 6GHz BSS =
-channel")
-
-interacting with commit
-
-  3bf2537ec2e3 ("ath10k: drop beacon and probe response which leak from oth=
-er channel")
-
-from the net-next tree.
-
-I have applied the following merge fix patch for today (which, on
-reflection, may not be correct, but builds).
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Tue, 21 Dec 2021 11:40:49 +1100
-Subject: [PATCH] fixup for "cfg80211: Use the HE operation IE to determine =
-a 6GHz BSS channel"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/net/wireless/ath/ath10k/wmi.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/wireless/ath/ath10k/wmi.c b/drivers/net/wireless/a=
-th/ath10k/wmi.c
-index 4733fd7fb169..657bd6a32a36 100644
---- a/drivers/net/wireless/ath/ath10k/wmi.c
-+++ b/drivers/net/wireless/ath/ath10k/wmi.c
-@@ -2613,6 +2613,7 @@ int ath10k_wmi_event_mgmt_rx(struct ath10k *ar, struc=
-t sk_buff *skb)
- 	if (ieee80211_is_beacon(hdr->frame_control) ||
- 	    ieee80211_is_probe_resp(hdr->frame_control)) {
- 		struct ieee80211_mgmt *mgmt =3D (void *)skb->data;
-+		enum cfg80211_bss_frame_type ftype;
- 		u8 *ies;
- 		int ies_ch;
-=20
-@@ -2623,9 +2624,14 @@ int ath10k_wmi_event_mgmt_rx(struct ath10k *ar, stru=
-ct sk_buff *skb)
-=20
- 		ies =3D mgmt->u.beacon.variable;
-=20
-+		if (ieee80211_is_beacon(mgmt->frame_control))
-+			ftype =3D CFG80211_BSS_FTYPE_BEACON;
-+		else /* if (ieee80211_is_probe_resp(mgmt->frame_control)) */
-+			ftype =3D CFG80211_BSS_FTYPE_PRESP;
-+
- 		ies_ch =3D cfg80211_get_ies_channel_number(mgmt->u.beacon.variable,
- 							 skb_tail_pointer(skb) - ies,
--							 sband->band);
-+							 sband->band, ftype);
-=20
- 		if (ies_ch > 0 && ies_ch !=3D channel) {
- 			ath10k_dbg(ar, ATH10K_DBG_MGMT,
---=20
-2.33.0
+* x86, kselftest-kvm
+  - kvm.vmx_pmu_msrs_test
 
 
+## Metric Regressions (compared to next-20211117)
+No metric regressions found.
 
---=20
-Cheers,
-Stephen Rothwell
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
---Sig_/03R.m108Y_t1hW6EI1SYrX8
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
 
------BEGIN PGP SIGNATURE-----
+## Test Fixes (compared to next-20211117)
+* dragonboard-410c, kselftest-sync
+  - sync.sync_test
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHBJLwACgkQAVBC80lX
-0GwPygf+Kdmuupv94+ul74skfM1l6UVffIhetINDDorSIeBSZVHaajDwmqi7P8PZ
-0N0722gKosC32PXbvmaqvqg1myGKaPza7p6IfQ9sxQDikFPIjdBPjY7spJq8c1qp
-2ohSvsqklP8c7Bn5hszbg1RaKESb2NnB/nD8DkXYZbUUh6L/aktbaPBwMaart2K1
-ezT4pKeILtDJoYMdqUYpQKDDM/iIZdy+BMfS8NAkUhcm2FmtrqmCsJ/z9m4+eiMu
-oByQ03O+mu/G568/Dqmp1Cc+oBvdlB15DdqJZTz7osV67dugIvBHdrK2XZch3etz
-C941+p2Sqdftj6paKziCPyjmFnHfGA==
-=iUW7
------END PGP SIGNATURE-----
+* hi6220-hikey, kselftest-timers
+  - timers.nsleep-lat
 
---Sig_/03R.m108Y_t1hW6EI1SYrX8--
+* qemu_x86_64, kselftest-kvm
+  - kvm.set_memory_region_test
+
+* qemu_x86_64, kselftest-timers
+  - timers.rtcpie
+
+* x15, kselftest-core
+  - core.close_range_test
+
+* x15, kselftest-sync
+  - sync.sync_test
+
+* x86, kselftest-kvm
+  - kvm.memslot_perf_test
+
+
+## Metric Fixes (compared to next-20211117)
+No metric fixes found.
+
+## Test result summary
+total: 2498, pass: 1396, fail: 246, skip: 856, xfail: 0
+
+## Build Summary
+
+## Test suites summary
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-lkdtm
+* kselftest-membarrier
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+
+--
+Linaro LKFT
+https://lkft.linaro.org

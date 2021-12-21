@@ -2,175 +2,104 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93BE547B6AC
-	for <lists+linux-next@lfdr.de>; Tue, 21 Dec 2021 02:05:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0178A47B6FB
+	for <lists+linux-next@lfdr.de>; Tue, 21 Dec 2021 02:56:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230380AbhLUBFF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 20 Dec 2021 20:05:05 -0500
-Received: from a8-29.smtp-out.amazonses.com ([54.240.8.29]:39611 "EHLO
-        a8-29.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229551AbhLUBFF (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Mon, 20 Dec 2021 20:05:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1640048704;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=6XIgwuvRADkn4ciQLoOHtaaDsCIpj1CIotsWiFDNO5M=;
-        b=Ernz0XqZMwHuNraHy0eVcQEFF7zjUhtlqmHi3N5QXgvB6XE1NQopx9L+R4PPuZHI
-        orF4+qr8fhHQ+ucyTePvSj96UuIH4dWddfvtSfDZq7imfjUPMiy15RfSEBaSFKhL/Un
-        QDcrxw5fiLxHBEBaOQjhRbQSpxF5nYjv4WE0eTNY=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1640048704;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=6XIgwuvRADkn4ciQLoOHtaaDsCIpj1CIotsWiFDNO5M=;
-        b=I3Ocey5Sw5f02e9hBA3RwNYnTritsTvvKe3opbw+nLKExrt3IsKsgMQ0wtCJNZYx
-        3XtQ7wojYUsiVAf9xr3FLj7eN22r/qM1WUJmWucmQG7wi9s1LjiSzoGYVpxDUFZUXP+
-        qtVuZlLTsx98P6LM+hXQmM+xk78neRJuZ76YQ2kI=
-From:   lkft@linaro.org
-To:     lkft@linaro.org
-Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
-        linux-next@vger.kernel.org, shuah@kernel.org
-Subject: [REGRESSION] lkft kselftest for next-20211216
+        id S231327AbhLUB4T (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 20 Dec 2021 20:56:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44054 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231309AbhLUB4T (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 20 Dec 2021 20:56:19 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 661E9C061574;
+        Mon, 20 Dec 2021 17:56:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=bHLeXu+YMuW4qKMNGcZRf53kShKHZ66lrQQNLJlHeOU=; b=Sd0IVJrnBLyxGYK77jnqtIcNFl
+        jY+oRGxJyg0l0Ov7DVxFPs919H48yOJ8rXWVFTLkI+QIN4J916pkwnB4u787lQGQ8zc0xbBzkWfvU
+        8xTe7EsL1P47eIRXnhCdyo5dKUx60bVGXTXH7U1DVYyuYMqoujTmQvtGd7+HCog4JHvaYc/INLJxl
+        cSji4/9B7v73iaHb1j5//sxuvf7yMzBTmq8fFUEs9lcNpux01OyIKrpxzNslCx9EDI7zql/E4t1rU
+        Ascjo+h+knVWDK8scDgZjlc9XkwfPitizGMF1Gaykb48zosiNPd2hCaGc0VXcOVaqccU+E4rZ2Dz3
+        ngIvGNPg==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mzUNx-002dI0-45; Tue, 21 Dec 2021 01:56:13 +0000
+Message-ID: <00384bd8-f51a-7c7f-9319-c40c33ca14cc@infradead.org>
+Date:   Mon, 20 Dec 2021 17:56:08 -0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH -next] reset: starfive-jh7100: Fix 32bit compilation
+Content-Language: en-US
+To:     Emil Renner Berthing <kernel@esmil.dk>, soc@kernel.org
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+References: <20211220121800.760846-1-kernel@esmil.dk>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20211220121800.760846-1-kernel@esmil.dk>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-Message-ID: <0100017dda853a3b-3b264601-3389-49c0-88f5-015dce7c676e-000000@email.amazonses.com>
-Date:   Tue, 21 Dec 2021 01:05:04 +0000
-Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2021.12.21-54.240.8.29
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-## Build
-* kernel: 5.16.0-rc5
-* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-* git branch: master
-* git commit: fbf252e0967821ce890e23359d00c30132876014
-* git describe: next-20211216
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20211216
-
-## Test Regressions (compared to next-20211117)
-* qemu_i386, kselftest-cgroup
-  - cgroup.test_freezer
-  - cgroup.test_freezer.test_cgfreezer_ptrace
-
-* qemu_i386, kselftest-rtc
-  - rtc.rtctest
-
-* x15, kselftest-capabilities
-  - capabilities.test_execve
-
-* x15, kselftest-cgroup
-  - cgroup.test_freezer
-  - cgroup.test_kill
-  - cgroup.test_kill.test_cgkill_simple
-
-* x86, kselftest-kvm
-  - kvm.vmx_pmu_msrs_test
 
 
-## Metric Regressions (compared to next-20211117)
-No metric regressions found.
+On 12/20/21 04:17, Emil Renner Berthing wrote:
+> We need to include linux/io-64-nonatomic-lo-hi.h or readq/writeq won't
+> be defined when compiling on 32bit architectures:
+> 
+> On i386:
+> 
+> ../drivers/reset/reset-starfive-jh7100.c: In function ‘jh7100_reset_update’:
+> ../drivers/reset/reset-starfive-jh7100.c:81:10: error: implicit declaration of function ‘readq’; did you mean ‘readl’? [-Werror=implicit-function-declaration]
+>   value = readq(reg_assert);
+>            ^~~~~
+> ../drivers/reset/reset-starfive-jh7100.c:86:2: error: implicit declaration of function ‘writeq’; did you mean ‘writel’? [-Werror=implicit-function-declaration]
+>   writeq(value, reg_assert);
+>   ^~~~~~
+> 
+> On m68k:
+> 
+> drivers/reset/reset-starfive-jh7100.c:81:17: error: implicit declaration of function 'readq'; did you mean 'readb'? [-Werror=implicit-function-declaration]
+> drivers/reset/reset-starfive-jh7100.c:86:9: error: implicit declaration of function 'writeq'; did you mean 'writel'? [-Werror=implicit-function-declaration]
+> cc1: all warnings being treated as errors
+> make[3]: *** [scripts/Makefile.build:289: drivers/reset/reset-starfive-jh7100.o] Error 1
+> make[2]: *** [scripts/Makefile.build:572: drivers/reset] Error 2
+> make[1]: *** [Makefile:1969: drivers] Error 2
+> make: *** [Makefile:226: __sub-make] Error 2
+> 
+> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+> Fixes: 0be3a1595bf8 ("reset: starfive-jh7100: Add StarFive JH7100 reset driver")
+> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
 
+Thanks.
 
-## Test Fixes (compared to next-20211117)
-* dragonboard-410c, kselftest-sync
-  - sync.sync_test
+> ---
+>  drivers/reset/reset-starfive-jh7100.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/reset/reset-starfive-jh7100.c b/drivers/reset/reset-starfive-jh7100.c
+> index e28a19d271cb..fc44b2fb3e03 100644
+> --- a/drivers/reset/reset-starfive-jh7100.c
+> +++ b/drivers/reset/reset-starfive-jh7100.c
+> @@ -7,6 +7,7 @@
+>  
+>  #include <linux/bitmap.h>
+>  #include <linux/io.h>
+> +#include <linux/io-64-nonatomic-lo-hi.h>
+>  #include <linux/iopoll.h>
+>  #include <linux/mod_devicetable.h>
+>  #include <linux/platform_device.h>
 
-* hi6220-hikey, kselftest-timers
-  - timers.nsleep-lat
-
-* qemu_x86_64, kselftest-kvm
-  - kvm.set_memory_region_test
-
-* qemu_x86_64, kselftest-timers
-  - timers.rtcpie
-
-* x15, kselftest-core
-  - core.close_range_test
-
-* x15, kselftest-sync
-  - sync.sync_test
-
-* x86, kselftest-kvm
-  - kvm.memslot_perf_test
-
-
-## Metric Fixes (compared to next-20211117)
-No metric fixes found.
-
-## Test result summary
-total: 2498, pass: 1396, fail: 246, skip: 856, xfail: 0
-
-## Build Summary
-
-## Test suites summary
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-lkdtm
-* kselftest-membarrier
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-
---
-Linaro LKFT
-https://lkft.linaro.org
+-- 
+~Randy

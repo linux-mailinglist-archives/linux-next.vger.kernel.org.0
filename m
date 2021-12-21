@@ -2,107 +2,123 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2547347BEBD
-	for <lists+linux-next@lfdr.de>; Tue, 21 Dec 2021 12:17:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A27347BF8C
+	for <lists+linux-next@lfdr.de>; Tue, 21 Dec 2021 13:16:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236966AbhLULR3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 21 Dec 2021 06:17:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57804 "EHLO
+        id S237490AbhLUMQO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 21 Dec 2021 07:16:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232127AbhLULR2 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 21 Dec 2021 06:17:28 -0500
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F7EDC061574;
-        Tue, 21 Dec 2021 03:17:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Type:References:
-        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Content-Transfer-Encoding:
-        Sender:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=gRG6JY48L9ROunICAHJ4xCJZ15g9dEgpL3TQjx//E5g=; t=1640085448; x=1641295048; 
-        b=EEwiqd5jqdbAkbm74PAPiJtqoGWj3rukvo3XFMp8lA2iFGNBilAJwzes9w6Lm9nR+MgZTbkRsgb
-        V2sMtJiLD+sfetdrdW0gRuV2lfkGXNcBhvaAFapxQpoa2HUnGGG2KiOjujVCum1+YBynRhRtJbFHZ
-        rk705+H0U3tiPLRSND2wYxFm0GFci9M0T/7+vtqDMvYWs2KWfFXkhBahBnI2gNpIXgw8ecVbfk1x+
-        Tef/hMXHbyQUpoWT0gE/WMGIJrGdmIofHOAvCtP5m+UrlYNVyBQv4BQLFthD9o1EC8U084Qk3BNAb
-        IPbxJtPSEotKm/OiGS/b1qtoyT5AMrmc7igg==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.95)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1mzd8w-00EXWu-6S;
-        Tue, 21 Dec 2021 12:17:18 +0100
-Message-ID: <13ca3acf1107cd08b87f5d6adf93a06b5f9663f2.camel@sipsolutions.net>
-Subject: Re: linux-next: build failure after merge of the mac80211-next tree
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Wireless <linux-wireless@vger.kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Kalle Valo <quic_kvalo@quicinc.com>,
-        Wen Gong <quic_wgong@quicinc.com>,
-        Ayala Beker <ayala.beker@intel.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        with ESMTP id S234571AbhLUMQO (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 21 Dec 2021 07:16:14 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D85DC061574;
+        Tue, 21 Dec 2021 04:16:14 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JJFmX5MKzz4xmt;
+        Tue, 21 Dec 2021 23:16:12 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1640088973;
+        bh=1z2SwME5Aku2UNRpHEs9HfjiN4612fvj2KO0CU/gLZ0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=KiKkw5AkjqUz5Uwm+B85zBd92j8ZIglBHPR+inJwY5YFf0iIVjZpak7rl946TTxOd
+         s839cWVU+gd9qBcKLd+kBIUHqvPLfoBmWSuy8N4L9to+m9lUkOHgSx9MfDlceh2mHH
+         7I7vzcUHLvQm7pzXKAC7jIV5oz0WiI/Dh9rMpJf9p+P+Yk769/zMmUOrf4pqSZQDoY
+         gPdw4Q5q95eOV6EQcrcc6IK0kKS0Di3CvDFGqCgjFf271uExv+ka1ZCZkzGizw/dDh
+         BFFe/7djYbkPufS/4CqwrqUlrrp5bJCAMO5NDMt1sChRuANnSZzd6owU9E39emrUqH
+         VcXcshlM9ufBA==
+Date:   Tue, 21 Dec 2021 23:16:11 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Date:   Tue, 21 Dec 2021 12:17:12 +0100
-In-Reply-To: <20211221221519.75dff443@canb.auug.org.au>
-References: <20211221115004.1cd6b262@canb.auug.org.au>
-         <82d41a8b2c236fa40697094a3d4a325865bde2b2.camel@sipsolutions.net>
-         <20211221221519.75dff443@canb.auug.org.au>
-Content-Type: multipart/signed; micalg="pgp-sha512";
-        protocol="application/pgp-signature"; boundary="=-ZVfJ6yLK0Qqn2YWp4vgG"
-User-Agent: Evolution 3.42.2 (3.42.2-1.fc35) 
+Subject: linux-next: run time warning after merge of the userns tree
+Message-ID: <20211221231611.785b74cf@canb.auug.org.au>
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
-X-malware-bazaar-2: OK
+Content-Type: multipart/signed; boundary="Sig_/4uD7FicQV8yBT7I4oCRdziU";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-
---=-ZVfJ6yLK0Qqn2YWp4vgG
-Content-Type: text/plain; charset="UTF-8"
+--Sig_/4uD7FicQV8yBT7I4oCRdziU
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, 2021-12-21 at 22:15 +1100, Stephen Rothwell wrote:
-> Hi Johannes,
->=20
-> On Tue, 21 Dec 2021 12:02:57 +0100 Johannes Berg <johannes@sipsolutions.n=
-et> wrote:
-> >=20
-> > Thanks for the heads-up, also on the merge issue.
-> >=20
-> > I'll pull back net-next and fix this.
->=20
-> Or just let Dave know when you ask him to merge your tree ...
->=20
+Hi all,
 
-Yeah, I guess I can do that too.
+[I am just guessing at the userns tree.]
 
-Maybe I'll do that and link to both of your resolutions, they both look
-good :)
+My qemu boot test of a powerpc pseries_le_defconfig kernel produced
+this warning:
 
-johannes
+  SLUB: HWalign=3D128, Order=3D0-3, MinObjects=3D0, CPUs=3D1, Nodes=3D1
+  ftrace: allocating 33453 entries in 13 pages
+  ftrace: allocated 13 pages with 3 groups
+  trace event string verifier disabled
+  ------------[ cut here ]------------
+  WARNING: CPU: 0 PID: 0 at kernel/sched/core.c:9469 sched_init+0x45c/0x4f4
+  Modules linked in:
+  CPU: 0 PID: 0 Comm: swapper Not tainted 5.16.0-rc6 #2
+  NIP:  c000000002027c98 LR: c000000002027c94 CTR: 0000000000000000
+  REGS: c00000000278bb80 TRAP: 0700   Not tainted  (5.16.0-rc6)
+  MSR:  8000000002021033 <SF,VEC,ME,IR,DR,RI,LE>  CR: 84000220  XER: 000000=
+00
+  CFAR: c00000000016c1fc IRQMASK: 1=20
+  GPR00: c000000002027c94 c00000000278be20 c00000000278d300 000000000000000=
+1=20
+  GPR04: c000000000f88788 c000000002865d98 c000000007070680 000000000000000=
+1=20
+  GPR08: 000000007dae0000 c000000007070630 0000000000000000 000000000000000=
+1=20
+  GPR12: 0000000000000000 c000000002970000 0000000000000000 000000000000000=
+0=20
+  GPR16: 0000000002bf00d0 c0000000027c1f38 c00000000017e510 c000000002867f0=
+0=20
+  GPR20: c0000000025306b8 c00000000017b520 c00000000017b200 c0000000028682b=
+8=20
+  GPR24: 0000000000000400 0000000000000000 c0000000027c2470 c0000000027b3a0=
+0=20
+  GPR28: c0000000021af900 0000000000000800 0000000000000000 c00000007fc8f90=
+0=20
+  NIP [c000000002027c98] sched_init+0x45c/0x4f4
+  LR [c000000002027c94] sched_init+0x458/0x4f4
+  Call Trace:
+  [c00000000278be20] [c000000002027c94] sched_init+0x458/0x4f4 (unreliable)
+  [c00000000278bed0] [c000000002004200] start_kernel+0x53c/0x8cc
+  [c00000000278bf90] [c00000000000d39c] start_here_common+0x1c/0x600
+  Instruction dump:
+  90ea0188 f92a0180 3d22fffb 39291890 39490050 7d005028 31080001 7d00512d=20
+  40c2fff4 e86d0908 4a144499 60000000 <0b030000> a08d0008 e86d0908 4bfff849=
+=20
+  ---[ end trace 0000000000000000 ]---
 
---=-ZVfJ6yLK0Qqn2YWp4vgG
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
+Exposed by commit
+
+  40966e316f86 ("kthread: Ensure struct kthread is present for all kthreads=
+")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/4uD7FicQV8yBT7I4oCRdziU
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEH1e1rEeCd0AIMq6MB8qZga/fl8QFAmHBt7gACgkQB8qZga/f
-l8Rhig//XH2Dd8PYtvFdzwZzlxoo/xWQEpGrC4WSLgjiv4Xg3mno66CQtgmTOfEg
-SPl+NLDlrWYVHcuYfDMxY1abQQR5mCMtTMv7l2a5s4zuA5KBbDHH8bGhF5AGbcDT
-sT6tgzWcsk1nw5i+1qeYZF/U0JWY8Hq7HG0xADayQMsoQIewEustVNl4yGHJLXeF
-uVgJ/uxCto2wHRUgWSrLD25TFn+NorxvAwoOmUETFD4V51YA3vhanoHVp1Fl6oWa
-nbc20sSCHJQEYYxK/jH0w+Hxbn878vHCb7lTUhb7+JoccgRZ4VuGZyzZkbgfwkUj
-QarY196zrH+IyW8nauF7qvjqiFbAN3zJHorj/IbGgxGCHjTTzL2sq2kgbpS89LEa
-a9FTovnMI39qginbsi1rGKoen/b8eQvnpK8tTaKF2J7IAECR71t8BHQRvLE1mF8o
-L9RxuzQVc4GXP9KGEj9//seKcw6ApB1w4oCO6p2MFmg6aX1eH11ogsZhHQxoDDMH
-ez8Te1dyrU8YqQDvMi/WSU5xA17403J31X5d7fgzEXUOD99lV7ZXtoGcr1vuLThv
-R0hOMZgT3SH/f2C0zYvGGpoU/qvXZgPEgWPp7YMRSCqnzeziDlbaWhjGfHAfGz9V
-iQRPAMz0iX2pXssw4GM8feXWdJQiX3heBov+MfWkrbUnkylbnZw=
-=fzz/
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHBxYsACgkQAVBC80lX
+0GzZjgf+I10ffk6B+zKRHQ3My2mJIzY8paFnofu1ZtjHulspRya3djQ3fJaWc6/m
+8hhmBXx3EC1LjZ/UGE/aVJZrVJV4OUl5KA4Igvca5Qe7CjpG/l0jqTIvL2IUiSCG
+gejkDZCpBA0vk31SndzAD3WVtjinZiBvcd+4F6CK/aBVNykwWla7xZba1Wkndp0p
+r+XboFq/Mi8THNpwkNdV4EokaHefhuBuHHNQk+t76pGQILJ/46YgPrn80egaRqOQ
+2TcTIpvkSG92xVhGC6ouX9VACFvYKPrtNkXvp6kF68LIiNtJAntIsTG7artukofJ
+z8wikqxR6dKcfq6bmrBpZmUMzPJyyQ==
+=Siq0
 -----END PGP SIGNATURE-----
 
---=-ZVfJ6yLK0Qqn2YWp4vgG--
+--Sig_/4uD7FicQV8yBT7I4oCRdziU--

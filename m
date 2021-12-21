@@ -2,94 +2,161 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1673247BE86
-	for <lists+linux-next@lfdr.de>; Tue, 21 Dec 2021 12:03:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C206C47BE90
+	for <lists+linux-next@lfdr.de>; Tue, 21 Dec 2021 12:07:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236861AbhLULD2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 21 Dec 2021 06:03:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54682 "EHLO
+        id S236894AbhLULHl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 21 Dec 2021 06:07:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236854AbhLULD1 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 21 Dec 2021 06:03:27 -0500
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48A79C061574;
-        Tue, 21 Dec 2021 03:03:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Type:References:
-        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Content-Transfer-Encoding:
-        Sender:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=yglYthrFmg///JUzG1COfGQeT83+F4LyeoS2yb5n4eY=; t=1640084607; x=1641294207; 
-        b=h6Kmdyamhqj/2ksbaLz9/jTwuL+9NMJmpjmSUUPnIA1wi3lksMBXoryb3oSeX5wMx6uWp56vGhb
-        B0tft34aQEWMABxeLChfSw8fBl4NS/7ORzOKgzmJJahGuC1wwfbKnoTeC+lH936VcWKDgmEkKPekC
-        uiGDXQtatAlNAxnpmmSv+3YQU9HsY2L8TZyr3zyActttvB4KJaKh3KO4h7qHg3mvUkCJVzNolAkYg
-        TpQmzTQ0yRHVrnzv0eY+iKX/Njsjv7LJ9WlC0xrgR5D7NcZIdb2lpBALZgNyEXrZMiFC562mdgZbi
-        mMpCOssHWCeBH1wB7FZSCCiAA5h4MxKQZHmQ==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.95)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1mzcvB-00EXEt-94;
-        Tue, 21 Dec 2021 12:03:06 +0100
-Message-ID: <82d41a8b2c236fa40697094a3d4a325865bde2b2.camel@sipsolutions.net>
-Subject: Re: linux-next: build failure after merge of the mac80211-next tree
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Wireless <linux-wireless@vger.kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Kalle Valo <quic_kvalo@quicinc.com>,
-        Wen Gong <quic_wgong@quicinc.com>,
-        Ayala Beker <ayala.beker@intel.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Date:   Tue, 21 Dec 2021 12:02:57 +0100
-In-Reply-To: <20211221115004.1cd6b262@canb.auug.org.au>
-References: <20211221115004.1cd6b262@canb.auug.org.au>
-Content-Type: multipart/signed; micalg="pgp-sha512";
-        protocol="application/pgp-signature"; boundary="=-IsYl64bjhYT+ofXkGlet"
-User-Agent: Evolution 3.42.2 (3.42.2-1.fc35) 
+        with ESMTP id S236910AbhLULHl (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 21 Dec 2021 06:07:41 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 881D1C06173F;
+        Tue, 21 Dec 2021 03:07:40 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JJDFP69FHz4xgt;
+        Tue, 21 Dec 2021 22:07:37 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1640084858;
+        bh=sGwUVGMYmfSOoq7kl7vDs2DU8f7u457UNrYrWsnc7cI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=GBeMZgtBF1Ft8aaYUK9ZHz1PCA/BuMMlMIXe1CB+qAraH9eWDGytnzFDHvZrEifYE
+         3xx+NaZPvwmClY3RfkRs6xtrPLlhYgdJgdqZQq3ju0e4iPQUcApm/y2g8tFJS7YyaO
+         39dCcedc5yaOPL9R/smS8At/hzLOGuX53CGrHgOlOxFyGp3NYcmv5PnZ0CeUJlaNM+
+         htXChcCt193YQrJhkMD+l3mVMWvsLDFubLh0ANohPfe4YGOI23QzBtPxo70PZEEbZ9
+         1jQx1kenazBsZt9bts8EAaBuk9PEw8o0yvfA6bJmqzAySqYt9FiGp8ReYbZVW5zcYZ
+         FrKXvdL8brhHw==
+Date:   Tue, 21 Dec 2021 22:07:34 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Yafang Shao <laoar.shao@gmail.com>
+Subject: linux-next: manual merge of the akpm-current tree with the userns
+ tree
+Message-ID: <20211221220734.16e36bdf@canb.auug.org.au>
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
-X-malware-bazaar-2: OK
+Content-Type: multipart/signed; boundary="Sig_/zy9E67.wwSzBvkVnKa=+TMT";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-
---=-IsYl64bjhYT+ofXkGlet
-Content-Type: text/plain; charset="UTF-8"
+--Sig_/zy9E67.wwSzBvkVnKa=+TMT
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Stephen,
+Hi all,
 
-Thanks for the heads-up, also on the merge issue.
+Today's linux-next merge of the akpm-current tree got conflicts in:
 
-I'll pull back net-next and fix this.
+  include/linux/kthread.h
+  kernel/kthread.c
 
-johannes
+between commit:
 
+  40966e316f86 ("kthread: Ensure struct kthread is present for all kthreads=
+")
 
---=-IsYl64bjhYT+ofXkGlet
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
+from the userns tree and commit:
+
+  1ac41b3d9ad8 ("kthread: dynamically allocate memory to store kthread's fu=
+ll name")
+
+from the akpm-current tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc include/linux/kthread.h
+index 4f3433afb54b,a1810374eaa9..000000000000
+--- a/include/linux/kthread.h
++++ b/include/linux/kthread.h
+@@@ -33,7 -33,8 +33,8 @@@ struct task_struct *kthread_create_on_c
+  					  unsigned int cpu,
+  					  const char *namefmt);
+ =20
++ void get_kthread_comm(char *buf, size_t buf_size, struct task_struct *tsk=
+);
+ -void set_kthread_struct(struct task_struct *p);
+ +bool set_kthread_struct(struct task_struct *p);
+ =20
+  void kthread_set_per_cpu(struct task_struct *k, int cpu);
+  bool kthread_is_per_cpu(struct task_struct *k);
+diff --cc kernel/kthread.c
+index c14707d15341,8be710f2d83d..000000000000
+--- a/kernel/kthread.c
++++ b/kernel/kthread.c
+@@@ -94,7 -95,19 +96,19 @@@ static inline struct kthread *__to_kthr
+  	return kthread;
+  }
+ =20
++ void get_kthread_comm(char *buf, size_t buf_size, struct task_struct *tsk)
++ {
++ 	struct kthread *kthread =3D to_kthread(tsk);
++=20
++ 	if (!kthread || !kthread->full_name) {
++ 		__get_task_comm(buf, buf_size, tsk);
++ 		return;
++ 	}
++=20
++ 	strscpy_pad(buf, kthread->full_name, buf_size);
++ }
++=20
+ -void set_kthread_struct(struct task_struct *p)
+ +bool set_kthread_struct(struct task_struct *p)
+  {
+  	struct kthread *kthread;
+ =20
+@@@ -122,13 -128,17 +136,17 @@@ void free_kthread_struct(struct task_st
+  	struct kthread *kthread;
+ =20
+  	/*
+ -	 * Can be NULL if this kthread was created by kernel_thread()
+ -	 * or if kmalloc() in kthread() failed.
+ +	 * Can be NULL if kmalloc() in set_kthread_struct() failed.
+  	 */
+  	kthread =3D to_kthread(k);
++ 	if (!kthread)
++ 		return;
++=20
+  #ifdef CONFIG_BLK_CGROUP
+- 	WARN_ON_ONCE(kthread && kthread->blkcg_css);
++ 	WARN_ON_ONCE(kthread->blkcg_css);
+  #endif
+ +	k->set_child_tid =3D (__force void __user *)NULL;
++ 	kfree(kthread->full_name);
+  	kfree(kthread);
+  }
+ =20
+
+--Sig_/zy9E67.wwSzBvkVnKa=+TMT
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEH1e1rEeCd0AIMq6MB8qZga/fl8QFAmHBtGEACgkQB8qZga/f
-l8St2Q/+Lik9DpdokHmVx7W0bgDNJHpogY6YKv7S56LMQwzYafq88nZrn2VaNdON
-8eNouxP64ypNKdIq4qc6qwE1vBHFfFNsJ93eAJp9T6RgDK1y6thKwWnhOdVVTh42
-+m4cwS8hOGI4MSxIFujHsi9oSafzLmGWvXpT7uIQ3ozB/g5RhvP74Z7/dkKKQxvy
-IV/hjVH3YELpjDWxSohdX9gS3u65139UDDmw05EPp1aXEJ8P+ZkqywyGFEIa9oGo
-Qe2QNW9LhO5FgjPQPKY5dKr078CUTQPn/FTtuiYQ+iYQvuHDaIHqE83uhTyhEXky
-tRpBU9X8JfZK1IdSLlQepshd0hRUi7csfRZCNo74lLovgwqb2Z7ANnHlOpN8j+J/
-MxsG5gqPfpnIv9IzGN9MQQn94ZEsKs2NkDrDkIiIoxbfSw9fAc6576jXmhdFPmsm
-d0edOXh7w17SAZBCrvzRjBcCnrbkNTnPhrZUHXI9cmbfa/OTHTVN7iW/gUAbF6DP
-GVHjc+OdjcL2IZbbeqQ9nThlQdGFeiGCyK3W3Pk4cXgStRmw6TDV9lojfKJ8Mw1a
-gOY3uXQrhV6EiqeXkjapkzrKwA9ydf8OAR6GfskC+9bp81Pje7cdWg8Y06n2buSW
-IXUIXTKFXeNyVLSuS04BBwxyqAJvF2V7vErUjy0yRewyPgG/iKo=
-=rbU4
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHBtXYACgkQAVBC80lX
+0Gybugf/QCb63It2JBJC7x3/0T9JyLC8vuGTK+1+oDDMZ6O+jSRqqTd8XOjcP7FN
+aCqGpu0eKvnS7XfyJzebP+OrzWXvOqKsfOHR4dfBqitrqBUE2Dc1zNS3i8+UfqYJ
+dphfXJHDrPR+K2Ty3L7UcHb0M9kf7yC5RWouHEyBeLuZj0ds/P15losPo204CdUg
+37pfwcpxgj3Z7fMLecbxp52yF8ZeqHJcGMb4B6TbZwMIyEN71pPQlSV4QMQwKhV8
+ArjwL7v7nK1qbu7CU5Evt4nH9UlcCGqhIbSPrW2oELoixbcApJcVaXaDPUyQo6I6
+ZcNY1uEgVC3oPg9jnz6Rx3uQxk+o4A==
+=jh07
 -----END PGP SIGNATURE-----
 
---=-IsYl64bjhYT+ofXkGlet--
+--Sig_/zy9E67.wwSzBvkVnKa=+TMT--

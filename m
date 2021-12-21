@@ -2,129 +2,143 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 719DA47BFB7
-	for <lists+linux-next@lfdr.de>; Tue, 21 Dec 2021 13:31:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F24847C1EA
+	for <lists+linux-next@lfdr.de>; Tue, 21 Dec 2021 15:52:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237579AbhLUMbj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 21 Dec 2021 07:31:39 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:60536 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbhLUMbj (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 21 Dec 2021 07:31:39 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 81582B8167A;
-        Tue, 21 Dec 2021 12:31:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67246C36AE2;
-        Tue, 21 Dec 2021 12:31:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640089896;
-        bh=aRJ72Tt/74M53TxT2OxpczsMwM+tVhnGCLhStYmdK/k=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=IJBirJBSycKfJ4lUKJrrxZxSzLZkwUAq0ACEDvV8ExcILnan4u+0BBUTcLn9TFkqq
-         ROWCarGa1JebcuK58DHn/YEufZ/E4Wvk60GE+N/+7258YhqIs47Y9GyLzRwe+45EhO
-         hRcVP7brTIM078SJo4/Na1e67bK4dsLsVwruz0cT1DtUbVXzXq7l29Yz+/uKkNsBH0
-         9UEm6LIdF8DzY2qNsw/aE93856Vgj/FzYgwozsJqaCxaE1mJN2cZ1nzFFJwr4f8mtB
-         qby1l/K1PxCO+er7akG6mgi98NKtiyeRJ0ze949WgytylPmphYNY0oovS+JNemufHu
-         jUQn26FZbEwjA==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Johannes Berg <johannes@sipsolutions.net>,
-        Wireless <linux-wireless@vger.kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Wen Gong <quic_wgong@quicinc.com>,
-        Ayala Beker <ayala.beker@intel.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the mac80211-next tree
-References: <20211221115004.1cd6b262@canb.auug.org.au>
-Date:   Tue, 21 Dec 2021 14:31:31 +0200
-In-Reply-To: <20211221115004.1cd6b262@canb.auug.org.au> (Stephen Rothwell's
-        message of "Tue, 21 Dec 2021 11:50:04 +1100")
-Message-ID: <8735mmm95o.fsf@tynnyri.adurom.net>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        id S238646AbhLUOwX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 21 Dec 2021 09:52:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51078 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235634AbhLUOwW (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 21 Dec 2021 09:52:22 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CCF2C061574
+        for <linux-next@vger.kernel.org>; Tue, 21 Dec 2021 06:52:22 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id x32so39436039ybi.12
+        for <linux-next@vger.kernel.org>; Tue, 21 Dec 2021 06:52:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=lPecjuYH2sRt3YsiNb+7U2s9NUIfUFmtOepdin22CgA=;
+        b=nivnD2BKaYV5UJYwQDC/5g3SWtOM0hQ5o4ImmZRodEIJyenK2iBRi3N3o5v7nIf/RN
+         zhK3SSfVxAOzo0wg6oIVx3jZnTPpFrnfUcbGEo179m7VgBXfR2YlGrmZ9CUE1wcULQ9k
+         F4JbZII0o0bfFswOya+MXCaYn5U5ZxNiuFExgberG64w2EKrDhgIBSV5XVFZAkm99U0C
+         Ew+GvOKuPJKCZMTH/eIjJAaBv8MxQc7qu401q3cJlE2UuG1DxUdxgc17DS2nH09Xx12y
+         ebnuBka3UrFQ90P82f6R+uowaYYg9/gE6EInNoMQkcM0Rr37kkjLg88hDOJzi7b0xSS6
+         dJtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=lPecjuYH2sRt3YsiNb+7U2s9NUIfUFmtOepdin22CgA=;
+        b=czvmXP0F/G3tNB39k/w5EVVd1lbj2XXUC42A3q7+IU37jmecfT2Nl6fSdWZRj1RJGD
+         1Fc8+GB8Zxl4/UfeZ9ixgqKwv/4YXnoryMgrrcCws3ClAv1TVnxoG95GpG+9H0utGf/v
+         VfvrPFLpZclPYPM8QI7sTwLeErWv2aKfb6lHyTqcFZInViU2/u+RSONsjD5fLfzEhH3v
+         zZL9Qaje5DtnCi8wJR4dcLjlUmeyIcNB6gGLoClJL+z2pCvIfi4lHYxua8aCeAXWcZS8
+         YuAng0I6RYwobkepbKg+tgXH2p96T0MYzBX+x4QlWwrFVxKUKmtqW96pklldZpCliteQ
+         vIBg==
+X-Gm-Message-State: AOAM533F9BONR+W4W4A2TN8YHgGo70ex0F7zl0rlgeleEqeOyySozgi6
+        rJSLai0NnHlEku7ctVpDplBGijHIo97HTzF5ZgEIbQ==
+X-Google-Smtp-Source: ABdhPJwQp2NqG8bCknQsI6uWBjEQ5KK4O5nWdq86Oulm10lLmAk6li+163inPeGRBc7a56fcfx6f5x2pEoCZCvgH2gQ=
+X-Received: by 2002:a25:300b:: with SMTP id w11mr5233833ybw.108.1640098341406;
+ Tue, 21 Dec 2021 06:52:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 21 Dec 2021 20:22:10 +0530
+Message-ID: <CA+G9fYvLaR5CF777CKeWTO+qJFTN6vAvm95gtzN+7fw3Wi5hkA@mail.gmail.com>
+Subject: [next] WARNING: CPU: 0 PID: 0 at kernel/sched/core.c:9469 sched_init
+To:     open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <Dietmar.Eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Christian Brauner <christian@brauner.io>,
+        "Eric W. Biederman" <ebiederm@xmission.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Stephen Rothwell <sfr@canb.auug.org.au> writes:
+[ Please ignore this email if it is already reported ]
 
-> Hi all,
->
-> After merging the mac80211-next tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
->
-> drivers/net/wireless/ath/ath10k/wmi.c: In function 'ath10k_wmi_event_mgmt_rx':
-> drivers/net/wireless/ath/ath10k/wmi.c:2626:12: error: too few
-> arguments to function 'cfg80211_get_ies_channel_number'
->  2626 |   ies_ch = cfg80211_get_ies_channel_number(mgmt->u.beacon.variable,
->       |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> In file included from include/net/mac80211.h:21,
->                  from drivers/net/wireless/ath/ath10k/htt.h:16,
->                  from drivers/net/wireless/ath/ath10k/core.h:18,
->                  from drivers/net/wireless/ath/ath10k/wmi.c:11:
-> include/net/cfg80211.h:6421:5: note: declared here
->  6421 | int cfg80211_get_ies_channel_number(const u8 *ie, size_t ielen,
->       |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->
-> Caused by commit
->
->   7f599aeccbd2 ("cfg80211: Use the HE operation IE to determine a 6GHz BSS channel")
->
-> interacting with commit
->
->   3bf2537ec2e3 ("ath10k: drop beacon and probe response which leak from other channel")
->
-> from the net-next tree.
->
-> I have applied the following merge fix patch for today (which, on
-> reflection, may not be correct, but builds).
->
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Tue, 21 Dec 2021 11:40:49 +1100
-> Subject: [PATCH] fixup for "cfg80211: Use the HE operation IE to determine a 6GHz BSS channel"
->
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  drivers/net/wireless/ath/ath10k/wmi.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/net/wireless/ath/ath10k/wmi.c b/drivers/net/wireless/ath/ath10k/wmi.c
-> index 4733fd7fb169..657bd6a32a36 100644
-> --- a/drivers/net/wireless/ath/ath10k/wmi.c
-> +++ b/drivers/net/wireless/ath/ath10k/wmi.c
-> @@ -2613,6 +2613,7 @@ int ath10k_wmi_event_mgmt_rx(struct ath10k *ar, struct sk_buff *skb)
->  	if (ieee80211_is_beacon(hdr->frame_control) ||
->  	    ieee80211_is_probe_resp(hdr->frame_control)) {
->  		struct ieee80211_mgmt *mgmt = (void *)skb->data;
-> +		enum cfg80211_bss_frame_type ftype;
->  		u8 *ies;
->  		int ies_ch;
->  
-> @@ -2623,9 +2624,14 @@ int ath10k_wmi_event_mgmt_rx(struct ath10k *ar, struct sk_buff *skb)
->  
->  		ies = mgmt->u.beacon.variable;
->  
-> +		if (ieee80211_is_beacon(mgmt->frame_control))
-> +			ftype = CFG80211_BSS_FTYPE_BEACON;
-> +		else /* if (ieee80211_is_probe_resp(mgmt->frame_control)) */
-> +			ftype = CFG80211_BSS_FTYPE_PRESP;
-> +
->  		ies_ch = cfg80211_get_ies_channel_number(mgmt->u.beacon.variable,
->  							 skb_tail_pointer(skb) - ies,
-> -							 sband->band);
-> +							 sband->band, ftype);
+While booting Linux next 20211221 on x86_64, i386, arm and arm64.
+the following kernel crash reported.
 
-I would remove the commented out code '/* if
-(ieee80211_is_probe_resp(mgmt->frame_control)) */', otherwise looks good
-to me.
+kernel warning while booting.
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+Starting kernel ...
+[    0.000000] Linux version 5.16.0-rc6-next-20211221
+(tuxmake@tuxmake) (x86_64-linux-gnu-gcc (Debian 11.2.0-10) 11.2.0, GNU
+ld (GNU Binutils for Debian) 2.37) #1 SMP PREEMPT @1640092006
+<trim>
+[    0.106683] ------------[ cut here ]------------
+[    0.106684] WARNING: CPU: 0 PID: 0 at kernel/sched/core.c:9469
+sched_init+0x417/0x534
+[    0.106689] Modules linked in:
+[    0.106692] CPU: 0 PID: 0 Comm: swapper Not tainted
+5.16.0-rc6-next-20211221 #1
+[    0.106694] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
+2.5 11/26/2020
+[    0.106696] RIP: 0010:sched_init+0x417/0x534
+[    0.106698] Code: ff 05 69 0d e1 ff 65 4c 8b 24 25 40 ad 01 00 48
+c7 c7 00 a9 37 a0 4c 89 e6 e8 d1 ed f8 fd 4c 89 e7 e8 f9 ba 07 fe 84
+c0 74 02 <0f> 0b e8 5e 12 ea fe 31 db 45 31 ed 49 c7 c4 40 9d 02 00 89
+c6 65
+[    0.106700] RSP: 0000:ffffffffa0203ea0 EFLAGS: 00010002
+[    0.106702] RAX: 0000000000000001 RBX: ffff944aa7ba9d40 RCX: 0000000000000001
+[    0.106703] RDX: ffffffffa0700160 RSI: ffffffff9fe13fc0 RDI: ffff94474007c028
+[    0.106704] RBP: ffffffffa0203ec8 R08: 0000000000000080 R09: 0000000000000000
+[    0.106706] R10: ffff94474007c000 R11: 00000000000273c0 R12: ffffffffa0218940
+[    0.106707] R13: 0000000000000000 R14: 0000000000029d40 R15: ffff944aa7ba9e40
+[    0.106708] FS:  0000000000000000(0000) GS:ffff944aa7a00000(0000)
+knlGS:0000000000000000
+[    0.106710] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[    0.106711] CR2: ffff9447d3201000 CR3: 0000000192c10001 CR4: 00000000000606b0
+[    0.106712] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[    0.106713] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[    0.106714] Call Trace:
+[    0.106716]  <TASK>
+[    0.106718]  start_kernel+0x3e0/0x695
+[    0.106722]  x86_64_start_reservations+0x24/0x26
+[    0.106724]  x86_64_start_kernel+0xa0/0xa6
+[    0.106727]  secondary_startup_64_no_verify+0xd5/0xdb
+[    0.106730]  </TASK>
+[    0.106731] ---[ end trace 0000000000000000 ]---
+[    0.107612] Dynamic Preempt: voluntary
+[    0.107632] rcu: Preemptible hierarchical RCU implementation.
+[    0.107633] rcu: RCU event tracing is enabled.
+[    0.107634] rcu: RCU restricting CPUs from N#
+R_CPUS=64 to nr_cpu_ids=4.
+[    0.107636] Trampoline variant of Tasks RCU enabled.
+[    0.107636] Rude variant of Tasks RCU enabled.
+[    0.107637] rcu: RCU calculated value of scheduler-enlistment delay
+is 100 jiffies.
+[    0.107638] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=4
+[    0.108792] NR_IRQS: 4352, nr_irqs: 456, preallocated irqs: 16
+[    0.109168] kfence: initialized - using 2097152 bytes for 255
+objects at 0x(____ptrval____)-0x(____ptrval____)
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+Test log link,
+https://qa-reports.linaro.org/lkft/linux-next-master-sanity/build/next-20211221/testrun/6972816/suite/linux-log-parser/test/check-kernel-warning-4190375/log
+https://lkft.validation.linaro.org/scheduler/job/4190375#L475
+
+metadata:
+---------
+  git branch: master
+  git repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+  git commit: 2850c2311ef4bf30ae8dd8927f0f66b026ff08fb
+  git describe: next-20211221
+  make_kernelversion: 5.16.0-rc6
+  kernel-config: https://builds.tuxbuild.com/22b2KawnzAREmulZd4tc18MxX1C/config
+
+--
+Linaro LKFT
+https://lkft.linaro.org

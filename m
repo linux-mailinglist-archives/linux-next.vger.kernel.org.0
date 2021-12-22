@@ -2,122 +2,105 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 015DA47DB8A
-	for <lists+linux-next@lfdr.de>; Thu, 23 Dec 2021 00:47:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35BED47DB99
+	for <lists+linux-next@lfdr.de>; Thu, 23 Dec 2021 00:58:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242162AbhLVXrK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 22 Dec 2021 18:47:10 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:59583 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241033AbhLVXrJ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 22 Dec 2021 18:47:09 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JK93H23tsz4xZ1;
-        Thu, 23 Dec 2021 10:47:06 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1640216828;
-        bh=34nDuBhsacLhqyEbLB21aao7b8KPXpJzCaQIVuvITmE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=LUov80UI5aIfp4Kt5cOe4Fa7ren5ZsWS36frHOcmD0+3hb9kftVXQeIEHjRk+Nvsr
-         qenO3EyUqfXS+ja6GfQab1KJx1KymvzrljRf8NcovParFDfbma8M4MivnP8+P4Xg55
-         kqsayjOXxl47VPWojMix5ZTnzeQSs2XUp1jHBFHqGebYba1yKlKJ3zYYbP0abvbCat
-         xCLZWHFHSLFu6ZZLL2RJEoYSx4DKNY91QXIJ3t0ebpC3tbKQF0pHTOSyJGD8/g1bb8
-         yJvoeyt9oUrU+sZyAQEMC+Ptvuu/g/ISIVGNr9VhDqFxXiw429MacPZvik/wKupA9X
-         YZRmv7qcqMuXw==
-Date:   Thu, 23 Dec 2021 10:47:04 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        id S238043AbhLVX6t (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 22 Dec 2021 18:58:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50094 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231232AbhLVX6t (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 22 Dec 2021 18:58:49 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24968C061574;
+        Wed, 22 Dec 2021 15:58:49 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id n15-20020a17090a160f00b001a75089daa3so7252147pja.1;
+        Wed, 22 Dec 2021 15:58:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=XofzRBE+iv6y6NDSZetvECywZ3qDZCAlP8imEJP0fxo=;
+        b=T+SRzr5tpM/IJyMrjcvA4Jy8/zIe5e5bbClozQhwW1c3oxYnLXMXjwp54Q9NUKF9b+
+         JJL0ohnFzVpWWVAU0Lz+dllztfpSUBmAdZENzRdo/Afm/cKBxOlPiwW9JR2nrMXoNThi
+         EoP1alHdq2mTRVJdFWiWZd5aev/MVWE4aEaO2PvHc1tB2ocN3mbukOEdobxfvy+ZJHHT
+         uG+zc2mkYwWmmxumVbzrt7c43xrQBqxeWkcjrQPxyj+DfIne22vke7h4Zc/A+9FF66B5
+         Ckngtl1W0+5TnAI5FwWhEKRI7l6/5pVfO2//YDogvDB5B+BbYfWRugvk5hDyHfEKS0lG
+         lm0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=XofzRBE+iv6y6NDSZetvECywZ3qDZCAlP8imEJP0fxo=;
+        b=dC1BOREojCyfXIKTFiwbzbzDbzs/6iqqGPaFamRJ6SZTnIkMfOClwtsOWgCwKbd0fI
+         SmdmMQrWonJ36+/Nra5vbpuFHxgWqzHmO9QY+PsXr5gP8deoxLGlaYKbmovIrZoIUemw
+         6Biw/dO74VIYtgt9EsswQ2VK7pvBcLI9tGdVEki4Dtwsd1F/hRkZTnRAiBCycx/pGXGT
+         1/bM/opvVRQqzphLraAIcyM+QcHQvZf7vBKgTe/5nC5Zxgz/HDUBq0cMgT4Nroufx7iF
+         JFVyHaeI7uiQKvebVeYn3H5/8Pl1gsff7NTswVOo2N6fH1oEUsrqDWf+hA+81di+6HH+
+         lsFQ==
+X-Gm-Message-State: AOAM5327U7AgTAC5GmGPEzO9SC4gUUnJlG1YX3cLR4BTSXhY2YyQnklH
+        YKO8ld74CdJZSwoyhv6R6HBwJffHRQo=
+X-Google-Smtp-Source: ABdhPJxMdQIvmF3YP8RKhDYcN9nk1UpYQKV42h5xFhYLnaw+C4gY/NwjI7dPnP8YfvBzmzPTv/ZG4g==
+X-Received: by 2002:a17:902:bd04:b0:148:ea19:556 with SMTP id p4-20020a170902bd0400b00148ea190556mr4843883pls.112.1640217528040;
+        Wed, 22 Dec 2021 15:58:48 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id s30sm3502774pfw.31.2021.12.22.15.58.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Dec 2021 15:58:47 -0800 (PST)
+Subject: Re: linux-next: build warning after merge of the arm-soc tree
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Olof Johansson <olof@lixom.net>,
+        ARM <linux-arm-kernel@lists.infradead.org>,
+        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Roger Quadros <rogerq@kernel.org>
-Subject: linux-next: manual merge of the nand tree with the drivers-memory
- tree
-Message-ID: <20211223104704.35fa3a41@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20211223085944.0095eaf5@canb.auug.org.au>
+ <CAK8P3a3WxP1x60fj7oPzY2=gTUEgA68x1vc17tRHEJ-O19-UTQ@mail.gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <6a830fc3-2186-0335-a600-8410abc24ea2@gmail.com>
+Date:   Wed, 22 Dec 2021 15:58:45 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/IzdqL2uUTP76_L0plyVbCWR";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <CAK8P3a3WxP1x60fj7oPzY2=gTUEgA68x1vc17tRHEJ-O19-UTQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/IzdqL2uUTP76_L0plyVbCWR
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 12/22/21 3:22 PM, Arnd Bergmann wrote:
+> On Wed, Dec 22, 2021 at 10:59 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>>
+>> Hi all,
+>>
+>> After merging the arm-soc tree, today's linux-next build (arm
+>> multi_v7_defconfig) produced this warning:
+>>
+>> arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dts:109.4-14: Warning (reg_format): /switch/ports:reg: property has invalid length (4 bytes) (#address-cells == 2, #size-cells == 1)
+>> arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dtb: Warning (pci_device_reg): Failed prerequisite 'reg_format'
+>> arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dtb: Warning (pci_device_bus_num): Failed prerequisite 'reg_format'
+>> arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dtb: Warning (i2c_bus_reg): Failed prerequisite 'reg_format'
+>> arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dtb: Warning (spi_bus_reg): Failed prerequisite 'reg_format'
+>> arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dts:106.9-149.5: Warning (avoid_default_addr_size): /switch/ports: Relying on default #address-cells value
+>> arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dts:106.9-149.5: Warning (avoid_default_addr_size): /switch/ports: Relying on default #size-cells value
+>>
+>> Maybe introduced by commit
+>>
+>>   3d2d52a0d183 ("ARM: dts: BCM5301X: define RTL8365MB switch on Asus RT-AC88U")
+> 
+> Confirmed, and now reverted as I'm already tagging the final pull requests.
+> 
+> Arınç, Florian: Feel free to resubmit a fixed version for the "late"
+> branch that Olof
+> may still pick up when I'm out of office, in case this is an important
+> change. Otherwise
+> I guess we can leave it for 5.18
 
-Hi all,
-
-Today's linux-next merge of the nand tree got a conflict in:
-
-  drivers/mtd/nand/raw/omap2.c
-
-between commit:
-
-  f2f8115fe8b3 ("memory: omap-gpmc: Use a compatible match table when check=
-ing for NAND controller")
-
-from the drivers-memory tree and commit:
-
-  0137c74ad873 ("mtd: rawnand: omap2: Add compatible for AM64 SoC")
-
-from the nand tree.
-
-I fixed it up (I used the former version and added the following patch)
-and can carry the fix as necessary. This is now fixed as far as linux-next
-is concerned, but any non trivial conflicts should be mentioned to your
-upstream maintainer when your tree is submitted for merging.  You may
-also want to consider cooperating with the maintainer of the conflicting
-tree to minimise any particularly complex conflicts.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Thu, 23 Dec 2021 10:41:35 +1100
-Subject: [PATCH] fixup for "memory: omap-gpmc: Use a compatible match table=
- when checking for NAND controller"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- include/linux/platform_data/mtd-nand-omap2.h | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/include/linux/platform_data/mtd-nand-omap2.h b/include/linux/p=
-latform_data/mtd-nand-omap2.h
-index 92f011805ad4..8c2f1f185353 100644
---- a/include/linux/platform_data/mtd-nand-omap2.h
-+++ b/include/linux/platform_data/mtd-nand-omap2.h
-@@ -65,6 +65,7 @@ struct gpmc_nand_regs {
-=20
- static const struct of_device_id omap_nand_ids[] =3D {
- 	{ .compatible =3D "ti,omap2-nand", },
-+	{ .compatible =3D "ti,am64-nand", },
- 	{},
- };
-=20
---=20
-2.33.0
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/IzdqL2uUTP76_L0plyVbCWR
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHDuPkACgkQAVBC80lX
-0GxlNgf/bDolQqo7UGnffq0BLDiPOuvIihfG9FxkWOc2jc386JOAR5i5bKetxuuz
-G++xf2sKJqWTMkztH5rwaf3oPAjUwyKGFEM76kKS/YpeF6GZRN/VcIi4AZg0bl8y
-/Z/eDXQSM9FnmRX77m4uedwh122d/qc+ldHuVVWooO+CW+kBZX8JsDQWgdnpcvSw
-ev57m0expuEKvpyvoip2MHkBatjnxP8j9Z8drXr1H9lwwsXEfN2d0Ug9/toXidQs
-akJE5o0zca8xwZkLmgFy22wZMT76Ul1oJ5VmiXqbwEx57rp1cKBe723tWrPyPYqW
-7seHvJBxt38QTzlFxFM9nszVTsYvGA==
-=tFy9
------END PGP SIGNATURE-----
-
---Sig_/IzdqL2uUTP76_L0plyVbCWR--
+Will do, thanks and sorry about not catching this earlier, I did not see
+it it in the build log somehow.
+-- 
+Florian

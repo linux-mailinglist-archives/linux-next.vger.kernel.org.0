@@ -2,96 +2,201 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC66B47CBF7
-	for <lists+linux-next@lfdr.de>; Wed, 22 Dec 2021 04:50:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F6C647CC00
+	for <lists+linux-next@lfdr.de>; Wed, 22 Dec 2021 05:16:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233648AbhLVDuW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 21 Dec 2021 22:50:22 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:53013 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232444AbhLVDuW (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 21 Dec 2021 22:50:22 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JJfVJ2QHNz4xgw;
-        Wed, 22 Dec 2021 14:50:15 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1640145020;
-        bh=1gSJCMn7ct3ljzUhwcf96/8gcMJWyTknZl8h09ZvdP4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=EaGWTISRYHyR2uf+SNDcH1WDlaPGFuczKLkIcUVRhrpgVpqD4q5PV9Pc+1ZihU3n8
-         qZPWxzzdhACIWYRlGAgCtxRXspYpE8c/vnGj3N55rL3nbdarNZ0TPR1QBO0OUNDZgq
-         I0TybrQ85E4BGbKRuhlsb8IS+ZjWPv/k1P4aiQZAr34Y60gnYJY7M5GV33KiGOI3m7
-         /1uKBBgUr7mDUB1uhx5IvH+jMS+Ewxxfn2uDeHONq/b1wJkrqYiZsFldLkl58GID8N
-         YiS9+jtWb0VhNH8M74O+5aMzQ5F8+g6Wis0eS0Fyu8FORXcnKxTgWjNrQ3YBYhT4KK
-         1kyjxR39UFhig==
-Date:   Wed, 22 Dec 2021 14:50:14 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dave Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the drm tree with the drm-misc-fixes
- tree
-Message-ID: <20211222145014.472328be@canb.auug.org.au>
+        id S242205AbhLVEQs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 21 Dec 2021 23:16:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36884 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242314AbhLVEQr (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 21 Dec 2021 23:16:47 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A57C061574
+        for <linux-next@vger.kernel.org>; Tue, 21 Dec 2021 20:16:47 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id q17so885679plr.11
+        for <linux-next@vger.kernel.org>; Tue, 21 Dec 2021 20:16:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=95tOImqJkHDydld66G+22jN2KCiVAi8ifO/oz5wpbrg=;
+        b=DqPsMoRxibQAbW5O15ps39fHC8BPvi8U56FAZKvI84VfBnBsOLbv+Osid7gGivHl25
+         CtYiy72MvL1D/ZyKX6OjAV24T/3nuKGLFoxq0RjTroPlUBLunGYjlKdX5D46azwfn+zN
+         u2DykMPWP1TnXMwEKZ/iEfjVzOORogRbmDCaOyC0pJlb+wsnSsDV8teruN3RUSCGdStL
+         Ph64C3qveOiGBWuF7EAiYn/SduoJ9NJmxqEGpSS/B08tw/+qMEBfGJ2qRc+e3MBNcDHx
+         pviLm+Sncqah/ayQP0W1NMGHo5BYO1Ot1L4gqGc62GKlXJ1rOYQhVBUSgshCZd72f/Bf
+         Oh3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=95tOImqJkHDydld66G+22jN2KCiVAi8ifO/oz5wpbrg=;
+        b=x/lFfQSKMZ4LwFMZpkp66y2GfgAmaF7dKHun7YBQo+lcn2uciieEo8TBhhQIfGtU7B
+         reTljCIsbgCn5KbYSnfkEeMMgtHNTwDfgy9phPvph4NG6N6uj2pJr4pYjhBUKGUy/8EM
+         WKVZQ1H1n1OUDn5xlKBmNvpc/b4oZtsI5seAeU2qKr7+ObkgQyWnHYnzBG0OlC14hyzC
+         Z4c5s+f80PE1Ov92tbRGxIQcMH1qswjifd70YCpxAiKZnnX3BhScfD2daxagc5yqltpn
+         sMIJ9QyVOwL715HbahT0CKnE7xqiRxUbC5t6I/k7fRpdF+TOHRisTsnm7iRmy2lsthty
+         ohYw==
+X-Gm-Message-State: AOAM532DiJ4l9Y7Fz/WM8J1oqLhjg8uwo0BK/NrB3sAGVwKuwtuU7c9C
+        kFWJKA17MTgxMrZGpYT8xPJyAoBJ1FedvOSU
+X-Google-Smtp-Source: ABdhPJwKZ0YwGoG3gHN7qpfc50EsgXhKxQfE7CaxgJ2/e0QFDmo7KxibLE7L4jpusAZgqytcCoeGFQ==
+X-Received: by 2002:a17:902:ab02:b0:148:bca5:bab with SMTP id ik2-20020a170902ab0200b00148bca50babmr1418900plb.46.1640146607069;
+        Tue, 21 Dec 2021 20:16:47 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id y12sm589801pfe.140.2021.12.21.20.16.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Dec 2021 20:16:46 -0800 (PST)
+Message-ID: <61c2a6ae.1c69fb81.dcb2a.2ac9@mx.google.com>
+Date:   Tue, 21 Dec 2021 20:16:46 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/zF5D0Q+.65monPUqeOmdZ0g";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v5.16-rc6-189-gb5f0860e19b1
+X-Kernelci-Report-Type: test
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+Subject: next/pending-fixes baseline: 717 runs,
+ 3 regressions (v5.16-rc6-189-gb5f0860e19b1)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/zF5D0Q+.65monPUqeOmdZ0g
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/pending-fixes baseline: 717 runs, 3 regressions (v5.16-rc6-189-gb5f086=
+0e19b1)
 
-Hi all,
+Regressions Summary
+-------------------
 
-Today's linux-next merge of the drm tree got a conflict in:
+platform                 | arch   | lab           | compiler | defconfig   =
+                 | regressions
+-------------------------+--------+---------------+----------+-------------=
+-----------------+------------
+bcm2836-rpi-2-b          | arm    | lab-collabora | gcc-10   | multi_v7_def=
+c...MB2_KERNEL=3Dy | 1          =
 
-  drivers/gpu/drm/nouveau/nouveau_fence.c
+minnowboard-turbot-E3826 | x86_64 | lab-collabora | gcc-10   | x86_64_defco=
+n...6-chromebook | 1          =
 
-between commit:
+minnowboard-turbot-E3826 | x86_64 | lab-collabora | gcc-10   | x86_64_defco=
+nfig+crypto      | 1          =
 
-  67f74302f45d ("drm/nouveau: wait for the exclusive fence after the shared=
- ones v2")
 
-from the drm-misc-fixes tree and commit:
+  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
+v5.16-rc6-189-gb5f0860e19b1/plan/baseline/
 
-  40298cb45071 ("drm/nouveau: use the new iterator in nouveau_fence_sync")
+  Test:     baseline
+  Tree:     next
+  Branch:   pending-fixes
+  Describe: v5.16-rc6-189-gb5f0860e19b1
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      b5f0860e19b1e6ac634308b70049180d800e1619 =
 
-from the drm tree.
 
-I fixed it up (I just used the latter version) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
 
---=20
-Cheers,
-Stephen Rothwell
+Test Regressions
+---------------- =
 
---Sig_/zF5D0Q+.65monPUqeOmdZ0g
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHCoHYACgkQAVBC80lX
-0GyfUAgAoAi63KqneHolxn64MFP9kfVXtRglSldvtMUcUyZnEzL4ub6cCj7PE8/e
-5RwDIHzStvITG8DeQlM+eWCAjZbDd1CLCgEgQn9HH7G+5n5DBXUL2Ll4tgxbvQho
-2dpOeESgguHA2a/VMZzDmRIsHWvu0SB03qrBsnC6btt83chvDtPUP9Q3LlZSM0rO
-ZXAIM1Zwt3K+sr3DZWTvXmbbIYIji4vf68dR0kYhETZw97SNWhPOSdWNb42J1Dz5
-35frsST/B/MV9JEBC6ZhCauMPZgK0c+PUmUOEDiRv49Hb3fdcigWfHyZaboZpyp1
-DHUwf8nd/zLDqd7stLso2zFqFpdx0w==
-=xq+w
------END PGP SIGNATURE-----
+platform                 | arch   | lab           | compiler | defconfig   =
+                 | regressions
+-------------------------+--------+---------------+----------+-------------=
+-----------------+------------
+bcm2836-rpi-2-b          | arm    | lab-collabora | gcc-10   | multi_v7_def=
+c...MB2_KERNEL=3Dy | 1          =
 
---Sig_/zF5D0Q+.65monPUqeOmdZ0g--
+
+  Details:     https://kernelci.org/test/plan/id/61c27971335af0fda739711e
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.16-rc6-1=
+89-gb5f0860e19b1/arm/multi_v7_defconfig+config_thumb2_kernel=3Dy/gcc-10/lab=
+-collabora/baseline-bcm2836-rpi-2-b.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.16-rc6-1=
+89-gb5f0860e19b1/arm/multi_v7_defconfig+config_thumb2_kernel=3Dy/gcc-10/lab=
+-collabora/baseline-bcm2836-rpi-2-b.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20211210.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/61c27971335af0fda7397=
+11f
+        failing since 42 days (last pass: v5.15-rc7-176-gbfbd58926fc5, firs=
+t fail: v5.15-12053-g6f9f2ed9499c) =
+
+ =
+
+
+
+platform                 | arch   | lab           | compiler | defconfig   =
+                 | regressions
+-------------------------+--------+---------------+----------+-------------=
+-----------------+------------
+minnowboard-turbot-E3826 | x86_64 | lab-collabora | gcc-10   | x86_64_defco=
+n...6-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/61c26adbac5a911af1397132
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+x86-chromebook
+  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.16-rc6-1=
+89-gb5f0860e19b1/x86_64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabor=
+a/baseline-minnowboard-turbot-E3826.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.16-rc6-1=
+89-gb5f0860e19b1/x86_64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabor=
+a/baseline-minnowboard-turbot-E3826.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20211210.0/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/61c26adbac5a911af1397=
+133
+        failing since 0 day (last pass: v5.16-rc5-395-g46f3b5d984fa, first =
+fail: v5.16-rc6-155-g25b50ce58687) =
+
+ =
+
+
+
+platform                 | arch   | lab           | compiler | defconfig   =
+                 | regressions
+-------------------------+--------+---------------+----------+-------------=
+-----------------+------------
+minnowboard-turbot-E3826 | x86_64 | lab-collabora | gcc-10   | x86_64_defco=
+nfig+crypto      | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/61c26e4cff577ee3ee397141
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+crypto
+  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.16-rc6-1=
+89-gb5f0860e19b1/x86_64/x86_64_defconfig+crypto/gcc-10/lab-collabora/baseli=
+ne-minnowboard-turbot-E3826.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.16-rc6-1=
+89-gb5f0860e19b1/x86_64/x86_64_defconfig+crypto/gcc-10/lab-collabora/baseli=
+ne-minnowboard-turbot-E3826.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20211210.0/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/61c26e4cff577ee3ee397=
+142
+        failing since 1 day (last pass: v5.16-rc5-257-g713f2fcb90ea, first =
+fail: v5.16-rc5-395-g46f3b5d984fa) =
+
+ =20

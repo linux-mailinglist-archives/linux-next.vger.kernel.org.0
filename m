@@ -2,99 +2,87 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0447947D908
-	for <lists+linux-next@lfdr.de>; Wed, 22 Dec 2021 22:59:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5F4247DA85
+	for <lists+linux-next@lfdr.de>; Thu, 23 Dec 2021 00:22:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241045AbhLVV7v (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 22 Dec 2021 16:59:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50860 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234030AbhLVV7u (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 22 Dec 2021 16:59:50 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E040C061574;
-        Wed, 22 Dec 2021 13:59:50 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JK6gR27d7z4xbd;
-        Thu, 23 Dec 2021 08:59:46 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1640210388;
-        bh=TklSx10aW0pHnE233yn87br6m+Ruo2on2shB4yYZkiA=;
-        h=Date:From:To:Cc:Subject:From;
-        b=RxLoN727VZsOOkkOpjHaMdnRFwscAhkeoR/5foRtoOwlRYSiC2PDTf/NaBU9Jb5rm
-         w64uM0l9gMvPW3pAGOTsh9YfBlGZOBt1fk8asrsPLWQLbQ94qEPPPIopLjy5+uO6nj
-         eP1sY6farBAbQKnEuSqgC8P/OUweGNHGY/ZEacZ6tgiFJ1J21Zsy8JkDJtyrYLdbXT
-         RDUCk74lUK351PBgWFMnmYcuOTvG2iRxeSVMOIQx+mhd/mXWxI/s24L/09X0AY2RVC
-         kpPwIpzGf9lPuB3oiT6vWXytZN6e0o26kBFSPdVLed4xHz/1NEWgrboDgui26YxNBC
-         OPCd42hPV/JFw==
-Date:   Thu, 23 Dec 2021 08:59:44 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        ARM <linux-arm-kernel@lists.infradead.org>
-Cc:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        id S245468AbhLVXWx convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-next@lfdr.de>); Wed, 22 Dec 2021 18:22:53 -0500
+Received: from mout.kundenserver.de ([217.72.192.73]:37317 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245636AbhLVXWw (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 22 Dec 2021 18:22:52 -0500
+Received: from mail-wr1-f44.google.com ([209.85.221.44]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MXoxG-1mz6bm3mqy-00YESJ; Thu, 23 Dec 2021 00:22:50 +0100
+Received: by mail-wr1-f44.google.com with SMTP id r17so7897108wrc.3;
+        Wed, 22 Dec 2021 15:22:50 -0800 (PST)
+X-Gm-Message-State: AOAM532Y5jKLGHkYeoGYo9loKWciernRSpn7B88nsc5PD5GrsvIMe5M6
+        2NwO9AR2gUMP4+FgayDl84qCLQ4lNQDkjYiTVFg=
+X-Google-Smtp-Source: ABdhPJw9uvBVgsr2Gcg3Nra+s0VShilg43p0yBw7r08mPnnGpKyICZ9z8hi55OCoFPQKV3SgsyicfeMLJf8K3g2dLrA=
+X-Received: by 2002:a5d:6d0e:: with SMTP id e14mr3594325wrq.407.1640215370376;
+ Wed, 22 Dec 2021 15:22:50 -0800 (PST)
+MIME-Version: 1.0
+References: <20211223085944.0095eaf5@canb.auug.org.au>
+In-Reply-To: <20211223085944.0095eaf5@canb.auug.org.au>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 23 Dec 2021 00:22:34 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3WxP1x60fj7oPzY2=gTUEgA68x1vc17tRHEJ-O19-UTQ@mail.gmail.com>
+Message-ID: <CAK8P3a3WxP1x60fj7oPzY2=gTUEgA68x1vc17tRHEJ-O19-UTQ@mail.gmail.com>
+Subject: Re: linux-next: build warning after merge of the arm-soc tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>,
+        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
         Florian Fainelli <f.fainelli@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the arm-soc tree
-Message-ID: <20211223085944.0095eaf5@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/4DpgRW6knj1wx2f5p4ku0FS";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Provags-ID: V03:K1:UJgjNx4krcB90RxxDGdJr08xY+xMCoH3h5yyD/elk5c8aS/f91y
+ 7d4TUoZ2hADedbjcTrnSoDiSPgB1jyXv7kgdjs3fGuEYsDGM6OkN6uMQX0qX9cHwoifr3u9
+ 0i2cEn2q+JoQRdZiDv3j7fjsmUkN7L1jqlIPQcXoUlnnvzsETSCqw58sQk0JB3SQrvZV195
+ 0g3u5sZ2OKKV6U+N2lDIA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:C5Co6cZAREo=:3rrE46Q6nB7y9rXQVQ79ef
+ cXfkXO66G7psmk0uTlwJVPp41ohKK/MsU9370WEp4Ca29fh28OCrKD63Qivn8uFlMvwN2vySW
+ mNhxdoFH66jKkQWiL5LUPSYnffCXL6MVNR3Unx07s5D8cboMGcFsPBtyUVWQCCGpLUXBRNsEb
+ OgzAIiJUw/uwI0k2G7jeyIUR7ipGo3pdHUo9vWWqMFzPJAXYSyvU7S62KCM27kzsR+52s7bLa
+ IsqfJxX7HI0VMTBz7j0jahCfMrx7ee1cSvIKklQPR2ZCcDlTtJBJnPOTbtvWh+WXgvXUxJK1t
+ nGkWyig+GVy43CxmDGyCVF5k3zI8WayPMpxeweCLqAEwnMV4RZ/eeeoHZR9TFyYvXjenPFmk3
+ BeXN8Rsx++BJ15BcjoBpxKeSE0AUp1XEcdcV+sEpMN3KbRq7/kHY2VAW7oxHFcpmAa6q/e/8H
+ 3EC7ntZnDY+h2EEPYsGuYSQdcAAUemd0TEXRU21Bujhhaa+eN1Y3sdwnWX8eaNG2hdCHUW/qV
+ CEKa1gZh1Bitxm7JJpE++j3zO2JSIaOZf0IHfwFKwR7STnCM4YHL4sgUX2G1Am4kRbfkTsyfp
+ b0Q/zfZXj49lrbjJHnorEgu7Z0Wt3RVu2L2vleE2fpICwghbvSiS1m6FfX+JIrmTmfI7HZGpQ
+ J2e5/SbGnv6vSYVXqLDen2RvFIY/WNLiftCKx8z9Fy1YNnivBpPUQB7fh0BAMcgBX8as=
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/4DpgRW6knj1wx2f5p4ku0FS
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Dec 22, 2021 at 10:59 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> After merging the arm-soc tree, today's linux-next build (arm
+> multi_v7_defconfig) produced this warning:
+>
+> arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dts:109.4-14: Warning (reg_format): /switch/ports:reg: property has invalid length (4 bytes) (#address-cells == 2, #size-cells == 1)
+> arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dtb: Warning (pci_device_reg): Failed prerequisite 'reg_format'
+> arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dtb: Warning (pci_device_bus_num): Failed prerequisite 'reg_format'
+> arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dtb: Warning (i2c_bus_reg): Failed prerequisite 'reg_format'
+> arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dtb: Warning (spi_bus_reg): Failed prerequisite 'reg_format'
+> arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dts:106.9-149.5: Warning (avoid_default_addr_size): /switch/ports: Relying on default #address-cells value
+> arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dts:106.9-149.5: Warning (avoid_default_addr_size): /switch/ports: Relying on default #size-cells value
+>
+> Maybe introduced by commit
+>
+>   3d2d52a0d183 ("ARM: dts: BCM5301X: define RTL8365MB switch on Asus RT-AC88U")
 
-Hi all,
+Confirmed, and now reverted as I'm already tagging the final pull requests.
 
-After merging the arm-soc tree, today's linux-next build (arm
-multi_v7_defconfig) produced this warning:
+Arınç, Florian: Feel free to resubmit a fixed version for the "late"
+branch that Olof
+may still pick up when I'm out of office, in case this is an important
+change. Otherwise
+I guess we can leave it for 5.18
 
-arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dts:109.4-14: Warning (reg_format)=
-: /switch/ports:reg: property has invalid length (4 bytes) (#address-cells =
-=3D=3D 2, #size-cells =3D=3D 1)
-arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dtb: Warning (pci_device_reg): Fai=
-led prerequisite 'reg_format'
-arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dtb: Warning (pci_device_bus_num):=
- Failed prerequisite 'reg_format'
-arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dtb: Warning (i2c_bus_reg): Failed=
- prerequisite 'reg_format'
-arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dtb: Warning (spi_bus_reg): Failed=
- prerequisite 'reg_format'
-arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dts:106.9-149.5: Warning (avoid_de=
-fault_addr_size): /switch/ports: Relying on default #address-cells value
-arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dts:106.9-149.5: Warning (avoid_de=
-fault_addr_size): /switch/ports: Relying on default #size-cells value
-
-Maybe introduced by commit
-
-  3d2d52a0d183 ("ARM: dts: BCM5301X: define RTL8365MB switch on Asus RT-AC8=
-8U")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/4DpgRW6knj1wx2f5p4ku0FS
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHDn9AACgkQAVBC80lX
-0GyaeAf/WPrbTYp0eDL54QOzju9jt121EbbKjsU2jpj2BC3U80Hsed2r66fcmYkJ
-WaUIm0VojkPQXMRD9Zw/4qO58tzFl2oEYPwNA5N+R7cv4Mpm0ysazrkpU0g3IWw4
-TTFMOTAhwvcxKZVjbKHAKre98bQ3VWbmPfCQuhHmXmwaMwZtwnbGdQ+faRJrl71U
-vz7bXDekUwsmqxFAGGpQMOau48oR/TqmPYgk7SieDBHe9k1Xck8ZLry+RMdzV3QA
-9xtH0cOXBYMS9Pw5VYmxA7VFxtxPPAG2ehtlrY76HcNWwVn9fKoNsk04qsgyIyUj
-7QCkOCNY6We4FVk1pH3m+LCUPut+Tw==
-=UBpu
------END PGP SIGNATURE-----
-
---Sig_/4DpgRW6knj1wx2f5p4ku0FS--
+        Arnd

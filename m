@@ -2,97 +2,61 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3E7047E792
-	for <lists+linux-next@lfdr.de>; Thu, 23 Dec 2021 19:18:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D521A47E7F1
+	for <lists+linux-next@lfdr.de>; Thu, 23 Dec 2021 20:07:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349645AbhLWSSh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 23 Dec 2021 13:18:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41190 "EHLO
+        id S234806AbhLWTHx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 23 Dec 2021 14:07:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349610AbhLWSSf (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 23 Dec 2021 13:18:35 -0500
-Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1DE4C061401;
-        Thu, 23 Dec 2021 10:18:35 -0800 (PST)
-Received: by mail-ua1-x935.google.com with SMTP id r15so11606513uao.3;
-        Thu, 23 Dec 2021 10:18:35 -0800 (PST)
+        with ESMTP id S231368AbhLWTHv (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 23 Dec 2021 14:07:51 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96BC5C061401
+        for <linux-next@vger.kernel.org>; Thu, 23 Dec 2021 11:07:51 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id n15-20020a17090a160f00b001a75089daa3so9560583pja.1
+        for <linux-next@vger.kernel.org>; Thu, 23 Dec 2021 11:07:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=NmeJ67pdFJJuFTydiDcuzKxhQ/kTg7RGAFCoGfwnnPY=;
-        b=GA7RPJuOwrMLDuLABEAn1P9Iuz4C8iTV3/DkmisuF6nWgWzi4siqog+UeRN6qCO9//
-         KF101w8xqZhCbWCdiyvAG6ougU6dKptJFKBvsTuavk18GEP2nBbSOrWksnR9k4bldjEM
-         tGDWRf68p8qZMIOKCa9O30L/sDM5/1y8Wo/g0+O74T4de5dhfgm8d8vQML1YKzpNRH2T
-         Uxc/G6tZ5+Adlj/afRLRwRCJdIErzDvjHTCviulfDssXa0+HLCE7Ro7h1WZQnQ3ntp+U
-         IB19kqnAq0jy+++yRRQ1GxryNX3LAvoS54dDpJv6trdy/eMi1jHTkQdKJJt/liBREDSm
-         3Vuw==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=PA5Eb3SKatYFaqsO/40bx9AAytaL07oA6ydkj8EAbzQ=;
+        b=UkmYk8bkT1Rlj5rgk1SO6h0a2ZnhiE0CBVLQVCDUO1lxjvxxLnJNbWx2J/zaCycaUm
+         gpjDQqIAT6ZdkIVSdg12eiqOeKZjQ7B6avvrJ11TgZ58l6SPRF67r2i8cOWD6iLnPwPF
+         +GcYnPV4M9mtgkW7MsgK10b37Ijt2h/pZL/47tsQAtxbO0Nb1h1DPgU3hjSIh8885jv5
+         oNLiuaX90XkSrXfJ0vKffls2f+YLeWewZGK/zF0rLrvD9l7ES6ybm6hpfj/AVz5kx4WE
+         A714SEbTsaEBoc+IzAmR9gzV6J73CerBUPJm1+2cTEpQIpocdCh9nGXBIgSVzkoz3fIl
+         Ib/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=NmeJ67pdFJJuFTydiDcuzKxhQ/kTg7RGAFCoGfwnnPY=;
-        b=gZF+Ln+3/aS8v5pbrz3twuxs0/1+MAvYXPD75dIPbfq6mq0XkSPTtaPlFDtnUgtR0Q
-         kiVectUmMnXOrUxjE1ANa64Du0M52I1e96/GlWtCDyfKTsSzkk8TdS3ClK6K0ZMeI7oK
-         DAzH+8ePggtO53ZLBOGgkFasF2efiYbxSANJ+h3MHU+YWsUx8i5A3BR4+74boNRoYtno
-         ogalfViQczHW/LPehlTqRFN8Z0Q54H5/uEW9daFPmigyqREnEr98RQ1sasjK1F1zI005
-         xSqBG5UY49XTIJIYs1EkAJbiO2J7kXIa2TR3eXelbwGklH92KhEUFsfZI/SdzIOCVMiA
-         G+Xw==
-X-Gm-Message-State: AOAM5306/VEIGjCFxxvmynDXJ4zEk8/wl8Wf0Y0PxS7IYBm13aQ60pHT
-        NJZ7gVuFb6CQ027BTyhaQ1A=
-X-Google-Smtp-Source: ABdhPJxVz2GubnCEUR0CBNvNp3uJCME9FVi8+Mv1mIbvYXIP0Q5klHH0NBupIB9HFM0aUwCYoHGfbA==
-X-Received: by 2002:a67:2683:: with SMTP id m125mr1086777vsm.80.1640283514812;
-        Thu, 23 Dec 2021 10:18:34 -0800 (PST)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id s12sm1192696vsj.26.2021.12.23.10.18.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Dec 2021 10:18:34 -0800 (PST)
-Message-ID: <684e3940-0884-4139-dd4e-a16375ec9cf6@gmail.com>
-Date:   Thu, 23 Dec 2021 10:18:32 -0800
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=PA5Eb3SKatYFaqsO/40bx9AAytaL07oA6ydkj8EAbzQ=;
+        b=RhHqmSDicmj8LjuHM1No907vr2MfBju4tA5kPfihultmePevP7QBMU5gdb9FKHGiX6
+         2zTBW9PvHTxktwsgSoG3g0ubq1hinTGuOCpd/SXN1m9LlGJs5Ggi2iH+oQq/ycBo7rmh
+         E5NtW+vQWOST4HJ+lE34gkezpSTgG9a2+vBaAeiYh04boyy4SU22WiihtfLyuIIfkQVD
+         88FopyVS3qr3H6XhppWZR0Fr8U1Vm0vpbtO292PX0TILvWlDJbLGG3FJN/9cixOYkXQG
+         h/Hvmhfr98kJd7Im8O6InIpM4Oc7Snj3NlcoPnpN8JhGGBRCAX+zz31Q7kJR/XIh7yM6
+         AvPA==
+X-Gm-Message-State: AOAM533R/JzdC+H5zIlkO5gpm/S2Fw7RWvNDCvsUK1/p1y0hCleY96fU
+        AcMU2/3WprGJx1xEK0hBLL/JAWjM+ts5tgew7mo=
+X-Google-Smtp-Source: ABdhPJxjjNNaAAZf6zdtV7cHFZ3Xttipb6gKEGO0gs2RpfKNenVe7eKOsItJva599gJnrgD6H+SGyKXDWlL/iH75a/Q=
+X-Received: by 2002:a17:902:bc85:b0:143:954e:8548 with SMTP id
+ bb5-20020a170902bc8500b00143954e8548mr3526489plb.82.1640286471040; Thu, 23
+ Dec 2021 11:07:51 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: linux-next: build warning after merge of the arm-soc tree
-Content-Language: en-US
-To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Olof Johansson <olof@lixom.net>,
-        ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20211223085944.0095eaf5@canb.auug.org.au>
- <CAK8P3a3WxP1x60fj7oPzY2=gTUEgA68x1vc17tRHEJ-O19-UTQ@mail.gmail.com>
- <6a830fc3-2186-0335-a600-8410abc24ea2@gmail.com>
- <00324e0f-7825-4ddc-a823-40a698715442@arinc9.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <00324e0f-7825-4ddc-a823-40a698715442@arinc9.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a05:6a20:789d:b0:68:7657:a7bf with HTTP; Thu, 23 Dec 2021
+ 11:07:50 -0800 (PST)
+Reply-To: revfrpaulwilliams2@gmail.com
+From:   "Rev. Fr. Paul Williams" <melindagatesfoundation53@gmail.com>
+Date:   Fri, 24 Dec 2021 00:37:50 +0530
+Message-ID: <CAMk=7STiO_AnPfiThkc0igBhN28j_=mWdZ6Aq04xstne4q8cRw@mail.gmail.com>
+Subject: Donation From Williams Foundation.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-
-
-On 12/23/2021 12:50 AM, Arınç ÜNAL wrote:
-> Hey Florian.
-> 
-> I'm not sure I understand what's going wrong here. I did everything 
-> according to the documentation here:
-> https://github.com/torvalds/linux/blob/master/Documentation/devicetree/bindings/net/dsa/realtek-smi.txt#L158 
-
-The problem is that there is a 'reg' property for the 'ports' node when 
-this node is just a "container" for additional sub-node. This is because 
-the example you rightfully followed to the letter was wrong to begin 
-with. Should be fixed with:
-
-https://lore.kernel.org/netdev/20211223181741.3999-1-f.fainelli@gmail.com/
-
-And you would need to make a matching change to 
-arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dts.
-
-Thanks!
--- 
-Florian
+Contact Rev. Fr. Paul Williams Immediately For A Charity Donation Of
+$6,200,000.00 United States Dollars At E-Mail:
+revfrpaulwilliams2@gmail.com

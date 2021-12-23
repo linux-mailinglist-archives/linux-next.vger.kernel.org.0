@@ -2,99 +2,96 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92AED47E93A
-	for <lists+linux-next@lfdr.de>; Thu, 23 Dec 2021 22:56:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1165147E9A1
+	for <lists+linux-next@lfdr.de>; Fri, 24 Dec 2021 00:13:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350384AbhLWV4C (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 23 Dec 2021 16:56:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60934 "EHLO
+        id S240824AbhLWXNC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 23 Dec 2021 18:13:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350360AbhLWV4B (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 23 Dec 2021 16:56:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F79AC061401;
-        Thu, 23 Dec 2021 13:56:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S229834AbhLWXNB (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 23 Dec 2021 18:13:01 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CAEBC061757;
+        Thu, 23 Dec 2021 15:13:01 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 48DDC61DF1;
-        Thu, 23 Dec 2021 21:56:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06346C36AE5;
-        Thu, 23 Dec 2021 21:55:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640296559;
-        bh=dr7iVkk0LkwcDcx/bOyQpEUgPSkNDbhiM8ZpQoQDc7U=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=SiEbRSIjWiVgUYMZWSaX6jGvqtMgeVnC8EWeOotCHKOtmkqiCUTl+M84gYJnbsJjY
-         1MXwWdPhmMk+W+207p+H4QMR1aPHemvvuQXIrwWC/7/u/N3xFRiIUBuiEktw7EAKFg
-         8h8wALf996Z0MqsdiKNSZLEG0L7qdL6vVQRRUhkS5uOfUH4Mepj1D8xnCuXtdKPglu
-         b0MOnqf11OVWqPlMzNc/OXH36DhrX/DKHOWJRNCi/ehMbOziFwJAGBa64eagiCxE6J
-         ArmLBgS5XDkC2SUvyM1SP6YZCWxFOHx5vDgpJ9chKY4icVB5/NQ/aunGo6RS7oc6m/
-         rnvd8MKduyB8g==
-Subject: Re: linux-next: manual merge of the nand tree with the drivers-memory
- tree
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JKmFL5hYwz4xdB;
+        Fri, 24 Dec 2021 10:12:54 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1640301176;
+        bh=mSEwCmZeG0D9DmgQuWbQoRE5M9p+R3WB8Yp/Ec0XfyU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=u73uzC9jwwXHOjG2aMO6+bLDUAg9QUOKCBIQrlJafhbFcztrr6Mcz5uTlgevnShUx
+         x1IDNjn1ePBaBL+0KRIFFQYXTNgmSUWpuXhaulVxJAZv1pJhPXFY6PvsjJ6TZJp04s
+         qGEniuH8PcgbG95uEUDoZxA+O33qvlgAkvW9eJgraKYzk6El5NZ2pgFUcYxgV1S2P6
+         hz1Bz0PeLcOM1woZgnentRDHAxkT/lkscXAiS95lUCM9ejvXHkQWIfta+KYmA2ZMva
+         gBBw+pNk0vh7d4YRlOUSJ+0INt/DkvVOZMwLeekhajsybYo6uK3C8bGHlhw/7tLIer
+         d5r1ENFvGwMqA==
+Date:   Fri, 24 Dec 2021 10:12:50 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20211223104704.35fa3a41@canb.auug.org.au>
- <ce08a9b7-4fc5-2cc7-2a5a-dbab6eabea14@canonical.com>
-From:   Roger Quadros <rogerq@kernel.org>
-Message-ID: <e189f3c2-7b3d-39d6-6717-ad6558638a1b@kernel.org>
-Date:   Thu, 23 Dec 2021 23:55:55 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+Subject: linux-next: build warning after merge of the akpm-current tree
+Message-ID: <20211224101250.53eb8270@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <ce08a9b7-4fc5-2cc7-2a5a-dbab6eabea14@canonical.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/8kirmVWH/kta4iwzm9CHywN";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+--Sig_/8kirmVWH/kta4iwzm9CHywN
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-On 23/12/2021 23:17, Krzysztof Kozlowski wrote:
-> On 23/12/2021 00:47, Stephen Rothwell wrote:
->> Hi all,
->>
->> Today's linux-next merge of the nand tree got a conflict in:
->>
->>   drivers/mtd/nand/raw/omap2.c
->>
->> between commit:
->>
->>   f2f8115fe8b3 ("memory: omap-gpmc: Use a compatible match table when checking for NAND controller")
->>
->> from the drivers-memory tree and commit:
->>
->>   0137c74ad873 ("mtd: rawnand: omap2: Add compatible for AM64 SoC")
->>
->> from the nand tree.
->>
->> I fixed it up (I used the former version and added the following patch)
->> and can carry the fix as necessary. This is now fixed as far as linux-next
->> is concerned, but any non trivial conflicts should be mentioned to your
->> upstream maintainer when your tree is submitted for merging.  You may
->> also want to consider cooperating with the maintainer of the conflicting
->> tree to minimise any particularly complex conflicts.
->>
-> 
-> Thanks Stephen, the fix looks correct.
-> 
-> Roger,
-> It seems you sent two separate patches touching exactly the same files
-> recently for two different trees. One for memory controllers moving the
-> NAND ids and second for MTD tree with adding new compatible.
-> Please don't, instead second should base on the other and these should
-> go via one tree. This is a non-trivial conflict which could be avoided.
+After merging the akpm-current tree, yesterday's linux-next build
+(htmldocs) produced this warning:
 
-Thanks Stephen and Krzysztof.
+Documentation/admin-guide/sysctl/kernel.rst:798: WARNING: Malformed table.
+Text in column margin in table line 7.
 
-Sorry for the trouble. I will be more careful next time.
+=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+bit 0  print all tasks info
+bit 1  print system memory info
+bit 2  print timer info
+bit 3  print locks info if ``CONFIG_LOCKDEP`` is on
+bit 4  print ftrace buffer
+bit 5: print all printk messages in buffer
+bit 6: print all CPUs backtrace (if available in the arch)
+=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 
-cheers,
--roger
+Introduced by commit
+
+  658a6ba2a287 ("panic: add option to dump all CPUs backtraces in panic_pri=
+nt")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/8kirmVWH/kta4iwzm9CHywN
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHFAnIACgkQAVBC80lX
+0GyFqwf9Fhqk6WHpq07lUI68T4iPpyJWYS0QeAK0YgI8JQn0wdGrnSp/rm3512bV
+o7rcjn3yWKtUjYFSl0lx/KNFLygBR3WUtExGYw3Bi9XrDy8yjl5UGyJUbfDdDmOs
+NEXvUOE97RlF90iQmWWjAAEK9k125+U4sVqMNp4wAnrUSsM1M42fJTC7+4+nbSj5
+BvkUHg08/SCT+YCGiSjfE51IdNQaIIx6mSBqeNpq/2RbrqvImNTi23amTsAVnQfU
+i3eToeKS81PbckHvr0HLviz5RaXnBGHRrCRg8gTDCvxYG0PWF/gU40EdJ9MoybeW
+4r6ATqDwuGLL4UbYgTEk/0ZWBn9lYQ==
+=obAK
+-----END PGP SIGNATURE-----
+
+--Sig_/8kirmVWH/kta4iwzm9CHywN--

@@ -2,144 +2,151 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5150147EC21
-	for <lists+linux-next@lfdr.de>; Fri, 24 Dec 2021 07:24:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0124E47ECCF
+	for <lists+linux-next@lfdr.de>; Fri, 24 Dec 2021 08:45:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351533AbhLXGYj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 24 Dec 2021 01:24:39 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:51513 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351519AbhLXGYY (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 24 Dec 2021 01:24:24 -0500
+        id S234221AbhLXHpY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 24 Dec 2021 02:45:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48494 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234111AbhLXHpY (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 24 Dec 2021 02:45:24 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D840FC061401;
+        Thu, 23 Dec 2021 23:45:23 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JKxqB0DzZz4xd4;
-        Fri, 24 Dec 2021 17:24:22 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JKzcd1rT3z4xZ1;
+        Fri, 24 Dec 2021 18:45:21 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1640327062;
-        bh=YE1wtxoSL7iH5/8H8eURuhEpHOr8nEwwfVK4clKW11s=;
+        s=201702; t=1640331921;
+        bh=vRzgZOEbPeMdEI5ydoYq3Dx46rAUSpzZcddztszbPjM=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Zgj4DVC4TGDGsCLsgOjNR3uppZLmq7SoNy0LD8KM3lcROLwaR+1908lmN6Io9psJF
-         uJe7gydAhT1QUVk+fLHCGQJtUxhQBY5BYTNcgRbWjQX+uY7bQwhx4uj8Pbo9go1GHh
-         RmF35Avbto6vM++xn7bAwMMUjMxB0oR6toigtvs/pECzKpkgYOnjXvae4W9dQ0yZeK
-         9kCwLpSlckMPSb5TrwyKd5SUAAYW7fsnZhLkH9WiMlha/oy6k+c/KwdP/ALvMEa1BD
-         twBwJLwv9g5hu7EabxMtb0gpefQQ1PZpDGoWJshnS2zj9ZwazekKCe0jcRFdyKdeF7
-         VIFvOZyhxTJWw==
-Date:   Fri, 24 Dec 2021 17:24:21 +1100
+        b=ajUTf6KkegOTrpfoBJGnK+3pA+myFUOE+fLgnUmRMZP6e9yaN4IRdJADjEPg7HAx8
+         XniUBjclhA1Y2YdQ4Utx7BGEgBGrg+VEY472yVdpbK7cd+qNg7tPE/4WZju+ix0BI0
+         RrXemUzqJLc5mjE1pxY8DpXEcJ2TYo//dE9VtIgPF53kLbFGU7GCZDnEVDiFi/0gjY
+         s6eDwJ5Rp00ZY7WEdzK2WfM1JAH154PHsP9/vt3oiefyf/DTdunmSDlKQm+Xi1ybQn
+         k26TILSbqwInAGH9t0gBre08J9COSKVRFJ//zYlupo4ninETCNNV15SU09wmdbOlcg
+         CPyQmB0Ye35SA==
+Date:   Fri, 24 Dec 2021 18:45:20 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the folio-iomap tree with the
- nvdimm tree
-Message-ID: <20211224172421.3f009baa@canb.auug.org.au>
-In-Reply-To: <20211222211536.2fed6e78@canb.auug.org.au>
-References: <20211222211536.2fed6e78@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Yafang Shao <laoar.shao@gmail.com>
+Subject: Re: linux-next: manual merge of the akpm-current tree with the
+ userns tree
+Message-ID: <20211224184520.157a0660@canb.auug.org.au>
+In-Reply-To: <20211221220734.16e36bdf@canb.auug.org.au>
+References: <20211221220734.16e36bdf@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/0M0v2UHopzbSCQ04krWZ2om";
+Content-Type: multipart/signed; boundary="Sig_/w.KJ5Xme_=_jTrEZ_lpN5h_";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/0M0v2UHopzbSCQ04krWZ2om
+--Sig_/w.KJ5Xme_=_jTrEZ_lpN5h_
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Wed, 22 Dec 2021 21:15:36 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+On Tue, 21 Dec 2021 22:07:34 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
 wrote:
 >
-> Today's linux-next merge of the folio-iomap tree got a conflict in:
+> Today's linux-next merge of the akpm-current tree got conflicts in:
 >=20
->   fs/iomap/buffered-io.c
+>   include/linux/kthread.h
+>   kernel/kthread.c
 >=20
 > between commit:
 >=20
->   de291b590286 ("iomap: turn the byte variable in iomap_zero_iter into a =
-ssize_t")
+>   40966e316f86 ("kthread: Ensure struct kthread is present for all kthrea=
+ds")
 >=20
-> from the nvdimm tree and commits:
+> from the userns tree and commit:
 >=20
->   a25def1fe568 ("iomap: Convert __iomap_zero_iter to use a folio")
->   4d7bd0eb72e5 ("iomap: Inline __iomap_zero_iter into its caller")
+>   1ac41b3d9ad8 ("kthread: dynamically allocate memory to store kthread's =
+full name")
 >=20
-> from the folio-iomap tree.
+> from the akpm-current tree.
 
-Thanks to the addition of commit
+With the addition of commit
 
-  9e05e95ca8da ("iomap: Fix error handling in iomap_zero_iter()")
+  329b30af470a ("kthread: Generalize pf_io_worker so it can point to struct=
+ kthread")
 
-to the nvdimm tree, the resolutions is now as below.
+to the userns tree, the resolution is now as below.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc fs/iomap/buffered-io.c
-index d3b1169602fa,c6b3a148e898..000000000000
---- a/fs/iomap/buffered-io.c
-+++ b/fs/iomap/buffered-io.c
-@@@ -888,19 -908,32 +907,23 @@@ static loff_t iomap_zero_iter(struct io
-  		return length;
+diff --cc kernel/kthread.c
+index 261a3c3b9c6c,8be710f2d83d..000000000000
+--- a/kernel/kthread.c
++++ b/kernel/kthread.c
+@@@ -94,7 -95,19 +96,19 @@@ static inline struct kthread *__to_kthr
+  	return kthread;
+  }
  =20
-  	do {
-- 		unsigned offset =3D offset_in_page(pos);
-- 		ssize_t bytes =3D min_t(u64, PAGE_SIZE - offset, length);
-- 		struct page *page;
-+ 		struct folio *folio;
-  		int status;
-+ 		size_t offset;
-+ 		size_t bytes =3D min_t(u64, SIZE_MAX, length);
- =20
-- 		status =3D iomap_write_begin(iter, pos, bytes, &page);
- -		if (IS_DAX(iter->inode)) {
- -			s64 tmp =3D dax_iomap_zero(pos, bytes, iomap);
- -			if (tmp < 0)
- -				return tmp;
- -			bytes =3D tmp;
- -			goto good;
- -		}
- -
-+ 		status =3D iomap_write_begin(iter, pos, bytes, &folio);
-  		if (status)
-  			return status;
- =20
-- 		zero_user(page, offset, bytes);
-- 		mark_page_accessed(page);
-+ 		offset =3D offset_in_folio(folio, pos);
-+ 		if (bytes > folio_size(folio) - offset)
-+ 			bytes =3D folio_size(folio) - offset;
++ void get_kthread_comm(char *buf, size_t buf_size, struct task_struct *tsk)
++ {
++ 	struct kthread *kthread =3D to_kthread(tsk);
 +=20
-+ 		folio_zero_range(folio, offset, bytes);
-+ 		folio_mark_accessed(folio);
++ 	if (!kthread || !kthread->full_name) {
++ 		__get_task_comm(buf, buf_size, tsk);
++ 		return;
++ 	}
++=20
++ 	strscpy_pad(buf, kthread->full_name, buf_size);
++ }
++=20
+ -void set_kthread_struct(struct task_struct *p)
+ +bool set_kthread_struct(struct task_struct *p)
+  {
+  	struct kthread *kthread;
  =20
-- 		bytes =3D iomap_write_end(iter, pos, bytes, bytes, page);
-+ 		bytes =3D iomap_write_end(iter, pos, bytes, bytes, folio);
- -good:
-  		if (WARN_ON_ONCE(bytes =3D=3D 0))
-  			return -EIO;
+@@@ -118,13 -128,17 +132,17 @@@ void free_kthread_struct(struct task_st
+  	struct kthread *kthread;
+ =20
+  	/*
+ -	 * Can be NULL if this kthread was created by kernel_thread()
+ -	 * or if kmalloc() in kthread() failed.
+ +	 * Can be NULL if kmalloc() in set_kthread_struct() failed.
+  	 */
+  	kthread =3D to_kthread(k);
++ 	if (!kthread)
++ 		return;
++=20
+  #ifdef CONFIG_BLK_CGROUP
+- 	WARN_ON_ONCE(kthread && kthread->blkcg_css);
++ 	WARN_ON_ONCE(kthread->blkcg_css);
+  #endif
+ +	k->worker_private =3D NULL;
++ 	kfree(kthread->full_name);
+  	kfree(kthread);
+  }
  =20
 
---Sig_/0M0v2UHopzbSCQ04krWZ2om
+--Sig_/w.KJ5Xme_=_jTrEZ_lpN5h_
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHFZ5UACgkQAVBC80lX
-0GzWXgf9F1oyJk+5p1QscW/ZdYcSbgu6+ZuKLMiWQLwhLzfO5LDQ6OXqsMuDrt+s
-+wTtnw+WKmkoxx0lRhrUMMBDk+JxVFKoBMmtoJOpyXMuiz20tSagb1Y/vsm7dxMS
-AXDNN5C/8Kv5DZgXybAZ+Zvj6eMm19MqJDbbltFpBASo8fANQg4K4K1S31+7XA68
-6sYdQZI60rcyiyOKcBd61rFCVDVEop20OnN9YPQJxSFCm5ZM7nFPh4Qo/r2UVr5f
-YYvKcxQy2hvV0QIE3oinvkfF1kA+mrrx84PVqmlUqrLEnfDb1EuyRWajgM751Hyz
-PZYzYvBPmb1xdi16W856QVxACskl3A==
-=YAOZ
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHFepAACgkQAVBC80lX
+0Gyntwf/Sv6+N4PaXfLtGqYguX9GDW5tNZOMF5txNYKk+UzZVkRAIW/TttFN7P+l
+FPm/CIyTf6Uya2uXBSSjebU1X7FsqXof9z1qjVhI76LSMg77Cd2feoQzzmucJm4l
+e9J1NrTvjUk53Dpi3nqY21IdzZP+0IXk9wZkogORDmpSMXydbhX/Xu4LS5U9rHgS
+JYRxkAAQsDJtluS/psS+rHZaUxxQUcFxxpo/CoLN/X+YSG6OHtQM4f374Gu29Kt2
+gEeQ9RVWIlsWG3noPkFVFl70kSNLkMuATzUdutnRSQiSi5eSv7qEansCFZMLeMDt
+0dlv/Za6LU+YqnY5il+VQLfcKEG8Rg==
+=A3tV
 -----END PGP SIGNATURE-----
 
---Sig_/0M0v2UHopzbSCQ04krWZ2om--
+--Sig_/w.KJ5Xme_=_jTrEZ_lpN5h_--

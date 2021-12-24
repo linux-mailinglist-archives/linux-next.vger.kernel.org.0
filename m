@@ -2,143 +2,144 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8453647EBC8
-	for <lists+linux-next@lfdr.de>; Fri, 24 Dec 2021 06:37:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5150147EC21
+	for <lists+linux-next@lfdr.de>; Fri, 24 Dec 2021 07:24:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242561AbhLXFhK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 24 Dec 2021 00:37:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48486 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351385AbhLXFhK (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 24 Dec 2021 00:37:10 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 286CBC061401;
-        Thu, 23 Dec 2021 21:37:10 -0800 (PST)
+        id S1351533AbhLXGYj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 24 Dec 2021 01:24:39 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:51513 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351519AbhLXGYY (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 24 Dec 2021 01:24:24 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JKwmh3f93z4xRC;
-        Fri, 24 Dec 2021 16:37:08 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JKxqB0DzZz4xd4;
+        Fri, 24 Dec 2021 17:24:22 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1640324228;
-        bh=Ml+H7gSgEnX6bae3B1iydAFvNRCqxcogiHKEVbyHUJg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=rmZrGGDQC5SQHkEejgyD7Iny4WbGGKGNhxu+o9PoZkOeLCu2HG+9F0HiOGl4xF5ei
-         JRm1Ue2hui7aUialUKKdRgpKFFKjN+92F6zgggFk8SgIWYVPIRpzWxFjxqnekjXaZ3
-         TXHHH5ZlSv1r0ccB/slUx/tj2iTtq9MyotZ/EFQbjXyc9czRVJ58+u0NSk/CHpVKn+
-         o6GPM1Bqf7FNM0vzos2MsxHd/JiMw2W80Aa6eYUBYzVRygX9TkwvUfSjG/B5YBEM74
-         z2myK6NaFLvUxaYjRSNfWGkk3PeWPLX4OQi3CB60QjDkDiilFtqUMc3Y5biQGIKx/7
-         3evLhwvMt+KXg==
-Date:   Fri, 24 Dec 2021 16:37:07 +1100
+        s=201702; t=1640327062;
+        bh=YE1wtxoSL7iH5/8H8eURuhEpHOr8nEwwfVK4clKW11s=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Zgj4DVC4TGDGsCLsgOjNR3uppZLmq7SoNy0LD8KM3lcROLwaR+1908lmN6Io9psJF
+         uJe7gydAhT1QUVk+fLHCGQJtUxhQBY5BYTNcgRbWjQX+uY7bQwhx4uj8Pbo9go1GHh
+         RmF35Avbto6vM++xn7bAwMMUjMxB0oR6toigtvs/pECzKpkgYOnjXvae4W9dQ0yZeK
+         9kCwLpSlckMPSb5TrwyKd5SUAAYW7fsnZhLkH9WiMlha/oy6k+c/KwdP/ALvMEa1BD
+         twBwJLwv9g5hu7EabxMtb0gpefQQ1PZpDGoWJshnS2zj9ZwazekKCe0jcRFdyKdeF7
+         VIFvOZyhxTJWw==
+Date:   Fri, 24 Dec 2021 17:24:21 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     Daniel Latypov <dlatypov@google.com>,
-        Harinder Singh <sharinder@google.com>,
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Dan Williams <dan.j.williams@intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the kunit-next tree with the jc_docs
- tree
-Message-ID: <20211224163707.70e04c0f@canb.auug.org.au>
+Subject: Re: linux-next: manual merge of the folio-iomap tree with the
+ nvdimm tree
+Message-ID: <20211224172421.3f009baa@canb.auug.org.au>
+In-Reply-To: <20211222211536.2fed6e78@canb.auug.org.au>
+References: <20211222211536.2fed6e78@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/BBTCWNwXxSZyBJk_3_wdbe_";
+Content-Type: multipart/signed; boundary="Sig_/0M0v2UHopzbSCQ04krWZ2om";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/BBTCWNwXxSZyBJk_3_wdbe_
+--Sig_/0M0v2UHopzbSCQ04krWZ2om
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the kunit-next tree got a conflict in:
+On Wed, 22 Dec 2021 21:15:36 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> Today's linux-next merge of the folio-iomap tree got a conflict in:
+>=20
+>   fs/iomap/buffered-io.c
+>=20
+> between commit:
+>=20
+>   de291b590286 ("iomap: turn the byte variable in iomap_zero_iter into a =
+ssize_t")
+>=20
+> from the nvdimm tree and commits:
+>=20
+>   a25def1fe568 ("iomap: Convert __iomap_zero_iter to use a folio")
+>   4d7bd0eb72e5 ("iomap: Inline __iomap_zero_iter into its caller")
+>=20
+> from the folio-iomap tree.
 
-  Documentation/dev-tools/kunit/start.rst
+Thanks to the addition of commit
 
-between commit:
+  9e05e95ca8da ("iomap: Fix error handling in iomap_zero_iter()")
 
-  c48b9ef1f794 ("Documentation: KUnit: Rewrite getting started")
-
-from the jc_docs tree and commit:
-
-  4c2911f1e140 ("kunit: tool: reconfigure when the used kunitconfig changes=
-")
-
-from the kunit-next tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+to the nvdimm tree, the resolutions is now as below.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc Documentation/dev-tools/kunit/start.rst
-index a858ab009944,0a5e65540974..000000000000
---- a/Documentation/dev-tools/kunit/start.rst
-+++ b/Documentation/dev-tools/kunit/start.rst
-@@@ -59,19 -44,23 +59,20 @@@ or ``VFAT_FS``. To run ``FAT_KUNIT_TEST
+diff --cc fs/iomap/buffered-io.c
+index d3b1169602fa,c6b3a148e898..000000000000
+--- a/fs/iomap/buffered-io.c
++++ b/fs/iomap/buffered-io.c
+@@@ -888,19 -908,32 +907,23 @@@ static loff_t iomap_zero_iter(struct io
+  		return length;
  =20
-  	CONFIG_LIST_KUNIT_TEST=3Dy
+  	do {
+- 		unsigned offset =3D offset_in_page(pos);
+- 		ssize_t bytes =3D min_t(u64, PAGE_SIZE - offset, length);
+- 		struct page *page;
++ 		struct folio *folio;
+  		int status;
++ 		size_t offset;
++ 		size_t bytes =3D min_t(u64, SIZE_MAX, length);
  =20
- -:doc:`kunit_tool <kunit-tool>` will ensure that all config options set in
- -``.kunitconfig`` are set in the kernel ``.config`` before running the tes=
-ts.
- -It'll warn you if you haven't included the dependencies of the options yo=
-u're
- -using.
- +Before running the tests, kunit_tool ensures that all config options
- +set in ``.kunitconfig`` are set in the kernel ``.config``. It will warn
- +you if you have not included dependencies for the options used.
- =20
-- .. note ::
--    The configuration is only updated if the ``.kunitconfig`` is not a
--    subset of ``.config``. You can use tools (for example:
--    make menuconfig) to adjust other config options.
-+ .. note::
-+    If you change the ``.kunitconfig``, kunit.py will trigger a rebuild of=
- the
-+    ``.config`` file. But you can edit the ``.config`` file directly or wi=
-th
-+    tools like ``make menuconfig O=3D.kunit``. As long as its a superset of
-+    ``.kunitconfig``, kunit.py won't overwrite your changes.
- =20
+- 		status =3D iomap_write_begin(iter, pos, bytes, &page);
+ -		if (IS_DAX(iter->inode)) {
+ -			s64 tmp =3D dax_iomap_zero(pos, bytes, iomap);
+ -			if (tmp < 0)
+ -				return tmp;
+ -			bytes =3D tmp;
+ -			goto good;
+ -		}
  -
- -Running the tests (KUnit Wrapper)
- ----------------------------------
- -
- -To make sure that everything is set up correctly, simply invoke the Python
- -wrapper from your kernel repo:
- +Running Tests (KUnit Wrapper)
- +-----------------------------
- +1. To make sure that everything is set up correctly, invoke the Python
- +   wrapper from your kernel repository:
++ 		status =3D iomap_write_begin(iter, pos, bytes, &folio);
+  		if (status)
+  			return status;
  =20
-  .. code-block:: bash
+- 		zero_user(page, offset, bytes);
+- 		mark_page_accessed(page);
++ 		offset =3D offset_in_folio(folio, pos);
++ 		if (bytes > folio_size(folio) - offset)
++ 			bytes =3D folio_size(folio) - offset;
++=20
++ 		folio_zero_range(folio, offset, bytes);
++ 		folio_mark_accessed(folio);
+ =20
+- 		bytes =3D iomap_write_end(iter, pos, bytes, bytes, page);
++ 		bytes =3D iomap_write_end(iter, pos, bytes, bytes, folio);
+ -good:
+  		if (WARN_ON_ONCE(bytes =3D=3D 0))
+  			return -EIO;
  =20
 
---Sig_/BBTCWNwXxSZyBJk_3_wdbe_
+--Sig_/0M0v2UHopzbSCQ04krWZ2om
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHFXIMACgkQAVBC80lX
-0GwQyQf9HDkjuhISmD2MO9n5Cw4JeSLMMW3wDjNU3U2rj1KWjmAvjkgfkqSE8gbS
-IEEj/wfc4sAoUkFqDI8oj9EA5w86HrIiJN8+wne350arMTbrVZlajIfEI5JcFXYf
-BdGcoGoaXrYs/7MDLw5AFxuRdkqMckleJ/YRw5ExpUSX+QDZCUG09be5yUlsjfJZ
-9moggGlFVHyNnVNrWg0Irg9+uOWzc6b6MAdR0uQDtHb/UUx1sFYs0HL5cLlQ7mOd
-JWH7X5bioNytLHRxwCu7e+fnC4QRNNMkbQPG9ag+dujdqPVOWnAMcXVtmBU21uDK
-9FSfDJ6rkVo3H/bXlkb7xtRyMFYQyA==
-=Cc42
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHFZ5UACgkQAVBC80lX
+0GzWXgf9F1oyJk+5p1QscW/ZdYcSbgu6+ZuKLMiWQLwhLzfO5LDQ6OXqsMuDrt+s
++wTtnw+WKmkoxx0lRhrUMMBDk+JxVFKoBMmtoJOpyXMuiz20tSagb1Y/vsm7dxMS
+AXDNN5C/8Kv5DZgXybAZ+Zvj6eMm19MqJDbbltFpBASo8fANQg4K4K1S31+7XA68
+6sYdQZI60rcyiyOKcBd61rFCVDVEop20OnN9YPQJxSFCm5ZM7nFPh4Qo/r2UVr5f
+YYvKcxQy2hvV0QIE3oinvkfF1kA+mrrx84PVqmlUqrLEnfDb1EuyRWajgM751Hyz
+PZYzYvBPmb1xdi16W856QVxACskl3A==
+=YAOZ
 -----END PGP SIGNATURE-----
 
---Sig_/BBTCWNwXxSZyBJk_3_wdbe_--
+--Sig_/0M0v2UHopzbSCQ04krWZ2om--

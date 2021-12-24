@@ -2,832 +2,2415 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89ECE47ED87
-	for <lists+linux-next@lfdr.de>; Fri, 24 Dec 2021 09:55:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CB2747EE52
+	for <lists+linux-next@lfdr.de>; Fri, 24 Dec 2021 11:43:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241574AbhLXIzk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 24 Dec 2021 03:55:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35708 "EHLO
+        id S1343826AbhLXKn2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 24 Dec 2021 05:43:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238166AbhLXIzk (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 24 Dec 2021 03:55:40 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3B8FC061401;
-        Fri, 24 Dec 2021 00:55:39 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JL19k1Cbfz4xZ4;
-        Fri, 24 Dec 2021 19:55:38 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1640336138;
-        bh=qgHKZQ8/Cu9QT6qbR5sFx0D05008K2s5MRASFKvHdlI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=s5UcZ+INFmc07J8UBEjYrOCcK51/y3sku1krH+PbzvPr9VHo96lBsGOFzBUz5sOYu
-         isAi/6SyirN1ht7RgKL4dFB6ODVfLA6njA49gmZ2naUd4UR41wzt/Lt1afuyNv16lA
-         JuZiBCadKaVeHLkXUw8SUkCVHymD0hsFpz+uCBdl8VgC5zv+O6W61yY90GU2DXyQd4
-         PgdeNRqDjLurvNr6R19Zndiga0A1doJRKruV37kjD3Gf5ue/q3zoAVCNtD8NUUQYQG
-         vi+EDe1FF5tps2R8aD86U/m9ADAnnGewYuAX5pPRYfAH6kv8p3JXLO+fEn+QvCaPss
-         EGWkxozl4sOnA==
-Date:   Fri, 24 Dec 2021 19:55:37 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Tree for Dec 24
-Message-ID: <20211224195537.03e623e4@canb.auug.org.au>
+        with ESMTP id S240741AbhLXKn1 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 24 Dec 2021 05:43:27 -0500
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 372E4C061401
+        for <linux-next@vger.kernel.org>; Fri, 24 Dec 2021 02:43:27 -0800 (PST)
+Received: by mail-pg1-x530.google.com with SMTP id 2so7314619pgb.12
+        for <linux-next@vger.kernel.org>; Fri, 24 Dec 2021 02:43:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=fGijaCkw9daAtcVWUXgzrP6MUX9o+5yLB/dU7/qNlE4=;
+        b=KtNdBEQ+biMWzhMo2SELXsxDLz8xzG7ZoiCuj5BLZs+1jVWKqMV3qJO5OH59Lro0Ga
+         Etk4VOWPwoIn4TKVeadkeFcnZUmGDSxLl/ovhoGw3e6X0+WyMtA8Kx+snEEO+tXSokrE
+         MbeH7XzvwhK9q/VKN4GG5Y3X53XoMx1Yuc9ZmCsUYsIIYnE9R6rKEV7oueYvqDV0N91n
+         7w2uHiN8uRnx1+XoA7IX6m4cVNsWeHsmehsPkHg7yHQ2OEkE7IPfFJXK8m2uWmYRbLiX
+         zqrpIKBLhxl06TK81g+LCWVE/6qAKxZMzayJpbRh98mrm+XoYfN3LhDGaEjVeb/MdnaE
+         8HFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=fGijaCkw9daAtcVWUXgzrP6MUX9o+5yLB/dU7/qNlE4=;
+        b=vK4B4TXE5eiiKf+Qs7/FYnXlKQN77VkCuRfLcDGtUp7Er+gRMzDuPhxZ70H7Ijz/kH
+         g3Yce/WPaUZmarQKiGMenS0/kj8daJvrJ0Z6rrgU6vdePoFxo7ESPedP5YmsIzg2K93P
+         RiNxNOaPltn9vnGR2+Y9hYm/A9WimYgY6hYNL51+VDFyszQ/PywS/8OgijLBOjzMzWC/
+         YCUcnPk92TScYQaqqlxEIIHt6npmQJUWkStBMLzQ9kG+gWcULNB9ZvO4x4+Tn7aE8Pbv
+         O/esQFYzLEtpCzc36JjPDlJYx+qnE677FIEkd6PCPeBae9D6Q4NU1lhY5U8Hwic6sn2V
+         zmuw==
+X-Gm-Message-State: AOAM532iwvdMXwTvUhLk8O5qS75/grzldkL4JFeB5Zr2HEPTwr75+rLT
+        r+kCKPEv3kGLe8zF4bmbHI6pymyUq5L+FKZM
+X-Google-Smtp-Source: ABdhPJx9hG2wN8xQrnkkAeZ3W7PKRBSU4Wyv25KYzVG22F+2Xmj4nIyHdU8SvqDytra6LQyRYDMDJQ==
+X-Received: by 2002:a63:e651:: with SMTP id p17mr5687802pgj.233.1640342604613;
+        Fri, 24 Dec 2021 02:43:24 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id v6sm7139865pgj.82.2021.12.24.02.43.23
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Dec 2021 02:43:24 -0800 (PST)
+Message-ID: <61c5a44c.1c69fb81.7caaa.47d0@mx.google.com>
+Date:   Fri, 24 Dec 2021 02:43:24 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Lbua9nKCl..9yn2eP_._X6w";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: next-20211224
+X-Kernelci-Report-Type: build
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+Subject: next/master build: 202 builds: 18 failed, 184 passed, 248 errors,
+ 72 warnings (next-20211224)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Lbua9nKCl..9yn2eP_._X6w
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/master build: 202 builds: 18 failed, 184 passed, 248 errors, 72 warnin=
+gs (next-20211224)
 
-Hi all,
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20211224/
 
-News: there will be no linux-next releases between Dec 25 and Jan 3
-(inclusive).  You should all take some time off and have a Merry
-Christmas.
+Tree: next
+Branch: master
+Git Describe: next-20211224
+Git Commit: ea586a076e8aa606c59b66d86660590f18354b11
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 7 unique architectures
 
-Changes since 20211223:
+Build Failures Detected:
 
-The driver-core tree gained a conflict against the drivers-x86-fixes tree.
+arm64:
+    allmodconfig: (clang-13) FAIL
+    allmodconfig: (gcc-10) FAIL
 
-The phy-next tree gained a build failure so I used the version from
-next-20211223.
+arm:
+    allmodconfig: (clang-13) FAIL
+    multi_v5_defconfig: (clang-13) FAIL
+    allmodconfig: (gcc-10) FAIL
+    multi_v7_defconfig+CONFIG_SMP=3Dn: (gcc-10) FAIL
+    qcom_defconfig: (gcc-10) FAIL
+    rpc_defconfig: (gcc-10) FAIL
 
-The userns tree gained a conflict against the vhost tree.
+i386:
+    allmodconfig: (clang-13) FAIL
 
-The kunit-next tree gained conflicts against the jc_docs tree.
+mips:
+    bigsur_defconfig: (gcc-10) FAIL
+    decstation_64_defconfig: (gcc-10) FAIL
+    decstation_defconfig: (gcc-10) FAIL
+    decstation_r4k_defconfig: (gcc-10) FAIL
+    ip27_defconfig: (gcc-10) FAIL
+    ip28_defconfig: (gcc-10) FAIL
+    sb1250_swarm_defconfig: (gcc-10) FAIL
 
-Non-merge commits (relative to Linus' tree): 8807
- 9138 files changed, 418254 insertions(+), 180242 deletions(-)
+x86_64:
+    allmodconfig: (clang-13) FAIL
+    allmodconfig: (gcc-10) FAIL
 
-----------------------------------------------------------------------------
+Errors and Warnings Detected:
 
-I have created today's linux-next tree at
-git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
-are tracking the linux-next tree using git, you should not use "git pull"
-to do so as that will try to merge the new linux-next release with the
-old one.  You should use "git fetch" and checkout or reset to the new
-master.
+arc:
+    haps_hs_smp_defconfig+kselftest (gcc-10): 3 warnings
+    tinyconfig (gcc-10): 1 warning
 
-You can see which trees have been included by looking in the Next/Trees
-file in the source.  There are also quilt-import.log and merge.log
-files in the Next directory.  Between each merge, the tree was built
-with a ppc64_defconfig for powerpc, an allmodconfig for x86_64, a
-multi_v7_defconfig for arm and a native build of tools/perf. After
-the final fixups (if any), I do an x86_64 modules_install followed by
-builds for x86_64 allnoconfig, powerpc allnoconfig (32 and 64 bit),
-ppc44x_defconfig, allyesconfig and pseries_le_defconfig and i386,
-arm64, sparc and sparc64 defconfig and htmldocs. And finally, a simple
-boot test of the powerpc pseries_le_defconfig kernel in qemu (with and
-without kvm enabled).
+arm64:
+    allmodconfig (clang-13): 1 error
+    allmodconfig (gcc-10): 1 error, 1 warning
+    defconfig (clang-13): 3 warnings
+    defconfig+CONFIG_ARM64_64K_PAGES=3Dy (clang-13): 3 warnings
 
-Below is a summary of the state of the merge.
+arm:
+    allmodconfig (clang-13): 40 errors, 13 warnings
+    allmodconfig (gcc-10): 179 errors, 2 warnings
+    aspeed_g5_defconfig (clang-13): 10 warnings
+    at91_dt_defconfig (gcc-10): 1 warning
+    multi_v5_defconfig (gcc-10): 1 warning
+    multi_v5_defconfig (clang-13): 2 errors
+    multi_v7_defconfig (clang-13): 10 warnings
+    multi_v7_defconfig+CONFIG_SMP=3Dn (gcc-10): 2 errors
+    qcom_defconfig (gcc-10): 1 error
+    rpc_defconfig (gcc-10): 2 errors
 
-I am currently merging 348 trees (counting Linus' and 94 trees of bug
-fix patches pending for the current merge release).
+i386:
+    allmodconfig (clang-13): 10 errors, 1 warning
 
-Stats about the size of the tree over time can be seen at
-http://neuling.org/linux-next-size.html .
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
+    32r2el_defconfig+kselftest (gcc-10): 1 warning
+    bigsur_defconfig (gcc-10): 1 error
+    decstation_64_defconfig (gcc-10): 1 error
+    decstation_defconfig (gcc-10): 1 error
+    decstation_r4k_defconfig (gcc-10): 1 error
+    fuloong2e_defconfig (gcc-10): 1 error
+    sb1250_swarm_defconfig (gcc-10): 1 error
 
-Status of my local build tests will be at
-http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
-advice about cross compilers/configs that work, we are always open to add
-more builds.
+riscv:
 
-Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
-Gortmaker for triage and bug fixes.
+x86_64:
+    allmodconfig (gcc-10): 2 errors
+    allmodconfig (clang-13): 2 errors, 19 warnings
+    x86_64_defconfig+debug (gcc-10): 2 warnings
 
---=20
-Cheers,
-Stephen Rothwell
+Errors summary:
 
-$ git checkout master
-$ git reset --hard stable
-Merging origin/master (76657eaef4a7 Merge tag 'net-5.16-rc7' of git://git.k=
-ernel.org/pub/scm/linux/kernel/git/netdev/net)
-Merging fixes/fixes (d06c942efea4 Merge tag 'for_linus' of git://git.kernel=
-.org/pub/scm/linux/kernel/git/mst/vhost)
-Merging kbuild-current/fixes (e851dfae4371 Merge tag 'kgdb-5.16-rc1' of git=
-://git.kernel.org/pub/scm/linux/kernel/git/danielt/linux)
-Merging arc-current/for-curr (b9cac915c541 ARC: thread_info.h: correct two =
-typos in a comment)
-Merging arm-current/fixes (8536a5ef8860 ARM: 9169/1: entry: fix Thumb2 bug =
-in iWMMXt exception handling)
-Merging arm64-fixes/for-next/fixes (9c5d89bc1055 arm64: kexec: Fix missing =
-error code 'ret' warning in load_other_segments())
-Merging arm-soc-fixes/arm/fixes (7ad8b2fcb850 Merge tag 'imx-fixes-5.16-3' =
-of git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux into arm/fi=
-xes)
-Merging drivers-memory-fixes/fixes (8c5ba21c16bd memory: mtk-smi: Fix a nul=
-l dereference for the ostd)
-Merging tee-fixes/fixes (d58071a8a76d Linux 5.16-rc3)
-Merging m68k-current/for-linus (8a3c0a74ae87 m68k: defconfig: Update defcon=
-figs for v5.15-rc1)
-Merging powerpc-fixes/fixes (8734b41b3efe powerpc/module_64: Fix livepatchi=
-ng for RO modules)
-Merging s390-fixes/fixes (85bf17b28f97 recordmcount.pl: look for jgnop inst=
-ruction as well as bcrl on s390)
-Merging sparc/master (05a59d79793d Merge git://git.kernel.org:/pub/scm/linu=
-x/kernel/git/netdev/net)
-Merging fscrypt-current/for-stable (80f6e3080bfc fs-verity: fix signed inte=
-ger overflow with i_size near S64_MAX)
-Merging net/master (391e5975c020 net: stmmac: dwmac-visconti: Fix value of =
-ETHER_CLK_SEL_FREQ_SEL_2P5M)
-Merging bpf/master (819d11507f66 bpf, selftests: Fix spelling mistake "tain=
-ed" -> "tainted")
-Merging ipsec/master (68ac0f3810e7 xfrm: state and policy should fail if XF=
-RMA_IF_ID 0)
-Merging netfilter/master (8ca4090fec02 Merge git://git.kernel.org/pub/scm/l=
-inux/kernel/git/pablo/nf)
-Merging ipvs/master (a50e659b2a1b net: mvpp2: fix XDP rx queues registering)
-Merging wireless-drivers/master (f7d55d2e439f mt76: mt7921: fix build regre=
-ssion)
-Merging mac80211/master (60ec7fcfe768 qlcnic: potential dereference null po=
-inter of rx_queue->page_ring)
-Merging rdma-fixes/for-rc (12d3bbdd6bd2 RDMA/hns: Replace kfree() with kvfr=
-ee())
-Merging sound-current/for-linus (edca7cc4b0ac ALSA: hda/realtek: Fix quirk =
-for Clevo NJ51CU)
-Merging sound-asoc-fixes/for-linus (114157960f72 Merge remote-tracking bran=
-ch 'asoc/for-5.15' into asoc-linus)
-Merging regmap-fixes/for-linus (459e1cd0d5ec Merge remote-tracking branch '=
-regmap/for-5.15' into regmap-linus)
-Merging regulator-fixes/for-linus (85223d609c99 regulator: dt-bindings: sam=
-sung,s5m8767: add missing op_mode to bucks)
-Merging spi-fixes/for-linus (0497943728c7 Merge remote-tracking branch 'spi=
-/for-5.15' into spi-linus)
-Merging pci-current/for-linus (87620512681a PCI: apple: Fix PERST# polarity)
-Merging driver-core.current/driver-core-linus (136057256686 Linux 5.16-rc2)
-Merging tty.current/tty-linus (a7904a538933 Linux 5.16-rc6)
-Merging usb.current/usb-linus (3f345e907a8e usb: typec: ucsi: Only check th=
-e contract if there is a connection)
-Merging usb-gadget-fixes/fixes (e49d033bddf5 Linux 5.12-rc6)
-Merging usb-serial-fixes/usb-linus (a7904a538933 Linux 5.16-rc6)
-Merging usb-chipidea-fixes/for-usb-fixes (f130d08a8d79 usb: chipidea: ci_hd=
-rc_imx: Also search for 'phys' phandle)
-CONFLICT (content): Merge conflict in drivers/usb/chipidea/ci_hdrc_imx.c
-Merging phy/fixes (f0ae8685b285 phy: HiSilicon: Fix copy and paste bug in e=
-rror handling)
-Merging staging.current/staging-linus (d58071a8a76d Linux 5.16-rc3)
-Merging iio-fixes/fixes-togreg (8f80931a3a4d iio: adc: ti-adc081c: Partial =
-revert of removal of ACPI IDs)
-Merging char-misc.current/char-misc-linus (3a0152b21952 nitro_enclaves: Use=
- get_user_pages_unlocked() call to handle mmap assert)
-Merging soundwire-fixes/fixes (fa55b7dcdc43 Linux 5.16-rc1)
-Merging thunderbolt-fixes/fixes (a7904a538933 Linux 5.16-rc6)
-Merging input-current/for-linus (4ebfee2bbc1a Input: elants_i2c - do not ch=
-eck Remark ID on eKTH3900/eKTH5312)
-Merging crypto-current/master (27750a315aba crypto: qat - do not handle PFV=
-F sources for qat_4xxx)
-Merging vfio-fixes/for-linus (8704e8934908 vfio/pci: Fix OpRegion read)
-Merging kselftest-fixes/fixes (fa55b7dcdc43 Linux 5.16-rc1)
-Merging modules-fixes/modules-linus (2a987e65025e Merge tag 'perf-tools-fix=
-es-for-v5.16-2021-12-07' of git://git.kernel.org/pub/scm/linux/kernel/git/a=
-cme/linux)
-Merging dmaengine-fixes/fixes (822c9f2b833c dmaengine: st_fdma: fix MODULE_=
-ALIAS)
-Merging backlight-fixes/for-backlight-fixes (a38fd8748464 Linux 5.12-rc2)
-Merging mtd-fixes/mtd/fixes (27a030e87292 mtd: dataflash: Add device-tree S=
-PI IDs)
-Merging mfd-fixes/for-mfd-fixes (a61f4661fba4 mfd: intel_quark_i2c_gpio: Re=
-vert "Constify static struct resources")
-Merging v4l-dvb-fixes/fixes (d40f0b133b44 media: meson-ir-tx: remove incorr=
-ect doc comment)
-Merging reset-fixes/reset/fixes (92c959bae2e5 reset: renesas: Fix Runtime P=
-M usage)
-Merging mips-fixes/mips-fixes (09d97da660ff MIPS: Only define pci_remap_ios=
-pace() for Ralink)
-Merging at91-fixes/at91-fixes (fa55b7dcdc43 Linux 5.16-rc1)
-Merging omap-fixes/fixes (80d680fdccba ARM: dts: omap3430-sdp: Fix NAND dev=
-ice node)
-Merging kvm-fixes/master (fdba608f15e2 KVM: VMX: Wake vCPU when delivering =
-posted IRQ even if vCPU =3D=3D this vCPU)
-Merging kvms390-fixes/master (0e9ff65f455d KVM: s390: preserve deliverable_=
-mask in __airqs_kick_single_vcpu)
-Merging hwmon-fixes/hwmon (cdc5287acad9 hwmon: (lm90) Do not report 'busy' =
-status bit as alarm)
-Merging nvdimm-fixes/libnvdimm-fixes (3dd60fb9d95d nvdimm/pmem: stop using =
-q_usage_count as external pgmap refcount)
-Merging cxl-fixes/fixes (fae8817ae804 cxl/mem: Fix memory device capacity p=
-robing)
-Merging btrfs-fixes/next-fixes (c748b846dab6 Merge branch 'misc-5.16' into =
-next-fixes)
-Merging vfs-fixes/fixes (25f54d08f12f autofs: fix wait name hash calculatio=
-n in autofs_wait())
-Merging dma-mapping-fixes/for-linus (18a3c5f7abfd Merge tag 'for_linus' of =
-git://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost)
-Merging i3c-fixes/i3c/fixes (fe07bfda2fb9 Linux 5.12-rc1)
-Merging drivers-x86-fixes/fixes (26a8b0943780 platform/x86: intel_pmc_core:=
- fix memleak on registration failure)
-Merging samsung-krzk-fixes/fixes (4f5d06d381ba arm64: dts: exynos: drop sam=
-sung,ufs-shareability-reg-offset in ExynosAutov9)
-Merging pinctrl-samsung-fixes/fixes (fa55b7dcdc43 Linux 5.16-rc1)
-Merging devicetree-fixes/dt/linus (b398123bff3b efi: apply memblock cap aft=
-er memblock_add())
-Merging scsi-fixes/fixes (142c779d05d1 scsi: vmw_pvscsi: Set residual data =
-length conditionally)
-Merging drm-fixes/drm-fixes (dbfba788c7ef Merge tag 'drm-intel-fixes-2021-1=
-2-22' of git://anongit.freedesktop.org/drm/drm-intel into drm-fixes)
-Merging amdgpu-fixes/drm-fixes (2c409ba81be2 drm/radeon: fix si_enable_smc_=
-cac() failed issue)
-Merging drm-intel-fixes/for-linux-next-fixes (7807bf28fe02 drm/i915/guc: On=
-ly assign guc_id.id when stealing guc_id)
-Merging mmc-fixes/fixes (ff31ee0a0f47 mmc: mmci: stm32: clear DLYB_CR after=
- sending tuning command)
-Merging rtc-fixes/rtc-fixes (bd33335aa93d rtc: cmos: Disable irq around dir=
-ect invocation of cmos_interrupt())
-Merging gnss-fixes/gnss-linus (136057256686 Linux 5.16-rc2)
-Merging hyperv-fixes/hyperv-fixes (1dc2f2b81a6a hv: utils: add PTP_1588_CLO=
-CK to Kconfig to fix build)
-Merging soc-fsl-fixes/fix (7e5e744183bb soc: fsl: dpio: fix qbman alignment=
- error in the virtualization context)
-Merging risc-v-fixes/fixes (f6f7fbb89bf8 riscv: dts: sifive unmatched: Link=
- the tmp451 with its power supply)
-Merging pidfd-fixes/fixes (03ba0fe4d09f file: simplify logic in __close_ran=
-ge())
-Merging fpga-fixes/fixes (8bb7eca972ad Linux 5.15)
-Merging spdx/spdx-linus (bc128349588d LICENSES/LGPL-2.1: Add LGPL-2.1-or-la=
-ter as valid identifiers)
-Merging gpio-brgl-fixes/gpio/for-current (3e4d9a485029 gpio: virtio: remove=
- timeout)
-Merging gpio-intel-fixes/fixes (fa55b7dcdc43 Linux 5.16-rc1)
-Merging pinctrl-intel-fixes/fixes (fa55b7dcdc43 Linux 5.16-rc1)
-Merging erofs-fixes/fixes (57bbeacdbee7 erofs: fix deadlock when shrink ero=
-fs slab)
-Merging integrity-fixes/fixes (843385694721 evm: Fix a small race in init_d=
-esc())
-Merging kunit-fixes/kunit-fixes (fa55b7dcdc43 Linux 5.16-rc1)
-Merging ubifs-fixes/fixes (78c7d49f55d8 ubifs: journal: Make sure to not di=
-rty twice for auth nodes)
-Merging memblock-fixes/fixes (d7f55471db27 memblock: fix memblock_phys_allo=
-c() section mismatch error)
-Merging cel-fixes/for-rc (53b1119a6e50 NFSD: Fix READDIR buffer overflow)
-Merging irqchip-fixes/irq/irqchip-fixes (c3fbab7767c5 irqchip/irq-bcm7120-l=
-2: Add put_device() after of_find_device_by_node())
-Merging renesas-fixes/fixes (432b52eea3dc ARM: shmobile: defconfig: Restore=
- graphical consoles)
-Merging perf-current/perf/urgent (c271a55b0c60 perf inject: Fix segfault du=
-e to perf_data__fd() without open)
-Merging efi-fixes/urgent (4bc5e64e6cf3 efi: Move efifb_setup_from_dmi() pro=
-totype from arch headers)
-Merging zstd-fixes/zstd-linus (d58071a8a76d Linux 5.16-rc3)
-Merging drm-misc-fixes/for-linux-next-fixes (67f74302f45d drm/nouveau: wait=
- for the exclusive fence after the shared ones v2)
-Merging kbuild/for-next (4dc0759c563a init/Kconfig: Drop linker version che=
-ck for LD_ORPHAN_WARN)
-Merging perf/perf/core (b9f6fbb3b2c2 perf arm64: Inject missing frames when=
- using 'perf record --call-graph=3Dfp')
-Merging compiler-attributes/compiler-attributes (7c00621dcaee compiler_type=
-s: mark __compiletime_assert failure as __noreturn)
-Merging dma-mapping/for-next (f857acfc457e lib/scatterlist: cleanup macros =
-into static inline functions)
-Merging asm-generic/master (733e417518a6 asm-generic/error-injection.h: fix=
- a spelling mistake, and a coding style issue)
-Merging arc/for-next (6880fa6c5660 Linux 5.15-rc1)
-Merging arm/for-next (e00dd02c0e0f Merge branch 'devel-stable' into for-nex=
-t)
-Merging arm64/for-next/core (52d3ff9d3658 Merge branches 'for-next/misc', '=
-for-next/cache-ops-dzp', 'for-next/stacktrace', 'for-next/xor-neon', 'for-n=
-ext/kasan', 'for-next/armv8_7-fp', 'for-next/atomics', 'for-next/bti', 'for=
--next/sve', 'for-next/kselftest' and 'for-next/kcsan', remote-tracking bran=
-ch 'arm64/for-next/perf' into for-next/core)
-Merging arm-perf/for-next/perf (1609c22a8a09 Merge branch 'for-next/perf-cp=
-u' into for-next/perf)
-Merging arm-soc/for-next (49b721df4e3d Merge branch 'arm/dt' into for-next)
-CONFLICT (content): Merge conflict in arch/arm/Kconfig
-Merging actions/for-next (444d018d8d38 ARM: dts: owl-s500-roseapplepi: Add =
-ATC2603C PMIC)
-Merging amlogic/for-next (996b0777eaca Merge branch 'v5.17/dt64' into for-n=
-ext)
-Merging aspeed/for-next (a7e02e92755c Merge branches 'dt-for-v5.17', 'defco=
-nfig-for-v5.17' and 'soc-for-v5.17' into for-next)
-Merging at91/at91-next (9be3df0e718c Merge branch 'at91-defconfig' into at9=
-1-next)
-Merging drivers-memory/for-next (ff086e15d838 Merge branch 'for-v5.17/omap-=
-gpmc' into for-next)
-Merging imx-mxs/for-next (b95a3922f285 Merge branch 'imx/defconfig' into fo=
-r-next)
-Merging keystone/next (cb293d3b430e Merge branch 'for_5.15/drivers-soc' int=
-o next)
-Merging mediatek/for-next (ccf7b63aac3e Merge branch 'v5.16-next/dts64' int=
-o for-next)
-Merging mvebu/for-next (d835946fc3d8 Merge branch 'mvebu/dt' into mvebu/for=
--next)
-Merging omap/for-next (61b6b9cfada4 Merge branch 'omap-for-v5.17/fixes-not-=
-urgent' into for-next)
-Merging qcom/for-next (7e5fe035d019 Merge branches 'arm64-defconfig-for-5.1=
-7', 'arm64-for-5.17', 'clk-for-5.17', 'defconfig-for-5.17' and 'drivers-for=
--5.17' into for-next)
-CONFLICT (content): Merge conflict in arch/arm/configs/multi_v7_defconfig
-Merging raspberrypi/for-next (c5915b53d4c2 dt-bindings: soc: bcm: Convert b=
-rcm,bcm2835-vchiq to json-schema)
-Merging renesas/next (743002730737 Merge branch 'renesas-arm-dt-for-v5.17' =
-into renesas-next)
-Merging reset/reset/next (89e7a6698fdd reset: uniphier-glue: Use devm_add_a=
-ction_or_reset())
-Merging rockchip/for-next (f3e71d41b8bf Merge branch 'v5.17-armsoc/dts64' i=
-nto for-next)
-Merging samsung-krzk/for-next (b1cbda0fc343 Merge branch 'next/dt64' into f=
-or-next)
-Merging scmi/for-linux-next (a0708ab07633 Merge branch 'for-next/scmi' of g=
-it://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux into for-li=
-nux-next)
-Merging stm32/stm32-next (3ff0810ffc47 ARM: dts: stm32: Add Engicam i.Core =
-STM32MP1 C.TOUCH 2.0 10.1" OF)
-Merging sunxi/sunxi/for-next (1d21ba6546a5 Merge branch 'sunxi/dt-for-5.17'=
- into sunxi/for-next)
-Merging tee/next (ce352be35ba0 Merge branch 'async_notif' into next)
-Merging tegra/for-next (707b88674206 Merge branch for-5.17/arm/defconfig in=
-to for-next)
-Merging ti/ti-next (e66d73b2aa76 Merge branch 'ti-k3-dts-next' into ti-next)
-Merging xilinx/for-next (2eb48e610ef7 Merge remote-tracking branch 'zynqmp/=
-dt' into for-next)
-Merging clk/clk-next (79ace752c9ea Merge branch 'clk-cleanup' into clk-next)
-Merging clk-imx/for-next (9dd81021084f clk: imx8mp: Fix the parent clk of t=
-he audio_root_clk)
-Merging clk-renesas/renesas-clk (f0b62b0bbedc clk: renesas: r9a07g044: Add =
-GPU clock and reset entries)
-Merging clk-samsung/for-next (45bd8166a1d8 clk: samsung: Add initial Exynos=
-7885 clock driver)
-Merging csky/linux-next (a0793fdad9a1 csky: fix typo of fpu config macro)
-Merging h8300/h8300-next (1ec10274d436 h8300: don't implement set_fs)
-Merging m68k/for-next (376e3fdecb0d m68k: Enable memtest functionality)
-Merging m68knommu/for-next (a7904a538933 Linux 5.16-rc6)
-Merging microblaze/next (7b94b7f0ae24 microblaze: add const to of_device_id)
-Merging mips/mips-next (18c7e03400ae MIPS: generic: enable SMP on SMVP syst=
-ems)
-Merging nds32/next (07cd7745c6f2 nds32/setup: remove unused memblock_region=
- variable in setup_memory())
-CONFLICT (content): Merge conflict in arch/nds32/Kconfig
-CONFLICT (content): Merge conflict in arch/nds32/Kbuild
-Merging nios2/for-next (7f7bc20bc41a nios2: Don't use _end for calculating =
-min_low_pfn)
-Merging openrisc/for-next (433fe39f674d openrisc: Add clone3 ABI wrapper)
-Merging parisc-hd/for-next (9ac05e740b93 parisc: Add lws_atomic_xchg and lw=
-s_atomic_store syscalls)
-Merging powerpc/next (5b09250cca85 powerpc/perf: Fix spelling of "its")
-Merging soc-fsl/next (67a4fa80561f soc: fsl: Correct MAINTAINERS database (=
-SOC))
-Merging risc-v/for-next (dacef016c088 riscv: dts: enable more DA9063 functi=
-ons for the SiFive HiFive Unmatched)
-CONFLICT (content): Merge conflict in arch/riscv/boot/dts/sifive/hifive-unm=
-atched-a00.dts
-Merging s390/for-next (280267e26c02 Merge branch 'features' into for-next)
-Merging sh/for-next (8518e694203d sh: pgtable-3level: Fix cast to pointer f=
-rom integer of different size)
-Merging sparc-next/master (dd0d718152e4 Merge tag 'spi-fix-v5.8-rc2' of git=
-://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi)
-Merging uml/linux-next (db0dd9cee822 um: virtio_uml: Allow probing from dev=
-icetree)
-Merging xtensa/xtensa-for-next (bd47cdb78997 xtensa: move section symbols t=
-o asm/sections.h)
-Merging pidfd/for-next (317465bcc6f4 Merge branch 'fs.idmapped' into for-ne=
-xt)
-Merging fscrypt/master (b7e072f9b77f fscrypt: improve a few comments)
-Merging fscache/fscache-next (cdf0fa7e16e2 9p, afs, ceph, cifs, nfs: Use cu=
-rrent_is_kswapd() rather than gfpflags_allow_blocking())
-CONFLICT (content): Merge conflict in fs/cifs/inode.c
-CONFLICT (modify/delete): fs/cachefiles/bind.c deleted in fscache/fscache-n=
-ext and modified in HEAD. Version HEAD of fs/cachefiles/bind.c left in tree.
-$ git rm -f fs/cachefiles/bind.c
-Applying: fix up for "fs: add is_idmapped_mnt() helper"
-Merging afs/afs-next (52af7105eceb afs: Set mtime from the client for yfs c=
-reate operations)
-Merging btrfs/for-next (279373dee83e Fixup merge-to-merge conflict in lzo_c=
-ompress_pages)
-Merging ceph/master (fd84bfdddd16 ceph: fix up non-directory creation in SG=
-ID directories)
-Merging cifs/for-next (a7904a538933 Linux 5.16-rc6)
-Merging configfs/for-next (c42dd069be8d configfs: fix a race in configfs_lo=
-okup())
-Merging ecryptfs/next (682a8e2b41ef Merge tag 'ecryptfs-5.13-rc1-updates' o=
-f git://git.kernel.org/pub/scm/linux/kernel/git/tyhicks/ecryptfs)
-Merging erofs/dev (469407a3b5ed erofs: clean up erofs_map_blocks tracepoint=
-s)
-Merging exfat/dev (4b095fcf2d43 exfat: fix missing REQ_SYNC in exfat_update=
-_bhs())
-Merging ext3/for_next (5f0a61886e30 Pull Amir's FAN_RENAME and FAN_REPORT_T=
-ARGET_FID support for fanotify.)
-Merging ext4/dev (ba2e524d918a ext4: Remove unused match_table_t tokens)
-Merging f2fs/dev (79516e4f8f45 f2fs: Simplify bool conversion)
-Merging fsverity/fsverity (07c99001312c fs-verity: support reading signatur=
-e with ioctl)
-Merging fuse/for-next (073c3ab6ae01 Documentation/filesystem/dax: DAX on vi=
-rtiofs)
-Merging gfs2/for-next (9fc8bbcbb697 gfs2: dump inode object for iopen glock=
-s)
-Merging jfs/jfs-next (c48a14dca2cb JFS: fix memleak in jfs_mount)
-Merging ksmbd/ksmbd-for-next (83912d6d55be ksmbd: disable SMB2_GLOBAL_CAP_E=
-NCRYPTION for SMB 3.1.1)
-Merging nfs/linux-next (064a91771f7a SUNRPC: use different lock keys for IN=
-ET6 and LOCAL)
-Merging nfs-anna/linux-next (9ee4f22580f0 nfs: nfs4clinet: check the return=
- value of kstrdup())
-Merging nfsd/nfsd-next (2e3f00c5f29f nfsd: improve stateid access bitmask d=
-ocumentation)
-Merging cel/for-next (abd599feaf66 nfsd: Replace use of rwsem with errseq_t)
-CONFLICT (content): Merge conflict in fs/nfsd/nfs4state.c
-Merging ntfs3/master (52e00ea6b26e fs/ntfs3: Update valid size if -EIOCBQUE=
-UED)
-Merging orangefs/for-next (ac2c63757f4f orangefs: Fix sb refcount leak when=
- allocate sb info failed.)
-Merging overlayfs/overlayfs-next (5b0a414d06c3 ovl: fix filattr copy-up fai=
-lure)
-Merging ubifs/next (aa39cc675799 jffs2: GC deadlock reading a page that is =
-used in jffs2_write_begin())
-Merging v9fs/9p-next (a403e2bd0026 9p: only copy valid iattrs in 9P2000.L s=
-etattr implementation)
-Merging xfs/for-next (6ed6356b0771 xfs: prevent a WARN_ONCE() in xfs_ioc_at=
-tr_list())
-Merging zonefs/for-next (95b115332a83 zonefs: remove redundant null bio che=
-ck)
-Merging iomap/iomap-for-next (5ad448ce2976 iomap: iomap_read_inline_data cl=
-eanup)
-Merging djw-vfs/vfs-for-next (d03ef4daf33a fs: forbid invalid project ID)
-Merging file-locks/locks-next (80d8e4d3f313 fs/locks: fix fcntl_getlk64/fcn=
-tl_setlk64 stub prototypes)
-Merging vfs/for-next (8f40da9494cf Merge branch 'misc.namei' into for-next)
-Merging printk/for-next (09b7bafa9876 Merge branch 'for-5.17' into for-next)
-Merging pci/next (770851f91de8 Merge branch 'pci/errors')
-Merging pstore/for-next/pstore (a5d05b07961a pstore/ftrace: Allow immediate=
- recording)
-Merging hid/for-next (b92c6c23f16d Merge branch 'for-5.16/upstream-fixes' i=
-nto for-next)
-Merging i2c/i2c/for-next (da6c84e2ef39 Merge branch 'i2c/for-mergewindow' i=
-nto i2c/for-next)
-Merging i3c/i3c/next (3f43926f2712 i3c/master/mipi-i3c-hci: Fix a potential=
-ly infinite loop in 'hci_dat_v1_get_index()')
-Merging dmi/dmi-for-next (f97a2103f1a7 firmware: dmi: Move product_sku info=
- to the end of the modalias)
-Merging hwmon-staging/hwmon-next (01b619f3c639 hwmon: (dell-smm) Pack the w=
-hole smm_regs struct)
-Merging jc_docs/docs-next (b36064425a18 Documentation: KUnit: Restyled Freq=
-uently Asked Questions)
-Merging v4l-dvb/master (68b9bcc8a534 media: ipu3-cio2: Add support for inst=
-antiating i2c-clients for VCMs)
-Merging v4l-dvb-next/master (68b9bcc8a534 media: ipu3-cio2: Add support for=
- instantiating i2c-clients for VCMs)
-Merging pm/linux-next (bd982f30deb7 Merge branches 'thermal-tools' and 'the=
-rmal-int340x' into linux-next)
-Merging cpufreq-arm/cpufreq/arm/linux-next (8f5783ad9eb8 cpufreq: qcom-hw: =
-Use optional irq API)
-Merging cpupower/cpupower (e173bc6e950a tools: cpupower: fix typo in cpupow=
-er-idle-set(1) manpage)
-Merging devfreq/devfreq-next (4667431419e9 PM / devfreq: Reduce log severit=
-y for informative message)
-Merging opp/opp/linux-next (7ca81b690e59 dt-bindings: opp: Allow multi-word=
-ed OPP entry name)
-Merging thermal/thermal/linux-next (8ee1c0f6526c thermal/drivers/rz2gl: Add=
- error check for reset_control_deassert())
-Merging ieee1394/for-next (54b3bd99f094 firewire: nosy: switch from 'pci_' =
-to 'dma_' API)
-Merging dlm/next (e4dc81ed5a80 fs: dlm: memory cache for lowcomms hotpath)
-Merging rdma/for-next (c8f476da84ad Merge branch 'mlx5-next' of git://git.k=
-ernel.org/pub/scm/linux/kernel/git/mellanox/linux)
-Merging net-next/master (f2b551fad8d8 Merge tag 'wireless-drivers-next-2021=
--12-23' of git://git.kernel.org/pub/scm/linux/kernel/git/kvalo/wireless-dri=
-vers-next)
-CONFLICT (content): Merge conflict in include/net/sock.h
-Merging bpf-next/for-next (ecf45e60a62d selftests/bpf: Add btf_dump__new to=
- test_cpp)
-Merging ipsec-next/master (ac1077e92825 net: xfrm: drop check of pols[0] fo=
-r the second time)
-Merging mlx5-next/mlx5-next (685b1afd7911 net/mlx5: Introduce log_max_curre=
-nt_uc_list_wr_supported bit)
-Merging netfilter-next/master (c42ba4290b21 netfilter: flowtable: remove ip=
-v4/ipv6 modules)
-Merging ipvs-next/master (632cb151ca53 netfilter: ctnetlink: remove useless=
- type conversion to bool)
-Merging wireless-drivers-next/master (d430dffbe9dd mt76: mt7921: fix a poss=
-ible race enabling/disabling runtime-pm)
-Merging bluetooth/master (5d1dd2e5a681 Bluetooth: MGMT: Fix spelling mistak=
-e "simultanous" -> "simultaneous")
-Merging mac80211-next/master (294e70c952b4 Merge tag 'mac80211-next-for-net=
--next-2021-12-21' of git://git.kernel.org/pub/scm/linux/kernel/git/jberg/ma=
-c80211-next)
-Merging mtd/mtd/next (6420ac0af95d mtdchar: prevent unbounded allocation in=
- MEMWRITE ioctl)
-Merging nand/nand/next (ecb78b290bb5 mtd: rawnand: gpmi: Use platform_get_i=
-rq_byname() to get the interrupt)
-CONFLICT (content): Merge conflict in drivers/mtd/nand/raw/omap2.c
-Applying: fixup for "memory: omap-gpmc: Use a compatible match table when c=
-hecking for NAND controller"
-Merging spi-nor/spi-nor/next (9de3cb1cc95b mtd: spi-nor: micron-st: write 2=
- bytes when disabling Octal DTR mode)
-Merging crypto/master (696645d25baf crypto: hisilicon/qm - disable queue wh=
-en 'CQ' error)
-CONFLICT (content): Merge conflict in drivers/crypto/qat/qat_4xxx/adf_4xxx_=
-hw_data.c
-Merging drm/drm-next (040bf2a9446f Merge tag 'drm-misc-next-fixes-2021-12-2=
-3' of git://anongit.freedesktop.org/drm/drm-misc into drm-next)
-CONFLICT (content): Merge conflict in drivers/gpu/drm/nouveau/nouveau_fence=
-.c
-Merging drm-misc/for-linux-next (5da8b49de472 dt-bindings: display: bridge:=
- lvds-codec: Fix duplicate key)
-Merging amdgpu/drm-next (c8f56d6d0eaa drm/amdgpu: bump driver version for n=
-ew CTX OP to set/get stable pstates)
-Merging drm-intel/for-linux-next (1c405ca11bf5 Merge tag 'mediatek-drm-next=
--5.17' of https://git.kernel.org/pub/scm/linux/kernel/git/chunkuang.hu/linu=
-x into drm-next)
-Merging drm-intel-gt/for-linux-next-gt (1c405ca11bf5 Merge tag 'mediatek-dr=
-m-next-5.17' of https://git.kernel.org/pub/scm/linux/kernel/git/chunkuang.h=
-u/linux into drm-next)
-Merging drm-tegra/drm/tegra/for-next (d210919dbdc8 drm/tegra: Add back arm_=
-iommu_detach_device())
-Merging drm-msm/msm-next (f61550b3864b drm/msm/dp: dp_link_parse_sink_count=
-() return immediately if aux read failed)
-Merging imx-drm/imx-drm/next (20fbfc81e390 drm/imx: imx-tve: Make use of th=
-e helper function devm_platform_ioremap_resource())
-Merging etnaviv/etnaviv/next (cdd156955f94 drm/etnaviv: consider completed =
-fence seqno in hang check)
-Merging regmap/for-next (02d6fdecb9c3 regmap: allow to define reg_update_bi=
-ts for no bus configuration)
-Merging sound/for-next (dec242b6a838 ALSA: gus: Fix memory leaks at memory =
-allocator error paths)
-Merging sound-asoc/for-next (2f15d3cebd45 ASoC: qcom: Parse "pin-switches" =
-and "widgets" from DT)
-Merging modules/modules-next (d457f9e1ae29 MAINTAINERS: Remove myself as mo=
-dules maintainer)
-Merging input/next (652c0441de58 Input: byd - fix typo in a comment)
-Merging block/for-next (41e744dc9ee6 Merge branch 'for-5.17/block' into for=
--next)
-Merging device-mapper/for-next (1cef171abd39 dm integrity: fix data corrupt=
-ion due to improper use of bvec_kmap_local)
-Merging libata/for-next (4b03d96711ba libata: use min() to make code cleane=
-r)
-Merging pcmcia/pcmcia-next (e39cdacf2f66 pcmcia: i82092: fix a null pointer=
- dereference bug)
-Merging mmc/next (585cba9d424e MAINTAINERS: Add i.MX sdhci maintainer)
-Merging mfd/for-mfd-next (8ae4069acdee dt-bindings: mfd: Add Freecom system=
- controller)
-Merging backlight/for-backlight-next (ec961cf32411 backlight: qcom-wled: Re=
-spect enabled-strings in set_brightness)
-Merging battery/for-next (9652c02428f3 power: bq25890: add POWER_SUPPLY_PRO=
-P_TEMP)
-Merging regulator/for-next (5d55cbc720cc regulator: dt-bindings: samsung,s5=
-m8767: Move fixed string BUCK9 to 'properties')
-Merging security/next-testing (047843bdb316 Merge branch 'landlock_lsm_v34'=
- into next-testing)
-Merging apparmor/apparmor-next (fa55b7dcdc43 Linux 5.16-rc1)
-Merging integrity/next-integrity (32ba540f3c2a evm: mark evm_fixmode as __r=
-o_after_init)
-Merging keys/keys-next (e377c31f788f integrity: Load mokx variables into th=
-e blacklist keyring)
-CONFLICT (content): Merge conflict in certs/system_keyring.c
-Merging safesetid/safesetid-next (1b8b71922919 LSM: SafeSetID: Mark safeset=
-id_initialized as __initdata)
-Merging selinux/next (6cd9d4b97891 selinux: minor tweaks to selinux_add_opt=
-())
-Merging smack/next (0934ad42bb2c smackfs: use netlbl_cfg_cipsov4_del() for =
-deleting cipso_v4_doi)
-Merging tomoyo/master (f702e1107601 tomoyo: use hwight16() in tomoyo_domain=
-_quota_is_ok())
-Merging tpmdd/next (255c5267d5be tpm: Add Upgrade/Reduced mode support for =
-TPM2 modules)
-Merging watchdog/master (0fcfb00b28c0 Linux 5.16-rc4)
-Merging iommu/next (e77bd369ce46 Merge branches 'arm/smmu', 'virtio', 'x86/=
-amd', 'x86/vt-d' and 'core' into next)
-Merging audit/next (ed98ea2128b6 audit: replace zero-length array with flex=
-ible-array member)
-Merging devicetree/for-next (7821f3a0b525 dt-bindings: crypto: convert Qual=
-comm PRNG to yaml)
-CONFLICT (content): Merge conflict in include/linux/of_fdt.h
-Merging mailbox/mailbox-for-next (97961f78e8bc mailbox: imx: support i.MX8U=
-LP S4 MU)
-Merging spi/for-next (12baee68b2df spi: pxa2xx: Propagate firmware node)
-Merging tip/auto-latest (8144a7147ddc Merge branch into tip/master: 'objtoo=
-l/urgent')
-CONFLICT (content): Merge conflict in arch/arm64/kernel/perf_callchain.c
-Merging clockevents/timers/drivers/next (7647204c2e81 dt-bindings: timer: A=
-dd Mstar MSC313e timer devicetree bindings documentation)
-Merging edac/edac-for-next (b31351eada05 Merge branch 'edac-misc' into edac=
--for-next)
-Merging irqchip/irq/irqchip-next (cd448b24c621 Merge branch irq/misc-5.17 i=
-nto irq/irqchip-next)
-Merging ftrace/for-next (a6ed2aee5464 tracing: Switch to kvfree_rcu() API)
-Merging rcu/rcu/next (6a654e5501a6 fixup! rcu: Rework rcu_barrier() and cal=
-lback-migration logic)
-Merging kvm/next (5e4e84f1124a Merge tag 'kvm-s390-next-5.17-1' of git://gi=
-t.kernel.org/pub/scm/linux/kernel/git/kvms390/linux into HEAD)
-CONFLICT (content): Merge conflict in arch/arm64/kvm/Makefile
-CONFLICT (content): Merge conflict in arch/arm64/kvm/Kconfig
-Merging kvm-arm/next (8a44f9f57770 Merge branch kvm-arm64/misc-5.17 into kv=
-marm-master/next)
-CONFLICT (content): Merge conflict in arch/arm64/kvm/arm.c
-Merging kvms390/next (812de04661c4 KVM: s390: Clarify SIGP orders versus ST=
-OP/RESTART)
-Merging xen-tip/linux-next (bc3bfd76d55f xen/gntdev: fix unmap notification=
- order)
-Merging percpu/for-next (4e1f82dce05b Merge branch 'for-5.16-fixes' into fo=
-r-next)
-Merging workqueues/for-next (7f224759dbdf Merge branch 'for-5.17' into for-=
-next)
-Merging drivers-x86/for-next (c0518b21fba5 platform/x86/intel: Remove X86_P=
-LATFORM_DRIVERS_INTEL)
-Merging chrome-platform/for-next (297d34e73d49 platform/chrome: cros_ec_pro=
-to: Use ec_command for check_features)
-Merging hsi/for-next (a1ee1c08fcd5 HSI: core: Fix return freed object in hs=
-i_new_client)
-Merging leds/for-next (d949edb503b1 leds: lp55xx: initialise output directi=
-on from dts)
-Merging ipmi/for-next (42e941eae9c0 ipmi: ssif: replace strlcpy with strscp=
-y)
-Merging driver-core/driver-core-next (67e532a42cf4 driver core: platform: d=
-ocument registration-failure requirement)
-CONFLICT (content): Merge conflict in drivers/platform/x86/intel/Kconfig
-Merging usb/usb-next (ce1d37cb7697 usb: musb: dsps: Use platform_get_irq_by=
-name() to get the interrupt)
-Merging usb-gadget/next (e49d033bddf5 Linux 5.12-rc6)
-Merging usb-serial/usb-next (2585cf9dfaad Linux 5.16-rc5)
-Merging usb-chipidea-next/for-usb-next (78665f57c3fa usb: chipidea: udc: ma=
-ke controller hardware endpoint primed)
-Merging tty/tty-next (712fe4c84982 serial: sh-sci: Remove BREAK/FRAME/PARIT=
-Y/OVERRUN printouts)
-Merging char-misc/char-misc-next (1bb866dcb8cf Merge tag 'iio-for-5.17a' of=
- https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio into char-misc-n=
-ext)
-Merging extcon/extcon-next (a7eb8e38bcd8 extcon: Deduplicate code in extcon=
-_set_state_sync())
-Merging phy-next/next (3b1c6f311b29 phy: uniphier-usb3ss: fix unintended wr=
-iting zeros to PHY register)
-$ git reset --hard HEAD^
-Merging next-20211223 version of phy-next
-Merging soundwire/next (bb349fd2d580 soundwire: qcom: remove redundant vers=
-ion number read)
-Merging thunderbolt/next (e27830fbaf6a thunderbolt: Add module parameter fo=
-r CLx disabling)
-Merging vfio/next (2bed2ced40c9 vfio/iommu_type1: replace kfree with kvfree)
-Merging staging/staging-next (144779edf598 staging: greybus: fix stack size=
- warning with UBSAN)
-Merging iio/togreg (c9791a94384a iio: adc: ti-adc081c: Partial revert of re=
-moval of ACPI IDs)
-Merging mux/for-next (949354d5d49a mux: Fix struct mux_state kernel-doc com=
-ment)
-Merging icc/icc-next (01f8938ad036 Merge branch 'icc-qcm2290' into icc-next)
-Merging dmaengine/next (2577394f4b01 Merge tag 'dmaengine_topic_slave_id_re=
-moval_5.17' into next)
-CONFLICT (content): Merge conflict in drivers/dma/idxd/submit.c
-Merging cgroup/for-next (1815775e7454 cgroup: return early if it is already=
- on preloaded list)
-Merging scsi/for-next (112e1f9af852 Merge branch 'misc' into for-next)
-Merging scsi-mkp/for-next (c77b1f8a8fae scsi: mpi3mr: Bump driver version t=
-o 8.0.0.61.0)
-Merging vhost/linux-next (e2f504111891 vdpa: Mark vdpa_config_ops.get_vq_no=
-tification as optional)
-CONFLICT (content): Merge conflict in include/uapi/linux/virtio_iommu.h
-CONFLICT (content): Merge conflict in drivers/iommu/virtio-iommu.c
-Merging rpmsg/for-next (3cfae448f91e Merge branches 'rproc-next', 'rpmsg-ne=
-xt' and 'hwspinlock-next' into for-next)
-Merging gpio/for-next (7ac554888233 MAINTAINERS: Remove reference to non-ex=
-isting file)
-Merging gpio-brgl/gpio/for-next (f21ecad451c9 gpio: regmap: Switch to use f=
-wnode instead of of_node)
-CONFLICT (content): Merge conflict in tools/testing/selftests/gpio/Makefile
-Merging gpio-intel/for-next (9d5f0f6644b1 gpio: sch: fix typo in a comment)
-Merging gpio-sim/gpio/gpio-sim (0fcfb00b28c0 Linux 5.16-rc4)
-Merging pinctrl/for-next (195acd15792a Merge branch 'devel' into for-next)
-CONFLICT (content): Merge conflict in drivers/pinctrl/Makefile
-CONFLICT (content): Merge conflict in drivers/pinctrl/Kconfig
-Merging pinctrl-intel/for-next (db1b2a8caf5b pinctrl: cherryview: Use tempo=
-rary variable for struct device)
-Merging pinctrl-renesas/renesas-pinctrl (ea7e26ebe6a9 pinctrl: renesas: r8a=
-779a0: Align comments)
-Merging pinctrl-samsung/for-next (16dd3bb5c190 pinctrl: samsung: Make symbo=
-l 'exynos7885_pin_ctrl' static)
-Merging pwm/for-next (3f0565451cc0 dt-bindings: pwm: Avoid selecting schema=
- on node name match)
-Merging userns/for-next (541d759bb769 Merge of signal-for-v5.17, and ucount=
--rlimit-fixes-for-v5.16 for testing in linux-next)
-CONFLICT (content): Merge conflict in kernel/fork.c
-CONFLICT (content): Merge conflict in fs/nfsd/nfssvc.c
-Applying: fix up for "lockd: use svc_set_num_threads() for thread start and=
- stop"
-Applying: fix up for "vhost: use user_worker to check RLIMITs"
-Applying: fix 2 for "vhost: use user_worker to check RLIMITs"
-Merging ktest/for-next (170f4869e662 ktest.pl: Fix the logic for truncating=
- the size of the log file for email)
-Merging kselftest/next (e89908201e25 selftests/vm: remove ARRAY_SIZE define=
- from individual tests)
-Merging livepatching/for-next (df81e6740263 Merge branch 'for-5.17/fixes' i=
-nto for-next)
-Merging coresight/next (efa56eddf5d5 coresight: core: Fix typo in a comment)
-Merging rtc/rtc-next (cd17420ebea5 rtc: cmos: avoid UIP when writing alarm =
-time)
-Merging nvdimm/libnvdimm-for-next (9e05e95ca8da iomap: Fix error handling i=
-n iomap_zero_iter())
-CONFLICT (content): Merge conflict in fs/ext4/super.c
-Merging at24/at24/for-next (d08aea21c89d eeprom: at24: Add support for 24c1=
-025 EEPROM)
-Merging ntb/ntb-next (f96cb827ce49 ntb: ntb_pingpong: remove redundant init=
-ialization of variables msg_data and spad_data)
-Merging seccomp/for-next/seccomp (1e6d69c7b9cd selftests/seccomp: Report ev=
-ent mismatches more clearly)
-Merging kspp/for-next/kspp (136057256686 Linux 5.16-rc2)
-Merging kspp-gustavo/for-next/kspp (64bc5a949ae1 Merge branch 'for-linus/ks=
-pp' into for-next/kspp)
-Merging cisco/for-next (9e98c678c2d6 Linux 5.1-rc1)
-Merging gnss/gnss-next (547d2167c5c3 gnss: usb: add support for Sierra Wire=
-less XM1210)
-Merging fsi/next (7cc2f34e1f4d fsi: sbefifo: Use interruptible mutex lockin=
-g)
-Merging slimbus/for-next (fa55b7dcdc43 Linux 5.16-rc1)
-Merging nvmem/for-next (779809c07324 dt-bindings: nvmem: Add missing 'reg' =
-property)
-Merging xarray/main (1c9f4b00b3cf XArray: Document the locking requirement =
-for the xa_state)
-Merging hyperv/hyperv-next (846da38de0e8 net: netvsc: Add Isolation VM supp=
-ort for netvsc driver)
-CONFLICT (content): Merge conflict in drivers/net/hyperv/netvsc.c
-Merging auxdisplay/auxdisplay (4daa9ff89ef2 auxdisplay: charlcd: checking f=
-or pointer reference before dereferencing)
-Merging kgdb/kgdb/for-next (b77dbc86d604 kdb: Adopt scheduler's task classi=
-fication)
-Merging hmm/hmm (6880fa6c5660 Linux 5.15-rc1)
-Merging fpga/for-next (98ceca2f2932 fpga: region: fix kernel-doc)
-Merging kunit/test (fa55b7dcdc43 Linux 5.16-rc1)
-Merging cfi/cfi/next (baaf965f9430 mtd: hyperbus: rpc-if: fix bug in rpcif_=
-hb_remove)
-Merging kunit-next/kunit (ad659ccb5412 kunit: tool: Default --jobs to numbe=
-r of CPUs)
-CONFLICT (content): Merge conflict in Documentation/dev-tools/kunit/start.r=
-st
-CONFLICT (content): Merge conflict in Documentation/dev-tools/kunit/index.r=
-st
-Merging trivial/for-next (9ff9b0d392ea Merge tag 'net-next-5.10' of git://g=
-it.kernel.org/pub/scm/linux/kernel/git/netdev/net-next)
-Merging mhi/mhi-next (00776ac534cc bus: mhi: pci_generic: Introduce Sierra =
-EM919X support)
-Merging memblock/for-next (e888fa7bb882 memblock: Check memory add/cap orde=
-ring)
-Merging init/init-user-pointers (38b082236e77 initramfs: use vfs_utimes in =
-do_copy)
-Merging counters/counters (e71ba9452f0b Linux 5.11-rc2)
-Merging rust/rust-next (075c05e2eb5d [RFC] drivers: android: Binder IPC in =
-Rust)
-CONFLICT (modify/delete): tools/include/linux/lockdep.h deleted in HEAD and=
- modified in rust/rust-next. Version rust/rust-next of tools/include/linux/=
-lockdep.h left in tree.
-CONFLICT (content): Merge conflict in samples/Makefile
-CONFLICT (content): Merge conflict in samples/Kconfig
-CONFLICT (content): Merge conflict in Documentation/process/changes.rst
-$ git rm -f tools/include/linux/lockdep.h
-Merging cxl/next (53989fad1286 cxl/pmem: Fix module reload vs workqueue sta=
-te)
-Merging folio/for-next (3103f9a51dd0 mm: Use multi-index entries in the pag=
-e cache)
-CONFLICT (content): Merge conflict in mm/filemap.c
-Merging folio-iomap/folio-iomap (4d7bd0eb72e5 iomap: Inline __iomap_zero_it=
-er into its caller)
-CONFLICT (content): Merge conflict in fs/iomap/buffered-io.c
-Merging bitmap/bitmap-master-5.15 (785cb064e2f8 vsprintf: rework bitmap_lis=
-t_string)
-CONFLICT (content): Merge conflict in drivers/dma/ti/edma.c
-CONFLICT (content): Merge conflict in arch/s390/kvm/kvm-s390.c
-CONFLICT (content): Merge conflict in arch/powerpc/include/asm/cputhreads.h
-CONFLICT (content): Merge conflict in arch/parisc/include/asm/bitops.h
-Merging zstd/zstd-next (fa55b7dcdc43 Linux 5.16-rc1)
-Merging efi/next (21e42b00f779 efi/libstub: measure loaded initrd info into=
- the TPM)
-Merging unicode/for-next (e2a58d2d3416 unicode: only export internal symbol=
-s for the selftests)
-CONFLICT (content): Merge conflict in fs/f2fs/sysfs.c
-Merging slab/slab-next (07fda4f11e35 mm/slob: Remove unnecessary page_mapco=
-unt_reset() function call)
-Merging random/master (7273fd1f9af8 random: fix data race on crng init time)
-Merging landlock/next (2585cf9dfaad Linux 5.16-rc5)
-Merging akpm-current/current (2b8f69eda097 ubsan: remove CONFIG_UBSAN_OBJEC=
-T_SIZE)
-CONFLICT (content): Merge conflict in mm/zsmalloc.c
-CONFLICT (content): Merge conflict in mm/memremap.c
-CONFLICT (content): Merge conflict in kernel/kthread.c
-CONFLICT (content): Merge conflict in include/linux/kthread.h
-$ git checkout -b akpm remotes/origin/akpm/master
-$ git rebase --onto master remotes/origin/akpm/master-base
-Merging akpm/master (801cefa1c7a8 lib/stackdepot: always do filter_irq_stac=
-ks() in stack_depot_save())
+    22   arch/arm/include/asm/percpu.h:40:28: error: out of range pc-relati=
+ve fixup value
+    16   arch/arm/include/asm/current.h:39:28: error: out of range pc-relat=
+ive fixup value
+    3    drivers/net/ethernet/amd/declance.c:1231:20: error: assignment of =
+read-only location =E2=80=98*(dev->dev_addr + (sizetype)i)=E2=80=99
+    2    fatal error: too many errors emitted, stopping now [-ferror-limit=
+=3D]
+    2    drivers/scsi/hisi_sas/hisi_sas_main.c:1536:21: error: variable 'sa=
+s_phy' is uninitialized when used here [-Werror,-Wuninitialized]
+    2    drivers/net/ethernet/broadcom/sb1250-mac.c:2187:20: error: assignm=
+ent of read-only location =E2=80=98*(dev->dev_addr + (sizetype)i)=E2=80=99
+    2    arch/arm/include/asm/current.h:53:6: error: out of range pc-relati=
+ve fixup value
+    2    /usr/lib/gcc/x86_64-linux-gnu/10/plugin/include/config/i386/i386.h=
+:2500:10: fatal error: common/config/i386/i386-cpuinfo.h: No such file or d=
+irectory
+    1    irq-gic-v3-its.c:(.text+0x14b8): undefined reference to `cpus_boot=
+ed_once_mask'
+    1    include/asm-generic/div64.h:222:28: error: comparison of distinct =
+pointer types lacks a cast [-Werror]
+    1    drivers/usb/gadget/udc/at91_udc.h:174:33: error: format =E2=80=98%=
+d=E2=80=99 expects argument of type =E2=80=98int=E2=80=99, but argument 3 h=
+as type =E2=80=98struct gpio_desc *=E2=80=99 [-Werror=3Dformat=3D]
+    1    drivers/pinctrl/pinctrl-thunderbay.c:815:8: error: assignment disc=
+ards =E2=80=98const=E2=80=99 qualifier from pointer target type [-Werror=3D=
+discarded-qualifiers]
+    1    drivers/pinctrl/pinctrl-thunderbay.c:815:8: error: assigning to 'c=
+onst char **' from 'const char *const *' discards qualifiers [-Werror,-Winc=
+ompatible-pointer-types-discards-qualifiers]
+    1    drivers/hv/vmbus_drv.c:2082:29: error: shift count >=3D width of t=
+ype [-Werror,-Wshift-count-overflow]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_rq_dlg_=
+calc_31.c:939:13: error: stack frame size (1404) exceeds limit (1024) in fu=
+nction 'dml_rq_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn30/display_rq_dlg_=
+calc_30.c:981:13: error: stack frame size (1180) exceeds limit (1024) in fu=
+nction 'dml_rq_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_rq_dlg_=
+calc_21.c:829:13: error: stack frame size (1084) exceeds limit (1024) in fu=
+nction 'dml_rq_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vb=
+a_21.c:3518:6: error: stack frame size (1244) exceeds limit (1024) in funct=
+ion 'dml21_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-t=
+han]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vb=
+a_21.c:1466:13: error: stack frame size (1212) exceeds limit (1024) in func=
+tion 'DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanc=
+eCalculation' [-Werror,-Wframe-larger-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
+a_20v2.c:3393:6: error: stack frame size (1580) exceeds limit (1024) in fun=
+ction 'dml20v2_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larg=
+er-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
+a_20v2.c:1145:13: error: stack frame size (1324) exceeds limit (1024) in fu=
+nction 'dml20v2_DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAnd=
+PerformanceCalculation' [-Werror,-Wframe-larger-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
+a_20.c:3286:6: error: stack frame size (1548) exceeds limit (1024) in funct=
+ion 'dml20_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-t=
+han]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
+a_20.c:1085:13: error: stack frame size (1356) exceeds limit (1024) in func=
+tion 'dml20_DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerf=
+ormanceCalculation' [-Werror,-Wframe-larger-than]
+    1    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=
+=80=98-mhard-float=E2=80=99
+    1    arm-linux-gnueabihf-ld: irq-gic-v3-its.c:(.text+0x14bc): undefined=
+ reference to `cpus_booted_once_mask'
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
+=3D0x'
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
+=3D0x'
+    1    /tmp/kci/linux/build/../drivers/gpu/drm/panel/panel-edp.c:843: und=
+efined reference to `drm_panel_dp_aux_backlight'
+    1    /tmp/ccYOX7un.s:7952: Error: invalid literal constant: pool needs =
+to be closer
+    1    /tmp/ccYOX7un.s:516: Error: invalid literal constant: pool needs t=
+o be closer
+    1    /tmp/ccYOX7un.s:45395: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:45336: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:45274: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:45179: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:44661: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:44602: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:44540: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:44443: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:44080: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:44021: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:43961: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:43871: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:43646: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:43587: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:43520: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:43420: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:42974: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:42929: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:42682: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:42623: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:42556: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:42456: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:42011: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:41966: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:41307: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:41248: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:41188: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:41098: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:40835: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:40776: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:40714: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:40620: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:40396: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:40337: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:40270: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:40172: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:39967: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:39908: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:39846: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:39752: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:39568: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:39509: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:39442: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:39342: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:39098: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:39039: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:38979: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:38875: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:38637: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:38578: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:38511: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:38413: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:38153: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:38094: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:38027: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:37931: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:37715: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:37656: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:37594: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:37499: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:37301: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:37242: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:37175: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:37079: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:36901: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:36842: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:36780: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:36684: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:36052: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:35993: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:35931: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:35836: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:35657: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:35598: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:35531: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:35435: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:35281: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:35222: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:35156: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:35059: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:34914: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:34855: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:34789: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:34692: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:34528: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:34469: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:34402: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:34306: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:34105: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:34046: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:33984: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:33888: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:33722: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:33663: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:33596: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:33497: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:33345: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:33286: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:33220: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:33123: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:32969: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:32910: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:32848: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:32751: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:32622: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:32563: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:32501: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:32406: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:32250: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:32191: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:32128: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:32033: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:31895: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:31836: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:31774: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:31679: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:31538: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:31479: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:31419: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:31330: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:31180: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:31121: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:31059: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:30970: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:30875: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:30816: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:30756: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:30667: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:30530: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:30471: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:30409: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:30314: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:30175: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:30116: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:30054: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:29965: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:29877: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:29818: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:29758: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:29669: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:29517: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:29458: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:29396: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:29301: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:29194: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:29135: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:29075: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:28985: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:28687: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:28627: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:28567: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:28475: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:28402: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:28342: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:28282: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:28192: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:28119: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:28059: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:27999: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:27914: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:27842: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:27782: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:27722: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:27638: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:27569: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:27510: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:27450: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:27366: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:25857: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:17766: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:17705: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:13628: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:13528: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:12238: Error: invalid literal constant: pool needs=
+ to be closer
+    1    /tmp/ccYOX7un.s:12198: Error: invalid literal constant: pool needs=
+ to be closer
 
---Sig_/Lbua9nKCl..9yn2eP_._X6w
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+Warnings summary:
 
------BEGIN PGP SIGNATURE-----
+    22   clang: warning: argument unused during compilation: '-march=3Darmv=
+6k' [-Wunused-command-line-argument]
+    10   clang: warning: argument unused during compilation: '-march=3Darmv=
+7-a' [-Wunused-command-line-argument]
+    4    drivers/scsi/hisi_sas/hisi_sas_main.c:1528:29: note: initialize th=
+e variable 'sas_phy' to silence this warning
+    3    cc1: all warnings being treated as errors
+    2    include/linux/kern_levels.h:5:18: warning: format =E2=80=98%d=E2=
+=80=99 expects argument of type =E2=80=98int=E2=80=99, but argument 2 has t=
+ype =E2=80=98struct gpio_desc *=E2=80=99 [-Wformat=3D]
+    2    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+    2    arch/arc/Makefile:26: ** WARNING ** CONFIG_ARC_TUNE_MCPU flag '' i=
+s unknown, fallback to ''
+    2    1 warning generated.
+    1    vmlinux.o: warning: objtool: vc_switch_off_ist()+0x8a: call to mem=
+cpy() leaves .noinstr.text section
+    1    vmlinux.o: warning: objtool: sync_regs()+0x20: call to memcpy() le=
+aves .noinstr.text section
+    1    vmlinux.o: warning: objtool: mce_start()+0x44: call to __kasan_che=
+ck_write() leaves .noinstr.text section
+    1    vmlinux.o: warning: objtool: mce_severity_amd()+0x5e: call to mce_=
+severity_amd_smca() leaves .noinstr.text section
+    1    vmlinux.o: warning: objtool: mce_read_aux()+0x4b: call to mca_msr_=
+reg() leaves .noinstr.text section
+    1    vmlinux.o: warning: objtool: in_task_stack()+0xc: call to task_sta=
+ck_page() leaves .noinstr.text section
+    1    vmlinux.o: warning: objtool: in_entry_stack()+0x10: call to cpu_en=
+try_stack() leaves .noinstr.text section
+    1    vmlinux.o: warning: objtool: fixup_bad_iret()+0x32: call to memset=
+() leaves .noinstr.text section
+    1    vmlinux.o: warning: objtool: do_syscall_64()+0x44: call to memset(=
+) leaves .noinstr.text section
+    1    vmlinux.o: warning: objtool: do_machine_check()+0x13a: call to mce=
+_no_way_out() leaves .noinstr.text section
+    1    vmlinux.o: warning: objtool: do_int80_syscall_32()+0x52: call to m=
+emset() leaves .noinstr.text section
+    1    vmlinux.o: warning: objtool: __sev_put_ghcb()+0x36: call to memcpy=
+() leaves .noinstr.text section
+    1    vmlinux.o: warning: objtool: __sev_get_ghcb()+0xa1: call to memcpy=
+() leaves .noinstr.text section
+    1    vmlinux.o: warning: objtool: __sev_es_nmi_complete()+0x5a: call to=
+ ghcb_set_sw_exit_code() leaves .noinstr.text section
+    1    vmlinux.o: warning: objtool: __do_fast_syscall_32()+0x52: call to =
+memset() leaves .noinstr.text section
+    1    lib/strnlen_user.o: warning: objtool: strnlen_user()+0x5d: call to=
+ do_strnlen_user() with UACCESS enabled
+    1    lib/strncpy_from_user.o: warning: objtool: strncpy_from_user()+0x8=
+a: call to do_strncpy_from_user() with UACCESS enabled
+    1    fs/reiserfs/lbalance.o: warning: objtool: leaf_copy_items_entirely=
+()+0x734: stack state mismatch: cfa1=3D4+200 cfa2=3D4+192
+    1    drivers/scsi/mpi3mr/mpi3mr_fw.o: warning: objtool: mpi3mr_op_reque=
+st_post() falls through to next function mpi3mr_check_rh_fault_ioc()
+    1    drivers/scsi/hisi_sas/hisi_sas_main.c:1536:21: warning: variable '=
+sas_phy' is uninitialized when used here [-Wuninitialized]
+    1    arch/x86/kernel/head64.o: warning: objtool: __startup_64() falls t=
+hrough to next function startup_64_setup_env()
+    1    arch/arc/include/asm/perf_event.h:91:27: warning: 'arc_pmu_ev_hw_m=
+ap' defined but not used [-Wunused-const-variable=3D]
+    1    arch/arc/include/asm/perf_event.h:126:27: warning: 'arc_pmu_cache_=
+map' defined but not used [-Wunused-const-variable=3D]
+    1    :1536:21: warning: variable 'sas_phy' is uninitialized when used h=
+ere [-Wuninitialized]
+    1    : warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHFiwkACgkQAVBC80lX
-0Gz/+wf8CdnYF91Ji9ErFdvwM8GPROBecO8s74eKF8DUsRkzwBp2m5U629ulQuiM
-TTLgQZTnyaQe1tK+sPbyONzo4hhmPtpoQMJd+g4EXot6JExgDzCtYPJ62T7mP1OJ
-iHXC3jr4Hbju08BU0ztc58vgZ3NkCfu7tfiAOdlbHGWQJBz3jGzRmCBmjLsb8Xl5
-FAPLaxZB8sNuPG3bAJBjYv9YDSW8iAGbrI4TSFL4EC0IUxBo9Yn7nppXDjMfbAc9
-/ofOSPthG/gDf1iF31GKlcFiNzj0fIbKSPMShFranJghEp4v89qS0WtC/tbAKQKQ
-4amN7YOv8RTcYqRmFJw7k0kROfEWkw==
-=9+DK
------END PGP SIGNATURE-----
+Section mismatches summary:
 
---Sig_/Lbua9nKCl..9yn2eP_._X6w--
+    1    WARNING: modpost: vmlinux.o(.text+0x15c697): Section mismatch in r=
+eference from the function __next_node() to the variable .init.data:numa_no=
+des_parsed
+    1    WARNING: modpost: vmlinux.o(.text+0x15c622): Section mismatch in r=
+eference from the function test_bit() to the variable .init.data:numa_nodes=
+_parsed
+    1    WARNING: modpost: vmlinux.o(.text+0x15c60e): Section mismatch in r=
+eference from the function test_bit() to the variable .init.data:numa_nodes=
+_parsed
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+kselftest (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warni=
+ng, 0 section mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, clang-13) =E2=80=94 FAIL, 1 error, 0 warnings, 0 secti=
+on mismatches
+
+Errors:
+    drivers/pinctrl/pinctrl-thunderbay.c:815:8: error: assigning to 'const =
+char **' from 'const char *const *' discards qualifiers [-Werror,-Wincompat=
+ible-pointer-types-discards-qualifiers]
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, clang-13) =E2=80=94 FAIL, 40 errors, 13 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    arch/arm/include/asm/percpu.h:40:28: error: out of range pc-relative fi=
+xup value
+    arch/arm/include/asm/current.h:39:28: error: out of range pc-relative f=
+ixup value
+    arch/arm/include/asm/current.h:39:28: error: out of range pc-relative f=
+ixup value
+    arch/arm/include/asm/current.h:39:28: error: out of range pc-relative f=
+ixup value
+    arch/arm/include/asm/current.h:39:28: error: out of range pc-relative f=
+ixup value
+    arch/arm/include/asm/percpu.h:40:28: error: out of range pc-relative fi=
+xup value
+    arch/arm/include/asm/percpu.h:40:28: error: out of range pc-relative fi=
+xup value
+    arch/arm/include/asm/percpu.h:40:28: error: out of range pc-relative fi=
+xup value
+    arch/arm/include/asm/current.h:39:28: error: out of range pc-relative f=
+ixup value
+    arch/arm/include/asm/percpu.h:40:28: error: out of range pc-relative fi=
+xup value
+    arch/arm/include/asm/current.h:39:28: error: out of range pc-relative f=
+ixup value
+    arch/arm/include/asm/percpu.h:40:28: error: out of range pc-relative fi=
+xup value
+    arch/arm/include/asm/percpu.h:40:28: error: out of range pc-relative fi=
+xup value
+    arch/arm/include/asm/current.h:39:28: error: out of range pc-relative f=
+ixup value
+    arch/arm/include/asm/percpu.h:40:28: error: out of range pc-relative fi=
+xup value
+    arch/arm/include/asm/percpu.h:40:28: error: out of range pc-relative fi=
+xup value
+    arch/arm/include/asm/percpu.h:40:28: error: out of range pc-relative fi=
+xup value
+    arch/arm/include/asm/percpu.h:40:28: error: out of range pc-relative fi=
+xup value
+    arch/arm/include/asm/current.h:39:28: error: out of range pc-relative f=
+ixup value
+    fatal error: too many errors emitted, stopping now [-ferror-limit=3D]
+    arch/arm/include/asm/percpu.h:40:28: error: out of range pc-relative fi=
+xup value
+    arch/arm/include/asm/current.h:39:28: error: out of range pc-relative f=
+ixup value
+    arch/arm/include/asm/percpu.h:40:28: error: out of range pc-relative fi=
+xup value
+    arch/arm/include/asm/percpu.h:40:28: error: out of range pc-relative fi=
+xup value
+    arch/arm/include/asm/current.h:39:28: error: out of range pc-relative f=
+ixup value
+    arch/arm/include/asm/percpu.h:40:28: error: out of range pc-relative fi=
+xup value
+    arch/arm/include/asm/percpu.h:40:28: error: out of range pc-relative fi=
+xup value
+    arch/arm/include/asm/current.h:39:28: error: out of range pc-relative f=
+ixup value
+    arch/arm/include/asm/current.h:39:28: error: out of range pc-relative f=
+ixup value
+    arch/arm/include/asm/current.h:39:28: error: out of range pc-relative f=
+ixup value
+    arch/arm/include/asm/current.h:39:28: error: out of range pc-relative f=
+ixup value
+    arch/arm/include/asm/percpu.h:40:28: error: out of range pc-relative fi=
+xup value
+    arch/arm/include/asm/percpu.h:40:28: error: out of range pc-relative fi=
+xup value
+    arch/arm/include/asm/current.h:39:28: error: out of range pc-relative f=
+ixup value
+    arch/arm/include/asm/percpu.h:40:28: error: out of range pc-relative fi=
+xup value
+    arch/arm/include/asm/percpu.h:40:28: error: out of range pc-relative fi=
+xup value
+    arch/arm/include/asm/current.h:39:28: error: out of range pc-relative f=
+ixup value
+    arch/arm/include/asm/percpu.h:40:28: error: out of range pc-relative fi=
+xup value
+    arch/arm/include/asm/percpu.h:40:28: error: out of range pc-relative fi=
+xup value
+    fatal error: too many errors emitted, stopping now [-ferror-limit=3D]
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    : warning: argument unused during compilation: '-march=3Darmv6k' [-Wunu=
+sed-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (x86_64, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 secti=
+on mismatches
+
+Errors:
+    /usr/lib/gcc/x86_64-linux-gnu/10/plugin/include/config/i386/i386.h:2500=
+:10: fatal error: common/config/i386/i386-cpuinfo.h: No such file or direct=
+ory
+    /usr/lib/gcc/x86_64-linux-gnu/10/plugin/include/config/i386/i386.h:2500=
+:10: fatal error: common/config/i386/i386-cpuinfo.h: No such file or direct=
+ory
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, gcc-10) =E2=80=94 FAIL, 179 errors, 2 warnings, 0 sectio=
+n mismatches
+
+Errors:
+    /tmp/ccYOX7un.s:516: Error: invalid literal constant: pool needs to be =
+closer
+    /tmp/ccYOX7un.s:7952: Error: invalid literal constant: pool needs to be=
+ closer
+    /tmp/ccYOX7un.s:12198: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:12238: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:13528: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:13628: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:17705: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:17766: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:25857: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:27366: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:27450: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:27510: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:27569: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:27638: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:27722: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:27782: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:27842: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:27914: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:27999: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:28059: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:28119: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:28192: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:28282: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:28342: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:28402: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:28475: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:28567: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:28627: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:28687: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:28985: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:29075: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:29135: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:29194: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:29301: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:29396: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:29458: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:29517: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:29669: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:29758: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:29818: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:29877: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:29965: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:30054: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:30116: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:30175: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:30314: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:30409: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:30471: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:30530: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:30667: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:30756: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:30816: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:30875: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:30970: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:31059: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:31121: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:31180: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:31330: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:31419: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:31479: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:31538: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:31679: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:31774: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:31836: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:31895: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:32033: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:32128: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:32191: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:32250: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:32406: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:32501: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:32563: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:32622: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:32751: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:32848: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:32910: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:32969: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:33123: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:33220: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:33286: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:33345: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:33497: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:33596: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:33663: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:33722: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:33888: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:33984: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:34046: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:34105: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:34306: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:34402: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:34469: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:34528: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:34692: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:34789: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:34855: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:34914: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:35059: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:35156: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:35222: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:35281: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:35435: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:35531: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:35598: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:35657: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:35836: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:35931: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:35993: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:36052: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:36684: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:36780: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:36842: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:36901: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:37079: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:37175: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:37242: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:37301: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:37499: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:37594: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:37656: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:37715: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:37931: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:38027: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:38094: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:38153: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:38413: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:38511: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:38578: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:38637: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:38875: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:38979: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:39039: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:39098: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:39342: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:39442: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:39509: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:39568: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:39752: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:39846: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:39908: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:39967: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:40172: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:40270: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:40337: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:40396: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:40620: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:40714: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:40776: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:40835: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:41098: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:41188: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:41248: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:41307: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:41966: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:42011: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:42456: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:42556: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:42623: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:42682: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:42929: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:42974: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:43420: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:43520: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:43587: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:43646: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:43871: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:43961: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:44021: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:44080: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:44443: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:44540: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:44602: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:44661: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:45179: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:45274: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:45336: Error: invalid literal constant: pool needs to b=
+e closer
+    /tmp/ccYOX7un.s:45395: Error: invalid literal constant: pool needs to b=
+e closer
+    include/asm-generic/div64.h:222:28: error: comparison of distinct point=
+er types lacks a cast [-Werror]
+    drivers/usb/gadget/udc/at91_udc.h:174:33: error: format =E2=80=98%d=E2=
+=80=99 expects argument of type =E2=80=98int=E2=80=99, but argument 3 has t=
+ype =E2=80=98struct gpio_desc *=E2=80=99 [-Werror=3Dformat=3D]
+
+Warnings:
+    cc1: all warnings being treated as errors
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (x86_64, clang-13) =E2=80=94 FAIL, 2 errors, 19 warnings, 0 se=
+ction mismatches
+
+Errors:
+    drivers/hv/vmbus_drv.c:2082:29: error: shift count >=3D width of type [=
+-Werror,-Wshift-count-overflow]
+    drivers/scsi/hisi_sas/hisi_sas_main.c:1536:21: error: variable 'sas_phy=
+' is uninitialized when used here [-Werror,-Wuninitialized]
+
+Warnings:
+    arch/x86/kernel/head64.o: warning: objtool: __startup_64() falls throug=
+h to next function startup_64_setup_env()
+    vmlinux.o: warning: objtool: do_syscall_64()+0x44: call to memset() lea=
+ves .noinstr.text section
+    vmlinux.o: warning: objtool: do_int80_syscall_32()+0x52: call to memset=
+() leaves .noinstr.text section
+    vmlinux.o: warning: objtool: __do_fast_syscall_32()+0x52: call to memse=
+t() leaves .noinstr.text section
+    vmlinux.o: warning: objtool: sync_regs()+0x20: call to memcpy() leaves =
+.noinstr.text section
+    vmlinux.o: warning: objtool: vc_switch_off_ist()+0x8a: call to memcpy()=
+ leaves .noinstr.text section
+    vmlinux.o: warning: objtool: fixup_bad_iret()+0x32: call to memset() le=
+aves .noinstr.text section
+    vmlinux.o: warning: objtool: in_task_stack()+0xc: call to task_stack_pa=
+ge() leaves .noinstr.text section
+    vmlinux.o: warning: objtool: in_entry_stack()+0x10: call to cpu_entry_s=
+tack() leaves .noinstr.text section
+    vmlinux.o: warning: objtool: mce_read_aux()+0x4b: call to mca_msr_reg()=
+ leaves .noinstr.text section
+    vmlinux.o: warning: objtool: do_machine_check()+0x13a: call to mce_no_w=
+ay_out() leaves .noinstr.text section
+    vmlinux.o: warning: objtool: mce_start()+0x44: call to __kasan_check_wr=
+ite() leaves .noinstr.text section
+    vmlinux.o: warning: objtool: mce_severity_amd()+0x5e: call to mce_sever=
+ity_amd_smca() leaves .noinstr.text section
+    vmlinux.o: warning: objtool: __sev_es_nmi_complete()+0x5a: call to ghcb=
+_set_sw_exit_code() leaves .noinstr.text section
+    vmlinux.o: warning: objtool: __sev_get_ghcb()+0xa1: call to memcpy() le=
+aves .noinstr.text section
+    vmlinux.o: warning: objtool: __sev_put_ghcb()+0x36: call to memcpy() le=
+aves .noinstr.text section
+    fs/reiserfs/lbalance.o: warning: objtool: leaf_copy_items_entirely()+0x=
+734: stack state mismatch: cfa1=3D4+200 cfa2=3D4+192
+    drivers/scsi/mpi3mr/mpi3mr_fw.o: warning: objtool: mpi3mr_op_request_po=
+st() falls through to next function mpi3mr_check_rh_fault_ioc()
+    drivers/scsi/hisi_sas/hisi_sas_main.c:1528:29: note: initialize the var=
+iable 'sas_phy' to silence this warning
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(.text+0x15c60e): Section mismatch in refere=
+nce from the function test_bit() to the variable .init.data:numa_nodes_pars=
+ed
+    WARNING: modpost: vmlinux.o(.text+0x15c622): Section mismatch in refere=
+nce from the function test_bit() to the variable .init.data:numa_nodes_pars=
+ed
+    WARNING: modpost: vmlinux.o(.text+0x15c697): Section mismatch in refere=
+nce from the function __next_node() to the variable .init.data:numa_nodes_p=
+arsed
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (i386, clang-13) =E2=80=94 FAIL, 10 errors, 1 warning, 0 secti=
+on mismatches
+
+Errors:
+    drivers/scsi/hisi_sas/hisi_sas_main.c:1536:21: error: variable 'sas_phy=
+' is uninitialized when used here [-Werror,-Wuninitialized]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_rq_dlg_calc_=
+21.c:829:13: error: stack frame size (1084) exceeds limit (1024) in functio=
+n 'dml_rq_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn30/display_rq_dlg_calc_=
+30.c:981:13: error: stack frame size (1180) exceeds limit (1024) in functio=
+n 'dml_rq_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_rq_dlg_calc_=
+31.c:939:13: error: stack frame size (1404) exceeds limit (1024) in functio=
+n 'dml_rq_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20v=
+2.c:1145:13: error: stack frame size (1324) exceeds limit (1024) in functio=
+n 'dml20v2_DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerfo=
+rmanceCalculation' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20.=
+c:1085:13: error: stack frame size (1356) exceeds limit (1024) in function =
+'dml20_DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerforman=
+ceCalculation' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vba_21.=
+c:1466:13: error: stack frame size (1212) exceeds limit (1024) in function =
+'DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalc=
+ulation' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20v=
+2.c:3393:6: error: stack frame size (1580) exceeds limit (1024) in function=
+ 'dml20v2_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-th=
+an]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vba_21.=
+c:3518:6: error: stack frame size (1244) exceeds limit (1024) in function '=
+dml21_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20.=
+c:3286:6: error: stack frame size (1548) exceeds limit (1024) in function '=
+dml20_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+
+Warnings:
+    drivers/scsi/hisi_sas/hisi_sas_main.c:1528:29: note: initialize the var=
+iable 'sas_phy' to silence this warning
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 section =
+mismatches
+
+Errors:
+    drivers/pinctrl/pinctrl-thunderbay.c:815:8: error: assignment discards =
+=E2=80=98const=E2=80=99 qualifier from pointer target type [-Werror=3Ddisca=
+rded-qualifiers]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+am200epdkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ar7_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, clang-13) =E2=80=94 PASS, 0 errors, 10 warnings, =
+0 section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+assabet_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+at91_dt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    include/linux/kern_levels.h:5:18: warning: format =E2=80=98%d=E2=80=99 =
+expects argument of type =E2=80=98int=E2=80=99, but argument 2 has type =E2=
+=80=98struct gpio_desc *=E2=80=99 [-Wformat=3D]
+
+---------------------------------------------------------------------------=
+-----
+ath25_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath79_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axm55xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+badge4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm2835_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm47xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm63xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+bigsur_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    drivers/net/ethernet/broadcom/sb1250-mac.c:2187:20: error: assignment o=
+f read-only location =E2=80=98*(dev->dev_addr + (sizetype)i)=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+bmips_be_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+bmips_stb_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+capcella_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+cavium_octeon_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cerfcube_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+cm_x300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+cobalt_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+collie_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+corgi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cu1830-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+davinci_all_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+db1xxx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_64_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings,=
+ 0 section mismatches
+
+Errors:
+    drivers/net/ethernet/amd/declance.c:1231:20: error: assignment of read-=
+only location =E2=80=98*(dev->dev_addr + (sizetype)i)=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+decstation_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 =
+section mismatches
+
+Errors:
+    drivers/net/ethernet/amd/declance.c:1231:20: error: assignment of read-=
+only location =E2=80=98*(dev->dev_addr + (sizetype)i)=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+decstation_r4k_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings=
+, 0 section mismatches
+
+Errors:
+    drivers/net/ethernet/amd/declance.c:1231:20: error: assignment of read-=
+only location =E2=80=98*(dev->dev_addr + (sizetype)i)=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, clang-13) =E2=80=94 PASS, 0 errors, 3 warnings, 0 section=
+ mismatches
+
+Warnings:
+    :1536:21: warning: variable 'sas_phy' is uninitialized when used here [=
+-Wuninitialized]
+    drivers/scsi/hisi_sas/hisi_sas_main.c:1528:29: note: initialize the var=
+iable 'sas_phy' to silence this warning
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_16K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-13) =E2=80=94 PASS, 0 er=
+rors, 3 warnings, 0 section mismatches
+
+Warnings:
+    drivers/scsi/hisi_sas/hisi_sas_main.c:1536:21: warning: variable 'sas_p=
+hy' is uninitialized when used here [-Wuninitialized]
+    drivers/scsi/hisi_sas/hisi_sas_main.c:1528:29: note: initialize the var=
+iable 'sas_phy' to silence this warning
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+crypto (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+debug (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+debug (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+ima (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+dove_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+eseries_pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+exynos_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ezx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+footbridge_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+fuloong2e_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 s=
+ection mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+gcw0_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+gemini_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+h3600_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+h5000_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+hackkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+kselftest (arc, gcc-10) =E2=80=94 PASS, 0 errors, 3 w=
+arnings, 0 section mismatches
+
+Warnings:
+    arch/arc/Makefile:26: ** WARNING ** CONFIG_ARC_TUNE_MCPU flag '' is unk=
+nown, fallback to ''
+    arch/arc/include/asm/perf_event.h:126:27: warning: 'arc_pmu_cache_map' =
+defined but not used [-Wunused-const-variable=3D]
+    arch/arc/include/asm/perf_event.h:91:27: warning: 'arc_pmu_ev_hw_map' d=
+efined but not used [-Wunused-const-variable=3D]
+
+---------------------------------------------------------------------------=
+-----
+hisi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+hsdk_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+debug (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+imote2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v4_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+iop32x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip22_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip27_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip28_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip32_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ixp4xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+jazz_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+jmr3927_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+jornada720_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+keystone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+lart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson1b_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson1c_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson2k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson3_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpc18xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpd270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lubbock_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+magician_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mainstone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_kvm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_qemu_32r6_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaaprp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_eva_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_xpa_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mini2440_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+moxart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mpc30x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mps2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+mtx1_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v4t_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    include/linux/kern_levels.h:5:18: warning: format =E2=80=98%d=E2=80=99 =
+expects argument of type =E2=80=98int=E2=80=99, but argument 2 has type =E2=
+=80=98struct gpio_desc *=E2=80=99 [-Wformat=3D]
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, clang-13) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 =
+section mismatches
+
+Errors:
+    arch/arm/include/asm/current.h:53:6: error: out of range pc-relative fi=
+xup value
+    arch/arm/include/asm/current.h:53:6: error: out of range pc-relative fi=
+xup value
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, clang-13) =E2=80=94 PASS, 0 errors, 10 warnings, 0=
+ section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-10) =E2=80=94 PASS, =
+0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-10) =E2=80=
+=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 0=
+ warnings, 0 section mismatches
+
+Errors:
+    irq-gic-v3-its.c:(.text+0x14b8): undefined reference to `cpus_booted_on=
+ce_mask'
+    arm-linux-gnueabihf-ld: irq-gic-v3-its.c:(.text+0x14bc): undefined refe=
+rence to `cpus_booted_once_mask'
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
+ errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mxs_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+neponset_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+netwinder_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_sdcard_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+omap1_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+omap2plus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+omega2p_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+orion5x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+oxnas_v6_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+palmz72_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pic32mzda_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+pleb_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa255-idp_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa910_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+qcom_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section=
+ mismatches
+
+Errors:
+    /tmp/kci/linux/build/../drivers/gpu/drm/panel/panel-edp.c:843: undefine=
+d reference to `drm_panel_dp_aux_backlight'
+
+---------------------------------------------------------------------------=
+-----
+qi_lb60_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+rb532_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rbtx49xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+realview_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+rm200_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rpc_defconfig (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 section=
+ mismatches
+
+Errors:
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=3D0x'
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=3D0x'
+
+---------------------------------------------------------------------------=
+-----
+rs90_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+rt305x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rv32_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s3c2410_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s3c6400_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s5pv210_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sb1250_swarm_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, =
+0 section mismatches
+
+Errors:
+    drivers/net/ethernet/broadcom/sb1250-mac.c:2187:20: error: assignment o=
+f read-only location =E2=80=98*(dev->dev_addr + (sizetype)i)=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+shannon_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+shmobile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+simpad_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+socfpga_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear13xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+spitz_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+stm32_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sunxi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+tb0226_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+tct_hammer_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mis=
+matches
+
+Warnings:
+    arch/arc/Makefile:26: ** WARNING ** CONFIG_ARC_TUNE_MCPU flag '' is unk=
+nown, fallback to ''
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+trizeps4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+u8500_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+versatile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+vexpress_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vf610m4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+viper_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+vocore2_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+workpad_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+crypto (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+debug (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 2 warning=
+s, 0 section mismatches
+
+Warnings:
+    lib/strncpy_from_user.o: warning: objtool: strncpy_from_user()+0x8a: ca=
+ll to do_strncpy_from_user() with UACCESS enabled
+    lib/strnlen_user.o: warning: objtool: strnlen_user()+0x5d: call to do_s=
+trnlen_user() with UACCESS enabled
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+ima (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, =
+0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 e=
+rrors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook+kselftest (x86_64, gcc-10) =E2=80=94 PASS, =
+0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+xcep_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+zeus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---
+For more info write to <info@kernelci.org>

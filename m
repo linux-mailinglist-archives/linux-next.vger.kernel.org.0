@@ -2,86 +2,205 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A22647F101
-	for <lists+linux-next@lfdr.de>; Fri, 24 Dec 2021 21:11:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00F8647F35A
+	for <lists+linux-next@lfdr.de>; Sat, 25 Dec 2021 15:07:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230510AbhLXULr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 24 Dec 2021 15:11:47 -0500
-Received: from mga04.intel.com ([192.55.52.120]:55970 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230385AbhLXULr (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 24 Dec 2021 15:11:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640376707; x=1671912707;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yxOVbnhxaTtSXDxw3/Z/jt2EJFus+3mv49/BliTiIyU=;
-  b=eP1LlH1f/L8jYDCO8WfksxSownCXU9N5lA5iUBmfR0DqBcVC1QkGNxBe
-   MHTEn+MuCUTHGNv9Le0bZaW4U/WIz1EW+JyXHdh3sjf2WMckKsYp3rQcV
-   pW0TuRFicpnb9QKqe75RsHBCUVFkvmB4coi1/TVAw/T+rzLgenP6gBtfi
-   HQC6XKJRNpAKtH2r401z9f54zn/lDYtZvsm1c6tHckiFs8uu7c/y9zeFn
-   822G8YMM2kG0jJAqyi3gfK/tV1wJ4ZDVDluxA0kgxnjyj1QH5FW/hAb71
-   1hD0FNh5HqGskir2yr/SNerKlOHSzqBanYfqJfXXR4cUWgLSKYaTEJsWV
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10208"; a="239789446"
-X-IronPort-AV: E=Sophos;i="5.88,233,1635231600"; 
-   d="scan'208";a="239789446"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Dec 2021 12:11:46 -0800
-X-IronPort-AV: E=Sophos;i="5.88,233,1635231600"; 
-   d="scan'208";a="485438109"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Dec 2021 12:11:44 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1n0qtQ-001lu1-CW;
-        Fri, 24 Dec 2021 22:10:20 +0200
-Date:   Fri, 24 Dec 2021 22:10:20 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Greg KH <greg@kroah.com>, Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        "David E. Box" <david.e.box@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the driver-core tree with the
- drivers-x86-fixes tree
-Message-ID: <YcYpLFmy0Z+EBRNY@smile.fi.intel.com>
-References: <20211224131450.2c7e0dae@canb.auug.org.au>
+        id S231835AbhLYOHz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 25 Dec 2021 09:07:55 -0500
+Received: from a48-34.smtp-out.amazonses.com ([54.240.48.34]:54963 "EHLO
+        a48-34.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231819AbhLYOHz (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Sat, 25 Dec 2021 09:07:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1640441274;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+        bh=Fmql+kMKa6xchEtdxExzA/FauKkv50BVNXBJXlERiXY=;
+        b=eYiSyUcwJgiaUq3IdHntcAq6qG4AiRGmgCe65s+Dp1byE3Kd0NZ/6Qg+wde1Fydt
+        oZzdZchQhMwqdpY0dOnM4HuvPt5QrE5sSz79Wb7v0S+QLdZonTo1mn+4PcyLctHXtTB
+        pHh+FD2AlPHAatD3u1763OOMMJopFA8wt4SvbNXw=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1640441274;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+        bh=Fmql+kMKa6xchEtdxExzA/FauKkv50BVNXBJXlERiXY=;
+        b=kifESm2pHoEQAKO2N6Ul+ZlKiW8bMpEWS4F69fUsX8jFpXDn269ry7ExYGKUOZo0
+        +ggDbLRrvXVpx3fU7lmplQLsEHMEYVeTU8L4KX9TIEO/X9l93VWecDjhQo7UQrpwQ6p
+        LsSm5hSviIE7MvPqestAmXWBSbSYCTRYNJm11IYg=
+From:   lkft@linaro.org
+To:     lkft@linaro.org
+Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        linux-next@vger.kernel.org, shuah@kernel.org
+Subject: [REGRESSION] lkft kselftest for next-20211223
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211224131450.2c7e0dae@canb.auug.org.au>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Message-ID: <0100017df1eb5f0a-b0e3a631-42b8-400d-9afc-36dbe232e7ee-000000@email.amazonses.com>
+Date:   Sat, 25 Dec 2021 14:07:54 +0000
+Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
+X-SES-Outgoing: 2021.12.25-54.240.48.34
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Dec 24, 2021 at 01:14:50PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the driver-core tree got a conflict in:
-> 
->   drivers/platform/x86/intel/Kconfig
-> 
-> between commit:
-> 
->   4f6c131c3c31 ("platform/x86/intel: Remove X86_PLATFORM_DRIVERS_INTEL")
-> 
-> from the drivers-x86-fixes tree and commit:
-> 
->   a3c8f906ed5f ("platform/x86/intel: Move intel_pmt from MFD to Auxiliary Bus")
-> 
-> from the driver-core tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary.
+## Build
+* kernel: 5.16.0-rc6
+* git: ['https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git', 'https://gitlab.com/Linaro/lkft/mirrors/next/linux-next']
+* git branch: master
+* git commit: 79f063d60c8cfc0c215d342cb7778e2ad402c2d5
+* git describe: next-20211223
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20211223
 
-Fix is correct, thanks!
+## Test Regressions (compared to next-20211216)
+* dragonboard-410c, kselftest-capabilities
+  - capabilities.test_execve
 
--- 
-With Best Regards,
-Andy Shevchenko
+* dragonboard-410c, kselftest-cgroup
+  - cgroup.test_freezer
+  - cgroup.test_freezer.test_cgfreezer_ptrace
+
+* dragonboard-410c, kselftest-proc
+  - proc.proc-fsconfig-hidepid
+
+* dragonboard-410c, kselftest-seccomp
+  - seccomp.seccomp_bpf
+  - seccomp.seccomp_bpf.global.user_notification_filter_empty
+  - seccomp.seccomp_bpf.global.user_notification_filter_empty_threaded
+
+* hi6220-hikey, kselftest-rtc
+  - rtc.rtctest
+
+* x15, kselftest-core
+  - core.close_range_test
+
+* x15, kselftest-sync
+  - sync.sync_test
 
 
+## Metric Regressions (compared to next-20211216)
+No metric regressions found.
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+
+## Test Fixes (compared to next-20211216)
+* dragonboard-410c, kselftest-gpio
+  - gpio.gpio-sim.sh
+
+* dragonboard-410c, kselftest-rseq
+  - rseq.basic_percpu_ops_test
+  - rseq.basic_test
+  - rseq.param_test
+  - rseq.param_test_benchmark
+  - rseq.param_test_compare_twice
+
+* hi6220-hikey, kselftest-gpio
+  - gpio.gpio-sim.sh
+
+* qemu_i386, kselftest-cgroup
+  - cgroup.test_freezer
+  - cgroup.test_freezer.test_cgfreezer_ptrace
+
+* qemu_i386, kselftest-gpio
+  - gpio.gpio-sim.sh
+
+* qemu_x86_64, kselftest-gpio
+  - gpio.gpio-sim.sh
+
+* qemu_x86_64, kselftest-rtc
+  - rtc.rtctest
+
+* x15, kselftest-capabilities
+  - capabilities.test_execve
+
+* x15, kselftest-cgroup
+  - cgroup.test_freezer
+  - cgroup.test_kill
+  - cgroup.test_kill.test_cgkill_simple
+
+* x86, kselftest-gpio
+  - gpio.gpio-sim.sh
+
+* x86, kselftest-kvm
+  - kvm.vmx_pmu_msrs_test
+
+
+## Metric Fixes (compared to next-20211216)
+No metric fixes found.
+
+## Test result summary
+total: 3489, pass: 1876, fail: 336, skip: 1277, xfail: 0
+
+## Build Summary
+
+## Test suites summary
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-lkdtm
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+
+--
+Linaro LKFT
+https://lkft.linaro.org

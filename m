@@ -2,192 +2,124 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6DB447F4F1
-	for <lists+linux-next@lfdr.de>; Sun, 26 Dec 2021 03:43:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B295480795
+	for <lists+linux-next@lfdr.de>; Tue, 28 Dec 2021 10:09:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230340AbhLZCnK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 25 Dec 2021 21:43:10 -0500
-Received: from a8-73.smtp-out.amazonses.com ([54.240.8.73]:60991 "EHLO
-        a8-73.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229456AbhLZCnK (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Sat, 25 Dec 2021 21:43:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1640486589;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=n2xQG7AzStU3nPVNrQazQNLCRsViieocpVPPwnvsgLA=;
-        b=XyVouobvN+Jq4FBf+H90W2UNiEkR3NG2aNSSAYBb+GY4RozGlWUfKKAjshDrLJ/o
-        umSHy7YzK10GUEoM5yIuB5E4SZx+VmQg3kk0/DoFnTSiEpdTq68fIst1D65ri6Ht/Ix
-        dCVWIemVtmHiJWP6DJ6fuws/gcLQrJtX7OrlEGxs=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1640486589;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=n2xQG7AzStU3nPVNrQazQNLCRsViieocpVPPwnvsgLA=;
-        b=CAwVR6BDG1Dz6nvpJ9r6hW2j/yttxX9hSpfUUKW0JYC7KpM8S+p6WCG3qtONI5K1
-        2QJepXXEQDu7hK2+HXOL7gg8nYD1F/oMfC1h6xYKMt+oKSSbRBV8xt13UUNM0mKn/fS
-        zvcKWjCXPlOw1S76ZtxJ/tG0WOlmHFPWW/5xF6Uc=
-From:   lkft@linaro.org
-To:     lkft@linaro.org
-Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
-        linux-next@vger.kernel.org, shuah@kernel.org
-Subject: [REGRESSION] lkft kselftest for next-20211222
+        id S235791AbhL1JJl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 28 Dec 2021 04:09:41 -0500
+Received: from mail-vk1-f180.google.com ([209.85.221.180]:44798 "EHLO
+        mail-vk1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233041AbhL1JJl (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 28 Dec 2021 04:09:41 -0500
+Received: by mail-vk1-f180.google.com with SMTP id b77so9958983vka.11;
+        Tue, 28 Dec 2021 01:09:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=C2L/mIkOhGH5Un7mufox+a5rve6lVrG/dmfdaGHBhKs=;
+        b=lZKHxm4nCkl2WI6gLo/tHnd9f4Ii1n71q9nPHgwttdi+5kMSPoaLIxW6nNi6zdyZri
+         uzNZliqh7l1pSTM8mcMplxxyNvbYVnpVitCLt/1+rrvXcuX0dBeJNiGBZcc8ypJC0hGk
+         yw8oX7l5KqoMSgL8jF1HerYQll5aZA5i4qWooZC0hBX73sOnbL3HuIAjMpHrrATfr8MZ
+         d6P68KVdxUYPgbEAqk2fLdM7lr3pWb5UqNQ21QjddBxpH5Rxq3xeWqwTe5GMOA5a905u
+         0fQKruFakAk0kR9RUKSZ/ivtQVybHlqEddxzP4fDLJZu7D7LUawsWG6euMcsSE404rLS
+         AAMQ==
+X-Gm-Message-State: AOAM530qh4gxgbmhzmdVpnOyxxpYFngRzwmYnBuuxq6Bf/M6DE2XJ48p
+        PypCHABs8SduNbj0LulhuZ1BvxX1JQxxdw==
+X-Google-Smtp-Source: ABdhPJwl5xABcsAZHJLdoiOpNYFGptDSMwBnxedcJ0OF3HGydxFU3rK+sF6Orat0Rnk5zAvn7xb0/g==
+X-Received: by 2002:a05:6122:16a7:: with SMTP id 39mr6236243vkl.13.1640682580467;
+        Tue, 28 Dec 2021 01:09:40 -0800 (PST)
+Received: from mail-ua1-f53.google.com (mail-ua1-f53.google.com. [209.85.222.53])
+        by smtp.gmail.com with ESMTPSA id o19sm3356463vsl.12.2021.12.28.01.09.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Dec 2021 01:09:40 -0800 (PST)
+Received: by mail-ua1-f53.google.com with SMTP id o63so31013772uao.5;
+        Tue, 28 Dec 2021 01:09:40 -0800 (PST)
+X-Received: by 2002:a05:6102:2155:: with SMTP id h21mr5620772vsg.68.1640682579829;
+ Tue, 28 Dec 2021 01:09:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-Message-ID: <0100017df49ed2e3-d87845bb-cb42-4d40-91be-5793496d3d86-000000@email.amazonses.com>
-Date:   Sun, 26 Dec 2021 02:43:09 +0000
-Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2021.12.26-54.240.8.73
+References: <20211214172437.1552740-1-broonie@kernel.org>
+In-Reply-To: <20211214172437.1552740-1-broonie@kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 28 Dec 2021 10:09:28 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUQjKOp6B7_-pG8t8OzrH=H+dYjn65YMHHy7CLaw6OU1g@mail.gmail.com>
+Message-ID: <CAMuHMdUQjKOp6B7_-pG8t8OzrH=H+dYjn65YMHHy7CLaw6OU1g@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the dmaengine tree with the
+ dmaengine-fixes tree
+To:     Dave Jiang <dave.jiang@intel.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Mark Brown <broonie@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-## Build
-* kernel: 5.16.0-rc6
-* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-* git branch: master
-* git commit: 2bd48302750c652889a2604b3df8b591c1d3af08
-* git describe: next-20211222
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20211222
+On Wed, Dec 15, 2021 at 10:53 AM <broonie@kernel.org> wrote:
+> Today's linux-next merge of the dmaengine tree got a conflict in:
+>
+>   drivers/dma/idxd/submit.c
+>
+> between commit:
+>
+>   8affd8a4b5ce3 ("dmaengine: idxd: fix missed completion on abort path")
+>
+> from the dmaengine-fixes tree and commit:
+>
+>   5d78abb6fbc97 ("dmaengine: idxd: rework descriptor free path on failure")
+>
+> from the dmaengine tree.
+>
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>
+> diff --cc drivers/dma/idxd/submit.c
+> index 83452fbbb168b,569815a84e95b..0000000000000
+> --- a/drivers/dma/idxd/submit.c
+> +++ b/drivers/dma/idxd/submit.c
+> @@@ -134,20 -120,32 +125,43 @@@ static void llist_abort_desc(struct idx
+>         spin_unlock(&ie->list_lock);
+>
+>         if (found)
+> -               complete_desc(found, IDXD_COMPLETE_ABORT);
+> +               idxd_dma_complete_txd(found, IDXD_COMPLETE_ABORT, false);
+>  +
+>  +      /*
+> -        * complete_desc() will return desc to allocator and the desc can be
+> -        * acquired by a different process and the desc->list can be modified.
+> -        * Delete desc from list so the list trasversing does not get corrupted
+> -        * by the other process.
+> ++       * completing the descriptor will return desc to allocator and
+> ++       * the desc can be acquired by a different process and the
+> ++       * desc->list can be modified.  Delete desc from list so the
+> ++       * list trasversing does not get corrupted by the other process.
 
-## Test Regressions (compared to next-20211216)
-* dragonboard-410c, kselftest-rtc
-  - rtc.rtctest.rtc.uie_read
+traversing
 
-* x15, kselftest-core
-  - core.close_range_test
+>  +       */
+>  +      list_for_each_entry_safe(d, t, &flist, list) {
+>  +              list_del_init(&d->list);
+> -               complete_desc(d, IDXD_COMPLETE_NORMAL);
+> ++              idxd_dma_complete_txd(d, IDXD_COMPLETE_NORMAL, false);
 
-* x15, kselftest-rtc
-  - rtc.rtctest.rtc.alarm_alm_set
-  - rtc.rtctest.rtc.alarm_alm_set_minute
-  - rtc.rtctest.rtc.alarm_wkalm_set
-  - rtc.rtctest.rtc.date_read
+Is "false" correct here?
 
+>  +      }
+>   }
 
-## Metric Regressions (compared to next-20211216)
-No metric regressions found.
+Gr{oetje,eeting}s,
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-
-## Test Fixes (compared to next-20211216)
-* dragonboard-410c, kselftest-gpio
-  - gpio.gpio-sim.sh
-
-* hi6220-hikey, kselftest-gpio
-  - gpio.gpio-sim.sh
-
-* i386, kselftest-rtc
-  - rtc.rtctest
-
-* qemu_i386, kselftest-cgroup
-  - cgroup.test_freezer
-  - cgroup.test_freezer.test_cgfreezer_ptrace
-
-* qemu_i386, kselftest-gpio
-  - gpio.gpio-sim.sh
-
-* qemu_x86_64, kselftest-gpio
-  - gpio.gpio-sim.sh
-
-* qemu_x86_64, kselftest-rtc
-  - rtc.rtctest
-
-* x15, kselftest-capabilities
-  - capabilities.test_execve
-
-* x15, kselftest-cgroup
-  - cgroup.test_freezer
-  - cgroup.test_kill
-  - cgroup.test_kill.test_cgkill_simple
-
-* x86, kselftest-gpio
-  - gpio.gpio-sim.sh
-
-* x86, kselftest-kvm
-  - kvm.vmx_pmu_msrs_test
-
-* x86, kselftest-rtc
-  - rtc.rtctest
-
-
-## Metric Fixes (compared to next-20211216)
-No metric fixes found.
-
-## Test result summary
-total: 3109, pass: 1694, fail: 305, skip: 1110, xfail: 0
-
-## Build Summary
-
-## Test suites summary
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-lkdtm
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
+                        Geert
 
 --
-Linaro LKFT
-https://lkft.linaro.org
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

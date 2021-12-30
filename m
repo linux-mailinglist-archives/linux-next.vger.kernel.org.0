@@ -2,103 +2,119 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F5CE481ACA
-	for <lists+linux-next@lfdr.de>; Thu, 30 Dec 2021 09:42:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32519481EA1
+	for <lists+linux-next@lfdr.de>; Thu, 30 Dec 2021 18:32:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237814AbhL3Ims (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 30 Dec 2021 03:42:48 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:58450 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230472AbhL3Ims (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 30 Dec 2021 03:42:48 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A80BF615F1;
-        Thu, 30 Dec 2021 08:42:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63049C36AEA;
-        Thu, 30 Dec 2021 08:42:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640853767;
-        bh=vyvelD0Nu1PcVFnAHB/GirQcZKWNcV9A02QtrZmIqf8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:From;
-        b=D60tRmX0q5Z1EAnZvAOQRAhiEpoh0/PYYALEuofTZWMEJ6clBXaUOM4cNUVxsHfG5
-         qMCUovUacUCbDjuecHIBRyB3XHEkpZXxLVzxWZxblqALOsg26JYmj5jUH/trB9jsa2
-         m56hza0kcSi10HhzXsd+rZtnV3pwTENLjKJRppGpyRdzQCWtI48m6v4m41rvTiIXsm
-         J/4vNJ/EX89uY1AeHKWGMZNZNjdOLBQsQ2KyAtpPG0qmPeiC+XqIUYPDhqpEQGtMn9
-         zpBGEsdDZu/grBalKvYWYM2J1Pf0VmC8v07tKgdbD6LEjehTDvv3hTUlqC0u4s6FCm
-         ok3tqh/O5dEMA==
-From:   SeongJae Park <sj@kernel.org>
-To:     akpm@linux-foundation.org
-Cc:     broonie@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-next@vger.kernel.org, mhocko@suse.cz,
-        mm-commits@vger.kernel.org, sfr@canb.auug.org.au
-Subject: Re: mmotm 2021-12-29-20-07 uploaded
-Date:   Thu, 30 Dec 2021 08:42:43 +0000
-Message-Id: <20211230084243.10673-1-sj@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20211230040740.SbquJAFf5%akpm@linux-foundation.org>
+        id S241457AbhL3Rcs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 30 Dec 2021 12:32:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51694 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231386AbhL3Rcr (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 30 Dec 2021 12:32:47 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91046C061574;
+        Thu, 30 Dec 2021 09:32:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:To:Subject:MIME-Version:Date:Message-ID:Sender:
+        Reply-To:Cc:Content-ID:Content-Description;
+        bh=aA9xBCuC2t/FCahUtFoF9vl9PxKpUL1fgzD9EinxOdo=; b=Z8drxXgAC81DL2C+p/fauQxUXf
+        NsKPhFvqfekg/WFrvVja5bA4fBORGdpvl0dWCK1Aoy3l5uVtRvRBA9iSLlKP7MEsBfdf/5Fu5FSLU
+        sDrJhGQg0kzhDDj/znSXRYMKj8gNfjGfKfzPuBuKqbI+FiNy+JxXh4xugYlsC7E9GWKVC6f1MDl9S
+        Y6gPYgQNL7lvyLoboMGvlG7EvgBVcGm9mBUQH3kBagIVy5gjGwDniIoBNVLLGX4ciE9bYzSNqeSxg
+        TaJvSv6YFKo1M5aY7TKF3d6WSTbKPOsj5qwdeTGeZpTdggtOoHpx+gKJFlk48Ggu+VoGK6+XLFRGa
+        4m2kFgjQ==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n2zI7-009x46-N5; Thu, 30 Dec 2021 17:32:39 +0000
+Message-ID: <3ad11107-30d8-ab75-961b-8142404c8c21@infradead.org>
+Date:   Thu, 30 Dec 2021 09:32:35 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: mmotm 2021-12-29-20-07 uploaded (mm/damon)
+Content-Language: en-US
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>,
+        akpm@linux-foundation.org, broonie@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
+        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
+        SeongJae Park <sj@kernel.org>
+References: <20211230040740.SbquJAFf5%akpm@linux-foundation.org>
+ <a57f9bc4-2c1b-f819-17a6-2e1d2f9dd173@infradead.org>
+ <1aaf9c11-0d8e-b92d-5c92-46e50a6e8d4e@linux.alibaba.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <1aaf9c11-0d8e-b92d-5c92-46e50a6e8d4e@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hello Andrew,
-
-On Wed, 29 Dec 2021 20:07:40 -0800 akpm@linux-foundation.org wrote:
-
-> The mm-of-the-moment snapshot 2021-12-29-20-07 has been uploaded to
-> 
->    https://www.ozlabs.org/~akpm/mmotm/
-> 
-> mmotm-readme.txt says
-> 
-> README for mm-of-the-moment:
-> 
-> https://www.ozlabs.org/~akpm/mmotm/
-> 
-> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
-> more than once a week.
-> 
-> You will need quilt to apply these patches to the latest Linus release (5.x
-> or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
-> https://ozlabs.org/~akpm/mmotm/series
-> 
-> The file broken-out.tar.gz contains two datestamp files: .DATE and
-> .DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
-> followed by the base kernel version against which this patch series is to
-> be applied.
-> 
-> This tree is partially included in linux-next.  To see which patches are
-> included in linux-next, consult the `series' file.  Only the patches
-> within the #NEXT_PATCHES_START/#NEXT_PATCHES_END markers are included in
-> linux-next.
-> 
-> 
-> A full copy of the full kernel tree with the linux-next and mmotm patches
-> already applied is available through git within an hour of the mmotm
-> release.  Individual mmotm releases are tagged.  The master branch always
-> points to the latest release, so it's constantly rebasing.
-> 
-> 	https://github.com/hnaz/linux-mm
-
-I realized the git repository is not updated since 2021-10-27.  That's
-obviously not a problem, but if that's not temporal but intentional, I guess
-above text might be better to be updated?
-
-> 
-> The directory https://www.ozlabs.org/~akpm/mmots/ (mm-of-the-second)
-> contains daily snapshots of the -mm tree.  It is updated more frequently
-> than mmotm, and is untested.
-> 
-> A git copy of this tree is also available at
-> 
-> 	https://github.com/hnaz/linux-mm
-
-ditto.
 
 
-Thanks,
-SJ
+On 12/29/21 22:33, Baolin Wang wrote:
+> Hi,
+> 
+> On 12/30/2021 2:27 PM, Randy Dunlap wrote:
+>> Hi--
+>>
+>> On 12/29/21 20:07, akpm@linux-foundation.org wrote:
+>>> The mm-of-the-moment snapshot 2021-12-29-20-07 has been uploaded to
+>>>
+>>>     https://www.ozlabs.org/~akpm/mmotm/
+>>>
+>>> mmotm-readme.txt says
+>>>
+>>> README for mm-of-the-moment:
+>>>
+>>> https://www.ozlabs.org/~akpm/mmotm/
+>>>
+>>> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
+>>> more than once a week.
+>>>
+>>> You will need quilt to apply these patches to the latest Linus release (5.x
+>>> or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
+>>> https://ozlabs.org/~akpm/mmotm/series
+>>>
+>>> The file broken-out.tar.gz contains two datestamp files: .DATE and
+>>> .DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
+>>> followed by the base kernel version against which this patch series is to
+>>> be applied.
+>>
+>>
+>> On i386:
+>>
+>> ../mm/damon/vaddr.c: In function ‘damon_hugetlb_mkold’:
+>> ../mm/damon/vaddr.c:402:17: warning: unused variable ‘h’ [-Wunused-variable]
+>>    struct hstate *h = hstate_vma(vma);
+> 
+> Ah, thanks for report, I think below changes can fix the warning. And I'll send a new version to address this warning.
 
-[...]
+Yes, that works. Thanks.
+
+Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+
+> diff --git a/mm/damon/vaddr.c b/mm/damon/vaddr.c
+> index bcdc602..25bff8a 100644
+> --- a/mm/damon/vaddr.c
+> +++ b/mm/damon/vaddr.c
+> @@ -397,7 +397,6 @@ static void damon_hugetlb_mkold(pte_t *pte, struct mm_struct *mm,
+>                                 struct vm_area_struct *vma, unsigned long addr)
+>  {
+>         bool referenced = false;
+> -       struct hstate *h = hstate_vma(vma);
+>         pte_t entry = huge_ptep_get(pte);
+>         struct page *page = pte_page(entry);
+> 
+> @@ -414,7 +413,7 @@ static void damon_hugetlb_mkold(pte_t *pte, struct mm_struct *mm,
+>         }
+> 
+>  #ifdef CONFIG_MMU_NOTIFIER
+> -       if (mmu_notifier_clear_young(mm, addr, addr + huge_page_size(h)))
+> +       if (mmu_notifier_clear_young(mm, addr, addr + huge_page_size(hstate_vma(vma))))
+>                 referenced = true;
+>  #endif /* CONFIG_MMU_NOTIFIER */
+
+-- 
+~Randy

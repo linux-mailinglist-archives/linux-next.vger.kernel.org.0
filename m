@@ -2,119 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32519481EA1
-	for <lists+linux-next@lfdr.de>; Thu, 30 Dec 2021 18:32:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69296482741
+	for <lists+linux-next@lfdr.de>; Sat,  1 Jan 2022 11:29:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241457AbhL3Rcs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 30 Dec 2021 12:32:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51694 "EHLO
+        id S232226AbiAAK3p (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 1 Jan 2022 05:29:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231386AbhL3Rcr (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 30 Dec 2021 12:32:47 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91046C061574;
-        Thu, 30 Dec 2021 09:32:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:To:Subject:MIME-Version:Date:Message-ID:Sender:
-        Reply-To:Cc:Content-ID:Content-Description;
-        bh=aA9xBCuC2t/FCahUtFoF9vl9PxKpUL1fgzD9EinxOdo=; b=Z8drxXgAC81DL2C+p/fauQxUXf
-        NsKPhFvqfekg/WFrvVja5bA4fBORGdpvl0dWCK1Aoy3l5uVtRvRBA9iSLlKP7MEsBfdf/5Fu5FSLU
-        sDrJhGQg0kzhDDj/znSXRYMKj8gNfjGfKfzPuBuKqbI+FiNy+JxXh4xugYlsC7E9GWKVC6f1MDl9S
-        Y6gPYgQNL7lvyLoboMGvlG7EvgBVcGm9mBUQH3kBagIVy5gjGwDniIoBNVLLGX4ciE9bYzSNqeSxg
-        TaJvSv6YFKo1M5aY7TKF3d6WSTbKPOsj5qwdeTGeZpTdggtOoHpx+gKJFlk48Ggu+VoGK6+XLFRGa
-        4m2kFgjQ==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n2zI7-009x46-N5; Thu, 30 Dec 2021 17:32:39 +0000
-Message-ID: <3ad11107-30d8-ab75-961b-8142404c8c21@infradead.org>
-Date:   Thu, 30 Dec 2021 09:32:35 -0800
+        with ESMTP id S229624AbiAAK3p (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 1 Jan 2022 05:29:45 -0500
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FC18C061574
+        for <linux-next@vger.kernel.org>; Sat,  1 Jan 2022 02:29:45 -0800 (PST)
+Received: by mail-pl1-x642.google.com with SMTP id c3so8439758pls.5
+        for <linux-next@vger.kernel.org>; Sat, 01 Jan 2022 02:29:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:from:mime-version:content-transfer-encoding
+         :content-description:subject:to:date:reply-to;
+        bh=dhFaFNGf9P/hgzfpigNOAcNefTeR7Csml9+Bh/hdy/w=;
+        b=C5OlgXdCsyGauJE9EojEBd19/+yVCg+GJinycnLX1E3NyKAycaH3FQxBbSuALCg9En
+         TGoJl9iCWM2PgoJi8koSs/AbkCBkCD0j4c9jOon0GdHeTA43grSchYIoHa/Bkcv2+U08
+         cDYEbff8ylCyZLNZVCi+IO2N62B/PnJka0Vn7A9+Kks1eUOPnGoBOS5x1JHgG5tts5ws
+         pre+WG1+AGPPzLEeQhB1RORYNvbFiMhmu6D3Ja/DsDj+mx5YibS6l/+8ExLdZbKl78nK
+         elsQ6hJ0H15DWR9FmUzfrT/rsaqej5RAxbpjZ8lvGUo348KshdJwROpxR0PO5pCz/zxY
+         tZiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:from:mime-version
+         :content-transfer-encoding:content-description:subject:to:date
+         :reply-to;
+        bh=dhFaFNGf9P/hgzfpigNOAcNefTeR7Csml9+Bh/hdy/w=;
+        b=uq1Yv7A1keDqHKmLtqAHXYBPVgN/bU5KNfKAQquadHL+h9pgRuEe7YfB8NXZmMrlcX
+         MJR/NuLrZDTSEpsRHUb9aR42oL9wZvDkHYgptzWBJfjOEfhOvKMk2bv/fdh1CbNPrXiO
+         xnkJbOhvfkPo8e2w/sXPLd89Z0wa3qnTW8UyC+ehljkx2liy9bGZI1rQTL3OckpMuw0f
+         EqbXgca+yMlAuJwsUG3prpghOwnZDijlg89jT4eYCzh95nGdYzMFzgupO7uRQ5CSBkJ0
+         Fm07hr/7BWVpJxMXN0jfQqnZKwm0/rHX0OIIAS+aJWZSvv+sNW9SCTocJlGr8TrJgXBD
+         8ZhA==
+X-Gm-Message-State: AOAM530iY6T/38uva02lM5dKrMukiD4eRYWZb+PvcHPR6UHjsg31JMzU
+        heUiXg2fqaLQ6FqhoItgQ0E=
+X-Google-Smtp-Source: ABdhPJyUmJCIRyhaAlMycOSBdSsbpncPhAFeAE1g1WQqHAWco/mFJPf5iiysDp+NjknDtGHE40Pv4Q==
+X-Received: by 2002:a17:902:9343:b0:148:a2e8:2c49 with SMTP id g3-20020a170902934300b00148a2e82c49mr38399406plp.152.1641032984651;
+        Sat, 01 Jan 2022 02:29:44 -0800 (PST)
+Received: from [192.168.0.153] ([143.244.48.136])
+        by smtp.gmail.com with ESMTPSA id c24sm17039024pgj.57.2022.01.01.02.29.37
+        (version=TLS1 cipher=AES128-SHA bits=128/128);
+        Sat, 01 Jan 2022 02:29:44 -0800 (PST)
+Message-ID: <61d02d18.1c69fb81.20b84.ed3a@mx.google.com>
+From:   vipiolpeace@gmail.com
+X-Google-Original-From: suport.prilend@gmail.com
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: mmotm 2021-12-29-20-07 uploaded (mm/damon)
-Content-Language: en-US
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>,
-        akpm@linux-foundation.org, broonie@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
-        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
-        SeongJae Park <sj@kernel.org>
-References: <20211230040740.SbquJAFf5%akpm@linux-foundation.org>
- <a57f9bc4-2c1b-f819-17a6-2e1d2f9dd173@infradead.org>
- <1aaf9c11-0d8e-b92d-5c92-46e50a6e8d4e@linux.alibaba.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <1aaf9c11-0d8e-b92d-5c92-46e50a6e8d4e@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: RE:
+To:     Recipients <suport.prilend@gmail.com>
+Date:   Sat, 01 Jan 2022 12:29:29 +0200
+Reply-To: andres.stemmet1@gmail.com
+X-Mailer: TurboMailer 2
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+I want to confide in you to finalize this transaction of mutual benefits. I=
+t may seem strange to you, but it is real. This is a transaction that has n=
+o risk at all, due process shall be followed and it shall be carried out un=
+der the ambit of the financial laws. Being the Chief Financial Officer, BP =
+Plc. I want to trust and put in your care Eighteen Million British Pounds S=
+terling, The funds were acquired from an over-invoiced payment from a past =
+contract executed in one of my departments. I can't successfully achieve th=
+is transaction without presenting you as foreign contractor who will provid=
+e a bank account to receive the funds.
+
+Documentation for the claim of the funds will be legally processed and docu=
+mented, so I will need your full cooperation on this matter for our mutual =
+benefits. We will discuss details if you are interested to work with me to =
+secure this funds. I will appreciate your prompt response in every bit of o=
+ur communication. Stay Blessed and Stay Safe.
+
+Best Regards
 
 
-On 12/29/21 22:33, Baolin Wang wrote:
-> Hi,
-> 
-> On 12/30/2021 2:27 PM, Randy Dunlap wrote:
->> Hi--
->>
->> On 12/29/21 20:07, akpm@linux-foundation.org wrote:
->>> The mm-of-the-moment snapshot 2021-12-29-20-07 has been uploaded to
->>>
->>>     https://www.ozlabs.org/~akpm/mmotm/
->>>
->>> mmotm-readme.txt says
->>>
->>> README for mm-of-the-moment:
->>>
->>> https://www.ozlabs.org/~akpm/mmotm/
->>>
->>> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
->>> more than once a week.
->>>
->>> You will need quilt to apply these patches to the latest Linus release (5.x
->>> or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
->>> https://ozlabs.org/~akpm/mmotm/series
->>>
->>> The file broken-out.tar.gz contains two datestamp files: .DATE and
->>> .DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
->>> followed by the base kernel version against which this patch series is to
->>> be applied.
->>
->>
->> On i386:
->>
->> ../mm/damon/vaddr.c: In function ‘damon_hugetlb_mkold’:
->> ../mm/damon/vaddr.c:402:17: warning: unused variable ‘h’ [-Wunused-variable]
->>    struct hstate *h = hstate_vma(vma);
-> 
-> Ah, thanks for report, I think below changes can fix the warning. And I'll send a new version to address this warning.
+Tel: +44 7537 185910
+Andres  Stemmet
+Email: andres.stemmet1@gmail.com  =
 
-Yes, that works. Thanks.
+Chief financial officer
+BP Petroleum p.l.c.
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+                                                                           =
+                        Copyright =A9 1996-2021
 
-> diff --git a/mm/damon/vaddr.c b/mm/damon/vaddr.c
-> index bcdc602..25bff8a 100644
-> --- a/mm/damon/vaddr.c
-> +++ b/mm/damon/vaddr.c
-> @@ -397,7 +397,6 @@ static void damon_hugetlb_mkold(pte_t *pte, struct mm_struct *mm,
->                                 struct vm_area_struct *vma, unsigned long addr)
->  {
->         bool referenced = false;
-> -       struct hstate *h = hstate_vma(vma);
->         pte_t entry = huge_ptep_get(pte);
->         struct page *page = pte_page(entry);
-> 
-> @@ -414,7 +413,7 @@ static void damon_hugetlb_mkold(pte_t *pte, struct mm_struct *mm,
->         }
-> 
->  #ifdef CONFIG_MMU_NOTIFIER
-> -       if (mmu_notifier_clear_young(mm, addr, addr + huge_page_size(h)))
-> +       if (mmu_notifier_clear_young(mm, addr, addr + huge_page_size(hstate_vma(vma))))
->                 referenced = true;
->  #endif /* CONFIG_MMU_NOTIFIER */
-
--- 
-~Randy

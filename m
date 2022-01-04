@@ -2,76 +2,116 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34F8F483948
-	for <lists+linux-next@lfdr.de>; Tue,  4 Jan 2022 00:50:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 091B9483970
+	for <lists+linux-next@lfdr.de>; Tue,  4 Jan 2022 01:15:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229731AbiACXuc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 3 Jan 2022 18:50:32 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:38033 "EHLO
+        id S231419AbiADAPy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 3 Jan 2022 19:15:54 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:37929 "EHLO
         gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiACXub (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 3 Jan 2022 18:50:31 -0500
+        with ESMTP id S230331AbiADAPy (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 3 Jan 2022 19:15:54 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JSXYf1Pfjz4xgr;
-        Tue,  4 Jan 2022 10:50:30 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JSY6w5LK0z4y41;
+        Tue,  4 Jan 2022 11:15:52 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1641253830;
-        bh=KQs3YxUQZmemphXfY2NFLrFnQbOVwIoYU0KDTRQ+ez0=;
+        s=201702; t=1641255353;
+        bh=BkGjYzrwCeaT9F8zSkNUuvWI/Njr0yVkcljfWHn7nBU=;
         h=Date:From:To:Cc:Subject:From;
-        b=AoWcJj67bE5KxEmcuKkYN4r7Z3nnU+0fdx7WvPTzOjkao/gHQmhNlyStOLfNACmKU
-         FAhE7vbbga+noxS18BaDJvKxt3NqiCjD6zO6FfnmyVpe184V3S+IZm6vH9KRYolOOS
-         i0UxUgv0EqVFFT4e7/a7CelMuqbWsC1FMT6V+a2078ZshJM0voCXjYeLY7nosYQVOj
-         9kq7JQjvnj9WmM2f++a55IPEm/RtybL0HAYizx59O4bf99/S4vqfQAPInYcVet+TBb
-         a7rHZYBV3oogvh6i9eQZ7bta/44D6sJlV8vON9d7SZGYe10bOpZMbC5otxPBBQqCHx
-         T4DPz9KtXT+6A==
-Date:   Tue, 4 Jan 2022 10:50:28 +1100
+        b=XEmtNenXI71epZxNhwuN5LYhL7ugzDxLGYq73uEGVow3OGqfL6LS8iuJcr26egbkf
+         S/Ng955xXvt1oAn/8cKNK+whe5D2T+IAyJyhTghfJ+9bZlZhW8MAd64pWm2LBza2T/
+         8aPaxdFX35JHe6mBZLXDEucMubBNu2Ezp85WXWJfM/gIoX0sV3z3/WJ05Tjo4TMalG
+         iffWRXuMG1f/lIYp5SuPtXBrd/hsdXGOu7oy71nKi2gZ91R65IbMhNFlNr2Tk2OlEN
+         ahq3eGrAB/bO9bGhaGAR8TN7iNhZnC7uUeLXzE5/RTkju7hp8V54AOHUo96AT00JjF
+         MYmqTgxHzsVow==
+Date:   Tue, 4 Jan 2022 11:15:51 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the amdgpu tree
-Message-ID: <20220104105028.023863e2@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the pm tree
+Message-ID: <20220104111551.7f26e893@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/8C6JJDB+VXrKg8Xl5emQBqI";
+Content-Type: multipart/signed; boundary="Sig_/8rVNh+u5XBEjZLUpjZfghpN";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/8C6JJDB+VXrKg8Xl5emQBqI
+--Sig_/8rVNh+u5XBEjZLUpjZfghpN
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Commit
+After merging the pm tree, today's linux-next build (x86_84 allmodconfig)
+failed like this:
 
-  3be2709660dc ("drm/amdgpu: Call amdgpu_device_unmap_mmio() if device is u=
-nplugged to prevent crash in GPU initialization failure")
+sound/soc/sh/rz-ssi.c: In function 'rz_ssi_probe':
+sound/soc/sh/rz-ssi.c:1023:2: error: ignoring return value of 'pm_runtime_r=
+esume_and_get' declared with attribute 'warn_unused_result' [-Werror=3Dunus=
+ed-result]
+ 1023 |  pm_runtime_resume_and_get(&pdev->dev);
+      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
 
-is missing a Signed-off-by from its committer.
+Caused by commit
+
+  877d952c261e ("PM: runtime: Annotate pm_runtime_resume_and_get() as __mus=
+t_check")
+
+This also produced the following warnings in my arm multi_v7_defconfig
+build:
+
+drivers/crypto/stm32/stm32-hash.c: In function 'stm32_hash_hw_init':
+drivers/crypto/stm32/stm32-hash.c:816:2: warning: ignoring return value of =
+'pm_runtime_resume_and_get' declared with attribute 'warn_unused_result' [-=
+Wunused-result]
+  816 |  pm_runtime_resume_and_get(hdev->dev);
+      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/crypto/stm32/stm32-hash.c: In function 'stm32_hash_import':
+drivers/crypto/stm32/stm32-hash.c:1003:2: warning: ignoring return value of=
+ 'pm_runtime_resume_and_get' declared with attribute 'warn_unused_result' [=
+-Wunused-result]
+ 1003 |  pm_runtime_resume_and_get(hdev->dev);
+      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/crypto/stm32/stm32-hash.c: In function 'stm32_hash_export':
+drivers/crypto/stm32/stm32-hash.c:965:2: warning: ignoring return value of =
+'pm_runtime_resume_and_get' declared with attribute 'warn_unused_result' [-=
+Wunused-result]
+  965 |  pm_runtime_resume_and_get(hdev->dev);
+      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/crypto/stm32/stm32-cryp.c: In function 'stm32_cryp_hw_init':
+drivers/crypto/stm32/stm32-cryp.c:545:2: warning: ignoring return value of =
+'pm_runtime_resume_and_get' declared with attribute 'warn_unused_result' [-=
+Wunused-result]
+  545 |  pm_runtime_resume_and_get(cryp->dev);
+      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+I have used the pm tree from next-20211224 for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/8C6JJDB+VXrKg8Xl5emQBqI
+--Sig_/8rVNh+u5XBEjZLUpjZfghpN
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHTi8QACgkQAVBC80lX
-0Gw7Swf8D8EOxTo89/qCabAVs95FqUZKmz2c5P7RoIzTlEK5wEwAOAAqyjhx4jGp
-d6aJI7BcAyt9qHEM56DOSZ0cYr/SBuN97JdwHq6Ji6HL3+rO1dleNN2pl2C8SVz2
-qwRfV94QOiZEqsrsM4asL5uHnEWL7ibaQhboGMXWBdx5DjkycfkPQgPF0Z75FIHN
-5IXAMsdjL2Kg+Mxip3c2WQUAmt1kBIWZGLUVUBknL+8wk27oWgmRVLrmK0q4C8Xb
-wvIziiYLcUz+R5X19OzI/2uHbneFKcx5Nw8EyyJhkBdCp6Pims7TjOHrJMyENIBN
-BG/tyxefNbMCPXL1/mv6qUvbcmdsxg==
-=ie3U
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHTkbcACgkQAVBC80lX
+0GwBKAgAkP9MzfHPRwpQs1r8tZP6C1JB5PmQJgtIzu/74+p5IDCdI2ps/Vjpe/z8
+89cP3Y99d1hsinQytnX/fBouU8Nf3FrCcuHrvfROJ37bzyzXpH0P8SugmuyslvRW
+iiJAccgMl9X1ltuU60leQFU/MtbC/67q+tQIsV4DyFi2qnYFnRQYFQ6TP49d0VHo
+x2j03dCVQc4iq+QjLyHUmfe6AdrRzNQU6oDAObZsJZ95nS0tK9LVfxeb8jOrq+l9
+z2QRBIM+jJE6CtCO/NecSQuoaoXSz1IokUF+3b3u97aRzju0DLFNBOSQYOgwolp7
+nnVmcdqrqFR2bR6f0dp0F4zLtFNhGg==
+=n7yp
 -----END PGP SIGNATURE-----
 
---Sig_/8C6JJDB+VXrKg8Xl5emQBqI--
+--Sig_/8rVNh+u5XBEjZLUpjZfghpN--

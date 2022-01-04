@@ -2,103 +2,112 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D29C2483D99
-	for <lists+linux-next@lfdr.de>; Tue,  4 Jan 2022 09:03:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 559A7483DA3
+	for <lists+linux-next@lfdr.de>; Tue,  4 Jan 2022 09:06:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233919AbiADICy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 4 Jan 2022 03:02:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49768 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234042AbiADICX (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 4 Jan 2022 03:02:23 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BB50C0617A0;
-        Tue,  4 Jan 2022 00:02:23 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JSlT93Wdxz4y4H;
-        Tue,  4 Jan 2022 19:02:21 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1641283341;
-        bh=+jagbjeZ5GOmwxkcHyi/G7QBXs4r6KG+6i3WMny4jw8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=jCfMZhdmWHtYrCRSPwZ+Jj0qpwDMMp8Vqf7LwjFJ4efZGvlL0AMAQIIqap15b2cir
-         qnTDYGasDdXUxo1HTddqDgvggA9BPpF31STucqX8Anm7LO1H0Jt43GTyuFRlkDRFH6
-         FqK59tshKGOSjtrr76kV2lI69fKbeOXyES4R9vIdhOV7e8grfrvVuy+HNIQdk9oOmS
-         iMQK3MuplH3wqtq8LzKUDMh/iaFmVJcik+QNbjo9F1/BAQgvhAd2h1wO8GK6sATsHP
-         5zheHWlV6ZDZj2ATUtRBhr/GMpgXJBuNJsfVVZtgKeOMCjaqYj2YgOOUk+0IVgejsQ
-         EbM2ETV5Ik6KQ==
-Date:   Tue, 4 Jan 2022 19:02:20 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Heiner Kallweit <hkallweit1@gmail.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        id S232335AbiADIGr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 4 Jan 2022 03:06:47 -0500
+Received: from cpanel.siel.si ([46.19.9.99]:47674 "EHLO cpanel.siel.si"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229634AbiADIGr (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 4 Jan 2022 03:06:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
+        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:
+        Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=FTIQ58c8Pxh8g1dcpcLQvOwm5QlGAkx3hNLDdb/ITCs=; b=FNEHOKG1RwThn271fMZsoAgDw1
+        sZ8tTBwV3kv+AdUaJ9RMUrzhUqfYl+6///vqzpdUtm8to+Lv/nA2GgCUleu0jh97Ers+OntbOx96O
+        7nw829HiIDS0E08mwPKmZiJm5JU9Siqx7eXsCRqjgHr/SeqrfaNsLc+AaBS4w5aijqclwkXxilTkZ
+        yYy3r7cFHd4VW48BchXtw6D4kNfvna//U03vfUvWH/oBqw1Nc1avXLDU2roMjq8HO50FYHCRlvD0P
+        +V2aUVJ95pofF1BzIBYdY1oYU+Xl5hjXO+ngK96qPmWKns6tWVgVnmmlxWm9O3E2FcF4rgRVoxVJ8
+        JAZMzXTg==;
+Received: from [89.212.21.243] (port=36710 helo=[192.168.69.215])
+        by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <andrej.picej@norik.com>)
+        id 1n4eq3-008kJ3-6L; Tue, 04 Jan 2022 09:06:42 +0100
+Subject: Re: linux-next: Fixes tags need some work in the watchdog tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Wim Van Sebroeck <wim@iguana.be>
+Cc:     Sam Protsenko <semen.protsenko@linaro.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the pm tree
-Message-ID: <20220104190220.45c8e0cf@canb.auug.org.au>
-In-Reply-To: <d485fb62-b576-f9b6-13bc-709a2c409240@gmail.com>
-References: <20220104111551.7f26e893@canb.auug.org.au>
-        <d485fb62-b576-f9b6-13bc-709a2c409240@gmail.com>
+References: <20220104083659.4e5f2754@canb.auug.org.au>
+From:   Andrej Picej <andrej.picej@norik.com>
+Message-ID: <432b6c61-f8c6-368d-2386-590bed2aee7a@norik.com>
+Date:   Tue, 4 Jan 2022 09:06:44 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/+=Twe.6.+LdJY68sTlUc5zr";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <20220104083659.4e5f2754@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - cpanel.siel.si
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - norik.com
+X-Get-Message-Sender-Via: cpanel.siel.si: authenticated_id: andrej.picej@norik.com
+X-Authenticated-Sender: cpanel.siel.si: andrej.picej@norik.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/+=Twe.6.+LdJY68sTlUc5zr
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Stephan,
 
-Hi Heiner,
+On 3. 01. 22 22:36, Stephen Rothwell wrote:
+> Hi all,
+> 
+> In commit
+> 
+>    02d04e694fa3 ("watchdog: s3c2410: Fix getting the optional clock")
+> 
+> Fixes tag
+> 
+>    Fixes: a4f3dc8d5fbc ("watchdog: s3c2410: Support separate source clock")
+> 
+> has these problem(s):
+> 
+>    - Target SHA1 does not exist
+> 
+> Maybe you meant
+> 
+> Fixes: e249d01b5e8b ("watchdog: s3c2410: Support separate source clock")
+> 
+> In commit
+> 
+>    ce3401c72f01 ("watchdog: da9063: Add hard dependency on I2C")
+> 
+> Fixes tag
+> 
+>    Fixes: 5ea29919c294 ("watchdog: da9063: use atomic safe i2c transfer in reset handler")
+> 
+> has these problem(s):
+> 
+>    - Target SHA1 does not exist
+> 
+> Maybe you meant
+> 
+> Fixes: 968011a291f3 ("watchdog: da9063: use atomic safe i2c transfer in reset handler")
+> 
 
-On Tue, 4 Jan 2022 08:29:28 +0100 Heiner Kallweit <hkallweit1@gmail.com> wr=
-ote:
->
-> The patch in the pm tree annotating pm_runtime_resume_and_get() as __must=
-_check
-> follows some fixes of pm_runtime_resume_and_get() usage that went through=
- other
-> trees. These fixes are in linux-next but don't seem to be in the pm tree.
-> We talk about:
-> f04b4fb47d83 ("ASoC: sh: rz-ssi: Check return value of pm_runtime_resume_=
-and_get()")
+Yes, that's probably right for my patch, sorry for that.
 
-In the sound-asoc tree.
+I was puzzled on where to get the SHA1 of not-yet applied commit, 
+because this patches ("watchdog: da9063: use atomic safe i2c transfer in 
+reset handler" and the fix "watchdog: da9063: Add hard dependency on 
+I2C") followed quite closely together. Is there any way that I can get 
+the SHA1 of the commit that was applied? It should be a part of some 
+branch right? I'm asking because I couldn't find a repo or a branch that 
+this two commits are a part of.
 
-> 3d6b661330a7 ("crypto: stm32 - Revert broken pm_runtime_resume_and_get ch=
-anges")
+Anyway should I send a v2, or what is the procedure here?
 
-In the crypto tree.
-
-Both those are merged into linux-next after the pm tree.  If Linus did
-the same, the pm tree commit would break his build.  The only way you
-can have that pm tree commit in linux-next is to ask Andrew Morton to
-put it in the post linux-next part of his patch series.  Otherwise, it
-needs to be removed form the pm tree and wait until after the next
-merge window closes (or at least both the above trees have been merged
-by Linus).
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/+=Twe.6.+LdJY68sTlUc5zr
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHT/wwACgkQAVBC80lX
-0Gxw2gf/QRDQaS3RPEIJNBJkkWrvsiD5FZO65gX9xPWSx2baqplxASp/gWY73XtC
-5Y1ARgKV2Lb8LkkHuLvr31o+hK7Xa4F9PmwICyACn5CXG8YQBzZ5YikplCC1qaBA
-QRpkwYzY1OVKj9o2mP/8EVdCaq08gkQ/9Rju+P4cISyQtcMndmnJVKeGBbrc5t7f
-z0ZE1SjzkwNifFMHIeAzY1D8jkRbhWBPVKdKZNwaX4GnYIFUV8MOKelbm/scGgsK
-J7hgCFIV1gT21oTyKnyuf+jjb7ezzAyLNcDRXKh86xxVq2KdQXBwyY8VzWtz1tmV
-Gi1nSgU/bRmYPv2zjh5JDKsHjpUFBg==
-=gFjg
------END PGP SIGNATURE-----
-
---Sig_/+=Twe.6.+LdJY68sTlUc5zr--
+Thanks,
+Andrej

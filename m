@@ -2,100 +2,75 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BEAE485EDC
-	for <lists+linux-next@lfdr.de>; Thu,  6 Jan 2022 03:38:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65401485F88
+	for <lists+linux-next@lfdr.de>; Thu,  6 Jan 2022 05:10:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344864AbiAFCi5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 5 Jan 2022 21:38:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39614 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231967AbiAFCiy (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 5 Jan 2022 21:38:54 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84EC6C061245;
-        Wed,  5 Jan 2022 18:38:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=IoUlGEH/xqrV07najlhYyl2fC5yKIy9uFAiZQwDiAD4=; b=bH8zsFsvZVmlTk7euNsOfQBiQy
-        TQG3pk1XOSzYDEkc/ki9qtzAVIbGUWlaDz6Guy056ifz2+S4b9EvsiGgVeHzDk2rXHOJicCR9Fykk
-        m0mbNZX5slU0SGxqmbPvJnjsrmKUxp/z0XUro94iOFwFGX69JSqqVO07MOJT5U3SxUejjO3lNgHOF
-        6RZ8gdfKASIPL1KtKQ9VLKljlOdtgwO1sIzuUDM/udldJC09Tny1xFFSPWFhoemZ5lcVf+raH36Nh
-        453Vs1AcAZSjN/t7jSR74ynziDELJ9m7sUg9hmSpP1vPDVOrTcj6rAXPiIfFlvNCJ8azuxUoEaICv
-        vQC4Z+mA==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n5Ifv-00F5zd-GZ; Thu, 06 Jan 2022 02:38:47 +0000
-Message-ID: <8b423739-abe6-7e48-1a20-149ae56df108@infradead.org>
-Date:   Wed, 5 Jan 2022 18:38:42 -0800
+        id S232254AbiAFEKO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 5 Jan 2022 23:10:14 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:48387 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229907AbiAFEKO (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 5 Jan 2022 23:10:14 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JTtDN3fjjz4xd4;
+        Thu,  6 Jan 2022 15:10:12 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1641442212;
+        bh=Ved6JHdmzhtZe5QjKz9X6ODAkx9dqx1to5coknU5gdk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Uwj77FXqfXLH3HbsO3/ufvHvTCHnOJXk1MddT+beRtdhO3WNZt1NtZe2EP01aF6iZ
+         w8P9/tvLX/PiKy9EW9+SqGWjv1CDZd5go8gAlDGKlL+4nCG7IQIjBy1rKSqSAsCVto
+         JEImhtXaI5Bjo4JnHYZ/N/lkP6XfdhareHo290gXzddNp0NJydsr+5FgT8uMX9yevY
+         SbzgNgAHBYaTmJi9vCjfwhoaflLLszrBTpH5UfaLvW4UM0q5hkFFPYjWyDhQYI8q6x
+         fg6z3H9Fx98/mnLIJV1FpR5GHgFB9dsRwth7PDheBLabUe/1piKPWO7QPnHECKMOa6
+         ck4DAIdaKNYGw==
+Date:   Thu, 6 Jan 2022 15:10:10 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: please clean up the keys tree
+Message-ID: <20220106151010.500e4f83@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [next] mm/shmem.c:3993:5: error: conflicting types for
- 'shmem_unuse'; have 'int(unsigned int, long unsigned int *)'
-Content-Language: en-US
-To:     Matthew Wilcox <willy@infradead.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     linux-mm <linux-mm@kvack.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Christoph Hellwig <hch@lst.de>,
-        Juergen Gross <jgross@suse.com>,
-        Dan Streetman <ddstreet@ieee.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Seth Jennings <sjenning@redhat.com>,
-        Vitaly Wool <vitaly.wool@konsulko.com>,
-        lkft-triage@lists.linaro.org
-References: <CA+G9fYvXfD3wS8eJV6A6GygqhJb3AUF9OROQAkBRRTN+thVo-g@mail.gmail.com>
- <YdXYHP5gPMRzmv0B@casper.infradead.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <YdXYHP5gPMRzmv0B@casper.infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/8MBV+HpNehm5g+O9jpIX3OM";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+--Sig_/8MBV+HpNehm5g+O9jpIX3OM
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi David,
 
-On 1/5/22 09:40, Matthew Wilcox wrote:
-> On Wed, Jan 05, 2022 at 08:01:19PM +0530, Naresh Kamboju wrote:
->> mm/shmem.c:3993:5: error: conflicting types for 'shmem_unuse'; have
->> 'int(unsigned int,  long unsigned int *)'
->>  3993 | int shmem_unuse(unsigned int type, unsigned long *fs_pages_to_unuse)
->>       |     ^~~~~~~~~~~
->> In file included from include/linux/khugepaged.h:6,
->>                  from mm/shmem.c:37:
->> include/linux/shmem_fs.h:86:5: note: previous declaration of
->> 'shmem_unuse' with type 'int(unsigned int)'
->>    86 | int shmem_unuse(unsigned int type);
->>       |     ^~~~~~~~~~~
-> 
-> This is "mm: simplify try_to_unuse" in akpm's tree.
-> 
-> It needs a fix that looks something like this:
+All the commits in the keys tree
+(git://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git#keys-n=
+ext)
+are also in Linus' tree as different commits.  Please clean that up as
+it is causing merge conflicts against later work.
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+--=20
+Cheers,
+Stephen Rothwell
 
-thanks.
+--Sig_/8MBV+HpNehm5g+O9jpIX3OM
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-> 
-> +++ b/mm/shmem.c
-> @@ -3990,7 +3990,7 @@ int __init shmem_init(void)
->         return 0;
->  }
-> 
-> -int shmem_unuse(unsigned int type, unsigned long *fs_pages_to_unuse)
-> +int shmem_unuse(unsigned int type)
->  {
->         return 0;
->  }
-> 
+-----BEGIN PGP SIGNATURE-----
 
--- 
-~Randy
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHWa6IACgkQAVBC80lX
+0Gy9kAgAi8L+l7i56isbP6GaPUpJpoYNea+b/MlrO1Uf3c8CwbNWws2ypFvv1A7y
+YZ1qmc+bCWo4yqa5ca0ia+9k5hWq7oJ5ZQxvVun74MZn+XGx5trq3t2LdIWd9vz4
+FGQ/Js/hOyx8+O1L2zlWaHYrOjT9g0TxBYdVsMRcI+oTqp+U/OoZRPzZA7hBQbah
+VdVRlyKp0iRpTjZPzg5Os/rt0gGIAUWXB2K9hcq+a2r2LGgisqH+NkUlwd4mZma4
+oI9ALV3oz+Fmxo08o0R/oQ34R3vtzT55HvrEr3PAcHanlM406VPrHwi7ggkrVvBH
+zpfZKgadHTphi9kJCCrC7b/cCKABgA==
+=zHbj
+-----END PGP SIGNATURE-----
+
+--Sig_/8MBV+HpNehm5g+O9jpIX3OM--

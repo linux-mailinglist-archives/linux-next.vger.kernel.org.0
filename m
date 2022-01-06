@@ -2,100 +2,123 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8109E48672C
-	for <lists+linux-next@lfdr.de>; Thu,  6 Jan 2022 16:57:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94400486768
+	for <lists+linux-next@lfdr.de>; Thu,  6 Jan 2022 17:10:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240720AbiAFP5w (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 6 Jan 2022 10:57:52 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:47589 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240549AbiAFP5w (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 6 Jan 2022 10:57:52 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JV9wt44GWz4xnF;
-        Fri,  7 Jan 2022 02:57:49 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1641484670;
-        bh=ktbP9DuifnC33YkqPBnXVa42B/rSlHhfo8tfS+ObafU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=harcKIMh6F1bS2oj6TBVdexo7cZRYLIskCagb7g6+gRVNfZ9e5B425OuPGaZO6Cu9
-         vyQ9beOAUhWVkw6vhqW2lojGzrFketVgVTbmvphY/HTFFjkDLZeim8sr1KawzNhk2k
-         gD1fGKMKKUJ9Nk+jrFJRSDezcGRlnCQXuF1T7R+0GaRp1DrdWhv/MFhxQOFCymI6a5
-         tH6jUOdK1MkgGp3cT8FAo3/4PCufA0PL7C800JrwSVRa+eHUclN3Soy4T/NfxaUnGS
-         NIwIIu7Wg21N3JIoLpDTsqh0iW1REwjnzel5MF/H5miIGGhUCOmnV5o5wA6MSitENI
-         MNGKZvIzeKz6w==
-Date:   Fri, 7 Jan 2022 02:57:49 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Saeed Mahameed <saeedm@nvidia.com>, Shay Drory <shayd@nvidia.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        id S241018AbiAFQKh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 6 Jan 2022 11:10:37 -0500
+Received: from wout2-smtp.messagingengine.com ([64.147.123.25]:48283 "EHLO
+        wout2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240960AbiAFQKh (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 6 Jan 2022 11:10:37 -0500
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id C14D33203792;
+        Thu,  6 Jan 2022 11:10:35 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Thu, 06 Jan 2022 11:10:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm2; bh=GYrOzPy4E9jGWAdsDPb4wXuhkQK
+        EoqLRn+NcBFYgQ48=; b=LCFglY/d9i+zVQnK63ApRSeHxG82YFekFP/3eAJ4tHq
+        g2Y0fVrM/QkgkfwpAGCY6HcPrnDaEuzi8HQQrV4FDk6I4pUwIhGNI6B8UHOkDsTc
+        SmUzJEApYaohRSKXzqFoSyaOp9fGEAkNd722iLwPnvH7NW9teWY80KQf7WX9ITtH
+        In5B1ObOw0obfB0kOSqMZmkmj5sRkgNUgWUp3/OkXGXnas2K6R858znM0cGKfpEk
+        HZy1aZIW7B8KRa2jCD1TXsuE3X9cQq4voCgCXyn/1P8xXCy82flc7i0Ea63raD7J
+        FC8qbwlMdYoIMm2Z2jCJ0R6d5ii51f+4iFW1yfinjjg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=GYrOzP
+        y4E9jGWAdsDPb4wXuhkQKEoqLRn+NcBFYgQ48=; b=GKwioXZAQ4b9Mv69hMrz6u
+        EDYru7fCdvH8aSedCyU7HbBarCXwcTRDbdrdWECJFgJ0dAara4cyW0nsf/Fkyz0W
+        scQoBJLsjuE9nXNZd6AdbRngGDCi05xdY6qbcopYUAX1A9YDO79K35FGK4Gl4t9F
+        +wkpp4E3wsdtShtqgYFuiFSbUyTJNJVCwG1go9MjcH4jozKw0y3UE/766dybxGBw
+        734W3kprOBCs8RxsBymf+FiiSFGhvk8BBDZ/S8T3IRe1LLNJMWC04nwS7S99BuHd
+        RcEDhGWAcCt1umpl1194I8pFatPHpzVUYYcdnF4DyyR57EskfB6Su3KRtbBBkLSA
+        ==
+X-ME-Sender: <xms:ehTXYdArnZPbAzH4jfyPIskAnjXayN8_-DfuI0sM15D_f-JWN2Q5nA>
+    <xme:ehTXYbij_hp06kPlN9Zb3QGcCKTISqt3S3ydQW0zdLzkkszML7gJA1TvvkO_kdJWo
+    yR-9ramtM4W0g>
+X-ME-Received: <xmr:ehTXYYldg7rsXrwLSK8ItJumnDw6jsuT4fa4Q4Swa9JuB26Hw2AVD7zqJ9MP6FulM1Hu1qaevcASMweUnyLdc-TeikdYcykS>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrudefledgkeegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
+    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeevueehje
+    fgfffgiedvudekvdektdelleelgefhleejieeugeegveeuuddukedvteenucevlhhushht
+    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
+    drtghomh
+X-ME-Proxy: <xmx:ehTXYXxVJ71jW5VKjp70jWmazRAH9YBdgR8mWFz2afYdr7RnvERm7w>
+    <xmx:ehTXYSSSIHNb8kVUl6n9qfsSE895RgvjgF2j1S5bFd-D5U-Uv0SI7g>
+    <xmx:ehTXYaYtQbpIyBTmxcH4ByU2j9U_D0sL2g2bJLFkEl1P8J_27H0MDg>
+    <xmx:exTXYREl7Tqu8bw4A2IRo-DntWaYBKa1gdKJm3oTxuN14BUTYM84cQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 6 Jan 2022 11:10:33 -0500 (EST)
+Date:   Thu, 6 Jan 2022 17:10:31 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Pavel Hofman <pavel.hofman@ivitera.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the net-next tree
-Message-ID: <20220107025749.35eaa2c2@canb.auug.org.au>
+Subject: Re: linux-next: build warning after merge of the usb tree
+Message-ID: <YdcUd19eAmI1MwNT@kroah.com>
+References: <20220107024815.15dc7e04@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ZcDLKJ85=hXNyzMW=iApaUP";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220107024815.15dc7e04@canb.auug.org.au>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/ZcDLKJ85=hXNyzMW=iApaUP
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, Jan 07, 2022 at 02:48:15AM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the usb tree, today's linux-next build (htmldocs) produced
+> this warning:
+> 
+> Documentation/ABI/testing/configfs-usb-gadget-uac2:2: WARNIN
+> G: Malformed table.
+> Text in column margin in table line 27.
+> 
+> =====================   =======================================
+> c_chmask                capture channel mask
+> c_srate                 capture sampling rate
+> c_ssize                 capture sample size (bytes)
+> c_sync                  capture synchronization type
+>                         (async/adaptive)
+> c_mute_present          capture mute control enable
+> c_volume_present        capture volume control enable
+> c_volume_min            capture volume control min value
+>                         (in 1/256 dB)
+> c_volume_max            capture volume control max value
+>                         (in 1/256 dB)
+> c_volume_res            capture volume control resolution
+>                         (in 1/256 dB)
+> fb_max                  maximum extra bandwidth in async mode
+> p_chmask                playback channel mask
+> p_srate                 playback sampling rate
+> p_ssize                 playback sample size (bytes)
+> p_mute_present          playback mute control enable
+> p_volume_present        playback volume control enable
+> _volume_present        playback volume control enable
+> p_volume_min            playback volume control min value
+>                         (in 1/256 dB)
+> p_volume_max            playback volume control max value
+>                         (in 1/256 dB)
+> p_volume_res            playback volume control resolution
+>                         (in 1/256 dB)
+> req_number      the number of pre-allocated requests for both capture
+>                         and playback
+> =====================   =======================================
+> 
+> Introduced by commit
+> 
+>   e3088ebc1b97 ("docs: ABI: added missing num_requests param to UAC2")
+> 
 
-Hi all,
+Pavel, can you send a follow-on patch to fix this up?
 
-After merging the net-next tree, today's linux-next build (htmldocs)
-produced this warning:
+thanks,
 
-Documentation/networking/devlink/mlx5.rst:13: WARNING: Error parsing conten=
-t block for the "list-table" directive: uniform two-level bullet list expec=
-ted, but row 2 does not contain the same number of items as row 1 (2 vs 3).
-
-.. list-table:: Generic parameters implemented
-
-   * - Name
-     - Mode
-     - Validation
-   * - ``enable_roce``
-     - driverinit
-   * - ``io_eq_size``
-     - driverinit
-     - The range is between 64 and 4096.
-   * - ``event_eq_size``
-     - driverinit
-     - The range is between 64 and 4096.
-   * - ``max_macs``
-     - driverinit
-     - The range is between 1 and 2^31. Only power of 2 values are supporte=
-d.
-
-Introduced by commit
-
-  0844fa5f7b89 ("net/mlx5: Let user configure io_eq_size param")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/ZcDLKJ85=hXNyzMW=iApaUP
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHXEX0ACgkQAVBC80lX
-0GwTKggAl9FepAt2fg7HzYFpkSOru751SyXVjSr7e3Ztrqa/hw61waw9Hz6Abp41
-i7q9Lkw8997yzGIi4D1q74svTrj5KCHAs3U4XN6+hgctnyGgT6SytQv7trFecYX4
-CsOaVDvfD1IQgogf+811+5BGOGFa/E0UUkugQfYTQEtoEY/nZvzut/PEEf9T/Eks
-1vTaDFZrbOTElhXIJT/SSnZM3fat9YCcGf7j/nfv+4UgLe493AJJhLEpGbd9aCsx
-/9jVGqoW2StO6kq00wflPVsEaCnLNvMBr1QRCju0PZH8017vW5R78ajqpvvpXMT3
-U2EmFyqOpgBghHmaLBiVKuEzYc0vCA==
-=pvtx
------END PGP SIGNATURE-----
-
---Sig_/ZcDLKJ85=hXNyzMW=iApaUP--
+greg k-h

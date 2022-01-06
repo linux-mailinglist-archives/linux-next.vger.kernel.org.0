@@ -2,97 +2,116 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8967D4866E7
-	for <lists+linux-next@lfdr.de>; Thu,  6 Jan 2022 16:45:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DE12486709
+	for <lists+linux-next@lfdr.de>; Thu,  6 Jan 2022 16:48:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240618AbiAFPpq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 6 Jan 2022 10:45:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45812 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240599AbiAFPpq (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 6 Jan 2022 10:45:46 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD88EC061245;
-        Thu,  6 Jan 2022 07:45:45 -0800 (PST)
+        id S232549AbiAFPsT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 6 Jan 2022 10:48:19 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:34807 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230138AbiAFPsS (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 6 Jan 2022 10:48:18 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JV9fv2JtDz4xd4;
-        Fri,  7 Jan 2022 02:45:43 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JV9jr2dlZz4xd4;
+        Fri,  7 Jan 2022 02:48:16 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1641483943;
-        bh=bwoSqF0boW0Hn0Lyd2XQ0v0GgQB1austW82Fc7xFja0=;
+        s=201702; t=1641484097;
+        bh=xfms9TANy3Zz+RR0S26Hb+XnMo+yJLO3B83lLSXF9Po=;
         h=Date:From:To:Cc:Subject:From;
-        b=BYi9+GkbtZf87oClIqWemtjLITbVjdtfbvEG9ysX+7/amFI7fXWIPXIEyx05BB3Wf
-         +ipz5GBpudl1BjsaKxjShCvMvqPHrNVdPQ+mSQV2ifgPJ6eqVf+JgeDtAic9JcNX7j
-         wFLy9AZpf/b6UJBp1zds5xBDC23fzqU8ZTUvG+tDjGmH+Xo5JiGm56+XQxwnpFvKil
-         NhqSuBzRrmpCX10HgmeezKLUb1XNfEawww3QJYrqKjONo63+vS0xaoaOgi9B2ojb19
-         Seduz06QFVMKIQ8whuZ1RsbHdq05oG6FQD9GbzbwzTYYQgEV7LYuEz9EYwvPQgXolr
-         2s1C2cs7Vg+NQ==
-Date:   Fri, 7 Jan 2022 02:45:41 +1100
+        b=Mvuz6UaUep/VQ6SGssMg2tmeCZfa27A0bYOwo2MdhnZo0Em58wG46r34KsFSiioAA
+         QutN9797xhTedfg8AVht0GGNjgucoQtXVxKmrYN9hR2/FWwByenHQIpqEYVTrlcK1R
+         S7GbLfKkvmQIADoZ6AgZKyGtBSuKpcBXjHS8zp9F+jrFs8YuDLtYD0fltqD839pBPo
+         w6dQ5gH3/pPmbGjVEUzKqTS4+c1gfjytvTQObcqVV7HaSrI5DnJVJTg+iLoNOysdhP
+         M8QJZOU7a1+00s1dS3ukomTmv4enuoQfJrs971x8ySDBvGe+KUnCdCnUA8HvCRDLig
+         FcVfZEn52/ajw==
+Date:   Fri, 7 Jan 2022 02:48:15 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+To:     Greg KH <greg@kroah.com>
+Cc:     Pavel Hofman <pavel.hofman@ivitera.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the akpm-current tree
-Message-ID: <20220107024541.1256d609@canb.auug.org.au>
+Subject: linux-next: build warning after merge of the usb tree
+Message-ID: <20220107024815.15dc7e04@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Jswjkwtzg1Gyvjk0_OM.NLy";
+Content-Type: multipart/signed; boundary="Sig_/X9PCbToV=6m/CZMN1np9f.5";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Jswjkwtzg1Gyvjk0_OM.NLy
+--Sig_/X9PCbToV=6m/CZMN1np9f.5
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the akpm-current tree, today's linux-next build (htmldocs)
-produced this warning:
+After merging the usb tree, today's linux-next build (htmldocs) produced
+this warning:
 
-Documentation/admin-guide/sysctl/kernel.rst:798: WARNING: Malformed table.
-Text in column margin in table line 7.
+Documentation/ABI/testing/configfs-usb-gadget-uac2:2: WARNIN
+G: Malformed table.
+Text in column margin in table line 27.
 
-=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-bit 0  print all tasks info
-bit 1  print system memory info
-bit 2  print timer info
-bit 3  print locks info if ``CONFIG_LOCKDEP`` is on
-bit 4  print ftrace buffer
-bit 5: print all printk messages in buffer
-bit 6: print all CPUs backtrace (if available in the arch)
-=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D   =3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+c_chmask                capture channel mask
+c_srate                 capture sampling rate
+c_ssize                 capture sample size (bytes)
+c_sync                  capture synchronization type
+                        (async/adaptive)
+c_mute_present          capture mute control enable
+c_volume_present        capture volume control enable
+c_volume_min            capture volume control min value
+                        (in 1/256 dB)
+c_volume_max            capture volume control max value
+                        (in 1/256 dB)
+c_volume_res            capture volume control resolution
+                        (in 1/256 dB)
+fb_max                  maximum extra bandwidth in async mode
+p_chmask                playback channel mask
+p_srate                 playback sampling rate
+p_ssize                 playback sample size (bytes)
+p_mute_present          playback mute control enable
+p_volume_present        playback volume control enable
+_volume_present        playback volume control enable
+p_volume_min            playback volume control min value
+                        (in 1/256 dB)
+p_volume_max            playback volume control max value
+                        (in 1/256 dB)
+p_volume_res            playback volume control resolution
+                        (in 1/256 dB)
+req_number      the number of pre-allocated requests for both capture
+                        and playback
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D   =3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 
-Introduced by commits
+Introduced by commit
 
-  934d51cad60c ("docs: sysctl/kernel: add missing bit to panic_print")
-  addc64999934 ("panic: add option to dump all CPUs backtraces in panic_pri=
-nt")
+  e3088ebc1b97 ("docs: ABI: added missing num_requests param to UAC2")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/Jswjkwtzg1Gyvjk0_OM.NLy
+--Sig_/X9PCbToV=6m/CZMN1np9f.5
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHXDqUACgkQAVBC80lX
-0Gzbuwf/URiu7AYrOb0eB7Onur5tBza2cGLgB/IGjGUyqz5FYeGcIvdYqlNNAshx
-ywRwB+ZRmlGDUai7lfAI9zCeonfHS2MDfM7AwvZYUWoH3bkSHZd+XRSW2dJj6BFe
-5VMNVLk2R+z5qJwKqT66V/xbyexaXveJsrNBQibBk+ljFlSvdmmuOAt48RMZJRne
-N8YxiMzAz2yEDy1xAupKRH7rVYJj0FzKGZinrbPEuQ5LtJMeIbG6djWaqami/kAm
-2BPbszM+cRfdgj9v4C/uvBHLD3SgiLQgVHN2sUo4mj7O0sqBEbzcvgpzE95kAq8O
-MC+UXs0evwl0P+jwRwHUHAXzXwKGcw==
-=EyHq
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHXDz8ACgkQAVBC80lX
+0Gw/bgf+Kjwnv2dYJhdrviryBJJ4yXFlddJSjBRIR9BbWUUBD08PCw4qSg5OYnPv
+IsnoLF+O+tAwMYq4BIrVw29FckwG+fozjGJGtEfqxAD77phv7mYSVaLofTqNwaTv
+JFu7r9cetXWeZl6Fd4ZDtyi9MpKqrJz5gCWeE/VyQZJXVH+O+lzk6DP3SMx0Xuhv
+w46UD8aIWYNmrXZ17TEDZanO0i7zUGq7dwM/CT1vrVs5HjCiYQLiU1Vm1/F3dnM0
+2f4WjkbbmkbQ//GSMQDsUdbrRqVwN8ayq4wterl4TXI22MAI7ulrRUpDjYLljGjO
+TP+u3nwc+ojF7at+1hmKX0eARAHYxg==
+=TkpT
 -----END PGP SIGNATURE-----
 
---Sig_/Jswjkwtzg1Gyvjk0_OM.NLy--
+--Sig_/X9PCbToV=6m/CZMN1np9f.5--

@@ -2,114 +2,82 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16FB0485D6D
-	for <lists+linux-next@lfdr.de>; Thu,  6 Jan 2022 01:45:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83FD6485E85
+	for <lists+linux-next@lfdr.de>; Thu,  6 Jan 2022 03:19:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343973AbiAFAo5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 5 Jan 2022 19:44:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42092 "EHLO
+        id S1344662AbiAFCTX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 5 Jan 2022 21:19:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343944AbiAFAok (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 5 Jan 2022 19:44:40 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 295F4C061245;
-        Wed,  5 Jan 2022 16:44:39 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JTng81lQFz4xgr;
-        Thu,  6 Jan 2022 11:44:36 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1641429877;
-        bh=oJEm9UZTQOdDnyKkahGUfCvqK0BBdI9KSwf46TYUum8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=n+t403u+H0T+9aQg+/RCKC5GyQjyvqoXkPowo6PD51/OgoSldWtoOa9qdlo1+v0cZ
-         n0Nz5e/tTui4dk6mLJB45BHvDT0HJieZxgWq6rNLwYGRwUpVXcSnwi+TqG+93AAZG9
-         wdENWeAdX9Bt2OBvM18a2wgf8FPMEp6AjSS6v9EgbruzTtx8DCaNInRHMHhq0Cp4y5
-         jIUcd45vYGWSmS4NpOCGRg9QoMWnuD2s24MPX5M8nhehv/CjxMzlU0BpEEW+DiAdIY
-         fhsT9wHtUyUjsUZFN1WQbB6ewIIJFR9y3DySy6mR0BXiI9+1vQQ/oAazR2onGEQrOy
-         BPFqzf5DFLAIw==
-Date:   Thu, 6 Jan 2022 11:44:34 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Doug Ledford <dledford@redhat.com>,
-        Jason Gunthorpe <jgg@mellanox.com>
-Cc:     Jason Gunthorpe <jgg@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Kees Cook <keescook@chromium.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Maor Gottlieb <maorg@nvidia.com>
-Subject: linux-next: manual merge of the rdma tree with the rdma-fixes tree
-Message-ID: <20220106114434.32f9b4d4@canb.auug.org.au>
+        with ESMTP id S231945AbiAFCTV (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 5 Jan 2022 21:19:21 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3806C061245;
+        Wed,  5 Jan 2022 18:19:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=Jb0syjHpG90vtrcvQMBr8NaCZtixi1quvmjWqPgmKwo=; b=idFiwniAicpO40YAG+sjgcnG7D
+        3p75dlba9rRvggAS66G3KyurtPqYnkSjMyuRQpUhDxsDW0qWL0xoJQPlkBjdFZKHyIIKpDh7SIj1r
+        NktCifCT42dl/xK8YSEGCiI4PynNT/7i7UidVWLRRsZVySPyIpPix/4B8HHe5rjMZ2b4OaYNzKJlW
+        TrAmYw93/9u96/2RhurUnPpA0xXpjG5gtVQNxYhLCM7zCbGqDHJRkFtGtzl+MF0VcfOhjRW8Sal4A
+        X8ISLkPXgVLB0av1zX85Igp9yZsJRaUPQ+2Q3dGKAiYfzRHRA02mU2Xy9qOWZdqjT/549m8NKj7/y
+        pozQ37ew==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n5IN3-00F5FT-Ii; Thu, 06 Jan 2022 02:19:17 +0000
+Message-ID: <20e286d4-25d7-fb6e-31a1-4349c805aae3@infradead.org>
+Date:   Wed, 5 Jan 2022 18:19:14 -0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/2QGUp/DJ2hcFdo8eOYsQ+c4";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: linux-next: Tree for Jan 5 (cpufreq/amd-pstate)
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Huang Rui <ray.huang@amd.com>, linux-pm@vger.kernel.org
+References: <20220105191239.26498b30@canb.auug.org.au>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220105191239.26498b30@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/2QGUp/DJ2hcFdo8eOYsQ+c4
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-Today's linux-next merge of the rdma tree got a conflict in:
+On 1/5/22 00:12, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Changes since 20220104:
+> 
+> The pm tree lost its build failure.
+> 
 
-  drivers/infiniband/hw/mlx5/mlx5_ib.h
+on i386 and x86_64:
+# CONFIG_ACPI is not set
 
-between commit:
+In file included from ../drivers/cpufreq/amd-pstate.c:40:0:
+../include/acpi/processor.h:226:2: error: unknown type name ‘phys_cpuid_t’
+  phys_cpuid_t phys_id; /* CPU hardware ID such as APIC ID for x86 */
+  ^~~~~~~~~~~~
+../include/acpi/processor.h:355:1: error: unknown type name ‘phys_cpuid_t’; did you mean ‘phys_addr_t’?
+ phys_cpuid_t acpi_get_phys_id(acpi_handle, int type, u32 acpi_id);
+ ^~~~~~~~~~~~
+ phys_addr_t
+  CC      drivers/rtc/rtc-rv3029c2.o
+../include/acpi/processor.h:356:1: error: unknown type name ‘phys_cpuid_t’; did you mean ‘phys_addr_t’?
+ phys_cpuid_t acpi_map_madt_entry(u32 acpi_id);
+ ^~~~~~~~~~~~
+ phys_addr_t
+../include/acpi/processor.h:357:20: error: unknown type name ‘phys_cpuid_t’; did you mean ‘phys_addr_t’?
+ int acpi_map_cpuid(phys_cpuid_t phys_id, u32 acpi_id);
+                    ^~~~~~~~~~~~
+                    phys_addr_t
 
-  4163cb3d1980 ("Revert "RDMA/mlx5: Fix releasing unallocated memory in der=
-eg MR flow"")
 
-from the rdma-fixes tree and commit:
-
-  e517f76a3cb2 ("RDMA/mlx5: Use memset_after() to zero struct mlx5_ib_mr")
-
-from the rdma tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/infiniband/hw/mlx5/mlx5_ib.h
-index e636e954f6bf,b6030ef8f7af..000000000000
---- a/drivers/infiniband/hw/mlx5/mlx5_ib.h
-+++ b/drivers/infiniband/hw/mlx5/mlx5_ib.h
-@@@ -664,9 -665,8 +665,9 @@@ struct mlx5_ib_mr=20
- =20
-  	/* User MR data */
-  	struct mlx5_cache_ent *cache_ent;
-+ 	/* Everything after cache_ent is zero'd when MR allocated */
- +	struct ib_umem *umem;
- =20
-- 	/* This is zero'd when the MR is allocated */
-  	union {
-  		/* Used only while the MR is in the cache */
-  		struct {
-
---Sig_/2QGUp/DJ2hcFdo8eOYsQ+c4
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHWO3IACgkQAVBC80lX
-0GyHMQgAi48KwKu38tVFyTYCGQjPFdl/vD3nbGUNqoWNy663hzYc9/WRTsdNWg7m
-iFuxP4puCrsYoreiOAEBsIOf64Zxr3IhFxwfhqhOQpt0WhKiMaQH5c3eyw48ThOx
-/8pLnOWHSJKfeV0YjeXVdhR5eSFp0iJ9wpyur8ujeiuSN56S4pKdocGuD8wtKD1a
-Oi9e3uB+ln56l9aHI3xxUxZBYJ2ncbpHNY7AFBN0zC1JVPkg/0NArs+EdZXVqwAi
-szvn5l64xy0DJl0IEs6NONofkl8YCXmDapS9iO9rsBKe/LqUcmVTBlvLdTPgRG2A
-XZ2xpKsPg9whOBc4b0WtfyjCVpH32Q==
-=0qdn
------END PGP SIGNATURE-----
-
---Sig_/2QGUp/DJ2hcFdo8eOYsQ+c4--
+-- 
+~Randy

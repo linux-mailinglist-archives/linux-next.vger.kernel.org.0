@@ -2,35 +2,32 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DD3D4871C5
-	for <lists+linux-next@lfdr.de>; Fri,  7 Jan 2022 05:33:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E35F54871DA
+	for <lists+linux-next@lfdr.de>; Fri,  7 Jan 2022 05:43:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345819AbiAGEdL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 6 Jan 2022 23:33:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51868 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbiAGEdK (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 6 Jan 2022 23:33:10 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7214AC061245;
-        Thu,  6 Jan 2022 20:33:09 -0800 (PST)
+        id S231483AbiAGEnL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 6 Jan 2022 23:43:11 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:58451 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230171AbiAGEnL (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 6 Jan 2022 23:43:11 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JVVhM1Nlzz4xgr;
-        Fri,  7 Jan 2022 15:33:07 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JVVvy0RpWz4xts;
+        Fri,  7 Jan 2022 15:43:10 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1641529987;
-        bh=iTKh+7zuFx/fXKoFulVxDndjC5u90yEuRUIk3fdVIJw=;
+        s=201702; t=1641530590;
+        bh=qPGhPR+Z+Z92noDv8k9SKWIIl+jHtp1XlEUwg7LNDTs=;
         h=Date:From:To:Cc:Subject:From;
-        b=NC1w7yzsVsC+qSVZdTIhdxfjySXaRw+4AJc99AhJxi0G6YzRETy2qxW25NH9U5XAa
-         xHwcnmWWpvHYgfZJGyhwnQ/SJOB+KdDQjoRmSSg2bAcsMk9PAFkF6+VOfHfNnncsS5
-         AapwGz137kgQ9R3X2k8Pqds7Fgoxvjy1cdaV+70IRVVsyjX3Sf6cl8nVbrR/lT032t
-         5bFwCZY9+q8NIfj1PBuXXkBePMeP7mE17lSqEP9CBvLomh2TeNxW5+7ULiwIikfWcB
-         SrFGJIjaChnO4xw3PdANTWzMBYqVY8JFFpTgFKPpZ7GzH32BvL7CJwcBNUjzmqa8uJ
-         HcjjfKfMurKUA==
-Date:   Fri, 7 Jan 2022 15:33:06 +1100
+        b=eIXXPvokUXnnraNUNNXhUX7dEjVOya6V+mOVF3EsUJbyjO1c3+PKSureViSHzS+FS
+         MlAR/1E3JCuovO1yozW6eHd4MQlzGjIJSQw0gihbz5sRROhVR1KO8cBMA/Nq+MuE+X
+         i7FnX5JtL4WGAQJn0LM4NPOh7ClFgSpqoSFuvbrOgGnlouzp4ChXe5PXbi1SyfbtIt
+         d6z+/AFcC+AmVbq/PH8XfirAYLIddJv18cVd7r7c5uCA4X4kfe7DwLh0yDTy9SdK1a
+         I3BdooU/RiDUs/wm2RAPqsMuQBTbFHAV8GxeAnFqCvY9efgFOucJd9V9LEpc52MhgA
+         tRqdOlbrzeDmw==
+Date:   Fri, 7 Jan 2022 15:43:09 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Jarkko Sakkinen <jarkko@kernel.org>,
         Masahiro Yamada <masahiroy@kernel.org>
@@ -39,15 +36,15 @@ Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         =?UTF-8?B?TWlja2HDq2wgU2FsYcO8?= =?UTF-8?B?bg==?= 
         <mic@linux.microsoft.com>
 Subject: linux-next: manual merge of the tpmdd tree with the kbuild tree
-Message-ID: <20220107153306.3f8a2329@canb.auug.org.au>
+Message-ID: <20220107154309.287d658a@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/UxZA.PrK7RLqTQum2UVkq_Q";
+Content-Type: multipart/signed; boundary="Sig_/.WxI_cplo/pHnJakss.Mclc";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/UxZA.PrK7RLqTQum2UVkq_Q
+--Sig_/.WxI_cplo/pHnJakss.Mclc
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -55,12 +52,13 @@ Hi all,
 
 Today's linux-next merge of the tpmdd tree got a conflict in:
 
-  MAINTAINERS
-  certs/.gitignore
+  certs/Makefile
 
-between commit:
+between commits:
 
-  98bb79d61f0c ("certs: move scripts/extract-cert to certs/")
+  33c1957574b6 ("kbuild: do not quote string values in include/config/auto.=
+conf")
+  41f431290557 ("certs: refactor file cleaning")
 
 from the kbuild tree and commit:
 
@@ -79,46 +77,89 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc MAINTAINERS
-index d38fd8f77cbc,f8188efa3854..000000000000
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@@ -4445,7 -4410,10 +4445,9 @@@ L:	keyrings@vger.kernel.or
-  S:	Maintained
-  F:	Documentation/admin-guide/module-signing.rst
-  F:	certs/
-+ F:	scripts/check-blacklist-hashes.awk
- -F:	scripts/extract-cert.c
-  F:	scripts/sign-file.c
-+ F:	tools/certs/
+diff --cc certs/Makefile
+index f7041c29a2e0,e38e10c46890..000000000000
+--- a/certs/Makefile
++++ b/certs/Makefile
+@@@ -6,21 -6,46 +6,36 @@@
+  obj-$(CONFIG_SYSTEM_TRUSTED_KEYRING) +=3D system_keyring.o system_certifi=
+cates.o common.o
+  obj-$(CONFIG_SYSTEM_BLACKLIST_KEYRING) +=3D blacklist.o common.o
+  obj-$(CONFIG_SYSTEM_REVOCATION_LIST) +=3D revocation_certificates.o
+ -ifneq ($(CONFIG_SYSTEM_BLACKLIST_HASH_LIST),"")
+ +ifneq ($(CONFIG_SYSTEM_BLACKLIST_HASH_LIST),)
++=20
++ quiet_cmd_check_blacklist_hashes =3D CHECK   $(patsubst "%",%,$(2))
++       cmd_check_blacklist_hashes =3D $(AWK) -f $(srctree)/scripts/check-b=
+lacklist-hashes.awk $(2); touch $@
++=20
++ $(eval $(call config_filename,SYSTEM_BLACKLIST_HASH_LIST))
++=20
++ $(obj)/blacklist_hashes.o: $(obj)/blacklist_hashes_checked
++=20
++ CFLAGS_blacklist_hashes.o +=3D -I$(srctree)
++=20
+ -targets +=3D blacklist_hashes_checked
++ $(obj)/blacklist_hashes_checked: $(SYSTEM_BLACKLIST_HASH_LIST_SRCPREFIX)$=
+(SYSTEM_BLACKLIST_HASH_LIST_FILENAME) scripts/check-blacklist-hashes.awk FO=
+RCE
++ 	$(call if_changed,check_blacklist_hashes,$(SYSTEM_BLACKLIST_HASH_LIST_SR=
+CPREFIX)$(CONFIG_SYSTEM_BLACKLIST_HASH_LIST))
++=20
+  obj-$(CONFIG_SYSTEM_BLACKLIST_KEYRING) +=3D blacklist_hashes.o
++=20
+  else
+  obj-$(CONFIG_SYSTEM_BLACKLIST_KEYRING) +=3D blacklist_nohashes.o
+  endif
+++targets +=3D blacklist_hashes_checked
  =20
-  CFAG12864B LCD DRIVER
-  M:	Miguel Ojeda <ojeda@kernel.org>
-diff --cc certs/.gitignore
-index 9e42fe3e02f5,01de9442e4e2..000000000000
---- a/certs/.gitignore
-+++ b/certs/.gitignore
-@@@ -1,4 -1,4 +1,5 @@@
-  # SPDX-License-Identifier: GPL-2.0-only
-+ /blacklist_hashes_checked
- +/extract-cert
-  /x509_certificate_list
-  /x509_revocation_list
+ -ifeq ($(CONFIG_SYSTEM_TRUSTED_KEYRING),y)
+ -
+ -$(eval $(call config_filename,SYSTEM_TRUSTED_KEYS))
+ +quiet_cmd_extract_certs  =3D CERT    $@
+ +      cmd_extract_certs  =3D $(obj)/extract-cert $(2) $@
+ =20
+ -# GCC doesn't include .incbin files in -MD generated dependencies (PR#668=
+71)
+  $(obj)/system_certificates.o: $(obj)/x509_certificate_list
+ =20
+ -# Cope with signing_key.x509 existing in $(srctree) not $(objtree)
+ -AFLAGS_system_certificates.o :=3D -I$(srctree)
+ -
+ -quiet_cmd_extract_certs  =3D EXTRACT_CERTS   $(patsubst "%",%,$(2))
+ -      cmd_extract_certs  =3D scripts/extract-cert $(2) $@
+ +$(obj)/x509_certificate_list: $(CONFIG_SYSTEM_TRUSTED_KEYS) $(obj)/extrac=
+t-cert FORCE
+ +	$(call if_changed,extract_certs,$(if $(CONFIG_SYSTEM_TRUSTED_KEYS),$<,""=
+))
+ =20
+  targets +=3D x509_certificate_list
+ -$(obj)/x509_certificate_list: scripts/extract-cert $(SYSTEM_TRUSTED_KEYS_=
+SRCPREFIX)$(SYSTEM_TRUSTED_KEYS_FILENAME) FORCE
+ -	$(call if_changed,extract_certs,$(SYSTEM_TRUSTED_KEYS_SRCPREFIX)$(CONFIG=
+_SYSTEM_TRUSTED_KEYS))
+ -endif # CONFIG_SYSTEM_TRUSTED_KEYRING
+ -
+ -clean-files :=3D x509_certificate_list .x509.list x509_revocation_list bl=
+acklist_hashes_checked
+ =20
+  ifeq ($(CONFIG_MODULE_SIG),y)
+  	SIGN_KEY =3D y
 
---Sig_/UxZA.PrK7RLqTQum2UVkq_Q
+--Sig_/.WxI_cplo/pHnJakss.Mclc
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHXwoIACgkQAVBC80lX
-0GxynwgAny3fH1eDy2QKqAZGUPFMdwG0JKpFPKmTXEF6NVlGvW4ozfJvkLFRTJgI
-kYQd48jGeqErootVLrtaFG3SQtrEljGKGetvotB1yFiwRpktq9qVxGwmHJo+dnxX
-xWNFBHB3xIDjLly1iXUCoI9+IPj859HNapEReQr1d/1ijHtRAu70tzR2w0Jclnnf
-sNjE2rHiK9Ba2bTcuAF2k2thcbFzDJ+69ComwkuWbWDQ3mjtFAbMZwfYdpyNvohM
-8PD/68XJa4OY2HQnH0dWjLIKyt384ugeueJw/N9vKKhXRaiB6e1wlotCRd2rUwGY
-tLkVfY7EirMD4HYZ/S7Cg79Bs4kafQ==
-=q2oz
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHXxN0ACgkQAVBC80lX
+0GzaaAf/cxADqh2us9UXNDU264P1ZdwDGy4iOWO/Gphz2V1Qxov3VvQftG67eMJg
+NQ0E0WGBh7JL8X8WV3VootdAkjVJ9vZcAJ/nWM649gNqHtDq/Aunc2mzd1FOMooE
+tK/Np5K9dqK+t9Xnq1mcTqs9AxDvhtYFusKjDB6SO35BNpyGJo7vFyiINR3shHW6
+8EQE4rRSG8NYnum/ejzpr9ZsvKtJ96KawktzLHoAaNbMmVHqZKXcsZMW0gL3blUG
+B9dBG08n/v0GjyIQ47W+dj5iS1XpvTL0iMZMbDQ0yEIq+5H3/IgXHCaaTn83xDGu
++kx0qdIkgPfDxyftSDHNR4huuiGvOQ==
+=pzpK
 -----END PGP SIGNATURE-----
 
---Sig_/UxZA.PrK7RLqTQum2UVkq_Q--
+--Sig_/.WxI_cplo/pHnJakss.Mclc--

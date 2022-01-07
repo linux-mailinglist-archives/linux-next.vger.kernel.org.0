@@ -2,177 +2,161 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EC43487309
-	for <lists+linux-next@lfdr.de>; Fri,  7 Jan 2022 07:22:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 413A248745D
+	for <lists+linux-next@lfdr.de>; Fri,  7 Jan 2022 09:58:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230054AbiAGGWJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 7 Jan 2022 01:22:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47508 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbiAGGWJ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 7 Jan 2022 01:22:09 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 083C4C061245;
-        Thu,  6 Jan 2022 22:22:09 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JVY666Qv7z4xsl;
-        Fri,  7 Jan 2022 17:22:06 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1641536527;
-        bh=nHGeUliebDmEO1ebGGAygpLNK2xu1YUT2hKojM43UWU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=JvIkye2mopHOr9Jw17Wl+wTizDiw9v4p3xMgcAe7FcoG7pQTs9iDJUkejTZEr/mqj
-         b9d/MNPgNx4InjCvgF1k5QLaW2fO82dHaJI2/9Ic8+pktGu3rpYVzniOOYwweCqgB4
-         njec+rqRj6KDxZmBOCupcbfVdnnK0lLjRPsRjhbhszw04xvpBUYxgMEBv2/apSGD4E
-         6G4K88Z6UlqudQdxffgE3G/ENIEJinxajF6QTzNdhNhQBbK+8UMyIexgdxSAEJjvgj
-         V3+Gt7UzuFwQYTpjb3FcFr7tjABH/Crn6F0W16U6eE9jNGLWpZZfjSMJK6L+tP8cZS
-         MTbk0HDxnexcg==
-Date:   Fri, 7 Jan 2022 17:22:06 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Masahiro Yamada <masahiroy@kernel.org>
+        id S1346260AbiAGI6v (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 7 Jan 2022 03:58:51 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:11314 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1346266AbiAGI6v (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 7 Jan 2022 03:58:51 -0500
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2078blLG013296;
+        Fri, 7 Jan 2022 08:58:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
+ references : from : message-id : date : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=oXCQfd4G/iTC0kL7PG2TR72N4GH+CGqN1sK2PO5maA4=;
+ b=D+5P/ZGSyoi3qPYSV5EyGzW0qKo6ryygTzox/7qVNKhSLB1lrykaGTT0JoJOwFjIr6Pn
+ OEjhEK2cN6QUuu/Y4jssOKdiS6t2/rajM/Jl2Ml06QNj7ldHkYteunRjf9mGGPsgLsCX
+ xE2IEcGhrgxZqKuWCRIFrc5AlAObIn+/ON9uAVrAz6Q33NiR+zMfF//NjuL7gw4l3nWS
+ 6YO01Re/4JbeoaGU9ViUW2/HU0RrhK7DMA4B/POH5HBhQg0asjiOiu0j45Uq6+1dTgxU
+ TZv96eciIPkOsnjKSjEV5BUz1qKE8i4mVFKFIm6PV1agU2Weex2nKm768tPQdszwWx8k sQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3de4x350m6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Jan 2022 08:58:44 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 2078nE1P020440;
+        Fri, 7 Jan 2022 08:58:44 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3de4x350kn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Jan 2022 08:58:44 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2078qEpg027940;
+        Fri, 7 Jan 2022 08:58:42 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma04ams.nl.ibm.com with ESMTP id 3de5gfvgt9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Jan 2022 08:58:42 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2078wevl28246344
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 7 Jan 2022 08:58:40 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 00BD0A4066;
+        Fri,  7 Jan 2022 08:58:40 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B0738A405C;
+        Fri,  7 Jan 2022 08:58:38 +0000 (GMT)
+Received: from li-e8dccbcc-2adc-11b2-a85c-bc1f33b9b810.ibm.com (unknown [9.43.61.156])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri,  7 Jan 2022 08:58:38 +0000 (GMT)
+Subject: Re: linux-next: build failure after merge of the perf tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: much more building going on
-Message-ID: <20220107172206.3fbdd09f@canb.auug.org.au>
-In-Reply-To: <20220107171319.0afa619a@canb.auug.org.au>
-References: <20220107171319.0afa619a@canb.auug.org.au>
+References: <20220106091921.3fa617bc@canb.auug.org.au>
+From:   kajoljain <kjain@linux.ibm.com>
+Message-ID: <6623bc13-d99c-74c1-29c8-b4ae7a570d99@linux.ibm.com>
+Date:   Fri, 7 Jan 2022 14:28:37 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+In-Reply-To: <20220106091921.3fa617bc@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: GoUI2xrrQd_i_kr9YxZgHF4IHXHPjdbS
+X-Proofpoint-GUID: hE6zumqYfke5FYWDYh6Ygh00xlRsjP2J
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/gfnq..WJdAx3hrDrbehH6IR";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-07_03,2022-01-06_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ priorityscore=1501 spamscore=0 bulkscore=0 mlxlogscore=999 suspectscore=0
+ malwarescore=0 phishscore=0 mlxscore=0 clxscore=1011 adultscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201070061
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/gfnq..WJdAx3hrDrbehH6IR
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-On Fri, 7 Jan 2022 17:13:19 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> Since yesterday, my builds are taking much longer and it seems just
-> about everything is being rebuilt when there should be very little done.
->=20
-> One example is after mergeing the clockevents tree, the diffstat looks
-> like this:
->=20
-> $ git diff --stat HEAD^..
->  .../devicetree/bindings/timer/cdns,ttc.yaml        |   3 +
->  .../bindings/timer/mstar,msc313e-timer.yaml        |  46 ++++
->  .../devicetree/bindings/timer/nxp,tpm-timer.yaml   |   6 +-
->  .../devicetree/bindings/timer/renesas,ostm.yaml    |  20 +-
->  .../bindings/timer/rockchip,rk-timer.yaml          |   1 -
->  MAINTAINERS                                        |   1 +
->  drivers/clocksource/Kconfig                        |  12 +-
->  drivers/clocksource/Makefile                       |   1 +
->  drivers/clocksource/exynos_mct.c                   |  52 +++--
->  drivers/clocksource/renesas-ostm.c                 |  39 +++-
->  drivers/clocksource/timer-imx-sysctr.c             |   6 +-
->  drivers/clocksource/timer-msc313e.c                | 253 +++++++++++++++=
-++++++
->  drivers/clocksource/timer-pistachio.c              |   3 +-
->  13 files changed, 411 insertions(+), 32 deletions(-)
->=20
-> but my powerpc and arm builds rebuilt basically everything.
->=20
-> This happens for a lot of merges - though some do not rebuild very much
-> at all.
->=20
-> Any ideas about what changed yesterday?  (I directed this to the kbuild
-> tree maintainer since the kbuild tree was updated yesterday - though
-> that may be a coincidence).
+On 1/6/22 3:49 AM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the perf tree, today's linux-next build (powerpc
+> ppc64_defconfig) failed like this:
+> 
+> In file included from include/linux/perf_event.h:17,
+>                  from arch/powerpc/perf/isa207-common.h:12,
+>                  from arch/powerpc/perf/isa207-common.c:9:
+> arch/powerpc/perf/isa207-common.c: In function 'isa207_find_source':
+> include/uapi/linux/perf_event.h:1339:11: error: 'PERF_MEM_HOPS_2' undeclared (first use in this function); did you mean 'PERF_MEM_HOPS_0'?
+>  1339 |  (((__u64)PERF_MEM_##a##_##s) << PERF_MEM_##a##_SHIFT)
+>       |           ^~~~~~~~~
+> arch/powerpc/perf/isa207-common.h:273:20: note: in expansion of macro 'PERF_MEM_S'
+>   273 | #define P(a, b)    PERF_MEM_S(a, b)
+>       |                    ^~~~~~~~~~
+> arch/powerpc/perf/isa207-common.c:240:51: note: in expansion of macro 'P'
+>   240 |     ret |= PH(LVL, REM_RAM1) | REM | LEVEL(RAM) | P(HOPS, 2);
+>       |                                                   ^
+> include/uapi/linux/perf_event.h:1339:11: note: each undeclared identifier is reported only once for each function it appears in
+>  1339 |  (((__u64)PERF_MEM_##a##_##s) << PERF_MEM_##a##_SHIFT)
+>       |           ^~~~~~~~~
+> arch/powerpc/perf/isa207-common.h:273:20: note: in expansion of macro 'PERF_MEM_S'
+>   273 | #define P(a, b)    PERF_MEM_S(a, b)
+>       |                    ^~~~~~~~~~
+> arch/powerpc/perf/isa207-common.c:240:51: note: in expansion of macro 'P'
+>   240 |     ret |= PH(LVL, REM_RAM1) | REM | LEVEL(RAM) | P(HOPS, 2);
+>       |                                                   ^
+> include/uapi/linux/perf_event.h:1339:11: error: 'PERF_MEM_HOPS_3' undeclared (first use in this function); did you mean 'PERF_MEM_HOPS_0'?
+>  1339 |  (((__u64)PERF_MEM_##a##_##s) << PERF_MEM_##a##_SHIFT)
+>       |           ^~~~~~~~~
+> arch/powerpc/perf/isa207-common.h:273:20: note: in expansion of macro 'PERF_MEM_S'
+>   273 | #define P(a, b)    PERF_MEM_S(a, b)
+>       |                    ^~~~~~~~~~
+> arch/powerpc/perf/isa207-common.c:244:51: note: in expansion of macro 'P'
+>   244 |     ret |= PH(LVL, REM_RAM2) | REM | LEVEL(RAM) | P(HOPS, 3);
+>       |                                                   ^
+> 
+> Caused by commit
+> 
+>   af2b24f228a0 ("perf powerpc: Add data source encodings for power10 platform")
+> 
+> It looks like patch 1/4 of this series is missing ...
 
-OK, it *may* have something to do with Kconfig file updates for example wit=
-h this diffstat:
+Hi Stephen,
+     Yes you are right, original patch series contain 4 patches, where
+1/4 patch contain kernel side changes for the same. Hence we are getting
+this error, as that patch is missing in the Arnaldo tree.
 
- .../memory-controllers/synopsys,ddrc-ecc.yaml      |  1 +
- drivers/edac/Kconfig                               |  2 +-
- drivers/edac/amd64_edac.c                          | 36 ++++++++++++++-
- drivers/edac/amd64_edac.h                          |  8 +++-
- drivers/edac/edac_mc.c                             |  2 +
- drivers/edac/sb_edac.c                             |  2 +-
- drivers/edac/sifive_edac.c                         |  2 +-
- drivers/edac/synopsys_edac.c                       | 52 ++++++++++++++++++=
-----
- drivers/ras/cec.c                                  |  2 +-
- include/linux/edac.h                               |  6 +++
- 10 files changed, 98 insertions(+), 15 deletions(-)
+Link to the patchset: https://lkml.org/lkml/2021/12/6/143
 
-And only this Kconfig change:
+That kernel side patch is taken by Michael Ellermen via powerpc git.
 
-$ git diff HEAD^.. drivers/edac/Kconfig
-diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
-index 2fc4c3f91fd5..58ab63642e72 100644
---- a/drivers/edac/Kconfig
-+++ b/drivers/edac/Kconfig
-@@ -484,7 +484,7 @@ config EDAC_ARMADA_XP
-=20
- config EDAC_SYNOPSYS
-        tristate "Synopsys DDR Memory Controller"
--       depends on ARCH_ZYNQ || ARCH_ZYNQMP
-+       depends on ARCH_ZYNQ || ARCH_ZYNQMP || ARCH_INTEL_SOCFPGA
-        help
-          Support for error detection and correction on the Synopsys DDR
-          memory controller.
+Link to the patchset on powerpc/next:
 
-I noticed that the following files have changed (timestamp at least) in
-the object directory:
+[1/4] perf: Add new macros for mem_hops field
+https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/commit/?id=cb1c4aba055f928ffae0c868e8dfe08eeab302e7
 
--rw-r--r-- 1 sfr users    46271 Jan  7 17:09 ./include/config/auto.conf.cmd
--rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/DEFAULT_TCP_C=
-ONG
--rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/DEFAULT_INIT
--rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/BUILD_SALT
--rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/RTC_SYSTOHC_D=
-EVICE
--rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/EXTRA_TARGETS
--rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/CC_IMPLICIT_F=
-ALLTHROUGH
--rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/RTC_HCTOSYS_D=
-EVICE
--rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/EXTRA_FIRMWARE
--rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/DEFAULT_HOSTN=
-AME
--rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/CC_VERSION_TE=
-XT
--rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/MODPROBE_PATH
--rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/LOCALVERSION
--rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/INITRAMFS_SOU=
-RCE
--rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/FAT_DEFAULT_I=
-OCHARSET
--rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/CMDLINE
--rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/NLS_DEFAULT
--rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/MAGIC_SYSRQ_S=
-ERIAL_SEQUENCE
--rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/LSM
--rw-r--r-- 1 sfr users    54294 Jan  7 17:09 ./include/generated/autoconf.h
--rw-r--r-- 1 sfr users    39198 Jan  7 17:09 ./include/config/auto.conf
 
-then lots more is rebuilt.
---=20
-Cheers,
-Stephen Rothwell
+[3/4] powerpc/perf: Add encodings to represent data based on newer
+composite PERF_MEM_LVLNUM* fields
+ https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/commit/?id=4a20ee106154ac1765dea97932faad29f0ba57fc
 
---Sig_/gfnq..WJdAx3hrDrbehH6IR
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+[4/4] powerpc/perf: Add data source encodings for power10 platform
+https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/commit/?id=6ed05a8efda56e5be11081954929421de19cce88
 
------BEGIN PGP SIGNATURE-----
+Thanks,
+Kajol Jain
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHX3A4ACgkQAVBC80lX
-0Gzy5Qf8CwGEMFBySFhGkmnSMraFTI2kyaPxmd7fn75Hd/xKyIkIJp5txKpReDPD
-nBA+xrpGP3emNkSSAOcqaeybFY3foddQt8CGCWiyVaJhlY3AOpvNr7e5QZqzIgtD
-O1CZFDDVoBwFP/lCbueNY5xRe1Q6vmgDv6SfxERjmOpc39y9B2bZSGyHqlrbw8Od
-apeWnvFNmGts6/pnSTkUQuiBrLTXxHmY18fxw/vaQwchozdFQ33iVi/FDdgcIPfu
-brZpATo0VFC0d4oCKZ1YyVMaTmJuhL7oT+Ay8wo6TgqeYB5i6GEEgnrOQsokw9Kn
-4ZLkwZi+yq9py/GlHUZlmmf+T3B73Q==
-=AKR7
------END PGP SIGNATURE-----
-
---Sig_/gfnq..WJdAx3hrDrbehH6IR--
+> 
+> I have used the perf tree from next-20220105 for today.
+> 

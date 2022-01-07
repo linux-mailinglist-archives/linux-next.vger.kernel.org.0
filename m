@@ -2,161 +2,165 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 413A248745D
-	for <lists+linux-next@lfdr.de>; Fri,  7 Jan 2022 09:58:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7A51487481
+	for <lists+linux-next@lfdr.de>; Fri,  7 Jan 2022 10:10:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346260AbiAGI6v (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 7 Jan 2022 03:58:51 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:11314 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1346266AbiAGI6v (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 7 Jan 2022 03:58:51 -0500
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2078blLG013296;
-        Fri, 7 Jan 2022 08:58:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
- references : from : message-id : date : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=oXCQfd4G/iTC0kL7PG2TR72N4GH+CGqN1sK2PO5maA4=;
- b=D+5P/ZGSyoi3qPYSV5EyGzW0qKo6ryygTzox/7qVNKhSLB1lrykaGTT0JoJOwFjIr6Pn
- OEjhEK2cN6QUuu/Y4jssOKdiS6t2/rajM/Jl2Ml06QNj7ldHkYteunRjf9mGGPsgLsCX
- xE2IEcGhrgxZqKuWCRIFrc5AlAObIn+/ON9uAVrAz6Q33NiR+zMfF//NjuL7gw4l3nWS
- 6YO01Re/4JbeoaGU9ViUW2/HU0RrhK7DMA4B/POH5HBhQg0asjiOiu0j45Uq6+1dTgxU
- TZv96eciIPkOsnjKSjEV5BUz1qKE8i4mVFKFIm6PV1agU2Weex2nKm768tPQdszwWx8k sQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3de4x350m6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 07 Jan 2022 08:58:44 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 2078nE1P020440;
-        Fri, 7 Jan 2022 08:58:44 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3de4x350kn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 07 Jan 2022 08:58:44 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2078qEpg027940;
-        Fri, 7 Jan 2022 08:58:42 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma04ams.nl.ibm.com with ESMTP id 3de5gfvgt9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 07 Jan 2022 08:58:42 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2078wevl28246344
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 7 Jan 2022 08:58:40 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 00BD0A4066;
-        Fri,  7 Jan 2022 08:58:40 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B0738A405C;
-        Fri,  7 Jan 2022 08:58:38 +0000 (GMT)
-Received: from li-e8dccbcc-2adc-11b2-a85c-bc1f33b9b810.ibm.com (unknown [9.43.61.156])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri,  7 Jan 2022 08:58:38 +0000 (GMT)
-Subject: Re: linux-next: build failure after merge of the perf tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220106091921.3fa617bc@canb.auug.org.au>
-From:   kajoljain <kjain@linux.ibm.com>
-Message-ID: <6623bc13-d99c-74c1-29c8-b4ae7a570d99@linux.ibm.com>
-Date:   Fri, 7 Jan 2022 14:28:37 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-In-Reply-To: <20220106091921.3fa617bc@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: GoUI2xrrQd_i_kr9YxZgHF4IHXHPjdbS
-X-Proofpoint-GUID: hE6zumqYfke5FYWDYh6Ygh00xlRsjP2J
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        id S236863AbiAGJKV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 7 Jan 2022 04:10:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56588 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236732AbiAGJKV (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 7 Jan 2022 04:10:21 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65F14C061245
+        for <linux-next@vger.kernel.org>; Fri,  7 Jan 2022 01:10:21 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id ie13so4716856pjb.1
+        for <linux-next@vger.kernel.org>; Fri, 07 Jan 2022 01:10:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=ooSTM39+fp5hQ36GKX3vll9WKMsYqPNK01QYiA8Q75E=;
+        b=Zqx13VzAset9YN4gGd85H5EsHG4+Rsk2yPzqIk5B8h4pu9Fm1UDG/3/b1BTOnNYuCW
+         END7V5R8nfXM89/FwHJ6z5gQHqP7C3SBSv9KG8nz7QDsjvxjzCKhFRHOczdVK6V74D2Y
+         fODKSorixPqJkNrjaFLrf8yjB911D0N6b79An7mGGWGLmyMlyQrYguE98sKQn9KqKsKj
+         a/0FXG6/t0hw0hFiyztx8c+LU6lCAlsQ63D6ljfnjVyz4/dd/J6AxlU9Zb8OF38wAHUe
+         2UDrIwWd1l9FlTN4xGAAHoNKty/EZvmKehn9KZLvSX2u7R/G/Id5YK+z2VRvoEsaZtTg
+         xSJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=ooSTM39+fp5hQ36GKX3vll9WKMsYqPNK01QYiA8Q75E=;
+        b=g736eWxSHH5PnLgRECLn5vkF/PySv2g3xFf2nrLlNc5+5rDeCm+pBQqaoE4SAERN5m
+         e29X/q+ymzN5iSK8mhHu+n1OHGw9OvmUwb8Gnhw3dwq4lYZh30JmDvqVqV44K4XTs1Vf
+         LCNhS82MUscSgVOQxHv9t9xyiepgQsdc1LfnRUcbKXY4zyZAcrGaGW3E9dz5PEjA3mPl
+         FokHmletPnz7+dsazb6mkYLv37rtukIfDLbJNSlP1If8GoUJSeyoFYBTiZ2wkvK2PLak
+         BZOXBNIi0QorrKAsKwFly2ulMf+Ccle/f2u8bUhOcteWGOOTkJ3vLYAuUvAEA7ya8i6h
+         SzGQ==
+X-Gm-Message-State: AOAM532YPZrntgJHRy6hNqTxcEOtdixEHKdj2CFAhuQuR9Tarn5EoVPE
+        mdM6ZUyecII5pB8G4z84/mC+e2R+9ZLHztOh
+X-Google-Smtp-Source: ABdhPJwLHcxIdKgPvsdUbeWUQE0pW4XrVfa4lMfsYqMTMEfXd/YwmtublRayG/GW+yNJkzJ3gXVpOg==
+X-Received: by 2002:a17:90a:5893:: with SMTP id j19mr14792645pji.30.1641546620731;
+        Fri, 07 Jan 2022 01:10:20 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id s9sm5113962pjn.2.2022.01.07.01.10.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jan 2022 01:10:20 -0800 (PST)
+Message-ID: <61d8037c.1c69fb81.a0028.e0ef@mx.google.com>
+Date:   Fri, 07 Jan 2022 01:10:20 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-07_03,2022-01-06_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- priorityscore=1501 spamscore=0 bulkscore=0 mlxlogscore=999 suspectscore=0
- malwarescore=0 phishscore=0 mlxscore=0 clxscore=1011 adultscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201070061
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: v5.16-rc8-122-g4a9da1f24064
+X-Kernelci-Branch: pending-fixes
+Subject: next/pending-fixes baseline: 451 runs,
+ 2 regressions (v5.16-rc8-122-g4a9da1f24064)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+next/pending-fixes baseline: 451 runs, 2 regressions (v5.16-rc8-122-g4a9da1=
+f24064)
+
+Regressions Summary
+-------------------
+
+platform           | arch  | lab           | compiler | defconfig          =
+          | regressions
+-------------------+-------+---------------+----------+--------------------=
+----------+------------
+bcm2836-rpi-2-b    | arm   | lab-collabora | gcc-10   | multi_v7_defc...MB2=
+_KERNEL=3Dy | 1          =
+
+kontron-pitx-imx8m | arm64 | lab-kontron   | gcc-10   | defconfig+CON...OMI=
+ZE_BASE=3Dy | 1          =
 
 
-On 1/6/22 3:49 AM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the perf tree, today's linux-next build (powerpc
-> ppc64_defconfig) failed like this:
-> 
-> In file included from include/linux/perf_event.h:17,
->                  from arch/powerpc/perf/isa207-common.h:12,
->                  from arch/powerpc/perf/isa207-common.c:9:
-> arch/powerpc/perf/isa207-common.c: In function 'isa207_find_source':
-> include/uapi/linux/perf_event.h:1339:11: error: 'PERF_MEM_HOPS_2' undeclared (first use in this function); did you mean 'PERF_MEM_HOPS_0'?
->  1339 |  (((__u64)PERF_MEM_##a##_##s) << PERF_MEM_##a##_SHIFT)
->       |           ^~~~~~~~~
-> arch/powerpc/perf/isa207-common.h:273:20: note: in expansion of macro 'PERF_MEM_S'
->   273 | #define P(a, b)    PERF_MEM_S(a, b)
->       |                    ^~~~~~~~~~
-> arch/powerpc/perf/isa207-common.c:240:51: note: in expansion of macro 'P'
->   240 |     ret |= PH(LVL, REM_RAM1) | REM | LEVEL(RAM) | P(HOPS, 2);
->       |                                                   ^
-> include/uapi/linux/perf_event.h:1339:11: note: each undeclared identifier is reported only once for each function it appears in
->  1339 |  (((__u64)PERF_MEM_##a##_##s) << PERF_MEM_##a##_SHIFT)
->       |           ^~~~~~~~~
-> arch/powerpc/perf/isa207-common.h:273:20: note: in expansion of macro 'PERF_MEM_S'
->   273 | #define P(a, b)    PERF_MEM_S(a, b)
->       |                    ^~~~~~~~~~
-> arch/powerpc/perf/isa207-common.c:240:51: note: in expansion of macro 'P'
->   240 |     ret |= PH(LVL, REM_RAM1) | REM | LEVEL(RAM) | P(HOPS, 2);
->       |                                                   ^
-> include/uapi/linux/perf_event.h:1339:11: error: 'PERF_MEM_HOPS_3' undeclared (first use in this function); did you mean 'PERF_MEM_HOPS_0'?
->  1339 |  (((__u64)PERF_MEM_##a##_##s) << PERF_MEM_##a##_SHIFT)
->       |           ^~~~~~~~~
-> arch/powerpc/perf/isa207-common.h:273:20: note: in expansion of macro 'PERF_MEM_S'
->   273 | #define P(a, b)    PERF_MEM_S(a, b)
->       |                    ^~~~~~~~~~
-> arch/powerpc/perf/isa207-common.c:244:51: note: in expansion of macro 'P'
->   244 |     ret |= PH(LVL, REM_RAM2) | REM | LEVEL(RAM) | P(HOPS, 3);
->       |                                                   ^
-> 
-> Caused by commit
-> 
->   af2b24f228a0 ("perf powerpc: Add data source encodings for power10 platform")
-> 
-> It looks like patch 1/4 of this series is missing ...
+  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
+v5.16-rc8-122-g4a9da1f24064/plan/baseline/
 
-Hi Stephen,
-     Yes you are right, original patch series contain 4 patches, where
-1/4 patch contain kernel side changes for the same. Hence we are getting
-this error, as that patch is missing in the Arnaldo tree.
-
-Link to the patchset: https://lkml.org/lkml/2021/12/6/143
-
-That kernel side patch is taken by Michael Ellermen via powerpc git.
-
-Link to the patchset on powerpc/next:
-
-[1/4] perf: Add new macros for mem_hops field
-https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/commit/?id=cb1c4aba055f928ffae0c868e8dfe08eeab302e7
+  Test:     baseline
+  Tree:     next
+  Branch:   pending-fixes
+  Describe: v5.16-rc8-122-g4a9da1f24064
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      4a9da1f24064c28ad02b99b21ee52a0900c77b5c =
 
 
-[3/4] powerpc/perf: Add encodings to represent data based on newer
-composite PERF_MEM_LVLNUM* fields
- https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/commit/?id=4a20ee106154ac1765dea97932faad29f0ba57fc
 
-[4/4] powerpc/perf: Add data source encodings for power10 platform
-https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/commit/?id=6ed05a8efda56e5be11081954929421de19cce88
+Test Regressions
+---------------- =
 
-Thanks,
-Kajol Jain
 
-> 
-> I have used the perf tree from next-20220105 for today.
-> 
+
+platform           | arch  | lab           | compiler | defconfig          =
+          | regressions
+-------------------+-------+---------------+----------+--------------------=
+----------+------------
+bcm2836-rpi-2-b    | arm   | lab-collabora | gcc-10   | multi_v7_defc...MB2=
+_KERNEL=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/61d7d4e5213063487bef6748
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.16-rc8-1=
+22-g4a9da1f24064/arm/multi_v7_defconfig+config_thumb2_kernel=3Dy/gcc-10/lab=
+-collabora/baseline-bcm2836-rpi-2-b.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.16-rc8-1=
+22-g4a9da1f24064/arm/multi_v7_defconfig+config_thumb2_kernel=3Dy/gcc-10/lab=
+-collabora/baseline-bcm2836-rpi-2-b.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20211210.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/61d7d4e5213063487bef6=
+749
+        failing since 58 days (last pass: v5.15-rc7-176-gbfbd58926fc5, firs=
+t fail: v5.15-12053-g6f9f2ed9499c) =
+
+ =
+
+
+
+platform           | arch  | lab           | compiler | defconfig          =
+          | regressions
+-------------------+-------+---------------+----------+--------------------=
+----------+------------
+kontron-pitx-imx8m | arm64 | lab-kontron   | gcc-10   | defconfig+CON...OMI=
+ZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/61d7d25de11a0915aeef673e
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.16-rc8-1=
+22-g4a9da1f24064/arm64/defconfig+config_randomize_base=3Dy/gcc-10/lab-kontr=
+on/baseline-kontron-pitx-imx8m.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.16-rc8-1=
+22-g4a9da1f24064/arm64/defconfig+config_randomize_base=3Dy/gcc-10/lab-kontr=
+on/baseline-kontron-pitx-imx8m.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20211210.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/61d7d25de11a0915aeef6=
+73f
+        new failure (last pass: v5.16-rc8-104-g4774f91d5489) =
+
+ =20

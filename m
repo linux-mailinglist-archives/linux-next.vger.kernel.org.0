@@ -2,91 +2,68 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7D9E486E8B
-	for <lists+linux-next@lfdr.de>; Fri,  7 Jan 2022 01:18:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5001B486EFF
+	for <lists+linux-next@lfdr.de>; Fri,  7 Jan 2022 01:42:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbiAGASD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 6 Jan 2022 19:18:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50628 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbiAGASD (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 6 Jan 2022 19:18:03 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E72C1C061245;
-        Thu,  6 Jan 2022 16:18:02 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S1343942AbiAGAmB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 6 Jan 2022 19:42:01 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:58554 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343865AbiAGAmB (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 6 Jan 2022 19:42:01 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JVP202fwYz4xnF;
-        Fri,  7 Jan 2022 11:17:59 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1641514681;
-        bh=gkbDodgK6FMeEY46FSXHJH/Yi/b/XtlC2hyXcdtVT18=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=gpIm1U7Guou2hwfM0GC1xKDRGABV0vAs/Ypbg92i2C0knt1pAl63geGFJAEahAQbK
-         0PAKeVn3fzWnPWG4cabxu9eYascVS0IHIVdrtdTS1CimdC+jdIwJrC602D6L984vKt
-         Tfs1pTfYypdhD7RIMEu3mNmdtL/VyfnYMVipRZJ7CbbPu6ho2LME0fx89j47tgbZpb
-         SSsqBdZrsgJ9BQsZd81Bqh12Mqucg0ZEFAtSp8Nlk3iNRta/SClD2lgnIEmXESxhZp
-         yetir8ydxvEcpd5CDIxwfhfq+tPeSbyVW71RbmMyi86L1Dui++XEPp51Ca3WGFLQ7U
-         qwT7NpaqUIaYA==
-Date:   Fri, 7 Jan 2022 11:17:59 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     Hannes Reinecke <hare@suse.de>,
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0768BB8240F;
+        Fri,  7 Jan 2022 00:42:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FE93C36AE0;
+        Fri,  7 Jan 2022 00:41:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641516118;
+        bh=Pd98R3goIk+E5okVr1q0OLtQzqo9FH4v6pbDvQnNilA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=g5oheXA8hsFKxI2ZF2pVFv4yVXCt+dapX25W2D82mnCgc0n+wYrWhiQ4b+tBUpKCL
+         uBFd7F4nM+C6gypfGz0Dd/QtZfmjx5nAesuWOQuLb/n9C0UqA6zpRUBWMYKE8Pns9c
+         OZf8eXAcLQzhR4W9izNeZnbR2XZVp0VRksTj2fnH8o/tdO9kOvOnDkmBuprJWHjEns
+         nBgRIXm0qUrOXedcQv56rAE3aKDLooWBc3JF2FHNJhaF4BJ42QyB2AhMdFxj4l5lRT
+         1h3WKr8wtyhze1RmLAH4HHPIg+SufYrgu5d2Hy5QAS1hLhbQWgUGp1IlgJ4UAdzRL+
+         D36Ow49DdLeYQ==
+Date:   Thu, 6 Jan 2022 16:41:56 -0800
+From:   Saeed Mahameed <saeed@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Shay Drory <shayd@nvidia.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the libata tree
-Message-ID: <20220107111759.57d0d377@canb.auug.org.au>
-In-Reply-To: <92b2ca94-6a72-7ec5-6a0f-d45f776f7a74@opensource.wdc.com>
-References: <20220107010832.42c93c30@canb.auug.org.au>
-        <92b2ca94-6a72-7ec5-6a0f-d45f776f7a74@opensource.wdc.com>
+Subject: Re: linux-next: build warning after merge of the net-next tree
+Message-ID: <20220107004156.ycgrmqesgtnvxzrp@sx1>
+References: <20220107025749.35eaa2c2@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/7xw6oCo4L+DNrcpp_QnNt5Q";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20220107025749.35eaa2c2@canb.auug.org.au>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/7xw6oCo4L+DNrcpp_QnNt5Q
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi Damien,
-
-On Fri, 7 Jan 2022 08:58:48 +0900 Damien Le Moal <damien.lemoal@opensource.=
-wdc.com> wrote:
+On Fri, Jan 07, 2022 at 02:57:49AM +1100, Stephen Rothwell wrote:
+>Hi all,
 >
-> I fixed that yesterday afternoon my time (Japan), so before your morning =
-in the
-> US (assuming you are based there).
+>After merging the net-next tree, today's linux-next build (htmldocs)
+>produced this warning:
+>
+>Documentation/networking/devlink/mlx5.rst:13: WARNING: Error parsing content block for the "list-table" directive: uniform two-level bullet list expected, but row 2 does not contain the same number of items as row 1 (2 vs 3).
+>
 
-No, Australia (so +1100) at the moment (see my email headers :-)).
+...
 
-I do fetch trees regularly during the day, but I merged your tree at
-about 13:28 yesterday (11:28 your time), but the build failure did not
-happen until I did the powerpc allyesconfig build at about 1am this
-morning.
+>Introduced by commit
+>
+>  0844fa5f7b89 ("net/mlx5: Let user configure io_eq_size param")
+>
 
-Thanks for fixing this, it will be in today's release.
---=20
-Cheers,
-Stephen Rothwell
+Thanks for the report, I just submitted a fix to net-next.
 
---Sig_/7xw6oCo4L+DNrcpp_QnNt5Q
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHXhrcACgkQAVBC80lX
-0GwxAggAl4nRuzEegUqz+uWovs/u1sgWaCgzyk6nv6c5uW6uzZKnfS+01jEizTja
-hQ6hKuMtR1rRj8zB/Go6iUDu0cFOZsW8CzyrgJne8m1LNwjL2gDoqCf+2tElOg+1
-IdEFUaFlhngQs7EjNWzDcWY+VeUeKmWSwZjrYn1CiSpGTvLTIkQs1FJg6EMohHHx
-LrB/GQ61/rbS4cltJONBPmdJyc3SY1nHBuu8aN8uOhlHrVzq33mxBKOjJT3H8z9f
-oGzAmYZ90UTYQvKIdhMU/a09DvWX9H9ze0+EpFJTCEzKZ6a2ktEhlyAIH90KPh33
-/mJa/ugWC1uE8a0Rr1oO2oUUjNl1fg==
-=m0Jv
------END PGP SIGNATURE-----
-
---Sig_/7xw6oCo4L+DNrcpp_QnNt5Q--

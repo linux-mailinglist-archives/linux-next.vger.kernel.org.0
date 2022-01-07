@@ -2,75 +2,128 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C37A487A7B
-	for <lists+linux-next@lfdr.de>; Fri,  7 Jan 2022 17:35:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 147D9487F4E
+	for <lists+linux-next@lfdr.de>; Sat,  8 Jan 2022 00:18:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240193AbiAGQfD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 7 Jan 2022 11:35:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44586 "EHLO
+        id S231443AbiAGXS4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 7 Jan 2022 18:18:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240146AbiAGQfC (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 7 Jan 2022 11:35:02 -0500
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF6CFC061574;
-        Fri,  7 Jan 2022 08:35:02 -0800 (PST)
-Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 596EE385;
-        Fri,  7 Jan 2022 16:35:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 596EE385
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1641573302; bh=YhgZI0FFIn0hZaq5zbXIpWpArNqcf+xaFaMH98W3O7s=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=gTjKnqYjVLLwUDWp64VbAkskquX2XUz9xQJ8vRD7IsI0mZm22pbQZdmvb0APZcq6M
-         OzTcRyrmK6awej83cn0KhEWaDSJJbXwzjrV0tyUQdftmMlfpotBRdZZycfLWxQRnwu
-         FkwVi15P5z6ilqv5JHYtCljs2ySVSVNJLajatC6uHownbh2OTNoZmSOnlD8EwVkxWF
-         XZ9+FaWk754mukv+S3FI+uQBA6iJnZJHVCEw1kKqq8hmdkQ6iL2mPnQuawHd8KsJ5e
-         /EsBJPX7zlvnLesLSCUjCAmueO9yMxKDHtOvD/uXkDRwbFFTrz450u2PMzgcg3cIeG
-         +gRLXcDp7pNrw==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     James Clark <james.clark@arm.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        with ESMTP id S229560AbiAGXS4 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 7 Jan 2022 18:18:56 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB914C061574
+        for <linux-next@vger.kernel.org>; Fri,  7 Jan 2022 15:18:55 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id c2so6415497pfc.1
+        for <linux-next@vger.kernel.org>; Fri, 07 Jan 2022 15:18:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=qcUcFBxpc9ID4beHj3LZVEpoGIJrtujuPv7fi7OSzeU=;
+        b=cYk7v3REj5JT92ymWjoFJHT3nvUrFT1ufcOt5EDo5psuqviVgSgFlZBOb4fIwZshQ0
+         rqRva5TUT55YfgPItuSIltXPEolCjz9AbaCrorW6HXhclmDHQg2uNK4fPGdMpwGm6tlW
+         Df/DwJs7a1wlf2Kv58iOl5ENTh2ix7UeIWGfk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qcUcFBxpc9ID4beHj3LZVEpoGIJrtujuPv7fi7OSzeU=;
+        b=nbmSb7ZODwyOQzO9DZep6LI9GKCUxBmkh8HCsRf5XqZbSAjkvARFE8LdNOGZEOtvr0
+         e2La91JcldPQgeiJummuorCZo0JeuW6lq+RGq2uikG2dA1ECcUbLWCtCYdOFIslfsFrb
+         el3Av3JJ4APwl7jlQ5okqHebqXxCwnKpiH370KZ3V7jcjT6tRS/uZGTCq0IahseBfNui
+         FBPImpIOvq9czMKTSabOVBNFTBY2c6pL7JL2v7OtIhfzexBrSaFv7mg336TlQTUC0qgo
+         UXxXU9A1GI2H8puMBhS9atsnp/nc+8DNAHtazQ+CzVJ28/IbfliUe26OOmpPJAemvPrY
+         SVjA==
+X-Gm-Message-State: AOAM530VblLKBtW5UMMq8r/F9xqtu8Ua4A5bnkWoKwMfbHZJ5I5teKsy
+        +LqnlmBLifk6F1Ri9jP+Xqy1PGTbclBrjw==
+X-Google-Smtp-Source: ABdhPJxs+kMXb7ewpy7D31H1nn5qFuY3PCAj+JXmXjIwYGSyOYNd18wjlGszqtJqyGxK/x0vBTNrYQ==
+X-Received: by 2002:a63:4d17:: with SMTP id a23mr59125871pgb.179.1641597535344;
+        Fri, 07 Jan 2022 15:18:55 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id h26sm10892pfn.213.2022.01.07.15.18.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jan 2022 15:18:55 -0800 (PST)
+Date:   Fri, 7 Jan 2022 15:18:54 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Greg KH <greg@kroah.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ralph Siemsen <ralph.siemsen@linaro.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the jc_docs tree
-In-Reply-To: <c13988e1-fd85-03e5-a05d-7bfee16d4c8d@arm.com>
-References: <20220107103649.53774b30@canb.auug.org.au>
- <c13988e1-fd85-03e5-a05d-7bfee16d4c8d@arm.com>
-Date:   Fri, 07 Jan 2022 09:35:10 -0700
-Message-ID: <87lezro669.fsf@meer.lwn.net>
+Subject: Re: linux-next: manual merge of the char-misc tree with the
+ char-misc.current tree
+Message-ID: <202201071517.662B329D39@keescook>
+References: <20211206144901.63529ac9@canb.auug.org.au>
+ <Ya4Tb9NUj33UdxmI@smile.fi.intel.com>
+ <20211206161734.GA4141317@maple.netwinder.org>
+ <Ya491Dtj7HqoMhvW@smile.fi.intel.com>
+ <YbcPz0SyzSlp8YGU@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YbcPz0SyzSlp8YGU@kroah.com>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-James Clark <james.clark@arm.com> writes:
+On Mon, Dec 13, 2021 at 10:18:07AM +0100, Greg KH wrote:
+> On Mon, Dec 06, 2021 at 06:44:04PM +0200, Andy Shevchenko wrote:
+> > On Mon, Dec 06, 2021 at 11:17:34AM -0500, Ralph Siemsen wrote:
+> > > On Mon, Dec 06, 2021 at 03:43:11PM +0200, Andy Shevchenko wrote:
+> > > > On Mon, Dec 06, 2021 at 02:49:01PM +1100, Stephen Rothwell wrote:
+> > > > > Hi all,
+> > > > > 
+> > > > > Today's linux-next merge of the char-misc tree got a conflict in:
+> > > > > 
+> > > > >   drivers/misc/eeprom/at25.c
+> > > > > 
+> > > > > between commit:
+> > > > > 
+> > > > >   9a626577398c ("nvmem: eeprom: at25: fix FRAM byte_len")
+> > > 
+> > > This was my original patch from Nov 8th.
+> > > 
+> > > > >   5b557298d7d0 ("misc: at25: Make driver OF independent again")
+> > > > >   a692fc39bf90 ("misc: at25: Don't copy garbage to the at25->chip in FRAM case")
+> > > > >   58589a75bba9 ("misc: at25: Check proper value of chip length in FRAM case")
+> > > > >   51902c1212fe ("misc: at25: Use at25->chip instead of local chip everywhere in ->probe()")
+> > > > > (and probably more)
+> > > 
+> > > These are newer versions and some cleanups from Andy. I was not aware of
+> > > this work going on. I'm surprised at25 is getting so much attention ;-)
+> > 
+> > Me neither. :-)
+> > 
+> > > > > I fixed it up (I just used the latter version) and can carry the fix as
+> > > > > necessary. This is now fixed as far as linux-next is concerned, but any
+> > > > > non trivial conflicts should be mentioned to your upstream maintainer
+> > > > > when your tree is submitted for merging.  You may also want to consider
+> > > > > cooperating with the maintainer of the conflicting tree to minimise any
+> > > > > particularly complex conflicts.
+> > > > 
+> > > > The result from char-misc.current should be used as is and I guess it's
+> > > > what you have done, thanks!
+> > > 
+> > > Agreed - Andy's version is cleaner, and includes my fixes. I've run some
+> > > quick tests locally and all seems to be working as expected.
+> > 
+> > Thanks, Ralph!
+> 
+> This should now be resolved in my tree, thanks.
 
-> On 06/01/2022 23:36, Stephen Rothwell wrote:
->> Hi all,
->> 
->> In commit
->> 
->>   e94f43ea200a ("docs: automarkup.py: Fix invalid HTML link output and broken URI fragments")
->> 
->> Fixes tag
->> 
->>   Fixes: d18b01789ae5 ("docs: Add automatic cross-reference for
->> 
->> has these problem(s):
->> 
->>   - Subject has leading but no trailing parentheses
->>   - Subject has leading but no trailing quotes
+I think something has gone very wrong here. The allocation for "at25" is
+now missing in at25_probe():
 
-[...]
+-       at25 = devm_kzalloc(&spi->dev, sizeof(struct at25_data), GFP_KERNEL);
+-       if (!at25)
+-               return -ENOMEM;
+-
 
-> @Jonathan, I'm happy to resubmit with the changes, but it might be
-> easier if you just make the fix in place.
+This leads to a fair bit of confusion from static analysis which sees
+the "at25" as basically empty. :P
 
-I've fixed it, no worries.
-
-Thanks,
-
-jon
+-- 
+Kees Cook

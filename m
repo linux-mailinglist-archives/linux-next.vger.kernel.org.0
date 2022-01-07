@@ -2,165 +2,113 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7A51487481
-	for <lists+linux-next@lfdr.de>; Fri,  7 Jan 2022 10:10:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04F6E48753D
+	for <lists+linux-next@lfdr.de>; Fri,  7 Jan 2022 11:12:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236863AbiAGJKV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 7 Jan 2022 04:10:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56588 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236732AbiAGJKV (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 7 Jan 2022 04:10:21 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65F14C061245
-        for <linux-next@vger.kernel.org>; Fri,  7 Jan 2022 01:10:21 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id ie13so4716856pjb.1
-        for <linux-next@vger.kernel.org>; Fri, 07 Jan 2022 01:10:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=ooSTM39+fp5hQ36GKX3vll9WKMsYqPNK01QYiA8Q75E=;
-        b=Zqx13VzAset9YN4gGd85H5EsHG4+Rsk2yPzqIk5B8h4pu9Fm1UDG/3/b1BTOnNYuCW
-         END7V5R8nfXM89/FwHJ6z5gQHqP7C3SBSv9KG8nz7QDsjvxjzCKhFRHOczdVK6V74D2Y
-         fODKSorixPqJkNrjaFLrf8yjB911D0N6b79An7mGGWGLmyMlyQrYguE98sKQn9KqKsKj
-         a/0FXG6/t0hw0hFiyztx8c+LU6lCAlsQ63D6ljfnjVyz4/dd/J6AxlU9Zb8OF38wAHUe
-         2UDrIwWd1l9FlTN4xGAAHoNKty/EZvmKehn9KZLvSX2u7R/G/Id5YK+z2VRvoEsaZtTg
-         xSJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=ooSTM39+fp5hQ36GKX3vll9WKMsYqPNK01QYiA8Q75E=;
-        b=g736eWxSHH5PnLgRECLn5vkF/PySv2g3xFf2nrLlNc5+5rDeCm+pBQqaoE4SAERN5m
-         e29X/q+ymzN5iSK8mhHu+n1OHGw9OvmUwb8Gnhw3dwq4lYZh30JmDvqVqV44K4XTs1Vf
-         LCNhS82MUscSgVOQxHv9t9xyiepgQsdc1LfnRUcbKXY4zyZAcrGaGW3E9dz5PEjA3mPl
-         FokHmletPnz7+dsazb6mkYLv37rtukIfDLbJNSlP1If8GoUJSeyoFYBTiZ2wkvK2PLak
-         BZOXBNIi0QorrKAsKwFly2ulMf+Ccle/f2u8bUhOcteWGOOTkJ3vLYAuUvAEA7ya8i6h
-         SzGQ==
-X-Gm-Message-State: AOAM532YPZrntgJHRy6hNqTxcEOtdixEHKdj2CFAhuQuR9Tarn5EoVPE
-        mdM6ZUyecII5pB8G4z84/mC+e2R+9ZLHztOh
-X-Google-Smtp-Source: ABdhPJwLHcxIdKgPvsdUbeWUQE0pW4XrVfa4lMfsYqMTMEfXd/YwmtublRayG/GW+yNJkzJ3gXVpOg==
-X-Received: by 2002:a17:90a:5893:: with SMTP id j19mr14792645pji.30.1641546620731;
-        Fri, 07 Jan 2022 01:10:20 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id s9sm5113962pjn.2.2022.01.07.01.10.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jan 2022 01:10:20 -0800 (PST)
-Message-ID: <61d8037c.1c69fb81.a0028.e0ef@mx.google.com>
-Date:   Fri, 07 Jan 2022 01:10:20 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        id S237209AbiAGKM1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 7 Jan 2022 05:12:27 -0500
+Received: from cable.insite.cz ([84.242.75.189]:58320 "EHLO cable.insite.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237200AbiAGKM0 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 7 Jan 2022 05:12:26 -0500
+X-Greylist: delayed 583 seconds by postgrey-1.27 at vger.kernel.org; Fri, 07 Jan 2022 05:12:26 EST
+Received: from localhost (localhost [127.0.0.1])
+        by cable.insite.cz (Postfix) with ESMTP id 11058A1A3D402;
+        Fri,  7 Jan 2022 11:02:41 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1641549761; bh=tizAdbtBw+SOGeryllpWwxHMqLzcos8YC+NWd72pqU0=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=X597OViHwuZn4OHb1y4j/UWAjISx/cVC+42lm3nKCMGoCPjOGAkF097CB7bDb+gd8
+         4xN7y2cWgBE4mpzL8EISLKaULEEuHBeRPzQOuGp3AL/mjrC1mO7vbtPs2xLRevfC8v
+         RW590hm9Bf1ogEcrt9vIztFyNe72atmagKOs/I+g=
+Received: from cable.insite.cz ([84.242.75.189])
+        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id CsquOWCR0EEf; Fri,  7 Jan 2022 11:02:35 +0100 (CET)
+Received: from [192.168.105.22] (dustin.pilsfree.net [81.201.58.138])
+        (Authenticated sender: pavel)
+        by cable.insite.cz (Postfix) with ESMTPSA id 6BBE1A1A3D401;
+        Fri,  7 Jan 2022 11:02:35 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1641549755; bh=tizAdbtBw+SOGeryllpWwxHMqLzcos8YC+NWd72pqU0=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=ksvbRsFtP9bsZKSlZjXDwa2VnfVV6aQvdsR7BKJAaXKoaHAO0hQ0A2I1kpENibHhr
+         2czlmOz91aC9DeSQcG0D3dUI0RtIIcAhBsToBnhzNCo3wh/zh/6se8GyoQdRBppTBm
+         m2OE6ke9Y0JjEau1xAzb/ePYleLiAc9zZAVYslLs=
+Subject: Re: linux-next: build warning after merge of the usb tree
+To:     Greg KH <greg@kroah.com>, Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20220107024815.15dc7e04@canb.auug.org.au>
+ <YdcUd19eAmI1MwNT@kroah.com>
+From:   Pavel Hofman <pavel.hofman@ivitera.com>
+Message-ID: <8e3fe4fb-335e-58f5-84f4-3db224525fd0@ivitera.com>
+Date:   Fri, 7 Jan 2022 11:02:34 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: v5.16-rc8-122-g4a9da1f24064
-X-Kernelci-Branch: pending-fixes
-Subject: next/pending-fixes baseline: 451 runs,
- 2 regressions (v5.16-rc8-122-g4a9da1f24064)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+In-Reply-To: <YdcUd19eAmI1MwNT@kroah.com>
+Content-Type: text/plain; charset=iso-8859-2; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes baseline: 451 runs, 2 regressions (v5.16-rc8-122-g4a9da1=
-f24064)
 
-Regressions Summary
--------------------
+Dne 06. 01. 22 v 17:10 Greg KH napsal(a):
+> On Fri, Jan 07, 2022 at 02:48:15AM +1100, Stephen Rothwell wrote:
+>> Hi all,
+>>
+>> After merging the usb tree, today's linux-next build (htmldocs) produced
+>> this warning:
+>>
+>> Documentation/ABI/testing/configfs-usb-gadget-uac2:2: WARNIN
+>> G: Malformed table.
+>> Text in column margin in table line 27.
+>>
+>> =====================   =======================================
+>> c_chmask                capture channel mask
+>> c_srate                 capture sampling rate
+>> c_ssize                 capture sample size (bytes)
+>> c_sync                  capture synchronization type
+>>                          (async/adaptive)
+>> c_mute_present          capture mute control enable
+>> c_volume_present        capture volume control enable
+>> c_volume_min            capture volume control min value
+>>                          (in 1/256 dB)
+>> c_volume_max            capture volume control max value
+>>                          (in 1/256 dB)
+>> c_volume_res            capture volume control resolution
+>>                          (in 1/256 dB)
+>> fb_max                  maximum extra bandwidth in async mode
+>> p_chmask                playback channel mask
+>> p_srate                 playback sampling rate
+>> p_ssize                 playback sample size (bytes)
+>> p_mute_present          playback mute control enable
+>> p_volume_present        playback volume control enable
+>> _volume_present        playback volume control enable
+>> p_volume_min            playback volume control min value
+>>                          (in 1/256 dB)
+>> p_volume_max            playback volume control max value
+>>                          (in 1/256 dB)
+>> p_volume_res            playback volume control resolution
+>>                          (in 1/256 dB)
+>> req_number      the number of pre-allocated requests for both capture
+>>                          and playback
+>> =====================   =======================================
+>>
+>> Introduced by commit
+>>
+>>    e3088ebc1b97 ("docs: ABI: added missing num_requests param to UAC2")
+>>
+> 
+> Pavel, can you send a follow-on patch to fix this up?
+> 
 
-platform           | arch  | lab           | compiler | defconfig          =
-          | regressions
--------------------+-------+---------------+----------+--------------------=
-----------+------------
-bcm2836-rpi-2-b    | arm   | lab-collabora | gcc-10   | multi_v7_defc...MB2=
-_KERNEL=3Dy | 1          =
+Greg, sorry for the inconvenience, of course I will do so. Please can 
+you point me to some doc describing the correct ABI format? There are 
+varying numbers of tabs in those files.
 
-kontron-pitx-imx8m | arm64 | lab-kontron   | gcc-10   | defconfig+CON...OMI=
-ZE_BASE=3Dy | 1          =
+Thanks a lot,
 
-
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v5.16-rc8-122-g4a9da1f24064/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v5.16-rc8-122-g4a9da1f24064
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      4a9da1f24064c28ad02b99b21ee52a0900c77b5c =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform           | arch  | lab           | compiler | defconfig          =
-          | regressions
--------------------+-------+---------------+----------+--------------------=
-----------+------------
-bcm2836-rpi-2-b    | arm   | lab-collabora | gcc-10   | multi_v7_defc...MB2=
-_KERNEL=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/61d7d4e5213063487bef6748
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.16-rc8-1=
-22-g4a9da1f24064/arm/multi_v7_defconfig+config_thumb2_kernel=3Dy/gcc-10/lab=
--collabora/baseline-bcm2836-rpi-2-b.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.16-rc8-1=
-22-g4a9da1f24064/arm/multi_v7_defconfig+config_thumb2_kernel=3Dy/gcc-10/lab=
--collabora/baseline-bcm2836-rpi-2-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20211210.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/61d7d4e5213063487bef6=
-749
-        failing since 58 days (last pass: v5.15-rc7-176-gbfbd58926fc5, firs=
-t fail: v5.15-12053-g6f9f2ed9499c) =
-
- =
-
-
-
-platform           | arch  | lab           | compiler | defconfig          =
-          | regressions
--------------------+-------+---------------+----------+--------------------=
-----------+------------
-kontron-pitx-imx8m | arm64 | lab-kontron   | gcc-10   | defconfig+CON...OMI=
-ZE_BASE=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/61d7d25de11a0915aeef673e
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.16-rc8-1=
-22-g4a9da1f24064/arm64/defconfig+config_randomize_base=3Dy/gcc-10/lab-kontr=
-on/baseline-kontron-pitx-imx8m.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.16-rc8-1=
-22-g4a9da1f24064/arm64/defconfig+config_randomize_base=3Dy/gcc-10/lab-kontr=
-on/baseline-kontron-pitx-imx8m.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20211210.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/61d7d25de11a0915aeef6=
-73f
-        new failure (last pass: v5.16-rc8-104-g4774f91d5489) =
-
- =20
+Pavel.

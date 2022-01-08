@@ -2,198 +2,83 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E36E488318
-	for <lists+linux-next@lfdr.de>; Sat,  8 Jan 2022 11:55:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB5A3488333
+	for <lists+linux-next@lfdr.de>; Sat,  8 Jan 2022 12:22:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232725AbiAHKz4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 8 Jan 2022 05:55:56 -0500
-Received: from condef-06.nifty.com ([202.248.20.71]:46329 "EHLO
-        condef-06.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229973AbiAHKz4 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 8 Jan 2022 05:55:56 -0500
-X-Greylist: delayed 361 seconds by postgrey-1.27 at vger.kernel.org; Sat, 08 Jan 2022 05:55:56 EST
-Received: from conssluserg-05.nifty.com ([10.126.8.84])by condef-06.nifty.com with ESMTP id 208AlIIj014056
-        for <linux-next@vger.kernel.org>; Sat, 8 Jan 2022 19:47:18 +0900
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175]) (authenticated)
-        by conssluserg-05.nifty.com with ESMTP id 208AkoOZ017944;
-        Sat, 8 Jan 2022 19:46:50 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 208AkoOZ017944
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1641638811;
-        bh=3ycalqzctzTSUeksLXb1B1zcoh1yoLaA2eeGA2udKgE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=nxB0dkCAdIKEY3U1R9AMvAFhRbStglwyjRRBjIEKhAj+7opxThVdNfWkizXTEaxtq
-         cBwR7RYixkTq1TK3jgSYO20AXDADKAEkbZyvpMi6OI3eE+sISgXRYiJBMp4mP/ecCg
-         Ru3UB5jVrCbwus3+oNWdOlQaCFtkZ7G+L3SK0PEzhvSeJGxCnEIwh2Avykq3SJBPpu
-         rD0aDkmPu7ZTlpvfpI3Ao5N3u2bWDWDBJe+ZE3vBJ7nFn1SSb79zg/kBZcQe8CLT0f
-         e4J4fCIPYdSKsinemPdN05zJ8YzKvrQZLjpBl9hLasG7vPtv9jOu2I/1ju/OBkKjGf
-         kFHRDDMIjw0Wg==
-X-Nifty-SrcIP: [209.85.215.175]
-Received: by mail-pg1-f175.google.com with SMTP id t135so339494pgb.4;
-        Sat, 08 Jan 2022 02:46:50 -0800 (PST)
-X-Gm-Message-State: AOAM532tZ4KrBZ0ntdXvRSPJG/lGafhdhkbWel/03dpF326b0N3RjCA6
-        /lg/Iw0eBZOL8N9dyUjpgDJ0dVpir+YMYgK6ddE=
-X-Google-Smtp-Source: ABdhPJz01dludZDhtrS+2CPgi+C09X+bQCFteAIei7qLMuS+NUgvSx7KXHHR9Y7tuvz/mYZKHniY+GL3Ds8t8vJvNn8=
-X-Received: by 2002:a05:6a00:1484:b0:4bb:86a:c061 with SMTP id
- v4-20020a056a00148400b004bb086ac061mr67863230pfu.36.1641638809733; Sat, 08
- Jan 2022 02:46:49 -0800 (PST)
-MIME-Version: 1.0
-References: <20220107171319.0afa619a@canb.auug.org.au> <20220107172206.3fbdd09f@canb.auug.org.au>
- <20220108171424.669e37d6@canb.auug.org.au>
-In-Reply-To: <20220108171424.669e37d6@canb.auug.org.au>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sat, 8 Jan 2022 19:46:12 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAT9c+_pVyfPA_XfhjSFCifDX3P9JNrbsF6-38Yh=1t69g@mail.gmail.com>
-Message-ID: <CAK7LNAT9c+_pVyfPA_XfhjSFCifDX3P9JNrbsF6-38Yh=1t69g@mail.gmail.com>
-Subject: Re: linux-next: much more building going on
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
+        id S231538AbiAHLWs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 8 Jan 2022 06:22:48 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:41605 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232919AbiAHLWs (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 8 Jan 2022 06:22:48 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JWHkZ4V2bz4xsl;
+        Sat,  8 Jan 2022 22:22:46 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1641640966;
+        bh=VxaJnLBR6LZ4qO7VWtc8nrB4osndOqpKNWabQdCjUio=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=pAa+1T1YUb+U6WPRWRSMpD6ZPbsrMSyvlr1F5zWDa/XoTCvGxWEza7Er2xOpACWgH
+         y49jTaNgWkDMuvedbTiWEENvmH6aEHCbdP2bawcHdblw4FZqaOvGL9OhI8gIR0g8wU
+         IEObuifbaisslOaGAqjrxwpA6Omz9MMcwk6WE3b/7mVumwVlu+C40rHLAN23noNvsK
+         D6e+iFqYLg94mS/TZLnf6Amd6m8nmPRD3uJaHQQFcu5tqE3iBCh6fXYIqBj/OvR/ZP
+         FhaT2+LNamyDlm3s6FtGfiail5Y3YJ8SxS7nEbgqM4BDXgrE75DoH1clV82oyTNuiX
+         e1SWSJ28LnVAA==
+Date:   Sat, 8 Jan 2022 22:22:45 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Masahiro Yamada <masahiroy@kernel.org>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: linux-next: much more building going on
+Message-ID: <20220108222245.21acc816@canb.auug.org.au>
+In-Reply-To: <CAK7LNAT9c+_pVyfPA_XfhjSFCifDX3P9JNrbsF6-38Yh=1t69g@mail.gmail.com>
+References: <20220107171319.0afa619a@canb.auug.org.au>
+        <20220107172206.3fbdd09f@canb.auug.org.au>
+        <20220108171424.669e37d6@canb.auug.org.au>
+        <CAK7LNAT9c+_pVyfPA_XfhjSFCifDX3P9JNrbsF6-38Yh=1t69g@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/B/Qlgd0w8Jnk3=gT8vGFwXH";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Sat, Jan 8, 2022 at 3:14 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> On Fri, 7 Jan 2022 17:22:06 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >
-> > On Fri, 7 Jan 2022 17:13:19 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> > >
-> > > Since yesterday, my builds are taking much longer and it seems just
-> > > about everything is being rebuilt when there should be very little done.
-> > >
-> > > One example is after mergeing the clockevents tree, the diffstat looks
-> > > like this:
-> > >
-> > > $ git diff --stat HEAD^..
-> > >  .../devicetree/bindings/timer/cdns,ttc.yaml        |   3 +
-> > >  .../bindings/timer/mstar,msc313e-timer.yaml        |  46 ++++
-> > >  .../devicetree/bindings/timer/nxp,tpm-timer.yaml   |   6 +-
-> > >  .../devicetree/bindings/timer/renesas,ostm.yaml    |  20 +-
-> > >  .../bindings/timer/rockchip,rk-timer.yaml          |   1 -
-> > >  MAINTAINERS                                        |   1 +
-> > >  drivers/clocksource/Kconfig                        |  12 +-
-> > >  drivers/clocksource/Makefile                       |   1 +
-> > >  drivers/clocksource/exynos_mct.c                   |  52 +++--
-> > >  drivers/clocksource/renesas-ostm.c                 |  39 +++-
-> > >  drivers/clocksource/timer-imx-sysctr.c             |   6 +-
-> > >  drivers/clocksource/timer-msc313e.c                | 253 +++++++++++++++++++++
-> > >  drivers/clocksource/timer-pistachio.c              |   3 +-
-> > >  13 files changed, 411 insertions(+), 32 deletions(-)
-> > >
-> > > but my powerpc and arm builds rebuilt basically everything.
-> > >
-> > > This happens for a lot of merges - though some do not rebuild very much
-> > > at all.
-> > >
-> > > Any ideas about what changed yesterday?  (I directed this to the kbuild
-> > > tree maintainer since the kbuild tree was updated yesterday - though
-> > > that may be a coincidence).
-> >
-> > OK, it *may* have something to do with Kconfig file updates for example with this diffstat:
-> >
-> >  .../memory-controllers/synopsys,ddrc-ecc.yaml      |  1 +
-> >  drivers/edac/Kconfig                               |  2 +-
-> >  drivers/edac/amd64_edac.c                          | 36 ++++++++++++++-
-> >  drivers/edac/amd64_edac.h                          |  8 +++-
-> >  drivers/edac/edac_mc.c                             |  2 +
-> >  drivers/edac/sb_edac.c                             |  2 +-
-> >  drivers/edac/sifive_edac.c                         |  2 +-
-> >  drivers/edac/synopsys_edac.c                       | 52 ++++++++++++++++++----
-> >  drivers/ras/cec.c                                  |  2 +-
-> >  include/linux/edac.h                               |  6 +++
-> >  10 files changed, 98 insertions(+), 15 deletions(-)
-> >
-> > And only this Kconfig change:
-> >
-> > $ git diff HEAD^.. drivers/edac/Kconfig
-> > diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
-> > index 2fc4c3f91fd5..58ab63642e72 100644
-> > --- a/drivers/edac/Kconfig
-> > +++ b/drivers/edac/Kconfig
-> > @@ -484,7 +484,7 @@ config EDAC_ARMADA_XP
-> >
-> >  config EDAC_SYNOPSYS
-> >         tristate "Synopsys DDR Memory Controller"
-> > -       depends on ARCH_ZYNQ || ARCH_ZYNQMP
-> > +       depends on ARCH_ZYNQ || ARCH_ZYNQMP || ARCH_INTEL_SOCFPGA
-> >         help
-> >           Support for error detection and correction on the Synopsys DDR
-> >           memory controller.
-> >
-> > I noticed that the following files have changed (timestamp at least) in
-> > the object directory:
-> >
-> > -rw-r--r-- 1 sfr users    46271 Jan  7 17:09 ./include/config/auto.conf.cmd
-> > -rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/DEFAULT_TCP_CONG
-> > -rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/DEFAULT_INIT
-> > -rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/BUILD_SALT
-> > -rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/RTC_SYSTOHC_DEVICE
-> > -rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/EXTRA_TARGETS
-> > -rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/CC_IMPLICIT_FALLTHROUGH
-> > -rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/RTC_HCTOSYS_DEVICE
-> > -rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/EXTRA_FIRMWARE
-> > -rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/DEFAULT_HOSTNAME
-> > -rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/CC_VERSION_TEXT
-> > -rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/MODPROBE_PATH
-> > -rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/LOCALVERSION
-> > -rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/INITRAMFS_SOURCE
-> > -rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/FAT_DEFAULT_IOCHARSET
-> > -rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/CMDLINE
-> > -rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/NLS_DEFAULT
-> > -rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/MAGIC_SYSRQ_SERIAL_SEQUENCE
-> > -rw-r--r-- 1 sfr users        0 Jan  7 17:09 ./include/config/LSM
-> > -rw-r--r-- 1 sfr users    54294 Jan  7 17:09 ./include/generated/autoconf.h
-> > -rw-r--r-- 1 sfr users    39198 Jan  7 17:09 ./include/config/auto.conf
-> >
-> > then lots more is rebuilt.
->
-> Bisection points to commit
->
->   33c1957574b6 ("kbuild: do not quote string values in include/config/auto.conf")
->
-> from the kbuild tree and indeed if I revert commits
->
->   ec769168623b ("microblaze: use built-in function to get CPU_{MAJOR,MINOR,REV}")
->   98bb79d61f0c ("certs: move scripts/extract-cert to certs/")
->   33c1957574b6 ("kbuild: do not quote string values in include/config/auto.conf")
->
-> from the merge of the kbuild tree into linux-next (up to that point),
-> the problem goes away.
->
-> My test case is this:
->
-> $ rm -rf ../test
-> $ mkdir ../test
-> $ make ARCH=powerpc O=../test -s ppc64_defconfig
-> $ make ARCH=powerpc O=../test -j40 -O init/main.o
-> (edit drivers/edac/Kconfig as above)
-> $ make ARCH=powerpc O=../test -s ppc64_defconfig
-> $ make ARCH=powerpc O=../test -j40 -O init/main.o
->
-> In the good case, none of the files in ../test/include/config
-> representing CONFIG_ options are changed and init/main.o is not
-> rebuilt.  In the bad case some of the files above (in
-> ../test/include/config) are touched and init/main.o is rebuilt.
->
-> Please see if you can figure out what actually is wrong with
-> 33c1957574b6 or else remove those commits from the kbuild tree (or
-> revert them).  This extra rebuilding is adding about 7 hours to my day
-> :-(
+--Sig_/B/Qlgd0w8Jnk3=gT8vGFwXH
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi Masahiro,
 
-Sorry for the annoyance.
-As you noticed, this is a bug of 33c1957574b6.
+On Sat, 8 Jan 2022 19:46:12 +0900 Masahiro Yamada <masahiroy@kernel.org> wr=
+ote:
+>
+> I fixed it and updated linux-kbuild/for-next.
+>=20
+> Hopefully, it should be fine for monday's linux-next.
 
-I fixed it and updated linux-kbuild/for-next.
+Thanks, I look forward to it :-)
 
-Hopefully, it should be fine for monday's linux-next.
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/B/Qlgd0w8Jnk3=gT8vGFwXH
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
 
--- 
-Best Regards
-Masahiro Yamada
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHZdAUACgkQAVBC80lX
+0GwkGQf/UwgvhlgyGVV01ZdzmI1U1Si3Xgnz0ZRoTqRpiVk2yIjb+vrTVcnPduCi
+N7Hfto8exgFiUUjRTOqq0xKAZXrWx2fLZP6KI9FLBMyIQexuXpriPtW0vqWQ2AkJ
+4015BGHhZlhvtJgo6aSNqqqn63TnIFSpXJAZFweTdB/ghg+M2yK7HW/X6yQ5J+0e
+XT8Tm3buPQ8xZhHFr3to1sCaYyIyQYgb7eGXa6aVcB0hbo92LNyzMh3fxirsbjCv
+uOAshsHWVEv0dI8DONe9eM0YSIVAQgCTA/tT8Cf/k+ewcpqWBQaDE74sryeziKAJ
+tH2xVHDyghpCG2xg5uOZ6D7TCtQ6xA==
+=KbR/
+-----END PGP SIGNATURE-----
+
+--Sig_/B/Qlgd0w8Jnk3=gT8vGFwXH--

@@ -2,129 +2,105 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B81C488EA4
-	for <lists+linux-next@lfdr.de>; Mon, 10 Jan 2022 03:26:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60FB1488EA7
+	for <lists+linux-next@lfdr.de>; Mon, 10 Jan 2022 03:28:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235951AbiAJC0b (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 9 Jan 2022 21:26:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39194 "EHLO
+        id S236563AbiAJC2Z (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 9 Jan 2022 21:28:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236563AbiAJC0b (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 9 Jan 2022 21:26:31 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DA4BC06173F
-        for <linux-next@vger.kernel.org>; Sun,  9 Jan 2022 18:26:31 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id n16so10717935plc.2
-        for <linux-next@vger.kernel.org>; Sun, 09 Jan 2022 18:26:31 -0800 (PST)
+        with ESMTP id S237004AbiAJC2Y (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 9 Jan 2022 21:28:24 -0500
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B343C06173F;
+        Sun,  9 Jan 2022 18:28:24 -0800 (PST)
+Received: by mail-pg1-x52f.google.com with SMTP id v25so9938360pge.2;
+        Sun, 09 Jan 2022 18:28:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=cL5O9YY9L14UFsATxnw10xKMQgd1AM7SwLEr6dJwle4=;
-        b=MEt8wREyHnVykTuEQlLVW6giG0spADKtYd7cDSnZSYEBnYKDowXzfPVzj3a48BkaCG
-         K92bBlRYNLQKpWy3ihkqH7dk8B/qf2PzYHCcPytYwg/hrIpm4ozJlAOthmsyeMqHhI4z
-         blxej/78srdVnKjjALAgvIYeTbQf7csPRyb31Pdxb+i9nyH70t9w5ryV10KeUsTL9YOx
-         0Wf9PrszpMFVOK2dM2zMech/JJTIn6Z1URU+K/ALFFtqFT8Prqi9tIcVY7LR0hZdj/74
-         nWXVszfqz0nOo1dq0XrmAYbwXpPipvP8/K1S/3+mbozlps+BQG4AhlPlNdM3qwJM9Gm8
-         Zucg==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=Fhwafi9bQ+TDzwB2W2ndiRkZ9PEJnYw2z5PZNEdD7RE=;
+        b=ewqGyM5Or6tw7RubrPY8DI/4lX/ZCj/5O+ezsIkxL8PUlrTaCL4i6ebiApkkh3fqfJ
+         ipwl4QoWlZpb7/3BPNmPrX73yB16nIfGIYCDbgNSfVlRxqraiE663zNJYJ8Da2zgI9WH
+         N281w+t24Pr5DR2J60Lfn8ygHhYlPihqZWvIiZd5jkxyUezgxYL4MXKTwGrA2zyHAD2P
+         BAH4cItrDJztW7r4UitYyBGYX2+94QkqMrxA4JBa1f57oxE6Asu2/fALGRmE7xG5nutK
+         sNZkEVVCkwNAjebLqMukvMf5px9PB5jA9YCarURfblZcJXY4f4rkJ97+JX8Q74Z3Y06G
+         BjSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=cL5O9YY9L14UFsATxnw10xKMQgd1AM7SwLEr6dJwle4=;
-        b=a+WgOl4Qscf+9KxMksoOK/vfI4Vx8F6C2J86CdKZuLtsxgfcvity0l9QG0Yv9UClXt
-         cDidCZPHn7CL7oBRt6REREQMqA+OVlaX1YRvd32BzTaAbwW/6tAJXds+OTR8Z3rjpxwT
-         HLmkxIb+OThcX9wVxycP0AEKBj8Ljcc0qLFidzVr31nYmXSQ5hcTBk0/DqGGVcJs/958
-         2UBU8INOzMEGtKznVOlJe1kx+UUHYvwOGouQ0ynzg5L/uEwliS/+usL8VUeJQdfD6Jc5
-         srg6yXv2sJQG+/HbfxzCwc7lP34Ah2nuUvOaX0s5Vgi5pNydSzs1BhLHtpEa//PBgpHu
-         gZyw==
-X-Gm-Message-State: AOAM533a5tOtcnkSvyWKaCLnMVXn0FQ8+eLMCWLSzo/mXKLgRLcBKB1G
-        YrLsorNOwsZ3A+FcpxpeEN6esKr3U9RzuPsj
-X-Google-Smtp-Source: ABdhPJzea/7jzkkh6ABeotyNqg9A27xNWtvMfRXjS3niM10FwhcA/w3UljZFQtx4yi9d+jAe/jT0MA==
-X-Received: by 2002:a17:90b:a0f:: with SMTP id gg15mr28149428pjb.8.1641781590469;
-        Sun, 09 Jan 2022 18:26:30 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id x4sm4057931pjn.56.2022.01.09.18.26.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Jan 2022 18:26:30 -0800 (PST)
-Message-ID: <61db9956.1c69fb81.e68f4.c3cc@mx.google.com>
-Date:   Sun, 09 Jan 2022 18:26:30 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=Fhwafi9bQ+TDzwB2W2ndiRkZ9PEJnYw2z5PZNEdD7RE=;
+        b=j5Vi1iLfjbRIwyliXisskV7/gM7aqg/+wEL5flpu3oX0LRfkSGb/jlNxSjMx8xucd5
+         pcae09eEqOzlmqf1lCxU2J2cxwV5U/+GvRc6GQ3IcQcgy8GShMWDzUqc1x9EVeazbJew
+         PB+4VW1gp4uechQSex+2LGXLXIJwZtssSoeVD35iJRuClfLz9kVXCDP1xtGSKCSnTc8K
+         1btQIdZ2oCdZglrEHVIIVvKOwFwWLZcbEIU4UmNWXb3YCu8tgzveTbIYUcG47WGokJTn
+         P3PbIlBnbUmIoDsgAfZxXSpjqf/UnTeVOcLymbRJl63phF+P8QjoNurq/ClX3BQKQvow
+         pTLA==
+X-Gm-Message-State: AOAM531KWyDiZz5I7yIafutTveVSUv5RACihmeT1hxZxex2jYU0pAd58
+        4lNMP1Pa//46WkLILjm33W0=
+X-Google-Smtp-Source: ABdhPJzyt+qrQJqjvogHkAyHikJf20I4GUCSQWuNJiQ5FZBAJmzqEkNuYrNN0QH6FeJdmQFnE7Yq/Q==
+X-Received: by 2002:a05:6a00:2484:b0:4bf:328f:3f07 with SMTP id c4-20020a056a00248400b004bf328f3f07mr442655pfv.86.1641781703766;
+        Sun, 09 Jan 2022 18:28:23 -0800 (PST)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id w5sm4734941pfu.214.2022.01.09.18.28.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 09 Jan 2022 18:28:23 -0800 (PST)
+Message-ID: <935a60a0-4197-54a1-8365-08556779e8f3@gmail.com>
+Date:   Mon, 10 Jan 2022 10:28:12 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: v5.16-rc8-185-gf94a706f394a
-X-Kernelci-Branch: pending-fixes
-Subject: next/pending-fixes baseline: 491 runs,
- 1 regressions (v5.16-rc8-185-gf94a706f394a)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.1
+Subject: Re: linux-next: manual merge of the kvm tree with the tip tree
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Like Xu <like.xu@linux.intel.com>, Like Xu <likexu@tencent.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Zhu Lingshan <lingshan.zhu@intel.com>,
+        KVM <kvm@vger.kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+References: <20220110131642.75375b09@canb.auug.org.au>
+From:   Like Xu <like.xu.linux@gmail.com>
+Organization: Tencent
+In-Reply-To: <20220110131642.75375b09@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes baseline: 491 runs, 1 regressions (v5.16-rc8-185-gf94a70=
-6f394a)
+On 10/1/2022 10:16 am, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the kvm tree got a conflict in:
+> 
+>    arch/x86/kvm/pmu.c
+> 
+> between commits:
+> 
+>    b9f5621c9547 ("perf/core: Rework guest callbacks to prepare for static_call support")
+>    73cd107b9685 ("KVM: x86: Drop current_vcpu for kvm_running_vcpu + kvm_arch_vcpu variable")
+> 
+> from the tip tree and commit:
+> 
+>    40ccb96d5483 ("KVM: x86/pmu: Add pmc->intr to refactor kvm_perf_overflow{_intr}()")
+> 
+> from the kvm tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+> 
 
-Regressions Summary
--------------------
-
-platform        | arch | lab           | compiler | defconfig              =
-      | regressions
-----------------+------+---------------+----------+------------------------=
-------+------------
-bcm2836-rpi-2-b | arm  | lab-collabora | gcc-10   | multi_v7_defc...MB2_KER=
-NEL=3Dy | 1          =
-
-
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v5.16-rc8-185-gf94a706f394a/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v5.16-rc8-185-gf94a706f394a
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      f94a706f394ab9fc1852538946c9887f2aa08bf3 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform        | arch | lab           | compiler | defconfig              =
-      | regressions
-----------------+------+---------------+----------+------------------------=
-------+------------
-bcm2836-rpi-2-b | arm  | lab-collabora | gcc-10   | multi_v7_defc...MB2_KER=
-NEL=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/61db5e64c4a1ce04b2ef673d
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.16-rc8-1=
-85-gf94a706f394a/arm/multi_v7_defconfig+config_thumb2_kernel=3Dy/gcc-10/lab=
--collabora/baseline-bcm2836-rpi-2-b.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.16-rc8-1=
-85-gf94a706f394a/arm/multi_v7_defconfig+config_thumb2_kernel=3Dy/gcc-10/lab=
--collabora/baseline-bcm2836-rpi-2-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20211210.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/61db5e64c4a1ce04b2ef6=
-73e
-        failing since 60 days (last pass: v5.15-rc7-176-gbfbd58926fc5, firs=
-t fail: v5.15-12053-g6f9f2ed9499c) =
-
- =20
+The fix looks good to me. Thank you and please move on.

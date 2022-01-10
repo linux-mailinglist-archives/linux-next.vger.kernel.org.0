@@ -2,105 +2,132 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60FB1488EA7
-	for <lists+linux-next@lfdr.de>; Mon, 10 Jan 2022 03:28:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3EB1488EB9
+	for <lists+linux-next@lfdr.de>; Mon, 10 Jan 2022 03:44:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236563AbiAJC2Z (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 9 Jan 2022 21:28:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39600 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237004AbiAJC2Y (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 9 Jan 2022 21:28:24 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B343C06173F;
-        Sun,  9 Jan 2022 18:28:24 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id v25so9938360pge.2;
-        Sun, 09 Jan 2022 18:28:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=Fhwafi9bQ+TDzwB2W2ndiRkZ9PEJnYw2z5PZNEdD7RE=;
-        b=ewqGyM5Or6tw7RubrPY8DI/4lX/ZCj/5O+ezsIkxL8PUlrTaCL4i6ebiApkkh3fqfJ
-         ipwl4QoWlZpb7/3BPNmPrX73yB16nIfGIYCDbgNSfVlRxqraiE663zNJYJ8Da2zgI9WH
-         N281w+t24Pr5DR2J60Lfn8ygHhYlPihqZWvIiZd5jkxyUezgxYL4MXKTwGrA2zyHAD2P
-         BAH4cItrDJztW7r4UitYyBGYX2+94QkqMrxA4JBa1f57oxE6Asu2/fALGRmE7xG5nutK
-         sNZkEVVCkwNAjebLqMukvMf5px9PB5jA9YCarURfblZcJXY4f4rkJ97+JX8Q74Z3Y06G
-         BjSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=Fhwafi9bQ+TDzwB2W2ndiRkZ9PEJnYw2z5PZNEdD7RE=;
-        b=j5Vi1iLfjbRIwyliXisskV7/gM7aqg/+wEL5flpu3oX0LRfkSGb/jlNxSjMx8xucd5
-         pcae09eEqOzlmqf1lCxU2J2cxwV5U/+GvRc6GQ3IcQcgy8GShMWDzUqc1x9EVeazbJew
-         PB+4VW1gp4uechQSex+2LGXLXIJwZtssSoeVD35iJRuClfLz9kVXCDP1xtGSKCSnTc8K
-         1btQIdZ2oCdZglrEHVIIVvKOwFwWLZcbEIU4UmNWXb3YCu8tgzveTbIYUcG47WGokJTn
-         P3PbIlBnbUmIoDsgAfZxXSpjqf/UnTeVOcLymbRJl63phF+P8QjoNurq/ClX3BQKQvow
-         pTLA==
-X-Gm-Message-State: AOAM531KWyDiZz5I7yIafutTveVSUv5RACihmeT1hxZxex2jYU0pAd58
-        4lNMP1Pa//46WkLILjm33W0=
-X-Google-Smtp-Source: ABdhPJzyt+qrQJqjvogHkAyHikJf20I4GUCSQWuNJiQ5FZBAJmzqEkNuYrNN0QH6FeJdmQFnE7Yq/Q==
-X-Received: by 2002:a05:6a00:2484:b0:4bf:328f:3f07 with SMTP id c4-20020a056a00248400b004bf328f3f07mr442655pfv.86.1641781703766;
-        Sun, 09 Jan 2022 18:28:23 -0800 (PST)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id w5sm4734941pfu.214.2022.01.09.18.28.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 09 Jan 2022 18:28:23 -0800 (PST)
-Message-ID: <935a60a0-4197-54a1-8365-08556779e8f3@gmail.com>
-Date:   Mon, 10 Jan 2022 10:28:12 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.1
-Subject: Re: linux-next: manual merge of the kvm tree with the tip tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Like Xu <like.xu@linux.intel.com>, Like Xu <likexu@tencent.com>,
+        id S238229AbiAJCol (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 9 Jan 2022 21:44:41 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:44253 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238230AbiAJCoh (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 9 Jan 2022 21:44:37 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JXJ7k6BqJz4xQp;
+        Mon, 10 Jan 2022 13:44:34 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1641782675;
+        bh=X9gEiAgzNEMkBxdg3FPLWb38MZXFN7WEk+znYiiyWQE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=uQoa2BqhvKG8OFF9pMYwCWYkCpBn5eUSxYdcY9jPSurb+KIjw875a2tpGgct7olia
+         IVZeVPbxr3l5uKgdd9MKRZBrEw3WaYIYXi5LPars0sll5CeV4kOo+bQCFYsLJX3J2n
+         ZXmKoR6XeETfB280HUg2cmIErUli5xs1zT1Loq8L4+vSrSK+R70q7Yi3B8ZCPY9tYY
+         4HbSDy3w+bgRB2FMHqVFCR+6MxyHBcgUNqavyGknQAOjSvahK7sml2ZbWtIYZrQG/Q
+         k/dSEvqD/EBNOC8su1KKvyR5dyqzhf0RM8oS2LMuYYipU+mRY/HSmgbXJzlXYA2VkO
+         kOuGnuJ9rok6g==
+Date:   Mon, 10 Jan 2022 13:44:34 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Denis Pauk <pauk.denis@gmail.com>,
+        Ed Brindley <kernel@maidavale.org>,
+        Eugene Shalygin <eugene.shalygin@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Zhu Lingshan <lingshan.zhu@intel.com>,
-        KVM <kvm@vger.kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-References: <20220110131642.75375b09@canb.auug.org.au>
-From:   Like Xu <like.xu.linux@gmail.com>
-Organization: Tencent
-In-Reply-To: <20220110131642.75375b09@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the drivers-x86 tree with the
+ hwmon-staging tree
+Message-ID: <20220110134434.675f608f@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/8z7SpmqSvj.DMk0NhBXkQgO";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 10/1/2022 10:16 am, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the kvm tree got a conflict in:
-> 
->    arch/x86/kvm/pmu.c
-> 
-> between commits:
-> 
->    b9f5621c9547 ("perf/core: Rework guest callbacks to prepare for static_call support")
->    73cd107b9685 ("KVM: x86: Drop current_vcpu for kvm_running_vcpu + kvm_arch_vcpu variable")
-> 
-> from the tip tree and commit:
-> 
->    40ccb96d5483 ("KVM: x86/pmu: Add pmc->intr to refactor kvm_perf_overflow{_intr}()")
-> 
-> from the kvm tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-> 
+--Sig_/8z7SpmqSvj.DMk0NhBXkQgO
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-The fix looks good to me. Thank you and please move on.
+Hi all,
+
+Today's linux-next merge of the drivers-x86 tree got a conflict in:
+
+  MAINTAINERS
+
+between commits:
+
+  548820e21ce1 ("hwmon: (asus_wmi_sensors) Support X370 Asus WMI.")
+  b87611d43757 ("hwmon: (asus_wmi_ec_sensors) Support B550 Asus WMI.")
+
+from the hwmon-staging tree and commit:
+
+  0a6509b0926d ("platform/x86: Add Asus TF103C dock driver")
+
+from the drivers-x86 tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc MAINTAINERS
+index 41c43425f7f9,1dd2cbff0c6b..000000000000
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@@ -3017,20 -2988,13 +3017,27 @@@ W:	http://acpi4asus.sf.ne
+  F:	drivers/platform/x86/asus*.c
+  F:	drivers/platform/x86/eeepc*.c
+ =20
++ ASUS TF103C DOCK DRIVER
++ M:	Hans de Goede <hdegoede@redhat.com>
++ L:	platform-driver-x86@vger.kernel.org
++ S:	Maintained
++ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drive=
+rs-x86.git
++ F:	drivers/platform/x86/asus-tf103c-dock.c
++=20
+ +ASUS WMI HARDWARE MONITOR DRIVER
+ +M:	Ed Brindley <kernel@maidavale.org>
+ +M:	Denis Pauk <pauk.denis@gmail.com>
+ +L:	linux-hwmon@vger.kernel.org
+ +S:	Maintained
+ +F:	drivers/hwmon/asus_wmi_sensors.c
+ +
+ +ASUS WMI EC HARDWARE MONITOR DRIVER
+ +M:	Eugene Shalygin <eugene.shalygin@gmail.com>
+ +M:	Denis Pauk <pauk.denis@gmail.com>
+ +L:	linux-hwmon@vger.kernel.org
+ +S:	Maintained
+ +F:	drivers/hwmon/asus_wmi_ec_sensors.c
+ +
+  ASUS WIRELESS RADIO CONTROL DRIVER
+  M:	Jo=C3=A3o Paulo Rechi Vita <jprvita@gmail.com>
+  L:	platform-driver-x86@vger.kernel.org
+
+--Sig_/8z7SpmqSvj.DMk0NhBXkQgO
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHbnZIACgkQAVBC80lX
+0GxbxAf+PbO5RaLbpnZcPai4hNEF5GuBF9E9umNItHOtQPfWAzNIVersmnIV+hjX
+qvutukFid5VcE1jjiEOAq5jmdKKp7jhW4B4yy9ZmBOnrKzie2JygPeXjSNpNJ6W5
+5l3DFyquC98wJHog1vSeGwPsAP2YUTAWp56XayFyY4hiL3T9fe+4Ng6xzMQKkdl1
+dIRHFuOePdKXkb4UcuvmOQ2wGfRpMazuhz5pe2F1iMmbtXeJMan52atDTb5aqI18
+75mtERfy05XRFtRgxK0R/2XzKBTKBCLK4nefqjlUa/Sj4BHN/36vMiKsb/8MX7LF
+BX8oReP4WDd9/Vz8zEKGXKHFvKChbw==
+=/oOO
+-----END PGP SIGNATURE-----
+
+--Sig_/8z7SpmqSvj.DMk0NhBXkQgO--

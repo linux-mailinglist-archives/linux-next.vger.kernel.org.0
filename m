@@ -2,130 +2,178 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21AA3488DF6
-	for <lists+linux-next@lfdr.de>; Mon, 10 Jan 2022 02:12:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52BE4488E9B
+	for <lists+linux-next@lfdr.de>; Mon, 10 Jan 2022 03:16:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232694AbiAJBMN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 9 Jan 2022 20:12:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50960 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232660AbiAJBML (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 9 Jan 2022 20:12:11 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4326C06173F;
-        Sun,  9 Jan 2022 17:12:10 -0800 (PST)
+        id S238180AbiAJCQs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 9 Jan 2022 21:16:48 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:40119 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234152AbiAJCQr (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 9 Jan 2022 21:16:47 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JXG526KP9z4xdd;
-        Mon, 10 Jan 2022 12:12:06 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JXHWb5gCRz4xtf;
+        Mon, 10 Jan 2022 13:16:43 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1641777129;
-        bh=+EEgq+InNwGoZQSeDBe5vynY7rMJF9rZjCwUWpyr6T4=;
+        s=201702; t=1641781006;
+        bh=6+f18ZytRVV6ZaJN651JtsXZrQaqFJ8HTPPIaAtVkGI=;
         h=Date:From:To:Cc:Subject:From;
-        b=l5B80r/2NpiXiHcetH/5zPuh7AjPfLKKsHHMUjA4rLHElGlu1cWF2D6TlWPqcsxFI
-         gPEW2cFz4qIZ9165jA6MeP4p8SRL8gnTOpeH4NayuQMG65eSrMRswhTNN7Wa2iPjF7
-         y6yl33tfb03TD5E9cfV+u2uNg24D3E4AZHzTJT+8pIMDHM+5PvuRdupD72ls6QGftG
-         DcyZKWqudGwDB//ipJFgZqxVdKGEZL04lX8vp4bJ2EYLLesTVdgR2vy3bjsaI3SkPq
-         24B+R6i18LT5YIL+UUMIOF7FeqZWTwm7vk+FyEweNhcXcWLqtKt+FK3x+EahJ/gO5e
-         42ebDH9p51J+g==
-Date:   Mon, 10 Jan 2022 12:12:05 +1100
+        b=seJzmcEXPNZgKSMfYSq70ONkvm4sLqPw+0xeRCbbD/e286IrAz0FZmfGce0TR/cwy
+         n7wo6wnOKjzMMlsQoDDsE25oIAFSZqYrVbARitylvV+bLL8XCqSJXc/mi9tI9/Jz4H
+         z7uDkRY2kGeovu2NXVJNQ8kJzGz7lWMpk1rBTyIIABiIcJ7+a9g5sxJx6JtKvHulBu
+         oUCNQRRd1UFBThvQ0jCjZIN1ZLotJTSLCB8Ctvs7ljeDPqJ9zd+vqGxiN4Lr2f0uwB
+         Um36ul3M7VDtvWqNNvjOtrOXGWrsvZGo/Rwb4hTdlavQ9oPh5TTqcfNok1jAUTnYBC
+         sLpKkueEnVn9w==
+Date:   Mon, 10 Jan 2022 13:16:42 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>,
+To:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>,
         "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Like Xu <like.xu@linux.intel.com>, Like Xu <likexu@tencent.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Nitesh Narayan Lal <nitesh@redhat.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Shay Drory <shayd@nvidia.com>
-Subject: linux-next: manual merge of the tip tree with the net-next tree
-Message-ID: <20220110121205.1bf54032@canb.auug.org.au>
+        Sean Christopherson <seanjc@google.com>,
+        Zhu Lingshan <lingshan.zhu@intel.com>
+Subject: linux-next: manual merge of the kvm tree with the tip tree
+Message-ID: <20220110131642.75375b09@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/9G=xNMZ2T_tZk4A5hv9ic5b";
+Content-Type: multipart/signed; boundary="Sig_/_VVmxq40xsv17Zf05GUT0+I";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/9G=xNMZ2T_tZk4A5hv9ic5b
+--Sig_/_VVmxq40xsv17Zf05GUT0+I
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the tip tree got a conflict in:
+Today's linux-next merge of the kvm tree got a conflict in:
 
-  drivers/net/ethernet/mellanox/mlx5/core/pci_irq.c
+  arch/x86/kvm/pmu.c
 
-between commit:
+between commits:
 
-  5256a46bf538 ("net/mlx5: Introduce control IRQ request API")
-  30c6afa735db ("net/mlx5: Move affinity assignment into irq_request")
+  b9f5621c9547 ("perf/core: Rework guest callbacks to prepare for static_ca=
+ll support")
+  73cd107b9685 ("KVM: x86: Drop current_vcpu for kvm_running_vcpu + kvm_arc=
+h_vcpu variable")
 
-from the net-next tree and commits:
+from the tip tree and commit:
 
-  7451e9ea8e20 ("net/mlx5: Use irq_set_affinity_and_hint()")
-  0422fe2666ae ("Merge branch 'linus' into irq/core, to fix conflict")
+  40ccb96d5483 ("KVM: x86/pmu: Add pmc->intr to refactor kvm_perf_overflow{=
+_intr}()")
 
-from the tip tree.
+from the kvm tree.
 
-I fixed it up (I think, see below) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/net/ethernet/mellanox/mlx5/core/pci_irq.c
-index 90fec0649ef5,fd7a671eda33..000000000000
---- a/drivers/net/ethernet/mellanox/mlx5/core/pci_irq.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/pci_irq.c
-@@@ -236,10 -244,6 +236,10 @@@ struct mlx5_irq *mlx5_irq_alloc(struct=20
-  		err =3D -ENOMEM;
-  		goto err_cpumask;
-  	}
- +	if (affinity) {
- +		cpumask_copy(irq->mask, affinity);
-- 		irq_set_affinity_hint(irq->irqn, irq->mask);
-++		irq_set_affinity_and_hint(irq->irqn, irq->mask);
- +	}
-  	irq->pool =3D pool;
-  	irq->refcount =3D 1;
-  	irq->index =3D i;
-@@@ -251,7 -255,6 +251,7 @@@
-  	}
-  	return irq;
-  err_xa:
-- 	irq_set_affinity_hint(irq->irqn, NULL);
-++	irq_set_affinity_and_hint(irq->irqn, NULL);
-  	free_cpumask_var(irq->mask);
-  err_cpumask:
-  	free_irq(irq->irqn, &irq->nh);
+diff --cc arch/x86/kvm/pmu.c
+index 0c2133eb4cf6,8abdadb7e22a..000000000000
+--- a/arch/x86/kvm/pmu.c
++++ b/arch/x86/kvm/pmu.c
+@@@ -55,43 -55,41 +55,41 @@@ static void kvm_pmi_trigger_fn(struct i
+  	kvm_pmu_deliver_pmi(vcpu);
+  }
+ =20
+- static void kvm_perf_overflow(struct perf_event *perf_event,
+- 			      struct perf_sample_data *data,
+- 			      struct pt_regs *regs)
++ static inline void __kvm_perf_overflow(struct kvm_pmc *pmc, bool in_pmi)
+  {
+- 	struct kvm_pmc *pmc =3D perf_event->overflow_handler_context;
+  	struct kvm_pmu *pmu =3D pmc_to_pmu(pmc);
+ =20
+- 	if (!test_and_set_bit(pmc->idx, pmu->reprogram_pmi)) {
+- 		__set_bit(pmc->idx, (unsigned long *)&pmu->global_status);
+- 		kvm_make_request(KVM_REQ_PMU, pmc->vcpu);
+- 	}
++ 	/* Ignore counters that have been reprogrammed already. */
++ 	if (test_and_set_bit(pmc->idx, pmu->reprogram_pmi))
++ 		return;
++=20
++ 	__set_bit(pmc->idx, (unsigned long *)&pmu->global_status);
++ 	kvm_make_request(KVM_REQ_PMU, pmc->vcpu);
++=20
++ 	if (!pmc->intr)
++ 		return;
++=20
++ 	/*
++ 	 * Inject PMI. If vcpu was in a guest mode during NMI PMI
++ 	 * can be ejected on a guest mode re-entry. Otherwise we can't
++ 	 * be sure that vcpu wasn't executing hlt instruction at the
++ 	 * time of vmexit and is not going to re-enter guest mode until
++ 	 * woken up. So we should wake it, but this is impossible from
++ 	 * NMI context. Do it from irq work instead.
++ 	 */
+ -	if (in_pmi && !kvm_is_in_guest())
+++	if (in_pmi && !kvm_handling_nmi_from_guest(pmc->vcpu))
++ 		irq_work_queue(&pmc_to_pmu(pmc)->irq_work);
++ 	else
++ 		kvm_make_request(KVM_REQ_PMI, pmc->vcpu);
+  }
+ =20
+- static void kvm_perf_overflow_intr(struct perf_event *perf_event,
+- 				   struct perf_sample_data *data,
+- 				   struct pt_regs *regs)
++ static void kvm_perf_overflow(struct perf_event *perf_event,
++ 			      struct perf_sample_data *data,
++ 			      struct pt_regs *regs)
+  {
+  	struct kvm_pmc *pmc =3D perf_event->overflow_handler_context;
+- 	struct kvm_pmu *pmu =3D pmc_to_pmu(pmc);
+-=20
+- 	if (!test_and_set_bit(pmc->idx, pmu->reprogram_pmi)) {
+- 		__set_bit(pmc->idx, (unsigned long *)&pmu->global_status);
+- 		kvm_make_request(KVM_REQ_PMU, pmc->vcpu);
+ =20
+- 		/*
+- 		 * Inject PMI. If vcpu was in a guest mode during NMI PMI
+- 		 * can be ejected on a guest mode re-entry. Otherwise we can't
+- 		 * be sure that vcpu wasn't executing hlt instruction at the
+- 		 * time of vmexit and is not going to re-enter guest mode until
+- 		 * woken up. So we should wake it, but this is impossible from
+- 		 * NMI context. Do it from irq work instead.
+- 		 */
+- 		if (!kvm_handling_nmi_from_guest(pmc->vcpu))
+- 			irq_work_queue(&pmc_to_pmu(pmc)->irq_work);
+- 		else
+- 			kvm_make_request(KVM_REQ_PMI, pmc->vcpu);
+- 	}
++ 	__kvm_perf_overflow(pmc, true);
+  }
+ =20
+  static void pmc_reprogram_counter(struct kvm_pmc *pmc, u32 type,
 
---Sig_/9G=xNMZ2T_tZk4A5hv9ic5b
+--Sig_/_VVmxq40xsv17Zf05GUT0+I
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHbh+UACgkQAVBC80lX
-0GzbOQf/fmez3TTY/hreb4bHbcNvGU91IBdl68jHtumY0ZbiDNBs2Q9aCWDBq1b9
-NZBJzF1k7qW77L4efAkhwRxzJHmIlxqPTVJezmBA75OvwrKiDqll53nQiAvvlxA+
-v3f0HbzxAAVZhHYYDdYwAsJN0Zy+4CWPMM+fcRw6Pvu2y0UzzdaOY5W8/lIVQ9li
-lpMGUTdVuv74cr/E+otx9YOUYDJPPpp2iVh7LKbVjT8ohDJT8ZYHstHTY6jJSlYm
-fPqfI2Ipkf+SLYzcemwyH1TjTxkVIho5jRI7bLuZdZrDF+C1x0AimXqjGTyEKhqp
-+muNUnZdRL3y638+tRXNO6hoF5EeTw==
-=feda
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHblwoACgkQAVBC80lX
+0GxGqAf/S5/gwpIWoyOwbSmC0GOiMlOh/aJrlngCftQFNBVJVjjNWqMG4qCTKcFB
+c5dUhqFc9QQUc/95bW7Z2V0zvgElnTBQp/yEVepVR9Jna2GqK1tMK+/AG8qJfNa3
+ht1Ply8p/UDEStcN3vXIFLJSKPDlslrFC59oeoQ0yoZjQpAIrxinydZEFu4iFGja
+fM+67wkDnTDWKG/tLRbn5YAdjplA91mgOI0JOxTSxuphLzUOBU65BkM+IBGxYm/R
+XlhKSBlNRBJ1x+Wh3qehl3MTfYNS3kKXyxPXistYop8qvBbxbFa59CMP0jn5bBzU
+SjY2KDrLFhTgebw4zyE8VuJjA9YXiQ==
+=Hkz0
 -----END PGP SIGNATURE-----
 
---Sig_/9G=xNMZ2T_tZk4A5hv9ic5b--
+--Sig_/_VVmxq40xsv17Zf05GUT0+I--

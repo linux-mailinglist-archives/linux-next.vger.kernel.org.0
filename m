@@ -2,145 +2,215 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E58748BA61
-	for <lists+linux-next@lfdr.de>; Tue, 11 Jan 2022 23:01:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B97548BB42
+	for <lists+linux-next@lfdr.de>; Wed, 12 Jan 2022 00:09:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238155AbiAKWBd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 11 Jan 2022 17:01:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50570 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343842AbiAKWB3 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 11 Jan 2022 17:01:29 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33F56C06173F;
-        Tue, 11 Jan 2022 14:01:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S244879AbiAKXJT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 11 Jan 2022 18:09:19 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:54739 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346739AbiAKXJS (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 11 Jan 2022 18:09:18 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 09133CE1BAF;
-        Tue, 11 Jan 2022 22:01:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32B65C36AE9;
-        Tue, 11 Jan 2022 22:01:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641938485;
-        bh=9lyo4a7wsSQoH9aAqy6csVZ0oeEb5XrusjosDq6bNi4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=egNfDjOvv46AdQ2B6ud2WT6mVIGPjavhSHH2PHK3HKIuE3aXsdg/GvBRDo5aALxka
-         escHHXylha6bDTT+aXPk0zU5ZeMF+cCnVR2mr7j+VllKY5KMOTr7PT6XAWLiFfEd7L
-         a3wgwPjM38ls+9dT0xcUJH+0sItn04wO7cr/RD4zj4UE2Wswy0PvGYlhlDt2PEWLCt
-         8C60co6m2EShIUQmgCkbNqCcO/RCSDR/ppwtmwKb810UvE2LBAXTBuMpw1yZNz9uIr
-         8HXQMl+aKlK9McFSuvr9BCzg2ELyww4xBTThCqczVXzDG3jFpdzYP1ba7W7wieSA2i
-         RBxvXUO41Xi2A==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 2675940714; Tue, 11 Jan 2022 19:01:23 -0300 (-03)
-Date:   Tue, 11 Jan 2022 19:01:23 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        kajoljain <kjain@linux.ibm.com>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JYRGM713Wz4y41;
+        Wed, 12 Jan 2022 10:09:15 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1641942556;
+        bh=08NokgJc73R+NC0VqWdeZC2r+IFiHVxfrx3GJGjwno8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=RKIHenyqpTWsoks/OpkzuERZSVhUjCLDg3xmG3aGR2ntnltVFvQP6GoR1jrS1cuwz
+         rgebBwr7kOguO3ZBMU6br/FMNRO5FSKKtZEdEbgdSepIseyrpm19c1JPZNXMYJB1zn
+         Geqsv6ANg/nTvUwivVnmA+9vfaeA0NYS07fwdWP+f+/gfcojJU8VY7ICkKHUnmeSkQ
+         dA7wWPSnfeD8+koY4LzYN9NrKsHgKj1OMk8tSsHuJIuHgB6XpYulfs5fpyEQ7fxoe0
+         6/f73ZjAnwquAg4OvVMzvP3g8V39sig1THZUN47tK/kwEDGLDCgUZGCROcfwuaITgy
+         liH391Gy9+BHQ==
+Date:   Wed, 12 Jan 2022 10:09:14 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Alex Deucher <alexander.deucher@amd.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the perf tree
-Message-ID: <Yd3+M+efH6bTEpP9@kernel.org>
-References: <20220106091921.3fa617bc@canb.auug.org.au>
- <6623bc13-d99c-74c1-29c8-b4ae7a570d99@linux.ibm.com>
- <20220112084553.2aa71f08@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Wenjing Liu <wenjing.liu@amd.com>
+Subject: linux-next: manual merge of the amdgpu tree with Linus' tree
+Message-ID: <20220112100914.4354b1b3@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220112084553.2aa71f08@canb.auug.org.au>
-X-Url:  http://acmel.wordpress.com
+Content-Type: multipart/signed; boundary="Sig_/fDpdK7j5YvSYin7AlwdO6JA";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Em Wed, Jan 12, 2022 at 08:45:53AM +1100, Stephen Rothwell escreveu:
-> Hi all,
-> 
-> On Fri, 7 Jan 2022 14:28:37 +0530 kajoljain <kjain@linux.ibm.com> wrote:
-> >
-> > On 1/6/22 3:49 AM, Stephen Rothwell wrote:
-> > > 
-> > > After merging the perf tree, today's linux-next build (powerpc
-> > > ppc64_defconfig) failed like this:
-> > > 
-> > > In file included from include/linux/perf_event.h:17,
-> > >                  from arch/powerpc/perf/isa207-common.h:12,
-> > >                  from arch/powerpc/perf/isa207-common.c:9:
-> > > arch/powerpc/perf/isa207-common.c: In function 'isa207_find_source':
-> > > include/uapi/linux/perf_event.h:1339:11: error: 'PERF_MEM_HOPS_2' undeclared (first use in this function); did you mean 'PERF_MEM_HOPS_0'?
-> > >  1339 |  (((__u64)PERF_MEM_##a##_##s) << PERF_MEM_##a##_SHIFT)
-> > >       |           ^~~~~~~~~
-> > > arch/powerpc/perf/isa207-common.h:273:20: note: in expansion of macro 'PERF_MEM_S'
-> > >   273 | #define P(a, b)    PERF_MEM_S(a, b)
-> > >       |                    ^~~~~~~~~~
-> > > arch/powerpc/perf/isa207-common.c:240:51: note: in expansion of macro 'P'
-> > >   240 |     ret |= PH(LVL, REM_RAM1) | REM | LEVEL(RAM) | P(HOPS, 2);
-> > >       |                                                   ^
-> > > include/uapi/linux/perf_event.h:1339:11: note: each undeclared identifier is reported only once for each function it appears in
-> > >  1339 |  (((__u64)PERF_MEM_##a##_##s) << PERF_MEM_##a##_SHIFT)
-> > >       |           ^~~~~~~~~
-> > > arch/powerpc/perf/isa207-common.h:273:20: note: in expansion of macro 'PERF_MEM_S'
-> > >   273 | #define P(a, b)    PERF_MEM_S(a, b)
-> > >       |                    ^~~~~~~~~~
-> > > arch/powerpc/perf/isa207-common.c:240:51: note: in expansion of macro 'P'
-> > >   240 |     ret |= PH(LVL, REM_RAM1) | REM | LEVEL(RAM) | P(HOPS, 2);
-> > >       |                                                   ^
-> > > include/uapi/linux/perf_event.h:1339:11: error: 'PERF_MEM_HOPS_3' undeclared (first use in this function); did you mean 'PERF_MEM_HOPS_0'?
-> > >  1339 |  (((__u64)PERF_MEM_##a##_##s) << PERF_MEM_##a##_SHIFT)
-> > >       |           ^~~~~~~~~
-> > > arch/powerpc/perf/isa207-common.h:273:20: note: in expansion of macro 'PERF_MEM_S'
-> > >   273 | #define P(a, b)    PERF_MEM_S(a, b)
-> > >       |                    ^~~~~~~~~~
-> > > arch/powerpc/perf/isa207-common.c:244:51: note: in expansion of macro 'P'
-> > >   244 |     ret |= PH(LVL, REM_RAM2) | REM | LEVEL(RAM) | P(HOPS, 3);
-> > >       |                                                   ^
-> > > 
-> > > Caused by commit
-> > > 
-> > >   af2b24f228a0 ("perf powerpc: Add data source encodings for power10 platform")
-> > > 
-> > > It looks like patch 1/4 of this series is missing ...  
-> > 
-> > Hi Stephen,
-> >      Yes you are right, original patch series contain 4 patches, where
-> > 1/4 patch contain kernel side changes for the same. Hence we are getting
-> > this error, as that patch is missing in the Arnaldo tree.
-> > 
-> > Link to the patchset: https://lkml.org/lkml/2021/12/6/143
-> > 
-> > That kernel side patch is taken by Michael Ellermen via powerpc git.
-> > 
-> > Link to the patchset on powerpc/next:
-> > 
-> > [1/4] perf: Add new macros for mem_hops field
-> > https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/commit/?id=cb1c4aba055f928ffae0c868e8dfe08eeab302e7
-> > 
-> > 
-> > [3/4] powerpc/perf: Add encodings to represent data based on newer
-> > composite PERF_MEM_LVLNUM* fields
-> >  https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/commit/?id=4a20ee106154ac1765dea97932faad29f0ba57fc
-> > 
-> > [4/4] powerpc/perf: Add data source encodings for power10 platform
-> > https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/commit/?id=6ed05a8efda56e5be11081954929421de19cce88
-> > 
-> > Thanks,
-> > Kajol Jain
-> > 
-> > > 
-> > > I have used the perf tree from next-20220105 for today.
-> > >   
-> 
-> I am still getting this build failure.
+--Sig_/fDpdK7j5YvSYin7AlwdO6JA
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Yeah, this patch shouldn't have been merged thru the perf _tools_ tree,
-my bad, it should have gone thru Michael PPC kernel tree.
+Hi all,
 
-It was a single series mixing up tools/ with kernel bits, I thought I
-had picked just the tools part but made a mistake.
+Today's linux-next merge of the amdgpu tree got conflicts in:
 
-This should get resolved when the rest of the kernel bits go via
-Michael's powerpc tree, right?
+  drivers/gpu/drm/amd/display/dc/core/dc_resource.c
+  drivers/gpu/drm/amd/display/dc/inc/resource.h
 
-- Arnaldo
+between commit:
+
+  75b950ef6166 ("Revert "drm/amd/display: Fix for otg synchronization logic=
+"")
+
+from Linus' tree and commit:
+
+  580013b2cef8 ("drm/amd/display: unhard code link to phy idx mapping in dc=
+ link and clean up")
+
+from the amdgpu tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/gpu/drm/amd/display/dc/core/dc_resource.c
+index de5c7d1e0267,b3912ff9dc91..000000000000
+--- a/drivers/gpu/drm/amd/display/dc/core/dc_resource.c
++++ b/drivers/gpu/drm/amd/display/dc/core/dc_resource.c
+@@@ -3216,3 -3216,90 +3216,36 @@@ struct hpo_dp_link_encoder *resource_ge
+  	return hpo_dp_link_enc;
+  }
+  #endif
++=20
+ -void reset_syncd_pipes_from_disabled_pipes(struct dc *dc,
+ -		struct dc_state *context)
+ -{
+ -	int i, j;
+ -	struct pipe_ctx *pipe_ctx_old, *pipe_ctx, *pipe_ctx_syncd;
+ -
+ -	/* If pipe backend is reset, need to reset pipe syncd status */
+ -	for (i =3D 0; i < dc->res_pool->pipe_count; i++) {
+ -		pipe_ctx_old =3D	&dc->current_state->res_ctx.pipe_ctx[i];
+ -		pipe_ctx =3D &context->res_ctx.pipe_ctx[i];
+ -
+ -		if (!pipe_ctx_old->stream)
+ -			continue;
+ -
+ -		if (pipe_ctx_old->top_pipe || pipe_ctx_old->prev_odm_pipe)
+ -			continue;
+ -
+ -		if (!pipe_ctx->stream ||
+ -				pipe_need_reprogram(pipe_ctx_old, pipe_ctx)) {
+ -
+ -			/* Reset all the syncd pipes from the disabled pipe */
+ -			for (j =3D 0; j < dc->res_pool->pipe_count; j++) {
+ -				pipe_ctx_syncd =3D &context->res_ctx.pipe_ctx[j];
+ -				if ((GET_PIPE_SYNCD_FROM_PIPE(pipe_ctx_syncd) =3D=3D pipe_ctx_old->pi=
+pe_idx) ||
+ -					!IS_PIPE_SYNCD_VALID(pipe_ctx_syncd))
+ -					SET_PIPE_SYNCD_TO_PIPE(pipe_ctx_syncd, j);
+ -			}
+ -		}
+ -	}
+ -}
+ -
+ -void check_syncd_pipes_for_disabled_master_pipe(struct dc *dc,
+ -	struct dc_state *context,
+ -	uint8_t disabled_master_pipe_idx)
+ -{
+ -	int i;
+ -	struct pipe_ctx *pipe_ctx, *pipe_ctx_check;
+ -
+ -	pipe_ctx =3D &context->res_ctx.pipe_ctx[disabled_master_pipe_idx];
+ -	if ((GET_PIPE_SYNCD_FROM_PIPE(pipe_ctx) !=3D disabled_master_pipe_idx) ||
+ -		!IS_PIPE_SYNCD_VALID(pipe_ctx))
+ -		SET_PIPE_SYNCD_TO_PIPE(pipe_ctx, disabled_master_pipe_idx);
+ -
+ -	/* for the pipe disabled, check if any slave pipe exists and assert */
+ -	for (i =3D 0; i < dc->res_pool->pipe_count; i++) {
+ -		pipe_ctx_check =3D &context->res_ctx.pipe_ctx[i];
+ -
+ -		if ((GET_PIPE_SYNCD_FROM_PIPE(pipe_ctx_check) =3D=3D disabled_master_pi=
+pe_idx) &&
+ -			IS_PIPE_SYNCD_VALID(pipe_ctx_check) && (i !=3D disabled_master_pipe_id=
+x))
+ -			DC_ERR("DC: Failure: pipe_idx[%d] syncd with disabled master pipe_idx[=
+%d]\n",
+ -				i, disabled_master_pipe_idx);
+ -	}
+ -}
+ -
++ uint8_t resource_transmitter_to_phy_idx(const struct dc *dc, enum transmi=
+tter transmitter)
++ {
++ 	/* TODO - get transmitter to phy idx mapping from DMUB */
++ 	uint8_t phy_idx =3D transmitter - TRANSMITTER_UNIPHY_A;
++=20
++ #if defined(CONFIG_DRM_AMD_DC_DCN)
++ 	if (dc->ctx->dce_version =3D=3D DCN_VERSION_3_1 &&
++ 			dc->ctx->asic_id.hw_internal_rev =3D=3D YELLOW_CARP_B0) {
++ 		switch (transmitter) {
++ 		case TRANSMITTER_UNIPHY_A:
++ 			phy_idx =3D 0;
++ 			break;
++ 		case TRANSMITTER_UNIPHY_B:
++ 			phy_idx =3D 1;
++ 			break;
++ 		case TRANSMITTER_UNIPHY_C:
++ 			phy_idx =3D 5;
++ 			break;
++ 		case TRANSMITTER_UNIPHY_D:
++ 			phy_idx =3D 6;
++ 			break;
++ 		case TRANSMITTER_UNIPHY_E:
++ 			phy_idx =3D 4;
++ 			break;
++ 		default:
++ 			phy_idx =3D 0;
++ 			break;
++ 		}
++ 	}
++ #endif
++ 	return phy_idx;
++ }
+diff --cc drivers/gpu/drm/amd/display/dc/inc/resource.h
+index e589cbe67307,028180f58f71..000000000000
+--- a/drivers/gpu/drm/amd/display/dc/inc/resource.h
++++ b/drivers/gpu/drm/amd/display/dc/inc/resource.h
+@@@ -208,4 -212,12 +208,6 @@@ struct hpo_dp_link_encoder *resource_ge
+  		const struct dc_link *link);
+  #endif
+ =20
+ -void reset_syncd_pipes_from_disabled_pipes(struct dc *dc,
+ -	struct dc_state *context);
+ -
+ -void check_syncd_pipes_for_disabled_master_pipe(struct dc *dc,
+ -	struct dc_state *context,
+ -	uint8_t disabled_master_pipe_idx);
++ uint8_t resource_transmitter_to_phy_idx(const struct dc *dc, enum transmi=
+tter transmitter);
++=20
+  #endif /* DRIVERS_GPU_DRM_AMD_DC_DEV_DC_INC_RESOURCE_H_ */
+
+--Sig_/fDpdK7j5YvSYin7AlwdO6JA
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHeDhoACgkQAVBC80lX
+0Gx9nggAkeyfUWS2XRe4IvuNePf6t2G0m+BlFBGeZO+p/0EgJhKzqtRiNGda499m
+jTqJaoik8+j0tH2SFWUP9PsgLPBtT6H07rt3RDLEZDgfWE1suyZ35uNWnjZmHRSj
+ViBMt6dcQRz+g+0+IgGpjSO57KYFiX0FzctB/t70ZyZeWkSU3BdwMF+wGdXcWmEJ
+V1KIibPEjzz7poMS1iyPeLhlr+Ro47KC7m4zTAuecvkVWEwLAu0yqL+nwv/fhsY1
+7sLF42MSYUcZV2UZTqqEHGMwAGmEaEGf/t8UyjLsOqR2Sf9Zragw21wofIun1gBJ
+CcXXLWUo0kq9LSo7B5+Wvvo9IisJxA==
+=LgwU
+-----END PGP SIGNATURE-----
+
+--Sig_/fDpdK7j5YvSYin7AlwdO6JA--

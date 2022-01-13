@@ -2,83 +2,108 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E98748E073
-	for <lists+linux-next@lfdr.de>; Thu, 13 Jan 2022 23:38:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0CAB48E11D
+	for <lists+linux-next@lfdr.de>; Fri, 14 Jan 2022 00:46:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237996AbiAMWi4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 13 Jan 2022 17:38:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34360 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238024AbiAMWi4 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 13 Jan 2022 17:38:56 -0500
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E03F5C06174E
-        for <linux-next@vger.kernel.org>; Thu, 13 Jan 2022 14:38:55 -0800 (PST)
-Received: by mail-pg1-x541.google.com with SMTP id t32so1162366pgm.7
-        for <linux-next@vger.kernel.org>; Thu, 13 Jan 2022 14:38:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=YbEI3Q/NEjCtDTVCV1jkA7nYNYBH/Wfa2wk3IkVyJko=;
-        b=TZSnmiKfh8lQHyoHB+yllzvEmA18to6wFnOGKYs0poMgePC/IzPQirrR4ktwaDnvqN
-         6MtgeXCy1yK/vlfiGBEgBcEWSdlaZhy13ZGg8bropI5LiWLT69uDg3RLIG4RAEnMei/e
-         OLsKu4ckBojbKLqXja5eQdc78QuplSbLUeUuR4YwQsmoJKPsmqAxP6kAsKKrhO2uloGx
-         jgBW3DLRyjuJTQuba5a1bywPT+79uteTY7MRR7+lTs5pNJAoJHK8njIEoPRz5bJHtGc4
-         HFHciKQwdRnv9OQdv5RacscrcPdsiz56D1dXGcQrq4Bp8NviqIrfWkgUqnbc+T36lHWO
-         JWDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=YbEI3Q/NEjCtDTVCV1jkA7nYNYBH/Wfa2wk3IkVyJko=;
-        b=nQl9QVx6p/8NVpvo8vICSumneDl9XID2Y916WDiWn6x8xUARXK4B1U8uEjnAHKxjvE
-         LEBjGPPp8H6m0FFpaoO+c5wPy3bVQlzNn0GAGHcLPzeveodEqq9duAwg3XAHkVfUAU8Z
-         XPGTWE/GZkiZU7yZXCaBbZVebhk9S5Bb3BSpWYIr2NU4FW50lhGt5AxORVr+/7yp+hiO
-         uJlVQ54g1qgudQqcuN18MF3WID+2CNVO0gJR4+7mOwqcFP1VLW9WmBq5oxFpvAzkBpIC
-         ZEHUHDVA/lZGWFb+LQlPfdMnRoCM7MVvsM9/9YWx+rgtVzag2I5QidVb9FeOcN4+Jrya
-         HzAw==
-X-Gm-Message-State: AOAM533NcWEHT9jhi547kM3i6vslH9Pt1uyW8BJuh7R8peWX4H96WJJL
-        g+yYOAUgwiHbAHWPA6NM7tWzzDqzkQH5PacnPQw=
-X-Google-Smtp-Source: ABdhPJxV+CDcXMAaoBlObNCE+WkBdJZDSsiMXXJxSU4qLOl+5GP7wjtV5hGVQqePL03Cw94D/ZrqizECvr4TNYXN3v8=
-X-Received: by 2002:a05:6a00:26c5:b0:4bd:4ad6:9c71 with SMTP id
- p5-20020a056a0026c500b004bd4ad69c71mr6167765pfw.45.1642113535225; Thu, 13 Jan
- 2022 14:38:55 -0800 (PST)
+        id S232719AbiAMXpx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 13 Jan 2022 18:45:53 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:42231 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229870AbiAMXpw (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 13 Jan 2022 18:45:52 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JZgzc15Rlz4xdl;
+        Fri, 14 Jan 2022 10:45:48 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1642117548;
+        bh=P1oHUqqn/eV0/p46wXQ8gE8oaGC8GZ689Js6UJbblhc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=XGH1Q+BLcCQljQLz3QcfohVToAjnNUjZ/dthDThjt3/8RI454ASKqSw86Y7q7OpwB
+         IDpPanaIR8wf1DI/zrdBnyDDa3W5DRZ+NWmA65HDhDu+CARQm1b35DQKOY2bfV8Zm1
+         Sexgnb4ttiodx9YAAREvohrpVP8B+tws4VJAJtgCjgOPWBBE8139RZtdKOyMBrp5w+
+         59amqshf3EzTK/Qytf4GavqbGXDPaDZJIFw+bRKGpfFOc8AaITqcoum6XCD06umskE
+         49HVMrgQN8L4yg6MCAJbDuVBud4pziuQwUwgelGIGtSMZK0PJt8grRKN4PwqIJx09F
+         uJJdG4v2lhYnw==
+Date:   Fri, 14 Jan 2022 10:45:47 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Bjorn Helgaas <bhelgaas@google.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Subject: linux-next: manual merge of the pci tree with Linus' tree
+Message-ID: <20220114104547.55e2f188@canb.auug.org.au>
 MIME-Version: 1.0
-Received: by 2002:a05:6a10:f38c:0:0:0:0 with HTTP; Thu, 13 Jan 2022 14:38:54
- -0800 (PST)
-Reply-To: mchristophdaniel@gmail.com
-From:   Marcus Galois <marcus.galois@gmail.com>
-Date:   Thu, 13 Jan 2022 23:38:54 +0100
-Message-ID: <CANqBaXWLwHBNoawbz2tGySxar8jn5q2OzEiG-GjWCyVh=aJu6w@mail.gmail.com>
-Subject: Good News Finally.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/17_McLNeUpDca94VKUnrm4M";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hello friend.
+--Sig_/17_McLNeUpDca94VKUnrm4M
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-You might find it so difficult to remember me, though it is indeed a
-very long time, I am much delighted to contact you again after a long
-period of time, I remember you despite circumstances that made things
-not worked out as we projected then. I want to inform you that the
-transaction we're doing together then finally worked out and I decided
-to contact you and to let you know because of your tremendous effort
-to make things work out then.
+Hi all,
 
-Meanwhile I must inform you that I'm presently in Caribbean Island for
-numerous business negotiation with some partners. with my sincere
-heart i have decided to compensate you with USD$900,000 for your
-dedication then on our transaction, you tried so much that period and
-I appreciated your effort. I wrote a cheque/check on your name, as
-soon as you receive it, you let me know.
+Today's linux-next merge of the pci tree got a conflict in:
 
-Contact my secretary now on his email: mchristophdaniel@gmail.com
-Name: Mr. Christoph Daniel
+  drivers/pci/controller/Kconfig
 
-You are to forward to him your Name........ Address.......,Phone
-number......for shipment/dispatch of the cheque/Check to you
+between commit:
 
-Regards,
-Mr. Marcus Galois
+  aa50faff4416 ("PCI: mt7621: Convert driver into 'bool'")
+
+from Linus' tree and commit:
+
+  44ddb791f8f4 ("PCI: mt7621: Allow COMPILE_TEST for all arches")
+
+from the pci tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/pci/controller/Kconfig
+index aec8c9a3488b,f7e44d9c6965..000000000000
+--- a/drivers/pci/controller/Kconfig
++++ b/drivers/pci/controller/Kconfig
+@@@ -332,8 -332,8 +332,8 @@@ config PCIE_APPL
+  	  If unsure, say Y if you have an Apple Silicon system.
+ =20
+  config PCIE_MT7621
+ -	tristate "MediaTek MT7621 PCIe Controller"
+ +	bool "MediaTek MT7621 PCIe Controller"
+- 	depends on SOC_MT7621 || (MIPS && COMPILE_TEST)
++ 	depends on SOC_MT7621 || COMPILE_TEST
+  	select PHY_MT7621_PCI
+  	default SOC_MT7621
+  	help
+
+--Sig_/17_McLNeUpDca94VKUnrm4M
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHguasACgkQAVBC80lX
+0GwuYwf/YU/sj+Gt7e7zbdWhxExASLAdhpBUvPwoPUJr2z1JyP5aY5hiuobGAHZ2
+SIhjfZe5mZQVH5Pfjs4Ro/Wgx/U8JVVSNe+sPundOERrLhJU730eIb/PA53JGMr9
+kJNsIS1pXriQWE3XsIuvhDT5tHOVxypC0EY3IXL+wtVisziYJemBH5Z8AvmHuO/O
+qpcZmO54aJUGEzFRKwNHPXXn4gvCarxg2Ys5+OU+UpiqROManBnoZj67vkCUV0cX
+d0sFM5mQAq1a2OwhIDuIP8SDnA9nks97MfzHloDkUssCLLh2mxxjLZkvvoJPgCpy
+5ezx1ZFsJSrDspDZcIRHqLvz6o8g4g==
+=XfED
+-----END PGP SIGNATURE-----
+
+--Sig_/17_McLNeUpDca94VKUnrm4M--

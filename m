@@ -2,71 +2,114 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2694948E183
-	for <lists+linux-next@lfdr.de>; Fri, 14 Jan 2022 01:30:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86B3D48E195
+	for <lists+linux-next@lfdr.de>; Fri, 14 Jan 2022 01:36:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233200AbiANAan (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 13 Jan 2022 19:30:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59210 "EHLO
+        id S238430AbiANAgq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 13 Jan 2022 19:36:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230491AbiANAan (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 13 Jan 2022 19:30:43 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 349F1C061574;
-        Thu, 13 Jan 2022 16:30:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=54KQIIRQWaQKeVSpqMmcruRzw4QbdmH7UbY8+htwdso=; b=XBCZFUr1hWoWA1gWKc2wNuyLB3
-        aSoF4htM9EklGuEX9QXPb7O0Vg8hHNIHG75WXKji+vYJxmJ34+EPxNVKikUmuHOfTmC2FA8YCilKR
-        HpYF2HuWP3dbZFdSaQnBzrX5GmP8W23qgQbZKZTdvKEGq4f556AQob5mS4gO9Fi1XUhgRqIo4FaM/
-        fKKqXEk/K4iFTsJcJued0d9lZO+aUDJlFBdqJeF+0HKYPwyeVKTlJpsm23YOndGikXlekQnSoTDlg
-        RDBXhwvvIP6c/89lHhybszMR32mvTJlZTTpvKx1ZNV27L78RBeWdLJOdZ3mdN2YeNqYjzOwItMEfh
-        CTi4Z86Q==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n8AUH-005LfN-JG; Fri, 14 Jan 2022 00:30:37 +0000
-Date:   Fri, 14 Jan 2022 00:30:37 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        with ESMTP id S238400AbiANAgq (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 13 Jan 2022 19:36:46 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3BFDC061574;
+        Thu, 13 Jan 2022 16:36:45 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JZj6H6r7Tz4xtf;
+        Fri, 14 Jan 2022 11:36:39 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1642120600;
+        bh=nACV+LjVxjYi12tPMg0p/WAn7P3DgqSJ0YPnJTcJhKQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=PSOWkDUdpZ0wGRS93EcY74xczwAZg+SwvPbmQhE5W1DpG5kJDqX0c/Z0Xa7haQgCh
+         jINWXVcoYQf6M9LcoPaVh6vjLYfe9CA8N+32W9wngPH3eR+sDsnMyQmLt2QXBosHRl
+         58G7TqOApd0EP6APf+PXDz8IPfokufrOaH5cjM/lnseUVt2ilm/jq+KB1UCcedRByZ
+         Ta7Ggut5Y130sx7K9CGdioX+ubsslALMXRehDV327HLZxx+y5JpqDpjW6DiWEqOkkx
+         fKDDSKOx2vAzZjcykt5LallJMR2MXDcOL6IZ+dzv7IvEkXYzIHkQ9oF2yJZU+zUN1D
+         3wPEKNu/1sDXQ==
+Date:   Fri, 14 Jan 2022 11:36:39 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: linux-next: Tree for Jan 13 (UBSAN: invalid-load in
- ../mm/swap.c:996:11)
-Message-ID: <YeDELXPXWuM1qZc/@casper.infradead.org>
-References: <20220113152247.3f7c6c49@canb.auug.org.au>
- <56c04e36-ff53-10c7-34dd-1c1385639de6@infradead.org>
- <YeCP8Kh+4y7NR1K+@casper.infradead.org>
- <24d83e9c-a4d5-176b-1ff3-909d0ad56302@infradead.org>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Dave Airlie <airlied@linux.ie>
+Subject: linux-next: build failure after merge of the amdgpu tree
+Message-ID: <20220114113639.2e2cc115@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <24d83e9c-a4d5-176b-1ff3-909d0ad56302@infradead.org>
+Content-Type: multipart/signed; boundary="Sig_/VzoRggXv9sgl.a/DeHmK2rz";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Jan 13, 2022 at 01:26:48PM -0800, Randy Dunlap wrote:
-> 
-> 
-> On 1/13/22 12:47, Matthew Wilcox wrote:
-> > On Thu, Jan 13, 2022 at 12:12:52PM -0800, Randy Dunlap wrote:
-> >> [    1.561983] UBSAN: invalid-load in ../mm/swap.c:996:11
-> >> [    1.561986] load of value 221 is not a valid value for type '_Bool'
-> > 
-> > Ooh.  This one's mine.  Randy, does it repeat easily?  This should
-> > fix it:
-> 
-> Yes, 100% of the time (for N = 3).
-> 
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Tested-by: Randy Dunlap <rdunlap@infradead.org>
-> 
-> Fixed 100% of the time (for N = 3).
+--Sig_/VzoRggXv9sgl.a/DeHmK2rz
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks.  It's now at
-https://git.infradead.org/users/willy/pagecache.git/shortlog/refs/heads/for-next
-so it'll be part of the next linux-next.
+Hi all,
+
+After merging the amdgpu tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
+
+drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c: In function 'program_ti=
+ming_sync':
+drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c:1409:17: error: 'struct =
+dc_config' has no member named 'use_pipe_ctx_sync_logic'
+ 1409 |   if (dc->config.use_pipe_ctx_sync_logic) {
+      |                 ^
+drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c:1412:20: error: 'struct =
+pipe_ctx' has no member named 'pipe_idx_syncd'
+ 1412 |     if (pipe_set[j]->pipe_idx_syncd =3D=3D pipe_set[0]->pipe_idx_sy=
+ncd) {
+      |                    ^~
+drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c:1412:51: error: 'struct =
+pipe_ctx' has no member named 'pipe_idx_syncd'
+ 1412 |     if (pipe_set[j]->pipe_idx_syncd =3D=3D pipe_set[0]->pipe_idx_sy=
+ncd) {
+      |                                                   ^~
+drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c:1418:17: error: 'struct =
+pipe_ctx' has no member named 'pipe_idx_syncd'
+ 1418 |      pipe_set[j]->pipe_idx_syncd =3D pipe_set[0]->pipe_idx_syncd;
+      |                 ^~
+drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c:1418:47: error: 'struct =
+pipe_ctx' has no member named 'pipe_idx_syncd'
+ 1418 |      pipe_set[j]->pipe_idx_syncd =3D pipe_set[0]->pipe_idx_syncd;
+      |                                               ^~
+
+Caused by git doing a bad automatic merge with Linus' tree because commit
+
+  75b950ef6166 ("Revert "drm/amd/display: Fix for otg synchronization logic=
+"")
+
+has been cherry-picked into the amdgpu tree and then a fixed version of
+the reverted commit applied on top.  It would be easier if just a
+fix up for the oriingal commit was added to the amdgpu tree, or Linus'
+tree was merged into the amdgpu tree and then the fixed version applied.
+
+I have used the amdgpu tree from next-20220113 for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/VzoRggXv9sgl.a/DeHmK2rz
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHgxZcACgkQAVBC80lX
+0GzSEwf/T7jFWABx576CJeNAIeB3asMjIY4Mo0BBsQ9PDNrkUDo4sRPTeZfrvYyX
+bWtxzoWcUeKRoofhjLm2Jg5c9Wnu3eN1+MvycCKzzPcHhhsB3b8ytRQB+h+/6muu
+Wnl1lnKisFP2q7wZCTmILSm9HXdMBJ5Y4NfbCZvfMbNLlRMk7BdwGGWGLYLIT+UG
+tPPtGRjWEh6H0QOJhDQ8i7zWlS26GI3OT/p3SRh5Dkl0oaPa1raOkFhaHyu0v9lS
+Ub/wG7i3TG6hnH7p9/3p1y2AqHjKTl5q1rvugX0Ff47TK4zOcvz+rL/Z1sOKw8cg
+4t7wjOt/mt39KErzLSSk9fbH6MUatg==
+=QRxE
+-----END PGP SIGNATURE-----
+
+--Sig_/VzoRggXv9sgl.a/DeHmK2rz--

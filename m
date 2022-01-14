@@ -2,114 +2,93 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86B3D48E195
-	for <lists+linux-next@lfdr.de>; Fri, 14 Jan 2022 01:36:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8E8C48E1E1
+	for <lists+linux-next@lfdr.de>; Fri, 14 Jan 2022 02:02:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238430AbiANAgq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 13 Jan 2022 19:36:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60540 "EHLO
+        id S238589AbiANBCq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 13 Jan 2022 20:02:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238400AbiANAgq (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 13 Jan 2022 19:36:46 -0500
+        with ESMTP id S233398AbiANBCq (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 13 Jan 2022 20:02:46 -0500
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3BFDC061574;
-        Thu, 13 Jan 2022 16:36:45 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0848C061574;
+        Thu, 13 Jan 2022 17:02:43 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JZj6H6r7Tz4xtf;
-        Fri, 14 Jan 2022 11:36:39 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JZjhK5l4fz4xtf;
+        Fri, 14 Jan 2022 12:02:41 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1642120600;
-        bh=nACV+LjVxjYi12tPMg0p/WAn7P3DgqSJ0YPnJTcJhKQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=PSOWkDUdpZ0wGRS93EcY74xczwAZg+SwvPbmQhE5W1DpG5kJDqX0c/Z0Xa7haQgCh
-         jINWXVcoYQf6M9LcoPaVh6vjLYfe9CA8N+32W9wngPH3eR+sDsnMyQmLt2QXBosHRl
-         58G7TqOApd0EP6APf+PXDz8IPfokufrOaH5cjM/lnseUVt2ilm/jq+KB1UCcedRByZ
-         Ta7Ggut5Y130sx7K9CGdioX+ubsslALMXRehDV327HLZxx+y5JpqDpjW6DiWEqOkkx
-         fKDDSKOx2vAzZjcykt5LallJMR2MXDcOL6IZ+dzv7IvEkXYzIHkQ9oF2yJZU+zUN1D
-         3wPEKNu/1sDXQ==
-Date:   Fri, 14 Jan 2022 11:36:39 +1100
+        s=201702; t=1642122162;
+        bh=M141uA0Im2Hud7b7HD5pRH7hxR5HLZew7H/Em0uz5F8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=aBX9q3LT7VgKBq97UcsruZbxQEEEqtRyPRC6pMB8NTmuYzZW+Wwnu2o6BNI96nxA5
+         fJCqCgapfXI7tAY/Sb6z306cNo/ydkFXiRLsRluFzmp3Ew33fvrB2bJKrqNIFVwl1y
+         2pj43GM0koK+PAK+XfI0nrGSJkkDck0gyd8yWFcxiOdSZ8KFjtd/MzsgSQqYSt3zE1
+         //h/sYIRPGwV0yiB+QvhNa+nG3rbim69KXjfoF3071dveechIpPSQmREZoqfHoVR8u
+         y9KhPjcaX7WLkWRLZLOXVAsRtg714EZjTtMhec50ySQaOgTLlUxauWmDWtd6MwK00g
+         wwCt9ATDwdj/A==
+Date:   Fri, 14 Jan 2022 12:02:40 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Yinan Liu <yinan@linux.alibaba.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Dave Airlie <airlied@linux.ie>
-Subject: linux-next: build failure after merge of the amdgpu tree
-Message-ID: <20220114113639.2e2cc115@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the ftrace tree
+Message-ID: <20220114120240.4b592480@canb.auug.org.au>
+In-Reply-To: <20220112113103.7e03448f@canb.auug.org.au>
+References: <20220112113103.7e03448f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/VzoRggXv9sgl.a/DeHmK2rz";
+Content-Type: multipart/signed; boundary="Sig_/wnYUD+_he4wYAMN/08IXqt_";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/VzoRggXv9sgl.a/DeHmK2rz
+--Sig_/wnYUD+_he4wYAMN/08IXqt_
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the amdgpu tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+On Wed, 12 Jan 2022 11:31:03 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> After merging the ftrace tree, today's linux-next build (powerpc
+> ppc64_defconfig) failed like this:
+>=20
+> Inconsistent kallsyms data
+> Try make KALLSYMS_EXTRA_PASS=3D1 as a workaround
+>=20
+> I am not sure what caused this - maybe commit
+>=20
+>   4f1f18311591 ("scripts: ftrace - move the sort-processing in ftrace_ini=
+t")
+>=20
+> I have used the ftrace tree from next-20220111 for today.
 
-drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c: In function 'program_ti=
-ming_sync':
-drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c:1409:17: error: 'struct =
-dc_config' has no member named 'use_pipe_ctx_sync_logic'
- 1409 |   if (dc->config.use_pipe_ctx_sync_logic) {
-      |                 ^
-drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c:1412:20: error: 'struct =
-pipe_ctx' has no member named 'pipe_idx_syncd'
- 1412 |     if (pipe_set[j]->pipe_idx_syncd =3D=3D pipe_set[0]->pipe_idx_sy=
-ncd) {
-      |                    ^~
-drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c:1412:51: error: 'struct =
-pipe_ctx' has no member named 'pipe_idx_syncd'
- 1412 |     if (pipe_set[j]->pipe_idx_syncd =3D=3D pipe_set[0]->pipe_idx_sy=
-ncd) {
-      |                                                   ^~
-drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c:1418:17: error: 'struct =
-pipe_ctx' has no member named 'pipe_idx_syncd'
- 1418 |      pipe_set[j]->pipe_idx_syncd =3D pipe_set[0]->pipe_idx_syncd;
-      |                 ^~
-drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c:1418:47: error: 'struct =
-pipe_ctx' has no member named 'pipe_idx_syncd'
- 1418 |      pipe_set[j]->pipe_idx_syncd =3D pipe_set[0]->pipe_idx_syncd;
-      |                                               ^~
-
-Caused by git doing a bad automatic merge with Linus' tree because commit
-
-  75b950ef6166 ("Revert "drm/amd/display: Fix for otg synchronization logic=
-"")
-
-has been cherry-picked into the amdgpu tree and then a fixed version of
-the reverted commit applied on top.  It would be easier if just a
-fix up for the oriingal commit was added to the amdgpu tree, or Linus'
-tree was merged into the amdgpu tree and then the fixed version applied.
-
-I have used the amdgpu tree from next-20220113 for today.
+I am still getting this.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/VzoRggXv9sgl.a/DeHmK2rz
+--Sig_/wnYUD+_he4wYAMN/08IXqt_
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHgxZcACgkQAVBC80lX
-0GzSEwf/T7jFWABx576CJeNAIeB3asMjIY4Mo0BBsQ9PDNrkUDo4sRPTeZfrvYyX
-bWtxzoWcUeKRoofhjLm2Jg5c9Wnu3eN1+MvycCKzzPcHhhsB3b8ytRQB+h+/6muu
-Wnl1lnKisFP2q7wZCTmILSm9HXdMBJ5Y4NfbCZvfMbNLlRMk7BdwGGWGLYLIT+UG
-tPPtGRjWEh6H0QOJhDQ8i7zWlS26GI3OT/p3SRh5Dkl0oaPa1raOkFhaHyu0v9lS
-Ub/wG7i3TG6hnH7p9/3p1y2AqHjKTl5q1rvugX0Ff47TK4zOcvz+rL/Z1sOKw8cg
-4t7wjOt/mt39KErzLSSk9fbH6MUatg==
-=QRxE
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHgy7AACgkQAVBC80lX
+0GywVQf+IhUpgidbLaQEOV6MPgWQ8cxv8mMsZ7gaNLc/sYZ1Q7wBv8qA01SxnDCB
+xEpML44palAVdC2Vc0hV2NosJjxFPEIM+aCWT1MPPLEp6IYITivuMk8tCZL2ztQ0
+l9ityiL4izNpOhi90+7PebKMA1OMHWPgUrPIE8hvwPtSpz1R1ifXbKlvbIXQgYQt
+itKdl7/8w0XGR6qPlNystJwzp2K5Sg2M/frxCjvfptCxlXHqALClEibmw1sYdGiR
+wmfog3D8SrRV34cLemugYx/xuy1CYlY7ytjWSHfye7PVit1OwlVQlOuIEBfEY2cv
+26hvv6DGrm/8psO20RYr9XoXeApGaA==
+=9VNf
 -----END PGP SIGNATURE-----
 
---Sig_/VzoRggXv9sgl.a/DeHmK2rz--
+--Sig_/wnYUD+_he4wYAMN/08IXqt_--

@@ -2,67 +2,91 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B01948E274
-	for <lists+linux-next@lfdr.de>; Fri, 14 Jan 2022 03:16:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FBE948E2BE
+	for <lists+linux-next@lfdr.de>; Fri, 14 Jan 2022 03:58:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231185AbiANCQi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 13 Jan 2022 21:16:38 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:41140 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229863AbiANCQi (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 13 Jan 2022 21:16:38 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S236084AbiANC6N (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 13 Jan 2022 21:58:13 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:44555 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232070AbiANC6N (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 13 Jan 2022 21:58:13 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D6413B821C9;
-        Fri, 14 Jan 2022 02:16:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 347F9C36AE3;
-        Fri, 14 Jan 2022 02:16:35 +0000 (UTC)
-Date:   Thu, 13 Jan 2022 21:16:33 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JZmFZ0K0Nz4xcF;
+        Fri, 14 Jan 2022 13:58:09 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1642129091;
+        bh=ExvOuVJGS7SgM9h2o/gDiugRq364buQ/K5sn89L0MNA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=L272IB73XEzsk5tJa2uly9rIR0tWGXyQagZHDLMzsPfKC2So21LPhINFOIPzc1i1T
+         GzQmZt/mdrjZ3YnCy0CE3OLzExLlVWqvrvCODAEIHxbxeOyNaqoQHVnc6mWVDVKpk5
+         P9LmJTL4o4xZLZGnb6/pHPFLIPO2aLHIB74Ufrnljt2rhaRTl0gjYSt+2IK4jD6l+3
+         mFTR1pKr6c6iEOaKTkrvFx1gF+0UN4NLXq9VixG43T7+/HBrQhSQcH/Ny3RrviHP0m
+         /17Uz23Y5OONiLkjhNDZa9rKNCU+X8sEblJ3e0SRGYd4JlJUIpGovoIWT9lAqF+R6t
+         i9wi+6L264WKg==
+Date:   Fri, 14 Jan 2022 13:58:08 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Steven Rostedt <rostedt@goodmis.org>
 Cc:     Yinan Liu <yinan@linux.alibaba.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
 Subject: Re: linux-next: build failure after merge of the ftrace tree
-Message-ID: <20220113211633.4f9bea57@gandalf.local.home>
-In-Reply-To: <20220114120240.4b592480@canb.auug.org.au>
+Message-ID: <20220114135808.391398d0@canb.auug.org.au>
+In-Reply-To: <20220113211633.4f9bea57@gandalf.local.home>
 References: <20220112113103.7e03448f@canb.auug.org.au>
         <20220114120240.4b592480@canb.auug.org.au>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        <20220113211633.4f9bea57@gandalf.local.home>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/0qQ6vIRey.hJvnjFo9e4aD0";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, 14 Jan 2022 12:02:40 +1100
-Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+--Sig_/0qQ6vIRey.hJvnjFo9e4aD0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> Hi all,
-> 
-> On Wed, 12 Jan 2022 11:31:03 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >
-> > After merging the ftrace tree, today's linux-next build (powerpc
-> > ppc64_defconfig) failed like this:
-> > 
-> > Inconsistent kallsyms data
-> > Try make KALLSYMS_EXTRA_PASS=1 as a workaround
-> > 
-> > I am not sure what caused this - maybe commit
-> > 
-> >   4f1f18311591 ("scripts: ftrace - move the sort-processing in ftrace_init")
-> > 
-> > I have used the ftrace tree from next-20220111 for today.  
-> 
-> I am still getting this.
-> 
+Hi Steve,
 
-What compiler are you using, because I built my branch against all archs
-and it didn't have an issue.
+On Thu, 13 Jan 2022 21:16:33 -0500 Steven Rostedt <rostedt@goodmis.org> wro=
+te:
+>
+> What compiler are you using, because I built my branch against all archs
+> and it didn't have an issue.
 
-I can try to see if it is with linux-next and something my tree has with
-other updates.
+gcc (Debian 10.3.0-11) 10.3.0
+GNU ld (GNU Binutils for Debian) 2.37
 
--- Steve
+I am doing a native build on ppc64le.
+
+> I can try to see if it is with linux-next and something my tree has with
+> other updates.
+
+Thanks.  There are some changes in the kbuild tree that may interact, I
+guess.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/0qQ6vIRey.hJvnjFo9e4aD0
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHg5sAACgkQAVBC80lX
+0GwujQf/YC0DvIpmXwrEdDqoXvQvs+8QsEzlVFOslrCGcwfBFUsPWjiL6Ac/HldX
+L1JM75UuDg7D0sBdDoA+Q/ITDbfzy7gqINL6boS/cTy4aNpP0i7IEKoeykjGgCGH
+SXruLJV7wiqzn5KHlSu0QUd3oFxLFyxDweRNUJArzB1koveDKvlifRUGu7wsPDXq
+NiE+W5uSPebAIfSGkTJfDhEOjtpP3H0e76pFyYLlsGn8mE4W5s0VG7fjC9M5iNbP
+65xyxOgaFHWFJXdG7OnBFWg8IhpfDHmfH/yaRaOCLgSDfz1BfIqC2L1GMRuw2Uuy
+v9RavS/ERu9xogN86LAON6aO9WrJQg==
+=sNXI
+-----END PGP SIGNATURE-----
+
+--Sig_/0qQ6vIRey.hJvnjFo9e4aD0--

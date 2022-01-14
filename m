@@ -2,108 +2,71 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0CAB48E11D
-	for <lists+linux-next@lfdr.de>; Fri, 14 Jan 2022 00:46:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2694948E183
+	for <lists+linux-next@lfdr.de>; Fri, 14 Jan 2022 01:30:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232719AbiAMXpx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 13 Jan 2022 18:45:53 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:42231 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229870AbiAMXpw (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 13 Jan 2022 18:45:52 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JZgzc15Rlz4xdl;
-        Fri, 14 Jan 2022 10:45:48 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1642117548;
-        bh=P1oHUqqn/eV0/p46wXQ8gE8oaGC8GZ689Js6UJbblhc=;
-        h=Date:From:To:Cc:Subject:From;
-        b=XGH1Q+BLcCQljQLz3QcfohVToAjnNUjZ/dthDThjt3/8RI454ASKqSw86Y7q7OpwB
-         IDpPanaIR8wf1DI/zrdBnyDDa3W5DRZ+NWmA65HDhDu+CARQm1b35DQKOY2bfV8Zm1
-         Sexgnb4ttiodx9YAAREvohrpVP8B+tws4VJAJtgCjgOPWBBE8139RZtdKOyMBrp5w+
-         59amqshf3EzTK/Qytf4GavqbGXDPaDZJIFw+bRKGpfFOc8AaITqcoum6XCD06umskE
-         49HVMrgQN8L4yg6MCAJbDuVBud4pziuQwUwgelGIGtSMZK0PJt8grRKN4PwqIJx09F
-         uJJdG4v2lhYnw==
-Date:   Fri, 14 Jan 2022 10:45:47 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Bjorn Helgaas <bhelgaas@google.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        id S233200AbiANAan (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 13 Jan 2022 19:30:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59210 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230491AbiANAan (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 13 Jan 2022 19:30:43 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 349F1C061574;
+        Thu, 13 Jan 2022 16:30:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=54KQIIRQWaQKeVSpqMmcruRzw4QbdmH7UbY8+htwdso=; b=XBCZFUr1hWoWA1gWKc2wNuyLB3
+        aSoF4htM9EklGuEX9QXPb7O0Vg8hHNIHG75WXKji+vYJxmJ34+EPxNVKikUmuHOfTmC2FA8YCilKR
+        HpYF2HuWP3dbZFdSaQnBzrX5GmP8W23qgQbZKZTdvKEGq4f556AQob5mS4gO9Fi1XUhgRqIo4FaM/
+        fKKqXEk/K4iFTsJcJued0d9lZO+aUDJlFBdqJeF+0HKYPwyeVKTlJpsm23YOndGikXlekQnSoTDlg
+        RDBXhwvvIP6c/89lHhybszMR32mvTJlZTTpvKx1ZNV27L78RBeWdLJOdZ3mdN2YeNqYjzOwItMEfh
+        CTi4Z86Q==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n8AUH-005LfN-JG; Fri, 14 Jan 2022 00:30:37 +0000
+Date:   Fri, 14 Jan 2022 00:30:37 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Subject: linux-next: manual merge of the pci tree with Linus' tree
-Message-ID: <20220114104547.55e2f188@canb.auug.org.au>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: linux-next: Tree for Jan 13 (UBSAN: invalid-load in
+ ../mm/swap.c:996:11)
+Message-ID: <YeDELXPXWuM1qZc/@casper.infradead.org>
+References: <20220113152247.3f7c6c49@canb.auug.org.au>
+ <56c04e36-ff53-10c7-34dd-1c1385639de6@infradead.org>
+ <YeCP8Kh+4y7NR1K+@casper.infradead.org>
+ <24d83e9c-a4d5-176b-1ff3-909d0ad56302@infradead.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/17_McLNeUpDca94VKUnrm4M";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <24d83e9c-a4d5-176b-1ff3-909d0ad56302@infradead.org>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/17_McLNeUpDca94VKUnrm4M
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, Jan 13, 2022 at 01:26:48PM -0800, Randy Dunlap wrote:
+> 
+> 
+> On 1/13/22 12:47, Matthew Wilcox wrote:
+> > On Thu, Jan 13, 2022 at 12:12:52PM -0800, Randy Dunlap wrote:
+> >> [    1.561983] UBSAN: invalid-load in ../mm/swap.c:996:11
+> >> [    1.561986] load of value 221 is not a valid value for type '_Bool'
+> > 
+> > Ooh.  This one's mine.  Randy, does it repeat easily?  This should
+> > fix it:
+> 
+> Yes, 100% of the time (for N = 3).
+> 
+> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+> Tested-by: Randy Dunlap <rdunlap@infradead.org>
+> 
+> Fixed 100% of the time (for N = 3).
 
-Hi all,
-
-Today's linux-next merge of the pci tree got a conflict in:
-
-  drivers/pci/controller/Kconfig
-
-between commit:
-
-  aa50faff4416 ("PCI: mt7621: Convert driver into 'bool'")
-
-from Linus' tree and commit:
-
-  44ddb791f8f4 ("PCI: mt7621: Allow COMPILE_TEST for all arches")
-
-from the pci tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/pci/controller/Kconfig
-index aec8c9a3488b,f7e44d9c6965..000000000000
---- a/drivers/pci/controller/Kconfig
-+++ b/drivers/pci/controller/Kconfig
-@@@ -332,8 -332,8 +332,8 @@@ config PCIE_APPL
-  	  If unsure, say Y if you have an Apple Silicon system.
- =20
-  config PCIE_MT7621
- -	tristate "MediaTek MT7621 PCIe Controller"
- +	bool "MediaTek MT7621 PCIe Controller"
-- 	depends on SOC_MT7621 || (MIPS && COMPILE_TEST)
-+ 	depends on SOC_MT7621 || COMPILE_TEST
-  	select PHY_MT7621_PCI
-  	default SOC_MT7621
-  	help
-
---Sig_/17_McLNeUpDca94VKUnrm4M
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHguasACgkQAVBC80lX
-0GwuYwf/YU/sj+Gt7e7zbdWhxExASLAdhpBUvPwoPUJr2z1JyP5aY5hiuobGAHZ2
-SIhjfZe5mZQVH5Pfjs4Ro/Wgx/U8JVVSNe+sPundOERrLhJU730eIb/PA53JGMr9
-kJNsIS1pXriQWE3XsIuvhDT5tHOVxypC0EY3IXL+wtVisziYJemBH5Z8AvmHuO/O
-qpcZmO54aJUGEzFRKwNHPXXn4gvCarxg2Ys5+OU+UpiqROManBnoZj67vkCUV0cX
-d0sFM5mQAq1a2OwhIDuIP8SDnA9nks97MfzHloDkUssCLLh2mxxjLZkvvoJPgCpy
-5ezx1ZFsJSrDspDZcIRHqLvz6o8g4g==
-=XfED
------END PGP SIGNATURE-----
-
---Sig_/17_McLNeUpDca94VKUnrm4M--
+Thanks.  It's now at
+https://git.infradead.org/users/willy/pagecache.git/shortlog/refs/heads/for-next
+so it'll be part of the next linux-next.

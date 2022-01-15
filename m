@@ -2,100 +2,72 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 372CD48F65B
-	for <lists+linux-next@lfdr.de>; Sat, 15 Jan 2022 11:19:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CFC348F68B
+	for <lists+linux-next@lfdr.de>; Sat, 15 Jan 2022 12:33:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231549AbiAOKTw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 15 Jan 2022 05:19:52 -0500
-Received: from gateway24.websitewelcome.com ([192.185.51.251]:46851 "EHLO
-        gateway24.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229530AbiAOKTw (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Sat, 15 Jan 2022 05:19:52 -0500
-X-Greylist: delayed 1442 seconds by postgrey-1.27 at vger.kernel.org; Sat, 15 Jan 2022 05:19:51 EST
-Received: from cm11.websitewelcome.com (cm11.websitewelcome.com [100.42.49.5])
-        by gateway24.websitewelcome.com (Postfix) with ESMTP id 0FEE0878D
-        for <linux-next@vger.kernel.org>; Sat, 15 Jan 2022 03:55:48 -0600 (CST)
-Received: from gator4132.hostgator.com ([192.185.4.144])
-        by cmsmtp with SMTP
-        id 8fmmn65UtINxB8fmmnQhtU; Sat, 15 Jan 2022 03:55:48 -0600
-X-Authority-Reason: nr=8
-Received: from host-79-47-126-144.retail.telecomitalia.it ([79.47.126.144]:34826 helo=[10.0.0.109])
-        by gator4132.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <bristot@kernel.org>)
-        id 1n8fml-001urN-7W; Sat, 15 Jan 2022 03:55:47 -0600
-Message-ID: <92e4dd91-8d28-b059-ebd4-3c4e027662ad@kernel.org>
-Date:   Sat, 15 Jan 2022 10:55:44 +0100
+        id S231594AbiAOLdk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 15 Jan 2022 06:33:40 -0500
+Received: from ssl.serverraum.org ([176.9.125.105]:53641 "EHLO
+        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229812AbiAOLdk (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 15 Jan 2022 06:33:40 -0500
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 97B6D223ED;
+        Sat, 15 Jan 2022 12:33:38 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1642246418;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0KEFXqu+fzFHJgxY8mspyC5L+cr7ncawgm58PL7n558=;
+        b=tasuua0gVD9X6RSR2RGaMo/kNHNK0BYw26hcPk8YjcEHV0LiuMd7KwqbuTYShyYfJ/KYXW
+        iwO9K9x763ROBSEd3dMl1GHGCi1l7Q8wPk9VkLIpXCDn1MlweMIImDEviExxHvxCKLF8GU
+        Nvga/QmzEo/YFkGgESpcyN9r5OU78ZI=
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: linux-next: build warnings after merge of the ftrace tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220115152812.32d3ba5a@canb.auug.org.au>
-From:   Daniel Bristot de Oliveira <bristot@kernel.org>
-In-Reply-To: <20220115152812.32d3ba5a@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4132.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - kernel.org
-X-BWhitelist: no
-X-Source-IP: 79.47.126.144
-X-Source-L: No
-X-Exim-ID: 1n8fml-001urN-7W
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: host-79-47-126-144.retail.telecomitalia.it ([10.0.0.109]) [79.47.126.144]:34826
-X-Source-Auth: kernel@bristot.me
-X-Email-Count: 1
-X-Source-Cap: YnJpc3RvdG1lO2JyaXN0b3RtZTtnYXRvcjQxMzIuaG9zdGdhdG9yLmNvbQ==
-X-Local-Domain: no
+Date:   Sat, 15 Jan 2022 12:33:38 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Rob Herring <robherring2@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warnings after merge of the devicetree tree
+In-Reply-To: <20220115153212.593f534d@canb.auug.org.au>
+References: <20220115153212.593f534d@canb.auug.org.au>
+User-Agent: Roundcube Webmail/1.4.12
+Message-ID: <668e68d07c114435f680eafd5444e1e3@walle.cc>
+X-Sender: michael@walle.cc
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen
+Hi,
 
-On 1/15/22 05:28, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the ftrace tree, today's linux-next build (htmldoc)
+Am 2022-01-15 05:32, schrieb Stephen Rothwell:
+> After merging the devicetree tree, today's linux-next build (htmldocs)
 > produced these warnings:
 > 
-> Documentation/tools/rtla/rtla-osnoise-hist.rst: WARNING: document isn't included in any toctree
-> Documentation/tools/rtla/rtla-osnoise-top.rst: WARNING: document isn't included in any toctree
-> Documentation/tools/rtla/rtla-timerlat.rst: WARNING: document isn't included in any toctree
-> Documentation/tools/rtla/rtla-timerlat-hist.rst: WARNING: document isn't included in any toctree
-> Documentation/tools/rtla/rtla-timerlat-top.rst: WARNING: document isn't included in any toctree
+> include/linux/of.h:1037: warning: Function parameter or member 'np'
+> not described in 'of_parse_phandle_with_optional_args'
+> include/linux/of.h:1037: warning: Function parameter or member
+> 'list_name' not described in 'of_parse_phandle_with_optional_args'
+> include/linux/of.h:1037: warning: Function parameter or member
+> 'cells_name' not described in 'of_parse_phandle_with_optional_args'
+> include/linux/of.h:1037: warning: Function parameter or member 'index'
+> not described in 'of_parse_phandle_with_optional_args'
+> include/linux/of.h:1037: warning: Function parameter or member
+> 'out_args' not described in 'of_parse_phandle_with_optional_args'
 > 
-> Introduced by commits
+> Introduced by commit
 > 
->   b1be48307de4 ("rtla: Add rtla osnoise top documentation")
->   e7041c6b3c12 ("rtla: Add rtla osnoise hist documentation")
->   29380d4055e5 ("rtla: Add rtla timerlat documentation")
->   df337d014b57 ("rtla: Add rtla timerlat top documentation")
->   5dce5904e3b9 ("rtla: Add rtla timerlat hist documentation")
-> 
+>   952c4865d27a ("of: base: add of_parse_phandle_with_optional_args()")
 
-The Documentation/tools/$tools/ is a new directory to store man pages of the
-$tools. The idea seems to be to create a '"book" within the larger documentation 
-collection'.
+Sorry about that, just sent a fixes patch:
+https://lore.kernel.org/linux-devicetree/20220115113156.435037-1-michael@walle.cc/
 
-I moved the documentation to that directory following Corbet's suggestion [1], 
-but the "book" was not yet created. I think it deserves the hands of a more 
-expert person in Docs.
-
-Thoughts?
-
-[1] https://lore.kernel.org/lkml/5796a3d5-ae98-9d28-138f-981a06dab34b@kernel.org/
-
--- Daniel
+-michael

@@ -2,158 +2,129 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1E4848FF51
-	for <lists+linux-next@lfdr.de>; Sun, 16 Jan 2022 22:53:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D34EC48FF5A
+	for <lists+linux-next@lfdr.de>; Sun, 16 Jan 2022 22:54:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236291AbiAPVw5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 16 Jan 2022 16:52:57 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:46699 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233803AbiAPVw5 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 16 Jan 2022 16:52:57 -0500
+        id S236307AbiAPVyl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 16 Jan 2022 16:54:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41902 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233774AbiAPVyl (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 16 Jan 2022 16:54:41 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12367C061574;
+        Sun, 16 Jan 2022 13:54:41 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JcTKx5CWpz4y4r;
-        Mon, 17 Jan 2022 08:52:52 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JcTMr05B0z4y4r;
+        Mon, 17 Jan 2022 08:54:31 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1642369974;
-        bh=bwhuUlxc+ba6Mt/6tWzdvb7bvoFl9C80gEw9GihBUjc=;
+        s=201702; t=1642370076;
+        bh=4Oy66ShTun4ti7zT93SlHvM1ki9/1BUHlvd5thJEPsU=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=IwU+qr7YC0pUAqeZ6HpOf5xuk4Sz8l0mXtUxRje8/c+98Rmkwp/OhLYJqA4HF38cq
-         Oq3eve4XvFF5knG69Ek+zM7dpLtLhsW9MELOBVtNyPoQ7/G/kDWK6R6MrfkBPk6tTY
-         SYBqKWi5SpUIjcr6WvIer61veSjbk5KHH3JcMeOUtxpvwSKYDe3uS9GFVgNz/H/5zm
-         Ehy19hkln1wyUpve2RLJqqmazENeZkx1z6n/6e3I/EECPIqiTo9Juu3zqHMIJOFvYC
-         w6QSS0JkpoTluYNolvjIL3M6y4a0x4lFK4Tnzm0qXR148ZD1lLUZnoTt3CRuu9TInW
-         N4ZqXPmZmsVHQ==
-Date:   Mon, 17 Jan 2022 08:52:52 +1100
+        b=bEc7BpYtzC9Mx9Wq6rpmDsjPVg9amw+gIx42NWxrhfV/m/qASAA1AVf3KsOZ3d2r+
+         qdSPlsJUg9+71V5BLF+RwFZ/L5K9RZDHri0Lhnhg/EMNP3ewaO4v0bK3yI6f5KonR5
+         pP2KizvVbsbUz25pveCvgXS4zxMbfR2N2kOg5xA8DmM5fmU4PpXPxpQVyNWO46+cqq
+         pE/l3rk2jR9qXyb/M8+U2R1BVGAYnlHraLm4KWJH3KI3XoDnAgy3O0p1h/c5wk2fxY
+         YaAYZ1XyKxYedMmUv+K5JiKnKATwmIWVhK5VO80HKgxj1Z7WaxCv9sHB9Gyv+PasnO
+         Ji6myd+GYnACQ==
+Date:   Mon, 17 Jan 2022 08:54:31 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
+To:     Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul@pwsan.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>,
+        Anup Patel <anup.patel@wdc.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atish.patra@wdc.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Atish Patra <atishp@rivosinc.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Yinan Liu <yinan@linux.alibaba.com>
-Subject: Re: linux-next: manual merge of the ftrace tree with the kbuild
- tree
-Message-ID: <20220117085252.57a45537@canb.auug.org.au>
-In-Reply-To: <20220114174623.729249d7@canb.auug.org.au>
-References: <20220112112147.3e19ce23@canb.auug.org.au>
-        <20220114174623.729249d7@canb.auug.org.au>
+        Palmer Dabbelt <palmer@rivosinc.com>
+Subject: Re: linux-next: manual merge of the kvm tree with the risc-v tree
+Message-ID: <20220117085431.7bef9ebc@canb.auug.org.au>
+In-Reply-To: <20220112114024.7be8aac6@canb.auug.org.au>
+References: <20220112114024.7be8aac6@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/wt+/v9r1wJaf+lVLe6gHxOR";
+Content-Type: multipart/signed; boundary="Sig_/ls2tCAonIwnKX_AJBeqqKur";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/wt+/v9r1wJaf+lVLe6gHxOR
+--Sig_/ls2tCAonIwnKX_AJBeqqKur
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Fri, 14 Jan 2022 17:46:23 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+On Wed, 12 Jan 2022 11:40:24 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
 wrote:
 >
-> On Wed, 12 Jan 2022 11:21:47 +1100 Stephen Rothwell <sfr@canb.auug.org.au=
-> wrote:
-> >
-> > Today's linux-next merge of the ftrace tree got a conflict in:
-> >=20
-> >   scripts/link-vmlinux.sh
-> >=20
-> > between commit:
-> >=20
-> >   7d153696e5db ("kbuild: do not include include/config/auto.conf from s=
-hell scripts")
-> >=20
-> > from the kbuild tree and commit:
-> >=20
-> >   4f1f18311591 ("scripts: ftrace - move the sort-processing in ftrace_i=
-nit")
-> >=20
-> > from the ftrace tree.
-> >=20
-> > I fixed it up (see below) and can carry the fix as necessary. This
-> > is now fixed as far as linux-next is concerned, but any non trivial
-> > conflicts should be mentioned to your upstream maintainer when your tree
-> > is submitted for merging.  You may also want to consider cooperating
-> > with the maintainer of the conflicting tree to minimise any particularly
-> > complex conflicts.
-> >=20
-> >=20
-> > diff --cc scripts/link-vmlinux.sh
-> > index 5189c9a12066,dd9955f45774..000000000000
-> > --- a/scripts/link-vmlinux.sh
-> > +++ b/scripts/link-vmlinux.sh
-> > @@@ -412,11 -411,8 +412,8 @@@ if is_enabled CONFIG_BUILDTIME_TABLE_SO
-> >   	fi
-> >   fi
-> >  =20
-> > - info SYSMAP System.map
-> > - mksysmap vmlinux System.map
-> > -=20
-> >   # step a (see comment above)
-> >  -if [ -n "${CONFIG_KALLSYMS}" ]; then
-> >  +if is_enabled CONFIG_KALLSYMS; then
-> >   	mksysmap ${kallsyms_vmlinux} .tmp_System.map
-> >  =20
-> >   	if ! cmp -s System.map .tmp_System.map; then =20
+> Today's linux-next merge of the kvm tree got a conflict in:
 >=20
-> My mistake, the merge resolution should be as below.
+>   arch/riscv/include/asm/sbi.h
+>=20
+> between commit:
+>=20
+>   b579dfe71a6a ("RISC-V: Use SBI SRST extension when available")
+>=20
+> from the risc-v tree and commit:
+>=20
+>   c62a76859723 ("RISC-V: KVM: Add SBI v0.2 base extension")
+>=20
+> from the kvm tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 >=20
 >=20
-> diff --cc scripts/link-vmlinux.sh
-> index 5189c9a12066,dd9955f45774..000000000000
-> --- a/scripts/link-vmlinux.sh
-> +++ b/scripts/link-vmlinux.sh
-> @@@ -404,7 -400,10 +404,10 @@@ if is_enabled CONFIG_DEBUG_INFO_BTF &&=20
->   	${RESOLVE_BTFIDS} vmlinux
->   fi
->  =20
-> + info SYSMAP System.map
-> + mksysmap vmlinux System.map
+> diff --cc arch/riscv/include/asm/sbi.h
+> index 289621da4a2a,9c46dd3ff4a2..000000000000
+> --- a/arch/riscv/include/asm/sbi.h
+> +++ b/arch/riscv/include/asm/sbi.h
+> @@@ -27,7 -27,14 +27,15 @@@ enum sbi_ext_id=20
+>   	SBI_EXT_IPI =3D 0x735049,
+>   	SBI_EXT_RFENCE =3D 0x52464E43,
+>   	SBI_EXT_HSM =3D 0x48534D,
+>  +	SBI_EXT_SRST =3D 0x53525354,
 > +=20
->  -if [ -n "${CONFIG_BUILDTIME_TABLE_SORT}" ]; then
->  +if is_enabled CONFIG_BUILDTIME_TABLE_SORT; then
->   	info SORTTAB vmlinux
->   	if ! sorttable vmlinux; then
->   		echo >&2 Failed to sort kernel tables
-> @@@ -412,11 -411,8 +415,8 @@@
->   	fi
->   fi
+> + 	/* Experimentals extensions must lie within this range */
+> + 	SBI_EXT_EXPERIMENTAL_START =3D 0x08000000,
+> + 	SBI_EXT_EXPERIMENTAL_END =3D 0x08FFFFFF,
+> +=20
+> + 	/* Vendor extensions must lie within this range */
+> + 	SBI_EXT_VENDOR_START =3D 0x09000000,
+> + 	SBI_EXT_VENDOR_END =3D 0x09FFFFFF,
+>   };
 >  =20
-> - info SYSMAP System.map
-> - mksysmap vmlinux System.map
-> -=20
->   # step a (see comment above)
->  -if [ -n "${CONFIG_KALLSYMS}" ]; then
->  +if is_enabled CONFIG_KALLSYMS; then
->   	mksysmap ${kallsyms_vmlinux} .tmp_System.map
->  =20
->   	if ! cmp -s System.map .tmp_System.map; then
+>   enum sbi_ext_base_fid {
 
-This is now a conflict between the kbuild tree and Linus' tree.
+This is now a conflict between the risc-v tree and Linus' tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/wt+/v9r1wJaf+lVLe6gHxOR
+--Sig_/ls2tCAonIwnKX_AJBeqqKur
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHkk7QACgkQAVBC80lX
-0Gza7Qf+MqvaXRPNzg74jgaYVKmkY3KG0Ea4+PK+lQaMJtr4hmtchIfgd4ibBAHT
-ruJPhbV20KiuCWvOg/wEylDLlA0LDaOS6Fqd6yoAvWJcTZ6ju4BYyAhMRAEykB24
-WdXNtWIfrVXeWTBUlxAA6q0lLPxW999q8u9wkpiYkOESW8Hjw7ERiVeTv7EP9KXG
-qxh3ji7ydkDfe5Aom0tlFhru2lPc6nedAe1HBm+OhQvgtqsSCs0fvI86/c5+Df92
-bXRf28zM58M4ucjXqoGQK06VeHd/75K7ydyrdtTva/GwfrhT5M7k6NUDZBZm52wN
-5pKQTWEzvV8WR6qJQy6aW2DXRHInxQ==
-=2QTU
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHklBcACgkQAVBC80lX
+0Gx0Kgf8DwWsTWCg2uDT5qR3wwkFtCKSuP0wF5QIgkhrkYZpRAudXaqXQyjsiXO5
++sELtoAlDRix1bMM+A470UU5PFX0nol4w3iP+YqQM0blt2K8B8ghCeq4bww4U+RP
+f2tE7YVt88/vqoz689CO5XkBSx3FHThW9iyGpZbSdc6ZLALypOB/NSIqQqaMKEfu
+qRCNILhu8gVRVsBMXvZeKDEb+w4YdKggW8vifasj+Wldrk+C0r61jc+wycpUvbSS
+WBPm5NjAj4Dz1VxUxc/x/TkRJZVzxFI3Z2bj7Zz/1XftvUBrS0MaW7BRoU0gTeUY
+iJX/XQCADUMTvHa94AVweB0pauBgqA==
+=N0Ig
 -----END PGP SIGNATURE-----
 
---Sig_/wt+/v9r1wJaf+lVLe6gHxOR--
+--Sig_/ls2tCAonIwnKX_AJBeqqKur--

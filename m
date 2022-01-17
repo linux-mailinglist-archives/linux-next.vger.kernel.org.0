@@ -2,67 +2,87 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B280A491187
-	for <lists+linux-next@lfdr.de>; Mon, 17 Jan 2022 23:02:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09D3149118B
+	for <lists+linux-next@lfdr.de>; Mon, 17 Jan 2022 23:02:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231401AbiAQWBq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 17 Jan 2022 17:01:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56334 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231394AbiAQWBp (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 17 Jan 2022 17:01:45 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FAF0C061574;
-        Mon, 17 Jan 2022 14:01:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S235604AbiAQWCo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 17 Jan 2022 17:02:44 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:58595 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231394AbiAQWCn (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 17 Jan 2022 17:02:43 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A3A0D611D4;
-        Mon, 17 Jan 2022 22:01:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9DE4C36AEC;
-        Mon, 17 Jan 2022 22:01:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1642456904;
-        bh=iQtwHLjitLdt/eMeudvR1p4//TwEyv4CAXHlSX5Qc/I=;
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jd5Vn3pPGz4y3V;
+        Tue, 18 Jan 2022 09:02:41 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1642456961;
+        bh=1eoYy/BOqilAQSyAUyNLW4IuNDEj1AkUsUlzcywZheI=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=wFJTCLlmtPgfQza2hk4yfEON1iU+oQSRo7odjjWbGYS07NpCEZnSbmPCleTFGaHa+
-         0bi5f5yiyX3G0TWIbt6jsmADSjVr8T5YnEdczeP5RSFjWvNbd0blLw6WoCXW3vFfeY
-         0kR6CG6MusSaZlyaycJtD1Kur18WuMBD1/ZWSFGs=
-Date:   Mon, 17 Jan 2022 14:01:41 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Suren Baghdasaryan <surenb@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        b=XvKZuyRvp8gXYxj7t2XtT2VDFz0fZz2DAnQvnMFr1cnPRDeo2WxjvATwZ4SuxMtCD
+         AsoGlmxD8NKO9WJcRuNCV4t/n6UhSGBtU8DClNfWNatD0bkkS+teE8PrRgWQQc3qu0
+         kyEn22BTyFUfSc+DbmohXXx7LHfMefkjYyGwVNKtsWFw7QNMOOLCNMhmxRBxjaDzfY
+         V+c/ZiDv7+gEItjFJEuywJ+C8gaaDwffk0MI204p235XeTzAQODSBNkrCHmO6gvSZ+
+         WA9CItg/2i/znsVshYI/tuqyUOtrXFytDzQ5wEhp/WCUB+mlpMrzV8uV/t3q5GRkBD
+         Nndj/wy1rv7Zg==
+Date:   Tue, 18 Jan 2022 09:02:40 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the origin tree
-Message-Id: <20220117140141.45b49494cebb09bc651a9169@linux-foundation.org>
-In-Reply-To: <20220117132434.242b0f66@canb.auug.org.au>
-References: <20220117114514.5b6daa04@canb.auug.org.au>
-        <CAJuCfpErqDrgEkw7OXyGTkfXiAEDHx=9DF9cW0qdc27Nm1_wrw@mail.gmail.com>
-        <20220117132434.242b0f66@canb.auug.org.au>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Subject: Re: linux-next: build warning after merge of the pm tree
+Message-ID: <20220118090240.3429ff1f@canb.auug.org.au>
+In-Reply-To: <20211013172846.55fb665a@canb.auug.org.au>
+References: <20211013172846.55fb665a@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/JgqXXKnVfTU/CDXcSze3hs_";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, 17 Jan 2022 13:24:34 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+--Sig_/JgqXXKnVfTU/CDXcSze3hs_
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> Hi Suren,
-> 
-> On Sun, 16 Jan 2022 17:27:34 -0800 Suren Baghdasaryan <surenb@google.com> wrote:
-> >
-> > Sorry, I saw the warning before when backporting this patch but I
-> > didn't realize that the followup patches refactoring this code would
-> > not be merged.
-> 
-> Hopefully they will be merged shortly.  Andrew?
-> 
+Hi all,
 
-Sorry didn't see this on x86_64.
-sysctl-move-some-boundary-constants-from-sysctlc-to-sysctl_vals.patch
-fixes this.  Shall be sending upstream in a few days.
+On Wed, 13 Oct 2021 17:28:46 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>=20
+> After merging the pm tree, today's linux-next build (htmldocs) produced
+> this warning:
+>=20
+> Documentation/ABI/testing/sysfs-class-thermal:201: WARNING: Bullet list e=
+nds without a blank line; unexpected unindent.
+>=20
+> Introduced by commit
+>=20
+>   80da1b508f29 ("thermal: Move ABI documentation to Documentation/ABI")
 
+I am still seeing this warning.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/JgqXXKnVfTU/CDXcSze3hs_
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHl54AACgkQAVBC80lX
+0Gy2DwgAnWY9NHbKO9/YyqCCE96fR79uRYIoVycl5CU7D26phUcANbMTuNn7ytYM
+9SaMiji/SOuFFaHcr9q5me7A+m7uNt/spQ3v8l1dg96F/YwaTCXYoisb00QZCCcD
+Gcw95EIvhhYo1N4pqPTW8LFeh+odFUALvRhbyKTgU+2c+v56MR3dO33oU+EWM+YY
+WG5h7wQoBtMv/imK4Cgn95YXjWYPyByPFEn8eC1g0/biS7LVdqQaVoLOqKour3ps
+Bi1PjXLcKT1dnckArcjQXMTzUzIYhHzi0+Vq64TqUqcwuMq5ztvZwdGi4FyCu32K
+UJQVnowUNp9fohhnv/0ah1q1CXN0NA==
+=1f2h
+-----END PGP SIGNATURE-----
+
+--Sig_/JgqXXKnVfTU/CDXcSze3hs_--

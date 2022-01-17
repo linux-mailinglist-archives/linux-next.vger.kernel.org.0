@@ -2,165 +2,1893 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D909148FF60
-	for <lists+linux-next@lfdr.de>; Sun, 16 Jan 2022 22:57:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3030348FFC2
+	for <lists+linux-next@lfdr.de>; Mon, 17 Jan 2022 01:42:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236293AbiAPV5D (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 16 Jan 2022 16:57:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42440 "EHLO
+        id S233959AbiAQAl7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 16 Jan 2022 19:41:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233689AbiAPV5C (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 16 Jan 2022 16:57:02 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6398CC061574;
-        Sun, 16 Jan 2022 13:57:02 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JcTQh58kPz4y4B;
-        Mon, 17 Jan 2022 08:57:00 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1642370221;
-        bh=+44FdQ9yi9zlm/WpV+A+PqUF4BuStBMbD1wHprju17I=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=GP1GT6Z6Iqws/tc1gWnUKafWEhVCxauPyw7qgvFz8FAkKCwnjYqPuo3O7KPd2f0Jj
-         SeY03uei+iFHMlGM9BQQ1wAohyP9lehSTSc1/9nb4uwX+u1Kbk1Mzs6peFmANoxRO6
-         VVxyzeJklmJc9WxQLDxF8Hd1lz1qhsBoVkeoYtGVxqq4yTFGEsypZsxO+kJxZs/rIK
-         CL5UH91ZDRifRPFnuGyl88IRIxC9wnNzdrJTGsj5jzr6GGW+sxLX0HpffYGp3XHkhn
-         SZOZXduXHYtNtX5h1eh12uRqmIi9cqtBWfg9nka9g6El2z6H0wVmEM/Sj+ZEAwbrkE
-         hY+mcgn3kVpmA==
-Date:   Mon, 17 Jan 2022 08:57:00 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jeff Layton <jlayton@kernel.org>, Ilya Dryomov <idryomov@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Venky Shankar <vshankar@redhat.com>
-Subject: Re: linux-next: manual merge of the akpm-current tree with the ceph
- tree
-Message-ID: <20220117085700.389949a8@canb.auug.org.au>
-In-Reply-To: <20220114145502.2ab21d46@canb.auug.org.au>
-References: <20220114145502.2ab21d46@canb.auug.org.au>
+        with ESMTP id S233846AbiAQAl7 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 16 Jan 2022 19:41:59 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52B6FC061574
+        for <linux-next@vger.kernel.org>; Sun, 16 Jan 2022 16:41:59 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id m13so18974493pji.3
+        for <linux-next@vger.kernel.org>; Sun, 16 Jan 2022 16:41:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=B5fplRPxzCRbBnu4LdHuGg5in1L3wBsJC/6RVfZQD30=;
+        b=q78KIVLuDgRyhQvjbMLia0iyWC2bR+ZDK1u8gldkV4U5tSmRSF1UvykVqZcn2jg8wh
+         3MWOqfAYdS2yQZq/RYaOcSs3JZXXHAbtjwmd+pzya4fVHhl3iCzTeS5Uc96GnLQHePcm
+         pnQRwM1Q70i/JTnSddxpQckfr79d8Kj5i+0ja8DoXiyE7oi1z0x1aGMCM4F7bnt9m94Z
+         SD9EX6RIuLGOdmt89Uhpw5m5yqng7zQsiwpisuDZSHeSGLZ/neMMa1aeP/mCFrwqmO6a
+         1rJxjMLt++v4a4T2Ttm+nnyWJOu6F18yDZkSWJeMcMmBVz/696rBLMj2Qj9bZdrbcu+4
+         RS0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=B5fplRPxzCRbBnu4LdHuGg5in1L3wBsJC/6RVfZQD30=;
+        b=GkWKErA0zXtDavQNK0YzfOBf5NbtkdeHEj1sefdG8nAOlvIYnTVjggOrc33vsEMFtv
+         GEh8FJsE679ecvHmZeF/tT6nt7kUk9o9KUJPVAijkAzk082h9G7+IcPs5CwBtMYPWAGK
+         rPsNEUjn9+njdqpLLfr2okR/4MmdwaEWaFUGi8EogIfJPhlTrMLGnp1vVN2V3BLttgZM
+         IfZ1Pq9i7OPEXF4EAxvC1hLKju1FFAgCA36TwzKclNK81+uWcfIqf4yDJ2f/Sh1GjQ2N
+         rUUGztpsoxhZeT19ZwnFSAnS0Yu68dJAyn39DCe/OIGIYwzkos9hFE6kymXeLW/N5Jfg
+         jvwg==
+X-Gm-Message-State: AOAM531uVqZgS9s5Xs80hhnnPUWmLlWhA1yauSWtEpcNV1MRMrWNKyDl
+        1U5BolBpqn031GiNUShAkzM5HNmKrrJ0D6PJ
+X-Google-Smtp-Source: ABdhPJyx31z+WFqTTRS7nqLH15Losr6KII8hP5cTTo3aSS1K7/Amdm/LdgFplXtwLTJ3AMZd7ZP9MA==
+X-Received: by 2002:a17:902:6841:b0:149:6791:5a4f with SMTP id f1-20020a170902684100b0014967915a4fmr19892320pln.123.1642380117386;
+        Sun, 16 Jan 2022 16:41:57 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id z31sm9798616pgl.10.2022.01.16.16.41.56
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Jan 2022 16:41:57 -0800 (PST)
+Message-ID: <61e4bb55.1c69fb81.a1f32.b47e@mx.google.com>
+Date:   Sun, 16 Jan 2022 16:41:57 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/+g05TpvkkHvSzhVKHgXFjii";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: v5.16-10644-g36cca0cb5eb5
+X-Kernelci-Branch: pending-fixes
+Subject: next/pending-fixes build: 205 builds: 13 failed, 192 passed, 16 errors,
+ 129 warnings (v5.16-10644-g36cca0cb5eb5)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/+g05TpvkkHvSzhVKHgXFjii
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/pending-fixes build: 205 builds: 13 failed, 192 passed, 16 errors, 129=
+ warnings (v5.16-10644-g36cca0cb5eb5)
 
-Hi all,
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v5.16-10644-g36cca0cb5eb5/
 
-On Fri, 14 Jan 2022 14:55:02 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> Today's linux-next merge of the akpm-current tree got conflicts in:
->=20
->   include/linux/ceph/libceph.h
->   net/ceph/ceph_common.c
->=20
-> between commit:
->=20
->   4153c7fc937a ("libceph: rename parse_fsid() to ceph_parse_fsid() and ex=
-port")
->=20
-> from the ceph tree and commit:
->=20
->   f9126de5849a ("mm: allow !GFP_KERNEL allocations for kvmalloc")
->=20
-> from the akpm-current tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->=20
->=20
-> diff --cc include/linux/ceph/libceph.h
-> index 644f224eccf7,309acbcb5a8a..000000000000
-> --- a/include/linux/ceph/libceph.h
-> +++ b/include/linux/ceph/libceph.h
-> @@@ -295,8 -295,6 +295,7 @@@ extern bool libceph_compatible(void *da
->  =20
->   extern const char *ceph_msg_type_name(int type);
->   extern int ceph_check_fsid(struct ceph_client *client, struct ceph_fsid=
- *fsid);
-> - extern void *ceph_kvmalloc(size_t size, gfp_t flags);
->  +extern int ceph_parse_fsid(const char *str, struct ceph_fsid *fsid);
->  =20
->   struct fs_parameter;
->   struct fc_log;
-> diff --cc net/ceph/ceph_common.c
-> index decae43b4262,9441b4a4912b..000000000000
-> --- a/net/ceph/ceph_common.c
-> +++ b/net/ceph/ceph_common.c
-> @@@ -190,34 -190,7 +190,7 @@@ int ceph_compare_options(struct ceph_op
->   }
->   EXPORT_SYMBOL(ceph_compare_options);
->  =20
-> - /*
-> -  * kvmalloc() doesn't fall back to the vmalloc allocator unless flags a=
-re
-> -  * compatible with (a superset of) GFP_KERNEL.  This is because while t=
-he
-> -  * actual pages are allocated with the specified flags, the page table =
-pages
-> -  * are always allocated with GFP_KERNEL.
-> -  *
-> -  * ceph_kvmalloc() may be called with GFP_KERNEL, GFP_NOFS or GFP_NOIO.
-> -  */
-> - void *ceph_kvmalloc(size_t size, gfp_t flags)
-> - {
-> - 	void *p;
-> -=20
-> - 	if ((flags & (__GFP_IO | __GFP_FS)) =3D=3D (__GFP_IO | __GFP_FS)) {
-> - 		p =3D kvmalloc(size, flags);
-> - 	} else if ((flags & (__GFP_IO | __GFP_FS)) =3D=3D __GFP_IO) {
-> - 		unsigned int nofs_flag =3D memalloc_nofs_save();
-> - 		p =3D kvmalloc(size, GFP_KERNEL);
-> - 		memalloc_nofs_restore(nofs_flag);
-> - 	} else {
-> - 		unsigned int noio_flag =3D memalloc_noio_save();
-> - 		p =3D kvmalloc(size, GFP_KERNEL);
-> - 		memalloc_noio_restore(noio_flag);
-> - 	}
-> -=20
-> - 	return p;
-> - }
-> -=20
->  -static int parse_fsid(const char *str, struct ceph_fsid *fsid)
->  +int ceph_parse_fsid(const char *str, struct ceph_fsid *fsid)
->   {
->   	int i =3D 0;
->   	char tmp[3];
+Tree: next
+Branch: pending-fixes
+Git Describe: v5.16-10644-g36cca0cb5eb5
+Git Commit: 36cca0cb5eb5f16d2f5a2300c5c9597f617ca3d4
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 7 unique architectures
 
-This is now a conflict between the ceph tree and Linus' tree.
+Build Failures Detected:
 
---=20
-Cheers,
-Stephen Rothwell
+arm64:
+    allmodconfig: (gcc-10) FAIL
 
---Sig_/+g05TpvkkHvSzhVKHgXFjii
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+arm:
+    allmodconfig: (gcc-10) FAIL
+    multi_v7_defconfig+CONFIG_SMP=3Dn: (gcc-10) FAIL
+    qcom_defconfig: (gcc-10) FAIL
+    rpc_defconfig: (gcc-10) FAIL
 
------BEGIN PGP SIGNATURE-----
+mips:
+    bigsur_defconfig: (gcc-10) FAIL
+    decstation_64_defconfig: (gcc-10) FAIL
+    decstation_defconfig: (gcc-10) FAIL
+    decstation_r4k_defconfig: (gcc-10) FAIL
+    ip27_defconfig: (gcc-10) FAIL
+    ip28_defconfig: (gcc-10) FAIL
+    sb1250_swarm_defconfig: (gcc-10) FAIL
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHklKwACgkQAVBC80lX
-0GwQ7wgAiISglzpGUpBWS07YF4AiK9msJDK0BTTIYUvv8dPYytmjEubZ5wUWBVcA
-AC+bIjz7I5401hLuO+k7aperW4K1KHl8/lUUEa1YrexNOu1ZZ1NrXchWc7xnkPyl
-rp9Lq4d2ItDZT0MA6/U7Rboh90hNaA67YElyFWZfWI2ebwJEpuVvNmZKIJdijKTJ
-kGne2Lxr0s3a8r4trS/xtDWfh2AyJEKPjaILr88agA8VBdskZ4XcanmpZcEamKjO
-4hVY740Kk7+0QaZs3WczZUxgxM67LELapctHorNMlXblcgqVmMsHFDN3FMVx/2br
-GQ09gwLUZinvffdPjCw/oaBz0zOwcQ==
-=kwAz
------END PGP SIGNATURE-----
+x86_64:
+    allmodconfig: (gcc-10) FAIL
 
---Sig_/+g05TpvkkHvSzhVKHgXFjii--
+Errors and Warnings Detected:
+
+arc:
+    allnoconfig (gcc-10): 1 warning
+    haps_hs_smp_defconfig+kselftest (gcc-10): 1 warning
+    tinyconfig (gcc-10): 1 warning
+
+arm64:
+    allmodconfig (gcc-10): 1 error, 1 warning
+
+arm:
+    allmodconfig (gcc-10): 1 error, 1 warning
+    am200epdkit_defconfig (gcc-10): 1 warning
+    assabet_defconfig (gcc-10): 1 warning
+    at91_dt_defconfig (gcc-10): 2 warnings
+    badge4_defconfig (gcc-10): 1 warning
+    cerfcube_defconfig (gcc-10): 1 warning
+    cm_x300_defconfig (gcc-10): 1 warning
+    colibri_pxa270_defconfig (gcc-10): 1 warning
+    colibri_pxa300_defconfig (gcc-10): 1 warning
+    collie_defconfig (gcc-10): 1 warning
+    davinci_all_defconfig (gcc-10): 1 warning
+    dove_defconfig (gcc-10): 1 warning
+    ep93xx_defconfig (gcc-10): 1 warning
+    eseries_pxa_defconfig (gcc-10): 1 warning
+    ezx_defconfig (gcc-10): 1 warning
+    footbridge_defconfig (gcc-10): 1 warning
+    gemini_defconfig (gcc-10): 1 warning
+    h3600_defconfig (gcc-10): 1 warning
+    h5000_defconfig (gcc-10): 1 warning
+    hackkit_defconfig (gcc-10): 1 warning
+    hisi_defconfig (gcc-10): 1 warning
+    imote2_defconfig (gcc-10): 1 warning
+    integrator_defconfig (gcc-10): 1 warning
+    iop32x_defconfig (gcc-10): 1 warning
+    ixp4xx_defconfig (gcc-10): 1 warning
+    jornada720_defconfig (gcc-10): 1 warning
+    lart_defconfig (gcc-10): 1 warning
+    lpc18xx_defconfig (gcc-10): 1 warning
+    lpc32xx_defconfig (gcc-10): 1 warning
+    lpd270_defconfig (gcc-10): 1 warning
+    lubbock_defconfig (gcc-10): 1 warning
+    magician_defconfig (gcc-10): 1 warning
+    mainstone_defconfig (gcc-10): 1 warning
+    mini2440_defconfig (gcc-10): 1 warning
+    mmp2_defconfig (gcc-10): 1 warning
+    moxart_defconfig (gcc-10): 1 warning
+    mps2_defconfig (gcc-10): 1 warning
+    multi_v4t_defconfig (gcc-10): 1 warning
+    multi_v5_defconfig (gcc-10): 1 warning
+    multi_v7_defconfig+CONFIG_SMP=3Dn (gcc-10): 2 errors
+    neponset_defconfig (gcc-10): 1 warning
+    netwinder_defconfig (gcc-10): 1 warning
+    nhk8815_defconfig (gcc-10): 1 warning
+    palmz72_defconfig (gcc-10): 1 warning
+    pcm027_defconfig (gcc-10): 1 warning
+    pleb_defconfig (gcc-10): 1 warning
+    pxa168_defconfig (gcc-10): 1 warning
+    pxa255-idp_defconfig (gcc-10): 1 warning
+    pxa3xx_defconfig (gcc-10): 1 warning
+    pxa910_defconfig (gcc-10): 1 warning
+    qcom_defconfig (gcc-10): 1 error
+    rpc_defconfig (gcc-10): 2 errors
+    s3c2410_defconfig (gcc-10): 1 warning
+    s3c6400_defconfig (gcc-10): 1 warning
+    s5pv210_defconfig (gcc-10): 1 warning
+    sama5_defconfig (gcc-10): 1 warning
+    sama7_defconfig (gcc-10): 1 warning
+    shannon_defconfig (gcc-10): 1 warning
+    simpad_defconfig (gcc-10): 1 warning
+    spear13xx_defconfig (gcc-10): 1 warning
+    spear3xx_defconfig (gcc-10): 1 warning
+    spear6xx_defconfig (gcc-10): 1 warning
+    stm32_defconfig (gcc-10): 1 warning
+    trizeps4_defconfig (gcc-10): 1 warning
+    versatile_defconfig (gcc-10): 1 warning
+    vf610m4_defconfig (gcc-10): 1 warning
+    viper_defconfig (gcc-10): 1 warning
+    vt8500_v6_v7_defconfig (gcc-10): 1 warning
+    xcep_defconfig (gcc-10): 1 warning
+    zeus_defconfig (gcc-10): 1 warning
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-10): 2 warnings
+    32r2el_defconfig+kselftest (gcc-10): 2 warnings
+    ar7_defconfig (gcc-10): 1 warning
+    ath25_defconfig (gcc-10): 1 warning
+    ath79_defconfig (gcc-10): 1 warning
+    bcm47xx_defconfig (gcc-10): 1 warning
+    bcm63xx_defconfig (gcc-10): 1 warning
+    bigsur_defconfig (gcc-10): 1 error, 1 warning
+    bmips_be_defconfig (gcc-10): 1 warning
+    bmips_stb_defconfig (gcc-10): 1 warning
+    capcella_defconfig (gcc-10): 1 warning
+    cavium_octeon_defconfig (gcc-10): 1 warning
+    ci20_defconfig (gcc-10): 2 warnings
+    cobalt_defconfig (gcc-10): 1 warning
+    cu1000-neo_defconfig (gcc-10): 1 warning
+    cu1830-neo_defconfig (gcc-10): 1 warning
+    db1xxx_defconfig (gcc-10): 1 warning
+    decstation_64_defconfig (gcc-10): 1 error, 1 warning
+    decstation_defconfig (gcc-10): 1 error, 1 warning
+    decstation_r4k_defconfig (gcc-10): 1 error, 1 warning
+    e55_defconfig (gcc-10): 1 warning
+    fuloong2e_defconfig (gcc-10): 1 error
+    ip22_defconfig (gcc-10): 1 warning
+    jazz_defconfig (gcc-10): 1 warning
+    jmr3927_defconfig (gcc-10): 1 warning
+    lemote2f_defconfig (gcc-10): 1 error
+    loongson2k_defconfig (gcc-10): 1 warning
+    malta_defconfig (gcc-10): 1 warning
+    malta_qemu_32r6_defconfig (gcc-10): 1 warning
+    maltaaprp_defconfig (gcc-10): 1 warning
+    maltasmvp_defconfig (gcc-10): 1 warning
+    maltasmvp_eva_defconfig (gcc-10): 1 warning
+    maltaup_defconfig (gcc-10): 1 warning
+    maltaup_xpa_defconfig (gcc-10): 1 warning
+    mpc30x_defconfig (gcc-10): 1 warning
+    mtx1_defconfig (gcc-10): 3 warnings
+    omega2p_defconfig (gcc-10): 1 warning
+    pic32mzda_defconfig (gcc-10): 1 warning
+    qi_lb60_defconfig (gcc-10): 1 warning
+    rb532_defconfig (gcc-10): 1 warning
+    rbtx49xx_defconfig (gcc-10): 1 warning
+    rm200_defconfig (gcc-10): 1 warning
+    rs90_defconfig (gcc-10): 1 warning
+    rt305x_defconfig (gcc-10): 1 warning
+    sb1250_swarm_defconfig (gcc-10): 1 error, 1 warning
+    tb0219_defconfig (gcc-10): 1 warning
+    tb0226_defconfig (gcc-10): 1 warning
+    tb0287_defconfig (gcc-10): 1 warning
+    vocore2_defconfig (gcc-10): 1 warning
+    workpad_defconfig (gcc-10): 1 warning
+
+riscv:
+    defconfig (gcc-10): 1 warning
+    nommu_k210_defconfig (gcc-10): 1 warning
+    nommu_k210_sdcard_defconfig (gcc-10): 1 warning
+    rv32_defconfig (gcc-10): 1 warning
+
+x86_64:
+    allmodconfig (gcc-10): 2 errors
+
+Errors summary:
+
+    3    drivers/net/ethernet/amd/declance.c:1231:20: error: assignment of =
+read-only location =E2=80=98*(dev->dev_addr + (sizetype)i)=E2=80=99
+    2    drivers/net/ethernet/broadcom/sb1250-mac.c:2187:20: error: assignm=
+ent of read-only location =E2=80=98*(dev->dev_addr + (sizetype)i)=E2=80=99
+    2    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=
+=80=98-mhard-float=E2=80=99
+    2    /usr/lib/gcc/x86_64-linux-gnu/10/plugin/include/config/i386/i386.h=
+:2500:10: fatal error: common/config/i386/i386-cpuinfo.h: No such file or d=
+irectory
+    1    irq-gic-v3-its.c:(.text+0x14d0): undefined reference to `cpus_boot=
+ed_once_mask'
+    1    drivers/usb/gadget/udc/at91_udc.h:174:33: error: format =E2=80=98%=
+d=E2=80=99 expects argument of type =E2=80=98int=E2=80=99, but argument 3 h=
+as type =E2=80=98struct gpio_desc *=E2=80=99 [-Werror=3Dformat=3D]
+    1    drivers/pinctrl/pinctrl-thunderbay.c:815:8: error: assignment disc=
+ards =E2=80=98const=E2=80=99 qualifier from pointer target type [-Werror=3D=
+discarded-qualifiers]
+    1    arm-linux-gnueabihf-ld: irq-gic-v3-its.c:(.text+0x14d4): undefined=
+ reference to `cpus_booted_once_mask'
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
+=3D0x'
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
+=3D0x'
+    1    /tmp/kci/linux/build/../drivers/gpu/drm/panel/panel-edp.c:843: und=
+efined reference to `drm_panel_dp_aux_backlight'
+
+Warnings summary:
+
+    115  kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 de=
+fined but not used [-Wunused-variable]
+    3    sound/pci/ca0106/ca0106.h:62: warning: "PTR" redefined
+    2    include/linux/kern_levels.h:5:18: warning: format =E2=80=98%d=E2=
+=80=99 expects argument of type =E2=80=98int=E2=80=99, but argument 2 has t=
+ype =E2=80=98struct gpio_desc *=E2=80=99 [-Wformat=3D]
+    2    cc1: all warnings being treated as errors
+    2    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+    2    arch/arc/Makefile:26: ** WARNING ** CONFIG_ARC_TUNE_MCPU flag '' i=
+s unknown, fallback to ''
+    1    lib/test_printf.c:247: warning: "PTR" redefined
+    1    kernel/sysctl.c:125:12: warning: 'one_thousand' defined but not us=
+ed [-Wunused-variable]
+    1    arch/mips/boot/dts/ingenic/jz4780.dtsi:513.33-515.6: Warning (unit=
+_address_format): /nemc@13410000/efuse@d0/eth-mac-addr@0x22: unit name shou=
+ld not have leading "0x"
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+kselftest (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warni=
+ngs, 0 section mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+    lib/test_printf.c:247: warning: "PTR" redefined
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 section =
+mismatches
+
+Errors:
+    drivers/pinctrl/pinctrl-thunderbay.c:815:8: error: assignment discards =
+=E2=80=98const=E2=80=99 qualifier from pointer target type [-Werror=3Ddisca=
+rded-qualifiers]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mi=
+smatches
+
+Errors:
+    drivers/usb/gadget/udc/at91_udc.h:174:33: error: format =E2=80=98%d=E2=
+=80=99 expects argument of type =E2=80=98int=E2=80=99, but argument 3 has t=
+ype =E2=80=98struct gpio_desc *=E2=80=99 [-Werror=3Dformat=3D]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (x86_64, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 secti=
+on mismatches
+
+Errors:
+    /usr/lib/gcc/x86_64-linux-gnu/10/plugin/include/config/i386/i386.h:2500=
+:10: fatal error: common/config/i386/i386-cpuinfo.h: No such file or direct=
+ory
+    /usr/lib/gcc/x86_64-linux-gnu/10/plugin/include/config/i386/i386.h:2500=
+:10: fatal error: common/config/i386/i386-cpuinfo.h: No such file or direct=
+ory
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mi=
+smatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: 'one_thousand' defined but not used [-=
+Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+am200epdkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
+section mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+ar7_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+assabet_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+at91_dt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+    include/linux/kern_levels.h:5:18: warning: format =E2=80=98%d=E2=80=99 =
+expects argument of type =E2=80=98int=E2=80=99, but argument 2 has type =E2=
+=80=98struct gpio_desc *=E2=80=99 [-Wformat=3D]
+
+---------------------------------------------------------------------------=
+-----
+ath25_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+ath79_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+axm55xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+badge4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+bcm2835_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm47xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+bcm63xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+bigsur_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 secti=
+on mismatches
+
+Errors:
+    drivers/net/ethernet/broadcom/sb1250-mac.c:2187:20: error: assignment o=
+f read-only location =E2=80=98*(dev->dev_addr + (sizetype)i)=E2=80=99
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+bmips_be_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+bmips_stb_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
+ection mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+capcella_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+cavium_octeon_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning,=
+ 0 section mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+cerfcube_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+ci20_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    arch/mips/boot/dts/ingenic/jz4780.dtsi:513.33-515.6: Warning (unit_addr=
+ess_format): /nemc@13410000/efuse@d0/eth-mac-addr@0x22: unit name should no=
+t have leading "0x"
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+cm_x300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+cobalt_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning,=
+ 0 section mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning,=
+ 0 section mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+collie_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+corgi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
+section mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+cu1830-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
+section mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+davinci_all_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
+section mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+db1xxx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+decstation_64_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, =
+0 section mismatches
+
+Errors:
+    drivers/net/ethernet/amd/declance.c:1231:20: error: assignment of read-=
+only location =E2=80=98*(dev->dev_addr + (sizetype)i)=E2=80=99
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+decstation_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 s=
+ection mismatches
+
+Errors:
+    drivers/net/ethernet/amd/declance.c:1231:20: error: assignment of read-=
+only location =E2=80=98*(dev->dev_addr + (sizetype)i)=E2=80=99
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+decstation_r4k_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning,=
+ 0 section mismatches
+
+Errors:
+    drivers/net/ethernet/amd/declance.c:1231:20: error: assignment of read-=
+only location =E2=80=98*(dev->dev_addr + (sizetype)i)=E2=80=99
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mi=
+smatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+crypto (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+ima (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+dove_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+e55_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+ep93xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+eseries_pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
+section mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+exynos_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ezx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+footbridge_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
+ection mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+fuloong2e_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 s=
+ection mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+gcw0_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+gemini_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+gpr_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+h3600_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+h5000_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+hackkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+kselftest (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 w=
+arning, 0 section mismatches
+
+Warnings:
+    arch/arc/Makefile:26: ** WARNING ** CONFIG_ARC_TUNE_MCPU flag '' is unk=
+nown, fallback to ''
+
+---------------------------------------------------------------------------=
+-----
+hisi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+hsdk_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+imote2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+imx_v4_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
+ection mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+iop32x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+ip22_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+ip27_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip28_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip32_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ixp4xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+jazz_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+jmr3927_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+jornada720_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
+ection mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+keystone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+lart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+lemote2f_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 se=
+ction mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+loongson1b_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson1c_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson2k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
+section mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+loongson3_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpc18xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+lpc32xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+lpd270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+lubbock_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+magician_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+mainstone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+malta_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+malta_kvm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_qemu_32r6_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warnin=
+g, 0 section mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+maltaaprp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
+ection mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
+ection mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_eva_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning,=
+ 0 section mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+maltaup_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+maltaup_xpa_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0=
+ section mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+milbeaut_m10v_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mini2440_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+mmp2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+moxart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+mpc30x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+mps2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+mtx1_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    sound/pci/ca0106/ca0106.h:62: warning: "PTR" redefined
+    sound/pci/ca0106/ca0106.h:62: warning: "PTR" redefined
+    sound/pci/ca0106/ca0106.h:62: warning: "PTR" redefined
+
+---------------------------------------------------------------------------=
+-----
+multi_v4t_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    include/linux/kern_levels.h:5:18: warning: format =E2=80=98%d=E2=80=99 =
+expects argument of type =E2=80=98int=E2=80=99, but argument 2 has type =E2=
+=80=98struct gpio_desc *=E2=80=99 [-Wformat=3D]
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-10) =E2=80=94 PASS, =
+0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-10) =E2=80=
+=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 0=
+ warnings, 0 section mismatches
+
+Errors:
+    irq-gic-v3-its.c:(.text+0x14d0): undefined reference to `cpus_booted_on=
+ce_mask'
+    arm-linux-gnueabihf-ld: irq-gic-v3-its.c:(.text+0x14d4): undefined refe=
+rence to `cpus_booted_once_mask'
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
+ errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+crypto (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+ima (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mxs_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+neponset_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+netwinder_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+nhk8815_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0=
+ section mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_sdcard_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 1 war=
+ning, 0 section mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+omap1_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+omap2plus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+omega2p_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+orion5x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+oxnas_v6_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+palmz72_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+pcm027_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+pic32mzda_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
+ection mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+pleb_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+pxa168_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+pxa255-idp_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
+ection mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+pxa3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+pxa910_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+qcom_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section=
+ mismatches
+
+Errors:
+    /tmp/kci/linux/build/../drivers/gpu/drm/panel/panel-edp.c:843: undefine=
+d reference to `drm_panel_dp_aux_backlight'
+
+---------------------------------------------------------------------------=
+-----
+qi_lb60_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+rb532_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+rbtx49xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+realview_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+rm200_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+rpc_defconfig (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 section=
+ mismatches
+
+Errors:
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=3D0x'
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=3D0x'
+
+---------------------------------------------------------------------------=
+-----
+rs90_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+rt305x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+rv32_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+s3c2410_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+s3c6400_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+s5pv210_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+sama5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+sama7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+sb1250_swarm_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0=
+ section mismatches
+
+Errors:
+    drivers/net/ethernet/broadcom/sb1250-mac.c:2187:20: error: assignment o=
+f read-only location =E2=80=98*(dev->dev_addr + (sizetype)i)=E2=80=99
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+shannon_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+shmobile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+simpad_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+socfpga_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear13xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+spear3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+spear6xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+spitz_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+stm32_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+sunxi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+tb0219_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+tb0226_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+tb0287_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+tct_hammer_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mis=
+matches
+
+Warnings:
+    arch/arc/Makefile:26: ** WARNING ** CONFIG_ARC_TUNE_MCPU flag '' is unk=
+nown, fallback to ''
+
+---------------------------------------------------------------------------=
+-----
+trizeps4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+u8500_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+versatile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+vexpress_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vf610m4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+viper_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+vocore2_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0=
+ section mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+workpad_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+crypto (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+ima (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, =
+0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 e=
+rrors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook+kselftest (x86_64, gcc-10) =E2=80=94 PASS, =
+0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86_kvm_guest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0=
+ warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+xcep_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+zeus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    kernel/sysctl.c:125:12: warning: =E2=80=98one_thousand=E2=80=99 defined=
+ but not used [-Wunused-variable]
+
+---
+For more info write to <info@kernelci.org>

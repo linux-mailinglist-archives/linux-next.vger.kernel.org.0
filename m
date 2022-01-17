@@ -2,90 +2,119 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6799D491161
-	for <lists+linux-next@lfdr.de>; Mon, 17 Jan 2022 22:42:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B94A4491184
+	for <lists+linux-next@lfdr.de>; Mon, 17 Jan 2022 23:01:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237737AbiAQVmY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 17 Jan 2022 16:42:24 -0500
-Received: from mout.gmx.net ([212.227.15.19]:33383 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237515AbiAQVmW (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 17 Jan 2022 16:42:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1642455732;
-        bh=CjO3Hio2OwEz3aLo79EY9u6+106RoCFGduZbE4yheTs=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=gALf5YeO661+wEDU/erTMhRoSmqHHshcrKiDy85NxOpCod8H3IgYNmmevWgf68Smi
-         APVc/5id2erWr1mS9B7fKGUczb2WjvvlhRUSpqIOCt7rWZfBpaJAWI27cnJh5RdadG
-         8lMLoyqw3ZytrZVrDSbM4ZRWt+w2mkAqoHBJilxQ=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.167.237]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1N63Vi-1mGMdY2Jui-016Qb2; Mon, 17
- Jan 2022 22:42:12 +0100
-Message-ID: <c86bd360-a3d3-9aba-cd98-d1458b301787@gmx.de>
-Date:   Mon, 17 Jan 2022 22:41:07 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: linux-next: Fixes tag needs some work in the fbdev tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     "Z. Liu" <liuzx@knownsec.com>,
+        id S230205AbiAQWBE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 17 Jan 2022 17:01:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56172 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231394AbiAQWBC (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 17 Jan 2022 17:01:02 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4055C061574;
+        Mon, 17 Jan 2022 14:01:01 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jd5Sq4q8Zz4y3V;
+        Tue, 18 Jan 2022 09:00:59 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1642456859;
+        bh=plaNKHLvNQ8OF3ALbYE1GNmcp/NcKkMAXJx6qB0A+FI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Nwo8q3N/P+KH04OD3TxNsdgiuVOYyD78+ax81HPu30QckpKKWXlPdcuM0n19AjJ56
+         vDwQP5uSkhr5ANItsdYDMK64WPDb8QdmAbF511HodqXBDSbfefQr8kRsz0WUJzUoMA
+         l/3XgKlIVO9K47eEag/KKBnTnfDu6z5zREAwgWH0Az29vtM8zS4Z+gl14BVf72cSeg
+         EXpVYgbono9YmmEnlDjy+gGsOZGFa9Im263ynZJl0fQGRMsQUtjpcB62ex8m+SYJKL
+         GJBVJIfVeXg5jWQ2WLlXir7F8WcUJcV/zc8qbWPc/XZNzUGD5HyDgv26J3vcr9f5yA
+         JGIGyStfuhpWw==
+Date:   Tue, 18 Jan 2022 09:00:58 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Greentime Hu <green.hu@gmail.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220118083336.25b0bcd6@canb.auug.org.au>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <20220118083336.25b0bcd6@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:pfFYL1ylQwNolxj51a/ex+/2d5RyUzhFaXO5cB2Ano5AQn030KM
- yY2w5Q24JkrKGnhLlL5i+M8SLC9iu/2xd+ckRByeoF4HqvAjaVltYqVDEdI7ntFmXPXkua/
- VWZE/2E0rpHFoLJrF9fxt8tnagZXdYHPfo/vJXN7fkw+TzL9N5zaoSsFObsYOcY7kG53gyc
- clQK5VIxDfx/EIpJU3h+Q==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:SHg2tCboBbc=:EGyRHHp3Uo/LowcHp10y/F
- C3ZxlsCGTToi3oWB+/7lGLmYfDd5wQ98bYhvyg6JleK9MQw6qgOY8BSAZE+qyxoDb05WQAhTB
- HJ0qxxrRd1ZhkgoiIeRxkbr/KVbxWv2+Os1MVkHSzl7Xe7wqNroiF7X7WRX6NgTG8vRFPKBod
- o4XAb42twHxGsAkqyECTP+OE8+PWpr9nXq0ztMhKUMvEMqntyQHmOLkpRSkR/7Hx/fDLG4ldv
- GeKAKucs8NuDdFtMiSbIfhbTY5Sm+HOeEaapK4gkp21BdCFODngcGYgv4yeTTOTxer3lL85Ot
- 4rMy8b9wsZ5tDx+PyaA2lkIvVZX5vlQP8iOd8yKQYVhFYQqlk9/amOeucoctq+VO8AuShfuNu
- GjvXdINEyygQJWBW3elkPGEem6/6Ub4RMgHEzzhyam28V2QPAaE9za2y98ZcTeXulfQ6Z5+lr
- ze+NjrUuDB6uttajMRlGckuE5Veqw5yrbk6epgyok/gervvBJsn9YRxwZaGImkmrDBJxTPO87
- k3iZh34osOWeJdAZFwcmL1aRID6vOcQO1sj8atmM0WpbJWj7LOYYaucMXz6JuF1xkhv6EYFQb
- aOtZ6AJ7zcb7bl0B1/oZBcOu3hjmdnsr3sdSD7yfQCIvMgxhFNcw+J+xJVi0X+EpgpVExRG0n
- g3blrsX46zml1fOT0YgIdxSk9fSUcsd0KfHFPa+hHOJDwPuUqzJW0uFUm9276fS27eTmzPdFs
- oXPo9aRB+j8S+oBg4AbAh/UBFHFlGxIuRGU7yN/D9zVQe5So31PTXC4VdgUhkb1Vzzorx5uTT
- 4oD/RAZ5G+/ZDMADHPrRMk878YhIENLng5ytIok49opflr7HK4C0upKw+AX6WFqXac2D9gsmC
- DG0pXIciKXxNy1RSnrva+5PvGj/mAbRxnceFTUlTkCwGrIgFYWlIaYjd5bEitKd/5bHupAckn
- fKcI68JwsJ+cY6Or+x7YOYvlqik9+LrT0A4fXSlwJ9O4Tk7N9tMoh4yf6VKWWMg9CGIxoY8QG
- Di2uFRzlwGoVMHUT6MlZNJieNCF1khmr3mj9a1gVSgjC2ylXSeh4v52Nh/d7v0w88/geDDy+D
- G5I2pV+Tnogskk=
+Subject: Re: linux-next: manual merge of the nds32 tree with the kbuild tree
+Message-ID: <20220118090058.2c987ec6@canb.auug.org.au>
+In-Reply-To: <20211025093813.2ebe9212@canb.auug.org.au>
+References: <20211025093813.2ebe9212@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/6/MsRurRevswd7=JCmzhlF9";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 1/17/22 22:33, Stephen Rothwell wrote:
-> Hi all,
->
-> In commit
->
->   a274f635669a ("matroxfb: set maxvram of vbG200eW to the same as vbG200=
- to avoid black screen")
->
-> Fixes tag
->
->   Fixes: 1be60bd66d54 ("matroxfb: add Matrox MGA-G200eW board support")
->
-> has these problem(s):
->
->   - Target SHA1 does not exist
->
-> Maybe you meant
->
-> Fixes: 11be60bd66d5 ("matroxfb: add Matrox MGA-G200eW board support")
+--Sig_/6/MsRurRevswd7=JCmzhlF9
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Yes.
-Fixed up now.
+Hi all,
 
-Thanks!
-Helge
+On Mon, 25 Oct 2021 09:38:13 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> Today's linux-next merge of the nds32 tree got a conflict in:
+>=20
+>   arch/nds32/Kbuild
+>=20
+> between commit:
+>=20
+>   8212f8986d31 ("kbuild: use more subdir- for visiting subdirectories whi=
+le cleaning")
+>=20
+> from the kbuild tree and commit:
+>=20
+>   37160f01e8ea ("nds32: move core-y in arch/nds32/Makefile to arch/nds32/=
+Kbuild")
+>=20
+> from the nds32 tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+>=20
+> diff --cc arch/nds32/Kbuild
+> index 4e39f7abdeb6,565b9bc3c9db..000000000000
+> --- a/arch/nds32/Kbuild
+> +++ b/arch/nds32/Kbuild
+> @@@ -1,4 -1,4 +1,7 @@@
+>   # SPDX-License-Identifier: GPL-2.0-only
+> + obj-y			+=3D kernel/ mm/
+> + obj-$(CONFIG_FPU)	+=3D math-emu/
+> + obj-y			+=3D boot/dts/
+>  +
+>  +# for cleaning
+>  +subdir- +=3D boot
+
+I am still getting this conflict (and another on arch/nds32/Kconfig),
+and so am wondering when the nds32 tree will be submitted to Linus for
+merging?  It has not been updated since last September.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/6/MsRurRevswd7=JCmzhlF9
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHl5xoACgkQAVBC80lX
+0GxOmgf/RnbTKi0FPNEAoeK1HnUlwWI06nlgU7TuRKu7FxAvrZ7wuO+NBtA3e1F7
+HYIa73CVhHZ60VsQGCNRjOb8uLHDIq7pAOazgL3XxDVt35BEJ8ckFEETXAwtvQHI
+rG3c0STb4kuozncjQ6MxAF8f+W5sMqRU8tddOwXGj0vES8g4/Y8QwWyvgGY1mSgi
+ab7QRmjPDBl74kXY6HA4fIMcWYDSGZO4uIrzmW2MRoMEnP7bs6CZ+/9oTJI9h0wT
+estOy+6BTgymuaVYZWS8M0m6mEfpXakv9x8V5mD+hMtSWec/4suynHCARQcIa9to
+pFP0MWLgavP1I7dsgcR3KYts/24Vbw==
+=e4J5
+-----END PGP SIGNATURE-----
+
+--Sig_/6/MsRurRevswd7=JCmzhlF9--

@@ -2,96 +2,123 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9939C4911B9
-	for <lists+linux-next@lfdr.de>; Mon, 17 Jan 2022 23:30:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15DD2491278
+	for <lists+linux-next@lfdr.de>; Tue, 18 Jan 2022 00:51:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233494AbiAQWao (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 17 Jan 2022 17:30:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34456 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbiAQWao (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 17 Jan 2022 17:30:44 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEBE9C061574;
-        Mon, 17 Jan 2022 14:30:43 -0800 (PST)
+        id S231566AbiAQXvO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 17 Jan 2022 18:51:14 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:58073 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243839AbiAQXvN (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 17 Jan 2022 18:51:13 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jd6756MYFz4y3q;
-        Tue, 18 Jan 2022 09:30:41 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jd7vs0t1pz4y3l;
+        Tue, 18 Jan 2022 10:51:05 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1642458642;
-        bh=S/vRHnr813JVAuZLgX3lfRw7+YkXFFaRXlxnMiBOuxg=;
+        s=201702; t=1642463472;
+        bh=U5ePYBcLSSsiGs20yGfXoqllL031A9bEv13F94J46kU=;
         h=Date:From:To:Cc:Subject:From;
-        b=Lz7qo8VovCNS5QA0Uwm7QFlaFA7yJsSRnm8jUvXC1KgjUzKQmARbgWFcjSKV6bvQl
-         Ku1Ro3chQqKq4ZXBh87dfMq5ewpRZLmUevQK0GPUEo8oFQ/IvRdndyQMPUfEc+jf8g
-         o8ZnFGEAHE3iYTynyjS4voLO/VF3w0zCaZ/TKhRLNMkmoSwpzrgtNLQJNnD22bwVTo
-         O4l7u0YLJRJDiIvlc/6ZJTcFVGHytnzWwC7iEXfWCdNPTRfeNdHsPbT9fhcO/+WiyX
-         14A7a0YaXFo77h+lvFJTlW0N7i780DSiUIndIycsTCiR2akjZzPtT27jNq8gmrViat
-         D8uKZmHz/xWBw==
-Date:   Tue, 18 Jan 2022 09:30:41 +1100
+        b=cQ33iLtEdNOSXLLV+l3QVA8gD3hqJ9T5BYaz/7m9SIQM8vJeyKQ4afrEjMq6bsV85
+         E6ap4nroIKuArCr37XTQ3H3g/SSPyFRJQA9NaM0cdtlWv5wK5x02NgVQuZcAhN5N7A
+         hxYcrwI38hzKT9kAAsv2Jz6N51tMrB7VfGsQolk40naceLxJ28IoLwBX6Lxfs1TOIx
+         F6hcJA6zozFHgNa4feLxJPw0CCcznXdEaqno0IL8Np18pQMYrqUktkeqoTCq3a4yYg
+         OVdK+B8QqiCPU1Zq9qFBeo99JctPmJm/+J+XaeeMnywjARharwoRZCsSgINHwfJBso
+         DnUkxIxVZPSPA==
+Date:   Tue, 18 Jan 2022 10:51:04 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Darrick J. Wong" <djwong@kernel.org>,
-        David Chinner <david@fromorbit.com>, linux-xfs@vger.kernel.org
-Cc:     "Darrick J. Wong" <darrick.wong@oracle.com>,
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Adam Bratschi-Kaye <ark.email@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boris-Chengbiao Zhou <bobo1239@web.de>,
+        Daniel Xu <dxu@dxuuu.xyz>, Finn Behrens <me@kloenk.de>,
+        Gary Guo <gary@garyguo.net>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the xfs tree with Linus' tree
-Message-ID: <20220118093041.7d964a13@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Wei Liu <wei.liu@kernel.org>, Wu XiangCheng <bobwxc@email.cn>,
+        Yuki Okushi <jtitor@2k36.org>
+Subject: linux-next: manual merge of the rust tree with the kbuild tree
+Message-ID: <20220118105104.67c5def1@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/qiycWsTUvJ/nKIuquKX8fev";
+Content-Type: multipart/signed; boundary="Sig_/EZ.EqF6OsVE5ebnOnZlSAWl";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/qiycWsTUvJ/nKIuquKX8fev
+--Sig_/EZ.EqF6OsVE5ebnOnZlSAWl
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the xfs tree got a conflict in:
+Today's linux-next merge of the rust tree got a conflict in:
 
-  fs/xfs/xfs_ioctl.c
+  Documentation/process/changes.rst
 
 between commit:
 
-  983d8e60f508 ("xfs: map unwritten blocks in XFS_IOC_{ALLOC,FREE}SP just l=
-ike fallocate")
+  df05c0e9496c ("Documentation: Raise the minimum supported version of LLVM=
+ to 11.0.0")
 
-from Linus' tree and commit:
+from the kbuild tree and commit:
 
-  4d1b97f9ce7c ("xfs: kill the XFS_IOC_{ALLOC,FREE}SP* ioctls")
+  78b471443e27 ("docs: add Rust documentation")
 
-from the xfs tree.
+from the rust tree.
 
-I fixed it up (the latter removed the code modified by the former, so I
-did that) and can carry the fix as necessary. This is now fixed as far as
-linux-next is concerned, but any non trivial conflicts should be mentioned
-to your upstream maintainer when your tree is submitted for merging.
-You may also want to consider cooperating with the maintainer of the
-conflicting tree to minimise any particularly complex conflicts.
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/qiycWsTUvJ/nKIuquKX8fev
+diff --cc Documentation/process/changes.rst
+index a337e8eabfe1,0f5d64d3993f..000000000000
+--- a/Documentation/process/changes.rst
++++ b/Documentation/process/changes.rst
+@@@ -30,7 -30,9 +30,9 @@@ you probably needn't concern yourself w
+          Program        Minimal version       Command to check the version
+  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D
+  GNU C                  5.1              gcc --version
+ -Clang/LLVM (optional)  10.0.1           clang --version
+ +Clang/LLVM (optional)  11.0.0           clang --version
++ Rust (optional)        1.58.0           rustc --version
++ bindgen (optional)     0.56.0           bindgen --version
+  GNU make               3.81             make --version
+  binutils               2.23             ld -v
+  flex                   2.5.35           flex --version
+
+--Sig_/EZ.EqF6OsVE5ebnOnZlSAWl
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHl7hEACgkQAVBC80lX
-0GziMQgAnbFf6fxZhkFBqTytHndz1NVTZ2aG2gVMMBPORWgwLM6x37m4odw4hhsu
-M4vSRkX11ZctaGELZ3FZjLNEGlskTZ15C7TJ2ITTZ2hh/+g1R+rPii/60LGGfcS8
-WVMQxLER1bl01OfkJndqW2e6Mi+3Wokzlxuz/9A2MiZBCcKEMIsT0DrbjxnTrVaD
-M0FthzAvoKZ42gwHD0yJmZe8FtqbQ0pnMSVcUpg2RX1QMZ5pDG74INN6djLb1YRw
-jQNu3VtOVNLiWidAvdxWs1EbHQTbh3YPMyHF1ON0OIo/ukrCas3coX9tHXN3K5VR
-JJSN7da8lW8MyMnpvOt9a+lWIcTqiw==
-=g3xX
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHmAOgACgkQAVBC80lX
+0Gy0BAf+ManR3uMGCPSIDV55J79YEgtziApLhwVHeXT+9wxtoakkmMpz9lCpC9uq
++WulxA0UhC599lk1hP084G+t/M0vdvwd8swBPUXSzCWz/1HkwGxxZggYq1ZbYpoz
+4CnHCRAJmzRQge27lXNAvGxDcy5tLmbB69QvoRvFNVXja89qNqOM9XP4uVup2OEc
+1GiP1poV/XanVAx5uz7zpevhVpSgiTxANvUYuc2aKZQJBP4R/spqU9ukE7b9hPd5
+ME/MSmnKLPqzoaI3u6B8DLsBuhl2NHOOrcXbUjuMMWqc67fnuNSe/gdIvKnxQD8n
+iJt/YOmPhBKB98IeRRjdmaXisvme4w==
+=0vKt
 -----END PGP SIGNATURE-----
 
---Sig_/qiycWsTUvJ/nKIuquKX8fev--
+--Sig_/EZ.EqF6OsVE5ebnOnZlSAWl--

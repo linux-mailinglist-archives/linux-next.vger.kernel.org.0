@@ -2,78 +2,71 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15DD2491278
-	for <lists+linux-next@lfdr.de>; Tue, 18 Jan 2022 00:51:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C247F4913C9
+	for <lists+linux-next@lfdr.de>; Tue, 18 Jan 2022 02:52:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231566AbiAQXvO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 17 Jan 2022 18:51:14 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:58073 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243839AbiAQXvN (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 17 Jan 2022 18:51:13 -0500
+        id S236467AbiARBwf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 17 Jan 2022 20:52:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50398 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236336AbiARBwd (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 17 Jan 2022 20:52:33 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D2C2C061574;
+        Mon, 17 Jan 2022 17:52:32 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jd7vs0t1pz4y3l;
-        Tue, 18 Jan 2022 10:51:05 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JdBbt5Wkhz4xsm;
+        Tue, 18 Jan 2022 12:52:26 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1642463472;
-        bh=U5ePYBcLSSsiGs20yGfXoqllL031A9bEv13F94J46kU=;
+        s=201702; t=1642470748;
+        bh=kR/zK4xF3tyAN2VgcwkwIkvMU1E9aH33MEHQopQjlEk=;
         h=Date:From:To:Cc:Subject:From;
-        b=cQ33iLtEdNOSXLLV+l3QVA8gD3hqJ9T5BYaz/7m9SIQM8vJeyKQ4afrEjMq6bsV85
-         E6ap4nroIKuArCr37XTQ3H3g/SSPyFRJQA9NaM0cdtlWv5wK5x02NgVQuZcAhN5N7A
-         hxYcrwI38hzKT9kAAsv2Jz6N51tMrB7VfGsQolk40naceLxJ28IoLwBX6Lxfs1TOIx
-         F6hcJA6zozFHgNa4feLxJPw0CCcznXdEaqno0IL8Np18pQMYrqUktkeqoTCq3a4yYg
-         OVdK+B8QqiCPU1Zq9qFBeo99JctPmJm/+J+XaeeMnywjARharwoRZCsSgINHwfJBso
-         DnUkxIxVZPSPA==
-Date:   Tue, 18 Jan 2022 10:51:04 +1100
+        b=pNdM6XYUaCXceej05bDsYWF6iwS8CJVM/B/xg60wpoi9LEXlfxJQdO7E8KAEzD4um
+         wapSA7r7Joq+ZVYFMmKHGYCbKWk0j6kmktDAl6ihPZJz7UHAISu8sjbeRrFXKMnxw4
+         xXNetK+qoPNJEuNKyjHPAG+JQ3b4a7lyXMLuEP0VybZgXTlfjxxryOy/2pD/8rI5r4
+         b1LySLw/jQszxn0A4rnYP0/Ayohc8VliJXJezyekCriGWI6lIPD4FbHQSN/KrzDG6w
+         73yeGusvlsHjY9uBF3fvNvMip/1XhveCS+OF1EVf2FdI9vn3fi/+qLvmeL8gYvubEg
+         v19V+RUUNAJFQ==
+Date:   Tue, 18 Jan 2022 12:52:25 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Adam Bratschi-Kaye <ark.email@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boris-Chengbiao Zhou <bobo1239@web.de>,
-        Daniel Xu <dxu@dxuuu.xyz>, Finn Behrens <me@kloenk.de>,
-        Gary Guo <gary@garyguo.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Wei Liu <wei.liu@kernel.org>, Wu XiangCheng <bobwxc@email.cn>,
-        Yuki Okushi <jtitor@2k36.org>
-Subject: linux-next: manual merge of the rust tree with the kbuild tree
-Message-ID: <20220118105104.67c5def1@canb.auug.org.au>
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Xiaoming Ni <nixiaoming@huawei.com>
+Subject: linux-next: manual merge of the akpm tree with the random tree
+Message-ID: <20220118125225.31313015@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/EZ.EqF6OsVE5ebnOnZlSAWl";
+Content-Type: multipart/signed; boundary="Sig_/HnRFYszX4qkU+HoY/VBET3S";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/EZ.EqF6OsVE5ebnOnZlSAWl
+--Sig_/HnRFYszX4qkU+HoY/VBET3S
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the rust tree got a conflict in:
+Today's linux-next merge of the akpm tree got a conflict in:
 
-  Documentation/process/changes.rst
+  drivers/char/random.c
 
 between commit:
 
-  df05c0e9496c ("Documentation: Raise the minimum supported version of LLVM=
- to 11.0.0")
+  b48e412a0b73 ("random: selectively clang-format where it makes sense")
 
-from the kbuild tree and commit:
+from the random tree and patch:
 
-  78b471443e27 ("docs: add Rust documentation")
+  "random: move the random sysctl declarations to its own file"
 
-from the rust tree.
+from the akpm tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -86,39 +79,45 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc Documentation/process/changes.rst
-index a337e8eabfe1,0f5d64d3993f..000000000000
---- a/Documentation/process/changes.rst
-+++ b/Documentation/process/changes.rst
-@@@ -30,7 -30,9 +30,9 @@@ you probably needn't concern yourself w
-          Program        Minimal version       Command to check the version
-  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D
-  GNU C                  5.1              gcc --version
- -Clang/LLVM (optional)  10.0.1           clang --version
- +Clang/LLVM (optional)  11.0.0           clang --version
-+ Rust (optional)        1.58.0           rustc --version
-+ bindgen (optional)     0.56.0           bindgen --version
-  GNU make               3.81             make --version
-  binutils               2.23             ld -v
-  flex                   2.5.35           flex --version
+diff --cc drivers/char/random.c
+index b04664fa61a2,2ce43609dbc8..000000000000
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@@ -2055,7 -2076,18 +2054,18 @@@ static struct ctl_table random_table[]=20
+  #endif
+  	{ }
+  };
++=20
++ /*
++  * rand_initialize() is called before sysctl_init(),
++  * so we cannot call register_sysctl_init() in rand_initialize()
++  */
++ static int __init random_sysctls_init(void)
++ {
++ 	register_sysctl_init("kernel/random", random_table);
++ 	return 0;
++ }
++ device_initcall(random_sysctls_init);
+ -#endif 	/* CONFIG_SYSCTL */
+ +#endif	/* CONFIG_SYSCTL */
+ =20
+  struct batched_entropy {
+  	union {
 
---Sig_/EZ.EqF6OsVE5ebnOnZlSAWl
+--Sig_/HnRFYszX4qkU+HoY/VBET3S
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHmAOgACgkQAVBC80lX
-0Gy0BAf+ManR3uMGCPSIDV55J79YEgtziApLhwVHeXT+9wxtoakkmMpz9lCpC9uq
-+WulxA0UhC599lk1hP084G+t/M0vdvwd8swBPUXSzCWz/1HkwGxxZggYq1ZbYpoz
-4CnHCRAJmzRQge27lXNAvGxDcy5tLmbB69QvoRvFNVXja89qNqOM9XP4uVup2OEc
-1GiP1poV/XanVAx5uz7zpevhVpSgiTxANvUYuc2aKZQJBP4R/spqU9ukE7b9hPd5
-ME/MSmnKLPqzoaI3u6B8DLsBuhl2NHOOrcXbUjuMMWqc67fnuNSe/gdIvKnxQD8n
-iJt/YOmPhBKB98IeRRjdmaXisvme4w==
-=0vKt
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHmHVkACgkQAVBC80lX
+0GwnYQf/fSVq8cqI92+/P6EHMHjoKIVR7fJG9FtXMcMwodg7wTjiRfwSHc90emOZ
+JVIQ97rLn+oW/vteFiwcJovEy9LzW/rtYyrHDHFJAvcslPWVEBkkAX3iYZGbQTAf
+4QTtJl5XXTJR6afLixC3avjkdhq/2wRE+m22ztlBqWL12iafCszgZuVqpEbIXGyc
+uRmyqPEn4r+9i0/nDRw46S3T71U+jSPDj3Hqrm0Wi1gvvbtzcNb937xtTw2zRNLD
+OvJ+dN3GLj25OEwd/NyaqAZzwAdUDuFftNi67E+8/fVOeDcX8wFxjMTFwlQrYGMh
+efprWeoaOMZr85KHOosWhuzMYhTx4g==
+=bq0K
 -----END PGP SIGNATURE-----
 
---Sig_/EZ.EqF6OsVE5ebnOnZlSAWl--
+--Sig_/HnRFYszX4qkU+HoY/VBET3S--

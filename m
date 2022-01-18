@@ -2,79 +2,196 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1FBA492646
-	for <lists+linux-next@lfdr.de>; Tue, 18 Jan 2022 14:00:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA2AF4929E5
+	for <lists+linux-next@lfdr.de>; Tue, 18 Jan 2022 16:52:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229379AbiARNAe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 18 Jan 2022 08:00:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36056 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239710AbiARNAd (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 18 Jan 2022 08:00:33 -0500
-Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3897AC061746
-        for <linux-next@vger.kernel.org>; Tue, 18 Jan 2022 05:00:33 -0800 (PST)
-Received: by mail-vk1-xa2d.google.com with SMTP id 191so12389423vkc.1
-        for <linux-next@vger.kernel.org>; Tue, 18 Jan 2022 05:00:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=kt7BSYvG+rr2bLEECwLOEMCvBVZotJIk44/4XcKD9H0=;
-        b=oIAPvRrwyQK9z6AQAojxDeGAhXY+r2o1UmC6sFh8E/FwQr9mstQDRr/1NSvmGRtcCX
-         /w1QS+uNfbLsvQZX7xX+9sz3uC6D4RoCWaXbANnoA2dUrPepMcqirC5k6HNVS1fFqE0Z
-         mmnlRUiL8Xw3KIyLVLMGnExCwsSQFeIKh8JW3bqp1bYt9+tHsadbHk4RvmOHNK7Sl5QN
-         8VSQkuo3Tc4LhDddKs1B1xacb1x98ojXw9qcgRZeTdxEnzHjo/CWLLbARksjq/KHcz6i
-         aR29itdUv3X9HyWbgkBUkSe9JOKQ7x5gCFvVaYAAUeR/IrssS1C3mXYec7clwDkIPtov
-         CL+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=kt7BSYvG+rr2bLEECwLOEMCvBVZotJIk44/4XcKD9H0=;
-        b=pSeyH4115XrobvC1hy7s17taFUA7J40eiLlmZfSkzWU6SlfnTEanyMMc+WyefkDeL4
-         VxR+7Zm3hY0iPAWLmzNhJBJCmSY12nJVfUUiIa9nBLpbvwW1AlWTaQR/jmxrprxwxe4a
-         Wpft77U2W/ja0fkJVykdGm1oWVsHBW7cSMNFKblJJ0s58J5Cc4mEpqDEdGxoIqjbLnj0
-         MATtEXaRcWCGQx08ZMdAL3Xfvw2UI25JtH+Y9HcxCpRdFw9gBRF4XGz1wNmmvKjtAzEt
-         G/ixm4PJQYVVUjFjb6+yawD0YnFg9O5J0QHvMVyhXxf+NEfVelMGGvbDI6/R8ac/bu8n
-         IMtw==
-X-Gm-Message-State: AOAM532i/HEmIEHdvh9Ls08LyyrbqiDxG4mi8OKrHXhRE6PvCEl9u/e6
-        LcRY520ZvZjeVMUlY1ZEqUUbsjU3AjH9IOjTg70=
-X-Google-Smtp-Source: ABdhPJxU0Mgz8nglAQGJWvQd5fZGyHw86cgkNwVsJrkRauzIVzFmr7WCj4QJVEymoxx51zJjSdHqWP82BjKwyfLYnRA=
-X-Received: by 2002:a05:6122:1808:: with SMTP id ay8mr10188346vkb.36.1642510832144;
- Tue, 18 Jan 2022 05:00:32 -0800 (PST)
+        id S1346028AbiARPwg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 18 Jan 2022 10:52:36 -0500
+Received: from a8-81.smtp-out.amazonses.com ([54.240.8.81]:46301 "EHLO
+        a8-81.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233324AbiARPwf (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Tue, 18 Jan 2022 10:52:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1642521155;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+        bh=QFsjs9FFcADUla+OdtiluaNUoVc15oEykTqiXNylkFY=;
+        b=YlN710WHEtd6IxZQ1jLXrRI0ZXkihzpOxQkf67DNpB3cWOpx5F5xf3cOAvmvakHf
+        DrJESpjHlS7FEbyunsH9qvWYwnuViGwj5Emo/lWVYNbi3g7/qyINs38/LQQo2kGPKz3
+        e8JvmVxLzNnb0NUdgxlNK0FgEk+XjzPEYJzGFYpA=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1642521155;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+        bh=QFsjs9FFcADUla+OdtiluaNUoVc15oEykTqiXNylkFY=;
+        b=V8/HdiRRIV615PgbUrgey6BUlQtxImyzKNETswGYWll8BLb5Nvz2YI6VTykS7er+
+        ZdgdM9tldwnBUf1+glidfdSQUXWKqm46murAiWO2qYJXZAGAhhWMenRFspWxO34SCcL
+        2xTUZvCsAsm0NByTNP8OH3wtLk3ijpVF6KguM3E0=
+From:   lkft@linaro.org
+To:     lkft@linaro.org
+Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        linux-next@vger.kernel.org, shuah@kernel.org
+Subject: [REGRESSION] lkft kselftest for next-20211118
 MIME-Version: 1.0
-Received: by 2002:ab0:3793:0:0:0:0:0 with HTTP; Tue, 18 Jan 2022 05:00:31
- -0800 (PST)
-Reply-To: mohsheikhalhamed@gmail.com
-From:   bratikox <bratikox@gmail.com>
-Date:   Tue, 18 Jan 2022 14:00:31 +0100
-Message-ID: <CAFuXTSx6Lu9odoPCd=RZLGBtKNFkTY9wS0ub46GZpRb2p6+pYQ@mail.gmail.com>
-Subject: Salam Alaikum /ADIA LOAN OFFER
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Message-ID: <0100017e6de3d489-5fae87f5-0856-41d5-82fb-624d52abfc43-000000@email.amazonses.com>
+Date:   Tue, 18 Jan 2022 15:52:34 +0000
+Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
+X-SES-Outgoing: 2022.01.18-54.240.8.81
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Salam Alaikum,
+## Build
+* kernel: 5.16.0-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+* git branch: master
+* git commit: 5191249f880367a4cd675825cd721a8d78f26a45
+* git describe: next-20211118
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20211118
 
-We are a United Arab Emirates based investment company known as Abu
-Dhabi Investment Authority working on expanding its portfolio globally
-and financing projects.
+## Test Regressions (compared to next-20211115)
+* dragonboard-410c, kselftest-sync
+  - sync.sync_test
 
-We are offering Corporate and Personal Loan at 3.5% Interest Rate for
-a duration of 5 to 10 years.
+* i386, kselftest-net
+  - net.so_txtime.sh
 
-Please get back to us on Email: mohsheikhalhamed@gmail.com ,if you are
-interested for further embellishment.
+* qemu_arm, kselftest-rtc
+  - rtc.rtctest
 
-We also pay 2% commission to brokers who introduce project owners for
-finance or other opportunities.
+* qemu_i386, kselftest-rtc
+  - rtc.rtctest
+
+* x15, kselftest-capabilities
+  - capabilities.test_execve
+
+* x15, kselftest-cgroup
+  - cgroup.test_kill
+  - cgroup.test_kill.test_cgkill_simple
+
+* x15, kselftest-rtc
+  - rtc.rtctest.rtc.alarm_alm_set
+  - rtc.rtctest.rtc.alarm_alm_set_minute
+  - rtc.rtctest.rtc.alarm_wkalm_set
+  - rtc.rtctest.rtc.date_read
+
+* x86, kselftest-kvm
+  - kvm.kvm_page_table_test
 
 
- Yours truly,
- Hamed Mohammad
- (Personal Assistant)
- Abu Dhabi Investment Authority
- 211 Corniche, P.O Box 3600
- Abu Dhabi,United Arab Emirates
+## Metric Regressions (compared to next-20211115)
+No metric regressions found.
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+
+## Test Fixes (compared to next-20211115)
+* i386, kselftest-net
+  - net.tls
+  - net.tls.tls.12_aes_gcm.send_then_sendfile
+  - net.tls.tls.12_chacha.send_then_sendfile
+  - net.tls.tls.13_aes_gcm.send_then_sendfile
+  - net.tls.tls.13_chacha.send_then_sendfile
+  - net.tls.tls.13_sm4_ccm.send_then_sendfile
+  - net.tls.tls.13_sm4_gcm.send_then_sendfile
+
+* x15, kselftest-cgroup
+  - cgroup.test_freezer
+  - cgroup.test_freezer.test_cgfreezer_ptrace
+
+* x15, kselftest-core
+  - core.close_range_test
+
+* x15, kselftest-sync
+  - sync.sync_test
+
+* x86, kselftest-net
+  - net.gro.sh
+
+
+## Metric Fixes (compared to next-20211115)
+No metric fixes found.
+
+## Test result summary
+total: 5350, pass: 3334, fail: 606, skip: 1410, xfail: 0
+
+## Build Summary
+
+## Test suites summary
+* kselftest-
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-lkdtm
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+
+--
+Linaro LKFT
+https://lkft.linaro.org

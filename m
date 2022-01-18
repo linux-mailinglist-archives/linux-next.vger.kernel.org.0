@@ -2,122 +2,320 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C247F4913C9
-	for <lists+linux-next@lfdr.de>; Tue, 18 Jan 2022 02:52:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69DE04915B3
+	for <lists+linux-next@lfdr.de>; Tue, 18 Jan 2022 03:29:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236467AbiARBwf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 17 Jan 2022 20:52:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50398 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236336AbiARBwd (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 17 Jan 2022 20:52:33 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D2C2C061574;
-        Mon, 17 Jan 2022 17:52:32 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JdBbt5Wkhz4xsm;
-        Tue, 18 Jan 2022 12:52:26 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1642470748;
-        bh=kR/zK4xF3tyAN2VgcwkwIkvMU1E9aH33MEHQopQjlEk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=pNdM6XYUaCXceej05bDsYWF6iwS8CJVM/B/xg60wpoi9LEXlfxJQdO7E8KAEzD4um
-         wapSA7r7Joq+ZVYFMmKHGYCbKWk0j6kmktDAl6ihPZJz7UHAISu8sjbeRrFXKMnxw4
-         xXNetK+qoPNJEuNKyjHPAG+JQ3b4a7lyXMLuEP0VybZgXTlfjxxryOy/2pD/8rI5r4
-         b1LySLw/jQszxn0A4rnYP0/Ayohc8VliJXJezyekCriGWI6lIPD4FbHQSN/KrzDG6w
-         73yeGusvlsHjY9uBF3fvNvMip/1XhveCS+OF1EVf2FdI9vn3fi/+qLvmeL8gYvubEg
-         v19V+RUUNAJFQ==
-Date:   Tue, 18 Jan 2022 12:52:25 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Xiaoming Ni <nixiaoming@huawei.com>
-Subject: linux-next: manual merge of the akpm tree with the random tree
-Message-ID: <20220118125225.31313015@canb.auug.org.au>
+        id S245325AbiARC3b (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 17 Jan 2022 21:29:31 -0500
+Received: from a8-81.smtp-out.amazonses.com ([54.240.8.81]:35459 "EHLO
+        a8-81.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S245303AbiARC13 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Mon, 17 Jan 2022 21:27:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1642472848;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+        bh=nw8f4TKgi4Wpx6QLC+yCwTh4jbJ3hmnhXHEG+liUSwM=;
+        b=PB2M+s5nZjLoT6Z9KrDI728plysqiy19QMQdiAulyhKf0eHUMob7fWjZ+q5Eq+Vq
+        ziyDDYiPubeMV/1ks5uuBP8oDArABw5c6jM9eYI/L9U4nEhC7m2jtJ/NPcQx0VMbqGq
+        f1jQq4awsB2i7KeQ0SJ1nCTc18KnIxk3NgiI5iVI=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1642472848;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+        bh=nw8f4TKgi4Wpx6QLC+yCwTh4jbJ3hmnhXHEG+liUSwM=;
+        b=i1IqBVAtYypaFVSasoy+9h8y8x++/8psXX0898gs+W9Paswh7ENyVYvIerpR8Zz6
+        4/d6i2Y5t57V5OvblNrzV9PfyMSpG1CUkJOe20dWV3IE/gu8XSZOw+20P5o4ZB66VJE
+        8UK0gb/S/PG6xaqErUQH/1WNSQQmtU/xkKprhdwM=
+From:   lkft@linaro.org
+To:     lkft@linaro.org
+Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        linux-next@vger.kernel.org, shuah@kernel.org
+Subject: [REGRESSION] lkft kselftest for next-20220113
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/HnRFYszX4qkU+HoY/VBET3S";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Message-ID: <0100017e6b02bbe1-9fd85329-4983-4ce9-a2a1-8c00290d439a-000000@email.amazonses.com>
+Date:   Tue, 18 Jan 2022 02:27:28 +0000
+Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
+X-SES-Outgoing: 2022.01.18-54.240.8.81
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/HnRFYszX4qkU+HoY/VBET3S
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+## Build
+* kernel: 5.16.0
+* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+* git branch: master
+* git commit: 27c9d5b3c24af29de643533984f1ba3e650c7c78
+* git describe: next-20220113
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220113
 
-Hi all,
+## Test Regressions (compared to next-20211224)
+* dragonboard-410c, kselftest-capabilities
+  - capabilities.test_execve
 
-Today's linux-next merge of the akpm tree got a conflict in:
+* dragonboard-410c, kselftest-cgroup
+  - cgroup.test_freezer
+  - cgroup.test_freezer.test_cgfreezer_ptrace
+  - cgroup.test_kill
 
-  drivers/char/random.c
+* dragonboard-410c, kselftest-kvm
+  - kvm.get-reg-list
 
-between commit:
+* dragonboard-410c, kselftest-pidfd
+  - pidfd.pidfd_setns_test
 
-  b48e412a0b73 ("random: selectively clang-format where it makes sense")
+* dragonboard-410c, kselftest-proc
+  - proc.fd-001-lookup
+  - proc.fd-002-posix-eq
+  - proc.proc-fsconfig-hidepid
+  - proc.proc-multiple-procfs
+  - proc.proc-uptime-001
 
-from the random tree and patch:
+* dragonboard-410c, kselftest-rseq
+  - rseq.basic_percpu_ops_test
+  - rseq.basic_test
+  - rseq.param_test
+  - rseq.param_test_benchmark
+  - rseq.param_test_compare_twice
 
-  "random: move the random sysctl declarations to its own file"
+* dragonboard-410c, kselftest-sync
+  - sync.sync_test
 
-from the akpm tree.
+* dragonboard-410c, kselftest-timens
+  - timens.procfs
+  - timens.timens
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+* dragonboard-410c, kselftest-timers
+  - timers.nsleep-lat
 
---=20
-Cheers,
-Stephen Rothwell
+* hi6220-hikey, kselftest-pidfd
+  - pidfd.pidfd_setns_test
 
-diff --cc drivers/char/random.c
-index b04664fa61a2,2ce43609dbc8..000000000000
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@@ -2055,7 -2076,18 +2054,18 @@@ static struct ctl_table random_table[]=20
-  #endif
-  	{ }
-  };
-+=20
-+ /*
-+  * rand_initialize() is called before sysctl_init(),
-+  * so we cannot call register_sysctl_init() in rand_initialize()
-+  */
-+ static int __init random_sysctls_init(void)
-+ {
-+ 	register_sysctl_init("kernel/random", random_table);
-+ 	return 0;
-+ }
-+ device_initcall(random_sysctls_init);
- -#endif 	/* CONFIG_SYSCTL */
- +#endif	/* CONFIG_SYSCTL */
- =20
-  struct batched_entropy {
-  	union {
+* hi6220-hikey, kselftest-proc
+  - proc.fd-001-lookup
+  - proc.fd-002-posix-eq
+  - proc.proc-multiple-procfs
 
---Sig_/HnRFYszX4qkU+HoY/VBET3S
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+* hi6220-hikey, kselftest-sync
+  - sync.sync_test
 
------BEGIN PGP SIGNATURE-----
+* hi6220-hikey, kselftest-timens
+  - timens.procfs
+  - timens.timens
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHmHVkACgkQAVBC80lX
-0GwnYQf/fSVq8cqI92+/P6EHMHjoKIVR7fJG9FtXMcMwodg7wTjiRfwSHc90emOZ
-JVIQ97rLn+oW/vteFiwcJovEy9LzW/rtYyrHDHFJAvcslPWVEBkkAX3iYZGbQTAf
-4QTtJl5XXTJR6afLixC3avjkdhq/2wRE+m22ztlBqWL12iafCszgZuVqpEbIXGyc
-uRmyqPEn4r+9i0/nDRw46S3T71U+jSPDj3Hqrm0Wi1gvvbtzcNb937xtTw2zRNLD
-OvJ+dN3GLj25OEwd/NyaqAZzwAdUDuFftNi67E+8/fVOeDcX8wFxjMTFwlQrYGMh
-efprWeoaOMZr85KHOosWhuzMYhTx4g==
-=bq0K
------END PGP SIGNATURE-----
+* hi6220-hikey, kselftest-timers
+  - timers.set-timer-lat
 
---Sig_/HnRFYszX4qkU+HoY/VBET3S--
+* qemu_i386, kselftest-cgroup
+  - cgroup.test_freezer
+  - cgroup.test_kill
+
+* qemu_i386, kselftest-pidfd
+  - pidfd.pidfd_setns_test
+
+* qemu_i386, kselftest-proc
+  - proc.fd-001-lookup
+  - proc.fd-002-posix-eq
+  - proc.proc-multiple-procfs
+
+* qemu_i386, kselftest-timens
+  - timens.procfs
+  - timens.timens
+
+* qemu_x86_64, kselftest-cgroup
+  - cgroup.test_freezer
+  - cgroup.test_kill
+
+* qemu_x86_64, kselftest-kvm
+  - kvm.cr4_cpuid_sync_test
+  - kvm.debug_regs
+  - kvm.demand_paging_test
+  - kvm.dirty_log_perf_test
+  - kvm.emulator_error_test
+  - kvm.get_cpuid_test
+  - kvm.get_msr_index_features
+  - kvm.hardware_disable_test
+  - kvm.hyperv_cpuid
+  - kvm.hyperv_features
+  - kvm.kvm_binary_stats_test
+  - kvm.kvm_create_max_vcpus
+  - kvm.kvm_page_table_test
+  - kvm.kvm_pv_test
+  - kvm.memslot_modification_stress_test
+  - kvm.mmu_role_test
+  - kvm.platform_info_test
+  - kvm.set_boot_cpu_id
+  - kvm.set_memory_region_test
+  - kvm.set_sregs_test
+  - kvm.smm_test
+  - kvm.state_test
+  - kvm.svm_int_ctl_test
+  - kvm.svm_vmcall_test
+  - kvm.sync_regs_test
+  - kvm.system_counter_offset_test
+  - kvm.tsc_msrs_test
+  - kvm.userspace_io_test
+  - kvm.userspace_msr_exit_test
+  - kvm.xapic_ipi_test
+
+* qemu_x86_64, kselftest-pidfd
+  - pidfd.pidfd_setns_test
+
+* qemu_x86_64, kselftest-proc
+  - proc.fd-001-lookup
+  - proc.fd-002-posix-eq
+  - proc.proc-multiple-procfs
+
+* qemu_x86_64, kselftest-sync
+  - sync.sync_test
+
+* qemu_x86_64, kselftest-timens
+  - timens.procfs
+  - timens.timens
+
+* x15, kselftest-capabilities
+  - capabilities.test_execve
+
+* x15, kselftest-cgroup
+  - cgroup.test_freezer
+  - cgroup.test_kill
+  - cgroup.test_kill.test_cgkill_simple
+
+* x15, kselftest-core
+  - core.close_range_test
+
+
+## Metric Regressions (compared to next-20211224)
+No metric regressions found.
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+
+## Test Fixes (compared to next-20211224)
+* dragonboard-410c, kselftest-capabilities
+  - capabilities.test_execve
+
+* dragonboard-410c, kselftest-lkdtm
+  - lkdtm.SLAB_FREE_DOUBLE.sh
+
+* dragonboard-410c, kselftest-proc
+  - proc.proc-fsconfig-hidepid
+
+* dragonboard-410c, kselftest-rseq
+  - rseq.basic_percpu_ops_test
+  - rseq.basic_test
+  - rseq.param_test
+  - rseq.param_test_benchmark
+  - rseq.param_test_compare_twice
+
+* dragonboard-410c, kselftest-seccomp
+  - seccomp.seccomp_bpf
+  - seccomp.seccomp_bpf.global.user_notification_filter_empty
+  - seccomp.seccomp_bpf.global.user_notification_filter_empty_threaded
+
+* i386, kselftest-rtc
+  - rtc.rtctest
+
+* juno-r2, kselftest-cgroup
+  - cgroup.test_freezer
+  - cgroup.test_freezer.test_cgfreezer_ptrace
+
+* juno-r2, kselftest-clone3
+  - clone3.clone3_set_tid
+
+* qemu_arm, kselftest-rtc
+  - rtc.rtctest
+
+* x15, kselftest-capabilities
+  - capabilities.test_execve
+
+* x15, kselftest-cgroup
+  - cgroup.test_freezer
+  - cgroup.test_kill
+  - cgroup.test_kill.test_cgkill_simple
+
+* x15, kselftest-core
+  - core.close_range_test
+
+
+## Metric Fixes (compared to next-20211224)
+No metric fixes found.
+
+## Test result summary
+total: 3775, pass: 1936, fail: 489, skip: 1350, xfail: 0
+
+## Build Summary
+
+## Test suites summary
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-lkdtm
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+
+--
+Linaro LKFT
+https://lkft.linaro.org

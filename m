@@ -2,85 +2,85 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B745B492D18
-	for <lists+linux-next@lfdr.de>; Tue, 18 Jan 2022 19:17:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C47574939DE
+	for <lists+linux-next@lfdr.de>; Wed, 19 Jan 2022 12:49:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347893AbiARSRg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 18 Jan 2022 13:17:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53562 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347872AbiARSRg (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 18 Jan 2022 13:17:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8158C061574;
-        Tue, 18 Jan 2022 10:17:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1354191AbiASLtW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 19 Jan 2022 06:49:22 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:52991 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233640AbiASLtW (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 19 Jan 2022 06:49:22 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 66DC561504;
-        Tue, 18 Jan 2022 18:17:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7629C340E0;
-        Tue, 18 Jan 2022 18:17:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642529854;
-        bh=iJ0MdH5QslLk5DaTZSJY1trQkw+gM14Ryth70aQ9KG0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=a5MW+3QtPPeXs6UHQMvUPf655LsQM8V7tw0//kUyOZ9vL9gMBxEsQjcVxMVLKytmD
-         auZ/JKlo/Mh8vF/3RW6/ZJA4dmQ4XxAjMiPzMPNPtknNrBzVSAUzG7q0MkBW/mZasm
-         1YF4oe/XHCa8tmSBEq/oh62JomUvkG27MSYuIcDdE3gafJSiEA4lPR39RKkiFLaGNE
-         Bd+i9KJINRUznZsQsLBK1QJcPEley8Dh/GwLtDeyacjZO9CbT3quYmZE7/RrtViYDT
-         W9uS9/ajgsTdJKr5T75L8GroPRiB7QFWLNsndrc4/LfotS4JDbHDroofw8JnUNvXNu
-         OBtljZopaaIrA==
-Date:   Tue, 18 Jan 2022 10:17:34 -0800
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     David Chinner <david@fromorbit.com>, linux-xfs@vger.kernel.org,
-        "Darrick J. Wong" <darrick.wong@oracle.com>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jf3p80ltYz4y3p;
+        Wed, 19 Jan 2022 22:49:20 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1642592960;
+        bh=AI8Xp8WmFMzDYfkAVqP8te/3eXUi2hDB4d00oNT2g3g=;
+        h=Date:From:To:Cc:Subject:From;
+        b=iWx5D1yShLEExjx2+/bZbAIBXwoWH5lO7wB4dm19dwy9KqjBOxc18HHvICVn37Te0
+         qNoNv0JZ3PyjZxu3G0h3QAdOhX0ECLtR8uwQ4Vp6SNf3pTHDi9DgORiyIG8CpNct2A
+         pF3F0H0rYSwXoyiDW1Fwvua/cHx4nV9IWX5MvRkBmfh0yOTzxWc/hnmi/qvKg7BikA
+         uWEKIyfxJaHOlIwPFWQezpKf4xlKd4yIfwSPaSzkze/+9OOIpAZeu8LKB2Cv1jM/Vm
+         e10XFrWpE4fapoCzjTTshX8GKLhDDVdZ4gEXFNbP+z7RSv1caYRn1NthUPIfzJSyq8
+         u1yJJUuZnLd1w==
+Date:   Wed, 19 Jan 2022 22:49:18 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>
+Cc:     Wei Wang <wei.w.wang@intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the xfs tree with Linus' tree
-Message-ID: <20220118181734.GC13540@magnolia>
-References: <20220118093041.7d964a13@canb.auug.org.au>
+Subject: linux-next: Fixes tag needs some work in the kvm tree
+Message-ID: <20220119224918.026a21f1@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220118093041.7d964a13@canb.auug.org.au>
+Content-Type: multipart/signed; boundary="Sig_/YP+XCLo2kK.6P1+hz607rTI";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 09:30:41AM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the xfs tree got a conflict in:
-> 
->   fs/xfs/xfs_ioctl.c
-> 
-> between commit:
-> 
->   983d8e60f508 ("xfs: map unwritten blocks in XFS_IOC_{ALLOC,FREE}SP just like fallocate")
-> 
-> from Linus' tree and commit:
-> 
->   4d1b97f9ce7c ("xfs: kill the XFS_IOC_{ALLOC,FREE}SP* ioctls")
-> 
-> from the xfs tree.
-> 
-> I fixed it up (the latter removed the code modified by the former, so I
-> did that) and can carry the fix as necessary. This is now fixed as far as
-> linux-next is concerned, but any non trivial conflicts should be mentioned
-> to your upstream maintainer when your tree is submitted for merging.
-> You may also want to consider cooperating with the maintainer of the
-> conflicting tree to minimise any particularly complex conflicts.
+--Sig_/YP+XCLo2kK.6P1+hz607rTI
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Ok, thanks!  The resolution you picked (delete xfs_ioc_space regardless
-of its contents) is exactly what I was expecting.
+Hi all,
 
---D
+In commit
 
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
+  32c8644b37cf ("kvm: selftests: conditionally build vm_xsave_req_perm()")
 
+Fixes tag
 
+  Fixes: 415a3c33e8 ("kvm: selftests: Add support for KVM_CAP_XSAVE2")
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+    Can be fixed in the future by setting core.abbrev to 12 (or more) or
+    (for git v2.11 or later) just making sure it is not set (or set to
+    "auto").
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/YP+XCLo2kK.6P1+hz607rTI
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHn+r8ACgkQAVBC80lX
+0Gz0OggAiMDH9+/N4KishH8m9aWwABnNUu0uAHYkKbaZEI2TSnQSENmQ9Zydug23
+ZH+pvst4VJHP5t0n7dkD5GdoGy56KrwiioX8cldpfoidXjLyMBoJ0iIN9vhpOLam
+pzWWECxTaNl+q+9J+AEY72/BFFLjFphbD+pWEvOUiddIaqhCBCZCdiWbsYG+xLCN
+sIPHrsJWyWD5Q2DJqrhjgFJhKtjmlgmobzRxkjISfKLUvPBKvFrlzrV8FVQgjzjr
+32he1Hh6An12wideEFKbE+kknsoMSE7i1EeCavQI6oiZFM9sC725GfEPX9lpjtWj
+iSrRroT+N3tm+acoKa/WfYqafebQkg==
+=2Fns
+-----END PGP SIGNATURE-----
+
+--Sig_/YP+XCLo2kK.6P1+hz607rTI--

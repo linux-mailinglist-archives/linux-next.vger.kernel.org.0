@@ -2,88 +2,104 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 22B71495CF0
-	for <lists+linux-next@lfdr.de>; Fri, 21 Jan 2022 10:38:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3F93495DDD
+	for <lists+linux-next@lfdr.de>; Fri, 21 Jan 2022 11:42:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344915AbiAUJio (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 21 Jan 2022 04:38:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34940 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234243AbiAUJin (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 21 Jan 2022 04:38:43 -0500
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADDEEC061574
-        for <linux-next@vger.kernel.org>; Fri, 21 Jan 2022 01:38:43 -0800 (PST)
-Received: by mail-yb1-xb2c.google.com with SMTP id p5so25787530ybd.13
-        for <linux-next@vger.kernel.org>; Fri, 21 Jan 2022 01:38:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JekWhR8CMAxMCtnFBApW6vamUlJTaekkAKvbq4p6qw8=;
-        b=Mu93tn/1YAjVBeQULNJalS9X6HhXvdWuyJXmfAqYbyxtxM0dtvMRc+raEPKdaKvd1j
-         W8jW7wwFnUYqcxvwlY4G9B0sR9xprDxdAKdd0JyJVIAgSzP1Vg36C/ZZqPTTMQVeQKlk
-         SB/QuNjdCsYqzTCpkkZ76PVrvOBoNAiR5+qeeYz+B++Ax0BLwt7s6J+GZE4wEO1Ju2aR
-         Dr1e04+a6xS3r5LKxcnKAgOstzSLyEfXClE/U0xMM/BWLLZ8pSHvYlj3Y/C3mUpkO+gS
-         Ap3JYFS/dUwYBdBnGvyFqeEfUmllZvIoJyVvlsiHvrpEwZY5WOtx/o5APydHInZdx/kX
-         IW3g==
+        id S234824AbiAUKmN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 21 Jan 2022 05:42:13 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:28419 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1350082AbiAUKmM (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Fri, 21 Jan 2022 05:42:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642761732;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CdPdILngPzGrQBwtZZKW+7ixKah3Wpht/KCyewnhlCg=;
+        b=E2QK4XXt/0wjkP32B5b/QnbINlfL7E02PHIne200FVc+8BYe3VdhMKgIhqVHnWhByIW8/Z
+        cawFlFcUL24Khn0y9RkzyU6GVsWuvboEMwyCata0lDrJVJjqhryun117fRvPT6mwY+qcas
+        Z8Jet5vlP6q9fTi9514oNMyvqi1ESvg=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-512-CQRcnKm1MfSHL2uiqJYmQQ-1; Fri, 21 Jan 2022 05:42:11 -0500
+X-MC-Unique: CQRcnKm1MfSHL2uiqJYmQQ-1
+Received: by mail-ed1-f71.google.com with SMTP id p17-20020aa7c891000000b004052d1936a5so4375737eds.7
+        for <linux-next@vger.kernel.org>; Fri, 21 Jan 2022 02:42:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JekWhR8CMAxMCtnFBApW6vamUlJTaekkAKvbq4p6qw8=;
-        b=6OeVb0ZtjHXkEQDPL4/rD3ge3dGifv1CRtRM2dwaTEfDYjSA8Tc6mVNZemhP4Umo/X
-         IKL/UzemHtOV2wjD9Jjv+JfK1MLMVh3SaIT57ApdYk0htEiV5+zgg4V9JvYOiED8XHq3
-         K79Rd3+DXa22HWGYCKYGH02oTMdxFzhWgfBc7XN0YG9v9nWtzQQig84o+9as26Z/ylBp
-         svwpy4hMre0ILI3hh0+tiHUd2pQlavqv/raW+xmhWh/10iKdRAsKeY60jYK6E95Ky5V0
-         TY67JdwLIqC51r0nzxpHv1jy7CKKbk0POzZ4bH/ZZg7XStcuRqdSmLlr34dwKhgJ/Oip
-         zH2Q==
-X-Gm-Message-State: AOAM532mqrm5W/E0Odxb1uP9F4UoUNWxzNLSzHVWgtoHRfPKwAMSs+n7
-        qoTztHQjalEd/DFwIZatclqLa6gKjQcCSu1Vx5m6uw==
-X-Google-Smtp-Source: ABdhPJxwPwDcVZlwqlEbNURijL+6MLGocOVUhJTkp4UaAqzb1wi8hvxpYQGzCNUitvJcHn3KXKIEEW0s6ye7Cf9nlng=
-X-Received: by 2002:a25:c04c:: with SMTP id c73mr4847013ybf.553.1642757922889;
- Fri, 21 Jan 2022 01:38:42 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=CdPdILngPzGrQBwtZZKW+7ixKah3Wpht/KCyewnhlCg=;
+        b=rU3cOtgsim9qFIHn4SVsls5M2saharT4JSDGxHsWysDIgqGCSNiuHgT9IEUw5vwUOF
+         z2t0oETxPD6Lrf5SqEv0ldzIE8HaS+4mEv4fnorMh5ii+pijkYxAtf1El45agRXLByLe
+         rBG1OJFpRles6PJGzpZVor3dTPKNvdz6bYHP5GAOLI81AE6NdGqN1AUkgNmMy5HZjKOj
+         MCxTpWrtmCR3Tybeen1aD3WBDkZTbtxhPgRponJ8FPMTLesmDfPkaCsyQ7kh3ZiAepP/
+         oat6vljeJtPJq/nY8Wma0GU6Po6d7fnmhFVa88sfHUfPep8ZLxmu7gK7Pw8w1ccOyeEO
+         ogPQ==
+X-Gm-Message-State: AOAM530aU+3LPBjEYjTThR/Y8YBHlmc9ptca6DO/zkBpeAP5jgLZTWPp
+        yI0ierTn3RTHVd05tz9o7oiAR4nohApDJftLvfKvCNeSZ0veKAbJ4QRMbqeEKzuJT/ays7AAKOO
+        +c7rlUgaiTF+zyOuPhT/G2g==
+X-Received: by 2002:a05:6402:31e9:: with SMTP id dy9mr3680089edb.65.1642761729926;
+        Fri, 21 Jan 2022 02:42:09 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwip9Cp2oVEYL+pg2NbsXqt2zQcoTWCMHysfXzR0VjzDHu2yy8g2b0X+EK52vUarXS+yjY5QQ==
+X-Received: by 2002:a05:6402:31e9:: with SMTP id dy9mr3680084edb.65.1642761729806;
+        Fri, 21 Jan 2022 02:42:09 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id z10sm2504846edl.54.2022.01.21.02.42.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Jan 2022 02:42:09 -0800 (PST)
+Message-ID: <faa591e3-19f3-1a8d-4e64-bc8cc94b82dc@redhat.com>
+Date:   Fri, 21 Jan 2022 11:42:08 +0100
 MIME-Version: 1.0
-References: <CA+G9fYtq0wzSeG8YG-a+=KrbdWqHJMXk1hvq0FKeAvj9sZAK2g@mail.gmail.com>
- <6249735f-e6b7-1331-eb2b-361bb17d6115@opensource.wdc.com> <CA+G9fYu__OOvk-ESXoOqbd-Lk+CmO8CSQ8chEFf3MyeTjKtp9g@mail.gmail.com>
- <350720e8-9b78-bd24-5c60-602076610bf4@opensource.wdc.com>
-In-Reply-To: <350720e8-9b78-bd24-5c60-602076610bf4@opensource.wdc.com>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 21 Jan 2022 15:08:31 +0530
-Message-ID: <CA+G9fYuMc9qjQE+XoKUzwhMP4O5QE5FbCEhJEmrd_Q8LaC4nFw@mail.gmail.com>
-Subject: Re: [next] mips: cavium_octeon_defconfig: pata_octeon_cf.c:598:23:
- error: passing argument 1 of 'trace_ata_bmdma_stop' from incompatible pointer type
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-mips@vger.kernel.org,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        regressions@lists.linux.dev, lkft-triage@lists.linaro.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Zeal Robot <zealci@zte.com.cn>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        CGEL ZTE <cgel.zte@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: linux-next: build warning after merge of the drm-misc tree
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20211015205422.53bec93d@canb.auug.org.au>
+ <20220120141851.5503b65a@canb.auug.org.au>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220120141851.5503b65a@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, 21 Jan 2022 at 14:47, Damien Le Moal
-<damien.lemoal@opensource.wdc.com> wrote:
->
-> On 2022/01/21 17:58, Naresh Kamboju wrote:
-> >> I just posted a fix. As I do not have the environment to compile test
-> >> mips, could someone test please ? I will send the fix to Linus asap
-> >> after confirmation that it is OK.
-> >
-> > Please share your patch / patch link. I will test it with tuxmake.
->
-> I posted on linux-ide and CC-ed linux-mips:
->
-> https://marc.info/?l=linux-ide&m=164275458614058&w=2
+Hi Stepen,
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+On 1/20/22 04:18, Stephen Rothwell wrote:
+> Hi all,
+> 
+> On Fri, 15 Oct 2021 20:54:22 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>>
+>> After merging the drm-misc tree, today's linux-next build (htmldocs)
+>> produced this warning:
+>>
+>> Documentation/gpu/drm-kms-helpers:451: /home/sfr/next/next/drivers/gpu/drm/drm_privacy_screen.c:270: WARNING: Inline emphasis start-string without end-string.
+>>
+>> Introduced by commit
+>>
+>>   8a12b170558a ("drm/privacy-screen: Add notifier support (v2)")
+> 
+> I am still getting this warning.
 
-- Naresh
+Sorry I completely missed your original report on this between
+all the other kernel related emails.
+
+I'll prepare a fix for this coming Monday.
+
+Regards,
+
+Hans
+

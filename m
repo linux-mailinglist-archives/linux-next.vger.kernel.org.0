@@ -2,104 +2,118 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3F93495DDD
-	for <lists+linux-next@lfdr.de>; Fri, 21 Jan 2022 11:42:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7ACB4961FE
+	for <lists+linux-next@lfdr.de>; Fri, 21 Jan 2022 16:24:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234824AbiAUKmN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 21 Jan 2022 05:42:13 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:28419 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1350082AbiAUKmM (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Fri, 21 Jan 2022 05:42:12 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1642761732;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CdPdILngPzGrQBwtZZKW+7ixKah3Wpht/KCyewnhlCg=;
-        b=E2QK4XXt/0wjkP32B5b/QnbINlfL7E02PHIne200FVc+8BYe3VdhMKgIhqVHnWhByIW8/Z
-        cawFlFcUL24Khn0y9RkzyU6GVsWuvboEMwyCata0lDrJVJjqhryun117fRvPT6mwY+qcas
-        Z8Jet5vlP6q9fTi9514oNMyvqi1ESvg=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-512-CQRcnKm1MfSHL2uiqJYmQQ-1; Fri, 21 Jan 2022 05:42:11 -0500
-X-MC-Unique: CQRcnKm1MfSHL2uiqJYmQQ-1
-Received: by mail-ed1-f71.google.com with SMTP id p17-20020aa7c891000000b004052d1936a5so4375737eds.7
-        for <linux-next@vger.kernel.org>; Fri, 21 Jan 2022 02:42:10 -0800 (PST)
+        id S244783AbiAUPYd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 21 Jan 2022 10:24:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57120 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233285AbiAUPYd (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 21 Jan 2022 10:24:33 -0500
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5E1DC06173B
+        for <linux-next@vger.kernel.org>; Fri, 21 Jan 2022 07:24:32 -0800 (PST)
+Received: by mail-yb1-xb34.google.com with SMTP id p5so28452348ybd.13
+        for <linux-next@vger.kernel.org>; Fri, 21 Jan 2022 07:24:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lHv4QGKyWaC8pJttpt8QUbf3yyP/jMKn3N+flk/PW10=;
+        b=TuYOvf2B9HOi6a6+5H3dsW8U3FeTz9UocCY2hj9gLGhDsiqoc/vJ4m/8w6bS1mIXAx
+         DfzIIKlVbbDQ2XO53YTs+3KImo9w77vLdnlNocWdvZhBO69EUV1qCkr/K/tJYMeQkQIB
+         a1ZSJe9u2MwXLlhK0yvgZNH0jSsNAf+fk6xNknc5OOrvmGPN0OsDYtfU1iEO4oSKz3px
+         FWRYKaz5l7DLNHgHH/Daee6JLM0IhoUGnE2mmF1uDk32AkvK/k0h+7NlhLM5Lwy/3hlB
+         zU8a6LtNI62avuO/YK+UPiDllbENyvd6MONG7fd86WC/2etQOle1gOmHUJYrL2nHP+lv
+         qrAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=CdPdILngPzGrQBwtZZKW+7ixKah3Wpht/KCyewnhlCg=;
-        b=rU3cOtgsim9qFIHn4SVsls5M2saharT4JSDGxHsWysDIgqGCSNiuHgT9IEUw5vwUOF
-         z2t0oETxPD6Lrf5SqEv0ldzIE8HaS+4mEv4fnorMh5ii+pijkYxAtf1El45agRXLByLe
-         rBG1OJFpRles6PJGzpZVor3dTPKNvdz6bYHP5GAOLI81AE6NdGqN1AUkgNmMy5HZjKOj
-         MCxTpWrtmCR3Tybeen1aD3WBDkZTbtxhPgRponJ8FPMTLesmDfPkaCsyQ7kh3ZiAepP/
-         oat6vljeJtPJq/nY8Wma0GU6Po6d7fnmhFVa88sfHUfPep8ZLxmu7gK7Pw8w1ccOyeEO
-         ogPQ==
-X-Gm-Message-State: AOAM530aU+3LPBjEYjTThR/Y8YBHlmc9ptca6DO/zkBpeAP5jgLZTWPp
-        yI0ierTn3RTHVd05tz9o7oiAR4nohApDJftLvfKvCNeSZ0veKAbJ4QRMbqeEKzuJT/ays7AAKOO
-        +c7rlUgaiTF+zyOuPhT/G2g==
-X-Received: by 2002:a05:6402:31e9:: with SMTP id dy9mr3680089edb.65.1642761729926;
-        Fri, 21 Jan 2022 02:42:09 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwip9Cp2oVEYL+pg2NbsXqt2zQcoTWCMHysfXzR0VjzDHu2yy8g2b0X+EK52vUarXS+yjY5QQ==
-X-Received: by 2002:a05:6402:31e9:: with SMTP id dy9mr3680084edb.65.1642761729806;
-        Fri, 21 Jan 2022 02:42:09 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
-        by smtp.gmail.com with ESMTPSA id z10sm2504846edl.54.2022.01.21.02.42.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Jan 2022 02:42:09 -0800 (PST)
-Message-ID: <faa591e3-19f3-1a8d-4e64-bc8cc94b82dc@redhat.com>
-Date:   Fri, 21 Jan 2022 11:42:08 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lHv4QGKyWaC8pJttpt8QUbf3yyP/jMKn3N+flk/PW10=;
+        b=Fyk0w+HJUV5cD1hZRGLi/OQvYqgOl0UXQAd5110F8HQFthiSvEUBj+E0ZgFaAJBxdl
+         G+PhdQppH7mCZj1OcbkmmbN4ZzKaR5Mi7xmY/cvfgIEC5O2SjXDWvSGqAABYbVD5cOkG
+         IZEqgxvW4saIpaCzTW33qvz7QANwvc4cqGLyUrpvcwRNoKFijHf9ZTfUu5tUxG9t5KTG
+         eJw/v+/AE6RG3vMEeRx2Xb4h9K6gJA02UIoFqyj3YrkyIzLNhzeXvvu6SmH6VIc0LUqJ
+         JxVHXoPbyV2iqQW9oM29HeKwLxRU1XXchRsnnNhGA8MgOduWheHN27KldZ/vtaBI81Qh
+         HACA==
+X-Gm-Message-State: AOAM531YzFqTWtlYPTYEL+8cwjIPwjFh74I2mrv+APbeX0A9qe2Ug5uZ
+        +5XHfbotyini8ZRCap2U8151P+QcdVWoJJ77Q9X5xA==
+X-Google-Smtp-Source: ABdhPJx9UVWg3EfP5/63PnvEnF1YOj5Isounp9ZYZMOzIVLh11iewxgOKv8wxnLSIL7XfldkUQ5A1Lpj9PcvCTC39xs=
+X-Received: by 2002:a25:838b:: with SMTP id t11mr4282883ybk.146.1642778671696;
+ Fri, 21 Jan 2022 07:24:31 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: linux-next: build warning after merge of the drm-misc tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20211015205422.53bec93d@canb.auug.org.au>
- <20220120141851.5503b65a@canb.auug.org.au>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220120141851.5503b65a@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <CA+G9fYvuEqeoLO6dC_qtGyRUz=UPv5i0C3jZ_n9nz5kWOuCHYQ@mail.gmail.com>
+In-Reply-To: <CA+G9fYvuEqeoLO6dC_qtGyRUz=UPv5i0C3jZ_n9nz5kWOuCHYQ@mail.gmail.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 21 Jan 2022 20:54:20 +0530
+Message-ID: <CA+G9fYuKGaDfyke81wbSe2yqTm6GqWNuKw2wB6NFaCLa1q7z6A@mail.gmail.com>
+Subject: Re: [next] parisc: allnoconfig: ERROR: modpost: Section mismatches
+ detected. Set CONFIG_SECTION_MISMATCH_WARN_ONLY=y to allow them.
+To:     John David Anglin <dave.anglin@bell.net>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        regressions@lists.linux.dev, lkft-triage@lists.linaro.org,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org,
+        linux-parisc <linux-parisc@vger.kernel.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>, pavel@ucw.cz,
+        rppt@kernel.org, Andrew Morton <akpm@linux-foundation.org>,
+        linux-mm <linux-mm@kvack.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Helge Deller <deller@gmx.de>, Deller <deller@kernel.org>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stepen,
+On Fri, 21 Jan 2022 at 13:16, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+>
+> Linux next-20220121 parisc allnoconfig build failed with gcc-9/10/11.
+>
+> make --silent --keep-going --jobs=8 ARCH=parisc
+> CROSS_COMPILE=hppa-linux-gnu- 'CC=sccache hppa-linux-gnu-gcc'
+> 'HOSTCC=sccache gcc'
+>
+> WARNING: modpost: vmlinux.o(.text+0x1c8): Section mismatch in
+> reference from the function ksys_sync() to the function
+> .init.text:memblock_alloc_try_nid()
+> The function ksys_sync() references
+> the function __init memblock_alloc_try_nid().
+> This is often because ksys_sync lacks a __init
+> annotation or the annotation of memblock_alloc_try_nid is wrong.
+>
+> ERROR: modpost: Section mismatches detected.
+> Set CONFIG_SECTION_MISMATCH_WARN_ONLY=y to allow them.
+> make[2]: *** [/builds/linux/scripts/Makefile.modpost:59:
+> vmlinux.symvers] Error 1
 
-On 1/20/22 04:18, Stephen Rothwell wrote:
-> Hi all,
-> 
-> On Fri, 15 Oct 2021 20:54:22 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->>
->> After merging the drm-misc tree, today's linux-next build (htmldocs)
->> produced this warning:
->>
->> Documentation/gpu/drm-kms-helpers:451: /home/sfr/next/next/drivers/gpu/drm/drm_privacy_screen.c:270: WARNING: Inline emphasis start-string without end-string.
->>
->> Introduced by commit
->>
->>   8a12b170558a ("drm/privacy-screen: Add notifier support (v2)")
-> 
-> I am still getting this warning.
+Anders bisected this build and the first bad commit is point to,
 
-Sorry I completely missed your original report on this between
-all the other kernel related emails.
+first bad commit: [4f05e5a3946923676e147ad0e33c80df8249b2fe]
+parisc: Drop __init from map_pages declaration
 
-I'll prepare a fix for this coming Monday.
 
-Regards,
-
-Hans
-
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>
+> metadata:
+>   git branch: master
+>   git repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+>   git describe: next-20220121
+>   kernel-config: https://builds.tuxbuild.com/23zIAxC4uCgy4zadA01JYyOwCR4/config
+>   build: https://builds.tuxbuild.com/23zIAxC4uCgy4zadA01JYyOwCR4/
+>
+> # To install tuxmake on your system globally:
+> # sudo pip3 install -U tuxmake
+> #
+> # See https://docs.tuxmake.org/ for complete documentation.
+> # Original tuxmake command with fragments listed below.
+>
+> tuxmake --runtime podman --target-arch parisc --toolchain gcc-11
+> --kconfig allnoconfig
+>
+> --
+> Linaro LKFT
+> https://lkft.linaro.org

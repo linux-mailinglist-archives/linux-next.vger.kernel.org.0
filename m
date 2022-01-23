@@ -2,119 +2,90 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E246497149
-	for <lists+linux-next@lfdr.de>; Sun, 23 Jan 2022 12:24:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AF14497579
+	for <lists+linux-next@lfdr.de>; Sun, 23 Jan 2022 21:24:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231654AbiAWLYX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 23 Jan 2022 06:24:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40156 "EHLO
+        id S239904AbiAWUYe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 23 Jan 2022 15:24:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbiAWLYW (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 23 Jan 2022 06:24:22 -0500
+        with ESMTP id S239824AbiAWUYe (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 23 Jan 2022 15:24:34 -0500
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0EA9C06173B;
-        Sun, 23 Jan 2022 03:24:21 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7271FC06173B;
+        Sun, 23 Jan 2022 12:24:29 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JhW3S1Ss8z4xNq;
-        Sun, 23 Jan 2022 22:24:20 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jhl2d2RvLz4xNp;
+        Mon, 24 Jan 2022 07:24:24 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1642937060;
-        bh=AXqTBcO/JQOfYg0JjB8y47Tymg3zAnj4rj1Hr3uw2sQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=kDf0RgzN5aMBMcChu8mUaXYqGZEySy/H1izEgPl1BiDkrbARh6RQR+Deo3Y6YWst/
-         EIhFXnoJwelNXE8EhcjQcaVke5fX3iKXaRgoiAcEz1+i+RUtXDhG96PeYVUsYrwcIB
-         NCCVfkGawevaMTrYTvjgdfaCXNnqfuk8dvlmzpH1GYAfEO1XxNcRC4dXGAkJg/3xsY
-         lSRZJ23/fSuG73wxKer7mFPXkz4RRY7c/UoGVswKki/fT62WHBkI7Mo6ywZvebhOIJ
-         rNpGjey6lu6CCJDY6ZKvY3f1l82674nIWLphgCOg0HMN/SEdrwfXkwc4dgB2HirNpZ
-         srW1cEk6UrTIw==
-Date:   Sun, 23 Jan 2022 22:24:19 +1100
+        s=201702; t=1642969465;
+        bh=7wjl80U+njEwMXV1/vX38G0FRHWH79agiKblFR7hqQg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=hUyaysxZ88jg2szAgcYnD65m/zV3eE5FR0UDRSvN85k9Kq/S5o4mApcx4HjRZlbyo
+         /bDFsZ1QtqxjNMoreZ9UZQYqURkWXTwxy/r3UW6oelXaOFBsvxvqtqbjvV9WJ7tLLs
+         tKK3Kx0zMWbm5HnM+TCth/2D3FBK60VR51NCophWyup8V/bquteBZCZxZU48zGS2uV
+         Zh6oD9HNWXlWi+oQnQ0bkyr2GJXj8FnAHB1ukBJfZ0dX3zp3zchs50YBQl5P5lpGr2
+         kV8sSiT6Ogq95jTwf5iROtBvrBkxgDgwqwtkMWxJqPNF9CMJ3DLIfNUq/LIzfYYwVq
+         YVkQn9WMvgx5w==
+Date:   Mon, 24 Jan 2022 07:24:22 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
-        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org
-Subject: Re: [PATCH 1/1] sysctl: Fix 'one_thousand' defined but not used
- warning
-Message-ID: <20220123222419.1f948e8a@canb.auug.org.au>
-In-Reply-To: <Ye0bUGBJWRp+abEF@xhacker>
-References: <20220117012317.21168-1-surenb@google.com>
-        <Ye0bUGBJWRp+abEF@xhacker>
+To:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the phy tree
+Message-ID: <20220124072422.3cf483a1@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/QPlZWTPGr0k1gtB4pQ6ulNl";
+Content-Type: multipart/signed; boundary="Sig_/Vxe92CtCaC60/oFCKTMHL=p";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/QPlZWTPGr0k1gtB4pQ6ulNl
+--Sig_/Vxe92CtCaC60/oFCKTMHL=p
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Jisheng,
+Hi all,
 
-On Sun, 23 Jan 2022 17:09:36 +0800 Jisheng Zhang <jszhang@kernel.org> wrote:
->
-> On Sun, Jan 16, 2022 at 05:23:17PM -0800, Suren Baghdasaryan wrote:
-> > Fix the following warning issued when CONFIG_PERF_EVENTS is not
-> > defined:
-> >=20
-> > kernel/sysctl.c:125:12: warning: 'one_thousand' defined but not used [-=
-Wunused-variable]
-> >=20
-> > Fixes: 39c65a94cd96 ("mm/pagealloc: sysctl: change watermark_scale_fact=
-or max limit to 30%")
-> > Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> > ---
-> >  kernel/sysctl.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >=20
-> > diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-> > index ef77be575d87..81a6f2d47f77 100644
-> > --- a/kernel/sysctl.c
-> > +++ b/kernel/sysctl.c
-> > @@ -122,7 +122,9 @@ static unsigned long one_ul =3D 1;
-> >  static unsigned long long_max =3D LONG_MAX;
-> >  static int one_hundred =3D 100;
-> >  static int two_hundred =3D 200;
-> > +#ifdef CONFIG_PERF_EVENTS
-> >  static int one_thousand =3D 1000; =20
->=20
-> what about moving one_thousand definition below to group it with
-> six_hundred_forty_kb var together, so that we can avoid one
-> #ifdef CONFIG_PERF_EVENTS ... #endif
->=20
-> > +#endif
-> >  static int three_thousand =3D 3000;
-> >  #ifdef CONFIG_PRINTK
-> >  static int ten_thousand =3D 10000;
-> > --=20
-> > 2.34.1.703.g22d0c6ccf7-goog
-> >  =20
+In commit
 
-This has been fixed in Linus' current tree.
+  760e61025158 ("phy: ti: Fix "BUG: KASAN: global-out-of-bounds in _get_max=
+div" issue")
+
+Fixes tag
+
+  Fixes: 091876cc35 ("phy: ti: j721e-wiz: Add support for WIZ module presen=
+t in TI J721E SoC")
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+    Can be fixed in the future by setting core.abbrev to 12 (or more) or
+    (for git v2.11 or later) just making sure it is not set (or set to
+    "auto").
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/QPlZWTPGr0k1gtB4pQ6ulNl
+--Sig_/Vxe92CtCaC60/oFCKTMHL=p
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHtOuMACgkQAVBC80lX
-0GyK/Qf/RxIoUc6kNwRGfkw1R+LbpkZEI6NDetkWhkFFyxCsaoKdwFadKGFPtGkD
-Uw+V73WlNlMGknsMV5t5TdZqflsVsmt+9lbL4wTBSm9Hdd8We6zR6rBdIbg6fJm+
-vLx908fdT7n7NGGSmocNl4+JcvkXhjpjlULTEtISJjuG3VdrIleq2EZ/uCeDCeF9
-NnpvzCzDH6u1Nv2tlGltGBCIhvu6IhYjELeoDskxztidFPFcIfATQTCeSFK2dqOJ
-bDw16gLG+NXQTqiLL5+LXVLt+eE07NYGc5oVh0B1a3JkPDufbrfPLD22cU0yKHwY
-qymRvV1JSD9p2jq4yRHdPJTy8/sKKw==
-=CS/l
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHtuXYACgkQAVBC80lX
+0Gxc6Af6AnsUiPCEyKIQljdINcAq4R2b93Idc3uG8KMEGb9kJOj5Bqd+wwhYX5ZK
+gy1yRObFETBrplhgPBKZamL7sti5G3r8CC/OXPW32HoRxCdQyNqQH4UlDChP0zgA
+WtF4w5g/d66x9FW/SSHyXzRrtp2CEob7juUvMFj4HPTPZJ1T+p57fgprIpolWpBL
+ZRBEkSjimoKPfx8gGXyFFF9BThKBetFrD4jjyRiViNQUFY8Cae+4x1Iliovp4PLf
+CWUdjU6mOulGeEiSnVCL3+5/tXU1ZUOqWRzKRyEZBzae4CpYoa9zLsYR8dRMkOal
+XzdNWEKjAByTl6bRAfJ5Hyntm873Pg==
+=4WcS
 -----END PGP SIGNATURE-----
 
---Sig_/QPlZWTPGr0k1gtB4pQ6ulNl--
+--Sig_/Vxe92CtCaC60/oFCKTMHL=p--

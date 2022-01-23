@@ -2,89 +2,85 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BEA89497008
-	for <lists+linux-next@lfdr.de>; Sun, 23 Jan 2022 06:41:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CAA54970B2
+	for <lists+linux-next@lfdr.de>; Sun, 23 Jan 2022 10:17:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235538AbiAWFlY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 23 Jan 2022 00:41:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51044 "EHLO
+        id S236067AbiAWJRR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 23 Jan 2022 04:17:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbiAWFlY (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 23 Jan 2022 00:41:24 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A3DC06173B;
-        Sat, 22 Jan 2022 21:41:23 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S230401AbiAWJRR (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 23 Jan 2022 04:17:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B642C06173B;
+        Sun, 23 Jan 2022 01:17:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JhMRc5mWGz4y4h;
-        Sun, 23 Jan 2022 16:41:16 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1642916477;
-        bh=r7NPI2TNvsMacvzHSFiKu0O4MgYsJ2iddlDbMqUX9kI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=qR6iffQSKTaTC2PEihKWf99cU5RvvnRZBZdTEbKsVDBD/hePrAB9GfbiNWbpJbiJQ
-         /dxGz0iGUvRXAVgsbv0bJpAKkyBTBQSuV76YMrphK2RhucmUXVpXma+8ol6RosKgvh
-         Y90nVap9zajtjPi1Bz/6Hqh8eWlZVwMyTw3s116UW9vN4PcLI62F9sP9Hg5YBxfw7t
-         /fTYbsFk82cNRPDQFjdhz1cSgS0ScM8SEyJqteZKaHnwLgsndzF/loruUZD3H7b7ke
-         DgZrw2LWLGipGGj8gCV3pWaRuOvyVhjuxzz/GFt8DMPNO/zx1HkdUfRtqHCnvpdB6Y
-         EN731aV6sSy+Q==
-Date:   Sun, 23 Jan 2022 16:41:15 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Luben Tuikov <luben.tuikov@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the amdgpu tree
-Message-ID: <20220123164116.5fd89414@canb.auug.org.au>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 23EB760920;
+        Sun, 23 Jan 2022 09:17:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED734C340E2;
+        Sun, 23 Jan 2022 09:17:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642929436;
+        bh=T5B5ekyVJC+CZ64ohYULuUfaqWzSUcjA8KoiSEczAm8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Wr5iCOtaj1gdnpElkHT3Kfncf7cXEpvQsxYanq9Egt+3Agh92wRlrBu33JC4ddm4z
+         cwbj4Aygtz05BIKOdXXLjAfQLMFX2xKKY2kXewv1RzAVVbwshc54b2zLfN9TioCrYJ
+         kDbv54jnmng3FzcUUYM6bGEhR066ZxtUsBeOkciMS20yKYcI1up0A3jeDxWGja8nMd
+         avOhliGtcC3Olkc25YE5lD1KNMSWOqkE7r+c/SXnl9I1V3Bfa1lhCdT4JQ1GNgMVf3
+         B7LAYh8n1X7RKyPETk49a1v9yZyLX9B8CTev9tQEFG+qu4ywcg2hJNUGXlMNuNY7kP
+         n6zpejDMLcpYQ==
+Date:   Sun, 23 Jan 2022 17:09:36 +0800
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     sfr@canb.auug.org.au, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org
+Subject: Re: [PATCH 1/1] sysctl: Fix 'one_thousand' defined but not used
+ warning
+Message-ID: <Ye0bUGBJWRp+abEF@xhacker>
+References: <20220117012317.21168-1-surenb@google.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/c/N9DKwK2gFA84ASPi1sIG0";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220117012317.21168-1-surenb@google.com>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/c/N9DKwK2gFA84ASPi1sIG0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Sun, Jan 16, 2022 at 05:23:17PM -0800, Suren Baghdasaryan wrote:
+> Fix the following warning issued when CONFIG_PERF_EVENTS is not
+> defined:
+> 
+> kernel/sysctl.c:125:12: warning: 'one_thousand' defined but not used [-Wunused-variable]
+> 
+> Fixes: 39c65a94cd96 ("mm/pagealloc: sysctl: change watermark_scale_factor max limit to 30%")
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> ---
+>  kernel/sysctl.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+> index ef77be575d87..81a6f2d47f77 100644
+> --- a/kernel/sysctl.c
+> +++ b/kernel/sysctl.c
+> @@ -122,7 +122,9 @@ static unsigned long one_ul = 1;
+>  static unsigned long long_max = LONG_MAX;
+>  static int one_hundred = 100;
+>  static int two_hundred = 200;
+> +#ifdef CONFIG_PERF_EVENTS
+>  static int one_thousand = 1000;
 
-Hi all,
+what about moving one_thousand definition below to group it with
+six_hundred_forty_kb var together, so that we can avoid one
+#ifdef CONFIG_PERF_EVENTS ... #endif
 
-In commit
-
-  47b6584b9f43 ("drm/amdgpu: Fix kernel compilation; style")
-
-Fixes tag
-
-  Fixes: 824c2051039dfc ("drm/amdgpu: Disable FRU EEPROM access for SRIOV")
-
-has these problem(s):
-
-  - Target SHA1 does not exist
-
-Maybe you meant
-
-Fixes: eadabcc2bc6c ("drm/amdgpu: Disable FRU EEPROM access for SRIOV")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/c/N9DKwK2gFA84ASPi1sIG0
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHs6nwACgkQAVBC80lX
-0GziIAgAkDx7MkIr4sSxSIbmENXVNrg67iAf7GKKTmTOczI11oFbMw+d2Kt2O/QL
-hzUf9F/mQ2V4heynkpatihGIk/ziFmfKum7t8WEUt1IqZWKTNmA6bcBla5ofiJE1
-zTqUyBbE/43BbLfMjjnc2UcyTemlpez6hvM0cFpXrELJBtqF6d3Rxen/IRVZVfNO
-dFt69Gc5fVmeZDSxfQnEHFzHKtExREVFlutBK0ybZ+IzsB1vvKK5qWac39golHFo
-UX1ToNBF/5g8z3Ot4+S8Fngcp5va8i2wuMj74O0ChBswaypEQ94+4iXEZ6+aZf+v
-gQC1jr3OO0OSMfvdKXsMhTVdCM8nYw==
-=UgJd
------END PGP SIGNATURE-----
-
---Sig_/c/N9DKwK2gFA84ASPi1sIG0--
+> +#endif
+>  static int three_thousand = 3000;
+>  #ifdef CONFIG_PRINTK
+>  static int ten_thousand = 10000;
+> -- 
+> 2.34.1.703.g22d0c6ccf7-goog
+> 

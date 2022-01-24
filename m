@@ -2,201 +2,195 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5198749A621
-	for <lists+linux-next@lfdr.de>; Tue, 25 Jan 2022 03:18:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CEE849A61E
+	for <lists+linux-next@lfdr.de>; Tue, 25 Jan 2022 03:18:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3411562AbiAYAdz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 24 Jan 2022 19:33:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34764 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2371542AbiAYAIa (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 24 Jan 2022 19:08:30 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8194FC07E5FC;
-        Mon, 24 Jan 2022 13:56:45 -0800 (PST)
+        id S3411504AbiAYAdk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 24 Jan 2022 19:33:40 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:40897 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1384119AbiAXXHz (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 24 Jan 2022 18:07:55 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JjP2g5NNcz4xkH;
-        Tue, 25 Jan 2022 08:56:43 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JjQck0KgCz4yNv;
+        Tue, 25 Jan 2022 10:07:50 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1643061404;
-        bh=4S2QL1mgQdDy3wG5x8z+3aHXu4I0TpoY6OXzQgXC6gM=;
+        s=201702; t=1643065671;
+        bh=gSrXkPNnk0YehCYf9GLjrCcWKdM0QjZqaSwXfjinxuQ=;
         h=Date:From:To:Cc:Subject:From;
-        b=KopXF4/hev5V2fzuxyBJm/547JvhmXcBZp2ruOVmha+g5iNl5GEo8JjNsAN/fDLsN
-         PL2zq4XapD+gS79OkAuQQQRWoEVZKl6GOKoHTksRCNZ15K3uTLWmvcCIgYR5LU3WBC
-         Ki0toDsFI2H+vQbNtQ/Fo8fYUVFrIJLgbvos0eagCgruCCTOtKYxeVu69O/mXuKByd
-         pYgcA89ZsDqonzyTQUoK+aUNkmRceXnTL0WalkmWqd5L7mpn+7MtxJWxfLzKTfXiEh
-         JMxdOGNwgMULdmqzLVb7nSYt7ivmCe26pa7wzSds1+jpVYYoYPfCaMtYw/ef5BBI14
-         aEjDkmbmRLYqg==
-Date:   Tue, 25 Jan 2022 08:56:43 +1100
+        b=ZYc85MqQ96gQk3kYj6ZEspKNyK/7PIOCFRicMYvonFlRKxhdsCsU56HOTlm329JrF
+         Wkn6wCbztF3IVE/6iDZZ5dIBNg3jXf0FrBys6phv4kYGEvO63fRx+7TBRhCGCQvyoh
+         P4ESGWSPR1nmpJFEJYrpWTgAb3tzkF8e9I4LCbJpU86HaumPYWw96VAopReZUq3KG5
+         ht+TJYXOC4TmH4s3fCuSqBAXTYG7kApeinbuzlac7XD9m9elvcU1Hte+DX2AIUcrY8
+         t+MQyc/s+cp4/r/0e4kcH0hhgq8ECBMNwgu4vzo0CJWdE7L9byr4xfPSoR7epuq+vr
+         iy7jq7Dg75n2g==
+Date:   Tue, 25 Jan 2022 10:07:48 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Jani Nikula <jani.nikula@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Toke =?UTF-8?B?SMO4aWxhbmQt?= =?UTF-8?B?SsO4cmdlbnNlbg==?= 
-        <toke@redhat.com>
-Subject: linux-next: manual merge of the bpf-next tree with Linus' tree
-Message-ID: <20220125085643.14e441b6@canb.auug.org.au>
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+Subject: linux-next: manual merge of the drm-intel-gt tree with the
+ drm-intel tree
+Message-ID: <20220125100748.16b29ea9@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/1_7SJyP+trl=NHHKfArBEdF";
+Content-Type: multipart/signed; boundary="Sig_/.X3blEqMQKfAGNPOMCSmikx";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/1_7SJyP+trl=NHHKfArBEdF
+--Sig_/.X3blEqMQKfAGNPOMCSmikx
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the bpf-next tree got a conflict in:
+Today's linux-next merge of the drm-intel-gt tree got a conflict in:
 
-  tools/testing/selftests/bpf/prog_tests/xdp_link.c
+  drivers/gpu/drm/i915/i915_drv.h
 
 between commit:
 
-  4b27480dcaa7 ("bpf/selftests: convert xdp_link test to ASSERT_* macros")
+  2ef97818d3aa ("drm/i915: split out i915_gem_evict.h from i915_drv.h")
 
-from Linus' tree and commit:
+from the drm-intel tree and commit:
 
-  544356524dd6 ("selftests/bpf: switch to new libbpf XDP APIs")
+  7e00897be8bf ("drm/i915: Add object locking to i915_gem_evict_for_node an=
+d i915_gem_evict_something, v2.")
 
-from the bpf-next tree.
+from the drm-intel-gt tree.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+I fixed it up (I used the former and adde the following merge fix patch)
+and can carry the fix as necessary. This is now fixed as far as linux-next
+is concerned, but any non trivial conflicts should be mentioned to your
+upstream maintainer when your tree is submitted for merging.  You may
+also want to consider cooperating with the maintainer of the conflicting
+tree to minimise any particularly complex conflicts.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Tue, 25 Jan 2022 09:44:44 +1100
+Subject: [PATCH] merge fix for "drm/i915: split out i915_gem_evict.h from i=
+915_drv.h"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/gpu/drm/i915/i915_gem_evict.h | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/gpu/drm/i915/i915_gem_evict.h b/drivers/gpu/drm/i915/i=
+915_gem_evict.h
+index d4478b6ad11b..bd6e78abd530 100644
+--- a/drivers/gpu/drm/i915/i915_gem_evict.h
++++ b/drivers/gpu/drm/i915/i915_gem_evict.h
+@@ -12,11 +12,13 @@ struct drm_mm_node;
+ struct i915_address_space;
+=20
+ int __must_check i915_gem_evict_something(struct i915_address_space *vm,
++					  struct i915_gem_ww_ctx *ww,
+ 					  u64 min_size, u64 alignment,
+ 					  unsigned long color,
+ 					  u64 start, u64 end,
+ 					  unsigned flags);
+ int __must_check i915_gem_evict_for_node(struct i915_address_space *vm,
++					 struct i915_gem_ww_ctx *ww,
+ 					 struct drm_mm_node *node,
+ 					 unsigned int flags);
+ int i915_gem_evict_vm(struct i915_address_space *vm);
+--=20
+2.34.1
+
+But then I also needed due to commit:
+
+  6945c53bc712 ("drm/i915: Add locking to i915_gem_evict_vm(), v3.")
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Tue, 25 Jan 2022 09:51:55 +1100
+Subject: [PATCH] extra merge fix for "drm/i915: split out i915_gem_evict.h =
+from i915_drv.h"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/gpu/drm/i915/i915_gem_evict.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/i915/i915_gem_evict.h b/drivers/gpu/drm/i915/i=
+915_gem_evict.h
+index bd6e78abd530..b7f8e9435b2c 100644
+--- a/drivers/gpu/drm/i915/i915_gem_evict.h
++++ b/drivers/gpu/drm/i915/i915_gem_evict.h
+@@ -21,6 +21,7 @@ int __must_check i915_gem_evict_for_node(struct i915_addr=
+ess_space *vm,
+ 					 struct i915_gem_ww_ctx *ww,
+ 					 struct drm_mm_node *node,
+ 					 unsigned int flags);
+-int i915_gem_evict_vm(struct i915_address_space *vm);
++int i915_gem_evict_vm(struct i915_address_space *vm,
++		      struct i915_gem_ww_ctx *ww);
+=20
+ #endif /* __I915_GEM_EVICT_H__ */
+--=20
+2.34.1
+
+And then this due to commit
+
+  e849f7e70860 ("drm/i915: Call i915_gem_evict_vm in vm_fault_gtt to preven=
+t new ENOSPC errors, v2.")
+(and the above commit)
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Tue, 25 Jan 2022 10:02:16 +1100
+Subject: [PATCH] extra 2 merge fix for "drm/i915: split out i915_gem_evict.=
+h from i915_drv.h"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/gpu/drm/i915/gem/i915_gem_mman.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/gpu/drm/i915/gem/i915_gem_mman.c b/drivers/gpu/drm/i91=
+5/gem/i915_gem_mman.c
+index 4afad1604a6a..a69787999d09 100644
+--- a/drivers/gpu/drm/i915/gem/i915_gem_mman.c
++++ b/drivers/gpu/drm/i915/gem/i915_gem_mman.c
+@@ -21,6 +21,7 @@
+ #include "i915_trace.h"
+ #include "i915_user_extensions.h"
+ #include "i915_gem_ttm.h"
++#include "i915_gem_evict.h"
+ #include "i915_vma.h"
+=20
+ static inline bool
+--=20
+2.34.1
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc tools/testing/selftests/bpf/prog_tests/xdp_link.c
-index b2b357f8c74c,0c5e4ea8eaae..000000000000
---- a/tools/testing/selftests/bpf/prog_tests/xdp_link.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_link.c
-@@@ -8,9 -8,9 +8,9 @@@
- =20
-  void serial_test_xdp_link(void)
-  {
-- 	DECLARE_LIBBPF_OPTS(bpf_xdp_set_link_opts, opts, .old_fd =3D -1);
- -	__u32 duration =3D 0, id1, id2, id0 =3D 0, prog_fd1, prog_fd2, err;
-  	struct test_xdp_link *skel1 =3D NULL, *skel2 =3D NULL;
- +	__u32 id1, id2, id0 =3D 0, prog_fd1, prog_fd2;
-+ 	LIBBPF_OPTS(bpf_xdp_attach_opts, opts);
-  	struct bpf_link_info link_info;
-  	struct bpf_prog_info prog_info;
-  	struct bpf_link *link;
-@@@ -41,14 -40,14 +41,14 @@@
-  	id2 =3D prog_info.id;
- =20
-  	/* set initial prog attachment */
-- 	err =3D bpf_set_link_xdp_fd_opts(IFINDEX_LO, prog_fd1, XDP_FLAGS_REPLACE=
-, &opts);
-+ 	err =3D bpf_xdp_attach(IFINDEX_LO, prog_fd1, XDP_FLAGS_REPLACE, &opts);
- -	if (CHECK(err, "fd_attach", "initial prog attach failed: %d\n", err))
- +	if (!ASSERT_OK(err, "fd_attach"))
-  		goto cleanup;
- =20
-  	/* validate prog ID */
-- 	err =3D bpf_get_link_xdp_id(IFINDEX_LO, &id0, 0);
-+ 	err =3D bpf_xdp_query_id(IFINDEX_LO, 0, &id0);
- -	CHECK(err || id0 !=3D id1, "id1_check",
- -	      "loaded prog id %u !=3D id1 %u, err %d", id0, id1, err);
- +	if (!ASSERT_OK(err, "id1_check_err") || !ASSERT_EQ(id0, id1, "id1_check_=
-val"))
- +		goto cleanup;
- =20
-  	/* BPF link is not allowed to replace prog attachment */
-  	link =3D bpf_program__attach_xdp(skel1->progs.xdp_handler, IFINDEX_LO);
-@@@ -61,9 -60,9 +61,9 @@@
-  	}
- =20
-  	/* detach BPF program */
-- 	opts.old_fd =3D prog_fd1;
-- 	err =3D bpf_set_link_xdp_fd_opts(IFINDEX_LO, -1, XDP_FLAGS_REPLACE, &opt=
-s);
-+ 	opts.old_prog_fd =3D prog_fd1;
-+ 	err =3D bpf_xdp_detach(IFINDEX_LO, XDP_FLAGS_REPLACE, &opts);
- -	if (CHECK(err, "prog_detach", "failed %d\n", err))
- +	if (!ASSERT_OK(err, "prog_detach"))
-  		goto cleanup;
- =20
-  	/* now BPF link should attach successfully */
-@@@ -73,24 -72,25 +73,24 @@@
-  	skel1->links.xdp_handler =3D link;
- =20
-  	/* validate prog ID */
-- 	err =3D bpf_get_link_xdp_id(IFINDEX_LO, &id0, 0);
-+ 	err =3D bpf_xdp_query_id(IFINDEX_LO, 0, &id0);
- -	if (CHECK(err || id0 !=3D id1, "id1_check",
- -		  "loaded prog id %u !=3D id1 %u, err %d", id0, id1, err))
- +	if (!ASSERT_OK(err, "id1_check_err") || !ASSERT_EQ(id0, id1, "id1_check_=
-val"))
-  		goto cleanup;
- =20
-  	/* BPF prog attach is not allowed to replace BPF link */
-- 	opts.old_fd =3D prog_fd1;
-- 	err =3D bpf_set_link_xdp_fd_opts(IFINDEX_LO, prog_fd2, XDP_FLAGS_REPLACE=
-, &opts);
-+ 	opts.old_prog_fd =3D prog_fd1;
-+ 	err =3D bpf_xdp_attach(IFINDEX_LO, prog_fd2, XDP_FLAGS_REPLACE, &opts);
- -	if (CHECK(!err, "prog_attach_fail", "unexpected success\n"))
- +	if (!ASSERT_ERR(err, "prog_attach_fail"))
-  		goto cleanup;
- =20
-  	/* Can't force-update when BPF link is active */
-- 	err =3D bpf_set_link_xdp_fd(IFINDEX_LO, prog_fd2, 0);
-+ 	err =3D bpf_xdp_attach(IFINDEX_LO, prog_fd2, 0, NULL);
- -	if (CHECK(!err, "prog_update_fail", "unexpected success\n"))
- +	if (!ASSERT_ERR(err, "prog_update_fail"))
-  		goto cleanup;
- =20
-  	/* Can't force-detach when BPF link is active */
-- 	err =3D bpf_set_link_xdp_fd(IFINDEX_LO, -1, 0);
-+ 	err =3D bpf_xdp_detach(IFINDEX_LO, 0, NULL);
- -	if (CHECK(!err, "prog_detach_fail", "unexpected success\n"))
- +	if (!ASSERT_ERR(err, "prog_detach_fail"))
-  		goto cleanup;
- =20
-  	/* BPF link is not allowed to replace another BPF link */
-@@@ -109,8 -109,9 +109,8 @@@
-  		goto cleanup;
-  	skel2->links.xdp_handler =3D link;
- =20
-- 	err =3D bpf_get_link_xdp_id(IFINDEX_LO, &id0, 0);
-+ 	err =3D bpf_xdp_query_id(IFINDEX_LO, 0, &id0);
- -	if (CHECK(err || id0 !=3D id2, "id2_check",
- -		  "loaded prog id %u !=3D id2 %u, err %d", id0, id1, err))
- +	if (!ASSERT_OK(err, "id2_check_err") || !ASSERT_EQ(id0, id2, "id2_check_=
-val"))
-  		goto cleanup;
- =20
-  	/* updating program under active BPF link works as expected */
-
---Sig_/1_7SJyP+trl=NHHKfArBEdF
+--Sig_/.X3blEqMQKfAGNPOMCSmikx
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHvIJsACgkQAVBC80lX
-0GwzXwf/d+fypAnqe9dQ0KH2hWEWCM+EuR+6KNO3awVyilMlumFFqA6fgj6gjnVi
-N7KUtj4XuyLHdDyScoWy8JXfFBz4V1wyVRoKB6I2bB0xF3inV3GrPOucv9ytQrU1
-CtCRSDaEe/FeUM9pr5ck70fwB6X36+zPqERqOD4xkD8Rvc1VRr16zKydAhsup1Tv
-7X4QMazfwHoavWKk5vSqmd1ePx4ZlHEcpcF8ES7rgmgqFUrLXK2RaovwBhVX0oFV
-UjzwPYkw2BKE/hgSITSVI2H9H4UcADcK9fcfKfEmGDC1AwiVNU4XbyXqcq+Hfagg
-ScEKp1VDUWHVb5osbZVoLIWAkgU/wA==
-=XKBz
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHvMUQACgkQAVBC80lX
+0GzvCwf9FWUy7E0d12GF/oput5FtDHOwD+gXZobQ3fZiMEP6KSAwbhZiIYqS5xtu
+fDqJoA+h0FWMW9A4yjXAiTLvNkT4eUT5Hie7UAXo736MXifY6G/zNlugPCq+fklj
+eL8rInbENMk2CA+AgqwatbI31JY8Y1oDb+V2X3Han88r81yBj9RzYhIoDg3EwzIG
+TOsYs4ZGuVH77h+l6CHnw0o2rGRpvkHHRgrEbdHqtgauQtgZ4dpL0d5WznTxV8HF
+Zm2lygZeUTfzu4gSnrrmyY3VRtCKEXeD3w04TYAtDdzPa11h3e3mdeabiXWJlxYT
+o4AV8NP8DYlgih9PY+U77QaQdfaG4w==
+=Y/b3
 -----END PGP SIGNATURE-----
 
---Sig_/1_7SJyP+trl=NHHKfArBEdF--
+--Sig_/.X3blEqMQKfAGNPOMCSmikx--

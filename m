@@ -2,32 +2,35 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CEE849A61E
-	for <lists+linux-next@lfdr.de>; Tue, 25 Jan 2022 03:18:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D75EA49AAFA
+	for <lists+linux-next@lfdr.de>; Tue, 25 Jan 2022 05:44:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3411504AbiAYAdk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 24 Jan 2022 19:33:40 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:40897 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384119AbiAXXHz (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 24 Jan 2022 18:07:55 -0500
+        id S1387374AbiAYDxg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 24 Jan 2022 22:53:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43568 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S3414772AbiAYAte (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 24 Jan 2022 19:49:34 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1049EC047CE4;
+        Mon, 24 Jan 2022 14:33:45 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JjQck0KgCz4yNv;
-        Tue, 25 Jan 2022 10:07:50 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JjPsL1zWVz4y82;
+        Tue, 25 Jan 2022 09:33:42 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1643065671;
-        bh=gSrXkPNnk0YehCYf9GLjrCcWKdM0QjZqaSwXfjinxuQ=;
+        s=201702; t=1643063623;
+        bh=Q7cV3zIVrbk4eZ0vx98E9oUuVG4Uaj8FKYUwZqQb2BU=;
         h=Date:From:To:Cc:Subject:From;
-        b=ZYc85MqQ96gQk3kYj6ZEspKNyK/7PIOCFRicMYvonFlRKxhdsCsU56HOTlm329JrF
-         Wkn6wCbztF3IVE/6iDZZ5dIBNg3jXf0FrBys6phv4kYGEvO63fRx+7TBRhCGCQvyoh
-         P4ESGWSPR1nmpJFEJYrpWTgAb3tzkF8e9I4LCbJpU86HaumPYWw96VAopReZUq3KG5
-         ht+TJYXOC4TmH4s3fCuSqBAXTYG7kApeinbuzlac7XD9m9elvcU1Hte+DX2AIUcrY8
-         t+MQyc/s+cp4/r/0e4kcH0hhgq8ECBMNwgu4vzo0CJWdE7L9byr4xfPSoR7epuq+vr
-         iy7jq7Dg75n2g==
-Date:   Tue, 25 Jan 2022 10:07:48 +1100
+        b=tSstAJsmJEYLMABaBazIkF0XpBRW/SOMc3kdt6nXnj1hiPz7i2TIEQYfFawA6AqLs
+         E4BTAf09G9wMUUQT7iFFAzJlyl93SJ0er4Ks7lKmeWg8Uq9EW3RjnnZySVqO9nllaC
+         2s+opzEvyUCdMiZkIC3W8kMJRW9+8TpSJ3mP78M5WgIdiLGHi4Tkc0tvTWVEJoSR2C
+         7C8kMDxFkKuhdh5ZG6fhaftYfGtDzst3My3BQlob8Nqk3F7VKppbVyq9FGDpbEAjuL
+         O7KDgZkAwVEbNcyEUdmTca4BJBS76plaByzsvZTgVCv+iVIawleELHxs+oz4V0RAmA
+         2duOdsAp+nW6Q==
+Date:   Tue, 25 Jan 2022 09:33:41 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
         Jani Nikula <jani.nikula@linux.intel.com>,
@@ -35,162 +38,150 @@ To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
         Rodrigo Vivi <rodrigo.vivi@intel.com>,
         Intel Graphics <intel-gfx@lists.freedesktop.org>,
         DRI <dri-devel@lists.freedesktop.org>
-Cc:     Jani Nikula <jani.nikula@intel.com>,
+Cc:     John Harrison <John.C.Harrison@Intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-Subject: linux-next: manual merge of the drm-intel-gt tree with the
- drm-intel tree
-Message-ID: <20220125100748.16b29ea9@canb.auug.org.au>
+        Matt Roper <matthew.d.roper@intel.com>,
+        Umesh Nerlige Ramappa <umesh.nerlige.ramappa@intel.com>
+Subject: linux-next: manual merge of the drm-intel tree with Linus' tree
+Message-ID: <20220125093341.15244634@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/.X3blEqMQKfAGNPOMCSmikx";
+Content-Type: multipart/signed; boundary="Sig_/2ZL55ve7xa9iF44s=AjpDmu";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/.X3blEqMQKfAGNPOMCSmikx
+--Sig_/2ZL55ve7xa9iF44s=AjpDmu
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the drm-intel-gt tree got a conflict in:
+Today's linux-next merge of the drm-intel tree got a conflict in:
 
-  drivers/gpu/drm/i915/i915_drv.h
+  drivers/gpu/drm/i915/i915_reg.h
 
 between commit:
 
-  2ef97818d3aa ("drm/i915: split out i915_gem_evict.h from i915_drv.h")
+  77cdd054dd2c ("drm/i915/pmu: Connect engine busyness stats from GuC to pm=
+u")
 
-from the drm-intel tree and commit:
+from Linus' tree and commit:
 
-  7e00897be8bf ("drm/i915: Add object locking to i915_gem_evict_for_node an=
-d i915_gem_evict_something, v2.")
+  202b1f4c1234 ("drm/i915/gt: Move engine registers to their own header")
 
-from the drm-intel-gt tree.
+from the drm-intel tree.
 
-I fixed it up (I used the former and adde the following merge fix patch)
-and can carry the fix as necessary. This is now fixed as far as linux-next
-is concerned, but any non trivial conflicts should be mentioned to your
-upstream maintainer when your tree is submitted for merging.  You may
-also want to consider cooperating with the maintainer of the conflicting
-tree to minimise any particularly complex conflicts.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Tue, 25 Jan 2022 09:44:44 +1100
-Subject: [PATCH] merge fix for "drm/i915: split out i915_gem_evict.h from i=
-915_drv.h"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/gpu/drm/i915/i915_gem_evict.h | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/gpu/drm/i915/i915_gem_evict.h b/drivers/gpu/drm/i915/i=
-915_gem_evict.h
-index d4478b6ad11b..bd6e78abd530 100644
---- a/drivers/gpu/drm/i915/i915_gem_evict.h
-+++ b/drivers/gpu/drm/i915/i915_gem_evict.h
-@@ -12,11 +12,13 @@ struct drm_mm_node;
- struct i915_address_space;
-=20
- int __must_check i915_gem_evict_something(struct i915_address_space *vm,
-+					  struct i915_gem_ww_ctx *ww,
- 					  u64 min_size, u64 alignment,
- 					  unsigned long color,
- 					  u64 start, u64 end,
- 					  unsigned flags);
- int __must_check i915_gem_evict_for_node(struct i915_address_space *vm,
-+					 struct i915_gem_ww_ctx *ww,
- 					 struct drm_mm_node *node,
- 					 unsigned int flags);
- int i915_gem_evict_vm(struct i915_address_space *vm);
---=20
-2.34.1
-
-But then I also needed due to commit:
-
-  6945c53bc712 ("drm/i915: Add locking to i915_gem_evict_vm(), v3.")
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Tue, 25 Jan 2022 09:51:55 +1100
-Subject: [PATCH] extra merge fix for "drm/i915: split out i915_gem_evict.h =
-from i915_drv.h"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/gpu/drm/i915/i915_gem_evict.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/i915/i915_gem_evict.h b/drivers/gpu/drm/i915/i=
-915_gem_evict.h
-index bd6e78abd530..b7f8e9435b2c 100644
---- a/drivers/gpu/drm/i915/i915_gem_evict.h
-+++ b/drivers/gpu/drm/i915/i915_gem_evict.h
-@@ -21,6 +21,7 @@ int __must_check i915_gem_evict_for_node(struct i915_addr=
-ess_space *vm,
- 					 struct i915_gem_ww_ctx *ww,
- 					 struct drm_mm_node *node,
- 					 unsigned int flags);
--int i915_gem_evict_vm(struct i915_address_space *vm);
-+int i915_gem_evict_vm(struct i915_address_space *vm,
-+		      struct i915_gem_ww_ctx *ww);
-=20
- #endif /* __I915_GEM_EVICT_H__ */
---=20
-2.34.1
-
-And then this due to commit
-
-  e849f7e70860 ("drm/i915: Call i915_gem_evict_vm in vm_fault_gtt to preven=
-t new ENOSPC errors, v2.")
-(and the above commit)
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Tue, 25 Jan 2022 10:02:16 +1100
-Subject: [PATCH] extra 2 merge fix for "drm/i915: split out i915_gem_evict.=
-h from i915_drv.h"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/gpu/drm/i915/gem/i915_gem_mman.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/gpu/drm/i915/gem/i915_gem_mman.c b/drivers/gpu/drm/i91=
-5/gem/i915_gem_mman.c
-index 4afad1604a6a..a69787999d09 100644
---- a/drivers/gpu/drm/i915/gem/i915_gem_mman.c
-+++ b/drivers/gpu/drm/i915/gem/i915_gem_mman.c
-@@ -21,6 +21,7 @@
- #include "i915_trace.h"
- #include "i915_user_extensions.h"
- #include "i915_gem_ttm.h"
-+#include "i915_gem_evict.h"
- #include "i915_vma.h"
-=20
- static inline bool
---=20
-2.34.1
+I fixed it up (see below - maybe should be done better?) and can carry the
+fix as necessary. This is now fixed as far as linux-next is concerned,
+but any non trivial conflicts should be mentioned to your upstream
+maintainer when your tree is submitted for merging.  You may also want
+to consider cooperating with the maintainer of the conflicting tree to
+minimise any particularly complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/.X3blEqMQKfAGNPOMCSmikx
+diff --cc drivers/gpu/drm/i915/i915_reg.h
+index 971d601fe751,cf168c3e0471..000000000000
+--- a/drivers/gpu/drm/i915/i915_reg.h
++++ b/drivers/gpu/drm/i915/i915_reg.h
+@@@ -2661,52 -1825,7 +1843,9 @@@
+  #define   AUX_INV		REG_BIT(0)
+  #define BLT_HWS_PGA_GEN7	_MMIO(0x04280)
+  #define VEBOX_HWS_PGA_GEN7	_MMIO(0x04380)
+- #define RING_ACTHD(base)	_MMIO((base) + 0x74)
+- #define RING_ACTHD_UDW(base)	_MMIO((base) + 0x5c)
+- #define RING_NOPID(base)	_MMIO((base) + 0x94)
+- #define RING_IMR(base)		_MMIO((base) + 0xa8)
+- #define RING_HWSTAM(base)	_MMIO((base) + 0x98)
+- #define RING_TIMESTAMP(base)		_MMIO((base) + 0x358)
+- #define RING_TIMESTAMP_UDW(base)	_MMIO((base) + 0x358 + 4)
+- #define   TAIL_ADDR		0x001FFFF8
+- #define   HEAD_WRAP_COUNT	0xFFE00000
+- #define   HEAD_WRAP_ONE		0x00200000
+- #define   HEAD_ADDR		0x001FFFFC
+- #define   RING_NR_PAGES		0x001FF000
+- #define   RING_REPORT_MASK	0x00000006
+- #define   RING_REPORT_64K	0x00000002
+- #define   RING_REPORT_128K	0x00000004
+- #define   RING_NO_REPORT	0x00000000
+- #define   RING_VALID_MASK	0x00000001
+- #define   RING_VALID		0x00000001
+- #define   RING_INVALID		0x00000000
+- #define   RING_WAIT_I8XX	(1 << 0) /* gen2, PRBx_HEAD */
+- #define   RING_WAIT		(1 << 11) /* gen3+, PRBx_CTL */
+- #define   RING_WAIT_SEMAPHORE	(1 << 10) /* gen6+ */
+ =20
+ +#define GUCPMTIMESTAMP          _MMIO(0xC3E8)
+ +
+- /* There are 16 64-bit CS General Purpose Registers per-engine on Gen8+ */
+- #define GEN8_RING_CS_GPR(base, n)	_MMIO((base) + 0x600 + (n) * 8)
+- #define GEN8_RING_CS_GPR_UDW(base, n)	_MMIO((base) + 0x600 + (n) * 8 + 4)
+-=20
+- #define RING_FORCE_TO_NONPRIV(base, i) _MMIO(((base) + 0x4D0) + (i) * 4)
+- #define   RING_FORCE_TO_NONPRIV_ADDRESS_MASK	REG_GENMASK(25, 2)
+- #define   RING_FORCE_TO_NONPRIV_ACCESS_RW	(0 << 28)    /* CFL+ & Gen11+ */
+- #define   RING_FORCE_TO_NONPRIV_ACCESS_RD	(1 << 28)
+- #define   RING_FORCE_TO_NONPRIV_ACCESS_WR	(2 << 28)
+- #define   RING_FORCE_TO_NONPRIV_ACCESS_INVALID	(3 << 28)
+- #define   RING_FORCE_TO_NONPRIV_ACCESS_MASK	(3 << 28)
+- #define   RING_FORCE_TO_NONPRIV_RANGE_1		(0 << 0)     /* CFL+ & Gen11+ */
+- #define   RING_FORCE_TO_NONPRIV_RANGE_4		(1 << 0)
+- #define   RING_FORCE_TO_NONPRIV_RANGE_16	(2 << 0)
+- #define   RING_FORCE_TO_NONPRIV_RANGE_64	(3 << 0)
+- #define   RING_FORCE_TO_NONPRIV_RANGE_MASK	(3 << 0)
+- #define   RING_FORCE_TO_NONPRIV_MASK_VALID	\
+- 					(RING_FORCE_TO_NONPRIV_RANGE_MASK \
+- 					| RING_FORCE_TO_NONPRIV_ACCESS_MASK)
+- #define   RING_MAX_NONPRIV_SLOTS  12
+-=20
+  #define GEN7_TLB_RD_ADDR	_MMIO(0x4700)
+ =20
+  #define GEN9_GAMT_ECO_REG_RW_IA _MMIO(0x4ab0)
+@@@ -2778,27 -1885,7 +1905,10 @@@
+  #define GEN2_INSTDONE	_MMIO(0x2090)
+  #define NOPID		_MMIO(0x2094)
+  #define HWSTAM		_MMIO(0x2098)
+- #define DMA_FADD_I8XX(base)	_MMIO((base) + 0xd0)
+- #define RING_BBSTATE(base)	_MMIO((base) + 0x110)
+- #define   RING_BB_PPGTT		(1 << 5)
+- #define RING_SBBADDR(base)	_MMIO((base) + 0x114) /* hsw+ */
+- #define RING_SBBSTATE(base)	_MMIO((base) + 0x118) /* hsw+ */
+- #define RING_SBBADDR_UDW(base)	_MMIO((base) + 0x11c) /* gen8+ */
+- #define RING_BBADDR(base)	_MMIO((base) + 0x140)
+- #define RING_BBADDR_UDW(base)	_MMIO((base) + 0x168) /* gen8+ */
+- #define RING_BB_PER_CTX_PTR(base)	_MMIO((base) + 0x1c0) /* gen8+ */
+- #define RING_INDIRECT_CTX(base)		_MMIO((base) + 0x1c4) /* gen8+ */
+- #define RING_INDIRECT_CTX_OFFSET(base)	_MMIO((base) + 0x1c8) /* gen8+ */
+- #define RING_CTX_TIMESTAMP(base)	_MMIO((base) + 0x3a8) /* gen8+ */
+-=20
+- #define VDBOX_CGCTL3F10(base)		_MMIO((base) + 0x3f10)
+- #define   IECPUNIT_CLKGATE_DIS		REG_BIT(22)
+ =20
+ +#define VDBOX_CGCTL3F18(base)		_MMIO((base) + 0x3f18)
+ +#define   ALNUNIT_CLKGATE_DIS		REG_BIT(13)
+ +
+  #define ERROR_GEN6	_MMIO(0x40a0)
+  #define GEN7_ERR_INT	_MMIO(0x44040)
+  #define   ERR_INT_POISON		(1 << 31)
+
+--Sig_/2ZL55ve7xa9iF44s=AjpDmu
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHvMUQACgkQAVBC80lX
-0GzvCwf9FWUy7E0d12GF/oput5FtDHOwD+gXZobQ3fZiMEP6KSAwbhZiIYqS5xtu
-fDqJoA+h0FWMW9A4yjXAiTLvNkT4eUT5Hie7UAXo736MXifY6G/zNlugPCq+fklj
-eL8rInbENMk2CA+AgqwatbI31JY8Y1oDb+V2X3Han88r81yBj9RzYhIoDg3EwzIG
-TOsYs4ZGuVH77h+l6CHnw0o2rGRpvkHHRgrEbdHqtgauQtgZ4dpL0d5WznTxV8HF
-Zm2lygZeUTfzu4gSnrrmyY3VRtCKEXeD3w04TYAtDdzPa11h3e3mdeabiXWJlxYT
-o4AV8NP8DYlgih9PY+U77QaQdfaG4w==
-=Y/b3
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHvKUUACgkQAVBC80lX
+0Gwxewf+OMrUFaGLuYGYg5EgrZvYs6OAjlxGfiU6hn4qQimxLo0Idz+12DpIMtt1
+NA/MxjY9MzpHj756KK+jGSzsS1HmUYXQvCw1uPBY/6XesaRpFio/iujoRLtJKo0c
+KVK90J2IUv/Tj2XJg7KDWybDFBTTa7tyGWwIF6G10/i7vCplaswXERggRIdF+ACT
+Ty3meYA8lKIAoGv8AP3ryEvKLFSsiTyF4+GSZQ/AZVPsh9vOy7gqhSUbRTyRHrwa
+jK0Ucu/l5fHt7bbAVWePaHs1mkBA9PW6Kk7Eg7nN3i4C5PsSo/UyqbjOjnNXMY5Y
+GpnYoinv6581dqwm8dzdxazwN6TQYg==
+=WVH5
 -----END PGP SIGNATURE-----
 
---Sig_/.X3blEqMQKfAGNPOMCSmikx--
+--Sig_/2ZL55ve7xa9iF44s=AjpDmu--

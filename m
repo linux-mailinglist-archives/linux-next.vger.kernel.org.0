@@ -2,80 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A92B349BE93
-	for <lists+linux-next@lfdr.de>; Tue, 25 Jan 2022 23:33:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4E2249BEBA
+	for <lists+linux-next@lfdr.de>; Tue, 25 Jan 2022 23:40:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233879AbiAYWdl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 25 Jan 2022 17:33:41 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:55937 "EHLO
+        id S233931AbiAYWkh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 25 Jan 2022 17:40:37 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:43259 "EHLO
         gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233892AbiAYWdM (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 25 Jan 2022 17:33:12 -0500
+        with ESMTP id S233930AbiAYWkh (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 25 Jan 2022 17:40:37 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jk1pB4qZGz4xdl;
-        Wed, 26 Jan 2022 09:33:06 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jk1yq5ndKz4xjx;
+        Wed, 26 Jan 2022 09:40:35 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1643149986;
-        bh=4N5QEyxMjjwZITic1lYF0XkgVn9dsIlL0PsrC3TOMHo=;
+        s=201702; t=1643150436;
+        bh=/Z7u52vIWMzyap1X/8gzPT5BJqHVjzgBldpQh7dDOEw=;
         h=Date:From:To:Cc:Subject:From;
-        b=L02PQ8pCXcMps5P7QIe5ola+But/eUFTITsxdmJ3adm3d+d/f8UJEZBYo9ahf8NoW
-         BXfICohdsogLlQpCdjrTjGQn7FuOu6Kwmmlx/sp6CH/CCtY6mbstli8wpmh97zCM3E
-         bhpKQ0KLXsZSWhqFOs98s+nixxdCO+3ATPAR1UoMmmMlS8bt7FyOZoj1dtIRGF2C6A
-         fTFiDU6kpmx5tUDa01fGYzZsh9N+Q3kD4QJULzaI4sByECRpbkYSt0nbwPsCnL2lSV
-         7csDDekaISwpRWsGWutj3zGzo42fMEp6NfLNIJF5UDy5UeS0H7Mvu7U8CS/p4tVTBp
-         RMA5XsY/f2nsw==
-Date:   Wed, 26 Jan 2022 09:33:05 +1100
+        b=dHcDt02RRC1r19ceyALlTZPFAPUDJTw9kcEaWXFjj9tolra3Qxv8Rp3dktE+yc8ar
+         lYQN+aM4Wb1K0dMSomRyIQcP8h/1/mjChkQqUJ/XichttKJNjx2J5SmrYSFo6RbIH9
+         d8WU+Jvgphd8qAWn6L/75zy2qlnlZpgk1KHk5OqTjmOGFCP3T1zpyuPme50PMqJTPl
+         wLShhecqjYcwAGawdPzDc6IWf/PfpoRvb1RffHLNJUBuFi4Xbs6e8f49go/GO5/Ywg
+         fV77/GsnNLCol4atPcIoU/tHiIoknr8uH6lppQ4u0wdPPwDC9dQgqT0JtV3CnMRF4U
+         tcYlm8i/VMbig==
+Date:   Wed, 26 Jan 2022 09:40:35 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Luben Tuikov <luben.tuikov@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the samsung-krzk
- tree
-Message-ID: <20220126093305.5726fcbb@canb.auug.org.au>
+Subject: linux-next: Fixes tag needs some work in the amdgpu tree
+Message-ID: <20220126094035.631da5e3@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/p5Q/XEB/c8t.Pm0IKDvOYcv";
+Content-Type: multipart/signed; boundary="Sig_/fdX+xxffMnLM9Y_QbH9+mj2";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/p5Q/XEB/c8t.Pm0IKDvOYcv
+--Sig_/fdX+xxffMnLM9Y_QbH9+mj2
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Commits
+In commit
 
-  1f22c720691e ("Revert "arm64: dts: fsd: Add initial device tree support"")
-  191448a71471 ("Revert "arm64: dts: fsd: Add initial pinctrl support"")
+  69bba523d97a ("drm/amdgpu: Fix kernel compilation; style")
 
-are missing a Signed-off-by from their author and committer.
+Fixes tag
 
-Reverts are changes too and so should be signed off and have reasonable
-("why did we do this?") changelogs.
+  Fixes: 1b08dfb889b2c5 ("drm/amdgpu: Disable FRU EEPROM access for SRIOV")
+
+has these problem(s):
+
+  - Subject does not match target commit subject
+    Just use
+	git log -1 --format=3D'Fixes: %h ("%s")'
+
+Thus:
+
+Fixes: 1b08dfb889b2 ("drm/amdgpu: remove gart.ready flag")
+
+or
+
+Fixes: eadabcc2bc6c ("drm/amdgpu: Disable FRU EEPROM access for SRIOV")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/p5Q/XEB/c8t.Pm0IKDvOYcv
+--Sig_/fdX+xxffMnLM9Y_QbH9+mj2
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHweqEACgkQAVBC80lX
-0Gx10wf/RZM9esQhP2tnVjq+YvXAw+l0pZmPJS31cHltX9HJl5Qmu3qe8mMCkuLf
-BgL3cTrrjyBaBGtEN68vffkeOxlVMD28dU0b2tydnSWYH+2FWckiGUIhGJ4oCpA0
-ItxlQt8UWJ+sRpSAQazqBxp7vyicSSTeISkpwukzUKw8/MGoyRvLsaxS+9h1pLpM
-k6AsZ3IYVGBaWwCQf+Go1sKogjaBHPKzOAEpj9uT8x0I7ipRx/4u3Pt/8a2royHF
-Yn9Sbqfr4h5fgPirtlVUKBwf2MfxaDIk9G+Bd+u8e39Z0mlvW8+oJvGbBQ1MUrL5
-X4XpScUH+eZCbEipYDAlEEoMhpOlLQ==
-=/k5Y
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHwfGMACgkQAVBC80lX
+0GxJjwf/Wtl67qsfw2x4SZcfAQp5Lvm/yjTtQ2ZqqrAR2Oxe9oBhJBBESw5ZeljQ
+KZ6rwcmJM/CyVZuDsjT8PyqT/d/CVcSMVp04DezW8iK9ad7gTzupYC/1uSrh7Ow+
+mQxKzNWgH03qbJ1RUNMgx+h58LoGQzjg4cqyXS2x5qAZpq+JyDAJ+RHkSZ0Vaa/m
+Bnzl7P7SfKH9RnHKYyj0CwtwEnDLgPmFy59c2rvaPphPGZYCiP13pLoondtTSV78
+HNmGL2P9FZvQxOdBgaazypoHHCyhXmXm1f7w2YhZsn8ZEKijt0FzGqMfySM2MsRD
+19stpLcVEXEsQId2bXSRb8g1UyltIw==
+=Mx3O
 -----END PGP SIGNATURE-----
 
---Sig_/p5Q/XEB/c8t.Pm0IKDvOYcv--
+--Sig_/fdX+xxffMnLM9Y_QbH9+mj2--

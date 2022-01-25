@@ -2,140 +2,144 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E22D49B5C3
-	for <lists+linux-next@lfdr.de>; Tue, 25 Jan 2022 15:10:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BDA249B67D
+	for <lists+linux-next@lfdr.de>; Tue, 25 Jan 2022 15:37:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386335AbiAYOKT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 25 Jan 2022 09:10:19 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:42478 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1578005AbiAYOIO (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 25 Jan 2022 09:08:14 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 1BF57212BD;
-        Tue, 25 Jan 2022 14:08:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1643119691;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Qgv+MCqvmwhK2qBc6bQ3xFsDD/T8tTwmC45myn5GeeM=;
-        b=SAgTkskqs+WGzMZOZnENh+aVQbQAFb8kjORO9SRQRKTeaaANpyaKdGkVzG6LtfWbCJ5aZi
-        z88UdoDpTbtqZBKDze9Cndl8o+0voBduRbbdp6X58Nvvy/Z0ZZEb4LrRevw0RlFJrGqh1H
-        aJC74ElK0MeWHbkeIY3uUxD+jwuvZ2I=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1643119691;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Qgv+MCqvmwhK2qBc6bQ3xFsDD/T8tTwmC45myn5GeeM=;
-        b=ckxb176UMExRWNpklDJLGSm2kS+aYyJ2UW5kMD2QH/4UAZwThcxvOCA61ILX6sBZ781hdO
-        xGMYtC1ukaW9DyAA==
-Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
-        by relay2.suse.de (Postfix) with ESMTP id 12363A3B83;
-        Tue, 25 Jan 2022 14:08:10 +0000 (UTC)
-Received: by ds.suse.cz (Postfix, from userid 10065)
-        id 90789DA7A9; Tue, 25 Jan 2022 15:07:30 +0100 (CET)
-Date:   Tue, 25 Jan 2022 15:07:30 +0100
-From:   David Sterba <dsterba@suse.cz>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Kees Cook <keescook@chromium.org>, David Sterba <dsterba@suse.com>,
-        Omar Sandoval <osandov@fb.com>,
+        id S230384AbiAYOhC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 25 Jan 2022 09:37:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38570 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1388297AbiAYOdL (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 25 Jan 2022 09:33:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 259A1C06175F;
+        Tue, 25 Jan 2022 06:32:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EB0C0B8180A;
+        Tue, 25 Jan 2022 14:31:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3D2DC340E0;
+        Tue, 25 Jan 2022 14:31:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643121118;
+        bh=TjiX/pJ3jr1qZrQo1Hb5I+RhGqJRpdiNcaSW38hFvnM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=e1hvj+wKBMDc9NHJ/xRYFOPWv5n/MtaAM3F4UlC2BsUaiRgMLLxmsB902n4OgqXu3
+         zp1HhY5+TwltC9oFSD/J3iIMa6+Q2mdF0eVNvr+tW+6Lcktjr+m2H+4zoGY/PkIfoz
+         Ab4TV2TWjYDvWJyhlL0frwnaJKQ+ENBZGnEYcqlW+O2tQU3H/b7rRjSdYPIrAKJCf1
+         LSNIEQ229hJjpl/I1dbUNGpg+uTvbbz3QNdvlwmwBdbKWPNfScWnRr/AUCmagRbRJU
+         edsg8f3i5R1Sk/nCutJrdIEgJe0Z4b5YAwVsCP65mtpuR2IPmumAsPMxSnTPAxyKC6
+         6UH8vt6C+SJzg==
+Date:   Tue, 25 Jan 2022 23:31:54 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
 Subject: Re: linux-next: build failure after merge of the kspp tree
-Message-ID: <20220125140730.GO14046@suse.cz>
-Reply-To: dsterba@suse.cz
-Mail-Followup-To: dsterba@suse.cz, Stephen Rothwell <sfr@canb.auug.org.au>,
-        Kees Cook <keescook@chromium.org>, David Sterba <dsterba@suse.com>,
-        Omar Sandoval <osandov@fb.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220125115757.20bc45e8@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220125115757.20bc45e8@canb.auug.org.au>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+Message-Id: <20220125233154.dac280ed36944c0c2fe6f3ac@kernel.org>
+In-Reply-To: <20220125222732.98ce2e445726e773f40e122e@kernel.org>
+References: <20220125145006.677e3709@canb.auug.org.au>
+        <202201242230.C54A6BCDFE@keescook>
+        <20220125222732.98ce2e445726e773f40e122e@kernel.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 11:57:57AM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the kspp tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
-> 
-> In file included from include/linux/string.h:253,
->                  from include/linux/bitmap.h:11,
->                  from include/linux/cpumask.h:12,
->                  from arch/x86/include/asm/cpumask.h:5,
->                  from arch/x86/include/asm/msr.h:11,
->                  from arch/x86/include/asm/processor.h:22,
->                  from arch/x86/include/asm/cpufeature.h:5,
->                  from arch/x86/include/asm/thread_info.h:53,
->                  from include/linux/thread_info.h:60,
->                  from arch/x86/include/asm/preempt.h:7,
->                  from include/linux/preempt.h:78,
->                  from include/linux/spinlock.h:55,
->                  from include/linux/wait.h:9,
->                  from include/linux/mempool.h:8,
->                  from include/linux/bio.h:8,
->                  from fs/btrfs/ioctl.c:7:
-> In function 'fortify_memcpy_chk',
->     inlined from 'btrfs_ioctl_encoded_write' at fs/btrfs/ioctl.c:5082:3:
-> include/linux/fortify-string.h:316:25: error: call to '__write_overflow_field' declared with attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror=attribute-warning]
->   316 |                         __write_overflow_field(p_size_field, size);
->       |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> include/linux/fortify-string.h:324:25: error: call to '__read_overflow2_field' declared with attribute warning: detected read beyond size of field (2nd parameter); maybe use struct_group()? [-Werror=attribute-warning]
->   324 |                         __read_overflow2_field(q_size_field, size);
->       |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> cc1: all warnings being treated as errors
-> 
-> Caused by commit
-> 
->   602670289b69 ("fortify: Detect struct member overflows in memcpy() at compile-time")
-> 
-> interacting with commit
-> 
->   504e1ebb6316 ("btrfs: add BTRFS_IOC_ENCODED_WRITE")
-> 
-> from the btrfs tree.
-> 
-> I applied the following hack:
-> 
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Tue, 25 Jan 2022 11:47:17 +1100
-> Subject: [PATCH] fix up for "btrfs: add BTRFS_IOC_ENCODED_WRITE"
-> 
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  fs/btrfs/ioctl.c | 11 ++++++++---
->  1 file changed, 8 insertions(+), 3 deletions(-)
-> 
-> diff --git a/fs/btrfs/ioctl.c b/fs/btrfs/ioctl.c
-> index 73ad918a05a9..d34620034f8e 100644
-> --- a/fs/btrfs/ioctl.c
-> +++ b/fs/btrfs/ioctl.c
-> @@ -5079,9 +5079,14 @@ static int btrfs_ioctl_encoded_write(struct file *file, void __user *argp,
->  		}
->  		args.iov = compat_ptr(args32.iov);
->  		args.iovcnt = args32.iovcnt;
-> -		memcpy(&args.offset, &args32.offset,
-> -		       sizeof(args) -
-> -		       offsetof(struct btrfs_ioctl_encoded_io_args, offset));
-> +		args.offset = args32.offset;
-> +		args.flags = args32.flags;
-> +		args.len = args32.len;
-> +		args.unencoded_len = args32.unencoded_len;
-> +		args.unencoded_offset = args32.unencoded_offset;
-> +		args.compression = args32.compression;
-> +		args.encryption = args32.encryption;
-> +		memcpy(args.reserved, args32.reserved, sizeof(args.reserved));
->  #else
->  		return -ENOTTY;
->  #endif
+On Tue, 25 Jan 2022 22:27:32 +0900
+Masami Hiramatsu <mhiramat@kernel.org> wrote:
 
-Thanks, the patchset is still in progress so I'll apply this a fixup
-until the patch gets updated.
+> > /*
+> >  * struct trace_event_data_offsets_<call> {
+> >  *      u32                             <item1>;
+> >  *      u32                             <item2>;
+> >  *      [...]
+> >  * };
+> >  *
+> >  * The __dynamic_array() macro will create each u32 <item>, this is
+> >  * to keep the offset of each array from the beginning of the event.
+> >  * The size of an array is also encoded, in the higher 16 bits of
+> >  * <item>.
+> >  */
+> > 
+> > So, I think -Warray-bounds is refusing to see the destination as
+> > anything except a u32, but being accessed at 4 (sizeof(u32)) + 8
+> > (address && 0xffff) (?)
+> 
+> Ah, I got it. Yes, that's right. __data_loc() will access the data
+> from the __entry, but the __rel_loc() points the same address from
+> the encoded field ("__rel_loc_foo" in this case) itself.
+> This is introduced for the user application event, which doesn't
+> know the actual __entry size because the __entry includes some
+> kernel internal defined fields.
+> 
+> > But if this is true, I would imagine there would be plenty of other
+> > warnings? I'm currently stumped.
+> 
+> That is because __rel_loc is used only in the sample code in the kernel
+> for testing. Other use-cases comes from user-space.
+> Hmm, can we skip this boundary check for this example?
+
+If the -Warray-bounds determines the destination array size from
+the type of given pointer, we can just change the macro as below;
+
+#define __get_rel_dynamic_array(field) 
+			((void *)__entry +                                 \
+			 offsetof(typeof(*__entry), __rel_loc_##field) +   \
+			 sizeof(__entry->__rel_loc_##field) +              \
+			 (__entry->__rel_loc_##field & 0xffff))
+
+This must works same as __get_dynamic_array() macro.
+
+Could you try this patch?
+
+From 2982ba01367ec1f746a4f128512436e5325a7f9d Mon Sep 17 00:00:00 2001
+From: Masami Hiramatsu <mhiramat@kernel.org>
+Date: Tue, 25 Jan 2022 23:19:30 +0900
+Subject: [PATCH] tracing: Avoid -Warray-bounds warning for __rel_loc macro
+
+Since -Warray-bounds checks the destination size from the
+type of given pointer, __assign_rel_str() macro gets warned
+because it passes the pointer to the 'u32' field instead of
+'trace_event_raw_*' data structure.
+Pass the data address calculated from the 'trace_event_raw_*'
+instead of 'u32' __rel_loc field.
+
+Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Kees Cook <keescook@chromium.org>
+---
+ include/trace/trace_events.h | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/include/trace/trace_events.h b/include/trace/trace_events.h
+index 8c6f7c433518..65d927e059d3 100644
+--- a/include/trace/trace_events.h
++++ b/include/trace/trace_events.h
+@@ -318,9 +318,10 @@ TRACE_MAKE_SYSTEM_STR();
+ #define __get_str(field) ((char *)__get_dynamic_array(field))
+ 
+ #undef __get_rel_dynamic_array
+-#define __get_rel_dynamic_array(field)	\
+-		((void *)(&__entry->__rel_loc_##field) +	\
+-		 sizeof(__entry->__rel_loc_##field) +		\
++#define __get_rel_dynamic_array(field)					\
++		((void *)__entry + 					\
++		 offsetof(typeof(*__entry), __rel_loc_##field) +	\
++		 sizeof(__entry->__rel_loc_##field) +			\
+ 		 (__entry->__rel_loc_##field & 0xffff))
+ 
+ #undef __get_rel_dynamic_array_len
+-- 
+2.25.1
+
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>

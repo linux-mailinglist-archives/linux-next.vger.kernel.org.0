@@ -2,136 +2,153 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A73849AAFF
-	for <lists+linux-next@lfdr.de>; Tue, 25 Jan 2022 05:44:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5F1949AAFE
+	for <lists+linux-next@lfdr.de>; Tue, 25 Jan 2022 05:44:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387513AbiAYDxq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        id S1351431AbiAYDxq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
         Mon, 24 Jan 2022 22:53:46 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:55213 "EHLO
+Received: from gandalf.ozlabs.org ([150.107.74.76]:43541 "EHLO
         gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1317576AbiAYDCZ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 24 Jan 2022 22:02:25 -0500
+        with ESMTP id S1582875AbiAYDYo (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 24 Jan 2022 22:24:44 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JjWqL1B89z4yCK;
-        Tue, 25 Jan 2022 14:02:22 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JjXJt6sSLz4y5t;
+        Tue, 25 Jan 2022 14:24:30 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1643079743;
-        bh=TvDJrkrqUKutpB4iDmLWYqvoeUHMikzPzXuaP881VMM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=BQXNgbl3V8MHe/t7kUpggFKVC1K56HQMdvb4uOvYomfBBIZ8hCHn8oshvVkdpKddu
-         3ThCOsmvhkWPBvdkqtoMZdCN9l3FKDJY9R9lawxMMDrSy5SF0F0qdRsznvHPfC+p/+
-         dlfgL6qRIcIObUxxG3FrS38YsRKV+RuGe4AZp7VaFxokRq6zdERcGe1XqqRpeCervG
-         z2FvIgTbuYCEYIsrWL/ycQ1ci9WyxH1Hbnc0Asp+3FWZgXVQK9YNI58B6a6mOeE0Uz
-         02hH01pl+BGDZ85nPM2lhxZ8264/elWKItJJQ8ZiUxSiSpPmSfgy1SEZwIeqz+px4x
-         ef1ZZAulYjquA==
-Date:   Tue, 25 Jan 2022 14:02:21 +1100
+        s=201702; t=1643081072;
+        bh=TZLUgeha3UgBWPULciAx47PKJ6+EbX+2P4quvRb1h0A=;
+        h=Date:From:To:Cc:Subject:From;
+        b=JycxqdgrDBIoyBIIuF3vGU7CKvzcMMt9NxDdTyBWSQTc76vX0dw3tkedjBNxSyf9V
+         vOO2UJ3Z5I2TXaaXGZYDiyJrjjHdpdbpx4goHkm0pHw7jppQfht8YsJjTenNPr59+p
+         C1mrAz2mTIOiSYPALLMlHIXAejz0hlwm+/BWjAahTQb93AAaKFskiNKT1BP5M+1Dhn
+         EdFRh6T0qIjYevipxAcgNhnIcLSSgo6xC9TdqlVvdbOdq/8iCFyuXxE+6Su6N5pJgN
+         FREp5uvhkM2A1/5graxMbIU8XuTxd/+Ewjv/cLnCKy4dItO1nyL0Ey1seVXDziv7n7
+         8Au4nV94Xx4Xw==
+Date:   Tue, 25 Jan 2022 14:24:30 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Kees Cook <keescook@chromium.org>
 Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        "Bryant G. Ly" <bryantly@linux.vnet.ibm.com>,
+        Michael Cyr <mikecyr@linux.vnet.ibm.com>,
+        Nicholas Bellinger <nab@linux-iscsi.org>,
+        Steven Royer <seroyer@linux.vnet.ibm.com>,
+        Tyrel Datwyler <tyreld@linux.vnet.ibm.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Edmund Dea <edmund.j.dea@intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Anitha Chrisanthus <anitha.chrisanthus@intel.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Subject: Re: linux-next: build failure after merge of the kspp tree
-Message-ID: <20220125140221.5c1f4640@canb.auug.org.au>
-In-Reply-To: <20220125135546.1a2e1d6b@canb.auug.org.au>
-References: <20220125135546.1a2e1d6b@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the kspp tree
+Message-ID: <20220125142430.75c3160e@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/cnjjE1VOxX+DM8Z37u7_5St";
+Content-Type: multipart/signed; boundary="Sig_/a1p_bkazwN8LurQiv3XEc_x";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/cnjjE1VOxX+DM8Z37u7_5St
+--Sig_/a1p_bkazwN8LurQiv3XEc_x
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Tue, 25 Jan 2022 13:55:46 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> After merging the kspp tree, today's linux-next build (powerpc
-> allyesconfig) failed like this:
->=20
-> drivers/gpu/drm/kmb/kmb_plane.c: In function 'kmb_plane_atomic_disable':
-> drivers/gpu/drm/kmb/kmb_plane.c:165:34: error: array subscript 3 is above=
- array bounds of 'struct layer_status[2]' [-Werror=3Darray-bounds]
->   165 |                 kmb->plane_status[plane_id].ctrl =3D LCD_CTRL_GL2=
-_ENABLE;
->       |                 ~~~~~~~~~~~~~~~~~^~~~~~~~~~
-> In file included from drivers/gpu/drm/kmb/kmb_plane.c:17:
-> drivers/gpu/drm/kmb/kmb_drv.h:61:41: note: while referencing 'plane_statu=
-s'
->    61 |         struct layer_status             plane_status[KMB_MAX_PLAN=
-ES];
->       |                                         ^~~~~~~~~~~~
-> drivers/gpu/drm/kmb/kmb_plane.c:162:34: error: array subscript 2 is above=
- array bounds of 'struct layer_status[2]' [-Werror=3Darray-bounds]
->   162 |                 kmb->plane_status[plane_id].ctrl =3D LCD_CTRL_GL1=
-_ENABLE;
->       |                 ~~~~~~~~~~~~~~~~~^~~~~~~~~~
-> In file included from drivers/gpu/drm/kmb/kmb_plane.c:17:
-> drivers/gpu/drm/kmb/kmb_drv.h:61:41: note: while referencing 'plane_statu=
-s'
->    61 |         struct layer_status             plane_status[KMB_MAX_PLAN=
-ES];
->       |                                         ^~~~~~~~~~~~
->=20
-> Exposed by commit
->=20
->   4ba545781e20 ("Makefile: Enable -Warray-bounds")
->=20
-> Originally introduced by commmit
->=20
->   7f7b96a8a0a1 ("drm/kmb: Add support for KeemBay Display")
->=20
-> Maybe should have been fixed by
->=20
->   c026565fe9be ("drm/kmb: Enable alpha blended second plane")
->=20
-> I have applied the following hack for now.
+After merging the kspp tree, today's linux-next build (powerpc
+allyesconfig) failed like this:
 
-Actually, this one:
+
+drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c: In function 'ibmvscsis_send_messa=
+ges':
+drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c:1934:44: error: array subscript 's=
+truct viosrp_crq[0]' is partly outside array bounds of 'u64[1]' {aka 'long =
+long unsigned int[1]'} [-Werror=3Darray-bounds]
+ 1934 |                                         crq->valid =3D VALID_CMD_RE=
+SP_EL;
+      |                                            ^~
+drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c:1875:13: note: while referencing '=
+msg_hi'
+ 1875 |         u64 msg_hi =3D 0;
+      |             ^~~~~~
+drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c:1935:44: error: array subscript 's=
+truct viosrp_crq[0]' is partly outside array bounds of 'u64[1]' {aka 'long =
+long unsigned int[1]'} [-Werror=3Darray-bounds]
+ 1935 |                                         crq->format =3D cmd->rsp.fo=
+rmat;
+      |                                            ^~
+drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c:1875:13: note: while referencing '=
+msg_hi'
+ 1875 |         u64 msg_hi =3D 0;
+      |             ^~~~~~
+drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c:1938:52: error: array subscript 's=
+truct viosrp_crq[0]' is partly outside array bounds of 'u64[1]' {aka 'long =
+long unsigned int[1]'} [-Werror=3Darray-bounds]
+ 1938 |                                                 crq->status =3D VIO=
+SRP_ADAPTER_FAIL;
+      |                                                    ^~
+drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c:1875:13: note: while referencing '=
+msg_hi'
+ 1875 |         u64 msg_hi =3D 0;
+      |             ^~~~~~
+drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c:1940:44: error: array subscript 's=
+truct viosrp_crq[0]' is partly outside array bounds of 'u64[1]' {aka 'long =
+long unsigned int[1]'} [-Werror=3Darray-bounds]
+ 1940 |                                         crq->IU_length =3D cpu_to_b=
+e16(cmd->rsp.len);
+      |                                            ^~
+drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c:1875:13: note: while referencing '=
+msg_hi'
+ 1875 |         u64 msg_hi =3D 0;
+      |             ^~~~~~
+
+Exposed by commit
+
+  4ba545781e20 ("Makefile: Enable -Warray-bounds")
+
+Probably introduced by commit
+
+  88a678bbc34c ("ibmvscsis: Initial commit of IBM VSCSI Tgt Driver")
+
+I applied the following hack for now:
 
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Tue, 25 Jan 2022 13:45:26 +1100
-Subject: [PATCH] hack for building with -Warray-bounds
+Date: Tue, 25 Jan 2022 14:18:36 +1100
+Subject: [PATCH] scsi: hack for building with -Warray-bounds
 
 Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 ---
- drivers/gpu/drm/kmb/kmb_plane.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/kmb/kmb_plane.c b/drivers/gpu/drm/kmb/kmb_plan=
-e.c
-index 00404ba4126d..b54197920712 100644
---- a/drivers/gpu/drm/kmb/kmb_plane.c
-+++ b/drivers/gpu/drm/kmb/kmb_plane.c
-@@ -158,12 +158,14 @@ static void kmb_plane_atomic_disable(struct drm_plane=
- *plane,
- 	case LAYER_1:
- 		kmb->plane_status[plane_id].ctrl =3D LCD_CTRL_VL2_ENABLE;
- 		break;
-+#if 0
- 	case LAYER_2:
- 		kmb->plane_status[plane_id].ctrl =3D LCD_CTRL_GL1_ENABLE;
- 		break;
- 	case LAYER_3:
- 		kmb->plane_status[plane_id].ctrl =3D LCD_CTRL_GL2_ENABLE;
- 		break;
-+#endif
- 	}
+diff --git a/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c b/drivers/scsi/ibmvsc=
+si_tgt/ibmvscsi_tgt.c
+index 61f06f6885a5..89fcf98c61c3 100644
+--- a/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c
++++ b/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c
+@@ -1872,11 +1872,11 @@ static void srp_snd_msg_failed(struct scsi_info *vs=
+csi, long rc)
+  */
+ static void ibmvscsis_send_messages(struct scsi_info *vscsi)
+ {
+-	u64 msg_hi =3D 0;
++	u64 msg_hi[2] =3D { };
+ 	/* note do not attempt to access the IU_data_ptr with this pointer
+ 	 * it is not valid
+ 	 */
+-	struct viosrp_crq *crq =3D (struct viosrp_crq *)&msg_hi;
++	struct viosrp_crq *crq =3D (struct viosrp_crq *)msg_hi;
+ 	struct ibmvscsis_cmd *cmd, *nxt;
+ 	long rc =3D ADAPT_SUCCESS;
+ 	bool retry =3D false;
+@@ -1940,7 +1940,7 @@ static void ibmvscsis_send_messages(struct scsi_info =
+*vscsi)
+ 					crq->IU_length =3D cpu_to_be16(cmd->rsp.len);
 =20
- 	kmb->plane_status[plane_id].disable =3D true;
+ 					rc =3D h_send_crq(vscsi->dma_dev->unit_address,
+-							be64_to_cpu(msg_hi),
++							be64_to_cpu(msg_hi[0]),
+ 							be64_to_cpu(cmd->rsp.tag));
+=20
+ 					dev_dbg(&vscsi->dev, "send_messages: cmd %p, tag 0x%llx, rc %ld\n",
 --=20
 2.34.1
 
@@ -139,20 +156,20 @@ index 00404ba4126d..b54197920712 100644
 Cheers,
 Stephen Rothwell
 
---Sig_/cnjjE1VOxX+DM8Z37u7_5St
+--Sig_/a1p_bkazwN8LurQiv3XEc_x
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHvaD0ACgkQAVBC80lX
-0GzIlwf/YbfmBUupjdnZLXT6He7H2h+ikh6AHDDlE5lgPdRvOoZUPh0rYidLl5gG
-taH43NaDTc1z8mth7cQafT3S/r8K0+499FC1lKFmI4AeGj61DJg9hiyBRZvjuKvA
-IYb9TV1Ba/3SMFG4PE1w8uMlW3VPvUXXhp/AkX4u6/S+vgPr6DzyC63uv1dD5F9a
-XVAO9c72Xua/Z0wMVadKsjd7jsXgxl+XyQqZLPumAi1fOixvXb8Z3y03Xp0qjvHx
-AH89s9PVfD9NAdwnTt755ankalaqeT+YDWg5ytK6xX3X3P8GPy/6tgFRN+hWBai5
-TZ8d+WOMJ8DTYUQqkMOA/5MBmeAMWQ==
-=KboG
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHvbW4ACgkQAVBC80lX
+0GzvMQf/QRhiXVaYaZG2uTo539upkz90dUyYzgIla+hvXu2Ncl+aKbJzDbudgtu0
+YyA1qYpwLN+F3L6W0klBFB9b+b7Na6YG+RBiYuI48qK4BXRXmdGbHbRptwL+QJup
+Z13twPX7Ip3ppDXjhY6s+8BDwmaPZ8BQ8lW2EkFeQCp0I+fmCNpKPH32vqdVUgMu
+cK4jOYk0VurL5miS83sDphMUS9etbCgOIla8k81VYR7Grr+Vk6aiJBz0gRNv2pZj
+3B3456eZyd0t7dRnBfuIFhS0jd7AiRRRT24dyQ6OQKeU/5dXx8usPxUK3WwykQJH
+oiqF8T/tDlLggKd81lALspKc4Uk7ig==
+=AWTT
 -----END PGP SIGNATURE-----
 
---Sig_/cnjjE1VOxX+DM8Z37u7_5St--
+--Sig_/a1p_bkazwN8LurQiv3XEc_x--

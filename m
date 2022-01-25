@@ -2,106 +2,129 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 912C349BDDE
-	for <lists+linux-next@lfdr.de>; Tue, 25 Jan 2022 22:29:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7943B49BE1B
+	for <lists+linux-next@lfdr.de>; Tue, 25 Jan 2022 23:00:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233122AbiAYV3C (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 25 Jan 2022 16:29:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50298 "EHLO
+        id S233434AbiAYWAk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 25 Jan 2022 17:00:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233099AbiAYV3C (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 25 Jan 2022 16:29:02 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21325C06173B;
-        Tue, 25 Jan 2022 13:29:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A8B78617D9;
-        Tue, 25 Jan 2022 21:29:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FA81C340E0;
-        Tue, 25 Jan 2022 21:29:00 +0000 (UTC)
-Date:   Tue, 25 Jan 2022 16:28:59 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        with ESMTP id S233445AbiAYWAk (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 25 Jan 2022 17:00:40 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43AFEC06173B
+        for <linux-next@vger.kernel.org>; Tue, 25 Jan 2022 14:00:40 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id j10so7269200pgc.6
+        for <linux-next@vger.kernel.org>; Tue, 25 Jan 2022 14:00:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=w+gteY1m43RHWpAycmbb69VeDmwEbqJifo/y9P69NPY=;
+        b=ARuYewZ5nw2ffzLdYlSu2aMvxPDlJPeFoeXQevHpAhWx0mahldaPAuZCLMPBWq2m1W
+         VXOncIt0HDqQbaC7oSXbooZ+Yv2BRa7af2HpboJ7/rLYHtXUsQeMnKSZoBr3U0adBzJF
+         ulCr0dgQp9UF0A3gkAK7uqKN1tMapR4NYI2ZU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=w+gteY1m43RHWpAycmbb69VeDmwEbqJifo/y9P69NPY=;
+        b=gQ4qoGDLpC5NoSnz42/wNlz9U3yCdRf98LprptOvYK7GKCnMX5S8nRc+BiApyewyd7
+         8UG+3sYrI271VIFMacwmf1klYJIFeoumgl77HSQBew3JIpBp1Tflmw88YnI5+yDrAdbd
+         NNlQ5Trr5xb6Zjl0xFTpD21LyBF08JQsRaBIhRCahKYRO4wcmucjWkmxOPdAESs0xAA9
+         q80jY0IIqoZ7k8TR7IsZHe7xRjlohRHk+2bjynO5OQFBN86VFipr6VoHBuqguvK8udIU
+         EnaJlMdK7yE9wMXfDBYVehD3wpFljCiFN8vjrMN6GB2h6RfV1PQiIXcDTQ8QHeLx7RKe
+         hMpg==
+X-Gm-Message-State: AOAM53221bK3UEy+LuTjFOWeQ0x/5rF7JYlsuRtfnhxGL4Cnptm89lNs
+        JkZFsFpqiQSMfDmYU8o4KOmdxA==
+X-Google-Smtp-Source: ABdhPJzes72NzIlsk1hNk11tlJURFS9Irv2XtzmUVNkXQUCwSAYsjCxvGFNijeJsuUm756MAeqTZaw==
+X-Received: by 2002:a63:5009:: with SMTP id e9mr13537396pgb.9.1643148039767;
+        Tue, 25 Jan 2022 14:00:39 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id g18sm1274268pju.7.2022.01.25.14.00.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jan 2022 14:00:39 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the kspp tree
-Message-ID: <20220125162859.2b3cc8a0@gandalf.local.home>
-In-Reply-To: <20220125162326.3d1ca960@gandalf.local.home>
-References: <20220125145006.677e3709@canb.auug.org.au>
-        <202201242230.C54A6BCDFE@keescook>
-        <20220125222732.98ce2e445726e773f40e122e@kernel.org>
-        <20220125233154.dac280ed36944c0c2fe6f3ac@kernel.org>
-        <202201251256.CCCBE9851E@keescook>
-        <20220125162326.3d1ca960@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        linux-next@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH] perf: Avoid -Warray-bounds warning for __rel_loc macro
+Date:   Tue, 25 Jan 2022 14:00:37 -0800
+Message-Id: <20220125220037.2738923-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2566; h=from:subject; bh=3xCm2+8JkO8X0PscRpFVHhDSlZ1UoLF0UYBAebUszpA=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBh8HMFGIbJFCGrr+z4Xoy2f3YnntnkP9QDnMb6g02i TSwvyiSJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYfBzBQAKCRCJcvTf3G3AJqrsD/ 94nj4D9vdN9BWSEEsomamjGEI3J1gCXW+xZ5u7sv0hL1ocGMptGpRIjUC+iXq+GiEW0inZGRByQTz9 4gJVDAWiYy2ZrJAZJacIym4Wnq6YFnAGSl1XPra9r38LFN9yPBIVycYlcoGp3YmlPPilwey9ZP6jtV 5CtWFtr/jt/UNRUm50e28eeO7lxElLxll1OAbW8Vf7LOWyiGXSWzFYUmDWy8u756vkAq4wKd82Ch5K SQh8YtmZoowti5+PZjRxZLsGsHRfjaQ8fZtonvqUNLomp6y4gOB2Lku9JV5gvFvBvMf1rBADSdmiBa t7sSnBU95/9ch6GZmf07QcBkfp2LqZNVCDj8AoKh11eGXVBIlkzaN/OHEAbkHDv/sD2CWYZdOJL4Ok HjEUn2QSOho3O/mV0MAV56pd6PE9PbcF64H0XzETheiDRWgab5rp7/2NVV+LFYPKl2Y/RyNCWYTzM2 uAU+M3sLoylxS0nu1VHREqX4Ty+3v6Nq7LQ/DkptAzYMRz3XgaxpfMMnwLZ/atoDYbQTn7bIScVKYL V6JwuEofnZYi3E6SAwgEch2S4SvHTMyRrB6/+M5kl+5y5njIe/DX1AftdPxZwo3bb1LQTGdbtedloq Ke99TuMaGMCGExVYFLAFXge2tyYhE2ELMp9+qMOWmtDjuB1wUudBAwsB64YQ==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, 25 Jan 2022 16:23:26 -0500
-Steven Rostedt <rostedt@goodmis.org> wrote:
+As done for trace_events.h, also fix the __rel_loc macro in perf.h,
+which silences the -Warray-bounds warning:
 
-> > >  #undef __get_rel_dynamic_array
-> > > -#define __get_rel_dynamic_array(field)	\
-> > > -		((void *)(&__entry->__rel_loc_##field) +	\
-> > > -		 sizeof(__entry->__rel_loc_##field) +		\
-> > > +#define __get_rel_dynamic_array(field)					\
-> > > +		((void *)__entry + 					\
-> > > +		 offsetof(typeof(*__entry), __rel_loc_##field) +	\
-> > > +		 sizeof(__entry->__rel_loc_##field) +			\
-> > >  		 (__entry->__rel_loc_##field & 0xffff))
-> > >  
-> > >  #undef __get_rel_dynamic_array_len    
-> > 
+In file included from ./include/linux/string.h:253,
+                 from ./include/linux/bitmap.h:11,
+                 from ./include/linux/cpumask.h:12,
+                 from ./include/linux/mm_types_task.h:14,
+                 from ./include/linux/mm_types.h:5,
+                 from ./include/linux/buildid.h:5,
+                 from ./include/linux/module.h:14,
+                 from samples/trace_events/trace-events-sample.c:2:
+In function '__fortify_strcpy',
+    inlined from 'perf_trace_foo_rel_loc' at samples/trace_events/./trace-events-sample.h:519:1:
+./include/linux/fortify-string.h:47:33: warning: '__builtin_strcpy' offset 12 is out of the bounds [
+0, 4] [-Warray-bounds]
+   47 | #define __underlying_strcpy     __builtin_strcpy
+      |                                 ^
+./include/linux/fortify-string.h:445:24: note: in expansion of macro '__underlying_strcpy'
+  445 |                 return __underlying_strcpy(p, q);
+      |                        ^~~~~~~~~~~~~~~~~~~
 
-I also do not like the the inconsistency between
-sizeof(__entry->__rel_loc_##field) and sizeof(u32) that is used in the
-calculation part:
+Also make __data struct member a proper flexible array to avoid future
+problems.
 
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ include/trace/perf.h         | 5 +++--
+ include/trace/trace_events.h | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-#define __rel_dynamic_array(type, item, len)				\
-	__item_length = (len) * sizeof(type);				\
-	__data_offsets->item = __data_size +				\
-			       offsetof(typeof(*entry), __data) -	\
-			       offsetof(typeof(*entry), __rel_loc_##item) -	\
-			       sizeof(u32);				\
-	__data_offsets->item |= __item_length << 16;			\
-	__data_size += __item_length;
+diff --git a/include/trace/perf.h b/include/trace/perf.h
+index b77d09c70a93..5800d13146c3 100644
+--- a/include/trace/perf.h
++++ b/include/trace/perf.h
+@@ -26,8 +26,9 @@
+ 
+ #undef __get_rel_dynamic_array
+ #define __get_rel_dynamic_array(field)	\
+-		((void *)(&__entry->__rel_loc_##field) +	\
+-		 sizeof(__entry->__rel_loc_##field) +		\
++		((void *)__entry +					\
++		 offsetof(typeof(*__entry), __rel_loc_##field) +	\
++		 sizeof(__entry->__rel_loc_##field) +			\
+ 		 (__entry->__rel_loc_##field & 0xffff))
+ 
+ #undef __get_rel_dynamic_array_len
+diff --git a/include/trace/trace_events.h b/include/trace/trace_events.h
+index cefefed18e85..7c86cc541c7a 100644
+--- a/include/trace/trace_events.h
++++ b/include/trace/trace_events.h
+@@ -134,7 +134,7 @@ TRACE_MAKE_SYSTEM_STR();
+ 	struct trace_event_raw_##name {					\
+ 		struct trace_entry	ent;				\
+ 		tstruct							\
+-		char			__data[0];			\
++		char			__data[];			\
+ 	};								\
+ 									\
+ 	static struct trace_event_class event_class_##name;
+-- 
+2.30.2
 
-Why is one using sizeof(u32) and the other using the size of the field?
-
-Just to let you know what is happening. As dynamic elements of the trace
-event needs to be appended at the end of the event, the above macros are
-defined and then run through the TRACE_EVENT() macro, where the
-TP_STRUCT__entry() is parsed to calculate where each item will be for that
-event.
-
-static inline notrace int trace_event_get_offsets_##call(		\
-	struct trace_event_data_offsets_##call *__data_offsets, proto)	\
-{									\
-	int __data_size = 0;						\
-	int __maybe_unused __item_length;				\
-	struct trace_event_raw_##call __maybe_unused *entry;		\
-									\
-	tstruct;							\
-									\
-	return __data_size;						\
-}
-
-
-The tstruct is the TP_STRUCT__entry() and for each __rel_dynamic_array() or
-__dynamic_array(), the __data_size gets updated and saved into the
-__data_offsets that holds where each item is.
-
-The rel versions sets the offset from its location to the data, where as
-the non rel versions sets the offset from the beginning of the event to the
-data.
-
--- Steve

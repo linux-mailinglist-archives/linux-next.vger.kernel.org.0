@@ -2,151 +2,180 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 878EE49AB84
-	for <lists+linux-next@lfdr.de>; Tue, 25 Jan 2022 06:16:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B94349AC31
+	for <lists+linux-next@lfdr.de>; Tue, 25 Jan 2022 07:16:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349497AbiAYFQJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 25 Jan 2022 00:16:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45680 "EHLO
+        id S231254AbiAYGPx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 25 Jan 2022 01:15:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1391196AbiAYFD5 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 25 Jan 2022 00:03:57 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB6DC0AD1A1
-        for <linux-next@vger.kernel.org>; Mon, 24 Jan 2022 19:35:58 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id w190so11907418pfw.7
-        for <linux-next@vger.kernel.org>; Mon, 24 Jan 2022 19:35:58 -0800 (PST)
+        with ESMTP id S256040AbiAYFUM (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 25 Jan 2022 00:20:12 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDBA8C06136A
+        for <linux-next@vger.kernel.org>; Mon, 24 Jan 2022 19:43:45 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id u10so13580167pfg.10
+        for <linux-next@vger.kernel.org>; Mon, 24 Jan 2022 19:43:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=9x/Lsa7ti7gTSupQfhnG6ZXqf3XFn7FMKDh1kMENpvw=;
-        b=OMYsr3z2K+XI/ZQ+BWmynvWMXqDyN50mi/156DKaicA8Rq1srJ9KHg/MEuYUKlumnT
-         khIzm+PT8QwnBKfFhhBZD3936ZzZp4mBsnH010vHbZtwKHsTGxzwjQf6ktZDQ9RL+HC+
-         UWTNZ/vY2xZZM5bQDWFQv1M9j837LeV4nk538=
+        bh=Hqb18lApb/EFs0zyR5xR3AKweon3zrpFVJcMur2wQdo=;
+        b=oO7BhMsRUneAngIb6wlqB5HdF/xeGN3DL6ZG/u6ECkSxMoHNPpOOfAxzqAVgDtaT4n
+         BqgVUmMg7H/tUSffs8I7Gu+5usatPhZmWCP6dwG5G66u/ppefFTP/PzhcbM+ahaNgq3m
+         buQUbZQoUcLRALeKNkHYbuTNLU9Dxu0PcIcBE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=9x/Lsa7ti7gTSupQfhnG6ZXqf3XFn7FMKDh1kMENpvw=;
-        b=kUciLzUhpQ1SDSAmITH3vzn1aP54FXWmEQUzfA9tc0J4ftkCq92P8SrBOzkZNvwMKi
-         tmrYY+JHacc/qmc+971oR8Yx8qJXQA7Y3/+xw5nuCALZS99RxBB0FK1m4zofCr1ksfgA
-         zGW1O6FnFyFb4DDsH0UhuIOS6puPJn4YksOmzeKMfqXFfRt2a1g41KiSV/zfJunv0A7X
-         zW6kFjQuHFejGEclxx2tY3iMCXOgTyj6PyMi0/WbC8vOgz12XUHThWkObctvaMNGxM01
-         cOlSpUAmGzQ39ofznm1KFjtmyjEoTqfuoVSGcQXVxWA7Sc59nK3Qej1ax64nOJmaw8Oe
-         4Trw==
-X-Gm-Message-State: AOAM533SpKKGm8QqI20he7PeY8B/dj/rX5tJm1K1xxUL1QjvdIKxgNMH
-        2QNw0jvMf5yiVGRVx/Q1HEkMPw==
-X-Google-Smtp-Source: ABdhPJzOSHR28VSWx0ruqnBVgXS6IERsb1Z/aoPvcziYyRFHW8j/TUdZRzIE1/2HprGg7JLj893NDg==
-X-Received: by 2002:a63:8c06:: with SMTP id m6mr13843903pgd.498.1643081757547;
-        Mon, 24 Jan 2022 19:35:57 -0800 (PST)
+        bh=Hqb18lApb/EFs0zyR5xR3AKweon3zrpFVJcMur2wQdo=;
+        b=ngFu2ZoyVC/0fFFSMMkecUcYwRUxolrdEQ7ig7WFjEAfhFxuW1wzR+4SBFS9cWGZb0
+         enNgab60KpMMR5MGb3rhpe3e0j97dJZtbtP1/yspA2GX2E52WCobNrIgpc5gb2dVXmzR
+         pJuexZoHhJKPc440Yl1dXnzRW0SSUiLqBqR18ctxFvkpkFDZsCgAr/b/wCuQ0TGyHbQb
+         1C0b2KWXKwVNaxP/O25oTuDvhRMTBi+isnnxC4khmjSM1ky+bdmOa7dxZvy1UJtaKp3I
+         aWb2T7CqrCjFTStyAlxiwUpbmlTWsTa7LQvLFn0pQbBaD2dgDW/SbtxiaaBkn16DSrNT
+         AflQ==
+X-Gm-Message-State: AOAM532UUZs9ugfmsWLRtPN1a7xUmA5XY5qGP5DKiwjghpShgO5Yv/Ja
+        d887EvDYCfkBnGuUqPNS92QnOg==
+X-Google-Smtp-Source: ABdhPJwYG5x88nJPkog09GJ1OJns/HDR/CaUdlxBNhDCDDEWbRfi9mn7oaVXJoVP7XPSNW9ZK0FocA==
+X-Received: by 2002:aa7:8218:0:b0:4c7:ef9b:8151 with SMTP id k24-20020aa78218000000b004c7ef9b8151mr11663250pfi.77.1643082225441;
+        Mon, 24 Jan 2022 19:43:45 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id d4sm5854164pgw.30.2022.01.24.19.35.57
+        by smtp.gmail.com with ESMTPSA id p18sm19244628pfh.98.2022.01.24.19.43.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jan 2022 19:35:57 -0800 (PST)
-Date:   Mon, 24 Jan 2022 19:35:56 -0800
+        Mon, 24 Jan 2022 19:43:45 -0800 (PST)
+Date:   Mon, 24 Jan 2022 19:43:44 -0800
 From:   Kees Cook <keescook@chromium.org>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     David Sterba <dsterba@suse.cz>, David Sterba <dsterba@suse.com>,
-        Omar Sandoval <osandov@fb.com>,
+Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        "Bryant G. Ly" <bryantly@linux.vnet.ibm.com>,
+        Michael Cyr <mikecyr@linux.vnet.ibm.com>,
+        Nicholas Bellinger <nab@linux-iscsi.org>,
+        Steven Royer <seroyer@linux.vnet.ibm.com>,
+        Tyrel Datwyler <tyreld@linux.vnet.ibm.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
 Subject: Re: linux-next: build failure after merge of the kspp tree
-Message-ID: <202201241924.20B85B89@keescook>
-References: <20220125115757.20bc45e8@canb.auug.org.au>
+Message-ID: <202201241938.DA2AB1AB4@keescook>
+References: <20220125142430.75c3160e@canb.auug.org.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220125115757.20bc45e8@canb.auug.org.au>
+In-Reply-To: <20220125142430.75c3160e@canb.auug.org.au>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 11:57:57AM +1100, Stephen Rothwell wrote:
+On Tue, Jan 25, 2022 at 02:24:30PM +1100, Stephen Rothwell wrote:
 > Hi all,
 > 
-> After merging the kspp tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
+> After merging the kspp tree, today's linux-next build (powerpc
+> allyesconfig) failed like this:
 > 
-> In file included from include/linux/string.h:253,
->                  from include/linux/bitmap.h:11,
->                  from include/linux/cpumask.h:12,
->                  from arch/x86/include/asm/cpumask.h:5,
->                  from arch/x86/include/asm/msr.h:11,
->                  from arch/x86/include/asm/processor.h:22,
->                  from arch/x86/include/asm/cpufeature.h:5,
->                  from arch/x86/include/asm/thread_info.h:53,
->                  from include/linux/thread_info.h:60,
->                  from arch/x86/include/asm/preempt.h:7,
->                  from include/linux/preempt.h:78,
->                  from include/linux/spinlock.h:55,
->                  from include/linux/wait.h:9,
->                  from include/linux/mempool.h:8,
->                  from include/linux/bio.h:8,
->                  from fs/btrfs/ioctl.c:7:
-> In function 'fortify_memcpy_chk',
->     inlined from 'btrfs_ioctl_encoded_write' at fs/btrfs/ioctl.c:5082:3:
-> include/linux/fortify-string.h:316:25: error: call to '__write_overflow_field' declared with attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror=attribute-warning]
->   316 |                         __write_overflow_field(p_size_field, size);
->       |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> include/linux/fortify-string.h:324:25: error: call to '__read_overflow2_field' declared with attribute warning: detected read beyond size of field (2nd parameter); maybe use struct_group()? [-Werror=attribute-warning]
->   324 |                         __read_overflow2_field(q_size_field, size);
->       |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> cc1: all warnings being treated as errors
 > 
-> Caused by commit
+> drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c: In function 'ibmvscsis_send_messages':
+> drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c:1934:44: error: array subscript 'struct viosrp_crq[0]' is partly outside array bounds of 'u64[1]' {aka 'long long unsigned int[1]'} [-Werror=array-bounds]
+>  1934 |                                         crq->valid = VALID_CMD_RESP_EL;
+>       |                                            ^~
+> drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c:1875:13: note: while referencing 'msg_hi'
+>  1875 |         u64 msg_hi = 0;
+>       |             ^~~~~~
+> drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c:1935:44: error: array subscript 'struct viosrp_crq[0]' is partly outside array bounds of 'u64[1]' {aka 'long long unsigned int[1]'} [-Werror=array-bounds]
+>  1935 |                                         crq->format = cmd->rsp.format;
+>       |                                            ^~
+> drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c:1875:13: note: while referencing 'msg_hi'
+>  1875 |         u64 msg_hi = 0;
+>       |             ^~~~~~
+> drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c:1938:52: error: array subscript 'struct viosrp_crq[0]' is partly outside array bounds of 'u64[1]' {aka 'long long unsigned int[1]'} [-Werror=array-bounds]
+>  1938 |                                                 crq->status = VIOSRP_ADAPTER_FAIL;
+>       |                                                    ^~
+> drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c:1875:13: note: while referencing 'msg_hi'
+>  1875 |         u64 msg_hi = 0;
+>       |             ^~~~~~
+> drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c:1940:44: error: array subscript 'struct viosrp_crq[0]' is partly outside array bounds of 'u64[1]' {aka 'long long unsigned int[1]'} [-Werror=array-bounds]
+>  1940 |                                         crq->IU_length = cpu_to_be16(cmd->rsp.len);
+>       |                                            ^~
+> drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c:1875:13: note: while referencing 'msg_hi'
+>  1875 |         u64 msg_hi = 0;
+>       |             ^~~~~~
 > 
->   602670289b69 ("fortify: Detect struct member overflows in memcpy() at compile-time")
+> Exposed by commit
 > 
-> interacting with commit
+>   4ba545781e20 ("Makefile: Enable -Warray-bounds")
 > 
->   504e1ebb6316 ("btrfs: add BTRFS_IOC_ENCODED_WRITE")
+> Probably introduced by commit
 > 
-> from the btrfs tree.
-
-Thanks!
-
-I found the btrfs patch here:
-https://lore.kernel.org/all/ec08e6f559ab47b3300ca5a67e8fc984fd3f040f.1637179348.git.osandov@fb.com/
-
+>   88a678bbc34c ("ibmvscsis: Initial commit of IBM VSCSI Tgt Driver")
 > 
-> I applied the following hack:
+> I applied the following hack for now:
 > 
 > From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Tue, 25 Jan 2022 11:47:17 +1100
-> Subject: [PATCH] fix up for "btrfs: add BTRFS_IOC_ENCODED_WRITE"
+> Date: Tue, 25 Jan 2022 14:18:36 +1100
+> Subject: [PATCH] scsi: hack for building with -Warray-bounds
 > 
 > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 > ---
->  fs/btrfs/ioctl.c | 11 ++++++++---
->  1 file changed, 8 insertions(+), 3 deletions(-)
+>  drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/fs/btrfs/ioctl.c b/fs/btrfs/ioctl.c
-> index 73ad918a05a9..d34620034f8e 100644
-> --- a/fs/btrfs/ioctl.c
-> +++ b/fs/btrfs/ioctl.c
-> @@ -5079,9 +5079,14 @@ static int btrfs_ioctl_encoded_write(struct file *file, void __user *argp,
->  		}
->  		args.iov = compat_ptr(args32.iov);
->  		args.iovcnt = args32.iovcnt;
-> -		memcpy(&args.offset, &args32.offset,
-> -		       sizeof(args) -
-> -		       offsetof(struct btrfs_ioctl_encoded_io_args, offset));
-> +		args.offset = args32.offset;
-> +		args.flags = args32.flags;
-> +		args.len = args32.len;
-> +		args.unencoded_len = args32.unencoded_len;
-> +		args.unencoded_offset = args32.unencoded_offset;
-> +		args.compression = args32.compression;
-> +		args.encryption = args32.encryption;
-> +		memcpy(args.reserved, args32.reserved, sizeof(args.reserved));
->  #else
->  		return -ENOTTY;
->  #endif
+> diff --git a/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c b/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c
+> index 61f06f6885a5..89fcf98c61c3 100644
+> --- a/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c
+> +++ b/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c
+> @@ -1872,11 +1872,11 @@ static void srp_snd_msg_failed(struct scsi_info *vscsi, long rc)
+>   */
+>  static void ibmvscsis_send_messages(struct scsi_info *vscsi)
+>  {
+> -	u64 msg_hi = 0;
+> +	u64 msg_hi[2] = { };
+>  	/* note do not attempt to access the IU_data_ptr with this pointer
+>  	 * it is not valid
+>  	 */
+> -	struct viosrp_crq *crq = (struct viosrp_crq *)&msg_hi;
+> +	struct viosrp_crq *crq = (struct viosrp_crq *)msg_hi;
+>  	struct ibmvscsis_cmd *cmd, *nxt;
+>  	long rc = ADAPT_SUCCESS;
+>  	bool retry = false;
+> @@ -1940,7 +1940,7 @@ static void ibmvscsis_send_messages(struct scsi_info *vscsi)
+>  					crq->IU_length = cpu_to_be16(cmd->rsp.len);
+>  
+>  					rc = h_send_crq(vscsi->dma_dev->unit_address,
+> -							be64_to_cpu(msg_hi),
+> +							be64_to_cpu(msg_hi[0]),
+>  							be64_to_cpu(cmd->rsp.tag));
+>  
+>  					dev_dbg(&vscsi->dev, "send_messages: cmd %p, tag 0x%llx, rc %ld\n",
 
-I'll see if I can construct something shorter using struct_group().
+This looks correct to me. struct viosrp_crq is 16 bytes wide. The only
+suggestion I might make would be either avoid the bare '2':
 
--Kees
+	u64 msg_hi[sizeof(struct viosrp_crq) / sizeof(u64)] = { };
+
+or adjust struct viosrp_crq so the casting isn't needed at all:
+
+
+truct viosrp_crq {
+	union {
+		u64 hi;
+		struct {
+		        u8 valid;               /* used by RPA */
+		        u8 format;              /* SCSI vs out-of-band */
+		        u8 reserved;
+		        u8 status;              /* non-scsi failure? (e.g. DMA failure) */
+		        __be16 timeout;         /* in seconds */
+		        __be16 IU_length;       /* in bytes */
+		};
+	};
+        __be64 IU_data_ptr;     /* the TCE for transferring data */
+};
+
+	struct viosrp_crq crq = { };
+	...
+ 			rc = h_send_crq(vscsi->dma_dev->unit_address,
+					be64_to_cpu(crq.hi),
+					be64_to_cpu(cmd->rsp.tag));
+
+
 
 -- 
 Kees Cook

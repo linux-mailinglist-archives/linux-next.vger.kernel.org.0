@@ -2,32 +2,32 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C5C749AAFD
-	for <lists+linux-next@lfdr.de>; Tue, 25 Jan 2022 05:44:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A73849AAFF
+	for <lists+linux-next@lfdr.de>; Tue, 25 Jan 2022 05:44:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387502AbiAYDxp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 24 Jan 2022 22:53:45 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:45491 "EHLO
+        id S1387513AbiAYDxq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 24 Jan 2022 22:53:46 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:55213 "EHLO
         gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345604AbiAYC4G (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 24 Jan 2022 21:56:06 -0500
+        with ESMTP id S1317576AbiAYDCZ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 24 Jan 2022 22:02:25 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JjWgr67Z3z4y7S;
-        Tue, 25 Jan 2022 13:55:52 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JjWqL1B89z4yCK;
+        Tue, 25 Jan 2022 14:02:22 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1643079355;
-        bh=exfOBrNGIq18HB9bpbg5tO06O42Lp4/sVUlZzo7SeNc=;
-        h=Date:From:To:Cc:Subject:From;
-        b=W7k5uazm+p1A9H6KRBm5c9OJP2/bU55qmgAbohHKdtPzWBfB6cX39goZyjzRxtQX8
-         vD5Vv04G2flS6FcQaS0nd8qjTgmEBUp/vdnAQ9BAq5dPeg9/Cu1i9BtaGfz2q/sWD3
-         QRi4770hsK2puISXNjZGspRzKXr72sKHtOqc6va/MYBCHtF/5up5OusqH0Jsli8wVc
-         H7pW8oU6Zcs4xUOEGB78gZNwvNAnNijV+gqoYBNCcxwAtLvqxjG18vkrKPlpqCwUUv
-         4TeNvUPE5jCc9ZZYdHlDY3zToT1ZH1HrGBVl74a37zZnlcyxp4za9E22C/YZNc6A0r
-         o1YjAByTuLsaw==
-Date:   Tue, 25 Jan 2022 13:55:46 +1100
+        s=201702; t=1643079743;
+        bh=TvDJrkrqUKutpB4iDmLWYqvoeUHMikzPzXuaP881VMM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=BQXNgbl3V8MHe/t7kUpggFKVC1K56HQMdvb4uOvYomfBBIZ8hCHn8oshvVkdpKddu
+         3ThCOsmvhkWPBvdkqtoMZdCN9l3FKDJY9R9lawxMMDrSy5SF0F0qdRsznvHPfC+p/+
+         dlfgL6qRIcIObUxxG3FrS38YsRKV+RuGe4AZp7VaFxokRq6zdERcGe1XqqRpeCervG
+         z2FvIgTbuYCEYIsrWL/ycQ1ci9WyxH1Hbnc0Asp+3FWZgXVQK9YNI58B6a6mOeE0Uz
+         02hH01pl+BGDZ85nPM2lhxZ8264/elWKItJJQ8ZiUxSiSpPmSfgy1SEZwIeqz+px4x
+         ef1ZZAulYjquA==
+Date:   Tue, 25 Jan 2022 14:02:21 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Kees Cook <keescook@chromium.org>
 Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
@@ -39,59 +39,68 @@ Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
         Sam Ravnborg <sam@ravnborg.org>,
         Daniel Vetter <daniel@ffwll.ch>,
         Thomas Zimmermann <tzimmermann@suse.de>
-Subject: linux-next: build failure after merge of the kspp tree
-Message-ID: <20220125135546.1a2e1d6b@canb.auug.org.au>
+Subject: Re: linux-next: build failure after merge of the kspp tree
+Message-ID: <20220125140221.5c1f4640@canb.auug.org.au>
+In-Reply-To: <20220125135546.1a2e1d6b@canb.auug.org.au>
+References: <20220125135546.1a2e1d6b@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/nrM2XqSEID89HGMexxVxPDt";
+Content-Type: multipart/signed; boundary="Sig_/cnjjE1VOxX+DM8Z37u7_5St";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/nrM2XqSEID89HGMexxVxPDt
+--Sig_/cnjjE1VOxX+DM8Z37u7_5St
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the kspp tree, today's linux-next build (powerpc
-allyesconfig) failed like this:
+On Tue, 25 Jan 2022 13:55:46 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> After merging the kspp tree, today's linux-next build (powerpc
+> allyesconfig) failed like this:
+>=20
+> drivers/gpu/drm/kmb/kmb_plane.c: In function 'kmb_plane_atomic_disable':
+> drivers/gpu/drm/kmb/kmb_plane.c:165:34: error: array subscript 3 is above=
+ array bounds of 'struct layer_status[2]' [-Werror=3Darray-bounds]
+>   165 |                 kmb->plane_status[plane_id].ctrl =3D LCD_CTRL_GL2=
+_ENABLE;
+>       |                 ~~~~~~~~~~~~~~~~~^~~~~~~~~~
+> In file included from drivers/gpu/drm/kmb/kmb_plane.c:17:
+> drivers/gpu/drm/kmb/kmb_drv.h:61:41: note: while referencing 'plane_statu=
+s'
+>    61 |         struct layer_status             plane_status[KMB_MAX_PLAN=
+ES];
+>       |                                         ^~~~~~~~~~~~
+> drivers/gpu/drm/kmb/kmb_plane.c:162:34: error: array subscript 2 is above=
+ array bounds of 'struct layer_status[2]' [-Werror=3Darray-bounds]
+>   162 |                 kmb->plane_status[plane_id].ctrl =3D LCD_CTRL_GL1=
+_ENABLE;
+>       |                 ~~~~~~~~~~~~~~~~~^~~~~~~~~~
+> In file included from drivers/gpu/drm/kmb/kmb_plane.c:17:
+> drivers/gpu/drm/kmb/kmb_drv.h:61:41: note: while referencing 'plane_statu=
+s'
+>    61 |         struct layer_status             plane_status[KMB_MAX_PLAN=
+ES];
+>       |                                         ^~~~~~~~~~~~
+>=20
+> Exposed by commit
+>=20
+>   4ba545781e20 ("Makefile: Enable -Warray-bounds")
+>=20
+> Originally introduced by commmit
+>=20
+>   7f7b96a8a0a1 ("drm/kmb: Add support for KeemBay Display")
+>=20
+> Maybe should have been fixed by
+>=20
+>   c026565fe9be ("drm/kmb: Enable alpha blended second plane")
+>=20
+> I have applied the following hack for now.
 
-drivers/gpu/drm/kmb/kmb_plane.c: In function 'kmb_plane_atomic_disable':
-drivers/gpu/drm/kmb/kmb_plane.c:165:34: error: array subscript 3 is above a=
-rray bounds of 'struct layer_status[2]' [-Werror=3Darray-bounds]
-  165 |                 kmb->plane_status[plane_id].ctrl =3D LCD_CTRL_GL2_E=
-NABLE;
-      |                 ~~~~~~~~~~~~~~~~~^~~~~~~~~~
-In file included from drivers/gpu/drm/kmb/kmb_plane.c:17:
-drivers/gpu/drm/kmb/kmb_drv.h:61:41: note: while referencing 'plane_status'
-   61 |         struct layer_status             plane_status[KMB_MAX_PLANES=
-];
-      |                                         ^~~~~~~~~~~~
-drivers/gpu/drm/kmb/kmb_plane.c:162:34: error: array subscript 2 is above a=
-rray bounds of 'struct layer_status[2]' [-Werror=3Darray-bounds]
-  162 |                 kmb->plane_status[plane_id].ctrl =3D LCD_CTRL_GL1_E=
-NABLE;
-      |                 ~~~~~~~~~~~~~~~~~^~~~~~~~~~
-In file included from drivers/gpu/drm/kmb/kmb_plane.c:17:
-drivers/gpu/drm/kmb/kmb_drv.h:61:41: note: while referencing 'plane_status'
-   61 |         struct layer_status             plane_status[KMB_MAX_PLANES=
-];
-      |                                         ^~~~~~~~~~~~
-
-Exposed by commit
-
-  4ba545781e20 ("Makefile: Enable -Warray-bounds")
-
-Originally introduced by commmit
-
-  7f7b96a8a0a1 ("drm/kmb: Add support for KeemBay Display")
-
-Maybe should have been fixed by
-
-  c026565fe9be ("drm/kmb: Enable alpha blended second plane")
-
-I have applied the following hack for now.
+Actually, this one:
 
 From: Stephen Rothwell <sfr@canb.auug.org.au>
 Date: Tue, 25 Jan 2022 13:45:26 +1100
@@ -104,15 +113,18 @@ Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 
 diff --git a/drivers/gpu/drm/kmb/kmb_plane.c b/drivers/gpu/drm/kmb/kmb_plan=
 e.c
-index 00404ba4126d..c12e900c6c93 100644
+index 00404ba4126d..b54197920712 100644
 --- a/drivers/gpu/drm/kmb/kmb_plane.c
 +++ b/drivers/gpu/drm/kmb/kmb_plane.c
-@@ -161,9 +161,11 @@ static void kmb_plane_atomic_disable(struct drm_plane =
-*plane,
+@@ -158,12 +158,14 @@ static void kmb_plane_atomic_disable(struct drm_plane=
+ *plane,
+ 	case LAYER_1:
+ 		kmb->plane_status[plane_id].ctrl =3D LCD_CTRL_VL2_ENABLE;
+ 		break;
++#if 0
  	case LAYER_2:
  		kmb->plane_status[plane_id].ctrl =3D LCD_CTRL_GL1_ENABLE;
  		break;
-+#if 0
  	case LAYER_3:
  		kmb->plane_status[plane_id].ctrl =3D LCD_CTRL_GL2_ENABLE;
  		break;
@@ -127,20 +139,20 @@ index 00404ba4126d..c12e900c6c93 100644
 Cheers,
 Stephen Rothwell
 
---Sig_/nrM2XqSEID89HGMexxVxPDt
+--Sig_/cnjjE1VOxX+DM8Z37u7_5St
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHvZrIACgkQAVBC80lX
-0Gxj6gf/ZKsSyaOBUb43GfeYY9eBBKNOBDJcX1eTPHcB9bK6bcGRWWXMviVjIOJU
-IZ4U07Wd0ytcz1CSbOEATioVlukDAjwKt4ZXgdBAR5/+JNIn+M6WLTGqXJly3izc
-MfuXgQAzDN+Q+Drt+vL/hcSXlq/O26egplrB/mww0j48pCt2FPvf2gona+mVtMol
-OhLIEH6olM3HGUYAx5cnhuMfDs8UpA+4tMfYZkkP2bzpiDy8zC2mzByFFPR2NcbF
-2L/uqM4IcsnVb67egQ8ViXOtL9ak5dEZG/MFmvkyWm5XOsP9CuukHMxatcD9J0+F
-wTRKnfvQx95m3nONtNW+meNeKKz+TQ==
-=uTQR
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHvaD0ACgkQAVBC80lX
+0GzIlwf/YbfmBUupjdnZLXT6He7H2h+ikh6AHDDlE5lgPdRvOoZUPh0rYidLl5gG
+taH43NaDTc1z8mth7cQafT3S/r8K0+499FC1lKFmI4AeGj61DJg9hiyBRZvjuKvA
+IYb9TV1Ba/3SMFG4PE1w8uMlW3VPvUXXhp/AkX4u6/S+vgPr6DzyC63uv1dD5F9a
+XVAO9c72Xua/Z0wMVadKsjd7jsXgxl+XyQqZLPumAi1fOixvXb8Z3y03Xp0qjvHx
+AH89s9PVfD9NAdwnTt755ankalaqeT+YDWg5ytK6xX3X3P8GPy/6tgFRN+hWBai5
+TZ8d+WOMJ8DTYUQqkMOA/5MBmeAMWQ==
+=KboG
 -----END PGP SIGNATURE-----
 
---Sig_/nrM2XqSEID89HGMexxVxPDt--
+--Sig_/cnjjE1VOxX+DM8Z37u7_5St--

@@ -2,137 +2,169 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D29549AF52
-	for <lists+linux-next@lfdr.de>; Tue, 25 Jan 2022 10:11:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44C3249AF55
+	for <lists+linux-next@lfdr.de>; Tue, 25 Jan 2022 10:11:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1452440AbiAYJJA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 25 Jan 2022 04:09:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44750 "EHLO
+        id S1453534AbiAYJJB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 25 Jan 2022 04:09:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1453534AbiAYIyp (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 25 Jan 2022 03:54:45 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61393C078504
-        for <linux-next@vger.kernel.org>; Mon, 24 Jan 2022 23:44:07 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id u130so14604420pfc.2
-        for <linux-next@vger.kernel.org>; Mon, 24 Jan 2022 23:44:07 -0800 (PST)
+        with ESMTP id S1454868AbiAYJB1 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 25 Jan 2022 04:01:27 -0500
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53D32C06C599
+        for <linux-next@vger.kernel.org>; Tue, 25 Jan 2022 00:33:09 -0800 (PST)
+Received: by mail-yb1-xb2d.google.com with SMTP id 23so59330319ybf.7
+        for <linux-next@vger.kernel.org>; Tue, 25 Jan 2022 00:33:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=YDl8tuenOB7OINLaTsYd1+PC6tJZxYpv16l39VyIDDg=;
-        b=jhLcV//DEN8NAy6w0LcFzAs7igIi+ZA17lYQTXWHFHsVoY0ehWuVVsQ1YPRQ/SSvsI
-         u0qOQ/gMEy+9Td2Idd9gSVlVTZPXe76GHBVLil/jwoskzCcRJYwuez58o6gJRmGvoWdp
-         QgzmSigJP7mawexsbZ4FSNnGvZX2o2y0b+Eww=
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=dm9enjdusY3A58QDHQgAeNFRYRFu+m9zKXkfR9/EpRs=;
+        b=nSMoXtfNYLuW0tj4xK3VmeQumN3LjX90Qwub9MFmotXJGHExifDnvmw9xwBm0lEp+B
+         V9/TdhX0FwRwmwS37FdwFFJRwt/xQUDyEYjOGh5gPkAP7bhRPXeziwNdmcib9y6NUMO2
+         dnbS4M5tJqGDKRv7npjZuBYs8wqACrUdDkeAP+jJcAwvDUR4c5yHP+6LGPns5TbaSd5p
+         iJFS93cNGhb2n8y6kllHV49hZ7O5e6YdcHBXDRVLJAnUEkOxUkBxfIbOGQ1EhSle+J8R
+         eJ/OnfJmCeSke7pOy2CkoUMDeut5AB41hxDLsK/eI10MKf1LgRAeqCU6rVMYkunXH7Pw
+         YX2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=YDl8tuenOB7OINLaTsYd1+PC6tJZxYpv16l39VyIDDg=;
-        b=q7PtFXxjPlB5+X2CIzc2EW6Z3L46iTeArHv2IJAH+hP0/Ed5IwsGmWqhKg/0oRbPGn
-         6AVl1w9IPzilnp3yq4FLM6aQh8ET0KWr8KfDlEKWNzivwrBM21bdFaXiY7ffdsQni17E
-         RLXn1q/JluOgkLZxy1IpOAo3rljfZ9xaBX479dNTtDHbuoB8y8UcZpkS87+3QnN5iOFq
-         KFWO9ywSzV6dzCVaCWSo4bXvGH9VMAltSPT3kUhIt4pL/LvO8+bdlZZh3sRM9lcS2klL
-         RNbyrRnBt2dvzjZ5xsRty8G2XjsCH4V7sZUjWPmfMf6rmPqHOuer1ukghODhImgz55jr
-         ajYA==
-X-Gm-Message-State: AOAM532kW5B+znVUdK9Ck8I9+w+quu0IUCCuduBWCYlGTYmOZ+kY/1eu
-        bHMMXIgpxm5kU4FqxEhtmfSiIQK0jkyBpA==
-X-Google-Smtp-Source: ABdhPJx1eKNMtskZDfwNpOccUTY1Kim/WLynhTPSIe0KGbPCH/+gumJHFG8D9tPvqfTxjWfWVTu7rg==
-X-Received: by 2002:a65:6ab0:: with SMTP id x16mr14730337pgu.24.1643096646857;
-        Mon, 24 Jan 2022 23:44:06 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id s23sm20534298pfg.144.2022.01.24.23.44.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jan 2022 23:44:06 -0800 (PST)
-Date:   Mon, 24 Jan 2022 23:44:05 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the kspp tree
-Message-ID: <202201242230.C54A6BCDFE@keescook>
-References: <20220125145006.677e3709@canb.auug.org.au>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=dm9enjdusY3A58QDHQgAeNFRYRFu+m9zKXkfR9/EpRs=;
+        b=UcdFeEHzD1ouxajMOn4/WMCQNynAZmNpMm3wwlYcVR+7QJw0B3LnpwA4RrG2Y6Ur4E
+         WgzfcssT2M2GWmNEEF3MkI49XgX6UepOzlh19TtxehBnE1lJzIVFb9nvtTHQLr49ebEB
+         k/906i3WWAXWXB2vQewJ9qI3J8JxvlU/7Xg6eVjNLZChaakJftEip7iVcSJMRd7+tXnT
+         O+3P/pslIUICImk8WUbrVz624AnI8f6T+l0CT7SX5U4GrpXCRT8bSmkA89ENMn6aGRbC
+         br/Nw3vbrd8wttwLrNi5Lh8jNNN1oSFK31hVfUC9h03lM/WZynAvKCWkuWORrGxyPaV/
+         xuwQ==
+X-Gm-Message-State: AOAM531VPx8zU2XsFMK1qDwbkdFq5y3jx5wcIPZoh0s4hplY7SSNLwWJ
+        inEmtcqtgaSmV+6vheV0dLscQtFVrOilaCbV0j5k96dQNK0=
+X-Google-Smtp-Source: ABdhPJwvQMc9HJl8nsOUSH2i5xJkTl3raQES9oPi0hrO8s7OtbRkU6QxYjtQdRgzy4F3BMTEEojUzYMCtI8md0GoLUY=
+X-Received: by 2002:a25:c04c:: with SMTP id c73mr27934623ybf.553.1643099587866;
+ Tue, 25 Jan 2022 00:33:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220125145006.677e3709@canb.auug.org.au>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 25 Jan 2022 14:02:56 +0530
+Message-ID: <CA+G9fYvrk4V=DiS8kgyxKkRAo4s-FPKeh8pf4YrRJPhcgioPmQ@mail.gmail.com>
+Subject: [next] WARNING: CPU: 0 PID: 0 at kernel/trace/trace_events.c:417 trace_event_raw_init
+To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, regressions@lists.linux.dev,
+        LTP List <ltp@lists.linux.it>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Ingo Molnar <mingo@redhat.com>,
+        Qian Cai <quic_qiancai@quicinc.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Marco Elver <elver@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 02:50:06PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the kspp tree, today's linux-next build (powerpc
-> allmodconfig) failed like this:
-> 
-> In file included from include/linux/string.h:253,
->                  from include/linux/bitmap.h:11,
->                  from include/linux/cpumask.h:12,
->                  from include/linux/mm_types_task.h:14,
->                  from include/linux/mm_types.h:5,
->                  from include/linux/buildid.h:5,
->                  from include/linux/module.h:14,
->                  from samples/trace_events/trace-events-sample.c:2:
-> In function '__fortify_strcpy',
->     inlined from 'perf_trace_foo_rel_loc' at samples/trace_events/./trace-events-sample.h:519:1:
-> include/linux/fortify-string.h:47:33: error: '__builtin_strcpy' offset 12 is out of the bounds [0, 4] [-Werror=array-bounds]
+[Please ignore this report if it is already reported]
 
--Warray-bounds thinks something is trying to get at offset 12 of an
-object it thinks is only 4 bytes in size.
+Following kernel WARNING: reported while boot linux next 20220125 tag
+on qemu_arm64.
+While testing LTP ftrace the following kernel WARNING: noticed.
 
->    47 | #define __underlying_strcpy     __builtin_strcpy
->       |                                 ^
-> include/linux/fortify-string.h:445:24: note: in expansion of macro '__underlying_strcpy'
->   445 |                 return __underlying_strcpy(p, q);
->       |                        ^~~~~~~~~~~~~~~~~~~
-> 
-> Exposed by (probably) commit
-> 
->   602670289b69 ("fortify: Detect struct member overflows in memcpy() at compile-time")
-> 
-> Introduced by commit
-> 
->   b466b1332164 ("samples/trace_event: Add '__rel_loc' using sample event")
-> 
-> I have reverted that latter commit for today.
+[    0.000000] ------------[ cut here ]------------
+[    0.000000] WARNING: CPU: 0 PID: 0 at
+kernel/trace/trace_events.c:417 trace_event_raw_init+0x490/0x4ec
+[    0.000000] Modules linked in:
+[    0.000000] CPU: 0 PID: 0 Comm: swapper/0 Not tainted
+5.17.0-rc1-next-20220125 #1
+[    0.000000] Hardware name: linux,dummy-virt (DT)
+[    0.000000] pstate: 600000c5 (nZCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[    0.000000] pc : trace_event_raw_init+0x490/0x4ec
+[    0.000000] lr : trace_event_raw_init+0x250/0x4ec
+[    0.000000] sp : ffffc91900963d30
+[    0.000000] x29: ffffc91900963d30 x28: 0000000000000005 x27: 0000000000000000
+[    0.000000] x26: 0000000000000003 x25: ffffc918ff56c8e8 x24: ffffc918ffc57bf8
+[    0.000000] x23: 0000000000000001 x22: ffffc91900d4bf18 x21: 0000000000000000
+[    0.000000] x20: ffffc91900d44fa8 x19: 0000000000000251 x18: 00000000ffffffff
+[    0.000000] x17: 000000000000003f x16: 0000000000000009 x15: ffffffffffffffff
+[    0.000000] x14: 0000000000000000 x13: ffffffffffffffff x12: 0000000000000028
+[    0.000000] x11: 0101010101010101 x10: 0000000000000403 x9 : ffffc918fe3d2600
+[    0.000000] x8 : 0101010101010101 x7 : 7f7f7f7f7f7f7f7f x6 : fefefefefefeff28
+[    0.000000] x5 : 000000000000003e x4 : 0000000000000008 x3 : 0000000000000000
+[    0.000000] x2 : 000000000000023f x1 : 0000000000000000 x0 : 0000000000000000
+[    0.000000] Call trace:
+[    0.000000]  trace_event_raw_init+0x490/0x4ec
+[    0.000000]  event_init+0x38/0xb0
+[    0.000000]  trace_event_init+0x9c/0x2ac
+[    0.000000]  trace_init+0x10/0x1c
+[    0.000000]  start_kernel+0x474/0x710
+[    0.000000]  __primary_switched+0xc0/0xc8
+[    0.000000] ---[ end trace 0000000000000000 ]---
 
-Digging through the macros, I end up reconstructing this:
+and
+Running tests.......
+[    6.791530] ------------[ ftrace bug ]------------
+[    6.791941] ftrace faulted on modifying
+[    6.791943] [<ffffc918fff403fc>] set_reset_devices+0x8/0x24
+[    6.792681] Setting ftrace call site to call ftrace function
+[    6.793111] ftrace record flags: 80000001
+[    6.793384]  (1)
+[    6.793384]  expected tramp: ffffc918fe22bd20
+[    6.793868] ------------[ cut here ]------------
+[    6.794212] WARNING: CPU: 1 PID: 468 at kernel/trace/ftrace.c:2068
+ftrace_bug+0x280/0x2b0
+[    6.794879] Modules linked in: rfkill crct10dif_ce fuse
+[    6.795300] CPU: 1 PID: 468 Comm: ftrace_regressi Tainted: G
+W         5.17.0-rc1-next-20220125 #1
+[    6.796074] Hardware name: linux,dummy-virt (DT)
+[    6.796453] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[    6.797016] pc : ftrace_bug+0x280/0x2b0
+[    6.797331] lr : ftrace_bug+0x280/0x2b0
+[    6.797649] sp : ffff8000088a3af0
+[    6.797921] x29: ffff8000088a3af0 x28: ffff0000c1b2a000 x27: 0000000000000000
+[    6.798507] x26: 0000000000000000 x25: ffff8000088a3d40 x24: ffffc91900e24000
+[    6.799090] x23: 00000000fffffff2 x22: ffffc918ffc46248 x21: ffffc9190096ecc8
+[    6.799670] x20: ffff0000c0080030 x19: ffffc9190096e000 x18: ffffffffffffffff
+[    6.800242] x17: 0000000000000000 x16: 0000000000000000 x15: ffff8000888a3817
+[    6.800815] x14: 0000000000000000 x13: 3032646232326566 x12: 3831396366666666
+[    6.801398] x11: 203a706d61727420 x10: ffffc91900991ba0 x9 : ffffc918fe31bbc4
+[    6.801979] x8 : 00000000ffffefff x7 : ffffc919009e9ba0 x6 : 0000000000000001
+[    6.802557] x5 : ffffc9190096f000 x4 : ffffc9190096f280 x3 : 0000000000000000
+[    6.803138] x2 : 0000000000000000 x1 : ffff0000c1b2a000 x0 : 0000000000000022
+[    6.803700] Call trace:
+[    6.803899]  ftrace_bug+0x280/0x2b0
+[    6.804185]  ftrace_replace_code+0x94/0xa0
+[    6.804523]  ftrace_modify_all_code+0xe0/0x14c
+[    6.804886]  arch_ftrace_update_code+0x14/0x20
+[    6.805255]  ftrace_run_update_code+0x24/0x7c
+[    6.805611]  ftrace_startup+0xf4/0x1b0
+[    6.805919]  register_ftrace_function+0x38/0x90
+[    6.806290]  stack_trace_sysctl+0xa0/0x190
+[    6.806630]  proc_sys_call_handler+0x18c/0x250
+[    6.806993]  proc_sys_write+0x20/0x30
+[    6.807295]  new_sync_write+0xf0/0x18c
+[    6.807607]  vfs_write+0x244/0x2b0
+[    6.807889]  ksys_write+0x74/0x100
+[    6.808168]  __arm64_sys_write+0x28/0x3c
+[    6.808491]  invoke_syscall+0x50/0x120
+[    6.808800]  el0_svc_common.constprop.0+0x104/0x124
+[    6.809427]  do_el0_svc+0x34/0x9c
+[    6.809703]  el0_svc+0x2c/0x90
+[    6.809961]  el0t_64_sync_handler+0xa4/0x130
+[    6.810318]  el0t_64_sync+0x1a0/0x1a4
+[    6.810617] ---[ end trace 0000000000000000 ]---
 
-	strcpy( (char *)((void *)(&__entry->__rel_loc_foo) +
-				  sizeof(__entry->__rel_loc_foo) +
-				  (__entry->__rel_loc_foo & 0xffff)),
-		foo ? (const char *)(foo) : "(null)");
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-I couldn't figure out how __entry is being allocated, but it seemed
-maybe related to this note:
+ref:
+  - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220125/testrun/7535055/suite/linux-log-parser/test/check-kernel-warning-4390834/log
+  - https://lkft.validation.linaro.org/scheduler/job/4390834#L282
 
-/*
- * struct trace_event_data_offsets_<call> {
- *      u32                             <item1>;
- *      u32                             <item2>;
- *      [...]
- * };
- *
- * The __dynamic_array() macro will create each u32 <item>, this is
- * to keep the offset of each array from the beginning of the event.
- * The size of an array is also encoded, in the higher 16 bits of
- * <item>.
- */
+metadata:
+  git branch: master
+  git repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+  git describe: next-20220125
+  kernel-config: https://builds.tuxbuild.com/24B14LVWVfE8GOgox8KftnlXxPf/config
 
-So, I think -Warray-bounds is refusing to see the destination as
-anything except a u32, but being accessed at 4 (sizeof(u32)) + 8
-(address && 0xffff) (?)
 
-But if this is true, I would imagine there would be plenty of other
-warnings? I'm currently stumped.
-
-Reading 55de2c0b5610 ("tracing: Add '__rel_loc' using trace event
-macros") did not help me. ;)
-
--Kees
-
--- 
-Kees Cook
+--
+Linaro LKFT
+https://lkft.linaro.org

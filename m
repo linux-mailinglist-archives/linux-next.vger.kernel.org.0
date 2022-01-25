@@ -2,129 +2,186 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7943B49BE1B
-	for <lists+linux-next@lfdr.de>; Tue, 25 Jan 2022 23:00:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78B7549BE24
+	for <lists+linux-next@lfdr.de>; Tue, 25 Jan 2022 23:02:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233434AbiAYWAk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 25 Jan 2022 17:00:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57280 "EHLO
+        id S233463AbiAYWB7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 25 Jan 2022 17:01:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233445AbiAYWAk (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 25 Jan 2022 17:00:40 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43AFEC06173B
-        for <linux-next@vger.kernel.org>; Tue, 25 Jan 2022 14:00:40 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id j10so7269200pgc.6
-        for <linux-next@vger.kernel.org>; Tue, 25 Jan 2022 14:00:40 -0800 (PST)
+        with ESMTP id S233462AbiAYWB6 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 25 Jan 2022 17:01:58 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0A60C061744
+        for <linux-next@vger.kernel.org>; Tue, 25 Jan 2022 14:01:58 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id u10so16462976pfg.10
+        for <linux-next@vger.kernel.org>; Tue, 25 Jan 2022 14:01:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=w+gteY1m43RHWpAycmbb69VeDmwEbqJifo/y9P69NPY=;
-        b=ARuYewZ5nw2ffzLdYlSu2aMvxPDlJPeFoeXQevHpAhWx0mahldaPAuZCLMPBWq2m1W
-         VXOncIt0HDqQbaC7oSXbooZ+Yv2BRa7af2HpboJ7/rLYHtXUsQeMnKSZoBr3U0adBzJF
-         ulCr0dgQp9UF0A3gkAK7uqKN1tMapR4NYI2ZU=
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=f+Aaba2ErpXUq7vBNLVHguof037975X+yPrv7J77Tcg=;
+        b=cNdZeLox84me8aWclC47yRmEs5qsap7dCX3N0KCyd4z/FIo4JTaRHfDIrU0SByXMgN
+         GiVU+Uc+d6ujjYCV2BAW3Rogu9HDub5t+pLGzWlh7fU/bfr1SpgK/bm7JpULBK5dkl43
+         7ZrEc1fzjCZNfiVwvbBTCpct/QcNMnvefpb2M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=w+gteY1m43RHWpAycmbb69VeDmwEbqJifo/y9P69NPY=;
-        b=gQ4qoGDLpC5NoSnz42/wNlz9U3yCdRf98LprptOvYK7GKCnMX5S8nRc+BiApyewyd7
-         8UG+3sYrI271VIFMacwmf1klYJIFeoumgl77HSQBew3JIpBp1Tflmw88YnI5+yDrAdbd
-         NNlQ5Trr5xb6Zjl0xFTpD21LyBF08JQsRaBIhRCahKYRO4wcmucjWkmxOPdAESs0xAA9
-         q80jY0IIqoZ7k8TR7IsZHe7xRjlohRHk+2bjynO5OQFBN86VFipr6VoHBuqguvK8udIU
-         EnaJlMdK7yE9wMXfDBYVehD3wpFljCiFN8vjrMN6GB2h6RfV1PQiIXcDTQ8QHeLx7RKe
-         hMpg==
-X-Gm-Message-State: AOAM53221bK3UEy+LuTjFOWeQ0x/5rF7JYlsuRtfnhxGL4Cnptm89lNs
-        JkZFsFpqiQSMfDmYU8o4KOmdxA==
-X-Google-Smtp-Source: ABdhPJzes72NzIlsk1hNk11tlJURFS9Irv2XtzmUVNkXQUCwSAYsjCxvGFNijeJsuUm756MAeqTZaw==
-X-Received: by 2002:a63:5009:: with SMTP id e9mr13537396pgb.9.1643148039767;
-        Tue, 25 Jan 2022 14:00:39 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=f+Aaba2ErpXUq7vBNLVHguof037975X+yPrv7J77Tcg=;
+        b=q5T18PmxCF/6v01FSRfuOoXsu7pWuQ/hclyDzwVdWguS/oRfGjqHU0ZRZmd3rSyj3z
+         tWJw80nmHeLQeWX7XluB3MRVzVIwcCGkQ0TUP0VoY7Smw43E5BiKVW9WKKvwBNKnDCfK
+         eEnHdYVQ/IYfuLSuTyz/teGaWOZW9v3578zgNIFdmiTvyMJUqMO1dVXNKeuHD5xqaqsL
+         Q49GryxE+skL6yYFis+QOTjYgTgSMEJp2+HbZKdUS4ZcJsxfxa2R6Oqy4oaDE1M7cKTt
+         GDw3EnzHW8E58K4ROfjK+E3n3586duYYcLbeoiaWJGnihXxkNPU6ZYVTqRq6j5QYF1A9
+         gpuA==
+X-Gm-Message-State: AOAM532N83NO2zdS6rHYvxzcUWsbkCP1k2yyXCdOQwxj5U0M9tcRVZYx
+        4lQ7TnPrGLhUITe1K8krBCD2kQ==
+X-Google-Smtp-Source: ABdhPJzyQCqsG6NPvpV8s4zrvXKBmCTM4IytclQGXToHeWxUa2RmazvbA1BQ6fvga96SoUSlolRY2A==
+X-Received: by 2002:a05:6a00:23c3:b0:4ca:f0d2:aad9 with SMTP id g3-20020a056a0023c300b004caf0d2aad9mr3384176pfc.51.1643148118205;
+        Tue, 25 Jan 2022 14:01:58 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id g18sm1274268pju.7.2022.01.25.14.00.39
+        by smtp.gmail.com with ESMTPSA id g20sm17818pfv.4.2022.01.25.14.01.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jan 2022 14:00:39 -0800 (PST)
+        Tue, 25 Jan 2022 14:01:57 -0800 (PST)
+Date:   Tue, 25 Jan 2022 14:01:57 -0800
 From:   Kees Cook <keescook@chromium.org>
 To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-next@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH] perf: Avoid -Warray-bounds warning for __rel_loc macro
-Date:   Tue, 25 Jan 2022 14:00:37 -0800
-Message-Id: <20220125220037.2738923-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.30.2
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the kspp tree
+Message-ID: <202201251400.9F091FC@keescook>
+References: <20220125145006.677e3709@canb.auug.org.au>
+ <202201242230.C54A6BCDFE@keescook>
+ <20220125222732.98ce2e445726e773f40e122e@kernel.org>
+ <20220125233154.dac280ed36944c0c2fe6f3ac@kernel.org>
+ <202201251256.CCCBE9851E@keescook>
+ <20220125162326.3d1ca960@gandalf.local.home>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2566; h=from:subject; bh=3xCm2+8JkO8X0PscRpFVHhDSlZ1UoLF0UYBAebUszpA=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBh8HMFGIbJFCGrr+z4Xoy2f3YnntnkP9QDnMb6g02i TSwvyiSJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYfBzBQAKCRCJcvTf3G3AJqrsD/ 94nj4D9vdN9BWSEEsomamjGEI3J1gCXW+xZ5u7sv0hL1ocGMptGpRIjUC+iXq+GiEW0inZGRByQTz9 4gJVDAWiYy2ZrJAZJacIym4Wnq6YFnAGSl1XPra9r38LFN9yPBIVycYlcoGp3YmlPPilwey9ZP6jtV 5CtWFtr/jt/UNRUm50e28eeO7lxElLxll1OAbW8Vf7LOWyiGXSWzFYUmDWy8u756vkAq4wKd82Ch5K SQh8YtmZoowti5+PZjRxZLsGsHRfjaQ8fZtonvqUNLomp6y4gOB2Lku9JV5gvFvBvMf1rBADSdmiBa t7sSnBU95/9ch6GZmf07QcBkfp2LqZNVCDj8AoKh11eGXVBIlkzaN/OHEAbkHDv/sD2CWYZdOJL4Ok HjEUn2QSOho3O/mV0MAV56pd6PE9PbcF64H0XzETheiDRWgab5rp7/2NVV+LFYPKl2Y/RyNCWYTzM2 uAU+M3sLoylxS0nu1VHREqX4Ty+3v6Nq7LQ/DkptAzYMRz3XgaxpfMMnwLZ/atoDYbQTn7bIScVKYL V6JwuEofnZYi3E6SAwgEch2S4SvHTMyRrB6/+M5kl+5y5njIe/DX1AftdPxZwo3bb1LQTGdbtedloq Ke99TuMaGMCGExVYFLAFXge2tyYhE2ELMp9+qMOWmtDjuB1wUudBAwsB64YQ==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220125162326.3d1ca960@gandalf.local.home>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-As done for trace_events.h, also fix the __rel_loc macro in perf.h,
-which silences the -Warray-bounds warning:
+On Tue, Jan 25, 2022 at 04:23:26PM -0500, Steven Rostedt wrote:
+> On Tue, 25 Jan 2022 12:57:24 -0800
+> Kees Cook <keescook@chromium.org> wrote:
+> 
+> > On Tue, Jan 25, 2022 at 11:31:54PM +0900, Masami Hiramatsu wrote:
+> > > On Tue, 25 Jan 2022 22:27:32 +0900
+> > > Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> > >   
+> > > > > /*
+> > > > >  * struct trace_event_data_offsets_<call> {
+> > > > >  *      u32                             <item1>;
+> > > > >  *      u32                             <item2>;
+> > > > >  *      [...]
+> > > > >  * };
+> > > > >  *
+> > > > >  * The __dynamic_array() macro will create each u32 <item>, this is
+> > > > >  * to keep the offset of each array from the beginning of the event.
+> > > > >  * The size of an array is also encoded, in the higher 16 bits of
+> > > > >  * <item>.
+> > > > >  */
+> > > > > 
+> > > > > So, I think -Warray-bounds is refusing to see the destination as
+> > > > > anything except a u32, but being accessed at 4 (sizeof(u32)) + 8
+> > > > > (address && 0xffff) (?)  
+> > > > 
+> > > > Ah, I got it. Yes, that's right. __data_loc() will access the data
+> > > > from the __entry, but the __rel_loc() points the same address from
+> > > > the encoded field ("__rel_loc_foo" in this case) itself.
+> > > > This is introduced for the user application event, which doesn't
+> > > > know the actual __entry size because the __entry includes some
+> > > > kernel internal defined fields.
+> > > >   
+> > > > > But if this is true, I would imagine there would be plenty of other
+> > > > > warnings? I'm currently stumped.  
+> > > > 
+> > > > That is because __rel_loc is used only in the sample code in the kernel
+> > > > for testing. Other use-cases comes from user-space.
+> > > > Hmm, can we skip this boundary check for this example?  
+> > > 
+> > > If the -Warray-bounds determines the destination array size from
+> > > the type of given pointer, we can just change the macro as below;
+> > > 
+> > > #define __get_rel_dynamic_array(field) 
+> > > 			((void *)__entry +                                 \
+> > > 			 offsetof(typeof(*__entry), __rel_loc_##field) +   \
+> > > 			 sizeof(__entry->__rel_loc_##field) +              \
+> > > 			 (__entry->__rel_loc_##field & 0xffff))
+> > > 
+> > > This must works same as __get_dynamic_array() macro.
+> > > 
+> > > Could you try this patch?
+> > > 
+> > > From 2982ba01367ec1f746a4f128512436e5325a7f9d Mon Sep 17 00:00:00 2001
+> > > From: Masami Hiramatsu <mhiramat@kernel.org>
+> > > Date: Tue, 25 Jan 2022 23:19:30 +0900
+> > > Subject: [PATCH] tracing: Avoid -Warray-bounds warning for __rel_loc macro
+> > > 
+> > > Since -Warray-bounds checks the destination size from the
+> > > type of given pointer, __assign_rel_str() macro gets warned
+> > > because it passes the pointer to the 'u32' field instead of
+> > > 'trace_event_raw_*' data structure.
+> > > Pass the data address calculated from the 'trace_event_raw_*'
+> > > instead of 'u32' __rel_loc field.
+> > > 
+> > > Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+> > > Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> > > Cc: Kees Cook <keescook@chromium.org>
+> > > ---
+> > >  include/trace/trace_events.h | 7 ++++---
+> > >  1 file changed, 4 insertions(+), 3 deletions(-)
+> > > 
+> > > diff --git a/include/trace/trace_events.h b/include/trace/trace_events.h
+> > > index 8c6f7c433518..65d927e059d3 100644
+> > > --- a/include/trace/trace_events.h
+> > > +++ b/include/trace/trace_events.h
+> > > @@ -318,9 +318,10 @@ TRACE_MAKE_SYSTEM_STR();
+> > >  #define __get_str(field) ((char *)__get_dynamic_array(field))
+> > >  
+> > >  #undef __get_rel_dynamic_array
+> > > -#define __get_rel_dynamic_array(field)	\
+> > > -		((void *)(&__entry->__rel_loc_##field) +	\
+> > > -		 sizeof(__entry->__rel_loc_##field) +		\
+> > > +#define __get_rel_dynamic_array(field)					\
+> > > +		((void *)__entry + 					\
+> > > +		 offsetof(typeof(*__entry), __rel_loc_##field) +	\
+> > > +		 sizeof(__entry->__rel_loc_##field) +			\
+> > >  		 (__entry->__rel_loc_##field & 0xffff))
+> > >  
+> > >  #undef __get_rel_dynamic_array_len  
+> > 
+> > This patch doesn't silence the warning, but now that I see the shape of
+> > things more clearly, let me see if I can find the right combo.
+> 
+> Hmm, could the zero size array cause an issues here. That is, does this
+> help?
+> 
+> diff --git a/include/trace/trace_events.h b/include/trace/trace_events.h
+> index 65d927e059d3..3d29919045af 100644
+> --- a/include/trace/trace_events.h
+> +++ b/include/trace/trace_events.h
+> @@ -128,7 +128,7 @@ TRACE_MAKE_SYSTEM_STR();
+>  	struct trace_event_raw_##name {					\
+>  		struct trace_entry	ent;				\
+>  		tstruct							\
+> -		char			__data[0];			\
+> +		char			__data[];			\
+>  	};								\
+>  									\
+>  	static struct trace_event_class event_class_##name;
 
-In file included from ./include/linux/string.h:253,
-                 from ./include/linux/bitmap.h:11,
-                 from ./include/linux/cpumask.h:12,
-                 from ./include/linux/mm_types_task.h:14,
-                 from ./include/linux/mm_types.h:5,
-                 from ./include/linux/buildid.h:5,
-                 from ./include/linux/module.h:14,
-                 from samples/trace_events/trace-events-sample.c:2:
-In function '__fortify_strcpy',
-    inlined from 'perf_trace_foo_rel_loc' at samples/trace_events/./trace-events-sample.h:519:1:
-./include/linux/fortify-string.h:47:33: warning: '__builtin_strcpy' offset 12 is out of the bounds [
-0, 4] [-Warray-bounds]
-   47 | #define __underlying_strcpy     __builtin_strcpy
-      |                                 ^
-./include/linux/fortify-string.h:445:24: note: in expansion of macro '__underlying_strcpy'
-  445 |                 return __underlying_strcpy(p, q);
-      |                        ^~~~~~~~~~~~~~~~~~~
+I changed this too, just to future-proof it, and in an attempt to base
+the address off of __data[] (which turned out not to be needed).
 
-Also make __data struct member a proper flexible array to avoid future
-problems.
+It turns out that there was still a version of the __get_rel_dyanmic_array
+in perf.h that was the actual culprit.
 
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- include/trace/perf.h         | 5 +++--
- include/trace/trace_events.h | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/include/trace/perf.h b/include/trace/perf.h
-index b77d09c70a93..5800d13146c3 100644
---- a/include/trace/perf.h
-+++ b/include/trace/perf.h
-@@ -26,8 +26,9 @@
- 
- #undef __get_rel_dynamic_array
- #define __get_rel_dynamic_array(field)	\
--		((void *)(&__entry->__rel_loc_##field) +	\
--		 sizeof(__entry->__rel_loc_##field) +		\
-+		((void *)__entry +					\
-+		 offsetof(typeof(*__entry), __rel_loc_##field) +	\
-+		 sizeof(__entry->__rel_loc_##field) +			\
- 		 (__entry->__rel_loc_##field & 0xffff))
- 
- #undef __get_rel_dynamic_array_len
-diff --git a/include/trace/trace_events.h b/include/trace/trace_events.h
-index cefefed18e85..7c86cc541c7a 100644
---- a/include/trace/trace_events.h
-+++ b/include/trace/trace_events.h
-@@ -134,7 +134,7 @@ TRACE_MAKE_SYSTEM_STR();
- 	struct trace_event_raw_##name {					\
- 		struct trace_entry	ent;				\
- 		tstruct							\
--		char			__data[0];			\
-+		char			__data[];			\
- 	};								\
- 									\
- 	static struct trace_event_class event_class_##name;
 -- 
-2.30.2
-
+Kees Cook

@@ -2,71 +2,80 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AFE2849BE64
-	for <lists+linux-next@lfdr.de>; Tue, 25 Jan 2022 23:21:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A92B349BE93
+	for <lists+linux-next@lfdr.de>; Tue, 25 Jan 2022 23:33:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233725AbiAYWVR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 25 Jan 2022 17:21:17 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:33614 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233724AbiAYWVR (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 25 Jan 2022 17:21:17 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S233879AbiAYWdl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 25 Jan 2022 17:33:41 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:55937 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233892AbiAYWdM (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 25 Jan 2022 17:33:12 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CBFCF617DA;
-        Tue, 25 Jan 2022 22:21:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BBAFC340E0;
-        Tue, 25 Jan 2022 22:21:15 +0000 (UTC)
-Date:   Tue, 25 Jan 2022 17:21:14 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jk1pB4qZGz4xdl;
+        Wed, 26 Jan 2022 09:33:06 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1643149986;
+        bh=4N5QEyxMjjwZITic1lYF0XkgVn9dsIlL0PsrC3TOMHo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=L02PQ8pCXcMps5P7QIe5ola+But/eUFTITsxdmJ3adm3d+d/f8UJEZBYo9ahf8NoW
+         BXfICohdsogLlQpCdjrTjGQn7FuOu6Kwmmlx/sp6CH/CCtY6mbstli8wpmh97zCM3E
+         bhpKQ0KLXsZSWhqFOs98s+nixxdCO+3ATPAR1UoMmmMlS8bt7FyOZoj1dtIRGF2C6A
+         fTFiDU6kpmx5tUDa01fGYzZsh9N+Q3kD4QJULzaI4sByECRpbkYSt0nbwPsCnL2lSV
+         7csDDekaISwpRWsGWutj3zGzo42fMEp6NfLNIJF5UDy5UeS0H7Mvu7U8CS/p4tVTBp
+         RMA5XsY/f2nsw==
+Date:   Wed, 26 Jan 2022 09:33:05 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the kspp tree
-Message-ID: <20220125172114.6807ed8f@gandalf.local.home>
-In-Reply-To: <202201251402.0FB08DB@keescook>
-References: <20220125145006.677e3709@canb.auug.org.au>
-        <202201242230.C54A6BCDFE@keescook>
-        <20220125222732.98ce2e445726e773f40e122e@kernel.org>
-        <20220125233154.dac280ed36944c0c2fe6f3ac@kernel.org>
-        <202201251256.CCCBE9851E@keescook>
-        <20220125162326.3d1ca960@gandalf.local.home>
-        <20220125162859.2b3cc8a0@gandalf.local.home>
-        <202201251402.0FB08DB@keescook>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Subject: linux-next: Signed-off-by missing for commit in the samsung-krzk
+ tree
+Message-ID: <20220126093305.5726fcbb@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/p5Q/XEB/c8t.Pm0IKDvOYcv";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, 25 Jan 2022 14:07:14 -0800
-Kees Cook <keescook@chromium.org> wrote:
+--Sig_/p5Q/XEB/c8t.Pm0IKDvOYcv
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> > The tstruct is the TP_STRUCT__entry() and for each __rel_dynamic_array() or
-> > __dynamic_array(), the __data_size gets updated and saved into the
-> > __data_offsets that holds where each item is.
-> > 
-> > The rel versions sets the offset from its location to the data, where as
-> > the non rel versions sets the offset from the beginning of the event to the
-> > data.  
-> 
-> Could this just be
-> 
-> #define __get_rel_dynamic_array(field) \
-> 	((void *)(&__entry->data[__entry->__rel_loc_##field & 0xffff])
-> 
-> ?
+Hi all,
 
-This is currently user space defined. But since the only user of the rel_*
-version hasn't been upstreamed yet, we could change it. But it also
-requires changing libtraceevent as it depends on this code too.
+Commits
 
-I'm surprised that it doesn't break with the __get_dynamic_array()
-versions, or is that because it's based off of __entry?
+  1f22c720691e ("Revert "arm64: dts: fsd: Add initial device tree support"")
+  191448a71471 ("Revert "arm64: dts: fsd: Add initial pinctrl support"")
 
--- Steve
+are missing a Signed-off-by from their author and committer.
+
+Reverts are changes too and so should be signed off and have reasonable
+("why did we do this?") changelogs.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/p5Q/XEB/c8t.Pm0IKDvOYcv
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHweqEACgkQAVBC80lX
+0Gx10wf/RZM9esQhP2tnVjq+YvXAw+l0pZmPJS31cHltX9HJl5Qmu3qe8mMCkuLf
+BgL3cTrrjyBaBGtEN68vffkeOxlVMD28dU0b2tydnSWYH+2FWckiGUIhGJ4oCpA0
+ItxlQt8UWJ+sRpSAQazqBxp7vyicSSTeISkpwukzUKw8/MGoyRvLsaxS+9h1pLpM
+k6AsZ3IYVGBaWwCQf+Go1sKogjaBHPKzOAEpj9uT8x0I7ipRx/4u3Pt/8a2royHF
+Yn9Sbqfr4h5fgPirtlVUKBwf2MfxaDIk9G+Bd+u8e39Z0mlvW8+oJvGbBQ1MUrL5
+X4XpScUH+eZCbEipYDAlEEoMhpOlLQ==
+=/k5Y
+-----END PGP SIGNATURE-----
+
+--Sig_/p5Q/XEB/c8t.Pm0IKDvOYcv--

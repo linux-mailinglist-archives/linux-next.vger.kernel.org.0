@@ -2,148 +2,149 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D7F149AB82
-	for <lists+linux-next@lfdr.de>; Tue, 25 Jan 2022 06:16:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 878EE49AB84
+	for <lists+linux-next@lfdr.de>; Tue, 25 Jan 2022 06:16:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229565AbiAYFQI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 25 Jan 2022 00:16:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40876 "EHLO
+        id S1349497AbiAYFQJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 25 Jan 2022 00:16:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S3416784AbiAYEmD (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 24 Jan 2022 23:42:03 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EEC3C061760
-        for <linux-next@vger.kernel.org>; Mon, 24 Jan 2022 19:22:44 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id c3so17854415pls.5
-        for <linux-next@vger.kernel.org>; Mon, 24 Jan 2022 19:22:44 -0800 (PST)
+        with ESMTP id S1391196AbiAYFD5 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 25 Jan 2022 00:03:57 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB6DC0AD1A1
+        for <linux-next@vger.kernel.org>; Mon, 24 Jan 2022 19:35:58 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id w190so11907418pfw.7
+        for <linux-next@vger.kernel.org>; Mon, 24 Jan 2022 19:35:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=Oqh/QrylE3qwclVle0OxUKedqq6NnQXFDpCsoYWtHv0=;
-        b=QUB65Uqx37uyu0GYgnR9XW/AwBHHIv4vcjG8rlbOI8stWM2l4x3WKE+peh/69VAT48
-         l9dXCc3DFcMAjl8scbF8q4LPrNb+3zfQdaahKpxPkykVUlMLLHFXjDmwIYpPxKlILxaQ
-         DKIYWaOCQeaxYrTUhOfYnTc+jyg3baVViUqXs=
+        bh=9x/Lsa7ti7gTSupQfhnG6ZXqf3XFn7FMKDh1kMENpvw=;
+        b=OMYsr3z2K+XI/ZQ+BWmynvWMXqDyN50mi/156DKaicA8Rq1srJ9KHg/MEuYUKlumnT
+         khIzm+PT8QwnBKfFhhBZD3936ZzZp4mBsnH010vHbZtwKHsTGxzwjQf6ktZDQ9RL+HC+
+         UWTNZ/vY2xZZM5bQDWFQv1M9j837LeV4nk538=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=Oqh/QrylE3qwclVle0OxUKedqq6NnQXFDpCsoYWtHv0=;
-        b=U63pJ/j9Wa+IM05e9M0aBcy5GJ27fpLwyrZkQuOFca+76jufhRJURctWLND8JUPVkG
-         GKMT8hdKuB2fbnke0eoSPrhj/rzOWbGpd33jcLuCEaw8mGwYdGNUMeFAlJH3yOEnVLxF
-         E7oafea0T7NYbnvYzEMjlAfP8jouXP2F2h0yDbm6eAKwSkkDo9eIBkBaiCtknyehvmjX
-         T78WL7NAr+AST09Ou6Yecy8klBubv6yFna211yUETCO/2+Gq/doJLzBeWhmgCOkPgBfh
-         YeKHELXrMCjMgaesPwouoQ5k5XaaCRSisQ9L0hRvO2wElORMJg6vcKNdADi5qPKrJgYL
-         Lt8g==
-X-Gm-Message-State: AOAM532WBym+OWKss9S+GM/wLLSDHU+4GR0ucaEnIidjDkW24ieYsqIC
-        /mbfdh6U7Et05srzhWz0S/XJxNUFlyMNRQ==
-X-Google-Smtp-Source: ABdhPJx6e05OQGJ+QZT0qastZmt3AkKAO2UcDJDt2uvjX/kPJTwsy5i1vlifmWG83l1eX6EOt4md1A==
-X-Received: by 2002:a17:90a:2b85:: with SMTP id u5mr1429319pjd.77.1643080963342;
-        Mon, 24 Jan 2022 19:22:43 -0800 (PST)
+        bh=9x/Lsa7ti7gTSupQfhnG6ZXqf3XFn7FMKDh1kMENpvw=;
+        b=kUciLzUhpQ1SDSAmITH3vzn1aP54FXWmEQUzfA9tc0J4ftkCq92P8SrBOzkZNvwMKi
+         tmrYY+JHacc/qmc+971oR8Yx8qJXQA7Y3/+xw5nuCALZS99RxBB0FK1m4zofCr1ksfgA
+         zGW1O6FnFyFb4DDsH0UhuIOS6puPJn4YksOmzeKMfqXFfRt2a1g41KiSV/zfJunv0A7X
+         zW6kFjQuHFejGEclxx2tY3iMCXOgTyj6PyMi0/WbC8vOgz12XUHThWkObctvaMNGxM01
+         cOlSpUAmGzQ39ofznm1KFjtmyjEoTqfuoVSGcQXVxWA7Sc59nK3Qej1ax64nOJmaw8Oe
+         4Trw==
+X-Gm-Message-State: AOAM533SpKKGm8QqI20he7PeY8B/dj/rX5tJm1K1xxUL1QjvdIKxgNMH
+        2QNw0jvMf5yiVGRVx/Q1HEkMPw==
+X-Google-Smtp-Source: ABdhPJzOSHR28VSWx0ruqnBVgXS6IERsb1Z/aoPvcziYyRFHW8j/TUdZRzIE1/2HprGg7JLj893NDg==
+X-Received: by 2002:a63:8c06:: with SMTP id m6mr13843903pgd.498.1643081757547;
+        Mon, 24 Jan 2022 19:35:57 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id kk17sm717517pjb.21.2022.01.24.19.22.42
+        by smtp.gmail.com with ESMTPSA id d4sm5854164pgw.30.2022.01.24.19.35.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jan 2022 19:22:42 -0800 (PST)
-Date:   Mon, 24 Jan 2022 19:22:42 -0800
+        Mon, 24 Jan 2022 19:35:57 -0800 (PST)
+Date:   Mon, 24 Jan 2022 19:35:56 -0800
 From:   Kees Cook <keescook@chromium.org>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+Cc:     David Sterba <dsterba@suse.cz>, David Sterba <dsterba@suse.com>,
+        Omar Sandoval <osandov@fb.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Edmund Dea <edmund.j.dea@intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Anitha Chrisanthus <anitha.chrisanthus@intel.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
 Subject: Re: linux-next: build failure after merge of the kspp tree
-Message-ID: <202201241918.D63B75BCF1@keescook>
-References: <20220125135546.1a2e1d6b@canb.auug.org.au>
- <20220125140221.5c1f4640@canb.auug.org.au>
+Message-ID: <202201241924.20B85B89@keescook>
+References: <20220125115757.20bc45e8@canb.auug.org.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220125140221.5c1f4640@canb.auug.org.au>
+In-Reply-To: <20220125115757.20bc45e8@canb.auug.org.au>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 02:02:21PM +1100, Stephen Rothwell wrote:
+On Tue, Jan 25, 2022 at 11:57:57AM +1100, Stephen Rothwell wrote:
 > Hi all,
 > 
-> On Tue, 25 Jan 2022 13:55:46 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >
-> > After merging the kspp tree, today's linux-next build (powerpc
-> > allyesconfig) failed like this:
-> > 
-> > drivers/gpu/drm/kmb/kmb_plane.c: In function 'kmb_plane_atomic_disable':
-> > drivers/gpu/drm/kmb/kmb_plane.c:165:34: error: array subscript 3 is above array bounds of 'struct layer_status[2]' [-Werror=array-bounds]
-> >   165 |                 kmb->plane_status[plane_id].ctrl = LCD_CTRL_GL2_ENABLE;
-> >       |                 ~~~~~~~~~~~~~~~~~^~~~~~~~~~
-> > In file included from drivers/gpu/drm/kmb/kmb_plane.c:17:
-> > drivers/gpu/drm/kmb/kmb_drv.h:61:41: note: while referencing 'plane_status'
-> >    61 |         struct layer_status             plane_status[KMB_MAX_PLANES];
-> >       |                                         ^~~~~~~~~~~~
-> > drivers/gpu/drm/kmb/kmb_plane.c:162:34: error: array subscript 2 is above array bounds of 'struct layer_status[2]' [-Werror=array-bounds]
-> >   162 |                 kmb->plane_status[plane_id].ctrl = LCD_CTRL_GL1_ENABLE;
-> >       |                 ~~~~~~~~~~~~~~~~~^~~~~~~~~~
-> > In file included from drivers/gpu/drm/kmb/kmb_plane.c:17:
-> > drivers/gpu/drm/kmb/kmb_drv.h:61:41: note: while referencing 'plane_status'
-> >    61 |         struct layer_status             plane_status[KMB_MAX_PLANES];
-> >       |                                         ^~~~~~~~~~~~
-> > 
-> > Exposed by commit
-> > 
-> >   4ba545781e20 ("Makefile: Enable -Warray-bounds")
-> > 
-> > Originally introduced by commmit
-> > 
-> >   7f7b96a8a0a1 ("drm/kmb: Add support for KeemBay Display")
-> > 
-> > Maybe should have been fixed by
-> > 
-> >   c026565fe9be ("drm/kmb: Enable alpha blended second plane")
-
-Yeah, that had fixed it at some point. :(
-
-> > 
-> > I have applied the following hack for now.
+> After merging the kspp tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
 > 
-> Actually, this one:
+> In file included from include/linux/string.h:253,
+>                  from include/linux/bitmap.h:11,
+>                  from include/linux/cpumask.h:12,
+>                  from arch/x86/include/asm/cpumask.h:5,
+>                  from arch/x86/include/asm/msr.h:11,
+>                  from arch/x86/include/asm/processor.h:22,
+>                  from arch/x86/include/asm/cpufeature.h:5,
+>                  from arch/x86/include/asm/thread_info.h:53,
+>                  from include/linux/thread_info.h:60,
+>                  from arch/x86/include/asm/preempt.h:7,
+>                  from include/linux/preempt.h:78,
+>                  from include/linux/spinlock.h:55,
+>                  from include/linux/wait.h:9,
+>                  from include/linux/mempool.h:8,
+>                  from include/linux/bio.h:8,
+>                  from fs/btrfs/ioctl.c:7:
+> In function 'fortify_memcpy_chk',
+>     inlined from 'btrfs_ioctl_encoded_write' at fs/btrfs/ioctl.c:5082:3:
+> include/linux/fortify-string.h:316:25: error: call to '__write_overflow_field' declared with attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror=attribute-warning]
+>   316 |                         __write_overflow_field(p_size_field, size);
+>       |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> include/linux/fortify-string.h:324:25: error: call to '__read_overflow2_field' declared with attribute warning: detected read beyond size of field (2nd parameter); maybe use struct_group()? [-Werror=attribute-warning]
+>   324 |                         __read_overflow2_field(q_size_field, size);
+>       |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> cc1: all warnings being treated as errors
 > 
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Tue, 25 Jan 2022 13:45:26 +1100
-> Subject: [PATCH] hack for building with -Warray-bounds
+> Caused by commit
 > 
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  drivers/gpu/drm/kmb/kmb_plane.c | 2 ++
->  1 file changed, 2 insertions(+)
+>   602670289b69 ("fortify: Detect struct member overflows in memcpy() at compile-time")
 > 
-> diff --git a/drivers/gpu/drm/kmb/kmb_plane.c b/drivers/gpu/drm/kmb/kmb_plane.c
-> index 00404ba4126d..b54197920712 100644
-> --- a/drivers/gpu/drm/kmb/kmb_plane.c
-> +++ b/drivers/gpu/drm/kmb/kmb_plane.c
-> @@ -158,12 +158,14 @@ static void kmb_plane_atomic_disable(struct drm_plane *plane,
->  	case LAYER_1:
->  		kmb->plane_status[plane_id].ctrl = LCD_CTRL_VL2_ENABLE;
->  		break;
-> +#if 0
->  	case LAYER_2:
->  		kmb->plane_status[plane_id].ctrl = LCD_CTRL_GL1_ENABLE;
->  		break;
->  	case LAYER_3:
->  		kmb->plane_status[plane_id].ctrl = LCD_CTRL_GL2_ENABLE;
->  		break;
-> +#endif
->  	}
->  
->  	kmb->plane_status[plane_id].disable = true;
+> interacting with commit
+> 
+>   504e1ebb6316 ("btrfs: add BTRFS_IOC_ENCODED_WRITE")
+> 
+> from the btrfs tree.
 
 Thanks!
 
-The prior thread about this was here:
-https://lore.kernel.org/lkml/20210825181807.1138053-1-keescook@chromium.org/
+I found the btrfs patch here:
+https://lore.kernel.org/all/ec08e6f559ab47b3300ca5a67e8fc984fd3f040f.1637179348.git.osandov@fb.com/
+
+> 
+> I applied the following hack:
+> 
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Tue, 25 Jan 2022 11:47:17 +1100
+> Subject: [PATCH] fix up for "btrfs: add BTRFS_IOC_ENCODED_WRITE"
+> 
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  fs/btrfs/ioctl.c | 11 ++++++++---
+>  1 file changed, 8 insertions(+), 3 deletions(-)
+> 
+> diff --git a/fs/btrfs/ioctl.c b/fs/btrfs/ioctl.c
+> index 73ad918a05a9..d34620034f8e 100644
+> --- a/fs/btrfs/ioctl.c
+> +++ b/fs/btrfs/ioctl.c
+> @@ -5079,9 +5079,14 @@ static int btrfs_ioctl_encoded_write(struct file *file, void __user *argp,
+>  		}
+>  		args.iov = compat_ptr(args32.iov);
+>  		args.iovcnt = args32.iovcnt;
+> -		memcpy(&args.offset, &args32.offset,
+> -		       sizeof(args) -
+> -		       offsetof(struct btrfs_ioctl_encoded_io_args, offset));
+> +		args.offset = args32.offset;
+> +		args.flags = args32.flags;
+> +		args.len = args32.len;
+> +		args.unencoded_len = args32.unencoded_len;
+> +		args.unencoded_offset = args32.unencoded_offset;
+> +		args.compression = args32.compression;
+> +		args.encryption = args32.encryption;
+> +		memcpy(args.reserved, args32.reserved, sizeof(args.reserved));
+>  #else
+>  		return -ENOTTY;
+>  #endif
+
+I'll see if I can construct something shorter using struct_group().
 
 -Kees
 

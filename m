@@ -2,74 +2,84 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 835C349B803
-	for <lists+linux-next@lfdr.de>; Tue, 25 Jan 2022 16:54:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DA6D49BAA4
+	for <lists+linux-next@lfdr.de>; Tue, 25 Jan 2022 18:53:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358245AbiAYPwd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 25 Jan 2022 10:52:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56462 "EHLO
+        id S1348467AbiAYRxn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 25 Jan 2022 12:53:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1582407AbiAYPtt (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 25 Jan 2022 10:49:49 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3286EC061771;
-        Tue, 25 Jan 2022 07:49:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E3A0CB818D0;
-        Tue, 25 Jan 2022 15:49:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11A37C340E5;
-        Tue, 25 Jan 2022 15:49:39 +0000 (UTC)
-Date:   Tue, 25 Jan 2022 10:49:38 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
+        with ESMTP id S243299AbiAYRxP (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 25 Jan 2022 12:53:15 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF1B0C06173B
+        for <linux-next@vger.kernel.org>; Tue, 25 Jan 2022 09:53:14 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id h14so3224476plf.1
+        for <linux-next@vger.kernel.org>; Tue, 25 Jan 2022 09:53:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=TdEpPt26Kd5ANAoShc8sbb2YgnlITBWoslxb5vWIwEY=;
+        b=YzgYg9UDALgHKyWstuZhVyuAwx51TXB1k3kl+r9JbhLEv9o5u0Znx7TJiFssZ5VvSH
+         qa+/jjs1oRx5XNbHLM5RkVGqX3YfJ2qwlh6Cs+H+WP+GpCRVf2bI7P5k5g0xjwHPJ3U+
+         tWtTDd8//8grF1A1PYoLrjaRlfST5DAEPJlmo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=TdEpPt26Kd5ANAoShc8sbb2YgnlITBWoslxb5vWIwEY=;
+        b=UBKqZRSZf8IN58gvL/74tQfxlxZvb9qcdiVR6wU+J5Ljo0pAjCry6J0WQKmE/yKzcD
+         Yo2vRylyOwO+tSyQuoUl8wSv0uBH/T3S9BR5qvDqb3BJV9znkxVMPlwzsAft0Gp78J3I
+         bG+L6XMFugPOavnlaR7IME1w0UTwzsRaRpPywpMmz+rFXW0ZskalE5d3YqtbkroN/hUd
+         S/I5LqrbjMOprmci3b+t0YW0mKJcwmNR0gHnpmnzOsKX0LlAgh3b/vgCP7PTEPw1OFPp
+         tjh87ZiwuX3lxAsuJC1eJc5Fcg6tgqwi1JTFcAseHNkAraKktjane6Lnbubv0cA1ZE1Z
+         1bVg==
+X-Gm-Message-State: AOAM532EMqphFckN41si/JQ00CqtX/wTYHomQm9NC8VMssubNOsJj1xP
+        6TJwakYibB3o27Nbsq5o86/KbA==
+X-Google-Smtp-Source: ABdhPJwNGoJh0Y7zhQk0/VKPgKclIQQBKnQecn44cSa8KoSPv8nXiehDcI7fK/eKC+dpURSfjOIW/A==
+X-Received: by 2002:a17:902:7143:b0:14a:62ed:c2a7 with SMTP id u3-20020a170902714300b0014a62edc2a7mr19990530plm.80.1643133194479;
+        Tue, 25 Jan 2022 09:53:14 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id p38sm14430104pgb.36.2022.01.25.09.53.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jan 2022 09:53:14 -0800 (PST)
+Date:   Tue, 25 Jan 2022 09:53:13 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
 Subject: Re: linux-next: build failure after merge of the kspp tree
-Message-ID: <20220125104938.566da04f@gandalf.local.home>
-In-Reply-To: <20220125233154.dac280ed36944c0c2fe6f3ac@kernel.org>
+Message-ID: <202201250952.2C89D08@keescook>
 References: <20220125145006.677e3709@canb.auug.org.au>
-        <202201242230.C54A6BCDFE@keescook>
-        <20220125222732.98ce2e445726e773f40e122e@kernel.org>
-        <20220125233154.dac280ed36944c0c2fe6f3ac@kernel.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+ <202201242230.C54A6BCDFE@keescook>
+ <20220125222732.98ce2e445726e773f40e122e@kernel.org>
+ <20220125090152.0c457aae@gandalf.local.home>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220125090152.0c457aae@gandalf.local.home>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, 25 Jan 2022 23:31:54 +0900
-Masami Hiramatsu <mhiramat@kernel.org> wrote:
-
-> Could you try this patch?
+On Tue, Jan 25, 2022 at 09:01:52AM -0500, Steven Rostedt wrote:
+> On Tue, 25 Jan 2022 22:27:32 +0900
+> Masami Hiramatsu <mhiramat@kernel.org> wrote:
 > 
-> >From 2982ba01367ec1f746a4f128512436e5325a7f9d Mon Sep 17 00:00:00 2001  
-> From: Masami Hiramatsu <mhiramat@kernel.org>
-> Date: Tue, 25 Jan 2022 23:19:30 +0900
-> Subject: [PATCH] tracing: Avoid -Warray-bounds warning for __rel_loc macro
+> > > But if this is true, I would imagine there would be plenty of other
+> > > warnings? I'm currently stumped.  
+> > 
+> > That is because __rel_loc is used only in the sample code in the kernel
+> > for testing. Other use-cases comes from user-space.
+> > Hmm, can we skip this boundary check for this example?
 > 
-> Since -Warray-bounds checks the destination size from the
-> type of given pointer, __assign_rel_str() macro gets warned
-> because it passes the pointer to the 'u32' field instead of
-> 'trace_event_raw_*' data structure.
-> Pass the data address calculated from the 'trace_event_raw_*'
-> instead of 'u32' __rel_loc field.
-> 
-> Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Cc: Kees Cook <keescook@chromium.org>
+> Is this only checked when __CHECKER__ is defined? If so, would this work?
 
-If this works, I'll add it instead of the one that just turns it off it
-__CHECKER__ is defined.
+__CHECKER__ is only for sparse. This is from re-enabling -Warray-bounds
+for gcc.
 
-Can you please let me know if it fixes the issue for you. I have a test run
-waiting on it.
-
-Thanks,
-
--- Steve
+-- 
+Kees Cook

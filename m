@@ -2,80 +2,130 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73BAF49C276
-	for <lists+linux-next@lfdr.de>; Wed, 26 Jan 2022 05:06:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3726949C3F6
+	for <lists+linux-next@lfdr.de>; Wed, 26 Jan 2022 08:01:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237484AbiAZEGs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 25 Jan 2022 23:06:48 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:55418 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237464AbiAZEGs (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 25 Jan 2022 23:06:48 -0500
+        id S237495AbiAZHBe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 26 Jan 2022 02:01:34 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:60578 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229979AbiAZHBe (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 26 Jan 2022 02:01:34 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 34820617AA;
-        Wed, 26 Jan 2022 04:06:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB322C340E3;
-        Wed, 26 Jan 2022 04:06:46 +0000 (UTC)
-Date:   Tue, 25 Jan 2022 23:06:45 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4A5BAB81C0C;
+        Wed, 26 Jan 2022 07:01:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DB70C340E3;
+        Wed, 26 Jan 2022 07:01:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643180491;
+        bh=DnMOT2vlu2opZbnfCdapvRfBKqFGLQL1Y5Zbwh5314g=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=SE8ra/wvzUJDhk8ChNZk2kYH5wi9CXIf7KYV1Uw7XnNNJEqrL5Oetr1kfhbYIvxvw
+         3AFkP2fG6WYk8p52Kuq6z3cfAzvUaP4GXrkTcR4FR8iFnJttDl/B63UnLdex/TR+9B
+         HwpU+D5MjDB9Jw3ijrM2E+SyCyOMnngJuio3fdS3hB54xtXltggj67kAaNM7wj7+S+
+         qALdsuInsQAV3jRiqjS4tQV8bO54rfZPuuFqENyysCizjCFFD0JLJeAqSEJ9iFeRJ8
+         Tz0RnBtRM7+WdNrvAEEeJHegTUcFyfoIumaZ5pPWO7cVaWpz2nMNPZUqvDyCu/cVlD
+         jRWY/DGC5WlSw==
+Date:   Wed, 26 Jan 2022 16:01:27 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Beau Belgrave <beaub@linux.microsoft.com>
-Subject: Re: linux-next: build failure after merge of the kspp tree
-Message-ID: <20220125230645.097dad3a@gandalf.local.home>
-In-Reply-To: <20220126125252.2ef18d786cfaf4a135a2d10f@kernel.org>
-References: <20220125145006.677e3709@canb.auug.org.au>
-        <202201242230.C54A6BCDFE@keescook>
-        <20220125222732.98ce2e445726e773f40e122e@kernel.org>
-        <20220125233154.dac280ed36944c0c2fe6f3ac@kernel.org>
-        <202201251256.CCCBE9851E@keescook>
-        <20220125162326.3d1ca960@gandalf.local.home>
-        <20220125162859.2b3cc8a0@gandalf.local.home>
-        <202201251402.0FB08DB@keescook>
-        <20220125172114.6807ed8f@gandalf.local.home>
-        <20220126093538.893fb44a7cb0a7cd840c7fdb@kernel.org>
-        <20220125201634.698cc777@gandalf.local.home>
-        <20220126125252.2ef18d786cfaf4a135a2d10f@kernel.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
+        linux-next@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] perf: Avoid -Warray-bounds warning for __rel_loc macro
+Message-Id: <20220126160127.f3deb7f73e87066e94218a48@kernel.org>
+In-Reply-To: <20220125220037.2738923-1-keescook@chromium.org>
+References: <20220125220037.2738923-1-keescook@chromium.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, 26 Jan 2022 12:52:52 +0900
-Masami Hiramatsu <mhiramat@kernel.org> wrote:
+On Tue, 25 Jan 2022 14:00:37 -0800
+Kees Cook <keescook@chromium.org> wrote:
 
-> > On Wed, 26 Jan 2022 09:35:38 +0900
-> > Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> >   
-> > > I think Kees' idea seems better. If you and Beau are good, I will update
-> > > the macros for __rel_loc. (This requires to change some user-space
-> > > application which Beau is making too.)  
-> > 
-> > If Beau is OK with it, I'm OK with it too. I need to release a new version
-> > of libtraceevent anyway, and I can make the update for that too.
-> > 
-> > Who's adding the patch (if Beau says it's OK), you or Kees?  
+> As done for trace_events.h, also fix the __rel_loc macro in perf.h,
+> which silences the -Warray-bounds warning:
 > 
-> This will update the __rel_loc spec, so I'll do it :)
+> In file included from ./include/linux/string.h:253,
+>                  from ./include/linux/bitmap.h:11,
+>                  from ./include/linux/cpumask.h:12,
+>                  from ./include/linux/mm_types_task.h:14,
+>                  from ./include/linux/mm_types.h:5,
+>                  from ./include/linux/buildid.h:5,
+>                  from ./include/linux/module.h:14,
+>                  from samples/trace_events/trace-events-sample.c:2:
+> In function '__fortify_strcpy',
+>     inlined from 'perf_trace_foo_rel_loc' at samples/trace_events/./trace-events-sample.h:519:1:
+> ./include/linux/fortify-string.h:47:33: warning: '__builtin_strcpy' offset 12 is out of the bounds [
+> 0, 4] [-Warray-bounds]
+>    47 | #define __underlying_strcpy     __builtin_strcpy
+>       |                                 ^
+> ./include/linux/fortify-string.h:445:24: note: in expansion of macro '__underlying_strcpy'
+>   445 |                 return __underlying_strcpy(p, q);
+>       |                        ^~~~~~~~~~~~~~~~~~~
+> 
+> Also make __data struct member a proper flexible array to avoid future
+> problems.
+> 
 
-As I replied to the other email, I don't think we want to do this.
+This looks good to me.
 
-As "rel" means relative, I think it makes more sense to keep it as is, and
-not have it just be from the data section. That may be even more confusing.
+Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
 
-But I'll wait for Beau to answer.
+BTW, same macro is in the include/trace/bpf_probe.h.
+I'm not sure bpf using this macro, should we update it for
+consistency?
 
-Note, I added both your and Kees patches to my queue and I'm currently
-testing it. You can see what I'm testing here:
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Masami Hiramatsu <mhiramat@kernel.org>
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>  include/trace/perf.h         | 5 +++--
+>  include/trace/trace_events.h | 2 +-
+>  2 files changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/include/trace/perf.h b/include/trace/perf.h
+> index b77d09c70a93..5800d13146c3 100644
+> --- a/include/trace/perf.h
+> +++ b/include/trace/perf.h
+> @@ -26,8 +26,9 @@
+>  
+>  #undef __get_rel_dynamic_array
+>  #define __get_rel_dynamic_array(field)	\
+> -		((void *)(&__entry->__rel_loc_##field) +	\
+> -		 sizeof(__entry->__rel_loc_##field) +		\
+> +		((void *)__entry +					\
+> +		 offsetof(typeof(*__entry), __rel_loc_##field) +	\
+> +		 sizeof(__entry->__rel_loc_##field) +			\
+>  		 (__entry->__rel_loc_##field & 0xffff))
+>  
+>  #undef __get_rel_dynamic_array_len
+> diff --git a/include/trace/trace_events.h b/include/trace/trace_events.h
+> index cefefed18e85..7c86cc541c7a 100644
+> --- a/include/trace/trace_events.h
+> +++ b/include/trace/trace_events.h
+> @@ -134,7 +134,7 @@ TRACE_MAKE_SYSTEM_STR();
+>  	struct trace_event_raw_##name {					\
+>  		struct trace_entry	ent;				\
+>  		tstruct							\
+> -		char			__data[0];			\
+> +		char			__data[];			\
+>  	};								\
+>  									\
+>  	static struct trace_event_class event_class_##name;
+> -- 
+> 2.30.2
+> 
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git/log/?h=ftrace/core
 
--- Steve
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>

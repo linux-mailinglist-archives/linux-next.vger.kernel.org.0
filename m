@@ -2,95 +2,85 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71CF449D528
-	for <lists+linux-next@lfdr.de>; Wed, 26 Jan 2022 23:18:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3C2749D5AD
+	for <lists+linux-next@lfdr.de>; Wed, 26 Jan 2022 23:50:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229490AbiAZWSE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 26 Jan 2022 17:18:04 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:33339 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233059AbiAZWSD (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 26 Jan 2022 17:18:03 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JkdQK4c5nz4y4h;
-        Thu, 27 Jan 2022 09:18:01 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1643235482;
-        bh=pqKmV1+sA3ysIMqwWvsV/2bshz9rBVkAJxRMcw0Ep7A=;
-        h=Date:From:To:Cc:Subject:From;
-        b=rhyflr3TRldBrcKcVF/IPAlxOT9tW+SQKtr0NPr6TcpzAKVrN/JznW+pyP9m4Vk/B
-         nIQNL7NyQU6FnHKiftZwACZEabc5e1ecIkcayNSSfavVlIQF/A0JylKHCMbRMSisCb
-         IdHFT0jub43WAwmL0GN6kQBa0LEQTHaoM12M5JpzhmOGdmsgSulwiidHzbSR36MI6t
-         2tAVoxTzHtH/YZ5YgW2AASc+wM2MZDp0bKb06vviOMRvuhZCdU5XP7uAvxms87YPR/
-         754TH1ewQcT5xYXS4MbZ0fCQeHfU4hhRJwQPJ76qVxK6bg7zM+RDFXCnEaK5AzyO3Y
-         UlxKd2NuXImgA==
-Date:   Thu, 27 Jan 2022 09:18:00 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>
-Cc:     "Maciej W. Rozycki" <macro@embecosm.com>,
+        id S230027AbiAZWuR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 26 Jan 2022 17:50:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34372 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229904AbiAZWuQ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 26 Jan 2022 17:50:16 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51445C06161C;
+        Wed, 26 Jan 2022 14:50:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=bsJ43rsX9/xKUt0cosEyzB1KK8mU+O0sfDNz58+hwX4=; b=U7LrV54n5uf4VALn9huJ+bso/e
+        KRX3bpf47wOmGOEb3C62aFOaU0Jp1FgZMZKb69n033moM9KSAq6srSHKgeJS/gk9Dsq5KbZYAMeRo
+        LITrsuZoGuMhl1QvjNO8cw4ZVbMRSlO6QalvGYQfc/ZYT1BQET2fm3X14iobtG8UePiNkdWYMqhA/
+        x0soNUKMEIfazHPHjHfEwYiWCwCj8zJL0ZNgl40CNy10weUbdmP3YJtZ+bQxH3RFum3UCGPv13O+F
+        QHNc0V8pdhJpr2xRcyrS/w6Zl4ha/IlWpegmugxaKUdGz0UVzyjnffz36l4zInvmBl/QQ1faxVzL6
+        pjdK0iWw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56894)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1nCr7E-0003sT-2V; Wed, 26 Jan 2022 22:50:12 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1nCr7B-0004qk-8t; Wed, 26 Jan 2022 22:50:09 +0000
+Date:   Wed, 26 Jan 2022 22:50:09 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warnings after merge of the tty.current tree
-Message-ID: <20220127091800.1e8f333b@canb.auug.org.au>
+Subject: Re: linux-next: Signed-off-by missing for commits in the net-next
+ tree
+Message-ID: <YfHQIZ07stBQTNqm@shell.armlinux.org.uk>
+References: <20220127075702.1b0b73c2@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/v=2uYWWNVzpOwakz1k7_3mM";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220127075702.1b0b73c2@canb.auug.org.au>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/v=2uYWWNVzpOwakz1k7_3mM
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, Jan 27, 2022 at 07:57:02AM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Commits
+> 
+>   04a0683f7db4 ("net: stmmac: convert to phylink_generic_validate()")
+>   f4c296c90976 ("net: stmmac: remove phylink_config.pcs_poll usage")
+>   d194923d51c9 ("net: stmmac: fill in supported_interfaces")
+>   92c3807b9ac3 ("net: stmmac: convert to phylink_get_linkmodes()")
+>   be6ec5b70266 ("net: xpcs: add support for retrieving supported interface modes")
+> 
+> are missing a Signed-off-by from their author.
 
-Hi all,
+Hi Stephen,
 
-After merging the tty.current tree, today's linux-next build (x86_64
-allmodconfig) produced these warnings:
+Sigh, this is more vim stupidity. The commits _look_ fine in vim and
+look fine in git log on an 80 column display, but that is because the
+"Tested-by" line somehow ended up with the perfect amount of space
+characters to make it so.
 
-In file included from <command-line>:
-./usr/include/linux/cyclades.h:6:2: warning: #warning "Support for features=
- provided by this header has been removed" [-Wcpp]
-    6 | #warning "Support for features provided by this header has been rem=
-oved"
-      |  ^~~~~~~
-./usr/include/linux/cyclades.h:7:2: warning: #warning "Please consider upda=
-ting your code" [-Wcpp]
-    7 | #warning "Please consider updating your code"
-      |  ^~~~~~~
+This is not the first time this has happened - it keeps happening, and
+I've no clue why it keeps happening, other than rediculous vi behaviour.
+I'm sorry, but I don't see any solution to it at the moment. Maybe
+someone can suggest something that (a) prevents it happening when I
+paste in the Tested-by line, and (b) makes vim show when lines in a
+commit message are longer than 80 characters?
 
-
-Introduced by commit
-
-  f23653fe6447 ("tty: Partially revert the removal of the Cyclades public A=
-PI")
-
-This is a bit annoying :-(
-
-Can we exclude include/uapi/linux/cyclades.h from the headers checking,
-please?
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/v=2uYWWNVzpOwakz1k7_3mM
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHxyJgACgkQAVBC80lX
-0Gz03Af7B8GI4oPRwLbhNgw+eRGOyKrn/WyMDq70A1kJTPi07ZZrUXXSi4K2kKci
-6LVCg6TUQU7D+d2T6FbSfqwgpyg2mWsrGpwWGxRyoIfLyWdSKzbn9Y+7YHY32t0H
-WLNkvD2P55NdqC0wu9f12Pl7plC9LkrX2ZZPXtW+9nCuxndAcZ093bfqYBeYw1T0
-Ij4bc8U7ME8g9ZCOA+RWAk0u8SsUeqm9IZTL/ZziSUXWVIZHtcRZkAPQ/PRqdZk0
-qB2ZvMQqMd10CPq/Bch30/Yiqv4sQnf4Zb92UnX6Ky4kpo2TMPerxgvFIwpsK25E
-V9gPEx6h/NRIuJGajdF/MruKOsfsMQ==
-=Iusj
------END PGP SIGNATURE-----
-
---Sig_/v=2uYWWNVzpOwakz1k7_3mM--
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

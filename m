@@ -2,102 +2,78 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9E0149D29C
-	for <lists+linux-next@lfdr.de>; Wed, 26 Jan 2022 20:42:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BE7C49D3D3
+	for <lists+linux-next@lfdr.de>; Wed, 26 Jan 2022 21:50:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231910AbiAZTmC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 26 Jan 2022 14:42:02 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:33272 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232787AbiAZTmC (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 26 Jan 2022 14:42:02 -0500
-Received: from kbox (c-73-140-2-214.hsd1.wa.comcast.net [73.140.2.214])
-        by linux.microsoft.com (Postfix) with ESMTPSA id F31F520B6C61;
-        Wed, 26 Jan 2022 11:42:01 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com F31F520B6C61
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1643226122;
-        bh=GQsjA0Zi3xGMLtKkvPmpas2no5KqOyzZf6JJLTyRjcA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sLyHbYBUphkL/qvthcOZh3zJEMIZLZw9vAHuW8dNKIYzapXzwhVYEG3iR4pr99JcV
-         YZ56i2/YBJzJmTmWokxp91i0ihULT+NAf3GIV9ocFdApKIUa8VH1LgJWr0ENHx4rnC
-         ITqNbRoEJwYq+qI3YGHFzLBDKAEy2yXT+exyXRy8=
-Date:   Wed, 26 Jan 2022 11:41:38 -0800
-From:   Beau Belgrave <beaub@linux.microsoft.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        id S230204AbiAZUuC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 26 Jan 2022 15:50:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34860 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229510AbiAZUuC (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 26 Jan 2022 15:50:02 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A619C06161C;
+        Wed, 26 Jan 2022 12:50:02 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JkbSj322Yz4xmj;
+        Thu, 27 Jan 2022 07:49:57 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1643230197;
+        bh=fSP4pk+gLT9lXhwLtplW9408kxdERgKMUbPCTn7gWdw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ggmf7Dmsd48Y8VoxnCusCkLdRZc7DHCPjPoqooKIUlPxhpStIe0Tj/lWPcfKXsMx/
+         NvknFIZNeW4q8T/b8T7AAKTPKu7cGhB1/waGCCOdl/yjFl5FaTzwQKv6DAcz9cAlEC
+         fC3FwK7EY0mwkLx1to3BlTePCO5hNxDUcoEp9Pqn4GMunGSmgRCM+W996+0xwMiD8D
+         qKmiOTDhRIaZY4A3AruiLwLAM6BcJoFpbw+/TG8IJYdgFbY0ckqc3D2NTxEi++5cSt
+         DCSBLXWQ1NcxBO15BPA2qz12pwKGkA9kUDCrrN/C3kBhdYfsJMtC+xSdDUzl1OVRX4
+         2xfoKoGRoxn/w==
+Date:   Thu, 27 Jan 2022 07:49:55 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Shawn Guo <shawnguo@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the kspp tree
-Message-ID: <20220126194138.GA4298@kbox>
-References: <20220125233154.dac280ed36944c0c2fe6f3ac@kernel.org>
- <202201251256.CCCBE9851E@keescook>
- <20220125162326.3d1ca960@gandalf.local.home>
- <20220125162859.2b3cc8a0@gandalf.local.home>
- <202201251402.0FB08DB@keescook>
- <20220125172114.6807ed8f@gandalf.local.home>
- <20220126093538.893fb44a7cb0a7cd840c7fdb@kernel.org>
- <20220125201634.698cc777@gandalf.local.home>
- <202201251917.18361B4F6@keescook>
- <20220125222545.353fa400@gandalf.local.home>
+Subject: linux-next: Signed-off-by missing for commit in the imx-mxs tree
+Message-ID: <20220127074955.11974c91@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220125222545.353fa400@gandalf.local.home>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: multipart/signed; boundary="Sig_/eGW8Oxu21XfY5MvfncKOw21";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 10:26:11PM -0500, Steven Rostedt wrote:
-> On Tue, 25 Jan 2022 19:18:53 -0800
-> Kees Cook <keescook@chromium.org> wrote:
-> 
-> > On Tue, Jan 25, 2022 at 08:16:34PM -0500, Steven Rostedt wrote:
-> > > On Wed, 26 Jan 2022 09:35:38 +0900
-> > > Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> > >   
-> > > > I think Kees' idea seems better. If you and Beau are good, I will update
-> > > > the macros for __rel_loc. (This requires to change some user-space
-> > > > application which Beau is making too.)  
+--Sig_/eGW8Oxu21XfY5MvfncKOw21
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I like the simplicity of using offset from the start of data, however,
-we would have to save the start of data somewhere for this. The user
-trace processing side won't know the size of the common header (unless I
-missed something elsewhere got added).
+Hi all,
 
-Due to this, I would *prefer* to have the offset still be the offset
-from the __rel_loc entry. That makes it absolutely clear to both user and
-kernel without requiring any additional information where to find it.
+Commit
 
-> > > 
-> > > If Beau is OK with it, I'm OK with it too. I need to release a new version
-> > > of libtraceevent anyway, and I can make the update for that too.
-> > > 
-> > > Who's adding the patch (if Beau says it's OK), you or Kees?  
-> > 
-> > I don't know anything about libtraceevent, so hopefully not me! :) The
-> > patches Masami and I already sent fix the warning, so I leave it you
-> > y'all to decide if you want to make the internals a bit simpler.
-> > 
-> 
-> 
-> Thinking about this more. I may just take both your patches, and leave it
-> as an offset from the location of the descriptor. It's closer to the
-> meaning of "relative" than doing it as a fixed offset from data.
-> 
-> And then no other patches or user space needs to be changed.
-> 
+  339cc9b208bd ("arm64: dts: imx8qm: Drop CPU 'arm,armv8' compatible")
 
-Right, and on the user side we will not know the start of the "data" /
-fixed offset without carrying back that information somehow, due to the
-common header size not being a fixed length forever.
+is missing a Signed-off-by from its committer.
 
-> Thanks,
-> 
-> -- Steve
+--=20
+Cheers,
+Stephen Rothwell
 
-Thanks,
--Beau
+--Sig_/eGW8Oxu21XfY5MvfncKOw21
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHxs/MACgkQAVBC80lX
+0GzbmAf+MAXDPpHjeMY4uCZdbK57rAzApS8smtzHszCi1l2EnbyCoOnSzNmx2QOp
+wnPb3/A0SLubQ3SAFPY1eqOctJtBDOxwwobnXw6nDIYC5zIr6pSco4/Dc9I30hsn
+Bdy/jkeGmSimrILD1+c9/rgUWbX1pqTe2nfDVZdh5BHKFjx5bkLbs+q3u883IkWq
+Gk4xNS5HYkk9gK6XOxkprqs2VEeeqGRx3bMoCG7BqN9uEQsx9MUNgreOlgao25Zx
+HeND5HwulfWhryOugp9eCyY/XTpEeWTRXaE82nyixQBTilfxrUxyUygzsh/oFv1K
+EDPjBqf+zVD/ffP4bv4fIW7TzhRmPg==
+=6WKw
+-----END PGP SIGNATURE-----
+
+--Sig_/eGW8Oxu21XfY5MvfncKOw21--

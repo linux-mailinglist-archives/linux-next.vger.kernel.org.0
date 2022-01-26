@@ -2,78 +2,85 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BE7C49D3D3
-	for <lists+linux-next@lfdr.de>; Wed, 26 Jan 2022 21:50:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 220C349D3EA
+	for <lists+linux-next@lfdr.de>; Wed, 26 Jan 2022 21:57:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230204AbiAZUuC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 26 Jan 2022 15:50:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34860 "EHLO
+        id S231469AbiAZU5H (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 26 Jan 2022 15:57:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbiAZUuC (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 26 Jan 2022 15:50:02 -0500
+        with ESMTP id S231445AbiAZU5G (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 26 Jan 2022 15:57:06 -0500
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A619C06161C;
-        Wed, 26 Jan 2022 12:50:02 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B725C06161C;
+        Wed, 26 Jan 2022 12:57:06 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JkbSj322Yz4xmj;
-        Thu, 27 Jan 2022 07:49:57 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jkbcw0LRfz4xmx;
+        Thu, 27 Jan 2022 07:57:03 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1643230197;
-        bh=fSP4pk+gLT9lXhwLtplW9408kxdERgKMUbPCTn7gWdw=;
+        s=201702; t=1643230625;
+        bh=cjuTzKhDkCsuuyLW9b96xzPl6QhdHMRo44uq08vCYms=;
         h=Date:From:To:Cc:Subject:From;
-        b=ggmf7Dmsd48Y8VoxnCusCkLdRZc7DHCPjPoqooKIUlPxhpStIe0Tj/lWPcfKXsMx/
-         NvknFIZNeW4q8T/b8T7AAKTPKu7cGhB1/waGCCOdl/yjFl5FaTzwQKv6DAcz9cAlEC
-         fC3FwK7EY0mwkLx1to3BlTePCO5hNxDUcoEp9Pqn4GMunGSmgRCM+W996+0xwMiD8D
-         qKmiOTDhRIaZY4A3AruiLwLAM6BcJoFpbw+/TG8IJYdgFbY0ckqc3D2NTxEi++5cSt
-         DCSBLXWQ1NcxBO15BPA2qz12pwKGkA9kUDCrrN/C3kBhdYfsJMtC+xSdDUzl1OVRX4
-         2xfoKoGRoxn/w==
-Date:   Thu, 27 Jan 2022 07:49:55 +1100
+        b=EIgIIWetf8yFVGQHZc+zkqlkKeY6ufzzGm4FO39lFqtr292YNV696BmrRJb5mAOjV
+         wiH/mcWFZxlxjSjtcIXffHrC6xIzTCbVP8W7bvsPLh/ciXrOPBORmGIhCPNczqZ15c
+         fJFUIjG/U5i9hw5lP8HDt59GKiqC5Q62b2szkr74nU/G6akJZVWzt6A3h8lCcD3MOO
+         TGwIlnpzbgJkjblkjoZtAccs/nx3uh/WqcJgQ/NP5xy8JLEpAtSUlqvC+UfewhoBTr
+         6cjq8qaKPZDiM7bqKKHgXc0JZQ1tczD95+shzMGhfcQRUEnWj7MaxnNn5mIXWPRrGs
+         U16mqkg80ntUw==
+Date:   Thu, 27 Jan 2022 07:57:02 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Shawn Guo <shawnguo@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the imx-mxs tree
-Message-ID: <20220127074955.11974c91@canb.auug.org.au>
+Subject: linux-next: Signed-off-by missing for commits in the net-next tree
+Message-ID: <20220127075702.1b0b73c2@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/eGW8Oxu21XfY5MvfncKOw21";
+Content-Type: multipart/signed; boundary="Sig_/ho3yJJm664Ov7YLS+Zw88gM";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/eGW8Oxu21XfY5MvfncKOw21
+--Sig_/ho3yJJm664Ov7YLS+Zw88gM
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Commit
+Commits
 
-  339cc9b208bd ("arm64: dts: imx8qm: Drop CPU 'arm,armv8' compatible")
+  04a0683f7db4 ("net: stmmac: convert to phylink_generic_validate()")
+  f4c296c90976 ("net: stmmac: remove phylink_config.pcs_poll usage")
+  d194923d51c9 ("net: stmmac: fill in supported_interfaces")
+  92c3807b9ac3 ("net: stmmac: convert to phylink_get_linkmodes()")
+  be6ec5b70266 ("net: xpcs: add support for retrieving supported interface =
+modes")
 
-is missing a Signed-off-by from its committer.
+are missing a Signed-off-by from their author.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/eGW8Oxu21XfY5MvfncKOw21
+--Sig_/ho3yJJm664Ov7YLS+Zw88gM
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHxs/MACgkQAVBC80lX
-0GzbmAf+MAXDPpHjeMY4uCZdbK57rAzApS8smtzHszCi1l2EnbyCoOnSzNmx2QOp
-wnPb3/A0SLubQ3SAFPY1eqOctJtBDOxwwobnXw6nDIYC5zIr6pSco4/Dc9I30hsn
-Bdy/jkeGmSimrILD1+c9/rgUWbX1pqTe2nfDVZdh5BHKFjx5bkLbs+q3u883IkWq
-Gk4xNS5HYkk9gK6XOxkprqs2VEeeqGRx3bMoCG7BqN9uEQsx9MUNgreOlgao25Zx
-HeND5HwulfWhryOugp9eCyY/XTpEeWTRXaE82nyixQBTilfxrUxyUygzsh/oFv1K
-EDPjBqf+zVD/ffP4bv4fIW7TzhRmPg==
-=6WKw
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHxtZ4ACgkQAVBC80lX
+0Gw4sAf9FhJRCPchnhM+UlW0VC/k89qoLcm6DAiZolMvGa2RVHkBIbKRJtjir0BH
+pmE/nQzOmFB+FvPSMST0TOk1CIoYglqz6gvZFkGx8vcQAU0iR+V3oT6zHBDwa5tu
+tqhMfNjoOe4ITQfEN8TXs2gg9f82DJ74+1XBkD9bWwjAKn+FBTiaICmXDsKf6Y+g
+jjNjt843AIegCaP1uwDBHZmDF0MdBI6dR80EMZctXpBN4DEr9rQdV6fDRb+lwCqy
+c3bsMjKJiztc3QvC8lD50DOy8PdYOTvN+exhDOI38nagSkTvpEbUl4XQlJaCPtvY
+kGW9Z38kYTrfxnJwWuLxMM3yXVKUSw==
+=SxhN
 -----END PGP SIGNATURE-----
 
---Sig_/eGW8Oxu21XfY5MvfncKOw21--
+--Sig_/ho3yJJm664Ov7YLS+Zw88gM--

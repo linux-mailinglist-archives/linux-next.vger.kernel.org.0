@@ -2,74 +2,102 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E7B249C4E0
-	for <lists+linux-next@lfdr.de>; Wed, 26 Jan 2022 09:08:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9E0149D29C
+	for <lists+linux-next@lfdr.de>; Wed, 26 Jan 2022 20:42:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238132AbiAZIIW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 26 Jan 2022 03:08:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53280 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230011AbiAZIIV (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 26 Jan 2022 03:08:21 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A9D5C06161C;
-        Wed, 26 Jan 2022 00:08:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 22BCAB81C10;
-        Wed, 26 Jan 2022 08:08:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1342C340E7;
-        Wed, 26 Jan 2022 08:08:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643184498;
-        bh=XN8ZU255NqtT3dXXG59OkaiN7aG9z4IlJk7nbQNu+GQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Wkf5ihcdzbGwIpNoYAPpKMDJ8xGEse7fE5gRbWUNJxEXzcuu9R/2r8ZbaIvdvEa9z
-         Cv/SypKpDnrEs29n0UnGvW8Jryl0hUCddaEEPGoXWoVARkXjqpoccciVn4E81LjEyX
-         5zKDd8cS0u7tn5AthqAGejWxai8071ZN8/6TOVp4Bs+gTdZsrRJyg9Ugsk60HyjyZS
-         /lDzdcN7y7zFQCKSdXcNN4kvDhwbDTDIGSMr4R3xHvz+zlkpcxmwE8cZuwjhfCYR+X
-         Gek00rbqqW0Sxl8R8AllcNke61BLV6N5BzSyDcc8y0ieXg5CqzplR65K749ty34dxj
-         f/3NtfonhL78w==
-Received: by mail-pg1-f176.google.com with SMTP id t32so20474353pgm.7;
-        Wed, 26 Jan 2022 00:08:18 -0800 (PST)
-X-Gm-Message-State: AOAM533QJ7NkZL5jIlfuIjkgqAYkUYNreUkRbUzl2t5Wk+o+qAR2snDi
-        HxdbNGPdFVqzbrNFWvnczLq1tgBTgWZAmOJVn0k=
-X-Google-Smtp-Source: ABdhPJzfiJTEL7wh3VAbWPxzy9gvcrIllCO0pta1GrOhUIBtV2oFMFrvhmsoH6xav3ovUfE0jCa+rJBgVxcFM2f009I=
-X-Received: by 2002:a63:8f43:: with SMTP id r3mr18309825pgn.195.1643184498586;
- Wed, 26 Jan 2022 00:08:18 -0800 (PST)
-MIME-Version: 1.0
-References: <20220126093305.5726fcbb@canb.auug.org.au>
-In-Reply-To: <20220126093305.5726fcbb@canb.auug.org.au>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Wed, 26 Jan 2022 09:08:07 +0100
-X-Gmail-Original-Message-ID: <CAJKOXPcP0ZZrmNg2X5k8WOgDqJdpOsX3dTe_DgdimPrAgh=j0A@mail.gmail.com>
-Message-ID: <CAJKOXPcP0ZZrmNg2X5k8WOgDqJdpOsX3dTe_DgdimPrAgh=j0A@mail.gmail.com>
-Subject: Re: linux-next: Signed-off-by missing for commit in the samsung-krzk tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        id S231910AbiAZTmC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 26 Jan 2022 14:42:02 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:33272 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232787AbiAZTmC (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 26 Jan 2022 14:42:02 -0500
+Received: from kbox (c-73-140-2-214.hsd1.wa.comcast.net [73.140.2.214])
+        by linux.microsoft.com (Postfix) with ESMTPSA id F31F520B6C61;
+        Wed, 26 Jan 2022 11:42:01 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com F31F520B6C61
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1643226122;
+        bh=GQsjA0Zi3xGMLtKkvPmpas2no5KqOyzZf6JJLTyRjcA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sLyHbYBUphkL/qvthcOZh3zJEMIZLZw9vAHuW8dNKIYzapXzwhVYEG3iR4pr99JcV
+         YZ56i2/YBJzJmTmWokxp91i0ihULT+NAf3GIV9ocFdApKIUa8VH1LgJWr0ENHx4rnC
+         ITqNbRoEJwYq+qI3YGHFzLBDKAEy2yXT+exyXRy8=
+Date:   Wed, 26 Jan 2022 11:41:38 -0800
+From:   Beau Belgrave <beaub@linux.microsoft.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: linux-next: build failure after merge of the kspp tree
+Message-ID: <20220126194138.GA4298@kbox>
+References: <20220125233154.dac280ed36944c0c2fe6f3ac@kernel.org>
+ <202201251256.CCCBE9851E@keescook>
+ <20220125162326.3d1ca960@gandalf.local.home>
+ <20220125162859.2b3cc8a0@gandalf.local.home>
+ <202201251402.0FB08DB@keescook>
+ <20220125172114.6807ed8f@gandalf.local.home>
+ <20220126093538.893fb44a7cb0a7cd840c7fdb@kernel.org>
+ <20220125201634.698cc777@gandalf.local.home>
+ <202201251917.18361B4F6@keescook>
+ <20220125222545.353fa400@gandalf.local.home>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220125222545.353fa400@gandalf.local.home>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, 25 Jan 2022 at 23:33, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> Commits
->
->   1f22c720691e ("Revert "arm64: dts: fsd: Add initial device tree support"")
->   191448a71471 ("Revert "arm64: dts: fsd: Add initial pinctrl support"")
->
-> are missing a Signed-off-by from their author and committer.
->
-> Reverts are changes too and so should be signed off and have reasonable
-> ("why did we do this?") changelogs.
+On Tue, Jan 25, 2022 at 10:26:11PM -0500, Steven Rostedt wrote:
+> On Tue, 25 Jan 2022 19:18:53 -0800
+> Kees Cook <keescook@chromium.org> wrote:
+> 
+> > On Tue, Jan 25, 2022 at 08:16:34PM -0500, Steven Rostedt wrote:
+> > > On Wed, 26 Jan 2022 09:35:38 +0900
+> > > Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> > >   
+> > > > I think Kees' idea seems better. If you and Beau are good, I will update
+> > > > the macros for __rel_loc. (This requires to change some user-space
+> > > > application which Beau is making too.)  
 
-Yes, you're right. I am dropping the commits (with reverts) but was
-too late yesterday. I'll fix it today.
+I like the simplicity of using offset from the start of data, however,
+we would have to save the start of data somewhere for this. The user
+trace processing side won't know the size of the common header (unless I
+missed something elsewhere got added).
 
-Best regards,
-Krzysztof
+Due to this, I would *prefer* to have the offset still be the offset
+from the __rel_loc entry. That makes it absolutely clear to both user and
+kernel without requiring any additional information where to find it.
+
+> > > 
+> > > If Beau is OK with it, I'm OK with it too. I need to release a new version
+> > > of libtraceevent anyway, and I can make the update for that too.
+> > > 
+> > > Who's adding the patch (if Beau says it's OK), you or Kees?  
+> > 
+> > I don't know anything about libtraceevent, so hopefully not me! :) The
+> > patches Masami and I already sent fix the warning, so I leave it you
+> > y'all to decide if you want to make the internals a bit simpler.
+> > 
+> 
+> 
+> Thinking about this more. I may just take both your patches, and leave it
+> as an offset from the location of the descriptor. It's closer to the
+> meaning of "relative" than doing it as a fixed offset from data.
+> 
+> And then no other patches or user space needs to be changed.
+> 
+
+Right, and on the user side we will not know the start of the "data" /
+fixed offset without carrying back that information somehow, due to the
+common header size not being a fixed length forever.
+
+> Thanks,
+> 
+> -- Steve
+
+Thanks,
+-Beau

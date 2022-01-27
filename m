@@ -2,65 +2,88 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F58649DA27
-	for <lists+linux-next@lfdr.de>; Thu, 27 Jan 2022 06:28:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E049049DA56
+	for <lists+linux-next@lfdr.de>; Thu, 27 Jan 2022 06:51:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236161AbiA0F2i (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 27 Jan 2022 00:28:38 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:52054 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231796AbiA0F2h (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 27 Jan 2022 00:28:37 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S236319AbiA0FvP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 27 Jan 2022 00:51:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44774 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229551AbiA0FvP (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 27 Jan 2022 00:51:15 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBE46C06161C;
+        Wed, 26 Jan 2022 21:51:14 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 325146184D;
-        Thu, 27 Jan 2022 05:28:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D65EC340E4;
-        Thu, 27 Jan 2022 05:28:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643261316;
-        bh=2NdSwzXs0/J0PSIuKmSGKLJE4Qf81V0hg2EpWJnok/4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ujHo/YpLgkZeQuyqHISrAmgajrE+2lJ3N+DAFYvdzpaEIfL742n81byiUFDUCgxKL
-         bTOGu9hQqQgwwYSeE+32Md0E0ljTTmlZy3tuJ/1CYQ5CXXvW1kpkR8FC3rSnsvAllQ
-         SnBl2U0N23bgGTDNdUNRlsiqACFegDkVEarr7kkzOy0joKEF5yqWFT9W59T+4WQY5n
-         LQmqbONWmXS3vgRduXoBFFRSkIfPU97J2RNLOjnpy26pohrR4u2ZHvarpaiYw6ZumW
-         oK4pHQirHaXBjT/ZxXI+OD6HIc08RhZdg9bri8QFnYIz1aOTuKr+s29punp+pnZp80
-         9L6fimuhGDntA==
-Date:   Thu, 27 Jan 2022 10:58:32 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Marcel Ziswiler <marcel@ziswiler.com>
-Cc:     linux-phy@lists.infradead.org, linux-next@vger.kernel.org,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Tim Harvey <tharvey@gateworks.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-imx@nxp.com, linux-pci@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Richard Zhu <hongxing.zhu@nxp.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>
-Subject: Re: [PATCH v2] phy: freescale: pcie: cosmetic clean-up
-Message-ID: <YfItgKZ4eCeFB5ZX@matsya>
-References: <20220113090321.119880-1-marcel@ziswiler.com>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JkqTC6jd6z4xcW;
+        Thu, 27 Jan 2022 16:51:11 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1643262672;
+        bh=IT/5oeVf+5eLV6UP5nfiGX/ZILAl3ow5U5CT3rHdSv8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=iSnQv1K8TDsJhD2o4WngHRECCgfa2jJ1prXHCjp5z8H+b3LvwOeKOJGBD7fpDq4ga
+         0UzagLisDfofmkxJ3F+f+jD6MxldO/yXFGPi0lnHObd+GlC/gbFUEqFIoHKHueYTfw
+         uVDYQnpoh2x76Xv7Vr2frc1GMaeOPy6rrdgMOSid5DeY7rBS4DpTn2tiYldNcgVzbO
+         DgxmXVatbzCgt9linNyObOeClNgmgodnPA8ZLH2tzZggKFvXOuI2I668BCGUWugZb2
+         sVbheFJcSEgUmkJdMzduewDZnVQVLWhqoLwbNF9iLaAwd1P/QJEZ9cLGBzJt7kfy5b
+         fBqnhU51/6O1g==
+Date:   Thu, 27 Jan 2022 16:51:10 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     akpm@linux-foundation.org
+Cc:     broonie@kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-next@vger.kernel.org, mhocko@suse.cz,
+        mm-commits@vger.kernel.org
+Subject: Re: mmotm 2022-01-26-21-04 uploaded
+Message-ID: <20220127165110.55e88e44@canb.auug.org.au>
+In-Reply-To: <20220127050456.M1eh-ltbc%akpm@linux-foundation.org>
+References: <20220127050456.M1eh-ltbc%akpm@linux-foundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220113090321.119880-1-marcel@ziswiler.com>
+Content-Type: multipart/signed; boundary="Sig_/yh9HQnnZ0L3mZQiAfJzkJxB";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 13-01-22, 10:03, Marcel Ziswiler wrote:
-> From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
-> 
-> Sort includes alphabethically and add a new line before the dt-bindings
-> one as usually done.
+--Sig_/yh9HQnnZ0L3mZQiAfJzkJxB
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Applied, thanks
+Hi Andrew,
 
--- 
-~Vinod
+On Wed, 26 Jan 2022 21:04:56 -0800 akpm@linux-foundation.org wrote:
+>
+> * docs-sysctl-kernel-add-missing-bit-to-panic_print.patch
+> * panic-add-option-to-dump-all-cpus-backtraces-in-panic_print.patch
+> * panic-allow-printing-extra-panic-information-on-kdump.patch
+
+
+> * sysctl-documentation-fix-table-format-warning.patch
+
+Just wondering why this patch isn't up just after the above patches
+(instead of being in the post-next section)?
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/yh9HQnnZ0L3mZQiAfJzkJxB
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHyMs4ACgkQAVBC80lX
+0GzQXgf/ddidSmsqbc+sCcVI3RHLKW6OH0UQ3mWuVlihhKP4No3GXq/ly85xR3hw
+oWGG03tzKRZHTIArg6/VLpIvl/+xaX6ZCO2TiYib0Pd+ckX5acDNWHB3tEc8tewP
+oYDUvxdu4sllfeoCry1JJ+ukusohUjiZSA+gRcn2HP/5CsOPcRzW2Aut5FTWYeOD
+l/rNa4AdhfGpa0SC58eUGhr+7Lilak4x/QHey/hQ9dMqZmoP3whge5R0L0TH4kT8
+oeASJQQBQf0CnrYrXNips9wSJh3HR5ezt9dsdD3tiOBEiEAFYvP8aclNW9c9N2eF
+caVFu0SOQAys91FIitCFjtE3HiUESw==
+=RmY0
+-----END PGP SIGNATURE-----
+
+--Sig_/yh9HQnnZ0L3mZQiAfJzkJxB--

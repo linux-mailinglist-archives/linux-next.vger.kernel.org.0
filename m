@@ -2,121 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF32C49E23F
-	for <lists+linux-next@lfdr.de>; Thu, 27 Jan 2022 13:22:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2FEF49E7E6
+	for <lists+linux-next@lfdr.de>; Thu, 27 Jan 2022 17:44:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241113AbiA0MWW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 27 Jan 2022 07:22:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47904 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235916AbiA0MWT (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 27 Jan 2022 07:22:19 -0500
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F88EC06174A
-        for <linux-next@vger.kernel.org>; Thu, 27 Jan 2022 04:22:18 -0800 (PST)
-Received: by mail-yb1-xb31.google.com with SMTP id h14so8016016ybe.12
-        for <linux-next@vger.kernel.org>; Thu, 27 Jan 2022 04:22:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=3hB9Pz6IWWJ5e7Q7LJO+f7Hvw0FPQfxvZX3pslGGprg=;
-        b=ntq5txrAiaRnnSYQlIbMFX9yyxuv2ySgZhUuXwgFl3VjEENE4TPnfiUcbKWy8UlCJH
-         Xv1qCObUn7HIRPtto8YmdaTIigsu2/dBkvzn5zBUCS5Rom0RnrUMLb3Hi/Y53yplNPRb
-         iSCil1KGMM17K5x1zt5/gEOx3o3O4a27dS+B20iOxYHrBaDQQYXZ2skDKGiYC8Yd5U+O
-         rtuO1yMa2eiiI4Fb9RQvskyNLOQwNSn5ioCb+pyLVAHGAUrqZZaeJxTEX4tyDRjirPMy
-         EYuyE+oBQnfwKwtfEK4+pjkM2bct8AFgQJ9DHU8VArEw375D/5uNj8pNWuqBx4OWldmg
-         l05A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=3hB9Pz6IWWJ5e7Q7LJO+f7Hvw0FPQfxvZX3pslGGprg=;
-        b=sKzIaD1efr4YEFyE6rbypMPBzVLpFQJ3bfsq4I++SVlndFfA4/UzBxW9Q33u/3DqEO
-         TjvHzZUoZDuSLoIMeBCqNPxrfn2/XZvcPQktYgtCzV+SNKdd7pAHZIIM0g8RRqbca7Jy
-         NaYxyjEW40Z4QHAPtF57edLX0KHxfvpiRDIsars+aBbFMPmwuIKhpai+VthePakDNFZW
-         2lZC39pCI6+dsMB3D4vHqjlDOOdvlKp3nMx+AvBz/jlQFr0OSz1eZECvlfj3HthQ/Q7b
-         w+4tdUofPJPxj458bNg/eUdo3f296lZ04QBuhi0hYzk3kqgfG9kZP80rbC0FkqEvDhx2
-         5KpA==
-X-Gm-Message-State: AOAM533Ut3J5ymzXWCDdDHpk+bKDeTq4c9biHcVT+DcaK5246JpeDJL8
-        Ch6s7we8YcKkD7/7Vki8ESbxLZFEJ/4z7KojJH5uT8HHjK0fEw==
-X-Google-Smtp-Source: ABdhPJzytcm5xEDIvl0zeaLFWxg0fZUVG5vboDDlEChIHTA93sE6aZZBgrDRfJIg+aN0+BwPBqgtjUxzA37MsECRi1k=
-X-Received: by 2002:a25:b13:: with SMTP id 19mr4857037ybl.684.1643286137004;
- Thu, 27 Jan 2022 04:22:17 -0800 (PST)
+        id S244048AbiA0Qof (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 27 Jan 2022 11:44:35 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:37359 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244054AbiA0Qof (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 27 Jan 2022 11:44:35 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jl5z466Pgz4xcT;
+        Fri, 28 Jan 2022 03:44:32 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1643301873;
+        bh=MX51oCd5bYSXDZe8p/UcQRq6AXgsb/XDeiec+w4Y0wY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Uao15/lhQjJwl2dipxNY9hvuxyNRyiggc/Y9TMjW0SAZVdse/rAQYvNMFyQOCQ5Nn
+         dLd1qBLsk2zmx8LMMQ81QbOj1gD9WS1w4eH1xJTOy0zApo3XztRKXo+5D2FhnSbp95
+         zx1Ught578YSy4xnNaX7k8CFUjoGPM8SNWpc6sTeAkEMhXZpK0tSvUGufq89wpjw0+
+         69vqjQvE3mnSZNLsuQ+I11Lp0Lkuvt/btise/qWipXdaAJcoekaUSQX2x1KODIC0R2
+         PZ3LmsWLfWUDie/TBpPz9535V60v9SfRmXaQs5WeM+3+KyJr/K9KWuPgO+t6pG7Gu1
+         IqizhWW5aP4sQ==
+Date:   Fri, 28 Jan 2022 03:44:30 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warnings in Linus' tree
+Message-ID: <20220128034430.77fef717@canb.auug.org.au>
+In-Reply-To: <20220127060141.GA10653@lst.de>
+References: <20220127153055.6dd9f73d@canb.auug.org.au>
+        <20220127060141.GA10653@lst.de>
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 27 Jan 2022 17:52:05 +0530
-Message-ID: <CA+G9fYtGGdxLwkV=VHdDP_d2C0oLd7=wUhF1wcYtndpp-y5BTA@mail.gmail.com>
-Subject: [next] i386: ERROR: modpost: "__aeabi_uldivmod" [fs/btrfs/btrfs.ko] undefined!
-To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, linux-fsdevel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, lkft-triage@lists.linaro.org,
-        regressions@lists.linux.dev
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        David Sterba <dsterba@suse.com>,
-        Josef Bacik <josef@toxicpanda.com>, Chris Mason <clm@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/03=0ATfZR7Di9qbVyibM7nu";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-[ Please ignore this email if it is already reported ]
+--Sig_/03=0ATfZR7Di9qbVyibM7nu
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Regression detected while building modules Linux next-20220127 on arm and i386
-with kselftest (kselftest-merge) configs with gcc-11.
+Hi Christoph,
 
-Build errors i386:
-------------------
-make --silent --keep-going --jobs=8
-  ARCH=i386 CROSS_COMPILE=i686-linux-gnu- 'CC=sccache
-i686-linux-gnu-gcc' 'HOSTCC=sccache gcc'
+On Thu, 27 Jan 2022 07:01:41 +0100 Christoph Hellwig <hch@lst.de> wrote:
+>
+> On Thu, Jan 27, 2022 at 03:30:55PM +1100, Stephen Rothwell wrote:
+> >=20
+> > Building Linus' tree, today's linux-next build (htmldocs) produced
+> > these warnings:
+> >=20
+> > include/linux/blkdev.h:1533: warning: Function parameter or member 'sta=
+rt_time' not described in 'bio_end_io_acct'
+> > include/linux/blkdev.h:1533: warning: Excess function parameter 'start'=
+ description in 'bio_end_io_acct'
+> >=20
+> > Introduced by commit
+> >=20
+> >   956d510ee78c ("block: add disk/bio-based accounting helpers") =20
+>=20
+> The warning looks correct, but that commit is rather old, so something
+> else must have caused it to be emitted now?
 
-ERROR: modpost: "__umoddi3" [fs/btrfs/btrfs.ko] undefined!
-make[2]: *** [/builds/linux/scripts/Makefile.modpost:134:
-modules-only.symvers] Error 1
-make[2]: *** Deleting file 'modules-only.symvers'
+Yeah, but I couldn't see anything obvious.
 
-Build errors arm:
-------------------
-make --silent --keep-going --jobs=8
-  ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- 'CC=sccache
-arm-linux-gnueabihf-gcc' 'HOSTCC=sccache gcc'
+--=20
+Cheers,
+Stephen Rothwell
 
-ERROR: modpost: "__aeabi_uldivmod" [fs/btrfs/btrfs.ko] undefined!
-make[2]: *** [/builds/linux/scripts/Makefile.modpost:134:
-modules-only.symvers] Error 1
+--Sig_/03=0ATfZR7Di9qbVyibM7nu
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHyy+4ACgkQAVBC80lX
+0GxH8ggAn7Nw74omN15x0YNxT3itr8Sm2r6A2ogQkLGg+3R7+lXaPBj5tSSJbPhY
+3OIRG+BpK/l9OcP8NOP9wLNidd6mg6qbpjD4F4Y28K94p38sXAYnCMBcMmyBVMEk
+JuLOChGb2BCaESVJkK9MTvII6kigVgSstUkzKWhb98hcJrETZ//fA44EPiM0D9Q5
+QC3ic6OkVMYPeDA22oE+lC5Uj92J6uQlMCiPcyp68xSnU+VAtPtFLlX0sDGOCu/x
+xNC+WQJNo9oe81Z5wt86QZ658G9e9+C8c/bRlk9LiD9Z+MFZSNdXQHydoFG96b5w
+U5taHJ2gYE60tTH6e2vplWZ1n85Y1w==
+=WLhG
+-----END PGP SIGNATURE-----
 
-
-meta data:
------------
-    git describe: next-20220127
-    git_repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-    git_sha: 0eb96e2c58c03e79fc2ee833ba88bf9226986564
-    git_short_log: 0eb96e2c58c0 (\"Add linux-next specific files for 20220127\")
-    target_arch: arm / i386
-    toolchain: gcc-11
-
-Build log:
--------------
-https://builds.tuxbuild.com/24GSTOD7EpxnncxTZgHJzXw97t5/
-https://builds.tuxbuild.com/24A38knX5TuIfIPU54KLcUReDcN/
-
-
-steps to reproduce:
--------------------
-# To install tuxmake on your system globally:
-# sudo pip3 install -U tuxmake
-#
-# See https://docs.tuxmake.org/ for complete documentation.
-
-tuxmake --runtime podman --target-arch i386 --toolchain gcc-11 \
- --kconfig https://builds.tuxbuild.com/24GSQgCAtqXT6UgGf37kLxUHlYX/config \
-   cpupower headers kernel kselftest kselftest-merge modules
-
-
---
-Linaro LKFT
-https://lkft.linaro.org
+--Sig_/03=0ATfZR7Di9qbVyibM7nu--

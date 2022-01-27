@@ -2,47 +2,47 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4218549DB59
-	for <lists+linux-next@lfdr.de>; Thu, 27 Jan 2022 08:23:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E80949DBA7
+	for <lists+linux-next@lfdr.de>; Thu, 27 Jan 2022 08:32:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233312AbiA0HXC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 27 Jan 2022 02:23:02 -0500
-Received: from out4-smtp.messagingengine.com ([66.111.4.28]:35509 "EHLO
+        id S237338AbiA0Hbz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 27 Jan 2022 02:31:55 -0500
+Received: from out4-smtp.messagingengine.com ([66.111.4.28]:34599 "EHLO
         out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230171AbiA0HXB (ORCPT
+        by vger.kernel.org with ESMTP id S233852AbiA0Hbz (ORCPT
         <rfc822;linux-next@vger.kernel.org>);
-        Thu, 27 Jan 2022 02:23:01 -0500
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 19E055C00CE;
-        Thu, 27 Jan 2022 02:23:01 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Thu, 27 Jan 2022 02:23:01 -0500
+        Thu, 27 Jan 2022 02:31:55 -0500
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id DC96D5C006F;
+        Thu, 27 Jan 2022 02:31:54 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Thu, 27 Jan 2022 02:31:54 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
         :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; bh=jmOFRNqeia8Jwv6HakalwIdHv5r33fycUZ8Ohh
-        YSdrI=; b=gjbVRNyHosFvzz7vHX7EjSXxLm54HwhfugkQqbhbiNtiF3MzOlhK7A
-        7yjpRkc+s3pe7JAvKqHdMmK21/5mlD6Y+judlvIte/jPkLPRRJPbdrm7nIBkKPfE
-        fuMhRoPAZXwWdal90I9tlnuc09mAvTk9MWZce66MYAY9mIBpb2CBnblNWUtEpEkK
-        toiDhiQ6vslrgo+wScHqLcXdoSAwz520IOEbDJICXz0+YU4WA3G+azxqmQyNzx+5
-        GQZ7VIeLbmMbhTairpuGYQB6jht+NE6O03bEH7a+BS5S8OUHpkY39yVVBtZvuHY3
-        zn3z9KHKo7oFqVkKH4EZy+96FF/21skA==
+        :subject:to:to; s=fm2; bh=EbdQKynrwM3mxnu0lIvnum4EYaMT0eAuKGC+QK
+        OBK/4=; b=UL8wcCDrh7Rx3fT2ReCAy/H+FjwEQ33hxZ21cU0S8FJ4xxV201E2Ti
+        YbdGtAI9inZPmT5Exzl978DWvc0xv7rGu7kZk95TIk01RvYl4bjrAKe1oQ6yUOz6
+        CTpsMxlkeSrVADQ6OBHkQ5UAgG/8744r9HmldhK8hYaoiV+ykjmDlzV5NYSnm0mt
+        H3UkSOFrf96ER2phRXUwQi0T3xejKMl0aTIVkN5YtDDYyJqs9pfCnGYo5ogQAes1
+        aG/KKPpDzL3ZC3OVOBgIi9VdYz+H2S6aenIgV+l9csBfVF2kerB31g/6JB9eNebx
+        GY/XGL2xpw4r5GvzgdzMNh9ZHqkt85fA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-type:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
         :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=jmOFRNqeia8Jwv6Ha
-        kalwIdHv5r33fycUZ8OhhYSdrI=; b=U/DG73Ek6XPZTNwdQwwGcgLUVuOS3elJv
-        svGvi4QgszniwRu0MbYaWVNiqMDP9pXQ8jHkp9Y48labRMz73QsFiVeMioB4etTi
-        7BOHjdEsfSRXewwvkf61/pWMZUNhFphLOY5U+EBPyQQhX8zVRrF9rkFFYMn5c6B6
-        k9PsJ7FFBPjeNz2iJQeHHU/nKqwgjfrxwbRAOQ2j4N5yWjSEp9MR4YhlWT0F0BWO
-        Kaw3Uiinc0JwRfi7GpPMmk2wM+I5dnFN+ofspg2UbM72Ikc8GthYSfY6OPzzbICE
-        czoh+xZiIqtMXob64V7MuuyXfb2qGUB6GJyEgHGKh8r8U+P96c0jQ==
-X-ME-Sender: <xms:VEjyYfxuqCyXymG9V1EaKkPFwNXD9UDxzbdVJrci1XrcDMl9OJGRLg>
-    <xme:VEjyYXTFs3fJECy9X9OOKbxdQd5vtGefrb7mlD54MXIekG5F_x_dlQ_wwA_Uixe9S
-    33oPVR3IO-ESQ>
-X-ME-Received: <xmr:VEjyYZWiQRElVILXOHfJ224wKhiwchTpOpcJdD6ftUP_k8nt9_QkSDGyvLnO1z_dUU_nfOHq2y6bDZQ2-ssEheILl9hndchG>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrfedvgddutdejucetufdoteggodetrfdotf
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=EbdQKynrwM3mxnu0l
+        Ivnum4EYaMT0eAuKGC+QKOBK/4=; b=A7c5QZiaFgZPHm8aK+sIbTUhbpLZ9gqYn
+        v5dW0kxjRb+x/5rmGwn7Eds7njDlUv3o7JHn6qb3j+lqYZsVH775H9Ls1OBGTGda
+        Jkx+0VG85IVa98rwgMtUTOfayGmF85TNWL4l/MMRA36r8brB/cREd2FCXZDCFySw
+        ATUcbGFn6FiUgjWUOx+EDpmUwl1YQm6L5SFeZcwJbejDRZxI3vxsdKttxKmxJq+S
+        I+Lgj98P4XEvjMhH/qS2Z3e2VAnYRSs7D7T84xcyeM0c559YXWVXgbVQ7LmRdheb
+        mgVS8roW8y/qRl06DI9z9WXyfBctaQOj7h7+Khm0i/axZeCuf4qVw==
+X-ME-Sender: <xms:akryYWPPXdftbzaHJoW_wEB01WpftdH8cqxHbAF8Z3bAR1rmUaqDQQ>
+    <xme:akryYU9bfkwXKL_b9O-SQc4hwkqssvLNmqJRHMSlz-NwfPoUfqBGK4sttE8X52wbP
+    h-ZbkCghnVRkw>
+X-ME-Received: <xmr:akryYdQyCr7Uq3XWNTjUTffttAU4LU8254QF4U9Z-dtJqKjRggMhTzkokfwmA2hWQOg6by00DG2w5C6S9XoP-8W7LMX1B1JP>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrfedvgddutdelucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
@@ -50,55 +50,54 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrfedvgddutdejucetufdoteggod
     fgfffgiedvudekvdektdelleelgefhleejieeugeegveeuuddukedvteenucevlhhushht
     vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
     drtghomh
-X-ME-Proxy: <xmx:VEjyYZiDQ60J3N4ziFtf6QT0On3bYQh5EuHwmatgRH2T3ZTh6ljNmw>
-    <xmx:VEjyYRBcXcq42kPxeb9-8w3ZDRJV1ULN7lVXpPCri8RwitBXZP5rEw>
-    <xmx:VEjyYSIvHUpmdQdkGtZ__yMOPow3k0bgwvPxaDxAskEjxPNZlMD4pg>
-    <xmx:VUjyYT2LPx2yq3mzEmeXykuCC8QmRF_PBoVh_RMSkBlSNvmbZ7Qarg>
+X-ME-Proxy: <xmx:akryYWuIVQwNMPJlVsTJuqC6EfCa6-XCSa2bH0ROAbArKrkLEsp95Q>
+    <xmx:akryYef74uEvO4Q_CsyeuXX6bVHICbz8FjztJPGZgZtSE_LaDcs77g>
+    <xmx:akryYa1n0Sc3FEIwyNPHB2zWEPF1Kkwisig1SayGFgymSY89tsb1kQ>
+    <xmx:akryYWTTuS4gneLIvJIJO3Ul3ODVg9yqPsDUezbQTteHWWA5aHKaTA>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 27 Jan 2022 02:22:59 -0500 (EST)
-Date:   Thu, 27 Jan 2022 08:22:56 +0100
+ 27 Jan 2022 02:31:53 -0500 (EST)
+Date:   Thu, 27 Jan 2022 08:31:46 +0100
 From:   Greg KH <greg@kroah.com>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     "Maciej W. Rozycki" <macro@embecosm.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
 Subject: Re: linux-next: build warnings after merge of the tty.current tree
-Message-ID: <YfJIUIj1mDcShwpV@kroah.com>
+Message-ID: <YfJKYj3UOYQIHsb0@kroah.com>
 References: <20220127091800.1e8f333b@canb.auug.org.au>
+ <YfJIUIj1mDcShwpV@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220127091800.1e8f333b@canb.auug.org.au>
+In-Reply-To: <YfJIUIj1mDcShwpV@kroah.com>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 09:18:00AM +1100, Stephen Rothwell wrote:
-> Hi all,
+On Thu, Jan 27, 2022 at 08:22:56AM +0100, Greg KH wrote:
+> On Thu, Jan 27, 2022 at 09:18:00AM +1100, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > After merging the tty.current tree, today's linux-next build (x86_64
+> > allmodconfig) produced these warnings:
+> > 
+> > In file included from <command-line>:
+> > ./usr/include/linux/cyclades.h:6:2: warning: #warning "Support for features provided by this header has been removed" [-Wcpp]
+> >     6 | #warning "Support for features provided by this header has been removed"
+> >       |  ^~~~~~~
+> > ./usr/include/linux/cyclades.h:7:2: warning: #warning "Please consider updating your code" [-Wcpp]
+> >     7 | #warning "Please consider updating your code"
+> >       |  ^~~~~~~
+> > 
+> > 
+> > Introduced by commit
+> > 
+> >   f23653fe6447 ("tty: Partially revert the removal of the Cyclades public API")
+> > 
+> > This is a bit annoying :-(
 > 
-> After merging the tty.current tree, today's linux-next build (x86_64
-> allmodconfig) produced these warnings:
-> 
-> In file included from <command-line>:
-> ./usr/include/linux/cyclades.h:6:2: warning: #warning "Support for features provided by this header has been removed" [-Wcpp]
->     6 | #warning "Support for features provided by this header has been removed"
->       |  ^~~~~~~
-> ./usr/include/linux/cyclades.h:7:2: warning: #warning "Please consider updating your code" [-Wcpp]
->     7 | #warning "Please consider updating your code"
->       |  ^~~~~~~
-> 
-> 
-> Introduced by commit
-> 
->   f23653fe6447 ("tty: Partially revert the removal of the Cyclades public API")
-> 
-> This is a bit annoying :-(
+> Sorry, odd it doesn't show up in my builds, nor in 0-day.
 
-Sorry, odd it doesn't show up in my builds, nor in 0-day.
+Ah, 0-day reported it on the original patch, but not once it was in my
+tree.  odd.
 
-> Can we exclude include/uapi/linux/cyclades.h from the headers checking,
-> please?
-
-Let me fix this up, thanks.
-
-greg k-h

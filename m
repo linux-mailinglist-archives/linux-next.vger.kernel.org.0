@@ -2,94 +2,103 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B055349DB01
-	for <lists+linux-next@lfdr.de>; Thu, 27 Jan 2022 07:52:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4218549DB59
+	for <lists+linux-next@lfdr.de>; Thu, 27 Jan 2022 08:23:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236959AbiA0Gwx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 27 Jan 2022 01:52:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55328 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236970AbiA0Gwx (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 27 Jan 2022 01:52:53 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E662EC061714;
-        Wed, 26 Jan 2022 22:52:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:To:Subject:MIME-Version:Date:Message-ID:Sender:
-        Reply-To:Cc:Content-ID:Content-Description;
-        bh=dCJQMJKL5IVz1Z8zwkX2bymXH1fFjLGZs4aTLD4gTKE=; b=QMQYP7stSyLIc5Ob038zt/GXVe
-        FxbqDCMpQFpyu72raeYh8/gsSU0GxZGbp3s9Pt+nlgmA4ozYtJtOy8+yucVxFFfQrInSuXMAlsvJm
-        KHEKni20loUi3hYE11abbNDAhPjVR4ICMNZ+iwQV5exKQakXuyZRnt9/o8sgjfdxTvcwXti1h2qjt
-        74dt/UOUjm4fZ4GkZySsGJPMM82uhEldZf5f9IgQk6j5eh/ES/UAi5+JaZAIgVo1xdgfRgc2YmHH7
-        LTcGr2zViVo2evZvrQHyTXzrpBNaYBq1bkakrPWJSzYNMQbL6gfSNhjRPFKJjsh2qYilsdK47u1pM
-        GviCG0bg==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nCyeH-0045So-Bn; Thu, 27 Jan 2022 06:52:49 +0000
-Message-ID: <6b4f3d82-01e8-5bf3-927f-33ac62178fd5@infradead.org>
-Date:   Wed, 26 Jan 2022 22:52:43 -0800
+        id S233312AbiA0HXC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 27 Jan 2022 02:23:02 -0500
+Received: from out4-smtp.messagingengine.com ([66.111.4.28]:35509 "EHLO
+        out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230171AbiA0HXB (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Thu, 27 Jan 2022 02:23:01 -0500
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 19E055C00CE;
+        Thu, 27 Jan 2022 02:23:01 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Thu, 27 Jan 2022 02:23:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; bh=jmOFRNqeia8Jwv6HakalwIdHv5r33fycUZ8Ohh
+        YSdrI=; b=gjbVRNyHosFvzz7vHX7EjSXxLm54HwhfugkQqbhbiNtiF3MzOlhK7A
+        7yjpRkc+s3pe7JAvKqHdMmK21/5mlD6Y+judlvIte/jPkLPRRJPbdrm7nIBkKPfE
+        fuMhRoPAZXwWdal90I9tlnuc09mAvTk9MWZce66MYAY9mIBpb2CBnblNWUtEpEkK
+        toiDhiQ6vslrgo+wScHqLcXdoSAwz520IOEbDJICXz0+YU4WA3G+azxqmQyNzx+5
+        GQZ7VIeLbmMbhTairpuGYQB6jht+NE6O03bEH7a+BS5S8OUHpkY39yVVBtZvuHY3
+        zn3z9KHKo7oFqVkKH4EZy+96FF/21skA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=jmOFRNqeia8Jwv6Ha
+        kalwIdHv5r33fycUZ8OhhYSdrI=; b=U/DG73Ek6XPZTNwdQwwGcgLUVuOS3elJv
+        svGvi4QgszniwRu0MbYaWVNiqMDP9pXQ8jHkp9Y48labRMz73QsFiVeMioB4etTi
+        7BOHjdEsfSRXewwvkf61/pWMZUNhFphLOY5U+EBPyQQhX8zVRrF9rkFFYMn5c6B6
+        k9PsJ7FFBPjeNz2iJQeHHU/nKqwgjfrxwbRAOQ2j4N5yWjSEp9MR4YhlWT0F0BWO
+        Kaw3Uiinc0JwRfi7GpPMmk2wM+I5dnFN+ofspg2UbM72Ikc8GthYSfY6OPzzbICE
+        czoh+xZiIqtMXob64V7MuuyXfb2qGUB6GJyEgHGKh8r8U+P96c0jQ==
+X-ME-Sender: <xms:VEjyYfxuqCyXymG9V1EaKkPFwNXD9UDxzbdVJrci1XrcDMl9OJGRLg>
+    <xme:VEjyYXTFs3fJECy9X9OOKbxdQd5vtGefrb7mlD54MXIekG5F_x_dlQ_wwA_Uixe9S
+    33oPVR3IO-ESQ>
+X-ME-Received: <xmr:VEjyYZWiQRElVILXOHfJ224wKhiwchTpOpcJdD6ftUP_k8nt9_QkSDGyvLnO1z_dUU_nfOHq2y6bDZQ2-ssEheILl9hndchG>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrfedvgddutdejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
+    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeevueehje
+    fgfffgiedvudekvdektdelleelgefhleejieeugeegveeuuddukedvteenucevlhhushht
+    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
+    drtghomh
+X-ME-Proxy: <xmx:VEjyYZiDQ60J3N4ziFtf6QT0On3bYQh5EuHwmatgRH2T3ZTh6ljNmw>
+    <xmx:VEjyYRBcXcq42kPxeb9-8w3ZDRJV1ULN7lVXpPCri8RwitBXZP5rEw>
+    <xmx:VEjyYSIvHUpmdQdkGtZ__yMOPow3k0bgwvPxaDxAskEjxPNZlMD4pg>
+    <xmx:VUjyYT2LPx2yq3mzEmeXykuCC8QmRF_PBoVh_RMSkBlSNvmbZ7Qarg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 27 Jan 2022 02:22:59 -0500 (EST)
+Date:   Thu, 27 Jan 2022 08:22:56 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     "Maciej W. Rozycki" <macro@embecosm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warnings after merge of the tty.current tree
+Message-ID: <YfJIUIj1mDcShwpV@kroah.com>
+References: <20220127091800.1e8f333b@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: mmotm 2022-01-26-21-04 uploaded (gpu/drm/i915/i915_gem_evict.h)
-Content-Language: en-US
-To:     akpm@linux-foundation.org, broonie@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
-        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org
-References: <20220127050456.M1eh-ltbc%akpm@linux-foundation.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220127050456.M1eh-ltbc%akpm@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220127091800.1e8f333b@canb.auug.org.au>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-
-
-On 1/26/22 21:04, akpm@linux-foundation.org wrote:
-> The mm-of-the-moment snapshot 2022-01-26-21-04 has been uploaded to
+On Thu, Jan 27, 2022 at 09:18:00AM +1100, Stephen Rothwell wrote:
+> Hi all,
 > 
->    https://www.ozlabs.org/~akpm/mmotm/
+> After merging the tty.current tree, today's linux-next build (x86_64
+> allmodconfig) produced these warnings:
 > 
-> mmotm-readme.txt says
+> In file included from <command-line>:
+> ./usr/include/linux/cyclades.h:6:2: warning: #warning "Support for features provided by this header has been removed" [-Wcpp]
+>     6 | #warning "Support for features provided by this header has been removed"
+>       |  ^~~~~~~
+> ./usr/include/linux/cyclades.h:7:2: warning: #warning "Please consider updating your code" [-Wcpp]
+>     7 | #warning "Please consider updating your code"
+>       |  ^~~~~~~
 > 
-> README for mm-of-the-moment:
 > 
-> https://www.ozlabs.org/~akpm/mmotm/
+> Introduced by commit
 > 
-> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
-> more than once a week.
+>   f23653fe6447 ("tty: Partially revert the removal of the Cyclades public API")
 > 
-> You will need quilt to apply these patches to the latest Linus release (5.x
-> or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
-> https://ozlabs.org/~akpm/mmotm/series
-> 
-> The file broken-out.tar.gz contains two datestamp files: .DATE and
-> .DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
-> followed by the base kernel version against which this patch series is to
-> be applied.
+> This is a bit annoying :-(
 
-on x86_64:
-(from linux-next.patch)
+Sorry, odd it doesn't show up in my builds, nor in 0-day.
 
+> Can we exclude include/uapi/linux/cyclades.h from the headers checking,
+> please?
 
-  HDRTEST drivers/gpu/drm/i915/i915_gem_evict.h
-In file included from <command-line>:0:0:
-./../drivers/gpu/drm/i915/i915_gem_evict.h:15:15: error: ‘struct i915_gem_ww_ctx’ declared inside parameter list will not be visible outside of this definition or declaration [-Werror]
-        struct i915_gem_ww_ctx *ww,
-               ^~~~~~~~~~~~~~~
-./../drivers/gpu/drm/i915/i915_gem_evict.h:21:14: error: ‘struct i915_gem_ww_ctx’ declared inside parameter list will not be visible outside of this definition or declaration [-Werror]
-       struct i915_gem_ww_ctx *ww,
-              ^~~~~~~~~~~~~~~
-./../drivers/gpu/drm/i915/i915_gem_evict.h:25:16: error: ‘struct i915_gem_ww_ctx’ declared inside parameter list will not be visible outside of this definition or declaration [-Werror]
-         struct i915_gem_ww_ctx *ww);
-                ^~~~~~~~~~~~~~~
-cc1: all warnings being treated as errors
+Let me fix this up, thanks.
 
-
--- 
-~Randy
+greg k-h

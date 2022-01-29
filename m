@@ -2,50 +2,51 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 817EA4A3299
-	for <lists+linux-next@lfdr.de>; Sun, 30 Jan 2022 00:23:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 358C14A32A1
+	for <lists+linux-next@lfdr.de>; Sun, 30 Jan 2022 00:37:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346466AbiA2XXL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 29 Jan 2022 18:23:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56476 "EHLO
+        id S1346457AbiA2XhS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 29 Jan 2022 18:37:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238951AbiA2XXK (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 29 Jan 2022 18:23:10 -0500
+        with ESMTP id S238951AbiA2XhS (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 29 Jan 2022 18:37:18 -0500
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79062C061714;
-        Sat, 29 Jan 2022 15:23:09 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0719C061714;
+        Sat, 29 Jan 2022 15:37:17 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JmVjz37dQz4xcN;
-        Sun, 30 Jan 2022 10:23:03 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JmW2K4t2Qz4xcN;
+        Sun, 30 Jan 2022 10:37:13 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1643498583;
-        bh=SxN/2ugBVfaI/4+xVgJJ0hH3WGsgXTSrK65pT/q6KR4=;
+        s=201702; t=1643499436;
+        bh=FSKXe7E9PwPDbZiibMOaFerPO5Fty9qSVnGbt7bjiOA=;
         h=Date:From:To:Cc:Subject:From;
-        b=nw0OUYt3Sd7aXz2WdhtT7vlWfFlXg0q7XSQz60afOAcsrjyvDQLiiY93Sk6ffUv1h
-         r8bPC1fPvmyV871Qq3Fu+C3NhHr9U7qZeqo5ZoQhF1Tm6W3QgKTJaVxNjUx/FKFo/s
-         B6jAtzeVUbFjp0sVHTkbJO9ZC1TrM5Tzt0vBHNpYXLCNry0ViX8xlI5AZVu1FNJpQY
-         QkOtpWMK9byGL17vAndOO0M1t+UZ+7Z/f7JDJa0fKR0FYvmJqhICICNueTtEnCySPR
-         66qsSGZv+HPVEeKXH8WSpHaViWOzu9QQsXpFIB8T3Keg4/z3/ySNscXkKWErDJtY2O
-         JG311EEQ/xj+A==
-Date:   Sun, 30 Jan 2022 10:23:02 +1100
+        b=P6cEBLAT+WqETy48Mb4Fr9Tr7ECTnQT1y0U4tSAe1IgKVEdwO+zUzr8Oe/nVcVtOQ
+         o/s/MiO6oTCVwOVDdMhX8C2mdOhjRUQn/fyEu1qf3B+zgFOgceCybg5JvcHsVrl51/
+         8e2foIo6W2KlamTO+JEPlfLCht35wNhtb4agcdeRve1YLbQzHkybYs3wmroRimeaRb
+         YD2ZFwi7I+IZGRQcqiZarSIrFaIluKL+GIE2JK2kf2xuoFpW8d+0EaOQNHmzLun8dy
+         HtGoM+RxjwBJegDdIYQeeVdNJ66BYtA+cn7K9x5HEX/ABOrhVYdNfq25AqSOZGYqfs
+         biqr1StbvN9qA==
+Date:   Sun, 30 Jan 2022 10:37:12 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Heiko Stuebner <heiko@sntech.de>
-Cc:     Peter Geis <pgwipeout@gmail.com>,
+To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>
+Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the rockchip tree
-Message-ID: <20220130102302.698a7551@canb.auug.org.au>
+Subject: linux-next: Fixes tag needs some work in the edac tree
+Message-ID: <20220130103712.391407a7@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/xQXFxOSoM50oyK0_sAbP=9A";
+Content-Type: multipart/signed; boundary="Sig_/47CorGqD=TTlKR1s8bFM9g0";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/xQXFxOSoM50oyK0_sAbP=9A
+--Sig_/47CorGqD=TTlKR1s8bFM9g0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -53,39 +54,37 @@ Hi all,
 
 In commit
 
-  8c318aaa2000 ("arm64: dts: rockchip: fix Quartz64-A ddr regulator voltage=
-")
+  34f6e9ab86ec ("EDAC/xgene: Fix deferred probing")
 
 Fixes tag
 
-  Fixes: b33a22a1e7c4 ("arm64: dts: rockchip: add basic dts for Pine64
+  Fixes: 0d4429301c4 ("EDAC: Add APM X-Gene SoC EDAC driver")
 
 has these problem(s):
 
-  - Subject has leading but no trailing parentheses
-  - Subject has leading but no trailing quotes
-
-Please do not split Fixes tags over more than one line.  Also, keep all
-the commit message tags together at the end of the commit message.
+  - SHA1 should be at least 12 digits long
+    Can be fixed in the future by setting core.abbrev to 12 (or more) or
+    (for git v2.11 or later) just making sure it is not set (or set to
+    "auto").
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/xQXFxOSoM50oyK0_sAbP=9A
+--Sig_/47CorGqD=TTlKR1s8bFM9g0
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmH1zFYACgkQAVBC80lX
-0GxrAgf/Skh0jQzGNH27+MEUw8u0Am48iG0txW+52GLJq0S4ARNlKGr0IwYefbOd
-5A2B6kZB8dyUjcOUD7mcy6aq3VMY5iLrL2HEf54RSD8ldNY+egjeIDDbut8l+kDs
-ZMTcfCMq70zsTUafibt5pbR5p4U9dSxJx8NZ1UJRiKHrX89FC0pyhFQHIFTC4UXj
-g/VO/7vlpoDw4SoPUhLuOLkMVO1u4frpZSHAH4dthb1U5LBahW7CzYDlrjcKxx9e
-WRbeOTqip110+DqbIjeGJprbYcEgETB34DgOA+0EQah4T7tGdjR2YGFukElsQ25r
-dWD+fPcKQX7g4gzEqPkbiyh0zpsZ4w==
-=WQzr
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmH1z6kACgkQAVBC80lX
+0GwUoAgAj6ZfNtmHZimqK/zMianANBgmw3mhCbtjsRj6JsMvbiqW7zZPsH+CsvQa
+cnLkZALIErpW/OxTw8KrjPXmXr9j/S05zjX7O4EjNCWoPJpNpGJDe4sYz+tPu0C/
+tp9Pv1MeVJApP0h9qDzyqLqccZlKyRnoN12lE4I/K6t8fAt/4KGSllwvc1oQKFLY
+e+/Lw/1lXehvZPDEMngqVk+SeSWpOIAbyeFula307KsQ+NuIEtkFRNW3U1/xVCj/
+gJY/cjrMwWgyZJmT02QWrKDqclQEAcyLFjieNTGB62Be7UaT0MKA1+AJZKDhz93R
+Xlv5P4iAg5zgs6JDLE7A3xO950ArAA==
+=YirD
 -----END PGP SIGNATURE-----
 
---Sig_/xQXFxOSoM50oyK0_sAbP=9A--
+--Sig_/47CorGqD=TTlKR1s8bFM9g0--

@@ -2,61 +2,62 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ECFBC4A32BD
-	for <lists+linux-next@lfdr.de>; Sun, 30 Jan 2022 01:08:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C375C4A3549
+	for <lists+linux-next@lfdr.de>; Sun, 30 Jan 2022 10:04:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353511AbiA3AIW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 29 Jan 2022 19:08:22 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:46444 "EHLO mail.skyhub.de"
+        id S1354377AbiA3JE4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 30 Jan 2022 04:04:56 -0500
+Received: from gloria.sntech.de ([185.11.138.130]:51874 "EHLO gloria.sntech.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1353509AbiA3AIV (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sat, 29 Jan 2022 19:08:21 -0500
-Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id BCCFA1EC0501;
-        Sun, 30 Jan 2022 01:08:15 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1643501295;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=yfhFxfxF8NarSX8GHfOcK6wOuYA4m73EaIxZ6XycAIA=;
-        b=gTFuF04FbxNGeU3WluPjOgb/UNacljz4S4fCeMcP/EKIhMF5ssl0FZpaZzivrCKXZcRLy1
-        tTTR0ZmrPlnFzmSI7VosAv7/9iO/NQfhISayfyTeUAEjPGg8u5j7TU7qBUEDx+fVTsykVh
-        LCaWqJA3yJZUodFqMeAIdub3FgvFTW0=
-Date:   Sun, 30 Jan 2022 01:08:11 +0100
-From:   Borislav Petkov <bp@alien8.de>
+        id S1346840AbiA3JE4 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 30 Jan 2022 04:04:56 -0500
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1nE68j-0000Id-R8; Sun, 30 Jan 2022 10:04:53 +0100
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
+Cc:     Peter Geis <pgwipeout@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the edac tree
-Message-ID: <YfXW6+1hTVVTodeI@zn.tnic>
-References: <20220130103712.391407a7@canb.auug.org.au>
+Subject: Re: linux-next: Fixes tag needs some work in the rockchip tree
+Date:   Sun, 30 Jan 2022 10:04:52 +0100
+Message-ID: <14086734.IJ1KOUGyn7@diego>
+In-Reply-To: <20220130102302.698a7551@canb.auug.org.au>
+References: <20220130102302.698a7551@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220130103712.391407a7@canb.auug.org.au>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Sun, Jan 30, 2022 at 10:37:12AM +1100, Stephen Rothwell wrote:
+Hi Stephen,
+
+Am Sonntag, 30. Januar 2022, 00:23:02 CET schrieb Stephen Rothwell:
+> Hi all,
+> 
+> In commit
+> 
+>   8c318aaa2000 ("arm64: dts: rockchip: fix Quartz64-A ddr regulator voltage")
+> 
 > Fixes tag
 > 
->   Fixes: 0d4429301c4 ("EDAC: Add APM X-Gene SoC EDAC driver")
-    Fixes: 0d4429301c4a ("EDAC: Add APM X-Gene SoC EDAC driver")
+>   Fixes: b33a22a1e7c4 ("arm64: dts: rockchip: add basic dts for Pine64
+> 
+> has these problem(s):
+> 
+>   - Subject has leading but no trailing parentheses
+>   - Subject has leading but no trailing quotes
+> 
+> Please do not split Fixes tags over more than one line.  Also, keep all
+> the commit message tags together at the end of the commit message.
+
+sorry about that. I've corrected the commit now to not split the fixes tag.
+
+Thanks for catching that
+Heiko
 
 
-Somebody ate the trailing 'a'. Fixed.
 
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette

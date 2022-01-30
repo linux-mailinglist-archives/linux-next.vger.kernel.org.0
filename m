@@ -2,62 +2,62 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C375C4A3549
-	for <lists+linux-next@lfdr.de>; Sun, 30 Jan 2022 10:04:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C236A4A355B
+	for <lists+linux-next@lfdr.de>; Sun, 30 Jan 2022 10:30:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354377AbiA3JE4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 30 Jan 2022 04:04:56 -0500
-Received: from gloria.sntech.de ([185.11.138.130]:51874 "EHLO gloria.sntech.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1346840AbiA3JE4 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 30 Jan 2022 04:04:56 -0500
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1nE68j-0000Id-R8; Sun, 30 Jan 2022 10:04:53 +0100
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Peter Geis <pgwipeout@gmail.com>,
+        id S234034AbiA3Jac (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 30 Jan 2022 04:30:32 -0500
+Received: from mxout04.lancloud.ru ([45.84.86.114]:41206 "EHLO
+        mxout04.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354461AbiA3Jaa (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 30 Jan 2022 04:30:30 -0500
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout04.lancloud.ru 1737A20C475F
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+Subject: Re: linux-next: Fixes tag needs some work in the edac tree
+To:     Borislav Petkov <bp@alien8.de>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+CC:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the rockchip tree
-Date:   Sun, 30 Jan 2022 10:04:52 +0100
-Message-ID: <14086734.IJ1KOUGyn7@diego>
-In-Reply-To: <20220130102302.698a7551@canb.auug.org.au>
-References: <20220130102302.698a7551@canb.auug.org.au>
+References: <20220130103712.391407a7@canb.auug.org.au>
+ <YfXW6+1hTVVTodeI@zn.tnic>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <3b00d41c-b25a-fc5b-c1b7-b3cdbc5e5bba@omp.ru>
+Date:   Sun, 30 Jan 2022 12:30:24 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+In-Reply-To: <YfXW6+1hTVVTodeI@zn.tnic>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+Hello!
 
-Am Sonntag, 30. Januar 2022, 00:23:02 CET schrieb Stephen Rothwell:
-> Hi all,
-> 
-> In commit
-> 
->   8c318aaa2000 ("arm64: dts: rockchip: fix Quartz64-A ddr regulator voltage")
-> 
-> Fixes tag
-> 
->   Fixes: b33a22a1e7c4 ("arm64: dts: rockchip: add basic dts for Pine64
-> 
-> has these problem(s):
-> 
->   - Subject has leading but no trailing parentheses
->   - Subject has leading but no trailing quotes
-> 
-> Please do not split Fixes tags over more than one line.  Also, keep all
-> the commit message tags together at the end of the commit message.
+On 1/30/22 3:08 AM, Borislav Petkov wrote:
 
-sorry about that. I've corrected the commit now to not split the fixes tag.
+>> Fixes tag
+>>
+>>   Fixes: 0d4429301c4 ("EDAC: Add APM X-Gene SoC EDAC driver")
+>     Fixes: 0d4429301c4a ("EDAC: Add APM X-Gene SoC EDAC driver")
+> 
+> 
+> Somebody ate the trailing 'a'. Fixed.
 
-Thanks for catching that
-Heiko
+   Oops, that was me, :-/ TY! :-)
 
+> 
+> Thx.
 
-
+MBR, Sergey

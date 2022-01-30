@@ -2,60 +2,152 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5485C4A35B8
-	for <lists+linux-next@lfdr.de>; Sun, 30 Jan 2022 11:32:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDCA64A3AB7
+	for <lists+linux-next@lfdr.de>; Sun, 30 Jan 2022 23:34:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354443AbiA3KcD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 30 Jan 2022 05:32:03 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:36688 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231978AbiA3KcD (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 30 Jan 2022 05:32:03 -0500
-Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S233766AbiA3WeK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 30 Jan 2022 17:34:10 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:50301 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233616AbiA3WeK (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 30 Jan 2022 17:34:10 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DF9BD1EC0249;
-        Sun, 30 Jan 2022 11:31:57 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1643538718;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=sms0XPOHzhyDEB3CLBC6GV1oYGHnfiOfdOCw6rR3WcQ=;
-        b=EMkjyEjPNLWOpzYrft1itNiqCdlPIbvzZMy6qdJMw6RuhXjxku7KIohNwUb/H+JqOydR1d
-        1GJ06MI0xgXk0ow8U13B1oXb5S5PLBn8VZciNj+XyYTYy/dG5beFe5nx5nb4Hrb2xJa8bM
-        /Xm6fjP2MKuXaP3WNeZp1JxxdbHR3DU=
-Date:   Sun, 30 Jan 2022 11:31:52 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jn5b429Dnz4xcq;
+        Mon, 31 Jan 2022 09:34:08 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1643582048;
+        bh=R2a/s5cswYdl1kcfDiZ5RF7E0kCcUTG0iR5Pfd857Pw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=FYfuPHfWnlSfigjLoqb0D0vYsen/+JlooNe1+TmLb0TLqYQclAAIjB0U2hYpbdzBf
+         FUqtAgfVe0yl06y39JQl/qtTkPGn0uwyunyfZKSsVAG4xCggAq0WxV8xzuUrQgNMFd
+         b7KcuKV55DlhqIxH4cQCg+yHoElB3PlsHnPhsUGG/TwSnSeo7GOXCJgwygyNJfaRzR
+         VyHsOPvnlnVhtK6mNMkOBkKm2k8bKz3wEmssRF0JVfpwux80PoT6Q8l7e/yekAEPM8
+         afRy0mCCUaLb6s4CIjy8GH8Gr5hvAo1+s/N/Ch8E0tg1OeP/DEs6FErP7szKqYYcdQ
+         Y0jNDZ9KWqqdA==
+Date:   Mon, 31 Jan 2022 09:34:06 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Shijith Thotton <sthotton@marvell.com>,
+        Srujana Challa <schalla@marvell.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the edac tree
-Message-ID: <YfZpGHVjE+Hn+ZSv@zn.tnic>
-References: <20220130103712.391407a7@canb.auug.org.au>
- <YfXW6+1hTVVTodeI@zn.tnic>
- <3b00d41c-b25a-fc5b-c1b7-b3cdbc5e5bba@omp.ru>
+Subject: linux-next: build failure after merge of the kspp tree
+Message-ID: <20220131093406.4200546c@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <3b00d41c-b25a-fc5b-c1b7-b3cdbc5e5bba@omp.ru>
+Content-Type: multipart/signed; boundary="Sig_/IfyaL2G5XAz9GN4+6TdxnpR";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Sun, Jan 30, 2022 at 12:30:24PM +0300, Sergey Shtylyov wrote:
->    Oops, that was me, :-/ TY! :-)
+--Sig_/IfyaL2G5XAz9GN4+6TdxnpR
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-No worries, my patch massaging script catches those things now so I
-should be able to catch them in review.
+Hi all,
 
-Thx.
+After merging the kspp tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
--- 
-Regards/Gruss,
-    Boris.
+In file included from include/linux/printk.h:555,
+                 from include/asm-generic/bug.h:22,
+                 from arch/x86/include/asm/bug.h:84,
+                 from include/linux/bug.h:5,
+                 from include/linux/mmdebug.h:5,
+                 from include/linux/gfp.h:5,
+                 from include/linux/firmware.h:7,
+                 from drivers/crypto/marvell/octeontx2/otx2_cptpf_ucode.c:5:
+drivers/crypto/marvell/octeontx2/otx2_cptpf_ucode.c: In function 'otx2_cpt_=
+print_uc_dbg_info':
+include/linux/dynamic_debug.h:162:33: error: array subscript 4 is above arr=
+ay bounds of 'u32[4]' {aka 'unsigned int[4]'} [-Werror=3Darray-bounds]
+  162 |         _dynamic_func_call(fmt, __dynamic_pr_debug,             \
+      |                                 ^
+include/linux/dynamic_debug.h:134:17: note: in definition of macro '__dynam=
+ic_func_call'
+  134 |                 func(&id, ##__VA_ARGS__);               \
+      |                 ^~~~
+include/linux/dynamic_debug.h:162:9: note: in expansion of macro '_dynamic_=
+func_call'
+  162 |         _dynamic_func_call(fmt, __dynamic_pr_debug,             \
+      |         ^~~~~~~~~~~~~~~~~~
+include/linux/printk.h:570:9: note: in expansion of macro 'dynamic_pr_debug'
+  570 |         dynamic_pr_debug(fmt, ##__VA_ARGS__)
+      |         ^~~~~~~~~~~~~~~~
+drivers/crypto/marvell/octeontx2/otx2_cptpf_ucode.c:1798:41: note: in expan=
+sion of macro 'pr_debug'
+ 1798 |                                         pr_debug("Mask: %8.8x %8.8x=
+ %8.8x %8.8x %8.8x",
+      |                                         ^~~~~~~~
+drivers/crypto/marvell/octeontx2/otx2_cptpf_ucode.c:1756:13: note: while re=
+ferencing 'mask'
+ 1756 |         u32 mask[4];
+      |             ^~~~
 
-https://people.kernel.org/tglx/notes-about-netiquette
+Caused by commit
+
+  d9d7749773e8 ("crypto: octeontx2 - add apis for custom engine groups")
+
+from Linus' tree interacting with commit
+
+  a8712a32665f ("Makefile: Enable -Warray-bounds")
+
+from the kspp tree.
+
+I have applied the following patch for now.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Mon, 31 Jan 2022 09:28:12 +1100
+Subject: [PATCH] fix up for otx2_cptpf_ucode.c out of bound reference
+
+Fixes: d9d7749773e8 ("crypto: octeontx2 - add apis for custom engine groups=
+")
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/crypto/marvell/octeontx2/otx2_cptpf_ucode.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/crypto/marvell/octeontx2/otx2_cptpf_ucode.c b/drivers/=
+crypto/marvell/octeontx2/otx2_cptpf_ucode.c
+index 4c8ebdf671ca..e990405c7f33 100644
+--- a/drivers/crypto/marvell/octeontx2/otx2_cptpf_ucode.c
++++ b/drivers/crypto/marvell/octeontx2/otx2_cptpf_ucode.c
+@@ -1753,7 +1753,7 @@ void otx2_cpt_print_uc_dbg_info(struct otx2_cptpf_dev=
+ *cptpf)
+ 	char engs_info[2 * OTX2_CPT_NAME_LENGTH];
+ 	struct otx2_cpt_eng_grp_info *grp;
+ 	struct otx2_cpt_engs_rsvd *engs;
+-	u32 mask[4];
++	u32 mask[5];
+ 	int i, j;
+=20
+ 	pr_debug("Engine groups global info");
+--=20
+2.34.1
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/IfyaL2G5XAz9GN4+6TdxnpR
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmH3El4ACgkQAVBC80lX
+0Gy3ywgAmTfWly7vylkZG5qCWQN3WRbtZeGDp5vpaEhwZ4kGpYmb4atgGNGgwaOB
+g55ROPbk/d9k70kVYbmqkD5zID/S8htOXnBd2peHbD8Pbzh6kCoUm3JBWcOEXupf
+MUphJW6ReT1nCIMjTWjSrymhKj8UaIGN3ssfTtFu+ulaotaLpweTIaBh/t/WzhHl
+p2QMkIWejUrV8Av2FajLrwXRXD2v1Rd/j9xNEaC3pGcLAJkzOq31GTFJnTobQZ4B
+rLEATlf5Z2d2YwfjNLWEJ0iFdGIp9yqyVpXzRQIeUXxpBHIrkSZOCT0DNvGhRGJh
+TkkoF+T/KONyrB9I3UuyvupHZkLPtQ==
+=nb63
+-----END PGP SIGNATURE-----
+
+--Sig_/IfyaL2G5XAz9GN4+6TdxnpR--

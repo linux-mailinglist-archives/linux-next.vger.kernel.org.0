@@ -2,152 +2,73 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDCA64A3AB7
-	for <lists+linux-next@lfdr.de>; Sun, 30 Jan 2022 23:34:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9630B4A3ABF
+	for <lists+linux-next@lfdr.de>; Sun, 30 Jan 2022 23:38:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233766AbiA3WeK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 30 Jan 2022 17:34:10 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:50301 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233616AbiA3WeK (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 30 Jan 2022 17:34:10 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jn5b429Dnz4xcq;
-        Mon, 31 Jan 2022 09:34:08 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1643582048;
-        bh=R2a/s5cswYdl1kcfDiZ5RF7E0kCcUTG0iR5Pfd857Pw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=FYfuPHfWnlSfigjLoqb0D0vYsen/+JlooNe1+TmLb0TLqYQclAAIjB0U2hYpbdzBf
-         FUqtAgfVe0yl06y39JQl/qtTkPGn0uwyunyfZKSsVAG4xCggAq0WxV8xzuUrQgNMFd
-         b7KcuKV55DlhqIxH4cQCg+yHoElB3PlsHnPhsUGG/TwSnSeo7GOXCJgwygyNJfaRzR
-         VyHsOPvnlnVhtK6mNMkOBkKm2k8bKz3wEmssRF0JVfpwux80PoT6Q8l7e/yekAEPM8
-         afRy0mCCUaLb6s4CIjy8GH8Gr5hvAo1+s/N/Ch8E0tg1OeP/DEs6FErP7szKqYYcdQ
-         Y0jNDZ9KWqqdA==
-Date:   Mon, 31 Jan 2022 09:34:06 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Shijith Thotton <sthotton@marvell.com>,
-        Srujana Challa <schalla@marvell.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the kspp tree
-Message-ID: <20220131093406.4200546c@canb.auug.org.au>
+        id S1356656AbiA3WiY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 30 Jan 2022 17:38:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49638 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233616AbiA3WiU (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 30 Jan 2022 17:38:20 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8BF5C061714;
+        Sun, 30 Jan 2022 14:38:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=1t/hAfD4sljpm/fYcrJJQBJptypIl3Z3zsM9UZkZOfw=; b=jJTQZfQ/Zwy2norvJ1sOwqR8SC
+        MJz7VlMpASnp5vU3HVVBfY7JNZs8AuSl8amkjX1lHeaUuXy8SyyZYyxXZZ89DtwnotKdYgUwpQ66f
+        YtdzaTuM3hd9ABp0Cs7UN3BebBupoFueMk/Sxwtw03YJslUQU1Gvvtu5QMd0n1Y3RuEulGr/s281m
+        YoercRcVgXmXVbUS47XPxoLsKUtUiyhLj0k6Vz1pIpNcDkoyZTZTaPMIL/+v9b30z4tFbwv2Bq5MI
+        GS92WGFRdKxWg87lDMbftcJH8hXQqsQgoDRZUdGoGhIQeaPyCZ3WnOIPb6eYHV+xRwqGqhff15z1b
+        wpMpkFRA==;
+Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nEIpv-007aLn-Kx; Sun, 30 Jan 2022 22:38:19 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH] acpi: require CRC32 to build
+Date:   Sun, 30 Jan 2022 14:38:18 -0800
+Message-Id: <20220130223818.16985-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/IfyaL2G5XAz9GN4+6TdxnpR";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/IfyaL2G5XAz9GN4+6TdxnpR
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+ACPI core now requires crc32() but the kernel build can fail when
+CRC32 is not set/enabled, so select it in the ACPI Kconfig entry.
 
-Hi all,
+Fixes this build error:
 
-After merging the kspp tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+ia64-linux-ld: drivers/acpi/scan.o: in function `acpi_store_pld_crc':
+include/acpi/platform/aclinuxex.h:62: undefined reference to `crc32_le'
 
-In file included from include/linux/printk.h:555,
-                 from include/asm-generic/bug.h:22,
-                 from arch/x86/include/asm/bug.h:84,
-                 from include/linux/bug.h:5,
-                 from include/linux/mmdebug.h:5,
-                 from include/linux/gfp.h:5,
-                 from include/linux/firmware.h:7,
-                 from drivers/crypto/marvell/octeontx2/otx2_cptpf_ucode.c:5:
-drivers/crypto/marvell/octeontx2/otx2_cptpf_ucode.c: In function 'otx2_cpt_=
-print_uc_dbg_info':
-include/linux/dynamic_debug.h:162:33: error: array subscript 4 is above arr=
-ay bounds of 'u32[4]' {aka 'unsigned int[4]'} [-Werror=3Darray-bounds]
-  162 |         _dynamic_func_call(fmt, __dynamic_pr_debug,             \
-      |                                 ^
-include/linux/dynamic_debug.h:134:17: note: in definition of macro '__dynam=
-ic_func_call'
-  134 |                 func(&id, ##__VA_ARGS__);               \
-      |                 ^~~~
-include/linux/dynamic_debug.h:162:9: note: in expansion of macro '_dynamic_=
-func_call'
-  162 |         _dynamic_func_call(fmt, __dynamic_pr_debug,             \
-      |         ^~~~~~~~~~~~~~~~~~
-include/linux/printk.h:570:9: note: in expansion of macro 'dynamic_pr_debug'
-  570 |         dynamic_pr_debug(fmt, ##__VA_ARGS__)
-      |         ^~~~~~~~~~~~~~~~
-drivers/crypto/marvell/octeontx2/otx2_cptpf_ucode.c:1798:41: note: in expan=
-sion of macro 'pr_debug'
- 1798 |                                         pr_debug("Mask: %8.8x %8.8x=
- %8.8x %8.8x %8.8x",
-      |                                         ^~~~~~~~
-drivers/crypto/marvell/octeontx2/otx2_cptpf_ucode.c:1756:13: note: while re=
-ferencing 'mask'
- 1756 |         u32 mask[4];
-      |             ^~~~
-
-Caused by commit
-
-  d9d7749773e8 ("crypto: octeontx2 - add apis for custom engine groups")
-
-from Linus' tree interacting with commit
-
-  a8712a32665f ("Makefile: Enable -Warray-bounds")
-
-from the kspp tree.
-
-I have applied the following patch for now.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Mon, 31 Jan 2022 09:28:12 +1100
-Subject: [PATCH] fix up for otx2_cptpf_ucode.c out of bound reference
-
-Fixes: d9d7749773e8 ("crypto: octeontx2 - add apis for custom engine groups=
-")
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Fixes: 882c982dada4 ("acpi: Store CRC-32 hash of the _PLD in struct acpi_device")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: Guenter Roeck <linux@roeck-us.net>
+Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
 ---
- drivers/crypto/marvell/octeontx2/otx2_cptpf_ucode.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/acpi/Kconfig |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/crypto/marvell/octeontx2/otx2_cptpf_ucode.c b/drivers/=
-crypto/marvell/octeontx2/otx2_cptpf_ucode.c
-index 4c8ebdf671ca..e990405c7f33 100644
---- a/drivers/crypto/marvell/octeontx2/otx2_cptpf_ucode.c
-+++ b/drivers/crypto/marvell/octeontx2/otx2_cptpf_ucode.c
-@@ -1753,7 +1753,7 @@ void otx2_cpt_print_uc_dbg_info(struct otx2_cptpf_dev=
- *cptpf)
- 	char engs_info[2 * OTX2_CPT_NAME_LENGTH];
- 	struct otx2_cpt_eng_grp_info *grp;
- 	struct otx2_cpt_engs_rsvd *engs;
--	u32 mask[4];
-+	u32 mask[5];
- 	int i, j;
-=20
- 	pr_debug("Engine groups global info");
---=20
-2.34.1
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/IfyaL2G5XAz9GN4+6TdxnpR
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmH3El4ACgkQAVBC80lX
-0Gy3ywgAmTfWly7vylkZG5qCWQN3WRbtZeGDp5vpaEhwZ4kGpYmb4atgGNGgwaOB
-g55ROPbk/d9k70kVYbmqkD5zID/S8htOXnBd2peHbD8Pbzh6kCoUm3JBWcOEXupf
-MUphJW6ReT1nCIMjTWjSrymhKj8UaIGN3ssfTtFu+ulaotaLpweTIaBh/t/WzhHl
-p2QMkIWejUrV8Av2FajLrwXRXD2v1Rd/j9xNEaC3pGcLAJkzOq31GTFJnTobQZ4B
-rLEATlf5Z2d2YwfjNLWEJ0iFdGIp9yqyVpXzRQIeUXxpBHIrkSZOCT0DNvGhRGJh
-TkkoF+T/KONyrB9I3UuyvupHZkLPtQ==
-=nb63
------END PGP SIGNATURE-----
-
---Sig_/IfyaL2G5XAz9GN4+6TdxnpR--
+--- linux-next-20220128.orig/drivers/acpi/Kconfig
++++ linux-next-20220128/drivers/acpi/Kconfig
+@@ -11,6 +11,7 @@ menuconfig ACPI
+ 	depends on ARCH_SUPPORTS_ACPI
+ 	select PNP
+ 	select NLS
++	select CRC32
+ 	default y if X86
+ 	help
+ 	  Advanced Configuration and Power Interface (ACPI) support for 

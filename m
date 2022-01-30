@@ -2,106 +2,130 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C80B4A3AD2
-	for <lists+linux-next@lfdr.de>; Sun, 30 Jan 2022 23:58:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A9564A3ADA
+	for <lists+linux-next@lfdr.de>; Mon, 31 Jan 2022 00:10:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356760AbiA3W6S (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 30 Jan 2022 17:58:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53942 "EHLO
+        id S233943AbiA3XKB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 30 Jan 2022 18:10:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233819AbiA3W6R (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 30 Jan 2022 17:58:17 -0500
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B84C061714;
-        Sun, 30 Jan 2022 14:58:16 -0800 (PST)
-Received: by mail-oi1-x234.google.com with SMTP id b186so17338752oif.1;
-        Sun, 30 Jan 2022 14:58:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=9Df74O5bzOlukfRZbmLUqfOQQ47feWvT/frNyZtSZgI=;
-        b=Lc0MfJf7Wux1Qlf2poiJ8kmsU1LkxpOYjVBHcUPGp71pVVbX+/spyalzfLM86jGXiB
-         YIl1g8LQJQUhnAz8n9iulARDMREIEl/EI0UCl6cwy2yDhRR8p88KNZfXZ4zL+PeLHwNv
-         9wF37kuBHdaVVuMfcx0ELHMkOfwSZaK0xgXCKaYmbbtIOtWZswYScY+KQ6nJGkaz/ca6
-         dbv4wbEITXk+zBedR2QpqljpBF+geD4lFX2XWqKkXOUqc7hgPyiyl2p1nodNUtNJNtNy
-         +bZPrT5ohfGsEyvtIt0KaEXto7i6EYscaBQqInH7BM7vm80t6Rg9Cp/VUbxcI+UR6mw9
-         LPAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=9Df74O5bzOlukfRZbmLUqfOQQ47feWvT/frNyZtSZgI=;
-        b=DOSAcL/mG/9bw+UTW9vpgu+DIgv2Z3KG0WXZ6Gv+BA5Pb5HZ9DWu4D9yeOgbjxzR8h
-         cs2Nt942iNoUbxWK+KCI8DnnxFeVvET4H14ymrnm5DI6GfEZtfmUuhel29rmTthLxv2c
-         H8vIpI/Xvzh3Jl3VefYpUROhbqFNG6KXTeZYgvwU/wgzhIxPoP28VDb2thEAgwbk8tuO
-         /1wGTSSMwYWeecUsEkr1fVlRw/2HYhjU37Xb8+MjCh9zrKbJ6YeN2b0Oy4N70kMk8aIn
-         3savMyzFbJd+WUFF0zcu/cLJuKeHgBo9kqo/F7V9SFLnFtlBHxJhroUfN4iXbLQ7Ogp+
-         Fkqw==
-X-Gm-Message-State: AOAM531WXQ2HyBy3bgBUOsbCQ6NNku/wypqep7Ne6FVRZ50EhC2gFeUR
-        PDC9DeaWNpYH9RHVvqiKYQbddtkRTRCR5Q==
-X-Google-Smtp-Source: ABdhPJw5qC4Lgd7HZVVI15M/HLNZloNIY++bNFPk9Sgimu3r2Ae6uDZevOfSLauiuUwwnnstCDLiQQ==
-X-Received: by 2002:a05:6808:189f:: with SMTP id bi31mr11430338oib.5.1643583495881;
-        Sun, 30 Jan 2022 14:58:15 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g4sm8070621otg.61.2022.01.30.14.58.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 30 Jan 2022 14:58:15 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <f153d3dc-f4c1-9c4b-aac3-da3a696a3313@roeck-us.net>
-Date:   Sun, 30 Jan 2022 14:58:13 -0800
+        with ESMTP id S233819AbiA3XKB (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 30 Jan 2022 18:10:01 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E719CC061714;
+        Sun, 30 Jan 2022 15:10:00 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jn6NM4bKkz4xRB;
+        Mon, 31 Jan 2022 10:09:55 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1643584195;
+        bh=bDpsJoZWES//hT1pTNftPxhCHGgocAa0nMe8EX/9mA0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=kdmvn6grKXsB/4rdyx3o3I3cofHcTXQ/LbvvvOhUEMj9JcthWq7oc/z0HkHpd4Qli
+         y8gGWOj5O8uwqkv6sROMLbi+GbPmGQUjSetrWFJocvkyT5D2lXuvBWlevD+YfCNGch
+         7TJexujRAQRMua3AUvqOjPRG6132rut3udkb2kO5+tcPPuB44xWgsJM9dgke/+Rgnj
+         6QQ8t57aRlUWcMCSaIyTMAjv8VF3JaO+1+tgjwLb2SwHqpw8SvtxtgHqlClP13gDi+
+         6wzjMl9jGdkoWTJ9zpvF3ocvKQjvfoJh01e8OvQgbCgSovECHmt4g08Cy1eUywjK77
+         nI9pUGrqY+P/Q==
+Date:   Mon, 31 Jan 2022 10:09:54 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Leon Romanovsky <leon@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the kspp tree
+Message-ID: <20220131100954.74a2034f@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] acpi: require CRC32 to build
-Content-Language: en-US
-To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org
-Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <20220130223818.16985-1-rdunlap@infradead.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220130223818.16985-1-rdunlap@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/zu4q6q2/mkBU.yay6bQj.rh";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 1/30/22 14:38, Randy Dunlap wrote:
-> ACPI core now requires crc32() but the kernel build can fail when
-> CRC32 is not set/enabled, so select it in the ACPI Kconfig entry.
-> 
-> Fixes this build error:
-> 
-> ia64-linux-ld: drivers/acpi/scan.o: in function `acpi_store_pld_crc':
-> include/acpi/platform/aclinuxex.h:62: undefined reference to `crc32_le'
-> 
-> Fixes: 882c982dada4 ("acpi: Store CRC-32 hash of the _PLD in struct acpi_device")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Reported-by: Guenter Roeck <linux@roeck-us.net>
-> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Cc: Linus Torvalds <torvalds@linux-foundation.org>
+--Sig_/zu4q6q2/mkBU.yay6bQj.rh
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+Hi all,
 
-> ---
->   drivers/acpi/Kconfig |    1 +
->   1 file changed, 1 insertion(+)
-> 
-> --- linux-next-20220128.orig/drivers/acpi/Kconfig
-> +++ linux-next-20220128/drivers/acpi/Kconfig
-> @@ -11,6 +11,7 @@ menuconfig ACPI
->   	depends on ARCH_SUPPORTS_ACPI
->   	select PNP
->   	select NLS
-> +	select CRC32
->   	default y if X86
->   	help
->   	  Advanced Configuration and Power Interface (ACPI) support for
+After merging the kspp tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
+In file included from include/linux/string.h:253,
+                 from include/linux/bitmap.h:11,
+                 from include/linux/cpumask.h:12,
+                 from arch/x86/include/asm/cpumask.h:5,
+                 from arch/x86/include/asm/msr.h:11,
+                 from arch/x86/include/asm/processor.h:22,
+                 from arch/x86/include/asm/timex.h:5,
+                 from include/linux/timex.h:65,
+                 from include/linux/time32.h:13,
+                 from include/linux/time.h:60,
+                 from include/linux/skbuff.h:15,
+                 from include/linux/tcp.h:17,
+                 from drivers/net/ethernet/mellanox/mlx5/core/en_tx.c:33:
+In function 'fortify_memcpy_chk',
+    inlined from 'mlx5e_insert_vlan' at drivers/net/ethernet/mellanox/mlx5/=
+core/en_tx.c:211:2,
+    inlined from 'mlx5e_sq_xmit_wqe' at drivers/net/ethernet/mellanox/mlx5/=
+core/en_tx.c:496:4:
+include/linux/fortify-string.h:325:25: error: call to '__write_overflow_fie=
+ld' declared with attribute warning: detected write beyond size of field (1=
+st parameter); maybe use struct_group()? [-Werror=3Dattribute-warning]
+  325 |                         __write_overflow_field(p_size_field, size);
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from include/linux/string.h:253,
+                 from include/linux/bitmap.h:11,
+                 from include/linux/cpumask.h:12,
+                 from arch/x86/include/asm/cpumask.h:5,
+                 from arch/x86/include/asm/msr.h:11,
+                 from arch/x86/include/asm/processor.h:22,
+                 from arch/x86/include/asm/timex.h:5,
+                 from include/linux/timex.h:65,
+                 from include/linux/time32.h:13,
+                 from include/linux/time.h:60,
+                 from include/linux/ktime.h:24,
+                 from include/linux/timer.h:6,
+                 from include/linux/netdevice.h:24,
+                 from include/trace/events/xdp.h:8,
+                 from include/linux/bpf_trace.h:5,
+                 from drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c:33:
+In function 'fortify_memcpy_chk',
+    inlined from 'mlx5e_xmit_xdp_frame' at drivers/net/ethernet/mellanox/ml=
+x5/core/en/xdp.c:344:3:
+include/linux/fortify-string.h:325:25: error: call to '__write_overflow_fie=
+ld' declared with attribute warning: detected write beyond size of field (1=
+st parameter); maybe use struct_group()? [-Werror=3Dattribute-warning]
+  325 |                         __write_overflow_field(p_size_field, size);
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Caused by various commits in the mlx5 driver interacting with the new
+memcpy checking.
+
+I have disabled CONFIG_MLX5_CORE_EN for today while this gets sorted
+out properly.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/zu4q6q2/mkBU.yay6bQj.rh
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmH3GsIACgkQAVBC80lX
+0GwP6Qf9EISBThaLkN39k4EX2CoZ3A7N1cqf1QaL/+IEsaOCxaX8BOcMyvj/D2dA
+kZ/w+ZAnGOeeLTWgDE4phA05h7wKZ09HTjM+6kuQH4nm9NjylxC9VfJp+Fxi6W5S
+CjN+lGRrtO7I/+eJPA7BTy3pH0sBGwBcLy+ZlVdbO/zrm+6TlFkYqXzgJJgNazmE
+xSuC/WVvRTv1PBfo7Rjp8VD0XiYOsK46ovJP3tYA51BzhepyWcl0yduBAzjWB/wp
+7pnjWOaBmHeo2VHmSQo+71+IlteslG7tSlO87c9XAoL0FWB0MmeW9CX82TMU4H8h
+YfnbU02OM7AUMfYVFCEobwTwHlf0jQ==
+=Nn/o
+-----END PGP SIGNATURE-----
+
+--Sig_/zu4q6q2/mkBU.yay6bQj.rh--

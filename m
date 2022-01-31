@@ -2,100 +2,96 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6A504A50C2
-	for <lists+linux-next@lfdr.de>; Mon, 31 Jan 2022 22:06:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73B794A5254
+	for <lists+linux-next@lfdr.de>; Mon, 31 Jan 2022 23:27:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344277AbiAaVGI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 31 Jan 2022 16:06:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43820 "EHLO
+        id S233497AbiAaW1r (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 31 Jan 2022 17:27:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343693AbiAaVGI (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 31 Jan 2022 16:06:08 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57381C061714
-        for <linux-next@vger.kernel.org>; Mon, 31 Jan 2022 13:06:08 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id qe6-20020a17090b4f8600b001b7aaad65b9so355895pjb.2
-        for <linux-next@vger.kernel.org>; Mon, 31 Jan 2022 13:06:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=SU2C5Ut+6pVhWNusD7rQJSCoDPKXcj6KPViieB+X2lo=;
-        b=hoQPs3vvKd7f1xYDysO+MqUCq4Iv27DRIoE1LCB2rYcxtJxZsOpFbFs/dzUF4N+KB7
-         YOvrYpJQ6TEndtT426TWvnQaEdc8kuPAvKL1ohdSugHUSz5qDExR/NXy0vXMuNI258E+
-         TfjMsP0xEQN9+BRl5R2eCk8q0PFJoH0jSWOzU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=SU2C5Ut+6pVhWNusD7rQJSCoDPKXcj6KPViieB+X2lo=;
-        b=1jAeOgB1ffRZRJh5mMSIJdEptNBS635Lppw9t8iepCdmrOkN7PtYVd/U93tUZRq5VQ
-         WEXNggAecz+P8sne/+StO/+vHHiTh6irafvfx4fMSoHiQYYWAbiCvh0kw706SKbKNGud
-         BYrCyvYccqRqzvKIb8V9Xp4I/vKGLnHjUB4q2pKAUqzNXEJZZ23hl7NFrn55eIY6aIfb
-         nA8AwmpITQduiDE+IkdmS2ECK8mriLQeehdioDVq5fRzYvdxtLOYWiQs9f0O8YwF+Igx
-         VpJitn/PNuq/BM+u0Amj4HKFgsQ3y1g7PkGM5GalSnfwedhShNJCuLFendJ+xocTVGoC
-         5ong==
-X-Gm-Message-State: AOAM530X/huF1hWua3R96ofxEpjI05kzJJqz7DCghVSoXgVJUPrvAvlz
-        VNFNC6drTtgrQkVcoWk52aia7A==
-X-Google-Smtp-Source: ABdhPJw3mk7g/0+d8ppkglsn7LnLQZW0nlmnZxQQxVqkVpoCYTS2/ssuThB0561M1pMoYV+W9kT4YA==
-X-Received: by 2002:a17:902:c215:: with SMTP id 21mr21063159pll.134.1643663167174;
-        Mon, 31 Jan 2022 13:06:07 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id z6sm5913634pfb.171.2022.01.31.13.06.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 13:06:06 -0800 (PST)
-Date:   Mon, 31 Jan 2022 13:06:06 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Saeed Mahameed <saeedm@nvidia.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Leon Romanovsky <leon@kernel.org>,
+        with ESMTP id S233366AbiAaW1n (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 31 Jan 2022 17:27:43 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D4C2C061714;
+        Mon, 31 Jan 2022 14:27:43 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JnjP46VS2z4xcR;
+        Tue,  1 Feb 2022 09:27:36 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1643668058;
+        bh=6zdO+QRlqy6ZLwcdl/K3VM9cvcTFOAPhdPY6ABA2x/U=;
+        h=Date:From:To:Cc:Subject:From;
+        b=nqj30PCA+v7dUgNT8bzmCEhuWO0L2WodR6X42tFLAHVUP/y+QrnCsFHNr1VipYnPH
+         QXg90PfgQM2kqa0aKkFOU38PgrjwUPtTB8CKpfYDJp70JwPF3utXlWPbee0zDdXmL0
+         oJANbKbPAkNS/9pAacfCxjjxS4jcEndvqagGxXSSImSEacq1HtOgCRMnfqTl198XN/
+         webdUcVH+a9Fc5+9+8fXttTdp0+ysuZhckFFW5Gw/LhOPhBS2WydVW7RFvtRQVlhNq
+         IrD3jWwCkbEDVpNnhGUNwMny8iha6628xVqFJcSN83iMCaquepwM1DMytj/fcIbMd1
+         /hY6lZZElC6Yw==
+Date:   Tue, 1 Feb 2022 09:27:35 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: Re: linux-next: build failure after merge of the kspp tree
-Message-ID: <202201311300.39BE058A1@keescook>
-References: <20220131100954.74a2034f@canb.auug.org.au>
- <202201302002.41A8DDA2@keescook>
- <20220131155932.3f88ec71@canb.auug.org.au>
- <202201302216.97F2691@keescook>
- <20220131191019.fpa5sn5u4kuov5ub@sx1>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the drm-intel-fixes tree
+Message-ID: <20220201092735.1d5b38d3@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220131191019.fpa5sn5u4kuov5ub@sx1>
+Content-Type: multipart/signed; boundary="Sig_/P0jXNpzxGM5MKBdivRc5/.o";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 11:10:19AM -0800, Saeed Mahameed wrote:
-> On 30 Jan 22:19, Kees Cook wrote:
-> > On Mon, Jan 31, 2022 at 03:59:32PM +1100, Stephen Rothwell wrote:
-> > > On Sun, 30 Jan 2022 20:04:00 -0800 Kees Cook <keescook@chromium.org> wrote:
-> > > > https://lore.kernel.org/linux-hardening/20220124172242.2410996-1-keescook@chromium.org/
+--Sig_/P0jXNpzxGM5MKBdivRc5/.o
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Fixes: 34802a42b352 ("net/mlx5e: Do not modify the TX SKB")
+Hi all,
 
-> > > > https://lore.kernel.org/linux-hardening/20220124172028.2410761-1-keescook@chromium.org/
+After merging the drm-intel-fixes tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-Fixes: b5503b994ed5 ("net/mlx5e: XDP TX forwarding support")
+drivers/gpu/drm/i915/i915_vma.c: In function 'i915_vma_bind':
+drivers/gpu/drm/i915/i915_vma.c:451:25: error: 'ret' undeclared (first use =
+in this function); did you mean 'net'?
+  451 |                         ret =3D i915_gem_object_wait_moving_fence(v=
+ma->obj, true);
+      |                         ^~~
+      |                         net
 
-> > > yeah, neither has made it yet.  However, it would not have helped as I
-> > > am merging the kspp tree very early so that new bugs get fixed in the
-> > > trees that introduce them.  These 2 are in Linus tree (for a long time)
-> > > and so it would be better if these fixes went int the net tree and then
-> > > Linus' tree as bug fixes.
-> 
-> I need proper fixes tags to submit to net, can you provide ?
+Caused by commit
 
-Sure! See above.
+  2e872d87cbf2 ("drm/i915: delete shadow "ret" variable")
 
-> another option is to use a shared branch with those fixes and pull it to
-> both net-next and kspp.
+I have reverted that commit for today.
 
-It's just a handful left now, so I think we'll avoid this for now.
+--=20
+Cheers,
+Stephen Rothwell
 
-Thanks!
+--Sig_/P0jXNpzxGM5MKBdivRc5/.o
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
--- 
-Kees Cook
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmH4YlcACgkQAVBC80lX
+0Gy3cwf/brC2EFiNiIpdHNyA+Otwx6kgE3B0cDHwQF3xWcjAq/DfGqMeY1buwpN4
+XifRhRRZWIuIiStMWbLOgMyEU2FqMDDNpa7Ek0mEGuY+xYw9Dqac1Hudti7KfjFq
+OLAzTOSjeETHtVyL7HCqGxSZPqybyc21//hnixrF4lrTz/97c/DOGzid97Jz2huM
+JSQHll4qDlLr4hxUmfO4jb7Xyqr0CSadW5UHcC04kiF3zWxhwrXBbdSXBh3GdCGL
+5/useiTgWbsAEOuk0Lzs5ewnR/X/z0PU1b4VK47W/nr4C0w4eArQMK66zYFYILYR
+TGY1jtNFb8ULvJCPcUPgnPF6Oxa8GA==
+=EBQN
+-----END PGP SIGNATURE-----
+
+--Sig_/P0jXNpzxGM5MKBdivRc5/.o--

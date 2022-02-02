@@ -2,113 +2,102 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DA254A7614
-	for <lists+linux-next@lfdr.de>; Wed,  2 Feb 2022 17:39:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59BCB4A7C24
+	for <lists+linux-next@lfdr.de>; Thu,  3 Feb 2022 01:00:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232755AbiBBQjn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 2 Feb 2022 11:39:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44186 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235789AbiBBQjm (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Feb 2022 11:39:42 -0500
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D896DC06173B
-        for <linux-next@vger.kernel.org>; Wed,  2 Feb 2022 08:39:42 -0800 (PST)
-Received: by mail-pg1-x531.google.com with SMTP id f8so18746369pgf.8
-        for <linux-next@vger.kernel.org>; Wed, 02 Feb 2022 08:39:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=tY7gifojugJSD5p4YfWSz9NLQ3A3BS+rqgnzng9kvSw=;
-        b=BDw1mjVM+280XSXCpS330TZurj8fGxBv+iO6moGSKQvKefM5AOP+UBihwh/pltBMNR
-         gadkcufziPPtSNG/j1UEaBG5T16386R1jrR8/enqNPP0c4A0ZdHK8g+TVbaPvXFRB8Dz
-         +t9cyrk2C4kswXaNLPfRJbU2CnC+o+g9YPvMt8AuWVnHL3qKlu7bgC2ydF3U113GUgrG
-         eq+7hmuTqV537xt2U1us/MTANqzEYmFECDNQRQ+unKXlCYAKs3uM8+5Q83GxCeNKpSLk
-         B6unFTv5JKltb2yLKuoUDd5c1/ByDyRtJBHfqm9nH29TUQf3UiVYgl2oFm0GtM8MfNab
-         Zj1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=tY7gifojugJSD5p4YfWSz9NLQ3A3BS+rqgnzng9kvSw=;
-        b=HN4AMqJaFgLOmRQyWOlkjz7RMig2p2d4SZyViqq6RqVdoayS/P8aFraudYP+8nOT8z
-         JjsTfTZ9Y0ZRHFqR5fmSZtrHfrGcCbt6w13ksFnI6rDDn66ODpRGLmq4D0yoOepCf2zz
-         xnDNA6wbczN0haWuavwk2jVGj0em0vYfnKqmsts3NAS8n3p79+418viVY+2Z9t3OLPiU
-         TuylM2PNDDt+j9DRNh3VXeUpMU7UHkEmdJ+lvRHvrRaJEosO6NTugGHjaSQ6AUGLBqoF
-         1O9cqZ/BtZiVm4GeNkpZPl5BNW6QMUs6HSHyDQRyZ6vOsYXhw8nhhtrHC9NaxGKb5owe
-         xKoQ==
-X-Gm-Message-State: AOAM532yrVTnbYaNw+erQX1EBWxndA6XFtb1P4Z44imX6EL7/tR9O/zi
-        hAfNPCnWYvpOdBQZCpVrbTAHNaWQPK0JqOKY78QCxQ==
-X-Google-Smtp-Source: ABdhPJyTguLiL2diyFPk98mfUwfK8MI6kgRxK+9KfJJmXZoB0buNdO7m9XYTxFJhYAqKBZhxV38R/qAPe+/HPj9Dd4k=
-X-Received: by 2002:a05:6a00:2343:: with SMTP id j3mr30022335pfj.7.1643819982134;
- Wed, 02 Feb 2022 08:39:42 -0800 (PST)
+        id S239568AbiBCAAA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 2 Feb 2022 19:00:00 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:49329 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234065AbiBCAAA (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Feb 2022 19:00:00 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JpzLj0t3Sz4xmt;
+        Thu,  3 Feb 2022 10:59:56 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1643846398;
+        bh=2IHWp8kmKG6pwvVBxGoqJsHFkv7IjW45tANE/ocUJCo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=mJtV8cNfomv84yN40D9zLILinFiDXnuLdhS5HtKMiCSolQa5nXgCwNu48gAmdeR23
+         aGMv5lQ09i4e4Tg0vjm7ZWznYu3j8cRtwyRn3hAT+aekIaFjGbZSPZWZwxrjRUNFDJ
+         cIrBWbEspI9bpuqCif/67QEj6wTb/6h0ADzfp3ZvEDP8ddL1j3cHJHJ1zhbzC7HNcs
+         ax9PCdNfa5oKCfmZnRI9zloRoGThlUDvkqWC9ke9H1xHHKrjJmhgIYh9B1wcvFX9Z9
+         PihnREsvN85pTyehU0BUR0s2BJjkZUUjLMP6Lw/OGaGuPWnjSBwbfSGeg0RgQCHRJp
+         5Ai8xd0oOh4wA==
+Date:   Thu, 3 Feb 2022 10:59:55 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     John Harrison <John.C.Harrison@Intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Matt Roper <matthew.d.roper@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        Umesh Nerlige Ramappa <umesh.nerlige.ramappa@intel.com>
+Subject: linux-next: manual merge of the drm-intel tree with the
+ drm-intel-fixes tree
+Message-ID: <20220203105955.1cd61502@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20220202000522.A3834C340EB@smtp.kernel.org> <46e56d44-bd7d-9239-a5db-099b6e285bee@infradead.org>
-In-Reply-To: <46e56d44-bd7d-9239-a5db-099b6e285bee@infradead.org>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Wed, 2 Feb 2022 08:39:06 -0800
-Message-ID: <CAJD7tkYMhnf-Ph8tpC-E4Zudt53grP1SddUxScXsh76Acg2aTg@mail.gmail.com>
-Subject: Re: mmotm 2022-02-01-16-04 uploaded (mm/memcontrol.c)
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, broonie@kernel.org,
-        mhocko@suse.cz, sfr@canb.auug.org.au, linux-next@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, mm-commits@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; boundary="Sig_/qYjjXV8pFbe/W.USU2pBn4_";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Thanks for pointing this out. The kernel test robot emailed me about
-it and I am working on fixing it for v2.
+--Sig_/qYjjXV8pFbe/W.USU2pBn4_
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 1, 2022 at 7:50 PM Randy Dunlap <rdunlap@infradead.org> wrote:
->
->
->
-> On 2/1/22 16:05, Andrew Morton wrote:
-> > The mm-of-the-moment snapshot 2022-02-01-16-04 has been uploaded to
-> >
-> >    https://www.ozlabs.org/~akpm/mmotm/
-> >
-> > mmotm-readme.txt says
-> >
-> > README for mm-of-the-moment:
-> >
-> > https://www.ozlabs.org/~akpm/mmotm/
-> >
-> > This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
-> > more than once a week.
-> >
-> > You will need quilt to apply these patches to the latest Linus release =
-(5.x
-> > or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated=
- in
-> > https://ozlabs.org/~akpm/mmotm/series
-> >
-> > The file broken-out.tar.gz contains two datestamp files: .DATE and
-> > .DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss=
-,
-> > followed by the base kernel version against which this patch series is =
-to
-> > be applied.
->
-> on i386:
-> (memcg-add-per-memcg-total-kernel-memory-stat.patch)
->
->
-> ../mm/memcontrol.c: In function =E2=80=98uncharge_batch=E2=80=99:
-> ../mm/memcontrol.c:6805:4: error: implicit declaration of function =E2=80=
-=98mem_cgroup_kmem_record=E2=80=99; did you mean =E2=80=98mem_cgroup_id_rem=
-ove=E2=80=99? [-Werror=3Dimplicit-function-declaration]
->     mem_cgroup_kmem_record(ug->memcg, -ug->nr_kmem);
->     ^~~~~~~~~~~~~~~~~~~~~~
->     mem_cgroup_id_remove
->
->
-> Full randconfig file is attached.
->
-> --
-> ~Randy
+Hi all,
+
+Today's linux-next merge of the drm-intel tree got a conflict in:
+
+  drivers/gpu/drm/i915/i915_reg.h
+
+between commit:
+
+  b3f74938d656 ("drm/i915/pmu: Use PM timestamp instead of RING TIMESTAMP f=
+or reference")
+
+from the drm-intel-fixes tree and commit:
+
+  22ba60f617bd ("drm/i915: Move [more] GT registers to their own header fil=
+e")
+
+from the drm-intel tree.
+
+I fixed it up (I just used the latter version) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/qYjjXV8pFbe/W.USU2pBn4_
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmH7GvsACgkQAVBC80lX
+0GzaEgf/ciUxwV2kDzIokzbMY0hb4N3b7NoLZIMauwA1+8VuA4IxKNAG3Rvoj2jG
++jSAZW7bL8rXjB2clWosD78q7Rjgj4wEFOpbCueoaaSFFU5bRwuft7UFr+Tak5Fq
+6HWtKy3teCRqojMnEP+tIKg5mmF5Xb27SQwXd+E5tBTUVhCbftLR4tOaQeoZmQJD
+Yba5pNP8fI82Fgml1xp5Du+3rWfZmZ/KbggIV2FvLA5tlt/JEk596MmXueqnQ+93
+MRDAVvi6t7MfQtoZ6NfpDrJJ0vHzdqFutIQU5W3VmDKdKVLrgJihYeuKkNCisIaA
+CK3kBAJ+Ku897zHL83PnQTzTkRT6dA==
+=cpd6
+-----END PGP SIGNATURE-----
+
+--Sig_/qYjjXV8pFbe/W.USU2pBn4_--

@@ -2,575 +2,211 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 334FC4A6E6E
-	for <lists+linux-next@lfdr.de>; Wed,  2 Feb 2022 11:11:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50C5C4A6EA7
+	for <lists+linux-next@lfdr.de>; Wed,  2 Feb 2022 11:25:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232636AbiBBKL5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 2 Feb 2022 05:11:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39314 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232563AbiBBKL4 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Feb 2022 05:11:56 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 648F7C061714
-        for <linux-next@vger.kernel.org>; Wed,  2 Feb 2022 02:11:56 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id e16so17930065pgn.4
-        for <linux-next@vger.kernel.org>; Wed, 02 Feb 2022 02:11:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=cVeaFpISBcLydBizkK2RPIymasjT1eAYuih0SHVqEV8=;
-        b=09O7vh7gq1zfmPp/EZf6fN5r+goKqzy7xbFilzOzte2nQ+ABKAkxDLpnbl3eOEPufa
-         vsngEtW2XSyI9kk1T1GUNG1DR+bEUTV4VX1iuIRij/xJ8I5yFY6deZ6NNji7Qz1HwV1c
-         QBPQnH92jGhD4kl/QiNMp2zjF0WfOgmJTsrhGREBeDOSylXpD6ZhOMZUYkQGXDkUi2p6
-         vwuF56tYbURf+0eexbdihvhrTJ430f3Q0K3jA+pXUxWQm+PYgIup5WfviQ+E4YTB8W2L
-         vkeQMC8KAZyCKBPS8HKFBfX+X223/HnNsBuo+nkx8t9s6mYw0bq0daQuf6fqkI5uWlAh
-         flOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=cVeaFpISBcLydBizkK2RPIymasjT1eAYuih0SHVqEV8=;
-        b=Z2bq5OoS742Uoz0uBPAYXBrF6Nt9fmWvmGftRKBlVgDm54bxhU8OceabKue63tdf9R
-         KNSafkH7zNpcPlY8CM8ZjYhylVvHL9MzHljK2+h+5XMfFy0BE8J9OaE/Xfk1VNpLR72w
-         YCE0xcb/NZ0HdDdgb0txcI9AJNloNJ3Ui4X9BpLt9TnE6rYqGV/jiGYpHMavVYU0f989
-         3nlwjhogUAYoGH6taujHzFB0tysebGBZpie05VwwOFHYh8EqaiRRQhUYkBCJbAACyXor
-         1bF+/cGcIuw+VmVk+KE6mTrQrqauA4SVX44Xfbzy//0xrtNIw7Xka4ICKjyIwoqEBjff
-         Jrdw==
-X-Gm-Message-State: AOAM530GGrzeRaiOVeuFVUT7Yv+SsXtdE3jUv8Yt6iCV8XH01LtZztb2
-        8qnca/F3xF32SNadY29cC5Oi+z1PMGnQOynR
-X-Google-Smtp-Source: ABdhPJwoPK3i+k0bM8vc8A/VWWuv3BYbzcOnlhIi7jDNUJvZC2d1pqpt68XCz2+ZRFsNwjUfVQf93g==
-X-Received: by 2002:a63:d853:: with SMTP id k19mr24007152pgj.39.1643796715579;
-        Wed, 02 Feb 2022 02:11:55 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id u17sm33603706pgi.14.2022.02.02.02.11.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Feb 2022 02:11:55 -0800 (PST)
-Message-ID: <61fa58eb.1c69fb81.30cf6.a729@mx.google.com>
-Date:   Wed, 02 Feb 2022 02:11:55 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        id S230235AbiBBKZu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 2 Feb 2022 05:25:50 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:40350 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230159AbiBBKZt (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Feb 2022 05:25:49 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 7D648210F0;
+        Wed,  2 Feb 2022 10:25:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1643797548; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MBFFaDdmpbT6cNaTMIBoX1VcquThiP3u/BbxSfb0wuY=;
+        b=JNyvQq662qKvUWcs9r5zq+Jz/igNI+v62rKC0yfVhjIHkHCflRLSfDyvO1+CWJpEtSmCZL
+        ePl6mWc7tdwNi1N1Sdf6gr9lzmpIhZH0/qDwWBnnt756KpoQNyWAFTXMbfC095yhG0tpP8
+        tySdDWFy6jc9EjuO7BeHxFbXFpvsx0w=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1643797548;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MBFFaDdmpbT6cNaTMIBoX1VcquThiP3u/BbxSfb0wuY=;
+        b=cHMA9RBg/YOLGW3X8Ur250PkskpWN81lZCwjed4jJKEwqBEfZJREGR/lLIer26dKg2HAbb
+        +nmofruHHuuINuBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2299F13DFD;
+        Wed,  2 Feb 2022 10:25:48 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id iNJPByxc+mHoYwAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Wed, 02 Feb 2022 10:25:48 +0000
+Message-ID: <a1dd9d31-3ad0-b58f-c67b-5896048281ed@suse.de>
+Date:   Wed, 2 Feb 2022 11:25:47 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: next-20220202
-X-Kernelci-Tree: next
-X-Kernelci-Report-Type: test
-X-Kernelci-Branch: master
-Subject: next/master baseline: 688 runs, 13 regressions (next-20220202)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [next] arm: panel-edp.c:(.text+0xb74): undefined reference to
+ `drm_panel_dp_aux_backlight'
+Content-Language: en-US
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Marek Vasut <marex@denx.de>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        regressions@lists.linux.dev, Arnd Bergmann <arnd@arndb.de>,
+        Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>,
+        David Airlie <airlied@linux.ie>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        lkft-triage@lists.linaro.org,
+        Grace Mi <grace.mi@ecs.corp-partner.google.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+References: <CA+G9fYvN0NyaVkRQmA1O6rX7H8PPaZrUAD7=RDy33QY9rUU-9g@mail.gmail.com>
+ <76ff2848-3af4-6758-6e98-91a4c9ad26d8@suse.de>
+ <CAMj1kXE6Q9uW45Q5A-TuPDiXTPOGrGjUn_8FUBKNGQ1g9bd3Rg@mail.gmail.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <CAMj1kXE6Q9uW45Q5A-TuPDiXTPOGrGjUn_8FUBKNGQ1g9bd3Rg@mail.gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------09SMQnBOqe6XcqkDFM74kwlP"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master baseline: 688 runs, 13 regressions (next-20220202)
-
-Regressions Summary
--------------------
-
-platform                   | arch  | lab             | compiler | defconfig=
-                    | regressions
----------------------------+-------+-----------------+----------+----------=
---------------------+------------
-bcm2836-rpi-2-b            | arm   | lab-collabora   | gcc-10   | multi_v7_=
-defc...MB2_KERNEL=3Dy | 1          =
-
-cubietruck                 | arm   | lab-baylibre    | gcc-10   | multi_v7_=
-defc...MB2_KERNEL=3Dy | 2          =
-
-qemu_arm64-virt-gicv2-uefi | arm64 | lab-baylibre    | gcc-10   | defconfig=
-+debug              | 1          =
-
-qemu_arm64-virt-gicv2-uefi | arm64 | lab-collabora   | gcc-10   | defconfig=
-+debug              | 1          =
-
-qemu_arm64-virt-gicv2-uefi | arm64 | lab-linaro-lkft | gcc-10   | defconfig=
-+debug              | 1          =
-
-qemu_arm64-virt-gicv3-uefi | arm64 | lab-baylibre    | gcc-10   | defconfig=
-+debug              | 1          =
-
-qemu_arm64-virt-gicv3-uefi | arm64 | lab-collabora   | gcc-10   | defconfig=
-+debug              | 1          =
-
-qemu_arm64-virt-gicv3-uefi | arm64 | lab-linaro-lkft | gcc-10   | defconfig=
-+debug              | 1          =
-
-r8a77950-salvator-x        | arm64 | lab-baylibre    | gcc-10   | defconfig=
-                    | 1          =
-
-rk3399-gru-kevin           | arm64 | lab-collabora   | gcc-10   | defconfig=
-+arm64-chromebook   | 1          =
-
-sun7i-a20-cubieboard2      | arm   | lab-clabbe      | gcc-10   | multi_v7_=
-defc...MB2_KERNEL=3Dy | 2          =
-
-
-  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
-220202/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   master
-  Describe: next-20220202
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      6abab1b81b657ca74b7c443e832d95c87901e75b =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                   | arch  | lab             | compiler | defconfig=
-                    | regressions
----------------------------+-------+-----------------+----------+----------=
---------------------+------------
-bcm2836-rpi-2-b            | arm   | lab-collabora   | gcc-10   | multi_v7_=
-defc...MB2_KERNEL=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/61fa247d54e55a0a795d6f0c
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20220202/arm/=
-multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab-collabora/baseline-b=
-cm2836-rpi-2-b.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20220202/arm/=
-multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab-collabora/baseline-b=
-cm2836-rpi-2-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220121.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/61fa247d54e55a0a795d6=
-f0d
-        failing since 9 days (last pass: next-20220121, first fail: next-20=
-220124) =
-
- =
-
-
-
-platform                   | arch  | lab             | compiler | defconfig=
-                    | regressions
----------------------------+-------+-----------------+----------+----------=
---------------------+------------
-cubietruck                 | arm   | lab-baylibre    | gcc-10   | multi_v7_=
-defc...MB2_KERNEL=3Dy | 2          =
-
-
-  Details:     https://kernelci.org/test/plan/id/61fa2678ece9f6121a5d6f12
-
-  Results:     4 PASS, 2 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20220202/arm/=
-multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab-baylibre/baseline-cu=
-bietruck.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20220202/arm/=
-multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab-baylibre/baseline-cu=
-bietruck.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220121.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.dmesg.alert: https://kernelci.org/test/case/id/61fa2679ece9f61=
-21a5d6f19
-        failing since 0 day (last pass: next-20220127, first fail: next-202=
-20201)
-        16 lines
-
-    2022-02-02T06:36:30.706067  kern  :alert : 8<--- cut here ---
-    2022-02-02T06:36:30.714074  kern  :alert : Unable to handle kernel NULL=
- pointer dereference at virtual address 000001a0
-    2022-02-02T06:36:30.717613  kern  :alert : [000001a0] *pgd=3Dbc955835   =
-
-
-  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/61fa2679ece9f61=
-21a5d6f1a
-        failing since 0 day (last pass: next-20220127, first fail: next-202=
-20201)
-        55 lines
-
-    2022-02-02T06:36:30.729100  kern  :alert : Register<8>[   37.062063] <L=
-AVA_SIGNAL_TESTCASE TEST_CASE_ID=3Dalert RESULT=3Dfail UNITS=3Dlines MEASUR=
-EMENT=3D16>
-    2022-02-02T06:36:30.730880   r0 information: NULL pointer
-    2022-02-02T06:36:30.736483  kern  :alert : Register r1 information: non=
--slab/vmalloc memory
-    2022-02-02T06:36:30.742184  kern  :alert : Register r2 information: non=
--slab/vmalloc memory
-    2022-02-02T06:36:30.747159  kern  :alert : Register r3 information: non=
--paged memory
-    2022-02-02T06:36:30.755907  kern  :alert : Register r4 information: sla=
-b kmalloc-1k start c46f2800 pointer offset 64 size 1024
-    2022-02-02T06:36:30.763806  kern  :alert : Register r5 information: sla=
-b task_struct start c40b9100 pointer offset 0
-    2022-02-02T06:36:30.772285  kern  :alert : Register r6 information: sla=
-b kmalloc-1k start c21aa000 pointer offset 16 size 1024
-    2022-02-02T06:36:30.781110  kern  :alert : Register r7 information: sla=
-b kmalloc-1k start c46f2800 pointer offset 128 size 1024
-    2022-02-02T06:36:30.786697  kern  :alert : Register r8 information: non=
--slab/vmalloc memory =
-
-    ... (43 line(s) more)  =
-
- =
-
-
-
-platform                   | arch  | lab             | compiler | defconfig=
-                    | regressions
----------------------------+-------+-----------------+----------+----------=
---------------------+------------
-qemu_arm64-virt-gicv2-uefi | arm64 | lab-baylibre    | gcc-10   | defconfig=
-+debug              | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/61fa299f129320e6175d6ee8
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+debug
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20220202/arm6=
-4/defconfig+debug/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv2-uefi.t=
-xt
-  HTML log:    https://storage.kernelci.org//next/master/next-20220202/arm6=
-4/defconfig+debug/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv2-uefi.h=
-tml
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220121.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/61fa299f129320e6175d6=
-ee9
-        failing since 50 days (last pass: v5.16-rc4-6579-gea922272cbe5, fir=
-st fail: v5.16-rc5-6644-gbcd5ddb85fad) =
-
- =
-
-
-
-platform                   | arch  | lab             | compiler | defconfig=
-                    | regressions
----------------------------+-------+-----------------+----------+----------=
---------------------+------------
-qemu_arm64-virt-gicv2-uefi | arm64 | lab-collabora   | gcc-10   | defconfig=
-+debug              | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/61fa344b0e784307d15d6eea
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+debug
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20220202/arm6=
-4/defconfig+debug/gcc-10/lab-collabora/baseline-qemu_arm64-virt-gicv2-uefi.=
-txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20220202/arm6=
-4/defconfig+debug/gcc-10/lab-collabora/baseline-qemu_arm64-virt-gicv2-uefi.=
-html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220121.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/61fa344b0e784307d15d6=
-eeb
-        failing since 50 days (last pass: v5.16-rc4-6579-gea922272cbe5, fir=
-st fail: v5.16-rc5-6644-gbcd5ddb85fad) =
-
- =
-
-
-
-platform                   | arch  | lab             | compiler | defconfig=
-                    | regressions
----------------------------+-------+-----------------+----------+----------=
---------------------+------------
-qemu_arm64-virt-gicv2-uefi | arm64 | lab-linaro-lkft | gcc-10   | defconfig=
-+debug              | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/61fa26e01e084978b05d6ef3
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+debug
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20220202/arm6=
-4/defconfig+debug/gcc-10/lab-linaro-lkft/baseline-qemu_arm64-virt-gicv2-uef=
-i.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20220202/arm6=
-4/defconfig+debug/gcc-10/lab-linaro-lkft/baseline-qemu_arm64-virt-gicv2-uef=
-i.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220121.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/61fa26e01e084978b05d6=
-ef4
-        failing since 50 days (last pass: v5.16-rc4-6579-gea922272cbe5, fir=
-st fail: v5.16-rc5-6644-gbcd5ddb85fad) =
-
- =
-
-
-
-platform                   | arch  | lab             | compiler | defconfig=
-                    | regressions
----------------------------+-------+-----------------+----------+----------=
---------------------+------------
-qemu_arm64-virt-gicv3-uefi | arm64 | lab-baylibre    | gcc-10   | defconfig=
-+debug              | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/61fa29f0d02ca634cd5d6ee8
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+debug
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20220202/arm6=
-4/defconfig+debug/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv3-uefi.t=
-xt
-  HTML log:    https://storage.kernelci.org//next/master/next-20220202/arm6=
-4/defconfig+debug/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv3-uefi.h=
-tml
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220121.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/61fa29f0d02ca634cd5d6=
-ee9
-        failing since 48 days (last pass: v5.16-rc5-6644-gbcd5ddb85fad, fir=
-st fail: next-20211214) =
-
- =
-
-
-
-platform                   | arch  | lab             | compiler | defconfig=
-                    | regressions
----------------------------+-------+-----------------+----------+----------=
---------------------+------------
-qemu_arm64-virt-gicv3-uefi | arm64 | lab-collabora   | gcc-10   | defconfig=
-+debug              | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/61fa3501e00044fed55d6ef6
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+debug
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20220202/arm6=
-4/defconfig+debug/gcc-10/lab-collabora/baseline-qemu_arm64-virt-gicv3-uefi.=
-txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20220202/arm6=
-4/defconfig+debug/gcc-10/lab-collabora/baseline-qemu_arm64-virt-gicv3-uefi.=
-html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220121.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/61fa3501e00044fed55d6=
-ef7
-        failing since 48 days (last pass: v5.16-rc5-6644-gbcd5ddb85fad, fir=
-st fail: next-20211214) =
-
- =
-
-
-
-platform                   | arch  | lab             | compiler | defconfig=
-                    | regressions
----------------------------+-------+-----------------+----------+----------=
---------------------+------------
-qemu_arm64-virt-gicv3-uefi | arm64 | lab-linaro-lkft | gcc-10   | defconfig=
-+debug              | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/61fa26e21e084978b05d6ef9
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+debug
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20220202/arm6=
-4/defconfig+debug/gcc-10/lab-linaro-lkft/baseline-qemu_arm64-virt-gicv3-uef=
-i.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20220202/arm6=
-4/defconfig+debug/gcc-10/lab-linaro-lkft/baseline-qemu_arm64-virt-gicv3-uef=
-i.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220121.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/61fa26e21e084978b05d6=
-efa
-        failing since 48 days (last pass: v5.16-rc5-6644-gbcd5ddb85fad, fir=
-st fail: next-20211214) =
-
- =
-
-
-
-platform                   | arch  | lab             | compiler | defconfig=
-                    | regressions
----------------------------+-------+-----------------+----------+----------=
---------------------+------------
-r8a77950-salvator-x        | arm64 | lab-baylibre    | gcc-10   | defconfig=
-                    | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/61fa272e342c30e19a5d6f04
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20220202/arm6=
-4/defconfig/gcc-10/lab-baylibre/baseline-r8a77950-salvator-x.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20220202/arm6=
-4/defconfig/gcc-10/lab-baylibre/baseline-r8a77950-salvator-x.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220121.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/61fa272e342c30e19a5d6=
-f05
-        new failure (last pass: next-20220201) =
-
- =
-
-
-
-platform                   | arch  | lab             | compiler | defconfig=
-                    | regressions
----------------------------+-------+-----------------+----------+----------=
---------------------+------------
-rk3399-gru-kevin           | arm64 | lab-collabora   | gcc-10   | defconfig=
-+arm64-chromebook   | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/61fa200e8ed2970f5d5d6ee9
-
-  Results:     88 PASS, 3 FAIL, 0 SKIP
-  Full config: defconfig+arm64-chromebook
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20220202/arm6=
-4/defconfig+arm64-chromebook/gcc-10/lab-collabora/baseline-rk3399-gru-kevin=
-.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20220202/arm6=
-4/defconfig+arm64-chromebook/gcc-10/lab-collabora/baseline-rk3399-gru-kevin=
-.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220121.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.rockchip-i2s1-probed: https://kernelci.org/test/case/id=
-/61fa200e8ed2970f5d5d6f0b
-        failing since 9 days (last pass: next-20220121, first fail: next-20=
-220124)
-
-    2022-02-02T06:09:00.285135  <4>[   22.893130] cdn-dp fec00000.dp: Direc=
-t firmware load for rockchip/dptx.bin failed with error -2
-    2022-02-02T06:09:00.814614  /lava-5591877/1/../bin/lava-test-case
-    2022-02-02T06:09:00.826327  <8>[   23.435590] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Drockchip-i2s1-probed RESULT=3Dfail>   =
-
- =
-
-
-
-platform                   | arch  | lab             | compiler | defconfig=
-                    | regressions
----------------------------+-------+-----------------+----------+----------=
---------------------+------------
-sun7i-a20-cubieboard2      | arm   | lab-clabbe      | gcc-10   | multi_v7_=
-defc...MB2_KERNEL=3Dy | 2          =
-
-
-  Details:     https://kernelci.org/test/plan/id/61fa24b1d4964acb0e5d6f5b
-
-  Results:     4 PASS, 2 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20220202/arm/=
-multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab-clabbe/baseline-sun7=
-i-a20-cubieboard2.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20220202/arm/=
-multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab-clabbe/baseline-sun7=
-i-a20-cubieboard2.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220121.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.dmesg.alert: https://kernelci.org/test/case/id/61fa24b1d4964ac=
-b0e5d6f62
-        failing since 0 day (last pass: next-20220127, first fail: next-202=
-20201)
-        16 lines
-
-    2022-02-02T06:28:33.504868  kern  :alert : 8<--- cut here ---
-    2022-02-02T06:28:33.515803  kern  :alert : Unable to handle kernel NULL=
- pointer dereference at virtual address 000001a0
-    2022-02-02T06:28:33.524980  kern  :alert : [000001a0] *pgd=3D7d[   43.2=
-22464] <LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Dalert RESULT=3Dfail UNITS=3Dlin=
-es MEASUREMENT=3D16>
-    2022-02-02T06:28:33.525367  10f835   =
-
-
-  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/61fa24b1d4964ac=
-b0e5d6f63
-        failing since 0 day (last pass: next-20220127, first fail: next-202=
-20201)
-        55 lines
-
-    2022-02-02T06:28:33.530526  kern  :alert : Register r0 information: NUL=
-L pointer
-    2022-02-02T06:28:33.535900  kern  :alert : Register r1 information: non=
--slab/vmalloc memory
-    2022-02-02T06:28:33.539590  kern  :alert : Register r2 information: non=
--slab/vmalloc memory
-    2022-02-02T06:28:33.545151  kern  :alert : Register r3 information: non=
--paged memory
-    2022-02-02T06:28:33.555991  kern  :alert : Register r4 information: sla=
-b kmalloc-1k start c445ec00 pointer offset 64 size 1024
-    2022-02-02T06:28:33.565228  kern  :alert : Register r5 information: sla=
-b task_struct start c40b2200 pointer offset 0
-    2022-02-02T06:28:33.570712  kern  :alert : Register r6 information: sla=
-b kmalloc-1k start c21a1c00 pointer offset 16 size 1024
-    2022-02-02T06:28:33.579810  kern  :alert : Register r7 information: sla=
-b kmalloc-1k start c445ec00 pointer offset 128 size 1024
-    2022-02-02T06:28:33.585345  kern  :alert : Register r8 information: non=
--slab/vmalloc memory
-    2022-02-02T06:28:33.596240  kern  :alert : Register r9 information: sla=
-b kmalloc-1k start c21a1c00 pointer offset 0 size 1024 =
-
-    ... (42 line(s) more)  =
-
- =20
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------09SMQnBOqe6XcqkDFM74kwlP
+Content-Type: multipart/mixed; boundary="------------L3fX3bWa0slbEyrcIytD0sy2";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: Marek Vasut <marex@denx.de>, Stephen Rothwell <sfr@canb.auug.org.au>,
+ regressions@lists.linux.dev, Arnd Bergmann <arnd@arndb.de>,
+ Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>,
+ David Airlie <airlied@linux.ie>, Naresh Kamboju <naresh.kamboju@linaro.org>,
+ open list <linux-kernel@vger.kernel.org>,
+ dri-devel <dri-devel@lists.freedesktop.org>,
+ Douglas Anderson <dianders@chromium.org>,
+ Linux-Next Mailing List <linux-next@vger.kernel.org>,
+ Thierry Reding <thierry.reding@gmail.com>, lkft-triage@lists.linaro.org,
+ Grace Mi <grace.mi@ecs.corp-partner.google.com>,
+ Sam Ravnborg <sam@ravnborg.org>,
+ Linux ARM <linux-arm-kernel@lists.infradead.org>
+Message-ID: <a1dd9d31-3ad0-b58f-c67b-5896048281ed@suse.de>
+Subject: Re: [next] arm: panel-edp.c:(.text+0xb74): undefined reference to
+ `drm_panel_dp_aux_backlight'
+References: <CA+G9fYvN0NyaVkRQmA1O6rX7H8PPaZrUAD7=RDy33QY9rUU-9g@mail.gmail.com>
+ <76ff2848-3af4-6758-6e98-91a4c9ad26d8@suse.de>
+ <CAMj1kXE6Q9uW45Q5A-TuPDiXTPOGrGjUn_8FUBKNGQ1g9bd3Rg@mail.gmail.com>
+In-Reply-To: <CAMj1kXE6Q9uW45Q5A-TuPDiXTPOGrGjUn_8FUBKNGQ1g9bd3Rg@mail.gmail.com>
+
+--------------L3fX3bWa0slbEyrcIytD0sy2
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
+
+SGkNCg0KQW0gMDIuMDIuMjIgdW0gMTA6Mjggc2NocmllYiBBcmQgQmllc2hldXZlbDoNCj4g
+T24gV2VkLCAyIEZlYiAyMDIyIGF0IDEwOjA4LCBUaG9tYXMgWmltbWVybWFubiA8dHppbW1l
+cm1hbm5Ac3VzZS5kZT4gd3JvdGU6DQo+Pg0KPj4gSGkNCj4+DQo+PiBBbSAwMi4wMi4yMiB1
+bSAxMDowMiBzY2hyaWViIE5hcmVzaCBLYW1ib2p1Og0KPj4+IEZvbGxvd2luZyBidWlsZHMg
+ZmFpbGVkIG9uIExpbnV4IG5leHQgMjAyMjAyMDIgYXJtIGFyY2hpdGVjdHVyZS4NCj4+PiAg
+ICAgLSBhcm0tZ2NjLTEwLW9tYXAycGx1c19kZWZjb25maWcNCj4+PiAgICAgLSBhcm0tY2xh
+bmctbmlnaHRseS1zaG1vYmlsZV9kZWZjb25maWcNCj4+PiAgICAgLSBhcm0tZ2NjLTgtbHBj
+MzJ4eF9kZWZjb25maWcNCj4+PiAgICAgLSBhcm0tY2xhbmctMTMtc2htb2JpbGVfZGVmY29u
+ZmlnDQo+Pj4gICAgIC0gYXJtLWdjYy0xMC1zaG1vYmlsZV9kZWZjb25maWcNCj4+PiAgICAg
+LSBhcm0tY2xhbmctMTEtc2htb2JpbGVfZGVmY29uZmlnDQo+Pj4gICAgIC0gYXJtLWNsYW5n
+LTExLW9tYXAycGx1c19kZWZjb25maWcNCj4+PiAgICAgLSBhcm0tY2xhbmctMTMtb21hcDJw
+bHVzX2RlZmNvbmZpZw0KPj4+ICAgICAtIGFybS1jbGFuZy0xMS1scGMzMnh4X2RlZmNvbmZp
+Zw0KPj4+ICAgICAtIGFybS1nY2MtOC1vbWFwMnBsdXNfZGVmY29uZmlnDQo+Pj4gICAgIC0g
+YXJtLWdjYy05LXZleHByZXNzX2RlZmNvbmZpZw0KPj4+ICAgICAtIGFybS1jbGFuZy1uaWdo
+dGx5LWxwYzMyeHhfZGVmY29uZmlnDQo+Pj4gICAgIC0gYXJtLWdjYy05LXNobW9iaWxlX2Rl
+ZmNvbmZpZw0KPj4+ICAgICAtIGFybS1jbGFuZy0xMy1scGMzMnh4X2RlZmNvbmZpZw0KPj4+
+ICAgICAtIGFybS1nY2MtMTAtc2FtYTVfZGVmY29uZmlnDQo+Pj4gICAgIC0gYXJtLWNsYW5n
+LTExLXZleHByZXNzX2RlZmNvbmZpZw0KPj4+ICAgICAtIGFybS1jbGFuZy0xMS1zYW1hNV9k
+ZWZjb25maWcNCj4+PiAgICAgLSBhcm0tZ2NjLTktb21hcDJwbHVzX2RlZmNvbmZpZw0KPj4+
+ICAgICAtIGFybS1jbGFuZy1uaWdodGx5LXNhbWE1X2RlZmNvbmZpZw0KPj4+ICAgICAtIGFy
+bS1jbGFuZy0xMy12ZXhwcmVzc19kZWZjb25maWcNCj4+PiAgICAgLSBhcm0tY2xhbmctbmln
+aHRseS12ZXhwcmVzc19kZWZjb25maWcNCj4+PiAgICAgLSBhcm0tZ2NjLTktbHBjMzJ4eF9k
+ZWZjb25maWcNCj4+PiAgICAgLSBhcm0tY2xhbmctMTItdmV4cHJlc3NfZGVmY29uZmlnDQo+
+Pj4gICAgIC0gYXJtLWdjYy0xMC12ZXhwcmVzc19kZWZjb25maWcNCj4+PiAgICAgLSBhcm0t
+Y2xhbmctMTItc2htb2JpbGVfZGVmY29uZmlnDQo+Pj4gICAgIC0gYXJtLWdjYy0xMS1vbWFw
+MnBsdXNfZGVmY29uZmlnDQo+Pj4gICAgIC0gYXJtLWdjYy05LXNhbWE1X2RlZmNvbmZpZw0K
+Pj4+ICAgICAtIGFybS1nY2MtOC1zaG1vYmlsZV9kZWZjb25maWcNCj4+PiAgICAgLSBhcm0t
+Z2NjLTEwLWxwYzMyeHhfZGVmY29uZmlnDQo+Pj4gICAgIC0gYXJtLWNsYW5nLTEyLW9tYXAy
+cGx1c19kZWZjb25maWcNCj4+PiAgICAgLSBhcm0tZ2NjLTgtdmV4cHJlc3NfZGVmY29uZmln
+DQo+Pj4gICAgIC0gYXJtLWNsYW5nLTEyLXNhbWE1X2RlZmNvbmZpZw0KPj4+ICAgICAtIGFy
+bS1jbGFuZy1uaWdodGx5LW9tYXAycGx1c19kZWZjb25maWcNCj4+PiAgICAgLSBhcm0tZ2Nj
+LTExLWxwYzMyeHhfZGVmY29uZmlnDQo+Pj4gICAgIC0gYXJtLWdjYy0xMS1zYW1hNV9kZWZj
+b25maWcNCj4+PiAgICAgLSBhcm0tZ2NjLTExLXNobW9iaWxlX2RlZmNvbmZpZw0KPj4+ICAg
+ICAtIGFybS1nY2MtMTEtdmV4cHJlc3NfZGVmY29uZmlnDQo+Pj4gICAgIC0gYXJtLWdjYy04
+LXNhbWE1X2RlZmNvbmZpZw0KPj4+ICAgICAtIGFybS1jbGFuZy0xMy1zYW1hNV9kZWZjb25m
+aWcNCj4+PiAgICAgLSBhcm0tY2xhbmctMTItbHBjMzJ4eF9kZWZjb25maWcNCj4+Pg0KPj4+
+DQo+Pj4gbWFrZSAtLXNpbGVudCAtLWtlZXAtZ29pbmcgLS1qb2JzPTggIEFSQ0g9YXJtDQo+
+Pj4gQ1JPU1NfQ09NUElMRT1hcm0tbGludXgtZ251ZWFiaWhmLSAnQ0M9c2NjYWNoZQ0KPj4+
+IGFybS1saW51eC1nbnVlYWJpaGYtZ2NjJyAnSE9TVENDPXNjY2FjaGUgZ2NjJyB2ZXhwcmVz
+c19kZWZjb25maWcNCj4+PiBtYWtlIC0tc2lsZW50IC0ta2VlcC1nb2luZyAtLWpvYnM9OCAg
+QVJDSD1hcm0NCj4+PiBDUk9TU19DT01QSUxFPWFybS1saW51eC1nbnVlYWJpaGYtICdDQz1z
+Y2NhY2hlDQo+Pj4gYXJtLWxpbnV4LWdudWVhYmloZi1nY2MnICdIT1NUQ0M9c2NjYWNoZSBn
+Y2MnDQo+Pj4gYXJtLWxpbnV4LWdudWVhYmloZi1sZDogZHJpdmVycy9ncHUvZHJtL3BhbmVs
+L3BhbmVsLWVkcC5vOiBpbiBmdW5jdGlvbg0KPj4+IGBwYW5lbF9lZHBfcHJvYmUnOg0KPj4+
+IHBhbmVsLWVkcC5jOigudGV4dCsweGI3NCk6IHVuZGVmaW5lZCByZWZlcmVuY2UgdG8gYGRy
+bV9wYW5lbF9kcF9hdXhfYmFja2xpZ2h0Jw0KPj4+IG1ha2VbMV06ICoqKiBbL2J1aWxkcy9s
+aW51eC9NYWtlZmlsZToxMjIyOiB2bWxpbnV4XSBFcnJvciAxDQo+Pj4NCj4+Pg0KPj4+IFJl
+cG9ydGVkLWJ5OiBMaW51eCBLZXJuZWwgRnVuY3Rpb25hbCBUZXN0aW5nIDxsa2Z0QGxpbmFy
+by5vcmc+DQo+Pj4NCj4+PiBtZXRhIGRhdGE6DQo+Pj4gLS0tLS0tLS0tLS0NCj4+PiAgICAg
+ICBnaXQgZGVzY3JpYmU6IG5leHQtMjAyMjAyMDINCj4+PiAgICAgICBnaXRfcmVwbzogaHR0
+cHM6Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvbmV4dC9saW51
+eC1uZXh0LmdpdA0KPj4+ICAgICAgIHRhcmdldF9hcmNoOiBhcm0NCj4+PiAgICAgICBrY29u
+ZmlnOiB2ZXhwcmVzc19kZWZjb25maWcNCj4+PiAgICAgICB0b29sY2hhaW46IGdjYy0xMQ0K
+Pj4+DQo+Pj4gQnVpbGQgbG9nOg0KPj4+IC0tLS0tLS0tLS0tLS0NCj4+PiBodHRwczovL2J1
+aWxkcy50dXhidWlsZC5jb20vMjRYUmltNzJ2RlhpeDZsNk1kQUpORU55NmplLw0KPj4+DQo+
+Pj4gU3RlcHMgdG8gcmVwcm9kdWNlOg0KPj4+IC0tLS0tLS0tLS0tLS0tLS0tLS0tDQo+Pj4g
+IyBUbyBpbnN0YWxsIHR1eG1ha2Ugb24geW91ciBzeXN0ZW0gZ2xvYmFsbHk6DQo+Pj4gIyBz
+dWRvIHBpcDMgaW5zdGFsbCAtVSB0dXhtYWtlDQo+Pj4gIw0KPj4+ICMgU2VlIGh0dHBzOi8v
+ZG9jcy50dXhtYWtlLm9yZy8gZm9yIGNvbXBsZXRlIGRvY3VtZW50YXRpb24uDQo+Pj4gIyBP
+cmlnaW5hbCB0dXhtYWtlIGNvbW1hbmQgd2l0aCBmcmFnbWVudHMgbGlzdGVkIGJlbG93Lg0K
+Pj4+DQo+Pj4gdHV4bWFrZSAtLXJ1bnRpbWUgcG9kbWFuIC0tdGFyZ2V0LWFyY2ggYXJtIC0t
+dG9vbGNoYWluIGdjYy0xMQ0KPj4+IC0ta2NvbmZpZyB2ZXhwcmVzc19kZWZjb25maWcNCj4+
+Pg0KPj4+IHR1eG1ha2UgLS1ydW50aW1lIHBvZG1hbiAtLXRhcmdldC1hcmNoIGFybSAtLXRv
+b2xjaGFpbiBnY2MtMTENCj4+PiAtLWtjb25maWcgaHR0cHM6Ly9idWlsZHMudHV4YnVpbGQu
+Y29tLzI0WFJpbTcydkZYaXg2bDZNZEFKTkVOeTZqZS9jb25maWcNCj4+DQo+PiBZb3UnbGwg
+bm93IG5lZWQNCj4+DQo+PiAgICAgQ09ORklHX0RSTV9EUF9IRUxQRVI9eQ0KPj4NCj4+IGlu
+IHlvdXIgY29uZmlnLg0KPj4NCj4gDQo+IFRoYXQgc2hvdWxkIG5ldmVyIGJlIHRoZSBzb2x1
+dGlvbiBmb3IgbGlua2VyIGVycm9ycyBzdWNoIGFzIHRoaXMgb25lLg0KPiANCj4gSWYgQ09O
+RklHX0RSTV9QQU5FTF9FRFAgcmVsaWVzIG9uIHNvbWV0aGluZyBwcm92aWRlZCBieQ0KPiBD
+T05GSUdfRFJNX0RQX0hFTFBFUiwgaXQgc2hvdWxkIHNlbGVjdCBpdCBvciBkZXBlbmQgb24g
+aXQgaW4gS2NvbmZpZy4NCg0KT2YgY291cnNlLCB3ZSdsbCBwcm92aWRlIGEgcGF0Y2ggZm9y
+IHRoZSBLY29uZmlnIGZpbGVzLg0KDQpCZXN0IHJlZ2FyZHMNClRob21hcw0KDQoNCi0tIA0K
+VGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29m
+dHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8
+cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOkZnRz
+ZsO8aHJlcjogSXZvIFRvdGV2DQo=
+
+--------------L3fX3bWa0slbEyrcIytD0sy2--
+
+--------------09SMQnBOqe6XcqkDFM74kwlP
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmH6XCsFAwAAAAAACgkQlh/E3EQov+Cb
+zxAAsHI8kD0VNgbrk53q4cUbmeMpCf1RfYYxmu+1fVDZrUZAdibe5zbmqg9M2npozE4Sf2v2ZiA0
+tHNrtPOhaoSiPc6r8Ycu0LKpVIDXkwE1f4PnZCHth1wA7PfZ49cH5x5/pUwAjoLLzIDTZEhfFy/x
+JaF1/mfFImh1ArS1XopBUxtlKnN8c3AG0fWQan1x4KkLatuPEoTt43hkrgWMdgcqa8D0UUGi06Mm
+Hu9Vkf2XqQW5kPMa0oGpPkPzSQiah/rsHl+IyvzY4iMGJ54dizI3LBWYD0zCRjDr9N7oWm+XCys0
+NltgnER7XzsclZCfPfEza3NVjJXTs/thMIyuz+I/T4xUQjElK/qqXw96UhF0l90ZJIpo4tCmd+lT
+/tTvJUTzpRxkdYdlDIGih4bVpE3c+WzYn91GVAZEtjrtRed1xii2Cwa7CbsHqYgPeaFKNef6ZYH7
+HU0c5VTDsjPGgdVQE4su4tuGRKWskvJSe+fXsWPB0Q17Z8a/k/KMelTQYFptG5Nmsb1O16PEYHw2
+EEwZCIyQfDk8LZsXeEF+twzpAluT5P6HfWQwrDVTO8kL2ITF6mIIZ4SqTqX+CLAEiv1Sm4oTM6gN
+j2BHtjngJ67zeSGdCGeq2GJi6dJMap+BNqdmpRiOPAdwtlv0DQCaGygTTurwg1hJIZhl3z+SXU1o
+M0k=
+=xpIB
+-----END PGP SIGNATURE-----
+
+--------------09SMQnBOqe6XcqkDFM74kwlP--

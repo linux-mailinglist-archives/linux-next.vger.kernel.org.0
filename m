@@ -2,98 +2,154 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 675784A6D03
-	for <lists+linux-next@lfdr.de>; Wed,  2 Feb 2022 09:38:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 826D14A6D67
+	for <lists+linux-next@lfdr.de>; Wed,  2 Feb 2022 10:02:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244978AbiBBIis (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 2 Feb 2022 03:38:48 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:51407 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236764AbiBBIis (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Feb 2022 03:38:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643791121;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=162v2xzxQ3u4een4KbGtcbrsH49dUuDX0sFGI3OoKaM=;
-        b=hvlJWCLz014lHSnbOrHUfr2E1LFtE4KKNIozv6wMKZhtuwKwcUjaY1Qul7KBqF01Ns1p5F
-        yUu61ogr0+gzkR8WMVtRpSRrXpyeJFxsaj2J9xcIsI2DN/LPbAhESPdYD6mqTf8QVZFxRX
-        9WY4c51hU5/11tpkQjXl18LCOh2XG14=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-263-pSDuFzwbNqaocoJSJHXPfw-1; Wed, 02 Feb 2022 03:38:40 -0500
-X-MC-Unique: pSDuFzwbNqaocoJSJHXPfw-1
-Received: by mail-ed1-f69.google.com with SMTP id h21-20020aa7c955000000b0040390b2bfc5so10013819edt.15
-        for <linux-next@vger.kernel.org>; Wed, 02 Feb 2022 00:38:40 -0800 (PST)
+        id S231362AbiBBJCu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 2 Feb 2022 04:02:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51956 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231654AbiBBJCt (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Feb 2022 04:02:49 -0500
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EFA7C061714
+        for <linux-next@vger.kernel.org>; Wed,  2 Feb 2022 01:02:49 -0800 (PST)
+Received: by mail-yb1-xb34.google.com with SMTP id p5so58760011ybd.13
+        for <linux-next@vger.kernel.org>; Wed, 02 Feb 2022 01:02:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=nnsoRIvHiPW86fgxS/TUyo3uILbX1Bq5yPw+gC/F9ps=;
+        b=jcYJckd8Ljg20UUBM8DwyMlBxEUJU28BoexIQ5gFXf8MFvRLjMOwgeby/nQAUMck+R
+         zgeldWz3rlkcnHIGXEkgSKvRPy8SUHeUS3OrmhopQkVqhEAb2vNDUW2fuvWFp89tK3iV
+         9pB0F0wRWI2n8otQ+w22/W+XEbEhKoHirdS2nzt5A94k2sUJjmpGoGOwTrJJxUF6GF+8
+         vycFMQyzdnVq7soCNlNJ1H2g4Vh2o/buypgUT7NDXDrtB7mmB8AFaYV39p8BDzlkzhp2
+         aTnWX/6l1y5ppo1UeaT56ne2iZtsOl+OJyMbbD2/SyJOdlqo/h8+2E92sypqrb0rK0f0
+         wwsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=162v2xzxQ3u4een4KbGtcbrsH49dUuDX0sFGI3OoKaM=;
-        b=NUlLDhz/iHRhxz/dJnETXRDE4C1wp6F7i2D8pB+yv8Ft25E8/uSipbj+Fj2GSvmIWE
-         gNphmfRqqPQsmE19sXv/0WZcCvzuy1SpIZn3v6fUhoWqdev377l8b0/oU7KAJpvV/O/Q
-         N/EKQJZt1ype5lqjV55As5cLSRsaA6ABmXkSqS6ZSdFJPbCSJARbI7U2q6rPd1l8KcLm
-         GMbdlgdTxpNDpfPmAtJ6qBvo3S/k10M1iVx/N2+pxAT5lV5VwJTI4IQVZbJt2FbbY/xf
-         Nf0hhBpo4KwraI2VBDNVN7sr573YoVxx5yDM4TtokDwp4KFBbOwDqZuGKgoFGIk0+BN3
-         Qh3w==
-X-Gm-Message-State: AOAM532MCayJxE7Ey5YYudsQ/a5lZLFIt5PQ5Y4uP33pE3jcuD8ppiKC
-        xceveHjnCJ3cgL4kPC9MxArr8WQ6trO/0+IL2HixR0SeBYgrcQjVKH/dphHjtE4yd0LQt7WvNZK
-        k18r5fETsEc5POvjfOdF9HA==
-X-Received: by 2002:a17:906:2758:: with SMTP id a24mr23315052ejd.433.1643791119159;
-        Wed, 02 Feb 2022 00:38:39 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxEdyJNA8q1uNmHWvFYEP/YNkKz8zxzVGxoUKfJxYwDg29nVRSAIrzftsT2br720j5xsvp4tQ==
-X-Received: by 2002:a17:906:2758:: with SMTP id a24mr23315040ejd.433.1643791119012;
-        Wed, 02 Feb 2022 00:38:39 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
-        by smtp.gmail.com with ESMTPSA id lf16sm15322042ejc.25.2022.02.02.00.38.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Feb 2022 00:38:38 -0800 (PST)
-Message-ID: <f50d5044-7192-bdb3-7ca9-7217ed311787@redhat.com>
-Date:   Wed, 2 Feb 2022 09:38:37 +0100
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=nnsoRIvHiPW86fgxS/TUyo3uILbX1Bq5yPw+gC/F9ps=;
+        b=hwb2uIEA3IQCuFbYnlFgQ6fetmez/+ap7ZlTFUCeI2EIBs1eMzixKimHvHXglFoMWM
+         G0FeIlj80/kzBmvcmThW4wa7SjSGaWERtivd7rJQ8uvC3XuuobReiNzAWFSUSTLVBdxD
+         /6rzcIW/Lzny7ieqOqfMhMR6IavrTgLuWdXZL/a53WEiT9DvGrYrxJ/aSEakfYkDAIwY
+         ItXqSBfwS8fMZ4qjP4MFbdKU4QGx7d1RPKmI7lgN9uriI7pCOPVUQfjEf+/y+292IntQ
+         hb6ny9c5ceX9OrquNAWW3F+aBaKpRXjXb/UeKBO4F5N6Q/bVCQIaBNg1ucKIUrXNsErq
+         m5Bw==
+X-Gm-Message-State: AOAM5330qdPo9dJtlu4x3Hllsaa4xCP3YXXUq7khoWAYyWXo3IGKb6Ua
+        qPaCiFoMYViGWG6ZZv17JP4AM4/LF9gHZ6T4KQIcEw==
+X-Google-Smtp-Source: ABdhPJyvdt2XcB7jzRbFPAV1aT4cuO5tnJlamsO5G6CPh11//XRMrUWWSxF02QNQh572rdlKdwV2g/+q7FXHG2ral+o=
+X-Received: by 2002:a25:b13:: with SMTP id 19mr37709652ybl.684.1643792568511;
+ Wed, 02 Feb 2022 01:02:48 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: linux-next: build warning after merge of the drm tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Dave Airlie <airlied@linux.ie>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Rajat Jain <rajatja@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220202150201.290c7d3d@canb.auug.org.au>
- <20220202150320.3e9bdd62@canb.auug.org.au>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220202150320.3e9bdd62@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 2 Feb 2022 14:32:37 +0530
+Message-ID: <CA+G9fYvN0NyaVkRQmA1O6rX7H8PPaZrUAD7=RDy33QY9rUU-9g@mail.gmail.com>
+Subject: [next] arm: panel-edp.c:(.text+0xb74): undefined reference to `drm_panel_dp_aux_backlight'
+To:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, dri-devel@lists.freedesktop.org,
+        regressions@lists.linux.dev
+Cc:     Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Grace Mi <grace.mi@ecs.corp-partner.google.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Marek Vasut <marex@denx.de>, Sam Ravnborg <sam@ravnborg.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi,
+Following builds failed on Linux next 20220202 arm architecture.
+  - arm-gcc-10-omap2plus_defconfig
+  - arm-clang-nightly-shmobile_defconfig
+  - arm-gcc-8-lpc32xx_defconfig
+  - arm-clang-13-shmobile_defconfig
+  - arm-gcc-10-shmobile_defconfig
+  - arm-clang-11-shmobile_defconfig
+  - arm-clang-11-omap2plus_defconfig
+  - arm-clang-13-omap2plus_defconfig
+  - arm-clang-11-lpc32xx_defconfig
+  - arm-gcc-8-omap2plus_defconfig
+  - arm-gcc-9-vexpress_defconfig
+  - arm-clang-nightly-lpc32xx_defconfig
+  - arm-gcc-9-shmobile_defconfig
+  - arm-clang-13-lpc32xx_defconfig
+  - arm-gcc-10-sama5_defconfig
+  - arm-clang-11-vexpress_defconfig
+  - arm-clang-11-sama5_defconfig
+  - arm-gcc-9-omap2plus_defconfig
+  - arm-clang-nightly-sama5_defconfig
+  - arm-clang-13-vexpress_defconfig
+  - arm-clang-nightly-vexpress_defconfig
+  - arm-gcc-9-lpc32xx_defconfig
+  - arm-clang-12-vexpress_defconfig
+  - arm-gcc-10-vexpress_defconfig
+  - arm-clang-12-shmobile_defconfig
+  - arm-gcc-11-omap2plus_defconfig
+  - arm-gcc-9-sama5_defconfig
+  - arm-gcc-8-shmobile_defconfig
+  - arm-gcc-10-lpc32xx_defconfig
+  - arm-clang-12-omap2plus_defconfig
+  - arm-gcc-8-vexpress_defconfig
+  - arm-clang-12-sama5_defconfig
+  - arm-clang-nightly-omap2plus_defconfig
+  - arm-gcc-11-lpc32xx_defconfig
+  - arm-gcc-11-sama5_defconfig
+  - arm-gcc-11-shmobile_defconfig
+  - arm-gcc-11-vexpress_defconfig
+  - arm-gcc-8-sama5_defconfig
+  - arm-clang-13-sama5_defconfig
+  - arm-clang-12-lpc32xx_defconfig
 
-On 2/2/22 05:03, Stephen Rothwell wrote:
-> Hi all,
-> 
-> On Wed, 2 Feb 2022 15:02:01 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->>
->> After merging the drm tree, today's linux-next build (htmldocs) produced
->> this warning:
->>
->> drivers/gpu/drm/drm_privacy_screen.c:X: warning: Function parameter or member 'data' not described in 'drm_privacy_screen_register'
-> 
-> Actually:
-> 
-> drivers/gpu/drm/drm_privacy_screen.c:392: warning: Function parameter or member 'data' not described in 'drm_privacy_screen_register'
 
-Thank you for reporting this, I will prepare a patch fixing this.
+make --silent --keep-going --jobs=8  ARCH=arm
+CROSS_COMPILE=arm-linux-gnueabihf- 'CC=sccache
+arm-linux-gnueabihf-gcc' 'HOSTCC=sccache gcc' vexpress_defconfig
+make --silent --keep-going --jobs=8  ARCH=arm
+CROSS_COMPILE=arm-linux-gnueabihf- 'CC=sccache
+arm-linux-gnueabihf-gcc' 'HOSTCC=sccache gcc'
+arm-linux-gnueabihf-ld: drivers/gpu/drm/panel/panel-edp.o: in function
+`panel_edp_probe':
+panel-edp.c:(.text+0xb74): undefined reference to `drm_panel_dp_aux_backlight'
+make[1]: *** [/builds/linux/Makefile:1222: vmlinux] Error 1
 
-Regards,
 
-Hans
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
+meta data:
+-----------
+    git describe: next-20220202
+    git_repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+    target_arch: arm
+    kconfig: vexpress_defconfig
+    toolchain: gcc-11
+
+Build log:
+-------------
+https://builds.tuxbuild.com/24XRim72vFXix6l6MdAJNENy6je/
+
+Steps to reproduce:
+--------------------
+# To install tuxmake on your system globally:
+# sudo pip3 install -U tuxmake
+#
+# See https://docs.tuxmake.org/ for complete documentation.
+# Original tuxmake command with fragments listed below.
+
+tuxmake --runtime podman --target-arch arm --toolchain gcc-11
+--kconfig vexpress_defconfig
+
+tuxmake --runtime podman --target-arch arm --toolchain gcc-11
+--kconfig https://builds.tuxbuild.com/24XRim72vFXix6l6MdAJNENy6je/config
+
+
+--
+Linaro LKFT
+https://lkft.linaro.org

@@ -2,57 +2,65 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50C5C4A6EA7
-	for <lists+linux-next@lfdr.de>; Wed,  2 Feb 2022 11:25:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 468694A74BF
+	for <lists+linux-next@lfdr.de>; Wed,  2 Feb 2022 16:38:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230235AbiBBKZu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 2 Feb 2022 05:25:50 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:40350 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230159AbiBBKZt (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Feb 2022 05:25:49 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 7D648210F0;
-        Wed,  2 Feb 2022 10:25:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1643797548; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MBFFaDdmpbT6cNaTMIBoX1VcquThiP3u/BbxSfb0wuY=;
-        b=JNyvQq662qKvUWcs9r5zq+Jz/igNI+v62rKC0yfVhjIHkHCflRLSfDyvO1+CWJpEtSmCZL
-        ePl6mWc7tdwNi1N1Sdf6gr9lzmpIhZH0/qDwWBnnt756KpoQNyWAFTXMbfC095yhG0tpP8
-        tySdDWFy6jc9EjuO7BeHxFbXFpvsx0w=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1643797548;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MBFFaDdmpbT6cNaTMIBoX1VcquThiP3u/BbxSfb0wuY=;
-        b=cHMA9RBg/YOLGW3X8Ur250PkskpWN81lZCwjed4jJKEwqBEfZJREGR/lLIer26dKg2HAbb
-        +nmofruHHuuINuBA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2299F13DFD;
-        Wed,  2 Feb 2022 10:25:48 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id iNJPByxc+mHoYwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Wed, 02 Feb 2022 10:25:48 +0000
-Message-ID: <a1dd9d31-3ad0-b58f-c67b-5896048281ed@suse.de>
-Date:   Wed, 2 Feb 2022 11:25:47 +0100
+        id S235276AbiBBPiC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 2 Feb 2022 10:38:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57890 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230205AbiBBPiC (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Feb 2022 10:38:02 -0500
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF48BC061714
+        for <linux-next@vger.kernel.org>; Wed,  2 Feb 2022 07:38:01 -0800 (PST)
+Received: by mail-io1-xd2b.google.com with SMTP id r144so25905547iod.9
+        for <linux-next@vger.kernel.org>; Wed, 02 Feb 2022 07:38:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=LXZjdBVUtQGV4jUy/sSg/c0o5bKUeLjM4SJrys+RBDA=;
+        b=EwQJWxpGepkosxid+haDZbAtfhCXdkymdOi2U11KFVv5IkJFH9hjEIv9LmMM22rxv5
+         v0I/0YeesBXynB/GV98KKdIvjPbMkrre483WJBHQ2pSjJusq75/gVpwWfVoYpwOw7lC6
+         VWBPjYC3pu+IRCuYMYnjuZXTTX3frS9b+Vdqw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LXZjdBVUtQGV4jUy/sSg/c0o5bKUeLjM4SJrys+RBDA=;
+        b=q82zWoZMuy/5xvEUvOWlIZGvl3FONxSpn3l6u2fRhZA+RNAuY3dpEu6V59HPTlVY1Q
+         1/1cTo3ukfonsdLqWPjrZEEVq+eA+9Eag9najgbOb7EVr7GlwmRNP0mKnD0xmfFyCE6b
+         2G5BhE0XN60VVDKVHTDEmnPF28OlM7+cIFdYSPWb8hccOs05B88wTIiFkrWBhnZxydZI
+         LXtbtNslAjXT30dpi0iya0lkHCsKwepFwBa0MBvsTotx5TQh/WvzVAlVHQt13TLfZUZD
+         rcW/qpigCH5rtK7FnHbNQnxP2xQXl+WD81G4/Bxkh4Nm5JIOC4h5RD9dee8SDN9MbdOw
+         fG8Q==
+X-Gm-Message-State: AOAM530bm3WBfURZdlOkoBGrpuf1Z8PFvdHuS2K4jp5BXM5A5+aQd/JY
+        7KE3A8AFKKERmti4QuHuVWivlsqUsuWH9Q==
+X-Google-Smtp-Source: ABdhPJxMGhSo+7c8Ve8XtEw63ejGqEw07ImgmTJARSEDZNIAw+4HnulvOJ5ZEU8ZDsbTGobXysYNqQ==
+X-Received: by 2002:a05:6602:727:: with SMTP id g7mr17018916iox.90.1643816280985;
+        Wed, 02 Feb 2022 07:38:00 -0800 (PST)
+Received: from mail-il1-f176.google.com (mail-il1-f176.google.com. [209.85.166.176])
+        by smtp.gmail.com with ESMTPSA id l13sm6863695ilj.24.2022.02.02.07.37.59
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Feb 2022 07:37:59 -0800 (PST)
+Received: by mail-il1-f176.google.com with SMTP id z4so17373386ilz.4
+        for <linux-next@vger.kernel.org>; Wed, 02 Feb 2022 07:37:59 -0800 (PST)
+X-Received: by 2002:a92:c011:: with SMTP id q17mr16748310ild.165.1643816278744;
+ Wed, 02 Feb 2022 07:37:58 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [next] arm: panel-edp.c:(.text+0xb74): undefined reference to
- `drm_panel_dp_aux_backlight'
-Content-Language: en-US
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Marek Vasut <marex@denx.de>,
+References: <CA+G9fYvN0NyaVkRQmA1O6rX7H8PPaZrUAD7=RDy33QY9rUU-9g@mail.gmail.com>
+ <76ff2848-3af4-6758-6e98-91a4c9ad26d8@suse.de> <CAMj1kXE6Q9uW45Q5A-TuPDiXTPOGrGjUn_8FUBKNGQ1g9bd3Rg@mail.gmail.com>
+ <a1dd9d31-3ad0-b58f-c67b-5896048281ed@suse.de>
+In-Reply-To: <a1dd9d31-3ad0-b58f-c67b-5896048281ed@suse.de>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 2 Feb 2022 07:37:47 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=UzVczyMKiCt9tkMBveGqWFbACMF_Z1GRWypz+awSO06Q@mail.gmail.com>
+Message-ID: <CAD=FV=UzVczyMKiCt9tkMBveGqWFbACMF_Z1GRWypz+awSO06Q@mail.gmail.com>
+Subject: Re: [next] arm: panel-edp.c:(.text+0xb74): undefined reference to `drm_panel_dp_aux_backlight'
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     Ard Biesheuvel <ardb@kernel.org>, Marek Vasut <marex@denx.de>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
         regressions@lists.linux.dev, Arnd Bergmann <arnd@arndb.de>,
         Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>,
@@ -60,153 +68,132 @@ Cc:     Marek Vasut <marex@denx.de>,
         Naresh Kamboju <naresh.kamboju@linaro.org>,
         open list <linux-kernel@vger.kernel.org>,
         dri-devel <dri-devel@lists.freedesktop.org>,
-        Douglas Anderson <dianders@chromium.org>,
         Linux-Next Mailing List <linux-next@vger.kernel.org>,
         Thierry Reding <thierry.reding@gmail.com>,
         lkft-triage@lists.linaro.org,
         Grace Mi <grace.mi@ecs.corp-partner.google.com>,
         Sam Ravnborg <sam@ravnborg.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-References: <CA+G9fYvN0NyaVkRQmA1O6rX7H8PPaZrUAD7=RDy33QY9rUU-9g@mail.gmail.com>
- <76ff2848-3af4-6758-6e98-91a4c9ad26d8@suse.de>
- <CAMj1kXE6Q9uW45Q5A-TuPDiXTPOGrGjUn_8FUBKNGQ1g9bd3Rg@mail.gmail.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <CAMj1kXE6Q9uW45Q5A-TuPDiXTPOGrGjUn_8FUBKNGQ1g9bd3Rg@mail.gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------09SMQnBOqe6XcqkDFM74kwlP"
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------09SMQnBOqe6XcqkDFM74kwlP
-Content-Type: multipart/mixed; boundary="------------L3fX3bWa0slbEyrcIytD0sy2";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: Marek Vasut <marex@denx.de>, Stephen Rothwell <sfr@canb.auug.org.au>,
- regressions@lists.linux.dev, Arnd Bergmann <arnd@arndb.de>,
- Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>,
- David Airlie <airlied@linux.ie>, Naresh Kamboju <naresh.kamboju@linaro.org>,
- open list <linux-kernel@vger.kernel.org>,
- dri-devel <dri-devel@lists.freedesktop.org>,
- Douglas Anderson <dianders@chromium.org>,
- Linux-Next Mailing List <linux-next@vger.kernel.org>,
- Thierry Reding <thierry.reding@gmail.com>, lkft-triage@lists.linaro.org,
- Grace Mi <grace.mi@ecs.corp-partner.google.com>,
- Sam Ravnborg <sam@ravnborg.org>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>
-Message-ID: <a1dd9d31-3ad0-b58f-c67b-5896048281ed@suse.de>
-Subject: Re: [next] arm: panel-edp.c:(.text+0xb74): undefined reference to
- `drm_panel_dp_aux_backlight'
-References: <CA+G9fYvN0NyaVkRQmA1O6rX7H8PPaZrUAD7=RDy33QY9rUU-9g@mail.gmail.com>
- <76ff2848-3af4-6758-6e98-91a4c9ad26d8@suse.de>
- <CAMj1kXE6Q9uW45Q5A-TuPDiXTPOGrGjUn_8FUBKNGQ1g9bd3Rg@mail.gmail.com>
-In-Reply-To: <CAMj1kXE6Q9uW45Q5A-TuPDiXTPOGrGjUn_8FUBKNGQ1g9bd3Rg@mail.gmail.com>
+Hi,
 
---------------L3fX3bWa0slbEyrcIytD0sy2
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+On Wed, Feb 2, 2022 at 2:25 AM Thomas Zimmermann <tzimmermann@suse.de> wrote:
+>
+> Hi
+>
+> Am 02.02.22 um 10:28 schrieb Ard Biesheuvel:
+> > On Wed, 2 Feb 2022 at 10:08, Thomas Zimmermann <tzimmermann@suse.de> wrote:
+> >>
+> >> Hi
+> >>
+> >> Am 02.02.22 um 10:02 schrieb Naresh Kamboju:
+> >>> Following builds failed on Linux next 20220202 arm architecture.
+> >>>     - arm-gcc-10-omap2plus_defconfig
+> >>>     - arm-clang-nightly-shmobile_defconfig
+> >>>     - arm-gcc-8-lpc32xx_defconfig
+> >>>     - arm-clang-13-shmobile_defconfig
+> >>>     - arm-gcc-10-shmobile_defconfig
+> >>>     - arm-clang-11-shmobile_defconfig
+> >>>     - arm-clang-11-omap2plus_defconfig
+> >>>     - arm-clang-13-omap2plus_defconfig
+> >>>     - arm-clang-11-lpc32xx_defconfig
+> >>>     - arm-gcc-8-omap2plus_defconfig
+> >>>     - arm-gcc-9-vexpress_defconfig
+> >>>     - arm-clang-nightly-lpc32xx_defconfig
+> >>>     - arm-gcc-9-shmobile_defconfig
+> >>>     - arm-clang-13-lpc32xx_defconfig
+> >>>     - arm-gcc-10-sama5_defconfig
+> >>>     - arm-clang-11-vexpress_defconfig
+> >>>     - arm-clang-11-sama5_defconfig
+> >>>     - arm-gcc-9-omap2plus_defconfig
+> >>>     - arm-clang-nightly-sama5_defconfig
+> >>>     - arm-clang-13-vexpress_defconfig
+> >>>     - arm-clang-nightly-vexpress_defconfig
+> >>>     - arm-gcc-9-lpc32xx_defconfig
+> >>>     - arm-clang-12-vexpress_defconfig
+> >>>     - arm-gcc-10-vexpress_defconfig
+> >>>     - arm-clang-12-shmobile_defconfig
+> >>>     - arm-gcc-11-omap2plus_defconfig
+> >>>     - arm-gcc-9-sama5_defconfig
+> >>>     - arm-gcc-8-shmobile_defconfig
+> >>>     - arm-gcc-10-lpc32xx_defconfig
+> >>>     - arm-clang-12-omap2plus_defconfig
+> >>>     - arm-gcc-8-vexpress_defconfig
+> >>>     - arm-clang-12-sama5_defconfig
+> >>>     - arm-clang-nightly-omap2plus_defconfig
+> >>>     - arm-gcc-11-lpc32xx_defconfig
+> >>>     - arm-gcc-11-sama5_defconfig
+> >>>     - arm-gcc-11-shmobile_defconfig
+> >>>     - arm-gcc-11-vexpress_defconfig
+> >>>     - arm-gcc-8-sama5_defconfig
+> >>>     - arm-clang-13-sama5_defconfig
+> >>>     - arm-clang-12-lpc32xx_defconfig
+> >>>
+> >>>
+> >>> make --silent --keep-going --jobs=8  ARCH=arm
+> >>> CROSS_COMPILE=arm-linux-gnueabihf- 'CC=sccache
+> >>> arm-linux-gnueabihf-gcc' 'HOSTCC=sccache gcc' vexpress_defconfig
+> >>> make --silent --keep-going --jobs=8  ARCH=arm
+> >>> CROSS_COMPILE=arm-linux-gnueabihf- 'CC=sccache
+> >>> arm-linux-gnueabihf-gcc' 'HOSTCC=sccache gcc'
+> >>> arm-linux-gnueabihf-ld: drivers/gpu/drm/panel/panel-edp.o: in function
+> >>> `panel_edp_probe':
+> >>> panel-edp.c:(.text+0xb74): undefined reference to `drm_panel_dp_aux_backlight'
+> >>> make[1]: *** [/builds/linux/Makefile:1222: vmlinux] Error 1
+> >>>
+> >>>
+> >>> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> >>>
+> >>> meta data:
+> >>> -----------
+> >>>       git describe: next-20220202
+> >>>       git_repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+> >>>       target_arch: arm
+> >>>       kconfig: vexpress_defconfig
+> >>>       toolchain: gcc-11
+> >>>
+> >>> Build log:
+> >>> -------------
+> >>> https://builds.tuxbuild.com/24XRim72vFXix6l6MdAJNENy6je/
+> >>>
+> >>> Steps to reproduce:
+> >>> --------------------
+> >>> # To install tuxmake on your system globally:
+> >>> # sudo pip3 install -U tuxmake
+> >>> #
+> >>> # See https://docs.tuxmake.org/ for complete documentation.
+> >>> # Original tuxmake command with fragments listed below.
+> >>>
+> >>> tuxmake --runtime podman --target-arch arm --toolchain gcc-11
+> >>> --kconfig vexpress_defconfig
+> >>>
+> >>> tuxmake --runtime podman --target-arch arm --toolchain gcc-11
+> >>> --kconfig https://builds.tuxbuild.com/24XRim72vFXix6l6MdAJNENy6je/config
+> >>
+> >> You'll now need
+> >>
+> >>     CONFIG_DRM_DP_HELPER=y
+> >>
+> >> in your config.
+> >>
+> >
+> > That should never be the solution for linker errors such as this one.
+> >
+> > If CONFIG_DRM_PANEL_EDP relies on something provided by
+> > CONFIG_DRM_DP_HELPER, it should select it or depend on it in Kconfig.
+>
+> Of course, we'll provide a patch for the Kconfig files.
 
-SGkNCg0KQW0gMDIuMDIuMjIgdW0gMTA6Mjggc2NocmllYiBBcmQgQmllc2hldXZlbDoNCj4g
-T24gV2VkLCAyIEZlYiAyMDIyIGF0IDEwOjA4LCBUaG9tYXMgWmltbWVybWFubiA8dHppbW1l
-cm1hbm5Ac3VzZS5kZT4gd3JvdGU6DQo+Pg0KPj4gSGkNCj4+DQo+PiBBbSAwMi4wMi4yMiB1
-bSAxMDowMiBzY2hyaWViIE5hcmVzaCBLYW1ib2p1Og0KPj4+IEZvbGxvd2luZyBidWlsZHMg
-ZmFpbGVkIG9uIExpbnV4IG5leHQgMjAyMjAyMDIgYXJtIGFyY2hpdGVjdHVyZS4NCj4+PiAg
-ICAgLSBhcm0tZ2NjLTEwLW9tYXAycGx1c19kZWZjb25maWcNCj4+PiAgICAgLSBhcm0tY2xh
-bmctbmlnaHRseS1zaG1vYmlsZV9kZWZjb25maWcNCj4+PiAgICAgLSBhcm0tZ2NjLTgtbHBj
-MzJ4eF9kZWZjb25maWcNCj4+PiAgICAgLSBhcm0tY2xhbmctMTMtc2htb2JpbGVfZGVmY29u
-ZmlnDQo+Pj4gICAgIC0gYXJtLWdjYy0xMC1zaG1vYmlsZV9kZWZjb25maWcNCj4+PiAgICAg
-LSBhcm0tY2xhbmctMTEtc2htb2JpbGVfZGVmY29uZmlnDQo+Pj4gICAgIC0gYXJtLWNsYW5n
-LTExLW9tYXAycGx1c19kZWZjb25maWcNCj4+PiAgICAgLSBhcm0tY2xhbmctMTMtb21hcDJw
-bHVzX2RlZmNvbmZpZw0KPj4+ICAgICAtIGFybS1jbGFuZy0xMS1scGMzMnh4X2RlZmNvbmZp
-Zw0KPj4+ICAgICAtIGFybS1nY2MtOC1vbWFwMnBsdXNfZGVmY29uZmlnDQo+Pj4gICAgIC0g
-YXJtLWdjYy05LXZleHByZXNzX2RlZmNvbmZpZw0KPj4+ICAgICAtIGFybS1jbGFuZy1uaWdo
-dGx5LWxwYzMyeHhfZGVmY29uZmlnDQo+Pj4gICAgIC0gYXJtLWdjYy05LXNobW9iaWxlX2Rl
-ZmNvbmZpZw0KPj4+ICAgICAtIGFybS1jbGFuZy0xMy1scGMzMnh4X2RlZmNvbmZpZw0KPj4+
-ICAgICAtIGFybS1nY2MtMTAtc2FtYTVfZGVmY29uZmlnDQo+Pj4gICAgIC0gYXJtLWNsYW5n
-LTExLXZleHByZXNzX2RlZmNvbmZpZw0KPj4+ICAgICAtIGFybS1jbGFuZy0xMS1zYW1hNV9k
-ZWZjb25maWcNCj4+PiAgICAgLSBhcm0tZ2NjLTktb21hcDJwbHVzX2RlZmNvbmZpZw0KPj4+
-ICAgICAtIGFybS1jbGFuZy1uaWdodGx5LXNhbWE1X2RlZmNvbmZpZw0KPj4+ICAgICAtIGFy
-bS1jbGFuZy0xMy12ZXhwcmVzc19kZWZjb25maWcNCj4+PiAgICAgLSBhcm0tY2xhbmctbmln
-aHRseS12ZXhwcmVzc19kZWZjb25maWcNCj4+PiAgICAgLSBhcm0tZ2NjLTktbHBjMzJ4eF9k
-ZWZjb25maWcNCj4+PiAgICAgLSBhcm0tY2xhbmctMTItdmV4cHJlc3NfZGVmY29uZmlnDQo+
-Pj4gICAgIC0gYXJtLWdjYy0xMC12ZXhwcmVzc19kZWZjb25maWcNCj4+PiAgICAgLSBhcm0t
-Y2xhbmctMTItc2htb2JpbGVfZGVmY29uZmlnDQo+Pj4gICAgIC0gYXJtLWdjYy0xMS1vbWFw
-MnBsdXNfZGVmY29uZmlnDQo+Pj4gICAgIC0gYXJtLWdjYy05LXNhbWE1X2RlZmNvbmZpZw0K
-Pj4+ICAgICAtIGFybS1nY2MtOC1zaG1vYmlsZV9kZWZjb25maWcNCj4+PiAgICAgLSBhcm0t
-Z2NjLTEwLWxwYzMyeHhfZGVmY29uZmlnDQo+Pj4gICAgIC0gYXJtLWNsYW5nLTEyLW9tYXAy
-cGx1c19kZWZjb25maWcNCj4+PiAgICAgLSBhcm0tZ2NjLTgtdmV4cHJlc3NfZGVmY29uZmln
-DQo+Pj4gICAgIC0gYXJtLWNsYW5nLTEyLXNhbWE1X2RlZmNvbmZpZw0KPj4+ICAgICAtIGFy
-bS1jbGFuZy1uaWdodGx5LW9tYXAycGx1c19kZWZjb25maWcNCj4+PiAgICAgLSBhcm0tZ2Nj
-LTExLWxwYzMyeHhfZGVmY29uZmlnDQo+Pj4gICAgIC0gYXJtLWdjYy0xMS1zYW1hNV9kZWZj
-b25maWcNCj4+PiAgICAgLSBhcm0tZ2NjLTExLXNobW9iaWxlX2RlZmNvbmZpZw0KPj4+ICAg
-ICAtIGFybS1nY2MtMTEtdmV4cHJlc3NfZGVmY29uZmlnDQo+Pj4gICAgIC0gYXJtLWdjYy04
-LXNhbWE1X2RlZmNvbmZpZw0KPj4+ICAgICAtIGFybS1jbGFuZy0xMy1zYW1hNV9kZWZjb25m
-aWcNCj4+PiAgICAgLSBhcm0tY2xhbmctMTItbHBjMzJ4eF9kZWZjb25maWcNCj4+Pg0KPj4+
-DQo+Pj4gbWFrZSAtLXNpbGVudCAtLWtlZXAtZ29pbmcgLS1qb2JzPTggIEFSQ0g9YXJtDQo+
-Pj4gQ1JPU1NfQ09NUElMRT1hcm0tbGludXgtZ251ZWFiaWhmLSAnQ0M9c2NjYWNoZQ0KPj4+
-IGFybS1saW51eC1nbnVlYWJpaGYtZ2NjJyAnSE9TVENDPXNjY2FjaGUgZ2NjJyB2ZXhwcmVz
-c19kZWZjb25maWcNCj4+PiBtYWtlIC0tc2lsZW50IC0ta2VlcC1nb2luZyAtLWpvYnM9OCAg
-QVJDSD1hcm0NCj4+PiBDUk9TU19DT01QSUxFPWFybS1saW51eC1nbnVlYWJpaGYtICdDQz1z
-Y2NhY2hlDQo+Pj4gYXJtLWxpbnV4LWdudWVhYmloZi1nY2MnICdIT1NUQ0M9c2NjYWNoZSBn
-Y2MnDQo+Pj4gYXJtLWxpbnV4LWdudWVhYmloZi1sZDogZHJpdmVycy9ncHUvZHJtL3BhbmVs
-L3BhbmVsLWVkcC5vOiBpbiBmdW5jdGlvbg0KPj4+IGBwYW5lbF9lZHBfcHJvYmUnOg0KPj4+
-IHBhbmVsLWVkcC5jOigudGV4dCsweGI3NCk6IHVuZGVmaW5lZCByZWZlcmVuY2UgdG8gYGRy
-bV9wYW5lbF9kcF9hdXhfYmFja2xpZ2h0Jw0KPj4+IG1ha2VbMV06ICoqKiBbL2J1aWxkcy9s
-aW51eC9NYWtlZmlsZToxMjIyOiB2bWxpbnV4XSBFcnJvciAxDQo+Pj4NCj4+Pg0KPj4+IFJl
-cG9ydGVkLWJ5OiBMaW51eCBLZXJuZWwgRnVuY3Rpb25hbCBUZXN0aW5nIDxsa2Z0QGxpbmFy
-by5vcmc+DQo+Pj4NCj4+PiBtZXRhIGRhdGE6DQo+Pj4gLS0tLS0tLS0tLS0NCj4+PiAgICAg
-ICBnaXQgZGVzY3JpYmU6IG5leHQtMjAyMjAyMDINCj4+PiAgICAgICBnaXRfcmVwbzogaHR0
-cHM6Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvbmV4dC9saW51
-eC1uZXh0LmdpdA0KPj4+ICAgICAgIHRhcmdldF9hcmNoOiBhcm0NCj4+PiAgICAgICBrY29u
-ZmlnOiB2ZXhwcmVzc19kZWZjb25maWcNCj4+PiAgICAgICB0b29sY2hhaW46IGdjYy0xMQ0K
-Pj4+DQo+Pj4gQnVpbGQgbG9nOg0KPj4+IC0tLS0tLS0tLS0tLS0NCj4+PiBodHRwczovL2J1
-aWxkcy50dXhidWlsZC5jb20vMjRYUmltNzJ2RlhpeDZsNk1kQUpORU55NmplLw0KPj4+DQo+
-Pj4gU3RlcHMgdG8gcmVwcm9kdWNlOg0KPj4+IC0tLS0tLS0tLS0tLS0tLS0tLS0tDQo+Pj4g
-IyBUbyBpbnN0YWxsIHR1eG1ha2Ugb24geW91ciBzeXN0ZW0gZ2xvYmFsbHk6DQo+Pj4gIyBz
-dWRvIHBpcDMgaW5zdGFsbCAtVSB0dXhtYWtlDQo+Pj4gIw0KPj4+ICMgU2VlIGh0dHBzOi8v
-ZG9jcy50dXhtYWtlLm9yZy8gZm9yIGNvbXBsZXRlIGRvY3VtZW50YXRpb24uDQo+Pj4gIyBP
-cmlnaW5hbCB0dXhtYWtlIGNvbW1hbmQgd2l0aCBmcmFnbWVudHMgbGlzdGVkIGJlbG93Lg0K
-Pj4+DQo+Pj4gdHV4bWFrZSAtLXJ1bnRpbWUgcG9kbWFuIC0tdGFyZ2V0LWFyY2ggYXJtIC0t
-dG9vbGNoYWluIGdjYy0xMQ0KPj4+IC0ta2NvbmZpZyB2ZXhwcmVzc19kZWZjb25maWcNCj4+
-Pg0KPj4+IHR1eG1ha2UgLS1ydW50aW1lIHBvZG1hbiAtLXRhcmdldC1hcmNoIGFybSAtLXRv
-b2xjaGFpbiBnY2MtMTENCj4+PiAtLWtjb25maWcgaHR0cHM6Ly9idWlsZHMudHV4YnVpbGQu
-Y29tLzI0WFJpbTcydkZYaXg2bDZNZEFKTkVOeTZqZS9jb25maWcNCj4+DQo+PiBZb3UnbGwg
-bm93IG5lZWQNCj4+DQo+PiAgICAgQ09ORklHX0RSTV9EUF9IRUxQRVI9eQ0KPj4NCj4+IGlu
-IHlvdXIgY29uZmlnLg0KPj4NCj4gDQo+IFRoYXQgc2hvdWxkIG5ldmVyIGJlIHRoZSBzb2x1
-dGlvbiBmb3IgbGlua2VyIGVycm9ycyBzdWNoIGFzIHRoaXMgb25lLg0KPiANCj4gSWYgQ09O
-RklHX0RSTV9QQU5FTF9FRFAgcmVsaWVzIG9uIHNvbWV0aGluZyBwcm92aWRlZCBieQ0KPiBD
-T05GSUdfRFJNX0RQX0hFTFBFUiwgaXQgc2hvdWxkIHNlbGVjdCBpdCBvciBkZXBlbmQgb24g
-aXQgaW4gS2NvbmZpZy4NCg0KT2YgY291cnNlLCB3ZSdsbCBwcm92aWRlIGEgcGF0Y2ggZm9y
-IHRoZSBLY29uZmlnIGZpbGVzLg0KDQpCZXN0IHJlZ2FyZHMNClRob21hcw0KDQoNCi0tIA0K
-VGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29m
-dHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8
-cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOkZnRz
-ZsO8aHJlcjogSXZvIFRvdGV2DQo=
+There was discussion about this last November but I guess nothing came of it?
 
---------------L3fX3bWa0slbEyrcIytD0sy2--
+https://lore.kernel.org/r/20211117062704.14671-1-rdunlap@infradead.org/
 
---------------09SMQnBOqe6XcqkDFM74kwlP
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+In there Arnd provided a proposed patch. If everyone likes that and it
+fixes things then we can apply it...
 
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmH6XCsFAwAAAAAACgkQlh/E3EQov+Cb
-zxAAsHI8kD0VNgbrk53q4cUbmeMpCf1RfYYxmu+1fVDZrUZAdibe5zbmqg9M2npozE4Sf2v2ZiA0
-tHNrtPOhaoSiPc6r8Ycu0LKpVIDXkwE1f4PnZCHth1wA7PfZ49cH5x5/pUwAjoLLzIDTZEhfFy/x
-JaF1/mfFImh1ArS1XopBUxtlKnN8c3AG0fWQan1x4KkLatuPEoTt43hkrgWMdgcqa8D0UUGi06Mm
-Hu9Vkf2XqQW5kPMa0oGpPkPzSQiah/rsHl+IyvzY4iMGJ54dizI3LBWYD0zCRjDr9N7oWm+XCys0
-NltgnER7XzsclZCfPfEza3NVjJXTs/thMIyuz+I/T4xUQjElK/qqXw96UhF0l90ZJIpo4tCmd+lT
-/tTvJUTzpRxkdYdlDIGih4bVpE3c+WzYn91GVAZEtjrtRed1xii2Cwa7CbsHqYgPeaFKNef6ZYH7
-HU0c5VTDsjPGgdVQE4su4tuGRKWskvJSe+fXsWPB0Q17Z8a/k/KMelTQYFptG5Nmsb1O16PEYHw2
-EEwZCIyQfDk8LZsXeEF+twzpAluT5P6HfWQwrDVTO8kL2ITF6mIIZ4SqTqX+CLAEiv1Sm4oTM6gN
-j2BHtjngJ67zeSGdCGeq2GJi6dJMap+BNqdmpRiOPAdwtlv0DQCaGygTTurwg1hJIZhl3z+SXU1o
-M0k=
-=xpIB
------END PGP SIGNATURE-----
-
---------------09SMQnBOqe6XcqkDFM74kwlP--
+-Doug

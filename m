@@ -2,139 +2,98 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36F864A6C00
-	for <lists+linux-next@lfdr.de>; Wed,  2 Feb 2022 07:59:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 675784A6D03
+	for <lists+linux-next@lfdr.de>; Wed,  2 Feb 2022 09:38:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234723AbiBBG6k (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 2 Feb 2022 01:58:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52344 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbiBBG6k (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Feb 2022 01:58:40 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77203C061714
-        for <linux-next@vger.kernel.org>; Tue,  1 Feb 2022 22:58:40 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id n32so17983024pfv.11
-        for <linux-next@vger.kernel.org>; Tue, 01 Feb 2022 22:58:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=Hc/sMjgwJi/SiVQ6bUGh4IHW2Urr2tdu0A1y7WfhC6M=;
-        b=S5wdyBgEahSNbY1nW1tv/5K1dfwR8iq+URy7UkE18qYUvrxY8mcob+dw2J5zmnJ69e
-         EQLy7J1VtU/f7O3Ml6otrHihiykbf4gfprsLckjwQB/g7yQFwbTaMj10vIC8rE3PYX4P
-         phogAh0fFj8Kqpn1gJP04jhQ4bE+yXXuzMZVPda+XFSc8KLU5K5yHiD0oN3JLkfwsac2
-         W51rnIUY+PFOlK7RdwfhSl0WBH80rkOVuUkdmmLFhhTSnXGi7BvZJuJYqRCChudcSSJr
-         D9wSOhw45/2iosmskmucA2Nyw0WLc7vSurGTcSTqCMJ8M5YSYXA+sLQK/al2TACuFxIT
-         ne9w==
+        id S244978AbiBBIis (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 2 Feb 2022 03:38:48 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:51407 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236764AbiBBIis (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Feb 2022 03:38:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643791121;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=162v2xzxQ3u4een4KbGtcbrsH49dUuDX0sFGI3OoKaM=;
+        b=hvlJWCLz014lHSnbOrHUfr2E1LFtE4KKNIozv6wMKZhtuwKwcUjaY1Qul7KBqF01Ns1p5F
+        yUu61ogr0+gzkR8WMVtRpSRrXpyeJFxsaj2J9xcIsI2DN/LPbAhESPdYD6mqTf8QVZFxRX
+        9WY4c51hU5/11tpkQjXl18LCOh2XG14=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-263-pSDuFzwbNqaocoJSJHXPfw-1; Wed, 02 Feb 2022 03:38:40 -0500
+X-MC-Unique: pSDuFzwbNqaocoJSJHXPfw-1
+Received: by mail-ed1-f69.google.com with SMTP id h21-20020aa7c955000000b0040390b2bfc5so10013819edt.15
+        for <linux-next@vger.kernel.org>; Wed, 02 Feb 2022 00:38:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=Hc/sMjgwJi/SiVQ6bUGh4IHW2Urr2tdu0A1y7WfhC6M=;
-        b=zvC5mT+8zrn/fReELIBA32XCNfYXR36FooJq3Uu7J9jJQ0cWkZ/X8Bo0mBAVrHXiag
-         ilmHaQxg/pMTnxSeVZTzuDwor5PJBZY6W2vAKSOWzEWGxZ3NIzXUbO1H36CbI53lL7Kg
-         K2Osu/8Jq4sCfQdKpzRaE4QTfaWDK3eevYVbpfFGNokDcWe8Iowi/PXQeBHVJtuyraQH
-         flStNagS3iobfakSJEQb7ZWbFV7dILtmL6lQQIgLR7EOvrgo9Nyk4MMDZryk0fHnV9Nb
-         IqPO8JBUs0Q1HzZrmd+euDhnjb1hE16dP21+iASBQsz+T1mA6jc1kvhoyTIWVyp9ys/S
-         Ct6w==
-X-Gm-Message-State: AOAM532KqhitYYdLU3AYRR97ljdJKsz4esNKmfnFfFolo6PJZereT+Bn
-        cIRdhmlRyu4YdhChbioESYSrtQ4sAOpWd0Hu
-X-Google-Smtp-Source: ABdhPJyWADLi4ekTjmRdm+d+MMka3D83ANadOh/eAXFa8006cHbU0TSDPoOPtLrSRT2CJJd/NGZf4w==
-X-Received: by 2002:a63:2c07:: with SMTP id s7mr23378830pgs.181.1643785119846;
-        Tue, 01 Feb 2022 22:58:39 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id h19sm4722079pjv.38.2022.02.01.22.58.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Feb 2022 22:58:39 -0800 (PST)
-Message-ID: <61fa2b9f.1c69fb81.3f3e9.d06b@mx.google.com>
-Date:   Tue, 01 Feb 2022 22:58:39 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=162v2xzxQ3u4een4KbGtcbrsH49dUuDX0sFGI3OoKaM=;
+        b=NUlLDhz/iHRhxz/dJnETXRDE4C1wp6F7i2D8pB+yv8Ft25E8/uSipbj+Fj2GSvmIWE
+         gNphmfRqqPQsmE19sXv/0WZcCvzuy1SpIZn3v6fUhoWqdev377l8b0/oU7KAJpvV/O/Q
+         N/EKQJZt1ype5lqjV55As5cLSRsaA6ABmXkSqS6ZSdFJPbCSJARbI7U2q6rPd1l8KcLm
+         GMbdlgdTxpNDpfPmAtJ6qBvo3S/k10M1iVx/N2+pxAT5lV5VwJTI4IQVZbJt2FbbY/xf
+         Nf0hhBpo4KwraI2VBDNVN7sr573YoVxx5yDM4TtokDwp4KFBbOwDqZuGKgoFGIk0+BN3
+         Qh3w==
+X-Gm-Message-State: AOAM532MCayJxE7Ey5YYudsQ/a5lZLFIt5PQ5Y4uP33pE3jcuD8ppiKC
+        xceveHjnCJ3cgL4kPC9MxArr8WQ6trO/0+IL2HixR0SeBYgrcQjVKH/dphHjtE4yd0LQt7WvNZK
+        k18r5fETsEc5POvjfOdF9HA==
+X-Received: by 2002:a17:906:2758:: with SMTP id a24mr23315052ejd.433.1643791119159;
+        Wed, 02 Feb 2022 00:38:39 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxEdyJNA8q1uNmHWvFYEP/YNkKz8zxzVGxoUKfJxYwDg29nVRSAIrzftsT2br720j5xsvp4tQ==
+X-Received: by 2002:a17:906:2758:: with SMTP id a24mr23315040ejd.433.1643791119012;
+        Wed, 02 Feb 2022 00:38:39 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id lf16sm15322042ejc.25.2022.02.02.00.38.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Feb 2022 00:38:38 -0800 (PST)
+Message-ID: <f50d5044-7192-bdb3-7ca9-7217ed311787@redhat.com>
+Date:   Wed, 2 Feb 2022 09:38:37 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.17-rc2-283-g4c44843f7a9c
-X-Kernelci-Tree: next
-X-Kernelci-Report-Type: test
-X-Kernelci-Branch: pending-fixes
-Subject: next/pending-fixes baseline: 543 runs,
- 1 regressions (v5.17-rc2-283-g4c44843f7a9c)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: linux-next: build warning after merge of the drm tree
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Dave Airlie <airlied@linux.ie>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Rajat Jain <rajatja@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20220202150201.290c7d3d@canb.auug.org.au>
+ <20220202150320.3e9bdd62@canb.auug.org.au>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220202150320.3e9bdd62@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes baseline: 543 runs, 1 regressions (v5.17-rc2-283-g4c4484=
-3f7a9c)
+Hi,
 
-Regressions Summary
--------------------
+On 2/2/22 05:03, Stephen Rothwell wrote:
+> Hi all,
+> 
+> On Wed, 2 Feb 2022 15:02:01 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>>
+>> After merging the drm tree, today's linux-next build (htmldocs) produced
+>> this warning:
+>>
+>> drivers/gpu/drm/drm_privacy_screen.c:X: warning: Function parameter or member 'data' not described in 'drm_privacy_screen_register'
+> 
+> Actually:
+> 
+> drivers/gpu/drm/drm_privacy_screen.c:392: warning: Function parameter or member 'data' not described in 'drm_privacy_screen_register'
 
-platform   | arch | lab          | compiler | defconfig             | regre=
-ssions
------------+------+--------------+----------+-----------------------+------=
-------
-da850-lcdk | arm  | lab-baylibre | gcc-10   | davinci_all_defconfig | 1    =
-      =
+Thank you for reporting this, I will prepare a patch fixing this.
 
+Regards,
 
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v5.17-rc2-283-g4c44843f7a9c/plan/baseline/
+Hans
 
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v5.17-rc2-283-g4c44843f7a9c
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      4c44843f7a9c642de663b537f77bbfa10aabc4ab =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform   | arch | lab          | compiler | defconfig             | regre=
-ssions
------------+------+--------------+----------+-----------------------+------=
-------
-da850-lcdk | arm  | lab-baylibre | gcc-10   | davinci_all_defconfig | 1    =
-      =
-
-
-  Details:     https://kernelci.org/test/plan/id/61f9f30dd1f345ff075d6f34
-
-  Results:     5 PASS, 1 FAIL, 0 SKIP
-  Full config: davinci_all_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.17-rc2-2=
-83-g4c44843f7a9c/arm/davinci_all_defconfig/gcc-10/lab-baylibre/baseline-da8=
-50-lcdk.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.17-rc2-2=
-83-g4c44843f7a9c/arm/davinci_all_defconfig/gcc-10/lab-baylibre/baseline-da8=
-50-lcdk.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220121.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.dmesg.alert: https://kernelci.org/test/case/id/61f9f30ed1f345f=
-f075d6f3b
-        failing since 9 days (last pass: v5.16-11577-gffd79fec234d, first f=
-ail: v5.17-rc1-180-g86539e2bdb99)
-        3 lines
-
-    2022-02-02T02:57:08.871163  kern  :alert : BUG: Bad page state in proce=
-ss kworker/u2:0  pfn:c3000
-    2022-02-02T02:57:08.871497  kern  :alert : BUG: Bad page state in proce=
-ss kworker/u2:0  pfn:c3400
-    2022-02-02T02:57:08.871683  kern  :alert : BUG: Bad page state in proce=
-ss kworker/u2:0  pfn:c3800
-    2022-02-02T02:57:08.913863  <8><LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Dale=
-rt RESULT=3Dfail UNITS=3Dlines MEASUREMENT=3D3>   =
-
- =20

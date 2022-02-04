@@ -2,124 +2,211 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEA7E4A9243
-	for <lists+linux-next@lfdr.de>; Fri,  4 Feb 2022 03:16:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C601E4A92DB
+	for <lists+linux-next@lfdr.de>; Fri,  4 Feb 2022 04:57:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346628AbiBDCQ2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 3 Feb 2022 21:16:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51334 "EHLO
+        id S1356883AbiBDD54 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 3 Feb 2022 22:57:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233976AbiBDCQ2 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 3 Feb 2022 21:16:28 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4631AC061714;
-        Thu,  3 Feb 2022 18:16:27 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JqfKd003Pz4xQp;
-        Fri,  4 Feb 2022 13:16:20 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1643940981;
-        bh=jkZQmuyQzyKA0GIwHcT7UC8C6dcjOfg5jhaAd6IvPQk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Tx9JGu3LQvL794T0FmMQf5VT2sKVHUN6+GAC8Zisqvr8rtrfMEtm69EBS6JfUWSnw
-         sX3y+ZPbqsAwAOR9fjcryMPCJ4JdPTYO0BSoi/HwnntTmCBmre0mY7IpmDZgMs03+v
-         nyHoxZoPtJHGLHs7QqAnCAJ37EKnCQiW/5K3OgaY4gi4zo9N4aIaH1ZMEEXv0aCIG4
-         PTa90K347dCHbP6ZcdK16lai2ZLsqL5O+yQze558h6youLgFtlF6S3MA1e25vdqcbw
-         R4ZnMnA7GC2JmgU4xmtCkC4/Zue8mNdmFLZ+UQHbg0CNZzw1M6p2pZWfpvnCfBZGl2
-         SY6lTcSyxyyLg==
-Date:   Fri, 4 Feb 2022 13:16:19 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@linux.microsoft.com>
-Subject: linux-next: manual merge of the landlock tree with Linus' tree
-Message-ID: <20220204131619.566307b9@canb.auug.org.au>
+        with ESMTP id S1356880AbiBDD54 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 3 Feb 2022 22:57:56 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1F85C061714
+        for <linux-next@vger.kernel.org>; Thu,  3 Feb 2022 19:57:55 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id l24-20020a17090aec1800b001b55738f633so6996312pjy.1
+        for <linux-next@vger.kernel.org>; Thu, 03 Feb 2022 19:57:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=sBrYbyiIO5FxHauA9iVjTAmo8jFq1Is705b9FHd65j8=;
+        b=H3fpTlaNMRp7AJyUhRPuA2zk+m+GGyiMEe1ZOPgxUysVgYIUH8gH6xPpWmSSkIOq3l
+         RrXfQxz8tw0WJTLzEBqKWas/ojmw7ihSqqqAEshtN1UkmeW57VFFuuN0+TXfzYpX40d3
+         XVgbAdWBmA4EXIgMGs7ZaZJNmrGEI9JOKrqDOjTmURK0B5Rjlyb8bjwQMvAULYS5STeW
+         RKTDUalr+W1JuUIHBQgj8D8u9Rm4epAikyDViyluB4DCvIZe1qO+VzuIdR+5nYx9l2oc
+         ZFSmhQOWRObQO6lOr43jJJTeY7Engd8fPcdkjiQzBquKeRt5S20gDQh45K7/H0zCknQw
+         48DQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=sBrYbyiIO5FxHauA9iVjTAmo8jFq1Is705b9FHd65j8=;
+        b=0KOMFsovQl1x0bwKZ+nisHUF92YA74H2b8v5ArkjrIAHwozAnxqVqUz0/oeZVFtbip
+         HeoTAHd4S3GJmjfCpP74fEl2jPpxZpTGUdS60Wb3XKRxPshKnPnPsBZavIVBWLoT35ks
+         Av2rM1C+QPFtgN63LyQGQx/Uof9GF4iTrw5c0ssPog6AKG7J8piPiG8Zz7biKv09ecGT
+         8uH52eqOhSez3+iEm18X0/4hHfkdoOZLzScH7fTDvAhVYlk3MhN2sh96C7aAcJZZ0IRO
+         811K4cGMUNSjlwezKm0rjQoacxz0XhSg8ihNf2yyUCalVG54eqZFdW8qs4oxf4nb1YYU
+         BzkA==
+X-Gm-Message-State: AOAM532Gz0RDiFeXK/4HBwNP/9u4a5iG2tENaLrru5hBzoWId97JJLwO
+        VKCfVuTjRq5NiQzsEpc5hdWCv/VSyO/ISRc8
+X-Google-Smtp-Source: ABdhPJyACCe8o0e7hXkA8yVRNnfUzUl15bmhldZezIrAuOJ4by54Kp/wpXsKQIXChFmoObNvsa1ZOA==
+X-Received: by 2002:a17:90b:350c:: with SMTP id ls12mr1052346pjb.44.1643947075287;
+        Thu, 03 Feb 2022 19:57:55 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id j12sm378393pgf.63.2022.02.03.19.57.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Feb 2022 19:57:55 -0800 (PST)
+Message-ID: <61fca443.1c69fb81.63f4f.1bfa@mx.google.com>
+Date:   Thu, 03 Feb 2022 19:57:55 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/lht/ZhflkAm7rLbqRi7BSGC";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v5.17-rc2-403-g6098f9527e1d
+X-Kernelci-Tree: next
+X-Kernelci-Report-Type: test
+X-Kernelci-Branch: pending-fixes
+Subject: next/pending-fixes baseline: 582 runs,
+ 3 regressions (v5.17-rc2-403-g6098f9527e1d)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/lht/ZhflkAm7rLbqRi7BSGC
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/pending-fixes baseline: 582 runs, 3 regressions (v5.17-rc2-403-g6098f9=
+527e1d)
 
-Hi all,
+Regressions Summary
+-------------------
 
-Today's linux-next merge of the landlock tree got a conflict in:
+platform               | arch   | lab          | compiler | defconfig      =
+        | regressions
+-----------------------+--------+--------------+----------+----------------=
+--------+------------
+da850-lcdk             | arm    | lab-baylibre | gcc-10   | davinci_all_def=
+config  | 1          =
 
-  kernel/printk/sysctl.c
+imx6ul-14x14-evk       | arm    | lab-nxp      | gcc-10   | imx_v6_v7_defco=
+nfig    | 1          =
 
-between commit:
+qemu_x86_64-uefi-mixed | x86_64 | lab-cip      | gcc-10   | x86_64_defconfi=
+g+debug | 1          =
 
-  1f2cfdd349b7 ("printk: Fix incorrect __user type in proc_dointvec_minmax_=
-sysadmin()")
 
-from Linus' tree and commit:
+  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
+v5.17-rc2-403-g6098f9527e1d/plan/baseline/
 
-  c96303ec34ab ("printk: Move back proc_dointvec_minmax_sysadmin() to sysct=
-l.c")
+  Test:     baseline
+  Tree:     next
+  Branch:   pending-fixes
+  Describe: v5.17-rc2-403-g6098f9527e1d
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      6098f9527e1d4fdede9898dd5e8672dbb6f6d754 =
 
-from the landlock tree.
 
-I fixed it up (I used the letter version and then added the following
-merge fix patch) and can carry the fix as necessary. This is now fixed
-as far as linux-next is concerned, but any non trivial conflicts should
-be mentioned to your upstream maintainer when your tree is submitted for
-merging.  You may also want to consider cooperating with the maintainer
-of the conflicting tree to minimise any particularly complex conflicts.
 
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Fri, 4 Feb 2022 13:13:51 +1100
-Subject: [PATCH] fix up for "printk: Fix incorrect __user type in proc_doin=
-tvec_minmax_sysadmin()"
+Test Regressions
+---------------- =
 
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- kernel/sysctl.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index 2e2027e323fd..39e45a602e97 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -889,7 +889,7 @@ static int proc_taint(struct ctl_table *table, int writ=
-e,
- }
-=20
- int proc_dointvec_minmax_sysadmin(struct ctl_table *table, int write,
--				void __user *buffer, size_t *lenp, loff_t *ppos)
-+				void *buffer, size_t *lenp, loff_t *ppos)
- {
- 	if (write && !capable(CAP_SYS_ADMIN))
- 		return -EPERM;
---=20
-2.34.1
 
---=20
-Cheers,
-Stephen Rothwell
+platform               | arch   | lab          | compiler | defconfig      =
+        | regressions
+-----------------------+--------+--------------+----------+----------------=
+--------+------------
+da850-lcdk             | arm    | lab-baylibre | gcc-10   | davinci_all_def=
+config  | 1          =
 
---Sig_/lht/ZhflkAm7rLbqRi7BSGC
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
 
------BEGIN PGP SIGNATURE-----
+  Details:     https://kernelci.org/test/plan/id/61fc6f2b56e8dcf5ce5d6f17
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmH8jHMACgkQAVBC80lX
-0GyxRggAjEuzdVTGZU27tkNHDs6faOUFxHDxonmLFRP9r7IJ4jumzUQIFGVYJIlD
-hAbNvEJbhRTV/f7PCxb/JpqsevgYsWt29ks3CkGEAycgEbarfKrs5BvVufvM43RN
-rXS+bLyts+onBfniwzYYHLrNCKtsDGa9Sy+J55Hg+wbdOWwltebGbc9numbeuhi2
-iAPLhqKZo72snTlhNozX7iiGH4n0O+9zBPrOonvEI9E+UFrK3X0slUa2TN1nUBix
-LTWU2NgtCpgZuYgXLEXN1RHO0HQTPUZ+pncbtIo94+qnxXiwbQrT5xiZi/UuIQYh
-7a726L8hxnoJxJDSW9jjyCAwcqm+Zg==
-=aJqr
------END PGP SIGNATURE-----
+  Results:     5 PASS, 1 FAIL, 0 SKIP
+  Full config: davinci_all_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.17-rc2-4=
+03-g6098f9527e1d/arm/davinci_all_defconfig/gcc-10/lab-baylibre/baseline-da8=
+50-lcdk.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.17-rc2-4=
+03-g6098f9527e1d/arm/davinci_all_defconfig/gcc-10/lab-baylibre/baseline-da8=
+50-lcdk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220121.0/armel/rootfs.cpio.gz =
 
---Sig_/lht/ZhflkAm7rLbqRi7BSGC--
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/61fc6f2b56e8dcf=
+5ce5d6f1e
+        failing since 11 days (last pass: v5.16-11577-gffd79fec234d, first =
+fail: v5.17-rc1-180-g86539e2bdb99)
+        3 lines
+
+    2022-02-04T00:11:16.821910  <8><LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Dcri=
+t RESULT=3Dpass UNITS=3Dlines MEASUREMENT=3D0>
+    2022-02-04T00:11:16.943617  kern  :alert : BUG: Bad page state in proce=
+ss kworker/u2:0  pfn:c3000
+    2022-02-04T00:11:16.943925  kern  :alert : BUG: Bad page state in proce=
+ss kworker/u2:0  pfn:c3400
+    2022-02-04T00:11:16.944124  kern  :alert : BUG: Bad page state in proce=
+ss kworker/u2:0  pfn:c3800   =
+
+ =
+
+
+
+platform               | arch   | lab          | compiler | defconfig      =
+        | regressions
+-----------------------+--------+--------------+----------+----------------=
+--------+------------
+imx6ul-14x14-evk       | arm    | lab-nxp      | gcc-10   | imx_v6_v7_defco=
+nfig    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/61fc70a92713541d615d6f0a
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: imx_v6_v7_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.17-rc2-4=
+03-g6098f9527e1d/arm/imx_v6_v7_defconfig/gcc-10/lab-nxp/baseline-imx6ul-14x=
+14-evk.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.17-rc2-4=
+03-g6098f9527e1d/arm/imx_v6_v7_defconfig/gcc-10/lab-nxp/baseline-imx6ul-14x=
+14-evk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220121.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/61fc70a92713541d615d6=
+f0b
+        failing since 14 days (last pass: v5.16-7998-gbeebf0a29205, first f=
+ail: v5.16-11408-ga51e80162547) =
+
+ =
+
+
+
+platform               | arch   | lab          | compiler | defconfig      =
+        | regressions
+-----------------------+--------+--------------+----------+----------------=
+--------+------------
+qemu_x86_64-uefi-mixed | x86_64 | lab-cip      | gcc-10   | x86_64_defconfi=
+g+debug | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/61fc7046bc6fc2d7415d6f3e
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+debug
+  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.17-rc2-4=
+03-g6098f9527e1d/x86_64/x86_64_defconfig+debug/gcc-10/lab-cip/baseline-qemu=
+_x86_64-uefi-mixed.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.17-rc2-4=
+03-g6098f9527e1d/x86_64/x86_64_defconfig+debug/gcc-10/lab-cip/baseline-qemu=
+_x86_64-uefi-mixed.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220121.0/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/61fc7046bc6fc2d7415d6=
+f3f
+        new failure (last pass: v5.17-rc2-341-g1c6ffcd3a088) =
+
+ =20

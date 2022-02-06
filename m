@@ -1,95 +1,98 @@
 Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2E264AA011
-	for <lists+linux-next@lfdr.de>; Fri,  4 Feb 2022 20:30:11 +0100 (CET)
+Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id 8FB114AB229
+	for <lists+linux-next@lfdr.de>; Sun,  6 Feb 2022 21:56:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233686AbiBDTaK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 4 Feb 2022 14:30:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60450 "EHLO
+        id S233847AbiBFU4k (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 6 Feb 2022 15:56:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233661AbiBDTaJ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 4 Feb 2022 14:30:09 -0500
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8CDCC061714
-        for <linux-next@vger.kernel.org>; Fri,  4 Feb 2022 11:30:09 -0800 (PST)
-Received: by mail-pg1-x52a.google.com with SMTP id j10so5816685pgc.6
-        for <linux-next@vger.kernel.org>; Fri, 04 Feb 2022 11:30:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sjz/d2uJSRskReEmVHKPPM9K20Vc4OsAmYuunLLpKFw=;
-        b=nIRVyrBynAGmaqmots0Mq+aw1Avy4WkS6UPdfbbOrVc45NFzxxpY/9TWPB4t7o3pYY
-         dll6b2poAli+XYy5rUVa4dTB5exq3qBNqKTnhC2Bf32hal1L/hovklTGk/YrufUtDo51
-         h9TZPM1W6daiJ+dfC5cQOYRynQ4ltQhCmKqSYLep5Sn+r9USG6T/DhnBECkzhHDNWZJ+
-         yf5FCQVjjG/R9Vvb2BLYD16zichIYpEBf8TeUT0x2XS/GhWXXsp5I2HZnx9lXleRP/yR
-         mNgQa51908kvsqdlyNjPL5oHTXcNfsqJwyzQgtJf9/m4HKZtYG989mDnz6mclz4su77/
-         2aVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sjz/d2uJSRskReEmVHKPPM9K20Vc4OsAmYuunLLpKFw=;
-        b=KzB/+gWtQrJrMBSp6rAm/7+TgHvtjLj5q/htoGyc+eOCfRE5plKHg4ARDO3XS824A/
-         e5ZXS/3iQJePZ+sTky9gPqi5x+2cgWM70flHfWSNLrJVXuNtOmuswJp2sLid9V37+LHd
-         jkZ4EBg74KqiumriMCoL60jv24ZaIDhgIGZbT+wS8Tu/CjINO2BCD7WDgDOU3M9qb+/W
-         lxcqF0V9VOjiJTPZDxuVSvp+N/jYAlh0Su/y7DXsZvZLxTIFUYW+YI9VVyaj1nfIZeU9
-         xGeFndQgXVodKytqhjxcOfKQUTXe+SZolBuOSLzqc8XmzpSiKRjzEkKIQkWZ9JNRV0lj
-         iREw==
-X-Gm-Message-State: AOAM531HPhhQkpSAkITk1AJR1wmjISC5D4wsdGr+FAInkXVzETKVK7XZ
-        VDUC+6EBYIsXOk+AaFdSI1NU72DcS2+CJNsUfHybYg==
-X-Google-Smtp-Source: ABdhPJwl/Ikwm+SRw8mO/XCAwWW+cI6ZLc926D0tRc+KyiKrxJHhusUtS8WUK1022mB/ftpk6q2o5I90X1d7yB8ZhvM=
-X-Received: by 2002:a63:fc0b:: with SMTP id j11mr442424pgi.146.1644003008833;
- Fri, 04 Feb 2022 11:30:08 -0800 (PST)
-MIME-Version: 1.0
-References: <20220202150201.290c7d3d@canb.auug.org.au> <20220202150320.3e9bdd62@canb.auug.org.au>
- <f50d5044-7192-bdb3-7ca9-7217ed311787@redhat.com>
-In-Reply-To: <f50d5044-7192-bdb3-7ca9-7217ed311787@redhat.com>
-From:   Rajat Jain <rajatja@google.com>
-Date:   Fri, 4 Feb 2022 11:29:32 -0800
-Message-ID: <CACK8Z6EKsFwJcpmqFoVOkQYqLMK37Qz3FYkf+-EhP4AFiscbeA@mail.gmail.com>
-Subject: Re: linux-next: build warning after merge of the drm tree
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Dave Airlie <airlied@linux.ie>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        with ESMTP id S233661AbiBFU4j (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 6 Feb 2022 15:56:39 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D59C2C06173B;
+        Sun,  6 Feb 2022 12:56:35 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JsM585k0lz4xcZ;
+        Mon,  7 Feb 2022 07:56:28 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1644180989;
+        bh=LTwvonFI3NHOe6zUssHtoyLjsi6BGi6tDmxdv6Te+7A=;
+        h=Date:From:To:Cc:Subject:From;
+        b=FqnpSm0ozP8ynS9D0JrwkHmJfKk5pyvp3Hpub+lwkqmED+MTGOaOZ95r9imVeD8sU
+         LD9Ibh9f48zkADkH5yrcK6gUxCKQxVPaPo9mh/dC6jtxKXXw2Xm/CmhNKRd0cd8K5M
+         nAEQZ75LZVEcGK/CIuU2T333NPA/V57TR6+FgngQuqfXHH+9Gj7pWFbL+ye3Pb9GNM
+         AjF5n86AepQQlX27JLZg8wq1lqklMyDgvi/WkPUjx6E+dZdaPnDJClPMvZVVgybqVb
+         UqvIdPPfbQgupL4nptTV8/gNn6HfNsm8voL2iA7RkZ0X+eHn0/rDtJlI3lxWjLOu/0
+         TXRI+wgKLayfA==
+Date:   Mon, 7 Feb 2022 07:56:27 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Anna Schumaker <Anna.Schumaker@Netapp.com>,
+        Trond Myklebust <trondmy@gmail.com>,
+        NFS Mailing List <linux-nfs@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: linux-next: Fixes tag needs some work in the nfs-anna tree
+Message-ID: <20220207075627.1dec35b6@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/NvMxmgrqWFG+QaNX7H1mFsa";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Feb 2, 2022 at 12:38 AM Hans de Goede <hdegoede@redhat.com> wrote:
->
-> Hi,
->
-> On 2/2/22 05:03, Stephen Rothwell wrote:
-> > Hi all,
-> >
-> > On Wed, 2 Feb 2022 15:02:01 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >>
-> >> After merging the drm tree, today's linux-next build (htmldocs) produced
-> >> this warning:
-> >>
-> >> drivers/gpu/drm/drm_privacy_screen.c:X: warning: Function parameter or member 'data' not described in 'drm_privacy_screen_register'
-> >
-> > Actually:
-> >
-> > drivers/gpu/drm/drm_privacy_screen.c:392: warning: Function parameter or member 'data' not described in 'drm_privacy_screen_register'
->
-> Thank you for reporting this, I will prepare a patch fixing this.
+--Sig_/NvMxmgrqWFG+QaNX7H1mFsa
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thank you so much Hans!
+Hi all,
 
-Best Regards,
+In commit
 
-Rajat
+  677c0cebca78 ("NFS: Fix initialisation of nfs_client cl_flags field")
 
->
-> Regards,
->
-> Hans
->
+Fixes tag
+
+  Fixes: 87871d990a2c ("NFSv4: Initialise connection to the server in nfs4_=
+alloc_client()")
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: dd99e9f98fbf ("NFSv4: Initialise connection to the server in nfs4_al=
+loc_client()")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/NvMxmgrqWFG+QaNX7H1mFsa
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIANfsACgkQAVBC80lX
+0Gy//Qf9E7ERfnQ4ARb6qGTZFzM5nuoKp7L0fl39kgkoBPVkelChvVz2RJ7TIr18
+gm9mmowvely+pvrIewILQt+nAY9eZ6HRBX9Q6CUe3Cf9sq9cdZj6EUKgVxcpW96i
+g3jq7mN4xNGEl7Yuqkff/EXRue6tVykS+tk01DZ/lw62FWz7ehja9F9TMjzeQM4V
+aVs40WxiZ+HAqvsQcMX+eY+wjHZ5pgYM8TFBi/Xy8+/LS93QjYv+gpRXkQmAZYNF
+vHjg3RHL+3dpSZTJv0ePNRf03A7ch1vutV9y89d68+08XQ9RQhyRWroKSVv8eKio
+2ukx0jRjJ10BrfO35nFd6+lGesDTTg==
+=ORjs
+-----END PGP SIGNATURE-----
+
+--Sig_/NvMxmgrqWFG+QaNX7H1mFsa--

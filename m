@@ -2,94 +2,122 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E79C4AB473
-	for <lists+linux-next@lfdr.de>; Mon,  7 Feb 2022 07:15:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 222144AB46F
+	for <lists+linux-next@lfdr.de>; Mon,  7 Feb 2022 07:15:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234115AbiBGGPR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 7 Feb 2022 01:15:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41202 "EHLO
+        id S229638AbiBGGOt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 7 Feb 2022 01:14:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbiBGEG7 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 6 Feb 2022 23:06:59 -0500
+        with ESMTP id S1351851AbiBGEky (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 6 Feb 2022 23:40:54 -0500
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FF57C061A73;
-        Sun,  6 Feb 2022 20:06:58 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3FC5C043181;
+        Sun,  6 Feb 2022 20:40:52 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JsXdr4h8Nz4xPv;
-        Mon,  7 Feb 2022 15:06:56 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JsYNz1HsNz4xcZ;
+        Mon,  7 Feb 2022 15:40:51 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1644206816;
-        bh=L6tKb33/O1w3gvZdBQUa7i+NvihKIKciWhy/zQyQ8EM=;
+        s=201702; t=1644208851;
+        bh=PDkMNGz9lzSvYPAAsjozPtMokUKhqT2nnJaS3aMjUNQ=;
         h=Date:From:To:Cc:Subject:From;
-        b=DoHMl4lOHO/bta48hMqe2PY4/ki4vc8iBXRLeHC4meXA3wPehPG02uvQqe41fxSDY
-         ZbvbmfYtMB+kvzfCJzCzaJA+Gifuw9ZVZu4wqgHeIsKVwOlf0J+CRwydBs4fNrNPQQ
-         kfvmiCpetOsj6XSzfnWBkpK0PskeGP68SfybJAKZO8QiE5OPcASav9qTQzCvWffSly
-         SFLBpzotTPbd85B/VrfINcUVgN367/zRXlL3vyqZHPEwaqWuSsAhbWXK31Fh2BQH3u
-         mWs+jDbCbD7/ACz7JFFjJ99B8A+FPGutBHTQzRR0Ogf/R97oHrHS9BPDRj76v4Uhsh
-         ycZo0gM/K/Lkg==
-Date:   Mon, 7 Feb 2022 15:06:55 +1100
+        b=iDHwA+zs11NYDTPW/eWNgXbNE9x9/nqL8MWJBSuvgfD79Co3eVp3fG1/HWmpDRLd5
+         zUBOgoth5M5cNG3eTaVp+h3LMApV7O2QG1DqbWrbK1McY1QqpjTF0IFUyQAZIqtMoR
+         Wgi3xt/sA3tzP5BmWokJG7uZigCOmrO+kMYaSrv2rzvfqPJJ5gYP1VOY+DD94xunPL
+         P/ZL28egOBm8UbnffoBGB9GTo26/2DA5+xzZcK7t2EeA7DHsNhNGy+Hp38dYkV30EG
+         jKGUYvwYZJh2rU2xePMacsGBSP8xrW3NOS7H0DRtYlD2EmmvoJwK/y2NJnLP5/y7jl
+         vPAAifGHyPGtA==
+Date:   Mon, 7 Feb 2022 15:40:50 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Yang Shi <shy828301@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the akpm-current tree
-Message-ID: <20220207150655.76173d43@canb.auug.org.au>
+To:     Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: Tree for Feb 7
+Message-ID: <20220207154050.13d1af27@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/zfn5waytRg/k5PpHJZdDabO";
+Content-Type: multipart/signed; boundary="Sig_/jVFwx2E0D7Sudvk.Vw=RnML";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,LOCALPART_IN_SUBJECT,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/zfn5waytRg/k5PpHJZdDabO
+--Sig_/jVFwx2E0D7Sudvk.Vw=RnML
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the akpm-current tree, today's linux-next build (arm
-multi_v7_defconfig) produced this warning:
+Changes since 20220204:
 
-fs/proc/task_mmu.c: In function 'pagemap_pmd_range':
-fs/proc/task_mmu.c:1444:14: warning: unused variable 'migration' [-Wunused-=
-variable]
- 1444 |         bool migration =3D false;
-      |              ^~~~~~~~~
+The folio tree gained a build failure so I used the version from
+next-20220204.
 
-Introduced by commit
+Non-merge commits (relative to Linus' tree): 3686
+ 4056 files changed, 155617 insertions(+), 54888 deletions(-)
 
-  78cff485ae77 ("fs-proc-task_mmuc-dont-read-mapcount-for-migration-entry-v=
-4")
+----------------------------------------------------------------------------
 
-"migration" is only used when CONFIG_TRANSPARENT_HUGEPAGE is defined.
+I have created today's linux-next tree at
+git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
+are tracking the linux-next tree using git, you should not use "git pull"
+to do so as that will try to merge the new linux-next release with the
+old one.  You should use "git fetch" and checkout or reset to the new
+master.
+
+You can see which trees have been included by looking in the Next/Trees
+file in the source.  There are also quilt-import.log and merge.log
+files in the Next directory.  Between each merge, the tree was built
+with a ppc64_defconfig for powerpc, an allmodconfig for x86_64, a
+multi_v7_defconfig for arm and a native build of tools/perf. After
+the final fixups (if any), I do an x86_64 modules_install followed by
+builds for x86_64 allnoconfig, powerpc allnoconfig (32 and 64 bit),
+ppc44x_defconfig, allyesconfig and pseries_le_defconfig and i386,
+arm64, sparc and sparc64 defconfig and htmldocs. And finally, a simple
+boot test of the powerpc pseries_le_defconfig kernel in qemu (with and
+without kvm enabled).
+
+Below is a summary of the state of the merge.
+
+I am currently merging 345 trees (counting Linus' and 93 trees of bug
+fix patches pending for the current merge release).
+
+Stats about the size of the tree over time can be seen at
+http://neuling.org/linux-next-size.html .
+
+Status of my local build tests will be at
+http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
+advice about cross compilers/configs that work, we are always open to add
+more builds.
+
+Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
+Gortmaker for triage and bug fixes.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/zfn5waytRg/k5PpHJZdDabO
+--Sig_/jVFwx2E0D7Sudvk.Vw=RnML
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIAmt8ACgkQAVBC80lX
-0GxfCQf/QG/+1XHNBO6hv4bMP+crdvPVf7yKTsT6l/fRRUqH53KGHyLQmk14TtRY
-cN/3mV0qhyXp9RTYQfQp8ktefPpREci8IGCmR7tU1qQ9NtA1AL1E2JD1H0cHmPXO
-3dqHD2tl5uixPCDdDSSeBBKwlyGIWJsUKJjrWc+mMqt8zi34pORlCwoDu/MKtNMf
-JgVnKY6nKfcfUzzGz10+oFGLKVEbQBUkQ2pBg3FMm9J/iVpcVkUF6tdLPkyvAvQJ
-o9W8DUAmx4CDwj6wVoz0ih+cI2JNCXrqor+OLJmaZFNa+rtc4goSoVYbgDGxH1va
-V3jf2g+eytTtwTUwB/KzGnV2LyrOaw==
-=ka1T
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIAotIACgkQAVBC80lX
+0GwNUAgApW2/1Vg+WiSp8fljJDDVmucZylGkbsl0QFRT+L6l5b+hKy5ibIgbcU4B
+Z2Axyv+OTJI8so9tGhOH1aIDsS98EQDCvCouskkytBSgV2FSgPuJRWdx1YPSmKBI
+pbyVxiZL/2vbESDX3R3oJ3hbBor5khgRSd2lY0q0XpJOEYbToZYVsyskomfPozja
+oyDOabD9PKkPPQtWfOfPlAJyS6c8QmzKACumWm6HkKf5tQX5f98/Wkh7tC+cgBAV
+bZxC/ulxiuDNMVGiYHsQw4ySQEdiFWWtJMXn6Za4+ESDonsbe7iAiC9MHD04aDhQ
+s5FjC4cLV/L5CAEhr8ij3SM/YPy7Pw==
+=yP5A
 -----END PGP SIGNATURE-----
 
---Sig_/zfn5waytRg/k5PpHJZdDabO--
+--Sig_/jVFwx2E0D7Sudvk.Vw=RnML--

@@ -2,736 +2,4724 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23F8E4AB475
-	for <lists+linux-next@lfdr.de>; Mon,  7 Feb 2022 07:15:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48F484AB588
+	for <lists+linux-next@lfdr.de>; Mon,  7 Feb 2022 08:07:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237519AbiBGGPU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 7 Feb 2022 01:15:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49294 "EHLO
+        id S231645AbiBGHG4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 7 Feb 2022 02:06:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352003AbiBGEmy (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 6 Feb 2022 23:42:54 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38074C043181;
-        Sun,  6 Feb 2022 20:42:51 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JsYRF5ZPYz4xcZ;
-        Mon,  7 Feb 2022 15:42:49 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1644208969;
-        bh=PZPB7JemmUTrSPlO+NtOU/5BNiL00tkdO47qdm+W4o0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=PbAk+iSPtlMkf4KVKBZQvSswwgxEvpDwWQ6/012w78UqrK0ZQ2lT7P8Ieh5lEM+zf
-         OfytXgJYt3DGtIAT38ivuBkc5IO+7jYeeH/ROcU3+dsIBEXbbWlo2ZKiT26ILPEPpl
-         vNFJJ7W7gW0zqNWhIigpcZKfFqMN0hhpLp2UDzqX1afEETVMAawsC3xurTK7VlBArN
-         cYe6OdgMWLUIrCqP7psyXj4EFz+nQSyyGUokRJOhCAYtlh37PruFnAEw0BjVQ17ERt
-         ROX4y/fnIOV1A9AQH6Fxo1Lv49xxnfyxe4uo8+ZsqDWw+Ki9rTsUoVp1I6H4RK4hzr
-         aScH0Y9QqJyNQ==
-Date:   Mon, 7 Feb 2022 15:42:49 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: Tree for Feb 7
-Message-ID: <20220207154249.7b968ab2@canb.auug.org.au>
-In-Reply-To: <20220207154050.13d1af27@canb.auug.org.au>
-References: <20220207154050.13d1af27@canb.auug.org.au>
+        with ESMTP id S233208AbiBGGwR (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 7 Feb 2022 01:52:17 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AF2BC043181
+        for <linux-next@vger.kernel.org>; Sun,  6 Feb 2022 22:52:14 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id my12-20020a17090b4c8c00b001b528ba1cd7so12478788pjb.1
+        for <linux-next@vger.kernel.org>; Sun, 06 Feb 2022 22:52:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=5RPUGT2RB+mbxB/RF1lEJ230DFyITlpB1KqAvvO0cR4=;
+        b=O/OZnU2660DcbaiSdsVqNnhMFkmyfPSy/cPyoQkgSoZetMNXleEWZgUcwHp6xBOarr
+         G9bA255ImQ3sOc9a4XR3wfAHqx90kPG+ZEm84fHjFIEJvX0WOvuwoxHbIM6VvnwwigAg
+         +isQT8vJlS/4d5VqpGxLH0YQrJP6nKhL5PISXMz42rGYWqXvOuhcj3SZorz5kmJ0sgmO
+         PQOt+GKMCGGyj78i9kC4M+1qmEwmTcqcONQun4LYNSLc4WHuXHv0AlKsDUIVoC0WovaN
+         BFtCnYnWIdtNJVr0d0GU2r1ZWYuNJ4e74om+rnd6YisYw5z2XTDMR4rpaBcfNVFpXcv/
+         gQ3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=5RPUGT2RB+mbxB/RF1lEJ230DFyITlpB1KqAvvO0cR4=;
+        b=2qdROO8lV/XxbMLsOVLMKdg7VgMWUBKLowCIISU6v4p/lcF8LRMiPa6j84FfwPbHb+
+         VkTBAk5QgjRA+a/FnnGcs90a7PjMYtPUoyq4sft5xE4sG2dCNL9TOqJGpZ5wjjSlM4qT
+         aUbH8m6DfbzHTzheXeUbhA59ax1FhSmutEt3Kl2WrK2HB3HsAvNmEygG5qnGPu7mhSKN
+         hsjJ4+BXVtzTwk5yNTsL47HxsRbj4HZgcc9uH0CubvRRmsHOGUhqS//OAAutFR7WWoPz
+         tGTgMtK5iiRI0nYXy2fFksNilf8QN1DeLSwj55KYSxNAlbN2rA1ntSv6xHBRVit4sQYg
+         Djuw==
+X-Gm-Message-State: AOAM533ihOZTVlZvmY9634Pn+NtzMEcvF3z0yPMe75qVp+T9Y/5X/ODS
+        MpCOnJsE36EshH3YHma5falkElarzjS7NHre
+X-Google-Smtp-Source: ABdhPJzDgyMyVxSOZKJSpQeJIswy4kzhImHsMEQiwWq1fSXNT22WP/oTzPpiie9zd/uE9QlW2BqTMA==
+X-Received: by 2002:a17:90b:4a8d:: with SMTP id lp13mr12299634pjb.206.1644216732020;
+        Sun, 06 Feb 2022 22:52:12 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id l21sm10699318pfu.120.2022.02.06.22.52.11
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 06 Feb 2022 22:52:11 -0800 (PST)
+Message-ID: <6200c19b.1c69fb81.bd18b.b9a2@mx.google.com>
+Date:   Sun, 06 Feb 2022 22:52:11 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/1I/iIYzT5re.d=Z+.Fm+Dji";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: next-20220207
+X-Kernelci-Tree: next
+X-Kernelci-Report-Type: build
+X-Kernelci-Branch: master
+Subject: next/master build: 206 builds: 20 failed, 186 passed, 23 errors,
+ 1053 warnings (next-20220207)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/1I/iIYzT5re.d=Z+.Fm+Dji
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/master build: 206 builds: 20 failed, 186 passed, 23 errors, 1053 warni=
+ngs (next-20220207)
 
-Hi all,
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20220207/
 
-On Mon, 7 Feb 2022 15:40:50 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> Below is a summary of the state of the merge.
+Tree: next
+Branch: master
+Git Describe: next-20220207
+Git Commit: b3c0a155ef77550d48f6eb7c6fdd6075764a5622
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 7 unique architectures
 
---=20
-Cheers,
-Stephen Rothwell
+Build Failures Detected:
 
-$ git checkout master
-$ git reset --hard stable
-Merging origin/master (dfd42facf1e4 Linux 5.17-rc3)
-Merging fixes/fixes (d06c942efea4 Merge tag 'for_linus' of git://git.kernel=
-.org/pub/scm/linux/kernel/git/mst/vhost)
-Merging kbuild-current/fixes (e6340b6526ee certs: Fix build error when CONF=
-IG_MODULE_SIG_KEY is empty)
-Merging arc-current/for-curr (e783362eb54c Linux 5.17-rc1)
-Merging arm-current/fixes (9f80ccda53b9 ARM: 9180/1: Thumb2: align ALT_UP()=
- sections in modules sufficiently)
-Merging arm64-fixes/for-next/fixes (a4b92cebc31d arm64: Enable Cortex-A510 =
-erratum 2051678 by default)
-Merging arm-soc-fixes/arm/fixes (c8013355ead6 ARM: dts: gpio-ranges propert=
-y is now required)
-Merging drivers-memory-fixes/fixes (e783362eb54c Linux 5.17-rc1)
-Merging tee-fixes/fixes (7e3c6eb44c91 Merge tags 'optee-fixes-for-v5.17' an=
-d 'optee-fix-for-v5.17' into fixes)
-Merging m68k-current/for-linus (1a0ae068bf6b m68k: defconfig: Update defcon=
-figs for v5.16-rc1)
-Merging powerpc-fixes/fixes (8defc2a5dd8f powerpc/64s/interrupt: Fix decrem=
-enter storm)
-Merging s390-fixes/fixes (663d34c8df98 s390/hypfs: include z/VM guests with=
- access control group set)
-Merging sparc/master (05a59d79793d Merge git://git.kernel.org:/pub/scm/linu=
-x/kernel/git/netdev/net)
-Merging fscrypt-current/for-stable (80f6e3080bfc fs-verity: fix signed inte=
-ger overflow with i_size near S64_MAX)
-Merging net/master (28f922213886 net/smc: fix ref_tracker issue in smc_pnet=
-_add())
-Merging bpf/master (fe68195daf34 ixgbevf: Require large buffers for build_s=
-kb on 82599VF)
-Merging ipsec/master (a6d95c5a628a Revert "xfrm: xfrm_state_mtu should retu=
-rn at least 1280 for ipv6")
-Merging netfilter/master (59085208e4a2 net: mscc: ocelot: fix all IP traffi=
-c getting trapped to CPU with PTP over IP)
-Merging ipvs/master (7674b7b559b6 net: amd-xgbe: ensure to reset the tx_tim=
-er_active flag)
-Merging wireless/main (f0a6fd152706 cfg80211: fix race in netlink owner int=
-erface destruction)
-Merging rdma-fixes/for-rc (f3136c4ce7ac RDMA/mlx4: Don't continue event han=
-dler after memory allocation failure)
-Merging sound-current/for-linus (52517d9c0c01 Merge tag 'asoc-fix-v5.17-rc2=
-' of https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound into for=
--linus)
-Merging sound-asoc-fixes/for-linus (618c2dc667c8 ASoC: ops: Fix stereo chan=
-ge notifications)
-Merging regmap-fixes/for-linus (8419f8e559a7 regmap-irq: Use regmap_irq_upd=
-ate_bits instead of regmap_write)
-Merging regulator-fixes/for-linus (1301ba2d6596 Merge remote-tracking branc=
-h 'regulator/for-5.16' into regulator-linus)
-Merging spi-fixes/for-linus (9104f6b46783 Merge remote-tracking branch 'spi=
-/for-5.16' into spi-linus)
-Merging pci-current/for-linus (7dd3876205df PCI: kirin: Add dev struct for =
-of_device_get_match_data())
-Merging driver-core.current/driver-core-linus (e783362eb54c Linux 5.17-rc1)
-Merging tty.current/tty-linus (28cb138f559f vt_ioctl: add array_index_nospe=
-c to VT_ACTIVATE)
-Merging usb.current/usb-linus (5432184107cd usb: gadget: f_uac2: Define spe=
-cific wTerminalType)
-Merging usb-gadget-fixes/fixes (e49d033bddf5 Linux 5.12-rc6)
-Merging usb-serial-fixes/usb-linus (6ca0c6283340 USB: serial: cp210x: add C=
-PI Bulk Coin Recycler id)
-Merging usb-chipidea-fixes/for-usb-fixes (f130d08a8d79 usb: chipidea: ci_hd=
-rc_imx: Also search for 'phys' phandle)
-CONFLICT (content): Merge conflict in drivers/usb/chipidea/ci_hdrc_imx.c
-Merging phy/fixes (9a8406ba1a9a phy: dphy: Correct clk_pre parameter)
-Merging staging.current/staging-linus (426aca16e903 staging: fbtft: Fix err=
-or path in fbtft_driver_module_init())
-Merging iio-fixes/fixes-togreg (21472ddd4258 iio: imu: st_lsm6dsx: wait for=
- settling time in st_lsm6dsx_read_oneshot)
-Merging char-misc.current/char-misc-linus (05daa805a86c bus: mhi: pci_gener=
-ic: Add mru_default for Cinterion MV31-W)
-Merging soundwire-fixes/fixes (e783362eb54c Linux 5.17-rc1)
-Merging thunderbolt-fixes/fixes (26291c54e111 Linux 5.17-rc2)
-Merging input-current/for-linus (762f99f4f3cb Merge branch 'next' into for-=
-linus)
-Merging crypto-current/master (c6ce9c5831ca crypto: api - Move cryptomgr so=
-ft dependency into algapi)
-Merging vfio-fixes/for-linus (8704e8934908 vfio/pci: Fix OpRegion read)
-Merging kselftest-fixes/fixes (183f80fd72db selftests/ir: fix build with an=
-cient kernel headers)
-Merging modules-fixes/modules-linus (2a987e65025e Merge tag 'perf-tools-fix=
-es-for-v5.16-2021-12-07' of git://git.kernel.org/pub/scm/linux/kernel/git/a=
-cme/linux)
-Merging dmaengine-fixes/fixes (e783362eb54c Linux 5.17-rc1)
-Merging backlight-fixes/for-backlight-fixes (a38fd8748464 Linux 5.12-rc2)
-Merging mtd-fixes/mtd/fixes (36415a796471 mtd: rawnand: brcmnand: Fixed inc=
-orrect sub-page ECC status)
-Merging mfd-fixes/for-mfd-fixes (a61f4661fba4 mfd: intel_quark_i2c_gpio: Re=
-vert "Constify static struct resources")
-Merging v4l-dvb-fixes/fixes (d40f0b133b44 media: meson-ir-tx: remove incorr=
-ect doc comment)
-Merging reset-fixes/reset/fixes (92c959bae2e5 reset: renesas: Fix Runtime P=
-M usage)
-Merging mips-fixes/mips-fixes (2161ba070999 MIPS: KVM: fix vz.c kernel-doc =
-notation)
-Merging at91-fixes/at91-fixes (fa55b7dcdc43 Linux 5.16-rc1)
-Merging omap-fixes/fixes (80d680fdccba ARM: dts: omap3430-sdp: Fix NAND dev=
-ice node)
-Merging kvm-fixes/master (7e6a6b400db8 Merge tag 'kvmarm-fixes-5.17-2' of g=
-it://git.kernel.org/pub/scm/linux/kernel/git/kvmarm/kvmarm into HEAD)
-Merging kvms390-fixes/master (0e9ff65f455d KVM: s390: preserve deliverable_=
-mask in __airqs_kick_single_vcpu)
-Merging hwmon-fixes/hwmon (bb9bb9c75482 hwmon: (ntc_thermistor) Underscore =
-Samsung thermistor)
-Merging nvdimm-fixes/libnvdimm-fixes (3dd60fb9d95d nvdimm/pmem: stop using =
-q_usage_count as external pgmap refcount)
-Merging cxl-fixes/fixes (fae8817ae804 cxl/mem: Fix memory device capacity p=
-robing)
-Merging btrfs-fixes/next-fixes (c30ef1bf06ac Merge branch 'misc-5.17' into =
-next-fixes)
-Merging vfs-fixes/fixes (25f54d08f12f autofs: fix wait name hash calculatio=
-n in autofs_wait())
-Merging dma-mapping-fixes/for-linus (18a3c5f7abfd Merge tag 'for_linus' of =
-git://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost)
-Merging i3c-fixes/i3c/fixes (fe07bfda2fb9 Linux 5.12-rc1)
-Merging drivers-x86-fixes/fixes (e3d13da7f77d platform/x86: asus-wmi: Fix r=
-egression when probing for fan curve control)
-Merging samsung-krzk-fixes/fixes (442b0c08db7e soc: samsung: Fix typo in CO=
-NFIG_EXYNOS_USI description)
-Merging pinctrl-samsung-fixes/fixes (e783362eb54c Linux 5.17-rc1)
-Merging devicetree-fixes/dt/linus (fa4300f060e5 of: unittest: update text o=
-f expected warnings)
-Merging scsi-fixes/fixes (c763ec4c10f7 scsi: hisi_sas: Fix setting of hisi_=
-sas_slot.is_internal)
-Merging drm-fixes/drm-fixes (9ca3d3cd0857 Merge tag 'drm-intel-fixes-2022-0=
-2-03' of git://anongit.freedesktop.org/drm/drm-intel into drm-fixes)
-Merging amdgpu-fixes/drm-fixes (2c409ba81be2 drm/radeon: fix si_enable_smc_=
-cac() failed issue)
-Merging drm-intel-fixes/for-linux-next-fixes (7d73c602154d drm/i915/pmu: Fi=
-x KMD and GuC race on accessing busyness)
-Merging mmc-fixes/fixes (bd2db32e7c3e moxart: fix potential use-after-free =
-on remove path)
-Merging rtc-fixes/rtc-fixes (bd33335aa93d rtc: cmos: Disable irq around dir=
-ect invocation of cmos_interrupt())
-Merging gnss-fixes/gnss-linus (e783362eb54c Linux 5.17-rc1)
-Merging hyperv-fixes/hyperv-fixes (3149efcdf2c6 PCI: hv: Fix NUMA node assi=
-gnment when kernel boots with custom NUMA topology)
-Merging soc-fsl-fixes/fix (8120bd469f55 soc: fsl: dpaa2-console: free buffe=
-r before returning from dpaa2_console_read)
-Merging risc-v-fixes/fixes (ca0cb9a60f6d riscv/mm: Add XIP_FIXUP for riscv_=
-pfn_base)
-Merging pidfd-fixes/fixes (03ba0fe4d09f file: simplify logic in __close_ran=
-ge())
-Merging fpga-fixes/fixes (8bb7eca972ad Linux 5.15)
-Merging spdx/spdx-linus (e783362eb54c Linux 5.17-rc1)
-Merging gpio-brgl-fixes/gpio/for-current (2cba05451a6d gpio: aggregator: Fi=
-x calling into sleeping GPIO controllers)
-Merging gpio-intel-fixes/fixes (e783362eb54c Linux 5.17-rc1)
-Merging pinctrl-intel-fixes/fixes (500c77eed0fe pinctrl: zynqmp: Revert "Un=
-ify pin naming")
-Merging erofs-fixes/fixes (24331050a3e6 erofs: fix small compressed files i=
-nlining)
-Merging integrity-fixes/fixes (843385694721 evm: Fix a small race in init_d=
-esc())
-Merging kunit-fixes/kunit-fixes (de4d73b16d5d kunit: fix missing f in f-str=
-ing in run_checks.py)
-Merging ubifs-fixes/fixes (c3c07fc25f37 ubi: fastmap: Return error code if =
-memory allocation fails in add_aeb())
-Merging memblock-fixes/fixes (d7f55471db27 memblock: fix memblock_phys_allo=
-c() section mismatch error)
-Merging cel-fixes/for-rc (accd66d0a0a3 NFSD: Deprecate NFS_OFFSET_MAX)
-Merging irqchip-fixes/irq/irqchip-fixes (1d4df649cbb4 irqchip/sifive-plic: =
-Add missing thead,c900-plic match string)
-Merging renesas-fixes/fixes (432b52eea3dc ARM: shmobile: defconfig: Restore=
- graphical consoles)
-Merging perf-current/perf/urgent (fceb62124d8f perf ftrace: system_wide col=
-lection is not effective by default)
-Merging efi-fixes/urgent (f5390cd0b43c efi: runtime: avoid EFIv2 runtime se=
-rvices on Apple x86 machines)
-Merging zstd-fixes/zstd-linus (88a309465b3f lib: zstd: clean up double word=
- in comment.)
-Merging drm-misc-fixes/for-linux-next-fixes (6df4432a5eca drm/panel: simple=
-: Assign data from panel_dpi_probe() correctly)
-Merging kspp/for-next/kspp (9327f2939dc4 Merge branch 'for-next/hardening' =
-into for-next/kspp)
-Applying: scsi: hack for building with -Warray-bounds
-Merging kspp-gustavo/for-next/kspp (c9e6606c7fe9 Linux 5.16-rc8)
-Merging kbuild/for-next (c6553cd5dec6 usr/include/Makefile: add linux/nfc.h=
- to the compile-test coverage)
-Merging perf/perf/core (e783362eb54c Linux 5.17-rc1)
-Merging compiler-attributes/compiler-attributes (7c00621dcaee compiler_type=
-s: mark __compiletime_assert failure as __noreturn)
-Merging dma-mapping/for-next (404f9373c4e5 swiotlb: simplify array allocati=
-on)
-Merging asm-generic/master (733e417518a6 asm-generic/error-injection.h: fix=
- a spelling mistake, and a coding style issue)
-Merging arc/for-next (6880fa6c5660 Linux 5.15-rc1)
-Merging arm/for-next (ed43eed0a6ac Merge branch 'devel-stable' into for-nex=
-t)
-CONFLICT (content): Merge conflict in arch/arm/Kconfig
-Merging arm64/for-next/core (bb425a759847 arm64: mm: apply __ro_after_init =
-to memory_limit)
-Merging arm-perf/for-next/perf (3da4390bcdf4 arm64: perf: Don't register us=
-er access sysctl handler multiple times)
-Merging arm-soc/for-next (317a42bd9204 ARM: Document merges)
-CONFLICT (content): Merge conflict in arch/arm64/boot/dts/apple/t8103.dtsi
-Merging actions/for-next (444d018d8d38 ARM: dts: owl-s500-roseapplepi: Add =
-ATC2603C PMIC)
-Merging amlogic/for-next (2c420d79dae4 arm64: dts: meson-g12-common: add ua=
-rt_ao_b pins muxing)
-Merging aspeed/for-next (a7e02e92755c Merge branches 'dt-for-v5.17', 'defco=
-nfig-for-v5.17' and 'soc-for-v5.17' into for-next)
-Merging at91/at91-next (9be3df0e718c Merge branch 'at91-defconfig' into at9=
-1-next)
-Merging drivers-memory/for-next (691396e21c14 Merge branch 'for-v5.18/tegra=
-' into for-next)
-Merging imx-mxs/for-next (afb77a29073e Merge branch 'imx/defconfig' into fo=
-r-next)
-Merging keystone/next (cb293d3b430e Merge branch 'for_5.15/drivers-soc' int=
-o next)
-Merging mediatek/for-next (896f47a2c39c Merge branch 'v5.17-next/dts64' int=
-o for-next)
-Merging mvebu/for-next (fecc54c7ccfe Merge branch 'mvebu/arm' into mvebu/fo=
-r-next)
-Merging omap/for-next (61b6b9cfada4 Merge branch 'omap-for-v5.17/fixes-not-=
-urgent' into for-next)
-Merging qcom/for-next (c924e8d6f4a4 Merge branches 'arm64-defconfig-for-5.1=
-8', 'arm64-for-5.18', 'drivers-for-5.18', 'dts-for-5.18', 'arm64-fixes-for-=
-5.17' and 'dts-fixes-for-5.17' into for-next)
-Merging raspberrypi/for-next (c5915b53d4c2 dt-bindings: soc: bcm: Convert b=
-rcm,bcm2835-vchiq to json-schema)
-Merging renesas/next (c3b08f12c719 Merge branches 'renesas-arm-defconfig-fo=
-r-v5.18' and 'renesas-arm-dt-for-v5.18' into renesas-next)
-Merging reset/reset/next (89e7a6698fdd reset: uniphier-glue: Use devm_add_a=
-ction_or_reset())
-Merging rockchip/for-next (a2f1c4909563 Merge branch 'v5.18-armsoc/dts64' i=
-nto for-next)
-Merging samsung-krzk/for-next (e0995440d460 Merge branch 'next/defconfig' i=
-nto for-next)
-CONFLICT (add/add): Merge conflict in arch/arm64/boot/dts/exynos/exynos850-=
-pinctrl.dtsi
-CONFLICT (add/add): Merge conflict in arch/arm64/boot/dts/exynos/exynos850.=
-dtsi
-Merging scmi/for-linux-next (26291c54e111 Linux 5.17-rc2)
-Merging stm32/stm32-next (26291c54e111 Linux 5.17-rc2)
-Merging sunxi/sunxi/for-next (14eadca892dd Merge branch 'sunxi/dt-for-5.18'=
- into sunxi/for-next)
-Merging tee/next (ce352be35ba0 Merge branch 'async_notif' into next)
-Merging tegra/for-next (52db893a313e Merge branch for-5.18/arm64/dt into fo=
-r-next)
-Merging ti/ti-next (3be5bf60d055 Merge branch 'ti-k3-dts-next' into ti-next)
-Merging xilinx/for-next (3a14f0e61408 arm64: zynqmp: Rename dma to dma-cont=
-roller)
-Merging clk/clk-next (28c7bbb2a3fc Merge branch 'clk-kunit' into clk-next)
-Merging clk-imx/for-next (036a4b4b4dfa clk: imx: Add imx8dxl clk driver)
-Merging clk-renesas/renesas-clk (678eb67513a9 dt-bindings: clock: renesas: =
-Document RZ/V2L SoC)
-Merging clk-samsung/for-next (45bd8166a1d8 clk: samsung: Add initial Exynos=
-7885 clock driver)
-Merging csky/linux-next (a0793fdad9a1 csky: fix typo of fpu config macro)
-Merging h8300/h8300-next (1ec10274d436 h8300: don't implement set_fs)
-Merging m68k/for-next (a9940f83a6e2 m68k: Add asm/config.h)
-Merging m68knommu/for-next (2553301355f8 m68knommu: fix ucsimm sparse warni=
-ngs)
-Merging microblaze/next (fcc619621df5 microblaze/PCI: Remove pci_phys_mem_a=
-ccess_prot() dead code)
-Merging mips/mips-next (e783362eb54c Linux 5.17-rc1)
-Merging nds32/next (07cd7745c6f2 nds32/setup: remove unused memblock_region=
- variable in setup_memory())
-CONFLICT (content): Merge conflict in arch/nds32/Kbuild
-CONFLICT (content): Merge conflict in arch/nds32/Kconfig
-Merging nios2/for-next (7f7bc20bc41a nios2: Don't use _end for calculating =
-min_low_pfn)
-Merging openrisc/for-next (862cf8d5fd98 openrisc/boot: Remove unnecessary i=
-nitialisation in memcpy().)
-Merging parisc-hd/for-next (d7da660cab47 parisc: Fix sglist access in ccio-=
-dma.c)
-Merging powerpc/next (29ec39fcf11e Merge tag 'powerpc-5.17-1' of git://git.=
-kernel.org/pub/scm/linux/kernel/git/powerpc/linux)
-Merging soc-fsl/next (1ce93cb102e7 soc: fsl: qe: Check of ioremap return va=
-lue)
-Merging risc-v/for-next (e783362eb54c Linux 5.17-rc1)
-Merging s390/for-next (ce7eefa1c265 Merge branch 'fixes' into for-next)
-Merging sh/for-next (8518e694203d sh: pgtable-3level: Fix cast to pointer f=
-rom integer of different size)
-Merging sparc-next/master (dd0d718152e4 Merge tag 'spi-fix-v5.8-rc2' of git=
-://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi)
-Merging uml/linux-next (db0dd9cee822 um: virtio_uml: Allow probing from dev=
-icetree)
-Merging xtensa/xtensa-for-next (8a900dc390da xtensa: Remove unused early_re=
-ad_config_byte() et al declarations)
-Merging pidfd/for-next (317465bcc6f4 Merge branch 'fs.idmapped' into for-ne=
-xt)
-Merging fscrypt/master (b7e072f9b77f fscrypt: improve a few comments)
-Merging fscache/fscache-next (dd81e1c7d5fb Merge tag 'powerpc-5.17-2' of gi=
-t://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux)
-Merging afs/afs-next (26291c54e111 Linux 5.17-rc2)
-Merging btrfs/for-next (80839488f2a7 Merge branch 'for-next-next-v5.17-2022=
-0204' into for-next-20220204)
-Merging ceph/master (038b8d1d1ab1 libceph: optionally use bounce buffer on =
-recv path in crc mode)
-Merging cifs/for-next (dfd42facf1e4 Linux 5.17-rc3)
-Merging configfs/for-next (c42dd069be8d configfs: fix a race in configfs_lo=
-okup())
-Merging ecryptfs/next (682a8e2b41ef Merge tag 'ecryptfs-5.13-rc1-updates' o=
-f git://git.kernel.org/pub/scm/linux/kernel/git/tyhicks/ecryptfs)
-Merging erofs/dev (e783362eb54c Linux 5.17-rc1)
-Merging exfat/dev (dd81e1c7d5fb Merge tag 'powerpc-5.17-2' of git://git.ker=
-nel.org/pub/scm/linux/kernel/git/powerpc/linux)
-Merging ext3/for_next (ee12595147ac fanotify: Fix stale file descriptor in =
-copy_event_to_user())
-Merging ext4/dev (f340b3d90274 fs/ext4: fix comments mentioning i_mutex)
-Merging f2fs/dev (a7b55e08008a f2fs: adjust readahead block number during r=
-ecovery)
-Merging fsverity/fsverity (07c99001312c fs-verity: support reading signatur=
-e with ioctl)
-Merging fuse/for-next (073c3ab6ae01 Documentation/filesystem/dax: DAX on vi=
-rtiofs)
-Merging gfs2/for-next (9421fdba4215 gfs2: Initialize gh_error in gfs2_glock=
-_nq)
-Merging jfs/jfs-next (c48a14dca2cb JFS: fix memleak in jfs_mount)
-Merging ksmbd/ksmbd-for-next (f9929ef6a2a5 ksmbd: add support for key excha=
-nge)
-Merging nfs/linux-next (26291c54e111 Linux 5.17-rc2)
-Merging nfs-anna/linux-next (bde6c98853b2 xprtrdma: fix pointer derefs in e=
-rror cases of rpcrdma_ep_create)
-Merging nfsd/for-next (8dfa08baad02 SUNRPC: Record endpoint information in =
-trace log)
-Merging ntfs3/master (52e00ea6b26e fs/ntfs3: Update valid size if -EIOCBQUE=
-UED)
-Merging orangefs/for-next (40a74870b2d1 orangefs: Fix the size of a memory =
-allocation in orangefs_bufmap_alloc())
-Merging overlayfs/overlayfs-next (94fd19752b28 ovl: don't fail copy up if n=
-o fileattr support on upper)
-Merging ubifs/next (aa39cc675799 jffs2: GC deadlock reading a page that is =
-used in jffs2_write_begin())
-Merging v9fs/9p-next (22e424feb665 Revert "fs/9p: search open fids first")
-Merging xfs/for-next (cea267c235e1 xfs: ensure log flush at the end of a sy=
-nchronous fallocate call)
-Merging zonefs/for-next (95b115332a83 zonefs: remove redundant null bio che=
-ck)
-Merging iomap/iomap-for-next (ebb7fb1557b1 xfs, iomap: limit individual ioe=
-nd chain lengths in writeback)
-Merging djw-vfs/vfs-for-next (2d86293c7075 xfs: return errors in xfs_fs_syn=
-c_fs)
-Merging file-locks/locks-next (80d8e4d3f313 fs/locks: fix fcntl_getlk64/fcn=
-tl_setlk64 stub prototypes)
-Merging vfs/for-next (8f40da9494cf Merge branch 'misc.namei' into for-next)
-Merging printk/for-next (65c2c0709d8e Merge branch 'rework/fast-next-seq' i=
-nto for-next)
-Merging pci/next (e783362eb54c Linux 5.17-rc1)
-Merging pstore/for-next/pstore (a5d05b07961a pstore/ftrace: Allow immediate=
- recording)
-Merging hid/for-next (2b3566c337c3 Merge branch 'for-5.17/upstream-fixes' i=
-nto for-next)
-Merging i2c/i2c/for-next (934705316f0f i2c: mediatek: Add i2c compatible fo=
-r Mediatek MT8186)
-Merging i3c/i3c/next (13462ba1815d i3c: master: dw: check return of dw_i3c_=
-master_get_free_pos())
-Merging dmi/dmi-for-next (f97a2103f1a7 firmware: dmi: Move product_sku info=
- to the end of the modalias)
-Merging hwmon-staging/hwmon-next (2d894d63ecb9 hwmon: (asus-ec-sensors) rea=
-d sensors as signed ints)
-Merging jc_docs/docs-next (869f496e1aa6 docs: process: submitting-patches: =
-Clarify the Reported-by usage)
-Merging v4l-dvb/master (7dc5fc6d3bd6 media: mtk-cir: simplify code)
-Merging v4l-dvb-next/master (68a99f6a0ebf media: lirc: report ir receiver o=
-verflow)
-Merging pm/linux-next (08615cb8c0e1 Merge branch 'thermal-hfi' into linux-n=
-ext)
-Merging cpufreq-arm/cpufreq/arm/linux-next (d776790a5536 cpufreq: mediatek-=
-hw: Fix double devm_remap in hotplug case)
-Merging cpupower/cpupower (101025ff8e47 tools/power/cpupower/{ToDo =3D> TOD=
-O}: Rename the todo file)
-Merging devfreq/devfreq-next (4667431419e9 PM / devfreq: Reduce log severit=
-y for informative message)
-Merging opp/opp/linux-next (489a00ef46c9 Documentation: power: Update outda=
-ted contents in opp.rst)
-Merging thermal/thermal/linux-next (8ee1c0f6526c thermal/drivers/rz2gl: Add=
- error check for reset_control_deassert())
-Merging ieee1394/for-next (54b3bd99f094 firewire: nosy: switch from 'pci_' =
-to 'dma_' API)
-Merging dlm/next (feae43f8aa88 fs: dlm: print cluster addr if non-cluster n=
-ode connects)
-Merging rdma/for-next (0d9c00117b8a RDMA/mlx4: remove redundant assignment =
-to variable nreq)
-Merging net-next/master (9c1be1935fb6 net: initialize init_net earlier)
-Merging bpf-next/for-next (422ee58dc0ef selftests/bpf: Fix tests to use arc=
-h-dependent syscall entry points)
-Merging ipsec-next/master (2ecda181682e xfrm: delete duplicated functions t=
-hat calls same xfrm_api_check())
-Merging mlx5-next/mlx5-next (cac3231cc684 mlx5: remove usused static inline=
-s)
-Merging netfilter-next/master (c828414ac935 netfilter: nft_compat: suppress=
- comment match)
-Merging ipvs-next/master (e7d786331c62 Merge branch 'udp-ipv6-optimisations=
-')
-Merging bluetooth/master (a5dc88794406 Bluetooth: btusb: Add support for In=
-tel Madison Peak (MsP2) device)
-Merging wireless-next/main (c761161851d3 mac80211: Remove redundent assignm=
-ent channel_type)
-Merging mtd/mtd/next (e02dacd3a26d mtd: rawnand: Fix misuses of of_match_no=
-de())
-Merging nand/nand/next (d430e4acd99f mtd: rawnand: brcmnand: Fix sparse war=
-nings in bcma_nand)
-Merging spi-nor/spi-nor/next (5f340402bbfc mtd: spi-nor: Remove debugfs ent=
-ries that duplicate sysfs entries)
-Merging crypto/master (95e26b0391d0 crypto: sl3516 - remove redundant initi=
-alizations of pointers in_sg and out_sg)
-Merging drm/drm-next (53dbee4926d3 Merge tag 'drm-misc-next-2022-01-27' of =
-git://anongit.freedesktop.org/drm/drm-misc into drm-next)
-Merging drm-misc/for-linux-next (d3cbc6e323c9 drm: panel-orientation-quirks=
-: Add quirk for the 1Netbook OneXPlayer)
-Merging amdgpu/drm-next (53593d1be00c drm/amdgpu/smu11.5: restore cclks in =
-vangogh_set_performance_level)
-CONFLICT (content): Merge conflict in drivers/gpu/drm/amd/amdgpu/amdgpu_drv=
-.c
-CONFLICT (content): Merge conflict in drivers/gpu/drm/amd/display/dc/core/d=
-c_link_dp.c
-Merging drm-intel/for-linux-next (d946bc44aa0b drm/i915: Disable unused pow=
-er wells left enabled by BIOS)
-CONFLICT (content): Merge conflict in drivers/gpu/drm/i915/i915_reg.h
-Merging drm-intel-gt/for-linux-next-gt (876f7a438e42 Merge drm/drm-next int=
-o drm-intel-gt-next)
-CONFLICT (content): Merge conflict in drivers/gpu/drm/i915/i915_drv.h
-CONFLICT (content): Merge conflict in drivers/gpu/drm/i915/i915_reg.h
-Applying: merge fix for "drm/i915: split out i915_gem_evict.h from i915_drv=
-.h"
-Applying: extra merge fix for "drm/i915: split out i915_gem_evict.h from i9=
-15_drv.h"
-Applying: extra 2 merge fix for "drm/i915: split out i915_gem_evict.h from =
-i915_drv.h"
-Applying: fix up for "drm/i915: Move GT registers to their own header file"
-Merging drm-tegra/drm/tegra/for-next (22d7ee32f1fb gpu: host1x: Fix hang on=
- Tegra186+)
-Merging drm-msm/msm-next (6aa89ae1fb04 drm/msm/gpu: Cancel idle/boost work =
-on suspend)
-Merging imx-drm/imx-drm/next (20fbfc81e390 drm/imx: imx-tve: Make use of th=
-e helper function devm_platform_ioremap_resource())
-Merging etnaviv/etnaviv/next (cdd156955f94 drm/etnaviv: consider completed =
-fence seqno in hang check)
-Merging fbdev/for-next (c5510f53140c video: fbdev: Fix wrong file path for =
-pvr2fb.c in Kconfig help text)
-Merging regmap/for-next (1056c41634d4 regmap-irq: Fix typo in comment)
-Merging sound/for-next (9d73d1928eb8 kselftest: alsa: Declare most function=
-s static)
-Merging sound-asoc/for-next (d466706b9d0d ASoC: sun4i-i2s: Support for Allw=
-inner R329 and D1 SoCs)
-Merging modules/modules-next (a97ac8cb24a3 module: fix signature check fail=
-ures when using in-kernel decompression)
-Merging input/next (87a0b2fafc09 Merge tag 'v5.16' into next)
-CONFLICT (content): Merge conflict in drivers/input/misc/axp20x-pek.c
-Merging block/for-next (55afd1269c72 Merge branch 'for-5.18/io_uring' into =
-for-next)
-Merging device-mapper/for-next (eaac0b590a47 dm sysfs: use default_groups i=
-n kobj_type)
-Merging libata/for-next (0c72a87889d6 libata: make ata_host_suspend() *void=
-*)
-Merging pcmcia/pcmcia-next (3928cf08334e pcmcia: db1xxx_ss: restrict to MIP=
-S_DB1XXX boards)
-Merging mmc/next (0cb63fc57859 dt-bindings: mmc: Add compatible for Mediate=
-k MT8186)
-Merging mfd/for-mfd-next (9cb74781a436 mfd: intel_soc_pmic_crc: Set main IR=
-Q domain bus token to DOMAIN_BUS_NEXUS)
-Merging backlight/for-backlight-next (ec961cf32411 backlight: qcom-wled: Re=
-spect enabled-strings in set_brightness)
-Merging battery/for-next (784056d36f27 power: supply: axp288_fuel_gauge: Fi=
-x spelling mistake "resisitor" -> "resistor")
-Merging regulator/for-next (e4a7e3f741f7 regulator/rpi-panel-attiny: Use tw=
-o transactions for I2C read)
-Merging security/next-testing (047843bdb316 Merge branch 'landlock_lsm_v34'=
- into next-testing)
-Merging apparmor/apparmor-next (364bd29902ae apparmor: Fix some kernel-doc =
-comments)
-Merging integrity/next-integrity (89677197ae70 ima: Do not print policy rul=
-e with inactive LSM labels)
-Merging keys/keys-next (2d743660786e Merge branch 'fixes' of git://git.kern=
-el.org/pub/scm/linux/kernel/git/viro/vfs)
-Merging safesetid/safesetid-next (1b8b71922919 LSM: SafeSetID: Mark safeset=
-id_initialized as __initdata)
-Merging selinux/next (70f4169ab421 selinux: parse contexts for mount option=
-s early)
-Merging smack/next (e783362eb54c Linux 5.17-rc1)
-Merging tomoyo/master (f702e1107601 tomoyo: use hwight16() in tomoyo_domain=
-_quota_is_ok())
-Merging tpmdd/next (a33f5c380c4b Merge tag 'xfs-5.17-merge-3' of git://git.=
-kernel.org/pub/scm/fs/xfs/xfs-linux)
-Merging watchdog/master (ffd264bd152c watchdog: msc313e: Check if the WDT w=
-as running at boot)
-Merging iommu/next (26291c54e111 Linux 5.17-rc2)
-Merging audit/next (e783362eb54c Linux 5.17-rc1)
-Merging devicetree/for-next (d029175f1420 MAINTAINERS: dt-bindings: Add Krz=
-ysztof Kozlowski)
-Merging mailbox/mailbox-for-next (869b6ca39c08 dt-bindings: mailbox: Add mo=
-re protocol and client ID)
-Merging spi/for-next (4e28b22225e3 spi: dt-bindings: add mising description=
- type to reg property)
-Merging tip/auto-latest (6275d291a763 Merge irq/core into tip/master)
-Merging clockevents/timers/drivers/next (7647204c2e81 dt-bindings: timer: A=
-dd Mstar MSC313e timer devicetree bindings documentation)
-Merging edac/edac-for-next (59d0e09374a3 Merge branch 'edac-urgent' into ed=
-ac-for-next)
-Merging irqchip/irq/irqchip-next (cd448b24c621 Merge branch irq/misc-5.17 i=
-nto irq/irqchip-next)
-Merging ftrace/for-next (6b9b6413700e ftrace: Fix assuming build time sort =
-works for s390)
-Merging rcu/rcu/next (d51c69ea4ca3 rcu-tasks: Set ->percpu_enqueue_shift to=
- zero upon contention)
-Merging kvm/next (17179d0068b2 Merge tag 'kvmarm-fixes-5.17-1' of git://git=
-.kernel.org/pub/scm/linux/kernel/git/kvmarm/kvmarm into HEAD)
-Merging kvm-arm/next (1c53a1ae3612 Merge branch kvm-arm64/misc-5.17 into kv=
-marm-master/next)
-Merging kvms390/next (812de04661c4 KVM: s390: Clarify SIGP orders versus ST=
-OP/RESTART)
-Merging xen-tip/linux-next (e25a8d959992 x86/Xen: streamline (and fix) PV C=
-PU enumeration)
-Merging percpu/for-next (4e1f82dce05b Merge branch 'for-5.16-fixes' into fo=
-r-next)
-Merging workqueues/for-next (bc35f7ef9628 workqueue: Convert the type of po=
-ol->nr_running to int)
-Merging drivers-x86/for-next (34fc68348554 platform/surface: surface3-wmi: =
-Simplify resource management)
-Merging chrome-platform/for-next (ffebd9053272 platform/chrome: cros_ec_typ=
-ec: Check for EC device)
-Merging hsi/for-next (e783362eb54c Linux 5.17-rc1)
-Merging leds/for-next (d949edb503b1 leds: lp55xx: initialise output directi=
-on from dts)
-Merging ipmi/for-next (d134ad2574a1 ipmi: ssif: replace strlcpy with strscp=
-y)
-Merging driver-core/driver-core-next (aa21a1bf97be scripts/get_abi.pl: Igno=
-re hidden files)
-Merging usb/usb-next (2dac5d2864af usb: gadget: f_uac2: Neaten and reduce s=
-ize of afunc_validate_opts)
-Merging usb-gadget/next (e49d033bddf5 Linux 5.12-rc6)
-Merging usb-serial/usb-next (26291c54e111 Linux 5.17-rc2)
-Merging usb-chipidea-next/for-usb-next (78665f57c3fa usb: chipidea: udc: ma=
-ke controller hardware endpoint primed)
-Merging tty/tty-next (186ab09930aa serial: core: Drop duplicate NULL check =
-in uart_*shutdown())
-Merging char-misc/char-misc-next (b86f32951d17 hpet: remove unused writeq/r=
-eadq function definitions)
-Merging extcon/extcon-next (26291c54e111 Linux 5.17-rc2)
-Merging gnss/gnss-next (26291c54e111 Linux 5.17-rc2)
-Merging phy-next/next (1f1b0c105b19 dt-bindings: phy: Add compatible for Me=
-diatek MT8186)
-CONFLICT (modify/delete): Documentation/devicetree/bindings/phy/qcom,usb-hs=
--phy.txt deleted in phy-next/next and modified in HEAD.  Version HEAD of Do=
-cumentation/devicetree/bindings/phy/qcom,usb-hs-phy.txt left in tree.
-$ git rm -f Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.txt
-Applying: merge fix for "dt-bindings: phy: qcom,usb-hs-phy: add MSM8226 com=
-patible"
-Merging soundwire/next (e783362eb54c Linux 5.17-rc1)
-Merging thunderbolt/next (7f7b571becf3 thunderbolt: Replace acpi_bus_get_de=
-vice())
-Merging vfio/next (2bed2ced40c9 vfio/iommu_type1: replace kfree with kvfree)
-Merging staging/staging-next (74e69e95f13f staging: r8188eu: remove constan=
-t variable eRFPath)
-Merging iio/togreg (38ac2f038666 iio: chemical: sunrise_co2: set val parame=
-ter only on success)
-Merging mux/for-next (0fcfb00b28c0 Linux 5.16-rc4)
-Merging icc/icc-next (9d6c7ee7c4bb interconnect: imx: Add imx_icc_get_bw fu=
-nction to set initial avg and peak)
-Merging dmaengine/next (e783362eb54c Linux 5.17-rc1)
-Merging cgroup/for-next (48da2ddc4c78 Merge branch 'for-5.17-fixes' into fo=
-r-next)
-Merging scsi/for-next (7bc8faaf4d50 Merge branch 'fixes' into for-next)
-Merging scsi-mkp/for-next (d1d87c33f47d scsi: lpfc: Remove redundant flush_=
-workqueue() call)
-Merging vhost/linux-next (fae0bd40fab0 virtio_console: break out of buf pol=
-l on remove)
-Merging rpmsg/for-next (ae6062c4abdb remoteproc: mtk_scp: Use dev_err_probe=
-() where possible)
-Merging gpio/for-next (7ac554888233 MAINTAINERS: Remove reference to non-ex=
-isting file)
-Merging gpio-brgl/gpio/for-next (0868ad385aff gpio: Add support for Airoha =
-EN7523 GPIO controller)
-Merging gpio-intel/for-next (a1ce76e89907 gpio: tps68470: Allow building as=
- module)
-Merging gpio-sim/gpio/gpio-sim (0fcfb00b28c0 Linux 5.16-rc4)
-Merging pinctrl/for-next (003c30d8ad1c Merge branch 'devel' into for-next)
-Merging pinctrl-intel/for-next (689e00887740 pinctrl: baytrail: Clear direc=
-t_irq_en flag on broken configs)
-Merging pinctrl-renesas/renesas-pinctrl (742dd872d37f pinctrl: renesas: r8a=
-77995: Restore pin group sort order)
-Merging pinctrl-samsung/for-next (3652dc070bad pinctrl: samsung: improve wa=
-ke irq info on console)
-Merging pwm/for-next (657e54e54ba5 pwm: pxa: Implement .apply() callback)
-Merging userns/for-next (f9d87929d451 ucount:  Make get_ucount a safe get_u=
-ser replacement)
-Merging ktest/for-next (170f4869e662 ktest.pl: Fix the logic for truncating=
- the size of the log file for email)
-Merging kselftest/next (57765eb4d4b7 selftests/kselftest/runner.sh: Pass op=
-tional command parameters in environment)
-Merging livepatching/for-next (32fdbc45ade0 Merge branch 'for-5.17/kallsyms=
-' into for-next)
-Merging coresight/next (ebbce265bba1 coresight: trbe: Move check for kernel=
- page table isolation from EL0 to probe)
-Merging rtc/rtc-next (e783362eb54c Linux 5.17-rc1)
-Merging nvdimm/libnvdimm-for-next (9e05e95ca8da iomap: Fix error handling i=
-n iomap_zero_iter())
-Merging at24/at24/for-next (e783362eb54c Linux 5.17-rc1)
-Merging ntb/ntb-next (afe1c85b354c IDT: Fix Build warnings on some 32bit ar=
-chitectures.)
-Merging seccomp/for-next/seccomp (1e6d69c7b9cd selftests/seccomp: Report ev=
-ent mismatches more clearly)
-Merging cisco/for-next (9e98c678c2d6 Linux 5.1-rc1)
-Merging fsi/next (7cc2f34e1f4d fsi: sbefifo: Use interruptible mutex lockin=
-g)
-Merging slimbus/for-next (e783362eb54c Linux 5.17-rc1)
-Merging nvmem/for-next (8043480a8cef nvmem: qfprom: fix kerneldoc warning)
-Merging xarray/main (22f56b8e890d XArray: Include bitmap.h from xarray.h)
-Merging hyperv/hyperv-next (4ee524587105 Drivers: hv: Compare cpumasks and =
-not their weights in init_vp_index())
-Merging auxdisplay/auxdisplay (4daa9ff89ef2 auxdisplay: charlcd: checking f=
-or pointer reference before dereferencing)
-Merging kgdb/kgdb/for-next (b77dbc86d604 kdb: Adopt scheduler's task classi=
-fication)
-Merging hmm/hmm (6880fa6c5660 Linux 5.15-rc1)
-Merging fpga/for-next (21f0a239ecab fpga: dfl: pci: Remove usage of the dep=
-recated "pci-dma-compat.h" API)
-Merging kunit/test (e783362eb54c Linux 5.17-rc1)
-Merging cfi/cfi/next (baaf965f9430 mtd: hyperbus: rpc-if: fix bug in rpcif_=
-hb_remove)
-Merging kunit-next/kunit (c2741453478b kunit: cleanup assertion macro inter=
-nal variables)
-Merging trivial/for-next (081c8919b02b Documentation: remove trivial tree)
-Merging mhi/mhi-next (b2aa7904752d bus: mhi: pci_generic: Add mru_default f=
-or Cinterion MV31-W)
-Merging memblock/for-next (a59466ee91aa memblock: Remove #ifdef __KERNEL__ =
-from memblock.h)
-Merging init/init-user-pointers (38b082236e77 initramfs: use vfs_utimes in =
-do_copy)
-Merging counters/counters (e71ba9452f0b Linux 5.11-rc2)
-Merging cxl/next (be185c2988b4 cxl/core: Remove cxld_const_init in cxl_deco=
-der_alloc())
-Merging folio/for-next (b1ccdc7664f5 selftests/vm/transhuge-stress: Support=
- file-backed PMD folios)
-$ git reset --hard HEAD^
-Merging next-20220204 version of folio
-Merging folio-iomap/folio-iomap (4d7bd0eb72e5 iomap: Inline __iomap_zero_it=
-er into its caller)
-Merging zstd/zstd-next (88a309465b3f lib: zstd: clean up double word in com=
-ment.)
-Merging efi/next (42f4046bc4ba efi: use default_groups in kobj_type)
-Merging unicode/for-next (5298d4bfe80f unicode: clean up the Kconfig symbol=
- confusion)
-Merging slab/for-next (07f910f9b729 mm: Remove slab from struct page)
-Merging random/master (7c866ef11e30 random: make credit_entropy_bits() alwa=
-ys safe)
-Merging landlock/next (a691b9858300 Merge Landlock fixes into next)
-Merging rust/rust-next (ced9f62ec435 init/Kconfig: Specify the interpreter =
-for rust-is-available.sh)
-CONFLICT (content): Merge conflict in Documentation/process/changes.rst
-CONFLICT (content): Merge conflict in samples/Kconfig
-CONFLICT (content): Merge conflict in samples/Makefile
-Merging akpm-current/current (7eb867b39a8e ipc/mqueue: use get_tree_nodev()=
- in mqueue_get_tree())
-CONFLICT (content): Merge conflict in lib/Kconfig.debug
-$ git checkout -b akpm remotes/origin/akpm/master
-$ git rebase --onto master remotes/origin/akpm/master-base
-Merging akpm/master (2080104cef88 Merge branch 'akpm-current/current')
+arm64:
+    allmodconfig: (clang-14) FAIL
 
---Sig_/1I/iIYzT5re.d=Z+.Fm+Dji
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+arm:
+    allmodconfig: (clang-14) FAIL
+    allmodconfig: (gcc-10) FAIL
+    lpc32xx_defconfig: (gcc-10) FAIL
+    omap2plus_defconfig: (gcc-10) FAIL
+    qcom_defconfig: (gcc-10) FAIL
+    realview_defconfig: (gcc-10) FAIL
+    rpc_defconfig: (gcc-10) FAIL
+    sama5_defconfig: (gcc-10) FAIL
+    shmobile_defconfig: (gcc-10) FAIL
+    sunxi_defconfig: (gcc-10) FAIL
+    versatile_defconfig: (gcc-10) FAIL
+    vexpress_defconfig: (gcc-10) FAIL
 
------BEGIN PGP SIGNATURE-----
+i386:
+    allmodconfig: (clang-14) FAIL
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIAo0kACgkQAVBC80lX
-0GwlgQgAluPa9ZAkWAdRDBhH/PAycv19T80Lg/k3DSD0nW1ALGZJPPkVy2CJdv1v
-TQQSiqbMj3o++GAq/fQZNGF5LCdQVptnvGqzSmqKOyw7urLBs7oGxTKKRwFKAl8p
-tvhst4YUUKvIOyhhpYJuCXeRdFgG0W0IYKzy3tPJXyuzrGR2q5s6vshHvRsWMcdv
-BpT7FdLlUGug5ERB6Y/E3KaFLiMhDIZR9SucdwKtTsTVaauqaqjSm5teR4m5zVt+
-4rSOrgSl9wTEwp/Skzk9pECkukARz+rJJ5BoXBRuGpeRihXRCz3NSGI/e/OUaGia
-RVZ8dQosuWDcafrIXn8+OPsOUpjrIA==
-=Qq5I
------END PGP SIGNATURE-----
+mips:
+    decstation_64_defconfig: (gcc-10) FAIL
+    ip27_defconfig: (gcc-10) FAIL
+    ip28_defconfig: (gcc-10) FAIL
+    loongson3_defconfig: (gcc-10) FAIL
 
---Sig_/1I/iIYzT5re.d=Z+.Fm+Dji--
+x86_64:
+    allmodconfig: (clang-14) FAIL
+    allmodconfig: (gcc-10) FAIL
+
+Errors and Warnings Detected:
+
+arc:
+    allnoconfig (gcc-10): 1 warning
+    axs103_defconfig (gcc-10): 1 warning
+    haps_hs_defconfig (gcc-10): 1 warning
+    haps_hs_smp_defconfig (gcc-10): 1 warning
+    haps_hs_smp_defconfig+debug (gcc-10): 1 warning
+    haps_hs_smp_defconfig+kselftest (gcc-10): 1 warning
+    hsdk_defconfig (gcc-10): 6 warnings
+    nsimosci_hs_defconfig (gcc-10): 1 warning
+    nsimosci_hs_smp_defconfig (gcc-10): 1 warning
+    vdk_hs38_defconfig (gcc-10): 1 warning
+
+arm64:
+    allmodconfig (clang-14): 1 error, 1 warning
+    defconfig (gcc-10): 17 warnings
+    defconfig (clang-14): 37 warnings
+    defconfig+CONFIG_ARM64_16K_PAGES=3Dy (gcc-10): 17 warnings
+    defconfig+CONFIG_ARM64_64K_PAGES=3Dy (gcc-10): 17 warnings
+    defconfig+CONFIG_ARM64_64K_PAGES=3Dy (clang-14): 37 warnings
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (gcc-10): 17 warnings
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy (gcc-10): 17 warnings
+    defconfig+arm64-chromebook (gcc-10): 17 warnings
+    defconfig+crypto (gcc-10): 17 warnings
+    defconfig+debug (gcc-10): 17 warnings
+    defconfig+ima (gcc-10): 17 warnings
+    defconfig+kselftest (gcc-10): 17 warnings
+
+arm:
+    allmodconfig (gcc-10): 1 error, 1 warning
+    allmodconfig (clang-14): 2 errors, 13 warnings
+    am200epdkit_defconfig (gcc-10): 5 warnings
+    aspeed_g4_defconfig (gcc-10): 5 warnings
+    aspeed_g5_defconfig (gcc-10): 1 warning
+    aspeed_g5_defconfig (clang-14): 47 warnings
+    assabet_defconfig (gcc-10): 5 warnings
+    at91_dt_defconfig (gcc-10): 5 warnings
+    axm55xx_defconfig (gcc-10): 5 warnings
+    badge4_defconfig (gcc-10): 5 warnings
+    bcm2835_defconfig (gcc-10): 6 warnings
+    cerfcube_defconfig (gcc-10): 5 warnings
+    cm_x300_defconfig (gcc-10): 5 warnings
+    colibri_pxa270_defconfig (gcc-10): 5 warnings
+    colibri_pxa300_defconfig (gcc-10): 5 warnings
+    collie_defconfig (gcc-10): 5 warnings
+    corgi_defconfig (gcc-10): 5 warnings
+    davinci_all_defconfig (gcc-10): 1 warning
+    dove_defconfig (gcc-10): 9 warnings
+    ep93xx_defconfig (gcc-10): 5 warnings
+    eseries_pxa_defconfig (gcc-10): 5 warnings
+    ezx_defconfig (gcc-10): 5 warnings
+    footbridge_defconfig (gcc-10): 5 warnings
+    gemini_defconfig (gcc-10): 6 warnings
+    h3600_defconfig (gcc-10): 5 warnings
+    h5000_defconfig (gcc-10): 4 warnings
+    hackkit_defconfig (gcc-10): 5 warnings
+    hisi_defconfig (gcc-10): 5 warnings
+    imote2_defconfig (gcc-10): 5 warnings
+    imx_v4_v5_defconfig (gcc-10): 4 warnings
+    imx_v6_v7_defconfig (gcc-10): 6 warnings
+    integrator_defconfig (gcc-10): 1 warning
+    iop32x_defconfig (gcc-10): 5 warnings
+    ixp4xx_defconfig (gcc-10): 5 warnings
+    jornada720_defconfig (gcc-10): 5 warnings
+    keystone_defconfig (gcc-10): 6 warnings
+    lart_defconfig (gcc-10): 5 warnings
+    lpc32xx_defconfig (gcc-10): 1 error, 5 warnings
+    lpd270_defconfig (gcc-10): 5 warnings
+    magician_defconfig (gcc-10): 5 warnings
+    mainstone_defconfig (gcc-10): 5 warnings
+    milbeaut_m10v_defconfig (gcc-10): 1 warning
+    mini2440_defconfig (gcc-10): 10 warnings
+    moxart_defconfig (gcc-10): 5 warnings
+    multi_v4t_defconfig (gcc-10): 1 warning
+    multi_v7_defconfig (gcc-10): 14 warnings
+    multi_v7_defconfig (clang-14): 44 warnings
+    multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (gcc-10): 14 warnings
+    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (gcc-10): 14 warn=
+ings
+    multi_v7_defconfig+CONFIG_SMP=3Dn (gcc-10): 16 warnings
+    multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (gcc-10): 14 warnings
+    multi_v7_defconfig+debug (gcc-10): 14 warnings
+    mvebu_v5_defconfig (gcc-10): 10 warnings
+    mvebu_v7_defconfig (gcc-10): 11 warnings
+    mxs_defconfig (gcc-10): 5 warnings
+    netwinder_defconfig (gcc-10): 5 warnings
+    nhk8815_defconfig (gcc-10): 1 warning
+    omap1_defconfig (gcc-10): 5 warnings
+    omap2plus_defconfig (gcc-10): 1 error, 8 warnings
+    orion5x_defconfig (gcc-10): 5 warnings
+    oxnas_v6_defconfig (gcc-10): 1 warning
+    palmz72_defconfig (gcc-10): 5 warnings
+    pcm027_defconfig (gcc-10): 5 warnings
+    pleb_defconfig (gcc-10): 5 warnings
+    pxa168_defconfig (gcc-10): 5 warnings
+    pxa255-idp_defconfig (gcc-10): 5 warnings
+    pxa3xx_defconfig (gcc-10): 5 warnings
+    pxa910_defconfig (gcc-10): 5 warnings
+    pxa_defconfig (gcc-10): 9 warnings
+    qcom_defconfig (gcc-10): 1 error, 6 warnings
+    realview_defconfig (gcc-10): 1 error, 1 warning
+    rpc_defconfig (gcc-10): 2 errors
+    s3c6400_defconfig (gcc-10): 5 warnings
+    s5pv210_defconfig (gcc-10): 5 warnings
+    sama5_defconfig (gcc-10): 1 error, 5 warnings
+    sama7_defconfig (gcc-10): 1 warning
+    shannon_defconfig (gcc-10): 5 warnings
+    shmobile_defconfig (gcc-10): 1 error, 6 warnings
+    simpad_defconfig (gcc-10): 5 warnings
+    socfpga_defconfig (gcc-10): 5 warnings
+    spear13xx_defconfig (gcc-10): 5 warnings
+    spear3xx_defconfig (gcc-10): 5 warnings
+    spear6xx_defconfig (gcc-10): 5 warnings
+    spitz_defconfig (gcc-10): 5 warnings
+    sunxi_defconfig (gcc-10): 1 error, 6 warnings
+    tct_hammer_defconfig (gcc-10): 5 warnings
+    tegra_defconfig (gcc-10): 8 warnings
+    trizeps4_defconfig (gcc-10): 5 warnings
+    u8500_defconfig (gcc-10): 6 warnings
+    versatile_defconfig (gcc-10): 1 error, 1 warning
+    vexpress_defconfig (gcc-10): 1 error, 1 warning
+    viper_defconfig (gcc-10): 5 warnings
+    vt8500_v6_v7_defconfig (gcc-10): 5 warnings
+    zeus_defconfig (gcc-10): 5 warnings
+
+i386:
+    allmodconfig (clang-14): 1 error, 1 warning
+    allnoconfig (gcc-10): 1 warning
+    allnoconfig (clang-14): 5 warnings
+    i386_defconfig (gcc-10): 6 warnings
+    i386_defconfig (clang-14): 15 warnings
+    i386_defconfig+debug (gcc-10): 6 warnings
+    i386_defconfig+kselftest (gcc-10): 6 warnings
+
+mips:
+    32r2el_defconfig (gcc-10): 2 warnings
+    32r2el_defconfig+debug (gcc-10): 2 warnings
+    32r2el_defconfig+kselftest (gcc-10): 2 warnings
+    bcm47xx_defconfig (gcc-10): 1 warning
+    bcm63xx_defconfig (gcc-10): 1 warning
+    bigsur_defconfig (gcc-10): 1 warning
+    bmips_be_defconfig (gcc-10): 1 warning
+    bmips_stb_defconfig (gcc-10): 1 warning
+    capcella_defconfig (gcc-10): 1 warning
+    ci20_defconfig (gcc-10): 1 warning
+    cobalt_defconfig (gcc-10): 1 warning
+    db1xxx_defconfig (gcc-10): 1 warning
+    decstation_defconfig (gcc-10): 1 warning
+    decstation_r4k_defconfig (gcc-10): 1 warning
+    e55_defconfig (gcc-10): 1 warning
+    fuloong2e_defconfig (gcc-10): 1 error, 1 warning
+    gcw0_defconfig (gcc-10): 7 warnings
+    ip22_defconfig (gcc-10): 5 warnings
+    ip32_defconfig (gcc-10): 1 warning
+    jazz_defconfig (gcc-10): 1 warning
+    jmr3927_defconfig (gcc-10): 1 warning
+    lemote2f_defconfig (gcc-10): 1 error, 5 warnings
+    loongson1b_defconfig (gcc-10): 1 warning
+    loongson1c_defconfig (gcc-10): 1 warning
+    loongson2k_defconfig (gcc-10): 1 warning
+    loongson3_defconfig (gcc-10): 2 errors, 1 warning
+    malta_defconfig (gcc-10): 1 warning
+    malta_kvm_defconfig (gcc-10): 1 warning
+    malta_qemu_32r6_defconfig (gcc-10): 1 warning
+    maltaaprp_defconfig (gcc-10): 1 warning
+    maltasmvp_defconfig (gcc-10): 1 warning
+    maltasmvp_eva_defconfig (gcc-10): 1 warning
+    maltaup_defconfig (gcc-10): 1 warning
+    mpc30x_defconfig (gcc-10): 1 warning
+    mtx1_defconfig (gcc-10): 1 warning
+    pic32mzda_defconfig (gcc-10): 1 warning
+    rb532_defconfig (gcc-10): 1 warning
+    rbtx49xx_defconfig (gcc-10): 1 warning
+    rm200_defconfig (gcc-10): 1 warning
+    rs90_defconfig (gcc-10): 1 warning
+    sb1250_swarm_defconfig (gcc-10): 1 warning
+    tb0219_defconfig (gcc-10): 1 warning
+    tb0287_defconfig (gcc-10): 1 warning
+
+riscv:
+    defconfig (gcc-10): 1 warning
+    defconfig+CONFIG_EFI=3Dn (clang-14): 5 warnings
+    defconfig+debug (gcc-10): 1 warning
+    defconfig+kselftest (gcc-10): 1 warning
+    rv32_defconfig (gcc-10): 1 warning
+
+x86_64:
+    allmodconfig (clang-14): 1 error, 2 warnings
+    allmodconfig (gcc-10): 2 errors
+    allnoconfig (gcc-10): 1 warning
+    allnoconfig (clang-14): 5 warnings
+    x86_64_defconfig (clang-14): 16 warnings
+    x86_64_defconfig (gcc-10): 6 warnings
+    x86_64_defconfig+amdgpu (gcc-10): 6 warnings
+    x86_64_defconfig+crypto (gcc-10): 6 warnings
+    x86_64_defconfig+debug (gcc-10): 8 warnings
+    x86_64_defconfig+ima (gcc-10): 6 warnings
+    x86_64_defconfig+kselftest (gcc-10): 6 warnings
+    x86_64_defconfig+x86-chromebook (gcc-10): 6 warnings
+    x86_64_defconfig+x86-chromebook+amdgpu (gcc-10): 6 warnings
+    x86_64_defconfig+x86-chromebook+kselftest (gcc-10): 6 warnings
+    x86_64_defconfig+x86_kvm_guest (gcc-10): 6 warnings
+
+Errors summary:
+
+    4    panel-edp.c:(.text+0xb70): undefined reference to `drm_panel_dp_au=
+x_backlight'
+    3    fs/io_uring.c:9396:9: error: variable 'ret' is uninitialized when =
+used here [-Werror,-Wuninitialized]
+    2    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=
+=80=98-mhard-float=E2=80=99
+    2    /usr/lib/gcc/x86_64-linux-gnu/10/plugin/include/config/i386/i386.h=
+:2500:10: fatal error: common/config/i386/i386-cpuinfo.h: No such file or d=
+irectory
+    1    panel-edp.c:(.text+0xc0c): undefined reference to `drm_panel_dp_au=
+x_backlight'
+    1    panel-edp.c:(.text+0xbdc): undefined reference to `drm_panel_dp_au=
+x_backlight'
+    1    panel-edp.c:(.text+0xb7c): undefined reference to `drm_panel_dp_au=
+x_backlight'
+    1    panel-edp.c:(.text+0xb28): undefined reference to `drm_panel_dp_au=
+x_backlight'
+    1    mips-linux-gnu-ld: (.init.text+0x1720): undefined reference to `no=
+de_data'
+    1    include/linux/tpm.h:290:2: error: field  within 'struct tpm_header=
+' is less aligned than 'union tpm_header::(anonymous at ../include/linux/tp=
+m.h:290:2)' and is usually due to 'struct tpm_header' being packed, which c=
+an lead to unaligned accesses [-Werror,-Wunaligned-access]
+    1    fs/proc/task_mmu.c:1444:7: error: unused variable =E2=80=98migrati=
+on=E2=80=99 [-Werror=3Dunused-variable]
+    1    fs/proc/task_mmu.c:1444:7: error: unused variable 'migration' [-We=
+rror,-Wunused-variable]
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
+=3D0x'
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
+=3D0x'
+    1    ERROR: modpost: "drm_panel_dp_aux_backlight" [drivers/gpu/drm/pane=
+l/panel-edp.ko] undefined!
+    1    (.init.text+0x16f8): undefined reference to `node_data'
+
+Warnings summary:
+
+    348  drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct=
+ cpu_capability=E2=80=99 declared inside parameter list will not be visible=
+ outside of this definition or declaration
+    148  fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migra=
+tion=E2=80=99 [-Wunused-variable]
+    90   1 warning generated.
+    62   arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is ou=
+tside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 =
+[-Warray-bounds]
+    62   arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is ou=
+tside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 =
+[-Warray-bounds]
+    62   arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknow=
+n> is outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=
+=E2=80=99 [-Warray-bounds]
+    62   arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknow=
+n> is outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=
+=E2=80=99 [-Warray-bounds]
+    47   drivers/thermal/thermal_netlink.h:113:71: warning: declaration of =
+'struct cpu_capability' will not be visible outside of this function [-Wvis=
+ibility]
+    24   drivers/thermal/tegra/../thermal_netlink.h:113:71: warning: =E2=80=
+=98struct cpu_capability=E2=80=99 declared inside parameter list will not b=
+e visible outside of this definition or declaration
+    23   clang: warning: argument unused during compilation: '-march=3Darmv=
+6k' [-Wunused-command-line-argument]
+    17   fs/proc/task_mmu.c:1444:7: warning: unused variable 'migration' [-=
+Wunused-variable]
+    16   drivers/thermal/samsung/../thermal_netlink.h:113:71: warning: =E2=
+=80=98struct cpu_capability=E2=80=99 declared inside parameter list will no=
+t be visible outside of this definition or declaration
+    12   fs/io_uring.c:9373:13: note: initialize the variable 'ret' to sile=
+nce this warning
+    10   drivers/thermal/qcom/../thermal_netlink.h:113:71: warning: =E2=80=
+=98struct cpu_capability=E2=80=99 declared inside parameter list will not b=
+e visible outside of this definition or declaration
+    10   clang: warning: argument unused during compilation: '-march=3Darmv=
+7-a' [-Wunused-command-line-argument]
+    9    include/uapi/linux/if_pppox.h:71:4: warning: field sa_addr within =
+'struct sockaddr_pppox' is less aligned than 'union (unnamed union at ../in=
+clude/uapi/linux/if_pppox.h:68:2)' and is usually due to 'struct sockaddr_p=
+ppox' being packed, which can lead to unaligned accesses [-Wunaligned-acces=
+s]
+    9    fs/io_uring.c:9396:9: warning: variable 'ret' is uninitialized whe=
+n used here [-Wuninitialized]
+    7    include/uapi/linux/videodev2.h:1744:2: warning: field  within 'str=
+uct v4l2_ext_control' is less aligned than 'union v4l2_ext_control::(anonym=
+ous at ../include/uapi/linux/videodev2.h:1744:2)' and is usually due to 'st=
+ruct v4l2_ext_control' being packed, which can lead to unaligned accesses [=
+-Wunaligned-access]
+    6    drivers/thermal/st/../thermal_netlink.h:113:71: warning: =E2=80=98=
+struct cpu_capability=E2=80=99 declared inside parameter list will not be v=
+isible outside of this definition or declaration
+    5    drivers/thermal/thermal_netlink.h:113:71: warning: 'struct cpu_cap=
+ability' declared inside parameter list will not be visible outside of this=
+ definition or declaration
+    4    drivers/thermal/tegra/../thermal_netlink.h:113:71: warning: declar=
+ation of 'struct cpu_capability' will not be visible outside of this functi=
+on [-Wvisibility]
+    3    drivers/thermal/samsung/../thermal_netlink.h:113:71: warning: decl=
+aration of 'struct cpu_capability' will not be visible outside of this func=
+tion [-Wvisibility]
+    3    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+    2    drivers/thermal/qcom/../thermal_netlink.h:113:71: warning: declara=
+tion of 'struct cpu_capability' will not be visible outside of this functio=
+n [-Wvisibility]
+    1    net/core/skbuff.o: warning: objtool: skb_copy()+0x12d: unreachable=
+ instruction
+    1    lib/strnlen_user.o: warning: objtool: strnlen_user()+0x5d: call to=
+ do_strnlen_user() with UACCESS enabled
+    1    lib/strncpy_from_user.o: warning: objtool: strncpy_from_user()+0x8=
+a: call to do_strncpy_from_user() with UACCESS enabled
+    1    include/asm-generic/unaligned.h:14:8: warning: array subscript -1 =
+is outside array bounds of =E2=80=98unsigned char[1]=E2=80=99 [-Warray-boun=
+ds]
+    1    drivers/thermal/st/../thermal_netlink.h:113:71: warning: declarati=
+on of 'struct cpu_capability' will not be visible outside of this function =
+[-Wvisibility]
+    1    drivers/gpu/drm/stm/ltdc.c:625:2: warning: variable 'val' is used =
+uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
+    1    drivers/gpu/drm/stm/ltdc.c:600:9: note: initialize the variable 'v=
+al' to silence this warning
+    1    cc1: all warnings being treated as errors
+    1    arch/x86/kernel/head64.o: warning: objtool: __startup_64() falls t=
+hrough to next function startup_64_setup_env()
+    1    arch/mips/boot/dts/ingenic/jz4780.dtsi:513.33-515.6: Warning (unit=
+_address_format): /nemc@13410000/efuse@d0/eth-mac-addr@0x22: unit name shou=
+ld not have leading "0x"
+    1    arch/arm/mach-vexpress/spc.c:592:18: warning: array subscript -1 i=
+s below array bounds of =E2=80=98bool[2]=E2=80=99 {aka =E2=80=98_Bool[2]=E2=
+=80=99} [-Warray-bounds]
+    1    arch/arm/mach-vexpress/spc.c:583:21: warning: array subscript -1 i=
+s below array bounds of =E2=80=98bool[2]=E2=80=99 {aka =E2=80=98_Bool[2]=E2=
+=80=99} [-Warray-bounds]
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+debug (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings,=
+ 0 section mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+kselftest (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warni=
+ngs, 0 section mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (x86_64, clang-14) =E2=80=94 FAIL, 1 error, 2 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    fs/io_uring.c:9396:9: error: variable 'ret' is uninitialized when used =
+here [-Werror,-Wuninitialized]
+
+Warnings:
+    arch/x86/kernel/head64.o: warning: objtool: __startup_64() falls throug=
+h to next function startup_64_setup_env()
+    fs/io_uring.c:9373:13: note: initialize the variable 'ret' to silence t=
+his warning
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mi=
+smatches
+
+Errors:
+    fs/proc/task_mmu.c:1444:7: error: unused variable =E2=80=98migration=E2=
+=80=99 [-Werror=3Dunused-variable]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (i386, clang-14) =E2=80=94 FAIL, 1 error, 1 warning, 0 section=
+ mismatches
+
+Errors:
+    fs/io_uring.c:9396:9: error: variable 'ret' is uninitialized when used =
+here [-Werror,-Wuninitialized]
+
+Warnings:
+    fs/io_uring.c:9373:13: note: initialize the variable 'ret' to silence t=
+his warning
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, clang-14) =E2=80=94 FAIL, 2 errors, 13 warnings, 0 secti=
+on mismatches
+
+Errors:
+    include/linux/tpm.h:290:2: error: field  within 'struct tpm_header' is =
+less aligned than 'union tpm_header::(anonymous at ../include/linux/tpm.h:2=
+90:2)' and is usually due to 'struct tpm_header' being packed, which can le=
+ad to unaligned accesses [-Werror,-Wunaligned-access]
+    fs/proc/task_mmu.c:1444:7: error: unused variable 'migration' [-Werror,=
+-Wunused-variable]
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (x86_64, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 secti=
+on mismatches
+
+Errors:
+    /usr/lib/gcc/x86_64-linux-gnu/10/plugin/include/config/i386/i386.h:2500=
+:10: fatal error: common/config/i386/i386-cpuinfo.h: No such file or direct=
+ory
+    /usr/lib/gcc/x86_64-linux-gnu/10/plugin/include/config/i386/i386.h:2500=
+:10: fatal error: common/config/i386/i386-cpuinfo.h: No such file or direct=
+ory
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, clang-14) =E2=80=94 FAIL, 1 error, 1 warning, 0 sectio=
+n mismatches
+
+Errors:
+    fs/io_uring.c:9396:9: error: variable 'ret' is uninitialized when used =
+here [-Werror,-Wuninitialized]
+
+Warnings:
+    fs/io_uring.c:9373:13: note: initialize the variable 'ret' to silence t=
+his warning
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, clang-14) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable 'migration' [-Wunus=
+ed-variable]
+    1 warning generated.
+    fs/io_uring.c:9396:9: warning: variable 'ret' is uninitialized when use=
+d here [-Wuninitialized]
+    fs/io_uring.c:9373:13: note: initialize the variable 'ret' to silence t=
+his warning
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
+ismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mi=
+smatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable 'migration' [-Wunus=
+ed-variable]
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, clang-14) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable 'migration' [-Wunus=
+ed-variable]
+    1 warning generated.
+    fs/io_uring.c:9396:9: warning: variable 'ret' is uninitialized when use=
+d here [-Wuninitialized]
+    fs/io_uring.c:9373:13: note: initialize the variable 'ret' to silence t=
+his warning
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+am200epdkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0=
+ section mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+ar7_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, clang-14) =E2=80=94 PASS, 0 errors, 47 warnings, =
+0 section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable 'migration' [-Wunus=
+ed-variable]
+    1 warning generated.
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    include/uapi/linux/if_pppox.h:71:4: warning: field sa_addr within 'stru=
+ct sockaddr_pppox' is less aligned than 'union (unnamed union at ../include=
+/uapi/linux/if_pppox.h:68:2)' and is usually due to 'struct sockaddr_pppox'=
+ being packed, which can lead to unaligned accesses [-Wunaligned-access]
+    1 warning generated.
+    fs/io_uring.c:9396:9: warning: variable 'ret' is uninitialized when use=
+d here [-Wuninitialized]
+    fs/io_uring.c:9373:13: note: initialize the variable 'ret' to silence t=
+his warning
+    1 warning generated.
+    include/uapi/linux/if_pppox.h:71:4: warning: field sa_addr within 'stru=
+ct sockaddr_pppox' is less aligned than 'union (unnamed union at ../include=
+/uapi/linux/if_pppox.h:68:2)' and is usually due to 'struct sockaddr_pppox'=
+ being packed, which can lead to unaligned accesses [-Wunaligned-access]
+    1 warning generated.
+    include/uapi/linux/if_pppox.h:71:4: warning: field sa_addr within 'stru=
+ct sockaddr_pppox' is less aligned than 'union (unnamed union at ../include=
+/uapi/linux/if_pppox.h:68:2)' and is usually due to 'struct sockaddr_pppox'=
+ being packed, which can lead to unaligned accesses [-Wunaligned-access]
+    1 warning generated.
+    include/uapi/linux/if_pppox.h:71:4: warning: field sa_addr within 'stru=
+ct sockaddr_pppox' is less aligned than 'union (unnamed union at ../include=
+/uapi/linux/if_pppox.h:68:2)' and is usually due to 'struct sockaddr_pppox'=
+ being packed, which can lead to unaligned accesses [-Wunaligned-access]
+    1 warning generated.
+    include/uapi/linux/if_pppox.h:71:4: warning: field sa_addr within 'stru=
+ct sockaddr_pppox' is less aligned than 'union (unnamed union at ../include=
+/uapi/linux/if_pppox.h:68:2)' and is usually due to 'struct sockaddr_pppox'=
+ being packed, which can lead to unaligned accesses [-Wunaligned-access]
+    1 warning generated.
+    include/uapi/linux/if_pppox.h:71:4: warning: field sa_addr within 'stru=
+ct sockaddr_pppox' is less aligned than 'union (unnamed union at ../include=
+/uapi/linux/if_pppox.h:68:2)' and is usually due to 'struct sockaddr_pppox'=
+ being packed, which can lead to unaligned accesses [-Wunaligned-access]
+    1 warning generated.
+    include/uapi/linux/if_pppox.h:71:4: warning: field sa_addr within 'stru=
+ct sockaddr_pppox' is less aligned than 'union (unnamed union at ../include=
+/uapi/linux/if_pppox.h:68:2)' and is usually due to 'struct sockaddr_pppox'=
+ being packed, which can lead to unaligned accesses [-Wunaligned-access]
+    1 warning generated.
+    include/uapi/linux/if_pppox.h:71:4: warning: field sa_addr within 'stru=
+ct sockaddr_pppox' is less aligned than 'union (unnamed union at ../include=
+/uapi/linux/if_pppox.h:68:2)' and is usually due to 'struct sockaddr_pppox'=
+ being packed, which can lead to unaligned accesses [-Wunaligned-access]
+    1 warning generated.
+    include/uapi/linux/if_pppox.h:71:4: warning: field sa_addr within 'stru=
+ct sockaddr_pppox' is less aligned than 'union (unnamed union at ../include=
+/uapi/linux/if_pppox.h:68:2)' and is usually due to 'struct sockaddr_pppox'=
+ being packed, which can lead to unaligned accesses [-Wunaligned-access]
+    1 warning generated.
+    include/uapi/linux/videodev2.h:1744:2: warning: field  within 'struct v=
+4l2_ext_control' is less aligned than 'union v4l2_ext_control::(anonymous a=
+t ../include/uapi/linux/videodev2.h:1744:2)' and is usually due to 'struct =
+v4l2_ext_control' being packed, which can lead to unaligned accesses [-Wuna=
+ligned-access]
+    1 warning generated.
+    include/uapi/linux/videodev2.h:1744:2: warning: field  within 'struct v=
+4l2_ext_control' is less aligned than 'union v4l2_ext_control::(anonymous a=
+t ../include/uapi/linux/videodev2.h:1744:2)' and is usually due to 'struct =
+v4l2_ext_control' being packed, which can lead to unaligned accesses [-Wuna=
+ligned-access]
+    1 warning generated.
+    include/uapi/linux/videodev2.h:1744:2: warning: field  within 'struct v=
+4l2_ext_control' is less aligned than 'union v4l2_ext_control::(anonymous a=
+t ../include/uapi/linux/videodev2.h:1744:2)' and is usually due to 'struct =
+v4l2_ext_control' being packed, which can lead to unaligned accesses [-Wuna=
+ligned-access]
+    1 warning generated.
+    include/uapi/linux/videodev2.h:1744:2: warning: field  within 'struct v=
+4l2_ext_control' is less aligned than 'union v4l2_ext_control::(anonymous a=
+t ../include/uapi/linux/videodev2.h:1744:2)' and is usually due to 'struct =
+v4l2_ext_control' being packed, which can lead to unaligned accesses [-Wuna=
+ligned-access]
+    1 warning generated.
+    include/uapi/linux/videodev2.h:1744:2: warning: field  within 'struct v=
+4l2_ext_control' is less aligned than 'union v4l2_ext_control::(anonymous a=
+t ../include/uapi/linux/videodev2.h:1744:2)' and is usually due to 'struct =
+v4l2_ext_control' being packed, which can lead to unaligned accesses [-Wuna=
+ligned-access]
+    1 warning generated.
+    include/uapi/linux/videodev2.h:1744:2: warning: field  within 'struct v=
+4l2_ext_control' is less aligned than 'union v4l2_ext_control::(anonymous a=
+t ../include/uapi/linux/videodev2.h:1744:2)' and is usually due to 'struct =
+v4l2_ext_control' being packed, which can lead to unaligned accesses [-Wuna=
+ligned-access]
+    1 warning generated.
+    include/uapi/linux/videodev2.h:1744:2: warning: field  within 'struct v=
+4l2_ext_control' is less aligned than 'union v4l2_ext_control::(anonymous a=
+t ../include/uapi/linux/videodev2.h:1744:2)' and is usually due to 'struct =
+v4l2_ext_control' being packed, which can lead to unaligned accesses [-Wuna=
+ligned-access]
+    1 warning generated.
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+assabet_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+at91_dt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+ath25_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath79_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axm55xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+axs103_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable 'migration' [-Wunus=
+ed-variable]
+
+---------------------------------------------------------------------------=
+-----
+badge4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+bcm2835_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 6 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+
+---------------------------------------------------------------------------=
+-----
+bcm47xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+bcm63xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+bigsur_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+bmips_be_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+bmips_stb_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
+ection mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+capcella_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+cerfcube_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+ci20_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    arch/mips/boot/dts/ingenic/jz4780.dtsi:513.33-515.6: Warning (unit_addr=
+ess_format): /nemc@13410000/efuse@d0/eth-mac-addr@0x22: unit name should no=
+t have leading "0x"
+
+---------------------------------------------------------------------------=
+-----
+cm_x300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+cobalt_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings=
+, 0 section mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings=
+, 0 section mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+collie_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+corgi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cu1830-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+davinci_all_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
+section mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+db1xxx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+decstation_64_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
+section mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+decstation_r4k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning=
+, 0 section mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mi=
+smatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 17 warnings, 0 section =
+mismatches
+
+Warnings:
+    drivers/thermal/samsung/../thermal_netlink.h:113:71: warning: =E2=80=98=
+struct cpu_capability=E2=80=99 declared inside parameter list will not be v=
+isible outside of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/tegra/../thermal_netlink.h:113:71: warning: =E2=80=98st=
+ruct cpu_capability=E2=80=99 declared inside parameter list will not be vis=
+ible outside of this definition or declaration
+    drivers/thermal/qcom/../thermal_netlink.h:113:71: warning: =E2=80=98str=
+uct cpu_capability=E2=80=99 declared inside parameter list will not be visi=
+ble outside of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, clang-14) =E2=80=94 PASS, 0 errors, 37 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    fs/io_uring.c:9396:9: warning: variable 'ret' is uninitialized when use=
+d here [-Wuninitialized]
+    fs/io_uring.c:9373:13: note: initialize the variable 'ret' to silence t=
+his warning
+    1 warning generated.
+    drivers/thermal/samsung/../thermal_netlink.h:113:71: warning: declarati=
+on of 'struct cpu_capability' will not be visible outside of this function =
+[-Wvisibility]
+    1 warning generated.
+    drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'stru=
+ct cpu_capability' will not be visible outside of this function [-Wvisibili=
+ty]
+    1 warning generated.
+    drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'stru=
+ct cpu_capability' will not be visible outside of this function [-Wvisibili=
+ty]
+    1 warning generated.
+    drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'stru=
+ct cpu_capability' will not be visible outside of this function [-Wvisibili=
+ty]
+    1 warning generated.
+    drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'stru=
+ct cpu_capability' will not be visible outside of this function [-Wvisibili=
+ty]
+    1 warning generated.
+    drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'stru=
+ct cpu_capability' will not be visible outside of this function [-Wvisibili=
+ty]
+    1 warning generated.
+    drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'stru=
+ct cpu_capability' will not be visible outside of this function [-Wvisibili=
+ty]
+    1 warning generated.
+    drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'stru=
+ct cpu_capability' will not be visible outside of this function [-Wvisibili=
+ty]
+    1 warning generated.
+    drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'stru=
+ct cpu_capability' will not be visible outside of this function [-Wvisibili=
+ty]
+    1 warning generated.
+    drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'stru=
+ct cpu_capability' will not be visible outside of this function [-Wvisibili=
+ty]
+    1 warning generated.
+    drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'stru=
+ct cpu_capability' will not be visible outside of this function [-Wvisibili=
+ty]
+    1 warning generated.
+    drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'stru=
+ct cpu_capability' will not be visible outside of this function [-Wvisibili=
+ty]
+    1 warning generated.
+    drivers/thermal/qcom/../thermal_netlink.h:113:71: warning: declaration =
+of 'struct cpu_capability' will not be visible outside of this function [-W=
+visibility]
+    1 warning generated.
+    drivers/thermal/tegra/../thermal_netlink.h:113:71: warning: declaration=
+ of 'struct cpu_capability' will not be visible outside of this function [-=
+Wvisibility]
+    1 warning generated.
+    drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'stru=
+ct cpu_capability' will not be visible outside of this function [-Wvisibili=
+ty]
+    1 warning generated.
+    drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'stru=
+ct cpu_capability' will not be visible outside of this function [-Wvisibili=
+ty]
+    1 warning generated.
+    drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'stru=
+ct cpu_capability' will not be visible outside of this function [-Wvisibili=
+ty]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_16K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 17 warnings, 0 section mismatches
+
+Warnings:
+    drivers/thermal/samsung/../thermal_netlink.h:113:71: warning: =E2=80=98=
+struct cpu_capability=E2=80=99 declared inside parameter list will not be v=
+isible outside of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/qcom/../thermal_netlink.h:113:71: warning: =E2=80=98str=
+uct cpu_capability=E2=80=99 declared inside parameter list will not be visi=
+ble outside of this definition or declaration
+    drivers/thermal/tegra/../thermal_netlink.h:113:71: warning: =E2=80=98st=
+ruct cpu_capability=E2=80=99 declared inside parameter list will not be vis=
+ible outside of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 17 warnings, 0 section mismatches
+
+Warnings:
+    drivers/thermal/samsung/../thermal_netlink.h:113:71: warning: =E2=80=98=
+struct cpu_capability=E2=80=99 declared inside parameter list will not be v=
+isible outside of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/tegra/../thermal_netlink.h:113:71: warning: =E2=80=98st=
+ruct cpu_capability=E2=80=99 declared inside parameter list will not be vis=
+ible outside of this definition or declaration
+    drivers/thermal/qcom/../thermal_netlink.h:113:71: warning: =E2=80=98str=
+uct cpu_capability=E2=80=99 declared inside parameter list will not be visi=
+ble outside of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-14) =E2=80=94 PASS, 0 er=
+rors, 37 warnings, 0 section mismatches
+
+Warnings:
+    fs/io_uring.c:9396:9: warning: variable 'ret' is uninitialized when use=
+d here [-Wuninitialized]
+    fs/io_uring.c:9373:13: note: initialize the variable 'ret' to silence t=
+his warning
+    1 warning generated.
+    drivers/thermal/samsung/../thermal_netlink.h:113:71: warning: declarati=
+on of 'struct cpu_capability' will not be visible outside of this function =
+[-Wvisibility]
+    1 warning generated.
+    drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'stru=
+ct cpu_capability' will not be visible outside of this function [-Wvisibili=
+ty]
+    1 warning generated.
+    drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'stru=
+ct cpu_capability' will not be visible outside of this function [-Wvisibili=
+ty]
+    1 warning generated.
+    drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'stru=
+ct cpu_capability' will not be visible outside of this function [-Wvisibili=
+ty]
+    1 warning generated.
+    drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'stru=
+ct cpu_capability' will not be visible outside of this function [-Wvisibili=
+ty]
+    1 warning generated.
+    drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'stru=
+ct cpu_capability' will not be visible outside of this function [-Wvisibili=
+ty]
+    drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'stru=
+ct cpu_capability' will not be visible outside of this function [-Wvisibili=
+ty]
+    1 warning generated.
+    1 warning generated.
+    drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'stru=
+ct cpu_capability' will not be visible outside of this function [-Wvisibili=
+ty]
+    1 warning generated.
+    drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'stru=
+ct cpu_capability' will not be visible outside of this function [-Wvisibili=
+ty]
+    1 warning generated.
+    drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'stru=
+ct cpu_capability' will not be visible outside of this function [-Wvisibili=
+ty]
+    1 warning generated.
+    drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'stru=
+ct cpu_capability' will not be visible outside of this function [-Wvisibili=
+ty]
+    1 warning generated.
+    drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'stru=
+ct cpu_capability' will not be visible outside of this function [-Wvisibili=
+ty]
+    1 warning generated.
+    drivers/thermal/qcom/../thermal_netlink.h:113:71: warning: declaration =
+of 'struct cpu_capability' will not be visible outside of this function [-W=
+visibility]
+    1 warning generated.
+    drivers/thermal/tegra/../thermal_netlink.h:113:71: warning: declaration=
+ of 'struct cpu_capability' will not be visible outside of this function [-=
+Wvisibility]
+    1 warning generated.
+    drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'stru=
+ct cpu_capability' will not be visible outside of this function [-Wvisibili=
+ty]
+    1 warning generated.
+    drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'stru=
+ct cpu_capability' will not be visible outside of this function [-Wvisibili=
+ty]
+    1 warning generated.
+    drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'stru=
+ct cpu_capability' will not be visible outside of this function [-Wvisibili=
+ty]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 17 warnings, 0 section mismatches
+
+Warnings:
+    drivers/thermal/samsung/../thermal_netlink.h:113:71: warning: =E2=80=98=
+struct cpu_capability=E2=80=99 declared inside parameter list will not be v=
+isible outside of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/qcom/../thermal_netlink.h:113:71: warning: =E2=80=98str=
+uct cpu_capability=E2=80=99 declared inside parameter list will not be visi=
+ble outside of this definition or declaration
+    drivers/thermal/tegra/../thermal_netlink.h:113:71: warning: =E2=80=98st=
+ruct cpu_capability=E2=80=99 declared inside parameter list will not be vis=
+ible outside of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_EFI=3Dn (riscv, clang-14) =E2=80=94 PASS, 0 errors, 5 warn=
+ings, 0 section mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable 'migration' [-Wunus=
+ed-variable]
+    1 warning generated.
+    fs/io_uring.c:9396:9: warning: variable 'ret' is uninitialized when use=
+d here [-Wuninitialized]
+    fs/io_uring.c:9373:13: note: initialize the variable 'ret' to silence t=
+his warning
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 17 warnings, 0 section mismatches
+
+Warnings:
+    drivers/thermal/samsung/../thermal_netlink.h:113:71: warning: =E2=80=98=
+struct cpu_capability=E2=80=99 declared inside parameter list will not be v=
+isible outside of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/tegra/../thermal_netlink.h:113:71: warning: =E2=80=98st=
+ruct cpu_capability=E2=80=99 declared inside parameter list will not be vis=
+ible outside of this definition or declaration
+    drivers/thermal/qcom/../thermal_netlink.h:113:71: warning: =E2=80=98str=
+uct cpu_capability=E2=80=99 declared inside parameter list will not be visi=
+ble outside of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 17 war=
+nings, 0 section mismatches
+
+Warnings:
+    drivers/thermal/samsung/../thermal_netlink.h:113:71: warning: =E2=80=98=
+struct cpu_capability=E2=80=99 declared inside parameter list will not be v=
+isible outside of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/tegra/../thermal_netlink.h:113:71: warning: =E2=80=98st=
+ruct cpu_capability=E2=80=99 declared inside parameter list will not be vis=
+ible outside of this definition or declaration
+    drivers/thermal/qcom/../thermal_netlink.h:113:71: warning: =E2=80=98str=
+uct cpu_capability=E2=80=99 declared inside parameter list will not be visi=
+ble outside of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+
+---------------------------------------------------------------------------=
+-----
+defconfig+crypto (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 17 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    drivers/thermal/samsung/../thermal_netlink.h:113:71: warning: =E2=80=98=
+struct cpu_capability=E2=80=99 declared inside parameter list will not be v=
+isible outside of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/qcom/../thermal_netlink.h:113:71: warning: =E2=80=98str=
+uct cpu_capability=E2=80=99 declared inside parameter list will not be visi=
+ble outside of this definition or declaration
+    drivers/thermal/tegra/../thermal_netlink.h:113:71: warning: =E2=80=98st=
+ruct cpu_capability=E2=80=99 declared inside parameter list will not be vis=
+ible outside of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+
+---------------------------------------------------------------------------=
+-----
+defconfig+debug (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+defconfig+debug (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 17 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    drivers/thermal/samsung/../thermal_netlink.h:113:71: warning: =E2=80=98=
+struct cpu_capability=E2=80=99 declared inside parameter list will not be v=
+isible outside of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/qcom/../thermal_netlink.h:113:71: warning: =E2=80=98str=
+uct cpu_capability=E2=80=99 declared inside parameter list will not be visi=
+ble outside of this definition or declaration
+    drivers/thermal/tegra/../thermal_netlink.h:113:71: warning: =E2=80=98st=
+ruct cpu_capability=E2=80=99 declared inside parameter list will not be vis=
+ible outside of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+
+---------------------------------------------------------------------------=
+-----
+defconfig+ima (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 17 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    drivers/thermal/samsung/../thermal_netlink.h:113:71: warning: =E2=80=98=
+struct cpu_capability=E2=80=99 declared inside parameter list will not be v=
+isible outside of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/qcom/../thermal_netlink.h:113:71: warning: =E2=80=98str=
+uct cpu_capability=E2=80=99 declared inside parameter list will not be visi=
+ble outside of this definition or declaration
+    drivers/thermal/tegra/../thermal_netlink.h:113:71: warning: =E2=80=98st=
+ruct cpu_capability=E2=80=99 declared inside parameter list will not be vis=
+ible outside of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
+section mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 17 warnings, =
+0 section mismatches
+
+Warnings:
+    drivers/thermal/samsung/../thermal_netlink.h:113:71: warning: =E2=80=98=
+struct cpu_capability=E2=80=99 declared inside parameter list will not be v=
+isible outside of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/tegra/../thermal_netlink.h:113:71: warning: =E2=80=98st=
+ruct cpu_capability=E2=80=99 declared inside parameter list will not be vis=
+ible outside of this definition or declaration
+    drivers/thermal/qcom/../thermal_netlink.h:113:71: warning: =E2=80=98str=
+uct cpu_capability=E2=80=99 declared inside parameter list will not be visi=
+ble outside of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+
+---------------------------------------------------------------------------=
+-----
+dove_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 9 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+
+---------------------------------------------------------------------------=
+-----
+e55_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+ep93xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+eseries_pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0=
+ section mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+ezx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 section=
+ mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+footbridge_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 =
+section mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+fuloong2e_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 1 warning, 0 se=
+ction mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+gcw0_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 7 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    include/asm-generic/unaligned.h:14:8: warning: array subscript -1 is ou=
+tside array bounds of =E2=80=98unsigned char[1]=E2=80=99 [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+gemini_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 6 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+
+---------------------------------------------------------------------------=
+-----
+h3600_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+h5000_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+hackkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable 'migration' [-Wunus=
+ed-variable]
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
+section mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable 'migration' [-Wunus=
+ed-variable]
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+debug (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warni=
+ng, 0 section mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable 'migration' [-Wunus=
+ed-variable]
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+kselftest (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 w=
+arning, 0 section mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable 'migration' [-Wunus=
+ed-variable]
+
+---------------------------------------------------------------------------=
+-----
+hisi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+hsdk_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 6 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable 'migration' [-Wunus=
+ed-variable]
+    drivers/thermal/thermal_netlink.h:113:71: warning: 'struct cpu_capabili=
+ty' declared inside parameter list will not be visible outside of this defi=
+nition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: 'struct cpu_capabili=
+ty' declared inside parameter list will not be visible outside of this defi=
+nition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: 'struct cpu_capabili=
+ty' declared inside parameter list will not be visible outside of this defi=
+nition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: 'struct cpu_capabili=
+ty' declared inside parameter list will not be visible outside of this defi=
+nition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: 'struct cpu_capabili=
+ty' declared inside parameter list will not be visible outside of this defi=
+nition or declaration
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 6 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, clang-14) =E2=80=94 PASS, 0 errors, 15 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable 'migration' [-Wunus=
+ed-variable]
+    1 warning generated.
+    fs/io_uring.c:9396:9: warning: variable 'ret' is uninitialized when use=
+d here [-Wuninitialized]
+    fs/io_uring.c:9373:13: note: initialize the variable 'ret' to silence t=
+his warning
+    1 warning generated.
+    drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'stru=
+ct cpu_capability' will not be visible outside of this function [-Wvisibili=
+ty]
+    1 warning generated.
+    drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'stru=
+ct cpu_capability' will not be visible outside of this function [-Wvisibili=
+ty]
+    1 warning generated.
+    drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'stru=
+ct cpu_capability' will not be visible outside of this function [-Wvisibili=
+ty]
+    1 warning generated.
+    drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'stru=
+ct cpu_capability' will not be visible outside of this function [-Wvisibili=
+ty]
+    1 warning generated.
+    drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'stru=
+ct cpu_capability' will not be visible outside of this function [-Wvisibili=
+ty]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+debug (i386, gcc-10) =E2=80=94 PASS, 0 errors, 6 warnings, 0=
+ section mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 6 warning=
+s, 0 section mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+
+---------------------------------------------------------------------------=
+-----
+imote2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+imx_v4_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+imx_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 6 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+
+---------------------------------------------------------------------------=
+-----
+integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
+ection mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+iop32x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+ip22_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+
+---------------------------------------------------------------------------=
+-----
+ip27_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip28_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip32_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+ixp4xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+jazz_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+jmr3927_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+jornada720_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 =
+section mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+keystone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 6 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+
+---------------------------------------------------------------------------=
+-----
+lart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+lemote2f_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 5 warnings, 0 se=
+ction mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+
+---------------------------------------------------------------------------=
+-----
+loongson1b_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
+section mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+loongson1c_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
+section mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+loongson2k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
+section mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+loongson3_defconfig (mips, gcc-10) =E2=80=94 FAIL, 2 errors, 1 warning, 0 s=
+ection mismatches
+
+Errors:
+    (.init.text+0x16f8): undefined reference to `node_data'
+    mips-linux-gnu-ld: (.init.text+0x1720): undefined reference to `node_da=
+ta'
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+lpc32xx_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 5 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    panel-edp.c:(.text+0xc0c): undefined reference to `drm_panel_dp_aux_bac=
+klight'
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+lpd270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+magician_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+mainstone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+malta_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+malta_kvm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
+ection mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+malta_qemu_32r6_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warnin=
+g, 0 section mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+maltaaprp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
+ection mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
+ection mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_eva_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning,=
+ 0 section mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+maltaup_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+milbeaut_m10v_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, =
+0 section mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+mini2440_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 10 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+
+---------------------------------------------------------------------------=
+-----
+moxart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+mpc30x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+mps2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+mtx1_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+multi_v4t_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 14 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+    drivers/thermal/samsung/../thermal_netlink.h:113:71: warning: =E2=80=98=
+struct cpu_capability=E2=80=99 declared inside parameter list will not be v=
+isible outside of this definition or declaration
+    drivers/thermal/st/../thermal_netlink.h:113:71: warning: =E2=80=98struc=
+t cpu_capability=E2=80=99 declared inside parameter list will not be visibl=
+e outside of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/tegra/../thermal_netlink.h:113:71: warning: =E2=80=98st=
+ruct cpu_capability=E2=80=99 declared inside parameter list will not be vis=
+ible outside of this definition or declaration
+    drivers/thermal/tegra/../thermal_netlink.h:113:71: warning: =E2=80=98st=
+ruct cpu_capability=E2=80=99 declared inside parameter list will not be vis=
+ible outside of this definition or declaration
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, clang-14) =E2=80=94 PASS, 0 errors, 44 warnings, 0=
+ section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable 'migration' [-Wunus=
+ed-variable]
+    1 warning generated.
+    fs/io_uring.c:9396:9: warning: variable 'ret' is uninitialized when use=
+d here [-Wuninitialized]
+    fs/io_uring.c:9373:13: note: initialize the variable 'ret' to silence t=
+his warning
+    1 warning generated.
+    drivers/thermal/samsung/../thermal_netlink.h:113:71: warning: declarati=
+on of 'struct cpu_capability' will not be visible outside of this function =
+[-Wvisibility]
+    1 warning generated.
+    drivers/thermal/st/../thermal_netlink.h:113:71: warning: declaration of=
+ 'struct cpu_capability' will not be visible outside of this function [-Wvi=
+sibility]
+    1 warning generated.
+    drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'stru=
+ct cpu_capability' will not be visible outside of this function [-Wvisibili=
+ty]
+    1 warning generated.
+    drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'stru=
+ct cpu_capability' will not be visible outside of this function [-Wvisibili=
+ty]
+    1 warning generated.
+    drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'stru=
+ct cpu_capability' will not be visible outside of this function [-Wvisibili=
+ty]
+    1 warning generated.
+    drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'stru=
+ct cpu_capability' will not be visible outside of this function [-Wvisibili=
+ty]
+    1 warning generated.
+    drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'stru=
+ct cpu_capability' will not be visible outside of this function [-Wvisibili=
+ty]
+    1 warning generated.
+    drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'stru=
+ct cpu_capability' will not be visible outside of this function [-Wvisibili=
+ty]
+    1 warning generated.
+    drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'stru=
+ct cpu_capability' will not be visible outside of this function [-Wvisibili=
+ty]
+    1 warning generated.
+    drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'stru=
+ct cpu_capability' will not be visible outside of this function [-Wvisibili=
+ty]
+    1 warning generated.
+    drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'stru=
+ct cpu_capability' will not be visible outside of this function [-Wvisibili=
+ty]
+    1 warning generated.
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    drivers/gpu/drm/stm/ltdc.c:625:2: warning: variable 'val' is used unini=
+tialized whenever switch default is taken [-Wsometimes-uninitialized]
+    drivers/gpu/drm/stm/ltdc.c:600:9: note: initialize the variable 'val' t=
+o silence this warning
+    1 warning generated.
+    drivers/thermal/tegra/../thermal_netlink.h:113:71: warning: declaration=
+ of 'struct cpu_capability' will not be visible outside of this function [-=
+Wvisibility]
+    1 warning generated.
+    drivers/thermal/tegra/../thermal_netlink.h:113:71: warning: declaration=
+ of 'struct cpu_capability' will not be visible outside of this function [-=
+Wvisibility]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-10) =E2=80=94 PASS, =
+0 errors, 14 warnings, 0 section mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+    drivers/thermal/samsung/../thermal_netlink.h:113:71: warning: =E2=80=98=
+struct cpu_capability=E2=80=99 declared inside parameter list will not be v=
+isible outside of this definition or declaration
+    drivers/thermal/st/../thermal_netlink.h:113:71: warning: =E2=80=98struc=
+t cpu_capability=E2=80=99 declared inside parameter list will not be visibl=
+e outside of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/tegra/../thermal_netlink.h:113:71: warning: =E2=80=98st=
+ruct cpu_capability=E2=80=99 declared inside parameter list will not be vis=
+ible outside of this definition or declaration
+    drivers/thermal/tegra/../thermal_netlink.h:113:71: warning: =E2=80=98st=
+ruct cpu_capability=E2=80=99 declared inside parameter list will not be vis=
+ible outside of this definition or declaration
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-10) =E2=80=
+=94 PASS, 0 errors, 14 warnings, 0 section mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+    drivers/thermal/samsung/../thermal_netlink.h:113:71: warning: =E2=80=98=
+struct cpu_capability=E2=80=99 declared inside parameter list will not be v=
+isible outside of this definition or declaration
+    drivers/thermal/st/../thermal_netlink.h:113:71: warning: =E2=80=98struc=
+t cpu_capability=E2=80=99 declared inside parameter list will not be visibl=
+e outside of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/tegra/../thermal_netlink.h:113:71: warning: =E2=80=98st=
+ruct cpu_capability=E2=80=99 declared inside parameter list will not be vis=
+ible outside of this definition or declaration
+    drivers/thermal/tegra/../thermal_netlink.h:113:71: warning: =E2=80=98st=
+ruct cpu_capability=E2=80=99 declared inside parameter list will not be vis=
+ible outside of this definition or declaration
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1=
+6 warnings, 0 section mismatches
+
+Warnings:
+    arch/arm/mach-vexpress/spc.c:583:21: warning: array subscript -1 is bel=
+ow array bounds of =E2=80=98bool[2]=E2=80=99 {aka =E2=80=98_Bool[2]=E2=80=
+=99} [-Warray-bounds]
+    arch/arm/mach-vexpress/spc.c:592:18: warning: array subscript -1 is bel=
+ow array bounds of =E2=80=98bool[2]=E2=80=99 {aka =E2=80=98_Bool[2]=E2=80=
+=99} [-Warray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+    drivers/thermal/samsung/../thermal_netlink.h:113:71: warning: =E2=80=98=
+struct cpu_capability=E2=80=99 declared inside parameter list will not be v=
+isible outside of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/st/../thermal_netlink.h:113:71: warning: =E2=80=98struc=
+t cpu_capability=E2=80=99 declared inside parameter list will not be visibl=
+e outside of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/tegra/../thermal_netlink.h:113:71: warning: =E2=80=98st=
+ruct cpu_capability=E2=80=99 declared inside parameter list will not be vis=
+ible outside of this definition or declaration
+    drivers/thermal/tegra/../thermal_netlink.h:113:71: warning: =E2=80=98st=
+ruct cpu_capability=E2=80=99 declared inside parameter list will not be vis=
+ible outside of this definition or declaration
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
+ errors, 14 warnings, 0 section mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+    drivers/thermal/samsung/../thermal_netlink.h:113:71: warning: =E2=80=98=
+struct cpu_capability=E2=80=99 declared inside parameter list will not be v=
+isible outside of this definition or declaration
+    drivers/thermal/st/../thermal_netlink.h:113:71: warning: =E2=80=98struc=
+t cpu_capability=E2=80=99 declared inside parameter list will not be visibl=
+e outside of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/tegra/../thermal_netlink.h:113:71: warning: =E2=80=98st=
+ruct cpu_capability=E2=80=99 declared inside parameter list will not be vis=
+ible outside of this definition or declaration
+    drivers/thermal/tegra/../thermal_netlink.h:113:71: warning: =E2=80=98st=
+ruct cpu_capability=E2=80=99 declared inside parameter list will not be vis=
+ible outside of this definition or declaration
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+debug (arm, gcc-10) =E2=80=94 PASS, 0 errors, 14 warning=
+s, 0 section mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+    drivers/thermal/samsung/../thermal_netlink.h:113:71: warning: =E2=80=98=
+struct cpu_capability=E2=80=99 declared inside parameter list will not be v=
+isible outside of this definition or declaration
+    drivers/thermal/st/../thermal_netlink.h:113:71: warning: =E2=80=98struc=
+t cpu_capability=E2=80=99 declared inside parameter list will not be visibl=
+e outside of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/tegra/../thermal_netlink.h:113:71: warning: =E2=80=98st=
+ruct cpu_capability=E2=80=99 declared inside parameter list will not be vis=
+ible outside of this definition or declaration
+    drivers/thermal/tegra/../thermal_netlink.h:113:71: warning: =E2=80=98st=
+ruct cpu_capability=E2=80=99 declared inside parameter list will not be vis=
+ible outside of this definition or declaration
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 10 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 11 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+
+---------------------------------------------------------------------------=
+-----
+mxs_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 section=
+ mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+netwinder_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+nhk8815_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_sdcard_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
+section mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable 'migration' [-Wunus=
+ed-variable]
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning=
+, 0 section mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable 'migration' [-Wunus=
+ed-variable]
+
+---------------------------------------------------------------------------=
+-----
+omap1_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+omap2plus_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 8 warnings, 0 se=
+ction mismatches
+
+Errors:
+    ERROR: modpost: "drm_panel_dp_aux_backlight" [drivers/gpu/drm/panel/pan=
+el-edp.ko] undefined!
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+
+---------------------------------------------------------------------------=
+-----
+omega2p_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+orion5x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+oxnas_v6_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+palmz72_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+pcm027_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+pic32mzda_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
+ection mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+pleb_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+pxa168_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+pxa255-idp_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 =
+section mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+pxa3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+pxa910_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 9 warnings, 0 section=
+ mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+
+---------------------------------------------------------------------------=
+-----
+qcom_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 6 warnings, 0 section=
+ mismatches
+
+Errors:
+    panel-edp.c:(.text+0xb70): undefined reference to `drm_panel_dp_aux_bac=
+klight'
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+
+---------------------------------------------------------------------------=
+-----
+qi_lb60_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+rb532_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+rbtx49xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+realview_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 sect=
+ion mismatches
+
+Errors:
+    panel-edp.c:(.text+0xb7c): undefined reference to `drm_panel_dp_aux_bac=
+klight'
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+rm200_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+rpc_defconfig (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 section=
+ mismatches
+
+Errors:
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=3D0x'
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=3D0x'
+
+---------------------------------------------------------------------------=
+-----
+rs90_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+rt305x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rv32_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+s3c6400_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+s5pv210_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+sama5_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 5 warnings, 0 sectio=
+n mismatches
+
+Errors:
+    panel-edp.c:(.text+0xb70): undefined reference to `drm_panel_dp_aux_bac=
+klight'
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+sama7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+sb1250_swarm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, =
+0 section mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+shannon_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+shmobile_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 6 warnings, 0 sec=
+tion mismatches
+
+Errors:
+    panel-edp.c:(.text+0xbdc): undefined reference to `drm_panel_dp_aux_bac=
+klight'
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+
+---------------------------------------------------------------------------=
+-----
+simpad_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+socfpga_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+spear13xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+spear3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+spear6xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+spitz_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+sunxi_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 6 warnings, 0 sectio=
+n mismatches
+
+Errors:
+    panel-edp.c:(.text+0xb70): undefined reference to `drm_panel_dp_aux_bac=
+klight'
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+
+---------------------------------------------------------------------------=
+-----
+tb0219_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+tb0287_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+tct_hammer_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 =
+section mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 8 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/tegra/../thermal_netlink.h:113:71: warning: =E2=80=98st=
+ruct cpu_capability=E2=80=99 declared inside parameter list will not be vis=
+ible outside of this definition or declaration
+    drivers/thermal/tegra/../thermal_netlink.h:113:71: warning: =E2=80=98st=
+ruct cpu_capability=E2=80=99 declared inside parameter list will not be vis=
+ible outside of this definition or declaration
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+trizeps4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+u8500_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 6 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable 'migration' [-Wunus=
+ed-variable]
+
+---------------------------------------------------------------------------=
+-----
+versatile_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 sec=
+tion mismatches
+
+Errors:
+    panel-edp.c:(.text+0xb28): undefined reference to `drm_panel_dp_aux_bac=
+klight'
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+vexpress_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 sect=
+ion mismatches
+
+Errors:
+    panel-edp.c:(.text+0xb70): undefined reference to `drm_panel_dp_aux_bac=
+klight'
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+vf610m4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+viper_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+vocore2_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, =
+0 section mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, clang-14) =E2=80=94 PASS, 0 errors, 16 warnings, =
+0 section mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable 'migration' [-Wunus=
+ed-variable]
+    1 warning generated.
+    net/core/skbuff.o: warning: objtool: skb_copy()+0x12d: unreachable inst=
+ruction
+    fs/io_uring.c:9396:9: warning: variable 'ret' is uninitialized when use=
+d here [-Wuninitialized]
+    fs/io_uring.c:9373:13: note: initialize the variable 'ret' to silence t=
+his warning
+    1 warning generated.
+    drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'stru=
+ct cpu_capability' will not be visible outside of this function [-Wvisibili=
+ty]
+    1 warning generated.
+    drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'stru=
+ct cpu_capability' will not be visible outside of this function [-Wvisibili=
+ty]
+    1 warning generated.
+    drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'stru=
+ct cpu_capability' will not be visible outside of this function [-Wvisibili=
+ty]
+    1 warning generated.
+    drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'stru=
+ct cpu_capability' will not be visible outside of this function [-Wvisibili=
+ty]
+    1 warning generated.
+    drivers/thermal/thermal_netlink.h:113:71: warning: declaration of 'stru=
+ct cpu_capability' will not be visible outside of this function [-Wvisibili=
+ty]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 6 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 6 warnin=
+gs, 0 section mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+crypto (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 6 warnin=
+gs, 0 section mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+debug (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 8 warning=
+s, 0 section mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+    lib/strnlen_user.o: warning: objtool: strnlen_user()+0x5d: call to do_s=
+trnlen_user() with UACCESS enabled
+    lib/strncpy_from_user.o: warning: objtool: strncpy_from_user()+0x8a: ca=
+ll to do_strncpy_from_user() with UACCESS enabled
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+ima (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 6 warnings,=
+ 0 section mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 6 war=
+nings, 0 section mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, =
+6 warnings, 0 section mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 e=
+rrors, 6 warnings, 0 section mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook+kselftest (x86_64, gcc-10) =E2=80=94 PASS, =
+0 errors, 6 warnings, 0 section mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86_kvm_guest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 6=
+ warnings, 0 section mismatches
+
+Warnings:
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+    drivers/thermal/thermal_netlink.h:113:71: warning: =E2=80=98struct cpu_=
+capability=E2=80=99 declared inside parameter list will not be visible outs=
+ide of this definition or declaration
+
+---------------------------------------------------------------------------=
+-----
+zeus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
+ outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
+=99 [-Warray-bounds]
+    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
+ array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
+ray-bounds]
+    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
+=E2=80=99 [-Wunused-variable]
+
+---
+For more info write to <info@kernelci.org>

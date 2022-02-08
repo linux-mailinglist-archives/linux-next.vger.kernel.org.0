@@ -2,64 +2,63 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAC954AD38D
-	for <lists+linux-next@lfdr.de>; Tue,  8 Feb 2022 09:34:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65E0D4AD818
+	for <lists+linux-next@lfdr.de>; Tue,  8 Feb 2022 13:03:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347610AbiBHIeX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 8 Feb 2022 03:34:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34332 "EHLO
+        id S234109AbiBHMDZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 8 Feb 2022 07:03:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350014AbiBHIeW (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Feb 2022 03:34:22 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBF33C03FEC3
-        for <linux-next@vger.kernel.org>; Tue,  8 Feb 2022 00:34:19 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id p22-20020a17090adf9600b001b8783b2647so1431183pjv.5
-        for <linux-next@vger.kernel.org>; Tue, 08 Feb 2022 00:34:19 -0800 (PST)
+        with ESMTP id S233096AbiBHMDY (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Feb 2022 07:03:24 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BB8BC03FEC0
+        for <linux-next@vger.kernel.org>; Tue,  8 Feb 2022 04:03:22 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id e28so18491143pfj.5
+        for <linux-next@vger.kernel.org>; Tue, 08 Feb 2022 04:03:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernelci-org.20210112.gappssmtp.com; s=20210112;
         h=message-id:date:mime-version:content-transfer-encoding:subject:to
          :from;
-        bh=/yyPrytpUeF92c4xv1KWEI+EpGZn+4zXsF7+NdyXDcA=;
-        b=h0OXaa90DsWtjVEL+BvtKyRKK5WfsWiPP8wyJUlHKsIJH4B/ePOSCBtvdW6ngkU2NA
-         J3/vEw2qU3K8CzL05Vrq5OZMwoRcuWMBMrYg/bJAVGh7UjtwIaazIDzLiHKzb2KYO+nf
-         nLEED4I/z4bCSEeyx3MdlqeEzUJULzzslaaXRnu2kNlDe1DEyJWLai4z2p36ahaIcyr4
-         k/hJ2pmQ4euzqW56L98BaVlpBw0N2XKVz7Z5tJT59zD/YbK42bllhSruI+FRwhanSA6v
-         q9jU8MoYjn5QSqFVFTvwNQvplO0WWE3pscYRLsbhB2yVY/L8xXGb2mk1AnZ8hsAxpRBR
-         pZ4w==
+        bh=RsJln9JMXFkwEyG9Upcn9FDSl1KawrtEgbK6yds6nI0=;
+        b=ZduYFA1/i/4OhOCDFgVn8wwIU12iPfaQ92hYeAf9YofpxxouklQyrTe5RaEdTaX2T8
+         oLSC8HjyLt7wnzzfa/NkejrH5TFSjl4R2LFhG+u/A4KVZbr5yI5uFe+AJcCMq/OudXMu
+         kFVgDZojYIROZBfQfRK3bUChR3n8FWyXyBD5jOTAPU4B7Z77EO5ubChHpJ4WhYm6TdoL
+         UCYp4/X1S+0+Q/RzlI3BkkqOb0foj/kQ1cXSiGzHX/DBin3KyftCi3AHpAjbilJYm//E
+         qESuI7PNih6557dlZ1FBty3wSJA9p8mIWkj72tFcKAEXAtuN/B61CLUfhLXW3TPT7Ji9
+         gE5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version
          :content-transfer-encoding:subject:to:from;
-        bh=/yyPrytpUeF92c4xv1KWEI+EpGZn+4zXsF7+NdyXDcA=;
-        b=3d9W18eN9Q3tnz6GsB6whf3FFJehtZS92wt95SZIPjyS4rYm4aIE9PFjjepN4z3DHN
-         2IUgh3AvvaxJHgJgCkm6G0WBcyQ6T9mkrYn966k2padNgCvnFbQhq6gweIyGLyqcSxDG
-         7+VwRBsbuL+3NRo4cj3Z2VkZUpHbtfbFJb0RCYaCfe9J4iTXCS+GaOfM1pf1kR4cUad8
-         SA0fhB8E7PpgQtTFFzkMjamUBkBOigUjWBXU1iZlGbJLskmxx1rPOfNwx86Hx2eiaCU5
-         Y0SMuoH4Cb2/Ib+WXJv8t/4RPa2H/LTHoYzg8r4qHem1rte4EBj1kvyEF4m5zku3Mc1O
-         /TEw==
-X-Gm-Message-State: AOAM531qFG14C0+XewelbzxqSjBY/Nl2La7MhoaGVKjrOAmLSiEtdvDv
-        VWjiszjL/r67bq5ItZAEseHuwMX4850BMciz
-X-Google-Smtp-Source: ABdhPJyr28jq/w3DnbFV9COi1uh81OaIuY20P75GEsd2rEPBUX5u+j40bVd5EycjdlA36Kr3684tdw==
-X-Received: by 2002:a17:90a:34c7:: with SMTP id m7mr147800pjf.122.1644309257077;
-        Tue, 08 Feb 2022 00:34:17 -0800 (PST)
+        bh=RsJln9JMXFkwEyG9Upcn9FDSl1KawrtEgbK6yds6nI0=;
+        b=VZETN998fol23p22HoLt8PFPMhu3n7CNoj67Bi4rQltslXxKvgDp8/vUthtpeZ5Kwp
+         9xf4TyYUt8LldHPBKCuz758dgzX/bKoavoKpkxOjaYCj6Uzj69X0R9XwkbGwevGmS4L2
+         D11477irXE7Bm/6RGr90lvWN9TUz6uuM/TcfQ549xbeX+s0uXSDOi12p2fMDDN+PteRl
+         sjSFfz1bJnKjlauNlMQdgzUIw/RKrn8B2GODc0epzSiyGH8E05J9ZPgfPO7PXQIV75CQ
+         KwVqzT271OsVoSxaQnpWQUTXR5M1H9JcglO0OPKotfKPlhlYS9Jqf0wc6SPM6cRApiRn
+         yyFQ==
+X-Gm-Message-State: AOAM533Lzv9jUNLgIDRHLCp8noU1D8S8Iu2x5ABV6A6r2gH7WLY1DnH8
+        yjMOmVdWP4RK6TKzCzF+lhdojT2mfFW8Jgkw
+X-Google-Smtp-Source: ABdhPJxXwcgK3jyRmsPUc9tmNnxSdaTRJ8va51lVmcgATZv3EhcM6fzD4wvHnwRVfG2Vwb11VZM+Gw==
+X-Received: by 2002:a05:6a00:17a2:: with SMTP id s34mr4040086pfg.72.1644321801071;
+        Tue, 08 Feb 2022 04:03:21 -0800 (PST)
 Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id d2sm7387934pgw.62.2022.02.08.00.34.15
-        for <linux-next@vger.kernel.org>
+        by smtp.gmail.com with ESMTPSA id y193sm16690450pfb.7.2022.02.08.04.03.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 00:34:16 -0800 (PST)
-Message-ID: <62022b08.1c69fb81.18fa9.1c5c@mx.google.com>
-Date:   Tue, 08 Feb 2022 00:34:16 -0800 (PST)
+        Tue, 08 Feb 2022 04:03:20 -0800 (PST)
+Message-ID: <62025c08.1c69fb81.1e421.9eff@mx.google.com>
+Date:   Tue, 08 Feb 2022 04:03:20 -0800 (PST)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-Kernelci-Kernel: next-20220208
 X-Kernelci-Tree: next
-X-Kernelci-Report-Type: build
+X-Kernelci-Report-Type: test
 X-Kernelci-Branch: master
-Subject: next/master build: 201 builds: 18 failed, 183 passed, 23 errors,
- 508 warnings (next-20220208)
-To:     linux-next@vger.kernel.org
+Subject: next/master baseline: 707 runs, 25 regressions (next-20220208)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
 From:   "kernelci.org bot" <bot@kernelci.org>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
@@ -70,3037 +69,949 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master build: 201 builds: 18 failed, 183 passed, 23 errors, 508 warnin=
-gs (next-20220208)
-
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20220208/
-
-Tree: next
-Branch: master
-Git Describe: next-20220208
-Git Commit: 554f92dbda161fa073844ae6c62db257b8860a0a
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 7 unique architectures
-
-Build Failures Detected:
-
-arm64:
-    allmodconfig: (clang-14) FAIL
-
-arm:
-    allmodconfig: (clang-14) FAIL
-    allmodconfig: (gcc-10) FAIL
-    lpc32xx_defconfig: (gcc-10) FAIL
-    qcom_defconfig: (gcc-10) FAIL
-    realview_defconfig: (gcc-10) FAIL
-    rpc_defconfig: (gcc-10) FAIL
-    sama5_defconfig: (gcc-10) FAIL
-    shmobile_defconfig: (gcc-10) FAIL
-    sunxi_defconfig: (gcc-10) FAIL
-    versatile_defconfig: (gcc-10) FAIL
-    vexpress_defconfig: (gcc-10) FAIL
-
-i386:
-    allmodconfig: (clang-14) FAIL
-
-mips:
-    decstation_64_defconfig: (gcc-10) FAIL
-    ip27_defconfig: (gcc-10) FAIL
-    loongson3_defconfig: (gcc-10) FAIL
-
-x86_64:
-    allmodconfig: (clang-14) FAIL
-    allmodconfig: (gcc-10) FAIL
-
-Errors and Warnings Detected:
-
-arc:
-    axs103_defconfig (gcc-10): 1 warning
-    axs103_smp_defconfig (gcc-10): 1 warning
-    haps_hs_smp_defconfig (gcc-10): 1 warning
-    haps_hs_smp_defconfig+debug (gcc-10): 1 warning
-    haps_hs_smp_defconfig+kselftest (gcc-10): 1 warning
-    hsdk_defconfig (gcc-10): 1 warning
-    nsimosci_hs_defconfig (gcc-10): 1 warning
-    nsimosci_hs_smp_defconfig (gcc-10): 1 warning
-    vdk_hs38_defconfig (gcc-10): 1 warning
-    vdk_hs38_smp_defconfig (gcc-10): 1 warning
-
-arm64:
-    allmodconfig (clang-14): 1 error, 1 warning
-    defconfig (clang-14): 3 warnings
-    defconfig+CONFIG_ARM64_64K_PAGES=3Dy (clang-14): 3 warnings
-
-arm:
-    allmodconfig (clang-14): 2 errors, 13 warnings
-    allmodconfig (gcc-10): 1 error, 1 warning
-    am200epdkit_defconfig (gcc-10): 5 warnings
-    aspeed_g4_defconfig (gcc-10): 5 warnings
-    aspeed_g5_defconfig (clang-14): 47 warnings
-    aspeed_g5_defconfig (gcc-10): 1 warning
-    at91_dt_defconfig (gcc-10): 5 warnings
-    axm55xx_defconfig (gcc-10): 5 warnings
-    badge4_defconfig (gcc-10): 5 warnings
-    bcm2835_defconfig (gcc-10): 1 warning
-    cerfcube_defconfig (gcc-10): 5 warnings
-    cm_x300_defconfig (gcc-10): 5 warnings
-    colibri_pxa300_defconfig (gcc-10): 5 warnings
-    collie_defconfig (gcc-10): 5 warnings
-    corgi_defconfig (gcc-10): 5 warnings
-    dove_defconfig (gcc-10): 5 warnings
-    ep93xx_defconfig (gcc-10): 5 warnings
-    eseries_pxa_defconfig (gcc-10): 5 warnings
-    exynos_defconfig (gcc-10): 1 warning
-    ezx_defconfig (gcc-10): 5 warnings
-    footbridge_defconfig (gcc-10): 5 warnings
-    gemini_defconfig (gcc-10): 1 warning
-    h5000_defconfig (gcc-10): 4 warnings
-    hackkit_defconfig (gcc-10): 5 warnings
-    hisi_defconfig (gcc-10): 5 warnings
-    imote2_defconfig (gcc-10): 5 warnings
-    imx_v4_v5_defconfig (gcc-10): 4 warnings
-    imx_v6_v7_defconfig (gcc-10): 1 warning
-    integrator_defconfig (gcc-10): 1 warning
-    iop32x_defconfig (gcc-10): 5 warnings
-    ixp4xx_defconfig (gcc-10): 5 warnings
-    jornada720_defconfig (gcc-10): 5 warnings
-    keystone_defconfig (gcc-10): 1 warning
-    lart_defconfig (gcc-10): 5 warnings
-    lpc32xx_defconfig (gcc-10): 1 error, 5 warnings
-    lpd270_defconfig (gcc-10): 5 warnings
-    lubbock_defconfig (gcc-10): 5 warnings
-    magician_defconfig (gcc-10): 5 warnings
-    mainstone_defconfig (gcc-10): 5 warnings
-    milbeaut_m10v_defconfig (gcc-10): 1 warning
-    mini2440_defconfig (gcc-10): 5 warnings
-    moxart_defconfig (gcc-10): 5 warnings
-    multi_v4t_defconfig (gcc-10): 1 warning
-    multi_v5_defconfig (clang-14): 21 warnings
-    multi_v5_defconfig (gcc-10): 1 warning
-    multi_v7_defconfig (gcc-10): 1 warning
-    multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (gcc-10): 1 warning
-    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (gcc-10): 1 warni=
-ng
-    multi_v7_defconfig+CONFIG_SMP=3Dn (gcc-10): 3 warnings
-    multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (gcc-10): 1 warning
-    multi_v7_defconfig+kselftest (gcc-10): 1 warning
-    mvebu_v7_defconfig (gcc-10): 5 warnings
-    mxs_defconfig (gcc-10): 5 warnings
-    neponset_defconfig (gcc-10): 5 warnings
-    nhk8815_defconfig (gcc-10): 1 warning
-    omap1_defconfig (gcc-10): 5 warnings
-    orion5x_defconfig (gcc-10): 5 warnings
-    oxnas_v6_defconfig (gcc-10): 1 warning
-    palmz72_defconfig (gcc-10): 5 warnings
-    pcm027_defconfig (gcc-10): 5 warnings
-    pleb_defconfig (gcc-10): 5 warnings
-    pxa255-idp_defconfig (gcc-10): 5 warnings
-    pxa3xx_defconfig (gcc-10): 5 warnings
-    pxa910_defconfig (gcc-10): 5 warnings
-    pxa_defconfig (gcc-10): 5 warnings
-    qcom_defconfig (gcc-10): 1 error, 1 warning
-    realview_defconfig (gcc-10): 1 error, 1 warning
-    rpc_defconfig (gcc-10): 2 errors
-    s3c2410_defconfig (gcc-10): 5 warnings
-    s3c6400_defconfig (gcc-10): 5 warnings
-    s5pv210_defconfig (gcc-10): 5 warnings
-    sama5_defconfig (gcc-10): 1 error, 5 warnings
-    sama7_defconfig (gcc-10): 1 warning
-    shannon_defconfig (gcc-10): 5 warnings
-    shmobile_defconfig (gcc-10): 1 error, 1 warning
-    simpad_defconfig (gcc-10): 5 warnings
-    socfpga_defconfig (gcc-10): 5 warnings
-    spear13xx_defconfig (gcc-10): 5 warnings
-    spear6xx_defconfig (gcc-10): 5 warnings
-    sunxi_defconfig (gcc-10): 1 error, 1 warning
-    tct_hammer_defconfig (gcc-10): 5 warnings
-    tegra_defconfig (gcc-10): 1 warning
-    trizeps4_defconfig (gcc-10): 5 warnings
-    u8500_defconfig (gcc-10): 1 warning
-    versatile_defconfig (gcc-10): 1 error, 1 warning
-    vexpress_defconfig (gcc-10): 1 error, 1 warning
-    viper_defconfig (gcc-10): 5 warnings
-    vt8500_v6_v7_defconfig (gcc-10): 5 warnings
-    xcep_defconfig (gcc-10): 5 warnings
-    zeus_defconfig (gcc-10): 5 warnings
-
-i386:
-    allmodconfig (clang-14): 1 error, 1 warning
-    allnoconfig (clang-14): 5 warnings
-    allnoconfig (gcc-10): 1 warning
-    i386_defconfig (clang-14): 5 warnings
-    i386_defconfig (gcc-10): 1 warning
-    i386_defconfig+debug (gcc-10): 1 warning
-    i386_defconfig+kselftest (gcc-10): 1 warning
-
-mips:
-    32r2el_defconfig (gcc-10): 2 warnings
-    32r2el_defconfig+debug (gcc-10): 2 warnings
-    32r2el_defconfig+kselftest (gcc-10): 2 warnings
-    bcm47xx_defconfig (gcc-10): 1 warning
-    bcm63xx_defconfig (gcc-10): 1 warning
-    bigsur_defconfig (gcc-10): 1 warning
-    bmips_stb_defconfig (gcc-10): 1 warning
-    capcella_defconfig (gcc-10): 1 warning
-    ci20_defconfig (gcc-10): 1 warning
-    db1xxx_defconfig (gcc-10): 1 warning
-    decstation_defconfig (gcc-10): 1 warning
-    decstation_r4k_defconfig (gcc-10): 1 warning
-    e55_defconfig (gcc-10): 1 warning
-    fuloong2e_defconfig (gcc-10): 1 error, 1 warning
-    gpr_defconfig (gcc-10): 1 warning
-    ip22_defconfig (gcc-10): 1 warning
-    ip32_defconfig (gcc-10): 1 warning
-    jazz_defconfig (gcc-10): 1 warning
-    jmr3927_defconfig (gcc-10): 1 warning
-    lemote2f_defconfig (gcc-10): 1 error, 1 warning
-    loongson1c_defconfig (gcc-10): 1 warning
-    loongson2k_defconfig (gcc-10): 1 error, 1 warning
-    loongson3_defconfig (gcc-10): 2 errors, 1 warning
-    malta_defconfig (gcc-10): 1 warning
-    malta_qemu_32r6_defconfig (gcc-10): 1 warning
-    maltaaprp_defconfig (gcc-10): 1 warning
-    maltasmvp_defconfig (gcc-10): 1 warning
-    maltasmvp_eva_defconfig (gcc-10): 1 warning
-    maltaup_defconfig (gcc-10): 1 warning
-    maltaup_xpa_defconfig (gcc-10): 1 warning
-    mtx1_defconfig (gcc-10): 1 warning
-    pic32mzda_defconfig (gcc-10): 1 warning
-    rb532_defconfig (gcc-10): 1 warning
-    rm200_defconfig (gcc-10): 1 warning
-    rs90_defconfig (gcc-10): 1 warning
-    sb1250_swarm_defconfig (gcc-10): 1 warning
-    tb0219_defconfig (gcc-10): 1 warning
-    tb0226_defconfig (gcc-10): 1 warning
-    tb0287_defconfig (gcc-10): 1 warning
-    workpad_defconfig (gcc-10): 1 warning
-
-riscv:
-    defconfig (gcc-10): 1 warning
-    defconfig+CONFIG_EFI=3Dn (clang-14): 5 warnings
-    defconfig+debug (gcc-10): 1 warning
-    defconfig+kselftest (gcc-10): 1 warning
-    rv32_defconfig (gcc-10): 1 warning
-
-x86_64:
-    allmodconfig (gcc-10): 2 errors
-    allmodconfig (clang-14): 1 error, 2 warnings
-    allnoconfig (clang-14): 5 warnings
-    allnoconfig (gcc-10): 1 warning
-    x86_64_defconfig (gcc-10): 1 warning
-    x86_64_defconfig (clang-14): 6 warnings
-    x86_64_defconfig+amdgpu (gcc-10): 1 warning
-    x86_64_defconfig+debug (gcc-10): 3 warnings
-    x86_64_defconfig+ima (gcc-10): 1 warning
-    x86_64_defconfig+kselftest (gcc-10): 1 warning
-    x86_64_defconfig+x86-chromebook (gcc-10): 1 warning
-    x86_64_defconfig+x86-chromebook+amdgpu (gcc-10): 1 warning
-    x86_64_defconfig+x86-chromebook+kselftest (gcc-10): 1 warning
-    x86_64_defconfig+x86_kvm_guest (gcc-10): 1 warning
-
-Errors summary:
-
-    4    panel-edp.c:(.text+0xb70): undefined reference to `drm_panel_dp_au=
-x_backlight'
-    3    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=
-=80=98-mhard-float=E2=80=99
-    2    fs/io_uring.c:9396:9: error: variable 'ret' is uninitialized when =
-used here [-Werror,-Wuninitialized]
-    2    /usr/lib/gcc/x86_64-linux-gnu/10/plugin/include/config/i386/i386.h=
-:2500:10: fatal error: common/config/i386/i386-cpuinfo.h: No such file or d=
-irectory
-    1    panel-edp.c:(.text+0xc0c): undefined reference to `drm_panel_dp_au=
-x_backlight'
-    1    panel-edp.c:(.text+0xbdc): undefined reference to `drm_panel_dp_au=
-x_backlight'
-    1    panel-edp.c:(.text+0xb7c): undefined reference to `drm_panel_dp_au=
-x_backlight'
-    1    panel-edp.c:(.text+0xb28): undefined reference to `drm_panel_dp_au=
-x_backlight'
-    1    mips-linux-gnu-ld: (.init.text+0x1720): undefined reference to `no=
-de_data'
-    1    include/linux/tpm.h:290:2: error: field  within 'struct tpm_header=
-' is less aligned than 'union tpm_header::(anonymous at ../include/linux/tp=
-m.h:290:2)' and is usually due to 'struct tpm_header' being packed, which c=
-an lead to unaligned accesses [-Werror,-Wunaligned-access]
-    1    fs/proc/task_mmu.c:1444:7: error: unused variable =E2=80=98migrati=
-on=E2=80=99 [-Werror=3Dunused-variable]
-    1    fs/io_uring.c:9396:9: error: variable 'ret' is uninitialized when =
-used here [-Werror,-Wuninitialized]  CC      drivers/dma/mv_xor_v2.o
-    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
-=3D0x'
-    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
-=3D0x'
-    1    .........../fs/proc/task_mmu.c:1444:7: error: unused variable 'mig=
-ration' [-Werror,-Wunused-variable]
-    1    (.init.text+0x16f8): undefined reference to `node_data'
-
-Warnings summary:
-
-    140  fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migra=
-tion=E2=80=99 [-Wunused-variable]
-    58   arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is ou=
-tside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 =
-[-Warray-bounds]
-    58   arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is ou=
-tside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 =
-[-Warray-bounds]
-    58   arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknow=
-n> is outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=
-=E2=80=99 [-Warray-bounds]
-    58   arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknow=
-n> is outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=
-=E2=80=99 [-Warray-bounds]
-    40   1 warning generated.
-    21   clang: warning: argument unused during compilation: '-march=3Darmv=
-6k' [-Wunused-command-line-argument]
-    17   fs/proc/task_mmu.c:1444:7: warning: unused variable 'migration' [-=
-Wunused-variable]
-    13   include/uapi/linux/videodev2.h:1744:2: warning: field  within 'str=
-uct v4l2_ext_control' is less aligned than 'union v4l2_ext_control::(anonym=
-ous at ../include/uapi/linux/videodev2.h:1744:2)' and is usually due to 'st=
-ruct v4l2_ext_control' being packed, which can lead to unaligned accesses [=
--Wunaligned-access]
-    12   fs/io_uring.c:9373:13: note: initialize the variable 'ret' to sile=
-nce this warning
-    11   include/uapi/linux/if_pppox.h:71:4: warning: field sa_addr within =
-'struct sockaddr_pppox' is less aligned than 'union (unnamed union at ../in=
-clude/uapi/linux/if_pppox.h:68:2)' and is usually due to 'struct sockaddr_p=
-ppox' being packed, which can lead to unaligned accesses [-Wunaligned-acces=
-s]
-    9    fs/io_uring.c:9396:9: warning: variable 'ret' is uninitialized whe=
-n used here [-Wuninitialized]
-    3    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
-    1    net/core/skbuff.o: warning: objtool: skb_copy()+0x12d: unreachable=
- instruction
-    1    lib/strnlen_user.o: warning: objtool: strnlen_user()+0x5d: call to=
- do_strnlen_user() with UACCESS enabled
-    1    lib/strncpy_from_user.o: warning: objtool: strncpy_from_user()+0x8=
-a: call to do_strncpy_from_user() with UACCESS enabled
-    1    clangclang: warning: argument unused during compilation: '-march=
-=3Darmv6k' [-Wunused-command-line-argument]
-    1    cc1: all warnings being treated as errors
-    1    arch/x86/kernel/head64.o: warning: objtool: __startup_64() falls t=
-hrough to next function startup_64_setup_env()
-    1    arch/mips/boot/dts/ingenic/jz4780.dtsi:513.33-515.6: Warning (unit=
-_address_format): /nemc@13410000/efuse@d0/eth-mac-addr@0x22: unit name shou=
-ld not have leading "0x"
-    1    arch/arm/mach-vexpress/spc.c:592:18: warning: array subscript -1 i=
-s below array bounds of =E2=80=98bool[2]=E2=80=99 {aka =E2=80=98_Bool[2]=E2=
-=80=99} [-Warray-bounds]
-    1    arch/arm/mach-vexpress/spc.c:583:21: warning: array subscript -1 i=
-s below array bounds of =E2=80=98bool[2]=E2=80=99 {aka =E2=80=98_Bool[2]=E2=
-=80=99} [-Warray-bounds]
-    1    : warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig+debug (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings,=
- 0 section mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig+kselftest (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warni=
-ngs, 0 section mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm, clang-14) =E2=80=94 FAIL, 2 errors, 13 warnings, 0 secti=
-on mismatches
-
-Errors:
-    include/linux/tpm.h:290:2: error: field  within 'struct tpm_header' is =
-less aligned than 'union tpm_header::(anonymous at ../include/linux/tpm.h:2=
-90:2)' and is usually due to 'struct tpm_header' being packed, which can le=
-ad to unaligned accesses [-Werror,-Wunaligned-access]
-    .........../fs/proc/task_mmu.c:1444:7: error: unused variable 'migratio=
-n' [-Werror,-Wunused-variable]
-
-Warnings:
-    clangclang: warning: argument unused during compilation: '-march=3Darmv=
-6k' [-Wunused-command-line-argument]
-    : warning: argument unused during compilation: '-march=3Darmv6k' [-Wunu=
-sed-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mi=
-smatches
-
-Errors:
-    fs/proc/task_mmu.c:1444:7: error: unused variable =E2=80=98migration=E2=
-=80=99 [-Werror=3Dunused-variable]
-
-Warnings:
-    cc1: all warnings being treated as errors
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm64, clang-14) =E2=80=94 FAIL, 1 error, 1 warning, 0 sectio=
-n mismatches
-
-Errors:
-    fs/io_uring.c:9396:9: error: variable 'ret' is uninitialized when used =
-here [-Werror,-Wuninitialized]  CC      drivers/dma/mv_xor_v2.o
-
-Warnings:
-    fs/io_uring.c:9373:13: note: initialize the variable 'ret' to silence t=
-his warning
-
----------------------------------------------------------------------------=
------
-allmodconfig (i386, clang-14) =E2=80=94 FAIL, 1 error, 1 warning, 0 section=
- mismatches
-
-Errors:
-    fs/io_uring.c:9396:9: error: variable 'ret' is uninitialized when used =
-here [-Werror,-Wuninitialized]
-
-Warnings:
-    fs/io_uring.c:9373:13: note: initialize the variable 'ret' to silence t=
-his warning
-
----------------------------------------------------------------------------=
------
-allmodconfig (x86_64, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 secti=
-on mismatches
-
-Errors:
-    /usr/lib/gcc/x86_64-linux-gnu/10/plugin/include/config/i386/i386.h:2500=
-:10: fatal error: common/config/i386/i386-cpuinfo.h: No such file or direct=
-ory
-    /usr/lib/gcc/x86_64-linux-gnu/10/plugin/include/config/i386/i386.h:2500=
-:10: fatal error: common/config/i386/i386-cpuinfo.h: No such file or direct=
-ory
-
----------------------------------------------------------------------------=
------
-allmodconfig (x86_64, clang-14) =E2=80=94 FAIL, 1 error, 2 warnings, 0 sect=
-ion mismatches
-
-Errors:
-    fs/io_uring.c:9396:9: error: variable 'ret' is uninitialized when used =
-here [-Werror,-Wuninitialized]
-
-Warnings:
-    arch/x86/kernel/head64.o: warning: objtool: __startup_64() falls throug=
-h to next function startup_64_setup_env()
-    fs/io_uring.c:9373:13: note: initialize the variable 'ret' to silence t=
-his warning
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (i386, clang-14) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sectio=
-n mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable 'migration' [-Wunus=
-ed-variable]
-    1 warning generated.
-    fs/io_uring.c:9396:9: warning: variable 'ret' is uninitialized when use=
-d here [-Wuninitialized]
-    fs/io_uring.c:9373:13: note: initialize the variable 'ret' to silence t=
-his warning
-    1 warning generated.
-
----------------------------------------------------------------------------=
------
-allnoconfig (x86_64, clang-14) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable 'migration' [-Wunus=
-ed-variable]
-    1 warning generated.
-    fs/io_uring.c:9396:9: warning: variable 'ret' is uninitialized when use=
-d here [-Wuninitialized]
-    fs/io_uring.c:9373:13: note: initialize the variable 'ret' to silence t=
-his warning
-    1 warning generated.
-
----------------------------------------------------------------------------=
------
-allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
-ismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
- mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-am200epdkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0=
- section mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-ar7_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-aspeed_g5_defconfig (arm, clang-14) =E2=80=94 PASS, 0 errors, 47 warnings, =
-0 section mismatches
-
-Warnings:
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable 'migration' [-Wunus=
-ed-variable]
-    1 warning generated.
-    include/uapi/linux/if_pppox.h:71:4: warning: field sa_addr within 'stru=
-ct sockaddr_pppox' is less aligned than 'union (unnamed union at ../include=
-/uapi/linux/if_pppox.h:68:2)' and is usually due to 'struct sockaddr_pppox'=
- being packed, which can lead to unaligned accesses [-Wunaligned-access]
-    1 warning generated.
-    include/uapi/linux/if_pppox.h:71:4: warning: field sa_addr within 'stru=
-ct sockaddr_pppox' is less aligned than 'union (unnamed union at ../include=
-/uapi/linux/if_pppox.h:68:2)' and is usually due to 'struct sockaddr_pppox'=
- being packed, which can lead to unaligned accesses [-Wunaligned-access]
-    1 warning generated.
-    include/uapi/linux/if_pppox.h:71:4: warning: field sa_addr within 'stru=
-ct sockaddr_pppox' is less aligned than 'union (unnamed union at ../include=
-/uapi/linux/if_pppox.h:68:2)' and is usually due to 'struct sockaddr_pppox'=
- being packed, which can lead to unaligned accesses [-Wunaligned-access]
-    1 warning generated.
-    fs/io_uring.c:9396:9: warning: variable 'ret' is uninitialized when use=
-d here [-Wuninitialized]
-    fs/io_uring.c:9373:13: note: initialize the variable 'ret' to silence t=
-his warning
-    include/uapi/linux/if_pppox.h:71:4: warning: field sa_addr within 'stru=
-ct sockaddr_pppox' is less aligned than 'union (unnamed union at ../include=
-/uapi/linux/if_pppox.h:68:2)' and is usually due to 'struct sockaddr_pppox'=
- being packed, which can lead to unaligned accesses [-Wunaligned-access]
-    1 warning generated.
-    1 warning generated.
-    include/uapi/linux/if_pppox.h:71:4: warning: field sa_addr within 'stru=
-ct sockaddr_pppox' is less aligned than 'union (unnamed union at ../include=
-/uapi/linux/if_pppox.h:68:2)' and is usually due to 'struct sockaddr_pppox'=
- being packed, which can lead to unaligned accesses [-Wunaligned-access]
-    1 warning generated.
-    include/uapi/linux/if_pppox.h:71:4: warning: field sa_addr within 'stru=
-ct sockaddr_pppox' is less aligned than 'union (unnamed union at ../include=
-/uapi/linux/if_pppox.h:68:2)' and is usually due to 'struct sockaddr_pppox'=
- being packed, which can lead to unaligned accesses [-Wunaligned-access]
-    1 warning generated.
-    include/uapi/linux/if_pppox.h:71:4: warning: field sa_addr within 'stru=
-ct sockaddr_pppox' is less aligned than 'union (unnamed union at ../include=
-/uapi/linux/if_pppox.h:68:2)' and is usually due to 'struct sockaddr_pppox'=
- being packed, which can lead to unaligned accesses [-Wunaligned-access]
-    1 warning generated.
-    include/uapi/linux/if_pppox.h:71:4: warning: field sa_addr within 'stru=
-ct sockaddr_pppox' is less aligned than 'union (unnamed union at ../include=
-/uapi/linux/if_pppox.h:68:2)' and is usually due to 'struct sockaddr_pppox'=
- being packed, which can lead to unaligned accesses [-Wunaligned-access]
-    1 warning generated.
-    include/uapi/linux/if_pppox.h:71:4: warning: field sa_addr within 'stru=
-ct sockaddr_pppox' is less aligned than 'union (unnamed union at ../include=
-/uapi/linux/if_pppox.h:68:2)' and is usually due to 'struct sockaddr_pppox'=
- being packed, which can lead to unaligned accesses [-Wunaligned-access]
-    1 warning generated.
-    include/uapi/linux/videodev2.h:1744:2: warning: field  within 'struct v=
-4l2_ext_control' is less aligned than 'union v4l2_ext_control::(anonymous a=
-t ../include/uapi/linux/videodev2.h:1744:2)' and is usually due to 'struct =
-v4l2_ext_control' being packed, which can lead to unaligned accesses [-Wuna=
-ligned-access]
-    1 warning generated.
-    include/uapi/linux/videodev2.h:1744:2: warning: field  within 'struct v=
-4l2_ext_control' is less aligned than 'union v4l2_ext_control::(anonymous a=
-t ../include/uapi/linux/videodev2.h:1744:2)' and is usually due to 'struct =
-v4l2_ext_control' being packed, which can lead to unaligned accesses [-Wuna=
-ligned-access]
-    1 warning generated.
-    include/uapi/linux/videodev2.h:1744:2: warning: field  within 'struct v=
-4l2_ext_control' is less aligned than 'union v4l2_ext_control::(anonymous a=
-t ../include/uapi/linux/videodev2.h:1744:2)' and is usually due to 'struct =
-v4l2_ext_control' being packed, which can lead to unaligned accesses [-Wuna=
-ligned-access]
-    1 warning generated.
-    include/uapi/linux/videodev2.h:1744:2: warning: field  within 'struct v=
-4l2_ext_control' is less aligned than 'union v4l2_ext_control::(anonymous a=
-t ../include/uapi/linux/videodev2.h:1744:2)' and is usually due to 'struct =
-v4l2_ext_control' being packed, which can lead to unaligned accesses [-Wuna=
-ligned-access]
-    1 warning generated.
-    include/uapi/linux/videodev2.h:1744:2: warning: field  within 'struct v=
-4l2_ext_control' is less aligned than 'union v4l2_ext_control::(anonymous a=
-t ../include/uapi/linux/videodev2.h:1744:2)' and is usually due to 'struct =
-v4l2_ext_control' being packed, which can lead to unaligned accesses [-Wuna=
-ligned-access]
-    1 warning generated.
-    include/uapi/linux/videodev2.h:1744:2: warning: field  within 'struct v=
-4l2_ext_control' is less aligned than 'union v4l2_ext_control::(anonymous a=
-t ../include/uapi/linux/videodev2.h:1744:2)' and is usually due to 'struct =
-v4l2_ext_control' being packed, which can lead to unaligned accesses [-Wuna=
-ligned-access]
-    1 warning generated.
-    include/uapi/linux/videodev2.h:1744:2: warning: field  within 'struct v=
-4l2_ext_control' is less aligned than 'union v4l2_ext_control::(anonymous a=
-t ../include/uapi/linux/videodev2.h:1744:2)' and is usually due to 'struct =
-v4l2_ext_control' being packed, which can lead to unaligned accesses [-Wuna=
-ligned-access]
-    1 warning generated.
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-
----------------------------------------------------------------------------=
------
-aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
-ction mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-at91_dt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-ath25_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-ath79_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-axm55xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-axs103_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable 'migration' [-Wunus=
-ed-variable]
-
----------------------------------------------------------------------------=
------
-axs103_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
-ection mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable 'migration' [-Wunus=
-ed-variable]
-
----------------------------------------------------------------------------=
------
-badge4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-bcm2835_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-bcm47xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-bcm63xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-bigsur_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-bmips_stb_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
-ection mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-capcella_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
-ction mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-cavium_octeon_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cerfcube_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 se=
-ction mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-ci20_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    arch/mips/boot/dts/ingenic/jz4780.dtsi:513.33-515.6: Warning (unit_addr=
-ess_format): /nemc@13410000/efuse@d0/eth-mac-addr@0x22: unit name should no=
-t have leading "0x"
-
----------------------------------------------------------------------------=
------
-cm_x300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-colibri_pxa300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings=
-, 0 section mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-collie_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-corgi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 secti=
-on mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-cu1830-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-db1xxx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-decstation_64_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-decstation_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
-section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-decstation_r4k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning=
-, 0 section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, clang-14) =E2=80=94 PASS, 0 errors, 3 warnings, 0 section=
- mismatches
-
-Warnings:
-    fs/io_uring.c:9396:9: warning: variable 'ret' is uninitialized when use=
-d here [-Wuninitialized]
-    fs/io_uring.c:9373:13: note: initialize the variable 'ret' to silence t=
-his warning
-    1 warning generated.
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mi=
-smatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_16K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-14) =E2=80=94 PASS, 0 er=
-rors, 3 warnings, 0 section mismatches
-
-Warnings:
-    fs/io_uring.c:9396:9: warning: variable 'ret' is uninitialized when use=
-d here [-Wuninitialized]
-    fs/io_uring.c:9373:13: note: initialize the variable 'ret' to silence t=
-his warning
-    1 warning generated.
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_EFI=3Dn (riscv, clang-14) =E2=80=94 PASS, 0 errors, 5 warn=
-ings, 0 section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable 'migration' [-Wunus=
-ed-variable]
-    1 warning generated.
-    fs/io_uring.c:9396:9: warning: variable 'ret' is uninitialized when use=
-d here [-Wuninitialized]
-    fs/io_uring.c:9373:13: note: initialize the variable 'ret' to silence t=
-his warning
-    1 warning generated.
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
-s, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+arm64-chromebook+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+crypto (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+debug (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-defconfig+debug (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+ima (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
-section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-dove_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sectio=
-n mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-e55_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
- mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-ep93xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-eseries_pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0=
- section mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-exynos_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-ezx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 section=
- mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-footbridge_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 =
-section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-fuloong2e_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 1 warning, 0 se=
-ction mismatches
-
-Errors:
-    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
-=98-mhard-float=E2=80=99
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-gemini_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-gpr_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
- mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-h5000_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 secti=
-on mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-hackkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
-section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable 'migration' [-Wunus=
-ed-variable]
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig+debug (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warni=
-ng, 0 section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable 'migration' [-Wunus=
-ed-variable]
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig+kselftest (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 w=
-arning, 0 section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable 'migration' [-Wunus=
-ed-variable]
-
----------------------------------------------------------------------------=
------
-hisi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sectio=
-n mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-hsdk_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
- mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable 'migration' [-Wunus=
-ed-variable]
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, clang-14) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable 'migration' [-Wunus=
-ed-variable]
-    1 warning generated.
-    fs/io_uring.c:9396:9: warning: variable 'ret' is uninitialized when use=
-d here [-Wuninitialized]
-    fs/io_uring.c:9373:13: note: initialize the variable 'ret' to silence t=
-his warning
-    1 warning generated.
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-i386_defconfig+debug (i386, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
-section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning=
-, 0 section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-imote2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-imx_v4_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-imx_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
-ction mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
-ection mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-iop32x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-ip22_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-ip27_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-ip32_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-ixp4xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-jazz_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-jmr3927_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-jornada720_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 =
-section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-keystone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-lart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sectio=
-n mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-lemote2f_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 1 warning, 0 sec=
-tion mismatches
-
-Errors:
-    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
-=98-mhard-float=E2=80=99
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-loongson1c_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
-section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-loongson2k_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 1 warning, 0 s=
-ection mismatches
-
-Errors:
-    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
-=98-mhard-float=E2=80=99
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-loongson3_defconfig (mips, gcc-10) =E2=80=94 FAIL, 2 errors, 1 warning, 0 s=
-ection mismatches
-
-Errors:
-    (.init.text+0x16f8): undefined reference to `node_data'
-    mips-linux-gnu-ld: (.init.text+0x1720): undefined reference to `node_da=
-ta'
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-lpc18xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-lpc32xx_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 5 warnings, 0 sect=
-ion mismatches
-
-Errors:
-    panel-edp.c:(.text+0xc0c): undefined reference to `drm_panel_dp_aux_bac=
-klight'
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-lpd270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-lubbock_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-magician_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 se=
-ction mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-mainstone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-malta_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-malta_qemu_32r6_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warnin=
-g, 0 section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-maltaaprp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
-ection mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-maltasmvp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
-ection mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-maltasmvp_eva_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning,=
- 0 section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-maltaup_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-maltaup_xpa_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0=
- section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-milbeaut_m10v_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, =
-0 section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-mini2440_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 se=
-ction mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-moxart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-mps2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-mtx1_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-multi_v4t_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
-ction mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-multi_v5_defconfig (arm, clang-14) =E2=80=94 PASS, 0 errors, 21 warnings, 0=
- section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable 'migration' [-Wunus=
-ed-variable]
-    1 warning generated.
-    include/uapi/linux/if_pppox.h:71:4: warning: field sa_addr within 'stru=
-ct sockaddr_pppox' is less aligned than 'union (unnamed union at ../include=
-/uapi/linux/if_pppox.h:68:2)' and is usually due to 'struct sockaddr_pppox'=
- being packed, which can lead to unaligned accesses [-Wunaligned-access]
-    1 warning generated.
-    include/uapi/linux/if_pppox.h:71:4: warning: field sa_addr within 'stru=
-ct sockaddr_pppox' is less aligned than 'union (unnamed union at ../include=
-/uapi/linux/if_pppox.h:68:2)' and is usually due to 'struct sockaddr_pppox'=
- being packed, which can lead to unaligned accesses [-Wunaligned-access]
-    1 warning generated.
-    fs/io_uring.c:9396:9: warning: variable 'ret' is uninitialized when use=
-d here [-Wuninitialized]
-    fs/io_uring.c:9373:13: note: initialize the variable 'ret' to silence t=
-his warning
-    1 warning generated.
-    include/uapi/linux/videodev2.h:1744:2: warning: field  within 'struct v=
-4l2_ext_control' is less aligned than 'union v4l2_ext_control::(anonymous a=
-t ../include/uapi/linux/videodev2.h:1744:2)' and is usually due to 'struct =
-v4l2_ext_control' being packed, which can lead to unaligned accesses [-Wuna=
-ligned-access]
-    1 warning generated.
-    include/uapi/linux/videodev2.h:1744:2: warning: field  within 'struct v=
-4l2_ext_control' is less aligned than 'union v4l2_ext_control::(anonymous a=
-t ../include/uapi/linux/videodev2.h:1744:2)' and is usually due to 'struct =
-v4l2_ext_control' being packed, which can lead to unaligned accesses [-Wuna=
-ligned-access]
-    1 warning generated.
-    include/uapi/linux/videodev2.h:1744:2: warning: field  within 'struct v=
-4l2_ext_control' is less aligned than 'union v4l2_ext_control::(anonymous a=
-t ../include/uapi/linux/videodev2.h:1744:2)' and is usually due to 'struct =
-v4l2_ext_control' being packed, which can lead to unaligned accesses [-Wuna=
-ligned-access]
-    1 warning generated.
-    include/uapi/linux/videodev2.h:1744:2: warning: field  within 'struct v=
-4l2_ext_control' is less aligned than 'union v4l2_ext_control::(anonymous a=
-t ../include/uapi/linux/videodev2.h:1744:2)' and is usually due to 'struct =
-v4l2_ext_control' being packed, which can lead to unaligned accesses [-Wuna=
-ligned-access]
-    1 warning generated.
-    include/uapi/linux/videodev2.h:1744:2: warning: field  within 'struct v=
-4l2_ext_control' is less aligned than 'union v4l2_ext_control::(anonymous a=
-t ../include/uapi/linux/videodev2.h:1744:2)' and is usually due to 'struct =
-v4l2_ext_control' being packed, which can lead to unaligned accesses [-Wuna=
-ligned-access]
-    include/uapi/linux/videodev2.h:1744:2: warning: field  within 'struct v=
-4l2_ext_control' is less aligned than 'union v4l2_ext_control::(anonymous a=
-t ../include/uapi/linux/videodev2.h:1744:2)' and is usually due to 'struct =
-v4l2_ext_control' being packed, which can lead to unaligned accesses [-Wuna=
-ligned-access]
-    1 warning generated.
-    1 warning generated.
-
----------------------------------------------------------------------------=
------
-multi_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-10) =E2=80=94 PASS, =
-0 errors, 1 warning, 0 section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-10) =E2=80=
-=94 PASS, 0 errors, 1 warning, 0 section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-10) =E2=80=94 PASS, 0 errors, 3=
- warnings, 0 section mismatches
-
-Warnings:
-    arch/arm/mach-vexpress/spc.c:583:21: warning: array subscript -1 is bel=
-ow array bounds of =E2=80=98bool[2]=E2=80=99 {aka =E2=80=98_Bool[2]=E2=80=
-=99} [-Warray-bounds]
-    arch/arm/mach-vexpress/spc.c:592:18: warning: array subscript -1 is bel=
-ow array bounds of =E2=80=98bool[2]=E2=80=99 {aka =E2=80=98_Bool[2]=E2=80=
-=99} [-Warray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
- errors, 1 warning, 0 section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warn=
-ing, 0 section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-mvebu_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 se=
-ction mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-mxs_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 section=
- mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-neponset_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 se=
-ction mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-nhk8815_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-nommu_k210_sdcard_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
-nings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
-section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable 'migration' [-Wunus=
-ed-variable]
-
----------------------------------------------------------------------------=
------
-nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning=
-, 0 section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable 'migration' [-Wunus=
-ed-variable]
-
----------------------------------------------------------------------------=
------
-omap1_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 secti=
-on mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-omega2p_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-orion5x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-oxnas_v6_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-palmz72_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-pcm027_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-pic32mzda_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
-ection mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-pleb_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sectio=
-n mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-pxa255-idp_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 =
-section mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-pxa3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-pxa910_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 section=
- mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-qcom_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 section =
-mismatches
-
-Errors:
-    panel-edp.c:(.text+0xb70): undefined reference to `drm_panel_dp_aux_bac=
-klight'
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-qi_lb60_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-rb532_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-realview_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 sect=
-ion mismatches
-
-Errors:
-    panel-edp.c:(.text+0xb7c): undefined reference to `drm_panel_dp_aux_bac=
-klight'
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-rm200_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-rpc_defconfig (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 section=
- mismatches
-
-Errors:
-    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=3D0x'
-    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=3D0x'
-
----------------------------------------------------------------------------=
------
-rs90_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-rt305x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-rv32_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-s3c2410_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-s3c6400_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-s5pv210_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-sama5_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 5 warnings, 0 sectio=
-n mismatches
-
-Errors:
-    panel-edp.c:(.text+0xb70): undefined reference to `drm_panel_dp_aux_bac=
-klight'
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-sama7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-sb1250_swarm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, =
-0 section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-shannon_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-shmobile_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 sect=
-ion mismatches
-
-Errors:
-    panel-edp.c:(.text+0xbdc): undefined reference to `drm_panel_dp_aux_bac=
-klight'
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-simpad_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-socfpga_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-spear13xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-spear6xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 se=
-ction mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-stm32_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-sunxi_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 section=
- mismatches
-
-Errors:
-    panel-edp.c:(.text+0xb70): undefined reference to `drm_panel_dp_aux_bac=
-klight'
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-tb0219_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-tb0226_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-tb0287_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-tct_hammer_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 =
-section mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-trizeps4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 se=
-ction mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-u8500_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-vdk_hs38_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable 'migration' [-Wunus=
-ed-variable]
-
----------------------------------------------------------------------------=
------
-vdk_hs38_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0=
- section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable 'migration' [-Wunus=
-ed-variable]
-
----------------------------------------------------------------------------=
------
-versatile_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 sec=
-tion mismatches
-
-Errors:
-    panel-edp.c:(.text+0xb28): undefined reference to `drm_panel_dp_aux_bac=
-klight'
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-vexpress_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 sect=
-ion mismatches
-
-Errors:
-    panel-edp.c:(.text+0xb70): undefined reference to `drm_panel_dp_aux_bac=
-klight'
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-vf610m4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-viper_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 secti=
-on mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-vocore2_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, =
-0 section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-workpad_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
-ction mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, clang-14) =E2=80=94 PASS, 0 errors, 6 warnings, 0=
- section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable 'migration' [-Wunus=
-ed-variable]
-    1 warning generated.
-    fs/io_uring.c:9396:9: warning: variable 'ret' is uninitialized when use=
-d here [-Wuninitialized]
-    fs/io_uring.c:9373:13: note: initialize the variable 'ret' to silence t=
-his warning
-    1 warning generated.
-    net/core/skbuff.o: warning: objtool: skb_copy()+0x12d: unreachable inst=
-ruction
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 1 warnin=
-g, 0 section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+debug (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 warning=
-s, 0 section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-    lib/strncpy_from_user.o: warning: objtool: strncpy_from_user()+0x8a: ca=
-ll to do_strncpy_from_user() with UACCESS enabled
-    lib/strnlen_user.o: warning: objtool: strnlen_user()+0x5d: call to do_s=
-trnlen_user() with UACCESS enabled
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+ima (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, =
-0 section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 1 war=
-ning, 0 section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, =
-1 warning, 0 section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 e=
-rrors, 1 warning, 0 section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook+kselftest (x86_64, gcc-10) =E2=80=94 PASS, =
-0 errors, 1 warning, 0 section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86_kvm_guest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 1=
- warning, 0 section mismatches
-
-Warnings:
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-xcep_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sectio=
-n mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-zeus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sectio=
-n mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    fs/proc/task_mmu.c:1444:7: warning: unused variable =E2=80=98migration=
-=E2=80=99 [-Wunused-variable]
-
----
-For more info write to <info@kernelci.org>
+next/master baseline: 707 runs, 25 regressions (next-20220208)
+
+Regressions Summary
+-------------------
+
+platform                 | arch   | lab             | compiler | defconfig =
+                   | regressions
+-------------------------+--------+-----------------+----------+-----------=
+-------------------+------------
+i945gsex-qs              | i386   | lab-clabbe      | clang-14 | i386_defco=
+nfig               | 1          =
+
+meson-gxbb-p200          | arm64  | lab-baylibre    | gcc-10   | defconfig+=
+crypto             | 1          =
+
+minnowboard-turbot-E3826 | x86_64 | lab-collabora   | gcc-10   | x86_64_def=
+config+debug       | 1          =
+
+qemu_i386                | i386   | lab-baylibre    | clang-14 | i386_defco=
+nfig               | 1          =
+
+qemu_i386                | i386   | lab-broonie     | clang-14 | i386_defco=
+nfig               | 1          =
+
+qemu_i386                | i386   | lab-cip         | clang-14 | i386_defco=
+nfig               | 1          =
+
+qemu_i386                | i386   | lab-linaro-lkft | clang-14 | i386_defco=
+nfig               | 1          =
+
+qemu_i386-uefi           | i386   | lab-baylibre    | clang-14 | i386_defco=
+nfig               | 1          =
+
+qemu_i386-uefi           | i386   | lab-broonie     | clang-14 | i386_defco=
+nfig               | 1          =
+
+qemu_i386-uefi           | i386   | lab-cip         | clang-14 | i386_defco=
+nfig               | 1          =
+
+qemu_i386-uefi           | i386   | lab-linaro-lkft | clang-14 | i386_defco=
+nfig               | 1          =
+
+rk3399-gru-kevin         | arm64  | lab-collabora   | gcc-10   | defconfig+=
+arm64-chromebook   | 1          =
+
+sun50i-a64-bananapi-m64  | arm64  | lab-clabbe      | clang-14 | defconfig =
+                   | 1          =
+
+sun7i-a20-cubieboard2    | arm    | lab-baylibre    | gcc-10   | multi_v7_d=
+efconfig           | 2          =
+
+sun7i-a20-cubieboard2    | arm    | lab-baylibre    | gcc-10   | multi_v7_d=
+efc...CONFIG_SMP=3Dn | 2          =
+
+sun7i-a20-cubieboard2    | arm    | lab-baylibre    | gcc-10   | multi_v7_d=
+efc...MB2_KERNEL=3Dy | 2          =
+
+sun7i-a20-cubieboard2    | arm    | lab-clabbe      | gcc-10   | multi_v7_d=
+efconfig           | 2          =
+
+sun7i-a20-cubieboard2    | arm    | lab-clabbe      | gcc-10   | multi_v7_d=
+efc...CONFIG_SMP=3Dn | 2          =
+
+sun7i-a20-cubieboard2    | arm    | lab-clabbe      | gcc-10   | multi_v7_d=
+efc...MB2_KERNEL=3Dy | 2          =
+
+
+  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
+220208/plan/baseline/
+
+  Test:     baseline
+  Tree:     next
+  Branch:   master
+  Describe: next-20220208
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      554f92dbda161fa073844ae6c62db257b8860a0a =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform                 | arch   | lab             | compiler | defconfig =
+                   | regressions
+-------------------------+--------+-----------------+----------+-----------=
+-------------------+------------
+i945gsex-qs              | i386   | lab-clabbe      | clang-14 | i386_defco=
+nfig               | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6202214575dda9e5c05d6f1a
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: i386_defconfig
+  Compiler:    clang-14 (Debian clang version 14.0.0-++20220131071833+f3876=
+7d77156-1~exp1~20220131071935.139)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220208/i386=
+/i386_defconfig/clang-14/lab-clabbe/baseline-i945gsex-qs.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220208/i386=
+/i386_defconfig/clang-14/lab-clabbe/baseline-i945gsex-qs.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220121.0/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6202214575dda9e5c05d6=
+f1b
+        failing since 1 day (last pass: next-20220204, first fail: next-202=
+20207) =
+
+ =
+
+
+
+platform                 | arch   | lab             | compiler | defconfig =
+                   | regressions
+-------------------------+--------+-----------------+----------+-----------=
+-------------------+------------
+meson-gxbb-p200          | arm64  | lab-baylibre    | gcc-10   | defconfig+=
+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62022c54826b7806675d6efb
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220208/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-meson-gxbb-p200.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220208/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-meson-gxbb-p200.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220121.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62022c54826b7806675d6=
+efc
+        new failure (last pass: next-20220207) =
+
+ =
+
+
+
+platform                 | arch   | lab             | compiler | defconfig =
+                   | regressions
+-------------------------+--------+-----------------+----------+-----------=
+-------------------+------------
+minnowboard-turbot-E3826 | x86_64 | lab-collabora   | gcc-10   | x86_64_def=
+config+debug       | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62024adbcd8dc3bd325d6ef5
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+debug
+  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220208/x86_=
+64/x86_64_defconfig+debug/gcc-10/lab-collabora/baseline-minnowboard-turbot-=
+E3826.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220208/x86_=
+64/x86_64_defconfig+debug/gcc-10/lab-collabora/baseline-minnowboard-turbot-=
+E3826.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220121.0/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62024adbcd8dc3bd325d6=
+ef6
+        new failure (last pass: next-20220207) =
+
+ =
+
+
+
+platform                 | arch   | lab             | compiler | defconfig =
+                   | regressions
+-------------------------+--------+-----------------+----------+-----------=
+-------------------+------------
+qemu_i386                | i386   | lab-baylibre    | clang-14 | i386_defco=
+nfig               | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62022241866fe1ddbe5d6f07
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: i386_defconfig
+  Compiler:    clang-14 (Debian clang version 14.0.0-++20220131071833+f3876=
+7d77156-1~exp1~20220131071935.139)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220208/i386=
+/i386_defconfig/clang-14/lab-baylibre/baseline-qemu_i386.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220208/i386=
+/i386_defconfig/clang-14/lab-baylibre/baseline-qemu_i386.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220121.0/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62022241866fe1ddbe5d6=
+f08
+        failing since 1 day (last pass: next-20220204, first fail: next-202=
+20207) =
+
+ =
+
+
+
+platform                 | arch   | lab             | compiler | defconfig =
+                   | regressions
+-------------------------+--------+-----------------+----------+-----------=
+-------------------+------------
+qemu_i386                | i386   | lab-broonie     | clang-14 | i386_defco=
+nfig               | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62022258973901960f5d6eee
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: i386_defconfig
+  Compiler:    clang-14 (Debian clang version 14.0.0-++20220131071833+f3876=
+7d77156-1~exp1~20220131071935.139)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220208/i386=
+/i386_defconfig/clang-14/lab-broonie/baseline-qemu_i386.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220208/i386=
+/i386_defconfig/clang-14/lab-broonie/baseline-qemu_i386.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220121.0/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62022258973901960f5d6=
+eef
+        failing since 1 day (last pass: next-20220204, first fail: next-202=
+20207) =
+
+ =
+
+
+
+platform                 | arch   | lab             | compiler | defconfig =
+                   | regressions
+-------------------------+--------+-----------------+----------+-----------=
+-------------------+------------
+qemu_i386                | i386   | lab-cip         | clang-14 | i386_defco=
+nfig               | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620222b0781f07d7805d6f1b
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: i386_defconfig
+  Compiler:    clang-14 (Debian clang version 14.0.0-++20220131071833+f3876=
+7d77156-1~exp1~20220131071935.139)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220208/i386=
+/i386_defconfig/clang-14/lab-cip/baseline-qemu_i386.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220208/i386=
+/i386_defconfig/clang-14/lab-cip/baseline-qemu_i386.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220121.0/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620222b0781f07d7805d6=
+f1c
+        failing since 1 day (last pass: next-20220204, first fail: next-202=
+20207) =
+
+ =
+
+
+
+platform                 | arch   | lab             | compiler | defconfig =
+                   | regressions
+-------------------------+--------+-----------------+----------+-----------=
+-------------------+------------
+qemu_i386                | i386   | lab-linaro-lkft | clang-14 | i386_defco=
+nfig               | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62023ca820961dd5285d6ee9
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: i386_defconfig
+  Compiler:    clang-14 (Debian clang version 14.0.0-++20220131071833+f3876=
+7d77156-1~exp1~20220131071935.139)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220208/i386=
+/i386_defconfig/clang-14/lab-linaro-lkft/baseline-qemu_i386.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220208/i386=
+/i386_defconfig/clang-14/lab-linaro-lkft/baseline-qemu_i386.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220121.0/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62023ca820961dd5285d6=
+eea
+        failing since 1 day (last pass: next-20220204, first fail: next-202=
+20207) =
+
+ =
+
+
+
+platform                 | arch   | lab             | compiler | defconfig =
+                   | regressions
+-------------------------+--------+-----------------+----------+-----------=
+-------------------+------------
+qemu_i386-uefi           | i386   | lab-baylibre    | clang-14 | i386_defco=
+nfig               | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62022240866fe1ddbe5d6f04
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: i386_defconfig
+  Compiler:    clang-14 (Debian clang version 14.0.0-++20220131071833+f3876=
+7d77156-1~exp1~20220131071935.139)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220208/i386=
+/i386_defconfig/clang-14/lab-baylibre/baseline-qemu_i386-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220208/i386=
+/i386_defconfig/clang-14/lab-baylibre/baseline-qemu_i386-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220121.0/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62022240866fe1ddbe5d6=
+f05
+        failing since 1 day (last pass: next-20220204, first fail: next-202=
+20207) =
+
+ =
+
+
+
+platform                 | arch   | lab             | compiler | defconfig =
+                   | regressions
+-------------------------+--------+-----------------+----------+-----------=
+-------------------+------------
+qemu_i386-uefi           | i386   | lab-broonie     | clang-14 | i386_defco=
+nfig               | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62022257973901960f5d6ee9
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: i386_defconfig
+  Compiler:    clang-14 (Debian clang version 14.0.0-++20220131071833+f3876=
+7d77156-1~exp1~20220131071935.139)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220208/i386=
+/i386_defconfig/clang-14/lab-broonie/baseline-qemu_i386-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220208/i386=
+/i386_defconfig/clang-14/lab-broonie/baseline-qemu_i386-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220121.0/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62022257973901960f5d6=
+eea
+        failing since 1 day (last pass: next-20220204, first fail: next-202=
+20207) =
+
+ =
+
+
+
+platform                 | arch   | lab             | compiler | defconfig =
+                   | regressions
+-------------------------+--------+-----------------+----------+-----------=
+-------------------+------------
+qemu_i386-uefi           | i386   | lab-cip         | clang-14 | i386_defco=
+nfig               | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620222af0ab672c3ef5d6f03
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: i386_defconfig
+  Compiler:    clang-14 (Debian clang version 14.0.0-++20220131071833+f3876=
+7d77156-1~exp1~20220131071935.139)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220208/i386=
+/i386_defconfig/clang-14/lab-cip/baseline-qemu_i386-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220208/i386=
+/i386_defconfig/clang-14/lab-cip/baseline-qemu_i386-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220121.0/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620222af0ab672c3ef5d6=
+f04
+        failing since 1 day (last pass: next-20220204, first fail: next-202=
+20207) =
+
+ =
+
+
+
+platform                 | arch   | lab             | compiler | defconfig =
+                   | regressions
+-------------------------+--------+-----------------+----------+-----------=
+-------------------+------------
+qemu_i386-uefi           | i386   | lab-linaro-lkft | clang-14 | i386_defco=
+nfig               | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62023cb8f004d885a75d6f0e
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: i386_defconfig
+  Compiler:    clang-14 (Debian clang version 14.0.0-++20220131071833+f3876=
+7d77156-1~exp1~20220131071935.139)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220208/i386=
+/i386_defconfig/clang-14/lab-linaro-lkft/baseline-qemu_i386-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220208/i386=
+/i386_defconfig/clang-14/lab-linaro-lkft/baseline-qemu_i386-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220121.0/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62023cb8f004d885a75d6=
+f0f
+        failing since 1 day (last pass: next-20220204, first fail: next-202=
+20207) =
+
+ =
+
+
+
+platform                 | arch   | lab             | compiler | defconfig =
+                   | regressions
+-------------------------+--------+-----------------+----------+-----------=
+-------------------+------------
+rk3399-gru-kevin         | arm64  | lab-collabora   | gcc-10   | defconfig+=
+arm64-chromebook   | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620226aad7596ef1a05d6ee8
+
+  Results:     88 PASS, 3 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220208/arm6=
+4/defconfig+arm64-chromebook/gcc-10/lab-collabora/baseline-rk3399-gru-kevin=
+.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220208/arm6=
+4/defconfig+arm64-chromebook/gcc-10/lab-collabora/baseline-rk3399-gru-kevin=
+.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220121.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.rockchip-i2s1-probed: https://kernelci.org/test/case/id=
+/620226aad7596ef1a05d6f0a
+        failing since 15 days (last pass: next-20220121, first fail: next-2=
+0220124)
+
+    2022-02-08T08:15:23.178571  <4>[   22.933802] cdn-dp fec00000.dp: Direc=
+t firmware load for rockchip/dptx.bin failed with error -2
+    2022-02-08T08:15:23.564908  /lava-5640319/1/../bin/lava-test-case
+    2022-02-08T08:15:23.576168  <8>[   23.333320] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Drockchip-i2s1-probed RESULT=3Dfail>   =
+
+ =
+
+
+
+platform                 | arch   | lab             | compiler | defconfig =
+                   | regressions
+-------------------------+--------+-----------------+----------+-----------=
+-------------------+------------
+sun50i-a64-bananapi-m64  | arm64  | lab-clabbe      | clang-14 | defconfig =
+                   | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620222ae885abb35945d6efb
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    clang-14 (Debian clang version 14.0.0-++20220131071833+f3876=
+7d77156-1~exp1~20220131071935.139)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220208/arm6=
+4/defconfig/clang-14/lab-clabbe/baseline-sun50i-a64-bananapi-m64.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220208/arm6=
+4/defconfig/clang-14/lab-clabbe/baseline-sun50i-a64-bananapi-m64.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220121.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620222ae885abb35945d6=
+efc
+        new failure (last pass: next-20220207) =
+
+ =
+
+
+
+platform                 | arch   | lab             | compiler | defconfig =
+                   | regressions
+-------------------------+--------+-----------------+----------+-----------=
+-------------------+------------
+sun7i-a20-cubieboard2    | arm    | lab-baylibre    | gcc-10   | multi_v7_d=
+efconfig           | 2          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620221c0a7112b34175d6eff
+
+  Results:     4 PASS, 2 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220208/arm/=
+multi_v7_defconfig/gcc-10/lab-baylibre/baseline-sun7i-a20-cubieboard2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220208/arm/=
+multi_v7_defconfig/gcc-10/lab-baylibre/baseline-sun7i-a20-cubieboard2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220121.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/620221c0a7112b3=
+4175d6f06
+        new failure (last pass: next-20220128)
+        16 lines
+
+    2022-02-08T07:54:27.841517  kern  :alert : 8<--- cut here ---
+    2022-02-08T07:54:27.841755  kern  :alert : Unable to handle kernel NULL=
+ pointer dereference at virtual address 000001a0
+    2022-02-08T07:54:27.841931  kern  :alert : [000001a0] *pgd=3D7d<8>[   3=
+7.212390] <LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Dalert RESULT=3Dfail UNITS=3D=
+lines MEASUREMENT=3D16>
+    2022-02-08T07:54:27.842084  3d0835
+    2022-02-08T07:54:27.842230  kern  :alert : Register r0 information: NUL=
+L pointer
+    2022-02-08T07:54:27.842372  kern  :alert : Register r1 information: non=
+-slab/vmalloc memory
+    2022-02-08T07:54:27.842535  kern  :alert : Register r2 information: non=
+-slab/vmalloc memory   =
+
+
+  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/620221c0a7112b3=
+4175d6f07
+        new failure (last pass: next-20220128)
+        54 lines
+
+    2022-02-08T07:54:27.884419  kern  :alert : Register r3 information: non=
+-paged memory
+    2022-02-08T07:54:27.884658  kern  :alert : Register r4 information: sla=
+b kmalloc-1k start c45d3400 pointer offset 64 size 1024
+    2022-02-08T07:54:27.884798  kern  :alert : Register r5 information: sla=
+b task_struct start c40bc400 pointer offset 0
+    2022-02-08T07:54:27.884919  kern  :alert : Register r6 information: sla=
+b kmalloc-1k start c21a1c00 pointer offset 16 size 1024
+    2022-02-08T07:54:27.885033  kern  :alert : Register r7 information: sla=
+b kmalloc-1k start c45d3400 pointer offset 128 size 1024
+    2022-02-08T07:54:27.885145  kern  :alert : Register r8 information: non=
+-slab/vmalloc memory
+    2022-02-08T07:54:27.927521  kern  :alert : Register r9 information: sla=
+b kmalloc-1k start c21a1c00 pointer offset 0 size 1024
+    2022-02-08T07:54:27.927760  kern  :alert : Register r10 information: sl=
+ab kmalloc-1k start c45d4400 pointer offset 0 size 1024
+    2022-02-08T07:54:27.927895  kern  :alert : Register r11 information: NU=
+LL pointer
+    2022-02-08T07:54:27.928015  kern  :alert : Register r12 information: sl=
+ab task_struct start c40bc400 pointer offset 0 =
+
+    ... (47 line(s) more)  =
+
+ =
+
+
+
+platform                 | arch   | lab             | compiler | defconfig =
+                   | regressions
+-------------------------+--------+-----------------+----------+-----------=
+-------------------+------------
+sun7i-a20-cubieboard2    | arm    | lab-baylibre    | gcc-10   | multi_v7_d=
+efc...CONFIG_SMP=3Dn | 2          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620222d8895357dc5e5d6f02
+
+  Results:     4 PASS, 2 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220208/arm/=
+multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-10/lab-baylibre/baseline-sun7i-a20-cu=
+bieboard2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220208/arm/=
+multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-10/lab-baylibre/baseline-sun7i-a20-cu=
+bieboard2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220121.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/620222d8895357d=
+c5e5d6f09
+        new failure (last pass: next-20220125)
+        16 lines
+
+    2022-02-08T07:59:04.075657  kern  :alert : 8<--- cut here ---
+    2022-02-08T07:59:04.119170  kern  :alert : Unable to handle kernel NULL=
+ pointer dereference at virtual address 00000188
+    2022-02-08T07:59:04.119916  kern  :alert : [00000188] *pgd=3D7d<8>[   3=
+8.335289] <LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Dalert RESULT=3Dfail UNITS=3D=
+lines MEASUREMENT=3D16>
+    2022-02-08T07:59:04.120395  362835
+    2022-02-08T07:59:04.120823  kern  :alert : Register r0 information: NUL=
+L pointer
+    2022-02-08T07:59:04.121270  kern  :alert : Register r1 information: non=
+-slab/vmalloc memory
+    2022-02-08T07:59:04.121833  kern  :alert : Register r2 information: non=
+-slab/vmalloc memory
+    2022-02-08T07:59:04.122242  kern  :alert : Register r3 information: non=
+-paged memory   =
+
+
+  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/620222d8895357d=
+c5e5d6f0a
+        new failure (last pass: next-20220125)
+        54 lines
+
+    2022-02-08T07:59:04.161825  kern  :alert : Register r4 information: sla=
+b kmalloc-1k start c4658400 pointer offset 64 size 1024
+    2022-02-08T07:59:04.162569  kern  :alert : Register r5 information: sla=
+b task_struct start c446f480 pointer offset 0
+    2022-02-08T07:59:04.163205  kern  :alert : Register r6 information: sla=
+b kmalloc-1k start c20f4c00 pointer offset 16 size 1024
+    2022-02-08T07:59:04.163751  kern  :alert : Register r7 information: sla=
+b kmalloc-1k start c4658400 pointer offset 120 size 1024
+    2022-02-08T07:59:04.164308  kern  :alert : Register r8 information: non=
+-slab/vmalloc memory
+    2022-02-08T07:59:04.205110  kern  :alert : Register r9 information: sla=
+b kmalloc-1k start c20f4c00 pointer offset 0 size 1024
+    2022-02-08T07:59:04.205854  kern  :alert : Register r10 information: sl=
+ab kmalloc-1k start c43cbc00 pointer offset 0 size 1024
+    2022-02-08T07:59:04.206450  kern  :alert : Register r11 information: NU=
+LL pointer
+    2022-02-08T07:59:04.206990  kern  :alert : Register r12 information: sl=
+ab task_struct start c446f480 pointer offset 0
+    2022-02-08T07:59:04.207587  kern  :emerg : Internal error: Oops: 17 [#1=
+] ARM =
+
+    ... (46 line(s) more)  =
+
+ =
+
+
+
+platform                 | arch   | lab             | compiler | defconfig =
+                   | regressions
+-------------------------+--------+-----------------+----------+-----------=
+-------------------+------------
+sun7i-a20-cubieboard2    | arm    | lab-baylibre    | gcc-10   | multi_v7_d=
+efc...MB2_KERNEL=3Dy | 2          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6202242c9d38f8501a5d6ef2
+
+  Results:     4 PASS, 2 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220208/arm/=
+multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab-baylibre/baseline-su=
+n7i-a20-cubieboard2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220208/arm/=
+multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab-baylibre/baseline-su=
+n7i-a20-cubieboard2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220121.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/6202242c9d38f85=
+01a5d6ef9
+        new failure (last pass: next-20220127)
+        16 lines
+
+    2022-02-08T08:04:44.569614  kern  :alert : 8<--- cut here ---
+    2022-02-08T08:04:44.612561  kern  :alert : Unable to handle kernel NULL=
+ pointer dereference at virtual address 000001a0
+    2022-02-08T08:04:44.612805  kern  :alert : [000001a0] *pgd=3D7d<8>[   3=
+7.509461] <LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Dalert RESULT=3Dfail UNITS=3D=
+lines MEASUREMENT=3D16>
+    2022-02-08T08:04:44.612994  139835
+    2022-02-08T08:04:44.613148  kern  :alert : Register r0 information: NUL=
+L pointer
+    2022-02-08T08:04:44.613294  kern  :alert : Register r1 information: non=
+-slab/vmalloc memory
+    2022-02-08T08:04:44.613455  kern  :alert : Register r2 information: non=
+-slab/vmalloc memory
+    2022-02-08T08:04:44.613597  kern  :alert : Register r3 information: non=
+-paged memory   =
+
+
+  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/6202242c9d38f85=
+01a5d6efa
+        new failure (last pass: next-20220127)
+        54 lines
+
+    2022-02-08T08:04:44.655607  kern  :alert : Register r4 information: sla=
+b kmalloc-1k start c45a9400 pointer offset 64 size 1024
+    2022-02-08T08:04:44.656052  kern  :alert : Register r5 information: sla=
+b task_struct start c408ee80 pointer offset 0
+    2022-02-08T08:04:44.656474  kern  :alert : Register r6 information: sla=
+b kmalloc-1k start c21a1c00 pointer offset 16 size 1024
+    2022-02-08T08:04:44.656744  kern  :alert : Register r7 information: sla=
+b kmalloc-1k start c45a9400 pointer offset 128 size 1024
+    2022-02-08T08:04:44.656988  kern  :alert : Register r8 information: non=
+-slab/vmalloc memory
+    2022-02-08T08:04:44.698668  kern  :alert : Register r9 information: sla=
+b kmalloc-1k start c21a1c00 pointer offset 0 size 1024
+    2022-02-08T08:04:44.698914  kern  :alert : Register r10 information: sl=
+ab kmalloc-1k start c21b1400 pointer offset 0 size 1024
+    2022-02-08T08:04:44.699130  kern  :alert : Register r11 information: NU=
+LL pointer
+    2022-02-08T08:04:44.699302  kern  :alert : Register r12 information: sl=
+ab task_struct start c408ee80 pointer offset 0
+    2022-02-08T08:04:44.699452  kern  :emerg : Internal error: Oops: 17 [#1=
+] SMP THUMB2 =
+
+    ... (39 line(s) more)  =
+
+ =
+
+
+
+platform                 | arch   | lab             | compiler | defconfig =
+                   | regressions
+-------------------------+--------+-----------------+----------+-----------=
+-------------------+------------
+sun7i-a20-cubieboard2    | arm    | lab-clabbe      | gcc-10   | multi_v7_d=
+efconfig           | 2          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6202229b781f07d7805d6ef4
+
+  Results:     4 PASS, 2 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220208/arm/=
+multi_v7_defconfig/gcc-10/lab-clabbe/baseline-sun7i-a20-cubieboard2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220208/arm/=
+multi_v7_defconfig/gcc-10/lab-clabbe/baseline-sun7i-a20-cubieboard2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220121.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/6202229b781f07d=
+7805d6efb
+        new failure (last pass: next-20220128)
+        16 lines
+
+    2022-02-08T07:57:58.471460  kern  :alert : 8<--- cut here ---
+    2022-02-08T07:57:58.482231  kern  :alert : Unable to handle kernel NULL=
+ pointer dereference at virtual address 000001a0
+    2022-02-08T07:57:58.482620  kern  :alert : [000001a0] *pgd=3D7d3ae835
+    2022-02-08T07:57:58.491402  kern  :alert : Register[   44.266046] <LAVA=
+_SIGNAL_TESTCASE TEST_CASE_ID=3Dalert RESULT=3Dfail UNITS=3Dlines MEASUREME=
+NT=3D16>   =
+
+
+  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/6202229b781f07d=
+7805d6efc
+        new failure (last pass: next-20220128)
+        54 lines
+
+    2022-02-08T07:57:58.497071   r0 information: NULL pointer
+    2022-02-08T07:57:58.502473  kern  :alert : Register r1 information: non=
+-slab/vmalloc memory
+    2022-02-08T07:57:58.506192  kern  :alert : Register r2 information: non=
+-slab/vmalloc memory
+    2022-02-08T07:57:58.511901  kern  :alert : Register r3 information: non=
+-paged memory
+    2022-02-08T07:57:58.522683  kern  :alert : Register r4 information: sla=
+b kmalloc-1k start c445d000 pointer offset 64 size 1024
+    2022-02-08T07:57:58.526402  kern  :alert : Register r5 information: sla=
+b task_struct start c227b300 pointer offset 0
+    2022-02-08T07:57:58.537524  kern  :alert : Register r6 information: sla=
+b kmalloc-1k start c21a1c00 pointer offset 16 size 1024
+    2022-02-08T07:57:58.546685  kern  :alert : Register r7 information: sla=
+b kmalloc-1k start c445d000 pointer offset 128 size 1024
+    2022-02-08T07:57:58.552525  kern  :alert : Register r8 information: non=
+-slab/vmalloc memory
+    2022-02-08T07:57:58.563149  kern  :alert : Register r9 information: sla=
+b kmalloc-1k start c21a1c00 pointer offset 0 size 1024 =
+
+    ... (43 line(s) more)  =
+
+ =
+
+
+
+platform                 | arch   | lab             | compiler | defconfig =
+                   | regressions
+-------------------------+--------+-----------------+----------+-----------=
+-------------------+------------
+sun7i-a20-cubieboard2    | arm    | lab-clabbe      | gcc-10   | multi_v7_d=
+efc...CONFIG_SMP=3Dn | 2          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62022311fa3820eef45d6f25
+
+  Results:     4 PASS, 2 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220208/arm/=
+multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-10/lab-clabbe/baseline-sun7i-a20-cubi=
+eboard2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220208/arm/=
+multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-10/lab-clabbe/baseline-sun7i-a20-cubi=
+eboard2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220121.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/62022311fa3820e=
+ef45d6f2c
+        new failure (last pass: next-20220125)
+        16 lines
+
+    2022-02-08T07:59:58.183935  kern  :alert : 8<--- cut here ---
+    2022-02-08T07:59:58.194712  kern  :alert : Unable to handle kernel NULL=
+ pointer dereference at virtual address 00000188
+    2022-02-08T07:59:58.203974  kern  :alert : [00000188] *pgd=3D7d[   46.0=
+53906] <LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Dalert RESULT=3Dfail UNITS=3Dlin=
+es MEASUREMENT=3D16>
+    2022-02-08T07:59:58.204353  352835   =
+
+
+  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/62022311fa3820e=
+ef45d6f2d
+        new failure (last pass: next-20220125)
+        54 lines
+
+    2022-02-08T07:59:58.209369  kern  :alert : Register r0 information: NUL=
+L pointer
+    2022-02-08T07:59:58.214929  kern  :alert : Register r1 information: non=
+-slab/vmalloc memory
+    2022-02-08T07:59:58.218563  kern  :alert : Register r2 information: non=
+-slab/vmalloc memory
+    2022-02-08T07:59:58.224076  kern  :alert : Register r3 information: non=
+-paged memory
+    2022-02-08T07:59:58.235011  kern  :alert : Register r4 information: sla=
+b kmalloc-1k start c442a800 pointer offset 64 size 1024
+    2022-02-08T07:59:58.244500  kern  :alert : Register r5 information: sla=
+b task_struct start c4443480 pointer offset 0
+    2022-02-08T07:59:58.249654  kern  :alert : Register r6 information: sla=
+b kmalloc-1k start c20f4c00 pointer offset 16 size 1024
+    2022-02-08T07:59:58.258927  kern  :alert : Register r7 information: sla=
+b kmalloc-1k start c442a800 pointer offset 120 size 1024
+    2022-02-08T07:59:58.264440  kern  :alert : Register r8 information: non=
+-slab/vmalloc memory
+    2022-02-08T07:59:58.275364  kern  :alert : Register r9 information: sla=
+b kmalloc-1k start c20f4c00 pointer offset 0 size 1024 =
+
+    ... (43 line(s) more)  =
+
+ =
+
+
+
+platform                 | arch   | lab             | compiler | defconfig =
+                   | regressions
+-------------------------+--------+-----------------+----------+-----------=
+-------------------+------------
+sun7i-a20-cubieboard2    | arm    | lab-clabbe      | gcc-10   | multi_v7_d=
+efc...MB2_KERNEL=3Dy | 2          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6202246755e412b1195d6f1d
+
+  Results:     4 PASS, 2 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220208/arm/=
+multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab-clabbe/baseline-sun7=
+i-a20-cubieboard2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220208/arm/=
+multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab-clabbe/baseline-sun7=
+i-a20-cubieboard2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220121.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/6202246755e412b=
+1195d6f24
+        new failure (last pass: next-20220127)
+        16 lines
+
+    2022-02-08T08:05:40.654568  kern  :alert : 8<--- cut here ---
+    2022-02-08T08:05:40.665498  kern  :alert : Unable to handle kernel NULL=
+ pointer dereference at virtual address 000001a0
+    2022-02-08T08:05:40.665872  kern  :alert : [000001a0] *pgd=3D7d162835
+    2022-02-08T08:05:40.674716  kern  :alert : Register[   44.114252] <LAVA=
+_SIGNAL_TESTCASE TEST_CASE_ID=3Dalert RESULT=3Dfail UNITS=3Dlines MEASUREME=
+NT=3D16>   =
+
+
+  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/6202246755e412b=
+1195d6f25
+        new failure (last pass: next-20220127)
+        54 lines
+
+    2022-02-08T08:05:40.680192   r0 information: NULL pointer
+    2022-02-08T08:05:40.685672  kern  :alert : Register r1 information: non=
+-slab/vmalloc memory
+    2022-02-08T08:05:40.689209  kern  :alert : Register r2 information: non=
+-slab/vmalloc memory
+    2022-02-08T08:05:40.694850  kern  :alert : Register r3 information: non=
+-paged memory
+    2022-02-08T08:05:40.705802  kern  :alert : Register r4 information: sla=
+b kmalloc-1k start c4654800 pointer offset 64 size 1024
+    2022-02-08T08:05:40.715006  kern  :alert : Register r5 information: sla=
+b task_struct start c4581980 pointer offset 0
+    2022-02-08T08:05:40.720653  kern  :alert : Register r6 information: sla=
+b kmalloc-1k start c21a1c00 pointer offset 16 size 1024
+    2022-02-08T08:05:40.729565  kern  :alert : Register r7 information: sla=
+b kmalloc-1k start c4654800 pointer offset 128 size 1024
+    2022-02-08T08:05:40.734995  kern  :alert : Register r8 information: non=
+-slab/vmalloc memory
+    2022-02-08T08:05:40.745983  kern  :alert : Register r9 information: sla=
+b kmalloc-1k start c21a1c00 pointer offset 0 size 1024 =
+
+    ... (43 line(s) more)  =
+
+ =20

@@ -2,45 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 849EE4AE9D5
-	for <lists+linux-next@lfdr.de>; Wed,  9 Feb 2022 07:03:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E1E64AEA12
+	for <lists+linux-next@lfdr.de>; Wed,  9 Feb 2022 07:08:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229568AbiBIGAD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 9 Feb 2022 01:00:03 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:45818 "EHLO
+        id S232941AbiBIGHm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 9 Feb 2022 01:07:42 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:54132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233578AbiBIF6p (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 9 Feb 2022 00:58:45 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05290E00FA68;
-        Tue,  8 Feb 2022 21:58:46 -0800 (PST)
+        with ESMTP id S236250AbiBIGCo (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 9 Feb 2022 01:02:44 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDA26C05CB91;
+        Tue,  8 Feb 2022 22:02:47 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jtq1p0bDGz4xNq;
-        Wed,  9 Feb 2022 16:58:38 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jtq6Z1tFnz4xNn;
+        Wed,  9 Feb 2022 17:02:46 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1644386318;
-        bh=PQrMZ/nl25C90Hv0OCRYFicPXInOb23dgY9cuajsj2w=;
+        s=201702; t=1644386566;
+        bh=uxaaXvYIbtI4aegsfPOJtjkeOl5w2tl8Onh1/52Y3UI=;
         h=Date:From:To:Cc:Subject:From;
-        b=JfMAhXN/NG/6cBZRd6kIn8Kp7QyPvYoZ6QMmkUDQqd5rLWlL/zTgBusDoRoPALIhC
-         QDvk228g7kOOMkDbPoIBVVzEfNNFQYGbXlNgKa1eomcMFvvUoejEx5/fTZLRVVz+i3
-         3C0/8dftgQiTZo5V+e14CY31M2e3gJl3uhQ2caXhWjSQan4BD3QeL6DUUc/jHgAChE
-         aiE4agN0j59nzs7RrRRKHaENhH0iv1m3KGHRCpGz3372vb47OCBPwMLnYKlpZnY97c
-         86Zl++EuSv0Tf+tMTnmonCKDstF3H+8Tjq//jQal0fLdlmFoV7JTkgPWzaeuZV0UiV
-         K+SUbSDxUwTrg==
-Date:   Wed, 9 Feb 2022 16:58:37 +1100
+        b=JEmOY3f+PrmaLgzaoS1/h+UOwuEST3BWLFkg1C/eIduLraEwupOlF8Z78skyLXBqi
+         0qcVkrLvAy8CV+H2wpxD9TazffJZWfw2JZUMR4PKLSsNR/YZ3Q0l24alaBO1H1Qxby
+         r0BjOKN1hk0JdtXSBhzl7ZRW1EA9JvZowJVOKHju84DPOctP1WFc9/EDE5mgfym1dy
+         abQ7eRygw5WRMAWOl0MSPeuorV8CgiEZRkb7wsKioFiXNQ4n5LPdsXJP6Wukqy0D5h
+         lYblKlwJTZjsTs+35KRiYQ3K+FEtmbXXmw3DpF/T0/N2aZuJqd6XIIIZM75TRVL54Y
+         9Wz2QoP+ijAFA==
+Date:   Wed, 9 Feb 2022 17:02:45 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        "Huang, Ying" <ying.huang@intel.com>,
+Cc:     Hugh Dickins <hughd@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the akpm-current tree
-Message-ID: <20220209165837.19f27e9e@canb.auug.org.au>
+Subject: linux-next: build warnings after merge of the akpm-current tree
+Message-ID: <20220209170245.08968c92@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/.DUVFs/GQR7x4ulu.S3uNrm";
+Content-Type: multipart/signed; boundary="Sig_/Dee7nPj8oXldzM=GQLhF+HP";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -51,43 +50,42 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/.DUVFs/GQR7x4ulu.S3uNrm
+--Sig_/Dee7nPj8oXldzM=GQLhF+HP
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
 After merging the akpm-current tree, today's linux-next build (htmldocs)
-produced this warning:
+produced these warnings:
 
-Documentation/admin-guide/sysctl/kernel.rst:603: WARNING: Inconsistent lite=
-ral block quoting.
+include/linux/mm_types.h:272: warning: Function parameter or member '__fill=
+er' not described in 'folio'
+include/linux/mm_types.h:272: warning: Function parameter or member 'mlock_=
+count' not described in 'folio'
 
-Maybe introduced or exposed by commit
+Introduced by commit
 
-  68d17e593eb9 ("numa-balancing-optimize-page-placement-for-memory-tiering-=
-system-fix-fix")
-
-I am not clear what the warning means.
+  60a5c5ab0ba7 ("mm/munlock: maintain page->mlock_count while unevictable")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/.DUVFs/GQR7x4ulu.S3uNrm
+--Sig_/Dee7nPj8oXldzM=GQLhF+HP
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIDWA0ACgkQAVBC80lX
-0Gy5uAf9Fl0+lfaSNVz8AYwQvRdDTz8kfIzT/8X4u7++eu3X2kYh4asHJLrf9D0P
-RP1frgBOc2bdPVhF3Cx3ASlU6wnWWy2UkZy6hjG5GnZJlhAdyD2Utney+CyXCAlt
-5MEjY0jNKgBUnZjREhZtG/S/laKUgnroIytsqsQfCZKClm7NUKJqnrrbaMsIpa9e
-F6bPJ+k/IPMi1IzicG2WxulSjilc5c4l1G2kPXADBnGVl4iSPGIy92/cUV8jytEh
-+jj6XtC+2euqZaGgKgNiHSMm2uHFx8PbLqud2qf24LJKl6SroPEy+c8vzkfUc6J6
-nWZ2UoSS9lH/d5etI1CiZpLB9k482g==
-=VSaN
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIDWQUACgkQAVBC80lX
+0GxZZwf+IR40bxk5vxRy0bIafrZM+6L2eLLu1dGAl/UVhLcl65gzfePgODjI48rW
+JckKDQm8dKo9AynZkEVcrmMydEguGNNYtlYq2Of+WTuCKBfRaw+hXugzp25bI+e2
+4zBTPMInFJ4brUWzzKwc1CIxRMA73PfETZYX0X+M4zU77DP/tmHiR/8STWk3CyRX
+11vpm0vNTxRefEs52xJolPdy/Wf2BwC8ueGfzyyRcFWRToU7XRTvHgf5ZkyFuSzK
+A34dwxzhD4KYbpZAbGQ6UjQ1yxWKucN4BxLQiRb570ASow5IwLlLMxtr/11/LGhp
+9SRRHPEUjTJdUdNnf7iGu31I+H5IzA==
+=gLy4
 -----END PGP SIGNATURE-----
 
---Sig_/.DUVFs/GQR7x4ulu.S3uNrm--
+--Sig_/Dee7nPj8oXldzM=GQLhF+HP--

@@ -2,44 +2,47 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BD814AFF23
-	for <lists+linux-next@lfdr.de>; Wed,  9 Feb 2022 22:20:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 601B94B0353
+	for <lists+linux-next@lfdr.de>; Thu, 10 Feb 2022 03:27:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233235AbiBIVT6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 9 Feb 2022 16:19:58 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:47856 "EHLO
+        id S229901AbiBJC1c (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 9 Feb 2022 21:27:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233188AbiBIVT5 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 9 Feb 2022 16:19:57 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B82EAC014F32;
-        Wed,  9 Feb 2022 13:19:56 -0800 (PST)
+        with ESMTP id S229469AbiBJC1c (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 9 Feb 2022 21:27:32 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BC7C22BCE;
+        Wed,  9 Feb 2022 18:27:34 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JvCSp48DDz4xNn;
-        Thu, 10 Feb 2022 08:19:54 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JvH0y3Fwfz4xcp;
+        Thu, 10 Feb 2022 10:59:29 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1644441594;
-        bh=rxJNC65oBBpL7X2RVHQafH79h6Jp/lTESREKPAVVvp4=;
+        s=201702; t=1644451170;
+        bh=3taperdGKmrOZtQFKGHUJwb32+AU1uia470nz+nIGLg=;
         h=Date:From:To:Cc:Subject:From;
-        b=RgOfOo/Xpi4tVu4Lh81UDvCOEzTXJztTxDCH20R8Op4RG1PzMf37xmVDNmUCUDJEK
-         Ev2XZpFTPqTGuyuPUsYJpg4iPg8OKa0OhYeZt33RN3vIW6c46fEVdGjeOWLqVqQ58V
-         5YC3Nz3yrntnbuKPB4bJlQOEjq2B2ffjUr6YN//ZBtmb2kskdWWQro8r4LspCnz5Bn
-         Hh2xvUYmHaiFT8RT3395NM7tYgDyTfgJQ3MzEDQ3HvqAbdnhn+unkp8VIgAlb0SCNt
-         p9qY2qIWp5TAOPv5ARkKdsYHR299T6OZ5cRQKntON0QdQ3Cfkxdq54RcSn8yHm8+K9
-         mZUiBx8e0Nj/w==
-Date:   Thu, 10 Feb 2022 08:19:53 +1100
+        b=FvNQe8WgSZ81ocK6UfW2hJ442D6RROI38Bh57AKin/k4EWQkR+mRU2J/y+xxUu81E
+         O+FM4zz6hE1Zx80LFM9zaWxvZWIHwuPTK5tBe3/fAVg6u9K2oAONl87+Kugc1orZTT
+         HTs8DsPx2ULolcWL6VX/Hpgdo3ExhUstESq9agdHRzt4sRTJv+peBAK4KS1kTL5ua4
+         nWjk1j+UX9e1Ccg7FqyzYIumQtFdtKeGgKrYBsnSyH1NHMZSR/3p6xhACr3Rc9loQ2
+         CYng+mN4K05d46Cg36pKJyOQAhDMlxtBHL4oFE5D5QNzF+LlFMvkGg5j1Pbd30u6ZI
+         e3Wkna4SSCsng==
+Date:   Thu, 10 Feb 2022 10:59:28 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Yang Wang <KevinYang.Wang@amd.com>,
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Hariprasad Kelam <hkelam@marvell.com>,
+        Sunil Kovvuri Goutham <sgoutham@marvell.com>,
+        Sunil Kumar Kori <skori@marvell.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the amdgpu tree
-Message-ID: <20220210081953.48ff4dde@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the net-next tree
+Message-ID: <20220210105928.1877d587@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/5LVAXIeXe3Ook3DL7G9=qlt";
+Content-Type: multipart/signed; boundary="Sig_/JAQtZNoJvBCGJ1elJ+aszuF";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -50,46 +53,68 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/5LVAXIeXe3Ook3DL7G9=qlt
+--Sig_/JAQtZNoJvBCGJ1elJ+aszuF
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-In commit
+After merging the net-next tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-  41bea173d9b2 ("drm/amd/pm: drm/amd/pm: disable GetPptLimit message in sri=
-ov mode")
+In file included from include/linux/bitmap.h:9,
+                 from include/linux/cpumask.h:12,
+                 from arch/x86/include/asm/cpumask.h:5,
+                 from arch/x86/include/asm/msr.h:11,
+                 from arch/x86/include/asm/processor.h:22,
+                 from arch/x86/include/asm/timex.h:5,
+                 from include/linux/timex.h:65,
+                 from include/linux/time32.h:13,
+                 from include/linux/time.h:60,
+                 from include/linux/skbuff.h:15,
+                 from include/linux/if_ether.h:19,
+                 from include/linux/etherdevice.h:20,
+                 from drivers/net/ethernet/marvell/octeontx2/af/mbox.h:11,
+                 from drivers/net/ethernet/marvell/octeontx2/af/cgx.h:11,
+                 from drivers/net/ethernet/marvell/octeontx2/af/rpm.c:8:
+drivers/net/ethernet/marvell/octeontx2/af/rpm.c: In function 'rpm_cfg_pfc_q=
+uanta_thresh':
+include/linux/find.h:40:23: error: array subscript 'long unsigned int[0]' i=
+s partly outside array bounds of 'u16[1]' {aka 'short unsigned int[1]'} [-W=
+error=3Darray-bounds]
+   40 |                 val =3D *addr & GENMASK(size - 1, offset);
+      |                       ^~~~~
+drivers/net/ethernet/marvell/octeontx2/af/rpm.c:144:68: note: while referen=
+cing 'pfc_en'
+  144 | static void rpm_cfg_pfc_quanta_thresh(rpm_t *rpm, int lmac_id, u16 =
+pfc_en,
+      |                                                                ~~~~=
+^~~~~~
 
-Fixes tag
+Caused by commit
 
-  Fixes: f3527a6483fbcc ("drm/amd/pm: Enable sysfs required by rocm-smi too=
-lfor One VF mode")
+  1121f6b02e7a ("octeontx2-af: Priority flow control configuration support")
 
-has these problem(s):
-
-  - Subject does not match target commit subject
-    Just use
-	git log -1 --format=3D'Fixes: %h ("%s")'
+I have used the net-next tree frm next-20220209 for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/5LVAXIeXe3Ook3DL7G9=qlt
+--Sig_/JAQtZNoJvBCGJ1elJ+aszuF
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIEL/kACgkQAVBC80lX
-0GzKHgf+P+/lUv03I2Shis4TJFcMclj6wxdAHlcL5m+RM5T0De+JyIqvskmvbW/K
-+IpE8KwQtz91Ehc5E7XzcFZYJaX+IzZSd5k7vlyMX8fBXEN3eTBhfuybNNN58PkU
-oPbJiRRIYNaD6YyyyVhfFYSayabwN5GJywdsx4b6FEUEQ0BlnxzC2HevODiFrLp/
-14+qDxG+UoSS0oershDDMkMMA/OXJ0G402ekuXjKCT0LuF+sY390Prda1QNTndFr
-B5XpfeyhzxtKNwabK0DGZPRjUyUu79A51pFNOAeTqTZRaUrzhUOU81PU/Lwz0/EP
-6ivBsZMHCGhg1TfFNbIyG7vIRSvQjQ==
-=81xY
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIEVWAACgkQAVBC80lX
+0GzMIggAnZEdjRVp48k/a5FBizoXCCA3d36ID1HAPYJ3dMqKeZbAN06K6nieFiQS
+PzooAipsaw9kltj4vVGHUFsJh3owKWUgQUFgpsDt7Ni6WnwrAxTuJsszr1xIZhr0
+6nMnRdNBFiuymXSaEr4LtemzamnliYKi0SewLxDynI7QfcWLBiFI5ikiyvnH5TSZ
+BQebm3Wryv3XYWsHQyMsrT3QsV6mPRO7NLqYbQOKbojn79RwwVsA+xugy0rBzhcx
+Eyi1LIudq4NHEsgU49yHqdz8+t/4Wqv1fOifxVNjleGNoCEbofvDk6ldSAuVx9uk
+shO+lBaibvsyATz3mT1gzCRnKbo2kw==
+=Xslb
 -----END PGP SIGNATURE-----
 
---Sig_/5LVAXIeXe3Ook3DL7G9=qlt--
+--Sig_/JAQtZNoJvBCGJ1elJ+aszuF--

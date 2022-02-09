@@ -1,72 +1,48 @@
 Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14D514AF5F6
-	for <lists+linux-next@lfdr.de>; Wed,  9 Feb 2022 17:04:24 +0100 (CET)
+Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id 5BD814AFF23
+	for <lists+linux-next@lfdr.de>; Wed,  9 Feb 2022 22:20:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236463AbiBIQD1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 9 Feb 2022 11:03:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39298 "EHLO
+        id S233235AbiBIVT6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 9 Feb 2022 16:19:58 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:47856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236455AbiBIQD0 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 9 Feb 2022 11:03:26 -0500
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FD00C0612BE
-        for <linux-next@vger.kernel.org>; Wed,  9 Feb 2022 08:03:30 -0800 (PST)
-Received: by mail-qk1-x72e.google.com with SMTP id b35so1974339qkp.6
-        for <linux-next@vger.kernel.org>; Wed, 09 Feb 2022 08:03:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :mime-version;
-        bh=038Kq4HxYFM+fA4AaZi4fyE5bdjjt0bTEZgQgtvXcxo=;
-        b=abEhuyEoXj5fzKmch4cBB4p3U6tsw6pjAuCUQYzYkQ4U/RdCJVAXg6H3jCOjXD+6h0
-         mdayPkSRqrhmkOg54UpFoWXpXkxc8f55dlaV1DgPoEEhH9z8oBDdJXeyOoi66+QAkMGI
-         AX/99n+lZ6nYtC9WKiFmeqvnxVPBuG6xgyq667hYGdVlT3URrW/AMlMc/Vvdeb+j4QFX
-         S6Zggl1gO5lINVk1SqgS9uUPfP+VMXj47O3Zkikw8LUFptMbIjlpGzVWCLnwPpFxSfm2
-         94e67x1TsADR5GSl2mfbsZhRvuW7fSGtVdXeeimB+F7jChUg3NuubDS+qgkJbcucnyZt
-         7iuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:mime-version;
-        bh=038Kq4HxYFM+fA4AaZi4fyE5bdjjt0bTEZgQgtvXcxo=;
-        b=GYBaxf3qgkG2o4i3Pr+clWqVXKuOzrjX4BKb/AoOAsRujaXwdjIEE2n66Od01BS135
-         fRek4KIlsXTPOW0QCE17ShltMOse01aIzWO0fuqsDFJ0v+eAsHOPfTryVz0vv3p3KmMJ
-         aXtoOHXwnZRe8Mtu7/t/kupGxUk1cPspu5yZm1DqGBXeRHT4EN5KMQCb3C1799tUCNzx
-         8qNYjlk7eXsOkgdvoGQHZFR+nnQ0JXp76w7MrCKTa1pbUYrDDP3D1QzvtZ4x0vJZh7D9
-         v0NxVgI5FA4o7FgKq4SECplOWpyyS8J1BaXmHtxtbXL6lEBpa+aerizPKT6IGjR8cJNR
-         jWOw==
-X-Gm-Message-State: AOAM533El6aP2myGNCx5AO0Z4jnn/Yl5SJuq77SRoF8dIkF9q2gXgW30
-        qXokSnSPteGaGRQXFQT8EfnfXQ==
-X-Google-Smtp-Source: ABdhPJx2JVEbpZB2x+O1x3TuEv2vgIEl5U5HQXJalRC5/IJOEZUcM0zOngvhe9acRuJ6uEJQCjhLZg==
-X-Received: by 2002:a05:620a:22d4:: with SMTP id o20mr1514481qki.90.1644422609083;
-        Wed, 09 Feb 2022 08:03:29 -0800 (PST)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id o1sm9318353qkp.49.2022.02.09.08.03.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 08:03:28 -0800 (PST)
-Date:   Wed, 9 Feb 2022 08:03:26 -0800 (PST)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.anvils
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
+        with ESMTP id S233188AbiBIVT5 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 9 Feb 2022 16:19:57 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B82EAC014F32;
+        Wed,  9 Feb 2022 13:19:56 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JvCSp48DDz4xNn;
+        Thu, 10 Feb 2022 08:19:54 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1644441594;
+        bh=rxJNC65oBBpL7X2RVHQafH79h6Jp/lTESREKPAVVvp4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=RgOfOo/Xpi4tVu4Lh81UDvCOEzTXJztTxDCH20R8Op4RG1PzMf37xmVDNmUCUDJEK
+         Ev2XZpFTPqTGuyuPUsYJpg4iPg8OKa0OhYeZt33RN3vIW6c46fEVdGjeOWLqVqQ58V
+         5YC3Nz3yrntnbuKPB4bJlQOEjq2B2ffjUr6YN//ZBtmb2kskdWWQro8r4LspCnz5Bn
+         Hh2xvUYmHaiFT8RT3395NM7tYgDyTfgJQ3MzEDQ3HvqAbdnhn+unkp8VIgAlb0SCNt
+         p9qY2qIWp5TAOPv5ARkKdsYHR299T6OZ5cRQKntON0QdQ3Cfkxdq54RcSn8yHm8+K9
+         mZUiBx8e0Nj/w==
+Date:   Thu, 10 Feb 2022 08:19:53 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Yang Wang <KevinYang.Wang@amd.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warnings after merge of the akpm-current
- tree
-In-Reply-To: <20220209170245.08968c92@canb.auug.org.au>
-Message-ID: <d2701072-99e6-762b-bc80-64bda193c792@google.com>
-References: <20220209170245.08968c92@canb.auug.org.au>
+Subject: linux-next: Fixes tag needs some work in the amdgpu tree
+Message-ID: <20220210081953.48ff4dde@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: multipart/signed; boundary="Sig_/5LVAXIeXe3Ook3DL7G9=qlt";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,26 +50,46 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, 9 Feb 2022, Stephen Rothwell wrote:
+--Sig_/5LVAXIeXe3Ook3DL7G9=qlt
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> Hi all,
-> 
-> After merging the akpm-current tree, today's linux-next build (htmldocs)
-> produced these warnings:
-> 
-> include/linux/mm_types.h:272: warning: Function parameter or member '__filler' not described in 'folio'
-> include/linux/mm_types.h:272: warning: Function parameter or member 'mlock_count' not described in 'folio'
-> 
-> Introduced by commit
-> 
->   60a5c5ab0ba7 ("mm/munlock: maintain page->mlock_count while unevictable")
+Hi all,
 
-Thank you for including the patches and reporting this, Stephen.
-Is this a warning you can live with for a week or two?
+In commit
 
-I've never tried generating htmldocs (I'm tempted just to replace a few
-"/**"s by "/*"s!), and I'm fairly sure Matthew will have strong feelings
-about how this new union (or not) will be better foliated - me messing
-around with doc output here is unlikely to be helpful at this moment.
+  41bea173d9b2 ("drm/amd/pm: drm/amd/pm: disable GetPptLimit message in sri=
+ov mode")
 
-Hugh
+Fixes tag
+
+  Fixes: f3527a6483fbcc ("drm/amd/pm: Enable sysfs required by rocm-smi too=
+lfor One VF mode")
+
+has these problem(s):
+
+  - Subject does not match target commit subject
+    Just use
+	git log -1 --format=3D'Fixes: %h ("%s")'
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/5LVAXIeXe3Ook3DL7G9=qlt
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIEL/kACgkQAVBC80lX
+0GzKHgf+P+/lUv03I2Shis4TJFcMclj6wxdAHlcL5m+RM5T0De+JyIqvskmvbW/K
++IpE8KwQtz91Ehc5E7XzcFZYJaX+IzZSd5k7vlyMX8fBXEN3eTBhfuybNNN58PkU
+oPbJiRRIYNaD6YyyyVhfFYSayabwN5GJywdsx4b6FEUEQ0BlnxzC2HevODiFrLp/
+14+qDxG+UoSS0oershDDMkMMA/OXJ0G402ekuXjKCT0LuF+sY390Prda1QNTndFr
+B5XpfeyhzxtKNwabK0DGZPRjUyUu79A51pFNOAeTqTZRaUrzhUOU81PU/Lwz0/EP
+6ivBsZMHCGhg1TfFNbIyG7vIRSvQjQ==
+=81xY
+-----END PGP SIGNATURE-----
+
+--Sig_/5LVAXIeXe3Ook3DL7G9=qlt--

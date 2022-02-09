@@ -2,92 +2,98 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8F084AF48E
-	for <lists+linux-next@lfdr.de>; Wed,  9 Feb 2022 15:58:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14D514AF5F6
+	for <lists+linux-next@lfdr.de>; Wed,  9 Feb 2022 17:04:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235362AbiBIO6G (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 9 Feb 2022 09:58:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46358 "EHLO
+        id S236463AbiBIQD1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 9 Feb 2022 11:03:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232540AbiBIO6F (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 9 Feb 2022 09:58:05 -0500
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDBD5C06157B
-        for <linux-next@vger.kernel.org>; Wed,  9 Feb 2022 06:58:08 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id 192so6603860ybd.10
-        for <linux-next@vger.kernel.org>; Wed, 09 Feb 2022 06:58:08 -0800 (PST)
+        with ESMTP id S236455AbiBIQD0 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 9 Feb 2022 11:03:26 -0500
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FD00C0612BE
+        for <linux-next@vger.kernel.org>; Wed,  9 Feb 2022 08:03:30 -0800 (PST)
+Received: by mail-qk1-x72e.google.com with SMTP id b35so1974339qkp.6
+        for <linux-next@vger.kernel.org>; Wed, 09 Feb 2022 08:03:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=ECpUMaTdm+yyS+IRsgx6JK+2PJOAWfEZbqpS8KRUZVM=;
-        b=HtziXKNwy97T5nE4WySc3JUaj9CPpnWW5FC5nbT/LagHDXn71TVCpQ4AS2gUP0TTbO
-         0pF5q+D+Cdr+w69NbcO9hAMYvbTDBmXooJN6jICUEcfd2fjNPhg3jr/Rnp0c3+CSV/l1
-         vBfoGUMqkinuBVs3wgp44GH+BE6Qm/r63QstwFYosJR8ivZBa4UI1nwStTkGYZLUmHW1
-         LKgIgIAhr5n4grPxJaztFFvrqjIAiW1p/LxmHBNIvz/Ffo22R0kCpRx4LBHRxP+AsXqE
-         DG3opXXZKhg5P9yNB+RRXwDsUvg1cR75gRgbMAI0YejwfBwWcLG+/dsrAw+SABPIBWrn
-         A7rw==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :mime-version;
+        bh=038Kq4HxYFM+fA4AaZi4fyE5bdjjt0bTEZgQgtvXcxo=;
+        b=abEhuyEoXj5fzKmch4cBB4p3U6tsw6pjAuCUQYzYkQ4U/RdCJVAXg6H3jCOjXD+6h0
+         mdayPkSRqrhmkOg54UpFoWXpXkxc8f55dlaV1DgPoEEhH9z8oBDdJXeyOoi66+QAkMGI
+         AX/99n+lZ6nYtC9WKiFmeqvnxVPBuG6xgyq667hYGdVlT3URrW/AMlMc/Vvdeb+j4QFX
+         S6Zggl1gO5lINVk1SqgS9uUPfP+VMXj47O3Zkikw8LUFptMbIjlpGzVWCLnwPpFxSfm2
+         94e67x1TsADR5GSl2mfbsZhRvuW7fSGtVdXeeimB+F7jChUg3NuubDS+qgkJbcucnyZt
+         7iuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=ECpUMaTdm+yyS+IRsgx6JK+2PJOAWfEZbqpS8KRUZVM=;
-        b=sweJE1p2dwPzQERXhKXWQ7I9lFNibS8NBBF4vN187ZMBwZWRILBXfMsezeywZNg0B3
-         ysegle/3LIE7XiIKLwBzSLOrzJipsLVXOv+SzkkRkjVFhBxRkwS5EVgzInu7FzV+l/rj
-         5yRb+HwbD/VPNSTbf3an2/uZkLFAP17usTGGnQ+LphaWa9QrE1JUp1ARgsJE6Ll/Vlp/
-         LMEoWGGrxzH20QGd9fuNuUJQz7wuICOunkxuj1FLYfZTtep5xf7V3GpZ+omvrEoyeRQM
-         HW01fXDF5/w9M/xeMIyuTI6UpERtk3F7g11D8/26/Am1rKblAsSlhqB/ZjaaRS/HpJd4
-         PwVg==
-X-Gm-Message-State: AOAM53183npfW14A3lfDBqUt7UQroSQu5L4kv5PXPs5+oeym8NKAoGMR
-        O6ynucGS+dl6vZmtSM5SpAQmTcGgcgXb0dCb0b+TtA==
-X-Google-Smtp-Source: ABdhPJx6k/2CaivTOLnv01Uwjtg/gSghQiwECY/vFRnpXknpD8tKFEXHMvirvryWKGLl396E5KSyDbgKusErY0jh9FY=
-X-Received: by 2002:a25:6b45:: with SMTP id o5mr2446049ybm.704.1644418687758;
- Wed, 09 Feb 2022 06:58:07 -0800 (PST)
-MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 9 Feb 2022 20:27:56 +0530
-Message-ID: <CA+G9fYv_ssRhvYi4mM1ZeGCL2meFwRsakpADp_Cz3bNDZz2zSA@mail.gmail.com>
-Subject: Re: mm/munlock: mlock_page() munlock_page() batch by pagevec
-To:     open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        regressions@lists.linux.dev, lkft-triage@lists.linaro.org
-Cc:     Hugh Dickins <hughd@google.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        David Hildenbrand <david@redhat.com>,
-        Greg Thelen <gthelen@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:mime-version;
+        bh=038Kq4HxYFM+fA4AaZi4fyE5bdjjt0bTEZgQgtvXcxo=;
+        b=GYBaxf3qgkG2o4i3Pr+clWqVXKuOzrjX4BKb/AoOAsRujaXwdjIEE2n66Od01BS135
+         fRek4KIlsXTPOW0QCE17ShltMOse01aIzWO0fuqsDFJ0v+eAsHOPfTryVz0vv3p3KmMJ
+         aXtoOHXwnZRe8Mtu7/t/kupGxUk1cPspu5yZm1DqGBXeRHT4EN5KMQCb3C1799tUCNzx
+         8qNYjlk7eXsOkgdvoGQHZFR+nnQ0JXp76w7MrCKTa1pbUYrDDP3D1QzvtZ4x0vJZh7D9
+         v0NxVgI5FA4o7FgKq4SECplOWpyyS8J1BaXmHtxtbXL6lEBpa+aerizPKT6IGjR8cJNR
+         jWOw==
+X-Gm-Message-State: AOAM533El6aP2myGNCx5AO0Z4jnn/Yl5SJuq77SRoF8dIkF9q2gXgW30
+        qXokSnSPteGaGRQXFQT8EfnfXQ==
+X-Google-Smtp-Source: ABdhPJx2JVEbpZB2x+O1x3TuEv2vgIEl5U5HQXJalRC5/IJOEZUcM0zOngvhe9acRuJ6uEJQCjhLZg==
+X-Received: by 2002:a05:620a:22d4:: with SMTP id o20mr1514481qki.90.1644422609083;
+        Wed, 09 Feb 2022 08:03:29 -0800 (PST)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id o1sm9318353qkp.49.2022.02.09.08.03.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Feb 2022 08:03:28 -0800 (PST)
+Date:   Wed, 9 Feb 2022 08:03:26 -0800 (PST)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.anvils
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
         Matthew Wilcox <willy@infradead.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Rik van Riel <riel@surriel.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>, Yu Zhao <yuzhao@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warnings after merge of the akpm-current
+ tree
+In-Reply-To: <20220209170245.08968c92@canb.auug.org.au>
+Message-ID: <d2701072-99e6-762b-bc80-64bda193c792@google.com>
+References: <20220209170245.08968c92@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-The following build regression noticed while building Linux next 20220209
-arm/riscv/sh of allnoconfig and tinyconfig builds failed with gcc-10,
-gcc-11 and clang-13.
+On Wed, 9 Feb 2022, Stephen Rothwell wrote:
 
-clang: warning: argument unused during compilation: '-march=armv7-m'
-[-Wunused-command-line-argument]
-mm/swap.c:637:2: error: implicit declaration of function
-'mlock_page_drain' [-Werror,-Wimplicit-function-declaration]
-        mlock_page_drain(cpu);
-        ^
-1 error generated.
-make[2]: *** [scripts/Makefile.build:289: mm/swap.o] Error 1
+> Hi all,
+> 
+> After merging the akpm-current tree, today's linux-next build (htmldocs)
+> produced these warnings:
+> 
+> include/linux/mm_types.h:272: warning: Function parameter or member '__filler' not described in 'folio'
+> include/linux/mm_types.h:272: warning: Function parameter or member 'mlock_count' not described in 'folio'
+> 
+> Introduced by commit
+> 
+>   60a5c5ab0ba7 ("mm/munlock: maintain page->mlock_count while unevictable")
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Thank you for including the patches and reporting this, Stephen.
+Is this a warning you can live with for a week or two?
 
---
-Linaro LKFT
-https://lkft.linaro.org
+I've never tried generating htmldocs (I'm tempted just to replace a few
+"/**"s by "/*"s!), and I'm fairly sure Matthew will have strong feelings
+about how this new union (or not) will be better foliated - me messing
+around with doc output here is unlikely to be helpful at this moment.
+
+Hugh

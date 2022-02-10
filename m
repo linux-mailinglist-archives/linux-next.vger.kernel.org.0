@@ -2,47 +2,47 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED1CF4B068D
-	for <lists+linux-next@lfdr.de>; Thu, 10 Feb 2022 07:48:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 863654B0766
+	for <lists+linux-next@lfdr.de>; Thu, 10 Feb 2022 08:43:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235570AbiBJGsA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 10 Feb 2022 01:48:00 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53154 "EHLO
+        id S234594AbiBJHnn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 10 Feb 2022 02:43:43 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235569AbiBJGr7 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 10 Feb 2022 01:47:59 -0500
+        with ESMTP id S229613AbiBJHnm (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 10 Feb 2022 02:43:42 -0500
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50264DC5;
-        Wed,  9 Feb 2022 22:48:00 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A0D2D71;
+        Wed,  9 Feb 2022 23:43:43 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JvS4F5rqCz4xdJ;
-        Thu, 10 Feb 2022 17:47:57 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JvTJY4C9Xz4xNn;
+        Thu, 10 Feb 2022 18:43:41 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1644475678;
-        bh=td1kwnruqGnsMEqEKZXdiubcxx9JjEhXWqXjQMDC40w=;
+        s=201702; t=1644479021;
+        bh=GmNUgiuUI4wGUSUdmWY5dDIG/MzEogexYWKT6/FN4yY=;
         h=Date:From:To:Cc:Subject:From;
-        b=bNFirlc2F62z+TBdsiG1HQg1njp4uzIH2tCX18Ckf1EIhnAASsWuaKqLQbq8WOcW9
-         KCn6mBmNFNjdB1W3aqKc1I5/NzTE1De2lFYwY56/K08FZObhov7WHQPtjhrvge/NnF
-         kwlPPVBhoSlJ46yGAZgGZTOdEAMdQfQ+tWconO4T51JnMxvFCFuTKaOO76M5Tfjm1H
-         SDUsThkwzG1xSIRtfSxi0fmrvJL7LBEVrz/viCB5NXpsjfNAIUZ9JVI5Fv9EVvY5sL
-         9etSpgOBN9aq5tKkAjp0BQHt/HTkElEJAOWzvI8aKSSISicDjrFsqiTj7yB4axhBIz
-         CspKvNmQo1ekg==
-Date:   Thu, 10 Feb 2022 17:47:57 +1100
+        b=emDPeTRTCRm47PXxPT10cG4F0JiPSV2V+r4ZtTaGbpo2r/aYi2xX3zyHo4dBM3QAS
+         2jEmHAZdlJp4PN1Qe/fsGMqhLz/e26uj/9Goz7fgk8Xa9JeXVgSecijH31PNhG/Tcn
+         nhYKICNfJt4hO1gMOC898vgBDxbyQ5C7CLpxWRqpMFtZFN92CLr4hqyD6yHQMCQTiS
+         hdm58m1lcHrf1eKbfr8yW7q339Q648hCXFfRsnMHsp3/cMV0Ntgjv4LpiXZAiRruPw
+         4KQx5ZFCL+wsKLSUul480U6jZD8upDnOF0epJFIcu2N0NO6f/53+2abSvSo/4wk+Bo
+         O6x9LlXE6tJGQ==
+Date:   Thu, 10 Feb 2022 18:43:40 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>
-Cc:     Karolina Drobnik <karolinadrobnik@gmail.com>,
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Domenico Andreoli <domenico.andreoli@linux.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Tong Zhang <ztong0001@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        NeilBrown <neilb@suse.de>
-Subject: linux-next: manual merge of the akpm-current tree with the memblock
- tree
-Message-ID: <20220210174757.551a76c8@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: boottime warning from todays linux-next
+Message-ID: <20220210184340.7eba108a@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/_mW0RoHFD7s=vAev_6fW7_f";
+Content-Type: multipart/signed; boundary="Sig_/8XH3mUK8e..xQKie=tiiqmM";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -53,85 +53,49 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/_mW0RoHFD7s=vAev_6fW7_f
+--Sig_/8XH3mUK8e..xQKie=tiiqmM
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the akpm-current tree got a conflict in:
+My qemu boot of a powerpc pseries_le_defconfig kernel produced these
+kernel messages:
 
-  tools/testing/radix-tree/linux/gfp.h
+  CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.17.0-rc3 #2
+  Call Trace:
+  [c0000000073e3a80] [c0000000007bfd40] dump_stack_lvl+0x74/0xa8 (unreliabl=
+e)
+  [c0000000073e3ac0] [c00000000057e3dc] __register_sysctl_table+0x60c/0x9f0
+  [c0000000073e3bd0] [c000000002041170] init_fs_stat_sysctls+0x48/0x60
+  [c0000000073e3bf0] [c000000000012110] do_one_initcall+0x60/0x2d0
+  [c0000000073e3cd0] [c0000000020049f0] kernel_init_freeable+0x334/0x3dc
+  [c0000000073e3db0] [c000000000012710] kernel_init+0x30/0x1a0
+  [c0000000073e3e10] [c00000000000cd64] ret_from_kernel_thread+0x5c/0x64
 
-between commit:
+Presumably introduced by commit
 
-  5a198c3f9b0b ("tools: Move gfp.h and slab.h from radix-tree to lib")
-
-from the memblock tree and commit:
-
-  752fdadfaf92 ("mm: discard __GFP_ATOMIC")
-
-from the akpm-current tree.
-
-I fixed it up (I deleted the file and then added the following merge fix
-patch) and can carry the fix as necessary. This is now fixed as far as
-linux-next is concerned, but any non trivial conflicts should be mentioned
-to your upstream maintainer when your tree is submitted for merging.
-You may also want to consider cooperating with the maintainer of the
-conflicting tree to minimise any particularly complex conflicts.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Thu, 10 Feb 2022 17:44:54 +1100
-Subject: [PATCH] fix pu for "tools: Move gfp.h and slab.h from radix-tree t=
-o lib"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- tools/include/linux/gfp.h | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/tools/include/linux/gfp.h b/tools/include/linux/gfp.h
-index b238dbc9eb85..56eec4445bc9 100644
---- a/tools/include/linux/gfp.h
-+++ b/tools/include/linux/gfp.h
-@@ -12,7 +12,6 @@
- #define __GFP_FS		0x80u
- #define __GFP_NOWARN		0x200u
- #define __GFP_ZERO		0x8000u
--#define __GFP_ATOMIC		0x80000u
- #define __GFP_ACCOUNT		0x100000u
- #define __GFP_DIRECT_RECLAIM	0x400000u
- #define __GFP_KSWAPD_RECLAIM	0x2000000u
-@@ -20,7 +19,7 @@
- #define __GFP_RECLAIM	(__GFP_DIRECT_RECLAIM | __GFP_KSWAPD_RECLAIM)
-=20
- #define GFP_ZONEMASK	0x0fu
--#define GFP_ATOMIC	(__GFP_HIGH | __GFP_ATOMIC | __GFP_KSWAPD_RECLAIM)
-+#define GFP_ATOMIC	(__GFP_HIGH | __GFP_KSWAPD_RECLAIM)
- #define GFP_KERNEL	(__GFP_RECLAIM | __GFP_IO | __GFP_FS)
- #define GFP_NOWAIT	(__GFP_KSWAPD_RECLAIM)
-=20
---=20
-2.34.1
+  b42bc9a3c511 ("Fix regression due to "fs: move binfmt_misc sysctl to its =
+own file"")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/_mW0RoHFD7s=vAev_6fW7_f
+--Sig_/8XH3mUK8e..xQKie=tiiqmM
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIEtR0ACgkQAVBC80lX
-0GxkNQgAhkdruj1fMatkNFv2d8MbItyhAsd9jMNAI8c7rmB4Cp9W0M7AitG/fo4y
-LcSiET0VWp5Qv6JsYs7dppqgTpVm62W6lUp9WcpG3YAK9CDbswLFuT6NtAlAgQul
-J/islTJdI+BnKTEGF2cMqJgn/GBe9yH6erPhFR+T0kF05ZhbefRgLqX/Bj+vZ5Fe
-AcMfPR3giEq0oblVERmMPyli9BMi2OsWIwhFUqjXy+EpXU1U4U0mKd2EgQWd5uK4
-eX+ciDschMUPyOpWJkWC2h8nqs7ehn+IunEiKdeVz/fotzfG89q7W+zjDgB9qHZr
-GhxsHR6JEgrL108uUFay+KpwAXNSjQ==
-=fBDw
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIEwiwACgkQAVBC80lX
+0Gwpkgf9FDhRS+oGJo17XZiR5FrLO60Ay9dM8qIytpbmnlTFvtVeLvArQxicdbK8
+Kh53VnqgHwF4j4l1D/wrH1tgLR5r3WT8/loOOkx7ZOBl+LyAhfEjzSLMjkVqFDJ4
+T0b/7Nbn1ckNZhqCNyk9YVcwC6YJ4Nvb8lQgt8DLc9AWjDJVi/KKO+lZMhEDca4E
+0ZKTrDgCOU7YTM2k/Tt8nvn46ZIavA9ilD9AXwkKMlLU7hpVh3y3I1jhQYxZy5M+
+fsNjv1LRTthpYaSZMC0gSq7H7RpWV8x30oNb0gEmzkTtvLVAJ1TrYCLnxGzvG4B0
+Dq7ZCs44FQO5uKgHRJZP0W3cRj26YQ==
+=dnGc
 -----END PGP SIGNATURE-----
 
---Sig_/_mW0RoHFD7s=vAev_6fW7_f--
+--Sig_/8XH3mUK8e..xQKie=tiiqmM--

@@ -2,47 +2,47 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 601B94B0353
-	for <lists+linux-next@lfdr.de>; Thu, 10 Feb 2022 03:27:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 114E14B0351
+	for <lists+linux-next@lfdr.de>; Thu, 10 Feb 2022 03:27:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229901AbiBJC1c (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 9 Feb 2022 21:27:32 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42728 "EHLO
+        id S229882AbiBJCZS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 9 Feb 2022 21:25:18 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiBJC1c (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 9 Feb 2022 21:27:32 -0500
+        with ESMTP id S229469AbiBJCZQ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 9 Feb 2022 21:25:16 -0500
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BC7C22BCE;
-        Wed,  9 Feb 2022 18:27:34 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7904822BCC;
+        Wed,  9 Feb 2022 18:25:17 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JvH0y3Fwfz4xcp;
-        Thu, 10 Feb 2022 10:59:29 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JvLF41rmvz4xcZ;
+        Thu, 10 Feb 2022 13:25:12 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1644451170;
-        bh=3taperdGKmrOZtQFKGHUJwb32+AU1uia470nz+nIGLg=;
+        s=201702; t=1644459913;
+        bh=D+DjfAKMXi5ZeAZiu2dE72zIwqk88EIi86SvqawOGw8=;
         h=Date:From:To:Cc:Subject:From;
-        b=FvNQe8WgSZ81ocK6UfW2hJ442D6RROI38Bh57AKin/k4EWQkR+mRU2J/y+xxUu81E
-         O+FM4zz6hE1Zx80LFM9zaWxvZWIHwuPTK5tBe3/fAVg6u9K2oAONl87+Kugc1orZTT
-         HTs8DsPx2ULolcWL6VX/Hpgdo3ExhUstESq9agdHRzt4sRTJv+peBAK4KS1kTL5ua4
-         nWjk1j+UX9e1Ccg7FqyzYIumQtFdtKeGgKrYBsnSyH1NHMZSR/3p6xhACr3Rc9loQ2
-         CYng+mN4K05d46Cg36pKJyOQAhDMlxtBHL4oFE5D5QNzF+LlFMvkGg5j1Pbd30u6ZI
-         e3Wkna4SSCsng==
-Date:   Thu, 10 Feb 2022 10:59:28 +1100
+        b=W6Jfedq8r5SZVRHpVoRk67DH9Fa4nwuN+h8A1CELYz+0QVAC3tkLYyU5TXBoMDeSp
+         Qq/fmHvAUqxqUD+YWrgyrh7efCTRwvnor+ttJm1UnVe+WzNsWxc/ROZh2vy+S4JJjM
+         MGassANnWlFmf46Radn9zbrtPz8Clj3JVspbLDzcAx7jaQ/NoJJBtiHadI3MqKOhuG
+         RpbnkMwhiOfA4JMfRw2LDREKmeJBzZGfoEcPSDJmr6gb8G5nS67NADQ/AFFE3SCZmc
+         dSe7z1XcfT7xUMF4aAtVuuFHvFAFy3c8phrhPtjBahCF20z3kcbtWUy2j5xDUWgtJb
+         hcBrWEoIkaeAg==
+Date:   Thu, 10 Feb 2022 13:25:06 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Hariprasad Kelam <hkelam@marvell.com>,
-        Sunil Kovvuri Goutham <sgoutham@marvell.com>,
-        Sunil Kumar Kori <skori@marvell.com>,
+To:     Mark Brown <broonie@kernel.org>, Guenter Roeck <linux@roeck-us.net>
+Cc:     Cosmin Tanislav <cosmin.tanislav@analog.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the net-next tree
-Message-ID: <20220210105928.1877d587@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
+        <u.kleine-koenig@pengutronix.de>
+Subject: linux-next: manual merge of the spi tree with the hwmon-staging
+ tree
+Message-ID: <20220210132506.051144fb@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/JAQtZNoJvBCGJ1elJ+aszuF";
+Content-Type: multipart/signed; boundary="Sig_/pZxQmqOA4f0WuT9GPIXjHtV";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -53,68 +53,53 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/JAQtZNoJvBCGJ1elJ+aszuF
+--Sig_/pZxQmqOA4f0WuT9GPIXjHtV
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the net-next tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+Today's linux-next merge of the spi tree got a conflict in:
 
-In file included from include/linux/bitmap.h:9,
-                 from include/linux/cpumask.h:12,
-                 from arch/x86/include/asm/cpumask.h:5,
-                 from arch/x86/include/asm/msr.h:11,
-                 from arch/x86/include/asm/processor.h:22,
-                 from arch/x86/include/asm/timex.h:5,
-                 from include/linux/timex.h:65,
-                 from include/linux/time32.h:13,
-                 from include/linux/time.h:60,
-                 from include/linux/skbuff.h:15,
-                 from include/linux/if_ether.h:19,
-                 from include/linux/etherdevice.h:20,
-                 from drivers/net/ethernet/marvell/octeontx2/af/mbox.h:11,
-                 from drivers/net/ethernet/marvell/octeontx2/af/cgx.h:11,
-                 from drivers/net/ethernet/marvell/octeontx2/af/rpm.c:8:
-drivers/net/ethernet/marvell/octeontx2/af/rpm.c: In function 'rpm_cfg_pfc_q=
-uanta_thresh':
-include/linux/find.h:40:23: error: array subscript 'long unsigned int[0]' i=
-s partly outside array bounds of 'u16[1]' {aka 'short unsigned int[1]'} [-W=
-error=3Darray-bounds]
-   40 |                 val =3D *addr & GENMASK(size - 1, offset);
-      |                       ^~~~~
-drivers/net/ethernet/marvell/octeontx2/af/rpm.c:144:68: note: while referen=
-cing 'pfc_en'
-  144 | static void rpm_cfg_pfc_quanta_thresh(rpm_t *rpm, int lmac_id, u16 =
-pfc_en,
-      |                                                                ~~~~=
-^~~~~~
+  drivers/hwmon/adt7310.c
 
-Caused by commit
+between commits:
 
-  1121f6b02e7a ("octeontx2-af: Priority flow control configuration support")
+  9c950b125f78 ("hwmon: (adt7x10) Remove empty driver removal callback")
 
-I have used the net-next tree frm next-20220209 for today.
+from the hwmon-staging tree and commit:
+
+  a0386bba7093 ("spi: make remove callback a void function")
+
+from the spi tree.
+
+I fixed it up (I just used the former version) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
+
+
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/JAQtZNoJvBCGJ1elJ+aszuF
+--Sig_/pZxQmqOA4f0WuT9GPIXjHtV
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIEVWAACgkQAVBC80lX
-0GzMIggAnZEdjRVp48k/a5FBizoXCCA3d36ID1HAPYJ3dMqKeZbAN06K6nieFiQS
-PzooAipsaw9kltj4vVGHUFsJh3owKWUgQUFgpsDt7Ni6WnwrAxTuJsszr1xIZhr0
-6nMnRdNBFiuymXSaEr4LtemzamnliYKi0SewLxDynI7QfcWLBiFI5ikiyvnH5TSZ
-BQebm3Wryv3XYWsHQyMsrT3QsV6mPRO7NLqYbQOKbojn79RwwVsA+xugy0rBzhcx
-Eyi1LIudq4NHEsgU49yHqdz8+t/4Wqv1fOifxVNjleGNoCEbofvDk6ldSAuVx9uk
-shO+lBaibvsyATz3mT1gzCRnKbo2kw==
-=Xslb
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIEd4IACgkQAVBC80lX
+0Gz+XggAhrfUjMFc0bg3rXBvjg7x8CqRjr9IVh5JO3IPPsRGZfcxAa1XsVoZ22IA
+Pepvi5L47TFuxW/SQF5g3IlV4fzM5URGcrBpkV6K1qUwIpU3glXGmny9qlp4YPy1
+tSy4MfoiAi4oWx5e9h19saPvyXGNbDMy5v9viEsbTnhmxhDlnScXqRxGB9daRj+X
+mhdZ2uncZoliWF9cJMl1/O6laPISMD2rZrslPZu4oLBemZP4GFF5ii7bDSr4fXUH
+fB14dlJuB4jHjJ9pCSYPGff34st1vAHti0zA2TX1ztA0FVMGOM+jKyDlLF5y5DmA
+n8h7q/t62gQnlRF3tWRJcW4r4zrNYg==
+=SiyM
 -----END PGP SIGNATURE-----
 
---Sig_/JAQtZNoJvBCGJ1elJ+aszuF--
+--Sig_/pZxQmqOA4f0WuT9GPIXjHtV--

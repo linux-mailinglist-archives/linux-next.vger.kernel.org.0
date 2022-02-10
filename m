@@ -2,216 +2,174 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 738D34B0A0C
-	for <lists+linux-next@lfdr.de>; Thu, 10 Feb 2022 10:56:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A4504B0B0C
+	for <lists+linux-next@lfdr.de>; Thu, 10 Feb 2022 11:41:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237363AbiBJJ4K (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 10 Feb 2022 04:56:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42168 "EHLO
+        id S239912AbiBJKlc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 10 Feb 2022 05:41:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232675AbiBJJ4J (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 10 Feb 2022 04:56:09 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70808128
-        for <linux-next@vger.kernel.org>; Thu, 10 Feb 2022 01:56:11 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id y18so1365791plb.11
-        for <linux-next@vger.kernel.org>; Thu, 10 Feb 2022 01:56:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=TdQ31KRpPriQhlrUevLbqCFUVR1pLkZyM/eTfdGpq8o=;
-        b=6Qk7scXYcJ03uAGOqdahgYFvxDiu6ZXQuwrC7TyFwUZpf8YeasvWRkqSqyLav296xG
-         vbkGsMgC1GAHCJpzYDCQqy05Tp+mBG8gh0RIV2UWfep2BKUAzFW5LsGKHxduZ4ga9dSm
-         AyGFn9P2Dcdoed9aaUyDpOSczZBk3zJX0s9feCRkvyspI2ad22iKv3llc4EjX6K3Qdo9
-         M8Qif4TaXZfb56k71HuYLc9LQWPHJDeZ46VC2Fi7v/gaOK5Bb2qTjB9cVAS4DgBnZKRs
-         W7MZmJZRA3JmsrxX/l7Hh39m6BcT8oAI9wDn21JgoUpKSYAqRJX0ibvWORLzjIxT5dcd
-         TDYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=TdQ31KRpPriQhlrUevLbqCFUVR1pLkZyM/eTfdGpq8o=;
-        b=42OP0lox6KP59liOqNky32OGvcxrbhB/MiHjKFqqV3r55fZvrzPiryFgzlBzTdGTRf
-         JFyKWwjyXLbfJwXAlWia9kjlayL/uF1C8sK05fJCY6nDna7ffzi0HDHhrx+kWorD+iKp
-         Z+3Iz4P9d7VWVxVyPuuCxjTxijrxAuSq0JK3vUAx4xk6Man+E+OvchXeRhACKRIVb1II
-         HHa1mWeYKEUoIAzga7Ja/ZquKYb2VJXUpcrCVyZsBTI416cmVcb0Q5hHn95JkclpSX6P
-         KyOCo4UqH5aZtErrTjY2H6o2hR7eM5XpcnlDooO4jANjDPNc9bn/Dpx4D4yHQ4w6a/tC
-         5pBQ==
-X-Gm-Message-State: AOAM5301tSi7BpCGCFKa24SGNeAK2g4Q4UY+IsCxu7jOz7TD54iztrAv
-        DidrHQkC8HK7O9Cq2osRKl/Ys7BnBHwindIMpso=
-X-Google-Smtp-Source: ABdhPJyqGZo27tcqgvKbtaAinGENpQgpEAqCtqvku5mQhzHayJuXqWeUqD4Cvt48LWOYzkxLWpenXw==
-X-Received: by 2002:a17:90b:3512:: with SMTP id ls18mr1924396pjb.224.1644486970792;
-        Thu, 10 Feb 2022 01:56:10 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id m20sm23322601pfk.215.2022.02.10.01.56.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 01:56:10 -0800 (PST)
-Message-ID: <6204e13a.1c69fb81.616df.a13c@mx.google.com>
-Date:   Thu, 10 Feb 2022 01:56:10 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S237058AbiBJKlb (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 10 Feb 2022 05:41:31 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 747A5C39;
+        Thu, 10 Feb 2022 02:41:32 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JvYFk6blpz4xNn;
+        Thu, 10 Feb 2022 21:41:30 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1644489691;
+        bh=zM4o1zwgm3vw53ogWM5KCUtOhCfuY1zqv412d3b2K3U=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=E0SAWAeeobP5SsoupU89jcdHIvijYDUJsEHXq0NW4l4TAeX3Ih89zQf/IebVg4Zuj
+         yrP+S7jUadk9wg4fB9NomjPalK5cWxURQp1YBlp493ghAkGkr3coBQJUf4My0u44jG
+         NTxgrU73G7viM0hkGfvp5KB4oNoHVD6Dq/LCo9GuSGTrShkVSrnMmoPbfVirh0DtOU
+         NEWQelcFlvW195iNAqd7BHNg9Yd9Bp7xhjB6y1UdPqYj260sBst8HG2oGLuYhoF+YU
+         XRD7yrHWPE9X8A9dRrtcZs0fdJ1Fgxbfddx17XFpcHjEaaYsEJDvL8wi/ZG1vSO7ld
+         N5KL8OzB9jytg==
+Date:   Thu, 10 Feb 2022 21:41:25 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Domenico Andreoli <domenico.andreoli@linux.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Tong Zhang <ztong0001@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: boottime warning from todays linux-next
+Message-ID: <20220210214125.2b248790@canb.auug.org.au>
+In-Reply-To: <20220210193302.686fa61a@canb.auug.org.au>
+References: <20220210184340.7eba108a@canb.auug.org.au>
+        <20220210193302.686fa61a@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Tree: next
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Kernel: v5.17-rc3-356-gdfd7907f4e4f
-Subject: next/pending-fixes baseline: 308 runs,
- 3 regressions (v5.17-rc3-356-gdfd7907f4e4f)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/.9oRFWI6oIp8UvKbLn8tZsd";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes baseline: 308 runs, 3 regressions (v5.17-rc3-356-gdfd790=
-7f4e4f)
+--Sig_/.9oRFWI6oIp8UvKbLn8tZsd
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Regressions Summary
--------------------
+Hi all,
 
-platform               | arch   | lab           | compiler | defconfig     =
-               | regressions
------------------------+--------+---------------+----------+---------------=
----------------+------------
-asus-C436FA-Flip-hatch | x86_64 | lab-collabora | gcc-10   | x86_64_defcon.=
-..6-chromebook | 1          =
+On Thu, 10 Feb 2022 19:33:02 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> On Thu, 10 Feb 2022 18:43:40 +1100 Stephen Rothwell <sfr@canb.auug.org.au=
+> wrote:
+> >
+> > My qemu boot of a powerpc pseries_le_defconfig kernel produced these
+> > kernel messages:
+> >=20
+> >   CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.17.0-rc3 #2
+> >   Call Trace:
+> >   [c0000000073e3a80] [c0000000007bfd40] dump_stack_lvl+0x74/0xa8 (unrel=
+iable)
+> >   [c0000000073e3ac0] [c00000000057e3dc] __register_sysctl_table+0x60c/0=
+x9f0
+> >   [c0000000073e3bd0] [c000000002041170] init_fs_stat_sysctls+0x48/0x60
+> >   [c0000000073e3bf0] [c000000000012110] do_one_initcall+0x60/0x2d0
+> >   [c0000000073e3cd0] [c0000000020049f0] kernel_init_freeable+0x334/0x3dc
+> >   [c0000000073e3db0] [c000000000012710] kernel_init+0x30/0x1a0
+> >   [c0000000073e3e10] [c00000000000cd64] ret_from_kernel_thread+0x5c/0x64
+> >=20
+> > Presumably introduced by commit
+> >=20
+> >   b42bc9a3c511 ("Fix regression due to "fs: move binfmt_misc sysctl to =
+its own file"") =20
+>=20
+> OK, I cannot reproduce this with just Linus' tree.  I will try to bisect.
 
-bcm2836-rpi-2-b        | arm    | lab-collabora | gcc-10   | multi_v7_defc.=
-..MB2_KERNEL=3Dy | 1          =
+It bisected to commit
 
-da850-lcdk             | arm    | lab-baylibre  | gcc-10   | davinci_all_de=
-fconfig        | 1          =
+  43a9443d5da2 ("Merge branch 'akpm-current/current'")
 
+and both parents of that commit are fine :-(
 
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v5.17-rc3-356-gdfd7907f4e4f/plan/baseline/
+"git diff-tree --cc 43a9443d5da2" looks like this:
 
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v5.17-rc3-356-gdfd7907f4e4f
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      dfd7907f4e4fe53417c1436f4a727a143e0ba2d2 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform               | arch   | lab           | compiler | defconfig     =
-               | regressions
------------------------+--------+---------------+----------+---------------=
----------------+------------
-asus-C436FA-Flip-hatch | x86_64 | lab-collabora | gcc-10   | x86_64_defcon.=
-..6-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6204a59e74f6c3ec4ec6296c
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+x86-chromebook
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.17-rc3-3=
-56-gdfd7907f4e4f/x86_64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabor=
-a/baseline-asus-C436FA-Flip-hatch.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.17-rc3-3=
-56-gdfd7907f4e4f/x86_64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabor=
-a/baseline-asus-C436FA-Flip-hatch.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220121.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6204a59e74f6c3ec4ec62=
-96d
-        new failure (last pass: v5.17-rc3-310-g301c67a59c13) =
-
- =
-
-
-
-platform               | arch   | lab           | compiler | defconfig     =
-               | regressions
------------------------+--------+---------------+----------+---------------=
----------------+------------
-bcm2836-rpi-2-b        | arm    | lab-collabora | gcc-10   | multi_v7_defc.=
-..MB2_KERNEL=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6204bcdec1681fc31bc62986
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.17-rc3-3=
-56-gdfd7907f4e4f/arm/multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab=
--collabora/baseline-bcm2836-rpi-2-b.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.17-rc3-3=
-56-gdfd7907f4e4f/arm/multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab=
--collabora/baseline-bcm2836-rpi-2-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220121.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6204bcdec1681fc31bc62=
-987
-        failing since 92 days (last pass: v5.15-rc7-176-gbfbd58926fc5, firs=
-t fail: v5.15-12053-g6f9f2ed9499c) =
-
- =
-
-
-
-platform               | arch   | lab           | compiler | defconfig     =
-               | regressions
------------------------+--------+---------------+----------+---------------=
----------------+------------
-da850-lcdk             | arm    | lab-baylibre  | gcc-10   | davinci_all_de=
-fconfig        | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6204a90b577d9cc4d1c6296b
-
-  Results:     5 PASS, 1 FAIL, 0 SKIP
-  Full config: davinci_all_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.17-rc3-3=
-56-gdfd7907f4e4f/arm/davinci_all_defconfig/gcc-10/lab-baylibre/baseline-da8=
-50-lcdk.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.17-rc3-3=
-56-gdfd7907f4e4f/arm/davinci_all_defconfig/gcc-10/lab-baylibre/baseline-da8=
-50-lcdk.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220121.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.dmesg.alert: https://kernelci.org/test/case/id/6204a90b577d9cc=
-4d1c6296f
-        failing since 17 days (last pass: v5.16-11577-gffd79fec234d, first =
-fail: v5.17-rc1-180-g86539e2bdb99)
-        3 lines
-
-    2022-02-10T05:56:19.022384  kern  :alert : BUG: Bad page state in proce=
-ss kworker/u2:0  pfn:c3000
-    2022-02-10T05:56:19.022680  kern  :alert : BUG: Bad page state in proce=
-ss kworker/u2:0  pfn:c3400
-    2022-02-10T05:56:19.022867  kern  :alert : BUG: Bad page state in proce=
-ss kworker/u2:0  pfn:c3800
-    2022-02-10T05:56:19.067163  <8><LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Dale=
-rt RESULT=3Dfail UNITS=3Dlines MEASUREMENT=3D3>   =
-
+43a9443d5da2d53dc06095b90b1aca18b72caef5
+diff --cc lib/Kconfig.debug
+index f15dd96028b5,efc1a1908e04..682c776ae73d
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@@ -317,6 -339,7 +339,7 @@@ config DEBUG_INFO_BT
+  	depends on !DEBUG_INFO_SPLIT && !DEBUG_INFO_REDUCED
+  	depends on !GCC_PLUGIN_RANDSTRUCT || COMPILE_TEST
+  	depends on BPF_SYSCALL
+ -	depends on !DEBUG_INFO_DWARF5
+++	depends on !DEBUG_INFO_DWARF5 || PAHOLE_VERSION >=3D 121
+  	help
+  	  Generate deduplicated BTF type information from DWARF debug info.
+  	  Turning this on expects presence of pahole tool, which will convert
+diff --cc tools/include/linux/gfp.h
+index b238dbc9eb85,22030756fbc0..56eec4445bc9
+--- a/tools/include/linux/gfp.h
++++ b/tools/include/linux/gfp.h
+@@@ -2,31 -1,4 +2,30 @@@
+  #ifndef _TOOLS_INCLUDE_LINUX_GFP_H
+  #define _TOOLS_INCLUDE_LINUX_GFP_H
  =20
+ +#include <linux/types.h>
+ +
+ +#define __GFP_BITS_SHIFT 26
+ +#define __GFP_BITS_MASK ((gfp_t)((1 << __GFP_BITS_SHIFT) - 1))
+ +
+ +#define __GFP_HIGH		0x20u
+ +#define __GFP_IO		0x40u
+ +#define __GFP_FS		0x80u
+ +#define __GFP_NOWARN		0x200u
+ +#define __GFP_ZERO		0x8000u
+- #define __GFP_ATOMIC		0x80000u
+ +#define __GFP_ACCOUNT		0x100000u
+ +#define __GFP_DIRECT_RECLAIM	0x400000u
+ +#define __GFP_KSWAPD_RECLAIM	0x2000000u
+ +
+ +#define __GFP_RECLAIM	(__GFP_DIRECT_RECLAIM | __GFP_KSWAPD_RECLAIM)
+ +
+ +#define GFP_ZONEMASK	0x0fu
+- #define GFP_ATOMIC	(__GFP_HIGH | __GFP_ATOMIC | __GFP_KSWAPD_RECLAIM)
+++#define GFP_ATOMIC	(__GFP_HIGH | __GFP_KSWAPD_RECLAIM)
+ +#define GFP_KERNEL	(__GFP_RECLAIM | __GFP_IO | __GFP_FS)
+ +#define GFP_NOWAIT	(__GFP_KSWAPD_RECLAIM)
+ +
+ +static inline bool gfpflags_allow_blocking(const gfp_t gfp_flags)
+ +{
+ +	return !!(gfp_flags & __GFP_DIRECT_RECLAIM);
+ +}
+ +
+  #endif /* _TOOLS_INCLUDE_LINUX_GFP_H */
+
+Which looks pretty innocuous.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/.9oRFWI6oIp8UvKbLn8tZsd
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIE69UACgkQAVBC80lX
+0GwUbwf/WQUzB5q1bNcnhWYFuMb3Xg6rTxYL4DnzXcsQGkyX43VwGE2oR4mL6ODP
+Vq03Zg2hj9Nr/EhO6gkfKPwluTKpJ2Vpk0ht5LYijmPwjuk1afI81cnhoP/ghMI8
+iVdfPHcdyBRjp37W5lIUojYRmqKYYaSVW91qm29xjzILAaqQstpsm1k+xf8RqhUH
+TjdVa3nP/YirWfdGqbEhNgNjWOvE9tPYnt2e2KgpHvxJBlBjn4xQIaJrlqJTf1qG
+e95NKq0gnpmgjogzbHSDMFnCPMCwJkjtrq+Z0CCn1ioXAybRV/27QoZ8pdfrqa5b
+IT+dgx3BwhY3Dnuro+QoEcyd+fBFHw==
+=3Smq
+-----END PGP SIGNATURE-----
+
+--Sig_/.9oRFWI6oIp8UvKbLn8tZsd--

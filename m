@@ -2,91 +2,140 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED4544B078A
-	for <lists+linux-next@lfdr.de>; Thu, 10 Feb 2022 08:51:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DECF94B07D6
+	for <lists+linux-next@lfdr.de>; Thu, 10 Feb 2022 09:11:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236642AbiBJHv3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 10 Feb 2022 02:51:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39632 "EHLO
+        id S237044AbiBJIK7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 10 Feb 2022 03:10:59 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232487AbiBJHv2 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 10 Feb 2022 02:51:28 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2A8F103D;
-        Wed,  9 Feb 2022 23:51:29 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JvTTS6nWRz4xcp;
-        Thu, 10 Feb 2022 18:51:24 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1644479485;
-        bh=B1yq2bMy9lM80w8xA1JlUKwRSLuLjFjKn9WHjv+Tyac=;
-        h=Date:From:To:Cc:Subject:From;
-        b=QUAk6QnQQaryS8kLj8v66KK8wwxvFnhjWGSmsXbQsz/MMBBNbkoUmHdqNDVV519d4
-         k01eSNYceb6YhKe6RjEnC4oLno8ijEN08DcmPe3ddVoFYSSuVIiPHQzgtpsx+nC0Zo
-         qfRBwfuReqmwTTMdmNUQBDJts/63+ybLwVofLwa7W15YKA6r2vUWVBSH6hsbhmhYds
-         x7aMuUPJ/YIOM4KCu2kuPI3Vl/xIOaurEsqJW/5FLFZLBR0oxD7L3rIAzXIJWD7Xcj
-         qidVHuEaL2piymFq3zQqiroXH4XLyHQXNF69KWZU8yICnJON4G3STBJg8m5YOOu4MK
-         h52Flw1aZq6Sg==
-Date:   Thu, 10 Feb 2022 18:51:23 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Alistair Francis <alistair@alistair23.me>,
-        Lee Jones <lee.jones@linaro.org>,
+        with ESMTP id S235748AbiBJIK6 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 10 Feb 2022 03:10:58 -0500
+X-Greylist: delayed 534 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 10 Feb 2022 00:11:00 PST
+Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC63D275;
+        Thu, 10 Feb 2022 00:10:59 -0800 (PST)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.nyi.internal (Postfix) with ESMTP id AF52F580150;
+        Thu, 10 Feb 2022 03:02:02 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Thu, 10 Feb 2022 03:02:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; bh=PnpDbCRZGPp5ifSTERgTXRQM9Rv/E2SdB0qFWY
+        wi/Og=; b=lEWBuaBgH31hd8rrTx0Bn0MN0c4ro+u0VouYcY/OrlrSIQKI73aLqE
+        Yrl/6w4fYlKVeGpwUlHdE9Y3GFYbd8Zoh2sH24nU62YDlRwyVOB61QiANaKn4qxS
+        rvbC8wiNxjbzuZYkIrVA3xlIcwEc3EoyiJOi+4iy8x6B4ImXM967VLsvfVXpO4XH
+        tj0iSGn1itCtyE+K55qaJdtjdR7128K5tcflVH3epTN6ktq6lMyAVqb2sGVWE94G
+        B2HgmsIyyOpETtwV/brGfpE2XBdy2XhqC39x14IMphHDjyBBC7dXh2fizoRlAvb4
+        yV436j0X1ILlE2hdkpEpS8vP0cZZBgUg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=PnpDbCRZGPp5ifSTE
+        RgTXRQM9Rv/E2SdB0qFWYwi/Og=; b=i1WSoUtaNV7reSiJbZ1/TSFQMNbI31mCa
+        YlP+ZE+iMxCt810dwPBtlzm/AtxhQb1WkqTfd00bjokbNa9vzrvQjs0xQd6ESG5Y
+        2Mq6lyTCMrOnInsfoTRiXQHkAFlo1lbwnVGZPDeCbJg5C9XG/TKvzk5gN2dx8Bk5
+        AcuB4kmevueR7OPaLXLtyvnKJn99gb+SrxqrHLe3Z66GVkxPT5gXGU45f6tnMhoe
+        HvKAoPCPjf8AsJazcUAn3Okmii05ez39ZS7KkKLPNrqHjKVbNYDXd45PyFvdXRwb
+        bm2fTDsG0+Vg/VLgGoQgGQwrDFtvkpx4xxlyk/QjP56oKbHrtZjgA==
+X-ME-Sender: <xms:ecYEYpSXKXVPeqIVpKsfEKW2ulsThyPHfeNXCTkq5FVsJ3YQCjMQ2Q>
+    <xme:ecYEYiyeSp3gEwD0NxwBuJ0vss3YXrw8ehVDarAWGn2BZs-hCw5gqUTDi1Nkwq1OM
+    NMLNxD8DheOZg>
+X-ME-Received: <xmr:ecYEYu040fLlnwX54F-jfP3YIroxfksS-m_XdBCKuuXemqXsJCk70KhbMgmQK0d7KgyfG9BpKfht4lvgkCyi7jmYHoybRzrh>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddriedtgdduudefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
+    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeevueehje
+    fgfffgiedvudekvdektdelleelgefhleejieeugeegveeuuddukedvteenucevlhhushht
+    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
+    drtghomh
+X-ME-Proxy: <xmx:esYEYhCXmaFHaVRgFmqEt0HfR9eAJk0oDdXfeUgA4sLLVxttcfltKw>
+    <xmx:esYEYih2ISucqOfIQ3EnDiHyCNg8W7mfMZg3tCT9F4swzWwopMJcqQ>
+    <xmx:esYEYlrbLYvQq1RcaF8rYoBjto9csFa1Pk2NhlrnnX-oqhJAZ7hETg>
+    <xmx:esYEYjY5FYVI15as4LdLkyW0-lViFRog4RNSzLQ1cgG9uyBBwlrJSw>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 10 Feb 2022 03:02:01 -0500 (EST)
+Date:   Thu, 10 Feb 2022 09:01:59 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Michal Simek <monstr@monstr.eu>, David Heidelberg <david@ixit.cz>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the hwmon-staging tree
-Message-ID: <20220210185123.4d39766c@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Sean Anderson <sean.anderson@seco.com>
+Subject: Re: linux-next: manual merge of the usb tree with the xilinx tree
+Message-ID: <YgTGdwkTkDgx+pan@kroah.com>
+References: <20220210141550.56359523@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/W_77iuQxsfC.=1Nsr_uJRrc";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220210141550.56359523@canb.auug.org.au>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/W_77iuQxsfC.=1Nsr_uJRrc
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, Feb 10, 2022 at 02:15:50PM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the usb tree got a conflict in:
+> 
+>   arch/arm64/boot/dts/xilinx/zynqmp.dtsi
+> 
+> between commit:
+> 
+>   eceb6f8677d3 ("arm64: xilinx: dts: drop legacy property #stream-id-cells")
+> 
+> from the xilinx tree and commit:
+> 
+>   d8b1c3d0d700 ("arm64: dts: zynqmp: Move USB clocks to dwc3 node")
+> 
+> from the usb tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+> 
+> diff --cc arch/arm64/boot/dts/xilinx/zynqmp.dtsi
+> index 056761c974fd,ba68fb8529ee..000000000000
+> --- a/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
+> +++ b/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
+> @@@ -823,6 -824,8 +822,7 @@@
+>   				interrupt-parent = <&gic>;
+>   				interrupt-names = "dwc_usb3", "otg";
+>   				interrupts = <0 65 4>, <0 69 4>;
+> + 				clock-names = "bus_early", "ref";
+>  -				#stream-id-cells = <1>;
+>   				iommus = <&smmu 0x860>;
+>   				snps,quirk-frame-length-adjustment = <0x20>;
+>   				/* dma-coherent; */
+> @@@ -849,6 -851,8 +848,7 @@@
+>   				interrupt-parent = <&gic>;
+>   				interrupt-names = "dwc_usb3", "otg";
+>   				interrupts = <0 70 4>, <0 74 4>;
+> + 				clock-names = "bus_early", "ref";
+>  -				#stream-id-cells = <1>;
+>   				iommus = <&smmu 0x861>;
+>   				snps,quirk-frame-length-adjustment = <0x20>;
+>   				/* dma-coherent; */
+> -- 
+> Cheers,
+> Stephen Rothwell
 
-Hi all,
 
-After merging the hwmon-staging tree, today's linux-next build (htmldocs)
-produced this warning:
 
-Documentation/hwmon/sy7636a-hwmon.rst:4: WARNING: Title underline too short.
+Looks good, thanks!
 
-Kernel driver sy7636a-hwmon
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-
-Introduced by commit
-
-  de34a4053250 ("hwmon: sy7636a: Add temperature driver for sy7636a")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/W_77iuQxsfC.=1Nsr_uJRrc
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIEw/sACgkQAVBC80lX
-0Gz6GggAnBJNpVLR2V4GcHcuXk6upLj96cSBx8FWXo6xC+ByKEAnrXSHoV0zrmVV
-gxqOurCgPXWqG9MJXiulTDy0qFK6jCdNAbjlJAQOecxZQYk3jwImAC0nG53lIe4+
-AIAAOJPWRDAcVi8ebCUvAslg6CAqPeCSHGZ/e79Uc5gza4aT2k6hGqj1U4St58Qu
-JXdZ9Ks0mG2gyxabIoR24WJLJArtuSBog875WHHnazYXPymy1VOafVkRLI59tOLB
-vp267qHXR1t0G1q0E6R5h+oXvYuCILro0Rv3CY6eaSJ9uv/O2kRdjKQbIE+hq3MD
-qyrOZjaZ5nX3ioAIjDlGbtv8cVkjSg==
-=41wg
------END PGP SIGNATURE-----
-
---Sig_/W_77iuQxsfC.=1Nsr_uJRrc--
+greg k-h

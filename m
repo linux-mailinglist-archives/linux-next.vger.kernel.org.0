@@ -2,51 +2,54 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 255564B1ABC
-	for <lists+linux-next@lfdr.de>; Fri, 11 Feb 2022 01:53:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99E544B1B50
+	for <lists+linux-next@lfdr.de>; Fri, 11 Feb 2022 02:34:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346554AbiBKAwZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 10 Feb 2022 19:52:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41076 "EHLO
+        id S238899AbiBKBdk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 10 Feb 2022 20:33:40 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346528AbiBKAwY (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 10 Feb 2022 19:52:24 -0500
+        with ESMTP id S235662AbiBKBdk (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 10 Feb 2022 20:33:40 -0500
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 450335F8E;
-        Thu, 10 Feb 2022 16:52:24 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8C685582;
+        Thu, 10 Feb 2022 17:33:39 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jvw7T67qHz4xdJ;
-        Fri, 11 Feb 2022 11:52:21 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jvx353l77z4xcl;
+        Fri, 11 Feb 2022 12:33:37 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1644540742;
-        bh=tM9oSUqc6GihGbZkPvqaIHIZCKY0n+fEMRawOrrTALY=;
+        s=201702; t=1644543218;
+        bh=KxLwMynRJ0UsoOel3fOo4xenJdot+JkG2dWXB0EDpxA=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=tGQqH+km47OY8CFfKc5FhDlCKoJVSG5GhYpZzJiekmm46QrOtRJ4d+oi6tDM99YnS
-         4N899PZ0reKalNLo/MaYKxsOlq/RZ8bBKvuFfQwZCPN56YKTlySLRvt3z7qOuJTm63
-         8T/pZGsvo2Fmbn4A6U7RtLJ08MYLNMh/qAUI53lQ3rLs0BgLGYkUCSAS2vXUJpjgpQ
-         yWLBwCZKNBIHUa1b+ZEauXePqRQ/SpPpkinJVn4t1dpZ3XwbOL4cQA0sUMWl8cLMq3
-         aFTQvU0biu/DnLBUlBgyaB/xM71zS1/YW2x352PE5gHGKnyGOn5u6R5ctEPcOhWH33
-         3FAWpvB+9moMQ==
-Date:   Fri, 11 Feb 2022 11:52:20 +1100
+        b=inpSJ5qE80eJDCLj0eze36lR4GEmHaV13FzR2trUww1s8BR+/g5p3YqKiberout75
+         6E8b3N1cDHZdoBaJTt+dEtT2meG1qqFubvKvAKWzPn4zRmFw3bly5jWocKhkzZ5nVE
+         MRQLhKSs9cq1PnVBJd407u1hOqAkKtISWXyl8uWLbeJ0UNkRU21QrYavk10LL0fbA6
+         gL+x9tyNuQaXY0n/O9PKFpRBZwHViSdsJf9L1DLCEvyROYDyxGnwS/tpafUXb3mTO9
+         +SLGpdFMj/Pp0RNKJwO1tH1WaW5OyDGq4twEbii1Ajp9uh9Fw0lN7b6gViC6I0Vpao
+         153alyaWyGS2w==
+Date:   Fri, 11 Feb 2022 12:33:36 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Networking <netdev@vger.kernel.org>,
-        David Miller <davem@davemloft.net>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Song Liu <song@kernel.org>,
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        Tong Zhang <ztong0001@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Domenico Andreoli <domenico.andreoli@linux.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the net-next tree (Was:
- Re: linux-next: build failure after merge of the bpf-next tree)
-Message-ID: <20220211115220.4d4746fe@canb.auug.org.au>
-In-Reply-To: <20220209112135.7fec872f@canb.auug.org.au>
-References: <20220209112135.7fec872f@canb.auug.org.au>
+Subject: Re: linux-next: boottime warning from todays linux-next
+Message-ID: <20220211123336.54eff9de@canb.auug.org.au>
+In-Reply-To: <YgWdbYfWgHP2jBmI@bombadil.infradead.org>
+References: <20220210184340.7eba108a@canb.auug.org.au>
+        <20220210193302.686fa61a@canb.auug.org.au>
+        <20220210214125.2b248790@canb.auug.org.au>
+        <20220210222953.6e078d20@canb.auug.org.au>
+        <YgWdbYfWgHP2jBmI@bombadil.infradead.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ImzMXu3OpUzcrR/0Blb+6dX";
+Content-Type: multipart/signed; boundary="Sig_/g2ImcQNIuZLdtj/=NtqDINk";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -57,51 +60,92 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/ImzMXu3OpUzcrR/0Blb+6dX
+--Sig_/g2ImcQNIuZLdtj/=NtqDINk
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Luis,
 
-On Wed, 9 Feb 2022 11:21:35 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> After merging the bpf-next tree, today's linux-next build (powerpc
-> ppc64_defconfig) failed like this:
+On Thu, 10 Feb 2022 15:19:09 -0800 Luis Chamberlain <mcgrof@kernel.org> wro=
+te:
 >=20
-> kernel/bpf/core.c:830:23: error: variably modified 'bitmap' at file scope
->   830 |         unsigned long bitmap[BITS_TO_LONGS(BPF_PROG_CHUNK_COUNT)];
->       |                       ^~~~~~
+> FWIW Linus merged a more newer version of the regression fix, and only
+> until today did we get that version on linux-next.
 >=20
-> Caused by commit
+> > So it seems that the parent of "fs/binfmt_misc" is a permanently empty
+> > directory - the is_empty_dir() check in insert_header() succeeds. =20
 >=20
->   57631054fae6 ("bpf: Introduce bpf_prog_pack allocator")
+> I am not seeing this issue on x86_64 KVM guest with:
 >=20
-> I have used the bpf-next tree from next-20220208 for today.
+> CONFIG_BINFMT_MISC=3Dm
+> or
+> CONFIG_BINFMT_MISC=3Dy
+>=20
+> I think the issue might be that linux-next has Andrew's earlier
+> version of the fix merged, and Linus now has the new version. So
+> linux-next has these extra things below. But I can't understand
+> why this is seen on ppc and not on x86_64.
+>=20
+> diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+> index 241cfc6bc36f..788b9a34d5ab 100644
+> --- a/kernel/sysctl.c
+> +++ b/kernel/sysctl.c
+> @@ -2735,17 +2735,6 @@ static struct ctl_table vm_table[] =3D {
+>  	{ }
+>  };
+> =20
+> -static struct ctl_table fs_table[] =3D {
+> -#if defined(CONFIG_BINFMT_MISC) || defined(CONFIG_BINFMT_MISC_MODULE)
+> -	{
+> -		.procname	=3D "binfmt_misc",
+> -		.mode		=3D 0555,
+> -		.child		=3D sysctl_mount_point,
+> -	},
+> -#endif
+> -	{ }
+> -};
+> -
+>  static struct ctl_table debug_table[] =3D {
+>  #ifdef CONFIG_SYSCTL_EXCEPTION_TRACE
+>  	{
+> @@ -2765,7 +2754,6 @@ static struct ctl_table dev_table[] =3D {
+> =20
+>  DECLARE_SYSCTL_BASE(kernel, kern_table);
+>  DECLARE_SYSCTL_BASE(vm, vm_table);
+> -DECLARE_SYSCTL_BASE(fs, fs_table);
+>  DECLARE_SYSCTL_BASE(debug, debug_table);
+>  DECLARE_SYSCTL_BASE(dev, dev_table);
+> =20
+> @@ -2773,7 +2761,6 @@ int __init sysctl_init_bases(void)
+>  {
+>  	register_sysctl_base(kernel);
+>  	register_sysctl_base(vm);
+> -	register_sysctl_base(fs);
+>  	register_sysctl_base(debug);
+>  	register_sysctl_base(dev);
+> =20
 
-The net-next tree has inherited this build failure by merging the
-bpf-next tree.
-
-I have used the net-next tree from next-20220209 for today.
+Thanks for noticing that.  I have removed the old version from my copy
+of mmotm today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/ImzMXu3OpUzcrR/0Blb+6dX
+--Sig_/g2ImcQNIuZLdtj/=NtqDINk
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIFs0QACgkQAVBC80lX
-0GxsDQgAlns5dBAnb2XaAy4qyu4Br0sM9tPbvnXUPnEH6p9ksbrB4rJg1C0n0md2
-BeM4yujg/8UMC/ohfOB0/UG04DpsiWDtqkvSBFSccGmNAltyBHELL6+fGIsa21Cw
-qhwMDiQguS3pvYasZcx799MM61VsdrCSw9JaAbaM2JQrcBXzveY45USYy01dy1et
-NIeeFgHKffDxtiWMs4gQoLU85snZDvhVdg1TGLZJ+GXsjF7Znr+vjlMo+/02QrJp
-/jRwD8s+axiFleJe63mTvTaYGSCIhkOPtkTVz4m5sF22uIaDPphY/qg8av0I2yRu
-RESHNzJjz5DyR37imUp63kETSd+GyQ==
-=S9bw
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIFvPAACgkQAVBC80lX
+0Gwijgf/TBdDbcMhAB0z9NguKoO3pYzk1BqQws7Iu79AMgDt00akkM2gceMKpFuh
+k8woqS8ESIDtrz4FjiU6sUh8pe4RVQg9Z0qLw0Ez6tRTNDmyLYqafrKLzuPytuM7
+a0XtSXO/Vid1EX5jR4oAN0CJMVXS5S7lUOSNVI0arWkjIyblpL1fcWd8klzb6D8m
+1dDI+NRnoFd78aNfEZt0rxJbUEs8zivqiLkxlfUpcWoPn2924UUIvWcNvvMZW8T3
+hOU6RYI7g3zm3pleVBzvFETS5qktFdCq3jwlFkJDLWWXrAY8DQWaHqF4oKVfwfkM
+zL0ZQYnAW/HZ3XzZQDqYX0e7ri7RZA==
+=Fgbg
 -----END PGP SIGNATURE-----
 
---Sig_/ImzMXu3OpUzcrR/0Blb+6dX--
+--Sig_/g2ImcQNIuZLdtj/=NtqDINk--

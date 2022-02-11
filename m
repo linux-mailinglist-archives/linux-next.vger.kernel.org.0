@@ -2,180 +2,104 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D3C74B20F5
-	for <lists+linux-next@lfdr.de>; Fri, 11 Feb 2022 10:06:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1119A4B293B
+	for <lists+linux-next@lfdr.de>; Fri, 11 Feb 2022 16:42:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348229AbiBKJGX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 11 Feb 2022 04:06:23 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50962 "EHLO
+        id S242164AbiBKPmW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 11 Feb 2022 10:42:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348122AbiBKJGW (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 11 Feb 2022 04:06:22 -0500
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E261F1B
-        for <linux-next@vger.kernel.org>; Fri, 11 Feb 2022 01:06:21 -0800 (PST)
-Received: by mail-il1-f200.google.com with SMTP id k12-20020a92c24c000000b002bc9876bf27so5615982ilo.21
-        for <linux-next@vger.kernel.org>; Fri, 11 Feb 2022 01:06:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=AVcGm0EZzrrnlVKUgG8QxskPWiO/poY886sJ5KEoXHY=;
-        b=BEPkP+L/qUDcvWvF4N3c/2zYveGRRFLFinZt69Gn5CvDQ5Sq/doJUZyGIRZSSdsPXR
-         U/xT5v4pUO+dt+FlwaGqILxA/Gb8JtoF9mskZV2T/h8+NEZUkFSJ/Ggr01X7IAtx3y3B
-         gd7qJsfM7L0xdx9zL4DKqdfcVDlG9IusUKfhLSeeK+wwGvenBm5CaAdraz1QvleoYtFI
-         ULnFqNE9kl4I1rLDEqptKVvwe3rmDsqc033YzbncGCmbNL9fdjWF5+WAphaKJ+a/hx7t
-         mtd5yG9EbM1PXPqsbykzS/5NdlpeeHKdSfoOVLmA7rYBnkDNM9w+Zqzdg/4AIF4s3lIB
-         fGsA==
-X-Gm-Message-State: AOAM531LY2D5XfDPdFq+b7yTn09IoM69VQMt9TOTeoOREAMbD3/5mw0/
-        G3BX7zqnZmI5kb3Vzwbv/GMMatSKSRRELsOHOfjF3gJIRQGJ
-X-Google-Smtp-Source: ABdhPJxSVkHCKRC0zvZIU3npjSAX+sigocCFZftEFRRmPIaDnOzFO9wIR7XP8U6GKVfRe6J3FqS0HqnBu/Cl1GzS4VbzB4FNSLLi
+        with ESMTP id S1343923AbiBKPmV (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 11 Feb 2022 10:42:21 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E49ECF0;
+        Fri, 11 Feb 2022 07:42:20 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id A8AC4212B8;
+        Fri, 11 Feb 2022 15:42:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1644594138;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MOvt3nP6o555NwCZ0+/YXZ/7DPCmnppoG+QFn1Mcl/s=;
+        b=dIg+c6GG044XfCDI0EaMRO0Ucap381BvO//H1tMkb5BGDgYXgUGjjuCz7xQoLpWIroU4wK
+        Iu0Pg2sDRD86xIGNMbA5F7FIWWkjphDFjg5hHXpM098itV1hBqZvxyFp2Ij+1Koxim+cxl
+        AzLDFkuHNzPf2iMi6UBfqxJnRETwJbI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1644594138;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MOvt3nP6o555NwCZ0+/YXZ/7DPCmnppoG+QFn1Mcl/s=;
+        b=IjHGNhWEeiJa7RNTR9QWRv91zymNNRRHT/v+L5B7DQaAd2BHkttK31VUuIiouSWBiKrvqt
+        R0siUtNFvOo99tDg==
+Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
+        by relay2.suse.de (Postfix) with ESMTP id 9CBC5A3B8A;
+        Fri, 11 Feb 2022 15:42:18 +0000 (UTC)
+Received: by ds.suse.cz (Postfix, from userid 10065)
+        id 59C37DA823; Fri, 11 Feb 2022 16:38:36 +0100 (CET)
+Date:   Fri, 11 Feb 2022 16:38:36 +0100
+From:   David Sterba <dsterba@suse.cz>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Kees Cook <keescook@chromium.org>, David Sterba <dsterba@suse.com>,
+        Omar Sandoval <osandov@fb.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the btrfs tree (Was:
+ Re: linux-next: build failure after merge of the kspp tree)
+Message-ID: <20220211153835.GY12643@suse.cz>
+Reply-To: dsterba@suse.cz
+Mail-Followup-To: dsterba@suse.cz, Stephen Rothwell <sfr@canb.auug.org.au>,
+        Kees Cook <keescook@chromium.org>, David Sterba <dsterba@suse.com>,
+        Omar Sandoval <osandov@fb.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20220125115757.20bc45e8@canb.auug.org.au>
+ <20220125140730.GO14046@suse.cz>
+ <20220211104238.5da77acd@canb.auug.org.au>
 MIME-Version: 1.0
-X-Received: by 2002:a02:2422:: with SMTP id f34mr271094jaa.237.1644570380451;
- Fri, 11 Feb 2022 01:06:20 -0800 (PST)
-Date:   Fri, 11 Feb 2022 01:06:20 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000055c5ca05d7ba61a9@google.com>
-Subject: [syzbot] linux-next boot error: WARNING in jbd2_journal_add_journal_head
-From:   syzbot <syzbot+8b01515f1a28478eb4bd@syzkaller.appspotmail.com>
-To:     jack@suse.com, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com,
-        tytso@mit.edu
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220211104238.5da77acd@canb.auug.org.au>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hello,
+On Fri, Feb 11, 2022 at 10:42:38AM +1100, Stephen Rothwell wrote:
+> > > --- a/fs/btrfs/ioctl.c
+> > > +++ b/fs/btrfs/ioctl.c
+> > > @@ -5079,9 +5079,14 @@ static int btrfs_ioctl_encoded_write(struct file *file, void __user *argp,
+> > >  		}
+> > >  		args.iov = compat_ptr(args32.iov);
+> > >  		args.iovcnt = args32.iovcnt;
+> > > -		memcpy(&args.offset, &args32.offset,
+> > > -		       sizeof(args) -
+> > > -		       offsetof(struct btrfs_ioctl_encoded_io_args, offset));
+> > > +		args.offset = args32.offset;
+> > > +		args.flags = args32.flags;
+> > > +		args.len = args32.len;
+> > > +		args.unencoded_len = args32.unencoded_len;
+> > > +		args.unencoded_offset = args32.unencoded_offset;
+> > > +		args.compression = args32.compression;
+> > > +		args.encryption = args32.encryption;
+> > > +		memcpy(args.reserved, args32.reserved, sizeof(args.reserved));
+> > >  #else
+> > >  		return -ENOTTY;
+> > >  #endif  
+> > 
+> > Thanks, the patchset is still in progress so I'll apply this a fixup
+> > until the patch gets updated.
+> 
+> This has come back today ... presumably the hack was removed but the
+> original patch was not fixed.
 
-syzbot found the following issue on:
-
-HEAD commit:    395a61741f7e Add linux-next specific files for 20220210
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=15273c74700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=addf1551553641e4
-dashboard link: https://syzkaller.appspot.com/bug?extid=8b01515f1a28478eb4bd
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+8b01515f1a28478eb4bd@syzkaller.appspotmail.com
-
-debug_vm_pgtable: [debug_vm_pgtable         ]: Validating architecture page table helpers
-Key type ._fscrypt registered
-Key type .fscrypt registered
-Key type fscrypt-provisioning registered
-kAFS: Red Hat AFS client v0.1 registering.
-Btrfs loaded, crc32c=crc32c-intel, assert=on, zoned=yes, fsverity=yes
-Key type big_key registered
-Key type encrypted registered
-AppArmor: AppArmor sha1 policy hashing enabled
-ima: No TPM chip found, activating TPM-bypass!
-Loading compiled-in module X.509 certificates
-Loaded X.509 cert 'Build time autogenerated kernel key: 6faad590106e97e953b70d9fe8fe9023f99ac2db'
-ima: Allocated hash algorithm: sha256
-ima: No architecture policies found
-evm: Initialising EVM extended attributes:
-evm: security.selinux (disabled)
-evm: security.SMACK64 (disabled)
-evm: security.SMACK64EXEC (disabled)
-evm: security.SMACK64TRANSMUTE (disabled)
-evm: security.SMACK64MMAP (disabled)
-evm: security.apparmor
-evm: security.ima
-evm: security.capability
-evm: HMAC attrs: 0x1
-PM:   Magic number: 10:298:72
-usb usb24-port4: hash matches
-printk: console [netcon0] enabled
-netconsole: network logging started
-gtp: GTP module loaded (pdp ctx size 104 bytes)
-rdma_rxe: loaded
-cfg80211: Loading compiled-in X.509 certificates for regulatory database
-cfg80211: Loaded X.509 cert 'sforshee: 00b28ddf47aef9cea7'
-ALSA device list:
-  #0: Dummy 1
-  #1: Loopback 1
-  #2: Virtual MIDI Card 1
-md: Waiting for all devices to be available before autodetect
-md: If you don't use raid, use raid=noautodetect
-md: Autodetecting RAID arrays.
-md: autorun ...
-md: ... autorun DONE.
-EXT4-fs (sda1): mounted filesystem with ordered data mode. Quota mode: none.
-VFS: Mounted root (ext4 filesystem) readonly on device 8:1.
-devtmpfs: mounted
-Freeing unused kernel image (initmem) memory: 2716K
-Write protecting the kernel read-only data: 172032k
-Freeing unused kernel image (text/rodata gap) memory: 2016K
-Freeing unused kernel image (rodata/data gap) memory: 996K
-Run /sbin/init as init process
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 1 at mm/slub.c:3246 kmem_cache_alloc+0x329/0x3d0 mm/slub.c:3251
-Modules linked in:
-CPU: 1 PID: 1 Comm: init Not tainted 5.17.0-rc3-next-20220210-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:kmem_cache_alloc+0x329/0x3d0 mm/slub.c:3246
-Code: 5d 3e 7e 48 8b 05 a7 5b bc 0b e8 b2 35 9f ff 85 c0 74 2d 65 ff 0d b7 5d 3e 7e 0f 85 93 fe ff ff e8 5b 33 3c ff e9 89 fe ff ff <0f> 0b e9 0a fd ff ff b9 01 00 00 00 bb 01 00 00 00 e9 ce fe ff ff
-RSP: 0018:ffffc90000c675c8 EFLAGS: 00010202
-RAX: 0000000000000000 RBX: ffff88801b4740e8 RCX: 0000000000000000
-RDX: ffff888011898000 RSI: 0000000000000d40 RDI: ffff888018aa9c80
-RBP: ffff888018aa9c80 R08: 0000000000000000 R09: 0000000000000000
-R10: ffffffff823295f6 R11: 0000000000000000 R12: 0000000000000d40
-R13: ffff88801b4740e8 R14: 0000000000000100 R15: ffff88807f34a000
-FS:  00007fab10ea9800(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ff6395be300 CR3: 000000007f201000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- kmem_cache_zalloc include/linux/slab.h:705 [inline]
- journal_alloc_journal_head fs/jbd2/journal.c:2864 [inline]
- jbd2_journal_add_journal_head+0x1cb/0x5c0 fs/jbd2/journal.c:2933
- jbd2_journal_get_write_access+0x112/0x190 fs/jbd2/transaction.c:1240
- __ext4_journal_get_write_access+0x1ba/0x440 fs/ext4/ext4_jbd2.c:235
- ext4_reserve_inode_write+0x187/0x270 fs/ext4/inode.c:5699
- __ext4_mark_inode_dirty+0x17b/0x8d0 fs/ext4/inode.c:5865
- ext4_dirty_inode+0xd4/0x110 fs/ext4/inode.c:5902
- __mark_inode_dirty+0x45b/0xfe0 fs/fs-writeback.c:2370
- generic_update_time fs/inode.c:1856 [inline]
- inode_update_time fs/inode.c:1869 [inline]
- touch_atime+0x63d/0x700 fs/inode.c:1941
- pick_link fs/namei.c:1796 [inline]
- step_into+0x89e/0x1d80 fs/namei.c:1876
- walk_component+0x171/0x6a0 fs/namei.c:2026
- link_path_walk.part.0+0x7ef/0xf70 fs/namei.c:2347
- link_path_walk fs/namei.c:2271 [inline]
- path_lookupat+0xc8/0x860 fs/namei.c:2498
- filename_lookup+0x1c6/0x590 fs/namei.c:2528
- user_path_at_empty+0x42/0x60 fs/namei.c:2851
- user_path_at include/linux/namei.h:57 [inline]
- do_faccessat+0x127/0x850 fs/open.c:424
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7fab11035a67
-Code: 77 01 c3 48 8b 15 11 f4 0c 00 f7 d8 64 89 02 48 c7 c0 ff ff ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 b8 15 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 01 c3 48 8b 15 e1 f3 0c 00 f7 d8 64 89 02 b8
-RSP: 002b:00007ffd5ca3e9c8 EFLAGS: 00000246 ORIG_RAX: 0000000000000015
-RAX: ffffffffffffffda RBX: 0000000000000b71 RCX: 00007fab11035a67
-RDX: 0000000000000000 RSI: 0000000000000006 RDI: 00007fab111cc285
-RBP: 0000000000000008 R08: 0000000000000000 R09: 00007fab110d3288
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000b71
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+I've updated the patchset and thought the fixup has been applied but no.
+I'll fold it to the patch so it doesn't get lost again.

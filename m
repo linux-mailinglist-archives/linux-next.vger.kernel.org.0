@@ -2,117 +2,160 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C6DB4B1D43
-	for <lists+linux-next@lfdr.de>; Fri, 11 Feb 2022 05:09:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF4264B1D88
+	for <lists+linux-next@lfdr.de>; Fri, 11 Feb 2022 05:57:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241213AbiBKEJ0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 10 Feb 2022 23:09:26 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46568 "EHLO
+        id S239101AbiBKE5X convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-next@lfdr.de>); Thu, 10 Feb 2022 23:57:23 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230111AbiBKEJ0 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 10 Feb 2022 23:09:26 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB8BD95;
-        Thu, 10 Feb 2022 20:09:25 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jw0Vl3NPqz4xcZ;
-        Fri, 11 Feb 2022 15:09:15 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1644552561;
-        bh=VUVojCKKHWJKmWHANxS0TOL5/b0Vvl062S8oKMsUMXU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=X4BafQYNtpR9G23Lo5DB0dMiuWtJPpvuPKrmkUzS0D2FfFFfDfvYxnTSW/7/eGBmJ
-         ze8E6zWE3H0G7DcrdFEANtSkTmt9kjvUJuV73YAUQn9oB6o/YQMMYewo87feuevoc0
-         ILRO90NIJ1XJtohzPAQpl1/9M84p4JcSe1fNw7SipZB6jwAI7qB/0X8fcNCUFJiv2l
-         k9+O4AaAGyRSmgRwvcZxAfjA6NtlbAhAKwrAWreFTBz2p49FTe+tffKLrzUL2IL/4O
-         HoLf6wVxWU/ttQNT0Hf55FEcHOvFldAtHDj4B6qkUQWhHaZKdJeO2bYCqbBuQUiChf
-         E5nNkse/p6bUQ==
-Date:   Fri, 11 Feb 2022 15:09:15 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-Cc:     Cai Huoqing <cai.huoqing@linux.dev>,
-        Cai Huoqing <caihuoqing@baidu.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: linux-next: manual merge of the iio tree with Linus' tree
-Message-ID: <20220211150915.712009a0@canb.auug.org.au>
+        with ESMTP id S233325AbiBKE5V (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 10 Feb 2022 23:57:21 -0500
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F8BB26F9
+        for <linux-next@vger.kernel.org>; Thu, 10 Feb 2022 20:57:20 -0800 (PST)
+Received: by mail-il1-f198.google.com with SMTP id b3-20020a056e020c8300b002be19f9e043so5319618ile.13
+        for <linux-next@vger.kernel.org>; Thu, 10 Feb 2022 20:57:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to
+         :content-transfer-encoding;
+        bh=kcbMTGf4ThT8HO5Mt7WKPPdEbptzj8mzIaWRHlsij1o=;
+        b=Pi75kLjp0FlLyB2vmSRTIbvk0hXPFhziJcnQDUZ7oSJgpGXzPze8WXL1Y5xDRRoT7C
+         dococDKNUWe0Xk/J1H3qP6Egl4K81nTNtOdDYN94DbM0tFDglmLuI8E9ZBgNbsLDP5qg
+         I1WMADaY0QTzjbnQti67bXxRuvQ1ETCY7kZvXXT+1odSe+nOFVZmzKVSK8y2YwUpa9hZ
+         Pb3ZkNxIPdYB3cSZQX3z3/dFCJ/Z1VFmu2f32ZOxqW+jPtnvJ2P1sjZMwOgm9ibkUvmS
+         K82arY5UkLAL/V+X31dPxelybuelvpcHDtlPXmUAKoz3JfH4ug576zgfpQQg/c1Dzv+3
+         Vt0g==
+X-Gm-Message-State: AOAM533SkQPTwcAwHASvhJiY38H7HJlTeYEHjJE24MTQGH1Ej3IjfQjn
+        qGQh/PEfiJYfIlxHq5MvVpVdeFU6abXv+JsEf6kWw9xyf905
+X-Google-Smtp-Source: ABdhPJwhJpHjOrV/NFpwJWwL3TvphCCOOtIBqKNKSVEkbgl7OVIGhvvWC2rkp7VB3IkRpN40hKCkfI5UF91RN/XvA9fN3fZMPITQ
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/RsAQV=bWgI+mxumJR4XMy9w";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:1487:: with SMTP id n7mr29261ilk.109.1644555439753;
+ Thu, 10 Feb 2022 20:57:19 -0800 (PST)
+Date:   Thu, 10 Feb 2022 20:57:19 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ccd19405d7b6e687@google.com>
+Subject: [syzbot] linux-next test error: WARNING: suspicious RCU usage in hsr_node_get_first
+From:   syzbot <syzbot+787eccd42a00a400e647@syzkaller.appspotmail.com>
+To:     claudiajkang@gmail.com, davem@davemloft.net,
+        ennoerlangen@gmail.com, george.mccollister@gmail.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org, marco.wenzel@a-eberle.de,
+        netdev@vger.kernel.org, olteanv@gmail.com, sfr@canb.auug.org.au,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/RsAQV=bWgI+mxumJR4XMy9w
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hello,
 
-Hi all,
+syzbot found the following issue on:
 
-Today's linux-next merge of the iio tree got a conflict in:
+HEAD commit:    554f92dbda16 Add linux-next specific files for 20220208
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=13655472700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=540b1094b49a74bd
+dashboard link: https://syzkaller.appspot.com/bug?extid=787eccd42a00a400e647
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-  .mailmap
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+787eccd42a00a400e647@syzkaller.appspotmail.com
 
-between commit:
+batman_adv: batadv0: The MTU of interface batadv_slave_1 is too small (1500) to handle the transport of batman-adv packets. Packets going over this interface will be fragmented on layer2 which could impact the performance. Setting the MTU to 1560 would solve the problem.
+batman_adv: batadv0: Not using interface batadv_slave_1 (retrying later): interface not active
+=============================
+WARNING: suspicious RCU usage
+5.17.0-rc3-next-20220208-syzkaller #0 Not tainted
+-----------------------------
+net/hsr/hsr_framereg.c:34 suspicious rcu_dereference_check() usage!
 
-  984d1efff230 ("mailmap: update email address of Brian Silverman")
+other info that might help us debug this:
 
-from Linus' tree and commit:
 
-  f3366f8e6464 ("mailmap: Update email address for Cai Huoqing")
+rcu_scheduler_active = 2, debug_locks = 1
+2 locks held by syz-executor.0/3596:
+ #0: ffffffff8d3357e8 (rtnl_mutex){+.+.}-{3:3}, at: rtnl_lock net/core/rtnetlink.c:72 [inline]
+ #0: ffffffff8d3357e8 (rtnl_mutex){+.+.}-{3:3}, at: rtnetlink_rcv_msg+0x3be/0xb80 net/core/rtnetlink.c:5591
+ #1: ffff88807ec9d5f0 (&hsr->list_lock){+...}-{2:2}, at: spin_lock_bh include/linux/spinlock.h:359 [inline]
+ #1: ffff88807ec9d5f0 (&hsr->list_lock){+...}-{2:2}, at: hsr_create_self_node+0x225/0x650 net/hsr/hsr_framereg.c:108
 
-from the iio tree.
+stack backtrace:
+CPU: 1 PID: 3596 Comm: syz-executor.0 Not tainted 5.17.0-rc3-next-20220208-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ hsr_node_get_first+0x9b/0xb0 net/hsr/hsr_framereg.c:34
+ hsr_create_self_node+0x22d/0x650 net/hsr/hsr_framereg.c:109
+ hsr_dev_finalize+0x2c1/0x7d0 net/hsr/hsr_device.c:514
+ hsr_newlink+0x315/0x730 net/hsr/hsr_netlink.c:102
+ __rtnl_newlink+0x107c/0x1760 net/core/rtnetlink.c:3481
+ rtnl_newlink+0x64/0xa0 net/core/rtnetlink.c:3529
+ rtnetlink_rcv_msg+0x413/0xb80 net/core/rtnetlink.c:5594
+ netlink_rcv_skb+0x153/0x420 net/netlink/af_netlink.c:2494
+ netlink_unicast_kernel net/netlink/af_netlink.c:1317 [inline]
+ netlink_unicast+0x539/0x7e0 net/netlink/af_netlink.c:1343
+ netlink_sendmsg+0x904/0xe00 net/netlink/af_netlink.c:1919
+ sock_sendmsg_nosec net/socket.c:705 [inline]
+ sock_sendmsg+0xcf/0x120 net/socket.c:725
+ __sys_sendto+0x21c/0x320 net/socket.c:2040
+ __do_sys_sendto net/socket.c:2052 [inline]
+ __se_sys_sendto net/socket.c:2048 [inline]
+ __x64_sys_sendto+0xdd/0x1b0 net/socket.c:2048
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f3148504e1c
+Code: fa fa ff ff 44 8b 4c 24 2c 4c 8b 44 24 20 89 c5 44 8b 54 24 28 48 8b 54 24 18 b8 2c 00 00 00 48 8b 74 24 10 8b 7c 24 08 0f 05 <48> 3d 00 f0 ff ff 77 34 89 ef 48 89 44 24 08 e8 20 fb ff ff 48 8b
+RSP: 002b:00007ffeab5f2ab0 EFLAGS: 00000293 ORIG_RAX: 000000000000002c
+RAX: ffffffffffffffda RBX: 00007f314959d320 RCX: 00007f3148504e1c
+RDX: 0000000000000048 RSI: 00007f314959d370 RDI: 0000000000000003
+RBP: 0000000000000000 R08: 00007ffeab5f2b04 R09: 000000000000000c
+R10: 0000000000000000 R11: 0000000000000293 R12: 0000000000000000
+R13: 00007f314959d370 R14: 0000000000000003 R15: 0000000000000000
+ </TASK>
+device hsr_slave_0 entered promiscuous mode
+device hsr_slave_1 entered promiscuous mode
+netdevsim netdevsim0 netdevsim0: renamed from eth0
+netdevsim netdevsim0 netdevsim1: renamed from eth1
+netdevsim netdevsim0 netdevsim2: renamed from eth2
+netdevsim netdevsim0 netdevsim3: renamed from eth3
+bridge0: port 2(bridge_slave_1) entered blocking state
+bridge0: port 2(bridge_slave_1) entered forwarding state
+bridge0: port 1(bridge_slave_0) entered blocking state
+bridge0: port 1(bridge_slave_0) entered forwarding state
+8021q: adding VLAN 0 to HW filter on device bond0
+8021q: adding VLAN 0 to HW filter on device team0
+IPv6: ADDRCONF(NETDEV_CHANGE): hsr0: link becomes ready
+8021q: adding VLAN 0 to HW filter on device batadv0
+device veth0_vlan entered promiscuous mode
+device veth1_vlan entered promiscuous mode
+device veth0_macvtap entered promiscuous mode
+device veth1_macvtap entered promiscuous mode
+batman_adv: batadv0: Interface activated: batadv_slave_0
+batman_adv: batadv0: Interface activated: batadv_slave_1
+netdevsim netdevsim0 netdevsim0: set [1, 0] type 2 family 0 port 6081 - 0
+netdevsim netdevsim0 netdevsim1: set [1, 0] type 2 family 0 port 6081 - 0
+netdevsim netdevsim0 netdevsim2: set [1, 0] type 2 family 0 port 6081 - 0
+netdevsim netdevsim0 netdevsim3: set [1, 0] type 2 family 0 port 6081 - 0
+syz-executor.0 (3596) used greatest stack depth: 22424 bytes left
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
 
---=20
-Cheers,
-Stephen Rothwell
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --cc .mailmap
-index 8cd44b0c6579,76dd303c7eac..000000000000
---- a/.mailmap
-+++ b/.mailmap
-@@@ -70,7 -70,7 +70,8 @@@ Boris Brezillon <bbrezillon@kernel.org
-  Boris Brezillon <bbrezillon@kernel.org> <boris.brezillon@free-electrons.c=
-om>
-  Brian Avery <b.avery@hp.com>
-  Brian King <brking@us.ibm.com>
- +Brian Silverman <bsilver16384@gmail.com> <brian.silverman@bluerivertech.c=
-om>
-+ Cai Huoqing <cai.huoqing@linux.dev> <caihuoqing@baidu.com>
-  Changbin Du <changbin.du@intel.com> <changbin.du@gmail.com>
-  Changbin Du <changbin.du@intel.com> <changbin.du@intel.com>
-  Chao Yu <chao@kernel.org> <chao2.yu@samsung.com>
-
---Sig_/RsAQV=bWgI+mxumJR4XMy9w
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIF4WsACgkQAVBC80lX
-0GxDqQgApGlLLS5f/rq5gu1zLJ0oxN/F5zigNo1TdqjIKEFdZ8ti1IIH3pD9DgVB
-Cev5hj4OWD+UTv+RG4gvFSYfDjfg3/bHWwBhS0BzdPevYhgM0pEIxeAEpsfa+zgF
-0oU303tpGThx0Tti9MNDoRPMXBy1vmrb+n3zg4LMyMvdi/zQLUXigMC5fymywDaz
-tBxJRIJWYtSLsrIiJ4eNN/tIU/D9LYquFXaGG8uB2/oJfPHjuxIpKd84V+izd/7+
-L2xFam4MiSs5YSuAoDyJVvQRV1OtXFY20k6cnxCMLKkEiWfqKysRogVdEwHBL0zN
-gwH8jl1GdLXIcIlV+eSsTJbWxF7erA==
-=EWHb
------END PGP SIGNATURE-----
-
---Sig_/RsAQV=bWgI+mxumJR4XMy9w--
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

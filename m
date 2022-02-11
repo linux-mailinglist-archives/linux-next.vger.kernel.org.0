@@ -2,50 +2,52 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D36084B1B6B
-	for <lists+linux-next@lfdr.de>; Fri, 11 Feb 2022 02:43:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04DC94B1BE8
+	for <lists+linux-next@lfdr.de>; Fri, 11 Feb 2022 03:07:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346918AbiBKBnF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 10 Feb 2022 20:43:05 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48220 "EHLO
+        id S1347143AbiBKCGd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 10 Feb 2022 21:06:33 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235662AbiBKBnE (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 10 Feb 2022 20:43:04 -0500
+        with ESMTP id S242403AbiBKCGd (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 10 Feb 2022 21:06:33 -0500
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CFF85F8C;
-        Thu, 10 Feb 2022 17:43:04 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 459155F9B;
+        Thu, 10 Feb 2022 18:06:32 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JvxFy5gJMz4xRB;
-        Fri, 11 Feb 2022 12:43:02 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jvxmx3R5xz4xRB;
+        Fri, 11 Feb 2022 13:06:24 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1644543783;
-        bh=g1adS5Mf4yxBoE+lEPW0CS33tWPdSm6l7vqPogSlpBk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=piiw5O2jYqPXo0dNH0SzpRBhMKIOBmaNz6kTj5uv/w8VhvYNe3W29omjs98o0TM8l
-         9ydK6dq/axl6fVbABNAQgisaPL18bRmizNZ4kNlD8tWeMmzBRoI/etSAoVTbLGN9RM
-         YtU74Ap7UC7xxUCUFX8HqdbYZ6Bx6ij+1EMj3cYR4cv64dy72i2AtRyDfspXvyk77E
-         q426a7EPCr1YxSs2gcDrq91Ar6dayCnjlRM5Mp2dToAsUd1Va7M9746kntCVU2SXRk
-         o1ZOJttcUqdUY1M/UHWcKubD0K8rhv3LMtsQzpARSgqDJpWkWSs/PGYghpNU/5JdB7
-         m3oqfwfgWmsuw==
-Date:   Fri, 11 Feb 2022 12:43:02 +1100
+        s=201702; t=1644545187;
+        bh=41ADKpDhvwyAZMddYDgXJPz5v6qbPxB/ugfUN4tyqPY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=UJW2EGP2gLjAh/cRmfLgwqpw8uDQuFU/YD2O0G/D7rZjQ1WxozYtv/kbL3fNn1uEI
+         9X5S71wRvgTEI06My5CPP9546gXgwSUV21RiZPXdUdc2CoL30VN/XJ66sYY/YWb1D7
+         m1w+SHNMs45frFiYfkXCSs3JcaFyw5eJu4ZB6bZiuKkp+vIHftlJOircnOhlqhbuXB
+         PCnkoDWiGNXHzQRH09DK79aXdNoNfeKspBbfi5cc0qWy9oCcIa3Tgn7f2hv522LCHr
+         +IUcKfZmCR0Tgh6fBd3pEESjf9LWTs5PE5/KbnaXYE931xOP4wE5waq6EN3S9UONsb
+         UyenXucDeN8KA==
+Date:   Fri, 11 Feb 2022 13:06:23 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Tong Zhang <ztong0001@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Domenico Andreoli <domenico.andreoli@linux.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Dave Airlie <airlied@linux.ie>
+Cc:     Arunpravin <Arunpravin.PaneerSelvam@amd.com>,
+        Christian =?UTF-8?B?S8O2?= =?UTF-8?B?bmln?= 
+        <christian.koenig@amd.com>, Jani Nikula <jani.nikula@intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: boottime warning from todays linux-next
-Message-ID: <20220211124302.7b0f0ec0@canb.auug.org.au>
-In-Reply-To: <CAA5qM4BKwS9W5UCbnfo_xSTJKBuUEyNzUrg0UfGhoxWK5WK3RQ@mail.gmail.com>
-References: <20220210184340.7eba108a@canb.auug.org.au>
-        <CAA5qM4BKwS9W5UCbnfo_xSTJKBuUEyNzUrg0UfGhoxWK5WK3RQ@mail.gmail.com>
+Subject: linux-next: manual merge of the drm-intel tree with the drm tree
+Message-ID: <20220211130623.7cb860aa@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/DL6fQvuyFhN33u0jVrgCW+u";
+Content-Type: multipart/signed; boundary="Sig_/j4imPgn6DGpQHHJIoh5bmez";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -56,45 +58,65 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/DL6fQvuyFhN33u0jVrgCW+u
+--Sig_/j4imPgn6DGpQHHJIoh5bmez
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Tong,
+Hi all,
 
-On Thu, 10 Feb 2022 15:35:30 -0800 Tong Zhang <ztong0001@gmail.com> wrote:
->
-> I am trying to see if I can reproduce this.
-> Could you share the QEMU command line and pseries_le_defconfig?
-> Latest kernel does not have pseries_le_defconfig so I assume you have
-> your own version.
+Today's linux-next merge of the drm-intel tree got a conflict in:
 
-This is a ARCH=3Dpowerpc build and qemu run.
+  drivers/gpu/drm/i915/i915_module.c
 
-qemu-system-ppc64 -M pseries -cpu POWER8 -m 2G -vga none -nographic -kernel=
- $vmlinux -initrd $initrd
+between commit:
 
-I have a simple initrd that just boots to a login prompt.
+  6387a3c4b0c4 ("drm: move the buddy allocator from i915 into common drm")
 
-Anyway, it seems that the mystery has been solved (hopefully).
+from the drm tree and commit:
+
+  24524e3f43cf ("drm/i915: move the DRIVER_* macros to i915_driver.[ch]")
+
+from the drm-intel tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/DL6fQvuyFhN33u0jVrgCW+u
+diff --cc drivers/gpu/drm/i915/i915_module.c
+index 8451822637f0,5d6fdf37fb5a..000000000000
+--- a/drivers/gpu/drm/i915/i915_module.c
++++ b/drivers/gpu/drm/i915/i915_module.c
+@@@ -9,6 -9,8 +9,7 @@@
+  #include "gem/i915_gem_context.h"
+  #include "gem/i915_gem_object.h"
+  #include "i915_active.h"
+ -#include "i915_buddy.h"
++ #include "i915_driver.h"
+  #include "i915_params.h"
+  #include "i915_pci.h"
+  #include "i915_perf.h"
+
+--Sig_/j4imPgn6DGpQHHJIoh5bmez
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIFvyYACgkQAVBC80lX
-0Gx8PQf+I+iXCArkWWbLWbI9BLA9VZcLxJA1D4IOYLvQVXKyJK88MCptqO84EKit
-dY0y5chaiXO4ux7u0PesR4HOI6kwwEWMcT/poZZIzzl5hgYyuPbbZisEF+U9ARRt
-n5LEHb8ikbByW9lM5IrWZWEmx2nYG05toveuLGvyBxgZStgg+6PmJMhlA+EF+J4F
-kzZsRSmJYcm7S8tYXOcdLQnLO5xcIHLdosfD4nVmmKq2DmA23t91GY8CYUkQmO/X
-zdtSim2x7iPNKgnpNDDzOFko3VM5CKGwyfH0jE6z3itvv7ca4tepjXv55eFgv01r
-okVCObDCJ0sACOw65UoOyDBmm1oYCw==
-=diWt
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIFxJ8ACgkQAVBC80lX
+0Gwl9wgAkS+R5m4vZdQSOT5buQhA9ewL+7ldHjHps/dIAd34h78CLE1DYkjKFKm+
+6RcCKONnjNtXpOjWq0pNCwE4rv0TezHci5wDKspow9yXQ7heqGk+508KLiyJrYAK
+rKB884EyrdPe5kN5e1T3G/YzVtYhInusN37jhGMDksTvegNo3Txtdr4vhMtkImY0
+0TpnY3lgK8RkMoGCitAvYRp4D90Sgltjt9GDw5y0vs9fx8JwhU/LkP2J9iOws5bE
+UsffZqZZfb3a7gle3ahQOhsHTj9wwE+GpcW7ehWtwSoX05qPoAq6ItA5wUDBTSeh
+RJ0JAYo12wD7vsILwIFJHf1c2bH98g==
+=z61v
 -----END PGP SIGNATURE-----
 
---Sig_/DL6fQvuyFhN33u0jVrgCW+u--
+--Sig_/j4imPgn6DGpQHHJIoh5bmez--

@@ -2,56 +2,54 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB70E4B1F89
-	for <lists+linux-next@lfdr.de>; Fri, 11 Feb 2022 08:47:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 652074B1F9B
+	for <lists+linux-next@lfdr.de>; Fri, 11 Feb 2022 08:49:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347793AbiBKHqv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 11 Feb 2022 02:46:51 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52992 "EHLO
+        id S1347798AbiBKHt4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 11 Feb 2022 02:49:56 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229789AbiBKHqv (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 11 Feb 2022 02:46:51 -0500
+        with ESMTP id S229961AbiBKHtz (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 11 Feb 2022 02:49:55 -0500
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4C742D4;
-        Thu, 10 Feb 2022 23:46:50 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F774B35;
+        Thu, 10 Feb 2022 23:49:55 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jw5Kh1C1Kz4xcY;
-        Fri, 11 Feb 2022 18:46:48 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jw5P62TRWz4xcY;
+        Fri, 11 Feb 2022 18:49:46 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1644565608;
-        bh=cOHXs+qw3p5jeWTYUNSQ6a37/cxDtUPz6RdojQhCpH0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=eJRgYQbUQYTVEa/SWoTyHjYeYTyjtQFFVVJY9I/L+JaZ058yusb3BSjJBbIL1CJS0
-         fL0TC4ebA3lKSQ0mNGDLIqUdrdz+1YVV6cqH78SxReHJ021qKX0zTgxWOfS76yc9uz
-         AHPb6aT5yf+BnJ12RQqOlGRPm9tu6sE/lRAv6u7XH3pKQlkKukEWLOzUK2oC0jTiDu
-         ytVDy7ZrbFWiVJivHOAqPV0BNlKw4MWLqpevWQFyivDcy553vyzAbLEBruFgBnVasC
-         EZztG1HhcB51abtkRPA1Qf+jU6vwGvLJ47CGxMNHQXgo8EDgMNWBrupEtfKXN7hq3o
-         neDvaA6HfJFqQ==
-Date:   Fri, 11 Feb 2022 18:46:47 +1100
+        s=201702; t=1644565793;
+        bh=gNbUFF91eRbp2n/8xdXGTesci5ftBWuDnIOJVDWoZ1g=;
+        h=Date:From:To:Cc:Subject:From;
+        b=T1YxXDz7EpV5Yn8rpl9ZDyP0C0baSaTTEK2doMfjdEkTS5ujVOHtuynPYyRSn3Wle
+         DnOxpf8vlZHGVlbFRVEipq+q6vpI78JieeGWoxHMlKz/8qtrGqojma4elv/kTz6S5g
+         E95xW83JXDns7JnlkCEG+dXrenSebRZ0so7d+YMHRbIG6/VicBVqVnL/cREhiN8/Co
+         5rd8jU4sYYfN0dghWMrcyh/mi8g45H55Tf5hlq/vLZZDWALSULqM9RZ8htbtEOumpu
+         ijTOOR9ffiiCVypQwOv7Y75/LiTEGhRzIWRZYWthJh03lVl6SRryJJ6A6sB1goIxqy
+         8VG7PHNq7D4bQ==
+Date:   Fri, 11 Feb 2022 18:49:45 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        Tong Zhang <ztong0001@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Domenico Andreoli <domenico.andreoli@linux.com>,
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc:     Adam Bratschi-Kaye <ark.email@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boris-Chengbiao Zhou <bobo1239@web.de>,
+        Daniel Xu <dxu@dxuuu.xyz>, Finn Behrens <me@kloenk.de>,
+        Gary Guo <gary@garyguo.net>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Wei Liu <wei.liu@kernel.org>, Wu XiangCheng <bobwxc@email.cn>,
+        Yuki Okushi <jtitor@2k36.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: boottime warning from todays linux-next
-Message-ID: <20220211184647.0a62dad4@canb.auug.org.au>
-In-Reply-To: <YgW+DopXpFNZTj4k@bombadil.infradead.org>
-References: <20220210184340.7eba108a@canb.auug.org.au>
-        <20220210193302.686fa61a@canb.auug.org.au>
-        <20220210214125.2b248790@canb.auug.org.au>
-        <20220210222953.6e078d20@canb.auug.org.au>
-        <YgWdbYfWgHP2jBmI@bombadil.infradead.org>
-        <20220211123336.54eff9de@canb.auug.org.au>
-        <YgW+DopXpFNZTj4k@bombadil.infradead.org>
+Subject: linux-next: build warnings after merge of the rust tree
+Message-ID: <20220211184945.7b2fb872@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/52ORiMzXrF8KF4+TuM3QYPH";
+Content-Type: multipart/signed; boundary="Sig_/04o7gX0+LP=3JwbS/ocZhtN";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -62,43 +60,44 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/52ORiMzXrF8KF4+TuM3QYPH
+--Sig_/04o7gX0+LP=3JwbS/ocZhtN
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Luis,
+Hi all,
 
-On Thu, 10 Feb 2022 17:38:22 -0800 Luis Chamberlain <mcgrof@kernel.org> wro=
-te:
->
-> On Fri, Feb 11, 2022 at 12:33:36PM +1100, Stephen Rothwell wrote:
-> >=20
-> > Thanks for noticing that.  I have removed the old version from my copy
-> > of mmotm today. =20
->=20
-> And ... does that fix your boot?
+After merging the rust tree, today's linux-next build (htmldocs) produced
+these warnings:
 
-Yes, the messages are all gone.
+Documentation/rust/coding-guidelines.rst:74: WARNING: Unexpected indentatio=
+n.
+Documentation/rust/coding-guidelines.rst:79: WARNING: Definition list ends =
+without a blank line; unexpected unindent.
+Documentation/rust/coding-guidelines.rst:80: WARNING: Block quote ends with=
+out a blank line; unexpected unindent.
 
-Thanks again.
+Introduced by commit
+
+  0b154fdfa6ec ("docs: add Rust documentation")
+
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/52ORiMzXrF8KF4+TuM3QYPH
+--Sig_/04o7gX0+LP=3JwbS/ocZhtN
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIGFGcACgkQAVBC80lX
-0GznrQf9HQBeck5FeKsEabJk1lVTMmUbTO6bviZ8WMCRjANm1bXl1UFxpnkRdBRP
-Kef5LJ01uKyWc78rsbppXsceuauzgG82VeAZEzopD9fuq2Go40GIbW1PkTZWZW8T
-5zpjmsarGCBHSvm0MUsQq0NOkwe9SEvKqHNF/Oh1Z9uP+vjqruE0nCHVrmOAN6VG
-/vg3bJv9oayGXD3eLdrfxRuMzNJkZn9eD8EgwjzgINreUg1U2a4Soa4qJ/sSMpvb
-q5OrMCfufyiJ9Qx2EEctfP0kyXixM0eYiMUPCQdeR1j5bbDan9ga6TOyQp3tVrgm
-873HS2iv0M02b7LD2sFdKH17eGkwnQ==
-=ym7y
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIGFRkACgkQAVBC80lX
+0GxaoQf+NTMGhmJWIHcQH14GDZZ7uwkynzXAWrA98V0pD2Gv2mqfCLXLAGgjT19c
+x7+fhsGRGlsDdXa/Kj3g+aWjO5QuZdtk9eK1OLQrOYi3aM8k4MwW+pPXQJo5Mw5R
+zHQAkNSpgm3SgufJbB+6ln8lQ+OZExK8T6bK6W/dJgPSdOOIWJL/GHFmuaKnggHo
+WqtYG81v+Rv3R08INK5DP8SOQAZ9vOHjt3jdptxAPneHPyfU7uWbsszU9UZKti9U
+P3BtN/e6X64WVO1Mgub341dhuhyUHK5Y9IIcY+54OPovtO6x30CRQlIuYd7Gvv/x
+5E5iRTRJFGdQY7QoILZ0WEa2phltZA==
+=c2BT
 -----END PGP SIGNATURE-----
 
---Sig_/52ORiMzXrF8KF4+TuM3QYPH--
+--Sig_/04o7gX0+LP=3JwbS/ocZhtN--

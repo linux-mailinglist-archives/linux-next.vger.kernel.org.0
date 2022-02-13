@@ -2,45 +2,43 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A163B4B3AF6
-	for <lists+linux-next@lfdr.de>; Sun, 13 Feb 2022 11:54:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CD914B3AFF
+	for <lists+linux-next@lfdr.de>; Sun, 13 Feb 2022 12:03:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234973AbiBMKwc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 13 Feb 2022 05:52:32 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56840 "EHLO
+        id S235283AbiBMLAs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 13 Feb 2022 06:00:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229834AbiBMKwb (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 13 Feb 2022 05:52:31 -0500
+        with ESMTP id S235278AbiBMLAr (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 13 Feb 2022 06:00:47 -0500
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 929765DE68;
-        Sun, 13 Feb 2022 02:52:25 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98BF05EDDD;
+        Sun, 13 Feb 2022 03:00:41 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JxPLw0bLjz4xcY;
-        Sun, 13 Feb 2022 21:52:24 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JxPXS1fChz4xcY;
+        Sun, 13 Feb 2022 22:00:40 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1644749544;
-        bh=q1PiSzy9fPtrrGlyILZI15Ey5v0iP5l6DYvReg+qPbY=;
+        s=201702; t=1644750040;
+        bh=LgXs76Dju0jSFRHKKrckEL2WS2aNQ58HZxTb3GTqDQw=;
         h=Date:From:To:Cc:Subject:From;
-        b=brnyHL0Aq7MiGDh1N2ew5vNbBDnGfEPjzW9EpJlUWj3WmBzsl1mmSOpvcwhxoRPSX
-         sM70jvD71BhcsSGELqlnrxUxZquCXldLlB9+iIPrcTd3m2lOTdomEgseY0bIApfXQB
-         C8kFpNnRaQTtWQ7M2a8FOPKb9S6pgpsDzbNnOM/P3hJiBe0yc1V3vJQohQs9zE1vao
-         hY+ymlIlKBU5m2ZltYrxvvX/yyhLQ3M1LjLsLxyySt5QTpJYBv/jgih76tpzxykoxt
-         hW2xDtsJvXKKxAY4yAo//ARcCrZMfvFI8mJvDi0gEOctck2qqepWcsniqXR03142oT
-         uaqliYTP0geVA==
-Date:   Sun, 13 Feb 2022 21:52:23 +1100
+        b=G8GPbRnAtrDCyXoxP1Bz5crWXsy/IK546fd6ATCQuH9SWYquFKBCFCfDEfd9MDlHA
+         1THJXlmKFgoDwPKslq75Cg/Syljbr5HQp3Yw8XkWLsdjJfT9+2Pw7i1bNg75qtcOAN
+         U+aIa7NU0opuOqPLj3j95tM/B8s2lnKqp0Alq6wInWZfiGLiI+UHnw4w1fddrv6oJY
+         7MyZeHwBshe3ggzcwK6xbL2gS/D68KjLK+SUPr7bMkRf8yRDcK3bzyW+Oe5SuEFi/5
+         qUtppC1vLDZb9Bgam1uMBb/amqbi3YrOln/oPKAe+fOQlCIFhTiMLvqLWeTIQAZr0G
+         L6FXhZOweBdJA==
+Date:   Sun, 13 Feb 2022 22:00:39 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Steven Whitehouse <swhiteho@redhat.com>,
-        Bob Peterson <rpeterso@redhat.com>
-Cc:     Andreas Gruenbacher <agruenba@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the gfs2 tree
-Message-ID: <20220213215223.04cc2755@canb.auug.org.au>
+Subject: linux-next: Signed-off-by missing for commit in the battery tree
+Message-ID: <20220213220039.4a583a0a@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/aL7VeTQ=NAdC=Dki1Lsr0_A";
+Content-Type: multipart/signed; boundary="Sig_/lPJ7W0GN+Y+8nnDwLuAIYOE";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -51,7 +49,7 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/aL7VeTQ=NAdC=Dki1Lsr0_A
+--Sig_/lPJ7W0GN+Y+8nnDwLuAIYOE
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -59,7 +57,7 @@ Hi all,
 
 Commit
 
-  700e82af02f2 ("gfs2: assign rgrp glock before compute_bitstructs")
+  e748590daf72 ("power: supply: PCHG: Use MKBP for device event handling")
 
 is missing a Signed-off-by from its committer.
 
@@ -67,20 +65,20 @@ is missing a Signed-off-by from its committer.
 Cheers,
 Stephen Rothwell
 
---Sig_/aL7VeTQ=NAdC=Dki1Lsr0_A
+--Sig_/lPJ7W0GN+Y+8nnDwLuAIYOE
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmII4ucACgkQAVBC80lX
-0GzKdQgAgWiCmn2eVbfUPetwaHqvfIgQWqMyo+nPnrT9aVdyVUq2pwHgvzN9Y0zj
-Rbx4DeOhQNKNPGira2IxVvUwD3crIcCUWMoFRrG7iU3JOUdflFZ4XIGn0QBu2DF1
-kV5tXkzDJoJe6NFUceZWS4mr524rISMkv0vyLypwNByfG5Yih1VkyeJDm0Q8Lulx
-2P2SDmRJAG/hC3XPOZixOnAQtWKz+I0U+e428z6lOvKIyqF9xKo95vFQB5UODN2r
-BXqcJCOtFpWMNsrNOIIsJMEab73KodDgTm0SMKcDXyut0qt5MDPMZ3nLZqfmo8/E
-rhsJWtaKzHJaWA4AIEPUP4E7kY4wjQ==
-=ZzP2
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmII5NcACgkQAVBC80lX
+0GxOvQgAiUjdkD/HyZPne62rQMvVg6jz689Ej5DySBZ0wHBtql/IgkYRxvpnG56C
+3D70NuwKkJmgyQ0sAkze3dfvpRqjJNEzNouHSoSplit6ijHejeoNldep90t9zMos
++ZhFLqmKMpexXM9BSvrcGwWA0J45/bwgS6ZO2Wcnp26DWcSMHCe00Ovwh8EUEP8k
+B1QglLBgyXqFsD8dYmrP40Haz8yjJhicy7L9/JF7w4V7m7iDA44Joy7T4Zea9qsY
+Zg6Nnb5EDlA+Kw3m0+8v9z0T5ZGw6i8KEKe37SvnOCQGtePxliJq1wETDFAte8FF
+EoNrEroT+sC3q9UZQ/xVvS2HofRtiA==
+=UQE9
 -----END PGP SIGNATURE-----
 
---Sig_/aL7VeTQ=NAdC=Dki1Lsr0_A--
+--Sig_/lPJ7W0GN+Y+8nnDwLuAIYOE--

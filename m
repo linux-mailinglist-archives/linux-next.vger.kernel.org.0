@@ -2,43 +2,45 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84EEB4B3AF0
-	for <lists+linux-next@lfdr.de>; Sun, 13 Feb 2022 11:45:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A163B4B3AF6
+	for <lists+linux-next@lfdr.de>; Sun, 13 Feb 2022 11:54:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235156AbiBMKpM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 13 Feb 2022 05:45:12 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54592 "EHLO
+        id S234973AbiBMKwc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 13 Feb 2022 05:52:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229834AbiBMKpL (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 13 Feb 2022 05:45:11 -0500
+        with ESMTP id S229834AbiBMKwb (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 13 Feb 2022 05:52:31 -0500
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A87C5D67A;
-        Sun, 13 Feb 2022 02:45:04 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 929765DE68;
+        Sun, 13 Feb 2022 02:52:25 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JxPBQ4zqVz4xPv;
-        Sun, 13 Feb 2022 21:45:02 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JxPLw0bLjz4xcY;
+        Sun, 13 Feb 2022 21:52:24 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1644749102;
-        bh=rc04cqWIKdAAbQXu6l3QwXyrgGSEPlAdKLhxMCoARX8=;
+        s=201702; t=1644749544;
+        bh=q1PiSzy9fPtrrGlyILZI15Ey5v0iP5l6DYvReg+qPbY=;
         h=Date:From:To:Cc:Subject:From;
-        b=eXn45UNKV4dgnz2E3nNRrKQBLA1l/x48H5fGS/3XNi+iV3ElBqY97DO+PQpgtz3ox
-         N7jeeVaaEPI2wbZlvI5lQOtqJ7vMCrGLoKGNj+4ZTQSFPH5QjtdntNdUYoPHJjHFMV
-         0goWfsk8Z5Vp4iI5TZZHb8uqh1V9W94eIezeAYP+TXADGOABaBKf1ww+JyLpmrRzs/
-         PxmZPW07zFw0IdPDraRXIEeiE9TXRNvD+iMHj+5/srVPZWJcdWwuXw03UBfE67WCTG
-         8JZGVVwPKVQBZcZWqzPSPbaUYw9Yh+AIfoHBxT09w/j4qO8EpKv+v2Ju5LeP14ay59
-         WYfAhmDlNtvew==
-Date:   Sun, 13 Feb 2022 21:45:01 +1100
+        b=brnyHL0Aq7MiGDh1N2ew5vNbBDnGfEPjzW9EpJlUWj3WmBzsl1mmSOpvcwhxoRPSX
+         sM70jvD71BhcsSGELqlnrxUxZquCXldLlB9+iIPrcTd3m2lOTdomEgseY0bIApfXQB
+         C8kFpNnRaQTtWQ7M2a8FOPKb9S6pgpsDzbNnOM/P3hJiBe0yc1V3vJQohQs9zE1vao
+         hY+ymlIlKBU5m2ZltYrxvvX/yyhLQ3M1LjLsLxyySt5QTpJYBv/jgih76tpzxykoxt
+         hW2xDtsJvXKKxAY4yAo//ARcCrZMfvFI8mJvDi0gEOctck2qqepWcsniqXR03142oT
+         uaqliYTP0geVA==
+Date:   Sun, 13 Feb 2022 21:52:23 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christian Brauner <christian@brauner.io>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Steven Whitehouse <swhiteho@redhat.com>,
+        Bob Peterson <rpeterso@redhat.com>
+Cc:     Andreas Gruenbacher <agruenba@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the pidfd tree
-Message-ID: <20220213214501.4e2961a0@canb.auug.org.au>
+Subject: linux-next: Signed-off-by missing for commit in the gfs2 tree
+Message-ID: <20220213215223.04cc2755@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/mSzW0hLnaiYIU0lG/wX32VE";
+Content-Type: multipart/signed; boundary="Sig_/aL7VeTQ=NAdC=Dki1Lsr0_A";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -49,42 +51,36 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/mSzW0hLnaiYIU0lG/wX32VE
+--Sig_/aL7VeTQ=NAdC=Dki1Lsr0_A
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-In commit
+Commit
 
-  fdadcbad209c ("fs: add kernel doc for mnt_{hold,unhold}_writers()")
+  700e82af02f2 ("gfs2: assign rgrp glock before compute_bitstructs")
 
-Fixes tag
-
-  Fixes: commit fbdc2f6c40f6 ("fs: split out functions to hold writers")
-
-has these problem(s):
-
-  - leading word 'commit' unexpected
+is missing a Signed-off-by from its committer.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/mSzW0hLnaiYIU0lG/wX32VE
+--Sig_/aL7VeTQ=NAdC=Dki1Lsr0_A
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmII4S0ACgkQAVBC80lX
-0Gx0Ggf/TXumUWseGRBhi2TxzNUBcjsYw76X+2Q+Siaqk4OkTjIUJSu/sAsxe8LS
-RRd4gtAaBhIGzxYE2TQfIi2JI4DAHoyrpqSvONl+rOl5zQNfyksJr+mMjVdqu7DI
-+AfKcxArxTgTsxDkmIT/R0487SCNPlew2SJOkl9AY1PrjnL9ccpe0eBGVq3ig7GK
-NCUUjUz81itSu61TaFjp0I772cb1UPTEsES9Uqq4Y5LIXjaW3pUyRzZa8krRed8Q
-wCMWQbyN6zfB8MDiJCtr1hXXe2vczxIkAI29h9/B5qe197dIRYWYOeV3XiGzYcI4
-MnKS7q4hsPUfxNElPK6weTQTJzOgDQ==
-=440v
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmII4ucACgkQAVBC80lX
+0GzKdQgAgWiCmn2eVbfUPetwaHqvfIgQWqMyo+nPnrT9aVdyVUq2pwHgvzN9Y0zj
+Rbx4DeOhQNKNPGira2IxVvUwD3crIcCUWMoFRrG7iU3JOUdflFZ4XIGn0QBu2DF1
+kV5tXkzDJoJe6NFUceZWS4mr524rISMkv0vyLypwNByfG5Yih1VkyeJDm0Q8Lulx
+2P2SDmRJAG/hC3XPOZixOnAQtWKz+I0U+e428z6lOvKIyqF9xKo95vFQB5UODN2r
+BXqcJCOtFpWMNsrNOIIsJMEab73KodDgTm0SMKcDXyut0qt5MDPMZ3nLZqfmo8/E
+rhsJWtaKzHJaWA4AIEPUP4E7kY4wjQ==
+=ZzP2
 -----END PGP SIGNATURE-----
 
---Sig_/mSzW0hLnaiYIU0lG/wX32VE--
+--Sig_/aL7VeTQ=NAdC=Dki1Lsr0_A--

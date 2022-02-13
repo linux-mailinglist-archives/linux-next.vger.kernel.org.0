@@ -2,118 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01A714B33B6
-	for <lists+linux-next@lfdr.de>; Sat, 12 Feb 2022 09:07:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D10A4B3AEC
+	for <lists+linux-next@lfdr.de>; Sun, 13 Feb 2022 11:40:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232553AbiBLIHb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 12 Feb 2022 03:07:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60278 "EHLO
+        id S229677AbiBMKjr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 13 Feb 2022 05:39:47 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbiBLIHa (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 12 Feb 2022 03:07:30 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A44B426AEF;
-        Sat, 12 Feb 2022 00:07:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=iHhueysbCF7cZjZhCX5TgtZT8UQe1Vger0YteybGiHM=; b=KZ7FrHGXWuM3vnsfygdkKvajuH
-        HuXE9S5PDDVjtgv6hUCvHtMGYSY+2zIHQcfSewF1XUBn+bHq43Ke6pLvf2GXejVcdNm1FRlkezyfX
-        L6rzJ8TapkKwrrt03ZG6XcJlXdM5kdTGaiMtsUX2Gv8fmwuga3U4UZ47wxOauG4dbJ9jsYe2M1CEm
-        1L+LaBoGdG4As0KICqso/EpU/rIyRtgCJPjBwCHs0nOdx7IHLngoXektapvUKMgUgcUSHCFl2D/2z
-        TsBjmjtoT4Jv6hc4ro4Q7IUetKgvTmjSHTXoHXHL6vvZ6eTk9eZJKG3PpqCB+NDBLW/9rD/Q7dt32
-        JlxLz67g==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nInQi-00B6RH-1w; Sat, 12 Feb 2022 08:06:52 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        with ESMTP id S229834AbiBMKjr (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 13 Feb 2022 05:39:47 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 340FC5D640;
+        Sun, 13 Feb 2022 02:39:41 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3F5B53002C5;
-        Sat, 12 Feb 2022 09:06:49 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 115DD201C872D; Sat, 12 Feb 2022 09:06:49 +0100 (CET)
-Date:   Sat, 12 Feb 2022 09:06:49 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, broonie@kernel.org,
-        mhocko@suse.cz, sfr@canb.auug.org.au, linux-next@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, mm-commits@vger.kernel.org,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: mmotm 2022-02-11-15-07 uploaded (objtool: ftrace_likely_update)
-Message-ID: <YgdqmbK7Irwa2Ryh@hirez.programming.kicks-ass.net>
-References: <20220211230819.191B1C340E9@smtp.kernel.org>
- <8074da01-7aa3-9913-1a1e-2ce307ccdbbd@infradead.org>
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JxP482hFgz4xcY;
+        Sun, 13 Feb 2022 21:39:36 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1644748776;
+        bh=vzfNiDIGFc1DKK/k7hfUXazl1OqJYrls97yWyHhv6yA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=g3Qmr2S51VXucFmOkHN6HyZNFpHKBNmbAAAhk+xBN/viBS2gxClkCsp8hkIMokLni
+         KiJP11cn5ygnLdFUNIN6I2jmZyAu/LvTxhxMfD+H6MlnwRjPu4QqJpUGEAobhY1+N+
+         JoG5MwJp3iMrJ1zAnN7Pz4RFvLJe0r1BWKILtjLElNDW9vWZARHRoYSmWfX34snNMQ
+         MyvakSeG/ExE3OCie7NFMjtEwLLGOKmLxC2F/x0TxTjsTOapM0B+hT0B4ALrjeTkPI
+         rG8/kRi24vWn3hCUPMPxmxMXkY0qu5ZVQVHt0t2jXzaTHioqj2CH+tSHk/yFhz/T7G
+         P3g1Wg8NKWfnA==
+Date:   Sun, 13 Feb 2022 21:39:35 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andy Gross <agross@kernel.org>
+Cc:     Robert Marko <robimarko@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the qcom tree
+Message-ID: <20220213213935.2c5ef8c2@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8074da01-7aa3-9913-1a1e-2ce307ccdbbd@infradead.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/d=tze1_u/PA7dlaKj+YfIf1";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Feb 11, 2022 at 06:32:06PM -0800, Randy Dunlap wrote:
-> on x86_64:
-> 
-> $ gcc --version
-> gcc (SUSE Linux) 7.5.0
-> 
-> 
-> vmlinux.o: warning: objtool: fixup_bad_iret()+0x72: call to ftrace_likely_update() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: noist_exc_debug()+0x30: call to ftrace_likely_update() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: exc_nmi()+0x14e: call to ftrace_likely_update() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: poke_int3_handler()+0x55: call to ftrace_likely_update() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: __sev_get_ghcb()+0x1b: call to ftrace_likely_update() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: __sev_put_ghcb()+0x18: call to ftrace_likely_update() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: __sev_es_ist_exit()+0x2b: call to ftrace_likely_update() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: kernel_exc_vmm_communication()+0x4f: call to ftrace_likely_update() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: rcu_dynticks_eqs_exit()+0x2c: call to ftrace_likely_update() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: rcu_dynticks_eqs_enter()+0x29: call to ftrace_likely_update() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: rcu_eqs_exit.constprop.62()+0x1a: call to ftrace_likely_update() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: rcu_eqs_enter.constprop.63()+0x23: call to ftrace_likely_update() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: rcu_nmi_enter()+0x17: call to ftrace_likely_update() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: irqentry_nmi_enter()+0x36: call to ftrace_likely_update() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: irqentry_nmi_exit()+0xa1: call to ftrace_likely_update() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: enter_from_user_mode()+0x4f: call to ftrace_likely_update() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: syscall_enter_from_user_mode()+0x53: call to ftrace_likely_update() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare()+0x4f: call to ftrace_likely_update() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: irqentry_enter_from_user_mode()+0x4f: call to ftrace_likely_update() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: context_tracking_recursion_enter()+0x67: call to ftrace_likely_update() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: __context_tracking_enter()+0x2c: call to ftrace_likely_update() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: fixup_bad_iret()+0x72: call to ftrace_likely_update() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: noist_exc_debug()+0x30: call to ftrace_likely_update() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: exc_nmi()+0x14e: call to ftrace_likely_update() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: poke_int3_handler()+0x55: call to ftrace_likely_update() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: __sev_get_ghcb()+0x1b: call to ftrace_likely_update() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: __sev_put_ghcb()+0x18: call to ftrace_likely_update() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: __sev_es_ist_exit()+0x2b: call to ftrace_likely_update() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: kernel_exc_vmm_communication()+0x4f: call to ftrace_likely_update() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: rcu_dynticks_eqs_exit()+0x2c: call to ftrace_likely_update() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: rcu_dynticks_eqs_enter()+0x29: call to ftrace_likely_update() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: rcu_eqs_exit.constprop.62()+0x1a: call to ftrace_likely_update() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: rcu_eqs_enter.constprop.63()+0x23: call to ftrace_likely_update() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: rcu_nmi_enter()+0x17: call to ftrace_likely_update() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: irqentry_nmi_enter()+0x36: call to ftrace_likely_update() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: irqentry_nmi_exit()+0xa1: call to ftrace_likely_update() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: enter_from_user_mode()+0x4f: call to ftrace_likely_update() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: syscall_enter_from_user_mode()+0x53: call to ftrace_likely_update() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare()+0x4f: call to ftrace_likely_update() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: irqentry_enter_from_user_mode()+0x4f: call to ftrace_likely_update() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: context_tracking_recursion_enter()+0x67: call to ftrace_likely_update() leaves .noinstr.text section
-> vmlinux.o: warning: objtool: __context_tracking_enter()+0x2c: call to ftrace_likely_update() leaves .noinstr.text section
+--Sig_/d=tze1_u/PA7dlaKj+YfIf1
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Yes, TRACE_BRANCH_PROFILING and PROFILE_ALL_BRANCHES are fundamentally
-broken and I have no intention of trying to fix them.
+Hi all,
 
-The moment we pull PTI into noinstr C code this will result in insta
-boot fail.
+In commit
+
+  bf8f5182b8f5 ("clk: qcom: ipq8074: fix PCI-E clock oops")
+
+Fixes tag
+
+  Fixes: f0cfcf1a ("clk: qcom: ipq8074: Add missing clocks for pcie")
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+    Can be fixed for the future by setting core.abbrev to 12 (or more)
+    or (for git v2.11 or later) just making sure it is not set (or set to
+    "auto").
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/d=tze1_u/PA7dlaKj+YfIf1
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmII3+cACgkQAVBC80lX
+0Gy1XwgAiqtXX1oTngR4NbTmbfvmaCc5HkKmhnn20jypFrsKUM1s2bI72bYfYcwM
+gJy+IsbiH6T54BRJ65+uqQaA5ZC54Gnph4UoobygYY1vGdAyXoEfnRe2IS6zeGfv
+J7rQWgQK7p7M08za4t6lG/6uwHpx1pUX1f6R6zO1iMksmjz5hohY492f70MPUwYD
+FTJHrEaFJkMeVR3QGk71P1Q1T2tZr/z6mBbOOEDNTCz5JoXARR60JnerN1889mr6
+R9YOenH+iNfxT8Q5/r+dxpdX90kfik1lOwm3WlW3fTPsvKXg4JkwuwgQDaLDTrc6
+6WgsVWPoa3TE8Wc9Km5Vxi7jgPTaJg==
+=vTmk
+-----END PGP SIGNATURE-----
+
+--Sig_/d=tze1_u/PA7dlaKj+YfIf1--

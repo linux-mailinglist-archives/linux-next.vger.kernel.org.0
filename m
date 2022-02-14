@@ -2,49 +2,46 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 755634B3EBB
-	for <lists+linux-next@lfdr.de>; Mon, 14 Feb 2022 01:54:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 951C34B3ECF
+	for <lists+linux-next@lfdr.de>; Mon, 14 Feb 2022 02:11:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238919AbiBNAyp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 13 Feb 2022 19:54:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57988 "EHLO
+        id S231489AbiBNBLw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 13 Feb 2022 20:11:52 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233732AbiBNAyo (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 13 Feb 2022 19:54:44 -0500
+        with ESMTP id S229532AbiBNBLv (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 13 Feb 2022 20:11:51 -0500
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB4FC522DE;
-        Sun, 13 Feb 2022 16:54:37 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21760527D0;
+        Sun, 13 Feb 2022 17:11:44 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jxm2Z6F4Nz4xcZ;
-        Mon, 14 Feb 2022 11:54:30 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JxmQN60s3z4xdG;
+        Mon, 14 Feb 2022 12:11:40 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1644800072;
-        bh=ocDwSD7bCblHT7UKg4UyZyYXJz6H2kFovkRwt8OFd6s=;
+        s=201702; t=1644801102;
+        bh=VzbAzvyPGcOnwuj9d/Abn7ku3LkVBKdNiAvwFmSRCWc=;
         h=Date:From:To:Cc:Subject:From;
-        b=Q7AkeKwVpZQQLpsEbGTIVpiDpbCCUwinB6K84h7PA9E30i5ZdghjXzGEPhOv6LOr8
-         Ksk7VcEabKszu7um9/05w4C3sZ+ELh/Bs/Lk5LsY8hzt3OZuusFmrofH6+5sdi8xPa
-         44PklDXSdL4yxjAsB34rZhIzS5rALd/XIOzOH6y/1IKFfKCZvj+DJozcyIW1rTVEPO
-         xGaBOEtFumjN6+4S67iTryE+lLkANbIpGEc5fOO3TwSQIs2ybgsSr8TlqHQIdM17hp
-         fytwLo6ZDioSx4Pz3C9DI6oKgNNC8zrjMpxFugSoPpncGAhPhYshcKEkSiVEQN6xeV
-         vGWo0vHBkzpXQ==
-Date:   Mon, 14 Feb 2022 11:54:29 +1100
+        b=rGS3Pe7EW/xU3gVmhIrAdOM/T2Ea6If9E0hhNDQtyqcwIDDampBq+JJWypbPh0PCh
+         7LZw2G2HVIT9f1n10sLQQhx2uxaZ03pTpPhJxQMJA3kUtg88/XD46bxuTzAVM66pKZ
+         aSDqYOu3Y1xzHACRK3wrIN3HHGPzKKcPURQyLPTbQIIfMDpDjH80VEsiv08qutxCIo
+         HOASNvZ3rgDDYgd5xlROFbYGzcXKFGBHxO1Fy8Hr3HPELA89h4VVO28ONzERk7b35o
+         k+T8S9BavbFdk87vOIxKCF697IFWvucmZqBIpY6/BjOBFXpNu+T4M+UqoAqEyv1rXM
+         0zTjLmuEtaQLg==
+Date:   Mon, 14 Feb 2022 12:11:39 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the drm-intel-gt tree with the
- drm-intel tree
-Message-ID: <20220214115429.16613f3a@canb.auug.org.au>
+To:     Jens Axboe <axboe@kernel.dk>, Theodore Ts'o <tytso@mit.edu>,
+        Eric Biggers <ebiggers@kernel.org>
+Cc:     Christoph Hellwig <hch@lst.de>, Eric Biggers <ebiggers@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Satya Tangirala <satyat@google.com>
+Subject: linux-next: manual merge of the block tree with the fscrypt tree
+Message-ID: <20220214121139.2e5a4be5@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/eURzRz08=q3T+0BGJrhPfB8";
+Content-Type: multipart/signed; boundary="Sig_/6Qx5ut0wT8y./V7IZS_tqj0";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -55,35 +52,80 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/eURzRz08=q3T+0BGJrhPfB8
+--Sig_/6Qx5ut0wT8y./V7IZS_tqj0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-The ongoing merge conflicts between the drm-intel tree and the
-drm-intel-gt tree are just a mess, so I am removing the drm-intel-gt
-tree from linux-next until you all can come up with a better way of
-doing conflicting development.
+Today's linux-next merge of the block tree got a conflict in:
+
+  fs/iomap/direct-io.c
+
+between commit:
+
+  489734ef94f4 ("iomap: support direct I/O with fscrypt using blk-crypto")
+
+from the fscrypt tree and commit:
+
+  07888c665b40 ("block: pass a block_device and opf to bio_alloc")
+
+from the block tree.
+
+I fixed it up (I think - see below) and can carry the fix as necessary.
+This is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/eURzRz08=q3T+0BGJrhPfB8
+diff --cc fs/iomap/direct-io.c
+index 20325b3926fa,e2ba13645ef2..000000000000
+--- a/fs/iomap/direct-io.c
++++ b/fs/iomap/direct-io.c
+@@@ -185,10 -183,7 +185,9 @@@ static void iomap_dio_zero(const struc
+  	int flags =3D REQ_SYNC | REQ_IDLE;
+  	struct bio *bio;
+ =20
+- 	bio =3D bio_alloc(GFP_KERNEL, 1);
++ 	bio =3D bio_alloc(iter->iomap.bdev, 1, REQ_OP_WRITE | flags, GFP_KERNEL);
+ +	fscrypt_set_bio_crypt_ctx(bio, inode, pos >> inode->i_blkbits,
+ +				  GFP_KERNEL);
+- 	bio_set_dev(bio, iter->iomap.bdev);
+  	bio->bi_iter.bi_sector =3D iomap_sector(&iter->iomap, pos);
+  	bio->bi_private =3D dio;
+  	bio->bi_end_io =3D iomap_dio_bio_end_io;
+@@@ -313,10 -307,7 +311,9 @@@ static loff_t iomap_dio_bio_iter(const=20
+  			goto out;
+  		}
+ =20
+- 		bio =3D bio_alloc(GFP_KERNEL, nr_pages);
++ 		bio =3D bio_alloc(iomap->bdev, nr_pages, bio_opf, GFP_KERNEL);
+ +		fscrypt_set_bio_crypt_ctx(bio, inode, pos >> inode->i_blkbits,
+ +					  GFP_KERNEL);
+- 		bio_set_dev(bio, iomap->bdev);
+  		bio->bi_iter.bi_sector =3D iomap_sector(iomap, pos);
+  		bio->bi_write_hint =3D dio->iocb->ki_hint;
+  		bio->bi_ioprio =3D dio->iocb->ki_ioprio;
+
+--Sig_/6Qx5ut0wT8y./V7IZS_tqj0
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIJqEUACgkQAVBC80lX
-0GwfJQgAiBwRMOvQL4nvcgvQ1I8bX8G+hJle/DiDdRxFid0bhV6v18na6V6oou7K
-s7jgoofbAedlX3bum2KhJdSKotXcirH8BGne2981f6f8r+xQIcmacI8lPlM54JXj
-Kv7Vm3cWf+/xDz6aOXEWmyV5YNBF6PjZO3x9z71MGcGMyHTFY+MtfPx2X5eQuquG
-2osq7t/bAPhqKo4FNhQNUoFHGpV6e32FvHT+GJRYtY5aGfp8For9/IfWpndDrz/q
-znZka0mrJD1OnLcHe4GDgbVrurmdKiJKP7IJ6F7ucIvusfMuOs3iZrVGLWOHTyWw
-cqhV1xQSkDGgK6vhpuriK6Xk9Oxrig==
-=5nDl
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIJrEsACgkQAVBC80lX
+0GxG4wgAlPzAE6GvmS3PjUCgOfDzMlxaACpkVu0rM1T9qYCS+ivMxsJVeBQBw517
+kOxdD4CpyI5keO2Pg7D8YRTsRLxuDDfcb7Sbs/sazW50xnfH9I9xLogDZOt5NHRr
+eF6RgHmfJ2cqauiAqy/esqWqIaGBqDo065Ha78905oTf50mtFGGnG6tSGM6EAp3M
+wrJ6tSq2k6TKO3vyGPACoUhWqizewjQQYsRLC5D3IKDZy0pvg4jga3yUiDlG9oEG
+j5av7vRv5TmQpTfjYYRSHtlg63YNkJN8hbIusT8iPqzj0DcNa5oyxxGkz771X+sn
+z3PUmAMXFnvlVt0gnWbP2GEEich4hQ==
+=q12c
 -----END PGP SIGNATURE-----
 
---Sig_/eURzRz08=q3T+0BGJrhPfB8--
+--Sig_/6Qx5ut0wT8y./V7IZS_tqj0--

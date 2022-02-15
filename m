@@ -2,60 +2,46 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB3554B6BC8
-	for <lists+linux-next@lfdr.de>; Tue, 15 Feb 2022 13:12:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A25D4B6D16
+	for <lists+linux-next@lfdr.de>; Tue, 15 Feb 2022 14:12:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232909AbiBOMMF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 15 Feb 2022 07:12:05 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37076 "EHLO
+        id S235746AbiBONMT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 15 Feb 2022 08:12:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233946AbiBOMME (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 15 Feb 2022 07:12:04 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6B3DB7C43;
-        Tue, 15 Feb 2022 04:11:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644927113; x=1676463113;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=zT4S6A5ModLhQpd7e86PbFMHrNsbDenFUKNBpKpWx9k=;
-  b=KPngO8FNYHASWhRZmeCyzjnyeCiBxbrGCTv1xVLQKb8AGPGXiv29fmYP
-   2kWP/Sm7jV7mAupakoWZb46eWTin9UAo4Uhlr9jp41O7R9ygThyj2MF6U
-   7AJ9d7m1Iqq8iPESPA3j70Cahk8lrfSN31ItUrOOJZJb5S+y+XcXg715l
-   ngqFfVIHm2MVMKA31krJ8caxv8l0djjPfrSq9HMBU+BnvrIK7zfowragV
-   x3kj96QXmIMtnrTSoOToNUVh/iD9csKnqGutoSUyKzpeW/MSgbvvcHUql
-   WO82ExMpOsMqxCjj8AvMYEGXPXPIftCTg5/xOe4Gz2PdamVJVfQ5CMUGL
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="336769396"
-X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
-   d="scan'208";a="336769396"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 04:11:53 -0800
-X-IronPort-AV: E=Sophos;i="5.88,370,1635231600"; 
-   d="scan'208";a="528823662"
-Received: from ylian16-mobl1.ccr.corp.intel.com (HELO localhost) ([10.252.20.230])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 04:11:50 -0800
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Dave Airlie <airlied@linux.ie>
-Subject: Re: linux-next: build failure after merge of the drm-intel tree
-In-Reply-To: <20220215121039.1d1ec3e6@canb.auug.org.au>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20220215121039.1d1ec3e6@canb.auug.org.au>
-Date:   Tue, 15 Feb 2022 14:11:47 +0200
-Message-ID: <87r1845ny4.fsf@intel.com>
+        with ESMTP id S238089AbiBONMT (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 15 Feb 2022 08:12:19 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB9353CA5C;
+        Tue, 15 Feb 2022 05:12:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=WJCVjdG3llh4Pax4fS+sKC0PQ6TTr4horlSS1/qCeE0=; b=CpIQqwuWuVIIYpAJEwuBFabxE2
+        FLqI07WOzty023BhI3LpkZQUvlYVREo3skH4lEkjflWKRGzMdFkoxwiPFWEzLgd8srDJ+zAR+53j1
+        /h/XeEnD+/ucwyvtyr3osNk8D4AnlBhxFni/aOwBd678kC4F3mPfdeOKdYkIflSeYHpa1yC/0DuqI
+        hNXiAlGwlzrKLB+8JnF62PH5rCjIvBZ3PKyavRRpc5b+JjWXe362RaMHgSSAcGzpusc4ZMiWEmdL9
+        lv2f1j88NvovRVTAm+Gdxk6pYc0TsZ03WVhRC6wC9E79reDLH9DGB5mYJptp/yxP1PO4hGbM5lvJ/
+        ibvix2Sw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nJxcj-00DrTR-37; Tue, 15 Feb 2022 13:12:05 +0000
+Date:   Tue, 15 Feb 2022 13:12:05 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the akpm-current tree with the folio
+ tree
+Message-ID: <YgumpQrC+cuYe91H@casper.infradead.org>
+References: <20220215180043.23879691@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220215180043.23879691@canb.auug.org.au>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,34 +50,34 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, 15 Feb 2022, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+On Tue, Feb 15, 2022 at 06:00:43PM +1100, Stephen Rothwell wrote:
 > Hi all,
->
-> After merging the drm-intel tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
->
-> drivers/gpu/drm/i915/gvt/kvmgt.c: In function 'handle_edid_regs':
-> drivers/gpu/drm/i915/gvt/kvmgt.c:595:38: error: implicit declaration of function 'drm_edid_block_valid' [-Werror=implicit-function-declaration]
->   595 |                                 if (!drm_edid_block_valid(
->       |                                      ^~~~~~~~~~~~~~~~~~~~
->
-> Presumably caused by commit
->
->   14da21cc4671 ("drm/i915: axe lots of unnecessary includes from i915_drv.h")
->
-> I am beginning to wonder if you guys run stuff through your CI before
-> relasing to linux-next.  Especially important when removing #include
-> statements from include files :-)
+> 
+> Today's linux-next merge of the block tree got conflicts in:
+> 
+>   include/linux/mm.h
+>   include/linux/rmap.h
+>   mm/gup.c
+>   mm/huge_memory.c
+>   mm/internal.h
+>   mm/memory-failure.c
+>   mm/migrate.c
+>   mm/mlock.c
+>   mm/rmap.c
+>   mm/vmscan.c
+> 
+> There is no way I can figure out in a reasonable time (or at all
+> probably) the resolution needed here.  You guys need to get together
+> and figure out how the folio tree changes are going to progress to
+> Linus' tree.
+> 
+> I have gone back and used the folio tree from next-20220204 again for
+> today.
 
-Thanks for the report. Apparently CI (and I) have VFIO=n, VFIO_MDEV=n,
-and DRM_I915_GVT_KVMGT=n.
+Thanks!
 
-BR,
-Jani.
+My plan is to take v2 of Hugh's mlock rewrite into my tree today and
+redo the folio changes on top of those.  That should reduce the amount
+of conflict between akpm's tree and the folio tree to the usual
+managable amount.  Let's see how that goes.
 
-
->
-> I have used the drm-intel tree from next-20220214 for today.
-
--- 
-Jani Nikula, Intel Open Source Graphics Center

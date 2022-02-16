@@ -2,48 +2,48 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF9CF4B80A2
+	by mail.lfdr.de (Postfix) with ESMTP id 493C04B80A0
 	for <lists+linux-next@lfdr.de>; Wed, 16 Feb 2022 07:26:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229494AbiBPGUB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 16 Feb 2022 01:20:01 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:36150 "EHLO
+        id S229477AbiBPGV0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 16 Feb 2022 01:21:26 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:44202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbiBPGUA (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 16 Feb 2022 01:20:00 -0500
+        with ESMTP id S229497AbiBPGV0 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 16 Feb 2022 01:21:26 -0500
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C42C41ACF3F;
-        Tue, 15 Feb 2022 22:19:46 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 932921A9E4D;
+        Tue, 15 Feb 2022 22:21:11 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jz78s5FjLz4xdl;
-        Wed, 16 Feb 2022 17:19:41 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jz7BZ1JBDz4xcY;
+        Wed, 16 Feb 2022 17:21:10 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1644992383;
-        bh=kaDHcbr3dh0VX0PRp5MNXgUvb4nHiUrlwz3mKEZw29I=;
-        h=Date:From:To:Cc:Subject:From;
-        b=jkunBFrpK2Bx+KlQpZdGesJ1bk0FTIRx+K+PZfZ8Pzjk3eR/yYDA+WBDimRfROZAr
-         TNfhsqYWcJb+qa3C06Fw+IQiClN9vf5JdNvRGf4nu6VJamcJusKPXE2Mw2ORkt5Fwt
-         UgqV0/+PUVvSjv1AVe3YgJTdOqBHzVbe7kAX8kM2lAkKDbh94+Srj/bPTnSTfcQQg2
-         oKunX0eFCe0D63otRDs0dcXmhlMjj5W7GslOGYxzwqAgg1s6r0slfZ4f8ZGHAIlFqT
-         BeFxjOfN/VJD/iIf0qbKTvlKUOOl83lSpJpFaqORX98JqT6xiHbFvMUs+IOtNySyU6
-         c3lRKyFQa9lQQ==
-Date:   Wed, 16 Feb 2022 17:15:12 +1100
+        s=201702; t=1644992470;
+        bh=bM8L3lvECd65NuVMQ2/7Mm5rU3b3w5oT279rVAUXjuU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=b/KXBbYuGz3fIqEt7XdMU45i4VTsAdgp/WIdYqvC7Lj9DzhOyYs+aXu6rKEtQUl8b
+         t/EMPyrnXIwtwhMM9Ig8OmFX3bY2a69s1RO0LJqWCCQK4+xmP9dfZLvlsCiUTCjUgX
+         WLOYqHwjEq/bTSvvm/2m8H/K1oGzzq6YwY33XHOUGWnYn3qMGrykjT7EvkC1J8I9RS
+         jeL3iQIPui6zSmMPYS6kGzrYdw5QwzPFVDGg8bkeBZx9ryi3OzUiSJsQMEmV7ZsHTM
+         GgL6Lk8vyMO3UKuBqVyLsWZiA7a/Kuraj9hVX2TxcMZDNYRMJ+oeG0jXRm4P2Rd/kH
+         GdvAJgnU8c5Lg==
+Date:   Wed, 16 Feb 2022 17:21:09 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     Alex Sierra <alex.sierra@amd.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Christoph Hellwig <hch@lst.de>,
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the akpm-current tree with the folio
- tree
-Message-ID: <20220216171512.60243a76@canb.auug.org.au>
+Subject: Re: linux-next: manual merge of the akpm-current tree with the
+ folio tree
+Message-ID: <20220216172109.72fd0a38@canb.auug.org.au>
+In-Reply-To: <YgumpQrC+cuYe91H@casper.infradead.org>
+References: <20220215180043.23879691@canb.auug.org.au>
+        <YgumpQrC+cuYe91H@casper.infradead.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/uSgS2W4KQ.ZDWmANhAS1Td.";
+Content-Type: multipart/signed; boundary="Sig_/d7MEtPDNcdphfEixjBBcwgI";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -54,197 +54,69 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/uSgS2W4KQ.ZDWmANhAS1Td.
+--Sig_/d7MEtPDNcdphfEixjBBcwgI
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Matthew,
 
-Today's linux-next merge of the akpm-current tree got a conflict in:
+On Tue, 15 Feb 2022 13:12:05 +0000 Matthew Wilcox <willy@infradead.org> wro=
+te:
+>
+> On Tue, Feb 15, 2022 at 06:00:43PM +1100, Stephen Rothwell wrote:
+> > Hi all,
+> >=20
+> > Today's linux-next merge of the block tree got conflicts in:
+> >=20
+> >   include/linux/mm.h
+> >   include/linux/rmap.h
+> >   mm/gup.c
+> >   mm/huge_memory.c
+> >   mm/internal.h
+> >   mm/memory-failure.c
+> >   mm/migrate.c
+> >   mm/mlock.c
+> >   mm/rmap.c
+> >   mm/vmscan.c
+> >=20
+> > There is no way I can figure out in a reasonable time (or at all
+> > probably) the resolution needed here.  You guys need to get together
+> > and figure out how the folio tree changes are going to progress to
+> > Linus' tree.
+> >=20
+> > I have gone back and used the folio tree from next-20220204 again for
+> > today. =20
+>=20
+> Thanks!
+>=20
+> My plan is to take v2 of Hugh's mlock rewrite into my tree today and
+> redo the folio changes on top of those.  That should reduce the amount
+> of conflict between akpm's tree and the folio tree to the usual
+> managable amount.  Let's see how that goes.
+>=20
 
-  mm/gup.c
+It looks like Andrew now has a new version of Hugh's patches and there
+are quite a few other conflicts as well (see my attempt at mm/gup.c).
 
-between commit:
-
-  024d57c2766e ("mm/gup: Convert check_and_migrate_movable_pages() to use a=
- folio")
-
-from the folio tree and commits:
-
-  d4dddc8ac982 ("mm: refactor check_and_migrate_movable_pages")
-  2bba8945c42e ("mm/gup: fail get_user_pages for LONGTERM dev coherent type=
-")
-  de09ea3e8f88 ("mm/gup: migrate device coherent pages when pinning instead=
- of failing")
-
-from the akpm-current tree.
-
-I fixed it up (I think - see below) and can carry the fix as necessary.
-This is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
+I have used the folio tree from next-20220204 again for today, sorry.
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc mm/gup.c
-index 57bf69ac8ab4,4ab43b4fc9bc..000000000000
---- a/mm/gup.c
-+++ b/mm/gup.c
-@@@ -1783,50 -1844,84 +1786,85 @@@ static long check_and_migrate_movable_p
-  					    struct page **pages,
-  					    unsigned int gup_flags)
-  {
-- 	unsigned long i;
-- 	unsigned long isolation_error_count =3D 0;
-- 	bool drain_allow =3D true;
-+ 	unsigned long isolation_error_count =3D 0, i;
- -	struct page *prev_head =3D NULL;
-++	struct folio *prev_folio =3D NULL;
-  	LIST_HEAD(movable_page_list);
-- 	long ret =3D 0;
-- 	struct folio *folio, *prev_folio =3D NULL;
-- 	struct migration_target_control mtc =3D {
-- 		.nid =3D NUMA_NO_NODE,
-- 		.gfp_mask =3D GFP_USER | __GFP_NOWARN,
-- 	};
-+ 	bool drain_allow =3D true;
-+ 	int ret =3D 0;
- =20
-  	for (i =3D 0; i < nr_pages; i++) {
-- 		folio =3D page_folio(pages[i]);
- -		struct page *head =3D compound_head(pages[i]);
-++		struct folio *folio =3D page_folio(pages[i]);
-+=20
- -		if (head =3D=3D prev_head)
- +		if (folio =3D=3D prev_folio)
-  			continue;
- -		prev_head =3D head;
- +		prev_folio =3D folio;
-+=20
-  		/*
-- 		 * If we get a movable page, since we are going to be pinning
-- 		 * these entries, try to move them out if possible.
-+ 		 * Device private pages will get faulted in during gup so it
-+ 		 * shouldn't be possible to see one here.
-  		 */
-- 		if (!is_pinnable_page(&folio->page)) {
-- 			if (folio_test_hugetlb(folio)) {
-- 				if (!isolate_huge_page(&folio->page,
-- 							&movable_page_list))
-- 					isolation_error_count++;
-- 			} else {
-- 				if (!folio_test_lru(folio) && drain_allow) {
-- 					lru_add_drain_all();
-- 					drain_allow =3D false;
-- 				}
- -		if (WARN_ON_ONCE(is_device_private_page(head))) {
-++		if (WARN_ON_ONCE(is_device_private_page(&folio->page))) {
-+ 			ret =3D -EFAULT;
-+ 			goto unpin_pages;
-+ 		}
- =20
-- 				if (folio_isolate_lru(folio)) {
-- 					isolation_error_count++;
-- 					continue;
-- 				}
-- 				list_add_tail(&folio->lru, &movable_page_list);
-- 				node_stat_mod_folio(folio,
-- 						    NR_ISOLATED_ANON +
-- 						    folio_is_file_lru(folio),
-- 						    folio_nr_pages(folio));
-+ 		/*
-+ 		 * Device coherent pages are managed by a driver and should not
-+ 		 * be pinned indefinitely as it prevents the driver moving the
-+ 		 * page. So when trying to pin with FOLL_LONGTERM instead try
-+ 		 * to migrate the page out of device memory.
-+ 		 */
- -		if (is_device_coherent_page(head)) {
- -			WARN_ON_ONCE(PageCompound(head));
-++		if (is_device_coherent_page(&folio->page)) {
-++			WARN_ON_ONCE(PageCompound(&folio->page));
-+=20
-+ 			/*
-+ 			 * Migration will fail if the page is pinned, so convert
-+ 			 * the pin on the source page to a normal reference.
-+ 			 */
-+ 			if (gup_flags & FOLL_PIN) {
- -				get_page(head);
- -				unpin_user_page(head);
-++				get_page(&folio->page);
-++				unpin_user_page(&folio->page);
-  			}
-+=20
- -			pages[i] =3D migrate_device_page(head, gup_flags);
-++			pages[i] =3D migrate_device_page(&folio->page, gup_flags);
-+ 			if (!pages[i]) {
-+ 				ret =3D -EBUSY;
-+ 				goto unpin_pages;
-+ 			}
-+ 			continue;
-  		}
-+=20
- -		if (is_pinnable_page(head))
-++		if (is_pinnable_page(&folio->page))
-+ 			continue;
-+=20
-+ 		/*
-+ 		 * Try to move out any movable page before pinning the range.
-+ 		 */
- -		if (PageHuge(head)) {
- -			if (!isolate_huge_page(head, &movable_page_list))
-++		if (folio_test_hugetlb(folio)) {
-++			if (!isolate_huge_page(&folio->page,
-++					       &movable_page_list))
-+ 				isolation_error_count++;
-+ 			continue;
-+ 		}
-+=20
- -		if (!PageLRU(head) && drain_allow) {
-++		if (!folio_test_lru(folio) && drain_allow) {
-+ 			lru_add_drain_all();
-+ 			drain_allow =3D false;
-+ 		}
-+=20
- -		if (isolate_lru_page(head)) {
-++		if (folio_isolate_lru(folio)) {
-+ 			isolation_error_count++;
-+ 			continue;
-+ 		}
- -		list_add_tail(&head->lru, &movable_page_list);
- -		mod_node_page_state(page_pgdat(head),
- -				    NR_ISOLATED_ANON + page_is_file_lru(head),
- -				    thp_nr_pages(head));
-++		list_add_tail(&folio->lru, &movable_page_list);
-++		node_stat_mod_folio(folio,
-++				    NR_ISOLATED_ANON + folio_is_file_lru(folio),
-++				    folio_nr_pages(folio));
-  	}
- =20
-+ 	if (!list_empty(&movable_page_list) || isolation_error_count)
-+ 		goto unpin_pages;
-+=20
-  	/*
-  	 * If list is empty, and no isolation errors, means that all pages are
-  	 * in the correct zone.
-
---Sig_/uSgS2W4KQ.ZDWmANhAS1Td.
+--Sig_/d7MEtPDNcdphfEixjBBcwgI
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIMlnAACgkQAVBC80lX
-0GyBaAf/YBepAUjDQtFdyo27jiIcVZQa2g4QO6XQFFOkHrxCxkj4RQUjyS+JDUTN
-B1Z5AKSG9k6sQzWgYG6HQdeOw8vlgvzZ0esxe9ctZrpxLCyA6fWQ/whg2D3UJf/2
-eBujJcZnsebPiDWFnkp2dtnZdMVSvjxGkVSG7H8RDhb+mshKHzZ8GVfRFKQeaAeA
-0XDUhw0edDEbD2USMqhuvZQkmDy7DAiICJM0Zzf9bOwLZJHofKG/rvd6JM4alURY
-zsbjQXtw5J576fj3JkUVlzi9+WMDpeeAF17oviBmO3XA9/2p/XUujKmoEzZ/Qze0
-10+Ti45Ivq+nP8P3aMJ9jS0K3a1Oew==
-=8XgI
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIMl9UACgkQAVBC80lX
+0Gx9NggAoR5ZrOZkPYWYajxpf/ie5j8zUFFQgdiHuxtq0bcN3uBrXe22hu14QVrc
+lkzMU+D5Vb3AAzvZRA2/lK3Q8vfYRZSZMDBaoNP5FJ+PXy/fOfhNfc/fe58Eeido
+k+coZsr2F0sWr3sw5lIGK6vrcnXng+c8e5YnPynwJBafhKHnx7ljwAxd+CoV2g/Z
+HwgPUB76gkIkNUK82W+qyOhw86R8UDUDD0xVU1y14ddCAx2WCu/bwnmTusNlXPZw
++mVDwjZPtDodtf9JoPIfKksftwLTeBTvwN5nlWEnrEHX7xUN/xuAgD7nhRmxK2yI
+9xi46/a7V1+lKkzrCHMz5IZPKFcdkg==
+=+iTL
 -----END PGP SIGNATURE-----
 
---Sig_/uSgS2W4KQ.ZDWmANhAS1Td.--
+--Sig_/d7MEtPDNcdphfEixjBBcwgI--

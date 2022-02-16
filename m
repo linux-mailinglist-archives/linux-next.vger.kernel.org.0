@@ -2,45 +2,46 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F20B24B8773
-	for <lists+linux-next@lfdr.de>; Wed, 16 Feb 2022 13:20:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B83774B8879
+	for <lists+linux-next@lfdr.de>; Wed, 16 Feb 2022 14:07:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230059AbiBPMVA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 16 Feb 2022 07:21:00 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38538 "EHLO
+        id S229676AbiBPNHY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 16 Feb 2022 08:07:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232840AbiBPMU7 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 16 Feb 2022 07:20:59 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EF29295FFA;
-        Wed, 16 Feb 2022 04:20:46 -0800 (PST)
+        with ESMTP id S233564AbiBPNHX (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 16 Feb 2022 08:07:23 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18F03E016;
+        Wed, 16 Feb 2022 05:07:09 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: tonyk)
-        with ESMTPSA id E6CFB1F4506E
+        with ESMTPSA id 0E7FF1F40AE2
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1645014045;
-        bh=KGv3qi0/1qhw2Wkx1ythbjE2BIDW/ZTM/yt/IuCEiIo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=S2sr4BwbEoGrcCanT1eM0wxBbJB/89NHdwvA88lnjl9b+qfB9vro0oqb2ClhwaPh5
-         RoToC07bCpg7xRypO6+Z8TIcIs6nCGCzS9Cua4/XeJEPwF76tOYPJvGnOttMZlxrtZ
-         NRslSH1jbU5BnX7BeNImN6y3EY3Z80fREo08IzDysc2DpPFNAKl0GnzC7HiLz9wQ26
-         b8RKw86y2vqkdc0nwPe/D5s+SasjCcKsp98A+CO5EC+Yb3hQ3pM8Qhv60E63Jw4gGw
-         M56vTL1TiUdfaJC6EoKyEcvQHNovW+2xyQ4IH3UbFO6iVKMJ3KrhSypkabfZ+2JC+V
-         0fLm3RNOVAu2Q==
-Message-ID: <c041df98-fbea-bc76-75c0-42d549248dfd@collabora.com>
-Date:   Wed, 16 Feb 2022 09:20:38 -0300
+        s=mail; t=1645016828;
+        bh=yrAn8vL3kOup+hs9ZweLwoFtSHWsggRpT/ckoMEaSno=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=IuvxH97K1TGXvozbseudBG1OIKYdfm6tSY80yTfWP3cKJuuBbglsSGMMOyRbP8qhv
+         XDXu6sCfZ6gDTJG8Dtc6dcmkwyt5T+l2a0tC+z3uxNzwkziccrib0iQVCNYGZ43f9o
+         1rShZrAOB5VIKvt6B8zj++xeo90iBo1ciPh9pHbyupneyF4fxBST7J0FAd+h69IJF3
+         uJVkLZwbQc5j6QTNcQf0p7+H2To1ydmgvBaJ8jzXMup+9qrPhMir6li0A7ZvdYhOAt
+         ZcWNVHhlGafV5n8StbHAH/YTo2RUv5QKwvhjYzkZzHZFNdZ4yqzuz7pPkL7TU0byyp
+         IbpbAb7FiMA9g==
+Message-ID: <284e2e05-9402-e480-7a69-3282b7e95b6f@collabora.com>
+Date:   Wed, 16 Feb 2022 10:07:02 -0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.6.0
 Subject: Re: linux-next: build failure after merge of the spi tree
 Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@collabora.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
 References: <20220216161718.2c094b08@canb.auug.org.au>
-From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@collabora.com>
-In-Reply-To: <20220216161718.2c094b08@canb.auug.org.au>
+ <c041df98-fbea-bc76-75c0-42d549248dfd@collabora.com>
+In-Reply-To: <c041df98-fbea-bc76-75c0-42d549248dfd@collabora.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -53,28 +54,38 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+Às 09:20 de 16/02/22, André Almeida escreveu:
+> Hi Stephen,
+> 
+> Às 02:17 de 16/02/22, Stephen Rothwell escreveu:
+>> Hi all,
+>>
+>> After merging the spi tree, today's linux-next build (powerpc
+>> allyesconfig) failed like this:
+>>
+>> drivers/spi/spi-amd.c:333:37: error: 'spi_acpi_match' undeclared here (not in a function)
+>>   333 |                 .acpi_match_table = spi_acpi_match,
+>>       |                                     ^~~~~~~~~~~~~~
+>>
+>> Caused by commit
+>>
+>>   209043554915 ("spi: amd: Add support for version AMDI0062")
+>>
+>> CONFIG_ACPI is not set for this build.
+>>
+>> I have reverted that commit for today.
+>>
+> 
+> Thanks for input. I'll send a new series with a patch to make this
+> driver depends on ACPI then. My patch touched this line, but this
+> variable was there before, so I think this build breakage is happening
+> for some time.
 
-Às 02:17 de 16/02/22, Stephen Rothwell escreveu:
-> Hi all,
-> 
-> After merging the spi tree, today's linux-next build (powerpc
-> allyesconfig) failed like this:
-> 
-> drivers/spi/spi-amd.c:333:37: error: 'spi_acpi_match' undeclared here (not in a function)
->   333 |                 .acpi_match_table = spi_acpi_match,
->       |                                     ^~~~~~~~~~~~~~
-> 
-> Caused by commit
-> 
->   209043554915 ("spi: amd: Add support for version AMDI0062")
-> 
-> CONFIG_ACPI is not set for this build.
-> 
-> I have reverted that commit for today.
-> 
+Actually, the following diff in my commit is the problem:
 
-Thanks for input. I'll send a new series with a patch to make this
-driver depends on ACPI then. My patch touched this line, but this
-variable was there before, so I think this build breakage is happening
-for some time.
+-		.acpi_match_table = ACPI_PTR(spi_acpi_match),
++		.acpi_match_table = spi_acpi_match,
+
+ACPI_PTR() make it as NULL if CONFIG_ACPI is not set, making the driver
+suitable for test compiling even without ACPI enabled. Mark, I'll send a
+v3 with this fixed.

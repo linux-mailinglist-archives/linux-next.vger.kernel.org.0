@@ -2,50 +2,51 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2D214B8D47
-	for <lists+linux-next@lfdr.de>; Wed, 16 Feb 2022 17:07:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBF5A4B8D4B
+	for <lists+linux-next@lfdr.de>; Wed, 16 Feb 2022 17:08:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235966AbiBPQH7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 16 Feb 2022 11:07:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36850 "EHLO
+        id S233829AbiBPQIb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 16 Feb 2022 11:08:31 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232520AbiBPQH7 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 16 Feb 2022 11:07:59 -0500
+        with ESMTP id S234915AbiBPQIb (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 16 Feb 2022 11:08:31 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF8AB9D72;
-        Wed, 16 Feb 2022 08:07:47 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF456BB573;
+        Wed, 16 Feb 2022 08:08:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DABFD61AC0;
-        Wed, 16 Feb 2022 16:07:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F219C004E1;
-        Wed, 16 Feb 2022 16:07:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B5F161AC0;
+        Wed, 16 Feb 2022 16:08:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3E93C004E1;
+        Wed, 16 Feb 2022 16:08:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645027666;
-        bh=NFkfbdOAbPVQan1POI4dMNk5eBImxr+9OGABQJj8KqM=;
+        s=k20201202; t=1645027698;
+        bh=mjr4Url4IwxZmbQKJe7epd1L1irQIl41yeN8c8f7hjY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=p5ox1mAQXw5JkoWxJlHhoidcPBAfC65ZPmCHHu83jVRssyUxirECwi5s93HZ7MZRT
-         LRxrQ8JA/fTPdYbY+y4o5TZv6QFMZxhlvbOVX/ZShyWhAuk7tIi7ZhaEntAjdCuKcY
-         GfgEqEVZ0Wp1Yz9xhrJYV1ijypxpcxiyM2dAzZaVSJIj1TfLs+cb5iQkVSQT4eDqV0
-         Zd790p6HyMEgrRbG77Xclxjk4T6P42PbYY0Dni0t/51iyl1/tmjnwqKEI0cVzPneeP
-         Myok8RR0yN8oxf7KiTN53L+X4/fEe+7+4SoBcli5peS2t/cfYGXyTf2IIwThyVl5dS
-         ShtDgvPPdnY9g==
-Date:   Wed, 16 Feb 2022 16:07:41 +0000
+        b=siNmeK9pkkGXQjNt3U+kKaJDKTAFpJTvMt16/diMX2WZt8dhVrpgU31qjL61Thbf5
+         fdJspFsKJoJe0WaC7zo+G+4BplZHfPcKYBYml/Y5Umq8VLFX4eM4tPbJXxTWhc8eIB
+         hps/xP57totzW0RAU/IVq/QXQu95bSNAgaUC+ef+CVTVUQFsJxZsMJEfQYKaDwbCxZ
+         o7jVA+ugSJa8ESgZPvSlDVAhqgu4CANwb64rKx7PzE3dmDQ5tBFq8p3tAV8CclGhUS
+         nUoHuFdNpKJZJOv9VUV88tEax7IPSjpsWodi7YjTXATgK9xvF8RKRP6ZPvSvoRlUKF
+         XJs0lSKxKGBsQ==
+Date:   Wed, 16 Feb 2022 16:08:13 +0000
 From:   Mark Brown <broonie@kernel.org>
 To:     =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@collabora.com>
 Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
 Subject: Re: linux-next: build failure after merge of the spi tree
-Message-ID: <Yg0hTRF6HsMoVG0Z@sirena.org.uk>
+Message-ID: <Yg0hbeSPpDa4Oy2x@sirena.org.uk>
 References: <20220216161718.2c094b08@canb.auug.org.au>
  <c041df98-fbea-bc76-75c0-42d549248dfd@collabora.com>
+ <284e2e05-9402-e480-7a69-3282b7e95b6f@collabora.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="kFuz3fSSNOvX773v"
+        protocol="application/pgp-signature"; boundary="hjqty4fVI3z9EMvB"
 Content-Disposition: inline
-In-Reply-To: <c041df98-fbea-bc76-75c0-42d549248dfd@collabora.com>
+In-Reply-To: <284e2e05-9402-e480-7a69-3282b7e95b6f@collabora.com>
 X-Cookie: Fremen add life to spice!
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -58,35 +59,36 @@ List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
 
---kFuz3fSSNOvX773v
+--hjqty4fVI3z9EMvB
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Feb 16, 2022 at 09:20:38AM -0300, Andr=E9 Almeida wrote:
+On Wed, Feb 16, 2022 at 10:07:02AM -0300, Andr=E9 Almeida wrote:
 
-> Thanks for input. I'll send a new series with a patch to make this
-> driver depends on ACPI then. My patch touched this line, but this
-> variable was there before, so I think this build breakage is happening
-> for some time.
+> ACPI_PTR() make it as NULL if CONFIG_ACPI is not set, making the driver
+> suitable for test compiling even without ACPI enabled. Mark, I'll send a
+> v3 with this fixed.
 
-No, don't do that - just compile out the ACPI support when not in use
-like other drivers do.  A dependency on ACPI || COMPILE_TEST could be
-useful but you still need to fix the driver.
+Please do not submit new versions of already applied patches, please
+submit incremental updates to the existing code.  Modifying existing
+commits creates problems for other users building on top of those
+commits so it's best practice to only change pubished git commits if
+absolutely essential.
 
---kFuz3fSSNOvX773v
+--hjqty4fVI3z9EMvB
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmINIU0ACgkQJNaLcl1U
-h9C+swf/fDU6Dr7pzTsEKLmiksLRgowukAYRIIWxekj6swzwA+nz5DOsTmTvaAfs
-DejqbdEl/sEWqCNG2EB5hNGVHrgQP2aMqPGu5zGsdai9zP76drKi/NSlUv1LJtWf
-q02gWypC61HwBwR/B6Y5YnzhIBSgCMk3a5JcbLuU/7lMkeWaQtk+D57ZRsECvjSe
-vI+mFOgwwRHq2A/ezPI03KUMxaKy5+gPSYj+1l6qSPVexOCvSJMJEQcq5VL3Bnak
-m32DLkNJzJNYziuCo4bM8pM2shoX+0B2Il97avJicGT8JAvUcpNdAurcYJtIz3m2
-rxlu1e/TzeGToRFBa+GeVTo5Oh3RXg==
-=h2Gb
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmINIW0ACgkQJNaLcl1U
+h9BAcQf9F5mT9SUL7RC+pxU9jwsqYTHzirfjmEkkS9LckSf1BwKRld1ZY16Kd9Qu
+xZx3eOp5A1z2QX0ufzawFZnerPHeyPRqKfEolSXTvQK4Va6Ec9s2QdSyrlvxO86h
+bIwMokJlLfm+drc/T2NbN62/vqEMF4RhiglW5DpM76mxAKuulL7raLmvWQ9tyUkH
+Y0p1kwBtovH/nRK+O1gosTd4rheyxNgrRtibvB2gwDMbAtGOjlrpFAKXahngo1hr
+S7rby87Kd/LdOAUeOwo8yu3wYG+sikFsdzUCGJQFOleEd+o7Fk3RUFZ0IpH5Qt2b
+lRA9OuM+6+Z6BwJpv2scYo90SVYeuQ==
+=Gqw5
 -----END PGP SIGNATURE-----
 
---kFuz3fSSNOvX773v--
+--hjqty4fVI3z9EMvB--

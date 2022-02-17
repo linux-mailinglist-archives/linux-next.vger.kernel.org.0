@@ -2,118 +2,85 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 248AF4B986B
-	for <lists+linux-next@lfdr.de>; Thu, 17 Feb 2022 06:46:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F8334B9870
+	for <lists+linux-next@lfdr.de>; Thu, 17 Feb 2022 06:51:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234428AbiBQFqW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 17 Feb 2022 00:46:22 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58320 "EHLO
+        id S233288AbiBQFvv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 17 Feb 2022 00:51:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230317AbiBQFqV (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 17 Feb 2022 00:46:21 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADC7027FB8A;
-        Wed, 16 Feb 2022 21:46:07 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S229831AbiBQFvm (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 17 Feb 2022 00:51:42 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0895413DE7;
+        Wed, 16 Feb 2022 21:51:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JzkMc3f6sz4xNq;
-        Thu, 17 Feb 2022 16:46:04 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1645076766;
-        bh=p+Um8RNaCHTI1zf6BsFpsoyhkmB9hkJgJE8X6Y245rg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Um94UWKP8xqWPoHU7twbMRWCs1Q3XmPCZBgyaHk3nmBV4M23p687IF2wWnluhwdC+
-         zu5nnOTbBg9fNWkfMvq11cw6QeojQSLKvXUqZ4cjunAMc+RSPCaS9YQPnyj3cUMlfE
-         xPgg32TWMi8WFB+LY67MOhZ+XOfsFBgBQ5DWSIRu2GAnGHyFf7IE9zISourGNTCTM9
-         SkmlbPn/R2vmhRQa8AiIlmCqN8ELRVCiV/xYE8Hlga644BKhgeQBk4/B3AClYWplyP
-         g+DaFukHM86pUw3BIpw5kAaCn8aJoijFmYjbEkfV3ePFrQVZ4RgdhNhUgqEuMRcfB/
-         JsJAfkLo79nkQ==
-Date:   Thu, 17 Feb 2022 16:46:03 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Liam Howlett <liam.howlett@oracle.com>,
-        Helge Deller <deller@gmx.de>,
-        Parisc List <linux-parisc@vger.kernel.org>
-Cc:     Dave Anglin <dave.anglin@bell.net>,
+        by ams.source.kernel.org (Postfix) with ESMTPS id A3712B80D56;
+        Thu, 17 Feb 2022 05:51:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14DDAC340E8;
+        Thu, 17 Feb 2022 05:51:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1645077085;
+        bh=DbWFlI8tR+zfxxtBr/EFeEr5eetJy4Sz7A2lzK7mrEM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=P1Y8CY/LkMU0O+62HvfFKN07FRBgmUnpGbFouLqN7Q3sCYJcHGel+Wk9gcrSrO35N
+         RfZlaSbH1I9+XXOjVAKWGyGgby9ORPJdLQ3Ll+vcqdBg/56iSStilTpSPt6Uxu7im2
+         kxGBo9HGUqMp6qcgzNtf+oareAsvNxLYAu18n2Hg=
+Date:   Wed, 16 Feb 2022 21:51:24 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Matthew Wilcox <willy@infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Subject: linux-next: manual merge of the maple tree with the parisc-hd tree
-Message-ID: <20220217164603.33035dab@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/hc9TgN0STIYtzt7V.=7RBdI";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the akpm-current tree with the
+ folio tree
+Message-Id: <20220216215124.169c42a52e31575cedc4dea5@linux-foundation.org>
+In-Reply-To: <20220217163026.5e48ccb1@canb.auug.org.au>
+References: <20220215180043.23879691@canb.auug.org.au>
+        <YgumpQrC+cuYe91H@casper.infradead.org>
+        <20220216172109.72fd0a38@canb.auug.org.au>
+        <Yg1hf0iHdKcjnq6l@casper.infradead.org>
+        <20220217163026.5e48ccb1@canb.auug.org.au>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/hc9TgN0STIYtzt7V.=7RBdI
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, 17 Feb 2022 16:30:26 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-Hi all,
+> Hi Matthew,
+> 
+> On Wed, 16 Feb 2022 20:41:35 +0000 Matthew Wilcox <willy@infradead.org> wrote:
+> >
+> > So where do we go from here?  I can see ways of resolving this if
+> > Andrew switches to git, but he won't, so that's out.  Perhaps I can
+> > publish a git tree of Hugh's mlock patches and Christoph's series,
+> > and you can pull that before Andrew's tree so git resolves the conflicts
+> > early before trying to resolve conflicts against my tree?
+> 
+> My response for any other subsystem would be that you need to go
+> through the maintainer's tree.  In this case that means feeding a patch
+> series to Andrew and updating that patch series.
+> 
+> Alternatively, you need to find someone (with Andrew's agreement) who
+> can maintain a git tree that includes all Andrew's MM patches and any
+> other topic branches and deals with all the conflicts and can feed it
+> all to Linus.  Linux-next would also include that tree/branch.
+> 
+> Andrew, do you have any comments?
 
-Today's linux-next merge of the maple tree got a conflict in:
+Let's try Matthew's idea - I'll get Hugh's and Christoph's series via
+linux-next and shall figure out the rest.
 
-  arch/parisc/kernel/cache.c
-
-between commit:
-
-  aca41f39ad08 ("parisc: Add vDSO support")
-
-from the parisc-hd tree and commit:
-
-  59f11d074faa ("parisc: Remove mmap linked list from cache handling")
-
-from the maple tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc arch/parisc/kernel/cache.c
-index a08f8499b720,c3a8d29b6f9f..000000000000
---- a/arch/parisc/kernel/cache.c
-+++ b/arch/parisc/kernel/cache.c
-@@@ -582,8 -585,8 +585,8 @@@ void flush_cache_mm(struct mm_struct *m
-  	}
- =20
-  	preempt_disable();
- -	if (mm->context =3D=3D mfsp(3)) {
- +	if (mm->context.space_id =3D=3D mfsp(3)) {
-- 		for (vma =3D mm->mmap; vma; vma =3D vma->vm_next)
-+ 		for_each_vma(vmi, vma)
-  			flush_user_cache_tlb(vma, vma->vm_start, vma->vm_end);
-  		preempt_enable();
-  		return;
-
---Sig_/hc9TgN0STIYtzt7V.=7RBdI
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIN4RsACgkQAVBC80lX
-0GxGkgf+IkYTSbVodyoDkCXe2GkBYFXOZRC5FBnlvowgBETifg7uaj4wGqWATbd+
-Mkujh/yuDGdOKu3Q8+i+ESpVkNd76hoJaSpOSUqIh1mHEmZKAHH0bTS3F8LD8Jmc
-z1KDSksbGkEpX05dIt/LGHfJuFQj1/gxo6wqRq8TD2UqM00TGoZCH+L0t2ohcV/e
-XcqAIBdh8boaiNUPaFTvaHq80EQujy3eJ0BAViiPGWORPV3nFkmrVdkFtCbdJP4h
-aB9Il2eWsQqS1wPZhkfQhxvVHNBM2L1BQbfC6AEwlbDIcV0WhSz/wlMRsp4sp9bD
-KUA65RzTxer+aqH0V5nq2YzA3eYa5g==
-=pu+k
------END PGP SIGNATURE-----
-
---Sig_/hc9TgN0STIYtzt7V.=7RBdI--
+I assume mapletree will throw another spanner in the works?

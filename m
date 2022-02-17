@@ -2,45 +2,46 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7E004B9900
-	for <lists+linux-next@lfdr.de>; Thu, 17 Feb 2022 07:13:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D46A4B991B
+	for <lists+linux-next@lfdr.de>; Thu, 17 Feb 2022 07:17:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229805AbiBQGM1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 17 Feb 2022 01:12:27 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58818 "EHLO
+        id S230254AbiBQGQz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 17 Feb 2022 01:16:55 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230254AbiBQGM1 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 17 Feb 2022 01:12:27 -0500
+        with ESMTP id S229865AbiBQGQy (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 17 Feb 2022 01:16:54 -0500
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1DF2F1AF3;
-        Wed, 16 Feb 2022 22:12:12 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06CDB9D73;
+        Wed, 16 Feb 2022 22:16:40 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jzkxl2s5Jz4xNq;
-        Thu, 17 Feb 2022 17:12:11 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jzl2v1ZRqz4xcP;
+        Thu, 17 Feb 2022 17:16:39 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1645078331;
-        bh=IIxohzdVx8GweK2Y3k45JqmhFu+BJpv7EWKPoCEdnO0=;
+        s=201702; t=1645078599;
+        bh=yndhLuoCihi2mdNtpdhpTeQNtBOWIAtKU+vq2xv7kZM=;
         h=Date:From:To:Cc:Subject:From;
-        b=lcUFRKIyCYJ8WU22GSwGxtQl+grwzzwg6sxTyT+l/lNqqKemYWtJFyN15eK4/NLsQ
-         msNEkkYwoJA/iNZnX6cFrdFj+BfEB6soyZLqjI4JUfxR/6Uh5CcHll8QbAvEStzlrt
-         UJiYbvBIqUCxG3VKlgDz6CZSUTebkHqU3hxI8BrTqjBXQnosubQx9GEemljXEsszZ+
-         zASUAjlQcV1e7iArkDN0aS6h24hl4b12ZQbyI3qXATnq3Uw+U/6033l/TeykxHm99X
-         TavGOTPjSj+DRQZ6jvpeABZOHomc7xlqoO+rMCt7yLx6/dVEelpFZwRVOUbifZhony
-         mncQTkzvr9CEA==
-Date:   Thu, 17 Feb 2022 17:12:10 +1100
+        b=OP19HA3UNVkyhBvi5gMYMXVf3XN95KH8cOwIXYqD5/JlqyRBKdn5w5BoBUv1lbxWt
+         pBWSFl82PscDb+t2AKj9PgZp8yJnp7wGXjTq7s3yITefDu3hsYCCEWeKZkBSHyAq9P
+         t45uw2KS/+gfMfv2oGBJk9+cSftfvIf2FsMqb6aL1HCG0SSAhXGJ8C+IcB7Vtq8QSA
+         i4PCfamtt0gY0GJwTrq+1WW1t67fBy7EmluoxeEXbZd9I8xsu5bD+0+hH4cdCT4DvL
+         EjLRMjjVODwpXSFuFIHQMRNivqxb0IhMjkQKs2upmVcQeyhLIl/VZfcXbLe26c2J+o
+         tpXgn75GMWsCw==
+Date:   Thu, 17 Feb 2022 17:16:38 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Liam Howlett <liam.howlett@oracle.com>,
         Mike Rapoport <rppt@kernel.org>
 Cc:     Karolina Drobnik <karolinadrobnik@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>
 Subject: linux-next: manual merge of the maple tree with the memblock tree
-Message-ID: <20220217171210.5164c2f8@canb.auug.org.au>
+Message-ID: <20220217171638.084b6321@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/gt1k4cHag+JdX1TQm=xiz+p";
+Content-Type: multipart/signed; boundary="Sig_/By0+UJL6uInXq.l0EXI+5Gw";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -51,7 +52,7 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/gt1k4cHag+JdX1TQm=xiz+p
+--Sig_/By0+UJL6uInXq.l0EXI+5Gw
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -59,15 +60,16 @@ Hi all,
 
 Today's linux-next merge of the maple tree got a conflict in:
 
-  tools/include/linux/slab.h
+  tools/testing/radix-tree/Makefile
 
 between commit:
 
   5a198c3f9b0b ("tools: Move gfp.h and slab.h from radix-tree to lib")
 
-from the memblock tree and commit:
+from the memblock tree and commits:
 
-  3a77b4e41d4f ("radix tree test suite: Add support for slab bulk APIs")
+  4af8015a7707 ("Maple Tree: Add new data structure")
+  f6955b248f29 ("lib/test_maple_tree: Add testing for maple tree")
 
 from the maple tree.
 
@@ -82,37 +84,41 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc tools/include/linux/slab.h
-index f41d8a0eb1a4,d7aed1cc6978..000000000000
---- a/tools/include/linux/slab.h
-+++ b/tools/include/linux/slab.h
-@@@ -35,4 -24,8 +35,8 @@@ struct kmem_cache *kmem_cache_create(co
-  			unsigned int align, unsigned int flags,
-  			void (*ctor)(void *));
- =20
-+ void kmem_cache_free_bulk(struct kmem_cache *cachep, size_t size, void **=
-list);
-+ int kmem_cache_alloc_bulk(struct kmem_cache *cachep, gfp_t gfp, size_t si=
-ze,
-+ 			  void **list);
-+=20
- -#endif		/* SLAB_H */
- +#endif		/* _TOOLS_SLAB_H */
+diff --cc tools/testing/radix-tree/Makefile
+index c4ea4fbb0bfc,3e0fa6ae0e0a..000000000000
+--- a/tools/testing/radix-tree/Makefile
++++ b/tools/testing/radix-tree/Makefile
+@@@ -4,9 -4,8 +4,9 @@@ CFLAGS +=3D -I. -I../../include -g -Og -W
+  	  -fsanitize=3Dundefined
+  LDFLAGS +=3D -fsanitize=3Daddress -fsanitize=3Dundefined
+  LDLIBS+=3D -lpthread -lurcu
+- TARGETS =3D main idr-test multiorder xarray
++ TARGETS =3D main idr-test multiorder xarray maple
+ -CORE_OFILES :=3D xarray.o radix-tree.o idr.o linux.o test.o find_bit.o bi=
+tmap.o maple.o
+ +CORE_OFILES :=3D xarray.o radix-tree.o idr.o linux.o test.o find_bit.o bi=
+tmap.o \
+- 			 slab.o
+++			 slab.o maple.o
+  OFILES =3D main.o $(CORE_OFILES) regression1.o regression2.o regression3.=
+o \
+  	 regression4.o tag_check.o multiorder.o idr-test.o iteration_check.o \
+  	 iteration_check_2.o benchmark.o
 
---Sig_/gt1k4cHag+JdX1TQm=xiz+p
+--Sig_/By0+UJL6uInXq.l0EXI+5Gw
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIN5zoACgkQAVBC80lX
-0GxrYgf/cZV4MkHwnu+kgnamM01epwoBLchSffnRTneyS4UorSlWF0rWnO5cnQbf
-S9f1OcQMUkTgRtJgD0kQA+OCZChQMF5aef3/nZAhLM2HedOSVmQVf9JWggCi0maU
-X6cwRY8NOjN/5S2X4LSrMe6zp7pfsLVg/OYWTpX4ipQgjc/Nb9KeJz6CuJ4Uortt
-Zi0fhv4SB57OhKG+vVrG1n6oOuULWzN8T3x6yP5CI/58sMZRt0NPz/+DTAGMWv3m
-UciHDXcpzFJF+Wt7jADrbhaQ40OxDf9MxvaUENKKQi9FTiDx4uOzcL+NXP1NGE93
-d9JRGwVCE4Q63FfXeDuooOyu3cps8Q==
-=d3bP
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIN6EYACgkQAVBC80lX
+0GwC0QgApRlXYu9STYCVZBWHathn2O42JttqL60cDuHYQ0hwx5tjHwN6zAU8SLZq
+HQsDMlaRvrPNVjGrV0IFspPF/EnuD+0EHcSUQVqOvU5N7rPq3oz3Sn09OlXPLiS6
+TVvhNl9Lyvvb7LmxhIbVcCcqdwFSotnafAf7F2GQ4kDRKYF8h+qUyULrlSIKQ8FO
+t+KxGNgZUZHJ3QNBP/aWcA/nKRQjqG0wv2NDtx8IQ5W6yTWO3PNqh3u3+kSl7jY0
+WawQnNPZTChnzCX/ciWFXpUMBacn7dKWi1Bu99YhMrPgXkUIUEM6XaZCs5HbimYU
+gqRNfvmV9KevFVQOW3/uITBK+w2V+Q==
+=W4U+
 -----END PGP SIGNATURE-----
 
---Sig_/gt1k4cHag+JdX1TQm=xiz+p--
+--Sig_/By0+UJL6uInXq.l0EXI+5Gw--

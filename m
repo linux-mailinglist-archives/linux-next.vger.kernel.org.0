@@ -2,129 +2,164 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 026D14BA9BB
-	for <lists+linux-next@lfdr.de>; Thu, 17 Feb 2022 20:24:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FB564BABA2
+	for <lists+linux-next@lfdr.de>; Thu, 17 Feb 2022 22:19:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245129AbiBQTY4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 17 Feb 2022 14:24:56 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35492 "EHLO
+        id S234749AbiBQVUK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 17 Feb 2022 16:20:10 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245120AbiBQTYz (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 17 Feb 2022 14:24:55 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2223F94D9;
-        Thu, 17 Feb 2022 11:24:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D9C161CC7;
-        Thu, 17 Feb 2022 19:24:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2D5AC340E8;
-        Thu, 17 Feb 2022 19:24:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645125879;
-        bh=r0FFFkQf0v+Vq0994D2RUjxFXog+gDvbX6KefPHK3dM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ny4nH9oRvZxO4sdirwRFEzdQyb+FedPG/TtZtia5tof0ulcZG7V7kVFVztg3KsQhn
-         q6nHNP8tHb3ERbAlhvHyR6BmIiOOUqU/RG1+TmbfXFnUyyDwpXnL5HrLjtUQtj+fbM
-         DPF5vGQUJsUFOvURAG2AgHzFd/yU8JGjnyQcD/qDxo3aw4aS0CPSmg8+KpgO4VeRwT
-         j81K1m0ilN1jHDGdUxp2ldSzyXp4BNJvOx4gLD8b0HETBykTK0b7FknOxuMiWocTIH
-         V/PsUIFUOMcKy7/YItFJ79f2PsGduZJk12mFQcKJmlYFSVk5p/ZnH0RYb8QjCLhcG+
-         uIdAs2bRZYfzA==
-Date:   Thu, 17 Feb 2022 19:24:35 +0000
-From:   Will Deacon <will@kernel.org>
+        with ESMTP id S232714AbiBQVUJ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 17 Feb 2022 16:20:09 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDF597EB1A;
+        Thu, 17 Feb 2022 13:19:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=WzcmJYTIYrt9kZZ5GGnt4kb1vTdwO2pIR1DRHbAVjto=; b=BRr57bJUnkXthQmfSEQhMh8yjo
+        8s5Mp2aio7M9Je92WKqFlEfEiDJ47kRZMnqZDWf5Tt/jyTVvzGL2Uo8pfmg5o1R1d38VqPAETJujs
+        5YnjPtNTdeK9cThGWI+U373VpJCsg4wysXtlbpjePKfMYLRlZv624MCM3K67NdbBAmW3VUOZx4dO5
+        ahTLzmeaYx7AL+C2LCm1vIdnLqlpWHICxMPa+RsqbgV5tMA6PJ6lEeSI0wZXaz1lmCdHsHGxCyPbx
+        XLQ/PR1DGJ+XjSoPGX4Tz4RMeYbto3/hBzlgio7eT1o/QYUkEBteK6ZhzkaPwBM4BhhBBpVULIHVg
+        DLEBI7tw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nKoBj-00FxRX-2d; Thu, 17 Feb 2022 21:19:43 +0000
+Date:   Thu, 17 Feb 2022 21:19:43 +0000
+From:   Matthew Wilcox <willy@infradead.org>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Liam Howlett <liam.howlett@oracle.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the maple tree
-Message-ID: <20220217192434.GA11800@willie-the-truck>
-References: <20220217191857.6d9917c2@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        linux-mm@kvack.org,
+        William Kucharski <william.kucharski@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Alistair Popple <apopple@nvidia.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Christoph Hellwig <hch@lst.de>, Hugh Dickins <hughd@google.com>
+Subject: Re: linux-next: manual merge of the akpm-current tree with the folio
+ tree
+Message-ID: <Yg6778VW5JX512GL@casper.infradead.org>
+References: <20220215180043.23879691@canb.auug.org.au>
+ <YgumpQrC+cuYe91H@casper.infradead.org>
+ <20220216172109.72fd0a38@canb.auug.org.au>
+ <Yg1hf0iHdKcjnq6l@casper.infradead.org>
+ <20220217163026.5e48ccb1@canb.auug.org.au>
+ <20220216215124.169c42a52e31575cedc4dea5@linux-foundation.org>
+ <20220217173810.0addd3ed@canb.auug.org.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220217191857.6d9917c2@canb.auug.org.au>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220217173810.0addd3ed@canb.auug.org.au>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 07:18:57PM +1100, Stephen Rothwell wrote:
+On Thu, Feb 17, 2022 at 05:38:10PM +1100, Stephen Rothwell wrote:
 > Hi all,
 > 
-> After merging the maple tree, today's linux-next build (arm64 defconfig)
-> failed like this:
+> On Wed, 16 Feb 2022 21:51:24 -0800 Andrew Morton <akpm@linux-foundation.org> wrote:
+> >
+> > On Thu, 17 Feb 2022 16:30:26 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> > > 
+> > > On Wed, 16 Feb 2022 20:41:35 +0000 Matthew Wilcox <willy@infradead.org> wrote:  
+> > > >
+> > > > So where do we go from here?  I can see ways of resolving this if
+> > > > Andrew switches to git, but he won't, so that's out.  Perhaps I can
+> > > > publish a git tree of Hugh's mlock patches and Christoph's series,
+> > > > and you can pull that before Andrew's tree so git resolves the conflicts
+> > > > early before trying to resolve conflicts against my tree?  
+> > > 
+> > > My response for any other subsystem would be that you need to go
+> > > through the maintainer's tree.  In this case that means feeding a patch
+> > > series to Andrew and updating that patch series.
+> > > 
+> > > Alternatively, you need to find someone (with Andrew's agreement) who
+> > > can maintain a git tree that includes all Andrew's MM patches and any
+> > > other topic branches and deals with all the conflicts and can feed it
+> > > all to Linus.  Linux-next would also include that tree/branch.
+> > > 
+> > > Andrew, do you have any comments?  
+> > 
+> > Let's try Matthew's idea - I'll get Hugh's and Christoph's series via
+> > linux-next and shall figure out the rest.
 > 
-> arch/arm64/kernel/elfcore.c: In function 'elf_core_extra_phdrs':
-> arch/arm64/kernel/elfcore.c:13:35: error: 'struct mm_struct' has no member named 'mmap'
->    13 |                 for (vma = tsk->mm->mmap; vma; vma = vma->vm_next)      \
->       |                                   ^~
-> arch/arm64/kernel/elfcore.c:69:9: note: in expansion of macro 'for_each_mte_vma'
->    69 |         for_each_mte_vma(current, vma)
->       |         ^~~~~~~~~~~~~~~~
-> arch/arm64/kernel/elfcore.c:13:57: error: 'struct vm_area_struct' has no member named 'vm_next'
->    13 |                 for (vma = tsk->mm->mmap; vma; vma = vma->vm_next)      \
->       |                                                         ^~
-> arch/arm64/kernel/elfcore.c:69:9: note: in expansion of macro 'for_each_mte_vma'
->    69 |         for_each_mte_vma(current, vma)
->       |         ^~~~~~~~~~~~~~~~
-> arch/arm64/kernel/elfcore.c: In function 'elf_core_write_extra_phdrs':
-> arch/arm64/kernel/elfcore.c:13:35: error: 'struct mm_struct' has no member named 'mmap'
->    13 |                 for (vma = tsk->mm->mmap; vma; vma = vma->vm_next)      \
->       |                                   ^~
-> arch/arm64/kernel/elfcore.c:79:9: note: in expansion of macro 'for_each_mte_vma'
->    79 |         for_each_mte_vma(current, vma) {
->       |         ^~~~~~~~~~~~~~~~
-> arch/arm64/kernel/elfcore.c:13:57: error: 'struct vm_area_struct' has no member named 'vm_next'
->    13 |                 for (vma = tsk->mm->mmap; vma; vma = vma->vm_next)      \
->       |                                                         ^~
-> arch/arm64/kernel/elfcore.c:79:9: note: in expansion of macro 'for_each_mte_vma'
->    79 |         for_each_mte_vma(current, vma) {
->       |         ^~~~~~~~~~~~~~~~
-> arch/arm64/kernel/elfcore.c: In function 'elf_core_extra_data_size':
-> arch/arm64/kernel/elfcore.c:13:35: error: 'struct mm_struct' has no member named 'mmap'
->    13 |                 for (vma = tsk->mm->mmap; vma; vma = vma->vm_next)      \
->       |                                   ^~
-> arch/arm64/kernel/elfcore.c:104:9: note: in expansion of macro 'for_each_mte_vma'
->   104 |         for_each_mte_vma(current, vma)
->       |         ^~~~~~~~~~~~~~~~
-> arch/arm64/kernel/elfcore.c:13:57: error: 'struct vm_area_struct' has no member named 'vm_next'
->    13 |                 for (vma = tsk->mm->mmap; vma; vma = vma->vm_next)      \
->       |                                                         ^~
-> arch/arm64/kernel/elfcore.c:104:9: note: in expansion of macro 'for_each_mte_vma'
->   104 |         for_each_mte_vma(current, vma)
->       |         ^~~~~~~~~~~~~~~~
-> arch/arm64/kernel/elfcore.c: In function 'elf_core_write_extra_data':
-> arch/arm64/kernel/elfcore.c:13:35: error: 'struct mm_struct' has no member named 'mmap'
->    13 |                 for (vma = tsk->mm->mmap; vma; vma = vma->vm_next)      \
->       |                                   ^~
-> arch/arm64/kernel/elfcore.c:114:9: note: in expansion of macro 'for_each_mte_vma'
->   114 |         for_each_mte_vma(current, vma) {
->       |         ^~~~~~~~~~~~~~~~
-> arch/arm64/kernel/elfcore.c:13:57: error: 'struct vm_area_struct' has no member named 'vm_next'
->    13 |                 for (vma = tsk->mm->mmap; vma; vma = vma->vm_next)      \
->       |                                                         ^~
-> arch/arm64/kernel/elfcore.c:114:9: note: in expansion of macro 'for_each_mte_vma'
->   114 |         for_each_mte_vma(current, vma) {
->       |         ^~~~~~~~~~~~~~~~
-> 
-> Caused by commit
-> 
->   b09e8361a4c3 ("mm: Remove the vma linked list")
-> 
-> interacting with commit
-> 
->   6dd8b1a0b6cb ("arm64: mte: Dump the MTE tags in the core file")
-> 
-> from the arm64 tree.
+> OK, but I am on vacation from tomorrow until Feb 28th, so I will assume
+> you will have it all ready for me by then.
 
-Yikes, this is quite a mess. Liam -- how would you like to resolve this?
+I assume you mean that you'll do one last pull and release a
+next-20220218, rather than saying that the next release will be
+next-20220229?
 
-Will
+I have pushed out f82e2137bc1e to infradead/for-next.  xfstests currently
+running.  It includes:
+
+Alex Sierra (10):
+      mm: add zone device coherent type memory support
+      mm: add device coherent vma selection for memory migration
+      mm/gup: fail get_user_pages for LONGTERM dev coherent type
+      drm/amdkfd: add SPM support for SVM
+      drm/amdkfd: coherent type as sys mem on migration to ram
+      lib: test_hmm add ioctl to get zone device type
+      lib: test_hmm add module param for zone device type
+      lib: add support for device coherent type in test_hmm
+      tools: update hmm-test to support device coherent type
+      tools: update test_hmm script to support SP config
+
+Alistair Popple (2):
+      mm: remove the vma check in migrate_vma_setup()
+      mm/gup: migrate device coherent pages when pinning instead of failing
+
+Christoph Hellwig (14):
+      mm: remove a pointless CONFIG_ZONE_DEVICE check in memremap_pages
+      mm: remove the __KERNEL__ guard from <linux/mm.h>
+      mm: remove pointless includes from <linux/hmm.h>
+      mm: move free_devmap_managed_page to memremap.c
+      mm: simplify freeing of devmap managed pages
+      mm: don't include <linux/memremap.h> in <linux/mm.h>
+      mm: remove the extra ZONE_DEVICE struct page refcount
+      fsdax: depend on ZONE_DEVICE || FS_DAX_LIMITED
+      mm: generalize the pgmap based page_free infrastructure
+      mm: refactor check_and_migrate_movable_pages
+      mm: refactor the ZONE_DEVICE handling in migrate_vma_insert_page
+      mm: refactor the ZONE_DEVICE handling in migrate_vma_pages
+      mm: move the migrate_vma_* device migration code into its own file
+      mm: build migrate_vma_* for all configs with ZONE_DEVICE support
+
+Hugh Dickins (13):
+      mm/munlock: delete page_mlock() and all its works
+      mm/munlock: delete FOLL_MLOCK and FOLL_POPULATE
+      mm/munlock: delete munlock_vma_pages_all(), allow oomreap
+      mm/munlock: rmap call mlock_vma_page() munlock_vma_page()
+      mm/munlock: replace clear_page_mlock() by final clearance
+      mm/munlock: maintain page->mlock_count while unevictable
+      mm/munlock: mlock_pte_range() when mlocking or munlocking
+      mm/migrate: __unmap_and_move() push good newpage to LRU
+      mm/munlock: delete smp_mb() from __pagevec_lru_add_fn()
+      mm/munlock: mlock_page() munlock_page() batch by pagevec
+      mm/munlock: page migration needs mlock pagevec drained
+      mm/thp: collapse_file() do try_to_unmap(TTU_BATCH_FLUSH)
+      mm/thp: shrink_page_list() avoid splitting VM_LOCKED THP
+
+Matthew Wilcox (Oracle) (83):
+[skipped]
+
+Mike Rapoport (1):
+      arch: Add pmd_pfn() where it is missing
+
+William Kucharski (1):
+      mm/readahead: Align file mappings for non-DAX
+
+
+I squashed in the various -fix patches that were in the akpm or next
+trees.  I hope I didn't miss anything important.
+
+https://git.infradead.org/users/willy/pagecache.git/shortlog/refs/heads/for-next
+if anyone wants to browse and tell me if I messed something up.

@@ -2,64 +2,63 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC6FF4BA115
-	for <lists+linux-next@lfdr.de>; Thu, 17 Feb 2022 14:27:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6135C4BA68E
+	for <lists+linux-next@lfdr.de>; Thu, 17 Feb 2022 17:58:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238896AbiBQN2F (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 17 Feb 2022 08:28:05 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37838 "EHLO
+        id S243508AbiBQQ4a (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 17 Feb 2022 11:56:30 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240486AbiBQN2F (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 17 Feb 2022 08:28:05 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 335931AE733
-        for <linux-next@vger.kernel.org>; Thu, 17 Feb 2022 05:27:48 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id d17so5025889pfl.0
-        for <linux-next@vger.kernel.org>; Thu, 17 Feb 2022 05:27:48 -0800 (PST)
+        with ESMTP id S243506AbiBQQ43 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 17 Feb 2022 11:56:29 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95E612B3578
+        for <linux-next@vger.kernel.org>; Thu, 17 Feb 2022 08:56:12 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id s16so5511377pgs.13
+        for <linux-next@vger.kernel.org>; Thu, 17 Feb 2022 08:56:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernelci-org.20210112.gappssmtp.com; s=20210112;
         h=message-id:date:mime-version:content-transfer-encoding:subject:to
          :from;
-        bh=paNJpH3sPrfa5UKotbxED9FwL1KJ4MylzRxDRuoN40A=;
-        b=DD+svz8jjoivM0UOfBE3/X5FR+boLO4gHkrESs8Nwcpo/Vlm2ku2uqGjPyd8r5fDJu
-         orgu5YnQWN60Xagg9OHPJ0NEaEzzUzrFJrXeGaAz/h5097b9VaWPMf2E6UkM4mRgH0uO
-         +bVcgbrSfOJKUOU4iK1f8w8eHc9j0aCEK8WlV13VlcRQoR7Yss4c4xhliRMv6txHIQo0
-         JtCTD8z8iApOMtryndlDd1Rw0Jxp8D8BcoRgPTSRM8DOPpBQtOCE7xq3UwONEphJbuj6
-         Nh9yya2/HxSnh6oJg55TJ9baWikTYrFh+xtL2TESjWRzJzrIVEtud8npi8SKKo/zQWJl
-         Z3qA==
+        bh=puYt7cZzueDkSxatSYt2Qvvqx/a3zoPS81QyivMWd5I=;
+        b=hZvq/qdMhoQ8YDyslmWSWEC4jKScS+9AyIuFFX5G+XF+Q/ZT27FKfDE41OU7bs827Z
+         J8SzSny21wQvWnTsZM8A6LtNzdzg3MeXOckFEHo8HJ1sNFrbrsX0g4CtXdqWbMQVdJKS
+         qywwGZGpKDMLW/jL6QIzsLI1n+URuQ7ZdHbVmkfDhkH4jSwiqv43y1MZhkwOoPYmKqVc
+         Shi897+uAtPrbh4fQok2i5/kB4TeSrSKHMjV2Ixvzu2b/8jQvUNuCLoyx2EScQDxzaRk
+         Qdl/GbO2gZfsDwShGEUEuOL2yLlYqXI4JLrDv8i8daqOfrIuyqh8MjKAW3xrFBdwNrtx
+         D/Pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version
          :content-transfer-encoding:subject:to:from;
-        bh=paNJpH3sPrfa5UKotbxED9FwL1KJ4MylzRxDRuoN40A=;
-        b=45YgD3fWR5BpXFA7471aZ26pYZtBNFZvLRj6/z9GFTENDsSc45NUhY6Z0EpZDnlzOQ
-         Ah6X+fMzIGo9PBWcALzprpd2qIHwVRsB9XYTPm2chCTQIsOUG30DlyJX4N+7MCZAkk4/
-         vCJ4SYi9xsf1CA5zI+98YvwfzDg4ULsoAhe/uJPaZXVyKjmIFjF3SjdMvvda9Ixz1mMx
-         TPr5/xEFXewmrof6z534Y8Y3h59ey6R3PqkUkCPrvH/LF9vM7R1G7IWxwNH1gni3akI/
-         QybZMzs72UfjqKUGWnuKB9zvA4j5s7zVWMHXgUv1vfCyLxqheGTP73/WE9saYXXXhtHT
-         z8tA==
-X-Gm-Message-State: AOAM531igtsYjjcKvamQCU+eiuKFyXoOI6ngX03XvWrVUV2UXCDSgmwq
-        g9YTfjhJURTE31DlMGy3rZ9Nt3w1GA6mjMce
-X-Google-Smtp-Source: ABdhPJwwjbGLsutl9oGWMZVLC9JpC/tHhWEJCp/BdJiKhAZEd4qxS6oksz+3/QpjpLklYnSZRV8oPQ==
-X-Received: by 2002:a62:1b4b:0:b0:4e1:83c7:effe with SMTP id b72-20020a621b4b000000b004e183c7effemr3134987pfb.75.1645104465646;
-        Thu, 17 Feb 2022 05:27:45 -0800 (PST)
+        bh=puYt7cZzueDkSxatSYt2Qvvqx/a3zoPS81QyivMWd5I=;
+        b=xt+PYgKBp9V6pmoutEm6wD1zdkKpN0nmC9OeOa69TqpVA7EdOAu0IoI9o9a7eouyGI
+         bTBZl8JtGc6g+CTBCYK3ZmHwrUIc4jsQPlMkzkHyGR2jq2Fuszhz4SqzKk3OnB0tpZ3o
+         XpQMrKN92OxdS0jcA4nZM9kNjaFFFXcl7BM4l/5aeLJgn9bWvtghZbBllD/ba/7MP9Uo
+         Z/HWJS72i22S9SobySsHdKYW1RT9+fv25CZ6I53rc9Ikma7VNkHJpMMoM7bF14XbJovc
+         gfpl1QkkNvfZIhzrWiXKAby2rTcIrUyzmK3cQBWcfuH859KWu3h8tBpnID8GJi/n16FO
+         marQ==
+X-Gm-Message-State: AOAM532+8uSPMfqFhmvRxpv99jHM2gYH6G0qdOQ6LbWfHDCt/jG0PmHS
+        GsKuNKxNARJ3maCVLRu+5OVO4/D/DhCrxKR6
+X-Google-Smtp-Source: ABdhPJxxei+DgXXRd6pZle5utR20OHz0QnVXX0xhUh/PuLt5YZg9Vz/0cF6rzEZ+Ij4v1vQvIXN3qQ==
+X-Received: by 2002:aa7:83c2:0:b0:4e0:91c1:6795 with SMTP id j2-20020aa783c2000000b004e091c16795mr3685225pfn.54.1645116970658;
+        Thu, 17 Feb 2022 08:56:10 -0800 (PST)
 Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id i4sm13304752pfq.105.2022.02.17.05.27.03
-        for <linux-next@vger.kernel.org>
+        by smtp.gmail.com with ESMTPSA id lk11sm2810587pjb.31.2022.02.17.08.56.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Feb 2022 05:27:15 -0800 (PST)
-Message-ID: <620e4d33.1c69fb81.d91b8.fa98@mx.google.com>
-Date:   Thu, 17 Feb 2022 05:27:15 -0800 (PST)
+        Thu, 17 Feb 2022 08:56:10 -0800 (PST)
+Message-ID: <620e7e2a.1c69fb81.b35a7.569b@mx.google.com>
+Date:   Thu, 17 Feb 2022 08:56:10 -0800 (PST)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: build
+X-Kernelci-Report-Type: test
 X-Kernelci-Tree: next
 X-Kernelci-Branch: master
 X-Kernelci-Kernel: next-20220217
-Subject: next/master build: 226 builds: 23 failed, 203 passed, 39 errors,
- 349 warnings (next-20220217)
-To:     linux-next@vger.kernel.org
+Subject: next/master baseline: 641 runs, 99 regressions (next-20220217)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
 From:   "kernelci.org bot" <bot@kernelci.org>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
@@ -70,2758 +69,3626 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master build: 226 builds: 23 failed, 203 passed, 39 errors, 349 warnin=
-gs (next-20220217)
-
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20220217/
-
-Tree: next
-Branch: master
-Git Describe: next-20220217
-Git Commit: 3c30cf91b5ecc7272b3d2942ae0505dd8320b81c
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 7 unique architectures
-
-Build Failures Detected:
-
-arm64:
-    allmodconfig: (clang-14) FAIL
-
-arm:
-    allmodconfig: (clang-14) FAIL
-    allmodconfig: (gcc-10) FAIL
-    lpc32xx_defconfig: (gcc-10) FAIL
-    omap2plus_defconfig: (gcc-10) FAIL
-    qcom_defconfig: (gcc-10) FAIL
-    realview_defconfig: (gcc-10) FAIL
-    rpc_defconfig: (gcc-10) FAIL
-    sama5_defconfig: (gcc-10) FAIL
-    shmobile_defconfig: (gcc-10) FAIL
-    sunxi_defconfig: (gcc-10) FAIL
-    versatile_defconfig: (gcc-10) FAIL
-    vexpress_defconfig: (gcc-10) FAIL
-
-i386:
-    allmodconfig: (clang-14) FAIL
-
-mips:
-    decstation_64_defconfig: (gcc-10) FAIL
-    ip22_defconfig: (gcc-10) FAIL
-    ip27_defconfig: (gcc-10) FAIL
-    ip28_defconfig: (gcc-10) FAIL
-    loongson3_defconfig: (gcc-10) FAIL
-    malta_defconfig: (gcc-10) FAIL
-    malta_kvm_defconfig: (gcc-10) FAIL
-
-x86_64:
-    allmodconfig: (clang-14) FAIL
-    allmodconfig: (gcc-10) FAIL
-
-Errors and Warnings Detected:
-
-arc:
-
-arm64:
-    allmodconfig (clang-14): 5 errors, 1 warning
-    defconfig+CONFIG_ARM64_64K_PAGES=3Dy (gcc-10): 1 warning
-    defconfig+CONFIG_ARM64_64K_PAGES=3Dy (clang-14): 2 warnings
-
-arm:
-    allmodconfig (gcc-10): 1 error, 1 warning
-    allmodconfig (clang-14): 5 errors, 14 warnings
-    am200epdkit_defconfig (gcc-10): 4 warnings
-    aspeed_g4_defconfig (gcc-10): 4 warnings
-    aspeed_g5_defconfig (clang-14): 10 warnings
-    assabet_defconfig (gcc-10): 4 warnings
-    at91_dt_defconfig (gcc-10): 4 warnings
-    axm55xx_defconfig (gcc-10): 4 warnings
-    badge4_defconfig (gcc-10): 4 warnings
-    cerfcube_defconfig (gcc-10): 4 warnings
-    cm_x300_defconfig (gcc-10): 4 warnings
-    colibri_pxa270_defconfig (gcc-10): 4 warnings
-    colibri_pxa300_defconfig (gcc-10): 4 warnings
-    collie_defconfig (gcc-10): 4 warnings
-    corgi_defconfig (gcc-10): 4 warnings
-    dove_defconfig (gcc-10): 4 warnings
-    ep93xx_defconfig (gcc-10): 4 warnings
-    eseries_pxa_defconfig (gcc-10): 4 warnings
-    ezx_defconfig (gcc-10): 4 warnings
-    footbridge_defconfig (gcc-10): 4 warnings
-    h3600_defconfig (gcc-10): 4 warnings
-    h5000_defconfig (gcc-10): 4 warnings
-    hackkit_defconfig (gcc-10): 4 warnings
-    hisi_defconfig (gcc-10): 4 warnings
-    imote2_defconfig (gcc-10): 4 warnings
-    imx_v4_v5_defconfig (gcc-10): 4 warnings
-    iop32x_defconfig (gcc-10): 4 warnings
-    ixp4xx_defconfig (gcc-10): 4 warnings
-    jornada720_defconfig (gcc-10): 4 warnings
-    lart_defconfig (gcc-10): 4 warnings
-    lpc18xx_defconfig (gcc-10): 2 warnings
-    lpc32xx_defconfig (gcc-10): 1 error, 4 warnings
-    lpd270_defconfig (gcc-10): 4 warnings
-    lubbock_defconfig (gcc-10): 4 warnings
-    magician_defconfig (gcc-10): 4 warnings
-    mainstone_defconfig (gcc-10): 4 warnings
-    mini2440_defconfig (gcc-10): 4 warnings
-    mmp2_defconfig (gcc-10): 4 warnings
-    moxart_defconfig (gcc-10): 4 warnings
-    mps2_defconfig (gcc-10): 2 warnings
-    multi_v7_defconfig (clang-14): 13 warnings
-    multi_v7_defconfig+CONFIG_SMP=3Dn (gcc-10): 2 warnings
-    mvebu_v5_defconfig (gcc-10): 4 warnings
-    mvebu_v7_defconfig (gcc-10): 4 warnings
-    mxs_defconfig (gcc-10): 4 warnings
-    neponset_defconfig (gcc-10): 4 warnings
-    netwinder_defconfig (gcc-10): 4 warnings
-    omap1_defconfig (gcc-10): 4 warnings
-    omap2plus_defconfig (gcc-10): 1 error
-    orion5x_defconfig (gcc-10): 4 warnings
-    palmz72_defconfig (gcc-10): 4 warnings
-    pcm027_defconfig (gcc-10): 4 warnings
-    pleb_defconfig (gcc-10): 4 warnings
-    pxa168_defconfig (gcc-10): 4 warnings
-    pxa255-idp_defconfig (gcc-10): 4 warnings
-    pxa3xx_defconfig (gcc-10): 4 warnings
-    pxa910_defconfig (gcc-10): 4 warnings
-    pxa_defconfig (gcc-10): 4 warnings
-    qcom_defconfig (gcc-10): 1 error
-    realview_defconfig (gcc-10): 1 error
-    rpc_defconfig (gcc-10): 2 errors
-    s3c2410_defconfig (gcc-10): 4 warnings
-    s3c6400_defconfig (gcc-10): 4 warnings
-    s5pv210_defconfig (gcc-10): 4 warnings
-    sama5_defconfig (gcc-10): 1 error, 4 warnings
-    shannon_defconfig (gcc-10): 4 warnings
-    shmobile_defconfig (gcc-10): 1 error
-    simpad_defconfig (gcc-10): 4 warnings
-    socfpga_defconfig (gcc-10): 4 warnings
-    spear13xx_defconfig (gcc-10): 4 warnings
-    spear3xx_defconfig (gcc-10): 4 warnings
-    spear6xx_defconfig (gcc-10): 4 warnings
-    spitz_defconfig (gcc-10): 4 warnings
-    stm32_defconfig (gcc-10): 2 warnings
-    sunxi_defconfig (gcc-10): 1 error
-    tct_hammer_defconfig (gcc-10): 4 warnings
-    trizeps4_defconfig (gcc-10): 4 warnings
-    versatile_defconfig (gcc-10): 1 error
-    vexpress_defconfig (gcc-10): 1 error
-    vf610m4_defconfig (gcc-10): 1 warning
-    viper_defconfig (gcc-10): 4 warnings
-    vt8500_v6_v7_defconfig (gcc-10): 4 warnings
-    xcep_defconfig (gcc-10): 4 warnings
-    zeus_defconfig (gcc-10): 4 warnings
-
-i386:
-    allmodconfig (clang-14): 2 errors
-
-mips:
-    32r2el_defconfig (gcc-10): 1 warning
-    32r2el_defconfig+debug (gcc-10): 1 warning
-    32r2el_defconfig+kselftest (gcc-10): 1 warning
-    ci20_defconfig (gcc-10): 1 warning
-    fuloong2e_defconfig (gcc-10): 1 error
-    gcw0_defconfig (gcc-10): 1 warning
-    ip22_defconfig (gcc-10): 1 error, 1 warning
-    lemote2f_defconfig (gcc-10): 1 error
-    loongson2k_defconfig (gcc-10): 1 error
-    loongson3_defconfig (gcc-10): 2 errors
-    malta_defconfig (gcc-10): 1 error, 1 warning
-    malta_kvm_defconfig (gcc-10): 1 error, 1 warning
-
-riscv:
-    nommu_k210_defconfig (gcc-10): 2 warnings
-    nommu_k210_sdcard_defconfig (gcc-10): 2 warnings
-
-x86_64:
-    allmodconfig (clang-14): 5 errors, 15 warnings
-    allmodconfig (gcc-10): 2 errors
-    x86_64_defconfig (clang-14): 1 warning
-    x86_64_defconfig+debug (gcc-10): 2 warnings
-
-Errors summary:
-
-    8    include/linux/fortify-string.h:328:4: error: call to __write_overf=
-low_field declared with 'warning' attribute: detected write beyond size of =
-field (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warni=
-ng]
-    4    panel-edp.c:(.text+0xb70): undefined reference to `drm_panel_dp_au=
-x_backlight'
-    3    net/netfilter/xt_socket.c:224:3: error: implicit declaration of fu=
-nction =E2=80=98nf_defrag_ipv6_disable=E2=80=99; did you mean =E2=80=98nf_d=
-efrag_ipv4_disable=E2=80=99? [-Werror=3Dimplicit-function-declaration]
-    3    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=
-=80=98-mhard-float=E2=80=99
-    2    drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c:2416:7: error: variable 'r=
-as_obj' is used uninitialized whenever '||' condition is true [-Werror,-Wso=
-metimes-uninitialized]
-    2    drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c:2416:7: error: variable 'r=
-as_obj' is used uninitialized whenever 'if' condition is true [-Werror,-Wso=
-metimes-uninitialized]
-    2    /usr/lib/gcc/x86_64-linux-gnu/10/plugin/include/config/i386/i386.h=
-:2500:10: fatal error: common/config/i386/i386-cpuinfo.h: No such file or d=
-irectory
-    1    panel-edp.c:(.text+0xc0c): undefined reference to `drm_panel_dp_au=
-x_backlight'
-    1    panel-edp.c:(.text+0xbdc): undefined reference to `drm_panel_dp_au=
-x_backlight'
-    1    panel-edp.c:(.text+0xb7c): undefined reference to `drm_panel_dp_au=
-x_backlight'
-    1    panel-edp.c:(.text+0xb28): undefined reference to `drm_panel_dp_au=
-x_backlight'
-    1    mips-linux-gnu-ld: (.init.text+0x1750): undefined reference to `no=
-de_data'
-    1    drivers/gpu/drm/selftests/test-drm_plane_helper.c:76:5: error: sta=
-ck frame size (1200) exceeds limit (1024) in 'igt_check_plane_state' [-Werr=
-or,-Wframe-larger-than]
-    1    drivers/gpu/drm/selftests/test-drm_plane_helper.c:76:5: error: sta=
-ck frame size (1084) exceeds limit (1024) in 'igt_check_plane_state' [-Werr=
-or,-Wframe-larger-than]
-    1    drivers/gpu/drm/selftests/test-drm_mm.c:372:12: error: stack frame=
- size (1040) exceeds limit (1024) in '__igt_reserve' [-Werror,-Wframe-large=
-r-than]
-    1    drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c:671:14: error: forma=
-t =E2=80=98%ld=E2=80=99 expects argument of type =E2=80=98long int=E2=80=99=
-, but argument 4 has type =E2=80=98size_t=E2=80=99 {aka =E2=80=98unsigned i=
-nt=E2=80=99} [-Werror=3Dformat=3D]
-    1    crypto/wp512.c:782:13: error: stack frame size (1168) exceeds limi=
-t (1024) in 'wp512_process_buffer' [-Werror,-Wframe-larger-than]
-    1    arch/x86/include/asm/checksum_32.h:149:6: error: inline assembly r=
-equires more registers than available
-    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
-=3D0x'
-    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
-=3D0x'
-    1    ERROR: modpost: "drm_panel_dp_aux_backlight" [drivers/gpu/drm/pane=
-l/panel-edp.ko] undefined!
-    1    (.init.text+0x1728): undefined reference to `node_data'
-
-Warnings summary:
-
-    68   arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is ou=
-tside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 =
-[-Warray-bounds]
-    68   arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is ou=
-tside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 =
-[-Warray-bounds]
-    68   arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknow=
-n> is outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=
-=E2=80=99 [-Warray-bounds]
-    68   arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknow=
-n> is outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=
-=E2=80=99 [-Warray-bounds]
-    24   clang: warning: argument unused during compilation: '-march=3Darmv=
-6k' [-Wunused-command-line-argument]
-    9    clang: warning: argument unused during compilation: '-march=3Darmv=
-7-a' [-Wunused-command-line-argument]
-    6    mm/oom_kill.c:60:25: warning: =E2=80=98vm_oom_kill_table=E2=80=99 =
-defined but not used [-Wunused-variable]
-    5    fs/binfmt_flat.c:117:12: warning: =E2=80=98flat_core_dump=E2=80=99=
- defined but not used [-Wunused-function]
-    3    cc1: some warnings being treated as errors
-    3    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
-    2    drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c:2403:41: note: initialize =
-the variable 'ras_obj' to silence this warning
-    2    1 warning generated.
-    1    vmlinux.o: warning: objtool: vc_switch_off_ist()+0x8a: call to mem=
-cpy() leaves .noinstr.text section
-    1    vmlinux.o: warning: objtool: sync_regs()+0x20: call to memcpy() le=
-aves .noinstr.text section
-    1    vmlinux.o: warning: objtool: in_task_stack()+0xc: call to task_sta=
-ck_page() leaves .noinstr.text section
-    1    vmlinux.o: warning: objtool: in_entry_stack()+0x10: call to cpu_en=
-try_stack() leaves .noinstr.text section
-    1    vmlinux.o: warning: objtool: fixup_bad_iret()+0x32: call to memset=
-() leaves .noinstr.text section
-    1    vmlinux.o: warning: objtool: __sev_put_ghcb()+0x35: call to memcpy=
-() leaves .noinstr.text section
-    1    vmlinux.o: warning: objtool: __sev_get_ghcb()+0xa0: call to memcpy=
-() leaves .noinstr.text section
-    1    vmlinux.o: warning: objtool: __sev_es_nmi_complete()+0x5a: call to=
- ghcb_set_sw_exit_code() leaves .noinstr.text section
-    1    net/core/skbuff.o: warning: objtool: skb_copy()+0x12d: unreachable=
- instruction
-    1    lib/strnlen_user.o: warning: objtool: strnlen_user()+0x5d: call to=
- do_strnlen_user() with UACCESS enabled
-    1    lib/strncpy_from_user.o: warning: objtool: strncpy_from_user()+0x8=
-a: call to do_strncpy_from_user() with UACCESS enabled
-    1    include/asm-generic/unaligned.h:14:8: warning: array subscript -1 =
-is outside array bounds of =E2=80=98unsigned char[1]=E2=80=99 [-Warray-boun=
-ds]
-    1    fs/reiserfs/lbalance.o: warning: objtool: leaf_copy_items_entirely=
-()+0x7fd: stack state mismatch: cfa1=3D4+240 cfa2=3D4+232
-    1    drivers/video/fbdev/udlfb.o: warning: objtool: dlfb_ops_write() fa=
-lls through to next function dlfb_ops_setcolreg()
-    1    drivers/video/fbdev/smscufx.o: warning: objtool: ufx_ops_write() f=
-alls through to next function ufx_ops_setcolreg()
-    1    drivers/soc/qcom/rpmh-rsc.o: warning: objtool: rpmh_rsc_write_ctrl=
-_data() falls through to next function trace_raw_output_rpmh_tx_done()
-    1    drivers/gpu/drm/stm/ltdc.c:625:2: warning: variable 'val' is used =
-uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
-    1    drivers/gpu/drm/stm/ltdc.c:600:9: note: initialize the variable 'v=
-al' to silence this warning
-    1    drivers/gpu/drm/radeon/sumo_dpm.o: warning: objtool: sumo_dpm_set_=
-power_state() falls through to next function sumo_dpm_post_set_power_state()
-    1    clang: warning:   CC      arch/arm/common/mcpm_platsmp.o
-    1    cc1: all warnings being treated as errors
-    1    arch/x86/kernel/head64.o: warning: objtool: __startup_64() falls t=
-hrough to next function startup_64_setup_env()
-    1    arch/mips/boot/dts/ingenic/jz4780.dtsi:513.33-515.6: Warning (unit=
-_address_format): /nemc@13410000/efuse@d0/eth-mac-addr@0x22: unit name shou=
-ld not have leading "0x"
-    1    arch/arm64/kernel/elfcore.c:62:1: warning: the frame size of 2064 =
-bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
-    1    arch/arm64/kernel/elfcore.c:25:12: warning: stack frame size (2144=
-) exceeds limit (2048) in 'mte_dump_tag_range' [-Wframe-larger-than]
-    1    arch/arm/mach-vexpress/spc.c:592:18: warning: array subscript -1 i=
-s below array bounds of =E2=80=98bool[2]=E2=80=99 {aka =E2=80=98_Bool[2]=E2=
-=80=99} [-Warray-bounds]
-    1    arch/arm/mach-vexpress/spc.c:583:21: warning: array subscript -1 i=
-s below array bounds of =E2=80=98bool[2]=E2=80=99 {aka =E2=80=98_Bool[2]=E2=
-=80=99} [-Warray-bounds]
-
-Section mismatches summary:
-
-    1    WARNING: modpost: vmlinux.o(.text+0x156bd7): Section mismatch in r=
-eference from the function __next_node() to the variable .init.data:numa_no=
-des_parsed
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig+debug (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, =
-0 section mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig+kselftest (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warni=
-ng, 0 section mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mi=
-smatches
-
-Errors:
-    drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c:671:14: error: format =E2=
-=80=98%ld=E2=80=99 expects argument of type =E2=80=98long int=E2=80=99, but=
- argument 4 has type =E2=80=98size_t=E2=80=99 {aka =E2=80=98unsigned int=E2=
-=80=99} [-Werror=3Dformat=3D]
-
-Warnings:
-    cc1: all warnings being treated as errors
-
----------------------------------------------------------------------------=
------
-allmodconfig (i386, clang-14) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 secti=
-on mismatches
-
-Errors:
-    drivers/gpu/drm/selftests/test-drm_plane_helper.c:76:5: error: stack fr=
-ame size (1084) exceeds limit (1024) in 'igt_check_plane_state' [-Werror,-W=
-frame-larger-than]
-    arch/x86/include/asm/checksum_32.h:149:6: error: inline assembly requir=
-es more registers than available
-
----------------------------------------------------------------------------=
------
-allmodconfig (x86_64, clang-14) =E2=80=94 FAIL, 5 errors, 15 warnings, 0 se=
-ction mismatches
-
-Errors:
-    include/linux/fortify-string.h:328:4: error: call to __write_overflow_f=
-ield declared with 'warning' attribute: detected write beyond size of field=
- (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
-    include/linux/fortify-string.h:328:4: error: call to __write_overflow_f=
-ield declared with 'warning' attribute: detected write beyond size of field=
- (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
-    drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c:2416:7: error: variable 'ras_ob=
-j' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometim=
-es-uninitialized]
-    drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c:2416:7: error: variable 'ras_ob=
-j' is used uninitialized whenever '||' condition is true [-Werror,-Wsometim=
-es-uninitialized]
-    include/linux/fortify-string.h:328:4: error: call to __write_overflow_f=
-ield declared with 'warning' attribute: detected write beyond size of field=
- (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
-
-Warnings:
-    arch/x86/kernel/head64.o: warning: objtool: __startup_64() falls throug=
-h to next function startup_64_setup_env()
-    vmlinux.o: warning: objtool: sync_regs()+0x20: call to memcpy() leaves =
-.noinstr.text section
-    vmlinux.o: warning: objtool: vc_switch_off_ist()+0x8a: call to memcpy()=
- leaves .noinstr.text section
-    vmlinux.o: warning: objtool: fixup_bad_iret()+0x32: call to memset() le=
-aves .noinstr.text section
-    vmlinux.o: warning: objtool: in_task_stack()+0xc: call to task_stack_pa=
-ge() leaves .noinstr.text section
-    vmlinux.o: warning: objtool: in_entry_stack()+0x10: call to cpu_entry_s=
-tack() leaves .noinstr.text section
-    vmlinux.o: warning: objtool: __sev_es_nmi_complete()+0x5a: call to ghcb=
-_set_sw_exit_code() leaves .noinstr.text section
-    vmlinux.o: warning: objtool: __sev_get_ghcb()+0xa0: call to memcpy() le=
-aves .noinstr.text section
-    vmlinux.o: warning: objtool: __sev_put_ghcb()+0x35: call to memcpy() le=
-aves .noinstr.text section
-    fs/reiserfs/lbalance.o: warning: objtool: leaf_copy_items_entirely()+0x=
-7fd: stack state mismatch: cfa1=3D4+240 cfa2=3D4+232
-    drivers/soc/qcom/rpmh-rsc.o: warning: objtool: rpmh_rsc_write_ctrl_data=
-() falls through to next function trace_raw_output_rpmh_tx_done()
-    drivers/video/fbdev/udlfb.o: warning: objtool: dlfb_ops_write() falls t=
-hrough to next function dlfb_ops_setcolreg()
-    drivers/video/fbdev/smscufx.o: warning: objtool: ufx_ops_write() falls =
-through to next function ufx_ops_setcolreg()
-    drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c:2403:41: note: initialize the v=
-ariable 'ras_obj' to silence this warning
-    drivers/gpu/drm/radeon/sumo_dpm.o: warning: objtool: sumo_dpm_set_power=
-_state() falls through to next function sumo_dpm_post_set_power_state()
-
-Section mismatches:
-    WARNING: modpost: vmlinux.o(.text+0x156bd7): Section mismatch in refere=
-nce from the function __next_node() to the variable .init.data:numa_nodes_p=
-arsed
-
----------------------------------------------------------------------------=
------
-allmodconfig (x86_64, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 secti=
-on mismatches
-
-Errors:
-    /usr/lib/gcc/x86_64-linux-gnu/10/plugin/include/config/i386/i386.h:2500=
-:10: fatal error: common/config/i386/i386-cpuinfo.h: No such file or direct=
-ory
-    /usr/lib/gcc/x86_64-linux-gnu/10/plugin/include/config/i386/i386.h:2500=
-:10: fatal error: common/config/i386/i386-cpuinfo.h: No such file or direct=
-ory
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm64, clang-14) =E2=80=94 FAIL, 5 errors, 1 warning, 0 secti=
-on mismatches
-
-Errors:
-    include/linux/fortify-string.h:328:4: error: call to __write_overflow_f=
-ield declared with 'warning' attribute: detected write beyond size of field=
- (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
-    include/linux/fortify-string.h:328:4: error: call to __write_overflow_f=
-ield declared with 'warning' attribute: detected write beyond size of field=
- (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
-    drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c:2416:7: error: variable 'ras_ob=
-j' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometim=
-es-uninitialized]
-    drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c:2416:7: error: variable 'ras_ob=
-j' is used uninitialized whenever '||' condition is true [-Werror,-Wsometim=
-es-uninitialized]
-    include/linux/fortify-string.h:328:4: error: call to __write_overflow_f=
-ield declared with 'warning' attribute: detected write beyond size of field=
- (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
-
-Warnings:
-    drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c:2403:41: note: initialize the v=
-ariable 'ras_obj' to silence this warning
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm, clang-14) =E2=80=94 FAIL, 5 errors, 14 warnings, 0 secti=
-on mismatches
-
-Errors:
-    crypto/wp512.c:782:13: error: stack frame size (1168) exceeds limit (10=
-24) in 'wp512_process_buffer' [-Werror,-Wframe-larger-than]
-    include/linux/fortify-string.h:328:4: error: call to __write_overflow_f=
-ield declared with 'warning' attribute: detected write beyond size of field=
- (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
-    include/linux/fortify-string.h:328:4: error: call to __write_overflow_f=
-ield declared with 'warning' attribute: detected write beyond size of field=
- (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
-    drivers/gpu/drm/selftests/test-drm_mm.c:372:12: error: stack frame size=
- (1040) exceeds limit (1024) in '__igt_reserve' [-Werror,-Wframe-larger-tha=
-n]
-    drivers/gpu/drm/selftests/test-drm_plane_helper.c:76:5: error: stack fr=
-ame size (1200) exceeds limit (1024) in 'igt_check_plane_state' [-Werror,-W=
-frame-larger-than]
-
-Warnings:
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-
----------------------------------------------------------------------------=
------
-allnoconfig (i386, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (x86_64, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-am200epdkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0=
- section mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-ar7_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-aspeed_g5_defconfig (arm, clang-14) =E2=80=94 PASS, 0 errors, 10 warnings, =
-0 section mismatches
-
-Warnings:
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-
----------------------------------------------------------------------------=
------
-assabet_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-at91_dt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-ath25_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-ath79_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-axm55xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-axs103_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-axs103_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-badge4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-bcm2835_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-bcm47xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-bcm63xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-bigsur_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-bmips_be_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-bmips_stb_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-capcella_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-cavium_octeon_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cerfcube_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 se=
-ction mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-ci20_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    arch/mips/boot/dts/ingenic/jz4780.dtsi:513.33-515.6: Warning (unit_addr=
-ess_format): /nemc@13410000/efuse@d0/eth-mac-addr@0x22: unit name should no=
-t have leading "0x"
-
----------------------------------------------------------------------------=
------
-cm_x300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-cobalt_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-colibri_pxa270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings=
-, 0 section mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-colibri_pxa300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings=
-, 0 section mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-collie_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-corgi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 secti=
-on mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-cu1830-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-davinci_all_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-db1xxx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-decstation_64_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-decstation_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-decstation_r4k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_16K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 1 warning, 0 section mismatches
-
-Warnings:
-    arch/arm64/kernel/elfcore.c:62:1: warning: the frame size of 2064 bytes=
- is larger than 2048 bytes [-Wframe-larger-than=3D]
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-14) =E2=80=94 PASS, 0 er=
-rors, 2 warnings, 0 section mismatches
-
-Warnings:
-    arch/arm64/kernel/elfcore.c:25:12: warning: stack frame size (2144) exc=
-eeds limit (2048) in 'mte_dump_tag_range' [-Wframe-larger-than]
-    1 warning generated.
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
-s, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_EFI=3Dn (riscv, clang-14) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
-s, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+arm64-chromebook+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+crypto (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+debug (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+debug (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+ima (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-dove_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sectio=
-n mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-e55_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-ep93xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-eseries_pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0=
- section mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-exynos_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-ezx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 section=
- mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-footbridge_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 =
-section mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-fuloong2e_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 s=
-ection mismatches
-
-Errors:
-    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
-=98-mhard-float=E2=80=99
-
----------------------------------------------------------------------------=
------
-gcw0_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    include/asm-generic/unaligned.h:14:8: warning: array subscript -1 is ou=
-tside array bounds of =E2=80=98unsigned char[1]=E2=80=99 [-Warray-bounds]
-
----------------------------------------------------------------------------=
------
-gemini_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-gpr_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-h3600_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 secti=
-on mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-h5000_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 secti=
-on mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-hackkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-haps_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig+debug (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warni=
-ngs, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig+kselftest (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 w=
-arnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-hisi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sectio=
-n mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-hsdk_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig+debug (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-imote2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-imx_v4_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-imx_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-iop32x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-ip22_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 section=
- mismatches
-
-Errors:
-    net/netfilter/xt_socket.c:224:3: error: implicit declaration of functio=
-n =E2=80=98nf_defrag_ipv6_disable=E2=80=99; did you mean =E2=80=98nf_defrag=
-_ipv4_disable=E2=80=99? [-Werror=3Dimplicit-function-declaration]
-
-Warnings:
-    cc1: some warnings being treated as errors
-
----------------------------------------------------------------------------=
------
-ip27_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-ip28_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-ip32_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-ixp4xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-jazz_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-jmr3927_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-jornada720_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 =
-section mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-keystone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-lart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sectio=
-n mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-lemote2f_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 se=
-ction mismatches
-
-Errors:
-    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
-=98-mhard-float=E2=80=99
-
----------------------------------------------------------------------------=
------
-loongson1b_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-loongson1c_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-loongson2k_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 =
-section mismatches
-
-Errors:
-    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
-=98-mhard-float=E2=80=99
-
----------------------------------------------------------------------------=
------
-loongson3_defconfig (mips, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 =
-section mismatches
-
-Errors:
-    (.init.text+0x1728): undefined reference to `node_data'
-    mips-linux-gnu-ld: (.init.text+0x1750): undefined reference to `node_da=
-ta'
-
----------------------------------------------------------------------------=
------
-lpc18xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    mm/oom_kill.c:60:25: warning: =E2=80=98vm_oom_kill_table=E2=80=99 defin=
-ed but not used [-Wunused-variable]
-    fs/binfmt_flat.c:117:12: warning: =E2=80=98flat_core_dump=E2=80=99 defi=
-ned but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-lpc32xx_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 4 warnings, 0 sect=
-ion mismatches
-
-Errors:
-    panel-edp.c:(.text+0xc0c): undefined reference to `drm_panel_dp_aux_bac=
-klight'
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-lpd270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-lubbock_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-magician_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 se=
-ction mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-mainstone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-malta_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 sectio=
-n mismatches
-
-Errors:
-    net/netfilter/xt_socket.c:224:3: error: implicit declaration of functio=
-n =E2=80=98nf_defrag_ipv6_disable=E2=80=99; did you mean =E2=80=98nf_defrag=
-_ipv4_disable=E2=80=99? [-Werror=3Dimplicit-function-declaration]
-
-Warnings:
-    cc1: some warnings being treated as errors
-
----------------------------------------------------------------------------=
------
-malta_kvm_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 se=
-ction mismatches
-
-Errors:
-    net/netfilter/xt_socket.c:224:3: error: implicit declaration of functio=
-n =E2=80=98nf_defrag_ipv6_disable=E2=80=99; did you mean =E2=80=98nf_defrag=
-_ipv4_disable=E2=80=99? [-Werror=3Dimplicit-function-declaration]
-
-Warnings:
-    cc1: some warnings being treated as errors
-
----------------------------------------------------------------------------=
------
-malta_qemu_32r6_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
-gs, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-maltaaprp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-maltasmvp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-maltasmvp_eva_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-maltaup_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-maltaup_xpa_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-milbeaut_m10v_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
-mini2440_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 se=
-ction mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-mmp2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sectio=
-n mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-moxart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-mpc30x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-mps2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sectio=
-n mismatches
-
-Warnings:
-    mm/oom_kill.c:60:25: warning: =E2=80=98vm_oom_kill_table=E2=80=99 defin=
-ed but not used [-Wunused-variable]
-    fs/binfmt_flat.c:117:12: warning: =E2=80=98flat_core_dump=E2=80=99 defi=
-ned but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-mtx1_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v4t_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-multi_v5_defconfig (arm, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, clang-14) =E2=80=94 PASS, 0 errors, 13 warnings, 0=
- section mismatches
-
-Warnings:
-    clang: warning:   CC      arch/arm/common/mcpm_platsmp.o
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    drivers/gpu/drm/stm/ltdc.c:625:2: warning: variable 'val' is used unini=
-tialized whenever switch default is taken [-Wsometimes-uninitialized]
-    drivers/gpu/drm/stm/ltdc.c:600:9: note: initialize the variable 'val' t=
-o silence this warning
-    1 warning generated.
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-10) =E2=80=94 PASS, =
-0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-10) =E2=80=
-=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2=
- warnings, 0 section mismatches
-
-Warnings:
-    arch/arm/mach-vexpress/spc.c:583:21: warning: array subscript -1 is bel=
-ow array bounds of =E2=80=98bool[2]=E2=80=99 {aka =E2=80=98_Bool[2]=E2=80=
-=99} [-Warray-bounds]
-    arch/arm/mach-vexpress/spc.c:592:18: warning: array subscript -1 is bel=
-ow array bounds of =E2=80=98bool[2]=E2=80=99 {aka =E2=80=98_Bool[2]=E2=80=
-=99} [-Warray-bounds]
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
- errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+debug (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-mvebu_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 se=
-ction mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-mvebu_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 se=
-ction mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-mxs_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 section=
- mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-neponset_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 se=
-ction mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-netwinder_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-nhk8815_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, =
-0 section mismatches
-
-Warnings:
-    mm/oom_kill.c:60:25: warning: =E2=80=98vm_oom_kill_table=E2=80=99 defin=
-ed but not used [-Wunused-variable]
-    fs/binfmt_flat.c:117:12: warning: =E2=80=98flat_core_dump=E2=80=99 defi=
-ned but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-nommu_k210_sdcard_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 2 war=
-nings, 0 section mismatches
-
-Warnings:
-    mm/oom_kill.c:60:25: warning: =E2=80=98vm_oom_kill_table=E2=80=99 defin=
-ed but not used [-Wunused-variable]
-    fs/binfmt_flat.c:117:12: warning: =E2=80=98flat_core_dump=E2=80=99 defi=
-ned but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-omap1_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 secti=
-on mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-omap2plus_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 se=
-ction mismatches
-
-Errors:
-    ERROR: modpost: "drm_panel_dp_aux_backlight" [drivers/gpu/drm/panel/pan=
-el-edp.ko] undefined!
-
----------------------------------------------------------------------------=
------
-omega2p_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-orion5x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-oxnas_v6_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-palmz72_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-pcm027_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-pic32mzda_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-pleb_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sectio=
-n mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-pxa168_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-pxa255-idp_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 =
-section mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-pxa3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-pxa910_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 section=
- mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-qcom_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section=
- mismatches
-
-Errors:
-    panel-edp.c:(.text+0xb70): undefined reference to `drm_panel_dp_aux_bac=
-klight'
-
----------------------------------------------------------------------------=
------
-qi_lb60_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-rb532_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-rbtx49xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-realview_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 sec=
-tion mismatches
-
-Errors:
-    panel-edp.c:(.text+0xb7c): undefined reference to `drm_panel_dp_aux_bac=
-klight'
-
----------------------------------------------------------------------------=
------
-rm200_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-rpc_defconfig (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 section=
- mismatches
-
-Errors:
-    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=3D0x'
-    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=3D0x'
-
----------------------------------------------------------------------------=
------
-rs90_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-rt305x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-rv32_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-s3c2410_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-s3c6400_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-s5pv210_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-sama5_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 4 warnings, 0 sectio=
-n mismatches
-
-Errors:
-    panel-edp.c:(.text+0xb70): undefined reference to `drm_panel_dp_aux_bac=
-klight'
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-sama7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-sb1250_swarm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
-shannon_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-shmobile_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 sec=
-tion mismatches
-
-Errors:
-    panel-edp.c:(.text+0xbdc): undefined reference to `drm_panel_dp_aux_bac=
-klight'
-
----------------------------------------------------------------------------=
------
-simpad_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-socfpga_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-spear13xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-spear3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 se=
-ction mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-spear6xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 se=
-ction mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-spitz_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 secti=
-on mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-stm32_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
-on mismatches
-
-Warnings:
-    mm/oom_kill.c:60:25: warning: =E2=80=98vm_oom_kill_table=E2=80=99 defin=
-ed but not used [-Wunused-variable]
-    fs/binfmt_flat.c:117:12: warning: =E2=80=98flat_core_dump=E2=80=99 defi=
-ned but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-sunxi_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 sectio=
-n mismatches
-
-Errors:
-    panel-edp.c:(.text+0xb70): undefined reference to `drm_panel_dp_aux_bac=
-klight'
-
----------------------------------------------------------------------------=
------
-tb0219_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-tb0226_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-tb0287_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-tct_hammer_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 =
-section mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-trizeps4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 se=
-ction mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-u8500_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-vdk_hs38_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-vdk_hs38_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-versatile_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 se=
-ction mismatches
-
-Errors:
-    panel-edp.c:(.text+0xb28): undefined reference to `drm_panel_dp_aux_bac=
-klight'
-
----------------------------------------------------------------------------=
------
-vexpress_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 sec=
-tion mismatches
-
-Errors:
-    panel-edp.c:(.text+0xb70): undefined reference to `drm_panel_dp_aux_bac=
-klight'
-
----------------------------------------------------------------------------=
------
-vf610m4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    mm/oom_kill.c:60:25: warning: =E2=80=98vm_oom_kill_table=E2=80=99 defin=
-ed but not used [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-viper_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 secti=
-on mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-vocore2_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, =
-0 section mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-workpad_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, clang-14) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
-section mismatches
-
-Warnings:
-    net/core/skbuff.o: warning: objtool: skb_copy()+0x12d: unreachable inst=
-ruction
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
-gs, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+crypto (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
-gs, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+debug (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 2 warning=
-s, 0 section mismatches
-
-Warnings:
-    lib/strncpy_from_user.o: warning: objtool: strncpy_from_user()+0x8a: ca=
-ll to do_strncpy_from_user() with UACCESS enabled
-    lib/strnlen_user.o: warning: objtool: strnlen_user()+0x5d: call to do_s=
-trnlen_user() with UACCESS enabled
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+ima (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
-nings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, =
-0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 e=
-rrors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook+kselftest (x86_64, gcc-10) =E2=80=94 PASS, =
-0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86_kvm_guest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0=
- warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-xcep_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sectio=
-n mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----------------------------------------------------------------------------=
------
-zeus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sectio=
-n mismatches
-
-Warnings:
-    arch/arm/mm/dma-mapping.c:395:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:396:15: warning: array subscript <unknown> is=
- outside array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=
-=99 [-Warray-bounds]
-    arch/arm/mm/dma-mapping.c:404:36: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-    arch/arm/mm/dma-mapping.c:405:42: warning: array subscript i is outside=
- array bounds of =E2=80=98struct dma_contig_early_reserve[0]=E2=80=99 [-War=
-ray-bounds]
-
----
-For more info write to <info@kernelci.org>
+next/master baseline: 641 runs, 99 regressions (next-20220217)
+
+Regressions Summary
+-------------------
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+imx8mn-ddr4-evk            | arm64  | lab-baylibre    | clang-14 | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+minnowboard-turbot-E3826   | x86_64 | lab-collabora   | gcc-10   | x86_64_d=
+efconfig+debug       | 1          =
+
+qemu_arm64-virt-gicv2      | arm64  | lab-baylibre    | clang-14 | defconfi=
+g                    | 1          =
+
+qemu_arm64-virt-gicv2      | arm64  | lab-baylibre    | clang-14 | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+qemu_arm64-virt-gicv2      | arm64  | lab-broonie     | clang-14 | defconfi=
+g                    | 1          =
+
+qemu_arm64-virt-gicv2      | arm64  | lab-broonie     | clang-14 | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+qemu_arm64-virt-gicv2      | arm64  | lab-cip         | clang-14 | defconfi=
+g                    | 1          =
+
+qemu_arm64-virt-gicv2      | arm64  | lab-cip         | clang-14 | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+qemu_arm64-virt-gicv2      | arm64  | lab-baylibre    | gcc-10   | defconfi=
+g+crypto             | 1          =
+
+qemu_arm64-virt-gicv2      | arm64  | lab-baylibre    | gcc-10   | defconfi=
+g+arm64-chromebook   | 1          =
+
+qemu_arm64-virt-gicv2      | arm64  | lab-baylibre    | gcc-10   | defconfi=
+g+CON...OMIZE_BASE=3Dy | 1          =
+
+qemu_arm64-virt-gicv2      | arm64  | lab-baylibre    | gcc-10   | defconfi=
+g                    | 1          =
+
+qemu_arm64-virt-gicv2      | arm64  | lab-baylibre    | gcc-10   | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+qemu_arm64-virt-gicv2      | arm64  | lab-broonie     | gcc-10   | defconfi=
+g+crypto             | 1          =
+
+qemu_arm64-virt-gicv2      | arm64  | lab-broonie     | gcc-10   | defconfi=
+g+arm64-chromebook   | 1          =
+
+qemu_arm64-virt-gicv2      | arm64  | lab-broonie     | gcc-10   | defconfi=
+g+CON...OMIZE_BASE=3Dy | 1          =
+
+qemu_arm64-virt-gicv2      | arm64  | lab-broonie     | gcc-10   | defconfi=
+g                    | 1          =
+
+qemu_arm64-virt-gicv2      | arm64  | lab-broonie     | gcc-10   | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+qemu_arm64-virt-gicv2      | arm64  | lab-cip         | gcc-10   | defconfi=
+g+crypto             | 1          =
+
+qemu_arm64-virt-gicv2      | arm64  | lab-cip         | gcc-10   | defconfi=
+g+arm64-chromebook   | 1          =
+
+qemu_arm64-virt-gicv2      | arm64  | lab-cip         | gcc-10   | defconfi=
+g+CON...OMIZE_BASE=3Dy | 1          =
+
+qemu_arm64-virt-gicv2      | arm64  | lab-cip         | gcc-10   | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-baylibre    | clang-14 | defconfi=
+g                    | 1          =
+
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-baylibre    | clang-14 | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-broonie     | clang-14 | defconfi=
+g                    | 1          =
+
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-broonie     | clang-14 | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-cip         | clang-14 | defconfi=
+g                    | 1          =
+
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-cip         | clang-14 | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-baylibre    | gcc-10   | defconfi=
+g+crypto             | 1          =
+
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-baylibre    | gcc-10   | defconfi=
+g+arm64-chromebook   | 1          =
+
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-baylibre    | gcc-10   | defconfi=
+g+debug              | 1          =
+
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-baylibre    | gcc-10   | defconfi=
+g+CON...OMIZE_BASE=3Dy | 1          =
+
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-baylibre    | gcc-10   | defconfi=
+g                    | 1          =
+
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-baylibre    | gcc-10   | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-broonie     | gcc-10   | defconfi=
+g+crypto             | 1          =
+
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-broonie     | gcc-10   | defconfi=
+g+arm64-chromebook   | 1          =
+
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-broonie     | gcc-10   | defconfi=
+g+debug              | 1          =
+
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-broonie     | gcc-10   | defconfi=
+g+CON...OMIZE_BASE=3Dy | 1          =
+
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-broonie     | gcc-10   | defconfi=
+g                    | 1          =
+
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-broonie     | gcc-10   | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-cip         | gcc-10   | defconfi=
+g+crypto             | 1          =
+
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-cip         | gcc-10   | defconfi=
+g+arm64-chromebook   | 1          =
+
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-cip         | gcc-10   | defconfi=
+g+debug              | 1          =
+
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-cip         | gcc-10   | defconfi=
+g+CON...OMIZE_BASE=3Dy | 1          =
+
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-cip         | gcc-10   | defconfi=
+g                    | 1          =
+
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-cip         | gcc-10   | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-linaro-lkft | gcc-10   | defconfi=
+g+debug              | 1          =
+
+qemu_arm64-virt-gicv3      | arm64  | lab-baylibre    | clang-14 | defconfi=
+g                    | 1          =
+
+qemu_arm64-virt-gicv3      | arm64  | lab-baylibre    | clang-14 | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+qemu_arm64-virt-gicv3      | arm64  | lab-broonie     | clang-14 | defconfi=
+g                    | 1          =
+
+qemu_arm64-virt-gicv3      | arm64  | lab-broonie     | clang-14 | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+qemu_arm64-virt-gicv3      | arm64  | lab-cip         | clang-14 | defconfi=
+g                    | 1          =
+
+qemu_arm64-virt-gicv3      | arm64  | lab-cip         | clang-14 | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+qemu_arm64-virt-gicv3      | arm64  | lab-baylibre    | gcc-10   | defconfi=
+g+crypto             | 1          =
+
+qemu_arm64-virt-gicv3      | arm64  | lab-baylibre    | gcc-10   | defconfi=
+g+arm64-chromebook   | 1          =
+
+qemu_arm64-virt-gicv3      | arm64  | lab-baylibre    | gcc-10   | defconfi=
+g+CON...OMIZE_BASE=3Dy | 1          =
+
+qemu_arm64-virt-gicv3      | arm64  | lab-baylibre    | gcc-10   | defconfi=
+g                    | 1          =
+
+qemu_arm64-virt-gicv3      | arm64  | lab-baylibre    | gcc-10   | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+qemu_arm64-virt-gicv3      | arm64  | lab-broonie     | gcc-10   | defconfi=
+g+crypto             | 1          =
+
+qemu_arm64-virt-gicv3      | arm64  | lab-broonie     | gcc-10   | defconfi=
+g+arm64-chromebook   | 1          =
+
+qemu_arm64-virt-gicv3      | arm64  | lab-broonie     | gcc-10   | defconfi=
+g+CON...OMIZE_BASE=3Dy | 1          =
+
+qemu_arm64-virt-gicv3      | arm64  | lab-broonie     | gcc-10   | defconfi=
+g                    | 1          =
+
+qemu_arm64-virt-gicv3      | arm64  | lab-broonie     | gcc-10   | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+qemu_arm64-virt-gicv3      | arm64  | lab-cip         | gcc-10   | defconfi=
+g+crypto             | 1          =
+
+qemu_arm64-virt-gicv3      | arm64  | lab-cip         | gcc-10   | defconfi=
+g+arm64-chromebook   | 1          =
+
+qemu_arm64-virt-gicv3      | arm64  | lab-cip         | gcc-10   | defconfi=
+g+CON...OMIZE_BASE=3Dy | 1          =
+
+qemu_arm64-virt-gicv3      | arm64  | lab-cip         | gcc-10   | defconfi=
+g                    | 1          =
+
+qemu_arm64-virt-gicv3      | arm64  | lab-cip         | gcc-10   | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+qemu_arm64-virt-gicv3-uefi | arm64  | lab-baylibre    | clang-14 | defconfi=
+g                    | 1          =
+
+qemu_arm64-virt-gicv3-uefi | arm64  | lab-baylibre    | clang-14 | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+qemu_arm64-virt-gicv3-uefi | arm64  | lab-broonie     | clang-14 | defconfi=
+g                    | 1          =
+
+qemu_arm64-virt-gicv3-uefi | arm64  | lab-broonie     | clang-14 | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+qemu_arm64-virt-gicv3-uefi | arm64  | lab-cip         | clang-14 | defconfi=
+g                    | 1          =
+
+qemu_arm64-virt-gicv3-uefi | arm64  | lab-cip         | clang-14 | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+qemu_arm64-virt-gicv3-uefi | arm64  | lab-baylibre    | gcc-10   | defconfi=
+g+crypto             | 1          =
+
+qemu_arm64-virt-gicv3-uefi | arm64  | lab-baylibre    | gcc-10   | defconfi=
+g+arm64-chromebook   | 1          =
+
+qemu_arm64-virt-gicv3-uefi | arm64  | lab-baylibre    | gcc-10   | defconfi=
+g+debug              | 1          =
+
+qemu_arm64-virt-gicv3-uefi | arm64  | lab-baylibre    | gcc-10   | defconfi=
+g+CON...OMIZE_BASE=3Dy | 1          =
+
+qemu_arm64-virt-gicv3-uefi | arm64  | lab-baylibre    | gcc-10   | defconfi=
+g                    | 1          =
+
+qemu_arm64-virt-gicv3-uefi | arm64  | lab-baylibre    | gcc-10   | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+qemu_arm64-virt-gicv3-uefi | arm64  | lab-broonie     | gcc-10   | defconfi=
+g+crypto             | 1          =
+
+qemu_arm64-virt-gicv3-uefi | arm64  | lab-broonie     | gcc-10   | defconfi=
+g+arm64-chromebook   | 1          =
+
+qemu_arm64-virt-gicv3-uefi | arm64  | lab-broonie     | gcc-10   | defconfi=
+g+debug              | 1          =
+
+qemu_arm64-virt-gicv3-uefi | arm64  | lab-broonie     | gcc-10   | defconfi=
+g+CON...OMIZE_BASE=3Dy | 1          =
+
+qemu_arm64-virt-gicv3-uefi | arm64  | lab-broonie     | gcc-10   | defconfi=
+g                    | 1          =
+
+qemu_arm64-virt-gicv3-uefi | arm64  | lab-broonie     | gcc-10   | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+qemu_arm64-virt-gicv3-uefi | arm64  | lab-cip         | gcc-10   | defconfi=
+g+crypto             | 1          =
+
+qemu_arm64-virt-gicv3-uefi | arm64  | lab-cip         | gcc-10   | defconfi=
+g+arm64-chromebook   | 1          =
+
+qemu_arm64-virt-gicv3-uefi | arm64  | lab-cip         | gcc-10   | defconfi=
+g+debug              | 1          =
+
+qemu_arm64-virt-gicv3-uefi | arm64  | lab-cip         | gcc-10   | defconfi=
+g                    | 1          =
+
+qemu_arm64-virt-gicv3-uefi | arm64  | lab-cip         | gcc-10   | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+qemu_arm64-virt-gicv3-uefi | arm64  | lab-linaro-lkft | gcc-10   | defconfi=
+g+debug              | 1          =
+
+rk3399-gru-kevin           | arm64  | lab-collabora   | gcc-10   | defconfi=
+g+arm64-chromebook   | 1          =
+
+sun7i-a20-cubieboard2      | arm    | lab-clabbe      | clang-14 | multi_v7=
+_defconfig           | 2          =
+
+sun7i-a20-cubieboard2      | arm    | lab-clabbe      | gcc-10   | multi_v7=
+_defconfig           | 2          =
+
+sun7i-a20-cubieboard2      | arm    | lab-clabbe      | gcc-10   | multi_v7=
+_defc...MB2_KERNEL=3Dy | 2          =
+
+
+  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
+220217/plan/baseline/
+
+  Test:     baseline
+  Tree:     next
+  Branch:   master
+  Describe: next-20220217
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      3c30cf91b5ecc7272b3d2942ae0505dd8320b81c =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+imx8mn-ddr4-evk            | arm64  | lab-baylibre    | clang-14 | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e512a80d56e74bdc62968
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    clang-14 (Debian clang version 14.0.0-++20220212123227+2a228=
+6e9859a-1~exp1~20220212003308.41)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-14/lab-baylibre/baseline-imx8m=
+n-ddr4-evk.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-14/lab-baylibre/baseline-imx8m=
+n-ddr4-evk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e512a80d56e74bdc62=
+969
+        new failure (last pass: next-20220216) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+minnowboard-turbot-E3826   | x86_64 | lab-collabora   | gcc-10   | x86_64_d=
+efconfig+debug       | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e49b1921b266306c62986
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+debug
+  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/x86_=
+64/x86_64_defconfig+debug/gcc-10/lab-collabora/baseline-minnowboard-turbot-=
+E3826.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/x86_=
+64/x86_64_defconfig+debug/gcc-10/lab-collabora/baseline-minnowboard-turbot-=
+E3826.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e49b1921b266306c62=
+987
+        new failure (last pass: next-20220216) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv2      | arm64  | lab-baylibre    | clang-14 | defconfi=
+g                    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4ca1d1795bab9bc62968
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    clang-14 (Debian clang version 14.0.0-++20220212123227+2a228=
+6e9859a-1~exp1~20220212003308.41)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig/clang-14/lab-baylibre/baseline-qemu_arm64-virt-gicv2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig/clang-14/lab-baylibre/baseline-qemu_arm64-virt-gicv2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e4ca1d1795bab9bc62=
+969
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv2      | arm64  | lab-baylibre    | clang-14 | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4d563dffa2d226c62987
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    clang-14 (Debian clang version 14.0.0-++20220212123227+2a228=
+6e9859a-1~exp1~20220212003308.41)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-14/lab-baylibre/baseline-qemu_=
+arm64-virt-gicv2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-14/lab-baylibre/baseline-qemu_=
+arm64-virt-gicv2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e4d563dffa2d226c62=
+988
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv2      | arm64  | lab-broonie     | clang-14 | defconfi=
+g                    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4c64158b173428c62971
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    clang-14 (Debian clang version 14.0.0-++20220212123227+2a228=
+6e9859a-1~exp1~20220212003308.41)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig/clang-14/lab-broonie/baseline-qemu_arm64-virt-gicv2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig/clang-14/lab-broonie/baseline-qemu_arm64-virt-gicv2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e4c64158b173428c62=
+972
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv2      | arm64  | lab-broonie     | clang-14 | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4d3f198c27c2eec62968
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    clang-14 (Debian clang version 14.0.0-++20220212123227+2a228=
+6e9859a-1~exp1~20220212003308.41)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-14/lab-broonie/baseline-qemu_a=
+rm64-virt-gicv2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-14/lab-broonie/baseline-qemu_a=
+rm64-virt-gicv2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e4d3f198c27c2eec62=
+969
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv2      | arm64  | lab-cip         | clang-14 | defconfi=
+g                    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e57f3e4fc955d5bc629cb
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    clang-14 (Debian clang version 14.0.0-++20220212123227+2a228=
+6e9859a-1~exp1~20220212003308.41)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig/clang-14/lab-cip/baseline-qemu_arm64-virt-gicv2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig/clang-14/lab-cip/baseline-qemu_arm64-virt-gicv2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e57f3e4fc955d5bc62=
+9cc
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv2      | arm64  | lab-cip         | clang-14 | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e5a040db0b558cec62984
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    clang-14 (Debian clang version 14.0.0-++20220212123227+2a228=
+6e9859a-1~exp1~20220212003308.41)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-14/lab-cip/baseline-qemu_arm64=
+-virt-gicv2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-14/lab-cip/baseline-qemu_arm64=
+-virt-gicv2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e5a040db0b558cec62=
+985
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv2      | arm64  | lab-baylibre    | gcc-10   | defconfi=
+g+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e45e582b38be5ddc62968
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e45e582b38be5ddc62=
+969
+        failing since 7 days (last pass: next-20220208, first fail: next-20=
+220210) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv2      | arm64  | lab-baylibre    | gcc-10   | defconfi=
+g+arm64-chromebook   | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e486853b2e33bc6c62976
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+arm64-chromebook/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-g=
+icv2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+arm64-chromebook/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-g=
+icv2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e486853b2e33bc6c62=
+977
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv2      | arm64  | lab-baylibre    | gcc-10   | defconfi=
+g+CON...OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4a0bc9a780c1bfc62968
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-qemu_arm=
+64-virt-gicv2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-qemu_arm=
+64-virt-gicv2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e4a0bc9a780c1bfc62=
+969
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv2      | arm64  | lab-baylibre    | gcc-10   | defconfi=
+g                    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4bc7eb27ac436ac6296a
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e4bc7eb27ac436ac62=
+96b
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv2      | arm64  | lab-baylibre    | gcc-10   | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4cf422c4db0432c6296f
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-qemu_ar=
+m64-virt-gicv2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-qemu_ar=
+m64-virt-gicv2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e4cf422c4db0432c62=
+970
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv2      | arm64  | lab-broonie     | gcc-10   | defconfi=
+g+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4582f5e249dd48c629a9
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+crypto/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gicv2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+crypto/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gicv2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e4582f5e249dd48c62=
+9aa
+        failing since 7 days (last pass: next-20220208, first fail: next-20=
+220210) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv2      | arm64  | lab-broonie     | gcc-10   | defconfi=
+g+arm64-chromebook   | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e47b5e7ecff5a7fc62978
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+arm64-chromebook/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gi=
+cv2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+arm64-chromebook/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gi=
+cv2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e47b5e7ecff5a7fc62=
+979
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv2      | arm64  | lab-broonie     | gcc-10   | defconfi=
+g+CON...OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4993e472ed7a45c6299a
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-broonie/baseline-qemu_arm6=
+4-virt-gicv2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-broonie/baseline-qemu_arm6=
+4-virt-gicv2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e4993e472ed7a45c62=
+99b
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv2      | arm64  | lab-broonie     | gcc-10   | defconfi=
+g                    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4a5b5a71d4d71ac62987
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gicv2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gicv2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e4a5b5a71d4d71ac62=
+988
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv2      | arm64  | lab-broonie     | gcc-10   | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4cb4d164e05415c6298b
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-broonie/baseline-qemu_arm=
+64-virt-gicv2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-broonie/baseline-qemu_arm=
+64-virt-gicv2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e4cb5d164e05415c62=
+98c
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv2      | arm64  | lab-cip         | gcc-10   | defconfi=
+g+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e46ff4d44daaae5c62997
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+crypto/gcc-10/lab-cip/baseline-qemu_arm64-virt-gicv2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+crypto/gcc-10/lab-cip/baseline-qemu_arm64-virt-gicv2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e46ff4d44daaae5c62=
+998
+        failing since 7 days (last pass: next-20220208, first fail: next-20=
+220210) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv2      | arm64  | lab-cip         | gcc-10   | defconfi=
+g+arm64-chromebook   | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4c28822dc58be2c629bd
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+arm64-chromebook/gcc-10/lab-cip/baseline-qemu_arm64-virt-gicv2.=
+txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+arm64-chromebook/gcc-10/lab-cip/baseline-qemu_arm64-virt-gicv2.=
+html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e4c28822dc58be2c62=
+9be
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv2      | arm64  | lab-cip         | gcc-10   | defconfi=
+g+CON...OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e51e4c25ba543a9c6296f
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-cip/baseline-qemu_arm64-vi=
+rt-gicv2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-cip/baseline-qemu_arm64-vi=
+rt-gicv2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e51e4c25ba543a9c62=
+970
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv2      | arm64  | lab-cip         | gcc-10   | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e58d861a3e83070c62968
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-cip/baseline-qemu_arm64-v=
+irt-gicv2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-cip/baseline-qemu_arm64-v=
+irt-gicv2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e58d861a3e83070c62=
+969
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-baylibre    | clang-14 | defconfi=
+g                    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4cb552fbff01c4c6299f
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    clang-14 (Debian clang version 14.0.0-++20220212123227+2a228=
+6e9859a-1~exp1~20220212003308.41)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig/clang-14/lab-baylibre/baseline-qemu_arm64-virt-gicv2-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig/clang-14/lab-baylibre/baseline-qemu_arm64-virt-gicv2-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e4cb552fbff01c4c62=
+9a0
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-baylibre    | clang-14 | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4d904212800e60c6297f
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    clang-14 (Debian clang version 14.0.0-++20220212123227+2a228=
+6e9859a-1~exp1~20220212003308.41)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-14/lab-baylibre/baseline-qemu_=
+arm64-virt-gicv2-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-14/lab-baylibre/baseline-qemu_=
+arm64-virt-gicv2-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e4d904212800e60c62=
+980
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-broonie     | clang-14 | defconfi=
+g                    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4c66158b173428c62974
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    clang-14 (Debian clang version 14.0.0-++20220212123227+2a228=
+6e9859a-1~exp1~20220212003308.41)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig/clang-14/lab-broonie/baseline-qemu_arm64-virt-gicv2-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig/clang-14/lab-broonie/baseline-qemu_arm64-virt-gicv2-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e4c66158b173428c62=
+975
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-broonie     | clang-14 | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4d2dd39f8fa054c629b1
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    clang-14 (Debian clang version 14.0.0-++20220212123227+2a228=
+6e9859a-1~exp1~20220212003308.41)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-14/lab-broonie/baseline-qemu_a=
+rm64-virt-gicv2-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-14/lab-broonie/baseline-qemu_a=
+rm64-virt-gicv2-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e4d2dd39f8fa054c62=
+9b2
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-cip         | clang-14 | defconfi=
+g                    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e58106c62a7ae9ac629c2
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    clang-14 (Debian clang version 14.0.0-++20220212123227+2a228=
+6e9859a-1~exp1~20220212003308.41)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig/clang-14/lab-cip/baseline-qemu_arm64-virt-gicv2-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig/clang-14/lab-cip/baseline-qemu_arm64-virt-gicv2-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e58106c62a7ae9ac62=
+9c3
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-cip         | clang-14 | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e5a72dbc894ab63c62998
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    clang-14 (Debian clang version 14.0.0-++20220212123227+2a228=
+6e9859a-1~exp1~20220212003308.41)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-14/lab-cip/baseline-qemu_arm64=
+-virt-gicv2-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-14/lab-cip/baseline-qemu_arm64=
+-virt-gicv2-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e5a72dbc894ab63c62=
+999
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-baylibre    | gcc-10   | defconfi=
+g+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4583f5e249dd48c629b7
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv2-uefi.=
+txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv2-uefi.=
+html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e4583f5e249dd48c62=
+9b8
+        failing since 7 days (last pass: next-20220208, first fail: next-20=
+220210) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-baylibre    | gcc-10   | defconfi=
+g+arm64-chromebook   | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e486653b2e33bc6c62970
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+arm64-chromebook/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-g=
+icv2-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+arm64-chromebook/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-g=
+icv2-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e486653b2e33bc6c62=
+971
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-baylibre    | gcc-10   | defconfi=
+g+debug              | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e48a3504203bc15c6298d
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+debug
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+debug/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv2-uefi.t=
+xt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+debug/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv2-uefi.h=
+tml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e48a3504203bc15c62=
+98e
+        failing since 8 days (last pass: next-20220207, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-baylibre    | gcc-10   | defconfi=
+g+CON...OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4a0c00e69a364cc62997
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-qemu_arm=
+64-virt-gicv2-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-qemu_arm=
+64-virt-gicv2-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e4a0c00e69a364cc62=
+998
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-baylibre    | gcc-10   | defconfi=
+g                    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4bb18279836783c62983
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv2-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv2-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e4bb18279836783c62=
+984
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-baylibre    | gcc-10   | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4d41198c27c2eec62970
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-qemu_ar=
+m64-virt-gicv2-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-qemu_ar=
+m64-virt-gicv2-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e4d41198c27c2eec62=
+971
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-broonie     | gcc-10   | defconfi=
+g+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e456e2b697ed85fc6298b
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+crypto/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gicv2-uefi.t=
+xt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+crypto/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gicv2-uefi.h=
+tml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e456e2b697ed85fc62=
+98c
+        failing since 7 days (last pass: next-20220208, first fail: next-20=
+220210) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-broonie     | gcc-10   | defconfi=
+g+arm64-chromebook   | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e47b4dcdfbd62bdc6298c
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+arm64-chromebook/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gi=
+cv2-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+arm64-chromebook/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gi=
+cv2-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e47b4dcdfbd62bdc62=
+98d
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-broonie     | gcc-10   | defconfi=
+g+debug              | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e47ee8c9c6ccfa7c6298f
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+debug
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+debug/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gicv2-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+debug/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gicv2-uefi.ht=
+ml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e47ee8c9c6ccfa7c62=
+990
+        failing since 8 days (last pass: next-20220207, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-broonie     | gcc-10   | defconfi=
+g+CON...OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e49a8e472ed7a45c629a0
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-broonie/baseline-qemu_arm6=
+4-virt-gicv2-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-broonie/baseline-qemu_arm6=
+4-virt-gicv2-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e49a8e472ed7a45c62=
+9a1
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-broonie     | gcc-10   | defconfi=
+g                    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4a475a71d4d71ac6297c
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gicv2-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gicv2-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e4a475a71d4d71ac62=
+97d
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-broonie     | gcc-10   | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4cf2533aa486c8c6296f
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-broonie/baseline-qemu_arm=
+64-virt-gicv2-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-broonie/baseline-qemu_arm=
+64-virt-gicv2-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e4cf2533aa486c8c62=
+970
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-cip         | gcc-10   | defconfi=
+g+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e462c65c74ae06dc62973
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+crypto/gcc-10/lab-cip/baseline-qemu_arm64-virt-gicv2-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+crypto/gcc-10/lab-cip/baseline-qemu_arm64-virt-gicv2-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e462c65c74ae06dc62=
+974
+        failing since 7 days (last pass: next-20220208, first fail: next-20=
+220210) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-cip         | gcc-10   | defconfi=
+g+arm64-chromebook   | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4bcc34e40b4fffc62975
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+arm64-chromebook/gcc-10/lab-cip/baseline-qemu_arm64-virt-gicv2-=
+uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+arm64-chromebook/gcc-10/lab-cip/baseline-qemu_arm64-virt-gicv2-=
+uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e4bcc34e40b4fffc62=
+976
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-cip         | gcc-10   | defconfi=
+g+debug              | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4c58158b173428c6296b
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+debug
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+debug/gcc-10/lab-cip/baseline-qemu_arm64-virt-gicv2-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+debug/gcc-10/lab-cip/baseline-qemu_arm64-virt-gicv2-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e4c58158b173428c62=
+96c
+        failing since 8 days (last pass: next-20220207, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-cip         | gcc-10   | defconfi=
+g+CON...OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e52480b44b6c5d7c62968
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-cip/baseline-qemu_arm64-vi=
+rt-gicv2-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-cip/baseline-qemu_arm64-vi=
+rt-gicv2-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e52480b44b6c5d7c62=
+969
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-cip         | gcc-10   | defconfi=
+g                    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e546e59407c5544c6299c
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig/gcc-10/lab-cip/baseline-qemu_arm64-virt-gicv2-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig/gcc-10/lab-cip/baseline-qemu_arm64-virt-gicv2-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e546e59407c5544c62=
+99d
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-cip         | gcc-10   | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e59beacdb9e9d10c62985
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-cip/baseline-qemu_arm64-v=
+irt-gicv2-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-cip/baseline-qemu_arm64-v=
+irt-gicv2-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e59beacdb9e9d10c62=
+986
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv2-uefi | arm64  | lab-linaro-lkft | gcc-10   | defconfi=
+g+debug              | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e488bc924f684a3c62978
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+debug
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+debug/gcc-10/lab-linaro-lkft/baseline-qemu_arm64-virt-gicv2-uef=
+i.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+debug/gcc-10/lab-linaro-lkft/baseline-qemu_arm64-virt-gicv2-uef=
+i.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e488bc924f684a3c62=
+979
+        failing since 8 days (last pass: next-20220207, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv3      | arm64  | lab-baylibre    | clang-14 | defconfi=
+g                    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4cf0533aa486c8c62968
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    clang-14 (Debian clang version 14.0.0-++20220212123227+2a228=
+6e9859a-1~exp1~20220212003308.41)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig/clang-14/lab-baylibre/baseline-qemu_arm64-virt-gicv3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig/clang-14/lab-baylibre/baseline-qemu_arm64-virt-gicv3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e4cf0533aa486c8c62=
+969
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv3      | arm64  | lab-baylibre    | clang-14 | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4d42e41e65d635c6296b
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    clang-14 (Debian clang version 14.0.0-++20220212123227+2a228=
+6e9859a-1~exp1~20220212003308.41)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-14/lab-baylibre/baseline-qemu_=
+arm64-virt-gicv3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-14/lab-baylibre/baseline-qemu_=
+arm64-virt-gicv3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e4d42e41e65d635c62=
+96c
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv3      | arm64  | lab-broonie     | clang-14 | defconfi=
+g                    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4c68d70c02193dc6296f
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    clang-14 (Debian clang version 14.0.0-++20220212123227+2a228=
+6e9859a-1~exp1~20220212003308.41)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig/clang-14/lab-broonie/baseline-qemu_arm64-virt-gicv3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig/clang-14/lab-broonie/baseline-qemu_arm64-virt-gicv3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e4c68d70c02193dc62=
+970
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv3      | arm64  | lab-broonie     | clang-14 | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4d03533aa486c8c6299c
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    clang-14 (Debian clang version 14.0.0-++20220212123227+2a228=
+6e9859a-1~exp1~20220212003308.41)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-14/lab-broonie/baseline-qemu_a=
+rm64-virt-gicv3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-14/lab-broonie/baseline-qemu_a=
+rm64-virt-gicv3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e4d03533aa486c8c62=
+99d
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv3      | arm64  | lab-cip         | clang-14 | defconfi=
+g                    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e58744e9477a19bc6298d
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    clang-14 (Debian clang version 14.0.0-++20220212123227+2a228=
+6e9859a-1~exp1~20220212003308.41)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig/clang-14/lab-cip/baseline-qemu_arm64-virt-gicv3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig/clang-14/lab-cip/baseline-qemu_arm64-virt-gicv3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e58744e9477a19bc62=
+98e
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv3      | arm64  | lab-cip         | clang-14 | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e59a0acdb9e9d10c62968
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    clang-14 (Debian clang version 14.0.0-++20220212123227+2a228=
+6e9859a-1~exp1~20220212003308.41)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-14/lab-cip/baseline-qemu_arm64=
+-virt-gicv3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-14/lab-cip/baseline-qemu_arm64=
+-virt-gicv3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e59a0acdb9e9d10c62=
+969
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv3      | arm64  | lab-baylibre    | gcc-10   | defconfi=
+g+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4597ac4d058eeac629f7
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e4597ac4d058eeac62=
+9f8
+        failing since 7 days (last pass: next-20220208, first fail: next-20=
+220210) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv3      | arm64  | lab-baylibre    | gcc-10   | defconfi=
+g+arm64-chromebook   | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4818ba0612bd28c6298e
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+arm64-chromebook/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-g=
+icv3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+arm64-chromebook/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-g=
+icv3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e4818ba0612bd28c62=
+98f
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv3      | arm64  | lab-baylibre    | gcc-10   | defconfi=
+g+CON...OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4a485a71d4d71ac6297f
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-qemu_arm=
+64-virt-gicv3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-qemu_arm=
+64-virt-gicv3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e4a485a71d4d71ac62=
+980
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv3      | arm64  | lab-baylibre    | gcc-10   | defconfi=
+g                    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4bc8070a7c700bc62977
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e4bc8070a7c700bc62=
+978
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv3      | arm64  | lab-baylibre    | gcc-10   | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4d3f2112f8ebe3c629a8
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-qemu_ar=
+m64-virt-gicv3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-qemu_ar=
+m64-virt-gicv3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e4d3f2112f8ebe3c62=
+9a9
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv3      | arm64  | lab-broonie     | gcc-10   | defconfi=
+g+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e456f2b697ed85fc6298e
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+crypto/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gicv3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+crypto/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gicv3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e456f2b697ed85fc62=
+98f
+        failing since 7 days (last pass: next-20220208, first fail: next-20=
+220210) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv3      | arm64  | lab-broonie     | gcc-10   | defconfi=
+g+arm64-chromebook   | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e479e3c27419868c6298c
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+arm64-chromebook/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gi=
+cv3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+arm64-chromebook/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gi=
+cv3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e479e3c27419868c62=
+98d
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv3      | arm64  | lab-broonie     | gcc-10   | defconfi=
+g+CON...OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e49ba4cfac247a6c62996
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-broonie/baseline-qemu_arm6=
+4-virt-gicv3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-broonie/baseline-qemu_arm6=
+4-virt-gicv3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e49bb4cfac247a6c62=
+997
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv3      | arm64  | lab-broonie     | gcc-10   | defconfi=
+g                    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4abfa4449b0e97c6297c
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gicv3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gicv3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e4abfa4449b0e97c62=
+97d
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv3      | arm64  | lab-broonie     | gcc-10   | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4cf122c4db0432c62969
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-broonie/baseline-qemu_arm=
+64-virt-gicv3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-broonie/baseline-qemu_arm=
+64-virt-gicv3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e4cf122c4db0432c62=
+96a
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv3      | arm64  | lab-cip         | gcc-10   | defconfi=
+g+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e467316640f9b36c62971
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+crypto/gcc-10/lab-cip/baseline-qemu_arm64-virt-gicv3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+crypto/gcc-10/lab-cip/baseline-qemu_arm64-virt-gicv3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e467316640f9b36c62=
+972
+        failing since 7 days (last pass: next-20220208, first fail: next-20=
+220210) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv3      | arm64  | lab-cip         | gcc-10   | defconfi=
+g+arm64-chromebook   | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4afabf11831eeac62976
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+arm64-chromebook/gcc-10/lab-cip/baseline-qemu_arm64-virt-gicv3.=
+txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+arm64-chromebook/gcc-10/lab-cip/baseline-qemu_arm64-virt-gicv3.=
+html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e4afabf11831eeac62=
+977
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv3      | arm64  | lab-cip         | gcc-10   | defconfi=
+g+CON...OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e52ca973a0a9990c62971
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-cip/baseline-qemu_arm64-vi=
+rt-gicv3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-cip/baseline-qemu_arm64-vi=
+rt-gicv3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e52ca973a0a9990c62=
+972
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv3      | arm64  | lab-cip         | gcc-10   | defconfi=
+g                    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e54e7d78c2ff9bac6297c
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig/gcc-10/lab-cip/baseline-qemu_arm64-virt-gicv3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig/gcc-10/lab-cip/baseline-qemu_arm64-virt-gicv3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e54e7d78c2ff9bac62=
+97d
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv3      | arm64  | lab-cip         | gcc-10   | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e593cadb8ed901ec6297f
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-cip/baseline-qemu_arm64-v=
+irt-gicv3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-cip/baseline-qemu_arm64-v=
+irt-gicv3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e593cadb8ed901ec62=
+980
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv3-uefi | arm64  | lab-baylibre    | clang-14 | defconfi=
+g                    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4ca052fbff01c4c62973
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    clang-14 (Debian clang version 14.0.0-++20220212123227+2a228=
+6e9859a-1~exp1~20220212003308.41)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig/clang-14/lab-baylibre/baseline-qemu_arm64-virt-gicv3-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig/clang-14/lab-baylibre/baseline-qemu_arm64-virt-gicv3-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e4ca052fbff01c4c62=
+974
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv3-uefi | arm64  | lab-baylibre    | clang-14 | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4d919fdeaef1d3c62993
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    clang-14 (Debian clang version 14.0.0-++20220212123227+2a228=
+6e9859a-1~exp1~20220212003308.41)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-14/lab-baylibre/baseline-qemu_=
+arm64-virt-gicv3-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-14/lab-baylibre/baseline-qemu_=
+arm64-virt-gicv3-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e4d919fdeaef1d3c62=
+994
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv3-uefi | arm64  | lab-broonie     | clang-14 | defconfi=
+g                    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4c63158b173428c6296e
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    clang-14 (Debian clang version 14.0.0-++20220212123227+2a228=
+6e9859a-1~exp1~20220212003308.41)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig/clang-14/lab-broonie/baseline-qemu_arm64-virt-gicv3-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig/clang-14/lab-broonie/baseline-qemu_arm64-virt-gicv3-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e4c63158b173428c62=
+96f
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv3-uefi | arm64  | lab-broonie     | clang-14 | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4d674212800e60c6296e
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    clang-14 (Debian clang version 14.0.0-++20220212123227+2a228=
+6e9859a-1~exp1~20220212003308.41)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-14/lab-broonie/baseline-qemu_a=
+rm64-virt-gicv3-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-14/lab-broonie/baseline-qemu_a=
+rm64-virt-gicv3-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e4d674212800e60c62=
+96f
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv3-uefi | arm64  | lab-cip         | clang-14 | defconfi=
+g                    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e57ac06f2ce10b4c6299f
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    clang-14 (Debian clang version 14.0.0-++20220212123227+2a228=
+6e9859a-1~exp1~20220212003308.41)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig/clang-14/lab-cip/baseline-qemu_arm64-virt-gicv3-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig/clang-14/lab-cip/baseline-qemu_arm64-virt-gicv3-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e57ac06f2ce10b4c62=
+9a0
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv3-uefi | arm64  | lab-cip         | clang-14 | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e5a68dbc894ab63c62989
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    clang-14 (Debian clang version 14.0.0-++20220212123227+2a228=
+6e9859a-1~exp1~20220212003308.41)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-14/lab-cip/baseline-qemu_arm64=
+-virt-gicv3-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-14/lab-cip/baseline-qemu_arm64=
+-virt-gicv3-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e5a68dbc894ab63c62=
+98a
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv3-uefi | arm64  | lab-baylibre    | gcc-10   | defconfi=
+g+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e45990b1cabb45fc6296c
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv3-uefi.=
+txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+crypto/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv3-uefi.=
+html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e45990b1cabb45fc62=
+96d
+        failing since 7 days (last pass: next-20220208, first fail: next-20=
+220210) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv3-uefi | arm64  | lab-baylibre    | gcc-10   | defconfi=
+g+arm64-chromebook   | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4840ec1d2bbf39c629fb
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+arm64-chromebook/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-g=
+icv3-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+arm64-chromebook/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-g=
+icv3-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e4840ec1d2bbf39c62=
+9fc
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv3-uefi | arm64  | lab-baylibre    | gcc-10   | defconfi=
+g+debug              | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e48dfcf073a9f41c629ac
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+debug
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+debug/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv3-uefi.t=
+xt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+debug/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv3-uefi.h=
+tml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e48dfcf073a9f41c62=
+9ad
+        failing since 8 days (last pass: next-20220207, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv3-uefi | arm64  | lab-baylibre    | gcc-10   | defconfi=
+g+CON...OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e49f86507891ba0c62979
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-qemu_arm=
+64-virt-gicv3-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-qemu_arm=
+64-virt-gicv3-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e49f86507891ba0c62=
+97a
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv3-uefi | arm64  | lab-baylibre    | gcc-10   | defconfi=
+g                    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4bebeb27ac436ac6296f
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv3-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig/gcc-10/lab-baylibre/baseline-qemu_arm64-virt-gicv3-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e4bebeb27ac436ac62=
+970
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv3-uefi | arm64  | lab-baylibre    | gcc-10   | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4cf1ff5a383fd5c62968
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-qemu_ar=
+m64-virt-gicv3-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-baylibre/baseline-qemu_ar=
+m64-virt-gicv3-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e4cf1ff5a383fd5c62=
+969
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv3-uefi | arm64  | lab-broonie     | gcc-10   | defconfi=
+g+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4570a7706b2288c6299e
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+crypto/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gicv3-uefi.t=
+xt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+crypto/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gicv3-uefi.h=
+tml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e4570a7706b2288c62=
+99f
+        failing since 7 days (last pass: next-20220208, first fail: next-20=
+220210) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv3-uefi | arm64  | lab-broonie     | gcc-10   | defconfi=
+g+arm64-chromebook   | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e47a1f5cadc84dac62973
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+arm64-chromebook/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gi=
+cv3-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+arm64-chromebook/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gi=
+cv3-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e47a1f5cadc84dac62=
+974
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv3-uefi | arm64  | lab-broonie     | gcc-10   | defconfi=
+g+debug              | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e483fec1d2bbf39c629f5
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+debug
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+debug/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gicv3-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+debug/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gicv3-uefi.ht=
+ml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e483fec1d2bbf39c62=
+9f6
+        failing since 8 days (last pass: next-20220207, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv3-uefi | arm64  | lab-broonie     | gcc-10   | defconfi=
+g+CON...OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4980dea7a930d3c62a12
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-broonie/baseline-qemu_arm6=
+4-virt-gicv3-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-broonie/baseline-qemu_arm6=
+4-virt-gicv3-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e4980dea7a930d3c62=
+a13
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv3-uefi | arm64  | lab-broonie     | gcc-10   | defconfi=
+g                    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4ac0a4449b0e97c62980
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gicv3-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig/gcc-10/lab-broonie/baseline-qemu_arm64-virt-gicv3-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e4ac0a4449b0e97c62=
+981
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv3-uefi | arm64  | lab-broonie     | gcc-10   | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4cb4d1795bab9bc62a64
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-broonie/baseline-qemu_arm=
+64-virt-gicv3-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-broonie/baseline-qemu_arm=
+64-virt-gicv3-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e4cb4d1795bab9bc62=
+a65
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv3-uefi | arm64  | lab-cip         | gcc-10   | defconfi=
+g+crypto             | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e46a46e5252bde6c62969
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+crypto
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+crypto/gcc-10/lab-cip/baseline-qemu_arm64-virt-gicv3-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+crypto/gcc-10/lab-cip/baseline-qemu_arm64-virt-gicv3-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e46a46e5252bde6c62=
+96a
+        failing since 7 days (last pass: next-20220208, first fail: next-20=
+220210) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv3-uefi | arm64  | lab-cip         | gcc-10   | defconfi=
+g+arm64-chromebook   | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4b8721709a52e2c62972
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+arm64-chromebook/gcc-10/lab-cip/baseline-qemu_arm64-virt-gicv3-=
+uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+arm64-chromebook/gcc-10/lab-cip/baseline-qemu_arm64-virt-gicv3-=
+uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e4b8721709a52e2c62=
+973
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv3-uefi | arm64  | lab-cip         | gcc-10   | defconfi=
+g+debug              | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4d42198c27c2eec62974
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+debug
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+debug/gcc-10/lab-cip/baseline-qemu_arm64-virt-gicv3-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+debug/gcc-10/lab-cip/baseline-qemu_arm64-virt-gicv3-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e4d42198c27c2eec62=
+975
+        failing since 8 days (last pass: next-20220207, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv3-uefi | arm64  | lab-cip         | gcc-10   | defconfi=
+g                    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e559bc5b6c9fdd0c62971
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig/gcc-10/lab-cip/baseline-qemu_arm64-virt-gicv3-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig/gcc-10/lab-cip/baseline-qemu_arm64-virt-gicv3-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e559bc5b6c9fdd0c62=
+972
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv3-uefi | arm64  | lab-cip         | gcc-10   | defconfi=
+g+CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e58bb7f984be663c62993
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-cip/baseline-qemu_arm64-v=
+irt-gicv3-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-cip/baseline-qemu_arm64-v=
+irt-gicv3-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e58bb7f984be663c62=
+994
+        failing since 8 days (last pass: next-20220208, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+qemu_arm64-virt-gicv3-uefi | arm64  | lab-linaro-lkft | gcc-10   | defconfi=
+g+debug              | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e489410ad0d612cc62986
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+debug
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+debug/gcc-10/lab-linaro-lkft/baseline-qemu_arm64-virt-gicv3-uef=
+i.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+debug/gcc-10/lab-linaro-lkft/baseline-qemu_arm64-virt-gicv3-uef=
+i.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/620e489410ad0d612cc62=
+987
+        failing since 8 days (last pass: next-20220207, first fail: next-20=
+220209) =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+rk3399-gru-kevin           | arm64  | lab-collabora   | gcc-10   | defconfi=
+g+arm64-chromebook   | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4a4141c19df8f5c6296e
+
+  Results:     88 PASS, 4 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+arm64-chromebook/gcc-10/lab-collabora/baseline-rk3399-gru-kevin=
+.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm6=
+4/defconfig+arm64-chromebook/gcc-10/lab-collabora/baseline-rk3399-gru-kevin=
+.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.rockchip-i2s1-probed: https://kernelci.org/test/case/id=
+/620e4a4141c19df8f5c62994
+        failing since 24 days (last pass: next-20220121, first fail: next-2=
+0220124)
+
+    2022-02-17T13:14:09.244395  <8>[   33.001825] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Drockchip-i2s0-probed RESULT=3Dpass>
+    2022-02-17T13:14:10.269340  /lava-5714775/1/../bin/lava-test-case
+    2022-02-17T13:14:10.280116  <8>[   34.038662] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Drockchip-i2s1-probed RESULT=3Dfail>   =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+sun7i-a20-cubieboard2      | arm    | lab-clabbe      | clang-14 | multi_v7=
+_defconfig           | 2          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4c2d34e40b4fffc629a2
+
+  Results:     4 PASS, 2 FAIL, 1 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    clang-14 (Debian clang version 14.0.0-++20220212123227+2a228=
+6e9859a-1~exp1~20220212003308.41)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm/=
+multi_v7_defconfig/clang-14/lab-clabbe/baseline-sun7i-a20-cubieboard2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm/=
+multi_v7_defconfig/clang-14/lab-clabbe/baseline-sun7i-a20-cubieboard2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/620e4c2d34e40b4=
+fffc629a6
+        failing since 15 days (last pass: next-20220127, first fail: next-2=
+0220201)
+        16 lines
+
+    2022-02-17T13:22:35.494986  kern  :alert : 8<--- cut here ---
+    2022-02-17T13:22:35.505871  kern  :alert : Unable to handle kernel NULL=
+ pointer dereference at virtual address 000001a0
+    2022-02-17T13:22:35.506281  kern  :alert : [000001a0] *pgd=3D7cbdc835
+    2022-02-17T13:22:35.515192  kern  :alert : Register[   44.461781] <LAVA=
+_SIGNAL_TESTCASE TEST_CASE_ID=3Dalert RESULT=3Dfail UNITS=3Dlines MEASUREME=
+NT=3D16>   =
+
+
+  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/620e4c2d34e40b4=
+fffc629a7
+        failing since 15 days (last pass: next-20220127, first fail: next-2=
+0220201)
+        83 lines
+
+    2022-02-17T13:22:35.520521   r0 information: NULL pointer
+    2022-02-17T13:22:35.526042  kern  :alert : Register r1 information: non=
+-slab/vmalloc memory
+    2022-02-17T13:22:35.529698  kern  :alert : Register r2 information: non=
+-slab/vmalloc memory
+    2022-02-17T13:22:35.535415  kern  :alert : Register r3 information: NUL=
+L pointer
+    2022-02-17T13:22:35.546103  kern  :alert : Register r4 information: sla=
+b kmalloc-1k start c21b1c00 pointer offset 64 size 1024
+    2022-02-17T13:22:35.549863  kern  :alert : Register r5 information: non=
+-slab/vmalloc memory
+    2022-02-17T13:22:35.560781  kern  :alert : Register r6 information: sla=
+b kmalloc-1k start c21b1c00 pointer offset 608 size 1024
+    2022-02-17T13:22:35.566216  kern  :alert : Register r7 information: sla=
+b kmalloc-1k start c21b1c00 pointer offset 64 size 1024
+    2022-02-17T13:22:35.575603  kern  :alert : Register r8 information: sla=
+b kmalloc-1k start c21a1c00 pointer offset 16 size 1024
+    2022-02-17T13:22:35.581019  kern  :alert : Register r9 information: non=
+-paged memory =
+
+    ... (43 line(s) more)  =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+sun7i-a20-cubieboard2      | arm    | lab-clabbe      | gcc-10   | multi_v7=
+_defconfig           | 2          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e4bb527ba8d20d8c62977
+
+  Results:     4 PASS, 2 FAIL, 1 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm/=
+multi_v7_defconfig/gcc-10/lab-clabbe/baseline-sun7i-a20-cubieboard2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm/=
+multi_v7_defconfig/gcc-10/lab-clabbe/baseline-sun7i-a20-cubieboard2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/620e4bb527ba8d2=
+0d8c6297b
+        failing since 13 days (last pass: next-20220125, first fail: next-2=
+0220204)
+        16 lines
+
+    2022-02-17T13:20:16.626706  kern  :alert : 8<--- cut here ---
+    2022-02-17T13:20:16.637628  kern  :alert : Unable to handle kernel NULL=
+ pointer dereference at virtual address 000001a0
+    2022-02-17T13:20:16.646974  kern  :alert : [000001a0] *pgd=3D7c[   43.7=
+70180] <LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Dalert RESULT=3Dfail UNITS=3Dlin=
+es MEASUREMENT=3D16>
+    2022-02-17T13:20:16.647355  a1e835   =
+
+
+  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/620e4bb527ba8d2=
+0d8c6297c
+        failing since 13 days (last pass: next-20220125, first fail: next-2=
+0220204)
+        54 lines
+
+    2022-02-17T13:20:16.652456  kern  :alert : Register r0 information: NUL=
+L pointer
+    2022-02-17T13:20:16.657916  kern  :alert : Register r1 information: non=
+-slab/vmalloc memory
+    2022-02-17T13:20:16.661494  kern  :alert : Register r2 information: non=
+-slab/vmalloc memory
+    2022-02-17T13:20:16.667008  kern  :alert : Register r3 information: non=
+-paged memory
+    2022-02-17T13:20:16.677934  kern  :alert : Register r4 information: sla=
+b kmalloc-1k start c21a2800 pointer offset 64 size 1024
+    2022-02-17T13:20:16.687112  kern  :alert : Register r5 information: sla=
+b task_struct start c4dc4c80 pointer offset 0
+    2022-02-17T13:20:16.692635  kern  :alert : Register r6 information: sla=
+b kmalloc-1k start c21a1c00 pointer offset 16 size 1024
+    2022-02-17T13:20:16.701792  kern  :alert : Register r7 information: sla=
+b kmalloc-1k start c21a2800 pointer offset 128 size 1024
+    2022-02-17T13:20:16.707359  kern  :alert : Register r8 information: non=
+-slab/vmalloc memory
+    2022-02-17T13:20:16.718243  kern  :alert : Register r9 information: sla=
+b kmalloc-1k start c21a1c00 pointer offset 0 size 1024 =
+
+    ... (45 line(s) more)  =
+
+ =
+
+
+
+platform                   | arch   | lab             | compiler | defconfi=
+g                    | regressions
+---------------------------+--------+-----------------+----------+---------=
+---------------------+------------
+sun7i-a20-cubieboard2      | arm    | lab-clabbe      | gcc-10   | multi_v7=
+_defc...MB2_KERNEL=3Dy | 2          =
+
+
+  Details:     https://kernelci.org/test/plan/id/620e5001674a6697abc6298d
+
+  Results:     4 PASS, 2 FAIL, 1 SKIP
+  Full config: multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220217/arm/=
+multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab-clabbe/baseline-sun7=
+i-a20-cubieboard2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220217/arm/=
+multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab-clabbe/baseline-sun7=
+i-a20-cubieboard2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220211.1/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/620e5001674a669=
+7abc62991
+        failing since 15 days (last pass: next-20220127, first fail: next-2=
+0220201)
+        16 lines
+
+    2022-02-17T13:38:55.789814  kern  :alert : 8<--- cut here ---
+    2022-02-17T13:38:55.800741  kern  :alert : Unable to handle kernel NULL=
+ pointer dereference at virtual address 000001a0
+    2022-02-17T13:38:55.801206  kern  :alert : [000001a0] *pgd=3D7d797835
+    2022-02-17T13:38:55.809923  kern  :alert : Register[   44.110544] <LAVA=
+_SIGNAL_TESTCASE TEST_CASE_ID=3Dalert RESULT=3Dfail UNITS=3Dlines MEASUREME=
+NT=3D16>   =
+
+
+  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/620e5001674a669=
+7abc62992
+        failing since 15 days (last pass: next-20220127, first fail: next-2=
+0220201)
+        54 lines
+
+    2022-02-17T13:38:55.815389   r0 information: NULL pointer
+    2022-02-17T13:38:55.820836  kern  :alert : Register r1 information: non=
+-slab/vmalloc memory
+    2022-02-17T13:38:55.824554  kern  :alert : Register r2 information: non=
+-slab/vmalloc memory
+    2022-02-17T13:38:55.830035  kern  :alert : Register r3 information: non=
+-paged memory
+    2022-02-17T13:38:55.840931  kern  :alert : Register r4 information: sla=
+b kmalloc-1k start c4de3c00 pointer offset 64 size 1024
+    2022-02-17T13:38:55.850338  kern  :alert : Register r5 information: sla=
+b task_struct start c25a8000 pointer offset 0
+    2022-02-17T13:38:55.855648  kern  :alert : Register r6 information: sla=
+b kmalloc-1k start c21a1c00 pointer offset 16 size 1024
+    2022-02-17T13:38:55.864816  kern  :alert : Register r7 information: sla=
+b kmalloc-1k start c4de3c00 pointer offset 128 size 1024
+    2022-02-17T13:38:55.872342  kern  :alert : Register r8 information: non=
+-slab/vmalloc memory
+    2022-02-17T13:38:55.881228  kern  :alert : Register r9 information: sla=
+b kmalloc-1k start c21a1c00 pointer offset 0 size 1024 =
+
+    ... (42 line(s) more)  =
+
+ =20

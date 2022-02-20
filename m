@@ -2,111 +2,240 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1447B4BCB43
-	for <lists+linux-next@lfdr.de>; Sun, 20 Feb 2022 01:28:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11CCB4BCDEF
+	for <lists+linux-next@lfdr.de>; Sun, 20 Feb 2022 11:21:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232238AbiBTARw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 19 Feb 2022 19:17:52 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51932 "EHLO
+        id S230388AbiBTJyy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 20 Feb 2022 04:54:54 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229807AbiBTARv (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 19 Feb 2022 19:17:51 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F9D6E96;
-        Sat, 19 Feb 2022 16:17:30 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4K1Qx31JFrz4xbG;
-        Sun, 20 Feb 2022 11:17:26 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1645316248;
-        bh=DCXYiK3nnRpaNjPDnxUCWkEWrolEOinAfGFiJac7/jg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=SiYZYlBvghxP2XFEnEg2J4k1mdpO3pELPyH8qbcvRSYfMRXayN9Aa5hDEMEJl7nXh
-         0MNlIaCi9nuutVIYZNVBS0QLbiwU9ePpGnFS3B7R5/EVIdjy0yDXTJVXSVtF+sLeGF
-         pgGna5j4xnNtQvreqSLVf/Icc4EskGaVH8fqioCDCBFKtQEHgxq6RG99v5ranl/S71
-         0ALiwtTDdeUdUu00KdbEnSaAC63/tGpeJe6jQ2aJBF8qB0Cqt7vLwdkvjDmAFo+jcS
-         xzVczOntU6ZlfSmGy3EiJWexZTsfMBt2eqrQ3/ox1SERN2y2vy4VgdobvH49GrAFMV
-         gg9/lJPArbcZQ==
-Date:   Sun, 20 Feb 2022 11:17:25 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        linux-mm@kvack.org,
-        William Kucharski <william.kucharski@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Alistair Popple <apopple@nvidia.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Hugh Dickins <hughd@google.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: Re: linux-next: manual merge of the akpm-current tree with the
- folio tree
-Message-ID: <20220220111725.411507e9@canb.auug.org.au>
-In-Reply-To: <Yg6778VW5JX512GL@casper.infradead.org>
-References: <20220215180043.23879691@canb.auug.org.au>
-        <YgumpQrC+cuYe91H@casper.infradead.org>
-        <20220216172109.72fd0a38@canb.auug.org.au>
-        <Yg1hf0iHdKcjnq6l@casper.infradead.org>
-        <20220217163026.5e48ccb1@canb.auug.org.au>
-        <20220216215124.169c42a52e31575cedc4dea5@linux-foundation.org>
-        <20220217173810.0addd3ed@canb.auug.org.au>
-        <Yg6778VW5JX512GL@casper.infradead.org>
+        with ESMTP id S229808AbiBTJyw (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 20 Feb 2022 04:54:52 -0500
+Received: from a8-29.smtp-out.amazonses.com (a8-29.smtp-out.amazonses.com [54.240.8.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AECEB43ED6;
+        Sun, 20 Feb 2022 01:54:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1645350869;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+        bh=CI7aPjbCMIJBhrg99NXNcQ0AYlHUSTFnv/QzuHedZCo=;
+        b=NJ1QMRCQv8d9BvVKqbUXRZjaFNEhVSqfYdBX9cE5p/Mf1R9i9dfDXUv9f2ZggJNj
+        s/jQOaTH8w5MzFvVlh2EOJ6Qc/Y+s5VgGBMLUw/UkgVVdkBwlwkfrj0BXt/89NOpS4X
+        0tChhej+t1cD99fjzizxcZ9odd7umKQQEs9/aKGE=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1645350869;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+        bh=CI7aPjbCMIJBhrg99NXNcQ0AYlHUSTFnv/QzuHedZCo=;
+        b=RCGoW1NCh+pG4oHMD4dX6Cd9dD4CdLIgQMw51/cbI2YnZiWBQaaRousW6ZqHSn4c
+        2Sj6sTxp+MUWhV3vJKQuoEkOxxpF7dItDA5lHWIpaMab0mfM2ZEwN3yT3i53iAdE6zc
+        AkyFBJiZGQBRNTXmCcAacTgKhyW2VmseRXQyVU9M=
+From:   lkft@linaro.org
+To:     lkft@linaro.org
+Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        linux-next@vger.kernel.org, shuah@kernel.org
+Subject: [REGRESSION] lkft kselftest for next-20220202
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/28TS1CVtYg20v70uYpRoY.A";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Message-ID: <0100017f168dd90e-8efa765d-3d26-4762-8ff1-f8feef2453e2-000000@email.amazonses.com>
+Date:   Sun, 20 Feb 2022 09:54:29 +0000
+Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
+X-SES-Outgoing: 2022.02.20-54.240.8.29
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,TO_EQ_FM_DIRECT_MX,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/28TS1CVtYg20v70uYpRoY.A
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+## Build
+* kernel: 5.17.0-rc2
+* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+* git branch: master
+* git commit: 6abab1b81b657ca74b7c443e832d95c87901e75b
+* git describe: next-20220202
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220202
 
-Hi Matthew,
+## Test Regressions (compared to next-20220124)
+* i386, kselftest-seccomp
+  - seccomp.seccomp_bpf.TSYNC.siblings_fail_prctl
+  - seccomp.seccomp_bpf.TSYNC.two_siblings_with_one_divergence
+  - seccomp.seccomp_bpf.TSYNC.two_siblings_with_one_divergence_no_tid_in_err
 
-On Thu, 17 Feb 2022 21:19:43 +0000 Matthew Wilcox <willy@infradead.org> wro=
-te:
->
-> I assume you mean that you'll do one last pull and release a
-> next-20220218, rather than saying that the next release will be
-> next-20220229?
+* juno-r2, kselftest-net
+  - net.tls.tls.13_sm4_ccm.recv_lowat
 
-Suprise! No :-) I started vacation on Friday morning (18-27the Feb *inclusi=
-ve*).
+* juno-r2, kselftest-seccomp
+  - seccomp.seccomp_bpf.TSYNC.siblings_fail_prctl
+  - seccomp.seccomp_bpf.TSYNC.two_siblings_with_one_divergence
+  - seccomp.seccomp_bpf.TSYNC.two_siblings_with_one_divergence_no_tid_in_err
 
-> I have pushed out f82e2137bc1e to infradead/for-next.  xfstests currently
-> running.  It includes:
+* qemu_x86_64, kselftest-seccomp
+  - seccomp.seccomp_bpf
+  - seccomp.seccomp_bpf.TSYNC.siblings_fail_prctl
+  - seccomp.seccomp_bpf.TSYNC.two_siblings_with_one_divergence
+  - seccomp.seccomp_bpf.TSYNC.two_siblings_with_one_divergence_no_tid_in_err
 
-I have refetched your tree into the stuff I will leave for Mark.
+* x15, kselftest-capabilities
+  - capabilities.test_execve
 
---=20
-Cheers,
-Stephen Rothwell
+* x15, kselftest-cgroup
+  - cgroup.test_freezer
+  - cgroup.test_kill
+  - cgroup.test_kill.test_cgkill_simple
 
---Sig_/28TS1CVtYg20v70uYpRoY.A
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+* x15, kselftest-core
+  - core.close_range_test
 
------BEGIN PGP SIGNATURE-----
+* x15, kselftest-seccomp
+  - seccomp.seccomp_bpf.TSYNC.siblings_fail_prctl
+  - seccomp.seccomp_bpf.TSYNC.two_siblings_with_one_divergence
+  - seccomp.seccomp_bpf.TSYNC.two_siblings_with_one_divergence_no_tid_in_err
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIRiJUACgkQAVBC80lX
-0GzHvQgAhMO/d5xEnCKuA4I6yLxSrJVXXWiNnk4vTuy7xl5TNuiRg5axPqOoCQU+
-mNGAidmjosx7nhGYEGaXt2J7Nok1AAEgT9QYmgZD5tbrxPi/yuBflB46pEwAJ3OT
-hLKR+dIf606T7Mq3LGgfl9pWzM7tDuIrcunAflQBR0UT1q2dRsXT6okAl+sHWRmC
-9uM3IshfD+jrhEn0IDlC60/bYK2hAe1bL2H9Q+I5crPaqgmk7tRdUzZHU7zCFlKv
-SHsPr9tNrwHnHzFzUUCGqqaD9eab4fY+tV6CRZNK0pySo11SktweDio2r2EwCACz
-23Y9w1ixkMqWJzMmtFdbL5yIpYSfWQ==
-=isKl
------END PGP SIGNATURE-----
+* x86, kselftest-seccomp
+  - seccomp.seccomp_bpf.TSYNC.siblings_fail_prctl
+  - seccomp.seccomp_bpf.TSYNC.two_siblings_with_one_divergence
+  - seccomp.seccomp_bpf.TSYNC.two_siblings_with_one_divergence_no_tid_in_err
 
---Sig_/28TS1CVtYg20v70uYpRoY.A--
+
+## Metric Regressions (compared to next-20220124)
+No metric regressions found.
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+
+## Test Fixes (compared to next-20220124)
+* i386, kselftest-rtc
+  - rtc.rtctest
+
+* juno-r2, kselftest-cgroup
+  - cgroup.test_freezer
+  - cgroup.test_freezer.test_cgfreezer_ptrace
+
+* juno-r2, kselftest-cpufreq
+  - cpufreq.main.sh
+
+* juno-r2, kselftest-lkdtm
+  - lkdtm.ARRAY_BOUNDS.sh
+
+* juno-r2, kselftest-mincore
+  - mincore.mincore_selftest
+
+* qemu_arm, kselftest-cpufreq
+  - cpufreq.main.sh
+
+* qemu_arm, kselftest-rtc
+  - rtc.rtctest
+
+* qemu_arm, kselftest-zram
+  - zram.zram.sh
+
+* qemu_i386, kselftest-cpufreq
+  - cpufreq.main.sh
+
+* qemu_i386, kselftest-rtc
+  - rtc.rtctest
+
+* qemu_x86_64, kselftest-cpufreq
+  - cpufreq.main.sh
+
+* x15, kselftest-capabilities
+  - capabilities.test_execve
+
+* x15, kselftest-cgroup
+  - cgroup.test_freezer
+  - cgroup.test_kill
+  - cgroup.test_kill.test_cgkill_simple
+
+* x15, kselftest-core
+  - core.close_range_test
+
+* x15, kselftest-rtc
+  - rtc.rtctest
+  - rtc.rtctest.rtc.alarm_alm_set
+  - rtc.rtctest.rtc.alarm_alm_set_minute
+  - rtc.rtctest.rtc.alarm_wkalm_set
+  - rtc.rtctest.rtc.alarm_wkalm_set_minute
+  - rtc.rtctest.rtc.date_read
+
+* x86, kselftest-lkdtm
+  - lkdtm.ARRAY_BOUNDS.sh
+
+* x86, kselftest-rtc
+  - rtc.rtctest
+
+
+## Metric Fixes (compared to next-20220124)
+No metric fixes found.
+
+## Test result summary
+total: 4318, pass: 2787, fail: 524, skip: 1007, xfail: 0
+
+## Build Summary
+
+## Test suites summary
+* kselftest-android
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-lkdtm
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+
+--
+Linaro LKFT
+https://lkft.linaro.org

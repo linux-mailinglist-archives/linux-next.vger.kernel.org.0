@@ -2,48 +2,53 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DCF74BCE5F
-	for <lists+linux-next@lfdr.de>; Sun, 20 Feb 2022 13:09:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 389434BE6CC
+	for <lists+linux-next@lfdr.de>; Mon, 21 Feb 2022 19:02:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243355AbiBTMJW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 20 Feb 2022 07:09:22 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46038 "EHLO
+        id S1358840AbiBUNTP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 21 Feb 2022 08:19:15 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbiBTMJV (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 20 Feb 2022 07:09:21 -0500
-Received: from a8-29.smtp-out.amazonses.com (a8-29.smtp-out.amazonses.com [54.240.8.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 991D7427CE;
-        Sun, 20 Feb 2022 04:08:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1645358938;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=G8hRDruforIKzwsEyd3c3gZSeQje7/UXc9DJOMk75T4=;
-        b=UQdUqi5NkRJXU2Ip1KXYboKr2TzAfOy62LzteBJZaB6YiFsheRw6ujL9aBFvQ9eg
-        uYOX2NnSk4etvnURKsS8lJJoAlLtEabxJszpRVC3bd5n+tU+9N8LLq0YV89ExaHJMaq
-        3b1IM+P8fuUuygOQs1TSUi/ezfIGJItECgK6ovHo=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1645358938;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=G8hRDruforIKzwsEyd3c3gZSeQje7/UXc9DJOMk75T4=;
-        b=iX/eKVoSG+TA4OU0q0WPiiDwdr4w8MEKMyE+dmG/LXawQXeUBoh3hilrAQl2bYh+
-        +snbeHE+hrMe6QocEk3R7Bsu42yV1MmWSphgXXOXUog2rDHsjR68o2E4oly+mDoGty3
-        Te6sJOFMEO0sbtF9ugl3f+mdayNaQi/07JalWs3o=
-From:   lkft@linaro.org
-To:     lkft@linaro.org
-Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
-        linux-next@vger.kernel.org, shuah@kernel.org
-Subject: [REGRESSION] lkft kselftest for next-20220203
+        with ESMTP id S232982AbiBUNTP (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Feb 2022 08:19:15 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0982C1EEF7;
+        Mon, 21 Feb 2022 05:18:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 91E5D6137C;
+        Mon, 21 Feb 2022 13:18:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BE45C340E9;
+        Mon, 21 Feb 2022 13:18:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645449530;
+        bh=zZBPLOwN6VC415V5nh8joz0veP6og+pbcOBCbahM5NY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=tII7+LMLdbC5SVB2FtWb7FEzAeHIwAAc7hck7Mk5k7BIJa5ZC+l5QzIHp0AGiq0X2
+         UR80X/ciAYECVR636j0ilnAmXMdL2J+P21y9xkwTnjAKd+yVPiDKfUtgqqPewazSl+
+         WX7Lo+qrwPdXkRF48WdblnbBPHYqYB9U6l3HREEmvkInODlHDJ3MHC43sIXxtV6Jpq
+         7Uz3S64nVyhSZOtRLoKFXK72a7+q9wo6upqb/OLFv8kjDQBlQO3PhzzNxiLWaqW0/Z
+         oUf/Xudcffgr4uj9hBRtO5kuwJ6Th8voIrviv0OwXKFDWkIJ7TWzdT4dqkMIFQEyYA
+         2serFy4vZWSPA==
+From:   broonie@kernel.org
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Geliang Tang <geliang.tang@suse.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: linux-next: manual merge of the net-next tree with the net tree
+Date:   Mon, 21 Feb 2022 13:18:42 +0000
+Message-Id: <20220221131842.468893-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-Message-ID: <0100017f1708f8b7-35d5c7a4-9e80-47bf-8fe8-4260155cb63d-000000@email.amazonses.com>
-Date:   Sun, 20 Feb 2022 12:08:58 +0000
-Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2022.02.20-54.240.8.29
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,TO_EQ_FM_DIRECT_MX,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,210 +56,63 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-## Build
-* kernel: 5.17.0-rc2
-* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-* git branch: master
-* git commit: 2d3d8c7643a56bfe2e808f97d5a4360d49f3b45b
-* git describe: next-20220203
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220203
+Hi all,
 
-## Test Regressions (compared to next-20220124)
-* hi6220-hikey, kselftest-timers
-  - timers.set-timer-lat
+Today's linux-next merge of the net-next tree got a conflict in:
 
-* i386, kselftest-seccomp
-  - seccomp.seccomp_bpf.TSYNC.siblings_fail_prctl
-  - seccomp.seccomp_bpf.TSYNC.two_siblings_with_one_divergence
-  - seccomp.seccomp_bpf.TSYNC.two_siblings_with_one_divergence_no_tid_in_err
+  tools/testing/selftests/net/mptcp/mptcp_join.sh
 
-* juno-r2, kselftest-net
-  - net.tls.tls.12_aes_gcm.shutdown_reuse
+between commit:
 
-* juno-r2, kselftest-seccomp
-  - seccomp.seccomp_bpf.TSYNC.siblings_fail_prctl
-  - seccomp.seccomp_bpf.TSYNC.two_siblings_with_one_divergence
-  - seccomp.seccomp_bpf.TSYNC.two_siblings_with_one_divergence_no_tid_in_err
+  6ef84b1517e08 ("selftests: mptcp: more robust signal race test")
 
-* qemu_x86_64, kselftest-seccomp
-  - seccomp.seccomp_bpf
-  - seccomp.seccomp_bpf.TSYNC.siblings_fail_prctl
-  - seccomp.seccomp_bpf.TSYNC.two_siblings_with_one_divergence
-  - seccomp.seccomp_bpf.TSYNC.two_siblings_with_one_divergence_no_tid_in_err
+from the net tree and commit:
 
-* x15, kselftest-capabilities
-  - capabilities.test_execve
+  34aa6e3bccd86 ("selftests: mptcp: add ip mptcp wrappers")
 
-* x15, kselftest-cgroup
-  - cgroup.test_freezer
-  - cgroup.test_kill
-  - cgroup.test_kill.test_cgkill_simple
+from the net-next tree.
 
-* x15, kselftest-core
-  - core.close_range_test
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
-* x15, kselftest-seccomp
-  - seccomp.seccomp_bpf.TSYNC.siblings_fail_prctl
-  - seccomp.seccomp_bpf.TSYNC.two_siblings_with_one_divergence
-  - seccomp.seccomp_bpf.TSYNC.two_siblings_with_one_divergence_no_tid_in_err
-
-* x86, kselftest-net
-  - net.gro.sh
-
-* x86, kselftest-seccomp
-  - seccomp.seccomp_bpf.TSYNC.siblings_fail_prctl
-  - seccomp.seccomp_bpf.TSYNC.two_siblings_with_one_divergence
-  - seccomp.seccomp_bpf.TSYNC.two_siblings_with_one_divergence_no_tid_in_err
-
-
-## Metric Regressions (compared to next-20220124)
-No metric regressions found.
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-
-## Test Fixes (compared to next-20220124)
-* hi6220-hikey, kselftest-rtc
-  - rtc.rtctest
-
-* i386, kselftest-rtc
-  - rtc.rtctest
-
-* juno-r2, kselftest-cgroup
-  - cgroup.test_freezer
-  - cgroup.test_freezer.test_cgfreezer_ptrace
-
-* juno-r2, kselftest-cpufreq
-  - cpufreq.main.sh
-
-* juno-r2, kselftest-mincore
-  - mincore.mincore_selftest
-
-* qemu_arm, kselftest-cpufreq
-  - cpufreq.main.sh
-
-* qemu_arm, kselftest-rtc
-  - rtc.rtctest
-
-* qemu_i386, kselftest-cpufreq
-  - cpufreq.main.sh
-
-* qemu_i386, kselftest-rtc
-  - rtc.rtctest
-
-* qemu_x86_64, kselftest-cpufreq
-  - cpufreq.main.sh
-
-* x15, kselftest-capabilities
-  - capabilities.test_execve
-
-* x15, kselftest-cgroup
-  - cgroup.test_freezer
-  - cgroup.test_kill
-  - cgroup.test_kill.test_cgkill_simple
-
-* x15, kselftest-core
-  - core.close_range_test
-
-* x15, kselftest-rtc
-  - rtc.rtctest
-  - rtc.rtctest.rtc.alarm_alm_set
-  - rtc.rtctest.rtc.alarm_alm_set_minute
-  - rtc.rtctest.rtc.alarm_wkalm_set
-  - rtc.rtctest.rtc.alarm_wkalm_set_minute
-  - rtc.rtctest.rtc.date_read
-
-* x15, kselftest-sync
-  - sync.sync_test
-
-* x86, kselftest-lkdtm
-  - lkdtm.ARRAY_BOUNDS.sh
-
-* x86, kselftest-rtc
-  - rtc.rtctest
-
-
-## Metric Fixes (compared to next-20220124)
-No metric fixes found.
-
-## Test result summary
-total: 5110, pass: 3395, fail: 609, skip: 1106, xfail: 0
-
-## Build Summary
-
-## Test suites summary
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-lkdtm
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-
---
-Linaro LKFT
-https://lkft.linaro.org
+diff --cc tools/testing/selftests/net/mptcp/mptcp_join.sh
+index 0c8a2a20b96cf,725924012b412..0000000000000
+--- a/tools/testing/selftests/net/mptcp/mptcp_join.sh
++++ b/tools/testing/selftests/net/mptcp/mptcp_join.sh
+@@@ -1163,20 -1287,17 +1302,21 @@@ signal_address_tests(
+  
+  	# signal addresses race test
+  	reset
+- 	ip netns exec $ns1 ./pm_nl_ctl limits 4 4
+- 	ip netns exec $ns2 ./pm_nl_ctl limits 4 4
+- 	ip netns exec $ns1 ./pm_nl_ctl add 10.0.1.1 flags signal
+- 	ip netns exec $ns1 ./pm_nl_ctl add 10.0.2.1 flags signal
+- 	ip netns exec $ns1 ./pm_nl_ctl add 10.0.3.1 flags signal
+- 	ip netns exec $ns1 ./pm_nl_ctl add 10.0.4.1 flags signal
+- 	ip netns exec $ns2 ./pm_nl_ctl add 10.0.1.2 flags signal
+- 	ip netns exec $ns2 ./pm_nl_ctl add 10.0.2.2 flags signal
+- 	ip netns exec $ns2 ./pm_nl_ctl add 10.0.3.2 flags signal
+- 	ip netns exec $ns2 ./pm_nl_ctl add 10.0.4.2 flags signal
+++
++ 	pm_nl_set_limits $ns1 4 4
++ 	pm_nl_set_limits $ns2 4 4
++ 	pm_nl_add_endpoint $ns1 10.0.1.1 flags signal
++ 	pm_nl_add_endpoint $ns1 10.0.2.1 flags signal
++ 	pm_nl_add_endpoint $ns1 10.0.3.1 flags signal
++ 	pm_nl_add_endpoint $ns1 10.0.4.1 flags signal
++ 	pm_nl_add_endpoint $ns2 10.0.1.2 flags signal
++ 	pm_nl_add_endpoint $ns2 10.0.2.2 flags signal
++ 	pm_nl_add_endpoint $ns2 10.0.3.2 flags signal
++ 	pm_nl_add_endpoint $ns2 10.0.4.2 flags signal
+ -	run_tests $ns1 $ns2 10.0.1.1
+ +
+ +	# the peer could possibly miss some addr notification, allow retransmission
+ +	ip netns exec $ns1 sysctl -q net.mptcp.add_addr_timeout=1
+ +	run_tests $ns1 $ns2 10.0.1.1 0 0 0 slow
+  	chk_join_nr "signal addresses race test" 3 3 3
+  
+  	# the server will not signal the address terminating

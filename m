@@ -2,70 +2,81 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16A434BDF3D
-	for <lists+linux-next@lfdr.de>; Mon, 21 Feb 2022 18:49:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 156714BEAD3
+	for <lists+linux-next@lfdr.de>; Mon, 21 Feb 2022 20:37:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379768AbiBUQzi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 21 Feb 2022 11:55:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43104 "EHLO
+        id S229681AbiBUSTI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 21 Feb 2022 13:19:08 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236640AbiBUQzi (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Feb 2022 11:55:38 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67E1B22534;
-        Mon, 21 Feb 2022 08:55:15 -0800 (PST)
+        with ESMTP id S232617AbiBUSQK (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Feb 2022 13:16:10 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B1DA15A2D;
+        Mon, 21 Feb 2022 10:06:57 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 041BB61382;
-        Mon, 21 Feb 2022 16:55:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C569C340E9;
-        Mon, 21 Feb 2022 16:55:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645462514;
-        bh=jrQMS32Y1cpaAZL7S0U/5LN6RhNCJS/O/ftu+R/tX2E=;
-        h=From:To:Cc:Subject:Date:From;
-        b=PEiOT0VX8RzZ2Wc4wowdCPbk9UCNYymMqf20I+hPVEbalNw7N+sdZP/d0cUqx4QiT
-         u84xA+fJqZQ2swnLqE8ohgbMrvtslHNNiA3SVsTQXZBM/FX5Tfm/YXLWkfCPgBN9om
-         SYcuO01IkbBJHx918Ki8HgDfIuekEJqMdQyKCJ/J2uHvVA0FZXsAdb789WQWjSUGEV
-         Cui5sSzTn36CVFTByrtQoaJ6bHmq54ai5gT9GJXgpjgaD0yVGHkyI9NsbdBtLxXp3O
-         b6nt5Xa4g2mveiaYDIV+DD8k7BppTKzN9rXl2ZX2AxXnx4At09oiirwqnBLcHHODJl
-         uX2O1x6ro3eIQ==
-From:   broonie@kernel.org
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     build@vger.kernel.org, failure@vger.kernel.org,
-        after@vger.kernel.org, merge@vger.kernel.org, of@vger.kernel.org,
-        the@vger.kernel.org, BRANCH@vger.kernel.org, tree@vger.kernel.org,
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2B2EDB816FE;
+        Mon, 21 Feb 2022 18:06:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2AD5C340E9;
+        Mon, 21 Feb 2022 18:06:53 +0000 (UTC)
+Date:   Mon, 21 Feb 2022 18:06:50 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Liam Howlett <liam.howlett@oracle.com>
+Cc:     Will Deacon <will@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: drivers/memstick/core/ms_block.c
-Date:   Mon, 21 Feb 2022 16:55:08 +0000
-Message-Id: <20220221165508.2633962-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+Subject: Re: [PATCH] arm64: Change elfcore for_each_mte_vma() to use VMA
+ iterator
+Message-ID: <YhPUuu+6TPMKjhwk@arm.com>
+References: <20220218014642.lop2ohx4ov6fekyl@revolver>
+ <20220218023650.672072-1-Liam.Howlett@oracle.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220218023650.672072-1-Liam.Howlett@oracle.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi all,
+On Fri, Feb 18, 2022 at 02:37:04AM +0000, Liam Howlett wrote:
+> diff --git a/arch/arm64/kernel/elfcore.c b/arch/arm64/kernel/elfcore.c
+> index 3455ee4acc04..930a0bc4cac4 100644
+> --- a/arch/arm64/kernel/elfcore.c
+> +++ b/arch/arm64/kernel/elfcore.c
+> @@ -8,9 +8,9 @@
+>  #include <asm/cpufeature.h>
+>  #include <asm/mte.h>
+>  
+> -#define for_each_mte_vma(tsk, vma)					\
+> +#define for_each_mte_vma(vmi, vma)					\
+>  	if (system_supports_mte())					\
+> -		for (vma = tsk->mm->mmap; vma; vma = vma->vm_next)	\
+> +		for_each_vma(vmi, vma)					\
+>  			if (vma->vm_flags & VM_MTE)
+>  
+>  static unsigned long mte_vma_tag_dump_size(struct vm_area_struct *vma)
+> @@ -65,8 +65,9 @@ Elf_Half elf_core_extra_phdrs(void)
+>  {
+>  	struct vm_area_struct *vma;
+>  	int vma_count = 0;
+> +	VMA_ITERATOR(vmi, current->mm, 0);
+>  
+> -	for_each_mte_vma(current, vma)
+> +	for_each_mte_vma(vmi, vma)
+>  		vma_count++;
 
-After merging the mmc tree, today's linux-next build (x86 allmodconfig)
-failed like this:
+I'm fine with the patch but it can't be applied to arm64 for-next/mte
+branch as it won't build and the maple tree doesn't have the MTE
+patches. Do you have a stable branch with the for_each_vma() iterator?
 
-/tmp/next/build/drivers/memstick/core/ms_block.c:158:6: error: implicit declaration of function 'bitmap_weight_eq'; did you mean 'bitmap_weight'? [-Werror=implicit-function-declaration]
-  158 |  if (bitmap_weight_eq(msb->used_blocks_bitmap, msb->block_count,
-      |      ^~~~~~~~~~~~~~~~
-      |      bitmap_weight
+Anyway, if you find a way to solve the problem, for this patch:
 
-Caused by commit
-
-  5f8d171cd8a93f ("memstick: replace bitmap_weight with bitmap_weight_eq where appropriate")
-
-I used the mmc tree from 20220217 instead.
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>

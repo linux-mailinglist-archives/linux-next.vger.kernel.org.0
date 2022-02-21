@@ -2,47 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 389434BE6CC
-	for <lists+linux-next@lfdr.de>; Mon, 21 Feb 2022 19:02:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 467124BDD63
+	for <lists+linux-next@lfdr.de>; Mon, 21 Feb 2022 18:45:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358840AbiBUNTP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 21 Feb 2022 08:19:15 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53754 "EHLO
+        id S233758AbiBUN4Y (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 21 Feb 2022 08:56:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232982AbiBUNTP (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Feb 2022 08:19:15 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0982C1EEF7;
-        Mon, 21 Feb 2022 05:18:51 -0800 (PST)
+        with ESMTP id S240657AbiBUN4X (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Feb 2022 08:56:23 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79237BF73;
+        Mon, 21 Feb 2022 05:55:59 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 91E5D6137C;
-        Mon, 21 Feb 2022 13:18:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BE45C340E9;
-        Mon, 21 Feb 2022 13:18:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2812AB81188;
+        Mon, 21 Feb 2022 13:55:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 921FDC340E9;
+        Mon, 21 Feb 2022 13:55:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645449530;
-        bh=zZBPLOwN6VC415V5nh8joz0veP6og+pbcOBCbahM5NY=;
+        s=k20201202; t=1645451756;
+        bh=J/e+1VPpw4RIUwxGwSRWfpseVM4XoBE0hkJ8DH/QOys=;
         h=From:To:Cc:Subject:Date:From;
-        b=tII7+LMLdbC5SVB2FtWb7FEzAeHIwAAc7hck7Mk5k7BIJa5ZC+l5QzIHp0AGiq0X2
-         UR80X/ciAYECVR636j0ilnAmXMdL2J+P21y9xkwTnjAKd+yVPiDKfUtgqqPewazSl+
-         WX7Lo+qrwPdXkRF48WdblnbBPHYqYB9U6l3HREEmvkInODlHDJ3MHC43sIXxtV6Jpq
-         7Uz3S64nVyhSZOtRLoKFXK72a7+q9wo6upqb/OLFv8kjDQBlQO3PhzzNxiLWaqW0/Z
-         oUf/Xudcffgr4uj9hBRtO5kuwJ6Th8voIrviv0OwXKFDWkIJ7TWzdT4dqkMIFQEyYA
-         2serFy4vZWSPA==
+        b=k/960sBhEX2zv1wWstCL1hxofDD0DlV6ErBmh+tTz/cnlE5B+Lw8BbNbhS6wy0PQf
+         ig488E8B48wJbIzA3D7zdlQ7TQliGObDZwnGCFUf+AnnbhOWXyJq45e2JAUsuGkUz7
+         Sif8G3fIVMiH/bQObraAsGqjRd0ia5O/r34fOPCBB//VojSuTgAzbrN+4ICntvTwMP
+         KIjJaGz2jdcgz2dfa8jm+7fON32FlXxelmoaSP3k2d0MFFPoxjbMvhgbqAyzBjOo7B
+         D+9tZpcIvbV94xY+VWP0QZrOHSO7Cu+vzgq+eq4/xaZZSypoSakC4/jwXULFrdXwzg
+         9WDsx8Ovn3sfw==
 From:   broonie@kernel.org
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Geliang Tang <geliang.tang@suse.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Boris Brezillon <boris.brezillon@collabora.com>
+Cc:     Christophe Kerello <christophe.kerello@foss.st.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: linux-next: manual merge of the net-next tree with the net tree
-Date:   Mon, 21 Feb 2022 13:18:42 +0000
-Message-Id: <20220221131842.468893-1-broonie@kernel.org>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the nand tree with the mtd tree
+Date:   Mon, 21 Feb 2022 13:55:52 +0000
+Message-Id: <20220221135552.2196160-1-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -58,19 +55,19 @@ X-Mailing-List: linux-next@vger.kernel.org
 
 Hi all,
 
-Today's linux-next merge of the net-next tree got a conflict in:
+Today's linux-next merge of the nand tree got a conflict in:
 
-  tools/testing/selftests/net/mptcp/mptcp_join.sh
+  Documentation/devicetree/bindings/mtd/nand-controller.yaml
 
 between commit:
 
-  6ef84b1517e08 ("selftests: mptcp: more robust signal race test")
+  751f204a6fe6f ("dt-bindings: mtd: nand-chip: Create a NAND chip description")
 
-from the net tree and commit:
+from the mtd tree and commit:
 
-  34aa6e3bccd86 ("selftests: mptcp: add ip mptcp wrappers")
+  cb57fae479be4 ("dt-binding: mtd: nand: Document the wp-gpios property")
 
-from the net-next tree.
+from the nand tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -79,40 +76,28 @@ is submitted for merging.  You may also want to consider cooperating
 with the maintainer of the conflicting tree to minimise any particularly
 complex conflicts.
 
-diff --cc tools/testing/selftests/net/mptcp/mptcp_join.sh
-index 0c8a2a20b96cf,725924012b412..0000000000000
---- a/tools/testing/selftests/net/mptcp/mptcp_join.sh
-+++ b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-@@@ -1163,20 -1287,17 +1302,21 @@@ signal_address_tests(
+diff --cc Documentation/devicetree/bindings/mtd/nand-controller.yaml
+index 33855eb48a795,53b21aed0ac5f..0000000000000
+--- a/Documentation/devicetree/bindings/mtd/nand-controller.yaml
++++ b/Documentation/devicetree/bindings/mtd/nand-controller.yaml
+@@@ -116,6 -154,20 +116,13 @@@ patternProperties
+            Ready/Busy pins. Active state refers to the NAND ready state and
+            should be set to GPIOD_ACTIVE_HIGH unless the signal is inverted.
   
-  	# signal addresses race test
-  	reset
-- 	ip netns exec $ns1 ./pm_nl_ctl limits 4 4
-- 	ip netns exec $ns2 ./pm_nl_ctl limits 4 4
-- 	ip netns exec $ns1 ./pm_nl_ctl add 10.0.1.1 flags signal
-- 	ip netns exec $ns1 ./pm_nl_ctl add 10.0.2.1 flags signal
-- 	ip netns exec $ns1 ./pm_nl_ctl add 10.0.3.1 flags signal
-- 	ip netns exec $ns1 ./pm_nl_ctl add 10.0.4.1 flags signal
-- 	ip netns exec $ns2 ./pm_nl_ctl add 10.0.1.2 flags signal
-- 	ip netns exec $ns2 ./pm_nl_ctl add 10.0.2.2 flags signal
-- 	ip netns exec $ns2 ./pm_nl_ctl add 10.0.3.2 flags signal
-- 	ip netns exec $ns2 ./pm_nl_ctl add 10.0.4.2 flags signal
-++
-+ 	pm_nl_set_limits $ns1 4 4
-+ 	pm_nl_set_limits $ns2 4 4
-+ 	pm_nl_add_endpoint $ns1 10.0.1.1 flags signal
-+ 	pm_nl_add_endpoint $ns1 10.0.2.1 flags signal
-+ 	pm_nl_add_endpoint $ns1 10.0.3.1 flags signal
-+ 	pm_nl_add_endpoint $ns1 10.0.4.1 flags signal
-+ 	pm_nl_add_endpoint $ns2 10.0.1.2 flags signal
-+ 	pm_nl_add_endpoint $ns2 10.0.2.2 flags signal
-+ 	pm_nl_add_endpoint $ns2 10.0.3.2 flags signal
-+ 	pm_nl_add_endpoint $ns2 10.0.4.2 flags signal
- -	run_tests $ns1 $ns2 10.0.1.1
- +
- +	# the peer could possibly miss some addr notification, allow retransmission
- +	ip netns exec $ns1 sysctl -q net.mptcp.add_addr_timeout=1
- +	run_tests $ns1 $ns2 10.0.1.1 0 0 0 slow
-  	chk_join_nr "signal addresses race test" 3 3 3
++       wp-gpios:
++         description:
++           Contains one GPIO descriptor for the Write Protect pin.
++           Active state refers to the NAND Write Protect state and should be
++           set to GPIOD_ACTIVE_LOW unless the signal is inverted.
++         maxItems: 1
++ 
+ -      secure-regions:
+ -        $ref: /schemas/types.yaml#/definitions/uint64-matrix
+ -        description:
+ -          Regions in the NAND chip which are protected using a secure element
+ -          like Trustzone. This property contains the start address and size of
+ -          the secure regions present.
+ -
+      required:
+        - reg
   
-  	# the server will not signal the address terminating

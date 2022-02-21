@@ -2,45 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 963B24BECDA
-	for <lists+linux-next@lfdr.de>; Mon, 21 Feb 2022 22:59:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 939AE4BECE4
+	for <lists+linux-next@lfdr.de>; Mon, 21 Feb 2022 23:06:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235087AbiBUV7q (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 21 Feb 2022 16:59:46 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60844 "EHLO
+        id S235110AbiBUWGx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 21 Feb 2022 17:06:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235086AbiBUV7o (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Feb 2022 16:59:44 -0500
+        with ESMTP id S233190AbiBUWGx (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Feb 2022 17:06:53 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 584D122BD9;
-        Mon, 21 Feb 2022 13:59:20 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96D4E22BE2;
+        Mon, 21 Feb 2022 14:06:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F17F3B8179E;
-        Mon, 21 Feb 2022 21:59:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0852C340E9;
-        Mon, 21 Feb 2022 21:59:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5AED5B810F5;
+        Mon, 21 Feb 2022 22:06:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC7CEC340E9;
+        Mon, 21 Feb 2022 22:06:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645480757;
-        bh=Y9EBJMBOb1MRmHPeo2PIe4iMaumaEzn/v6ZKpHrdCqk=;
+        s=k20201202; t=1645481186;
+        bh=7LWosMqRDOsNooX1HPjL606jn97RZiS2HzXWtRFqKp0=;
         h=From:To:Cc:Subject:Date:From;
-        b=KUzFhgwLAqAxLKEj/mzdeQTBr02mQOWZOetFNzw9mSGrMWOOFmtQCrSRbKS5UI+vw
-         VMRmRYiCpzCra9dhFKCOrte2twahoS7XKLkWiIX6WGGUmTLFUsJvPWN3hRNY3UhVsA
-         ahFdz1MiJ6/roGP6z2806uzxQoHEG9UZ8YXpu7Tbnt7dNjO1cmzxVm/viQ129d3+1e
-         SMfdtDkJpZxLrARn8LJEIIjS6LewhJuy1Da9MwO2jUjwFLTLVG7/s/XQ+mZb7FLgxm
-         zJvcny6Ry0LIHjkwiaCaKsa3Ues4hoPs1d/aubtR2rqFtKEUQXQtVjHcakTA9NYim2
-         EHeYy1DyzhKIQ==
+        b=smPXcDSKyeJ/38vIGtvvhn/bNOBDfhwj4WDjvG1e+z5YYJwaK4V2k6hVIVhO2xOEb
+         gr+rntafb+UD+d1JGF5eGkAcikA5H1FQKOz7jcahy8Vj0yeGFRCZty+cx6hhUhuBnQ
+         Ur31UbgmIu2CpF8X93fY8XrePMMhrv1+6miT0lQ0Vkt19UtitiGUOJlnblbtqjd4Nx
+         UKDLcp3IVAcOeoVULCJGmGoIpIF0tNp/3JPnyStKu0yupQ9uSZ/SajHp2/n79zxkHY
+         Rn4HooSrs33m6HX+ODPzcqccV/58kb2WgwfOthPoxi1q6JGo+JZNc+DRY4QX736oVz
+         EIiFgfQrju+Xg==
 From:   broonie@kernel.org
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     Christoph Hellwig <hch@lst.de>, Gioh Kim <gi-oh.kim@ionos.com>,
-        Jack Wang <jinpu.wang@ionos.com>, Jens Axboe <axboe@kernel.dk>,
+Cc:     Chaitanya Kulkarni <kch@nvidia.com>,
+        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Md Haris Iqbal <haris.iqbal@ionos.com>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
 Subject: linux-next: manual merge of the scsi-mkp tree with the block tree
-Date:   Mon, 21 Feb 2022 21:59:11 +0000
-Message-Id: <20220221215911.2948692-1-broonie@kernel.org>
+Date:   Mon, 21 Feb 2022 22:06:22 +0000
+Message-Id: <20220221220622.3000432-1-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -58,15 +57,15 @@ Hi all,
 
 Today's linux-next merge of the scsi-mkp tree got a conflict in:
 
-  drivers/block/rnbd/rnbd-clt.c
+  block/blk-lib.c
 
 between commit:
 
-  448025c103938 ("block/rnbd: client device does not care queue/rotational")
+  0a3140ea0fae3 ("block: pass a block_device and opf to blk_next_bio")
 
 from the block tree and commit:
 
-  e8e9884730b36 ("scsi: rnbd: Remove WRITE_SAME support")
+  2988062985d59 ("scsi: block: Remove REQ_OP_WRITE_SAME support")
 
 from the scsi-mkp tree.
 
@@ -77,25 +76,9 @@ is submitted for merging.  You may also want to consider cooperating
 with the maintainer of the conflicting tree to minimise any particularly
 complex conflicts.
 
-diff --cc drivers/block/rnbd/rnbd-clt.c
-index 1f63f308eb394,dc192d2738854..0000000000000
---- a/drivers/block/rnbd/rnbd-clt.c
-+++ b/drivers/block/rnbd/rnbd-clt.c
-@@@ -1606,13 -1607,13 +1603,13 @@@ struct rnbd_clt_dev *rnbd_clt_map_devic
-  	}
-  
-  	rnbd_clt_info(dev,
-- 		       "map_device: Device mapped as %s (nsectors: %zu, logical_block_size: %d, physical_block_size: %d, max_write_same_sectors: %d, max_discard_sectors: %d, discard_granularity: %d, discard_alignment: %d, secure_discard: %d, max_segments: %d, max_hw_sectors: %d, wc: %d, fua: %d)\n",
- -		       "map_device: Device mapped as %s (nsectors: %zu, logical_block_size: %d, physical_block_size: %d, max_discard_sectors: %d, discard_granularity: %d, discard_alignment: %d, secure_discard: %d, max_segments: %d, max_hw_sectors: %d, rotational: %d, wc: %d, fua: %d)\n",
-++		       "map_device: Device mapped as %s (nsectors: %zu, logical_block_size: %d, physical_block_size: %d, max_discard_sectors: %d, discard_granularity: %d, discard_alignment: %d, secure_discard: %d, max_segments: %d, max_hw_sectors: %d, wc: %d, fua: %d)\n",
-  		       dev->gd->disk_name, dev->nsectors,
-  		       dev->logical_block_size, dev->physical_block_size,
-- 		       dev->max_write_same_sectors, dev->max_discard_sectors,
-+ 		       dev->max_discard_sectors,
-  		       dev->discard_granularity, dev->discard_alignment,
-  		       dev->secure_discard, dev->max_segments,
- -		       dev->max_hw_sectors, dev->rotational, dev->wc, dev->fua);
- +		       dev->max_hw_sectors, dev->wc, dev->fua);
-  
-  	mutex_unlock(&dev->lock);
-  	rnbd_clt_put_sess(sess);
+diff --cc block/blk-lib.c
+index fc6ea52e74824,bf5254ccdb5f8..0000000000000
+--- a/block/blk-lib.c
++++ b/block/blk-lib.c
+
+(took the deletion of _WRITE_SAME from scsi-mkp)

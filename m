@@ -2,49 +2,43 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1F5C4BDC1C
-	for <lists+linux-next@lfdr.de>; Mon, 21 Feb 2022 18:41:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08D434BE87F
+	for <lists+linux-next@lfdr.de>; Mon, 21 Feb 2022 19:05:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348344AbiBUOeK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 21 Feb 2022 09:34:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45980 "EHLO
+        id S245106AbiBUQHx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 21 Feb 2022 11:07:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377872AbiBUOeI (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Feb 2022 09:34:08 -0500
+        with ESMTP id S232866AbiBUQHw (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Feb 2022 11:07:52 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C79A1C116;
-        Mon, 21 Feb 2022 06:33:44 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F5E163D1;
+        Mon, 21 Feb 2022 08:07:29 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1654BB811C7;
-        Mon, 21 Feb 2022 14:33:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E27B4C340E9;
-        Mon, 21 Feb 2022 14:33:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CC45DB81257;
+        Mon, 21 Feb 2022 16:07:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58556C340E9;
+        Mon, 21 Feb 2022 16:07:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645454021;
-        bh=MOKLyo7/CIj15UTSyuW2OgdaszN7jrsaNp5k1YPY3aE=;
+        s=k20201202; t=1645459646;
+        bh=hkQhgL/DyOVPovT36fLffi6gFZoFqkKaa53QcfVmoSU=;
         h=From:To:Cc:Subject:Date:From;
-        b=uJF68NIcZywWr+dDWoAj52OBmNWOx64XPUk+mXZiEndyaMwIRzMKkA+e4U28CC9eq
-         ez/lh5CXxMUiIct56BJw6x8vMIU+uof5pMiNMyuPftd5Ac5ZFdvaYSjeDaV+Qzt2jR
-         tIxZMcE5RAzTeAG6E4Jw4b+Bjqm3Sz5f17Cle7+Q8D7OMmTN3pcptcBw9IswtuAqqQ
-         IFM0MXCEPgJ2rEM9RhXXCuJywv1ICB+9IDoOaWGo75U5EhToqwCnd32Q9anVQwjrDi
-         arAmdYdVZSW87OLP1wjynqpnUfs4HF305YoAO89GQ6Zi9OzsOuVZeWj3WeXvHsuhih
-         BolyH1ymDSFnQ==
+        b=UgPdrP//iiOXo+ATSe3gnCPWxCHRAwfudLoPCRPep4f5m51G6YzTOBw3c2iyQUyGy
+         KdBJljkAcp0cODCzLppN2opolWrIVnPUp1zOZ0P2OFQRs9v9osUXfSeEWK6IkSUdJi
+         3UOXPCR8qMAGNu+LafkBIRCMp5//G1mtCJmQ6zoJqzpNtg6oRs+hf4m3V9F2vx8FHP
+         8kmTko6euqxPgcEa9z9WUI13UEujyS+1bX/b65XNsjwZp89t4AOggOOq1cebPM8/zL
+         lPvd+NByVC6h135ka0o8+o00auJijE9dbcMOOA/bppUwcGoqAeOb0cAI1pJhwA5Ocp
+         PRAHOHjumR5LQ==
 From:   broonie@kernel.org
-To:     Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>
-Cc:     Jani Nikula <jani.nikula@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Robert Beckett <bob.beckett@collabora.com>,
-        =?UTF-8?q?Thomas=20Hellstr=C3=B6m?= 
-        <thomas.hellstrom@linux.intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-Subject: linux-next: manual merge of the drm-intel-gt tree with the drm-intel tree
-Date:   Mon, 21 Feb 2022 14:33:36 +0000
-Message-Id: <20220221143337.3527550-1-broonie@kernel.org>
+To:     Luis Chamberlain <mcgrof@kernel.org>, Jessica Yu <jeyu@kernel.org>,
+        Aaron Tomlin <atomlin@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the modules tree
+Date:   Mon, 21 Feb 2022 16:07:21 +0000
+Message-Id: <20220221160721.1627006-1-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -60,88 +54,28 @@ X-Mailing-List: linux-next@vger.kernel.org
 
 Hi all,
 
-Today's linux-next merge of the drm-intel-gt tree got conflicts in:
+After merging the modules tree, today's linux-next build (KCONFIG_NAME)
+failed like this:
 
-  drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c
-  drivers/gpu/drm/i915/i915_drv.h
-  drivers/gpu/drm/i915/i915_reg.h
-  drivers/gpu/drm/i915/selftests/i915_gem_gtt.c
+In file included from /tmp/next/build/include/linux/build_bug.h:5,
+                 from /tmp/next/build/include/linux/container_of.h:5,
+                 from /tmp/next/build/include/linux/list.h:5,
+                 from /tmp/next/build/include/linux/module.h:12,
+                 from /tmp/next/build/kernel/module/strict_rwx.c:8:
+/tmp/next/build/kernel/module/strict_rwx.c: In function 'frob_rodata':
+/tmp/next/build/kernel/module/strict_rwx.c:16:10: error: implicit declaration of function 'PAGE_ALIGNED'; did you mean 'IS_ALIGNED'? [-Werror=implicit-function-declaration]
+   16 |  BUG_ON(!PAGE_ALIGNED(layout->base));
+      |          ^~~~~~~~~~~~
+/tmp/next/build/include/linux/compiler.h:78:42: note: in definition of macro 'unlikely'
+   78 | # define unlikely(x) __builtin_expect(!!(x), 0)
+      |                                          ^
+/tmp/next/build/kernel/module/strict_rwx.c:16:2: note: in expansion of macro 'BUG_ON'
+   16 |  BUG_ON(!PAGE_ALIGNED(layout->base));
+      |  ^~~~~~
+cc1: some warnings being treated as errors
 
-between commits:
+Caused by commit
 
-  b508d01fa577e ("drm/i915: split out i915_gem_internal.h from i915_drv.h")
-  29b9702ffe70d ("drm/i915/ttm: Return some errors instead of trying memcpy move")
-  9a8e720fd0641 ("drm/i915: split out gem/i915_gem_domain.h from i915_drv.h")
-  b508d01fa577e ("drm/i915: split out i915_gem_internal.h from i915_drv.h")
+  e5973a14d18 ("module: Move strict rwx support to a separate file")
 
-from the drm-intel tree and commits:
-
-  3526b607b0239 ("drm/i915/ttm: Return some errors instead of trying memcpy move")
-  a413c99fc1e49 ("drm/i915: add gtt misalignment test")
-  b508d01fa577e ("drm/i915: split out i915_gem_internal.h from i915_drv.h")
-
-from the drm-intel-gt tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-diff --cc drivers/gpu/drm/i915/i915_drv.h
-index ffde71b6b3f1f,6ffadf4b3f1ab..0000000000000
---- a/drivers/gpu/drm/i915/i915_drv.h
-+++ b/drivers/gpu/drm/i915/i915_drv.h
-@@@ -1089,10 -1284,10 +1087,12 @@@ IS_SUBPLATFORM(const struct drm_i915_pr
-  	IS_SUBPLATFORM(dev_priv, INTEL_DG2, INTEL_SUBPLATFORM_G10)
-  #define IS_DG2_G11(dev_priv) \
-  	IS_SUBPLATFORM(dev_priv, INTEL_DG2, INTEL_SUBPLATFORM_G11)
-+ #define IS_DG2_G12(dev_priv) \
-+ 	IS_SUBPLATFORM(dev_priv, INTEL_DG2, INTEL_SUBPLATFORM_G12)
-  #define IS_ADLS_RPLS(dev_priv) \
-  	IS_SUBPLATFORM(dev_priv, INTEL_ALDERLAKE_S, INTEL_SUBPLATFORM_RPL_S)
- +#define IS_ADLP_N(dev_priv) \
- +	IS_SUBPLATFORM(dev_priv, INTEL_ALDERLAKE_P, INTEL_SUBPLATFORM_N)
-  #define IS_HSW_EARLY_SDV(dev_priv) (IS_HASWELL(dev_priv) && \
-  				    (INTEL_DEVID(dev_priv) & 0xFF00) == 0x0C00)
-  #define IS_BDW_ULT(dev_priv) \
-diff --cc drivers/gpu/drm/i915/i915_reg.h
-index 8e1b469a4cd1b,4b95c94084d98..0000000000000
---- a/drivers/gpu/drm/i915/i915_reg.h
-+++ b/drivers/gpu/drm/i915/i915_reg.h
-diff --cc drivers/gpu/drm/i915/selftests/i915_gem_gtt.c
-index 1b508c89468c1,ca4ed9dd909b8..0000000000000
---- a/drivers/gpu/drm/i915/selftests/i915_gem_gtt.c
-+++ b/drivers/gpu/drm/i915/selftests/i915_gem_gtt.c
-@@@ -26,7 -26,7 +26,8 @@@
-  #include <linux/prime_numbers.h>
-  
-  #include "gem/i915_gem_context.h"
- +#include "gem/i915_gem_internal.h"
-+ #include "gem/i915_gem_region.h"
-  #include "gem/selftests/mock_context.h"
-  #include "gt/intel_context.h"
-  #include "gt/intel_gpu_commands.h"
-diff --git a/drivers/gpu/drm/i915/i915_gem_evict.h b/drivers/gpu/drm/i915/i915_gem_evict.h
-index d4478b6ad11bb..b7f8e9435b2c6 100644
---- a/drivers/gpu/drm/i915/i915_gem_evict.h
-+++ b/drivers/gpu/drm/i915/i915_gem_evict.h
-@@ -12,13 +12,16 @@ struct drm_mm_node;
- struct i915_address_space;
- 
- int __must_check i915_gem_evict_something(struct i915_address_space *vm,
-+					  struct i915_gem_ww_ctx *ww,
- 					  u64 min_size, u64 alignment,
- 					  unsigned long color,
- 					  u64 start, u64 end,
- 					  unsigned flags);
- int __must_check i915_gem_evict_for_node(struct i915_address_space *vm,
-+					 struct i915_gem_ww_ctx *ww,
- 					 struct drm_mm_node *node,
- 					 unsigned int flags);
--int i915_gem_evict_vm(struct i915_address_space *vm);
-+int i915_gem_evict_vm(struct i915_address_space *vm,
-+		      struct i915_gem_ww_ctx *ww);
- 
- #endif /* __I915_GEM_EVICT_H__ */
+I have used the -next tree from the 17th.

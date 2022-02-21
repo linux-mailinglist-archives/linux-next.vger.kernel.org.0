@@ -2,46 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D93D4BEB1A
-	for <lists+linux-next@lfdr.de>; Mon, 21 Feb 2022 20:37:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46C8F4BEBF7
+	for <lists+linux-next@lfdr.de>; Mon, 21 Feb 2022 21:39:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232971AbiBUTWN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 21 Feb 2022 14:22:13 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49754 "EHLO
+        id S232988AbiBUUjs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 21 Feb 2022 15:39:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbiBUTWM (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Feb 2022 14:22:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8EA71A38C;
-        Mon, 21 Feb 2022 11:21:48 -0800 (PST)
+        with ESMTP id S231478AbiBUUjr (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Feb 2022 15:39:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08CE6237DC;
+        Mon, 21 Feb 2022 12:39:24 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 633B660C92;
-        Mon, 21 Feb 2022 19:21:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A5EDC340E9;
-        Mon, 21 Feb 2022 19:21:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AA748B81719;
+        Mon, 21 Feb 2022 20:39:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34678C340E9;
+        Mon, 21 Feb 2022 20:39:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645471307;
-        bh=xSWpEwDybfYAh05pjuUF2t9kyf2Kg4owDWECjFNX7fM=;
+        s=k20201202; t=1645475961;
+        bh=4UgHp0D2dDI4dxyLYTBIGgNqsShAcd1aE/cjFXj66u0=;
         h=From:To:Cc:Subject:Date:From;
-        b=tuz6cAh2R5epfpgw7bSpEBaUbVxeL35Q10C0/0+3M8KPrREmEseS+JvKLl92kFHbh
-         ray3bQQEGn+89CRBcHUWBtic36HA8TZCfY8A61oouEdl9DNBSkGO469AR8xqwOvplX
-         CZCY7amAvEY3l1wa7XGq+5107zrNBtlYyKBRpKQdaI372A6kkRI1hUZq+YyJBUdGFX
-         nB2/PxhJGfNRt/qwCFsy/hMdysqA82PnDsgrU1pJP6FbrEw2/0Zc4h/onb6mQrsipJ
-         bOaYO0Qd0NNgKsAXYLmzS2f8effOEKOfM6XqIj+DAYLxXaG/OHsTFcFrRy6rFhunY9
-         T0ZjOIpBZ/8cA==
+        b=cu7VsrIC5vR/TgzV+enBuaUmdcKljGD5Zx6UmMRoYrEw3G2KYAleb11NAacEDazQ8
+         GobGs2GVqV1wAYdqctdh3WEPXCRtaCr8ZAVp1nLNUa7YaaOyYactHf2xws/5ulvGj8
+         ZHfkg7XCo7Z5e9qYNfEwG18w6pw+Y9bQ8Q5gNSVsKNzZS1Ql1TJt2rJdyUrWMR4BhM
+         YkRA98jAET8jFAHsglN21v+oSRdUZdZLBd3Xn4kM9/Bz4tGrbzhH1oKueOvGWMGoDJ
+         aGsbyLTLdkEZvIGUyvZnBH7uS8VrtTFM1uwHpyKnAjQKC3XWph5l8rqRRoIdiw9IuG
+         CrebUSSqk7pXw==
 From:   broonie@kernel.org
 To:     Greg KH <greg@kroah.com>
-Cc:     David Heidelberg <david@ixit.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans de Goede <hdegoede@redhat.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Sean Anderson <sean.anderson@seco.com>
-Subject: linux-next: manual merge of the usb tree with the xilinx tree
-Date:   Mon, 21 Feb 2022 19:21:43 +0000
-Message-Id: <20220221192143.1661784-1-broonie@kernel.org>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the usb tree with the usb.current tree
+Date:   Mon, 21 Feb 2022 20:39:17 +0000
+Message-Id: <20220221203917.1899359-1-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -59,15 +57,15 @@ Hi all,
 
 Today's linux-next merge of the usb tree got a conflict in:
 
-  arch/arm64/boot/dts/xilinx/zynqmp.dtsi
+  drivers/usb/dwc3/dwc3-pci.c
 
 between commit:
 
-  eceb6f8677d31 ("arm64: xilinx: dts: drop legacy property #stream-id-cells")
+  d7c93a903f33f ("usb: dwc3: pci: Add "snps,dis_u2_susphy_quirk" for Intel Bay Trail")
 
-from the xilinx tree and commit:
+from the usb.current tree and commit:
 
-  d8b1c3d0d700f ("arm64: dts: zynqmp: Move USB clocks to dwc3 node")
+  582ab24e096fd ("usb: dwc3: pci: Set "linux,phy_charger_detect" property on some Bay Trail boards")
 
 from the usb tree.
 
@@ -78,25 +76,48 @@ is submitted for merging.  You may also want to consider cooperating
 with the maintainer of the conflicting tree to minimise any particularly
 complex conflicts.
 
-diff --cc arch/arm64/boot/dts/xilinx/zynqmp.dtsi
-index 056761c974fda,ba68fb8529ee0..0000000000000
---- a/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
-+++ b/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
-@@@ -823,6 -824,8 +822,7 @@@
-  				interrupt-parent = <&gic>;
-  				interrupt-names = "dwc_usb3", "otg";
-  				interrupts = <0 65 4>, <0 69 4>;
-+ 				clock-names = "bus_early", "ref";
- -				#stream-id-cells = <1>;
-  				iommus = <&smmu 0x860>;
-  				snps,quirk-frame-length-adjustment = <0x20>;
-  				/* dma-coherent; */
-@@@ -849,6 -851,8 +848,7 @@@
-  				interrupt-parent = <&gic>;
-  				interrupt-names = "dwc_usb3", "otg";
-  				interrupts = <0 70 4>, <0 74 4>;
-+ 				clock-names = "bus_early", "ref";
- -				#stream-id-cells = <1>;
-  				iommus = <&smmu 0x861>;
-  				snps,quirk-frame-length-adjustment = <0x20>;
-  				/* dma-coherent; */
+diff --cc arch/arm64/boot/dts/qcom/ipq6018.dtsi
+index 4e7efa97724bd,a614b9f73e2cd..0000000000000
+--- a/arch/arm64/boot/dts/qcom/ipq6018.dtsi
++++ b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
+diff --cc drivers/usb/dwc3/dwc3-pci.c
+index 06d0e88ec8af9,4330c974b31ba..0000000000000
+--- a/drivers/usb/dwc3/dwc3-pci.c
++++ b/drivers/usb/dwc3/dwc3-pci.c
+@@@ -120,13 -119,14 +120,21 @@@ static const struct property_entry dwc3
+  	{}
+  };
+  
+ +static const struct property_entry dwc3_pci_intel_byt_properties[] = {
+ +	PROPERTY_ENTRY_STRING("dr_mode", "peripheral"),
+ +	PROPERTY_ENTRY_BOOL("snps,dis_u2_susphy_quirk"),
+ +	PROPERTY_ENTRY_BOOL("linux,sysdev_is_parent"),
+ +	{}
+ +};
+ +
++ static const struct property_entry dwc3_pci_intel_phy_charger_detect_properties[] = {
++ 	PROPERTY_ENTRY_STRING("dr_mode", "peripheral"),
++ 	PROPERTY_ENTRY_BOOL("snps,dis_u2_susphy_quirk"),
++ 	PROPERTY_ENTRY_BOOL("linux,phy_charger_detect"),
++ 	PROPERTY_ENTRY_BOOL("linux,sysdev_is_parent"),
++ 	{}
++ };
++ 
+  static const struct property_entry dwc3_pci_mrfld_properties[] = {
+  	PROPERTY_ENTRY_STRING("dr_mode", "otg"),
+  	PROPERTY_ENTRY_STRING("linux,extcon-name", "mrfld_bcove_pwrsrc"),
+@@@ -169,10 -169,10 +177,14 @@@ static const struct software_node dwc3_
+  	.properties = dwc3_pci_intel_properties,
+  };
+  
+ +static const struct software_node dwc3_pci_intel_byt_swnode = {
+ +	.properties = dwc3_pci_intel_byt_properties,
+ +};
+ +
++ static const struct software_node dwc3_pci_intel_phy_charger_detect_swnode = {
++ 	.properties = dwc3_pci_intel_phy_charger_detect_properties,
++ };
++ 
+  static const struct software_node dwc3_pci_intel_mrfld_swnode = {
+  	.properties = dwc3_pci_mrfld_properties,
+  };

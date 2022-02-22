@@ -2,45 +2,48 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B22144BED40
-	for <lists+linux-next@lfdr.de>; Mon, 21 Feb 2022 23:32:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF7554BEE7B
+	for <lists+linux-next@lfdr.de>; Tue, 22 Feb 2022 02:14:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbiBUWcr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 21 Feb 2022 17:32:47 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57992 "EHLO
+        id S237856AbiBVAmT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 21 Feb 2022 19:42:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235607AbiBUWcr (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Feb 2022 17:32:47 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24DAA26CC;
-        Mon, 21 Feb 2022 14:32:22 -0800 (PST)
+        with ESMTP id S231537AbiBVAmT (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Feb 2022 19:42:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18EDD255B2;
+        Mon, 21 Feb 2022 16:41:54 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 3CE94CE12AF;
-        Mon, 21 Feb 2022 22:32:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94B8BC340E9;
-        Mon, 21 Feb 2022 22:32:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B20C5B816FB;
+        Tue, 22 Feb 2022 00:41:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1340CC340E9;
+        Tue, 22 Feb 2022 00:41:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645482739;
-        bh=oNd55KzMQeaSAd6DDSrw5QGVIEvLaDaOWF9kCKeKBfk=;
+        s=k20201202; t=1645490512;
+        bh=IELOXQyVJAFo5UdAD8Yr5sUxke47bf1fgOMma60bkAc=;
         h=From:To:Cc:Subject:Date:From;
-        b=Kxbv5uLE79vPeHEeQnCY35iiRvSP+ObqzIC34W8mSBerCaUuYJo8wznyOZC9aQ8F/
-         yc9t82oeg1FromwlQUdmz1a1nIS0ls9kq4ikShVk78fQ0brgP7z2Wo1EA74zdwLkb/
-         FeNsQ+clzyW+TGSYY3Kj4k+SOZ6P3WvfiLriEuvYJfhT4da1RgWxP9r+AYhDyz1Xxm
-         c/NFTQLLOzzFdaK0Ht/SPwUexS3noTc3O1BrXOt+I6OMkqREGHXk/K75Oz1EZ64ku7
-         HBZwlA+CeXaQEyQ8+MX+Fq2nsnsi+UuZKAiUgKfyvnOQgM/vzNBCMFwW/Bez8qROMq
-         dhfRVlXmBhWjg==
+        b=cLlQqg6/YHrSI2FFKsNhdc7lvW6iiZR4lPQopFrZkkz8XbrTZEr+rbdPl5r6ty0UX
+         /rwvK+bHez4M+NtS4E4911O4rhcWpQuwKiKwsQONN2AIfz9E9QLOUyYG1pZT1yfaqZ
+         Cros8dWt3VaRPe9pngdKUKWplOyttoPGnPIEUJ+ORjOpTVIxEap0RQFYQ3LvUQmuDD
+         QhvXOjDWdNm6ppOc4+vizTwD7MjHHcnEpLi6KtsW5CwDMDyUMEFBWpO+0nyjX2bwlQ
+         MN2jRDfeE1KPJWs+at0ejJ8UTpjPkITTevlNh/nMi03R5T9F7rVVglqcFriyucDooO
+         D/5xP+iU0KYlw==
 From:   broonie@kernel.org
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Marc Zyngier <maz@kernel.org>
-Subject: linux-next: manual merge of the pinctrl tree with the irqchip tree
-Date:   Mon, 21 Feb 2022 22:32:16 +0000
-Message-Id: <20220221223216.3616980-1-broonie@kernel.org>
+        Lucas De Marchi <lucas.demarchi@intel.com>
+Subject: linux-next: manual merge of the folio tree with the drm-intel tree
+Date:   Tue, 22 Feb 2022 00:41:47 +0000
+Message-Id: <20220222004147.3360596-1-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -54,19 +57,19 @@ X-Mailing-List: linux-next@vger.kernel.org
 
 Hi all,
 
-Today's linux-next merge of the pinctrl tree got a conflict in:
+Today's linux-next merge of the folio tree got a conflict in:
 
-  drivers/pinctrl/pinctrl-starfive.c
+  drivers/gpu/drm/drm_cache.c
 
 between commit:
 
-  0d872ed9e2148 ("pinctrl: starfive: Move PM device over to irq domain")
+  7938f4218168a ("dma-buf-map: Rename to iosys-map")
 
-from the irqchip tree and commit:
+from the drm-intel tree and commit:
 
-  64fd52a4d3ce6 ("pinctrl: starfive: Use a static name for the GPIO irq_chip")
+  96160c2f78bd1 ("mm: don't include <linux/memremap.h> in <linux/mm.h>")
 
-from the pinctrl tree.
+from the folio tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -75,17 +78,22 @@ is submitted for merging.  You may also want to consider cooperating
 with the maintainer of the conflicting tree to minimise any particularly
 complex conflicts.
 
-diff --cc drivers/pinctrl/pinctrl-starfive.c
-index 5be9866c2b3c0,0e4ff4c709f87..0000000000000
---- a/drivers/pinctrl/pinctrl-starfive.c
-+++ b/drivers/pinctrl/pinctrl-starfive.c
-@@@ -1307,8 -1308,8 +1308,6 @@@ static int starfive_probe(struct platfo
-  	sfp->gc.base = -1;
-  	sfp->gc.ngpio = NR_GPIOS;
+diff --cc drivers/gpu/drm/drm_cache.c
+index 4b0da6baff78e,50b8a088f763a..0000000000000
+--- a/drivers/gpu/drm/drm_cache.c
++++ b/drivers/gpu/drm/drm_cache.c
+@@@ -27,11 -27,11 +27,11 @@@
+  /*
+   * Authors: Thomas Hellström <thomas-at-tungstengraphics-dot-com>
+   */
+- 
+ -#include <linux/dma-buf-map.h>
+ +#include <linux/cc_platform.h>
+  #include <linux/export.h>
+  #include <linux/highmem.h>
+ -#include <linux/cc_platform.h>
++ #include <linux/ioport.h>
+ +#include <linux/iosys-map.h>
+  #include <xen/xen.h>
   
-- 	starfive_irq_chip.name = sfp->gc.label;
- -	starfive_irq_chip.parent_device = dev;
---
-  	sfp->gc.irq.chip = &starfive_irq_chip;
-  	sfp->gc.irq.parent_handler = starfive_gpio_irq_handler;
-  	sfp->gc.irq.num_parents = 1;
+  #include <drm/drm_cache.h>

@@ -2,43 +2,43 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63BE44BF767
-	for <lists+linux-next@lfdr.de>; Tue, 22 Feb 2022 12:42:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A73ED4BF76C
+	for <lists+linux-next@lfdr.de>; Tue, 22 Feb 2022 12:45:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231755AbiBVLmh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 22 Feb 2022 06:42:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34052 "EHLO
+        id S231734AbiBVLqI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 22 Feb 2022 06:46:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231753AbiBVLmg (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Feb 2022 06:42:36 -0500
+        with ESMTP id S229940AbiBVLqH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Feb 2022 06:46:07 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1CDE137744;
-        Tue, 22 Feb 2022 03:42:11 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9342D13D57D;
+        Tue, 22 Feb 2022 03:45:42 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 924AEB81871;
-        Tue, 22 Feb 2022 11:42:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3D28C340E8;
-        Tue, 22 Feb 2022 11:42:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 29CF3B818F0;
+        Tue, 22 Feb 2022 11:45:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7DF4C340E8;
+        Tue, 22 Feb 2022 11:45:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645530129;
-        bh=D2KqbO6eGYgWoVDqwkm8sFaVGoXiE9qbHySLnP8AXg0=;
+        s=k20201202; t=1645530339;
+        bh=pzXQp3gLZJn/et9RYHZDznc/NFxqsdIZIn4P2XMVLMA=;
         h=From:To:Cc:Subject:Date:From;
-        b=u+97p9UWGW4VFXXWPnxKX/v62ujsqpa04ERX8+I8KFoLc5/y1pVEnbY0ESQqnlUHa
-         pFN7WzcTs6Dv2im2jPQ5KAhb/eC80MKUZAKi5dG0kOOdbjXAMYqokpF3ZiQVW2I8sU
-         jmjx9+SkQ8Vs4TkfN2R955r3+bIDK1WSJ1FhQNp3fAYYyOCdZv8R/A4TZmCwZH3TOm
-         YG/vnfYZafLNPo7K3qyPprLD7D6a4JTITgget5IoFM9GxczH25dPvFc0lj57lw3CKP
-         gzDY5tRn1uzI+gD3wv8wMGnFUXoWaJZDO0WLsWlh9gMpiirL+tkKI/MDXPMp7uaxg8
-         ByzcHyB1KkWNw==
+        b=V5wzeJJA2HiAP0VEAVbEMHnIWmw7AIfzO20Tsm71orbxgvTLZRCBFh9Bc4Ed6vLLh
+         zFDYcNho8lbjOOastBzOJF4z4m/7vgNnyzNs9OwJ6w46tj01R84rkk6wiUPEN8Vjni
+         qZaMUzRVGHEv7DxGNCtIub+JNWFfrF7s2KP9FNKyk1RxFsAMzTzjAkjvaOe2y9ZGN6
+         00m+czw578lA4ZwQHOlg48lY5V9YPNJWvO56TbBS0ZH0IdEc79mi/WFg6UjnzL5lj9
+         Y6rAodJlSD7OP+9oifG+ZI+sPLCPJHcJIm7Ibol1uFF1DWKgVIKR9AuJfvoNswuvdR
+         yzOYHFasaJWRw==
 From:   broonie@kernel.org
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the mips tree with the asm-generic tree
-Date:   Tue, 22 Feb 2022 11:42:03 +0000
-Message-Id: <20220222114203.686638-1-broonie@kernel.org>
+To:     Greentime Hu <green.hu@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Subject: linux-next: manual merge of the nds32 tree with the kbuild tree
+Date:   Tue, 22 Feb 2022 11:45:36 +0000
+Message-Id: <20220222114536.743705-1-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -54,19 +54,19 @@ X-Mailing-List: linux-next@vger.kernel.org
 
 Hi all,
 
-Today's linux-next merge of the mips tree got a conflict in:
+Today's linux-next merge of the nds32 tree got a conflict in:
 
-  arch/mips/sibyte/common/sb_tbprof.c
+  arch/nds32/Kbuild
 
 between commit:
 
-  27e8140d7819b ("uaccess: fix type mismatch warnings from access_ok()")
+  8212f8986d311 ("kbuild: use more subdir- for visiting subdirectories while cleaning")
 
-from the asm-generic tree and commit:
+from the kbuild tree and commit:
 
-  10242464e506b ("MIPS: sibyte: Add missing __user annotations in sb_tbprof.c")
+  37160f01e8ea6 ("nds32: move core-y in arch/nds32/Makefile to arch/nds32/Kbuild")
 
-from the mips tree.
+from the nds32 tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -75,9 +75,24 @@ is submitted for merging.  You may also want to consider cooperating
 with the maintainer of the conflicting tree to minimise any particularly
 complex conflicts.
 
-diff --cc arch/mips/sibyte/common/sb_tbprof.c
-index 01d00b87d0f5a,bc47681e825a3..0000000000000
---- a/arch/mips/sibyte/common/sb_tbprof.c
-+++ b/arch/mips/sibyte/common/sb_tbprof.c
-
-(used the head version)
+diff --cc arch/nds32/Kbuild
+index ac127371afa47,565b9bc3c9db4..0000000000000
+--- a/arch/nds32/Kbuild
++++ b/arch/nds32/Kbuild
+diff --cc arch/nds32/Kconfig
+index 013249430fa3d,a20b42d4bdb6e..0000000000000
+--- a/arch/nds32/Kconfig
++++ b/arch/nds32/Kconfig
+@@@ -61,6 -63,12 +60,9 @@@ config GENERIC_LOCKBREA
+  	def_bool y
+  	depends on PREEMPTION
+  
++ config LOCKDEP_SUPPORT
++ 	def_bool y
++ 
+ -config TRACE_IRQFLAGS_SUPPORT
+ -	def_bool y
+ -
+  config STACKTRACE_SUPPORT
+  	def_bool y
+  

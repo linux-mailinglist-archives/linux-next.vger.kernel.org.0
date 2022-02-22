@@ -2,48 +2,46 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1ED34C058E
-	for <lists+linux-next@lfdr.de>; Wed, 23 Feb 2022 00:52:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03DB34C05AC
+	for <lists+linux-next@lfdr.de>; Wed, 23 Feb 2022 00:59:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230304AbiBVXxE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 22 Feb 2022 18:53:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37240 "EHLO
+        id S236346AbiBWAAO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 22 Feb 2022 19:00:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236293AbiBVXxE (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Feb 2022 18:53:04 -0500
+        with ESMTP id S236202AbiBWAAN (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Feb 2022 19:00:13 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B22D3337D;
-        Tue, 22 Feb 2022 15:52:37 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A65C02654;
+        Tue, 22 Feb 2022 15:59:45 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 122EF611C8;
-        Tue, 22 Feb 2022 23:52:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F5C0C340E8;
-        Tue, 22 Feb 2022 23:52:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3183261227;
+        Tue, 22 Feb 2022 23:59:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4E00C340E8;
+        Tue, 22 Feb 2022 23:59:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645573956;
-        bh=UwaC5xY+ZaDH26vO4EYbimVhcqyY47M9XO1A6/S8skU=;
+        s=k20201202; t=1645574384;
+        bh=nKpRT4I7rBEMlNQ22UrRDmjM7DxTxcBYObIPyBwFRvU=;
         h=From:To:Cc:Subject:Date:From;
-        b=nwo8uyYMIf7IAKkP0j1TRdG9qYY7wE3B4N3HLA9pPUzcHg3OPHdWNUmcvaZMqSF+g
-         Maj0fyyV9zvDUBUfEpJUiVHylcqnVcLLR8tffz4bhAi0UOMlVKtZksiYDYuhIXoj3r
-         dPNDSvxPXHDHbCHzpCxU1GOHNF9aON8r+m9ClNqZcFqy4wTTxTwCL79iJWjFP6l8yJ
-         VEb5jg9TGS/npKWFpZ6xPG69lOduKtv7SUThsHrqF1w2cHRZDYBJiEUMa/iQBiQ54V
-         5uzNJRY0E3ozKci48z2oBL43lKvttrxvr5vdlRUB5ND4CIP/r254QqoxfvuD6okRH+
-         rBbHCFUusM6Ag==
+        b=DvLA8wUdq6tbNOhUPBnoxDc5JxsShl+RuYsIlvsAcsZx0LantEzAp7zNl+tL0PP0X
+         49HTNa9OPZI7azPwY8HeLd08Fub8Hs3L8dZHfo1EdI5TfExKi2llU2ezwi92xfmuLr
+         F0JZuYktur1iLAzbviH/YJrC50m5y6RuMtmRzadJKV5p38o8GyceR88yzwAxaZV8Ce
+         Tr1VuEXDinn3gGYXl0ovsUrg9qhB05KmypKa2sGZlXYhf/zGWZ1Nx8OQPuO44oZZ2N
+         kp3KPfQaVyAHjZLNnUdr9W5TLAGz/fZjQRidOShZRWsypF0FOC/aIrObpIrhBr2rja
+         gN7KuJUXSoQBg==
 From:   broonie@kernel.org
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Liam Howlett <liam.howlett@oracle.com>
+Cc:     Dave Anglin <dave.anglin@bell.net>, Helge Deller <deller@gmx.de>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        "Liam R . Howlett" <Liam.Howlett@Oracle.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        sujiaxun <sujiaxun@uniontech.com>,
-        tangmeng <tangmeng@uniontech.com>,
-        zhanglianjie <zhanglianjie@uniontech.com>,
-        Zhen Ni <nizhen@uniontech.com>
-Subject: linux-next: manual merge of the sysctl tree with the tip tree
-Date:   Tue, 22 Feb 2022 23:52:18 +0000
-Message-Id: <20220222235218.906101-1-broonie@kernel.org>
+        Matthew Wilcox <willy@infradead.org>
+Subject: linux-next: manual merge of the maple tree with the parisc tree
+Date:   Tue, 22 Feb 2022 23:59:39 +0000
+Message-Id: <20220222235939.906617-1-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -59,30 +57,19 @@ X-Mailing-List: linux-next@vger.kernel.org
 
 Hi all,
 
-Today's linux-next merge of the sysctl tree got conflicts in:
+Today's linux-next merge of the maple tree got a conflict in:
 
-  include/linux/sched/sysctl.h
-  kernel/sysctl.c
+  arch/parisc/kernel/cache.c
 
 between commit:
 
-  c8eaf6ac76f40 ("sched: move autogroup sysctls into its own file")
+  389f36b709496 ("parisc: Add vDSO support")
 
-from the tip tree and commits:
+from the parisc tree and commit:
 
-  fc12aa67daba8 ("kernel/do_mount_initrd: move real_root_dev sysctls to its own file")
-  97d4da3bab169 ("kernel/delayacct: move delayacct sysctls to its own file")
-  c7c1839c3c942 ("kernel/acct: move acct sysctls to its own file")
-  b5fefe080be0f ("kernel/panic: move panic sysctls to its own file")
-  3831fb33e3f35 ("kernel/lockdep: move lockdep sysctls to its own file")
-  f31483d6edf09 ("sched: Move energy_aware sysctls to topology.c")
-  301ee4d2abae7 ("sched: Move cfs_bandwidth_slice sysctls to fair.c")
-  eb862b3dc6dbf ("sched: Move uclamp_util sysctls to core.c")
-  4925401d06dc2 ("sched: Move rr_timeslice sysctls to rt.c")
-  ebb891f03580b ("sched: Move deadline_period sysctls to deadline.c")
-  5f6e55c2485c8 ("sched: Move rt_period/runtime sysctls to rt.c")
+  57723d1d4d3fc ("parisc: Remove mmap linked list from cache handling")
 
-from the sysctl tree.
+from the maple tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -91,167 +78,18 @@ is submitted for merging.  You may also want to consider cooperating
 with the maintainer of the conflicting tree to minimise any particularly
 complex conflicts.
 
-diff --cc include/linux/sched/sysctl.h
-index 3f2b70f8d32ce,187d8c1eade69..0000000000000
---- a/include/linux/sched/sysctl.h
-+++ b/include/linux/sched/sysctl.h
-@@@ -23,46 -21,11 +21,7 @@@ enum sched_tunable_scaling 
-  	SCHED_TUNABLESCALING_END,
-  };
+diff --cc arch/parisc/kernel/cache.c
+index e7b8e74dad8e1,c3a8d29b6f9fe..0000000000000
+--- a/arch/parisc/kernel/cache.c
++++ b/arch/parisc/kernel/cache.c
+@@@ -582,8 -585,8 +585,8 @@@ void flush_cache_mm(struct mm_struct *m
+  	}
   
-- /*
--  *  control realtime throttling:
--  *
--  *  /proc/sys/kernel/sched_rt_period_us
--  *  /proc/sys/kernel/sched_rt_runtime_us
--  */
-- extern unsigned int sysctl_sched_rt_period;
-- extern int sysctl_sched_rt_runtime;
-- 
-- extern unsigned int sysctl_sched_dl_period_max;
-- extern unsigned int sysctl_sched_dl_period_min;
-- 
-- #ifdef CONFIG_UCLAMP_TASK
-- extern unsigned int sysctl_sched_uclamp_util_min;
-- extern unsigned int sysctl_sched_uclamp_util_max;
-- extern unsigned int sysctl_sched_uclamp_util_min_rt_default;
-- #endif
-- 
-- #ifdef CONFIG_CFS_BANDWIDTH
-- extern unsigned int sysctl_sched_cfs_bandwidth_slice;
- -#ifdef CONFIG_SCHED_AUTOGROUP
- -extern unsigned int sysctl_sched_autogroup_enabled;
---#endif
-- 
-- extern int sysctl_sched_rr_timeslice;
-- extern int sched_rr_timeslice;
---
-- int sched_rr_handler(struct ctl_table *table, int write, void *buffer,
-- 		size_t *lenp, loff_t *ppos);
-- int sched_rt_handler(struct ctl_table *table, int write, void *buffer,
-- 		size_t *lenp, loff_t *ppos);
-- int sysctl_sched_uclamp_handler(struct ctl_table *table, int write,
-- 		void *buffer, size_t *lenp, loff_t *ppos);
-  int sysctl_numa_balancing(struct ctl_table *table, int write, void *buffer,
-  		size_t *lenp, loff_t *ppos);
-- int sysctl_schedstats(struct ctl_table *table, int write, void *buffer,
-- 		size_t *lenp, loff_t *ppos);
-- 
-- #if defined(CONFIG_ENERGY_MODEL) && defined(CONFIG_CPU_FREQ_GOV_SCHEDUTIL)
-- extern unsigned int sysctl_sched_energy_aware;
-- int sched_energy_aware_handler(struct ctl_table *table, int write,
-- 		void *buffer, size_t *lenp, loff_t *ppos);
-- #endif
-  
-  #endif /* _LINUX_SCHED_SYSCTL_H */
-diff --cc kernel/sysctl.c
-index 6a494ab55beaf,22037f03cd2bc..0000000000000
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@@ -1701,103 -1654,17 +1663,6 @@@ static struct ctl_table kern_table[] = 
-  		.extra2		= SYSCTL_ONE,
-  	},
-  #endif /* CONFIG_NUMA_BALANCING */
-- 	{
-- 		.procname	= "sched_rt_period_us",
-- 		.data		= &sysctl_sched_rt_period,
-- 		.maxlen		= sizeof(unsigned int),
-- 		.mode		= 0644,
-- 		.proc_handler	= sched_rt_handler,
-- 	},
-- 	{
-- 		.procname	= "sched_rt_runtime_us",
-- 		.data		= &sysctl_sched_rt_runtime,
-- 		.maxlen		= sizeof(int),
-- 		.mode		= 0644,
-- 		.proc_handler	= sched_rt_handler,
-- 	},
-- 	{
-- 		.procname	= "sched_deadline_period_max_us",
-- 		.data		= &sysctl_sched_dl_period_max,
-- 		.maxlen		= sizeof(unsigned int),
-- 		.mode		= 0644,
-- 		.proc_handler	= proc_dointvec,
-- 	},
-- 	{
-- 		.procname	= "sched_deadline_period_min_us",
-- 		.data		= &sysctl_sched_dl_period_min,
-- 		.maxlen		= sizeof(unsigned int),
-- 		.mode		= 0644,
-- 		.proc_handler	= proc_dointvec,
-- 	},
-- 	{
-- 		.procname	= "sched_rr_timeslice_ms",
-- 		.data		= &sysctl_sched_rr_timeslice,
-- 		.maxlen		= sizeof(int),
-- 		.mode		= 0644,
-- 		.proc_handler	= sched_rr_handler,
-- 	},
-- #ifdef CONFIG_UCLAMP_TASK
-- 	{
-- 		.procname	= "sched_util_clamp_min",
-- 		.data		= &sysctl_sched_uclamp_util_min,
-- 		.maxlen		= sizeof(unsigned int),
-- 		.mode		= 0644,
-- 		.proc_handler	= sysctl_sched_uclamp_handler,
-- 	},
-- 	{
-- 		.procname	= "sched_util_clamp_max",
-- 		.data		= &sysctl_sched_uclamp_util_max,
-- 		.maxlen		= sizeof(unsigned int),
-- 		.mode		= 0644,
-- 		.proc_handler	= sysctl_sched_uclamp_handler,
-- 	},
-- 	{
-- 		.procname	= "sched_util_clamp_min_rt_default",
-- 		.data		= &sysctl_sched_uclamp_util_min_rt_default,
-- 		.maxlen		= sizeof(unsigned int),
-- 		.mode		= 0644,
-- 		.proc_handler	= sysctl_sched_uclamp_handler,
-- 	},
-- #endif
-- #ifdef CONFIG_CFS_BANDWIDTH
- -#ifdef CONFIG_SCHED_AUTOGROUP
---	{
-- 		.procname	= "sched_cfs_bandwidth_slice_us",
-- 		.data		= &sysctl_sched_cfs_bandwidth_slice,
- -		.procname	= "sched_autogroup_enabled",
- -		.data		= &sysctl_sched_autogroup_enabled,
---		.maxlen		= sizeof(unsigned int),
---		.mode		= 0644,
---		.proc_handler	= proc_dointvec_minmax,
-- 		.extra1		= SYSCTL_ONE,
-- 	},
-- #endif
-- #if defined(CONFIG_ENERGY_MODEL) && defined(CONFIG_CPU_FREQ_GOV_SCHEDUTIL)
-- 	{
-- 		.procname	= "sched_energy_aware",
-- 		.data		= &sysctl_sched_energy_aware,
-- 		.maxlen		= sizeof(unsigned int),
-- 		.mode		= 0644,
-- 		.proc_handler	= sched_energy_aware_handler,
---		.extra1		= SYSCTL_ZERO,
---		.extra2		= SYSCTL_ONE,
-- 	},
-- #endif
-- #ifdef CONFIG_PROVE_LOCKING
-- 	{
-- 		.procname	= "prove_locking",
-- 		.data		= &prove_locking,
-- 		.maxlen		= sizeof(int),
-- 		.mode		= 0644,
-- 		.proc_handler	= proc_dointvec,
-- 	},
-- #endif
-- #ifdef CONFIG_LOCK_STAT
-- 	{
-- 		.procname	= "lock_stat",
-- 		.data		= &lock_stat,
-- 		.maxlen		= sizeof(int),
-- 		.mode		= 0644,
-- 		.proc_handler	= proc_dointvec,
---	},
---#endif
-  	{
-  		.procname	= "panic",
-  		.data		= &panic_timeout,
+  	preempt_disable();
+ -	if (mm->context == mfsp(3)) {
+ +	if (mm->context.space_id == mfsp(3)) {
+- 		for (vma = mm->mmap; vma; vma = vma->vm_next)
++ 		for_each_vma(vmi, vma)
+  			flush_user_cache_tlb(vma, vma->vm_start, vma->vm_end);
+  		preempt_enable();
+  		return;

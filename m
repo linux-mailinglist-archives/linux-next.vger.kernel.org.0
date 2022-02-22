@@ -2,46 +2,51 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A73ED4BF76C
-	for <lists+linux-next@lfdr.de>; Tue, 22 Feb 2022 12:45:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACE7E4BF7DD
+	for <lists+linux-next@lfdr.de>; Tue, 22 Feb 2022 13:08:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231734AbiBVLqI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 22 Feb 2022 06:46:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36022 "EHLO
+        id S231219AbiBVMJN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 22 Feb 2022 07:09:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229940AbiBVLqH (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Feb 2022 06:46:07 -0500
+        with ESMTP id S231530AbiBVMJM (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Feb 2022 07:09:12 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9342D13D57D;
-        Tue, 22 Feb 2022 03:45:42 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 976A6B458E;
+        Tue, 22 Feb 2022 04:08:47 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 29CF3B818F0;
-        Tue, 22 Feb 2022 11:45:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7DF4C340E8;
-        Tue, 22 Feb 2022 11:45:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 36C41B81995;
+        Tue, 22 Feb 2022 12:08:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D81A5C340E8;
+        Tue, 22 Feb 2022 12:08:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645530339;
-        bh=pzXQp3gLZJn/et9RYHZDznc/NFxqsdIZIn4P2XMVLMA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=V5wzeJJA2HiAP0VEAVbEMHnIWmw7AIfzO20Tsm71orbxgvTLZRCBFh9Bc4Ed6vLLh
-         zFDYcNho8lbjOOastBzOJF4z4m/7vgNnyzNs9OwJ6w46tj01R84rkk6wiUPEN8Vjni
-         qZaMUzRVGHEv7DxGNCtIub+JNWFfrF7s2KP9FNKyk1RxFsAMzTzjAkjvaOe2y9ZGN6
-         00m+czw578lA4ZwQHOlg48lY5V9YPNJWvO56TbBS0ZH0IdEc79mi/WFg6UjnzL5lj9
-         Y6rAodJlSD7OP+9oifG+ZI+sPLCPJHcJIm7Ibol1uFF1DWKgVIKR9AuJfvoNswuvdR
-         yzOYHFasaJWRw==
-From:   broonie@kernel.org
-To:     Greentime Hu <green.hu@gmail.com>
+        s=k20201202; t=1645531724;
+        bh=KiLmQYE1zsLB1JOKSusDj6Fs0OXTjXKjzDkTWV/k4VU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lFgH7y5CtEh6X+QBnViRTZDkvbO8JBeYJAMpPqibM5600tpDi8s2G/L5GFjsBz8/s
+         ewx05CTiVkMObB3HwVjA1VEut/EI5hbJ/QTVIR0t6LsULlN/DQ7RXTzBAOXcawU4CR
+         kyPHeEd+EFO+Z0rAHztBLUDBzLPEFtNywhByLSGRbRADGhK+YrEiQJ/iSLZn++jTxv
+         aXKU5ZqEncHOrhRDuOfAi/ZRvtTkXl+Hst3OXCIf3Bk3GSg5zWXMSE/isgK9uWo7Rc
+         D2XI5RPM6B6NA7jwnFyM0uQyZVibeHxILscrdALPK8ATE61Uju7BXdbBKkm39it+7w
+         2awLFm4VHQeOg==
+Date:   Tue, 22 Feb 2022 12:08:40 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Vlastimil Babka <vbabka@suse.cz>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: linux-next: manual merge of the nds32 tree with the kbuild tree
-Date:   Tue, 22 Feb 2022 11:45:36 +0000
-Message-Id: <20220222114536.743705-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        Matthew Wilcox <willy@infradead.org>
+Subject: Re: linux-next: manual merge of the slab tree with the origin tree
+Message-ID: <YhTSSN3Hlh19MHSX@sirena.org.uk>
+References: <20220222010824.3406817-1-broonie@kernel.org>
+ <c19d1ff8-ab19-a118-17e6-bbf74059954b@suse.cz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="61pwXX3kz7G/bNpI"
+Content-Disposition: inline
+In-Reply-To: <c19d1ff8-ab19-a118-17e6-bbf74059954b@suse.cz>
+X-Cookie: I smell a wumpus.
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -52,47 +57,37 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi all,
 
-Today's linux-next merge of the nds32 tree got a conflict in:
+--61pwXX3kz7G/bNpI
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-  arch/nds32/Kbuild
+On Tue, Feb 22, 2022 at 02:35:39AM +0100, Vlastimil Babka wrote:
 
-between commit:
+> Weird, these commits are old and unreachable, this is from before the merge
+> window. The slab tree for-next is here, Stephen has been incorporating it for
+> some time:
 
-  8212f8986d311 ("kbuild: use more subdir- for visiting subdirectories while cleaning")
+> https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git/log/?h=for-next
 
-from the kbuild tree and commit:
+> Same thing with your other mail wrt mm/zsmalloc.c
 
-  37160f01e8ea6 ("nds32: move core-y in arch/nds32/Makefile to arch/nds32/Kbuild")
+Yes, there was a problem picking up new versions of trees which I've
+already sorted.  Things should be fine today (modulo any conflicts).
 
-from the nds32 tree.
+--61pwXX3kz7G/bNpI
+Content-Type: application/pgp-signature; name="signature.asc"
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+-----BEGIN PGP SIGNATURE-----
 
-diff --cc arch/nds32/Kbuild
-index ac127371afa47,565b9bc3c9db4..0000000000000
---- a/arch/nds32/Kbuild
-+++ b/arch/nds32/Kbuild
-diff --cc arch/nds32/Kconfig
-index 013249430fa3d,a20b42d4bdb6e..0000000000000
---- a/arch/nds32/Kconfig
-+++ b/arch/nds32/Kconfig
-@@@ -61,6 -63,12 +60,9 @@@ config GENERIC_LOCKBREA
-  	def_bool y
-  	depends on PREEMPTION
-  
-+ config LOCKDEP_SUPPORT
-+ 	def_bool y
-+ 
- -config TRACE_IRQFLAGS_SUPPORT
- -	def_bool y
- -
-  config STACKTRACE_SUPPORT
-  	def_bool y
-  
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIU0kcACgkQJNaLcl1U
+h9Cgggf/QcP20fZKzfwwMVgsHXaaXTv3D4vSkuh9wn2Nq7RHV4mpu9RmWipcBlKk
+4dZlWkxMtADIAGpww5CFG+fmgXv1ZlhrfA5MRRuQiYgIWmMnPQf3xskjfiI+5JP+
+3OyeB+XE3OqU1qFOnKnobIx8Ka+AQaE9q/AWVxxYeBYDtO4NXJxBZzIrEMQP3ksF
+A9HuiNhlgblQeGQP5n/s8kj62WQQ1JEmaasEzT7BcPhuW7kCvk39hxwUaNFl4nJ0
+FRncYs9kaHwmjFZNMxyGrjDoTwnlysFaFgWr3O9KztVl97sBWdfBbjXFgEwj2Fgn
+bMPJfF+pTqEX6NnHTgWZBQmqffAGNg==
+=KeY5
+-----END PGP SIGNATURE-----
+
+--61pwXX3kz7G/bNpI--

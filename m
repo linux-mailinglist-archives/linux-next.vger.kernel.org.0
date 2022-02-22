@@ -2,92 +2,96 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACE7E4BF7DD
-	for <lists+linux-next@lfdr.de>; Tue, 22 Feb 2022 13:08:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B22DD4BF9BC
+	for <lists+linux-next@lfdr.de>; Tue, 22 Feb 2022 14:46:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231219AbiBVMJN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 22 Feb 2022 07:09:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56178 "EHLO
+        id S231220AbiBVNrC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 22 Feb 2022 08:47:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231530AbiBVMJM (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Feb 2022 07:09:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 976A6B458E;
-        Tue, 22 Feb 2022 04:08:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 36C41B81995;
-        Tue, 22 Feb 2022 12:08:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D81A5C340E8;
-        Tue, 22 Feb 2022 12:08:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645531724;
-        bh=KiLmQYE1zsLB1JOKSusDj6Fs0OXTjXKjzDkTWV/k4VU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lFgH7y5CtEh6X+QBnViRTZDkvbO8JBeYJAMpPqibM5600tpDi8s2G/L5GFjsBz8/s
-         ewx05CTiVkMObB3HwVjA1VEut/EI5hbJ/QTVIR0t6LsULlN/DQ7RXTzBAOXcawU4CR
-         kyPHeEd+EFO+Z0rAHztBLUDBzLPEFtNywhByLSGRbRADGhK+YrEiQJ/iSLZn++jTxv
-         aXKU5ZqEncHOrhRDuOfAi/ZRvtTkXl+Hst3OXCIf3Bk3GSg5zWXMSE/isgK9uWo7Rc
-         D2XI5RPM6B6NA7jwnFyM0uQyZVibeHxILscrdALPK8ATE61Uju7BXdbBKkm39it+7w
-         2awLFm4VHQeOg==
-Date:   Tue, 22 Feb 2022 12:08:40 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Matthew Wilcox <willy@infradead.org>
-Subject: Re: linux-next: manual merge of the slab tree with the origin tree
-Message-ID: <YhTSSN3Hlh19MHSX@sirena.org.uk>
-References: <20220222010824.3406817-1-broonie@kernel.org>
- <c19d1ff8-ab19-a118-17e6-bbf74059954b@suse.cz>
+        with ESMTP id S231684AbiBVNrB (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Feb 2022 08:47:01 -0500
+X-Greylist: delayed 306 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 22 Feb 2022 05:46:34 PST
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85751F7D
+        for <linux-next@vger.kernel.org>; Tue, 22 Feb 2022 05:46:33 -0800 (PST)
+Received: from mail-wr1-f51.google.com ([209.85.221.51]) by
+ mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1M26j1-1nOyOS1Iqn-002U9c; Tue, 22 Feb 2022 14:41:25 +0100
+Received: by mail-wr1-f51.google.com with SMTP id j17so6647561wrc.0;
+        Tue, 22 Feb 2022 05:41:25 -0800 (PST)
+X-Gm-Message-State: AOAM53253vlgjUczge5LNVq1b0GVlyTXiEt0v6mUwufIT8DSvpbz8lS2
+        G9gR5+4XF7KojTG8bTynHeF8Afa1Rn5RDwGokaE=
+X-Google-Smtp-Source: ABdhPJyr+2RhXG63IhBc5XIrliIkimhF56LiOI66mJ7uVY+o3TbaU5WI9zGAVLchk95JIXaawBejBzGFhacNF+x7UJA=
+X-Received: by 2002:a5d:59a3:0:b0:1e9:542d:1a35 with SMTP id
+ p3-20020a5d59a3000000b001e9542d1a35mr15302491wrr.192.1645537284771; Tue, 22
+ Feb 2022 05:41:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="61pwXX3kz7G/bNpI"
-Content-Disposition: inline
-In-Reply-To: <c19d1ff8-ab19-a118-17e6-bbf74059954b@suse.cz>
-X-Cookie: I smell a wumpus.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220222114203.686638-1-broonie@kernel.org>
+In-Reply-To: <20220222114203.686638-1-broonie@kernel.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 22 Feb 2022 14:41:08 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0EhPNp6HCJuwJGze1GxdbQpcbYsS9J+tqC1yt2Z13W_w@mail.gmail.com>
+Message-ID: <CAK8P3a0EhPNp6HCJuwJGze1GxdbQpcbYsS9J+tqC1yt2Z13W_w@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the mips tree with the asm-generic tree
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:MxGuVEvjMBhMOPKTUFNMp8hTQ2GOBUY22ewzWMLQtndI6zCrXaS
+ mLQRfIuWO/WA/RWvDVa4spH+Yf+oWyJ/MmTzrk7vnBJJbFQPvMYMCTFRuS/GDBFscEfjcCk
+ NRR9GeBtGyrdbq71hF3J4tYfeP5OKl4ejsl01k7Hpn5Bo/i8dPJGxqswYGs86hIgVmzgCuY
+ XX+hN9Y2DybxYX+YlCrvQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:CxU+KDj8nc4=:RdUfBAKxW2NJcO5EQ5wYsd
+ KcfP2VaDKIFCJ0HsRy6s/80durvWnPHjwjuVf78AqCkgspPVxyQiMXbdLhWjhu0aX+F+7uo9C
+ 1/M00D52O/0Z5ktVbbQs4QFsIkXoFESptJbeNCv0ZuytOoIqwPyiZq2LpPRrYGehRI6hLdHnO
+ P31/giE1y3DvYVIHMNnGD9Ry9ibuSH6m2dxqbyMAaNXjghAvPpPcEotr54RkQm6Ibt7s0BP8/
+ pZbj7uziUOAcRxFqLpjo0n7StkEkL+e+hbFLcCljb8MTa+1QvMAHU4jToifiCA9mNKuBVcrfG
+ Nlxl46bb05l1UcKAyQKvqgzx77kZlHS4HizxF5moLK8WHYGOXc3Ul3NllbmNAFEBoYn3C2xZm
+ ffTytGCO1FrCBx2000OdSV/JoTGUgxF1JIhoMUtTqIiLoc8LbgTxXP6HPAyWw8GUcQTU7k65I
+ 2z1YxdxuwH597vNnYkvgcuwvo7mDsNjavInzYDnbOUkCcqEPCx+D5d6x+vKS/c8zGr3elrBji
+ HRa2Y5Qi7qSyY6W+hRdemM+E2ZvsHO6nOHUtnjx5sDP8jgqhwDmHPuMH1nF5SV80UULG06Ae0
+ 5CIEQuPyXI6L2iuZi0R6KDHJ3hyxE1zUcSBc4BVK9GBr1BsuYRFPPSjdBbMHRzT4Aq+7MS7+E
+ Jtj5tt11cHyJ8E7JyqbU2FffOJmD3mgH0AsKwQj6Rw3Psqw691y2TrkyX5rWv8eQwo68=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+On Tue, Feb 22, 2022 at 12:42 PM <broonie@kernel.org> wrote:
+>
+> Hi all,
+>
+> Today's linux-next merge of the mips tree got a conflict in:
+>
+>   arch/mips/sibyte/common/sb_tbprof.c
+>
+> between commit:
+>
+>   27e8140d7819b ("uaccess: fix type mismatch warnings from access_ok()")
+>
+> from the asm-generic tree and commit:
+>
+>   10242464e506b ("MIPS: sibyte: Add missing __user annotations in sb_tbprof.c")
+>
+> from the mips tree.
+>
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
---61pwXX3kz7G/bNpI
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Thanks for the report. I needed to rebase my tree anyway, dropped
+the duplicate change from my local copy for now, should be part of
+my public branch in a few days when I send a new version of the series.
 
-On Tue, Feb 22, 2022 at 02:35:39AM +0100, Vlastimil Babka wrote:
-
-> Weird, these commits are old and unreachable, this is from before the merge
-> window. The slab tree for-next is here, Stephen has been incorporating it for
-> some time:
-
-> https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git/log/?h=for-next
-
-> Same thing with your other mail wrt mm/zsmalloc.c
-
-Yes, there was a problem picking up new versions of trees which I've
-already sorted.  Things should be fine today (modulo any conflicts).
-
---61pwXX3kz7G/bNpI
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIU0kcACgkQJNaLcl1U
-h9Cgggf/QcP20fZKzfwwMVgsHXaaXTv3D4vSkuh9wn2Nq7RHV4mpu9RmWipcBlKk
-4dZlWkxMtADIAGpww5CFG+fmgXv1ZlhrfA5MRRuQiYgIWmMnPQf3xskjfiI+5JP+
-3OyeB+XE3OqU1qFOnKnobIx8Ka+AQaE9q/AWVxxYeBYDtO4NXJxBZzIrEMQP3ksF
-A9HuiNhlgblQeGQP5n/s8kj62WQQ1JEmaasEzT7BcPhuW7kCvk39hxwUaNFl4nJ0
-FRncYs9kaHwmjFZNMxyGrjDoTwnlysFaFgWr3O9KztVl97sBWdfBbjXFgEwj2Fgn
-bMPJfF+pTqEX6NnHTgWZBQmqffAGNg==
-=KeY5
------END PGP SIGNATURE-----
-
---61pwXX3kz7G/bNpI--
+       Arnd

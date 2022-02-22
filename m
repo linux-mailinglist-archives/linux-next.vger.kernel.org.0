@@ -2,79 +2,102 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA8784BFF1F
-	for <lists+linux-next@lfdr.de>; Tue, 22 Feb 2022 17:45:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EC3F4BFF98
+	for <lists+linux-next@lfdr.de>; Tue, 22 Feb 2022 18:03:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232544AbiBVQpz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 22 Feb 2022 11:45:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59828 "EHLO
+        id S231723AbiBVREF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 22 Feb 2022 12:04:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234290AbiBVQpx (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Feb 2022 11:45:53 -0500
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 777BE169380;
-        Tue, 22 Feb 2022 08:45:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
-        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=RV3r/FyWMZxOU+OB5U/7cz0ame6ae2fwMla9IbBoUWE=;
-        t=1645548327; x=1646757927; b=U2Ofd6CRzMX7TuEMOliU8aeDmOLLhjPpRgzaEegXn3jEDqr
-        aVy0Mis3+BYThfjYbtTRqqCT7JqltjOluFFdKBVqBwG2FIUu/WuAZf8SBQ+FSt94h2xG1KDWYmhtM
-        sqEACtCu4LW9ZMmT6NFwFE8uxGqOwTyfvNdYFDcjj1VGhyS2W+RicHdgiRAAxfmF2tDISdbbeVfDW
-        sfm6REi1Jgj9fZpHJb/qbGkIYJBrzO18Pj+zSUE5R7GfSMQvvHC5VGk2hZ8M/fFOpvC0J3D3p59ab
-        tFARZlNv81UCFO7dq4SSTVyTiHQ77Z3MeHUDeQspRxpNSjFbtDenX+ns0pOFAbxA==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.95)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1nMYHo-004KHx-PN;
-        Tue, 22 Feb 2022 17:45:12 +0100
-Message-ID: <116cc3c6cdf4d515a31848dda915b9c21ce02922.camel@sipsolutions.net>
-Subject: Re: linux-next: manual merge of the wireless-next tree with the
- origin tree
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     broonie@kernel.org, Kalle Valo <kvalo@kernel.org>,
-        Wireless <linux-wireless@vger.kernel.org>
-Cc:     Ilan Peer <ilan.peer@intel.com>,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        with ESMTP id S232433AbiBVREF (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Feb 2022 12:04:05 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 911E3522FA;
+        Tue, 22 Feb 2022 09:03:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B97461255;
+        Tue, 22 Feb 2022 17:03:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F19AEC340E8;
+        Tue, 22 Feb 2022 17:03:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645549418;
+        bh=J2CURahxnVv8b6eRRfjW/3jnd2IJWphDlftdm3zmD0U=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Nh8sJNEB0hscdsctvswYJN1g1szpTYkym4RdoK060CK+YVjzLAsurKkPxf4Dm6st2
+         hLhwjMCgn+RNw+DiCEMq6HjvYNlvmL1Inr4I0pwgZDjLOt+Uxo3ZOBpJvbw4BEZq78
+         v8D6ue4QvVaYSojDKbL5tbD87q7d9vT/VvB6ZPjnAPFcB89mP2Io9VPYIOWkTOcYot
+         k6cMGkTuVms43N76emcqEhJDbN1XxRwic+EtzUvwKuFfxvpJDES17XX2nW3YCDl+/a
+         1iCJ04Aa3IXymFx+mazzHaBvQhVE/ZvsWtgIbVmXPLZA8Cvha8Yg6iQHinfOgGw5Bs
+         Xgqi2d2YgH27g==
+From:   broonie@kernel.org
+To:     Dave Airlie <airlied@linux.ie>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Jani Nikula <jani.nikula@intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Date:   Tue, 22 Feb 2022 17:45:11 +0100
-In-Reply-To: <20220222161218.4028508-1-broonie@kernel.org>
-References: <20220222161218.4028508-1-broonie@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Matt Roper <matthew.d.roper@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+Subject: linux-next: manual merge of the drm tree with the drm-intel-fixes tree
+Date:   Tue, 22 Feb 2022 17:03:33 +0000
+Message-Id: <20220222170333.694165-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-malware-bazaar: not-scanned
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi,
+Hi all,
 
-> Today's linux-next merge of the wireless-next tree got a conflict in:
-> 
->   net/mac80211/mlme.c
-> 
-> between commit:
-> 
->   a72c01a94f1d2 ("mac80211: mlme: check for null after calling kmemdup")
-> 
-> from the origin tree and commit:
-> 
->   820acc810fb6e ("mac80211: Add EHT capabilities to association/probe request")
-> 
-> from the wireless-next tree.
+Today's linux-next merge of the drm tree got a conflict in:
 
-Thanks. I think Stephen had also noticed this before.
+  drivers/gpu/drm/i915/display/intel_snps_phy.c
 
-Maybe I'll just move the new code around so it doesn't conflict anymore
-;)
+between commit:
 
-johannes
+  28adef861233c ("drm/i915/dg2: Print PHY name properly on calibration error")
+
+from the drm-intel-fixes tree and commit:
+
+  c5274e86da5fe ("drm/i915/snps: convert to drm device based logging")
+
+from the drm tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+diff --cc drivers/gpu/drm/i915/display/intel_snps_phy.c
+index 92ff654f54f56,8573a458811a0..0000000000000
+--- a/drivers/gpu/drm/i915/display/intel_snps_phy.c
++++ b/drivers/gpu/drm/i915/display/intel_snps_phy.c
+@@@ -28,13 -29,13 +29,13 @@@ void intel_snps_phy_wait_for_calibratio
+  	enum phy phy;
+  
+  	for_each_phy_masked(phy, ~0) {
+- 		if (!intel_phy_is_snps(dev_priv, phy))
++ 		if (!intel_phy_is_snps(i915, phy))
+  			continue;
+  
+- 		if (intel_de_wait_for_clear(dev_priv, ICL_PHY_MISC(phy),
++ 		if (intel_de_wait_for_clear(i915, ICL_PHY_MISC(phy),
+  					    DG2_PHY_DP_TX_ACK_MASK, 25))
+- 			DRM_ERROR("SNPS PHY %c failed to calibrate after 25ms.\n",
+- 				  phy_name(phy));
++ 			drm_err(&i915->drm, "SNPS PHY %c failed to calibrate after 25ms.\n",
+ -				phy);
+++				phy_name(phy));
+  	}
+  }
+  

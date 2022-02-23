@@ -2,45 +2,45 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB2EC4C1CBA
-	for <lists+linux-next@lfdr.de>; Wed, 23 Feb 2022 21:00:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 076C14C1D85
+	for <lists+linux-next@lfdr.de>; Wed, 23 Feb 2022 22:16:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243481AbiBWUAz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 23 Feb 2022 15:00:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35018 "EHLO
+        id S232658AbiBWVRC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 23 Feb 2022 16:17:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234260AbiBWUAy (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 23 Feb 2022 15:00:54 -0500
+        with ESMTP id S231799AbiBWVRB (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 23 Feb 2022 16:17:01 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89DCD27FC4;
-        Wed, 23 Feb 2022 12:00:26 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74A87389D;
+        Wed, 23 Feb 2022 13:16:32 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D03D5617A4;
-        Wed, 23 Feb 2022 20:00:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0123C340E7;
-        Wed, 23 Feb 2022 20:00:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 864036146A;
+        Wed, 23 Feb 2022 21:16:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A197C340E7;
+        Wed, 23 Feb 2022 21:16:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645646425;
-        bh=DNaS5nEsaghqF5/p/pvOR81erUDcQR6ZRHgWGUSoSUE=;
+        s=k20201202; t=1645650991;
+        bh=dVA6FsrIZlXDxX3UZou79kyBWx4acf0DRXX9Let5EH8=;
         h=From:To:Cc:Subject:Date:From;
-        b=RMZjxwhTDl5y3mpkk24R6+2nCsCs56AjgVjmRNJHsUp3IBpqMFANmIYL34eHucMcB
-         XYQis2gr/78mwJftWTkXZfjKUT4AOlnjDI4+uM6RPwUu8VtuMpRxzoSqI/Uh1Z/rec
-         XCXH+cDyMHrl57rGAkKaNXiqZoEzywJATcKxs/7BjGKrXDzQvIWjHA3Q/l+23cWCKQ
-         0DRTBjZJsMyeWlsLztJkXrdVK5angB8yaTZPEJgX0YaUNFgvqdZppXEsp0H485dTRR
-         DTDeIxYDX5+lNUJxjVGX8zlFvgHlRgpCvkkks7RePeGv+h99yzYe//pl36rl5L9PBW
-         9CUlZD7atb5+g==
+        b=JLbz/v9T2QJXXvhKj0K6W4QNfAAm9gxg7LWW9yNO27URW31r6ua/ggSlMq8DzQDVk
+         7bbSHahJTEPXb7D8QpCpDW53bc/RBflPW2Mo4Krg6TLQIUJcC6k2ki3CfnFnB6j6V4
+         rhljCKg53W+2yHpM74Wo0LRrbs1dEZfWROE1BqAkeBQEq0ARUrvt82k3RcxbfYwpJ0
+         tQ+d9DsNfZ8GuyoQV2kAPplrA6Lm/iEp7NwIzv+gapdYA57Mnp8Md8KADUvuzqjjYq
+         IN1GkwpJuxj3j15xYUKrQ8K5cywPPgs93CI2n2OF+CYTVLkc4V4f0kKKo6NbA9ljO7
+         ihMvMbZuganag==
 From:   broonie@kernel.org
-To:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>
-Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     Li-hao Kuo <lhjeff911@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Nicholas Piggin <npiggin@gmail.com>
-Subject: linux-next: manual merge of the kvm tree with the kvm-fixes tree
-Date:   Wed, 23 Feb 2022 20:00:19 +0000
-Message-Id: <20220223200019.1891646-1-broonie@kernel.org>
+        Mark Brown <broonie@kernel.org>,
+        Vincent Shih <vincent.sunplus@gmail.com>
+Subject: linux-next: manual merge of the nvmem tree with the spi tree
+Date:   Wed, 23 Feb 2022 21:16:27 +0000
+Message-Id: <20220223211627.123208-1-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -56,22 +56,20 @@ X-Mailing-List: linux-next@vger.kernel.org
 
 Hi all,
 
-FIXME: Add owner of second tree to To:
-       Add author(s)/SOB of conflicting commits.
+Today's linux-next merge of the nvmem tree got a conflict in:
 
-Today's linux-next merge of the kvm tree got a conflict in:
+  MAINTAINERS
 
-  include/uapi/linux/kvm.h
+between commits:
 
-between commit:
+  f62ca4e2a8630 ("spi: Add spi driver for Sunplus SP7021")
+  a708078eeb992 ("spi: Add Sunplus SP7021 schema")
 
-  93b71801a8274 ("KVM: PPC: reserve capability 210 for KVM_CAP_PPC_AIL_MODE_3")
+from the spi tree and commit:
 
-from the kvm-fixes tree and commit:
+  5293c629db958 ("nvmem: Add driver for OCOTP in Sunplus SP7021")
 
-  d004079edc166 ("KVM: s390: Add capability for storage key extension of MEM_OP IOCTL")
-
-from the kvm tree.
+from the nvmem tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -80,17 +78,27 @@ is submitted for merging.  You may also want to consider cooperating
 with the maintainer of the conflicting tree to minimise any particularly
 complex conflicts.
 
-diff --cc include/uapi/linux/kvm.h
-index 507ee1f2aa96b,dbc550bbd9fa3..0000000000000
---- a/include/uapi/linux/kvm.h
-+++ b/include/uapi/linux/kvm.h
-@@@ -1134,7 -1140,7 +1140,8 @@@ struct kvm_ppc_resize_hpt 
-  #define KVM_CAP_VM_GPA_BITS 207
-  #define KVM_CAP_XSAVE2 208
-  #define KVM_CAP_SYS_ATTRIBUTES 209
- -#define KVM_CAP_S390_MEM_OP_EXTENSION 210
- +#define KVM_CAP_PPC_AIL_MODE_3 210
-++#define KVM_CAP_S390_MEM_OP_EXTENSION 211
+diff --cc MAINTAINERS
+index 3746d28eb5f41,507697a118385..0000000000000
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@@ -18717,13 -18491,12 +18717,19 @@@ S:	Maintaine
+  F:	Documentation/devicetree/bindings/rtc/sunplus,sp7021-rtc.yaml
+  F:	drivers/rtc/rtc-sunplus.c
   
-  #ifdef KVM_CAP_IRQ_ROUTING
-  
+ +SUNPLUS SPI CONTROLLER INTERFACE DRIVER
+ +M:	Li-hao Kuo <lhjeff911@gmail.com>
+ +L:	linux-spi@vger.kernel.org
+ +S:	Maintained
+ +F:	Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
+ +F:	drivers/spi/spi-sunplus-sp7021.c
+ +
++ SUNPLUS OCOTP DRIVER
++ M:	Vincent Shih <vincent.sunplus@gmail.com>
++ S:	Maintained
++ F:	Documentation/devicetree/bindings/nvmem/sunplus,sp7021-ocotp.yaml
++ F:	drivers/nvmem/sunplus-ocotp.c
++ 
+  SUPERH
+  M:	Yoshinori Sato <ysato@users.sourceforge.jp>
+  M:	Rich Felker <dalias@libc.org>

@@ -2,44 +2,42 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31A284C1896
-	for <lists+linux-next@lfdr.de>; Wed, 23 Feb 2022 17:30:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E69E74C1917
+	for <lists+linux-next@lfdr.de>; Wed, 23 Feb 2022 17:54:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234468AbiBWQao (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 23 Feb 2022 11:30:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41610 "EHLO
+        id S241485AbiBWQyv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 23 Feb 2022 11:54:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230215AbiBWQao (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 23 Feb 2022 11:30:44 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65750E009;
-        Wed, 23 Feb 2022 08:30:16 -0800 (PST)
+        with ESMTP id S231601AbiBWQyu (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 23 Feb 2022 11:54:50 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2FFE49681;
+        Wed, 23 Feb 2022 08:54:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F1E6AB81EB0;
-        Wed, 23 Feb 2022 16:30:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46D76C340E7;
-        Wed, 23 Feb 2022 16:30:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9EA79B820F8;
+        Wed, 23 Feb 2022 16:54:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7409DC340E7;
+        Wed, 23 Feb 2022 16:54:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645633813;
-        bh=R55TaZ1yeTOZBHSm3FPqIV1ej7TW8V8o3let2ioiVFM=;
+        s=k20201202; t=1645635260;
+        bh=dX+EwgQhKbQ1b86T1pA6/pdpuPolNYCq5ZQnp2NuDEU=;
         h=From:To:Cc:Subject:Date:From;
-        b=dwMtTEPcCdUHF9egKhE7OHv83pbzIb3Qzi9S8NV7YVzhsRHasoGh2X8l8UWOyR39u
-         TWh9u0zoWjTDO8+tAhI/lVT60ygtxxUWBNOowxEjSAcNcPX378Y3sXGlTZT0if93vZ
-         NSTFDCn4EBeQmcaiFeJ8wY3ydzBIrsCuJSlDYV+KeRtoae/RQlxlwAdhPTM5vTg2ek
-         kjiy5LcgElG1y32JAklSYkkjK2ZHHVI0G4wQxxdbvluf8ctzZiaVG2fV6i/5YExa8k
-         AlBvpkKQgfkYWW8pEjSMESPHcDbJsvnuuIkwtO55HWKI/hUXVyEGMT1rAHgJ7zXUHH
-         hgg4vT/OWmwog==
+        b=kiF/9dFXS2DYVN+VDbMxDjiPhYtv5JX3inXe0JsJH2Wx/rGWLL8NDyuietpoSauQX
+         MtNxxo43Z4xDJ3uhuZfao1mOVVXS0ij+mZAxibAMKS1IO6xmDCbTv80FEBg1v80gDf
+         eWFs33gF1MQ48FLFhK11zZ2GhkKIU38YLG49sZ7cPpaFONXS2XjiLCxpizf6vuIDut
+         gIg2pjBARN32A2iayjbzZmlnAHkJWBJ3Tz1Fj0gl3lrTw2AhicxbJQNSleewhm2b9d
+         u3e1O5eqO9BVmsNABQNJsS+BkxwUe5glV4YgfkUQWz7OH+aJy8l0JK9H4W5REGPaLT
+         BMMn+aC5wNxTg==
 From:   broonie@kernel.org
-To:     Thierry Reding <thierry.reding@gmail.com>
+To:     Lee Jones <lee.jones@linaro.org>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Thierry Reding <treding@nvidia.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Subject: linux-next: manual merge of the drm-tegra tree with the drm tree
-Date:   Wed, 23 Feb 2022 16:30:07 +0000
-Message-Id: <20220223163007.328242-1-broonie@kernel.org>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the mfd tree
+Date:   Wed, 23 Feb 2022 16:54:16 +0000
+Message-Id: <20220223165416.2359767-1-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -55,53 +53,18 @@ X-Mailing-List: linux-next@vger.kernel.org
 
 Hi all,
 
-Today's linux-next merge of the drm-tegra tree got conflicts in:
+After merging the mfd tree, today's linux-next build (KCONFIG_NAME)
+failed like this:
 
-  drivers/gpu/drm/tegra/dpaux.c
-  drivers/gpu/drm/tegra/Kconfig
+/tmp/next/build/drivers/mfd/sprd-sc27xx-spi.c:255:35: error: redefinition of 'sprd_pmic_spi_ids'
+  255 | static const struct spi_device_id sprd_pmic_spi_ids[] = {
+      |                                   ^~~~~~~~~~~~~~~~~
+/tmp/next/build/drivers/mfd/sprd-sc27xx-spi.c:242:35: note: previous definition of 'sprd_pmic_spi_ids' was here
+  242 | static const struct spi_device_id sprd_pmic_spi_ids[] = {
+      |                                   ^~~~~~~~~~~~~~~~~
 
-between commit:
+Caused by commit
 
-  adb9d5a2cc77e ("drm/dp: Move DisplayPort helpers into separate helper module")
+  6fc90b92e9c7ef348 ("mfd: sprd: Add SPI device ID table")
 
-from the drm tree and commit:
-
-  8913e1aea4b32 ("drm/tegra: dpaux: Populate AUX bus")
-
-from the drm-tegra tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-diff --cc drivers/gpu/drm/tegra/Kconfig
-index 18c319b804c00,201f5175ecfec..0000000000000
---- a/drivers/gpu/drm/tegra/Kconfig
-+++ b/drivers/gpu/drm/tegra/Kconfig
-@@@ -5,7 -5,7 +5,8 @@@ config DRM_TEGR
-  	depends on COMMON_CLK
-  	depends on DRM
-  	depends on OF
- +	select DRM_DP_HELPER
-+ 	select DRM_DP_AUX_BUS
-  	select DRM_KMS_HELPER
-  	select DRM_MIPI_DSI
-  	select DRM_PANEL
-diff --cc drivers/gpu/drm/tegra/dpaux.c
-index 8ca500977a46b,d7a731d287d23..0000000000000
---- a/drivers/gpu/drm/tegra/dpaux.c
-+++ b/drivers/gpu/drm/tegra/dpaux.c
-@@@ -18,7 -18,8 +18,8 @@@
-  #include <linux/reset.h>
-  #include <linux/workqueue.h>
-  
- -#include <drm/drm_dp_helper.h>
- -#include <drm/drm_dp_aux_bus.h>
- +#include <drm/dp/drm_dp_helper.h>
-++#include <drm/dp/drm_dp_aux_bus.h>
-  #include <drm/drm_panel.h>
-  
-  #include "dp.h"
+I used the MFD tree from yesterday instead.

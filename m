@@ -2,45 +2,45 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 076C14C1D85
-	for <lists+linux-next@lfdr.de>; Wed, 23 Feb 2022 22:16:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00FC54C1DB9
+	for <lists+linux-next@lfdr.de>; Wed, 23 Feb 2022 22:26:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232658AbiBWVRC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 23 Feb 2022 16:17:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49824 "EHLO
+        id S234320AbiBWV1R (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 23 Feb 2022 16:27:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231799AbiBWVRB (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 23 Feb 2022 16:17:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74A87389D;
-        Wed, 23 Feb 2022 13:16:32 -0800 (PST)
+        with ESMTP id S229913AbiBWV1Q (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 23 Feb 2022 16:27:16 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D93AC2C108;
+        Wed, 23 Feb 2022 13:26:45 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 864036146A;
-        Wed, 23 Feb 2022 21:16:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A197C340E7;
-        Wed, 23 Feb 2022 21:16:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 90105B8212F;
+        Wed, 23 Feb 2022 21:26:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFDF3C340EC;
+        Wed, 23 Feb 2022 21:26:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645650991;
-        bh=dVA6FsrIZlXDxX3UZou79kyBWx4acf0DRXX9Let5EH8=;
+        s=k20201202; t=1645651603;
+        bh=W8tC/FVRHIFkQM3dTfI++6vT1L4EeKBHfJDqBbt6P+M=;
         h=From:To:Cc:Subject:Date:From;
-        b=JLbz/v9T2QJXXvhKj0K6W4QNfAAm9gxg7LWW9yNO27URW31r6ua/ggSlMq8DzQDVk
-         7bbSHahJTEPXb7D8QpCpDW53bc/RBflPW2Mo4Krg6TLQIUJcC6k2ki3CfnFnB6j6V4
-         rhljCKg53W+2yHpM74Wo0LRrbs1dEZfWROE1BqAkeBQEq0ARUrvt82k3RcxbfYwpJ0
-         tQ+d9DsNfZ8GuyoQV2kAPplrA6Lm/iEp7NwIzv+gapdYA57Mnp8Md8KADUvuzqjjYq
-         IN1GkwpJuxj3j15xYUKrQ8K5cywPPgs93CI2n2OF+CYTVLkc4V4f0kKKo6NbA9ljO7
-         ihMvMbZuganag==
+        b=afbgL0QDloqMaeO7KrrXNrEKQt8/s2AE/9WA/oLvAhWBxzZFyvonBHDx+90A8ipIG
+         4X4Q12mLmIFaBmnWK795VWjuPnBtHQJt5eg+PciwCwa0GM1ybzodMMp584i2owveza
+         4F0UUby5W53ygP+/5n77ahhe2ncnmY3ZHthaLwSGgkFA9WpnnEuXkDHpIVquTDdnr9
+         zi8z10LUoBwuEc4h6uX86/JP9E3O0t5c1MhxeggIvyUU54R7o2wbzQJ5OEsgZ7dJwb
+         0a7fwqZiLu/LU+mcSa5s/fi2jXuMfSNCr5wBiU7Syy6kxm1/epizN8+UaXnvqPTVtg
+         MHzMNWzq+Pqbg==
 From:   broonie@kernel.org
 To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     Li-hao Kuo <lhjeff911@gmail.com>,
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
+        Michael Walle <michael@walle.cc>,
         Vincent Shih <vincent.sunplus@gmail.com>
-Subject: linux-next: manual merge of the nvmem tree with the spi tree
-Date:   Wed, 23 Feb 2022 21:16:27 +0000
-Message-Id: <20220223211627.123208-1-broonie@kernel.org>
+Subject: linux-next: manual merge of the nvmem tree with the char-misc tree
+Date:   Wed, 23 Feb 2022 21:26:34 +0000
+Message-Id: <20220223212634.398789-1-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -56,17 +56,18 @@ X-Mailing-List: linux-next@vger.kernel.org
 
 Hi all,
 
-Today's linux-next merge of the nvmem tree got a conflict in:
+Today's linux-next merge of the nvmem tree got conflicts in:
 
-  MAINTAINERS
+  drivers/nvmem/Kconfig
+  drivers/nvmem/Makefile
 
-between commits:
+between commit:
 
-  f62ca4e2a8630 ("spi: Add spi driver for Sunplus SP7021")
-  a708078eeb992 ("spi: Add Sunplus SP7021 schema")
+  f78451012b9e1 ("nvmem: add driver for Layerscape SFP (Security Fuse Processor)")
 
-from the spi tree and commit:
+from the char-misc tree and commits:
 
+  1c565569b4704 ("nvmem: add driver for Layerscape SFP (Security Fuse Processor)")
   5293c629db958 ("nvmem: Add driver for OCOTP in Sunplus SP7021")
 
 from the nvmem tree.
@@ -78,27 +79,4 @@ is submitted for merging.  You may also want to consider cooperating
 with the maintainer of the conflicting tree to minimise any particularly
 complex conflicts.
 
-diff --cc MAINTAINERS
-index 3746d28eb5f41,507697a118385..0000000000000
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@@ -18717,13 -18491,12 +18717,19 @@@ S:	Maintaine
-  F:	Documentation/devicetree/bindings/rtc/sunplus,sp7021-rtc.yaml
-  F:	drivers/rtc/rtc-sunplus.c
-  
- +SUNPLUS SPI CONTROLLER INTERFACE DRIVER
- +M:	Li-hao Kuo <lhjeff911@gmail.com>
- +L:	linux-spi@vger.kernel.org
- +S:	Maintained
- +F:	Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
- +F:	drivers/spi/spi-sunplus-sp7021.c
- +
-+ SUNPLUS OCOTP DRIVER
-+ M:	Vincent Shih <vincent.sunplus@gmail.com>
-+ S:	Maintained
-+ F:	Documentation/devicetree/bindings/nvmem/sunplus,sp7021-ocotp.yaml
-+ F:	drivers/nvmem/sunplus-ocotp.c
-+ 
-  SUPERH
-  M:	Yoshinori Sato <ysato@users.sourceforge.jp>
-  M:	Rich Felker <dalias@libc.org>
+[Took the version from the nvmem tree]

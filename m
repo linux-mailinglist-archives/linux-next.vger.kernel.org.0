@@ -2,180 +2,178 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E6A14C29F9
-	for <lists+linux-next@lfdr.de>; Thu, 24 Feb 2022 11:57:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6002C4C2CF7
+	for <lists+linux-next@lfdr.de>; Thu, 24 Feb 2022 14:28:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233694AbiBXK5F (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 24 Feb 2022 05:57:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51872 "EHLO
+        id S234877AbiBXN2y (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 24 Feb 2022 08:28:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232918AbiBXK5D (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 24 Feb 2022 05:57:03 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0A9227C22D
-        for <linux-next@vger.kernel.org>; Thu, 24 Feb 2022 02:56:28 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id 12so1455466pgd.0
-        for <linux-next@vger.kernel.org>; Thu, 24 Feb 2022 02:56:28 -0800 (PST)
+        with ESMTP id S234878AbiBXN2x (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 24 Feb 2022 08:28:53 -0500
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2DD5B0E85
+        for <linux-next@vger.kernel.org>; Thu, 24 Feb 2022 05:28:22 -0800 (PST)
+Received: by mail-yb1-xb29.google.com with SMTP id v186so3844912ybg.1
+        for <linux-next@vger.kernel.org>; Thu, 24 Feb 2022 05:28:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=FBG1JO3MaD3eqx3J2ItCCTQeFrgCiW72hTymBvvHQp4=;
-        b=g8doNj4cgJyVNNEDBZfboiXuYVZVo8EoYyg2uLJubvWqP9Bi1xTR+2eHZhBN42sU9W
-         OBaFkT2xGB8+PYWizF41KhxJ/wKfvXtzHe87CwCkj1DKBs2pTlq4ybkHjZ7HnJXJo8IO
-         zNh7Dx76FuS22Z9UwvV6DDjKTopGyQXXcqab4ADb72H2Ux9pz9GS0L7vk0Wmp4TA6bFC
-         M6WH48TROwx1S80ZneaokFaj051jQXiRvyD33Vg3ba2bN13blWb1xfMi6TqEr9D0Offd
-         gW7mRoZM9qgt8MPSj6Ir90FG/nF/4cehTsmDWTM/O0AjWSsXGoM7n4+mBSB9T4TCx06E
-         RZ/A==
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=PWoHM5P/pAPHOuW7BhTY/a4Hu1y7CT5eN63sjuNRDM0=;
+        b=T6kRQLU5OYXCLAAhR3IDKqlM5/MBIPB0MlSNrYg1ST0xzKd67NFMMi1h1rfacr2EEK
+         JmvSBDZQeHGT0VuDaEecgoXv1jcHtywHilkZdgncE5r8pY3dnIzpzeP2clkuaf75SBac
+         AC4pPjWSD//SJh4bI8800iyNd/Lbq5HMFH9W5Fl42JvBa12dHgMhsIz47fIX/unGZhTb
+         1nZtiuEpXCTa8SvJcvayYbSUjZl6zV7V2lYxe4lpRzHEFVMQM9hCAygqY4yuNtuf/i10
+         9RwgEgYTkVh4srczR+kAQlRLepmfi17b6Fh0croahgB+qkdqFZZjhcGEc5EYuzj315VH
+         f7+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=FBG1JO3MaD3eqx3J2ItCCTQeFrgCiW72hTymBvvHQp4=;
-        b=RRFFlmks/lm4Tb063pUnhmg1ItVwjmjfXgonUnPN2Bflqza012rRe0wGcEHXAeYRs9
-         TCI6CyTqI4NSfoVAJF3O497pShvZI+t1CQaF0L7/puX/nWbLA+pBYLFwH/G6os9+lsOv
-         9BGqLG1iOU1sU9irRHyzq4iADB2G9rIravlmKGL8GaU1ws6MskuIBXPql7mKb1Jsua3m
-         DHFaersJALaiPv3GDrMMM9Y1JE5e2z64Xrb2a1p7L4Isi0IKkZtkO5AWF85HIvZqLKMZ
-         pQvAVZnzZLxkN+M9bl2FXU82d2mi/vsVsfohetiGpsz0cQ2flXQY4RGsPWyE2ANQ+Wj+
-         XENg==
-X-Gm-Message-State: AOAM533yM50i4Ka7SjvHpFSzG0NV3IXr/BIMErKvCK1aQBkqer5drLXq
-        QYY5QNAg6g70ZR8qOpABfB9s5B8Q9ZZNg3+X41o=
-X-Google-Smtp-Source: ABdhPJydbQCgQn6dpqotSWeHTKb+Iw0ZI66E2wXZjFBofMy+gb53rJ5YSRnpeh3iGBb6tQ4c4yQRtQ==
-X-Received: by 2002:a05:6a00:1706:b0:4df:7fe0:841a with SMTP id h6-20020a056a00170600b004df7fe0841amr2371422pfc.64.1645700188059;
-        Thu, 24 Feb 2022 02:56:28 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id s7sm2844784pfb.197.2022.02.24.02.56.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 02:56:27 -0800 (PST)
-Message-ID: <6217645b.1c69fb81.23ef4.7380@mx.google.com>
-Date:   Thu, 24 Feb 2022 02:56:27 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=PWoHM5P/pAPHOuW7BhTY/a4Hu1y7CT5eN63sjuNRDM0=;
+        b=Qza1BcvaBDoWSv1oJJ67KNoifjIbCJ/3uxWMxkjREDCzspaAB2vOf/L5Or+UpymJKk
+         zwH98xWM2c3FlzyKXh0ujYU0WaWECFd0WhB9u2Xo1y9UGfZYzr24UCRsuZxZCntf4R4R
+         ebFODdTtE4g6cdXGvY9INMCNMwOAH9sTlFBt2yxzYUh9uTVPeAj45iWodieRJDQZsGtq
+         8dMb9vw2+G2dYk9amlskSB/Wbmk079rIT8dPJGJedqquiXsDBbXJUbrk/VC8K3wcls8y
+         mU8ZLQ+KIvdsG/uW0zd/2J8TTsWlsDScB4YRAOhs0tbBiO2/1yqLAQ+KLy8EUVvu0m8r
+         XDPQ==
+X-Gm-Message-State: AOAM531iQ1CDv6UWAJbbMliSNRUROwphG4kKUB0GAv6kXuxvTucRUCQh
+        6wdG6TII7Owh3tNTOm3kfRtUxnqKa5q3nuINQmGJ6Q==
+X-Google-Smtp-Source: ABdhPJxnnQg82+iGZ9tQJY/owmawEKGz4l4bYRutG1NcymM1wcsYLniNeRuWFOrxo49epnA8AM9EVI4jsl0UEGopAjU=
+X-Received: by 2002:a25:6993:0:b0:624:55af:336c with SMTP id
+ e141-20020a256993000000b0062455af336cmr2381922ybc.412.1645709301901; Thu, 24
+ Feb 2022 05:28:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Tree: next
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Kernel: v5.17-rc5-244-gd77a1b37f796
-Subject: next/pending-fixes baseline: 216 runs,
- 2 regressions (v5.17-rc5-244-gd77a1b37f796)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 24 Feb 2022 18:58:10 +0530
+Message-ID: <CA+G9fYtzLr+9T9Z1N8QLznW6DqTOU8iSHvgMftdhe2XkEf8F8g@mail.gmail.com>
+Subject: [next] next-20220223 kernel crash
+To:     Tejun Heo <tj@kernel.org>, Lai Jiangshan <jiangshanlai@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Lai Jiangshan <laijs@linux.alibaba.com>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, regressions@lists.linux.dev,
+        lkft-triage@lists.linaro.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes baseline: 216 runs, 2 regressions (v5.17-rc5-244-gd77a1b=
-37f796)
+Linux next-20220223 boot failed due to the kernel crash on all devices.
 
-Regressions Summary
--------------------
+metadata:
+  git_ref: master
+  git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+  git_sha: d4a0ae62a277377de396850ed4b709b6bd9b7326
+  git_describe: next-20220223
+  kernel-config: https://builds.tuxbuild.com/25XO3ffPO3RLpbE3aNxffMu4nEf/config
 
-platform            | arch  | lab          | compiler | defconfig          =
-          | regressions
---------------------+-------+--------------+----------+--------------------=
-----------+------------
-da850-lcdk          | arm   | lab-baylibre | gcc-10   | davinci_all_defconf=
-ig        | 1          =
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-r8a77950-salvator-x | arm64 | lab-baylibre | gcc-10   | defconfig+CON...OMI=
-ZE_BASE=3Dy | 1          =
+crash log on x86_64 machine [1]:
+[    5.326681] Please do not flush events WQ.
+[    5.327480] CPU: 0 PID: 1 Comm: swapper/0 Not tainted
+5.17.0-rc5-next-20220223 #1
+[    5.327480] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
+2.0b 07/27/2017
+[    5.327480] Call Trace:
+[    5.327480]  <TASK>
+[    5.327480]  dump_stack_lvl+0x49/0x5e
+[    5.327480]  dump_stack+0x10/0x12
+[    5.327480]  check_flush_dependency.cold+0x19/0x2e
+[    5.327480]  __flush_work.isra.0+0x186/0x400
+[    5.327480]  ? alloc_unbound_pwq+0x600/0x600
+[    5.327480]  ? preempt_count_sub+0xd2/0x120
+[    5.327480]  ? __rcu_read_unlock+0x53/0x70
+[    5.327480]  ? __queue_work+0x33e/0x680
+[    5.327480]  ? queue_work_on+0x4e/0x80
+[    5.327480]  ? work_on_cpu+0xb5/0xf0
+[    5.327480]  ? trace_hardirqs_on+0x38/0x120
+[    5.327480]  work_on_cpu+0xc1/0xf0
+[    5.327480]  ? queue_work_on+0x80/0x80
+[    5.327480]  ? __traceiter_workqueue_execute_end+0x70/0x70
+[    5.327480]  ? acpi_processor_power_init_bm_check+0x1a0/0x1a0
+[    5.327480]  ? acpi_os_allocate_zeroed+0x2a/0x2a
+[    5.327480]  acpi_processor_ffh_cstate_probe+0x105/0x1f0
+[    5.327480]  acpi_processor_evaluate_cst+0x553/0x670
+[    5.327480]  ? acpi_processor_claim_cst_control+0x80/0x80
+[    5.327480]  ? __kasan_check_write+0x14/0x20
+[    5.327480]  ? up_write+0x3f/0x70
+[    5.327480]  acpi_processor_get_power_info+0x87/0x850
+[    5.327480]  acpi_processor_power_init+0x113/0x260
+[    5.327480]  __acpi_processor_start+0x205/0x270
+[    5.327480]  acpi_processor_start+0x41/0x60
+[    5.327480]  really_probe+0x138/0x5d0
+[    5.327480]  ? __kasan_check_write+0x14/0x20
+[    5.327480]  __driver_probe_device+0x19e/0x230
+[    5.327480]  driver_probe_device+0x4e/0xf0
+[    5.327480]  __driver_attach+0xfc/0x260
+[    5.327480]  ? __device_attach_driver+0x130/0x130
+[    5.327480]  bus_for_each_dev+0xfb/0x150
+[    5.327480]  ? subsys_dev_iter_exit+0x10/0x10
+[    5.327480]  ? preempt_count_sub+0xd2/0x120
+[    5.327480]  ? _raw_spin_unlock+0x1f/0x40
+[    5.327480]  driver_attach+0x2d/0x40
+[    5.327480]  bus_add_driver+0x23f/0x300
+[    5.327480]  driver_register+0x119/0x1a0
+[    5.327480]  ? acpi_video_init+0x142/0x142
+[    5.327480]  acpi_processor_driver_init+0x33/0xc8
+[    5.327480]  do_one_initcall+0x99/0x2c0
+[    5.327480]  ? trace_event_raw_event_initcall_finish+0x160/0x160
+[    5.327480]  ? parameqn+0x40/0xa0
+[    5.327480]  ? __kmalloc+0x1cf/0x390
+[    5.327480]  kernel_init_freeable+0x2d2/0x330
+[    5.327480]  ? rest_init+0xf0/0xf0
+[    5.327480]  kernel_init+0x1e/0x140
+[    5.327480]  ret_from_fork+0x22/0x30
+[    5.327480]  </TASK>
 
+crash log on qemu [2]:
 
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v5.17-rc5-244-gd77a1b37f796/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v5.17-rc5-244-gd77a1b37f796
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      d77a1b37f7969d466615068820f08e9f4d66283d =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform            | arch  | lab          | compiler | defconfig          =
-          | regressions
---------------------+-------+--------------+----------+--------------------=
-----------+------------
-da850-lcdk          | arm   | lab-baylibre | gcc-10   | davinci_all_defconf=
-ig        | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/62172769f054df5946c6298c
-
-  Results:     5 PASS, 1 FAIL, 1 SKIP
-  Full config: davinci_all_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.17-rc5-2=
-44-gd77a1b37f796/arm/davinci_all_defconfig/gcc-10/lab-baylibre/baseline-da8=
-50-lcdk.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.17-rc5-2=
-44-gd77a1b37f796/arm/davinci_all_defconfig/gcc-10/lab-baylibre/baseline-da8=
-50-lcdk.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220218.1/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.dmesg.alert: https://kernelci.org/test/case/id/62172769f054df5=
-946c62990
-        failing since 31 days (last pass: v5.16-11577-gffd79fec234d, first =
-fail: v5.17-rc1-180-g86539e2bdb99)
-        3 lines
-
-    2022-02-24T06:36:03.416842  kern  :alert : BUG: Bad page state in proce=
-ss kworker/u2:0  pfn:c3000
-    2022-02-24T06:36:03.417075  kern  :alert : BUG: Bad page state in proce=
-ss kworker/u2:0  pfn:c3400
-    2022-02-24T06:36:03.417251  kern  :alert : BUG: Bad page state in proce=
-ss kworker/u2:0  pfn:c3800
-    2022-02-24T06:36:03.461786  <8><LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Dale=
-rt RESULT=3Dfail UNITS=3Dlines MEASUREMENT=3D3>   =
-
- =
-
-
-
-platform            | arch  | lab          | compiler | defconfig          =
-          | regressions
---------------------+-------+--------------+----------+--------------------=
-----------+------------
-r8a77950-salvator-x | arm64 | lab-baylibre | gcc-10   | defconfig+CON...OMI=
-ZE_BASE=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/621741824aee15e7d2c6296a
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.17-rc5-2=
-44-gd77a1b37f796/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-bayli=
-bre/baseline-r8a77950-salvator-x.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.17-rc5-2=
-44-gd77a1b37f796/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-bayli=
-bre/baseline-r8a77950-salvator-x.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220218.1/arm64/rootfs.cpio.gz =
+[    9.766144] Please do not flush events_unbound WQ.
+[    9.766938] CPU: 1 PID: 1 Comm: swapper/0 Not tainted
+5.17.0-rc5-next-20220223 #1
+[    9.766938] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
+BIOS 1.12.0-1 04/01/2014
+[    9.766938] Call Trace:
+[    9.766938]  <TASK>
+[    9.766938]  dump_stack_lvl+0x49/0x5e
+[    9.766938]  dump_stack+0x10/0x12
+[    9.766938]  check_flush_dependency.cold+0x19/0x2e
+[    9.766938]  __flush_work.isra.0+0x186/0x400
+[    9.766938]  ? __queue_work+0x339/0x680
+[    9.766938]  ? alloc_unbound_pwq+0x600/0x600
+[    9.766938]  ? __queue_work+0x33e/0x680
+[    9.766938]  ? queue_work_on+0x4e/0x80
+[    9.766938]  ? driver_deferred_probe_trigger.part.0+0xcb/0xe0
+[    9.766938]  ? trace_hardirqs_on+0x38/0x120
+[    9.766938]  ? queue_work_on+0x4e/0x80
+[    9.766938]  ? driver_deferred_probe_add.part.0+0xe0/0xe0
+[    9.766938]  flush_work+0xe/0x10
+[    9.766938]  deferred_probe_initcall+0x3e/0xa0
+[    9.766938]  do_one_initcall+0x99/0x2c0
+[    9.766938]  ? trace_event_raw_event_initcall_finish+0x160/0x160
+[    9.766938]  ? parameqn+0x40/0xa0
+[    9.766938]  ? __kmalloc+0x1cf/0x390
+[    9.766938]  kernel_init_freeable+0x2d2/0x330
+[    9.766938]  ? rest_init+0xf0/0xf0
+[    9.766938]  kernel_init+0x1e/0x140
+[    9.766938]  ret_from_fork+0x22/0x30
+[    9.766938]  </TASK>
+[    9.786217] PM:   Magic number: 10:124:564
 
 
+--
+Linaro LKFT
+https://lkft.linaro.org
 
-  * baseline.login: https://kernelci.org/test/case/id/621741824aee15e7d2c62=
-96b
-        new failure (last pass: v5.17-rc5-215-ge61abe3bd006) =
 
- =20
+[1] https://lkft.validation.linaro.org/scheduler/job/4617047#L840
+[2] https://lkft.validation.linaro.org/scheduler/job/4617053#L661

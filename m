@@ -2,62 +2,50 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6002C4C2CF7
-	for <lists+linux-next@lfdr.de>; Thu, 24 Feb 2022 14:28:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A2784C2D81
+	for <lists+linux-next@lfdr.de>; Thu, 24 Feb 2022 14:46:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234877AbiBXN2y (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 24 Feb 2022 08:28:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40816 "EHLO
+        id S234692AbiBXNqi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 24 Feb 2022 08:46:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234878AbiBXN2x (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 24 Feb 2022 08:28:53 -0500
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2DD5B0E85
-        for <linux-next@vger.kernel.org>; Thu, 24 Feb 2022 05:28:22 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id v186so3844912ybg.1
-        for <linux-next@vger.kernel.org>; Thu, 24 Feb 2022 05:28:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=PWoHM5P/pAPHOuW7BhTY/a4Hu1y7CT5eN63sjuNRDM0=;
-        b=T6kRQLU5OYXCLAAhR3IDKqlM5/MBIPB0MlSNrYg1ST0xzKd67NFMMi1h1rfacr2EEK
-         JmvSBDZQeHGT0VuDaEecgoXv1jcHtywHilkZdgncE5r8pY3dnIzpzeP2clkuaf75SBac
-         AC4pPjWSD//SJh4bI8800iyNd/Lbq5HMFH9W5Fl42JvBa12dHgMhsIz47fIX/unGZhTb
-         1nZtiuEpXCTa8SvJcvayYbSUjZl6zV7V2lYxe4lpRzHEFVMQM9hCAygqY4yuNtuf/i10
-         9RwgEgYTkVh4srczR+kAQlRLepmfi17b6Fh0croahgB+qkdqFZZjhcGEc5EYuzj315VH
-         f7+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=PWoHM5P/pAPHOuW7BhTY/a4Hu1y7CT5eN63sjuNRDM0=;
-        b=Qza1BcvaBDoWSv1oJJ67KNoifjIbCJ/3uxWMxkjREDCzspaAB2vOf/L5Or+UpymJKk
-         zwH98xWM2c3FlzyKXh0ujYU0WaWECFd0WhB9u2Xo1y9UGfZYzr24UCRsuZxZCntf4R4R
-         ebFODdTtE4g6cdXGvY9INMCNMwOAH9sTlFBt2yxzYUh9uTVPeAj45iWodieRJDQZsGtq
-         8dMb9vw2+G2dYk9amlskSB/Wbmk079rIT8dPJGJedqquiXsDBbXJUbrk/VC8K3wcls8y
-         mU8ZLQ+KIvdsG/uW0zd/2J8TTsWlsDScB4YRAOhs0tbBiO2/1yqLAQ+KLy8EUVvu0m8r
-         XDPQ==
-X-Gm-Message-State: AOAM531iQ1CDv6UWAJbbMliSNRUROwphG4kKUB0GAv6kXuxvTucRUCQh
-        6wdG6TII7Owh3tNTOm3kfRtUxnqKa5q3nuINQmGJ6Q==
-X-Google-Smtp-Source: ABdhPJxnnQg82+iGZ9tQJY/owmawEKGz4l4bYRutG1NcymM1wcsYLniNeRuWFOrxo49epnA8AM9EVI4jsl0UEGopAjU=
-X-Received: by 2002:a25:6993:0:b0:624:55af:336c with SMTP id
- e141-20020a256993000000b0062455af336cmr2381922ybc.412.1645709301901; Thu, 24
- Feb 2022 05:28:21 -0800 (PST)
+        with ESMTP id S231439AbiBXNqh (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 24 Feb 2022 08:46:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C5026F4E6;
+        Thu, 24 Feb 2022 05:46:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CD74561B38;
+        Thu, 24 Feb 2022 13:46:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4884C340E9;
+        Thu, 24 Feb 2022 13:46:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645710365;
+        bh=jnbdT8UDAZtAA54FrGhoPcolloNf7HRAUDbtYfwfctw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=IZrqtq2kceQS0Sq/mXjgWYuG/quLzDYr5v0h0g4VvsREdaekkp+FMtShpRfUNSGTS
+         1WIqmWBTkrWPqKLKuhDqisz1YeQJzLkCq9IMN8xPFgeBAuAkmMNf32u0ApbO9Wr0DX
+         Pl7/dtQrhGSKQHkybcvZ7OOwIJuQjLOE8xZW0+VxTxtoHcVI0AJRUVajJGJhBtIFsR
+         csu01x5+6DlNYc7zKoL1WvSkbfmfD8KDPeuU7qMlVuq0Ba4DovHY8mEvaq//wKnbNt
+         g8W5tHvwc4RvGnOq2Q3yUs1gasJVOI3PvnzmhDdWpa0XqYK/zLC0oOy14LvyTFMOh1
+         t6SBPIzc2LkPQ==
+From:   broonie@kernel.org
+To:     David Sterba <dsterba@suse.cz>
+Cc:     David Sterba <dsterba@suse.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Qu Wenruo <wqu@suse.com>,
+        =?UTF-8?q?D=C4=81vis=20Mos=C4=81ns?= <davispuh@gmail.com>
+Subject: linux-next: manual merge of the btrfs tree with the btrfs-fixes tree
+Date:   Thu, 24 Feb 2022 13:44:27 +0000
+Message-Id: <20220224134427.3208381-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 24 Feb 2022 18:58:10 +0530
-Message-ID: <CA+G9fYtzLr+9T9Z1N8QLznW6DqTOU8iSHvgMftdhe2XkEf8F8g@mail.gmail.com>
-Subject: [next] next-20220223 kernel crash
-To:     Tejun Heo <tj@kernel.org>, Lai Jiangshan <jiangshanlai@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Lai Jiangshan <laijs@linux.alibaba.com>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, regressions@lists.linux.dev,
-        lkft-triage@lists.linaro.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,114 +54,148 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Linux next-20220223 boot failed due to the kernel crash on all devices.
+Hi all,
 
-metadata:
-  git_ref: master
-  git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-  git_sha: d4a0ae62a277377de396850ed4b709b6bd9b7326
-  git_describe: next-20220223
-  kernel-config: https://builds.tuxbuild.com/25XO3ffPO3RLpbE3aNxffMu4nEf/config
+Today's linux-next merge of the btrfs tree got conflicts in:
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+  fs/btrfs/ctree.h
+  fs/btrfs/file.c
+  fs/btrfs/inode.c
+  fs/btrfs/ioctl.c
+  fs/btrfs/lzo.c
 
-crash log on x86_64 machine [1]:
-[    5.326681] Please do not flush events WQ.
-[    5.327480] CPU: 0 PID: 1 Comm: swapper/0 Not tainted
-5.17.0-rc5-next-20220223 #1
-[    5.327480] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
-2.0b 07/27/2017
-[    5.327480] Call Trace:
-[    5.327480]  <TASK>
-[    5.327480]  dump_stack_lvl+0x49/0x5e
-[    5.327480]  dump_stack+0x10/0x12
-[    5.327480]  check_flush_dependency.cold+0x19/0x2e
-[    5.327480]  __flush_work.isra.0+0x186/0x400
-[    5.327480]  ? alloc_unbound_pwq+0x600/0x600
-[    5.327480]  ? preempt_count_sub+0xd2/0x120
-[    5.327480]  ? __rcu_read_unlock+0x53/0x70
-[    5.327480]  ? __queue_work+0x33e/0x680
-[    5.327480]  ? queue_work_on+0x4e/0x80
-[    5.327480]  ? work_on_cpu+0xb5/0xf0
-[    5.327480]  ? trace_hardirqs_on+0x38/0x120
-[    5.327480]  work_on_cpu+0xc1/0xf0
-[    5.327480]  ? queue_work_on+0x80/0x80
-[    5.327480]  ? __traceiter_workqueue_execute_end+0x70/0x70
-[    5.327480]  ? acpi_processor_power_init_bm_check+0x1a0/0x1a0
-[    5.327480]  ? acpi_os_allocate_zeroed+0x2a/0x2a
-[    5.327480]  acpi_processor_ffh_cstate_probe+0x105/0x1f0
-[    5.327480]  acpi_processor_evaluate_cst+0x553/0x670
-[    5.327480]  ? acpi_processor_claim_cst_control+0x80/0x80
-[    5.327480]  ? __kasan_check_write+0x14/0x20
-[    5.327480]  ? up_write+0x3f/0x70
-[    5.327480]  acpi_processor_get_power_info+0x87/0x850
-[    5.327480]  acpi_processor_power_init+0x113/0x260
-[    5.327480]  __acpi_processor_start+0x205/0x270
-[    5.327480]  acpi_processor_start+0x41/0x60
-[    5.327480]  really_probe+0x138/0x5d0
-[    5.327480]  ? __kasan_check_write+0x14/0x20
-[    5.327480]  __driver_probe_device+0x19e/0x230
-[    5.327480]  driver_probe_device+0x4e/0xf0
-[    5.327480]  __driver_attach+0xfc/0x260
-[    5.327480]  ? __device_attach_driver+0x130/0x130
-[    5.327480]  bus_for_each_dev+0xfb/0x150
-[    5.327480]  ? subsys_dev_iter_exit+0x10/0x10
-[    5.327480]  ? preempt_count_sub+0xd2/0x120
-[    5.327480]  ? _raw_spin_unlock+0x1f/0x40
-[    5.327480]  driver_attach+0x2d/0x40
-[    5.327480]  bus_add_driver+0x23f/0x300
-[    5.327480]  driver_register+0x119/0x1a0
-[    5.327480]  ? acpi_video_init+0x142/0x142
-[    5.327480]  acpi_processor_driver_init+0x33/0xc8
-[    5.327480]  do_one_initcall+0x99/0x2c0
-[    5.327480]  ? trace_event_raw_event_initcall_finish+0x160/0x160
-[    5.327480]  ? parameqn+0x40/0xa0
-[    5.327480]  ? __kmalloc+0x1cf/0x390
-[    5.327480]  kernel_init_freeable+0x2d2/0x330
-[    5.327480]  ? rest_init+0xf0/0xf0
-[    5.327480]  kernel_init+0x1e/0x140
-[    5.327480]  ret_from_fork+0x22/0x30
-[    5.327480]  </TASK>
+between commit:
 
-crash log on qemu [2]:
+  2ac3e062af024 ("btrfs: reduce extent threshold for autodefrag")
+  741b23a970a79 ("btrfs: prevent copying too big compressed lzo segment")
+  26fbac2517fca ("btrfs: autodefrag: only scan one inode once")
+  966d879bafaaf ("btrfs: defrag: allow defrag_one_cluster() to skip large extent which is not a target")
+  d5633b0dee02d ("btrfs: defrag: bring back the old file extent search behavior")
 
-[    9.766144] Please do not flush events_unbound WQ.
-[    9.766938] CPU: 1 PID: 1 Comm: swapper/0 Not tainted
-5.17.0-rc5-next-20220223 #1
-[    9.766938] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
-BIOS 1.12.0-1 04/01/2014
-[    9.766938] Call Trace:
-[    9.766938]  <TASK>
-[    9.766938]  dump_stack_lvl+0x49/0x5e
-[    9.766938]  dump_stack+0x10/0x12
-[    9.766938]  check_flush_dependency.cold+0x19/0x2e
-[    9.766938]  __flush_work.isra.0+0x186/0x400
-[    9.766938]  ? __queue_work+0x339/0x680
-[    9.766938]  ? alloc_unbound_pwq+0x600/0x600
-[    9.766938]  ? __queue_work+0x33e/0x680
-[    9.766938]  ? queue_work_on+0x4e/0x80
-[    9.766938]  ? driver_deferred_probe_trigger.part.0+0xcb/0xe0
-[    9.766938]  ? trace_hardirqs_on+0x38/0x120
-[    9.766938]  ? queue_work_on+0x4e/0x80
-[    9.766938]  ? driver_deferred_probe_add.part.0+0xe0/0xe0
-[    9.766938]  flush_work+0xe/0x10
-[    9.766938]  deferred_probe_initcall+0x3e/0xa0
-[    9.766938]  do_one_initcall+0x99/0x2c0
-[    9.766938]  ? trace_event_raw_event_initcall_finish+0x160/0x160
-[    9.766938]  ? parameqn+0x40/0xa0
-[    9.766938]  ? __kmalloc+0x1cf/0x390
-[    9.766938]  kernel_init_freeable+0x2d2/0x330
-[    9.766938]  ? rest_init+0xf0/0xf0
-[    9.766938]  kernel_init+0x1e/0x140
-[    9.766938]  ret_from_fork+0x22/0x30
-[    9.766938]  </TASK>
-[    9.786217] PM:   Magic number: 10:124:564
+from the btrfs-fixes tree and commit:
+
+  13b2f7ab699a5 ("btrfs: close the gap between inode_should_defrag() and autodefrag extent size threshold")
+  48b433a2ef82a ("btrfs: add lzo workspace buffer length constants")
+  db360c49d476f ("btrfs: autodefrag: only scan one inode once")
+  e6c69fcbee7ef ("btrfs: defrag: use control structure in btrfs_defrag_file()")
+  6b17743d934ec ("btrfs: defrag: bring back the old file extent search behavior")
+
+from the btrfs tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+diff --cc fs/btrfs/ctree.h
+index 947f04789389e,5a569bc756c3c..0000000000000
+--- a/fs/btrfs/ctree.h
++++ b/fs/btrfs/ctree.h
+diff --cc fs/btrfs/file.c
+index 01111ee06e1ef,8815981447034..0000000000000
+--- a/fs/btrfs/file.c
++++ b/fs/btrfs/file.c
+diff --cc fs/btrfs/inode.c
+index 76e530f76e3cf,44e8d28182b7f..0000000000000
+--- a/fs/btrfs/inode.c
++++ b/fs/btrfs/inode.c
+diff --cc fs/btrfs/ioctl.c
+index 8d47ec5fc4f44,998bf48e5ce29..0000000000000
+--- a/fs/btrfs/ioctl.c
++++ b/fs/btrfs/ioctl.c
+@@@ -1435,16 -1460,16 +1461,23 @@@ static int defrag_collect_targets(struc
+  			goto add;
+  
+  		/* Skip too large extent */
+- 		if (range_len >= extent_thresh)
++ 		if (range_len >= ctrl->extent_thresh)
++ 			goto next;
++ 
++ 		/*
++ 		 * Skip extents already at its max capacity, this is mostly for
++ 		 * compressed extents, which max cap is only 128K.
++ 		 */
++ 		if (em->len >= get_extent_max_capacity(em))
+  			goto next;
+  
+ +		/*
+ +		 * Skip extents already at its max capacity, this is mostly for
+ +		 * compressed extents, which max cap is only 128K.
+ +		 */
+ +		if (em->len >= get_extent_max_capacity(em))
+ +			goto next;
+ +
+  		next_mergeable = defrag_check_next_extent(&inode->vfs_inode, em,
+  							  locked);
+  		if (!next_mergeable) {
+@@@ -1683,19 -1715,11 +1723,20 @@@ static int defrag_one_cluster(struct bt
+  			break;
+  		}
+  
+- 		if (max_sectors)
++ 		if (ctrl->max_sectors_to_defrag)
+  			range_len = min_t(u32, range_len,
+- 				(max_sectors - *sectors_defragged) * sectorsize);
++ 					  (ctrl->max_sectors_to_defrag -
++ 					   ctrl->sectors_defragged) * sectorsize);
+  
+ +		/*
+ +		 * If defrag_one_range() has updated last_scanned_ret,
+ +		 * our range may already be invalid (e.g. hole punched).
+ +		 * Skip if our range is before last_scanned_ret, as there is
+ +		 * no need to defrag the range anymore.
+ +		 */
+ +		if (entry->start + range_len <= *last_scanned_ret)
+ +			continue;
+ +
+  		if (ra)
+  			page_cache_sync_readahead(inode->vfs_inode.i_mapping,
+  				ra, NULL, entry->start >> PAGE_SHIFT,
+@@@ -1834,13 -1879,11 +1898,10 @@@ int btrfs_defrag_file(struct inode *ino
+  			break;
+  		}
+  		if (do_compress)
+- 			BTRFS_I(inode)->defrag_compress = compress_type;
+- 		ret = defrag_one_cluster(BTRFS_I(inode), ra, cur,
+- 				cluster_end + 1 - cur, extent_thresh,
+- 				newer_than, do_compress, &sectors_defragged,
+- 				max_to_defrag, &last_scanned);
+ -			BTRFS_I(inode)->defrag_compress = ctrl->compress;
++ 		ret = defrag_one_cluster(BTRFS_I(inode), ra, ctrl, cur,
++ 					 cluster_end + 1 - cur);
+  
+- 		if (sectors_defragged > prev_sectors_defragged)
++ 		if (ctrl->sectors_defragged > prev_sectors_defragged)
+  			balance_dirty_pages_ratelimited(inode->i_mapping);
+  
+  		btrfs_inode_unlock(inode, 0);
+diff --cc fs/btrfs/lzo.c
+index e6e28a9c79877,430ad36b8b080..0000000000000
+--- a/fs/btrfs/lzo.c
++++ b/fs/btrfs/lzo.c
 
 
---
-Linaro LKFT
-https://lkft.linaro.org
-
-
-[1] https://lkft.validation.linaro.org/scheduler/job/4617047#L840
-[2] https://lkft.validation.linaro.org/scheduler/job/4617053#L661
+diff --git a/fs/btrfs/ioctl.c b/fs/btrfs/ioctl.c
+index 7d3542893a165..5ef7c08b24b89 100644
+--- a/fs/btrfs/ioctl.c
++++ b/fs/btrfs/ioctl.c
+@@ -1734,7 +1734,7 @@ static int defrag_one_cluster(struct btrfs_inode *inode,
+ 		 * Skip if our range is before last_scanned_ret, as there is
+ 		 * no need to defrag the range anymore.
+ 		 */
+-		if (entry->start + range_len <= *last_scanned_ret)
++		if (entry->start + range_len <= ctrl->last_scanned)
+ 			continue;
+ 
+ 		if (ra)
+@@ -1760,7 +1760,7 @@ static int defrag_one_cluster(struct btrfs_inode *inode,
+ 		kfree(entry);
+ 	}
+ 	if (ret >= 0)
+-		*last_scanned_ret = max(*last_scanned_ret, start + len);
++		ctrl->last_scanned = max(ctrl->last_scanned, start + len);
+ 	return ret;
+ }
+ 

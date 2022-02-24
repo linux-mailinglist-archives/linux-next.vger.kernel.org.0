@@ -2,52 +2,48 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FD074C2130
-	for <lists+linux-next@lfdr.de>; Thu, 24 Feb 2022 02:43:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EE424C2152
+	for <lists+linux-next@lfdr.de>; Thu, 24 Feb 2022 02:49:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbiBXBnG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 23 Feb 2022 20:43:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46960 "EHLO
+        id S229747AbiBXBpQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 23 Feb 2022 20:45:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229807AbiBXBnD (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 23 Feb 2022 20:43:03 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72C50574A4;
-        Wed, 23 Feb 2022 17:42:33 -0800 (PST)
+        with ESMTP id S229739AbiBXBpQ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 23 Feb 2022 20:45:16 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B653813C9D7;
+        Wed, 23 Feb 2022 17:44:46 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7C830B82334;
-        Thu, 24 Feb 2022 01:17:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBD05C340E7;
-        Thu, 24 Feb 2022 01:16:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 69013B81FCD;
+        Thu, 24 Feb 2022 01:44:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DC0CC340E7;
+        Thu, 24 Feb 2022 01:44:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645665419;
-        bh=vNEbvywmyUr4OP031dUp7aKTPfYS8dSy6+FIPFhmc/8=;
+        s=k20201202; t=1645667084;
+        bh=XHH/uO/8KeWnauMtq/0M/7XsURJLAWgKWhTDuS/j7PU=;
         h=From:To:Cc:Subject:Date:From;
-        b=pYTcjxH4oc/8QnPy2E8blXq7rVjRxsCT5wct71mKQj9iTZAltPIAtSpLHZQVOVA8G
-         PbeJlxMJYtnAuVzkg/r2xIeK0sHQ/cKrvxTmcOQbqIYeTJeXNbg7lFDCkurxfd07LC
-         GyluwP3DTDBMyw2vv3k6l8k6pwTyuXsmbOC1/+a5eDQdJPX1xVOBt5tw9arcdQF6EJ
-         sl6tcRc6VAU6PU/61pxzv8HDreNB9yNKNHl2wzkL3v6wxNjQz1wyq7ST1zVpVaiDLj
-         nOFVbRwJPpGHQ8scaFgZ7jOXwRnOc07d9JXEQYQTHJ2Y3YeVSV/E3uqzqF4jW8o5NL
-         SGGV06C2DGHAg==
+        b=DJ5uOTxE695TQwqvHCCjvBDx1V9zfQteuN6RqddIxwLzmtMtU0YQF/Hbkg//oY47S
+         xDTaqE9t1p2533ns/ODCeWx1Yf+G9SergWl28ujncQdNY8B5VjGvbGMYaaSB2oM6ra
+         yDW7APgEakixM3iUJbsBFGDH4TKZj9nMls4vF2YHZylU9E4L91Ju4jvzwRJfkMl5ke
+         Uiy0wihAareamqkPNxn0XZgpxhwTQbIsA22QZl/QQyGt4S5K1fOFXuKX/l/L4+RhOE
+         m3oaJQvnoVZLcS4t5jOOiXg+GEMe+jpgfOqxBVogydXmG4FWlUtgCaSyb7WDYce+co
+         WjICUFmHg6BKg==
 From:   broonie@kernel.org
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Hugh Dickins <hughd@google.com>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        "Liam R . Howlett" <Liam.Howlett@Oracle.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the folio tree with the maple tree
-Date:   Thu, 24 Feb 2022 01:16:53 +0000
-Message-Id: <20220224011653.1380557-1-broonie@kernel.org>
+To:     Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: Tree for Feb 23
+Date:   Thu, 24 Feb 2022 01:44:40 +0000
+Message-Id: <20220224014440.1397777-1-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        LOCALPART_IN_SUBJECT,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -56,191 +52,65 @@ X-Mailing-List: linux-next@vger.kernel.org
 
 Hi all,
 
-Today's linux-next merge of the folio tree got a conflict in:
+Note that today's -next again does not include the akpm tree since it's
+been a long day and the conflicts especially with the mm code seemed
+more than it was wise for me to attempt.  I'll have another go tomorrow
+but no guarantees, I got further today.
 
-  mm/mmap.c
+Changes since 20220222:
 
-between commit:
+The drm-intel tree gained a conflict with the drm-intel-fixes tree.
 
-  f0b1293f7ebbb ("mm/mmap: Reorganize munmap to use maple states")
+The drm-tegra tree gained a conflict with the drm tree.
 
-from the maple tree and commit:
+The mfd tree gained a build failure, I used the version from yesterday
+instead.
 
-  a213e5cf71cbc ("mm/munlock: delete munlock_vma_pages_all(), allow oomreap")
+The kvm tree gained a conflict with the kvm-fixes tree.
 
-from the folio tree.
+The nvmem tree gained a conflict with the spi tree.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+The nvmem tree gained a conflict with the char-misc tree.
 
-I have absolutely no confindence in this resolution.
+I applied a fix for the build failure in the maple tree so merged
+today's version.
 
-diff --cc mm/mmap.c
-index 1b3600152f6f5,64b5985b5295c..0000000000000
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@@ -2286,32 -2780,38 +2286,37 @@@ int split_vma(struct mm_struct *mm, str
-  	return __split_vma(mm, vma, addr, new_below);
-  }
-  
- -/* Munmap is split into 2 main parts -- this part which finds
- +/*
- + * do_mas_align_munmap() - munmap the aligned region from @start to @end.
- + * @mas: The maple_state, ideally set up to alter the correct tree location.
- + * @vma: The starting vm_area_struct
- + * @mm: The mm_struct
- + * @start: The aligned start address to munmap.
- + * @end: The aligned end address to munmap.
- + * @uf: The userfaultfd list_head
- + * @downgrade: Set to true to attempt a write downgrade of the mmap_sem
- + *
- + * If @downgrade is true, check return code for potential release of the lock.
-++ *
-++ * Munmap is split into 2 main parts -- this part which finds
-+  * what needs doing, and the areas themselves, which do the
-+  * work.  This now handles partial unmappings.
-+  * Jeremy Fitzhardinge <jeremy@goop.org>
-   */
- -int __do_munmap(struct mm_struct *mm, unsigned long start, size_t len,
- -		struct list_head *uf, bool downgrade)
- -{
- -	unsigned long end;
- -	struct vm_area_struct *vma, *prev, *last;
- -
- -	if ((offset_in_page(start)) || start > TASK_SIZE || len > TASK_SIZE-start)
- -		return -EINVAL;
- -
- -	len = PAGE_ALIGN(len);
- -	end = start + len;
- -	if (len == 0)
- -		return -EINVAL;
- -
- -	/*
- -	 * arch_unmap() might do unmaps itself.  It must be called
- -	 * and finish any rbtree manipulation before this code
- -	 * runs and also starts to manipulate the rbtree.
- -	 */
- -	arch_unmap(mm, start, end);
- -
- -	/* Find the first overlapping VMA where start < vma->vm_end */
- -	vma = find_vma_intersection(mm, start, end);
- -	if (!vma)
- -		return 0;
- -	prev = vma->vm_prev;
- -
- +static int
- +do_mas_align_munmap(struct ma_state *mas, struct vm_area_struct *vma,
- +		    struct mm_struct *mm, unsigned long start,
- +		    unsigned long end, struct list_head *uf, bool downgrade)
- +{
- +	struct vm_area_struct *prev, *next;
- +	struct maple_tree mt_detach;
- +	int count = 0;
- +	MA_STATE(mas_detach, &mt_detach, start, end - 1);
- +	mt_init_flags(&mt_detach, MM_MT_FLAGS);
- +	mt_set_external_lock(&mt_detach, &mm->mmap_lock);
- +
- +	mas->last = end - 1;
- +	prev = next = NULL;
-  	/*
-  	 * If we need to split any vma, do it now to save pain later.
-  	 *
-@@@ -3107,13 -3127,8 +3112,12 @@@ void exit_mmap(struct mm_struct *mm
-  		 * Nothing can be holding mm->mmap_lock here and the above call
-  		 * to mmu_notifier_release(mm) ensures mmu notifier callbacks in
-  		 * __oom_reap_task_mm() will not block.
- +		 *
- +		 * This needs to be done before unlocking the VMAs in the loop
- +		 * below which clears VM_LOCKED, otherwise the oom reaper cannot
- +		 * reliably test it.
-  		 */
-  		(void)__oom_reap_task_mm(mm);
-- 
-  		set_bit(MMF_OOM_SKIP, &mm->flags);
-  	}
+The folio tree gained several conflicts with the maple tree.
 
-diff --git a/mm/mmap.c b/mm/mmap.c
-index 2ddf1caf90488..d469555df0a21 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -2373,10 +2373,8 @@ do_mas_align_munmap(struct ma_state *mas, struct vm_area_struct *vma,
- 		BUG_ON(next->vm_start > end);
- #endif
- 		vma_mas_store(next, &mas_detach);
--		if (next->vm_flags & VM_LOCKED) {
-+		if (next->vm_flags & VM_LOCKED)
- 			mm->locked_vm -= vma_pages(next);
--			munlock_vma_pages_all(next);
--		}
- 	}
- 
- 	next = mas_find(mas, ULONG_MAX);
-@@ -2906,10 +2904,8 @@ static int do_brk_munmap(struct ma_state *mas, struct vm_area_struct *vma,
- 	}
- 
- 	unmap_pages = vma_pages(&unmap);
--	if (vma->vm_flags & VM_LOCKED) {
-+	if (vma->vm_flags & VM_LOCKED)
- 		mm->locked_vm -= unmap_pages;
--		munlock_vma_pages_range(&unmap, newbrk, oldbrk);
--	}
- 
- 	next = mas_next(mas, ULONG_MAX);
- 	mmap_write_downgrade(mm);
-@@ -3130,10 +3126,8 @@ void exit_mmap(struct mm_struct *mm)
- 	rwsem_acquire(&mm->mmap_lock.dep_map, 0, 0, _THIS_IP_);
- 	if (mm->locked_vm) {
- 		mas_for_each(&mas, vma, ULONG_MAX) {
--			if (vma->vm_flags & VM_LOCKED) {
-+			if (vma->vm_flags & VM_LOCKED)
- 				mm->locked_vm -= vma_pages(vma);
--				munlock_vma_pages_all(vma);
--			}
- 		}
- 		mas_set(&mas, 0);
- 	}
+Non-merge commits (relative to Linus' tree): 7020
+ 7614 files changed, 874525 insertions(+), 213969 deletions(-)
 
-diff --git a/mm/mmap.c b/mm/mmap.c
-index 2ddf1caf90488..d469555df0a21 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -2373,10 +2373,8 @@ do_mas_align_munmap(struct ma_state *mas, struct vm_area_struct *vma,
- 		BUG_ON(next->vm_start > end);
- #endif
- 		vma_mas_store(next, &mas_detach);
--		if (next->vm_flags & VM_LOCKED) {
-+		if (next->vm_flags & VM_LOCKED)
- 			mm->locked_vm -= vma_pages(next);
--			munlock_vma_pages_all(next);
--		}
- 	}
- 
- 	next = mas_find(mas, ULONG_MAX);
-@@ -2906,10 +2904,8 @@ static int do_brk_munmap(struct ma_state *mas, struct vm_area_struct *vma,
- 	}
- 
- 	unmap_pages = vma_pages(&unmap);
--	if (vma->vm_flags & VM_LOCKED) {
-+	if (vma->vm_flags & VM_LOCKED)
- 		mm->locked_vm -= unmap_pages;
--		munlock_vma_pages_range(&unmap, newbrk, oldbrk);
--	}
- 
- 	next = mas_next(mas, ULONG_MAX);
- 	mmap_write_downgrade(mm);
-@@ -3130,10 +3126,8 @@ void exit_mmap(struct mm_struct *mm)
- 	rwsem_acquire(&mm->mmap_lock.dep_map, 0, 0, _THIS_IP_);
- 	if (mm->locked_vm) {
- 		mas_for_each(&mas, vma, ULONG_MAX) {
--			if (vma->vm_flags & VM_LOCKED) {
-+			if (vma->vm_flags & VM_LOCKED)
- 				mm->locked_vm -= vma_pages(vma);
--				munlock_vma_pages_all(vma);
--			}
- 		}
- 		mas_set(&mas, 0);
- 	}
+----------------------------------------------------------------------------
+
+I have created today's linux-next tree at
+git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
+are tracking the linux-next tree using git, you should not use "git pull"
+to do so as that will try to merge the new linux-next release with the
+old one.  You should use "git fetch" and checkout or reset to the new
+master.
+
+You can see which trees have been included by looking in the Next/Trees
+file in the source.  There are also quilt-import.log and merge.log
+files in the Next directory.  Between each merge, the tree was built
+with a defconfig for arm64, an allmodconfig for x86_64, a
+multi_v7_defconfig for arm and a native build of tools/perf. After the
+final fixups (if any), I do an x86_64 modules_install followed by builds
+for x86_64 allnoconfig, arm64 allnoconfig, arm64 allyesconfig and i386,
+and arm64 and htmldocs.
+
+Below is a summary of the state of the merge.
+
+I am currently merging 346 trees (counting Linus' and 93 trees of bug
+fix patches pending for the current merge release).
+
+Stats about the size of the tree over time can be seen at
+http://neuling.org/linux-next-size.html .
+
+Status of my local build tests will be at
+http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
+advice about cross compilers/configs that work, we are always open to add
+more builds.
+
+Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
+Gortmaker for triage and bug fixes.

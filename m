@@ -2,50 +2,66 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A2784C2D81
-	for <lists+linux-next@lfdr.de>; Thu, 24 Feb 2022 14:46:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 447B04C2DC4
+	for <lists+linux-next@lfdr.de>; Thu, 24 Feb 2022 15:03:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234692AbiBXNqi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 24 Feb 2022 08:46:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51372 "EHLO
+        id S235232AbiBXODW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 24 Feb 2022 09:03:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231439AbiBXNqh (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 24 Feb 2022 08:46:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C5026F4E6;
-        Thu, 24 Feb 2022 05:46:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CD74561B38;
-        Thu, 24 Feb 2022 13:46:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4884C340E9;
-        Thu, 24 Feb 2022 13:46:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645710365;
-        bh=jnbdT8UDAZtAA54FrGhoPcolloNf7HRAUDbtYfwfctw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=IZrqtq2kceQS0Sq/mXjgWYuG/quLzDYr5v0h0g4VvsREdaekkp+FMtShpRfUNSGTS
-         1WIqmWBTkrWPqKLKuhDqisz1YeQJzLkCq9IMN8xPFgeBAuAkmMNf32u0ApbO9Wr0DX
-         Pl7/dtQrhGSKQHkybcvZ7OOwIJuQjLOE8xZW0+VxTxtoHcVI0AJRUVajJGJhBtIFsR
-         csu01x5+6DlNYc7zKoL1WvSkbfmfD8KDPeuU7qMlVuq0Ba4DovHY8mEvaq//wKnbNt
-         g8W5tHvwc4RvGnOq2Q3yUs1gasJVOI3PvnzmhDdWpa0XqYK/zLC0oOy14LvyTFMOh1
-         t6SBPIzc2LkPQ==
-From:   broonie@kernel.org
-To:     David Sterba <dsterba@suse.cz>
-Cc:     David Sterba <dsterba@suse.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Qu Wenruo <wqu@suse.com>,
-        =?UTF-8?q?D=C4=81vis=20Mos=C4=81ns?= <davispuh@gmail.com>
-Subject: linux-next: manual merge of the btrfs tree with the btrfs-fixes tree
-Date:   Thu, 24 Feb 2022 13:44:27 +0000
-Message-Id: <20220224134427.3208381-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S235277AbiBXODW (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 24 Feb 2022 09:03:22 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6D2420D834
+        for <linux-next@vger.kernel.org>; Thu, 24 Feb 2022 06:02:51 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id bt13so4035103ybb.2
+        for <linux-next@vger.kernel.org>; Thu, 24 Feb 2022 06:02:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=Uu/up663McmtHwyoDsIfscJIaOT5C+2Ofku1sz+3c7s=;
+        b=yeaQV/RM7+yh7dyByba3Uw81wfq81mO7nu0TI1EIsiKw1na9UNQ5yiAkFLa2frERQW
+         jbhkruRz/0mKJTe4q2i8KivPZXfjhxkX4YMGUA8Jr8JiIeKw6v35R/vg+Q1Y2UudXLzz
+         I+g+XXszoc6acZz3QeX7+XNT1bSS9Xa9kq60oI6VJkldWS/UKfW+Syv4j/9Wrkmm0GhO
+         ttr1kb9ueMYL3JgGOxfwlMpFer8Yjd3sKt+RZbI7Tm3ZHlNHoGmQQOGnc7I5NopQ/bzK
+         zXxhfLMn4iaPtk5PyAJjnoskqnC4L4luHO+6tmPhjsArHuUbxYadXmvnii8WXt35NKWr
+         /VMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=Uu/up663McmtHwyoDsIfscJIaOT5C+2Ofku1sz+3c7s=;
+        b=7+skT5v9+gk5cbUun10uc0/T4N7ZkqZzK8mh+vFmslN+erTRYP7nWyJwDRpwqlvHfy
+         rbaPhigxJCoJrjK6ucn9kfB0ELaEcco2RfZgwDHBB6UI+97Ge0p+aWSMSgiAOvAdfY11
+         99VBaNXX1XCFranmBNgb7dBbRcrllBPPYC93XwL+HfDPaHBuKD2mV9YcTqgJ3AnajT8F
+         +qXSUkrXelAp5ckF/mdWquK6ZBTSC2YtB+VqA3tKAKvmEwLqhy86QxWhLA/QckFM6eJC
+         M8Z01/xygMcD+ZSJsRra1oHktAn+ud/J+IAXYPI0qOtDJLQvTFTwyw4dAGAhZQ/vpi8f
+         EEMQ==
+X-Gm-Message-State: AOAM532eD9YvIhb/PI2oTrTD2T2GuqVpmboaD0jkUvOqFjGEoU3W4DSN
+        eYmJI3IbGkSr72ezF7uctDsj2l/cuzR9iovdGX2bx+M0Sg2aGA==
+X-Google-Smtp-Source: ABdhPJyFgcSPtZ+7eIpJu47YYVNdcJlDOjQ2o+dB7cqBHv4UdHQ6MtQQsUac7jeboUaZhHeeixU4ZJErYZVWYCtypuQ=
+X-Received: by 2002:a25:2551:0:b0:623:a424:e2b5 with SMTP id
+ l78-20020a252551000000b00623a424e2b5mr2624980ybl.603.1645711368889; Thu, 24
+ Feb 2022 06:02:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 24 Feb 2022 19:32:38 +0530
+Message-ID: <CA+G9fYvdFWYQ4GJkvD9KK8ut=DqHu8MKM-jok+tXo6-HiaPT0g@mail.gmail.com>
+Subject: [next] mm/mmap.c:1962:25: error: passing argument 1 of 'vma_find'
+ from incompatible pointer type
+To:     linux-mm <linux-mm@kvack.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-parisc <linux-parisc@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>
+Cc:     "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        lkft-triage@lists.linaro.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,148 +70,58 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi all,
+Linux next-20220223 arch parisc builds failed due to following errors.
+Build configs:
+  - gcc-11-defconfig
+  - gcc-11-allnoconfig
+  - gcc-11-tinyconfig
 
-Today's linux-next merge of the btrfs tree got conflicts in:
-
-  fs/btrfs/ctree.h
-  fs/btrfs/file.c
-  fs/btrfs/inode.c
-  fs/btrfs/ioctl.c
-  fs/btrfs/lzo.c
-
-between commit:
-
-  2ac3e062af024 ("btrfs: reduce extent threshold for autodefrag")
-  741b23a970a79 ("btrfs: prevent copying too big compressed lzo segment")
-  26fbac2517fca ("btrfs: autodefrag: only scan one inode once")
-  966d879bafaaf ("btrfs: defrag: allow defrag_one_cluster() to skip large extent which is not a target")
-  d5633b0dee02d ("btrfs: defrag: bring back the old file extent search behavior")
-
-from the btrfs-fixes tree and commit:
-
-  13b2f7ab699a5 ("btrfs: close the gap between inode_should_defrag() and autodefrag extent size threshold")
-  48b433a2ef82a ("btrfs: add lzo workspace buffer length constants")
-  db360c49d476f ("btrfs: autodefrag: only scan one inode once")
-  e6c69fcbee7ef ("btrfs: defrag: use control structure in btrfs_defrag_file()")
-  6b17743d934ec ("btrfs: defrag: bring back the old file extent search behavior")
-
-from the btrfs tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-diff --cc fs/btrfs/ctree.h
-index 947f04789389e,5a569bc756c3c..0000000000000
---- a/fs/btrfs/ctree.h
-+++ b/fs/btrfs/ctree.h
-diff --cc fs/btrfs/file.c
-index 01111ee06e1ef,8815981447034..0000000000000
---- a/fs/btrfs/file.c
-+++ b/fs/btrfs/file.c
-diff --cc fs/btrfs/inode.c
-index 76e530f76e3cf,44e8d28182b7f..0000000000000
---- a/fs/btrfs/inode.c
-+++ b/fs/btrfs/inode.c
-diff --cc fs/btrfs/ioctl.c
-index 8d47ec5fc4f44,998bf48e5ce29..0000000000000
---- a/fs/btrfs/ioctl.c
-+++ b/fs/btrfs/ioctl.c
-@@@ -1435,16 -1460,16 +1461,23 @@@ static int defrag_collect_targets(struc
-  			goto add;
-  
-  		/* Skip too large extent */
-- 		if (range_len >= extent_thresh)
-+ 		if (range_len >= ctrl->extent_thresh)
-+ 			goto next;
-+ 
-+ 		/*
-+ 		 * Skip extents already at its max capacity, this is mostly for
-+ 		 * compressed extents, which max cap is only 128K.
-+ 		 */
-+ 		if (em->len >= get_extent_max_capacity(em))
-  			goto next;
-  
- +		/*
- +		 * Skip extents already at its max capacity, this is mostly for
- +		 * compressed extents, which max cap is only 128K.
- +		 */
- +		if (em->len >= get_extent_max_capacity(em))
- +			goto next;
- +
-  		next_mergeable = defrag_check_next_extent(&inode->vfs_inode, em,
-  							  locked);
-  		if (!next_mergeable) {
-@@@ -1683,19 -1715,11 +1723,20 @@@ static int defrag_one_cluster(struct bt
-  			break;
-  		}
-  
-- 		if (max_sectors)
-+ 		if (ctrl->max_sectors_to_defrag)
-  			range_len = min_t(u32, range_len,
-- 				(max_sectors - *sectors_defragged) * sectorsize);
-+ 					  (ctrl->max_sectors_to_defrag -
-+ 					   ctrl->sectors_defragged) * sectorsize);
-  
- +		/*
- +		 * If defrag_one_range() has updated last_scanned_ret,
- +		 * our range may already be invalid (e.g. hole punched).
- +		 * Skip if our range is before last_scanned_ret, as there is
- +		 * no need to defrag the range anymore.
- +		 */
- +		if (entry->start + range_len <= *last_scanned_ret)
- +			continue;
- +
-  		if (ra)
-  			page_cache_sync_readahead(inode->vfs_inode.i_mapping,
-  				ra, NULL, entry->start >> PAGE_SHIFT,
-@@@ -1834,13 -1879,11 +1898,10 @@@ int btrfs_defrag_file(struct inode *ino
-  			break;
-  		}
-  		if (do_compress)
-- 			BTRFS_I(inode)->defrag_compress = compress_type;
-- 		ret = defrag_one_cluster(BTRFS_I(inode), ra, cur,
-- 				cluster_end + 1 - cur, extent_thresh,
-- 				newer_than, do_compress, &sectors_defragged,
-- 				max_to_defrag, &last_scanned);
- -			BTRFS_I(inode)->defrag_compress = ctrl->compress;
-+ 		ret = defrag_one_cluster(BTRFS_I(inode), ra, ctrl, cur,
-+ 					 cluster_end + 1 - cur);
-  
-- 		if (sectors_defragged > prev_sectors_defragged)
-+ 		if (ctrl->sectors_defragged > prev_sectors_defragged)
-  			balance_dirty_pages_ratelimited(inode->i_mapping);
-  
-  		btrfs_inode_unlock(inode, 0);
-diff --cc fs/btrfs/lzo.c
-index e6e28a9c79877,430ad36b8b080..0000000000000
---- a/fs/btrfs/lzo.c
-+++ b/fs/btrfs/lzo.c
+metadata:
+  git_ref: master
+  git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+  git_sha: d4a0ae62a277377de396850ed4b709b6bd9b7326
+  git_describe: next-20220223
+  arch: parisc
+  toolchain: gcc-11
 
 
-diff --git a/fs/btrfs/ioctl.c b/fs/btrfs/ioctl.c
-index 7d3542893a165..5ef7c08b24b89 100644
---- a/fs/btrfs/ioctl.c
-+++ b/fs/btrfs/ioctl.c
-@@ -1734,7 +1734,7 @@ static int defrag_one_cluster(struct btrfs_inode *inode,
- 		 * Skip if our range is before last_scanned_ret, as there is
- 		 * no need to defrag the range anymore.
- 		 */
--		if (entry->start + range_len <= *last_scanned_ret)
-+		if (entry->start + range_len <= ctrl->last_scanned)
- 			continue;
- 
- 		if (ra)
-@@ -1760,7 +1760,7 @@ static int defrag_one_cluster(struct btrfs_inode *inode,
- 		kfree(entry);
- 	}
- 	if (ret >= 0)
--		*last_scanned_ret = max(*last_scanned_ret, start + len);
-+		ctrl->last_scanned = max(ctrl->last_scanned, start + len);
- 	return ret;
- }
- 
+Build error:
+-----------
+mm/mmap.c: In function 'expand_upwards':
+mm/mmap.c:1962:25: error: passing argument 1 of 'vma_find' from
+incompatible pointer type [-Werror=incompatible-pointer-types]
+ 1962 |         next = vma_find(mm, vma->vm_end);
+      |                         ^~
+      |                         |
+      |                         struct mm_struct *
+In file included from arch/parisc/include/asm/cacheflush.h:5,
+                 from include/linux/cacheflush.h:5,
+                 from include/linux/highmem.h:8,
+                 from include/linux/bvec.h:10,
+                 from include/linux/blk_types.h:10,
+                 from include/linux/writeback.h:13,
+                 from include/linux/backing-dev.h:16,
+                 from mm/mmap.c:14:
+include/linux/mm.h:661:54: note: expected 'struct vma_iterator *' but
+argument is of type 'struct mm_struct *'
+  661 | struct vm_area_struct *vma_find(struct vma_iterator *vmi,
+unsigned long max)
+      |                                 ~~~~~~~~~~~~~~~~~~~~~^~~
+cc1: some warnings being treated as errors
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+Steps to reproduce:
+------------------
+# To install tuxmake on your system globally:
+# sudo pip3 install -U tuxmake
+
+tuxmake --runtime podman --target-arch parisc --toolchain gcc-11
+--kconfig allnoconfig
+
+
+--
+Linaro LKFT
+https://lkft.linaro.org
+
+[1] https://builds.tuxbuild.com/25XO7KdJCJcum36gCorICgGU8C5/

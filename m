@@ -2,150 +2,149 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E70A4C31CA
-	for <lists+linux-next@lfdr.de>; Thu, 24 Feb 2022 17:46:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0230D4C3246
+	for <lists+linux-next@lfdr.de>; Thu, 24 Feb 2022 17:55:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230160AbiBXQqm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 24 Feb 2022 11:46:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56476 "EHLO
+        id S229556AbiBXQzf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 24 Feb 2022 11:55:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230138AbiBXQql (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 24 Feb 2022 11:46:41 -0500
+        with ESMTP id S229489AbiBXQze (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 24 Feb 2022 11:55:34 -0500
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06BA21637E1;
-        Thu, 24 Feb 2022 08:46:05 -0800 (PST)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21OFX0Gd000642;
-        Thu, 24 Feb 2022 16:45:56 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC9A522B19;
+        Thu, 24 Feb 2022 08:55:03 -0800 (PST)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21OFWbgt007287;
+        Thu, 24 Feb 2022 16:54:40 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : references : in-reply-to : content-type :
  content-id : content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=y2xHOSctmZmK/oYfkFba1YuHc2NeG4bieaKISfqFt7M=;
- b=pniz/At5IM2HrN8OHB4gkZ1qJiK4CJ2mKCTSOnRdGySnfHuOg7tbMsCpo7dHGm4fX+00
- h4aRXa5wFnQb5JS2SyRFcmvLtbQcb8saluUFfgvZE2NYS8RtZoqR+cQLX0yrCwJ9jpsU
- BqorxTZmqUi3Ze8Tb/rXwd1aQwZ/L87MReszJHBmbgc+v/Uxg1tO1+4xeu0LgTKkpxOD
- utLy2VwKqBkzjNRwuEvu62QCn9yR4WNp1O8LoE6mRr3qlAai6g4IbtRCceLMraSyZ0ab
- SrrBIwGWMeczXZcqjBWzhpn2TJ41a7Eb8nwGx+c9o9Ax4dloEFHTY6JjL+a/QFZW0YpS oQ== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3ecv6eyte0-1
+ bh=exn06IlWyHEzFy63SVNFnsbBPo+i5JjG4ZylIiqqa+g=;
+ b=lAw72qrUxZ0HR+fl0Ayz2wCyksCvRlVBhjvwiEdXus2kxwukh5Q9M6JA1RdLylilRw83
+ YrAS5ja4sEOLdtjjF+dE5TT9LTyFun+j/HjOlqdyiwQagNivx5W3BKkeXv493w6GG2jK
+ O3glkvOLk5Gy/l7YbCtYLACHe5Co+Az8JWIzGesAryhnEOh3dxz9vB4A9kuk2nrwgCYt
+ hU8cvuZFaRR9tpFtmFWGEkingjM+5B1FX4S4XFHE+VyAjML1+ualsSST7fJSEORWQNmd
+ XpehnjYjwAf0FxaXqGLC5/tt+V3UBQI0txfFbzJZiGpqvQ091SII31GsDYrwejo5V63w NA== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3ectsx80hn-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 24 Feb 2022 16:45:56 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 21OGUv39009718;
-        Thu, 24 Feb 2022 16:45:55 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2102.outbound.protection.outlook.com [104.47.58.102])
-        by userp3020.oracle.com with ESMTP id 3eat0r1am5-1
+        Thu, 24 Feb 2022 16:54:40 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 21OGUYQc159634;
+        Thu, 24 Feb 2022 16:54:39 GMT
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2174.outbound.protection.outlook.com [104.47.56.174])
+        by aserp3020.oracle.com with ESMTP id 3eb483ukwb-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 24 Feb 2022 16:45:55 +0000
+        Thu, 24 Feb 2022 16:54:39 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TEaUxb0H+iAFYjrNajSmYNPCEKtdJku6bUs40eyhtO540ECQAyQKIycg/9Kq2yOqdpeAxHjbJvo7tf7in8bvCtFCbd5J0lyoS8kWjWUHh2EE2kaz0s/ShLST4837GgW6DCNc77BoH9z+GowA16z1Zwr+90Y9bKwOGnFet4blL3NMj6SWMVCKJLYUYJnT7aW7Q159jidYX7GpxpSedr65P7ByH6IsXzNw9F2B6ToG7y2G8AzxYtOF6kbUdQeyAxytIZSFYSblLP7kITuFqWNNuNgQWwvmbV6iw3t++q65ea0HavR4RgxFqgXDtUcMzR0TEMcHMIu4/7DaRweM+MmUFA==
+ b=EtNeibnkGELRPAvvFxcEl962Pnq71yY0TCElvcIEBsUui0I5ObMDBZMEQyLLeA547Aau2or0ZsxP+gPSMr2ShoLoHISyfIvpfD/iW+tgltly+gCbZWEpXAmRiuRn1m0EfrURusIvHQKRQ9S9Yy5rEIqipdkGyXCWqsEt82j6PF7mXsjL7qjiKMeFTdxk0hZPUOnrL9g05pfln2qyHlmx/1652ktLYcPKCkkPYJiQPzRZ/c3Rrbys6KPDHIs0cJxr29WssCtaIB7Bt5GrwCtEso0oLHaGR2kFAhaqdd6FNH6+gydvAl0euG2aXZHD4HVG2/uaOmJrQdqtgVSvPFSygQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=y2xHOSctmZmK/oYfkFba1YuHc2NeG4bieaKISfqFt7M=;
- b=GGTxheviGM7tRco1cX0Pkvjbif71dUVKYuwATCsNRX7fyh4QNLGvo/n+jy4JSN6U/FbdX449sQhY3Jb4EFk1+4upT3CgjEbyTzMcAChcAQH1E+ZWVe3bYMHyhja8mbBtqJyOfBxImSPFGxJHg1MjdBKVoqDXF+mZFahh2umf80EfbGvriyfBx1lJEMcDb5s8NLBQmoTmQCQSSbhm2mlSQSuAsE2QoOJno7SI3TzNsGK2W4hznlQNx6AnGhCJXMvWtloiaBwniehKR1ByArmNrCL8kvGjce4LJ+1tU14GB7BLtdYPXA1fWIhCQgaWKegAl9dl1uiVEZhsU50ilDr84Q==
+ bh=exn06IlWyHEzFy63SVNFnsbBPo+i5JjG4ZylIiqqa+g=;
+ b=W2vjRiNTLBXUQHnN641tV5jclkE8rhdMFwRcmG515l+C5c/InbUxEPx7UktAQAXsZShHrDBm4vSuFn6M6djbV0onv2f+pV9K7NS/CPIl1oxstK0YlUJ+sNyc1u2Q9f4W7112F6Rk/yo79jrGPnjw4ZiN2OUSpOgoU3eaWop/IkGJA0ifd7ub7oLlA/hu3cJ2mJeF6hvjHcd90s3MLYOCcqn3s1U24pHTr7zw+BUOO149AlSKOaKSSWsGzLqiuVm6ujuc+nBY4pXj963M/jpp1s5ypyFFTNqrtT2ZU5P66ewtd16bysVB28gobQMOlvzNTAxwcCrGWa+HlDmKwhaNUA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=y2xHOSctmZmK/oYfkFba1YuHc2NeG4bieaKISfqFt7M=;
- b=bxWnHSKBiog9oT4L085Aq6U64C0A8oYMi9ldC62iZL3DmkR0kSWxpRJtG95ePgJJZHXRMzZszcQ6lk/B9jFGsxOTAQYpsQoIIZVJhKDlDBSxCA/Si/IibRky4n7Q/l9OIvqw/VCeYhEDtLLOa9YqvvNetoYQRZ25oTTsrZStN2s=
-Received: from BN0PR10MB5128.namprd10.prod.outlook.com (2603:10b6:408:117::24)
- by MN2PR10MB4110.namprd10.prod.outlook.com (2603:10b6:208:115::11) with
+ bh=exn06IlWyHEzFy63SVNFnsbBPo+i5JjG4ZylIiqqa+g=;
+ b=H9hUUcJF0c3lHZ7EYNnfWccJmz1wNrNy9Wo0v3j0mhDOy9VP2k/8eCm5k1CpO7s1niwDzJO3aMBWwj4cbtFL3XZ1pnpAN0GWCj4AyXKJLem2tsfUx9cb/u9XtNTKoAChqw0YfnTwf75AbXpypVEkc72MPvyfOQ1g3fnNbHRZSTg=
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
+ by MN2PR10MB3200.namprd10.prod.outlook.com (2603:10b6:208:124::21) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.22; Thu, 24 Feb
- 2022 16:45:52 +0000
-Received: from BN0PR10MB5128.namprd10.prod.outlook.com
- ([fe80::29c0:c62f:cba3:510e]) by BN0PR10MB5128.namprd10.prod.outlook.com
- ([fe80::29c0:c62f:cba3:510e%9]) with mapi id 15.20.5017.024; Thu, 24 Feb 2022
- 16:45:52 +0000
-From:   Chuck Lever III <chuck.lever@oracle.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-CC:     "broonie@kernel.org" <broonie@kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>
-Subject: Re: linux-next: Tree for Feb 22 (NFSD_V2_ACL)
-Thread-Topic: linux-next: Tree for Feb 22 (NFSD_V2_ACL)
-Thread-Index: AQHYKHvjd7nIQ/9dd0WHn6e/zlcx+qyhS2SAgAD35ICAAIyUAIAAGOcAgAACPQA=
-Date:   Thu, 24 Feb 2022 16:45:52 +0000
-Message-ID: <1253C13F-B917-4AEE-A746-4ABB06150ED4@oracle.com>
-References: <20220223014135.2764641-1-broonie@kernel.org>
- <5ef34a6f-c8ed-bb32-db24-050398c897a0@infradead.org>
- <EEADAF6A-04D6-42C8-9AAE-7D4EFB2FA507@oracle.com>
- <4820dc3e-6c4d-58f4-701a-784726f6c786@infradead.org>
- <3CFFC488-CC2F-4B2B-9DD3-F939468A85C7@oracle.com>
- <bc529f39-52c7-fd54-b435-d6c62351c526@infradead.org>
-In-Reply-To: <bc529f39-52c7-fd54-b435-d6c62351c526@infradead.org>
+ 2022 16:54:36 +0000
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::8df4:1db9:57f2:a96a]) by SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::8df4:1db9:57f2:a96a%3]) with mapi id 15.20.5017.024; Thu, 24 Feb 2022
+ 16:54:36 +0000
+From:   Liam Howlett <liam.howlett@oracle.com>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+CC:     open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Tong Tiangen <tongtiangen@huawei.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        "lkft-triage@lists.linaro.org" <lkft-triage@lists.linaro.org>
+Subject: Re: [next] riscv/kernel/vdso.c:123:27: error: 'next' undeclared
+Thread-Topic: [next] riscv/kernel/vdso.c:123:27: error: 'next' undeclared
+Thread-Index: AQHYKYoVxjaEXtw9fUOXgBAuDy4zo6yi60gA
+Date:   Thu, 24 Feb 2022 16:54:36 +0000
+Message-ID: <20220224165426.kihlm6bzwuvbjaot@revolver>
+References: <CA+G9fYuhipgPsHetpvBmD4GO7KGfhSRRAAgN2ZnoFUWiCKMy6Q@mail.gmail.com>
+In-Reply-To: <CA+G9fYuhipgPsHetpvBmD4GO7KGfhSRRAAgN2ZnoFUWiCKMy6Q@mail.gmail.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3654.120.0.1.13)
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: b919b8db-6eac-4ada-501c-08d9f7b51ee8
-x-ms-traffictypediagnostic: MN2PR10MB4110:EE_
-x-microsoft-antispam-prvs: <MN2PR10MB4110F056275EECDBD041D021933D9@MN2PR10MB4110.namprd10.prod.outlook.com>
+x-ms-office365-filtering-correlation-id: 8f518e89-7fee-4f19-6523-08d9f7b65700
+x-ms-traffictypediagnostic: MN2PR10MB3200:EE_
+x-microsoft-antispam-prvs: <MN2PR10MB32005F804309799C2F02DFAAFD3D9@MN2PR10MB3200.namprd10.prod.outlook.com>
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: yN9kjX/tWN/6Pqxd4bq38l9WGKfPP9LJc2HAsmRefmMpqR0ZwM7r+YHmjn8S3cA2qLhDx+l+2yI5nLInABQvoBQPCPEh0paF+TOEWu8bfnS57RzY0oNdvbOCrF33vJ+uR8g89Df8tJ6QxSSiREgmrYO8scxiN1Xwp1nodLczmHQcqPjBYzBbXZDKQx4imJiOgq5SLrASpdNJp+YNNyBDMjYQESBPTJE9e5su4k7DvOqbuQzecNPKmFKCKWNRXhWRalXR3OAhAn6di29M24Rvaxcw+joDBvfx5gxHXS+Iw/H81A/fBlgcZKrb8Jp7xs5PB+CAdCPjWZLKr5noKVOx8SAybiFZHc4fuVEH/ktbCkTeWziXvD7JylWVPUzuffFpnaMZBLJuVTdnfEH+ahsjSnlrGGQmNUKIRkpMrLxcb77H5kn0kF0tc6pL7Ft4+80efyV8aP9qQTJC5a1Ljw77vq0lWhXh32uDiNJsK/tig8RriN5H0jQXHULr6Rtmu4jrpPf2lsxX9rXZeZfChXm1waOCIGNsgumAmr0I359MvHitN8kRi8N+bLFH46MRJEEPozQW/6s0njFkAUlP0cdDfBGJw1ZHWQpy4LQzEewqP5Juml42PgRfQNH26zKfGVWpxIjjhdloUqLv1Sxi0UVRHsh86GGa+7ApFZErde8oYdOeuHQ3+I3Y7775x6GFp9iSGQU4NqZxifNC+VsRBXJOkq8ld2zD5I3NlFbmniuuI+RrupZZnqIvlF59oeOQ4MwG
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR10MB5128.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(53546011)(33656002)(6486002)(8936002)(6512007)(5660300002)(6506007)(508600001)(86362001)(2906002)(83380400001)(122000001)(71200400001)(26005)(316002)(76116006)(186003)(6916009)(66946007)(38100700002)(64756008)(2616005)(66556008)(66476007)(66446008)(36756003)(8676002)(91956017)(54906003)(38070700005)(4326008)(45980500001);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: 3jmRB0Kf/9xPbIzZkyZNzT/nIw8rebK6Bz58jhtgpGwu6F+QXOgfzCv5frGQvsHYN/CBfS0B6XFJvG7XGfuZoZGmLrYHhBu2JKLjDpkSEg+4oXw/SZWHJ3eelJe7upiHUC8SyDEO37eYkllsIN7PqV5okS5O2/603Zp1eTBnuqS12v+J+C3zwNWY7tlWtP+nqphebMQrt4DhotFSZS+hD32KdS79BPGC1t6+15gWeLaIhPdVOssCAy8OKmC8M3GdnVU/nsKlfnxYk2sJEbVBVA+OTgTskavMd/eHgkHTGjCpC2bMW38wAMyj6OaRk1DVQPfxeBGzhWjv4DRFPH/0HcnxY+3stDeaWc/3HkHEAcXGRcW0UutUp3qtbFGXaOln/e+IdRxEk4ZQFCMsu9ZILbtg4hpu8xflRvjAgiJytZzhLTYaFswBZI8vZgKdhnwyQzIHPIs0QpOs5X7H4g3JvIxLlhVdaAJSp7PRvqvOzzqaaATUDRIj2lsB36SN24z2qtM3MfalHkKQQ91QLNU8ZfdcAPVdH8WymYket5EjbchqtdWWV6pljsZHPQDR4ooxbSQbN/93wQ4tVPkNgKgPc0fsfZicFnjn/uFZqhhB6V8NS/L/0bX6eggUZMzdBslphenjzpepBLXGuaPC1outfI95YisPMKbtYrwI8RPFd8C7mHGNSDHLNe9MSAU4sWhNYK6mvx1O0mQbWZhCrwtuBS++8W28HOqVaSZPWwz0CzbECMNncTRmKKbKWznPBok1iPppsiHgH8OvCCgGqV/HR9ljEwtriOYWWQBsY/6H5ZU=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(5660300002)(9686003)(33716001)(38070700005)(4326008)(66446008)(8676002)(76116006)(66556008)(66946007)(64756008)(66476007)(7416002)(186003)(44832011)(26005)(6512007)(6506007)(91956017)(122000001)(6486002)(966005)(316002)(54906003)(6916009)(71200400001)(508600001)(86362001)(1076003)(2906002)(38100700002)(8936002);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?sCGeiC1lFKzrrYkKgNcqDcC//FbY/sF3XnSPUJyswVZDSD33VfZa3L/alzal?=
- =?us-ascii?Q?7ehkTux5BVcnHHGDTgoUQo9jTF416P8ieW1HROVQmI8V0GSpqzUnjgkricql?=
- =?us-ascii?Q?R927ZGSaFCoieQx5od0rw6iNO4l8MWnOdNwksKozop7fZ7k57HofaVRvBYt1?=
- =?us-ascii?Q?qLlb7MWQVmRMyHT3WZBnh79rH6qJY1GsljiqzG3rQzX1XIhNjsHgvbhrn+g0?=
- =?us-ascii?Q?3k7cAUNYP0MXNPTLd8skYqHLyYCGxK0dJKmjxC8TfCaQ/V3eFkke23bE89MO?=
- =?us-ascii?Q?iEME74T3yvQn4PnjEkeeBbCnFWQ0GZz+9RETygSmG/TqaLXiKAlhRH/QII27?=
- =?us-ascii?Q?mFZXE6D0uyHWZpdqKEaF+0d+gKFLrP6uMrjETKoMdY7SDDWkl/wXZtoxmas3?=
- =?us-ascii?Q?BdyVjjZp/AI2soINFTIJ9IvZr8oFHoHPWgbIqObsPPaaV65WsvjNgMNMtqS9?=
- =?us-ascii?Q?J5czJlXXsoMOds3fY4tYtPLh0s2/ZZjQKLZ9+Dakn4DKLU3FCrN4b0u/p1GN?=
- =?us-ascii?Q?viG3CN+LA7n+rH7JR3VGZ1lgJ4KUluU6ZUdodWlVeMrNmk+FsBcoQZaAQtkc?=
- =?us-ascii?Q?w41dNNyLbqFdbq55uFiyXRiSeWli30fddmyHC6T4uoP8XKCLXhTeoP1iH870?=
- =?us-ascii?Q?NAvRRhnO2bjqk8UckXRgRPNsNv/FYbvUDA95mf+Oi3SL0rw/ANzvvZFWNzfo?=
- =?us-ascii?Q?VqJ0ab1PsS54sZQ/jHB8YAu1M+fu1GezCX58rTJ0hlbOlF1UGZYKkw4lXXcQ?=
- =?us-ascii?Q?kW9K3/uWMqhWAIx2BamY81pyBSjz6jPSGEFBt69sssMGTGophu+gFe7o3PK1?=
- =?us-ascii?Q?PuF7nqMNnKCTi7ZvuE+oje18cDoJTz3/BoqTDOngDAEiYBA2vEgy2LjL5aLb?=
- =?us-ascii?Q?rRVS6XGTPjqm8Iy0yw6caO8Ai7CgAl6dx37mu30CbWnjSGN7Hb/dXwXuTv+b?=
- =?us-ascii?Q?M76TbtyvAVrQm7YTOYEFANfMS3s/s0F3bqONz4CuVsU2f16YUGlQe1GeSc27?=
- =?us-ascii?Q?usq5kBVa6db/Qc5VqjR8JVlw5O57VXdO/k8kt83BCCfIscMtCqRvzNnE2AQm?=
- =?us-ascii?Q?qWi6E1FISBAq06VIAN2tbQv70D8QRrgsk9wuVGiJzWTHwdKvtAvQkKxeePJ1?=
- =?us-ascii?Q?m3POfuqGYCU10Yq77BcDZGbP5ZWntaPh06fsRncgrG0qBiAAEAHq3bpO57r/?=
- =?us-ascii?Q?7Jd/9CAOm3IzZm2F4d+8cpJ2SgCAOma5bkFQBcmjGork8PQIp3rJuiH1dv53?=
- =?us-ascii?Q?Jq9wN/wC16QZmx97H54pw7OnWb0GS4txAFUDDwfnBnq/XZU5FOXnpeDVaWGh?=
- =?us-ascii?Q?Sxxlt0T+wZhU073rxFKYDivCR6OBNvjRIQlUol79ooRmJKRy7g1skPIb2d12?=
- =?us-ascii?Q?UTBepAjUblL0kAebAlmhheNgUD3l6eivMlNWfHjiJ+cwsW7JQwgrQkAUv/pO?=
- =?us-ascii?Q?JNezcS15QidRGoblF5xWDVPlpfAyUedAViQ9IgEJWFjfPYWBIAD78mc9GNiD?=
- =?us-ascii?Q?V7KdPZ/2A9DhwqbFCvq3cTJKkFHKP+Czxb/+k2oEzGIerbr0Id+PQH7pYFKh?=
- =?us-ascii?Q?iesq680a3S6+cYa41zFtN7DFLNk2Vifi5mwvLIdWyCUa/C2Vf3gY/uDdUWG1?=
- =?us-ascii?Q?Bf30rTGO86/TKnGZ46cb1gA=3D?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?+oMVUlzeAN6fAMiE0OuXGE3wRbHa9sxRcS4kqrhmxwBNHqqlJ3n/BgbI1kMA?=
+ =?us-ascii?Q?Wu7q6/WOXlF+QtMvNs5t7uczNavHMO1WLwn69jQ6hz7fe76zWV9qE8ulrwrQ?=
+ =?us-ascii?Q?gyoL7ZtEb/kX4i3nB6aB52M3MRIIL9JOmKjEZoAcOPbcVF/oaCNl6LqWFgf4?=
+ =?us-ascii?Q?PBpb9qFQ2JtefDGB5CbAd0bA+mMmbxgNhGfRQP6IunkTx8FQn4cyA45RtcMj?=
+ =?us-ascii?Q?Gqdg9PZJMLJZ+cRLXYn/3dpbmZS2NnQ6fODBeKYOfjS1T/DQlEqii3A620Q4?=
+ =?us-ascii?Q?zddAeXGTaOpGYByKE23UhXaClrwRcOwUfZDVQeAYW+uqgaW6ipX3PZcbU1n3?=
+ =?us-ascii?Q?zckKdNeHIHBlZYPLfAG4laCCoXpJQkrRYJPHpgH5po5aoDWGTP+7jS7v+0Lf?=
+ =?us-ascii?Q?KdHj8BXYSbAUciLxkkgQuvVTCFHihobIe7lQprjJnEBO///NRUxdBnny0SFK?=
+ =?us-ascii?Q?eUZ7GkwDpfuf6rOCSFBRtan6CUhtdeiNKinIVkmOrwZ2knTxPxIDeLvwL0IU?=
+ =?us-ascii?Q?E1jNjQ7pLKCuyKc34gjyeuPjx3E3E0WJ7cqWxtAQkj6WeN05zuJMZ3u+pnwN?=
+ =?us-ascii?Q?GJ8itpvxeZELAnjOdwDyLsUPG+32dPcvZMKQTqBV73SxcY46SQhDGVzPUrUg?=
+ =?us-ascii?Q?I4wHaaKS9jc3Fm2F/p525/WuvTvzJ6L/L7wpe4iOldTglBhBH63VmyDlAgS9?=
+ =?us-ascii?Q?aDTfBPC6SKvghs+cBwE3pC64dQQxlhK6HV0V0lp5ZeT//WAu8ReeSLMgLHds?=
+ =?us-ascii?Q?6eoaDTdEsht/v0XAYtcU+4vjDli2AzxotVksOardZGxVL67cYreiWWcWaMol?=
+ =?us-ascii?Q?tU5ctzfejUrS4KYQpu0PrNj0n0GJ/gooN+XC75v0vCmpqoCiCsfuVNrMblLq?=
+ =?us-ascii?Q?KMl/dc9wLXUAib36FL7wkk3M/oO1yq41D5n7XjprQyHPaHTsMF1X7RnJR3bu?=
+ =?us-ascii?Q?fWUcUULbtZyjT7XjIbhKGqYGPWVXvEcfSluXF3ek4eTHvZjfedU7Q44hgukt?=
+ =?us-ascii?Q?LsdU87tXxgqZgyPiyM1VTANv0DJ3uQ4oo6l/ms6GqMzg5UAnKmIs09B3LLxv?=
+ =?us-ascii?Q?DdnRlDxC7esz8j8nB0Kiz1xgLeIwvtN8E3zj7BnqfMrd1tQSj6gKllfqdVsP?=
+ =?us-ascii?Q?8vy9JQeL90qmeDy3pZfQ6HyAInzGh1LAVYARFpWiVcUxt1ljDOCq/ox5GL33?=
+ =?us-ascii?Q?QASL61x4s5rz/TsyNue+/2/Qj4I3AJPLE0DzYbGvvQ9T7spfa0bKcpZlm8h8?=
+ =?us-ascii?Q?1CWfWyvUFkbje5wjrCSzi85kFGeCxZA7c/AKBJvBILUf3+HQgks0Ws2AH2A/?=
+ =?us-ascii?Q?0MjY3+Ejqs21tSAuW957reEhqUimviChaWKsAzBYkouFPpVym2kqd7oC1tTz?=
+ =?us-ascii?Q?KfSNBC7fZ92UVRdWFhv4JJcUYK2gu3Fy1UcCfVzG3G4zIbax/U6ahwv5EdhF?=
+ =?us-ascii?Q?rs94XFa0VJoz4vGsLzLbX1tL43dk0i+K4Ax94q4EAdUUH9AR8EOaUFhEC77D?=
+ =?us-ascii?Q?uvdj0+J/rwbxVRqBdwcwUSNFlfURQwwveZnp4+AadrQP+mij9lE0dMI3wZNU?=
+ =?us-ascii?Q?UKeuQTINnE+4ZF6p00kYx7ZIC4wbR5zg+JhM+0j1dfofdwmlZZ+BAy5DNGEk?=
+ =?us-ascii?Q?suixob1Ei5kudNq9C8i0uu4=3D?=
 Content-Type: text/plain; charset="us-ascii"
-Content-ID: <E943538B278C3F4683E8AE9479E4025C@namprd10.prod.outlook.com>
+Content-ID: <DA28A8CC7BCFA64882A696C451DACAB1@namprd10.prod.outlook.com>
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: oracle.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN0PR10MB5128.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b919b8db-6eac-4ada-501c-08d9f7b51ee8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Feb 2022 16:45:52.8224
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8f518e89-7fee-4f19-6523-08d9f7b65700
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Feb 2022 16:54:36.4450
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: HktnkhpP8DlKrRl3L1kZVVzQ2OoammfjQHOf/YNLiybb24xnjof8DzGd6cD6qI/JZ0xIwZ72ufmRejOUQRGwqA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR10MB4110
+X-MS-Exchange-CrossTenant-userprincipalname: hROOBqYG7bDZOwJMbzd+DyrS6evWlmR+yVNDceqoMGlAdEV5bE4Yc/d9BY40L7CscbgqeSpP3Av8ZNd2wKhV1g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR10MB3200
 X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10268 signatures=684655
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0 spamscore=0
- mlxscore=0 adultscore=0 mlxlogscore=999 suspectscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2202240096
-X-Proofpoint-GUID: je2OkmKn-K9SRYO9SEOrggECOP4JInHG
-X-Proofpoint-ORIG-GUID: je2OkmKn-K9SRYO9SEOrggECOP4JInHG
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0
+ mlxlogscore=999 adultscore=0 bulkscore=0 phishscore=0 suspectscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202240096
+X-Proofpoint-ORIG-GUID: 9g2lmq0OZpvAxF_aHDYui_258C-5FmWA
+X-Proofpoint-GUID: 9g2lmq0OZpvAxF_aHDYui_258C-5FmWA
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
@@ -156,70 +155,70 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-
-
-> On Feb 24, 2022, at 11:37 AM, Randy Dunlap <rdunlap@infradead.org> wrote:
+* Naresh Kamboju <naresh.kamboju@linaro.org> [220224 09:23]:
+> [Please ignore this email if it is already reported]
 >=20
-> On 2/24/22 07:08, Chuck Lever III wrote:
->>=20
->>=20
->>> On Feb 24, 2022, at 1:45 AM, Randy Dunlap <rdunlap@infradead.org> wrote=
-:
->>>=20
->>>=20
->>>=20
->>> On 2/23/22 07:58, Chuck Lever III wrote:
->>>>=20
->>>>> On Feb 23, 2022, at 1:08 AM, Randy Dunlap <rdunlap@infradead.org> wro=
-te:
->>>>>=20
->>>>> On 2/22/22 17:41, broonie@kernel.org wrote:
->>>>>> Hi all,
->>>>>>=20
->>>>>> Note that today's -next does not include the akpm tree since it's be=
-en a
->>>>>> long day and the conflicts seemed more than it was wise for me to
->>>>>> attempt at this point.  I'll have another go tomorrow but no guarant=
-ees.
->>>>>>=20
->>>>>> Changes since 20220217:
->>>>>=20
->>>>> on x86_64:
->>>>>=20
->>>>> WARNING: unmet direct dependencies detected for NFSD_V2_ACL
->>>>> Depends on [n]: NETWORK_FILESYSTEMS [=3Dy] && NFSD [=3Dn]
->>>>> Selected by [y]:
->>>>> - NFSD_V3_ACL [=3Dy] && NETWORK_FILESYSTEMS [=3Dy]
->>>>=20
->>>> Thanks, Randy. I think I've got it addressed in my for-next.
->>>=20
->>> Hi Chuck,
->>>=20
->>> I'm still seeing this in next-20220223...
->>=20
->> I tested my fixed version of the commit with the randconfig
->> you attached to yesterday's email. Do you see this in
->> fs/nfsd/Kconfig from next-20220223 ?
+> Linux next-20220223 arch riscv builds failed due to following errors.
+> Build configs:
+>   - riscv-gcc-9-defconfig
+>   - riscv-gcc-9-defconfig
+>   - riscv-gcc-10-defconfig
+>   - riscv-gcc-11-defconfig
 >=20
-> Not all of it -- it's missing one line:
+> metadata:
+>   git_ref: master
+>   git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+>   git_sha: d4a0ae62a277377de396850ed4b709b6bd9b7326
+>   git_describe: next-20220223
+>   arch: riscv
+>   toolchain: gcc-11
 >=20
->> config NFSD_V2_ACL
->>        bool
->>        depends on NFSD
->>=20
->> config NFSD_V3_ACL
->>        bool "NFS server support for the NFSv3 ACL protocol extension"
->>        depends on NFSD      <<<<<<<<<<<<<<<<<<<<<< HERE <<<<<<<<<<<<<<<
->>        select NFSD_V2_ACL
->>        help
+> Build error:
+> -----------
+> In file included from arch/riscv/kernel/vdso.c:10:
+> arch/riscv/kernel/vdso.c: In function 'vdso_join_timens':
+> arch/riscv/kernel/vdso.c:123:27: error: 'next' undeclared (first use
+> in this function); did you mean 'net'?
+>   123 |         for_each_vma(vmi, next) {
+>       |                           ^~~~
+> include/linux/mm.h:685:49: note: in definition of macro 'for_each_vma'
+>   685 | #define for_each_vma(vmi, vma)          while ((vma =3D
+> vma_next(&(vmi))) !=3D NULL)
+>       |                                                 ^~~
+> arch/riscv/kernel/vdso.c:123:27: note: each undeclared identifier is
+> reported only once for each function it appears in
+>   123 |         for_each_vma(vmi, next) {
+>       |                           ^~~~
+> include/linux/mm.h:685:49: note: in definition of macro 'for_each_vma'
+>   685 | #define for_each_vma(vmi, vma)          while ((vma =3D
+> vma_next(&(vmi))) !=3D NULL)
+>       |                                                 ^~~
+> make[3]: *** [scripts/Makefile.build:288: arch/riscv/kernel/vdso.o] Error=
+ 1
+> make[3]: Target '__build' not remade because of errors.
+> make[2]: *** [scripts/Makefile.build:614: arch/riscv/kernel] Error 2
+> make[2]: Target '__build' not remade because of errors.
+> make[1]: *** [Makefile:1971: arch/riscv] Error 2
 >=20
-> When I add that, I no longer see the problem.
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>=20
+> Steps to reproduce:
+> ------------------
+> # To install tuxmake on your system globally:
+> # sudo pip3 install -U tuxmake
+>=20
+> tuxmake --runtime podman --target-arch riscv --toolchain gcc-11
+> --kconfig defconfig
+>=20
+> --
+> Linaro LKFT
+> https://lkft.linaro.org
+>=20
+> [1] https://builds.tuxbuild.com/25XO99nwfQgKrWKz4yfBPYw0wyU/
 
-That's the fix. I guess next-20220223 hasn't pulled in my latest
-for-next yet.
 
---
-Chuck Lever
+I have fixed this for linux-next.
 
 
-
+Thanks,
+Liam=

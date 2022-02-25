@@ -2,45 +2,45 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDA554C4FC2
-	for <lists+linux-next@lfdr.de>; Fri, 25 Feb 2022 21:41:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96A334C5003
+	for <lists+linux-next@lfdr.de>; Fri, 25 Feb 2022 21:48:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236702AbiBYUlf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 25 Feb 2022 15:41:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47468 "EHLO
+        id S237517AbiBYUri (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 25 Feb 2022 15:47:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231500AbiBYUle (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 25 Feb 2022 15:41:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42190214F99;
-        Fri, 25 Feb 2022 12:41:02 -0800 (PST)
+        with ESMTP id S237110AbiBYUri (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 25 Feb 2022 15:47:38 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B06C321DF08;
+        Fri, 25 Feb 2022 12:47:05 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 01AA7B83363;
-        Fri, 25 Feb 2022 20:41:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FB20C340E7;
-        Fri, 25 Feb 2022 20:40:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3779E61A39;
+        Fri, 25 Feb 2022 20:47:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 421B5C340E7;
+        Fri, 25 Feb 2022 20:47:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645821659;
-        bh=HE8061LF/iGlGPikfhtbvjKwTHd7MrtYrRbVauGucKk=;
+        s=k20201202; t=1645822024;
+        bh=BgwFCB+nKC3SRlS7et+uFSYIZ+NQB/a+ehhlWdZF9ek=;
         h=From:To:Cc:Subject:Date:From;
-        b=p1fVqOO/4teZOpAH/ugmrKB7ZJeG0J4pG1tth3XNCRtbdkF7vXE5d3pUJi+DzPm8u
-         i0ISzk+WNMwe1woR2UxwcRzkEL8yxQBaoiXm09MvY096J7S5RE1hbEKYRww4IbkKwD
-         p3JPKcwFLQUXYhxfsY7AyyFFlxa2DgYB/lrVdgw1ng7Pbyxt58oaaHzjhWTcM7u/h8
-         Ys9LgtK9IHDOQJlSwG3oxIdxtRsG4s3NxoLy54nQsPDPIyMv2aDxLWG4Hbt/b7WOnt
-         /vlLjEUoheH8f6zw5GGpyR2jIh43nxliyJteIEbmrfWb288JpylDo3Aa1yeJ4/IpI1
-         yhRaXZbAXJGVg==
+        b=tfi1tk1NBr5aceiuIy/FLUjHb+kTNsjvkNXMaSWhmyHJCrw7MDz9S9XZUtitjVYe3
+         0fJTXW+ahVr8OFBqoVz/W44K2rFKnQ/og+BUc6donqcjT/Lo7MwUOPyrSron9Z4sp6
+         MdDZSk6ErFcFZJS5jaHZ1qdwpNbXXWzp+A3RAaU29eqXBiZRkEwjtyFv/NK43DE2eu
+         e11SR1jgGZ0NKMvveyyWQ3z/D1H/qK9qbvWSmZo16dkJLv5vLdkpUNOrGnYfjUqk5D
+         8+wBD7FAk+Igr0uTrp/D0yPRP7n2a+AcKZF5aHdVcSd3wNNngYEEHjbiFPlpgxjui+
+         1Qm40hKGNh1tg==
 From:   broonie@kernel.org
-To:     Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+To:     Chanwoo Choi <cw00.choi@samsung.com>
+Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        linux-mmc@vger.kernel.org
-Subject: linux-next: build failure after merge of the char-misc tree
-Date:   Fri, 25 Feb 2022 20:40:55 +0000
-Message-Id: <20220225204055.3899986-1-broonie@kernel.org>
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+Subject: linux-next: manual merge of the extcon tree with the battery tree
+Date:   Fri, 25 Feb 2022 20:46:58 +0000
+Message-Id: <20220225204658.4006482-1-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -56,37 +56,51 @@ X-Mailing-List: linux-next@vger.kernel.org
 
 Hi all,
 
-After merging the char-misc tree, today's linux-next build (x86
-allmodconfig) failed like this:
+Today's linux-next merge of the extcon tree got a conflict in:
 
-/tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c: In function 'sd_request':
-/tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c:809:17: error: unused variable 'dev' [-Werror=unused-variable]
-  809 |  struct device *dev = &host->pdev->dev;
-      |                 ^~~
-/tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c: In function 'sdmmc_set_ios':
-/tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c:1084:17: error: unused variable 'dev' [-Werror=unused-variable]
- 1084 |  struct device *dev = &host->pdev->dev;
-      |                 ^~~
-/tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c: In function 'sdmmc_get_ro':
-/tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c:1133:17: error: unused variable 'dev' [-Werror=unused-variable]
- 1133 |  struct device *dev = &host->pdev->dev;
-      |                 ^~~
-/tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c: In function 'sdmmc_get_cd':
-/tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c:1159:17: error: unused variable 'dev' [-Werror=unused-variable]
- 1159 |  struct device *dev = &host->pdev->dev;
-      |                 ^~~
-/tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c: In function 'sdmmc_switch_voltage':
-/tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c:1258:17: error: unused variable 'dev' [-Werror=unused-variable]
- 1258 |  struct device *dev = &host->pdev->dev;
-      |                 ^~~
-/tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c: In function 'sdmmc_execute_tuning':
-/tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c:1311:17: error: unused variable 'dev' [-Werror=unused-variable]
- 1311 |  struct device *dev = &host->pdev->dev;
-      |                 ^~~
-cc1: all warnings being treated as errors
+  drivers/power/supply/max8997_charger.c
 
-Caused by commit
+between commit:
 
-  7570fb41e450ba37 ("mmc: rtsx: Let MMC core handle runtime PM")
+  fdc9ce72cffea ("power: supply: max8997_charger: Use devm_work_autocancel()")
 
-I have used the char-misc tree from yesterday instead.
+from the battery tree and commit:
+
+  e77e52e00b184 ("extcon: Fix extcon_get_extcon_dev() error handling")
+
+from the extcon tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+diff --cc drivers/power/supply/max8997_charger.c
+index 127c73b0b3bd7,634658adf313f..0000000000000
+--- a/drivers/power/supply/max8997_charger.c
++++ b/drivers/power/supply/max8997_charger.c
+@@@ -242,15 -248,15 +242,15 @@@ static int max8997_battery_probe(struc
+  		dev_info(&pdev->dev, "couldn't get charger regulator\n");
+  	}
+  	charger->edev = extcon_get_extcon_dev("max8997-muic");
+- 	if (IS_ERR_OR_NULL(charger->edev)) {
+- 		if (!charger->edev)
+- 			return -EPROBE_DEFER;
+- 		dev_info(charger->dev, "couldn't get extcon device\n");
++ 	if (IS_ERR(charger->edev)) {
++ 		dev_err_probe(charger->dev, PTR_ERR(charger->edev),
++ 			      "couldn't get extcon device: max8997-muic\n");
++ 		return PTR_ERR(charger->edev);
+  	}
+  
+- 	if (!IS_ERR(charger->reg) && !IS_ERR_OR_NULL(charger->edev)) {
++ 	if (!IS_ERR(charger->reg)) {
+ -		INIT_WORK(&charger->extcon_work, max8997_battery_extcon_evt_worker);
+ -		ret = devm_add_action(&pdev->dev, max8997_battery_extcon_evt_stop_work, charger);
+ +		ret = devm_work_autocancel(&pdev->dev, &charger->extcon_work,
+ +					   max8997_battery_extcon_evt_worker);
+  		if (ret) {
+  			dev_err(&pdev->dev, "failed to add extcon evt stop action: %d\n", ret);
+  			return ret;

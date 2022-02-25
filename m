@@ -2,48 +2,55 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AC684C39EE
-	for <lists+linux-next@lfdr.de>; Fri, 25 Feb 2022 00:55:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE5144C3B7C
+	for <lists+linux-next@lfdr.de>; Fri, 25 Feb 2022 03:13:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234580AbiBXXz3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 24 Feb 2022 18:55:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54492 "EHLO
+        id S236705AbiBYCML (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 24 Feb 2022 21:12:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbiBXXz3 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 24 Feb 2022 18:55:29 -0500
-Received: from a48-34.smtp-out.amazonses.com (a48-34.smtp-out.amazonses.com [54.240.48.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64FFE278CBF;
-        Thu, 24 Feb 2022 15:54:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1645746897;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=QbI2yvl+jpyU2l//9Q47e7edmEF4FJqN+ntTcUTUoL0=;
-        b=opI9fRRu1Pby81RTufGQRKboy3uVjc9cuwBKQ/cvvk4ENz4xHnWvl6bOuAfHEIf4
-        CxByWGD7wO44p3TOYUfNNJzfot2cu8hUjg+eWlX9KAWr900hW8pJb84kimhZA22EfZ3
-        qyLyCJYukw6asfm7magJO0kDIcFQw6O/T1TiUkTQ=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1645746897;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=QbI2yvl+jpyU2l//9Q47e7edmEF4FJqN+ntTcUTUoL0=;
-        b=FYaLIikwTzcqUj+WC6EU6vGK+kk6C0EWLMudrEGdNoOowzWI6RqGPp8EkcVsVsSY
-        wK8hS9VPPjzMqKn4Xf0robZaqII+tDFqNCphYSugj5p7JCOdquCLXrhzUWtwOpmGrzB
-        85q/rpVYKR6a6IHGvztJ2265ovbhGByzJwyWvuEw=
-From:   lkft@linaro.org
-To:     lkft@linaro.org
-Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
-        linux-next@vger.kernel.org, shuah@kernel.org
-Subject: lkft kselftest for next-20220222
+        with ESMTP id S235994AbiBYCMJ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 24 Feb 2022 21:12:09 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 114BD17E0C;
+        Thu, 24 Feb 2022 18:11:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 65E496152D;
+        Fri, 25 Feb 2022 02:11:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFA73C340E9;
+        Fri, 25 Feb 2022 02:11:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645755093;
+        bh=7/NWWWGZmubchTDBTFX0t3ZLHY9P4rfU+SUXOhgm+mY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HuHGcWubRB7o+glyFi2f73c1Kf0GYq25E0WCTibEINXlKL1ctV/45hWjBRjq3picC
+         nVgSsezU6NhaBlwDxE8dgaRV5mPS1nLuhIlbG/bKbcuXB51dsEX/vH60txc9CUMDIc
+         GaCEneign/ch/gcpjK83pKU3B8z3XxbV5bhztRPF1ThxQVvCROj2CYGkFqwFdLOpCV
+         R2+0sf/q7cRGdnQyM2JNkC3rJ4GvQRCsoq8yA90EwuNA04aIgFntuMgEQ9Z3b0KaJF
+         JoXD0v71k1SGwH+5ZvDj5Q5xUV1386M9EQLcJZ73ugkTZHSRSrCSLJ9Tbg2dH1EhEO
+         1kAyMY7ZrQjcA==
+Date:   Fri, 25 Feb 2022 02:11:28 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     mhocko@suse.cz, sfr@canb.auug.org.au, linux-next@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, mm-commits@vger.kernel.org,
+        Matthew Wilcox <willy@infradead.org>
+Subject: Re: mmotm 2022-02-23-21-20 uploaded
+Message-ID: <Yhg60P06ksKTjddP@sirena.org.uk>
+References: <20220224052137.BFB10C340E9@smtp.kernel.org>
+ <20220223212416.c957b713f5f8823f9b8e0a8d@linux-foundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-Message-ID: <0100017f2e28c195-73f296bc-57d1-4189-8035-176832d77450-000000@email.amazonses.com>
-Date:   Thu, 24 Feb 2022 23:54:57 +0000
-Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2022.02.24-54.240.48.34
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,TO_EQ_FM_DIRECT_MX,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="lUvLP3GXLpu2Xwy5"
+Content-Disposition: inline
+In-Reply-To: <20220223212416.c957b713f5f8823f9b8e0a8d@linux-foundation.org>
+X-Cookie: I smell a wumpus.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,36 +58,41 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-## Build
-* kernel: 5.17.0-rc5
-* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-* git branch: [None, 'master']
-* git commit: 196d330d7fb1e7cc0d85641c89ce4602cb36f12e
-* git describe: next-20220222
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220222
 
-## Test Regressions (compared to next-20220214)
-No test regressions found.
+--lUvLP3GXLpu2Xwy5
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-## Metric Regressions (compared to next-20220214)
-No metric regressions found.
+On Wed, Feb 23, 2022 at 09:24:16PM -0800, Andrew Morton wrote:
+> On Wed, 23 Feb 2022 21:21:36 -0800 Andrew Morton <akpm@linux-foundation.o=
+rg> wrote:
+>=20
+> > The mm-of-the-moment snapshot 2022-02-23-21-20 has been uploaded to
+> >=20
+> >    https://www.ozlabs.org/~akpm/mmotm/
+> >=20
+>=20
+> Below is how I resolved the fallout from jamming today's linux-next
+> back on top of the MM queue.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Thanks, this was enormously helpful (there's a bunch of embarrassing
+merge fixups in the tree today, but they're all driver error with me fat
+fingering the scripts).
 
+--lUvLP3GXLpu2Xwy5
+Content-Type: application/pgp-signature; name="signature.asc"
 
-## Test Fixes (compared to next-20220214)
-No test fixes found.
+-----BEGIN PGP SIGNATURE-----
 
-## Metric Fixes (compared to next-20220214)
-No metric fixes found.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIYOs8ACgkQJNaLcl1U
+h9CmgQf9FsPQwYEVn1aJ75UG8xJW7002CfpJTz23mA0EtEfQh8LbimuVns3H2IGu
+2kib7VN9CqpI7srhitHuw3pI4E3oobYWtTTUhMZqEMOcLg9zIcDiCV4bY6ack4D/
+8R0TR5eLjyypgC1L8xEikFNXUbAvQfVwgrtrU/XauXC85DsIPjGtj+gUFXlxt4tV
+Ip05B6zd8BbPGpiZLo4Kb45mXyHQrSQ4TZrqE5FOz3J7baSYp8rAdmgilXXFSNOR
+FKDawuaznrj/unpGrRrkRQB2dbCoiVqEvDS4wiyhL+sq/1AvheKqkuoCKeu9tZBj
+OZt2qR8i2pvP52YtMnpvLSe2rPAaXw==
+=dNB1
+-----END PGP SIGNATURE-----
 
-## Test result summary
-total: 0, pass: 0, fail: 0, skip: 0, xfail: 0
-
-## Build Summary
-
-## Test suites summary
-
---
-Linaro LKFT
-https://lkft.linaro.org
+--lUvLP3GXLpu2Xwy5--

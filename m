@@ -2,65 +2,48 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76A994C3EBD
-	for <lists+linux-next@lfdr.de>; Fri, 25 Feb 2022 08:10:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 719F84C3EF8
+	for <lists+linux-next@lfdr.de>; Fri, 25 Feb 2022 08:27:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234470AbiBYHKV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 25 Feb 2022 02:10:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53070 "EHLO
+        id S235223AbiBYH1Z (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 25 Feb 2022 02:27:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232670AbiBYHKV (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 25 Feb 2022 02:10:21 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D08921BE4FC
-        for <linux-next@vger.kernel.org>; Thu, 24 Feb 2022 23:09:49 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id u12so4114693ybd.7
-        for <linux-next@vger.kernel.org>; Thu, 24 Feb 2022 23:09:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=RkKJ3feumDpaH/4Q4R9EWvmv9jLE7v7OSMOwoBOQVW8=;
-        b=HWn4IvjfftzLpqogskfwiXRMAhH2YnmMfM5OsMY9RPUSUcpryyGeZSTHjOYBaHiIhl
-         DVOSOUlkmc+GGeLQcCUCEg0bwaxihtZERTQVzs5XnzXFXVQtPTUIDk9zHM5vNiWqySP/
-         oCCjbOR3glTpDgw6Ab7PaILpFVVNUw4Z0UebaRQq7ZVMZmcXjHL8O/hAGCL94evRM/CE
-         1JnE2fM1rc/x9+lklrxU1xg20vX4oB7de6MI2UDp54zDrz/ZqQ1qP5CvbBTmPTSLBvA4
-         b7esENhujCgn/h//pWlg7FsoklcZbtwyv1b98q4BPSugWpd5aACAOCjFVOaDvk67eTwE
-         2iJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=RkKJ3feumDpaH/4Q4R9EWvmv9jLE7v7OSMOwoBOQVW8=;
-        b=jPbufSQbpuAYr7pKANjWPsnYtHnFgGO1JPuafLlYTVqDyviSB3j5l4SFNXaR3mEBsE
-         Dnyz1oCxRwmCOel7NzZbZzrRmfTJllfxC897xun6FxFGFM6kk7iOukC66oLobDLTyAA2
-         kvepxD92PJftuunZcEiZQjSjc2qJUQwHf/dQjlOTlzoVSBTzdN/r8Z+6Ayx3s550mGYh
-         Wu1OrPK3es7JNLNoPAPcj5h3LwxIEH86xN/p8l8JxzHozryhaAoGyGxOVtnP/e7Linxs
-         qzF1D7jlFuE24LiAuT5WB9CC8s+aJPGa2jPWtxW6Y8a7J9DXxTErRXU8ENiDJ2nMGkY8
-         ZFIA==
-X-Gm-Message-State: AOAM531lq9Cdw/4p9lLuLxBFSDzhBb1L3siy7il6XZRk2UoUusmquE0j
-        DpB3FOnkF4tbtlR7wUn1VhqhLW4kb9yd2Rf4K8RV9g==
-X-Google-Smtp-Source: ABdhPJz5laBsJeGK80mAX/WEbB1K3EIdSrupGykMNNj/HIKrR3FFyHPZAgRAHsNtHZz81rqQLu1yS8VO8iZ7ZOAkxDU=
-X-Received: by 2002:a25:2551:0:b0:623:a424:e2b5 with SMTP id
- l78-20020a252551000000b00623a424e2b5mr6277259ybl.603.1645772989000; Thu, 24
- Feb 2022 23:09:49 -0800 (PST)
+        with ESMTP id S238100AbiBYH1Y (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 25 Feb 2022 02:27:24 -0500
+Received: from a48-37.smtp-out.amazonses.com (a48-37.smtp-out.amazonses.com [54.240.48.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 101B742ED7;
+        Thu, 24 Feb 2022 23:26:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1645774007;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+        bh=a/IVFR3inflT9Yw9us4KGNsp45d8WF5HkFPpJnegjG4=;
+        b=RLhGwTQwOE/u21oc7hy8V0p99ePHlW2itgLqyZ+E6FmjjzOPukDl6zr8yTa8c5W2
+        Th849+wk3Jx8UR8P+p+I9UBI9YXmXwGIqJ93hQlen2WSrcBPrCV4imdNJWshWL6RiP8
+        7OfU6IZBAlRewRQuurUYymJze4/bqsYrAf8pzC/s=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1645774007;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+        bh=a/IVFR3inflT9Yw9us4KGNsp45d8WF5HkFPpJnegjG4=;
+        b=cvUee8lndIxxVvn+I06GETpF1QaNDli8FRjO2lnol9emedwJtzn99HjRFdbc7fMa
+        zY1fYKk+0lmyhlyhsLjkCR4a4AnEbMQ1Y/r9vyHCsqL9jVqiViOHUi8Au6QL/Na42SH
+        dxrTqrIynKza6OZMF2OD5zxMDkrYXgHBbyUAvpOE=
+From:   lkft@linaro.org
+To:     lkft@linaro.org
+Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        linux-next@vger.kernel.org, shuah@kernel.org
+Subject: lkft kselftest for next-20220223
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 25 Feb 2022 12:39:37 +0530
-Message-ID: <CA+G9fYtEx=k9TM7c7EihbO3U0qxZLbKX26NWJ1L=jjEOuy7cHQ@mail.gmail.com>
-Subject: [next] mips-mt.c:233:19: error: conflicting types for 'mt_init'
-To:     linux-mips@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Kees Cook <keescook@chromium.org>,
-        Juxin Gao <gaojuxin@loongson.cn>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        lkft-triage@lists.linaro.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Message-ID: <0100017f2fc669f1-46d24378-6aa6-46c3-a113-6d8569337c67-000000@email.amazonses.com>
+Date:   Fri, 25 Feb 2022 07:26:46 +0000
+Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
+X-SES-Outgoing: 2022.02.25-54.240.48.37
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,TO_EQ_FM_DIRECT_MX,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,59 +51,36 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-[Please ignore this email if it is already reported]
+## Build
+* kernel: 5.17.0-rc5
+* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+* git branch: [None, 'master']
+* git commit: d4a0ae62a277377de396850ed4b709b6bd9b7326
+* git describe: next-20220223
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220223
 
-Linux next-20220224 arch mips build errors / warnings noticed [1].
+## Test Regressions (compared to next-20220216)
+No test regressions found.
 
-Build configs:
-  -  mips-gcc-8-malta_defconfig
-  -  mips-gcc-10-malta_defconfig
-  -  mips-gcc-8-defconfig
-  -  mips-gcc-10-defconfig
+## Metric Regressions (compared to next-20220216)
+No metric regressions found.
 
-metadata:
-    git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-    git_sha: 44948bd49d878dad6c9707e34f4a06df73c3a800
-    git_short_log: 44948bd49d87 (\Add linux-next specific files for 20220224\)
-    kconfig: defconfig
-    target_arch: mips
-    toolchain: gcc-10
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
 
-Build errors / warnings:
+## Test Fixes (compared to next-20220216)
+No test fixes found.
 
-arch/mips/kernel/mips-mt.c:233:19: error: conflicting types for 'mt_init'
-  233 | static int __init mt_init(void)
-      |                   ^~~~~~~
-In file included from include/linux/mm_types.h:12,
-                 from include/linux/mmzone.h:21,
-                 from include/linux/gfp.h:6,
-                 from include/linux/radix-tree.h:12,
-                 from include/linux/idr.h:15,
-                 from include/linux/kernfs.h:12,
-                 from include/linux/sysfs.h:16,
-                 from include/linux/kobject.h:20,
-                 from include/linux/energy_model.h:7,
-                 from include/linux/device.h:16,
-                 from arch/mips/kernel/mips-mt.c:7:
-include/linux/maple_tree.h:589:20: note: previous definition of
-'mt_init' was here
-  589 | static inline void mt_init(struct maple_tree *mt)
-      |                    ^~~~~~~
-make[3]: *** [scripts/Makefile.build:288: arch/mips/kernel/mips-mt.o] Error 1
+## Metric Fixes (compared to next-20220216)
+No metric fixes found.
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+## Test result summary
+total: 0, pass: 0, fail: 0, skip: 0, xfail: 0
 
-Steps to reproduce:
-------------------
-# To install tuxmake on your system globally:
-# sudo pip3 install -U tuxmake
+## Build Summary
 
-tuxmake --runtime podman --target-arch mips --toolchain gcc-10
---kconfig defconfig
+## Test suites summary
 
 --
 Linaro LKFT
 https://lkft.linaro.org
-
-[1] https://builds.tuxbuild.com/25aFF2X7uoyebURaYzNHW9FVEmN/

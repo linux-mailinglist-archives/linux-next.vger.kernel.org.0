@@ -2,105 +2,125 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C86A44C442D
-	for <lists+linux-next@lfdr.de>; Fri, 25 Feb 2022 13:04:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E10FB4C448B
+	for <lists+linux-next@lfdr.de>; Fri, 25 Feb 2022 13:23:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240463AbiBYMEL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 25 Feb 2022 07:04:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48722 "EHLO
+        id S240611AbiBYMXc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 25 Feb 2022 07:23:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240459AbiBYMEG (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 25 Feb 2022 07:04:06 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C1C1B84E9;
-        Fri, 25 Feb 2022 04:03:35 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 02E941F380;
-        Fri, 25 Feb 2022 12:03:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1645790614;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xtE+k70TidQoWi4j72BLWUm5533B5JQEZRp6zQv++Vg=;
-        b=cqGbabtspkxrbOc1xI1LRqg89EFUz/W0dSxa1Arw46Ca0MCA2fTnD+xwzfxtgNYJwkt3sN
-        8mKl13lL4fwVSmE39D4b/vLhXsaWaxVUm697H3HKe8yTUA2wprUwy1Z972p1n/yqjxfQ8x
-        LhZkHL7TKJrf4xIDI2mFy9KXfnrEMo4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1645790614;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xtE+k70TidQoWi4j72BLWUm5533B5JQEZRp6zQv++Vg=;
-        b=05jhUNWeAHGEyV3bFElcwMeV3zL2RiSqWWzpzY9DNFCSiEzkBf9mGtAciG0ymfNofs6paf
-        7UALELV7SVI00aDg==
-Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
-        by relay2.suse.de (Postfix) with ESMTP id EBBC4A3B8D;
-        Fri, 25 Feb 2022 12:03:33 +0000 (UTC)
-Received: by ds.suse.cz (Postfix, from userid 10065)
-        id 9B74FDA818; Fri, 25 Feb 2022 12:59:44 +0100 (CET)
-Date:   Fri, 25 Feb 2022 12:59:44 +0100
-From:   David Sterba <dsterba@suse.cz>
-To:     broonie@kernel.org
-Cc:     David Sterba <dsterba@suse.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Qu Wenruo <wqu@suse.com>,
-        =?utf-8?B?RMSBdmlzIE1vc8SBbnM=?= <davispuh@gmail.com>
-Subject: Re: linux-next: manual merge of the btrfs tree with the btrfs-fixes
- tree
-Message-ID: <20220225115944.GF12643@suse.cz>
-Reply-To: dsterba@suse.cz
-Mail-Followup-To: dsterba@suse.cz, broonie@kernel.org,
-        David Sterba <dsterba@suse.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Qu Wenruo <wqu@suse.com>,
-        =?utf-8?B?RMSBdmlzIE1vc8SBbnM=?= <davispuh@gmail.com>
-References: <20220224134427.3208381-1-broonie@kernel.org>
+        with ESMTP id S240610AbiBYMXc (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 25 Feb 2022 07:23:32 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C485920DB34;
+        Fri, 25 Feb 2022 04:23:00 -0800 (PST)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21PBMmcS033280;
+        Fri, 25 Feb 2022 12:22:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=psUjqUDIXrQuDk/0U0G6bTiHSZGQTDTjSpKnanVkLOU=;
+ b=C9VXNBfrBDhDc8KObk6NsCnVFIFb8LpS7RxunFyXY51/VhKLVTZz3iRXBc34CT4dHcvT
+ GZZ6KWKZKpFWHcmralHqPLGOkoDTgYTVkEfYtal6M+jF1CI0oaE+/4zERNu3LmmsUwJC
+ /0mv3GSl02qg2qKaWcyuT96FO7QI00bpvtXhx24+0IATu4ws7bLeeRgTWOCzotp8qOdk
+ 0TWZunph8PM5ua4RLs9F1bBPdjiflcVBXwBFz/JQwnGUdNieLIdXaeS0803Hf8Pg7Ycr
+ 0QNVAQVA6jnfsq4l1VdvAjcSYVdIqEl0l2/B0JHGZvvmngiEuapSBcYtdYcJFhoHp0KZ VQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3eewpn291c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 25 Feb 2022 12:22:41 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21PBQta4004716;
+        Fri, 25 Feb 2022 12:22:40 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3eewpn290a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 25 Feb 2022 12:22:40 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21PCIwCq030560;
+        Fri, 25 Feb 2022 12:22:38 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma03ams.nl.ibm.com with ESMTP id 3ear69rf5v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 25 Feb 2022 12:22:38 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21PCBqMg14745858
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 25 Feb 2022 12:11:52 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D912B52054;
+        Fri, 25 Feb 2022 12:22:35 +0000 (GMT)
+Received: from [9.145.163.29] (unknown [9.145.163.29])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 3FB7952059;
+        Fri, 25 Feb 2022 12:22:35 +0000 (GMT)
+Message-ID: <65d40e00-d7a4-0210-5253-d5d1744f0343@linux.ibm.com>
+Date:   Fri, 25 Feb 2022 13:22:34 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [next] next-20220223 kernel crash
+Content-Language: en-US
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Tejun Heo <tj@kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Lai Jiangshan <laijs@linux.alibaba.com>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, regressions@lists.linux.dev,
+        lkft-triage@lists.linaro.org
+References: <CA+G9fYtzLr+9T9Z1N8QLznW6DqTOU8iSHvgMftdhe2XkEf8F8g@mail.gmail.com>
+From:   Steffen Maier <maier@linux.ibm.com>
+In-Reply-To: <CA+G9fYtzLr+9T9Z1N8QLznW6DqTOU8iSHvgMftdhe2XkEf8F8g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 8iR0yfi5CRn2OiGcAc3R2PeQ1PHYEQN4
+X-Proofpoint-ORIG-GUID: jXsduC_UmntOMfiR-ERJZIlWIGPVZ4ni
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220224134427.3208381-1-broonie@kernel.org>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-02-25_07,2022-02-25_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 lowpriorityscore=0 suspectscore=0 phishscore=0 spamscore=0
+ clxscore=1011 mlxscore=0 adultscore=0 malwarescore=0 bulkscore=0
+ mlxlogscore=966 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202250066
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 01:44:27PM +0000, broonie@kernel.org wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the btrfs tree got conflicts in:
-> 
->   fs/btrfs/ctree.h
->   fs/btrfs/file.c
->   fs/btrfs/inode.c
->   fs/btrfs/ioctl.c
->   fs/btrfs/lzo.c
-> 
-> between commit:
-> 
->   2ac3e062af024 ("btrfs: reduce extent threshold for autodefrag")
->   741b23a970a79 ("btrfs: prevent copying too big compressed lzo segment")
->   26fbac2517fca ("btrfs: autodefrag: only scan one inode once")
->   966d879bafaaf ("btrfs: defrag: allow defrag_one_cluster() to skip large extent which is not a target")
->   d5633b0dee02d ("btrfs: defrag: bring back the old file extent search behavior")
-> 
-> from the btrfs-fixes tree and commit:
-> 
->   13b2f7ab699a5 ("btrfs: close the gap between inode_should_defrag() and autodefrag extent size threshold")
->   48b433a2ef82a ("btrfs: add lzo workspace buffer length constants")
->   db360c49d476f ("btrfs: autodefrag: only scan one inode once")
->   e6c69fcbee7ef ("btrfs: defrag: use control structure in btrfs_defrag_file()")
->   6b17743d934ec ("btrfs: defrag: bring back the old file extent search behavior")
-> 
-> from the btrfs tree.
+On 2/24/22 14:28, Naresh Kamboju wrote:
+> Linux next-20220223 boot failed due to the kernel crash on all devices.
 
-The fixes and for-next snapshot branches got out of sync a bit, I've
-checked that they merge without conflicts as of yesterday.
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> 
+> crash log on x86_64 machine [1]:
+> [    5.326681] Please do not flush events WQ.
+> [    5.327480] CPU: 0 PID: 1 Comm: swapper/0 Not tainted
+> 5.17.0-rc5-next-20220223 #1
+
+Is this related?:
+https://lore.kernel.org/all/4e5fe60d-abbb-6e73-b8cc-c3e1a314fbce@samsung.com/T/#u
+
+
+-- 
+Mit freundlichen Gruessen / Kind regards
+Steffen Maier
+
+Linux on IBM Z and LinuxONE
+
+https://www.ibm.com/privacy/us/en/
+IBM Deutschland Research & Development GmbH
+Vorsitzender des Aufsichtsrats: Gregor Pillen
+Geschaeftsfuehrung: David Faller
+Sitz der Gesellschaft: Boeblingen
+Registergericht: Amtsgericht Stuttgart, HRB 243294

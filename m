@@ -2,49 +2,45 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 813104C4BA3
-	for <lists+linux-next@lfdr.de>; Fri, 25 Feb 2022 18:08:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDA554C4FC2
+	for <lists+linux-next@lfdr.de>; Fri, 25 Feb 2022 21:41:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236229AbiBYRIx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 25 Feb 2022 12:08:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43518 "EHLO
+        id S236702AbiBYUlf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 25 Feb 2022 15:41:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237751AbiBYRIw (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 25 Feb 2022 12:08:52 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19A5117B8A3;
-        Fri, 25 Feb 2022 09:08:19 -0800 (PST)
+        with ESMTP id S231500AbiBYUle (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 25 Feb 2022 15:41:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42190214F99;
+        Fri, 25 Feb 2022 12:41:02 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 70383B82E51;
-        Fri, 25 Feb 2022 17:08:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03800C340E7;
-        Fri, 25 Feb 2022 17:08:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 01AA7B83363;
+        Fri, 25 Feb 2022 20:41:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FB20C340E7;
+        Fri, 25 Feb 2022 20:40:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645808897;
-        bh=hz+lH5qNUjVnCbRoevPcMCs+vilBSIywQyZBMPYFZE4=;
+        s=k20201202; t=1645821659;
+        bh=HE8061LF/iGlGPikfhtbvjKwTHd7MrtYrRbVauGucKk=;
         h=From:To:Cc:Subject:Date:From;
-        b=J6iG1CiTd1gJ8dTRKFQs5BuMv+965CCZ5QT10FvqfnorcsRa+c8PyzUudIZfn8QJn
-         bBeDyPP3mXgBnf4JPBeOv9XNs8qsTP7veQYZXGnXKv9Oek7Cv/CGfWO3AIxqLPpgzS
-         v8Bpt6npCDD/MOd8qb2SkfqtMJb0rFmfvVxjr/yrCWwE6ZyOCDTN2+Hk5Pj6mlwIxi
-         twKPO0qogNY5eJFX5cJWvjpIMSkaDl6NTLrbMz0BYLZHs8vTisOEDy+EU22+7EXW3B
-         iUzc5yZdjH5hs+mIPnCrtlAQ0chWXYcGr0fhQGVlxhiII618BBgpeuIbl5JMvyAtES
-         C/7M0HdvYUuHA==
+        b=p1fVqOO/4teZOpAH/ugmrKB7ZJeG0J4pG1tth3XNCRtbdkF7vXE5d3pUJi+DzPm8u
+         i0ISzk+WNMwe1woR2UxwcRzkEL8yxQBaoiXm09MvY096J7S5RE1hbEKYRww4IbkKwD
+         p3JPKcwFLQUXYhxfsY7AyyFFlxa2DgYB/lrVdgw1ng7Pbyxt58oaaHzjhWTcM7u/h8
+         Ys9LgtK9IHDOQJlSwG3oxIdxtRsG4s3NxoLy54nQsPDPIyMv2aDxLWG4Hbt/b7WOnt
+         /vlLjEUoheH8f6zw5GGpyR2jIh43nxliyJteIEbmrfWb288JpylDo3Aa1yeJ4/IpI1
+         yhRaXZbAXJGVg==
 From:   broonie@kernel.org
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Matt Roper <matthew.d.roper@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-Subject: linux-next: manual merge of the drm-intel tree with the drm-intel-fixes tree
-Date:   Fri, 25 Feb 2022 17:08:12 +0000
-Message-Id: <20220225170812.1523966-1-broonie@kernel.org>
+        linux-mmc@vger.kernel.org
+Subject: linux-next: build failure after merge of the char-misc tree
+Date:   Fri, 25 Feb 2022 20:40:55 +0000
+Message-Id: <20220225204055.3899986-1-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -60,26 +56,37 @@ X-Mailing-List: linux-next@vger.kernel.org
 
 Hi all,
 
-Today's linux-next merge of the drm-intel tree got a conflict in:
+After merging the char-misc tree, today's linux-next build (x86
+allmodconfig) failed like this:
 
-  drivers/gpu/drm/i915/display/intel_snps_phy.c
+/tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c: In function 'sd_request':
+/tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c:809:17: error: unused variable 'dev' [-Werror=unused-variable]
+  809 |  struct device *dev = &host->pdev->dev;
+      |                 ^~~
+/tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c: In function 'sdmmc_set_ios':
+/tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c:1084:17: error: unused variable 'dev' [-Werror=unused-variable]
+ 1084 |  struct device *dev = &host->pdev->dev;
+      |                 ^~~
+/tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c: In function 'sdmmc_get_ro':
+/tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c:1133:17: error: unused variable 'dev' [-Werror=unused-variable]
+ 1133 |  struct device *dev = &host->pdev->dev;
+      |                 ^~~
+/tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c: In function 'sdmmc_get_cd':
+/tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c:1159:17: error: unused variable 'dev' [-Werror=unused-variable]
+ 1159 |  struct device *dev = &host->pdev->dev;
+      |                 ^~~
+/tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c: In function 'sdmmc_switch_voltage':
+/tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c:1258:17: error: unused variable 'dev' [-Werror=unused-variable]
+ 1258 |  struct device *dev = &host->pdev->dev;
+      |                 ^~~
+/tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c: In function 'sdmmc_execute_tuning':
+/tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c:1311:17: error: unused variable 'dev' [-Werror=unused-variable]
+ 1311 |  struct device *dev = &host->pdev->dev;
+      |                 ^~~
+cc1: all warnings being treated as errors
 
-between commit:
+Caused by commit
 
-  28adef861233c ("drm/i915/dg2: Print PHY name properly on calibration error")
+  7570fb41e450ba37 ("mmc: rtsx: Let MMC core handle runtime PM")
 
-from the drm-intel-fixes tree and commits:
-
-  84073e568eec7 ("drm/i915/dg2: Print PHY name properly on calibration error")
-  b4eb76d82a0ea ("drm/i915/dg2: Skip output init on PHY calibration failure")
-
-from the drm-intel tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-[Used drm-intel version]
+I have used the char-misc tree from yesterday instead.

@@ -2,49 +2,49 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9885C4C4B13
-	for <lists+linux-next@lfdr.de>; Fri, 25 Feb 2022 17:43:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 813104C4BA3
+	for <lists+linux-next@lfdr.de>; Fri, 25 Feb 2022 18:08:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243174AbiBYQnl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 25 Feb 2022 11:43:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39098 "EHLO
+        id S236229AbiBYRIx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 25 Feb 2022 12:08:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243222AbiBYQni (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 25 Feb 2022 11:43:38 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0876475207;
-        Fri, 25 Feb 2022 08:43:03 -0800 (PST)
+        with ESMTP id S237751AbiBYRIw (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 25 Feb 2022 12:08:52 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19A5117B8A3;
+        Fri, 25 Feb 2022 09:08:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7BEE261C1A;
-        Fri, 25 Feb 2022 16:43:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFBE0C340E7;
-        Fri, 25 Feb 2022 16:42:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 70383B82E51;
+        Fri, 25 Feb 2022 17:08:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03800C340E7;
+        Fri, 25 Feb 2022 17:08:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645807381;
-        bh=APXY3EnRpsBOupquCiWiXnjHHke28N5/pcJDyEoZ/UQ=;
+        s=k20201202; t=1645808897;
+        bh=hz+lH5qNUjVnCbRoevPcMCs+vilBSIywQyZBMPYFZE4=;
         h=From:To:Cc:Subject:Date:From;
-        b=U/Ibm/gp6t9I+K0zJ8pjRvlOOUkTCoRp4vLm3L/rDBwerli1baLd0g/ZdU88LPdBy
-         RZ4d7Y2jBu/del2aMnr10HRGLH5u8IOuIW9/5AMzEudVp3LwC3U8mkSqyAjDgXMvON
-         HBPz0nA6WcKBDsnZO32sKJ2K7Xg6pULjiaRhDJETda0LhPM1KGZVg5aIQnKMW1JPSY
-         UHr+6AE2mSRh9IXr/b1zi1Rcbo13RxP7hGp0F3KFLBA3fycHF6yEFBsRZIkzP/y30g
-         KKzqGiqxA8eL3nSmc806TYft/Qv9BSCbsKVvrIxu94EfNCuaA3eHdzzkpzhOTA9ElV
-         Bq99ghUu2qnwA==
+        b=J6iG1CiTd1gJ8dTRKFQs5BuMv+965CCZ5QT10FvqfnorcsRa+c8PyzUudIZfn8QJn
+         bBeDyPP3mXgBnf4JPBeOv9XNs8qsTP7veQYZXGnXKv9Oek7Cv/CGfWO3AIxqLPpgzS
+         v8Bpt6npCDD/MOd8qb2SkfqtMJb0rFmfvVxjr/yrCWwE6ZyOCDTN2+Hk5Pj6mlwIxi
+         twKPO0qogNY5eJFX5cJWvjpIMSkaDl6NTLrbMz0BYLZHs8vTisOEDy+EU22+7EXW3B
+         iUzc5yZdjH5hs+mIPnCrtlAQ0chWXYcGr0fhQGVlxhiII618BBgpeuIbl5JMvyAtES
+         C/7M0HdvYUuHA==
 From:   broonie@kernel.org
-To:     Dave Airlie <airlied@linux.ie>,
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
         DRI <dri-devel@lists.freedesktop.org>
-Cc:     Allen Chen <allen.chen@ite.com.tw>,
-        Hsin-yi Wang <hsinyi@chromium.org>,
-        Hermes Wu <hermes.wu@ite.com.tw>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the drm tree
-Date:   Fri, 25 Feb 2022 16:42:31 +0000
-Message-Id: <20220225164231.904173-1-broonie@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Matt Roper <matthew.d.roper@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+Subject: linux-next: manual merge of the drm-intel tree with the drm-intel-fixes tree
+Date:   Fri, 25 Feb 2022 17:08:12 +0000
+Message-Id: <20220225170812.1523966-1-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -60,82 +60,26 @@ X-Mailing-List: linux-next@vger.kernel.org
 
 Hi all,
 
-After merging the drm tree, today's linux-next build (x86 allmodconfig)
-failed like this:
+Today's linux-next merge of the drm-intel tree got a conflict in:
 
-lib/strncpy_from_user.o: warning: objtool: strncpy_from_user()+0x10b: call to do_strncpy_from_user() with UACCESS enabled
-lib/strnlen_user.o: warning: objtool: strnlen_user()+0xbb: call to do_strnlen_user() with UACCESS enabled
-/tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c: In function 'receive_timing_debugfs_show':
-/tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3077:23: error: array subscript 4096 is outside array bounds of 'u8[200]' {aka 'unsigned char[200]'} [-Werror=array-bounds]
- 3077 |  u8 *str = read_buf, *end = read_buf + PAGE_SIZE;
-      |                       ^~~
-/tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3076:5: note: while referencing 'read_buf'
- 3076 |  u8 read_buf[READ_BUFFER_SIZE];
-      |     ^~~~~~~~
-/tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3077:23: error: array subscript 4096 is outside array bounds of 'u8[200]' {aka 'unsigned char[200]'} [-Werror=array-bounds]
- 3077 |  u8 *str = read_buf, *end = read_buf + PAGE_SIZE;
-      |                       ^~~
-/tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3076:5: note: while referencing 'read_buf'
- 3076 |  u8 read_buf[READ_BUFFER_SIZE];
-      |     ^~~~~~~~
-/tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3077:23: error: array subscript 4096 is outside array bounds of 'u8[200]' {aka 'unsigned char[200]'} [-Werror=array-bounds]
- 3077 |  u8 *str = read_buf, *end = read_buf + PAGE_SIZE;
-      |                       ^~~
-/tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3076:5: note: while referencing 'read_buf'
- 3076 |  u8 read_buf[READ_BUFFER_SIZE];
-      |     ^~~~~~~~
-/tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3077:23: error: array subscript 4096 is outside array bounds of 'u8[200]' {aka 'unsigned char[200]'} [-Werror=array-bounds]
- 3077 |  u8 *str = read_buf, *end = read_buf + PAGE_SIZE;
-      |                       ^~~
-/tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3076:5: note: while referencing 'read_buf'
- 3076 |  u8 read_buf[READ_BUFFER_SIZE];
-      |     ^~~~~~~~
-/tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3077:23: error: array subscript 4096 is outside array bounds of 'u8[200]' {aka 'unsigned char[200]'} [-Werror=array-bounds]
- 3077 |  u8 *str = read_buf, *end = read_buf + PAGE_SIZE;
-      |                       ^~~
-/tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3076:5: note: while referencing 'read_buf'
- 3076 |  u8 read_buf[READ_BUFFER_SIZE];
-      |     ^~~~~~~~
-/tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3077:23: error: array subscript 4096 is outside array bounds of 'u8[200]' {aka 'unsigned char[200]'} [-Werror=array-bounds]
- 3077 |  u8 *str = read_buf, *end = read_buf + PAGE_SIZE;
-      |                       ^~~
-/tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3076:5: note: while referencing 'read_buf'
- 3076 |  u8 read_buf[READ_BUFFER_SIZE];
-      |     ^~~~~~~~
-/tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3077:23: error: array subscript 4096 is outside array bounds of 'u8[200]' {aka 'unsigned char[200]'} [-Werror=array-bounds]
- 3077 |  u8 *str = read_buf, *end = read_buf + PAGE_SIZE;
-      |                       ^~~
-/tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3076:5: note: while referencing 'read_buf'
- 3076 |  u8 read_buf[READ_BUFFER_SIZE];
-      |     ^~~~~~~~
-/tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3077:23: error: array subscript 4096 is outside array bounds of 'u8[200]' {aka 'unsigned char[200]'} [-Werror=array-bounds]
- 3077 |  u8 *str = read_buf, *end = read_buf + PAGE_SIZE;
-      |                       ^~~
-/tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3076:5: note: while referencing 'read_buf'
- 3076 |  u8 read_buf[READ_BUFFER_SIZE];
-      |     ^~~~~~~~
-/tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3077:23: error: array subscript 4096 is outside array bounds of 'u8[200]' {aka 'unsigned char[200]'} [-Werror=array-bounds]
- 3077 |  u8 *str = read_buf, *end = read_buf + PAGE_SIZE;
-      |                       ^~~
-/tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3076:5: note: while referencing 'read_buf'
- 3076 |  u8 read_buf[READ_BUFFER_SIZE];
-      |     ^~~~~~~~
-/tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3077:23: error: array subscript 4096 is outside array bounds of 'u8[200]' {aka 'unsigned char[200]'} [-Werror=array-bounds]
- 3077 |  u8 *str = read_buf, *end = read_buf + PAGE_SIZE;
-      |                       ^~~
-/tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3076:5: note: while referencing 'read_buf'
- 3076 |  u8 read_buf[READ_BUFFER_SIZE];
-      |     ^~~~~~~~
-/tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3077:23: error: array subscript 4096 is outside array bounds of 'u8[200]' {aka 'unsigned char[200]'} [-Werror=array-bounds]
- 3077 |  u8 *str = read_buf, *end = read_buf + PAGE_SIZE;
-      |                       ^~~
-/tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3076:5: note: while referencing 'read_buf'
- 3076 |  u8 read_buf[READ_BUFFER_SIZE];
-      |     ^~~~~~~~
-cc1: all warnings being treated as errors
+  drivers/gpu/drm/i915/display/intel_snps_phy.c
 
-Caused by commit
+between commit:
 
-  b5c84a9edcd418 ("drm/bridge: add it6505 driver")
+  28adef861233c ("drm/i915/dg2: Print PHY name properly on calibration error")
 
-I have used the drm tree from yesterday instead.
+from the drm-intel-fixes tree and commits:
+
+  84073e568eec7 ("drm/i915/dg2: Print PHY name properly on calibration error")
+  b4eb76d82a0ea ("drm/i915/dg2: Skip output init on PHY calibration failure")
+
+from the drm-intel tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+[Used drm-intel version]

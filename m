@@ -2,52 +2,48 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4867D4C5458
-	for <lists+linux-next@lfdr.de>; Sat, 26 Feb 2022 08:23:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7F434C5616
+	for <lists+linux-next@lfdr.de>; Sat, 26 Feb 2022 14:30:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbiBZHX7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 26 Feb 2022 02:23:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34098 "EHLO
+        id S231797AbiBZNa5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 26 Feb 2022 08:30:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbiBZHX7 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 26 Feb 2022 02:23:59 -0500
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F2F14A6F0
-        for <linux-next@vger.kernel.org>; Fri, 25 Feb 2022 23:23:24 -0800 (PST)
-Received: by mail-il1-f199.google.com with SMTP id 11-20020a056e0220cb00b002c299cb036cso4229129ilq.3
-        for <linux-next@vger.kernel.org>; Fri, 25 Feb 2022 23:23:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=ni4lvJQUTghS0A94JZkFOwka6WIVFnjt5N9mjzzU6a4=;
-        b=b4v/R9oZdNQo5yD3x0JUiVfE1knOmDRZXbsBKfEkYVaUwwrgWZynuIqLTLUw1AXoQp
-         5trwQiqOjE3PdDGUPrriGm2XKxXNLnSjEFaxt9iZZBswDbnGEXpkGxMeEBLYcDGLdCVL
-         dvWouEHOGs05nx0MFpCcr/lSd5QXMTKOKznE99tbYhT/9Vr9j5n1vY7vTzNVVYKVGJ46
-         nYNOzEICk3yVThEjV2CeepVcidNZVu9no0+2XgjssQG2usGiMA4DJMhmnQwWJoX4ExzQ
-         zbUGg4jRowtH5O84pNsYwVhP6gzeVJs4RvzExD1Is7c1jy5S7tv5HGIIWJ5rzsu6AJw1
-         UrQg==
-X-Gm-Message-State: AOAM530aJA2P0RJNuB/m5ze43VBe0qfKAGkGdTO8LW+J1BD5fLvEBP58
-        77zlJYMs1i4JddpCHRMTDaWKhHVScJOlSN/91cgGa+0vDJjB
-X-Google-Smtp-Source: ABdhPJzx4DUBAx43q5XkKlSSWv/3LQS5YxNMm76ElPyAHBb7zrVHBi5LdDdAO+6ZiEkqMGxMpYthJqCrWFpq4t0tvyVcm1cfgfvm
+        with ESMTP id S231795AbiBZNaz (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 26 Feb 2022 08:30:55 -0500
+Received: from a8-29.smtp-out.amazonses.com (a8-29.smtp-out.amazonses.com [54.240.8.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 466E74D62E;
+        Sat, 26 Feb 2022 05:30:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1645882220;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+        bh=fC6smFVHLRjxytFRyQyAyDL9rrTwoYdz2RM/SJO46Jw=;
+        b=p81P0gNuH74gUF8pLEnmOqAPVRo7V7+bgB7wMZgPFTlrquh1Wgl26+ZicEZez2mP
+        S3kf+z6K5b/QcdwgWNzH91HQH18+UR1Fhb0PP61Hgdx8ieDZTaBnZT7sY3mXVYTH2SM
+        VmRTtbWkSgQ5xESkYZN5JOC33wbFsL/F9CO9ZpkA=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1645882220;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+        bh=fC6smFVHLRjxytFRyQyAyDL9rrTwoYdz2RM/SJO46Jw=;
+        b=jpeEbpqETnhQ58yNSwo4EzoM2Fwx9fIGbrxDXcuaDACCJNQoeqOLc6vbqR8UojKM
+        AulPF3sPwLc8uD2D25onK6Bs7DhL9Aj5RMYjIECUTpxrkSADEELXa5g+TGEf17m/13X
+        ysA1ldiLOYMz0gqVu8QMIgisrdtFfP59TTD0hGuk=
+From:   lkft@linaro.org
+To:     lkft@linaro.org
+Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        linux-next@vger.kernel.org, shuah@kernel.org
+Subject: lkft kselftest for next-20220225
 MIME-Version: 1.0
-X-Received: by 2002:a02:ccd7:0:b0:30d:21d0:51d6 with SMTP id
- k23-20020a02ccd7000000b0030d21d051d6mr8894823jaq.138.1645860203526; Fri, 25
- Feb 2022 23:23:23 -0800 (PST)
-Date:   Fri, 25 Feb 2022 23:23:23 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c7fde605d8e6b085@google.com>
-Subject: [syzbot] linux-next test error: WARNING in __mod_memcg_lruvec_state
-From:   syzbot <syzbot+a526c269335f529d25c8@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, cgroups@vger.kernel.org,
-        hannes@cmpxchg.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@kernel.org,
-        roman.gushchin@linux.dev, sfr@canb.auug.org.au,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Message-ID: <0100017f36399c8a-6d5ad838-77ba-4951-b354-fcd7cf2ea4e5-000000@email.amazonses.com>
+Date:   Sat, 26 Feb 2022 13:30:20 +0000
+Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
+X-SES-Outgoing: 2022.02.26-54.240.8.29
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,TO_EQ_FM_DIRECT_MX,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,63 +51,80 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hello,
+## Build
+* kernel: 5.17.0-rc5
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+* git branch: [None, 'master']
+* git commit: 06aeb1495c39c86ccfaf1adadc1d2200179f16eb
+* git describe: next-20220225
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220225
 
-syzbot found the following issue on:
+## Test Regressions (compared to next-20220223)
+No test regressions found.
 
-HEAD commit:    06aeb1495c39 Add linux-next specific files for 20220225
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=17a69c8e700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=8d8bf144f45f9b3
-dashboard link: https://syzkaller.appspot.com/bug?extid=a526c269335f529d25c8
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+## Metric Regressions (compared to next-20220223)
+No metric regressions found.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+a526c269335f529d25c8@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 3590 at mm/memcontrol.c:749 __mod_memcg_lruvec_state+0x1ab/0x220
-Modules linked in:
-CPU: 1 PID: 3590 Comm: syz-fuzzer Not tainted 5.17.0-rc5-next-20220225-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:__mod_memcg_lruvec_state+0x1ab/0x220
-Code: bb 23 92 0e 48 c7 c7 e0 b6 d9 89 e8 af d9 95 07 65 c7 05 f4 c8 37 7e 00 00 00 00 48 83 c4 08 5b 5d 41 5c 41 5d 41 5e 41 5f c3 <0f> 0b e9 a6 fe ff ff 4c 89 f6 48 c7 c7 60 63 ee 8b e8 8f d3 45 02
-RSP: 0000:ffffc900039efbc0 EFLAGS: 00010202
-RAX: 0000000000000206 RBX: 0000000000000200 RCX: ffffffff81aafa53
-RDX: 1ffff1100218fa8d RSI: 000000000000001c RDI: ffff888010c7d468
-RBP: ffff888010c7d000 R08: 0000000000000001 R09: ffffffff8ba144e7
-R10: fffffbfff174289c R11: 0000000000000001 R12: 000000000000001c
-R13: ffff88813fe38000 R14: ffff88813fe38000 R15: ffff88813fffa000
-FS:  000000c0001d2c90(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000000c000e00000 CR3: 000000001cfb0000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __mod_lruvec_page_state+0x1e5/0x3e0
- page_add_new_anon_rmap+0x2e5/0x930
- do_huge_pmd_anonymous_page+0x102c/0x2350
- __handle_mm_fault+0x2a66/0x4110
- handle_mm_fault+0x1c8/0x790
- do_user_addr_fault+0x489/0x11c0
- exc_page_fault+0x9e/0x180
- asm_exc_page_fault+0x1e/0x30
-RIP: 0033:0x465e33
-Code: 00 00 c5 fe 6f 06 c5 fe 6f 4e 20 c5 fe 6f 56 40 c5 fe 6f 5e 60 48 81 c6 80 00 00 00 c5 fd e7 07 c5 fd e7 4f 20 c5 fd e7 57 40 <c5> fd e7 5f 60 48 81 c7 80 00 00 00 48 81 eb 80 00 00 00 77 b5 0f
-RSP: 002b:000000c0003533b8 EFLAGS: 00010202
-RAX: 000000c000db4000 RBX: 0000000000423fe0 RCX: 000000c001224000
-RDX: 000000c001224001 RSI: 000000c000990020 RDI: 000000c000dfffa0
-RBP: 000000c000353418 R08: 000000c000db4000 R09: 0000000000000000
-R10: 0000000000000020 R11: 0000000000000206 R12: 000000c000243f18
-R13: 000000000000002e R14: 000000c0000001a0 R15: 0000000000000000
- </TASK>
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+## Test Fixes (compared to next-20220223)
+No test fixes found.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+## Metric Fixes (compared to next-20220223)
+No metric fixes found.
+
+## Test result summary
+total: 1720, pass: 1139, fail: 169, skip: 412, xfail: 0
+
+## Build Summary
+
+## Test suites summary
+* kselftest-android
+* kselftest-bpf
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-lkdtm
+* kselftest-membarrier
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+
+--
+Linaro LKFT
+https://lkft.linaro.org

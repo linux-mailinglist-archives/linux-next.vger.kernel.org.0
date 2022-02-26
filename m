@@ -2,257 +2,116 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEDF84C5395
-	for <lists+linux-next@lfdr.de>; Sat, 26 Feb 2022 04:42:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4867D4C5458
+	for <lists+linux-next@lfdr.de>; Sat, 26 Feb 2022 08:23:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbiBZDmd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 25 Feb 2022 22:42:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49036 "EHLO
+        id S229959AbiBZHX7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 26 Feb 2022 02:23:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiBZDmc (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 25 Feb 2022 22:42:32 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ECF1190C1A
-        for <linux-next@vger.kernel.org>; Fri, 25 Feb 2022 19:41:57 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id 132so6344971pga.5
-        for <linux-next@vger.kernel.org>; Fri, 25 Feb 2022 19:41:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=AJBcFMTpXAg39C9PAk29K+R/JvEwO0q74b3zYDQI1nk=;
-        b=AanJDkgxjK9f6dWNCPKAk0+OlkM4EJGCSn2IU/lVtJwLvD4kLesA9DiVwPz0Ww8O8t
-         +S3TElLt6IAioVXZHGGWOwIlhqdh/0BVGlWj7A1IBMlUmXtg0i2vIrTpcSeseRJHnIt2
-         FFRLvGpKtXGmRm2SQLl6pZ5BfO2GzmBISd4aIfd/ee988cf5xtuQkytmUys06dKTZnxh
-         uEzA+4y+DRD0omI5ur3r82GWbeLqubDUt2a5lw+7JIQL7qnzwVAt56cVmSNPBkaW8Hvc
-         350L/n2YBHOf84L5lrYM15ZD2t/Fhh+p0hzrYesr9VEgy9Cdazx/khhemaDqnNEtXkrf
-         vtRw==
+        with ESMTP id S229581AbiBZHX7 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 26 Feb 2022 02:23:59 -0500
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F2F14A6F0
+        for <linux-next@vger.kernel.org>; Fri, 25 Feb 2022 23:23:24 -0800 (PST)
+Received: by mail-il1-f199.google.com with SMTP id 11-20020a056e0220cb00b002c299cb036cso4229129ilq.3
+        for <linux-next@vger.kernel.org>; Fri, 25 Feb 2022 23:23:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=AJBcFMTpXAg39C9PAk29K+R/JvEwO0q74b3zYDQI1nk=;
-        b=MjjRlliqeRX1eGDdWk0rH1J2gsjwgkZRwwi+19+awousgX5/eJfU+CxD9RKLOoIcim
-         mhfOdJMNWDSGsyY6XDPoZy7ucM6kjKgvywNRDQZDwnO/1+B1wA68o/TMRMWADO6+rTR9
-         qvgzqDEgLkw+hp43uR8Y8BVmeLmFePNSACcINP3jG2Nm2omjlbJY6GWx5wIm2xalfcjw
-         PN8xn+h5Jg86NThZZvILzy0sNOT+R+krvCmunLA2aK3XTHjytk9Oyk9blZI3l5O0/V/X
-         NX1wPRCGO9IotkhgqDvy7AsXQOkYwj4zBGaLR4bGF5bbp2V8Im+HL0PPoNe9yTcFTP2V
-         dwBA==
-X-Gm-Message-State: AOAM532eLHnliWFj+5cwnQz4tytHZmGCQUHrrB2g+gKv3hfxXr/9SJO5
-        XJGf/Qj/QDclsVV8hrL5PDKIwU4NmtWI37TTPE4=
-X-Google-Smtp-Source: ABdhPJyEHnoAIwm8LndDoVQYy68IdOaK31Ds5kC5zL/+2ZGC8cKnn5z7c5RHTucFG06M+PZtAGrf1w==
-X-Received: by 2002:a65:6a13:0:b0:373:14f6:5d33 with SMTP id m19-20020a656a13000000b0037314f65d33mr8762421pgu.62.1645846916314;
-        Fri, 25 Feb 2022 19:41:56 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id 2-20020a631342000000b0037487b6b018sm3890142pgt.0.2022.02.25.19.41.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Feb 2022 19:41:55 -0800 (PST)
-Message-ID: <6219a183.1c69fb81.9c737.ae4d@mx.google.com>
-Date:   Fri, 25 Feb 2022 19:41:55 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=ni4lvJQUTghS0A94JZkFOwka6WIVFnjt5N9mjzzU6a4=;
+        b=b4v/R9oZdNQo5yD3x0JUiVfE1knOmDRZXbsBKfEkYVaUwwrgWZynuIqLTLUw1AXoQp
+         5trwQiqOjE3PdDGUPrriGm2XKxXNLnSjEFaxt9iZZBswDbnGEXpkGxMeEBLYcDGLdCVL
+         dvWouEHOGs05nx0MFpCcr/lSd5QXMTKOKznE99tbYhT/9Vr9j5n1vY7vTzNVVYKVGJ46
+         nYNOzEICk3yVThEjV2CeepVcidNZVu9no0+2XgjssQG2usGiMA4DJMhmnQwWJoX4ExzQ
+         zbUGg4jRowtH5O84pNsYwVhP6gzeVJs4RvzExD1Is7c1jy5S7tv5HGIIWJ5rzsu6AJw1
+         UrQg==
+X-Gm-Message-State: AOAM530aJA2P0RJNuB/m5ze43VBe0qfKAGkGdTO8LW+J1BD5fLvEBP58
+        77zlJYMs1i4JddpCHRMTDaWKhHVScJOlSN/91cgGa+0vDJjB
+X-Google-Smtp-Source: ABdhPJzx4DUBAx43q5XkKlSSWv/3LQS5YxNMm76ElPyAHBb7zrVHBi5LdDdAO+6ZiEkqMGxMpYthJqCrWFpq4t0tvyVcm1cfgfvm
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Tree: next
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Kernel: v5.17-rc5-388-geb90b11d71c0
-Subject: next/pending-fixes baseline: 325 runs,
- 4 regressions (v5.17-rc5-388-geb90b11d71c0)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:ccd7:0:b0:30d:21d0:51d6 with SMTP id
+ k23-20020a02ccd7000000b0030d21d051d6mr8894823jaq.138.1645860203526; Fri, 25
+ Feb 2022 23:23:23 -0800 (PST)
+Date:   Fri, 25 Feb 2022 23:23:23 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c7fde605d8e6b085@google.com>
+Subject: [syzbot] linux-next test error: WARNING in __mod_memcg_lruvec_state
+From:   syzbot <syzbot+a526c269335f529d25c8@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, cgroups@vger.kernel.org,
+        hannes@cmpxchg.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@kernel.org,
+        roman.gushchin@linux.dev, sfr@canb.auug.org.au,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes baseline: 325 runs, 4 regressions (v5.17-rc5-388-geb90b1=
-1d71c0)
+Hello,
 
-Regressions Summary
--------------------
+syzbot found the following issue on:
 
-platform           | arch  | lab           | compiler | defconfig          =
-          | regressions
--------------------+-------+---------------+----------+--------------------=
-----------+------------
-bcm2711-rpi-4-b    | arm64 | lab-collabora | gcc-10   | defconfig+CON...OMI=
-ZE_BASE=3Dy | 1          =
+HEAD commit:    06aeb1495c39 Add linux-next specific files for 20220225
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=17a69c8e700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8d8bf144f45f9b3
+dashboard link: https://syzkaller.appspot.com/bug?extid=a526c269335f529d25c8
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-bcm2836-rpi-2-b    | arm   | lab-collabora | gcc-10   | multi_v7_defc...MB2=
-_KERNEL=3Dy | 1          =
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+a526c269335f529d25c8@syzkaller.appspotmail.com
 
-da850-lcdk         | arm   | lab-baylibre  | gcc-10   | davinci_all_defconf=
-ig        | 1          =
-
-kontron-pitx-imx8m | arm64 | lab-kontron   | gcc-10   | defconfig+crypto   =
-          | 1          =
-
-
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v5.17-rc5-388-geb90b11d71c0/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v5.17-rc5-388-geb90b11d71c0
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      eb90b11d71c05bbf65814c4a79f7b7e9d6e95025 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform           | arch  | lab           | compiler | defconfig          =
-          | regressions
--------------------+-------+---------------+----------+--------------------=
-----------+------------
-bcm2711-rpi-4-b    | arm64 | lab-collabora | gcc-10   | defconfig+CON...OMI=
-ZE_BASE=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/62196a28df5eb5d644c62998
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.17-rc5-3=
-88-geb90b11d71c0/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-colla=
-bora/baseline-bcm2711-rpi-4-b.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.17-rc5-3=
-88-geb90b11d71c0/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-colla=
-bora/baseline-bcm2711-rpi-4-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220218.1/arm64/rootfs.cpio.gz =
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 3590 at mm/memcontrol.c:749 __mod_memcg_lruvec_state+0x1ab/0x220
+Modules linked in:
+CPU: 1 PID: 3590 Comm: syz-fuzzer Not tainted 5.17.0-rc5-next-20220225-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:__mod_memcg_lruvec_state+0x1ab/0x220
+Code: bb 23 92 0e 48 c7 c7 e0 b6 d9 89 e8 af d9 95 07 65 c7 05 f4 c8 37 7e 00 00 00 00 48 83 c4 08 5b 5d 41 5c 41 5d 41 5e 41 5f c3 <0f> 0b e9 a6 fe ff ff 4c 89 f6 48 c7 c7 60 63 ee 8b e8 8f d3 45 02
+RSP: 0000:ffffc900039efbc0 EFLAGS: 00010202
+RAX: 0000000000000206 RBX: 0000000000000200 RCX: ffffffff81aafa53
+RDX: 1ffff1100218fa8d RSI: 000000000000001c RDI: ffff888010c7d468
+RBP: ffff888010c7d000 R08: 0000000000000001 R09: ffffffff8ba144e7
+R10: fffffbfff174289c R11: 0000000000000001 R12: 000000000000001c
+R13: ffff88813fe38000 R14: ffff88813fe38000 R15: ffff88813fffa000
+FS:  000000c0001d2c90(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000000c000e00000 CR3: 000000001cfb0000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __mod_lruvec_page_state+0x1e5/0x3e0
+ page_add_new_anon_rmap+0x2e5/0x930
+ do_huge_pmd_anonymous_page+0x102c/0x2350
+ __handle_mm_fault+0x2a66/0x4110
+ handle_mm_fault+0x1c8/0x790
+ do_user_addr_fault+0x489/0x11c0
+ exc_page_fault+0x9e/0x180
+ asm_exc_page_fault+0x1e/0x30
+RIP: 0033:0x465e33
+Code: 00 00 c5 fe 6f 06 c5 fe 6f 4e 20 c5 fe 6f 56 40 c5 fe 6f 5e 60 48 81 c6 80 00 00 00 c5 fd e7 07 c5 fd e7 4f 20 c5 fd e7 57 40 <c5> fd e7 5f 60 48 81 c7 80 00 00 00 48 81 eb 80 00 00 00 77 b5 0f
+RSP: 002b:000000c0003533b8 EFLAGS: 00010202
+RAX: 000000c000db4000 RBX: 0000000000423fe0 RCX: 000000c001224000
+RDX: 000000c001224001 RSI: 000000c000990020 RDI: 000000c000dfffa0
+RBP: 000000c000353418 R08: 000000c000db4000 R09: 0000000000000000
+R10: 0000000000000020 R11: 0000000000000206 R12: 000000c000243f18
+R13: 000000000000002e R14: 000000c0000001a0 R15: 0000000000000000
+ </TASK>
 
 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-  * baseline.login: https://kernelci.org/test/case/id/62196a28df5eb5d644c62=
-999
-        new failure (last pass: v5.17-rc5-244-gd77a1b37f796) =
-
- =
-
-
-
-platform           | arch  | lab           | compiler | defconfig          =
-          | regressions
--------------------+-------+---------------+----------+--------------------=
-----------+------------
-bcm2836-rpi-2-b    | arm   | lab-collabora | gcc-10   | multi_v7_defc...MB2=
-_KERNEL=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/62197027acda209be0c62976
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.17-rc5-3=
-88-geb90b11d71c0/arm/multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab=
--collabora/baseline-bcm2836-rpi-2-b.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.17-rc5-3=
-88-geb90b11d71c0/arm/multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab=
--collabora/baseline-bcm2836-rpi-2-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220218.1/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/62197027acda209be0c62=
-977
-        failing since 8 days (last pass: v5.17-rc4-260-ga9d1ea1cfc32, first=
- fail: v5.17-rc4-287-g3d4071e48b88) =
-
- =
-
-
-
-platform           | arch  | lab           | compiler | defconfig          =
-          | regressions
--------------------+-------+---------------+----------+--------------------=
-----------+------------
-da850-lcdk         | arm   | lab-baylibre  | gcc-10   | davinci_all_defconf=
-ig        | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6219653875d046ed2bc62972
-
-  Results:     5 PASS, 1 FAIL, 1 SKIP
-  Full config: davinci_all_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.17-rc5-3=
-88-geb90b11d71c0/arm/davinci_all_defconfig/gcc-10/lab-baylibre/baseline-da8=
-50-lcdk.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.17-rc5-3=
-88-geb90b11d71c0/arm/davinci_all_defconfig/gcc-10/lab-baylibre/baseline-da8=
-50-lcdk.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220218.1/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.dmesg.alert: https://kernelci.org/test/case/id/6219653875d046e=
-d2bc62976
-        failing since 33 days (last pass: v5.16-11577-gffd79fec234d, first =
-fail: v5.17-rc1-180-g86539e2bdb99)
-        3 lines
-
-    2022-02-25T23:24:18.965093  kern  :alert : BUG: Bad page state in proce=
-ss kworker/u2:0  pfn:c3000
-    2022-02-25T23:24:18.965326  kern  :alert : BUG: Bad page state in proce=
-ss kworker/u2:0  pfn:c3400
-    2022-02-25T23:24:18.965464  kern  :alert : BUG: Bad page state in proce=
-ss kworker/u2:0  pfn:c3800
-    2022-02-25T23:24:19.009544  <8><LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Dale=
-rt RESULT=3Dfail UNITS=3Dlines MEASUREMENT=3D3>   =
-
- =
-
-
-
-platform           | arch  | lab           | compiler | defconfig          =
-          | regressions
--------------------+-------+---------------+----------+--------------------=
-----------+------------
-kontron-pitx-imx8m | arm64 | lab-kontron   | gcc-10   | defconfig+crypto   =
-          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/62196925f6d465eed0c629ae
-
-  Results:     51 PASS, 1 FAIL, 1 SKIP
-  Full config: defconfig+crypto
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.17-rc5-3=
-88-geb90b11d71c0/arm64/defconfig+crypto/gcc-10/lab-kontron/baseline-kontron=
--pitx-imx8m.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.17-rc5-3=
-88-geb90b11d71c0/arm64/defconfig+crypto/gcc-10/lab-kontron/baseline-kontron=
--pitx-imx8m.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220218.1/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.dwc3-usb1-probed: https://kernelci.org/test/case/id/621=
-96925f6d465eed0c629c5
-        new failure (last pass: v5.17-rc5-317-g24650335a6e9)
-
-    2022-02-25T23:41:11.830606  /lava-93277/1/../bin/lava-test-case
-    2022-02-25T23:41:11.830975  <8>[   11.346381] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Ddwc3-usb1-probed RESULT=3Dfail>   =
-
- =20
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

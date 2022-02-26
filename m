@@ -2,48 +2,50 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7F434C5616
-	for <lists+linux-next@lfdr.de>; Sat, 26 Feb 2022 14:30:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 459094C5690
+	for <lists+linux-next@lfdr.de>; Sat, 26 Feb 2022 16:08:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231797AbiBZNa5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 26 Feb 2022 08:30:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56882 "EHLO
+        id S230391AbiBZPJO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 26 Feb 2022 10:09:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231795AbiBZNaz (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 26 Feb 2022 08:30:55 -0500
-Received: from a8-29.smtp-out.amazonses.com (a8-29.smtp-out.amazonses.com [54.240.8.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 466E74D62E;
-        Sat, 26 Feb 2022 05:30:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1645882220;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=fC6smFVHLRjxytFRyQyAyDL9rrTwoYdz2RM/SJO46Jw=;
-        b=p81P0gNuH74gUF8pLEnmOqAPVRo7V7+bgB7wMZgPFTlrquh1Wgl26+ZicEZez2mP
-        S3kf+z6K5b/QcdwgWNzH91HQH18+UR1Fhb0PP61Hgdx8ieDZTaBnZT7sY3mXVYTH2SM
-        VmRTtbWkSgQ5xESkYZN5JOC33wbFsL/F9CO9ZpkA=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1645882220;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=fC6smFVHLRjxytFRyQyAyDL9rrTwoYdz2RM/SJO46Jw=;
-        b=jpeEbpqETnhQ58yNSwo4EzoM2Fwx9fIGbrxDXcuaDACCJNQoeqOLc6vbqR8UojKM
-        AulPF3sPwLc8uD2D25onK6Bs7DhL9Aj5RMYjIECUTpxrkSADEELXa5g+TGEf17m/13X
-        ysA1ldiLOYMz0gqVu8QMIgisrdtFfP59TTD0hGuk=
-From:   lkft@linaro.org
-To:     lkft@linaro.org
-Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
-        linux-next@vger.kernel.org, shuah@kernel.org
-Subject: lkft kselftest for next-20220225
+        with ESMTP id S230315AbiBZPJM (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 26 Feb 2022 10:09:12 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA79C1DC9A2;
+        Sat, 26 Feb 2022 07:08:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C0C660B89;
+        Sat, 26 Feb 2022 15:08:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D360C340E8;
+        Sat, 26 Feb 2022 15:08:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1645888115;
+        bh=ijmknrhdQP18Q3RIGWdlxw9x4DRN8zfnfy7bwDbty/A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=zeAx8OoHqjb05X0iSOHmFdz5gHsJZH2RRa0qOwRW4Afu7B5/3Cx7Ecnc6PIZDb8yg
+         2BAFCTCdQE55GcHlKltTZLWtqLPoys2qurnm2WgFUO1U/gAj3pXvTwN1RpdVOI+T49
+         f+th7ooD43Yjwj4xAtkmXqmxRfIYKMcqujyqd6bw=
+Date:   Sat, 26 Feb 2022 16:08:32 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     broonie@kernel.org, Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        linux-mmc@vger.kernel.org
+Subject: Re: linux-next: build failure after merge of the char-misc tree
+Message-ID: <YhpCcE19y3sGqLQ3@kroah.com>
+References: <20220225204055.3899986-1-broonie@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-Message-ID: <0100017f36399c8a-6d5ad838-77ba-4951-b354-fcd7cf2ea4e5-000000@email.amazonses.com>
-Date:   Sat, 26 Feb 2022 13:30:20 +0000
-Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2022.02.26-54.240.8.29
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,TO_EQ_FM_DIRECT_MX,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220225204055.3899986-1-broonie@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,80 +53,46 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-## Build
-* kernel: 5.17.0-rc5
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-* git branch: [None, 'master']
-* git commit: 06aeb1495c39c86ccfaf1adadc1d2200179f16eb
-* git describe: next-20220225
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220225
+On Fri, Feb 25, 2022 at 08:40:55PM +0000, broonie@kernel.org wrote:
+> Hi all,
+> 
+> After merging the char-misc tree, today's linux-next build (x86
+> allmodconfig) failed like this:
+> 
+> /tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c: In function 'sd_request':
+> /tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c:809:17: error: unused variable 'dev' [-Werror=unused-variable]
+>   809 |  struct device *dev = &host->pdev->dev;
+>       |                 ^~~
+> /tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c: In function 'sdmmc_set_ios':
+> /tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c:1084:17: error: unused variable 'dev' [-Werror=unused-variable]
+>  1084 |  struct device *dev = &host->pdev->dev;
+>       |                 ^~~
+> /tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c: In function 'sdmmc_get_ro':
+> /tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c:1133:17: error: unused variable 'dev' [-Werror=unused-variable]
+>  1133 |  struct device *dev = &host->pdev->dev;
+>       |                 ^~~
+> /tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c: In function 'sdmmc_get_cd':
+> /tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c:1159:17: error: unused variable 'dev' [-Werror=unused-variable]
+>  1159 |  struct device *dev = &host->pdev->dev;
+>       |                 ^~~
+> /tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c: In function 'sdmmc_switch_voltage':
+> /tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c:1258:17: error: unused variable 'dev' [-Werror=unused-variable]
+>  1258 |  struct device *dev = &host->pdev->dev;
+>       |                 ^~~
+> /tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c: In function 'sdmmc_execute_tuning':
+> /tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c:1311:17: error: unused variable 'dev' [-Werror=unused-variable]
+>  1311 |  struct device *dev = &host->pdev->dev;
+>       |                 ^~~
+> cc1: all warnings being treated as errors
+> 
+> Caused by commit
+> 
+>   7570fb41e450ba37 ("mmc: rtsx: Let MMC core handle runtime PM")
+> 
+> I have used the char-misc tree from yesterday instead.
 
-## Test Regressions (compared to next-20220223)
-No test regressions found.
+Kai-Heng, can you send an add-on patch to fix this?
 
-## Metric Regressions (compared to next-20220223)
-No metric regressions found.
+thanks,
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-
-## Test Fixes (compared to next-20220223)
-No test fixes found.
-
-## Metric Fixes (compared to next-20220223)
-No metric fixes found.
-
-## Test result summary
-total: 1720, pass: 1139, fail: 169, skip: 412, xfail: 0
-
-## Build Summary
-
-## Test suites summary
-* kselftest-android
-* kselftest-bpf
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-lkdtm
-* kselftest-membarrier
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-
---
-Linaro LKFT
-https://lkft.linaro.org
+greg k-h

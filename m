@@ -2,97 +2,97 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 459094C5690
-	for <lists+linux-next@lfdr.de>; Sat, 26 Feb 2022 16:08:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24DB14C5E87
+	for <lists+linux-next@lfdr.de>; Sun, 27 Feb 2022 21:20:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230391AbiBZPJO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 26 Feb 2022 10:09:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41652 "EHLO
+        id S229848AbiB0UV3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 27 Feb 2022 15:21:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230315AbiBZPJM (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 26 Feb 2022 10:09:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA79C1DC9A2;
-        Sat, 26 Feb 2022 07:08:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S229812AbiB0UV2 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 27 Feb 2022 15:21:28 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D261955755;
+        Sun, 27 Feb 2022 12:20:49 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C0C660B89;
-        Sat, 26 Feb 2022 15:08:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D360C340E8;
-        Sat, 26 Feb 2022 15:08:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645888115;
-        bh=ijmknrhdQP18Q3RIGWdlxw9x4DRN8zfnfy7bwDbty/A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=zeAx8OoHqjb05X0iSOHmFdz5gHsJZH2RRa0qOwRW4Afu7B5/3Cx7Ecnc6PIZDb8yg
-         2BAFCTCdQE55GcHlKltTZLWtqLPoys2qurnm2WgFUO1U/gAj3pXvTwN1RpdVOI+T49
-         f+th7ooD43Yjwj4xAtkmXqmxRfIYKMcqujyqd6bw=
-Date:   Sat, 26 Feb 2022 16:08:32 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     broonie@kernel.org, Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4K6FJD30xyz4xcZ;
+        Mon, 28 Feb 2022 07:20:43 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1645993244;
+        bh=bj4kQe2ga8DdybKfRKNaqFOjWtocJLyBV0Y3f+6szJc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=fvDMSZE9l2gjzHY7ZxHfhbPz0tTliKc3uLxm7/3z1mmt7Ol0f2IHwMUxDsvUCq188
+         u+WpcvTtB2ciiE4PPwsUHUaTB6QOZwzq6tbxplKENWMtVoEzvSHbFPZMYm65pxdqxO
+         N4hNnnvoxvI0FY7w490vsfYDpwpDPW6MnP/UHKs9cm1ahsdOW5PSSlLX/pWTN13nOP
+         z2acZh3RweGxsovhQt9lnMJvl8FLB/z3JzT79ips2/bLMs4MMcarrelhp7hQcLcba7
+         FQlLnHcVl1vlyjgnV5WyIcyDgMS86Qxyu3ZOpjW4iVsrYmkEGRXOsuL41kKfIai45G
+         v9PzOsFEiLfDA==
+Date:   Mon, 28 Feb 2022 07:20:42 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Sukadev Bhattiprolu <sukadev@linux.ibm.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        linux-mmc@vger.kernel.org
-Subject: Re: linux-next: build failure after merge of the char-misc tree
-Message-ID: <YhpCcE19y3sGqLQ3@kroah.com>
-References: <20220225204055.3899986-1-broonie@kernel.org>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the net tree
+Message-ID: <20220228072042.5314e22b@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220225204055.3899986-1-broonie@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/C7ouye5q8627jOdzauxjfu7";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Feb 25, 2022 at 08:40:55PM +0000, broonie@kernel.org wrote:
-> Hi all,
-> 
-> After merging the char-misc tree, today's linux-next build (x86
-> allmodconfig) failed like this:
-> 
-> /tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c: In function 'sd_request':
-> /tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c:809:17: error: unused variable 'dev' [-Werror=unused-variable]
->   809 |  struct device *dev = &host->pdev->dev;
->       |                 ^~~
-> /tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c: In function 'sdmmc_set_ios':
-> /tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c:1084:17: error: unused variable 'dev' [-Werror=unused-variable]
->  1084 |  struct device *dev = &host->pdev->dev;
->       |                 ^~~
-> /tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c: In function 'sdmmc_get_ro':
-> /tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c:1133:17: error: unused variable 'dev' [-Werror=unused-variable]
->  1133 |  struct device *dev = &host->pdev->dev;
->       |                 ^~~
-> /tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c: In function 'sdmmc_get_cd':
-> /tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c:1159:17: error: unused variable 'dev' [-Werror=unused-variable]
->  1159 |  struct device *dev = &host->pdev->dev;
->       |                 ^~~
-> /tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c: In function 'sdmmc_switch_voltage':
-> /tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c:1258:17: error: unused variable 'dev' [-Werror=unused-variable]
->  1258 |  struct device *dev = &host->pdev->dev;
->       |                 ^~~
-> /tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c: In function 'sdmmc_execute_tuning':
-> /tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c:1311:17: error: unused variable 'dev' [-Werror=unused-variable]
->  1311 |  struct device *dev = &host->pdev->dev;
->       |                 ^~~
-> cc1: all warnings being treated as errors
-> 
-> Caused by commit
-> 
->   7570fb41e450ba37 ("mmc: rtsx: Let MMC core handle runtime PM")
-> 
-> I have used the char-misc tree from yesterday instead.
+--Sig_/C7ouye5q8627jOdzauxjfu7
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Kai-Heng, can you send an add-on patch to fix this?
+Hi all,
 
-thanks,
+In commit
 
-greg k-h
+  765559b10ce5 ("ibmvnic: initialize rc before completing wait")
+
+Fixes tag
+
+  Fixes: 6b278c0cb378 ("ibmvnic delay complete()")
+
+has these problem(s):
+
+  - Subject does not match target commit subject
+    Just use
+	git log -1 --format=3D'Fixes: %h ("%s")'
+
+So
+
+Fixes: 6b278c0cb378 ("ibmvnic: delay complete()")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/C7ouye5q8627jOdzauxjfu7
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIb3RoACgkQAVBC80lX
+0Gyfmgf+L3yqbcnI6avxhcU+ivOnkGKhZfuy0IzwqVG4WghKtXRvfhsYs9c+1Bml
+IVfT3OyeGRns/9du8i7mVJWdOS7p+ITgDjdQXl5OHG7nXkRgRx/WJUo/bja/VzfC
+EjgoZt5kc+Y1QM1tFbdG/t6xQPK2y/kIe37KBZyqXs22vliNgkSzOu+SDAoirsbV
+sgfovsasGl2Xn/+QsEhwb4/W66MIsq8l7rOUlThFcfZWO119hhysN5C2Vg6289ke
+OGIno95mxafmZtg6ByKWX8i0FYmbj6I/1PdAnquQHSUbIBQ74dS3EfJdNGkdn/qE
+qu6VdBKE4l7J/PolMp0jtO5d6L+OCw==
+=eBrp
+-----END PGP SIGNATURE-----
+
+--Sig_/C7ouye5q8627jOdzauxjfu7--

@@ -2,48 +2,48 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6534D4C6743
-	for <lists+linux-next@lfdr.de>; Mon, 28 Feb 2022 11:46:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D2174C6773
+	for <lists+linux-next@lfdr.de>; Mon, 28 Feb 2022 11:49:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232459AbiB1Kqw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 28 Feb 2022 05:46:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36298 "EHLO
+        id S234982AbiB1Ktx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 28 Feb 2022 05:49:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbiB1Kqw (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 28 Feb 2022 05:46:52 -0500
+        with ESMTP id S234960AbiB1Ktj (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 28 Feb 2022 05:49:39 -0500
 Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C8D657B3E;
-        Mon, 28 Feb 2022 02:46:13 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 95D2358025B;
-        Mon, 28 Feb 2022 05:46:10 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Mon, 28 Feb 2022 05:46:10 -0500
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB3B15D1B5;
+        Mon, 28 Feb 2022 02:48:59 -0800 (PST)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 4376458027D;
+        Mon, 28 Feb 2022 05:48:59 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Mon, 28 Feb 2022 05:48:59 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
         :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; bh=feVj5PTVg+Alvboej1oYXFjSRH9S+YW1b1Xb8Q
-        QaQPc=; b=bGJWYiJv7fV9kVLNaDdOg1JT9KrAiyOBxvzIfjNWGrjV6P8pGmyE8m
-        ZjVmWnmhkZVJ2HL06VIDY7V+b4AoD82hSYUZ9Aw4AM3tECWCNl8fxeqEjHWBEIq0
-        EY8Th4aGQzuDesHVw/XBA0k1qZCxu0WRwYqjzvwtwOJwBeFzDwjM68iGybNyZFmr
-        kR0BREZFG/9qBY++9iszRhCPZBATvxEzC050vbSHEkOvGYd8kN9ubYkgjIb2XFGw
-        xOO5SNrxdRjX5kX2+gLzttkQez1KhsmcoaJCJBi0qNuj4uQs10DflbO0Cefbhg/j
-        g9BOmKa2Fc3rGZ9SKN5OAPFV5sH6kwxg==
+        :subject:to:to; s=fm3; bh=1vVga+h9htbpuVX4XD8VlM10uiiq7ZO3+UmFQE
+        c01vQ=; b=G+ZJOtIyw2/WazvvDKJTEgXHqoMoF3VJv2oKOGq4HDeWkTpOd8WBaT
+        4rHcpBbDc+9Q40E3VRnQZVyZ/TnAHgiMv+n0jHOCoqgKJb3y5c2rfx6jE89SIb6V
+        wuJl+VrQBakHz1bRaiUzukCY3YwHyArUCT2bEJjwBw4fBaNLxo87f39svsg6rW4M
+        FrMUpwRPrVgJt2SgGfjXyh4rTUGiwuracGqh9pypGThpKvggMHATxHjho+kSf+Pw
+        heMa0F3/JUt9L4e2D7WaaUrptrbQLO8XFLDibfMwypC1vdK9qeVxb0NoqswZmsY8
+        Z8Mrhat28uTSDyacKEGujZRc9zr/khHA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-type:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
         :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=feVj5PTVg+Alvboej
-        1oYXFjSRH9S+YW1b1Xb8QQaQPc=; b=c7KElXrnqnPUfuHZk64XXpktPPkEGrC0/
-        6f2+7c6K23R/v+b6FukYLKm4OoNrJGJd/l0+vPw4+Kf1qLsJDzNjqbp/F4/7amgs
-        T3/WbLT1GrMHSM1ubtg5ESJ46BBIUOKZ+zWPYwfKqRNJQbBCbousNS9951X7zEf/
-        sFKylsL9zAi03YS/yvwWx7addRQHQgSd6j2chRSFh3R+9m9rJLY+JFXAi4LrjgkQ
-        AESGGwkIPmkgIKqOcEBINN9H7HAEKA0l7g59+YcNg2ga4E5+BhXL4qwBTKzfpZYD
-        3ZrNFrNCFD7qC/pfnIa4dgqe6Mux1/b4Z3C8eHHYfGN977ig9A8Mg==
-X-ME-Sender: <xms:8qccYojSGPhpsK-uM6EwszLoreUFXPcq5d6UwazAjBh7HaGhtk9dLw>
-    <xme:8qccYhDwDT0WYOQfYq_D9GW06i23hvAhhembdcy6_CX08giWX5o6KPV9yVqdJMRdW
-    38-LIdpcokwKA>
-X-ME-Received: <xmr:8qccYgHvvarNLMkQW6BM7SQ3Cx3vEYEE_3cQ8wr1Yit28injU3EIcsBIJVdS1Y3mgHEj3jqXWOl-40sS0EeBZoLTMIE>
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=1vVga+h9htbpuVX4X
+        D8VlM10uiiq7ZO3+UmFQEc01vQ=; b=Nh+yscHoWuHDO/JIgKuLzs9zoLl0tZ1mY
+        ytVar5473XvqOezOvfLch4dZ8miNo2Z2FCrbhGra/iXZZdTGj82hJZ68h7V5YRmO
+        qktlxsL8Cx7Lvz3+2nygzNzE9AHjwGj87qTX5C+amkmj2In5kCJolrxtOIDvYkTY
+        Tbue0a8O+ceonP7NqFL1vPkI3KRKftK+bVsX/cJM7Lr7z8vJZIBiSrvH46HxZ7Ra
+        lJGmWt7sv13cPZClOiB/gFeqAjLI33HUDPddiy2dFm1uZyNwtg3B/aQgCLLlC4PB
+        A1DMifsXZpaLTCmKf/PeqVXgw6O28YXpIKL45K2B4I2vA+2RFg9IA==
+X-ME-Sender: <xms:m6gcYpgoaOlXM9gadUBqEGIAviqtLOe-Nbf7EFYWzlYEpnLZERGT7A>
+    <xme:m6gcYuD053lZfrxnnUQtlFblUFSPo_WOMfaqeXe9XLBvJjrhtJz_Lx2q8W_-Pv2RD
+    uGpitA8Be-iJw>
+X-ME-Received: <xmr:m6gcYpHbpEOohqqrGSPr4j0Eli8Xd9nAJL7TGNVlr2KLUHVHL91HzCLHWwCMO9LUARfDg-L3EYLU869VfSBzFb25Y3o>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddruddttddgudelucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
@@ -52,29 +52,27 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddruddttddgudelucetufdoteggod
     fgfffgiedvudekvdektdelleelgefhleejieeugeegveeuuddukedvteenucevlhhushht
     vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
     drtghomh
-X-ME-Proxy: <xmx:8qccYpQVac_7ndlD2z8vYgSpat-_-b1Vd-jI_SEamHOkSSEDN2ogiw>
-    <xmx:8qccYlzs1DGNM0vIh1LoQ2QUWY-KGruqbP2UETrPjXm7U-ZRkShs3Q>
-    <xmx:8qccYn7nubE893oGmogyrLq7VjC21ZgUKf6EQHB7NfslrkKUBJ5Y9Q>
-    <xmx:8qccYoo5Rg5fKLbhFn6t9BhA23mX_8PaTeXJjifWgmiYSG6y5Y4hDQ>
+X-ME-Proxy: <xmx:m6gcYuQuBVdHYfmN6Kvl3QfdijgiNSdtGgbI1hwtxnedBylDivM-Pw>
+    <xmx:m6gcYmyTyePgk8ZBswPOe7HUw3YRsapruwGegxM362ndjbrUM4N_ZQ>
+    <xmx:m6gcYk5pvScL-ey9GzG6KyC7NFnr5xGHbFmsISqoiWWB8gRNSWUiqg>
+    <xmx:m6gcYrrYq0YcPQnLfgZ3tW_Y0OF1eHNO5snpJM6jCnDUonnH4CWn_Q>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 28 Feb 2022 05:46:09 -0500 (EST)
-Date:   Mon, 28 Feb 2022 11:46:07 +0100
+ 28 Feb 2022 05:48:58 -0500 (EST)
+Date:   Mon, 28 Feb 2022 11:48:56 +0100
 From:   Greg KH <greg@kroah.com>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alistair Francis <alistair@alistair23.me>,
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Hammer Hsieh <hammerh0314@gmail.com>,
+        Li-hao Kuo <lhjeff911@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Robert Marko <robert.marko@sartura.hr>
-Subject: Re: linux-next: manual merge of the char-misc tree with the mfd tree
-Message-ID: <Yhyn72NO/roH1gA8@kroah.com>
-References: <20220228193928.3ec6ee98@canb.auug.org.au>
- <YhyPfcjJtIKNQtF8@google.com>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the tty tree with the spi tree
+Message-ID: <YhyomKViVd3iPYDE@kroah.com>
+References: <20220228191316.411f1475@canb.auug.org.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YhyPfcjJtIKNQtF8@google.com>
+In-Reply-To: <20220228191316.411f1475@canb.auug.org.au>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -85,22 +83,60 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 09:01:49AM +0000, Lee Jones wrote:
-> On Mon, 28 Feb 2022, Stephen Rothwell wrote:
+On Mon, Feb 28, 2022 at 07:13:16PM +1100, Stephen Rothwell wrote:
+> Hi all,
 > 
-> > Hi all,
-> > 
-> > Today's linux-next merge of the char-misc tree got a conflict in:
+> Today's linux-next merge of the tty tree got a conflict in:
 > 
-> I did ask for this *not* to be merged when it was in -testing.
+>   MAINTAINERS
+> 
+> between commit:
+> 
+>   f62ca4e2a863 ("spi: Add spi driver for Sunplus SP7021")
+> 
+> from the spi tree and commits:
+> 
+>   b48b9f6deacf ("dt-bindings: serial: Add bindings doc for Sunplus SoC UART Driver")
+>   9e8d5470325f ("serial: sunplus-uart: Add Sunplus SoC UART Driver")
+> 
+> from the tty tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
+> 
+> diff --cc MAINTAINERS
+> index e6b3e94de842,4a30001f6d7b..000000000000
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@@ -18635,13 -18549,12 +18642,19 @@@ S:	Maintaine
+>   F:	Documentation/devicetree/bindings/rtc/sunplus,sp7021-rtc.yaml
+>   F:	drivers/rtc/rtc-sunplus.c
+>   
+>  +SUNPLUS SPI CONTROLLER INTERFACE DRIVER
+>  +M:	Li-hao Kuo <lhjeff911@gmail.com>
+>  +L:	linux-spi@vger.kernel.org
+>  +S:	Maintained
+>  +F:	Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
+>  +F:	drivers/spi/spi-sunplus-sp7021.c
+>  +
+> + SUNPLUS UART DRIVER
+> + M:	Hammer Hsieh <hammerh0314@gmail.com>
+> + S:	Maintained
+> + F:	Documentation/devicetree/bindings/serial/sunplus,sp7021-uart.yaml
+> + F:	drivers/tty/serial/sunplus-uart.c
+> + 
+>   SUPERH
+>   M:	Yoshinori Sato <ysato@users.sourceforge.jp>
+>   M:	Rich Felker <dalias@libc.org>
 
-Sorry, I missed that, I saw your ack on the patch so that's why I took
-it.
-
-> I'll follow-up with Greg.
-
-Should I revert this from my tree?
-
-thanks,
+Looks correct, thanks!
 
 greg k-h

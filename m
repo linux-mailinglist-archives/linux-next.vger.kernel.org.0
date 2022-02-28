@@ -2,73 +2,122 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD7164C7841
-	for <lists+linux-next@lfdr.de>; Mon, 28 Feb 2022 19:44:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 887764C7BE9
+	for <lists+linux-next@lfdr.de>; Mon, 28 Feb 2022 22:26:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233499AbiB1SpW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 28 Feb 2022 13:45:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44814 "EHLO
+        id S230314AbiB1V1J (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 28 Feb 2022 16:27:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240681AbiB1SpJ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 28 Feb 2022 13:45:09 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81AB3D3
-        for <linux-next@vger.kernel.org>; Mon, 28 Feb 2022 10:43:39 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id j10-20020a17090a94ca00b001bc2a9596f6so12114240pjw.5
-        for <linux-next@vger.kernel.org>; Mon, 28 Feb 2022 10:43:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:subject:message-id:mime-version:content-disposition;
-        bh=sJkhEV59rO2h8a2e2lsSXuhWYpON8Y5Qx+5HjGzzaKI=;
-        b=BbINbsLjZnxm+81f8n6xZw36m8MmRCwv1hxJOv+AB9j2yHuBCK1V9+kRgsDBw7KITf
-         5sZFLg+lHc70J5PA7qAGKd5WsuiFeWm8+bTFGz3uTrwypL0fyj3akd+gAN+7lSxP/JDX
-         CU6QgCtZlRpLKasPb54w1GZ0Ctw8TrnSOzQq8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
-         :content-disposition;
-        bh=sJkhEV59rO2h8a2e2lsSXuhWYpON8Y5Qx+5HjGzzaKI=;
-        b=ClrNF76R7+vIig9sgFKUBzcOwBzskPzV7YFDBhdMwGX+Zu0mv+74rsJ7jXc3bz73ry
-         MUlptzuXEONjbbSX5uHkMXen9F+SPwAPHGxXZqq4cOx6QTiRd4mebnC2F5qEllc2DE57
-         RTmWKb5qSjaPFgQrSpi6H/UwFiI+T4SjBxKIMXBb3OUEYDcuj2SMl/FouBwjaZWdY2yS
-         f7KbOybUFyIZfzNZYQ3FsVaQpGhASvVIv7JvxpE/n5NHZYNuaeWRXIWvr6sVYaSX0EYk
-         0BHs1vLA3kPEuh2//nqi2tERZk+J/6s7mVuChesUlkSxQfQT86TrB1xKHZqqvl4wpxkL
-         jE2A==
-X-Gm-Message-State: AOAM533Jefa+WnNHLKFLrP95Nl6EXmYdi33qTwm6NICUqtoPPlN8xSGT
-        RdDAjup+DIt58kBRIAQv9zhEOtJm3ctVvw==
-X-Google-Smtp-Source: ABdhPJy9tKKiijHOD5SUv/RNaXWG3WYJ/RAiTDu0cCVoYxyiuMUH2OLzzCcSgFOKTdgSK9I+jac/ow==
-X-Received: by 2002:a17:902:c204:b0:150:15ec:7e83 with SMTP id 4-20020a170902c20400b0015015ec7e83mr20980929pll.3.1646073818747;
-        Mon, 28 Feb 2022 10:43:38 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id p30-20020a635b1e000000b0037572b4b9f5sm10761501pgb.39.2022.02.28.10.43.38
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 10:43:38 -0800 (PST)
-Date:   Mon, 28 Feb 2022 10:43:37 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     linux-next@vger.kernel.org
-Subject: change to Next/SHA1s ?
-Message-ID: <202202281042.733E768F@keescook>
+        with ESMTP id S230312AbiB1V1I (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 28 Feb 2022 16:27:08 -0500
+Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE9BF122201;
+        Mon, 28 Feb 2022 13:26:28 -0800 (PST)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 4F59A58022C;
+        Mon, 28 Feb 2022 16:26:26 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Mon, 28 Feb 2022 16:26:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; bh=OIyz6P+AJkzgHPB6lyoqYyA4WryI17czGefy6S
+        o4+vg=; b=g+0sLbddNqSKpmzpc8dRTL56R47UoWQdA/cTdlH2s7qDz1LunFgBrx
+        77D5SFRQOoavhceKTiA5eGeaGrNFb68RGBbUBpv3y7sFXzmSLwpKeRiYcVv+0tJE
+        Ou5JpSjSFnkFHo3IMJzOxgnRwmvi/l2LbR9lozfhKjvwXpJ6X7au/VKHTrffLnj5
+        Y/X6G9Wyo/od7aYAHChfzL6AZiBm4vBBPNypxXERnrj6G5bGNUrx7/Efa1NTkDYa
+        SbamfILq3vDTdlmAg0qpLWqfQps2qYvvQU0MKrO9KzHsS2XDNAWcg+7aY5vWGIJ5
+        IJxf5Vg982y/c1D7B6E4Y3rKTuMS2SzA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=OIyz6P+AJkzgHPB6l
+        yoqYyA4WryI17czGefy6So4+vg=; b=MvmSfJvCfoV9oQrUkCqSJe2LBYIWbqQAL
+        sGsAh5QeJHl0JMOHyqMcISU5a1i0jq18mxziuS0pg+xlxwgPU88f3LCb2rge64Gw
+        mME+sG3YZp1mKR/Qx0AScN//1iA3mi6KWykeaX9VLFlI4l18LT7oahoz4FP8F71h
+        MP4TwMgMzZvebJDuO33S8Aa6p2vLW7GA3QTgymdP+D72qbMIxztPEzfFkewya/t8
+        lPQQzIToMmSKcgU62jL/nHKl43o8xXTYpB3kYp/TrzaybDOC59Kl2xXNl+KGhLtk
+        IWyEs1y2x9BuQkNGM0MiJOgP6GApDg8CWR1337VcV/B5TGLep0OJQ==
+X-ME-Sender: <xms:AT4dYt6sOlewmArsKxusIZfj4Jkmr_mXHVU6zhzf37ngRks0zeR73Q>
+    <xme:AT4dYq4q6QPNm44c1Q2CY8qHcxhNdp3MpUeprEZ8J3y5iB-1p3k4oyePZ0gElivTe
+    H00uePtqTps6A>
+X-ME-Received: <xmr:AT4dYkfYZ1opuwGS1l4ew4k4MsCAeYY-nvw5BAMN35VT-nzpf9bfzW8jJEz4EkMLZoiplP2nQ-eL5wIAybCzy4Y>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddruddttddgudegkecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepveeuhe
+    ejgfffgfeivddukedvkedtleelleeghfeljeeiueeggeevueduudekvdetnecuvehluhhs
+    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
+    hhrdgtohhm
+X-ME-Proxy: <xmx:AT4dYmJM3gKYYlpiXoV5L_biHklvY-S-Mbx7H0ypnIpbDrtGN6_qYA>
+    <xmx:AT4dYhJW4pMLY3Vw8IPGVzlcjVb8YnXIKSx-xFcrSj-26Ry072N41g>
+    <xmx:AT4dYvxtMcZ91RtcjIYcEymFylo7tL4VuQ0dUEutHZGbgsdCYuGGGA>
+    <xmx:Aj4dYrDmrBqqm1sx2vgHp9qipKdAMjpbASwQCbyP6MOrEOaOqt148g>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 28 Feb 2022 16:26:25 -0500 (EST)
+Date:   Mon, 28 Feb 2022 22:26:22 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Alistair Francis <alistair@alistair23.me>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Robert Marko <robert.marko@sartura.hr>
+Subject: Re: linux-next: manual merge of the char-misc tree with the mfd tree
+Message-ID: <Yh09/r/nT2LeE82n@kroah.com>
+References: <20220228193928.3ec6ee98@canb.auug.org.au>
+ <YhyPfcjJtIKNQtF8@google.com>
+ <Yhyn72NO/roH1gA8@kroah.com>
+ <YhzENKPtY+WOp566@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YhzENKPtY+WOp566@google.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi!
+On Mon, Feb 28, 2022 at 12:46:44PM +0000, Lee Jones wrote:
+> On Mon, 28 Feb 2022, Greg KH wrote:
+> 
+> > On Mon, Feb 28, 2022 at 09:01:49AM +0000, Lee Jones wrote:
+> > > On Mon, 28 Feb 2022, Stephen Rothwell wrote:
+> > > 
+> > > > Hi all,
+> > > > 
+> > > > Today's linux-next merge of the char-misc tree got a conflict in:
+> > > 
+> > > I did ask for this *not* to be merged when it was in -testing.
+> > 
+> > Sorry, I missed that, I saw your ack on the patch so that's why I took
+> > it.
+> > 
+> > > I'll follow-up with Greg.
+> > 
+> > Should I revert this from my tree?
+> 
+> I did try to catch it before a revert would have been required.
 
-I was curious if it might be possible to emit the commit date along with
-the tree/SHA1 map in Next/SHA1s? That would let people trivially scan
-the file for relative age of trees, etc.
+My fault.
 
--Kees
+> But yes, please revert it.
 
--- 
-Kees Cook
+Will go do so now.
+
+> The Ack is not standard and should not be merged.
+
+I do not understand this, what went wrong here?
+
+thanks,
+
+greg k-h

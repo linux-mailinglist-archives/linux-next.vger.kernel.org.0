@@ -2,70 +2,50 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A174D4C6358
-	for <lists+linux-next@lfdr.de>; Mon, 28 Feb 2022 07:49:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F1DE4C6389
+	for <lists+linux-next@lfdr.de>; Mon, 28 Feb 2022 08:04:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233339AbiB1Gtj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 28 Feb 2022 01:49:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38070 "EHLO
+        id S233514AbiB1HFE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 28 Feb 2022 02:05:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230255AbiB1Gti (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 28 Feb 2022 01:49:38 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21CC547AE8;
-        Sun, 27 Feb 2022 22:49:00 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id p9so22720920ejd.6;
-        Sun, 27 Feb 2022 22:49:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VtdxgxKnpOzp/IOMEe55+hGAU7UnYBpWIDnMsFXjwTk=;
-        b=S9WuuRUM63iMiQEObW/gLBEXcaHpVI0fOM4zz16PKm673tMquxmRXAUGIeFxLZKTKO
-         mMI6nFJRkOwwTRxuUQ5xt8LG6gPHVcOt3q1g+QSFro4DDwMGf47c3VCc/rctOC/mTeE4
-         ZaBawDtRzxAdwH+g3o3Wjaxvc8dxAfRXz1U0ZgsdLVA2Pj3nr/2HxeWA2Slcwk6hnINz
-         Rc5HF3FrCyfyGHsNdntAa87x23Kn6dvC54xddzmo1mfUMwBiOaUMvh3js/nxmzgts6m4
-         A7WDgsMKbIhULisN5vuNGIWuKNoMRTMfviJzxkUNrW3h1Njug+ZLNHRioQ2csQ3YxvJW
-         3XJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VtdxgxKnpOzp/IOMEe55+hGAU7UnYBpWIDnMsFXjwTk=;
-        b=vm2keuvs2RRL3EPNZnmKU84juBb9Y7K650u2lX3DNKFWMxPbn+TleBOLKZn3Dwhc5S
-         jmgXN+qfz+edcPNe0V6qwmsLm1cTCPsLltOvH4xrcOMg35L0qvQGDNq9x3pH9Z6UPV74
-         /Veqvw6+AZBpdUodgPebdClAylZFwG+XylZ4YiJTrUqBMDElQUK99mumum6JotxkkI0M
-         kD6wmd0lFVUAHqgwFWyeURVZ5TPn6c5XfZ5PbW0pC4oMPLR0jjBziiBd0eyQEjJksWSX
-         mHsg5uT7yIA3jMRON2TwdwIDJQlJ2SXmJYLzEckzopXjz24Qsanw4Tu/y+5XytJXZFXW
-         sscQ==
-X-Gm-Message-State: AOAM530l4G1TxXsly+Eryfn8jiNg3kN5W8A52xUlF7+432CjEuWnsREi
-        sECF7j7UiUrgcctKmBPMKhA2GFpOu+kblSU7Cgg=
-X-Google-Smtp-Source: ABdhPJzzNIWTAShQGm7kD0MeqfACwMltUD0PL56BN40U1IPBItne3Wp4n7o1hgAfEgBtYEEBf6XPc2GB4M32bqbPFxc=
-X-Received: by 2002:a17:907:7663:b0:6ce:fdd:762d with SMTP id
- kk3-20020a170907766300b006ce0fdd762dmr14202783ejc.750.1646030938535; Sun, 27
- Feb 2022 22:48:58 -0800 (PST)
-MIME-Version: 1.0
-References: <20220225164231.904173-1-broonie@kernel.org> <CAJMQK-jGCX6Zp0gkfgqeA6=0zuWiSbWbytUixH3VFiwX9wtLNQ@mail.gmail.com>
-In-Reply-To: <CAJMQK-jGCX6Zp0gkfgqeA6=0zuWiSbWbytUixH3VFiwX9wtLNQ@mail.gmail.com>
-From:   Dave Airlie <airlied@gmail.com>
-Date:   Mon, 28 Feb 2022 16:48:47 +1000
-Message-ID: <CAPM=9tz0igKq1W3N_QseF97jqCY2Q9iSYwoFBVx2qJ8rWeVx-w@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the drm tree
-To:     Hsin-Yi Wang <hsinyi@chromium.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     Mark Brown <broonie@kernel.org>, Dave Airlie <airlied@linux.ie>,
-        Allen Chen <allen.chen@ite.com.tw>,
+        with ESMTP id S233502AbiB1HFB (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 28 Feb 2022 02:05:01 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D003459A49;
+        Sun, 27 Feb 2022 23:04:21 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4K6WZr03jbz4xcd;
+        Mon, 28 Feb 2022 18:04:19 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1646031860;
+        bh=aASHzSowQHuyexsfskNosRGiKowYjOmTJ/cbgGN/tvo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=QNCv4PEEhlecVBuE0afhxl/lzPzGXf7gLhm9EoSMZ/92WQMCqmi9Vs09o5hLl+9/L
+         KTWUJpimLIfOm33EdFREY9JhohB8suxVn+ZPlvMLezZ2CYxwEV3UY0ylYoq9nlwzl+
+         +2Ydlv+qHIR2xCrrSwRMaUnnshthAJG0doKzSBHkUMWdambk/+tpyCe/vl0ZnlI23Q
+         bF5DAYyjJwkkbxotAKUa1VUyLfLYOt7w3Q82xYUVq+O5GAMebFewsrqvHZVI9HQsaM
+         x69OeUbk5BiDFmLsk9QhJPhTA1v0aLVp4Tfm88THVhB8i2SCp3/dmKP9WjpFfkO4N3
+         ZSKPKRAr5OSrg==
+Date:   Mon, 28 Feb 2022 18:04:19 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     broonie@kernel.org, Linus Walleij <linus.walleij@linaro.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Hermes Wu <Hermes.Wu@ite.com.tw>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the pinctrl tree with the irqchip
+ tree
+Message-ID: <20220228180419.3e0a9f91@canb.auug.org.au>
+In-Reply-To: <20220221223216.3616980-1-broonie@kernel.org>
+References: <20220221223216.3616980-1-broonie@kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/aYFkvPjWaW0IiZ95fR8py1X";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,123 +53,71 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, 28 Feb 2022 at 16:44, Hsin-Yi Wang <hsinyi@chromium.org> wrote:
->
-> On Sat, Feb 26, 2022 at 12:43 AM <broonie@kernel.org> wrote:
-> >
-> > Hi all,
-> >
-> > After merging the drm tree, today's linux-next build (x86 allmodconfig)
-> > failed like this:
-> >
-> > lib/strncpy_from_user.o: warning: objtool: strncpy_from_user()+0x10b: call to do_strncpy_from_user() with UACCESS enabled
-> > lib/strnlen_user.o: warning: objtool: strnlen_user()+0xbb: call to do_strnlen_user() with UACCESS enabled
-> > /tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c: In function 'receive_timing_debugfs_show':
-> > /tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3077:23: error: array subscript 4096 is outside array bounds of 'u8[200]' {aka 'unsigned char[200]'} [-Werror=array-bounds]
-> >  3077 |  u8 *str = read_buf, *end = read_buf + PAGE_SIZE;
-> >       |                       ^~~
-> > /tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3076:5: note: while referencing 'read_buf'
-> >  3076 |  u8 read_buf[READ_BUFFER_SIZE];
-> >       |     ^~~~~~~~
-> > /tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3077:23: error: array subscript 4096 is outside array bounds of 'u8[200]' {aka 'unsigned char[200]'} [-Werror=array-bounds]
-> >  3077 |  u8 *str = read_buf, *end = read_buf + PAGE_SIZE;
-> >       |                       ^~~
-> > /tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3076:5: note: while referencing 'read_buf'
-> >  3076 |  u8 read_buf[READ_BUFFER_SIZE];
-> >       |     ^~~~~~~~
-> > /tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3077:23: error: array subscript 4096 is outside array bounds of 'u8[200]' {aka 'unsigned char[200]'} [-Werror=array-bounds]
-> >  3077 |  u8 *str = read_buf, *end = read_buf + PAGE_SIZE;
-> >       |                       ^~~
-> > /tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3076:5: note: while referencing 'read_buf'
-> >  3076 |  u8 read_buf[READ_BUFFER_SIZE];
-> >       |     ^~~~~~~~
-> > /tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3077:23: error: array subscript 4096 is outside array bounds of 'u8[200]' {aka 'unsigned char[200]'} [-Werror=array-bounds]
-> >  3077 |  u8 *str = read_buf, *end = read_buf + PAGE_SIZE;
-> >       |                       ^~~
-> > /tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3076:5: note: while referencing 'read_buf'
-> >  3076 |  u8 read_buf[READ_BUFFER_SIZE];
-> >       |     ^~~~~~~~
-> > /tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3077:23: error: array subscript 4096 is outside array bounds of 'u8[200]' {aka 'unsigned char[200]'} [-Werror=array-bounds]
-> >  3077 |  u8 *str = read_buf, *end = read_buf + PAGE_SIZE;
-> >       |                       ^~~
-> > /tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3076:5: note: while referencing 'read_buf'
-> >  3076 |  u8 read_buf[READ_BUFFER_SIZE];
-> >       |     ^~~~~~~~
-> > /tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3077:23: error: array subscript 4096 is outside array bounds of 'u8[200]' {aka 'unsigned char[200]'} [-Werror=array-bounds]
-> >  3077 |  u8 *str = read_buf, *end = read_buf + PAGE_SIZE;
-> >       |                       ^~~
-> > /tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3076:5: note: while referencing 'read_buf'
-> >  3076 |  u8 read_buf[READ_BUFFER_SIZE];
-> >       |     ^~~~~~~~
-> > /tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3077:23: error: array subscript 4096 is outside array bounds of 'u8[200]' {aka 'unsigned char[200]'} [-Werror=array-bounds]
-> >  3077 |  u8 *str = read_buf, *end = read_buf + PAGE_SIZE;
-> >       |                       ^~~
-> > /tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3076:5: note: while referencing 'read_buf'
-> >  3076 |  u8 read_buf[READ_BUFFER_SIZE];
-> >       |     ^~~~~~~~
-> > /tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3077:23: error: array subscript 4096 is outside array bounds of 'u8[200]' {aka 'unsigned char[200]'} [-Werror=array-bounds]
-> >  3077 |  u8 *str = read_buf, *end = read_buf + PAGE_SIZE;
-> >       |                       ^~~
-> > /tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3076:5: note: while referencing 'read_buf'
-> >  3076 |  u8 read_buf[READ_BUFFER_SIZE];
-> >       |     ^~~~~~~~
-> > /tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3077:23: error: array subscript 4096 is outside array bounds of 'u8[200]' {aka 'unsigned char[200]'} [-Werror=array-bounds]
-> >  3077 |  u8 *str = read_buf, *end = read_buf + PAGE_SIZE;
-> >       |                       ^~~
-> > /tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3076:5: note: while referencing 'read_buf'
-> >  3076 |  u8 read_buf[READ_BUFFER_SIZE];
-> >       |     ^~~~~~~~
-> > /tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3077:23: error: array subscript 4096 is outside array bounds of 'u8[200]' {aka 'unsigned char[200]'} [-Werror=array-bounds]
-> >  3077 |  u8 *str = read_buf, *end = read_buf + PAGE_SIZE;
-> >       |                       ^~~
-> > /tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3076:5: note: while referencing 'read_buf'
-> >  3076 |  u8 read_buf[READ_BUFFER_SIZE];
-> >       |     ^~~~~~~~
-> > /tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3077:23: error: array subscript 4096 is outside array bounds of 'u8[200]' {aka 'unsigned char[200]'} [-Werror=array-bounds]
-> >  3077 |  u8 *str = read_buf, *end = read_buf + PAGE_SIZE;
-> >       |                       ^~~
-> > /tmp/next/build/drivers/gpu/drm/bridge/ite-it6505.c:3076:5: note: while referencing 'read_buf'
-> >  3076 |  u8 read_buf[READ_BUFFER_SIZE];
-> >       |     ^~~~~~~~
-> > cc1: all warnings being treated as errors
-> >
-> > Caused by commit
-> >
-> >   b5c84a9edcd418 ("drm/bridge: add it6505 driver")
-> >
-> > I have used the drm tree from yesterday instead.
->
-> hi all,
->
-> The following fix should be able to address the errors. Should it be
-> squashed into b5c84a9edcd418 ("drm/bridge: add it6505 driver")?
+--Sig_/aYFkvPjWaW0IiZ95fR8py1X
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Can you send a patch with this to dri-devel? It's far too far down the
-tree to sqaush anything at this point.
+Hi all,
 
-Dave.
+On Mon, 21 Feb 2022 22:32:16 +0000 broonie@kernel.org wrote:
 >
-> diff --git a/drivers/gpu/drm/bridge/ite-it6505.c
-> b/drivers/gpu/drm/bridge/ite-it6505.c
-> index fb16a176822d81..f2f101220ade94 100644
-> --- a/drivers/gpu/drm/bridge/ite-it6505.c
-> +++ b/drivers/gpu/drm/bridge/ite-it6505.c
-> @@ -289,7 +289,7 @@
->  #define WORD_LENGTH_20BIT 2
->  #define WORD_LENGTH_24BIT 3
->  #define DEBUGFS_DIR_NAME "it6505-debugfs"
-> -#define READ_BUFFER_SIZE 200
-> +#define READ_BUFFER_SIZE 400
->
->  /* Vendor option */
->  #define HDCP_DESIRED 1
-> @@ -3074,7 +3074,7 @@ static ssize_t
-> receive_timing_debugfs_show(struct file *file, char __user *buf,
->         struct it6505 *it6505 = file->private_data;
->         struct drm_display_mode *vid = &it6505->video_info;
->         u8 read_buf[READ_BUFFER_SIZE];
-> -       u8 *str = read_buf, *end = read_buf + PAGE_SIZE;
-> +       u8 *str = read_buf, *end = read_buf + READ_BUFFER_SIZE;
->         ssize_t ret, count;
->
->         if (!it6505)
+> Today's linux-next merge of the pinctrl tree got a conflict in:
+>=20
+>   drivers/pinctrl/pinctrl-starfive.c
+>=20
+> between commit:
+>=20
+>   0d872ed9e2148 ("pinctrl: starfive: Move PM device over to irq domain")
+>=20
+> from the irqchip tree and commit:
+>=20
+>   64fd52a4d3ce6 ("pinctrl: starfive: Use a static name for the GPIO irq_c=
+hip")
+>=20
+> from the pinctrl tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+> diff --cc drivers/pinctrl/pinctrl-starfive.c
+> index 5be9866c2b3c0,0e4ff4c709f87..0000000000000
+> --- a/drivers/pinctrl/pinctrl-starfive.c
+> +++ b/drivers/pinctrl/pinctrl-starfive.c
+> @@@ -1307,8 -1308,8 +1308,6 @@@ static int starfive_probe(struct platfo
+>   	sfp->gc.base =3D -1;
+>   	sfp->gc.ngpio =3D NR_GPIOS;
+>  =20
+> - 	starfive_irq_chip.name =3D sfp->gc.label;
+>  -	starfive_irq_chip.parent_device =3D dev;
+> --
+>   	sfp->gc.irq.chip =3D &starfive_irq_chip;
+>   	sfp->gc.irq.parent_handler =3D starfive_gpio_irq_handler;
+>   	sfp->gc.irq.num_parents =3D 1;
+
+This is now a conflict between the irqchip tree and Linus' tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/aYFkvPjWaW0IiZ95fR8py1X
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIcc/MACgkQAVBC80lX
+0Gw1xAf8CA1S2R2jSQ8sMReMRjsyslcpM+vfENRQtUejShVKXqNMObKnEoQKvaBV
+lKPO64vefjFxr2i23z8t4pE24znVOLYB0j7cyGOJhswCPJovkGHqBRCkkuYhpbh3
+TqGwyW+m7qvAjDlwlqnPSmW9iT1UjE11QjvDnb9kEn/t8fyCTv764qHJygfDg4kp
+fp7ftAzlWGY36A7PJvpXqwKONSTuZTJ4HhQIWBAMCLGcePz7hc7/LKe/VcHXWCBc
+1JOnOfKDmn0cQUJykvyOWSP9XzOvHWo40Hbv1VQsdLgUuoIJqu0CryY0n0rQOGNr
+wuENEIpQQMg3WYUEB2ot9qKRA2pOBQ==
+=qgke
+-----END PGP SIGNATURE-----
+
+--Sig_/aYFkvPjWaW0IiZ95fR8py1X--

@@ -2,152 +2,77 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E23D74C6877
-	for <lists+linux-next@lfdr.de>; Mon, 28 Feb 2022 11:54:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 840CD4C6958
+	for <lists+linux-next@lfdr.de>; Mon, 28 Feb 2022 12:06:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235209AbiB1Kyj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 28 Feb 2022 05:54:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50920 "EHLO
+        id S235400AbiB1LHE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 28 Feb 2022 06:07:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235394AbiB1Kxf (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 28 Feb 2022 05:53:35 -0500
-Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B658B6662D;
-        Mon, 28 Feb 2022 02:51:43 -0800 (PST)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 1F6FD580272;
-        Mon, 28 Feb 2022 05:51:43 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Mon, 28 Feb 2022 05:51:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; bh=CVV/FYiagZabkUSFBdzimqho0tyD8t54QWCRsx
-        SiA/4=; b=BpGnFStaHo1d/eOGvhZtY0UB7XWUsy4MUYujb2tbTC2HAaGLaEXjTX
-        M6HnisywIXRsg4+/biO8DDKcrghJl5ttdrtYUUbDoLgrkBIOVXYamEGnbsDopWsI
-        RzXqwyZPQZMzHoePbFikdsa83SF5QYweWJItA0TWGwc+6r4NYicdq5FH+MJPxEkB
-        djqI+9HGbRkBjEXbEET+VR7DntOPVJaxTeEPe472wWDR2GVURsL9IPRt5r1NEsQ0
-        HZguG4oREsF6xtZPif8rOiON0FWspctgD/p9D5BBSxrMFTNe1md4+8TQndj9vKxC
-        lxlcj0ch7cQ9cfYpbQXMEBT0AwXuiOig==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=CVV/FYiagZabkUSFB
-        dzimqho0tyD8t54QWCRsxSiA/4=; b=PgSWRXuhoUJJH5NYUqfD/XCDRX5uHR20J
-        /ni7MR7GGw0DODiPJHILHXPxmh74GFzfRpU4ZicZYiofEeBU/xebXwJVvAcSRiZn
-        mKvXj0v8skxoCEX4XKgbeckpyDV0YIKDATNpEvKMHFvf4Y0qdvlkHuyqR5y6SFET
-        TwPQE/KhuTi9/GP3jUfLXBx8dkenXi0DS7oEYbuWMA1T6AdNgp3VJSvTd/sYnKXG
-        69mrCtSZRH2YR5pfV60elRUjA+QTfpk4KuKxBqdExutlC2isNbHbcZ6w5r13TM1y
-        fMf+iaIIDPMUdnZrNq5XZZBQhB4/HbuAxlf2QnLGJmXqjSR5DJ+7A==
-X-ME-Sender: <xms:PqkcYnI33Jx1Elr4ziWVwCa3i9NR2MA6RP9RX4XTGGc-UQYk15TjMg>
-    <xme:PqkcYrIjouSQyy14A8nQSo4GRD42Qeb81BKqYR1xeUfTg5q55JSpkrHyNAVO2Oarv
-    Ta4RaEj7qoxVQ>
-X-ME-Received: <xmr:PqkcYvt2k0At9bmwAsf0MgTEWbfiR2bsPzUvHzvMqQ-auAzZFlRW64BfPzxxkuAunAwIhOQYhO6mqJ-2QqmAjxBr9K0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddruddttddgudelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
-    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeevueehje
-    fgfffgiedvudekvdektdelleelgefhleejieeugeegveeuuddukedvteenucevlhhushht
-    vghrufhiiigvpedunecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
-    drtghomh
-X-ME-Proxy: <xmx:PqkcYgaX9pkmjFFiWEIxoi4ovItnC5xm1taQOhDuhZ6Exat6pN_O7g>
-    <xmx:PqkcYuZ1ecM1dDINYS9SBKCTSVhQZuKdoSoDHb7goVoVifK2ohL2fg>
-    <xmx:PqkcYkBzkv-6_kfKJGPJ_Lh_8mdwodoMd89NGIkZxl13iizu9bBltA>
-    <xmx:P6kcYuKj9_VkEsCJXsTn1jsuxPksSaqWehaiExcIZZSvUgGHhThJjA>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 28 Feb 2022 05:51:42 -0500 (EST)
-Date:   Mon, 28 Feb 2022 11:51:40 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Mark Brown <broonie@kernel.org>,
-        Hammer Hsieh <hammerh0314@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Vincent Shih <vincent.sunplus@gmail.com>,
-        Li-hao Kuo <lhjeff911@gmail.com>
-Subject: Re: linux-next: manual merge of the char-misc tree with the spi and
- tty trees
-Message-ID: <YhypPL9HsxTKOJyA@kroah.com>
-References: <20220228193630.2e079d89@canb.auug.org.au>
+        with ESMTP id S234721AbiB1LHD (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 28 Feb 2022 06:07:03 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50DCB66F89;
+        Mon, 28 Feb 2022 03:06:23 -0800 (PST)
+Date:   Mon, 28 Feb 2022 12:06:19 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1646046380;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kuYSAt1MZUM/puwk3yZe7khsCEtHcjgvevbbDPW87Zk=;
+        b=LhXrKps5NOhICMcZKstR1+jE06JIFDHGjkMlKSATJoZgFQyZ8pK2n5VWwZri6sGMljWH9g
+        6WLE0k08QFMolOr516NBCQZ3vGUTVimY6xVTLdEBJfTOf3VGOPv7gAxHMMCyqYysM97V8+
+        18+EXOf5bzfsoi9/qExuIC+mncp8HDV30K23ZwWHfDtnjmRQaEHjcBAH+8cCHOcP2MtfLz
+        W6DFUWJjy97Y+hOwOPzo9IyuYGt/GXbD9CYsWZkHYTED/5c+aRyYszrRFpxO+nUkwD5RLq
+        Ic2vobdPqB8lalkJ6UbsRkbK8vqOFoTLuQTiwxvJXmZ0RqFKM266ujgKTUYCrw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1646046380;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kuYSAt1MZUM/puwk3yZe7khsCEtHcjgvevbbDPW87Zk=;
+        b=iBu5w7qyoK/y+oosN2Cvtf8iwCsNS0eYQ8x4WLqriihNBzWDKhtLPmKfRL/IkcMYx1cZ4G
+        vqvOGjGC4TnBxNAA==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     syzbot <syzbot+a526c269335f529d25c8@syzkaller.appspotmail.com>,
+        cgroups@vger.kernel.org, hannes@cmpxchg.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-next@vger.kernel.org, mhocko@kernel.org,
+        roman.gushchin@linux.dev, sfr@canb.auug.org.au,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] linux-next test error: WARNING in
+ __mod_memcg_lruvec_state
+Message-ID: <YhysqzlMHWTXLR4B@linutronix.de>
+References: <000000000000c7fde605d8e6b085@google.com>
+ <20220227220943.490fb7b5f7c57d872f9523cb@linux-foundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220228193630.2e079d89@canb.auug.org.au>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220227220943.490fb7b5f7c57d872f9523cb@linux-foundation.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 07:36:30PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the char-misc tree got a conflict in:
-> 
->   MAINTAINERS
-> 
-> between commits:
-> 
->   f62ca4e2a863 ("spi: Add spi driver for Sunplus SP7021")
->   b48b9f6deacf ("dt-bindings: serial: Add bindings doc for Sunplus SoC UART Driver")
->   9e8d5470325f ("serial: sunplus-uart: Add Sunplus SoC UART Driver")
-> 
-> from the spi and tty trees and commits:
-> 
->   9e8d5470325f ("serial: sunplus-uart: Add Sunplus SoC UART Driver")
->   8fb29b450182 ("dt-bindings: nvmem: Add bindings doc for Sunplus OCOTP driver")
-> 
-> from the char-misc tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
-> 
-> diff --cc MAINTAINERS
-> index d1e56ec04e14,37ea1436fc62..000000000000
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@@ -18642,19 -18578,12 +18678,25 @@@ S:	Maintaine
->   F:	Documentation/devicetree/bindings/rtc/sunplus,sp7021-rtc.yaml
->   F:	drivers/rtc/rtc-sunplus.c
->   
-> + SUNPLUS OCOTP DRIVER
-> + M:	Vincent Shih <vincent.sunplus@gmail.com>
-> + S:	Maintained
-> + F:	Documentation/devicetree/bindings/nvmem/sunplus,sp7021-ocotp.yaml
-> + F:	drivers/nvmem/sunplus-ocotp.c
-> + 
->  +SUNPLUS SPI CONTROLLER INTERFACE DRIVER
->  +M:	Li-hao Kuo <lhjeff911@gmail.com>
->  +L:	linux-spi@vger.kernel.org
->  +S:	Maintained
->  +F:	Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
->  +F:	drivers/spi/spi-sunplus-sp7021.c
->  +
->  +SUNPLUS UART DRIVER
->  +M:	Hammer Hsieh <hammerh0314@gmail.com>
->  +S:	Maintained
->  +F:	Documentation/devicetree/bindings/serial/sunplus,sp7021-uart.yaml
->  +F:	drivers/tty/serial/sunplus-uart.c
->  +
->   SUPERH
->   M:	Yoshinori Sato <ysato@users.sourceforge.jp>
->   M:	Rich Felker <dalias@libc.org>
+#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/bigeasy/staging.git 71d365035711aef4c4b1018d02fcf7868e3cb0c5
 
-Fix looks good, thanks.
+On 2022-02-27 22:09:43 [-0800], Andrew Morton wrote:
+> (cc bigeasy)
+> 
+>                         WARN_ON_ONCE(!irqs_disabled());
+> 
+> in __mod_memcg_lruvec_state(), methinks.
 
-greg k-h
+This report ist from before you added
+   mm-memcg-protect-per-cpu-counter-by-disabling-preemption-on-preempt_rt-where-needed-fix.patch
+
+to your tree. So it can be ignored. The next -next tree should be fine.
+
+Sebastian

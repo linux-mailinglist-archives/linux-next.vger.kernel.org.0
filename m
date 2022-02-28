@@ -2,122 +2,113 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 887764C7BE9
-	for <lists+linux-next@lfdr.de>; Mon, 28 Feb 2022 22:26:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C51FE4C7D3F
+	for <lists+linux-next@lfdr.de>; Mon, 28 Feb 2022 23:27:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230314AbiB1V1J (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 28 Feb 2022 16:27:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39304 "EHLO
+        id S230125AbiB1W2Q (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 28 Feb 2022 17:28:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230312AbiB1V1I (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 28 Feb 2022 16:27:08 -0500
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE9BF122201;
-        Mon, 28 Feb 2022 13:26:28 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 4F59A58022C;
-        Mon, 28 Feb 2022 16:26:26 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Mon, 28 Feb 2022 16:26:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; bh=OIyz6P+AJkzgHPB6lyoqYyA4WryI17czGefy6S
-        o4+vg=; b=g+0sLbddNqSKpmzpc8dRTL56R47UoWQdA/cTdlH2s7qDz1LunFgBrx
-        77D5SFRQOoavhceKTiA5eGeaGrNFb68RGBbUBpv3y7sFXzmSLwpKeRiYcVv+0tJE
-        Ou5JpSjSFnkFHo3IMJzOxgnRwmvi/l2LbR9lozfhKjvwXpJ6X7au/VKHTrffLnj5
-        Y/X6G9Wyo/od7aYAHChfzL6AZiBm4vBBPNypxXERnrj6G5bGNUrx7/Efa1NTkDYa
-        SbamfILq3vDTdlmAg0qpLWqfQps2qYvvQU0MKrO9KzHsS2XDNAWcg+7aY5vWGIJ5
-        IJxf5Vg982y/c1D7B6E4Y3rKTuMS2SzA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=OIyz6P+AJkzgHPB6l
-        yoqYyA4WryI17czGefy6So4+vg=; b=MvmSfJvCfoV9oQrUkCqSJe2LBYIWbqQAL
-        sGsAh5QeJHl0JMOHyqMcISU5a1i0jq18mxziuS0pg+xlxwgPU88f3LCb2rge64Gw
-        mME+sG3YZp1mKR/Qx0AScN//1iA3mi6KWykeaX9VLFlI4l18LT7oahoz4FP8F71h
-        MP4TwMgMzZvebJDuO33S8Aa6p2vLW7GA3QTgymdP+D72qbMIxztPEzfFkewya/t8
-        lPQQzIToMmSKcgU62jL/nHKl43o8xXTYpB3kYp/TrzaybDOC59Kl2xXNl+KGhLtk
-        IWyEs1y2x9BuQkNGM0MiJOgP6GApDg8CWR1337VcV/B5TGLep0OJQ==
-X-ME-Sender: <xms:AT4dYt6sOlewmArsKxusIZfj4Jkmr_mXHVU6zhzf37ngRks0zeR73Q>
-    <xme:AT4dYq4q6QPNm44c1Q2CY8qHcxhNdp3MpUeprEZ8J3y5iB-1p3k4oyePZ0gElivTe
-    H00uePtqTps6A>
-X-ME-Received: <xmr:AT4dYkfYZ1opuwGS1l4ew4k4MsCAeYY-nvw5BAMN35VT-nzpf9bfzW8jJEz4EkMLZoiplP2nQ-eL5wIAybCzy4Y>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddruddttddgudegkecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepveeuhe
-    ejgfffgfeivddukedvkedtleelleeghfeljeeiueeggeevueduudekvdetnecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
-    hhrdgtohhm
-X-ME-Proxy: <xmx:AT4dYmJM3gKYYlpiXoV5L_biHklvY-S-Mbx7H0ypnIpbDrtGN6_qYA>
-    <xmx:AT4dYhJW4pMLY3Vw8IPGVzlcjVb8YnXIKSx-xFcrSj-26Ry072N41g>
-    <xmx:AT4dYvxtMcZ91RtcjIYcEymFylo7tL4VuQ0dUEutHZGbgsdCYuGGGA>
-    <xmx:Aj4dYrDmrBqqm1sx2vgHp9qipKdAMjpbASwQCbyP6MOrEOaOqt148g>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 28 Feb 2022 16:26:25 -0500 (EST)
-Date:   Mon, 28 Feb 2022 22:26:22 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alistair Francis <alistair@alistair23.me>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Robert Marko <robert.marko@sartura.hr>
-Subject: Re: linux-next: manual merge of the char-misc tree with the mfd tree
-Message-ID: <Yh09/r/nT2LeE82n@kroah.com>
-References: <20220228193928.3ec6ee98@canb.auug.org.au>
- <YhyPfcjJtIKNQtF8@google.com>
- <Yhyn72NO/roH1gA8@kroah.com>
- <YhzENKPtY+WOp566@google.com>
+        with ESMTP id S229741AbiB1W2Q (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 28 Feb 2022 17:28:16 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A4831009;
+        Mon, 28 Feb 2022 14:27:35 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4K6w4334nhz4xNq;
+        Tue,  1 Mar 2022 09:27:31 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1646087251;
+        bh=BNxDQe5VTzqxcywd6eToBVSDG4uIxuEp5NhVFGmx2z4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=OgfAaj9F+5sIkGhDruQtLfCygWBHX7+1cbarvgf7JMBRkppJbcDL+nQrx45yveJNa
+         ZFrWBcDF4B/TzPwLXNXTRkBSc7SzyJ5mPE9+GvEZXI13avJQ12mEBbRYb762yutbiu
+         aQPaQ3eFtRueQOsDJT9Xw67k0khzJ1xGFPM4TDDjsIoSSFitvo+tyTh77JYQ9YM+jN
+         HPWxsQu1a+zZqgBjXmumRgvLwpTFc+i6AFQaUGfjLNWsTIe5u1Woh1CQylsiEpn0LY
+         PT4PqV/tmhml1HGp2k69W5bUjz+9IS5oFYA8y1IJI2Xe2FiLwqw0VYOquZd6srG0nz
+         0OgkTVwa77/Yg==
+Date:   Tue, 1 Mar 2022 09:27:30 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the kspp tree
+Message-ID: <20220301092730.10de23c5@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YhzENKPtY+WOp566@google.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/pfqV5CKsIcM+XrwHc7zQGP_";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 12:46:44PM +0000, Lee Jones wrote:
-> On Mon, 28 Feb 2022, Greg KH wrote:
-> 
-> > On Mon, Feb 28, 2022 at 09:01:49AM +0000, Lee Jones wrote:
-> > > On Mon, 28 Feb 2022, Stephen Rothwell wrote:
-> > > 
-> > > > Hi all,
-> > > > 
-> > > > Today's linux-next merge of the char-misc tree got a conflict in:
-> > > 
-> > > I did ask for this *not* to be merged when it was in -testing.
-> > 
-> > Sorry, I missed that, I saw your ack on the patch so that's why I took
-> > it.
-> > 
-> > > I'll follow-up with Greg.
-> > 
-> > Should I revert this from my tree?
-> 
-> I did try to catch it before a revert would have been required.
+--Sig_/pfqV5CKsIcM+XrwHc7zQGP_
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-My fault.
+Hi all,
 
-> But yes, please revert it.
+After merging the kspp tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-Will go do so now.
+drivers/gpu/drm/drm_dp_helper.c: In function 'drm_dp_pcon_dsc_bpp_incr':
+drivers/gpu/drm/drm_dp_helper.c:3130:28: error: array subscript 12 is outsi=
+de array bounds of 'const u8[12]' {aka 'const unsigned char[12]'} [-Werror=
+=3Darray-bounds]
+ 3130 |         buf =3D pcon_dsc_dpcd[DP_PCON_DSC_BPP_INCR - DP_PCON_DSC_EN=
+CODER];
+      |               ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
+~~~~
+drivers/gpu/drm/drm_dp_helper.c:3126:39: note: while referencing 'pcon_dsc_=
+dpcd'
+ 3126 | int drm_dp_pcon_dsc_bpp_incr(const u8 pcon_dsc_dpcd[DP_PCON_DSC_ENC=
+ODER_CAP_SIZE])
+      |                              ~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
+~~~~~~~~~~~~~~
+drivers/gpu/drm/drm_dp_helper.c: In function 'drm_dp_get_adjust_request_pos=
+t_cursor':
+drivers/gpu/drm/drm_dp_helper.c:59:27: error: array subscript 10 is outside=
+ array bounds of 'const u8[6]' {aka 'const unsigned char[6]'} [-Werror=3Dar=
+ray-bounds]
+   59 |         return link_status[r - DP_LANE0_1_STATUS];
+      |                ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
+drivers/gpu/drm/drm_dp_helper.c:147:51: note: while referencing 'link_statu=
+s'
+  147 | u8 drm_dp_get_adjust_request_post_cursor(const u8 link_status[DP_LI=
+NK_STATUS_SIZE],
+      |                                          ~~~~~~~~~^~~~~~~~~~~~~~~~~=
+~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
 
-> The Ack is not standard and should not be merged.
+I can't see what in the kspp tree suddenly brought this on, so I have
+used the kspp tree from next-20220228 for today.
 
-I do not understand this, what went wrong here?
+In case it matters: x86_64-linux-gnu-gcc (Debian 11.2.0-9) 11.2.0
+--=20
+Cheers,
+Stephen Rothwell
 
-thanks,
+--Sig_/pfqV5CKsIcM+XrwHc7zQGP_
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-greg k-h
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIdTFIACgkQAVBC80lX
+0Gxk9gf/U8p/6zXUjBhT2tpqL+4KZuXPKciGwjI8N3UxEXk0Tp1uAFLP+qQnqcMT
+VOfDSTFcErYXOqJNgLez8M4BDK+LG+d0DnKoD+yH/Ioww93lVb0ivUvQKyCD7df5
+N1SEVCmEaUlL7u3eEbZ5Mgb8gfxX+SS9WLqhHWM2LVEoty/oUqoufnNewTc8HWWW
+xcsSnIr4eBExC6Y6Y1tbXNtQ/3ZPCbrYeSg68C0vCxIaZT/qBHfPi1QGaEA1Yokk
+6A6+6APAUP47XuSu7HNZgl02lnpe6gyLj971u/F+Fw1M4OLjXLyukoIr35xhuiyP
+po4x3meJa0naeQFDfaFN6B2jgIE+Vg==
+=2pJJ
+-----END PGP SIGNATURE-----
+
+--Sig_/pfqV5CKsIcM+XrwHc7zQGP_--

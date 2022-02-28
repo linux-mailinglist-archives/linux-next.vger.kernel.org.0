@@ -2,46 +2,47 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D4174C5F6F
-	for <lists+linux-next@lfdr.de>; Sun, 27 Feb 2022 23:33:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C78A4C6017
+	for <lists+linux-next@lfdr.de>; Mon, 28 Feb 2022 01:16:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231996AbiB0WeC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 27 Feb 2022 17:34:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36054 "EHLO
+        id S229878AbiB1AQ6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 27 Feb 2022 19:16:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbiB0WeC (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 27 Feb 2022 17:34:02 -0500
+        with ESMTP id S229662AbiB1AQ5 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 27 Feb 2022 19:16:57 -0500
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D943434AD;
-        Sun, 27 Feb 2022 14:33:22 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B006260CDF;
+        Sun, 27 Feb 2022 16:16:18 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4K6JFD5SVTz4xNq;
-        Mon, 28 Feb 2022 09:33:20 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4K6LWy4f6Dz4xbw;
+        Mon, 28 Feb 2022 11:16:14 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1646001200;
-        bh=he4tqkULprG8lOp+0VNCwlfXYNq9Q5rw/8wBY7GGSSg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=PvR5T7QhD014wcl3zzqh3gYZdNP6vGzBG6WP7MQqwbYNezQrwouZajKdnlRxKPl/C
-         EAuf1j8e7AOc+b8JODLite7RMH1RULnkwzEG3CGo/MtVUuwX+42WBQYpELccNvTeN6
-         J0VVjwJTK67HrNfkSe5cSxpgEbXd1JyiqWNI/R7KSAidb1zyLie8JKb0oB238MRJTd
-         Zz7FLTxLqQ361qMT8dbVGaTaKhd8RoIndY8bGD21mw8riDN5zfEg7VOTsVjt7IZo4V
-         1/YLSsYWnfI0IOI1OdXwWh2ZLGC+n/DzdftDNjttmpZzeYmoU79yNuLHRkstli+9HI
-         5rpA9dRb8ZcSQ==
-Date:   Mon, 28 Feb 2022 09:33:20 +1100
+        s=201702; t=1646007376;
+        bh=hH17aUcIFirXuu3qRlWLoyirY8kZuh415CPZTH2yVG4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=VjFA1yCVId+N3r2dOrKaQbKsUIYKxNkyATHP/X1Xs7CTbZhcAG1OtcoPvo3e7GO12
+         roG526ZDZEp6jvS0auJwMf59+3SBZAYRXYjGkvgIjLZOgOKhy2CIRDLbYIpVYlZP9e
+         yx8xvkMPAo0PCUqC1v8i4tsM6oFIXn0mXeX+jXkUY1+0HSekGTPXFFS/a53B1kvByN
+         e6OugKYfWWMuf9qGUnc8jyMROTNM+R65KPEVjwHKkVyfD9zCPyWRNzjGl0UuRz+xxi
+         2vBD5zkCxx4k6AS4ucJYzwVIgsk6PZ2+q1dWOlKlwofptsulYvjXgHTnFaR5wyaCpR
+         ZDCKcNRXVbFTQ==
+Date:   Mon, 28 Feb 2022 11:16:13 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: Tree for Feb 17
-Message-ID: <20220228093320.7ac8e394@canb.auug.org.au>
-In-Reply-To: <Yg+hpgB4EOp9DNOA@sirena.org.uk>
-References: <20220217205133.6c4d9ebb@canb.auug.org.au>
-        <Yg+hpgB4EOp9DNOA@sirena.org.uk>
+To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>,
+        Russell King <linux@armlinux.org.uk>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the arm-soc tree with the arm tree
+Message-ID: <20220228111613.1e299554@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/V+pfoY+x8gRXN6_im4u1NRM";
+Content-Type: multipart/signed; boundary="Sig_/P/W2lPhzpdDVvBaPNPKt7AW";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -52,43 +53,69 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/V+pfoY+x8gRXN6_im4u1NRM
+--Sig_/P/W2lPhzpdDVvBaPNPKt7AW
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Mark,
+Hi all,
 
-On Fri, 18 Feb 2022 13:39:50 +0000 Mark Brown <broonie@kernel.org> wrote:
->
-> On Thu, Feb 17, 2022 at 08:51:33PM +1100, Stephen Rothwell wrote:
-> > Hi all,
-> >=20
-> > News: there will be no linux-next releases from Friday Feb 18 until
-> > Friday Feb 25 inclusive. =20
->=20
-> I'll try to provide cover from Monday as usual, I'm on holiday myself
-> today so not likely to be anything today.
+Today's linux-next merge of the arm-soc tree got a conflict in:
 
-Thanks again for stepping up unasked.
+  arch/arm/Kconfig
+
+between commit:
+
+  54f481a2308e ("ARM: remove old-style irq entry")
+
+from the arm tree and commit:
+
+  00ba9357d189 ("ARM: ixp4xx: Drop custom DMA coherency and bouncing")
+
+from the arm-soc tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/V+pfoY+x8gRXN6_im4u1NRM
+diff --cc arch/arm/Kconfig
+index 72150cb8db02,d9142ad18c52..000000000000
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@@ -389,10 -379,10 +386,9 @@@ config ARCH_IOP32
+  config ARCH_IXP4XX
+  	bool "IXP4xx-based"
+  	depends on MMU
+- 	select ARCH_HAS_DMA_SET_COHERENT_MASK
+  	select ARCH_SUPPORTS_BIG_ENDIAN
++ 	select ARM_PATCH_PHYS_VIRT
+  	select CPU_XSCALE
+- 	select DMABOUNCE if PCI
+ -	select GENERIC_IRQ_MULTI_HANDLER
+  	select GPIO_IXP4XX
+  	select GPIOLIB
+  	select HAVE_PCI
+
+--Sig_/P/W2lPhzpdDVvBaPNPKt7AW
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIb/DAACgkQAVBC80lX
-0GxtAwf+KB0f6IEDa0pbZGSTK+wjVX78vCvlhZfHSKIKbR/GzNfukP4V1g+lxKOT
-n6P2IyJzDmDNc/XmREhOfTVOsUPdi6qjQjBdmQBbvjp4KAVg2VNbWf6l5/pkhFAF
-nLUoFCc0a/VshbD5YVgfMB8Zz3L22neUvRf/GeVit2APebbKEejNt2jtNSG9ZaST
-jE+m9nrI1AJRTueB37F2CI64U+rWoVXQ45JEatc4N9/4mtUE19CP2Uw6RVAVJ4l7
-k4dY+f35RTy55mHjHB6iFwYJBzk13/Wzr5cpzrKMo5403RVE2I/EUxWcrahlIMqr
-guMOo9+sEUk+BgExMTy8byWB6tiW3A==
-=Nq1r
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIcFE0ACgkQAVBC80lX
+0Gyr+gf+NnhPyTYlY0KGQyt15/KvnqBcvWEhZ6GMEEtzsqqsh5RleJc7NKbsVHAm
+fvaiyKrSMNUJBBab9hdXVDP1K+tPkfrVOaaILWWxeTNRVqhgNTt/RGmlpX1s6Fmv
+5tXXsaGg2UyBjrScEJb3TKe4VznkvkE7aG8QFHXvWPMFVQq1KnGFrwVuh23dBtnI
+e9o9IMBmANPOs7LdUYwUeA9E731F58tekSm0vMUv2eLMiIgBtnlzSOJ3NaEeS1io
+kq5WsHZ0mbWoz+SA4QzcLmNQRPK6Uv/+mZCP2QsZc3it7uV+Ind2F8tc4lHdgboD
+HlMy00vDQ/0ZaFhmN6yfedva4nF1JA==
+=B7DU
 -----END PGP SIGNATURE-----
 
---Sig_/V+pfoY+x8gRXN6_im4u1NRM--
+--Sig_/P/W2lPhzpdDVvBaPNPKt7AW--

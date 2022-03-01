@@ -2,101 +2,268 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAEAF4C7FC5
-	for <lists+linux-next@lfdr.de>; Tue,  1 Mar 2022 01:53:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5C184C804B
+	for <lists+linux-next@lfdr.de>; Tue,  1 Mar 2022 02:20:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231480AbiCAAyg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 28 Feb 2022 19:54:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42844 "EHLO
+        id S229687AbiCABVM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 28 Feb 2022 20:21:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229809AbiCAAyg (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 28 Feb 2022 19:54:36 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 703E3F70;
-        Mon, 28 Feb 2022 16:53:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:References:To:From:Subject:MIME-Version:Date:Message-ID:Sender:
-        Reply-To:Cc:Content-ID:Content-Description;
-        bh=NZ91IYeIblNdDBut8MLpWdnA9o4cCrnTYppf7PU1ers=; b=H7pOJZasUim98q+EC7q64TPboV
-        6lvIwmzxOyQqh4fWhPFUSlFXc1wm7Wc+PsoRyU27Z5LbRF0TZzx6a/wfh2GmXLDz1si+K+yS5H5Uf
-        cMRbY7DeT4cV8Du4l/9uBzfPIRGskTowCD+EtZWNUpurwoB8vkxQ5lwgySfz7+nHjJvbdnqv8exnn
-        XwDACrsks/9xXHLoNqEg5asUjT5RvoHp58sK9sbEyoCQqFi4kANgwWa4vcYLYEyg1IeEvHQ3mZxfV
-        oTzl6ANrfzWCnxVF8bvjC8gODSyj38Dsk5vD58SCARnhJ2jQiL5kCxsEMQA8O8pxXrXf/yNmIEErE
-        nKibrs0g==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nOqlx-0095DT-UI; Tue, 01 Mar 2022 00:53:50 +0000
-Message-ID: <c35bb2e5-0538-1247-a5a4-7eb34836947a@infradead.org>
-Date:   Mon, 28 Feb 2022 16:53:44 -0800
+        with ESMTP id S229736AbiCABVL (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 28 Feb 2022 20:21:11 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E757A5FF31;
+        Mon, 28 Feb 2022 17:20:29 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4K6zvY1KjMz4xmt;
+        Tue,  1 Mar 2022 12:20:24 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1646097628;
+        bh=3zkLK1DB9BDVoMqb7VGAMm8+RO0CcJeGkkYb0Ikb7kk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=s77EHbKhJfzKsstKlwIv2fOafWWWngyVWHgRG6i6WkG7leBBahasA2udb8fuoLOUU
+         U+YikW/M55pbD+xNrb4UR3hyZA9B+aWe4APiA6X3Amzw/py48Nhx6IbAmOiJ9TMe53
+         L0mLOvi/UCxa667hA99229cHle4fw/Gv9X+pfKSuSbQ8bGNgd92tOzLwkhj16tfcDx
+         Z8wJoruJCiqJsD/WTxYAn+xURudLpC8MdgDgv1zKXkvhkh7+qR6ISuf5O1snEOIZXC
+         ipTzDp1Lj7PYxiMAFjSL4MKy9n3rhgWzlo1uysDOZI14ZSIrn/f86Y01EFh8CF8+oF
+         i50KwzwO6hF6A==
+Date:   Tue, 1 Mar 2022 12:20:24 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Dave Airlie <airlied@linux.ie>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Yong Wu <yong.wu@mediatek.com>,
+        "jason-jh.lin" <jason-jh.lin@mediatek.com>
+Subject: linux-next: manual merge of the drm tree with the v4l-dvb tree
+Message-ID: <20220301122024.47cb2dcf@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: mmotm 2022-02-28-14-45 uploaded
- (drivers/tty/serial/sunplus-uart.c:)
-Content-Language: en-US
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     Andrew Morton <akpm@linux-foundation.org>, broonie@kernel.org,
-        mhocko@suse.cz, sfr@canb.auug.org.au, linux-next@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, mm-commits@vger.kernel.org,
-        linux-serial@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hammer Hsieh <hammerh0314@gmail.com>
-References: <20220228224600.44415C340EE@smtp.kernel.org>
- <1e91ecfb-0432-8c0c-e537-49954313abff@infradead.org>
-In-Reply-To: <1e91ecfb-0432-8c0c-e537-49954313abff@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/svc=vizdYk0mCEN9obg/1F+";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+--Sig_/svc=vizdYk0mCEN9obg/1F+
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-On 2/28/22 16:46, Randy Dunlap wrote:
-> 
-> 
-> On 2/28/22 14:45, Andrew Morton wrote:
->> The mm-of-the-moment snapshot 2022-02-28-14-45 has been uploaded to
->>
->>    https://www.ozlabs.org/~akpm/mmotm/
->>
->> mmotm-readme.txt says
->>
->> README for mm-of-the-moment:
->>
->> https://www.ozlabs.org/~akpm/mmotm/
->>
->> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
->> more than once a week.
->>
->> You will need quilt to apply these patches to the latest Linus release (5.x
->> or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
->> https://ozlabs.org/~akpm/mmotm/series
-> 
-> on x86_64 or i386:
-> 
-> when CONFIG_SERIAL_SUNPLUS_CONSOLE is not set:
-> 
-> ../drivers/tty/serial/sunplus-uart.c:574:12: error: ‘sunplus_uart_console’ undeclared here (not in a function); did you mean ‘sunplus_uart_ops’?
->   .cons  = &sunplus_uart_console,
->             ^~~~~~~~~~~~~~~~~~~~
+Today's linux-next merge of the drm tree got a conflict in:
 
-Huh. On a different build, another build error was found,
-also with CONFIG_SERIAL_SUNPLUS_CONSOLE not set:
+  Documentation/devicetree/bindings/display/mediatek/mediatek,disp.txt
 
-../drivers/tty/serial/sunplus-uart.c: In function ‘sunplus_poll_put_char’:
-../drivers/tty/serial/sunplus-uart.c:464:2: error: implicit declaration of function ‘wait_for_xmitr’; did you mean ‘wait_on_bit’? [-Werror=implicit-function-declaration]
-  wait_for_xmitr(port);
-  ^~~~~~~~~~~~~~
+between commit:
 
+  6d0990e6e844 ("media: dt-binding: mediatek: Get rid of mediatek,larb for =
+multimedia HW")
 
--- 
-~Randy
+from the v4l-dvb tree and commit:
+
+  4ed545e7d100 ("dt-bindings: display: mediatek: disp: split each block to =
+individual yaml")
+
+from the drm tree.
+
+I fixed it up (I deleted the file and added the following merge fix patch)
+and can carry the fix as necessary. This is now fixed as far as linux-next
+is concerned, but any non trivial conflicts should be mentioned to your
+upstream maintainer when your tree is submitted for merging.  You may
+also want to consider cooperating with the maintainer of the conflicting
+tree to minimise any particularly complex conflicts.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Tue, 1 Mar 2022 12:17:12 +1100
+Subject: [PATCH] fix up for "media: dt-binding: mediatek: Get rid of
+ mediatek,larb for multimedia HW"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ .../bindings/display/mediatek/mediatek,ovl-2l.yaml     | 10 ----------
+ .../bindings/display/mediatek/mediatek,ovl.yaml        | 10 ----------
+ .../bindings/display/mediatek/mediatek,rdma.yaml       | 10 ----------
+ .../bindings/display/mediatek/mediatek,wdma.yaml       | 10 ----------
+ 4 files changed, 40 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,ov=
+l-2l.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,ovl=
+-2l.yaml
+index 611a2dbdefa4..e3cef99d0f98 100644
+--- a/Documentation/devicetree/bindings/display/mediatek/mediatek,ovl-2l.ya=
+ml
++++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,ovl-2l.ya=
+ml
+@@ -46,15 +46,6 @@ properties:
+       This property should point to the respective IOMMU block with master=
+ port as argument,
+       see Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml for =
+details.
+=20
+-  mediatek,larb:
+-    description:
+-      This property should contain a phandle pointing to the local arbiter=
+ devices defined in
+-      Documentation/devicetree/bindings/memory-controllers/mediatek,smi-la=
+rb.yaml.
+-      It must sort according to the local arbiter index, like larb0, larb1=
+, larb2...
+-    $ref: /schemas/types.yaml#/definitions/phandle-array
+-    minItems: 1
+-    maxItems: 32
+-
+   mediatek,gce-client-reg:
+     description: The register of client driver can be configured by gce wi=
+th
+       4 arguments defined in this property, such as phandle of gce, subsys=
+ id,
+@@ -83,6 +74,5 @@ examples:
+         power-domains =3D <&spm MT8183_POWER_DOMAIN_DISP>;
+         clocks =3D <&mmsys CLK_MM_DISP_OVL0_2L>;
+         iommus =3D <&iommu M4U_PORT_DISP_2L_OVL0_LARB0>;
+-        mediatek,larb =3D <&larb0>;
+         mediatek,gce-client-reg =3D <&gce SUBSYS_1400XXXX 0x9000 0x1000>;
+     };
+diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,ov=
+l.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,ovl.ya=
+ml
+index e71f79bc2dee..93d5c68a2dbd 100644
+--- a/Documentation/devicetree/bindings/display/mediatek/mediatek,ovl.yaml
++++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,ovl.yaml
+@@ -61,15 +61,6 @@ properties:
+       This property should point to the respective IOMMU block with master=
+ port as argument,
+       see Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml for =
+details.
+=20
+-  mediatek,larb:
+-    description:
+-      This property should contain a phandle pointing to the local arbiter=
+ devices defined in
+-      Documentation/devicetree/bindings/memory-controllers/mediatek,smi-la=
+rb.yaml.
+-      It must sort according to the local arbiter index, like larb0, larb1=
+, larb2...
+-    $ref: /schemas/types.yaml#/definitions/phandle-array
+-    minItems: 1
+-    maxItems: 32
+-
+   mediatek,gce-client-reg:
+     description: The register of client driver can be configured by gce wi=
+th
+       4 arguments defined in this property, such as phandle of gce, subsys=
+ id,
+@@ -98,6 +89,5 @@ examples:
+         power-domains =3D <&scpsys MT8173_POWER_DOMAIN_MM>;
+         clocks =3D <&mmsys CLK_MM_DISP_OVL0>;
+         iommus =3D <&iommu M4U_PORT_DISP_OVL0>;
+-        mediatek,larb =3D <&larb0>;
+         mediatek,gce-client-reg =3D <&gce SUBSYS_1400XXXX 0xc000 0x1000>;
+     };
+diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,rd=
+ma.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,rdma.=
+yaml
+index 8ef821641672..b56e22fbcd52 100644
+--- a/Documentation/devicetree/bindings/display/mediatek/mediatek,rdma.yaml
++++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,rdma.yaml
+@@ -63,15 +63,6 @@ properties:
+       This property should point to the respective IOMMU block with master=
+ port as argument,
+       see Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml for =
+details.
+=20
+-  mediatek,larb:
+-    description:
+-      This property should contain a phandle pointing to the local arbiter=
+ devices defined in
+-      Documentation/devicetree/bindings/memory-controllers/mediatek,smi-la=
+rb.yaml.
+-      It must sort according to the local arbiter index, like larb0, larb1=
+, larb2...
+-    $ref: /schemas/types.yaml#/definitions/phandle-array
+-    minItems: 1
+-    maxItems: 32
+-
+   mediatek,rdma-fifo-size:
+     description:
+       rdma fifo size may be different even in same SOC, add this property =
+to the
+@@ -111,7 +102,6 @@ examples:
+         power-domains =3D <&scpsys MT8173_POWER_DOMAIN_MM>;
+         clocks =3D <&mmsys CLK_MM_DISP_RDMA0>;
+         iommus =3D <&iommu M4U_PORT_DISP_RDMA0>;
+-        mediatek,larb =3D <&larb0>;
+         mediatek,rdma-fifosize =3D <8192>;
+         mediatek,gce-client-reg =3D <&gce SUBSYS_1400XXXX 0xe000 0x1000>;
+     };
+diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,wd=
+ma.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,wdma.=
+yaml
+index aaf5649b6413..f9f00a518edf 100644
+--- a/Documentation/devicetree/bindings/display/mediatek/mediatek,wdma.yaml
++++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,wdma.yaml
+@@ -44,15 +44,6 @@ properties:
+       This property should point to the respective IOMMU block with master=
+ port as argument,
+       see Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml for =
+details.
+=20
+-  mediatek,larb:
+-    description:
+-      This property should contain a phandle pointing to the local arbiter=
+ devices defined in
+-      Documentation/devicetree/bindings/memory-controllers/mediatek,smi-la=
+rb.yaml.
+-      It must sort according to the local arbiter index, like larb0, larb1=
+, larb2...
+-    $ref: /schemas/types.yaml#/definitions/phandle-array
+-    minItems: 1
+-    maxItems: 32
+-
+   mediatek,gce-client-reg:
+     description: The register of client driver can be configured by gce wi=
+th
+       4 arguments defined in this property, such as phandle of gce, subsys=
+ id,
+@@ -81,6 +72,5 @@ examples:
+         power-domains =3D <&scpsys MT8173_POWER_DOMAIN_MM>;
+         clocks =3D <&mmsys CLK_MM_DISP_WDMA0>;
+         iommus =3D <&iommu M4U_PORT_DISP_WDMA0>;
+-        mediatek,larb =3D <&larb0>;
+         mediatek,gce-client-reg =3D <&gce SUBSYS_1401XXXX 0x1000 0x1000>;
+     };
+--=20
+2.34.1
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/svc=vizdYk0mCEN9obg/1F+
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIddNgACgkQAVBC80lX
+0Gwiwwf8DpqdHFaP3vENUgrQThEzwRgxUcRkx0dsVFNRK5UBHxsVfLd/lvEJelUW
+xi31Q7vT+tJNI6mN7Ax46IOdxY8VPPwEV8WmVwws0daDJNHuqOkc1cjqVxJyvITG
+iuBgFAx9huilX7S2FuW/vOrfp5QJGYnrKuWG2lPd3uGGyrTCBAMkjxIowiJsqvXd
+cYLm0iJJLJNlhKqMDNqTWRrYefAx7+lEFNkbbJDoKVjy4cHJ6W6UdCpVZdkQEbzq
+p9mIw571yJbCl6xQ1zM2ybOauYZQIaJpxz/9z/IsyXr0Qi+XL8PrArw0NXecsvGh
+j2oNEKo5TGwfasy4eCNwpO8xie3bJg==
+=dNK2
+-----END PGP SIGNATURE-----
+
+--Sig_/svc=vizdYk0mCEN9obg/1F+--

@@ -2,80 +2,90 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D2144C7F78
-	for <lists+linux-next@lfdr.de>; Tue,  1 Mar 2022 01:43:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44BC54C7F96
+	for <lists+linux-next@lfdr.de>; Tue,  1 Mar 2022 01:46:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231862AbiCAAoF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 28 Feb 2022 19:44:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57720 "EHLO
+        id S230527AbiCAArH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 28 Feb 2022 19:47:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231851AbiCAAoE (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 28 Feb 2022 19:44:04 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 111D31AD8C;
-        Mon, 28 Feb 2022 16:43:24 -0800 (PST)
+        with ESMTP id S231651AbiCAArH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 28 Feb 2022 19:47:07 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 329601CFDA;
+        Mon, 28 Feb 2022 16:46:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
-        bh=VRtotTgRjt8wUewVfxAnnsW/LkqttFUYABF7jPzSKmM=; b=UaEbdPQ//Q6peho6+qf+TIsEPC
-        lOypGHi4VgTUdDgo7t4MZDqp4xjdTX8F8B9CNJ5wukDUTmL3X8UvDu159XkZE83rIFnP828FdzM3w
-        rZgvHFV2mmZmtLvWNWxENS4RIXBU926w1p95B9ilgn/mgYp1WU1s9Db4fWXZ/JrdRw6up/ruNc9IU
-        UJV6EqXhM8SUcEM3Dy5DOOIzPMfPnQ53zGKapqcIf+OnychSawAT0lvkOxttBxyN1dGRfzEnTufXx
-        R60vjjf5dmZMRmC3wckSqLUcgHppTqrVZXS7fdKidrZoZSWEzUtOFYfcB9f+qsXu2iR2Vh7rvwPOB
-        mJAqhAbw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nOqbp-00EWOO-1a; Tue, 01 Mar 2022 00:43:21 +0000
-Date:   Mon, 28 Feb 2022 16:43:21 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Aaron Tomlin <atomlin@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the modules tree
-Message-ID: <Yh1sKVz4g+X0xge0@bombadil.infradead.org>
-References: <20220301113333.21d6f0c6@canb.auug.org.au>
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:To:Subject:MIME-Version:Date:Message-ID:Sender:
+        Reply-To:Cc:Content-ID:Content-Description;
+        bh=6kLooZJqwGGXeVVaSJP06IJVzbhf/g8lxAgwKUZTKkQ=; b=OibTSq6yzv7ONGW8VvnYgQrrEv
+        5KZXpoYlNennpum1jNu3fUeCUaZ2uwA/+/EN6S3kvydscWR3ai3JyrE0HPVnxvL+eGn7YwpvXsSnK
+        1kuvYe+9VOZ95TkqbuzuYkt6yAW62u4M5e6g+B1J3Vki69gIekQVJEsSQbVcMYDdubwggu2gty4pj
+        igK7cLFtxs4QDUrIoboG6GrFtKtvd4YR9y1x9B9/W06Cj2QDNrfWMAHbrID3RrI97sRxyL2x44AMJ
+        of9dpt7+ltreM13WOu7kWxDDmRsi/vufxKYAtItg5XvSCk+eJCXgNiNa2aG6+1UgFUHjsxn1M3B/h
+        X0sVMgHw==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nOqeh-0094bj-Vo; Tue, 01 Mar 2022 00:46:20 +0000
+Message-ID: <1e91ecfb-0432-8c0c-e537-49954313abff@infradead.org>
+Date:   Mon, 28 Feb 2022 16:46:13 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220301113333.21d6f0c6@canb.auug.org.au>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: mmotm 2022-02-28-14-45 uploaded
+ (drivers/tty/serial/sunplus-uart.c:)
+Content-Language: en-US
+To:     Andrew Morton <akpm@linux-foundation.org>, broonie@kernel.org,
+        mhocko@suse.cz, sfr@canb.auug.org.au, linux-next@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, mm-commits@vger.kernel.org,
+        linux-serial@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hammer Hsieh <hammerh0314@gmail.com>
+References: <20220228224600.44415C340EE@smtp.kernel.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220228224600.44415C340EE@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Mar 01, 2022 at 11:33:33AM +1100, Stephen Rothwell wrote:
-> Hi all,
->=20
-> In commit
->=20
->   f131a1296ecf ("module: Make internal.h and decompress.c more compliant")
->=20
-> Fixes tag
->=20
->   Fixes: f314dfea16a ("modsign: log module name in the event of an error")
->=20
-> has these problem(s):
->=20
->   - SHA1 should be at least 12 digits long
->     This can be fixed for the future by setting core.abbrev to 12 (or
->     more) or (for git v2.11 or later) just making sure it is not set
->     (or set to "auto").
 
-This is not that critical but I've decided to reset my tree again back
-to Linus' tree as I jumped the gun in mergig this to modulex-next as it
-has not been run time tested yet. So I've dumped this on modules-testing, a=
-nd
-once we get more testing results I'll push this to modules-next.
 
-I can fix the commit log to have 12 digits on the SHA1 manually,
-provided no other compile or run time issues are found.
+On 2/28/22 14:45, Andrew Morton wrote:
+> The mm-of-the-moment snapshot 2022-02-28-14-45 has been uploaded to
+> 
+>    https://www.ozlabs.org/~akpm/mmotm/
+> 
+> mmotm-readme.txt says
+> 
+> README for mm-of-the-moment:
+> 
+> https://www.ozlabs.org/~akpm/mmotm/
+> 
+> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
+> more than once a week.
+> 
+> You will need quilt to apply these patches to the latest Linus release (5.x
+> or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
+> https://ozlabs.org/~akpm/mmotm/series
 
-  Luis
+on x86_64 or i386:
+
+when CONFIG_SERIAL_SUNPLUS_CONSOLE is not set:
+
+../drivers/tty/serial/sunplus-uart.c:574:12: error: ‘sunplus_uart_console’ undeclared here (not in a function); did you mean ‘sunplus_uart_ops’?
+  .cons  = &sunplus_uart_console,
+            ^~~~~~~~~~~~~~~~~~~~
+
+
+
+-- 
+~Randy

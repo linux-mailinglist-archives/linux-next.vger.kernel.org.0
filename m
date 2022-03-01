@@ -2,342 +2,117 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E81E94C83DD
-	for <lists+linux-next@lfdr.de>; Tue,  1 Mar 2022 07:18:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 845B44C8535
+	for <lists+linux-next@lfdr.de>; Tue,  1 Mar 2022 08:30:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230499AbiCAGTC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 1 Mar 2022 01:19:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57614 "EHLO
+        id S231635AbiCAHat (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 1 Mar 2022 02:30:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230488AbiCAGTB (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 1 Mar 2022 01:19:01 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 401633FD8F
-        for <linux-next@vger.kernel.org>; Mon, 28 Feb 2022 22:18:21 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id z15so13269082pfe.7
-        for <linux-next@vger.kernel.org>; Mon, 28 Feb 2022 22:18:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=iQ2CEeCtCBfVyoQowjsH+J4sxCPVcDgfkFgI7XHu7po=;
-        b=srs6T8OuKApPUqRMxrioKG2q/bFb864X6Bmj1BlZSJWNMcJyssBZ/L8Nxm7472RgZ1
-         EOTsoAXHrlcvVjxHcOtokb5AWD36AEkccgrjI6j031t8fhApOQJzex1/Dlvfd1LqvMDX
-         YRjJTtYaD5Fn5sCwYaqVZ6RK8QxX0vqkqkDJ9NpjzvNFUb/A7XB3GUc3NRWAXh7FLQ4y
-         6cyprRKLxMV6/LdiV3wwVVGq/7QsVzH4mTmqyRLxt6gHxxjsP0xoIZR1H8ZL9Ik//PLL
-         YESpEOgtM4ymWzH4tul/ZJhUyXnLgxpXdyC6oKa08K58prCCGDrZduByhkfr8BKj8ZIr
-         DAwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=iQ2CEeCtCBfVyoQowjsH+J4sxCPVcDgfkFgI7XHu7po=;
-        b=1+m8iTfujyj2tb5bHZvKqnwoMzai0MUv/rffVVzUTCgZLTKuXtQSYABale6SwpkHUj
-         bjOeu3y+fXIRkVb0r0A8VodvEttG0U5c1nz+qE6wZtc0hpLxCZFZk6Ik9JHouvEMNM6b
-         InPC3UnDg1YQNenywbpSSbRZW0r1ad6XGn71UY6jb0DVzfZM7JbekDeAE07qYx+9aEif
-         HXfKzWndcrqGPa8r75OjwxPLPDxCBP3QuFqScexyHN+CQrSoOfDvesf7iIW+uJYr1rWX
-         f7LI+w9Zi/oS3W8XonfqiyUg32be/VeGit44D2XSioZKwcGyc1NFVnrnoGrWzC8PSaTL
-         K6RQ==
-X-Gm-Message-State: AOAM533nnjW+SlpjVJzxfDhqp13SdmrafQnT1uGFX0OgAYsrUji1/LmY
-        8DYjSLiIWJa2omAyX0kc/wnVnSPX5M/jT8BliGo=
-X-Google-Smtp-Source: ABdhPJwTvzHSsMf/JCaM4Uhg3YbUm/eGTfE+BfXWML07jr0aWQ1E8vD5cWTSxb5mAENuwe0XmiWolw==
-X-Received: by 2002:a63:4d8:0:b0:373:cf6d:40e3 with SMTP id 207-20020a6304d8000000b00373cf6d40e3mr20525001pge.590.1646115500560;
-        Mon, 28 Feb 2022 22:18:20 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id q10-20020a056a00084a00b004f26d3f5d8fsm15622352pfk.25.2022.02.28.22.18.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 22:18:20 -0800 (PST)
-Message-ID: <621dbaac.1c69fb81.f06af.8352@mx.google.com>
-Date:   Mon, 28 Feb 2022 22:18:20 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S230291AbiCAHat (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 1 Mar 2022 02:30:49 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52B267D005;
+        Mon, 28 Feb 2022 23:30:08 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4K78610wrcz4xmt;
+        Tue,  1 Mar 2022 18:30:01 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1646119802;
+        bh=orFthqPFiROEjHHJB+lrlSid+FqXnyyRmJ5wWJwfFvI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=I3zt/pewGsm8kxIkOSJ+/2zTkhr1rxXGtUQdzR4qizN7AvHlYj0K1eSqZQj+nUR38
+         f9rd3vNfSbjVxm8frBoYUcn9df7HqoQ6NGOBSFQmNfp/tM0Zs6E8qAE0y3iI6mBYmf
+         2jnF94XJKPAHg/cQzIy52gVav1KWkHfBwHmPkK2x2OcSNTHzu6Qo1gn9AqvxvayJnA
+         Q9iK1/bNtyC+gbLEb9NPD4FYfGvxSmwqaGtSPOXJlw1zb4SUgcaqGOzSeiTr9fYgq4
+         th4lbF1ktHY1cpzz2w/HKZN/SfSc9e1nMOJRsBNpCTmQVhuK2acWcql8GGVTj3ezAb
+         XjHf4ZMWDZvfw==
+Date:   Tue, 1 Mar 2022 18:29:58 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jens Axboe <axboe@kernel.dk>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>
+Cc:     broonie@kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the scsi-mkp tree with the block
+ tree
+Message-ID: <20220301182958.7897ce30@canb.auug.org.au>
+In-Reply-To: <20220221220622.3000432-1-broonie@kernel.org>
+References: <20220221220622.3000432-1-broonie@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Tree: next
-X-Kernelci-Branch: master
-X-Kernelci-Kernel: next-20220228
-Subject: next/master baseline: 501 runs, 7 regressions (next-20220228)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/LZIN_SwZYLgmXKP0cvFGDH6";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master baseline: 501 runs, 7 regressions (next-20220228)
-
-Regressions Summary
--------------------
-
-platform                     | arch   | lab           | compiler | defconfi=
-g                    | regressions
------------------------------+--------+---------------+----------+---------=
----------------------+------------
-bcm2711-rpi-4-b              | arm64  | lab-collabora | clang-14 | defconfi=
-g                    | 1          =
-
-meson-g12a-u200              | arm64  | lab-baylibre  | gcc-10   | defconfi=
-g+debug              | 1          =
-
-meson-gxl-s905x-libretech-cc | arm64  | lab-baylibre  | gcc-10   | defconfi=
-g+CON...BIG_ENDIAN=3Dy | 1          =
-
-meson-gxl-s905x-libretech-cc | arm64  | lab-clabbe    | gcc-10   | defconfi=
-g+CON...BIG_ENDIAN=3Dy | 1          =
-
-meson-sm1-khadas-vim3l       | arm64  | lab-baylibre  | gcc-10   | defconfi=
-g+CON...BIG_ENDIAN=3Dy | 1          =
-
-meson8b-odroidc1             | arm    | lab-baylibre  | gcc-10   | multi_v7=
-_defc...CONFIG_SMP=3Dn | 1          =
-
-minnowboard-turbot-E3826     | x86_64 | lab-collabora | gcc-10   | x86_64_d=
-efconfig+ima         | 1          =
-
-
-  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
-220228/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   master
-  Describe: next-20220228
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      6705cd745adbbeac6b13002c7a30060f7b2568a5 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                     | arch   | lab           | compiler | defconfi=
-g                    | regressions
------------------------------+--------+---------------+----------+---------=
----------------------+------------
-bcm2711-rpi-4-b              | arm64  | lab-collabora | clang-14 | defconfi=
-g                    | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/621d86691b8b2aeceac62974
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    clang-14 (Debian clang version 14.0.0-++20220226043049+f8ca5=
-fabdb54-1~exp1~20220226043142.74)
-  Plain log:   https://storage.kernelci.org//next/master/next-20220228/arm6=
-4/defconfig/clang-14/lab-collabora/baseline-bcm2711-rpi-4-b.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20220228/arm6=
-4/defconfig/clang-14/lab-collabora/baseline-bcm2711-rpi-4-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220218.1/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/621d86691b8b2aeceac62=
-975
-        new failure (last pass: next-20220223) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler | defconfi=
-g                    | regressions
------------------------------+--------+---------------+----------+---------=
----------------------+------------
-meson-g12a-u200              | arm64  | lab-baylibre  | gcc-10   | defconfi=
-g+debug              | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/621d80e631eafe48d7c629f9
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+debug
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20220228/arm6=
-4/defconfig+debug/gcc-10/lab-baylibre/baseline-meson-g12a-u200.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20220228/arm6=
-4/defconfig+debug/gcc-10/lab-baylibre/baseline-meson-g12a-u200.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220218.1/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/621d80e631eafe48d7c62=
-9fa
-        new failure (last pass: next-20220217) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler | defconfi=
-g                    | regressions
------------------------------+--------+---------------+----------+---------=
----------------------+------------
-meson-gxl-s905x-libretech-cc | arm64  | lab-baylibre  | gcc-10   | defconfi=
-g+CON...BIG_ENDIAN=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/621d82873f6b7822f3c62a7b
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20220228/arm6=
-4/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-10/lab-baylibre/baseline-meson-gx=
-l-s905x-libretech-cc.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20220228/arm6=
-4/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-10/lab-baylibre/baseline-meson-gx=
-l-s905x-libretech-cc.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220218.1/arm64be/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/621d82873f6b7822f3c62=
-a7c
-        new failure (last pass: next-20220215) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler | defconfi=
-g                    | regressions
------------------------------+--------+---------------+----------+---------=
----------------------+------------
-meson-gxl-s905x-libretech-cc | arm64  | lab-clabbe    | gcc-10   | defconfi=
-g+CON...BIG_ENDIAN=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/621d84b31aa9755827c629af
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20220228/arm6=
-4/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-10/lab-clabbe/baseline-meson-gxl-=
-s905x-libretech-cc.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20220228/arm6=
-4/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-10/lab-clabbe/baseline-meson-gxl-=
-s905x-libretech-cc.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220218.1/arm64be/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/621d84b31aa9755827c62=
-9b0
-        new failure (last pass: next-20220215) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler | defconfi=
-g                    | regressions
------------------------------+--------+---------------+----------+---------=
----------------------+------------
-meson-sm1-khadas-vim3l       | arm64  | lab-baylibre  | gcc-10   | defconfi=
-g+CON...BIG_ENDIAN=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/621d82b42a214aa05ac62970
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20220228/arm6=
-4/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-10/lab-baylibre/baseline-meson-sm=
-1-khadas-vim3l.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20220228/arm6=
-4/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-10/lab-baylibre/baseline-meson-sm=
-1-khadas-vim3l.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220218.1/arm64be/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/621d82b42a214aa05ac62=
-971
-        new failure (last pass: next-20220224) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler | defconfi=
-g                    | regressions
------------------------------+--------+---------------+----------+---------=
----------------------+------------
-meson8b-odroidc1             | arm    | lab-baylibre  | gcc-10   | multi_v7=
-_defc...CONFIG_SMP=3Dn | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/621d824e9f12149778c6296c
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20220228/arm/=
-multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-10/lab-baylibre/baseline-meson8b-odro=
-idc1.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20220228/arm/=
-multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-10/lab-baylibre/baseline-meson8b-odro=
-idc1.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220218.1/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/621d824e9f12149778c62=
-96d
-        new failure (last pass: next-20220223) =
-
- =
-
-
-
-platform                     | arch   | lab           | compiler | defconfi=
-g                    | regressions
------------------------------+--------+---------------+----------+---------=
----------------------+------------
-minnowboard-turbot-E3826     | x86_64 | lab-collabora | gcc-10   | x86_64_d=
-efconfig+ima         | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/621d83236f4e492cb5c62997
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+ima
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20220228/x86_=
-64/x86_64_defconfig+ima/gcc-10/lab-collabora/baseline-minnowboard-turbot-E3=
-826.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20220228/x86_=
-64/x86_64_defconfig+ima/gcc-10/lab-collabora/baseline-minnowboard-turbot-E3=
-826.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220218.1/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/621d83236f4e492cb5c62=
-998
-        new failure (last pass: next-20220224) =
-
- =20
+--Sig_/LZIN_SwZYLgmXKP0cvFGDH6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi all,
+
+On Mon, 21 Feb 2022 22:06:22 +0000 broonie@kernel.org wrote:
+>
+> Today's linux-next merge of the scsi-mkp tree got a conflict in:
+>=20
+>   block/blk-lib.c
+>=20
+> between commit:
+>=20
+>   0a3140ea0fae3 ("block: pass a block_device and opf to blk_next_bio")
+>=20
+> from the block tree and commit:
+>=20
+>   2988062985d59 ("scsi: block: Remove REQ_OP_WRITE_SAME support")
+>=20
+> from the scsi-mkp tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+> diff --cc block/blk-lib.c
+> index fc6ea52e74824,bf5254ccdb5f8..0000000000000
+> --- a/block/blk-lib.c
+> +++ b/block/blk-lib.c
+>=20
+> (took the deletion of _WRITE_SAME from scsi-mkp)
+
+This is now a conflict between the scsi tree and the block tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/LZIN_SwZYLgmXKP0cvFGDH6
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIdy3YACgkQAVBC80lX
+0GzNyggAmo8RpRW5Hye3jb/vY2h08pfoSCtOHeWQR8t3RWMhDWQ/96HsKeRTk3wl
+cYSQzqnEWvWBjo3WUYu5ZVVaXvwpoXZFJt2BPZZsM8751kqSzKFsWjSOIWqPmU9E
+8s5SjT74jwlnkPIaQPQAU5N7YTA5PLQq/4Vqt/8LzHYhY+ECNWC1+7huIowdbRgF
+F4voSDEUF9r9GXLZ1kt8+RYGzDOahcBbdoxOC8xM2uFaoQIZlWp8H7sVVFc8Er5w
+DMB2g2RCujRWlZ9TSHASH2oXHW5S8/AXvPRsnaOA8FrH20PPmj4Gfcg7NTdgiZrZ
+KnpoYOJ6q0NfRz/KR/62XhtKsmQkhw==
+=ofEz
+-----END PGP SIGNATURE-----
+
+--Sig_/LZIN_SwZYLgmXKP0cvFGDH6--

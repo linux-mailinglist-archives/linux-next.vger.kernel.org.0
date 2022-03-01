@@ -2,65 +2,55 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7495E4C8961
-	for <lists+linux-next@lfdr.de>; Tue,  1 Mar 2022 11:35:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 819A04C8A0A
+	for <lists+linux-next@lfdr.de>; Tue,  1 Mar 2022 11:55:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234308AbiCAKgN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 1 Mar 2022 05:36:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49184 "EHLO
+        id S233727AbiCAKzo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 1 Mar 2022 05:55:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232950AbiCAKgG (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 1 Mar 2022 05:36:06 -0500
-Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58A3756C13;
-        Tue,  1 Mar 2022 02:35:25 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailnew.west.internal (Postfix) with ESMTP id 0F9902B00092;
-        Tue,  1 Mar 2022 05:35:20 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Tue, 01 Mar 2022 05:35:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; bh=ysRpXoSkUBqFNe0diSr30u/oZ9ovPoPLQJ+x+S
-        shXy4=; b=LL/FiTvDraDFXmTwJJXQoj3uX8vifSN3X+NdzHjgEut6RWRri/6Fuu
-        BBQtcUiHJZ9Z58tH2qGOB2keYCEMRbmXAPrwb8khMeEX3sqhQna/EKpjRMHo+PCM
-        auUI8NeEcEiqfVXU2ytmUSsDugvJpqyxTMEOBtBAt+pRxQFuS5NGYt6i82ZYoJGM
-        dX2SIWmcUdw3kUWnomNZpensPv3/MIjK7JLvy43NqzaCg2GxRFJUJWqKDjF3ibIq
-        xqDfBjrOgugVoCBUvemeywXHgQN061S2CX/8icTB72ZRRWJFnXzN2DGZz58cXDOI
-        wdJBXHhMUhzuY9MvINt5v9Ms1Qb4QeWw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=ysRpXoSkUBqFNe0di
-        Sr30u/oZ9ovPoPLQJ+x+SshXy4=; b=gebClrELORVqYBDgZn5+bZgsjjQEpsKVS
-        Ka6JPKE1tUqAZqy5pc+UH8fc5jjAACFOp+892+zJ9vm6di9foTDFxJXdjn4wcbYp
-        a2HY0c39Zy0k3o7D8efxmLau/VJ6RmVvWXb3mCwdH9Np+3IZfWTCNsE5DBcVpm+v
-        ++yaR8dQWrulgviJKi5MDUeAR/9aqpG/W2mAu0Yobg2J1GEksVh4rvXnryLR5Uk5
-        WFibuvrvZJ3PwndItJLzBEsT5IJRtxcTa2tPojHPpDWsE7R9nUZUu55RY38M45Ps
-        qxMV0PRIKa+5PMFwcmZsaNAM5NeXsRbHuHE15OEA9PG5CPhKuz9+w==
-X-ME-Sender: <xms:6PYdYunB4kqylP5S5BS93NseSw0zTl_gn_9Gm1lOdGyUsu8COcxpFw>
-    <xme:6PYdYl0ChrVs3hbj6ypsCclN6uY8BFoAfUHg7fr7mr7xh8wDbDW_eaNQXNqzoNCdk
-    LGnsUE__2dZ8w>
-X-ME-Received: <xmr:6PYdYsrnSntjFVn9m97YSRz4h-TBHDQswReCOvGduE8gVZrezLoK5ibAmC69Ca81Bt2HRV6tjJ5sc7gkS6EJ5Lg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddruddtvddgudehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
-    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeeuleeltd
-    ehkeeltefhleduuddvhfffuedvffduveegheekgeeiffevheegfeetgfenucffohhmrghi
-    nhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhm
-X-ME-Proxy: <xmx:6PYdYimZP-plN_TuooYyEArYlBIw74yeWoG5Oi4qSSt8ps8K41058w>
-    <xmx:6PYdYs3Qvtx5KNjYCk5HgZjzGCQERQZ8mS4MYwvjfqwZY7VlElgXxg>
-    <xmx:6PYdYpuxuTCirwc00aQciyaRXUQF6MqKRlrVCaRIvpOLla48xeOEcA>
-    <xmx:6PYdYiMe1ebt3xGqtaJnfYKocKutSwi64TO2hq-x_wSadIEhW3IawxtU3vU>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 1 Mar 2022 05:35:20 -0500 (EST)
-Date:   Tue, 1 Mar 2022 11:35:17 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Lee Jones <lee.jones@linaro.org>
+        with ESMTP id S229563AbiCAKzn (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 1 Mar 2022 05:55:43 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 105BA483B4
+        for <linux-next@vger.kernel.org>; Tue,  1 Mar 2022 02:55:01 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id i8so2761891wrr.8
+        for <linux-next@vger.kernel.org>; Tue, 01 Mar 2022 02:55:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=RC9oQAYhwzqDcFJdvw95JaPm8X/ixpz4G02IlVUuRQA=;
+        b=fYMVAihAYq9J0SIqjc+WIOtnDT9inS98fW1fEi2Sn7ghMnAI3y501AUdeK0R7blrUp
+         0/CzDMOfXmbb80tqsD1JDwEQEQP1Qh2s7zs0K7f0tNTVS6JrKl3ecELo5nx5seZBwdK9
+         vimGyhAwh/LYebJwbHA4Arcm5BmPeEsFLJemnowLmgAGOAWL7CLRKIOXAOmFWoMYREKi
+         4D5KcCD9faaxJIMc6EXKsN/8k3vN7ip7tcOFf8mCfX35R4RqMZGH8fUsTBlUuZtZAyZv
+         CgB9l4S31auUQUUfGqDIj/536k5mlGOJJf5Q1qNYme3xdjdar0ZUR698ZnnbUX1H+b1/
+         4v6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=RC9oQAYhwzqDcFJdvw95JaPm8X/ixpz4G02IlVUuRQA=;
+        b=ba00wmKSWpy/kOK7RWKvt/mdMbf2+F0dCCsLrMdM51S33wV5WjFq8xtGL0kyCsTklA
+         xrPqFMcvPtKl8p2Ah18iekaAFUdt3lG+933ezijItDFIn9Hoard/YVkNfi0DyIFLE/tx
+         c0AaFo0wrkA2n0taoWc5jZA+xyYTj78N28YrREw33iAJL5zHumuIBVBI8iBtJvWND+K/
+         S9jGNs+MIZipl4JN3f3YgoQPpuXtUDxaogLh2fvyjAjqkSSFjYzYOydpZxk31c2KDnUl
+         3MxCFQERxBIgTQqmI0lbBimV9GOKCAsdNysjEWZUdQzka3nupLHBEM1b35Uc3SsDOCQB
+         BA5w==
+X-Gm-Message-State: AOAM531xSLxS77K+adcb/t6bm/bnMwvIEjTLLlrdAWK7FInCjkf5eTYt
+        OmHpykjQiBM4Yp6sJrwzb0AmFsj859JG7w==
+X-Google-Smtp-Source: ABdhPJzdYMhou6o5WrZ52n2EdXq1yT7EjObFb+PF0Vlfb5l46Xdgw8+pUJp/NLWi38XzB8Ln5nF/ug==
+X-Received: by 2002:adf:a512:0:b0:1ea:9656:958b with SMTP id i18-20020adfa512000000b001ea9656958bmr18797120wrb.241.1646132099524;
+        Tue, 01 Mar 2022 02:54:59 -0800 (PST)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id bg20-20020a05600c3c9400b0037fa5c422c8sm2438734wmb.48.2022.03.01.02.54.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Mar 2022 02:54:59 -0800 (PST)
+Date:   Tue, 1 Mar 2022 10:54:57 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Greg KH <greg@kroah.com>
 Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Arnd Bergmann <arnd@arndb.de>,
         Alistair Francis <alistair@alistair23.me>,
@@ -68,92 +58,119 @@ Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Robert Marko <robert.marko@sartura.hr>
 Subject: Re: linux-next: manual merge of the char-misc tree with the mfd tree
-Message-ID: <Yh325S5PyPiJf4F5@kroah.com>
+Message-ID: <Yh37gTCPaESkgNzV@google.com>
 References: <20220228193928.3ec6ee98@canb.auug.org.au>
  <YhyPfcjJtIKNQtF8@google.com>
  <Yhyn72NO/roH1gA8@kroah.com>
  <YhzENKPtY+WOp566@google.com>
  <Yh09/r/nT2LeE82n@kroah.com>
  <Yh3pZXQPP9kmcSSx@google.com>
+ <Yh325S5PyPiJf4F5@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Yh3pZXQPP9kmcSSx@google.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Yh325S5PyPiJf4F5@kroah.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Mar 01, 2022 at 09:37:41AM +0000, Lee Jones wrote:
-> On Mon, 28 Feb 2022, Greg KH wrote:
-> 
-> > On Mon, Feb 28, 2022 at 12:46:44PM +0000, Lee Jones wrote:
-> > > On Mon, 28 Feb 2022, Greg KH wrote:
-> > > 
-> > > > On Mon, Feb 28, 2022 at 09:01:49AM +0000, Lee Jones wrote:
-> > > > > On Mon, 28 Feb 2022, Stephen Rothwell wrote:
-> > > > > 
-> > > > > > Hi all,
+On Tue, 01 Mar 2022, Greg KH wrote:
+
+> On Tue, Mar 01, 2022 at 09:37:41AM +0000, Lee Jones wrote:
+> > On Mon, 28 Feb 2022, Greg KH wrote:
+> > 
+> > > On Mon, Feb 28, 2022 at 12:46:44PM +0000, Lee Jones wrote:
+> > > > On Mon, 28 Feb 2022, Greg KH wrote:
+> > > > 
+> > > > > On Mon, Feb 28, 2022 at 09:01:49AM +0000, Lee Jones wrote:
+> > > > > > On Mon, 28 Feb 2022, Stephen Rothwell wrote:
 > > > > > > 
-> > > > > > Today's linux-next merge of the char-misc tree got a conflict in:
+> > > > > > > Hi all,
+> > > > > > > 
+> > > > > > > Today's linux-next merge of the char-misc tree got a conflict in:
+> > > > > > 
+> > > > > > I did ask for this *not* to be merged when it was in -testing.
 > > > > > 
-> > > > > I did ask for this *not* to be merged when it was in -testing.
+> > > > > Sorry, I missed that, I saw your ack on the patch so that's why I took
+> > > > > it.
+> > > > > 
+> > > > > > I'll follow-up with Greg.
+> > > > > 
+> > > > > Should I revert this from my tree?
 > > > > 
-> > > > Sorry, I missed that, I saw your ack on the patch so that's why I took
-> > > > it.
-> > > > 
-> > > > > I'll follow-up with Greg.
-> > > > 
-> > > > Should I revert this from my tree?
+> > > > I did try to catch it before a revert would have been required.
 > > > 
-> > > I did try to catch it before a revert would have been required.
+> > > My fault.
+> > > 
+> > > > But yes, please revert it.
+> > > 
+> > > Will go do so now.
 > > 
-> > My fault.
+> > Thank you.
 > > 
-> > > But yes, please revert it.
+> > > > The Ack is not standard and should not be merged.
+> > > 
+> > > I do not understand this, what went wrong here?
 > > 
-> > Will go do so now.
-> 
-> Thank you.
-> 
-> > > The Ack is not standard and should not be merged.
+> > The "Ack" you saw was just a placeholder.
 > > 
-> > I do not understand this, what went wrong here?
+> > When I provided it, I would have done so like this:
+> > 
+> >     "For my own reference (apply this as-is to your sign-off block):
+> > 
+> >      Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>"
+> > 
+> > REF: https://lore.kernel.org/all/YQ0fYe531yCyP4pf@google.com/
+> > 
+> > The majority of maintainers I regularly work with know this to mean
+> > that the set is due to be routed via MFD (with a subsequent
+> > pull-request to an immutable branch to follow), since MFD is often
+> > the centre piece (parent) of the patch-sets I deal with.
+> > 
+> > I appreciate that this could cause confusion, but I'm not sure of a
+> > better way to convey this information such that it survives through
+> > various submission iterations.
 > 
-> The "Ack" you saw was just a placeholder.
+> But what else is another maintainer supposed to think if they see that
+> ack on the patch?  Ignore it?  I took that to mean "this is good from a
+> mfd-point-of-view" which meant it can go through whatever tree it is
+> supposed to.
 > 
-> When I provided it, I would have done so like this:
-> 
->     "For my own reference (apply this as-is to your sign-off block):
-> 
->      Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>"
-> 
-> REF: https://lore.kernel.org/all/YQ0fYe531yCyP4pf@google.com/
-> 
-> The majority of maintainers I regularly work with know this to mean
-> that the set is due to be routed via MFD (with a subsequent
-> pull-request to an immutable branch to follow), since MFD is often
-> the centre piece (parent) of the patch-sets I deal with.
-> 
-> I appreciate that this could cause confusion, but I'm not sure of a
-> better way to convey this information such that it survives through
-> various submission iterations.
+> Are you wanting this individual patch to go through your tree now only?
+> If so, you should say that by NOT acking it :)
 
-But what else is another maintainer supposed to think if they see that
-ack on the patch?  Ignore it?  I took that to mean "this is good from a
-mfd-point-of-view" which meant it can go through whatever tree it is
-supposed to.
+It's not quite as easy as that.
 
-Are you wanting this individual patch to go through your tree now only?
-If so, you should say that by NOT acking it :)
+It wouldn't be fair to the contributor to start reviews once all the
+other patches in the set are ready to be merged.  So how would I
+indicate that the MFD part is ready, fully expecting some of the other
+patches in the set to be reworked and subsequent revisions are to be
+submitted?
 
-How do you want to see this merged?
+This method actually works really well the majority of the time, and
+has done for a number of years.  However, I am always willing to
+improve on my processes given the opportunity.
 
-thanks,
+> How do you want to see this merged?
 
-greg k-h
+The plan is for the whole set to be merged together via MFD.
+
+All of the other maintainers have now Acked, so it's ready to go:
+
+  https://lore.kernel.org/all/20220131133049.77780-1-robert.marko@sartura.hr/
+
+Looking at the diff, I'm not entirely sure why you took it in the
+first place?
+
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

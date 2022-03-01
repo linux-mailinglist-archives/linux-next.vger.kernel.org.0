@@ -2,188 +2,108 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C79CE4C97A7
-	for <lists+linux-next@lfdr.de>; Tue,  1 Mar 2022 22:19:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A44344C97C2
+	for <lists+linux-next@lfdr.de>; Tue,  1 Mar 2022 22:27:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232861AbiCAVUU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 1 Mar 2022 16:20:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43938 "EHLO
+        id S233263AbiCAV2T (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 1 Mar 2022 16:28:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233874AbiCAVUU (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 1 Mar 2022 16:20:20 -0500
-Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 686213584B;
-        Tue,  1 Mar 2022 13:19:38 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 0ECBD5801CB;
-        Tue,  1 Mar 2022 16:19:36 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Tue, 01 Mar 2022 16:19:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; bh=irkPueAiCfILIlzGGrxDq4dAsI7OyDyYXO5rJi
-        ZUrTM=; b=nUBYDx1r98toHBQHQnjBoT1UWSlb2c+Q/aegWeKvBa4e80FeMy7qZf
-        gpjuryM+h/jy8lxKhZvcsIm0qY29GpWWqD3uVS7oUX/XLWmbA2a2moHyG0t4J9Qi
-        lgMAaKf6pcVLgZdzSrukZwdkNY+AmDHVfI+OI41DZzlsxRUz8CIxQ/1PQI04QS2t
-        SNoaPGqEJyDASzDICDiP8hlmyeq40JmAtWEQaCxsY2+T4pRlKch+8vogQjXHDEk+
-        0yql1lEFCFeSe0i5fJyxhm3wVzRpV4xLb2a5vn2DzI7ZObSePGRfEf+4JHSjgpys
-        3lopO3iT1ggNi8Xwje8nDfw/+Ldb05YA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=irkPueAiCfILIlzGG
-        rxDq4dAsI7OyDyYXO5rJiZUrTM=; b=oL+UTYByN2j14PQWQ5sQ06BoSof3xj7En
-        EtgBehgZxHWqAAkUI3ZK+ZIvCDaMLGUTprlJ+Yw31Jz+AdarhGz539duKh+APMfT
-        s0E4YjLJYcoPCeOAcr2PEJGB8PVaEEmxct/NtqWgfOKulxdo6IJYjtQPyO4MGf6s
-        sx/WmyPH4t5oli117uJI+PDO7j3XqErpfoO8LMV1pKmBYt7dV5PM2fwzpwpQu5QJ
-        0MFsz3kR6udPVmtUqZv9qSqkpJKNCSHsDYIMeb9NfZjTigNq9AdilnbjJpOQpFfo
-        VVNmtwLkEIsujhIQ5XsQW/ETA4aZQJjgRTQxfvIgpRcpRHKP3HhrA==
-X-ME-Sender: <xms:540eYmzqjA4fvjOAXE8TrWwGgnthUZTRqYZIHZvtyCcvrHQRwFAdFg>
-    <xme:540eYiT0ItjMp0cC_MGjomeezo0d2wI9XVtRaZnu5DzfaBdugVuwTKJqNcoXFayex
-    zOWcQ_NBs4PLg>
-X-ME-Received: <xmr:540eYoWjyq6O0HlIrj_H61MfEszUvhRuJg-kOaAUBeSoLuOlv5Fhfdn2Kq_voNhBXVFEwk8jko1LQtPeCdvPtyM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddruddtvddgudeghecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepueelle
-    dtheekleethfeludduvdfhffeuvdffudevgeehkeegieffveehgeeftefgnecuffhomhgr
-    ihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
-X-ME-Proxy: <xmx:540eYsiJsNSzuhiwfFzWknUf6WKOWwa3mm-pASJ_UCpqf3BwR3YSvA>
-    <xmx:540eYoAemNtfqlxLSpoUpn8u3W4zTaWKpEoYLf5WfjaIb-fswNJhPA>
-    <xmx:540eYtKYEspi5AXjEuHrK8FRzJw9AAvG1jEF3rsfioXKXgGbvIkm0A>
-    <xmx:6I0eYk7rylAeHS0FxImKd1xGVeOaViRlYwnzMvMh-b1O9KGHdka4QQ>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 1 Mar 2022 16:19:35 -0500 (EST)
-Date:   Tue, 1 Mar 2022 22:19:30 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        with ESMTP id S231863AbiCAV2T (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 1 Mar 2022 16:28:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C46B2B276;
+        Tue,  1 Mar 2022 13:27:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E57546121A;
+        Tue,  1 Mar 2022 21:27:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 050E6C340EE;
+        Tue,  1 Mar 2022 21:27:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1646170055;
+        bh=T/McMRYbMuu8/Croir0tdzYmDthGMYZxovzrwCbNsY8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZXir+gDxoZ8hzCA+RmVyyqaW98B0YwW4ZiehZt1BTSyp+AKFk8xVAkybHzsZImWzT
+         xH8Yo5bJDkzhEbCSks3rn8ek+g/y+Pe0gUNq1nDNlcWHIA4Nu8BhIHmP2bqQ06ehwg
+         sXlg25mSEkcRiJzl7y7ZT9ro9L2CcrJ8lPupIe5w=
+Date:   Tue, 1 Mar 2022 22:27:32 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     broonie@kernel.org, Kai-Heng Feng <kai.heng.feng@canonical.com>,
         Arnd Bergmann <arnd@arndb.de>,
-        Alistair Francis <alistair@alistair23.me>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Robert Marko <robert.marko@sartura.hr>
-Subject: Re: linux-next: manual merge of the char-misc tree with the mfd tree
-Message-ID: <Yh6N4mWCfHtlBM07@kroah.com>
-References: <20220228193928.3ec6ee98@canb.auug.org.au>
- <YhyPfcjJtIKNQtF8@google.com>
- <Yhyn72NO/roH1gA8@kroah.com>
- <YhzENKPtY+WOp566@google.com>
- <Yh09/r/nT2LeE82n@kroah.com>
- <Yh3pZXQPP9kmcSSx@google.com>
- <Yh325S5PyPiJf4F5@kroah.com>
- <Yh37gTCPaESkgNzV@google.com>
+        linux-mmc@vger.kernel.org
+Subject: Re: linux-next: build failure after merge of the char-misc tree
+Message-ID: <Yh6PxD9d7Fb4VLP5@kroah.com>
+References: <20220225204055.3899986-1-broonie@kernel.org>
+ <YhpCcE19y3sGqLQ3@kroah.com>
+ <20220301161426.0218d519@canb.auug.org.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yh37gTCPaESkgNzV@google.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220301161426.0218d519@canb.auug.org.au>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Mar 01, 2022 at 10:54:57AM +0000, Lee Jones wrote:
-> On Tue, 01 Mar 2022, Greg KH wrote:
+On Tue, Mar 01, 2022 at 04:14:26PM +1100, Stephen Rothwell wrote:
+> Hi all,
 > 
-> > On Tue, Mar 01, 2022 at 09:37:41AM +0000, Lee Jones wrote:
-> > > On Mon, 28 Feb 2022, Greg KH wrote:
+> On Sat, 26 Feb 2022 16:08:32 +0100 Greg KH <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Fri, Feb 25, 2022 at 08:40:55PM +0000, broonie@kernel.org wrote:
 > > > 
-> > > > On Mon, Feb 28, 2022 at 12:46:44PM +0000, Lee Jones wrote:
-> > > > > On Mon, 28 Feb 2022, Greg KH wrote:
-> > > > > 
-> > > > > > On Mon, Feb 28, 2022 at 09:01:49AM +0000, Lee Jones wrote:
-> > > > > > > On Mon, 28 Feb 2022, Stephen Rothwell wrote:
-> > > > > > > 
-> > > > > > > > Hi all,
-> > > > > > > > 
-> > > > > > > > Today's linux-next merge of the char-misc tree got a conflict in:
-> > > > > > > 
-> > > > > > > I did ask for this *not* to be merged when it was in -testing.
-> > > > > > 
-> > > > > > Sorry, I missed that, I saw your ack on the patch so that's why I took
-> > > > > > it.
-> > > > > > 
-> > > > > > > I'll follow-up with Greg.
-> > > > > > 
-> > > > > > Should I revert this from my tree?
-> > > > > 
-> > > > > I did try to catch it before a revert would have been required.
-> > > > 
-> > > > My fault.
-> > > > 
-> > > > > But yes, please revert it.
-> > > > 
-> > > > Will go do so now.
+> > > After merging the char-misc tree, today's linux-next build (x86
+> > > allmodconfig) failed like this:
 > > > 
-> > > Thank you.
+> > > /tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c: In function 'sd_request':
+> > > /tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c:809:17: error: unused variable 'dev' [-Werror=unused-variable]
+> > >   809 |  struct device *dev = &host->pdev->dev;
+> > >       |                 ^~~
+> > > /tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c: In function 'sdmmc_set_ios':
+> > > /tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c:1084:17: error: unused variable 'dev' [-Werror=unused-variable]
+> > >  1084 |  struct device *dev = &host->pdev->dev;
+> > >       |                 ^~~
+> > > /tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c: In function 'sdmmc_get_ro':
+> > > /tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c:1133:17: error: unused variable 'dev' [-Werror=unused-variable]
+> > >  1133 |  struct device *dev = &host->pdev->dev;
+> > >       |                 ^~~
+> > > /tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c: In function 'sdmmc_get_cd':
+> > > /tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c:1159:17: error: unused variable 'dev' [-Werror=unused-variable]
+> > >  1159 |  struct device *dev = &host->pdev->dev;
+> > >       |                 ^~~
+> > > /tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c: In function 'sdmmc_switch_voltage':
+> > > /tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c:1258:17: error: unused variable 'dev' [-Werror=unused-variable]
+> > >  1258 |  struct device *dev = &host->pdev->dev;
+> > >       |                 ^~~
+> > > /tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c: In function 'sdmmc_execute_tuning':
+> > > /tmp/next/build/drivers/mmc/host/rtsx_pci_sdmmc.c:1311:17: error: unused variable 'dev' [-Werror=unused-variable]
+> > >  1311 |  struct device *dev = &host->pdev->dev;
+> > >       |                 ^~~
+> > > cc1: all warnings being treated as errors
 > > > 
-> > > > > The Ack is not standard and should not be merged.
-> > > > 
-> > > > I do not understand this, what went wrong here?
+> > > Caused by commit
 > > > 
-> > > The "Ack" you saw was just a placeholder.
+> > >   7570fb41e450ba37 ("mmc: rtsx: Let MMC core handle runtime PM")
 > > > 
-> > > When I provided it, I would have done so like this:
-> > > 
-> > >     "For my own reference (apply this as-is to your sign-off block):
-> > > 
-> > >      Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>"
-> > > 
-> > > REF: https://lore.kernel.org/all/YQ0fYe531yCyP4pf@google.com/
-> > > 
-> > > The majority of maintainers I regularly work with know this to mean
-> > > that the set is due to be routed via MFD (with a subsequent
-> > > pull-request to an immutable branch to follow), since MFD is often
-> > > the centre piece (parent) of the patch-sets I deal with.
-> > > 
-> > > I appreciate that this could cause confusion, but I'm not sure of a
-> > > better way to convey this information such that it survives through
-> > > various submission iterations.
+> > > I have used the char-misc tree from yesterday instead.  
 > > 
-> > But what else is another maintainer supposed to think if they see that
-> > ack on the patch?  Ignore it?  I took that to mean "this is good from a
-> > mfd-point-of-view" which meant it can go through whatever tree it is
-> > supposed to.
+> > Kai-Heng, can you send an add-on patch to fix this?
 > > 
-> > Are you wanting this individual patch to go through your tree now only?
-> > If so, you should say that by NOT acking it :)
+> > thanks,
 > 
-> It's not quite as easy as that.
-> 
-> It wouldn't be fair to the contributor to start reviews once all the
-> other patches in the set are ready to be merged.  So how would I
-> indicate that the MFD part is ready, fully expecting some of the other
-> patches in the set to be reworked and subsequent revisions are to be
-> submitted?
+> I am still getting these build errors.
 
-But from an "outside" observer, this patch series seemed to have acks
-from all maintainers, yet no one was taking it.  Which is why I picked
-it up (someone asked me to.)  Having the subsystem maintainer ack it
-implied to me that there was no problem.  Odd that you later on had one :)
-
-> > How do you want to see this merged?
-> 
-> The plan is for the whole set to be merged together via MFD.
-> 
-> All of the other maintainers have now Acked, so it's ready to go:
-> 
->   https://lore.kernel.org/all/20220131133049.77780-1-robert.marko@sartura.hr/
-> 
-> Looking at the diff, I'm not entirely sure why you took it in the
-> first place?
-
-As I mentioned above, someone else asked me to as it was sitting around
-for quite a while with no movement.
-
-thanks,
+Should now be fixed, sorry for the delay.
 
 greg k-h

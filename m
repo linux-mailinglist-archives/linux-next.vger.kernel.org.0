@@ -2,62 +2,63 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB2384C9F5D
-	for <lists+linux-next@lfdr.de>; Wed,  2 Mar 2022 09:37:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5A9E4C9FCC
+	for <lists+linux-next@lfdr.de>; Wed,  2 Mar 2022 09:49:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234220AbiCBIid (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 2 Mar 2022 03:38:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32788 "EHLO
+        id S240210AbiCBIuR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 2 Mar 2022 03:50:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231879AbiCBIic (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Mar 2022 03:38:32 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0583149F1D
-        for <linux-next@vger.kernel.org>; Wed,  2 Mar 2022 00:37:49 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id p9so1456252wra.12
-        for <linux-next@vger.kernel.org>; Wed, 02 Mar 2022 00:37:48 -0800 (PST)
+        with ESMTP id S240219AbiCBIuR (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Mar 2022 03:50:17 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC8EE5C354
+        for <linux-next@vger.kernel.org>; Wed,  2 Mar 2022 00:49:33 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id i66so639124wma.5
+        for <linux-next@vger.kernel.org>; Wed, 02 Mar 2022 00:49:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=FyMU8fq6y4HoMZwEsMGQy/b/5UhgOTpxKWSbxduUW2U=;
-        b=NihcgkqUkT0B/zsTlsx+XzrBEQd2pUUX7WqAIAOcocJ+Qlud6uUY/rO3t+BCjbJ+ls
-         7eR4xVYaPIn2OINEeLD70a7tAeP1FWs348PUwDNpuZrZBlDYpIiApAXjwhSLuyCPYx6R
-         Fi00/T/ffEHpzHq92kDi590SWMuAqvO0BLjJFXgVAYH8sLtKKf4m3slBOyyO3bsVF7Kz
-         SlPc2CwAAjb6nxzxEfSAwSGNxUPWxRFWS+usC6gNFhptle0s4ntxkJju5e1uy5iaeREq
-         9k6MaTULshnBoWP4Y6VWlfPtFykzt3eXLyA8gRiBwrtoK/LX+bMWHDhckSfqL1TRQVGO
-         +KMQ==
+        bh=SYfvCwb/W3WNk+L8cxBMzh00xT5wfH+9eEmldGfOgI8=;
+        b=DYr6ubscevfBzbcdY+Y9vEBZXdqvU1A5XxM6fUGLF1mEO6KKzkqEn29Dfp8csk96S1
+         /WmC2LDDWi+cMCk7SWUqsMTiv3Ry1Bq0MQ3mrYnCStTJ7MXqdj9kXF+EmJd8BSn5pX5g
+         fU5wt6z0wUNZZ35dLueFaGEU5az84yyQsFFJBDVUKvGgY0w3Vm9SlXfPKAyg9HGPRXvw
+         tMpMXNCXWg+KNFa047heYu8i3Vl07PvJ5MKc00Ze+wDkQ5D+Gw7/lFulUwFT10iEVQ+v
+         HdK7VgMwdff2FLC2w4Z9l0wlzRwbI0t8FrNhGvOKgEXE08SvhSMu4peaKCaLdNXDxqKG
+         pZkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to;
-        bh=FyMU8fq6y4HoMZwEsMGQy/b/5UhgOTpxKWSbxduUW2U=;
-        b=m99y5dV+pjdUd7ePzJskHh9zDZ+m2QwFhdYrsb/wyEzcJMf9HZ5HjC2LqiiYlERucN
-         eFY7z0wPAlbXosrEEuL8ErWEoM9jlZmk9H9kCp4qnOS4zmtu0zwIwiu1PTaESd7PnTSk
-         Pzp7gVwGQkusN2lHTUC8XPVbEtyNCilIlKaSn2qh/Q21Nf56cePm6xLeAQf9/CQWvAu8
-         +LBmJAPy8FnQVQRYiXuek0H/tvSbfytZmLEmx5Nc7b+A+xsA0ntkd/1H9i64pAd9+DQ4
-         72JsRHNhVgHHfjgckXwYuXNRgzNpVJwiWGqM4cg3KsOowoYrwYcmsyOFpJJbzJsb7a96
-         EFFg==
-X-Gm-Message-State: AOAM532fnr5bj2RQUuUUiwstcZsQhwkz/IatkvVcduQnxv4DOm+2RH0C
-        qpZ2P1qOJmpLOIe2nspnRxwLtw==
-X-Google-Smtp-Source: ABdhPJwl9qFFI1veZYMItGxkmO2YTm89AX3gV+MTpqHzqEy3cLhV8nvy5+eNURy/aVI3T4huRj5M0A==
-X-Received: by 2002:a5d:408c:0:b0:1ee:6c0f:1830 with SMTP id o12-20020a5d408c000000b001ee6c0f1830mr20725366wrp.687.1646210267541;
-        Wed, 02 Mar 2022 00:37:47 -0800 (PST)
+        bh=SYfvCwb/W3WNk+L8cxBMzh00xT5wfH+9eEmldGfOgI8=;
+        b=r1VKSrx930/zedCXURi2FxhCqGYK+zbC/H8Sf6vXXe7MIq4Zo18kBvRcQVEQKiS1Bc
+         V+gjZB3MMadvhl4gTRK9V7KYd68aHZ1sW9bNOG2ACSjstAr+8ASCI1tMQrPIIVE2rH7Q
+         gZAUshxh1Yo59Nke9Oqvp4NpUe9iXWzKG6AkBnEJzMJ6K/CQXeE7qYrDrQHZLIP7Yg7J
+         WOi8FsKOsD7pO9ljr90E/XFK8BHV/kzsSrV/dPAg2t5ZmueTCHvTHPk6WUaUt3KPEJAm
+         8cPs6DVSUp0zaTyQFm9De6nlYSB+VScIjOhJ2frCFzBlledCdto6tCSkhxffkYxsS3H0
+         53jw==
+X-Gm-Message-State: AOAM533x2R5jnpP7Vkh7UNuGsUlofIBs1v7Jk7PxAKINrAATeNGVKwUo
+        CXlpmO6CchzoCKPSBezVd8KvBg==
+X-Google-Smtp-Source: ABdhPJxTl9Qootm9SKZ4yKKoOvXTgf5Y4iGxV9pCsD/8iYqSo/nBkR8s0sch9TfhEXHnUlSTHwRN3A==
+X-Received: by 2002:a7b:c5d6:0:b0:381:4127:84d3 with SMTP id n22-20020a7bc5d6000000b00381412784d3mr17613363wmk.24.1646210972309;
+        Wed, 02 Mar 2022 00:49:32 -0800 (PST)
 Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id k13-20020a7bc40d000000b00381890032dfsm4284201wmi.1.2022.03.02.00.37.46
+        by smtp.gmail.com with ESMTPSA id 10-20020adf808a000000b001edd413a952sm16055534wrl.95.2022.03.02.00.49.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 00:37:47 -0800 (PST)
-Date:   Wed, 2 Mar 2022 08:37:45 +0000
+        Wed, 02 Mar 2022 00:49:31 -0800 (PST)
+Date:   Wed, 2 Mar 2022 08:49:29 +0000
 From:   Lee Jones <lee.jones@linaro.org>
-To:     Robert Marko <robert.marko@sartura.hr>
-Cc:     Greg KH <greg@kroah.com>, Stephen Rothwell <sfr@canb.auug.org.au>,
+To:     Greg KH <greg@kroah.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Arnd Bergmann <arnd@arndb.de>,
         Alistair Francis <alistair@alistair23.me>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Robert Marko <robert.marko@sartura.hr>
 Subject: Re: linux-next: manual merge of the char-misc tree with the mfd tree
-Message-ID: <Yh8s2WeF6NEGiArh@google.com>
+Message-ID: <Yh8vmWeW+sPz0DdD@google.com>
 References: <20220228193928.3ec6ee98@canb.auug.org.au>
  <YhyPfcjJtIKNQtF8@google.com>
  <Yhyn72NO/roH1gA8@kroah.com>
@@ -66,12 +67,12 @@ References: <20220228193928.3ec6ee98@canb.auug.org.au>
  <Yh3pZXQPP9kmcSSx@google.com>
  <Yh325S5PyPiJf4F5@kroah.com>
  <Yh37gTCPaESkgNzV@google.com>
- <CA+HBbNF1Am7k9M7Mf_9+TRmQ6CtFkF5MSQ4LU79svvSxPUBPiw@mail.gmail.com>
+ <Yh6N4mWCfHtlBM07@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+HBbNF1Am7k9M7Mf_9+TRmQ6CtFkF5MSQ4LU79svvSxPUBPiw@mail.gmail.com>
+In-Reply-To: <Yh6N4mWCfHtlBM07@kroah.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -82,99 +83,24 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, 02 Mar 2022, Robert Marko wrote:
-
-> On Tue, Mar 1, 2022 at 11:54 AM Lee Jones <lee.jones@linaro.org> wrote:
-> >
-> > On Tue, 01 Mar 2022, Greg KH wrote:
-> >
-> > > On Tue, Mar 01, 2022 at 09:37:41AM +0000, Lee Jones wrote:
-> > > > On Mon, 28 Feb 2022, Greg KH wrote:
-> > > >
-> > > > > On Mon, Feb 28, 2022 at 12:46:44PM +0000, Lee Jones wrote:
-> > > > > > On Mon, 28 Feb 2022, Greg KH wrote:
-> > > > > >
-> > > > > > > On Mon, Feb 28, 2022 at 09:01:49AM +0000, Lee Jones wrote:
-> > > > > > > > On Mon, 28 Feb 2022, Stephen Rothwell wrote:
-> > > > > > > >
-> > > > > > > > > Hi all,
-> > > > > > > > >
-> > > > > > > > > Today's linux-next merge of the char-misc tree got a conflict in:
-> > > > > > > >
-> > > > > > > > I did ask for this *not* to be merged when it was in -testing.
-> > > > > > >
-> > > > > > > Sorry, I missed that, I saw your ack on the patch so that's why I took
-> > > > > > > it.
-> > > > > > >
-> > > > > > > > I'll follow-up with Greg.
-> > > > > > >
-> > > > > > > Should I revert this from my tree?
-> > > > > >
-> > > > > > I did try to catch it before a revert would have been required.
-> > > > >
-> > > > > My fault.
-> > > > >
-> > > > > > But yes, please revert it.
-> > > > >
-> > > > > Will go do so now.
-> > > >
-> > > > Thank you.
-> > > >
-> > > > > > The Ack is not standard and should not be merged.
-> > > > >
-> > > > > I do not understand this, what went wrong here?
-> > > >
-> > > > The "Ack" you saw was just a placeholder.
-> > > >
-> > > > When I provided it, I would have done so like this:
-> > > >
-> > > >     "For my own reference (apply this as-is to your sign-off block):
-> > > >
-> > > >      Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>"
-> > > >
-> > > > REF: https://lore.kernel.org/all/YQ0fYe531yCyP4pf@google.com/
-> > > >
-> > > > The majority of maintainers I regularly work with know this to mean
-> > > > that the set is due to be routed via MFD (with a subsequent
-> > > > pull-request to an immutable branch to follow), since MFD is often
-> > > > the centre piece (parent) of the patch-sets I deal with.
-> > > >
-> > > > I appreciate that this could cause confusion, but I'm not sure of a
-> > > > better way to convey this information such that it survives through
-> > > > various submission iterations.
-> > >
-> > > But what else is another maintainer supposed to think if they see that
-> > > ack on the patch?  Ignore it?  I took that to mean "this is good from a
-> > > mfd-point-of-view" which meant it can go through whatever tree it is
-> > > supposed to.
-> > >
-> > > Are you wanting this individual patch to go through your tree now only?
-> > > If so, you should say that by NOT acking it :)
-> >
-> > It's not quite as easy as that.
-> >
-> > It wouldn't be fair to the contributor to start reviews once all the
-> > other patches in the set are ready to be merged.  So how would I
-> > indicate that the MFD part is ready, fully expecting some of the other
-> > patches in the set to be reworked and subsequent revisions are to be
-> > submitted?
-> >
-> > This method actually works really well the majority of the time, and
-> > has done for a number of years.  However, I am always willing to
-> > improve on my processes given the opportunity.
-> >
+On Tue, 01 Mar 2022, Greg KH wrote:
 > > > How do you want to see this merged?
-> >
+> > 
 > > The plan is for the whole set to be merged together via MFD.
-> >
+> > 
 > > All of the other maintainers have now Acked, so it's ready to go:
-> >
+> > 
 > >   https://lore.kernel.org/all/20220131133049.77780-1-robert.marko@sartura.hr/
+> > 
+> > Looking at the diff, I'm not entirely sure why you took it in the
+> > first place?
 > 
-> Hi Lee, as far as I understand you will now take this series up via
-> your MFD tree?
+> As I mentioned above, someone else asked me to as it was sitting around
+> for quite a while with no movement.
 
-Yes, that's correct.
+Okay, just went to investigate.
+
+The set hasn't been merged because it is missing a DT Ack from Rob.
 
 -- 
 Lee Jones [李琼斯]

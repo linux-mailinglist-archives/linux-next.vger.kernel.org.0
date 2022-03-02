@@ -2,124 +2,85 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7743A4C9DEA
-	for <lists+linux-next@lfdr.de>; Wed,  2 Mar 2022 07:44:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB5D54C9DFF
+	for <lists+linux-next@lfdr.de>; Wed,  2 Mar 2022 07:48:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239704AbiCBGoq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 2 Mar 2022 01:44:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33158 "EHLO
+        id S239752AbiCBGte (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 2 Mar 2022 01:49:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239691AbiCBGop (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Mar 2022 01:44:45 -0500
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA59D73063
-        for <linux-next@vger.kernel.org>; Tue,  1 Mar 2022 22:44:01 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id j2so1486114ybu.0
-        for <linux-next@vger.kernel.org>; Tue, 01 Mar 2022 22:44:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=xA54Dg6YOKNxGRpzFrHv89ue1P7bxRw6n+8ssbPupxQ=;
-        b=TVtPeZqgVLUGUuIZ2XD0OBb6+n+CwoQ7OZnDO/i5IYb35GWzQpSK0T18BGlKtAa3PC
-         d9tOQlEpZsFADgHbdsnUpZs8vnf+nlh274yZnN9T8WivtZqFSqpLt9sHEBAGKUrsPEfB
-         Xs1P2YpD8oo5VllT/IBNvMCmgowulIZwVar5+PFuJKwXES2WKkZt2vk0biXX174+B33n
-         pMhLJrFl+XPUXqWqYBKaKlKgIpP1tTCUKBumj8Xmh09GzH7ivYs79pSpxFWwr44eyHdC
-         jnhBuYoO8sgMzXjOg31FCu/UDu3yg4MSw8urDUl9c0eQaqssSCmqKQXFNeJgp6mDpuKC
-         hU8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=xA54Dg6YOKNxGRpzFrHv89ue1P7bxRw6n+8ssbPupxQ=;
-        b=xQmG2lI1LO0naZpVDHmsTi6HWTjTCc09Tq7OrWGkR4cpBfKY6OOy2JxR1bgvdLiAWg
-         oNKJthhfjhw2mYLEitvzdr/1P5Ihtwb0bEEI1OCqpjJdeZHWwu1MPpiyaXmh9/M7EnT3
-         ici7Zz8QnX6KKo8SHIhvEWuFUknRfl1zlzk6kqpVFEa+ebPL4uHW1khlp7HaS+nab3UW
-         W6sLYHOO8e3sem9yOtg9w5+EV8MGXaTxf40k9PY4t1eUtd5TkeQdJN2tqs5F8BDZhHhG
-         Qm+UlOBXGFlmiyOe6J9LHHBUHasW/Z3BaNvFZiX+fwiAtSZ5hDjWXO8XmpOJPqnTMXVb
-         GMAg==
-X-Gm-Message-State: AOAM530O6oyRjRFzTh9uHgVTF2tfrxDCYiWxFBiRfbsPL8UpBqgkZMg0
-        UST+/7/dcEzuYtW9nnQIG5uQ5BqDrMR+GdDvauMsEg==
-X-Google-Smtp-Source: ABdhPJygqCh8bXOVmE1/4Sdam8IVhHnChATGgXXOD/t6ZD0DdfMuzII/fTX/m/OiAH2BuaKT/UpC9se9Dk+X37wJwJ0=
-X-Received: by 2002:a25:4109:0:b0:628:7778:fb18 with SMTP id
- o9-20020a254109000000b006287778fb18mr6967618yba.412.1646203440687; Tue, 01
- Mar 2022 22:44:00 -0800 (PST)
+        with ESMTP id S239758AbiCBGtd (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Mar 2022 01:49:33 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26385B2D7F;
+        Tue,  1 Mar 2022 22:48:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AC42C618B4;
+        Wed,  2 Mar 2022 06:48:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEBE8C340F2;
+        Wed,  2 Mar 2022 06:48:47 +0000 (UTC)
+Date:   Wed, 2 Mar 2022 12:18:44 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the mhi tree
+Message-ID: <20220302064844.GF12451@workstation>
+References: <20220302173714.78c9f43c@canb.auug.org.au>
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 2 Mar 2022 12:13:49 +0530
-Message-ID: <CA+G9fYvUHjwU9sOMs+zNwuauGLqah3Ce_5VKtifZucOuXqw2qA@mail.gmail.com>
-Subject: [next] warning: the frame size of 1120 bytes is larger than 1024
- bytes [-Wframe-larger-than=]
-To:     open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>, linux-fsdevel@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        lkft-triage@lists.linaro.org
-Cc:     Nick Terrell <terrelln@fb.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        cai.huoqing@linux.dev, Anders Roxell <anders.roxell@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220302173714.78c9f43c@canb.auug.org.au>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Following warnings noticed while building Linux next-20220301
-for arm KASAN builds [1].
+Hi Stephen,
 
-Build warnings:
-lib/zstd/common/entropy_common.c: In function 'HUF_readStats':
-lib/zstd/common/entropy_common.c:257:1: warning: the frame size of
-1120 bytes is larger than 1024 bytes [-Wframe-larger-than=]
-  257 | }
-      | ^
-net/ipv4/tcp.c: In function 'do_tcp_getsockopt.constprop':
-net/ipv4/tcp.c:4272:1: warning: the frame size of 1152 bytes is larger
-than 1024 bytes [-Wframe-larger-than=]
- 4272 | }
-      | ^
-fs/select.c: In function 'do_sys_poll':
-fs/select.c:1045:1: warning: the frame size of 1264 bytes is larger
-than 1024 bytes [-Wframe-larger-than=]
- 1045 | }
-      | ^
-drivers/usb/host/xhci.c: In function 'xhci_reserve_bandwidth':
-drivers/usb/host/xhci.c:2877:1: warning: the frame size of 1056 bytes
-is larger than 1024 bytes [-Wframe-larger-than=]
- 2877 | }
-      | ^
-drivers/media/dvb-frontends/mxl5xx.c: In function 'config_ts':
-drivers/media/dvb-frontends/mxl5xx.c:1566:1: warning: the frame size
-of 1224 bytes is larger than 1024 bytes [-Wframe-larger-than=]
- 1566 | }
-      | ^
+On Wed, Mar 02, 2022 at 05:37:14PM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the mhi tree, today's linux-next build (x86_64 allmodconfig)
+> failed like this:
+> 
+> drivers/bus/mhi/ep/main.c: In function 'mhi_ep_register_controller':
+> drivers/bus/mhi/ep/main.c:1426:9: error: implicit declaration of function 'irq_set_status_flags' [-Werror=implicit-function-declaration]
+>  1426 |         irq_set_status_flags(mhi_cntrl->irq, IRQ_NOAUTOEN);
+>       |         ^~~~~~~~~~~~~~~~~~~~
+> drivers/bus/mhi/ep/main.c:1426:46: error: 'IRQ_NOAUTOEN' undeclared (first use in this function); did you mean 'IRQF_NO_AUTOEN'?
+>  1426 |         irq_set_status_flags(mhi_cntrl->irq, IRQ_NOAUTOEN);
+>       |                                              ^~~~~~~~~~~~
+>       |                                              IRQF_NO_AUTOEN
+> drivers/bus/mhi/ep/main.c:1426:46: note: each undeclared identifier is reported only once for each function it appears in
+> 
+> Caused by commit
+> 
+>   6cb3bc57b0c5 ("bus: mhi: ep: Add support for processing MHI endpoint interrupts")
+> 
+> Presumably a missing include.
+> 
+
+Yes, it seems I was missing "#include <linux/irq.h>" for irq APIs. Fixed
+now!
+
+But somehow this header got included in ARM cross compilation and I
+failed to catch it.
+
+Thanks,
+Mani
+
+> I have used the mhi tree from next-20220301 for today.
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
 
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-
-Steps to reproduce:
-# To install tuxmake on your system globally:
-# sudo pip3 install -U tuxmake
-
-tuxmake --runtime podman --target-arch arm --toolchain gcc-10
---kconfig https://builds.tuxbuild.com/25mUEFdMf8eGt8sUkh7JnHahLIW/config
-
-
---
-Linaro LKFT
-https://lkft.linaro.org
-
-[1] https://builds.tuxbuild.com/25mUEFdMf8eGt8sUkh7JnHahLIW/

@@ -2,126 +2,119 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83EBC4CA15F
-	for <lists+linux-next@lfdr.de>; Wed,  2 Mar 2022 10:52:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 835FE4CA1EC
+	for <lists+linux-next@lfdr.de>; Wed,  2 Mar 2022 11:13:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236731AbiCBJxV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 2 Mar 2022 04:53:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34848 "EHLO
+        id S240926AbiCBKOH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 2 Mar 2022 05:14:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236809AbiCBJxV (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Mar 2022 04:53:21 -0500
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71B1D647D;
-        Wed,  2 Mar 2022 01:52:38 -0800 (PST)
-Received: by mail-io1-xd29.google.com with SMTP id c14so1104861ioa.12;
-        Wed, 02 Mar 2022 01:52:38 -0800 (PST)
+        with ESMTP id S240928AbiCBKOG (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Mar 2022 05:14:06 -0500
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D30B82BB00
+        for <linux-next@vger.kernel.org>; Wed,  2 Mar 2022 02:13:22 -0800 (PST)
+Received: by mail-io1-xd33.google.com with SMTP id d62so1155203iog.13
+        for <linux-next@vger.kernel.org>; Wed, 02 Mar 2022 02:13:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=I2o/pswz8CsOqeDuAgZ3eqxvNrxBejX6LZSzFbSCbBI=;
-        b=abAWMduWTWfXPuvZrFhTxtXcEPYwnj6f4Ci3G04BEBi+KJl8ExHkzPtTRFq+47JkDQ
-         5z0/nK7IoBhR3UkQDlA2XFmYaNx/ysabtceP5FE/7Y2OIq5Sc53pFN1WxZcA1obFvdCB
-         7mrXffryFR+ro5wY2W1T4ol+p5vCNze0gHUVwCkSy0WbrWX4ft3E9WBYRu/LQ8i5kcbY
-         ry/4wpzVF5kPO8No4mialbJXofkLN4pFyDWm3eILEpJHclOSuHBvD1LnSdG5EtBPQS12
-         cSweC8SUpH0b2xOyPcJjmosm28l5ehtjN8QHj/u4Wg1wZxGhZnsJaFiIUcu5HeHUtnP+
-         9Qfw==
+        d=sartura-hr.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=n/va5PuoUYUrMdAnEJH/5BVU8R8hPyHSL3l6c3JGTEI=;
+        b=7/D7e72U3eXPy0qot+X5W3ZtTrt1LQtQnW4I17LkNgPjd/I6dSguPJpT5PifCuHojs
+         yXn8bVzlGwLTyhFC8NAbs5aIDtjpkWqEzp5qpLNj9GN1W06vQ3QrFpHVyMqQWsFe7NYw
+         /FUoGQF75G5tfmBo/8MXfMoaCDvnvCQTlad7piOYmjk2Ug8fFe8waFYkRcXQY93Q/F6W
+         RiG4S5UiFeYOxOhd6XK5MVmU6Y65fz5frYckWTbYsD1LO0cki7i37iEdlNMAWuFWD9+T
+         ugH163XNPpLyfMPZfAvfAey4MdBcqK3xfGSrjB2MiovMyby+U5F8L5VAtIx7RNy/YCQE
+         +b1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=I2o/pswz8CsOqeDuAgZ3eqxvNrxBejX6LZSzFbSCbBI=;
-        b=fMsOiYQ2ULpkymIIo8rlBdrfGkxWt4mXbQ0TgoyldsHLSQarBywnUGq1OOxK2yKQEq
-         Qxu0KCZr33geAdGOzww8tE1SfsU6D8SBnuS2GKSXMRIblE23vnhnnkRLeX/74LtGQaN5
-         KYJ4KWMzp8i2m1aXkcpVEAFwQJbhHo00K+ivzbZFrw3PkR12XhWQK1F3moKwEHYEqFni
-         5yZvGkfbLQ926nG1gyaLlWC+0Ei65NqNSNmNH1j4UhRls7u2TqqFCHzvD4ID2H7/Z6j4
-         O/as4Q6P776Vbr7EO3eFJT2rbbF0He5zECxhhXlYvkJZo+zPKpC1UAl3R725/Wr5FnGN
-         eh/A==
-X-Gm-Message-State: AOAM533ns7sedgOVFDevXt1Z3IreSnyX/MTzHv1w3a+6rLNeAmLZ8DXH
-        p2loiFX11ZSkVfxWnoO910E=
-X-Google-Smtp-Source: ABdhPJxFUXHHlld8SYitQpMlLWzDb6yrh0+mgCsz4nYJ4ZwRLkJ46kYwKsSY3aR4w/38eHCPUL69vQ==
-X-Received: by 2002:a02:cb5b:0:b0:311:c0a0:9e1c with SMTP id k27-20020a02cb5b000000b00311c0a09e1cmr25177577jap.5.1646214757768;
-        Wed, 02 Mar 2022 01:52:37 -0800 (PST)
-Received: from [192.168.0.14] (static-63-182-85-188.ipcom.comunitel.net. [188.85.182.63])
-        by smtp.gmail.com with ESMTPSA id v11-20020a056e02164b00b002c4a2d3d080sm1721804ilu.28.2022.03.02.01.52.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Mar 2022 01:52:37 -0800 (PST)
-Message-ID: <33a65b94-9e99-2cf8-0b62-95127916ce79@gmail.com>
-Date:   Wed, 2 Mar 2022 10:52:34 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=n/va5PuoUYUrMdAnEJH/5BVU8R8hPyHSL3l6c3JGTEI=;
+        b=WSRfT0cX4/5vi4GlhMskkzwBMA3mKrGj/ZjnFbV7lE1xHgZsSBa/e0Lm6EwTGkuLXa
+         7shHaexnFrmYYUrUPBdlRsTAHDENEWgQb44dW8Do3NLkIZ0A/5kssDAS0ImkgKHvxh8k
+         SqYNh1D2+Rl4B2lFGr2HdwVtrp0g5FiU+nVy9bHuIBZwkRGg50iCsk3YKIqD44ekMB0M
+         FXMwxPbil1ls1rEU2QH8IzZIjLlksOq/xvOtlST2+60OGKYSiVzunTOhwBIpG9iahT+f
+         NZ7ohJ2qdHWHDhL4AgTwoKgSGuw6nw7dW+81px2fHjxqP5GB5Z0VHWBxARVg1ekU6i81
+         MjDA==
+X-Gm-Message-State: AOAM532wDMBgAAxshuwFWD3deprjLU71zU8M6aBl17V0vsjDsibDj29A
+        +7/S3svAGB0ynHEl5FVglVvX1d8eiUXyIpK4PdegBQ==
+X-Google-Smtp-Source: ABdhPJwi5a5pnoBoiow+gCoyvl+naffUXTuNGaq0HgF1hNQyVeEkOReDHm1F1EtCUxzaXxbv9XvBmkxP8lf5wMBMQOs=
+X-Received: by 2002:a02:6383:0:b0:314:d9da:13b2 with SMTP id
+ j125-20020a026383000000b00314d9da13b2mr24352512jac.99.1646216002260; Wed, 02
+ Mar 2022 02:13:22 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: linux-next: build failure after merge of the arm-soc tree
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Olof Johansson <olof@lixom.net>,
-        ARM <linux-arm-kernel@lists.infradead.org>,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>,
+References: <20220228193928.3ec6ee98@canb.auug.org.au> <YhyPfcjJtIKNQtF8@google.com>
+ <Yhyn72NO/roH1gA8@kroah.com> <YhzENKPtY+WOp566@google.com>
+ <Yh09/r/nT2LeE82n@kroah.com> <Yh3pZXQPP9kmcSSx@google.com>
+ <Yh325S5PyPiJf4F5@kroah.com> <Yh37gTCPaESkgNzV@google.com>
+ <Yh6N4mWCfHtlBM07@kroah.com> <Yh8vmWeW+sPz0DdD@google.com>
+In-Reply-To: <Yh8vmWeW+sPz0DdD@google.com>
+From:   Robert Marko <robert.marko@sartura.hr>
+Date:   Wed, 2 Mar 2022 11:13:11 +0100
+Message-ID: <CA+HBbNF-KZ3+R_+O1e8m1tHfHXKRwqO0uF3D85R9czpYGnot+w@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the char-misc tree with the mfd tree
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Greg KH <greg@kroah.com>, Stephen Rothwell <sfr@canb.auug.org.au>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Alistair Francis <alistair@alistair23.me>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220302095008.27b6c6a9@canb.auug.org.au>
- <CAK8P3a0Quh+PqfBWe-LqzoSgs=ROzu6-8Nq=qceeHRwj8k7uYQ@mail.gmail.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <CAK8P3a0Quh+PqfBWe-LqzoSgs=ROzu6-8Nq=qceeHRwj8k7uYQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Arnd,
+On Wed, Mar 2, 2022 at 9:49 AM Lee Jones <lee.jones@linaro.org> wrote:
+>
+> On Tue, 01 Mar 2022, Greg KH wrote:
+> > > > How do you want to see this merged?
+> > >
+> > > The plan is for the whole set to be merged together via MFD.
+> > >
+> > > All of the other maintainers have now Acked, so it's ready to go:
+> > >
+> > >   https://lore.kernel.org/all/20220131133049.77780-1-robert.marko@sar=
+tura.hr/
+> > >
+> > > Looking at the diff, I'm not entirely sure why you took it in the
+> > > first place?
+> >
+> > As I mentioned above, someone else asked me to as it was sitting around
+> > for quite a while with no movement.
+>
+> Okay, just went to investigate.
+>
+> The set hasn't been merged because it is missing a DT Ack from Rob.
 
-On 02/03/2022 08:45, Arnd Bergmann wrote:
-> On Tue, Mar 1, 2022 at 11:50 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->>
->> Hi all,
->>
->> After merging the arm-soc tree, today's linux-next build (arm
->> multi_v7_defconfig) failed like this:
->>
->> drivers/soc/mediatek/mtk-mmsys.c:64:10: error: 'const struct mtk_mmsys_driver_data' has no member named 'sw0_rst_offset'
->>     64 |         .sw0_rst_offset = MT8186_MMSYS_SW0_RST_B,
->>        |          ^~~~~~~~~~~~~~
->> In file included from drivers/soc/mediatek/mtk-mmsys.c:18:
->> drivers/soc/mediatek/mt8186-mmsys.h:55:57: warning: excess elements in struct initializer
->>     55 | #define MT8186_MMSYS_SW0_RST_B                          0x160
->>        |                                                         ^~~~~
->> drivers/soc/mediatek/mtk-mmsys.c:64:27: note: in expansion of macro 'MT8186_MMSYS_SW0_RST_B'
->>     64 |         .sw0_rst_offset = MT8186_MMSYS_SW0_RST_B,
->>        |                           ^~~~~~~~~~~~~~~~~~~~~~
->> drivers/soc/mediatek/mt8186-mmsys.h:55:57: note: (near initialization for 'mt8186_mmsys_driver_data')
->>     55 | #define MT8186_MMSYS_SW0_RST_B                          0x160
->>        |                                                         ^~~~~
->> drivers/soc/mediatek/mtk-mmsys.c:64:27: note: in expansion of macro 'MT8186_MMSYS_SW0_RST_B'
->>     64 |         .sw0_rst_offset = MT8186_MMSYS_SW0_RST_B,
->>        |                           ^~~~~~~~~~~~~~~~~~~~~~
->>
->> Caused by commit
->>
->>    831785f0e5b9 ("soc: mediatek: mmsys: add mmsys reset control for MT8186")
->>
->> I have used the arm-soc tree from next-20220301 for today.
-> 
-> I'm going on vacation right now, did a quick revert of that commit to fix the
-> build. Rex-BC Chen, Matthias: please send a proper fix that I can apply next
-> week when I get back, to replace my revert.
-> 
+Does anybody know if Rob is active?
+He has not replied to any of the patch revisions in many months.
+I have tried pinging/bumping on the patches but it did not help.
 
-I send a new pull request with the missing commit included. Please let me know 
-if you prefer the commit on top of the old pull request. This would break 
-git-bisecting, but the window of commits is rather small.
+Regards,
+Robert
+>
+> --
+> Lee Jones [=E6=9D=8E=E7=90=BC=E6=96=AF]
+> Principal Technical Lead - Developer Services
+> Linaro.org =E2=94=82 Open source software for Arm SoCs
+> Follow Linaro: Facebook | Twitter | Blog
 
-I fixed my for-next branch yesterday already.
 
-Sorry for the inconvenience.
 
-Matthias
+--=20
+Robert Marko
+Staff Embedded Linux Engineer
+Sartura Ltd.
+Lendavska ulica 16a
+10000 Zagreb, Croatia
+Email: robert.marko@sartura.hr
+Web: www.sartura.hr

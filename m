@@ -2,85 +2,85 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB5D54C9DFF
-	for <lists+linux-next@lfdr.de>; Wed,  2 Mar 2022 07:48:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CC934C9E7B
+	for <lists+linux-next@lfdr.de>; Wed,  2 Mar 2022 08:38:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239752AbiCBGte (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 2 Mar 2022 01:49:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40768 "EHLO
+        id S234362AbiCBHj1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 2 Mar 2022 02:39:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239758AbiCBGtd (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Mar 2022 01:49:33 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26385B2D7F;
-        Tue,  1 Mar 2022 22:48:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AC42C618B4;
-        Wed,  2 Mar 2022 06:48:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEBE8C340F2;
-        Wed,  2 Mar 2022 06:48:47 +0000 (UTC)
-Date:   Wed, 2 Mar 2022 12:18:44 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the mhi tree
-Message-ID: <20220302064844.GF12451@workstation>
-References: <20220302173714.78c9f43c@canb.auug.org.au>
+        with ESMTP id S234717AbiCBHj1 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Mar 2022 02:39:27 -0500
+Received: from a8-97.smtp-out.amazonses.com (a8-97.smtp-out.amazonses.com [54.240.8.97])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7F0737A39;
+        Tue,  1 Mar 2022 23:38:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1646206722;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+        bh=cbcL4el6kk1bLK+yqEUc6ji5Azmi0oPW5Z+ZLBD1oJE=;
+        b=hI+AixeFxnx/i2bIyz6YSXZ7doyawoTAy/qQvjXF0zaI4E7PAlPR7GV0DGkCBvVm
+        XszZigopglvLkG3ylfBXyCY8CGoTojia/vlnpva2IN0xrijITk4vDHqCnUeMIg+J0OU
+        WnBHWUTfXr1YpwBggU8M5vyYO6QgCCklybL43h9U=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1646206722;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+        bh=cbcL4el6kk1bLK+yqEUc6ji5Azmi0oPW5Z+ZLBD1oJE=;
+        b=JMEin0iZo4NfqhBC53y0GAEDRTad2cnDDD1FNR/OoSU0CvvaFTOmZmplVG5FFIPf
+        sC/l4TmRiCssaVTUzlIy0aVpdI03UUPPl59C773TlnuyWIIN3EbCGHgfB+S1V22tRsM
+        y5Iw5pjwDWZql8xibPDvBNg0phyuR5WNZG+Us+0o=
+From:   lkft@linaro.org
+To:     lkft@linaro.org
+Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        linux-next@vger.kernel.org, shuah@kernel.org
+Subject: lkft kselftest for next-20220301
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220302173714.78c9f43c@canb.auug.org.au>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Message-ID: <0100017f499121ef-166acd25-c6f4-4b7d-936b-edfcf4855048-000000@email.amazonses.com>
+Date:   Wed, 2 Mar 2022 07:38:42 +0000
+Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
+X-SES-Outgoing: 2022.03.02-54.240.8.97
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,TO_EQ_FM_DIRECT_MX,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+## Build
+* kernel: 5.17.0-rc6
+* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+* git branch: [None, 'master']
+* git commit: e6ada6df471f847da3b09b357e246c62335bc0bb
+* git describe: next-20220301
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220301
 
-On Wed, Mar 02, 2022 at 05:37:14PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the mhi tree, today's linux-next build (x86_64 allmodconfig)
-> failed like this:
-> 
-> drivers/bus/mhi/ep/main.c: In function 'mhi_ep_register_controller':
-> drivers/bus/mhi/ep/main.c:1426:9: error: implicit declaration of function 'irq_set_status_flags' [-Werror=implicit-function-declaration]
->  1426 |         irq_set_status_flags(mhi_cntrl->irq, IRQ_NOAUTOEN);
->       |         ^~~~~~~~~~~~~~~~~~~~
-> drivers/bus/mhi/ep/main.c:1426:46: error: 'IRQ_NOAUTOEN' undeclared (first use in this function); did you mean 'IRQF_NO_AUTOEN'?
->  1426 |         irq_set_status_flags(mhi_cntrl->irq, IRQ_NOAUTOEN);
->       |                                              ^~~~~~~~~~~~
->       |                                              IRQF_NO_AUTOEN
-> drivers/bus/mhi/ep/main.c:1426:46: note: each undeclared identifier is reported only once for each function it appears in
-> 
-> Caused by commit
-> 
->   6cb3bc57b0c5 ("bus: mhi: ep: Add support for processing MHI endpoint interrupts")
-> 
-> Presumably a missing include.
-> 
+## Test Regressions (compared to next-20220225)
+No test regressions found.
 
-Yes, it seems I was missing "#include <linux/irq.h>" for irq APIs. Fixed
-now!
+## Metric Regressions (compared to next-20220225)
+No metric regressions found.
 
-But somehow this header got included in ARM cross compilation and I
-failed to catch it.
-
-Thanks,
-Mani
-
-> I have used the mhi tree from next-20220301 for today.
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
 
+## Test Fixes (compared to next-20220225)
+No test fixes found.
+
+## Metric Fixes (compared to next-20220225)
+No metric fixes found.
+
+## Test result summary
+total: 0, pass: 0, fail: 0, skip: 0, xfail: 0
+
+## Build Summary
+
+## Test suites summary
+
+--
+Linaro LKFT
+https://lkft.linaro.org

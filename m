@@ -2,74 +2,128 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 019CE4C9B44
-	for <lists+linux-next@lfdr.de>; Wed,  2 Mar 2022 03:39:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 521C84C9C1A
+	for <lists+linux-next@lfdr.de>; Wed,  2 Mar 2022 04:26:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231676AbiCBCkE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 1 Mar 2022 21:40:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37264 "EHLO
+        id S234154AbiCBD1A (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 1 Mar 2022 22:27:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232563AbiCBCkE (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 1 Mar 2022 21:40:04 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC8F92E6AC;
-        Tue,  1 Mar 2022 18:39:21 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id e13so367388plh.3;
-        Tue, 01 Mar 2022 18:39:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:cc:reply-to:from:subject:message-id:date:user-agent:mime-version
-         :content-transfer-encoding:content-language;
-        bh=MtG6z1Jzb89Ndx+jl2cJ0c1G9ZcfiK5kSL2+E0wyCng=;
-        b=abfrrGS0XqDXsi7/Xv1Z4tFdV23VfDvlIsqmd4l95dfY7OUh5ZJyiuhIRJ+mFzXvXu
-         BKuNxZymZZ+9o/qz+/P4mWxNDsggFyiMKX9WtNN7DeEQAKwvM901P5x8q3wV8kNYLzkC
-         ekKEg4poMrbv+9f1tv0+/PTTgnPje9Q6ZLayL35dxtzSpccu9hVxCZ9d0GR8W+obk+2r
-         LNLscVM1qONrJG5A8GlomyUwB/1rq/J2qNKuoIchtJ9lmd1ltbb3DwQSMsLB5bZWmPQx
-         LkyEdp3dmN7LMztvoMwS2oBTz7Y6jn3zQw2dW83nmUeoTXQwIoLDYtszH8OMTyifNlws
-         5A4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:to:cc:reply-to:from:subject:message-id:date
-         :user-agent:mime-version:content-transfer-encoding:content-language;
-        bh=MtG6z1Jzb89Ndx+jl2cJ0c1G9ZcfiK5kSL2+E0wyCng=;
-        b=FNQsFE78dj6w4qyXA+4TIzjQ5h8C0960JjVmkNZgdyvbSfMbjw6pCxX7k9T7ATEOF+
-         Qds36ERxnZX17yy+TTJMwLvPEW1GYzYJ/5M9ZY2n8n1HaENNIcsZJvY8eTMiWdkG7GVC
-         xvR1qoQeUaq8gT1Rmz7EvbaGyjCXNcoNWuS9eRmbNR69EWMIw8QD2yA2mJQhOGx+kd/q
-         fgSiB3NXERqrqek5oQfrx/3qkqug4HYOZR835KGHmSe8r3NSTYRwfxWNJLkE3/lMTTxE
-         25Vs08NBlSiVvBUAL66wlSbv3yIAxW5HTXVw5Neinfvo4KSYUI4RKWGINQi/z44ElVv1
-         BB7Q==
-X-Gm-Message-State: AOAM533RA9ZskRw4XN1qA3O2QNAuaK/eKRetKfr38xoZJgksus4rB9Lo
-        6hCJBbhgyqy5I2HFheFWHQA=
-X-Google-Smtp-Source: ABdhPJzRWPFocHCjcn3D/1crvW6jIAuiApm7zY8OeyhMDlDQKmtpOisKmOaARpeA6aFKmOW7Zn/Ufw==
-X-Received: by 2002:a17:902:e549:b0:150:2412:c94c with SMTP id n9-20020a170902e54900b001502412c94cmr25176748plf.94.1646188760970;
-        Tue, 01 Mar 2022 18:39:20 -0800 (PST)
-Received: from ?IPv6:2600:8802:2207:ac00:38b7:6dcb:b27d:e974? ([2600:8802:2207:ac00:38b7:6dcb:b27d:e974])
-        by smtp.gmail.com with ESMTPSA id z6-20020a056a00240600b004e17ab23340sm18875337pfh.177.2022.03.01.18.39.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Mar 2022 18:39:20 -0800 (PST)
-To:     dri-devel@lists.freedesktop.org,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Lyude Paul <lyude@redhat.com>, ville.syrjala@linux.intel.com,
-        jani.nikula@intel.com, airlied@redhat.com, dianders@chromium.org,
-        tzimmermann@suse.de, sfr@canb.auug.org.au,
-        lkft-triage@lists.linaro.org
-Reply-To: CA+G9fYu4PPE6_91mzor0bW7RSzBDNJ3xqqgeeK-jR1jokmhYOQ@mail.gmail.com
-From:   Rudraksha Gupta <guptarud@gmail.com>
-Subject: MSM8960: gpu/drm/dp/drm_dp.c:59:27: warning: array subscript 10 is
- outside, array bounds of 'const u8[6]'
-Message-ID: <8e13f51a-845b-1fdf-11ea-6053f7d8df9e@gmail.com>
-Date:   Tue, 1 Mar 2022 18:39:19 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        with ESMTP id S229809AbiCBD1A (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 1 Mar 2022 22:27:00 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2071.outbound.protection.outlook.com [40.107.94.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD0D06660D;
+        Tue,  1 Mar 2022 19:26:17 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XbFMl8ygbbuT4PyTmKV/u+beyNvicJ8Gt9pLl62uelHDmJcSWDQUY33kWrVnh7Dd3n1wHnzDww05i4IP7OWq+xWvKYsNlCQm5xovo2YQQDwC6Ce6kPDEcmL/zAhRd1b2S5xLYScdTF5YP7PwevykbdgRbHV0NPnE8Kgpg48Cm6WSlKM/QNLqGmyDPVjktP2yQeAcxdSt5u/14rgt5cN5ZOu7dA9YVrLu5hJrrNcRRRFHEUBePY260KDgFxAG0fG03P8p5LqdL8XOVJbdmaBq+9tZzxwldVKnvVFaC9ZYnYJMayUE2ertj5jdOs8RRkbSka7Lm2n+T/RAmwMdcPM1vg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=arZxQ1tFCEKaKTiHRpXXomAgXeTQMuwVREWTutaEJsE=;
+ b=Et4kSt/6mQZMPfAL2aeBTco4pDaFXznDLcBZi0NtjsqLZlqCHKcB8UoLL9tj+3EeQab3/wPngeWaum88iSLyDjoHk8ISudpKR22o2cMDdDZKZ2EcFLNoRfZTeuv2ke5bsKj2Qe0oHyX/mhcVX4AysHtsIbZZw1/y9ZbLiwmyihJtHGC0IVdEIq7YobWTZh6wdACG4ap1xg1H1jxsnhopi1lGpUXOhhdk7Snzlgtt1TWRkXhZQTlHs1y4qkmsNMdg4ubtq5kSna2Ob8X3yxFj/j5edDF5Kw5v4+pFof65X5UTpO/rI3NdbRwlwI9rrWjhStFYuuSQp2feHXguSD1YDQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=arZxQ1tFCEKaKTiHRpXXomAgXeTQMuwVREWTutaEJsE=;
+ b=TILwhgpX4MeFaSOL0yyS7iQw1XH0DYyEyF8YE9StfZfnZXJRdG4FZp1vp7gQCo5TzeEDM4T8pBr7idFjH0kTzJDUhnkTeL6hupzxCRnFFCW+Rj3AfK/aRK4HKuEYsWdg4244GYUd8Vj1sUw4/HZIYwU0rJSby3PjNCOOvB0T23k=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM5PR12MB1947.namprd12.prod.outlook.com (2603:10b6:3:111::23)
+ by BN6PR1201MB0244.namprd12.prod.outlook.com (2603:10b6:405:54::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Wed, 2 Mar
+ 2022 03:26:15 +0000
+Received: from DM5PR12MB1947.namprd12.prod.outlook.com
+ ([fe80::a105:faab:243:1dd3]) by DM5PR12MB1947.namprd12.prod.outlook.com
+ ([fe80::a105:faab:243:1dd3%11]) with mapi id 15.20.5017.027; Wed, 2 Mar 2022
+ 03:26:15 +0000
+Message-ID: <14b6a691-d31e-2e54-cf91-352b9b30414d@amd.com>
+Date:   Tue, 1 Mar 2022 22:26:12 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: linux-next: build warning after merge of the drm-misc tree
 Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20211117134926.1d339d71@canb.auug.org.au>
+ <20220120142639.02c54ae9@canb.auug.org.au>
+ <20220302123126.65bcbc82@canb.auug.org.au>
+From:   Andrey Grodzovsky <andrey.grodzovsky@amd.com>
+In-Reply-To: <20220302123126.65bcbc82@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: BL1PR13CA0430.namprd13.prod.outlook.com
+ (2603:10b6:208:2c3::15) To DM5PR12MB1947.namprd12.prod.outlook.com
+ (2603:10b6:3:111::23)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 8c9d8dbe-97bf-4050-fccd-08d9fbfc687a
+X-MS-TrafficTypeDiagnostic: BN6PR1201MB0244:EE_
+X-Microsoft-Antispam-PRVS: <BN6PR1201MB02448657769B44E183262301EA039@BN6PR1201MB0244.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: rTU17CG29J0aJR9uBYuUz2w84HJ7JsGDF+ABd5NMKtJJE6F9tXRcmNgPTSRWOm5dQvt/McfvE3aT19aLO3+88VYNIjhlw7QyVEhd1BAtJ40Maecpp4LU6zUXTE6xZqAEVCaWhAkQibhMV16nC4vNiuy/eDhFHVg/D9QobVbO1oQY57jiXPVcVqxtIZa/g2cETzrLQUFgEl7uVLnflihABPS5VGprBlwHv1yFA3LK+W8RlgpNbLH2He9igiipG1eywewybtYZp7Oy8HXl7dR0F3lsRgXYZPLTGB5bgwPojQFL1+DldPhgRbZwkRHJJl+K+yKyoG5IAlWPpcDyawziYkEXMgsV4ZBUCHqo0V24cMsY9EaTTb8dRCH1jdcxDOrnkTONGuxTSjnA0Id3khc+yQw4uFyvfoqvvdtSsiquHo+FEE13e9+4dIusacIVjSyF0iDfZmw+xw4HH7ngzZ8PpS3h9CEp+ChxwwW2tzl1ULSq5bUsEbdEx1rJmqUZEhfQiF/Ebeg8Zrw2LdZdVtgRYqQeLRUEf9TKxowQrYlmCN/TWCSSnOw/VO6Rw7HfdxLXVhTlXdXt3FkdweK+d3eVKTMA8dHRd0SFfl/WCFU6vGTopgc0V3xlRyyLwy5CnhwpLbVFEdVu1L+bJ1KO/GeEjFi6XO3fAy/7RHcfTJcyvrc2NONRf0U0hIguOyrkSlYDYFq/7WfKKKvUXlgs0Ld8JWv4hSBkb6rbWhY4JtYhsoI=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB1947.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(38100700002)(6512007)(53546011)(6506007)(186003)(2616005)(83380400001)(2906002)(110136005)(54906003)(316002)(8936002)(4326008)(8676002)(31686004)(6486002)(66476007)(508600001)(66556008)(66946007)(31696002)(6666004)(44832011)(4744005)(36756003)(86362001)(5660300002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OFE2bXcyMnJmUk0xNlFyOFpZa0Y4SEJ4NlFaVnJ1YzNUMWp2eGlMSXFBMzJT?=
+ =?utf-8?B?K2dsamhySndKSEQrNWsrM3JZRjZjdGZMeUdyRTE1aWNrN2FFMnBlM2Njcng0?=
+ =?utf-8?B?bEpqNUhrL1RFSnVVbG1QalRjKytGVnlRU1R2bkV2dEY1YU1CWkVDL3RZaklu?=
+ =?utf-8?B?VFhqK3FRRXBaWnFROTZSeDllWGR4Ym9QYlZrWnhuSjZ2NVo0WVNRY3pRTTgz?=
+ =?utf-8?B?U3M2Y0pPT0ljSzIzZVVlT0Z6eFhnR1U4dVFWREhINGZpdUpLc3pQYkJ3ZDda?=
+ =?utf-8?B?Umt5WUZtY3ZibzRQVDR0MHZ4OUVodTlqeVFuVkRXSGk2YlEzTStkY3d3czBC?=
+ =?utf-8?B?WnluMENKQjllN2VpY2xVK2R5Ry94aVpKOUd2OFFJTkhobVliNWxzVGVDR09E?=
+ =?utf-8?B?MHlHV1FLTmgyNmlRY1hMa0pmMXErVHVEY0R1eUE3bGpocTFDd0p5Tk5SVjI0?=
+ =?utf-8?B?bFZZek1adUJIUHlqV21GUHl6ZEVMUG9BUGNjcUtUdXJDTFl4NGpTUW1WdUlF?=
+ =?utf-8?B?dzMrTDRqNlpNblI5dWxaZzVPbmpRMEE1emJjaW5uUXJzSDRKbmxBYlNIZEFN?=
+ =?utf-8?B?ZStyZHNENEVMQzZwdkNlY1MrY1dGQ3FkZWtKdjNBR1gyQm5PK2ppS2RqNzRa?=
+ =?utf-8?B?THI0V2VTaUpITGluRkJEYllPRXZ6NnJkempiUU1iVlhYd0NXc00zMzJlaEFl?=
+ =?utf-8?B?VTc5ekdXTmhKOUpyRnJIenkxRHpwTkhjZ0F6UFpUbFdPdDJtZzRVMzhpZmV6?=
+ =?utf-8?B?b1RnZHVySjY1c2d3dVZxYXdpTm0vUkZ4QjBnTFhTVE9mcXFhY2NXRnJOK0JO?=
+ =?utf-8?B?K290Rzh1RzFFYWxLQzBsNldhYUlZQzB5TkdGZXJUMERrbys0QVU4enNKcjRW?=
+ =?utf-8?B?dnYxRzVNL0cySEFzbjhlejVlaXpRZjlaNnNkcEFQQm9OWHNPcjdtdFM1b3NK?=
+ =?utf-8?B?Mk1LK0VMSmZXa29SK1pYQ0Y0Z0tWV2tBVEJnRTAwN1puV2hMTm1MYXozT1pX?=
+ =?utf-8?B?cHYxKys2YjRKWDkrVjJjWkJ2Z0E5ME5mR3hOcWFNT3cvbzNWN1FnTkNDWHhZ?=
+ =?utf-8?B?QjdXa216M0lLMlo3YmVEamhIZVJhKys3N2N0MjBhWVdTbWk5ZEJVaUQ1NmFy?=
+ =?utf-8?B?dmhDR0gxNkVmVW01RW9TbUJmWWE5SEJPNUVKNmVKKzc3VEkvSjExRm9OdjRj?=
+ =?utf-8?B?TnRSOGtvZUdNRnJqbGg2U3FsLzhIanRKQWd1eEVzblpmbWhQYVpyem5XeU1D?=
+ =?utf-8?B?bTVnS2hGMHlnMUVWOUVCTkNoeGhmOUlDWVhaNlhvaUlPYWFWWkh5emYxaENG?=
+ =?utf-8?B?Y3VlSmhIeUdpVEpiVFhwS09XMmZTeEFqMDNkeUpPT2xsK2Fpa0tINjBhb01a?=
+ =?utf-8?B?V3pLNkh4NU1QaVJZNS8rcXdIcGVKUUVObUtCeGdxV1VGaVI5U0RWYXFzSzAr?=
+ =?utf-8?B?ZHo3OS8rUHdySC9TL1VWazVtR3E2ejVueXQvWk5ETzdRVnQxL21iSlRrSHZh?=
+ =?utf-8?B?VkdUb2VvczRIbEJnMnROWWhuYnEyRkNjcUJVNE5za3JmTTdic3djNERTRVZt?=
+ =?utf-8?B?b0puY2hLdlhkYS90eWoyM0hQNFlUZkRRNE1Sd3Nwait3N2E4S1ZNTzdhYjk3?=
+ =?utf-8?B?NWViOG5kVW9VL2lHY2lnR1d1cXdnZDBpOTNRYkNVYnJwM0JFWm01a3VhM1Zn?=
+ =?utf-8?B?eG50K3Z6ZUE2cUZIa1dMWFB1bUU2eDd4QTFpbFdHZFhoV2t4a0R1bC9sT2Vs?=
+ =?utf-8?B?SXBlMC9rVENRM09ZMFE4TWpPS2tLTmF5aHRoOUtqUkc3dmw1dXI1aWh5U3dL?=
+ =?utf-8?B?cU9EeUo2enZRakdQNnJvSXR3dDMzZHhrY2JiUEwvQThjRFZKUHdZMUNBd3Qz?=
+ =?utf-8?B?Sk1HRmk0NXJRTUxMemMyMkVpODBkQXZhdUNKSHZCUnc2NDRuTlV4V3FPZzRa?=
+ =?utf-8?B?NjRLbkpudFF0aXJXb1FDYy9aZDk1M2M0eGRlb2J1VVRzU2lRMk5nb1ovVVlP?=
+ =?utf-8?B?ZEYza0pNWjVDWVdUSHpSNEt6bHF2RHdWbEpCU0dEeHhnSUh1S293NTc0M0tl?=
+ =?utf-8?B?RkRKckdTY0sremczK05zNUo5TXRkeXlIQkErV1FQKzBNZXdKM3RRNWw1YTNw?=
+ =?utf-8?B?NWRxbmtVTHJJb0Q5Y1NDSldvbjNQSFdPTXMxNVBjSWNxUDFhVXpmWUJSYzlE?=
+ =?utf-8?B?WUk5TzdYYS9KLzBYWFEwSE1tNmc4TU9oWVRrMVJnc0ZVb1RDbkt2Q1VUQWVa?=
+ =?utf-8?Q?wL9m9pCZYOx4yQNrkcxh0ktRVxfPYIll0L+6JiiUKs=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8c9d8dbe-97bf-4050-fccd-08d9fbfc687a
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB1947.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2022 03:26:15.7075
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: N95FvjjAkGa+XS6d3wIJDepVFrkLbXWT/JM/Qy/AfnBlptfLzKmGfK/DPM+xTOLSWlc+ESy5tT7yR45B/HJ/qQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR1201MB0244
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,25 +131,24 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi all,
+Please check you have commit c7703ce38c1e Andrey Grodzovsky   3 weeks 
+ago    drm/amdgpu: Fix htmldoc warning
 
+Andrey
 
-I am getting this warning when compiling the kernel for the MSM8960 with 
-this defconfig: 
-https://raw.githubusercontent.com/apq8064-mainline/linux/qcom-apq8064-next/arch/arm/configs/qcom_apq8064_defconfig
-
-
-Warning:
-
-../drivers/gpu/drm/dp/drm_dp.c: In function 
-'drm_dp_get_adjust_request_post_cursor':
-../drivers/gpu/drm/dp/drm_dp.c:59:27: warning: array subscript 10 is 
-outside array bounds of 'const u8[6]' {aka 'const unsigned char[6]'} 
-[-Warray-bounds]
-    59 |         return link_status[r - DP_LANE0_1_STATUS];
-       |                ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
-../drivers/gpu/drm/dp/drm_dp.c:210:51: note: while referencing 'link_status'
-   210 | u8 drm_dp_get_adjust_request_post_cursor(const u8 
-link_status[DP_LINK_STATUS_SIZE],
-       | ~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+On 2022-03-01 20:31, Stephen Rothwell wrote:
+> Hi all,
+>
+> On Thu, 20 Jan 2022 14:26:39 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>> On Wed, 17 Nov 2021 13:49:26 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>>> After merging the drm-misc tree, today's linux-next build (htmldocs)
+>>> produced this warning:
+>>>
+>>> include/drm/gpu_scheduler.h:316: warning: Function parameter or member 'work' not described in 'drm_sched_job'
+>>>
+>>> Introduced by commit
+>>>
+>>>    542cff7893a3 ("drm/sched: Avoid lockdep spalt on killing a processes")
+>> I am still seeing this warning.
+> I am still seeing this warning.
+>

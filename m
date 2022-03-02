@@ -2,188 +2,130 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC3A84C98D5
-	for <lists+linux-next@lfdr.de>; Wed,  2 Mar 2022 00:09:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24FEE4C99CD
+	for <lists+linux-next@lfdr.de>; Wed,  2 Mar 2022 01:22:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235473AbiCAXKa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 1 Mar 2022 18:10:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34338 "EHLO
+        id S232067AbiCBAXB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 1 Mar 2022 19:23:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232601AbiCAXKa (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 1 Mar 2022 18:10:30 -0500
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ECE121E2D
-        for <linux-next@vger.kernel.org>; Tue,  1 Mar 2022 15:09:48 -0800 (PST)
-Received: by mail-io1-xd35.google.com with SMTP id d62so20267453iog.13
-        for <linux-next@vger.kernel.org>; Tue, 01 Mar 2022 15:09:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sartura-hr.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Y8RDk06dMtqt5Vc0Z3JX9uAw5ZRfhyFUAMgbkcYcBz8=;
-        b=YcVqUtD6HgXzkV0tWm1n0cAKwLfj5cwKwSMSgZcvGVqzEoSKYf4RoDovFp1AOaI8Ra
-         HydFb/Vwnt4VEwxtoNxp67ITHrgB6DHoQ8ZmD6EvLwAqgaEerh5EQ1KVudjqrWAezPbl
-         j5EKdxRCVQDbrp9ZUz6UHxGwviVneyrc5EJ0n1ew1+fAdjtW/YIeBbEP+5ZxLq0iST5D
-         3R3P4ZjV3ErWC2zj7hjgKAetPOEesYSIzbdwoaiUXUZW480Ae9ieltZWKC5ADIdRCPyW
-         Af9Hl+Jb+xywqWCOsRhY+WnJFpmcsUSuMsewxbiur/60KtWGZN4Mi42VZxnUhnPgePsd
-         3RQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Y8RDk06dMtqt5Vc0Z3JX9uAw5ZRfhyFUAMgbkcYcBz8=;
-        b=AHdvmSJgaYmd4YAkcbAro8TccqJaJkGNXb+97lqxjTqTYVZH8MWmvA5fussIkKY8y8
-         N7kGh86czbm24QdQEKvvQTvBMqKZ8cfBXjlACIq8A2QgaYZ5OafMnMYo21G/BTmgzF7S
-         DfjDpkENhrtoLWTxPmyvwXZH5RkDG3iLIf/q35JM0UyHvr8fCP2h9yfLTA72zWFEbPDu
-         OUqtJeaQNRc5OiNcYAj2pZ1vD213kcXYf4ppCZq61ZYLcFIrciMZ2f0251Sm//I60fut
-         t7I9T2Tf3RVKc77VnbJO3rasFRva7KHKk04nrzHmnU9KGNCEUzRyhPAzQ2+JF1CWgWg2
-         vlEA==
-X-Gm-Message-State: AOAM533sh2cTDIAXVUOgIKftONyyscu2JqgIj1q7V3tTvHqU6Qg41MoE
-        fWZWZOXYvASbcs3PMijBHmQpgqutGUZbn5NgMcMRpw==
-X-Google-Smtp-Source: ABdhPJxm9iap8trMn5QrNdom9Tnebv2vnXpm6120kMDo+ky58M1hnvyfjtI5XBsce7XsvA2LdYzVxvvR2rryTv3V8hA=
-X-Received: by 2002:a05:6602:2b13:b0:602:ccc:86ba with SMTP id
- p19-20020a0566022b1300b006020ccc86bamr20697481iov.176.1646176187862; Tue, 01
- Mar 2022 15:09:47 -0800 (PST)
-MIME-Version: 1.0
-References: <20220228193928.3ec6ee98@canb.auug.org.au> <YhyPfcjJtIKNQtF8@google.com>
- <Yhyn72NO/roH1gA8@kroah.com> <YhzENKPtY+WOp566@google.com>
- <Yh09/r/nT2LeE82n@kroah.com> <Yh3pZXQPP9kmcSSx@google.com>
- <Yh325S5PyPiJf4F5@kroah.com> <Yh37gTCPaESkgNzV@google.com>
-In-Reply-To: <Yh37gTCPaESkgNzV@google.com>
-From:   Robert Marko <robert.marko@sartura.hr>
-Date:   Wed, 2 Mar 2022 00:09:36 +0100
-Message-ID: <CA+HBbNF1Am7k9M7Mf_9+TRmQ6CtFkF5MSQ4LU79svvSxPUBPiw@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the char-misc tree with the mfd tree
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Greg KH <greg@kroah.com>, Stephen Rothwell <sfr@canb.auug.org.au>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alistair Francis <alistair@alistair23.me>,
+        with ESMTP id S230090AbiCBAXB (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 1 Mar 2022 19:23:01 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5653E0EE;
+        Tue,  1 Mar 2022 16:22:18 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4K7ZYv1ChRz4xcq;
+        Wed,  2 Mar 2022 11:22:10 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1646180533;
+        bh=dAP0ZGftN0DtRSKRVIj+eVXmzd7nsxKydwHZQ5ZXAdU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=JhtfPjOE5b6myYSkCUuDgBHozNF6u6Nrfrz3jV1YxZRWd4sUKgmS4p3bzc8jqLaAo
+         /pK1SbTPgOPmYzPo7/OiYN9xn1jL/5eFpDUnbcfA05V5q9+SK4eHFbKweng01Y84Y2
+         h1sSGahRk6oYEgpye91jCIp0HOkgvxovcpEm+2vHef8u8ffAIR+GNj8AeHr9Vwpk2f
+         HVyH3Bc6FCFI5eGfQLipZjcn6zUjvLGZuhDY8TbtOGf9Jf37KjolXnH2CGynCXhiqB
+         Y0/mE18GssuBlS405k/rUiKRQ51hYCa55fgdQ2sxOF3kUSGJ3glqSNmOAz8ZC9GlPI
+         k/ercW7sE0zwA==
+Date:   Wed, 2 Mar 2022 11:22:09 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Dust Li <dust.li@linux.alibaba.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Tony Lu <tonylu@linux.alibaba.com>
+Subject: linux-next: manual merge of the net-next tree with the net tree
+Message-ID: <20220302112209.355def40@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/3rw2I3JrDfSWQiBsGkIt2sO";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Mar 1, 2022 at 11:54 AM Lee Jones <lee.jones@linaro.org> wrote:
->
-> On Tue, 01 Mar 2022, Greg KH wrote:
->
-> > On Tue, Mar 01, 2022 at 09:37:41AM +0000, Lee Jones wrote:
-> > > On Mon, 28 Feb 2022, Greg KH wrote:
-> > >
-> > > > On Mon, Feb 28, 2022 at 12:46:44PM +0000, Lee Jones wrote:
-> > > > > On Mon, 28 Feb 2022, Greg KH wrote:
-> > > > >
-> > > > > > On Mon, Feb 28, 2022 at 09:01:49AM +0000, Lee Jones wrote:
-> > > > > > > On Mon, 28 Feb 2022, Stephen Rothwell wrote:
-> > > > > > >
-> > > > > > > > Hi all,
-> > > > > > > >
-> > > > > > > > Today's linux-next merge of the char-misc tree got a confli=
-ct in:
-> > > > > > >
-> > > > > > > I did ask for this *not* to be merged when it was in -testing=
-.
-> > > > > >
-> > > > > > Sorry, I missed that, I saw your ack on the patch so that's why=
- I took
-> > > > > > it.
-> > > > > >
-> > > > > > > I'll follow-up with Greg.
-> > > > > >
-> > > > > > Should I revert this from my tree?
-> > > > >
-> > > > > I did try to catch it before a revert would have been required.
-> > > >
-> > > > My fault.
-> > > >
-> > > > > But yes, please revert it.
-> > > >
-> > > > Will go do so now.
-> > >
-> > > Thank you.
-> > >
-> > > > > The Ack is not standard and should not be merged.
-> > > >
-> > > > I do not understand this, what went wrong here?
-> > >
-> > > The "Ack" you saw was just a placeholder.
-> > >
-> > > When I provided it, I would have done so like this:
-> > >
-> > >     "For my own reference (apply this as-is to your sign-off block):
-> > >
-> > >      Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>"
-> > >
-> > > REF: https://lore.kernel.org/all/YQ0fYe531yCyP4pf@google.com/
-> > >
-> > > The majority of maintainers I regularly work with know this to mean
-> > > that the set is due to be routed via MFD (with a subsequent
-> > > pull-request to an immutable branch to follow), since MFD is often
-> > > the centre piece (parent) of the patch-sets I deal with.
-> > >
-> > > I appreciate that this could cause confusion, but I'm not sure of a
-> > > better way to convey this information such that it survives through
-> > > various submission iterations.
-> >
-> > But what else is another maintainer supposed to think if they see that
-> > ack on the patch?  Ignore it?  I took that to mean "this is good from a
-> > mfd-point-of-view" which meant it can go through whatever tree it is
-> > supposed to.
-> >
-> > Are you wanting this individual patch to go through your tree now only?
-> > If so, you should say that by NOT acking it :)
->
-> It's not quite as easy as that.
->
-> It wouldn't be fair to the contributor to start reviews once all the
-> other patches in the set are ready to be merged.  So how would I
-> indicate that the MFD part is ready, fully expecting some of the other
-> patches in the set to be reworked and subsequent revisions are to be
-> submitted?
->
-> This method actually works really well the majority of the time, and
-> has done for a number of years.  However, I am always willing to
-> improve on my processes given the opportunity.
->
-> > How do you want to see this merged?
->
-> The plan is for the whole set to be merged together via MFD.
->
-> All of the other maintainers have now Acked, so it's ready to go:
->
->   https://lore.kernel.org/all/20220131133049.77780-1-robert.marko@sartura=
-.hr/
+--Sig_/3rw2I3JrDfSWQiBsGkIt2sO
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Hi Lee, as far as I understand you will now take this series up via
-your MFD tree?
+Hi all,
 
-Regards,
-Robert
->
-> Looking at the diff, I'm not entirely sure why you took it in the
-> first place?
->
-> --
-> Lee Jones [=E6=9D=8E=E7=90=BC=E6=96=AF]
-> Principal Technical Lead - Developer Services
-> Linaro.org =E2=94=82 Open source software for Arm SoCs
-> Follow Linaro: Facebook | Twitter | Blog
+Today's linux-next merge of the net-next tree got a conflict in:
 
+  net/smc/af_smc.c
 
+between commit:
+
+  4d08b7b57ece ("net/smc: Fix cleanup when register ULP fails")
+
+from the net tree and commit:
+
+  462791bbfa35 ("net/smc: add sysctl interface for SMC")
+
+from the net-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
-Robert Marko
-Staff Embedded Linux Engineer
-Sartura Ltd.
-Lendavska ulica 16a
-10000 Zagreb, Croatia
-Email: robert.marko@sartura.hr
-Web: www.sartura.hr
+Cheers,
+Stephen Rothwell
+
+diff --cc net/smc/af_smc.c
+index 284befa90967,6447607675fa..000000000000
+--- a/net/smc/af_smc.c
++++ b/net/smc/af_smc.c
+@@@ -3087,14 -3287,20 +3293,22 @@@ static int __init smc_init(void
+  	rc =3D tcp_register_ulp(&smc_ulp_ops);
+  	if (rc) {
+  		pr_err("%s: tcp_ulp_register fails with %d\n", __func__, rc);
+ -		goto out_sock;
+ +		goto out_ib;
+  	}
+ =20
++ 	rc =3D smc_sysctl_init();
++ 	if (rc) {
++ 		pr_err("%s: sysctl_init fails with %d\n", __func__, rc);
++ 		goto out_ulp;
++ 	}
++=20
+  	static_branch_enable(&tcp_have_smc);
+  	return 0;
+ =20
++ out_ulp:
++ 	tcp_unregister_ulp(&smc_ulp_ops);
+ +out_ib:
+ +	smc_ib_unregister_client();
+  out_sock:
+  	sock_unregister(PF_SMC);
+  out_proto6:
+
+--Sig_/3rw2I3JrDfSWQiBsGkIt2sO
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIeuLEACgkQAVBC80lX
+0GxXxAf/c3JLhvQZbbd21vYirxRsH8mlecMX7Qi1f3zpj/Dp+5yAgjmtWcOTlhkh
+dXB6ZkWwv5DoZOtrFZKjx/ron4dtrDlkzUnI1bO3Mq9q5UEph4h0NK2g/5AOt2dq
+UEPQ6hjAGVJTT5q6dsuisnkELd5dsgVL7B9d2+uppODO78/mzk1BYJsN5YXwWVNw
+cKtY3k850jiKnZYGXL2G7cKrKSE4J7gYD5GblXG3ILB/gZlJ5jXG4dSDniOPUgXg
+Id+a94mxqGWEFYC/qny8A3Pb2pv6vYdEvdqYyjrVGh4XG6slIpvtPZuZscWRPs7d
+HdC5hxhKAMDKfgLqdnVGNue5ja2ybQ==
+=m+8O
+-----END PGP SIGNATURE-----
+
+--Sig_/3rw2I3JrDfSWQiBsGkIt2sO--

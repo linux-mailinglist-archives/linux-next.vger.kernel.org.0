@@ -2,80 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCCE04C9ECE
-	for <lists+linux-next@lfdr.de>; Wed,  2 Mar 2022 09:00:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F36344C9ED8
+	for <lists+linux-next@lfdr.de>; Wed,  2 Mar 2022 09:05:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239920AbiCBIBW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 2 Mar 2022 03:01:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43994 "EHLO
+        id S239958AbiCBIFo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 2 Mar 2022 03:05:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239910AbiCBIBT (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Mar 2022 03:01:19 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 009E0B6D14
-        for <linux-next@vger.kernel.org>; Wed,  2 Mar 2022 00:00:35 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id y5so611960wmi.0
-        for <linux-next@vger.kernel.org>; Wed, 02 Mar 2022 00:00:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=6EnkP3G89LOuEbKkRGHr/q7Nv6a/aOjFoR0uEwGT1xw=;
-        b=V8fPKFqwDJ8Dy92I3pVJC3xxFxCIKmvAa/jsclT9eI84ZRpMU+6blTDMSq3wpPRcTk
-         zZhPp9VzQZHIhlsQF6ITQ7EZj4Kbxpir5WDl2o5UMXcNjYUdqZ9KbD8ZIEee79oTvyEH
-         oFlXI2XCf3pWVQ9NP5O6S1L/9c/KLCZuJtb5axFJS1BLq7GTyCKR/3I4KL9caLjhcsZS
-         5fLJqEZpm4O0d2IGoj9TPHQcH2VNKrBphqyMQZ+egHZL2+pvx9614lcv0FyeCrulPFGf
-         9LnKjV8+z0qAPTASDepCdXWTH1391WGpUi4an8+Iy5XY1UgVcq26sE93Gxsjo/NNfRs6
-         QLjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=6EnkP3G89LOuEbKkRGHr/q7Nv6a/aOjFoR0uEwGT1xw=;
-        b=r2Y5YJxsHetNu9AtB2tM9uyZSKRJN9TCSYe81xXU9IKPyw5eX9JmsIjE9NCecIM3GK
-         ndh6C++qYKB1BX7wjvL+LNuJ7hD8Oko8uoW5fMZKWw6yP6PR6Dlih70fRop6+tW409MY
-         HwEMlHLQw3BqunibQzzLx9Ix5NRtW3fEbY+Im/eBcW9gEpppUuKpNSw5JI+NM0Eq0SU9
-         ZlVHm+VygtaL0PC+11G8i2jg+WtWTMKYorOs4nnB1bwmIPjGJ6CVtxL9NlJZKYp+YzPL
-         mXscEv7j9koghaQV2y6LIRQLMKtwSm0pKDCFh9/CwVU+gExdElp+HO+/KecAgTyUUY6m
-         J9uw==
-X-Gm-Message-State: AOAM533OLmQ8JCaRHEjIzhju49WOl3V99kiNyNX7xtZ/HjlHXMyEKsKg
-        OyKWVm0JrmqTp672ym6eYcBVnA==
-X-Google-Smtp-Source: ABdhPJwvSxBoudapBNvzLrn0ekB10uvEM8VCg20AuY76WEEr8NkSk85eSx/VJI98pWsRrWnk48wFgA==
-X-Received: by 2002:a05:600c:4e10:b0:381:a004:5855 with SMTP id b16-20020a05600c4e1000b00381a0045855mr4807543wmq.70.1646208034474;
-        Wed, 02 Mar 2022 00:00:34 -0800 (PST)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id w22-20020a7bc756000000b0038171f6bb63sm4827495wmk.35.2022.03.02.00.00.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 00:00:34 -0800 (PST)
-Date:   Wed, 2 Mar 2022 08:00:31 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Greg KH <greg@kroah.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alistair Francis <alistair@alistair23.me>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Robert Marko <robert.marko@sartura.hr>
-Subject: Re: linux-next: manual merge of the char-misc tree with the mfd tree
-Message-ID: <Yh8kH5sWMkFBYQyN@google.com>
-References: <20220228193928.3ec6ee98@canb.auug.org.au>
- <YhyPfcjJtIKNQtF8@google.com>
- <Yhyn72NO/roH1gA8@kroah.com>
- <YhzENKPtY+WOp566@google.com>
- <Yh09/r/nT2LeE82n@kroah.com>
- <Yh3pZXQPP9kmcSSx@google.com>
- <Yh325S5PyPiJf4F5@kroah.com>
- <Yh37gTCPaESkgNzV@google.com>
- <Yh6N4mWCfHtlBM07@kroah.com>
+        with ESMTP id S235793AbiCBIFo (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Mar 2022 03:05:44 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F473B6D15;
+        Wed,  2 Mar 2022 00:05:01 -0800 (PST)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2227cQhd012056;
+        Wed, 2 Mar 2022 08:04:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : to : from : subject : cc : content-type :
+ content-transfer-encoding; s=pp1;
+ bh=mNKrNnfcjIOG7tiLS+y7yt4cKOhNyjFGkuN26+hJWIQ=;
+ b=hYSTiYAmg31UySPasfqSoBgvbBmzhnQ0BBstqSLj1ysmVBanKJ4pj+T1dCB06Tlcgegl
+ mYaygtxTFZF8EQeAp7rh1/YkLIYuidUmqRQJs/3aquMo24fclqtwMOiPUzJ/6/GCCdm+
+ ESu+AlvQv+/fAdkak5O0PI3oFbLQbiH7zinYtt9NSm2p4A+t4YUvmEwFABwkou1bG3dY
+ 3YvEpdqbqXKo9X3emNeX/VQpeZaPa+i6wUxQTzPapSruYl5gx/aGRfHeIQH384EDP+O6
+ ebkEzTn/SxE87X/raK236ksrw+7N9gbLR/5uNJHMCMCRbKLgfOVbQ1wAypZXWFDEs1eP og== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ej1e3v2f9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Mar 2022 08:04:50 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 2227kWba029259;
+        Wed, 2 Mar 2022 08:04:49 GMT
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ej1e3v2ey-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Mar 2022 08:04:49 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22282xYk031801;
+        Wed, 2 Mar 2022 08:04:48 GMT
+Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
+        by ppma02wdc.us.ibm.com with ESMTP id 3efbua2se2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Mar 2022 08:04:48 +0000
+Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
+        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22284lUx23331120
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 2 Mar 2022 08:04:47 GMT
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 35796C6055;
+        Wed,  2 Mar 2022 08:04:47 +0000 (GMT)
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 17C7EC605B;
+        Wed,  2 Mar 2022 08:04:42 +0000 (GMT)
+Received: from [9.43.6.233] (unknown [9.43.6.233])
+        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Wed,  2 Mar 2022 08:04:41 +0000 (GMT)
+Message-ID: <d583adf0-2d98-60b6-620c-722912c05852@linux.vnet.ibm.com>
+Date:   Wed, 2 Mar 2022 13:31:39 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Content-Language: en-US
+To:     linux-scsi <linux-scsi@vger.kernel.org>
+From:   Abdul Haleem <abdhalee@linux.vnet.ibm.com>
+Subject: [next-20220225][Oops][ppc] lvm snapshot merge results kernel panics
+ (throtl_pending_timer_fn)
+Cc:     yukuai3@huawei.com, ming.lei@redhat.com,
+        linux-next <linux-next@vger.kernel.org>, axboe@kernel.dk,
+        linux-block@vger.kernel.org,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Yh6N4mWCfHtlBM07@kroah.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Jb0_nJv9ibAHtLbMzcw11Z9yHYXz0xWX
+X-Proofpoint-ORIG-GUID: rhEucWJoA4J6_qcX1q9MrXPo-bR4qaML
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-02_01,2022-02-26_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ phishscore=0 priorityscore=1501 suspectscore=0 mlxlogscore=999
+ malwarescore=0 mlxscore=0 clxscore=1011 adultscore=0 bulkscore=0
+ impostorscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2201110000 definitions=main-2203020033
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,113 +95,254 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, 01 Mar 2022, Greg KH wrote:
+Greeting's
 
-> On Tue, Mar 01, 2022 at 10:54:57AM +0000, Lee Jones wrote:
-> > On Tue, 01 Mar 2022, Greg KH wrote:
-> > 
-> > > On Tue, Mar 01, 2022 at 09:37:41AM +0000, Lee Jones wrote:
-> > > > On Mon, 28 Feb 2022, Greg KH wrote:
-> > > > 
-> > > > > On Mon, Feb 28, 2022 at 12:46:44PM +0000, Lee Jones wrote:
-> > > > > > On Mon, 28 Feb 2022, Greg KH wrote:
-> > > > > > 
-> > > > > > > On Mon, Feb 28, 2022 at 09:01:49AM +0000, Lee Jones wrote:
-> > > > > > > > On Mon, 28 Feb 2022, Stephen Rothwell wrote:
-> > > > > > > > 
-> > > > > > > > > Hi all,
-> > > > > > > > > 
-> > > > > > > > > Today's linux-next merge of the char-misc tree got a conflict in:
-> > > > > > > > 
-> > > > > > > > I did ask for this *not* to be merged when it was in -testing.
-> > > > > > > 
-> > > > > > > Sorry, I missed that, I saw your ack on the patch so that's why I took
-> > > > > > > it.
-> > > > > > > 
-> > > > > > > > I'll follow-up with Greg.
-> > > > > > > 
-> > > > > > > Should I revert this from my tree?
-> > > > > > 
-> > > > > > I did try to catch it before a revert would have been required.
-> > > > > 
-> > > > > My fault.
-> > > > > 
-> > > > > > But yes, please revert it.
-> > > > > 
-> > > > > Will go do so now.
-> > > > 
-> > > > Thank you.
-> > > > 
-> > > > > > The Ack is not standard and should not be merged.
-> > > > > 
-> > > > > I do not understand this, what went wrong here?
-> > > > 
-> > > > The "Ack" you saw was just a placeholder.
-> > > > 
-> > > > When I provided it, I would have done so like this:
-> > > > 
-> > > >     "For my own reference (apply this as-is to your sign-off block):
-> > > > 
-> > > >      Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>"
-> > > > 
-> > > > REF: https://lore.kernel.org/all/YQ0fYe531yCyP4pf@google.com/
-> > > > 
-> > > > The majority of maintainers I regularly work with know this to mean
-> > > > that the set is due to be routed via MFD (with a subsequent
-> > > > pull-request to an immutable branch to follow), since MFD is often
-> > > > the centre piece (parent) of the patch-sets I deal with.
-> > > > 
-> > > > I appreciate that this could cause confusion, but I'm not sure of a
-> > > > better way to convey this information such that it survives through
-> > > > various submission iterations.
-> > > 
-> > > But what else is another maintainer supposed to think if they see that
-> > > ack on the patch?  Ignore it?  I took that to mean "this is good from a
-> > > mfd-point-of-view" which meant it can go through whatever tree it is
-> > > supposed to.
-> > > 
-> > > Are you wanting this individual patch to go through your tree now only?
-> > > If so, you should say that by NOT acking it :)
-> > 
-> > It's not quite as easy as that.
-> > 
-> > It wouldn't be fair to the contributor to start reviews once all the
-> > other patches in the set are ready to be merged.  So how would I
-> > indicate that the MFD part is ready, fully expecting some of the other
-> > patches in the set to be reworked and subsequent revisions are to be
-> > submitted?
-> 
-> But from an "outside" observer, this patch series seemed to have acks
-> from all maintainers, yet no one was taking it.  Which is why I picked
-> it up (someone asked me to.)  Having the subsystem maintainer ack it
-> implied to me that there was no problem.  Odd that you later on had one :)
+Linux next kernel 5.17.0-rc5-next-20220225 crashed on my power 10 LPAR 
+when merge lvm snapshot on nvme disk
 
-I understand the problem and I'm not blaming you for your assumptions.
+console logs
+------------
 
-Can you recommend a better solution though?
+fdisk -l /dev/nvme1n1
 
-To be fair this very seldom causes issues.
+Disk /dev/nvme1n1: 372.6 GiB, 400088457216 bytes, 97677846 sectors
+Units: sectors of 1 * 4096 = 4096 bytes
+Sector size (logical/physical): 4096 bytes / 4096 bytes
+I/O size (minimum/optimal): 4096 bytes / 4096 bytes
+vgcreate avocado_vg /dev/nvme1n1
+   Volume group "avocado_vg" successfully created
 
-And now you know, you know. :)
+lvcreate --name avocado_lv --size 18432.0 avocado_vg -y
+   Wiping ext2 signature on /dev/avocado_vg/avocado_lv.
+   Logical volume "avocado_lv" created.
 
-> > > How do you want to see this merged?
-> > 
-> > The plan is for the whole set to be merged together via MFD.
-> > 
-> > All of the other maintainers have now Acked, so it's ready to go:
-> > 
-> >   https://lore.kernel.org/all/20220131133049.77780-1-robert.marko@sartura.hr/
-> > 
-> > Looking at the diff, I'm not entirely sure why you took it in the
-> > first place?
-> 
-> As I mentioned above, someone else asked me to as it was sitting around
-> for quite a while with no movement.
+lvdisplay avocado_vg
+   --- Logical volume ---
+   LV Path                /dev/avocado_vg/avocado_lv
+   LV Name                avocado_lv
+   VG Name                avocado_vg
+   LV UUID nkhkFh-Oofl-GKH1-1055-3B47-0gup-yQtI1s
+   LV Write Access        read/write
+   LV Creation host, time ltc-zz1b-lp4.aus.stglabs.ibm.com, 2022-03-02 
+01:32:19 -0600
+   LV Status              available
+   # open                 0
+   LV Size                18.00 GiB
+   Current LE             4608
+   Segments               1
+   Allocation             inherit
+   Read ahead sectors     auto
+   - currently set to     8192
+   Block device           253:0
 
-Probably better for them to reply to the 0th patch in the first instance.
+mkfs.ext2 /dev/avocado_vg/avocado_lv
+
+mke2fs 1.44.6 (5-Mar-2019)
+Creating filesystem with 4718592 4k blocks and 1179648 inodes
+Filesystem UUID: 5ed3c335-bac2-4b64-a827-222d287af0b2
+Superblock backups stored on blocks:
+     32768, 98304, 163840, 229376, 294912, 819200, 884736, 1605632, 
+2654208,
+     4096000
+
+Allocating group tables: done
+Writing inode tables: done
+Writing superblocks and filesystem accounting information: done
+
+mount /dev/avocado_vg/avocado_lv /mnt
+
+[ 1053.517019] EXT4-fs (dm-0): mounting ext2 file system using the ext4 
+subsystem
+[ 1053.518270] EXT4-fs (dm-0): mounted filesystem without journal. Quota 
+mode: none.
+
+umount /dev/avocado_vg/avocado_lv
+
+lvdisplay avocado_vg
+   --- Logical volume ---
+   LV Path                /dev/avocado_vg/avocado_lv
+   LV Name                avocado_lv
+   VG Name                avocado_vg
+   LV UUID nkhkFh-Oofl-GKH1-1055-3B47-0gup-yQtI1s
+   LV Write Access        read/write
+   LV Creation host, time ltc-zz1b-lp4.aus.stglabs.ibm.com, 2022-03-02 
+01:32:19 -0600
+   LV Status              available
+   # open                 0
+   LV Size                18.00 GiB
+   Current LE             4608
+   Segments               1
+   Allocation             inherit
+   Read ahead sectors     auto
+   - currently set to     8192
+   Block device           253:0
+
+lvcreate --snapshot --name avocado_sn /dev/avocado_vg/avocado_lv 
+--ignoreactivationskip --size 18432.0
+
+   Logical volume "avocado_sn" created.
+
+vgdisplay avocado_vg
+
+   --- Volume group ---
+   VG Name               avocado_vg
+   System ID
+   Format                lvm2
+   Metadata Areas        1
+   Metadata Sequence No  4
+   VG Access             read/write
+   VG Status             resizable
+   MAX LV                0
+   Cur LV                2
+   Open LV               0
+   Max PV                0
+   Cur PV                1
+   Act PV                1
+   VG Size               <372.61 GiB
+   PE Size               4.00 MiB
+   Total PE              95388
+   Alloc PE / Size       9216 / 36.00 GiB
+   Free  PE / Size       86172 / <336.61 GiB
+   VG UUID               jobi1f-kHw4-2ovw-nR3E-Eml5-tFYR-mJc3WT
+
+lvdisplay avocado_vg
+   --- Logical volume ---
+   LV Path                /dev/avocado_vg/avocado_lv
+   LV Name                avocado_lv
+   VG Name                avocado_vg
+   LV UUID nkhkFh-Oofl-GKH1-1055-3B47-0gup-yQtI1s
+   LV Write Access        read/write
+   LV Creation host, time ltc-zz1b-lp4.aus.stglabs.ibm.com, 2022-03-02 
+01:32:19 -0600
+   LV snapshot status     source of
+                          avocado_sn [active]
+   LV Status              available
+   # open                 0
+   LV Size                18.00 GiB
+   Current LE             4608
+   Segments               1
+   Allocation             inherit
+   Read ahead sectors     auto
+   - currently set to     256
+   Block device           253:0
+
+   --- Logical volume ---
+   LV Path                /dev/avocado_vg/avocado_sn
+   LV Name                avocado_sn
+   VG Name                avocado_vg
+   LV UUID QL14R9-aVa9-nD8z-DTyg-87qL-b2yY-O30G5P
+   LV Write Access        read/write
+   LV Creation host, time ltc-zz1b-lp4.aus.stglabs.ibm.com, 2022-03-02 
+01:32:20 -0600
+   LV snapshot status     active destination for avocado_lv
+   LV Status              available
+   # open                 0
+   LV Size                18.00 GiB
+   Current LE             4608
+   COW-table size         18.00 GiB
+   COW-table LE           4608
+   Allocated to snapshot  0.00%
+   Snapshot chunk size    4.00 KiB
+   Segments               1
+   Allocation             inherit
+   Read ahead sectors     auto
+   - currently set to     8192
+   Block device           253:3
+
+lvconvert --merge --interval 1 /dev/avocado_vg/avocado_sn
+   Merging of volume avocado_vg/avocado_sn started.
+   avocado_vg/avocado_lv: Merged: 100.00%
+BUG: Unable to handle kernel data access on write at 0x3335323d524f4ab1
+Faulting instruction address: 0xc000000000cb3a2c
+Oops: Kernel access of bad area, sig: 11 [#1]
+LE PAGE_SIZE=64K MMU=Hash SMP NR_CPUS=2048 NUMA pSeries
+Modules linked in: dm_snapshot dm_bufio rpadlpar_io rpaphp kvm_pr kvm 
+nf_tables libcrc32c
+  nfnetlink tcp_diag udp_diag inet_diag unix_diag af_packet_diag 
+netlink_diag rfkill dm_mod sg pseries_rn
+g xts uio_pdrv_genirq vmx_crypto gf128mul uio nfsd auth_rpcgss nfs_acl 
+lockd grace sunrpc binfmt_misc sc
+h_fq_codel ip_tables ext4 mbcache jbd2 sd_mod ibmvscsi ibmvnic 
+scsi_transport_srp ibmveth nvme nvme_core
+  t10_pi
+  CPU: 17 PID: 0 Comm: swapper/17 Kdump: loaded Not tainted 
+5.17.0-rc5-next-20220225-autote
+
+  NIP:  c000000000cb3a2c LR: c0000000006740b4 CTR: c000000000674030
+  REGS: c0000000034ff390 TRAP: 0380   Not tainted 
+(5.17.0-rc5-next-20220225-autotest)
+  MSR:  8000000000009033 <SF,EE,ME,IR,DR,RI,LE>  CR: 82008228  XER: 20040000
+  CFAR: c0000000006740b0 IRQMASK: 1
+  GPR00: c000000000220290 c0000000034ff630 c0000000028d3200 
+3335323d524f4ab1
+  GPR04: c000000000674030 00000001000126d5 0000000000000200 
+0000000000000000
+  GPR08: 0000000000000000 0000000000000000 0000000000000001 
+0000000000000001
+  GPR12: 0000000022000222 c00000000ffa6680 0000000000000100 
+0000000000000010
+  GPR16: 0000000000000100 0000000000000002 c000000002902108 
+c0000000020e7880
+  GPR20: c000000000674030 5deadbeef0000122 c00000077c908668 
+c0000000b4dce000
+  GPR24: c0000000acb6a800 c0000000034ff7c8 3335323d524f4a41 
+0000000000000100
+  GPR28: c000000000674030 c0000000acb6a880 3335323d524f4ab1 
+c0000000acb6a830
+  NIP [c000000000cb3a2c] _raw_spin_lock_irq+0x1c/0xa0
+  LR [c0000000006740b4] throtl_pending_timer_fn+0x84/0x450
+  Call Trace:
+  [c0000000034ff630] [c0000000034ff670] 0xc0000000034ff670 (unreliable)
+  [c0000000034ff650] [c000000002903a00] jiffies+0x0/0x80
+  [c0000000034ff710] [c000000000220290] call_timer_fn+0x50/0x200
+  [c0000000034ff7a0] [c000000000221c30] run_timer_softirq+0x340/0x7c0
+  [c0000000034ff870] [c000000000cb3cb8] __do_softirq+0x158/0x3e0
+  [c0000000034ff970] [c00000000014ef78] irq_exit+0x168/0x1b0
+  [c0000000034ff9a0] [c0000000000271c4] timer_interrupt+0x1a4/0x3e0
+  [c0000000034ffa00] [c000000000009a08] decrementer_common_virt+0x208/0x210
+  --- interrupt: 900 at plpar_hcall_norets_notrace+0x18/0x2c
+  NIP:  c0000000000ece58 LR: c0000000009d58c8 CTR: 0000000000000000
+  REGS: c0000000034ffa70 TRAP: 0900   Not tainted 
+(5.17.0-rc5-next-20220225-autotest)
+  MSR:  800000000280b033 <SF,VEC,VSX,EE,FP,ME,IR,DR,RI,LE>  CR: 
+22000224  XER: 20040000
+  CFAR: 0000000000000000 IRQMASK: 0
+  GPR00: 0000000000000000 c0000000034ffd10 c0000000028d3200 
+0000000000000000
+  GPR04: 000000000000ffff 0000000000000000 0000000000000000 
+0000000000000000
+  GPR08: 0000000000000000 0000000000000000 800000140fc3fc00 
+ffffffffffffffff
+  GPR12: 0000000000000000 c00000000ffa6680 0000000000010000 
+0000000000000800
+  GPR16: c0000000016a20e8 c00000077fff1678 ffffffffffffffff 
+0000000000000001
+  GPR20: 0000000000000001 0000000000000002 0000000000000010 
+c00000000282ff88
+  GPR24: 0000000000000001 000000f59a421dce 0000000000000000 
+0000000000000000
+  GPR28: 0000000000000001 0000000000000000 c0000000020e2098 
+c0000000020e20a0
+  NIP [c0000000000ece58] plpar_hcall_norets_notrace+0x18/0x2c
+  LR [c0000000009d58c8] check_and_cede_processor+0x48/0x60
+  --- interrupt: 900
+  [c0000000034ffd10] [c0000000034ffd40] 0xc0000000034ffd40 (unreliable)
+  [c0000000034ffd70] [c0000000009d5d04] dedicated_cede_loop+0x94/0x1a0
+  [c0000000034ffdc0] [c0000000009d2634] cpuidle_enter_state+0x2d4/0x4e0
+  [c0000000034ffe20] [c0000000009d28d8] cpuidle_enter+0x48/0x70
+  [c0000000034ffe60] [c00000000019db74] call_cpuidle+0x44/0x80
+  [c0000000034ffe80] [c00000000019e150] do_idle+0x340/0x390
+  [c0000000034fff00] [c00000000019e3d4] cpu_startup_entry+0x34/0x40
+  [c0000000034fff30] [c0000000000607e0] start_secondary+0x290/0x2b0
+  [c0000000034fff90] [c00000000000d154] start_secondary_prolog+0x10/0x14
+  Instruction dump:
+  7c0803a6 4bffffa4 60000000 60000000 60000000 3c4c01c2 3842f7f0 f821ffe1
+  39200001 992d0932 39200000 39400001 <7c801829> 7c044800 40c20010 7d40192d
+  ---[ end trace 0000000000000000 ]---
 
 -- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Regard's
+
+Abdul Haleem
+IBM Linux Technology Center
+

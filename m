@@ -2,46 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24FEE4C99CD
-	for <lists+linux-next@lfdr.de>; Wed,  2 Mar 2022 01:22:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 507344C99FE
+	for <lists+linux-next@lfdr.de>; Wed,  2 Mar 2022 01:43:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232067AbiCBAXB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 1 Mar 2022 19:23:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34090 "EHLO
+        id S238771AbiCBAn5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 1 Mar 2022 19:43:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230090AbiCBAXB (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 1 Mar 2022 19:23:01 -0500
+        with ESMTP id S229792AbiCBAn4 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 1 Mar 2022 19:43:56 -0500
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5653E0EE;
-        Tue,  1 Mar 2022 16:22:18 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C5A15E769;
+        Tue,  1 Mar 2022 16:43:14 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4K7ZYv1ChRz4xcq;
-        Wed,  2 Mar 2022 11:22:10 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4K7b28644dz4xRC;
+        Wed,  2 Mar 2022 11:43:12 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1646180533;
-        bh=dAP0ZGftN0DtRSKRVIj+eVXmzd7nsxKydwHZQ5ZXAdU=;
+        s=201702; t=1646181793;
+        bh=Zb0vd0yPoblAyV5qNpDm656rT0BpGkDb4bIzXPh9MDs=;
         h=Date:From:To:Cc:Subject:From;
-        b=JhtfPjOE5b6myYSkCUuDgBHozNF6u6Nrfrz3jV1YxZRWd4sUKgmS4p3bzc8jqLaAo
-         /pK1SbTPgOPmYzPo7/OiYN9xn1jL/5eFpDUnbcfA05V5q9+SK4eHFbKweng01Y84Y2
-         h1sSGahRk6oYEgpye91jCIp0HOkgvxovcpEm+2vHef8u8ffAIR+GNj8AeHr9Vwpk2f
-         HVyH3Bc6FCFI5eGfQLipZjcn6zUjvLGZuhDY8TbtOGf9Jf37KjolXnH2CGynCXhiqB
-         Y0/mE18GssuBlS405k/rUiKRQ51hYCa55fgdQ2sxOF3kUSGJ3glqSNmOAz8ZC9GlPI
-         k/ercW7sE0zwA==
-Date:   Wed, 2 Mar 2022 11:22:09 +1100
+        b=ZZrzZ3OIACHFW6ozBNLk77Of5QGYfhOCr88nsfSpabxpCeRRkj5ckxHn0b2Eo56Ox
+         CjOWUK9vIw8d3Ri/ruIVJm4B0gPx4CHNGNf2R5P+Ibtetl+N3vXjFIvFug7TzDFwVb
+         GZwZReiS3zQl05sWkzAVnS8dM95zreDkvsepvlExnO88HdzUl48xCVbDDL1A4yXqoE
+         3z2SjBalJ6sa5gxJDVdoiF3HxuWcgPS2Qjq/L+BmwcDGnXoeJK6vaf7YqlmYH82p+s
+         ItpOM+45BBkZ5HbgpsbszR9XOYsQWmhAViu3WNW8HiwjclCS33to6B+YemCdimqZBf
+         mJUYpIdbz4JzQ==
+Date:   Wed, 2 Mar 2022 11:43:12 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Dust Li <dust.li@linux.alibaba.com>,
+To:     Rob Clark <robdclark@gmail.com>, Sean Paul <seanpaul@chromium.org>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Tony Lu <tonylu@linux.alibaba.com>
-Subject: linux-next: manual merge of the net-next tree with the net tree
-Message-ID: <20220302112209.355def40@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the drm-msm tree
+Message-ID: <20220302114312.077aa81b@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/3rw2I3JrDfSWQiBsGkIt2sO";
+Content-Type: multipart/signed; boundary="Sig_/MS6smuMKV9MKdUoJbE66fzO";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -52,80 +50,46 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/3rw2I3JrDfSWQiBsGkIt2sO
+--Sig_/MS6smuMKV9MKdUoJbE66fzO
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the net-next tree got a conflict in:
+In commit
 
-  net/smc/af_smc.c
+  8661f450626f ("dt-bindings: display/msm: add missing brace in dpu-qcm2290=
+.yaml")
 
-between commit:
+Fixes tag
 
-  4d08b7b57ece ("net/smc: Fix cleanup when register ULP fails")
+  Fixes: 164f69d9d45a ("dt-bindings: msm: disp: add yaml schemas for
 
-from the net tree and commit:
+has these problem(s):
 
-  462791bbfa35 ("net/smc: add sysctl interface for SMC")
+  - Subject has leading but no trailing parentheses
+  - Subject has leading but no trailing quotes
 
-from the net-next tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+Please do not split Fixes tags over moe than one line or truncate them.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc net/smc/af_smc.c
-index 284befa90967,6447607675fa..000000000000
---- a/net/smc/af_smc.c
-+++ b/net/smc/af_smc.c
-@@@ -3087,14 -3287,20 +3293,22 @@@ static int __init smc_init(void
-  	rc =3D tcp_register_ulp(&smc_ulp_ops);
-  	if (rc) {
-  		pr_err("%s: tcp_ulp_register fails with %d\n", __func__, rc);
- -		goto out_sock;
- +		goto out_ib;
-  	}
- =20
-+ 	rc =3D smc_sysctl_init();
-+ 	if (rc) {
-+ 		pr_err("%s: sysctl_init fails with %d\n", __func__, rc);
-+ 		goto out_ulp;
-+ 	}
-+=20
-  	static_branch_enable(&tcp_have_smc);
-  	return 0;
- =20
-+ out_ulp:
-+ 	tcp_unregister_ulp(&smc_ulp_ops);
- +out_ib:
- +	smc_ib_unregister_client();
-  out_sock:
-  	sock_unregister(PF_SMC);
-  out_proto6:
-
---Sig_/3rw2I3JrDfSWQiBsGkIt2sO
+--Sig_/MS6smuMKV9MKdUoJbE66fzO
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIeuLEACgkQAVBC80lX
-0GxXxAf/c3JLhvQZbbd21vYirxRsH8mlecMX7Qi1f3zpj/Dp+5yAgjmtWcOTlhkh
-dXB6ZkWwv5DoZOtrFZKjx/ron4dtrDlkzUnI1bO3Mq9q5UEph4h0NK2g/5AOt2dq
-UEPQ6hjAGVJTT5q6dsuisnkELd5dsgVL7B9d2+uppODO78/mzk1BYJsN5YXwWVNw
-cKtY3k850jiKnZYGXL2G7cKrKSE4J7gYD5GblXG3ILB/gZlJ5jXG4dSDniOPUgXg
-Id+a94mxqGWEFYC/qny8A3Pb2pv6vYdEvdqYyjrVGh4XG6slIpvtPZuZscWRPs7d
-HdC5hxhKAMDKfgLqdnVGNue5ja2ybQ==
-=m+8O
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIevaAACgkQAVBC80lX
+0GxU0Af/e8RdvhgjudoWZgUYp9r31CsQJVdnZs/qiQc0K8npXo/rl78FD9neRzgc
+W1+tHh0m5C9IHx99k4iOOSrcezyNUiTRFc4IEcrFKwq7APda41YoQWDZdbnipuRl
+d48Su9wZHbP927Ic3ibit8w0qhiPtPfK86wEZU5FKpY7ukgpqoFH9lxnWAhBBd+z
+htJpqJuHGetRmIH3N85RHbMPOrP/+fkS4x+DcEJ0p0CZanskfr10MhstQ265Ajpn
+3oJAd9xrF5Y/ZRg1BmRja8Th8tgLjM7nypOHU4LXQvwhe/f+xvooG5phfenCfhju
+S8gQi5OaJCSzUqX99HhAdElnyT5itA==
+=tMRS
 -----END PGP SIGNATURE-----
 
---Sig_/3rw2I3JrDfSWQiBsGkIt2sO--
+--Sig_/MS6smuMKV9MKdUoJbE66fzO--

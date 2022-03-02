@@ -2,77 +2,104 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6034C4C9A4E
-	for <lists+linux-next@lfdr.de>; Wed,  2 Mar 2022 02:16:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63AF04C9A6A
+	for <lists+linux-next@lfdr.de>; Wed,  2 Mar 2022 02:31:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238803AbiCBBQp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 1 Mar 2022 20:16:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58806 "EHLO
+        id S231726AbiCBBcR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 1 Mar 2022 20:32:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229771AbiCBBQp (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 1 Mar 2022 20:16:45 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72214996A7;
-        Tue,  1 Mar 2022 17:16:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S230351AbiCBBcQ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 1 Mar 2022 20:32:16 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21B6C2F018;
+        Tue,  1 Mar 2022 17:31:33 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 275A3B81BFB;
-        Wed,  2 Mar 2022 01:15:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92128C340EE;
-        Wed,  2 Mar 2022 01:15:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646183757;
-        bh=ewUPkTFlUsosBWd4IqYZppZy3zDmtXuv9MukBGKEvd8=;
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4K7c5q44W8z4xcq;
+        Wed,  2 Mar 2022 12:31:27 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1646184689;
+        bh=AvxIclA+HfdtF6uRf9ReUyXIXfyCHwRpdXWQn0y/1Iw=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Yqp+tW7QNVHPNrg8/T3ZAqdjE0QauXRdEcVCbn6zqkUoT1m6rnOk39ks5sIYfpx7y
-         Z2vcCo1B5pPbspkoOogPj1VeMmgzszuBYglsY+L7jGQkqQcsM1f1+FqtpdCGXdVvrg
-         ceolLOjg9cxkv2lYILVGEfPLriE0iqRE6KdRvcezEVnuff9tXLTDQod27phOt+Lr7Z
-         wAZSQrk7GZSKtY8iXiS6e6hz9UTe3oLp4gPyf+4K02zE5/LSMxdz0mosWJZFpHMS7C
-         TTH3cCLUMCLCEDT1C1ljHEyNoIvMJcXFJGinkPAYxGK+7R9MC0a9bbQ9T/xnZoz2kX
-         yirILZIL9vHmA==
-Date:   Tue, 1 Mar 2022 17:15:56 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Dust Li <dust.li@linux.alibaba.com>,
+        b=sxkcZ2xh/RJo6wV2bcrx94cmsk3Yx1Z8BEbYrfX+lRd8lcHQ3bPZcoNLUYjPgonUa
+         IjYal6WhTHU+q3xm8JCSUsJ4JjjDlqQZLkmLduVxoaVgmgCK8i6hxv5fogKeVCZrfx
+         e1tnWvlcWbdgnqyZ9xC7F/INBMbW5/HfEkSwVMkBjUZCTK8qJmkjOlLWBxg8QEOud4
+         WvlQlGer9RnbB9+0QdWn0ia77P3Cr/xe9EzoM/f3GIFEuuZFBdgcQw2o3w1RnRj9Kl
+         jLTLuuqsVIxCC5YN4fBl9mW/QQGPMUKnMpsWt17h4uwmgihyqult7cnJrG6VVcaajR
+         UhrPUSgBp4BVA==
+Date:   Wed, 2 Mar 2022 12:31:26 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the net-next tree
-Message-ID: <20220301171556.7fcb6eeb@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-In-Reply-To: <20220302115646.422e29cd@canb.auug.org.au>
-References: <20220302115646.422e29cd@canb.auug.org.au>
+Subject: Re: linux-next: build warning after merge of the drm-misc tree
+Message-ID: <20220302123126.65bcbc82@canb.auug.org.au>
+In-Reply-To: <20220120142639.02c54ae9@canb.auug.org.au>
+References: <20211117134926.1d339d71@canb.auug.org.au>
+        <20220120142639.02c54ae9@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/vMoEJP4dGQ_c=PVNw9nf/n2";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, 2 Mar 2022 11:56:46 +1100 Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the net-next tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
-> 
-> 
-> Caused by commit
-> 
->   12bbb0d163a9 ("net/smc: add sysctl for autocorking")
-> 
-> ( or maybe commit
-> 
->   dcd2cf5f2fc0 ("net/smc: add autocorking support")
-> )
-> 
-> I have used the net-next tree from next-20220301 for today.
+--Sig_/vMoEJP4dGQ_c=PVNw9nf/n2
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Probably fixed by just pushed commit ef739f1dd3ac ("net: smc: fix
-different types in min()") ? Sorry about that.
+Hi all,
+
+On Thu, 20 Jan 2022 14:26:39 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> On Wed, 17 Nov 2021 13:49:26 +1100 Stephen Rothwell <sfr@canb.auug.org.au=
+> wrote:
+> >=20
+> > After merging the drm-misc tree, today's linux-next build (htmldocs)
+> > produced this warning:
+> >=20
+> > include/drm/gpu_scheduler.h:316: warning: Function parameter or member =
+'work' not described in 'drm_sched_job'
+> >=20
+> > Introduced by commit
+> >=20
+> >   542cff7893a3 ("drm/sched: Avoid lockdep spalt on killing a processes"=
+) =20
+>=20
+> I am still seeing this warning.
+
+I am still seeing this warning.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/vMoEJP4dGQ_c=PVNw9nf/n2
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIeyO4ACgkQAVBC80lX
+0Gx+ygf/U77Kq82vqHGRevDhByIucjbzp7gjA4KTD9HMV6uB7l37GEj5jXu/LC84
+KypgkQv8xxmX4ZNmwAZ3Yi591KGJx56QeEZCnXbprkXlHWq3gRPkDIlhMC6vXlNx
+uspG1ZL9Z2miNhb15n8MmyUTQ7sTYYXsvdOUFwYL/WdFC/Hc0ouS1dBBfe/nOAqi
+d92adK6DOWSB31N6XBEAAms//XgzULph/+QjK8NRujQqYNUmVQndOeGq/E+cwU7u
+iq+Bcf5s1sWiHQ/7LWCd5ZklhYlQTdorqLSB7b/0A1ls+rxH6NmnOcyas98sr06+
+GeMSeIjC9qxw3QUIDOYIcylU9FbYGw==
+=Yq//
+-----END PGP SIGNATURE-----
+
+--Sig_/vMoEJP4dGQ_c=PVNw9nf/n2--

@@ -2,96 +2,134 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 180574CB08E
-	for <lists+linux-next@lfdr.de>; Wed,  2 Mar 2022 22:01:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E79ED4CB119
+	for <lists+linux-next@lfdr.de>; Wed,  2 Mar 2022 22:16:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244968AbiCBVCN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 2 Mar 2022 16:02:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48016 "EHLO
+        id S239491AbiCBVQm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 2 Mar 2022 16:16:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237588AbiCBVCN (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Mar 2022 16:02:13 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2377DBD25;
-        Wed,  2 Mar 2022 13:01:27 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4K863n53qyz4xcP;
-        Thu,  3 Mar 2022 08:01:25 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1646254886;
-        bh=SQUuc3pybNpsZ8c1blUw1EbYy3GfHMBlhW9RHVMoqao=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Du9og/MyYKgDTOobVi4U0CYVKywdskIZFGVoA/aKoS58xYNkyVIlvEJ62HX8is6tv
-         ih9XKHNFUEYNYchn/JuuDQkH6xKoL4seNHWly4dZkmnXXntWMY7239K0Fqdb9/D4ct
-         bLJMjVuoSr9Su5KlnhPDUaxhfMumjwI/9BVyu0hv00bnm3s4I9PAluv2S0ESONoFyl
-         6Td3sGScqPaQLvBZ6Hqz9is3JcWqBh2Ngan8eUGPfWj1ae9iAPcNJVnGSoCXeibqHW
-         Xa+Cy40swvjv6hw7GCTC6ZlEl9i6xvhPI3Cz5AB1AMa5o7ax5Qu6oM0BPimfaltLkU
-         JXYgY+GbbzugA==
-Date:   Thu, 3 Mar 2022 08:01:24 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>
-Cc:     Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the sound-asoc tree
-Message-ID: <20220303080124.32dd0d15@canb.auug.org.au>
+        with ESMTP id S236824AbiCBVQl (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Mar 2022 16:16:41 -0500
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5095B2191
+        for <linux-next@vger.kernel.org>; Wed,  2 Mar 2022 13:15:57 -0800 (PST)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-2dbd8777564so33846217b3.0
+        for <linux-next@vger.kernel.org>; Wed, 02 Mar 2022 13:15:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=g6S7KTHpZij+RGyRnvZ8nkfXBf0HsFi8cLuypoMiBsc=;
+        b=Po0Ah5KgYGXPXt+xj6i2L/fWOJ79wDdt3yHPYnemARHcnitocRIUqJCIfcxzNd5YSC
+         snQrxe+RLdw0NGC/l4Luuu6VphbZsaYytB6COm1GMxri+SlYHubZCPv6B2KIz1kIv4ut
+         L7b1zvuEM2nf2tzlBWYuMStmy1vMTHZzxY4xHSqIgAHkvegdRv5KM+9+VomZenzmTezz
+         nHFjIXlWWPd1DWGVlTDLqWawx2mRl6F4Wk+Ag0Eor9NOCsM+AfXmUUhzVvxxK4kVpq4j
+         pqaG88cqK6lFiQ+WV+capV6KJVr1c/ET4bJoHMZDl/kCv1luhhHxXnSVE+/NRZ88wEDH
+         J33w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=g6S7KTHpZij+RGyRnvZ8nkfXBf0HsFi8cLuypoMiBsc=;
+        b=aKoXoHXTFNAMatX/DNerMK1lVgBMZMI9b8kelb0JBqJOzo87gPkCC411FM4FOUrSfH
+         tMnzLu6mH5+G8Wxa/9z2+sS+7mNa62MxGWqDoMgVEZsuQn0TEVrBDCbNkw2+eiJDF7xs
+         xl7MAOS3kOoYBEbjSaj5eBl0qkU3i+oK/Z/qeECxuBVUOmmXWveqfh0kYnwTUQj11O80
+         onsnRXk/3JDI86ByrJX1QefoMcTqWL4/kfVKCkOD1B5B5yIxalqG9Fp2PyzpGT9WECZw
+         EXLXoAF4LCjR3MabqYNuo/1rCxPwlNouoglNnfZHGoPjimOigBRu3qdBWujro+TwElpC
+         Jv1A==
+X-Gm-Message-State: AOAM531khe5oZE7iSUAlM0TTMtkAuA4dNOfDpJUfVk7r6qxqQiuntsl9
+        q0pHLxqQSu47UtkegPDwOdRS4Yzm+veK1DyNJn+ipw==
+X-Google-Smtp-Source: ABdhPJx83W/3wuFBK5MLadFsQL8B8MUMe9388xotYcgI6A1IybhSNFqphijnutgdst4Fs72DhVbMkGDOUROcKs6MLNA=
+X-Received: by 2002:a81:2f12:0:b0:2d7:d366:164a with SMTP id
+ v18-20020a812f12000000b002d7d366164amr32617735ywv.265.1646255755010; Wed, 02
+ Mar 2022 13:15:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ICDADcts05.GOWJxqhjO1BI";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 3 Mar 2022 02:45:43 +0530
+Message-ID: <CA+G9fYuX3nM5y_VD_0menGTF0AqDOZ85=ptmQ_3XoPAAxYMWyQ@mail.gmail.com>
+Subject: [next] Internal error: aarch64 BRK: f20003e8 at pc : has_cpuid_feature
+To:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Freescale Mailman List <freescale@lists.linaro.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Luis Machado <luis.machado@arm.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Alan Hayward <alan.hayward@arm.com>,
+        Salil Akerkar <Salil.Akerkar@arm.com>,
+        Shuah Khan <shuah@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Qian Cai <quic_qiancai@quicinc.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/ICDADcts05.GOWJxqhjO1BI
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+[Please ignore this email if it is already reported]
 
-Hi all,
+Linux next-20220228..next-20220302 running on Freescale Layerscape 2088A RDB
+board the following kernel crash reported [1].
 
-In commit
+This kernel crash is only seen with kselftest-merge configs.
 
-  de2c6f98817f ("ASoC: soc-compress: prevent the potentially use of null po=
-inter")
+metadata:
+  git_ref: master
+  git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+  git_sha: 6705cd745adbbeac6b13002c7a30060f7b2568a5
+  git_describe: next-20220228..next-20220302
+  kernel-config: https://builds.tuxbuild.com/25kHVbzi7zV3Pzb1i4scZwtXzeA/config
+  device: Freescale Layerscape 2088A RDB Board
 
-Fixes tag
+Kernel crash:
+[    0.000000] Detected PIPT I-cache on CPU0
+[    0.000000] Internal error: aarch64 BRK: f20003e8 [#1] PREEMPT SMP
+[    0.000000] Modules linked in:
+[    0.000000] CPU: 0 PID: 0 Comm: swapper Not tainted
+5.17.0-rc6-next-20220228 #1
+[    0.000000] Hardware name: Freescale Layerscape 2088A RDB Board (DT)
+[    0.000000] pstate: 200000c5 (nzCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[    0.000000] pc : has_cpuid_feature+0x104/0x10c
+[    0.000000] lr : has_cpuid_feature+0x58/0x10c
+[    0.000000] sp : ffffb7b2bf6b3d00
+[    0.000000] x29: ffffb7b2bf6b3d00 x28: ffffb7b2be085690 x27: 0000000000000018
+[    0.000000] x26: ffffb7b2be874e48 x25: ffffb7b2be874e70 x24: ffffb7b2beabc238
+[    0.000000] x23: 0000000000000005 x22: ffffb7b2bfc05be0 x21: ffffb7b2bfc05728
+[    0.000000] x20: 0000000000000020 x19: ffffb7b2be084950 x18: 0000000000000000
+[    0.000000] x17: 6666666666663733 x16: 000000000001f000 x15: 0126000040000000
+[    0.000000] x14: 1020110500000000 x13: 0000000002102211 x12: 0126000040000000
+[    0.000000] x11: 0000000000000000 x10: 0000000000000043 x9 : 1211111110110222
+[    0.000000] x8 : 0000000010011011 x7 : 0000013100000000 x6 : 0000000002102211
+[    0.000000] x5 : 0000000000000000 x4 : 0000000000000000 x3 : 0000000000000000
+[    0.000000] x2 : 0000000000000028 x1 : 0000000000000040 x0 : 0022220000000000
+[    0.000000] Call trace:
+[    0.000000]  has_cpuid_feature+0x104/0x10c
+[    0.000000]  has_useable_gicv3_cpuif+0x24/0x94
+[    0.000000]  update_cpu_capabilities+0x90/0x144
+[    0.000000]  init_cpu_features+0x28c/0x2b4
+[    0.000000]  cpuinfo_store_boot_cpu+0x58/0x68
+[    0.000000]  smp_prepare_boot_cpu+0x4c/0x60
+[    0.000000]  start_kernel+0x20c/0x77c
+[    0.000000]  __primary_switched+0xc0/0xc8
+[    0.000000] Code: b9402260 17ffffd7 d2800000 17ffffd6 (d4207d00)
+[    0.000000] ---[ end trace 0000000000000000 ]---
+[    0.000000] Kernel panic - not syncing: Attempted to kill the idle task!
 
-  Fixes: 467fece ("ASoC: soc-dai: move snd_soc_dai_stream_valid() to soc-da=
-i.c")
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-has these problem(s):
-
-  - SHA1 should be at least 12 digits long
-    This can be fixed for the future by setting core.abbrev to 12 (or
-    more) or (for git v2.11 or later) just making sure it is not set
-    (or set to "auto").
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/ICDADcts05.GOWJxqhjO1BI
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIf2yUACgkQAVBC80lX
-0GwJ4gf9Hgq9pA8em56U1sZ8Cx8BDiV+Yu4kfkOT3Psr9mdodRUwwNjrx95DmZLE
-+qIK7H13elHstBFq5DFoF3EYakiwed++XMjqmAHkX2Z/1hM7kV/tw/6IvhOrqmXB
-miDwXdNQvkbqVeVQAnpSGsq/QdndCsda6Jco5YvJjy8BY7Rs0fHE/6CeiPl7FBPe
-med5DkfxLAsrM0vUjuffQjSuBcZi5sHfNYUkTVxr1z1N4tkIHAVV2rFj5g+wTapT
-JwcbU/KsAwHU2I7uNFM0DWQOHQlgPtHta+mt/RhtSMZm5NxTXmWHRE9rsA1iqnMq
-oClqCxGf1Kqsv6/vh3PW1LF0SxPIkg==
-=Q5TE
------END PGP SIGNATURE-----
-
---Sig_/ICDADcts05.GOWJxqhjO1BI--
+--
+Linaro LKFT
+https://lkft.linaro.org
+[1] https://lavalab.nxp.com/scheduler/job/851695#L565
+[2] https://lavalab.nxp.com/scheduler/job/853258#L695

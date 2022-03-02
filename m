@@ -2,70 +2,84 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 835FE4CA1EC
-	for <lists+linux-next@lfdr.de>; Wed,  2 Mar 2022 11:13:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49B054CA238
+	for <lists+linux-next@lfdr.de>; Wed,  2 Mar 2022 11:32:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240926AbiCBKOH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 2 Mar 2022 05:14:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34102 "EHLO
+        id S240993AbiCBKd1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 2 Mar 2022 05:33:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240928AbiCBKOG (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Mar 2022 05:14:06 -0500
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D30B82BB00
-        for <linux-next@vger.kernel.org>; Wed,  2 Mar 2022 02:13:22 -0800 (PST)
-Received: by mail-io1-xd33.google.com with SMTP id d62so1155203iog.13
-        for <linux-next@vger.kernel.org>; Wed, 02 Mar 2022 02:13:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sartura-hr.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=n/va5PuoUYUrMdAnEJH/5BVU8R8hPyHSL3l6c3JGTEI=;
-        b=7/D7e72U3eXPy0qot+X5W3ZtTrt1LQtQnW4I17LkNgPjd/I6dSguPJpT5PifCuHojs
-         yXn8bVzlGwLTyhFC8NAbs5aIDtjpkWqEzp5qpLNj9GN1W06vQ3QrFpHVyMqQWsFe7NYw
-         /FUoGQF75G5tfmBo/8MXfMoaCDvnvCQTlad7piOYmjk2Ug8fFe8waFYkRcXQY93Q/F6W
-         RiG4S5UiFeYOxOhd6XK5MVmU6Y65fz5frYckWTbYsD1LO0cki7i37iEdlNMAWuFWD9+T
-         ugH163XNPpLyfMPZfAvfAey4MdBcqK3xfGSrjB2MiovMyby+U5F8L5VAtIx7RNy/YCQE
-         +b1Q==
+        with ESMTP id S241000AbiCBKd0 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Mar 2022 05:33:26 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 136A51AF31
+        for <linux-next@vger.kernel.org>; Wed,  2 Mar 2022 02:32:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646217161;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kPpPQo0rFTcgUQrPoN9LDSfjjllxDYkn6tRSloMNpvs=;
+        b=elxaCj4yQnho9Ikx+U5T/yf4bQ9kYlzdd8qPXTA2jGpW9U4a/0LhwgGEsFsd/Y68pdaX8O
+        CHDN8+zu7x2sePE/MRFWo62Aq+zafjoim3MLPsZkrHeslesbY2rAhub755YpMo/kPIDrBV
+        x99PDU0IXTbdniPpH7BNBriPTEl7x3w=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-381-5nPDqWZLOQCecmyVJAm2Kw-1; Wed, 02 Mar 2022 05:32:40 -0500
+X-MC-Unique: 5nPDqWZLOQCecmyVJAm2Kw-1
+Received: by mail-ed1-f69.google.com with SMTP id o5-20020a50c905000000b00410effbf65dso732637edh.17
+        for <linux-next@vger.kernel.org>; Wed, 02 Mar 2022 02:32:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=n/va5PuoUYUrMdAnEJH/5BVU8R8hPyHSL3l6c3JGTEI=;
-        b=WSRfT0cX4/5vi4GlhMskkzwBMA3mKrGj/ZjnFbV7lE1xHgZsSBa/e0Lm6EwTGkuLXa
-         7shHaexnFrmYYUrUPBdlRsTAHDENEWgQb44dW8Do3NLkIZ0A/5kssDAS0ImkgKHvxh8k
-         SqYNh1D2+Rl4B2lFGr2HdwVtrp0g5FiU+nVy9bHuIBZwkRGg50iCsk3YKIqD44ekMB0M
-         FXMwxPbil1ls1rEU2QH8IzZIjLlksOq/xvOtlST2+60OGKYSiVzunTOhwBIpG9iahT+f
-         NZ7ohJ2qdHWHDhL4AgTwoKgSGuw6nw7dW+81px2fHjxqP5GB5Z0VHWBxARVg1ekU6i81
-         MjDA==
-X-Gm-Message-State: AOAM532wDMBgAAxshuwFWD3deprjLU71zU8M6aBl17V0vsjDsibDj29A
-        +7/S3svAGB0ynHEl5FVglVvX1d8eiUXyIpK4PdegBQ==
-X-Google-Smtp-Source: ABdhPJwi5a5pnoBoiow+gCoyvl+naffUXTuNGaq0HgF1hNQyVeEkOReDHm1F1EtCUxzaXxbv9XvBmkxP8lf5wMBMQOs=
-X-Received: by 2002:a02:6383:0:b0:314:d9da:13b2 with SMTP id
- j125-20020a026383000000b00314d9da13b2mr24352512jac.99.1646216002260; Wed, 02
- Mar 2022 02:13:22 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=kPpPQo0rFTcgUQrPoN9LDSfjjllxDYkn6tRSloMNpvs=;
+        b=2lFCHAyMSUZzyEuzw513U/PT1xAA9Swv0qYGkxxNuUFanAaJWI8HiOhAQ+LyBoBuVL
+         v3uZaEYsrN/7thlrnH48/I2ijvdCTK9cpXX0+hkneYODVWTsO6D+Dfj+Fj/dyEGt+7di
+         k8xjX90w1fkYI8I4FURyculRz1LMo5qu5n37JdHZ8F8veqgxplAsiQS1TPAaDmPiMo8x
+         UC2AQU/mWuDG7Ecns422bshbDR9ftA5PG59thweTwU42oFTLL4dTvIXoMDfr0M86ow+U
+         t3sSxK5U30SX9tWyhP/JrGIGOpxc3NRMK/f7sYEQ2DYNoLVe6JrnkUutlZvgeaUU6Ndv
+         /IaA==
+X-Gm-Message-State: AOAM532IKZgo68uKW/G3Ar5ekaiknE1L4YJcFpXJIopUu1+KSeFcGc0C
+        VrHPXu7bJG3Qw8TRjJhO5IWnK96CW5ZIxxIRGoxIoxq+QqfuWtBe9LWhj2i1u3jAoUovbLoEUvK
+        WsOwPauZFfu9zilDZT4zYOw==
+X-Received: by 2002:a50:8d1a:0:b0:415:a1ce:89a8 with SMTP id s26-20020a508d1a000000b00415a1ce89a8mr4185345eds.146.1646217159197;
+        Wed, 02 Mar 2022 02:32:39 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzgt5fBNpSUSHz6W30noIClOvZSA7o9CWwo8lkYp+IWSlTUeGZLpFqRU4MWM0XGxUgTLVLFbg==
+X-Received: by 2002:a50:8d1a:0:b0:415:a1ce:89a8 with SMTP id s26-20020a508d1a000000b00415a1ce89a8mr4185326eds.146.1646217158987;
+        Wed, 02 Mar 2022 02:32:38 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id f3-20020a056402068300b0041594aa9eedsm1554151edy.54.2022.03.02.02.32.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Mar 2022 02:32:38 -0800 (PST)
+Message-ID: <9925b272-b52d-be3c-bac9-e56cea421199@redhat.com>
+Date:   Wed, 2 Mar 2022 11:32:37 +0100
 MIME-Version: 1.0
-References: <20220228193928.3ec6ee98@canb.auug.org.au> <YhyPfcjJtIKNQtF8@google.com>
- <Yhyn72NO/roH1gA8@kroah.com> <YhzENKPtY+WOp566@google.com>
- <Yh09/r/nT2LeE82n@kroah.com> <Yh3pZXQPP9kmcSSx@google.com>
- <Yh325S5PyPiJf4F5@kroah.com> <Yh37gTCPaESkgNzV@google.com>
- <Yh6N4mWCfHtlBM07@kroah.com> <Yh8vmWeW+sPz0DdD@google.com>
-In-Reply-To: <Yh8vmWeW+sPz0DdD@google.com>
-From:   Robert Marko <robert.marko@sartura.hr>
-Date:   Wed, 2 Mar 2022 11:13:11 +0100
-Message-ID: <CA+HBbNF-KZ3+R_+O1e8m1tHfHXKRwqO0uF3D85R9czpYGnot+w@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the char-misc tree with the mfd tree
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Greg KH <greg@kroah.com>, Stephen Rothwell <sfr@canb.auug.org.au>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alistair Francis <alistair@alistair23.me>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: linux-next: build warning after merge of the drm tree
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Dave Airlie <airlied@linux.ie>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Rajat Jain <rajatja@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+References: <20220202150201.290c7d3d@canb.auug.org.au>
+ <20220202150320.3e9bdd62@canb.auug.org.au>
+ <f50d5044-7192-bdb3-7ca9-7217ed311787@redhat.com>
+ <20220302123417.2c84200b@canb.auug.org.au>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220302123417.2c84200b@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,48 +87,41 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Mar 2, 2022 at 9:49 AM Lee Jones <lee.jones@linaro.org> wrote:
->
-> On Tue, 01 Mar 2022, Greg KH wrote:
-> > > > How do you want to see this merged?
-> > >
-> > > The plan is for the whole set to be merged together via MFD.
-> > >
-> > > All of the other maintainers have now Acked, so it's ready to go:
-> > >
-> > >   https://lore.kernel.org/all/20220131133049.77780-1-robert.marko@sar=
-tura.hr/
-> > >
-> > > Looking at the diff, I'm not entirely sure why you took it in the
-> > > first place?
-> >
-> > As I mentioned above, someone else asked me to as it was sitting around
-> > for quite a while with no movement.
->
-> Okay, just went to investigate.
->
-> The set hasn't been merged because it is missing a DT Ack from Rob.
+Hi,
 
-Does anybody know if Rob is active?
-He has not replied to any of the patch revisions in many months.
-I have tried pinging/bumping on the patches but it did not help.
+On 3/2/22 02:34, Stephen Rothwell wrote:
+> Hi all,
+> 
+> On Wed, 2 Feb 2022 09:38:37 +0100 Hans de Goede <hdegoede@redhat.com> wrote:
+>>
+>> On 2/2/22 05:03, Stephen Rothwell wrote:
+>>>
+>>> On Wed, 2 Feb 2022 15:02:01 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:  
+>>>>
+>>>> After merging the drm tree, today's linux-next build (htmldocs) produced
+>>>> this warning:
+>>>>
+>>>> drivers/gpu/drm/drm_privacy_screen.c:X: warning: Function parameter or member 'data' not described in 'drm_privacy_screen_register'  
+>>>
+>>> Actually:
+>>>
+>>> drivers/gpu/drm/drm_privacy_screen.c:392: warning: Function parameter or member 'data' not described in 'drm_privacy_screen_register'  
+>>
+>> Thank you for reporting this, I will prepare a patch fixing this.
+> 
+> I am still seeing this warning.
+
+Weird, this should be fixed by:
+
+https://cgit.freedesktop.org/drm-misc/commit/?id=ccbeca4ca04302d129602093c8d611065e3f7958
+
+Which was added to the "drm-misc-next-2022-02-23" drm-misc tag/pull-req 7 days ago,
+which was merged into drm-next 6 days ago ?
+
+I just reverted that did a make htmldocs and got the warning, then re-applied and
+the warning was gone...
 
 Regards,
-Robert
->
-> --
-> Lee Jones [=E6=9D=8E=E7=90=BC=E6=96=AF]
-> Principal Technical Lead - Developer Services
-> Linaro.org =E2=94=82 Open source software for Arm SoCs
-> Follow Linaro: Facebook | Twitter | Blog
 
+Hans
 
-
---=20
-Robert Marko
-Staff Embedded Linux Engineer
-Sartura Ltd.
-Lendavska ulica 16a
-10000 Zagreb, Croatia
-Email: robert.marko@sartura.hr
-Web: www.sartura.hr

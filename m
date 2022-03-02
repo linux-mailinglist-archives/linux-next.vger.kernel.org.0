@@ -2,134 +2,163 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E79ED4CB119
-	for <lists+linux-next@lfdr.de>; Wed,  2 Mar 2022 22:16:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 241474CB1F4
+	for <lists+linux-next@lfdr.de>; Wed,  2 Mar 2022 23:12:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239491AbiCBVQm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 2 Mar 2022 16:16:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56766 "EHLO
+        id S235450AbiCBWMn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 2 Mar 2022 17:12:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236824AbiCBVQl (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Mar 2022 16:16:41 -0500
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5095B2191
-        for <linux-next@vger.kernel.org>; Wed,  2 Mar 2022 13:15:57 -0800 (PST)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-2dbd8777564so33846217b3.0
-        for <linux-next@vger.kernel.org>; Wed, 02 Mar 2022 13:15:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=g6S7KTHpZij+RGyRnvZ8nkfXBf0HsFi8cLuypoMiBsc=;
-        b=Po0Ah5KgYGXPXt+xj6i2L/fWOJ79wDdt3yHPYnemARHcnitocRIUqJCIfcxzNd5YSC
-         snQrxe+RLdw0NGC/l4Luuu6VphbZsaYytB6COm1GMxri+SlYHubZCPv6B2KIz1kIv4ut
-         L7b1zvuEM2nf2tzlBWYuMStmy1vMTHZzxY4xHSqIgAHkvegdRv5KM+9+VomZenzmTezz
-         nHFjIXlWWPd1DWGVlTDLqWawx2mRl6F4Wk+Ag0Eor9NOCsM+AfXmUUhzVvxxK4kVpq4j
-         pqaG88cqK6lFiQ+WV+capV6KJVr1c/ET4bJoHMZDl/kCv1luhhHxXnSVE+/NRZ88wEDH
-         J33w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=g6S7KTHpZij+RGyRnvZ8nkfXBf0HsFi8cLuypoMiBsc=;
-        b=aKoXoHXTFNAMatX/DNerMK1lVgBMZMI9b8kelb0JBqJOzo87gPkCC411FM4FOUrSfH
-         tMnzLu6mH5+G8Wxa/9z2+sS+7mNa62MxGWqDoMgVEZsuQn0TEVrBDCbNkw2+eiJDF7xs
-         xl7MAOS3kOoYBEbjSaj5eBl0qkU3i+oK/Z/qeECxuBVUOmmXWveqfh0kYnwTUQj11O80
-         onsnRXk/3JDI86ByrJX1QefoMcTqWL4/kfVKCkOD1B5B5yIxalqG9Fp2PyzpGT9WECZw
-         EXLXoAF4LCjR3MabqYNuo/1rCxPwlNouoglNnfZHGoPjimOigBRu3qdBWujro+TwElpC
-         Jv1A==
-X-Gm-Message-State: AOAM531khe5oZE7iSUAlM0TTMtkAuA4dNOfDpJUfVk7r6qxqQiuntsl9
-        q0pHLxqQSu47UtkegPDwOdRS4Yzm+veK1DyNJn+ipw==
-X-Google-Smtp-Source: ABdhPJx83W/3wuFBK5MLadFsQL8B8MUMe9388xotYcgI6A1IybhSNFqphijnutgdst4Fs72DhVbMkGDOUROcKs6MLNA=
-X-Received: by 2002:a81:2f12:0:b0:2d7:d366:164a with SMTP id
- v18-20020a812f12000000b002d7d366164amr32617735ywv.265.1646255755010; Wed, 02
- Mar 2022 13:15:55 -0800 (PST)
+        with ESMTP id S230045AbiCBWMm (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Mar 2022 17:12:42 -0500
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2053.outbound.protection.outlook.com [40.107.96.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9707DC3373;
+        Wed,  2 Mar 2022 14:11:58 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bhUJL/nqtaC+5ghZ+C1btXUi9YQ73ZK1hzYrmYRfXtEzGa6YBhbrbQ2w4EwTYsn5Je6l3o+np6788GKrXlUBshEWAARECfKkpWCpWaKF/sKdVgdkya+KdY70JnbGbRNmV5+/Je4N4rwejLJtbAeBBPZa653+BfJjBfGdnNX0KmDEcasj2wT/XAKDZaZzNKdW36Q21iGJMZHWZpmHvJ4p4pdW/nmqRpNkKK/DkwOKVNPB24XXdkkqPHqk3aJltX3c86hWzY50U4BHdlMNzP+wLCs2TiAQ4dIVSDE/52l3o8pB0W6oIsC8/6u6KFDMyUMmnnjedoEu8szN2EunJ7OmrA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nwOdKmrjEMyh+ZevlDfjLL4uQyJ94Aoz4+x1VHTJLt0=;
+ b=YcxeE4VV8H5ypoifpDBdlnHao3GU2qB6kPDLWcqN7j8zNhyQLOWXrkU/KSb+zWriGtKCjp1IePEXCWCsTcllRvZKZpLQoNg9ekbNYPVdlNQTDIZHUXBVcqJNn0OK9oN3eIhK8f/PpqoAlwGGHyQ08IHjNHFkdkYuCgDPT/rsrswA2KHqVimJNxX1fu3NFLzAhqYq6x1N3OHsjIsC7r1LvQGQdm7rtoK1aYeOryIoE2uHsIHlYa8JvrdXpr8XkrWMYyRw3e61GwFG7SO4iZK99GIiTM51xdaYB+YimoZ8sJVL0O/dbXZNPKdFma2VgBexWeX4oycgKKA5PBY+oW/YAA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nwOdKmrjEMyh+ZevlDfjLL4uQyJ94Aoz4+x1VHTJLt0=;
+ b=B/jAV6ToFf+fO/FNvLtdKwd8+/1a0tTMSSX7VVlmnQohhrJaI0IGIlWJHUV9g6naD9J/GISRfxaOt707tethzLMJP/mq0qbHu6yFlhDxP55BOtvUW6/JvbIjc8xJCUx0a0vU0e26J/JvkGG9jEqE0DGQpRIWuXh3IMWXPocCGHc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM6PR12MB3370.namprd12.prod.outlook.com (2603:10b6:5:38::25) by
+ DM5PR12MB1820.namprd12.prod.outlook.com (2603:10b6:3:10d::15) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5017.26; Wed, 2 Mar 2022 22:11:56 +0000
+Received: from DM6PR12MB3370.namprd12.prod.outlook.com
+ ([fe80::b908:1ec9:3e42:ea00]) by DM6PR12MB3370.namprd12.prod.outlook.com
+ ([fe80::b908:1ec9:3e42:ea00%5]) with mapi id 15.20.5017.027; Wed, 2 Mar 2022
+ 22:11:56 +0000
+Message-ID: <4804f1e7-8a25-ad8c-dd63-589ed34260c6@amd.com>
+Date:   Wed, 2 Mar 2022 17:11:52 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: linux-next: Fixes tag needs some work in the amdgpu tree
+Content-Language: en-CA
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Alex Deucher <alexdeucher@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20220303075733.481987a8@canb.auug.org.au>
+From:   Luben Tuikov <luben.tuikov@amd.com>
+In-Reply-To: <20220303075733.481987a8@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YT1PR01CA0137.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:2f::16) To DM6PR12MB3370.namprd12.prod.outlook.com
+ (2603:10b6:5:38::25)
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 3 Mar 2022 02:45:43 +0530
-Message-ID: <CA+G9fYuX3nM5y_VD_0menGTF0AqDOZ85=ptmQ_3XoPAAxYMWyQ@mail.gmail.com>
-Subject: [next] Internal error: aarch64 BRK: f20003e8 at pc : has_cpuid_feature
-To:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Freescale Mailman List <freescale@lists.linaro.org>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Luis Machado <luis.machado@arm.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Alan Hayward <alan.hayward@arm.com>,
-        Salil Akerkar <Salil.Akerkar@arm.com>,
-        Shuah Khan <shuah@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Qian Cai <quic_qiancai@quicinc.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 5dbaaa36-66c1-4010-d245-08d9fc99a9b5
+X-MS-TrafficTypeDiagnostic: DM5PR12MB1820:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR12MB1820E75F190053D45348580799039@DM5PR12MB1820.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: SkG1RfbmvledhCpaQTQO5mtY/ok93AKO3uGssVgJrG8WthC9OaWVIJVj8sJYQjCxV9vn3RgpykoKDKcnFSy3g+AIhJgaM5P1SOlBGEYZ639HGrKZtYetZlrVACFk12CdkFJXznzt7aWfSPuWClDPneCra6xrfUISYFfi+pC+/zI6Nd2D9wCmqDUc6MfV6l71GAxyqCEUE66HhMbHtECHCRuefvVlyKrUY/meqBWA/7hfAsCsyk/KFILab7aPb4hExWBnzIjnCFmPzANTCuFuDNM84Oq3lqLI63vVET8QYYgoAX2fOa3FlKJm3P23+RGymVGfNLRvub3lsgYj306RdHOiW4ylVxpJ2toUDZA7sdjI9MU7q+kXoxgi2MsPLnCvOP/LJqbMVT0S+7h8Hd+mZ5ohyxYD1wBCAt+xTDHFb+BcFRuWeFfbocInvjhPsGMkgqCtIGPlEkMH6FfweSGAj82VFbVHxI7YY0fhqRHw+fkL6ZQ8Cj3PT6p/DeCPfnkL0mfnFapk7n74zTWm0yT6ptU3XULzL2gQeTOodaBGY/q8NZlhbac4pZ8mdtKeYxstSczZJc3iA00rnbwglBFZc82YGoRLCojZ4c8jhAkl6uSetwthS6U7PB0J0QnkPrx3Wkkkp15GW7tDh4vRoRAPBJvOnsP3PPplLihPSmvYAX4VGNdDizg3Pog0QAoEw2Zb1e4cpdUIRPbUkrsesswllmEBaasTgX1xe26eMrhIgJo=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3370.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66476007)(66556008)(8676002)(66946007)(26005)(4326008)(186003)(2616005)(316002)(508600001)(6486002)(53546011)(110136005)(54906003)(86362001)(6666004)(6506007)(6512007)(31696002)(36756003)(31686004)(2906002)(8936002)(4744005)(5660300002)(44832011)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WmdWVllRaVhnYVpveG1aTHV3ODZ4RnlrNVZJMmg0YUlEZ1Mzcm8rMStVTWdp?=
+ =?utf-8?B?UG9Yd3B0OGRvKzdlUFBXNXl3WlE3MzZBRWpxenN5eDk3SFpJekEyTkZRL3VH?=
+ =?utf-8?B?VWw3MmJkV0lsVTFOb0NleGpBT1JTRDI1azc2N205WVNzZEI2Y0JRL3d1TUtj?=
+ =?utf-8?B?V2dsZUcyN1hYYjRIZkxZU0p2d0k1aWxPS3VwTklZWk45ODZwWkcyblN0MWFj?=
+ =?utf-8?B?SzJ1cTI2SHdMWUk3QjB3UnYwbm5McXRNWFVZK0ZUaWozMzRzTkJ1TVVSYlhN?=
+ =?utf-8?B?MG1vaGFnNHVxZENxS29lREZVay9MQlF1VlRVQXZFV1ZiVHlkRy9QYzNZSmVI?=
+ =?utf-8?B?bGovVFM1TENKYStTdUtmVWo5YkV4S2FKQnBqeFlDdC9sRjltazZLZGFCRDI1?=
+ =?utf-8?B?U1ZCbnQxbGxFbWY1bzhzZmd4ZmNyd0RNSWMxdmlSMWJyZng1YnlLN0NYdDRP?=
+ =?utf-8?B?TFU3T3FDZUtnMjN0ejRjaVRLRE9VNXQ1TFF3eGhIRGZ6a3Flck1yYWtKZmtt?=
+ =?utf-8?B?Z2NwaFdOSzBJa2RXZ0hLWUFiaDNzejZnUmFRL2wzUXVLMUFzcFBCK0kzcUdz?=
+ =?utf-8?B?Z3dCSEx2UXlTUEcrWGpyRGxkZXo3T2l0cjlvTVhkdU9wRjFJRGlkbVBpZWJF?=
+ =?utf-8?B?djR2RjNhcllQSzNSK2VVUTBrcXNKTzlrQUgzd05DQmVOQ0Eya0dNWERES21m?=
+ =?utf-8?B?bWpwZFNBVndWYlF6bE9lN3VCWVZBRVpwRGdITThYTFlwV1NPTmVIT2FPWlJD?=
+ =?utf-8?B?WG1QM3piaTRNY0paalR2dktqUDd1dWFtM3Q4SWtLWXJmVWdVUlBLcXA2UTAz?=
+ =?utf-8?B?OUFxbkJheWdhUlQvTUFMTmpjTU9iWThCbXZVdmJuVUZOVkcxUVNjRnlGYVZH?=
+ =?utf-8?B?MHJGZnNCVFdVRE9tdlNETkRZcllJTzcwb1ZtdHg0c3ZYYW1sdnFkNStKRXdt?=
+ =?utf-8?B?dGRMM2k2emFwRWxYaHpvbUxnMG41a3NGN3o1Z2o4c3l2U1kydEZMUnN1N0NB?=
+ =?utf-8?B?R2hUMUU2TkZnUkVxeVFJTTFTNWptWkFKeDkvNzg1d3VXamE4YmlWL0NxZlJn?=
+ =?utf-8?B?WVowd1oxRGhvTnphMTkwWlIwL3o2cDI3ZjZSQThiajZrbW1SUHJZbHNwL0VT?=
+ =?utf-8?B?MmVtTE1HRjB0K2xaMkRyOXpCZWhmM3dnRkJnc1NNWlh1Q1FTc1NqNDR4RjBU?=
+ =?utf-8?B?ZGN4Nmp0cm5LMFFXb2xsWlBZb0FPUkhQbDRrVTRQdWNNUHhlb0QwQkxEa0Nq?=
+ =?utf-8?B?TW9RSTZjYytiekVvTnVVakZIaTNnNThHTlN5amtHVUtlb2ZHMllKUk9NU1NZ?=
+ =?utf-8?B?cDlaQWZ0N0ZwRTJaSy9GcmRhQ0liSUkxZ0Fkbnp6V3V5Nnd2TDd3U0RhWkhw?=
+ =?utf-8?B?dzBlV3FyTzdFSmYzL0ZBSDVzVEhrVlg5WFEzS3MyM2VCK3ZyWlpySkdBZzlI?=
+ =?utf-8?B?T1Nmd2xlZ1M0aDVuWGZJTmFxQXU0bk1DWmhrbEJ3S2ZpOVZFTThjVmkyMnBt?=
+ =?utf-8?B?TUg2MXBYMWpNMm5oRDVXVzcyWU8zK0ZoQ1loa1cvS0MyVGRxZWFMekc3TlpW?=
+ =?utf-8?B?VXViaWlDeG93bEJkN1NncGZCQW14eHhQcGUxRkoraWU3YTRmQ2JHL3AxQkg2?=
+ =?utf-8?B?YzdzWjJLU0cvRGh5Ymk3WFVIcEhiWjg0bUxURmJxMUFDNkpPZW4xaTl6OGNu?=
+ =?utf-8?B?NTZKSWF2K0N1cnVXanp5NXRrVDRuMmk3aGZBN3RiYXZIWWVWQmtKbURjYW4v?=
+ =?utf-8?B?cU9ZSFBiWHhNQmorTElOeExDNFo4RXB6M2E5bzJUaTIxeVRkZ084d29lUzRN?=
+ =?utf-8?B?UTdUTzJxblFLd3hVR0hEbDhISWhFVFdKaEM4TzhiTU0yWHFrTE41NGgrVGxt?=
+ =?utf-8?B?dmd4NkEyeDJjRjJrS3haN3dpUkVpZVIrWXVHVHRpYkoyclRiWTV6RUFBY0Q3?=
+ =?utf-8?B?NU1hVkFUZU9udERiQXArUm0yOTlzZHBIWndQVXB1NkVwYStCeWpCanJrdTZ6?=
+ =?utf-8?B?Q00xRC9rcjJtdHZUQXNKaUI2QjU4bzFQKzNtcTlGaFVlRU8vaDRUeHpGVWRi?=
+ =?utf-8?B?ZWg3WjZsTVRvTWVkeGl5SlIzVFZjT3N6dlI3SnF4SmJSVWtCK28wYnpsOGVU?=
+ =?utf-8?Q?bfIM=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5dbaaa36-66c1-4010-d245-08d9fc99a9b5
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3370.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2022 22:11:55.9128
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: OrUqXqCqpcbkW8eVoTfzcJHTHD9scY+0bE2jbb8a4xPJz8waTZ03Sb3guTFHXff6
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1820
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-[Please ignore this email if it is already reported]
+In our local branch it is:
 
-Linux next-20220228..next-20220302 running on Freescale Layerscape 2088A RDB
-board the following kernel crash reported [1].
+    60862e45da3b5a drm/amd/display: Don't fill up the logs
+    ...
+    Fixes: 5898243ba7acdb ("drm/amd/display: Add dsc pre-validation in atomic check")
 
-This kernel crash is only seen with kselftest-merge configs.
+Which exists:
 
-metadata:
-  git_ref: master
-  git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-  git_sha: 6705cd745adbbeac6b13002c7a30060f7b2568a5
-  git_describe: next-20220228..next-20220302
-  kernel-config: https://builds.tuxbuild.com/25kHVbzi7zV3Pzb1i4scZwtXzeA/config
-  device: Freescale Layerscape 2088A RDB Board
+    5898243ba7acdb drm/amd/display: Add dsc pre-validation in atomic check
 
-Kernel crash:
-[    0.000000] Detected PIPT I-cache on CPU0
-[    0.000000] Internal error: aarch64 BRK: f20003e8 [#1] PREEMPT SMP
-[    0.000000] Modules linked in:
-[    0.000000] CPU: 0 PID: 0 Comm: swapper Not tainted
-5.17.0-rc6-next-20220228 #1
-[    0.000000] Hardware name: Freescale Layerscape 2088A RDB Board (DT)
-[    0.000000] pstate: 200000c5 (nzCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[    0.000000] pc : has_cpuid_feature+0x104/0x10c
-[    0.000000] lr : has_cpuid_feature+0x58/0x10c
-[    0.000000] sp : ffffb7b2bf6b3d00
-[    0.000000] x29: ffffb7b2bf6b3d00 x28: ffffb7b2be085690 x27: 0000000000000018
-[    0.000000] x26: ffffb7b2be874e48 x25: ffffb7b2be874e70 x24: ffffb7b2beabc238
-[    0.000000] x23: 0000000000000005 x22: ffffb7b2bfc05be0 x21: ffffb7b2bfc05728
-[    0.000000] x20: 0000000000000020 x19: ffffb7b2be084950 x18: 0000000000000000
-[    0.000000] x17: 6666666666663733 x16: 000000000001f000 x15: 0126000040000000
-[    0.000000] x14: 1020110500000000 x13: 0000000002102211 x12: 0126000040000000
-[    0.000000] x11: 0000000000000000 x10: 0000000000000043 x9 : 1211111110110222
-[    0.000000] x8 : 0000000010011011 x7 : 0000013100000000 x6 : 0000000002102211
-[    0.000000] x5 : 0000000000000000 x4 : 0000000000000000 x3 : 0000000000000000
-[    0.000000] x2 : 0000000000000028 x1 : 0000000000000040 x0 : 0022220000000000
-[    0.000000] Call trace:
-[    0.000000]  has_cpuid_feature+0x104/0x10c
-[    0.000000]  has_useable_gicv3_cpuif+0x24/0x94
-[    0.000000]  update_cpu_capabilities+0x90/0x144
-[    0.000000]  init_cpu_features+0x28c/0x2b4
-[    0.000000]  cpuinfo_store_boot_cpu+0x58/0x68
-[    0.000000]  smp_prepare_boot_cpu+0x4c/0x60
-[    0.000000]  start_kernel+0x20c/0x77c
-[    0.000000]  __primary_switched+0xc0/0xc8
-[    0.000000] Code: b9402260 17ffffd7 d2800000 17ffffd6 (d4207d00)
-[    0.000000] ---[ end trace 0000000000000000 ]---
-[    0.000000] Kernel panic - not syncing: Attempted to kill the idle task!
+So maybe something happened in merging, etc.
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Regards,
+Luben
 
---
-Linaro LKFT
-https://lkft.linaro.org
-[1] https://lavalab.nxp.com/scheduler/job/851695#L565
-[2] https://lavalab.nxp.com/scheduler/job/853258#L695
+On 2022-03-02 15:57, Stephen Rothwell wrote:
+> Hi all,
+> 
+> In commit
+> 
+>   d15628d483a5 ("drm/amd/display: Don't fill up the logs")
+> 
+> Fixes tag
+> 
+>   Fixes: 5898243ba7acdb ("drm/amd/display: Add dsc pre-validation in atomic check")
+> 
+> has these problem(s):
+> 
+>   - Target SHA1 does not exist
+> 
+> Maybe you meant
+> 
+> Fixes: 17ce8a6907f7 ("drm/amd/display: Add dsc pre-validation in atomic check")
+> 
+
+Regards,
+-- 
+Luben

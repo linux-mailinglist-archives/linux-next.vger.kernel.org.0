@@ -2,99 +2,100 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9713A4C9B3D
-	for <lists+linux-next@lfdr.de>; Wed,  2 Mar 2022 03:33:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 019CE4C9B44
+	for <lists+linux-next@lfdr.de>; Wed,  2 Mar 2022 03:39:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234756AbiCBCdw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 1 Mar 2022 21:33:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50120 "EHLO
+        id S231676AbiCBCkE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 1 Mar 2022 21:40:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbiCBCdv (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 1 Mar 2022 21:33:51 -0500
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3255E4C7B0
-        for <linux-next@vger.kernel.org>; Tue,  1 Mar 2022 18:33:08 -0800 (PST)
-Received: by mail-qv1-xf34.google.com with SMTP id j5so466502qvs.13
-        for <linux-next@vger.kernel.org>; Tue, 01 Mar 2022 18:33:08 -0800 (PST)
+        with ESMTP id S232563AbiCBCkE (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 1 Mar 2022 21:40:04 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC8F92E6AC;
+        Tue,  1 Mar 2022 18:39:21 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id e13so367388plh.3;
+        Tue, 01 Mar 2022 18:39:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lSiSPFe8iX4s/Cskxwb02KRknvY9DHD+1TS5sjTtth4=;
-        b=fnbbwNmU7rBK+eDNfT5Q2EaTJe8Y+GrN2Xl8IUIU0/3ijzM+MeibxSa9cIODY9sw5b
-         J9jVWftN6B3jhM/q9Q7mjTdZKCImRiO/BpwykvUqXU1+joEreU7xSh+Q7Cpu0p3Dsn5g
-         Zjvxih+xAxi4w34QHe5PysysqeHTk+c0NFf0xZc5QLIInRN6M8pFu6oNUepiPVDmtc59
-         o217fXl594Jdbrqzfn/Hn9Hu9NGWfssRZrg7JGFntwraSCA5ThIRBzXV8aZojsu7zOUH
-         nFPXo6cxnb9bFVnDo8AvUbs1425mSfCvTAXten/j3bm3L/yDtvV/GvyiP4iBUh82lv9S
-         DWSg==
+        d=gmail.com; s=20210112;
+        h=to:cc:reply-to:from:subject:message-id:date:user-agent:mime-version
+         :content-transfer-encoding:content-language;
+        bh=MtG6z1Jzb89Ndx+jl2cJ0c1G9ZcfiK5kSL2+E0wyCng=;
+        b=abfrrGS0XqDXsi7/Xv1Z4tFdV23VfDvlIsqmd4l95dfY7OUh5ZJyiuhIRJ+mFzXvXu
+         BKuNxZymZZ+9o/qz+/P4mWxNDsggFyiMKX9WtNN7DeEQAKwvM901P5x8q3wV8kNYLzkC
+         ekKEg4poMrbv+9f1tv0+/PTTgnPje9Q6ZLayL35dxtzSpccu9hVxCZ9d0GR8W+obk+2r
+         LNLscVM1qONrJG5A8GlomyUwB/1rq/J2qNKuoIchtJ9lmd1ltbb3DwQSMsLB5bZWmPQx
+         LkyEdp3dmN7LMztvoMwS2oBTz7Y6jn3zQw2dW83nmUeoTXQwIoLDYtszH8OMTyifNlws
+         5A4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lSiSPFe8iX4s/Cskxwb02KRknvY9DHD+1TS5sjTtth4=;
-        b=MuMJonyRWnP77Frm47p5KVf3qZTuRQn5SBJMzsfhttqaHcOPGyqV6le57S3g0PnfKJ
-         aHgUSKsq/ougG/A31mEJiPNw9jY1aSiGJTXjCsubgaLN8xKjL8jQHhWZjlU6dPZEfTBy
-         bpPwjlgBDsUcMRqikAUQEkPyKjvsqVkvB5EBMb43fe1izT0XbCGnpeZEcH+1wldSVNv7
-         1jzZDMRnSCOTnpSqW8HDKpExYHjObo18pKnE7ptQ4UVVAxfmRepJykJsysxesz2DNGzm
-         8mLl8x9+ImyRL2y+1O80WGzL78P0FVZStIItiicrDmiCVbTjYIs1YJSF1UBrndM0tlF9
-         89TA==
-X-Gm-Message-State: AOAM531EX7ywTvrvqNekOFvhAp6OF6n1kjI8wQH0KSxrn/jeBenqYk8e
-        dqahMj1fgo8OmjfEntLMH0qMetLBOjk86iXJ7lV9LA==
-X-Google-Smtp-Source: ABdhPJwBXWIugiCEDwQdJHl1jccJGbZEQk8eCYLijo1mE1EyAZf0j/6iUpvJs3E0uhFUyzDYTPaIEz7CchaXauEvo3o=
-X-Received: by 2002:ad4:5883:0:b0:432:b007:962b with SMTP id
- dz3-20020ad45883000000b00432b007962bmr18357839qvb.55.1646188387369; Tue, 01
- Mar 2022 18:33:07 -0800 (PST)
+        h=x-gm-message-state:to:cc:reply-to:from:subject:message-id:date
+         :user-agent:mime-version:content-transfer-encoding:content-language;
+        bh=MtG6z1Jzb89Ndx+jl2cJ0c1G9ZcfiK5kSL2+E0wyCng=;
+        b=FNQsFE78dj6w4qyXA+4TIzjQ5h8C0960JjVmkNZgdyvbSfMbjw6pCxX7k9T7ATEOF+
+         Qds36ERxnZX17yy+TTJMwLvPEW1GYzYJ/5M9ZY2n8n1HaENNIcsZJvY8eTMiWdkG7GVC
+         xvR1qoQeUaq8gT1Rmz7EvbaGyjCXNcoNWuS9eRmbNR69EWMIw8QD2yA2mJQhOGx+kd/q
+         fgSiB3NXERqrqek5oQfrx/3qkqug4HYOZR835KGHmSe8r3NSTYRwfxWNJLkE3/lMTTxE
+         25Vs08NBlSiVvBUAL66wlSbv3yIAxW5HTXVw5Neinfvo4KSYUI4RKWGINQi/z44ElVv1
+         BB7Q==
+X-Gm-Message-State: AOAM533RA9ZskRw4XN1qA3O2QNAuaK/eKRetKfr38xoZJgksus4rB9Lo
+        6hCJBbhgyqy5I2HFheFWHQA=
+X-Google-Smtp-Source: ABdhPJzRWPFocHCjcn3D/1crvW6jIAuiApm7zY8OeyhMDlDQKmtpOisKmOaARpeA6aFKmOW7Zn/Ufw==
+X-Received: by 2002:a17:902:e549:b0:150:2412:c94c with SMTP id n9-20020a170902e54900b001502412c94cmr25176748plf.94.1646188760970;
+        Tue, 01 Mar 2022 18:39:20 -0800 (PST)
+Received: from ?IPv6:2600:8802:2207:ac00:38b7:6dcb:b27d:e974? ([2600:8802:2207:ac00:38b7:6dcb:b27d:e974])
+        by smtp.gmail.com with ESMTPSA id z6-20020a056a00240600b004e17ab23340sm18875337pfh.177.2022.03.01.18.39.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Mar 2022 18:39:20 -0800 (PST)
+To:     dri-devel@lists.freedesktop.org,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Lyude Paul <lyude@redhat.com>, ville.syrjala@linux.intel.com,
+        jani.nikula@intel.com, airlied@redhat.com, dianders@chromium.org,
+        tzimmermann@suse.de, sfr@canb.auug.org.au,
+        lkft-triage@lists.linaro.org
+Reply-To: CA+G9fYu4PPE6_91mzor0bW7RSzBDNJ3xqqgeeK-jR1jokmhYOQ@mail.gmail.com
+From:   Rudraksha Gupta <guptarud@gmail.com>
+Subject: MSM8960: gpu/drm/dp/drm_dp.c:59:27: warning: array subscript 10 is
+ outside, array bounds of 'const u8[6]'
+Message-ID: <8e13f51a-845b-1fdf-11ea-6053f7d8df9e@gmail.com>
+Date:   Tue, 1 Mar 2022 18:39:19 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20220302114312.077aa81b@canb.auug.org.au>
-In-Reply-To: <20220302114312.077aa81b@canb.auug.org.au>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Wed, 2 Mar 2022 05:32:56 +0300
-Message-ID: <CAA8EJpojNFKB2u6KrfotYUyRfqXjKbwQfdaz1dJ7N=2M7cQA_w@mail.gmail.com>
-Subject: Re: linux-next: Fixes tag needs some work in the drm-msm tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Rob Clark <robdclark@gmail.com>, Sean Paul <seanpaul@chromium.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, 2 Mar 2022 at 03:43, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> In commit
->
->   8661f450626f ("dt-bindings: display/msm: add missing brace in dpu-qcm2290.yaml")
->
-> Fixes tag
->
->   Fixes: 164f69d9d45a ("dt-bindings: msm: disp: add yaml schemas for
-
-It seems the Fixes tag got split by my mail client.
-Rob, any chance to fix that?
-
->
-> has these problem(s):
->
->   - Subject has leading but no trailing parentheses
->   - Subject has leading but no trailing quotes
->
-> Please do not split Fixes tags over moe than one line or truncate them.
->
-> --
-> Cheers,
-> Stephen Rothwell
+Hi all,
 
 
+I am getting this warning when compiling the kernel for the MSM8960 with 
+this defconfig: 
+https://raw.githubusercontent.com/apq8064-mainline/linux/qcom-apq8064-next/arch/arm/configs/qcom_apq8064_defconfig
 
--- 
-With best wishes
-Dmitry
+
+Warning:
+
+../drivers/gpu/drm/dp/drm_dp.c: In function 
+'drm_dp_get_adjust_request_post_cursor':
+../drivers/gpu/drm/dp/drm_dp.c:59:27: warning: array subscript 10 is 
+outside array bounds of 'const u8[6]' {aka 'const unsigned char[6]'} 
+[-Warray-bounds]
+    59 |         return link_status[r - DP_LANE0_1_STATUS];
+       |                ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
+../drivers/gpu/drm/dp/drm_dp.c:210:51: note: while referencing 'link_status'
+   210 | u8 drm_dp_get_adjust_request_post_cursor(const u8 
+link_status[DP_LINK_STATUS_SIZE],
+       | ~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+

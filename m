@@ -2,103 +2,124 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 685104C9DDB
-	for <lists+linux-next@lfdr.de>; Wed,  2 Mar 2022 07:37:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7743A4C9DEA
+	for <lists+linux-next@lfdr.de>; Wed,  2 Mar 2022 07:44:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231997AbiCBGiG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 2 Mar 2022 01:38:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43948 "EHLO
+        id S239704AbiCBGoq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 2 Mar 2022 01:44:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231644AbiCBGiF (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Mar 2022 01:38:05 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 297C85F8C9;
-        Tue,  1 Mar 2022 22:37:21 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4K7ktj0KcQz4xNm;
-        Wed,  2 Mar 2022 17:37:17 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1646203037;
-        bh=5+BxKhtnAqvVfvAgUzx1TGaC8TMewO/v7AoiFI0Ypwo=;
-        h=Date:From:To:Cc:Subject:From;
-        b=JYNvi/cKne4TYhAasMb7Xbcx0CzgqvCQ919SrUlnFD0wI07eahhxGRtjiuN+6NuN6
-         DPOTd/pPLdRTduaWITnjyAHullQTBTMBY1vcVx06pMlrWtBJz59f6ME47JQAOQiDap
-         J4VGhtEPRAdAQl6jw6/HNSLOzi+jJOrATpxTr6HKEOjpYfYkwlWOasePkWkqfVMILL
-         zYA2kB/7mBVjdmVeOgOB7zfq7Xxlgqv8mU+Qj9xK1nXom99CVSfSwoKjriACHKmIUS
-         Xt+ng4SGh97/VdyryGFNIxU/OnIqgLhxZ2AtoiYqX4P4VX3szMoWD+s8ll5Vr/v9Wh
-         Y2WE+0Pw32K3A==
-Date:   Wed, 2 Mar 2022 17:37:14 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     Manivannan Sadhasivam <mani@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the mhi tree
-Message-ID: <20220302173714.78c9f43c@canb.auug.org.au>
+        with ESMTP id S239691AbiCBGop (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Mar 2022 01:44:45 -0500
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA59D73063
+        for <linux-next@vger.kernel.org>; Tue,  1 Mar 2022 22:44:01 -0800 (PST)
+Received: by mail-yb1-xb33.google.com with SMTP id j2so1486114ybu.0
+        for <linux-next@vger.kernel.org>; Tue, 01 Mar 2022 22:44:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=xA54Dg6YOKNxGRpzFrHv89ue1P7bxRw6n+8ssbPupxQ=;
+        b=TVtPeZqgVLUGUuIZ2XD0OBb6+n+CwoQ7OZnDO/i5IYb35GWzQpSK0T18BGlKtAa3PC
+         d9tOQlEpZsFADgHbdsnUpZs8vnf+nlh274yZnN9T8WivtZqFSqpLt9sHEBAGKUrsPEfB
+         Xs1P2YpD8oo5VllT/IBNvMCmgowulIZwVar5+PFuJKwXES2WKkZt2vk0biXX174+B33n
+         pMhLJrFl+XPUXqWqYBKaKlKgIpP1tTCUKBumj8Xmh09GzH7ivYs79pSpxFWwr44eyHdC
+         jnhBuYoO8sgMzXjOg31FCu/UDu3yg4MSw8urDUl9c0eQaqssSCmqKQXFNeJgp6mDpuKC
+         hU8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=xA54Dg6YOKNxGRpzFrHv89ue1P7bxRw6n+8ssbPupxQ=;
+        b=xQmG2lI1LO0naZpVDHmsTi6HWTjTCc09Tq7OrWGkR4cpBfKY6OOy2JxR1bgvdLiAWg
+         oNKJthhfjhw2mYLEitvzdr/1P5Ihtwb0bEEI1OCqpjJdeZHWwu1MPpiyaXmh9/M7EnT3
+         ici7Zz8QnX6KKo8SHIhvEWuFUknRfl1zlzk6kqpVFEa+ebPL4uHW1khlp7HaS+nab3UW
+         W6sLYHOO8e3sem9yOtg9w5+EV8MGXaTxf40k9PY4t1eUtd5TkeQdJN2tqs5F8BDZhHhG
+         Qm+UlOBXGFlmiyOe6J9LHHBUHasW/Z3BaNvFZiX+fwiAtSZ5hDjWXO8XmpOJPqnTMXVb
+         GMAg==
+X-Gm-Message-State: AOAM530O6oyRjRFzTh9uHgVTF2tfrxDCYiWxFBiRfbsPL8UpBqgkZMg0
+        UST+/7/dcEzuYtW9nnQIG5uQ5BqDrMR+GdDvauMsEg==
+X-Google-Smtp-Source: ABdhPJygqCh8bXOVmE1/4Sdam8IVhHnChATGgXXOD/t6ZD0DdfMuzII/fTX/m/OiAH2BuaKT/UpC9se9Dk+X37wJwJ0=
+X-Received: by 2002:a25:4109:0:b0:628:7778:fb18 with SMTP id
+ o9-20020a254109000000b006287778fb18mr6967618yba.412.1646203440687; Tue, 01
+ Mar 2022 22:44:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/sWOK5kgboj74CDu8mLDMOXW";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 2 Mar 2022 12:13:49 +0530
+Message-ID: <CA+G9fYvUHjwU9sOMs+zNwuauGLqah3Ce_5VKtifZucOuXqw2qA@mail.gmail.com>
+Subject: [next] warning: the frame size of 1120 bytes is larger than 1024
+ bytes [-Wframe-larger-than=]
+To:     open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>, linux-fsdevel@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        lkft-triage@lists.linaro.org
+Cc:     Nick Terrell <terrelln@fb.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        cai.huoqing@linux.dev, Anders Roxell <anders.roxell@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/sWOK5kgboj74CDu8mLDMOXW
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Following warnings noticed while building Linux next-20220301
+for arm KASAN builds [1].
 
-Hi all,
+Build warnings:
+lib/zstd/common/entropy_common.c: In function 'HUF_readStats':
+lib/zstd/common/entropy_common.c:257:1: warning: the frame size of
+1120 bytes is larger than 1024 bytes [-Wframe-larger-than=]
+  257 | }
+      | ^
+net/ipv4/tcp.c: In function 'do_tcp_getsockopt.constprop':
+net/ipv4/tcp.c:4272:1: warning: the frame size of 1152 bytes is larger
+than 1024 bytes [-Wframe-larger-than=]
+ 4272 | }
+      | ^
+fs/select.c: In function 'do_sys_poll':
+fs/select.c:1045:1: warning: the frame size of 1264 bytes is larger
+than 1024 bytes [-Wframe-larger-than=]
+ 1045 | }
+      | ^
+drivers/usb/host/xhci.c: In function 'xhci_reserve_bandwidth':
+drivers/usb/host/xhci.c:2877:1: warning: the frame size of 1056 bytes
+is larger than 1024 bytes [-Wframe-larger-than=]
+ 2877 | }
+      | ^
+drivers/media/dvb-frontends/mxl5xx.c: In function 'config_ts':
+drivers/media/dvb-frontends/mxl5xx.c:1566:1: warning: the frame size
+of 1224 bytes is larger than 1024 bytes [-Wframe-larger-than=]
+ 1566 | }
+      | ^
 
-After merging the mhi tree, today's linux-next build (x86_64 allmodconfig)
-failed like this:
 
-drivers/bus/mhi/ep/main.c: In function 'mhi_ep_register_controller':
-drivers/bus/mhi/ep/main.c:1426:9: error: implicit declaration of function '=
-irq_set_status_flags' [-Werror=3Dimplicit-function-declaration]
- 1426 |         irq_set_status_flags(mhi_cntrl->irq, IRQ_NOAUTOEN);
-      |         ^~~~~~~~~~~~~~~~~~~~
-drivers/bus/mhi/ep/main.c:1426:46: error: 'IRQ_NOAUTOEN' undeclared (first =
-use in this function); did you mean 'IRQF_NO_AUTOEN'?
- 1426 |         irq_set_status_flags(mhi_cntrl->irq, IRQ_NOAUTOEN);
-      |                                              ^~~~~~~~~~~~
-      |                                              IRQF_NO_AUTOEN
-drivers/bus/mhi/ep/main.c:1426:46: note: each undeclared identifier is repo=
-rted only once for each function it appears in
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Caused by commit
 
-  6cb3bc57b0c5 ("bus: mhi: ep: Add support for processing MHI endpoint inte=
-rrupts")
+Steps to reproduce:
+# To install tuxmake on your system globally:
+# sudo pip3 install -U tuxmake
 
-Presumably a missing include.
+tuxmake --runtime podman --target-arch arm --toolchain gcc-10
+--kconfig https://builds.tuxbuild.com/25mUEFdMf8eGt8sUkh7JnHahLIW/config
 
-I have used the mhi tree from next-20220301 for today.
 
---=20
-Cheers,
-Stephen Rothwell
+--
+Linaro LKFT
+https://lkft.linaro.org
 
---Sig_/sWOK5kgboj74CDu8mLDMOXW
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIfEJoACgkQAVBC80lX
-0Gw71Qf+MXipuPeCVQ9CHodunMeCX9a8HXN82zhxWlfkQpMjZ9XZ64XrPMVT4/P8
-t57cC77AjcgE+GUd83ZTQPi5HObbNevXXycFlfK+wbahWa1h6mXXZKWQ4r3zHtKI
-KLlpow+PY2APOZV+hTqGaloJtNQHrHgujdciIKKAG/ILnAg4Ct+Cd9ysuX4CiDCd
-0R5PLo6U0W5cjIC5VwhjyMETpvoiBac8ZS7MMiVM2uV0nN6HvDRxwx79maaAJ1fp
-45tE79wrGsbZFSieHcGBiYcxX270lvtlsFOhadqW6XXGYEWj/3YzXhZgA+uGYtl8
-LV+v8S70W1ubnmROHHlocEXSm7OewA==
-=b5DF
------END PGP SIGNATURE-----
-
---Sig_/sWOK5kgboj74CDu8mLDMOXW--
+[1] https://builds.tuxbuild.com/25mUEFdMf8eGt8sUkh7JnHahLIW/

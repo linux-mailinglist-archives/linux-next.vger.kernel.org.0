@@ -2,47 +2,57 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 221A84CB6EA
-	for <lists+linux-next@lfdr.de>; Thu,  3 Mar 2022 07:24:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CDE34CB7CE
+	for <lists+linux-next@lfdr.de>; Thu,  3 Mar 2022 08:29:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229659AbiCCGZV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 3 Mar 2022 01:25:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40460 "EHLO
+        id S229929AbiCCH37 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 3 Mar 2022 02:29:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbiCCGZU (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 3 Mar 2022 01:25:20 -0500
+        with ESMTP id S229806AbiCCH37 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 3 Mar 2022 02:29:59 -0500
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA24415C9E1;
-        Wed,  2 Mar 2022 22:24:34 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5D122607;
+        Wed,  2 Mar 2022 23:29:13 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4K8LYT3Yp0z4xcq;
-        Thu,  3 Mar 2022 17:24:29 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4K8N0150d3z4xbw;
+        Thu,  3 Mar 2022 18:29:05 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1646288670;
-        bh=WjEJD8qPSy1vfpk5bNiCZBfbzfMQ7OUIDYOq4UMLvZs=;
-        h=Date:From:To:Cc:Subject:From;
-        b=nexB9RKb4nJAsZftjMRV1ZStvrxNHVJYHHaQ/vteI7ntKk7YdsUNCvNd7cvPY9Qwk
-         KbaFCVj33/QuiAkbdoXVPlb+kG74JTZZoXEU3468bSjGpEnewemviUM3czcuza2VAJ
-         +wAW5cC+2n/2QmubNYinfIw4X1PmIgxDSyLPmLsalA6Xt1YjSY10AUDd57xQiIFBZA
-         PlOnZ4YlDBFErqAlJApAGSTHCT3h8vALFoMT/AdcZ6nvC3IGBSOf6X1Za3PKL2qG5t
-         TyJwRzhPEQg/9lGoJVs1JRj8KmtLrJ9M1jUuLEiW2ZjTdDBiEbzLEv8SI9mICsTuZP
-         TI15qI7GT5G1Q==
-Date:   Thu, 3 Mar 2022 17:24:27 +1100
+        s=201702; t=1646292548;
+        bh=qHElhGY8fx0IVkA4MKaoAT7SKM+zW+9ViYbBstwm0qs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=aIyY689iO5Ub2F3h0/YJn7qTudOFn5rwYsr0nmJi1qb7/hdplSA6zfgtIzjyWFa6v
+         yW51QBkSrGmBySUO4PvmQuDWzEjknWQ/Q909NxxG1ym6uw1xXf177Ob21kqQ3CpA6n
+         XiePVycbfe4sjhkOy60jrTT8rvUOIBW4B1H0AoaSkB0CQv6lq4nDsfzj5goc+SNjJ8
+         nx2G65gOYNO9Wx9Lb/q36Bnne/C4cvK+ogKbp0TTF3kUsil/mmTF2yZNn3LKpAjoQn
+         0s+z2ioFOi3oGL8+OQGKhh7+yNbsFbOZ0nZFAjhWaGZupZeK9wKRvtQbsb5Qq3fAg8
+         sPF1FaaAUTX9g==
+Date:   Thu, 3 Mar 2022 18:29:04 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Matthew Wilcox <willy@infradead.org>, Arnd Bergmann <arnd@arndb.de>
-Cc:     Alan Kao <alankao@andestech.com>,
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Dave Airlie <airlied@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Mike Rapoport <rppt@linux.ibm.com>
-Subject: linux-next: manual merge of the folio tree with the asm-generic
- tree
-Message-ID: <20220303172427.24e17e51@canb.auug.org.au>
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Mark Brown <broonie@kernel.org>,
+        Allen Chen <allen.chen@ite.com.tw>,
+        Robert Foss <robert.foss@linaro.org>,
+        Hermes Wu <Hermes.Wu@ite.com.tw>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: Re: linux-next: build failure after merge of the kspp tree
+Message-ID: <20220303182904.43c5b1fb@canb.auug.org.au>
+In-Reply-To: <20220302201610.56ccfbc3@canb.auug.org.au>
+References: <20220301092730.10de23c5@canb.auug.org.au>
+        <202202281453.C8B840C7@keescook>
+        <20220302201610.56ccfbc3@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/l5ls55R_b9kvOK/4VMNXe0C";
+Content-Type: multipart/signed; boundary="Sig_/YxTb1i_/VP0VO9/qtU0JIP0";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -53,51 +63,46 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/l5ls55R_b9kvOK/4VMNXe0C
+--Sig_/YxTb1i_/VP0VO9/qtU0JIP0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the folio tree got a conflict in:
+ok, today I used the current kspp tree and added three patches as merge fix=
+ups:
 
-  arch/nds32/include/asm/pgtable.h
+https://lore.kernel.org/all/20220228081421.1504213-1-hsinyi@chromium.org/
+https://cgit.freedesktop.org/drm/drm-misc/commit/?id=3Dd4da1f27396fb1dde079=
+447a3612f4f512caed07
+https://cgit.freedesktop.org/drm/drm-misc/commit/?id=3Da2151490cc6c57b368d7=
+974ffd447a8b36ade639
 
-between commit:
+(the second one required a bit of fuzzing)
 
-  9f15ac318b83 ("nds32: Remove the architecture")
+I will remove them as they appear in the drm trees (hopefully).
 
-from the asm-generic tree and commit:
-
-  e558a885a525 ("arch: Add pmd_pfn() where it is missing")
-
-from the folio tree.
-
-I fixed it up (I just deleted the file) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
+Kees, you just need to remember that you have a dependency on the DRM
+patches being in Linus' tree before you send your pull request.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/l5ls55R_b9kvOK/4VMNXe0C
+--Sig_/YxTb1i_/VP0VO9/qtU0JIP0
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIgXxsACgkQAVBC80lX
-0GxG8Qf/Ur78DnlS7j0Rho0+zBqnou0eRhYNwZng2lBwOyfJakbdfQ+7jJKrYIVb
-AtN3oJHYkA2FiXEEobCp77j9gKs+IjnSRBEuWlr0NnoXiyriE6wWWMpZgxAyxt7V
-47WaTak3KjY99P+McVEz6JltEXN799U4FN2gFX4M9N2KSYlo8c0ouBiIUv4nV9mV
-Dn8LXSbj/qQwjaxuaBZU+4PI4gLWWnHo+I0hK/rPV60Qnqtp77wvTyBrNYJUbJ2E
-hj1M99IY59shtmusCzLfhLkNEpUEoO6zH4bENhnb5+tbUkDVFW2rEA1ADPn2N1vC
-AK2Z2wtnnsqL8GOMi3U2vwE7iTqO+w==
-=W3gd
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIgbkAACgkQAVBC80lX
+0Gw4Ngf9Hh9eVHWDQaSTSHnrUIHmluK7vvHnUi0Pjx7xKwZQa3sRpGhNgBE28dgp
+GgvFpjgLlH0zTebqMXovp17jeyylA198sromn6QAnrctzTQskJAIG/TAYI71FMGc
+eAaU2FQae9QR581hBTZVG6MZVxSWkMPJRUFly7FOO53QHk5xbWH+Z5JcztX9L77S
+5h3GpvbPij1uyybDjwfj8dm06gA1NYd1pyqgZJo0kzvCtSzManYdTfyRZuZk+vmS
+9/I1MdCHCUElvpGnEqfitzO6JCtFa/05jQa6b2P2SwDUhF4SErOW9Y3+47vCIx9y
+pUiPzw4KbXxKt6mGlaqjHmxFoNGmRw==
+=4sHe
 -----END PGP SIGNATURE-----
 
---Sig_/l5ls55R_b9kvOK/4VMNXe0C--
+--Sig_/YxTb1i_/VP0VO9/qtU0JIP0--

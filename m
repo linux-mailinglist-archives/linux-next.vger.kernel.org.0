@@ -2,62 +2,47 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9657A4CBB96
-	for <lists+linux-next@lfdr.de>; Thu,  3 Mar 2022 11:41:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 854504CBBFB
+	for <lists+linux-next@lfdr.de>; Thu,  3 Mar 2022 11:59:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232437AbiCCKmK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 3 Mar 2022 05:42:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41650 "EHLO
+        id S231131AbiCCLAU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 3 Mar 2022 06:00:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229826AbiCCKmI (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 3 Mar 2022 05:42:08 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E937111E3D2;
-        Thu,  3 Mar 2022 02:41:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S230328AbiCCLAU (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 3 Mar 2022 06:00:20 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D6AA154721;
+        Thu,  3 Mar 2022 02:59:35 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A1D1DB82467;
-        Thu,  3 Mar 2022 10:41:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 042BEC004E1;
-        Thu,  3 Mar 2022 10:41:17 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="fXZ/TAG/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1646304075;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Kpi2ggBMqpkgTKrHO8zFwhQlKDt8cDqLL+uADYbJkFw=;
-        b=fXZ/TAG/R70HCQfSXHa9EmGz7TeBBluFgHaGXfH7hgkJcP8cchmV94YqDgR0+89DtKCv2t
-        7SFHDKQy9vw0egnrfwFwxIAAwiKJ+sHioOnU7+5oYyz+Qh7MC6vtqGCbXJRGGX4FiaaInT
-        NtNERqGIiZlL3+1wKvphvuNa7vx04OU=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 3040dfd0 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Thu, 3 Mar 2022 10:41:15 +0000 (UTC)
-Received: by mail-yb1-f171.google.com with SMTP id g1so9332688ybe.4;
-        Thu, 03 Mar 2022 02:41:15 -0800 (PST)
-X-Gm-Message-State: AOAM532dFBcYrbUOS2kQx3BGT+0w1eiyk6pWb/tYtxJYC308TE/Atbuq
-        gr96MZKMRA7yIJNwclx10pm0VyKg8mU02VkQ2ic=
-X-Google-Smtp-Source: ABdhPJyPEE4gCKlFoezcuhcaB7fuOrbEaAT8Kipld7pwixBTKllT3UjtYnzw8zojJixj7/zAXTuM05vpAR6vVZwaKwM=
-X-Received: by 2002:a5b:6cf:0:b0:61e:1371:3cda with SMTP id
- r15-20020a5b06cf000000b0061e13713cdamr33199674ybq.235.1646304074230; Thu, 03
- Mar 2022 02:41:14 -0800 (PST)
-MIME-Version: 1.0
-References: <20220303190450.18626eea@canb.auug.org.au>
-In-Reply-To: <20220303190450.18626eea@canb.auug.org.au>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Thu, 3 Mar 2022 11:41:03 +0100
-X-Gmail-Original-Message-ID: <CAHmME9qTWSsa8Rjf+rS+hgWiTQTZOtU83TvPUE3uBYvRN9Xb1w@mail.gmail.com>
-Message-ID: <CAHmME9qTWSsa8Rjf+rS+hgWiTQTZOtU83TvPUE3uBYvRN9Xb1w@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the random tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     "Theodore Ts'o" <tytso@mit.edu>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4K8Sfq1J3Wz4xPv;
+        Thu,  3 Mar 2022 21:59:31 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1646305171;
+        bh=6DYqyin2JejukR+wgiGBjgLNrx3CsPedPZngc/l8iVE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=my0VBNENO6hSAsBslLFcw9NPsBn5LEEpBw1mzbAAH/V+q5jq9VpvWU0GwK62egKLx
+         9sncdTl7NunBln/y/y+XDTjI99tq4/nHs19NjxD8nu3edqWPSDhssy+19sbY24Yytr
+         jF/GXo5iFynXUaMwf1lsenEDeJU3wg72XlOZK9jUFIdVrDjQLfY8KSYyjxlzf6dGZL
+         kYsy1a5NrBPkzbX/eskpviKBH/AX2qcldmG/1jeL5PR4FR6vbRBAHX2TrVWtF7ehLz
+         QjBxo3KgQyTMuZZLFRlllTvZ81AnhNKfVzIBT+svsR1323xrlFJ49pHn6gDAzq7Q/2
+         Jyoh5fUK4PlqA==
+Date:   Thu, 3 Mar 2022 21:59:30 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Subject: linux-next: build failure after merge of the soundwire tree
+Message-ID: <20220303215930.014e72f8@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/yj5CwKeOAZSMxy0YI/2pmVV";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,12 +50,40 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+--Sig_/yj5CwKeOAZSMxy0YI/2pmVV
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for the report. My CI barked at me about this too this morning.
-Seems like a surprising circularity in arm64's headers that maybe
-should be fixed. But either way, I'll go with your forward declaration
-approach.
+Hi all,
 
-Regards,
-Jason
+After merging the soundwire tree, today's linux-next build (s390
+allmodconfig) failed like this:
+
+drivers/soundwire/qcom.c:1460:12: error: 'swrm_runtime_resume' defined but =
+not used [-Werror=3Dunused-function]
+
+Caused by commit
+
+  74e79da9fd46 ("soundwire: qcom: add runtime pm support")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/yj5CwKeOAZSMxy0YI/2pmVV
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIgn5IACgkQAVBC80lX
+0GyAjwf9HfXxENXoOLOXLgK5qgePdhMDT6id5dFfOc7pHDWnG29+nSXQ5GH5TeqI
+iNKOt084aSQ+sJtVQP6CCqMzZw8DwRYjJFgNukjuUl61MvB9rcvMb5eWvHLVf5ZO
+kOMM9n1f+ZOW2t1Lv4oORUn+8R3rw/JrSAEyBWn3M2dRxTT1BRxHOeVMGXxQI1mG
+0M3qc/IO3TSt7oRNBJA1baphXA9fqQIvRME/C7Hffh8+6sRiC/HDDAAM+K3kLw5T
+Kp2Bvwpoeas8bp4Yl3ep58rKP25uOxHUdM4ivNgChFSkRH9T5CcFoEUwst86Adbd
+eRht1uwBzNraJNYU3T7XVWhJ6FabOA==
+=gIlA
+-----END PGP SIGNATURE-----
+
+--Sig_/yj5CwKeOAZSMxy0YI/2pmVV--

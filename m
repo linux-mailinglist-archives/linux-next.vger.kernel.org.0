@@ -2,132 +2,102 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72E564CB537
-	for <lists+linux-next@lfdr.de>; Thu,  3 Mar 2022 04:07:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 221A84CB6EA
+	for <lists+linux-next@lfdr.de>; Thu,  3 Mar 2022 07:24:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231910AbiCCDBf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 2 Mar 2022 22:01:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41646 "EHLO
+        id S229659AbiCCGZV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 3 Mar 2022 01:25:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231903AbiCCDBe (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Mar 2022 22:01:34 -0500
-Received: from a48-34.smtp-out.amazonses.com (a48-34.smtp-out.amazonses.com [54.240.48.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACD3926AC5;
-        Wed,  2 Mar 2022 19:00:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1646276448;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=9ClZgaseIwYExjYJsdjEh8oapLPGGSYCPwbSe7kdUuo=;
-        b=QKqQpRlALVQtRpy1p/hmBsCsfAGRZny61kakqZ6ldCeqIH0pRE+K85wqd1g3QHQP
-        Nt+Fvzma7zGbNY7dpcrdWn5iZLOb2ggZK2BRwJFSsdIY+C3uGhku2sSjcjY7Ruu4jqw
-        M7DRDjPxqqXToAyw2gSy/gd7oNXNcvpTLziW1mYI=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1646276448;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=9ClZgaseIwYExjYJsdjEh8oapLPGGSYCPwbSe7kdUuo=;
-        b=W7NT3Z5/N6P2GwQpR+OXaPXy1VaDAQfGb8W6JPfRz2+xhubQ8+NZOT4QPJONiK/Z
-        1Y9woSj+mucPlZwbrExKokxgSBpFMlDFEMFp8Ul9qZer0rqPiNW8hWa45gWRxINoPGZ
-        PdJCA9jKA7dehTRNG5zyYdCqy96bsasWbIZRiO4c=
-From:   lkft@linaro.org
-To:     lkft@linaro.org
-Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
-        linux-next@vger.kernel.org, shuah@kernel.org
-Subject: lkft kselftest for next-20220302
+        with ESMTP id S229890AbiCCGZU (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 3 Mar 2022 01:25:20 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA24415C9E1;
+        Wed,  2 Mar 2022 22:24:34 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4K8LYT3Yp0z4xcq;
+        Thu,  3 Mar 2022 17:24:29 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1646288670;
+        bh=WjEJD8qPSy1vfpk5bNiCZBfbzfMQ7OUIDYOq4UMLvZs=;
+        h=Date:From:To:Cc:Subject:From;
+        b=nexB9RKb4nJAsZftjMRV1ZStvrxNHVJYHHaQ/vteI7ntKk7YdsUNCvNd7cvPY9Qwk
+         KbaFCVj33/QuiAkbdoXVPlb+kG74JTZZoXEU3468bSjGpEnewemviUM3czcuza2VAJ
+         +wAW5cC+2n/2QmubNYinfIw4X1PmIgxDSyLPmLsalA6Xt1YjSY10AUDd57xQiIFBZA
+         PlOnZ4YlDBFErqAlJApAGSTHCT3h8vALFoMT/AdcZ6nvC3IGBSOf6X1Za3PKL2qG5t
+         TyJwRzhPEQg/9lGoJVs1JRj8KmtLrJ9M1jUuLEiW2ZjTdDBiEbzLEv8SI9mICsTuZP
+         TI15qI7GT5G1Q==
+Date:   Thu, 3 Mar 2022 17:24:27 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Matthew Wilcox <willy@infradead.org>, Arnd Bergmann <arnd@arndb.de>
+Cc:     Alan Kao <alankao@andestech.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Mike Rapoport <rppt@linux.ibm.com>
+Subject: linux-next: manual merge of the folio tree with the asm-generic
+ tree
+Message-ID: <20220303172427.24e17e51@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-Message-ID: <0100017f4db90fa4-031778f7-c53b-42be-8b7c-7f4188af11ff-000000@email.amazonses.com>
-Date:   Thu, 3 Mar 2022 03:00:48 +0000
-Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2022.03.03-54.240.48.34
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,TO_EQ_FM_DIRECT_MX,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/l5ls55R_b9kvOK/4VMNXe0C";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-## Build
-* kernel: 5.17.0-rc6
-* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-* git branch: [None, 'master']
-* git commit: adaedcf826dccf01b69d9a1f1997c9446c6b2c54
-* git describe: next-20220302
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220302
+--Sig_/l5ls55R_b9kvOK/4VMNXe0C
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-## Test Regressions (compared to next-20220301)
-No test regressions found.
+Hi all,
 
-## Metric Regressions (compared to next-20220301)
-No metric regressions found.
+Today's linux-next merge of the folio tree got a conflict in:
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+  arch/nds32/include/asm/pgtable.h
 
+between commit:
 
-## Test Fixes (compared to next-20220301)
-No test fixes found.
+  9f15ac318b83 ("nds32: Remove the architecture")
 
-## Metric Fixes (compared to next-20220301)
-No metric fixes found.
+from the asm-generic tree and commit:
 
-## Test result summary
-total: 1656, pass: 951, fail: 179, skip: 526, xfail: 0
+  e558a885a525 ("arch: Add pmd_pfn() where it is missing")
 
-## Build Summary
+from the folio tree.
 
-## Test suites summary
-* kselftest-android
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
+I fixed it up (I just deleted the file) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
 
---
-Linaro LKFT
-https://lkft.linaro.org
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/l5ls55R_b9kvOK/4VMNXe0C
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIgXxsACgkQAVBC80lX
+0GxG8Qf/Ur78DnlS7j0Rho0+zBqnou0eRhYNwZng2lBwOyfJakbdfQ+7jJKrYIVb
+AtN3oJHYkA2FiXEEobCp77j9gKs+IjnSRBEuWlr0NnoXiyriE6wWWMpZgxAyxt7V
+47WaTak3KjY99P+McVEz6JltEXN799U4FN2gFX4M9N2KSYlo8c0ouBiIUv4nV9mV
+Dn8LXSbj/qQwjaxuaBZU+4PI4gLWWnHo+I0hK/rPV60Qnqtp77wvTyBrNYJUbJ2E
+hj1M99IY59shtmusCzLfhLkNEpUEoO6zH4bENhnb5+tbUkDVFW2rEA1ADPn2N1vC
+AK2Z2wtnnsqL8GOMi3U2vwE7iTqO+w==
+=W3gd
+-----END PGP SIGNATURE-----
+
+--Sig_/l5ls55R_b9kvOK/4VMNXe0C--

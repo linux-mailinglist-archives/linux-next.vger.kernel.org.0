@@ -2,57 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CDE34CB7CE
-	for <lists+linux-next@lfdr.de>; Thu,  3 Mar 2022 08:29:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E0684CB846
+	for <lists+linux-next@lfdr.de>; Thu,  3 Mar 2022 09:04:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbiCCH37 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 3 Mar 2022 02:29:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44822 "EHLO
+        id S229838AbiCCIFj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 3 Mar 2022 03:05:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229806AbiCCH37 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 3 Mar 2022 02:29:59 -0500
+        with ESMTP id S229620AbiCCIFi (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 3 Mar 2022 03:05:38 -0500
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5D122607;
-        Wed,  2 Mar 2022 23:29:13 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4950316F946;
+        Thu,  3 Mar 2022 00:04:53 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4K8N0150d3z4xbw;
-        Thu,  3 Mar 2022 18:29:05 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4K8NnH3yKyz4xbw;
+        Thu,  3 Mar 2022 19:04:51 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1646292548;
-        bh=qHElhGY8fx0IVkA4MKaoAT7SKM+zW+9ViYbBstwm0qs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=aIyY689iO5Ub2F3h0/YJn7qTudOFn5rwYsr0nmJi1qb7/hdplSA6zfgtIzjyWFa6v
-         yW51QBkSrGmBySUO4PvmQuDWzEjknWQ/Q909NxxG1ym6uw1xXf177Ob21kqQ3CpA6n
-         XiePVycbfe4sjhkOy60jrTT8rvUOIBW4B1H0AoaSkB0CQv6lq4nDsfzj5goc+SNjJ8
-         nx2G65gOYNO9Wx9Lb/q36Bnne/C4cvK+ogKbp0TTF3kUsil/mmTF2yZNn3LKpAjoQn
-         0s+z2ioFOi3oGL8+OQGKhh7+yNbsFbOZ0nZFAjhWaGZupZeK9wKRvtQbsb5Qq3fAg8
-         sPF1FaaAUTX9g==
-Date:   Thu, 3 Mar 2022 18:29:04 +1100
+        s=201702; t=1646294692;
+        bh=7S/eUg9H+1XBZgWh+Ph/h9XWDRoI6irlzEzEdjOtZAM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=JTDhKOB3AbmuGOIRqBygHpDGCfG9ig1RM6iMMuE4AFeaTB6x3D+NebS8OmAzKlTz0
+         yytwnEBiq9zKKJXcpQpZ7QLREALLB4Qni9TzPxrWjyqXzZmWwa+U1B+1JYh7jMU9zU
+         v9CXFPDnucQuT/TeEL0gDPuM+cejbcN1lrrisIDDE+lNQuJuhhAwmNFXdvwula3Pxu
+         eSkT2onKZ4EuOJ4kQPsPS8hS3zvxVd/pF4Kjx8oER5jG/nJXdsn4RBl9TVyXCrtjpn
+         jymKqS4zFdRv4qbaJ4+5q3XNCmzh0p1KkzNonuzMaOiD4r3sK+DlGGdLyTDH6+d+q9
+         bFMNL0xgm7UNg==
+Date:   Thu, 3 Mar 2022 19:04:50 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Dave Airlie <airlied@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Mark Brown <broonie@kernel.org>,
-        Allen Chen <allen.chen@ite.com.tw>,
-        Robert Foss <robert.foss@linaro.org>,
-        Hermes Wu <Hermes.Wu@ite.com.tw>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: Re: linux-next: build failure after merge of the kspp tree
-Message-ID: <20220303182904.43c5b1fb@canb.auug.org.au>
-In-Reply-To: <20220302201610.56ccfbc3@canb.auug.org.au>
-References: <20220301092730.10de23c5@canb.auug.org.au>
-        <202202281453.C8B840C7@keescook>
-        <20220302201610.56ccfbc3@canb.auug.org.au>
+To:     Theodore Ts'o <tytso@mit.edu>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the random tree
+Message-ID: <20220303190450.18626eea@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/YxTb1i_/VP0VO9/qtU0JIP0";
+Content-Type: multipart/signed; boundary="Sig_/.J72ZladJUcMmD1folqTPeK";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -63,46 +50,123 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/YxTb1i_/VP0VO9/qtU0JIP0
+--Sig_/.J72ZladJUcMmD1folqTPeK
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-ok, today I used the current kspp tree and added three patches as merge fix=
-ups:
+After merging the random tree, today's linux-next build (arm64 defconfig)
+failed like this:
 
-https://lore.kernel.org/all/20220228081421.1504213-1-hsinyi@chromium.org/
-https://cgit.freedesktop.org/drm/drm-misc/commit/?id=3Dd4da1f27396fb1dde079=
-447a3612f4f512caed07
-https://cgit.freedesktop.org/drm/drm-misc/commit/?id=3Da2151490cc6c57b368d7=
-974ffd447a8b36ade639
+In file included from include/linux/srcu.h:49,
+                 from include/linux/notifier.h:16,
+                 from include/linux/random.h:10,
+                 from arch/arm64/include/asm/pointer_auth.h:7,
+                 from arch/arm64/include/asm/processor.h:43,
+                 from include/linux/mutex.h:19,
+                 from include/linux/kernfs.h:11,
+                 from include/linux/sysfs.h:16,
+                 from include/linux/kobject.h:20,
+                 from include/linux/of.h:17,
+                 from include/linux/irqdomain.h:35,
+                 from include/linux/acpi.h:13,
+                 from include/acpi/apei.h:9,
+                 from include/acpi/ghes.h:5,
+                 from include/linux/arm_sdei.h:8,
+                 from arch/arm64/kernel/asm-offsets.c:10:
+include/linux/srcutree.h:67:22: error: field 'srcu_cb_mutex' has incomplete=
+ type
+   67 |         struct mutex srcu_cb_mutex;             /* Serialize CB pre=
+paration. */
+      |                      ^~~~~~~~~~~~~
+include/linux/srcutree.h:69:22: error: field 'srcu_gp_mutex' has incomplete=
+ type
+   69 |         struct mutex srcu_gp_mutex;             /* Serialize GP wor=
+k. */
+      |                      ^~~~~~~~~~~~~
+include/linux/srcutree.h:80:22: error: field 'srcu_barrier_mutex' has incom=
+plete type
+   80 |         struct mutex srcu_barrier_mutex;        /* Serialize barrie=
+r ops. */
+      |                      ^~~~~~~~~~~~~~~~~~
+In file included from include/linux/random.h:10,
+                 from arch/arm64/include/asm/pointer_auth.h:7,
+                 from arch/arm64/include/asm/processor.h:43,
+                 from include/linux/mutex.h:19,
+                 from include/linux/kernfs.h:11,
+                 from include/linux/sysfs.h:16,
+                 from include/linux/kobject.h:20,
+                 from include/linux/of.h:17,
+                 from include/linux/irqdomain.h:35,
+                 from include/linux/acpi.h:13,
+                 from include/acpi/apei.h:9,
+                 from include/acpi/ghes.h:5,
+                 from include/linux/arm_sdei.h:8,
+                 from arch/arm64/kernel/asm-offsets.c:10:
+include/linux/notifier.h:75:22: error: field 'mutex' has incomplete type
+   75 |         struct mutex mutex;
+      |                      ^~~~~
 
-(the second one required a bit of fuzzing)
+Caused by commit
 
-I will remove them as they appear in the drm trees (hopefully).
+  c3b03baac3f2 ("random: replace custom notifier chain with standard one")
 
-Kees, you just need to remember that you have a dependency on the DRM
-patches being in Linus' tree before you send your pull request.
+Which added the include of linux/notifier.h to linux/random.h :-(
+
+I have added this patch for today:
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Thu, 3 Mar 2022 18:43:56 +1100
+Subject: [PATCH] fix up for "random: replace custom notifier chain with sta=
+ndard one"
+
+Only the forward declaration of struct notifier_block is needed.
+This prevents a circular include dependency on arm64 (at least).
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ include/linux/random.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/include/linux/random.h b/include/linux/random.h
+index 7fccbc7e5a75..c0baffe7afb1 100644
+--- a/include/linux/random.h
++++ b/include/linux/random.h
+@@ -7,10 +7,11 @@
+ #include <linux/kernel.h>
+ #include <linux/list.h>
+ #include <linux/once.h>
+-#include <linux/notifier.h>
+=20
+ #include <uapi/linux/random.h>
+=20
++struct notifier_block;
++
+ extern void add_device_randomness(const void *, size_t);
+ extern void add_bootloader_randomness(const void *, size_t);
+=20
+--=20
+2.34.1
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/YxTb1i_/VP0VO9/qtU0JIP0
+--Sig_/.J72ZladJUcMmD1folqTPeK
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIgbkAACgkQAVBC80lX
-0Gw4Ngf9Hh9eVHWDQaSTSHnrUIHmluK7vvHnUi0Pjx7xKwZQa3sRpGhNgBE28dgp
-GgvFpjgLlH0zTebqMXovp17jeyylA198sromn6QAnrctzTQskJAIG/TAYI71FMGc
-eAaU2FQae9QR581hBTZVG6MZVxSWkMPJRUFly7FOO53QHk5xbWH+Z5JcztX9L77S
-5h3GpvbPij1uyybDjwfj8dm06gA1NYd1pyqgZJo0kzvCtSzManYdTfyRZuZk+vmS
-9/I1MdCHCUElvpGnEqfitzO6JCtFa/05jQa6b2P2SwDUhF4SErOW9Y3+47vCIx9y
-pUiPzw4KbXxKt6mGlaqjHmxFoNGmRw==
-=4sHe
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIgdqIACgkQAVBC80lX
+0Gy0Ygf/W3fFBJnwj4bcY86No7BvTpHTpDrE8VbUeIZGC3k/Y+PDpzBB0s/gZvVE
+keLmu+YRJe0hQqaCDeAlZczPmAY2o4s0P238rpkdzc99xgteQ//+vz5KqRgGk+hA
+f32fLks5A1qgOm9M/dF+2IsFlV0FB2iZqjoGjepoXA9S617bKhLWJlFC1xo7wV79
+cL2fIF54KcetLpTdXqFodrat21q0/VhNJ36ylajGqQJ+67W8bfNVjYeNbfKS/1Yd
+Cp+E6vYHQXMh7Gsguz6Mi6G74kijAU+wXJd7xNXOICxOIt/N9J4T8jjuMR6WC1ES
+s7U6ci1QV8V1H/uRjo591IO7YHlvbA==
+=ixfl
 -----END PGP SIGNATURE-----
 
---Sig_/YxTb1i_/VP0VO9/qtU0JIP0--
+--Sig_/.J72ZladJUcMmD1folqTPeK--

@@ -2,903 +2,844 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62B544CCF75
-	for <lists+linux-next@lfdr.de>; Fri,  4 Mar 2022 09:01:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B9A74CD197
+	for <lists+linux-next@lfdr.de>; Fri,  4 Mar 2022 10:48:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230324AbiCDIBq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 4 Mar 2022 03:01:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47202 "EHLO
+        id S239386AbiCDJs5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 4 Mar 2022 04:48:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230379AbiCDIBp (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 4 Mar 2022 03:01:45 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A1F019533D
-        for <linux-next@vger.kernel.org>; Fri,  4 Mar 2022 00:00:57 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id ev16-20020a17090aead000b001bc3835fea8so7365969pjb.0
-        for <linux-next@vger.kernel.org>; Fri, 04 Mar 2022 00:00:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=S49PstwCrD13UegHhwTcBTcqRWb3gr9v0SdSYnvJPvQ=;
-        b=kXGX7IlHQWuU9KziN8Mh3wPaU8FL2rcRE5rzHHJn570T7x9teb3+sIeDsqgaQ7KfOH
-         4+ie1G8k5ZMX5pN2Y6Wad/6NvqimJaadqHbLTLDKnDfHYut9HZuxjucZEb6ELExH5Crm
-         0rsHu8Ky7wZLBsIj7dKJ75IQRees9HUGB1SHKWZ6C7gyjF8g4YmHTBTjO9xjDnO8R72D
-         Ibtn55Vi782jVam64ULS5isp+91xLiNTa8QDRSM1swrn/xt5Er3mwt/yaeKzPVNJG3Kf
-         xIwkeA627A9AwIw1h/CQfe/UodcAwD3/EmxpyN849DCRgExldfNU18X7/yyBPTQuRDcE
-         57Sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=S49PstwCrD13UegHhwTcBTcqRWb3gr9v0SdSYnvJPvQ=;
-        b=B1rnNgnucIUTWpHdXQdgQOU0yFuDtYhyG50T9DLnasO0HleOmOJUxiVU5fBCujgYgp
-         35A/3Ruh4aWRwbgo2mQOPIUlZC2Eg6bJuCUX2qOGsWbQKk1AZTAuzvV/UVXj0etN/xTl
-         NOJ/ih9z3S+LqTGaLw0yjZsRVFZdZO3bjsT+lTe3Bjo1uP57Bg6ZlFrYAeQZk1Vn9K/h
-         780bOdyhnSZEC4iADRfVZmG57ggFUL1x9gchgyxT/GwuFdPrWAZqK/xpVxTtqJH5XQ+F
-         mDgzcCTNLKEVfZk/K2gfxylByw2ybMME9JYdd5RyHZNROFXi55CrEWgoDUgZIZ1Bft+4
-         J+4Q==
-X-Gm-Message-State: AOAM531KihgGQBDdnPTcw6DI8w5LTBac/wp2c+UwtIpiYvpl5Ot/7u2q
-        58UCkJMcFAjnmxCverGL0J3xCs4V+USOm+p23/c=
-X-Google-Smtp-Source: ABdhPJyCN7qpT/Oa3xmoPju9AFhgjkL1YuYI1cR8wmQ5NOJx95A0T5/q4YFCSkhNda/3e3HiJO4HGA==
-X-Received: by 2002:a17:90b:350c:b0:1bf:1dc5:1c3d with SMTP id ls12-20020a17090b350c00b001bf1dc51c3dmr4593445pjb.53.1646380855866;
-        Fri, 04 Mar 2022 00:00:55 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id k5-20020aa788c5000000b004df7bf0a290sm4995985pff.1.2022.03.04.00.00.55
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Mar 2022 00:00:55 -0800 (PST)
-Message-ID: <6221c737.1c69fb81.5806b.d832@mx.google.com>
-Date:   Fri, 04 Mar 2022 00:00:55 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S239393AbiCDJrz (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 4 Mar 2022 04:47:55 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D03A4199E2A;
+        Fri,  4 Mar 2022 01:47:05 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4K930l42Cxz4xPv;
+        Fri,  4 Mar 2022 20:47:03 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1646387223;
+        bh=JN1EnOJZTBHD8CvKpku9QwV9HuEl5r6N9nggBV+6t9Y=;
+        h=Date:From:To:Cc:Subject:From;
+        b=fYW1D5uCoijiKojqs76nDfu+Ou8yx7APorHh+IQOpSP1nd76L6V7gEroBRkccJUv1
+         9OnF9eO1mJE+iUS+5rHXaPRb+msVrLM+47E8lvljAvAf9Lm3CuyY/ufta2AEy42U/R
+         Wh1Bx6nLkX9SdZJYeQeCjqS+ywBR2T4PO1RydkPcMn2u6/5qfdw8/Nt+rEw/BbVAB4
+         EwvpTDErOhLsTcNdcVAChL+BiWwjdC/28MGQwV2wincyH4wA0BZPitfLpFg+K2lXFt
+         5Anekykfc7I3tLfU4WIUnSOjl4l+zVR2cRwLSokO/EgS5LuX2EQTz4Awoq0WaNIOoP
+         ObbFbpE80Y8Zw==
+Date:   Fri, 4 Mar 2022 20:47:01 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: Tree for Mar 4
+Message-ID: <20220304204701.63fc6468@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: build
-X-Kernelci-Tree: next
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Kernel: v5.17-rc6-312-gf15bf60c638f
-Subject: next/pending-fixes build: 139 builds: 4 failed, 135 passed, 7 errors,
- 6 warnings (v5.17-rc6-312-gf15bf60c638f)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/os1.aw2jLDno_s_1aLUYR3g";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,LOCALPART_IN_SUBJECT,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes build: 139 builds: 4 failed, 135 passed, 7 errors, 6 war=
-nings (v5.17-rc6-312-gf15bf60c638f)
-
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.17-rc6-312-gf15bf60c638f/
-
-Tree: next
-Branch: pending-fixes
-Git Describe: v5.17-rc6-312-gf15bf60c638f
-Git Commit: f15bf60c638f4bd55572d814df3fc67b16a31eca
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 7 unique architectures
-
-Build Failures Detected:
-
-arm:
-    qcom_defconfig: (gcc-10) FAIL
-    rpc_defconfig: (gcc-10) FAIL
-
-mips:
-    decstation_64_defconfig: (gcc-10) FAIL
-
-x86_64:
-    allmodconfig: (gcc-10) FAIL
-
-Errors and Warnings Detected:
-
-arc:
-
-arm64:
-
-arm:
-    qcom_defconfig (gcc-10): 1 error
-    rpc_defconfig (gcc-10): 2 errors
-
-i386:
-
-mips:
-    32r2el_defconfig (gcc-10): 1 warning
-    32r2el_defconfig+debug (gcc-10): 1 warning
-    32r2el_defconfig+kselftest (gcc-10): 1 warning
-    ci20_defconfig (gcc-10): 1 warning
-    fuloong2e_defconfig (gcc-10): 1 error
-    lemote2f_defconfig (gcc-10): 1 error
-
-riscv:
-
-x86_64:
-    allmodconfig (gcc-10): 2 errors
-    x86_64_defconfig+debug (gcc-10): 2 warnings
-
-Errors summary:
-
-    2    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=
-=80=98-mhard-float=E2=80=99
-    2    /usr/lib/gcc/x86_64-linux-gnu/10/plugin/include/config/i386/i386.h=
-:2500:10: fatal error: common/config/i386/i386-cpuinfo.h: No such file or d=
-irectory
-    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
-=3D0x'
-    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
-=3D0x'
-    1    /tmp/kci/linux/build/../drivers/gpu/drm/panel/panel-edp.c:843: und=
-efined reference to `drm_panel_dp_aux_backlight'
-
-Warnings summary:
-
-    3    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
-    1    lib/strnlen_user.o: warning: objtool: strnlen_user()+0x5d: call to=
- do_strnlen_user() with UACCESS enabled
-    1    lib/strncpy_from_user.o: warning: objtool: strncpy_from_user()+0x8=
-a: call to do_strncpy_from_user() with UACCESS enabled
-    1    arch/mips/boot/dts/ingenic/jz4780.dtsi:513.33-515.6: Warning (unit=
-_address_format): /nemc@13410000/efuse@d0/eth-mac-addr@0x22: unit name shou=
-ld not have leading "0x"
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig+debug (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, =
-0 section mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig+kselftest (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warni=
-ng, 0 section mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-allmodconfig (x86_64, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 secti=
-on mismatches
-
-Errors:
-    /usr/lib/gcc/x86_64-linux-gnu/10/plugin/include/config/i386/i386.h:2500=
-:10: fatal error: common/config/i386/i386-cpuinfo.h: No such file or direct=
-ory
-    /usr/lib/gcc/x86_64-linux-gnu/10/plugin/include/config/i386/i386.h:2500=
-:10: fatal error: common/config/i386/i386-cpuinfo.h: No such file or direct=
-ory
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-ar7_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-assabet_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-ath79_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-axm55xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-bigsur_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-bmips_be_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-bmips_stb_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-capcella_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-cerfcube_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-ci20_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    arch/mips/boot/dts/ingenic/jz4780.dtsi:513.33-515.6: Warning (unit_addr=
-ess_format): /nemc@13410000/efuse@d0/eth-mac-addr@0x22: unit name should no=
-t have leading "0x"
-
----------------------------------------------------------------------------=
------
-cm_x300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-colibri_pxa270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-colibri_pxa300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-collie_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-corgi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-cu1830-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-davinci_all_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-db1xxx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-decstation_64_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
-s, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+arm64-chromebook+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+crypto (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+debug (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-dove_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-e55_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-ep93xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-ezx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-fuloong2e_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 s=
-ection mismatches
-
-Errors:
-    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
-=98-mhard-float=E2=80=99
-
----------------------------------------------------------------------------=
------
-gemini_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-gpr_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-h3600_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-h5000_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-hackkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig+debug (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warni=
-ngs, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig+kselftest (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 w=
-arnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-imote2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-imx_v4_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-iop32x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-ip22_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-ixp4xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-jazz_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-jmr3927_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-jornada720_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-lemote2f_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 se=
-ction mismatches
-
-Errors:
-    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
-=98-mhard-float=E2=80=99
-
----------------------------------------------------------------------------=
------
-loongson2k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-loongson3_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-lpc32xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-lpd270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-lubbock_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-magician_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-malta_kvm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-malta_qemu_32r6_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
-gs, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-maltaaprp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-maltasmvp_eva_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-maltaup_xpa_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-milbeaut_m10v_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
-mini2440_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-mmp2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-moxart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-mpc30x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-mps2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-mtx1_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v4t_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-10) =E2=80=94 PASS, =
-0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-10) =E2=80=
-=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
- errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+debug (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-mvebu_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-mxs_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-neponset_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-netwinder_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-nommu_k210_sdcard_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
-nings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-omega2p_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-orion5x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-oxnas_v6_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-palmz72_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-pcm027_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-pic32mzda_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-pleb_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-pxa168_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-pxa255-idp_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-pxa3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-pxa910_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-qcom_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section=
- mismatches
-
-Errors:
-    /tmp/kci/linux/build/../drivers/gpu/drm/panel/panel-edp.c:843: undefine=
-d reference to `drm_panel_dp_aux_backlight'
-
----------------------------------------------------------------------------=
------
-qi_lb60_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-realview_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-rm200_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-rpc_defconfig (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 section=
- mismatches
-
-Errors:
-    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=3D0x'
-    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=3D0x'
-
----------------------------------------------------------------------------=
------
-rs90_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-rt305x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-s5pv210_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-sama5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-sama7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-sb1250_swarm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
-shmobile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-simpad_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-socfpga_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-spear13xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-spear3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-spitz_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-stm32_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-sunxi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-tb0219_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-tb0226_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-tb0287_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-tct_hammer_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-trizeps4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-vdk_hs38_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-vexpress_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-viper_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-vocore2_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-workpad_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+crypto (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
-gs, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+debug (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 2 warning=
-s, 0 section mismatches
-
-Warnings:
-    lib/strncpy_from_user.o: warning: objtool: strncpy_from_user()+0x8a: ca=
-ll to do_strncpy_from_user() with UACCESS enabled
-    lib/strnlen_user.o: warning: objtool: strnlen_user()+0x5d: call to do_s=
-trnlen_user() with UACCESS enabled
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+ima (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
-nings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 e=
-rrors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-xcep_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----
-For more info write to <info@kernelci.org>
+--Sig_/os1.aw2jLDno_s_1aLUYR3g
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi all,
+
+Changes since 20220303:
+
+New tree: counter-fixes
+
+The random tree lost its build failure for which I applied a patch.
+
+The kspp tree still had its build failure so I applied three upcoming
+DRM patches.
+
+Non-merge commits (relative to Linus' tree): 9610
+ 9794 files changed, 888912 insertions(+), 228277 deletions(-)
+
+----------------------------------------------------------------------------
+
+I have created today's linux-next tree at
+git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
+are tracking the linux-next tree using git, you should not use "git pull"
+to do so as that will try to merge the new linux-next release with the
+old one.  You should use "git fetch" and checkout or reset to the new
+master.
+
+You can see which trees have been included by looking in the Next/Trees
+file in the source.  There are also quilt-import.log and merge.log
+files in the Next directory.  Between each merge, the tree was built
+with a ppc64_defconfig for powerpc, an allmodconfig for x86_64, a
+multi_v7_defconfig for arm and a native build of tools/perf. After
+the final fixups (if any), I do an x86_64 modules_install followed by
+builds for x86_64 allnoconfig, powerpc allnoconfig (32 and 64 bit),
+ppc44x_defconfig, allyesconfig and pseries_le_defconfig and i386,
+arm64, sparc and sparc64 defconfig and htmldocs. And finally, a simple
+boot test of the powerpc pseries_le_defconfig kernel in qemu (with and
+without kvm enabled).
+
+Below is a summary of the state of the merge.
+
+I am currently merging 346 trees (counting Linus' and 94 trees of bug
+fix patches pending for the current merge release).
+
+Stats about the size of the tree over time can be seen at
+http://neuling.org/linux-next-size.html .
+
+Status of my local build tests will be at
+http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
+advice about cross compilers/configs that work, we are always open to add
+more builds.
+
+Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
+Gortmaker for triage and bug fixes.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+$ git checkout master
+$ git reset --hard stable
+Merging origin/master (b08968f196d4 cachefiles: Fix incorrect length to fal=
+locate())
+Merging fixes/fixes (d06c942efea4 Merge tag 'for_linus' of git://git.kernel=
+.org/pub/scm/linux/kernel/git/mst/vhost)
+Merging kbuild-current/fixes (754e0b0e3560 Linux 5.17-rc4)
+Merging arc-current/for-curr (e783362eb54c Linux 5.17-rc1)
+Merging arm-current/fixes (7b83299e5b93 ARM: 9182/1: mmu: fix returns from =
+early_param() and __setup() functions)
+Merging arm64-fixes/for-next/fixes (4f6de676d94e arm64: Correct wrong label=
+ in macro __init_el2_gicv3)
+Merging arm-soc-fixes/arm/fixes (a0e897d1b367 arm64: dts: armada-3720-turri=
+s-mox: Add missing ethernet0 alias)
+Merging drivers-memory-fixes/fixes (e783362eb54c Linux 5.17-rc1)
+Merging tee-fixes/fixes (6d8df1f9e8ae Merge tag 'optee-fix2-for-v5.17' into=
+ fixes)
+Merging m68k-current/for-linus (1a0ae068bf6b m68k: defconfig: Update defcon=
+figs for v5.16-rc1)
+Merging powerpc-fixes/fixes (fe663df78258 powerpc/lib/sstep: fix 'ptesync' =
+build error)
+Merging s390-fixes/fixes (c194dad21025 s390/extable: fix exception table so=
+rting)
+Merging sparc/master (05a59d79793d Merge git://git.kernel.org:/pub/scm/linu=
+x/kernel/git/netdev/net)
+Merging fscrypt-current/for-stable (80f6e3080bfc fs-verity: fix signed inte=
+ger overflow with i_size near S64_MAX)
+Merging net/master (b949c21fc23e Merge tag 'net-5.17-rc7' of git://git.kern=
+el.org/pub/scm/linux/kernel/git/netdev/net)
+Merging bpf/master (18b1ab7aa76b xsk: Fix race at socket teardown)
+Merging ipsec/master (4ff2980b6bd2 xfrm: fix tunnel model fragmentation beh=
+avior)
+Merging netfilter/master (f8e9bd34cedd Merge branch 'smc-fix')
+Merging ipvs/master (277f2bb14361 ibmvnic: schedule failover only if vioctl=
+ fails)
+Merging wireless/main (e6e91ec966db iwlwifi: mvm: return value for request_=
+ownership)
+Merging rdma-fixes/for-rc (7e57714cd0ad Linux 5.17-rc6)
+Merging sound-current/for-linus (0aa6b294b312 ALSA: intel_hdmi: Fix referen=
+ce to PCM buffer address)
+Merging sound-asoc-fixes/for-linus (b7fb0ae09009 ASoC: SOF: Intel: Fix NULL=
+ ptr dereference when ENOMEM)
+Merging regmap-fixes/for-linus (d04ad245d67a regmap-irq: Update interrupt c=
+lear register for proper reset)
+Merging regulator-fixes/for-linus (48fdc1fa4d93 Merge remote-tracking branc=
+h 'regulator/for-5.16' into regulator-linus)
+Merging spi-fixes/for-linus (a7c76d3f0787 Merge remote-tracking branch 'spi=
+/for-5.16' into spi-linus)
+Merging pci-current/for-linus (3f1271b54edc PCI: Mark all AMD Navi10 and Na=
+vi14 GPU ATS as broken)
+Merging driver-core.current/driver-core-linus (7e57714cd0ad Linux 5.17-rc6)
+Merging tty.current/tty-linus (7e57714cd0ad Linux 5.17-rc6)
+Merging usb.current/usb-linus (7e57714cd0ad Linux 5.17-rc6)
+Merging usb-gadget-fixes/fixes (e49d033bddf5 Linux 5.12-rc6)
+Merging usb-serial-fixes/usb-linus (cfc4442c642d USB: serial: option: add T=
+elit LE910R1 compositions)
+Merging usb-chipidea-fixes/for-usb-fixes (f130d08a8d79 usb: chipidea: ci_hd=
+rc_imx: Also search for 'phys' phandle)
+CONFLICT (content): Merge conflict in drivers/usb/chipidea/ci_hdrc_imx.c
+Merging phy/fixes (9a8406ba1a9a phy: dphy: Correct clk_pre parameter)
+Merging staging.current/staging-linus (342e7c6ea582 staging: rtl8723bs: Imp=
+rove the comment explaining the locking rules)
+Merging iio-fixes/fixes-togreg (123d838c4e7d iio: adc: xilinx-ams: Fix sing=
+le channel switching sequence)
+Merging counter-fixes/fixes-togreg (4a14311a3b93 counter: Stop using dev_ge=
+t_drvdata() to get the counter device)
+Merging char-misc.current/char-misc-linus (7e57714cd0ad Linux 5.17-rc6)
+Merging soundwire-fixes/fixes (e783362eb54c Linux 5.17-rc1)
+Merging thunderbolt-fixes/fixes (7e57714cd0ad Linux 5.17-rc6)
+Merging input-current/for-linus (04b7762e37c9 Input: elan_i2c - fix regulat=
+or enable count imbalance after suspend/resume)
+Merging crypto-current/master (c6ce9c5831ca crypto: api - Move cryptomgr so=
+ft dependency into algapi)
+Merging vfio-fixes/for-linus (8704e8934908 vfio/pci: Fix OpRegion read)
+Merging kselftest-fixes/fixes (6fec1ab67f8d selftests/ftrace: Do not trace =
+do_softirq because of PREEMPT_RT)
+Merging modules-fixes/modules-linus (a8e8f851e829 module: fix building with=
+ sysfs disabled)
+Merging dmaengine-fixes/fixes (cfb92440ee71 Linux 5.17-rc5)
+Merging backlight-fixes/for-backlight-fixes (a38fd8748464 Linux 5.12-rc2)
+Merging mtd-fixes/mtd/fixes (7cf1de957a98 mtd: rawnand: omap2: Actually pre=
+vent invalid configuration and build error)
+Merging mfd-fixes/for-mfd-fixes (a61f4661fba4 mfd: intel_quark_i2c_gpio: Re=
+vert "Constify static struct resources")
+Merging v4l-dvb-fixes/fixes (d40f0b133b44 media: meson-ir-tx: remove incorr=
+ect doc comment)
+Merging reset-fixes/reset/fixes (92c959bae2e5 reset: renesas: Fix Runtime P=
+M usage)
+Merging mips-fixes/mips-fixes (5d8965704fe5 MIPS: ralink: mt7621: use bitwi=
+se NOT instead of logical)
+Merging at91-fixes/at91-fixes (26077968f838 dt-bindings: ARM: at91: update =
+maintainers entry)
+Merging omap-fixes/fixes (8840f5460a23 ARM: dts: Use 32KiHz oscillator on d=
+evkit8000)
+Merging kvm-fixes/master (9ee83635d872 KVM: x86: Yield to IPI target vCPU o=
+nly if it is busy)
+Merging kvms390-fixes/master (0e9ff65f455d KVM: s390: preserve deliverable_=
+mask in __airqs_kick_single_vcpu)
+Merging hwmon-fixes/hwmon (686d303ee630 hwmon: (pmbus) Add mutex to regulat=
+or ops)
+Merging nvdimm-fixes/libnvdimm-fixes (3dd60fb9d95d nvdimm/pmem: stop using =
+q_usage_count as external pgmap refcount)
+Merging cxl-fixes/fixes (fae8817ae804 cxl/mem: Fix memory device capacity p=
+robing)
+Merging btrfs-fixes/next-fixes (6e60f6a7ae95 Merge branch 'misc-5.17' into =
+next-fixes)
+Merging vfs-fixes/fixes (9d2231c5d74e lib/iov_iter: initialize "flags" in n=
+ew pipe_buffer)
+Merging dma-mapping-fixes/for-linus (18a3c5f7abfd Merge tag 'for_linus' of =
+git://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost)
+Merging i3c-fixes/i3c/fixes (fe07bfda2fb9 Linux 5.12-rc1)
+Merging drivers-x86-fixes/fixes (21d90aaee8d5 surface: surface3_power: Fix =
+battery readings on batteries without a serial number)
+Merging samsung-krzk-fixes/fixes (442b0c08db7e soc: samsung: Fix typo in CO=
+NFIG_EXYNOS_USI description)
+Merging pinctrl-samsung-fixes/fixes (e783362eb54c Linux 5.17-rc1)
+Merging devicetree-fixes/dt/linus (0c0822bcb73f dt-bindings: update Roger Q=
+uadros email)
+Merging scsi-fixes/fixes (10af11564617 scsi: ufs: core: Fix divide by zero =
+in ufshcd_map_queues())
+Merging drm-fixes/drm-fixes (e7c470a4b543 Merge tag 'exynos-drm-fixes-v5.17=
+-rc6' of git://git.kernel.org/pub/scm/linux/kernel/git/daeinki/drm-exynos i=
+nto drm-fixes)
+Merging amdgpu-fixes/drm-fixes (2c409ba81be2 drm/radeon: fix si_enable_smc_=
+cac() failed issue)
+Merging drm-intel-fixes/for-linux-next-fixes (08783aa7693f drm/i915: s/JSP2=
+/ICP2/ PCH)
+Merging mmc-fixes/fixes (f0d2f15362f0 mmc: meson: Fix usage of meson_mmc_po=
+st_req())
+Merging rtc-fixes/rtc-fixes (bd33335aa93d rtc: cmos: Disable irq around dir=
+ect invocation of cmos_interrupt())
+Merging gnss-fixes/gnss-linus (e783362eb54c Linux 5.17-rc1)
+Merging hyperv-fixes/hyperv-fixes (ffc58bc4af93 Drivers: hv: utils: Make us=
+e of the helper macro LIST_HEAD())
+Merging soc-fsl-fixes/fix (a222fd854139 soc: fsl: qe: Check of ioremap retu=
+rn value)
+Merging risc-v-fixes/fixes (22e2100b1b07 riscv: fix oops caused by irqsoff =
+latency tracer)
+Merging pidfd-fixes/fixes (03ba0fe4d09f file: simplify logic in __close_ran=
+ge())
+Merging fpga-fixes/fixes (8bb7eca972ad Linux 5.15)
+Merging spdx/spdx-linus (d8152cfe2f21 Merge tag 'pci-v5.17-fixes-5' of git:=
+//git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci)
+Merging gpio-brgl-fixes/gpio/for-current (ae42f9288846 gpio: Return EPROBE_=
+DEFER if gc->to_irq is NULL)
+Merging gpio-intel-fixes/fixes (e783362eb54c Linux 5.17-rc1)
+Merging pinctrl-intel-fixes/fixes (6f66db29e241 pinctrl: tigerlake: Revert =
+"Add Alder Lake-M ACPI ID")
+Merging erofs-fixes/fixes (24331050a3e6 erofs: fix small compressed files i=
+nlining)
+Merging integrity-fixes/fixes (843385694721 evm: Fix a small race in init_d=
+esc())
+Merging kunit-fixes/kunit-fixes (92a68053c346 Documentation: KUnit: Fix usa=
+ge bug)
+Merging ubifs-fixes/fixes (c3c07fc25f37 ubi: fastmap: Return error code if =
+memory allocation fails in add_aeb())
+Merging memblock-fixes/fixes (c94afc46cae7 memblock: use kfree() to release=
+ kmalloced memblock regions)
+Merging cel-fixes/for-rc (c306d737691e NFSD: Deprecate NFS_OFFSET_MAX)
+Merging irqchip-fixes/irq/irqchip-fixes (1d4df649cbb4 irqchip/sifive-plic: =
+Add missing thead,c900-plic match string)
+Merging renesas-fixes/fixes (432b52eea3dc ARM: shmobile: defconfig: Restore=
+ graphical consoles)
+Merging perf-current/perf/urgent (13e741b83453 perf script: Fix error when =
+printing 'weight' field)
+Merging efi-fixes/urgent (9feaf8b387ee efi: fix return value of __setup han=
+dlers)
+Merging zstd-fixes/zstd-linus (88a309465b3f lib: zstd: clean up double word=
+ in comment.)
+Merging drm-misc-fixes/for-linux-next-fixes (62929726ef0e drm/vrr: Set VRR =
+capable prop only if it is attached to connector)
+Merging kbuild/for-next (d4c858643263 kallsyms: ignore all local labels pre=
+fixed by '.L')
+Merging perf/perf/core (56dce868198c libperf: Add API for allocating new th=
+read map array)
+Merging compiler-attributes/compiler-attributes (7c00621dcaee compiler_type=
+s: mark __compiletime_assert failure as __noreturn)
+Merging dma-mapping/for-next (80e439098161 dma-debug: fix return value of _=
+_setup handlers)
+Merging asm-generic/master (9f15ac318b83 nds32: Remove the architecture)
+Merging arc/for-next (6880fa6c5660 Linux 5.15-rc1)
+Merging arm/for-next (d5b493b066ca Merge branch 'devel-stable' into for-nex=
+t)
+Merging arm64/for-next/core (fe500628a097 Merge branch 'for-next/fpsimd' in=
+to for-next/core)
+Merging arm-perf/for-next/perf (602c873eb52e perf: Replace acpi_bus_get_dev=
+ice())
+Merging arm-soc/for-next (1c9566edd537 Revert "soc: mediatek: mmsys: add mm=
+sys reset control for MT8186")
+CONFLICT (content): Merge conflict in arch/arm/Kconfig
+Merging actions/for-next (444d018d8d38 ARM: dts: owl-s500-roseapplepi: Add =
+ATC2603C PMIC)
+Merging amlogic/for-next (39369380e729 Merge branch 'v5.18/dt64' into for-n=
+ext)
+Merging aspeed/for-next (d9540eeaa3d1 Merge branches 'nuvoton-dt-for-v5.18'=
+ and 'dt-for-v5.18' into for-next)
+Merging at91/at91-next (f4de6d853a03 Merge branch 'at91-soc' into at91-next)
+Merging drivers-memory/for-next (c27983bbc75b Merge branch 'mem-ctrl-next' =
+into for-next)
+Merging imx-mxs/for-next (45550ada88f0 Merge branch 'imx/defconfig' into fo=
+r-next)
+Merging keystone/next (cb293d3b430e Merge branch 'for_5.15/drivers-soc' int=
+o next)
+Merging mediatek/for-next (6ceb6a96db4e Merge branch 'v5.17-fixes' into for=
+-next)
+Merging mvebu/for-next (89756932b780 Merge branch 'mvebu/dt64' into mvebu/f=
+or-next)
+Merging omap/for-next (f9ecc209330a Merge branch 'omap-for-v5.18/dt' into f=
+or-next)
+Merging qcom/for-next (22139a9091fd Merge branches 'arm64-defconfig-for-5.1=
+8', 'arm64-for-5.18', 'clk-for-5.18', 'defconfig-for-5.18', 'drivers-for-5.=
+18', 'dts-for-5.18', 'arm64-fixes-for-5.17' and 'dts-fixes-for-5.17' into f=
+or-next)
+CONFLICT (content): Merge conflict in arch/arm/configs/multi_v7_defconfig
+CONFLICT (content): Merge conflict in arch/arm64/configs/defconfig
+Merging raspberrypi/for-next (c5915b53d4c2 dt-bindings: soc: bcm: Convert b=
+rcm,bcm2835-vchiq to json-schema)
+Merging renesas/next (dff7b84b4d2a Merge branch 'renesas-arm-dt-for-v5.18' =
+into renesas-next)
+Merging reset/reset/next (89e7a6698fdd reset: uniphier-glue: Use devm_add_a=
+ction_or_reset())
+Merging rockchip/for-next (f03511c4f2b5 Merge branch 'v5.18-armsoc/dts64' i=
+nto for-next)
+CONFLICT (content): Merge conflict in arch/arm64/boot/dts/rockchip/rk356x.d=
+tsi
+Merging samsung-krzk/for-next (b2d5c4016a34 Merge branch 'for-v5.18/dt-clea=
+nup' into for-next)
+Merging scmi/for-linux-next (210b966b7e2f Merge tag 'scmi-updates-5.18' of =
+git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux into for-l=
+inux-next)
+Merging stm32/stm32-next (74fa56279651 ARM: dts: stm32: Switch DWMAC RMII c=
+lock to MCO2 on DHCOM)
+Merging sunxi/sunxi/for-next (f25c47c67629 Merge branch 'sunxi/dt-for-5.18'=
+ into sunxi/for-next)
+Merging tee/next (3e53bb2bd87b Merge branch 'tee_shm_vmalloc_for_v5.19' int=
+o next)
+Merging tegra/for-next (6d746e1eb2f6 Merge branch for-5.18/arm64/defconfig =
+into for-next)
+Merging ti/ti-next (183a6f5c6e1e Merge branches 'ti-k3-dts-next' and 'ti-dr=
+ivers-soc-next' into ti-next)
+Merging xilinx/for-next (3a14f0e61408 arm64: zynqmp: Rename dma to dma-cont=
+roller)
+Merging clk/clk-next (7da5e77a1b5f Merge branch 'clk-fixes' into clk-next)
+Merging clk-imx/for-next (e2049ad63a24 clk: imx: add i.MX93 clk)
+Merging clk-renesas/renesas-clk (73421f2a48e6 clk: renesas: r8a779f0: Add P=
+FC clock)
+Merging clk-samsung/for-next (45bd8166a1d8 clk: samsung: Add initial Exynos=
+7885 clock driver)
+Merging csky/linux-next (a0793fdad9a1 csky: fix typo of fpu config macro)
+Merging h8300/h8300-next (1ec10274d436 h8300: don't implement set_fs)
+CONFLICT (modify/delete): arch/h8300/mm/memory.c deleted in h8300/h8300-nex=
+t and modified in HEAD.  Version HEAD of arch/h8300/mm/memory.c left in tre=
+e.
+$ git rm -f arch/h8300/mm/memory.c
+Merging m68k/for-next (0d52a01a266b m68k: defconfig: Disable fbdev on Sun3/=
+3x)
+Merging m68knommu/for-next (244e6c2d4e4d m68k: m5441x: remove erroneous clo=
+ck disable)
+Merging microblaze/next (fcc619621df5 microblaze/PCI: Remove pci_phys_mem_a=
+ccess_prot() dead code)
+Merging mips/mips-next (4a0a1436053b mips: ralink: fix a refcount leak in i=
+ll_acc_of_setup())
+Merging nios2/for-next (7f7bc20bc41a nios2: Don't use _end for calculating =
+min_low_pfn)
+Merging openrisc/for-next (862cf8d5fd98 openrisc/boot: Remove unnecessary i=
+nitialisation in memcpy().)
+Merging parisc-hd/for-next (d21d3f34cf6e parisc/unaligned: Enhance user-spa=
+ce visible output)
+CONFLICT (content): Merge conflict in arch/parisc/lib/memcpy.c
+Merging powerpc/next (8219d31effa7 powerpc/lib/sstep: Fix build errors with=
+ newer binutils)
+Merging soc-fsl/next (1ce93cb102e7 soc: fsl: qe: Check of ioremap return va=
+lue)
+Merging risc-v/for-next (d56201d9440d riscv: defconfig: enable hugetlbfs op=
+tion)
+Merging s390/for-next (5225811009e5 Merge branch 'features' into for-next)
+Merging sh/for-next (8518e694203d sh: pgtable-3level: Fix cast to pointer f=
+rom integer of different size)
+Merging sparc-next/master (dd0d718152e4 Merge tag 'spi-fix-v5.8-rc2' of git=
+://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi)
+Merging uml/linux-next (db0dd9cee822 um: virtio_uml: Allow probing from dev=
+icetree)
+Merging xtensa/xtensa-for-next (8a900dc390da xtensa: Remove unused early_re=
+ad_config_byte() et al declarations)
+Merging pidfd/for-next (d52c14f5f9b3 Merge branch 'pidfd.fd_install' into f=
+or-next)
+Merging fscrypt/master (cdaa1b1941f6 fscrypt: update documentation for dire=
+ct I/O support)
+Merging fscache/fscache-next (2522c1b16116 afs: Maintain netfs_i_context::r=
+emote_i_size)
+Merging afs/afs-next (26291c54e111 Linux 5.17-rc2)
+Merging btrfs/for-next (f717a6052f38 Merge branch 'for-next-next-v5.17-2022=
+0303' into for-next-20220303)
+Merging ceph/master (ad5255c1ea9c ceph: misc fix for code style and logs)
+Merging cifs/for-next (3de268c4de06 cifs: truncate the inode and mapping wh=
+en we simulate fcollapse)
+Merging configfs/for-next (84ec758fb2da configfs: fix a race in configfs_{,=
+un}register_subsystem())
+Merging ecryptfs/next (682a8e2b41ef Merge tag 'ecryptfs-5.13-rc1-updates' o=
+f git://git.kernel.org/pub/scm/linux/kernel/git/tyhicks/ecryptfs)
+Merging erofs/dev (22ba5e99b96f erofs: fix ztailpacking on > 4GiB filesyste=
+ms)
+Merging exfat/dev (dd81e1c7d5fb Merge tag 'powerpc-5.17-2' of git://git.ker=
+nel.org/pub/scm/linux/kernel/git/powerpc/linux)
+Merging ext3/for_next (487606687984 Merge reiserfs deprecation patch.)
+Merging ext4/dev (cc5095747edf ext4: don't BUG if someone dirty pages witho=
+ut asking ext4 first)
+Merging f2fs/dev (680af5b824a5 f2fs: quota: fix loop condition at f2fs_quot=
+a_sync())
+Merging fsverity/fsverity (07c99001312c fs-verity: support reading signatur=
+e with ioctl)
+Merging fuse/for-next (c086df490257 fuse: move FUSE_SUPER_MAGIC definition =
+to magic.h)
+Merging gfs2/for-next (b2963932346f gfs2: Remove return value for gfs2_indi=
+rect_init)
+Merging jfs/jfs-next (c48a14dca2cb JFS: fix memleak in jfs_mount)
+Merging ksmbd/ksmbd-for-next (1a927cda94ac Documentation: ksmbd: update Fea=
+ture Status table)
+Merging nfs/linux-next (6c984083ec24 NFS: Use of mapping_set_error() result=
+s in spurious errors)
+Merging nfs-anna/linux-next (d19e0183a883 NFS: Do not report writeback erro=
+rs in nfs_getattr())
+Merging nfsd/for-next (bf27a962851b fs/lock: only call lm_breaker_owns_leas=
+e if there is conflict.)
+Merging ntfs3/master (52e00ea6b26e fs/ntfs3: Update valid size if -EIOCBQUE=
+UED)
+Merging orangefs/for-next (40a74870b2d1 orangefs: Fix the size of a memory =
+allocation in orangefs_bufmap_alloc())
+Merging overlayfs/overlayfs-next (94fd19752b28 ovl: don't fail copy up if n=
+o fileattr support on upper)
+Merging ubifs/next (aa39cc675799 jffs2: GC deadlock reading a page that is =
+used in jffs2_write_begin())
+Merging v9fs/9p-next (22e424feb665 Revert "fs/9p: search open fids first")
+Merging xfs/for-next (b97cca3ba909 xfs: only bother with sync_filesystem du=
+ring readonly remount)
+Merging zonefs/for-next (95b115332a83 zonefs: remove redundant null bio che=
+ck)
+Merging iomap/iomap-for-next (ebb7fb1557b1 xfs, iomap: limit individual ioe=
+nd chain lengths in writeback)
+Merging djw-vfs/vfs-for-next (2d86293c7075 xfs: return errors in xfs_fs_syn=
+c_fs)
+Merging file-locks/locks-next (80d8e4d3f313 fs/locks: fix fcntl_getlk64/fcn=
+tl_setlk64 stub prototypes)
+Merging vfs/for-next (124f75f864f3 clean overflow checks in count_mounts() =
+a bit)
+CONFLICT (content): Merge conflict in arch/x86/um/Kconfig
+Merging printk/for-next (c5f75d490fc2 Merge branch 'for-5.18' into for-next)
+Merging pci/next (b3c57902bef6 Merge branch 'remotes/lorenzo/pci/uniphier')
+Merging pstore/for-next/pstore (023bbde3db41 pstore: Add prefix to ECC mess=
+ages)
+Merging hid/for-next (cde4b57a1c51 Merge branch 'for-5.17/upstream-fixes' i=
+nto for-next)
+Merging i2c/i2c/for-next (867dfe1041a0 Merge branch 'i2c/for-mergewindow' i=
+nto i2c/for-next)
+Merging i3c/i3c/next (13462ba1815d i3c: master: dw: check return of dw_i3c_=
+master_get_free_pos())
+Merging dmi/dmi-for-next (f97a2103f1a7 firmware: dmi: Move product_sku info=
+ to the end of the modalias)
+Merging hwmon-staging/hwmon-next (007e433cf037 hwmon: Add driver for Texas =
+Instruments TMP464 and TMP468)
+Merging jc_docs/docs-next (247097e2bbff docs: reporting-issues.rst: link ne=
+w document about regressions)
+Merging v4l-dvb/master (2b891d3980f6 media: xilinx: csi2rxss: Use mipi-csi2=
+.h)
+Merging v4l-dvb-next/master (2881ca629984 media: Makefiles: sort entries wh=
+ere it fits)
+Merging pm/linux-next (7c2ca3c76b25 Merge branch 'acpi-bus' into linux-next)
+Merging cpufreq-arm/cpufreq/arm/linux-next (72951a77c00f cpufreq: blocklist=
+ Qualcomm sc8280xp and sa8540p in cpufreq-dt-platdev)
+Merging cpupower/cpupower (8382dce5e483 cpupower: Add "perf" option to prin=
+t AMD P-State information)
+Merging devfreq/devfreq-next (26291c54e111 Linux 5.17-rc2)
+Merging opp/opp/linux-next (f48a0c475c2a Documentation: EM: Describe new re=
+gistration method using DT)
+Merging thermal/thermal/linux-next (cef4b473c499 thermal/drivers/brcmstb_th=
+ermal: Interrupt is optional)
+Merging ieee1394/for-next (54b3bd99f094 firewire: nosy: switch from 'pci_' =
+to 'dma_' API)
+Merging dlm/next (feae43f8aa88 fs: dlm: print cluster addr if non-cluster n=
+ode connects)
+Merging rdma/for-next (a80501b89152 RDMA/core: Remove unnecessary statement=
+s)
+Merging net-next/master (80901bff8129 Merge git://git.kernel.org/pub/scm/li=
+nux/kernel/git/netdev/net)
+CONFLICT (content): Merge conflict in drivers/hwmon/adt7310.c
+Merging bpf-next/for-next (7df5072cc05f bpf: Small BPF verifier log improve=
+ments)
+Merging ipsec-next/master (2ecda181682e xfrm: delete duplicated functions t=
+hat calls same xfrm_api_check())
+Merging mlx5-next/mlx5-next (45fee8edb4b3 net/mlx5: Add clarification on sy=
+nc reset failure)
+Merging netfilter-next/master (c828414ac935 netfilter: nft_compat: suppress=
+ comment match)
+Merging ipvs-next/master (c828414ac935 netfilter: nft_compat: suppress comm=
+ent match)
+Merging bluetooth/master (8c9fa1be6896 Bluetooth: mediatek: fix the conflic=
+t between mtk and msft vendor event)
+Merging wireless-next/main (e715f10f3d05 rtw89: get channel parameters of 1=
+60MHz bandwidth)
+CONFLICT (content): Merge conflict in net/mac80211/mlme.c
+Merging mtd/mtd/next (2365f91c861c mtd: parsers: trx: allow to use on Media=
+Tek MIPS SoCs)
+Merging nand/nand/next (ffb16c1c4267 mtd: rawnand: stm32_fmc2: Add NAND Wri=
+te Protect support)
+CONFLICT (content): Merge conflict in Documentation/devicetree/bindings/mtd=
+/nand-controller.yaml
+Merging spi-nor/spi-nor/next (3c552889e431 mtd: spi-nor: renumber flags)
+Merging crypto/master (280ee3c3aaa8 crypto: octeontx2 - fix missing unlock)
+Merging drm/drm-next (38a15ad9488e Merge tag 'amd-drm-next-5.18-2022-02-25'=
+ of https://gitlab.freedesktop.org/agd5f/linux into drm-next)
+CONFLICT (modify/delete): Documentation/devicetree/bindings/display/mediate=
+k/mediatek,disp.txt deleted in drm/drm-next and modified in HEAD.  Version =
+HEAD of Documentation/devicetree/bindings/display/mediatek/mediatek,disp.tx=
+t left in tree.
+$ git rm -f Documentation/devicetree/bindings/display/mediatek/mediatek,dis=
+p.txt
+Applying: fix up for "media: dt-binding: mediatek: Get rid of mediatek,larb=
+ for multimedia HW"
+Merging drm-misc/for-linux-next (07f380da3ebd drm/panel: simple: Fix Innolu=
+x G070Y2-L01 BPP settings)
+Merging amdgpu/drm-next (efa8692773c9 drm/radeon: Add HD-audio component no=
+tifier support (v2))
+Merging drm-intel/for-linux-next (6b4e414ce8da drm/i915: Pimp async flip de=
+bugs)
+Merging drm-tegra/drm/tegra/for-next (b53c24f69199 drm/tegra: Support YVYU,=
+ VYUY and YU24 formats)
+Merging drm-msm/msm-next (8661f450626f dt-bindings: display/msm: add missin=
+g brace in dpu-qcm2290.yaml)
+Merging imx-drm/imx-drm/next (20fbfc81e390 drm/imx: imx-tve: Make use of th=
+e helper function devm_platform_ioremap_resource())
+Merging etnaviv/etnaviv/next (cdd156955f94 drm/etnaviv: consider completed =
+fence seqno in hang check)
+Merging fbdev/for-next (4f01d09b2bbf video: fbdev: sm712fb: Fix crash in sm=
+tcfb_write())
+Merging regmap/for-next (2d2329787ba2 regmap: irq: cleanup comments)
+Merging sound/for-next (e52b78f89067 sound: core: Remove redundant variable=
+ and return the last statement)
+Merging sound-asoc/for-next (6984974883ca Merge remote-tracking branch 'aso=
+c/for-5.18' into asoc-next)
+Merging modules/modules-next (719fce7539cd Merge tag 'soc-fixes-5.17-2' of =
+git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc)
+Merging input/next (dfafa5602957 Input: da9063 - use devm_delayed_work_auto=
+cancel())
+Merging block/for-next (e2f4ede7e711 Merge branch 'for-5.18/drivers' into f=
+or-next)
+CONFLICT (content): Merge conflict in fs/iomap/direct-io.c
+Merging device-mapper/for-next (168678d765d3 dm mpath: use DMINFO instead o=
+f printk with KERN_INFO)
+Merging libata/for-next (4dd4d3deb502 ata: ahci: Rename CONFIG_SATA_LPM_MOB=
+ILE_POLICY configuration item)
+Merging pcmcia/pcmcia-next (3928cf08334e pcmcia: db1xxx_ss: restrict to MIP=
+S_DB1XXX boards)
+Merging mmc/next (1f311c94aabd mmc: rtsx: add 74 Clocks in power on flow)
+Merging mfd/for-mfd-next (7a69f34ab44d mfd: atmel-flexcom: fix compilation =
+warning)
+Merging backlight/for-backlight-next (ec961cf32411 backlight: qcom-wled: Re=
+spect enabled-strings in set_brightness)
+Merging battery/for-next (ffb983d31519 power: supply: Static data for Samsu=
+ng batteries)
+Merging regulator/for-next (29bfeed6be0c Merge remote-tracking branch 'regu=
+lator/for-5.18' into regulator-next)
+Merging security/next-testing (047843bdb316 Merge branch 'landlock_lsm_v34'=
+ into next-testing)
+Merging apparmor/apparmor-next (c2489617b3b9 apparmor: Fix undefined refere=
+nce to `zlib_deflate_workspacesize')
+Merging integrity/next-integrity (cd3bc044af48 KEYS: encrypted: Instantiate=
+ key with user-provided decrypted data)
+Merging keys/keys-next (2d743660786e Merge branch 'fixes' of git://git.kern=
+el.org/pub/scm/linux/kernel/git/viro/vfs)
+Merging safesetid/safesetid-next (1b8b71922919 LSM: SafeSetID: Mark safeset=
+id_initialized as __initdata)
+Merging selinux/next (cdbec3ede0b8 selinux: shorten the policy capability e=
+num names)
+Merging smack/next (a5cd1ab7ab67 Fix incorrect type in assignment of ipv6 p=
+ort for audit)
+Merging tomoyo/master (b9c20da356db workqueue: Warn flushing of kernel-glob=
+al workqueues)
+Merging tpmdd/next (c9e54f38976a integrity: Only use machine keyring when u=
+efi_check_trust_mok_keys is true)
+Merging watchdog/master (cfb92440ee71 Linux 5.17-rc5)
+Merging iommu/next (a9b491f6d6de Merge branches 'arm/msm', 'arm/renesas', '=
+arm/rockchip', 'iommu/fixes', 'x86/vt-d' and 'core' into next)
+Merging audit/next (272ceeaea355 audit: log AUDIT_TIME_* records only from =
+rules)
+Merging devicetree/for-next (dca669354e6f dt-bindings: Another pass removin=
+g cases of 'allOf' containing a '$ref')
+Merging mailbox/mailbox-for-next (869b6ca39c08 dt-bindings: mailbox: Add mo=
+re protocol and client ID)
+Merging spi/for-next (a3d3c11c0424 Merge remote-tracking branch 'spi/for-5.=
+18' into spi-next)
+CONFLICT (modify/delete): arch/arm/mach-pxa/stargate2.c deleted in HEAD and=
+ modified in spi/for-next.  Version spi/for-next of arch/arm/mach-pxa/starg=
+ate2.c left in tree.
+$ git rm -f arch/arm/mach-pxa/stargate2.c
+Merging tip/auto-latest (a66320f04160 Merge branch into tip/master: 'core/c=
+ore')
+Merging clockevents/timers/drivers/next (b22a1c270f53 clocksource/drivers/e=
+xynos_mct: Increase the size of name array)
+Merging edac/edac-for-next (9e32472d8b3f Merge branch 'edac-urgent' into ed=
+ac-for-next)
+Merging irqchip/irq/irqchip-next (1a68edc0dc1f Merge branch irq/plic-cleanu=
+ps into irq/irqchip-next)
+CONFLICT (content): Merge conflict in drivers/pinctrl/pinctrl-starfive.c
+Merging ftrace/for-next (864ea0e10cc9 user_events: Add documentation file)
+Merging rcu/rcu/next (1498a74770d7 torture: Enable CSD-lock stall reports f=
+or scftorture)
+CONFLICT (content): Merge conflict in kernel/rcu/tree_plugin.h
+Merging kvm/next (4dfc4ec2b7f5 Merge branch 'kvm-ppc-cap-210' into kvm-next=
+-5.18)
+CONFLICT (content): Merge conflict in arch/x86/kvm/x86.c
+Merging kvm-arm/next (0054348a2011 Merge branch kvm-arm64/misc-5.18 into kv=
+marm-master/next)
+Merging kvms390/next (ee6a569d3bf6 KVM: s390: pv: make use of ultravisor AI=
+V support)
+Merging xen-tip/linux-next (f66edf684edc xen/pci: Make use of the helper ma=
+cro LIST_HEAD())
+Merging percpu/for-next (4e1f82dce05b Merge branch 'for-5.16-fixes' into fo=
+r-next)
+Merging workqueues/for-next (bc35f7ef9628 workqueue: Convert the type of po=
+ol->nr_running to int)
+Merging drivers-x86/for-next (cb18448bbf1c platform/x86: x86-android-tablet=
+s: Lenovo Yoga Tablet 2 830/1050 sound support)
+CONFLICT (content): Merge conflict in drivers/platform/x86/thinkpad_acpi.c
+Merging chrome-platform/for-next (b579f139e470 platform/chrome: cros_ec_typ=
+ec: Update mux flags during partner removal)
+Merging hsi/for-next (e783362eb54c Linux 5.17-rc1)
+Merging leds/for-next (e26557a0aa68 leds: pca955x: Allow zero LEDs to be sp=
+ecified)
+Merging ipmi/for-next (f4676c8ec396 ipmi: kcs: aspeed: Remove old bindings =
+support)
+Merging driver-core/driver-core-next (4a248f85b3dd Merge 5.17-rc6 into driv=
+er-core-next)
+CONFLICT (content): Merge conflict in drivers/power/supply/ab8500_chargalg.c
+Merging usb/usb-next (ca9400ef7f67 Merge 5.17-rc6 into usb-next)
+CONFLICT (content): Merge conflict in arch/arm64/boot/dts/qcom/ipq6018.dtsi
+CONFLICT (content): Merge conflict in arch/arm64/boot/dts/xilinx/zynqmp.dtsi
+Merging usb-gadget/next (e49d033bddf5 Linux 5.12-rc6)
+Merging usb-serial/usb-next (c4b9c570965f USB: serial: simple: add Nokia ph=
+one driver)
+Merging usb-chipidea-next/for-usb-next (78665f57c3fa usb: chipidea: udc: ma=
+ke controller hardware endpoint primed)
+Merging tty/tty-next (47b95e8ab731 serial: mvebu-uart: fix return value che=
+ck in mvebu_uart_clock_probe())
+CONFLICT (content): Merge conflict in MAINTAINERS
+Merging char-misc/char-misc-next (3dd9a926ec23 mmc: rtsx: Fix build errors/=
+warnings for unused variable)
+CONFLICT (content): Merge conflict in MAINTAINERS
+Merging extcon/extcon-next (b26c5f03a645 extcon: Fix some kernel-doc commen=
+ts)
+CONFLICT (content): Merge conflict in drivers/power/supply/max8997_charger.c
+Merging gnss/gnss-next (26291c54e111 Linux 5.17-rc2)
+Merging phy-next/next (c6455af54899 phy: qcom-qmp: add sc8280xp UFS PHY)
+CONFLICT (modify/delete): Documentation/devicetree/bindings/phy/qcom,usb-hs=
+-phy.txt deleted in phy-next/next and modified in HEAD.  Version HEAD of Do=
+cumentation/devicetree/bindings/phy/qcom,usb-hs-phy.txt left in tree.
+$ git rm -f Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.txt
+Applying: merge fix for "dt-bindings: phy: qcom,usb-hs-phy: add MSM8226 com=
+patible"
+Merging soundwire/next (266fa94673d3 soundwire: qcom: use __maybe_unused fo=
+r swrm_runtime_resume())
+Merging thunderbolt/next (7f7b571becf3 thunderbolt: Replace acpi_bus_get_de=
+vice())
+Merging vfio/next (f8a665b15947 Merge branches 'v5.18/vfio/next/mlx5-migrat=
+ion-v10', 'v5.18/vfio/next/pm-fixes' and 'v5.18/vfio/next/uml-build-fix' in=
+to v5.18/vfio/next/next)
+Merging staging/staging-next (b25c7dc13fb8 staging: rts5208: fix Lines shou=
+ld not end with a '('.)
+CONFLICT (content): Merge conflict in drivers/staging/fbtft/fbtft.h
+Merging iio/togreg (0bf126163c3e iio: adc: xilinx-ams: Fix single channel s=
+witching sequence)
+CONFLICT (content): Merge conflict in .mailmap
+CONFLICT (content): Merge conflict in drivers/iio/accel/fxls8962af-core.c
+Merging mux/for-next (0fcfb00b28c0 Linux 5.16-rc4)
+Merging icc/icc-next (52c85167e413 Merge branch 'icc-msm8939' into icc-next)
+Merging dmaengine/next (ea7c8f598c32 dmaengine: idxd: restore traffic class=
+ defaults after wq reset)
+Merging cgroup/for-next (88ea791b5665 Merge branch 'for-5.17-fixes' into fo=
+r-next)
+Merging scsi/for-next (f6de306274ab Merge branch 'misc' into for-next)
+CONFLICT (content): Merge conflict in block/blk-lib.c
+CONFLICT (content): Merge conflict in drivers/block/rnbd/rnbd-clt.c
+Merging scsi-mkp/for-next (f2ddbbea7780 scsi: lpfc: Copyright updates for 1=
+4.2.0.0 patches)
+Merging vhost/linux-next (fae0bd40fab0 virtio_console: break out of buf pol=
+l on remove)
+Merging rpmsg/for-next (dbba77c2f01b Merge branch 'rproc-next' into for-nex=
+t)
+Merging gpio/for-next (7ac554888233 MAINTAINERS: Remove reference to non-ex=
+isting file)
+Merging gpio-brgl/gpio/for-next (37db988c3629 Merge tag 'intel-gpio-v5.18-1=
+' of gitolite.kernel.org:pub/scm/linux/kernel/git/andy/linux-gpio-intel int=
+o gpio/for-next)
+Merging gpio-intel/for-next (a1ce76e89907 gpio: tps68470: Allow building as=
+ module)
+Merging gpio-sim/gpio/gpio-sim (0fcfb00b28c0 Linux 5.16-rc4)
+Merging pinctrl/for-next (842366d7cb68 Merge branch 'devel' into for-next)
+Merging pinctrl-intel/for-next (d25478e1d8f9 pinctrl: icelake: Add Ice Lake=
+-N PCH pin controller support)
+Merging pinctrl-renesas/renesas-pinctrl (babe298e9caa pinctrl: renesas: r8a=
+779f0: Add Ethernet pins, groups, and functions)
+Merging pinctrl-samsung/for-next (3652dc070bad pinctrl: samsung: improve wa=
+ke irq info on console)
+Merging pwm/for-next (ed14d36498c8 pwm: rcar: Simplify multiplication/shift=
+ logic)
+Merging userns/for-next (0ac983f51203 ucounts: Fix systemd LimitNPROC with =
+private users regression)
+Merging ktest/for-next (170f4869e662 ktest.pl: Fix the logic for truncating=
+ the size of the log file for email)
+Merging kselftest/next (f6d344cd5fa6 selftests: Fix build when $(O) points =
+to a relative path)
+Merging livepatching/for-next (b44a7f076ce1 Merge branch 'for-5.18/selftest=
+s-fixes' into for-next)
+Merging coresight/next (b54f53bc11a5 coresight: Drop unused 'none' enum val=
+ue for each component)
+Merging rtc/rtc-next (73ce05302007 rtc: pcf2127: fix bug when reading alarm=
+ registers)
+Merging nvdimm/libnvdimm-for-next (2166a9974902 dax: make sure inodes are f=
+lushed before destroy cache)
+Merging at24/at24/for-next (e783362eb54c Linux 5.17-rc1)
+Merging ntb/ntb-next (d2bda1500aa8 IDT: Fix Build warnings on some 32bit ar=
+chitectures.)
+Merging seccomp/for-next/seccomp (eed09ad26182 samples/seccomp: Adjust samp=
+le to also provide kill option)
+Merging cisco/for-next (9e98c678c2d6 Linux 5.1-rc1)
+Merging fsi/next (f2af60bb7ce2 fsi: Add trace events in initialization path)
+Merging slimbus/for-next (e783362eb54c Linux 5.17-rc1)
+Merging nvmem/for-next (bdf79b27260b dt-bindings: nvmem: brcm,nvram: add ba=
+sic NVMEM cells)
+CONFLICT (add/add): Merge conflict in Documentation/devicetree/bindings/nvm=
+em/sunplus,sp7021-ocotp.yaml
+CONFLICT (content): Merge conflict in MAINTAINERS
+Merging xarray/main (22f56b8e890d XArray: Include bitmap.h from xarray.h)
+Merging hyperv/hyperv-next (1d7286729aa6 hv_balloon: rate-limit "Unhandled =
+message" warning)
+Merging auxdisplay/auxdisplay (9ed331f8a0fb auxdisplay: lcd2s: Use proper A=
+PI to free the instance of charlcd object)
+Merging kgdb/kgdb/for-next (b77dbc86d604 kdb: Adopt scheduler's task classi=
+fication)
+Merging hmm/hmm (6880fa6c5660 Linux 5.15-rc1)
+Merging fpga/for-next (21f0a239ecab fpga: dfl: pci: Remove usage of the dep=
+recated "pci-dma-compat.h" API)
+Merging kunit/test (e783362eb54c Linux 5.17-rc1)
+Merging cfi/cfi/next (e783362eb54c Linux 5.17-rc1)
+Merging kunit-next/kunit (5debe5bfa02c list: test: Add a test for list_entr=
+y_is_head())
+Merging trivial/for-next (081c8919b02b Documentation: remove trivial tree)
+Merging mhi/mhi-next (0d02ea60ea13 bus: mhi: ep: Add uevent support for mod=
+ule autoloading)
+Merging memblock/for-next (f30b002ccfee memblock: __next_mem_pfn_range_in_z=
+one: remove unneeded local variable nid)
+Merging init/init-user-pointers (38b082236e77 initramfs: use vfs_utimes in =
+do_copy)
+Merging counters/counters (e71ba9452f0b Linux 5.11-rc2)
+Merging cxl/next (e6e17cc6ed75 cxl/core: Fix cxl_device_lock() class detect=
+ion)
+Merging folio-iomap/folio-iomap (4d7bd0eb72e5 iomap: Inline __iomap_zero_it=
+er into its caller)
+Merging zstd/zstd-next (88a309465b3f lib: zstd: clean up double word in com=
+ment.)
+Merging efi/next (2baa81c83f6f efifb: Remove redundant efifb_setup_from_dmi=
+ stub)
+Merging unicode/for-next (5298d4bfe80f unicode: clean up the Kconfig symbol=
+ confusion)
+Merging slab/for-next (d3d59937afdf Merge branch 'for-5.18/trivial' into fo=
+r-next)
+Merging random/master (8497f1bb8d74 wireguard: device: clear keys on VM for=
+k)
+Merging landlock/next (a691b9858300 Merge Landlock fixes into next)
+Merging rust/rust-next (847245fe812e init/Kconfig: Specify the interpreter =
+for rust-is-available.sh)
+Merging sysctl/sysctl-next (fc12aa67daba kernel/do_mount_initrd: move real_=
+root_dev sysctls to its own file)
+CONFLICT (content): Merge conflict in include/linux/sched/sysctl.h
+CONFLICT (content): Merge conflict in kernel/sysctl.c
+Merging folio/for-next (0488343ba3dd selftests/vm/transhuge-stress: Support=
+ file-backed PMD folios)
+CONFLICT (modify/delete): arch/nds32/include/asm/pgtable.h deleted in HEAD =
+and modified in folio/for-next.  Version folio/for-next of arch/nds32/inclu=
+de/asm/pgtable.h left in tree.
+CONFLICT (content): Merge conflict in drivers/gpu/drm/drm_cache.c
+$ git rm -f arch/nds32/include/asm/pgtable.h
+Merging execve/for-next/execve (9e1a3ce0a952 binfmt_elf: Introduce KUnit te=
+st)
+Merging kspp/for-next/kspp (1b01a23d9a48 Merge branch 'for-next/hardening' =
+into for-next/kspp)
+Applying: drm/bridge: it6505: Fix the read buffer array bound
+Applying: drm/dp: Fix OOB read when handling Post Cursor2 register
+Applying: drm/dp: Fix off-by-one in register cache size
+Merging kspp-gustavo/for-next/kspp (91adfbb14c00 Merge branch 'for-next/ksp=
+p-fam0' into for-next/kspp)
+Merging akpm-current/current (f5e256748143 ipc/mqueue: use get_tree_nodev()=
+ in mqueue_get_tree())
+CONFLICT (content): Merge conflict in Documentation/admin-guide/sysctl/kern=
+el.rst
+CONFLICT (modify/delete): arch/nds32/mm/init.c deleted in HEAD and modified=
+ in akpm-current/current.  Version akpm-current/current of arch/nds32/mm/in=
+it.c left in tree.
+CONFLICT (content): Merge conflict in include/linux/sched/sysctl.h
+CONFLICT (content): Merge conflict in lib/Kconfig.debug
+CONFLICT (content): Merge conflict in mm/Kconfig
+CONFLICT (content): Merge conflict in mm/huge_memory.c
+CONFLICT (content): Merge conflict in mm/internal.h
+CONFLICT (content): Merge conflict in mm/memcontrol.c
+CONFLICT (content): Merge conflict in mm/memory-failure.c
+CONFLICT (content): Merge conflict in mm/memory.c
+CONFLICT (content): Merge conflict in mm/memremap.c
+CONFLICT (content): Merge conflict in mm/rmap.c
+CONFLICT (content): Merge conflict in mm/vmscan.c
+CONFLICT (modify/delete): tools/testing/radix-tree/linux/gfp.h deleted in H=
+EAD and modified in akpm-current/current.  Version akpm-current/current of =
+tools/testing/radix-tree/linux/gfp.h left in tree.
+$ git rm -f tools/testing/radix-tree/linux/gfp.h arch/nds32/mm/init.c
+Applying: fix up for "tools: Move gfp.h and slab.h from radix-tree to lib"
+$ git checkout -b akpm remotes/origin/akpm/master
+$ git rebase --onto master remotes/origin/akpm/master-base
+Merging akpm/master (a43902460ff4 kselftest/vm: override TARGETS from argum=
+ents)
+
+--Sig_/os1.aw2jLDno_s_1aLUYR3g
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIh4BUACgkQAVBC80lX
+0Gx1Vwf/YVx+0htphh6dBVcsV/ZzWjDPZjypPlWVo0aPwRQElZG1q44IQKZ6sdaq
+jvL5r7IxSuGCv3bXwynkLevbygqsxIIUIBI7EXm7kC/e9Hp8vyqoXWUloX+pSMnD
+5l0OrgDrR62Ga7tUMt2vfddqzdUsdB3GGRegEhKu/JKVwOICCEfgdJNvizVuevY5
+PJmBieT9B2REwg/P6gaEGExG+KlzIlN2dVJO3Ybh/2ceFN4FsZ+ph6eeIr2SRSDJ
+wCOCqZ9LFRsB/PRpG/aGMQ57sF5+55yZVKj+s8Mh7FT6JjOp/DUl/GOVPoF2oj7B
+O65kgn4lQlwOogoth16MIZS87BVTzg==
+=FfRm
+-----END PGP SIGNATURE-----
+
+--Sig_/os1.aw2jLDno_s_1aLUYR3g--

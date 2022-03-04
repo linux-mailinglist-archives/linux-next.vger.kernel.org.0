@@ -2,155 +2,213 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE4094CD2A1
-	for <lists+linux-next@lfdr.de>; Fri,  4 Mar 2022 11:41:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A4474CD37C
+	for <lists+linux-next@lfdr.de>; Fri,  4 Mar 2022 12:30:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237424AbiCDKmK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 4 Mar 2022 05:42:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51620 "EHLO
+        id S236841AbiCDLbI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 4 Mar 2022 06:31:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237318AbiCDKmJ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 4 Mar 2022 05:42:09 -0500
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 152DB1AAFC1
-        for <linux-next@vger.kernel.org>; Fri,  4 Mar 2022 02:41:22 -0800 (PST)
-Received: by mail-il1-f198.google.com with SMTP id k5-20020a926f05000000b002be190db91cso5278550ilc.11
-        for <linux-next@vger.kernel.org>; Fri, 04 Mar 2022 02:41:22 -0800 (PST)
+        with ESMTP id S239615AbiCDLbH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 4 Mar 2022 06:31:07 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0429F1B1259
+        for <linux-next@vger.kernel.org>; Fri,  4 Mar 2022 03:30:16 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id gb21so7096494pjb.5
+        for <linux-next@vger.kernel.org>; Fri, 04 Mar 2022 03:30:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=Nk+nFefMSHtdoUyea8+zjOPlrIAivlAOvA5GWcRecaA=;
+        b=XcVKd3kPFWUFtdkMI+SV7M9JglSfR6nMfHv6KzzmeKB5KufzC/GkSl4ZAnXmoEfTXX
+         sqglyk52qafNf+592KcbQ7E53rTheesR+XQ26g9lHBnYeTYXHiKepuhxFok5rJjqvDJK
+         045q47+fhtXHqZUFadSdFYTBVqsnyT3LHqqFMjDxShwxjS/yD9QWyDdATZEClK2sah2D
+         to/Tl2R4w56zpu3Kd2pmavBg1aM4lBveDJBVM3qINzB8qfhOr5SHsfXmVsV6OdeFmS6j
+         +wGMGgcY/2/f/3CtgJXjvri2IbQPDO4BS83iyZnGFk9n+TeaQDLGcQ5Is7/LCdFyHS0q
+         cAvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=6SuusqU261l0YZRBubHgkzmZFekkg3laoBBQucPRrgA=;
-        b=Fmbug+51LV3GlYVrLIeZggov6XoZoLhyVGlACCdO9eLZVQ4D+15JPbvr/YZ/cZaXzy
-         m6F5gBwj+prExmCLwaYnM9waSzWFpaCWEK3bCfZNXjWAMw5dcJ1ktEGxcbWB+iz2VKDL
-         JL06soR+nIrDLjBC2iNDCjBGoMp07BJ6kS+jpF+b08O8xXgYls0m4BdBg6ppWYeMS6Oo
-         TSKSKxsLeiRY1mm+3VDxVx4/Xw94laoqClihiChMjKbvGo/LnYvS1S84+Syc1hBpFLkG
-         yXEBkRyzJFKZB+bVFyW4i7BCNPF9cNoQYUWmdiTNeUyk0sQ3BxbDegLS4jzItKTg+7bS
-         0NwQ==
-X-Gm-Message-State: AOAM531Bs54XNr+ZqnmqpXivWvfgfYxFdoqSApoEv3k7ONVAb8prk++T
-        /54/hiVSGm6ujocKXfDvWsIeO4naUgoVfwlfIC1lvIgpbNjp
-X-Google-Smtp-Source: ABdhPJwKCMl3GU2i9vbnDTeANVWYScaZeMCV2tSwF1TW5fUve4h9UUDcIrdH6VmCvdsJafXL55JBIVWVo0pCWJHPquGCcHchQG9J
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=Nk+nFefMSHtdoUyea8+zjOPlrIAivlAOvA5GWcRecaA=;
+        b=y/yj2o+lAtoyoo0Nw3s1q/kAEIsd9MM9nXYwOFi57JzLvnOZGy7cScxW8mdkUoyL/w
+         BVDg2AHQvUGispu/82h7us3cwXx0DqLyhtsgP2yuDtk2MHruyd+ClDBnmybvb8r+hVBK
+         029oy33w2wp6r7VHNqZT8IpILil5Uxj/tqcrBhWUu+6ps5qzZC7X00g3b/Euroe8xNsP
+         ln/T9loCseaVGr0I0xv8jOfuFYbAf+1Dr+cgWz9UtOgaeAsknTHzyQXGkx7UzwkgLd33
+         R5Ds+Wqv3lldSJHJd7Rjsq7Rtc3qQcuoJCLXNBLZ12hiwSK9wxOH08G8X8WWeJibYOf6
+         313w==
+X-Gm-Message-State: AOAM53120ZvgXOUa9FRhGL3mty8C+njOQToBzOJkX0UrDnLJdgTcZGU5
+        DKtvYJpgr2YA9MmrNqvLvmlGFXX4ljYeCg/IqJE=
+X-Google-Smtp-Source: ABdhPJyjSHoDxqiOxyiWCoC4d2Mg0wP2dyJUtr3U0AZcuO9iJYr6W1TMchw8fEgmjPYZ1Wvmdrs2MA==
+X-Received: by 2002:a17:90a:c252:b0:1bc:52a8:cac8 with SMTP id d18-20020a17090ac25200b001bc52a8cac8mr10044830pjx.61.1646393415285;
+        Fri, 04 Mar 2022 03:30:15 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id p10-20020a056a0026ca00b004f38e426e3csm5594353pfw.201.2022.03.04.03.30.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Mar 2022 03:30:14 -0800 (PST)
+Message-ID: <6221f846.1c69fb81.cc425.ee94@mx.google.com>
+Date:   Fri, 04 Mar 2022 03:30:14 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:178f:b0:2c4:b692:a8ec with SMTP id
- y15-20020a056e02178f00b002c4b692a8ecmr13307761ilu.296.1646390481472; Fri, 04
- Mar 2022 02:41:21 -0800 (PST)
-Date:   Fri, 04 Mar 2022 02:41:21 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000cf53e605d96227cd@google.com>
-Subject: [syzbot] linux-next boot error: WARNING: suspicious RCU usage in cpuacct_charge
-From:   syzbot <syzbot+16e3f2c77e7c5a0113f9@syzkaller.appspotmail.com>
-To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        brauner@kernel.org, cgroups@vger.kernel.org, daniel@iogearbox.net,
-        hannes@cmpxchg.org, john.fastabend@gmail.com, kafai@fb.com,
-        kpsingh@kernel.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org, lizefan.x@bytedance.com,
-        netdev@vger.kernel.org, sfr@canb.auug.org.au,
-        songliubraving@fb.com, syzkaller-bugs@googlegroups.com,
-        tj@kernel.org, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Tree: next
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Kernel: v5.17-rc6-312-gf15bf60c638f
+Subject: next/pending-fixes baseline: 168 runs,
+ 3 regressions (v5.17-rc6-312-gf15bf60c638f)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hello,
+next/pending-fixes baseline: 168 runs, 3 regressions (v5.17-rc6-312-gf15bf6=
+0c638f)
 
-syzbot found the following issue on:
+Regressions Summary
+-------------------
 
-HEAD commit:    6d284ba80c0c Add linux-next specific files for 20220304
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=15c283d1700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=26714bde6b3ad08b
-dashboard link: https://syzkaller.appspot.com/bug?extid=16e3f2c77e7c5a0113f9
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+platform         | arch  | lab             | compiler | defconfig          =
+          | regressions
+-----------------+-------+-----------------+----------+--------------------=
+----------+------------
+bcm2711-rpi-4-b  | arm64 | lab-linaro-lkft | gcc-10   | defconfig+CON...OMI=
+ZE_BASE=3Dy | 1          =
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+16e3f2c77e7c5a0113f9@syzkaller.appspotmail.com
+bcm2836-rpi-2-b  | arm   | lab-collabora   | gcc-10   | multi_v7_defc...MB2=
+_KERNEL=3Dy | 1          =
 
-
-=============================
-WARNING: suspicious RCU usage
-5.17.0-rc6-next-20220304-syzkaller #0 Not tainted
------------------------------
-include/linux/cgroup.h:494 suspicious rcu_dereference_check() usage!
-
-other info that might help us debug this:
+rk3399-gru-kevin | arm64 | lab-collabora   | gcc-10   | defconfig+arm64-chr=
+omebook   | 1          =
 
 
-rcu_scheduler_active = 1, debug_locks = 1
-2 locks held by kthreadd/2:
- #0: ffff8881401726e0 (&p->pi_lock){....}-{2:2}, at: task_rq_lock+0x63/0x360 kernel/sched/core.c:578
- #1: ffff8880b9c39f98 (&rq->__lock){-...}-{2:2}, at: raw_spin_rq_lock_nested+0x2b/0x120 kernel/sched/core.c:478
+  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
+v5.17-rc6-312-gf15bf60c638f/plan/baseline/
 
-stack backtrace:
-CPU: 0 PID: 2 Comm: kthreadd Not tainted 5.17.0-rc6-next-20220304-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- task_css include/linux/cgroup.h:494 [inline]
- task_ca kernel/sched/cpuacct.c:40 [inline]
- cpuacct_charge+0x2af/0x3c0 kernel/sched/cpuacct.c:342
- cgroup_account_cputime include/linux/cgroup.h:792 [inline]
- update_curr+0x37b/0x830 kernel/sched/fair.c:907
- dequeue_entity+0x23/0xfd0 kernel/sched/fair.c:4422
- dequeue_task_fair+0x238/0xea0 kernel/sched/fair.c:5771
- dequeue_task kernel/sched/core.c:2019 [inline]
- __do_set_cpus_allowed+0x186/0x960 kernel/sched/core.c:2508
- __set_cpus_allowed_ptr_locked+0x2ba/0x4e0 kernel/sched/core.c:2841
- __set_cpus_allowed_ptr kernel/sched/core.c:2874 [inline]
- set_cpus_allowed_ptr+0x78/0xa0 kernel/sched/core.c:2879
- kthreadd+0x44/0x750 kernel/kthread.c:724
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
- </TASK>
-
-=============================
-WARNING: suspicious RCU usage
-5.17.0-rc6-next-20220304-syzkaller #0 Not tainted
------------------------------
-include/linux/cgroup.h:481 suspicious rcu_dereference_check() usage!
-
-other info that might help us debug this:
+  Test:     baseline
+  Tree:     next
+  Branch:   pending-fixes
+  Describe: v5.17-rc6-312-gf15bf60c638f
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      f15bf60c638f4bd55572d814df3fc67b16a31eca =
 
 
-rcu_scheduler_active = 1, debug_locks = 1
-2 locks held by kthreadd/2:
- #0: ffff8881401726e0 (&p->pi_lock){....}-{2:2}, at: task_rq_lock+0x63/0x360 kernel/sched/core.c:578
- #1: ffff8880b9c39f98 (&rq->__lock){-...}-{2:2}, at: raw_spin_rq_lock_nested+0x2b/0x120 kernel/sched/core.c:478
 
-stack backtrace:
-CPU: 0 PID: 2 Comm: kthreadd Not tainted 5.17.0-rc6-next-20220304-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- task_css_set include/linux/cgroup.h:481 [inline]
- task_dfl_cgroup include/linux/cgroup.h:550 [inline]
- cgroup_account_cputime include/linux/cgroup.h:794 [inline]
- update_curr+0x671/0x830 kernel/sched/fair.c:907
- dequeue_entity+0x23/0xfd0 kernel/sched/fair.c:4422
- dequeue_task_fair+0x238/0xea0 kernel/sched/fair.c:5771
- dequeue_task kernel/sched/core.c:2019 [inline]
- __do_set_cpus_allowed+0x186/0x960 kernel/sched/core.c:2508
- __set_cpus_allowed_ptr_locked+0x2ba/0x4e0 kernel/sched/core.c:2841
- __set_cpus_allowed_ptr kernel/sched/core.c:2874 [inline]
- set_cpus_allowed_ptr+0x78/0xa0 kernel/sched/core.c:2879
- kthreadd+0x44/0x750 kernel/kthread.c:724
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
- </TASK>
+Test Regressions
+---------------- =
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+platform         | arch  | lab             | compiler | defconfig          =
+          | regressions
+-----------------+-------+-----------------+----------+--------------------=
+----------+------------
+bcm2711-rpi-4-b  | arm64 | lab-linaro-lkft | gcc-10   | defconfig+CON...OMI=
+ZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6221c7579e95b4356ac62968
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.17-rc6-3=
+12-gf15bf60c638f/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-linar=
+o-lkft/baseline-bcm2711-rpi-4-b.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.17-rc6-3=
+12-gf15bf60c638f/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-linar=
+o-lkft/baseline-bcm2711-rpi-4-b.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220218.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6221c7579e95b4356ac62=
+969
+        new failure (last pass: v5.17-rc6-278-g34490bca674f) =
+
+ =
+
+
+
+platform         | arch  | lab             | compiler | defconfig          =
+          | regressions
+-----------------+-------+-----------------+----------+--------------------=
+----------+------------
+bcm2836-rpi-2-b  | arm   | lab-collabora   | gcc-10   | multi_v7_defc...MB2=
+_KERNEL=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6221c8c51d3b6603a0c62994
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.17-rc6-3=
+12-gf15bf60c638f/arm/multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab=
+-collabora/baseline-bcm2836-rpi-2-b.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.17-rc6-3=
+12-gf15bf60c638f/arm/multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab=
+-collabora/baseline-bcm2836-rpi-2-b.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220218.1/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6221c8c51d3b6603a0c62=
+995
+        failing since 15 days (last pass: v5.17-rc4-260-ga9d1ea1cfc32, firs=
+t fail: v5.17-rc4-287-g3d4071e48b88) =
+
+ =
+
+
+
+platform         | arch  | lab             | compiler | defconfig          =
+          | regressions
+-----------------+-------+-----------------+----------+--------------------=
+----------+------------
+rk3399-gru-kevin | arm64 | lab-collabora   | gcc-10   | defconfig+arm64-chr=
+omebook   | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6221c3f963fe32c096c62995
+
+  Results:     88 PASS, 4 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.17-rc6-3=
+12-gf15bf60c638f/arm64/defconfig+arm64-chromebook/gcc-10/lab-collabora/base=
+line-rk3399-gru-kevin.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.17-rc6-3=
+12-gf15bf60c638f/arm64/defconfig+arm64-chromebook/gcc-10/lab-collabora/base=
+line-rk3399-gru-kevin.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220218.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.rockchip-i2s1-probed: https://kernelci.org/test/case/id=
+/6221c3f963fe32c096c629bb
+        failing since 4 days (last pass: v5.17-rc5-244-gd77a1b37f796, first=
+ fail: v5.17-rc6-176-gb4e03e0dde48)
+
+    2022-03-04T07:46:43.955168  <8>[   32.837093] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Drockchip-i2s0-probed RESULT=3Dpass>
+    2022-03-04T07:46:44.980850  /lava-5813867/1/../bin/lava-test-case
+    2022-03-04T07:46:44.991914  <8>[   33.874770] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Drockchip-i2s1-probed RESULT=3Dfail>   =
+
+ =20

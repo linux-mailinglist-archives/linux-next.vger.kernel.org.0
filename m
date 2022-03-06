@@ -2,129 +2,85 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C52204CE896
-	for <lists+linux-next@lfdr.de>; Sun,  6 Mar 2022 04:49:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BB024CED9C
+	for <lists+linux-next@lfdr.de>; Sun,  6 Mar 2022 21:15:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231826AbiCFDur (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 5 Mar 2022 22:50:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37398 "EHLO
+        id S231543AbiCFUP5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 6 Mar 2022 15:15:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231794AbiCFDur (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 5 Mar 2022 22:50:47 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF0F649F29;
-        Sat,  5 Mar 2022 19:49:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=0kT2cAjbEikOYDhh0GLJi6kOamdwm6etWf1GvgjFBIY=; b=r3FwRsNUzI1YEK82/E9MsQl1si
-        sc04IEgPIznHECsCjoSW/VcEZnauiagj80/jGUUTH3/tThQ+Ccxl6cmltAP+fkHWxDHn71/rj8vwN
-        yUi/G55u3ldPvRD8rxjOpFXfK3XM9owhyrh2aZ3A8U9XBOCTvyoO1kFf3/TDoH+16Zhtq9sxUnhOX
-        WYho+N7DMhkIzqdasebAbH2Hx38E/X+aXMve606mHva4ipRtS5OfgHXSneixAUA3IkVeaEOvbk5/N
-        jHeYYMwYF8WNblgiW59xafxCLw5OiIvWYQBh3iGTJxjVFxTpnpnL3Fjsfn8HCAm389Rk/paCUm2Cc
-        k3py8osg==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nQhtz-00E537-9J; Sun, 06 Mar 2022 03:49:47 +0000
-Message-ID: <4c8f31d0-d51c-bb8c-acae-da1f1b1ada51@infradead.org>
-Date:   Sat, 5 Mar 2022 19:49:40 -0800
+        with ESMTP id S230401AbiCFUP4 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 6 Mar 2022 15:15:56 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4DA449F10;
+        Sun,  6 Mar 2022 12:14:59 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KBXrG5M6qz4xsk;
+        Mon,  7 Mar 2022 07:14:54 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1646597695;
+        bh=ZELYOeR+h1ZLQGtay/Jsd6ULBdk9wfcSTGD/Vxdigno=;
+        h=Date:From:To:Cc:Subject:From;
+        b=oLi0X0vEwpJaQtSC6Womn4sm51hr1M+Xzh95Wx/FVgYW8KZAVVO6+Oymy6xOBH92l
+         4a3t+ukcqS7xy+5hW6K/BUmlPjUJQBInNrpyMjWtb9yMFHuclUNmTSCT3vwb0y4Umt
+         5gqC/z3z8YBWoFFa6QHKyFNiBKjDxRL9FSR45lJcLgy0qsKhSC5GQZnNZEn/jcMuia
+         dEl3H7hmjX5s87s5MJkMxg5l5P8yLACFZgE+qJtmCuNecBR64JEAs237mobDm28xEQ
+         VXwpPJaK+imsa6iRNCw+PAi6fnZNhmyL+OhBmLWuFOHoZeArsKlt/zIrUx6R8Ck9Xp
+         R8R5MJlurjvYg==
+Date:   Mon, 7 Mar 2022 07:14:50 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Nicolas Ferre <nicolas.ferre@atmel.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the at91 tree
+Message-ID: <20220307071450.3074a015@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [next] mips-mt.c:233:19: error: conflicting types for 'mt_init'
-Content-Language: en-US
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        linux-mips@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Liam Howlett <liam.howlett@oracle.com>
-Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Kees Cook <keescook@chromium.org>,
-        Juxin Gao <gaojuxin@loongson.cn>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        lkft-triage@lists.linaro.org
-References: <CA+G9fYtEx=k9TM7c7EihbO3U0qxZLbKX26NWJ1L=jjEOuy7cHQ@mail.gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <CA+G9fYtEx=k9TM7c7EihbO3U0qxZLbKX26NWJ1L=jjEOuy7cHQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/kM8/5fP8sXQZT_YtXvb8x7O";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Liam,
+--Sig_/kM8/5fP8sXQZT_YtXvb8x7O
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Would you consider renaming maple tree's "mt_init()" function to
-maple_tree_init() or mtree_init() or something that does not
-conflict with the mt_init() function in arch/mips/ so that
-these build errors don't happen?
+Hi all,
 
-thanks.
+Commit
 
-On 2/24/22 23:09, Naresh Kamboju wrote:
-> [Please ignore this email if it is already reported]
-> 
-> Linux next-20220224 arch mips build errors / warnings noticed [1].
-> 
-> Build configs:
->   -  mips-gcc-8-malta_defconfig
->   -  mips-gcc-10-malta_defconfig
->   -  mips-gcc-8-defconfig
->   -  mips-gcc-10-defconfig
-> 
-> metadata:
->     git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
->     git_sha: 44948bd49d878dad6c9707e34f4a06df73c3a800
->     git_short_log: 44948bd49d87 (\Add linux-next specific files for 20220224\)
->     kconfig: defconfig
->     target_arch: mips
->     toolchain: gcc-10
-> 
-> 
-> Build errors / warnings:
-> 
-> arch/mips/kernel/mips-mt.c:233:19: error: conflicting types for 'mt_init'
->   233 | static int __init mt_init(void)
->       |                   ^~~~~~~
-> In file included from include/linux/mm_types.h:12,
->                  from include/linux/mmzone.h:21,
->                  from include/linux/gfp.h:6,
->                  from include/linux/radix-tree.h:12,
->                  from include/linux/idr.h:15,
->                  from include/linux/kernfs.h:12,
->                  from include/linux/sysfs.h:16,
->                  from include/linux/kobject.h:20,
->                  from include/linux/energy_model.h:7,
->                  from include/linux/device.h:16,
->                  from arch/mips/kernel/mips-mt.c:7:
-> include/linux/maple_tree.h:589:20: note: previous definition of
-> 'mt_init' was here
->   589 | static inline void mt_init(struct maple_tree *mt)
->       |                    ^~~~~~~
-> make[3]: *** [scripts/Makefile.build:288: arch/mips/kernel/mips-mt.o] Error 1
-> 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> 
-> Steps to reproduce:
-> ------------------
-> # To install tuxmake on your system globally:
-> # sudo pip3 install -U tuxmake
-> 
-> tuxmake --runtime podman --target-arch mips --toolchain gcc-10
-> --kconfig defconfig
-> 
-> --
-> 
-> [1] https://builds.tuxbuild.com/25aFF2X7uoyebURaYzNHW9FVEmN/
+  d355edef55ee ("soc: microchip: make mpfs_sys_controller_put static")
 
--- 
-~Randy
+is missing a Signed-off-by from its committer.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/kM8/5fP8sXQZT_YtXvb8x7O
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIlFjoACgkQAVBC80lX
+0GzVkwf/dLXyWMh4swzsLePGrsviq7UNIdAhV9Mcd90b3RYkJ66Fhyb6f/pal/qs
+/cXDD5ltnpdIFGlXxIhqhN+LMlDEqVWgfA+XhGqWEignwidK37v9fXqKhn2+oq56
+TMEz6DgnVCKXiDYq0InJlPhe9r4WlETDnMoBbcfDEwcdFTPdIKf14KEL5+UfDvx5
+QviMcUK5gGqviuPS54JNnD0hIpn0reSaxK5VLguUWY6LPoJr81JrG+84l/9ZLaSv
+WaXsWxQViJgkEeMiiD8oQjO9SJ/fHhh7XcGGbzWtYrioFmv+HPLbALtpYStwvhPl
+FVX9BbN2YMtDVHwngUE5Vw0RBBQXVA==
+=ieaR
+-----END PGP SIGNATURE-----
+
+--Sig_/kM8/5fP8sXQZT_YtXvb8x7O--

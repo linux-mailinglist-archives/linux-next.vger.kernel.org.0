@@ -2,47 +2,46 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DA644CFBF2
-	for <lists+linux-next@lfdr.de>; Mon,  7 Mar 2022 11:53:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C64064CFC73
+	for <lists+linux-next@lfdr.de>; Mon,  7 Mar 2022 12:14:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241023AbiCGKxw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 7 Mar 2022 05:53:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54618 "EHLO
+        id S235472AbiCGLPN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 7 Mar 2022 06:15:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241706AbiCGKwz (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 7 Mar 2022 05:52:55 -0500
+        with ESMTP id S237790AbiCGLOh (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 7 Mar 2022 06:14:37 -0500
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 615003E0DE;
-        Mon,  7 Mar 2022 02:13:00 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD38EEA37D;
+        Mon,  7 Mar 2022 02:37:03 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KBvQz09nXz4y0c;
-        Mon,  7 Mar 2022 21:12:42 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KBvz11kX9z4xxT;
+        Mon,  7 Mar 2022 21:37:00 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1646647963;
-        bh=43avDFrDr9aMk2gpa2YriZ716cDuLQIlsBGqwkqyvng=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=hKpt6FyD9K1wiajWtnGGwLYg7bCUmiDyEFL9SJlUuHRm/sgfTYJlD7sfhJtEFMsZ7
-         m3ApyphiC5n51R6j8Z8L6hu7DBVa1CWQku2cNTGhJOGar3XMRc/0II4c/cU+4z7oAD
-         6sFa+IMJWMYjOJ4NYhQxqxv9xMfvdzcv7YADczfM//DVl9l+9QB6nT62KQMQnFIaMu
-         guGBaheOJKWy0V0/qmfitMR4QWwvG5s8DOIDNa8vJJX8kodaVSZmyb5lS/GzTGZsUV
-         Z0D/kmKPHosGsVEPBmpr5AQX+bt1z9pmPSE0gQ+rE2PkIbd5cnAFnlxAM/GqLhMeYI
-         g5S69gcevt1Kw==
-Date:   Mon, 7 Mar 2022 21:12:42 +1100
+        s=201702; t=1646649422;
+        bh=peX5ncZNw7W4862AAmtxnFFiEeDsecLxz74PLZVkUnY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=sq6Com675jtq9Pu1MX5OqZvJFWqVUOt9PRF+ShDkT8CsicDFlIFwofgHxm6CMrcwX
+         wSUIBPjN4RD5yDoIH34fVpqaxPFUmqy8Bc2aRTiQBsi+9Q0qtC1mQHVxC389u6ZfFy
+         Za7Ag4hYvvVvo/yK8IzLmBctalbbiXyEPfM3OxvWDxSM1deL0PtBbkvP9SJHyOoiTT
+         85CMrarWbAG/c3WJC1x+snHz9xZemiwiPCy0kk1ah+fTtcngrvQcSVbaVgdLVG6SNn
+         pXez91fJLuxXAfQ9gOE8cyCatkZB1P3bWEX8lg/0gkT8Muf2vdrhOKzRe0BV32mBp8
+         /yMRdA7MWEl3Q==
+Date:   Mon, 7 Mar 2022 21:36:59 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>
-Subject: Re: linux-next: build warning after merge of the vhost tree
-Message-ID: <20220307211242.59fc0f0e@canb.auug.org.au>
-In-Reply-To: <1646635600.9436276-1-xuanzhuo@linux.alibaba.com>
-References: <20220307154011.6d456f28@canb.auug.org.au>
-        <1646635600.9436276-1-xuanzhuo@linux.alibaba.com>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the net-next tree
+Message-ID: <20220307213659.47658125@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/T5RRt1xHG.xnLDS8d/AyZoI";
+Content-Type: multipart/signed; boundary="Sig_/gCNSrbTFcM+LIOGa/Bs8YV=";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -53,71 +52,46 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/T5RRt1xHG.xnLDS8d/AyZoI
+--Sig_/gCNSrbTFcM+LIOGa/Bs8YV=
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi,
+Hi all,
 
-On Mon, 7 Mar 2022 14:46:40 +0800 Xuan Zhuo <xuanzhuo@linux.alibaba.com> wr=
-ote:
->
-> Can you help me test this patch? I don't have an arm environment around m=
-e.
->=20
-> Thanks
->=20
->=20
-> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> index 1fa2d632a994..4d629d1ea894 100644
-> --- a/drivers/net/virtio_net.c
-> +++ b/drivers/net/virtio_net.c
-> @@ -1820,7 +1820,7 @@ static int virtnet_rx_vq_reset(struct virtnet_info =
-*vi,
->=20
->  err:
->         netdev_err(vi->dev,
-> -                  "reset rx reset vq fail: rx queue index: %ld err: %d\n=
-",
-> +                  "reset rx reset vq fail: rx queue index: %td err: %d\n=
-",
->                    rq - vi->rq, err);
->         virtnet_napi_enable(rq->vq, &rq->napi);
->         return err;
-> @@ -1870,7 +1870,7 @@ static int virtnet_tx_vq_reset(struct virtnet_info =
-*vi,
->=20
->  err:
->         netdev_err(vi->dev,
-> -                  "reset tx reset vq fail: tx queue index: %ld err: %d\n=
-",
-> +                  "reset tx reset vq fail: tx queue index: %td err: %d\n=
-",
->                    sq - vi->sq, err);
->         virtnet_napi_tx_enable(vi, sq->vq, &sq->napi);
->         return err;
+After merging the net-next tree, today's linux-next build (arm64
+allmodconfig) failed like this:
 
-I had to apply that by hand, but it does work.
+drivers/net/ethernet/intel/ice/ice_xsk.c: In function 'ice_xmit_pkt_batch':
+drivers/net/ethernet/intel/ice/ice_xsk.c:801:0: error: ignoring #pragma GCC=
+ unroll [-Werror=3Dunknown-pragmas]
+  loop_unrolled_for(i =3D 0; i < PKTS_PER_BATCH; i++) {
+ ^
+cc1: all warnings being treated as errors
 
-Tested-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Caused by commit
+
+  126cdfe1007a ("ice: xsk: Improve AF_XDP ZC Tx and use batching API")
+
+This build was done with gcc v5.4.
+
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/T5RRt1xHG.xnLDS8d/AyZoI
+--Sig_/gCNSrbTFcM+LIOGa/Bs8YV=
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIl2poACgkQAVBC80lX
-0Gxhwwf/Yoy/Fx2MA3XKvHLKbSEO4haeLV/jiLTn33CCDtpIM0xqcZHR4Vdrx/iC
-eQeqrko2lzE9eH63myQI9aIrd8xpLBovdfuUlRzC9HpVlkhrrqf6+f70Y9RVSKa1
-alh98ccERL91LF1163puCeDJFaEHZb8ImHjqK7C1BjNssjnkOD62uGnajm8wFARu
-zPv054ntn9F2IIHKAntn4L5gEiMjlB7LAhoziVSWINvh9fjsQBgkv2UPXWcq46LM
-YGbHkKepzS+LANbKJ+Oiw3mgFD8+p6UxuToz6KtG5Qd7H0ZJRDs17tXi9WLSKmhB
-w9kWMEPual3nH7Np64LDGxCuTjhOBg==
-=Jcmj
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIl4EsACgkQAVBC80lX
+0GzsKQgAngfqOjii58mWhtOY4IN+VcduW2Ox7Wntzl3xddZRXN5A6b9d+FGkzuYw
+c2XsRUREr/ppjDQ8CvT72N/IE9bUeH6kkxFoH4jV1p1FYVmZLTbSz26Mtguy8Uz/
+5urqMkB0fn9Vqd8wxvieOiifXfHEjYqvko5crFjQeb0ygpz5ktSDiMAQ5PtVAIvQ
+zcoU4Z3qZKkkQJcPNGqyHAwyyvvf3M5u/7uRB1mJsrbludpHZe7jnduRTl/VHKqo
+zp/6s+NMOJN5kDOsCyEZ/3BgK5UCvo0DCRBeyaRGm+OSLiRNbJ7K9mos4hZsP0JZ
+0ekCsotarMDnIkV/kxjKvqaW3VUwtA==
+=NraY
 -----END PGP SIGNATURE-----
 
---Sig_/T5RRt1xHG.xnLDS8d/AyZoI--
+--Sig_/gCNSrbTFcM+LIOGa/Bs8YV=--

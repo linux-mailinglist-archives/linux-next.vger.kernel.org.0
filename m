@@ -2,79 +2,123 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF2724CF6CD
-	for <lists+linux-next@lfdr.de>; Mon,  7 Mar 2022 10:43:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE6684CF81F
+	for <lists+linux-next@lfdr.de>; Mon,  7 Mar 2022 10:52:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237733AbiCGJn0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 7 Mar 2022 04:43:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50468 "EHLO
+        id S232661AbiCGJvU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 7 Mar 2022 04:51:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240875AbiCGJli (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 7 Mar 2022 04:41:38 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2281C6B0B9
-        for <linux-next@vger.kernel.org>; Mon,  7 Mar 2022 01:38:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646645910;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ee33Lskx6xvrTL07INpx5daww9Qo7LwFjTAjJQn9svk=;
-        b=JTzYNbreCKWTIlf6NDyPFfDewp9PO1HjK1MdwmTusQf9Rlc8ymSsG4Js31El9LzhuDGtuv
-        uS8I/bK4JUJt8ePQxW+lCDM2ceTNd7lSiCfEYKCbNU8TKVGh+VbIj5HcR0EYZ0WOnLNvn5
-        FScinmHglZh0v4J0qlZ0LFqRtKzbPrw=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-602-L6X1cqVLOs66CMI7jLSi3g-1; Mon, 07 Mar 2022 04:38:25 -0500
-X-MC-Unique: L6X1cqVLOs66CMI7jLSi3g-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id AF0FF801AFC;
-        Mon,  7 Mar 2022 09:38:24 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.19])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C327A73DA2;
-        Mon,  7 Mar 2022 09:38:09 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20220307071810.42cff3b7@canb.auug.org.au>
-References: <20220307071810.42cff3b7@canb.auug.org.au>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     dhowells@redhat.com,
+        with ESMTP id S238480AbiCGJrE (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 7 Mar 2022 04:47:04 -0500
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FAAB6A068;
+        Mon,  7 Mar 2022 01:42:15 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0V6UNDIr_1646646123;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0V6UNDIr_1646646123)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Mon, 07 Mar 2022 17:42:03 +0800
+Message-ID: <1646646065.5940611-2-xuanzhuo@linux.alibaba.com>
+Subject: Re: linux-next: build warning after merge of the vhost tree
+Date:   Mon, 7 Mar 2022 17:41:05 +0800
+From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commit in the fscache tree
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <333962.1646645888.1@warthog.procyon.org.uk>
-Date:   Mon, 07 Mar 2022 09:38:08 +0000
-Message-ID: <333963.1646645888@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220307154011.6d456f28@canb.auug.org.au>
+ <1646635600.9436276-1-xuanzhuo@linux.alibaba.com>
+ <20220307040734-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20220307040734-mutt-send-email-mst@kernel.org>
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+On Mon, 7 Mar 2022 04:17:39 -0500, "Michael S. Tsirkin" <mst@redhat.com> wrote:
+> On Mon, Mar 07, 2022 at 02:46:40PM +0800, Xuan Zhuo wrote:
+> > On Mon, 7 Mar 2022 15:40:11 +1100, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> > > Hi all,
+> > >
+> > > After merging the vhost tree, today's linux-next build (arm
+> > > multi_v7_defconfig) produced this warning:
+> > >
+> > > drivers/net/virtio_net.c: In function 'virtnet_rx_vq_reset':
+> > > drivers/net/virtio_net.c:1823:63: warning: format '%ld' expects argument of type 'long int', but argument 3 has type 'int' [-Wformat=]
+> > >  1823 |                    "reset rx reset vq fail: rx queue index: %ld err: %d\n",
+> > >       |                                                             ~~^
+> > >       |                                                               |
+> > >       |                                                               long int
+> > >       |                                                             %d
+> > >  1824 |                    rq - vi->rq, err);
+> > >       |                    ~~~~~~~~~~~
+> > >       |                       |
+> > >       |                       int
+> > > drivers/net/virtio_net.c: In function 'virtnet_tx_vq_reset':
+> > > drivers/net/virtio_net.c:1873:63: warning: format '%ld' expects argument of type 'long int', but argument 3 has type 'int' [-Wformat=]
+> > >  1873 |                    "reset tx reset vq fail: tx queue index: %ld err: %d\n",
+> > >       |                                                             ~~^
+> > >       |                                                               |
+> > >       |                                                               long int
+> > >       |                                                             %d
+> > >  1874 |                    sq - vi->sq, err);
+> > >       |                    ~~~~~~~~~~~
+> > >       |                       |
+> > >       |                       int
+> > >
+> > > Introduced by commit
+> > >
+> > >   920ee0c540a2 ("virtio_net: support rx/tx queue reset")
+> > >
+> >
+> >
+> > Can you help me test this patch? I don't have an arm environment around me.
+> >
+> > Thanks
+>
+>
+> You should at least use
+> https://mirrors.edge.kernel.org/pub/tools/crosstool/
+> to test-build + test on x86.
 
-> Commit
-> 
->   2cdefea9850a ("netfs: Add a procfile to list in-progress requests")
-> 
-> is missing a Signed-off-by from its author and committer.
 
-I've moved that off onto a different branch.  It wasn't really meant to be
-included in the fscache-next set.
+I reproduced the problem using this method, and verified that this patch fixes
+it. I submitted a patch email.
 
-David
+Thanks.
 
+>
+> >
+> > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> > index 1fa2d632a994..4d629d1ea894 100644
+> > --- a/drivers/net/virtio_net.c
+> > +++ b/drivers/net/virtio_net.c
+> > @@ -1820,7 +1820,7 @@ static int virtnet_rx_vq_reset(struct virtnet_info *vi,
+> >
+> >  err:
+> >         netdev_err(vi->dev,
+> > -                  "reset rx reset vq fail: rx queue index: %ld err: %d\n",
+> > +                  "reset rx reset vq fail: rx queue index: %td err: %d\n",
+> >                    rq - vi->rq, err);
+> >         virtnet_napi_enable(rq->vq, &rq->napi);
+> >         return err;
+> > @@ -1870,7 +1870,7 @@ static int virtnet_tx_vq_reset(struct virtnet_info *vi,
+> >
+> >  err:
+> >         netdev_err(vi->dev,
+> > -                  "reset tx reset vq fail: tx queue index: %ld err: %d\n",
+> > +                  "reset tx reset vq fail: tx queue index: %td err: %d\n",
+> >                    sq - vi->sq, err);
+> >         virtnet_napi_tx_enable(vi, sq->vq, &sq->napi);
+> >         return err;
+> >
+> > > --
+> > > Cheers,
+> > > Stephen Rothwell
+> > >
+>

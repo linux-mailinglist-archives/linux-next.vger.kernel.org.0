@@ -2,46 +2,48 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E5594CEE56
-	for <lists+linux-next@lfdr.de>; Mon,  7 Mar 2022 00:14:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 102924CEEE3
+	for <lists+linux-next@lfdr.de>; Mon,  7 Mar 2022 01:13:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232350AbiCFXPg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 6 Mar 2022 18:15:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48154 "EHLO
+        id S233508AbiCGAOm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 6 Mar 2022 19:14:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230331AbiCFXPg (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 6 Mar 2022 18:15:36 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA7323BF9;
-        Sun,  6 Mar 2022 15:14:42 -0800 (PST)
+        with ESMTP id S233373AbiCGAOm (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 6 Mar 2022 19:14:42 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 826504B87F;
+        Sun,  6 Mar 2022 16:13:48 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KBcqd2hTvz4xvS;
-        Mon,  7 Mar 2022 10:14:36 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KBf7r630bz4xsk;
+        Mon,  7 Mar 2022 11:13:44 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1646608477;
-        bh=aEQWMqXdoCOIPAGzph08yIKzBRNDLEBPjztdvdKgsxI=;
+        s=201702; t=1646612026;
+        bh=OfUQf/emLmUE3ac6PJaQkNyOVOPCgK/lCEyh/+gJ6tA=;
         h=Date:From:To:Cc:Subject:From;
-        b=da4/zggK4h0oxQLkbp+BpzP6JTFgUvdgJscjxkUoAMfSGLahGu7I4l/gmaIW+ZXcC
-         6WqfFZ9got+GeFy9Str5JVyp0eL+ddGXdGT+PMsxYpSr6ZE8p0AHdRRyQxGiZl8zAC
-         b1dvxSCYGJCK3+lbk3V4/wIwwaJFAv5p61DnFQucF4XA5xMrlIMt2oo9dGZvKg7TzC
-         dhoNwbxjq1vO6UCsaIOL6f5fLHjwrPn4rrWqOHJt1tMhsOGMwOLxE+RuwHyz3ulEOT
-         6L//q4SQvyrMeFWYNwmkEO2olPO7DWpLYYWAhrLaB6yHpbzLMQHiHkxaOe3yb7mZTG
-         ERMXk9axjWqzg==
-Date:   Mon, 7 Mar 2022 10:14:36 +1100
+        b=NR1yJ4g+bwE30i2MCd/3NvchRgxp89qmYuujjfqYkx6ZDmaNniBvCRc3ersqQApDV
+         Y/XfoZsivQCT4CTU0gfZQwt8dI8j/G5jMweDA+tLFgyIYkPGC4GemaOKqP9/J0UNQt
+         L/OB1hkpPantcJpRHbZ/Muqvsrb4vaEL47Q1M9lFA7LWYxicQToZ81WL3/oeAv26sO
+         xwQOSEauCeIh4dNUBaH0SlHsDkp+FZ6tsd5H3U6Jrffz4ZpIQHne7uYSFR0Dya81QU
+         XGf3XPT5ixMYK5NdV3krL4eXiN/y+unX3OsNWJa8cxg3mBDQSOev2mNU5XcMQXVQRa
+         d2gtO5RatWr8g==
+Date:   Mon, 7 Mar 2022 11:13:42 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Ansuel Smith <ansuelsmth@gmail.com>,
+To:     Alex Deucher <alexdeucher@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Noralf =?UTF-8?B?VHLDuG5uZXM=?= <noralf@tronnes.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>
-Subject: linux-next: manual merge of the net-next tree with the net tree
-Message-ID: <20220307101436.7ae87da0@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the amdgpu tree
+Message-ID: <20220307111342.105ce204@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/YFuQs165iYKTP7YjEyi1H7z";
+Content-Type: multipart/signed; boundary="Sig_/C4CihK6q6=.LhC.PZI7Q3UD";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -52,79 +54,85 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/YFuQs165iYKTP7YjEyi1H7z
+--Sig_/C4CihK6q6=.LhC.PZI7Q3UD
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the net-next tree got a conflict in:
+After merging the amdgpu tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-  net/dsa/dsa2.c
+drivers/gpu/drm/tiny/panel-mipi-dbi.c:391:19: error: initialization of 'voi=
+d (*)(struct spi_device *)' from incompatible pointer type 'int (*)(struct =
+spi_device *)' [-Werror=3Dincompatible-pointer-types]
+  391 |         .remove =3D panel_mipi_dbi_spi_remove,
+      |                   ^~~~~~~~~~~~~~~~~~~~~~~~~
 
-between commit:
+Caused by commit
 
-  afb3cc1a397d ("net: dsa: unlock the rtnl_mutex when dsa_master_setup() fa=
-ils")
+  0e65e2e6abb0 ("drm/tiny: Add MIPI DBI compatible SPI driver")
 
-from the net tree and commit:
+interacting with commit
 
-  e83d56537859 ("net: dsa: replay master state events in dsa_tree_{setup,te=
-ardown}_master")
+  a0386bba7093 ("spi: make remove callback a void function")
 
-from the net-next tree.
+from the spi trees.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+I have applied the following merge fix.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Mon, 7 Mar 2022 11:01:01 +1100
+Subject: [PATCH] fix up for "spi: make remove callback a void function"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/gpu/drm/tiny/panel-mipi-dbi.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/drivers/gpu/drm/tiny/panel-mipi-dbi.c b/drivers/gpu/drm/tiny/p=
+anel-mipi-dbi.c
+index 7f8c6c51387f..c759ff9c2c87 100644
+--- a/drivers/gpu/drm/tiny/panel-mipi-dbi.c
++++ b/drivers/gpu/drm/tiny/panel-mipi-dbi.c
+@@ -336,14 +336,12 @@ static int panel_mipi_dbi_spi_probe(struct spi_device=
+ *spi)
+ 	return 0;
+ }
+=20
+-static int panel_mipi_dbi_spi_remove(struct spi_device *spi)
++static void panel_mipi_dbi_spi_remove(struct spi_device *spi)
+ {
+ 	struct drm_device *drm =3D spi_get_drvdata(spi);
+=20
+ 	drm_dev_unplug(drm);
+ 	drm_atomic_helper_shutdown(drm);
+-
+-	return 0;
+ }
+=20
+ static void panel_mipi_dbi_spi_shutdown(struct spi_device *spi)
+--=20
+2.34.1
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc net/dsa/dsa2.c
-index 074e4a69a728,d5f21a770689..000000000000
---- a/net/dsa/dsa2.c
-+++ b/net/dsa/dsa2.c
-@@@ -1064,9 -1078,18 +1078,18 @@@ static int dsa_tree_setup_master(struc
- =20
-  	list_for_each_entry(dp, &dst->ports, list) {
-  		if (dsa_port_is_cpu(dp)) {
-- 			err =3D dsa_master_setup(dp->master, dp);
-+ 			struct net_device *master =3D dp->master;
-+ 			bool admin_up =3D (master->flags & IFF_UP) &&
-+ 					!qdisc_tx_is_noop(master);
-+=20
-+ 			err =3D dsa_master_setup(master, dp);
-  			if (err)
- -				return err;
- +				break;
-+=20
-+ 			/* Replay master state event */
-+ 			dsa_tree_master_admin_state_change(dst, master, admin_up);
-+ 			dsa_tree_master_oper_state_change(dst, master,
-+ 							  netif_oper_up(master));
-  		}
-  	}
- =20
-
---Sig_/YFuQs165iYKTP7YjEyi1H7z
+--Sig_/C4CihK6q6=.LhC.PZI7Q3UD
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIlQFwACgkQAVBC80lX
-0GzeuQf7Bwf9dz0BDxU3kURL6XgCo4QmQ7w1lTSP9AIfFMHX/G6PLiHzH6eOPnfW
-00ED2iMXzLRaCRwXs7Pm+d656HEPLgfAZCTC9nV8dAPxtPtEUjGLXJmgEAyXsP0Y
-FhL8OzHd3/5xovWqUbavMWxIgwfpGOo+ngMRRFerMt0yolum3HwAAIWjLPukPYA5
-MQRw1gM0dzqRToLRCNl+Bzzkfx0tLz5KJi29HEpTk6ok6HTJoZ0VHutViqJelssD
-G+5GNXu7t/MZ10ZxL16JCH4NiSbBmwTmvbe59IA5pFbCXok7AWDLXHtJbpJAVq74
-ptqYQ4Bm9kfR+ppux7N8fNmYNBAdrA==
-=AcCJ
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIlTjYACgkQAVBC80lX
+0Gya9AgAnf8khqgClzhiCdnkQ72wArvffQGdP9ZzlX50GJ0Dz0fz0dkNytNbA0Jr
+26FAhcX56OTtcWtmWguHcLLMowmzA350EBop3eQM9+wpj382CdMepoOJIfLn0/Ik
+tHv+IjrkHKR+Gzlhhi563J/mx2+lXSapG69FANtK6p5CO1IxCIRx9FT5MbnDa71Z
+mT4pkBkEOGZnaRmmnnKBsrtdTOucAfDRrhtDjj84gHfH8j2G9ggkkPJHv/LhOxz+
+OQItxBl2kkRcpFxp0rhgy9XMrIwtdk5+Nu9jw0a1oKDs59xb7Dp3Drwziq7SikDf
+igJO88twe7Hm3gZwF59s79hPpEI8Og==
+=wta6
 -----END PGP SIGNATURE-----
 
---Sig_/YFuQs165iYKTP7YjEyi1H7z--
+--Sig_/C4CihK6q6=.LhC.PZI7Q3UD--

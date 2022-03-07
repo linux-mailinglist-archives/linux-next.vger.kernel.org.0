@@ -2,91 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0177A4D08FE
-	for <lists+linux-next@lfdr.de>; Mon,  7 Mar 2022 21:54:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 839774D0921
+	for <lists+linux-next@lfdr.de>; Mon,  7 Mar 2022 22:01:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245384AbiCGUzX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 7 Mar 2022 15:55:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47586 "EHLO
+        id S232750AbiCGVCA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 7 Mar 2022 16:02:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245411AbiCGUzF (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 7 Mar 2022 15:55:05 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCB4F34656;
-        Mon,  7 Mar 2022 12:53:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646686419; x=1678222419;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JcJUkTKZL/93UJ5Ywi8SfyzOjahp0gYVOJlYJUbzoxM=;
-  b=H9vHSXVtD8zhoRFzkluKhtqE2Pf6hey6O8TRXIaDNT8qwt8N5kjPOxxO
-   1Ak0gEtMYkXZ6qLwc2ZUVohQIf3wYSBS7Jfbnl4//TFhFTUIeL4S2ZUpZ
-   maLksrMtsMaUQpoMD2alzuEylHD5nzsW6cuRCWP/2lVOP2htCBbkqY62g
-   MPHpmGv0jFieqklTwnNyUZqEmkcnvk//eksasLUlE/EgEOnbzL/0xazjT
-   Y2mmGEF4f5wxL2x+ip7RPM9AhuFRJo4wsmGD8VINUkgZd4Jknccqo8g+0
-   RoJbsSSCPrJR1XVOM5wQj0uiQFJSPfI3f50wksX1vZIP9j1xvPRRBsirE
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="234456350"
-X-IronPort-AV: E=Sophos;i="5.90,163,1643702400"; 
-   d="scan'208";a="234456350"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 12:53:38 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,163,1643702400"; 
-   d="scan'208";a="509844026"
-Received: from boxer.igk.intel.com (HELO boxer) ([10.102.20.173])
-  by orsmga002.jf.intel.com with ESMTP; 07 Mar 2022 12:53:36 -0800
-Date:   Mon, 7 Mar 2022 21:53:35 +0100
-From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+        with ESMTP id S231577AbiCGVB7 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 7 Mar 2022 16:01:59 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6BCF506E0;
+        Mon,  7 Mar 2022 13:01:03 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KC9q107zbz4xcl;
+        Tue,  8 Mar 2022 08:01:00 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1646686861;
+        bh=CkSAho3XJU7iOyUDUQPlGZNbUtzr0VBnZQddMlegR/4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=pL9QPa6p0DqyFxZuocxM/aQRUY5uP5IGhpw5RZOvdt7Yj8+rRzVEkkb3rQ2/9dkpm
+         NWcoLeBCDMob9RQdPedLQMJu9ZRE0pgwgfJ76RgM0cK75pFALhxMqlqQloa9X0ZMv8
+         LUtwMBXO6i55fywUpTtwapyzq0yayI8W0kfnTQZLzydsxEWdd/c8D9OR1n48FvlZRs
+         KbPSTAB21/3d08OJPqnyPx4P2O4kgH3pWjHG+mEcwiDk42WZWlASea3rO6O2miBqna
+         TXoACLMxaCkl0L+V4XFa6rdK49zyxBqPSDBU27axGWyMtyU5U2bpLYBffiSFUkd8bO
+         tUyiXT3Lrj/bw==
+Date:   Tue, 8 Mar 2022 08:01:00 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        kuba@kernel.org, magnus.karlsson@intel.com
-Subject: Re: linux-next: build failure after merge of the net-next tree
-Message-ID: <YiZwz+6nRwl9YekK@boxer>
-References: <20220307213659.47658125@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the v4l-dvb-next
+ tree
+Message-ID: <20220308080100.7bee0e45@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220307213659.47658125@canb.auug.org.au>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/Xy1iwReg_B3DSG71kt0uTb/";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Mar 07, 2022 at 09:36:59PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the net-next tree, today's linux-next build (arm64
-> allmodconfig) failed like this:
-> 
-> drivers/net/ethernet/intel/ice/ice_xsk.c: In function 'ice_xmit_pkt_batch':
-> drivers/net/ethernet/intel/ice/ice_xsk.c:801:0: error: ignoring #pragma GCC unroll [-Werror=unknown-pragmas]
->   loop_unrolled_for(i = 0; i < PKTS_PER_BATCH; i++) {
->  ^
-> cc1: all warnings being treated as errors
-> 
-> Caused by commit
-> 
->   126cdfe1007a ("ice: xsk: Improve AF_XDP ZC Tx and use batching API")
-> 
-> This build was done with gcc v5.4.
+--Sig_/Xy1iwReg_B3DSG71kt0uTb/
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Hey Stephen, thanks for a report, I'll send a fix to net-next immediately.
-Maciej
+Hi all,
 
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
+Commit
 
+  56cb61f70e54 ("media: cx88-mpeg: clear interrupt status register before s=
+treaming video")
 
+is missing a Signed-off-by from its committer.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Xy1iwReg_B3DSG71kt0uTb/
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmImcowACgkQAVBC80lX
+0GyG0ggApjjlunFvOAvnPi20aL/UbaxXbX593qU3M43yCcKDGW0EUTcFaZM3kYSz
+COpYHyoB1mf1zjuE1CfKXwuEUEwpzULtMbIW3ucoevQzvCn5LzmpkcQinloNmzYJ
+CoAgijBZng9AvXKJoiDXdz3isJX0RAnOOXdIrYjUx3EVlkSoeiwncGbUzef7TVb/
+1mwLjOJMTPG0dV96jjekkwOA5X1sJxzLT0FSdnahmuuyh4yHCmbo4WSJb35QeNgL
+yZkGo5tM2jomoO911HkElrRw9OEDtXyYiTuTpbYLju0WRMBUjBhcXwsYmGGIZAXw
+z77/bBJHj5NqM6pnHyz+bcTHGX6dUA==
+=AMLD
+-----END PGP SIGNATURE-----
+
+--Sig_/Xy1iwReg_B3DSG71kt0uTb/--

@@ -2,149 +2,115 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53F2C4D0BD1
-	for <lists+linux-next@lfdr.de>; Tue,  8 Mar 2022 00:14:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B1594D0BE9
+	for <lists+linux-next@lfdr.de>; Tue,  8 Mar 2022 00:19:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236952AbiCGXPZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 7 Mar 2022 18:15:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60204 "EHLO
+        id S231462AbiCGXUI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 7 Mar 2022 18:20:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242917AbiCGXPY (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 7 Mar 2022 18:15:24 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2193A33E27;
-        Mon,  7 Mar 2022 15:14:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=1RJl9gPUoZ5r0tpE3KAj5UTUngTysCjGJETPpOzuLSc=; b=VGTbphPW+44xgsldnOtrZRksPu
-        5zkcPB10d7stBVRUgLup1/+ZOqiUvtIR0i/gWWUtg27mYsPGBVQO/v8api9RAOMYi9/6JrrH1hHAF
-        DMWqQrlOEJawA4SrKudJDam5qVxWoj3rc4BA1ynbsUY11vUBk5iN3VMwKlxSPpUUoYxG/s706r5pO
-        GH5gsdudLQ8vOWfKGmnHrIu1e7g7nMu3DVDkrbqa1TpyJsRpiKj+D4hTOmVa00peZ5KqgBG9ZAFo8
-        TRSprjiHqeLkkD8RN18BUr+CfDxfs9t4a4uKRuy61DQfLrVZKYPbF9CrENHACF8akyc3Q7QrHL3aa
-        /KeJgFLw==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nRMYM-00FdR5-9S; Mon, 07 Mar 2022 23:14:10 +0000
-Message-ID: <9d85050f-33c5-0cd0-3278-ca62f4ca098e@infradead.org>
-Date:   Mon, 7 Mar 2022 15:14:03 -0800
+        with ESMTP id S235279AbiCGXUH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 7 Mar 2022 18:20:07 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFF6133A2D;
+        Mon,  7 Mar 2022 15:19:11 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KCDtH6pLqz4xvZ;
+        Tue,  8 Mar 2022 10:19:03 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1646695148;
+        bh=f6lolPIC5IwKsskdbeaJLI6CQbyWlj670tBD1PrZiFU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=rtQsTnf2fM/PW6Yxqdh9+8bGgk+r0/Z7391IQU2irc2Fa2Jiwtndzx1uoOhhDoRqB
+         OY0wy/oCebxT10Wh49bgOfAMeOUg+mFYO6WcSXH5MeZDKqyAEDVjyDFbQ1GwYQ3sKf
+         nzcTKw8YzUetVNmaTGLh8313P1Ny2YBWXLMzZlVbwJFP02dSFrKLIxZ9GA9aHUZXDt
+         uMesZneKQqo0Mha3JoeARnUnHTmeC0TjTeIN9kP1kp7updi5mf9AHWye9Kn/0pMlpL
+         m7GJg6Wi+MbfxPCTrdAG9SoyHlZX4dN94zren4EuywTKQpzmvG4mpwbo/tkfqkydel
+         d1TiTHqym+URQ==
+Date:   Tue, 8 Mar 2022 10:19:03 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Marcel Holtmann <marcel@holtmann.org>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Signed-off-by missing for commits in the net-next
+ tree
+Message-ID: <20220308101903.68e0ba72@canb.auug.org.au>
+In-Reply-To: <20220307150248.388314c1@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+References: <20220307072248.7435feed@canb.auug.org.au>
+        <20220307150248.388314c1@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: mmotm 2022-03-06-20-33 uploaded (sound/soc/intel/boards/)
-Content-Language: en-US
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>, broonie@kernel.org,
-        mhocko@suse.cz, sfr@canb.auug.org.au, linux-next@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, mm-commits@vger.kernel.org
-Cc:     Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Keyon Jie <yang.jie@linux.intel.com>,
-        Cezary Rojewski <cezary.rojewski@intel.com>
-References: <20220307043435.251DBC340E9@smtp.kernel.org>
- <39c76613-3fb4-651b-1838-f460c4f76a17@infradead.org>
- <178c7536-7b54-5f73-b759-745db4fae2bc@linux.intel.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <178c7536-7b54-5f73-b759-745db4fae2bc@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/Reui66SgsK_ABwD5cryGsg6";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+--Sig_/Reui66SgsK_ABwD5cryGsg6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi Jakub,
 
-On 3/7/22 13:54, Pierre-Louis Bossart wrote:
-> 
-> 
-> On 3/7/22 15:12, Randy Dunlap wrote:
->>
->>
->> On 3/6/22 20:34, Andrew Morton wrote:
->>> The mm-of-the-moment snapshot 2022-03-06-20-33 has been uploaded to
->>>
->>>     https://www.ozlabs.org/~akpm/mmotm/
->>>
->>> mmotm-readme.txt says
->>>
->>> README for mm-of-the-moment:
->>>
->>> https://www.ozlabs.org/~akpm/mmotm/
->>>
->>> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
->>> more than once a week.
->>>
->>> You will need quilt to apply these patches to the latest Linus release (5.x
->>> or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
->>> https://ozlabs.org/~akpm/mmotm/series
->>
->> on x86_64:
->>
->> ERROR: modpost: "sof_dai_get_bclk" [sound/soc/intel/boards/snd-soc-intel-sof-cirrus-common.ko] undefined!
->> ERROR: modpost: "sof_dai_get_mclk" [sound/soc/intel/boards/snd-soc-intel-sof-realtek-common.ko] undefined!
->>
->>
->> Full randconfig file is attached.
-> 
-> Thanks Randy for the report. Indeed there's a problem with the SND_SOC_INTEL_SOF_SSP_AMP_MACH option. It should be conditional on at least one Intel/SOF platform being selected, as all the other platforms are already.
-> 
-> The following diff makes the problem go away:
+On Mon, 7 Mar 2022 15:02:48 -0800 Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> On Mon, 7 Mar 2022 07:22:48 +1100 Stephen Rothwell wrote:
+> >=20
+> > Commits
+> >=20
+> >   c2b2a1a77f6b ("Bluetooth: Improve skb handling in mgmt_device_connect=
+ed()")
+> >   ba17bb62ce41 ("Bluetooth: Fix skb allocation in mgmt_remote_name() & =
+mgmt_device_connected()")
+> >   a6fbb2bf51ad ("Bluetooth: mgmt: Remove unneeded variable")
+> >   8cd3c55c629e ("Bluetooth: hci_sync: fix undefined return of hci_disco=
+nnect_all_sync()")
+> >   3a0318140a6f ("Bluetooth: mgmt: Replace zero-length array with flexib=
+le-array member")
+> >=20
+> > are missing a Signed-off-by from their committer. =20
+>=20
+> Would it be possible to add bluetooth trees to linux-next?
+>=20
+> Marcel, Luiz, Johan, would it help?
 
-Ack. Works for me. (after ignoring the double-spaced lines :)
+I already have
 
-Thanks.
+git://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git
+branch master
 
-> 
-> diff --git a/sound/soc/intel/boards/Kconfig b/sound/soc/intel/boards/Kconfig
-> 
-> index 6884ddf9edad..81e012c164b0 100644
-> 
-> --- a/sound/soc/intel/boards/Kconfig
-> 
-> +++ b/sound/soc/intel/boards/Kconfig
-> 
-> @@ -615,6 +615,8 @@ config SND_SOC_INTEL_SOF_DA7219_MAX98373_MACH
-> 
-> 
-> 
->  endif ## SND_SOC_SOF_JASPERLAKE
-> 
-> 
-> 
-> +if SND_SOC_SOF_HDA_LINK
-> 
-> +
-> 
->  config SND_SOC_INTEL_SOF_SSP_AMP_MACH
-> 
->         tristate "SOF with amplifiers in I2S Mode"
-> 
->         depends on I2C && ACPI
-> 
-> @@ -631,6 +633,7 @@ config SND_SOC_INTEL_SOF_SSP_AMP_MACH
-> 
->            with RT1308/CS35L41 I2S audio codec.
-> 
->            Say Y if you have such a device.
-> 
->            If unsure select "N".
-> 
-> +endif ## SND_SOC_SOF_HDA_LINK
-> 
-> 
-> 
->  if SND_SOC_SOF_ELKHARTLAKE
-> 
-> 
-> 
+in linux-next.  Those commits appeared in the bluetooth and net-next
+trees on the same day (Monday) for me.
+--=20
+Cheers,
+Stephen Rothwell
 
--- 
-~Randy
+--Sig_/Reui66SgsK_ABwD5cryGsg6
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmImkucACgkQAVBC80lX
+0GwWJggApMriWmXL058glg0rQD+d+Cgu/IvprAQpgcdBnaQDZ2xzH4hCZmTiBkj7
+evCJlER5qAgEJXVSvrVB635a/J+TcVEO3/wKugyapSrUlYAOSBgedmne2Iy2kmeI
+jjp1gVVlUs2ji2bEiCPcXH+rT6NKk3yHIUeShe8nTieW+6QLjHPyrSTif4rcz63S
+C5+056XdwAkuWh5BxzIazNA6PLr1MFpCBSXd9hmSD35fUjj7B7XesAErN1jZl9w/
+viq9gbc9qv0MqFDLXezbZ3pW+VE3yFLlFnvBsa6mGDXEWOTSszAtBigLr4St657k
+Avzt67XP/dhaFDVmngoHkV4/2zvW8w==
+=Z3y5
+-----END PGP SIGNATURE-----
+
+--Sig_/Reui66SgsK_ABwD5cryGsg6--

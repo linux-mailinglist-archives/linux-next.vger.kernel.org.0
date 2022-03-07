@@ -2,65 +2,74 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5928F4D045D
-	for <lists+linux-next@lfdr.de>; Mon,  7 Mar 2022 17:43:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2B154D0466
+	for <lists+linux-next@lfdr.de>; Mon,  7 Mar 2022 17:44:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243222AbiCGQoV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 7 Mar 2022 11:44:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53190 "EHLO
+        id S244286AbiCGQpl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 7 Mar 2022 11:45:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240217AbiCGQoS (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 7 Mar 2022 11:44:18 -0500
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EE516E8E0
-        for <linux-next@vger.kernel.org>; Mon,  7 Mar 2022 08:43:23 -0800 (PST)
-Received: by mail-qk1-x735.google.com with SMTP id 85so4319291qkm.9
-        for <linux-next@vger.kernel.org>; Mon, 07 Mar 2022 08:43:23 -0800 (PST)
+        with ESMTP id S244275AbiCGQpk (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 7 Mar 2022 11:45:40 -0500
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CABCD793BB
+        for <linux-next@vger.kernel.org>; Mon,  7 Mar 2022 08:44:45 -0800 (PST)
+Received: by mail-qt1-x831.google.com with SMTP id b23so13740585qtt.6
+        for <linux-next@vger.kernel.org>; Mon, 07 Mar 2022 08:44:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=WxlXZbKegotTRphKHmCehZpEgIJ4wMzTilNUVs/+5nY=;
-        b=8J+stYa/ocPVv4jvR8jIsD+/+b5SachD9ks6Kn+B8F/whEu+72+yI/G6t+314zdcxd
-         Df+s50+d8n2lhyrpKZXDxkiH6o/PZj8inwflMIuKRKBkEjpZ9GhjKmsZqCRQfiaEkkB/
-         /DGdHIeDv/AAfifFcb1K1Ci3zrSPR+1em5+roDCBfagbueoLwJOj2IehLzQ/2I9SBUf4
-         UApXBg7gBCypq1vebggjm1qWM8lomACQseQGiRbLtWf8vZmCOolN5bgBwPqNFrxKiuXa
-         fSddDQcgI12TtMdFR1JjQpbKaFb2oVfG/4P4tV5KGrVdAPPfVj7vMQ8u0XaeNcdVUy6E
-         JZCQ==
+        bh=/XL/lMkKaAjZT+R1nP8H0cffa2vVj0nan43syJIwKEM=;
+        b=NGAxo4l6dVw4MjmbICDgizGHfOi4yre3b0pLfDORn6QkKhVCbfHF+rNemWGokfFRxH
+         NtY+yd2RUni7Od++YThC961zb+L5Yk2ElgJ+DYjcJKhNfNR2yIQmfScjlsvMIyDNMYQe
+         AXKXSlou68f/jC4mjOwJ8vmxzk+JY0I2UNLGmLBpfdJ5GRjidPgS/tcNepdp8+ee/Wmk
+         nr/FiTR9dxmfDbfhxRCDvHtnaGF39JYKTcY2bfSB3ZQERE5C1i1Es81mqkd3t5U9xMkN
+         VQwtkviAPHBlrajVClNPPqQ5qArz2i0+t0c+F1W37SpZXYWAeoHUyQ5m6fXR46JVYbnt
+         /Z1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=WxlXZbKegotTRphKHmCehZpEgIJ4wMzTilNUVs/+5nY=;
-        b=XvckhjEJIrjMsx2J/Oja/knEbBwONXSSK9zkJKX5rNYyMlim9wbdjW5y+M/BSporTk
-         NUs/BCGtrXVNYUyp9cs7jTDY/F03vVlaeuBOgo7td20/ZjpeBmQMsIy9MTfXLZLSf+zx
-         Ml5grkFHvmH0E06uWzcFyMh5NpeyeFh/hsI+1EMp3Efdhey9EG/YhsWKsE7XW5db5zUp
-         zlozJSA4TEfzWJ4fkSVyNt63Et0Y1ToWIxVtSXUx+0blExEiyvG5IkoEkfB0PFdRxcDV
-         79/T16phClPxNL7exwEI8838kuCuPV7JHZfbw3UY413YNiEsHlo5b0/5Ts00jz8qJXc6
-         PGsQ==
-X-Gm-Message-State: AOAM532CF76ZpR2QM2nF6xV9S0Hy0YA1E32kM7/rYNA1YIwLxUUNyf+9
-        EMACj0VFDi2bXzSpE5mKaz2M64cOf+Eg0Q==
-X-Google-Smtp-Source: ABdhPJxoAqXS7uh7G4R0lKgwS1ukWjfjVAzh0Qd9NFLxKhj/Nbz9L9pNu/gMDy1cKjWunuipXrVZFQ==
-X-Received: by 2002:a05:620a:4706:b0:67a:e619:8615 with SMTP id bs6-20020a05620a470600b0067ae6198615mr7474264qkb.775.1646671402742;
-        Mon, 07 Mar 2022 08:43:22 -0800 (PST)
+        bh=/XL/lMkKaAjZT+R1nP8H0cffa2vVj0nan43syJIwKEM=;
+        b=sPQKu2bdK+urorlx0gmrhmw4Pty58Is8Z3eF4xNBZr24gp2SbMSzWcZBwa6vTaNzJH
+         sL/12HiCVYQd8A/NTAWYkJe6G+gujQAG7MedYoo1AIJZDMYM4iteUXZguQ4Ju/2ITp98
+         ypnXBGM3baToc/Q4H8WoWvQwK+27LhQ/eVDqFhVrzimQNLDLbbjFKxkX5vssZAkm5qlp
+         Xtjk+KaVmpunfn9nWy6qMnFuM8n8WAF4XmpLEQ30K4Oec/MUqAsRyMcpoiHzVGiOBPl6
+         xL/4DufBcLPN0WYoA0LCbDwBzFjWi2Sqvp/D1Lz0KwLNxwCdV2uPZ+rUY2D1lGlx91ct
+         myFA==
+X-Gm-Message-State: AOAM533i5FP56O+F4vk9Sv0NzNZgO5e8+fC+jVBs7Ki8jzvoNRhn9o7X
+        U3fglskVOgVynriUWaGil1HZlw==
+X-Google-Smtp-Source: ABdhPJxUlGfyQuqHLZdnpfRoANxV+0hXCfHucRHiuTC80Gc6WFLFnVnTTEp8Y7BcKFfazeg0zyoF8A==
+X-Received: by 2002:ac8:5c10:0:b0:2de:2dac:1ea1 with SMTP id i16-20020ac85c10000000b002de2dac1ea1mr10272361qti.600.1646671485033;
+        Mon, 07 Mar 2022 08:44:45 -0800 (PST)
 Received: from localhost (cpe-98-15-154-102.hvc.res.rr.com. [98.15.154.102])
-        by smtp.gmail.com with ESMTPSA id j11-20020a37a00b000000b0067b436faccesm622651qke.122.2022.03.07.08.43.22
+        by smtp.gmail.com with ESMTPSA id u14-20020ac858ce000000b002de89087e7dsm8747493qta.78.2022.03.07.08.44.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 08:43:22 -0800 (PST)
-Date:   Mon, 7 Mar 2022 11:43:21 -0500
+        Mon, 07 Mar 2022 08:44:44 -0800 (PST)
+Date:   Mon, 7 Mar 2022 11:44:39 -0500
 From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Functional Testing <lkft@linaro.org>
-Subject: Re: linux-next: build failure after merge of the akpm tree
-Message-ID: <YiY2KYyjsCaANwo0@cmpxchg.org>
-References: <20220307215530.7c981424@canb.auug.org.au>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        regressions@lists.linux.dev, lkft-triage@lists.linaro.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        David Hildenbrand <david@redhat.com>,
+        "Dr. David Alan Gilbert" <dgilbert@redhat.com>
+Subject: Re: [next] mips: madvise.c:55:7: error: 'MADV_DONTNEED_LOCKED'
+ undeclared
+Message-ID: <YiY2dx5F0pEbsxkU@cmpxchg.org>
+References: <CA+G9fYvPdufo6c3MgPjAMBrkTqoLDO+2LN1PV3V8rTsqN5XSFg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220307215530.7c981424@canb.auug.org.au>
+In-Reply-To: <CA+G9fYvPdufo6c3MgPjAMBrkTqoLDO+2LN1PV3V8rTsqN5XSFg@mail.gmail.com>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -70,80 +79,20 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Sorry about that. This should fix it:
+On Mon, Mar 07, 2022 at 09:45:38PM +0530, Naresh Kamboju wrote:
+> Following build regressions errors/warnings noticed on mips architecture on
+> linux next-20220307 build.
+> 
+> make --silent --keep-going --jobs=8
+> O=/home/tuxbuild/.cache/tuxmake/builds/1/build ARCH=mips
+> CROSS_COMPILE=mips-linux-gnu- 'CC=sccache mips-linux-gnu-gcc'
+> 'HOSTCC=sccache gcc'
+> 
+> mm/madvise.c: In function 'madvise_need_mmap_write':
+> mm/madvise.c:55:7: error: 'MADV_DONTNEED_LOCKED' undeclared (first use
+> in this function); did you mean 'MADV_DONTNEED'?
+>    55 |  case MADV_DONTNEED_LOCKED:
 
----
-From a4d90a5faa418d98f925abe47b1a4fcffc4283f9 Mon Sep 17 00:00:00 2001
-From: Johannes Weiner <hannes@cmpxchg.org>
-Date: Mon, 7 Mar 2022 11:38:42 -0500
-Subject: [PATCH] mm: madvise: MADV_DONTNEED_LOCKED fix
+Thanks for the report, I sent a fix in reply to Stephen:
 
-On MiPS:
-mm/madvise.c:55:7: error: 'MADV_DONTNEED_LOCKED' undeclared (first use in this function); did you mean 'MADV_DONTNEED'?
-
-Define MADV_DONTNEED_LOCKED on archs that don't use the common mman.h
-
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
----
- arch/alpha/include/uapi/asm/mman.h  | 2 ++
- arch/mips/include/uapi/asm/mman.h   | 2 ++
- arch/parisc/include/uapi/asm/mman.h | 2 ++
- arch/xtensa/include/uapi/asm/mman.h | 2 ++
- 4 files changed, 8 insertions(+)
-
-diff --git a/arch/alpha/include/uapi/asm/mman.h b/arch/alpha/include/uapi/asm/mman.h
-index 56b4ee5a6c9e..4aa996423b0d 100644
---- a/arch/alpha/include/uapi/asm/mman.h
-+++ b/arch/alpha/include/uapi/asm/mman.h
-@@ -74,6 +74,8 @@
- #define MADV_POPULATE_READ	22	/* populate (prefault) page tables readable */
- #define MADV_POPULATE_WRITE	23	/* populate (prefault) page tables writable */
- 
-+#define MADV_DONTNEED_LOCKED	24	/* like DONTNEED, but drop locked pages too */
-+
- /* compatibility flags */
- #define MAP_FILE	0
- 
-diff --git a/arch/mips/include/uapi/asm/mman.h b/arch/mips/include/uapi/asm/mman.h
-index 40b210c65a5a..1be428663c10 100644
---- a/arch/mips/include/uapi/asm/mman.h
-+++ b/arch/mips/include/uapi/asm/mman.h
-@@ -101,6 +101,8 @@
- #define MADV_POPULATE_READ	22	/* populate (prefault) page tables readable */
- #define MADV_POPULATE_WRITE	23	/* populate (prefault) page tables writable */
- 
-+#define MADV_DONTNEED_LOCKED	24	/* like DONTNEED, but drop locked pages too */
-+
- /* compatibility flags */
- #define MAP_FILE	0
- 
-diff --git a/arch/parisc/include/uapi/asm/mman.h b/arch/parisc/include/uapi/asm/mman.h
-index 9e3c010c0f61..a7ea3204a5fa 100644
---- a/arch/parisc/include/uapi/asm/mman.h
-+++ b/arch/parisc/include/uapi/asm/mman.h
-@@ -55,6 +55,8 @@
- #define MADV_POPULATE_READ	22	/* populate (prefault) page tables readable */
- #define MADV_POPULATE_WRITE	23	/* populate (prefault) page tables writable */
- 
-+#define MADV_DONTNEED_LOCKED	24	/* like DONTNEED, but drop locked pages too */
-+
- #define MADV_MERGEABLE   65		/* KSM may merge identical pages */
- #define MADV_UNMERGEABLE 66		/* KSM may not merge identical pages */
- 
-diff --git a/arch/xtensa/include/uapi/asm/mman.h b/arch/xtensa/include/uapi/asm/mman.h
-index b3a22095371b..7966a58af472 100644
---- a/arch/xtensa/include/uapi/asm/mman.h
-+++ b/arch/xtensa/include/uapi/asm/mman.h
-@@ -109,6 +109,8 @@
- #define MADV_POPULATE_READ	22	/* populate (prefault) page tables readable */
- #define MADV_POPULATE_WRITE	23	/* populate (prefault) page tables writable */
- 
-+#define MADV_DONTNEED_LOCKED	24	/* like DONTNEED, but drop locked pages too */
-+
- /* compatibility flags */
- #define MAP_FILE	0
- 
--- 
-2.35.1
+https://lore.kernel.org/lkml/YiY2KYyjsCaANwo0@cmpxchg.org/T/#m58a9804edb680303b7351fb7cf6d9c93096ccaad

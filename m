@@ -2,78 +2,121 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 418FE4D0BFE
-	for <lists+linux-next@lfdr.de>; Tue,  8 Mar 2022 00:24:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85FBB4D0CA7
+	for <lists+linux-next@lfdr.de>; Tue,  8 Mar 2022 01:11:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243183AbiCGXZT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 7 Mar 2022 18:25:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54984 "EHLO
+        id S1344133AbiCHAMO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 7 Mar 2022 19:12:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240882AbiCGXZR (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 7 Mar 2022 18:25:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC3F4A3C5;
-        Mon,  7 Mar 2022 15:24:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S1344131AbiCHAMN (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 7 Mar 2022 19:12:13 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08DAA37022;
+        Mon,  7 Mar 2022 16:10:47 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5BA71B815E0;
-        Mon,  7 Mar 2022 23:24:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4486C340E9;
-        Mon,  7 Mar 2022 23:24:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646695460;
-        bh=fH7+crhzHVjXuw/xcVCDWpv4m05xVMzXGm7dPbHMG9I=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=nRIOoY7Lwacua73TW+Bc2couJTiyYC/ZO1ei30mPJnGqugmX5AZJRO8BM7UuiiJzF
-         7tt+YjlGpCkReYfSbBQjsAO8gpbXivrJREb/8fms8BTtkhXU1RuP3RFq3gRFS9LtCZ
-         Oo5WzPg4DyrP8af0a9b8pMw8IxVsP5tE/Z9MTGgmhNjxx+5h+bo0oGI4WY5k5+nl6X
-         1VjWfYWokIIFWlDKrE04BS6lSKeRVpAWygH0DnH1BRIznxJlZ1CCdxNjbHhmy/ZHAS
-         4TNWk3Bzl29cNUiE3nOUpE+YLYuHISKcS3zGIo9taGEEbIr71KQBBRVDgn47xU8+S7
-         bRF3S/WpTZa3g==
-Date:   Mon, 7 Mar 2022 15:24:18 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Marcel Holtmann <marcel@holtmann.org>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KCG1w4KWpz4xvZ;
+        Tue,  8 Mar 2022 11:10:44 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1646698245;
+        bh=iCc7WGqpMMXHLsEb4wHBI2GkdKkCV+OSxpSWkMIBTYY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=JwmUJjud7iCrNTUYEcGIQldPHSYsP8JtH01Uh1w+emR6fwtrHmErBj+7LcMa3IEwR
+         D12JzmVKtlVbZyHLUXGBHUOcp4wbMvgirUhhZk251gGWe+unwiFYoyub0D/8hy7yuN
+         eIy+eBjLvcU2Exx427Rl1Odex0rtvF7M8Et6CSWtwSg7nip4/LK4F0spzVBA7T2V9d
+         1d7dDm0ZsShxJS8syirQf5J4FI06LftVlqqr7KfEFD8xqRtYIR5mO3qhxkV25QD5I7
+         LReAWcGCG3nF4qi/P9E0Z5awfX5/QgOCMGc6Oqmny4/+AOahzwpntwtS/HqPdCyM/K
+         bie2dHKzmtvXA==
+Date:   Tue, 8 Mar 2022 11:10:43 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>, Greg KH <greg@kroah.com>
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commits in the net-next
- tree
-Message-ID: <20220307152418.6622230f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20220308101903.68e0ba72@canb.auug.org.au>
-References: <20220307072248.7435feed@canb.auug.org.au>
-        <20220307150248.388314c1@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <20220308101903.68e0ba72@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: linux-next: manual merge of the net-next tree with the
+ staging.current tree
+Message-ID: <20220308111043.1018a59d@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/kqz183InSqHJBsAYyJUDYub";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, 8 Mar 2022 10:19:03 +1100 Stephen Rothwell wrote:
-> > Would it be possible to add bluetooth trees to linux-next?
-> > 
-> > Marcel, Luiz, Johan, would it help?  
-> 
-> I already have
-> 
-> git://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git
-> branch master
-> 
-> in linux-next.  Those commits appeared in the bluetooth and net-next
-> trees on the same day (Monday) for me.
+--Sig_/kqz183InSqHJBsAYyJUDYub
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I see :/
+Hi all,
 
-Thanks for checking.
+Today's linux-next merge of the net-next tree got a conflict in:
+
+  drivers/staging/gdm724x/gdm_lte.c
+
+between commit:
+
+  fc7f750dc9d1 ("staging: gdm724x: fix use after free in gdm_lte_rx()")
+
+from the staging.current tree and commit:
+
+  4bcc4249b4cf ("staging: Use netif_rx().")
+
+from the net-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/staging/gdm724x/gdm_lte.c
+index 0d8d8fed283d,2587309da766..000000000000
+--- a/drivers/staging/gdm724x/gdm_lte.c
++++ b/drivers/staging/gdm724x/gdm_lte.c
+@@@ -76,10 -76,9 +76,10 @@@ static void tx_complete(void *arg
+ =20
+  static int gdm_lte_rx(struct sk_buff *skb, struct nic *nic, int nic_type)
+  {
+ -	int ret;
+ +	int ret, len;
+ =20
+ +	len =3D skb->len + ETH_HLEN;
+- 	ret =3D netif_rx_ni(skb);
++ 	ret =3D netif_rx(skb);
+  	if (ret =3D=3D NET_RX_DROP) {
+  		nic->stats.rx_dropped++;
+  	} else {
+
+--Sig_/kqz183InSqHJBsAYyJUDYub
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmImnwMACgkQAVBC80lX
+0GwyxwgAnquv2V3vkBKq9jW3/OUDq739TUPLq4opdFRHIawwN+xJJ/yLt050eod+
+WmHwX7uHNPNCgjs9vCB5IHkiCG6yw5nBFXexW3TbiQWHssGtcN1cJj/9BiGfDVtl
+xsKRUWCIOjpa3V8OoeQ6ZO8AuYA/Ic5b8ez/cKjOQddDde8mSN9DFuKJp3EU417+
+9GMF6SBOSbXnOtla5/kYV4/go0xzQ1DC6uBW/qPB6WJGALNxiPeZhPiu9E1eaV7F
+pGn+uXBkdADovcM61YhC/zLTkxC2mYmquVNxkoFvV9ZvyqhRnpgDn6Un+BtSnzFk
+vxyhLBsO3+BR7V1ujvlYAK2EofnmPQ==
+=plsM
+-----END PGP SIGNATURE-----
+
+--Sig_/kqz183InSqHJBsAYyJUDYub--

@@ -2,98 +2,88 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2484C4D235A
-	for <lists+linux-next@lfdr.de>; Tue,  8 Mar 2022 22:32:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74CA04D2367
+	for <lists+linux-next@lfdr.de>; Tue,  8 Mar 2022 22:38:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238092AbiCHVdU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 8 Mar 2022 16:33:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47162 "EHLO
+        id S243095AbiCHVjK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 8 Mar 2022 16:39:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231258AbiCHVdT (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Mar 2022 16:33:19 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3BED51E6E;
-        Tue,  8 Mar 2022 13:32:22 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KCpSh6fx0z4xvN;
-        Wed,  9 Mar 2022 08:32:20 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1646775141;
-        bh=L/+rhb3RWjpjkabvH3qgyz3UCnZ5urb85xrQUdEpUW4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=ulDWvwcHiiKREJ5JJIaCfP4SIg4Ju1FhoZ3jF/3nsZqG6xNlJADzcQDuYmt8WyiyT
-         NnlZC11d2IQyToAyv3ya8z98r7fQvMlKGZoGHzlzyPf6zY17iPLoBi2yXGL5m+h+93
-         it0+9xNRBfG03T+u0SFwEO1JaSoSQfnR7/FwSfLYKIQFRfRvF0iIsOBAy9XfBtz9lj
-         P5fXWXGsWLrQajepAUtSb86ms8JJXUEmIkFJl7dhyGo4e/VDNXWeVtWw2y+06n5g0q
-         AicCZ7NGUAUMCnDsiKzGtW7j0dS5w6sPK/pV6EVsXUXsyTRbKPioNLw53+It8df319
-         AXX/2HR+57QvQ==
-Date:   Wed, 9 Mar 2022 08:32:20 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>
-Cc:     Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        =?UTF-8?B?UMOpdGVy?= Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        with ESMTP id S231890AbiCHVjJ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Mar 2022 16:39:09 -0500
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D88783121B
+        for <linux-next@vger.kernel.org>; Tue,  8 Mar 2022 13:38:11 -0800 (PST)
+Received: from relay9-d.mail.gandi.net (unknown [217.70.183.199])
+        by mslow1.mail.gandi.net (Postfix) with ESMTP id 1833BD1664
+        for <linux-next@vger.kernel.org>; Tue,  8 Mar 2022 21:34:33 +0000 (UTC)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id B7AF3FF804;
+        Tue,  8 Mar 2022 21:34:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1646775267;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DbGDTAkv+8jp52xleEc1lU2kXFn/CtcrBMvCJ5j8Z9A=;
+        b=AV8Q7yXdq8imGC10NijVlFZ9zgrOPUHBKdoCCyopNuNWP80zyQsQIce6+XQMUjMjGZONdi
+        66eFsyOxn9XDbF1nLC9aekuktnUSDTHxO53z82NeFx0hp/rAlFZpiCh9fmS1ykWxsOlrHw
+        N6lZ3u+Xz8XKEkRmfTb7zQzEHm7WK2B649huyVM8dJYbsMZOqrvfjte401/zlG9Abkq8ky
+        H8dFJxRCWZkTRu2VXCi9JrYC8oLhpX+q658uPFGmnuG+L1BT+XVMG6xNZ6Shh4odikoMq4
+        UkDbNeLrdb0v3VdRhVtTGFAOKKHzKXvaoc/n/FNHZY07GYxZM7k0ASSwxPzeWQ==
+Date:   Tue, 8 Mar 2022 22:34:26 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Boris Brezillon <boris.brezillon@collabora.com>,
+        Jamie Iles <quic_jiles@quicinc.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the sound-asoc tree
-Message-ID: <20220309083220.7cf57122@canb.auug.org.au>
+Subject: Re: linux-next: Fixes tag needs some work in the i3c tree
+Message-ID: <YifL4q/R3VBho8/6@piout.net>
+References: <20220309082720.0f32c2f9@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/qzMRJurkcw755A0Oi1WrU+x";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220309082720.0f32c2f9@canb.auug.org.au>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/qzMRJurkcw755A0Oi1WrU+x
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 09/03/2022 08:27:20+1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> In commit
+> 
+>   6f5bad3d6960 ("i3c: fix uninitialized variable use in i2c setup")
+> 
+> Fixes tag
+> 
+>   Fixes: 97a82882d852 ("i3c: remove i2c board info from i2c_dev_desc")
+> 
+> has these problem(s):
+> 
+>   - Target SHA1 does not exist
+> 
+> Maybe you meant
+> 
+> Fixes: 31b9887c7258 ("i3c: remove i2c board info from i2c_dev_desc")
 
-Hi all,
+Thanks, fixed!
 
-In commit
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
 
-  fb763299bd8e ("ASoC: SOF: topology: remove redundant code")
 
-Fixes tag
 
-  Fixes: bdf4ad3fd01f ('ASoC: SOF: Intel: hda: assign link DMA channel at
-
-has these problem(s):
-
-  - Subject has leading but no trailing parentheses
-  - Subject has leading but no trailing quotes
-
-Please do not split Fixes tags over more than one line.  Also, please keep
-the commit message tags all together at the end of the commit message.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/qzMRJurkcw755A0Oi1WrU+x
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIny2QACgkQAVBC80lX
-0GyJdgf+LGDxpyKC6Ap/Xz1oFCohJ4J2keYsWHgfychzdi/wPkuth+qvKUBRzd8K
-tmt2WqAYGxPqJ5JVSApLRYgo8r+vamwaBeAEiQT0CIA86HoEZCjXP6PbjfeThEAs
-BxrLLrxn+R7PbqakNBcuESOKN0Yn4o6Vnw5UzD/IqdtaBVhBuPkCEYH+F1Oe6HGB
-jQfMeijuRYs9X3E1DtGQNMIRRve7+tCElAYXGnapeXti9IhxvUL6dVYp/gvpBvPo
-owhGWFiw+WYa4iquE3NLfcZaw2K+up4d9MkAhVUfMkknxRP6J8Ksc1VMy8+DiqLi
-d0ZXbYJH86aEkMdyUgKmZZOvuFMNjg==
-=Fm4N
------END PGP SIGNATURE-----
-
---Sig_/qzMRJurkcw755A0Oi1WrU+x--
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com

@@ -2,45 +2,48 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DDD64D234F
-	for <lists+linux-next@lfdr.de>; Tue,  8 Mar 2022 22:27:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2484C4D235A
+	for <lists+linux-next@lfdr.de>; Tue,  8 Mar 2022 22:32:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233302AbiCHV2V (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 8 Mar 2022 16:28:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36696 "EHLO
+        id S238092AbiCHVdU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 8 Mar 2022 16:33:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233223AbiCHV2U (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Mar 2022 16:28:20 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8091650E24;
-        Tue,  8 Mar 2022 13:27:23 -0800 (PST)
+        with ESMTP id S231258AbiCHVdT (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Mar 2022 16:33:19 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3BED51E6E;
+        Tue,  8 Mar 2022 13:32:22 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KCpLx6tB4z4xvf;
-        Wed,  9 Mar 2022 08:27:21 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KCpSh6fx0z4xvN;
+        Wed,  9 Mar 2022 08:32:20 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1646774842;
-        bh=ia+02u8yOr5U8LQBep995wZ05xzApNtG0GaoeZIXo58=;
+        s=201702; t=1646775141;
+        bh=L/+rhb3RWjpjkabvH3qgyz3UCnZ5urb85xrQUdEpUW4=;
         h=Date:From:To:Cc:Subject:From;
-        b=MZcDn6v0WbX/oe7qFUNPcoHgyxStErU913bGaCK/DWAI1KMjWmjZNXl/0DL12zUP3
-         hUNhSfRYaA135o3y47DHXs6L4ZPWxvGIfxlnglUzuD83WSYJW0YcD+3/J703kM12hM
-         8sziDXF2+hscn1W3tDEc4UJy3IAnF8v/JIjx9eg4qwodENxG2DESlcz4JzojBlQNpE
-         0hyI7a+ffdTSce9dz0tWaXCcJfIJnp1eww3t+MIGE4hGcX4AlfQKlj4NLEdXHqkmrY
-         mqywD+vjGMRxmDVJvxB3QYSKckPFd2QEnEwI55yW7fPXw6HgTsMVoqFIFRLrRVP5aU
-         agmSDVY6ZrQzg==
-Date:   Wed, 9 Mar 2022 08:27:20 +1100
+        b=ulDWvwcHiiKREJ5JJIaCfP4SIg4Ju1FhoZ3jF/3nsZqG6xNlJADzcQDuYmt8WyiyT
+         NnlZC11d2IQyToAyv3ya8z98r7fQvMlKGZoGHzlzyPf6zY17iPLoBi2yXGL5m+h+93
+         it0+9xNRBfG03T+u0SFwEO1JaSoSQfnR7/FwSfLYKIQFRfRvF0iIsOBAy9XfBtz9lj
+         P5fXWXGsWLrQajepAUtSb86ms8JJXUEmIkFJl7dhyGo4e/VDNXWeVtWw2y+06n5g0q
+         AicCZ7NGUAUMCnDsiKzGtW7j0dS5w6sPK/pV6EVsXUXsyTRbKPioNLw53+It8df319
+         AXX/2HR+57QvQ==
+Date:   Wed, 9 Mar 2022 08:32:20 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Boris Brezillon <boris.brezillon@collabora.com>
-Cc:     Jamie Iles <quic_jiles@quicinc.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+To:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>
+Cc:     Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        =?UTF-8?B?UMOpdGVy?= Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the i3c tree
-Message-ID: <20220309082720.0f32c2f9@canb.auug.org.au>
+Subject: linux-next: Fixes tag needs some work in the sound-asoc tree
+Message-ID: <20220309083220.7cf57122@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/0X/m=y4_gDCH5tBniudRhG8";
+Content-Type: multipart/signed; boundary="Sig_/qzMRJurkcw755A0Oi1WrU+x";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -51,7 +54,7 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/0X/m=y4_gDCH5tBniudRhG8
+--Sig_/qzMRJurkcw755A0Oi1WrU+x
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -59,38 +62,38 @@ Hi all,
 
 In commit
 
-  6f5bad3d6960 ("i3c: fix uninitialized variable use in i2c setup")
+  fb763299bd8e ("ASoC: SOF: topology: remove redundant code")
 
 Fixes tag
 
-  Fixes: 97a82882d852 ("i3c: remove i2c board info from i2c_dev_desc")
+  Fixes: bdf4ad3fd01f ('ASoC: SOF: Intel: hda: assign link DMA channel at
 
 has these problem(s):
 
-  - Target SHA1 does not exist
+  - Subject has leading but no trailing parentheses
+  - Subject has leading but no trailing quotes
 
-Maybe you meant
-
-Fixes: 31b9887c7258 ("i3c: remove i2c board info from i2c_dev_desc")
+Please do not split Fixes tags over more than one line.  Also, please keep
+the commit message tags all together at the end of the commit message.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/0X/m=y4_gDCH5tBniudRhG8
+--Sig_/qzMRJurkcw755A0Oi1WrU+x
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEyBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmInyjgACgkQAVBC80lX
-0GzTeQf4+8h7GXc1W9dZpInPj5h/plx93nB75S13uoM2rYVSVNfPGJxy/jvxRrM0
-syI6+QNWpROELLVxhpg47bxrwJhR8tlZZX736NRDhYBOO9bQGIwo4EcgwZ4OQDYl
-67YLtpXLXYUG2wxM4fsPSUXxlwS6fHE5DnP2kfToMGfUm1UGvgEkVPktiBKiFTe7
-N2EQYUrZtvNlKCItOC1gLwEtbbApN/SPLo+20rUJ8Xqrf0alFu6QEjwc9XqEi6nj
-RShNKxBXwsUxsW+QJRV5D4H8r/u2nzPRUS9UsdgraxoUjpS3DyyrRzg6fwS1rZHR
-aVZX0Em8ETelgl9f4FcHAV9FcEEX
-=E5aP
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIny2QACgkQAVBC80lX
+0GyJdgf+LGDxpyKC6Ap/Xz1oFCohJ4J2keYsWHgfychzdi/wPkuth+qvKUBRzd8K
+tmt2WqAYGxPqJ5JVSApLRYgo8r+vamwaBeAEiQT0CIA86HoEZCjXP6PbjfeThEAs
+BxrLLrxn+R7PbqakNBcuESOKN0Yn4o6Vnw5UzD/IqdtaBVhBuPkCEYH+F1Oe6HGB
+jQfMeijuRYs9X3E1DtGQNMIRRve7+tCElAYXGnapeXti9IhxvUL6dVYp/gvpBvPo
+owhGWFiw+WYa4iquE3NLfcZaw2K+up4d9MkAhVUfMkknxRP6J8Ksc1VMy8+DiqLi
+d0ZXbYJH86aEkMdyUgKmZZOvuFMNjg==
+=Fm4N
 -----END PGP SIGNATURE-----
 
---Sig_/0X/m=y4_gDCH5tBniudRhG8--
+--Sig_/qzMRJurkcw755A0Oi1WrU+x--

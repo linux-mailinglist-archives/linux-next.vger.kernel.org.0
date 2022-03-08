@@ -2,317 +2,922 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4BE54D1601
-	for <lists+linux-next@lfdr.de>; Tue,  8 Mar 2022 12:15:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88D184D1A50
+	for <lists+linux-next@lfdr.de>; Tue,  8 Mar 2022 15:22:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346421AbiCHLQr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 8 Mar 2022 06:16:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34482 "EHLO
+        id S240297AbiCHOXR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 8 Mar 2022 09:23:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346423AbiCHLQr (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Mar 2022 06:16:47 -0500
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41BA64666C;
-        Tue,  8 Mar 2022 03:15:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Ubky3f5oHng7Ccbc0lJa7UbKkFCIiDJH180hrlcDHGY=; b=LR+sVonuLD76VqP+PT6a1P0WQn
-        WK7kL/KAa/aI9m0SfuK8vDrF9f7R4UrDQiMymucYYB1j9eN9IhxkwiGgNwFXu0JUTqOARsmpolfwe
-        R7LuxzHC8y+tNmqq8nx/YTvcYG8AZo/t9U/CEvYjDLZXIb3Ne04eQvutQB/dD/S69KqSLLzsUpB5G
-        hou4BZDCKA4mLavz7Us4nr30DoSOO1bEO8z2A95ezLwjXXBRscZCX7Loy1KG3j2LrnqEoOcFhYiz/
-        MvFds5mPLJP0SAvRArDqy+WkGwLEEYLoyQVU8Td033/oSwoa/QXfaAGH2mf2umrWLhVfH5Z0FUo4j
-        Hz9iOjHg==;
-Received: from 211.81-166-168.customer.lyse.net ([81.166.168.211]:53650 helo=[192.168.10.61])
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1nRXoh-0004v2-Cg; Tue, 08 Mar 2022 12:15:47 +0100
-Message-ID: <a746b3f7-d39c-6779-abfd-d23ec297d502@tronnes.org>
-Date:   Tue, 8 Mar 2022 12:15:43 +0100
+        with ESMTP id S1347453AbiCHOW5 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Mar 2022 09:22:57 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 724184B41C
+        for <linux-next@vger.kernel.org>; Tue,  8 Mar 2022 06:21:59 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id c16-20020a17090aa61000b001befad2bfaaso2555837pjq.1
+        for <linux-next@vger.kernel.org>; Tue, 08 Mar 2022 06:21:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=FA1SVVOnjYcxccvd8HlsnHrJ5hMUvq927M8VgOPYitk=;
+        b=H+U40NxoMw2vA9CbKxV14vGqVC1blXv5i1yi9Fs7UX/yeiHsqlga8SsyKa1uIwXdsF
+         rSp+EnmQP34a0pmAr7vne0iC9bweJ/MYLEF16l/xYi9gWre68UQfOZpTifCr3f9dvRji
+         wnMPyq6qSdRd0o7EaYj/R6QFwcL6iEhcFikoEM/wsSaKildxotdZO/apgrUYxU2lrw1V
+         BT/8/Jknyk0TzO/18rgn/m1HRu783jtTJNLnB7guFtmrKVYWUrxRBXU3jYee6ePnPmmk
+         7BrXizDdj5y2LyZIEny13GPzClvpNDTbPF9+2m9w7rQsW06Vf808xcmkYuou9bxtURUW
+         lLyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=FA1SVVOnjYcxccvd8HlsnHrJ5hMUvq927M8VgOPYitk=;
+        b=G//k1iD1g7KINMt+0u19MJK4pawtEIsV7HvfTUINOpSvuHBsk+r+ntgIQ+/BlYMCya
+         qXEG/9rU5qUpL2idKL9bKTzH3ViH+LmA8RKQvqiA+DoYmgRlGBIRkvFHYLtY9oUnSINX
+         OFGcQO9a+9EzVqe1/OZNN60WfBpSX396AjS+qsDQNJX7Pzj29qV/dzPcosReedf/O+qs
+         iigqjyiowgz6QEMpNZmvV3L3ws22qPyALb/fFk2h4uXJPTjYz51ljVzxEhlI+cp4wQGb
+         6ouHdARUTfLQiyhFsp26wsYdqS28tTQ6vvkGBPMUDO6WmMgRwBCQXNFh71WUVt1LBqIc
+         fl3w==
+X-Gm-Message-State: AOAM532kHRP3szJarzm6ja+7D7FdNVXEqAcoDofK67+8bUc6GgvKBKrg
+        edGj4BmFg3QfwH1TW+cHq8SQmNTutzX1Tc7f2F4=
+X-Google-Smtp-Source: ABdhPJwKbYrz+fYv8B2s/Wl1uZY3Paj5yQ21jtO2+yrQBQUvmntOvQJhCMhPlADuWGfvY8bSYAly+Q==
+X-Received: by 2002:a17:90a:1b65:b0:1bf:41de:39f6 with SMTP id q92-20020a17090a1b6500b001bf41de39f6mr4940590pjq.137.1646749318326;
+        Tue, 08 Mar 2022 06:21:58 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id d202-20020a621dd3000000b004f6f21593cesm9230434pfd.220.2022.03.08.06.21.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Mar 2022 06:21:58 -0800 (PST)
+Message-ID: <62276686.1c69fb81.80d78.6d65@mx.google.com>
+Date:   Tue, 08 Mar 2022 06:21:58 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: linux-next: build failure after merge of the amdgpu tree
-To:     Mark Brown <broonie@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Alex Deucher <alexdeucher@gmail.com>
-Cc:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>
-References: <20220307111342.105ce204@canb.auug.org.au>
- <YiYC2fQgf7d/QPSM@sirena.org.uk>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-In-Reply-To: <YiYC2fQgf7d/QPSM@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Tree: next
+X-Kernelci-Branch: master
+X-Kernelci-Kernel: next-20220308
+Subject: next/master baseline: 466 runs, 24 regressions (next-20220308)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi drm-misc maintainers,
+next/master baseline: 466 runs, 24 regressions (next-20220308)
 
-I don't know who has act on this but the driver came through
-drm-misc-next so it's most likely not amd.
+Regressions Summary
+-------------------
 
-The initial post can be found here:
-https://lore.kernel.org/linux-next/YiYC2fQgf7d%2FQPSM@sirena.org.uk/T/
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+beaglebone-black             | arm    | lab-cip       | gcc-10   | omap2plu=
+s_defconfig          | 1          =
 
-Noralf.
+da850-lcdk                   | arm    | lab-baylibre  | clang-14 | multi_v5=
+_defconfig           | 1          =
 
-Den 07.03.2022 14.04, skrev Mark Brown:
-> On Mon, Mar 07, 2022 at 11:13:42AM +1100, Stephen Rothwell wrote:
-> 
->> Caused by commit
->>
->>   0e65e2e6abb0 ("drm/tiny: Add MIPI DBI compatible SPI driver")
->>
->> interacting with commit
->>
->>   a0386bba7093 ("spi: make remove callback a void function")
->>
->> from the spi trees.
-> 
-> The amdgpu tree can pull this tag and apply Stephen's fix as part of
-> that:
-> 
-> The following changes since commit 26291c54e111ff6ba87a164d85d4a4e134b7315c:
-> 
->   Linux 5.17-rc2 (2022-01-30 15:37:07 +0200)
-> 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-remove-void
-> 
-> for you to fetch changes up to a0386bba70934d42f586eaf68b21d5eeaffa7bd0:
-> 
->   spi: make remove callback a void function (2022-02-09 13:00:45 +0000)
-> 
-> ----------------------------------------------------------------
-> spi: Make remove() return void
-> 
-> This series from Uwe Kleine-König converts the spi remove function to
-> return void since there is nothing useful that we can do with a failure
-> and it as more buses are converted it'll enable further work on the
-> driver core.
-> 
-> ----------------------------------------------------------------
-> Uwe Kleine-König (5):
->       staging: fbtft: Fix error path in fbtft_driver_module_init()
->       staging: fbtft: Deduplicate driver registration macros
->       tpm: st33zp24: Make st33zp24_remove() a void function
->       platform/chrome: cros_ec: Make cros_ec_unregister() return void
->       spi: make remove callback a void function
-> 
->  drivers/bus/moxtet.c                               |  4 +-
->  drivers/char/tpm/st33zp24/i2c.c                    |  5 +-
->  drivers/char/tpm/st33zp24/spi.c                    |  9 +-
->  drivers/char/tpm/st33zp24/st33zp24.c               |  3 +-
->  drivers/char/tpm/st33zp24/st33zp24.h               |  2 +-
->  drivers/char/tpm/tpm_tis_spi_main.c                |  3 +-
->  drivers/clk/clk-lmk04832.c                         |  4 +-
->  drivers/gpio/gpio-74x164.c                         |  4 +-
->  drivers/gpio/gpio-max3191x.c                       |  4 +-
->  drivers/gpio/gpio-max7301.c                        |  4 +-
->  drivers/gpio/gpio-mc33880.c                        |  4 +-
->  drivers/gpio/gpio-pisosr.c                         |  4 +-
->  drivers/gpu/drm/panel/panel-abt-y030xx067a.c       |  4 +-
->  drivers/gpu/drm/panel/panel-ilitek-ili9322.c       |  4 +-
->  drivers/gpu/drm/panel/panel-ilitek-ili9341.c       |  3 +-
->  drivers/gpu/drm/panel/panel-innolux-ej030na.c      |  4 +-
->  drivers/gpu/drm/panel/panel-lg-lb035q02.c          |  4 +-
->  drivers/gpu/drm/panel/panel-lg-lg4573.c            |  4 +-
->  drivers/gpu/drm/panel/panel-nec-nl8048hl11.c       |  4 +-
->  drivers/gpu/drm/panel/panel-novatek-nt39016.c      |  4 +-
->  drivers/gpu/drm/panel/panel-samsung-db7430.c       |  3 +-
->  drivers/gpu/drm/panel/panel-samsung-ld9040.c       |  4 +-
->  drivers/gpu/drm/panel/panel-samsung-s6d27a1.c      |  3 +-
->  drivers/gpu/drm/panel/panel-samsung-s6e63m0-spi.c  |  3 +-
->  drivers/gpu/drm/panel/panel-sitronix-st7789v.c     |  4 +-
->  drivers/gpu/drm/panel/panel-sony-acx565akm.c       |  4 +-
->  drivers/gpu/drm/panel/panel-tpo-td028ttec1.c       |  4 +-
->  drivers/gpu/drm/panel/panel-tpo-td043mtea1.c       |  4 +-
->  drivers/gpu/drm/panel/panel-tpo-tpg110.c           |  3 +-
->  drivers/gpu/drm/panel/panel-widechips-ws2401.c     |  3 +-
->  drivers/gpu/drm/tiny/hx8357d.c                     |  4 +-
->  drivers/gpu/drm/tiny/ili9163.c                     |  4 +-
->  drivers/gpu/drm/tiny/ili9225.c                     |  4 +-
->  drivers/gpu/drm/tiny/ili9341.c                     |  4 +-
->  drivers/gpu/drm/tiny/ili9486.c                     |  4 +-
->  drivers/gpu/drm/tiny/mi0283qt.c                    |  4 +-
->  drivers/gpu/drm/tiny/repaper.c                     |  4 +-
->  drivers/gpu/drm/tiny/st7586.c                      |  4 +-
->  drivers/gpu/drm/tiny/st7735r.c                     |  4 +-
->  drivers/hwmon/adcxx.c                              |  4 +-
->  drivers/hwmon/adt7310.c                            |  3 +-
->  drivers/hwmon/max1111.c                            |  3 +-
->  drivers/hwmon/max31722.c                           |  4 +-
->  drivers/iio/accel/bma400_spi.c                     |  4 +-
->  drivers/iio/accel/bmc150-accel-spi.c               |  4 +-
->  drivers/iio/accel/bmi088-accel-spi.c               |  4 +-
->  drivers/iio/accel/kxsd9-spi.c                      |  4 +-
->  drivers/iio/accel/mma7455_spi.c                    |  4 +-
->  drivers/iio/accel/sca3000.c                        |  4 +-
->  drivers/iio/adc/ad7266.c                           |  4 +-
->  drivers/iio/adc/ltc2496.c                          |  4 +-
->  drivers/iio/adc/mcp320x.c                          |  4 +-
->  drivers/iio/adc/mcp3911.c                          |  4 +-
->  drivers/iio/adc/ti-adc12138.c                      |  4 +-
->  drivers/iio/adc/ti-ads7950.c                       |  4 +-
->  drivers/iio/adc/ti-ads8688.c                       |  4 +-
->  drivers/iio/adc/ti-tlc4541.c                       |  4 +-
->  drivers/iio/amplifiers/ad8366.c                    |  4 +-
->  drivers/iio/common/ssp_sensors/ssp_dev.c           |  4 +-
->  drivers/iio/dac/ad5360.c                           |  4 +-
->  drivers/iio/dac/ad5380.c                           |  4 +-
->  drivers/iio/dac/ad5446.c                           |  4 +-
->  drivers/iio/dac/ad5449.c                           |  4 +-
->  drivers/iio/dac/ad5504.c                           |  4 +-
->  drivers/iio/dac/ad5592r.c                          |  4 +-
->  drivers/iio/dac/ad5624r_spi.c                      |  4 +-
->  drivers/iio/dac/ad5686-spi.c                       |  4 +-
->  drivers/iio/dac/ad5761.c                           |  4 +-
->  drivers/iio/dac/ad5764.c                           |  4 +-
->  drivers/iio/dac/ad5791.c                           |  4 +-
->  drivers/iio/dac/ad8801.c                           |  4 +-
->  drivers/iio/dac/ltc1660.c                          |  4 +-
->  drivers/iio/dac/ltc2632.c                          |  4 +-
->  drivers/iio/dac/mcp4922.c                          |  4 +-
->  drivers/iio/dac/ti-dac082s085.c                    |  4 +-
->  drivers/iio/dac/ti-dac7311.c                       |  3 +-
->  drivers/iio/frequency/adf4350.c                    |  4 +-
->  drivers/iio/gyro/bmg160_spi.c                      |  4 +-
->  drivers/iio/gyro/fxas21002c_spi.c                  |  4 +-
->  drivers/iio/health/afe4403.c                       |  4 +-
->  drivers/iio/magnetometer/bmc150_magn_spi.c         |  4 +-
->  drivers/iio/magnetometer/hmc5843_spi.c             |  4 +-
->  drivers/iio/potentiometer/max5487.c                |  4 +-
->  drivers/iio/pressure/ms5611_spi.c                  |  4 +-
->  drivers/iio/pressure/zpa2326_spi.c                 |  4 +-
->  drivers/input/keyboard/applespi.c                  |  4 +-
->  drivers/input/misc/adxl34x-spi.c                   |  4 +-
->  drivers/input/touchscreen/ads7846.c                |  4 +-
->  drivers/input/touchscreen/cyttsp4_spi.c            |  4 +-
->  drivers/input/touchscreen/tsc2005.c                |  4 +-
->  drivers/leds/leds-cr0014114.c                      |  4 +-
->  drivers/leds/leds-dac124s085.c                     |  4 +-
->  drivers/leds/leds-el15203000.c                     |  4 +-
->  drivers/leds/leds-spi-byte.c                       |  4 +-
->  drivers/media/spi/cxd2880-spi.c                    |  4 +-
->  drivers/media/spi/gs1662.c                         |  4 +-
->  drivers/media/tuners/msi001.c                      |  3 +-
->  drivers/mfd/arizona-spi.c                          |  4 +-
->  drivers/mfd/da9052-spi.c                           |  3 +-
->  drivers/mfd/ezx-pcap.c                             |  4 +-
->  drivers/mfd/madera-spi.c                           |  4 +-
->  drivers/mfd/mc13xxx-spi.c                          |  3 +-
->  drivers/mfd/rsmu_spi.c                             |  4 +-
->  drivers/mfd/stmpe-spi.c                            |  4 +-
->  drivers/mfd/tps65912-spi.c                         |  4 +-
->  drivers/misc/ad525x_dpot-spi.c                     |  3 +-
->  drivers/misc/eeprom/eeprom_93xx46.c                |  4 +-
->  drivers/misc/lattice-ecp3-config.c                 |  4 +-
->  drivers/misc/lis3lv02d/lis3lv02d_spi.c             |  4 +-
->  drivers/mmc/host/mmc_spi.c                         |  3 +-
->  drivers/mtd/devices/mchp23k256.c                   |  4 +-
->  drivers/mtd/devices/mchp48l640.c                   |  4 +-
->  drivers/mtd/devices/mtd_dataflash.c                |  4 +-
->  drivers/mtd/devices/sst25l.c                       |  4 +-
->  drivers/net/can/m_can/tcan4x5x-core.c              |  4 +-
->  drivers/net/can/spi/hi311x.c                       |  4 +-
->  drivers/net/can/spi/mcp251x.c                      |  4 +-
->  drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c     |  4 +-
->  drivers/net/dsa/b53/b53_spi.c                      |  4 +-
->  drivers/net/dsa/microchip/ksz8795_spi.c            |  4 +-
->  drivers/net/dsa/microchip/ksz9477_spi.c            |  4 +-
->  drivers/net/dsa/sja1105/sja1105_main.c             |  6 +-
->  drivers/net/dsa/vitesse-vsc73xx-spi.c              |  6 +-
->  drivers/net/ethernet/asix/ax88796c_main.c          |  4 +-
->  drivers/net/ethernet/micrel/ks8851_spi.c           |  4 +-
->  drivers/net/ethernet/microchip/enc28j60.c          |  4 +-
->  drivers/net/ethernet/microchip/encx24j600.c        |  4 +-
->  drivers/net/ethernet/qualcomm/qca_spi.c            |  4 +-
->  drivers/net/ethernet/vertexcom/mse102x.c           |  4 +-
->  drivers/net/ethernet/wiznet/w5100-spi.c            |  4 +-
->  drivers/net/ieee802154/adf7242.c                   |  4 +-
->  drivers/net/ieee802154/at86rf230.c                 |  4 +-
->  drivers/net/ieee802154/ca8210.c                    |  6 +-
->  drivers/net/ieee802154/cc2520.c                    |  4 +-
->  drivers/net/ieee802154/mcr20a.c                    |  4 +-
->  drivers/net/ieee802154/mrf24j40.c                  |  4 +-
->  drivers/net/phy/spi_ks8995.c                       |  4 +-
->  drivers/net/wan/slic_ds26522.c                     |  3 +-
->  drivers/net/wireless/intersil/p54/p54spi.c         |  4 +-
->  drivers/net/wireless/marvell/libertas/if_spi.c     |  4 +-
->  drivers/net/wireless/microchip/wilc1000/spi.c      |  4 +-
->  drivers/net/wireless/st/cw1200/cw1200_spi.c        |  4 +-
->  drivers/net/wireless/ti/wl1251/spi.c               |  4 +-
->  drivers/net/wireless/ti/wlcore/spi.c               |  4 +-
->  drivers/nfc/nfcmrvl/spi.c                          |  3 +-
->  drivers/nfc/st-nci/spi.c                           |  4 +-
->  drivers/nfc/st95hf/core.c                          |  4 +-
->  drivers/nfc/trf7970a.c                             |  4 +-
->  drivers/platform/chrome/cros_ec.c                  |  4 +-
->  drivers/platform/chrome/cros_ec.h                  |  2 +-
->  drivers/platform/chrome/cros_ec_i2c.c              |  4 +-
->  drivers/platform/chrome/cros_ec_lpc.c              |  4 +-
->  drivers/platform/chrome/cros_ec_spi.c              |  4 +-
->  drivers/platform/olpc/olpc-xo175-ec.c              |  4 +-
->  drivers/rtc/rtc-ds1302.c                           |  3 +-
->  drivers/rtc/rtc-ds1305.c                           |  4 +-
->  drivers/rtc/rtc-ds1343.c                           |  4 +-
->  drivers/spi/spi-mem.c                              |  6 +-
->  drivers/spi/spi-slave-system-control.c             |  3 +-
->  drivers/spi/spi-slave-time.c                       |  3 +-
->  drivers/spi/spi-tle62x0.c                          |  3 +-
->  drivers/spi/spi.c                                  | 11 +--
->  drivers/spi/spidev.c                               |  4 +-
->  drivers/staging/fbtft/fbtft.h                      | 97 +++++++++-------------
->  drivers/staging/pi433/pi433_if.c                   |  4 +-
->  drivers/staging/wfx/bus_spi.c                      |  3 +-
->  drivers/tty/serial/max3100.c                       |  5 +-
->  drivers/tty/serial/max310x.c                       |  3 +-
->  drivers/tty/serial/sc16is7xx.c                     |  4 +-
->  drivers/usb/gadget/udc/max3420_udc.c               |  4 +-
->  drivers/usb/host/max3421-hcd.c                     |  3 +-
->  drivers/video/backlight/ams369fg06.c               |  3 +-
->  drivers/video/backlight/corgi_lcd.c                |  3 +-
->  drivers/video/backlight/ili922x.c                  |  3 +-
->  drivers/video/backlight/l4f00242t03.c              |  3 +-
->  drivers/video/backlight/lms501kf03.c               |  3 +-
->  drivers/video/backlight/ltv350qv.c                 |  3 +-
->  drivers/video/backlight/tdo24m.c                   |  3 +-
->  drivers/video/backlight/tosa_lcd.c                 |  4 +-
->  drivers/video/backlight/vgg2432a4.c                |  4 +-
->  drivers/video/fbdev/omap/lcd_mipid.c               |  4 +-
->  .../omapfb/displays/panel-lgphilips-lb035q02.c     |  4 +-
->  .../omap2/omapfb/displays/panel-nec-nl8048hl11.c   |  4 +-
->  .../omap2/omapfb/displays/panel-sony-acx565akm.c   |  4 +-
->  .../omap2/omapfb/displays/panel-tpo-td028ttec1.c   |  4 +-
->  .../omap2/omapfb/displays/panel-tpo-td043mtea1.c   |  4 +-
->  include/linux/spi/spi.h                            |  2 +-
->  sound/pci/hda/cs35l41_hda_spi.c                    |  4 +-
->  sound/soc/codecs/adau1761-spi.c                    |  3 +-
->  sound/soc/codecs/adau1781-spi.c                    |  3 +-
->  sound/soc/codecs/cs35l41-spi.c                     |  4 +-
->  sound/soc/codecs/pcm3168a-spi.c                    |  4 +-
->  sound/soc/codecs/pcm512x-spi.c                     |  3 +-
->  sound/soc/codecs/tlv320aic32x4-spi.c               |  4 +-
->  sound/soc/codecs/tlv320aic3x-spi.c                 |  4 +-
->  sound/soc/codecs/wm0010.c                          |  4 +-
->  sound/soc/codecs/wm8804-spi.c                      |  3 +-
->  sound/spi/at73c213.c                               |  4 +-
->  198 files changed, 248 insertions(+), 617 deletions(-)
+da850-lcdk                   | arm    | lab-baylibre  | gcc-10   | davinci_=
+all_defconfig        | 1          =
+
+da850-lcdk                   | arm    | lab-baylibre  | gcc-10   | multi_v5=
+_defconfig           | 1          =
+
+imx6q-var-dt6customboard     | arm    | lab-baylibre  | gcc-10   | multi_v7=
+_defconfig+debug     | 1          =
+
+imx7d-sdb                    | arm    | lab-nxp       | gcc-10   | imx_v6_v=
+7_defconfig          | 1          =
+
+imx8mn-ddr4-evk              | arm64  | lab-nxp       | gcc-10   | defconfi=
+g                    | 1          =
+
+meson-g12a-u200              | arm64  | lab-baylibre  | gcc-10   | defconfi=
+g+debug              | 1          =
+
+meson-g12b-a311d-khadas-vim3 | arm64  | lab-collabora | gcc-10   | defconfi=
+g+CON..._64K_PAGES=3Dy | 2          =
+
+meson-g12b-odroid-n2         | arm64  | lab-baylibre  | gcc-10   | defconfi=
+g                    | 1          =
+
+meson-gxbb-nanopi-k2         | arm64  | lab-baylibre  | gcc-10   | defconfi=
+g+debug              | 1          =
+
+meson-gxbb-p200              | arm64  | lab-baylibre  | gcc-10   | defconfi=
+g                    | 1          =
+
+minnowboard-turbot-E3826     | x86_64 | lab-collabora | gcc-10   | x86_64_d=
+efconfig+debug       | 1          =
+
+ox820-clouden...lug-series-3 | arm    | lab-baylibre  | gcc-10   | oxnas_v6=
+_defconfig           | 1          =
+
+panda                        | arm    | lab-baylibre  | gcc-10   | omap2plu=
+s_defconfig          | 1          =
+
+qemu_arm-vexpress-a9         | arm    | lab-baylibre  | gcc-10   | vexpress=
+_defconfig           | 1          =
+
+qemu_i386                    | i386   | lab-baylibre  | gcc-10   | i386_def=
+config+debug         | 1          =
+
+qemu_i386-uefi               | i386   | lab-baylibre  | gcc-10   | i386_def=
+config+debug         | 1          =
+
+qemu_x86_64                  | x86_64 | lab-baylibre  | gcc-10   | x86_64_d=
+efconfig+debug       | 1          =
+
+qemu_x86_64-uefi             | x86_64 | lab-baylibre  | gcc-10   | x86_64_d=
+efconfig+debug       | 1          =
+
+qemu_x86_64-uefi-mixed       | x86_64 | lab-baylibre  | gcc-10   | x86_64_d=
+efconfig+debug       | 1          =
+
+r8a77950-salvator-x          | arm64  | lab-baylibre  | gcc-10   | defconfi=
+g+CON...OMIZE_BASE=3Dy | 1          =
+
+zynqmp-zcu102                | arm64  | lab-cip       | gcc-10   | defconfi=
+g+debug              | 1          =
+
+
+  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
+220308/plan/baseline/
+
+  Test:     baseline
+  Tree:     next
+  Branch:   master
+  Describe: next-20220308
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      cb153b68ff91cbc434f3de70ac549e110543e1bb =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+beaglebone-black             | arm    | lab-cip       | gcc-10   | omap2plu=
+s_defconfig          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62272e66e4c2e06b5fc629a9
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: omap2plus_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220308/arm/=
+omap2plus_defconfig/gcc-10/lab-cip/baseline-beaglebone-black.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220308/arm/=
+omap2plus_defconfig/gcc-10/lab-cip/baseline-beaglebone-black.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220228.1/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62272e66e4c2e06b5fc62=
+9aa
+        failing since 3 days (last pass: next-20220201, first fail: next-20=
+220304) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+da850-lcdk                   | arm    | lab-baylibre  | clang-14 | multi_v5=
+_defconfig           | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62272ea8e7ea06b50ac62a2a
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v5_defconfig
+  Compiler:    clang-14 (Debian clang version 14.0.0-++20220226043049+f8ca5=
+fabdb54-1~exp1~20220226043142.74)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220308/arm/=
+multi_v5_defconfig/clang-14/lab-baylibre/baseline-da850-lcdk.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220308/arm/=
+multi_v5_defconfig/clang-14/lab-baylibre/baseline-da850-lcdk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220228.1/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62272ea8e7ea06b50ac62=
+a2b
+        failing since 4 days (last pass: next-20220301, first fail: next-20=
+220303) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+da850-lcdk                   | arm    | lab-baylibre  | gcc-10   | davinci_=
+all_defconfig        | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62272ffd0c522fb047c6296f
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: davinci_all_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220308/arm/=
+davinci_all_defconfig/gcc-10/lab-baylibre/baseline-da850-lcdk.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220308/arm/=
+davinci_all_defconfig/gcc-10/lab-baylibre/baseline-da850-lcdk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220228.1/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62272ffd0c522fb047c62=
+970
+        failing since 4 days (last pass: next-20220301, first fail: next-20=
+220303) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+da850-lcdk                   | arm    | lab-baylibre  | gcc-10   | multi_v5=
+_defconfig           | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62272d543474441bc5c62985
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v5_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220308/arm/=
+multi_v5_defconfig/gcc-10/lab-baylibre/baseline-da850-lcdk.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220308/arm/=
+multi_v5_defconfig/gcc-10/lab-baylibre/baseline-da850-lcdk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220228.1/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62272d543474441bc5c62=
+986
+        failing since 3 days (last pass: next-20220301, first fail: next-20=
+220304) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+imx6q-var-dt6customboard     | arm    | lab-baylibre  | gcc-10   | multi_v7=
+_defconfig+debug     | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6227319fbd08d177dcc62968
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+debug
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220308/arm/=
+multi_v7_defconfig+debug/gcc-10/lab-baylibre/baseline-imx6q-var-dt6custombo=
+ard.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220308/arm/=
+multi_v7_defconfig+debug/gcc-10/lab-baylibre/baseline-imx6q-var-dt6custombo=
+ard.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220228.1/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6227319fbd08d177dcc62=
+969
+        failing since 6 days (last pass: next-20220228, first fail: next-20=
+220301) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+imx7d-sdb                    | arm    | lab-nxp       | gcc-10   | imx_v6_v=
+7_defconfig          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62272c0d7d4f52344bc62975
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: imx_v6_v7_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220308/arm/=
+imx_v6_v7_defconfig/gcc-10/lab-nxp/baseline-imx7d-sdb.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220308/arm/=
+imx_v6_v7_defconfig/gcc-10/lab-nxp/baseline-imx7d-sdb.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220228.1/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62272c0d7d4f52344bc62=
+976
+        new failure (last pass: next-20220225) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+imx8mn-ddr4-evk              | arm64  | lab-nxp       | gcc-10   | defconfi=
+g                    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/622730f2c833b833bbc62991
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220308/arm6=
+4/defconfig/gcc-10/lab-nxp/baseline-imx8mn-ddr4-evk.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220308/arm6=
+4/defconfig/gcc-10/lab-nxp/baseline-imx8mn-ddr4-evk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220228.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/622730f2c833b833bbc62=
+992
+        new failure (last pass: next-20220304) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+meson-g12a-u200              | arm64  | lab-baylibre  | gcc-10   | defconfi=
+g+debug              | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62273129269c6ee4ebc6297c
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+debug
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220308/arm6=
+4/defconfig+debug/gcc-10/lab-baylibre/baseline-meson-g12a-u200.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220308/arm6=
+4/defconfig+debug/gcc-10/lab-baylibre/baseline-meson-g12a-u200.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220228.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62273129269c6ee4ebc62=
+97d
+        failing since 3 days (last pass: next-20220303, first fail: next-20=
+220304) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+meson-g12b-a311d-khadas-vim3 | arm64  | lab-collabora | gcc-10   | defconfi=
+g+CON..._64K_PAGES=3Dy | 2          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62272b1d1639327702c62977
+
+  Results:     4 PASS, 2 FAIL, 1 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220308/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-collabora/baseline-meson-=
+g12b-a311d-khadas-vim3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220308/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-collabora/baseline-meson-=
+g12b-a311d-khadas-vim3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220228.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/62272b1d1639327=
+702c6297a
+        new failure (last pass: next-20220303)
+        2 lines
+
+    2022-03-08T10:08:05.049540  kern  :alert : Mem abort info:
+    2022-03-08T10:08:05.049632  kern  :alert :   ESR =3D 0x86000007
+    2022-03-08T10:08:05.049705  kern  :alert :   EC =3D 0x21: IABT (current=
+ EL), IL =3D 32 bits
+    2022-03-08T10:08:05.049774  kern  :alert :   SE<8>[   18.553232] <LAVA_=
+SIGNAL_TESTCASE TEST_CASE_ID=3Demerg RESULT=3Dfail UNITS=3Dlines MEASUREMEN=
+T=3D2>
+    2022-03-08T10:08:05.049841  T =3D 0,<8>[   18.560171] <LAVA_SIGNAL_ENDR=
+UN 0_dmesg 5836867_1.5.2.4.1>
+    2022-03-08T10:08:05.049906   FnV =3D 0
+    2022-03-08T10:08:05.049969  kern  :alert :   EA =3D 0, S1PTW =3D 0
+    2022-03-08T10:08:05.050030  kern  :alert :   FSC =3D 0x07: level 3 tran=
+slation fault
+    2022-03-08T10:08:05.050091  kern  :alert : user pgtable: 64k pages, 48-=
+bit VAs, pgdp=3D000000002f9a3200   =
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/62272b1d1639327=
+702c6297b
+        new failure (last pass: next-20220303)
+        9 lines =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+meson-g12b-odroid-n2         | arm64  | lab-baylibre  | gcc-10   | defconfi=
+g                    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62272f874f000c7f77c62968
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220308/arm6=
+4/defconfig/gcc-10/lab-baylibre/baseline-meson-g12b-odroid-n2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220308/arm6=
+4/defconfig/gcc-10/lab-baylibre/baseline-meson-g12b-odroid-n2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220228.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62272f874f000c7f77c62=
+969
+        new failure (last pass: next-20220304) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+meson-gxbb-nanopi-k2         | arm64  | lab-baylibre  | gcc-10   | defconfi=
+g+debug              | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/622734680f6deeba65c62969
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+debug
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220308/arm6=
+4/defconfig+debug/gcc-10/lab-baylibre/baseline-meson-gxbb-nanopi-k2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220308/arm6=
+4/defconfig+debug/gcc-10/lab-baylibre/baseline-meson-gxbb-nanopi-k2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220228.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/622734680f6deeba65c62=
+96a
+        failing since 56 days (last pass: next-20220106, first fail: next-2=
+0220110) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+meson-gxbb-p200              | arm64  | lab-baylibre  | gcc-10   | defconfi=
+g                    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6227514f30f14b8081c62968
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220308/arm6=
+4/defconfig/gcc-10/lab-baylibre/baseline-meson-gxbb-p200.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220308/arm6=
+4/defconfig/gcc-10/lab-baylibre/baseline-meson-gxbb-p200.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220228.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6227514f30f14b8081c62=
+969
+        new failure (last pass: next-20220217) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+minnowboard-turbot-E3826     | x86_64 | lab-collabora | gcc-10   | x86_64_d=
+efconfig+debug       | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62273cb388df8e9888c62968
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+debug
+  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220308/x86_=
+64/x86_64_defconfig+debug/gcc-10/lab-collabora/baseline-minnowboard-turbot-=
+E3826.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220308/x86_=
+64/x86_64_defconfig+debug/gcc-10/lab-collabora/baseline-minnowboard-turbot-=
+E3826.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220228.1/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62273cb388df8e9888c62=
+969
+        new failure (last pass: next-20220304) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+ox820-clouden...lug-series-3 | arm    | lab-baylibre  | gcc-10   | oxnas_v6=
+_defconfig           | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62272d4a3474441bc5c6297f
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: oxnas_v6_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220308/arm/=
+oxnas_v6_defconfig/gcc-10/lab-baylibre/baseline-ox820-cloudengines-pogoplug=
+-series-3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220308/arm/=
+oxnas_v6_defconfig/gcc-10/lab-baylibre/baseline-ox820-cloudengines-pogoplug=
+-series-3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220228.1/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62272d4a3474441bc5c62=
+980
+        failing since 4 days (last pass: next-20220301, first fail: next-20=
+220303) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+panda                        | arm    | lab-baylibre  | gcc-10   | omap2plu=
+s_defconfig          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62272f9f492ca75b61c62997
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: omap2plus_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220308/arm/=
+omap2plus_defconfig/gcc-10/lab-baylibre/baseline-panda.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220308/arm/=
+omap2plus_defconfig/gcc-10/lab-baylibre/baseline-panda.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220228.1/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62272f9f492ca75b61c62=
+998
+        failing since 3 days (last pass: next-20220201, first fail: next-20=
+220304) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+qemu_arm-vexpress-a9         | arm    | lab-baylibre  | gcc-10   | vexpress=
+_defconfig           | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62272e27d7f22b8615c629a3
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: vexpress_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220308/arm/=
+vexpress_defconfig/gcc-10/lab-baylibre/baseline-qemu_arm-vexpress-a9.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220308/arm/=
+vexpress_defconfig/gcc-10/lab-baylibre/baseline-qemu_arm-vexpress-a9.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220228.1/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62272e27d7f22b8615c62=
+9a4
+        failing since 4 days (last pass: next-20220201, first fail: next-20=
+220303) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+qemu_i386                    | i386   | lab-baylibre  | gcc-10   | i386_def=
+config+debug         | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62272e16d7f22b8615c62968
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: i386_defconfig+debug
+  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220308/i386=
+/i386_defconfig+debug/gcc-10/lab-baylibre/baseline-qemu_i386.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220308/i386=
+/i386_defconfig+debug/gcc-10/lab-baylibre/baseline-qemu_i386.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220228.1/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62272e16d7f22b8615c62=
+969
+        failing since 3 days (last pass: next-20220303, first fail: next-20=
+220304) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+qemu_i386-uefi               | i386   | lab-baylibre  | gcc-10   | i386_def=
+config+debug         | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62272e17d7f22b8615c6296b
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: i386_defconfig+debug
+  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220308/i386=
+/i386_defconfig+debug/gcc-10/lab-baylibre/baseline-qemu_i386-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220308/i386=
+/i386_defconfig+debug/gcc-10/lab-baylibre/baseline-qemu_i386-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220228.1/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62272e17d7f22b8615c62=
+96c
+        failing since 3 days (last pass: next-20220303, first fail: next-20=
+220304) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+qemu_x86_64                  | x86_64 | lab-baylibre  | gcc-10   | x86_64_d=
+efconfig+debug       | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/622734a6780ff96b34c62992
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+debug
+  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220308/x86_=
+64/x86_64_defconfig+debug/gcc-10/lab-baylibre/baseline-qemu_x86_64.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220308/x86_=
+64/x86_64_defconfig+debug/gcc-10/lab-baylibre/baseline-qemu_x86_64.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220228.1/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/622734a6780ff96b34c62=
+993
+        failing since 3 days (last pass: next-20220303, first fail: next-20=
+220304) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+qemu_x86_64-uefi             | x86_64 | lab-baylibre  | gcc-10   | x86_64_d=
+efconfig+debug       | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6227350a8cedf3a8cdc62986
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+debug
+  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220308/x86_=
+64/x86_64_defconfig+debug/gcc-10/lab-baylibre/baseline-qemu_x86_64-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220308/x86_=
+64/x86_64_defconfig+debug/gcc-10/lab-baylibre/baseline-qemu_x86_64-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220228.1/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6227350a8cedf3a8cdc62=
+987
+        failing since 3 days (last pass: next-20220303, first fail: next-20=
+220304) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+qemu_x86_64-uefi-mixed       | x86_64 | lab-baylibre  | gcc-10   | x86_64_d=
+efconfig+debug       | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62273558d400b7accac62974
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+debug
+  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220308/x86_=
+64/x86_64_defconfig+debug/gcc-10/lab-baylibre/baseline-qemu_x86_64-uefi-mix=
+ed.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220308/x86_=
+64/x86_64_defconfig+debug/gcc-10/lab-baylibre/baseline-qemu_x86_64-uefi-mix=
+ed.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220228.1/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62273558d400b7accac62=
+975
+        failing since 3 days (last pass: next-20220303, first fail: next-20=
+220304) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+r8a77950-salvator-x          | arm64  | lab-baylibre  | gcc-10   | defconfi=
+g+CON...OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/622732733ba22ada96c62969
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220308/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-r8a77950=
+-salvator-x.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220308/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/baseline-r8a77950=
+-salvator-x.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220228.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/622732733ba22ada96c62=
+96a
+        new failure (last pass: next-20220304) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+zynqmp-zcu102                | arm64  | lab-cip       | gcc-10   | defconfi=
+g+debug              | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62273140c52f30bffec6296b
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+debug
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220308/arm6=
+4/defconfig+debug/gcc-10/lab-cip/baseline-zynqmp-zcu102.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220308/arm6=
+4/defconfig+debug/gcc-10/lab-cip/baseline-zynqmp-zcu102.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220228.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62273140c52f30bffec62=
+96c
+        failing since 3 days (last pass: next-20220303, first fail: next-20=
+220304) =
+
+ =20

@@ -2,43 +2,48 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D8154D317F
-	for <lists+linux-next@lfdr.de>; Wed,  9 Mar 2022 16:10:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EF2D4D378F
+	for <lists+linux-next@lfdr.de>; Wed,  9 Mar 2022 18:45:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233540AbiCIPLf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 9 Mar 2022 10:11:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37688 "EHLO
+        id S236140AbiCIQqm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 9 Mar 2022 11:46:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233603AbiCIPLe (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 9 Mar 2022 10:11:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49FB8A647B;
-        Wed,  9 Mar 2022 07:10:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E19B4B82200;
-        Wed,  9 Mar 2022 15:10:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF819C340F4;
-        Wed,  9 Mar 2022 15:10:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646838632;
-        bh=HW6Lkz1+wwMQvCFCzrUzcgIzsEbj2Xvy0+6Wzf4FlwY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=LGhLLa6WQZwwbOvrvE8SdNp/PVxstQcAKsfzBHxZoCY2eRahiO4DqB45w3O02pmga
-         LLAc2B7q31qxwDpCXzDZHymzbuaKd14QF/KvaajyHI5vpzeMeZsnyumQfEU0Jh9G/2
-         velrEIq7E/uFEIVK6aZm+xNJbR0ZEl3Ik9yIsjiGPDscMfIhJKaedP3Bwh1npXTI0b
-         hXdIiiVujtBXv0oq224S+MhJbcbWHVw1KtUMq68/CACe5wCB9GuCzd8oz6BFirqa+p
-         ka+Dtz/j5MajKEN/zho5f1nKjOt33yJQwgMCSlomOguD3seQx5Om3v/7y/wr/yyajP
-         9ptheUk809JDQ==
-Received: by mail-yb1-f178.google.com with SMTP id h126so5031873ybc.1;
-        Wed, 09 Mar 2022 07:10:32 -0800 (PST)
-X-Gm-Message-State: AOAM533NHuZ49tziH3jrAJxmWg9g2bGjiVugzZ3DM8OpddjG0IAfBd9Z
-        UpYT4HgGkS9DwrsFXjNm503elzrSw4TWKyUkq+c=
-X-Google-Smtp-Source: ABdhPJzx5u3nDic/3NGork/wE0Eh6ZeiSg3n7IH/fjWdHYj5xLNZiTNQkVuz3X16fIODQIFlxy4WRQb2U5gnUC/dInA=
-X-Received: by 2002:a25:df4e:0:b0:629:547b:d83a with SMTP id
- w75-20020a25df4e000000b00629547bd83amr98521ybg.432.1646838631682; Wed, 09 Mar
- 2022 07:10:31 -0800 (PST)
+        with ESMTP id S233478AbiCIQpQ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 9 Mar 2022 11:45:16 -0500
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDE4A3466B
+        for <linux-next@vger.kernel.org>; Wed,  9 Mar 2022 08:38:38 -0800 (PST)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-2dc0364d2ceso29338947b3.7
+        for <linux-next@vger.kernel.org>; Wed, 09 Mar 2022 08:38:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FYem1Pt/Xe9Lh/kXSus3+7B7F4+IckmOlwawpP7mogA=;
+        b=pe0TRecPrltVfciFdizjQSCxwxWp6DJOZb6bed+UsJamf1GlcRlaSr6xxRhVBUHApu
+         gbDXHSOskTCcRjMM86GcKJuwZd8ag3Di6bZDAEmyxfosweVlE8LkrLQIKzRe7Z+TYsNr
+         LoFthUEGmvtTACjAAmMyJ93MmEpBQWQ7dJuoyZ/mH5R4GIXRzCSPMSNQgfZ7q64t+cbZ
+         cJ0VYdQKbsbOgjuJEZ3RweSw5TB1A+o6fNDau++YDHFaV9w6hn8XEm4ElYJ/oPBMruYr
+         +rWeFUsbRphdfweEKvy/H0SRfjWskp5XVvZS/MD6wSi5bp/LV2ZWzGBbpVqmyDrlZzvI
+         sZaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FYem1Pt/Xe9Lh/kXSus3+7B7F4+IckmOlwawpP7mogA=;
+        b=NJc7Q4Q85tAfzgwYmRFBk9WdNu6bg2ESEvgzsrX6UP53Bf7cGxQ/iYgldMda+UC9zk
+         m11BAeuzH+LrFFYbY1LnjEqKqEdu9KIeCg6D7mr+4f9tB60G60qXWhO9FSkEK1qOi4ss
+         NoZN+NXwBoPua+VgmNg65lIAlxKGkQek2dEIvQVTVt/4qgRCqW4SUTNLNg9cnvuer3zG
+         Ls7jxqdy+H/a3wpl15jTztQmlbbZ4L9Zu3oCo31Rr+j8KQBN2es4fd5QpYCVYOgiTa/l
+         hPvHjbu0SCgcFJLTuE84h9NjJsLRfhLt0DX6Q9Gs1VcQxsLIsojuTYY7qPUJW4y+1Fv6
+         fgIg==
+X-Gm-Message-State: AOAM532gdqb7qNRiNhSUrxm1Ezb4tUi1MU/69G7xJ7OAKNJlzofaCer0
+        a1DU5cHS3VWkSUAowsj06s70m6asoKqR2O3RoWnivw==
+X-Google-Smtp-Source: ABdhPJy+ds2lSwlGEfqaJaQYi0bp8LMxsaCcGaBI0XNqMMJDHIY4lSe3/bruwhh+507hh0NIPNVtx8zXSaoWDd8Ml2w=
+X-Received: by 2002:a81:2f12:0:b0:2d7:d366:164a with SMTP id
+ v18-20020a812f12000000b002d7d366164amr521610ywv.265.1646843917980; Wed, 09
+ Mar 2022 08:38:37 -0800 (PST)
 MIME-Version: 1.0
 References: <CA+G9fYtpy8VgK+ag6OsA9TDrwi5YGU4hu7GM8xwpO7v6LrCD4Q@mail.gmail.com>
  <YiiDZ7jjG38gqP+Q@shell.armlinux.org.uk> <CAMj1kXHTdk1Abm7ShoZzrW6EpM9eyFMPSdaa58Ziie4ZMecCnQ@mail.gmail.com>
@@ -46,13 +51,12 @@ References: <CA+G9fYtpy8VgK+ag6OsA9TDrwi5YGU4hu7GM8xwpO7v6LrCD4Q@mail.gmail.com>
  <CA+G9fYt73AYs=z-BeZh22RBp==sf73pKky6m4iPSH7a4FssK7w@mail.gmail.com>
  <CAMj1kXEFZVeWLaRQJmwO+Nn6uW4q6vXJOaNNTVKju1p2bMQksA@mail.gmail.com> <YijCkHHhpleeADAO@shell.armlinux.org.uk>
 In-Reply-To: <YijCkHHhpleeADAO@shell.armlinux.org.uk>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Wed, 9 Mar 2022 16:10:20 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXHRb6JSmA9Jx8ude+14US1S1XvzZg9i2QSnhF_8FP7h6A@mail.gmail.com>
-Message-ID: <CAMj1kXHRb6JSmA9Jx8ude+14US1S1XvzZg9i2QSnhF_8FP7h6A@mail.gmail.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 9 Mar 2022 22:08:25 +0530
+Message-ID: <CA+G9fYtjrAMg8TykZdRyZEfRthyqom_73x87F-60C_QFeEL8Bg@mail.gmail.com>
 Subject: Re: [next] arm: Internal error: Oops: 5 PC is at __read_once_word_nocheck
 To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
         open list <linux-kernel@vger.kernel.org>,
         Linux-Next Mailing List <linux-next@vger.kernel.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
@@ -61,8 +65,8 @@ Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
         Corentin Labbe <clabbe.montjoie@gmail.com>,
         Stephen Rothwell <sfr@canb.auug.org.au>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,40 +75,15 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, 9 Mar 2022 at 16:07, Russell King (Oracle)
+Hi Russell,
+
+On Wed, 9 Mar 2022 at 20:37, Russell King (Oracle)
 <linux@armlinux.org.uk> wrote:
 >
 > On Wed, Mar 09, 2022 at 03:57:32PM +0100, Ard Biesheuvel wrote:
 > > On Wed, 9 Mar 2022 at 15:44, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
 > > >
-> > > On Wed, 9 Mar 2022 at 19:37, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
-> > > >
-> > > > On Wed, 9 Mar 2022 at 16:16, Ard Biesheuvel <ardb@kernel.org> wrote:
-> > > > >
-> > > > > On Wed, 9 Mar 2022 at 11:37, Russell King (Oracle)
-> > > > > <linux@armlinux.org.uk> wrote:
-> > > > > >
-> > > > > > On Wed, Mar 09, 2022 at 03:18:12PM +0530, Naresh Kamboju wrote:
-> > > > > > > While boting linux next-20220308 on BeagleBoard-X15 and qemu arm the following
-> > > > > > > kernel crash reported which is CONFIG_KASAN enabled build [1] & [2].
-> > > > > >
-> > > > > > The unwinder is currently broken in linux-next. Please try reverting
-> > > > > > 532319b9c418 ("ARM: unwind: disregard unwind info before stack frame is
-> > > > > > set up")
-> > >
-> > > I have reverted the suggested commit and built and boot failed due to reported
-> > > kernel crash [1].
-> > >
-> > > - Naresh
-> > >
-> >
-> > Thanks Naresh,
-> >
-> > This looks like it might be related to the issue Russell just sent a fix for:
-> > https://lore.kernel.org/linux-arm-kernel/CAMj1kXEqp2UmsyUe1eWErtpMk3dGEFZyyno3nqydC_ML0bwTLw@mail.gmail.com/T/#t
-> >
-> > Could you please try that?
->
+<trim>
 > Well, we unwound until:
 >
 >  __irq_svc from migrate_disable+0x0/0x70
@@ -119,36 +98,22 @@ On Wed, 9 Mar 2022 at 16:07, Russell King (Oracle)
 > growing bigger and bigger.
 >
 > I'd suggest also testing without the revert but with my patch.
->
 
-Indeed.
+I have tested your patch on top of linux next-20220309 and still see kernel
+crash as below [1]. build link [2].
 
-And as I suggested the other day, maybe it wouldn't be so bad to
-harden the vsp dereference, like below:
+[   26.812060] 8<--- cut here ---
+[   26.813459] Unhandled fault: page domain fault (0x01b) at 0xb6a3ab70
+[   26.816139] [b6a3ab70] *pgd=fb28a835
+[   26.817770] Internal error: : 1b [#1] SMP ARM
+[   26.819636] Modules linked in:
+[   26.820956] CPU: 0 PID: 211 Comm: haveged Not tainted
+5.17.0-rc7-next-20220309 #1
+[   26.824519] Hardware name: Generic DT based system
+[   26.827148] PC is at __read_once_word_nocheck+0x0/0x8
+[   26.829856] LR is at unwind_frame+0x7dc/0xab4
 
---- a/arch/arm/kernel/unwind.c
-+++ b/arch/arm/kernel/unwind.c
-@@ -27,6 +27,7 @@
- #include <linux/sched.h>
- #include <linux/slab.h>
- #include <linux/spinlock.h>
-+#include <linux/uaccess.h>
- #include <linux/list.h>
+- Naresh
 
- #include <asm/sections.h>
-@@ -236,10 +237,11 @@ static int unwind_pop_register(struct
-unwind_ctrl_block *ctrl,
-                if (*vsp >= (unsigned long *)ctrl->sp_high)
-                        return -URC_FAILURE;
-
--       /* Use READ_ONCE_NOCHECK here to avoid this memory access
--        * from being tracked by KASAN.
-+       /* Use get_kernel_nofault() here to avoid this memory access
-+        * from causing a fatal fault, and from being tracked by KASAN.
-         */
--       ctrl->vrs[reg] = READ_ONCE_NOCHECK(*(*vsp));
-+       if (get_kernel_nofault(ctrl->vrs[reg], *vsp))
-+               return -URC_FAILURE;
-        if (reg == 14)
-                ctrl->lr_addr = *vsp;
-        (*vsp)++;
+[1] https://lkft.validation.linaro.org/scheduler/job/4688599#L596
+[2] https://builds.tuxbuild.com/269gYLGuAdmltuLhIUDAjS2fg1Q/

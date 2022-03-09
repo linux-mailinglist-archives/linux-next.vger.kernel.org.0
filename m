@@ -2,110 +2,1311 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17EA94D28FF
-	for <lists+linux-next@lfdr.de>; Wed,  9 Mar 2022 07:31:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AB694D2979
+	for <lists+linux-next@lfdr.de>; Wed,  9 Mar 2022 08:31:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbiCIGcb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 9 Mar 2022 01:32:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44970 "EHLO
+        id S230319AbiCIHcF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 9 Mar 2022 02:32:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230041AbiCIGca (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 9 Mar 2022 01:32:30 -0500
-Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33FF216203A;
-        Tue,  8 Mar 2022 22:31:32 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0V6hi7Gt_1646807489;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0V6hi7Gt_1646807489)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 09 Mar 2022 14:31:30 +0800
-Message-ID: <1646807409.605431-1-xuanzhuo@linux.alibaba.com>
-Subject: Re: linux-next: build warning after merge of the vhost tree
-Date:   Wed, 9 Mar 2022 14:30:09 +0800
-From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-References: <20220307154011.6d456f28@canb.auug.org.au>
- <1646635600.9436276-1-xuanzhuo@linux.alibaba.com>
- <20220307211242.59fc0f0e@canb.auug.org.au>
- <20220307060012-mutt-send-email-mst@kernel.org>
- <20220309171300.0500a07e@canb.auug.org.au>
- <1646806544.818761-1-xuanzhuo@linux.alibaba.com>
-In-Reply-To: <1646806544.818761-1-xuanzhuo@linux.alibaba.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S230093AbiCIHcE (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 9 Mar 2022 02:32:04 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D3E46A011
+        for <linux-next@vger.kernel.org>; Tue,  8 Mar 2022 23:31:03 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id t14so1270667pgr.3
+        for <linux-next@vger.kernel.org>; Tue, 08 Mar 2022 23:31:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=CXC9KSwH91mUVMmTyS5iYQViku2Wl5E9DNacyU3xAtU=;
+        b=DHg/Eu690h3iAKjwMcT/bKwTUTA/Hrly8P+AXSHo8mmIDotbFVejYBzIqRSnL/iDnW
+         YGhniXdQMBA/6+GO6QV6BixiWss/ilZnKFQI3euPPxHcalg4UEIKCjCf4ecXp+zwOxZ0
+         LUCVryt7C+Z/LURHsioJNKtip0gTHF+tNEyZz+kYVasojiwRyHqsF2/D4mfK85BNKdag
+         ACsaU1Ft8+gdq5AUxwI5BlJBvPJDY3GHm7PLd7Dg4snZmDVN7cQJwbO9LbxUJgBnJYFp
+         JCddd4hkLCpaT17xPw/xp1st+OKkPuITpppoV1yuwD6masuD8CkCcfXcQJluWO0nvyuG
+         /gUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=CXC9KSwH91mUVMmTyS5iYQViku2Wl5E9DNacyU3xAtU=;
+        b=hS1NtbP/otOBuRggOS0UqOOSqPJda8rRaZWflzHtYOwNK9FzU/Ty9IphY+ubn/SbZz
+         Aq1ifkIlXPCv6FeBqtq6lCsBpY1sdUfn3ysYe4C9pIS8pTmaKl9SHVH83i9ZvPeSFyvx
+         Yf29j5+4LPBslofy7dgyDoPXb0w7AYpLJsakughhIUkQMo3/srniZczUQaRHIN1xkexM
+         nXtMXwtFO/fNGIjnsGaa1+Cb8QUSfKJGsRr20v6D4Zbjbt+v0kXLe5uoSMRE3YZGAddX
+         Q/ohT0Gbv0ezv0LTsYdhlD3jrpMFuWeQQ5S0BF2bO9s/Bj1znq/z0D2/HsKkM30YOEx5
+         1Few==
+X-Gm-Message-State: AOAM5330nozrfjLaAPVP4h2VTaj3rABK87b8f5valIzE0z3jG40jE72/
+        bMpq9RdRs7fspd+OoZ0DQkTnHgfTIu8BFmLgE4Q=
+X-Google-Smtp-Source: ABdhPJzgenhS0sNcfO5nEb9ZlCyTvSSZ3UL8XbX1Ooavej+Mkzg9CpLYaBQ42AhlCnVfg9qX4PtIag==
+X-Received: by 2002:a63:d252:0:b0:363:271c:fe63 with SMTP id t18-20020a63d252000000b00363271cfe63mr17699424pgi.524.1646811061922;
+        Tue, 08 Mar 2022 23:31:01 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id t7-20020a056a0021c700b004f737480bb8sm1505637pfj.4.2022.03.08.23.31.01
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Mar 2022 23:31:01 -0800 (PST)
+Message-ID: <622857b5.1c69fb81.607d.442e@mx.google.com>
+Date:   Tue, 08 Mar 2022 23:31:01 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Tree: next
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Kernel: v5.17-rc7-200-gfb8a41b34095
+Subject: next/pending-fixes build: 179 builds: 15 failed, 164 passed, 76 errors,
+ 5 warnings (v5.17-rc7-200-gfb8a41b34095)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, 9 Mar 2022 14:15:44 +0800, Xuan Zhuo <xuanzhuo@linux.alibaba.com> wrote:
-> On Wed, 9 Mar 2022 17:13:00 +1100, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> > Hi Michael,
-> >
-> > On Mon, 7 Mar 2022 06:00:27 -0500 "Michael S. Tsirkin" <mst@redhat.com> wrote:
-> > >
-> > > On Mon, Mar 07, 2022 at 09:12:42PM +1100, Stephen Rothwell wrote:
-> > > >
-> > > > On Mon, 7 Mar 2022 14:46:40 +0800 Xuan Zhuo <xuanzhuo@linux.alibaba.com> wrote:
-> > > > >
-> > > > > Can you help me test this patch? I don't have an arm environment around me.
-> > > > >
-> > > > > Thanks
-> > > > >
-> > > > >
-> > > > > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> > > > > index 1fa2d632a994..4d629d1ea894 100644
-> > > > > --- a/drivers/net/virtio_net.c
-> > > > > +++ b/drivers/net/virtio_net.c
-> > > > > @@ -1820,7 +1820,7 @@ static int virtnet_rx_vq_reset(struct virtnet_info *vi,
-> > > > >
-> > > > >  err:
-> > > > >         netdev_err(vi->dev,
-> > > > > -                  "reset rx reset vq fail: rx queue index: %ld err: %d\n",
-> > > > > +                  "reset rx reset vq fail: rx queue index: %td err: %d\n",
-> > > > >                    rq - vi->rq, err);
-> > > > >         virtnet_napi_enable(rq->vq, &rq->napi);
-> > > > >         return err;
-> > > > > @@ -1870,7 +1870,7 @@ static int virtnet_tx_vq_reset(struct virtnet_info *vi,
-> > > > >
-> > > > >  err:
-> > > > >         netdev_err(vi->dev,
-> > > > > -                  "reset tx reset vq fail: tx queue index: %ld err: %d\n",
-> > > > > +                  "reset tx reset vq fail: tx queue index: %td err: %d\n",
-> > > > >                    sq - vi->sq, err);
-> > > > >         virtnet_napi_tx_enable(vi, sq->vq, &sq->napi);
-> > > > >         return err;
-> > > >
-> > > > I had to apply that by hand, but it does work.
-> > > >
-> > > > Tested-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > >
-> > > OK, I squashed this into the problematic patch. Thanks a lot!
-> >
-> > The warnings have reappeared today :-( and this fixup is not applied.
-> > Something got lost in the rebase/rewrite?
->
-> Sorry for that.
->
-> The patch of the fix I submitted before was not merged locally. When the patch
-> set of v7 was released yesterday, this fix patch was not included.
+next/pending-fixes build: 179 builds: 15 failed, 164 passed, 76 errors, 5 w=
+arnings (v5.17-rc7-200-gfb8a41b34095)
 
-I see that Jason is reviewing, and when he completes the review, I will re-post
-the patch set. And according to his meaning, it will be split into two patch
-sets.
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v5.17-rc7-200-gfb8a41b34095/
 
-Thanks.
+Tree: next
+Branch: pending-fixes
+Git Describe: v5.17-rc7-200-gfb8a41b34095
+Git Commit: fb8a41b34095f3699c85326f6c326f86a7af4185
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 7 unique architectures
 
+Build Failures Detected:
 
->
->
-> > --
-> > Cheers,
-> > Stephen Rothwell
-> >
+arm:
+    allmodconfig: (gcc-10) FAIL
+    aspeed_g5_defconfig: (gcc-10) FAIL
+    bcm2835_defconfig: (gcc-10) FAIL
+    cns3420vb_defconfig: (gcc-10) FAIL
+    imx_v6_v7_defconfig: (gcc-10) FAIL
+    omap2plus_defconfig: (gcc-10) FAIL
+    oxnas_v6_defconfig: (gcc-10) FAIL
+    qcom_defconfig: (gcc-10) FAIL
+    realview_defconfig: (gcc-10) FAIL
+    rpc_defconfig: (gcc-10) FAIL
+    vt8500_v6_v7_defconfig: (gcc-10) FAIL
+
+mips:
+    decstation_64_defconfig: (gcc-10) FAIL
+    ip27_defconfig: (gcc-10) FAIL
+    ip28_defconfig: (gcc-10) FAIL
+
+x86_64:
+    allmodconfig: (gcc-10) FAIL
+
+Errors and Warnings Detected:
+
+arc:
+
+arm64:
+
+arm:
+    allmodconfig (gcc-10): 19 errors
+    aspeed_g5_defconfig (gcc-10): 2 errors
+    bcm2835_defconfig (gcc-10): 10 errors
+    cns3420vb_defconfig (gcc-10): 7 errors
+    imx_v6_v7_defconfig (gcc-10): 3 errors
+    omap2plus_defconfig (gcc-10): 9 errors
+    oxnas_v6_defconfig (gcc-10): 7 errors
+    qcom_defconfig (gcc-10): 1 error
+    realview_defconfig (gcc-10): 10 errors
+    rpc_defconfig (gcc-10): 2 errors
+    vt8500_v6_v7_defconfig (gcc-10): 2 errors
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
+    32r2el_defconfig+kselftest (gcc-10): 1 warning
+    ci20_defconfig (gcc-10): 1 warning
+    fuloong2e_defconfig (gcc-10): 1 error
+    lemote2f_defconfig (gcc-10): 1 error
+
+riscv:
+
+x86_64:
+    allmodconfig (gcc-10): 2 errors
+    x86_64_defconfig+debug (gcc-10): 2 warnings
+
+Errors summary:
+
+    9    arch/arm/kernel/entry-common.S:175: Error: co-processor register e=
+xpected -- `mcr p15,0,r0,c7,r5,4'
+    9    arch/arm/kernel/entry-common.S:166: Error: co-processor register e=
+xpected -- `mcr p15,0,r0,c7,r5,4'
+    5    arch/arm/mm/cache-v7.S:69: Error: co-processor register expected -=
+- `mcr p15,0,r0,c7,r5,4'
+    5    arch/arm/mm/cache-v7.S:42: Error: co-processor register expected -=
+- `mcr p15,0,r0,c7,r5,4'
+    5    arch/arm/mm/cache-v7.S:312: Error: co-processor register expected =
+-- `mcr p15,0,r0,c7,r5,4'
+    5    arch/arm/mm/cache-v7.S:179: Error: co-processor register expected =
+-- `mcr p15,0,r0,c7,r5,4'
+    5    arch/arm/mm/cache-v7.S:142: Error: co-processor register expected =
+-- `mcr p15,0,r0,c7,r5,4'
+    3    arch/arm/common/secure_cntvoff.S:29: Error: co-processor register =
+expected -- `mcr p15,0,r0,c7,r5,4'
+    3    arch/arm/common/secure_cntvoff.S:27: Error: co-processor register =
+expected -- `mcr p15,0,r0,c7,r5,4'
+    3    arch/arm/common/secure_cntvoff.S:24: Error: co-processor register =
+expected -- `mcr p15,0,r0,c7,r5,4'
+    2    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=
+=80=98-mhard-float=E2=80=99
+    2    arch/arm/mach-omap2/sleep44xx.S:91: Error: co-processor register e=
+xpected -- `mcr p15,0,r0,c7,r5,4'
+    2    arch/arm/mach-omap2/sleep44xx.S:342: Error: co-processor register =
+expected -- `mcr p15,0,r0,c7,r5,4'
+    2    arch/arm/mach-omap2/sleep44xx.S:274: Error: co-processor register =
+expected -- `mcr p15,0,r0,c7,r5,4'
+    2    arch/arm/mach-omap2/sleep44xx.S:223: Error: co-processor register =
+expected -- `mcr p15,0,r0,c7,r5,4'
+    2    arch/arm/mach-omap2/sleep44xx.S:205: Error: co-processor register =
+expected -- `mcr p15,0,r0,c7,r5,4'
+    2    arch/arm/mach-omap2/sleep44xx.S:193: Error: co-processor register =
+expected -- `mcr p15,0,r0,c7,r5,4'
+    2    arch/arm/mach-omap2/sleep44xx.S:131: Error: co-processor register =
+expected -- `mcr p15,0,r0,c7,r5,4'
+    2    arch/arm/mach-imx/suspend-imx6.S:315: Error: co-processor register=
+ expected -- `mcr p15,0,r0,c7,r5,4'
+    2    /usr/lib/gcc/x86_64-linux-gnu/10/plugin/include/config/i386/i386.h=
+:2500:10: fatal error: common/config/i386/i386-cpuinfo.h: No such file or d=
+irectory
+    1    arch/arm/mach-socfpga/self-refresh.S:77: Error: co-processor regis=
+ter expected -- `mcr p15,0,r0,c7,r5,4'
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
+=3D0x'
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
+=3D0x'
+    1    /tmp/kci/linux/build/../drivers/gpu/drm/panel/panel-edp.c:843: und=
+efined reference to `drm_panel_dp_aux_backlight'
+
+Warnings summary:
+
+    2    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+    1    lib/strnlen_user.o: warning: objtool: strnlen_user()+0x5d: call to=
+ do_strnlen_user() with UACCESS enabled
+    1    lib/strncpy_from_user.o: warning: objtool: strncpy_from_user()+0x8=
+a: call to do_strncpy_from_user() with UACCESS enabled
+    1    arch/mips/boot/dts/ingenic/jz4780.dtsi:513.33-515.6: Warning (unit=
+_address_format): /nemc@13410000/efuse@d0/eth-mac-addr@0x22: unit name shou=
+ld not have leading "0x"
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+kselftest (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warni=
+ng, 0 section mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (x86_64, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 secti=
+on mismatches
+
+Errors:
+    /usr/lib/gcc/x86_64-linux-gnu/10/plugin/include/config/i386/i386.h:2500=
+:10: fatal error: common/config/i386/i386-cpuinfo.h: No such file or direct=
+ory
+    /usr/lib/gcc/x86_64-linux-gnu/10/plugin/include/config/i386/i386.h:2500=
+:10: fatal error: common/config/i386/i386-cpuinfo.h: No such file or direct=
+ory
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, gcc-10) =E2=80=94 FAIL, 19 errors, 0 warnings, 0 section=
+ mismatches
+
+Errors:
+    arch/arm/common/secure_cntvoff.S:24: Error: co-processor register expec=
+ted -- `mcr p15,0,r0,c7,r5,4'
+    arch/arm/common/secure_cntvoff.S:27: Error: co-processor register expec=
+ted -- `mcr p15,0,r0,c7,r5,4'
+    arch/arm/common/secure_cntvoff.S:29: Error: co-processor register expec=
+ted -- `mcr p15,0,r0,c7,r5,4'
+    arch/arm/kernel/entry-common.S:166: Error: co-processor register expect=
+ed -- `mcr p15,0,r0,c7,r5,4'
+    arch/arm/kernel/entry-common.S:175: Error: co-processor register expect=
+ed -- `mcr p15,0,r0,c7,r5,4'
+    arch/arm/mm/cache-v7.S:42: Error: co-processor register expected -- `mc=
+r p15,0,r0,c7,r5,4'
+    arch/arm/mm/cache-v7.S:69: Error: co-processor register expected -- `mc=
+r p15,0,r0,c7,r5,4'
+    arch/arm/mm/cache-v7.S:142: Error: co-processor register expected -- `m=
+cr p15,0,r0,c7,r5,4'
+    arch/arm/mm/cache-v7.S:179: Error: co-processor register expected -- `m=
+cr p15,0,r0,c7,r5,4'
+    arch/arm/mm/cache-v7.S:312: Error: co-processor register expected -- `m=
+cr p15,0,r0,c7,r5,4'
+    arch/arm/mach-socfpga/self-refresh.S:77: Error: co-processor register e=
+xpected -- `mcr p15,0,r0,c7,r5,4'
+    arch/arm/mach-imx/suspend-imx6.S:315: Error: co-processor register expe=
+cted -- `mcr p15,0,r0,c7,r5,4'
+    arch/arm/mach-omap2/sleep44xx.S:91: Error: co-processor register expect=
+ed -- `mcr p15,0,r0,c7,r5,4'
+    arch/arm/mach-omap2/sleep44xx.S:131: Error: co-processor register expec=
+ted -- `mcr p15,0,r0,c7,r5,4'
+    arch/arm/mach-omap2/sleep44xx.S:193: Error: co-processor register expec=
+ted -- `mcr p15,0,r0,c7,r5,4'
+    arch/arm/mach-omap2/sleep44xx.S:205: Error: co-processor register expec=
+ted -- `mcr p15,0,r0,c7,r5,4'
+    arch/arm/mach-omap2/sleep44xx.S:223: Error: co-processor register expec=
+ted -- `mcr p15,0,r0,c7,r5,4'
+    arch/arm/mach-omap2/sleep44xx.S:274: Error: co-processor register expec=
+ted -- `mcr p15,0,r0,c7,r5,4'
+    arch/arm/mach-omap2/sleep44xx.S:342: Error: co-processor register expec=
+ted -- `mcr p15,0,r0,c7,r5,4'
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+ar7_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 s=
+ection mismatches
+
+Errors:
+    arch/arm/kernel/entry-common.S:166: Error: co-processor register expect=
+ed -- `mcr p15,0,r0,c7,r5,4'
+    arch/arm/kernel/entry-common.S:175: Error: co-processor register expect=
+ed -- `mcr p15,0,r0,c7,r5,4'
+
+---------------------------------------------------------------------------=
+-----
+assabet_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath25_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath79_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axm55xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+badge4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm2835_defconfig (arm, gcc-10) =E2=80=94 FAIL, 10 errors, 0 warnings, 0 se=
+ction mismatches
+
+Errors:
+    arch/arm/kernel/entry-common.S:166: Error: co-processor register expect=
+ed -- `mcr p15,0,r0,c7,r5,4'
+    arch/arm/kernel/entry-common.S:175: Error: co-processor register expect=
+ed -- `mcr p15,0,r0,c7,r5,4'
+    arch/arm/common/secure_cntvoff.S:24: Error: co-processor register expec=
+ted -- `mcr p15,0,r0,c7,r5,4'
+    arch/arm/common/secure_cntvoff.S:27: Error: co-processor register expec=
+ted -- `mcr p15,0,r0,c7,r5,4'
+    arch/arm/common/secure_cntvoff.S:29: Error: co-processor register expec=
+ted -- `mcr p15,0,r0,c7,r5,4'
+    arch/arm/mm/cache-v7.S:42: Error: co-processor register expected -- `mc=
+r p15,0,r0,c7,r5,4'
+    arch/arm/mm/cache-v7.S:69: Error: co-processor register expected -- `mc=
+r p15,0,r0,c7,r5,4'
+    arch/arm/mm/cache-v7.S:142: Error: co-processor register expected -- `m=
+cr p15,0,r0,c7,r5,4'
+    arch/arm/mm/cache-v7.S:179: Error: co-processor register expected -- `m=
+cr p15,0,r0,c7,r5,4'
+    arch/arm/mm/cache-v7.S:312: Error: co-processor register expected -- `m=
+cr p15,0,r0,c7,r5,4'
+
+---------------------------------------------------------------------------=
+-----
+bcm47xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm63xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+bigsur_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bmips_be_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+bmips_stb_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+capcella_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+cavium_octeon_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cerfcube_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+ci20_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    arch/mips/boot/dts/ingenic/jz4780.dtsi:513.33-515.6: Warning (unit_addr=
+ess_format): /nemc@13410000/efuse@d0/eth-mac-addr@0x22: unit name should no=
+t have leading "0x"
+
+---------------------------------------------------------------------------=
+-----
+cm_x300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+cns3420vb_defconfig (arm, gcc-10) =E2=80=94 FAIL, 7 errors, 0 warnings, 0 s=
+ection mismatches
+
+Errors:
+    arch/arm/kernel/entry-common.S:166: Error: co-processor register expect=
+ed -- `mcr p15,0,r0,c7,r5,4'
+    arch/arm/kernel/entry-common.S:175: Error: co-processor register expect=
+ed -- `mcr p15,0,r0,c7,r5,4'
+    arch/arm/mm/cache-v7.S:42: Error: co-processor register expected -- `mc=
+r p15,0,r0,c7,r5,4'
+    arch/arm/mm/cache-v7.S:69: Error: co-processor register expected -- `mc=
+r p15,0,r0,c7,r5,4'
+    arch/arm/mm/cache-v7.S:142: Error: co-processor register expected -- `m=
+cr p15,0,r0,c7,r5,4'
+    arch/arm/mm/cache-v7.S:179: Error: co-processor register expected -- `m=
+cr p15,0,r0,c7,r5,4'
+    arch/arm/mm/cache-v7.S:312: Error: co-processor register expected -- `m=
+cr p15,0,r0,c7,r5,4'
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+collie_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+corgi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cu1830-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+davinci_all_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+db1xxx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_64_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_r4k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+debug (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+dove_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+ep93xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+eseries_pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+exynos_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ezx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+footbridge_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+fuloong2e_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 s=
+ection mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+gcw0_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+gemini_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+gpr_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+h5000_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+hackkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+debug (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warni=
+ngs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+hisi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+hsdk_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+debug (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+imote2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v6_v7_defconfig (arm, gcc-10) =E2=80=94 FAIL, 3 errors, 0 warnings, 0 s=
+ection mismatches
+
+Errors:
+    arch/arm/kernel/entry-common.S:166: Error: co-processor register expect=
+ed -- `mcr p15,0,r0,c7,r5,4'
+    arch/arm/kernel/entry-common.S:175: Error: co-processor register expect=
+ed -- `mcr p15,0,r0,c7,r5,4'
+    arch/arm/mach-imx/suspend-imx6.S:315: Error: co-processor register expe=
+cted -- `mcr p15,0,r0,c7,r5,4'
+
+---------------------------------------------------------------------------=
+-----
+integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+iop32x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip22_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip27_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip28_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip32_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ixp4xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+jazz_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+jmr3927_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+jornada720_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+keystone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+lart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+lemote2f_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 se=
+ction mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+loongson1b_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson3_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpc18xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpc32xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpd270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lubbock_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+magician_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mainstone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_kvm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_qemu_32r6_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_eva_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_xpa_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+milbeaut_m10v_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mini2440_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mmp2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+moxart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mpc30x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mtx1_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v4t_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-10) =E2=80=94 PASS, =
+0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-10) =E2=80=
+=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0=
+ warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
+ errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+ima (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mxs_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+neponset_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+netwinder_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+nhk8815_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+omap1_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+omap2plus_defconfig (arm, gcc-10) =E2=80=94 FAIL, 9 errors, 0 warnings, 0 s=
+ection mismatches
+
+Errors:
+    arch/arm/kernel/entry-common.S:166: Error: co-processor register expect=
+ed -- `mcr p15,0,r0,c7,r5,4'
+    arch/arm/kernel/entry-common.S:175: Error: co-processor register expect=
+ed -- `mcr p15,0,r0,c7,r5,4'
+    arch/arm/mach-omap2/sleep44xx.S:91: Error: co-processor register expect=
+ed -- `mcr p15,0,r0,c7,r5,4'
+    arch/arm/mach-omap2/sleep44xx.S:131: Error: co-processor register expec=
+ted -- `mcr p15,0,r0,c7,r5,4'
+    arch/arm/mach-omap2/sleep44xx.S:193: Error: co-processor register expec=
+ted -- `mcr p15,0,r0,c7,r5,4'
+    arch/arm/mach-omap2/sleep44xx.S:205: Error: co-processor register expec=
+ted -- `mcr p15,0,r0,c7,r5,4'
+    arch/arm/mach-omap2/sleep44xx.S:223: Error: co-processor register expec=
+ted -- `mcr p15,0,r0,c7,r5,4'
+    arch/arm/mach-omap2/sleep44xx.S:274: Error: co-processor register expec=
+ted -- `mcr p15,0,r0,c7,r5,4'
+    arch/arm/mach-omap2/sleep44xx.S:342: Error: co-processor register expec=
+ted -- `mcr p15,0,r0,c7,r5,4'
+
+---------------------------------------------------------------------------=
+-----
+omega2p_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+orion5x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+oxnas_v6_defconfig (arm, gcc-10) =E2=80=94 FAIL, 7 errors, 0 warnings, 0 se=
+ction mismatches
+
+Errors:
+    arch/arm/kernel/entry-common.S:166: Error: co-processor register expect=
+ed -- `mcr p15,0,r0,c7,r5,4'
+    arch/arm/kernel/entry-common.S:175: Error: co-processor register expect=
+ed -- `mcr p15,0,r0,c7,r5,4'
+    arch/arm/mm/cache-v7.S:42: Error: co-processor register expected -- `mc=
+r p15,0,r0,c7,r5,4'
+    arch/arm/mm/cache-v7.S:69: Error: co-processor register expected -- `mc=
+r p15,0,r0,c7,r5,4'
+    arch/arm/mm/cache-v7.S:142: Error: co-processor register expected -- `m=
+cr p15,0,r0,c7,r5,4'
+    arch/arm/mm/cache-v7.S:179: Error: co-processor register expected -- `m=
+cr p15,0,r0,c7,r5,4'
+    arch/arm/mm/cache-v7.S:312: Error: co-processor register expected -- `m=
+cr p15,0,r0,c7,r5,4'
+
+---------------------------------------------------------------------------=
+-----
+palmz72_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pcm027_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa168_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+qcom_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section=
+ mismatches
+
+Errors:
+    /tmp/kci/linux/build/../drivers/gpu/drm/panel/panel-edp.c:843: undefine=
+d reference to `drm_panel_dp_aux_backlight'
+
+---------------------------------------------------------------------------=
+-----
+qi_lb60_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+rb532_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rbtx49xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+realview_defconfig (arm, gcc-10) =E2=80=94 FAIL, 10 errors, 0 warnings, 0 s=
+ection mismatches
+
+Errors:
+    arch/arm/kernel/entry-common.S:166: Error: co-processor register expect=
+ed -- `mcr p15,0,r0,c7,r5,4'
+    arch/arm/kernel/entry-common.S:175: Error: co-processor register expect=
+ed -- `mcr p15,0,r0,c7,r5,4'
+    arch/arm/common/secure_cntvoff.S:24: Error: co-processor register expec=
+ted -- `mcr p15,0,r0,c7,r5,4'
+    arch/arm/common/secure_cntvoff.S:27: Error: co-processor register expec=
+ted -- `mcr p15,0,r0,c7,r5,4'
+    arch/arm/common/secure_cntvoff.S:29: Error: co-processor register expec=
+ted -- `mcr p15,0,r0,c7,r5,4'
+    arch/arm/mm/cache-v7.S:42: Error: co-processor register expected -- `mc=
+r p15,0,r0,c7,r5,4'
+    arch/arm/mm/cache-v7.S:69: Error: co-processor register expected -- `mc=
+r p15,0,r0,c7,r5,4'
+    arch/arm/mm/cache-v7.S:142: Error: co-processor register expected -- `m=
+cr p15,0,r0,c7,r5,4'
+    arch/arm/mm/cache-v7.S:179: Error: co-processor register expected -- `m=
+cr p15,0,r0,c7,r5,4'
+    arch/arm/mm/cache-v7.S:312: Error: co-processor register expected -- `m=
+cr p15,0,r0,c7,r5,4'
+
+---------------------------------------------------------------------------=
+-----
+rpc_defconfig (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 section=
+ mismatches
+
+Errors:
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=3D0x'
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=3D0x'
+
+---------------------------------------------------------------------------=
+-----
+rs90_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+rt305x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rv32_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s3c2410_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s3c6400_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s5pv210_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sb1250_swarm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+shmobile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+simpad_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear6xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+spitz_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+stm32_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sunxi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+tb0219_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+tb0226_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+tb0287_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+tct_hammer_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+trizeps4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+u8500_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+versatile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+vf610m4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+viper_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+vocore2_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, =
+0 section mismatches
+
+Errors:
+    arch/arm/kernel/entry-common.S:166: Error: co-processor register expect=
+ed -- `mcr p15,0,r0,c7,r5,4'
+    arch/arm/kernel/entry-common.S:175: Error: co-processor register expect=
+ed -- `mcr p15,0,r0,c7,r5,4'
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+crypto (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+debug (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 2 warning=
+s, 0 section mismatches
+
+Warnings:
+    lib/strncpy_from_user.o: warning: objtool: strncpy_from_user()+0x8a: ca=
+ll to do_strncpy_from_user() with UACCESS enabled
+    lib/strnlen_user.o: warning: objtool: strnlen_user()+0x5d: call to do_s=
+trnlen_user() with UACCESS enabled
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+ima (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, =
+0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 e=
+rrors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook+kselftest (x86_64, gcc-10) =E2=80=94 PASS, =
+0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86_kvm_guest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0=
+ warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+xcep_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---
+For more info write to <info@kernelci.org>

@@ -2,169 +2,177 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C10D4D36BB
-	for <lists+linux-next@lfdr.de>; Wed,  9 Mar 2022 18:43:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02E0A4D3768
+	for <lists+linux-next@lfdr.de>; Wed,  9 Mar 2022 18:45:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236333AbiCIRJv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 9 Mar 2022 12:09:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50854 "EHLO
+        id S237025AbiCIRPt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 9 Mar 2022 12:15:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237718AbiCIRIn (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 9 Mar 2022 12:08:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A8DE4120F63
-        for <linux-next@vger.kernel.org>; Wed,  9 Mar 2022 08:59:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646845140;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qb1iDD9O8GakHXVHRPxQppvhosdQztyNQTb+YOxevjU=;
-        b=ErpzaAGFnxmNePdq84ylUhPWB6Mx5fOps10/C8LVYtuFnzT/EjpimLWhcnmqGDcMUItkN6
-        KHXo/lE+YGktafMGC0QcprzCtL8GqnJRzPGRXjWUXlJB6I9gqkvvXsmaNsMRSFLH+P2zTu
-        X+fKY7KjokT5WYocTu1r9P5U3qDo40U=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-642-PO8XRTYRNYa61hz46Df9uA-1; Wed, 09 Mar 2022 11:58:59 -0500
-X-MC-Unique: PO8XRTYRNYa61hz46Df9uA-1
-Received: by mail-ed1-f69.google.com with SMTP id s7-20020a508dc7000000b0040f29ccd65aso1624905edh.1
-        for <linux-next@vger.kernel.org>; Wed, 09 Mar 2022 08:58:58 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=qb1iDD9O8GakHXVHRPxQppvhosdQztyNQTb+YOxevjU=;
-        b=PoWiPJKsECSsDPAkqKbNIYktBKnkHxFvVY47CNhu0vuIg3d+2osDNXAnnUF49vZng2
-         cq02agqZ82tpS8kIHUuhY5iBYTyBTO/T5e+yRiYo5qeELl2blDkMm3JskffAL/PCWbzr
-         wdiSSRSJPxbVuFgogkOBIgJjCimQtpXap/o972yhJ2nw0S0W5QUJkTCmy/jM2lNE5csU
-         Ta6VZGUmEZVwHOCAUGqG7wvlHlGXwfvqNmrS+6OfOww2xcQH0LJ0vZaxBx9z1JUm1435
-         Lc9T4Bl+Luui0nx/1wpRiN8esE/ZlSR3ikIQU3G8pq3sGg2ZNo7Bo6WuTLIbWR35AOGy
-         srEA==
-X-Gm-Message-State: AOAM531KS2vCrcaVOc4W3oK3RVabIwrJ+zsh0n7KdYJ32Fi3AjoMUJwd
-        qsks/TEwEM/9hYULOZ/1vwixB3cV0bfk9ewfSETeQIl/8BqCN+rXA+R/floLRkBkrWuvQjAWwiY
-        5qLJt/fYfNZryeTJnEHSDOg==
-X-Received: by 2002:a17:906:3ad1:b0:6ce:a880:7745 with SMTP id z17-20020a1709063ad100b006cea8807745mr677335ejd.46.1646845137825;
-        Wed, 09 Mar 2022 08:58:57 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxYMTYVMUjRo+NSdRia5ez2xyId2oubQ9K+g2W7NICPyo05bYmdoMaHKAZcsV1AE6fuWkD3BA==
-X-Received: by 2002:a17:906:3ad1:b0:6ce:a880:7745 with SMTP id z17-20020a1709063ad100b006cea8807745mr677322ejd.46.1646845137600;
-        Wed, 09 Mar 2022 08:58:57 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:cdb2:2781:c55:5db0? (2001-1c00-0c1e-bf00-cdb2-2781-0c55-5db0.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:cdb2:2781:c55:5db0])
-        by smtp.gmail.com with ESMTPSA id a9-20020a1709066d4900b006da888c3ef0sm945780ejt.108.2022.03.09.08.58.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Mar 2022 08:58:57 -0800 (PST)
-Message-ID: <0d4cdbbb-993b-55f3-355a-e0826ab45f46@redhat.com>
-Date:   Wed, 9 Mar 2022 17:58:56 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: linux-next: build failure after merge of the kspp tree
-Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>,
+        with ESMTP id S238893AbiCIRPM (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 9 Mar 2022 12:15:12 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3193015697C;
+        Wed,  9 Mar 2022 09:11:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=0XOxoRhCxn4RuwbyrCrk6t3swVtPgJmu2MdScDyPqbQ=; b=mcg579PjLxcqqpzqmD4TRDh0KO
+        Xt0CJkuEF3rXPN1ImSzHh6Zt+thXoFDboFMnj8ugMCZZKUaIEVUXKcmvirOBNEMELY3Pxu/2zX5YG
+        r+VBiq0o+GX45wMXXny2eh9NxP71vd1ZpJNQPeG63R8Z/+SsqlFBYAWCIQMcENH6J/E51sljsf88X
+        E5oU7FtUDYgMnVs0JQzM4JfuM/paCLg9B7YP48F0cCiITKZ16aD2+nYxfZTuuu10ARHL0Oy04RsPn
+        Rv8nuvFfBpUBzV8AL/5DUKmbw9UWRXkqjXosDRTNuPtwZYpHZivlxTgEXuftAgwAYeeH0TFqL1YcO
+        SF5eQmsg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:57748)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1nRzqi-0002Gq-67; Wed, 09 Mar 2022 17:11:44 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1nRzqe-00088O-RE; Wed, 09 Mar 2022 17:11:40 +0000
+Date:   Wed, 9 Mar 2022 17:11:40 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Corentin Labbe <clabbe.montjoie@gmail.com>,
         Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Mark Gross <markgross@kernel.org>,
-        Mark Pearson <markpearson@lenovo.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220309211029.0c766cac@canb.auug.org.au>
- <202203090847.81E8862@keescook>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <202203090847.81E8862@keescook>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Subject: Re: [next] arm: Internal error: Oops: 5 PC is at
+ __read_once_word_nocheck
+Message-ID: <YijfzAhWAgfGGqCO@shell.armlinux.org.uk>
+References: <CA+G9fYtpy8VgK+ag6OsA9TDrwi5YGU4hu7GM8xwpO7v6LrCD4Q@mail.gmail.com>
+ <YiiDZ7jjG38gqP+Q@shell.armlinux.org.uk>
+ <CAMj1kXHTdk1Abm7ShoZzrW6EpM9eyFMPSdaa58Ziie4ZMecCnQ@mail.gmail.com>
+ <CA+G9fYvCvBBi+dZ+CnUy=ZK6GhCFhBw72_==Cav=Q8QP5T1r5w@mail.gmail.com>
+ <CA+G9fYt73AYs=z-BeZh22RBp==sf73pKky6m4iPSH7a4FssK7w@mail.gmail.com>
+ <CAMj1kXEFZVeWLaRQJmwO+Nn6uW4q6vXJOaNNTVKju1p2bMQksA@mail.gmail.com>
+ <YijCkHHhpleeADAO@shell.armlinux.org.uk>
+ <CA+G9fYtjrAMg8TykZdRyZEfRthyqom_73x87F-60C_QFeEL8Bg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYtjrAMg8TykZdRyZEfRthyqom_73x87F-60C_QFeEL8Bg@mail.gmail.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi,
-
-On 3/9/22 17:52, Kees Cook wrote:
-> On Wed, Mar 09, 2022 at 09:10:29PM +1100, Stephen Rothwell wrote:
->> Hi all,
->>
->> After merging the kspp tree, today's linux-next build (x86_64
->> allmodconfig) failed like this:
->>
->> In file included from include/linux/bitops.h:33,
->>                  from include/linux/kernel.h:22,
->>                  from drivers/platform/x86/thinkpad_acpi.c:37:
->> drivers/platform/x86/thinkpad_acpi.c: In function 'tpacpi_dytc_profile_init':
->> arch/x86/include/asm/bitops.h:207:22: error: array subscript 'long unsigned int[0]' is partly outside array bounds of 'int[1]' [-Werror=array-bounds]
->>   207 |                 (addr[nr >> _BITOPS_LONG_SHIFT])) != 0;
->>       |                 ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/platform/x86/thinkpad_acpi.c:10385:18: note: while referencing 'output'
->> 10385 |         int err, output;
->>       |                  ^~~~~~
->>
->> Actually the test_bit() in line 10409.
->>
->> Caused by commit
->>
->>   e1c21608e3cf ("platform/x86: thinkpad_acpi: Add PSC mode support")
->>
->> from the drivers-x86 tree interacting with the enablement of
->> -Werror=array-bounds.
->>
->> I have reverted that commit for today.
-
-Thank you.
-
-> Looking at https://lore.kernel.org/all/20220225182505.7234-1-markpearson@lenovo.com/
+On Wed, Mar 09, 2022 at 10:08:25PM +0530, Naresh Kamboju wrote:
+> Hi Russell,
 > 
-> The problem is with the cast of "int output" to "unsigned long". Past
-> fixes have either made the variable unsigned long, or adding a new
-> variable and removal of casts. e.g. this pseudo-patch:
+> On Wed, 9 Mar 2022 at 20:37, Russell King (Oracle)
+> <linux@armlinux.org.uk> wrote:
+> >
+> > On Wed, Mar 09, 2022 at 03:57:32PM +0100, Ard Biesheuvel wrote:
+> > > On Wed, 9 Mar 2022 at 15:44, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+> > > >
+> <trim>
+> > Well, we unwound until:
+> >
+> >  __irq_svc from migrate_disable+0x0/0x70
+> >
+> > and then crashed - and the key thing there is that we're at the start
+> > of migrate_disable() when we took an interrupt.
+> >
+> > For some reason, this triggers an access to address 0x10, which faults.
+> > We then try unwinding again, and successfully unwind all the way back
+> > to the same point (the line above) which then causes the unwinder to
+> > again access address 0x10, and the cycle repeats with the stack
+> > growing bigger and bigger.
+> >
+> > I'd suggest also testing without the revert but with my patch.
 > 
-> +	unsigned long bits;
+> I have tested your patch on top of linux next-20220309 and still see kernel
+> crash as below [1]. build link [2].
 > 
-> 	...
-> +	bits = output;
-> -	if (test_bit(DYTC_FC_MMC, (void *)&output)) { /* MMC MODE */
-> +	if (test_bit(DYTC_FC_MMC, &bits)) { /* MMC MODE */
+> [   26.812060] 8<--- cut here ---
+> [   26.813459] Unhandled fault: page domain fault (0x01b) at 0xb6a3ab70
+> [   26.816139] [b6a3ab70] *pgd=fb28a835
+> [   26.817770] Internal error: : 1b [#1] SMP ARM
+> [   26.819636] Modules linked in:
+> [   26.820956] CPU: 0 PID: 211 Comm: haveged Not tainted
+> 5.17.0-rc7-next-20220309 #1
+> [   26.824519] Hardware name: Generic DT based system
+> [   26.827148] PC is at __read_once_word_nocheck+0x0/0x8
+> [   26.829856] LR is at unwind_frame+0x7dc/0xab4
 > 
-> ...
+> - Naresh
 > 
-> -	} else if (test_bit(DYTC_FC_PSC, (void *)&output)) { /*PSC MODE */
-> +	} else if (test_bit(DYTC_FC_PSC, &bits)) { /*PSC MODE */
+> [1] https://lkft.validation.linaro.org/scheduler/job/4688599#L596
+> [2] https://builds.tuxbuild.com/269gYLGuAdmltuLhIUDAjS2fg1Q/
 
-Right I was just preparing a patch for this, I've gone with:
+I think the problem has just moved:
 
-diff --git a/drivers/platform/x86/thinkpad_acpi.c b/drivers/platform/x86/thinkpad_acpi.c
-index 7016c7fc3440..c476a78599d6 100644
---- a/drivers/platform/x86/thinkpad_acpi.c
-+++ b/drivers/platform/x86/thinkpad_acpi.c
-@@ -10399,7 +10399,7 @@ static int tpacpi_dytc_profile_init(struct ibm_init_struct *iibm)
- 	if (err)
- 		return err;
- 
--	if (test_bit(DYTC_FC_MMC, (void *)&output)) { /* MMC MODE */
-+	if (output & BIT(DYTC_FC_MMC)) { /* MMC MODE */
- 		dytc_profile_available = DYTC_FUNCMODE_MMC;
- 
- 		/*
-@@ -10412,7 +10412,7 @@ static int tpacpi_dytc_profile_init(struct ibm_init_struct *iibm)
- 			if (!err && ((output & DYTC_ERR_MASK) == DYTC_ERR_SUCCESS))
- 				dytc_mmc_get_available = true;
- 		}
--	} else if (test_bit(DYTC_FC_PSC, (void *)&output)) { /*PSC MODE */
-+	} else if (output & BIT(DYTC_FC_PSC)) { /* PSC MODE */
- 		dytc_profile_available = DYTC_FUNCMODE_PSC;
- 	} else {
- 		dbg_printk(TPACPI_DBG_INIT, "No DYTC support available\n");
+[   27.113085]  __irq_svc from __copy_to_user_std+0x24/0x378
 
-I'll push this to the drivers-x86 tree for-next branch.
+The code at the start of __copy_to_user_std is:
 
-Regards,
+   0:   e3a034bf        mov     r3, #-1090519040        ; 0xbf000000
+   4:   e243c001        sub     ip, r3, #1
+   8:   e05cc000        subs    ip, ip, r0
+   c:   228cc001        addcs   ip, ip, #1
+  10:   205cc002        subscs  ip, ip, r2
+  14:   33a00000        movcc   r0, #0
+  18:   e320f014        csdb
+  1c:   e3a03000        mov     r3, #0
+  20:   e92d481d        push    {r0, r2, r3, r4, fp, lr}
+  24:   e1a0b00d        mov     fp, sp
 
-Hans
+and the unwind information will be:
 
+0xc056f14c <arm_copy_to_user+0x1c>: @0xc0b89b84
+  Compact model index: 1
+  0x9b      vsp = r11
+  0xb1 0x0d pop {r0, r2, r3}
+  0x84 0x81 pop {r4, r11, r14}
+  0xb0      finish
 
+The problem is that the unwind information says "starting at offset
+0x1c, to unwind do the following operations". The first of which is
+to move r11 (fp) to the stack pointer. However, r11 isn't setup
+until function offset 0x24. You've hit that instruction, which hasn't
+executed yet, but the stack has been modified by pushing r0, r2-r4,
+fp and lr onto it.
+
+Given this, there is no way that the unwinder (as it currently stands)
+can do its job properly between 0x1c and 0x24.
+
+I don't think this is specifically caused by Ard's patches, but by
+the addition of KASAN, which has the effect of calling the unwinder
+at random points in the kernel (when an interrupt happens) and it's
+clear from the above that there are windows in the code where, if
+we attempt to unwind using the unwind information, we faill fail
+because the program state is not consistent with the unwind
+information.
+
+Ard's patch that changes:
+
+	ctrl->vrs[reg] = READ_ONCE_NOCHECK(*(*vsp));
+
+to use get_kernel_nofault() should have the effect of protecting
+against the oops, but the side effect is that it is fundamentally not
+possible with the way these things are to unwind at these points -
+which means its not possible to get a stacktrace there.
+
+So, I don't think this is a "new" problem, but a weakness of using
+the unwinder to get a backtrace for KASAN.
+
+Do you have any way to work out exactly when this problem first
+appeared?
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

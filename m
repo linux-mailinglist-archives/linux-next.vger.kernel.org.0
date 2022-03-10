@@ -2,43 +2,45 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 609B84D4395
-	for <lists+linux-next@lfdr.de>; Thu, 10 Mar 2022 10:33:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBA1C4D4451
+	for <lists+linux-next@lfdr.de>; Thu, 10 Mar 2022 11:13:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240833AbiCJJeb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 10 Mar 2022 04:34:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42342 "EHLO
+        id S231364AbiCJKOX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 10 Mar 2022 05:14:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235979AbiCJJea (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 10 Mar 2022 04:34:30 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDEC7C7936;
-        Thu, 10 Mar 2022 01:33:28 -0800 (PST)
+        with ESMTP id S230205AbiCJKOX (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 10 Mar 2022 05:14:23 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D5C6F1AE6;
+        Thu, 10 Mar 2022 02:13:22 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KDkQH3sq3z4x7Y;
-        Thu, 10 Mar 2022 20:33:27 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KDlJF0pjvz4xLS;
+        Thu, 10 Mar 2022 21:13:17 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1646904807;
-        bh=q+xqH7Ft5JQCCBUClzfLKc9UTW8bJal4XkE8zHn8qpI=;
+        s=201702; t=1646907197;
+        bh=a5TnBRyicVOOYJK/trLhEn9JHRFaDj9hNHLBtmLoVrY=;
         h=Date:From:To:Cc:Subject:From;
-        b=jBdM0qOkmrKhzpOuaH4ye1qlBdRKLs1/q3Cm5bzL8BIm6/oJwOgQhGUj/c78ZvHvw
-         3UmAOxMou5TGGc97RMu3Dezygyhq6gWk64IvL+JxW511b6Xto9OoLz+xui/cZG6ltw
-         D+duU7mbVFFKMlIgjkjvqp7H5UtusA0YG74Gv42ACnp9x8D15DvISlkokkTYvVt+v5
-         wNqxkfv4NBwV7YgoBFi8hYCUNibfm26/gVp683EXcGQXJFbkd0ZeA2B3ukIrkmiN5v
-         5jw5nq6xBBPNuXOZkJeG/xzUnHzAZMasLQ+9CKbdxVfhf5RyvIXdirltymKD22o0FH
-         RV86rUHLO7XMA==
-Date:   Thu, 10 Mar 2022 20:33:26 +1100
+        b=SD+W3LVyaSkjNub8+NIjiyCU432/ZNHreoGaiNid0OS874hcL9hBn1XnxpAFObjsD
+         KtcSG56mzSS56KcaZbGDZDJmKXgwvr3pdc1DrUpUN3xY/T6WUBZKjpMK0HpvoDYUc4
+         fuw24VMdXp8bqL40xKV87ZkSLqHR6WdLxPPB1/7V0ENa4jV6+wAVVRbMTHa8drysge
+         Uk5cJkmJ7MAMYAI3eZfusW4FMjfYNhOsUNkW01F/lHY63e10tssPgV3kylvCLfakl7
+         JEqGDQcmNwLE6ps8WOawIrr2hzpBUx4uApKoJ1k4ShykvCX8LeYCqgSzuPNSuBgX1Z
+         AlMuc8vh9CGJg==
+Date:   Thu, 10 Mar 2022 21:13:15 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Bjorn Helgaas <bhelgaas@google.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Karolina Drobnik <karolinadrobnik@gmail.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commits in the pci tree
-Message-ID: <20220310203326.7c863d4f@canb.auug.org.au>
+Subject: linux-next: build warning after merge of the memblock tree
+Message-ID: <20220310211315.595cca09@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/e1smVAxomyUjSUf1c/3Juca";
+Content-Type: multipart/signed; boundary="Sig_/DB3xEc/Xqmv5Cank09OenCB";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -49,38 +51,40 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/e1smVAxomyUjSUf1c/3Juca
+--Sig_/DB3xEc/Xqmv5Cank09OenCB
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Commits
+After merging the memblock tree, today's linux-next build (KCONFIG_NAME)
+produced this warning:
 
-  548d805b6557 ("PCI: fu740: Drop redundant '-gpios' from DT GPIO lookup")
-  e2502d3a7d35 ("PCI: rcar: Finish transition to L1 state in rcar_pcie_conf=
-ig_access()")
+Documentation/vm/index.rst:12: WARNING: toctree contains reference to nonex=
+isting document 'vm/memblock-sim'
 
-are missing a Signed-off-by from their committer.
+Introduced by commit
+
+  cc5a1e382509 ("memblock tests: Add TODO and README files")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/e1smVAxomyUjSUf1c/3Juca
+--Sig_/DB3xEc/Xqmv5Cank09OenCB
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIpxeYACgkQAVBC80lX
-0GxI3Qf/cqR48IwzDVv9KMrwlkd405XQ7eIrcWqgxxGNiwuSfq90I75ISqFOu1Ll
-SeZInDw0dzmcpVaA3lW+i2ovqJc+Jb4NzbnPlcSskcaULuA/IA3oSEiAbWtNcPuI
-j4S6xvken8Glh8xOTku6OWx3BJ1aVGp9d+tCXRFR1jxwU7F6g6qIsQ2Ujuxc0QET
-mGq1uD5f9LZU2NDa7SXDTxZXUCyk5eCcX1faM/517X5clxW0dIuSCOc5XFjDWz3/
-X9d6Thiu1BbjQmCnYwzFt+JpubhApbY7uPvAaStrGQZO0WGeEXyIESt8lbnEIE0m
-q71up05vxupKu8Gs64WXYDlvVa22yg==
-=+/WY
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIpzzsACgkQAVBC80lX
+0Gx4pQf+JL9D3WN+6B5y09I0ivcyIyq0FhvkmshFDDxg8aAm4+TRtMkCKWYPUAxJ
+O1IFPhEWUIWAWyWm6scOCDpSN3O7u/TgDVuvTTXmqcoJMK5uxgmKlVIZ+hT520v2
+FmgTIk2hUDftnTZ9KP/mITeqogE6p0oNgxCln7ATwD9sirNDZ5EwXd/9V2xR3+MC
+qEu0LUNU9U998DyGX8ElYYzh5S7wkO/hRfpXpATsK7vucrLulOZDc6i02KKt1dsW
+5t6zl4hc92ICCymYlzO8OGOL53MiCOKM6FRLcbkO7V55Qy3aDNzGOo0U/Jgw52wB
+cNDw8GuUlFn44YmJ5C3GvGnvS1FNJw==
+=Cq1/
 -----END PGP SIGNATURE-----
 
---Sig_/e1smVAxomyUjSUf1c/3Juca--
+--Sig_/DB3xEc/Xqmv5Cank09OenCB--

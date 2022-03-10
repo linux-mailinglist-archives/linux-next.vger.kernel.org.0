@@ -2,132 +2,192 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 989CC4D45D7
-	for <lists+linux-next@lfdr.de>; Thu, 10 Mar 2022 12:37:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 259454D4717
+	for <lists+linux-next@lfdr.de>; Thu, 10 Mar 2022 13:36:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229980AbiCJLiv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 10 Mar 2022 06:38:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59934 "EHLO
+        id S242032AbiCJMhE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 10 Mar 2022 07:37:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233162AbiCJLiu (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 10 Mar 2022 06:38:50 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1F5B13D43
-        for <linux-next@vger.kernel.org>; Thu, 10 Mar 2022 03:37:48 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id x200so10260233ybe.6
-        for <linux-next@vger.kernel.org>; Thu, 10 Mar 2022 03:37:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=1ziSuPMzYNAw8eT+iBfN5WM2hFNCKf7IS7RFWaVxPlg=;
-        b=ba8/6TOQ+hGmIeTYsQ6ojj2JBVlxNbrThk3McB+mMlo48TRziTO1ei4nh8wKenWuZ/
-         lt7Dpyww+cpYm4aeKTTnJpxvpUXKaTEXJ08x4JkUKrFFZqSEhPRiGKmgzZ3BI65+uW2k
-         thDlndn1Qt70mJ1l63wW/vWAenB67L2+FyXfLTARv7lmWrYxJQ+uXfa+v9Qztlm1p0bX
-         9jKSqFinWTLMVDCTMCiKjgdUZU2x6DI5VBynij+OtCxAwMYMHr61JDseNwpJjIlmjMJh
-         eSo1sQSn3cNYI7UbJsS6J7+oOlukXH/vGxTTSCEdTvZqvZo1VWkbLOeQW5wg29GppWnG
-         3M0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=1ziSuPMzYNAw8eT+iBfN5WM2hFNCKf7IS7RFWaVxPlg=;
-        b=xrfHqTidE3wtF98rVkqYj0NDXrh9aJJMxNEnMc9prasyDLjdQG/5t0qnoGKbCbAQBM
-         mDW1uw7MO0XuuY7pn0dD3Anwc/bURZoufIL57brSJ+hS9spMRcZLIxWhAlYVx05mQ1DT
-         qdzZUwWqAQbNeB2NHRE7aWW9wF4wFcabUkHGWElFNd2GPmJPVHApuOqs35Sce4/QaAiZ
-         iDerEx3UQgrfD/DK/H+jFiYQQGltdRduVl4R/7BRJomP2/4PDkcezuxYyN5otEKz/1zo
-         1c6gOWlCPXxsedcmnB28/tt1vsG60uO6mkXtX9aGTg02LqTlWXlWB3t1rLcHJ6YlsY1H
-         ViDw==
-X-Gm-Message-State: AOAM532IX5fYOJxBq7ZUAujXIWPsuHGA5AWx8unc0P0phgYJG40G96P1
-        3DfgK67ufkiTJhJkCunNTAB/A0Wk1g/iS3BLMeEq6Q==
-X-Google-Smtp-Source: ABdhPJxjhA4KF95Phht4rOAHa4GEkQ+TbVYtbU348Hj9PBYLNJOVYP54qb9DxrOcA9Y52tkAu1hFeD+l7r+aAwisBmw=
-X-Received: by 2002:a25:9909:0:b0:624:57e:d919 with SMTP id
- z9-20020a259909000000b00624057ed919mr3599420ybn.494.1646912267954; Thu, 10
- Mar 2022 03:37:47 -0800 (PST)
-MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 10 Mar 2022 17:07:36 +0530
-Message-ID: <CA+G9fYsz7+Ooc8L-Dpfjp6mMDdw43=SjqiE0ryABy3t6qEzRoQ@mail.gmail.com>
-Subject: [next] ld.lld: error: ./arch/arm/kernel/vmlinux.lds:34: AT expected,
- but got NOCROSSREFS
-To:     clang-built-linux <clang-built-linux@googlegroups.com>,
-        llvm@lists.linux.dev,
+        with ESMTP id S232156AbiCJMhE (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 10 Mar 2022 07:37:04 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCBA6141E23;
+        Thu, 10 Mar 2022 04:36:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=zmYAbKnVCCZBlerHQbcYZ1CzE/Z7tVO/OGbPWC3kXis=; b=1JYrbN1ExafiKL3d3v99aHh4Nt
+        1kEo2q+AuKnq8xNXYr66yfslkv8hP+eRsPnkhrel/uVcxEIFtKdue2bC/DZ5qRQDbOnuYud3KV2ix
+        ZM5vAiMmEdACb7S8FMNjB44ablaxRhEiV9ypbq8bkDyz4W+57dZzf4cZYA2ZGglyCYLTO8MAS1yAn
+        /dbn9xVhVVVF+QhQ3GiC9/F7Ja4Fxc7q/8ZpfWtIFw2sTAjKKQf5UoJrOA+1NxwMKP/g8HXvrrDH0
+        RM3kNsF6GJzyeLQWzGiZsqx0j52ZgqP0+T3w0JCjn2pXTIdj8sc7EnQDqOrV4ax0qv6xeclYqq8oJ
+        csfoehfw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:57764)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1nSI1N-00018O-TJ; Thu, 10 Mar 2022 12:35:58 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1nSI1L-0000Yc-38; Thu, 10 Mar 2022 12:35:55 +0000
+Date:   Thu, 10 Mar 2022 12:35:55 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>,
         Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Corentin Labbe <clabbe.montjoie@gmail.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: [next] arm: Internal error: Oops: 5 PC is at
+ __read_once_word_nocheck
+Message-ID: <Yinwq3Z9l0selLLS@shell.armlinux.org.uk>
+References: <CA+G9fYt73AYs=z-BeZh22RBp==sf73pKky6m4iPSH7a4FssK7w@mail.gmail.com>
+ <CAMj1kXEFZVeWLaRQJmwO+Nn6uW4q6vXJOaNNTVKju1p2bMQksA@mail.gmail.com>
+ <YijCkHHhpleeADAO@shell.armlinux.org.uk>
+ <CA+G9fYtjrAMg8TykZdRyZEfRthyqom_73x87F-60C_QFeEL8Bg@mail.gmail.com>
+ <YijfzAhWAgfGGqCO@shell.armlinux.org.uk>
+ <CAMj1kXFvjawvOzeTb2m1H=P-_aXgW-ozvaOK1FtjBv7G0sCDFA@mail.gmail.com>
+ <Yij2cZVKwPexGsTf@shell.armlinux.org.uk>
+ <CAMj1kXE02HH7vRUjF3iKAL+1idKTy-oOYyGnBd3g90m6eObBxg@mail.gmail.com>
+ <YikByJteDEtKi4Xv@shell.armlinux.org.uk>
+ <CAMj1kXGnwbe=YYWaRxaXioEfTJOdXg9JYcNddO8iifpWLRZCWg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXGnwbe=YYWaRxaXioEfTJOdXg9JYcNddO8iifpWLRZCWg@mail.gmail.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Linux next-20220310 arm clang builds failed due to following errors/warning=
-s.
+On Wed, Mar 09, 2022 at 09:42:29PM +0100, Ard Biesheuvel wrote:
+> On Wed, 9 Mar 2022 at 20:39, Russell King (Oracle)
+> <linux@armlinux.org.uk> wrote:
+> >
+> > On Wed, Mar 09, 2022 at 08:14:30PM +0100, Ard Biesheuvel wrote:
+> > > The backtrace dumped by __die() uses the pt_regs from the exception
+> > > context as the starting point, so the exception entry code that deals
+> > > with the condition that triggered the oops is omitted, and does not
+> > > have to be unwound.
+> >
+> > That is true, but that's not really the case I was thinking about.
+> > I was thinking more about cases such as RCU stalls, soft lockups,
+> > etc.
+> >
+> > For example:
+> >
+> > https://www.linuxquestions.org/questions/linux-kernel-70/kenel-v4-4-60-panic-in-igmp6_send-and-and-__neigh_create-4175704721/
+> >
+> > In that stack trace, the interesting bits are not the beginning of
+> > the stack trace down to __irq_svc, but everything beyond __irq_svc,
+> > since the lockup is probably caused by being stuck in
+> > _raw_write_lock_bh().
+> >
+> > It's these situations that we will totally destroy debuggability for,
+> > and the only way around that would be to force frame pointers and
+> > ARM builds (not Thumb-2 as that requires the unwinder... which means
+> > a Thumb-2 kernel soft lockup would be undebuggable.
+> >
+> 
+> Indeed.
+> 
+> But that means that the only other choice we have is to retain the
+> imprecise nature of the current solution (which usually works fine
+> btw), and simply deal with the faulting double dereference of vsp in
+> the unwinder code. We simply don't know whether the exception was
+> taken at a point where the stack frame is consistent with the unwind
+> data.
 
-metadata:
-    git_describe: next-20220310
-    git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-    git_sha: 71941773e143369a73c9c4a3b62fbb60736a1182
-    git_short_log: 71941773e143 (\Add linux-next specific files for 2022031=
-0\)
-    target_arch: arm
-    toolchain: clang-14
-    Kconfig: https://builds.tuxbuild.com/26BmBgHzW9MFZ3R0kIwL0Ce2r09/config
+Okay, further analysis (for the record, since I've said much of this on
+IRC):
 
-make --silent --keep-going --jobs=3D8
-O=3D/home/tuxbuild/.cache/tuxmake/builds/1/build LLVM=3D1 LLVM_IAS=3D1
-ARCH=3Darm CROSS_COMPILE=3Darm-linux-gnueabihf- 'HOSTCC=3Dsccache clang'
-'CC=3Dsccache clang'
-clang: warning: argument unused during compilation: '-march=3Darmv7-a'
-[-Wunused-command-line-argument]
-clang: warning: argument unused during compilation: '-march=3Darmv7-a'
-[-Wunused-command-line-argument]
-clang: warning: argument unused during compilation: '-march=3Darmv7-a'
-[-Wunused-command-line-argument]
-clang: warning: argument unused during compilation: '-march=3Darmv7-a'
-[-Wunused-command-line-argument]
-clang: warning: argument unused during compilation: '-march=3Darmv7-a'
-[-Wunused-command-line-argument]
-clang: warning: argument unused during compilation: '-march=3Darmv7-a'
-[-Wunused-command-line-argument]
-clang: warning: argument unused during compilation: '-march=3Darmv7-a'
-[-Wunused-command-line-argument]
-clang: warning: argument unused during compilation: '-march=3Darmv7-a'
-[-Wunused-command-line-argument]
-clang: warning: argument unused during compilation: '-march=3Darmv7-a'
-[-Wunused-command-line-argument]
-ld.lld: error: ./arch/arm/kernel/vmlinux.lds:34: AT expected, but got
-NOCROSSREFS
->>>  __vectors_lma =3D .; OVERLAY 0xffff0000 : NOCROSSREFS AT(__vectors_lma=
-) { .vectors { *(.vectors) } .vectors.bhb.loop8 { *(.vectors.bhb.loop8) } .=
-vectors.bhb.bpiall { *(.vectors.bhb.bpiall) } } __vectors_start =3D LOADADD=
-R(.vectors); __vectors_end =3D LOADADDR(.vectors) + SIZEOF(.vectors); __vec=
-tors_bhb_loop8_start =3D LOADADDR(.vectors.bhb.loop8); __vectors_bhb_loop8_=
-end =3D LOADADDR(.vectors.bhb.loop8) + SIZEOF(.vectors.bhb.loop8); __vector=
-s_bhb_bpiall_start =3D LOADADDR(.vectors.bhb.bpiall); __vectors_bhb_bpiall_=
-end =3D LOADADDR(.vectors.bhb.bpiall) + SIZEOF(.vectors.bhb.bpiall); . =3D =
-__vectors_lma + SIZEOF(.vectors) + SIZEOF(.vectors.bhb.loop8) + SIZEOF(.vec=
-tors.bhb.bpiall); __stubs_lma =3D .; .stubs ADDR(.vectors) + 0x1000 : AT(__=
-stubs_lma) { *(.stubs) } __stubs_start =3D LOADADDR(.stubs); __stubs_end =
-=3D LOADADDR(.stubs) + SIZEOF(.stubs); . =3D __stubs_lma + SIZEOF(.stubs); =
-PROVIDE(vector_fiq_offset =3D vector_fiq - ADDR(.vectors));
->>>                                          ^
-make[1]: *** [/builds/linux/Makefile:1225: vmlinux] Error 1
+What we have currently is a robust unwinder that will cope when things
+go wrong, such as an interrupt taken during the prologue of a function.
+The way it copes is by two mechanisms:
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+        /* store the highest address on the stack to avoid crossing it*/
+        low = frame->sp;
+        ctrl.sp_high = ALIGN(low, THREAD_SIZE);
 
-build link [1]
+These two represent the allowable bounds of the kernel stack. When we
+run the unwinder, before each unwind instruction we check whether the
+current SP value is getting close to the top of the kernel stack, and
+if so, turn on additional checking:
 
---
-Linaro LKFT
-https://lkft.linaro.org
+                if ((ctrl.sp_high - ctrl.vrs[SP]) < sizeof(ctrl.vrs))
+                        ctrl.check_each_pop = 1;
 
-[1] https://builds.tuxbuild.com/26BmBgHzW9MFZ3R0kIwL0Ce2r09/
+that will ensure if we go off the top of the kernel stack, the
+unwinder will report failure, and not access those addresses.
+
+After each instruction, we check whether the SP value is within the
+above bounds:
+
+                if (ctrl.vrs[SP] < low || ctrl.vrs[SP] >= ctrl.sp_high)
+                        return -URC_FAILURE;
+
+This means that the unwinder can never modify SP to point outside of
+the kernel stack region identified by low..ctrl.sp_high, thereby
+protecting the load inside unwind_pop_register() from ever
+dereferencing something outside of the kernel stack. Moreover, it also
+prevents the unwinder modifying SP to point below the current stack
+frame.
+
+The problem has been introduced by trying to make the unwinder cope
+with IRQ stacks in b6506981f880 ("ARM: unwind: support unwinding across
+multiple stacks"):
+
+-       if (!load_sp)
++       if (!load_sp) {
+                ctrl->vrs[SP] = (unsigned long)vsp;
++       } else {
++               ctrl->sp_low = ctrl->vrs[SP];
++               ctrl->sp_high = ALIGN(ctrl->sp_low, THREAD_SIZE);
++       }
+
+Now, whenever SP is loaded, we reset the allowable range for the SP
+value, and this completely defeats the protections we previously had
+which were ensuring that:
+
+1) the SP value doesn't jump back _down_ the kernel stack resulting
+   in an infinite unwind loop.
+2) the SP value doesn't end up outside the kernel stack.
+
+We need those protections to prevent these problems that are being
+reported - and the most efficient way I can think of doing that is to
+somehow valudate the new SP value _before_ we modify sp_low and
+sp_high, so these two limits are always valid.
+
+Merely changing the READ_ONCE_NOCHECK() to be get_kernel_nocheck()
+will only partly fix this problem - it will stop the unwinder oopsing
+the kernel, but definitely doesn't protect against (1) and doesn't
+protect against SP pointing at some thing that is accessible (e.g.
+a device or other kernel memory.)
+
+We're yet again at Thursday, with the last linux-next prior to the
+merge window being created this evening, which really doesn't leave
+much time to get this sorted... and we can't say "this code should
+have been in earlier in the cycle" this time around, because these
+changes to the unwinder have been present in linux-next prior to
+5.17-rc2. Annoyingly, it seems merging stuff earlier in the cycle
+doesn't actually solve the problem of these last minute debugging
+panics.
+
+Any suggestions for what we should do? Can we come up with some way
+to validate the new SP value before 6pm UTC this evening?
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

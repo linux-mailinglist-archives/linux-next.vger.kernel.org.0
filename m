@@ -2,126 +2,105 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35B684D4FCA
-	for <lists+linux-next@lfdr.de>; Thu, 10 Mar 2022 17:54:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 338AD4D4FF6
+	for <lists+linux-next@lfdr.de>; Thu, 10 Mar 2022 18:10:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243524AbiCJQzK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 10 Mar 2022 11:55:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53942 "EHLO
+        id S234629AbiCJRLz convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-next@lfdr.de>); Thu, 10 Mar 2022 12:11:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242956AbiCJQzJ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 10 Mar 2022 11:55:09 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 04832E02C2
-        for <linux-next@vger.kernel.org>; Thu, 10 Mar 2022 08:54:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646931248;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5MwC9pLk8kH+qC+K+f9j1LClRSMTrhuSRQJuKaO+wbA=;
-        b=SanHc34YjdtuMTvB2dGv3bnyfxBubHi+r22t/gnxLu01NNBAWyIcnqmnlP2v6stqg6LjPU
-        AYFG5irZiOh+QPn8qC+uHFFEYENvesh3VPK5F43UNgK+HxUWTyjTRlvMFyP2oePHeDR/+n
-        W0gplpJRARYUJPLDqGJzHHmm2/a74rI=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-484-NI1Ig8mUNSyCOHRw52hGHQ-1; Thu, 10 Mar 2022 11:54:06 -0500
-X-MC-Unique: NI1Ig8mUNSyCOHRw52hGHQ-1
-Received: by mail-wm1-f70.google.com with SMTP id c62-20020a1c3541000000b003815245c642so4300657wma.6
-        for <linux-next@vger.kernel.org>; Thu, 10 Mar 2022 08:54:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=5MwC9pLk8kH+qC+K+f9j1LClRSMTrhuSRQJuKaO+wbA=;
-        b=XvQxuolaIe03hXqABFksGRvEf87Yt+Fy74wcU2ATVyVpxWFvDSQ0CPugHWLCBDHQlY
-         KVZr3qS5AiYuDHLLg5ihNdzqLQj7j8EgSssUUPOFwh86m3PP+SiJ+bR4yut0KPeevF34
-         osxR92Kdqvjfvw3KIiUygDyw7dsqdAuhU4lwN1Qs6JZ+0MxZ/I+A6lFJP0JVRckr7v2N
-         cf4ZBAlXvTgBZZOePCGAS7g7ZAHcRQUyz5aXux6YhZlB3DNum3x7ELUkCqHwqnEPhJVl
-         cjs1grjknnJ9mtjt0QTrTCsMvT2Vyqj8Xf11LgBJafPDAslScAZYORJJByFLuIy5nqo/
-         To/g==
-X-Gm-Message-State: AOAM5337QjC5bCnIPcgw9fH+SqFmjSfwbUU5fCNmQUih5eOcCIyqndOQ
-        xc7gDsq2Mdu9Dn6bIJdow/bCGZOKkZVQcZtQkBlByASqhIk9+GnrDfM6tcGtOifpQ3MpFeFEui4
-        zlNdWwUtMEDoJp0xYYE7/oQ==
-X-Received: by 2002:a7b:c759:0:b0:389:82c6:ac44 with SMTP id w25-20020a7bc759000000b0038982c6ac44mr12107085wmk.168.1646931245752;
-        Thu, 10 Mar 2022 08:54:05 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwprMuo7fJBuzuQYrZDtLia+wgpoc1mm27QGdNvuTM/IhYDvmpe8AeQC8YG2KqJPs7x0QqE6w==
-X-Received: by 2002:a7b:c759:0:b0:389:82c6:ac44 with SMTP id w25-20020a7bc759000000b0038982c6ac44mr12107070wmk.168.1646931245495;
-        Thu, 10 Mar 2022 08:54:05 -0800 (PST)
-Received: from ?IPV6:2003:cb:c708:6100:d527:e3ca:6293:8440? (p200300cbc7086100d527e3ca62938440.dip0.t-ipconnect.de. [2003:cb:c708:6100:d527:e3ca:6293:8440])
-        by smtp.gmail.com with ESMTPSA id o41-20020a05600c512900b00389d8c3e2b9sm2669344wms.15.2022.03.10.08.54.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Mar 2022 08:54:05 -0800 (PST)
-Message-ID: <40f2a251-b844-9c6e-3e36-795433482998@redhat.com>
-Date:   Thu, 10 Mar 2022 17:54:04 +0100
+        with ESMTP id S230394AbiCJRLy (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 10 Mar 2022 12:11:54 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93A6215D3A3;
+        Thu, 10 Mar 2022 09:10:53 -0800 (PST)
+Received: from mail-wm1-f42.google.com ([209.85.128.42]) by
+ mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MVubb-1ncZTj3dn3-00RsYH; Thu, 10 Mar 2022 18:10:50 +0100
+Received: by mail-wm1-f42.google.com with SMTP id p184-20020a1c29c1000000b0037f76d8b484so3795999wmp.5;
+        Thu, 10 Mar 2022 09:10:50 -0800 (PST)
+X-Gm-Message-State: AOAM533Pva/6bc6aKl5NsMGMPWfBgB9p++ShzNiUPxMEGAXBCb4lmMad
+        N8GKHnFe8nFPkZPHSy72vli44q0P5iV4TltTq94=
+X-Google-Smtp-Source: ABdhPJxY8hGm9BEQKWwA3R6ukJGTZsnEU2TjUOjQUHCfOHpxv80mjDHnXeVwtelmj78dbQthb1oQ3YX63RkYL8slNoM=
+X-Received: by 2002:a1c:f20b:0:b0:389:c99a:4360 with SMTP id
+ s11-20020a1cf20b000000b00389c99a4360mr10282657wmc.174.1646932250447; Thu, 10
+ Mar 2022 09:10:50 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: linux-next: panic on 20220307 tree
-Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>,
-        Murphy Zhou <jencce.kernel@gmail.com>,
-        Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Linux-Next <linux-next@vger.kernel.org>
-References: <CADJHv_t0wMLJLCSkSh2CWTA=RKgYK0oxqqhnTdmuwtKSzdP5Jg@mail.gmail.com>
- <202203100825.8EAF86328B@keescook>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <202203100825.8EAF86328B@keescook>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220310072924.0EF1EC340EC@smtp.kernel.org> <c0eb0b0f-1fdb-b653-fbf9-4b1bd7c26efa@infradead.org>
+In-Reply-To: <c0eb0b0f-1fdb-b653-fbf9-4b1bd7c26efa@infradead.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 10 Mar 2022 18:10:34 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a23aduadfJsSEFdXB3a0B_krC9LLEfa-erSsSXcqzVqtw@mail.gmail.com>
+Message-ID: <CAK8P3a23aduadfJsSEFdXB3a0B_krC9LLEfa-erSsSXcqzVqtw@mail.gmail.com>
+Subject: Re: mmotm 2022-03-09-23-28 uploaded (drivers/perf/marvell_cn10k_ddr_pmu.c)
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Mark Brown <broonie@kernel.org>, Michal Hocko <mhocko@suse.cz>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        mm-commits@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Provags-ID: V03:K1:M7v+Mq5EbLAcuH2nYt7VJxsI46M2PrCK7TQVAAoFnYFrbqEGMRu
+ VogCi2EPJhfb9Swue5MgWnXjXk7ihfznZWshF5Ddt7LO9ZgIAitWKoTadRjOZBRXBsUJlYl
+ leTGBxjRHR02d8ztcrmvo1IzNcWYtsvKYq8s6MUL+1gBPPsyOFrQ4ih0+yAIa4fRrLtEWNn
+ nfoHGkcGiSHdlejkPronA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:9aSgktNS7nM=:4WZK+WY6ORo1deaLb2MVKm
+ sVK1XWvJhQPlEDUx5dWw27gKovOkzZzv0OPu5+6QP41aytxAyiHJ++HZjdbOIZQHGdFKTSW7/
+ IrUGBg1ZvzLBrGHUMJt8SSa6fsETsZatVOX3z054xdXyg3Qe8V5qmqj0e+3cpGUvZXxMrHRXt
+ CSpQEfGLR5PpvmMXreqCRoyNacNvQpPYWsIa9Vjk5hLwl/pIDLf7OFptwBd6N4VjXyPH5uclw
+ nykRRUqjnr1RBT1pJZUUjN4uvf+5INgUMChpC7R7t8cTXPn23P+hPM5t5at2Z0MZr8kMNI8To
+ Wz7wORa9tDvbI1vs1GzU2otzuZGVxfc+8DrqcuMhJKNVBKzblxFDUpGhIGWZ2yxtLQIa0cewq
+ Rf50JR7lk6K0vNnBp/okUmtggJyM7LZSIxjXQnCeTTM3yayL/PI92j+iywU4kio2pJTv0UrSw
+ VPjQe4TnmubJ9uJdMTHbqmYnZEtRjjgZt7Im4ZTxOWS/1VFC/P8nkncPM1rlInXyEIydqhWaV
+ htVxRWgJB5IwAuRSZstzsLBUqrUimfdNNJx0UXeZu3pBiNoDJ/DHOqCzEPD5C9VVsiMrexpa0
+ RjwwZNFpa2IfuKgy8zwyF+3LKzLvmBRn063edbqNQV0MPfSIJIK661zxK8h8tdBVqoYSsPnKk
+ I0dz11y7GWAdy5Ws9y1lyzugSjY96QoPur43R8VEiM3Es4/pnpw2TKePpw/DMoyvPl8M=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 10.03.22 17:29, Kees Cook wrote:
-> On Tue, Mar 08, 2022 at 10:44:57AM +0800, Murphy Zhou wrote:
->> Hi,
->>
->> Hit this shortly after build the next tree and reboot.
->>
->> [   72.985994] ------------[ cut here ]------------
->> [   72.986023] ------------[ cut here ]------------
->> [   73.009468] kernel BUG at include/linux/swapops.h:258!
->> [   73.033065] kernel BUG at include/linux/swapops.h:258!
-> 
-> This is in here:
-> 
-> static inline struct page *pfn_swap_entry_to_page(swp_entry_t entry)
-> {
->         struct page *p = pfn_to_page(swp_offset(entry));
-> 
->         /*
->          * Any use of migration entries may only occur while the
->          * corresponding page is locked
->          */
->         BUG_ON(is_migration_entry(entry) && !PageLocked(p));
-> 
->         return p;
-> }
-> 
-> Hugh, David, Andrew, might any of the recent mm/memory.c work caused
-> problems in here? (Or is this already fixed?)
+On Thu, Mar 10, 2022 at 5:34 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+> On 3/9/22 23:29, Andrew Morton wrote:
+> > The mm-of-the-moment snapshot 2022-03-09-23-28 has been uploaded to
+> >
+> >    https://www.ozlabs.org/~akpm/mmotm/
+> >
+> > mmotm-readme.txt says
+> >
+> > README for mm-of-the-moment:
+> >
+> > https://www.ozlabs.org/~akpm/mmotm/
+> >
+> > This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
+> > more than once a week.
+> >
+> > You will need quilt to apply these patches to the latest Linus release (5.x
+> > or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
+> > https://ozlabs.org/~akpm/mmotm/series
+>
+> on x86_64:
+>
+> ../drivers/perf/marvell_cn10k_ddr_pmu.c:723:21: error: ‘cn10k_ddr_pmu_of_match’ undeclared here (not in a function); did you mean ‘cn10k_ddr_pmu_driver’?
+>    .of_match_table = cn10k_ddr_pmu_of_match,
+>                      ^~~~~~~~~~~~~~~~~~~~~~
+>
+> Full randconfig file is attached.
+>
 
-Maybe related to:
+I suppose this is caused by having two different fixes applied, one that removes
+the of_match_ptr(), and one that adds an #ifdef. Either one would be correct,
+but the combination is not.
 
-https://lore.kernel.org/all/8f419d19-c83d-bbcd-8936-2d64ced7464c@google.com/T/#u
-
-which should be fixed now.
-
--- 
-Thanks,
-
-David / dhildenb
-
+       Arnd

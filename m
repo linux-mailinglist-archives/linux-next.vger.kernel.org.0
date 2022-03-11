@@ -2,81 +2,124 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8F8A4D5E8B
-	for <lists+linux-next@lfdr.de>; Fri, 11 Mar 2022 10:35:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E92B24D5EA9
+	for <lists+linux-next@lfdr.de>; Fri, 11 Mar 2022 10:43:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345328AbiCKJf6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 11 Mar 2022 04:35:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53282 "EHLO
+        id S1347624AbiCKJos (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 11 Mar 2022 04:44:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244357AbiCKJf6 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 11 Mar 2022 04:35:58 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E066C1BE0ED;
-        Fri, 11 Mar 2022 01:34:54 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KFLPQ21L3z4xcC;
-        Fri, 11 Mar 2022 20:34:50 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1646991290;
-        bh=lwDxUp/hw1Ufl/I6V6gqcN35yraDwcV17dzlHziDAEA=;
-        h=Date:From:To:Cc:Subject:From;
-        b=EtVgwZeYBJhZeYmzoBTfpvi2AyPYddT+GZ2qqEEnPa8A+CPVW2p79QIG5nP3pgocX
-         YDvu1XpImleNrbHVAZUJ2Z2uoaQAQnTiT3a2j7ngsT+reG+dlvT+K/ZIyA57WrttF+
-         VjlU2zg8O78ux9V5xYN4sRrCbsH84qQl2aw6pD/l8SNd9gtBot82mEpEJ2+y3G9lF6
-         O9z6EzCM6nlI3DFv5+/t0K+/MiHPBkVH5wwkbFBCtOEwGO/18C43akAVSP5AXbu8Wi
-         1EGXLwmXiZXdousv3nbPOb+rtLzAm1akZpOT9pfao1B33smKo49AoxOyDFohAx/gvP
-         wH3nWSpvBHZRg==
-Date:   Fri, 11 Mar 2022 20:34:46 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: No tree today
-Message-ID: <20220311203446.6d916402@canb.auug.org.au>
+        with ESMTP id S1347634AbiCKJor (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 11 Mar 2022 04:44:47 -0500
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FB3018CC30
+        for <linux-next@vger.kernel.org>; Fri, 11 Mar 2022 01:43:44 -0800 (PST)
+Received: by mail-yb1-xb29.google.com with SMTP id x200so16088746ybe.6
+        for <linux-next@vger.kernel.org>; Fri, 11 Mar 2022 01:43:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=TIFu/VHHMOB76DBH3VmekrMNPHjC046YZKBlr3Q42S0=;
+        b=yDo/kVojw5JfXILQOZb+2d0iyVAYnJKaRjlTcR3HrYYs523exps6sBTQU0iiynF/Ex
+         fFSHZQS8K8E5JeW26GPi0dPcDi0GKiPab1PuZCjBARn6gNuo2xR6nebgQlGe8UfAJTvR
+         CTVe9ksRUqHUF3nMtQRSqx5LtAkmMERp58MRCOdGot7Jq9EMgtXdfjuvnz5LH2SJemVN
+         fugj6+4p8KWzHCn3e0dE7lDsngCKjxnCB+gEEAerXqz226CsDQhd36CBygZLKVQGpngw
+         UqQiPIZ5WoBTKCPC6YuTcZujHoFblApvAmzNWAkyDv3+6P3qL0blAE8IKPKgVMtVS7ch
+         dLmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=TIFu/VHHMOB76DBH3VmekrMNPHjC046YZKBlr3Q42S0=;
+        b=R8ZpNynN8+9ln9ACkbaBO834ogKgaFE0pzO9Hkyc9sDbrh5VC/704rFfPdDCG6cB3U
+         pC6MWIVZyVoF6YqEaYnJ2yqaT9DGKdcWHoJw+3hd4By1lHd1q9rzpsCyAyDrAR5CMtyq
+         1rOUZB8Ds7oLl85YuHZtV/6DhSPUWrFl+hva6Me85Ghq7EfKkscB5CcS7Np39kbzNEOv
+         fqAEOB1OpoT45p0faQYimwZ0c1bUxfR6NnIc+/WEpZCC1fDq1cF9VQH2q/gQB5fyz/g6
+         FmFCdQafkjeQbHYJWNpQhSOFdB04lsuOumCNJ/mgUz29c1k6QNXz5JNtk4PZKRsyY65y
+         9mww==
+X-Gm-Message-State: AOAM530jbCHzEkxJ7NehoD7DamG5kA0cgMUOaje4IrFBxfeu3Iy/R5PB
+        CSW19V+G9zkD1H8yqq5dXfGTwMhn4uY21M+wvYP7BA==
+X-Google-Smtp-Source: ABdhPJybv6BjNreR3Rcq9Uuz3MSOw2t7DM4faUzpVS5N9Jka0gwWccLB0/3djh4fLXQXr+8oysqkC3TNPpXprHy8F4s=
+X-Received: by 2002:a25:ad07:0:b0:628:78df:ff24 with SMTP id
+ y7-20020a25ad07000000b0062878dfff24mr7314699ybi.233.1646991823539; Fri, 11
+ Mar 2022 01:43:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ep0E.32A17704ykWfvTBq/O";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,LOCALPART_IN_SUBJECT,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+From:   Anders Roxell <anders.roxell@linaro.org>
+Date:   Fri, 11 Mar 2022 10:43:32 +0100
+Message-ID: <CADYN=9+xY5Vku3Ws5E9S60SM5dCFfeGeRBkmDFbcxX0ZMoFing@mail.gmail.com>
+Subject: [next] arm64: allmodconfig: kernel BUG at include/linux/page-flags.h:509
+To:     beaub@linux.microsoft.com, Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        linux-trace-devel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/ep0E.32A17704ykWfvTBq/O
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi,
 
-Hi all,
+I'm building and running an arm64 allmodconfig kernel on next.
+Reacently I've seen this error below, for full log see [1].
 
-Due to a breakdown in our internal network this afternoon, I cannot
-complete linux-next today.  Sorry about that.
+[   56.000810][    T1] ------------[ cut here ]------------
+[   56.003178][    T1] kernel BUG at include/linux/page-flags.h:509!
+[   56.006291][    T1] Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
+[   56.008921][    T1] Modules linked in:
+[   56.010600][    T1] CPU: 0 PID: 1 Comm: swapper/0 Tainted: G
+        T 5.17.0-rc6-next-20220304 #1
+ff4358f1e97b9d4d3a7966961f455fb8cb5c735d
+[   56.015962][    T1] Hardware name: linux,dummy-virt (DT)
+[   56.018189][    T1] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT
+-SSBS BTYPE=--)
+[   56.021355][    T1] pc : set_page_reservations+0xf8/0x3b8
+[   56.023655][    T1] lr : set_page_reservations+0xec/0x3b8
+[   56.025976][    T1] sp : ffff80000eb37c20
+[   56.027699][    T1] x29: ffff80000eb37c20 x28: ffff0000079d8050
+x27: 0000000000000001
+[   56.031030][    T1] x26: ffff80000a2c6140 x25: ffff80000e240380
+x24: ffff80000b780f70
+[   56.034381][    T1] x23: fffffc0000000000 x22: 000000000028b100
+x21: fffffc000028b100
+[   56.037728][    T1] x20: ffff80000e23ffe0 x19: ffff80000e23ffe0
+x18: 0000000000000000
+[   56.041039][    T1] x17: 0000000000000000 x16: 0000000000000000
+x15: 0000000000000000
+[   56.044323][    T1] x14: 0000000000000000 x13: fffffffffffe34f0
+x12: fffffffffffe3498
+[   56.047644][    T1] x11: 0000000000000000 x10: 0000000000000000 x9
+: 0000000000000000
+[   56.050941][    T1] x8 : 0000000000000000 x7 : 0000000000000000 x6
+: 0000000000000000
+[   56.054258][    T1] x5 : 0000000000000000 x4 : 0000000000000000 x3
+: 0000000000000000
+[   56.057729][    T1] x2 : 0000000000000000 x1 : 0000000000000000 x0
+: 0000000000000001
+[   56.061075][    T1] Call trace:
+[   56.062436][    T1]  set_page_reservations+0xf8/0x3b8
+[   56.064709][    T1]  trace_events_user_init+0x1bc/0x3f8
+[   56.067110][    T1]  do_one_initcall+0x2ac/0x6c0
+[   56.069267][    T1]  do_initcalls+0x17c/0x244
+[   56.071269][    T1]  kernel_init_freeable+0x2a0/0x344
+[   56.073587][    T1]  kernel_init+0x34/0x180
+[   56.075614][    T1]  ret_from_fork+0x10/0x20
+[   56.077655][    T1] Code: 97937293 f9401a80 91000400 f9001a80 (d4210000)
+[   56.080828][    T1] ---[ end trace 0000000000000000 ]---
+[   56.083250][    T1] Kernel panic - not syncing: Oops - BUG: Fatal exception
+[   56.086279][    T1] ---[ end Kernel panic - not syncing: Oops -
+BUG: Fatal exception ]---
 
-Also there will be no linux-next release on Monday.
+Reported-by: Anders Roxell <anders.roxell@linaro.org>
 
---=20
+Any idea what happens?
+
+
 Cheers,
-Stephen Rothwell
-
---Sig_/ep0E.32A17704ykWfvTBq/O
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIrF7YACgkQAVBC80lX
-0GyHDAf9GJoa2abEU7vsTMN3JWLa9dOJlp9W5L0Zc4jj8Z9DCg+b8A+AuVGqCD/Q
-iS9wnt2FuqzUykp9RA4XXOcDDGOhasfLuSf+ypxcO+Cphtqv6YROaTlqnaO9S367
-9Ej3T2919l+jUa1eJePrLepL0P357uU6R3trI9axdjktCV85t3tZA9PjNUfli9JM
-lZ+Ivc277zddXUKF/rjp1UunGWhGg3yVaRxFq6/s2GKNN3GAA66whNEHRmWdHfwe
-gSKM+BPZOcK6U+A5KALynd17VbNhMT/Fy4LVEAUqIWp7/l8jFMf2lItBEBWPIBog
-qnf2q5rvJCUCRnZe2cSWhW9woB5IKg==
-=p7L9
------END PGP SIGNATURE-----
-
---Sig_/ep0E.32A17704ykWfvTBq/O--
+Anders
+[1] http://ix.io/3Rkj

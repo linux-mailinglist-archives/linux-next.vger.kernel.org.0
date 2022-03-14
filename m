@@ -2,93 +2,93 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6455E4D7E11
-	for <lists+linux-next@lfdr.de>; Mon, 14 Mar 2022 10:03:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AFCB4D8065
+	for <lists+linux-next@lfdr.de>; Mon, 14 Mar 2022 12:09:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237102AbiCNJEW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 14 Mar 2022 05:04:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49342 "EHLO
+        id S230525AbiCNLKX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 14 Mar 2022 07:10:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231559AbiCNJET (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 14 Mar 2022 05:04:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C19528E17;
-        Mon, 14 Mar 2022 02:03:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S238801AbiCNLKW (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 14 Mar 2022 07:10:22 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5924213CE9;
+        Mon, 14 Mar 2022 04:09:11 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B15B7612B9;
-        Mon, 14 Mar 2022 09:03:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DF57C340F5;
-        Mon, 14 Mar 2022 09:03:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647248588;
-        bh=BCdwikr2vz55Gg6PuMXgetSu2UWOs0MXUsCZC+OCyyE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=QahnG01e6jZc0dRks4DF6nDuGYJlCo/qGqpZq0DWYgiIZ0O8MFVA5Vgvgsw15t0qs
-         +sJ0J79nzL05Ucf+ZHyJRFRafef1ntTgOFhWjbgPocBgiEcaQnOoq8iWbgesmqr1Bf
-         qT2gzJx+BWAzjsGdWwqjnbu3tEA5GcJNa2JwjFLNk6f6Q+8eHjPuKKV9h8nJFMOlB2
-         KEOtb7jgBM+sckCHFbFWYUeMyzvzMt0RFO9Pq+jaMcD14udVF1WAK93VegVe9r5/SI
-         uFxblV0J6J6LKB6mJZMCf3fgv6PAKKnQKkrvcY5V40tCJv+sDyAfMv6H6WTzfVJNja
-         sdQQZSs7hGXzQ==
-Received: by mail-yb1-f173.google.com with SMTP id g26so29302888ybj.10;
-        Mon, 14 Mar 2022 02:03:08 -0700 (PDT)
-X-Gm-Message-State: AOAM532ED3LcxoHqq0BB0oZ8F3gaihBsD20SDOah0jSLiT7+k47OxnJi
-        DWQOoTA6bRhEm03eKRH47+nnXoIMLnx/cc3pLsE=
-X-Google-Smtp-Source: ABdhPJy8huQQmqnCSx9yI8of1v/BIBOYIbynMrebeBFvdYFpIPCFwVwclYk4awxHfJIfG6+KCP5D5ynA1anQobSsPqQ=
-X-Received: by 2002:a25:af8e:0:b0:622:c778:c0a2 with SMTP id
- g14-20020a25af8e000000b00622c778c0a2mr17505799ybh.50.1647248587150; Mon, 14
- Mar 2022 02:03:07 -0700 (PDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KHDLq4Hk7z4xLS;
+        Mon, 14 Mar 2022 22:09:07 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1647256147;
+        bh=Pn1uR5RihtV7pTnv1JUsDYmzsaDWJ6firiRLmwfXPek=;
+        h=Date:From:To:Cc:Subject:From;
+        b=n5U06B3GSHe3a1Z+2k6iyL3TPdXQ4xShWl8Tc0PL/FA78Bw8jce/JZhPcMlgDp+FP
+         kbt8IQ7xRMri04p0tjbS+7CF73eLu00Qokuza5lFkoTAPEPk3xr7Z75Y9KRdZutsA/
+         bXooPOvzBsxGwMoedm+dV4u9Q2W5N89Xs8SnIh1WvUIeyp8Qre+df0AIBpHF4RtYML
+         zU0fpKB4IXR5gVc6WMgA/X7PlsVtClsi5+oksOUUxJKImahhPn6s8/4Ahn8fAuRiVQ
+         pglOimgfcEWNyM4at2HNCFCqcn7k1bQAA+6C5hWOOgsqF8sZTqWxgn0PnnUNGEnikC
+         Xi85WnS64rtQA==
+Date:   Mon, 14 Mar 2022 22:09:05 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Gwendal Grignou <gwendal@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the hid tree
+Message-ID: <20220314220905.4e9eb8cf@canb.auug.org.au>
 MIME-Version: 1.0
-References: <CAMj1kXE02HH7vRUjF3iKAL+1idKTy-oOYyGnBd3g90m6eObBxg@mail.gmail.com>
- <YikByJteDEtKi4Xv@shell.armlinux.org.uk> <CAMj1kXGnwbe=YYWaRxaXioEfTJOdXg9JYcNddO8iifpWLRZCWg@mail.gmail.com>
- <Yinwq3Z9l0selLLS@shell.armlinux.org.uk> <Yin2jQqW+pUWJZ7E@shell.armlinux.org.uk>
- <CAMj1kXGkUJ=-4oA4GvBZNK94A1MrZ7UwKDN_tJRgwq8KF06VmA@mail.gmail.com>
- <CA+G9fYvEANOMekjvtu7agdVYQ_b8OMtxQdyAV2JT_vMdBU3VRA@mail.gmail.com>
- <CAMj1kXEVVZTKX_86bbTfLpFuDriV0-uwCMgSKDP+dzcD1L4XCw@mail.gmail.com>
- <CA+G9fYuO-sy+sZnhSz=A7Xm0LdSp2AT+7jCKLB33tZzK4izj3g@mail.gmail.com>
- <CAMj1kXGb_0FNU7capJEDWTZF2OegmZyBphhH8GuNqL7+YYLjZQ@mail.gmail.com>
- <Yip3GJDbJIYNeg44@shell.armlinux.org.uk> <CA+G9fYsjK7z3VUgaOcs+cCCQWNsXW58pbDqruev6ANLdcswF1g@mail.gmail.com>
-In-Reply-To: <CA+G9fYsjK7z3VUgaOcs+cCCQWNsXW58pbDqruev6ANLdcswF1g@mail.gmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Mon, 14 Mar 2022 10:02:55 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXEA8TmK_pqDxrEg5==OPfWp8LWEBE=iFhJ8-5cm_DOgyA@mail.gmail.com>
-Message-ID: <CAMj1kXEA8TmK_pqDxrEg5==OPfWp8LWEBE=iFhJ8-5cm_DOgyA@mail.gmail.com>
-Subject: Re: [next] arm: Internal error: Oops: 5 PC is at __read_once_word_nocheck
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Corentin Labbe <clabbe.montjoie@gmail.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>,
-        lkft-triage@lists.linaro.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/j7RygJc+1yep=iCIVz/ba9I";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, 14 Mar 2022 at 10:02, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
->
-> Hi  Ard and Russell,
->
-> Your three patches applied and tested on x15 tested by Daniel and reported
-> kernel crash did not find it after multiple iterations.
->
-> ARM: unwind: set frame.pc correctly for current-thread unwinding
-> ARM: entry: fix unwinder problems caused by IRQ stacks
-> ARM: Revert "unwind: dump exception stack from calling frame"
->
-> Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
->
+--Sig_/j7RygJc+1yep=iCIVz/ba9I
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thank you Naresh.
+Hi all,
+
+In commit
+
+  f97ec5d75e92 ("HID: intel-ish-hid: Use dma_alloc_coherent for firmware up=
+date")
+
+Fixes tag
+
+  Fixes: commit 91b228107da3 ("HID: intel-ish-hid: ISH firmware loader clie=
+nt driver")
+
+has these problem(s):
+
+  - leading word 'commit' unexpected
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/j7RygJc+1yep=iCIVz/ba9I
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIvIlEACgkQAVBC80lX
+0GymBwf/Qh5HfPEx/3hy6ppWHQulrhF7G5Z0ZlEFfqOAbitnGPmMY2BEyJ1VNSY1
+L1r5/fnWTUahYITXL7TNPswXrSv3EOkcWQyIVW+TnBjJA4uZwR81AuV6L+BpHpMY
+qcuAYgIVWQv+XErp9HryOfafHvboO+iE/tijdYbGMRLOQYbXvQFfjsqwdM7TIeDb
+7CT7v8xnrXYw2hkIX+4NKtKQeFZVVCdK8YMMJa6OdDW5c6PRQcrHqcwBX1ru8i0N
+VjTHFUd9UxRRS/4YND9AlSFU2rn7fDqOtXVmMK0WzvKP33y9969tWj4/kSP2/n35
+pnX1yhqIxMvjo5jLZkfwaar/dgRFJg==
+=rz2q
+-----END PGP SIGNATURE-----
+
+--Sig_/j7RygJc+1yep=iCIVz/ba9I--

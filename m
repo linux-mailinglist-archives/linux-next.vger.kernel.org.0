@@ -2,127 +2,75 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F6874D9C96
-	for <lists+linux-next@lfdr.de>; Tue, 15 Mar 2022 14:48:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0314B4D9D2E
+	for <lists+linux-next@lfdr.de>; Tue, 15 Mar 2022 15:15:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348775AbiCONtw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 15 Mar 2022 09:49:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58676 "EHLO
+        id S238491AbiCOOQj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 15 Mar 2022 10:16:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244349AbiCONtv (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 15 Mar 2022 09:49:51 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 787921E3FA;
-        Tue, 15 Mar 2022 06:48:38 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22FDTRqY000973;
-        Tue, 15 Mar 2022 13:48:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=OlTmFKeNOPbWVZWVR++ggfV/pUnN8vS0wntQqCNVVtQ=;
- b=KxCYTyEMX0TfQhgCqkYkaJc01K4NxLUyR1eTt31M61JPUeTD/KjfisytSTFwg8TOmoRT
- jhr9s9CBP4a+I/O7JysQZ3E8zxOXWKzlkA6a+kfhtWHkRBnFQEkhj0tLADav76YX7i3y
- XqNP9tqj78rgFKJ/8oEmn4/GCvWh9Yz9ovc4LDrFu9SOIf64q1oLJtVTfXBFjl4g6ZCa
- s18B/3WxwztVmzDSwbIZtONuhCWVdgMiSE78aT7Fvxr6aIoCIWXMgkPO5q5tweLycj/n
- yzSVweqqIrmfl+Vk5+6hSzmNnlJO2xxJwPja/slWqzt48JrquLoDnMn5NzsRpF8sTnAv sw== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3etuqvrdy6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Mar 2022 13:48:18 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22FDd4ft009614;
-        Tue, 15 Mar 2022 13:48:16 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma03ams.nl.ibm.com with ESMTP id 3et95wt2f9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Mar 2022 13:48:16 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22FDmD7D46530892
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 15 Mar 2022 13:48:13 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 89B76A405B;
-        Tue, 15 Mar 2022 13:48:13 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 008E1A405C;
-        Tue, 15 Mar 2022 13:48:11 +0000 (GMT)
-Received: from [9.43.37.159] (unknown [9.43.37.159])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 15 Mar 2022 13:48:10 +0000 (GMT)
-Message-ID: <e4041192-5d9a-bf36-75d4-58c36abc14b8@linux.ibm.com>
-Date:   Tue, 15 Mar 2022 19:18:09 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: linux-next: manual merge of the nvdimm tree with the powerpc tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>
+        with ESMTP id S231822AbiCOOQj (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 15 Mar 2022 10:16:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69E784EA0B;
+        Tue, 15 Mar 2022 07:15:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0486A61699;
+        Tue, 15 Mar 2022 14:15:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6AF0C340E8;
+        Tue, 15 Mar 2022 14:15:25 +0000 (UTC)
+Date:   Tue, 15 Mar 2022 10:15:24 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Chuck Lever III <chuck.lever@oracle.com>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Shivaprasad G Bhat <sbhat@linux.ibm.com>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>
-References: <20220315191538.323eefbb@canb.auug.org.au>
-From:   kajoljain <kjain@linux.ibm.com>
-In-Reply-To: <20220315191538.323eefbb@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: linux-next: manual merge of the ftrace tree with the nfsd tree
+Message-ID: <20220315101524.6215285d@gandalf.local.home>
+In-Reply-To: <A1869114-7192-4DF2-BD0F-B2A970F79CC2@oracle.com>
+References: <20220315145828.413e9301@canb.auug.org.au>
+        <A1869114-7192-4DF2-BD0F-B2A970F79CC2@oracle.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: oc8RKe36qml5uCS9FxAJSjtPHwalgQ3n
-X-Proofpoint-ORIG-GUID: oc8RKe36qml5uCS9FxAJSjtPHwalgQ3n
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-15_03,2022-03-15_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 bulkscore=0
- phishscore=0 malwarescore=0 mlxlogscore=999 impostorscore=0
- lowpriorityscore=0 clxscore=1011 priorityscore=1501 mlxscore=0
- suspectscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2202240000 definitions=main-2203150089
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+On Tue, 15 Mar 2022 13:33:30 +0000
+Chuck Lever III <chuck.lever@oracle.com> wrote:
 
+> >  af6b9668e85f ("tracing: Move the defines to create TRACE_EVENTS into their own files")
+> > 
+> > from the ftrace tree.
+> > 
+> > Well, this is a pain :-(  
 
-On 3/15/22 13:45, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the nvdimm tree got a conflict in:
-> 
->   arch/powerpc/platforms/pseries/papr_scm.c
-> 
-> between commit:
-> 
->   bbbca72352bb ("powerpc/papr_scm: Implement initial support for injecting smart errors")
-> 
-> from the powerpc tree and commit:
-> 
->   4c08d4bbc089 ("powerpc/papr_scm: Add perf interface support")
-> 
-> from the nvdimm tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-> 
+Welcome to the include/trace directory ;-)
 
-Hi Stephan,
-         The change for resolving merged trees issue looks good to me. I
-also tested the latest linux-next tree - master branch with
-next-20220315 changes and the papr_scm perf interface is working as
-expected. Thanks for correcting it.
+> 
+> Apologies. Steven, can you take the sockaddr patches in your tree
+> and resolve the x86_64 build issue?
+
+My apologies, I forgot that there was changes in other trees that affect
+this.
+
+Anyway, I'll go and do a merge myself and see what happens. The point of
+linux-next is to resolve these kinds of issues. I believe the reason you
+took those changes was because you have a dependency on them, and I think
+they should stay in your tree.
+
+Let me do the merge myself and verify what Stephen did was correct or needs
+to be updated. This will also need to be done for Linus as well.
 
 Thanks,
-Kajol Jain
+
+-- Steve

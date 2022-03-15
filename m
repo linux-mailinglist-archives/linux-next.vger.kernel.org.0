@@ -2,43 +2,51 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BECC24D98B0
-	for <lists+linux-next@lfdr.de>; Tue, 15 Mar 2022 11:26:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE4EC4D98F7
+	for <lists+linux-next@lfdr.de>; Tue, 15 Mar 2022 11:41:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347061AbiCOK12 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 15 Mar 2022 06:27:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49762 "EHLO
+        id S242524AbiCOKmX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 15 Mar 2022 06:42:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235405AbiCOK11 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 15 Mar 2022 06:27:27 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 498764506D;
-        Tue, 15 Mar 2022 03:26:15 -0700 (PDT)
+        with ESMTP id S1347169AbiCOKmW (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 15 Mar 2022 06:42:22 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA3AB506E9;
+        Tue, 15 Mar 2022 03:41:10 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KHqLp758Jz4xLQ;
-        Tue, 15 Mar 2022 21:26:10 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KHqh438Xbz4xNm;
+        Tue, 15 Mar 2022 21:41:08 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1647339971;
-        bh=DnIf4+KzBYCXCr77sCmro4W9111SzEmHH+XVf6G2kXg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=KFeYif+UtYtvMMn6VWssI8QIuN+TAbCrTuXNBQqgfG2VwT0MCDQ45Co0d5bVCgd17
-         nGhWXItLXi5J1gOka+nhL99TNlCHR8iOgbi8Nrur7drLvulN6TjxnK7qa2soWXVQs9
-         TeZSY0UAG8rMyCb2tYwFuzROdgDByIzl5dvwSwVddu2DNkvRU0Byt3NcD2Mz6iu/OL
-         SNhemqna8GEIOB48c4XViyiL48a54ZIjP/6VsAvrw2jkcBz4hjTLHfE1jS5zmI+Nzm
-         Bi3FZg5WWDfCxmTr362khDAmSwCthJujqEIe8RzaoIlwxEW4v6Ti2dWt9rWEwzTh2X
-         tSuwrssY8MQtw==
-Date:   Tue, 15 Mar 2022 21:26:10 +1100
+        s=201702; t=1647340869;
+        bh=RjFJmXH6IA0N3FVtyaPB9cyP/4A8Z1CtKfNY3KyxfMM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=rrvTTtucA5oLJJIat8mBZU9RC6r/1MI6nxSsybiWMqwZTFrPHpPljXbdRlGfDQ7g9
+         USo/cJlCd9wBAz/enNVgxLNKTrnKxPeFfCRYqR7HiQbhaMC2iPsR/tdaUK9ed4xu5R
+         nqUQPk7BQCp1Ho9x1/M7moofRHEj2kB7K7wrgUQxMNZTcC5k82cTMVLHF6P+WH1v2p
+         ljl7+6fmwx5oYsuLGVEtjVu+rKjCHWgh+kiLTWgqlY0RYTbaf61hxrULisgtU1IQO1
+         Do0iCI5wIwbyXYOBlmn8suCLFbwmYxZGRTPXghiMhxfKsS+L6IaExvfp9D+rqHtyOv
+         YpS80TnySdy1g==
+Date:   Tue, 15 Mar 2022 21:41:07 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the folio tree
-Message-ID: <20220315212610.0f996842@canb.auug.org.au>
+Subject: Re: linux-next: build failure after merge of the tip tree
+Message-ID: <20220315214107.4568a949@canb.auug.org.au>
+In-Reply-To: <20220315092219.GC8939@worktop.programming.kicks-ass.net>
+References: <20220315140644.369d98d6@canb.auug.org.au>
+        <20220315162327.53f7139f@canb.auug.org.au>
+        <20220315163747.3e11ad15@canb.auug.org.au>
+        <20220315092219.GC8939@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/h6xFeX791JGavsaFW91kBqU";
+Content-Type: multipart/signed; boundary="Sig_/vH84N1wp83rkD/uMB=IbbXM";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -49,47 +57,39 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/h6xFeX791JGavsaFW91kBqU
+--Sig_/vH84N1wp83rkD/uMB=IbbXM
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Peter,
 
-After merging the folio tree, today's linux-next build (powerpc
-ppc64_defconfig) failed like this:
+On Tue, 15 Mar 2022 10:22:19 +0100 Peter Zijlstra <peterz@infradead.org> wr=
+ote:
+>
+> Almost, it's this in combination with a follow up that uses it. I've
+> just managed to beat it into submission, will hopefully be cured for
+> tomorrow's build.
 
-mm/readahead.c: In function 'read_cache_pages_invalidate_page':
-mm/readahead.c:54:17: error: implicit declaration of function 'do_invalidat=
-epage'; did you mean 'd_invalidate'? [-Werror=3Dimplicit-function-declarati=
-on]
-   54 |                 do_invalidatepage(page, 0, PAGE_SIZE);
-      |                 ^~~~~~~~~~~~~~~~~
-      |                 d_invalidate
-
-Caused by commit
-
-  f1fdabbaae8e ("fs: Turn do_invalidatepage() into folio_invalidate()")
-
-I have used the folio tree from next-20220310 for today.
+Thanks.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/h6xFeX791JGavsaFW91kBqU
+--Sig_/vH84N1wp83rkD/uMB=IbbXM
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIwacIACgkQAVBC80lX
-0GzIKgf/S0YBkWV0/HqG8kYmfG4CemI4Ta2XCWBX0aH/ClwpWKKBiDXnVRia7T+f
-Rmh96NYuxApbsEtShZ4wrX7pkFkzLbkRYbc9diI5+2u/lhIrmT6MJ+QjPlEmLeLe
-XRNRPlKap7hpDKMUMvCSaAIMzp8Hvy4rIR9eQCwhWve/ViyBqquKcncC27vexgMS
-9oC1MD//dxicI0DnarhuQ/Dn3gUpas/t5eGMunZYRptSsWe+/KvvVDVXycQIjwFb
-HaLTfuCakG3vqp1BEk/uiBseSHKPhCjsD9gZ5Ae8rN7eDLn1koMOTZKoEksQzOCy
-qV69Y/L9uYx85dSwYBqQnq3zfRwcFA==
-=hzBH
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIwbUMACgkQAVBC80lX
+0GxG3wf/UjoJ6iXMtCRn2W1gD1Z0F82xen3cb52JX3wAB/J4OK5QR/RnISqhQRz7
+KsH76q2H5LCs2+fbnq7Tg4Rv80cAEFnFGpjw8MofSvzoV7gapHATBhMR52ykhpn0
+LS1ydUpx4TqlfPgrlU8RmhbnwCFYMZ8rcVYZszKy3stR9ykq47e1clEgKv+kkAhB
+mKRCFAvJQIJTrW/qMTIOjGwSFQDfemiOZEvWGDN4sKHEg1Ajk5QSnfAeaY43Glxo
+4N4Ebf+zc0USBs4Y3CElMpJ/DdGVu+a+6RnFni3fTdrzdnplOF/Z3RRMUquAK5mI
+yefMr61zyg72+wyq0qpBOCY1kjZZcw==
+=9cu9
 -----END PGP SIGNATURE-----
 
---Sig_/h6xFeX791JGavsaFW91kBqU--
+--Sig_/vH84N1wp83rkD/uMB=IbbXM--

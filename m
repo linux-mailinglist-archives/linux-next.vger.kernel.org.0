@@ -2,123 +2,156 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78E0F4DA115
-	for <lists+linux-next@lfdr.de>; Tue, 15 Mar 2022 18:26:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4042A4DA14C
+	for <lists+linux-next@lfdr.de>; Tue, 15 Mar 2022 18:32:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350545AbiCOR1T (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 15 Mar 2022 13:27:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51686 "EHLO
+        id S1343835AbiCORdT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 15 Mar 2022 13:33:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347737AbiCOR1Q (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 15 Mar 2022 13:27:16 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D04F748E78;
-        Tue, 15 Mar 2022 10:26:02 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22FGflpB002387;
-        Tue, 15 Mar 2022 17:25:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : in-reply-to : references : date : message-id : mime-version :
- content-type; s=pp1; bh=+m2zdRbNqsWkuVUHJWgaFa7AvKiQxrR+dHzT2AmUs8c=;
- b=FgLVs4jsakxDnWHrcaOP1dImS1/6Z2Ewv1RslCPRKf/07SH6vavvTJIMmq6+q4zIWbPB
- gC3ZURYKECyNRceFwPUl7Nrr16ETjAqZOBVJwRBVrKZeoWDVQuMicxzMPW4BbREkCqWb
- 1EDgr1M+ywt043mZKEQQMg9JHjaRq2kJgWTMvsIK8/Izay+cPfjjB+mp4av0W/QnQ5hi
- AWOihZZCeuFuBi7jY8dVq4gXhoBh7ecsMrrdjKXSW2yNbxV8p7YF/37d2eJhNTL5pQV8
- iQjwENlMbzgHzTLH/EafygqoAU67OBi0l3UO3zmEi0t98zMDmhoHaTTxmh1ePHjrsDeX AA== 
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3etxhtgy6e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Mar 2022 17:25:51 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22FHDKtp012855;
-        Tue, 15 Mar 2022 17:25:49 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma05fra.de.ibm.com with ESMTP id 3erk58p3n0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Mar 2022 17:25:49 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22FHPktZ52167006
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 15 Mar 2022 17:25:46 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 772D2AE04D;
-        Tue, 15 Mar 2022 17:25:46 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 89863AE045;
-        Tue, 15 Mar 2022 17:25:41 +0000 (GMT)
-Received: from vajain21.in.ibm.com (unknown [9.211.32.147])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with SMTP;
-        Tue, 15 Mar 2022 17:25:41 +0000 (GMT)
-Received: by vajain21.in.ibm.com (sSMTP sendmail emulation); Tue, 15 Mar 2022 22:55:39 +0530
-From:   Vaibhav Jain <vaibhav@linux.ibm.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>
-Cc:     Kajol Jain <kjain@linux.ibm.com>,
+        with ESMTP id S1350676AbiCORdH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 15 Mar 2022 13:33:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD02556775;
+        Tue, 15 Mar 2022 10:31:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 67B97615AC;
+        Tue, 15 Mar 2022 17:31:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 581E2C340E8;
+        Tue, 15 Mar 2022 17:31:53 +0000 (UTC)
+Date:   Tue, 15 Mar 2022 13:31:51 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Chuck Lever III <chuck.lever@oracle.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Shivaprasad G Bhat <sbhat@linux.ibm.com>
-Subject: Re: linux-next: manual merge of the nvdimm tree with the powerpc tree
-In-Reply-To: <20220315191538.323eefbb@canb.auug.org.au>
-References: <20220315191538.323eefbb@canb.auug.org.au>
-Date:   Tue, 15 Mar 2022 22:55:39 +0530
-Message-ID: <87v8wfb018.fsf@vajain21.in.ibm.com>
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: linux-next: manual merge of the ftrace tree with the nfsd tree
+Message-ID: <20220315133151.7e415bb3@gandalf.local.home>
+In-Reply-To: <A1869114-7192-4DF2-BD0F-B2A970F79CC2@oracle.com>
+References: <20220315145828.413e9301@canb.auug.org.au>
+        <A1869114-7192-4DF2-BD0F-B2A970F79CC2@oracle.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: -3J5cxA1rd3sxn56In5FZvp1n-T54dZQ
-X-Proofpoint-GUID: -3J5cxA1rd3sxn56In5FZvp1n-T54dZQ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-15_03,2022-03-15_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=999
- mlxscore=0 malwarescore=0 bulkscore=0 phishscore=0 spamscore=0
- suspectscore=0 impostorscore=0 clxscore=1011 priorityscore=1501
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203150104
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Stephen Rothwell <sfr@canb.auug.org.au> writes:
+On Tue, 15 Mar 2022 13:33:30 +0000
+Chuck Lever III <chuck.lever@oracle.com> wrote:
 
-> Hi all,
->
-> Today's linux-next merge of the nvdimm tree got a conflict in:
->
->   arch/powerpc/platforms/pseries/papr_scm.c
->
-> between commit:
->
->   bbbca72352bb ("powerpc/papr_scm: Implement initial support for injecting smart errors")
->
-> from the powerpc tree and commit:
->
->   4c08d4bbc089 ("powerpc/papr_scm: Add perf interface support")
->
-> from the nvdimm tree.
->
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+> > On Mar 14, 2022, at 11:58 PM, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> > 
+> > Hi all,
+> > 
+> > Today's linux-next merge of the ftrace tree got a conflict in:
+> > 
+> >  include/trace/trace_events.h
+> > 
+> > between commit:
+> > 
+> >  d07c9ad62247 ("tracing: Introduce helpers to safely handle dynamic-sized sockaddrs")
+> > 
+> > from the nfsd tree and commit:
+> > 
+> >  af6b9668e85f ("tracing: Move the defines to create TRACE_EVENTS into their own files")
+> > 
+> > from the ftrace tree.
+> > 
+> > Well, this is a pain :-(  
+> 
+> Apologies. Steven, can you take the sockaddr patches in your tree
+> and resolve the x86_64 build issue?
 
-Thanks for this correction Stephen and the change looks ok to me. I
-verified the functionality introduced by kernel commit bbbca72352bb
-("powerpc/papr_scm: Implement initial support for injecting smart
-errors") on the 'next-20220315' and found it to be working fine.
+Actually, the issue is not with your tree. It's a conflict with:
 
-<snip>
+  fa2c3254d7cff ("sched/tracing: Don't re-read p->state when emitting sched_switch event")
 
--- 
-Cheers
-~ Vaibhav
+Which changed the sched_switch event that my example was attaching to.
+
+At least this proves that it will not compile if your custom event does not
+match the prototype of the event that the custom event is modifying :-)
+
+
+> > 
+> > However, my x86_64 allmodconfig build then failed like this:
+> > 
+> > In file included from include/trace/define_custom_trace.h:55,
+> >                 from samples/trace_events/trace_custom_sched.h:95,
+> >                 from samples/trace_events/trace_custom_sched.c:24:
+> > samples/trace_events/./trace_custom_sched.h: In function 'ftrace_test_custom_probe_sched_switch':
+> > include/trace/trace_custom_events.h:178:42: error: passing argument 1 of 'check_trace_callback_type_sched_switch' from incompatible pointer type [-Werror=incompatible-pointer-types]
+> >  178 |         check_trace_callback_type_##call(trace_custom_event_raw_event_##template); \
+> >      |                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >      |                                          |
+> >      |                                          void (*)(void *, bool,  struct task_struct *, struct task_struct *) {aka void (*)(void *, _Bool,  struct task_struct *, struct task_struct *)}
+> > include/trace/trace_custom_events.h:34:9: note: in expansion of macro 'DEFINE_CUSTOM_EVENT'
+> >   34 |         DEFINE_CUSTOM_EVENT(name, name, PARAMS(proto), PARAMS(args));
+> >      |         ^~~~~~~~~~~~~~~~~~~
+> > samples/trace_events/./trace_custom_sched.h:21:1: note: in expansion of macro 'TRACE_CUSTOM_EVENT'
+> >   21 | TRACE_CUSTOM_EVENT(sched_switch,
+> >      | ^~~~~~~~~~~~~~~~~~
+> > In file included from include/linux/trace_events.h:11,
+> >                 from samples/trace_events/trace_custom_sched.c:10:
+> > include/linux/tracepoint.h:279:49: note: expected 'void (*)(void *, bool,  unsigned int,  struct task_struct *, struct task_struct *)' {aka 'void (*)(void *, _Bool,  unsigned int,  struct task_struct *, struct task_struct *)'} but argument is of type 'void (*)(void *, bool,  struct task_struct *, struct task_struct *)' {aka 'void (*)(void *, _Bool,  struct task_struct *, struct task_struct *)'}
+> >  279 |         check_trace_callback_type_##name(void (*cb)(data_proto))        \
+
+
+It's the type check code that failed. The above is complaining that it
+expects:
+
+ 'void (*)(void *, bool,  unsigned int,  struct task_struct *, struct
+ task_struct *)' {aka 'void (*)(void *, _Bool,  unsigned int,  struct task_struct *, struct task_struct *)'}
+
+But it found:
+
+ 'void (*)(void *, bool,  struct task_struct *, struct task_struct *)' {aka
+ 'void (*)(void *, _Bool,  struct task_struct *, struct task_struct *)'}
+
+
+That's because the sched_switch event had the int prev_state added to it,
+but my custom event was unaware of that.
+
+Stephen, I pushed out a branch on my tree that merges my for-next branch
+with next-20220315 and pushed it to:
+
+git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git
+
+branch: trace-merge-next-20220315
+
+-- Steve
+
+
+
+
+> >      |                                          ~~~~~~~^~~~~~~~~~~~~~~
+> > include/linux/tracepoint.h:419:9: note: in expansion of macro '__DECLARE_TRACE'
+> >  419 |         __DECLARE_TRACE(name, PARAMS(proto), PARAMS(args),              \
+> >      |         ^~~~~~~~~~~~~~~
+> > include/linux/tracepoint.h:553:9: note: in expansion of macro 'DECLARE_TRACE'
+> >  553 |         DECLARE_TRACE(name, PARAMS(proto), PARAMS(args))
+> >      |         ^~~~~~~~~~~~~
+> > include/trace/events/sched.h:222:1: note: in expansion of macro 'TRACE_EVENT'
+> >  222 | TRACE_EVENT(sched_switch,
+> >      | ^~~~~~~~~~~
+> > 
+> > So I gave up and uses the ftrace tree from next-20220310 for today.
+> > 
+> > I am going to need some help with this mess, please.
+> > -- 
+> > Cheers,
+> > Stephen Rothwell  
+> 
+> --
+> Chuck Lever
+> 
+> 
+

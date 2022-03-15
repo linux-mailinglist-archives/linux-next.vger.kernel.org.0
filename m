@@ -2,35 +2,35 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6906F4D93B0
-	for <lists+linux-next@lfdr.de>; Tue, 15 Mar 2022 06:23:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1DD74D93FE
+	for <lists+linux-next@lfdr.de>; Tue, 15 Mar 2022 06:38:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344345AbiCOFYr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 15 Mar 2022 01:24:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42978 "EHLO
+        id S235468AbiCOFjD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 15 Mar 2022 01:39:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243553AbiCOFYr (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 15 Mar 2022 01:24:47 -0400
+        with ESMTP id S232739AbiCOFjD (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 15 Mar 2022 01:39:03 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0C792701;
-        Mon, 14 Mar 2022 22:23:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFD85F3C;
+        Mon, 14 Mar 2022 22:37:49 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KHhdX1vk8z4xRB;
-        Tue, 15 Mar 2022 16:23:27 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KHhy36zS8z4xRB;
+        Tue, 15 Mar 2022 16:37:47 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1647321809;
-        bh=PzfOwLIHk92zj4bTFUWfNQ0WtSCJwHrXwlUpHj1Vyqg=;
+        s=201702; t=1647322668;
+        bh=I3Md9Wu+rXCekQ9TIyD4E1Jl3dFK5nZ9S4CAzhVMEG8=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=qMjwyYnoBpUIOCiKEgyIm71jpZqqiFfb1fbXwPzOQ58OCDruI5RvxZebPIxF0ZN/b
-         uDydWzsPkRlMZIBlVYR8am4Ptm5/qhp+RTW9BPNnkccdHbnRSGAM/zSaJITDGnOEu4
-         vjmMsSXIi58zQgowP46l50YopdhBg/zHqrw1HyH3qRX7Jj1KrosP9Uiis/zwVWxLCJ
-         JmOW/VWpu7kxuN50nl2NY8/2RlPUqkEN2ZPZjiBwSVOICpgTzFjU9ZTeQsvHX27kr2
-         xeUfNy2QrtZ8jR5+2FgUQG8x8Du9sHhiGHUTSRd1/ykyW8ZaR3Qtnz2VBsvNi8KbXN
-         3Ed9m9IEobfTA==
-Date:   Tue, 15 Mar 2022 16:23:27 +1100
+        b=NiLhsVZgjCvvW0GRG6dpmaiYmOppcTKvuBtkT+kuzOGDvlG6ecvHoxQFeDc9hZ1dq
+         YdMijfxKkFWgqrZgf6YCEFyljpFPDtaKB3H3bf+2H0YC0KRbXSqc+h81HHgWdK5q42
+         jcHAaDaaWdkWZxBnjIW8oCYfEtanpmT5Y9/zwhJ5azCBfhCFtInaW1jWqJWpwqFAuK
+         DZqzS2P6WyZTH/EnM1+m5aLwVZgiyLA2e++JwXst8qfCWgAHzhSVjBOYeDc7loKjgQ
+         Z2GoOng0MuweT83goRvBKARdKQmqhelKWY20lbFptBgRBcezU/26nP5oMcMoqrZL1q
+         AOnPEk1nDiF/g==
+Date:   Tue, 15 Mar 2022 16:37:47 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>,
@@ -39,11 +39,12 @@ To:     Thomas Gleixner <tglx@linutronix.de>,
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
 Subject: Re: linux-next: build failure after merge of the tip tree
-Message-ID: <20220315162327.53f7139f@canb.auug.org.au>
-In-Reply-To: <20220315140644.369d98d6@canb.auug.org.au>
+Message-ID: <20220315163747.3e11ad15@canb.auug.org.au>
+In-Reply-To: <20220315162327.53f7139f@canb.auug.org.au>
 References: <20220315140644.369d98d6@canb.auug.org.au>
+        <20220315162327.53f7139f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/h_.gzv4g=6AWUKhKDF5tTAo";
+Content-Type: multipart/signed; boundary="Sig_/Fk/whrzBZEABgv+GiSKQFUO";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -54,87 +55,96 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/h_.gzv4g=6AWUKhKDF5tTAo
+--Sig_/Fk/whrzBZEABgv+GiSKQFUO
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Tue, 15 Mar 2022 14:06:44 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+On Tue, 15 Mar 2022 16:23:27 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
 wrote:
 >
-> After merging the irqchip tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
->=20
-> arch/x86/kernel/cpuid.o: warning: objtool: file already has .orc_unwind s=
+> On Tue, 15 Mar 2022 14:06:44 +1100 Stephen Rothwell <sfr@canb.auug.org.au=
+> wrote:
+> >
+> > After merging the irqchip tree, today's linux-next build (x86_64
+> > allmodconfig) failed like this:
+> >=20
+> > arch/x86/kernel/cpuid.o: warning: objtool: file already has .orc_unwind=
+ section, skipping
+> > make[3]: *** [/home/sfr/next/next/scripts/Makefile.modfinal:61: arch/x8=
+6/kernel/cpuid.ko] Error 255
+> > arch/x86/kernel/msr.o: warning: objtool: file already has .orc_unwind s=
 ection, skipping
-> make[3]: *** [/home/sfr/next/next/scripts/Makefile.modfinal:61: arch/x86/=
-kernel/cpuid.ko] Error 255
-> arch/x86/kernel/msr.o: warning: objtool: file already has .orc_unwind sec=
-tion, skipping
-> make[3]: *** [/home/sfr/next/next/scripts/Makefile.modfinal:61: arch/x86/=
-kernel/msr.ko] Error 255
-> arch/x86/events/intel/intel-uncore.o: warning: objtool: file already has =
-.retpoline_sites, skipping
-> arch/x86/events/intel/intel-uncore.o: warning: objtool: file already has =
-.ibt_endbr_seal, skipping
-> arch/x86/events/intel/intel-uncore.o: warning: objtool: file already has =
-.orc_unwind section, skipping
-> make[3]: *** [/home/sfr/next/next/scripts/Makefile.modfinal:61: arch/x86/=
-events/intel/intel-uncore.ko] Error 255
->=20
-> I couldn't see anything int the irqchip tree that would cause this,
-> so I deleted my object directory and redid the build and this time
-> it succeeded.
->=20
-> I suspect some change in the tip tree has brought this on (it is merged
-> just a bit before the irqchip tree).
-
-This time after the merging usb trees:
-
-drivers/phy/qualcomm/phy-qcom-usb-hs.o: warning: objtool: file already has =
-.orc_unwind section, skipping
-make[3]: *** [scripts/Makefile.modfinal:61: drivers/phy/qualcomm/phy-qcom-u=
-sb-hs.ko] Error 255
-drivers/phy/qualcomm/phy-qcom-usb-hsic.o: warning: objtool: file already ha=
+> > make[3]: *** [/home/sfr/next/next/scripts/Makefile.modfinal:61: arch/x8=
+6/kernel/msr.ko] Error 255
+> > arch/x86/events/intel/intel-uncore.o: warning: objtool: file already ha=
+s .retpoline_sites, skipping
+> > arch/x86/events/intel/intel-uncore.o: warning: objtool: file already ha=
+s .ibt_endbr_seal, skipping
+> > arch/x86/events/intel/intel-uncore.o: warning: objtool: file already ha=
 s .orc_unwind section, skipping
-make[3]: *** [scripts/Makefile.modfinal:61: drivers/phy/qualcomm/phy-qcom-u=
-sb-hsic.ko] Error 255
+> > make[3]: *** [/home/sfr/next/next/scripts/Makefile.modfinal:61: arch/x8=
+6/events/intel/intel-uncore.ko] Error 255
+> >=20
+> > I couldn't see anything int the irqchip tree that would cause this,
+> > so I deleted my object directory and redid the build and this time
+> > it succeeded.
+> >=20
+> > I suspect some change in the tip tree has brought this on (it is merged
+> > just a bit before the irqchip tree). =20
+>=20
+> This time after the merging usb trees:
+>=20
+> drivers/phy/qualcomm/phy-qcom-usb-hs.o: warning: objtool: file already ha=
+s .orc_unwind section, skipping
+> make[3]: *** [scripts/Makefile.modfinal:61: drivers/phy/qualcomm/phy-qcom=
+-usb-hs.ko] Error 255
+> drivers/phy/qualcomm/phy-qcom-usb-hsic.o: warning: objtool: file already =
+has .orc_unwind section, skipping
+> make[3]: *** [scripts/Makefile.modfinal:61: drivers/phy/qualcomm/phy-qcom=
+-usb-hsic.ko] Error 255
+>=20
+> I just removed the drivers/phy/qualcomm directory from the object tree
+> and rebuilt.
+>=20
+> Then got this:
+>=20
+> drivers/phy/ti/phy-tusb1210.o: warning: objtool: file already has .orc_un=
+wind section, skipping
+> make[3]: *** [/home/sfr/next/next/scripts/Makefile.modfinal:61: drivers/p=
+hy/ti/phy-tusb1210.ko] Error 255
+>=20
+> So removed the drivers/phy/ti directory and rebuilt and the build
+> succeeded.
+>=20
+> I assume that something is being left around or reprocessed when it
+> should not be.
 
-I just removed the drivers/phy/qualcomm directory from the object tree
-and rebuilt.
+Maybe commit
 
-Then got this:
+  8856dadf7ad3 ("Kbuild: Allow whole module objtool runs")
 
-drivers/phy/ti/phy-tusb1210.o: warning: objtool: file already has .orc_unwi=
-nd section, skipping
-make[3]: *** [/home/sfr/next/next/scripts/Makefile.modfinal:61: drivers/phy=
-/ti/phy-tusb1210.ko] Error 255
-
-So removed the drivers/phy/ti directory and rebuilt and the build
-succeeded.
-
-I assume that something is being left around or reprocessed when it
-should not be.
+?
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/h_.gzv4g=6AWUKhKDF5tTAo
+--Sig_/Fk/whrzBZEABgv+GiSKQFUO
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIwIs8ACgkQAVBC80lX
-0GxmLAf7Bu1Kk56hsxpHDI3nmC85Nvv8og2l+H1IqSxhSth7AaWe5dcG9bnGjuRQ
-CEfzrXWhoaSaty//Sxl1zMMYR1bs3qiEo80vrayyWMigt+7uWV5QqdVpIwaHOGSU
-XaSdMdQ/I1GnDOuxih6AOE3M+U3Stsq//InzK2X2CwCNu+KWErY0s/KCNhEstvoM
-jnPQ/UokG2L24PjyNLQemqg29jHTnojw5fMB5vg7n3gSccgET0BgcGWtx+0YGaGo
-q75mg83t4YoDHmskL7Z8SyRGnFe4hduyOppa+9iUg8GFgzuEFdXSMD4SDzYdsDCr
-XOs/IyVPz5q2z7Jt3yCW2cERccETDA==
-=rwhc
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIwJisACgkQAVBC80lX
+0GwOKQf/VmiNnr36IEaDTWouwCaohGm5c4EslYAwPWXzfj2jMbp1SKBd+0hv7B5C
+o9DG9rmLdtsD8d4uRrX1L7jez3YJOv3YRFhSA4R34VkDeCvx7JqHxAxR5CIjPcpr
+magpmh7PEsrIzqwkSTTf9T6yjSJLZxHlHG8hv/9lvCRFE2/wxMLTbU+6KCIA2a1L
+pOAjgb64iG6NweGD1DhyEwtp7Q5BJidrWKk/akD0tVmXaaek5ZGFFSjDm74uOTgR
+RNpk9Z+xjT4hzjqa7ve0k/V84JxSbY+kT86HTd/G10V5M66H8F6/OHCwZOhHoFlG
+rB4UGEKcdY2woVS7ymgiUDZpt6aSqA==
+=Zgtw
 -----END PGP SIGNATURE-----
 
---Sig_/h_.gzv4g=6AWUKhKDF5tTAo--
+--Sig_/Fk/whrzBZEABgv+GiSKQFUO--

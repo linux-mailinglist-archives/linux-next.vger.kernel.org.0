@@ -2,49 +2,48 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4F144D9ABC
-	for <lists+linux-next@lfdr.de>; Tue, 15 Mar 2022 12:57:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 950F64D9AD1
+	for <lists+linux-next@lfdr.de>; Tue, 15 Mar 2022 13:04:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348083AbiCOL6o (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 15 Mar 2022 07:58:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55188 "EHLO
+        id S236628AbiCOMFN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 15 Mar 2022 08:05:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237957AbiCOL6n (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 15 Mar 2022 07:58:43 -0400
+        with ESMTP id S233997AbiCOMFM (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 15 Mar 2022 08:05:12 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62E6C517F4;
-        Tue, 15 Mar 2022 04:57:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F6C52E6D;
+        Tue, 15 Mar 2022 05:03:59 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KHsN95Qmkz4xv5;
-        Tue, 15 Mar 2022 22:57:29 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KHsWd6g3wz4xbs;
+        Tue, 15 Mar 2022 23:03:57 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1647345450;
-        bh=Ak7hK5d/JM+xbamjqXCyzPd0/RbHwnu/7DSW2JD3+Cc=;
-        h=Date:From:To:Cc:Subject:From;
-        b=ap7qU96dQqXD5/iVZAfDmixyRtT0mCedTYWrOx223TAdieIVwXyriuzAQcjO9ywun
-         HNvyYOzeTaeUzG7yQuNu0pykG813P+sO1MOftnKOju+6RZ0o5cSUo4nNh54LjLY3lA
-         gOb+x76/sKefZGoJt1jEar4f/180RpDcfIHoSH2TmhTJDofvmVYvSWBDoRsY3/fjT2
-         RKezs/UFsRDoD02pQbwNqRHfW3L2F2budxIapfAUyI/MRRSvRF2/TWKOU0ImnL4RUk
-         EsFAvf2wfal7/sloo8FM29ZhvJdg2P47LnM/wtsHFm3cSD7lUt0/NUmAcYcHyeB3Rz
-         uf0BJzjY4ZR1Q==
-Date:   Tue, 15 Mar 2022 22:57:29 +1100
+        s=201702; t=1647345838;
+        bh=FboyynBUQ4Ct3KLPx/K6ai77V62V72koVZsaldPGPD0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=dodzfGMo0o5eLFuRLrZKtUpA7GgnSXjqywS5D2q+GvawBTyORtr6ndjs5pLDTLVn0
+         V5sxueGsVkPRJP5p0BN/jHDsA/9Hbi00tXNvOogU2ozKrGJ+KQg5vGbktGFKFmRVyI
+         aEDB0r+mh7vFX1avZE0suvNjgVsvGmeHtdj+VjE4Ev0VORNjwVxARVf+xPXghaTPI5
+         0moj00ZrFVQcjPK7dAej5QxsaQtDlNlZP2LFHPJNUrcUNDbEOapio3Ct7DKsxROX5b
+         CFPYV5bwcZON9ogLwnOykCXVh9nNp43AstTHI4JoY6L4IWbd635iEuHvlQTtnXYx8z
+         4XxN2YSZx0KpA==
+Date:   Tue, 15 Mar 2022 23:03:56 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>, Hao Luo <haoluo@google.com>,
+To:     Jan Kara <jack@suse.cz>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Theodore Ts'o <tytso@mit.edu>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the akpm-current tree with the bpf-next
- tree
-Message-ID: <20220315225729.241ca3e6@canb.auug.org.au>
+Subject: Re: linux-next: manual merge of the folio tree with the ext4 tree
+Message-ID: <20220315230356.54b3ff8c@canb.auug.org.au>
+In-Reply-To: <20220315112512.yl7dewzglimjurh5@quack3.lan>
+References: <20220315204007.05ad4817@canb.auug.org.au>
+        <20220315112512.yl7dewzglimjurh5@quack3.lan>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/MDZB=SmDbWOFFH5rqQ/vIhF";
+Content-Type: multipart/signed; boundary="Sig_/xcCLTI6ScvhFGlIwlh=20=d";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -55,73 +54,39 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/MDZB=SmDbWOFFH5rqQ/vIhF
+--Sig_/xcCLTI6ScvhFGlIwlh=20=d
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Jan,
 
-Today's linux-next merge of the akpm-current tree got a conflict in:
+On Tue, 15 Mar 2022 12:25:12 +0100 Jan Kara <jack@suse.cz> wrote:
+>
+> Thanks for the notice Stephen! The resolution should be like:
+>=20
+> - 	WARN_ON_ONCE(!page_has_buffers(page));
+> + 	WARN_ON_ONCE(!folio_buffers(folio));
 
-  include/linux/compiler_types.h
-
-between commit:
-
-  6789ab9668d9 ("compiler_types: Refactor the use of btf_type_tag attribute=
-.")
-
-from the bpf-next tree and commit:
-
-  a7e15f5aee27 ("Documentation/sparse: add hints about __CHECKER__")
-
-from the akpm-current tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+Thanks, I have updated "git rerere"s resolution for tomorrow.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc include/linux/compiler_types.h
-index 1bc760ba400c,232dbd97f8b1..000000000000
---- a/include/linux/compiler_types.h
-+++ b/include/linux/compiler_types.h
-@@@ -4,13 -4,7 +4,14 @@@
- =20
-  #ifndef __ASSEMBLY__
- =20
- +#if defined(CONFIG_DEBUG_INFO_BTF) && defined(CONFIG_PAHOLE_HAS_BTF_TAG) =
-&& \
- +	__has_attribute(btf_type_tag)
- +# define BTF_TYPE_TAG(value) __attribute__((btf_type_tag(#value)))
- +#else
- +# define BTF_TYPE_TAG(value) /* nothing */
- +#endif
- +
-+ /* sparse defines __CHECKER__; see Documentation/dev-tools/sparse.rst */
-  #ifdef __CHECKER__
-  /* address spaces */
-  # define __kernel	__attribute__((address_space(0)))
-
---Sig_/MDZB=SmDbWOFFH5rqQ/vIhF
+--Sig_/xcCLTI6ScvhFGlIwlh=20=d
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIwfykACgkQAVBC80lX
-0GzHIQf/QqiM0VdwCaZUqspSrULS5B3gbqkP7jCJv/5F16W3pUXcqK99DgyM7Jdr
-o0wk6qmTVesHvPWsH5Qax+tYGp4ldtwrai+I8347LeFUGF2Yd+hFsmmU7HxwivzW
-GQDiCA4eHQr5Ynz9jRDhfyuqqbf/Yo2rRZZbyLoknr+BRdPUfisHhIlIaU3cZF9w
-xeS2hevzgO8hxlY6cvSadkvx28DMmJO6rQGYIbGk79Cv0fYp4kzByQ++bz8WDHS/
-WE9z/0sPGXaorPtEkbAZmFDaoATwg9rh23MT2Q5bX4SQWfxVgM0293M14BkmQPaU
-EbtwWFdzpsA31G5tEzAOilJkp6NI2A==
-=Oumu
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIwgKwACgkQAVBC80lX
+0GyFugf/cU0Xj4zeHMWc+lqVp5VddUP6tniOf5IuXl+LILL4C7d3JAicjwvwAHFJ
+x8iCraMSimoEVS24EqeqA7X1msaozIkV+ftuQtxFOX0aZj7j2w0DHk/DeSMK5dgv
+5xc7NyxkkVddtW4YhHuTH8RrzlzQXflP6zrvkGucx3YAz+7IT+mPHVAbQcXynWEz
+UWPgk/98iIO9ucjsZGTzFaxKW9y05wl0P3aTSp+LmSFDtqgPhDXzPt28W7Z33/PN
+es+/BQsG7CR457VC4WLOVsog8dLJbxsVLJQ530xM3HlvDj1jqohylCNNaRdIIE0M
+yraOH/MwTJboGXnhy5S7AekWkra4fg==
+=S9Ii
 -----END PGP SIGNATURE-----
 
---Sig_/MDZB=SmDbWOFFH5rqQ/vIhF--
+--Sig_/xcCLTI6ScvhFGlIwlh=20=d--

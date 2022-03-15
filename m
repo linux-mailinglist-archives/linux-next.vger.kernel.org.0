@@ -2,50 +2,49 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E5184D9682
-	for <lists+linux-next@lfdr.de>; Tue, 15 Mar 2022 09:42:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2792B4D977D
+	for <lists+linux-next@lfdr.de>; Tue, 15 Mar 2022 10:18:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231254AbiCOIns (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 15 Mar 2022 04:43:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46634 "EHLO
+        id S1346515AbiCOJT6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 15 Mar 2022 05:19:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343500AbiCOInr (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 15 Mar 2022 04:43:47 -0400
+        with ESMTP id S1346538AbiCOJT5 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 15 Mar 2022 05:19:57 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B262B4CD62;
-        Tue, 15 Mar 2022 01:42:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9596F13D3F;
+        Tue, 15 Mar 2022 02:18:44 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KHn3C5Dkrz4xvg;
-        Tue, 15 Mar 2022 19:42:31 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KHnrx2HZnz4xvg;
+        Tue, 15 Mar 2022 20:18:41 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1647333752;
-        bh=3LBWFpfo5KWICck/UJ51RLvAZ87sUmvXzLs4u5w3HjE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=AkD5MiHn21Wk1lb1TEiUPo8CEmmxIcVq+vVvh6k8IuU/4iV0tK2vAAJ5P0vlAHnDa
-         b94dvSpyXaXMqHR6ZIDE0sa46PlUH8pFQEBNz1MtOgzFzTTHALirDAJOndOsSV6Ynr
-         kHxYyc7Nha/kV6tVxJPeq9PQJFrb3qbZMQGReeSdn6W/AWhtLx7mcCsaBb6lkwtVIS
-         +/4NCO5Yyr04hOZn/yP1zcqRr0xFKe7c/L4JdWNplJ3VvgwshIsW+pBh7U0CjbBjkt
-         1IC8BjNHgTMFj2Eovm//2YZIc/4CqjbdyAlPjSHVTB50r7OZYadzTw2OjLLfstOzjI
-         kKHTWK2B5epyw==
-Date:   Tue, 15 Mar 2022 19:42:30 +1100
+        s=201702; t=1647335923;
+        bh=qKRtZYhERZZIQ1+1ePZpbu07BiR32VleXFJbK5n6jcg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=drez3G/AgYNVI8zRiawEaZIoTQjqQC4iLs/D0+HU/CF23pJdl8Ofo2DJhrSIhXWBW
+         gCJfp9VpAKxk0i8KuRda7z7avBe+vutiYGcy1u68lc5zgFqTMaHWbBmd8t+393fPPt
+         Dq3+/yPXmMvWG0qxVS6KBpwqyMhzbo6+QOfTqI0ApbTw+m4huM4HNlWoc423cl7gFH
+         UMQPw0Z9LmnbyETnvmQ5QpiAB1o8mzYiTvSn92v1wzj8xtKJ+vE3U7dJcqfOR+yooG
+         uSHriS0ON1Ye/ynFOA98bRAuVq3zL3fMfLtM0isv2nt1T2YqfYvstrc8iElK/Wn25k
+         lybrO1ci+EPYw==
+Date:   Tue, 15 Mar 2022 20:18:40 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>,
+To:     Luis Chamberlain <mcgrof@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>,
         "H. Peter Anvin" <hpa@zytor.com>,
         Peter Zijlstra <peterz@infradead.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the tip tree
-Message-ID: <20220315194230.62aec8ce@canb.auug.org.au>
-In-Reply-To: <20220315163747.3e11ad15@canb.auug.org.au>
-References: <20220315140644.369d98d6@canb.auug.org.au>
-        <20220315162327.53f7139f@canb.auug.org.au>
-        <20220315163747.3e11ad15@canb.auug.org.au>
+Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Zhen Ni <nizhen@uniontech.com>
+Subject: linux-next: manual merge of the sysctl tree with the tip tree
+Message-ID: <20220315201840.6146f234@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/xUX22JvAl0N4LuI3+MZnM1d";
+Content-Type: multipart/signed; boundary="Sig_/vj6a5IykJBDqtYDTjRghcBq";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -56,166 +55,103 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/xUX22JvAl0N4LuI3+MZnM1d
+--Sig_/vj6a5IykJBDqtYDTjRghcBq
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Tue, 15 Mar 2022 16:37:47 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> On Tue, 15 Mar 2022 16:23:27 +1100 Stephen Rothwell <sfr@canb.auug.org.au=
-> wrote:
-> >
-> > On Tue, 15 Mar 2022 14:06:44 +1100 Stephen Rothwell <sfr@canb.auug.org.=
-au> wrote: =20
-> > >
-> > > After merging the irqchip tree, today's linux-next build (x86_64
-> > > allmodconfig) failed like this:
-> > >=20
-> > > arch/x86/kernel/cpuid.o: warning: objtool: file already has .orc_unwi=
-nd section, skipping
-> > > make[3]: *** [/home/sfr/next/next/scripts/Makefile.modfinal:61: arch/=
-x86/kernel/cpuid.ko] Error 255
-> > > arch/x86/kernel/msr.o: warning: objtool: file already has .orc_unwind=
- section, skipping
-> > > make[3]: *** [/home/sfr/next/next/scripts/Makefile.modfinal:61: arch/=
-x86/kernel/msr.ko] Error 255
-> > > arch/x86/events/intel/intel-uncore.o: warning: objtool: file already =
-has .retpoline_sites, skipping
-> > > arch/x86/events/intel/intel-uncore.o: warning: objtool: file already =
-has .ibt_endbr_seal, skipping
-> > > arch/x86/events/intel/intel-uncore.o: warning: objtool: file already =
-has .orc_unwind section, skipping
-> > > make[3]: *** [/home/sfr/next/next/scripts/Makefile.modfinal:61: arch/=
-x86/events/intel/intel-uncore.ko] Error 255
-> > >=20
-> > > I couldn't see anything int the irqchip tree that would cause this,
-> > > so I deleted my object directory and redid the build and this time
-> > > it succeeded.
-> > >=20
-> > > I suspect some change in the tip tree has brought this on (it is merg=
-ed
-> > > just a bit before the irqchip tree).   =20
-> >=20
-> > This time after the merging usb trees:
-> >=20
-> > drivers/phy/qualcomm/phy-qcom-usb-hs.o: warning: objtool: file already =
-has .orc_unwind section, skipping
-> > make[3]: *** [scripts/Makefile.modfinal:61: drivers/phy/qualcomm/phy-qc=
-om-usb-hs.ko] Error 255
-> > drivers/phy/qualcomm/phy-qcom-usb-hsic.o: warning: objtool: file alread=
-y has .orc_unwind section, skipping
-> > make[3]: *** [scripts/Makefile.modfinal:61: drivers/phy/qualcomm/phy-qc=
-om-usb-hsic.ko] Error 255
-> >=20
-> > I just removed the drivers/phy/qualcomm directory from the object tree
-> > and rebuilt.
-> >=20
-> > Then got this:
-> >=20
-> > drivers/phy/ti/phy-tusb1210.o: warning: objtool: file already has .orc_=
-unwind section, skipping
-> > make[3]: *** [/home/sfr/next/next/scripts/Makefile.modfinal:61: drivers=
-/phy/ti/phy-tusb1210.ko] Error 255
-> >=20
-> > So removed the drivers/phy/ti directory and rebuilt and the build
-> > succeeded.
-> >=20
-> > I assume that something is being left around or reprocessed when it
-> > should not be. =20
->=20
-> Maybe commit
->=20
->   8856dadf7ad3 ("Kbuild: Allow whole module objtool runs")
->=20
-> ?
+Today's linux-next merge of the sysctl tree got a conflict in:
 
-And after merging the scsi tree:
+  kernel/sched/deadline.c
 
-arch/x86/crypto/aegis128-aesni.o: warning: objtool: file already has .stati=
-c_call_sites section, skipping
-arch/x86/crypto/aegis128-aesni.o: warning: objtool: file already has .retpo=
-line_sites, skipping
-arch/x86/crypto/aegis128-aesni.o: warning: objtool: file already has .ibt_e=
-ndbr_seal, skipping
-arch/x86/crypto/aegis128-aesni.o: warning: objtool: file already has .orc_u=
-nwind section, skipping
-arch/x86/crypto/aesni-intel.o: warning: objtool: file already has .static_c=
-all_sites section, skipping
-arch/x86/crypto/aesni-intel.o: warning: objtool: file already has .ibt_endb=
-r_seal, skipping
-arch/x86/crypto/aesni-intel.o: warning: objtool: file already has .orc_unwi=
-nd section, skipping
-arch/x86/crypto/aegis128-aesni.o: warning: objtool: file already has .stati=
-c_call_sites section, skipping
-arch/x86/crypto/aegis128-aesni.o: warning: objtool: file already has .retpo=
-line_sites, skipping
-arch/x86/crypto/aegis128-aesni.o: warning: objtool: file already has .ibt_e=
-ndbr_seal, skipping
-arch/x86/crypto/aegis128-aesni.o: warning: objtool: file already has .orc_u=
-nwind section, skipping
-arch/x86/crypto/aesni-intel.o: warning: objtool: file already has .static_c=
-all_sites section, skipping
-arch/x86/crypto/aesni-intel.o: warning: objtool: file already has .ibt_endb=
-r_seal, skipping
-arch/x86/crypto/aesni-intel.o: warning: objtool: file already has .orc_unwi=
-nd section, skipping
-arch/x86/kernel/cpu/mce/mce-inject.o: warning: objtool: file already has .s=
-tatic_call_sites section, skipping
-arch/x86/kernel/cpu/mce/mce-inject.o: warning: objtool: file already has .r=
-etpoline_sites, skipping
-arch/x86/kernel/cpu/mce/mce-inject.o: warning: objtool: file already has .o=
-rc_unwind section, skipping
-arch/x86/kernel/cpuid.o: warning: objtool: file already has .orc_unwind sec=
-tion, skipping
-arch/x86/kernel/msr.o: warning: objtool: file already has .orc_unwind secti=
-on, skipping
-crypto/aegis128.o: warning: objtool: file already has .static_call_sites se=
-ction, skipping
-crypto/aegis128.o: warning: objtool: file already has .orc_unwind section, =
-skipping
-crypto/arc4.o: warning: objtool: file already has .orc_unwind section, skip=
-ping
-crypto/async_tx/async_memcpy.o: warning: objtool: file already has .static_=
-call_sites section, skipping
-crypto/async_tx/async_memcpy.o: warning: objtool: file already has .retpoli=
-ne_sites, skipping
-crypto/async_tx/async_memcpy.o: warning: objtool: file already has .orc_unw=
-ind section, skipping
+between commit:
 
-and so on ...
+  eb77cf1c151c ("sched/deadline: Remove unused def_dl_bandwidth")
 
-I finally got fed up with rebuilding and so reverted these commits
+from the tip tree and commit:
 
-  c7d90e15b895 ("x86: Fix {int3,ibt}_selftest() vs LTO")
-  8959fcf5650e ("x86/alternative: Use .ibt_endbr_seal to seal indirect call=
-s")
-  49f8cb48085d ("objtool: Find unused ENDBR instructions")
-  b87d2fcee362 ("objtool: Validate IBT assumptions")
-  df280fcb49f9 ("objtool: Add IBT/ENDBR decoding")
-  51727f8e4a1a ("objtool: Read the NOENDBR annotation")
-  8856dadf7ad3 ("Kbuild: Allow whole module objtool runs")
+  ebb891f03580 ("sched: Move deadline_period sysctls to deadline.c")
+
+from the sysctl tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/xUX22JvAl0N4LuI3+MZnM1d
+diff --cc kernel/sched/deadline.c
+index 11cdc6d0c45f,9ed9ace11151..000000000000
+--- a/kernel/sched/deadline.c
++++ b/kernel/sched/deadline.c
+@@@ -18,6 -18,42 +18,40 @@@
+  #include "sched.h"
+  #include "pelt.h"
+ =20
+ -struct dl_bandwidth def_dl_bandwidth;
+ -
++ /*
++  * Default limits for DL period; on the top end we guard against small ut=
+il
++  * tasks still getting ridiculously long effective runtimes, on the botto=
+m end we
++  * guard against timer DoS.
++  */
++ static unsigned int sysctl_sched_dl_period_max =3D 1 << 22; /* ~4 seconds=
+ */
++ static unsigned int sysctl_sched_dl_period_min =3D 100;     /* 100 us */
++ #ifdef CONFIG_SYSCTL
++ static struct ctl_table sched_dl_sysctls[] =3D {
++ 	{
++ 		.procname       =3D "sched_deadline_period_max_us",
++ 		.data           =3D &sysctl_sched_dl_period_max,
++ 		.maxlen         =3D sizeof(unsigned int),
++ 		.mode           =3D 0644,
++ 		.proc_handler   =3D proc_dointvec,
++ 	},
++ 	{
++ 		.procname       =3D "sched_deadline_period_min_us",
++ 		.data           =3D &sysctl_sched_dl_period_min,
++ 		.maxlen         =3D sizeof(unsigned int),
++ 		.mode           =3D 0644,
++ 		.proc_handler   =3D proc_dointvec,
++ 	},
++ 	{}
++ };
++=20
++ static int __init sched_dl_sysctl_init(void)
++ {
++ 	register_sysctl_init("kernel", sched_dl_sysctls);
++ 	return 0;
++ }
++ late_initcall(sched_dl_sysctl_init);
++ #endif
++=20
+  static inline struct task_struct *dl_task_of(struct sched_dl_entity *dl_s=
+e)
+  {
+  	return container_of(dl_se, struct task_struct, dl);
+
+--Sig_/vj6a5IykJBDqtYDTjRghcBq
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIwUXcACgkQAVBC80lX
-0GzM2Af+K92PRl+zHuxwYC66rCvOeqikgiVklVadTooAEDjBlqXRblt0ODiRkSmD
-aKOKe9R3vdnSnh/J7jAT6AvH5CGtkPaxAzcaf8PSJYQGydAL4W0kItcDikThiCVK
-SUh8ud//UA9CxNhcY8c6hxRqyDvpphMNPsNcGluIeJGBT5oFh4RgijwBXbdqeM8M
-3pZNfSb7THCUjnDOgKDDT7Z1G1ulf54emHMR2ggIv6BKnz07Cl6/k4CjIcHx3hl6
-9JEetwehAjazzdOse5Ng6NF65SN9V4EFZgJ0D996HqJZSrBxg3OGJnF4areKXbDm
-C+zixvyXA3YZ4c1CGpBGtTNyl8bZUQ==
-=Fu1e
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIwWfAACgkQAVBC80lX
+0GxLfQf/V/cFLNKZxqqa7AsbySP1m/9D9gKx0p6A/nWc12vo6lMBPGDYhFr+GWfg
+LG1YEePaysIDSFDrAXOFFcrNGlpIvJIT/22cQiog30tODq+pOOeTEUUO70ajVOwI
+pd9ijBl/pMG14eFDmdzeV8/CuYNrR3O5/g/VBWXRMV6FyFFFnPb/W+4KJXHiG7uW
+ZMNMwOpJzIylR3e9quDXh5TX9FG2qNNjHTsZ+yZoeEKjGCsfdbtSVc0S4TaErcyx
+l4vruB8I6url4v0v5XsJZui8Le+TyCVIIgnoG6s1v8YLL8gUBlpxtBSmkEAdL8u8
+WTdj+mK0zVFOJKUc8xhbijse0cSzsw==
+=jn33
 -----END PGP SIGNATURE-----
 
---Sig_/xUX22JvAl0N4LuI3+MZnM1d--
+--Sig_/vj6a5IykJBDqtYDTjRghcBq--

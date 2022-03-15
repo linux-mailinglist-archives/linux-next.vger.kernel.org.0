@@ -2,45 +2,49 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8FFF4D9A87
-	for <lists+linux-next@lfdr.de>; Tue, 15 Mar 2022 12:44:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4F144D9ABC
+	for <lists+linux-next@lfdr.de>; Tue, 15 Mar 2022 12:57:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347963AbiCOLpj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 15 Mar 2022 07:45:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56508 "EHLO
+        id S1348083AbiCOL6o (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 15 Mar 2022 07:58:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241589AbiCOLpi (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 15 Mar 2022 07:45:38 -0400
+        with ESMTP id S237957AbiCOL6n (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 15 Mar 2022 07:58:43 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C90AB2AE1A;
-        Tue, 15 Mar 2022 04:44:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62E6C517F4;
+        Tue, 15 Mar 2022 04:57:32 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KHs533hsNz4xL3;
-        Tue, 15 Mar 2022 22:44:22 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KHsN95Qmkz4xv5;
+        Tue, 15 Mar 2022 22:57:29 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1647344664;
-        bh=I1kvJkvdwUyhlOvf9ZD2jpbUo7A7tXOZ/UJA5p1xLvU=;
+        s=201702; t=1647345450;
+        bh=Ak7hK5d/JM+xbamjqXCyzPd0/RbHwnu/7DSW2JD3+Cc=;
         h=Date:From:To:Cc:Subject:From;
-        b=aKa5VHgybScX95rsy/FeQcFWJc8w1L4qbc49YtztRZxBN/YsxkndP0eVFQ87bNezg
-         rqo7efNlC5pwWpnH852tboZgDw8TEWZ6dMMN2axOONrxTcwr0KqoCZ9wwzccoV4MPj
-         kXmuqmyIiJUKtb40MqfXV683yVeXO25zDgLZ/btmLngl7Zx2nUr1+l9spwGxpSQJ4Q
-         V7MuvmC0DGye9E/f724pXIW3VYoZwWRiQ3G7sHpVZdZfwcf/WoydCMSSVEBzDxPAuc
-         H1h1evmiCifwP3peDVu7+a/EIyUV+ZSD4DMcnsaNcHMltoIV2PCHQziC0eQ9ECnGys
-         X2JzeKsno8pLg==
-Date:   Tue, 15 Mar 2022 22:44:21 +1100
+        b=ap7qU96dQqXD5/iVZAfDmixyRtT0mCedTYWrOx223TAdieIVwXyriuzAQcjO9ywun
+         HNvyYOzeTaeUzG7yQuNu0pykG813P+sO1MOftnKOju+6RZ0o5cSUo4nNh54LjLY3lA
+         gOb+x76/sKefZGoJt1jEar4f/180RpDcfIHoSH2TmhTJDofvmVYvSWBDoRsY3/fjT2
+         RKezs/UFsRDoD02pQbwNqRHfW3L2F2budxIapfAUyI/MRRSvRF2/TWKOU0ImnL4RUk
+         EsFAvf2wfal7/sloo8FM29ZhvJdg2P47LnM/wtsHFm3cSD7lUt0/NUmAcYcHyeB3Rz
+         uf0BJzjY4ZR1Q==
+Date:   Tue, 15 Mar 2022 22:57:29 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
         Networking <netdev@vger.kernel.org>
-Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
+Cc:     Bjorn Helgaas <bhelgaas@google.com>, Hao Luo <haoluo@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the net-next tree
-Message-ID: <20220315224421.23a8def1@canb.auug.org.au>
+Subject: linux-next: manual merge of the akpm-current tree with the bpf-next
+ tree
+Message-ID: <20220315225729.241ca3e6@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/u9Y+4SMt+b9MeJhzmI11hoN";
+Content-Type: multipart/signed; boundary="Sig_/MDZB=SmDbWOFFH5rqQ/vIhF";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -51,82 +55,73 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/u9Y+4SMt+b9MeJhzmI11hoN
+--Sig_/MDZB=SmDbWOFFH5rqQ/vIhF
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the net-next tree, today's linux-next build (arm64
-defconfig) failed like this:
+Today's linux-next merge of the akpm-current tree got a conflict in:
 
-drivers/net/ethernet/mscc/ocelot.c: In function 'ocelot_port_set_default_pr=
-io':
-drivers/net/ethernet/mscc/ocelot.c:2920:21: error: 'IEEE_8021QAZ_MAX_TCS' u=
-ndeclared (first use in this function)
- 2920 |         if (prio >=3D IEEE_8021QAZ_MAX_TCS)
-      |                     ^~~~~~~~~~~~~~~~~~~~
-drivers/net/ethernet/mscc/ocelot.c:2920:21: note: each undeclared identifie=
-r is reported only once for each function it appears in
-drivers/net/ethernet/mscc/ocelot.c: In function 'ocelot_port_add_dscp_prio':
-drivers/net/ethernet/mscc/ocelot.c:2962:21: error: 'IEEE_8021QAZ_MAX_TCS' u=
-ndeclared (first use in this function)
- 2962 |         if (prio >=3D IEEE_8021QAZ_MAX_TCS)
-      |                     ^~~~~~~~~~~~~~~~~~~~
+  include/linux/compiler_types.h
 
-Caused by commit
+between commit:
 
-  978777d0fb06 ("net: dsa: felix: configure default-prio and dscp prioritie=
-s")
+  6789ab9668d9 ("compiler_types: Refactor the use of btf_type_tag attribute=
+.")
 
-I have applied the following fix up patch for today.
+from the bpf-next tree and commit:
 
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Tue, 15 Mar 2022 22:34:25 +1100
-Subject: [PATCH] fixup for "net: dsa: felix: configure default-prio and dsc=
-p priorities"
+  a7e15f5aee27 ("Documentation/sparse: add hints about __CHECKER__")
 
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/net/ethernet/mscc/ocelot.c | 1 +
- 1 file changed, 1 insertion(+)
+from the akpm-current tree.
 
-diff --git a/drivers/net/ethernet/mscc/ocelot.c b/drivers/net/ethernet/mscc=
-/ocelot.c
-index 41dbb1e326c4..7c4bd3f8e7ec 100644
---- a/drivers/net/ethernet/mscc/ocelot.c
-+++ b/drivers/net/ethernet/mscc/ocelot.c
-@@ -7,6 +7,7 @@
- #include <linux/dsa/ocelot.h>
- #include <linux/if_bridge.h>
- #include <linux/ptp_classify.h>
-+#include <net/dcbnl.h>
- #include <soc/mscc/ocelot_vcap.h>
- #include "ocelot.h"
- #include "ocelot_vcap.h"
---=20
-2.34.1
-
-
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/u9Y+4SMt+b9MeJhzmI11hoN
+diff --cc include/linux/compiler_types.h
+index 1bc760ba400c,232dbd97f8b1..000000000000
+--- a/include/linux/compiler_types.h
++++ b/include/linux/compiler_types.h
+@@@ -4,13 -4,7 +4,14 @@@
+ =20
+  #ifndef __ASSEMBLY__
+ =20
+ +#if defined(CONFIG_DEBUG_INFO_BTF) && defined(CONFIG_PAHOLE_HAS_BTF_TAG) =
+&& \
+ +	__has_attribute(btf_type_tag)
+ +# define BTF_TYPE_TAG(value) __attribute__((btf_type_tag(#value)))
+ +#else
+ +# define BTF_TYPE_TAG(value) /* nothing */
+ +#endif
+ +
++ /* sparse defines __CHECKER__; see Documentation/dev-tools/sparse.rst */
+  #ifdef __CHECKER__
+  /* address spaces */
+  # define __kernel	__attribute__((address_space(0)))
+
+--Sig_/MDZB=SmDbWOFFH5rqQ/vIhF
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIwfBUACgkQAVBC80lX
-0GyMbQgAgahDoiC6FAzw9S27/y1ElyAuLOYwCXFN7I+bbv98pI22SUm0XhaufTOz
-OuipKroQN/w5C15nyMbAKiw5tvCXUIM1Bd4TlvUxZS65qBQ+8Aaci1ASWunMpC0T
-1eZVUXrwhbwjumciKrlC+deEGWVW09MQ+yUCI2DDRFXofftbJNXlWVe3AC45/MBd
-l6AJTzun5HcO3HzisgOFL+VEfVzOh/sh98vmLedRg9La2hJYYhvrcTqEw12gQRlr
-AcXuPwrwTmND1URg/UB3qrYXJxELOq8A50i53Qb3uAl9nGWErnlGT2efV6QzaRQu
-uhuMfv69fs9HB5d4XQ2kbUpmbb/PBA==
-=/JqO
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIwfykACgkQAVBC80lX
+0GzHIQf/QqiM0VdwCaZUqspSrULS5B3gbqkP7jCJv/5F16W3pUXcqK99DgyM7Jdr
+o0wk6qmTVesHvPWsH5Qax+tYGp4ldtwrai+I8347LeFUGF2Yd+hFsmmU7HxwivzW
+GQDiCA4eHQr5Ynz9jRDhfyuqqbf/Yo2rRZZbyLoknr+BRdPUfisHhIlIaU3cZF9w
+xeS2hevzgO8hxlY6cvSadkvx28DMmJO6rQGYIbGk79Cv0fYp4kzByQ++bz8WDHS/
+WE9z/0sPGXaorPtEkbAZmFDaoATwg9rh23MT2Q5bX4SQWfxVgM0293M14BkmQPaU
+EbtwWFdzpsA31G5tEzAOilJkp6NI2A==
+=Oumu
 -----END PGP SIGNATURE-----
 
---Sig_/u9Y+4SMt+b9MeJhzmI11hoN--
+--Sig_/MDZB=SmDbWOFFH5rqQ/vIhF--

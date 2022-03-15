@@ -2,44 +2,45 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 853464D97DB
-	for <lists+linux-next@lfdr.de>; Tue, 15 Mar 2022 10:40:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 355904D97FD
+	for <lists+linux-next@lfdr.de>; Tue, 15 Mar 2022 10:45:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244050AbiCOJlZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 15 Mar 2022 05:41:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40062 "EHLO
+        id S238899AbiCOJrF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 15 Mar 2022 05:47:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233221AbiCOJlX (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 15 Mar 2022 05:41:23 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C96D84ECFF;
-        Tue, 15 Mar 2022 02:40:10 -0700 (PDT)
+        with ESMTP id S1346841AbiCOJrC (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 15 Mar 2022 05:47:02 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C4D94EF7F;
+        Tue, 15 Mar 2022 02:45:43 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KHpKh4GfCz4xLQ;
-        Tue, 15 Mar 2022 20:40:08 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KHpS55BRVz4xvk;
+        Tue, 15 Mar 2022 20:45:41 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1647337209;
-        bh=+W7q2MrZPwI4JUFKKW5+cHmHOtdaZBaq4G59lSvj7Ak=;
+        s=201702; t=1647337542;
+        bh=B2q16DxJf4qus0TFrzh8qkvr3VyKVQHScRe8pQas1tQ=;
         h=Date:From:To:Cc:Subject:From;
-        b=TsVIs/uuO088y47w/sYf4HFTyDIV3nIy/epSQecJsPHTLDUX6p9eMoZXBHAuNDycO
-         xuzzbmdPhpfSBG2V3gryun6a+OFrB4+ivraqvMJKe08djW7/8h9e+m5YE0n0Bj7L87
-         ouEGER9Xcbd9o3thQnqjTF1kdT8TXsccQ5x6U2ZDiOPL3N32z+RgMUc/vCEx978VJX
-         mKiGfBnxqMg2O9kxZUvVovneksgNxZZoAfsLceRdZ2ReMIao3BJtt/DfkK/2NNFMvt
-         +AG27srJEPBgmnqw/fgyVDBDM09UKKr2ouvP97hx98ypmgjiqoi0dKuOy/Cunme6K+
-         Ume+hCGtWlZvQ==
-Date:   Tue, 15 Mar 2022 20:40:07 +1100
+        b=MpCpoT4U4EweSP2qmN9y2m2ydK3xHZU7zjDlDk+oDIX+ayJxTqgutRek0eG3PClPB
+         0BPXgBvfKv3urq2BQkP2BsymGIvQQQ8ZdNF/Fh8yUAY6Y9sJrye34MwAXSHXdIvtQ1
+         QwMiIgmX2MOa9nDApXCZZXHCt4cmMY2W6m+/a9fi/VKuSz2Om1nXSf6SGgv567r2Rb
+         OlomYCiGA5HGuVRFmUtBPzy4diu0eBdqlWdLDVtIkYTBdyI///DEpmwEPM1HMb7p+N
+         kC2U4HmeYIxa+X61o38ljQLZMv1XZhGlU0qiwG55CoMyfwROfNpxJYf0umaKpI6xKO
+         dC/Ap6L0eI5VA==
+Date:   Tue, 15 Mar 2022 20:45:40 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Matthew Wilcox <willy@infradead.org>, Theodore Ts'o <tytso@mit.edu>
-Cc:     Jan Kara <jack@suse.cz>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the folio tree with the ext4 tree
-Message-ID: <20220315204007.05ad4817@canb.auug.org.au>
+To:     Matthew Wilcox <willy@infradead.org>,
+        Trond Myklebust <trondmy@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>
+Subject: linux-next: manual merge of the folio tree with the nfs tree
+Message-ID: <20220315204540.4f9f6b66@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/73g1OV73vFjk/_BE4rBQFdx";
+Content-Type: multipart/signed; boundary="Sig_/L.30S/tm16ei2/Xmo.j67IE";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -50,7 +51,7 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/73g1OV73vFjk/_BE4rBQFdx
+--Sig_/L.30S/tm16ei2/Xmo.j67IE
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -58,22 +59,18 @@ Hi all,
 
 Today's linux-next merge of the folio tree got a conflict in:
 
-  fs/ext4/inode.c
+  fs/nfs/file.c
 
 between commit:
 
-  2bb8dd401a4f ("ext4: warn when dirtying page w/o buffers in data=3Djourna=
-l mode")
+  8786fde8421c ("Convert NFS from readpages to readahead")
 
-from the ext4 tree and commit:
+from the nfs tree and commit:
 
   821405cf3ebb ("fs: Convert trivial uses of __set_page_dirty_nobuffers to =
 filemap_dirty_folio")
 
 from the folio tree.
-
-I didn't know how to complete this fix up ans so just commented out the
-new WARN_ON().
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -86,86 +83,36 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc fs/ext4/inode.c
-index 3d0ca48d20c8,436efd31cc27..000000000000
---- a/fs/ext4/inode.c
-+++ b/fs/ext4/inode.c
-@@@ -3573,31 -3541,30 +3573,32 @@@ const struct iomap_ops ext4_iomap_repor
-  };
+diff --cc fs/nfs/file.c
+index 81c80548a5c6,2df2a5392737..000000000000
+--- a/fs/nfs/file.c
++++ b/fs/nfs/file.c
+@@@ -518,8 -514,8 +518,8 @@@ static void nfs_swap_deactivate(struct=20
  =20
-  /*
--  * Whenever the page is being dirtied, corresponding buffers should alrea=
-dy be
- - * Folios can be marked dirty completely asynchronously from ext4's
- - * journalling activity.  By filemap_sync_pte(), try_to_unmap_one(), etc.
- - * We cannot do much here because ->dirty_folio may be called with the
- - * page table lock held.  The folio is not necessarily locked.
-++ * Whenever the folio is being dirtied, corresponding buffers should alre=
-ady be
- + * attached to the transaction (we take care of this in ext4_page_mkwrite=
-() and
- + * ext4_write_begin()). However we cannot move buffers to dirty transacti=
-on
--  * lists here because ->set_page_dirty is called under VFS locks and the =
-page
-++ * lists here because ->dirty_folio is called under VFS locks and the fol=
-io
- + * is not necessarily locked.
-   *
--  * We cannot just dirty the page and leave attached buffers clean, becaus=
-e the
-+  * We cannot just dirty the folio and leave attached buffers clean, becau=
-se the
-   * buffers' dirty state is "definitive".  We cannot just set the buffers =
-dirty
-   * or jbddirty because all the journalling code will explode.
-   *
--  * So what we do is to mark the page "pending dirty" and next time writep=
-age
-+  * So what we do is to mark the folio "pending dirty" and next time write=
-page
-   * is called, propagate that into the buffers appropriately.
-   */
-- static int ext4_journalled_set_page_dirty(struct page *page)
-+ static bool ext4_journalled_dirty_folio(struct address_space *mapping,
-+ 		struct folio *folio)
-  {
-- 	WARN_ON_ONCE(!page_has_buffers(page));
-- 	SetPageChecked(page);
-- 	return __set_page_dirty_nobuffers(page);
-++/*	WARN_ON_ONCE(!page_has_buffers(page)); */
-+ 	folio_set_checked(folio);
-+ 	return filemap_dirty_folio(mapping, folio);
-  }
- =20
-- static int ext4_set_page_dirty(struct page *page)
-+ static bool ext4_dirty_folio(struct address_space *mapping, struct folio =
-*folio)
-  {
-- 	WARN_ON_ONCE(!PageLocked(page) && !PageDirty(page));
-- 	WARN_ON_ONCE(!page_has_buffers(page));
-- 	return __set_page_dirty_buffers(page);
-+ 	WARN_ON_ONCE(!folio_test_locked(folio) && !folio_test_dirty(folio));
-+ 	WARN_ON_ONCE(!folio_buffers(folio));
-+ 	return block_dirty_folio(mapping, folio);
-  }
- =20
-  static int ext4_iomap_swap_activate(struct swap_info_struct *sis,
+  const struct address_space_operations nfs_file_aops =3D {
+  	.readpage =3D nfs_readpage,
+ -	.readpages =3D nfs_readpages,
+ +	.readahead =3D nfs_readahead,
+- 	.set_page_dirty =3D __set_page_dirty_nobuffers,
++ 	.dirty_folio =3D filemap_dirty_folio,
+  	.writepage =3D nfs_writepage,
+  	.writepages =3D nfs_writepages,
+  	.write_begin =3D nfs_write_begin,
 
---Sig_/73g1OV73vFjk/_BE4rBQFdx
+--Sig_/L.30S/tm16ei2/Xmo.j67IE
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIwXvcACgkQAVBC80lX
-0GyiVgf/Wm79pLAeGzGaH3YG60NjrGjCFkMwL24tW2HbBe2gVRm4g/F4niVymkvv
-1QZMG7fnX7B+K10YTw98G97bgjl+ghKnnAxb0E4aq26slrRsJ6hrm21dSHDJy7Wr
-TP8uLpcd4QnZ11YBy35SHXS2ccB4wwgDhrKw9KHTY3/9qVEHg4E9MAn2tVBT7PTt
-vElRkDcg590/Rh4u/3la9j9NwXxJKSE8mDT0f0eRMmzbIRyyaQas7DECQd1dfsyc
-mduw/PLuDF7Ppbk+Win45stZnrai90rMdl4pkIuVLRGc6FUY0R2JEiAUSKKcdzhm
-C3VfK131cnssBFS0sN8PD05JmI70YQ==
-=r9HF
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIwYEQACgkQAVBC80lX
+0GwDNwf/cDTM2EEwg17YpJFU+i5AW0bvv12QQeu8RFOLjANVUsGxUbzYqeO5JwVn
+8ZNE/7LOLrnT17McVjzVqx4UlcaWubtMo1uqVhoJyiT67A0PyQ6rEGJKIU78VX2F
+4mmXeWRgoweODr7tCr8HfJSyM+6Gx16TU+G++D70EjbjzR3+k+ISq3huevlGUPgd
+NuA4DXHK2ZXOQux+hH38l0Ag7TgZxXjNXC5AL+VncnRc7wgM8xZqGpmfoziSab6w
+uhuM2ltkxeAqAhe6k2qv0vAnVi7/7rAsLXn2iL+xxjfyTIbZzbyMX5fbounJcA0Q
+uwSNHwp7k8+bFgQDVYADaB2P9Xdx6w==
+=kTIg
 -----END PGP SIGNATURE-----
 
---Sig_/73g1OV73vFjk/_BE4rBQFdx--
+--Sig_/L.30S/tm16ei2/Xmo.j67IE--

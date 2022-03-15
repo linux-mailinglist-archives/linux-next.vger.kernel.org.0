@@ -2,164 +2,131 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 759754D9A51
-	for <lists+linux-next@lfdr.de>; Tue, 15 Mar 2022 12:25:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8FFF4D9A87
+	for <lists+linux-next@lfdr.de>; Tue, 15 Mar 2022 12:44:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344521AbiCOL02 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 15 Mar 2022 07:26:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48434 "EHLO
+        id S1347963AbiCOLpj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 15 Mar 2022 07:45:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233729AbiCOL01 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 15 Mar 2022 07:26:27 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DEE64ECFC;
-        Tue, 15 Mar 2022 04:25:15 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 266CD21900;
-        Tue, 15 Mar 2022 11:25:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1647343514; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BKrRwVuw72BzaglAlmSnLaAKxBvpnYrC6+CTmMlmAIY=;
-        b=EyGdUI6H6HT3KSpuL20Nz2Xq2T3sTqiyHr3cEFJNr+TV5qrRUeuKiB3CW6pu25G57HuXJ/
-        f9irrfuh4q8+vHogrUkg4ftkzUvhIilHewfS96GI8dY6ZKr20CS9jtB3DXUHIMq/y/Z2mL
-        j0LQPboP5xGY3WEhRy2GzovrYV6bDPY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1647343514;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BKrRwVuw72BzaglAlmSnLaAKxBvpnYrC6+CTmMlmAIY=;
-        b=rl1NWrhB7QGS7mg42YkFQ6lFLwSaqN4v4kXcpeh2QOTClGCUsqoXHAM/NA1lq8qcftsV/4
-        gE00On8d2rk7UqAQ==
-Received: from quack3.suse.cz (unknown [10.100.200.198])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S241589AbiCOLpi (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 15 Mar 2022 07:45:38 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C90AB2AE1A;
+        Tue, 15 Mar 2022 04:44:25 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 18941A3B87;
-        Tue, 15 Mar 2022 11:25:14 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 87835A0615; Tue, 15 Mar 2022 12:25:12 +0100 (CET)
-Date:   Tue, 15 Mar 2022 12:25:12 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Theodore Ts'o <tytso@mit.edu>, Jan Kara <jack@suse.cz>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KHs533hsNz4xL3;
+        Tue, 15 Mar 2022 22:44:22 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1647344664;
+        bh=I1kvJkvdwUyhlOvf9ZD2jpbUo7A7tXOZ/UJA5p1xLvU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=aKa5VHgybScX95rsy/FeQcFWJc8w1L4qbc49YtztRZxBN/YsxkndP0eVFQ87bNezg
+         rqo7efNlC5pwWpnH852tboZgDw8TEWZ6dMMN2axOONrxTcwr0KqoCZ9wwzccoV4MPj
+         kXmuqmyIiJUKtb40MqfXV683yVeXO25zDgLZ/btmLngl7Zx2nUr1+l9spwGxpSQJ4Q
+         V7MuvmC0DGye9E/f724pXIW3VYoZwWRiQ3G7sHpVZdZfwcf/WoydCMSSVEBzDxPAuc
+         H1h1evmiCifwP3peDVu7+a/EIyUV+ZSD4DMcnsaNcHMltoIV2PCHQziC0eQ9ECnGys
+         X2JzeKsno8pLg==
+Date:   Tue, 15 Mar 2022 22:44:21 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the folio tree with the ext4 tree
-Message-ID: <20220315112512.yl7dewzglimjurh5@quack3.lan>
-References: <20220315204007.05ad4817@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the net-next tree
+Message-ID: <20220315224421.23a8def1@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220315204007.05ad4817@canb.auug.org.au>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/u9Y+4SMt+b9MeJhzmI11hoN";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue 15-03-22 20:40:07, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the folio tree got a conflict in:
-> 
->   fs/ext4/inode.c
-> 
-> between commit:
-> 
->   2bb8dd401a4f ("ext4: warn when dirtying page w/o buffers in data=journal mode")
-> 
-> from the ext4 tree and commit:
-> 
->   821405cf3ebb ("fs: Convert trivial uses of __set_page_dirty_nobuffers to filemap_dirty_folio")
-> 
-> from the folio tree.
-> 
-> I didn't know how to complete this fix up ans so just commented out the
-> new WARN_ON().
+--Sig_/u9Y+4SMt+b9MeJhzmI11hoN
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for the notice Stephen! The resolution should be like:
+Hi all,
 
-- 	WARN_ON_ONCE(!page_has_buffers(page));
-+ 	WARN_ON_ONCE(!folio_buffers(folio));
+After merging the net-next tree, today's linux-next build (arm64
+defconfig) failed like this:
 
-How are we going to handle this conflict Ted? Just tell Linus about the
-conflict and resolution?
+drivers/net/ethernet/mscc/ocelot.c: In function 'ocelot_port_set_default_pr=
+io':
+drivers/net/ethernet/mscc/ocelot.c:2920:21: error: 'IEEE_8021QAZ_MAX_TCS' u=
+ndeclared (first use in this function)
+ 2920 |         if (prio >=3D IEEE_8021QAZ_MAX_TCS)
+      |                     ^~~~~~~~~~~~~~~~~~~~
+drivers/net/ethernet/mscc/ocelot.c:2920:21: note: each undeclared identifie=
+r is reported only once for each function it appears in
+drivers/net/ethernet/mscc/ocelot.c: In function 'ocelot_port_add_dscp_prio':
+drivers/net/ethernet/mscc/ocelot.c:2962:21: error: 'IEEE_8021QAZ_MAX_TCS' u=
+ndeclared (first use in this function)
+ 2962 |         if (prio >=3D IEEE_8021QAZ_MAX_TCS)
+      |                     ^~~~~~~~~~~~~~~~~~~~
 
-								Honza
+Caused by commit
 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
-> 
-> diff --cc fs/ext4/inode.c
-> index 3d0ca48d20c8,436efd31cc27..000000000000
-> --- a/fs/ext4/inode.c
-> +++ b/fs/ext4/inode.c
-> @@@ -3573,31 -3541,30 +3573,32 @@@ const struct iomap_ops ext4_iomap_repor
->   };
->   
->   /*
-> -  * Whenever the page is being dirtied, corresponding buffers should already be
->  - * Folios can be marked dirty completely asynchronously from ext4's
->  - * journalling activity.  By filemap_sync_pte(), try_to_unmap_one(), etc.
->  - * We cannot do much here because ->dirty_folio may be called with the
->  - * page table lock held.  The folio is not necessarily locked.
-> ++ * Whenever the folio is being dirtied, corresponding buffers should already be
->  + * attached to the transaction (we take care of this in ext4_page_mkwrite() and
->  + * ext4_write_begin()). However we cannot move buffers to dirty transaction
-> -  * lists here because ->set_page_dirty is called under VFS locks and the page
-> ++ * lists here because ->dirty_folio is called under VFS locks and the folio
->  + * is not necessarily locked.
->    *
-> -  * We cannot just dirty the page and leave attached buffers clean, because the
-> +  * We cannot just dirty the folio and leave attached buffers clean, because the
->    * buffers' dirty state is "definitive".  We cannot just set the buffers dirty
->    * or jbddirty because all the journalling code will explode.
->    *
-> -  * So what we do is to mark the page "pending dirty" and next time writepage
-> +  * So what we do is to mark the folio "pending dirty" and next time writepage
->    * is called, propagate that into the buffers appropriately.
->    */
-> - static int ext4_journalled_set_page_dirty(struct page *page)
-> + static bool ext4_journalled_dirty_folio(struct address_space *mapping,
-> + 		struct folio *folio)
->   {
-> - 	WARN_ON_ONCE(!page_has_buffers(page));
-> - 	SetPageChecked(page);
-> - 	return __set_page_dirty_nobuffers(page);
-> ++/*	WARN_ON_ONCE(!page_has_buffers(page)); */
-> + 	folio_set_checked(folio);
-> + 	return filemap_dirty_folio(mapping, folio);
->   }
->   
-> - static int ext4_set_page_dirty(struct page *page)
-> + static bool ext4_dirty_folio(struct address_space *mapping, struct folio *folio)
->   {
-> - 	WARN_ON_ONCE(!PageLocked(page) && !PageDirty(page));
-> - 	WARN_ON_ONCE(!page_has_buffers(page));
-> - 	return __set_page_dirty_buffers(page);
-> + 	WARN_ON_ONCE(!folio_test_locked(folio) && !folio_test_dirty(folio));
-> + 	WARN_ON_ONCE(!folio_buffers(folio));
-> + 	return block_dirty_folio(mapping, folio);
->   }
->   
->   static int ext4_iomap_swap_activate(struct swap_info_struct *sis,
+  978777d0fb06 ("net: dsa: felix: configure default-prio and dscp prioritie=
+s")
+
+I have applied the following fix up patch for today.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Tue, 15 Mar 2022 22:34:25 +1100
+Subject: [PATCH] fixup for "net: dsa: felix: configure default-prio and dsc=
+p priorities"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/net/ethernet/mscc/ocelot.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/net/ethernet/mscc/ocelot.c b/drivers/net/ethernet/mscc=
+/ocelot.c
+index 41dbb1e326c4..7c4bd3f8e7ec 100644
+--- a/drivers/net/ethernet/mscc/ocelot.c
++++ b/drivers/net/ethernet/mscc/ocelot.c
+@@ -7,6 +7,7 @@
+ #include <linux/dsa/ocelot.h>
+ #include <linux/if_bridge.h>
+ #include <linux/ptp_classify.h>
++#include <net/dcbnl.h>
+ #include <soc/mscc/ocelot_vcap.h>
+ #include "ocelot.h"
+ #include "ocelot_vcap.h"
+--=20
+2.34.1
 
 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/u9Y+4SMt+b9MeJhzmI11hoN
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIwfBUACgkQAVBC80lX
+0GyMbQgAgahDoiC6FAzw9S27/y1ElyAuLOYwCXFN7I+bbv98pI22SUm0XhaufTOz
+OuipKroQN/w5C15nyMbAKiw5tvCXUIM1Bd4TlvUxZS65qBQ+8Aaci1ASWunMpC0T
+1eZVUXrwhbwjumciKrlC+deEGWVW09MQ+yUCI2DDRFXofftbJNXlWVe3AC45/MBd
+l6AJTzun5HcO3HzisgOFL+VEfVzOh/sh98vmLedRg9La2hJYYhvrcTqEw12gQRlr
+AcXuPwrwTmND1URg/UB3qrYXJxELOq8A50i53Qb3uAl9nGWErnlGT2efV6QzaRQu
+uhuMfv69fs9HB5d4XQ2kbUpmbb/PBA==
+=/JqO
+-----END PGP SIGNATURE-----
+
+--Sig_/u9Y+4SMt+b9MeJhzmI11hoN--

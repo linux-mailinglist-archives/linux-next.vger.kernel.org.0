@@ -2,103 +2,123 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAD3C4D9E2E
-	for <lists+linux-next@lfdr.de>; Tue, 15 Mar 2022 15:55:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78E0F4DA115
+	for <lists+linux-next@lfdr.de>; Tue, 15 Mar 2022 18:26:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349506AbiCOO4s (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 15 Mar 2022 10:56:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42302 "EHLO
+        id S1350545AbiCOR1T (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 15 Mar 2022 13:27:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349486AbiCOO4o (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 15 Mar 2022 10:56:44 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D13D055BDC
-        for <linux-next@vger.kernel.org>; Tue, 15 Mar 2022 07:55:31 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id s8so20066115pfk.12
-        for <linux-next@vger.kernel.org>; Tue, 15 Mar 2022 07:55:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IT33os/gyb9Nj6BK4xBMhU9JHD8wbptBn+Fc9O72IfI=;
-        b=WDkdh6/uuZbR03IvsRgdosgxWLPfMuOGlI9Vd0GA+e9SR6lM0095MrEXhQ2dNddQH7
-         wXeWCs4KYAhbPFE6aXXfzwJSq9fCy8f1Um98oYu1ESDfy+d67egbllH7+1DX7I1COYjU
-         nj54/h23VZRdwYMHUuRHAp717T3Oa5opsdJibfWK92s1djCvjgGGNcS/3pkFxl33y+mu
-         FuYOUTlrAz1jG+ciIp7Lq7NI7w9mY8wyD3wUcARcN0xZVP4pQ/++7Njq78Q0drhUi+87
-         2JUJx9l5cqtaT5fOcqojWrkpiyTUBwvso0Ww3/3l6ZVhtT2YnMZdOfOOD4DGaaTcUsbn
-         Qw6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IT33os/gyb9Nj6BK4xBMhU9JHD8wbptBn+Fc9O72IfI=;
-        b=P4tlb4/jvVlGqRhg76IqdORUNF7aAwIlS30nX30ZJ8xBwJhwCCcl/NBdjJH7oYxbo/
-         GvUe8hCODLd6ABj4H1EKLiK4yUCLYNbUc9wV9uBMwB/1vBAYCQVa+0K1hRKpre3x/Mw3
-         d+DyAUhEo1+thX2JRslIvZwYa6iyIWGCnrilov8RhdgmpV1YKKvBoWfZR1a4o/CH6OFX
-         +gZepMd1alihrYpiUIWFBg9igab7uK6SxPm1KE5OyDDgTMB7lv8a0i6A3XtTNLii/g+A
-         NQ/FBtczBRf5BquJxewFbeAo0NJ8++7bMHAtwJ2e5Fir541XooZ2jMGnYqAhcpB5VgpQ
-         VOmQ==
-X-Gm-Message-State: AOAM533L1kB2+v2R4CqdfT5T1Irw/SOE65m+6j2iQ0gf4jxaIpVjtd0p
-        mOn8ZNXpECyf/UG9QBd1+j7OQA7GE2PSoAAOnCmttA==
-X-Google-Smtp-Source: ABdhPJzsFumlcq15TCtF1YTtFB4Y4vrUXRcgHz7PWWvEXTL+3AOPgjaRLecQdnP2aC/H+oHbQaXXeN4ZePk9MLzQ3pY=
-X-Received: by 2002:a05:6a02:283:b0:342:703e:1434 with SMTP id
- bk3-20020a056a02028300b00342703e1434mr24341197pgb.74.1647356131234; Tue, 15
- Mar 2022 07:55:31 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220315191538.323eefbb@canb.auug.org.au> <874k3z4guj.fsf@mpe.ellerman.id.au>
-In-Reply-To: <874k3z4guj.fsf@mpe.ellerman.id.au>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Tue, 15 Mar 2022 07:55:20 -0700
-Message-ID: <CAPcyv4hAGXWD0OS_yB3uc-fk7ami65q1zB4BuxqkhWggn1cNEQ@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the nvdimm tree with the powerpc tree
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        with ESMTP id S1347737AbiCOR1Q (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 15 Mar 2022 13:27:16 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D04F748E78;
+        Tue, 15 Mar 2022 10:26:02 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22FGflpB002387;
+        Tue, 15 Mar 2022 17:25:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : in-reply-to : references : date : message-id : mime-version :
+ content-type; s=pp1; bh=+m2zdRbNqsWkuVUHJWgaFa7AvKiQxrR+dHzT2AmUs8c=;
+ b=FgLVs4jsakxDnWHrcaOP1dImS1/6Z2Ewv1RslCPRKf/07SH6vavvTJIMmq6+q4zIWbPB
+ gC3ZURYKECyNRceFwPUl7Nrr16ETjAqZOBVJwRBVrKZeoWDVQuMicxzMPW4BbREkCqWb
+ 1EDgr1M+ywt043mZKEQQMg9JHjaRq2kJgWTMvsIK8/Izay+cPfjjB+mp4av0W/QnQ5hi
+ AWOihZZCeuFuBi7jY8dVq4gXhoBh7ecsMrrdjKXSW2yNbxV8p7YF/37d2eJhNTL5pQV8
+ iQjwENlMbzgHzTLH/EafygqoAU67OBi0l3UO3zmEi0t98zMDmhoHaTTxmh1ePHjrsDeX AA== 
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3etxhtgy6e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Mar 2022 17:25:51 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22FHDKtp012855;
+        Tue, 15 Mar 2022 17:25:49 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma05fra.de.ibm.com with ESMTP id 3erk58p3n0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Mar 2022 17:25:49 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22FHPktZ52167006
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 15 Mar 2022 17:25:46 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 772D2AE04D;
+        Tue, 15 Mar 2022 17:25:46 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 89863AE045;
+        Tue, 15 Mar 2022 17:25:41 +0000 (GMT)
+Received: from vajain21.in.ibm.com (unknown [9.211.32.147])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with SMTP;
+        Tue, 15 Mar 2022 17:25:41 +0000 (GMT)
+Received: by vajain21.in.ibm.com (sSMTP sendmail emulation); Tue, 15 Mar 2022 22:55:39 +0530
+From:   Vaibhav Jain <vaibhav@linux.ibm.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>
+Cc:     Kajol Jain <kjain@linux.ibm.com>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Shivaprasad G Bhat <sbhat@linux.ibm.com>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Shivaprasad G Bhat <sbhat@linux.ibm.com>
+Subject: Re: linux-next: manual merge of the nvdimm tree with the powerpc tree
+In-Reply-To: <20220315191538.323eefbb@canb.auug.org.au>
+References: <20220315191538.323eefbb@canb.auug.org.au>
+Date:   Tue, 15 Mar 2022 22:55:39 +0530
+Message-ID: <87v8wfb018.fsf@vajain21.in.ibm.com>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: -3J5cxA1rd3sxn56In5FZvp1n-T54dZQ
+X-Proofpoint-GUID: -3J5cxA1rd3sxn56In5FZvp1n-T54dZQ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-15_03,2022-03-15_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=999
+ mlxscore=0 malwarescore=0 bulkscore=0 phishscore=0 spamscore=0
+ suspectscore=0 impostorscore=0 clxscore=1011 priorityscore=1501
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203150104
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 4:21 AM Michael Ellerman <mpe@ellerman.id.au> wrote:
->
-> Stephen Rothwell <sfr@canb.auug.org.au> writes:
-> > Hi all,
-> >
-> > Today's linux-next merge of the nvdimm tree got a conflict in:
-> >
-> >   arch/powerpc/platforms/pseries/papr_scm.c
-> >
-> > between commit:
-> >
-> >   bbbca72352bb ("powerpc/papr_scm: Implement initial support for injecting smart errors")
-> >
-> > from the powerpc tree and commit:
-> >
-> >   4c08d4bbc089 ("powerpc/papr_scm: Add perf interface support")
-> >
-> > from the nvdimm tree.
-> >
-> > I fixed it up (see below) and can carry the fix as necessary. This
-> > is now fixed as far as linux-next is concerned, but any non trivial
-> > conflicts should be mentioned to your upstream maintainer when your tree
-> > is submitted for merging.  You may also want to consider cooperating
-> > with the maintainer of the conflicting tree to minimise any particularly
-> > complex conflicts.
->
-> Thanks, resolution looks obviously correct.
->
-> Dan, this seems benign to me, I don't think any further action is
-> required other than mentioning it to Linus.
+Stephen Rothwell <sfr@canb.auug.org.au> writes:
 
-Yes, it looks ok to me.
+> Hi all,
+>
+> Today's linux-next merge of the nvdimm tree got a conflict in:
+>
+>   arch/powerpc/platforms/pseries/papr_scm.c
+>
+> between commit:
+>
+>   bbbca72352bb ("powerpc/papr_scm: Implement initial support for injecting smart errors")
+>
+> from the powerpc tree and commit:
+>
+>   4c08d4bbc089 ("powerpc/papr_scm: Add perf interface support")
+>
+> from the nvdimm tree.
+>
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+
+Thanks for this correction Stephen and the change looks ok to me. I
+verified the functionality introduced by kernel commit bbbca72352bb
+("powerpc/papr_scm: Implement initial support for injecting smart
+errors") on the 'next-20220315' and found it to be working fine.
+
+<snip>
+
+-- 
+Cheers
+~ Vaibhav

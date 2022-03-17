@@ -2,90 +2,106 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 869DA4DD012
-	for <lists+linux-next@lfdr.de>; Thu, 17 Mar 2022 22:20:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 280324DD17E
+	for <lists+linux-next@lfdr.de>; Fri, 18 Mar 2022 00:52:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230201AbiCQVUN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 17 Mar 2022 17:20:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39116 "EHLO
+        id S229499AbiCQXw1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 17 Mar 2022 19:52:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230135AbiCQVUM (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 17 Mar 2022 17:20:12 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C39A1DE9F;
-        Thu, 17 Mar 2022 14:18:53 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S229853AbiCQXwY (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 17 Mar 2022 19:52:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD442B1209;
+        Thu, 17 Mar 2022 16:51:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KKKky3w3Sz4xXV;
-        Fri, 18 Mar 2022 08:18:50 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1647551931;
-        bh=jqK0nPVtwvYOHbKN9F3phggl61z9dDkP0bv/+owb1cs=;
-        h=Date:From:To:Cc:Subject:From;
-        b=BueAf71JoiUmW+CB8lI5l3ubEFhjscGX5qCh6LoWpvg1tk2VKvLhZ9bTStK1ZosgS
-         mSn72S91v2hqItq6qJjFds0vL9MAUbTJVhiY4SmpJ4mDplDKhky5A6hg95dAW6gT66
-         5OcfSLpS5NS7+dV7+mUXLggKMth8eO19wNRwnMa7NLcitO2wTLZBHuUpNrQ3XZYyzn
-         QhXwSTMYeE8F+yxz417+ABU43eEB/+VP75tzDcs2LamiRWw4aDye3kwJa4plxBUXP+
-         17eej4qmEGIFvkXbvEqSV8kkz9/ITeQ9JwedDJDZbrlfbPB1/a3GUszMfQtVucoYmi
-         s1ZtVySji6I5A==
-Date:   Fri, 18 Mar 2022 08:18:49 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the spi tree
-Message-ID: <20220318081849.71228339@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/dffVoO4x=ie4M/uiw6W0RMs";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C09546135C;
+        Thu, 17 Mar 2022 23:51:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0D9DC340E9;
+        Thu, 17 Mar 2022 23:51:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1647561062;
+        bh=c5eoa7XecUk0qot+FwjPKZfT8TI4sQLGAehXwg8J1K8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=oopVa0BAXrDMEKaNLsKFU0IN7quVxZGL8VjtKsp/HPcMyKTUFICek5K3+6YmMioil
+         GQbiJmnXhz2lfDO+k+pYgTtLKpZebKFOCDtUZmEDUNkI9xnaen9trRAKRDI+u8gaaV
+         9UGCX78YgwQ9lGVGWmyxgUXp2wqs3kSmxviMwB9w=
+Date:   Thu, 17 Mar 2022 16:51:00 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     broonie@kernel.org, mhocko@suse.cz, sfr@canb.auug.org.au,
+        linux-next@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        mm-commits@vger.kernel.org,
+        linux-um <linux-um@lists.infradead.org>, paulmck@kernel.org,
+        Richard Weinberger <richard@nod.at>,
+        Johannes Berg <johannes@sipsolutions.net>
+Subject: Re: mmotm 2022-03-16-17-42 uploaded (uml sub-x86_64, sched/fair,
+ RCU)
+Message-Id: <20220317165100.2755c5ae6a3a08b7ecb06181@linux-foundation.org>
+In-Reply-To: <917e9ce0-c8cf-61b2-d1ba-ebf25bbd979d@infradead.org>
+References: <20220317004304.95F89C340E9@smtp.kernel.org>
+        <0f622499-36e1-ea43-ddc3-a8b3bb08d34b@infradead.org>
+        <20220316213011.8cac447e692283a4b5d97f3d@linux-foundation.org>
+        <917e9ce0-c8cf-61b2-d1ba-ebf25bbd979d@infradead.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/dffVoO4x=ie4M/uiw6W0RMs
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, 16 Mar 2022 21:52:44 -0700 Randy Dunlap <rdunlap@infradead.org> wrote:
 
-Hi all,
+> >> In file included from ./arch/x86/include/generated/asm/rwonce.h:1:0,
+> >>                  from ../include/linux/compiler.h:248,
+> >>                  from ../include/linux/kernel.h:20,
+> >>                  from ../include/linux/cpumask.h:10,
+> >>                  from ../include/linux/energy_model.h:4,
+> >>                  from ../kernel/sched/fair.c:23:
+> >> ../include/linux/psi.h: In function ‘cgroup_move_task’:
+> >> ../include/linux/rcupdate.h:414:36: error: dereferencing pointer to incomplete type ‘struct css_set’
+> >>  #define RCU_INITIALIZER(v) (typeof(*(v)) __force __rcu *)(v)
+> >>                                     ^~~~
+> > 
+> > Works For Me.  I tried `make x86_64_defconfig' and `make i386_defconfig' too.
+> > 
+> > Can you please share that .config, or debug a bit?
+> 
+> $ make ARCH=um SUBARCH=x86_64 defconfig
+> 
 
-In commit
+I still can't reproduce this :(
 
-  ebc4cb43ea5a ("spi: Fix erroneous sgs value with min_t()")
+> This fixes the build error for me when CONFIG_PSI=n.
 
-Fixes tag
+I have CONFIG_PSI=n
 
-  Fixes: commit 1a4e53d2fc4f68aa ("spi: Fix invalid sgs value")
+> ---
+>  include/linux/psi.h |    3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> --- mmotm-2022-0316-1742.orig/include/linux/psi.h
+> +++ mmotm-2022-0316-1742/include/linux/psi.h
+> @@ -53,6 +53,9 @@ static inline int psi_cgroup_alloc(struc
+>  static inline void psi_cgroup_free(struct cgroup *cgrp)
+>  {
+>  }
+> +
+> +#include <linux/cgroup-defs.h>
+> +
+>  static inline void cgroup_move_task(struct task_struct *p, struct css_set *to)
+>  {
+>  	rcu_assign_pointer(p->cgroups, to);
 
-has these problem(s):
-
-  - leading word 'commit' unexpected
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/dffVoO4x=ie4M/uiw6W0RMs
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIzpbkACgkQAVBC80lX
-0GxU7Qf9G65RsTpMLymE5l1gsFUfTs+x8fscNzAT2eKQ1YQiA6QqjYHAn8KDqMfw
-/LVS7Rvdl71Uhx0QrPCRZ3djLa85Vyda8rGhiGHb843kuNQpLvvfkLWuKbO6BYD4
-uGA/Ce5xbp85HiQSjo8vatmyqUi/fblU6R93eAuHNP+7KpHRsCTRuAklERHmVS0f
-95m/D5hINbEYr27UXq8kK3Wi6Iwz6w5IoodybLOW5qbndLOD6uoWb0pHoiRenUKI
-HsUxjF4P4kLD/AN1skuN1pq6vItO6ely3gzs6wUB/tIu6qMXdCMfsDxSWemI9RNY
-uX7kmBbiEj4bNqFP85MJTyz/+qqVOQ==
-=DfGM
------END PGP SIGNATURE-----
-
---Sig_/dffVoO4x=ie4M/uiw6W0RMs--
+Nothing in -next touches psi.h so I am unable to determine which patch
+needs fixing :(

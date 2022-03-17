@@ -2,39 +2,58 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 615374DBF05
-	for <lists+linux-next@lfdr.de>; Thu, 17 Mar 2022 07:12:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 549C44DC000
+	for <lists+linux-next@lfdr.de>; Thu, 17 Mar 2022 08:11:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230159AbiCQGNR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 17 Mar 2022 02:13:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40494 "EHLO
+        id S230144AbiCQHM5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 17 Mar 2022 03:12:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229997AbiCQGNN (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 17 Mar 2022 02:13:13 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3CB922B6DD;
-        Wed, 16 Mar 2022 23:03:06 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KJxQB2vQXz4xgw;
-        Thu, 17 Mar 2022 17:02:58 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1647496982;
-        bh=helC+++jzqQi70QZ5QorRw4r/De1RHWf4TMymlE5AK8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=A7cNfq6P5+VB8R1Pjr8lSsYuZ3Kiyq7PtPQJ9xAphqKnX1Cy892yXGGN9bYvNz+f4
-         lkK1XGMzP0Vaf4QI9S166s9A0oBcvOb7CbECEorsp5eBYE8+2iKnyAbUuefrsWE6KX
-         0h3mt/sYmNODtfzIMAq8rN6CVMVRWBzfUYFF21Wy9r5s/2OtxicLA0YGwl8c1fzbMj
-         SPLWAYTR8aIvPE1oVpeZC+PHUbDj6bTpQHm/sHoy8BREGnqSNfiKYUMX9kPLgk5jNc
-         5Zyon3b/vbaTDzruZpq0BaznlH8fDqUGhmb8ZnJkiLuNRCmVFF/kw3Qqsuf7NeSFKX
-         rhloTVUCkCL2g==
-Date:   Thu, 17 Mar 2022 17:02:54 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Adam Bratschi-Kaye <ark.email@gmail.com>,
+        with ESMTP id S230170AbiCQHM5 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 17 Mar 2022 03:12:57 -0400
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42D5316A698;
+        Thu, 17 Mar 2022 00:11:41 -0700 (PDT)
+Received: by mail-il1-x129.google.com with SMTP id j29so3137412ila.4;
+        Thu, 17 Mar 2022 00:11:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lsH1jTwGh70nbMJVP8wAJmLqUSHhmR9shuFU76M+9Dc=;
+        b=EBzB740TKu1d1Imn3mpaSB1EfZ2FjXarBVL0Npr4JVxuTydJxK6GaorJm5cvoHan50
+         vid57wYTSwXyO/dPQEoc3X4KoEUoPrrxfj+fIagyseVtSHFazHuJcsVS4DC0u8l/7CZ7
+         QpUcDmZaqTc0eu0rXYtIrRTDKW44Nsl+7U6kTOHKQlI0d3A2is47q9H5Lm6YKIwokwif
+         bu5m2qhNTXEzDk07DaC1a0TwpqdPkxzIEfeffk19Si+088MSC3fURJLeLeA4KvopIpj4
+         ldGfVVm7o0WDdtHqG0wYQtxjEPI/yExWJky43z4PltQEh9PsZNwU4h6GrjWNCbxOrvyA
+         Tr/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lsH1jTwGh70nbMJVP8wAJmLqUSHhmR9shuFU76M+9Dc=;
+        b=23wqmmZBHZS3Xr6HJtueq+9C7Eunj8Bk3XKhNCvTIb6B4tWojy+KWMXa0+GkqPfEVb
+         S4HESCiHBC/ZC/L3EweouG7SxkG7iVck9yxd9g5AymhcJKs+ktzmLPDXDFKc8yBn1P18
+         ikR7MSkSUs0+1FpqRMEKib3d2CIOxVF7Zd6t0B0osPWVciJ61cdUeYmYTas7v/WmcGcz
+         QWwVy8wDD8bWpMq/1bOVNln8rseuPszFAR1D2zvwgTvmk0uTB0FYfR6dM+HtKvB8IRta
+         8EaIBFjKBHzW8CAOOdSl2LOKe7Jjs/C7R3FdPd5z3mVolUuwoDHlM1LAtLWBhDMkfB0E
+         0xPw==
+X-Gm-Message-State: AOAM5304TBP6wF/qwQVS0k2gsOlAjrvxuIOtXO0Q+pGIo2GmjX9cxCI1
+        /xEsfT2XBPHEExa1L/Wc8hHaCpiw3C2isClH1ZI=
+X-Google-Smtp-Source: ABdhPJylbMRWa83N8Qi1rEHyJaDatdhRujBdMy27TMS6aUMu0aXeRV6F+XT1QD0fGBvkRtFEXxUAEinfYkWcWu6zA1g=
+X-Received: by 2002:a05:6e02:1846:b0:2c7:b032:5d92 with SMTP id
+ b6-20020a056e02184600b002c7b0325d92mr1331857ilv.237.1647501100639; Thu, 17
+ Mar 2022 00:11:40 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220317170254.0f6e3bac@canb.auug.org.au>
+In-Reply-To: <20220317170254.0f6e3bac@canb.auug.org.au>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Thu, 17 Mar 2022 08:11:29 +0100
+Message-ID: <CANiq72=Ww3Qb4RfAHfognp8F2PbCRyA-3asqB-6f2R76uBLiXg@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the rust tree with the kbuild tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Adam Bratschi-Kaye <ark.email@gmail.com>,
         Alex Gaynor <alex.gaynor@gmail.com>,
         Antonio Terceiro <antonio.terceiro@linaro.org>,
         Boqun Feng <boqun.feng@gmail.com>,
@@ -51,13 +70,10 @@ Cc:     Adam Bratschi-Kaye <ark.email@gmail.com>,
         Miguel Ojeda <ojeda@kernel.org>,
         Sven Van Asbroeck <thesven73@gmail.com>,
         Wedson Almeida Filho <wedsonaf@google.com>
-Subject: linux-next: manual merge of the rust tree with the kbuild tree
-Message-ID: <20220317170254.0f6e3bac@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/BPgSHN+3IZml_gI+tb=ng6p";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,142 +81,13 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/BPgSHN+3IZml_gI+tb=ng6p
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Stephen,
 
-Hi all,
+On Thu, Mar 17, 2022 at 7:03 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> I fixed it up (see below) and can carry the fix as necessary. This
 
-Today's linux-next merge of the rust tree got a conflict in:
+Looks good to me -- thanks!
 
-  Makefile
-
-between commit:
-
-  f67695c9962e ("kbuild: Add environment variables for userprogs flags")
-
-from the kbuild tree and commit:
-
-  e2e7cf27b587 ("Kbuild: add Rust support")
-
-from the rust tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
 Cheers,
-Stephen Rothwell
-
-diff --cc Makefile
-index d2269ea42eac,67008a2d964c..000000000000
---- a/Makefile
-+++ b/Makefile
-@@@ -430,15 -437,32 +437,34 @@@ els
-  HOSTCC	=3D gcc
-  HOSTCXX	=3D g++
-  endif
-+ HOSTRUSTC =3D rustc
- =20
- -export KBUILD_USERCFLAGS :=3D -Wall -Wmissing-prototypes -Wstrict-prototy=
-pes \
- -			      -O2 -fomit-frame-pointer -std=3Dgnu89
- -export KBUILD_USERLDFLAGS :=3D
- +KBUILD_USERHOSTCFLAGS :=3D -Wall -Wmissing-prototypes -Wstrict-prototypes=
- \
- +			 -O2 -fomit-frame-pointer -std=3Dgnu11 \
- +			 -Wdeclaration-after-statement
- +KBUILD_USERCFLAGS  :=3D $(KBUILD_USERHOSTCFLAGS) $(USERCFLAGS)
- +KBUILD_USERLDFLAGS :=3D $(USERLDFLAGS)
- =20
-+ # These flags apply to all Rust code in the tree, including the kernel and
-+ # host programs.
-+ export rust_common_flags :=3D --edition=3D2021 \
-+ 			    -Zbinary_dep_depinfo=3Dy \
-+ 			    -Dunsafe_op_in_unsafe_fn -Drust_2018_idioms \
-+ 			    -Dunreachable_pub -Dnon_ascii_idents \
-+ 			    -Wmissing_docs \
-+ 			    -Drustdoc::missing_crate_level_docs \
-+ 			    -Dclippy::correctness -Dclippy::style \
-+ 			    -Dclippy::suspicious -Dclippy::complexity \
-+ 			    -Dclippy::perf \
-+ 			    -Dclippy::let_unit_value -Dclippy::mut_mut \
-+ 			    -Dclippy::needless_bitwise_bool \
-+ 			    -Dclippy::needless_continue \
-+ 			    -Wclippy::dbg_macro
-+=20
- -KBUILD_HOSTCFLAGS   :=3D $(KBUILD_USERCFLAGS) $(HOST_LFS_CFLAGS) $(HOSTCF=
-LAGS)
- +KBUILD_HOSTCFLAGS   :=3D $(KBUILD_USERHOSTCFLAGS) $(HOST_LFS_CFLAGS) $(HO=
-STCFLAGS)
-  KBUILD_HOSTCXXFLAGS :=3D -Wall -O2 $(HOST_LFS_CFLAGS) $(HOSTCXXFLAGS)
-+ KBUILD_HOSTRUSTFLAGS :=3D $(rust_common_flags) -O -Cstrip=3Ddebuginfo \
-+ 			-Zallow-features=3D $(HOSTRUSTFLAGS)
-  KBUILD_HOSTLDFLAGS  :=3D $(HOST_LFS_LDFLAGS) $(HOSTLDFLAGS)
-  KBUILD_HOSTLDLIBS   :=3D $(HOST_LFS_LIBS) $(HOSTLDLIBS)
- =20
-@@@ -517,12 -549,23 +551,23 @@@ KBUILD_CFLAGS   :=3D -Wall -Wundef -Werro
-  		   -fno-strict-aliasing -fno-common -fshort-wchar -fno-PIE \
-  		   -Werror=3Dimplicit-function-declaration -Werror=3Dimplicit-int \
-  		   -Werror=3Dreturn-type -Wno-format-security \
- -		   -std=3Dgnu89
- +		   -std=3Dgnu11
-  KBUILD_CPPFLAGS :=3D -D__KERNEL__
-+ KBUILD_RUSTFLAGS :=3D $(rust_common_flags) \
-+ 		    --target=3D$(objtree)/rust/target.json \
-+ 		    -Cpanic=3Dabort -Cembed-bitcode=3Dn -Clto=3Dn \
-+ 		    -Cforce-unwind-tables=3Dn -Ccodegen-units=3D1 \
-+ 		    -Csymbol-mangling-version=3Dv0 \
-+ 		    -Crelocation-model=3Dstatic \
-+ 		    -Zfunction-sections=3Dn \
-+ 		    -Dclippy::float_arithmetic
-+=20
-  KBUILD_AFLAGS_KERNEL :=3D
-  KBUILD_CFLAGS_KERNEL :=3D
-+ KBUILD_RUSTFLAGS_KERNEL :=3D
-  KBUILD_AFLAGS_MODULE  :=3D -DMODULE
-  KBUILD_CFLAGS_MODULE  :=3D -DMODULE
-+ KBUILD_RUSTFLAGS_MODULE :=3D --cfg MODULE
-  KBUILD_LDFLAGS_MODULE :=3D
-  KBUILD_LDFLAGS :=3D
-  CLANG_FLAGS :=3D
-@@@ -783,9 -858,12 +861,12 @@@ KBUILD_CFLAGS +=3D $(stackp-flags-y
-  KBUILD_CFLAGS-$(CONFIG_WERROR) +=3D -Werror
-  KBUILD_CFLAGS +=3D $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
- =20
-+ KBUILD_RUSTFLAGS-$(CONFIG_WERROR) +=3D -Dwarnings
-+ KBUILD_RUSTFLAGS +=3D $(KBUILD_RUSTFLAGS-y)
-+=20
-  ifdef CONFIG_CC_IS_CLANG
-  KBUILD_CPPFLAGS +=3D -Qunused-arguments
- -# The kernel builds with '-std=3Dgnu89' so use of GNU extensions is accep=
-table.
- +# The kernel builds with '-std=3Dgnu11' so use of GNU extensions is accep=
-table.
-  KBUILD_CFLAGS +=3D -Wno-gnu
-  # CLANG uses a _MergedGlobals as optimization, but this breaks modpost, a=
-s the
-  # source of a reference will be _MergedGlobals and not on of the whitelis=
-ted names.
-
---Sig_/BPgSHN+3IZml_gI+tb=ng6p
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIyzw4ACgkQAVBC80lX
-0GyefQgAieBGh2nAAPUJilnI9hVlKmg3eYr2zwzsGaAD1zwPNVykP8Dr67b9PXx/
-LTiYyJbgg2eHDA5OiyRLr0Hf0GkyrxIMsPl7Onw/50oL4kLDww8lgEnEtdg5uvla
-CWnGURHzWgmb0x5iVNGN177a/ssoUuXkHSW7eH2Fu8VRhl31VKp88xWGLSVTenwI
-+gpSdPXb1A03hoRY2sFhu46oyX5fgdkacxRngjSX9b5FFYzoWHiZmDpFUZu9IDAt
-UHXoOlUdekQ+XLWv5B7K37kMATrFGdfDlCzVPIYpu5+mRqsyCZyaV1UP4yupO/9v
-JXLWv24edim2b97zGPOdk8bQalko8Q==
-=r15x
------END PGP SIGNATURE-----
-
---Sig_/BPgSHN+3IZml_gI+tb=ng6p--
+Miguel

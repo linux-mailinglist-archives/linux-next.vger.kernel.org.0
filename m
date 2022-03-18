@@ -2,51 +2,53 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DFCE4DD54B
-	for <lists+linux-next@lfdr.de>; Fri, 18 Mar 2022 08:37:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 592504DD54F
+	for <lists+linux-next@lfdr.de>; Fri, 18 Mar 2022 08:39:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233128AbiCRHij (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 18 Mar 2022 03:38:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56848 "EHLO
+        id S232148AbiCRHki (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 18 Mar 2022 03:40:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232146AbiCRHij (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 18 Mar 2022 03:38:39 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 527491275C8;
-        Fri, 18 Mar 2022 00:37:21 -0700 (PDT)
+        with ESMTP id S231796AbiCRHki (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 18 Mar 2022 03:40:38 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBFBB23BC1;
+        Fri, 18 Mar 2022 00:39:19 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KKbSZ1ZH6z4xNm;
-        Fri, 18 Mar 2022 18:37:17 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KKbVr3HnXz4xNm;
+        Fri, 18 Mar 2022 18:39:16 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1647589040;
-        bh=IKLDZdzuNP/RMd5I9+dikiLBg/WA/Pgy519XXzgDQ5s=;
+        s=201702; t=1647589158;
+        bh=6Wb4c0vzY/hCjgjcuIHVKafvd8nAittXKbk139WRcJs=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Q9ord5kVayLaoKNEHsNpmSLYa5QoidyIGUQ8BFwGCJU+UjNaCMUzjnLVN4nIVDwtQ
-         UPpOs101i55rtraGWo0gZFmt0CZUgz0y1k+LEN7nnkwcgwdC+eW0LcXHtkM28G4Wuj
-         GqdvhdKRsJTNO1GB//gcNYf5XRINq75EyJ+WXqH3yZXA0IAn0ITdYGj6cFA9bzR8wo
-         ijy1NNXRPhr1jSn1jMOWuFwiIWjjFrc8Jz7mKP/fuEp3K/bdL+8SwuqmvJZYsu8PcX
-         XlSZi2nNkt3CPJkBsVYqKG5TD4s11e07Nw5XkaaXbCim7Y/y0/cy/J2osuh4fVTsZE
-         PKY/sI+nF0QVg==
-Date:   Fri, 18 Mar 2022 18:37:17 +1100
+        b=EWn52FZod2Zk+l8QkuB554b1TyvVj6liBzxR3FpOG1YoyBYELeN+FJIISmA5PPOKU
+         EPP+krM0lp86K5GZ6NJzkEq3fLqMbOHB38w/4a2cD2DMvBg550AsIR84Hdp/VTAcnS
+         dCSWEzuVxkw43J8K8fscraSSqCBos4mPoEBG7dFRDTFj2uq7axLu0Z4+xWiwV3x2Cb
+         fnFbmDDIDVmfsCMleIs51EeIlFZbI9NtLWK8uneJ5WDFFSl/UYrlS6i7CFPnSfL9LB
+         WDBaTs6rbPCOFYqelXrNFEEI5VlwGxHI5CKxqPRKhWqIcU1myCqv6LguQsZkuGvBfO
+         hiGQ1DqfW5TSA==
+Date:   Fri, 18 Mar 2022 18:39:15 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Greg KH <greg@kroah.com>, Olof Johansson <olof@lixom.net>,
         Arnd Bergmann <arnd@arndb.de>
-Cc:     Andy Gross <agross@kernel.org>, Baruch Siach <baruch@tkos.co.il>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+Cc:     Michal Simek <michal.simek@xilinx.com>,
+        Michal Simek <monstr@monstr.eu>,
+        David Heidelberg <david@ixit.cz>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Sean Anderson <sean.anderson@seco.com>,
         ARM <linux-arm-kernel@lists.infradead.org>
-Subject: Re: linux-next: manual merge of the usb tree with the qcom tree
-Message-ID: <20220318183717.7acac615@canb.auug.org.au>
-In-Reply-To: <YgTGihSrtlRR3DPC@kroah.com>
-References: <20220210141100.715b13e9@canb.auug.org.au>
-        <YgTGihSrtlRR3DPC@kroah.com>
+Subject: Re: linux-next: manual merge of the usb tree with the xilinx tree
+Message-ID: <20220318183915.08544653@canb.auug.org.au>
+In-Reply-To: <d7f84e0a-7c3a-116a-0911-2ed5a0bab2d9@xilinx.com>
+References: <20220210141550.56359523@canb.auug.org.au>
+        <YgTGdwkTkDgx+pan@kroah.com>
+        <d7f84e0a-7c3a-116a-0911-2ed5a0bab2d9@xilinx.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/4cOHKNki2dlAKpjqULnr5b9";
+Content-Type: multipart/signed; boundary="Sig_/PJVRzEizXvFrKDqxVxbgvhI";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -57,44 +59,72 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/4cOHKNki2dlAKpjqULnr5b9
+--Sig_/PJVRzEizXvFrKDqxVxbgvhI
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Thu, 10 Feb 2022 09:02:18 +0100 Greg KH <greg@kroah.com> wrote:
+On Thu, 10 Feb 2022 13:24:44 +0100 Michal Simek <michal.simek@xilinx.com> w=
+rote:
 >
-> On Thu, Feb 10, 2022 at 02:11:00PM +1100, Stephen Rothwell wrote:
+> On 2/10/22 09:01, Greg KH wrote:
+> > On Thu, Feb 10, 2022 at 02:15:50PM +1100, Stephen Rothwell wrote: =20
+> >>
+> >> Today's linux-next merge of the usb tree got a conflict in:
+> >>
+> >>    arch/arm64/boot/dts/xilinx/zynqmp.dtsi
+> >>
+> >> between commit:
+> >>
+> >>    eceb6f8677d3 ("arm64: xilinx: dts: drop legacy property #stream-id-=
+cells")
+> >>
+> >> from the xilinx tree and commit:
+> >>
+> >>    d8b1c3d0d700 ("arm64: dts: zynqmp: Move USB clocks to dwc3 node")
+> >>
+> >> from the usb tree.
+> >>
+> >> I fixed it up (see below) and can carry the fix as necessary. This
+> >> is now fixed as far as linux-next is concerned, but any non trivial
+> >> conflicts should be mentioned to your upstream maintainer when your tr=
+ee
+> >> is submitted for merging.  You may also want to consider cooperating
+> >> with the maintainer of the conflicting tree to minimise any particular=
+ly
+> >> complex conflicts.
+> >>
+> >> diff --cc arch/arm64/boot/dts/xilinx/zynqmp.dtsi
+> >> index 056761c974fd,ba68fb8529ee..000000000000
+> >> --- a/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
+> >> +++ b/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
+> >> @@@ -823,6 -824,8 +822,7 @@@
+> >>    				interrupt-parent =3D <&gic>;
+> >>    				interrupt-names =3D "dwc_usb3", "otg";
+> >>    				interrupts =3D <0 65 4>, <0 69 4>;
+> >> + 				clock-names =3D "bus_early", "ref";
+> >>   -				#stream-id-cells =3D <1>;
+> >>    				iommus =3D <&smmu 0x860>;
+> >>    				snps,quirk-frame-length-adjustment =3D <0x20>;
+> >>    				/* dma-coherent; */
+> >> @@@ -849,6 -851,8 +848,7 @@@
+> >>    				interrupt-parent =3D <&gic>;
+> >>    				interrupt-names =3D "dwc_usb3", "otg";
+> >>    				interrupts =3D <0 70 4>, <0 74 4>;
+> >> + 				clock-names =3D "bus_early", "ref";
+> >>   -				#stream-id-cells =3D <1>;
+> >>    				iommus =3D <&smmu 0x861>;
+> >>    				snps,quirk-frame-length-adjustment =3D <0x20>;
+> >>    				/* dma-coherent; */ =20
+> >> -- >> Cheers, =20
+> >> Stephen Rothwell =20
 > >=20
-> > Today's linux-next merge of the usb tree got a conflict in:
 > >=20
-> >   arch/arm64/boot/dts/qcom/ipq6018.dtsi
 > >=20
-> > between commit:
-> >=20
-> >   d1c10ab1494f ("arm64: dts: qcom: ipq6018: fix usb reference period")
-> >=20
-> > from the qcom tree and commit:
-> >=20
-> >   5726079cd486 ("arm64: dts: ipq6018: Use reference clock to set dwc3 p=
-eriod")
-> >=20
-> > from the usb tree.
-> >=20
-> > I fixed it up (I just use the latter) and can carry the fix as
-> > necessary. This is now fixed as far as linux-next is concerned, but any
-> > non trivial conflicts should be mentioned to your upstream maintainer
-> > when your tree is submitted for merging.  You may also want to consider
-> > cooperating with the maintainer of the conflicting tree to minimise any
-> > particularly complex conflicts.
-> >=20
-> > --=20
-> > Cheers,
-> > Stephen Rothwell =20
+> > Looks good, thanks! =20
 >=20
->=20
-> That is fine, thanks.
+> +1 on this.
 
 This is now a conflict between the usb tree and the arm-soc tree.
 
@@ -102,20 +132,20 @@ This is now a conflict between the usb tree and the arm-soc tree.
 Cheers,
 Stephen Rothwell
 
---Sig_/4cOHKNki2dlAKpjqULnr5b9
+--Sig_/PJVRzEizXvFrKDqxVxbgvhI
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmI0Nq0ACgkQAVBC80lX
-0GyGaQf+I25Ts5WbkH3++SiIm4wI2ANOEX5YG5EvG4IbI1gHlZWVm2nCU4/A5ymM
-/N88UMBctFey13drC7Zi5iI14nA9LFugeeYwkHr0bPDnUyi2ry1mwwrPV4wunQ2a
-6l3H/cj9LoWSS8HE+MvATxs97bQo6K7QUlNMYpdj6elb777KB6SucSb1xBZjqmks
-T8giG8huyAtFarjY86dKsU1KASvcOwjz1mIXqG8bks+q6EE2FbbjqIPKWFCAJ+EK
-CtVvCtx8pJyuGrWmrH3u/yGHffWVAfZlaihiOvkqMusIKtv845zX9PpkDKQTDNRL
-wrD7AxU6wMOA0Qf9OG/Z90nydyFHGg==
-=+A03
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmI0NyMACgkQAVBC80lX
+0GyzXAf8CM9oN7bvxMkix19UMXbQNqqe0tm8SWZCZJZtZLXa5MZLuUqOFLrwYUwZ
+0fm63wN2A2ti271tO6w5A6aStMD1I+0L/XGU9efaZqw/7GDwrVn6tgvAZg6LxZ48
+/W5hHhGQqEBRx/OZW3zU00vAeFFKNTQVBSHIexGINPZuRPLfNln9hfaU692d1ext
+la2JADEjm9zTvRN2kJV0Pety5Vaq1EJAyFTCkbFfz5x8vWdOQLirgsXXEs1giLtX
+/zhO7edJkUJ8+YxQBoOumjssG7u/KMpDflysASHkmtnVOcBDfddyltkTch+/pBlw
+UGVDCeOU6Q1jY9qB/WL8z8Ev9xa4oA==
+=LVhJ
 -----END PGP SIGNATURE-----
 
---Sig_/4cOHKNki2dlAKpjqULnr5b9--
+--Sig_/PJVRzEizXvFrKDqxVxbgvhI--

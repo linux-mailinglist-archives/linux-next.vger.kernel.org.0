@@ -2,169 +2,196 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF3784DD55A
-	for <lists+linux-next@lfdr.de>; Fri, 18 Mar 2022 08:44:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82AEB4DD5B9
+	for <lists+linux-next@lfdr.de>; Fri, 18 Mar 2022 09:01:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232301AbiCRHpn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 18 Mar 2022 03:45:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53498 "EHLO
+        id S233506AbiCRIBV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 18 Mar 2022 04:01:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231844AbiCRHpm (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 18 Mar 2022 03:45:42 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 796A51F42C9;
-        Fri, 18 Mar 2022 00:44:23 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KKbcj5SD7z4xgw;
-        Fri, 18 Mar 2022 18:44:21 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1647589462;
-        bh=dsXOzAUhSDy56QPmWs67ignbc2RjTXOlVjnzLk0t7Mc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Avnjyr2LyFPke8fhYTv460SMTLoPxkUmqrdI6acLrzVmTYWTO+wASx9mmcyunTwAh
-         MpTqEOffMCUe9zgEOGujGs2YqNDLAJwd0Pnzi0T26qh1Hv5ALgGNEvilo1usuE1nOC
-         LKF3p9AisL3VhdI0QN2z1Dt8vmGuWMDRDZGV32UR4eeLXQZ4muMT9kzCdAiJpvc75x
-         Ujdf03AhSYHBuhfUaYb9j/LKbjXPce++l6OwoEZS1ziI++fqyQwPFSqySf0fOm/J9p
-         2uIiwXg4nI1bv3YnvtboHO5TUCSbt9WpYdznJGVAyMx7rBmNg90qet9GD0sQUGjBwq
-         LTCC2sK+GBARA==
-Date:   Fri, 18 Mar 2022 18:44:20 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andy Gross <agross@kernel.org>, Olof Johansson <olof@lixom.net>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     Shawn Guo <shawnguo@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        with ESMTP id S233478AbiCRIBU (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 18 Mar 2022 04:01:20 -0400
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2085.outbound.protection.outlook.com [40.107.212.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF01217ECD9;
+        Fri, 18 Mar 2022 00:59:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ByrNFm8NVFy5jnJ323SEGxWPqPLJL9HX77Q77DKzSBYq3FKXE/F6iPBzffl3XtEEhDsSc96l8O2j4Dks0WTPRvCryq4xmXooGrkNMc7EFmGj+OPr8uOliG8Xgu/+7dLEeAJvKCRPU1g23f/sNfUV+WYe5B7GRY1PGPyv+eYZ82a8uwvdLP+td7ae3g1A776Qi8MeNS8R5a+4M63K5jJsO3lmQ3t78UprtwV6VTkrCkPYy2ATy7w6fyGxOl+HAfTVxpseMhsD5MIQF9Ebh3/2a4XsZASnLtDceVVzxiTQNCuoQpdbwOl5Lhd7uaUgy8TMJudVBLyJjG63v3rHn+rqvQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1/VMb/ujxO1rsV6hpMIFD0BkcKKpY0lXbc1GnNw8pKc=;
+ b=QDN8CyQloFvqdA1s7wE6niLgG1+//HJYxoVOZlcfmc6FVhS1em2UYQlT86eN+jSdg2LX2lWliYhpghxiB6tO3pExxIbzjB0CE8cpFq3kabjdan1PJXJ+VLU7jbG+KVTSljVxJlswibY2RC0SxcxjlUm3J/ThWNplwWXyAzL3a+7BrH+PvffCYmzmakTkeisVVhODIy3TBORuh09UsNlUT1i+Z/a/N9sh3WvDQKdqfc8Xshh91/7Qa0jxmXGaDD45wjNLe/UnwHD6mnWl6imNsrzOPO8yhSZ2GrkHbjInkGqJhmnht0a0G9se9hp6EQDYwnOSg6KPBgdYOroWMwW4hA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=canb.auug.org.au smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1/VMb/ujxO1rsV6hpMIFD0BkcKKpY0lXbc1GnNw8pKc=;
+ b=KKiZhxP20TRr1AQCagxip+ppdFVZYbXy98z1Wp8u0L+i7W3KIgVzk/1Dl8/fw/Q4Hs3AZCkAHWdNNl8dIjm7Q6+kE2EnftynuyJplkcArkWgziqZrBr7p2AfB0BOGCu+d5BaLg+XZ0a2R/8CiEbni4PSxLQOqiF55GYy6p54aqc=
+Received: from BN9PR03CA0338.namprd03.prod.outlook.com (2603:10b6:408:f6::13)
+ by MW4PR02MB7314.namprd02.prod.outlook.com (2603:10b6:303:65::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.14; Fri, 18 Mar
+ 2022 07:59:56 +0000
+Received: from BN1NAM02FT029.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:408:f6:cafe::61) by BN9PR03CA0338.outlook.office365.com
+ (2603:10b6:408:f6::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.18 via Frontend
+ Transport; Fri, 18 Mar 2022 07:59:56 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
+Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
+ BN1NAM02FT029.mail.protection.outlook.com (10.13.2.143) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5081.14 via Frontend Transport; Fri, 18 Mar 2022 07:59:55 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Fri, 18 Mar 2022 00:59:53 -0700
+Received: from smtp.xilinx.com (172.19.127.95) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Fri, 18 Mar 2022 00:59:53 -0700
+Envelope-to: sfr@canb.auug.org.au,
+ greg@kroah.com,
+ olof@lixom.net,
+ arnd@arndb.de,
+ monstr@monstr.eu,
+ david@ixit.cz,
+ linux-kernel@vger.kernel.org,
+ linux-next@vger.kernel.org,
+ sean.anderson@seco.com,
+ linux-arm-kernel@lists.infradead.org
+Received: from [10.254.241.50] (port=58286)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <michal.simek@xilinx.com>)
+        id 1nV7Wb-000755-C7; Fri, 18 Mar 2022 00:59:53 -0700
+Message-ID: <cccec2d0-6718-0bad-728b-ae473bbce953@xilinx.com>
+Date:   Fri, 18 Mar 2022 08:59:50 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: linux-next: manual merge of the usb tree with the xilinx tree
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>, Greg KH <greg@kroah.com>,
+        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
+CC:     Michal Simek <michal.simek@xilinx.com>,
+        Michal Simek <monstr@monstr.eu>,
+        David Heidelberg <david@ixit.cz>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Sean Anderson <sean.anderson@seco.com>,
         ARM <linux-arm-kernel@lists.infradead.org>
-Subject: Re: linux-next: manual merge of the qcom tree with the imx-mxs tree
-Message-ID: <20220318184420.74d10227@canb.auug.org.au>
-In-Reply-To: <20220214093432.31152d57@canb.auug.org.au>
-References: <20220214093432.31152d57@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/KjGyJqwnBjB=FlYRastjKI8";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220210141550.56359523@canb.auug.org.au>
+ <YgTGdwkTkDgx+pan@kroah.com>
+ <d7f84e0a-7c3a-116a-0911-2ed5a0bab2d9@xilinx.com>
+ <20220318183915.08544653@canb.auug.org.au>
+From:   Michal Simek <michal.simek@xilinx.com>
+In-Reply-To: <20220318183915.08544653@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d6fc7832-5b72-4833-abac-08da08b54a8e
+X-MS-TrafficTypeDiagnostic: MW4PR02MB7314:EE_
+X-Microsoft-Antispam-PRVS: <MW4PR02MB731491FFF269A4C8C01EAC35C6139@MW4PR02MB7314.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: A4oMg8k/5kVgN6o5iefGsNyY44ItJtCJ9ul3qKHOfTK2d/vlSZZ3WTn+co/5f3Yzz+08lUn4qJOS9geU2v+LbSxO0HWOGwEGjEV8x+rBaNQ0yQK8WfEjCHJ7xHNicQn/5dn23/iVi855Lk8ORpSBg70T8ah/0PHz8hKsP8+S0kWM9Y8TokHjKDmZjsOpAGwL/UjSXlMbPX45RaCABEwgkQmvGg7T1PQtVlVl2JudWnwxXEPgnLm/RaE3tf5P3+C75nOJr5W8YgtrleWsoiPQHSC3kRN/lEN6ZtvSdgzpmWE+28F1xd7wJj9q6JpJkogxrhEfwMjJpD/vUJtRW+QO7Wv5E2t7kweQpN+C/xu+MrkNph8So0diZIfDm7+IkiYaCV97YwC5zF7l1xibd3Sv01VVP2OlCF5zgCSw4ESQVoHmnACzdTDE2oJS78f6S4au4gJPyO6I/swo1qGIXS4tQuCtjS/PqmdptKV976fu5r0TJP5ZpjlA+BlNEAN73SMzKko6BOcVcz3aXm5R2T+V0RZ9RfumFvo2ZfFjhZmxkoJuEaKByTT1W/V4ESMqe5Lfq5VAtczt5sY6j0huOxBxS1oM9qlAyoFamYl5MngBEMX9abN4YpBSEO1IddeQk7PqhlmXsag+xojVqNkjrAlZlFzk3q9ZqmIHAjumChslB7nqLq6xel1LZN3XeQRk2v7j69je73teF+w6PpdtWiEAkGGWgYCfb3q74mCG2VgpevY=
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(336012)(426003)(5660300002)(36860700001)(508600001)(7416002)(2906002)(47076005)(83380400001)(82310400004)(40460700003)(31696002)(44832011)(36756003)(4326008)(31686004)(53546011)(8676002)(70586007)(70206006)(316002)(54906003)(110136005)(356005)(7636003)(2616005)(186003)(26005)(9786002)(8936002)(50156003)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Mar 2022 07:59:55.8063
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: d6fc7832-5b72-4833-abac-08da08b54a8e
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT029.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR02MB7314
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/KjGyJqwnBjB=FlYRastjKI8
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-On Mon, 14 Feb 2022 09:34:32 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> Today's linux-next merge of the qcom tree got a conflict in:
->=20
->   arch/arm64/configs/defconfig
->=20
-> between commits:
->=20
->   6e3807935e18 ("arm64: defconfig: re-order default configuration")
->   dde8cd786e37 ("arm64: defconfig: rebuild default configuration")
->=20
-> from the imx-mxs tree and commits:
->=20
->   cd7ce3e18afa ("arm64: defconfig: Enable SM8250 video clock controller")
->   17ef0b4b441f ("arm64: defconfig: enable mcp251xfd driver")
->=20
-> from the qcom tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->=20
-> --=20
-> Cheers,
-> Stephen Rothwell
->=20
-> diff --cc arch/arm64/configs/defconfig
-> index 2bb7765e5d82,bbe40f0fd620..000000000000
-> --- a/arch/arm64/configs/defconfig
-> +++ b/arch/arm64/configs/defconfig
-> @@@ -383,9 -383,11 +385,12 @@@ CONFIG_ATH10K=3D
->   CONFIG_ATH10K_PCI=3Dm
->   CONFIG_ATH10K_SNOC=3Dm
->   CONFIG_WCN36XX=3Dm
-> + CONFIG_ATH11K=3Dm
-> + CONFIG_ATH11K_AHB=3Dm
-> + CONFIG_ATH11K_PCI=3Dm
->   CONFIG_BRCMFMAC=3Dm
->   CONFIG_MWIFIEX=3Dm
->  +CONFIG_MWIFIEX_SDIO=3Dm
->   CONFIG_MWIFIEX_PCIE=3Dm
->   CONFIG_WL18XX=3Dm
->   CONFIG_WLCORE_SDIO=3Dm
-> @@@ -602,9 -607,9 +608,10 @@@ CONFIG_IMX_SC_WDT=3D
->   CONFIG_QCOM_WDT=3Dm
->   CONFIG_MESON_GXBB_WATCHDOG=3Dm
->   CONFIG_MESON_WATCHDOG=3Dm
->  +CONFIG_ARM_SMC_WATCHDOG=3Dy
->   CONFIG_RENESAS_WDT=3Dy
->   CONFIG_UNIPHIER_WATCHDOG=3Dy
-> + CONFIG_PM8916_WATCHDOG=3Dm
->   CONFIG_BCM2835_WDT=3Dy
->   CONFIG_MFD_ALTERA_SYSMGR=3Dy
->   CONFIG_MFD_BD9571MWV=3Dy
-> @@@ -1009,6 -1021,10 +1016,7 @@@ CONFIG_SDM_DISPCC_845=3D
->   CONFIG_SM_GCC_8350=3Dy
->   CONFIG_SM_GPUCC_8150=3Dy
->   CONFIG_SM_GPUCC_8250=3Dy
->  -CONFIG_SM_DISPCC_8250=3Dy
-> + CONFIG_SM_VIDEOCC_8250=3Dy
->   CONFIG_QCOM_HFPLL=3Dy
->   CONFIG_CLK_GFM_LPASS_SM8250=3Dm
->   CONFIG_CLK_RCAR_USB2_CLOCK_SEL=3Dy
-> @@@ -1042,11 -1058,10 +1050,12 @@@ CONFIG_RASPBERRYPI_POWER=3D
->   CONFIG_FSL_DPAA=3Dy
->   CONFIG_FSL_MC_DPIO=3Dy
->   CONFIG_FSL_RCPM=3Dy
->  +CONFIG_MTK_DEVAPC=3Dm
->   CONFIG_MTK_PMIC_WRAP=3Dy
-> + CONFIG_MAILBOX=3Dy
->   CONFIG_QCOM_AOSS_QMP=3Dy
->   CONFIG_QCOM_COMMAND_DB=3Dy
->  +CONFIG_QCOM_CPR=3Dy
->   CONFIG_QCOM_GENI_SE=3Dy
->   CONFIG_QCOM_RMTFS_MEM=3Dm
->   CONFIG_QCOM_RPMH=3Dy
+On 3/18/22 08:39, Stephen Rothwell wrote:
+> Hi all,
+> 
+> On Thu, 10 Feb 2022 13:24:44 +0100 Michal Simek <michal.simek@xilinx.com> wrote:
+>>
+>> On 2/10/22 09:01, Greg KH wrote:
+>>> On Thu, Feb 10, 2022 at 02:15:50PM +1100, Stephen Rothwell wrote:
+>>>>
+>>>> Today's linux-next merge of the usb tree got a conflict in:
+>>>>
+>>>>     arch/arm64/boot/dts/xilinx/zynqmp.dtsi
+>>>>
+>>>> between commit:
+>>>>
+>>>>     eceb6f8677d3 ("arm64: xilinx: dts: drop legacy property #stream-id-cells")
+>>>>
+>>>> from the xilinx tree and commit:
+>>>>
+>>>>     d8b1c3d0d700 ("arm64: dts: zynqmp: Move USB clocks to dwc3 node")
+>>>>
+>>>> from the usb tree.
+>>>>
+>>>> I fixed it up (see below) and can carry the fix as necessary. This
+>>>> is now fixed as far as linux-next is concerned, but any non trivial
+>>>> conflicts should be mentioned to your upstream maintainer when your tree
+>>>> is submitted for merging.  You may also want to consider cooperating
+>>>> with the maintainer of the conflicting tree to minimise any particularly
+>>>> complex conflicts.
+>>>>
+>>>> diff --cc arch/arm64/boot/dts/xilinx/zynqmp.dtsi
+>>>> index 056761c974fd,ba68fb8529ee..000000000000
+>>>> --- a/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
+>>>> +++ b/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
+>>>> @@@ -823,6 -824,8 +822,7 @@@
+>>>>     				interrupt-parent = <&gic>;
+>>>>     				interrupt-names = "dwc_usb3", "otg";
+>>>>     				interrupts = <0 65 4>, <0 69 4>;
+>>>> + 				clock-names = "bus_early", "ref";
+>>>>    -				#stream-id-cells = <1>;
+>>>>     				iommus = <&smmu 0x860>;
+>>>>     				snps,quirk-frame-length-adjustment = <0x20>;
+>>>>     				/* dma-coherent; */
+>>>> @@@ -849,6 -851,8 +848,7 @@@
+>>>>     				interrupt-parent = <&gic>;
+>>>>     				interrupt-names = "dwc_usb3", "otg";
+>>>>     				interrupts = <0 70 4>, <0 74 4>;
+>>>> + 				clock-names = "bus_early", "ref";
+>>>>    -				#stream-id-cells = <1>;
+>>>>     				iommus = <&smmu 0x861>;
+>>>>     				snps,quirk-frame-length-adjustment = <0x20>;
+>>>>     				/* dma-coherent; */
+>>>> -- >> Cheers,
+>>>> Stephen Rothwell
+>>>
+>>>
+>>>
+>>> Looks good, thanks!
+>>
+>> +1 on this.
+> 
+> This is now a conflict between the usb tree and the arm-soc tree.
+> 
 
-This is now a conflict between the qcom tree and the arm-soc tree.
+yes. I sent pull request to SOC tree and let Arnd know about this conflict.
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/KjGyJqwnBjB=FlYRastjKI8
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmI0OFUACgkQAVBC80lX
-0GxdFQf/YBH5t4Ph9WhcCA2CfidDsPZdFp8cFtQB/neuM0CoEDsfiITeXEiukpG/
-l2+66E42sG4VnSeM4s1yRV31dyKAmJot73IaGgNgivHQnW909vJ7XMyG/Ro+zW8o
-2yt31FIJQI/RGJ5SdomwQ7/+KSFbMP6kCFbcWrMzH95XMJ+XJZdSTnT9DuojEQiK
-FI4i9bYkATKxFtyv+OLzGOSwMsEOY9k6Sd9AN2IrnhkTyQqrUKiYerj1cTKEUjXl
-eYWpSW4sH/euwln1Kr1M8T/IZzsU3QiDaBqVxFY1PnPi/UykYeSrOWMk1DkZ5dok
-MGOFdZEwo1U8tIAdaU0gsVZ+bakKPQ==
-=c1qE
------END PGP SIGNATURE-----
-
---Sig_/KjGyJqwnBjB=FlYRastjKI8--
+Thanks,
+Michal

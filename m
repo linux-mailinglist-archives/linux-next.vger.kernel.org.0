@@ -2,52 +2,51 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6263F4DD53E
-	for <lists+linux-next@lfdr.de>; Fri, 18 Mar 2022 08:31:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DFCE4DD54B
+	for <lists+linux-next@lfdr.de>; Fri, 18 Mar 2022 08:37:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232023AbiCRHcX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 18 Mar 2022 03:32:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36160 "EHLO
+        id S233128AbiCRHij (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 18 Mar 2022 03:38:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231326AbiCRHcW (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 18 Mar 2022 03:32:22 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77FCE2409B;
-        Fri, 18 Mar 2022 00:31:04 -0700 (PDT)
+        with ESMTP id S232146AbiCRHij (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 18 Mar 2022 03:38:39 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 527491275C8;
+        Fri, 18 Mar 2022 00:37:21 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KKbKL1pPrz4xc1;
-        Fri, 18 Mar 2022 18:31:02 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KKbSZ1ZH6z4xNm;
+        Fri, 18 Mar 2022 18:37:17 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1647588663;
-        bh=R46NlN+rYs6doRFo+GJBndwKot6DC5GziYeiRObNQ4U=;
+        s=201702; t=1647589040;
+        bh=IKLDZdzuNP/RMd5I9+dikiLBg/WA/Pgy519XXzgDQ5s=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=h4NBXydz457IEgAXIQbv0VKGseeU5MXQExWtc8m627tChqBEUC6Ssgsa7Ali75icZ
-         Mei/PNECQ96W7RjYFTt1cgtN4jbrbXTm+2iNy+jR6NH2MkuABS04UIr4DJF3pkRZha
-         JQ09v8zVqzsqyl/Vq5bpJ6QjFHbn3Dd/+nDgtza5Sjv7YaznBKj4Q1og51WQoELBps
-         45aI9t2+esXErdmZt9Wnuc/XXNCe2Q+eYlNt1ejRJTegFa0zZutgWzZgUhSnVH4N40
-         a7UGKOl1WRZ96zAjrjpQf4YLj3fkpkrj7u85r8cBFKdmmbrv4ftJAhBBuocjpKjcnD
-         1HLPzwlVfBplQ==
-Date:   Fri, 18 Mar 2022 18:31:01 +1100
+        b=Q9ord5kVayLaoKNEHsNpmSLYa5QoidyIGUQ8BFwGCJU+UjNaCMUzjnLVN4nIVDwtQ
+         UPpOs101i55rtraGWo0gZFmt0CZUgz0y1k+LEN7nnkwcgwdC+eW0LcXHtkM28G4Wuj
+         GqdvhdKRsJTNO1GB//gcNYf5XRINq75EyJ+WXqH3yZXA0IAn0ITdYGj6cFA9bzR8wo
+         ijy1NNXRPhr1jSn1jMOWuFwiIWjjFrc8Jz7mKP/fuEp3K/bdL+8SwuqmvJZYsu8PcX
+         XlSZi2nNkt3CPJkBsVYqKG5TD4s11e07Nw5XkaaXbCim7Y/y0/cy/J2osuh4fVTsZE
+         PKY/sI+nF0QVg==
+Date:   Fri, 18 Mar 2022 18:37:17 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Joey Gouly <joey.gouly@arm.com>,
+To:     Greg KH <greg@kroah.com>, Olof Johansson <olof@lixom.net>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     Andy Gross <agross@kernel.org>, Baruch Siach <baruch@tkos.co.il>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the pinctrl tree
-Message-ID: <20220318183101.16b8d056@canb.auug.org.au>
-In-Reply-To: <20220120142539.6d1fac12@canb.auug.org.au>
-References: <20211027220118.71a229ab@canb.auug.org.au>
-        <874k92bu4q.wl-maz@kernel.org>
-        <20211028080331.6d199082@sal.lan>
-        <20220120142539.6d1fac12@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Sean Anderson <sean.anderson@seco.com>,
+        ARM <linux-arm-kernel@lists.infradead.org>
+Subject: Re: linux-next: manual merge of the usb tree with the qcom tree
+Message-ID: <20220318183717.7acac615@canb.auug.org.au>
+In-Reply-To: <YgTGihSrtlRR3DPC@kroah.com>
+References: <20220210141100.715b13e9@canb.auug.org.au>
+        <YgTGihSrtlRR3DPC@kroah.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/JdXxFheYXenaqAtzYWbWblL";
+Content-Type: multipart/signed; boundary="Sig_/4cOHKNki2dlAKpjqULnr5b9";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -58,103 +57,65 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/JdXxFheYXenaqAtzYWbWblL
+--Sig_/4cOHKNki2dlAKpjqULnr5b9
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Thu, 20 Jan 2022 14:25:39 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
+On Thu, 10 Feb 2022 09:02:18 +0100 Greg KH <greg@kroah.com> wrote:
 >
-> On Thu, 28 Oct 2021 08:03:31 +0100 Mauro Carvalho Chehab <mchehab@kernel.=
-org> wrote:
-> >
-> > Em Wed, 27 Oct 2021 12:10:45 +0100
-> > Marc Zyngier <maz@kernel.org> escreveu:
-> >  =20
-> > > On Wed, 27 Oct 2021 12:01:18 +0100, Stephen Rothwell <sfr@canb.auug.o=
-rg.au> wrote:   =20
-> > > >=20
-> > > > After merging the pinctrl tree, today's linux-next build (htmldocs)
-> > > > produced this warning:
-> > > >=20
-> > > > include/linux/gpio/driver.h:284: warning: Function parameter or mem=
-ber 'parent_handler_data_array' not described in 'gpio_irq_chip'
-> > > >=20
-> > > > Introduced by commit
-> > > >=20
-> > > >   cfe6807d82e9 ("gpio: Allow per-parent interrupt data")
-> > > >=20
-> > > > But may actually be a problem with the tool :-(     =20
-> > >=20
-> > > I guess the tool doesn't like having two fields that are part of a
-> > > union documented together... Happy to tweak it if someone tells me how
-> > > this should be written.   =20
+> On Thu, Feb 10, 2022 at 02:11:00PM +1100, Stephen Rothwell wrote:
 > >=20
-> > Yes, that's the case. See, when you do:
+> > Today's linux-next merge of the usb tree got a conflict in:
 > >=20
-> > 	/**
-> > 	 * @parent_handler_data:
-> > 	 * @parent_handler_data_array:
-> > 	 *
-> > 	 * Data associated, and passed to, the handler for the parent
-> > 	 * interrupt. Can either be a single pointer if @per_parent_data
-> > 	 * is false, or an array of @num_parents pointers otherwise.  If
-> > 	 * @per_parent_data is true, @parent_handler_data_array cannot be
-> > 	 * NULL.
-> > 	 */
-> > 	union {
-> > 		void *parent_handler_data;
-> > 		void **parent_handler_data_array;
-> > 	};
+> >   arch/arm64/boot/dts/qcom/ipq6018.dtsi
 > >=20
-> > The tool will understand it as an undocumented "parent_handler_data" and
-> > a documented "parent_handler_data_array".
+> > between commit:
 > >=20
-> > It has to do that, as otherwise it won't get cases where people just ad=
-ds a
-> > @foo: as a template but actually forgets to fill it.
+> >   d1c10ab1494f ("arm64: dts: qcom: ipq6018: fix usb reference period")
 > >=20
-> > The solution would be to add a description for both, e. g. something
-> > similar to:
+> > from the qcom tree and commit:
 > >=20
-> > 	/**
-> > 	 * @parent_handler_data:
-> > 	 *
-> > 	 * If @per_parent_data is false, contains a single pointer=20
-> > 	 * with the data associated, and passed to, the handler for the=20
-> > 	 * parent interrupt.
-> > 	 *
-> > 	 * @parent_handler_data_array:
-> > 	 *
-> > 	 * If @per_parent_data is true, it should contain an array of=20
-> > 	 * @num_parents pointers with the data associated, and passed to,
-> > 	 * the handler for the parent interrupt. Cannot be NULL.
-> > 	 */ =20
+> >   5726079cd486 ("arm64: dts: ipq6018: Use reference clock to set dwc3 p=
+eriod")
+> >=20
+> > from the usb tree.
+> >=20
+> > I fixed it up (I just use the latter) and can carry the fix as
+> > necessary. This is now fixed as far as linux-next is concerned, but any
+> > non trivial conflicts should be mentioned to your upstream maintainer
+> > when your tree is submitted for merging.  You may also want to consider
+> > cooperating with the maintainer of the conflicting tree to minimise any
+> > particularly complex conflicts.
+> >=20
+> > --=20
+> > Cheers,
+> > Stephen Rothwell =20
 >=20
-> I am still getting this warning.
+>=20
+> That is fine, thanks.
 
-I am still getting this warning.
+This is now a conflict between the usb tree and the arm-soc tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/JdXxFheYXenaqAtzYWbWblL
+--Sig_/4cOHKNki2dlAKpjqULnr5b9
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmI0NTUACgkQAVBC80lX
-0GxkhQf/V09aUv7iiBT8ilAVTFUnmXb8qqoPUne7JZP/57vK9JvPYbzwWRFRHy3s
-HcbEwC+hi5R8pkbQwTNtZkSDYmpgucAdWBjCVJhj3FF51YpYqVVl6JyX9RlQgR8s
-tBA9M0SCMt9fhLAlRk8FFoNww04uG4Jifr++KMbrnLEmwaHIi5H0FrU9KJB8DgHR
-G+U2F6LDO2MSvqrMYkgrjeRJNtYq/jOG+G9D7xsFfMzQxUkJ59ZYepfAZ6scENYC
-TrKLLX7h9e/qAVW4Kn8CdXNOsoykgHWYYi5Ma+UXektZ9XKCKzie8KXtT9U2va5Z
-ROTpoA3tT2MWIl9HCmaOAW6igvtj5g==
-=bDUN
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmI0Nq0ACgkQAVBC80lX
+0GyGaQf+I25Ts5WbkH3++SiIm4wI2ANOEX5YG5EvG4IbI1gHlZWVm2nCU4/A5ymM
+/N88UMBctFey13drC7Zi5iI14nA9LFugeeYwkHr0bPDnUyi2ry1mwwrPV4wunQ2a
+6l3H/cj9LoWSS8HE+MvATxs97bQo6K7QUlNMYpdj6elb777KB6SucSb1xBZjqmks
+T8giG8huyAtFarjY86dKsU1KASvcOwjz1mIXqG8bks+q6EE2FbbjqIPKWFCAJ+EK
+CtVvCtx8pJyuGrWmrH3u/yGHffWVAfZlaihiOvkqMusIKtv845zX9PpkDKQTDNRL
+wrD7AxU6wMOA0Qf9OG/Z90nydyFHGg==
+=+A03
 -----END PGP SIGNATURE-----
 
---Sig_/JdXxFheYXenaqAtzYWbWblL--
+--Sig_/4cOHKNki2dlAKpjqULnr5b9--

@@ -2,46 +2,52 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F29F4DD53B
-	for <lists+linux-next@lfdr.de>; Fri, 18 Mar 2022 08:29:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6263F4DD53E
+	for <lists+linux-next@lfdr.de>; Fri, 18 Mar 2022 08:31:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233059AbiCRHai (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 18 Mar 2022 03:30:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54646 "EHLO
+        id S232023AbiCRHcX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 18 Mar 2022 03:32:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233082AbiCRHaT (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 18 Mar 2022 03:30:19 -0400
+        with ESMTP id S231326AbiCRHcW (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 18 Mar 2022 03:32:22 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 716252BAE52;
-        Fri, 18 Mar 2022 00:28:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77FCE2409B;
+        Fri, 18 Mar 2022 00:31:04 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KKbGv6KwFz4xcj;
-        Fri, 18 Mar 2022 18:28:55 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KKbKL1pPrz4xc1;
+        Fri, 18 Mar 2022 18:31:02 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1647588536;
-        bh=3u1+m7ZgtZQn10YgN4bzgjMZhFt5PV60OvPyCDkmzmo=;
+        s=201702; t=1647588663;
+        bh=R46NlN+rYs6doRFo+GJBndwKot6DC5GziYeiRObNQ4U=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ES0e7aif1Nsi7gAL8O5tZvmb7UCFAQ5uMIEFW/AKjET26GOf/uM6L7OrxARN9KXRD
-         /pkYwvnJonEssBSbLfNTYSxzhjbuZhnQ1GwIaTZCld3tC0v04fFJ9knL05qxSVq+CR
-         Pug0ZbaahYeLShSBfdllgd1mdARGujZoUSU9hGPoHKrxSTCvHTsyKd0nuScXbu0Oe+
-         UN4DeO4GVkW1nOJTiWSnBF8FQpkGRhEYyy3fGaWOZhvHU8CqPYKWsTywJaj2NZU7Zm
-         FXzxLPlHQtbE1qJqE+OaZ5EwS8Js4HqnFdBdRCYKJSWQhvqq5pxynf72OEKFagaC68
-         l0/bFrE3FS8Qg==
-Date:   Fri, 18 Mar 2022 18:28:55 +1100
+        b=h4NBXydz457IEgAXIQbv0VKGseeU5MXQExWtc8m627tChqBEUC6Ssgsa7Ali75icZ
+         Mei/PNECQ96W7RjYFTt1cgtN4jbrbXTm+2iNy+jR6NH2MkuABS04UIr4DJF3pkRZha
+         JQ09v8zVqzsqyl/Vq5bpJ6QjFHbn3Dd/+nDgtza5Sjv7YaznBKj4Q1og51WQoELBps
+         45aI9t2+esXErdmZt9Wnuc/XXNCe2Q+eYlNt1ejRJTegFa0zZutgWzZgUhSnVH4N40
+         a7UGKOl1WRZ96zAjrjpQf4YLj3fkpkrj7u85r8cBFKdmmbrv4ftJAhBBuocjpKjcnD
+         1HLPzwlVfBplQ==
+Date:   Fri, 18 Mar 2022 18:31:01 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Joey Gouly <joey.gouly@arm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the spi-fixes tree
-Message-ID: <20220318182855.301fd666@canb.auug.org.au>
-In-Reply-To: <20220120142103.6a72ec62@canb.auug.org.au>
-References: <20211015211423.2d8d3c0b@canb.auug.org.au>
-        <20220120142103.6a72ec62@canb.auug.org.au>
+Subject: Re: linux-next: build warning after merge of the pinctrl tree
+Message-ID: <20220318183101.16b8d056@canb.auug.org.au>
+In-Reply-To: <20220120142539.6d1fac12@canb.auug.org.au>
+References: <20211027220118.71a229ab@canb.auug.org.au>
+        <874k92bu4q.wl-maz@kernel.org>
+        <20211028080331.6d199082@sal.lan>
+        <20220120142539.6d1fac12@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/q_Oeag0ph=YSCgpLrzPoYn.";
+Content-Type: multipart/signed; boundary="Sig_/JdXxFheYXenaqAtzYWbWblL";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -52,30 +58,80 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/q_Oeag0ph=YSCgpLrzPoYn.
+--Sig_/JdXxFheYXenaqAtzYWbWblL
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Thu, 20 Jan 2022 14:21:03 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+On Thu, 20 Jan 2022 14:25:39 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
 wrote:
 >
-> Hi all,
->=20
-> On Fri, 15 Oct 2021 21:14:23 +1100 Stephen Rothwell <sfr@canb.auug.org.au=
-> wrote:
+> On Thu, 28 Oct 2021 08:03:31 +0100 Mauro Carvalho Chehab <mchehab@kernel.=
+org> wrote:
+> >
+> > Em Wed, 27 Oct 2021 12:10:45 +0100
+> > Marc Zyngier <maz@kernel.org> escreveu:
+> >  =20
+> > > On Wed, 27 Oct 2021 12:01:18 +0100, Stephen Rothwell <sfr@canb.auug.o=
+rg.au> wrote:   =20
+> > > >=20
+> > > > After merging the pinctrl tree, today's linux-next build (htmldocs)
+> > > > produced this warning:
+> > > >=20
+> > > > include/linux/gpio/driver.h:284: warning: Function parameter or mem=
+ber 'parent_handler_data_array' not described in 'gpio_irq_chip'
+> > > >=20
+> > > > Introduced by commit
+> > > >=20
+> > > >   cfe6807d82e9 ("gpio: Allow per-parent interrupt data")
+> > > >=20
+> > > > But may actually be a problem with the tool :-(     =20
+> > >=20
+> > > I guess the tool doesn't like having two fields that are part of a
+> > > union documented together... Happy to tweak it if someone tells me how
+> > > this should be written.   =20
 > >=20
-> > After merging the spi-fixes tree, today's linux-next build (htmldocs)
-> > produced this warning:
+> > Yes, that's the case. See, when you do:
 > >=20
-> > include/linux/spi/spi.h:671: warning: Function parameter or member 'add=
-_lock' not described in 'spi_controller'
+> > 	/**
+> > 	 * @parent_handler_data:
+> > 	 * @parent_handler_data_array:
+> > 	 *
+> > 	 * Data associated, and passed to, the handler for the parent
+> > 	 * interrupt. Can either be a single pointer if @per_parent_data
+> > 	 * is false, or an array of @num_parents pointers otherwise.  If
+> > 	 * @per_parent_data is true, @parent_handler_data_array cannot be
+> > 	 * NULL.
+> > 	 */
+> > 	union {
+> > 		void *parent_handler_data;
+> > 		void **parent_handler_data_array;
+> > 	};
 > >=20
-> > Introduced by commit
+> > The tool will understand it as an undocumented "parent_handler_data" and
+> > a documented "parent_handler_data_array".
 > >=20
-> >   6098475d4cb4 ("spi: Fix deadlock when adding SPI controllers on SPI b=
-uses") =20
+> > It has to do that, as otherwise it won't get cases where people just ad=
+ds a
+> > @foo: as a template but actually forgets to fill it.
+> >=20
+> > The solution would be to add a description for both, e. g. something
+> > similar to:
+> >=20
+> > 	/**
+> > 	 * @parent_handler_data:
+> > 	 *
+> > 	 * If @per_parent_data is false, contains a single pointer=20
+> > 	 * with the data associated, and passed to, the handler for the=20
+> > 	 * parent interrupt.
+> > 	 *
+> > 	 * @parent_handler_data_array:
+> > 	 *
+> > 	 * If @per_parent_data is true, it should contain an array of=20
+> > 	 * @num_parents pointers with the data associated, and passed to,
+> > 	 * the handler for the parent interrupt. Cannot be NULL.
+> > 	 */ =20
 >=20
 > I am still getting this warning.
 
@@ -85,20 +141,20 @@ I am still getting this warning.
 Cheers,
 Stephen Rothwell
 
---Sig_/q_Oeag0ph=YSCgpLrzPoYn.
+--Sig_/JdXxFheYXenaqAtzYWbWblL
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmI0NLcACgkQAVBC80lX
-0Gzl3wf+JGaqndwVwoxDxBvXdnOK+IQzlDP3jEVO7G/fsJZYtOMAFpaWAg2901WN
-13/EIWrgFue2muEVF5RbKlNtp8ivBLpMeXt4Vrr1K60JTbvfBaX0PA34/ReoGnBf
-SNMobtAZE6Ec5D/I2hPpVDnRRVM4rcpHWjF5C2y4HRPVybwgc+8LLnj4UNzYawyu
-LsASXK8ybd0s1IVA4x2svA9k3HQd7UeiAq5GoDlUU/dLpqufGnJo8R5nFFigZtYM
-ec/Lxb91yH/V0dJnK3CfJ7OVGGILnsnjyLm2ib5LofXDVVsRYO/Ns0WkW62FI4fX
-KhPCpIb+kuSuJM9gZXewUyWE3S0WAQ==
-=4Omq
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmI0NTUACgkQAVBC80lX
+0GxkhQf/V09aUv7iiBT8ilAVTFUnmXb8qqoPUne7JZP/57vK9JvPYbzwWRFRHy3s
+HcbEwC+hi5R8pkbQwTNtZkSDYmpgucAdWBjCVJhj3FF51YpYqVVl6JyX9RlQgR8s
+tBA9M0SCMt9fhLAlRk8FFoNww04uG4Jifr++KMbrnLEmwaHIi5H0FrU9KJB8DgHR
+G+U2F6LDO2MSvqrMYkgrjeRJNtYq/jOG+G9D7xsFfMzQxUkJ59ZYepfAZ6scENYC
+TrKLLX7h9e/qAVW4Kn8CdXNOsoykgHWYYi5Ma+UXektZ9XKCKzie8KXtT9U2va5Z
+ROTpoA3tT2MWIl9HCmaOAW6igvtj5g==
+=bDUN
 -----END PGP SIGNATURE-----
 
---Sig_/q_Oeag0ph=YSCgpLrzPoYn.--
+--Sig_/JdXxFheYXenaqAtzYWbWblL--

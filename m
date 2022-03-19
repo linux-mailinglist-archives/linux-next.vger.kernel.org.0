@@ -2,107 +2,109 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D531B4DDEBC
-	for <lists+linux-next@lfdr.de>; Fri, 18 Mar 2022 17:22:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EEBD4DE6F1
+	for <lists+linux-next@lfdr.de>; Sat, 19 Mar 2022 09:16:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239130AbiCRQXj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 18 Mar 2022 12:23:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40298 "EHLO
+        id S242461AbiCSIRq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 19 Mar 2022 04:17:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239134AbiCRQXQ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 18 Mar 2022 12:23:16 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79DA6137F6C
-        for <linux-next@vger.kernel.org>; Fri, 18 Mar 2022 09:19:35 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id n7-20020a17090aab8700b001c6aa871860so2615639pjq.2
-        for <linux-next@vger.kernel.org>; Fri, 18 Mar 2022 09:19:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=wIyr3tfM4bHWTTMjqYpwMqQSPdZYUx72CzPTDgmkS4Q=;
-        b=hABRXW4IfDXMb7JKuEqwpInc+9bU/S9/pyTpGhtDr1QtPHu5v9Fx+8DpNh5A51XBp2
-         eRIHXcycRllQ5GOGo0Vqsf0FnKM8kRZsRDYbB7/Ttz/hGANV5FDevmYFqNjUh70O9Osz
-         9GvZP6wOtO4gtuV6z+y4Se8hUzyY+o5AMIPJK2sMABXReRK+pDy3YTdJGxudE/MV/bJl
-         JUSsSukQ0aDMY/sQj1d1DDwevAB7qYH8mQdm5zyvTgPVxTRkhFNp84l/vmZmdzEarzXb
-         gjhpiKouhFdqcLdGcF/UmNXj2nr9/Z41hbMJlAPGjfK16wuxntRz4Lj+dcypAl8qB08A
-         JZqw==
+        with ESMTP id S237430AbiCSIRq (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 19 Mar 2022 04:17:46 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6129E231935
+        for <linux-next@vger.kernel.org>; Sat, 19 Mar 2022 01:16:25 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id u10-20020a5ec00a000000b00648e5804d5bso6592893iol.12
+        for <linux-next@vger.kernel.org>; Sat, 19 Mar 2022 01:16:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=wIyr3tfM4bHWTTMjqYpwMqQSPdZYUx72CzPTDgmkS4Q=;
-        b=rIqZ4VBxxjVQXWpwccLysa8xgw/9T465isjPQknNlxYmf4qhbbg5Ih9TAVSNfn+cjc
-         Q6oLdJV1rD0L5KxN0CybB7zCnjskDi/LrosZh6TUEQ28Z1u+n0T6PFT2cDvGpDHH5D3J
-         YxUJ04EJntRRnTfzcBaFYiyeUz1irzRbea/ei4lntrtW+IVm5KEqZzi0na59LM4GPLvf
-         kqbkXBiWHuDp8cTwuM3y5a/KfS5K+3LwDoIp4gr+2C7rVl+8KwFrWGvcpPsY1/kFX948
-         /6NenkcFU/R+/o0/u7k8n4JSNchChtAAlnqTQw+tE8desoVTnS7g2smTzNi1Oceelh0y
-         dzsw==
-X-Gm-Message-State: AOAM530ecAzH481mpUbAWaS4XYbee5YsgjQtb/iEKh5qnPpvlbwuQdYv
-        W083LwcS3APgzH2a+m5JFCL0RHMXgQWhAm+7QBM=
-X-Google-Smtp-Source: ABdhPJwvzpTJT/i5HguGA1LlzPLikuvBVfKHhre/O906PR4I/w7up4SfcAyX0o7h4G+zZPKwHJrwTg==
-X-Received: by 2002:a17:90a:1117:b0:1c6:2430:d1c7 with SMTP id d23-20020a17090a111700b001c62430d1c7mr22708673pja.45.1647620369495;
-        Fri, 18 Mar 2022 09:19:29 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id d5-20020a636805000000b003822c1305b6sm1842603pgc.23.2022.03.18.09.19.29
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Mar 2022 09:19:29 -0700 (PDT)
-Message-ID: <6234b111.1c69fb81.610af.5991@mx.google.com>
-Date:   Fri, 18 Mar 2022 09:19:29 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=WUWCxbYXpv8z4jcgvVVgbLnra2IcxUsgwjwIFM6opyw=;
+        b=4tOq6KIWCd6/YcX4xsyKQjR8+O/mIk3EuecS76cbSLa41pmk8dFtCWNMRMlGr/owAQ
+         w8M6wSEdcECF6eaCbudvNyVOnUf4ZgECTv6Vtiziqlqb9U6zu+WlPo9Qpf/ZIpup5rNM
+         ihvuN8N6kYBPJV+/mHgMbBEKm+y/lRiwYyyWY5ozicypO8jS1MClyppooHGYjj4VCIfN
+         dAO1XqY4PCf5FMBhdYO+1F0s3civ0pEbBghKAOYmnVf9XgN3MdmUlhfOfzrdVFQrDUGA
+         /ERBAO2s9EYJoLwaDs+sWMCo+LKl0/pxF9VZjvk89sG4wgDuHkBy1bwGLMJBJRsXx6BB
+         tymA==
+X-Gm-Message-State: AOAM531GkAluZ+xRhfCDh2e2vAWUupotmfa+DFwFO+83b3hz/LM0kVV3
+        v5amnvCSs+nqg+ceAenhSurULiD3npxRUuJnFLjYXRljGHQM
+X-Google-Smtp-Source: ABdhPJyPEwIAqyIUFL+CxixBlWaTZmYK6PeM/UNgXrwWC4dbze6a16I/59eg/9wLMvT9QQR9oi7rektbQwH1FARKkQaauaXpb5uG
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: next-20220318
-X-Kernelci-Tree: next
-X-Kernelci-Branch: master
-Subject: next/master build: 223 builds: 11 failed, 212 passed (next-20220318)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:d56:b0:319:f6bb:25e1 with SMTP id
+ d22-20020a0566380d5600b00319f6bb25e1mr6281612jak.242.1647677784786; Sat, 19
+ Mar 2022 01:16:24 -0700 (PDT)
+Date:   Sat, 19 Mar 2022 01:16:24 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000110dee05da8de18a@google.com>
+Subject: [syzbot] linux-next test error: WARNING in __napi_schedule
+From:   syzbot <syzbot+6f21ac9e27fca7e97623@syzkaller.appspotmail.com>
+To:     Jason@zx2c4.com, davem@davemloft.net, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com, sfr@canb.auug.org.au,
+        syzkaller-bugs@googlegroups.com, wireguard@lists.zx2c4.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master build: 223 builds: 11 failed, 212 passed (next-20220318)
+Hello,
 
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20220318/
+syzbot found the following issue on:
 
-Tree: next
-Branch: master
-Git Describe: next-20220318
-Git Commit: 6d72dda014a4753974eb08950089ddf71fec4f60
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 7 unique architectures
+HEAD commit:    6d72dda014a4 Add linux-next specific files for 20220318
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=124f5589700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5907d82c35688f04
+dashboard link: https://syzkaller.appspot.com/bug?extid=6f21ac9e27fca7e97623
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Build Failures Detected:
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+6f21ac9e27fca7e97623@syzkaller.appspotmail.com
 
-arm64:
-    allmodconfig: (clang-14) FAIL
-    allmodconfig: (gcc-10) FAIL
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 3612 at net/core/dev.c:4268 ____napi_schedule net/core/dev.c:4268 [inline]
+WARNING: CPU: 0 PID: 3612 at net/core/dev.c:4268 __napi_schedule+0xe2/0x440 net/core/dev.c:5878
+Modules linked in:
+CPU: 0 PID: 3612 Comm: kworker/0:5 Not tainted 5.17.0-rc8-next-20220318-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: wg-crypt-wg0 wg_packet_decrypt_worker
+RIP: 0010:____napi_schedule net/core/dev.c:4268 [inline]
+RIP: 0010:__napi_schedule+0xe2/0x440 net/core/dev.c:5878
+Code: 74 4a e8 11 61 3c fa 31 ff 65 44 8b 25 d7 27 c6 78 41 81 e4 00 ff 0f 00 44 89 e6 e8 18 63 3c fa 45 85 e4 75 07 e8 ee 60 3c fa <0f> 0b e8 e7 60 3c fa 65 44 8b 25 f7 31 c6 78 31 ff 44 89 e6 e8 f5
+RSP: 0018:ffffc9000408fc78 EFLAGS: 00010093
+RAX: 0000000000000000 RBX: ffff88807fa90748 RCX: 0000000000000000
+RDX: ffff888019800000 RSI: ffffffff873c4802 RDI: 0000000000000003
+RBP: 0000000000000200 R08: 0000000000000000 R09: 0000000000000001
+R10: ffffffff873c47f8 R11: 0000000000000000 R12: 0000000000000000
+R13: ffff8880b9c00000 R14: 000000000003b100 R15: ffff88801cf90ec0
+FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f998512c300 CR3: 00000000707f2000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ napi_schedule include/linux/netdevice.h:465 [inline]
+ wg_queue_enqueue_per_peer_rx drivers/net/wireguard/queueing.h:204 [inline]
+ wg_packet_decrypt_worker+0x408/0x5d0 drivers/net/wireguard/receive.c:510
+ process_one_work+0x996/0x1610 kernel/workqueue.c:2289
+ worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+ kthread+0x2e9/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
+ </TASK>
 
-arm:
-    allmodconfig: (clang-14) FAIL
-    allmodconfig: (gcc-10) FAIL
-    rpc_defconfig: (gcc-10) FAIL
-
-i386:
-    allmodconfig: (clang-14) FAIL
-
-mips:
-    decstation_64_defconfig: (gcc-10) FAIL
-    ip27_defconfig: (gcc-10) FAIL
-    loongson3_defconfig: (gcc-10) FAIL
-
-x86_64:
-    allmodconfig: (clang-14) FAIL
-    allmodconfig: (gcc-10) FAIL
 
 ---
-For more info write to <info@kernelci.org>
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

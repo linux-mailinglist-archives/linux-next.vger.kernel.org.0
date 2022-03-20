@@ -2,109 +2,95 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EEBD4DE6F1
-	for <lists+linux-next@lfdr.de>; Sat, 19 Mar 2022 09:16:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CC8B4E1DE0
+	for <lists+linux-next@lfdr.de>; Sun, 20 Mar 2022 22:10:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242461AbiCSIRq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 19 Mar 2022 04:17:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40180 "EHLO
+        id S1343693AbiCTVL4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 20 Mar 2022 17:11:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237430AbiCSIRq (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 19 Mar 2022 04:17:46 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6129E231935
-        for <linux-next@vger.kernel.org>; Sat, 19 Mar 2022 01:16:25 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id u10-20020a5ec00a000000b00648e5804d5bso6592893iol.12
-        for <linux-next@vger.kernel.org>; Sat, 19 Mar 2022 01:16:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=WUWCxbYXpv8z4jcgvVVgbLnra2IcxUsgwjwIFM6opyw=;
-        b=4tOq6KIWCd6/YcX4xsyKQjR8+O/mIk3EuecS76cbSLa41pmk8dFtCWNMRMlGr/owAQ
-         w8M6wSEdcECF6eaCbudvNyVOnUf4ZgECTv6Vtiziqlqb9U6zu+WlPo9Qpf/ZIpup5rNM
-         ihvuN8N6kYBPJV+/mHgMbBEKm+y/lRiwYyyWY5ozicypO8jS1MClyppooHGYjj4VCIfN
-         dAO1XqY4PCf5FMBhdYO+1F0s3civ0pEbBghKAOYmnVf9XgN3MdmUlhfOfzrdVFQrDUGA
-         /ERBAO2s9EYJoLwaDs+sWMCo+LKl0/pxF9VZjvk89sG4wgDuHkBy1bwGLMJBJRsXx6BB
-         tymA==
-X-Gm-Message-State: AOAM531GkAluZ+xRhfCDh2e2vAWUupotmfa+DFwFO+83b3hz/LM0kVV3
-        v5amnvCSs+nqg+ceAenhSurULiD3npxRUuJnFLjYXRljGHQM
-X-Google-Smtp-Source: ABdhPJyPEwIAqyIUFL+CxixBlWaTZmYK6PeM/UNgXrwWC4dbze6a16I/59eg/9wLMvT9QQR9oi7rektbQwH1FARKkQaauaXpb5uG
+        with ESMTP id S244387AbiCTVLz (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 20 Mar 2022 17:11:55 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B46F2160C12;
+        Sun, 20 Mar 2022 14:10:30 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KM9Ps17K5z4xPv;
+        Mon, 21 Mar 2022 08:10:24 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1647810626;
+        bh=gHQtle1L42oxMgdPyJfIo2OZZHlUIp6gKrUv9V2v/1k=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ohEP3OV5AOFrFH7kTQlzbQIB1k3uoY9TscYraB0YlT+qH9gWOES/T+mXQoOoYdJoE
+         SPSv8w5A7xF1v9r5zHUbEeohiT5jm8JfDo9k9eL/4oYhNOdvLNvtHuaYHVUyq7zaIY
+         3aUWTUj9vbat7MwX4yoFFGtkjij4ZIbGldnh2kURwngxnVPm3SBXULjLcB6pd6v1OY
+         AZZWPC15wp3PCjKBIUzbO8bahbiJfKf656LiZ+FsxxddhlKY8etYzOBEeVBvCeUpEO
+         sgrIM/EEsNJQ1nzOA0rd0EJcvdIw3c3ufM/yxPCdnE+n+SksrBTNHDgdsy8oGb0xJU
+         MfikjfxctTR8A==
+Date:   Mon, 21 Mar 2022 08:10:23 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Wim Van Sebroeck <wim@iguana.be>
+Cc:     Miaoqian Lin <linmq006@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the watchdog tree
+Message-ID: <20220321081023.72569774@canb.auug.org.au>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:d56:b0:319:f6bb:25e1 with SMTP id
- d22-20020a0566380d5600b00319f6bb25e1mr6281612jak.242.1647677784786; Sat, 19
- Mar 2022 01:16:24 -0700 (PDT)
-Date:   Sat, 19 Mar 2022 01:16:24 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000110dee05da8de18a@google.com>
-Subject: [syzbot] linux-next test error: WARNING in __napi_schedule
-From:   syzbot <syzbot+6f21ac9e27fca7e97623@syzkaller.appspotmail.com>
-To:     Jason@zx2c4.com, davem@davemloft.net, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com, sfr@canb.auug.org.au,
-        syzkaller-bugs@googlegroups.com, wireguard@lists.zx2c4.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/43MW_JTXoFbS67SI2kiKu.S";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hello,
+--Sig_/43MW_JTXoFbS67SI2kiKu.S
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-syzbot found the following issue on:
+Hi all,
 
-HEAD commit:    6d72dda014a4 Add linux-next specific files for 20220318
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=124f5589700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5907d82c35688f04
-dashboard link: https://syzkaller.appspot.com/bug?extid=6f21ac9e27fca7e97623
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+In commit
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+6f21ac9e27fca7e97623@syzkaller.appspotmail.com
+  1f7590ac16e7 ("watchdog: rti-wdt: Add missing pm_runtime_disable() in pro=
+be function")
 
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 3612 at net/core/dev.c:4268 ____napi_schedule net/core/dev.c:4268 [inline]
-WARNING: CPU: 0 PID: 3612 at net/core/dev.c:4268 __napi_schedule+0xe2/0x440 net/core/dev.c:5878
-Modules linked in:
-CPU: 0 PID: 3612 Comm: kworker/0:5 Not tainted 5.17.0-rc8-next-20220318-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: wg-crypt-wg0 wg_packet_decrypt_worker
-RIP: 0010:____napi_schedule net/core/dev.c:4268 [inline]
-RIP: 0010:__napi_schedule+0xe2/0x440 net/core/dev.c:5878
-Code: 74 4a e8 11 61 3c fa 31 ff 65 44 8b 25 d7 27 c6 78 41 81 e4 00 ff 0f 00 44 89 e6 e8 18 63 3c fa 45 85 e4 75 07 e8 ee 60 3c fa <0f> 0b e8 e7 60 3c fa 65 44 8b 25 f7 31 c6 78 31 ff 44 89 e6 e8 f5
-RSP: 0018:ffffc9000408fc78 EFLAGS: 00010093
-RAX: 0000000000000000 RBX: ffff88807fa90748 RCX: 0000000000000000
-RDX: ffff888019800000 RSI: ffffffff873c4802 RDI: 0000000000000003
-RBP: 0000000000000200 R08: 0000000000000000 R09: 0000000000000001
-R10: ffffffff873c47f8 R11: 0000000000000000 R12: 0000000000000000
-R13: ffff8880b9c00000 R14: 000000000003b100 R15: ffff88801cf90ec0
-FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f998512c300 CR3: 00000000707f2000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- napi_schedule include/linux/netdevice.h:465 [inline]
- wg_queue_enqueue_per_peer_rx drivers/net/wireguard/queueing.h:204 [inline]
- wg_packet_decrypt_worker+0x408/0x5d0 drivers/net/wireguard/receive.c:510
- process_one_work+0x996/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2e9/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
- </TASK>
+Fixes tag
 
+  Fixes: 2d63908 ("watchdog: Add K3 RTI watchdog support")
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+has these problem(s):
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+  - SHA1 should be at least 12 digits long
+    This an be fixed for the future by setting core.abbrev to 12 (or
+    more) or (for git v2.11 or later) just making sure it is not set
+    (or set to "auto").
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/43MW_JTXoFbS67SI2kiKu.S
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmI3mD8ACgkQAVBC80lX
+0GxPFggAmKwILfcxW6X1LwqrD6vKehh6FmXGFkOKs+9HPxEpq3WtHCADAAbJSzST
+bJ7Dq1oZniv65FPXXG9ea3ENIpj/nl5duDk3aPowLUkHzhOiWpU3d3tESFCiIIuC
+o0gAb5Tn+iAWYdz4JHxhnRB6U/insL1UNMzKbPqfvrmTjIsewT2cETYkoBhuffVl
+cpR2c3iExYVvnlJ9xyz/aEdDers2xTxfE91X5HfahhA4XvTtjOi7Ib2g2ll0OP9n
+p2X/ivuOIouh3yceSRWyinFB17m55McXSTbFQD4oxVic4HbBpvBoxRbe3gS8heUY
+aV/GpbEATDy6Qxt3cFxLAT8rChbvVg==
+=U1lm
+-----END PGP SIGNATURE-----
+
+--Sig_/43MW_JTXoFbS67SI2kiKu.S--

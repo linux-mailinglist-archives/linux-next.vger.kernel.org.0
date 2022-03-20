@@ -2,45 +2,42 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CC8B4E1DE0
-	for <lists+linux-next@lfdr.de>; Sun, 20 Mar 2022 22:10:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C47EB4E1E07
+	for <lists+linux-next@lfdr.de>; Sun, 20 Mar 2022 22:48:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343693AbiCTVL4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 20 Mar 2022 17:11:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48476 "EHLO
+        id S236574AbiCTVty (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 20 Mar 2022 17:49:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244387AbiCTVLz (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 20 Mar 2022 17:11:55 -0400
+        with ESMTP id S235433AbiCTVtv (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 20 Mar 2022 17:49:51 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B46F2160C12;
-        Sun, 20 Mar 2022 14:10:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E904344E4;
+        Sun, 20 Mar 2022 14:48:25 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KM9Ps17K5z4xPv;
-        Mon, 21 Mar 2022 08:10:24 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KMBFg5dwzz4xNq;
+        Mon, 21 Mar 2022 08:48:23 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1647810626;
-        bh=gHQtle1L42oxMgdPyJfIo2OZZHlUIp6gKrUv9V2v/1k=;
-        h=Date:From:To:Cc:Subject:From;
-        b=ohEP3OV5AOFrFH7kTQlzbQIB1k3uoY9TscYraB0YlT+qH9gWOES/T+mXQoOoYdJoE
-         SPSv8w5A7xF1v9r5zHUbEeohiT5jm8JfDo9k9eL/4oYhNOdvLNvtHuaYHVUyq7zaIY
-         3aUWTUj9vbat7MwX4yoFFGtkjij4ZIbGldnh2kURwngxnVPm3SBXULjLcB6pd6v1OY
-         AZZWPC15wp3PCjKBIUzbO8bahbiJfKf656LiZ+FsxxddhlKY8etYzOBEeVBvCeUpEO
-         sgrIM/EEsNJQ1nzOA0rd0EJcvdIw3c3ufM/yxPCdnE+n+SksrBTNHDgdsy8oGb0xJU
-         MfikjfxctTR8A==
-Date:   Mon, 21 Mar 2022 08:10:23 +1100
+        s=201702; t=1647812903;
+        bh=HoPeXE78L27hjnpG3H5ey77XtOD5evIdjLZRv91A+1c=;
+        h=Date:From:To:Subject:From;
+        b=gFgJ7ms2DGk8ueVlsyOTypXAdJvujq94KHPbWMIY0hHtVUSkMNUHr0a95qc/q5OeA
+         L7R2RjP0RAsu2cZbjNhLQchBjICzTbARx9CDiICFRzAXWI82H20/7Vk7Ctr1w2kKOM
+         UocYgxNew38H02S1w4w7hajKhpoGsiuI7rokweI8b+g9FzdWvEadbvmNV0qmjxhGUu
+         kYZhJrTCpaMn2bUR/eDHuQ1ViK8XMcwGU5Q+D/5EZTeZ/nl/q9cl/H16vWskaMJSPT
+         r7/E3BK0KZ79qFfw3AIBPmYKmEJzSsehaoosJbKqDH4eXrc5/mAslPwyUFZDOLewYB
+         ks/gWfg87HRyQ==
+Date:   Mon, 21 Mar 2022 08:48:23 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Wim Van Sebroeck <wim@iguana.be>
-Cc:     Miaoqian Lin <linmq006@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the watchdog tree
-Message-ID: <20220321081023.72569774@canb.auug.org.au>
+Subject: linux-next: the merge window is open
+Message-ID: <20220321084823.6911700b@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/43MW_JTXoFbS67SI2kiKu.S";
+Content-Type: multipart/signed; boundary="Sig_/Q2YO=GGGLlaNaZ6EN3k3Wk/";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -51,46 +48,34 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/43MW_JTXoFbS67SI2kiKu.S
+--Sig_/Q2YO=GGGLlaNaZ6EN3k3Wk/
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-In commit
-
-  1f7590ac16e7 ("watchdog: rti-wdt: Add missing pm_runtime_disable() in pro=
-be function")
-
-Fixes tag
-
-  Fixes: 2d63908 ("watchdog: Add K3 RTI watchdog support")
-
-has these problem(s):
-
-  - SHA1 should be at least 12 digits long
-    This an be fixed for the future by setting core.abbrev to 12 (or
-    more) or (for git v2.11 or later) just making sure it is not set
-    (or set to "auto").
+Please do not add any v5.19 material to your linux-next included trees
+until after the merge window closes i.e. after v5.18-rc1 has been
+released.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/43MW_JTXoFbS67SI2kiKu.S
+--Sig_/Q2YO=GGGLlaNaZ6EN3k3Wk/
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmI3mD8ACgkQAVBC80lX
-0GxPFggAmKwILfcxW6X1LwqrD6vKehh6FmXGFkOKs+9HPxEpq3WtHCADAAbJSzST
-bJ7Dq1oZniv65FPXXG9ea3ENIpj/nl5duDk3aPowLUkHzhOiWpU3d3tESFCiIIuC
-o0gAb5Tn+iAWYdz4JHxhnRB6U/insL1UNMzKbPqfvrmTjIsewT2cETYkoBhuffVl
-cpR2c3iExYVvnlJ9xyz/aEdDers2xTxfE91X5HfahhA4XvTtjOi7Ib2g2ll0OP9n
-p2X/ivuOIouh3yceSRWyinFB17m55McXSTbFQD4oxVic4HbBpvBoxRbe3gS8heUY
-aV/GpbEATDy6Qxt3cFxLAT8rChbvVg==
-=U1lm
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmI3oScACgkQAVBC80lX
+0GwXfQf+JMYj7z3e41/HMwUpf3xuCDgEhhKJ25uX0ePXQNZ1DLyOKcJFZ65XPYcE
+7hRH7pu8xp875fXrMcfruSjin/hCqApcdVkQMBN8dNzlqSxQboYY7WK3n8psE79l
+TDTuUm9dqS6ppZLIOuV5jD+eFCKe6ZHgSaK3mSUhNYS2M/f+kXjnWcSPhLJfat8z
+Gk9olm9udDBGgOnzUsXw0Lf3YmVLuZoevoEV3g3DzjSImRnzJNEFDyF3v7KoPD/o
+gGv7MKofGtKGuSnJyo65xccECmmIleYQ4HidpDKJxGfx1KA7RLVMeYN3ywAA24xs
+N76oM8o6Rki0OzprHR7oJACNpobQMg==
+=Z0/p
 -----END PGP SIGNATURE-----
 
---Sig_/43MW_JTXoFbS67SI2kiKu.S--
+--Sig_/Q2YO=GGGLlaNaZ6EN3k3Wk/--

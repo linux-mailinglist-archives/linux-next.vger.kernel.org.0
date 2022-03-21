@@ -2,69 +2,145 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD09A4E308A
-	for <lists+linux-next@lfdr.de>; Mon, 21 Mar 2022 20:09:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B61024E3263
+	for <lists+linux-next@lfdr.de>; Mon, 21 Mar 2022 22:45:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245030AbiCUTKX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 21 Mar 2022 15:10:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58660 "EHLO
+        id S229453AbiCUVqU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 21 Mar 2022 17:46:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352455AbiCUTKU (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Mar 2022 15:10:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF2EF25C54;
-        Mon, 21 Mar 2022 12:08:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 84449B819B9;
-        Mon, 21 Mar 2022 19:08:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BD61C340F0;
-        Mon, 21 Mar 2022 19:08:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647889732;
-        bh=I2M4YjizpXTdiWneY92Z9cdijcfZVcivnq2uZ24KyhI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=s5M57ekAJJ6Oq6F15/Y0+83Lr4ZlkLddf3WbAoCJkZXm3FwY+sBrFJsgo2l6NRqlH
-         3ZgYOTfC2EHlKEkw17cVQ7EjokQsATI8DNfYjDo48nEEwK1ET2lHmdL13kkJiDhuHo
-         BGM8O00J+sjRswjU6kDFllQiD3Oib4JJu7sU8WPjj9ENO++MmPhJEN+DkbncHXHwaR
-         QmdGbZo3a4l4i/OJb/RpEGUQd5iCwBrRhMvChx9MihpDnkFr7DoZV3yLuhWwO7ObtN
-         k9Sf3GRqK5Oi6Zq1dLqiDwoKjfiOQU2wzqfRdjDROJT6vpVclx3B6wEy2uJvAyJrHc
-         5U9KLy2j0CKlQ==
-Date:   Mon, 21 Mar 2022 12:08:49 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     syzbot <syzbot+6f21ac9e27fca7e97623@syzkaller.appspotmail.com>
-Cc:     Jason@zx2c4.com, davem@davemloft.net, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, sfr@canb.auug.org.au,
-        syzkaller-bugs@googlegroups.com, wireguard@lists.zx2c4.com
-Subject: Re: [syzbot] linux-next test error: WARNING in __napi_schedule
-Message-ID: <20220321120849.1c87c4a4@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <000000000000110dee05da8de18a@google.com>
-References: <000000000000110dee05da8de18a@google.com>
+        with ESMTP id S229560AbiCUVqU (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Mar 2022 17:46:20 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E8E7B868
+        for <linux-next@vger.kernel.org>; Mon, 21 Mar 2022 14:41:36 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id mp6-20020a17090b190600b001c6841b8a52so570471pjb.5
+        for <linux-next@vger.kernel.org>; Mon, 21 Mar 2022 14:41:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=hzlxuoVcUtFNyYhd7IaP3vW/n/31iVrjVI0cYpxyVIg=;
+        b=AJJS8AlLvE3dh4Iw3f148oDobBs8GBjNK4HQR4fd1ld62s0aCs+22XINlkoJDU3AoS
+         8uOi8t84billfQr0/CqrEHKAzh01irX6vV3+g/0cziRJHBRIamVkeOpo/BnaIatO7PZV
+         Eh43oCbXlnRIdtB69OTh5c/BRYxUtttvmXan5DnrMyeb/hsvFapXSvlvx+JuWcvRFGHt
+         Ntke3y/TTx6l6EOaJqInsPSOd9mVsFU0WbP2/5lR+aO70ZuS7ys8aNRkV3i6D/Lf0evC
+         r6BJwCreN/NdOKs2SjJv0+1od6GQSOKpx1d5z0hh7EF2eui/EcuQxfMSPoOkBKCZ7FWC
+         /+Ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=hzlxuoVcUtFNyYhd7IaP3vW/n/31iVrjVI0cYpxyVIg=;
+        b=HXIjT9UmYlFqNntGW7qBFmfc+8CNepCM9LD43f+wyVz7zH3sg45LuKgF6JRcqvxc/s
+         oOYNvSIQX49wwxkumyyiJH2RzSqp4aIpX7AeVikLYzMyDJi5t+C9+9pJWyl1qA2y2wfP
+         ckE54E8MPNlNAfsUiPxDjmjaDztx7HjqifTP64BhxdQAkIVqD+1cbodl2O4SAKKEU5dr
+         6TCFDZxOl1ts1Y0xyC3vUv/+ufbQJIwpNNaY09n5I7qM1bCI9sT3gLWZSYzWU9JixhGo
+         kLQJhfKZQura1CoXbPSG1Xg7BGaieEllkhiqEXlgloMuDxsmuz7xygKuvSVh26nevral
+         6JSA==
+X-Gm-Message-State: AOAM532MYNwxIlvah22LsjUnsne0XIgf5I7/dAYTsdwanrWDpkW0f6dt
+        uehW8Qd6SiuIeMmFnVPpzk2NniXfV9v4a7NyFAxsVg==
+X-Google-Smtp-Source: ABdhPJyzdofKTKHoiJ4iGCBbHSPi4Xc1wlwYjpgmL6SpWKAD7UioDwd+ubLQF8zj102JpbsH9iOBSWpSmWQXM5a6nHg=
+X-Received: by 2002:a17:903:32c7:b0:154:4156:f384 with SMTP id
+ i7-20020a17090332c700b001544156f384mr10917932plr.34.1647898771195; Mon, 21
+ Mar 2022 14:39:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220318114133.113627-1-kjain@linux.ibm.com> <20220318114133.113627-2-kjain@linux.ibm.com>
+In-Reply-To: <20220318114133.113627-2-kjain@linux.ibm.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Mon, 21 Mar 2022 14:39:23 -0700
+Message-ID: <CAPcyv4iqpTn89WLOW1XjFXGZEYG_MmPg+VQbcDJ9ygJ4Jaybtw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] powerpc/papr_scm: Fix build failure when
+ CONFIG_PERF_EVENTS is not set
+To:     Kajol Jain <kjain@linux.ibm.com>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux NVDIMM <nvdimm@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Weiny, Ira" <ira.weiny@intel.com>,
+        Vishal L Verma <vishal.l.verma@intel.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Santosh Sivaraj <santosh@fossix.org>, maddy@linux.ibm.com,
+        rnsastry@linux.ibm.com,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        atrajeev@linux.vnet.ibm.com, Vaibhav Jain <vaibhav@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Linux MM <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Sat, 19 Mar 2022 01:16:24 -0700 syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    6d72dda014a4 Add linux-next specific files for 20220318
-> git tree:       linux-next
-> console output: https://syzkaller.appspot.com/x/log.txt?x=124f5589700000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=5907d82c35688f04
-> dashboard link: https://syzkaller.appspot.com/bug?extid=6f21ac9e27fca7e97623
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+On Fri, Mar 18, 2022 at 4:42 AM Kajol Jain <kjain@linux.ibm.com> wrote:
+>
+> The following build failure occures when CONFIG_PERF_EVENTS is not set
+> as generic pmu functions are not visible in that scenario.
+>
+> arch/powerpc/platforms/pseries/papr_scm.c:372:35: error: =E2=80=98struct =
+perf_event=E2=80=99 has no member named =E2=80=98attr=E2=80=99
+>          p->nvdimm_events_map[event->attr.config],
+>                                    ^~
+> In file included from ./include/linux/list.h:5,
+>                  from ./include/linux/kobject.h:19,
+>                  from ./include/linux/of.h:17,
+>                  from arch/powerpc/platforms/pseries/papr_scm.c:5:
+> arch/powerpc/platforms/pseries/papr_scm.c: In function =E2=80=98papr_scm_=
+pmu_event_init=E2=80=99:
+> arch/powerpc/platforms/pseries/papr_scm.c:389:49: error: =E2=80=98struct =
+perf_event=E2=80=99 has no member named =E2=80=98pmu=E2=80=99
+>   struct nvdimm_pmu *nd_pmu =3D to_nvdimm_pmu(event->pmu);
+>                                                  ^~
+> ./include/linux/container_of.h:18:26: note: in definition of macro =E2=80=
+=98container_of=E2=80=99
+>   void *__mptr =3D (void *)(ptr);     \
+>                           ^~~
+> arch/powerpc/platforms/pseries/papr_scm.c:389:30: note: in expansion of m=
+acro =E2=80=98to_nvdimm_pmu=E2=80=99
+>   struct nvdimm_pmu *nd_pmu =3D to_nvdimm_pmu(event->pmu);
+>                               ^~~~~~~~~~~~~
+> In file included from ./include/linux/bits.h:22,
+>                  from ./include/linux/bitops.h:6,
+>                  from ./include/linux/of.h:15,
+>                  from arch/powerpc/platforms/pseries/papr_scm.c:5:
+>
+> Fix the build issue by adding check for CONFIG_PERF_EVENTS config option
+> and disabling the papr_scm perf interface support incase this config
+> is not set
+>
+> Fixes: 4c08d4bbc089 ("powerpc/papr_scm: Add perf interface support") (Com=
+mit id
+> based on linux-next tree)
+> Signed-off-by: Kajol Jain <kjain@linux.ibm.com>
+> ---
+>  arch/powerpc/platforms/pseries/papr_scm.c | 15 +++++++++++++++
 
-#syz fix: net: Revert the softirq will run annotation in ____napi_schedule().
+This is a bit messier than I would have liked mainly because it dumps
+a bunch of ifdefery into a C file contrary to coding style, "Wherever
+possible, don't use preprocessor conditionals (#if, #ifdef) in .c
+files". I would expect this all to move to an organization like:
+
+arch/powerpc/platforms/pseries/papr_scm/main.c
+arch/powerpc/platforms/pseries/papr_scm/perf.c
+
+...and a new config symbol like:
+
+config PAPR_SCM_PERF
+       depends on PAPR_SCM && PERF_EVENTS
+       def_bool y
+
+...with wrappers in header files to make everything compile away
+without any need for main.c to carry an ifdef.
+
+Can you turn a patch like that in the next couple days? Otherwise, I
+think if Linus saw me sending a late breaking compile fix that threw
+coding style out the window he'd have cause to just drop the pull
+request entirely.

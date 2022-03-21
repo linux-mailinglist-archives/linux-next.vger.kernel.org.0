@@ -2,61 +2,49 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56B254E2AC3
-	for <lists+linux-next@lfdr.de>; Mon, 21 Mar 2022 15:30:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2C674E2A9C
+	for <lists+linux-next@lfdr.de>; Mon, 21 Mar 2022 15:28:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346039AbiCUOak (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 21 Mar 2022 10:30:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37192 "EHLO
+        id S1346347AbiCUO3D (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 21 Mar 2022 10:29:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349204AbiCUO1w (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Mar 2022 10:27:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A03C13F22;
-        Mon, 21 Mar 2022 07:21:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C9FE8B81648;
-        Mon, 21 Mar 2022 14:16:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88048C340E8;
-        Mon, 21 Mar 2022 14:16:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647872163;
-        bh=hCDpnium04L+NX98eEF16B611YIyYCDehSO1Lv/GK5Q=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=m6ZOJwLTrYt/LUfTxurjawz2XhZxdcUobTBvnxXsYD2VMuffI2oTFFbpxePM6/rnU
-         2ZwiPGsLynn2+81ORsVpu8wTM770Z/e/DIS9dDv2lsc+QQzP9fG2LJUh+0sDHUFbaM
-         EjqgCpXZsPN8u3FIl+biRb0twzHJC1bCyh3Pr214ba8DpFcDnOhpI17I7xPQ2v04YG
-         LPF93Rs3QaK8fzj7wFYAA1sbOJmnxXuoazUmmU54mphGcpFvnpKlzGvzgX/C6lrMKD
-         hC49iEXsoaTW1CkmN2qVSs1jKWHT2IXkLud39oAxKwNMuXW/5FzNFkd40bIkVOXCgm
-         J43z5Wt9hIZWQ==
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1nWIpE-00FyOT-QH; Mon, 21 Mar 2022 14:16:00 +0000
+        with ESMTP id S1349182AbiCUO1S (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Mar 2022 10:27:18 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8DB8D60FC;
+        Mon, 21 Mar 2022 07:20:02 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6A2F01042;
+        Mon, 21 Mar 2022 07:20:01 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.92.118])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D798F3F73D;
+        Mon, 21 Mar 2022 07:19:58 -0700 (PDT)
+Date:   Mon, 21 Mar 2022 14:19:53 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        mhiramat@kernel.org, rostedt@goodmis.org, ast@kernel.org,
+        hjl.tools@gmail.com, rick.p.edgecombe@intel.com, rppt@kernel.org,
+        linux-toolchains@vger.kernel.org, Andrew.Cooper3@citrix.com,
+        ndesaulniers@google.com
+Subject: Re: linux-next: build warnings after merge of the tip tree
+Message-ID: <YjiJiT9ml1dlG07q@FVFF77S0Q05N>
+References: <20220321140327.777f9554@canb.auug.org.au>
+ <Yjh11UjDZogc3foM@hirez.programming.kicks-ass.net>
+ <Yjh3xZuuY3QcZ1Bn@hirez.programming.kicks-ass.net>
+ <Yjh4xzSWtvR+vqst@hirez.programming.kicks-ass.net>
+ <YjiBbF+K4FKZyn6T@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Date:   Mon, 21 Mar 2022 14:16:00 +0000
-From:   Marc Zyngier <maz@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the irqchip tree
-In-Reply-To: <20220322000617.0a351d78@canb.auug.org.au>
-References: <20220322000617.0a351d78@canb.auug.org.au>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <3f500c7bae56e4d7ca2840cf9a0be35c@kernel.org>
-X-Sender: maz@kernel.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: sfr@canb.auug.org.au, linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YjiBbF+K4FKZyn6T@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,30 +53,46 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 2022-03-21 13:06, Stephen Rothwell wrote:
-> Hi all,
+On Mon, Mar 21, 2022 at 02:45:16PM +0100, Peter Zijlstra wrote:
+> On Mon, Mar 21, 2022 at 02:08:23PM +0100, Peter Zijlstra wrote:
+> > On Mon, Mar 21, 2022 at 02:04:05PM +0100, Peter Zijlstra wrote:
+> > > On Mon, Mar 21, 2022 at 01:55:49PM +0100, Peter Zijlstra wrote:
+> > > > On Mon, Mar 21, 2022 at 02:03:27PM +1100, Stephen Rothwell wrote:
+> > > > > Hi all,
+> > > > > 
+> > > > > After merging the tip tree, today's linux-next build (x864 allmodconfig)
+> > > > > produced these new warnings:
+> > > > > 
+> > > > > vmlinux.o: warning: objtool: arch_rethook_prepare()+0x55: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > > > vmlinux.o: warning: objtool: arch_rethook_trampoline_callback()+0x3e: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > > > vmlinux.o: warning: objtool: unwind_next_frame()+0x93e: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > > > vmlinux.o: warning: objtool: unwind_next_frame()+0x5f2: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > > > vmlinux.o: warning: objtool: unwind_next_frame()+0x4a7: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > > > vmlinux.o: warning: objtool: __rethook_find_ret_addr()+0x81: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > > > vmlinux.o: warning: objtool: __rethook_find_ret_addr()+0x90: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > > > vmlinux.o: warning: objtool: rethook_trampoline_handler()+0x8c: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > > > vmlinux.o: warning: objtool: rethook_trampoline_handler()+0x9b: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > > 
+> > > > Hurmph, lemme go figure out where that code comes from, I've not seen
+> > > > those.
+> > > 
+> > > Ahh, something tracing. I'll go do some patches on top of it.
+> > 
+> > Also, that x86 patch has never his x86@kernel.org and doesn't have an
+> > ACK from any x86 person :-(((
 > 
-> In commit
-> 
->   686121ebe6fc ("irqchip/gic-v4: Wait for GICR_VPENDBASER.Dirty to
-> clear before descheduling")
-> 
-> Fixes tag
-> 
->   Fixes: 57e3cebd022f ("KVM: arm64: Delay the polling of the
-> GICR_VPENDBASER.Dirty
-> 
-> has these problem(s):
-> 
->   - Subject has leading but no trailing parentheses
->   - Subject has leading but no trailing quotes
-> 
-> Please do not split Fixes tags over more than one line.
+> Worse, it adds a 3rd return trampoline without replacing any of the
+> existing two :-(
 
-Copy paste trikes back. Now fixed.
+Likewise; I have the same complaints for the arm64 patch.
+
+I haven't had the chance to review/ack that, and I'm actively working on
+improving out unwinder and the way it interacts with the various *existing*
+trampolines, so adding yat another is *not* good.
+
+> Why was this merged?
+
+Likewise, same question for arm64?
 
 Thanks,
-
-         M.
--- 
-Jazz is not dead. It just smells funny...
+Mark.

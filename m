@@ -2,64 +2,62 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B6C44E2CB5
-	for <lists+linux-next@lfdr.de>; Mon, 21 Mar 2022 16:46:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CE654E2D1A
+	for <lists+linux-next@lfdr.de>; Mon, 21 Mar 2022 17:05:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350544AbiCUPrk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 21 Mar 2022 11:47:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57296 "EHLO
+        id S1349742AbiCUQGf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 21 Mar 2022 12:06:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350517AbiCUPra (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Mar 2022 11:47:30 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B665370A;
-        Mon, 21 Mar 2022 08:46:04 -0700 (PDT)
+        with ESMTP id S237967AbiCUQGe (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Mar 2022 12:06:34 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE1BB1EC53;
+        Mon, 21 Mar 2022 09:05:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
         References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=AEeSeutZfJtu2nIPuVFGjj2ShykAWgOjHpmhtGwOQnc=; b=ban8yFbw+5HuTNu6qlubpGMcDs
-        3OBD6aMZ4bm1OggDFeh+2L2p0OzCRcUhhCeLzlYZnag6JQPpRlOdT7BIpikJipkVZzysYMNz747Pj
-        YnGn5XuPWflO5LbmIM1PgDmdAUAZNEs1trbWwUp1pkgbQLfoPM382N+Uh5ToNU8h+pIKYRpUho8in
-        JY236BxNqB2GSG3MUC2T/60BtDgxDgerC+ngYlr4Mj5oaQiCLY3thXipHQRD415FIKAo1G48Y6ebv
-        lJQk5ooR1YXLwZ+qrO4kaLz2dRUzLXKQZpyKyCgOSpwZPo3HdlyPLzkxdfKuv0KXASDrXMBwdhVVo
-        CUxgeiMQ==;
+        bh=kTrt/5pX9PnRnJo5oHL3WG+33ty/9VWvLwvtG9fEbwU=; b=qih6R7TEe0pxJ3/a/75RkzBjxc
+        +a1QvWKlo6ZJJprM2R1stVMA7yf1zF4Mo3mzZujtDOjnMAWfzUlkMnBEfk04R0x3maynyzfbX7I/n
+        cJzC8KZuwAFyb/ztnVg00qgEuTx+cFLxHMvDksyrnD8LdyL/sOBc6BUqenK3qJYSNSo0SbQ6sMXgD
+        LxZZyUK9dIgPePC9k2yPopKt3YJIQlZ1WUMcoWoltXIhvM7ywN8T+kXacUDSsX8GtpifX5I3s0F7t
+        Rz19BXeliWl94b64QDKLzJ8BJKcMqO22GU5TwRgxMSgf/tsA7hNNksnuX4gWC9K41T5gKnRDm9+7l
+        7EukiD1A==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nWKE1-00AiA1-OO; Mon, 21 Mar 2022 15:45:41 +0000
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nWKWF-003AQa-Bv; Mon, 21 Mar 2022 16:04:31 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 936783001CD;
-        Mon, 21 Mar 2022 16:45:40 +0100 (CET)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3080130031D;
+        Mon, 21 Mar 2022 17:04:28 +0100 (CET)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 31210203A7684; Mon, 21 Mar 2022 16:45:40 +0100 (CET)
-Date:   Mon, 21 Mar 2022 16:45:40 +0100
+        id AC7FA26718E94; Mon, 21 Mar 2022 17:04:28 +0100 (CET)
+Date:   Mon, 21 Mar 2022 17:04:28 +0100
 From:   Peter Zijlstra <peterz@infradead.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>,
         "H. Peter Anvin" <hpa@zytor.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        mhiramat@kernel.org, rostedt@goodmis.org, ast@kernel.org,
-        hjl.tools@gmail.com, rick.p.edgecombe@intel.com, rppt@kernel.org,
+        mhiramat@kernel.org, ast@kernel.org, hjl.tools@gmail.com,
+        rick.p.edgecombe@intel.com, rppt@kernel.org,
         linux-toolchains@vger.kernel.org, Andrew.Cooper3@citrix.com,
-        ndesaulniers@google.com,
-        Linus Torvalds <torvalds@linux-foundation.org>
+        ndesaulniers@google.com
 Subject: Re: linux-next: build warnings after merge of the tip tree
-Message-ID: <YjidpOZZJkF6aBTG@hirez.programming.kicks-ass.net>
+Message-ID: <YjiiDFHIQg78QwSb@hirez.programming.kicks-ass.net>
 References: <20220321140327.777f9554@canb.auug.org.au>
  <Yjh11UjDZogc3foM@hirez.programming.kicks-ass.net>
  <Yjh3xZuuY3QcZ1Bn@hirez.programming.kicks-ass.net>
- <Yjh4xzSWtvR+vqst@hirez.programming.kicks-ass.net>
- <YjiBbF+K4FKZyn6T@hirez.programming.kicks-ass.net>
- <YjiZhRelDJeX4dfR@hirez.programming.kicks-ass.net>
+ <20220321112805.1393f9b9@gandalf.local.home>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YjiZhRelDJeX4dfR@hirez.programming.kicks-ass.net>
+In-Reply-To: <20220321112805.1393f9b9@gandalf.local.home>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -70,47 +68,45 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 04:28:06PM +0100, Peter Zijlstra wrote:
-> On Mon, Mar 21, 2022 at 02:45:16PM +0100, Peter Zijlstra wrote:
-> > On Mon, Mar 21, 2022 at 02:08:23PM +0100, Peter Zijlstra wrote:
-> > > On Mon, Mar 21, 2022 at 02:04:05PM +0100, Peter Zijlstra wrote:
-> > > > On Mon, Mar 21, 2022 at 01:55:49PM +0100, Peter Zijlstra wrote:
-> > > > > On Mon, Mar 21, 2022 at 02:03:27PM +1100, Stephen Rothwell wrote:
-> > > > > > Hi all,
-> > > > > > 
-> > > > > > After merging the tip tree, today's linux-next build (x864 allmodconfig)
-> > > > > > produced these new warnings:
-> > > > > > 
-> > > > > > vmlinux.o: warning: objtool: arch_rethook_prepare()+0x55: relocation to !ENDBR: arch_rethook_trampoline+0x0
-> > > > > > vmlinux.o: warning: objtool: arch_rethook_trampoline_callback()+0x3e: relocation to !ENDBR: arch_rethook_trampoline+0x0
-> > > > > > vmlinux.o: warning: objtool: unwind_next_frame()+0x93e: relocation to !ENDBR: arch_rethook_trampoline+0x0
-> > > > > > vmlinux.o: warning: objtool: unwind_next_frame()+0x5f2: relocation to !ENDBR: arch_rethook_trampoline+0x0
-> > > > > > vmlinux.o: warning: objtool: unwind_next_frame()+0x4a7: relocation to !ENDBR: arch_rethook_trampoline+0x0
-> > > > > > vmlinux.o: warning: objtool: __rethook_find_ret_addr()+0x81: relocation to !ENDBR: arch_rethook_trampoline+0x0
-> > > > > > vmlinux.o: warning: objtool: __rethook_find_ret_addr()+0x90: relocation to !ENDBR: arch_rethook_trampoline+0x0
-> > > > > > vmlinux.o: warning: objtool: rethook_trampoline_handler()+0x8c: relocation to !ENDBR: arch_rethook_trampoline+0x0
-> > > > > > vmlinux.o: warning: objtool: rethook_trampoline_handler()+0x9b: relocation to !ENDBR: arch_rethook_trampoline+0x0
-> > > > > 
-> > > > > Hurmph, lemme go figure out where that code comes from, I've not seen
-> > > > > those.
-> > > > 
-> > > > Ahh, something tracing. I'll go do some patches on top of it.
-> > > 
-> > > Also, that x86 patch has never his x86@kernel.org and doesn't have an
-> > > ACK from any x86 person :-(((
-> > 
-> > Worse, it adds a 3rd return trampoline without replacing any of the
-> > existing two :-(
-> > 
-> > Why was this merged?
-> 
-> It additionally gets ret wrong:
-> 
->   vmlinux.o: warning: objtool: arch_rethook_trampoline()+0x4a: missing int3 after ret
-> 
-> and afaict regs->ss is garbage (much like kretprobes it appears).
-> 
-> Can we please unmerge this stuff and try again later?
+On Mon, Mar 21, 2022 at 11:28:05AM -0400, Steven Rostedt wrote:
+> On Mon, 21 Mar 2022 14:04:05 +0100
+> Peter Zijlstra <peterz@infradead.org> wrote:
 
-This landing in -next only today (after having been committed last
-friday night) is another clue it should probably go next round.
+> > Also, folks, I'm thinking we should start to move to __fexit__, if CET
+> > SHSTK ever wants to come to kernel land return trampolines will
+> > insta-stop working.
+> > 
+> > Hjl, do you think we could get -mfexit to go along with -mfentry ?
+
+> int funcA () {
+> 	[..]
+> 	return funcB();
+> }
+
+> This currently works with function graph and kretprobe tracing because of
+> the shadow stack. Let's say we traced both funcA and funcB
+> 
+> funcA:
+> 	call __fentry__
+			push funcA on trace-stack
+> 
+> 	[..]
+> 	jmp funcB
+> 
+> funcB:
+> 	call __fentry__
+			push funcB on trace-stack
+> 
+> 	[..]
+	call __fexit__
+			pop trace-stack until empty
+			  'exit funcB'
+			  'exit funcA'
+
+> 	ret
+
+> 
+> That is, the current algorithm traces the end of both funcA and funcB
+> without issue, because of how the shadow stack works.
+
+And it all works, no? Or what am I missing?

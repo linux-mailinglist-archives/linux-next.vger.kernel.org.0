@@ -2,102 +2,108 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9E194E2E84
-	for <lists+linux-next@lfdr.de>; Mon, 21 Mar 2022 17:51:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2236A4E2E91
+	for <lists+linux-next@lfdr.de>; Mon, 21 Mar 2022 17:53:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243202AbiCUQwe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 21 Mar 2022 12:52:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48410 "EHLO
+        id S245508AbiCUQyx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 21 Mar 2022 12:54:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347786AbiCUQwd (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Mar 2022 12:52:33 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55720171EC9;
-        Mon, 21 Mar 2022 09:51:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=GpBLN45XHdgrYM0mJnm8SxpRBseWTjkv46KwP4WkL8w=; b=FibBNvtHtcELnmPR5kl0+HSRDL
-        QVY6FftHfgU2nVmUOl5r51wh1rRPtldp+pwhaAluwv+hOk2obN7pWZjVGXTC+11RP2Wr/6X3n2Kog
-        IQ4PzWU+Pmq7uPMmhIzecCioopS/QAy6WF4b1wTrHkY2rvTmN8cA6+eSaoGuHAv9m0MO7AcZrDcb/
-        DaiIjnPzhwk/SL7Cug1ymDJM3AwmHYvp+qSm5mTmCfK2vb9mGXYDy4NwPMnVCWRS2yXnYNX+kF+au
-        EajY2HEWiFAcV+c7e2JSoZWZUlOyzPSXrabJM2hRYGvLaOoCMNTLIoR/YJr3ssoi9P0zh4Ykba4Mf
-        mbYbo4tw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nWLF5-00AlK4-4g; Mon, 21 Mar 2022 16:50:51 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 9632D30031D;
-        Mon, 21 Mar 2022 17:50:50 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 7EC432DB94824; Mon, 21 Mar 2022 17:50:50 +0100 (CET)
-Date:   Mon, 21 Mar 2022 17:50:50 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
+        with ESMTP id S1348765AbiCUQyw (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Mar 2022 12:54:52 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C49B2AC1
+        for <linux-next@vger.kernel.org>; Mon, 21 Mar 2022 09:53:20 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id p15so14854456lfk.8
+        for <linux-next@vger.kernel.org>; Mon, 21 Mar 2022 09:53:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=utyUaFkr1ZuUiYWhJkaB0qXmsCfjA9OUpKcvX6RwIYk=;
+        b=XiheaFj4jTydDhbYvNjr9omQv2Zp/C0MlIIU6zkU5VOIRbLNk0t6VwAsplXScFZ+iT
+         0mVfRfx8BrSnrCW60YgtWfXKiVxii3x5D0Ei9Rq/sHLALGwDvddfnWi+PZ2vobYlSfwI
+         6TpcGU6cypY7IpP1cZAsdxieS/Uau32wcvBcA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=utyUaFkr1ZuUiYWhJkaB0qXmsCfjA9OUpKcvX6RwIYk=;
+        b=AajKGoGkLSp40j3KQQKas8/7CObRinn5UueBe1QpnqgHopjeC8L3inLrUYZAee3/8m
+         nYDd4ndECdzl+e934T4EqnqaQ5CXZgnX0HSWaJ6VAOpFFSi2k6LebRnsogp0Pry+P7lw
+         u+kgcxYtN2l9YOrZeRk6il7ZeZVEBzG7SmqSieNc+Y7Cls6ignM8zvHroXU43v1nGISW
+         4d7hD6GIM/fadrxH5yNHsIvIXQtGgupQOQVWhKWQdyDodKmXVsOI0ySHTwJPELRUYcNT
+         UAKboyDFqdWInO+/NjoUHD2ej582fQfpIn3d1S+7ckUwhkUZT5J3/tjpqlcU75N4Ndwr
+         TmfA==
+X-Gm-Message-State: AOAM530lXiwL4mxvUTo1cS1UX5aK/cdF759b6cLs3Dq8Ymi6eT9VrwD3
+        y5InuiJXzsEN3xFrZxJWDOSHadRs2gyAnl0puXQ=
+X-Google-Smtp-Source: ABdhPJwY4kFkGMDIBx1yiRoSJRDiEZH72I3l9DQGFkSVkYlB7sTSY4eC2ic1YI22igBl2cEzdnWQLw==
+X-Received: by 2002:ac2:418c:0:b0:43e:8f98:98f0 with SMTP id z12-20020ac2418c000000b0043e8f9898f0mr15715888lfh.604.1647881596265;
+        Mon, 21 Mar 2022 09:53:16 -0700 (PDT)
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com. [209.85.208.178])
+        by smtp.gmail.com with ESMTPSA id h16-20020a19ca50000000b0044a25081cf9sm501904lfj.133.2022.03.21.09.53.15
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Mar 2022 09:53:16 -0700 (PDT)
+Received: by mail-lj1-f178.google.com with SMTP id b5so2115138ljf.13
+        for <linux-next@vger.kernel.org>; Mon, 21 Mar 2022 09:53:15 -0700 (PDT)
+X-Received: by 2002:a2e:a78f:0:b0:249:21ce:6d53 with SMTP id
+ c15-20020a2ea78f000000b0024921ce6d53mr16250149ljf.164.1647881594869; Mon, 21
+ Mar 2022 09:53:14 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220321140327.777f9554@canb.auug.org.au> <Yjh11UjDZogc3foM@hirez.programming.kicks-ass.net>
+ <Yjh3xZuuY3QcZ1Bn@hirez.programming.kicks-ass.net> <Yjh4xzSWtvR+vqst@hirez.programming.kicks-ass.net>
+ <YjiBbF+K4FKZyn6T@hirez.programming.kicks-ass.net> <YjiZhRelDJeX4dfR@hirez.programming.kicks-ass.net>
+ <YjidpOZZJkF6aBTG@hirez.programming.kicks-ass.net> <CAHk-=wigO=68WA8aMZnH9o8qRUJQbNJPERosvW82YuScrUTo7Q@mail.gmail.com>
+ <YjirfOJ2HQAnTrU4@hirez.programming.kicks-ass.net>
+In-Reply-To: <YjirfOJ2HQAnTrU4@hirez.programming.kicks-ass.net>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 21 Mar 2022 09:52:58 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wguO61ACXPSz=hmCxNTzqE=mNr_bWLv6GH5jCVZLBL=qw@mail.gmail.com>
+Message-ID: <CAHk-=wguO61ACXPSz=hmCxNTzqE=mNr_bWLv6GH5jCVZLBL=qw@mail.gmail.com>
+Subject: Re: linux-next: build warnings after merge of the tip tree
+To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>,
         "H. Peter Anvin" <hpa@zytor.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        mhiramat@kernel.org, ast@kernel.org, hjl.tools@gmail.com,
-        rick.p.edgecombe@intel.com, rppt@kernel.org,
-        linux-toolchains@vger.kernel.org, Andrew.Cooper3@citrix.com,
-        ndesaulniers@google.com
-Subject: Re: linux-next: build warnings after merge of the tip tree
-Message-ID: <Yjis6hJKUj/WrSwK@hirez.programming.kicks-ass.net>
-References: <20220321140327.777f9554@canb.auug.org.au>
- <Yjh11UjDZogc3foM@hirez.programming.kicks-ass.net>
- <Yjh3xZuuY3QcZ1Bn@hirez.programming.kicks-ass.net>
- <20220321112805.1393f9b9@gandalf.local.home>
- <YjiiDFHIQg78QwSb@hirez.programming.kicks-ass.net>
- <20220321121209.3b95e406@gandalf.local.home>
- <20220321121549.1c8588c5@gandalf.local.home>
- <YjiqgPL+pPGkOgCv@hirez.programming.kicks-ass.net>
- <20220321124551.3d73660b@gandalf.local.home>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220321124551.3d73660b@gandalf.local.home>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        "H.J. Lu" <hjl.tools@gmail.com>,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        linux-toolchains <linux-toolchains@vger.kernel.org>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 12:45:51PM -0400, Steven Rostedt wrote:
-> On Mon, 21 Mar 2022 17:40:32 +0100
-> Peter Zijlstra <peterz@infradead.org> wrote:
-> 
-> > func_B:
-> > 	call __fentry__	/* push func_B */
-> > 	...
-> > 	call __fexit__	/* pop 1 + tails */
-> > 	ret
-> > 
-> > func_A:
-> > 	call __fentry__ /* push func_A */
-> > 	...
-> > 	call __ftail__  /* mark func_A tail */
-> > 	jmp func_B
-> > 
-> > func_C:
-> > 	call __fentry__ /* push func_C */
-> > 	call func_A;
-> > 	...
-> > 	call __fexit__  /* pop 1 + tails */
-> > 	ret;
-> 
-> This also assumes that we need to trace everything that is marked. I
-> mentioned in another email, what do we do if we only trace funcA?
+On Mon, Mar 21, 2022 at 9:45 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > It's presumably not in any of the pull requests I already have
+> > pending, but it would be nice if I saw some details of _what_ you are
+> > complaining about, and not just the complaint itself ;)
+>
+> Duh, right. It's this series:
+>
+>   https://lore.kernel.org/bpf/164757541675.26179.17727138330733641017.git-patchwork-notify@kernel.org/
+>
+> That went into bpf-next last Friday. I just checked but haven't found a
+> pull for it yet.
 
-Like I said later on; if we inhibit tail-calls to notrace, this goes
-away.
+Thanks. I can confirm it's not in any of the pull requests I have
+pending, so I'll just start doing my normal work and try to remember
+to look out for this issue later.
+
+                 Linus

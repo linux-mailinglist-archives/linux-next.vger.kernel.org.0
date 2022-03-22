@@ -2,56 +2,55 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95DE74E3621
-	for <lists+linux-next@lfdr.de>; Tue, 22 Mar 2022 02:48:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAD664E366D
+	for <lists+linux-next@lfdr.de>; Tue, 22 Mar 2022 03:11:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235057AbiCVBqq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 21 Mar 2022 21:46:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44516 "EHLO
+        id S235379AbiCVCMj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 21 Mar 2022 22:12:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234610AbiCVBqp (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Mar 2022 21:46:45 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B7D326E9
-        for <linux-next@vger.kernel.org>; Mon, 21 Mar 2022 18:45:16 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id p8so16972356pfh.8
-        for <linux-next@vger.kernel.org>; Mon, 21 Mar 2022 18:45:16 -0700 (PDT)
+        with ESMTP id S235378AbiCVCMi (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Mar 2022 22:12:38 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 349421CFC7
+        for <linux-next@vger.kernel.org>; Mon, 21 Mar 2022 19:11:07 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id mj15-20020a17090b368f00b001c637aa358eso1171238pjb.0
+        for <linux-next@vger.kernel.org>; Mon, 21 Mar 2022 19:11:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=intel-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=QIf4Hy84dx7L6X4BNNjvqyd7qQS9lH8gSrCqndVgulg=;
-        b=c1eIS7vo7uHJkChkDX9E8UuibyJlcPj9ny6akRAfhecft5A4sQAAvRT6NWdrwAyYS1
-         dhaWlwDJJ1cJQ9ZRJHl9EjacUiDF5EHf3CHkOAqMuf0zU49JchE3kIj49+xSipYMpZiR
-         HImhOI6SXmdIbf5Eor+xzxKwjeQIQjsWyx8OU4AT+mnrMtNSqd3W8TbEmgIo7Y1ycTlD
-         rVRjOa0tpXALsViv1QgoVdGtel5P6mOpCoBMe6neh7LZthVINVhnDwPsTLrKPRqvH1Ba
-         hTfFX+3SOKUYmcJb74di86aoahq+yHYqmpEMYLfZnR7rPa1oD6FVpe5eB6p5JxtXIWju
-         iwxQ==
+         :cc;
+        bh=gGZp+MDIUzKlsOtQAo2TyTq0vVOirk1X0NOX9ev9OMc=;
+        b=jsl5hTKisonrNJYTeMtNHzyDFdCfEUgD/ujMhDJCupZnphMkfd0uzKApmqk/n3FaED
+         i46ZTIJ+Lj99NIG2v73jtrSrTVhoCDEpoHo9w7f4fY0L5l88DtDWVG91DqRej+vdmVzy
+         Xp6pL5ctDPnLYuyosqtk4O/t+86XwfOHd3CCYIEVOeCa0p5eOsaD1qEqq8a0aXbxvWHf
+         gX803FBk8yWx2Q0ft0SZnpgZ40r22BPfvagHhSHp0vKlLkzolVbE4jP+k1HbJAXZQKRY
+         0piuCSEkh7Hwa3M83oI+taVZYG/M22LqqoyUtOWoKSK3WFjcvR01ygKRGV4swgcRolZg
+         Dgeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=QIf4Hy84dx7L6X4BNNjvqyd7qQS9lH8gSrCqndVgulg=;
-        b=UMbRr0H6ToOUkuCYtdcTaEuoF9xRWxb+vPOXI1F9+CBj3UhOampWniHrBG9D0IbDe0
-         uRZ8a8LK9BMjdBBmDSZoBUOV+gQEYjCqUqaL3u/ZvC3FFhoQsz9lxtd24UsdspjTeXw0
-         ZozpGLF7NMt/hmA412k9V6phiQCmPn5HvxTDjD6boWPv2ZVblEKuUN3UzYN1bm83kHJj
-         ZF8YAr/CNEOQG4XU0oHipy8UUhHO60yoLgDo38ApfruvNQKgF2UfcO/RPZkwxCF0f5AB
-         yXo8rZVOyXg3+ApB+c8x93EvjOHwj3uN5gDgN2SvTXfTvej0KOJ2lZPni+4jrvHux42D
-         CB1Q==
-X-Gm-Message-State: AOAM531BA9/xfomuRYsts0KbFZHXSHBrPCVvo+up2oxzpH8D3tDAZWng
-        JcYAQwFJaAR8OvgD/pmijKXntoTCFAnrsLim37F9lA==
-X-Google-Smtp-Source: ABdhPJzVR8hSV4LYUKgF5NX85hxfFWmgAFFzJsBeUycAZHnf4kgiNP9olDkABVHU+za3VoOGb088WtmKxpJ0jIdi06E=
-X-Received: by 2002:a63:5c53:0:b0:381:309e:e72c with SMTP id
- n19-20020a635c53000000b00381309ee72cmr20646280pgm.40.1647913516040; Mon, 21
- Mar 2022 18:45:16 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=gGZp+MDIUzKlsOtQAo2TyTq0vVOirk1X0NOX9ev9OMc=;
+        b=HVoq0rMqJ6y2KL2qWgvpG8x4I1/aayfYIWfmfVgaaAS4OVI5l0PXsnuFIPg1t0x6Ys
+         DCaA0XBzYRQA2leOgcoml/YlO7ys4e0FzcIg3IE1WR0iZH+bE0lqqI/rgAnnOed7XRfp
+         g2JjSWOc2R9L3MbTEb55qfAoSB7qJJC3pehNN/junkkm50ygcG8OadGW3EjZv1iOQovr
+         RRE1tZwziaV3JdGfG/uAoMD07S3sU2QZ6CeqitkKX9sTDIMqxak1JsxFZtCXAOzPd8gX
+         TTVT0F694T4VndykGKv6Q/CHvquXGuKM+PsvsmTVSQM6E7qKoy/MCLs7V1Cr6wT0pEUY
+         sneQ==
+X-Gm-Message-State: AOAM531yNxhQfsKuZS+7Njg3kQH7Mn8JL+5FGKLbXZCUwjYMXci3zKTc
+        ixBM9RxWIZ+Kll7yA5oMIKM7QlkMfFJicMCXM1YIdA==
+X-Google-Smtp-Source: ABdhPJygUAsAdOWYyNjrdBLj+QkLKtyI/POLyJ7Ul6xPNIok2S+vw4/PZsNEToVHKjT2+REJe94s9PJMZnnk/6DQ+mw=
+X-Received: by 2002:a17:90a:430d:b0:1bc:f340:8096 with SMTP id
+ q13-20020a17090a430d00b001bcf3408096mr2221086pjg.93.1647915066682; Mon, 21
+ Mar 2022 19:11:06 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220318114133.113627-1-kjain@linux.ibm.com> <20220318114133.113627-2-kjain@linux.ibm.com>
- <CAPcyv4iqpTn89WLOW1XjFXGZEYG_MmPg+VQbcDJ9ygJ4Jaybtw@mail.gmail.com>
-In-Reply-To: <CAPcyv4iqpTn89WLOW1XjFXGZEYG_MmPg+VQbcDJ9ygJ4Jaybtw@mail.gmail.com>
+References: <20220318114133.113627-1-kjain@linux.ibm.com>
+In-Reply-To: <20220318114133.113627-1-kjain@linux.ibm.com>
 From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Mon, 21 Mar 2022 18:45:08 -0700
-Message-ID: <CAPcyv4iNy-RqKgwc61c+hL9g1zAE_tL5r_mqUQwCiKTzevjoDA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] powerpc/papr_scm: Fix build failure when
+Date:   Mon, 21 Mar 2022 19:10:59 -0700
+Message-ID: <CAPcyv4jNJy70b6jK6S9TYDrLLZxzSNQxfN7-bzOpVa+ffZN3hw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] drivers/nvdimm: Fix build failure when
  CONFIG_PERF_EVENTS is not set
 To:     Kajol Jain <kjain@linux.ibm.com>
 Cc:     Michael Ellerman <mpe@ellerman.id.au>,
@@ -68,88 +67,132 @@ Cc:     Michael Ellerman <mpe@ellerman.id.au>,
         "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
         atrajeev@linux.vnet.ibm.com, Vaibhav Jain <vaibhav@linux.ibm.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Linux MM <linux-mm@kvack.org>
+        Linux MM <linux-mm@kvack.org>,
+        kernel test robot <lkp@intel.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 2:39 PM Dan Williams <dan.j.williams@intel.com> wro=
-te:
+On Fri, Mar 18, 2022 at 4:42 AM Kajol Jain <kjain@linux.ibm.com> wrote:
 >
-> On Fri, Mar 18, 2022 at 4:42 AM Kajol Jain <kjain@linux.ibm.com> wrote:
-> >
-> > The following build failure occures when CONFIG_PERF_EVENTS is not set
-> > as generic pmu functions are not visible in that scenario.
-> >
-> > arch/powerpc/platforms/pseries/papr_scm.c:372:35: error: =E2=80=98struc=
-t perf_event=E2=80=99 has no member named =E2=80=98attr=E2=80=99
-> >          p->nvdimm_events_map[event->attr.config],
-> >                                    ^~
-> > In file included from ./include/linux/list.h:5,
-> >                  from ./include/linux/kobject.h:19,
-> >                  from ./include/linux/of.h:17,
-> >                  from arch/powerpc/platforms/pseries/papr_scm.c:5:
-> > arch/powerpc/platforms/pseries/papr_scm.c: In function =E2=80=98papr_sc=
-m_pmu_event_init=E2=80=99:
-> > arch/powerpc/platforms/pseries/papr_scm.c:389:49: error: =E2=80=98struc=
-t perf_event=E2=80=99 has no member named =E2=80=98pmu=E2=80=99
-> >   struct nvdimm_pmu *nd_pmu =3D to_nvdimm_pmu(event->pmu);
-> >                                                  ^~
-> > ./include/linux/container_of.h:18:26: note: in definition of macro =E2=
-=80=98container_of=E2=80=99
-> >   void *__mptr =3D (void *)(ptr);     \
-> >                           ^~~
-> > arch/powerpc/platforms/pseries/papr_scm.c:389:30: note: in expansion of=
- macro =E2=80=98to_nvdimm_pmu=E2=80=99
-> >   struct nvdimm_pmu *nd_pmu =3D to_nvdimm_pmu(event->pmu);
-> >                               ^~~~~~~~~~~~~
-> > In file included from ./include/linux/bits.h:22,
-> >                  from ./include/linux/bitops.h:6,
-> >                  from ./include/linux/of.h:15,
-> >                  from arch/powerpc/platforms/pseries/papr_scm.c:5:
-> >
-> > Fix the build issue by adding check for CONFIG_PERF_EVENTS config optio=
-n
-> > and disabling the papr_scm perf interface support incase this config
-> > is not set
-> >
-> > Fixes: 4c08d4bbc089 ("powerpc/papr_scm: Add perf interface support") (C=
-ommit id
-> > based on linux-next tree)
-> > Signed-off-by: Kajol Jain <kjain@linux.ibm.com>
-> > ---
-> >  arch/powerpc/platforms/pseries/papr_scm.c | 15 +++++++++++++++
+> The following build failure occures when CONFIG_PERF_EVENTS is not set
+> as generic pmu functions are not visible in that scenario.
 >
-> This is a bit messier than I would have liked mainly because it dumps
-> a bunch of ifdefery into a C file contrary to coding style, "Wherever
-> possible, don't use preprocessor conditionals (#if, #ifdef) in .c
-> files". I would expect this all to move to an organization like:
+> |-- s390-randconfig-r044-20220313
+> |   |-- nd_perf.c:(.text):undefined-reference-to-perf_pmu_migrate_context
+> |   |-- nd_perf.c:(.text):undefined-reference-to-perf_pmu_register
+> |   `-- nd_perf.c:(.text):undefined-reference-to-perf_pmu_unregister
 >
-> arch/powerpc/platforms/pseries/papr_scm/main.c
-> arch/powerpc/platforms/pseries/papr_scm/perf.c
+> Similar build failure in nds32 architecture:
+> nd_perf.c:(.text+0x21e): undefined reference to `perf_pmu_migrate_context'
+> nd_perf.c:(.text+0x434): undefined reference to `perf_pmu_register'
+> nd_perf.c:(.text+0x57c): undefined reference to `perf_pmu_unregister'
 >
-> ...and a new config symbol like:
+> Fix this issue by adding check for CONFIG_PERF_EVENTS config option
+> and disabling the nvdimm perf interface incase this config is not set.
 >
-> config PAPR_SCM_PERF
->        depends on PAPR_SCM && PERF_EVENTS
->        def_bool y
+> Also removed function declaration of perf_pmu_migrate_context,
+> perf_pmu_register, perf_pmu_unregister functions from nd.h as these are
+> common pmu functions which are part of perf_event.h and since we
+> are disabling nvdimm perf interface incase CONFIG_PERF_EVENTS option
+> is not set, we not need to declare them in nd.h
 >
-> ...with wrappers in header files to make everything compile away
-> without any need for main.c to carry an ifdef.
+> Fixes: 0fab1ba6ad6b ("drivers/nvdimm: Add perf interface to expose
+> nvdimm performance stats") (Commit id based on linux-next tree)
+> Signed-off-by: Kajol Jain <kjain@linux.ibm.com>
+> Link: https://lore.kernel.org/all/62317124.YBQFU33+s%2FwdvWGj%25lkp@intel.com/
+> Reported-by: kernel test robot <lkp@intel.com>
+> ---
+>  drivers/nvdimm/Makefile | 2 +-
+>  include/linux/nd.h      | 7 ++++---
+>  2 files changed, 5 insertions(+), 4 deletions(-)
 >
-> Can you turn a patch like that in the next couple days? Otherwise, I
-> think if Linus saw me sending a late breaking compile fix that threw
-> coding style out the window he'd have cause to just drop the pull
-> request entirely.
+> ---
+> - This fix patch changes are added and tested on top of linux-next tree
+>   on the 'next-20220315' branch.
+> ---
+> diff --git a/drivers/nvdimm/Makefile b/drivers/nvdimm/Makefile
+> index 3fb806748716..ba0296dca9db 100644
+> --- a/drivers/nvdimm/Makefile
+> +++ b/drivers/nvdimm/Makefile
+> @@ -15,7 +15,7 @@ nd_e820-y := e820.o
+>  libnvdimm-y := core.o
+>  libnvdimm-y += bus.o
+>  libnvdimm-y += dimm_devs.o
+> -libnvdimm-y += nd_perf.o
+> +libnvdimm-$(CONFIG_PERF_EVENTS) += nd_perf.o
+>  libnvdimm-y += dimm.o
+>  libnvdimm-y += region_devs.o
+>  libnvdimm-y += region.o
+> diff --git a/include/linux/nd.h b/include/linux/nd.h
+> index 7b2ccbdc1cbc..a4265eaf5ae8 100644
+> --- a/include/linux/nd.h
+> +++ b/include/linux/nd.h
+> @@ -8,8 +8,10 @@
+>  #include <linux/ndctl.h>
+>  #include <linux/device.h>
+>  #include <linux/badblocks.h>
+> +#ifdef CONFIG_PERF_EVENTS
+>  #include <linux/perf_event.h>
 
-Also, please base it on the current state of the libnvdimm-for-next
-branch as -next includes some of the SMART health changes leading to
-at least one conflict.
+Why must this not be included? Doesn't it already handle the
+CONFIG_PERF_EVENTS=n case internally?
+
+>  #include <linux/platform_device.h>
+
+I notice now that this platform-device header should have never been
+added in the first place, just forward declare:
+
+struct platform_device;
+
+> +#endif
+>
+>  enum nvdimm_event {
+>         NVDIMM_REVALIDATE_POISON,
+> @@ -25,6 +27,7 @@ enum nvdimm_claim_class {
+>         NVDIMM_CCLASS_UNKNOWN,
+>  };
+>
+> +#ifdef CONFIG_PERF_EVENTS
+>  #define NVDIMM_EVENT_VAR(_id)  event_attr_##_id
+>  #define NVDIMM_EVENT_PTR(_id)  (&event_attr_##_id.attr.attr)
+
+Why must these be inside the ifdef guard?
+
+>
+> @@ -63,9 +66,7 @@ extern ssize_t nvdimm_events_sysfs_show(struct device *dev,
+>
+>  int register_nvdimm_pmu(struct nvdimm_pmu *nvdimm, struct platform_device *pdev);
+>  void unregister_nvdimm_pmu(struct nvdimm_pmu *nd_pmu);
+
+Shouldn't there also be stub functions in the CONFIG_PERF_EVENTS=n case?
+
+static inline int register_nvdimm_pmu(struct nvdimm_pmu *nvdimm,
+struct platform_device *pdev)
+{
+    return -ENXIO;
+}
+
+static inline void unregister_nvdimm_pmu(struct nvdimm_pmu *nd_pmu)
+{
+}
+
+> -void perf_pmu_migrate_context(struct pmu *pmu, int src_cpu, int dst_cpu);
+> -int perf_pmu_register(struct pmu *pmu, const char *name, int type);
+> -void perf_pmu_unregister(struct pmu *pmu);
+
+Yeah, I should have caught these earlier.
+
+> +#endif
+>
+>  struct nd_device_driver {
+>         struct device_driver drv;
+> --
+> 2.31.1
+>

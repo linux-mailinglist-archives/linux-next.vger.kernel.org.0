@@ -2,74 +2,64 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAD664E366D
-	for <lists+linux-next@lfdr.de>; Tue, 22 Mar 2022 03:11:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 496E64E3692
+	for <lists+linux-next@lfdr.de>; Tue, 22 Mar 2022 03:21:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235379AbiCVCMj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 21 Mar 2022 22:12:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60394 "EHLO
+        id S235316AbiCVCP6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 21 Mar 2022 22:15:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235378AbiCVCMi (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Mar 2022 22:12:38 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 349421CFC7
-        for <linux-next@vger.kernel.org>; Mon, 21 Mar 2022 19:11:07 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id mj15-20020a17090b368f00b001c637aa358eso1171238pjb.0
-        for <linux-next@vger.kernel.org>; Mon, 21 Mar 2022 19:11:07 -0700 (PDT)
+        with ESMTP id S235328AbiCVCP4 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Mar 2022 22:15:56 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79B8F2CCA8
+        for <linux-next@vger.kernel.org>; Mon, 21 Mar 2022 19:13:13 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id s72so8897800pgc.5
+        for <linux-next@vger.kernel.org>; Mon, 21 Mar 2022 19:13:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gGZp+MDIUzKlsOtQAo2TyTq0vVOirk1X0NOX9ev9OMc=;
-        b=jsl5hTKisonrNJYTeMtNHzyDFdCfEUgD/ujMhDJCupZnphMkfd0uzKApmqk/n3FaED
-         i46ZTIJ+Lj99NIG2v73jtrSrTVhoCDEpoHo9w7f4fY0L5l88DtDWVG91DqRej+vdmVzy
-         Xp6pL5ctDPnLYuyosqtk4O/t+86XwfOHd3CCYIEVOeCa0p5eOsaD1qEqq8a0aXbxvWHf
-         gX803FBk8yWx2Q0ft0SZnpgZ40r22BPfvagHhSHp0vKlLkzolVbE4jP+k1HbJAXZQKRY
-         0piuCSEkh7Hwa3M83oI+taVZYG/M22LqqoyUtOWoKSK3WFjcvR01ygKRGV4swgcRolZg
-         Dgeg==
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=gq9aE80O7okK+Q0z6jI8UH4YW9YwjqtTTX80G8A6E3E=;
+        b=DCDpjI2oiLMrcP3HmHI7R3QpHOe2EAvJV7hUSLcLPn8eq8z/Lm99CGepbGx30EjNjN
+         V+SAsIti/gOFX/nl30xzElcrejau9GdmoltFvfmf45u3nnLpMJqVWvKCm6YnpJ5q0URC
+         gKAqN3B6gzWaqkwHaW1pGh6+3d/qIahMfMDV3MmLR4vVEjujocawuVU3WCyDspH2ZQFU
+         rnbpibb0Y1jHWNBZwe/bV8jgm2vZqw4gkEpjh9vIGam6ZqrJsQnXRz531aEu5nubQo1v
+         L/ZnnI3FGE3BzjqUivDk1TOZ9fNrBXKhRc1ksMeje/QQIbjzITAKI/+3eanr6gj1oTY/
+         I6CQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gGZp+MDIUzKlsOtQAo2TyTq0vVOirk1X0NOX9ev9OMc=;
-        b=HVoq0rMqJ6y2KL2qWgvpG8x4I1/aayfYIWfmfVgaaAS4OVI5l0PXsnuFIPg1t0x6Ys
-         DCaA0XBzYRQA2leOgcoml/YlO7ys4e0FzcIg3IE1WR0iZH+bE0lqqI/rgAnnOed7XRfp
-         g2JjSWOc2R9L3MbTEb55qfAoSB7qJJC3pehNN/junkkm50ygcG8OadGW3EjZv1iOQovr
-         RRE1tZwziaV3JdGfG/uAoMD07S3sU2QZ6CeqitkKX9sTDIMqxak1JsxFZtCXAOzPd8gX
-         TTVT0F694T4VndykGKv6Q/CHvquXGuKM+PsvsmTVSQM6E7qKoy/MCLs7V1Cr6wT0pEUY
-         sneQ==
-X-Gm-Message-State: AOAM531yNxhQfsKuZS+7Njg3kQH7Mn8JL+5FGKLbXZCUwjYMXci3zKTc
-        ixBM9RxWIZ+Kll7yA5oMIKM7QlkMfFJicMCXM1YIdA==
-X-Google-Smtp-Source: ABdhPJygUAsAdOWYyNjrdBLj+QkLKtyI/POLyJ7Ul6xPNIok2S+vw4/PZsNEToVHKjT2+REJe94s9PJMZnnk/6DQ+mw=
-X-Received: by 2002:a17:90a:430d:b0:1bc:f340:8096 with SMTP id
- q13-20020a17090a430d00b001bcf3408096mr2221086pjg.93.1647915066682; Mon, 21
- Mar 2022 19:11:06 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=gq9aE80O7okK+Q0z6jI8UH4YW9YwjqtTTX80G8A6E3E=;
+        b=hKXpv/ixhqXj6AxrufxyPiTL7PgWBp/H8HxkOJOgI5Ikj263tX91RKCaFsKZ5iOucI
+         r4jA6dUeiOyC+mO991a4/c794NwBOQAgF45V/yyLwn4I5rp6CxDlvuZDdq0eKsajkYOL
+         JHxi4+5lhVkfTuz0Y09O9MuWaB2HJwryO0zT3xLQE6dZIzF1jrwXyUNUt1BiuGCAJNXS
+         n2IbrG7im/rNLcthq204X/3ANSraahA7fF8zzNXe15x3KfvEIQf4FkQq3sCcGawAlh3e
+         HccYXPwVgrHvz6kSrVz/gs+CEt/FPO2hsBf9hy2AfVworzgUDmMwfSE2lHr1t0cc03X1
+         BvWg==
+X-Gm-Message-State: AOAM531T4qCqFIgJDcOs87mvs4gQZ7Po+cXm/8gmul37jvYHTacMMhT8
+        SqHe7T3eirpx36HKiu3RdEDVLDkBfqyutqwx+tE=
+X-Google-Smtp-Source: ABdhPJzvgy8gftWNf7FTDZ0CqB8T6Y4wxkX7Gc6Il6z4rEHddFJ1AzcKjPKUJLK/H3MsV/Bv/0vKEA==
+X-Received: by 2002:a63:1042:0:b0:382:7bcf:cc03 with SMTP id 2-20020a631042000000b003827bcfcc03mr6796276pgq.514.1647915192787;
+        Mon, 21 Mar 2022 19:13:12 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id f22-20020a056a0022d600b004f7a0b47b0dsm22458483pfj.109.2022.03.21.19.13.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Mar 2022 19:13:12 -0700 (PDT)
+Message-ID: <623930b8.1c69fb81.ee04d.d310@mx.google.com>
+Date:   Mon, 21 Mar 2022 19:13:12 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20220318114133.113627-1-kjain@linux.ibm.com>
-In-Reply-To: <20220318114133.113627-1-kjain@linux.ibm.com>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Mon, 21 Mar 2022 19:10:59 -0700
-Message-ID: <CAPcyv4jNJy70b6jK6S9TYDrLLZxzSNQxfN7-bzOpVa+ffZN3hw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] drivers/nvdimm: Fix build failure when
- CONFIG_PERF_EVENTS is not set
-To:     Kajol Jain <kjain@linux.ibm.com>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux NVDIMM <nvdimm@lists.linux.dev>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Weiny, Ira" <ira.weiny@intel.com>,
-        Vishal L Verma <vishal.l.verma@intel.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Santosh Sivaraj <santosh@fossix.org>, maddy@linux.ibm.com,
-        rnsastry@linux.ibm.com,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        atrajeev@linux.vnet.ibm.com, Vaibhav Jain <vaibhav@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Linux MM <linux-mm@kvack.org>,
-        kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Tree: next
+X-Kernelci-Branch: master
+X-Kernelci-Report-Type: test
+X-Kernelci-Kernel: next-20220321
+Subject: next/master baseline: 277 runs, 9 regressions (next-20220321)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -79,120 +69,346 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 4:42 AM Kajol Jain <kjain@linux.ibm.com> wrote:
->
-> The following build failure occures when CONFIG_PERF_EVENTS is not set
-> as generic pmu functions are not visible in that scenario.
->
-> |-- s390-randconfig-r044-20220313
-> |   |-- nd_perf.c:(.text):undefined-reference-to-perf_pmu_migrate_context
-> |   |-- nd_perf.c:(.text):undefined-reference-to-perf_pmu_register
-> |   `-- nd_perf.c:(.text):undefined-reference-to-perf_pmu_unregister
->
-> Similar build failure in nds32 architecture:
-> nd_perf.c:(.text+0x21e): undefined reference to `perf_pmu_migrate_context'
-> nd_perf.c:(.text+0x434): undefined reference to `perf_pmu_register'
-> nd_perf.c:(.text+0x57c): undefined reference to `perf_pmu_unregister'
->
-> Fix this issue by adding check for CONFIG_PERF_EVENTS config option
-> and disabling the nvdimm perf interface incase this config is not set.
->
-> Also removed function declaration of perf_pmu_migrate_context,
-> perf_pmu_register, perf_pmu_unregister functions from nd.h as these are
-> common pmu functions which are part of perf_event.h and since we
-> are disabling nvdimm perf interface incase CONFIG_PERF_EVENTS option
-> is not set, we not need to declare them in nd.h
->
-> Fixes: 0fab1ba6ad6b ("drivers/nvdimm: Add perf interface to expose
-> nvdimm performance stats") (Commit id based on linux-next tree)
-> Signed-off-by: Kajol Jain <kjain@linux.ibm.com>
-> Link: https://lore.kernel.org/all/62317124.YBQFU33+s%2FwdvWGj%25lkp@intel.com/
-> Reported-by: kernel test robot <lkp@intel.com>
-> ---
->  drivers/nvdimm/Makefile | 2 +-
->  include/linux/nd.h      | 7 ++++---
->  2 files changed, 5 insertions(+), 4 deletions(-)
->
-> ---
-> - This fix patch changes are added and tested on top of linux-next tree
->   on the 'next-20220315' branch.
-> ---
-> diff --git a/drivers/nvdimm/Makefile b/drivers/nvdimm/Makefile
-> index 3fb806748716..ba0296dca9db 100644
-> --- a/drivers/nvdimm/Makefile
-> +++ b/drivers/nvdimm/Makefile
-> @@ -15,7 +15,7 @@ nd_e820-y := e820.o
->  libnvdimm-y := core.o
->  libnvdimm-y += bus.o
->  libnvdimm-y += dimm_devs.o
-> -libnvdimm-y += nd_perf.o
-> +libnvdimm-$(CONFIG_PERF_EVENTS) += nd_perf.o
->  libnvdimm-y += dimm.o
->  libnvdimm-y += region_devs.o
->  libnvdimm-y += region.o
-> diff --git a/include/linux/nd.h b/include/linux/nd.h
-> index 7b2ccbdc1cbc..a4265eaf5ae8 100644
-> --- a/include/linux/nd.h
-> +++ b/include/linux/nd.h
-> @@ -8,8 +8,10 @@
->  #include <linux/ndctl.h>
->  #include <linux/device.h>
->  #include <linux/badblocks.h>
-> +#ifdef CONFIG_PERF_EVENTS
->  #include <linux/perf_event.h>
+next/master baseline: 277 runs, 9 regressions (next-20220321)
 
-Why must this not be included? Doesn't it already handle the
-CONFIG_PERF_EVENTS=n case internally?
+Regressions Summary
+-------------------
 
->  #include <linux/platform_device.h>
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+asus-C523NA-A20057-coral     | x86_64 | lab-collabora | gcc-10   | x86_64_d=
+efcon...6-chromebook | 1          =
 
-I notice now that this platform-device header should have never been
-added in the first place, just forward declare:
+beaglebone-black             | arm    | lab-cip       | gcc-10   | omap2plu=
+s_defconfig          | 1          =
 
-struct platform_device;
+da850-lcdk                   | arm    | lab-baylibre  | clang-14 | multi_v5=
+_defconfig           | 1          =
 
-> +#endif
->
->  enum nvdimm_event {
->         NVDIMM_REVALIDATE_POISON,
-> @@ -25,6 +27,7 @@ enum nvdimm_claim_class {
->         NVDIMM_CCLASS_UNKNOWN,
->  };
->
-> +#ifdef CONFIG_PERF_EVENTS
->  #define NVDIMM_EVENT_VAR(_id)  event_attr_##_id
->  #define NVDIMM_EVENT_PTR(_id)  (&event_attr_##_id.attr.attr)
+da850-lcdk                   | arm    | lab-baylibre  | gcc-10   | davinci_=
+all_defconfig        | 1          =
 
-Why must these be inside the ifdef guard?
+da850-lcdk                   | arm    | lab-baylibre  | gcc-10   | multi_v5=
+_defconfig           | 1          =
 
->
-> @@ -63,9 +66,7 @@ extern ssize_t nvdimm_events_sysfs_show(struct device *dev,
->
->  int register_nvdimm_pmu(struct nvdimm_pmu *nvdimm, struct platform_device *pdev);
->  void unregister_nvdimm_pmu(struct nvdimm_pmu *nd_pmu);
+hp-x360-12b-n4000-octopus    | x86_64 | lab-collabora | gcc-10   | x86_64_d=
+efcon...6-chromebook | 1          =
 
-Shouldn't there also be stub functions in the CONFIG_PERF_EVENTS=n case?
+imx8mn-ddr4-evk              | arm64  | lab-baylibre  | gcc-10   | defconfi=
+g+ima                | 1          =
 
-static inline int register_nvdimm_pmu(struct nvdimm_pmu *nvdimm,
-struct platform_device *pdev)
-{
-    return -ENXIO;
-}
+ox820-clouden...lug-series-3 | arm    | lab-baylibre  | gcc-10   | oxnas_v6=
+_defconfig           | 1          =
 
-static inline void unregister_nvdimm_pmu(struct nvdimm_pmu *nd_pmu)
-{
-}
+qemu_arm-vexpress-a9         | arm    | lab-baylibre  | gcc-10   | vexpress=
+_defconfig           | 1          =
 
-> -void perf_pmu_migrate_context(struct pmu *pmu, int src_cpu, int dst_cpu);
-> -int perf_pmu_register(struct pmu *pmu, const char *name, int type);
-> -void perf_pmu_unregister(struct pmu *pmu);
 
-Yeah, I should have caught these earlier.
+  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
+220321/plan/baseline/
 
-> +#endif
->
->  struct nd_device_driver {
->         struct device_driver drv;
-> --
-> 2.31.1
->
+  Test:     baseline
+  Tree:     next
+  Branch:   master
+  Describe: next-20220321
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      f9006d9269eac8ff295c2cb67280c54888c74106 =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+asus-C523NA-A20057-coral     | x86_64 | lab-collabora | gcc-10   | x86_64_d=
+efcon...6-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6238fffdbe422b66842172be
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+x86-chromebook
+  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220321/x86_=
+64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/baseline-asus-C523N=
+A-A20057-coral.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220321/x86_=
+64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/baseline-asus-C523N=
+A-A20057-coral.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220228.1/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6238fffdbe422b6684217=
+2bf
+        failing since 6 days (last pass: next-20220310, first fail: next-20=
+220315) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+beaglebone-black             | arm    | lab-cip       | gcc-10   | omap2plu=
+s_defconfig          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6238fd052813051de22172ff
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: omap2plus_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220321/arm/=
+omap2plus_defconfig/gcc-10/lab-cip/baseline-beaglebone-black.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220321/arm/=
+omap2plus_defconfig/gcc-10/lab-cip/baseline-beaglebone-black.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220228.1/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6238fd052813051de2217=
+300
+        failing since 17 days (last pass: next-20220201, first fail: next-2=
+0220304) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+da850-lcdk                   | arm    | lab-baylibre  | clang-14 | multi_v5=
+_defconfig           | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6238f9e8ff67fddb902172c4
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v5_defconfig
+  Compiler:    clang-14 (Debian clang version 14.0.0-++20220316013215+add3a=
+b7f4c8a-1~exp1~20220316133307.103)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220321/arm/=
+multi_v5_defconfig/clang-14/lab-baylibre/baseline-da850-lcdk.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220321/arm/=
+multi_v5_defconfig/clang-14/lab-baylibre/baseline-da850-lcdk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220228.1/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6238f9e8ff67fddb90217=
+2c5
+        failing since 18 days (last pass: next-20220301, first fail: next-2=
+0220303) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+da850-lcdk                   | arm    | lab-baylibre  | gcc-10   | davinci_=
+all_defconfig        | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6238f72c8df2c6fe032172be
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: davinci_all_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220321/arm/=
+davinci_all_defconfig/gcc-10/lab-baylibre/baseline-da850-lcdk.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220321/arm/=
+davinci_all_defconfig/gcc-10/lab-baylibre/baseline-da850-lcdk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220228.1/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6238f72c8df2c6fe03217=
+2bf
+        failing since 18 days (last pass: next-20220301, first fail: next-2=
+0220303) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+da850-lcdk                   | arm    | lab-baylibre  | gcc-10   | multi_v5=
+_defconfig           | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6238f892cb2255931f2172f1
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v5_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220321/arm/=
+multi_v5_defconfig/gcc-10/lab-baylibre/baseline-da850-lcdk.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220321/arm/=
+multi_v5_defconfig/gcc-10/lab-baylibre/baseline-da850-lcdk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220228.1/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6238f892cb2255931f217=
+2f2
+        failing since 16 days (last pass: next-20220301, first fail: next-2=
+0220304) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+hp-x360-12b-n4000-octopus    | x86_64 | lab-collabora | gcc-10   | x86_64_d=
+efcon...6-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6238f890cb2255931f2172e3
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+x86-chromebook
+  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220321/x86_=
+64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/baseline-hp-x360-12=
+b-n4000-octopus.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220321/x86_=
+64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/baseline-hp-x360-12=
+b-n4000-octopus.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220228.1/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6238f890cb2255931f217=
+2e4
+        failing since 6 days (last pass: next-20220310, first fail: next-20=
+220315) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+imx8mn-ddr4-evk              | arm64  | lab-baylibre  | gcc-10   | defconfi=
+g+ima                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6238f89ca8c612a9252172c5
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220321/arm6=
+4/defconfig+ima/gcc-10/lab-baylibre/baseline-imx8mn-ddr4-evk.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220321/arm6=
+4/defconfig+ima/gcc-10/lab-baylibre/baseline-imx8mn-ddr4-evk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220228.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6238f89ca8c612a925217=
+2c6
+        new failure (last pass: next-20220318) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+ox820-clouden...lug-series-3 | arm    | lab-baylibre  | gcc-10   | oxnas_v6=
+_defconfig           | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6238fa54ab668883e02172c4
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: oxnas_v6_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220321/arm/=
+oxnas_v6_defconfig/gcc-10/lab-baylibre/baseline-ox820-cloudengines-pogoplug=
+-series-3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220321/arm/=
+oxnas_v6_defconfig/gcc-10/lab-baylibre/baseline-ox820-cloudengines-pogoplug=
+-series-3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220228.1/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6238fa54ab668883e0217=
+2c5
+        failing since 18 days (last pass: next-20220301, first fail: next-2=
+0220303) =
+
+ =
+
+
+
+platform                     | arch   | lab           | compiler | defconfi=
+g                    | regressions
+-----------------------------+--------+---------------+----------+---------=
+---------------------+------------
+qemu_arm-vexpress-a9         | arm    | lab-baylibre  | gcc-10   | vexpress=
+_defconfig           | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6238feff0659dde18e2172b9
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: vexpress_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220321/arm/=
+vexpress_defconfig/gcc-10/lab-baylibre/baseline-qemu_arm-vexpress-a9.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220321/arm/=
+vexpress_defconfig/gcc-10/lab-baylibre/baseline-qemu_arm-vexpress-a9.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220228.1/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6238feff0659dde18e217=
+2ba
+        failing since 18 days (last pass: next-20220201, first fail: next-2=
+0220303) =
+
+ =20

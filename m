@@ -2,40 +2,40 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B0484E42C8
-	for <lists+linux-next@lfdr.de>; Tue, 22 Mar 2022 16:20:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CEA74E434F
+	for <lists+linux-next@lfdr.de>; Tue, 22 Mar 2022 16:48:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238600AbiCVPVe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 22 Mar 2022 11:21:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41148 "EHLO
+        id S234539AbiCVPuC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 22 Mar 2022 11:50:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238647AbiCVPV0 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Mar 2022 11:21:26 -0400
+        with ESMTP id S232819AbiCVPuA (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Mar 2022 11:50:00 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CBA5888EB;
-        Tue, 22 Mar 2022 08:19:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C083766AF9;
+        Tue, 22 Mar 2022 08:48:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
         References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=82Iai9rshD4beiVR/j7WhNo1cfOZSCSdMFJeraPEq2g=; b=da9HiTmJD+ymSvajQWByZu8GUx
-        86F+53OJsDWx617vaeyp46vNQgmSe2zo/Sq4RUl7edRnmisEdLfMi9Fxe16tctKyR4cwAanPhD3A1
-        xAZOQlanU7pMAM0exWcHANDTxu8n+y7fY7ANgHdUMygeoY24iGq+N6L1kOaobHsNc0fiRVqhxo7nd
-        rdtoe9T1KKM7U0SPgdV3OJd6AUp3Ig11ie4bJD2+1m+cn5LU369xSYtC17R4oCUs7IH/RYxT48lEl
-        RJglRD24J5uIWzLAshq5sqSsahGx5+n0RLHLR5C4WIc7kOgV8C3RfRiJhTLmm3gIeAnm7Y5c4bnQb
-        YKxs6KRg==;
+        bh=GWmTPAsKiygAsKe/gYrXQNAX5phOsYXBOkLRg3HAuqE=; b=R51TeMWpKxJIfUBzyk+ZVdxyhp
+        rJPi2hg+Rmz3n0kkNiO4Q/xcXcffftpXUeoUprxh05yGHiJtqe/VfA6M/sIgygYBGzwlSBKBAX9OG
+        zIXPa+VmyYr1YCtLpPRq62/9alhSpCERrpIfFUSrMp4q+pF9eEm7V+qDscZZXg7i9r00yCsVFMsmx
+        b4LlLs2WeJDvNu5G2UEZHptQZRDlo4JWBK/fc+z8QjbKz1aU7rfQ21nbv0K3AoSXROh4w3983N2+A
+        W7vwCUPgvZCIFNNgz43c7O54jGEK4af9QIn6MfRGqw9azSOQAZY6fo7WK9C2CxriToYQWblD257d5
+        PxABj9Gg==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
         by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nWgI3-00BhxY-9w; Tue, 22 Mar 2022 15:19:19 +0000
+        id 1nWgjs-00Bj5T-PQ; Tue, 22 Mar 2022 15:48:04 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1372430007E;
-        Tue, 22 Mar 2022 16:19:16 +0100 (CET)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 451553001CD;
+        Tue, 22 Mar 2022 16:48:02 +0100 (CET)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id D436D31AA29F5; Tue, 22 Mar 2022 16:19:16 +0100 (CET)
-Date:   Tue, 22 Mar 2022 16:19:16 +0100
+        id B77A52D6E78DD; Tue, 22 Mar 2022 16:48:02 +0100 (CET)
+Date:   Tue, 22 Mar 2022 16:48:02 +0100
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     Steven Rostedt <rostedt@goodmis.org>
 Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
@@ -49,7 +49,7 @@ Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         linux-toolchains@vger.kernel.org, Andrew.Cooper3@citrix.com,
         ndesaulniers@google.com
 Subject: Re: linux-next: build warnings after merge of the tip tree
-Message-ID: <Yjno9GS9Q0JEnZyc@hirez.programming.kicks-ass.net>
+Message-ID: <Yjnvsrp8253bxWPA@hirez.programming.kicks-ass.net>
 References: <20220321121209.3b95e406@gandalf.local.home>
  <20220321121549.1c8588c5@gandalf.local.home>
  <YjiqgPL+pPGkOgCv@hirez.programming.kicks-ass.net>
@@ -75,16 +75,64 @@ List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
 On Tue, Mar 22, 2022 at 11:04:38AM -0400, Steven Rostedt wrote:
-> On Tue, 22 Mar 2022 15:35:54 +0100
-> Peter Zijlstra <peterz@infradead.org> wrote:
 
-> > I suggested inhibiting tail-call to notrace, you said no. You now seem to
-> > agree that solves it.
+> > In recap:
+> > 
+> > 	__fentry__ -- push on trace-stack
+> > 	__ftail__  -- mark top-most entry complete
+> > 	__fexit__  -- mark top-most entry complete;
+> > 	              pop all completed entries
 > 
-> I said inhibiting tail-calls was a solution, but only inhibiting it to
-> notrace would probably have a significant performance impact.
-> 
-> I thought you were talking about adding notrace to tail calls, not the
-> other way around. Maybe that is our confusion in this conversation.
+> Again, this would require that the tail-calls are also being traced.
 
-Yeah, I meant inhibiting the compiler from doing tail-calls.
+Which is why we should inhibit tail-calls if the function is notrace.
+
+> > inhibit tail-calls to notrace.
+> 
+> Just inhibiting tail-calls to notrace would work without any of the above.
+
+I'm lost again; what? Without any of the above you got nothing because
+return-trampoline will not work.
+
+> But my fear is that will cause a noticeable performance impact.
+
+Most code isn't in fact notrace, and call+ret aren't *that* expensive.
+
+> > It's function graph tracing, kretprobes and whatever else this rethook
+> > stuff is about that needs this because return trampolines will stop
+> > working somewhere in the not too distant future.
+> 
+> Another crazy solution is to have:
+> 
+> func_A:
+> 	call __fentry__
+> 	...
+> tail:	jmp 1f 
+> 	call 1f
+	
+> 	call __fexit__
+> 	ret
+> 1:	jmp func_B
+> 
+> 
+> where the compiler tells us about "tail:" and that we know that func_A ends
+> with a tail call, and if we want to trace the end of func_A we convert that
+> jmp 1f into a nop. And then we call the func_B and it's return comes back
+> to where we call __fexit__ and then return normally.
+
+At that point giving us something like:
+
+1:
+	pushsection __ftail_loc
+	.long	1b - .
+	popsection
+
+	jmp.d32	func_B
+	call	__fexit__
+	ret
+
+is smaller and simpler, we can patch the jmp.d32 to call when tracing.
+The only problem is SLS, that might wants an int3 after jmp too
+( https://www.amd.com/en/corporate/product-security/bulletin/amd-sb-1026 ).
+
+That does avoid the need for __ftail__ I suppose.

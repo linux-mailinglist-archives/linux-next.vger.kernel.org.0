@@ -2,65 +2,99 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41D704E4132
-	for <lists+linux-next@lfdr.de>; Tue, 22 Mar 2022 15:26:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9EB04E4159
+	for <lists+linux-next@lfdr.de>; Tue, 22 Mar 2022 15:30:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233991AbiCVO1y (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 22 Mar 2022 10:27:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43516 "EHLO
+        id S235014AbiCVObz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 22 Mar 2022 10:31:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241238AbiCVO0v (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Mar 2022 10:26:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C662D13F48;
-        Tue, 22 Mar 2022 07:25:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A411615BE;
-        Tue, 22 Mar 2022 14:25:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 781C1C340EC;
-        Tue, 22 Mar 2022 14:25:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647959121;
-        bh=ZJy4jdo44xK7N2rkd/X1voMeDEE0lojYlDBJmgmcmhU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=MPq7XyYuZOLpWAJVUwMdRZF7wvfqt9CnUvtuCNcd2EOsQR8wjlPn5L4wm70eaJTdv
-         vkzjJCsXqKJRIfx3XxKJit/vwbEzEbdq9BeTJkdXy3os6LpfO254lsfS9Jk2YyFeab
-         0foNkCXdYPv45Wi0TF9u/KImGJNoBq+WovUGkxJERZBvh2OhX47pJtUJOIkVXICiYs
-         lqkp5A/NqVfp2Zjzul9P5+zkGMJNR6ZnzLItF6WzdG2BQ6yiUNU147qlqeXuEkknXz
-         qVCy43qgJNPbH6x+fl1YL+MfS87lnvE9cWDnsQkit56gHkYwSNJa2Qe3KU37/mFn+a
-         FQvJKCHe2gzJw==
-Date:   Tue, 22 Mar 2022 23:25:15 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
+        with ESMTP id S233837AbiCVObw (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Mar 2022 10:31:52 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F0B6A053;
+        Tue, 22 Mar 2022 07:30:24 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22MCrPt3020389;
+        Tue, 22 Mar 2022 14:29:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=+JUqREg8t44nEfQ2HVmmV0k84OjTE9fFx3uMTgNT6c8=;
+ b=DohYysYsSe0lIChowg4PiJ64Nou932rXu87EjNWEcTP/Kx1aA92r9l3SkQGmPjo2fINp
+ yvz4upRhS4wsW236WjgC18dCww5BUVwteZo1OLpCJdHsy3XZ6RJhVg0YVAkasv/aa8vD
+ giYuIwCAm9tGK7SopnrWb8U4d8LaRI2B6584mG/nzJDliFdTQnKdKmg5NH4D3PD86nSD
+ CQhVr3v91noj2UK/x6vUhLO+2vb9s+9Jg00aDP993pEswd6vYeXgCiBazN4mhueiYUzb
+ KAw9xr5K/V9Pkrf9hIyRTxfPUyLDySfJXZFWxNO2GBm4JelSGLidF3joEZ00adA7jVTe iw== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3eyc20pbby-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 22 Mar 2022 14:29:45 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22MEHEvf015607;
+        Tue, 22 Mar 2022 14:29:43 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma06ams.nl.ibm.com with ESMTP id 3ew6ehxerq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 22 Mar 2022 14:29:43 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22METee036831610
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 22 Mar 2022 14:29:40 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 139634C046;
+        Tue, 22 Mar 2022 14:29:40 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 960E04C044;
+        Tue, 22 Mar 2022 14:29:34 +0000 (GMT)
+Received: from [9.43.105.112] (unknown [9.43.105.112])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 22 Mar 2022 14:29:34 +0000 (GMT)
+Message-ID: <c198a1b5-cc7e-4e51-533b-a5794f506b17@linux.ibm.com>
+Date:   Tue, 22 Mar 2022 19:59:33 +0530
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 2/2] powerpc/papr_scm: Fix build failure when
+ CONFIG_PERF_EVENTS is not set
+Content-Language: en-US
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux NVDIMM <nvdimm@lists.linux.dev>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        mhiramat@kernel.org, ast@kernel.org, hjl.tools@gmail.com,
-        rick.p.edgecombe@intel.com, rppt@kernel.org,
-        linux-toolchains@vger.kernel.org, Andrew.Cooper3@citrix.com,
-        ndesaulniers@google.com
-Subject: Re: linux-next: build warnings after merge of the tip tree
-Message-Id: <20220322232515.97d8e2d66d051881bcfe3ce0@kernel.org>
-In-Reply-To: <20220321121209.3b95e406@gandalf.local.home>
-References: <20220321140327.777f9554@canb.auug.org.au>
-        <Yjh11UjDZogc3foM@hirez.programming.kicks-ass.net>
-        <Yjh3xZuuY3QcZ1Bn@hirez.programming.kicks-ass.net>
-        <20220321112805.1393f9b9@gandalf.local.home>
-        <YjiiDFHIQg78QwSb@hirez.programming.kicks-ass.net>
-        <20220321121209.3b95e406@gandalf.local.home>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Weiny, Ira" <ira.weiny@intel.com>,
+        Vishal L Verma <vishal.l.verma@intel.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Santosh Sivaraj <santosh@fossix.org>, maddy@linux.ibm.com,
+        rnsastry@linux.ibm.com,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        atrajeev@linux.vnet.ibm.com, Vaibhav Jain <vaibhav@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Linux MM <linux-mm@kvack.org>
+References: <20220318114133.113627-1-kjain@linux.ibm.com>
+ <20220318114133.113627-2-kjain@linux.ibm.com>
+ <CAPcyv4iqpTn89WLOW1XjFXGZEYG_MmPg+VQbcDJ9ygJ4Jaybtw@mail.gmail.com>
+From:   kajoljain <kjain@linux.ibm.com>
+In-Reply-To: <CAPcyv4iqpTn89WLOW1XjFXGZEYG_MmPg+VQbcDJ9ygJ4Jaybtw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: Iy28N7SpHGz-D1RAEQMseTZ42pbzCxD-
+X-Proofpoint-GUID: Iy28N7SpHGz-D1RAEQMseTZ42pbzCxD-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-22_06,2022-03-22_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ lowpriorityscore=0 bulkscore=0 malwarescore=0 impostorscore=0
+ suspectscore=0 priorityscore=1501 mlxlogscore=999 clxscore=1015
+ phishscore=0 mlxscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2202240000 definitions=main-2203220082
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,78 +102,167 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, 21 Mar 2022 12:12:09 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
 
-> On Mon, 21 Mar 2022 17:04:28 +0100
-> Peter Zijlstra <peterz@infradead.org> wrote:
+
+On 3/22/22 03:09, Dan Williams wrote:
+> On Fri, Mar 18, 2022 at 4:42 AM Kajol Jain <kjain@linux.ibm.com> wrote:
+>>
+>> The following build failure occures when CONFIG_PERF_EVENTS is not set
+>> as generic pmu functions are not visible in that scenario.
+>>
+>> arch/powerpc/platforms/pseries/papr_scm.c:372:35: error: ‘struct perf_event’ has no member named ‘attr’
+>>          p->nvdimm_events_map[event->attr.config],
+>>                                    ^~
+>> In file included from ./include/linux/list.h:5,
+>>                  from ./include/linux/kobject.h:19,
+>>                  from ./include/linux/of.h:17,
+>>                  from arch/powerpc/platforms/pseries/papr_scm.c:5:
+>> arch/powerpc/platforms/pseries/papr_scm.c: In function ‘papr_scm_pmu_event_init’:
+>> arch/powerpc/platforms/pseries/papr_scm.c:389:49: error: ‘struct perf_event’ has no member named ‘pmu’
+>>   struct nvdimm_pmu *nd_pmu = to_nvdimm_pmu(event->pmu);
+>>                                                  ^~
+>> ./include/linux/container_of.h:18:26: note: in definition of macro ‘container_of’
+>>   void *__mptr = (void *)(ptr);     \
+>>                           ^~~
+>> arch/powerpc/platforms/pseries/papr_scm.c:389:30: note: in expansion of macro ‘to_nvdimm_pmu’
+>>   struct nvdimm_pmu *nd_pmu = to_nvdimm_pmu(event->pmu);
+>>                               ^~~~~~~~~~~~~
+>> In file included from ./include/linux/bits.h:22,
+>>                  from ./include/linux/bitops.h:6,
+>>                  from ./include/linux/of.h:15,
+>>                  from arch/powerpc/platforms/pseries/papr_scm.c:5:
+>>
+>> Fix the build issue by adding check for CONFIG_PERF_EVENTS config option
+>> and disabling the papr_scm perf interface support incase this config
+>> is not set
+>>
+>> Fixes: 4c08d4bbc089 ("powerpc/papr_scm: Add perf interface support") (Commit id
+>> based on linux-next tree)
+>> Signed-off-by: Kajol Jain <kjain@linux.ibm.com>
+>> ---
+>>  arch/powerpc/platforms/pseries/papr_scm.c | 15 +++++++++++++++
 > 
-> > On Mon, Mar 21, 2022 at 11:28:05AM -0400, Steven Rostedt wrote:
-> > > On Mon, 21 Mar 2022 14:04:05 +0100
-> > > Peter Zijlstra <peterz@infradead.org> wrote:  
-> > 
-> > > > Also, folks, I'm thinking we should start to move to __fexit__, if CET
-> > > > SHSTK ever wants to come to kernel land return trampolines will
-> > > > insta-stop working.
-> > > > 
-> > > > Hjl, do you think we could get -mfexit to go along with -mfentry ?  
-> > 
-> > > int funcA () {
-> > > 	[..]
-> > > 	return funcB();
-> > > }  
-> > 
-> > > This currently works with function graph and kretprobe tracing because of
-> > > the shadow stack. Let's say we traced both funcA and funcB
-> > > 
-> > > funcA:
-> > > 	call __fentry__  
-> > 			push funcA on trace-stack
-> > > 
-> > > 	[..]
-> > > 	jmp funcB
-> > > 
-> > > funcB:
-> > > 	call __fentry__  
-> > 			push funcB on trace-stack
-> > > 
-> > > 	[..]  
-> > 	call __fexit__
-> > 			pop trace-stack until empty
+> This is a bit messier than I would have liked mainly because it dumps
+> a bunch of ifdefery into a C file contrary to coding style, "Wherever
+> possible, don't use preprocessor conditionals (#if, #ifdef) in .c
+> files". I would expect this all to move to an organization like:
 
-This seems wrong. We don't pop the trace-stack until empty, but we will
-record the real stack pointer at funcA.
+Hi Dan,
+      Thanks for reviewing the patches. Inorder to avoid the multiple
+ifdefs checks, we can also add stub function for papr_scm_pmu_register.
+With that change we will just have one ifdef check for
+CONFIG_PERF_EVENTS config in both papr_scm.c and nd.h file. Hence we can
+avoid adding new files specific for papr_scm perf interface.
 
-> > 			  'exit funcB'
-> > 			  'exit funcA'
+Below is the code snippet for that change, let me know if looks fine to
+you. I tested it
+with set/unset PAPR_SCM config value and set/unset PERF_EVENTS config
+value combinations.
+
+diff --git a/arch/powerpc/platforms/pseries/papr_scm.c
+b/arch/powerpc/platforms/pseries/papr_scm.c
+index 4dd513d7c029..38fabb44d3c3 100644
+--- a/arch/powerpc/platforms/pseries/papr_scm.c
++++ b/arch/powerpc/platforms/pseries/papr_scm.c
+@@ -69,8 +69,6 @@
+ #define PAPR_SCM_PERF_STATS_EYECATCHER __stringify(SCMSTATS)
+ #define PAPR_SCM_PERF_STATS_VERSION 0x1
+
+-#define to_nvdimm_pmu(_pmu)    container_of(_pmu, struct nvdimm_pmu, pmu)
+-
+ /* Struct holding a single performance metric */
+ struct papr_scm_perf_stat {
+        u8 stat_id[8];
+@@ -346,6 +344,9 @@ static ssize_t drc_pmem_query_stats(struct
+papr_scm_priv *p,
+        return 0;
+ }
+
++#ifdef CONFIG_PERF_EVENTS
++#define to_nvdimm_pmu(_pmu)    container_of(_pmu, struct nvdimm_pmu, pmu)
++
+ static int papr_scm_pmu_get_value(struct perf_event *event, struct
+device *dev, u64 *count)
+ {
+        struct papr_scm_perf_stat *stat;
+@@ -558,6 +559,10 @@ static void papr_scm_pmu_register(struct
+papr_scm_priv *p)
+        dev_info(&p->pdev->dev, "nvdimm pmu didn't register rc=%d\n", rc);
+ }
+
++#else
++static inline void papr_scm_pmu_register(struct papr_scm_priv *p) { }
++#endif
++
+ /*
+  * Issue hcall to retrieve dimm health info and populate papr_scm_priv
+with the
+  * health information.
+diff --git a/drivers/nvdimm/Makefile b/drivers/nvdimm/Makefile
+index 3fb806748716..ba0296dca9db 100644
+--- a/drivers/nvdimm/Makefile
++++ b/drivers/nvdimm/Makefile
+@@ -15,7 +15,7 @@ nd_e820-y := e820.o
+ libnvdimm-y := core.o
+ libnvdimm-y += bus.o
+ libnvdimm-y += dimm_devs.o
+-libnvdimm-y += nd_perf.o
++libnvdimm-$(CONFIG_PERF_EVENTS) += nd_perf.o
+ libnvdimm-y += dimm.o
+ libnvdimm-y += region_devs.o
+ libnvdimm-y += region.o
+diff --git a/include/linux/nd.h b/include/linux/nd.h
+index 7b2ccbdc1cbc..a387e2b630ad 100644
+--- a/include/linux/nd.h
++++ b/include/linux/nd.h
+@@ -57,15 +57,22 @@ struct nvdimm_pmu {
+        struct cpumask arch_cpumask;
+ };
+
++#ifdef CONFIG_PERF_EVENTS
+ extern ssize_t nvdimm_events_sysfs_show(struct device *dev,
+                                        struct device_attribute *attr,
+                                        char *page);
+
+ int register_nvdimm_pmu(struct nvdimm_pmu *nvdimm, struct
+platform_device *pdev);
+ void unregister_nvdimm_pmu(struct nvdimm_pmu *nd_pmu);
+-void perf_pmu_migrate_context(struct pmu *pmu, int src_cpu, int dst_cpu);
+-int perf_pmu_register(struct pmu *pmu, const char *name, int type);
+-void perf_pmu_unregister(struct pmu *pmu);
++
++#else
++static inline int register_nvdimm_pmu(struct nvdimm_pmu *nd_pmu, struct
+platform_device *pdev)
++{
++       return -ENXIO;
++}
++
++static inline void unregister_nvdimm_pmu(struct nvdimm_pmu *nd_pmu) { }
++#endif
+
+ struct nd_device_driver {
+        struct device_driver drv;
 > 
-> And what happens if funcC called funcA and it too was on the stack. We pop
-> that too? But it's not done yet, because calling of funcA was not a tail
-> call.
-
-Thus when the funcC is called, the trace-stack will be poped until funcA,
-because we can see the real stack pointer at the 'ret'.
-So the funcC is still on the trace-stack after that.
-
-Thank you,
-
-
+> arch/powerpc/platforms/pseries/papr_scm/main.c
+> arch/powerpc/platforms/pseries/papr_scm/perf.c
 > 
-> -- Steve
+> ...and a new config symbol like:
 > 
+> config PAPR_SCM_PERF
+>        depends on PAPR_SCM && PERF_EVENTS
+>        def_bool y
 > 
-> > 
-> > > 	ret  
-> > 
-> > > 
-> > > That is, the current algorithm traces the end of both funcA and funcB
-> > > without issue, because of how the shadow stack works.  
-> > 
-> > And it all works, no? Or what am I missing?
+> ...with wrappers in header files to make everything compile away
+> without any need for main.c to carry an ifdef.
 > 
-> 
-> 
+> Can you turn a patch like that in the next couple days? Otherwise, I
+> think if Linus saw me sending a late breaking compile fix that threw
+> coding style out the window he'd have cause to just drop the pull
+> request entirely.
 
+Sure Dan, I will work on the patches and send it asap once we finalized
+the changes.
 
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+Thanks,
+Kajol Jain

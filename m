@@ -2,57 +2,70 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6961D4E38C7
-	for <lists+linux-next@lfdr.de>; Tue, 22 Mar 2022 07:21:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7805A4E3979
+	for <lists+linux-next@lfdr.de>; Tue, 22 Mar 2022 08:19:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236936AbiCVGUE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 22 Mar 2022 02:20:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46106 "EHLO
+        id S237355AbiCVHTn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 22 Mar 2022 03:19:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236883AbiCVGUC (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Mar 2022 02:20:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FE96F24;
-        Mon, 21 Mar 2022 23:18:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AA0646142A;
-        Tue, 22 Mar 2022 06:18:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6EF2C340EC;
-        Tue, 22 Mar 2022 06:18:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647929914;
-        bh=E4QiXgUS2gXJ+MZo3C+fEHnauzWfzK2THXjd2mXgGto=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MNAkSF+etXMHwBztM/4fhNzfUV5LGdJ9adoMWSEjsTvXZAOSVe+5OxeMSx7Lrgaym
-         EIF0YQaGwE1I0NSmmYXcyVmIIxeVPl3OybUqLGSK3YWRFxv1eb+DF1q1Lsq7xMtlsH
-         Odi29Y+P9yvJSDTzh1oEpgPfwJTL93Wl3FJZYdnzE0xVV/Bj5FEq2hmbmW6GuTaRel
-         dRzMluIqOSUJIlWl3Glh1SGEtlnCrLlePVuLjE+UGxl0anC8Uia0jkVNVy4ZrWFRx9
-         iwu8el1/9/OOcY1Y3YcUoS4iX+ZFCCV0HUHvbwmQY8WrrZqS91xTeVl1XKf2nibnov
-         AfHb/B+Rj3JXg==
-Date:   Mon, 21 Mar 2022 23:18:33 -0700
-From:   Saeed Mahameed <saeed@kernel.org>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Saeed Mahameed <saeedm@nvidia.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Maxim Mikityanskiy <maximmi@nvidia.com>,
+        with ESMTP id S237368AbiCVHTe (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Mar 2022 03:19:34 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E831C1EEFA
+        for <linux-next@vger.kernel.org>; Tue, 22 Mar 2022 00:18:06 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id b19so23587087wrh.11
+        for <linux-next@vger.kernel.org>; Tue, 22 Mar 2022 00:18:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=rOPH6g37mauJoa2trxdFJdkR5hRR2ETwMr/7bfJTMVs=;
+        b=ECmoAO6pUz5bCOcqf0VjrZStJXin03xM1sXJYLPNpOrw/efsdaQ9T3QISm981kdFIk
+         ttvS4MEmLE6zZwzPh+Q62fnjXdEwS7bJxXAh4pJTGki2KiqC/8HiN9MS4/uwWJARnX9U
+         CR7I63zLZUo9H2YSiL3ap4rC/fCuZS++znRcLVfd53Obxk+z5/cyMaGdjXWyAlnklchI
+         /gjH3Wzc4Aa2Pgi07mD7JCgASK8Nvv7e6HMEyWrXJVlYl2FDAmfUCWOLoXpXBQDE1AYU
+         C/SSnwusEQ+nh3cvj86u0fK85nCaN8fD0ReHDDy9+4QjaWmT862USFlLAaiBWT2AM0LL
+         CLNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=rOPH6g37mauJoa2trxdFJdkR5hRR2ETwMr/7bfJTMVs=;
+        b=GDOqd+9VRd0S2Ed3HqXvb1bu18adSK2+JARJKa28NDtnd0si9613Bgiv9jFHxeXzPq
+         ghA8Pl5/fL6aMSVy93kjMd20pKLFoi+7MJPiE/20HIGsisWi4cMqxnpwEKiqE7+Rv8Sz
+         2lAomCE3g/fgCXyP4JmuZwwAyc0GaEOyv4MGh7+XQhk2W/qjEg72jhCMSMSKJEqhJxJ0
+         tfXK2zw7DNxODNRSQCCk2hP9+gQ9rZBdbJFdO8DHreMDCLXhhzHUesKC+i52bx9y3uYH
+         fEAhqNbAF8xMSa0CUqZiJGdolwSZJmsuaC/TdjmxFhIilfdlabQzi4O3RnVvIeX1AkyA
+         CAKA==
+X-Gm-Message-State: AOAM532AwtOfnMaaljIn5k40pu/te7YKGIYGa6k/8MRcwA6EZYxKykv0
+        Y6ikGl4WDJtiT11KGGpH/Ia7/A==
+X-Google-Smtp-Source: ABdhPJw8Nh+0d/8bu4YZeafGMb3cldwCg6y9uuMJF9kjovNL53b5FPU7i37C87TwMmaa46JtpHv7RQ==
+X-Received: by 2002:adf:a41c:0:b0:203:daeb:165f with SMTP id d28-20020adfa41c000000b00203daeb165fmr21807101wra.188.1647933485475;
+        Tue, 22 Mar 2022 00:18:05 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id f11-20020a7bcc0b000000b0037e0c362b6dsm1225250wmh.31.2022.03.22.00.18.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Mar 2022 00:18:04 -0700 (PDT)
+Date:   Tue, 22 Mar 2022 07:18:02 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Rob Herring <robherring2@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the net-next tree
-Message-ID: <20220322061833.ayp5sb4fb64e6lzo@sx1>
-References: <20220321183941.74be2543@canb.auug.org.au>
- <20220321144531.2b0503a1@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Michael Walle <michael@walle.cc>, Rob Herring <robh@kernel.org>
+Subject: Re: linux-next: manual merge of the devicetree tree with the mfd tree
+Message-ID: <Yjl4KsmOQWVfUui8@google.com>
+References: <20220322141029.1885af98@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220321144531.2b0503a1@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220322141029.1885af98@canb.auug.org.au>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,50 +73,28 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 21 Mar 14:45, Jakub Kicinski wrote:
->On Mon, 21 Mar 2022 18:39:41 +1100 Stephen Rothwell wrote:
->> Hi all,
->>
->> After merging the net-next tree, today's linux-next build (x86_64
->> allmodconfig) failed like this:
->>
->> In file included from include/linux/string.h:253,
->>                  from include/linux/bitmap.h:11,
->>                  from include/linux/cpumask.h:12,
->>                  from arch/x86/include/asm/cpumask.h:5,
->>                  from arch/x86/include/asm/msr.h:11,
->>                  from arch/x86/include/asm/processor.h:22,
->>                  from arch/x86/include/asm/timex.h:5,
->>                  from include/linux/timex.h:65,
->>                  from include/linux/time32.h:13,
->>                  from include/linux/time.h:60,
->>                  from include/linux/ktime.h:24,
->>                  from include/linux/timer.h:6,
->>                  from include/linux/netdevice.h:24,
->>                  from include/trace/events/xdp.h:8,
->>                  from include/linux/bpf_trace.h:5,
->>                  from drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c:33:
->> In function 'fortify_memset_chk',
->>     inlined from 'mlx5e_xmit_xdp_frame' at drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c:438:3:
->> include/linux/fortify-string.h:242:25: error: call to '__write_overflow_field' declared with attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror=attribute-warning]
->>   242 |                         __write_overflow_field(p_size_field, size);
->>       |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>
->> Caused by commit
->>
->>   9ded70fa1d81 ("net/mlx5e: Don't prefill WQEs in XDP SQ in the multi buffer mode")
->>
->> exposed by the kspp tree.
->>
->> I have applied the following fix patch for today (a better one is
->> probably possible).
->
->Hi Saeed,
->
->thoughts?
->
+On Tue, 22 Mar 2022, Stephen Rothwell wrote:
 
-I forgot about this warning in net :-/ we did a similar patch to net to
-avoid it, Stephen's patch is correct, 
-I will submit his fixup to net-next in the morning.
+> Hi all,
+> 
+> Today's linux-next merge of the devicetree tree got a conflict in:
+> 
+>   Documentation/devicetree/bindings/mfd/syscon.yaml
+> 
+> between commit:
+> 
+>   844dd8fe02f2 ("dt-bindings: Add compatibles for undocumented trivial syscons")
+> 
+> from the mfd tree and commit:
+> 
+>   c1ff0c0f24d6 ("dt-bindings: mfd: syscon: add microchip,lan966x-cpu-syscon compatible")
+> 
+> from the devicetree tree.
 
+Did you accidentally hoover this up Rob?
+
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

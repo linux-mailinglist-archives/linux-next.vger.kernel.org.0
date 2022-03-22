@@ -2,28 +2,38 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 185F64E3F6C
-	for <lists+linux-next@lfdr.de>; Tue, 22 Mar 2022 14:23:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3034B4E3FD2
+	for <lists+linux-next@lfdr.de>; Tue, 22 Mar 2022 14:51:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235450AbiCVNY3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 22 Mar 2022 09:24:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47850 "EHLO
+        id S234134AbiCVNxH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 22 Mar 2022 09:53:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235445AbiCVNY1 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Mar 2022 09:24:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 055A13B2A3;
-        Tue, 22 Mar 2022 06:22:59 -0700 (PDT)
+        with ESMTP id S235876AbiCVNwz (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Mar 2022 09:52:55 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EF9650B07;
+        Tue, 22 Mar 2022 06:51:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B09E61571;
-        Tue, 22 Mar 2022 13:22:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D396FC340EE;
-        Tue, 22 Mar 2022 13:22:56 +0000 (UTC)
-Date:   Tue, 22 Mar 2022 09:22:55 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
+        by sin.source.kernel.org (Postfix) with ESMTPS id 6D0CACE1E18;
+        Tue, 22 Mar 2022 13:51:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17D78C340EC;
+        Tue, 22 Mar 2022 13:51:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647957084;
+        bh=+PcSzqlfSr4quKABCcRJgSwsi7LZhav0meRk6eGzyQk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=FdatOK5EsCCKNSnd0SFBfhCB1ogmnUyN25HzjzgibJkE8MGgn40+e8L/IOlsBXcEJ
+         HMrA0modxfnFK4pVridEsoQREyNK44MG/If1ZkUJh1d+8MYgKmupFlpE3rY//nXs0K
+         ZvQ+DZfvR6W2vDeaCzZ9QCJqkTpRsj1ZqKBXFS8rxAu8MBIYQDsXEyGq7ssz3WENOU
+         8DSxM+7R10paiWeViNMFJbu5uU0Ulj0GswYgV+N4JJPnJBH+rf9AljCATLTAE9YUUX
+         XiJMzjq03TNToclXEXlkhNm9G+E2juwvKLEPI0p4V6UnVnTPiCNz8d9K8EaVBRA6H4
+         SzRxDhwH0LBFQ==
+Date:   Tue, 22 Mar 2022 22:51:18 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Mark Rutland <mark.rutland@arm.com>
 Cc:     Peter Zijlstra <peterz@infradead.org>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -31,56 +41,83 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         "H. Peter Anvin" <hpa@zytor.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        ast@kernel.org, hjl.tools@gmail.com, rick.p.edgecombe@intel.com,
-        rppt@kernel.org, linux-toolchains@vger.kernel.org,
-        Andrew.Cooper3@citrix.com, ndesaulniers@google.com
+        rostedt@goodmis.org, ast@kernel.org, hjl.tools@gmail.com,
+        rick.p.edgecombe@intel.com, rppt@kernel.org,
+        linux-toolchains@vger.kernel.org, Andrew.Cooper3@citrix.com,
+        ndesaulniers@google.com
 Subject: Re: linux-next: build warnings after merge of the tip tree
-Message-ID: <20220322092255.2c23e414@gandalf.local.home>
-In-Reply-To: <20220322214629.2bf40306e3beba23d88d509f@kernel.org>
+Message-Id: <20220322225118.ec33bf93e19d40f27d73c8d1@kernel.org>
+In-Reply-To: <YjnMDlS/6a4UWFQm@FVFF77S0Q05N>
 References: <20220321140327.777f9554@canb.auug.org.au>
         <Yjh11UjDZogc3foM@hirez.programming.kicks-ass.net>
         <Yjh3xZuuY3QcZ1Bn@hirez.programming.kicks-ass.net>
         <YjisdqdofbDIYj2U@hirez.programming.kicks-ass.net>
         <20220322143136.0e78366c3521b54b7b9385b8@kernel.org>
-        <Yjm+TmKyO+HDOBgN@hirez.programming.kicks-ass.net>
-        <20220322214629.2bf40306e3beba23d88d509f@kernel.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
+        <YjnMDlS/6a4UWFQm@FVFF77S0Q05N>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, 22 Mar 2022 21:46:29 +0900
-Masami Hiramatsu <mhiramat@kernel.org> wrote:
+On Tue, 22 Mar 2022 13:15:58 +0000
+Mark Rutland <mark.rutland@arm.com> wrote:
 
-> > > Indeed. I would like to replace the trampoline code of kretprobe with
-> > > rethook, eventually. There is no reason why we keep the clone.
-> > > (But I need more arch maintainers help for that, there are too many
-> > >  archs implemented kretprobes)  
+> On Tue, Mar 22, 2022 at 02:31:36PM +0900, Masami Hiramatsu wrote:
+> > On Mon, 21 Mar 2022 17:48:54 +0100
+> > Peter Zijlstra <peterz@infradead.org> wrote:
 > > 
-> > CONFIG_KPROBE_ON_RETHOOK - and then implement archs one by one?  
+> > > On Mon, Mar 21, 2022 at 02:04:05PM +0100, Peter Zijlstra wrote:
+> > > > On Mon, Mar 21, 2022 at 01:55:49PM +0100, Peter Zijlstra wrote:
+> > > > > On Mon, Mar 21, 2022 at 02:03:27PM +1100, Stephen Rothwell wrote:
+> > > > > > Hi all,
+> > > > > > 
+> > > > > > After merging the tip tree, today's linux-next build (x864 allmodconfig)
+> > > > > > produced these new warnings:
+> > > > > > 
+> > > > > > vmlinux.o: warning: objtool: arch_rethook_prepare()+0x55: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > > > > vmlinux.o: warning: objtool: arch_rethook_trampoline_callback()+0x3e: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > > > > vmlinux.o: warning: objtool: unwind_next_frame()+0x93e: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > > > > vmlinux.o: warning: objtool: unwind_next_frame()+0x5f2: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > > > > vmlinux.o: warning: objtool: unwind_next_frame()+0x4a7: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > > > > vmlinux.o: warning: objtool: __rethook_find_ret_addr()+0x81: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > > > > vmlinux.o: warning: objtool: __rethook_find_ret_addr()+0x90: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > > > > vmlinux.o: warning: objtool: rethook_trampoline_handler()+0x8c: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > > > > vmlinux.o: warning: objtool: rethook_trampoline_handler()+0x9b: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > > > 
+> > > > > Hurmph, lemme go figure out where that code comes from, I've not seen
+> > > > > those.
+> > > > 
+> > > > Ahh, something tracing. I'll go do some patches on top of it.
+> > > 
+> > > The below gets rid of the objtool warnings.
+> > 
+> > Yes, I confirmed that.
+> > 
+> > > But I still think it's fairly terrible to get a (flawed) carbon copy of
+> > > the kretprobe code.
+> > 
+> > Indeed. I would like to replace the trampoline code of kretprobe with
+> > rethook, eventually. There is no reason why we keep the clone.
+> > (But I need more arch maintainers help for that, there are too many
+> >  archs implemented kretprobes)
 > 
-> Sounds good! Maybe we will see different data structure fields
-> which depends on that config, but those are internal fields, so
-> user will not access it.
+> FWIW, I'm more than happy to help on the arm64 side if you could Cc me for
+> that; I'm aware of other things in this area I'd like to clean up for
+> backtracing, too.
 
-Which is basically what I do for ftrace. Which is why we have all these:
+Thank you for your warm help. OK, let me update and submit the rethook
+for arm64 :-)
 
-        select HAVE_DYNAMIC_FTRACE
-        select HAVE_DYNAMIC_FTRACE_WITH_REGS
-        select HAVE_DYNAMIC_FTRACE_WITH_ARGS
-        select HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
-        select HAVE_SAMPLE_FTRACE_DIRECT
-        select HAVE_SAMPLE_FTRACE_DIRECT_MULTI
+Thanks.
 
-in the architecture Kconfigs.
-
--- Steve
-
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>

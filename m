@@ -2,176 +2,203 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B1174E415F
-	for <lists+linux-next@lfdr.de>; Tue, 22 Mar 2022 15:32:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C1E04E4176
+	for <lists+linux-next@lfdr.de>; Tue, 22 Mar 2022 15:36:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235291AbiCVOda (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 22 Mar 2022 10:33:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39350 "EHLO
+        id S234822AbiCVOiF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 22 Mar 2022 10:38:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237892AbiCVOdI (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Mar 2022 10:33:08 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E79B56A033;
-        Tue, 22 Mar 2022 07:31:40 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22MDflFa018361;
-        Tue, 22 Mar 2022 14:30:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=HmdeA+97pLDLpIBbR2lwhbFwlcQt9yd22PsW4CzjZOQ=;
- b=Y90eVlONL6xwBEjwpuBZrYqPr8jyhh/Am1A0PjQh3L1pscOHKTIx+iczyivVEr1bwNfU
- CT3MclqvYJ1MucvSwGnaj7vlMc70I4qWbwZO7fr3UsG4oe/pDjTVeXQSfWLrMoVYqcZJ
- ZmnpkDeSZ4mDF6cRBofD3/rnoPdfCP44tyUr8yeb+KcUjGP0tC07qHq5nh3HEaMs5RJl
- dk30hW1n7/8PQvC3l85GES+TwRfZh7Pq0faHLYtwFqb+qbpHOzmDycNWlep4kLSFf3Qn
- TBWF2sKIyENDf0Iq31zZSRlYEMgxb9TjPJvl4snF0x2NrgmJlxkDFIRATh/0A6nFuYM5 hg== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3eyautr1cw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 22 Mar 2022 14:30:58 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22MEHRgU009937;
-        Tue, 22 Mar 2022 14:30:56 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma04ams.nl.ibm.com with ESMTP id 3ew6t8xdca-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 22 Mar 2022 14:30:56 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22MEUrJQ43843854
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 22 Mar 2022 14:30:53 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 183A24C040;
-        Tue, 22 Mar 2022 14:30:53 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E760E4C04A;
-        Tue, 22 Mar 2022 14:30:47 +0000 (GMT)
-Received: from [9.43.105.112] (unknown [9.43.105.112])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 22 Mar 2022 14:30:47 +0000 (GMT)
-Message-ID: <19bb75d2-63a3-7927-115c-6f5c0103fb88@linux.ibm.com>
-Date:   Tue, 22 Mar 2022 20:00:46 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 2/2] powerpc/papr_scm: Fix build failure when
- CONFIG_PERF_EVENTS is not set
-Content-Language: en-US
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux NVDIMM <nvdimm@lists.linux.dev>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Weiny, Ira" <ira.weiny@intel.com>,
-        Vishal L Verma <vishal.l.verma@intel.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Santosh Sivaraj <santosh@fossix.org>, maddy@linux.ibm.com,
-        rnsastry@linux.ibm.com,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        atrajeev@linux.vnet.ibm.com, Vaibhav Jain <vaibhav@linux.ibm.com>,
+        with ESMTP id S237974AbiCVOiE (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Mar 2022 10:38:04 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 194366AA52;
+        Tue, 22 Mar 2022 07:36:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=/4heW2XHZRFLz+hyRlxTzkxlhn+UmcdznSx7bzv3MCk=; b=piByHcxa0J71QzEQn5NsjwE3QM
+        LEZc/7zDWEdUMpJl6gD7uOEjjk9XAfEdoyV/6dpngp1sO94yVcx+FUVHJIakHA8q2y7BKkjeiReA7
+        h5+Q38djso32qbqwXG3m8Pp+jv8zMDIzSlM5Gxx2Vm2nYdRBKvPOHdRzpS/XOMPD/Olgey5Q7jUK4
+        rL9M4E4CSTpybeVmbBNAU6kekKpH5xSp+v7O0J/IcmdxxTow/WFnvCIkKmwFR5JM1RGGQq21QGcA+
+        gDnlKNKm3kPUQamkvEuT8yjowK69aHfnPxcI7sBApEXzQ3kjc9JXBNEECzeq4hlFZ/zjFLxmgY+7E
+        C9JwgN8g==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nWfc6-00Bg37-5p; Tue, 22 Mar 2022 14:35:58 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 49D1A3001CD;
+        Tue, 22 Mar 2022 15:35:54 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id C73622D6D4316; Tue, 22 Mar 2022 15:35:54 +0100 (CET)
+Date:   Tue, 22 Mar 2022 15:35:54 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Linux MM <linux-mm@kvack.org>
-References: <20220318114133.113627-1-kjain@linux.ibm.com>
- <20220318114133.113627-2-kjain@linux.ibm.com>
- <CAPcyv4iqpTn89WLOW1XjFXGZEYG_MmPg+VQbcDJ9ygJ4Jaybtw@mail.gmail.com>
- <CAPcyv4iNy-RqKgwc61c+hL9g1zAE_tL5r_mqUQwCiKTzevjoDA@mail.gmail.com>
-From:   kajoljain <kjain@linux.ibm.com>
-In-Reply-To: <CAPcyv4iNy-RqKgwc61c+hL9g1zAE_tL5r_mqUQwCiKTzevjoDA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: XDE74WRamQEl1IZRUeCaSfw9m_9vbgew
-X-Proofpoint-ORIG-GUID: XDE74WRamQEl1IZRUeCaSfw9m_9vbgew
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-22_06,2022-03-22_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- mlxlogscore=999 priorityscore=1501 mlxscore=0 malwarescore=0 bulkscore=0
- adultscore=0 lowpriorityscore=0 impostorscore=0 clxscore=1015 phishscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203220082
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        mhiramat@kernel.org, ast@kernel.org, hjl.tools@gmail.com,
+        rick.p.edgecombe@intel.com, rppt@kernel.org,
+        linux-toolchains@vger.kernel.org, Andrew.Cooper3@citrix.com,
+        ndesaulniers@google.com
+Subject: Re: linux-next: build warnings after merge of the tip tree
+Message-ID: <Yjneyn8o06svJkY4@hirez.programming.kicks-ass.net>
+References: <20220321112805.1393f9b9@gandalf.local.home>
+ <YjiiDFHIQg78QwSb@hirez.programming.kicks-ass.net>
+ <20220321121209.3b95e406@gandalf.local.home>
+ <20220321121549.1c8588c5@gandalf.local.home>
+ <YjiqgPL+pPGkOgCv@hirez.programming.kicks-ass.net>
+ <20220321124551.3d73660b@gandalf.local.home>
+ <Yjis6hJKUj/WrSwK@hirez.programming.kicks-ass.net>
+ <20220321125419.0a20415c@gandalf.local.home>
+ <YjmAz0MbdW4Q1Cnv@hirez.programming.kicks-ass.net>
+ <20220322091242.1ad0206b@gandalf.local.home>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220322091242.1ad0206b@gandalf.local.home>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+On Tue, Mar 22, 2022 at 09:12:42AM -0400, Steven Rostedt wrote:
 
-
-On 3/22/22 07:15, Dan Williams wrote:
-> On Mon, Mar 21, 2022 at 2:39 PM Dan Williams <dan.j.williams@intel.com> wrote:
->>
->> On Fri, Mar 18, 2022 at 4:42 AM Kajol Jain <kjain@linux.ibm.com> wrote:
->>>
->>> The following build failure occures when CONFIG_PERF_EVENTS is not set
->>> as generic pmu functions are not visible in that scenario.
->>>
->>> arch/powerpc/platforms/pseries/papr_scm.c:372:35: error: ‘struct perf_event’ has no member named ‘attr’
->>>          p->nvdimm_events_map[event->attr.config],
->>>                                    ^~
->>> In file included from ./include/linux/list.h:5,
->>>                  from ./include/linux/kobject.h:19,
->>>                  from ./include/linux/of.h:17,
->>>                  from arch/powerpc/platforms/pseries/papr_scm.c:5:
->>> arch/powerpc/platforms/pseries/papr_scm.c: In function ‘papr_scm_pmu_event_init’:
->>> arch/powerpc/platforms/pseries/papr_scm.c:389:49: error: ‘struct perf_event’ has no member named ‘pmu’
->>>   struct nvdimm_pmu *nd_pmu = to_nvdimm_pmu(event->pmu);
->>>                                                  ^~
->>> ./include/linux/container_of.h:18:26: note: in definition of macro ‘container_of’
->>>   void *__mptr = (void *)(ptr);     \
->>>                           ^~~
->>> arch/powerpc/platforms/pseries/papr_scm.c:389:30: note: in expansion of macro ‘to_nvdimm_pmu’
->>>   struct nvdimm_pmu *nd_pmu = to_nvdimm_pmu(event->pmu);
->>>                               ^~~~~~~~~~~~~
->>> In file included from ./include/linux/bits.h:22,
->>>                  from ./include/linux/bitops.h:6,
->>>                  from ./include/linux/of.h:15,
->>>                  from arch/powerpc/platforms/pseries/papr_scm.c:5:
->>>
->>> Fix the build issue by adding check for CONFIG_PERF_EVENTS config option
->>> and disabling the papr_scm perf interface support incase this config
->>> is not set
->>>
->>> Fixes: 4c08d4bbc089 ("powerpc/papr_scm: Add perf interface support") (Commit id
->>> based on linux-next tree)
->>> Signed-off-by: Kajol Jain <kjain@linux.ibm.com>
->>> ---
->>>  arch/powerpc/platforms/pseries/papr_scm.c | 15 +++++++++++++++
->>
->> This is a bit messier than I would have liked mainly because it dumps
->> a bunch of ifdefery into a C file contrary to coding style, "Wherever
->> possible, don't use preprocessor conditionals (#if, #ifdef) in .c
->> files". I would expect this all to move to an organization like:
->>
->> arch/powerpc/platforms/pseries/papr_scm/main.c
->> arch/powerpc/platforms/pseries/papr_scm/perf.c
->>
->> ...and a new config symbol like:
->>
->> config PAPR_SCM_PERF
->>        depends on PAPR_SCM && PERF_EVENTS
->>        def_bool y
->>
->> ...with wrappers in header files to make everything compile away
->> without any need for main.c to carry an ifdef.
->>
->> Can you turn a patch like that in the next couple days? Otherwise, I
->> think if Linus saw me sending a late breaking compile fix that threw
->> coding style out the window he'd have cause to just drop the pull
->> request entirely.
+> > Suppose:
+> > 
+> > notrace func_B()
+> > {
+> > 	...
+> > }
+> > 
+> > func_A()
+> > {
+> > 	...
+> > 	return func_B();
+> > }
+> > 
+> > then inhibiting tail calls would end up looking like:
 > 
-> Also, please base it on the current state of the libnvdimm-for-next
-> branch as -next includes some of the SMART health changes leading to
-> at least one conflict.
+> If we inhibit tail calls, then we do not need to make func_B notrace.
 
-Ok Dan, I will rebase my changes on top of libnvdimm-for-next branch.
+Dude, you're arguing in circles :-( the notrace was a given.
 
-Thanks,
-Kajol Jain
+> > func_A:
+> > 	call __fentry__
+> > 	...
+> > 	call func_B
+> > 	call __fexit__
+> > 	ret
+> > 
+> > Then A is fully traced, B is invisible, as per spec. What is the
+> > problem?
+> 
+> The above is fine, but then func_B is not a tail call and can also be
+> traced.
+
+Again, B is notrace as a given. This was all about how to deal with
+notrace functions.
+
+I suggested inhibiting tail-call to notrace, you said no. You now seem to
+agree that solves it.
+
+> > The problem you initially had, of doing a tail-call into a notrace, was
+> > that the __fexit__ call went missing, because notrace will obviously not
+> > have that. But that's avoided by inhibiting all tail-calls between
+> > notrace and !notrace functions (note that notrace must also not
+> > tail-call !notrace).
+> 
+> I'm confused by the above. Why can't a notrace tail call a !notrace?
+> If we tail call to a
+> 
+> func_B:
+> 	call __fentry__
+> 	...
+> 	call __fexit__
+> 	ret
+> 
+> then the fentry and fexit show a perfectly valid trace of func_B.
+
+Bah; I thought I had a case this morning, but now I can't seem to recall
+:/
+
+> > Your worry seems to stem about loosing visiblilty of !notrace functions,
+> > but AFAICT that doesn't happen.
+> 
+> My worry is:
+> 
+> func_A:
+> 	call __fentry__
+> 	...
+> 	jmp func_B
+> 
+> Where do we do the call __fexit__ ?
+
+In B (or wherever if B again does a tail-call).
+
+> That was the original concern, and I think the proposed solutions have
+> convoluted our thoughts about what we are trying to fix. So let's go back
+> to the beginning, and see how to deal with it.
+> 
+> That is, we have:
+> 
+> func_C:
+> 	call __fenty__
+> 	...
+> 	call func_A:
+> 	...
+> 	call func_B:
+> 	...
+> 	call __fexit__
+> 	ret
+> 
+> func_A:
+> 	call __fentry__
+> 	...
+	call __ftail__
+> 	jmp func_B
+> 
+> func_B:
+> 	call __fentry__
+> 	...
+> 	call __fexit__
+> 	ret
+> 
+> Where the above is C calling A and B as normal functions, A calling B as a
+> tail call and B just being a normal function called by both A and C (and
+> many other functions).
+
+We need the __ftail__ thing to mark the trace-stack entry of func_A as
+complete, then any future __fexit__ will be able to pop all completed
+entries.
+
+In recap:
+
+	__fentry__ -- push on trace-stack
+	__ftail__  -- mark top-most entry complete
+	__fexit__  -- mark top-most entry complete;
+	              pop all completed entries
+
+inhibit tail-calls to notrace.
+
+> And note, I do not want to limit function tracing (which does not rely on
+> __fexit__) just because we can't figure out how to handle __fexit__.
+
+I'm not following. Regular function tracing needs none of this.
+
+It's function graph tracing, kretprobes and whatever else this rethook
+stuff is about that needs this because return trampolines will stop
+working somewhere in the not too distant future.
+

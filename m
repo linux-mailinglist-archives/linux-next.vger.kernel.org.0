@@ -2,139 +2,108 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72F664E3876
-	for <lists+linux-next@lfdr.de>; Tue, 22 Mar 2022 06:32:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6961D4E38C7
+	for <lists+linux-next@lfdr.de>; Tue, 22 Mar 2022 07:21:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236728AbiCVFdN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 22 Mar 2022 01:33:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32958 "EHLO
+        id S236936AbiCVGUE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 22 Mar 2022 02:20:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236720AbiCVFdM (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Mar 2022 01:33:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B25381;
-        Mon, 21 Mar 2022 22:31:45 -0700 (PDT)
+        with ESMTP id S236883AbiCVGUC (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Mar 2022 02:20:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FE96F24;
+        Mon, 21 Mar 2022 23:18:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C1EE7B81B87;
-        Tue, 22 Mar 2022 05:31:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AAEFC340EC;
-        Tue, 22 Mar 2022 05:31:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AA0646142A;
+        Tue, 22 Mar 2022 06:18:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6EF2C340EC;
+        Tue, 22 Mar 2022 06:18:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647927102;
-        bh=S9IobCk2/SCUxMjhrXXqR93XhKqnu26qc3N4ltVvvR8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=dZ631HINBxUbJBtm1PoeSI+QIhyE67UmFHGhDNIFKBnRUXqxap8EQa3cEzRAT4dy4
-         zzIb1x4Aot4BfF+a5L9Lrq7JRK0rfjlztcarqmFrwhvPc4G7S3T3AamX7scHq/3d2u
-         HawIzWz2EFVrh7SrZsNd2EH+nseru+R8rR6oooEa/yUzOiGpt4rfPV2eynh5MDBlYQ
-         lXSJzL7RKasm9PqW6anjXReLsPrJ3iTURw4IEMWYZA5fZt5/uCIKvS9O/kJfv5pyOy
-         cHTTBwbadm0svfYtNcCquc6UfXmlTTmsM75YTGmYtkGzUYqUJckEFNNGtNEUVUp9aw
-         vzXRbtCHt76UQ==
-Date:   Tue, 22 Mar 2022 14:31:36 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
+        s=k20201202; t=1647929914;
+        bh=E4QiXgUS2gXJ+MZo3C+fEHnauzWfzK2THXjd2mXgGto=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MNAkSF+etXMHwBztM/4fhNzfUV5LGdJ9adoMWSEjsTvXZAOSVe+5OxeMSx7Lrgaym
+         EIF0YQaGwE1I0NSmmYXcyVmIIxeVPl3OybUqLGSK3YWRFxv1eb+DF1q1Lsq7xMtlsH
+         Odi29Y+P9yvJSDTzh1oEpgPfwJTL93Wl3FJZYdnzE0xVV/Bj5FEq2hmbmW6GuTaRel
+         dRzMluIqOSUJIlWl3Glh1SGEtlnCrLlePVuLjE+UGxl0anC8Uia0jkVNVy4ZrWFRx9
+         iwu8el1/9/OOcY1Y3YcUoS4iX+ZFCCV0HUHvbwmQY8WrrZqS91xTeVl1XKf2nibnov
+         AfHb/B+Rj3JXg==
+Date:   Mon, 21 Mar 2022 23:18:33 -0700
+From:   Saeed Mahameed <saeed@kernel.org>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Saeed Mahameed <saeedm@nvidia.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Maxim Mikityanskiy <maximmi@nvidia.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        mhiramat@kernel.org, rostedt@goodmis.org, ast@kernel.org,
-        hjl.tools@gmail.com, rick.p.edgecombe@intel.com, rppt@kernel.org,
-        linux-toolchains@vger.kernel.org, Andrew.Cooper3@citrix.com,
-        ndesaulniers@google.com
-Subject: Re: linux-next: build warnings after merge of the tip tree
-Message-Id: <20220322143136.0e78366c3521b54b7b9385b8@kernel.org>
-In-Reply-To: <YjisdqdofbDIYj2U@hirez.programming.kicks-ass.net>
-References: <20220321140327.777f9554@canb.auug.org.au>
-        <Yjh11UjDZogc3foM@hirez.programming.kicks-ass.net>
-        <Yjh3xZuuY3QcZ1Bn@hirez.programming.kicks-ass.net>
-        <YjisdqdofbDIYj2U@hirez.programming.kicks-ass.net>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the net-next tree
+Message-ID: <20220322061833.ayp5sb4fb64e6lzo@sx1>
+References: <20220321183941.74be2543@canb.auug.org.au>
+ <20220321144531.2b0503a1@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20220321144531.2b0503a1@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, 21 Mar 2022 17:48:54 +0100
-Peter Zijlstra <peterz@infradead.org> wrote:
+On 21 Mar 14:45, Jakub Kicinski wrote:
+>On Mon, 21 Mar 2022 18:39:41 +1100 Stephen Rothwell wrote:
+>> Hi all,
+>>
+>> After merging the net-next tree, today's linux-next build (x86_64
+>> allmodconfig) failed like this:
+>>
+>> In file included from include/linux/string.h:253,
+>>                  from include/linux/bitmap.h:11,
+>>                  from include/linux/cpumask.h:12,
+>>                  from arch/x86/include/asm/cpumask.h:5,
+>>                  from arch/x86/include/asm/msr.h:11,
+>>                  from arch/x86/include/asm/processor.h:22,
+>>                  from arch/x86/include/asm/timex.h:5,
+>>                  from include/linux/timex.h:65,
+>>                  from include/linux/time32.h:13,
+>>                  from include/linux/time.h:60,
+>>                  from include/linux/ktime.h:24,
+>>                  from include/linux/timer.h:6,
+>>                  from include/linux/netdevice.h:24,
+>>                  from include/trace/events/xdp.h:8,
+>>                  from include/linux/bpf_trace.h:5,
+>>                  from drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c:33:
+>> In function 'fortify_memset_chk',
+>>     inlined from 'mlx5e_xmit_xdp_frame' at drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c:438:3:
+>> include/linux/fortify-string.h:242:25: error: call to '__write_overflow_field' declared with attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror=attribute-warning]
+>>   242 |                         __write_overflow_field(p_size_field, size);
+>>       |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>
+>> Caused by commit
+>>
+>>   9ded70fa1d81 ("net/mlx5e: Don't prefill WQEs in XDP SQ in the multi buffer mode")
+>>
+>> exposed by the kspp tree.
+>>
+>> I have applied the following fix patch for today (a better one is
+>> probably possible).
+>
+>Hi Saeed,
+>
+>thoughts?
+>
 
-> On Mon, Mar 21, 2022 at 02:04:05PM +0100, Peter Zijlstra wrote:
-> > On Mon, Mar 21, 2022 at 01:55:49PM +0100, Peter Zijlstra wrote:
-> > > On Mon, Mar 21, 2022 at 02:03:27PM +1100, Stephen Rothwell wrote:
-> > > > Hi all,
-> > > > 
-> > > > After merging the tip tree, today's linux-next build (x864 allmodconfig)
-> > > > produced these new warnings:
-> > > > 
-> > > > vmlinux.o: warning: objtool: arch_rethook_prepare()+0x55: relocation to !ENDBR: arch_rethook_trampoline+0x0
-> > > > vmlinux.o: warning: objtool: arch_rethook_trampoline_callback()+0x3e: relocation to !ENDBR: arch_rethook_trampoline+0x0
-> > > > vmlinux.o: warning: objtool: unwind_next_frame()+0x93e: relocation to !ENDBR: arch_rethook_trampoline+0x0
-> > > > vmlinux.o: warning: objtool: unwind_next_frame()+0x5f2: relocation to !ENDBR: arch_rethook_trampoline+0x0
-> > > > vmlinux.o: warning: objtool: unwind_next_frame()+0x4a7: relocation to !ENDBR: arch_rethook_trampoline+0x0
-> > > > vmlinux.o: warning: objtool: __rethook_find_ret_addr()+0x81: relocation to !ENDBR: arch_rethook_trampoline+0x0
-> > > > vmlinux.o: warning: objtool: __rethook_find_ret_addr()+0x90: relocation to !ENDBR: arch_rethook_trampoline+0x0
-> > > > vmlinux.o: warning: objtool: rethook_trampoline_handler()+0x8c: relocation to !ENDBR: arch_rethook_trampoline+0x0
-> > > > vmlinux.o: warning: objtool: rethook_trampoline_handler()+0x9b: relocation to !ENDBR: arch_rethook_trampoline+0x0
-> > > 
-> > > Hurmph, lemme go figure out where that code comes from, I've not seen
-> > > those.
-> > 
-> > Ahh, something tracing. I'll go do some patches on top of it.
-> 
-> The below gets rid of the objtool warnings.
+I forgot about this warning in net :-/ we did a similar patch to net to
+avoid it, Stephen's patch is correct, 
+I will submit his fixup to net-next in the morning.
 
-Yes, I confirmed that.
-
-> 
-> But I still think it's fairly terrible to get a (flawed) carbon copy of
-> the kretprobe code.
-
-Indeed. I would like to replace the trampoline code of kretprobe with
-rethook, eventually. There is no reason why we keep the clone.
-(But I need more arch maintainers help for that, there are too many
- archs implemented kretprobes)
-
-> Also, I think both should fix regs->ss.
-
-I'm not sure this part. Since the return trampoline should run in the same
-context of the called function, isn't ss same there too?
-
-Thank you,
-
-> 
-> ---
-> diff --git a/arch/x86/kernel/rethook.c b/arch/x86/kernel/rethook.c
-> index f0f2f0608282..227a1890a984 100644
-> --- a/arch/x86/kernel/rethook.c
-> +++ b/arch/x86/kernel/rethook.c
-> @@ -20,6 +20,7 @@ asm(
->  	".type arch_rethook_trampoline, @function\n"
->  	"arch_rethook_trampoline:\n"
->  #ifdef CONFIG_X86_64
-> +	ANNOTATE_NOENDBR
->  	/* Push a fake return address to tell the unwinder it's a kretprobe. */
->  	"	pushq $arch_rethook_trampoline\n"
->  	UNWIND_HINT_FUNC
-> @@ -48,7 +49,7 @@ asm(
->  	"	addl $4, %esp\n"
->  	"	popfl\n"
->  #endif
-> -	"	ret\n"
-> +	ASM_RET
->  	".size arch_rethook_trampoline, .-arch_rethook_trampoline\n"
->  );
->  NOKPROBE_SYMBOL(arch_rethook_trampoline);
-
-
--- 
-Masami Hiramatsu <mhiramat@kernel.org>

@@ -2,38 +2,38 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3034B4E3FD2
-	for <lists+linux-next@lfdr.de>; Tue, 22 Mar 2022 14:51:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41D704E4132
+	for <lists+linux-next@lfdr.de>; Tue, 22 Mar 2022 15:26:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234134AbiCVNxH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 22 Mar 2022 09:53:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40814 "EHLO
+        id S233991AbiCVO1y (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 22 Mar 2022 10:27:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235876AbiCVNwz (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Mar 2022 09:52:55 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EF9650B07;
-        Tue, 22 Mar 2022 06:51:28 -0700 (PDT)
+        with ESMTP id S241238AbiCVO0v (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Mar 2022 10:26:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C662D13F48;
+        Tue, 22 Mar 2022 07:25:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 6D0CACE1E18;
-        Tue, 22 Mar 2022 13:51:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17D78C340EC;
-        Tue, 22 Mar 2022 13:51:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A411615BE;
+        Tue, 22 Mar 2022 14:25:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 781C1C340EC;
+        Tue, 22 Mar 2022 14:25:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647957084;
-        bh=+PcSzqlfSr4quKABCcRJgSwsi7LZhav0meRk6eGzyQk=;
+        s=k20201202; t=1647959121;
+        bh=ZJy4jdo44xK7N2rkd/X1voMeDEE0lojYlDBJmgmcmhU=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=FdatOK5EsCCKNSnd0SFBfhCB1ogmnUyN25HzjzgibJkE8MGgn40+e8L/IOlsBXcEJ
-         HMrA0modxfnFK4pVridEsoQREyNK44MG/If1ZkUJh1d+8MYgKmupFlpE3rY//nXs0K
-         ZvQ+DZfvR6W2vDeaCzZ9QCJqkTpRsj1ZqKBXFS8rxAu8MBIYQDsXEyGq7ssz3WENOU
-         8DSxM+7R10paiWeViNMFJbu5uU0Ulj0GswYgV+N4JJPnJBH+rf9AljCATLTAE9YUUX
-         XiJMzjq03TNToclXEXlkhNm9G+E2juwvKLEPI0p4V6UnVnTPiCNz8d9K8EaVBRA6H4
-         SzRxDhwH0LBFQ==
-Date:   Tue, 22 Mar 2022 22:51:18 +0900
+        b=MPq7XyYuZOLpWAJVUwMdRZF7wvfqt9CnUvtuCNcd2EOsQR8wjlPn5L4wm70eaJTdv
+         vkzjJCsXqKJRIfx3XxKJit/vwbEzEbdq9BeTJkdXy3os6LpfO254lsfS9Jk2YyFeab
+         0foNkCXdYPv45Wi0TF9u/KImGJNoBq+WovUGkxJERZBvh2OhX47pJtUJOIkVXICiYs
+         lqkp5A/NqVfp2Zjzul9P5+zkGMJNR6ZnzLItF6WzdG2BQ6yiUNU147qlqeXuEkknXz
+         qVCy43qgJNPbH6x+fl1YL+MfS87lnvE9cWDnsQkit56gHkYwSNJa2Qe3KU37/mFn+a
+         FQvJKCHe2gzJw==
+Date:   Tue, 22 Mar 2022 23:25:15 +0900
 From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Mark Rutland <mark.rutland@arm.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
 Cc:     Peter Zijlstra <peterz@infradead.org>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -41,19 +41,19 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         "H. Peter Anvin" <hpa@zytor.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        rostedt@goodmis.org, ast@kernel.org, hjl.tools@gmail.com,
+        mhiramat@kernel.org, ast@kernel.org, hjl.tools@gmail.com,
         rick.p.edgecombe@intel.com, rppt@kernel.org,
         linux-toolchains@vger.kernel.org, Andrew.Cooper3@citrix.com,
         ndesaulniers@google.com
 Subject: Re: linux-next: build warnings after merge of the tip tree
-Message-Id: <20220322225118.ec33bf93e19d40f27d73c8d1@kernel.org>
-In-Reply-To: <YjnMDlS/6a4UWFQm@FVFF77S0Q05N>
+Message-Id: <20220322232515.97d8e2d66d051881bcfe3ce0@kernel.org>
+In-Reply-To: <20220321121209.3b95e406@gandalf.local.home>
 References: <20220321140327.777f9554@canb.auug.org.au>
         <Yjh11UjDZogc3foM@hirez.programming.kicks-ass.net>
         <Yjh3xZuuY3QcZ1Bn@hirez.programming.kicks-ass.net>
-        <YjisdqdofbDIYj2U@hirez.programming.kicks-ass.net>
-        <20220322143136.0e78366c3521b54b7b9385b8@kernel.org>
-        <YjnMDlS/6a4UWFQm@FVFF77S0Q05N>
+        <20220321112805.1393f9b9@gandalf.local.home>
+        <YjiiDFHIQg78QwSb@hirez.programming.kicks-ass.net>
+        <20220321121209.3b95e406@gandalf.local.home>
 X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -68,56 +68,78 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, 22 Mar 2022 13:15:58 +0000
-Mark Rutland <mark.rutland@arm.com> wrote:
+On Mon, 21 Mar 2022 12:12:09 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-> On Tue, Mar 22, 2022 at 02:31:36PM +0900, Masami Hiramatsu wrote:
-> > On Mon, 21 Mar 2022 17:48:54 +0100
-> > Peter Zijlstra <peterz@infradead.org> wrote:
-> > 
-> > > On Mon, Mar 21, 2022 at 02:04:05PM +0100, Peter Zijlstra wrote:
-> > > > On Mon, Mar 21, 2022 at 01:55:49PM +0100, Peter Zijlstra wrote:
-> > > > > On Mon, Mar 21, 2022 at 02:03:27PM +1100, Stephen Rothwell wrote:
-> > > > > > Hi all,
-> > > > > > 
-> > > > > > After merging the tip tree, today's linux-next build (x864 allmodconfig)
-> > > > > > produced these new warnings:
-> > > > > > 
-> > > > > > vmlinux.o: warning: objtool: arch_rethook_prepare()+0x55: relocation to !ENDBR: arch_rethook_trampoline+0x0
-> > > > > > vmlinux.o: warning: objtool: arch_rethook_trampoline_callback()+0x3e: relocation to !ENDBR: arch_rethook_trampoline+0x0
-> > > > > > vmlinux.o: warning: objtool: unwind_next_frame()+0x93e: relocation to !ENDBR: arch_rethook_trampoline+0x0
-> > > > > > vmlinux.o: warning: objtool: unwind_next_frame()+0x5f2: relocation to !ENDBR: arch_rethook_trampoline+0x0
-> > > > > > vmlinux.o: warning: objtool: unwind_next_frame()+0x4a7: relocation to !ENDBR: arch_rethook_trampoline+0x0
-> > > > > > vmlinux.o: warning: objtool: __rethook_find_ret_addr()+0x81: relocation to !ENDBR: arch_rethook_trampoline+0x0
-> > > > > > vmlinux.o: warning: objtool: __rethook_find_ret_addr()+0x90: relocation to !ENDBR: arch_rethook_trampoline+0x0
-> > > > > > vmlinux.o: warning: objtool: rethook_trampoline_handler()+0x8c: relocation to !ENDBR: arch_rethook_trampoline+0x0
-> > > > > > vmlinux.o: warning: objtool: rethook_trampoline_handler()+0x9b: relocation to !ENDBR: arch_rethook_trampoline+0x0
-> > > > > 
-> > > > > Hurmph, lemme go figure out where that code comes from, I've not seen
-> > > > > those.
-> > > > 
-> > > > Ahh, something tracing. I'll go do some patches on top of it.
-> > > 
-> > > The below gets rid of the objtool warnings.
-> > 
-> > Yes, I confirmed that.
-> > 
-> > > But I still think it's fairly terrible to get a (flawed) carbon copy of
-> > > the kretprobe code.
-> > 
-> > Indeed. I would like to replace the trampoline code of kretprobe with
-> > rethook, eventually. There is no reason why we keep the clone.
-> > (But I need more arch maintainers help for that, there are too many
-> >  archs implemented kretprobes)
+> On Mon, 21 Mar 2022 17:04:28 +0100
+> Peter Zijlstra <peterz@infradead.org> wrote:
 > 
-> FWIW, I'm more than happy to help on the arm64 side if you could Cc me for
-> that; I'm aware of other things in this area I'd like to clean up for
-> backtracing, too.
+> > On Mon, Mar 21, 2022 at 11:28:05AM -0400, Steven Rostedt wrote:
+> > > On Mon, 21 Mar 2022 14:04:05 +0100
+> > > Peter Zijlstra <peterz@infradead.org> wrote:  
+> > 
+> > > > Also, folks, I'm thinking we should start to move to __fexit__, if CET
+> > > > SHSTK ever wants to come to kernel land return trampolines will
+> > > > insta-stop working.
+> > > > 
+> > > > Hjl, do you think we could get -mfexit to go along with -mfentry ?  
+> > 
+> > > int funcA () {
+> > > 	[..]
+> > > 	return funcB();
+> > > }  
+> > 
+> > > This currently works with function graph and kretprobe tracing because of
+> > > the shadow stack. Let's say we traced both funcA and funcB
+> > > 
+> > > funcA:
+> > > 	call __fentry__  
+> > 			push funcA on trace-stack
+> > > 
+> > > 	[..]
+> > > 	jmp funcB
+> > > 
+> > > funcB:
+> > > 	call __fentry__  
+> > 			push funcB on trace-stack
+> > > 
+> > > 	[..]  
+> > 	call __fexit__
+> > 			pop trace-stack until empty
 
-Thank you for your warm help. OK, let me update and submit the rethook
-for arm64 :-)
+This seems wrong. We don't pop the trace-stack until empty, but we will
+record the real stack pointer at funcA.
 
-Thanks.
+> > 			  'exit funcB'
+> > 			  'exit funcA'
+> 
+> And what happens if funcC called funcA and it too was on the stack. We pop
+> that too? But it's not done yet, because calling of funcA was not a tail
+> call.
+
+Thus when the funcC is called, the trace-stack will be poped until funcA,
+because we can see the real stack pointer at the 'ret'.
+So the funcC is still on the trace-stack after that.
+
+Thank you,
+
+
+> 
+> -- Steve
+> 
+> 
+> > 
+> > > 	ret  
+> > 
+> > > 
+> > > That is, the current algorithm traces the end of both funcA and funcB
+> > > without issue, because of how the shadow stack works.  
+> > 
+> > And it all works, no? Or what am I missing?
+> 
+> 
+> 
+
 
 -- 
 Masami Hiramatsu <mhiramat@kernel.org>

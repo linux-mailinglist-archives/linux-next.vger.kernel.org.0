@@ -2,45 +2,46 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68FE34E3745
-	for <lists+linux-next@lfdr.de>; Tue, 22 Mar 2022 04:11:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F81F4E37B5
+	for <lists+linux-next@lfdr.de>; Tue, 22 Mar 2022 04:54:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235922AbiCVDMD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 21 Mar 2022 23:12:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36706 "EHLO
+        id S236211AbiCVDwm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 21 Mar 2022 23:52:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235928AbiCVDMD (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Mar 2022 23:12:03 -0400
+        with ESMTP id S236157AbiCVDwk (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Mar 2022 23:52:40 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39BFA1E3E7;
-        Mon, 21 Mar 2022 20:10:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DE1E631F;
+        Mon, 21 Mar 2022 20:51:11 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KMxLt5HsQz4xNq;
-        Tue, 22 Mar 2022 14:10:30 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KMyFn3MMyz4xc3;
+        Tue, 22 Mar 2022 14:51:09 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1647918631;
-        bh=JgcPupeKnnHBzGSo+u871QI4p41qJ1PO7267xASx8Ng=;
+        s=201702; t=1647921069;
+        bh=WmtZDWKsmdUvEAhIKxLwwO8UN0TlexArmdJbXO5pm4Y=;
         h=Date:From:To:Cc:Subject:From;
-        b=POAk4w9hPKys2YmVxgz2G9QMazVxgx94pNu9pr37NjqvAkCKXwaXa9Of9ZccJi1LL
-         oREVGQVcs1yLsm/t83E8CqNgq5RKSg8mn5lB4GYb2RpfKGS349dWxnNk2trxDh03Wq
-         2PNkEfvpBAq11qbq1TjtNvUNMDsxAUPOfIRmxrbiVRQNL8p1OkE4kD0J4POAujOGym
-         v+l5XBS9xM1kBzSpWiADy8ed3Kb467HfNJMj9H1J8KtuKzL1HJNv9SdH0/BLTkEGx4
-         esTOeKEf41V6AG2bfGmSrrsMX/Q5PbsoOmzPAHPNHEE7ssN6m7HkPdv9ojSlkvc52c
-         e3I+4QIcNySNw==
-Date:   Tue, 22 Mar 2022 14:10:29 +1100
+        b=hL57UHxZXDMChAuQKWNdDvmjwjQnyIDYt3sXIB28r2LOsyqKN6CQf0Yq0RSM0/qhE
+         ulMokn7sTHbnY0u+nu1ko77tHklGwOx6ski93cK6taefhhZePFDhNlff8FgnsWc9xv
+         rs70cq7aQruvp6FS3vcb2cUGHqibcT13kGPsCyMZ5ZhYphdEHzkiOsZgDmx0/oc6Pp
+         keQdxQfy8P0fuuz1p2LTeGy02b2fI8e+pMse3XIS98158pAyLdAP7Xbun5CVi4YC+G
+         5kMKm8y+bR/b5CtPI0W4hfVJ/POIaz1xM1gGY50+rSmKNwg/do5PIEAcL7j2eWhKu9
+         y2803n/wlrEtQ==
+Date:   Tue, 22 Mar 2022 14:51:08 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Rob Herring <robherring2@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Michael Walle <michael@walle.cc>, Rob Herring <robh@kernel.org>
-Subject: linux-next: manual merge of the devicetree tree with the mfd tree
-Message-ID: <20220322141029.1885af98@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warnings after merge of the tip tree
+Message-ID: <20220322145108.2878ed64@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/=8eRZByPhcW_bYIMAev82Rw";
+Content-Type: multipart/signed; boundary="Sig_/lx+4g/ktsC9hxSGiz=8tMvI";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -51,70 +52,43 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/=8eRZByPhcW_bYIMAev82Rw
+--Sig_/lx+4g/ktsC9hxSGiz=8tMvI
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the devicetree tree got a conflict in:
+After merging the tip tree, today's linux-next build (x86_64 allmodconfig)
+produced these warnings:
 
-  Documentation/devicetree/bindings/mfd/syscon.yaml
+WARNING: modpost: EXPORT symbol "device_match_devt" [vmlinux] version ...
+Is "device_match_devt" prototyped in <asm/asm-prototypes.h>?
 
-between commit:
+I get thousands like this :-(
 
-  844dd8fe02f2 ("dt-bindings: Add compatibles for undocumented trivial sysc=
-ons")
+I don't know what has done this, but there is a new Kbuild and modpost
+change:
 
-from the mfd tree and commit:
-
-  c1ff0c0f24d6 ("dt-bindings: mfd: syscon: add microchip,lan966x-cpu-syscon=
- compatible")
-
-from the devicetree tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+  2f35e67f621f ("kbuild: Fixup the IBT kbuild changes")
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc Documentation/devicetree/bindings/mfd/syscon.yaml
-index 29d4a97f7108,5aa0daa55533..000000000000
---- a/Documentation/devicetree/bindings/mfd/syscon.yaml
-+++ b/Documentation/devicetree/bindings/mfd/syscon.yaml
-@@@ -44,10 -44,7 +44,11 @@@ properties
-                - hisilicon,hi6220-sramctrl
-                - hisilicon,pcie-sas-subctrl
-                - hisilicon,peri-subctrl
- +              - intel,lgm-syscon
- +              - marvell,armada-3700-usb2-host-misc
- +              - mediatek,mt8135-pctl-a-syscfg
- +              - mediatek,mt8135-pctl-b-syscfg
-+               - microchip,lan966x-cpu-syscon
-                - microchip,sparx5-cpu-syscon
-                - mstar,msc313-pmsleep
-                - rockchip,px30-qos
-
---Sig_/=8eRZByPhcW_bYIMAev82Rw
+--Sig_/lx+4g/ktsC9hxSGiz=8tMvI
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmI5PiUACgkQAVBC80lX
-0GzCTgf/fn4tKxmXvhKbgmHzqKLWSRIoQAnY7wD2eiJYRx2v3pbUfwsOt8xXs6dA
-YQKVMSfGrnnOs5zo3TkL3lUruQfKbHQVKHLYQGse1FUL+FNZLUtwZJ3DKjvsv3fM
-4jH9A3XdnIIq+6NOlyuWCj6whd0j4Uwlh/m5BctUQUW86ZyYeCoT8RbcS2kC3Esl
-oLpmgq7eID/uyQ/F6o+0tPXa9NC/EFvaMMZhaALv92yuRvqY0yb+W99n32mUoMLT
-ios6vIZL0v9DCU3e8TJ03UusMBTXdwFUnAxLWTZHsaPS3OHvzTx0iryhjhH6NQ2w
-/rT3DbsI0jLeKUuqyVerpg2DhyM+bw==
-=/g50
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmI5R6wACgkQAVBC80lX
+0Gw+HggAnP1DWAK94BPAdF4tDv8L6k/774AWzdL1qVrYdQ0yujlHAm7ugc26jQcY
+fXFKePsBOZxZ0eRUF8yXYBJXZZtnByTzYV4KsPEpIIuPuSZUBQgtQqGlNcMi7mma
+b4WBo+ufs4wynotJPXjbZpzJ0YtpYu+lkbwh7F+C0ZDXlQ23QA8e3V7SbpjZ1vNT
+I7A5h3B7fXqnIj8psu2mrpdVtic2WKxhepNdDCF6gscO78HJXlXfzjCHXjw8IxDY
+jRnxtv3d9CYEst11yLcAgPKueaYq50DPh2FHKAv4WymYuRXb0GkIdScx53TB0gPy
+k34tvoNMpipmKPnxkHe99XhK+WhXug==
+=KVQe
 -----END PGP SIGNATURE-----
 
---Sig_/=8eRZByPhcW_bYIMAev82Rw--
+--Sig_/lx+4g/ktsC9hxSGiz=8tMvI--

@@ -2,97 +2,107 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A51D4E3416
-	for <lists+linux-next@lfdr.de>; Tue, 22 Mar 2022 00:22:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1651B4E3560
+	for <lists+linux-next@lfdr.de>; Tue, 22 Mar 2022 01:25:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231533AbiCUXTp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 21 Mar 2022 19:19:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42174 "EHLO
+        id S233877AbiCVANv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 21 Mar 2022 20:13:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233059AbiCUXSR (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Mar 2022 19:18:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 729945C35A;
-        Mon, 21 Mar 2022 16:07:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S233876AbiCVANu (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Mar 2022 20:13:50 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0CC52D4D7A;
+        Mon, 21 Mar 2022 17:11:06 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 78056B81A66;
-        Mon, 21 Mar 2022 22:55:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8D08C340E8;
-        Mon, 21 Mar 2022 22:55:04 +0000 (UTC)
-Date:   Mon, 21 Mar 2022 18:55:03 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KMsKy5bk3z4xL3;
+        Tue, 22 Mar 2022 11:09:26 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1647907767;
+        bh=4nqnqth803i/Xf8RxS2LPdwAs0gytBUqS/Ki9UbFU/o=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=WkyHmOlGWeOcConUsOwGb5wtziOlfFWgr3Pqf1iBP9uPQ9AhTO3RafUR7aldIjINl
+         RtIxaFZkziB5SMLc4FofJ8dBOhnd4pa5WqDssv+yEH37otNPV0G4evYR+Y+3Qc92KP
+         qhMAYyWc5qVPPQYpQAfFpK6SW2PQLVZwQDgfEctjWZEqu5ankEEmoxPnppTwyCVilF
+         nidqkuMoT8b5S28dTvugDeApUpiLudT0PVamTRxSlKXpTk/i30feDdwuIDsfwMXBd7
+         39CFr463iSLpEPnRyWv92UFOYuE/FGODRi5eXJ0+koyZymRYpdDTg6jntu19Z4gWSa
+         5e5+TDK3Cq6dA==
+Date:   Tue, 22 Mar 2022 11:09:25 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Helge Deller <deller@gmx.de>,
+        Parisc List <linux-parisc@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        "H.J. Lu" <hjl.tools@gmail.com>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        linux-toolchains <linux-toolchains@vger.kernel.org>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: Re: linux-next: build warnings after merge of the tip tree
-Message-ID: <20220321185503.0dcb5d9c@gandalf.local.home>
-In-Reply-To: <CAADnVQKg7GPVpg-22B2Ym5HFVoGaquoFZDEkRwTDgXzm+L8OOw@mail.gmail.com>
-References: <20220321140327.777f9554@canb.auug.org.au>
-        <Yjh11UjDZogc3foM@hirez.programming.kicks-ass.net>
-        <Yjh3xZuuY3QcZ1Bn@hirez.programming.kicks-ass.net>
-        <Yjh4xzSWtvR+vqst@hirez.programming.kicks-ass.net>
-        <YjiBbF+K4FKZyn6T@hirez.programming.kicks-ass.net>
-        <YjiZhRelDJeX4dfR@hirez.programming.kicks-ass.net>
-        <YjidpOZZJkF6aBTG@hirez.programming.kicks-ass.net>
-        <CAHk-=wigO=68WA8aMZnH9o8qRUJQbNJPERosvW82YuScrUTo7Q@mail.gmail.com>
-        <YjirfOJ2HQAnTrU4@hirez.programming.kicks-ass.net>
-        <CAHk-=wguO61ACXPSz=hmCxNTzqE=mNr_bWLv6GH5jCVZLBL=qw@mail.gmail.com>
-        <20220322090541.7d06c8cb@canb.auug.org.au>
-        <CAADnVQJnZpQjUv-dw7SU-WwTOn_tZ8xmy5ydRn=g_m-9UyS2kw@mail.gmail.com>
-        <20220322094526.436ca4f7@elm.ozlabs.ibm.com>
-        <CAADnVQKg7GPVpg-22B2Ym5HFVoGaquoFZDEkRwTDgXzm+L8OOw@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the parisc-hd tree with the
+ asm-generic tree
+Message-ID: <20220322110925.7b295e54@canb.auug.org.au>
+In-Reply-To: <20220228114523.03b2f921@canb.auug.org.au>
+References: <20220228114523.03b2f921@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/JECP/m+MkvZbCsBV3x2wGku";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, 21 Mar 2022 15:50:17 -0700
-Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+--Sig_/JECP/m+MkvZbCsBV3x2wGku
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> > Peter has other concerns, please read the thread and consider them.  
-> 
-> Masami is an expert in kprobe. He copy pasted a bit of kprobe logic
-> to make it into 'multi kprobe' (he calls it fprobe).
-> I believe he knows what he's doing.
-> Steven reviewed and tested that set.
-> We've tested it as well and don't have any correctness or api concerns.
+Hi all,
 
-I tested it from a ftrace perspective, not an IBT or other work being done
-in the x86 world.
+On Mon, 28 Feb 2022 11:45:23 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> Today's linux-next merge of the parisc-hd tree got a conflict in:
+>=20
+>   arch/parisc/lib/memcpy.c
+>=20
+> between commit:
+>=20
+>   967747bbc084 ("uaccess: remove CONFIG_SET_FS")
+>=20
+> from the asm-generic tree and commit:
+>=20
+>   d4a767ea8b0e ("parisc: Use constants to encode the space registers like=
+ SR_KERNEL")
+>=20
+> from the parisc-hd tree.
 
-I'm fine with the work being done in kernel/tracing/ but it still requires
-the arch maintainer's acks for anything in arch/. I was under the
-impression that the arch specific code was Cc'ing the arch maintainers
-(which I always do when I touch their code). But I missed that they were
-not. That's my fault, I should have caught that.
+This is now a conflict between the asm-generic tree and commit
 
--- Steve
+  360bd6c65807 ("parisc: Use constants to encode the space registers like S=
+R_KERNEL")
+
+in Linus' tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/JECP/m+MkvZbCsBV3x2wGku
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmI5E7UACgkQAVBC80lX
+0GxbDggAn6FQaXTvpmAOqqfelYM0EN747gukeBKFXbUP64zbqUjQg9wzpSULUR0I
+bIrR4kAJEmic2i5goPHE5c/KgG+pGC80muNBL2KXtEPwSBk5cJHv0v7tUC9SYgSD
+ePEI75xwHjd2fc6iWjXTewd8CTEcfw+n+DSHsF9GHBD30+JG76OfdbgU3Bjx+NZq
+guwsbqCaoqkBGF4lmj+tWi0dopokNfCRkXzVx7RxHuvQSsGyYbSSzp6a5SjUfxQH
+0ferJuYWLMTNO13pyhxdMhlHsnzVabnFh61/uGsZNp3pdKC6y0O6Hs+j409edwR+
+FiuFT1zPrK+48+jZTqfOQZPIRsDKoQ==
+=FBOi
+-----END PGP SIGNATURE-----
+
+--Sig_/JECP/m+MkvZbCsBV3x2wGku--

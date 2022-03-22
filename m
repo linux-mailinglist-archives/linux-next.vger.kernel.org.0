@@ -2,49 +2,49 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 611174E48E7
-	for <lists+linux-next@lfdr.de>; Tue, 22 Mar 2022 23:07:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 424D24E498A
+	for <lists+linux-next@lfdr.de>; Wed, 23 Mar 2022 00:11:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237516AbiCVWIe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 22 Mar 2022 18:08:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56324 "EHLO
+        id S237299AbiCVXMt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 22 Mar 2022 19:12:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237512AbiCVWIc (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Mar 2022 18:08:32 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2B9B6F4BC;
-        Tue, 22 Mar 2022 15:07:03 -0700 (PDT)
+        with ESMTP id S235216AbiCVXMs (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Mar 2022 19:12:48 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C12C55E77D;
+        Tue, 22 Mar 2022 16:11:19 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KNQZB1hCtz4xMW;
-        Wed, 23 Mar 2022 09:06:58 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KNS0L0xxrz4xPv;
+        Wed, 23 Mar 2022 10:11:14 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1647986822;
-        bh=EsSxbDR9FaVnz6o0uFGQYD9/VmUeFlXQQpVgqKg3qZU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=YNqRNXLpPWoAreaWDoEPBErmxhMyJd8ZkYGpTfz+WkOTmMRKZMT1ZrmxjiLYf0C/i
-         WcGSHEyT0DmudFZLSdfL+np4ZtedELPc/SSe7HmyXCZHMhTDOQRX4YhmqfotCVrT2k
-         FFaZrfBolwMq/mt96co4/bTTejX0nXAd+FY+/UYoCmzqD+UDm8Yj3ooKz+ZS/San8k
-         e90CHL4yX+8xNRtReidt3RLWUGQeYoMK3NqCW+VZtLwcV7sKvSN2bmGkcO0eq/03t9
-         xN0uejTlXFY/bWeduvegXmUESqcj1MTCXw3zveCDzK6mLljYFRUafZi+6T+lV0kjSj
-         ArBl81pxkrlOg==
-Date:   Wed, 23 Mar 2022 09:06:57 +1100
+        s=201702; t=1647990674;
+        bh=SKiE5f0/Rlq6TatzPPOaTLpSSUfpNd+aBF9Lwqd3Wxc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=YD2AFpl+HTCeT2v/pAmYJb57NG9nifW3tZvzVWd3KzbMELsgafecqRqU4gx6YAzxf
+         neru+5NPsgpB0xooxfm5Gv+zOIzXSkjM5IZokMuXxghOhNlTxiABjIt05YzpACkb5x
+         4LmXkn5McD5gii3yvZ0UMS1c75Qd8E3VLmDg7JFTXLk76idIOb8YBQdyWG4qpweK1i
+         54+M30tzACYWE+/THTEjtwcrUs9Q3be8E9sAm1E1KSJzXas+VhM3WFSw6jSBg1+MbC
+         4GGpPEQBjeOrzgZ+QHbpTNVg3ay8niVVTEU6Bl5FZV+2Au4iXJjS5Emg4ftVhO4zpZ
+         +lC2XDcZbhMgQ==
+Date:   Wed, 23 Mar 2022 10:11:13 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul@pwsan.com>
-Cc:     Atish Patra <atish.patra@wdc.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Atish Patra <atishp@rivosinc.com>,
-        Changbin Du <changbin.du@gmail.com>,
-        Changbin Du <changbin.du@intel.com>,
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: linux-next: manual merge of the risc-v tree with Linus' tree
-Message-ID: <20220323090657.6538b9f6@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warnings after merge of the tip tree
+Message-ID: <20220323101113.1baac8a3@canb.auug.org.au>
+In-Reply-To: <20220322215252.GU8939@worktop.programming.kicks-ass.net>
+References: <20220322145108.2878ed64@canb.auug.org.au>
+        <20220322215252.GU8939@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/W+LMvh3XRYfEBCImGNDrQWK";
+Content-Type: multipart/signed; boundary="Sig_/wNfwU3ae+nICKJRKk=3l6.6";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -55,66 +55,55 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/W+LMvh3XRYfEBCImGNDrQWK
+--Sig_/wNfwU3ae+nICKJRKk=3l6.6
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Peter,
 
-Today's linux-next merge of the risc-v tree got a conflict in:
+On Tue, 22 Mar 2022 22:52:52 +0100 Peter Zijlstra <peterz@infradead.org> wr=
+ote:
+>
+> On Tue, Mar 22, 2022 at 02:51:08PM +1100, Stephen Rothwell wrote:
+> >=20
+> > After merging the tip tree, today's linux-next build (x86_64 allmodconf=
+ig)
+> > produced these warnings:
+> >=20
+> > WARNING: modpost: EXPORT symbol "device_match_devt" [vmlinux] version .=
+..
+> > Is "device_match_devt" prototyped in <asm/asm-prototypes.h>?
+> >=20
+> > I get thousands like this :-(
+> >=20
+> > I don't know what has done this, but there is a new Kbuild and modpost
+> > change:
+> >=20
+> >   2f35e67f621f ("kbuild: Fixup the IBT kbuild changes") =20
+>=20
+> It was; I rebased that commit and asked Boris to regen tip so you should
+> have it fixed for the next round.
 
-  arch/riscv/kernel/Makefile
-
-between commit:
-
-  22e2100b1b07 ("riscv: fix oops caused by irqsoff latency tracer")
-
-from Linus' tree and commit:
-
-  9dc6ce802136 ("RISC-V: Remove the current perf implementation")
-
-from the risc-v tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+Excellent thanks (I just picked up the new tip tree).
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc arch/riscv/kernel/Makefile
-index ffc87e76b1dd,fb63b462ff85..000000000000
---- a/arch/riscv/kernel/Makefile
-+++ b/arch/riscv/kernel/Makefile
-@@@ -51,9 -51,6 +51,8 @@@ obj-$(CONFIG_MODULE_SECTIONS)	+=3D module
-  obj-$(CONFIG_FUNCTION_TRACER)	+=3D mcount.o ftrace.o
-  obj-$(CONFIG_DYNAMIC_FTRACE)	+=3D mcount-dyn.o
- =20
- +obj-$(CONFIG_TRACE_IRQFLAGS)	+=3D trace_irq.o
- +
-- obj-$(CONFIG_RISCV_BASE_PMU)	+=3D perf_event.o
-  obj-$(CONFIG_PERF_EVENTS)	+=3D perf_callchain.o
-  obj-$(CONFIG_HAVE_PERF_REGS)	+=3D perf_regs.o
-  obj-$(CONFIG_RISCV_SBI)		+=3D sbi.o
-
---Sig_/W+LMvh3XRYfEBCImGNDrQWK
+--Sig_/wNfwU3ae+nICKJRKk=3l6.6
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmI6SIEACgkQAVBC80lX
-0Gwcewf/W6wFEr+iKaAZte9wLwLBnQ2TccYSimXqLexuh4r0huIsd+DsVQ1yAnbT
-927xwqDHuALGJ1CosaTOb4/1ErSmiuW1lysK5tssL9vJyvIcrGfS57W+dQcyD8lS
-SUdxUAcOQwz83W3sVBWH2cUXd4CKQvIR0LQwQJbY8xJp6UYSk0PUKNSCPcUFF9Ks
-aowrMKWHg5v0U1tq+emiikTmEVQUxdJkBg+LvPkRS4G4JOI4E7jb252n1jaRUKcY
-2EsredlMppGzp+BuWv75nvq1+bVC6qIutu4kWlF7sW6DLpUYA65sijJVttVpVAA1
-M+Qc/l2pax7C23HSNomyS6aGJallNg==
-=eWdh
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmI6V5EACgkQAVBC80lX
+0GyYxAf/bTmLw5KE6+1PwsQn4MRbEqgb6On6EXye0bxwRywmTeWi0uFO+pmK6507
+9Of81uFfR7uRmJXHxK47fbKjPP4hbQ9iSryPomD29U8n9NH0K/X9FHytcMWzNy64
+aa0bJHbxyuGlD75ZjxFvEeosI5wso/I/qN5c/D0+9sChmh9xHTOmp269m2hwJ2bU
+LMprFeGKh1EcOXvIItz9rhIvn84drCIT9q1NOpPcB+nAQVsbvQ+GFp0hg6UqfNK/
+6ikjGBwUn6cTlsvWgcaojW5qFImWI1Q21f2PpYHjWbv56N6loVn5cxd2Lu6anbkn
+qeaqtEEBp2hfNHgSXZWheebg6daBrw==
+=rWK9
 -----END PGP SIGNATURE-----
 
---Sig_/W+LMvh3XRYfEBCImGNDrQWK--
+--Sig_/wNfwU3ae+nICKJRKk=3l6.6--

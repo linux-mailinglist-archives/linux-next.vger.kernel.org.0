@@ -2,100 +2,51 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2915B4E56B3
-	for <lists+linux-next@lfdr.de>; Wed, 23 Mar 2022 17:44:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F36B4E5AEE
+	for <lists+linux-next@lfdr.de>; Wed, 23 Mar 2022 22:57:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239057AbiCWQqO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 23 Mar 2022 12:46:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57700 "EHLO
+        id S1345048AbiCWV6c (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 23 Mar 2022 17:58:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236943AbiCWQqO (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 23 Mar 2022 12:46:14 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD21FCC0;
-        Wed, 23 Mar 2022 09:44:43 -0700 (PDT)
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22NGVjho004726;
-        Wed, 23 Mar 2022 16:44:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=bR3Xdsc0A/CEVp68Z04s5U/ffS6+4SVOvjC43+ZAa40=;
- b=YzUVucaaU5yV0vnkJHaFFd+8UrRaJplDB96as66T8J4YYHG0himdGCf51LlY3ajgDtOn
- BNNZylPW0cjv70ZaA/U1Ua0z3mEI4hui/cTb4FAsEooO98l/seSWgEtTG/a6PVSr3M7w
- AUSRsSzJbxnaPNAgQBXtp0M+fpDZ3rvSxLL4N3dJ8uDG6BkUnXnZHKoz0HAWJNPulEDb
- Z7hFY0fANCfnhMetD9CO86aTSBpY8DGSkQvm7+NVtPmxF2BPFQHZW+5nxqAOSm5DOhC7
- I7xpZYUyIjqlPC+PPdf0bPEnlAIJzqkBb35gaUe4CEfhuU1+tnrzwKpeBk18t69itNQy 2Q== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3f0757875g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Mar 2022 16:43:59 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22NGhdwY022968;
-        Wed, 23 Mar 2022 16:43:57 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma04ams.nl.ibm.com with ESMTP id 3ew6t910m2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Mar 2022 16:43:57 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22NGhsVX26345744
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 23 Mar 2022 16:43:54 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8C0A242045;
-        Wed, 23 Mar 2022 16:43:54 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 385434203F;
-        Wed, 23 Mar 2022 16:43:49 +0000 (GMT)
-Received: from [9.43.30.161] (unknown [9.43.30.161])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 23 Mar 2022 16:43:48 +0000 (GMT)
-Message-ID: <51698a4d-1940-2191-5bdc-f3f7e4fa6e0e@linux.ibm.com>
-Date:   Wed, 23 Mar 2022 22:13:47 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 1/2] drivers/nvdimm: Fix build failure when
- CONFIG_PERF_EVENTS is not set
-Content-Language: en-US
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux NVDIMM <nvdimm@lists.linux.dev>,
+        with ESMTP id S242437AbiCWV6b (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 23 Mar 2022 17:58:31 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE7BC8C7F6;
+        Wed, 23 Mar 2022 14:57:00 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KP2J61wChz4xLS;
+        Thu, 24 Mar 2022 08:56:54 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1648072616;
+        bh=aHjNgAelKfhb/Va6saAW8LUPIPUtnQVfHHfUW96Rbcg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=g50l42DT9yMIVNvdYTJu50LRH6z0Llc5/yEA7d1qmaOLGq3LSbXmBrCGnGsTDt6O9
+         /4LBcY+fgAObFk4huYHlwH0NdzJlKjCLofjtORBmBPDTMLbSN2EPVG+Bkve51CPsBV
+         DNr9RC3rSjDEhgM+kZK6BRRLzxiGh2urREQ7C3jpHdHmMdi91Wh3f3k8ksvQKDIAfG
+         68uVkN2paIyVMCiNY4kJ1X54zNqTW7Gue6qMxyeU+Z+CX0jBHcE0TJdf71+B3rrxgP
+         38haQqTz7vP6puFRMmAFRKgpNtXe5m9c2OvMns+XozMRBdUrX1Y3xN7dlmGLCw0g/B
+         VvXXzR+NouNBg==
+Date:   Thu, 24 Mar 2022 08:56:53 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Richard Weinberger <richard@nod.at>
+Cc:     Matthew Wilcox <willy@infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Weiny, Ira" <ira.weiny@intel.com>,
-        Vishal L Verma <vishal.l.verma@intel.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Santosh Sivaraj <santosh@fossix.org>, maddy@linux.ibm.com,
-        rnsastry@linux.ibm.com,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        atrajeev@linux.vnet.ibm.com, Vaibhav Jain <vaibhav@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Linux MM <linux-mm@kvack.org>,
-        kernel test robot <lkp@intel.com>
-References: <20220318114133.113627-1-kjain@linux.ibm.com>
- <CAPcyv4jNJy70b6jK6S9TYDrLLZxzSNQxfN7-bzOpVa+ffZN3hw@mail.gmail.com>
-From:   kajoljain <kjain@linux.ibm.com>
-In-Reply-To: <CAPcyv4jNJy70b6jK6S9TYDrLLZxzSNQxfN7-bzOpVa+ffZN3hw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: g66pYFIrv4bvqoq2-4MUOpsjFTo-mARV
-X-Proofpoint-ORIG-GUID: g66pYFIrv4bvqoq2-4MUOpsjFTo-mARV
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Zhihao Cheng <chengzhihao1@huawei.com>
+Subject: Re: linux-next: manual merge of the folio tree with the ubifs-fixes
+ tree
+Message-ID: <20220324085653.4c4c5315@canb.auug.org.au>
+In-Reply-To: <20220315205259.71b4238a@canb.auug.org.au>
+References: <20220315205259.71b4238a@canb.auug.org.au>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-23_07,2022-03-23_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 impostorscore=0
- adultscore=0 malwarescore=0 mlxlogscore=999 bulkscore=0 clxscore=1015
- phishscore=0 priorityscore=1501 lowpriorityscore=0 spamscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203230087
+Content-Type: multipart/signed; boundary="Sig_/q_PUoTablLrBmKKVQNFxoNY";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -103,129 +54,75 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+--Sig_/q_PUoTablLrBmKKVQNFxoNY
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-On 3/22/22 07:40, Dan Williams wrote:
-> On Fri, Mar 18, 2022 at 4:42 AM Kajol Jain <kjain@linux.ibm.com> wrote:
->>
->> The following build failure occures when CONFIG_PERF_EVENTS is not set
->> as generic pmu functions are not visible in that scenario.
->>
->> |-- s390-randconfig-r044-20220313
->> |   |-- nd_perf.c:(.text):undefined-reference-to-perf_pmu_migrate_context
->> |   |-- nd_perf.c:(.text):undefined-reference-to-perf_pmu_register
->> |   `-- nd_perf.c:(.text):undefined-reference-to-perf_pmu_unregister
->>
->> Similar build failure in nds32 architecture:
->> nd_perf.c:(.text+0x21e): undefined reference to `perf_pmu_migrate_context'
->> nd_perf.c:(.text+0x434): undefined reference to `perf_pmu_register'
->> nd_perf.c:(.text+0x57c): undefined reference to `perf_pmu_unregister'
->>
->> Fix this issue by adding check for CONFIG_PERF_EVENTS config option
->> and disabling the nvdimm perf interface incase this config is not set.
->>
->> Also removed function declaration of perf_pmu_migrate_context,
->> perf_pmu_register, perf_pmu_unregister functions from nd.h as these are
->> common pmu functions which are part of perf_event.h and since we
->> are disabling nvdimm perf interface incase CONFIG_PERF_EVENTS option
->> is not set, we not need to declare them in nd.h
->>
->> Fixes: 0fab1ba6ad6b ("drivers/nvdimm: Add perf interface to expose
->> nvdimm performance stats") (Commit id based on linux-next tree)
->> Signed-off-by: Kajol Jain <kjain@linux.ibm.com>
->> Link: https://lore.kernel.org/all/62317124.YBQFU33+s%2FwdvWGj%25lkp@intel.com/
->> Reported-by: kernel test robot <lkp@intel.com>
->> ---
->>  drivers/nvdimm/Makefile | 2 +-
->>  include/linux/nd.h      | 7 ++++---
->>  2 files changed, 5 insertions(+), 4 deletions(-)
->>
->> ---
->> - This fix patch changes are added and tested on top of linux-next tree
->>   on the 'next-20220315' branch.
->> ---
->> diff --git a/drivers/nvdimm/Makefile b/drivers/nvdimm/Makefile
->> index 3fb806748716..ba0296dca9db 100644
->> --- a/drivers/nvdimm/Makefile
->> +++ b/drivers/nvdimm/Makefile
->> @@ -15,7 +15,7 @@ nd_e820-y := e820.o
->>  libnvdimm-y := core.o
->>  libnvdimm-y += bus.o
->>  libnvdimm-y += dimm_devs.o
->> -libnvdimm-y += nd_perf.o
->> +libnvdimm-$(CONFIG_PERF_EVENTS) += nd_perf.o
->>  libnvdimm-y += dimm.o
->>  libnvdimm-y += region_devs.o
->>  libnvdimm-y += region.o
->> diff --git a/include/linux/nd.h b/include/linux/nd.h
->> index 7b2ccbdc1cbc..a4265eaf5ae8 100644
->> --- a/include/linux/nd.h
->> +++ b/include/linux/nd.h
->> @@ -8,8 +8,10 @@
->>  #include <linux/ndctl.h>
->>  #include <linux/device.h>
->>  #include <linux/badblocks.h>
->> +#ifdef CONFIG_PERF_EVENTS
->>  #include <linux/perf_event.h>
-> 
-> Why must this not be included? Doesn't it already handle the
-> CONFIG_PERF_EVENTS=n case internally?
-> 
->>  #include <linux/platform_device.h>
-> 
-> I notice now that this platform-device header should have never been
-> added in the first place, just forward declare:
-> 
-> struct platform_device;
+On Tue, 15 Mar 2022 20:52:59 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> Today's linux-next merge of the folio tree got a conflict in:
+>=20
+>   fs/ubifs/file.c
+>=20
+> between commit:
+>=20
+>   3b67db8a6ca8 ("ubifs: Fix to add refcount once page is set private")
+>=20
+> from the ubifs-fixes tree and commit:
+>=20
+>   c337f2f4f746 ("ubifs: Convert from invalidatepage to invalidate_folio")
+>=20
+> from the folio tree.
+>=20
+> I fixed it up (I hope - see below) and can carry the fix as
+> necessary. This is now fixed as far as linux-next is concerned, but any
+> non trivial conflicts should be mentioned to your upstream maintainer
+> when your tree is submitted for merging.  You may also want to consider
+> cooperating with the maintainer of the conflicting tree to minimise any
+> particularly complex conflicts.
+>=20
+>=20
+> diff --cc fs/ubifs/file.c
+> index 6b45a037a047,8a9ffc2d4167..000000000000
+> --- a/fs/ubifs/file.c
+> +++ b/fs/ubifs/file.c
+> @@@ -1304,8 -1304,8 +1304,8 @@@ static void ubifs_invalidate_folio(stru
+>   		release_existing_page_budget(c);
+>  =20
+>   	atomic_long_dec(&c->dirty_pg_cnt);
+> - 	detach_page_private(page);
+> - 	ClearPageChecked(page);
+>  -	folio_clear_private(folio);
+> ++	folio_detach_private(folio);
+> + 	folio_clear_checked(folio);
+>   }
+>  =20
+>   int ubifs_fsync(struct file *file, loff_t start, loff_t end, int datasy=
+nc)
 
-Hi Dan,
-    Sure I will do the required changes.
+This is now a conflict between the ubifs-fixes tree and Linus' tree.
 
-Thanks,
-Kajol Jain
-> 
->> +#endif
->>
->>  enum nvdimm_event {
->>         NVDIMM_REVALIDATE_POISON,
->> @@ -25,6 +27,7 @@ enum nvdimm_claim_class {
->>         NVDIMM_CCLASS_UNKNOWN,
->>  };
->>
->> +#ifdef CONFIG_PERF_EVENTS
->>  #define NVDIMM_EVENT_VAR(_id)  event_attr_##_id
->>  #define NVDIMM_EVENT_PTR(_id)  (&event_attr_##_id.attr.attr)
-> 
-> Why must these be inside the ifdef guard?
-> 
->>
->> @@ -63,9 +66,7 @@ extern ssize_t nvdimm_events_sysfs_show(struct device *dev,
->>
->>  int register_nvdimm_pmu(struct nvdimm_pmu *nvdimm, struct platform_device *pdev);
->>  void unregister_nvdimm_pmu(struct nvdimm_pmu *nd_pmu);
-> 
-> Shouldn't there also be stub functions in the CONFIG_PERF_EVENTS=n case?
-> 
-> static inline int register_nvdimm_pmu(struct nvdimm_pmu *nvdimm,
-> struct platform_device *pdev)
-> {
->     return -ENXIO;
-> }
-> 
-> static inline void unregister_nvdimm_pmu(struct nvdimm_pmu *nd_pmu)
-> {
-> }
-> 
->> -void perf_pmu_migrate_context(struct pmu *pmu, int src_cpu, int dst_cpu);
->> -int perf_pmu_register(struct pmu *pmu, const char *name, int type);
->> -void perf_pmu_unregister(struct pmu *pmu);
-> 
-> Yeah, I should have caught these earlier.
-> 
->> +#endif
->>
->>  struct nd_device_driver {
->>         struct device_driver drv;
->> --
->> 2.31.1
->>
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/q_PUoTablLrBmKKVQNFxoNY
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmI7l6UACgkQAVBC80lX
+0GxFvAf+LdauYC4A5knBnbOVsqd46s2qnLxZbWMWwc+F8fgvwDk9H9qf1Jtqi58T
+gADReIjUwZ0ZsURSItlRNJqVwFwwOJQu0bpG0A6T9mkCUoQcqPAVjZQ+ZiD6wb9y
+HIWMwKApt3FSfHv8CZUuEJgVnJJx+76lVFrnm5v2FLVVQcny9zwAjvmzTaNhSWmg
+I7pMGCv/x8LAwOA01RJPom7DZ+gxiF9UrPZmBYoXlP/5kk5VLx/dHBqD+nQ0xUU0
+XOFm7TZNGKUCpdxHmGiiHBPlq+a58qdojpbQpMesaWrqjdYnIUSV5BxBfwsY1m84
+qRL+FhP/LIkpe67uGj2lsKhUl/t3Lg==
+=E4Zl
+-----END PGP SIGNATURE-----
+
+--Sig_/q_PUoTablLrBmKKVQNFxoNY--

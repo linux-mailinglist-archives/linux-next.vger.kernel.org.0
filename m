@@ -2,66 +2,66 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFE404E63D6
-	for <lists+linux-next@lfdr.de>; Thu, 24 Mar 2022 14:03:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD61D4E63DA
+	for <lists+linux-next@lfdr.de>; Thu, 24 Mar 2022 14:04:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235194AbiCXNDI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 24 Mar 2022 09:03:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58918 "EHLO
+        id S242970AbiCXNGG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 24 Mar 2022 09:06:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350373AbiCXNCu (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 24 Mar 2022 09:02:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 426BAA774C
-        for <linux-next@vger.kernel.org>; Thu, 24 Mar 2022 06:01:18 -0700 (PDT)
+        with ESMTP id S240451AbiCXNGF (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 24 Mar 2022 09:06:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0CC381D309
+        for <linux-next@vger.kernel.org>; Thu, 24 Mar 2022 06:04:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648126877;
+        s=mimecast20190719; t=1648127073;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=QKpt0iAlHwpVNyFxsS8ClqeuI+QSAUafQjmj70sQjk0=;
-        b=YsgQ5SWKZdamtcnlp4AwkoZ0Q08hIu1fIDAYRQaht1VQPtYtakzGxtEJcKjBs+Xx8M6a9y
-        2mYu4AlbktUDUdxT0/WUEBCsleNckhAX5pBXTJ6b0/UpHhfvSYvfODoWTFyT64s49cyUTt
-        9RAWpQOrQwI04MJwpeBLhitnBtpBw0k=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=HxPrUhuzt19uTx9FtmZNdKy0YYbrN6xElRt7MFKc2u4=;
+        b=F2tgJxwQFhzRGAEtb4k5jvXPiRlYmm+I5Fdvy/Pk3NOPdhtvDJ9+DqLn5uTBhLpjr3ZP6J
+        ss0gRl7ZCGHbgM5vA749DCWgetAjTktpLy3AZi/4fii2c4CkMXG9xj5EBUSmlgj4HxQ6Ak
+        8ySPWv1kvXmYT7hkout8klK4E85gQr8=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-107-yX-k7Q9fMLyVIR_xcWH-fg-1; Thu, 24 Mar 2022 09:01:15 -0400
-X-MC-Unique: yX-k7Q9fMLyVIR_xcWH-fg-1
-Received: by mail-ej1-f69.google.com with SMTP id r18-20020a17090609d200b006a6e943d09eso2399039eje.20
-        for <linux-next@vger.kernel.org>; Thu, 24 Mar 2022 06:01:15 -0700 (PDT)
+ us-mta-526-oEoAa6jdNV6TjFHPMvdiGQ-1; Thu, 24 Mar 2022 09:04:32 -0400
+X-MC-Unique: oEoAa6jdNV6TjFHPMvdiGQ-1
+Received: by mail-ed1-f70.google.com with SMTP id n4-20020a5099c4000000b00418ed58d92fso3015613edb.0
+        for <linux-next@vger.kernel.org>; Thu, 24 Mar 2022 06:04:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:references:content-language:in-reply-to
          :content-transfer-encoding;
-        bh=QKpt0iAlHwpVNyFxsS8ClqeuI+QSAUafQjmj70sQjk0=;
-        b=oXgFiAEGhcd0t7TjWN8+/xvY0CCVhlZPAme9hWZSsCP4I27EPG3IXyUdyl4ZG6kme5
-         QzTm5wsRtJHN6w9KQ9ca51eL5fuWw6TKfKUTBUnNFlN774CBkh0rtJfsOYsytE6bSPAX
-         iHq9rI2nY3o1ZvWeTmipufWEvgwsTDGCLTs7O2LqoKkHab7EGSVcLHPWgAh+rpvil4V3
-         J3I8NcBdFqBWqBFfOflbSnNJN18ik37UnwqJpA51bZ83apbr8pcpEe1u2FUksdegg6A1
-         aWoDJlEs8w1W50MgKvTnLG9miEJs6RFTEX92PiN6C3RTEXX4JC8hqruRc08aH4SPvywB
-         kFVw==
-X-Gm-Message-State: AOAM5309lZTM68GNHJshGbZwYFuhcaczIlb0slz8TC+X0VyErW6HyFXQ
-        EFWnQiqwSbPPY2+B8fi3doF9FByHBPQfIUE3dqoJ7HYKIrt1QIAbCc1SlCUWDE7OOCW2VzMwKQb
-        Knl9kImvptd80XfR85AloOw==
-X-Received: by 2002:a17:906:478e:b0:6db:7c67:c7e0 with SMTP id cw14-20020a170906478e00b006db7c67c7e0mr5536430ejc.335.1648126874666;
-        Thu, 24 Mar 2022 06:01:14 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy5wlUIgcIRRrqV8EYMQN7jV34L0dzbP6Fs6iZjFKL3f63okml3Ykm+F1K6VOIx+V1qTiRDxg==
-X-Received: by 2002:a17:906:478e:b0:6db:7c67:c7e0 with SMTP id cw14-20020a170906478e00b006db7c67c7e0mr5536401ejc.335.1648126874444;
-        Thu, 24 Mar 2022 06:01:14 -0700 (PDT)
+        bh=HxPrUhuzt19uTx9FtmZNdKy0YYbrN6xElRt7MFKc2u4=;
+        b=tIzzF3ueDs0Vlge3aSzl3/TXvBBjQBiDFhknq3G7exKwAjaqsQR+TSYmQ7SwoyHQEb
+         RAscp1hJ4KsyQ6hJV2JwtWTJJU/pNMK5gcntIfc5rEqPYSqWoTlg69/L2/Q+dGDeNAuS
+         E4GVwEgV490cXeAsyHkH8i5fKlm2lInSeSw0GMrz5uYJgboBvPCGwDDKlBN0wJ3VnPTJ
+         LENeYs44QLae21eygr7IHbODKaekPLjnDt8pZaA+RlKXZJ57E0hdbP2QhJ75/IVbe69t
+         uN78S/t7YagXk8OatY4jWSmyrNoYCqzLFYlZcrnGpIh+uKLsdsp56NlEf+advlhFzU3d
+         91qg==
+X-Gm-Message-State: AOAM533AsZ8rseakmcmFGJeIF3KHPfW+9iu3UtB1a4OyuOgMBKH9RbKy
+        o3dcNSZ0VAC8nzAGR7Vcc25+Hpee61PtNIJgHNIDSr4ARV1cln1cag030BpArqod1vhUNKXq/G5
+        KW5ZidocjP0MEkIqnkux9Pg==
+X-Received: by 2002:a17:907:70cc:b0:6e0:1646:9123 with SMTP id yk12-20020a17090770cc00b006e016469123mr5537115ejb.329.1648127069876;
+        Thu, 24 Mar 2022 06:04:29 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJy9mG1YV/Nxxur9iUPNhDYJQF2OMH9BNi3DfisIXyy0UXTE7U0Ir9X/t/kvNHmwS8S9IG4keg==
+X-Received: by 2002:a17:907:70cc:b0:6e0:1646:9123 with SMTP id yk12-20020a17090770cc00b006e016469123mr5537098ejb.329.1648127069696;
+        Thu, 24 Mar 2022 06:04:29 -0700 (PDT)
 Received: from ?IPV6:2001:1c00:c1e:bf00:cdb2:2781:c55:5db0? (2001-1c00-0c1e-bf00-cdb2-2781-0c55-5db0.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:cdb2:2781:c55:5db0])
-        by smtp.gmail.com with ESMTPSA id sd7-20020a1709076e0700b006e015549bdfsm1079786ejc.53.2022.03.24.06.01.13
+        by smtp.gmail.com with ESMTPSA id 17-20020a170906059100b006cee1bceddasm1107911ejn.130.2022.03.24.06.04.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Mar 2022 06:01:14 -0700 (PDT)
-Message-ID: <41973e94-c825-fa04-0dc8-cc1fe6b86d5c@redhat.com>
-Date:   Thu, 24 Mar 2022 14:01:13 +0100
+        Thu, 24 Mar 2022 06:04:29 -0700 (PDT)
+Message-ID: <d1399c72-d729-58f8-ac63-1966f18c028d@redhat.com>
+Date:   Thu, 24 Mar 2022 14:04:28 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.4.0
+From:   Hans de Goede <hdegoede@redhat.com>
 Subject: Re: linux-next: build warnings after merge of the drivers-x86 tree
-Content-Language: en-US
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Mark Gross <markgross@kernel.org>,
         "David E. Box" <david.e.box@linux.intel.com>,
@@ -73,13 +73,13 @@ References: <20220301201659.45ac94cd@canb.auug.org.au>
  <20220324183329.22c97ea1@canb.auug.org.au>
  <2f33bdce-a002-708a-dd65-7bfb6ebc4cd9@redhat.com>
  <20220324222241.42896e9e@canb.auug.org.au>
-From:   Hans de Goede <hdegoede@redhat.com>
+Content-Language: en-US
 In-Reply-To: <20220324222241.42896e9e@canb.auug.org.au>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -87,6 +87,8 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
+
+<fat fingered send, sending an incomplete email, this is attempt 2>
 
 Hi Stephen,
 
@@ -127,25 +129,31 @@ On 3/24/22 12:22, Stephen Rothwell wrote:
 [hans@shalem ~]$ rpm -qf /usr/bin/sphinx-apidoc
 python3-sphinx-4.4.0-1.fc36.noarch
 
+I doubt this makes a difference though.
+
 So I did some digging and the trick for reproducing any ABI
 related warnings is to touch the .rst file which has the
 "kernel-abi" reST directive (1) for the ABI subdir you want
-to regenerate the ABI docs for
+to regenerate the ABI docs for.
 
+So in this case I did:
 
+touch Documentation/admin-guide/abi-testing.rst
+make htmldocs &> log
 
+And now I can see the warnings. I'll prepare a fix for this.
 
- this is
-t
-I doubt this makes a difference though. AFAIK the build process
-for the files under Documentation/ABI is a bit different,
-I think there is an extra pre-process step involved and maybe
-I'm missing something needed for that step ?
+Looking at Documentation/Makefile I also learned that you
+can also do this:
 
-Looking at Documentation/Makefile I did 
+scripts/get_abi.pl validate --dir Documentation/ABI
+
+Which results in a different set of warnings...
 
 Regards,
 
 Hans
 
+
+1) Implemented in Documentation/sphinx/kernel_abi.py
 

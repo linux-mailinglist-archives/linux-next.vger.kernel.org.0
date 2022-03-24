@@ -2,158 +2,312 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD61D4E63DA
-	for <lists+linux-next@lfdr.de>; Thu, 24 Mar 2022 14:04:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35B464E65B4
+	for <lists+linux-next@lfdr.de>; Thu, 24 Mar 2022 15:54:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242970AbiCXNGG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 24 Mar 2022 09:06:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36416 "EHLO
+        id S1351058AbiCXO4N (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 24 Mar 2022 10:56:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240451AbiCXNGF (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 24 Mar 2022 09:06:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0CC381D309
-        for <linux-next@vger.kernel.org>; Thu, 24 Mar 2022 06:04:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648127073;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HxPrUhuzt19uTx9FtmZNdKy0YYbrN6xElRt7MFKc2u4=;
-        b=F2tgJxwQFhzRGAEtb4k5jvXPiRlYmm+I5Fdvy/Pk3NOPdhtvDJ9+DqLn5uTBhLpjr3ZP6J
-        ss0gRl7ZCGHbgM5vA749DCWgetAjTktpLy3AZi/4fii2c4CkMXG9xj5EBUSmlgj4HxQ6Ak
-        8ySPWv1kvXmYT7hkout8klK4E85gQr8=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-526-oEoAa6jdNV6TjFHPMvdiGQ-1; Thu, 24 Mar 2022 09:04:32 -0400
-X-MC-Unique: oEoAa6jdNV6TjFHPMvdiGQ-1
-Received: by mail-ed1-f70.google.com with SMTP id n4-20020a5099c4000000b00418ed58d92fso3015613edb.0
-        for <linux-next@vger.kernel.org>; Thu, 24 Mar 2022 06:04:30 -0700 (PDT)
+        with ESMTP id S1350988AbiCXO4M (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 24 Mar 2022 10:56:12 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D463575621
+        for <linux-next@vger.kernel.org>; Thu, 24 Mar 2022 07:54:40 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id c11so4012228pgu.11
+        for <linux-next@vger.kernel.org>; Thu, 24 Mar 2022 07:54:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=6AnDWvgnDLfgMJjP7xBwdDnBC4t7ScMB59rmvsQzaes=;
+        b=67i/D1zbLBF+xapSdCVBQo7oy4SJlUU1FE5UeRa4ErDRaQaMSGPj0/tfzjkQz2y7So
+         RQ0UHypSIYGDbs23KfcmtadsuR1C3F9PDtAYxP1DoBtLtpXlF87TsLJyYvpJO0yCGdec
+         Wr0qCioIZvWqDxRflKi7Y5lanhG07gGRg0RbC08igZNZr1sgvPOs07WQaFLfXCdCMFk5
+         8Gjc3khiCyMZ7IpkNJEntPf+h0CHGcMNp5eNHBGjDQ82Y2KRmgsidyewlUGsqblBRTK1
+         eg/jJDS3ZDGjbOvfdHJlx6b+kJKjdp6zFbWr1rg4UGty3JhUbEKsOYew0mwQQlhnE5Ts
+         BonQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:to:cc:references:content-language:in-reply-to
-         :content-transfer-encoding;
-        bh=HxPrUhuzt19uTx9FtmZNdKy0YYbrN6xElRt7MFKc2u4=;
-        b=tIzzF3ueDs0Vlge3aSzl3/TXvBBjQBiDFhknq3G7exKwAjaqsQR+TSYmQ7SwoyHQEb
-         RAscp1hJ4KsyQ6hJV2JwtWTJJU/pNMK5gcntIfc5rEqPYSqWoTlg69/L2/Q+dGDeNAuS
-         E4GVwEgV490cXeAsyHkH8i5fKlm2lInSeSw0GMrz5uYJgboBvPCGwDDKlBN0wJ3VnPTJ
-         LENeYs44QLae21eygr7IHbODKaekPLjnDt8pZaA+RlKXZJ57E0hdbP2QhJ75/IVbe69t
-         uN78S/t7YagXk8OatY4jWSmyrNoYCqzLFYlZcrnGpIh+uKLsdsp56NlEf+advlhFzU3d
-         91qg==
-X-Gm-Message-State: AOAM533AsZ8rseakmcmFGJeIF3KHPfW+9iu3UtB1a4OyuOgMBKH9RbKy
-        o3dcNSZ0VAC8nzAGR7Vcc25+Hpee61PtNIJgHNIDSr4ARV1cln1cag030BpArqod1vhUNKXq/G5
-        KW5ZidocjP0MEkIqnkux9Pg==
-X-Received: by 2002:a17:907:70cc:b0:6e0:1646:9123 with SMTP id yk12-20020a17090770cc00b006e016469123mr5537115ejb.329.1648127069876;
-        Thu, 24 Mar 2022 06:04:29 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy9mG1YV/Nxxur9iUPNhDYJQF2OMH9BNi3DfisIXyy0UXTE7U0Ir9X/t/kvNHmwS8S9IG4keg==
-X-Received: by 2002:a17:907:70cc:b0:6e0:1646:9123 with SMTP id yk12-20020a17090770cc00b006e016469123mr5537098ejb.329.1648127069696;
-        Thu, 24 Mar 2022 06:04:29 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:cdb2:2781:c55:5db0? (2001-1c00-0c1e-bf00-cdb2-2781-0c55-5db0.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:cdb2:2781:c55:5db0])
-        by smtp.gmail.com with ESMTPSA id 17-20020a170906059100b006cee1bceddasm1107911ejn.130.2022.03.24.06.04.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Mar 2022 06:04:29 -0700 (PDT)
-Message-ID: <d1399c72-d729-58f8-ac63-1966f18c028d@redhat.com>
-Date:   Thu, 24 Mar 2022 14:04:28 +0100
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=6AnDWvgnDLfgMJjP7xBwdDnBC4t7ScMB59rmvsQzaes=;
+        b=Z/A3oydiQ1hwjqYsa3SizDxX9T1wRDituJmre4KL8CffVe/aqNgUmBDQeKSxXqTy4O
+         VEnUrOi9tV6bc1cD+9oPU6MOlbiBiSMcZGYGdjbVtQojGLzdHnEM1n6fHCLz1sF7YW+W
+         HxrOPDfjUDTEzbEC4TRW6mhUSLHCFxhdlm9jOKjZ5lhaUa1B7o9BWaG+C75s6hkgQUfr
+         XsAYFTnophwfonIW5cGW+IG6lxb1JY/MWi5XfHfvTmtqbkYKbb4IBPsxqko9qzD8wCEN
+         tqcy8Zr4cpzr1EbDCADH+b4J15s6jj9dUOb4nHfsozHoSSF9lKk+d445ZoncTLs4vPjQ
+         DQ8A==
+X-Gm-Message-State: AOAM530wf62Y9XtLFYk55k2ODopdmBwUgQiuYoUGpcftUZeKYH7kGnc+
+        LYxi+0A0bj4mVJ2eIZePa3Akj8/92AwsmTFCUTI=
+X-Google-Smtp-Source: ABdhPJyNIhjzgqtho2j9AKpWraht6UzGorEBerktZlHh9UA9/tmytJprZZO9aIPQnwqZqjfMotIDeQ==
+X-Received: by 2002:a05:6a00:4303:b0:4fa:c75b:f716 with SMTP id cb3-20020a056a00430300b004fac75bf716mr5743281pfb.29.1648133680149;
+        Thu, 24 Mar 2022 07:54:40 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id f4-20020aa782c4000000b004f6f0334a51sm3499878pfn.126.2022.03.24.07.54.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Mar 2022 07:54:39 -0700 (PDT)
+Message-ID: <623c862f.1c69fb81.c7ec8.a24a@mx.google.com>
+Date:   Thu, 24 Mar 2022 07:54:39 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-From:   Hans de Goede <hdegoede@redhat.com>
-Subject: Re: linux-next: build warnings after merge of the drivers-x86 tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Mark Gross <markgross@kernel.org>,
-        "David E. Box" <david.e.box@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-References: <20220301201659.45ac94cd@canb.auug.org.au>
- <20220324183329.22c97ea1@canb.auug.org.au>
- <2f33bdce-a002-708a-dd65-7bfb6ebc4cd9@redhat.com>
- <20220324222241.42896e9e@canb.auug.org.au>
-Content-Language: en-US
-In-Reply-To: <20220324222241.42896e9e@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Tree: next
+X-Kernelci-Branch: master
+X-Kernelci-Report-Type: test
+X-Kernelci-Kernel: next-20220324
+Subject: next/master baseline: 446 runs, 6 regressions (next-20220324)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-<fat fingered send, sending an incomplete email, this is attempt 2>
+next/master baseline: 446 runs, 6 regressions (next-20220324)
 
-Hi Stephen,
+Regressions Summary
+-------------------
 
-On 3/24/22 12:22, Stephen Rothwell wrote:
-> Hi Hans,
-> 
-> On Thu, 24 Mar 2022 08:39:19 +0100 Hans de Goede <hdegoede@redhat.com> wrote:
->>
->> I replied to your original report on March 1st, but I never got a reply
->> to my reply:
->>
->> """
->> Thank you for the report.
->>
->> So I just did:
->>
->> touch Documentation/ABI/testing/sysfs-driver-intel_sdsi
->> make htmldocs &> log
->>
->> In a repo with drivers-x86/for-next checked out and checked the generated log files.
->> But I'm not seeing these WARNINGs.
->>
->> Also 'find Documentation/output/ -name "*sdsi*"' does not output anything,
->> is there anything special (maybe some extra utilities?) which I need to also enable
->> building of htmldocs for the files in Documentation/ABI ?
->> """
->>
->> If someone can let me know how to reproduce these warnings I would be happy
->> to fix them.
-> 
-> Sorry about that.  I am just doing what you are doing but with the
-> whole of linux-next (which I don't think would make a difference).  One
-> possibility is that we are using different versions of the doco
-> software.
-> 
-> I am using Sphinx version 4.3.2 (using Python 3).
+platform                  | arch   | lab           | compiler | defconfig  =
+                  | regressions
+--------------------------+--------+---------------+----------+------------=
+------------------+------------
+asus-C523NA-A20057-coral  | x86_64 | lab-collabora | gcc-10   | x86_64_defc=
+on...ebook+amdgpu | 1          =
 
-[hans@shalem ~]$ rpm -qf /usr/bin/sphinx-apidoc
-python3-sphinx-4.4.0-1.fc36.noarch
+asus-C523NA-A20057-coral  | x86_64 | lab-collabora | gcc-10   | x86_64_defc=
+on...6-chromebook | 1          =
 
-I doubt this makes a difference though.
+hp-x360-12b-n4000-octopus | x86_64 | lab-collabora | gcc-10   | x86_64_defc=
+on...ebook+amdgpu | 1          =
 
-So I did some digging and the trick for reproducing any ABI
-related warnings is to touch the .rst file which has the
-"kernel-abi" reST directive (1) for the ABI subdir you want
-to regenerate the ABI docs for.
+hp-x360-12b-n4000-octopus | x86_64 | lab-collabora | gcc-10   | x86_64_defc=
+on...6-chromebook | 1          =
 
-So in this case I did:
+imx8mn-ddr4-evk           | arm64  | lab-nxp       | gcc-10   | defconfig+C=
+ON..._64K_PAGES=3Dy | 1          =
 
-touch Documentation/admin-guide/abi-testing.rst
-make htmldocs &> log
-
-And now I can see the warnings. I'll prepare a fix for this.
-
-Looking at Documentation/Makefile I also learned that you
-can also do this:
-
-scripts/get_abi.pl validate --dir Documentation/ABI
-
-Which results in a different set of warnings...
-
-Regards,
-
-Hans
+r8a77950-salvator-x       | arm64  | lab-baylibre  | gcc-10   | defconfig+C=
+ON...BIG_ENDIAN=3Dy | 1          =
 
 
-1) Implemented in Documentation/sphinx/kernel_abi.py
+  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
+220324/plan/baseline/
 
+  Test:     baseline
+  Tree:     next
+  Branch:   master
+  Describe: next-20220324
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      dd315b5800612e6913343524aa9b993f9a8bb0cf =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform                  | arch   | lab           | compiler | defconfig  =
+                  | regressions
+--------------------------+--------+---------------+----------+------------=
+------------------+------------
+asus-C523NA-A20057-coral  | x86_64 | lab-collabora | gcc-10   | x86_64_defc=
+on...ebook+amdgpu | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/623c5271a4484f2fb6772511
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+x86-chromebook+amdgpu
+  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220324/x86_=
+64/x86_64_defconfig+x86-chromebook+amdgpu/gcc-10/lab-collabora/baseline-asu=
+s-C523NA-A20057-coral.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220324/x86_=
+64/x86_64_defconfig+x86-chromebook+amdgpu/gcc-10/lab-collabora/baseline-asu=
+s-C523NA-A20057-coral.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220228.1/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/623c5271a4484f2fb6772=
+512
+        failing since 8 days (last pass: next-20220310, first fail: next-20=
+220315) =
+
+ =
+
+
+
+platform                  | arch   | lab           | compiler | defconfig  =
+                  | regressions
+--------------------------+--------+---------------+----------+------------=
+------------------+------------
+asus-C523NA-A20057-coral  | x86_64 | lab-collabora | gcc-10   | x86_64_defc=
+on...6-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/623c588c63ea22822e77250d
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+x86-chromebook
+  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220324/x86_=
+64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/baseline-asus-C523N=
+A-A20057-coral.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220324/x86_=
+64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/baseline-asus-C523N=
+A-A20057-coral.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220228.1/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/623c588c63ea22822e772=
+50e
+        failing since 8 days (last pass: next-20220310, first fail: next-20=
+220315) =
+
+ =
+
+
+
+platform                  | arch   | lab           | compiler | defconfig  =
+                  | regressions
+--------------------------+--------+---------------+----------+------------=
+------------------+------------
+hp-x360-12b-n4000-octopus | x86_64 | lab-collabora | gcc-10   | x86_64_defc=
+on...ebook+amdgpu | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/623c48f95ebc569a53772502
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+x86-chromebook+amdgpu
+  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220324/x86_=
+64/x86_64_defconfig+x86-chromebook+amdgpu/gcc-10/lab-collabora/baseline-hp-=
+x360-12b-n4000-octopus.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220324/x86_=
+64/x86_64_defconfig+x86-chromebook+amdgpu/gcc-10/lab-collabora/baseline-hp-=
+x360-12b-n4000-octopus.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220228.1/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/623c48f95ebc569a53772=
+503
+        failing since 8 days (last pass: next-20220310, first fail: next-20=
+220315) =
+
+ =
+
+
+
+platform                  | arch   | lab           | compiler | defconfig  =
+                  | regressions
+--------------------------+--------+---------------+----------+------------=
+------------------+------------
+hp-x360-12b-n4000-octopus | x86_64 | lab-collabora | gcc-10   | x86_64_defc=
+on...6-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/623c4d35d329d7763c772527
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+x86-chromebook
+  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220324/x86_=
+64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/baseline-hp-x360-12=
+b-n4000-octopus.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220324/x86_=
+64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/baseline-hp-x360-12=
+b-n4000-octopus.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220228.1/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/623c4d35d329d7763c772=
+528
+        failing since 8 days (last pass: next-20220310, first fail: next-20=
+220315) =
+
+ =
+
+
+
+platform                  | arch   | lab           | compiler | defconfig  =
+                  | regressions
+--------------------------+--------+---------------+----------+------------=
+------------------+------------
+imx8mn-ddr4-evk           | arm64  | lab-nxp       | gcc-10   | defconfig+C=
+ON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/623c4862a2cdfe207d77255c
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220324/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-nxp/baseline-imx8mn-ddr4-=
+evk.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220324/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-nxp/baseline-imx8mn-ddr4-=
+evk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220228.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/623c4862a2cdfe207d772=
+55d
+        new failure (last pass: next-20220323) =
+
+ =
+
+
+
+platform                  | arch   | lab           | compiler | defconfig  =
+                  | regressions
+--------------------------+--------+---------------+----------+------------=
+------------------+------------
+r8a77950-salvator-x       | arm64  | lab-baylibre  | gcc-10   | defconfig+C=
+ON...BIG_ENDIAN=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/623c586963ea22822e772502
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220324/arm6=
+4/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-10/lab-baylibre/baseline-r8a77950=
+-salvator-x.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220324/arm6=
+4/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-10/lab-baylibre/baseline-r8a77950=
+-salvator-x.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220228.1/arm64be/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/623c586963ea22822e772=
+503
+        failing since 1 day (last pass: next-20220321, first fail: next-202=
+20322) =
+
+ =20

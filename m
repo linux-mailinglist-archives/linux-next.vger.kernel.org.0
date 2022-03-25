@@ -2,106 +2,143 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84CD24E6B55
-	for <lists+linux-next@lfdr.de>; Fri, 25 Mar 2022 00:50:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9804D4E6DBB
+	for <lists+linux-next@lfdr.de>; Fri, 25 Mar 2022 06:27:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356628AbiCXXvb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 24 Mar 2022 19:51:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35742 "EHLO
+        id S240824AbiCYF3T (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 25 Mar 2022 01:29:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357728AbiCXXuC (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 24 Mar 2022 19:50:02 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 777953B3F3;
-        Thu, 24 Mar 2022 16:48:28 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S230020AbiCYF3R (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 25 Mar 2022 01:29:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43128C558A;
+        Thu, 24 Mar 2022 22:27:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KPhkL6C9qz4xYc;
-        Fri, 25 Mar 2022 10:48:26 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1648165707;
-        bh=FGaYydygHo7aD6IpnCFLKUSu/ytyGYSSz5y0DpV5kbs=;
-        h=Date:From:To:Cc:Subject:From;
-        b=sYhUKU5P3uUcxw62vZz3WiQ6LhwgcOUpCVBVMTjprX5tdxSC3k1c1YTppgurYS4As
-         KliivHZ76pqwnXwkvEy+EfGMOhNZzhzk2n/sT2EojDv6kTXguYmrTmJrJidbMxrGH8
-         tSkyVDGVQknMnbijC12mCAT8RB+TFKsl/+td1Y8pW936Kz+2HdTwcefLUYyjPRUO3u
-         gFmy8/A665Ao4+SXObtfhmD6mJt3hRkSgsoO3wp935UmZUPUwhDbBabS1b0XG+SJMy
-         UJxqGb3Vx06diP9n32wu6byaZY2JnbffbJcmvYCwKKEqBhLct/JkCCf03gd+4z1OKM
-         CpIA568lDHV5w==
-Date:   Fri, 25 Mar 2022 10:48:25 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Sterba <dsterba@suse.cz>
-Cc:     David Sterba <dsterba@suse.com>,
-        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
+        by ams.source.kernel.org (Postfix) with ESMTPS id E59D5B827DB;
+        Fri, 25 Mar 2022 05:27:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDECDC340E9;
+        Fri, 25 Mar 2022 05:27:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648186061;
+        bh=o7srkXkXULFWKnfYW3Hq6LA5YW6Yx4lDlmCv1AtBwO0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=qgyNg2dHvREdN9Ag2cz2Kccs0yZa0IAIUxiIlV/d5bl+HIveB6M9WfyurSG0S7DXh
+         FsuDKdLHox1YbEEr1ccbp9gqYEjOpSOhPdbWV9UxZB/FncV7MNG2oMLp756D83KBOk
+         3MR4IuaJeOfFMp8jqjbTcSaS64w0CfKwajahLY/9n6nspk5/LJQ+4vXv/VUMtHDX6Z
+         L9+MLth85+M+GIvw0sZE4jGw0TrggRzsywRXtbiZSE30C74yePCbDPN4CrSQXzXKXS
+         k7gPcco9dZGYSP+/ar1ykKDwb/hzj66D7WVpSG7/S9CS32revZqFxWI15YvH1d5OcZ
+         iuemKUYD3CsNw==
+Date:   Fri, 25 Mar 2022 06:27:35 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        "David E. Box" <david.e.box@linux.intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the btrfs tree with the btrfs-fixes
- tree
-Message-ID: <20220325104825.72c2e97c@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: Re: linux-next: build warnings after merge of the drivers-x86 tree
+Message-ID: <20220325062735.0567775b@coco.lan>
+In-Reply-To: <20220325085522.731aee73@canb.auug.org.au>
+References: <20220301201659.45ac94cd@canb.auug.org.au>
+        <20220324183329.22c97ea1@canb.auug.org.au>
+        <2f33bdce-a002-708a-dd65-7bfb6ebc4cd9@redhat.com>
+        <20220324222241.42896e9e@canb.auug.org.au>
+        <d1399c72-d729-58f8-ac63-1966f18c028d@redhat.com>
+        <20220325085522.731aee73@canb.auug.org.au>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Wqj0wr/92CqfDAhZhsLf_3_";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Wqj0wr/92CqfDAhZhsLf_3_
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Em Fri, 25 Mar 2022 08:55:22 +1100
+Stephen Rothwell <sfr@canb.auug.org.au> escreveu:
 
-Hi all,
+> Hi Hans,
+> 
+> On Thu, 24 Mar 2022 14:04:28 +0100 Hans de Goede <hdegoede@redhat.com> wrote:
+> >
+> > So I did some digging and the trick for reproducing any ABI
+> > related warnings is to touch the .rst file which has the
+> > "kernel-abi" reST directive (1) for the ABI subdir you want
+> > to regenerate the ABI docs for.
+> > 
+> > So in this case I did:
+> > 
+> > touch Documentation/admin-guide/abi-testing.rst
+> > make htmldocs &> log  
+> 
+> Looks like missing dependencies :-(
 
-Today's linux-next merge of the btrfs tree got a conflict in:
+Not sure if are there a way to fix this. See, Sphinx doesn't use Makefile 
+dependencies, but, instead, it checks if the .rst file has changed or not.
+So, those tags that include contents from non-rst files, like the ABI ones
+and kernel-doc tags, are not considered by Sphinx when detecting the need
+to re-parse the .rst files that contain such tags.
 
-  fs/btrfs/zoned.c
+The safest way to ensure that Sphinx will process everything is running
+is to run `make cleandocs` before building the documentation.
 
-between commits:
+> Thanks for persisting ad discovering this.
+> 
+> > And now I can see the warnings. I'll prepare a fix for this.  
+> 
+> Excellent, thanks.
+> 
+> > Looking at Documentation/Makefile I also learned that you
+> > can also do this:
+> > 
+> > scripts/get_abi.pl validate --dir Documentation/ABI
 
-  0b9e66762aa0 ("btrfs: zoned: traverse devices under chunk_mutex in btrfs_=
-can_activate_zone")
-  62ed0bf7315b ("btrfs: zoned: remove left over ASSERT checking for single =
-profile")
+No need to pass Documentation/ABI directory, as it assumes it per
+default:
 
-from the btrfs-fixes tree and commits:
+	$ scripts/get_abi.pl validate 
 
-  71f3883a5968 ("btrfs: zoned: use RCU list in btrfs_can_activate_zone")
-  7d5e73a6ef6c ("btrfs: zoned: remove left over ASSERT checking for single =
-profile")
+Warning: /sys/bus/iio/devices/iio:deviceX/fault_ovuv is defined 2 times:  Documentation/ABI/testing/sysfs-bus-iio-temperature-max31856:14  Documentation/ABI/testing/sysfs-bus-iio-temperature-max31865:0
+Warning: /sys/bus/iio/devices/iio:deviceX/in_filter_notch_center_frequency is defined 2 times:  Documentation/ABI/testing/sysfs-bus-iio-temperature-max31865:12  Documentation/ABI/testing/sysfs-bus-iio:1943
+Warning: /sys/bus/iio/devices/triggerX/sampling_frequency is defined 2 times:  Documentation/ABI/testing/sysfs-bus-iio-timer-stm32:92  Documentation/ABI/testing/sysfs-bus-iio:91
+Warning: /sys/devices/system/cpu/cpuX/topology/core_id is defined 2 times:  Documentation/ABI/testing/sysfs-devices-system-cpu:69  Documentation/ABI/stable/sysfs-devices-system-cpu:38
 
-from the btrfs tree.
+Btw, while here, you can also check if the new ABI definitions
+are actually correct by running:
 
-I fixed it up (I just (arbitrarily) chose the former version) and can
-carry the fix as necessary. This is now fixed as far as linux-next is
-concerned, but any non trivial conflicts should be mentioned to your
-upstream maintainer when your tree is submitted for merging.  You may
-also want to consider cooperating with the maintainer of the conflicting
-tree to minimise any particularly complex conflicts.
+	$ ./scripts/get_abi.pl undefined
 
---=20
-Cheers,
-Stephen Rothwell
+On a system where the new ABI "What:" definitions can be found.
+This command converts the What: field into a regular expression,
+and then check if the entries under sysfs actually match the 
+location specified by the "What:" fields from the ABI files.
 
---Sig_/Wqj0wr/92CqfDAhZhsLf_3_
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+As there are currently many ones that are missing (or wrong), you
+can limit the scope of the checks by adding --search-string <regex>,
+like:
 
------BEGIN PGP SIGNATURE-----
+	$ ./scripts/get_abi.pl undefined --search-string hugepage
+	/sys/kernel/mm/transparent_hugepage/defrag not found.
+	/sys/kernel/mm/hugepages/hugepages-2048kB/free_hugepages not found.
+	/sys/kernel/mm/hugepages/hugepages-1048576kB/demote_size not found.
+	...
+	/sys/kernel/mm/transparent_hugepage/khugepaged/full_scans not found.
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmI9A0kACgkQAVBC80lX
-0Gyk4Af8CC8j8BwCE6j/OGuApn7BDyr3k9wzHkfohLwaZK2X2H6IF0MRn6lIciZi
-je5GgFVU3MBkGZvpc8WmBDcP4NqZtyhm+F+6mzF2Gz6s4Gex7Fj8nK+4+JIxbLHa
-XlpOZE9RVlROTs9oYeI/Bfa4ry4tN0iXv3TpqAzvBSSLjunjiGb148VhGiNKYfKs
-1q+mB5NjDD3pG5hAVKxJrxq2bLN5nlXa0Shh4Rz051rtadUb9S3f4yPxH6ww+AxH
-DxMnQQCWcJVcnrMckEb+sa5azyutMKWcVM0gqXZ2mVfbdrr80UKG37A0pGJCMaaE
-nfTfYC6d6GC6Zs7OE7Cu6NqHn/bWHQ==
-=VkAI
------END PGP SIGNATURE-----
+> > Which results in a different set of warnings...  
 
---Sig_/Wqj0wr/92CqfDAhZhsLf_3_--
+Such warnings are also reported at build time, when the ABI file is
+processed - e. g. if you either touch the files containing the ABI
+.rst files or if you do a make cleandocs before building the 
+documentation.
+
+Thanks,
+Mauro

@@ -2,213 +2,90 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E2C14E7C8B
-	for <lists+linux-next@lfdr.de>; Sat, 26 Mar 2022 01:21:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D58EB4E7C70
+	for <lists+linux-next@lfdr.de>; Sat, 26 Mar 2022 01:21:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233678AbiCYWPM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 25 Mar 2022 18:15:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37906 "EHLO
+        id S234112AbiCYXNm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 25 Mar 2022 19:13:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233603AbiCYWPL (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 25 Mar 2022 18:15:11 -0400
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA59D25E83
-        for <linux-next@vger.kernel.org>; Fri, 25 Mar 2022 15:13:35 -0700 (PDT)
-Received: by mail-oi1-x236.google.com with SMTP id j83so9656025oih.6
-        for <linux-next@vger.kernel.org>; Fri, 25 Mar 2022 15:13:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=PAdDbobA7ctOVd3F7wClb6JTLruDj5TFIdtnV7HXuO8=;
-        b=h55V9kQ5U2X286qcrn/XW1bPCCbK5drMiqQedFn46a7iit4ROK+BInCdGuGHQ+vTqd
-         kiNIJGJTdlPf8jdH16R1D7M1ja0XnwWCXX50bLOqZlNy1DqbroREFd2qYtsxRqoGbzKA
-         9oMLzUfr97I+5K83Q7v4WFdfHGcrpN8OS28mw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=PAdDbobA7ctOVd3F7wClb6JTLruDj5TFIdtnV7HXuO8=;
-        b=CTWCUJczjuffrm6KU2zkGF1b4l6BQuZjpqRedKs7n6uuZ8RTf0OCdM8yHLHtCuJ4ll
-         I/X9rqU6a2+uCtM4dm6OKJAPP8wbjurpa9uS5pCVXCrqmwZzM93voo7O+fiQGtKImV4M
-         Uty+ts6y84MHkAQrjC1JJQphc8OIexvxfPG0wWklwPXaiNBKe8UJIaxeF1KNLIYpNm8A
-         Wx13cvZORFnpmbp289Qk3KLHJhqLYn3b/GbuwVIyFAdlK5C6Gk0NLQccDalM+y7950sz
-         1bVydNn2i7rp4mV1uv2W4aZnxKZQeE7T0qdBc/nQQTvEkAC6xfdC0bUJu5pG8zEjFOog
-         0YqQ==
-X-Gm-Message-State: AOAM531tH5EPXXmWkuLPKsByKxb4oIG/NaFVxvP7JiGaKb0ELlZ8NxW4
-        r3iKylAPenyoQTIKFYZCheLMUQ==
-X-Google-Smtp-Source: ABdhPJzrh3as6EzSlyV4zCifga3mc8DRKXJ3IcSVHDKxmnRkMthzAmI+Lf4flooxoeGxfZh8tqjnfg==
-X-Received: by 2002:a05:6808:11c4:b0:2d9:c395:f15e with SMTP id p4-20020a05680811c400b002d9c395f15emr11146862oiv.47.1648246415160;
-        Fri, 25 Mar 2022 15:13:35 -0700 (PDT)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id r8-20020a05683001c800b005cdadc2a837sm3203525ota.70.2022.03.25.15.13.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Mar 2022 15:13:34 -0700 (PDT)
-Subject: Re: kselftest: net: tls: hangs
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Shuah Khan <shuah@kernel.org>,
+        with ESMTP id S234029AbiCYXNl (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 25 Mar 2022 19:13:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DF71522E4;
+        Fri, 25 Mar 2022 16:12:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 00E7A61744;
+        Fri, 25 Mar 2022 23:12:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECE0AC2BBE4;
+        Fri, 25 Mar 2022 23:12:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648249925;
+        bh=rca50a/MBSKGcXibi+6OsSu/0GluBeVQE48yXlUn5Wo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ek59Z3uvGRyrKysXMw8xAX+tagCv00LsHDEQHKWoo7rLCFOZbpWGiXxfTCATZzISl
+         d+1ieHRRfPCVS2ImeDrqxvWebuoJdEt1NfC8YJ6VImsZQR+XGgoxNVXvUrFKQJM+KE
+         F0Stp4aK1LSQ4B+7NR5makSJTHf5I0ye4iJ0KZ7UFkuPb3F7JEw6br4fQsLCaPxSuu
+         PWoYUuF4WGN+f4cRC8DSuI21O0x+sObWbilAbqUwz9zM47AhjoxGKdpSVaTCMC+25x
+         MzZe/p6I5zcPh8t/BlxiuHnROYvz67z74cOjlJ+MpucQpk4AN6he4gFT7Q8UAM4imV
+         EagBhg5l+iChg==
+Date:   Fri, 25 Mar 2022 16:12:03 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Shuah Khan <shuah@kernel.org>,
         "David S. Miller" <davem@davemloft.net>,
         Paolo Abeni <pabeni@redhat.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
         Linux-Next Mailing List <linux-next@vger.kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
         open list <linux-kernel@vger.kernel.org>,
         lkft-triage@lists.linaro.org, Netdev <netdev@vger.kernel.org>
+Subject: Re: kselftest: net: tls: hangs
+Message-ID: <20220325161203.7000698c@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <8c81e8ad-6741-b5ed-cf0a-5a302d51d40a@linuxfoundation.org>
 References: <CA+G9fYsntwPrwk39VfsAjRwoSNnb3nX8kCEUa=Gxit7_pfD6bg@mail.gmail.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <8c81e8ad-6741-b5ed-cf0a-5a302d51d40a@linuxfoundation.org>
-Date:   Fri, 25 Mar 2022 16:13:33 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        <8c81e8ad-6741-b5ed-cf0a-5a302d51d40a@linuxfoundation.org>
 MIME-Version: 1.0
-In-Reply-To: <CA+G9fYsntwPrwk39VfsAjRwoSNnb3nX8kCEUa=Gxit7_pfD6bg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 3/25/22 1:40 AM, Naresh Kamboju wrote:
-> While running kselftest net tls test case on Linux next and mainline kernels
-> the test case fails at following sub test cases and hangs every time.
-> Please investigate this hang issue.
+On Fri, 25 Mar 2022 16:13:33 -0600 Shuah Khan wrote:
+> > # #  RUN           tls.13_sm4_gcm.splice_cmsg_to_pipe ...
+> > # # tls.c:688:splice_cmsg_to_pipe:Expected splice(self->cfd, NULL,
+> > p[1], NULL, send_len, 0) (10) == -1 (-1)
+> > # # tls.c:689:splice_cmsg_to_pipe:Expected errno (2) == EINVAL (22)
+> > # # splice_cmsg_to_pipe: Test terminated by timeout
+> > # #          FAIL  tls.13_sm4_gcm.splice_cmsg_to_pipe
+> > # not ok 217 tls.13_sm4_gcm.splice_cmsg_to_pipe
+> > # #  RUN           tls.13_sm4_gcm.splice_dec_cmsg_to_pipe ...
+> > # # tls.c:708:splice_dec_cmsg_to_pipe:Expected recv(self->cfd, buf,
+> > send_len, 0) (10) == -1 (-1)
+> > # # tls.c:709:splice_dec_cmsg_to_pipe:Expected errno (2) == EIO (5)
+> > [  661.901558] kworker/dying (49) used greatest stack depth: 10576 bytes left  
 > 
-> kconfigs are generated from kselftest-merge config.
-> 
-> metadata:
->    git_ref: master
->    git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
->    git_sha: b61581ae229d8eb9f21f8753be3f4011f7692384
->    git_describe: next-20220323
->    kernel_version: 5.17.0
->    kernel-config: https://builds.tuxbuild.com/26mKij4yB5Q6WUpOyHHEoHLstVJ/config
-> 
-> Test log link,
-> --------------
-> # selftests: net: tls
-> # TAP version 13
-> # 1..502
-> # # Starting 502 tests from 14 test cases.
-> # #  RUN           global.non_established ...
-> # #            OK  global.non_established
-> # ok 1 global.non_established
-> # #  RUN           global.keysizes ...
-> # #            OK  global.keysizes
-> <trim>
-> 
-> # #  RUN           tls.12_aes_gcm.splice_cmsg_to_pipe ...
-> # # tls.c:688:splice_cmsg_to_pipe:Expected splice(self->cfd, NULL,
-> p[1], NULL, send_len, 0) (10) == -1 (-1)
-> # # tls.c:689:splice_cmsg_to_pipe:Expected errno (2) == EINVAL (22)
-> # # splice_cmsg_to_pipe: Test terminated by timeout
-> # #          FAIL  tls.12_aes_gcm.splice_cmsg_to_pipe
-> # not ok 21 tls.12_aes_gcm.splice_cmsg_to_pipe
-> # #  RUN           tls.12_aes_gcm.splice_dec_cmsg_to_pipe ...
-> # # tls.c:708:splice_dec_cmsg_to_pipe:Expected recv(self->cfd, buf,
-> send_len, 0) (10) == -1 (-1)
-> # # tls.c:709:splice_dec_cmsg_to_pipe:Expected errno (2) == EIO (5)
-> # # splice_dec_cmsg_to_pipe: Test terminated by timeout
-> # #          FAIL  tls.12_aes_gcm.splice_dec_cmsg_to_pipe
-> # not ok 22 tls.12_aes_gcm.splice_dec_cmsg_to_pipe
-> # #  RUN           tls.12_aes_gcm.recv_and_splice ...
-> # #            OK  tls.12_aes_gcm.recv_and_splice
-> 
-> <trim>
-> 
-> # #  RUN           tls.13_aes_gcm.splice_cmsg_to_pipe ...
-> # # tls.c:688:splice_cmsg_to_pipe:Expected splice(self->cfd, NULL,
-> p[1], NULL, send_len, 0) (10) == -1 (-1)
-> # # tls.c:689:splice_cmsg_to_pipe:Expected errno (2) == EINVAL (22)
-> # # splice_cmsg_to_pipe: Test terminated by timeout
-> # #          FAIL  tls.13_aes_gcm.splice_cmsg_to_pipe
-> # not ok 70 tls.13_aes_gcm.splice_cmsg_to_pipe
-> # #  RUN           tls.13_aes_gcm.splice_dec_cmsg_to_pipe ...
-> # # tls.c:708:splice_dec_cmsg_to_pipe:Expected recv(self->cfd, buf,
-> send_len, 0) (10) == -1 (-1)
-> # # tls.c:709:splice_dec_cmsg_to_pipe:Expected errno (2) == EIO (5)
-> # # splice_dec_cmsg_to_pipe: Test terminated by timeout
-> # #          FAIL  tls.13_aes_gcm.splice_dec_cmsg_to_pipe
-> # not ok 71 tls.13_aes_gcm.splice_dec_cmsg_to_pipe
-> 
-> 
-> <trim>
-> 
-> # #  RUN           tls.12_chacha.splice_cmsg_to_pipe ...
-> # # tls.c:688:splice_cmsg_to_pipe:Expected splice(self->cfd, NULL,
-> p[1], NULL, send_len, 0) (10) == -1 (-1)
-> # # tls.c:689:splice_cmsg_to_pipe:Expected errno (2) == EINVAL (22)
-> # # splice_cmsg_to_pipe: Test terminated by timeout
-> # #          FAIL  tls.12_chacha.splice_cmsg_to_pipe
-> # not ok 119 tls.12_chacha.splice_cmsg_to_pipe
-> # #  RUN           tls.12_chacha.splice_dec_cmsg_to_pipe ...
-> # # tls.c:708:splice_dec_cmsg_to_pipe:Expected recv(self->cfd, buf,
-> send_len, 0) (10) == -1 (-1)
-> # # tls.c:709:splice_dec_cmsg_to_pipe:Expected errno (2) == EIO (5)
-> # # splice_dec_cmsg_to_pipe: Test terminated by timeout
-> # #          FAIL  tls.12_chacha.splice_dec_cmsg_to_pipe
-> # not ok 120 tls.12_chacha.splice_dec_cmsg_to_pipe
-> 
-> <trim>
-> 
-> # #  RUN           tls.13_chacha.splice_cmsg_to_pipe ...
-> # # tls.c:688:splice_cmsg_to_pipe:Expected splice(self->cfd, NULL,
-> p[1], NULL, send_len, 0) (10) == -1 (-1)
-> # # tls.c:689:splice_cmsg_to_pipe:Expected errno (2) == EINVAL (22)
-> # # splice_cmsg_to_pipe: Test terminated by timeout
-> # #          FAIL  tls.13_chacha.splice_cmsg_to_pipe
-> # not ok 168 tls.13_chacha.splice_cmsg_to_pipe
-> # #  RUN           tls.13_chacha.splice_dec_cmsg_to_pipe ...
-> # # tls.c:708:splice_dec_cmsg_to_pipe:Expected recv(self->cfd, buf,
-> send_len, 0) (10) == -1 (-1)
-> # # tls.c:709:splice_dec_cmsg_to_pipe:Expected errno (2) == EIO (5)
-> # # splice_dec_cmsg_to_pipe: Test terminated by timeout
-> # #          FAIL  tls.13_chacha.splice_dec_cmsg_to_pipe
-> # not ok 169 tls.13_chacha.splice_dec_cmsg_to_pipe
-> 
-> <trim>
-> 
-> # #  RUN           tls.13_sm4_gcm.splice_cmsg_to_pipe ...
-> # # tls.c:688:splice_cmsg_to_pipe:Expected splice(self->cfd, NULL,
-> p[1], NULL, send_len, 0) (10) == -1 (-1)
-> # # tls.c:689:splice_cmsg_to_pipe:Expected errno (2) == EINVAL (22)
-> # # splice_cmsg_to_pipe: Test terminated by timeout
-> # #          FAIL  tls.13_sm4_gcm.splice_cmsg_to_pipe
-> # not ok 217 tls.13_sm4_gcm.splice_cmsg_to_pipe
-> # #  RUN           tls.13_sm4_gcm.splice_dec_cmsg_to_pipe ...
-> # # tls.c:708:splice_dec_cmsg_to_pipe:Expected recv(self->cfd, buf,
-> send_len, 0) (10) == -1 (-1)
-> # # tls.c:709:splice_dec_cmsg_to_pipe:Expected errno (2) == EIO (5)
-> [  661.901558] kworker/dying (49) used greatest stack depth: 10576 bytes left
+> This seems to be the problem perhaps.
+>
+> Jakub, any thoughts. The last change to tls.c was a while back.
 
-This seems to be the problem perhaps.
+Yes, sorry, kicked off a build and got distracted.
 
-Jakub, any thoughts. The last change to tls.c was a while back.
+I can repro the failures, TLS=n in the config I must have not tested
+that in the new cases.
 
-> 
-> Test case HANG here.
-> 
-> Full test log links [1] including boot log and test run log.
-> 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> 
-> --
-> Linaro LKFT
-> https://lkft.linaro.org
-> 
-> https://lkft.validation.linaro.org/scheduler/job/4770773#L2700
-> 
+But I can't repro the hung, and we have a timer at the hardness level
+IIUC so IDK how this could "hang"?
 
-thanks,
--- Shuah
-thanks,
--- Shuah
+Naresh, is there any stack trace in the logs? Can you repro on Linus's
+tree?

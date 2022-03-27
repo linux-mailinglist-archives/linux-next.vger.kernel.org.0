@@ -2,46 +2,48 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F1C74E8A84
-	for <lists+linux-next@lfdr.de>; Mon, 28 Mar 2022 00:32:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3A174E8B12
+	for <lists+linux-next@lfdr.de>; Mon, 28 Mar 2022 01:33:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236938AbiC0WeP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 27 Mar 2022 18:34:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52074 "EHLO
+        id S235037AbiC0Xes (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 27 Mar 2022 19:34:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236943AbiC0WeO (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 27 Mar 2022 18:34:14 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3139449C99;
-        Sun, 27 Mar 2022 15:32:34 -0700 (PDT)
+        with ESMTP id S229989AbiC0Xes (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 27 Mar 2022 19:34:48 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B915E0A2;
+        Sun, 27 Mar 2022 16:33:08 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KRVvK1418z4xXS;
-        Mon, 28 Mar 2022 09:32:29 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KRXFG0wzRz4xNm;
+        Mon, 28 Mar 2022 10:33:06 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1648420349;
-        bh=eGnzFInsDLriIvOfS1qS5g3gq01yurBK57/e7LTZYXw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=bBSPiO2YJ98hxnBqIblzmHY/pptEACqZhmewYK09YfOLH2z871QTJEGkoeuNvPkp/
-         TgjMvgok7fFQ7j96hWfnTha5NxaXs1ZRgRbQz4edWrxFnsmEhixvkz9DRjWa/VFwOV
-         YWIjabSGdVBpf92SCNO03fEbxpg219t+DAAYksk7W2k4+UvAObdW0wAnexlH0uTUeW
-         sAdRfy41wLbUUl0+R82vI/JCzWcs04yiuGC3P7sQJ0N9RRICnlSYUVol9ZPH/LiN8v
-         dR/kIS7YQl8tGjvr+9MCPi2sg0WDov+DJGJysVRpWaY3BJVNNx8tJhEFP1M5hTlx8x
-         2DUlt3D0/Pjlg==
-Date:   Mon, 28 Mar 2022 09:32:28 +1100
+        s=201702; t=1648423986;
+        bh=M45XB28xn1/Bfs1hY9Y7+mO4qS8oFV3iu8erEC4NRrQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=uD2kHHFOLwv0rF/dZHQ4eFU4hP3pCeCRLnP8J+DyiFrU/Zqp4r2nylkn/LdYPo/9Y
+         W9ofIO7msOyC0WMQ2THEbk1Nzu5YZpgPW/0GOXzoabj4OfGEKD8NV9JyQfUJIDPe6M
+         ydgu8vqbnZdArq5QCP6Uez0JF9i2zftZHgK59016uIJtkN1/B7eFmafyjruv6XRaNw
+         JDBpjQio+yzcR8DKWdCpCiwfyZJEPkjqw0c6KKS9omcIkdU1hTiuAiNIVjHCKpa3W+
+         MSNdzy6UXZVjrZ8bZ75EpQazjQ7mb2d37bWgXBFAEhPSlSFFGYXWsfaxcjL9zNn5Py
+         0VR9HF6+2EzOQ==
+Date:   Mon, 28 Mar 2022 10:33:05 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Steve French <smfrench@gmail.com>,
-        CIFS <linux-cifs@vger.kernel.org>
-Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Steve French <stfrench@microsoft.com>
-Subject: linux-next: manual merge of the cifs tree with Linus' tree
-Message-ID: <20220328093228.3c2a6019@canb.auug.org.au>
+        Michael Ellerman <mpe@ellerman.id.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: linux-next: build failure in Linus' tree
+Message-ID: <20220328103305.3fa42f9a@canb.auug.org.au>
+In-Reply-To: <CAHk-=whGmZrYZ=YdcjeJbpviUTShj0NOiG2q-3d1-RJtz6vBPQ@mail.gmail.com>
+References: <20220328090111.26f8980f@canb.auug.org.au>
+        <CAHk-=whGmZrYZ=YdcjeJbpviUTShj0NOiG2q-3d1-RJtz6vBPQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/AtoCfsxgC+r=uegyvJMlbg2";
+Content-Type: multipart/signed; boundary="Sig_/p376M4UlT+aL0d52XU_L2Rq";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -52,73 +54,37 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/AtoCfsxgC+r=uegyvJMlbg2
+--Sig_/p376M4UlT+aL0d52XU_L2Rq
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Linus,
 
-Today's linux-next merge of the cifs tree got a conflict in:
+On Sun, 27 Mar 2022 15:23:24 -0700 Linus Torvalds <torvalds@linux-foundatio=
+n.org> wrote:
+>
+> Will apply that patch asap.
 
-  fs/ksmbd/smb2pdu.h
-
-between commit:
-
-  5224f7909617 ("treewide: Replace zero-length arrays with flexible-array m=
-embers")
-
-from Linus' tree and commit:
-
-  be1350004392 ("smb3: move defines for query info and query fsinfo to smbf=
-s_common")
-
-from the cifs tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+Thanks
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc fs/ksmbd/smb2pdu.h
-index d49468426576,4db2896b977b..000000000000
---- a/fs/ksmbd/smb2pdu.h
-+++ b/fs/ksmbd/smb2pdu.h
-@@@ -818,13 -402,9 +402,9 @@@ struct smb2_file_stream_info=20
-  	__le32  StreamNameLength;
-  	__le64 StreamSize;
-  	__le64 StreamAllocationSize;
- -	char   StreamName[0];
- +	char   StreamName[];
-  } __packed;
- =20
-- struct smb2_file_eof_info { /* encoding of request for level 10 */
-- 	__le64 EndOfFile; /* new end of file value */
-- } __packed; /* level 20 Set */
--=20
-  struct smb2_file_ntwrk_info {
-  	__le64 CreationTime;
-  	__le64 LastAccessTime;
-
---Sig_/AtoCfsxgC+r=uegyvJMlbg2
+--Sig_/p376M4UlT+aL0d52XU_L2Rq
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJA5fwACgkQAVBC80lX
-0Gzfywf/fVjZrbTPcdvC0okFkip2vEmy1KyZSZx9g638jNIBHmKfXmb8uu8oAICv
-tf4slHDSX5MHLfBsxuaRZHlFcAHulohU7q4Oki1lnI9anKMUiXPClnZ0QKdXU5OM
-zAqHsT1jxq6VoPz6TBIOBeeA48wmgXA7MtdcGE4HbrOM458Dvg6wVJUyWpin/9dU
-psHwGlXdno92BbDKC2ChjzfSbdkL7uWYfaM2cYBMK1iv9ulMdeHpjbDvjHN9Nx4a
-Sr5btmceoJX8P0go2aB7i4qk4bD549yA5JIRTB2iXY/KK+nmk+RQVSiS07kFILbi
-jOyNEqrHSrrInO1a6jF4krdJgK2rqA==
-=nyNJ
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJA9DEACgkQAVBC80lX
+0GxZ+QgAoPtxju6+mSyCVBHtCXujWtF8Zw/IfpgGl2yzFD4wOT/Ox3SHHnle9EOu
+d4d6hDWTKcRRDLT99nH75jc/V72TSFcXERBpOLM57FkUi8fCJzC7J2R6MNo+d4l8
+o7EB5Uer8fz2n23Scda0AcUQsHZQc89T+fGL+OVXyUBPsjmgQcUtwyTivCiKUMoJ
+80U+Az/RmlGxSvmt+XuLrhy/dF1AViIMhcgpVvBtUNw6MbPeBei94xgkrXUJ0niw
+wMCTZ9Eww9z5qufTe7SCdkKwHIdHZP2A0MINvmAwDnfi6j73MbrHmvB2pBQpV0lf
+K1jyT9aTQ63MpUT72pq8ZOdJt9m7NQ==
+=rum5
 -----END PGP SIGNATURE-----
 
---Sig_/AtoCfsxgC+r=uegyvJMlbg2--
+--Sig_/p376M4UlT+aL0d52XU_L2Rq--

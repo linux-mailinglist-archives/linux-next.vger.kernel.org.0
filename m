@@ -2,48 +2,51 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3A174E8B12
-	for <lists+linux-next@lfdr.de>; Mon, 28 Mar 2022 01:33:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1840A4E8B21
+	for <lists+linux-next@lfdr.de>; Mon, 28 Mar 2022 01:57:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235037AbiC0Xes (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 27 Mar 2022 19:34:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33908 "EHLO
+        id S230334AbiC0X6k (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 27 Mar 2022 19:58:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbiC0Xes (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 27 Mar 2022 19:34:48 -0400
+        with ESMTP id S229989AbiC0X6j (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 27 Mar 2022 19:58:39 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B915E0A2;
-        Sun, 27 Mar 2022 16:33:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 955534ECF4;
+        Sun, 27 Mar 2022 16:56:59 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KRXFG0wzRz4xNm;
-        Mon, 28 Mar 2022 10:33:06 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KRXmk66JHz4xLS;
+        Mon, 28 Mar 2022 10:56:54 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1648423986;
-        bh=M45XB28xn1/Bfs1hY9Y7+mO4qS8oFV3iu8erEC4NRrQ=;
+        s=201702; t=1648425418;
+        bh=mwdXhjR/8rDA+sfg/YZQAQEnt90wTQFzvAOGkvL77WE=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=uD2kHHFOLwv0rF/dZHQ4eFU4hP3pCeCRLnP8J+DyiFrU/Zqp4r2nylkn/LdYPo/9Y
-         W9ofIO7msOyC0WMQ2THEbk1Nzu5YZpgPW/0GOXzoabj4OfGEKD8NV9JyQfUJIDPe6M
-         ydgu8vqbnZdArq5QCP6Uez0JF9i2zftZHgK59016uIJtkN1/B7eFmafyjruv6XRaNw
-         JDBpjQio+yzcR8DKWdCpCiwfyZJEPkjqw0c6KKS9omcIkdU1hTiuAiNIVjHCKpa3W+
-         MSNdzy6UXZVjrZ8bZ75EpQazjQ7mb2d37bWgXBFAEhPSlSFFGYXWsfaxcjL9zNn5Py
-         0VR9HF6+2EzOQ==
-Date:   Mon, 28 Mar 2022 10:33:05 +1100
+        b=iQziQp8FTmL8Pkao1uSjJ0tx9z9HhTPI1etwg6B294XNV+sjoDyuMe6V/1O7ClJVI
+         WEhZlULkGYxxJU9lt/AtZnWqlQOXOBOtk+9bTKcka7/5uNUBHa4KXhTjz8c+jVHstk
+         bst/0pPAuQH2NJ3SuEFHQhSvUeMxX0uGCL0oZCIY0KUlW7JDUdtnBwiGoWUODLDWke
+         t4aLr0ZofZzqBCN/XAoN2EgOgbTEI+Fo+A4uJ4DkjFw6lCYF/xhgIoD26b0F0+pBOx
+         f/JEUe+mgmEl5SM5+wr2goR7rMr8CcAcrctYbmEIYNGB2bLUK1450cL6INQ7Srj63Q
+         FAo1WffcSJQEQ==
+Date:   Mon, 28 Mar 2022 10:56:53 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: linux-next: build failure in Linus' tree
-Message-ID: <20220328103305.3fa42f9a@canb.auug.org.au>
-In-Reply-To: <CAHk-=whGmZrYZ=YdcjeJbpviUTShj0NOiG2q-3d1-RJtz6vBPQ@mail.gmail.com>
-References: <20220328090111.26f8980f@canb.auug.org.au>
-        <CAHk-=whGmZrYZ=YdcjeJbpviUTShj0NOiG2q-3d1-RJtz6vBPQ@mail.gmail.com>
+To:     Andrey Grodzovsky <andrey.grodzovsky@amd.com>
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the drm-misc tree
+Message-ID: <20220328105653.033d2920@canb.auug.org.au>
+In-Reply-To: <14b6a691-d31e-2e54-cf91-352b9b30414d@amd.com>
+References: <20211117134926.1d339d71@canb.auug.org.au>
+        <20220120142639.02c54ae9@canb.auug.org.au>
+        <20220302123126.65bcbc82@canb.auug.org.au>
+        <14b6a691-d31e-2e54-cf91-352b9b30414d@amd.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/p376M4UlT+aL0d52XU_L2Rq";
+Content-Type: multipart/signed; boundary="Sig_/isjWQJ7skPGKi+0oxFUkoBP";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -54,37 +57,60 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/p376M4UlT+aL0d52XU_L2Rq
-Content-Type: text/plain; charset=US-ASCII
+--Sig_/isjWQJ7skPGKi+0oxFUkoBP
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-Hi Linus,
+Hi Andrey,
 
-On Sun, 27 Mar 2022 15:23:24 -0700 Linus Torvalds <torvalds@linux-foundatio=
-n.org> wrote:
+On Tue, 1 Mar 2022 22:26:12 -0500 Andrey Grodzovsky <andrey.grodzovsky@amd.=
+com> wrote:
 >
-> Will apply that patch asap.
+> On 2022-03-01 20:31, Stephen Rothwell wrote:
+> > Hi all,
+> >
+> > On Thu, 20 Jan 2022 14:26:39 +1100 Stephen Rothwell <sfr@canb.auug.org.=
+au> wrote: =20
+> >> On Wed, 17 Nov 2021 13:49:26 +1100 Stephen Rothwell <sfr@canb.auug.org=
+.au> wrote: =20
+> >>> After merging the drm-misc tree, today's linux-next build (htmldocs)
+> >>> produced this warning:
+> >>>
+> >>> include/drm/gpu_scheduler.h:316: warning: Function parameter or membe=
+r 'work' not described in 'drm_sched_job'
+> >>>
+> >>> Introduced by commit
+> >>>
+> >>>    542cff7893a3 ("drm/sched: Avoid lockdep spalt on killing a process=
+es") =20
+> >> I am still seeing this warning. =20
+> > I am still seeing this warning.
+> > =20
+> Please check you have commit c7703ce38c1e Andrey Grodzovsky=C2=A0=C2=A0 3=
+ weeks ago=C2=A0=C2=A0=C2=A0 drm/amdgpu: Fix htmldoc warning
 
-Thanks
+I do have commit c7703ce38c1e (in fact it is in Linus' tree), but that
+commit does not address the warning above.  I am still (as of Friday)
+getting that warning.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/p376M4UlT+aL0d52XU_L2Rq
+--Sig_/isjWQJ7skPGKi+0oxFUkoBP
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJA9DEACgkQAVBC80lX
-0GxZ+QgAoPtxju6+mSyCVBHtCXujWtF8Zw/IfpgGl2yzFD4wOT/Ox3SHHnle9EOu
-d4d6hDWTKcRRDLT99nH75jc/V72TSFcXERBpOLM57FkUi8fCJzC7J2R6MNo+d4l8
-o7EB5Uer8fz2n23Scda0AcUQsHZQc89T+fGL+OVXyUBPsjmgQcUtwyTivCiKUMoJ
-80U+Az/RmlGxSvmt+XuLrhy/dF1AViIMhcgpVvBtUNw6MbPeBei94xgkrXUJ0niw
-wMCTZ9Eww9z5qufTe7SCdkKwHIdHZP2A0MINvmAwDnfi6j73MbrHmvB2pBQpV0lf
-K1jyT9aTQ63MpUT72pq8ZOdJt9m7NQ==
-=rum5
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJA+cYACgkQAVBC80lX
+0Gzr5Af9Fho4i/XiOVidND1OAco3hiL0X0forPuNkqXspGn7In3jcQF9FPoyLRBe
+K6W4fuIwY6uI7IntVQVqfQVN8Lv0KOdSBo9ZN7Sj9jF5yiEZXXAjXo29KnqNBQpN
+yiRO4cEYRaIfpHzNipahXWke0b7Yk68LfDAr0anEEVFxAr82UTWb4hQ8EITyWRo4
+J8AfZP69C+5FvKLFZZ/PHkF6Ggg48l5XaDd5YR9g5VFKQEm1Nx5ngFH+ijEB4bX1
+wIxxbJCMXO5oTkgU3oDYQYYJQ7NsOrYR3yC6fJPvq+EYO2OKQSgGeLZ5BhysGxXa
+Wi6zTE+wvS4yAbUbDPQZg+WCDXZWiA==
+=KbTg
 -----END PGP SIGNATURE-----
 
---Sig_/p376M4UlT+aL0d52XU_L2Rq--
+--Sig_/isjWQJ7skPGKi+0oxFUkoBP--

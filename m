@@ -2,79 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EE884E88FD
-	for <lists+linux-next@lfdr.de>; Sun, 27 Mar 2022 18:50:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7A0C4E8A2D
+	for <lists+linux-next@lfdr.de>; Sun, 27 Mar 2022 23:17:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232934AbiC0Qwf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 27 Mar 2022 12:52:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48866 "EHLO
+        id S234999AbiC0VSt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 27 Mar 2022 17:18:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231258AbiC0Qwe (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 27 Mar 2022 12:52:34 -0400
-X-Greylist: delayed 317 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 27 Mar 2022 09:50:55 PDT
-Received: from infomag.iguana.be (infomag.iguana.be [185.87.124.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 600B135271;
-        Sun, 27 Mar 2022 09:50:55 -0700 (PDT)
-Received: by infomag.iguana.be (Postfix, from userid 1001)
-        id 31DD4603CACE; Sun, 27 Mar 2022 18:45:37 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 infomag.iguana.be 31DD4603CACE
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=iguana.be;
-        s=infomag-20180602; t=1648399537;
-        bh=xi9ghDIL666f80ISa8o1+6wJFPc5yErjMsKA+Zk2UJs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bnCdiNPytPBpdDlSylv91q4aLJjwfaWVEDN4NRA/ae1U5RsbaY+CwZRqmeqRXQa++
-         Cu1+FhZhkvyQFtOEplgWESwmJeM8DlLntC0HOW9T63vbASuG8YmxBxr80aOseMMBqS
-         +u16NLPDBjP9Bq6V8Thq3mWff1rFh5VxanNR1AJI=
-Date:   Sun, 27 Mar 2022 18:45:37 +0200
-From:   Wim Van Sebroeck <wim@iguana.be>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Miaoqian Lin <linmq006@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
+        with ESMTP id S229878AbiC0VSs (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 27 Mar 2022 17:18:48 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FC5BFD39;
+        Sun, 27 Mar 2022 14:17:08 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KRTDH2kRGz4xNm;
+        Mon, 28 Mar 2022 08:17:03 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1648415823;
+        bh=0kdN9zM+X1uRZiE2ZBmkfo1quRCkCUYeKbqtkLzz1B0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=LKf3+c3kj8g0SY0ETjV7Bc+n2wLte4ChEjwMsFqQ1YYVgk6Kwe8FXCG4XmP5eKbRP
+         KJO/HEbahrX48Qh90NMjjbJ9pRPmhSr4g2WryMm+w/BKVsrfOV2Atkp6BfsR+aJZkx
+         4Dm9i4wn9DmqfQXaoI3dGk6iyNLsTcZoroeA8jn6zCoXCdyUuDyIFjnV68epYn/G8S
+         fnBdFE2DB904ctSr5H5Zvcm7Fm3hxt5UCpavOcUI61O3rChfBOBwWlC0tha1eUG/je
+         A6gyRYQFQt7k58DznoRKxVXRvLs4FlcqydLaODt7Ga/pcs8Yh0hCSqbiynw6NEN+D0
+         Zx29Su+LSSoIQ==
+Date:   Mon, 28 Mar 2022 08:17:02 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Steven Whitehouse <swhiteho@redhat.com>,
+        Bob Peterson <rpeterso@redhat.com>
+Cc:     Andreas Gruenbacher <agruenba@redhat.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the watchdog tree
-Message-ID: <20220327164537.GA18817@infomag.iguana.be>
-References: <20220321081023.72569774@canb.auug.org.au>
+Subject: linux-next: Signed-off-by missing for commit in the gfs2 tree
+Message-ID: <20220328081702.31b8c45a@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220321081023.72569774@canb.auug.org.au>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/xgSwUTHL+iyg8B7fWXz/FXx";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+--Sig_/xgSwUTHL+iyg8B7fWXz/FXx
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Sorry for the delay. Fixed now.
+Hi all,
 
-Kind regards,
-Wim.
+Commit
 
-> Hi all,
-> 
-> In commit
-> 
->   1f7590ac16e7 ("watchdog: rti-wdt: Add missing pm_runtime_disable() in probe function")
-> 
-> Fixes tag
-> 
->   Fixes: 2d63908 ("watchdog: Add K3 RTI watchdog support")
-> 
-> has these problem(s):
-> 
->   - SHA1 should be at least 12 digits long
->     This an be fixed for the future by setting core.abbrev to 12 (or
->     more) or (for git v2.11 or later) just making sure it is not set
->     (or set to "auto").
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
+  9e349f23802b ("gfs2: Make sure FITRIM minlen is rounded up to fs block si=
+ze")
 
+is missing a Signed-off-by from its committer.
 
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/xgSwUTHL+iyg8B7fWXz/FXx
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJA1E4ACgkQAVBC80lX
+0GyTOwgAlGx1vFxpStkNSmIg8ECVICUB+K6iCf+QDxX4nQVQc8y0OIrGIusJt7fA
+5Mw6FY3DO/xTO8oo67k0U7kgksfY1z3sJTzErxDIDpdQFNWVDOgoZi7yDkBEaGuc
+bM0eENFwHaC/7RfTnxTO7zErq4GSOgC3xhgnkzgQmdj+2bubObLMKYVAxyD5A4b0
+0H17cUSmBiDH4meFWiLHsuO8TROyba73AV+O6GjYbtij/8j0AiIVyfeHI6rHgmFb
+HPLHd2f9ffoOas5mSqIK96svh0LVvdRiVqXXjkAACQCUafgQRc8+0uyGRj7kVsJi
+y0QcExc6AazupyMr7Zf/eUCPAsjxtQ==
+=9Zva
+-----END PGP SIGNATURE-----
+
+--Sig_/xgSwUTHL+iyg8B7fWXz/FXx--

@@ -2,93 +2,103 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 676EF4EA2CD
-	for <lists+linux-next@lfdr.de>; Tue, 29 Mar 2022 00:16:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F7F24EA2F1
+	for <lists+linux-next@lfdr.de>; Tue, 29 Mar 2022 00:31:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229502AbiC1WN0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 28 Mar 2022 18:13:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37730 "EHLO
+        id S229513AbiC1WUJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 28 Mar 2022 18:20:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiC1WN0 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 28 Mar 2022 18:13:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5BA429B12C;
-        Mon, 28 Mar 2022 15:02:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E6EF6153F;
-        Mon, 28 Mar 2022 21:53:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24DFDC34100;
-        Mon, 28 Mar 2022 21:53:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648504385;
-        bh=oNs0fACiFDhDkycLiYXHQaGNFojDAo6v1AQHrYGCu2c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AHpsLaobXbTDIEC9UlU7FeCro6s04ki/GTaTC4isZ1IWnqRP64A5mrdUXa9SW0W4g
-         p5beKLeP5sC+e5P7DnSaN6lUYQtDf7WwWGfVPeAGwaigqcmMPwbbevsDxl3aj0uzxV
-         k6Xtf88KB2UI7zCUzeM/L4NZQKfIOyJzJp5U/oixBMbKXQPOjFEA+ckYxCX8XWi7Yg
-         arCAFU7rp2lE5YvvIarvIWfgo8ELcZxnl3rN9Bwvq1q7xoU9ZnJjwmOVuReck7RfG4
-         9wtmv2QOD4KNYksX8bPVDg3kkMEPcyeNg/nxQFHUnRSaAzGf8HvdS5b4uvDcSFhjZd
-         yuEQ6mLBnDDsg==
-Date:   Mon, 28 Mar 2022 14:52:58 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Vasily Gorbik <gor@linux.ibm.com>
-Cc:     Heiko Carstens <hca@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        linux-s390@vger.kernel.org, linux-next@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: s390 defconfig fails to build after
- 4afeb670710efa5cd5ed8b1d9f2d22d6ce332bcc
-Message-ID: <YkIuOnd6SWBYuKLz@dev-arch.thelio-3990X>
-References: <YkH/rRikE2CilpqU@dev-arch.thelio-3990X>
- <your-ad-here.call-01648503866-ext-8764@work.hours>
+        with ESMTP id S229599AbiC1WUH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 28 Mar 2022 18:20:07 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4EBDC65;
+        Mon, 28 Mar 2022 15:18:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=8GkLc/s+XEtz/UORDgvxTa0KxKSEAfLI2AHFnWlv8Mk=; b=ICob3tApxQsmar5HbaaA3fVYUE
+        Aa++An9QkojsDVrsh/htJ0+2v+LMyi9qn0y9676fOzkhDZyskgLhMGl218NEqnKk3pgDisRzyAagc
+        Tar+Eyn01xVBFdR9TtK8Nh8xUCCRVsutxDXyLyROP7fJptrNfYl0hD8gUmxQWCywarq5M8YH2Gd1A
+        uX6svXP8R5BDnGctjm3hgxNOqcFkseL6QO5HAY7ckxv6HoLX7U6faXR5McOyrRoqmg0hSFwyjPgHM
+        d76QrrVArIoMYG1zpPg4LmHV7BzhXK+WnJWK3jTlIZC9ICgueWZK7m/8U3s2GFY1LfVLGv5ksk31b
+        BZTPR92Q==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nYxZK-00HJIv-IW; Mon, 28 Mar 2022 22:10:34 +0000
+Date:   Mon, 28 Mar 2022 23:10:34 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: linux-next: build warnings after merge of the akpm-current tree
+Message-ID: <YkIyWqOAiAmJ4ear@casper.infradead.org>
+References: <20220209170245.08968c92@canb.auug.org.au>
+ <20220324182725.63a454e3@canb.auug.org.au>
+ <224c2147-36fe-93ed-41a5-a4609b59b4a2@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <your-ad-here.call-01648503866-ext-8764@work.hours>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <224c2147-36fe-93ed-41a5-a4609b59b4a2@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 11:44:26PM +0200, Vasily Gorbik wrote:
-> On Mon, Mar 28, 2022 at 11:34:21AM -0700, Nathan Chancellor wrote:
+On Mon, Mar 28, 2022 at 12:54:14PM -0700, Hugh Dickins wrote:
+> On Thu, 24 Mar 2022, Stephen Rothwell wrote:
+> 
 > > Hi all,
 > > 
-> > Apologies if this has been reported or fixed already, I did not see a
-> > report when searching lore.kernel.org and it is reproducible as of
-> > commit 7dcfe50f58d2 ("s390/pci: rename get_zdev_by_bus() to
-> > zdev_from_bus()") in s390/linux.git.
+> > On Wed, 9 Feb 2022 17:02:45 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> > > 
+> > > After merging the akpm-current tree, today's linux-next build (htmldocs)
+> > > produced these warnings:
+> > > 
+> > > include/linux/mm_types.h:272: warning: Function parameter or member '__filler' not described in 'folio'
+> > > include/linux/mm_types.h:272: warning: Function parameter or member 'mlock_count' not described in 'folio'
+> > > 
+> > > Introduced by commit
+> > > 
+> > >   60a5c5ab0ba7 ("mm/munlock: maintain page->mlock_count while unevictable")
 > > 
-> > Our continuous integration noticed a build failure on next-20220328 in
-> > arch/s390/kernel/entry.S, which does not appear to be compiler specific,
-> > as I can reproduce this with GCC easily:
+> > I am still getting these warnings.  That commit is now
 > > 
-> > https://builds.tuxbuild.com/2716QwFVG9408TJ43vkEc7trVCI/build.log
+> >   07ca76067308 ("mm/munlock: maintain page->mlock_count while unevictable")
 > > 
-> > $ make -skj"$(nproc)" ARCH=s390 CROSS_COMPILE=s390x-linux-gnu- defconfig arch/s390/kernel/entry.o
-> > arch/s390/kernel/entry.S: Assembler messages:
-> > arch/s390/kernel/entry.S:335: Error: Unrecognized opcode: `jgnop'
-> > arch/s390/kernel/entry.S:493: Error: Unrecognized opcode: `jgnop'
-> > arch/s390/kernel/entry.S:494: Error: Unrecognized opcode: `jgnop'
+> > in Linus' tree :-(
 > 
-> Thank you for reporting this!
+> Sorry about that Stephen: back in Feb I expected Matthew to have strong
+> feelings about it, and it wouldn't have been helpful for me to mess it
+> around at that time.
 > 
-> jgnop mnemonic has been introduced with binutils commit
-> b10b530a4566 ("IBM Z: Add support for HLASM extended mnemonics")
-> 
-> and is part of binutils-2_36 and newer.
-> 
-> I fixed it by using old "brcl 0,0" alternative here:
-> https://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git/commit/?h=features&id=faf79934e65aff90284725518a5ec3c2241c65ae
+> But I'll reply to this now with my suggested patch: which Matthew may
+> not like (he may consider it a retrograde step), but unless he NAKs it
+> and comes up with something we all like better, it should do for now.
 
-Awesome, thank you a lot for the quick fix!
+Sorry!  I didn't see these emails back in February, or I would have
+fixed it up.  I'm doing a build now, but it's a very slow process
+(and seems to have become single-threaded since the last time I ran it?)
+so it will be a little while before I can produce a patch.
 
-Cheers,
-Nathan
+> I did try to 'make htmldocs' for the first time, but was put off by all
+> the new packages I was asked to install - not a good use of time.  And
+> I'm so ignorant that I do not even know if "/* public: */" is a helpful
+> comment or a special annotation.
+
+Fortunately the documentation is actually documented:
+Documentation/doc-guide/kernel-doc.rst
+''Structure, union, and enumeration documentation''
+
+There are still many, many warnings when building the documentation, so
+don't feel particularly bad about this.  I've tried to make it more
+obvious to non-doc-specialists by making W=1 emit warnings, but that
+only happens for .c files, not for .h files.  As you say, the amount
+of tooling that needs to be installed to make htmldocs is intimidating.

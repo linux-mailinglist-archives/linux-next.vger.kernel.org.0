@@ -2,115 +2,112 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91A364E9F00
-	for <lists+linux-next@lfdr.de>; Mon, 28 Mar 2022 20:34:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AC374EA0D1
+	for <lists+linux-next@lfdr.de>; Mon, 28 Mar 2022 21:56:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243190AbiC1SgM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 28 Mar 2022 14:36:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38414 "EHLO
+        id S1343851AbiC1T4L (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 28 Mar 2022 15:56:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237113AbiC1SgL (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 28 Mar 2022 14:36:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F8FC4CD6A;
-        Mon, 28 Mar 2022 11:34:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AF334611D6;
-        Mon, 28 Mar 2022 18:34:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE483C340F0;
-        Mon, 28 Mar 2022 18:34:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648492469;
-        bh=bBbJyKWaKqZSl867ct1z9j/2rS/3DFocRJvGbOT/w6U=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Q/KglgPgJ0pk2GoUg8dncSjJA8u9jOYjpkxG9q8RC5NG+J5UKiIf/6oG28/azbE0N
-         kgc9jImchiPRIXxpne/on6epcAP1NQnYRIx21vZhu3W1HOGdZ5k+uTP4LIhKOJyRip
-         NjfkAcDHGtL8CHiEUEpzzuTUaWwyh1AvGWIyvMWPskTJLrdF0e78O81iG2FHQRJQo2
-         Ekr425EAcGkwjLr3CW8gfDxOZMCcmikcJiXQlWsn3GmYkD8tkEQrynXXpYy5svEANz
-         aSWIHyAcOY9VBpciThtHTkXxm14BTtbnSr1BBG5w+GgwZnutA5+MA0tXMj0DRoABWk
-         qvMZChIOA/XZA==
-Date:   Mon, 28 Mar 2022 11:34:21 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>
-Cc:     linux-s390@vger.kernel.org, linux-next@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: s390 defconfig fails to build after
- 4afeb670710efa5cd5ed8b1d9f2d22d6ce332bcc
-Message-ID: <YkH/rRikE2CilpqU@dev-arch.thelio-3990X>
+        with ESMTP id S243536AbiC1T4J (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 28 Mar 2022 15:56:09 -0400
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9264724BFD
+        for <linux-next@vger.kernel.org>; Mon, 28 Mar 2022 12:54:27 -0700 (PDT)
+Received: by mail-qv1-xf36.google.com with SMTP id jo24so12732364qvb.5
+        for <linux-next@vger.kernel.org>; Mon, 28 Mar 2022 12:54:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :mime-version;
+        bh=WrEOFIQ8nddTmMjs0Ezvn7QeIOPamLyL9uH7CFNlwEE=;
+        b=i++HAmVS08JASO6QZX/Xxgy/WbjC6B9It9btp8NtISWO1XdWybZMgkp+1n2749DK+l
+         up+gAv1WXMOAS577OHEZWFKZMPYi3/4AWZJ0kZaCxHR4W81jgktIpfO58ct3RT56yILp
+         LErunoEniN1dHor8JQot9XSKdQ5xk64soBcRbZV5HstN764lrWAVt5DAD/dVefgRs+wJ
+         EMRJwG/WuH2REr2QGENSMRh8DBfiyGdtoulcD75XIoV4O36bAhbW2/9t0FVGbdk/8iik
+         yh8kKIcF3o3k0FqsU4C9TvEzz2Yym5baprzy4dJ+InwYJgQ87txdeVTynshkpShpq0HX
+         Xw5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:mime-version;
+        bh=WrEOFIQ8nddTmMjs0Ezvn7QeIOPamLyL9uH7CFNlwEE=;
+        b=l7ILdsYhFe5LNbHoh6Mhn8sTmbGmhPUjqjfrOzUA9/Gz6f6Sqc1Vhve13cqcpty2FN
+         VPKQTjbv/8EOyurmKuzkuSaprYiGZlJhWX4+lKP7USn8iyZrOyilfn1b7wy0lX/pfurj
+         KqbJylstOptlbGjknAAh5H7pdBHy3ehXUmVS8QZ+lqrir8u+ZJaozoSscZlBBqDR1sPK
+         +OVNqplVq6TEA4MdG13fR98ycIu6T9o4k3RiA62xcnKH6+u8pEm0dx2IlxABMOS+S9GK
+         eZBNsA/wTI6blCYzbQaZvYhQO2RT7mI+GDAmjmoBGewwXdhORrIQe2kCTVnYOGItB8bQ
+         N+zA==
+X-Gm-Message-State: AOAM530U/MLSvJX828n/ml06HtSq8KwBkHPOdh4xWVPQYxqD1o4l1bkv
+        l9VaZeC8JA8GMNsGEoqGUd3ciw==
+X-Google-Smtp-Source: ABdhPJyKVt6eqEjiUmWY8SL0qm9MJdTACYj37suEPT1ul1RFDZ72gXR+7h0UKCfzCiuSD2ZSDfor7g==
+X-Received: by 2002:a05:6214:caa:b0:441:4ba4:3ebd with SMTP id s10-20020a0562140caa00b004414ba43ebdmr22641386qvs.22.1648497266582;
+        Mon, 28 Mar 2022 12:54:26 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id g9-20020a05620a108900b0067b13036bd5sm8239489qkk.52.2022.03.28.12.54.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Mar 2022 12:54:26 -0700 (PDT)
+Date:   Mon, 28 Mar 2022 12:54:14 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.anvils
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+cc:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: linux-next: build warnings after merge of the akpm-current
+ tree
+In-Reply-To: <20220324182725.63a454e3@canb.auug.org.au>
+Message-ID: <224c2147-36fe-93ed-41a5-a4609b59b4a2@google.com>
+References: <20220209170245.08968c92@canb.auug.org.au> <20220324182725.63a454e3@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi all,
+On Thu, 24 Mar 2022, Stephen Rothwell wrote:
 
-Apologies if this has been reported or fixed already, I did not see a
-report when searching lore.kernel.org and it is reproducible as of
-commit 7dcfe50f58d2 ("s390/pci: rename get_zdev_by_bus() to
-zdev_from_bus()") in s390/linux.git.
+> Hi all,
+> 
+> On Wed, 9 Feb 2022 17:02:45 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> > 
+> > After merging the akpm-current tree, today's linux-next build (htmldocs)
+> > produced these warnings:
+> > 
+> > include/linux/mm_types.h:272: warning: Function parameter or member '__filler' not described in 'folio'
+> > include/linux/mm_types.h:272: warning: Function parameter or member 'mlock_count' not described in 'folio'
+> > 
+> > Introduced by commit
+> > 
+> >   60a5c5ab0ba7 ("mm/munlock: maintain page->mlock_count while unevictable")
+> 
+> I am still getting these warnings.  That commit is now
+> 
+>   07ca76067308 ("mm/munlock: maintain page->mlock_count while unevictable")
+> 
+> in Linus' tree :-(
 
-Our continuous integration noticed a build failure on next-20220328 in
-arch/s390/kernel/entry.S, which does not appear to be compiler specific,
-as I can reproduce this with GCC easily:
+Sorry about that Stephen: back in Feb I expected Matthew to have strong
+feelings about it, and it wouldn't have been helpful for me to mess it
+around at that time.
 
-https://builds.tuxbuild.com/2716QwFVG9408TJ43vkEc7trVCI/build.log
+But I'll reply to this now with my suggested patch: which Matthew may
+not like (he may consider it a retrograde step), but unless he NAKs it
+and comes up with something we all like better, it should do for now.
 
-$ make -skj"$(nproc)" ARCH=s390 CROSS_COMPILE=s390x-linux-gnu- defconfig arch/s390/kernel/entry.o
-arch/s390/kernel/entry.S: Assembler messages:
-arch/s390/kernel/entry.S:335: Error: Unrecognized opcode: `jgnop'
-arch/s390/kernel/entry.S:493: Error: Unrecognized opcode: `jgnop'
-arch/s390/kernel/entry.S:494: Error: Unrecognized opcode: `jgnop'
+I did try to 'make htmldocs' for the first time, but was put off by all
+the new packages I was asked to install - not a good use of time.  And
+I'm so ignorant that I do not even know if "/* public: */" is a helpful
+comment or a special annotation.
 
-Bisect converged on commit 4afeb670710e ("s390/alternatives: use
-instructions instead of byte patterns"):
-
-# bad: [7dcfe50f58d28e0e2ba79e9e4333888bcf9442a4] s390/pci: rename get_zdev_by_bus() to zdev_from_bus()
-# good: [895ae58da4a2360d9c2d255cd9fc8de64e265022] s390/zcrypt: Add admask to zcdn
-git bisect start '7dcfe50f58d2' '895ae58da4a2'
-# bad: [09bc20c8fb35cf1afed1612b287e9ddbe6a7d73c] s390/kprobes: enable kretprobes framepointer verification
-git bisect bad 09bc20c8fb35cf1afed1612b287e9ddbe6a7d73c
-# good: [f09354ffd84eef3c88efa8ba6df05efe50cfd16a] s390/traps: improve panic message for translation-specification exception
-git bisect good f09354ffd84eef3c88efa8ba6df05efe50cfd16a
-# bad: [2d6c0008be64bd813008d2a796108e89edec1030] s390/ap: use insn format for new instructions
-git bisect bad 2d6c0008be64bd813008d2a796108e89edec1030
-# bad: [6982dba181deba54c5ccb301aaed6f6ec14c6310] s390/alternatives: use insn format for new instructions
-git bisect bad 6982dba181deba54c5ccb301aaed6f6ec14c6310
-# bad: [4afeb670710efa5cd5ed8b1d9f2d22d6ce332bcc] s390/alternatives: use instructions instead of byte patterns
-git bisect bad 4afeb670710efa5cd5ed8b1d9f2d22d6ce332bcc
-# first bad commit: [4afeb670710efa5cd5ed8b1d9f2d22d6ce332bcc] s390/alternatives: use instructions instead of byte patterns
-
-I can reproduce with TuxMake's [1] gcc-8, gcc-9, and gcc-10 containers,
-but not the gcc-11 one. The version information of GCC and binutils of
-each container is provided below in case it helps with reproducing.
-Given this is out of line assembly, I am sure the compiler has little to
-do with it, but as the compiler is the driver for .S files, I included
-it to be thorough.
-
-s390x-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0
-GNU assembler (GNU Binutils for Debian) 2.31.1
-
-s390x-linux-gnu-gcc (Debian 9.3.0-22) 9.3.0
-GNU assembler (GNU Binutils for Debian) 2.35.2
-
-s390x-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110
-GNU assembler (GNU Binutils for Debian) 2.35.2
-
-s390x-linux-gnu-gcc (Debian 11.2.0-18) 11.2.0
-GNU assembler (GNU Binutils for Debian) 2.38
-
-[1]: https://tuxmake.org/
-
-Cheers,
-Nathan
+Patch follows...
+Hugh

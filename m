@@ -2,267 +2,277 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E63E4EA619
-	for <lists+linux-next@lfdr.de>; Tue, 29 Mar 2022 05:32:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02AFF4EA797
+	for <lists+linux-next@lfdr.de>; Tue, 29 Mar 2022 07:59:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231526AbiC2DeF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 28 Mar 2022 23:34:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57090 "EHLO
+        id S232528AbiC2GBS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 29 Mar 2022 02:01:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230243AbiC2DeC (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 28 Mar 2022 23:34:02 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39591247C04
-        for <linux-next@vger.kernel.org>; Mon, 28 Mar 2022 20:32:20 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id b189so13117521qkf.11
-        for <linux-next@vger.kernel.org>; Mon, 28 Mar 2022 20:32:20 -0700 (PDT)
+        with ESMTP id S232292AbiC2GBR (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 29 Mar 2022 02:01:17 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9548733EAA
+        for <linux-next@vger.kernel.org>; Mon, 28 Mar 2022 22:59:34 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id y10so11625754pfa.7
+        for <linux-next@vger.kernel.org>; Mon, 28 Mar 2022 22:59:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :mime-version;
-        bh=2fIJHgtwQJCcepgLU3AMUprrMX5GU5EmSB2H27stKPM=;
-        b=SmVKUEZ1LkpmvnRIJnTFWd7ejo5fcpvZCXUAtZkQQXtFPRfoU5jeq4z86IAc17OG7g
-         UhQzj5BcjQKC4nCfymC/u8iADVdrN+7q09XD22IRyxwArXunmtvh9Hp7jMLryllQUzHn
-         aPHaLvbx+66kP5CYVciVLrG1OOGn5GncHsZskfray387nMaSvKsMT8EH4Jr3++Q4H8pC
-         SjD6govujccTnI60GL41fKUlpIJfaYaJ+GsWV41hlgEslrURHn9YebjXd/8pAHI19m05
-         PPBF6M97lMNhz092R+XU6Hg93xGs2Djqj/OueMgQXWLH+G7Hq+I2SuSWzSbQVuAkKsY6
-         +/LQ==
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=ndAH/97JY6gt+PzL3QVMcSLLQYPrxTKxr27i9nXNwS8=;
+        b=1wq0Nx/q85YlsmisdSqGfkrS+GbVol9mr2kquPMmyDrw3HO6i582M59pVZJp5y+IwL
+         MFPQ1CledA9lXHsv40By+3jqE/l+5fr8d0X/OHB0b3VohSvaFlxzjSs4GggxjACK/Q9j
+         CS4sQkYuELATPYRm946+0R+sB8EA3JUwAtpqAr4s8b0B/SEo7ltYH+fb9746MTl+wX69
+         dKvzLPSlwc8yBBI2yuHCf0Ql0JjxE7z2vTSt/lYRKx6r1zli0oP1Om9FmpV0xpeZtpO1
+         qoViJE6hPbC9PbncI1O91A/l+LzUym84Ag0gdp7yqHfV+6NWYjqI0tMofxD/57ow+BT0
+         cTNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:mime-version;
-        bh=2fIJHgtwQJCcepgLU3AMUprrMX5GU5EmSB2H27stKPM=;
-        b=RuXdtdiodXoVx8dbBVoXvwX9C81k7cRBgFWVlUMM63avja6vbo59zqhHEvJjnpgbyd
-         jmYDfzemzoG3EFaFoCJ4wQhxjFubqZyHzsHyIMGdkYRPEO1LgSzaYI+klM5//vH1V2xB
-         IUdpDroJbJEmnvnP7Mt+1y2plULmECGRmBsgZtmcoCL3H39sp5yT2KDriIksEDz7NDEy
-         7h9jHZE+GLHyfOGSt3HKFU9VStpSadw8Xe9Ol7kecoIeBLO5q0wvey52bmp6tS8MP0t/
-         IPcORs3mEkO0hQQO/U/H0Uat1hzMNT8O2wTrfPS61EhRMXlETc8CX2HWoTcNQhyV6lkR
-         jo8w==
-X-Gm-Message-State: AOAM532QqUqUcXZ8UYUqD+eveZaVP6OOYvLX52v6v+kfqT8g9yiZTyXI
-        loVMDkWRLjTGSVd0bb4FQmNxSA==
-X-Google-Smtp-Source: ABdhPJxEZW9mmU2WInv3wXEngGk9GdQSAQVhEYyNxhXgD2Le/31tnluGvw7ZBAHkvl/CHFiIE31ggA==
-X-Received: by 2002:a37:e109:0:b0:680:a307:d4dc with SMTP id c9-20020a37e109000000b00680a307d4dcmr16938597qkm.198.1648524739088;
-        Mon, 28 Mar 2022 20:32:19 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id q8-20020a05622a04c800b002e06d7c1eabsm14100784qtx.16.2022.03.28.20.32.17
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=ndAH/97JY6gt+PzL3QVMcSLLQYPrxTKxr27i9nXNwS8=;
+        b=vcAqW+oI421Uu9EMZtJZhg0lNfk1lCAOs1HuPGJ+0E9Qnwu6WYYrzWQzqUtrIe9XWe
+         NtYcuGlaVWJG/vhU6JZPOgRUpyh1P99oZhg8actoei3GNo4Ujd0QdDHsAk+6RE1lAW74
+         +IQlUjo3voWXi6M6/ulX+2Sp4y4c90rIP4EQBvnZclTny4uRJwPHK5mGgXz0lPmCreVo
+         OqvbjCyPp8w+4nQXrzE0R3Y/OpKG1/FJy+ghyJ8yU0e+cm3l3j2rFDvp06QAuWU5ai90
+         8GvDj1MOunhrmIcmX1BM2FnG7BWhdE6YKD1aE4MozdfL7q49LCng/974MKrFXcClW+Wd
+         7nAA==
+X-Gm-Message-State: AOAM531xDwpWyswW4Hs996Cfam3BsQCXD9srs6PARO05koktjK8vyaYP
+        H44dw52wj5JBH4llfrpN/Vz0jNF7mTEtaWK020A=
+X-Google-Smtp-Source: ABdhPJwyRmn+V0kHi4+EuN+QozcVEq+RMrBvdfUNHrf7JmXSTAzZeVyrQXBLBOiAkXMnTQMqBZfRfg==
+X-Received: by 2002:a65:6941:0:b0:381:fea7:f3d8 with SMTP id w1-20020a656941000000b00381fea7f3d8mr848692pgq.235.1648533573882;
+        Mon, 28 Mar 2022 22:59:33 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id w79-20020a627b52000000b004fd8d1e5489sm256702pfc.87.2022.03.28.22.59.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Mar 2022 20:32:18 -0700 (PDT)
-Date:   Mon, 28 Mar 2022 20:32:07 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.anvils
-To:     Matthew Wilcox <willy@infradead.org>
-cc:     Hugh Dickins <hughd@google.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: linux-next: build warnings after merge of the akpm-current
- tree
-In-Reply-To: <YkI+4SzcoaqZIQIG@casper.infradead.org>
-Message-ID: <db6177a5-1f1-9f2a-3c6e-fbc9563c3e3e@google.com>
-References: <20220209170245.08968c92@canb.auug.org.au> <d2701072-99e6-762b-bc80-64bda193c792@google.com> <YkI+4SzcoaqZIQIG@casper.infradead.org>
+        Mon, 28 Mar 2022 22:59:33 -0700 (PDT)
+Message-ID: <6242a045.1c69fb81.8897f.06c2@mx.google.com>
+Date:   Mon, 28 Mar 2022 22:59:33 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Tree: next
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Kernel: v5.17-12935-gafa5b5041c02
+X-Kernelci-Report-Type: test
+Subject: next/pending-fixes baseline: 329 runs,
+ 5 regressions (v5.17-12935-gafa5b5041c02)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, 29 Mar 2022, Matthew Wilcox wrote:
-> On Wed, Feb 09, 2022 at 08:03:26AM -0800, Hugh Dickins wrote:
-> > On Wed, 9 Feb 2022, Stephen Rothwell wrote:
-> > > include/linux/mm_types.h:272: warning: Function parameter or member '__filler' not described in 'folio'
-> > > include/linux/mm_types.h:272: warning: Function parameter or member 'mlock_count' not described in 'folio'
-> > 
-> > Thank you for including the patches and reporting this, Stephen.
-> > Is this a warning you can live with for a week or two?
-> > 
-> > I've never tried generating htmldocs (I'm tempted just to replace a few
-> > "/**"s by "/*"s!), and I'm fairly sure Matthew will have strong feelings
-> > about how this new union (or not) will be better foliated - me messing
-> > around with doc output here is unlikely to be helpful at this moment.
-> 
-> I have a substantial question, and then some formatting / appearance
-> questions.
+next/pending-fixes baseline: 329 runs, 5 regressions (v5.17-12935-gafa5b504=
+1c02)
 
-I think that substantial question will soon need its own thread,
-rather than here in this htmldocs thread.
+Regressions Summary
+-------------------
 
-But while we are here, let's include a link into our previous discussion:
-https://lore.kernel.org/linux-mm/3c6097a7-df8c-f39c-36e8-8b5410e76c8a@google.com/
+platform                  | arch   | lab           | compiler | defconfig  =
+                  | regressions
+--------------------------+--------+---------------+----------+------------=
+------------------+------------
+asus-C523NA-A20057-coral  | x86_64 | lab-collabora | gcc-10   | x86_64_defc=
+on...ebook+amdgpu | 1          =
 
-> 
-> The first is, what does mlock_count represent for a multi-page folio
-> that is partially mlocked?  If you allocate an order-9 page then mmap()
-> 13 pages of it and mlockall(), does mlock_count increase by 1, 13 or 512?
+asus-C523NA-A20057-coral  | x86_64 | lab-collabora | gcc-10   | x86_64_defc=
+on...6-chromebook | 1          =
 
-You won't like the answer: none of the above; the current answer is 0.
+hp-x360-12b-n4000-octopus | x86_64 | lab-collabora | gcc-10   | x86_64_defc=
+on...ebook+amdgpu | 1          =
 
-Because before your folio work implementing readahead into compound pages,
-we had order-0 pages (mapped by PTEs), and (speaking x86_64 language)
-order-9 pages which (typically) get mapped by PMDs.
+hp-x360-12b-n4000-octopus | x86_64 | lab-collabora | gcc-10   | x86_64_defc=
+on...6-chromebook | 1          =
 
-And Kirill attended to the issue of PTE mappings of huge pages by leaving
-them out of the Mlocked accounting, and leaving huge pages mapped that way
-on evictable LRUs, so that they could be split under memory pressure.
+sun50i-a64-bananapi-m64   | arm64  | lab-clabbe    | gcc-10   | defconfig+C=
+ON...OMIZE_BASE=3Dy | 1          =
 
-And I've carried that forward in the mm/munlock series - though I claim
-to have simpified and improved it, by leaving PageDoubleMap out of it,
-keeping PMD mappings as Mlocked even if there are also PTE mappings.
 
-I think none of us have attended to PageCompound folio mappings changing
-the balance of probabilities: they are being left out of the mlocked
-accounting just like PTE mappings of THPs are.
+  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
+v5.17-12935-gafa5b5041c02/plan/baseline/
 
-If you'd like a number bigger than 0 there, I guess I can add a patch
-to, what, not skip PTE mappings of compound pages if !PageSwapBacked?
-Although it would be much nicer not to distinguish by PageSwapBacked,
-I suspect testing and page reclaim issues require us to make the
-distinction, for now at least.
+  Test:     baseline
+  Tree:     next
+  Branch:   pending-fixes
+  Describe: v5.17-12935-gafa5b5041c02
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      afa5b5041c02d7d802e884511e7fa8a65c67abfc =
 
-Then the answer to your question would be mlock_count 13
-(but Mlocked 2048 kB).
 
-As I said in the linked mail: it doesn't matter at all how you count them
-in mlock_count, just so long as they are counted up and down consistently.
-Since it's simplest just to count 1 in mlock_count for each PMD or PTE,
-I prefer that (as I did with THPs); but if you prefer to count PMDs up
-and down by HUGE_PMD_NR, that works too.
 
-mlock_count is just an internal implementation detail.
+Test Regressions
+---------------- =
 
-Mlocked and Unevictable amounts are visible to the user (and to various
-tests no doubt) but still just numbers shown; more important is whether
-a sparsely mlocked compound page can be split under memory pressure and
-its unmlocked portions reclaimed.
 
-I don't know where the folio work stands with splitting (but I think you
-have a patch which removes the !PageSwapBacked splitting of huge pages
-from vmscan.c - I've a separate mail to send you on that); but it looks
-like a lot of huge_memory.c is still HPAGE_PMD_NR-based (I'd say rightly,
-because PMD issues are traditional THP's main concern).
 
-If we do move sparsely mlocked folios to the "Unevictable LRU", I'm
-not sure how long we can get away with them being invisible to page
-reclaim: it will probably need someone (I'm not volunteering) to write
-a shrinker for them, along the lines of anon THP's deferred split list,
-or shmem THP's unused-beyond-EOF split list.
+platform                  | arch   | lab           | compiler | defconfig  =
+                  | regressions
+--------------------------+--------+---------------+----------+------------=
+------------------+------------
+asus-C523NA-A20057-coral  | x86_64 | lab-collabora | gcc-10   | x86_64_defc=
+on...ebook+amdgpu | 1          =
 
-> 
-> Then we have a tradeoff between prettiness of the source code and
-> prettiness of the htmldocs.  At one maximum, we can make it look like
-> this in the htmldocs:
-> 
-> struct folio {
->   unsigned long flags;
->   struct list_head lru;
->   unsigned int mlock_count;
->   struct address_space *mapping;
->   pgoff_t index;
->   void *private;
->   atomic_t _mapcount;
->   atomic_t _refcount;
-> #ifdef CONFIG_MEMCG;
->   unsigned long memcg_data;
-> #endif;
-> };
-> 
-> but at the cost of making the source code look like this:
-> 
-> struct folio {
->         /* private: don't document the anon union */
->         union {
->                 struct {
->         /* public: */
->                         unsigned long flags;
->         /* private: */
->                         union {
->         /* public: */
->                                 struct list_head lru;
->         /* private: */
->                                 struct {
->                                         void *__filler;
->         /* public: */
->                                         unsigned int mlock_count;
->         /* private: */
->                                 };
->                         };
->         /* public: */
->                         struct address_space *mapping;
-> 
-> At the other extreme, the htmldocs can look more complicated:
-> 
-> struct folio {
->   unsigned long flags;
->   union {
->     struct list_head lru;
->     struct {
->       unsigned int mlock_count;
->     };
->   };
->   struct address_space *mapping;
->   pgoff_t index;
->   void *private;
->   atomic_t _mapcount;
->   atomic_t _refcount;
-> #ifdef CONFIG_MEMCG;
->   unsigned long memcg_data;
-> #endif;
-> };
-> 
-> with the source code changes being merely:
-> 
-> @@ -227,6 +227,7 @@ struct page {
->   * struct folio - Represents a contiguous set of bytes.
->   * @flags: Identical to the page flags.
->   * @lru: Least Recently Used list; tracks how recently this folio was used.
-> + * @mlock_count: Number of times any page in this folio is mlocked.
->   * @mapping: The file this page belongs to, or refers to the anon_vma for
->   *    anonymous memory.
->   * @index: Offset within the file, in units of pages.  For anonymous memory,
-> @@ -256,7 +257,9 @@ struct folio {
->                         union {
->                                 struct list_head lru;
->                                 struct {
-> +       /* private: */
->                                         void *__filler;
-> +       /* public: */
->                                         unsigned int mlock_count;
->                                 };
->                         };
-> 
-> Various steps in between are possible, such as removing the anonymous
-> struct from the documentation, but leaving the union.  We could also
-> choose to document __filler, but that seems like a poor choice to me.
-> 
-> Anyway, that's all arguable and not really too important.  My mild
-> preference is for the private/public markers around __filler alone,
-> but I'll happily abide by the preferences of others.
 
-Same here: mild preference for this, but defer to others.
+  Details:     https://kernelci.org/test/plan/id/62426f80ddd2462f47ae067c
 
-> 
-> The important part is what mlock_count really means.  We can be
-> reasonably verbose here (two or three lines of text, I'd suggest).
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+x86-chromebook+amdgpu
+  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.17-12935=
+-gafa5b5041c02/x86_64/x86_64_defconfig+x86-chromebook+amdgpu/gcc-10/lab-col=
+labora/baseline-asus-C523NA-A20057-coral.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.17-12935=
+-gafa5b5041c02/x86_64/x86_64_defconfig+x86-chromebook+amdgpu/gcc-10/lab-col=
+labora/baseline-asus-C523NA-A20057-coral.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220228.1/x86/rootfs.cpio.gz =
 
-mlock_count aims to be the number of page table entries in VM_LOCKED
-VMAs for this folio, but may undercount.
 
-That's of course an over-simplification, skirting issues mentioned
-above, and that it can only be relied on when PageLRU PageUnevictable;
-but let's not get into those here.
 
-But I wrote that "mlock_count aims" sentence above without seeing your
- * @mlock_count: Number of times any page in this folio is mlocked.
+  * baseline.login: https://kernelci.org/test/case/id/62426f80ddd2462f47ae0=
+67d
+        failing since 13 days (last pass: v5.17-rc7-220-g483b57a0f972, firs=
+t fail: v5.17-rc8-96-g702087d7e205) =
 
-Yes, I think I prefer the brevity of what you wrote to mine.
+ =
 
-Thanks,
-Hugh
+
+
+platform                  | arch   | lab           | compiler | defconfig  =
+                  | regressions
+--------------------------+--------+---------------+----------+------------=
+------------------+------------
+asus-C523NA-A20057-coral  | x86_64 | lab-collabora | gcc-10   | x86_64_defc=
+on...6-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/624274e680f31653c3ae0697
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+x86-chromebook
+  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.17-12935=
+-gafa5b5041c02/x86_64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/=
+baseline-asus-C523NA-A20057-coral.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.17-12935=
+-gafa5b5041c02/x86_64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/=
+baseline-asus-C523NA-A20057-coral.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220228.1/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/624274e680f31653c3ae0=
+698
+        failing since 13 days (last pass: v5.17-rc7-200-gfb8a41b34095, firs=
+t fail: v5.17-rc8-122-ge6f79dd905ae) =
+
+ =
+
+
+
+platform                  | arch   | lab           | compiler | defconfig  =
+                  | regressions
+--------------------------+--------+---------------+----------+------------=
+------------------+------------
+hp-x360-12b-n4000-octopus | x86_64 | lab-collabora | gcc-10   | x86_64_defc=
+on...ebook+amdgpu | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6242829b183fc10fccae0687
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+x86-chromebook+amdgpu
+  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.17-12935=
+-gafa5b5041c02/x86_64/x86_64_defconfig+x86-chromebook+amdgpu/gcc-10/lab-col=
+labora/baseline-hp-x360-12b-n4000-octopus.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.17-12935=
+-gafa5b5041c02/x86_64/x86_64_defconfig+x86-chromebook+amdgpu/gcc-10/lab-col=
+labora/baseline-hp-x360-12b-n4000-octopus.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220228.1/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6242829b183fc10fccae0=
+688
+        failing since 14 days (last pass: v5.17-rc7-220-g483b57a0f972, firs=
+t fail: v5.17-rc8-96-g702087d7e205) =
+
+ =
+
+
+
+platform                  | arch   | lab           | compiler | defconfig  =
+                  | regressions
+--------------------------+--------+---------------+----------+------------=
+------------------+------------
+hp-x360-12b-n4000-octopus | x86_64 | lab-collabora | gcc-10   | x86_64_defc=
+on...6-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/624286317f2d8c9ff7ae06cd
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+x86-chromebook
+  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.17-12935=
+-gafa5b5041c02/x86_64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/=
+baseline-hp-x360-12b-n4000-octopus.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.17-12935=
+-gafa5b5041c02/x86_64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/=
+baseline-hp-x360-12b-n4000-octopus.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220228.1/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/624286317f2d8c9ff7ae0=
+6ce
+        failing since 13 days (last pass: v5.17-rc7-200-gfb8a41b34095, firs=
+t fail: v5.17-rc8-122-ge6f79dd905ae) =
+
+ =
+
+
+
+platform                  | arch   | lab           | compiler | defconfig  =
+                  | regressions
+--------------------------+--------+---------------+----------+------------=
+------------------+------------
+sun50i-a64-bananapi-m64   | arm64  | lab-clabbe    | gcc-10   | defconfig+C=
+ON...OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/624262be3da276f7ebae067c
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.17-12935=
+-gafa5b5041c02/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-clabbe/=
+baseline-sun50i-a64-bananapi-m64.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.17-12935=
+-gafa5b5041c02/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-clabbe/=
+baseline-sun50i-a64-bananapi-m64.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220228.1/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/624262be3da276f7ebae0=
+67d
+        new failure (last pass: v5.17-11526-gd877adea8dd9) =
+
+ =20

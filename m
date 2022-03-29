@@ -2,277 +2,113 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02AFF4EA797
-	for <lists+linux-next@lfdr.de>; Tue, 29 Mar 2022 07:59:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C968F4EA986
+	for <lists+linux-next@lfdr.de>; Tue, 29 Mar 2022 10:45:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232528AbiC2GBS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 29 Mar 2022 02:01:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47038 "EHLO
+        id S234114AbiC2IqZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 29 Mar 2022 04:46:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232292AbiC2GBR (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 29 Mar 2022 02:01:17 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9548733EAA
-        for <linux-next@vger.kernel.org>; Mon, 28 Mar 2022 22:59:34 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id y10so11625754pfa.7
-        for <linux-next@vger.kernel.org>; Mon, 28 Mar 2022 22:59:34 -0700 (PDT)
+        with ESMTP id S234084AbiC2IqY (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 29 Mar 2022 04:46:24 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7EC4168089;
+        Tue, 29 Mar 2022 01:44:41 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id k14so14267089pga.0;
+        Tue, 29 Mar 2022 01:44:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=ndAH/97JY6gt+PzL3QVMcSLLQYPrxTKxr27i9nXNwS8=;
-        b=1wq0Nx/q85YlsmisdSqGfkrS+GbVol9mr2kquPMmyDrw3HO6i582M59pVZJp5y+IwL
-         MFPQ1CledA9lXHsv40By+3jqE/l+5fr8d0X/OHB0b3VohSvaFlxzjSs4GggxjACK/Q9j
-         CS4sQkYuELATPYRm946+0R+sB8EA3JUwAtpqAr4s8b0B/SEo7ltYH+fb9746MTl+wX69
-         dKvzLPSlwc8yBBI2yuHCf0Ql0JjxE7z2vTSt/lYRKx6r1zli0oP1Om9FmpV0xpeZtpO1
-         qoViJE6hPbC9PbncI1O91A/l+LzUym84Ag0gdp7yqHfV+6NWYjqI0tMofxD/57ow+BT0
-         cTNQ==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Bl9cvCOl2JsstIJeBTKBLK/6QRxHIhdaBkcmq7o09pQ=;
+        b=iYpODQl0mjzOo7uUwTlz/c0sB/UJyUUKf0ObUBob9thwUmNV8OhzmJtBk15vBcG2nJ
+         crtxxKWXrMYHXEdeJUxJaqbFDd7aTawyF4jSWc+Kpf3tX2SmZ+zXtOj4vpT9XznKRsU/
+         y4MndpIGP4FJat1V2YR2Qu1MQgEo530Ppfd7X/aw09aQG0O+pBpI9nYr/wzQ98M2gd46
+         Pw5U6CEAT9+v36zc6SxkS0aB92U/+1nS2WOjsUBiSVzZAgXsvFbmD2XEOqORHGrKq516
+         00b5btUDJE4X7P3te+l+MUkGiXtEt52CqlR+skuvAPPH0Up62qsxXuK8SPITPXygXvxj
+         deBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=ndAH/97JY6gt+PzL3QVMcSLLQYPrxTKxr27i9nXNwS8=;
-        b=vcAqW+oI421Uu9EMZtJZhg0lNfk1lCAOs1HuPGJ+0E9Qnwu6WYYrzWQzqUtrIe9XWe
-         NtYcuGlaVWJG/vhU6JZPOgRUpyh1P99oZhg8actoei3GNo4Ujd0QdDHsAk+6RE1lAW74
-         +IQlUjo3voWXi6M6/ulX+2Sp4y4c90rIP4EQBvnZclTny4uRJwPHK5mGgXz0lPmCreVo
-         OqvbjCyPp8w+4nQXrzE0R3Y/OpKG1/FJy+ghyJ8yU0e+cm3l3j2rFDvp06QAuWU5ai90
-         8GvDj1MOunhrmIcmX1BM2FnG7BWhdE6YKD1aE4MozdfL7q49LCng/974MKrFXcClW+Wd
-         7nAA==
-X-Gm-Message-State: AOAM531xDwpWyswW4Hs996Cfam3BsQCXD9srs6PARO05koktjK8vyaYP
-        H44dw52wj5JBH4llfrpN/Vz0jNF7mTEtaWK020A=
-X-Google-Smtp-Source: ABdhPJwyRmn+V0kHi4+EuN+QozcVEq+RMrBvdfUNHrf7JmXSTAzZeVyrQXBLBOiAkXMnTQMqBZfRfg==
-X-Received: by 2002:a65:6941:0:b0:381:fea7:f3d8 with SMTP id w1-20020a656941000000b00381fea7f3d8mr848692pgq.235.1648533573882;
-        Mon, 28 Mar 2022 22:59:33 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id w79-20020a627b52000000b004fd8d1e5489sm256702pfc.87.2022.03.28.22.59.33
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Bl9cvCOl2JsstIJeBTKBLK/6QRxHIhdaBkcmq7o09pQ=;
+        b=G1y3Jh99IGJ9mgWMFOR459zzVlCHB4nqUQjG7HHHw/5P3cjnfH0oczfZ+2wmdIWE2I
+         3oZQytcX8ouWBDlfNbTtQFbb2digTojELbTTOmr2t3A9g4a4ZWQVgHzhI1UHEYeGPs+n
+         y45Qwu+SU/lyw8oQx2o1+tsku1v+X/h1R6gvzHR+Vs6YV83DwSSoKdr7qsLCElwOK/Oe
+         7tpjoHVFtt9jKX974pT/c00kDeIh473Yv8j4mRe3qKNgYireFq8C+FrUoxpVj9y58plD
+         zP1nfWnCxhpw1XPqy/VinZ1U3W+vJRGTHI9T/8f/ogPqADFoXDGRY9e3ExnDK/O7pIqX
+         QmQw==
+X-Gm-Message-State: AOAM530DJ/t+aaG+43T32VB9D+/1EYmssbHbaWv/bxPKLM0ZL2E2R2kS
+        IaRxuhulVcvz5p/1AViCA8L2ft9wkBswHeSG
+X-Google-Smtp-Source: ABdhPJy4YxKPspAhcyCCA4hkOFGK0e0KzBesKL2CsRvCVyLxQB+WAQCCxCBEvJ4sul5l4GY6/KX7ZA==
+X-Received: by 2002:a63:18f:0:b0:37c:4671:a2ce with SMTP id 137-20020a63018f000000b0037c4671a2cemr1271439pgb.429.1648543480977;
+        Tue, 29 Mar 2022 01:44:40 -0700 (PDT)
+Received: from ubuntu.mate (subs03-180-214-233-75.three.co.id. [180.214.233.75])
+        by smtp.gmail.com with ESMTPSA id q10-20020a056a00088a00b004f7ceff389esm20320601pfj.152.2022.03.29.01.44.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Mar 2022 22:59:33 -0700 (PDT)
-Message-ID: <6242a045.1c69fb81.8897f.06c2@mx.google.com>
-Date:   Mon, 28 Mar 2022 22:59:33 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 29 Mar 2022 01:44:39 -0700 (PDT)
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     linux-doc@vger.kernel.org
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul@pwsan.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        linux-riscv@lists.infradead.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: [PATCH] Documentation: riscv: remove non-existent document from table of contents
+Date:   Tue, 29 Mar 2022 15:44:28 +0700
+Message-Id: <20220329084428.376003-1-bagasdotme@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: next
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Kernel: v5.17-12935-gafa5b5041c02
-X-Kernelci-Report-Type: test
-Subject: next/pending-fixes baseline: 329 runs,
- 5 regressions (v5.17-12935-gafa5b5041c02)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes baseline: 329 runs, 5 regressions (v5.17-12935-gafa5b504=
-1c02)
+Remove reference to non-existent pmu.rst from table of contents tree
+in Documentation/riscv/index.rst.
 
-Regressions Summary
--------------------
+Fixes: 23b1f18326ec ("Documentation: riscv: Remove the old
+documentation")
+Link: https://lore.kernel.org/linux-next/20220329133412.591d6882@canb.auug.org.au/
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Paul Walmsley <paul@pwsan.com>
+Cc: Atish Patra <atish.patra@wdc.com>
+Cc: Atish Patra <atishp@atishpatra.org>
+Cc: Atish Patra <atishp@rivosinc.com>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc: Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc: linux-riscv@lists.infradead.org
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+---
+ Documentation/riscv/index.rst | 1 -
+ 1 file changed, 1 deletion(-)
 
-platform                  | arch   | lab           | compiler | defconfig  =
-                  | regressions
---------------------------+--------+---------------+----------+------------=
-------------------+------------
-asus-C523NA-A20057-coral  | x86_64 | lab-collabora | gcc-10   | x86_64_defc=
-on...ebook+amdgpu | 1          =
+diff --git a/Documentation/riscv/index.rst b/Documentation/riscv/index.rst
+index ea915c1960488a..e23b876ad6ebb6 100644
+--- a/Documentation/riscv/index.rst
++++ b/Documentation/riscv/index.rst
+@@ -7,7 +7,6 @@ RISC-V architecture
+ 
+     boot-image-header
+     vm-layout
+-    pmu
+     patch-acceptance
+ 
+     features
 
-asus-C523NA-A20057-coral  | x86_64 | lab-collabora | gcc-10   | x86_64_defc=
-on...6-chromebook | 1          =
+base-commit: 1930a6e739c4b4a654a69164dbe39e554d228915
+-- 
+An old man doll... just what I always wanted! - Clara
 
-hp-x360-12b-n4000-octopus | x86_64 | lab-collabora | gcc-10   | x86_64_defc=
-on...ebook+amdgpu | 1          =
-
-hp-x360-12b-n4000-octopus | x86_64 | lab-collabora | gcc-10   | x86_64_defc=
-on...6-chromebook | 1          =
-
-sun50i-a64-bananapi-m64   | arm64  | lab-clabbe    | gcc-10   | defconfig+C=
-ON...OMIZE_BASE=3Dy | 1          =
-
-
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v5.17-12935-gafa5b5041c02/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v5.17-12935-gafa5b5041c02
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      afa5b5041c02d7d802e884511e7fa8a65c67abfc =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                  | arch   | lab           | compiler | defconfig  =
-                  | regressions
---------------------------+--------+---------------+----------+------------=
-------------------+------------
-asus-C523NA-A20057-coral  | x86_64 | lab-collabora | gcc-10   | x86_64_defc=
-on...ebook+amdgpu | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/62426f80ddd2462f47ae067c
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+x86-chromebook+amdgpu
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.17-12935=
--gafa5b5041c02/x86_64/x86_64_defconfig+x86-chromebook+amdgpu/gcc-10/lab-col=
-labora/baseline-asus-C523NA-A20057-coral.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.17-12935=
--gafa5b5041c02/x86_64/x86_64_defconfig+x86-chromebook+amdgpu/gcc-10/lab-col=
-labora/baseline-asus-C523NA-A20057-coral.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220228.1/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/62426f80ddd2462f47ae0=
-67d
-        failing since 13 days (last pass: v5.17-rc7-220-g483b57a0f972, firs=
-t fail: v5.17-rc8-96-g702087d7e205) =
-
- =
-
-
-
-platform                  | arch   | lab           | compiler | defconfig  =
-                  | regressions
---------------------------+--------+---------------+----------+------------=
-------------------+------------
-asus-C523NA-A20057-coral  | x86_64 | lab-collabora | gcc-10   | x86_64_defc=
-on...6-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/624274e680f31653c3ae0697
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+x86-chromebook
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.17-12935=
--gafa5b5041c02/x86_64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/=
-baseline-asus-C523NA-A20057-coral.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.17-12935=
--gafa5b5041c02/x86_64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/=
-baseline-asus-C523NA-A20057-coral.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220228.1/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/624274e680f31653c3ae0=
-698
-        failing since 13 days (last pass: v5.17-rc7-200-gfb8a41b34095, firs=
-t fail: v5.17-rc8-122-ge6f79dd905ae) =
-
- =
-
-
-
-platform                  | arch   | lab           | compiler | defconfig  =
-                  | regressions
---------------------------+--------+---------------+----------+------------=
-------------------+------------
-hp-x360-12b-n4000-octopus | x86_64 | lab-collabora | gcc-10   | x86_64_defc=
-on...ebook+amdgpu | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6242829b183fc10fccae0687
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+x86-chromebook+amdgpu
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.17-12935=
--gafa5b5041c02/x86_64/x86_64_defconfig+x86-chromebook+amdgpu/gcc-10/lab-col=
-labora/baseline-hp-x360-12b-n4000-octopus.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.17-12935=
--gafa5b5041c02/x86_64/x86_64_defconfig+x86-chromebook+amdgpu/gcc-10/lab-col=
-labora/baseline-hp-x360-12b-n4000-octopus.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220228.1/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6242829b183fc10fccae0=
-688
-        failing since 14 days (last pass: v5.17-rc7-220-g483b57a0f972, firs=
-t fail: v5.17-rc8-96-g702087d7e205) =
-
- =
-
-
-
-platform                  | arch   | lab           | compiler | defconfig  =
-                  | regressions
---------------------------+--------+---------------+----------+------------=
-------------------+------------
-hp-x360-12b-n4000-octopus | x86_64 | lab-collabora | gcc-10   | x86_64_defc=
-on...6-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/624286317f2d8c9ff7ae06cd
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+x86-chromebook
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.17-12935=
--gafa5b5041c02/x86_64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/=
-baseline-hp-x360-12b-n4000-octopus.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.17-12935=
--gafa5b5041c02/x86_64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabora/=
-baseline-hp-x360-12b-n4000-octopus.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220228.1/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/624286317f2d8c9ff7ae0=
-6ce
-        failing since 13 days (last pass: v5.17-rc7-200-gfb8a41b34095, firs=
-t fail: v5.17-rc8-122-ge6f79dd905ae) =
-
- =
-
-
-
-platform                  | arch   | lab           | compiler | defconfig  =
-                  | regressions
---------------------------+--------+---------------+----------+------------=
-------------------+------------
-sun50i-a64-bananapi-m64   | arm64  | lab-clabbe    | gcc-10   | defconfig+C=
-ON...OMIZE_BASE=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/624262be3da276f7ebae067c
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.17-12935=
--gafa5b5041c02/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-clabbe/=
-baseline-sun50i-a64-bananapi-m64.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.17-12935=
--gafa5b5041c02/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-clabbe/=
-baseline-sun50i-a64-bananapi-m64.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220228.1/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/624262be3da276f7ebae0=
-67d
-        new failure (last pass: v5.17-11526-gd877adea8dd9) =
-
- =20

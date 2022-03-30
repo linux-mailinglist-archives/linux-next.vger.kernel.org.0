@@ -2,46 +2,46 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2066E4ECF4B
-	for <lists+linux-next@lfdr.de>; Thu, 31 Mar 2022 00:00:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FFC64ECFC4
+	for <lists+linux-next@lfdr.de>; Thu, 31 Mar 2022 00:44:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348802AbiC3WCm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 30 Mar 2022 18:02:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49290 "EHLO
+        id S1349311AbiC3WqR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 30 Mar 2022 18:46:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240323AbiC3WCk (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 30 Mar 2022 18:02:40 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A29C28E29;
-        Wed, 30 Mar 2022 15:00:54 -0700 (PDT)
+        with ESMTP id S1348450AbiC3WqP (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 30 Mar 2022 18:46:15 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAB3A1DA76;
+        Wed, 30 Mar 2022 15:44:27 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KTL3N3kj0z4x7X;
-        Thu, 31 Mar 2022 09:00:48 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KTM1k00krz4xLb;
+        Thu, 31 Mar 2022 09:44:25 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1648677649;
-        bh=iYw+8p71E5LentbCi72ec4+D2MIP7YhO4dUvkY/SOJM=;
+        s=201702; t=1648680266;
+        bh=uLjHaRxkBn1qxDblevEbhS+TDICmU2vAOGQ8Dk0eQyA=;
         h=Date:From:To:Cc:Subject:From;
-        b=CQ9xfc6wBJdZMuw7HlbUc54Esw/v2xexRAT4w9dftdloZIP7doSy7ZsquOaiLu7us
-         KZxxr9w5H+5dtiPKRERAgrgKT5UhSqw6xjh/GDhYmM+cZDsrkeg1zRPk7OsYc6eIoR
-         //1fjlT1ZdXRteJ8OXBx6EbRQUnQkYQjeL4UIyU+Meaa9CcriVRRLQmdkKzV31gEju
-         AQ1CDUeD5ZjiRp20gqo5RqUOi6jY4s0mxSTlo1XKbhYpTGtr3qQ59hohvJMmDQlSgN
-         adYyzX0mos3whviTnBi6lzHVwkXisEZnJs+P1rndBbaovyYMDJktZwdKppM7Kmxo3b
-         2dlgzJ95h6UfA==
-Date:   Thu, 31 Mar 2022 09:00:47 +1100
+        b=uANzCGtR6adPUADw8dtQ5Ur08WegwHWuqGe3jUU3plo8ohgSNRHuwxj8MPfxHgMgD
+         lR2UIF+NFLh2lN/a2bZfxkNxztR68BgDFqVI5UZgFrZhRpPC9aFghSju2jj8nq/siv
+         ph8sgth/pzihfBOyXRGV6pF+/kttnlKxJn+YD/9o7fpKoj30upBcyKVLA07ZWsAuG1
+         SQvo0kJCzXx2RnHa03NKKjdUbL9Kvxl6ZOL/OLAIeqhWlt29dzoJfTZ5vMq4ywcGGX
+         xaVbFe8c+HgKvinIfWaLfSwhWYj53KAGn6o6Zz1rff51zfvs2MFXFuU6jiZ2KmWEmw
+         +v9uWYzgCGi6w==
+Date:   Thu, 31 Mar 2022 09:44:25 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Darrick J. Wong" <djwong@kernel.org>,
-        David Chinner <david@fromorbit.com>, linux-xfs@vger.kernel.org
-Cc:     Christoph Hellwig <hch@lst.de>, Dave Chinner <dchinner@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>,
+To:     Alasdair G Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>, Jens Axboe <axboe@kernel.dk>
+Cc:     Christoph Hellwig <hch@lst.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the xfs tree with Linus' tree
-Message-ID: <20220331090047.7c6f2e1e@canb.auug.org.au>
+Subject: linux-next: manual merge of the device-mapper tree with the block
+ tree
+Message-ID: <20220331094425.0a9e0b92@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/TkjzsN7cULUEOTgjMQprT1M";
+Content-Type: multipart/signed; boundary="Sig_/DIMab.JdLpTZ7F+_9Ityuf+";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -52,51 +52,71 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/TkjzsN7cULUEOTgjMQprT1M
+--Sig_/DIMab.JdLpTZ7F+_9Ityuf+
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the xfs tree got a conflict in:
+Today's linux-next merge of the device-mapper tree got a conflict in:
 
-  fs/xfs/xfs_bio_io.c
+  include/linux/bio.h
 
 between commit:
 
-  49add4966d79 ("block: pass a block_device and opf to bio_init")
+  57c47b42f454 ("block: turn bio_kmalloc into a simple kmalloc wrapper")
 
-from Linus' tree and commit:
+from the block tree and commit:
 
-  919edbadebe1 ("xfs: drop async cache flushes from CIL commits.")
+  135eaaabd22a ("block: allow using the per-cpu bio cache from bio_alloc_bi=
+oset")
 
-from the xfs tree.
+from the device-mapper tree.
 
-I fixed it up (the latter commit removes the code modified by the former,
-so I just did that) and can carry the fix as necessary. This is now fixed
-as far as linux-next is concerned, but any non trivial conflicts should
-be mentioned to your upstream maintainer when your tree is submitted for
-merging.  You may also want to consider cooperating with the maintainer
-of the conflicting tree to minimise any particularly complex conflicts.
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/TkjzsN7cULUEOTgjMQprT1M
+diff --cc include/linux/bio.h
+index ab77473c855b,8c42b67c41c7..000000000000
+--- a/include/linux/bio.h
++++ b/include/linux/bio.h
+@@@ -405,9 -408,7 +405,7 @@@ extern int bioset_init_from_src(struct=20
+  struct bio *bio_alloc_bioset(struct block_device *bdev, unsigned short nr=
+_vecs,
+  			     unsigned int opf, gfp_t gfp_mask,
+  			     struct bio_set *bs);
+- struct bio *bio_alloc_kiocb(struct kiocb *kiocb, struct block_device *bde=
+v,
+- 		unsigned short nr_vecs, unsigned int opf, struct bio_set *bs);
+ -struct bio *bio_kmalloc(gfp_t gfp_mask, unsigned short nr_iovecs);
+ +struct bio *bio_kmalloc(unsigned short nr_vecs, gfp_t gfp_mask);
+  extern void bio_put(struct bio *);
+ =20
+  struct bio *bio_alloc_clone(struct block_device *bdev, struct bio *bio_sr=
+c,
+
+--Sig_/DIMab.JdLpTZ7F+_9Ityuf+
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJE0w8ACgkQAVBC80lX
-0Gz2JAf+MLKwDWHfyvkRpkpCVU8KdW0edxJzcG0S8GwcKt3v36qLghe/oR5AckRl
-W/MIK+0tskRXMxMqfB7XD8MPlVRSBpbZPgPiE9oJtnUMTQose6ktRTkG9lSWom2l
-wv9BaazG2kQin6x0qL9YGRmMjJEmWZ7LMB1y7SfaAwRyL8uEX2bjMxvJZKROm1z6
-udV54BuCuU7ZJW+5Rpqqurvk0gcq9MAROZ27XJJWbhRCeMWYxogiIeEEMUnysSZn
-gcyu3hMpeHMFBXNB2p2VgZEXvK8Xqe5wL/lhn9Kd9gvlLIo4INytCy6B2mhzchIw
-XbkfINaUCEwGxba8lyUq8jXuG2wlVg==
-=F1V+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJE3UkACgkQAVBC80lX
+0GyLdggAnCkO8cnQ/IbCPnb6/asbOIgQVCobJYXvEYdyICsEm9MJzbwxwSI5vUFd
+K1ox01BCJbWP3OSTBEZXYBo68mC7C3aTCWqe5x+UNSb2S99Xcw9WKERXZ4ScX576
+4Ow1eeGJH5FWRSgPjr12iFFpg4hoL0tmu6ncYFzjYtVN1WcMJ/IItJYmWcL/JGgf
+JnTVSs43Wj0cHNAXa/ZAN+Etmgza7wDygMEm6Ht+wWY/tJX+TLERgGFqrFj8TOSs
+hNVtBtRu1uispgVzyBN1OUnrVfsurW6vO4d8WyIfSPP3hxiGr2OxqZBvhmq+CRX1
+YtFyQAYZGyOWREwJpx7UJ1hc3pDItQ==
+=CB3+
 -----END PGP SIGNATURE-----
 
---Sig_/TkjzsN7cULUEOTgjMQprT1M--
+--Sig_/DIMab.JdLpTZ7F+_9Ityuf+--

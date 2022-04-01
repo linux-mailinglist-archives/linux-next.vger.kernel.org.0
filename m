@@ -2,86 +2,59 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2822A4EE7B5
-	for <lists+linux-next@lfdr.de>; Fri,  1 Apr 2022 07:16:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92B364EE7BD
+	for <lists+linux-next@lfdr.de>; Fri,  1 Apr 2022 07:21:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233551AbiDAFRg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 1 Apr 2022 01:17:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45492 "EHLO
+        id S241451AbiDAFWC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 1 Apr 2022 01:22:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234653AbiDAFRd (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 1 Apr 2022 01:17:33 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A899B261337;
-        Thu, 31 Mar 2022 22:15:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:To:Subject:MIME-Version:Date:Message-ID:Sender:
-        Reply-To:Cc:Content-ID:Content-Description;
-        bh=XY2BFJBYWtB/i6G9kwzJq4ajFFAn49+17pDObTzzXt4=; b=XVo35RMV8F1tiLiNR/KLocttT8
-        ut72fCLln9RQWuF6OVDURQr60hqoZmN/laAqm8UOwbzTYB2JR39YaheRyGhkiyj61GaMbMwrLIElv
-        2a0eTYJrqwkXFPxX5AQx13fum/0seodnygY+T78SaYkoNJn0PWd87QnITuACgddUW+XoOZhmEYStQ
-        Ka9w1u2Pkx/Srr/4h2uDDnDWT8fwZ9czKLzbuCohEND9FjV0WwMZcvIhhlugqKDZFUsNh2XqU81vo
-        D8JCfixqDz9iCulyOLAuNfjH4iyToQEUHWeYW+3fqies0/3ELneLbnbCShaJZLxrmWQ/gfXrMvUY4
-        kV88Fl4Q==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1na9d5-000HWh-Qw; Fri, 01 Apr 2022 05:15:25 +0000
-Message-ID: <048945eb-dd6b-c1b6-1430-973f70b4dda5@infradead.org>
-Date:   Thu, 31 Mar 2022 22:15:15 -0700
+        with ESMTP id S237334AbiDAFWB (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 1 Apr 2022 01:22:01 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C072A60AB2;
+        Thu, 31 Mar 2022 22:20:12 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 44CC068AFE; Fri,  1 Apr 2022 07:20:09 +0200 (CEST)
+Date:   Fri, 1 Apr 2022 07:20:09 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Alasdair G Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>,
+        Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the device-mapper tree with the
+ block tree
+Message-ID: <20220401052009.GA9398@lst.de>
+References: <20220331094425.0a9e0b92@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: mmotm 2022-03-31-20-37 uploaded
- (drivers/net/ethernet/fungible/funcore/fun_dev.o)
-Content-Language: en-US
-To:     Andrew Morton <akpm@linux-foundation.org>, broonie@kernel.org,
-        mhocko@suse.cz, sfr@canb.auug.org.au, linux-next@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, mm-commits@vger.kernel.org,
-        Network Development <netdev@vger.kernel.org>,
-        Dimitris Michailidis <dmichail@fungible.com>
-References: <20220401033845.8359AC2BBE4@smtp.kernel.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220401033845.8359AC2BBE4@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220331094425.0a9e0b92@canb.auug.org.au>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+On Thu, Mar 31, 2022 at 09:44:25AM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the device-mapper tree got a conflict in:
+> 
+>   include/linux/bio.h
+> 
+> between commit:
+> 
+>   57c47b42f454 ("block: turn bio_kmalloc into a simple kmalloc wrapper")
+> 
+> from the block tree and commit:
+> 
+>   135eaaabd22a ("block: allow using the per-cpu bio cache from bio_alloc_bioset")
 
-
-On 3/31/22 20:38, Andrew Morton wrote:
-> The mm-of-the-moment snapshot 2022-03-31-20-37 has been uploaded to
-> 
->    https://www.ozlabs.org/~akpm/mmotm/
-> 
-> mmotm-readme.txt says
-> 
-> README for mm-of-the-moment:
-> 
-> https://www.ozlabs.org/~akpm/mmotm/
-> 
-> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
-> more than once a week.
-> 
-> You will need quilt to apply these patches to the latest Linus release (5.x
-> or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
-> https://ozlabs.org/~akpm/mmotm/series
-> 
-
-on i386:
-
-ld: drivers/net/ethernet/fungible/funcore/fun_dev.o: in function `fun_dev_enable':
-(.text+0xe1a): undefined reference to `__udivdi3'
-
-
--- 
-~Randy
+Isn't this something Jens already had queued up in the block tree?

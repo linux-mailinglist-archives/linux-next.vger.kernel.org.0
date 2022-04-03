@@ -2,111 +2,127 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 475524EF965
-	for <lists+linux-next@lfdr.de>; Fri,  1 Apr 2022 19:57:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5B864F0CB6
+	for <lists+linux-next@lfdr.de>; Mon,  4 Apr 2022 00:09:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240274AbiDAR7o (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 1 Apr 2022 13:59:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40324 "EHLO
+        id S243823AbiDCWLu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 3 Apr 2022 18:11:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231842AbiDAR7o (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 1 Apr 2022 13:59:44 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49F9520A941
-        for <linux-next@vger.kernel.org>; Fri,  1 Apr 2022 10:57:54 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id bt26so6329655lfb.3
-        for <linux-next@vger.kernel.org>; Fri, 01 Apr 2022 10:57:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fungible.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JvhYeVuiyHzD2XZ5Sv6yl6UpWLRVligCuXo9RsgwXcc=;
-        b=gus+G3NKsoMAx1p9mych9MlnHzYDB3gBK5/+lInIhjhpc4I7FWao+babG4/sJ9GNJ2
-         YYElr7WYxvEm7tE47uBGZd1aREwnvxMa+JwEgv4Ddz0lvnyK1iVOAGaIadg9J+FssOYB
-         wQQHQing6CY+riYLM2tpNTjcNVS4V2N/UQ1wQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JvhYeVuiyHzD2XZ5Sv6yl6UpWLRVligCuXo9RsgwXcc=;
-        b=3XXijlFzhKDpFlZV7hVdN+3FYNToHUuP24QksjFeoaQ6r4CcTgqdP7QKAx/VMK0K4T
-         k83uRuEa3lZg5IbyaMzfe8hhqZ6e85X/3UKa0rAAo4a8T/SxBnAYGdyg/VqeqKJsFRUJ
-         ro6gmRdE0oG4xkFw43pwmPiA4PKqYwiT2PHucG2/em8NNnXto0bCL3D4CuV/8elyY0JI
-         US/MFqg/cCo3QVZ/NvUbJQVyyZfR042ahW4deassDjgAZSHGMZRMgE/Ed17dy60u5whN
-         GpwmMt5qm8wqctL8DhPT3mccWRiHdercMg1ra3hD8sl/URcxjiSwQK2UR6lci0t/RtJu
-         ZP0Q==
-X-Gm-Message-State: AOAM532DFgjafY5GejDpjVPdsF4Ai14NubjEqKoAIBE1vl6nSG6QK4gD
-        i4aWYFAAjH6uihg0Ocx4vpe29LFLi+q7pnxIZ9WsN7/M0iI1gA==
-X-Google-Smtp-Source: ABdhPJxWQ+i+ITn0cTBp8HpNpYi+FsZ+tLlRK5zUpDEx6eXcl5SqgGujjoEi601Spl5n8pBWofs9JC8n72Sl/3ZAbrY=
-X-Received: by 2002:a05:6512:11eb:b0:448:8cd0:7d7e with SMTP id
- p11-20020a05651211eb00b004488cd07d7emr14517234lfs.593.1648835872472; Fri, 01
- Apr 2022 10:57:52 -0700 (PDT)
+        with ESMTP id S229613AbiDCWLu (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 3 Apr 2022 18:11:50 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD9BF205E7;
+        Sun,  3 Apr 2022 15:09:54 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KWp3x3G0Nz4xNp;
+        Mon,  4 Apr 2022 08:09:49 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1649023789;
+        bh=bbvggyT8cLz9htyGPggIouyeA9Xia4xl6DPGtbQPyCE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=XFPjAMovu+ssAKRt+5fDqZz/38AENoCNorXuVQ09K7pb+VWjJifeulPhnyk4+4WVl
+         XJUmxX3VCUwUDpw6/sXAb1KbUXl9nvYJYLETXxLinzXOgT4LsgUqMFe/ezpBXrNSke
+         f46QGVSkiYt9hlWLa8bDfYV4PkiCQ3/f5WGWN3azhvoyD4TZUqHbkeVqoPGioDidYE
+         9LhjfvgAvlRYy4XbANuhQf0jyoWaK5lx0kpGfJImLl2T5XwT1+oAn6FbAwqH5QWyuZ
+         O5ZQcoVmxzZ/KrnWqBEt8pO8z2G+ayVor4uT7Z6AwnPwvE8EkB/x1RSbxAhDtmNiIs
+         lmQ9ntFAtqj4g==
+Date:   Mon, 4 Apr 2022 08:09:48 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the kbuild tree with Linus' tree
+Message-ID: <20220404080948.0590992a@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20220401033845.8359AC2BBE4@smtp.kernel.org> <048945eb-dd6b-c1b6-1430-973f70b4dda5@infradead.org>
- <20220401100418.7c109f81@kernel.org>
-In-Reply-To: <20220401100418.7c109f81@kernel.org>
-From:   Dimitris Michailidis <d.michailidis@fungible.com>
-Date:   Fri, 1 Apr 2022 10:57:38 -0700
-Message-ID: <CAOkoqZncM3JMQvcbaixuBPg43=Da2ac2JjZAfWRt_Ezs2CCyOg@mail.gmail.com>
-Subject: Re: mmotm 2022-03-31-20-37 uploaded (drivers/net/ethernet/fungible/funcore/fun_dev.o)
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Dimitris Michailidis <dmichail@fungible.com>,
-        Andrew Morton <akpm@linux-foundation.org>, broonie@kernel.org,
-        mhocko@suse.cz, Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        mm-commits@vger.kernel.org,
-        Network Development <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/hJ.h65H//uz7K/bHpxvjl8y";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Apr 1, 2022 at 10:04 AM Jakub Kicinski <kuba@kernel.org> wrote:
->
-> On Thu, 31 Mar 2022 22:15:15 -0700 Randy Dunlap wrote:
-> > On 3/31/22 20:38, Andrew Morton wrote:
-> > > The mm-of-the-moment snapshot 2022-03-31-20-37 has been uploaded to
-> > >
-> > >    https://www.ozlabs.org/~akpm/mmotm/
-> > >
-> > > mmotm-readme.txt says
-> > >
-> > > README for mm-of-the-moment:
-> > >
-> > > https://www.ozlabs.org/~akpm/mmotm/
-> > >
-> > > This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
-> > > more than once a week.
-> > >
-> > > You will need quilt to apply these patches to the latest Linus release (5.x
-> > > or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
-> > > https://ozlabs.org/~akpm/mmotm/series
-> >
-> > on i386:
-> >
-> > ld: drivers/net/ethernet/fungible/funcore/fun_dev.o: in function `fun_dev_enable':
-> > (.text+0xe1a): undefined reference to `__udivdi3'
->
-> Doesn't fail here.
->
-> Oh... Probably this:
->
->         num_dbs = (pci_resource_len(pdev, 0) - NVME_REG_DBS) /
->                   (fdev->db_stride * 4);
->
-> The bad config must have 64b resource length. Dimitris, PTAL.
+--Sig_/hJ.h65H//uz7K/bHpxvjl8y
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I built last night with the mm tree from github tagged
-v5.17-mmotm-2022-03-31-20-37, i386 allmodconfig. It didn't reach the
-link stage due to other errors but I looked at fun_dev.o with nm, it
-didn't have a reference to __udivdi3. It may need a PAE config, I'll
-try that.
+Hi all,
+
+Today's linux-next merge of the kbuild tree got a conflict in:
+
+  scripts/kconfig/confdata.c
+
+between commit:
+
+  b6ad541697ea ("kconfig: remove stale comment about removed kconfig_print_=
+symbol()")
+
+from Linus' tree and commit:
+
+  55de8686df7e ("kconfig: change .config format to use =3Dn instead of "is =
+not set"")
+
+from the kbuild tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+I think that maybe the kbuild tree needs to be fixed up to match what
+has actually been merged by Linus.
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc scripts/kconfig/confdata.c
+index c4340c90e172,0c711a1bdc96..000000000000
+--- a/scripts/kconfig/confdata.c
++++ b/scripts/kconfig/confdata.c
+@@@ -658,9 -658,14 +658,7 @@@ static char *escape_string_value(const=20
+  	return out;
+  }
+ =20
+- enum output_n { OUTPUT_N, OUTPUT_N_AS_UNSET, OUTPUT_N_NONE };
+-=20
+- static void __print_symbol(FILE *fp, struct symbol *sym, enum output_n ou=
+tput_n,
+ -/*
+ - * Kconfig configuration printer
+ - *
+ - * This printer is used when generating the resulting configuration after
+ - * kconfig invocation and `defconfig' files. Unset symbol might be omitte=
+d by
+ - * passing a non-NULL argument to the printer.
+ - */
++ static void __print_symbol(FILE *fp, struct symbol *sym, bool output_n,
+  			   bool escape_string)
+  {
+  	const char *val;
+
+--Sig_/hJ.h65H//uz7K/bHpxvjl8y
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJKGywACgkQAVBC80lX
+0Gx1Nwf+N/RXHRugoZXCXelMmEE0GfZKGCh9gAdVqp4rO8fS5if8AxpGgCncpm3V
+aq+i9G925kCIOtY8ZScGDvFU+bYsBLwFGlFpAT2wIdpZiJr/PZRHdwhLKMWwNlYu
+MDIWK4MveOcpnuUlJVQaTBu2m2Ja6RLB9c0n7na+lJce6btDpTqARi9wd7F4z7Qj
+aN/qce3tSt0IuJs2k4wVee4LK31fJHsXmBTwvYWWUsSGMdcS4Itfz+mfO+vJd1xm
+6t77zX39X70/fhzkyJQYrgmtwtkdZQtlehXMatKQ3+CUyNNDVQ1cuuo3D3M6dJID
+XvQWlFvrcJC1yV+rx8dpa4nuTKCJ7Q==
+=2J6q
+-----END PGP SIGNATURE-----
+
+--Sig_/hJ.h65H//uz7K/bHpxvjl8y--

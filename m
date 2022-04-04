@@ -2,267 +2,120 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B996C4F1CA5
-	for <lists+linux-next@lfdr.de>; Mon,  4 Apr 2022 23:28:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FCB44F1CAB
+	for <lists+linux-next@lfdr.de>; Mon,  4 Apr 2022 23:28:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239519AbiDDV2P (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 4 Apr 2022 17:28:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42550 "EHLO
+        id S241597AbiDDV21 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 4 Apr 2022 17:28:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379249AbiDDQuz (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 4 Apr 2022 12:50:55 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B9E213D78
-        for <linux-next@vger.kernel.org>; Mon,  4 Apr 2022 09:48:59 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id w7so9482989pfu.11
-        for <linux-next@vger.kernel.org>; Mon, 04 Apr 2022 09:48:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=n1CIUUILsijNyndDhoRSx88ZS3jNJI6RJM8ok7bcGCg=;
-        b=NFo9fL0v5Sr1/QNvbTjZ4UtVfEkAH4xu5n9wyy5czKhz+/MkNelTlVsDkcvPxD5Zow
-         UxJ8quEc915KsMOpogJMBqNz87y/3geGUGOtLDenRXzU/vZGYFsQdsmUwKf/z3IJaho8
-         semilKvu3EloQt5joUdmSsqpQw1T6wWp6WzHhPCML60znst5kR7IABgQQdanGn4/v5P0
-         YkyXVci1T6JhGNzXpkVAw9RdxJm8N9FGdSNfDlRY6Q+9dqZ1QC5IfKWmEG83vLhvEK0B
-         l3lJxOUl8I9bQD3/6EIGkGLgEzplyBW3/w3FMiJZV9+A3iZAJxUqaS/iyxmLwD9yKOeT
-         Bl5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=n1CIUUILsijNyndDhoRSx88ZS3jNJI6RJM8ok7bcGCg=;
-        b=ttIFWmfzgqAi8mhKgqPS3lavqrppceodbYywtm3IzMiwtUcabyMeocp2k/dTrJ5y13
-         6jaYoP+ZrhEFA1JoTr/UadxH+2Am2CDmJ9j8u/FyIJjDHcDr75DIfr8EkG8Bu9GjK/xf
-         eaOjiHN5WbQ9zlPouDOsMisrO+iQBY9vhfk3H1T/znqLHXXMvRfUeEBYY9q3eT2YlSX8
-         E9SCj6iS8gsp819CZvfsdR42BriSdiRd5Zz9EYVE3PJNIgj4UvvGxlUqyhJBVN/J2SDC
-         el+G1NE/1JAKs2hpBl2KQw/fAyYOMbnVjNFI8obqGUZC+iHB5s6IAry2oG3ZQE6T496r
-         3RTQ==
-X-Gm-Message-State: AOAM531xAPqJJ9fCHNVN5asvgB2CZb4Tg7f72lnZFKK0z/5wn2Pa9ruu
-        j88PF+viqPHE1S2XucayhYtKMSfIwPN+EYjhyK4=
-X-Google-Smtp-Source: ABdhPJznPgZb4kjt2LCN3XrYjtiJWBfN4swC+927PR4IBJqf+HYTWSCWwssG2sd1J9bC2ZRdsK1gow==
-X-Received: by 2002:a65:6cc3:0:b0:382:9d3c:ff82 with SMTP id g3-20020a656cc3000000b003829d3cff82mr696331pgw.110.1649090938757;
-        Mon, 04 Apr 2022 09:48:58 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id w19-20020a056a0014d300b004fae5e3970csm13446665pfu.35.2022.04.04.09.48.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 09:48:58 -0700 (PDT)
-Message-ID: <624b217a.1c69fb81.60cf2.1b7f@mx.google.com>
-Date:   Mon, 04 Apr 2022 09:48:58 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S1379310AbiDDQ7T (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 4 Apr 2022 12:59:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBD8A3B3EC;
+        Mon,  4 Apr 2022 09:57:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8988160C95;
+        Mon,  4 Apr 2022 16:57:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 235B7C2BBE4;
+        Mon,  4 Apr 2022 16:57:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649091441;
+        bh=3DwgQQibm4QtCGLBPHzzEvuy5aoVnSuQo3AjjdM3vbs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fk4AO+Sm8xS1TVN83Ht+dupzgBCUyMwmk3BdxRedx7gSUjUC8tNpe6fkePJnDCgvn
+         6z1ffAw+tRmbJc42ieFu4+y8g6Py2fjyb6A9BWRheaeI2tn5z4tAHTbLbEp2080+S9
+         CxB1WsVq5EIoeUe1he75gyGAxOSSKUfgy6CHbfw+TkSwcXK04OcBTqJ0zH0UGN8jud
+         gmLhXFq4Iv4cp4M9T+2ayVMUt/M0PSzt/xTjSrezEkmuwfcU4AMwGoj8W8UL1mjetC
+         QdQOK6sowskP4tRwiSnLlB0DFDguDCHON0Eg949oEq3JMuR6oVLAgcBK5/sITPY06j
+         QtceSyWGBreOw==
+Date:   Mon, 4 Apr 2022 09:57:19 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        lkft-triage@lists.linaro.org, regressions@lists.linux.dev,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Guo Ren <guoren@kernel.org>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Subject: Re: [next] riscv: Linux next-20220404 riscv defconfig builds failed.
+Message-ID: <Yksjb9Mkq658k4YJ@dev-arch.thelio-3990X>
+References: <CA+G9fYu_ZHOeOPDiwzXGL6Re8aFYW3K+JSL2Dozw=VHwaUFxyQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: next
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Kernel: v5.18-rc1-107-g56ad09fc9d717
-X-Kernelci-Report-Type: test
-Subject: next/pending-fixes baseline: 210 runs,
- 4 regressions (v5.18-rc1-107-g56ad09fc9d717)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYu_ZHOeOPDiwzXGL6Re8aFYW3K+JSL2Dozw=VHwaUFxyQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes baseline: 210 runs, 4 regressions (v5.18-rc1-107-g56ad09=
-fc9d717)
+On Mon, Apr 04, 2022 at 03:28:41PM +0530, Naresh Kamboju wrote:
+> Linux next-20220404 riscv defconfig builds failed.
+> 
+> Regressions found on riscv:
+>    - riscv-riscv-clang-14-defconfig
+>    - riscv-riscv-gcc-10-defconfig
+>    - riscv-riscv-clang-13-defconfig
+>    - riscv-riscv-clang-12-defconfig
+>    - riscv-riscv-clang-11-defconfig
+>    - riscv-riscv-gcc-11-defconfig
+>    - riscv-riscv-gcc-8-defconfig
+>    - riscv-riscv-gcc-9-defconfig
+>    - riscv-riscv-clang-nightly-defconfig
+> 
+> 
+> arch/riscv/kernel/compat_signal.c:7:10: fatal error:
+> linux/tracehook.h: No such file or directory
+>   7 | #include <linux/tracehook.h>
+>     |          ^~~~~~~~~~~~~~~~~~~
+> compilation terminated.
+> make[3]: *** [scripts/Makefile.build:289:
+> arch/riscv/kernel/compat_signal.o] Error 1
 
-Regressions Summary
--------------------
+For what it's worth, I also see:
 
-platform           | arch  | lab           | compiler | defconfig          =
-          | regressions
--------------------+-------+---------------+----------+--------------------=
-----------+------------
-da850-lcdk         | arm   | lab-baylibre  | gcc-10   | davinci_all_defconf=
-ig        | 1          =
+$ make -skj"$(nproc)" ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu- defconfig all
+arch/riscv/kernel/compat_vdso/compat_vdso.lds.S:3:10: fatal error: ../vdso/vdso.lds.S: No such file or directory
+    3 | #include <../vdso/vdso.lds.S>
+      |          ^~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[2]: *** [scripts/Makefile.build:462: arch/riscv/kernel/compat_vdso/compat_vdso.lds] Error 1
+arch/riscv/kernel/compat_vdso/rt_sigreturn.S:3:10: fatal error: ../vdso/rt_sigreturn.S: No such file or directory
+    3 | #include <../vdso/rt_sigreturn.S>
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+arch/riscv/kernel/compat_vdso/note.S:3:10: fatal error: ../vdso/note.S: No such file or directory
+    3 | #include <../vdso/note.S>
+      |          ^~~~~~~~~~~~~~~~
+compilation terminated.
+arch/riscv/kernel/compat_vdso/getcpu.S:3:10: fatal error: ../vdso/getcpu.S: No such file or directory
+    3 | #include <../vdso/getcpu.S>
+      |          ^~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[2]: *** [arch/riscv/kernel/compat_vdso/Makefile:43: arch/riscv/kernel/compat_vdso/rt_sigreturn.o] Error 1
+make[2]: *** [arch/riscv/kernel/compat_vdso/Makefile:43: arch/riscv/kernel/compat_vdso/note.o] Error 1
+make[2]: *** [arch/riscv/kernel/compat_vdso/Makefile:43: arch/riscv/kernel/compat_vdso/getcpu.o] Error 1
+arch/riscv/kernel/compat_vdso/flush_icache.S:3:10: fatal error: ../vdso/flush_icache.S: No such file or directory
+    3 | #include <../vdso/flush_icache.S>
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[2]: *** [arch/riscv/kernel/compat_vdso/Makefile:43: arch/riscv/kernel/compat_vdso/flush_icache.o] Error 1
 
-kontron-pitx-imx8m | arm64 | lab-kontron   | gcc-10   | defconfig          =
-          | 1          =
+I am guessing this code was never tested with $(srctree) == $(objtree).
 
-odroid-xu3         | arm   | lab-collabora | gcc-10   | multi_v7_defc...MB2=
-_KERNEL=3Dy | 1          =
-
-rk3399-gru-kevin   | arm64 | lab-collabora | gcc-10   | defconfig+arm64-chr=
-omebook   | 1          =
-
-
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v5.18-rc1-107-g56ad09fc9d717/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v5.18-rc1-107-g56ad09fc9d717
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      56ad09fc9d717a4cff78fa14ae6e98b9571021b1 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform           | arch  | lab           | compiler | defconfig          =
-          | regressions
--------------------+-------+---------------+----------+--------------------=
-----------+------------
-da850-lcdk         | arm   | lab-baylibre  | gcc-10   | davinci_all_defconf=
-ig        | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/624ae61e2fe53e5c11ae06be
-
-  Results:     5 PASS, 1 FAIL, 1 SKIP
-  Full config: davinci_all_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.18-rc1-1=
-07-g56ad09fc9d717/arm/davinci_all_defconfig/gcc-10/lab-baylibre/baseline-da=
-850-lcdk.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.18-rc1-1=
-07-g56ad09fc9d717/arm/davinci_all_defconfig/gcc-10/lab-baylibre/baseline-da=
-850-lcdk.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220401.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.dmesg.alert: https://kernelci.org/test/case/id/624ae61e2fe53e5=
-c11ae06c6
-        failing since 70 days (last pass: v5.16-11577-gffd79fec234d, first =
-fail: v5.17-rc1-180-g86539e2bdb99)
-        3 lines
-
-    2022-04-04T12:35:25.040908  kern  :alert : BUG: Bad page state in proce=
-ss kworker/u2:0  pfn:c3000
-    2022-04-04T12:35:25.041132  kern  :alert : BUG: Bad page state in proce=
-ss kworker/u2:0  pfn:c3400
-    2022-04-04T12:35:25.041302  kern  :alert : BUG: Bad page state in proce=
-ss kworker/u2:0  pfn:c3800
-    2022-04-04T12:35:25.085153  <8><LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Dale=
-rt RESULT=3Dfail UNITS=3Dlines MEASUREMENT=3D3>   =
-
- =
-
-
-
-platform           | arch  | lab           | compiler | defconfig          =
-          | regressions
--------------------+-------+---------------+----------+--------------------=
-----------+------------
-kontron-pitx-imx8m | arm64 | lab-kontron   | gcc-10   | defconfig          =
-          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/624ae665e005b046aaae0693
-
-  Results:     51 PASS, 1 FAIL, 1 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.18-rc1-1=
-07-g56ad09fc9d717/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-pitx-=
-imx8m.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.18-rc1-1=
-07-g56ad09fc9d717/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-pitx-=
-imx8m.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220401.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.dwc3-usb1-probed: https://kernelci.org/test/case/id/624=
-ae665e005b046aaae06a6
-        new failure (last pass: v5.17-13747-gaeb9fed350ee)
-
-    2022-04-04T12:36:43.773990  /lava-105430/1/../bin/lava-test-case
-    2022-04-04T12:36:43.774327  <8>[   14.687937] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Ddwc3-usb1-probed RESULT=3Dfail>
-    2022-04-04T12:36:43.774525  /lava-105430/1/../bin/lava-test-case
-    2022-04-04T12:36:43.774711  <8>[   14.707595] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dimx8mq-usb-phy-driver-present RESULT=3Dpass>
-    2022-04-04T12:36:43.774898  /lava-105430/1/../bin/lava-test-case
-    2022-04-04T12:36:43.775076  <8>[   14.728642] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dimx8mq-usb-phy0-probed RESULT=3Dpass>
-    2022-04-04T12:36:43.775255  /lava-105430/1/../bin/lava-test-case   =
-
- =
-
-
-
-platform           | arch  | lab           | compiler | defconfig          =
-          | regressions
--------------------+-------+---------------+----------+--------------------=
-----------+------------
-odroid-xu3         | arm   | lab-collabora | gcc-10   | multi_v7_defc...MB2=
-_KERNEL=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/624aead76140039255ae06d8
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.18-rc1-1=
-07-g56ad09fc9d717/arm/multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/la=
-b-collabora/baseline-odroid-xu3.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.18-rc1-1=
-07-g56ad09fc9d717/arm/multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/la=
-b-collabora/baseline-odroid-xu3.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220401.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/624aead76140039255ae0=
-6d9
-        failing since 25 days (last pass: v5.17-rc6-312-gf15bf60c638f, firs=
-t fail: v5.17-rc7-200-gfb8a41b34095) =
-
- =
-
-
-
-platform           | arch  | lab           | compiler | defconfig          =
-          | regressions
--------------------+-------+---------------+----------+--------------------=
-----------+------------
-rk3399-gru-kevin   | arm64 | lab-collabora | gcc-10   | defconfig+arm64-chr=
-omebook   | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/624aeae74d360279ceae067d
-
-  Results:     88 PASS, 4 FAIL, 0 SKIP
-  Full config: defconfig+arm64-chromebook
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.18-rc1-1=
-07-g56ad09fc9d717/arm64/defconfig+arm64-chromebook/gcc-10/lab-collabora/bas=
-eline-rk3399-gru-kevin.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.18-rc1-1=
-07-g56ad09fc9d717/arm64/defconfig+arm64-chromebook/gcc-10/lab-collabora/bas=
-eline-rk3399-gru-kevin.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220401.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.rockchip-i2s1-probed: https://kernelci.org/test/case/id=
-/624aeae74d360279ceae069f
-        failing since 35 days (last pass: v5.17-rc5-244-gd77a1b37f796, firs=
-t fail: v5.17-rc6-176-gb4e03e0dde48)
-
-    2022-04-04T12:55:40.174814  /lava-6016352/1/../bin/lava-test-case   =
-
- =20
+Cheers,
+Nathan

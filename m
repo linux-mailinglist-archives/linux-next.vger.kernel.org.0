@@ -2,205 +2,93 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C42BF4F1CAE
-	for <lists+linux-next@lfdr.de>; Mon,  4 Apr 2022 23:29:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E045D4F1F2B
+	for <lists+linux-next@lfdr.de>; Tue,  5 Apr 2022 00:32:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349150AbiDDV2c (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 4 Apr 2022 17:28:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55342 "EHLO
+        id S239876AbiDDW2M (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 4 Apr 2022 18:28:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379846AbiDDSRY (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 4 Apr 2022 14:17:24 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6240A3EA8F
-        for <linux-next@vger.kernel.org>; Mon,  4 Apr 2022 11:15:28 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id h24so5395367pfo.6
-        for <linux-next@vger.kernel.org>; Mon, 04 Apr 2022 11:15:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=jW4ivyk/IhtGx/e/FAwF/L+eSzIBLSv36eJiuFEUNr4=;
-        b=ilTDYmTOPIXRpGeeS2mhw0+7TsduJzz30fdvUsmRI2of2xxGHN0HhcRTZDFbLKagNq
-         78dYZpfpH9vz7EeqKiEyoGw1XdoX9aLQwSCdBtLl7eRLWQaTXeHJK23AX/ttpq6dEg9B
-         RQaWgXvjr6HzLAWaS8vjsw01Q9H0xGb54tlxJdURMdfi054t2oVrab3t9XCoGHk9HlWn
-         Mr1stLyeu4LxzArTx/giLHsNqOiJveKoJ5J7XgHziUsyhYuKBP8Xho5ObX8Xdhj+4Y6E
-         GXgqetKC4I+A6rJMuWcQO+9KZeyHVbjEXxoMrcvdV/48wZSNfySibKucnhHYuhSCr6RN
-         niiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=jW4ivyk/IhtGx/e/FAwF/L+eSzIBLSv36eJiuFEUNr4=;
-        b=uCx8oUOFO822JLs1kunMDqbRox61ckS5PW/vkBPkVfLTLYg9hIAJnSxTlNNuepn1lT
-         qiOSNJ3UjpSF8NlsU307vDMOVy5UrAuLY0E3kwtIfIENap02HCzb6Bqbdd0yRbUZ11qR
-         0+ESvJ8rvnRcLBWbeDoJzN24dgolja/I5YrM2+p2Qb8F0K5MsSGIQNcBNhU9wJ1Iyiqb
-         vFku37Ox/2JKakXhDBuWtN+1B/H1v1Fb4/ZWdXLB4HtUtTw7T7ONEMekefqkrw9cDVNY
-         WjUP2mwkH3rKsAGWy4/Mg/CiKqMoqkaL49GwmFC6diSGfozdvvMTKs8HzX8WOjBDhZLi
-         wHJw==
-X-Gm-Message-State: AOAM532UGHGSHKsApULcSkD/Z7EKYogzcNk/uQxQFQd+CgNWKMC2y1YQ
-        XYy8PB3mR2mH9z4D//4YlsG9jZJpHdvbsKeW8Zk=
-X-Google-Smtp-Source: ABdhPJz2L5MOGlVZhP09Mp/S2JvdbghlWo2GvqaBlOlL5A/Q4Ic+BtcaOmX5PSznoLEd2/rhnVLlIA==
-X-Received: by 2002:a63:ad45:0:b0:382:2459:5bc6 with SMTP id y5-20020a63ad45000000b0038224595bc6mr993947pgo.474.1649096127694;
-        Mon, 04 Apr 2022 11:15:27 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id b7-20020a17090ae38700b001ca8947e73csm146638pjz.0.2022.04.04.11.15.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 11:15:27 -0700 (PDT)
-Message-ID: <624b35bf.1c69fb81.b48e7.0a51@mx.google.com>
-Date:   Mon, 04 Apr 2022 11:15:27 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S239587AbiDDW1J (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 4 Apr 2022 18:27:09 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 376043204F;
+        Mon,  4 Apr 2022 14:50:44 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KXPbQ5Yyvz4xsx;
+        Tue,  5 Apr 2022 07:50:42 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1649109042;
+        bh=0hodjE1FtJ3AN9fnIJnBwuUUot8ym1q+Qm61r4T9AyA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=TumCdOh/A2DRqOSmxQMYAD5RAX8/jlbSmWvZhmdksg6NpKSBk947kOrhT/+LVRzQU
+         9l3Y3PFJ7sqHaNveyouZRUyBXxqG5NVJ63am2Pebx5ZRbJDoh+zb83/8MDBtxAxs6E
+         OyjMi5ZrC/2Ga3hP4yxpM03k8gK96RD1AMHY0YQ7DDA5HQ2hazzXNy4peTdfb553F1
+         HEyHIcFrVKY4FNzj6GWTCYGro53fgBDykm23AeMTNB44Msl0EdGTtQNJ/0nRxf6v13
+         uAEr7I7KCLEEhdi6U/f3MyJ7gpkzueRM0wn3zA97z8Vio7KsK8aETg7lErlNoLuPGO
+         wIwrxFHbHbz2A==
+Date:   Tue, 5 Apr 2022 07:50:41 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>
+Cc:     Mario Limonciello <mario.limonciello@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the drivers-x86-fixes tree
+Message-ID: <20220405075041.7a73e2a3@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: next
-X-Kernelci-Branch: master
-X-Kernelci-Kernel: next-20220404
-X-Kernelci-Report-Type: test
-Subject: next/master baseline: 257 runs, 3 regressions (next-20220404)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/HY9efuTy=7n2B2lBHp88UcZ";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master baseline: 257 runs, 3 regressions (next-20220404)
+--Sig_/HY9efuTy=7n2B2lBHp88UcZ
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Regressions Summary
--------------------
+Hi all,
 
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-kontron-pitx-imx8m           | arm64 | lab-kontron   | clang-14 | defconfig=
-+CON..._64K_PAGES=3Dy | 1          =
+In commit
 
-meson-g12b-a311d-khadas-vim3 | arm64 | lab-collabora | gcc-10   | defconfig=
-+CON...OMIZE_BASE=3Dy | 1          =
+  753ee989f7cf ("platform/x86: amd-pmc: Fix compilation without CONFIG_SUSP=
+END")
 
-odroid-xu3                   | arm   | lab-collabora | gcc-10   | multi_v7_=
-defc...MB2_KERNEL=3Dy | 1          =
+Fixes tag
 
+  Fixes: commit b1f66033cd4e ("platform/x86: amd-pmc: Move to later in the =
+suspend process")
 
-  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
-220404/plan/baseline/
+has these problem(s):
 
-  Test:     baseline
-  Tree:     next
-  Branch:   master
-  Describe: next-20220404
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      696206280c5e5c028caf9fd259999cb72b1f6127 =
+  - leading word 'commit' unexpected
 
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/HY9efuTy=7n2B2lBHp88UcZ
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-Test Regressions
----------------- =
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJLaDEACgkQAVBC80lX
+0Gyq9Af9HzmqtGoPZGRyG/G0S4rY2d1WuJ9J79W3seBRXOBHnF2Hh2MHPMECmhSM
+EqO9b96teliW/z1E9apPkC1grisluZNxdEX/oseiSWOBPr0vQmMThav5y8OBz0Gz
+2JtNoc1OXNwABBigz0YY+tq7RUdKE8ThOZIXqhdEqEOGrcgg8pBP4nqPIBUIpN/b
+3F0vmTXOCNTMwmxwtMJ66lymGllIILohD1dTonkePTQRFvPIsVKAOHUOuQvTjkRh
+zTWCmakG/9Xx07znFasgu1KQyRvhClYAsx7Tv45667Bb8hk4bK8N8WiaDo5QRd1S
+wy7M8AtoOq/lI8Lfejh+EIagntWX9w==
+=I5EF
+-----END PGP SIGNATURE-----
 
-
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-kontron-pitx-imx8m           | arm64 | lab-kontron   | clang-14 | defconfig=
-+CON..._64K_PAGES=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/624aeec2d4dcf59086ae068a
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
-  Compiler:    clang-14 (Debian clang version 14.0.1-++20220402053242+23d08=
-271a4b2-1~exp1~20220402053316.109)
-  Plain log:   https://storage.kernelci.org//next/master/next-20220404/arm6=
-4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-14/lab-kontron/baseline-kontro=
-n-pitx-imx8m.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20220404/arm6=
-4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-14/lab-kontron/baseline-kontro=
-n-pitx-imx8m.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220401.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/624aeec2d4dcf59086ae0=
-68b
-        new failure (last pass: next-20220401) =
-
- =
-
-
-
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-meson-g12b-a311d-khadas-vim3 | arm64 | lab-collabora | gcc-10   | defconfig=
-+CON...OMIZE_BASE=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/624af1e14108064f1cae06ca
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20220404/arm6=
-4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-collabora/baseline-meson-g=
-12b-a311d-khadas-vim3.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20220404/arm6=
-4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-collabora/baseline-meson-g=
-12b-a311d-khadas-vim3.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220401.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/624af1e14108064f1cae0=
-6cb
-        failing since 6 days (last pass: next-20220328, first fail: next-20=
-220329) =
-
- =
-
-
-
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-odroid-xu3                   | arm   | lab-collabora | gcc-10   | multi_v7_=
-defc...MB2_KERNEL=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/624b0f5ea52dcbf214ae0684
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/master/next-20220404/arm/=
-multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab-collabora/baseline-o=
-droid-xu3.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20220404/arm/=
-multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab-collabora/baseline-o=
-droid-xu3.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220401.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/624b0f5ea52dcbf214ae0=
-685
-        failing since 25 days (last pass: next-20220308, first fail: next-2=
-0220309) =
-
- =20
+--Sig_/HY9efuTy=7n2B2lBHp88UcZ--

@@ -2,93 +2,136 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C72F4F1FA8
-	for <lists+linux-next@lfdr.de>; Tue,  5 Apr 2022 00:58:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C6C94F201B
+	for <lists+linux-next@lfdr.de>; Tue,  5 Apr 2022 01:15:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241007AbiDDXAJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 4 Apr 2022 19:00:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57414 "EHLO
+        id S243860AbiDDXQt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 4 Apr 2022 19:16:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241112AbiDDW7v (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 4 Apr 2022 18:59:51 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A320868338;
-        Mon,  4 Apr 2022 15:15:34 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KXQ816Y3Zz4xXl;
-        Tue,  5 Apr 2022 08:15:29 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1649110530;
-        bh=hSld1OtloNUlGP1u1Kfudxjz3bzQNeJmyMD73S0cr9Y=;
-        h=Date:From:To:Cc:Subject:From;
-        b=OByxMCWOpsI93eJl8pTrnm5j5D4GmQY0YdL+bahp3Z2t9EQLSpfVu2pA6I4j0aDS7
-         4F55xdUsbREAODAq82apo8tdB/FmvqWIPJS7jFgF8OXxm5AdAIt6nfyAIDGBITMYqo
-         sphJPDseod9G/RsWVPGNgrUsinilYc+qJAz9PKql3meYTVvREs/7x2+CU25U9W245w
-         aJd80Hqt4dcOgyuo2fSyPNA4JBu7Z8m4ooEiNKap59VLkN9ERxjOcHkOkvbcPloeE8
-         HvCf5J3urmVhE6mvQRs8ryybilzqpiXQsTq2TK1IgeqoRAUo03qOAvY8vKQQtMI0Cs
-         VDNGKQfP6P2wA==
-Date:   Tue, 5 Apr 2022 08:15:29 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Aaron Tomlin <atomlin@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the modules tree
-Message-ID: <20220405081529.28925a1f@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ozG8sG927w5RS7u2QYNrcLY";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S243981AbiDDXQn (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 4 Apr 2022 19:16:43 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9013531375
+        for <linux-next@vger.kernel.org>; Mon,  4 Apr 2022 16:06:38 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id ku13-20020a17090b218d00b001ca8fcd3adeso758400pjb.2
+        for <linux-next@vger.kernel.org>; Mon, 04 Apr 2022 16:06:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CelcVZZcgILGJ3xGR4O1/qMCdW8m4dEbepwQO7O3y4o=;
+        b=CRhyzMykAr9K9V9LswpGk8W5gFe8aVbt1GaKdQUMl1PrWCmX789G8IQ4szOobgjV7y
+         HHpKg5Pwe4EK16rajap6IYmJu2XXP/8dI9ae5wZcGhvawbq2JK2kXTJ1iWJUVdGx6h6x
+         LYT6z/WOdVDQWlNB9sezx5jAYIBSRqnSdepRaNm9G4ZKvlqp6trr5YCUpuOm8N0+jFOT
+         D9a80sDqgcAe//66b+28KcteAtVjLO3NVzg47cJm7LH4qWoJXNJvtgo+yRgdTLWvNwfS
+         ls2NUlhYnnerBBTVQZzSyL7dHyUTZt5u6AGvmSMWs+YJFAj5+bHCU2SD8L7P3RDOEJWs
+         Jhsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=CelcVZZcgILGJ3xGR4O1/qMCdW8m4dEbepwQO7O3y4o=;
+        b=Mcw5DkO+UCyKMUj1FHxBZxr8bCRt3FqVtSnXLhcZtiI+9BWQbFBkR9Oy7ZN6U84M9f
+         WRueBEHP5snviFuW+ATwzfhKydcvXNWxuPxMkEHkIPf70auMnIhVHtKWCfUeOFI82lue
+         E2HNn+lldupsqXVGpY0udgVcFDOlpZcZ+2fwRzWoiW/I6IS2UHcBNae+Gft5LqdtbaJT
+         esG/VzUshdRG45I1cnk9oJ0dFk0D3WJ7RsRg60AHAeBX4H3Kigo0pKqiPol/LxmlGQQz
+         C85hOYLM4RkBVurwhTv2nDCFPkWRAZRKeeUKZ/AN2qAd83hKhtiSQ+bxgty6OLQGcrdJ
+         PTyw==
+X-Gm-Message-State: AOAM531kLBhO9GwVebzMppRoNhejOmUFkmtRpGQGAnJe1AW50AmyuhDs
+        erc/Pl3PuU3Hx/JbpLdckPPaJQ==
+X-Google-Smtp-Source: ABdhPJxMte66ZHmMF/EVN6GWcVOq+nGEvu7yOTygAC80MkZr2vEd9FlF/FRc+iKnj01U1TOeM3sobQ==
+X-Received: by 2002:a17:90a:ec13:b0:1ca:8240:9e4b with SMTP id l19-20020a17090aec1300b001ca82409e4bmr631786pjy.164.1649113597976;
+        Mon, 04 Apr 2022 16:06:37 -0700 (PDT)
+Received: from localhost ([12.3.194.138])
+        by smtp.gmail.com with ESMTPSA id cq13-20020a056a00330d00b004faa1fffd18sm12675204pfb.124.2022.04.04.16.06.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 16:06:37 -0700 (PDT)
+Date:   Mon, 04 Apr 2022 16:06:37 -0700 (PDT)
+X-Google-Original-Date: Mon, 04 Apr 2022 16:03:57 PDT (-0700)
+Subject:     Re: linux-next: manual merge of the csky tree with Linus' tree
+In-Reply-To: <CAJF2gTRc-NtpRS4ScQbgZAzN+thSejRXgHUuPwm3avYOCpPX2w@mail.gmail.com>
+CC:     Stephen Rothwell <sfr@canb.auug.org.au>, ren_guo@c-sky.com,
+        anup@brainfault.org, anup@brainfault.org, guoren@linux.alibaba.com,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     guoren@kernel.org
+Message-ID: <mhng-7164298c-95f1-4c8f-aca2-bfe679d272de@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/ozG8sG927w5RS7u2QYNrcLY
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Sun, 03 Apr 2022 20:54:55 PDT (-0700), guoren@kernel.org wrote:
+> Stephen Rothwell <sfr@canb.auug.org.au> 于 2022年4月4日周一 06:24写道：
+>
+>> Hi all,
+>>
+>> Today's linux-next merge of the csky tree got a conflict in:
+>>
+>>   arch/riscv/configs/rv32_defconfig
+>>
+>> between commits:
+>>
+>>   d56201d9440d ("riscv: defconfig: enable hugetlbfs option")
+>>   f6e64b66629e ("RISC-V: Enable CPU_IDLE drivers")
+>>   c5179ef1ca0c ("RISC-V: Enable RISC-V SBI CPU Idle driver for QEMU virt
+>> machine")
+>>   2e7451fb5763 ("RISC-V: Enable profiling by default")
+>>   6f562570b9c5 ("RISC-V: defconfig: Drop redundant SBI HVC and earlycon")
+>>
+>> from Linus' tree and commit:
+>>
+>>   0f6ffeaeed8f ("riscv: Fixup difference with defconfig")
+>>
+>> from the csky tree.
+>>
+>> I fixed it up (see below) and can carry the fix as necessary. This
+>> is now fixed as far as linux-next is concerned, but any non trivial
+>> conflicts should be mentioned to your upstream maintainer when your tree
+>> is submitted for merging.  You may also want to consider cooperating
+>> with the maintainer of the conflicting tree to minimise any particularly
+>> complex conflicts.
+>>
+>> I am trying to figure out why all these commits affecting the riscv
+>> architecture have suddenly turned up in the csky tree (and just before
+>> the merge window closed).
+>>
+> It's not for csky pull request. I just missed the 5.18 chance to merge
+> compat feature for riscv. This series also contains several other arches'
+> cleanup. I just want to see any other conflicts in the series. Thanks pay
+> the effort to take care.
 
-Hi all,
+[Sorry for missing this, Lenovo keeps putting broken motherboards in my 
+laptop so things on my end have been a mess for the past week.]
 
-In commit
+IIUC that's not usually how this is done: linux-next is really meant for 
+stuff that's ready to go in (and into the upcoming release), not for 
+experimentation (doubly so for the next release).  I usually push stuff 
+to another branch on one of my repos where autobuilders pick stuff up, 
+which is how I've been seeing the build issues.
 
-  450f0134ccf0 ("module: Make internal.h and decompress.c more compliant")
+IMO it gets kind of confusing for everyone when patch sets get mixed up 
+like this (spinning a v2 of the generic ticket locks with some SOBs 
+missing was similarly confusing, is that single-patch multi-arch fix).  
+It's already a bit of a headache getting these multi-arch patches 
+through, having extra confusion on when things are ready to go 
 
-Fixes tag
+Specifically: I'd been operating under the assumption that this would go 
+in through the RISC-V tree, as it's mostly diff in arch/riscv/.  There's 
+some refactoring in other arch ports that's not been acked, which I 
+don't really like to do, but I figured Christoph and Arnd having 
+written/acked it was close enough.  That said, I'm definately not going 
+to put it into my for-next when I'm getting build errors from arm64 
+autobuilders on the standalone branch.
 
-  Fixes: f314dfea16a ("modsign: log module name in the event of an error")
-
-has these problem(s):
-
-  - SHA1 should be at least 12 digits long
-    This can be fixed for the future by setting core.abbrev to 12 (or
-    more) or (for git v2.11 or later) just making sure it is not set
-    (or set to "auto").
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/ozG8sG927w5RS7u2QYNrcLY
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJLbgEACgkQAVBC80lX
-0Gzvawf9FUl9NsJQqmtaYCeYWbkpVDp8bDdCdAsiIG+LCUB9Tl7w8tkPf6Pn+vCs
-frFYcGdjHWvSz74ttbIUrPMYSLEmLZOt2SF6EqII5019jTSvtb+EyxBC1slRV5Uq
-K7e6G9OCSq1BfjnQ5U3z+XQU1GeyuSHmXIt6K8DEZhHe78OzIL8Qf+NGY5TXutt4
-OoPKom0hAqyS0wjoSUYxRW82fUr7E6iVS+9Ys65mN3bLA36Ot1NZKutneYrKxl3T
-N/AyNt2n928AlUKHlryLYTqz72aV9/o8TvyJhstA0aCzO28GOlttiviUr8rf0ATH
-JWTpSsBj4RobGLKGzqwZhx0LdQATFQ==
-=k1r2
------END PGP SIGNATURE-----
-
---Sig_/ozG8sG927w5RS7u2QYNrcLY--
+LMK if you had something different in mind, otherwise I'm just going to 
+proceed under the assumption this is going in through the RISC-V tree -- 
+I see a v11, I'm going to comment on that.

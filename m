@@ -2,120 +2,205 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FCB44F1CAB
-	for <lists+linux-next@lfdr.de>; Mon,  4 Apr 2022 23:28:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C42BF4F1CAE
+	for <lists+linux-next@lfdr.de>; Mon,  4 Apr 2022 23:29:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241597AbiDDV21 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 4 Apr 2022 17:28:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54744 "EHLO
+        id S1349150AbiDDV2c (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 4 Apr 2022 17:28:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379310AbiDDQ7T (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 4 Apr 2022 12:59:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBD8A3B3EC;
-        Mon,  4 Apr 2022 09:57:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8988160C95;
-        Mon,  4 Apr 2022 16:57:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 235B7C2BBE4;
-        Mon,  4 Apr 2022 16:57:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649091441;
-        bh=3DwgQQibm4QtCGLBPHzzEvuy5aoVnSuQo3AjjdM3vbs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fk4AO+Sm8xS1TVN83Ht+dupzgBCUyMwmk3BdxRedx7gSUjUC8tNpe6fkePJnDCgvn
-         6z1ffAw+tRmbJc42ieFu4+y8g6Py2fjyb6A9BWRheaeI2tn5z4tAHTbLbEp2080+S9
-         CxB1WsVq5EIoeUe1he75gyGAxOSSKUfgy6CHbfw+TkSwcXK04OcBTqJ0zH0UGN8jud
-         gmLhXFq4Iv4cp4M9T+2ayVMUt/M0PSzt/xTjSrezEkmuwfcU4AMwGoj8W8UL1mjetC
-         QdQOK6sowskP4tRwiSnLlB0DFDguDCHON0Eg949oEq3JMuR6oVLAgcBK5/sITPY06j
-         QtceSyWGBreOw==
-Date:   Mon, 4 Apr 2022 09:57:19 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        lkft-triage@lists.linaro.org, regressions@lists.linux.dev,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Guo Ren <guoren@kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Subject: Re: [next] riscv: Linux next-20220404 riscv defconfig builds failed.
-Message-ID: <Yksjb9Mkq658k4YJ@dev-arch.thelio-3990X>
-References: <CA+G9fYu_ZHOeOPDiwzXGL6Re8aFYW3K+JSL2Dozw=VHwaUFxyQ@mail.gmail.com>
+        with ESMTP id S1379846AbiDDSRY (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 4 Apr 2022 14:17:24 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6240A3EA8F
+        for <linux-next@vger.kernel.org>; Mon,  4 Apr 2022 11:15:28 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id h24so5395367pfo.6
+        for <linux-next@vger.kernel.org>; Mon, 04 Apr 2022 11:15:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=jW4ivyk/IhtGx/e/FAwF/L+eSzIBLSv36eJiuFEUNr4=;
+        b=ilTDYmTOPIXRpGeeS2mhw0+7TsduJzz30fdvUsmRI2of2xxGHN0HhcRTZDFbLKagNq
+         78dYZpfpH9vz7EeqKiEyoGw1XdoX9aLQwSCdBtLl7eRLWQaTXeHJK23AX/ttpq6dEg9B
+         RQaWgXvjr6HzLAWaS8vjsw01Q9H0xGb54tlxJdURMdfi054t2oVrab3t9XCoGHk9HlWn
+         Mr1stLyeu4LxzArTx/giLHsNqOiJveKoJ5J7XgHziUsyhYuKBP8Xho5ObX8Xdhj+4Y6E
+         GXgqetKC4I+A6rJMuWcQO+9KZeyHVbjEXxoMrcvdV/48wZSNfySibKucnhHYuhSCr6RN
+         niiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=jW4ivyk/IhtGx/e/FAwF/L+eSzIBLSv36eJiuFEUNr4=;
+        b=uCx8oUOFO822JLs1kunMDqbRox61ckS5PW/vkBPkVfLTLYg9hIAJnSxTlNNuepn1lT
+         qiOSNJ3UjpSF8NlsU307vDMOVy5UrAuLY0E3kwtIfIENap02HCzb6Bqbdd0yRbUZ11qR
+         0+ESvJ8rvnRcLBWbeDoJzN24dgolja/I5YrM2+p2Qb8F0K5MsSGIQNcBNhU9wJ1Iyiqb
+         vFku37Ox/2JKakXhDBuWtN+1B/H1v1Fb4/ZWdXLB4HtUtTw7T7ONEMekefqkrw9cDVNY
+         WjUP2mwkH3rKsAGWy4/Mg/CiKqMoqkaL49GwmFC6diSGfozdvvMTKs8HzX8WOjBDhZLi
+         wHJw==
+X-Gm-Message-State: AOAM532UGHGSHKsApULcSkD/Z7EKYogzcNk/uQxQFQd+CgNWKMC2y1YQ
+        XYy8PB3mR2mH9z4D//4YlsG9jZJpHdvbsKeW8Zk=
+X-Google-Smtp-Source: ABdhPJz2L5MOGlVZhP09Mp/S2JvdbghlWo2GvqaBlOlL5A/Q4Ic+BtcaOmX5PSznoLEd2/rhnVLlIA==
+X-Received: by 2002:a63:ad45:0:b0:382:2459:5bc6 with SMTP id y5-20020a63ad45000000b0038224595bc6mr993947pgo.474.1649096127694;
+        Mon, 04 Apr 2022 11:15:27 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id b7-20020a17090ae38700b001ca8947e73csm146638pjz.0.2022.04.04.11.15.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 11:15:27 -0700 (PDT)
+Message-ID: <624b35bf.1c69fb81.b48e7.0a51@mx.google.com>
+Date:   Mon, 04 Apr 2022 11:15:27 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYu_ZHOeOPDiwzXGL6Re8aFYW3K+JSL2Dozw=VHwaUFxyQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Tree: next
+X-Kernelci-Branch: master
+X-Kernelci-Kernel: next-20220404
+X-Kernelci-Report-Type: test
+Subject: next/master baseline: 257 runs, 3 regressions (next-20220404)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Apr 04, 2022 at 03:28:41PM +0530, Naresh Kamboju wrote:
-> Linux next-20220404 riscv defconfig builds failed.
-> 
-> Regressions found on riscv:
->    - riscv-riscv-clang-14-defconfig
->    - riscv-riscv-gcc-10-defconfig
->    - riscv-riscv-clang-13-defconfig
->    - riscv-riscv-clang-12-defconfig
->    - riscv-riscv-clang-11-defconfig
->    - riscv-riscv-gcc-11-defconfig
->    - riscv-riscv-gcc-8-defconfig
->    - riscv-riscv-gcc-9-defconfig
->    - riscv-riscv-clang-nightly-defconfig
-> 
-> 
-> arch/riscv/kernel/compat_signal.c:7:10: fatal error:
-> linux/tracehook.h: No such file or directory
->   7 | #include <linux/tracehook.h>
->     |          ^~~~~~~~~~~~~~~~~~~
-> compilation terminated.
-> make[3]: *** [scripts/Makefile.build:289:
-> arch/riscv/kernel/compat_signal.o] Error 1
+next/master baseline: 257 runs, 3 regressions (next-20220404)
 
-For what it's worth, I also see:
+Regressions Summary
+-------------------
 
-$ make -skj"$(nproc)" ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu- defconfig all
-arch/riscv/kernel/compat_vdso/compat_vdso.lds.S:3:10: fatal error: ../vdso/vdso.lds.S: No such file or directory
-    3 | #include <../vdso/vdso.lds.S>
-      |          ^~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[2]: *** [scripts/Makefile.build:462: arch/riscv/kernel/compat_vdso/compat_vdso.lds] Error 1
-arch/riscv/kernel/compat_vdso/rt_sigreturn.S:3:10: fatal error: ../vdso/rt_sigreturn.S: No such file or directory
-    3 | #include <../vdso/rt_sigreturn.S>
-      |          ^~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-arch/riscv/kernel/compat_vdso/note.S:3:10: fatal error: ../vdso/note.S: No such file or directory
-    3 | #include <../vdso/note.S>
-      |          ^~~~~~~~~~~~~~~~
-compilation terminated.
-arch/riscv/kernel/compat_vdso/getcpu.S:3:10: fatal error: ../vdso/getcpu.S: No such file or directory
-    3 | #include <../vdso/getcpu.S>
-      |          ^~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[2]: *** [arch/riscv/kernel/compat_vdso/Makefile:43: arch/riscv/kernel/compat_vdso/rt_sigreturn.o] Error 1
-make[2]: *** [arch/riscv/kernel/compat_vdso/Makefile:43: arch/riscv/kernel/compat_vdso/note.o] Error 1
-make[2]: *** [arch/riscv/kernel/compat_vdso/Makefile:43: arch/riscv/kernel/compat_vdso/getcpu.o] Error 1
-arch/riscv/kernel/compat_vdso/flush_icache.S:3:10: fatal error: ../vdso/flush_icache.S: No such file or directory
-    3 | #include <../vdso/flush_icache.S>
-      |          ^~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[2]: *** [arch/riscv/kernel/compat_vdso/Makefile:43: arch/riscv/kernel/compat_vdso/flush_icache.o] Error 1
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+kontron-pitx-imx8m           | arm64 | lab-kontron   | clang-14 | defconfig=
++CON..._64K_PAGES=3Dy | 1          =
 
-I am guessing this code was never tested with $(srctree) == $(objtree).
+meson-g12b-a311d-khadas-vim3 | arm64 | lab-collabora | gcc-10   | defconfig=
++CON...OMIZE_BASE=3Dy | 1          =
 
-Cheers,
-Nathan
+odroid-xu3                   | arm   | lab-collabora | gcc-10   | multi_v7_=
+defc...MB2_KERNEL=3Dy | 1          =
+
+
+  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
+220404/plan/baseline/
+
+  Test:     baseline
+  Tree:     next
+  Branch:   master
+  Describe: next-20220404
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      696206280c5e5c028caf9fd259999cb72b1f6127 =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+kontron-pitx-imx8m           | arm64 | lab-kontron   | clang-14 | defconfig=
++CON..._64K_PAGES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/624aeec2d4dcf59086ae068a
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    clang-14 (Debian clang version 14.0.1-++20220402053242+23d08=
+271a4b2-1~exp1~20220402053316.109)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220404/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-14/lab-kontron/baseline-kontro=
+n-pitx-imx8m.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220404/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-14/lab-kontron/baseline-kontro=
+n-pitx-imx8m.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220401.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/624aeec2d4dcf59086ae0=
+68b
+        new failure (last pass: next-20220401) =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+meson-g12b-a311d-khadas-vim3 | arm64 | lab-collabora | gcc-10   | defconfig=
++CON...OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/624af1e14108064f1cae06ca
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220404/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-collabora/baseline-meson-g=
+12b-a311d-khadas-vim3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220404/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-collabora/baseline-meson-g=
+12b-a311d-khadas-vim3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220401.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/624af1e14108064f1cae0=
+6cb
+        failing since 6 days (last pass: next-20220328, first fail: next-20=
+220329) =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+odroid-xu3                   | arm   | lab-collabora | gcc-10   | multi_v7_=
+defc...MB2_KERNEL=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/624b0f5ea52dcbf214ae0684
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220404/arm/=
+multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab-collabora/baseline-o=
+droid-xu3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220404/arm/=
+multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab-collabora/baseline-o=
+droid-xu3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220401.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/624b0f5ea52dcbf214ae0=
+685
+        failing since 25 days (last pass: next-20220308, first fail: next-2=
+0220309) =
+
+ =20

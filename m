@@ -2,109 +2,83 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 294944F35C8
-	for <lists+linux-next@lfdr.de>; Tue,  5 Apr 2022 15:53:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D107C4F476E
+	for <lists+linux-next@lfdr.de>; Wed,  6 Apr 2022 01:35:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236991AbiDEKzA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 5 Apr 2022 06:55:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50104 "EHLO
+        id S231995AbiDEVL1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 5 Apr 2022 17:11:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344472AbiDEJmF (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 5 Apr 2022 05:42:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A753DBD8BD
-        for <linux-next@vger.kernel.org>; Tue,  5 Apr 2022 02:27:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649150863;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sC0gvByyqOGxIVvKWID+U5sKeDMIxLfDoP4bDsHoAHY=;
-        b=bnSLLb+xH2vL3anio4wBtlyOwEJYezZ+4ZSvLJNfBVzlHXjFMtNSLSQWUuBm2LbAWiOBCU
-        woDKbrib3nLq5b5oJyo6ieSXv9Pd2f7x3teEIa8IMOidln7vGXV42A+/kDi5z7wnQ3gZ0c
-        4lGOioNRZyEscEXhBaOsKn5xcONyNSg=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-193-RMp8VS2eP5Gs-Y3j-_mttg-1; Tue, 05 Apr 2022 05:27:42 -0400
-X-MC-Unique: RMp8VS2eP5Gs-Y3j-_mttg-1
-Received: by mail-ed1-f69.google.com with SMTP id p14-20020a05640243ce00b0041cbccbe008so4075045edc.16
-        for <linux-next@vger.kernel.org>; Tue, 05 Apr 2022 02:27:41 -0700 (PDT)
+        with ESMTP id S1383812AbiDEPOt (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 5 Apr 2022 11:14:49 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C13CB56759
+        for <linux-next@vger.kernel.org>; Tue,  5 Apr 2022 06:27:34 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id c190-20020a1c35c7000000b0038e37907b5bso1614067wma.0
+        for <linux-next@vger.kernel.org>; Tue, 05 Apr 2022 06:27:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=xXiJ7E3buFOmKaSNtVYhVfiGSQm7gptWYLzEoB5MokI=;
+        b=O9IJQtdzbkZcZt0N+Gky9OnNamx2qItL0YP6nnMP3axAnjPu5sGS1XwJUnuM5FlHKO
+         lNI3Jk8H+gxK206jBmI5IFfFU/kpdOguY0M2S5doN1LKUbcWbUCYVMdXUi+BLNJ3Isp4
+         7Kb+w3s5nxelI4SJ1O0dy0/Re2ESgBt7Nk3n5Ds50qW/cX6EBQyp3vEf2vMKWZdQ1+dN
+         1ATJQ1jh5FpicZGmdVFRh0ycIsUfdjI6hNfzZWnnhzkphfRuFQHUGdoGnl9+dUjZ6G6q
+         3EVxNsHrJJWw7mZu41iPxfLHC2egBVBisTDMqFutWcbIP6rS4Bo7DPFPm2f0eMquBoZT
+         N6lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=sC0gvByyqOGxIVvKWID+U5sKeDMIxLfDoP4bDsHoAHY=;
-        b=ydTOoz/uTYpJ2EvjpUyJCDIv3KAJUTXiK43QtjIoDKO+2dFTVFXYdc8kJ6obDky0qX
-         4v+aKQrRywFGjKLy5kPGkqR8kWm6l7JZSlnIfNlBhowh0ojpBfXlvru3U2DMke5UEn75
-         bIpzy040f9RG73+aq+osZ6uSKUamtwM8YtuSzVOvexGmdqV9+jLoP3kC2mE6y3b/fSRD
-         hWBgR9MKTdAJbNxstvKu1JbtL3bXXe/NGtORrinAJVqk1T3Cr1Xcr3yBXOLfZ4EoV/ar
-         Lp1eAzig/XZuHQuf6F1bbu4dEeR/z7++PeQjo+D0AUFtt7oA7JKP8+rlhcdRdO9yjxN/
-         p/fg==
-X-Gm-Message-State: AOAM533/uN87DVvhhAH5ULSzQDqD3decydSCoMLd1toXCevWXOPxbylX
-        VLmM5cktCkCnaOSLr0I4+H3JQ6O7UIY8YXWFUAjfhkLISCNvgSRYKtkxj9/G7Ys7eia5sjL36jw
-        fFAUh60s5SyYlvcZvmKe8dg==
-X-Received: by 2002:a17:906:4fc7:b0:6da:92b2:f572 with SMTP id i7-20020a1709064fc700b006da92b2f572mr2546892ejw.184.1649150860488;
-        Tue, 05 Apr 2022 02:27:40 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwB3WmfzMOeRCORZ3nBWh1rSBws5rjaDTBJFWt5XN0IsrvTgQnvj9Ej10hBnbU9VbZ7HTRF4Q==
-X-Received: by 2002:a17:906:4fc7:b0:6da:92b2:f572 with SMTP id i7-20020a1709064fc700b006da92b2f572mr2546593ejw.184.1649150854567;
-        Tue, 05 Apr 2022 02:27:34 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
-        by smtp.gmail.com with ESMTPSA id y8-20020a50d8c8000000b0041c80bb88c7sm5906692edj.8.2022.04.05.02.27.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Apr 2022 02:27:34 -0700 (PDT)
-Message-ID: <7b545c5a-cab5-cfdd-4dad-c2f9bc62655c@redhat.com>
-Date:   Tue, 5 Apr 2022 11:27:33 +0200
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to:content-transfer-encoding;
+        bh=xXiJ7E3buFOmKaSNtVYhVfiGSQm7gptWYLzEoB5MokI=;
+        b=uX/t45qk06aA+cLLvgvUxu5g2vsv/1YNRNHW9d+TAiM/x5dDjW1j/dftAk3e67a5+9
+         VFb9sJjoRP1TGM7b78zgnTCrT8h3jF7smy6PzNrnRQQM9g/zC7UWjHZzmAgctaXGIyI+
+         cJEbQ27GFex3wZWmr7k3axMqWsLefer6Rku1/+DdoU6LUhyP/7PbjdO5SnyKWiL/fyQ/
+         uOeuLzcpJuQhdhcpoxZToXY3zsjOAHx6G5sJbBhfXmWZ8j/LnHm9sGDRgsVHRAmbaOk7
+         xni7jyI4w2N1QZJfyi4JvmAoRZVNpJuuhinj0iqr4kC9tx7R4bA9HOYMg8i5j1CVp7/K
+         MsBA==
+X-Gm-Message-State: AOAM533wfdXiQUGkZFiLIRYGFDZK+AzCn40QSClowyxws3BTCSOIK1i3
+        jSoBXxMt2vX0R6Zp+LWMTJVxfDFcWfeZooFtsfE=
+X-Google-Smtp-Source: ABdhPJzU44KSOpA5tDqBOHpaxPC6kg1ke01c0lNcdcR2CtWfwEfG4/exBR9pIw7aENh0xuqAFhmQYV3OL6ODTbw5Bd8=
+X-Received: by 2002:a05:600c:1e85:b0:38c:ef05:ba5d with SMTP id
+ be5-20020a05600c1e8500b0038cef05ba5dmr3087974wmb.119.1649165253154; Tue, 05
+ Apr 2022 06:27:33 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: linux-next: Fixes tag needs some work in the drivers-x86-fixes
- tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Mark Gross <markgross@kernel.org>
-Cc:     Mario Limonciello <mario.limonciello@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220405075041.7a73e2a3@canb.auug.org.au>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220405075041.7a73e2a3@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Sender: jimchampman5773@gmail.com
+Received: by 2002:a5d:64a5:0:0:0:0:0 with HTTP; Tue, 5 Apr 2022 06:27:32 -0700 (PDT)
+From:   The Sigrid Rausing Trust <thesigridrausingtrust@gmail.com>
+Date:   Tue, 5 Apr 2022 16:27:32 +0300
+X-Google-Sender-Auth: P3ZUqTx_LOsp1Q3oJx1FnRp6e6Y
+Message-ID: <CAJaLhfbYouV=pnYrp7C=CZcxo5xMbFCELazUY+YMsM_9JifNOQ@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi,
+Hallo,
 
-On 4/4/22 23:50, Stephen Rothwell wrote:
-> Hi all,
-> 
-> In commit
-> 
->   753ee989f7cf ("platform/x86: amd-pmc: Fix compilation without CONFIG_SUSPEND")
-> 
-> Fixes tag
-> 
->   Fixes: commit b1f66033cd4e ("platform/x86: amd-pmc: Move to later in the suspend process")
-> 
-> has these problem(s):
-> 
->   - leading word 'commit' unexpected
+    Ich bin Sigrid Rausing. Ihre E-Mail-Adresse wurde von Google Inc.
+bereitgestellt. Zuf=C3=A4llig als aktiver Benutzer im Web ausgew=C3=A4hlt.
+Aufgrund der Coronavirus-Pandemie spende ich Ihnen =E2=82=AC2.000.000,00 un=
+d
+fordere Sie auf, jemandem in Ihrem Umfeld mit dem Wenigen zu helfen,
+das Sie k=C3=B6nnen.
 
-Stephen, thank you for the report. I've just done a forced push
-to the drivers-x86-fixes branch fixing this.
+Weitere Informationen =C3=BCber mich finden Sie hier in meiner Wikipedia:
+https://en.wikipedia.org/wiki/Sigrid_Rausing
 
-Regards,
+Kontaktieren Sie mich unter dieser E-Mail-Adresse:
+thesigridrausingtrust@gmail.com f=C3=BCr weitere Informationen.
 
-Hans
-
+Gl=C3=BCckw=C3=BCnsche!
+Sigrid Maria Elisabet Rausing.

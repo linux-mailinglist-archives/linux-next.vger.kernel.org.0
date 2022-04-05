@@ -2,48 +2,58 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3EBD4F215F
-	for <lists+linux-next@lfdr.de>; Tue,  5 Apr 2022 06:09:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDE3D4F20F0
+	for <lists+linux-next@lfdr.de>; Tue,  5 Apr 2022 06:08:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231570AbiDEDJK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 4 Apr 2022 23:09:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50322 "EHLO
+        id S229897AbiDEDQ3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 4 Apr 2022 23:16:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231604AbiDEDI5 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 4 Apr 2022 23:08:57 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CA6A1A8C3F;
-        Mon,  4 Apr 2022 19:55:43 -0700 (PDT)
+        with ESMTP id S230174AbiDEDQU (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 4 Apr 2022 23:16:20 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A377414020;
+        Mon,  4 Apr 2022 20:14:21 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KXXMK4bW5z4xXt;
-        Tue,  5 Apr 2022 12:55:41 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KXXmj2Llfz4xXt;
+        Tue,  5 Apr 2022 13:14:13 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1649127342;
-        bh=0X5IKdKdiQgyqwGlPD2EXLDaBlQIGtaZABDXmKF3Bjc=;
+        s=201702; t=1649128456;
+        bh=KBuiQEmterFTPPldXufIwLpX/nw+FNXbdbxT2HKR7Lo=;
         h=Date:From:To:Cc:Subject:From;
-        b=i4cIVA3K0IZv5wjzC7kp94G+lS+Fu0hPNqWClOz8W0od9796yXypQicijCrLBNxdL
-         AftgyR1qv/lznaoWJ/nS0qPxSMXHOd9KGDXi5q028KbrtwR7rs7fq3t9nDK2y6XOG8
-         kl1YQZYdDhVRDVca/xMn595oQNutPvFQPhygAN+JkuoLtDvoVC918p7BDscWkySwgW
-         6R81LvQFGaN4UwxVAw6CZe/hlYtPYZHcyyjL9qHyGnCtKbhY6W2OnzDItWdr5uhhkI
-         YbOqJ6H2YW19q/rLXQkpDSvQ+duZmijA8Gra/wXY4tRwjwpzoxnOJ6HVwRpJMOxkU7
-         uupH3p3G7/G5A==
-Date:   Tue, 5 Apr 2022 12:55:40 +1000
+        b=KNiSWF0ygUeIiVASCvtp4LcqbShEwPZ7zpPbwcVvcVpFThMsA+jHIbNU/YMhIJy6m
+         BWHfGkPIvtCaBbvRrMRpYIxwJe0RYcZHGKGo0SqltnPMmSSi5JoyZxTnjleJVOgSU0
+         pml1qDDZoNRpv1rxXI2kGSK9tKfUsX2JV3P7LImbQFHVsaO9jWV6+jNFgOwgNsEXxR
+         oV/b7VmDrdDXHEbkHoCoObXW5foba7s9OaumF1bvoAyUwpBu23pF/LhVVsHlq84BOe
+         MdZsWEn5I1tIRHnzWlUvjnDzgTxU/8UGKwmIVYqge5Lh41fq8roYgd1JfG3X/H/MOC
+         amiiuyRqjXGIg==
+Date:   Tue, 5 Apr 2022 13:14:12 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        John Johansen <john.johansen@canonical.com>
-Cc:     David Gow <davidgow@google.com>,
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Adam Bratschi-Kaye <ark.email@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Antonio Terceiro <antonio.terceiro@linaro.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Boris-Chengbiao Zhou <bobo1239@web.de>,
+        Chun-Tse Shao <ctshao@google.com>, Daniel Xu <dxu@dxuuu.xyz>,
+        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
+        Douglas Su <d0u9.su@outlook.com>, Finn Behrens <me@kloenk.de>,
+        Gary Guo <gary@garyguo.net>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Ricardo Ribalda <ribalda@chromium.org>
-Subject: linux-next: manual merge of the kunit-next tree with the apparmor
- tree
-Message-ID: <20220405125540.2135d81d@canb.auug.org.au>
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Miguel Cano <macanroj@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>
+Subject: linux-next: manual merge of the rust tree with the kbuild tree
+Message-ID: <20220405131412.381b8a97@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/AgTO6kKYKuIZnbyIQZOZ85u";
+Content-Type: multipart/signed; boundary="Sig_/QaTbaPSIQKm2oYtkqwbmX_w";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -54,26 +64,26 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/AgTO6kKYKuIZnbyIQZOZ85u
+--Sig_/QaTbaPSIQKm2oYtkqwbmX_w
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the kunit-next tree got a conflict in:
+Today's linux-next merge of the rust tree got a conflict in:
 
-  security/apparmor/policy_unpack_test.c
+  Makefile
 
 between commit:
 
-  d86d1652ab13 ("apparmor: test: Remove some casts which are no-longer requ=
-ired")
+  703f8d8fad36 ("kbuild: Allow kernel installation packaging to override pk=
+g-config")
 
-from the apparmor tree and commit:
+from the kbuild tree and commit:
 
-  5f91bd9f1e7a ("apparmor: test: Use NULL macros")
+  241608fc4d70 ("Kbuild: add Rust support")
 
-from the kunit-next tree.
+from the rust tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -86,47 +96,64 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc security/apparmor/policy_unpack_test.c
-index 399dce3781aa,5c18d2f19862..000000000000
---- a/security/apparmor/policy_unpack_test.c
-+++ b/security/apparmor/policy_unpack_test.c
-@@@ -408,8 -408,8 +408,8 @@@ static void policy_unpack_test_unpack_u
+diff --cc Makefile
+index d9336e783be3,40182fcc211a..000000000000
+--- a/Makefile
++++ b/Makefile
+@@@ -436,7 -443,7 +443,8 @@@ els
+  HOSTCC	=3D gcc
+  HOSTCXX	=3D g++
+  endif
+ +HOSTPKG_CONFIG	=3D pkg-config
++ HOSTRUSTC =3D rustc
  =20
-  	size =3D unpack_u16_chunk(puf->e, &chunk);
+  KBUILD_USERHOSTCFLAGS :=3D -Wall -Wmissing-prototypes -Wstrict-prototypes=
+ \
+  			 -O2 -fomit-frame-pointer -std=3Dgnu11 \
+@@@ -534,7 -578,23 +579,23 @@@ KBUILD_LDFLAGS_MODULE :
+  KBUILD_LDFLAGS :=3D
+  CLANG_FLAGS :=3D
  =20
- -	KUNIT_EXPECT_EQ(test, size, (size_t)0);
- +	KUNIT_EXPECT_EQ(test, size, 0);
-- 	KUNIT_EXPECT_PTR_EQ(test, chunk, NULL);
-+ 	KUNIT_EXPECT_NULL(test, chunk);
-  	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos, puf->e->end - 1);
-  }
- =20
-@@@ -430,8 -430,8 +430,8 @@@ static void policy_unpack_test_unpack_u
- =20
-  	size =3D unpack_u16_chunk(puf->e, &chunk);
- =20
- -	KUNIT_EXPECT_EQ(test, size, (size_t)0);
- +	KUNIT_EXPECT_EQ(test, size, 0);
-- 	KUNIT_EXPECT_PTR_EQ(test, chunk, NULL);
-+ 	KUNIT_EXPECT_NULL(test, chunk);
-  	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos, puf->e->start + TEST_U16_OFFSET);
-  }
- =20
++ ifeq ($(KBUILD_CLIPPY),1)
++ 	RUSTC_OR_CLIPPY_QUIET :=3D CLIPPY
++ 	RUSTC_OR_CLIPPY =3D $(CLIPPY_DRIVER)
++ else
++ 	RUSTC_OR_CLIPPY_QUIET :=3D RUSTC
++ 	RUSTC_OR_CLIPPY =3D $(RUSTC)
++ endif
++=20
++ ifdef RUST_LIB_SRC
++ 	export RUST_LIB_SRC
++ endif
++=20
++ export RUSTC_BOOTSTRAP :=3D 1
++=20
+ -export ARCH SRCARCH CONFIG_SHELL BASH HOSTCC KBUILD_HOSTCFLAGS CROSS_COMP=
+ILE LD CC
+ +export ARCH SRCARCH CONFIG_SHELL BASH HOSTCC KBUILD_HOSTCFLAGS CROSS_COMP=
+ILE LD CC HOSTPKG_CONFIG
++ export RUSTC RUSTDOC RUSTFMT RUSTC_OR_CLIPPY_QUIET RUSTC_OR_CLIPPY BINDGE=
+N CARGO
++ export HOSTRUSTC KBUILD_HOSTRUSTFLAGS
+  export CPP AR NM STRIP OBJCOPY OBJDUMP READELF PAHOLE RESOLVE_BTFIDS LEX =
+YACC AWK INSTALLKERNEL
+  export PERL PYTHON3 CHECK CHECKFLAGS MAKE UTS_MACHINE HOSTCXX
+  export KGZIP KBZIP2 KLZOP LZMA LZ4 XZ ZSTD
 
---Sig_/AgTO6kKYKuIZnbyIQZOZ85u
+--Sig_/QaTbaPSIQKm2oYtkqwbmX_w
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJLr6wACgkQAVBC80lX
-0GyJnQf/QkeaZtW6owO89lZU4MNDWmuXCnwMNQFUq8zn++DBkraGLIhsvjSx6Qda
-sjXtf+yJbZ8ymitnZ15KQl9EbfBZ2e/TR3ZDZdOGVbxbaTGJIJhhIpY0hK4QRhec
-4OczTgg0E069PznOGPbM7UXtGSOVipnbJpWfMY1sT4Udr7qsiNrrRAyh9LaIKDIS
-Kipvr1eTZkawdB3IibTtOzRWdgVHGVl5zKex9J3sfJeXn0nGsFAGJVQzxp1ILBFQ
-lnLVenv8s3z5f5d+T9NxF7jtuM584Nz6Vm4bX7AseXOubigwmaEYGyfgu5fscp6z
-FkwdjacK9CtlSfsMGrT1FSG3wI0hpQ==
-=9CTE
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJLtAQACgkQAVBC80lX
+0GxY4Af/XU0Ei0CRfR4gxT1/1B1cr+7e926vN1zR76EKwV/v3Daou3MmwWgSJPhD
+1T728yLzQZGVhJwtkx43GOxasc7kzY6d4Y3CeL+EGZ/d3zlPAsvnR0bK+tEJqKCB
+P7cW24l7gU71WgzY0lMoiXLHSdAiAv+J21PP08017lxBXC9pYVfFxZ8iaCIY+okQ
+IIKw3qNQdKP8/ify2gSKSbK939IPJhJUuyisYbxyaZ9BoeEKaH5FtC+BmCGsgt0A
+QOAwNePh+XJ3d9aTdZJln1l+k+fAdo3seVB5tfA6u/MRSh7g/dtgByoenNrU2/Xa
+iB7La8ZA7Xm0dPJ3Awne5jWlljThjQ==
+=yVY2
 -----END PGP SIGNATURE-----
 
---Sig_/AgTO6kKYKuIZnbyIQZOZ85u--
+--Sig_/QaTbaPSIQKm2oYtkqwbmX_w--

@@ -2,97 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A05B74F27E2
-	for <lists+linux-next@lfdr.de>; Tue,  5 Apr 2022 10:09:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08FED4F313C
+	for <lists+linux-next@lfdr.de>; Tue,  5 Apr 2022 14:40:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233722AbiDEIJ0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 5 Apr 2022 04:09:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44528 "EHLO
+        id S232949AbiDEI7w (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 5 Apr 2022 04:59:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233744AbiDEIIw (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 5 Apr 2022 04:08:52 -0400
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D011D6C1C1
-        for <linux-next@vger.kernel.org>; Tue,  5 Apr 2022 01:02:22 -0700 (PDT)
-Received: by mail-qt1-f180.google.com with SMTP id t19so9835624qtc.4
-        for <linux-next@vger.kernel.org>; Tue, 05 Apr 2022 01:02:22 -0700 (PDT)
+        with ESMTP id S235506AbiDEIjy (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 5 Apr 2022 04:39:54 -0400
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBF25B87;
+        Tue,  5 Apr 2022 01:33:36 -0700 (PDT)
+Received: by mail-io1-xd2e.google.com with SMTP id r2so14271902iod.9;
+        Tue, 05 Apr 2022 01:33:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mylkO58ZKq1iBj80uJdfaHLKrfd/MmPSeOlKdlAN2g0=;
+        b=iBAh71Mhiz3dylNCqZo+yDdLJKHX7Ups2H7UShUJq9aLEVD+v/UN+esg2OInSOp5eR
+         qvwe656xyvQiVAOv2OVxK5ZZSjQkfewL3pNXUdN70ByDSmVqmu0Zx3vT7wfK1MP0/MVt
+         HISlGvX/tlI0uOfIlc4Ma/qL76vQv2D0ceU5GVbmucnU65zfj/NtDmfkm4mFZtmcOw7O
+         W5Qheo8WSoFs5cJ75vHsokH98+9pTpwERAc2S5c0RQs50gBe2zf6ZHKwRRHPUgkeOr7C
+         NT4QV/TckpGkTeuxPaWu964ZgslgqYRXix0btKt7SxTt2WoZWgSqtC6jVDcZtqMwS99u
+         5iJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=DVToskIosok67mSCWEbbFPrYb9U8sDgFYK1ET8Ir6hw=;
-        b=OIzTCG6YakLgVJk/qBlCEBqzZNm2Vtp8p2zTDC3BimZ5KZZMDOmZbCI+rCRl0MR0yI
-         JRP6tYdiZcaqqtq2djR/hKyLYugIYZhEtDSNFh5oRjjiTSyHCeRS9Tf9J2U2i/fE9a9T
-         3y8AgA1D7eCou/ND3z/dYIsAj6wX6sUn1uTgsEJWS9v+HzquwKdfz6n0qBGWzilxX0y3
-         Q9t1N/QSZ055GiZj4vpnOdLxSZWvVEnCABgpDxcEqmXG4Zf7AYLZL8k5X3ZZKqR3OAaq
-         uGhb4OcJ9ShZYkeAXIBlKH8yo3xJTgjN1Te2An+uGuPF9sd+EcTsz6oq4ZNC/aBXAo84
-         MkjQ==
-X-Gm-Message-State: AOAM533hwlFjYbliGlQXWnES57D2WS8hYNuISFRq+bvgtQrH/p41fn1G
-        vEcJMAWSQGZXa/eW8TJPtBSyLdodPN52PA==
-X-Google-Smtp-Source: ABdhPJxWYRAVEGFZl8oMdniZ77nhhQFI8gD/KY2SOWX6QGtmfLXsipV4PUeMBgRf14v6P2GXev2yRw==
-X-Received: by 2002:a05:620a:d50:b0:67e:e2b:a552 with SMTP id o16-20020a05620a0d5000b0067e0e2ba552mr1275347qkl.401.1649145740953;
-        Tue, 05 Apr 2022 01:02:20 -0700 (PDT)
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com. [209.85.128.177])
-        by smtp.gmail.com with ESMTPSA id p16-20020a05620a22b000b0067b7b158985sm7318473qkh.128.2022.04.05.01.02.20
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Apr 2022 01:02:20 -0700 (PDT)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-2eb46d33db9so73642897b3.12
-        for <linux-next@vger.kernel.org>; Tue, 05 Apr 2022 01:02:20 -0700 (PDT)
-X-Received: by 2002:a81:3d81:0:b0:2eb:8069:5132 with SMTP id
- k123-20020a813d81000000b002eb80695132mr1606661ywa.438.1649145739747; Tue, 05
- Apr 2022 01:02:19 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mylkO58ZKq1iBj80uJdfaHLKrfd/MmPSeOlKdlAN2g0=;
+        b=wFNy8fIYr79iTI/nb17r/AgAA3WR9idrtNSPWrGpqOy0gGxnQGmwxbuIe8pfRx8+DO
+         GwI5XElXHinVvzARs+u3drQ/V2AbMO10CzymwPI313mUwi+QW8ZjAP3NoV0auy38DilL
+         Fxowg1z+PWKaSDOUSB33wCOpsEPrZg5Gx891RXoPoAfzZmmY4lckz8kapx7B13Ciyo0x
+         uaM89+hgi/gaqq8pGawu1oXPt4RrJYKhNgl3mI4mD4IZ+EZYDVCK2KIGHjcULu+y7GUG
+         Wq5JWQ1KaGWcsAr52FF8YVfkT/jzduR0LBvjnNRl2XTs9bZCTeuzWT8tM8butIyglVr8
+         LbCA==
+X-Gm-Message-State: AOAM533QjB/5kQo/hqRvJr8KsTaZgEC4nUsawCpU+q4JbWULOGUKgjpN
+        PeG0YYkckQTZ2BAJN44LiBOxxQ3Vn5tuRA2DHeM=
+X-Google-Smtp-Source: ABdhPJz31mODfRf19/XwGfqFgcDFZs9wfyNoZm+PEmbmm8OtKipv6FNIiNgPJ1ZoLDVD0q2ZrQeH9IKSUdZPNp+Wevg=
+X-Received: by 2002:a05:6602:1341:b0:637:d4dc:6f85 with SMTP id
+ i1-20020a056602134100b00637d4dc6f85mr1069163iov.155.1649147616151; Tue, 05
+ Apr 2022 01:33:36 -0700 (PDT)
 MIME-Version: 1.0
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 5 Apr 2022 10:02:08 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWKPqvUzS7xY7L76U9KT78ZQkcOpRXzW0JcZHnve_Y4DA@mail.gmail.com>
-Message-ID: <CAMuHMdWKPqvUzS7xY7L76U9KT78ZQkcOpRXzW0JcZHnve_Y4DA@mail.gmail.com>
-Subject: Duplicate "select GENERIC_IRQ_MULTI_HANDLER"
-To:     "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux-Next <linux-next@vger.kernel.org>
+References: <20220405131412.381b8a97@canb.auug.org.au>
+In-Reply-To: <20220405131412.381b8a97@canb.auug.org.au>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Tue, 5 Apr 2022 10:33:25 +0200
+Message-ID: <CANiq72kvTE2u=9ahNhSbnchfxT9_xrD8JBTJYbw=oe8j8zCbig@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the rust tree with the kbuild tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Adam Bratschi-Kaye <ark.email@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Antonio Terceiro <antonio.terceiro@linaro.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Boris-Chengbiao Zhou <bobo1239@web.de>,
+        Chun-Tse Shao <ctshao@google.com>, Daniel Xu <dxu@dxuuu.xyz>,
+        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
+        Douglas Su <d0u9.su@outlook.com>, Finn Behrens <me@kloenk.de>,
+        Gary Guo <gary@garyguo.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Miguel Cano <macanroj@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Russell,
+On Tue, Apr 5, 2022 at 5:14 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> I fixed it up (see below) and can carry the fix as necessary. This
 
-It looks like you mismerged arch/arm/Kconfig in
+Looks fine, thanks Stephen!
 
-    commit 012d2fb6c8c90adac502c0bb9abd3e815f6047ca (arm/for-next)
-    Merge: a8cf7cf8d78a83e5 234a0f202a09a614
-    Author: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-    Date:   Fri Apr 1 12:59:27 2022 +0100
+I will likely rebase again for -rc2 like for -rc1 (done to avoid a
+build error on our side and a conflict on yours).
 
-        Merge branch 'devel-stable' into for-next
-
-        # Conflicts:
-        #       arch/arm/Kconfig
-        #       arch/arm/Kconfig.debug
-        #       arch/arm/boot/compressed/Makefile
-        #       arch/arm/include/asm/switch_to.h
-        #       arch/arm/kernel/traps.c
-
-Due to this, there are two "select GENERIC_IRQ_MULTI_HANDLER" in
-arch/arm/Kconfig, one on the main ARM symbol, and a superfluous one
-on the ARCH_S3C24XX symbol.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Cheers,
+Miguel

@@ -2,127 +2,279 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 113E64F20BC
-	for <lists+linux-next@lfdr.de>; Tue,  5 Apr 2022 04:06:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F38BD4F2178
+	for <lists+linux-next@lfdr.de>; Tue,  5 Apr 2022 06:09:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229531AbiDECAQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 4 Apr 2022 22:00:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33602 "EHLO
+        id S229668AbiDEC0u (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 4 Apr 2022 22:26:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbiDECAO (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 4 Apr 2022 22:00:14 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A67B44F4D2;
-        Mon,  4 Apr 2022 18:16:27 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S229693AbiDEC0t (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 4 Apr 2022 22:26:49 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDF3119EC6C;
+        Mon,  4 Apr 2022 18:21:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KXTp36QHMz4xXg;
-        Tue,  5 Apr 2022 11:00:11 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1649120412;
-        bh=pvAjgrubqUeybT12my8JKcBFZrLk6GFs9UdVcALm1Rw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=hYcFQ3qY5EyREHyfFG7FXCrx9OZ8bIuRRhoeY9aUcgfxzenLCQFnCM8VG+0qjUGoN
-         hb7DUGklkh5WCotHIUr2HbSxOArcUo1rN8wbPoKPAkGg5YuCkAGslCX2douUNvLDiI
-         g1C0BJhHnw7QQBAhjf8JODKNQOD6gN4x+xVM2sigR/2oy5lEuYJCE/2QIApYn8rPNG
-         uuPANRBVcR685QdrdUPcxPvH7AXpwtP1zSDiRBMfcSQMOWsTKvEVkuAVYanDBJpBDY
-         hsgH/4h/F9N+Tf4e3/Gc/zzzk4xoWgYEUD9NOtwIvrGNc4qnstZchKRzytpEKrAo+u
-         aXFC3kBsQUYtA==
-Date:   Tue, 5 Apr 2022 11:00:11 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     CQ Tang <cq.tang@intel.com>,
-        Juha-Pekka =?UTF-8?B?SGVpa2tpbMOk?= 
-        <juha-pekka.heikkila@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Matt Roper <matthew.d.roper@intel.com>,
-        Ramalingam C <ramalingam.c@intel.com>,
-        Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>
-Subject: linux-next: manual merge of the drm-intel tree with Linus' tree
-Message-ID: <20220405110011.42656314@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/vJGFu34SKYSA_epYaranuCs";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        by sin.source.kernel.org (Postfix) with ESMTPS id 0DACBCE1B6A;
+        Tue,  5 Apr 2022 00:11:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 410E3C2BBE4;
+        Tue,  5 Apr 2022 00:11:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1649117460;
+        bh=DHiPZaDwe+oVVKHgNILgr/HliqIK5s3t6QSGEV7Tdp4=;
+        h=Date:To:From:Subject:From;
+        b=SGVglnOIGf6R+OQ9CnIvYNsKwXaTnxV/twiYR3gN98bxlObXgBMQjU7uSDSMVvbpU
+         YnjP2r04YE+tLc2FuQA8ptFAqA7HLgBUN+z9SXOE9KFP4lTxS8jygoYebQ4LLy7Qy0
+         B2uo5SBep06fUAG2pbnJ7aq+gSxDUOfCiEryxqOU=
+Date:   Mon, 04 Apr 2022 17:10:59 -0700
+To:     broonie@kernel.org, mhocko@suse.cz, sfr@canb.auug.org.au,
+        linux-next@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        mm-commits@vger.kernel.org, akpm@linux-foundation.org
+From:   Andrew Morton <akpm@linux-foundation.org>
+Subject: mmotm 2022-04-04-17-10 uploaded
+Message-Id: <20220405001100.410E3C2BBE4@smtp.kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/vJGFu34SKYSA_epYaranuCs
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+The mm-of-the-moment snapshot 2022-04-04-17-10 has been uploaded to
 
-Hi all,
+   https://www.ozlabs.org/~akpm/mmotm/
 
-Today's linux-next merge of the drm-intel tree got a conflict in:
+mmotm-readme.txt says
 
-  drivers/gpu/drm/i915/intel_device_info.h
+README for mm-of-the-moment:
 
-between commit:
+https://www.ozlabs.org/~akpm/mmotm/
 
-  5e3094cfd9fb ("drm/i915/xehpsdv: Add has_flat_ccs to device info")
+This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
+more than once a week.
 
-from Linus' tree and commit:
+You will need quilt to apply these patches to the latest Linus release (5.x
+or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
+https://ozlabs.org/~akpm/mmotm/series
 
-  072ce4164f97 ("drm/i915/dg2: Tile 4 plane format support")
+The file broken-out.tar.gz contains two datestamp files: .DATE and
+.DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
+followed by the base kernel version against which this patch series is to
+be applied.
 
-from the drm-intel tree.
+This tree is partially included in linux-next.  To see which patches are
+included in linux-next, consult the `series' file.  Only the patches
+within the #NEXT_PATCHES_START/#NEXT_PATCHES_END markers are included in
+linux-next.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
 
---=20
-Cheers,
-Stephen Rothwell
+A full copy of the full kernel tree with the linux-next and mmotm patches
+already applied is available through git within an hour of the mmotm
+release.  Individual mmotm releases are tagged.  The master branch always
+points to the latest release, so it's constantly rebasing.
 
-diff --cc drivers/gpu/drm/i915/intel_device_info.h
-index 291215d9da28,8026e805ff12..000000000000
---- a/drivers/gpu/drm/i915/intel_device_info.h
-+++ b/drivers/gpu/drm/i915/intel_device_info.h
-@@@ -134,10 -131,9 +134,11 @@@ enum intel_ppgtt_type=20
-  	/* Keep has_* in alphabetical order */ \
-  	func(has_64bit_reloc); \
-  	func(has_64k_pages); \
- +	func(needs_compact_pt); \
-  	func(gpu_reset_clobbers_display); \
-  	func(has_reset_engine); \
- +	func(has_flat_ccs); \
-+ 	func(has_4tile); \
-  	func(has_global_mocs); \
-  	func(has_gt_uc); \
-  	func(has_guc_deprivilege); \
+	https://github.com/hnaz/linux-mm
 
---Sig_/vJGFu34SKYSA_epYaranuCs
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+The directory https://www.ozlabs.org/~akpm/mmots/ (mm-of-the-second)
+contains daily snapshots of the -mm tree.  It is updated more frequently
+than mmotm, and is untested.
 
------BEGIN PGP SIGNATURE-----
+A git copy of this tree is also available at
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJLlJsACgkQAVBC80lX
-0Gy1Vwf/ai698wOFTp8iHwKVkeATYt9n7KQrbPXReJI00ygB+CGtawI0WLEx+U1e
-x3dNfaeuUNE3u6NFpWfmTNl/CuUEoWfyLOXe98zoJyczE8H2cLq0wBFVTZwSMahf
-7PMhEduqTFMRpjI5eVF7/zfLg2p6MnnWo8kwP0qS+9s4vP71uE1V3m8nds705pxg
-MaGFdowHREd54ChblVpa3OyQvpd6XdB9hX63c3diTDx6cXL9PPZ911ipPc7K47lq
-RnqMakWG7Mo4Nb9m2hdvTLmyrJurcccTMqijsWv629Y6pQ8ryX5qhAn/qc9xvfkc
-TAO7jEdUPw9Owol24EyVxmLJ0TUcLg==
-=eJUe
------END PGP SIGNATURE-----
+	https://github.com/hnaz/linux-mm
 
---Sig_/vJGFu34SKYSA_epYaranuCs--
+
+
+This mmotm tree contains the following patches against 5.18-rc1:
+(patches marked "*" will be included in linux-next)
+
+* mm-migrate-use-thp_order-instead-of-hpage_pmd_order-for-new-page-allocation.patch
+* highmem-fix-checks-in-__kmap_local_sched_inout.patch
+* lz4-fix-lz4_decompress_safe_partial-read-out-of-bound.patch
+* mm-secretmem-fix-panic-when-growing-a-memfd_secret.patch
+* mm-secretmem-fix-panic-when-growing-a-memfd_secret-fix.patch
+* mailmap-update-vasily-averins-email-address.patch
+* memcg-sync-flush-only-if-periodic-flush-is-delayed.patch
+* mm-list_lruc-revert-mm-list_lru-optimize-memcg_reparent_list_lru_node.patch
+* mm-sparsemem-fix-mem_section-will-never-be-null-gcc-12-warning.patch
+* mm-avoid-pointless-invalidate_range_start-end-on-mremapold_size=0.patch
+* mm-mempolicy-fix-mpol_new-leak-in-shared_policy_replace.patch
+* mm-munlock-remove-fields-to-fix-htmldocs-warnings.patch
+* mm-hwpoison-fix-race-between-hugetlb-free-demotion-and-memory_failure_hugetlb.patch
+* irq_work-use-kasan_record_aux_stack_noalloc-record-callstack.patch
+* userfaultfd-mark-uffd_wp-regardless-of-vm_write-flag.patch
+* mm-fix-unexpected-zeroed-page-mapping-with-zram-swap.patch
+* mm-compaction-fix-compiler-warning-when-config_compaction=n.patch
+* hugetlb-do-not-demote-poisoned-hugetlb-pages.patch
+* proc-kpageflags-prevent-an-integer-overflow-in-stable_page_flags.patch
+* proc-kpageflags-do-not-use-uninitialized-struct-pages.patch
+* procfs-prevent-unpriveleged-processes-accessing-fdinfo-dir.patch
+  mm.patch
+* tools-vm-page_owner_sortc-use-fprintf-to-send-error-messages-to-stderr.patch
+* tools-vm-page_owner_sortc-support-for-multi-value-selection-in-single-argument.patch
+* tools-vm-page_owner_sortc-support-sorting-blocks-by-multiple-keys.patch
+* mm-rmap-fix-missing-swap_free-in-try_to_unmap-after-arch_unmap_one-failed.patch
+* mm-hugetlb-take-src_mm-write_protect_seq-in-copy_hugetlb_page_range.patch
+* mm-memory-slightly-simplify-copy_present_pte.patch
+* mm-rmap-split-page_dup_rmap-into-page_dup_file_rmap-and-page_try_dup_anon_rmap.patch
+* mm-rmap-convert-rmap-flags-to-a-proper-distinct-rmap_t-type.patch
+* mm-rmap-remove-do_page_add_anon_rmap.patch
+* mm-rmap-pass-rmap-flags-to-hugepage_add_anon_rmap.patch
+* mm-rmap-drop-compound-parameter-from-page_add_new_anon_rmap.patch
+* mm-rmap-use-page_move_anon_rmap-when-reusing-a-mapped-pageanon-page-exclusively.patch
+* mm-huge_memory-remove-outdated-vm_warn_on_once_page-from-unmap_page.patch
+* mm-page-flags-reuse-pg_mappedtodisk-as-pg_anon_exclusive-for-pageanon-pages.patch
+* mm-remember-exclusively-mapped-anonymous-pages-with-pg_anon_exclusive.patch
+* mm-gup-disallow-follow_pagefoll_pin.patch
+* mm-support-gup-triggered-unsharing-of-anonymous-pages.patch
+* mm-gup-trigger-fault_flag_unshare-when-r-o-pinning-a-possibly-shared-anonymous-page.patch
+* mm-gup-sanity-check-with-config_debug_vm-that-anonymous-pages-are-exclusive-when-unpinning.patch
+* mm-swap-remember-pg_anon_exclusive-via-a-swp-pte-bit.patch
+* mm-debug_vm_pgtable-add-tests-for-__have_arch_pte_swp_exclusive.patch
+* x86-pgtable-support-__have_arch_pte_swp_exclusive.patch
+* arm64-pgtable-support-__have_arch_pte_swp_exclusive.patch
+* s390-pgtable-cleanup-description-of-swp-pte-layout.patch
+* s390-pgtable-support-__have_arch_pte_swp_exclusive.patch
+* powerpc-pgtable-remove-_page_bit_swap_type-for-book3s.patch
+* powerpc-pgtable-support-__have_arch_pte_swp_exclusive-for-book3s.patch
+* mm-create-new-mm-swaph-header-file.patch
+* mm-create-new-mm-swaph-header-file-fix.patch
+* mm-drop-swap_dirty_folio.patch
+* mm-move-responsibility-for-setting-swp_fs_ops-to-swap_activate.patch
+* mm-reclaim-mustnt-enter-fs-for-swp_fs_ops-swap-space.patch
+* mm-introduce-swap_rw-and-use-it-for-reads-from-swp_fs_ops-swap-space.patch
+* mm-perform-async-writes-to-swp_fs_ops-swap-space-using-swap_rw.patch
+* doc-update-documentation-for-swap_activate-and-swap_rw.patch
+* mm-submit-multipage-reads-for-swp_fs_ops-swap-space.patch
+* mm-submit-multipage-write-for-swp_fs_ops-swap-space.patch
+* vfs-add-fmode_can_odirect-file-flag.patch
+* mm-shmem-make-shmem_init-return-void.patch
+* mm-shmem-make-shmem_init-return-void-fix.patch
+* mm-memcg-remove-unneeded-nr_scanned.patch
+* mm-memcg-mz-already-removed-from-rb_tree-if-not-null.patch
+* mm-memcg-set-memcg-after-css-verified-and-got-reference.patch
+* mm-memcg-set-pos-explicitly-for-reclaim-and-reclaim.patch
+* mm-memcg-move-generation-assignment-and-comparison-together.patch
+* mm-memcg-non-hierarchical-mode-is-deprecated.patch
+* mm-use-mmap_assert_write_locked-instead-of-open-coding-it.patch
+* mm-mmu_gather-limit-free-batch-count-and-add-schedule-point-in-tlb_batch_pages_flush.patch
+* mm-debug_vm_pgtable-drop-protection_map-usage.patch
+* mm-mmap-clarify-protection_map-indices.patch
+* mm-modify-the-method-to-search-addr-in-unmapped_area_topdown.patch
+* mm-mmapc-use-helper-mlock_future_check.patch
+* mm-mprotect-use-mmu_gather.patch
+* mm-mprotect-do-not-flush-when-not-required-architecturally.patch
+* mm-avoid-unnecessary-flush-on-change_huge_pmd.patch
+* mm-mremap-use-helper-mlock_future_check.patch
+* mm-mremap-avoid-unneeded-do_munmap-call.patch
+* mm-vmalloc-fix-a-comment.patch
+* documentation-sysctl-document-page_lock_unfairness.patch
+* mm-page_alloc-simplify-update-of-pgdat-in-wake_all_kswapds.patch
+* mm-page_alloc-add-same-penalty-is-enough-to-get-round-robin-order.patch
+* mm-discard-__gfp_atomic.patch
+* mm-page_alloc-simplify-pageblock-migratetype-check-in-__free_one_page.patch
+* mm-wrap-__find_buddy_pfn-with-a-necessary-buddy-page-validation.patch
+* mm-remove-unnecessary-void-conversions.patch
+* mm-khugepaged-sched-to-numa-node-when-collapse-huge-page.patch
+* hugetlb-remove-use-of-list-iterator-variable-after-loop.patch
+* mm-hugetlb_vmemmap-introduce-arch_want_hugetlb_page_free_vmemmap.patch
+* arm64-mm-hugetlb-enable-hugetlb_page_free_vmemmap-for-arm64.patch
+* mm-hugetlb_vmemmap-cleanup-hugetlb_vmemmap-related-functions.patch
+* mm-hugetlb_vmemmap-cleanup-hugetlb_free_vmemmap_enabled.patch
+* mm-hugetlb_vmemmap-cleanup-config_hugetlb_page_free_vmemmap.patch
+* sched-coredumph-clarify-the-use-of-mmf_vm_hugepage.patch
+* mm-khugepaged-remove-redundant-check-for-vm_no_khugepaged.patch
+* mm-khugepaged-skip-dax-vma.patch
+* mm-thp-only-regular-file-could-be-thp-eligible.patch
+* mm-khugepaged-make-khugepaged_enter-void-function.patch
+* mm-khugepaged-move-some-khugepaged_-functions-to-khugepagedc.patch
+* mm-khugepaged-introduce-khugepaged_enter_vma-helper.patch
+* mm-mmap-register-suitable-readonly-file-vmas-for-khugepaged.patch
+* mm-vmscan-reclaim-only-affects-managed_zones.patch
+* mm-vmscan-make-sure-wakeup_kswapd-with-managed-zone.patch
+* mm-vmscan-make-sure-wakeup_kswapd-with-managed-zone-v2.patch
+* mm-vmscan-sc-reclaim_idx-must-be-a-valid-zone-index.patch
+* mm-z3fold-declare-z3fold_mount-with-__init.patch
+* mm-z3fold-remove-obsolete-comment-in-z3fold_alloc.patch
+* mm-z3fold-minor-clean-up-for-z3fold_free.patch
+* mm-z3fold-remove-unneeded-page_mapcount_reset-and-clearpageprivate.patch
+* mm-z3fold-remove-confusing-local-variable-l-reassignment.patch
+* mm-z3fold-move-decrement-of-pool-pages_nr-into-__release_z3fold_page.patch
+* mm-z3fold-remove-redundant-list_del_init-of-zhdr-buddy-in-z3fold_free.patch
+* mm-z3fold-remove-unneeded-page_headless-check-in-free_handle.patch
+* mm-compaction-use-helper-isolation_suitable.patch
+* drivers-base-nodec-fix-compaction-sysfs-file-leak.patch
+* mm-add-selftests-for-migration-entries.patch
+* mm-migration-remove-unneeded-local-variable-mapping_locked.patch
+* mm-migration-remove-unneeded-out-label.patch
+* mm-migration-remove-unneeded-local-variable-page_lru.patch
+* mm-migration-fix-the-confusing-pagetranshuge-check.patch
+* mm-migration-use-helper-function-vma_lookup-in-add_page_for_migration.patch
+* mm-migration-use-helper-macro-min-in-do_pages_stat.patch
+* mm-migration-avoid-unneeded-nodemask_t-initialization.patch
+* mm-migration-remove-some-duplicated-codes-in-migrate_pages.patch
+* mm-migration-fix-potential-page-refcounts-leak-in-migrate_pages.patch
+* mm-migration-fix-potential-invalid-node-access-for-reclaim-based-migration.patch
+* mm-migration-fix-possible-do_pages_stat_array-racing-with-memory-offline.patch
+* ksm-count-ksm-merging-pages-for-each-process.patch
+* ksm-count-ksm-merging-pages-for-each-process-fix.patch
+* mm-vmstat-add-events-for-ksm-cow.patch
+* mm-untangle-config-dependencies-for-demote-on-reclaim.patch
+* mm-page_alloc-do-not-calculate-nodes-total-pages-and-memmap-pages-when-empty.patch
+* mm-memory_hotplug-reset-nodes-state-when-empty-during-offline.patch
+* mm-memory_hotplug-refactor-hotadd_init_pgdat-and-try_online_node.patch
+* mm-memory_hotplug-refactor-hotadd_init_pgdat-and-try_online_node-checkpatch-fixes.patch
+* mm-rmap-fix-cache-flush-on-thp-pages.patch
+* dax-fix-cache-flush-on-pmd-mapped-pages.patch
+* mm-rmap-introduce-pfn_mkclean_range-to-cleans-ptes.patch
+* mm-pvmw-add-support-for-walking-devmap-pages.patch
+* dax-fix-missing-writeprotect-the-pte-entry.patch
+* mm-simplify-follow_invalidate_pte.patch
+* zram-add-a-huge_idle-writeback-mode.patch
+* damon-vaddr-test-tweak-code-to-make-the-logic-clearer.patch
+* info-task-hung-in-generic_file_write_iter.patch
+* info-task-hung-in-generic_file_write-fix.patch
+* kernel-hung_taskc-monitor-killed-tasks.patch
+* ia64-fix-typos-in-comments.patch
+* ia64-ptrace-fix-typos-in-comments.patch
+* ia64-replace-comments-with-c99-initializers.patch
+* ocfs2-replace-usage-of-found-with-dedicated-list-iterator-variable.patch
+* ocfs2-remove-usage-of-list-iterator-variable-after-the-loop-body.patch
+* ocfs2-reflink-deadlock-when-clone-file-to-the-same-directory-simultaneously.patch
+* ocfs2-clear-links-count-in-ocfs2_mknod-if-an-error-occurs.patch
+* ocfs2-fix-ocfs2-corrupt-when-iputting-an-inode.patch
+* proc-fix-dentry-inode-overinstantiating-under-proc-pid-net.patch
+* proc-fix-dentry-inode-overinstantiating-under-proc-pid-net-checkpatch-fixes.patch
+* fs-proc-kcorec-remove-check-of-list-iterator-against-head-past-the-loop-body.patch
+* fs-proc-kcorec-remove-check-of-list-iterator-against-head-past-the-loop-body-fix.patch
+* proc-sysctl-make-protected_-world-readable.patch
+* kernel-pid_namespace-use-null-instead-of-using-plain-integer-as-pointer.patch
+* get_maintainer-honor-mailmap-for-in-file-emails.patch
+* lib-test_meminit-optimize-do_kmem_cache_rcu_persistent-test.patch
+* lib-kconfigdebug-remove-more-config__value-indirections.patch
+* lib-test_stringc-add-strspn-and-strcspn-tests.patch
+* lib-stringc-simplify-strspn.patch
+* pipe-make-poll_usage-boolean-and-annotate-its-access.patch
+* list-fix-a-data-race-around-ep-rdllist.patch
+* init-mainc-silence-some-wunused-parameter-warnings.patch
+* fatfs-remove-redundant-judgment.patch
+* add-fat-messages-to-printk-index.patch
+* add-fat-messages-to-printk-index-checkpatch-fixes.patch
+* fat-add-ratelimit-to-fat_ent_bread.patch
+* kexec-remove-redundant-assignments.patch
+* rapidio-remove-unnecessary-use-of-list-iterator.patch
+* taskstats-version-12-with-thread-group-and-exe-info.patch
+* taskstats-version-12-with-thread-group-and-exe-info-fix.patch
+* fs-sysv-check-sbi-s_firstdatazone-in-complete_read_super.patch
+* ipc-mqueue-use-get_tree_nodev-in-mqueue_get_tree.patch
+  linux-next.patch
+  linux-next-rejects.patch
+* mm-oom_killc-fix-vm_oom_kill_table-ifdeffery.patch
+* selftests-vm-add-test-for-soft-dirty-pte-bit.patch
+* kselftest-vm-override-targets-from-arguments.patch

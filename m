@@ -2,73 +2,156 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76FF04F4771
-	for <lists+linux-next@lfdr.de>; Wed,  6 Apr 2022 01:35:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2155C4F4774
+	for <lists+linux-next@lfdr.de>; Wed,  6 Apr 2022 01:35:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233376AbiDEVLb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 5 Apr 2022 17:11:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36770 "EHLO
+        id S235529AbiDEVLo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 5 Apr 2022 17:11:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457455AbiDEQDP (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 5 Apr 2022 12:03:15 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46CF775217;
-        Tue,  5 Apr 2022 08:45:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
-        bh=TMPbPnFou6Y997rWHcGS0450RsROzpZC2NDKg7Bz0/E=; b=oM7b1v96ZJoPGAEDhmOwbPoLav
-        iCeSDBMaybSOWxAT7ohLU+UWfeEvY05rOMw3RNM3JxB4slMWpnvY06O6hoBUVKl2VxYKZiR+9jfg2
-        oaK04+/o5LRy8M9ifmfq5HjC86Nr8vNsZB1a+nMGp9c3loCKjSHlDj9HoN+tT+ubDWCancy5h0rvm
-        iil5i7GSxAvatFCQU96lZ7QQftnZx0v0bG3BDXZfbrhcTteW69vlucO3Gwh0PwJgDyf0bR+Mb+bSK
-        gLRMKXFgAaC4u64Eo8ZqogjKATGl03TfP79k0sYWQxNTbXps14VygL6Fr0PfnOFR/v329Alfuq4Ce
-        ZGRkEN4g==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nblNS-001lcc-2I; Tue, 05 Apr 2022 15:45:54 +0000
-Date:   Tue, 5 Apr 2022 08:45:54 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Aaron Tomlin <atomlin@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the modules tree
-Message-ID: <YkxkMiSt1SnCLrGc@bombadil.infradead.org>
-References: <20220405081529.28925a1f@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220405081529.28925a1f@canb.auug.org.au>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S1457610AbiDEQRC (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 5 Apr 2022 12:17:02 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFD6E192B9
+        for <linux-next@vger.kernel.org>; Tue,  5 Apr 2022 09:15:02 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id r66so2589143pgr.3
+        for <linux-next@vger.kernel.org>; Tue, 05 Apr 2022 09:15:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6FUWFiiYF7RQM6AiZGZcmbxOr+8HtS1WpPnaUZsigro=;
+        b=BTCrh4EKdaMDmASfvS4ew7BfBRsBgAtjr3IHlo839Gs+uNJL1JaNgY7v+7hWAxfY3l
+         JN6DJshYDWPdzucQ0JkmFgrUmhoNFfJi73bCsveF0oWuFRP7ZaRXxVcx2MyGXEHBvcqr
+         ezLUNEkIkWuxApp/dOzuZHu9vzWAhReBDPZbNvhL60twYPz0hc25qbW/Cgif/u1Y2Bey
+         PFaiizHMBpyTQJeQxq7a9EHoXAw6vbOcXzeuNAH9O6dn555WunwPMGVXih/B0i1WNkF8
+         JKObM6m7yVDL2I0mUfdRK16YlqWP6DY4csOafI7oq9eqeQjOy3Cx7zy5zk/TfjfOOHiP
+         KGvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=6FUWFiiYF7RQM6AiZGZcmbxOr+8HtS1WpPnaUZsigro=;
+        b=AtU/kYxczUxxjK9UYbj2rfgVvfQINJ6gqhuvTg6VkejonYbEZgODwBgPqXwh1C1OAG
+         u6wVKZto+CWIeClzi8UNdfIlW9/ZxptCEomc7tskKSzOBP5fspB690QNAIRFyDICzdF/
+         CYwanoNvRcB4EgC4XQWXqZfnYjGfL3iR04U6g1vxN1HAhGiJrgTT4x5qdo5Y+Ut2k+ha
+         34uBJa7CfnFB+nl9dcvgeUKHCSwXQz7oxsGJShsa7rhEmAA8Sc/a+rQLgtT+k5T3n+Xa
+         jScO/w4mKAYoh7LuaFF0vPlSj84l4q/NGqQwMvZgldjPkFCDCN/1+LItgFBBJ75qKY/Z
+         4rKg==
+X-Gm-Message-State: AOAM530MMmp6gWHLRfIEIFaOw2R6P1lg4JOeCNXYNPPbrVUKiOAZnJ2G
+        DdwEtD08FZvMuNBdjnnRPWbiQQ==
+X-Google-Smtp-Source: ABdhPJxBsrRDDTM9H+4owE4Y81jBgCK2c5EsTHBBhVbKGNYldNMxrnBlnlMtBkUyZFupsZRuHzSSYg==
+X-Received: by 2002:a63:6443:0:b0:399:54fe:5184 with SMTP id y64-20020a636443000000b0039954fe5184mr3478339pgb.511.1649175302141;
+        Tue, 05 Apr 2022 09:15:02 -0700 (PDT)
+Received: from localhost ([12.3.194.138])
+        by smtp.gmail.com with ESMTPSA id l192-20020a6391c9000000b003861d9431c7sm13808252pge.62.2022.04.05.09.15.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Apr 2022 09:15:01 -0700 (PDT)
+Date:   Tue, 05 Apr 2022 09:15:01 -0700 (PDT)
+X-Google-Original-Date: Tue, 05 Apr 2022 09:14:59 PDT (-0700)
+Subject:     Re: [next] riscv: Linux next-20220404 riscv defconfig builds failed.
+In-Reply-To: <CAJF2gTQkGZnwXrXsbx8drL0AicVpOMW=JmOcrieuvyEf91XPhg@mail.gmail.com>
+CC:     nathan@kernel.org, naresh.kamboju@linaro.org,
+        linux-next@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, lkft-triage@lists.linaro.org,
+        regressions@lists.linux.dev,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        guoren@linux.alibaba.com, heiko@sntech.de,
+        Arnd Bergmann <arnd@arndb.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     guoren@kernel.org
+Message-ID: <mhng-cfa7bfb9-bab8-423c-85ad-ecd407d6e806@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Apr 05, 2022 at 08:15:29AM +1000, Stephen Rothwell wrote:
-> Hi all,
->=20
-> In commit
->=20
->   450f0134ccf0 ("module: Make internal.h and decompress.c more compliant")
->=20
-> Fixes tag
->=20
->   Fixes: f314dfea16a ("modsign: log module name in the event of an error")
->=20
-> has these problem(s):
->=20
->   - SHA1 should be at least 12 digits long
->     This can be fixed for the future by setting core.abbrev to 12 (or
->     more) or (for git v2.11 or later) just making sure it is not set
->     (or set to "auto").
+On Mon, 04 Apr 2022 22:17:24 PDT (-0700), guoren@kernel.org wrote:
+> On Tue, Apr 5, 2022 at 12:57 AM Nathan Chancellor <nathan@kernel.org> wrote:
+>>
+>> On Mon, Apr 04, 2022 at 03:28:41PM +0530, Naresh Kamboju wrote:
+>> > Linux next-20220404 riscv defconfig builds failed.
+>> >
+>> > Regressions found on riscv:
+>> >    - riscv-riscv-clang-14-defconfig
+>> >    - riscv-riscv-gcc-10-defconfig
+>> >    - riscv-riscv-clang-13-defconfig
+>> >    - riscv-riscv-clang-12-defconfig
+>> >    - riscv-riscv-clang-11-defconfig
+>> >    - riscv-riscv-gcc-11-defconfig
+>> >    - riscv-riscv-gcc-8-defconfig
+>> >    - riscv-riscv-gcc-9-defconfig
+>> >    - riscv-riscv-clang-nightly-defconfig
+>> >
+>> >
+>> > arch/riscv/kernel/compat_signal.c:7:10: fatal error:
+>> > linux/tracehook.h: No such file or directory
+>> >   7 | #include <linux/tracehook.h>
+>> >     |          ^~~~~~~~~~~~~~~~~~~
+>> > compilation terminated.
+>> > make[3]: *** [scripts/Makefile.build:289:
+>> > arch/riscv/kernel/compat_signal.o] Error 1
+>>
+>> For what it's worth, I also see:
+>>
+>> $ make -skj"$(nproc)" ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu- defconfig all
+>> arch/riscv/kernel/compat_vdso/compat_vdso.lds.S:3:10: fatal error: ../vdso/vdso.lds.S: No such file or directory
+>>     3 | #include <../vdso/vdso.lds.S>
+>>       |          ^~~~~~~~~~~~~~~~~~~~
+>> compilation terminated.
+>> make[2]: *** [scripts/Makefile.build:462: arch/riscv/kernel/compat_vdso/compat_vdso.lds] Error 1
+>> arch/riscv/kernel/compat_vdso/rt_sigreturn.S:3:10: fatal error: ../vdso/rt_sigreturn.S: No such file or directory
+>>     3 | #include <../vdso/rt_sigreturn.S>
+>>       |          ^~~~~~~~~~~~~~~~~~~~~~~~
+>> compilation terminated.
+>> arch/riscv/kernel/compat_vdso/note.S:3:10: fatal error: ../vdso/note.S: No such file or directory
+>>     3 | #include <../vdso/note.S>
+>>       |          ^~~~~~~~~~~~~~~~
+>> compilation terminated.
+>> arch/riscv/kernel/compat_vdso/getcpu.S:3:10: fatal error: ../vdso/getcpu.S: No such file or directory
+>>     3 | #include <../vdso/getcpu.S>
+>>       |          ^~~~~~~~~~~~~~~~~~
+>> compilation terminated.
+>> make[2]: *** [arch/riscv/kernel/compat_vdso/Makefile:43: arch/riscv/kernel/compat_vdso/rt_sigreturn.o] Error 1
+>> make[2]: *** [arch/riscv/kernel/compat_vdso/Makefile:43: arch/riscv/kernel/compat_vdso/note.o] Error 1
+>> make[2]: *** [arch/riscv/kernel/compat_vdso/Makefile:43: arch/riscv/kernel/compat_vdso/getcpu.o] Error 1
+>> arch/riscv/kernel/compat_vdso/flush_icache.S:3:10: fatal error: ../vdso/flush_icache.S: No such file or directory
+>>     3 | #include <../vdso/flush_icache.S>
+>>       |          ^~~~~~~~~~~~~~~~~~~~~~~~
+>> compilation terminated.
+>> make[2]: *** [arch/riscv/kernel/compat_vdso/Makefile:43: arch/riscv/kernel/compat_vdso/flush_icache.o] Error 1
+>>
+>> I am guessing this code was never tested with $(srctree) == $(objtree).
+> Thx for pointing it out:
+> I always use:
+> make -skj"$(nproc)" ARCH=riscv
+> CROSS_COMPILE=riscv64-unknown-linux-gnu- EXTRA_CFLAGS+=-g
+> O=../build-riscv/ defconfig all
+>
+> When I change to:
+> make -skj"$(nproc)" ARCH=riscv
+> CROSS_COMPILE=riscv64-unknown-linux-gnu- EXTRA_CFLAGS+=-g defconfig
+> all
+>
+> I got your problem.
 
-Fixed, thanks!
+Just to be clear: this one wasn't supposed to go in via the csky tree, 
+and had other build issues that were being found by the autobuilders 
+(which is why it hadn't gone in via the riscv tree).  I do in-tree 
+builds somewhat regularly so that probably would have caught it if 
+nothing else did, but my guess is that some other autobuilder would have 
+found it first (some of the earlier patches 
 
-  Luis
+Guo: please stop pushing things to linux-next that break the builds 
+and/or aren't aimed at your tree.  This just makes things unnecessarly 
+complicated.  If you don't want to deal with the build issues that's OK, 
+just LMK when you send the patch sets out and I'll deal with them, but 
+having linux-next's build break causes fallout for a lot of users.

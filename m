@@ -2,81 +2,77 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E87E84F544E
-	for <lists+linux-next@lfdr.de>; Wed,  6 Apr 2022 06:54:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF3154F5455
+	for <lists+linux-next@lfdr.de>; Wed,  6 Apr 2022 06:54:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230195AbiDFEre (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 6 Apr 2022 00:47:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47672 "EHLO
+        id S234084AbiDFEsS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 6 Apr 2022 00:48:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1847905AbiDFCU1 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 5 Apr 2022 22:20:27 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8ED71C027C;
-        Tue,  5 Apr 2022 16:39:20 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S1445407AbiDFDTk (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 5 Apr 2022 23:19:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9C7AE6140;
+        Tue,  5 Apr 2022 17:02:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KY3yC4zPhz4xXS;
-        Wed,  6 Apr 2022 09:39:15 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1649201955;
-        bh=F69dEHF/T1FOv3zeUBkqVqRNaF6UO3763xgO3JSC2xg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=lYusTzKraCFHh9QLZEw+du1wEmR4d7+qIyDwJ8mFFmb1PCTKffkEjS1m5b37C/RnR
-         KrjyMt41wNqFh2gIAwE0LGDz96abN0OiTd7OJg0iVk9JjMmpi0fDSHhdA4Y3zfK2jk
-         4cXEBNofvtllXdryuQWoqqonUXQBHH6M1MpYVPeerxBPXwPxR5dJCvPzl41+0bwo1e
-         AGwg6zE93yJRJnjfX6XCXX2z9t+H5q4cBMVc+w62+mAwnlq3U9VkOkSGy5WJx81Fw8
-         Q5OhtsbL0VmG+rH3x/tRLjI5RfBbjldeD/wgdQTlIezNqoYAoVMoGPllw2CtcdbJrp
-         +wUqiC1VpB4Wg==
-Date:   Wed, 6 Apr 2022 09:39:14 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Peter Chen <peter.chen@nxp.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id F15B8B82015;
+        Wed,  6 Apr 2022 00:02:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B123CC385A0;
+        Wed,  6 Apr 2022 00:02:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649203334;
+        bh=8Y6GbWre1d9UcnkZekzlBiAAWHoA0YZbonR1DZwHe34=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=p2qruuopq3d7gKMFdyaQ9EWX9cr27cQZLAZ7xfYCMJDQFXa3U/+0W6bQdVM6DG6L3
+         oqGsWWNgiWdTgYa8OXierOl4J6hopRh4DczDGAFoOMLxCFba6ruYKPfolAFBZ+ns3+
+         5bIhu5S4inE0IxqOkpe0xx/eMTBAPJt+M3VlEIhxrrgRym8aMx+8f5kIv3zgwjyKkp
+         S14PCjSHze7pQoiiGH1jecqJnBMMdsd10f0nF4EYfP+1RqOJeYy6CRjbSOqlffnvwG
+         1nAcBmOI1j0RxxrcIC+PJ/Kb6hUxfIbd7L+TPzXyVuF6KqsHthMLU0n18jN3aiRy0P
+         1pLrPnhR7Xu/Q==
+Date:   Wed, 6 Apr 2022 02:02:10 +0200
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: please clean up the usb-chipidea-fixes tree
-Message-ID: <20220406093914.25726c47@canb.auug.org.au>
+Subject: Re: linux-next: Signed-off-by missing for commit in the v4l-dvb
+ tree
+Message-ID: <20220406020210.2c01889f@coco.lan>
+In-Reply-To: <20220406083253.70adb56f@canb.auug.org.au>
+References: <20220406083201.15e8e589@canb.auug.org.au>
+        <20220406083253.70adb56f@canb.auug.org.au>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/piP=.XV82Ge=s2fnkk9j77/";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/piP=.XV82Ge=s2fnkk9j77/
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Em Wed, 6 Apr 2022 08:32:53 +1000
+Stephen Rothwell <sfr@canb.auug.org.au> escreveu:
 
-Hi all,
+> Hi all,
+> 
+> On Wed, 6 Apr 2022 08:32:01 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >
+> > Commit
+> > 
+> >   535f49a9e1f9 ("media: platform: imx-mipi-csis: Add dependency on VIDEO_DEV")
+> > 
+> > is missing a Signed-off-by from its committer.  
+> 
+> Sorry that is in the v4l-dvb-next tree.
+> 
+Fixed, thanks!
 
-The usb-chipidea-fixes tree has not been updated since Oct, 2021 and
-is generating a conflict when merged.  Please clean it up WRT Linus'
-tree as the only patch in there has been merged as another commit.
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/piP=.XV82Ge=s2fnkk9j77/
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJM0yIACgkQAVBC80lX
-0Gx9ZAf7BWvV9s4gl2ZDhV+ZRR1DB6whJTVyWsZnGLRujL22/sTR2JsACEHVLI6F
-O4L113SLboTWuIR0M2qeFRBNjQgKtLP0d5KXP6w25NWGlqwQCD+w23x0er+Oq0g/
-wxLqjFsWBNardaRmES2YGrwMSG/+p5+uQ9+2016vFcAZV7wR/n5zvbUiyRLI7nDN
-+LxslQ5s5NFNZUKp0Q64UcZXO9F92rjGRe8DQ1R+J1edWxQXmN2ZWPsGftkDFOmp
-UjafeSs5REYF3exMS0cfn1WZjszcs7ttAc6af4fMl3p8JQ14QdkKigFO8o5eC595
-abhyd1Mn7qMc8sT1kI0Oq8QcL6Z6zg==
-=UMxb
------END PGP SIGNATURE-----
-
---Sig_/piP=.XV82Ge=s2fnkk9j77/--
+Thanks,
+Mauro

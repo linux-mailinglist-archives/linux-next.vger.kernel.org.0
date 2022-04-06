@@ -2,48 +2,43 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 256124F57B0
-	for <lists+linux-next@lfdr.de>; Wed,  6 Apr 2022 10:16:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 819DD4F5BA7
+	for <lists+linux-next@lfdr.de>; Wed,  6 Apr 2022 12:43:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239619AbiDFIPB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 6 Apr 2022 04:15:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46494 "EHLO
+        id S1378752AbiDFKUB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 6 Apr 2022 06:20:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241892AbiDFIMv (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 6 Apr 2022 04:12:51 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D263917288B;
-        Tue,  5 Apr 2022 22:51:40 -0700 (PDT)
+        with ESMTP id S1377250AbiDFKSi (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 6 Apr 2022 06:18:38 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9CA4E43A7;
+        Tue,  5 Apr 2022 23:45:40 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KYDCv2qclz4xNp;
-        Wed,  6 Apr 2022 15:51:39 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KYFQC2Sxzz4xNp;
+        Wed,  6 Apr 2022 16:45:39 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1649224299;
-        bh=FI2yK1w4BoxDLceAwBGSkRpmSZfiLC52c+HFR+YTcCk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=tiaTpjp/qW7eHcK49V+/LajlejZwX3CwONOlMM6PuebxYbRAAEI868g8TzoBpowjd
-         PJD3ad4dNW3WiPGRjh/+0stYdae4f/eJRpLI1FIExaLVqho461FsBaSlGqMCg9P8XO
-         xKyG0bwXuoqlhm5HLpaExgaqfnSa5ukpJ4+v+Xa7F0jpu48bZ0CC5OLfuEpXRmLMRG
-         qIsaVlKvlSJUfyWZXZven0N1LTLHWtpP/3d4VjoUJNwaurUwXqx0o9ifBSwTfYclJO
-         niRGHo3ZP1GCINR4zjGIR6pgoWulrsBabtFNOu55xXFR7udAnH5awt3geuwrWm/NZ1
-         0nPnsWPoIhx+w==
-Date:   Wed, 6 Apr 2022 15:51:38 +1000
+        s=201702; t=1649227539;
+        bh=GY7NqJT5gG15KDdh+bqIXSFySSoQEilEDlX+CFfVH5M=;
+        h=Date:From:To:Cc:Subject:From;
+        b=qjwjHMH5ttiBhM4GfXQvLVTVXKbv3XRQe8zlqkFCjwz36Iyl6kX9EWftSWfXUolcY
+         F4Jmb8J3crTULvcshcEZf5nd2o//Ad91gOtU9KNXGeGGolGDmkPLE6x8cZQLRijoEj
+         Mzw/Uj/BA0yeBRL3jxeDtfsHnF7RBk39xw5APF1qdoSzzC0vpNdUfIigX801omHD/Z
+         YMOPZPvzuc4UCH6NUyO/GlzHp+h/zR8D9O8bPIQrbwUg0G4B/RAu7QjYgPaYl1Z4Nc
+         LVCZoy2b0xai+yqoc/eNzDCXMe9lF2K/aNtq+5A1Af6Vl1bZ3b3SXECZvowxERtHFE
+         bK7cff63RcuxQ==
+Date:   Wed, 6 Apr 2022 16:45:38 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Jani Nikula <jani.nikula@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warnings after merge of the drm-misc tree
-Message-ID: <20220406155138.61a8d85b@canb.auug.org.au>
-In-Reply-To: <20220406154431.567414c3@canb.auug.org.au>
-References: <20220406154431.567414c3@canb.auug.org.au>
+Subject: linux-next: Signed-off-by missing for commit in the kbuild tree
+Message-ID: <20220406164538.0438bd0e@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ICUojPUEsse9a.hRFPw8grO";
+Content-Type: multipart/signed; boundary="Sig_/uAcPf6hRDwqokOX0NsMO1d2";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -54,37 +49,36 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/ICUojPUEsse9a.hRFPw8grO
+--Sig_/uAcPf6hRDwqokOX0NsMO1d2
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Wed, 6 Apr 2022 15:44:31 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> After merging the drm-misc tree, today's linux-next build (KCONFIG_NAME)
+Commit
 
-This was an "htmldocs" build.
+  33057b0081b7 ("docs: kbuild: add references on Kconfig semantics")
+
+is missing a Signed-off-by from its committer.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/ICUojPUEsse9a.hRFPw8grO
+--Sig_/uAcPf6hRDwqokOX0NsMO1d2
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJNKmoACgkQAVBC80lX
-0GyYEwgAi2Imi3EmsiOg/zkGfnhxmHGLL2KeL8kX/wT/RCLY57XKvK2wt/Sc/PCu
-ZANpi2cD7vQa0UT93sHz03g07mzqI7UEnO8cP7uOD+9oSCcy2FaUDKAzcXsIIBPq
-nS3HLdn5UExItZxnkY685cAHWUY27rHgAT//lkqL0DXVO9kJGSkmtZGepvEZh4pa
-P9f/rzodnxaaT7eAuzmfLb1q9OtQb7N38QOX2S0ZTd9o5mh5sDAVhEdRug4Y+9nU
-tJ5Vj8qpTigEVk7HQtigjy6/17vv2Hjgv8aRTxWboTMfqXHgLDgHtyHKknA3ylX7
-c4FHkGeX1YnJ/pA4x5N/g30ZuNpWqA==
-=6WJm
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJNNxIACgkQAVBC80lX
+0GztYgf+Po2sx3ZyCb8JCY1PE9r0gxnHMR38JnauKMHT0BgL/R6o2ydwZmwPsQXI
+b2DHDScE0Fk8p2gaYTVUrSsIJ8/wwzLXXQY+4X7GHb23z6xuP91fF0+bo5CQHRU9
+X7NoZJdJHnF/E0s7mINPPnpNR433LvtKBR6bhf4KYjt6xqmNLFS3gsomWatL6Oq5
+c0F+vgnjlOZKpKb1T662ZpqKEC1+wNEy4VqF1pXywqOSh1VoobTn/cQWGinyIQRR
+U3XOcXaIBc6/pSIRDYfCfImkST07v2Bl+fCIbXrNCk9LfMdMv8hJuSExsObfuO0r
+nyVJ58+0BXUbRzxeHWRNzN4rtnHyNA==
+=jj5G
 -----END PGP SIGNATURE-----
 
---Sig_/ICUojPUEsse9a.hRFPw8grO--
+--Sig_/uAcPf6hRDwqokOX0NsMO1d2--

@@ -2,84 +2,87 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 688344F658C
-	for <lists+linux-next@lfdr.de>; Wed,  6 Apr 2022 18:43:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7427D4F65BF
+	for <lists+linux-next@lfdr.de>; Wed,  6 Apr 2022 18:43:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237726AbiDFQd2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 6 Apr 2022 12:33:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56000 "EHLO
+        id S237688AbiDFQfG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 6 Apr 2022 12:35:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237802AbiDFQcU (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 6 Apr 2022 12:32:20 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1084B3F15F8;
-        Tue,  5 Apr 2022 18:32:44 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S237718AbiDFQez (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 6 Apr 2022 12:34:55 -0400
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D0D741C17F;
+        Tue,  5 Apr 2022 18:46:00 -0700 (PDT)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KY6T65Vntz4xXS;
-        Wed,  6 Apr 2022 11:32:42 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1649208762;
-        bh=Rxxn1TD2UuepLVLS1hwWe9JcrPraf9Iiaa5Ny2qSNaw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=POlWXFTfFDSukK/5umCIKmt8FS0l7ph+FeMDUjz6xirkctNMlI6turW4LwC20ylCD
-         CmMiyF2VcEuYMZJa/oJiJSf0fUsrx3xedWm25kS2H+d7DDPcLg1cD6vwSPX9qUHzrO
-         vugQB9vrnv2j7WSn54uvOUv62e8gRTRT0+7YyTSPwNDR3XllEImr50GPwrjBss5NHE
-         WPmXvU9np/YIhDgwk2iT63shZnXOGDXFzBc/WYcSSQCvGGrTSydOrR9vP45SVUr4tA
-         TwRl82WwMr6K4H4cUne7omHlcicmomQxBCMF4v93RmPNXkqWQSNpijszlr+5Iajynl
-         StXD0T6gJIRQw==
-Date:   Wed, 6 Apr 2022 11:32:42 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Peter Chen <peter.chen@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: please clean up the usb-chipidea-fixes/next trees
-Message-ID: <20220406113242.3d7aefbd@canb.auug.org.au>
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 5E0FD839BA;
+        Wed,  6 Apr 2022 03:45:50 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1649209555;
+        bh=v3oFc7B9bk2XqycnFoV04ixZ2YcCpeqjwMggrSrn75U=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=o4J3v1s3ENNJEYYwqYgvj1wHS6f9tcldZPd7pkPdyzU6mW3Rol9t91MY41+ydOFqP
+         0+mAXb9BdNRZ2rgPZJELmfBa6E4gzP2kSyYospn3W4EdT82ZcOnH7cB2Z65VruxKdR
+         mOqgA4gc3aKwE8vKKIvh6unJbnqA7H0GJOPFkoyUuK1PErGEavYAv622jrZA8FJHTe
+         AFRZP+T+p11ZJOuJOaODsOnGV3lBVABwYHlSCsCZGYEhQJh1PEp+WXBohaylgwS4kZ
+         35eOXXxc7NIJJJznSlFPJRyzhqXWcV9M+Mg0oblqaqIj+YdwmsVHAJ3ajIvwgY1t0h
+         fcGjS6QUK0LAw==
+Message-ID: <481e40a3-bf84-1b04-b6e6-2a74a0b4b6fe@denx.de>
+Date:   Wed, 6 Apr 2022 03:45:49 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/.mfo3fXxDzL/nFbg7+KZ.0e";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: linux-next: build warning after merge of the drm-misc tree
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Robert Foss <robert.foss@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20220406105828.6d238651@canb.auug.org.au>
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <20220406105828.6d238651@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.103.5 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/.mfo3fXxDzL/nFbg7+KZ.0e
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 4/6/22 02:58, Stephen Rothwell wrote:
+> Hi all,
 
-Hi all,
+Hi,
 
-[Try again to an address that may work ...]
+> After merging the drm-misc tree, today's linux-next build (x86_64
+> allmodconfig) produced this warning:
+> 
+> WARNING: modpost: drivers/gpu/drm/bridge/chipone-icn6211.prelink.o(.exit.data+0x0): Section mismatch in reference from the variable __cfi_jt_cleanup_module to the function .init.text:cleanup_module()
+> The variable __exitdata __cfi_jt_cleanup_module references
+> a function __init cleanup_module().
+> This is often seen when error handling in the exit function
+> uses functionality in the init path.
+> The fix is often to remove the __init annotation of
+> cleanup_module() so it may be used outside an init section.
+> 
+> Introduced by commit
+> 
+>    8dde6f7452a1 ("drm: bridge: icn6211: Add I2C configuration support")
+> 
+> The chipone_exit function should not be marked __init.
 
-The usb-chipidea-fixes and -next trees have not been updated since Oct,
-2021 and the -fixes tree is generating a conflict when merged.  Please
-clean them it up WRT Linus' tree as the only patches in them have been
-merged as other commits.
+Thanks, fix is submitted.
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/.mfo3fXxDzL/nFbg7+KZ.0e
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJM7boACgkQAVBC80lX
-0GxM4QgAozPVYrwAvoW2lTiAICEVaP8psjHfXi7yX3n6XOTpjR8wUp2iKxvlbC2D
-NazdATRNOAslPWH7tLegAmYGZvRcYSbezPWdOGC8qZLS9LGShtz0Brby2wF4b9It
-y68uRcpvWr92XJs4uNotDQI0XfDq0IKQPL0n31agN0Bz5hh/ta3mIuiZJJ0WNRZ9
-f6HKkXd8BiA/MVTK6dauE7wNGAINpB5OHB/4gzfK89nENpF6mpTLTzB38QZyoQaa
-r0/H2Zry1a6Rw828IzUH6+08eB+PyIZb7ZvvYJk7OsW5JCXVmxj+HPX162+jZBKU
-v2lRL+2RxqavCtSExDFRLe/OnAUVsQ==
-=HKB9
------END PGP SIGNATURE-----
-
---Sig_/.mfo3fXxDzL/nFbg7+KZ.0e--
+Sigh.

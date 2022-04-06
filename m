@@ -2,67 +2,47 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 445F84F5DF3
-	for <lists+linux-next@lfdr.de>; Wed,  6 Apr 2022 14:45:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AA3D4F5EA3
+	for <lists+linux-next@lfdr.de>; Wed,  6 Apr 2022 15:04:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231248AbiDFMev (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 6 Apr 2022 08:34:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52222 "EHLO
+        id S230052AbiDFM46 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 6 Apr 2022 08:56:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233984AbiDFMdq (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 6 Apr 2022 08:33:46 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7494856ED65
-        for <linux-next@vger.kernel.org>; Wed,  6 Apr 2022 01:37:52 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id j8so1340987pll.11
-        for <linux-next@vger.kernel.org>; Wed, 06 Apr 2022 01:37:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=ln43QvioipthFryP0mj1hpUk/ZcSMUCXRRO28YWf7go=;
-        b=bHAS0TSKrHwI0lcr0dw13SlIMJz/MOSzH0OJFes/6tSYE5WFl8B54aE7sSaGHJ1nf4
-         GnE9F03CL6udyJ6j7XP10c+tdl1PUTYZxfFrhO8Q3+/bqiXWudoiFkVSxkq2i0RFgWNE
-         qhND3i9Bsr9uaKswZpu00yeBX1BE/DzNTni/cEG7KeEStlK+QIJ6osQcC5DlJDvbkVon
-         SeJQPFtCc7whMxyn057rjrPOByAER+E3xTntczhdOAw4ExYcahsd0qDS/E+XVpXggz4Y
-         j0x9yCmHvEy1gmJSm6vLapukVj4F8t+gzndAHxAgxSOsaY2DsFBcXMa7C8pKedheKxbg
-         Inag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=ln43QvioipthFryP0mj1hpUk/ZcSMUCXRRO28YWf7go=;
-        b=PyFsTpXcuz/jjOeKN/l5c3YdMfCEx5feTbQLzA/PysZJN9sPutvvAg6ksIDsUdJsFa
-         ybl1NU7DWyGmYqgTIRmk+E9KppnLRth6JsBAmdHPfuuEB8g0xjtx5b+daVktpsigrwG1
-         9cJYdMG1Yx84n3j0Gfi+sefs1txMyxw4SBBYq5FZl1t9iLUcwQzrWK0/WlkiHmbvyaCg
-         4nGYgDjASOZvi/kCjwaH9Hr8JWc03CB8wY9gdQNy8j9/Btj65M++FbUNrtHyOKYmfY8P
-         q46rvtS8LU2HNtwX0yHq0HC0TXQfnd56bhRmHiT8LVKdbeV9cUEsD1Vthl7G9CMoXcPA
-         vlzQ==
-X-Gm-Message-State: AOAM533Z406LpY183AbSXln++uU+uU1xhjNlJMB85p6QvPi1gxvmHxv+
-        xb2BDfYyloerX39KFwh1e+Y3DW9sM5i1x7X6
-X-Google-Smtp-Source: ABdhPJy1cQCEhYM6xrd96Zc2VagAe5h2kY7f8Ij+708/41akb36xOHIn/RWezutbY9igyzGg+zON8A==
-X-Received: by 2002:a17:902:bf07:b0:14f:a3a7:97a0 with SMTP id bi7-20020a170902bf0700b0014fa3a797a0mr7571610plb.105.1649234271611;
-        Wed, 06 Apr 2022 01:37:51 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id g6-20020a056a001a0600b004f7bd56cc08sm18266941pfv.123.2022.04.06.01.37.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Apr 2022 01:37:51 -0700 (PDT)
-Message-ID: <624d515f.1c69fb81.2e9b7.ffd9@mx.google.com>
-Date:   Wed, 06 Apr 2022 01:37:51 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229843AbiDFM4s (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 6 Apr 2022 08:56:48 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D031A61CA;
+        Wed,  6 Apr 2022 01:56:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1649235406; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YEZzm96WsgNKWPm41tm0nV++Aa+9P3fevYoGMhYP/zw=;
+        b=K+QzKAh62GkPKnK6Gcgil9rxSfp1+cvt8KVYpFNbuVCaJH7XGTYwPrKQ3lC7uwqNN8o536
+        3JB6vTsSqYEFI1tFPO+F5hs2nPadagcbo0of12TC1/Y+AvX3xXOncEdw7MmSOglpKij/Vg
+        BEoimLtYd35UCWOAMqeHaRsgdOEH7sg=
+Date:   Wed, 06 Apr 2022 09:56:31 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: linux-next: build failure after merge of the drm-misc tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Christophe Branchereau <cbranchereau@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Message-Id: <76UW9R.TLZ8ZU2LVHZW2@crapouillou.net>
+In-Reply-To: <20220406105049.5f5e01c1@canb.auug.org.au>
+References: <20220406105049.5f5e01c1@canb.auug.org.au>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: next
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Kernel: v5.18-rc1-239-gbd8224be6a15
-X-Kernelci-Report-Type: test
-Subject: next/pending-fixes baseline: 213 runs,
- 2 regressions (v5.18-rc1-239-gbd8224be6a15)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,106 +50,80 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes baseline: 213 runs, 2 regressions (v5.18-rc1-239-gbd8224=
-be6a15)
+Hi Stephen,
 
-Regressions Summary
--------------------
+Le mer., avril 6 2022 at 10:50:49 +1000, Stephen Rothwell=20
+<sfr@canb.auug.org.au> a =E9crit :
+> Hi all,
+>=20
+> After merging the drm-misc tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+>=20
+> drivers/gpu/drm/panel/panel-newvision-nv3052c.c:478:19: error:=20
+> initialization of 'void (*)(struct spi_device *)' from incompatible=20
+> pointer type 'int (*)(struct spi_device *)'=20
+> [-Werror=3Dincompatible-pointer-types]
+>   478 |         .remove =3D nv3052c_remove,
+>       |                   ^~~~~~~~~~~~~~
+> drivers/gpu/drm/panel/panel-newvision-nv3052c.c:478:19: note: (near=20
+> initialization for 'nv3052c_driver.remove')
+>=20
+> Caused by commit
+>=20
+>   49956b505c53 ("drm/panel: Add panel driver for NewVision NV3052C=20
+> based LCDs")
+>=20
+> interacting with commit
+>=20
+>   2cbfa2128662 ("spi: make remove callback a void function")
+>=20
+> from Linus' tree (merged in v5.18-rc1).
+>=20
+> I applied the following merge resolution patch for today.
 
-platform         | arch  | lab           | compiler | defconfig            =
-      | regressions
------------------+-------+---------------+----------+----------------------=
-------+------------
-imx8mn-ddr4-evk  | arm64 | lab-baylibre  | gcc-10   | defconfig+ima        =
-      | 1          =
+Sorry about that, my fault.
 
-rk3399-gru-kevin | arm64 | lab-collabora | gcc-10   | defconfig+arm64-chrom=
-ebook | 1          =
+I compile-tested Christophe's patchset *then* rebased to the latest=20
+drm-misc-next and pushed, should have done the other way around.
 
+-Paul
 
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v5.18-rc1-239-gbd8224be6a15/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v5.18-rc1-239-gbd8224be6a15
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      bd8224be6a158a915d87018610a9baa01421b114 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform         | arch  | lab           | compiler | defconfig            =
-      | regressions
------------------+-------+---------------+----------+----------------------=
-------+------------
-imx8mn-ddr4-evk  | arm64 | lab-baylibre  | gcc-10   | defconfig+ima        =
-      | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/624d16bfc4c1120812ae0695
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+ima
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.18-rc1-2=
-39-gbd8224be6a15/arm64/defconfig+ima/gcc-10/lab-baylibre/baseline-imx8mn-dd=
-r4-evk.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.18-rc1-2=
-39-gbd8224be6a15/arm64/defconfig+ima/gcc-10/lab-baylibre/baseline-imx8mn-dd=
-r4-evk.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220401.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/624d16bfc4c1120812ae0=
-696
-        new failure (last pass: v5.18-rc1-107-g56ad09fc9d717) =
-
- =
-
-
-
-platform         | arch  | lab           | compiler | defconfig            =
-      | regressions
------------------+-------+---------------+----------+----------------------=
-------+------------
-rk3399-gru-kevin | arm64 | lab-collabora | gcc-10   | defconfig+arm64-chrom=
-ebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/624d0e9123fcc478caae067f
-
-  Results:     88 PASS, 4 FAIL, 0 SKIP
-  Full config: defconfig+arm64-chromebook
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.18-rc1-2=
-39-gbd8224be6a15/arm64/defconfig+arm64-chromebook/gcc-10/lab-collabora/base=
-line-rk3399-gru-kevin.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.18-rc1-2=
-39-gbd8224be6a15/arm64/defconfig+arm64-chromebook/gcc-10/lab-collabora/base=
-line-rk3399-gru-kevin.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220401.0/arm64/rootfs.cpio.gz =
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Wed, 6 Apr 2022 10:46:57 +1000
+> Subject: [PATCH] fixup for "spi: make remove callback a void function"
+>=20
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  drivers/gpu/drm/panel/panel-newvision-nv3052c.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/gpu/drm/panel/panel-newvision-nv3052c.c=20
+> b/drivers/gpu/drm/panel/panel-newvision-nv3052c.c
+> index 127bcfdb59df..cf078f0d3cd3 100644
+> --- a/drivers/gpu/drm/panel/panel-newvision-nv3052c.c
+> +++ b/drivers/gpu/drm/panel/panel-newvision-nv3052c.c
+> @@ -416,15 +416,13 @@ static int nv3052c_probe(struct spi_device *spi)
+>  	return 0;
+>  }
+>=20
+> -static int nv3052c_remove(struct spi_device *spi)
+> +static void nv3052c_remove(struct spi_device *spi)
+>  {
+>  	struct nv3052c *priv =3D spi_get_drvdata(spi);
+>=20
+>  	drm_panel_remove(&priv->panel);
+>  	drm_panel_disable(&priv->panel);
+>  	drm_panel_unprepare(&priv->panel);
+> -
+> -	return 0;
+>  }
+>=20
+>  static const struct drm_display_mode ltk035c5444t_modes[] =3D {
+> --
+> 2.35.1
+>=20
+> --
+> Cheers,
+> Stephen Rothwell
 
 
-
-  * baseline.bootrr.rockchip-i2s1-probed: https://kernelci.org/test/case/id=
-/624d0e9123fcc478caae069a
-        failing since 37 days (last pass: v5.17-rc5-244-gd77a1b37f796, firs=
-t fail: v5.17-rc6-176-gb4e03e0dde48)
-
-    2022-04-06T03:52:40.745596  /lava-6034500/1/../bin/lava-test-case
-    2022-04-06T03:52:40.756579  <8>[   33.719151] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Drockchip-i2s1-probed RESULT=3Dfail>   =
-
- =20

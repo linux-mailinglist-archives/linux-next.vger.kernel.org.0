@@ -2,159 +2,122 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1E534F7EE2
-	for <lists+linux-next@lfdr.de>; Thu,  7 Apr 2022 14:23:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D717A4F7F23
+	for <lists+linux-next@lfdr.de>; Thu,  7 Apr 2022 14:34:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232003AbiDGMZr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 7 Apr 2022 08:25:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36818 "EHLO
+        id S245241AbiDGMfw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 7 Apr 2022 08:35:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231985AbiDGMZq (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 7 Apr 2022 08:25:46 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 526375419A;
-        Thu,  7 Apr 2022 05:23:45 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KZ0sp4k4bz4xcZ;
-        Thu,  7 Apr 2022 22:23:42 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1649334223;
-        bh=QasKlTaVbpI730es6A/xIsqvcHBYKj5COcg2FGq6uhg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=UQZLg4gFIizoJUaJ+VjCvw5x1VFXohXYnjTONxp3NRn8FaVUkt8EuMiYxD6wm4xlM
-         kr00iC8d+QZemjEMI3gXspZZ0uClT5Y1aC6guaYc4N5yXsO0r/1UvK4mUqdWFRT5Qj
-         PvSpoX/XpIrldXG7XRsd4TbwPQPGJDTmnloNwJWGFRDvnnDuqTJRblCWgKm9JHWiGH
-         rSaEPJP9aKl6vImRW+SskAXtXEDOkgGFPzfsauPh1S/rneME5j1LzEQXI/+LD6luzR
-         wFyLffKLbSagb7ZGUxcO6Vv8R+Nv+vu1ectwVn2Y6Ui/yggyxZ6yoNaZlPHXyW7juJ
-         98QPFQEGa+5Sg==
-Date:   Thu, 7 Apr 2022 22:23:41 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        perf-users <perf-users@linaro.org>, lkft-triage@lists.linaro.org,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        NeilBrown <neilb@suse.de>, tanu235m@gmail.com,
-        Matthew Wilcox <willy@infradead.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        mgorman@techsingularity.net,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Dave Marchevsky <davemarchevsky@fb.com>
-Subject: Re: [next] perf build failures: libbpf.c:10946:50: error: format
- '%li' expects argument of type 'long int *', but argument 4 has type
- 'size_t *' {aka 'unsigned int *'} [-Werror=format=]
-Message-ID: <20220407222341.626d8377@canb.auug.org.au>
-In-Reply-To: <CA+G9fYvdH87k2sSy6g3ehkqE8W94wdg-ww9-wS_t9w48Sp55PQ@mail.gmail.com>
-References: <CA+G9fYvdH87k2sSy6g3ehkqE8W94wdg-ww9-wS_t9w48Sp55PQ@mail.gmail.com>
+        with ESMTP id S245232AbiDGMfu (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 7 Apr 2022 08:35:50 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1BE615EDE5;
+        Thu,  7 Apr 2022 05:33:49 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id q19so4821160pgm.6;
+        Thu, 07 Apr 2022 05:33:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=oHuMdd+Tso54IS24zoaKEo7ZF3a1oq8FNtueInQMuKg=;
+        b=TP5m84milVRvG/vEdfXwdoGsaBa4DtHBo313pRzo5ALpNwKykawRcbsU4JHBwG928X
+         n5jRakad5YjG9eFkh+7QyNsQRSSkBceUG9GxSLvPM9ydqymcYFGa8t+cT16wAFVYtn5E
+         Tm0FxsfLb3ONv418/WLIsSgHsnwWPtYG1P7XhsyJBo1/YupRo+2Y1caU5ReQn2FTD9KR
+         oEfNV/qbGhraydqt6xDfrmotxOVI99RtQARty2IARenhNTZHIJ1pa2l7r4GamI/2KkDq
+         BmlszCrdY1v32v0rEq223xFv4QRc6SK6IN5w3cwfPHdg+hY2B1LoYIdhmzMBJnKAfFdl
+         yM+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=oHuMdd+Tso54IS24zoaKEo7ZF3a1oq8FNtueInQMuKg=;
+        b=bIccdu6pTAJ5HDDEqQ7+/rgLHh3QnrqdfxiO3Y/N/NK1QJ5b2gkqozESyw2MmV9tiA
+         g9THaHKl5unMj4+v4WW81AZNcJwTVIl7rHbnvaZpJuz7sahTGKXkLIPRD69En4dQaTjf
+         KeSKFOtU8mwEj29VszgrV14iVsuuFVoMFJBHj22AcSSNygzAgCZuZ7bephPsquCmO60s
+         0wZ+7D6FAVF+/odjKrYo44/K9u8hbvpJIr1dA1QIVHZ37/vCdmEC7i8P+XPPprgPAt2g
+         bvnTDVpSBaTrYijDqLtKsplifmKGFKBGuED8xukbEME/UQ5L2Y584AQGAs+kyUtuhGtm
+         DQhg==
+X-Gm-Message-State: AOAM533NZjxdT+lpEvz7+Ad5PcFqEXLzjZgQTBwKy3Su03twOtJHJfa/
+        y+qRsIOe/4QRi3I/ynQuj6WyIkeqzGzY7vIj
+X-Google-Smtp-Source: ABdhPJxaB7S5JM7L1Nse63e3q13TrwKZX/zgN6E55DEv72DlYwSESD8Cwg7AsnUwV84IfHCk/CWwgQ==
+X-Received: by 2002:a63:7f50:0:b0:386:2b5c:9d16 with SMTP id p16-20020a637f50000000b003862b5c9d16mr11244153pgn.153.1649334829156;
+        Thu, 07 Apr 2022 05:33:49 -0700 (PDT)
+Received: from ubuntu.mate (subs03-180-214-233-65.three.co.id. [180.214.233.65])
+        by smtp.gmail.com with ESMTPSA id nv11-20020a17090b1b4b00b001c71b0bf18bsm9484966pjb.11.2022.04.07.05.33.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Apr 2022 05:33:48 -0700 (PDT)
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     linux-doc@vger.kernel.org
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>, KVM <kvm@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Anup Patel <anup.patel@wdc.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: [PATCH v2] Documentation: kvm: Add missing line break in api.rst
+Date:   Thu,  7 Apr 2022 19:33:27 +0700
+Message-Id: <20220407123327.159079-1-bagasdotme@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/rw3NTfOGqReGPhMMpOdJFXU";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/rw3NTfOGqReGPhMMpOdJFXU
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Add missing line break separator between literal block and description
+of KVM_EXIT_RISCV_SBI.
 
-Hi Naresh,
+This fixes:
+</path/to/linux>/Documentation/virt/kvm/api.rst:6118: WARNING: Literal block ends without a blank line; unexpected unindent.
 
-On Thu, 7 Apr 2022 15:46:53 +0530 Naresh Kamboju <naresh.kamboju@linaro.org=
-> wrote:
->
-> perf build errors on i386 [1] on Linux next-20220407 [2]
->=20
-> usdt.c:1181:5: error: "__x86_64__" is not defined, evaluates to 0
-> [-Werror=3Dundef]
->  1181 | #if __x86_64__
->       |     ^~~~~~~~~~
-> usdt.c:1196:5: error: "__x86_64__" is not defined, evaluates to 0
-> [-Werror=3Dundef]
->  1196 | #if __x86_64__
->       |     ^~~~~~~~~~
-> cc1: all warnings being treated as errors
+Fixes: da40d85805937d ("RISC-V: KVM: Document RISC-V specific parts of KVM API")
+Cc: Anup Patel <anup.patel@wdc.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Albert Ou <aou@eecs.berkeley.edu>
+Cc: kvm@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-riscv@lists.infradead.org
+Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+---
+ Changes since v1 [1]:
+   - Rebased on v5.18-rc1
+   - Address Fixes tag problems reported by Stephen Rothwell [2] by
+     removing date and quote the original commit
 
-Caused by commit
+ [1]: https://lore.kernel.org/linux-doc/20220403065735.23859-1-bagasdotme@gmail.com/
+ [2]: https://lore.kernel.org/linux-next/20220407074844.110f9285@canb.auug.org.au/
 
-  4c59e584d158 ("libbpf: Add x86-specific USDT arg spec parsing logic")
+ Documentation/virt/kvm/api.rst | 1 +
+ 1 file changed, 1 insertion(+)
 
->   CC      /home/tuxbuild/.cache/tuxmake/builds/1/build/util/values.o
->   CC      /home/tuxbuild/.cache/tuxmake/builds/1/build/tests/backward-rin=
-g-buffer.o
->   CC      /home/tuxbuild/.cache/tuxmake/builds/1/build/tests/sdt.o
->   CC      /home/tuxbuild/.cache/tuxmake/builds/1/build/tests/is_printable=
-_array.o
->   CC      /home/tuxbuild/.cache/tuxmake/builds/1/build/util/debug.o
->   CC      /home/tuxbuild/.cache/tuxmake/builds/1/build/util/fncache.o
->   CC      /home/tuxbuild/.cache/tuxmake/builds/1/build/tests/bitmap.o
->   CC      /home/tuxbuild/.cache/tuxmake/builds/1/build/util/machine.o
-> libbpf.c: In function 'attach_uprobe':
-> libbpf.c:10946:50: error: format '%li' expects argument of type 'long
-> int *', but argument 4 has type 'size_t *' {aka 'unsigned int *'}
-> [-Werror=3Dformat=3D]
-> 10946 |         n =3D sscanf(func_name, "%m[a-zA-Z0-9_.]+%li", &func, &of=
-fset);
->       |                                                ~~^          ~~~~~=
-~~
->       |                                                  |          |
->       |                                                  long int *
-> size_t * {aka unsigned int *}
->       |                                                %i
-> cc1: all warnings being treated as errors
+diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+index d13fa66004672c..85c7abc51af521 100644
+--- a/Documentation/virt/kvm/api.rst
++++ b/Documentation/virt/kvm/api.rst
+@@ -6190,6 +6190,7 @@ Valid values for 'type' are:
+ 			unsigned long args[6];
+ 			unsigned long ret[2];
+ 		} riscv_sbi;
++
+ If exit reason is KVM_EXIT_RISCV_SBI then it indicates that the VCPU has
+ done a SBI call which is not handled by KVM RISC-V kernel module. The details
+ of the SBI call are available in 'riscv_sbi' member of kvm_run structure. The
 
-Caused by commit
+base-commit: 3123109284176b1532874591f7c81f3837bbdc17
+-- 
+An old man doll... just what I always wanted! - Clara
 
-  39f8dc43b7a0 ("libbpf: Add auto-attach for uprobes based on section name")
-
-> metadata:
->   git_ref: master
->   git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
->   git_sha: 2e9a9857569ec27e64d2ddd01294bbe3c736acb1
->   git_describe: next-20220407
->   kernel-config: https://builds.tuxbuild.com/27SL0lCnWoPP04Jn8zKQ5nEEX7i/=
-config
->   target_arch: i386
->=20
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
->=20
-> --
-> Linaro LKFT
-> https://lkft.linaro.org
->=20
->=20
-> [1] https://builds.tuxbuild.com/27SL0lCnWoPP04Jn8zKQ5nEEX7i/
-> [2] https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/-/jobs/2302706=
-510
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/rw3NTfOGqReGPhMMpOdJFXU
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJO180ACgkQAVBC80lX
-0Gwg0QgAlO/RQPm5kj5MwdctsdoMWBee9belDyZWV4sZvoToMlncDeyGATTg0XEa
-zB75m9NUEjgOLooNvLNWVC8HaXiODJTIh9rQfxAbMenQGnLQGK8lH37C6pZ4K0Ri
-brAyt5MdXr1N2PmHCzH9ULjX5lXMhIy/BETu29PMsqlhuzBdgLhJjuO/eV8ewLJH
-Siz0fTcQtjCK8uHH0wu5XYTGHm/ovTmDc4b/O8T9ToZWI/QQSF77bnBzxnI9DBI6
-4HIrlzwYHLolKqMP8RxePGMg4DiAxwC70wKGvJSNmG9aoEl2zd5fzMCVU3KjyRjf
-Ga+uU3PCwpSPryo8qn2DfJ6EB2Xrrg==
-=JNGK
------END PGP SIGNATURE-----
-
---Sig_/rw3NTfOGqReGPhMMpOdJFXU--

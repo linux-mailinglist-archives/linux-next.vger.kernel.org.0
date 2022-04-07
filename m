@@ -2,95 +2,120 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D89684F6D69
-	for <lists+linux-next@lfdr.de>; Wed,  6 Apr 2022 23:51:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88E5F4F71BD
+	for <lists+linux-next@lfdr.de>; Thu,  7 Apr 2022 03:52:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235850AbiDFVxp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 6 Apr 2022 17:53:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56928 "EHLO
+        id S233858AbiDGByl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 6 Apr 2022 21:54:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237441AbiDFVxb (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 6 Apr 2022 17:53:31 -0400
+        with ESMTP id S233993AbiDGByk (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 6 Apr 2022 21:54:40 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B94E863B9;
-        Wed,  6 Apr 2022 14:48:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28A02197AE3;
+        Wed,  6 Apr 2022 18:52:42 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KYdSF12Bbz4xQp;
-        Thu,  7 Apr 2022 07:48:44 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KYksb2gpgz4xYN;
+        Thu,  7 Apr 2022 11:52:35 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1649281725;
-        bh=DK+cW/YSbM9QgVsfA5avIq8Gu1o021YU+/DT6CxtWjU=;
+        s=201702; t=1649296357;
+        bh=37PlGlI3sxbpW9G0FpFMd9eeoJZa466BjwDqkD8YDE4=;
         h=Date:From:To:Cc:Subject:From;
-        b=laYmvDjk7ccbjaCiEwOdNagS8zFtObDx+4+vqJ03uQvo8LfOBqhjFjeYsA2eYx35Q
-         r5AZ6rKDEs6CAw8UkOULDPsV2NE7a4VygnZQNhK6NamiZoVPFPew1w+8jIRlsJS7fl
-         KAI8uu0WlaAy696klBOUFpiUT0OAsRyG/jTF8asv8YlVExOxzUToYOiIh3TZPDtqQ2
-         nfVoLBICXgvVRZtDOvC308vyl1AZWj/D3JqMhpBj/7fhaTnjZ0fMfDCDKErR8XK2IT
-         NOclIVFKqpnFvvlOxQZ5eAz8sOEiRwZArPYCHbly4K/NpZPXAs3/kG9JkRWQ/5+vCX
-         ZPL+8Su2nRd8A==
-Date:   Thu, 7 Apr 2022 07:48:44 +1000
+        b=T2GXYphQ1dElKh0u4lISQDZ/xGuhnbst8ttsLrbeUfQrGgYGkuAiN9WIVGJETX8+5
+         gMGKrd4sHb8cmS/UbtMgpcWKnfF6Cnt9DJux4ZdZXLxLm5QQ6oRGU0QQSvhRZeT9YL
+         CKN4qOZhBnJRehHM7I+8MDFEavU0ipd2o2nUA0OBimfIIlfIgucKqSspk1vVTdo4gB
+         tHYLT0l7vsbWHhc1NzgQJlV14fYwDy41quFqCst8r9uJrPtk73Exssdnzu0Z/2sHqf
+         7FJU9JHcnjDHvgnIjk3EC3y80ZTgVsH0L9RfO3Fczu1kqroWaUskoEykGWmibMTxOG
+         Rpt8e/z1SE3kA==
+Date:   Thu, 7 Apr 2022 11:52:23 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     Networking <netdev@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the kvm-fixes tree
-Message-ID: <20220407074844.110f9285@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Ricardo Ribalda <ribalda@chromium.org>
+Subject: linux-next: manual merge of the kunit-next tree with the net-next
+ tree
+Message-ID: <20220407115223.0b37dcea@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/+RrxcgKx5ma81EbkCOODyfU";
+Content-Type: multipart/signed; boundary="Sig_/RjfmePM/RmZdOu7RrCX12KI";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/+RrxcgKx5ma81EbkCOODyfU
+--Sig_/RjfmePM/RmZdOu7RrCX12KI
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-n commit
+Today's linux-next merge of the kunit-next tree got a conflict in:
 
-  c1be1ef1b4a7 ("Documentation: kvm: Add missing line break in api.rst")
+  net/mctp/test/route-test.c
 
-Fixes tag
+between commit:
 
-  Fixes: da40d85805937d (RISC-V: KVM: Document RISC-V specific parts of KVM=
- API, 2021-09-27)
+  f4b41f062c42 ("net: remove noblock parameter from skb_recv_datagram()")
 
-has these problem(s):
+from the net-next tree and commit:
 
-  - Subject does not match target commit subject
-    Just use
-	git log -1 --format=3D'Fixes: %h ("%s")'
+  741c9286ffad ("mctp: test: Use NULL macros")
 
-The date does not add anything.
+from the kunit-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/+RrxcgKx5ma81EbkCOODyfU
+diff --cc net/mctp/test/route-test.c
+index 24df29e135ed,17d9c49000c5..000000000000
+--- a/net/mctp/test/route-test.c
++++ b/net/mctp/test/route-test.c
+@@@ -360,8 -360,8 +360,8 @@@ static void mctp_test_route_input_sk(st
+ =20
+  	} else {
+  		KUNIT_EXPECT_NE(test, rc, 0);
+ -		skb2 =3D skb_recv_datagram(sock->sk, 0, 1, &rc);
+ +		skb2 =3D skb_recv_datagram(sock->sk, MSG_DONTWAIT, &rc);
+- 		KUNIT_EXPECT_PTR_EQ(test, skb2, NULL);
++ 		KUNIT_EXPECT_NULL(test, skb2);
+  	}
+ =20
+  	__mctp_route_test_fini(test, dev, rt, sock);
+
+--Sig_/RjfmePM/RmZdOu7RrCX12KI
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJOCrwACgkQAVBC80lX
-0Gxr6Af+KSn9hJ9N/4vtyfaVu1a3EwBDJCJ+TQEBOxdLW/cpZH1+ZkH3/9dpT2Wd
-1pmOzhKB92NCgZDHI0TcPWVyJcdKL7yPU3Ci+DhVcH6Qudr4bbG8OK4MdkZHAqHJ
-zAjX2yLcQFdk+xcxoAQHy9Iw+BD0VzC68Punaf3JJ8jHjI3p9QOFrMZkSWFFZjCU
-mOuvIo/I4hFZryudu2XbpEXnLtTMhzehfVaX+RcprFUred4Ku+EFsn/IUUcvuZy3
-Uctwuc5P2bnsb52Nb7LzqRrZFtXInqkUh99hfWoHTBs/20FLjI7XhqRHM8McN6Yl
-Y4hJLzLeBGZ+y+YMzg9f53fTTxRewg==
-=AOr2
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJOQ9cACgkQAVBC80lX
+0Gwk/Af+NX7EEjJKgtU1RbTjfSAt2U1E4LtxCoQX8Ycf8Uuj/TKZMLjuxaDy2C5Q
+CAgN3RC7O19PUoiiz9yhVb5xhxMVrZcxmVOSwCab4oGhxu7cqMSqLcAfLjQvpuy6
+D+P2sdvh8DgeAr35mzQJSPexGMrl2csxeN8p/mchxwiiNr39x5x3E5lJq5jol/kJ
+K9mzopQD2bF/RTegWATUKJBKfkv6r4OlIsElzav+qejRh6CNe3KJGWnL/G/7ElBU
+ACdefCGguzVI9BZndJsunAQwsL3BsN0KJoEnWws/zis9AXEtsl0QpBOvKvkMDqcJ
+Ukzg13xlMXDfyQf1bu35s1fkRSc5yg==
+=vPRf
 -----END PGP SIGNATURE-----
 
---Sig_/+RrxcgKx5ma81EbkCOODyfU--
+--Sig_/RjfmePM/RmZdOu7RrCX12KI--

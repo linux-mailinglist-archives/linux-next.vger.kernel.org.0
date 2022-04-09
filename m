@@ -2,96 +2,85 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73EB54FA536
-	for <lists+linux-next@lfdr.de>; Sat,  9 Apr 2022 07:42:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8B5F4FA5FF
+	for <lists+linux-next@lfdr.de>; Sat,  9 Apr 2022 10:30:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230024AbiDIFlA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 9 Apr 2022 01:41:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56862 "EHLO
+        id S235652AbiDIIcp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 9 Apr 2022 04:32:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbiDIFk7 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 9 Apr 2022 01:40:59 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE9A3129848;
-        Fri,  8 Apr 2022 22:38:51 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Kb3nh6TKcz4xdc;
-        Sat,  9 Apr 2022 15:38:48 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1649482729;
-        bh=ObCX1vpWKGpP32D7eKNxSqylo2gtE408p2KK16VnR2E=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=iSwPbjuJb7IYQcCke0Tm4PPXvyyXZKqgTkn5WU/JX10fH0ZkgO1m/1qkF68B3+EbG
-         H7quI84FqCFyGZktiFQ7APthTyfvZ+RAI0LZFcNCrYUPL8976NG1V5Q62TbFLFD9T2
-         5LBqW2zZqXdFgy4lhyIGA1JLQnGJB1K/TQVmgs+YC/2PSvQv/QyTCPEyy7TzHwrxpy
-         94VRLo/+u6bd/kA5Ybt/xsny7aVALRJpwnHS3ERDN5WcZeG3Hn9nacFLzsIPubO1xv
-         PV4672PI6lAxUuz/hIL4Ja124tPU8RqCdQpyh3//aYQf9u+rCT4Rre2vY9SIFXfp3E
-         G8lstgQqhNR9w==
-Date:   Sat, 9 Apr 2022 15:38:48 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Peter Chen <peter.chen@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: please clean up the usb-chipidea-fixes/next trees
-Message-ID: <20220409153848.4974ed6f@canb.auug.org.au>
-In-Reply-To: <20220409014702.GA3421@Peter>
-References: <20220406113242.3d7aefbd@canb.auug.org.au>
-        <20220409014702.GA3421@Peter>
+        with ESMTP id S230080AbiDIIco (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 9 Apr 2022 04:32:44 -0400
+Received: from a8-35.smtp-out.amazonses.com (a8-35.smtp-out.amazonses.com [54.240.8.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D4DDB7EA;
+        Sat,  9 Apr 2022 01:30:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1649493035;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+        bh=VKgZZKhpLzOES/8MDo6ThnaqOSsUk5I0EWd2dp2V45w=;
+        b=KkyGBsbyr0q6gtBgXhRGWdts83Y6JRSxQiWCfbJhWYptm/zOQ2LaxyZ8Qnxu342F
+        ObkX6fR0P9deEY/EXtsWVK5LNlcWv827CTiioLcVxF3AP4Eph0PuIhDwFo+SYvwUnOM
+        D13Uau8AAtzRmMgHyhzXF8aeUdbAGupFsbOHCD9w=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=6gbrjpgwjskckoa6a5zn6fwqkn67xbtw; d=amazonses.com; t=1649493035;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+        bh=VKgZZKhpLzOES/8MDo6ThnaqOSsUk5I0EWd2dp2V45w=;
+        b=gwWvilhhiNgvKLsvBiz7YSfyQ40Q4E+eyGHU79Zm25NkfxWex/6WsYhkQgEjFcJk
+        IC+Z0OnT7eEk1VgJFcnarfGsa07mdBVLNGR0mTudg3/2bUefEKUWYeneObPKplbXJg2
+        Y+cFMfdSVYq76SXlF3DyhXLYMQH6RD5drjwnddi8=
+From:   lkft@linaro.org
+To:     lkft@linaro.org
+Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        linux-next@vger.kernel.org, shuah@kernel.org
+Subject: lkft kselftest for next-20220408
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/d_w0jRhXnI9CxJ90Vtxpxfg";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Message-ID: <010001800d7249d1-e7ed44ab-a1a5-46ff-be98-02360be0965d-000000@email.amazonses.com>
+Date:   Sat, 9 Apr 2022 08:30:35 +0000
+Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
+X-SES-Outgoing: 2022.04.09-54.240.8.35
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,TO_EQ_FM_DIRECT_MX,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/d_w0jRhXnI9CxJ90Vtxpxfg
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+## Build
+* kernel: 5.18.0-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+* git branch: master
+* git commit: ff511c1c68a5a35ab0b3efb3c306fd80b10d74be
+* git describe: next-20220408
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220408
 
-Hi Peter,
+## Test Regressions (compared to next-20220401)
+No test regressions found.
 
-On Sat, 9 Apr 2022 09:47:02 +0800 Peter Chen <peter.chen@kernel.org> wrote:
->
-> On 22-04-06 11:32:42, Stephen Rothwell wrote:
-> >=20
-> > The usb-chipidea-fixes and -next trees have not been updated since Oct,
-> > 2021 and the -fixes tree is generating a conflict when merged.  Please
-> > clean them it up WRT Linus' tree as the only patches in them have been
-> > merged as other commits.
->=20
-> Sorry about that. I have a little busy these years, the USB patches
-> which went to my tree will go to the Greg's USB tree directly, I only
-> review these patches now. Would you please also delete my tree from
-> your merge list? Thanks.
+## Metric Regressions (compared to next-20220401)
+No metric regressions found.
 
-No worries, done.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
---=20
-Cheers,
-Stephen Rothwell
 
---Sig_/d_w0jRhXnI9CxJ90Vtxpxfg
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+## Test Fixes (compared to next-20220401)
+No test fixes found.
 
------BEGIN PGP SIGNATURE-----
+## Metric Fixes (compared to next-20220401)
+No metric fixes found.
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJRG+gACgkQAVBC80lX
-0GxBjAf+MG3c2L5nDdAbGma+1CZDmtxZ0dStXqVwo7hueewdxKNE7dgoBAssgOtw
-hFxaw1LNrI+iOjg790jm2PlESnNP2vTBu2u4SHSdwHA0VN+pZw1cGwU9g2ooR5/r
-Q05+N+bfdarzacPK0U4IPRtPnksmmnetVnLHes3nWONhhHmNuIjiGZ6Qmus/t0Ub
-sBMlLfTT+bDVMafRDuiiMzttjsrl/+2wQyJU+nRNNPOojxgjpABVpBSs02WuPOfl
-yZ4+w2fQNXQaePXP35ETBpLRaHBx/Ctej+E8V2qvoRRz0MHrq0bQOp1R7pUxJswe
-wwopiA+KIJxvGGHzqxM+qDOUHxmnAA==
-=z+zR
------END PGP SIGNATURE-----
+## Test result summary
+total: 0, pass: 0, fail: 0, skip: 0, xfail: 0
 
---Sig_/d_w0jRhXnI9CxJ90Vtxpxfg--
+## Build Summary
+
+## Test suites summary
+
+--
+Linaro LKFT
+https://lkft.linaro.org

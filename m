@@ -2,63 +2,63 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C57C74FA80A
-	for <lists+linux-next@lfdr.de>; Sat,  9 Apr 2022 15:11:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D36CB4FA8C6
+	for <lists+linux-next@lfdr.de>; Sat,  9 Apr 2022 15:52:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241893AbiDINNA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 9 Apr 2022 09:13:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45042 "EHLO
+        id S240769AbiDINzE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 9 Apr 2022 09:55:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241890AbiDINM7 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 9 Apr 2022 09:12:59 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B921443C0
-        for <linux-next@vger.kernel.org>; Sat,  9 Apr 2022 06:10:50 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id f3so10744225pfe.2
-        for <linux-next@vger.kernel.org>; Sat, 09 Apr 2022 06:10:50 -0700 (PDT)
+        with ESMTP id S236446AbiDINzD (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 9 Apr 2022 09:55:03 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 455953DDC2
+        for <linux-next@vger.kernel.org>; Sat,  9 Apr 2022 06:52:54 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id q36-20020a17090a17a700b001cb57a8da1cso2141962pja.0
+        for <linux-next@vger.kernel.org>; Sat, 09 Apr 2022 06:52:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernelci-org.20210112.gappssmtp.com; s=20210112;
         h=message-id:date:mime-version:content-transfer-encoding:subject:to
          :from;
-        bh=+uMO19y0E5ifLPuGhhoOYxTPLTATjBYShD27j0ANNpw=;
-        b=Q4KCv81ZDMBLfph0KGVChySUgogzv+VzgItqk3Mg+bxmybnP1nlOS7ZMwlj1H/upYI
-         II+OoAD7z6fx/PAB5r7xAiez8XYnxkJ7HkDmGkarF+6nYabnkT0tBHy95eBuiFJBKbst
-         8iuUpxRwTWU9yDQZKCMnuUgAi2jkoBU+b5R8ON4LqBvdHAg3j643b2vxaowmV93L3s7F
-         eBtIe1oO7sfjqtJhe1DwjmZkOnv/kup9YMhxtSdGd58CQJilnMIR7Zx+t1U3v4UgoUpb
-         wNNC8KciohDtD1Ky7idCS+5v1tGRTMf+eX7RuvCSrKGZMRJcGrBv4ClBhwxiCUIBU6V9
-         tx2Q==
+        bh=6WD8jKcI0VrfY06MIvBipifQdxF9dewaBbTyYh/8qYc=;
+        b=mftwvd/l1wdOVlLdtbF903GzmEjD6XzhI1FBouc1jYvJWAbkQQVba0KsAb2q3C+BOJ
+         1Q7zsCUeXjFn2oRpYR+Ws39j+hhCc5jV4dkhoJPiTFXPWSsEkrBmFnXMQVDIMpBJF/Ny
+         uJiGSgQhPQdhPN5SHyi73NJRmh1zdMCHk4ZQ9TvBOQFjBPftxfafEM3GfK7qK5nEfGks
+         Iu2sadQSQ+YNffeDooucL1NeGzhNFpughuSQBARkvCLaYoW1N15IhG9EmE3Wg6CT5KJY
+         tqMhUqKGbHP2mWNj1yYIpifPZQ0Q5LGgKNUd5iV4ancQTqrDH/QQMQrkYIL5sxIrWrWe
+         r+Xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version
          :content-transfer-encoding:subject:to:from;
-        bh=+uMO19y0E5ifLPuGhhoOYxTPLTATjBYShD27j0ANNpw=;
-        b=gINVxcgGYVq7f+Tbo60dHjJ46iflOCJNpushzn6/WU7c7iCkqtJ93yTqXm1vjdMiGG
-         +hyJFz4PbxkdeKHvMMDPNZztja2vK3pIaf1x6ejGh69cJEVzGPvgXrm5boPGAmpIn+yd
-         GT74jkUwgmjOxEA9ZyluZTivO/yi6txq3suKj4mXeewN8CcbOKXzJFwhxjuI+PNzTrDC
-         NMeQzIwyxX1wz9L7J0wmDol5nLbV6maHezCwDTO8GKO07LFF6nzJdv/hAzUshZqSqgl6
-         Nq3oA78M6FhR+Vq/kUScLE/voWYL2ZFLNYmMkgQmmOFxVELfScY4qT4quAfp7irGSQeX
-         i6yQ==
-X-Gm-Message-State: AOAM531F4oDwRGstUuvFt5BZPoljdYtLMVLPwmGinnM9uxGNISn3rwgV
-        LNZ4BrIIl6u1OJ1qEXD0PgT25pAgM3DwZ3UO
-X-Google-Smtp-Source: ABdhPJxB0szxbFYLvYhhk46PB+KrggozE9si4QWzA5qNl+HToejzidoX577W8qbW2QtL2PjGizZdjA==
-X-Received: by 2002:a65:5605:0:b0:399:4e2f:413d with SMTP id l5-20020a655605000000b003994e2f413dmr19062960pgs.504.1649509848941;
-        Sat, 09 Apr 2022 06:10:48 -0700 (PDT)
+        bh=6WD8jKcI0VrfY06MIvBipifQdxF9dewaBbTyYh/8qYc=;
+        b=y5S0yFTp88Xt7q0dFS4HxI2sD8PwjRjGZpQfN8o8WzTc35KGR/IUUyNzBHi677wM50
+         YZUrkWuRaUqf8hl7Bs8e7CVcK53QmZiyej4/LF5f2WkRTqRObXVZfRqEU354mCXK5hXG
+         ULv4IfzYp4nHvL2nzc0WQ4gWZmKTHD1ESm2IsfuG3G79If5ou2n9rapaYZ+nU4iFPDIm
+         27c7oHORnZY6W/Ep+ZdeNe8xCOHt2qGEvsH4ETufmi7S9g7Exjp9pDxOomS/NjmXmJW5
+         ZksdqlvRIF2gTtRAjHWK59pCXEPbzsH8PYatxPjkO97TRnDAE9CfSGkf7uC14SVxXRWB
+         JznA==
+X-Gm-Message-State: AOAM530LTPuwRk7FCZR1UXRVLHJKqULKdJhSyRt10QLuJF94GZW6g8f6
+        Nf2dq9t1LFc95E0DueumV+eFu0a6W7o652jH
+X-Google-Smtp-Source: ABdhPJzJtptM2QkyRwRvZ2iWrgh0y9dOaARUeg3GkVH/FArK2N0qoO67ibzx2/KtVM5tyBBcYVdHvg==
+X-Received: by 2002:a17:90b:1e4d:b0:1c7:467c:e229 with SMTP id pi13-20020a17090b1e4d00b001c7467ce229mr26855121pjb.52.1649512372944;
+        Sat, 09 Apr 2022 06:52:52 -0700 (PDT)
 Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id i2-20020a17090a138200b001cb6512b579sm1981150pja.44.2022.04.09.06.10.48
+        by smtp.gmail.com with ESMTPSA id k187-20020a636fc4000000b003983a01b896sm24426989pgc.90.2022.04.09.06.52.52
         for <linux-next@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 09 Apr 2022 06:10:48 -0700 (PDT)
-Message-ID: <625185d8.1c69fb81.bc0cd.4530@mx.google.com>
-Date:   Sat, 09 Apr 2022 06:10:48 -0700 (PDT)
+        Sat, 09 Apr 2022 06:52:52 -0700 (PDT)
+Message-ID: <62518fb4.1c69fb81.93593.15e0@mx.google.com>
+Date:   Sat, 09 Apr 2022 06:52:52 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-Kernelci-Tree: next
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Kernel: v5.18-rc1-427-g02f3bd309a78c
+X-Kernelci-Branch: master
+X-Kernelci-Kernel: next-20220408
 X-Kernelci-Report-Type: build
-Subject: next/pending-fixes build: 197 builds: 2 failed, 195 passed, 6 errors,
- 6 warnings (v5.18-rc1-427-g02f3bd309a78c)
+Subject: next/master build: 233 builds: 4 failed, 229 passed, 10 errors,
+ 52 warnings (next-20220408)
 To:     linux-next@vger.kernel.org
 From:   "kernelci.org bot" <bot@kernelci.org>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -70,22 +70,24 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes build: 197 builds: 2 failed, 195 passed, 6 errors, 6 war=
-nings (v5.18-rc1-427-g02f3bd309a78c)
+next/master build: 233 builds: 4 failed, 229 passed, 10 errors, 52 warnings=
+ (next-20220408)
 
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.18-rc1-427-g02f3bd309a78c/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20220408/
 
 Tree: next
-Branch: pending-fixes
-Git Describe: v5.18-rc1-427-g02f3bd309a78c
-Git Commit: 02f3bd309a78c84c8e12ff44a3fd4de16d1180c3
+Branch: master
+Git Describe: next-20220408
+Git Commit: ff511c1c68a5a35ab0b3efb3c306fd80b10d74be
 Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
 Built: 7 unique architectures
 
 Build Failures Detected:
 
 arm:
+    allmodconfig: (clang-14) FAIL
+    allmodconfig: (gcc-10) FAIL
     rpc_defconfig: (gcc-10) FAIL
 
 mips:
@@ -98,6 +100,14 @@ arc:
 arm64:
 
 arm:
+    allmodconfig (clang-14): 3 errors, 14 warnings
+    allmodconfig (gcc-10): 1 error
+    aspeed_g5_defconfig (clang-14): 10 warnings
+    cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (clang-13): 6 =
+warnings
+    cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (clang-13=
+): 6 warnings
+    multi_v7_defconfig (clang-14): 10 warnings
     rpc_defconfig (gcc-10): 2 errors
 
 i386:
@@ -121,13 +131,26 @@ Errors summary:
 
     4    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=
 =80=98-mhard-float=E2=80=99
+    1    drivers/net/wireless/realtek/rtw89/ser.c:397:2: error: unannotated=
+ fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
+    1    drivers/gpu/drm/selftests/test-drm_mm.c:372:12: error: stack frame=
+ size (1040) exceeds limit (1024) in '__igt_reserve' [-Werror,-Wframe-large=
+r-than]
+    1    crypto/wp512.c:782:13: error: stack frame size (1168) exceeds limi=
+t (1024) in 'wp512_process_buffer' [-Werror,-Wframe-larger-than]
     1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
 =3D0x'
     1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
 =3D0x'
+    1    ERROR: modpost: "__aeabi_uldivmod" [drivers/gpu/drm/amd/amdgpu/amd=
+gpu.ko] undefined!
 
 Warnings summary:
 
+    24   clang: warning: argument unused during compilation: '-march=3Darmv=
+6k' [-Wunused-command-line-argument]
+    22   clang: warning: argument unused during compilation: '-march=3Darmv=
+7-a' [-Wunused-command-line-argument]
     3    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
 e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
 ted "0,0"
@@ -178,8 +201,61 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+allmodconfig (arm, clang-14) =E2=80=94 FAIL, 3 errors, 14 warnings, 0 secti=
+on mismatches
+
+Errors:
+    crypto/wp512.c:782:13: error: stack frame size (1168) exceeds limit (10=
+24) in 'wp512_process_buffer' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/selftests/test-drm_mm.c:372:12: error: stack frame size=
+ (1040) exceeds limit (1024) in '__igt_reserve' [-Werror,-Wframe-larger-tha=
+n]
+    drivers/net/wireless/realtek/rtw89/ser.c:397:2: error: unannotated fall=
+-through between switch labels [-Werror,-Wimplicit-fallthrough]
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section m=
 ismatches
+
+Errors:
+    ERROR: modpost: "__aeabi_uldivmod" [drivers/gpu/drm/amd/amdgpu/amdgpu.k=
+o] undefined!
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -188,8 +264,18 @@ n mismatches
 
 ---------------------------------------------------------------------------=
 -----
-allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
+allnoconfig (i386, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -205,6 +291,33 @@ n mismatches
 -----
 aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
 ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, clang-14) =E2=80=94 PASS, 0 errors, 10 warnings, =
+0 section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
 
 ---------------------------------------------------------------------------=
 -----
@@ -333,6 +446,102 @@ on mismatches
 
 ---------------------------------------------------------------------------=
 -----
+cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (arm64, clang-13=
+) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chromebook=
+ (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatch=
+es
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
+tches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
+tches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-chrom=
+ebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
+matches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
+=E2=80=94 PASS, 0 errors, 6 warnings, 0 section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
+3) =E2=80=94 PASS, 0 errors, 6 warnings, 0 section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86-chr=
+omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86-chr=
+omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-chro=
+mebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (x86_64, clang=
+-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chromebook=
+ (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatc=
+hes
+
+---------------------------------------------------------------------------=
+-----
 cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
  section mismatches
 
@@ -345,6 +554,11 @@ cu1830-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
 -----
 davinci_all_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
  section mismatches
+
+---------------------------------------------------------------------------=
+-----
+db1xxx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -373,8 +587,33 @@ ismatches
 
 ---------------------------------------------------------------------------=
 -----
+defconfig (arm64, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_16K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-14) =E2=80=94 PASS, 0 er=
+rors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
 defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
 s, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_EFI=3Dn (riscv, clang-14) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -385,6 +624,11 @@ s, 0 warnings, 0 section mismatches
 -----
 defconfig+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
 ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 wa=
+rnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -517,6 +761,11 @@ arnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
+hisi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
 hsdk_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
 n mismatches
 
@@ -524,6 +773,11 @@ n mismatches
 -----
 i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
 on mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -554,6 +808,11 @@ section mismatches
 -----
 iop32x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
 ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip22_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -729,6 +988,11 @@ tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
+mps2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
 mtx1_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
 on mismatches
 
@@ -744,8 +1008,40 @@ ction mismatches
 
 ---------------------------------------------------------------------------=
 -----
+multi_v5_defconfig (arm, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
 multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
 ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, clang-14) =E2=80=94 PASS, 0 errors, 10 warnings, 0=
+ section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
 
 ---------------------------------------------------------------------------=
 -----
@@ -759,23 +1055,18 @@ multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-10) =E2=80=
 
 ---------------------------------------------------------------------------=
 -----
+multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0=
+ warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
 multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
  errors, 0 warnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-multi_v7_defconfig+crypto (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
 multi_v7_defconfig+debug (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
 , 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+ima (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -859,6 +1150,11 @@ ction mismatches
 
 ---------------------------------------------------------------------------=
 -----
+palmz72_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
 pcm027_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
 ion mismatches
 
@@ -879,6 +1175,21 @@ ion mismatches
 
 ---------------------------------------------------------------------------=
 -----
+pxa255-idp_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa910_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
 pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
  mismatches
 
@@ -886,6 +1197,11 @@ pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
 -----
 qcom_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
 n mismatches
+
+---------------------------------------------------------------------------=
+-----
+qi_lb60_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1118,6 +1434,11 @@ ection mismatches
 
 ---------------------------------------------------------------------------=
 -----
+x86_64_defconfig (x86_64, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
 x86_64_defconfig+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
 gs, 0 section mismatches
 
@@ -1151,6 +1472,11 @@ nings, 0 section mismatches
 -----
 x86_64_defconfig+x86-chromebook (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, =
 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors=
+, 0 warnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----

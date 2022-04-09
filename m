@@ -2,77 +2,97 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB6834FA166
-	for <lists+linux-next@lfdr.de>; Sat,  9 Apr 2022 03:47:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58C4C4FA517
+	for <lists+linux-next@lfdr.de>; Sat,  9 Apr 2022 07:26:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233130AbiDIBtS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 8 Apr 2022 21:49:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60170 "EHLO
+        id S233043AbiDIFZu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 9 Apr 2022 01:25:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbiDIBtS (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 8 Apr 2022 21:49:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C16F38DB3;
-        Fri,  8 Apr 2022 18:47:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S232034AbiDIFZt (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 9 Apr 2022 01:25:49 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF08126544;
+        Fri,  8 Apr 2022 22:23:38 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BD3956221F;
-        Sat,  9 Apr 2022 01:47:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11AD7C385A1;
-        Sat,  9 Apr 2022 01:47:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649468832;
-        bh=3QQ/+sw7zjk5GcFkLao0bBqHI5QBDVe2Le75SeHVzv0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IMemyBydUGRiLyonnv9uUGsm2/mEYJQjyCeQd9xFCb7nxLjlczmTyNjnA0E/dEcj5
-         fkwTuN/aiQnse0UYbbJe0SW4ygxSM+C2gNAA+MrW2iHPbWfT2u5jA8awS/oZvQaPVG
-         IEyAZo5KcCS2nufnrQpjlBkCG19ibMjltl1voxuykz7HT64ncFFlMFArh9q/IsxiFF
-         3lGdP4DGfrRXIY97uW/+L9ShcBE3RnQm6+cIgoHO1U8B5EdqGOl+4pbmuMWtF8gW1+
-         bJ2wYoXdEeCWy4bf+7oH6A/2wVVb/zLG2qoy1m2nHj0YUYdlxc8w38LFojbglnQBzn
-         ZP8DS8mxA6gFQ==
-Date:   Sat, 9 Apr 2022 09:47:02 +0800
-From:   Peter Chen <peter.chen@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Kb3S41h1Zz4xR1;
+        Sat,  9 Apr 2022 15:23:32 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1649481814;
+        bh=XobdU+KeJLZu1qvT7Shd/7p/QSg0qDaTgRMNjR5XoMU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=KRRiTcTE/7nWNj5+DEE4q1Jk2rwZkKwnhePa5KtDgsonSbB1uiUgJhPc23Qwxx+6A
+         s8kv1MA1KbCOiIO3Ovf8rAW0p1cIHLVHhJzXUQ6EL8ZTYtCYwJBr8gQfkOwXcWz8km
+         VDbjEdz68UAtA1GoI8sTZEmy0rug5Oao/fo6v31MK2iYGIXktgvJyz/eqK4oP5XVCv
+         2ddX//Eaiax1Nys555nud/3Uf400gwDOyLDWQVGdZuaoncJ8dLPa7qTwSIzKf0T3Ob
+         Pm4jqZ66WH3CVnQTjh2aA/dHu9d/v14yEXbresCEoPZyO8m+zgUhhYJYmBxhbRuit6
+         vTFTr52uQp+nw==
+Date:   Sat, 9 Apr 2022 15:23:30 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Reto Buerki <reet@codelabs.ch>,
+        Adrian-Ken Rueegsegger <ken@codelabs.ch>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: please clean up the usb-chipidea-fixes/next trees
-Message-ID: <20220409014702.GA3421@Peter>
-References: <20220406113242.3d7aefbd@canb.auug.org.au>
+Subject: linux-next: Fixes tag needs some work in the tip tree
+Message-ID: <20220409152330.6dad275f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220406113242.3d7aefbd@canb.auug.org.au>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/+G/Ml90U_EcHFfMG+TGy7mX";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 22-04-06 11:32:42, Stephen Rothwell wrote:
-> Hi all,
-> 
-> [Try again to an address that may work ...]
-> 
-> The usb-chipidea-fixes and -next trees have not been updated since Oct,
-> 2021 and the -fixes tree is generating a conflict when merged.  Please
-> clean them it up WRT Linus' tree as the only patches in them have been
-> merged as other commits.
-> 
+--Sig_/+G/Ml90U_EcHFfMG+TGy7mX
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Hi Stephen,
+Hi all,
 
-Sorry about that. I have a little busy these years, the USB patches
-which went to my tree will go to the Greg's USB tree directly, I only
-review these patches now. Would you please also delete my tree from
-your merge list? Thanks.
+In commit
 
--- 
+  59b18a1e65b7 ("x86/msi: Fix msi message data shadow struct")
 
-Thanks,
-Peter Chen
+Fixes tag
 
+  Fixes: 6285aa50736 ("x86/msi: Provide msi message shadow structs")
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+    This can be fixed for the future by setting core.abbrev to 12 (or
+    more) or (for git v2.11 or later) just making sure it is not set
+    (or set to "auto").
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/+G/Ml90U_EcHFfMG+TGy7mX
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJRGFIACgkQAVBC80lX
+0Gw0mQf9EiXvxWlXgxNd8AlgARzntrVtoKuMclUuX5kLfsJ4dGLKqqaAQB5I59o3
+ORDmIP3Lu68t6sF+qrdU6Hgyg/kDwc7bR3UpeXn/d/F2bF0UgTKs6I2OsVUu48Xb
+M+M7B8MFP/cIy+U+xEhDQ9gJuNeDbG6bV2jyPh4RMr5C7trTuct/WJegKdWo7wiB
+oOj9zyXkTbJa+JVDhBA5Mk4SmsTrp2Wdo1urUtwCx8RBuFjjABjHzhAZ1PvlH5bW
+REqqSv2iOUtUfF2d2aouEY2QldoMXff8DlK5kzPV0zUX7G8MiMyf2tX9kGyE43y3
+fjzDL008p07H4J+9VfKL/+dH6W1+vw==
+=Wi0U
+-----END PGP SIGNATURE-----
+
+--Sig_/+G/Ml90U_EcHFfMG+TGy7mX--

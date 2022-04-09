@@ -2,85 +2,77 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 583DC4F9F99
-	for <lists+linux-next@lfdr.de>; Sat,  9 Apr 2022 00:31:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB6834FA166
+	for <lists+linux-next@lfdr.de>; Sat,  9 Apr 2022 03:47:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237957AbiDHWcu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 8 Apr 2022 18:32:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44694 "EHLO
+        id S233130AbiDIBtS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 8 Apr 2022 21:49:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235322AbiDHWct (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 8 Apr 2022 18:32:49 -0400
-Received: from a48-34.smtp-out.amazonses.com (a48-34.smtp-out.amazonses.com [54.240.48.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7249DFF99;
-        Fri,  8 Apr 2022 15:30:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1649457043;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=JlOno0RbPOR+ZrFBAzTWV718fPFn/q9yNd9mErrD8Yw=;
-        b=QaJM/fYEBruqSE0/fXDd73EuWxSHURPRly+ZXZSObfb/LN+XRo2NeCwISfpLcl6P
-        yrOWNrCMnHvBuekf50UTTdl+K1vrQN56NFJK2WIHXEkqqKgiA2JV2EXCVL82KKfBWeP
-        k50vzT5j4olVAqiiN8oD08n3xVpixa1+rJ75WcxI=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=6gbrjpgwjskckoa6a5zn6fwqkn67xbtw; d=amazonses.com; t=1649457043;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=JlOno0RbPOR+ZrFBAzTWV718fPFn/q9yNd9mErrD8Yw=;
-        b=jHUNJ8anymvQmHARhBo5SXnz4M/r/3y8PwfsGafUxQNA69d/qBz+kaKyfXZS43oG
-        0Jryvh923soYMIizb+Y2xHKoSpcq2MFcyWZJaOPoLuDEGbZcRUpyIEOz2j6qQYt7bPi
-        HAX9Xm/BbpcifpYblsyTeo7LAPfKpmQc3Ue9bkkw=
-From:   lkft@linaro.org
-To:     lkft@linaro.org
-Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
-        linux-next@vger.kernel.org, shuah@kernel.org
-Subject: lkft kselftest for next-20220406
+        with ESMTP id S229490AbiDIBtS (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 8 Apr 2022 21:49:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C16F38DB3;
+        Fri,  8 Apr 2022 18:47:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BD3956221F;
+        Sat,  9 Apr 2022 01:47:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11AD7C385A1;
+        Sat,  9 Apr 2022 01:47:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649468832;
+        bh=3QQ/+sw7zjk5GcFkLao0bBqHI5QBDVe2Le75SeHVzv0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IMemyBydUGRiLyonnv9uUGsm2/mEYJQjyCeQd9xFCb7nxLjlczmTyNjnA0E/dEcj5
+         fkwTuN/aiQnse0UYbbJe0SW4ygxSM+C2gNAA+MrW2iHPbWfT2u5jA8awS/oZvQaPVG
+         IEyAZo5KcCS2nufnrQpjlBkCG19ibMjltl1voxuykz7HT64ncFFlMFArh9q/IsxiFF
+         3lGdP4DGfrRXIY97uW/+L9ShcBE3RnQm6+cIgoHO1U8B5EdqGOl+4pbmuMWtF8gW1+
+         bJ2wYoXdEeCWy4bf+7oH6A/2wVVb/zLG2qoy1m2nHj0YUYdlxc8w38LFojbglnQBzn
+         ZP8DS8mxA6gFQ==
+Date:   Sat, 9 Apr 2022 09:47:02 +0800
+From:   Peter Chen <peter.chen@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: please clean up the usb-chipidea-fixes/next trees
+Message-ID: <20220409014702.GA3421@Peter>
+References: <20220406113242.3d7aefbd@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-Message-ID: <010001800b4d1847-89f89015-ddad-488e-92d4-a7cafaff5056-000000@email.amazonses.com>
-Date:   Fri, 8 Apr 2022 22:30:43 +0000
-Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2022.04.08-54.240.48.34
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,TO_EQ_FM_DIRECT_MX,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220406113242.3d7aefbd@canb.auug.org.au>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-## Build
-* kernel: 5.18.0-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-* git branch: master
-* git commit: 109f6d10ec17302c4666f7df3dfa0e31d8589d41
-* git describe: next-20220406
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220406
+On 22-04-06 11:32:42, Stephen Rothwell wrote:
+> Hi all,
+> 
+> [Try again to an address that may work ...]
+> 
+> The usb-chipidea-fixes and -next trees have not been updated since Oct,
+> 2021 and the -fixes tree is generating a conflict when merged.  Please
+> clean them it up WRT Linus' tree as the only patches in them have been
+> merged as other commits.
+> 
 
-## Test Regressions (compared to next-20220401)
-No test regressions found.
+Hi Stephen,
 
-## Metric Regressions (compared to next-20220401)
-No metric regressions found.
+Sorry about that. I have a little busy these years, the USB patches
+which went to my tree will go to the Greg's USB tree directly, I only
+review these patches now. Would you please also delete my tree from
+your merge list? Thanks.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+-- 
 
+Thanks,
+Peter Chen
 
-## Test Fixes (compared to next-20220401)
-No test fixes found.
-
-## Metric Fixes (compared to next-20220401)
-No metric fixes found.
-
-## Test result summary
-total: 0, pass: 0, fail: 0, skip: 0, xfail: 0
-
-## Build Summary
-
-## Test suites summary
-
---
-Linaro LKFT
-https://lkft.linaro.org

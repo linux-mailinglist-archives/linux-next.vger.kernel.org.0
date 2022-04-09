@@ -2,48 +2,46 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58C4C4FA517
-	for <lists+linux-next@lfdr.de>; Sat,  9 Apr 2022 07:26:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73EB54FA536
+	for <lists+linux-next@lfdr.de>; Sat,  9 Apr 2022 07:42:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233043AbiDIFZu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 9 Apr 2022 01:25:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33280 "EHLO
+        id S230024AbiDIFlA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 9 Apr 2022 01:41:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232034AbiDIFZt (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 9 Apr 2022 01:25:49 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF08126544;
-        Fri,  8 Apr 2022 22:23:38 -0700 (PDT)
+        with ESMTP id S229741AbiDIFk7 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 9 Apr 2022 01:40:59 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE9A3129848;
+        Fri,  8 Apr 2022 22:38:51 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Kb3S41h1Zz4xR1;
-        Sat,  9 Apr 2022 15:23:32 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Kb3nh6TKcz4xdc;
+        Sat,  9 Apr 2022 15:38:48 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1649481814;
-        bh=XobdU+KeJLZu1qvT7Shd/7p/QSg0qDaTgRMNjR5XoMU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=KRRiTcTE/7nWNj5+DEE4q1Jk2rwZkKwnhePa5KtDgsonSbB1uiUgJhPc23Qwxx+6A
-         s8kv1MA1KbCOiIO3Ovf8rAW0p1cIHLVHhJzXUQ6EL8ZTYtCYwJBr8gQfkOwXcWz8km
-         VDbjEdz68UAtA1GoI8sTZEmy0rug5Oao/fo6v31MK2iYGIXktgvJyz/eqK4oP5XVCv
-         2ddX//Eaiax1Nys555nud/3Uf400gwDOyLDWQVGdZuaoncJ8dLPa7qTwSIzKf0T3Ob
-         Pm4jqZ66WH3CVnQTjh2aA/dHu9d/v14yEXbresCEoPZyO8m+zgUhhYJYmBxhbRuit6
-         vTFTr52uQp+nw==
-Date:   Sat, 9 Apr 2022 15:23:30 +1000
+        s=201702; t=1649482729;
+        bh=ObCX1vpWKGpP32D7eKNxSqylo2gtE408p2KK16VnR2E=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=iSwPbjuJb7IYQcCke0Tm4PPXvyyXZKqgTkn5WU/JX10fH0ZkgO1m/1qkF68B3+EbG
+         H7quI84FqCFyGZktiFQ7APthTyfvZ+RAI0LZFcNCrYUPL8976NG1V5Q62TbFLFD9T2
+         5LBqW2zZqXdFgy4lhyIGA1JLQnGJB1K/TQVmgs+YC/2PSvQv/QyTCPEyy7TzHwrxpy
+         94VRLo/+u6bd/kA5Ybt/xsny7aVALRJpwnHS3ERDN5WcZeG3Hn9nacFLzsIPubO1xv
+         PV4672PI6lAxUuz/hIL4Ja124tPU8RqCdQpyh3//aYQf9u+rCT4Rre2vY9SIFXfp3E
+         G8lstgQqhNR9w==
+Date:   Sat, 9 Apr 2022 15:38:48 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Reto Buerki <reet@codelabs.ch>,
-        Adrian-Ken Rueegsegger <ken@codelabs.ch>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Peter Chen <peter.chen@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the tip tree
-Message-ID: <20220409152330.6dad275f@canb.auug.org.au>
+Subject: Re: linux-next: please clean up the usb-chipidea-fixes/next trees
+Message-ID: <20220409153848.4974ed6f@canb.auug.org.au>
+In-Reply-To: <20220409014702.GA3421@Peter>
+References: <20220406113242.3d7aefbd@canb.auug.org.au>
+        <20220409014702.GA3421@Peter>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/+G/Ml90U_EcHFfMG+TGy7mX";
+Content-Type: multipart/signed; boundary="Sig_/d_w0jRhXnI9CxJ90Vtxpxfg";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -54,45 +52,46 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/+G/Ml90U_EcHFfMG+TGy7mX
+--Sig_/d_w0jRhXnI9CxJ90Vtxpxfg
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Peter,
 
-In commit
+On Sat, 9 Apr 2022 09:47:02 +0800 Peter Chen <peter.chen@kernel.org> wrote:
+>
+> On 22-04-06 11:32:42, Stephen Rothwell wrote:
+> >=20
+> > The usb-chipidea-fixes and -next trees have not been updated since Oct,
+> > 2021 and the -fixes tree is generating a conflict when merged.  Please
+> > clean them it up WRT Linus' tree as the only patches in them have been
+> > merged as other commits.
+>=20
+> Sorry about that. I have a little busy these years, the USB patches
+> which went to my tree will go to the Greg's USB tree directly, I only
+> review these patches now. Would you please also delete my tree from
+> your merge list? Thanks.
 
-  59b18a1e65b7 ("x86/msi: Fix msi message data shadow struct")
-
-Fixes tag
-
-  Fixes: 6285aa50736 ("x86/msi: Provide msi message shadow structs")
-
-has these problem(s):
-
-  - SHA1 should be at least 12 digits long
-    This can be fixed for the future by setting core.abbrev to 12 (or
-    more) or (for git v2.11 or later) just making sure it is not set
-    (or set to "auto").
+No worries, done.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/+G/Ml90U_EcHFfMG+TGy7mX
+--Sig_/d_w0jRhXnI9CxJ90Vtxpxfg
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJRGFIACgkQAVBC80lX
-0Gw0mQf9EiXvxWlXgxNd8AlgARzntrVtoKuMclUuX5kLfsJ4dGLKqqaAQB5I59o3
-ORDmIP3Lu68t6sF+qrdU6Hgyg/kDwc7bR3UpeXn/d/F2bF0UgTKs6I2OsVUu48Xb
-M+M7B8MFP/cIy+U+xEhDQ9gJuNeDbG6bV2jyPh4RMr5C7trTuct/WJegKdWo7wiB
-oOj9zyXkTbJa+JVDhBA5Mk4SmsTrp2Wdo1urUtwCx8RBuFjjABjHzhAZ1PvlH5bW
-REqqSv2iOUtUfF2d2aouEY2QldoMXff8DlK5kzPV0zUX7G8MiMyf2tX9kGyE43y3
-fjzDL008p07H4J+9VfKL/+dH6W1+vw==
-=Wi0U
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJRG+gACgkQAVBC80lX
+0GxBjAf+MG3c2L5nDdAbGma+1CZDmtxZ0dStXqVwo7hueewdxKNE7dgoBAssgOtw
+hFxaw1LNrI+iOjg790jm2PlESnNP2vTBu2u4SHSdwHA0VN+pZw1cGwU9g2ooR5/r
+Q05+N+bfdarzacPK0U4IPRtPnksmmnetVnLHes3nWONhhHmNuIjiGZ6Qmus/t0Ub
+sBMlLfTT+bDVMafRDuiiMzttjsrl/+2wQyJU+nRNNPOojxgjpABVpBSs02WuPOfl
+yZ4+w2fQNXQaePXP35ETBpLRaHBx/Ctej+E8V2qvoRRz0MHrq0bQOp1R7pUxJswe
+wwopiA+KIJxvGGHzqxM+qDOUHxmnAA==
+=z+zR
 -----END PGP SIGNATURE-----
 
---Sig_/+G/Ml90U_EcHFfMG+TGy7mX--
+--Sig_/d_w0jRhXnI9CxJ90Vtxpxfg--

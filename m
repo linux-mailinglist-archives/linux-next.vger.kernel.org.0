@@ -2,63 +2,63 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C7514FC5F6
-	for <lists+linux-next@lfdr.de>; Mon, 11 Apr 2022 22:42:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E0E54FC6E6
+	for <lists+linux-next@lfdr.de>; Mon, 11 Apr 2022 23:46:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231981AbiDKUo6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 11 Apr 2022 16:44:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45050 "EHLO
+        id S231344AbiDKVsN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 11 Apr 2022 17:48:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231387AbiDKUo5 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 11 Apr 2022 16:44:57 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B17F8E0FD
-        for <linux-next@vger.kernel.org>; Mon, 11 Apr 2022 13:42:40 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id md20-20020a17090b23d400b001cb70ef790dso443394pjb.5
-        for <linux-next@vger.kernel.org>; Mon, 11 Apr 2022 13:42:40 -0700 (PDT)
+        with ESMTP id S235312AbiDKVsL (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 11 Apr 2022 17:48:11 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B6B1A80D
+        for <linux-next@vger.kernel.org>; Mon, 11 Apr 2022 14:45:54 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id b2-20020a17090a010200b001cb0c78db57so662416pjb.2
+        for <linux-next@vger.kernel.org>; Mon, 11 Apr 2022 14:45:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernelci-org.20210112.gappssmtp.com; s=20210112;
         h=message-id:date:mime-version:content-transfer-encoding:subject:to
          :from;
-        bh=t6K3lJOzdRq3DoH37FNPJ8huMZjJN5YFUEAPHkVrwMY=;
-        b=uUDLDUlZJHo5GtIS0PuvOzchpc7Z6Fbubvg7SWtaJ2140Y2DNPFFdyzfqb6kMt7zUF
-         2lxgbuYmzscL9A52TdFYljekledbBumGZIjIRDOpqJUsYTwtxcTxnnsODQ4YHpFFYDKM
-         81mhDh7M2SESCp1VsuBAYHl8jOzW6Vf1s/QMCm11EkTNxTKoO1VIbtIm+KlL78ozDXRY
-         JsQE9HdswZgxnJitA3DzsuKVEwrP8DdT53nBsoEEio4OfmhV2GYKxskV01itwa6JzTgJ
-         y0mFhQ2jCV6ow5onEttKAmL/YeEm/Gwmks/0Oeq42ZIbfbC+6kZht9yJjwivJDj6JOHl
-         wgFg==
+        bh=2rYL+CwEGtulaajPVFSX3vzM9nKQPEgInHUP8Y8QDY0=;
+        b=4Ih/cSF7D3W3BZ/Rqb4Ze9npFOb9ONcKeqM9TjXqLJ+5Tlyx5vud92JVuh9CjXKS5b
+         ZS/975pmlQ+SbnZe+MSOweJrV0xA5wEXTS2HHG/h6aBa+n6/TCEtvXsQOz2fsX/aPtlz
+         RX/XEUaKx+00Q7aILyuzNLpqgranJR094ZNsncQC0xfxccTVVfF2oUHahwRh0JfB5ndc
+         NzxlkYka/q+5yVr7wVkqBTTO/KheeTNbJspzGh0oyh4hGA357iI56A0XnsjLwROSX67M
+         cuG+7M2gCtT0F5NiBZwBRl3ZLhBY0TdN/TQ5IrDSLyGe7BrM5sY5yrskCkjysQpXSHmz
+         yDDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version
          :content-transfer-encoding:subject:to:from;
-        bh=t6K3lJOzdRq3DoH37FNPJ8huMZjJN5YFUEAPHkVrwMY=;
-        b=DHTim+/qvT87SoFknDD8FGthjzDmWjzDKXeajoDZYF/G0nL4fiBTtYM5xaUaNyDGCG
-         8el48tD8mkNHe5bA47Yh26Oa+8vyTaHeLRnVYXRsYCC5Ravd+lLBkpyx6TcsQVWh/a4m
-         HxFVRd5+D/WZqdpGWHY5fqAnbGUIrc8w0NtZNSUW/A9p6WIO+RZPpvZnKuJQqlFEeAN1
-         bNrwyjOY+lX4a/HGY9uWIzDT5+FrTsx1SOIKg+TkNVR1Mnrp5xN8iJjZTptHKc+mDcPa
-         xvSyolzMkHXnRAW6kq7NyrIgjW9EFuKHVZsLNkhmnEQ1KIPg+gJh1Isx2kiAfZbND8Xj
-         7Rfw==
-X-Gm-Message-State: AOAM532U3kXrYE85bILR5LCd6WmAoSQQDRhJGgVRP+v1Fk4ykZtsWu7L
-        EY3JGOMVP/re+Jsxty8thdntBnQ2yxTbU/Zp
-X-Google-Smtp-Source: ABdhPJzSjLI4Yhp7ggOTQgyNy7X7MlFkWG95KqhgqAL7+5dzjUkNbUCWHrjGjiHU62jsH5QXjkswMg==
-X-Received: by 2002:a17:903:240f:b0:156:8e81:a0a3 with SMTP id e15-20020a170903240f00b001568e81a0a3mr33570857plo.13.1649709759122;
-        Mon, 11 Apr 2022 13:42:39 -0700 (PDT)
+        bh=2rYL+CwEGtulaajPVFSX3vzM9nKQPEgInHUP8Y8QDY0=;
+        b=Xav9m3lsu+od5DihwF1kPao6+f+4f5AvOu47Tssg8s8a7Gyu1EdkzCzMzqvjK7kCrc
+         4SN0bJzrZlX03QhOUCbQZ6Ma4rs6yWDmzv0jyNTX96uNXUja79R53bgogmiZVY1urHLY
+         sC3meITSgx0bLYzjrcRHmM/lO/dSfky2zc5ENi2Hi/yUUWTx5OfSy0gk33O4GHpMBmRP
+         TX7THPr67l7DfbI1UpqRLvy6meBQUdE2LgHOpCwi99IW7XQHNDd75WWG3leAkyWyzqCm
+         0gQ6VdnA8zhORNKG4dtzEtMJCFDADZ01JUmq5dB49bvDCua+LRWLQKpVB+3cMvSJS8ZG
+         8P8w==
+X-Gm-Message-State: AOAM532XKCCi896gkM3agZWA5dFl6uqmJnqQ+HT/HH1OCwMXeT8pOPpD
+        yvP6f8ceByMDGQ8ioQe+t+BGUWgJzbCd8UaU
+X-Google-Smtp-Source: ABdhPJwYsyoY3XVTY0h00lqXDDxs5WtTIzk1xcudRbkrjwxfOzZr8I5nqOx43yqLvIxuNgWkHgrmVA==
+X-Received: by 2002:a17:90b:4a06:b0:1c7:2020:b5b9 with SMTP id kk6-20020a17090b4a0600b001c72020b5b9mr1352193pjb.58.1649713553209;
+        Mon, 11 Apr 2022 14:45:53 -0700 (PDT)
 Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id y16-20020a17090a6c9000b001c993d935e7sm329152pjj.56.2022.04.11.13.42.38
+        by smtp.gmail.com with ESMTPSA id i2-20020a17090a138200b001cb6512b579sm410332pja.44.2022.04.11.14.45.51
         for <linux-next@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 13:42:38 -0700 (PDT)
-Message-ID: <625492be.1c69fb81.11c32.133c@mx.google.com>
-Date:   Mon, 11 Apr 2022 13:42:38 -0700 (PDT)
+        Mon, 11 Apr 2022 14:45:52 -0700 (PDT)
+Message-ID: <6254a190.1c69fb81.d8d48.1993@mx.google.com>
+Date:   Mon, 11 Apr 2022 14:45:52 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-Kernelci-Tree: next
-X-Kernelci-Branch: master
-X-Kernelci-Kernel: next-20220411
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Kernel: v5.18-rc1-608-g6537d9b7dc91
 X-Kernelci-Report-Type: build
-Subject: next/master build: 218 builds: 9 failed, 209 passed, 23 errors,
- 38 warnings (next-20220411)
+Subject: next/pending-fixes build: 207 builds: 2 failed, 205 passed, 6 errors,
+ 6 warnings (v5.18-rc1-608-g6537d9b7dc91)
 To:     linux-next@vger.kernel.org
 From:   "kernelci.org bot" <bot@kernelci.org>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -70,62 +70,42 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master build: 218 builds: 9 failed, 209 passed, 23 errors, 38 warnings=
- (next-20220411)
+next/pending-fixes build: 207 builds: 2 failed, 205 passed, 6 errors, 6 war=
+nings (v5.18-rc1-608-g6537d9b7dc91)
 
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20220411/
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v5.18-rc1-608-g6537d9b7dc91/
 
 Tree: next
-Branch: master
-Git Describe: next-20220411
-Git Commit: d12d7e1cfe38e0c36d28c7a9fbbc436ad0d17c14
+Branch: pending-fixes
+Git Describe: v5.18-rc1-608-g6537d9b7dc91
+Git Commit: 6537d9b7dc919cf5bfa912c7932c052cf0c7b2fd
 Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
 Built: 7 unique architectures
 
 Build Failures Detected:
 
-arm64:
-    allmodconfig: (clang-14) FAIL
-
 arm:
-    allmodconfig: (gcc-10) FAIL
-    multi_v7_defconfig+kselftest: (gcc-10) FAIL
     rpc_defconfig: (gcc-10) FAIL
 
-i386:
-    allmodconfig: (clang-14) FAIL
-    i386_defconfig+kselftest: (gcc-10) FAIL
-
 mips:
-    32r2el_defconfig+kselftest: (gcc-10) FAIL
     decstation_64_defconfig: (gcc-10) FAIL
-
-x86_64:
-    allmodconfig: (clang-14) FAIL
 
 Errors and Warnings Detected:
 
 arc:
 
 arm64:
-    allmodconfig (clang-14): 2 errors
 
 arm:
-    allmodconfig (gcc-10): 1 error
-    aspeed_g5_defconfig (clang-14): 10 warnings
-    multi_v7_defconfig (clang-14): 10 warnings
-    multi_v7_defconfig+kselftest (gcc-10): 1 error
     rpc_defconfig (gcc-10): 2 errors
 
 i386:
-    allmodconfig (clang-14): 9 errors
-    i386_defconfig+kselftest (gcc-10): 1 error
 
 mips:
     32r2el_defconfig (gcc-10): 1 warning
     32r2el_defconfig+debug (gcc-10): 1 warning
-    32r2el_defconfig+kselftest (gcc-10): 1 error, 1 warning
+    32r2el_defconfig+kselftest (gcc-10): 1 warning
     fuloong2e_defconfig (gcc-10): 1 error
     lemote2f_defconfig (gcc-10): 1 error
     loongson2k_defconfig (gcc-10): 1 error
@@ -135,47 +115,12 @@ mips:
 riscv:
 
 x86_64:
-    allmodconfig (clang-14): 2 errors, 12 warnings
     x86_64_defconfig+debug (gcc-10): 2 warnings
 
 Errors summary:
 
     4    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=
 =80=98-mhard-float=E2=80=99
-    3    drivers/net/wireless/realtek/rtw89/ser.c:397:2: error: unannotated=
- fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
-    2    include/linux/fortify-string.h:328:4: error: call to __write_overf=
-low_field declared with 'warning' attribute: detected write beyond size of =
-field (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warni=
-ng]
-    2    ERROR: modpost: "__udivdi3" [fs/btrfs/btrfs.ko] undefined!
-    2    ERROR: modpost: "__aeabi_uldivmod" [fs/btrfs/btrfs.ko] undefined!
-    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_rq_dlg_=
-calc_21.c:829:13: error: stack frame size (1084) exceeds limit (1024) in 'd=
-ml_rq_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
-    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vb=
-a_21.c:3518:6: error: stack frame size (1308) exceeds limit (1024) in 'dml2=
-1_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
-    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vb=
-a_21.c:1466:13: error: stack frame size (1244) exceeds limit (1024) in 'DIS=
-PCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculat=
-ion' [-Werror,-Wframe-larger-than]
-    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
-a_20v2.c:3393:6: error: stack frame size (1564) exceeds limit (1024) in 'dm=
-l20v2_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
-    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
-a_20v2.c:1145:13: error: stack frame size (1324) exceeds limit (1024) in 'd=
-ml20v2_DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerforman=
-ceCalculation' [-Werror,-Wframe-larger-than]
-    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
-a_20.c:3286:6: error: stack frame size (1596) exceeds limit (1024) in 'dml2=
-0_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
-    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
-a_20.c:1085:13: error: stack frame size (1388) exceeds limit (1024) in 'dml=
-20_DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCa=
-lculation' [-Werror,-Wframe-larger-than]
-    1    arch/x86/include/asm/checksum_32.h:149:6: error: inline assembly r=
-equires more registers than available
     1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
 =3D0x'
     1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
@@ -183,52 +128,16 @@ equires more registers than available
 
 Warnings summary:
 
-    10   clang: warning: argument unused during compilation: '-march=3Darmv=
-7-a' [-Wunused-command-line-argument]
-    10   clang: warning: argument unused during compilation: '-march=3Darmv=
-6k' [-Wunused-command-line-argument]
     3    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
 e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
 ted "0,0"
-    1    vmlinux.o: warning: objtool: vc_switch_off_ist()+0x8e: call to mem=
-cpy() leaves .noinstr.text section
-    1    vmlinux.o: warning: objtool: sync_regs()+0x24: call to memcpy() le=
-aves .noinstr.text section
-    1    vmlinux.o: warning: objtool: startup_64_setup_env()+0x132: return =
-with modified stack frame
-    1    vmlinux.o: warning: objtool: fixup_bad_iret()+0x36: call to memset=
-() leaves .noinstr.text section
-    1    vmlinux.o: warning: objtool: __sev_put_ghcb()+0x35: call to memcpy=
-() leaves .noinstr.text section
-    1    vmlinux.o: warning: objtool: __sev_get_ghcb()+0xa0: call to memcpy=
-() leaves .noinstr.text section
     1    lib/strnlen_user.o: warning: objtool: strnlen_user()+0x59: call to=
  do_strnlen_user() with UACCESS enabled
     1    lib/strncpy_from_user.o: warning: objtool: strncpy_from_user()+0x8=
 6: call to do_strncpy_from_user() with UACCESS enabled
-    1    fs/reiserfs/reiserfs.prelink.o: warning: objtool: leaf_copy_items_=
-entirely()+0x7fd: stack state mismatch: cfa1=3D4+240 cfa2=3D4+232
-    1    drivers/video/fbdev/udlfb.prelink.o: warning: objtool: dlfb_ops_wr=
-ite() falls through to next function dlfb_ops_setcolreg()
-    1    drivers/video/fbdev/smscufx.prelink.o: warning: objtool: ufx_ops_w=
-rite() falls through to next function ufx_ops_setcolreg()
-    1    drivers/soc/qcom/qcom_rpmh.prelink.o: warning: objtool: rpmh_rsc_w=
-rite_ctrl_data() falls through to next function trace_raw_output_rpmh_tx_do=
-ne()
-    1    drivers/scsi/mpi3mr/mpi3mr.prelink.o: warning: objtool: mpi3mr_op_=
-request_post() falls through to next function mpi3mr_check_rh_fault_ioc()
-    1    drivers/gpu/drm/radeon/radeon.prelink.o: warning: objtool: sumo_dp=
-m_set_power_state() falls through to next function sumo_dpm_post_set_power_=
-state()
     1    cc1: warning: result of =E2=80=98-117440512 << 16=E2=80=99 require=
 s 44 bits to represent, but =E2=80=98int=E2=80=99 only has 32 bits [-Wshift=
 -overflow=3D]
-
-Section mismatches summary:
-
-    1    WARNING: modpost: vmlinux.o(.text+0x15ae57): Section mismatch in r=
-eference from the function __next_node() to the variable .init.data:numa_no=
-des_parsed
 
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
@@ -259,11 +168,8 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-32r2el_defconfig+kselftest (mips, gcc-10) =E2=80=94 FAIL, 1 error, 1 warnin=
-g, 0 section mismatches
-
-Errors:
-    ERROR: modpost: "__udivdi3" [fs/btrfs/btrfs.ko] undefined!
+32r2el_defconfig+kselftest (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warni=
+ng, 0 section mismatches
 
 Warnings:
     arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
@@ -272,112 +178,8 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-allmodconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section m=
+allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
 ismatches
-
-Errors:
-    ERROR: modpost: "__aeabi_uldivmod" [fs/btrfs/btrfs.ko] undefined!
-
----------------------------------------------------------------------------=
------
-allmodconfig (i386, clang-14) =E2=80=94 FAIL, 9 errors, 0 warnings, 0 secti=
-on mismatches
-
-Errors:
-    arch/x86/include/asm/checksum_32.h:149:6: error: inline assembly requir=
-es more registers than available
-    drivers/net/wireless/realtek/rtw89/ser.c:397:2: error: unannotated fall=
--through between switch labels [-Werror,-Wimplicit-fallthrough]
-    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_rq_dlg_calc_=
-21.c:829:13: error: stack frame size (1084) exceeds limit (1024) in 'dml_rq=
-_dlg_get_dlg_params' [-Werror,-Wframe-larger-than]
-    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20.=
-c:1085:13: error: stack frame size (1388) exceeds limit (1024) in 'dml20_DI=
-SPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalcula=
-tion' [-Werror,-Wframe-larger-than]
-    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20v=
-2.c:1145:13: error: stack frame size (1324) exceeds limit (1024) in 'dml20v=
-2_DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCal=
-culation' [-Werror,-Wframe-larger-than]
-    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20.=
-c:3286:6: error: stack frame size (1596) exceeds limit (1024) in 'dml20_Mod=
-eSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
-    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vba_21.=
-c:1466:13: error: stack frame size (1244) exceeds limit (1024) in 'DISPCLKD=
-PPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation' =
-[-Werror,-Wframe-larger-than]
-    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20v=
-2.c:3393:6: error: stack frame size (1564) exceeds limit (1024) in 'dml20v2=
-_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
-    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vba_21.=
-c:3518:6: error: stack frame size (1308) exceeds limit (1024) in 'dml21_Mod=
-eSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm64, clang-14) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 sect=
-ion mismatches
-
-Errors:
-    include/linux/fortify-string.h:328:4: error: call to __write_overflow_f=
-ield declared with 'warning' attribute: detected write beyond size of field=
- (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
-    drivers/net/wireless/realtek/rtw89/ser.c:397:2: error: unannotated fall=
--through between switch labels [-Werror,-Wimplicit-fallthrough]
-
----------------------------------------------------------------------------=
------
-allmodconfig (x86_64, clang-14) =E2=80=94 FAIL, 2 errors, 12 warnings, 0 se=
-ction mismatches
-
-Errors:
-    include/linux/fortify-string.h:328:4: error: call to __write_overflow_f=
-ield declared with 'warning' attribute: detected write beyond size of field=
- (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
-    drivers/net/wireless/realtek/rtw89/ser.c:397:2: error: unannotated fall=
--through between switch labels [-Werror,-Wimplicit-fallthrough]
-
-Warnings:
-    vmlinux.o: warning: objtool: startup_64_setup_env()+0x132: return with =
-modified stack frame
-    vmlinux.o: warning: objtool: sync_regs()+0x24: call to memcpy() leaves =
-.noinstr.text section
-    vmlinux.o: warning: objtool: vc_switch_off_ist()+0x8e: call to memcpy()=
- leaves .noinstr.text section
-    vmlinux.o: warning: objtool: fixup_bad_iret()+0x36: call to memset() le=
-aves .noinstr.text section
-    vmlinux.o: warning: objtool: __sev_get_ghcb()+0xa0: call to memcpy() le=
-aves .noinstr.text section
-    vmlinux.o: warning: objtool: __sev_put_ghcb()+0x35: call to memcpy() le=
-aves .noinstr.text section
-    fs/reiserfs/reiserfs.prelink.o: warning: objtool: leaf_copy_items_entir=
-ely()+0x7fd: stack state mismatch: cfa1=3D4+240 cfa2=3D4+232
-    drivers/soc/qcom/qcom_rpmh.prelink.o: warning: objtool: rpmh_rsc_write_=
-ctrl_data() falls through to next function trace_raw_output_rpmh_tx_done()
-    drivers/video/fbdev/udlfb.prelink.o: warning: objtool: dlfb_ops_write()=
- falls through to next function dlfb_ops_setcolreg()
-    drivers/video/fbdev/smscufx.prelink.o: warning: objtool: ufx_ops_write(=
-) falls through to next function ufx_ops_setcolreg()
-    drivers/scsi/mpi3mr/mpi3mr.prelink.o: warning: objtool: mpi3mr_op_reque=
-st_post() falls through to next function mpi3mr_check_rh_fault_ioc()
-    drivers/gpu/drm/radeon/radeon.prelink.o: warning: objtool: sumo_dpm_set=
-_power_state() falls through to next function sumo_dpm_post_set_power_state=
-()
-
-Section mismatches:
-    WARNING: modpost: vmlinux.o(.text+0x15ae57): Section mismatch in refere=
-nce from the function __next_node() to the variable .init.data:numa_nodes_p=
-arsed
-
----------------------------------------------------------------------------=
------
-allnoconfig (i386, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -386,13 +188,8 @@ mismatches
 
 ---------------------------------------------------------------------------=
 -----
-allnoconfig (x86_64, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
+allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -413,33 +210,6 @@ ection mismatches
 -----
 aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
 ection mismatches
-
----------------------------------------------------------------------------=
------
-aspeed_g5_defconfig (arm, clang-14) =E2=80=94 PASS, 0 errors, 10 warnings, =
-0 section mismatches
-
-Warnings:
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
 
 ---------------------------------------------------------------------------=
 -----
@@ -598,43 +368,18 @@ s, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
 defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
 ismatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig (arm64, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_16K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-14) =E2=80=94 PASS, 0 er=
-rors, 0 warnings, 0 section mismatches
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
 
 ---------------------------------------------------------------------------=
 -----
 defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
 s, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_EFI=3Dn (riscv, clang-14) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -658,12 +403,12 @@ ction mismatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig+debug (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+defconfig+debug (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
 tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig+debug (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+defconfig+debug (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
 tion mismatches
 
 ---------------------------------------------------------------------------=
@@ -683,8 +428,18 @@ defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
 
 ---------------------------------------------------------------------------=
 -----
+dove_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
 e55_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
 n mismatches
+
+---------------------------------------------------------------------------=
+-----
+ep93xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -782,21 +537,13 @@ on mismatches
 
 ---------------------------------------------------------------------------=
 -----
-i386_defconfig (i386, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
 i386_defconfig+debug (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
  section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings=
-, 0 section mismatches
-
-Errors:
-    ERROR: modpost: "__udivdi3" [fs/btrfs/btrfs.ko] undefined!
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -812,6 +559,11 @@ ection mismatches
 -----
 integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+iop32x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1007,11 +759,6 @@ ection mismatches
 
 ---------------------------------------------------------------------------=
 -----
-multi_v5_defconfig (arm, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
 multi_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
 ction mismatches
 
@@ -1019,33 +766,6 @@ ction mismatches
 -----
 multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
 ction mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, clang-14) =E2=80=94 PASS, 0 errors, 10 warnings, 0=
- section mismatches
-
-Warnings:
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
 
 ---------------------------------------------------------------------------=
 -----
@@ -1069,16 +789,23 @@ multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
 
 ---------------------------------------------------------------------------=
 -----
+multi_v7_defconfig+crypto (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
 multi_v7_defconfig+debug (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
 , 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warni=
-ngs, 0 section mismatches
+multi_v7_defconfig+ima (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
 
-Errors:
-    ERROR: modpost: "__aeabi_uldivmod" [fs/btrfs/btrfs.ko] undefined!
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1366,11 +1093,6 @@ on mismatches
 
 ---------------------------------------------------------------------------=
 -----
-tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
 tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
 ismatches
 
@@ -1378,6 +1100,11 @@ ismatches
 -----
 tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
 smatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1438,11 +1165,6 @@ ction mismatches
 -----
 x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
 ection mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
 
 ---------------------------------------------------------------------------=
 -----

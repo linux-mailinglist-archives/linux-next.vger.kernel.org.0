@@ -2,156 +2,149 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D76014FF1C1
-	for <lists+linux-next@lfdr.de>; Wed, 13 Apr 2022 10:24:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84E174FF55E
+	for <lists+linux-next@lfdr.de>; Wed, 13 Apr 2022 13:01:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230230AbiDMI1H (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 13 Apr 2022 04:27:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47060 "EHLO
+        id S231564AbiDMLEK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 13 Apr 2022 07:04:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230220AbiDMI1G (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 13 Apr 2022 04:27:06 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2042.outbound.protection.outlook.com [40.107.244.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C4F2B18C;
-        Wed, 13 Apr 2022 01:24:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fHHp4PvgdfdUKeuZo6ty3HpZ6aqtc/ccQYLBWTjmhsdbFiya+1/S1eaUKjOdzUcRt2ZB+LscTWhGOo/SWu15VRe4C9MYKtjNMndCnXKNDjKt/CR5O4q9UIwz8T0K7Dv2mWL66Bzu2AJvbjL3HQGXp5jn4ZC3tl4TmaUYMV8VvH92RcC5W7bFcRWYtwf5hVsONxCcBgngpAYpUXOSw9cvk/4oMen0dK2t77c7nacCJxrOlsmTWnGCzan2/rWf8KgWNitvP9V1aQGqy4TArCC79UZ0GRFSLhtI0juhzE1CX5qsGPBBXys7hhoFyYm4jbbXCJWAJxL2aIe6rP20CXgaSQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hzOjtAX8RkT1f/OMndfoeoUNoRMkLaZXAAR3wFWZoYM=;
- b=igzCWfgqKV0dSLP5yHGkRwHFYeSx2dOZRcZ46e8Bw14fo1vkRo8JhZLVyltpR2lACYXiWmk965kfycw/vCo2NatYNpuJaEFCANAF65hHYjG79xao5VXEP9/YHd0ReJE1VZkySq5USddnAHgkhCkWjM7/4dZVBcLg0eReZCFFfxDs8DHb+Bu4WmmCGEYEflxgoT7oyTckDvs5gQULPfcgxgk1EdcCDIkcOZjeeNYcIwzsjRNldzhHoeXDlnkV7WrfqK+FJ/CyZLd7ZC0cHx1raqcW2SOH5hNRDS5dSGBefTGW/HDpL3z28x7dNDR46PrTK0VYBUAnytNzqBAcyBqqcw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hzOjtAX8RkT1f/OMndfoeoUNoRMkLaZXAAR3wFWZoYM=;
- b=agnQIwnlyBwehUJyNz5CUrakNe5Y3DwiH0fXGs2JFlu/1Hsd0Acj0/O0ipXTPmVdDKsIkcX4O5sLbQ6hP2Jo4FRLdi23jTWNwKfOlIe72/IvoxB/dS1YBZLXD6rJKnqX7pN/pMUTm8jUb1ZuKq/HEW4X1VagAYo+WToZg9qnG8w=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by SN1PR12MB2382.namprd12.prod.outlook.com (2603:10b6:802:2e::30) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.18; Wed, 13 Apr
- 2022 08:24:43 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::a5fb:7137:5e64:cf8]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::a5fb:7137:5e64:cf8%5]) with mapi id 15.20.5144.030; Wed, 13 Apr 2022
- 08:24:43 +0000
-Message-ID: <b6eee576-b950-c1a9-74d1-fe91468faba4@amd.com>
-Date:   Wed, 13 Apr 2022 10:24:37 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: linux-next: build warning after merge of the drm-misc tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Dave Airlie <airlied@linux.ie>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220406155030.0dacf051@canb.auug.org.au>
- <20220413100448.6f5f4de7@canb.auug.org.au>
- <YlaIgxknwmPbsg1h@phenom.ffwll.local>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <YlaIgxknwmPbsg1h@phenom.ffwll.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AM5PR04CA0035.eurprd04.prod.outlook.com
- (2603:10a6:206:1::48) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        with ESMTP id S230437AbiDMLEJ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 13 Apr 2022 07:04:09 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3824049F35
+        for <linux-next@vger.kernel.org>; Wed, 13 Apr 2022 04:01:48 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id t67so3046448ybi.2
+        for <linux-next@vger.kernel.org>; Wed, 13 Apr 2022 04:01:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lF5kt5jFogC6S7qxY754bNyuIo0w6PuBdFUJzlNflk4=;
+        b=VXDVh+fDKwC3uuGO9jw6LeAEzVTJ9MafgNOZRbkW9CZlqFoRj9FEyK2UJkA9MElSmc
+         Woz4x4sSi+ltgAYC+kwXOxbjkcCSqcZL2GlzwQtsyYm+HfclIKzi25tE1zIqQw+HDJlt
+         yMCtSbEn4J9nTfww2cndozhkZahgRuKBMB766mqVzsHjcKoJeT4zbihbYDcyDQ06Vyqm
+         ytLpL6yR5M3guyJ7J9BqvzlaIOCoVuvr255iHNYuylTKNWobJlsNSpUoQV1rrw66FAKT
+         77FMMsKfedKFVD+onp1GnNWpShSGIPe+zVxO6xZWy8E+JY34YNUvZQFpPMfWGoWI6Lxj
+         nfIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lF5kt5jFogC6S7qxY754bNyuIo0w6PuBdFUJzlNflk4=;
+        b=ocfOL7ncfEtFC9DKf6Zv1NWSGF21qVm+Lh3peXlQoAK29aFVGG1VFYuuphYZM8yz2D
+         rJOiYR4i4pIHUOig1Vj9MV/YL3rmYgiZPnasKKlvYDYxTzlhqJJk3Xx/cb8H5pZg6iFI
+         +v9TnIWiNqBXU644HLD1Oup5ev+alOiuEhcEAnYb4IHvGfa9o3MqWoqWRsoNsNPjV+KT
+         /2BwKeM5yQxM5Uf6vXljo04hsO9Mhzgx3EZULNULdaLXitjCwKYsvMhk9hQ0uNrPnfYz
+         InvFJMTfK1s6jOdnbt19X6qyU9NcmkdbmUpQCLeorbCL2K5pjaDX209r0GcWrwG81oUE
+         8ptw==
+X-Gm-Message-State: AOAM533d72Z/VLR3rW/a/ulwJmNBmP8L3QYZ09M2O6BdELZl+j2pM8UQ
+        ulNOzyScuSyyzlIgW4Sj7Qhge1ZKs0GcAM4LvoNNlQ==
+X-Google-Smtp-Source: ABdhPJx5whFXRNAmWiXTP4UVIi2kA1uqH5a5ihQWwBju6TkDBb7M6GgWXZ63y9AJ223kOYdVdHnWZIt7tmJEmA9fZtA=
+X-Received: by 2002:a25:c094:0:b0:641:10e0:cfd8 with SMTP id
+ c142-20020a25c094000000b0064110e0cfd8mr15800637ybf.88.1649847707317; Wed, 13
+ Apr 2022 04:01:47 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7cd17b0c-0737-45b0-4147-08da1d270f93
-X-MS-TrafficTypeDiagnostic: SN1PR12MB2382:EE_
-X-Microsoft-Antispam-PRVS: <SN1PR12MB2382B50F2A2583DCC318179383EC9@SN1PR12MB2382.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: xelbPXWCmiSAEzcP5FehVg5YTcnpXaUY233+fHS/JFkOQ7V1NbxyT7n8R3lZz26Fial1f3f89N4F6NJEvYHHIyhFTHv6Kz71LhVckoyR3azlEKQ/STxHc0fNj0tJaHaQBMj79hcMBtRh6B8IeQFKaUWtJXFX3sculf559GUiF3qjX+gLIJunv2BgIl4poPG+ZZjiTU3iZLCwpKAip1gwykS0LviurACJxTzSpxPwqEiih8n+dN96T2RXmYxerSr/2BDx5a816/Fx7LkFuAdkStC0job+DANjAYryiY61SjlThmbSGqvK1gVhJwBS7gBeQ0MUParHqa0CdiOUw5RTCXQcAMkNHCgclI9rdO0Xzh4rUNj2nWTXTKlDvDpUiV01IYxO/9Wdf8Ky0iXKCg2DxeVGEO8X21mz8WDSYsbksY0GTUqfV0LBMx7KGReSbEpx0fKJnC0AdRoOTqg/fYYBcR6Miof0947X58n9xxpuXykWUwOxgUILB+uiCsoMYTSMY1FER1VrmXLDTYQ2HEmOlGPEpPoWleoi+Fn04BCQPC4RoQbCNG2HcV/cfItjSxuvE3iSGGttjG5f6lxOzkGvyKTHXaH+R89k2NqPUtijLqUJjSUZKp0p7RU3ZGvCRSPw51PK2MU5Pl+rOg7yF8jFMSPMaoSeP9O0IYH95gdqfZNeK5RitOyF7FOX66/AxB+OG9cjXDjT0Tm56sMrTHZt80fjCrshSDFW6v0up4v1ODk=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(36756003)(5660300002)(31686004)(83380400001)(26005)(2906002)(4744005)(2616005)(186003)(66556008)(86362001)(66476007)(8676002)(6486002)(31696002)(6666004)(8936002)(110136005)(316002)(6512007)(6506007)(508600001)(38100700002)(66946007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZXBRZFVVeVl6R2czN2pnN01zNGZBTzhTL3MrOFFPYU5Rc3BQUkp2NVFKajZo?=
- =?utf-8?B?RjlhcEVZNjNSRjI3T3I4NVk1eldVRTBJYlNOV24zbU9HTU1UeFpadUdFd3Ew?=
- =?utf-8?B?eGpsdVNFQWk5N1lCLzY2ZWlkNllLOGNld1BCT29iRUNDZ1RtTzNja1F1dmJ2?=
- =?utf-8?B?QWZqRnlFNkZJaDRaOVJ3c3hhR1czbGtxb2I2VDAxSGQwU3VUYks0U0tCaFRF?=
- =?utf-8?B?WURKbWswc0NXOXVHbG9pTWR1WlJ0bDFoYmJ3MXJ5L0djSUZxd0hwQkc5KzlT?=
- =?utf-8?B?czdEWlBpVWJlWmhVN3RIeGp6RFhvL2dRUTkzK1VaaHlteVdKeEdjNDBRWFRM?=
- =?utf-8?B?c2RUUmFVMlcvaHNsWS9LZzIwNCtlR0hwMXN6emJ2U3JaNUJYei94dVUrL0J6?=
- =?utf-8?B?anJncmpUTWg3aGdjbFVybDl2TzBGS1BQY3VMNXduYStOVllwaXNRZUpzbWln?=
- =?utf-8?B?SCtZVGhVVFAyV2pKd1VLZHlGc25yQ3hoK3JkVThYTzlZODZaNG04dzlhaHIx?=
- =?utf-8?B?RGh5RUZIUENsSG1DbU9LUGNsdm80d0dodTlEb2pDUHVNeVJ3UGdOQ09IQmVE?=
- =?utf-8?B?bFJTNUtpektrTHVEWnhNT0xZWDBWNndkdm9xRGZURUdEQUFtU0pPOUV5TFd1?=
- =?utf-8?B?eHFiRmJMNnNhVUg1ZmN6emRLMG5EdXZIUXRmbG1DZ2M5VDBkWHZwSTdKT1dE?=
- =?utf-8?B?SjhkL20vMjdYTWRPeE1xK2Uzby9pazFUT3RWTUJmdGJqNk9kU0VnTWVMN2JG?=
- =?utf-8?B?aGMvSFVtWHh4Vk5Ocm1PYkVGcDV1RXJsMmhOMkdYTXRsY2k4Qi9iTVVhdHJ5?=
- =?utf-8?B?RzAzL2RobEZZYndycy9rcWJYMUY1d0xjOXRMVU9VaW5NSzFWSURPQVR2eDhC?=
- =?utf-8?B?elZkYjRvNGRmaFIvRk50eXZRcTRIaHlEN1lPMEk4dzVFZklPOEtlQk1QUzNa?=
- =?utf-8?B?dUxYV2VpYitPNnJmaWNrSlNvSUpOSUYyU2Nkc2lKZHBzMFB3MVc0RjEzUXJa?=
- =?utf-8?B?NndoY2lndDcxYVMwaWpESTVkTTVOSjM5ZTlGeU91eFB6Wms1d0V4ZldnZXpB?=
- =?utf-8?B?cG04UnZxOWZaaGZEck93MUU4M28wK3ZYTGhTUitvWDNKM0ZaVmdkL0kraUpQ?=
- =?utf-8?B?eTNHZk8ycldtaEwyMVdQR2tMcldHSUdPTmZJQXdKcC9ldkhscVB1aTRmcnVi?=
- =?utf-8?B?ZTVxVytrZEh1M2ZLcHRRRGd3cUhlbmxMektsQ1g1WE92azVMWEUvekZFc2c5?=
- =?utf-8?B?dk5HUzJOSXcxQnNxdjYvd0hCd3hCU01lTWk4Q1djNVdOMDd4VmtyT1pPajV2?=
- =?utf-8?B?N3h0Uk96TldweUdmWnJ0RTY1RHBabmxiUzRwN1lrcHhrKzA5QzlRRU1sMWpj?=
- =?utf-8?B?bXBZVlBibzRUaUNTMmgvMG1sdjBEc2lueEFrVmFkbFdHU2o0RG1DQnFXOTBo?=
- =?utf-8?B?eFFuRHhQWVI1RkNDVFNSWWVOeG9tK2NTUFRybU1mVzRUQ1Y3WE43ZmU4L3Nl?=
- =?utf-8?B?bkQ4Nk14dDF1TjRyRGV5OXdqRDRTZ2xHdXRBTlFyY2tBTWxUR3J3Ym9EQ1pj?=
- =?utf-8?B?MVZnUWtFT1dsNlNJa2ZaNisvbUVFNWR0VHV3SXVnZlA1dXF2eFJ5akxBZVhI?=
- =?utf-8?B?aThsSk9YZzRGNWNiVHlaMlRJbjZhSmZqME1KSHppdVRDMEZ1L0ZqU0k0ZkJo?=
- =?utf-8?B?UDFWZVQ0WGl0QXVpTFU4TW13WWtNVkR2NG9vK3k3bnFiRGl1Qm5TZFRrMkdC?=
- =?utf-8?B?SFVjbWp1VU5nQnB4TXRsNkRWUVNhblRMM1hJMTZ4V3N2bmVFM1piZWgxNGFt?=
- =?utf-8?B?ZHA5MGNhaDVZYTAvU1hZTnFZWUhsbnpRRHlQRUZwYk5MZEZuRStFV0Nqb0V1?=
- =?utf-8?B?aU9iakZjam92Y0MxcTJjTjFiVUJUZGhrY1M4R005TjNvV3dQZnBZdkJuL1kz?=
- =?utf-8?B?QjVPTFpYY1hlWUFlb2JOSmRPNkNFWHVFckNaSU9OZWtnbEwvdVJZbGNkc1ps?=
- =?utf-8?B?cGtxRVBQdG5kcjgrMXR6NFozVmJTQTdsWjFMY1RWdlRBZUR6SjY2cjdpelZl?=
- =?utf-8?B?K0pCSkg5UElmQjlWV3VGRWRtcDFOVHVpQ09RZ3hTS28xc3lnckk5SzhaSWlv?=
- =?utf-8?B?dDJXQkNMbTJBZW8vckN4NG50Z1JaQ0JtNzRaY0J3SDVVL1NKRXdEZHhmVndS?=
- =?utf-8?B?ZEVkUlZuMEhkTDYxYTIzdGtxVHNQRlRMcUhWMWpsVkRWb1BSWkdvTldDVG9z?=
- =?utf-8?B?NW9zaWxjb2tPMTlxSEc5cHJuSHhPWDBVVE1URUNWQ21LdENiMCtyT29tQStx?=
- =?utf-8?B?ZWFaeVc3WjU4aU00RS9CL0NsVFJsT2cwYkN5NVVKL0lWQVhuTE81UT09?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7cd17b0c-0737-45b0-4147-08da1d270f93
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Apr 2022 08:24:43.1866
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /v6Xj87fD+WN4EKhabh0YmskrXbf4ixoR/Vtvac0TSISASiTgozZ0IXQdqlGFGMP
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN1PR12MB2382
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <CA+G9fYusMPEsFXhDd4BEMa0jy-qZxgRTCpxZ8E4gjdrpHdQGOQ@mail.gmail.com>
+ <20220412140356.c0b382fe097cbf4fd040afcc@linux-foundation.org>
+In-Reply-To: <20220412140356.c0b382fe097cbf4fd040afcc@linux-foundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 13 Apr 2022 16:31:36 +0530
+Message-ID: <CA+G9fYvFsmCTZ6Np3ZFjTGPZGtCk2wCpqT39LiATxdFSnmkhBQ@mail.gmail.com>
+Subject: Re: [next] next-20220412: BUG: Bad page map in process oom_reaper pte
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>
+Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, LTP List <ltp@lists.linux.it>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        linux-mm <linux-mm@kvack.org>,
+        Anders Roxell <anders.roxell@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Am 13.04.22 um 10:23 schrieb Daniel Vetter:
-> On Wed, Apr 13, 2022 at 10:04:48AM +1000, Stephen Rothwell wrote:
->> Hi all,
->>
->> On Wed, 6 Apr 2022 15:50:30 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->>> After merging the drm-misc tree, today's linux-next build (htmldocs)
->>> produced this warning:
->>>
->>> include/drm/ttm/ttm_resource.h:226: warning: Function parameter or member 'pos' not described in 'ttm_lru_bulk_move'
->>>
->>> Introduced by commit
->>>
->>>    b0e2c9ea5afc ("drm/ttm: allow bulk moves for all domains")
->> This warning is now produced by the drm tree.
-> Christian, do you have a patch to fix this?
+Hi Andrew and Mike,
 
-Yeah, already on the TODO list. Just a few to much things coming in at 
-the same time here.
+On Wed, 13 Apr 2022 at 02:34, Andrew Morton <akpm@linux-foundation.org> wrote:
+>
+> On Tue, 12 Apr 2022 17:56:42 +0530 Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+>
+> > Linux next-20220412 i386 LTP mm test case caused following kernel crash
+> > however, test runs to complete successfully.
 
-Christian.
+<trim>
 
-> -Daniel
+> > [  952.018368] BUG: Bad page map in process oom_reaper  pte:06e7703e
+> > pmd:0583f067
+> >
+> >
+> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>
+> I wonder if this could be 859a85ddf90e714092de again.  But the timing
+> seems wrong.
+>
+> It seems repeatable.  Is it possible to run a bisection search please?
 
+Thanks for looking into this issue.
+Allow us sometime I will schedule this bisection and get back to you
+with my findings soon. By running LTP CVE test case  "ioctl_sg01"
+we are able to reproduce this problem [1] on qemu_i386.
+
+- Naresh
+
+[1] https://lkft.validation.linaro.org/scheduler/job/4876493#L29410
+--
+Crash log:
+tst_test.c:1433: TINFO: Timeout per run is 0h 05m 00s
+ioctl_sg01.c:81: TINFO: Found SCSI device /dev/sg1
+[ 1135.167555] __swap_info_get: Bad swap file entry 6c009400
+[ 1135.168577] BUG: Bad page map in process ioctl_sg01  pte:0128003e
+pmd:06bfb067
+[ 1135.169694] addr:289e2000 vm_flags:00100073 anon_vma:c2e29b28
+mapping:00000000 index:289e2
+[ 1135.171357] file:(null) fault:0x0 mmap:0x0 readpage:0x0
+[ 1135.172381] CPU: 2 PID: 31128 Comm: ioctl_sg01 Tainted: G        W
+       5.18.0-rc1-next-20220411 #1
+[ 1135.173914] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
+BIOS 1.12.0-1 04/01/2014
+[ 1135.175263] Call Trace:
+[ 1135.175662]  dump_stack_lvl+0x44/0x57
+[ 1135.176274]  dump_stack+0xd/0x10
+[ 1135.176785]  print_bad_pte.cold+0x82/0xd9
+[ 1135.177407]  ? free_swap_and_cache+0x2e/0xe0
+[ 1135.178138]  unmap_page_range+0x6b5/0x790
+[ 1135.178833]  unmap_single_vma+0x6c/0xd0
+[ 1135.179448]  unmap_vmas+0x71/0xe0
+[ 1135.179997]  unmap_region+0x88/0xf0
+[ 1135.180587]  __do_munmap+0x184/0x3f0
+[ 1135.181162]  __vm_munmap+0x71/0x120
+[ 1135.181750]  __ia32_sys_munmap+0x17/0x20
+[ 1135.182358]  __do_fast_syscall_32+0x4c/0xc0
+[ 1135.183086]  do_fast_syscall_32+0x32/0x70
+[ 1135.183746]  do_SYSENTER_32+0x15/0x20
+[ 1135.184317]  entry_SYSENTER_32+0x98/0xf1
+[ 1135.184960] EIP: 0xb7f01549
+[ 1135.185407] Code: 03 74 c0 01 10 05 03 74 b8 01 10 06 03 74 b4 01
+10 07 03 74 b0 01 10 08 03 74 d8 01 00 00 00 00 00 51 52 55 89 e5 0f
+34 cd 80 <5d> 5a 59 c3 90 90 90 90 8d 76 00 58 b8 77 00 00 00 cd 80 90
+8d 76
+[ 1135.188401] EAX: ffffffda EBX: 27d23000 ECX: 01000000 EDX: 27d23000
+[ 1135.189405] ESI: 01000000 EDI: 000000a0 EBP: 09db9520 ESP: bfe3630c
+[ 1135.190402] DS: 007b ES: 007b FS: 0000 GS: 0033 SS: 007b EFLAGS: 00000296
+[ 1135.191558] Disabling lock debugging due to kernel taint
+[ 1135.192604] __swap_info_get: Bad swap file entry 6c009401
+[ 1135.193685] BUG: Bad page map in process ioctl_sg01  pte:0128023e
+pmd:06bfb067
+[ 1135.195104] addr:289e3000 vm_flags:00100073 anon_vma:c2e29b28
+mapping:00000000 index:289e3
+[ 1135.196640] file:(null) fault:0x0 mmap:0x0 readpage:0x0
+[ 1135.197489] CPU: 2 PID: 31128 Comm: ioctl_sg01 Tainted: G    B   W
+       5.18.0-rc1-next-20220411 #1

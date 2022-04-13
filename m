@@ -2,46 +2,45 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E1594FECF5
-	for <lists+linux-next@lfdr.de>; Wed, 13 Apr 2022 04:33:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A41C14FECFB
+	for <lists+linux-next@lfdr.de>; Wed, 13 Apr 2022 04:34:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231716AbiDMCer (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 12 Apr 2022 22:34:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52290 "EHLO
+        id S229565AbiDMCgh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 12 Apr 2022 22:36:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231730AbiDMCep (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 12 Apr 2022 22:34:45 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792CC27FEC;
-        Tue, 12 Apr 2022 19:32:19 -0700 (PDT)
+        with ESMTP id S229497AbiDMCgg (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 12 Apr 2022 22:36:36 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0D89DC6;
+        Tue, 12 Apr 2022 19:34:16 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KdRSZ6Nc2z4xLS;
-        Wed, 13 Apr 2022 12:32:14 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KdRVv0DDjz4xLQ;
+        Wed, 13 Apr 2022 12:34:14 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1649817135;
-        bh=wWh7A1pF8tW1Y6A9R44xai1ZImvBv/lnkPKWeB4MEVY=;
+        s=201702; t=1649817255;
+        bh=Gg/b6OBoVPLkyC8Zt70CWjXEHj+DMMNe3GomLkFFDrA=;
         h=Date:From:To:Cc:Subject:From;
-        b=FEBOWSr6Wswmer06jZPpS3QQL9vNk8VLTJd/cqwCJZ1ExcainIANXKcO0c46jHn7T
-         K8aqaEDx/KJWdPCQbNjWN0L5CvxuihnGntVqSyKd97+ADY/9hMlGM6IrN/NybDs4Dk
-         /NH25mdK1/YHEya1MULHhVH/h9a3GCYCLrHMuxBKepA/w8zMN7cnpOwopMHcK8ZAJu
-         xIi4DdYU2ZHL6hwsQa8BLTuARDivoQ20Qn2AZpWQbBcUG5hRgVDr8Kz+ZOtctyX2qM
-         LEXBm/UfVs+xOC2R4FmFNWXZzugUP1wrUA5GeQzXLPhl5HwH5IZAnqLD21VnXrNZom
-         a/8F60nfEn/0Q==
-Date:   Wed, 13 Apr 2022 12:32:14 +1000
+        b=csIkXQc7BuexSkhqpvxKQBeIJJf5EP7cKPsfoKwdmWEcTbQYEmQsaS/ThabpHzNee
+         S3HD7jmhf2fbybxoC2Z17w6Bc1ZL9OC3bMlXDn2KHnFhldzgfn2ey1k4o8otQfgO3O
+         moqC+Gb9H/RV5epQTJzohx4pCoYt7QYiAVeqN6ZyiYmjSf30yqyZinGSWpk8o0wO7D
+         fNYA81bHPJ2FQCxwA8kS0bC0lg+NMUJtRMduHb2riR4mPlL5Vq8YCM9el+EKcmgGI5
+         AaPvn+2oiG9gWa36MwJMFN+gUnhJNCBpWiY8DXs0loHpD1ZEuWbd1IJgYx0wNb5Roi
+         pndXp05NWa6/A==
+Date:   Wed, 13 Apr 2022 12:34:14 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     David Zhang <dingchen.zhang@amd.com>,
-        Pavle Kotarac <Pavle.Kotarac@amd.com>,
-        Tom Chung <chiahsuan.chung@amd.com>,
+To:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>
+Cc:     David Woodhouse <dwmw@amazon.co.uk>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the amdgpu tree
-Message-ID: <20220413123214.2916366a@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>
+Subject: linux-next: manual merge of the kvm tree with the kvm-fixes tree
+Message-ID: <20220413123414.01119890@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/VSUMg3IFu=28NI3wB8IcmU8";
+Content-Type: multipart/signed; boundary="Sig_/jThhaPy3QoHXwP_vypFKGdn";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -52,57 +51,83 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/VSUMg3IFu=28NI3wB8IcmU8
+--Sig_/jThhaPy3QoHXwP_vypFKGdn
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the amdgpu tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+Today's linux-next merge of the kvm tree got a conflict in:
 
-drivers/gpu/drm/amd/amdgpu/../display/modules/power/power_helpers.c: In fun=
-ction 'is_psr_su_specific_panel':
-drivers/gpu/drm/amd/amdgpu/../display/modules/power/power_helpers.c:798:61:=
- error: 'DP_PSR2_WITH_Y_COORD_ET_SUPPORTED' undeclared (first use in this f=
-unction); did you mean 'DP_PSR2_WITH_Y_COORD_IS_SUPPORTED'?
-  798 |                 if (link->dpcd_caps.psr_info.psr_version >=3D DP_PS=
-R2_WITH_Y_COORD_ET_SUPPORTED)
-      |                                                             ^~~~~~~=
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-      |                                                             DP_PSR2=
-_WITH_Y_COORD_IS_SUPPORTED
-drivers/gpu/drm/amd/amdgpu/../display/modules/power/power_helpers.c:798:61:=
- note: each undeclared identifier is reported only once for each function i=
-t appears in
+  arch/x86/kvm/x86.c
 
-Caused by commit
+between commit:
 
-  901029aa0017 ("drm/amd/display: implement shared PSR-SU sink validation h=
-elper")
+  42dcbe7d8bac ("KVM: x86: hyper-v: Avoid writing to TSC page without an ac=
+tive vCPU")
 
-Please start including an x86_64 allmodconfig build in your local testing.
+from the kvm-fixes tree and commits:
 
-I have used the amdgpu tree from next-20220412 for today.
+  916d3608df82 ("KVM: x86: Use gfn_to_pfn_cache for pv_time")
+  7caf9571563e ("KVM: x86/xen: Use gfn_to_pfn_cache for vcpu_info")
+  69d413cfcf77 ("KVM: x86/xen: Use gfn_to_pfn_cache for vcpu_time_info")
+
+from the kvm tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/VSUMg3IFu=28NI3wB8IcmU8
+diff --cc arch/x86/kvm/x86.c
+index 547ba00ef64f,7a066cf92692..000000000000
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@@ -3106,14 -3101,15 +3101,14 @@@ static int kvm_guest_time_update(struc
+ =20
+  	vcpu->hv_clock.flags =3D pvclock_flags;
+ =20
+- 	if (vcpu->pv_time_enabled)
+- 		kvm_setup_pvclock_page(v, &vcpu->pv_time, 0);
+- 	if (vcpu->xen.vcpu_info_set)
+- 		kvm_setup_pvclock_page(v, &vcpu->xen.vcpu_info_cache,
+- 				       offsetof(struct compat_vcpu_info, time));
+- 	if (vcpu->xen.vcpu_time_info_set)
+- 		kvm_setup_pvclock_page(v, &vcpu->xen.vcpu_time_info_cache, 0);
++ 	if (vcpu->pv_time.active)
++ 		kvm_setup_guest_pvclock(v, &vcpu->pv_time, 0);
++ 	if (vcpu->xen.vcpu_info_cache.active)
++ 		kvm_setup_guest_pvclock(v, &vcpu->xen.vcpu_info_cache,
++ 					offsetof(struct compat_vcpu_info, time));
++ 	if (vcpu->xen.vcpu_time_info_cache.active)
++ 		kvm_setup_guest_pvclock(v, &vcpu->xen.vcpu_time_info_cache, 0);
+ -	if (!v->vcpu_idx)
+ -		kvm_hv_setup_tsc_page(v->kvm, &vcpu->hv_clock);
+ +	kvm_hv_setup_tsc_page(v->kvm, &vcpu->hv_clock);
+  	return 0;
+  }
+ =20
+
+--Sig_/jThhaPy3QoHXwP_vypFKGdn
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJWNi4ACgkQAVBC80lX
-0GxtDgf/R7QBwNAjE3s0lkfvYVxEBjoljx1M6pWxpwyvgzuVSEMHniFjBGG+kpsG
-o3NjBUz2Z1OcefES2M0lTMYuROGCIKzmGjpcCBx0662EGi6PCXFYoW1/7zAGOCMm
-arHKQBhzhI6FPAwDDNiMuanyEfStEqoQFdnhOmItniYnmk7qDqk6U5o9fkQBr7vL
-i+I7t0Z9PMW2GZtyNqyB7kuv0W9GXNPqKIpk8qmIAjlpfDRD9w1OuBk+lP3dvvkw
-Xp5FojeK9hwmj6prG8kMFBs6Eoxgc4wJ4IMs35b9SHWjYrbld/6BZ2WPBudlAJVu
-j9xVD+NLcqcw/cUMhsE/9UP5jJBsug==
-=S5Rb
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJWNqYACgkQAVBC80lX
+0GwE7Qf+Nl9w7aAKNeI+dWE09Es9ZGiwiDSvWVLDaweE3mPzVFIXTgHW5znqTAxi
+f98rAecJh+yJckl3mFILF/SBmU04GximtU2xkAEvJnAyN0RTqJXHxRQfjcTA2uo1
+NonkIWMHzwrPNgyjP8FU9EKJRqZ2mLBT6imtJOdO7dDpfjoTUheh2xDZPzzw4R1Z
+KFHfe2o55G39SmZdm2o/BcINaRNFpyKPjbG2EnGfqI9l8pVxFQioeacz0LVw3gCB
+NXcPJNw9vO0MKPJV8+wN9Mv4d12lUv5MM76aeZVMx3qwZ9HRsSDZiVJeRFLHPf2z
+Soym1YcwVXynueHo8gjSJu5V4Pdf5g==
+=4B8S
 -----END PGP SIGNATURE-----
 
---Sig_/VSUMg3IFu=28NI3wB8IcmU8--
+--Sig_/jThhaPy3QoHXwP_vypFKGdn--

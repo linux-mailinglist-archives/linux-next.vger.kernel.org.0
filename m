@@ -2,85 +2,118 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D51E4FF7CE
-	for <lists+linux-next@lfdr.de>; Wed, 13 Apr 2022 15:39:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 101C84FF8CF
+	for <lists+linux-next@lfdr.de>; Wed, 13 Apr 2022 16:19:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232370AbiDMNkv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 13 Apr 2022 09:40:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48662 "EHLO
+        id S231782AbiDMOVe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 13 Apr 2022 10:21:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235827AbiDMNku (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 13 Apr 2022 09:40:50 -0400
-Received: from a8-35.smtp-out.amazonses.com (a8-35.smtp-out.amazonses.com [54.240.8.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFD0E5F266;
-        Wed, 13 Apr 2022 06:38:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1649857107;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=1XNYhsrNPf8+D/nYnPncl80qSnYcKNrwGxgG2fxn7uQ=;
-        b=WJEmAo0REaRKESwg1E/05uX/c8pnGiGpvluutC76yA/J1ui9z2LobjRPZW4p041I
-        ovQ3NAIyjxb8GtQobybLDU3KDHcF2cn/2P8ICFWF+kkrP14Xdyg4jGhjJs1gQ5F/pZ4
-        gyslhepJY93nOkB8xZAI2kdJGe0ImVMwmzy65eWM=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=6gbrjpgwjskckoa6a5zn6fwqkn67xbtw; d=amazonses.com; t=1649857107;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=1XNYhsrNPf8+D/nYnPncl80qSnYcKNrwGxgG2fxn7uQ=;
-        b=AjceYrBOha8fh25bb+BRO5BwB0DYQj9szdo8RUonmIaCs0I/qpJuOY2VI8CvdVWf
-        bPJaRrQjZaMmvahQrlClzlSIjexzJdnYn71NrTn1vXNj4LvbxkAD8Eo9lUMUZNTtJhE
-        jeq39zmZpCimV8wCzG0pabFY9qpTtyokQK9yM670=
-From:   lkft@linaro.org
-To:     lkft@linaro.org
-Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
-        linux-next@vger.kernel.org, shuah@kernel.org
-Subject: lkft kselftest for next-20220411
+        with ESMTP id S229668AbiDMOVd (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 13 Apr 2022 10:21:33 -0400
+Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACAA96213C;
+        Wed, 13 Apr 2022 07:19:10 -0700 (PDT)
+Received: by mail-vs1-xe29.google.com with SMTP id e11so1719154vso.7;
+        Wed, 13 Apr 2022 07:19:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xyykOvfztuYgfnUpaCMGYMTkW5j0hQ73NitHRL4edV8=;
+        b=UiYmcEKYOKBRvcWHR3GG4EADybSbblJJ9Q4CGeCvMg1X+7K5hdDhNmW2xZKJx0LKQN
+         y/0QAlhBENSlTk1C+skjKYeoCRIMqhCku+6iDVMjvpXobnXe8R0XklqN1eZygpoglwCq
+         9mYwfDIhKh4CsS5Fee5/e2/OjK7kN7qIO8jD+sVjp0umzsKGcnGqON5AxNUR5xdo3G7x
+         EnQB5z1MB02hjofY00BRC5i7vaQLioT/hGzDKvSpCSwnYdzGVGRjzjRgrFFvGnbYDA3Z
+         BBDb55g0Qbx2g8kF4UvYDVsFf3hgCrEeFbeJ2Tla5t9I/Z3xRjyoQYmVu/zbWPUYP+dd
+         jn4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xyykOvfztuYgfnUpaCMGYMTkW5j0hQ73NitHRL4edV8=;
+        b=m/dEz7yBphswGhpCBCPJh4563ztFx9nfTJGcCQVVMD2x7Bz95jeF0/u1qFFs+ZWKqn
+         FLhgYvTJlFdNkdR3FMCYY+TIEpD5ims6LCdKPLC9hs79AVL7FS0pkMAHRpBgV3iQddaH
+         wUPBOjtckrz1ewu0fD0T4jvQDsVurdwHDVs1HeJqgVLNOREn5wlCxK7jS3KBf0Vv0pL4
+         DRj5YUZ1qQ2TzXEhw7B1j7x1DYrktnVhVWf2nRro5suEyVOLdKwVfyFRbLtCMfVcWQy9
+         dOaculvyLwQAPxljQvjlseTCxt2hq94PvGA5saooXIwmNvIdVtdK94Aa4MtI1e42TyRT
+         nVyA==
+X-Gm-Message-State: AOAM531Fc88tp1MqFWagfukyCpA6sa3Mj90l1I6mHrvYqoV2W96oPg3p
+        io7VJ7n7DgfJFOw526qBVeqBjW/2ZQNlmI43/XbBqV0J
+X-Google-Smtp-Source: ABdhPJxZZ+1DL3K8zLu6qD3AB9+JTzypyOIzi06xkzhJTwCGpOWfQGFuYA8pPD5fJd/kSD6ru7UwPmgWfby0GzNPLxA=
+X-Received: by 2002:a67:2444:0:b0:32a:1ad3:b26c with SMTP id
+ k65-20020a672444000000b0032a1ad3b26cmr1137165vsk.29.1649859549818; Wed, 13
+ Apr 2022 07:19:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-Message-ID: <01000180232596b5-0242d2d1-06be-4ed4-9e37-26c371e8ff7f-000000@email.amazonses.com>
-Date:   Wed, 13 Apr 2022 13:38:27 +0000
-Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2022.04.13-54.240.8.35
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,TO_EQ_FM_DIRECT_MX,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <BN9PR12MB5145ECB75120FF9AC1AA4CFB8DEC9@BN9PR12MB5145.namprd12.prod.outlook.com>
+In-Reply-To: <BN9PR12MB5145ECB75120FF9AC1AA4CFB8DEC9@BN9PR12MB5145.namprd12.prod.outlook.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Wed, 13 Apr 2022 10:18:57 -0400
+Message-ID: <CADnq5_OjPwzYtW99a-L6OrHz-oH0MqSNi+Me4T-x1vY8zEXLcQ@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the amdgpu tree
+To:     "Zhang, Dingchen (David)" <Dingchen.Zhang@amd.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        "Kotarac, Pavle" <Pavle.Kotarac@amd.com>,
+        "Chung, ChiaHsuan (Tom)" <ChiaHsuan.Chung@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-## Build
-* kernel: 5.18.0-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-* git branch: master
-* git commit: d12d7e1cfe38e0c36d28c7a9fbbc436ad0d17c14
-* git describe: next-20220411
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220411
+The patch should be there now.
 
-## Test Regressions (compared to next-20220408)
-No test regressions found.
+Alex
 
-## Metric Regressions (compared to next-20220408)
-No metric regressions found.
-
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-
-## Test Fixes (compared to next-20220408)
-No test fixes found.
-
-## Metric Fixes (compared to next-20220408)
-No metric fixes found.
-
-## Test result summary
-total: 0, pass: 0, fail: 0, skip: 0, xfail: 0
-
-## Build Summary
-
-## Test suites summary
-
---
-Linaro LKFT
-https://lkft.linaro.org
+On Wed, Apr 13, 2022 at 10:09 AM Zhang, Dingchen (David)
+<Dingchen.Zhang@amd.com> wrote:
+>
+> [AMD Official Use Only]
+>
+>
+> hi Stephen,
+>
+> Could you please check if below patch (which has been upstreamed) is in your Linux code base?
+>
+> ~~~~
+> eb2bb029bacf David Zhang         12 days ago    drm: add PSR2 support and capability definition as per eDP 1.5
+> ~~~~~
+>
+> Thanks
+> David
+> ________________________________ From: Stephen Rothwell
+> Sent: Tuesday, April 12, 2022 10:32 PM
+> To: Alex Deucher
+> Cc: Zhang, Dingchen (David); Kotarac, Pavle; Chung, ChiaHsuan (Tom); Linux Kernel Mailing List; Linux Next Mailing List
+> Subject: linux-next: build failure after merge of the amdgpu tree
+>
+> Hi all,
+>
+> After merging the amdgpu tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+>
+> drivers/gpu/drm/amd/amdgpu/../display/modules/power/power_helpers.c: In function 'is_psr_su_specific_panel':
+> drivers/gpu/drm/amd/amdgpu/../display/modules/power/power_helpers.c:798:61: error: 'DP_PSR2_WITH_Y_COORD_ET_SUPPORTED' undeclared (first use in this function); did you mean 'DP_PSR2_WITH_Y_COORD_IS_SUPPORTED'?
+>   798 |                 if (link->dpcd_caps.psr_info.psr_version >= DP_PSR2_WITH_Y_COORD_ET_SUPPORTED)
+>       |                                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>       |                                                             DP_PSR2_WITH_Y_COORD_IS_SUPPORTED
+> drivers/gpu/drm/amd/amdgpu/../display/modules/power/power_helpers.c:798:61: note: each undeclared identifier is reported only once for each function it appears in
+>
+> Caused by commit
+>
+>   901029aa0017 ("drm/amd/display: implement shared PSR-SU sink validation helper")
+>
+> Please start including an x86_64 allmodconfig build in your local testing.
+>
+> I have used the amdgpu tree from next-20220412 for today.
+>
+> --
+> Cheers,
+> Stephen Rothwell

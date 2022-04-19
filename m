@@ -2,85 +2,141 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4EA0507983
-	for <lists+linux-next@lfdr.de>; Tue, 19 Apr 2022 20:58:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F262507D3D
+	for <lists+linux-next@lfdr.de>; Wed, 20 Apr 2022 01:43:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354012AbiDSTAx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 19 Apr 2022 15:00:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45970 "EHLO
+        id S1346098AbiDSXps (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 19 Apr 2022 19:45:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233003AbiDSTAw (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 19 Apr 2022 15:00:52 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 490D03EF0A;
-        Tue, 19 Apr 2022 11:58:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Bp4bwe3H7WczeFj56jWpI8QBoijIjdBXfNXBKn0bveA=; b=BnjvFkL1Ut5niN1GJU9Qqiqxk6
-        bSPHAiXL02AryU4BQbQpKlkwkXIt6mnpaGai1EkMfb0N77GoGMiPu82Wt1d4/+QTWXcjmBV6Ku7ag
-        5hFnENghTqRcnVGh//6lZ3HUdy935pKzoa0T5tTd6a06gSHsV+1rn8Io1dCb+FjgCxRGlfV1yw4Y7
-        cXkAHqXV7UtAWVHSPZreuF+Fv6h6X24hK0ekZ6grYTMiEtvlDlP9dUvb31vc66WRUZZTLiANfU0Sd
-        ijIbnGbDawioK8ZKRXJzI4YrOxtoaUSi1Hwf0K71Z6Ka7hBoV/5ziHXVUw7oTmuDiI0mQAuI0pLBc
-        s6mPA9Zw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:58334)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1ngt2s-0001Sk-I9; Tue, 19 Apr 2022 19:57:50 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1ngt2g-00011J-Hx; Tue, 19 Apr 2022 19:57:38 +0100
-Date:   Tue, 19 Apr 2022 19:57:38 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        max.krummenacher@toradex.com, Shawn Guo <shawnguo@kernel.org>,
-        Stefano Stabellini <stefano.stabellini@xilinx.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>
-Subject: Re: [next] arm: boot failed - PC is at cpu_ca15_set_pte_ext
-Message-ID: <Yl8GInPZyl2PqK7D@shell.armlinux.org.uk>
-References: <CA+G9fYuACgY2hcAgh_LwVb9AURjodMJbV6SsJb90wj-0aJKUOw@mail.gmail.com>
+        with ESMTP id S243010AbiDSXps (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 19 Apr 2022 19:45:48 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D86B4205EF;
+        Tue, 19 Apr 2022 16:43:00 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KjgMy38VVz4xNm;
+        Wed, 20 Apr 2022 09:42:54 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1650411775;
+        bh=J7MkUMhWQdU5+xYSe/nobBFT2dwUOTLlJX16ZJ5gCZ8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=DGSZuOWZM8pCiYTIENJ0+s6W1KftyaOAof61s/j2aB0TyVlAm0by7Pud090LGTSrE
+         sNmC6HGYoXcAG0Vv7yccphUoiWSvKu2KYHR0iyVodEdy6NklxJpwJh1hhO5q2O+d4Z
+         qynJMnBl3mQ+BPSbmgfa18YodD//89wO/jAmE+D8K27EsfvPZA7rVAqoPuf8qr85UM
+         Ne1GIZ3q6o+IpR+wVjL4Ih43JO0/R4qbZwM6uXarQ3RfB/AzE1lzNxddLJXvg1INV9
+         2sfVUEjtVTwa1WyCAt7wFKW4yxDGMciB6qtxEdYa/ggcLpnbmbspDrQXbQxm4Zbf+z
+         quVc/yQoGro0A==
+Date:   Wed, 20 Apr 2022 09:42:53 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the arm-soc tree with the
+ samsung-krzk-fixes tree
+Message-ID: <20220420094253.2300b293@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYuACgY2hcAgh_LwVb9AURjodMJbV6SsJb90wj-0aJKUOw@mail.gmail.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/DKp=N4C.Lgr+UUxrN6C=uKa";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 04:28:52PM +0530, Naresh Kamboju wrote:
-> Linux next 20220419 boot failed on arm architecture qemu_arm and BeagleBoard
-> x15 device.
+--Sig_/DKp=N4C.Lgr+UUxrN6C=uKa
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Was the immediately previous linux-next behaving correctly?
+Hi all,
 
-If so, nothing has changed in the ARM32 kernel tree, so this must be
-someone else's issue - code that someone else has pushed into
-linux-next.
+Today's linux-next merge of the arm-soc tree got a conflict in:
 
-It looks to me like someone is walking the page tables incorrectly,
-somewhere buried in handle_mm_fault(), because the PTE pointer is in
-the upper-2k of a 4k page, which is most definitely illegal on arm32.
+  arch/arm/Kconfig
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+between commit:
+
+  436ce66003d5 ("ARM: s3c: mark as deprecated and schedule removal")
+
+from the samsung-krzk-fixes tree and commit:
+
+  8c1fb11b8a77 ("ARM: s3c: enable s3c24xx multiplatform support")
+
+from the arm-soc tree.
+
+I fixed it up (I used the latter version of this file and added the
+following merge fix patch) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Wed, 20 Apr 2022 09:38:18 +1000
+Subject: [PATCH] fixup for "ARM: s3c: mark as deprecated and schedule remov=
+al"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ arch/arm/mach-s3c/Kconfig.s3c24xx | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm/mach-s3c/Kconfig.s3c24xx b/arch/arm/mach-s3c/Kconfig.=
+s3c24xx
+index d7dc031abc7a..f151a6f6d89e 100644
+--- a/arch/arm/mach-s3c/Kconfig.s3c24xx
++++ b/arch/arm/mach-s3c/Kconfig.s3c24xx
+@@ -6,7 +6,7 @@
+ # Copyright 2007 Simtec Electronics
+=20
+ menuconfig ARCH_S3C24XX
+-	bool "Samsung S3C24XX SoCs"
++	bool "Samsung S3C24XX SoCs (deprecated, see help)"
+ 	depends on ARCH_MULTI_V4T || ARCH_MULTI_V5
+ 	depends on CPU_LITTLE_ENDIAN
+ 	select ATAGS
+@@ -22,6 +22,11 @@ menuconfig ARCH_S3C24XX
+ 	  (<http://www.simtec.co.uk/products/EB110ITX/>), the IPAQ 1940 or the
+ 	  Samsung SMDK2410 development board (and derivatives).
+=20
++	  The platform is deprecated and scheduled for removal. Please reach to
++	  the maintainers of the platform and linux-samsung-soc@vger.kernel.org if
++	  you still use it.
++	  Without such feedback, the platform will be removed after 2022.
++
+ if ARCH_S3C24XX
+=20
+ config PLAT_S3C24XX
+--=20
+2.35.1
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/DKp=N4C.Lgr+UUxrN6C=uKa
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJfSP0ACgkQAVBC80lX
+0GyrfQgAmh9MwcpRZSHBxgz5bDaAiL1XEFj1XQWe4T82DJXjOhdKQbuc4TiI7O36
+VXbLplS5ORqO9zhujJY/q5GJFYvcSa8nqm0JpETG0WroIfji2gvnqyH5s43gKDu4
+8JKCRKBnIElh1VFh9ubr6OEmlOCDLMkKby87P/UitNKfhpCbvxSuhxTC/ETFUh+6
+cxDMgv7EN4GT7AQLfqGdDw0/hmSOgDkGfdmUGJwjhI3kibNeGBzn8QeyKKYQ8tDT
+gGHAgUtA5GcgbIhdNsjd2oaJOSgFBWrqkaNg7f4IOyP4kwcXzeYc/Brt8ahy6t+v
+kgmNREgR2nn4GEipEBCUvtTwhJ5r1w==
+=DlxJ
+-----END PGP SIGNATURE-----
+
+--Sig_/DKp=N4C.Lgr+UUxrN6C=uKa--

@@ -2,95 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A24D850726F
-	for <lists+linux-next@lfdr.de>; Tue, 19 Apr 2022 18:02:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A6705072B3
+	for <lists+linux-next@lfdr.de>; Tue, 19 Apr 2022 18:10:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354247AbiDSQEN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 19 Apr 2022 12:04:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35870 "EHLO
+        id S1354445AbiDSQNR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 19 Apr 2022 12:13:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244370AbiDSQEM (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 19 Apr 2022 12:04:12 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B699032EF1
-        for <linux-next@vger.kernel.org>; Tue, 19 Apr 2022 09:01:28 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id md20-20020a17090b23d400b001cb70ef790dso2237246pjb.5
-        for <linux-next@vger.kernel.org>; Tue, 19 Apr 2022 09:01:28 -0700 (PDT)
+        with ESMTP id S1354485AbiDSQMm (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 19 Apr 2022 12:12:42 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE474240BC;
+        Tue, 19 Apr 2022 09:09:58 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id i20so23086492wrb.13;
+        Tue, 19 Apr 2022 09:09:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=yFkFjqpOiICUZKBBXqsv6xYMwtD9akgoqB/oPFVYH6s=;
-        b=XUI8d/MUyS+Z6t573L3e0zuWKytIV2vZPTKhN/jpInIJdtPnyFpa3mkD2THyk7ulh+
-         Kqkl8braNAE9j+cVqi7h+zsguIoHKpwdt1ulMzRFn9XAtlCXgEOceJ/X9P8kPhdyy6RS
-         OVkWATHLx+hgWUtYYauSZ6X5JObL8xWSV6fUicas6A0xH3fX0hdPhsb3TMwEmzIgh/Gy
-         I4vZggAjTylrVzA/eostCtJqoIKLdgQQ3CRHVlNXJeM70gzFnU/wRP+jUh75enA0xueE
-         183IFLFuwju1wx0+xzjYChKiiozVGiLMpIX+hd8ZM54/iy97hS3wlE0UGmPbHw99186R
-         82Hg==
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Riv/wb0nWsjQNLZH9GYpKN0qAwQCp6Wcud3WrpG9KQM=;
+        b=Avoiha5pzt5iXaV/qAwaZBlRbNzRg+oBgewVIskQueMBOYb/i02kFHy6FZnuD7c0dG
+         D8Uth0VK6C5HjExR+lE/jDSvhAcpo5N7+4FMsZktsHSgK8SMry0aL/NQcW2SovhmVsjx
+         HlXsvGQM2G7LpW+vh9q9a21F9NelezHdmhuIJhpuV3tdNZpoiYc+m0CYm87sGfPWcPnw
+         YjgKvnm4WItW+mLcoEYYVt7F0QpdZQV9j3FRhhHkPO7acZEpDUPN1BJMl09rHuQlW/Hi
+         MVW9wGMXQITcqUf36mnOU9k4t/8yN9H40B7IBMk3ZtjAKiqXtHmC3fNb51tqfHtaFJK7
+         PZjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=yFkFjqpOiICUZKBBXqsv6xYMwtD9akgoqB/oPFVYH6s=;
-        b=fGDXK8dyBZ025jwOOJ2B4wiaQK/14+YsJrXHusDgTv95mk0hmPu+Vi9ODm8iNXRZOD
-         OQDuHKSXSxCek2mcbCYNGpSjERGWofeFAi//izdbsNxJuRgcHJui1XgHYz3Yj9qyjnb+
-         oUUP6bTWmrCN6EooMhW6fZ/GjFY63qadulmE7PBs6QPl6yGF3t31PfcC1IUFZKgjHd/Y
-         qG3JktGwdI8q78WS+m+eZ5R3c5KKLpxcOFJIE2U8PIPLDWhOlC7zzB53lbLutMqvcJoX
-         a9Cv52ch7E5ycxC1HjqmUNSH0NjdPeJ9qtOrEh4PEOWRwhHEvygDZLpw7j93oIzZBbxR
-         3DSQ==
-X-Gm-Message-State: AOAM533JTHIp3rUgbYqLaqy1ympZm/lEfOlyepUjq0gHyriS+EDZapyX
-        UNvfpZ8mY77MtuskisSc36WXqg==
-X-Google-Smtp-Source: ABdhPJz7yUN7JdXLKZI7zWnZgfsDj/Q4UEhY0oOMe0d/DOdZqQMBqZRMVdNAYhpKxscDLCxPy8+FKA==
-X-Received: by 2002:a17:90a:2983:b0:1cb:8d6e:e10b with SMTP id h3-20020a17090a298300b001cb8d6ee10bmr19430845pjd.208.1650384087908;
-        Tue, 19 Apr 2022 09:01:27 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id i6-20020a17090a718600b001d27a7d1715sm8704344pjk.21.2022.04.19.09.01.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 09:01:27 -0700 (PDT)
-Date:   Tue, 19 Apr 2022 16:01:23 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>,
-        Peter Gonda <pgonda@google.com>,
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Riv/wb0nWsjQNLZH9GYpKN0qAwQCp6Wcud3WrpG9KQM=;
+        b=YvePLD+LZkS4xF57CTYjKVaaCm3FHGw+OqAOrJ9IgUbVyX98qeRcP1W/IOj6SBwpB/
+         xtDzGxbVlqaKBoDkNtA7HU4THv/+4uwsp1QSIQy6EMnxZa0/dWs8m6N00CEWCXy0KAvl
+         0/suxZr4YDB9zchfvlM4Z0BhQq0kIz/QJKmAy48Tk9ZeoAhC2AGzY58sbhbCO3WgD/7i
+         lcQ5JckBA/11ra28w1Vizx6eMn0UvMrAYPcFzeRhAZNrRrL/aW9FkoWydTAAg7uUAm0I
+         WkNCN15CTRVcD8QuN8wc+4rJMQOJrXVXyBiMUHw9C424Hk18j8fIboW66FMRqWVq83o6
+         LNyQ==
+X-Gm-Message-State: AOAM532vvCqFwuhJP9p1te1SyWoGcS7VoLbq6ppZCglllLFxESwYlLoy
+        MYtdpV/aMYGqOSqrpyQkF5FJrZiO2cXiDQ==
+X-Google-Smtp-Source: ABdhPJzlbsAj3brTwnY7x/GJOsGXKnLbdLi7eA5aNKGCWTj8wtYbbK9bMFTK6V9BsGqo+pb/Y9Ps/A==
+X-Received: by 2002:adf:9bd5:0:b0:207:a2a6:636a with SMTP id e21-20020adf9bd5000000b00207a2a6636amr11957576wrc.480.1650384597296;
+        Tue, 19 Apr 2022 09:09:57 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id 185-20020a1c19c2000000b0038a1d06e862sm20539187wmz.14.2022.04.19.09.09.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Apr 2022 09:09:56 -0700 (PDT)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <c222d971-b82e-ef54-5683-d5fd65829b21@redhat.com>
+Date:   Tue, 19 Apr 2022 18:09:54 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: linux-next: build failure after merge of the kvm tree
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     KVM <kvm@vger.kernel.org>, Peter Gonda <pgonda@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the kvm tree
-Message-ID: <Yl7c06VX5Pf4ZKsa@google.com>
 References: <20220419153423.644c0fa1@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220419153423.644c0fa1@canb.auug.org.au>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+ <Yl7c06VX5Pf4ZKsa@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <Yl7c06VX5Pf4ZKsa@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Apr 19, 2022, Stephen Rothwell wrote:
-> Hi all,
+On 4/19/22 18:01, Sean Christopherson wrote:
+>> In this commit, the uapi structure changes do not match the documentation
+>> changes:-(   Does it matter that the ABI may be changed by this commit
+>> (depending on the alignment of the structure members)?
+> Yeah, it's a bit of mess.  I believe we have a way out, waiting on Paolo to weigh in.
 > 
-> After merging the kvm tree, today's linux-next build (arm64 defconfig)
-> failed like this:
+> https://lore.kernel.org/all/YlisiF4BU6Uxe+iU@google.com
 > 
-> arch/arm64/kvm/psci.c: In function 'kvm_prepare_system_event':
-> arch/arm64/kvm/psci.c:184:32: error: 'struct <anonymous>' has no member named 'flags'
->   184 |         vcpu->run->system_event.flags = flags;
->       |                                ^
-> 
-> Caused by commit
-> 
->   c24a950ec7d6 ("KVM, SEV: Add KVM_EXIT_SHUTDOWN metadata for SEV-ES")
-> 
-> In this commit, the uapi structure changes do not match the documentation
-> changes :-(  Does it matter that the ABI may be changed by this commit
-> (depending on the alignment of the structure members)?
 
-Yeah, it's a bit of mess.  I believe we have a way out, waiting on Paolo to weigh in.
+I'll get to it tomorrow morning.
 
-https://lore.kernel.org/all/YlisiF4BU6Uxe+iU@google.com
+Paolo

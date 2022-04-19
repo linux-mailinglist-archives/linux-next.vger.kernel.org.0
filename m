@@ -2,49 +2,47 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55F305061E2
-	for <lists+linux-next@lfdr.de>; Tue, 19 Apr 2022 03:55:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DC7C5061EA
+	for <lists+linux-next@lfdr.de>; Tue, 19 Apr 2022 03:56:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244092AbiDSB60 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 18 Apr 2022 21:58:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60872 "EHLO
+        id S1344176AbiDSB7K (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 18 Apr 2022 21:59:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234779AbiDSB6Z (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 18 Apr 2022 21:58:25 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A48802E9C4;
-        Mon, 18 Apr 2022 18:55:43 -0700 (PDT)
+        with ESMTP id S1344215AbiDSB7I (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 18 Apr 2022 21:59:08 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 818F92F38A;
+        Mon, 18 Apr 2022 18:56:23 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Kj6MX4hDdz4xNl;
-        Tue, 19 Apr 2022 11:55:36 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Kj6NP470rz4xXg;
+        Tue, 19 Apr 2022 11:56:21 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1650333338;
-        bh=DXbIa55Wy/Q3nGx/SPf/fBwL+pHFUPSShfZOOhiLSCo=;
+        s=201702; t=1650333382;
+        bh=bw6Epi7kuW+sVZpYiLUWJMDl+fXAaCRfWsUoFVrSnX8=;
         h=Date:From:To:Cc:Subject:From;
-        b=VmS7r/jcStB5KCYGzttMloQbfjRE8knnbbn+GMWWwkxWr27Km0RZQB+0sJVXMrfkr
-         EqQJw3hXOyZkLsjMKQKxExliaP8pat8A+G6uJ/3ue8M4UjD71JQP/5R+aKbA1E6tZd
-         rgjO35KHSC7o1JbC0u3ZlrB/ml1ngjqE2hpCC75XuQiCg42hnBOqPIafW1GRtM+rak
-         beaU1a1zwEeuQ1ZhMhH1Q2DQKgTy1h3NQw49Xcj+DJVRfTF1tZFB4QhRgGTDl3yO2u
-         RYws7gCJSSGZIgPohPQsGt/Q+AaaHItAs5XmTJbrcVFLR64AvVowITpr3ql3vg6/jy
-         jUccgEY753WzA==
-Date:   Tue, 19 Apr 2022 11:55:35 +1000
+        b=r/db4BEzVG0xG1Hp5Y8cN760/sSionRdPY2dwIVhSA0krPSswRzzqIDOT/YOm6wkY
+         iLSisNbtjveXuKKi2JVSY70ISbJSm7KaTvovkt0Gvx3gHYBqFxut3tALLTtDre4QIw
+         oFhsfneweI0jkg7tr0BbLtPAR6Y7I5AYxN1Wo94fmiaszO8Jl4Sd/Vl2tjU+wbASnp
+         A4o+Mx/Vaa/sCMajb8dc/yGC6uYZoc7KGpty6vS8IHt9AAbtqDa4moIrw5EAKpi3vA
+         Zf7XqfLND2OO9Pru/tyb+v/j0aOSbRJdNzuZ1NMa8CDwNRYAig7j0qzLTGPJlFjh0a
+         M0+/MaS6daaGA==
+Date:   Tue, 19 Apr 2022 11:56:20 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     Borislav Petkov <bp@suse.de>,
+To:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: linux-next: manual merge of the tip tree with the jc_docs tree
-Message-ID: <20220419115535.742377e6@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the bpf-next tree
+Message-ID: <20220419115620.65580586@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/BT7HPQP2FC/M2SpREFVN7S2";
+Content-Type: multipart/signed; boundary="Sig_/Qc7UYigfGCWV7g9H9dXqsEu";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -55,97 +53,70 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/BT7HPQP2FC/M2SpREFVN7S2
+--Sig_/Qc7UYigfGCWV7g9H9dXqsEu
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the tip tree got a conflict in:
+After merging the bpf-next tree, today's linux-next build
+(x86_64 allmodconfig) failed like this:
 
-  Documentation/admin-guide/kernel-parameters.txt
+In file included from include/linux/compiler_types.h:73,
+                 from <command-line>:
+drivers/net/ethernet/intel/i40e/i40e_xsk.c: In function 'i40e_run_xdp_zc':
+include/linux/compiler_attributes.h:222:41: error: attribute 'fallthrough' =
+not preceding a case label or default label [-Werror]
+  222 | # define fallthrough                    __attribute__((__fallthroug=
+h__))
+      |                                         ^~~~~~~~~~~~~
+drivers/net/ethernet/intel/i40e/i40e_xsk.c:192:17: note: in expansion of ma=
+cro 'fallthrough'
+  192 |                 fallthrough; /* handle aborts by dropping packet */
+      |                 ^~~~~~~~~~~
+cc1: all warnings being treated as errors
+In file included from include/linux/compiler_types.h:73,
+                 from <command-line>:
+drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c: In function 'ixgbe_run_xdp_zc=
+':
+include/linux/compiler_attributes.h:222:41: error: attribute 'fallthrough' =
+not preceding a case label or default label [-Werror]
+  222 | # define fallthrough                    __attribute__((__fallthroug=
+h__))
+      |                                         ^~~~~~~~~~~~~
+drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c:147:17: note: in expansion of =
+macro 'fallthrough'
+  147 |                 fallthrough; /* handle aborts by dropping packet */
+      |                 ^~~~~~~~~~~
+cc1: all warnings being treated as errors
 
-between commits:
+Caused by commits
 
-  d2fc83c149a7 ("Docs/admin: alphabetize some kernel-parameters (part 1)")
+  b8aef650e549 ("i40e, xsk: Terminate Rx side of NAPI when XSK Rx queue get=
+s full")
+  c7dd09fd4628 ("ixgbe, xsk: Terminate Rx side of NAPI when XSK Rx queue ge=
+ts full")
 
-from the jc_docs tree and commits:
-
-  f8858b5eff30 ("x86/cpu: Remove "noclflush"")
-  1625c833db93 ("x86/cpu: Allow feature bit names from /proc/cpuinfo in cle=
-arcpuid=3D")
-
-from the tip tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+I have used the bpf-next tree from next-20220414 for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc Documentation/admin-guide/kernel-parameters.txt
-index 7ca823a3d5ba,269be339d738..000000000000
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@@ -563,20 -563,6 +563,25 @@@
- =20
-  	cio_ignore=3D	[S390]
-  			See Documentation/s390/common_io.rst for details.
- +
-- 	clearcpuid=3DBITNUM[,BITNUM...] [X86]
-++	clearcpuid=3DX[,X...] [X86]
- +			Disable CPUID feature X for the kernel. See
- +			arch/x86/include/asm/cpufeatures.h for the valid bit
-- 			numbers. Note the Linux specific bits are not necessarily
-- 			stable over kernel options, but the vendor specific
-++			numbers X. Note the Linux-specific bits are not necessarily
-++			stable over kernel options, but the vendor-specific
- +			ones should be.
-++			X can also be a string as appearing in the flags: line
-++			in /proc/cpuinfo which does not have the above
-++			instability issue. However, not all features have names
-++			in /proc/cpuinfo.
-++			Note that using this option will taint your kernel.
- +			Also note that user programs calling CPUID directly
- +			or using the feature without checking anything
- +			will still see it. This just prevents it from
- +			being used by the kernel or shown in /proc/cpuinfo.
- +			Also note the kernel might malfunction if you disable
- +			some critical bits.
- +
-  	clk_ignore_unused
-  			[CLK]
-  			Prevents the clock framework from automatically gating
-@@@ -3463,8 -3444,8 +3468,6 @@@
- =20
-  	nocache		[ARM]
- =20
-- 	noclflush	[BUGS=3DX86] Don't use the CLFLUSH instruction
- -	delayacct	[KNL] Enable per-task delay accounting
---
-  	nodsp		[SH] Disable hardware DSP at boot time.
- =20
-  	noefi		Disable EFI runtime services support.
-
---Sig_/BT7HPQP2FC/M2SpREFVN7S2
+--Sig_/Qc7UYigfGCWV7g9H9dXqsEu
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJeFpcACgkQAVBC80lX
-0Gwt3Qf/Y0xuhRdgYrGPOPLeNKdJh6pU3N7kPs9ph7fHf0XQoX+tVwg4D427s5uh
-22+nV9aHclTuaSb31q+ofk9xoPUObybWaTeG0RH1DUgOzuLJxAbSJIqdYJ29ppTL
-fI9XxEL2wZnvPk/z1MxZoglPVz9VV1tMfu1Vb2ifnfTRQg4eqrlq4cDXPWBhiWBJ
-/ZgmcRrkJ3KfHfeA9WWpz4a/ZNmWazz7xuLFse0aFTTHP1yJYW6UEvOnIOV4ct5R
-HGHfTWl9oWiPmX8D/5UhSKu6Rjq7jrQtwcCgFN/lJL6F8uAGCl56lddg5MFk/Pbc
-cfKR04Mbi01/Z7rlRMcsqlC4t9ExWQ==
-=KIGV
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJeFsQACgkQAVBC80lX
+0Gz5/gf8Ch542D+PbkaNqy0vZIQkDqVfngATjOow2qXLg/drPByTnYRlfP/A0Uc5
+fTK0+bPkOyEsRwnfIoZ0RPYQLXWwBBsEqpUbtQXDxm8E8dKnsV67mIs1P7dgh9FI
+4A1870zcNp4+RI8uTZHZ7xhGhivxEL+WPS0KdtgYo/2KGMdoVP604+imAZOfyRH7
+ld+QwVetB3V36o/iIDCFy7RwwNrphZ123sNrUTiz/rimJIqnve90sxjrpEoPTJxD
+LCnjfwqub0Tm0kWJYlWz+GwZHVzMt6DJu7NxyU63XBwZ0DEjv/HX9cnAVGEFa06Z
+SNH3b5YEUV/wcgflI9C7QM+o9m/eXg==
+=ie3L
 -----END PGP SIGNATURE-----
 
---Sig_/BT7HPQP2FC/M2SpREFVN7S2--
+--Sig_/Qc7UYigfGCWV7g9H9dXqsEu--

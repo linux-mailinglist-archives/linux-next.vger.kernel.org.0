@@ -2,91 +2,72 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD56350864E
-	for <lists+linux-next@lfdr.de>; Wed, 20 Apr 2022 12:48:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1352A5087F6
+	for <lists+linux-next@lfdr.de>; Wed, 20 Apr 2022 14:19:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243586AbiDTKvT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 20 Apr 2022 06:51:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50762 "EHLO
+        id S1378471AbiDTMVz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 20 Apr 2022 08:21:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229837AbiDTKvT (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 20 Apr 2022 06:51:19 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F18F318381;
-        Wed, 20 Apr 2022 03:48:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650451713; x=1681987713;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yiWtHyh0+dkP7vvS/980PY5qigFMLm0paOIezN2buEA=;
-  b=nydwTQ2fk6jOPIuWHNDYmBHVdpwaaq6aLWjsNMcdRraSAvufjSpRgtM+
-   dJVP13/UjdPMBKV1kgJNW9lT5KIn6c1fAb1BpTEqIIFjbA4Iz8e/DfCdo
-   7DAC1MwKkROXhB5p8GaRdhIn7H6M5Thy6R5mvex4dSB5L8Q2vGZWYm7SF
-   rg5nZpOqiX/+0VhKBZieXFdd2lepK56ALLPJ60G0LtqJBiUYjk/cEOo9H
-   3DusgwqeyjW5AhoFaFLKseK+9CumDFQNA8lhrBvJ4/t+c+fo7O14eVDNU
-   ZpQV4qHiMIYI/h17tCPqWNXfzfNdUNVT2/YHfovqlT8GFNhdQrg9y3MYM
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="350446355"
-X-IronPort-AV: E=Sophos;i="5.90,275,1643702400"; 
-   d="scan'208";a="350446355"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 03:48:33 -0700
-X-IronPort-AV: E=Sophos;i="5.90,275,1643702400"; 
-   d="scan'208";a="593132230"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 03:48:30 -0700
-Received: by lahna (sSMTP sendmail emulation); Wed, 20 Apr 2022 13:45:32 +0300
-Date:   Wed, 20 Apr 2022 13:45:32 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        with ESMTP id S1378472AbiDTMVy (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 20 Apr 2022 08:21:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3C6F53FD84
+        for <linux-next@vger.kernel.org>; Wed, 20 Apr 2022 05:19:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650457147;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cyh9GNwkSeiWX8VVWJet6cmrStrv1Y1BhHYKMAKCy08=;
+        b=O7hDaCbtQRDTv4+C0wp3S8wcw0nFCe5/Dq2Dbnn8uM1MCpH/AHmMD8+Q8gj8WU3I+eXM0y
+        6hK8GD38nXnmzY8wPoCHM2bk5XGkl+BKBPs+Rv0NK1vOF6+Z+e6qXRejfRzGR2GbR3/4EF
+        Rdy9CSQBV2EyKk0IEb7xL07zSDUloSc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-37-c57Y8JUANKiI4K4YZsNEHg-1; Wed, 20 Apr 2022 08:19:03 -0400
+X-MC-Unique: c57Y8JUANKiI4K4YZsNEHg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8BA648047D6;
+        Wed, 20 Apr 2022 12:19:02 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E3F7CC53523;
+        Wed, 20 Apr 2022 12:19:01 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     linux-doc@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>,
+        KVM <kvm@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Ricardo Ribalda <ribalda@chromium.org>
-Subject: Re: linux-next: manual merge of the kunit-next tree with the
- thunderbolt tree
-Message-ID: <Yl/kTEZxet0fLPj4@lahna>
-References: <20220420151612.117f84b9@canb.auug.org.au>
+        Anup Patel <anup.patel@wdc.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v2] Documentation: kvm: Add missing line break in api.rst
+Date:   Wed, 20 Apr 2022 08:18:58 -0400
+Message-Id: <20220420121858.1147650-1-pbonzini@redhat.com>
+In-Reply-To: <20220407123327.159079-1-bagasdotme@gmail.com>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220420151612.117f84b9@canb.auug.org.au>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+Queued, thanks.
 
-On Wed, Apr 20, 2022 at 03:16:12PM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the kunit-next tree got a conflict in:
-> 
->   drivers/thunderbolt/test.c
-> 
-> between commit:
-> 
->   9d2d0a5cf0ca ("thunderbolt: Use different lane for second DisplayPort tunnel")
-> 
-> from the thunderbolt tree and commit:
-> 
->   7aadf8433357 ("thunderbolt: test: use NULL macros")
-> 
-> from the kunit-next tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+Paolo
 
-The fixup looks good to me, thanks!
+

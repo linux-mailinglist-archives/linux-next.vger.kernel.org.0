@@ -2,198 +2,185 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1B7F508368
-	for <lists+linux-next@lfdr.de>; Wed, 20 Apr 2022 10:29:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B12E50843D
+	for <lists+linux-next@lfdr.de>; Wed, 20 Apr 2022 10:56:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376730AbiDTIcD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 20 Apr 2022 04:32:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51690 "EHLO
+        id S1376958AbiDTI5L (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 20 Apr 2022 04:57:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356317AbiDTIcC (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 20 Apr 2022 04:32:02 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 475F035A8A;
-        Wed, 20 Apr 2022 01:29:15 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id u5-20020a17090a6a8500b001d0b95031ebso1340979pjj.3;
-        Wed, 20 Apr 2022 01:29:15 -0700 (PDT)
+        with ESMTP id S1358676AbiDTI5K (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 20 Apr 2022 04:57:10 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BB3A3B3F1
+        for <linux-next@vger.kernel.org>; Wed, 20 Apr 2022 01:54:24 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-2ec42eae76bso10580847b3.10
+        for <linux-next@vger.kernel.org>; Wed, 20 Apr 2022 01:54:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=uAM52mYRx4qBEh42tbPo6qRRezPozANpFEE+yUsZh1M=;
-        b=PLBx8sIfEo7u7z0vDmz374mj6swYn89R0DC396DQ1IrKdi6dtsykJG7OpVWO6BprE3
-         d+osOcXdTb2UWBy19hUay57jdOueZzEG2i/wbIF9VUUwiphodqy7XCKe4PnFa8b64LWM
-         YohwU+lps6GObSG34fz53DOoDTK1WyeSGCcRyYuuhBeBCWnWvrz2i7G+maIP+Ku9cI/2
-         WnYGlAOo3Vpc7eBBeQQzyyjZT9/BfAom/1v/06uA1MdZD25YZ7ejcrtY5rpDjjsFgj55
-         YzZmPXImfDL62N2cI9Oo+h2s3nUZRULbGdcEIU4o418DJaYfvRorkrRIbIgecpjTODkV
-         b2Zw==
+         :cc;
+        bh=wLb6JbYsWBBApP0Mc9bUp5iLpj1TLGjQFNYgA4f58jY=;
+        b=Z5uO5aHIflhbnOadvmxDtFLCizKRo1UqS7cTKCrhpc4fG4g6SUUUMFIKuoHkr+Num2
+         n07blE0e5TZu46EsQ1SS0MUjLsKnU21sr2iJIV2WHWoDFF63kyvIch+not84gEOjExGr
+         0IbUg8b/5jSjlcTPry4Ila/roGc69AVBSeE7Ukh7ph+ub9oBZCGntsoXfYSCzQifN+B2
+         rqQbVyFMw08on2jkL5R7HavrzQMK8WFn9yzYOBleSYdCGypDe/5C6CeEROqEFF5pC5xe
+         PyEjGcuor5dZd+V3sp8HqwDjp6OgM5kPSra2+hkFvBBMCcmJXjz2AOFGP9zYlkvjET4h
+         ZbAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=uAM52mYRx4qBEh42tbPo6qRRezPozANpFEE+yUsZh1M=;
-        b=DC1c7+rV/ZgOCtsknDtFx+PFUkPdrSlsjk/nK76n8fTKFJiAIKlIdsOx4DPKBq1Pf7
-         RlaU0OcHJtVlfGupSFEv70gekzdCidmxa7Xf9DAeFt2ESSht05hVl/yqp/hHk54tbenK
-         tNkdCSiVaf/rSl4QK7A1F4TAO1ztT9DLmRIOz5dmxzAYbAoRwQoBD9vKIqO0hYXgGYSR
-         +qhyDcBAf3aH3Bn6DY5TElaDlKUeRXTJMIblXlZ7q+3DorAi4Dxs24ajyK7OvCuqqX4A
-         mgjeenP2NER3rPAtS3KFB2idNLzdGEdFX09iRfr5/aREb//lhTiSpN2gH5KXXDC4/9nc
-         S63Q==
-X-Gm-Message-State: AOAM530BtyIxHTq03bbm2VIfvP59JIwSpxasaCnsYYYtNYAD8B+yhrHK
-        Zj12hSOpoi8c4qGc6CNid/MnWeBduOXbwe0hPtPhWCTwR90=
-X-Google-Smtp-Source: ABdhPJztltEmK8pxuKsgH84cz3z1ArsVEVvKIsVhy7FM2nE1eHHgpkkAhkBr7DgY8ILW7tHZ5UN3S2yGbMwtFd2Q0HU=
-X-Received: by 2002:a17:903:18f:b0:15a:d3e:1e47 with SMTP id
- z15-20020a170903018f00b0015a0d3e1e47mr7424334plg.54.1650443354615; Wed, 20
- Apr 2022 01:29:14 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=wLb6JbYsWBBApP0Mc9bUp5iLpj1TLGjQFNYgA4f58jY=;
+        b=xAOr9VWX1tPHuf8aTp4XO5IslnOxHAHjW0zNjAl7f9mYU7wRMm4udjUEddCu5hlZsk
+         8OCOIRaQrj7naZnjf8mbWvsM48U3pKL5UVXXTGweYA+/fONR8tHdG7e5hDyOMObcVB2s
+         UyWuOTSXJKz+FZp62GwA8lVcy8W6t7rCFmpFMw+cRytJZrh5ZyTqZvFPidvrStLR7pLm
+         8Gkuj/tkl0Hv9EjfuDA06f3XtBOq/N/lbZgImc3FxflE61S4R44sQGnPqd5ThfWYaQ7E
+         0EYgn5849nFGYeTlftFfvuMv6FMaz1F8CYqEnSXG6+T4F/6aweTtw/QPZHk95aY87J7w
+         Z+zg==
+X-Gm-Message-State: AOAM531biSn1nEjIC/zaK1g+vYOKK/bTaQxHpJQ/YxaDC87AEulEanrg
+        uG3gtM72M7uQFNYrcPmXVWfxjtUV8xuVXsZbq62AsOMl35ctG9T1
+X-Google-Smtp-Source: ABdhPJxqWslF3f2CGWOJcNab6oG/sR2XviNs/WLvatn0fSI5Dx9gYNvanGHc1PAgK+WrJakb5fgu0yUuCX9H2BE5UBQ=
+X-Received: by 2002:a81:6dc7:0:b0:2f1:c5bf:8f64 with SMTP id
+ i190-20020a816dc7000000b002f1c5bf8f64mr8609703ywc.120.1650444863090; Wed, 20
+ Apr 2022 01:54:23 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220420175500.240e4eb3@canb.auug.org.au>
-In-Reply-To: <20220420175500.240e4eb3@canb.auug.org.au>
-From:   Yury Norov <yury.norov@gmail.com>
-Date:   Wed, 20 Apr 2022 01:29:03 -0700
-Message-ID: <CAAH8bW9gb+OKcTHUFDE9V38F=yniXZyxauBmbapre3ymBc9Zwg@mail.gmail.com>
-Subject: Re: linux-next: build warning after merge of the bitmap tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Maxim Kuvyrkov <maxim.kuvyrkov@linaro.org>
+References: <CA+G9fYuACgY2hcAgh_LwVb9AURjodMJbV6SsJb90wj-0aJKUOw@mail.gmail.com>
+ <CAMj1kXFKzi14UCoiDOMwS5jyNz61_UzxGXm+ke0EWEt4nn6E1g@mail.gmail.com>
+In-Reply-To: <CAMj1kXFKzi14UCoiDOMwS5jyNz61_UzxGXm+ke0EWEt4nn6E1g@mail.gmail.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 20 Apr 2022 14:24:11 +0530
+Message-ID: <CA+G9fYtv8D2eR4dME6Ecx4sPpBcBtKerdZxcxsqfaCJdKVa3VQ@mail.gmail.com>
+Subject: Re: [next] arm: boot failed - PC is at cpu_ca15_set_pte_ext
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        max.krummenacher@toradex.com, Shawn Guo <shawnguo@kernel.org>,
+        Stefano Stabellini <stefano.stabellini@xilinx.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
-
-(Adding Maxim Kuvyrkov from linaro/TCWG as he might be interested in
-arm part of this.
-
-On Wed, Apr 20, 2022 at 12:55 AM Stephen Rothwell <sfr@canb.auug.org.au> wr=
-ote:
+On Wed, 20 Apr 2022 at 13:01, Ard Biesheuvel <ardb@kernel.org> wrote:
 >
-> Hi all,
+> On Tue, 19 Apr 2022 at 12:59, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+> >
+> > Linux next 20220419 boot failed on arm architecture qemu_arm and BeagleBoard
+> > x15 device.
+> >
+> > kernel crash log from x15:
+> > -----------------
+> > [    6.866516] 8<--- cut here ---
+> > [    6.869598] Unable to handle kernel paging request at virtual
+> > address f000e62c
+> > [    6.876861] [f000e62c] *pgd=82935811, *pte=00000000, *ppte=00000000
+> > [    6.883209] Internal error: Oops: 807 [#3] SMP ARM
+> > [    6.888000] Modules linked in:
+> > [    6.891082] CPU: 1 PID: 1 Comm: swapper/0 Tainted: G      D W
+> >   5.18.0-rc3-next-20220419 #1
+> > [    6.899993] Hardware name: Generic DRA74X (Flattened Device Tree)
+> > [    6.906127] PC is at cpu_ca15_set_pte_ext+0x4c/0x58
+> > [    6.911041] LR is at handle_mm_fault+0x60c/0xed0
+> > [    6.915679] pc : [<c031f26c>]    lr : [<c04cfeb8>]    psr: 40000013
+> > [    6.921966] sp : f000dde8  ip : f000de44  fp : a0000013
+> > [    6.927215] r10: 00000000  r9 : 00000000  r8 : c1e95194
+> > [    6.932464] r7 : c3c95000  r6 : befffff1  r5 : 00000081  r4 : c29d8000
+> > [    6.939025] r3 : 00000000  r2 : 00000000  r1 : 00000040  r0 : f000de2c
+> > [    6.945587] Flags: nZcv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
+> > [    6.952758] Control: 10c5387d  Table: 8020406a  DAC: 00000051
+> > [    6.958526] Register r0 information: 2-page vmalloc region starting
+> > at 0xf000c000 allocated at kernel_clone+0x94/0x3b0
+> > [    6.969299] Register r1 information: non-paged memory
+> > [    6.974365] Register r2 information: NULL pointer
+> > [    6.979095] Register r3 information: NULL pointer
+> > [    6.983825] Register r4 information: slab task_struct start
+> > c29d8000 pointer offset 0
+> > [    6.991729] Register r5 information: non-paged memory
+> > [    6.996795] Register r6 information: non-paged memory
+> > [    7.001861] Register r7 information: slab vm_area_struct start
+> > c3c95000 pointer offset 0
+> > [    7.010009] Register r8 information: non-slab/vmalloc memory
+> > [    7.015716] Register r9 information: NULL pointer
+> > [    7.020446] Register r10 information: NULL pointer
+> > [    7.025238] Register r11 information: non-paged memory
+> > [    7.030426] Register r12 information: 2-page vmalloc region
+> > starting at 0xf000c000 allocated at kernel_clone+0x94/0x3b0
+> > [    7.041259] Process swapper/0 (pid: 1, stack limit = 0xfaff0077)
+> > [    7.047302] Stack: (0xf000dde8 to 0xf000e000)
+> > [    7.051696] dde0:                   c29d8000 00000cc0 c20a1108
+> > c2065fa0 c1e09f50 b6db6db7
+> > [    7.059906] de00: c195bf0c 17c0f572 c29d8000 c3c95000 00000cc0
+> > 000befff befff000 befffff1
+> > [    7.068115] de20: 00000081 c3c3afb8 c3c3afb8 00000000 00000000
+> > 00000000 00000000 00000000
+> > [    7.076324] de40: 00000000 17c0f572 befff000 c3c95000 00002017
+> > befffff1 00002017 00002fb8
+> > [    7.084564] de60: c2d04000 00000081 c29d8000 c04c6790 c20d01d4
+> > 00000000 00000001 c20ce440
+> > [    7.092773] de80: c1e10bcc fffff000 00000000 c2a45680 eeb33cc0
+> > c29d8000 00000000 c2d04000
+> > [    7.100982] dea0: befffff1 f000df18 00000000 00002017 c20661a0
+> > c04c77e8 f000df18 00000000
+> > [    7.109222] dec0: 00000000 c1d95c40 00000002 c20661e0 00000000
+> > 00000001 00000000 c04c7ad0
+> > [    7.117431] dee0: 00000011 c2d02a00 00000001 befffff1 c29d8000
+> > 00000000 00000011 c2a30010
+> > [    7.125640] df00: c29d8000 c0524c24 f000df18 00000000 00000000
+> > 2cd9e000 c1d95c40 17c0f572
+> > [    7.133850] df20: 00000000 c2d02a00 0000000b 00000ffc 00000000
+> > befffff1 00000000 c0524f74
+> > [    7.142089] df40: c1e0e394 c2d02a00 c209a71c 38e38e39 c29d8000
+> > bee00008 c2d02a00 c2a30000
+> > [    7.150299] df60: c1e0e394 c1e0e420 00000000 00000000 00000000
+> > c05266bc c209a000 c1944c60
+> > [    7.158508] df80: 00000000 00000000 00000000 c129d2b4 c209a000
+> > c1e0e394 00000000 c12b5600
+> > [    7.166748] dfa0: 00000000 c12b5518 00000000 c0300168 00000000
+> > 00000000 00000000 00000000
+> > [    7.174957] dfc0: 00000000 00000000 00000000 00000000 00000000
+> > 00000000 00000000 00000000
+> > [    7.183166] dfe0: 00000000 00000000 00000000 00000000 00000013
+> > 00000000 00000000 00000000
+> > [    7.191406] Code: 13110001 12211b02 13110b02 03a03000 (e5a03800)
 >
-> After merging the bitmap tree, today's linux-next build (htmldocs)
-> produced this warning:
+> This decodes to
 >
-> Documentation/core-api/kernel-api:87: /home/sfr/next/next/include/linux/b=
-itmap.h:425: WARNING: Unexpected indentation.
-> Documentation/core-api/kernel-api:87: /home/sfr/next/next/include/linux/b=
-itmap.h:426: WARNING: Block quote ends without a blank line; unexpected uni=
-ndent.
-> Documentation/core-api/kernel-api:87: /home/sfr/next/next/include/linux/b=
-itmap.h:431: WARNING: Unexpected indentation.
+>    0: 13110001 tstne r1, #1
+>    4: 12211b02 eorne r1, r1, #2048 ; 0x800
+>    8: 13110b02 tstne r1, #2048 ; 0x800
+>    c: 03a03000 moveq r3, #0
+>   10:* e5a03800 str r3, [r0, #2048]! ; 0x800 <-- trapping instruction
 >
-> Introduced by commit
+> and R0 points into the stack. So we are updating a PTE that is located
+> on the stack rather than in a page table somewhere, which seems very
+> odd. However, this could be a latent bug that got uncovered by the
+> VMAP stacks changes.
 >
->   6f46c24da767 ("bitmap: add bitmap_weight_{cmp, eq, gt, ge, lt, le} func=
-tions")
+> Unfortunately, the vmlinux.xz file I downloaded from the link below
+> seems to be different from the one that produced the crash, given that
+> the LR address of c04cfeb8 does not seem to correspond with
+> handle_mm_fault+0x60c/0xed0.
+> Can you please double check the artifacts?
 
-I'll build docs and fix those warnings. Thanks for pointing this out.
+You can find the vmlinux.xz for the trace log I have pasted.
 
-From previous linux-next build message:
+vmlinux.xz : https://builds.tuxbuild.com/280TS8MuM6sYWk5aUtrvWIw0RQ7/vmlinux.xz
+artifact-location: https://builds.tuxbuild.com/280TS8MuM6sYWk5aUtrvWIw0RQ7
 
-> ../lib/bitmap.c:21:5: error: conflicting types for '__bitmap_weight_cmp';=
- have 'int(const long unsigned int *, unsigned int,  int)'
->    21 | int __bitmap_weight_cmp(const unsigned long *bitmap, unsigned int=
- bits, int num)
->       |     ^~~~~~~~~~~~~~~~~~~
-> In file included from ../lib/bitmap.c:6:
-> tools/include/linux/bitmap.h:15:5: note: previous declaration of '__bitma=
-p_weight_cmp' with type 'int(const long unsigned int *, unsigned int,  unsi=
-gned int)'
->    15 | int __bitmap_weight_cmp(const unsigned long *bitmap, unsigned int=
- bits,
->       |     ^~~~~~~~~~~~~~~~~~~
-> ../lib/bitmap.c: In function '__bitmap_weight_cmp':
-> ../lib/bitmap.c:26:50: error: comparison of integer expressions of differ=
-ent signedness: 'unsigned int' and 'int' [-Werror=3Dsign-compare]
->    26 |                 if (w + bits - k * BITS_PER_LONG < num)
->       |                                                  ^
-> ../lib/bitmap.c:31:23: error: comparison of integer expressions of differ=
-ent signedness: 'unsigned int' and 'int' [-Werror=3Dsign-compare]
->    31 |                 if (w > num)
->       |                       ^
-> cc1: all warnings being treated as errors
-> tools/perf/../lib/bitmap.c:21:5: error: conflicting types for '__bitmap_w=
-eight_cmp'; have 'int(const long unsigned int *, unsigned int,  int)'
->    21 | int __bitmap_weight_cmp(const unsigned long *bitmap, unsigned int=
- bits, int num)
->       |     ^~~~~~~~~~~~~~~~~~~
-> In file included from tools/perf/../lib/bitmap.c:6:
-> tools/include/linux/bitmap.h:15:5: note: previous declaration of '__bitma=
-p_weight_cmp' with type 'int(const long unsigned int *, unsigned int,  unsi=
-gned int)'
->    15 | int __bitmap_weight_cmp(const unsigned long *bitmap, unsigned int=
- bits,
->       |     ^~~~~~~~~~~~~~~~~~~
-> tools/perf/../lib/bitmap.c: In function '__bitmap_weight_cmp':
-> tools/perf/../lib/bitmap.c:26:50: error: comparison of integer expression=
-s of different signedness: 'unsigned int' and 'int' [-Werror=3Dsign-compare=
-]
->    26 |                 if (w + bits - k * BITS_PER_LONG < num)
->       |                                                  ^
-> tools/perf/../lib/bitmap.c:31:23: error: comparison of integer expression=
-s of different signedness: 'unsigned int' and 'int' [-Werror=3Dsign-compare=
-]
->    31 |                 if (w > num)
->       |                       ^
-> cc1: all warnings being treated as errors
-
-I fixed tools build error and updated the bitmap-for-next branch. The
-problem is that tools/perf
-enables -Werror=3Dsign-compare, and main kernel not. So direct copying
-of functions from kernel
-to tools doesn't work. This might be an issue by itself because I
-think it would be better to keep
-kernel and tools code consistent whenever possible.
-
-Another problem is that the tools lacks testing from (obviously) me,
-0-day and TCWG. I added
-tools/perf to my testing build suite, and found that the build fails
-for arm and s390 on v5.18-rc2.
-See tools/perf build log attached.
-
-Thanks,
-Yury
-
-s390:
-  PERF_VERSION =3D 5.18.rc2.gce522ba9ef7e
-In file included from /usr/s390x-linux-gnu/include/stdio.h:866,
-                 from
-/home/yury/work/linux/tools/lib/perf/include/perf/cpumap.h:7,
-                 from util/session.c:13:
-In function =E2=80=98printf=E2=80=99,
-    inlined from =E2=80=98dump_event=E2=80=99 at util/session.c:1292:2,
-    inlined from =E2=80=98machines__deliver_event=E2=80=99 at util/session.=
-c:1502:2,
-    inlined from =E2=80=98perf_session__deliver_synth_event=E2=80=99 at uti=
-l/session.c:1703:9:
-/usr/s390x-linux-gnu/include/bits/stdio2.h:112:10: error: =E2=80=98%s=E2=80=
-=99
-directive argument is null [-Werror=3Dformat-overflow=3D]
-  112 |   return __printf_chk (__USE_FORTIFY_LEVEL - 1, __fmt,
-__va_arg_pack ());
-      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~~
-util/session.c: In function =E2=80=98perf_session__deliver_synth_event=E2=
-=80=99:
-util/session.c:1292:25: note: format string is defined here
- 1292 |  printf("\n%#" PRIx64 "@%s [%#x]: event: %d\n",
-      |                         ^~
-cc1: all warnings being treated as errors
-
-arm:
-  PERF_VERSION =3D 5.18.rc2.gce522ba9ef7e
-/tmp/ccHIlKZJ.s: Assembler messages:
-/tmp/ccHIlKZJ.s:541: Error: selected processor does not support `ldrd
-r0,r1,[r2]' in ARM mode
-/tmp/ccHIlKZJ.s:630: Error: selected processor does not support `strd
-r4,r5,[r3]' in ARM mode
-make[9]: *** [/home/yury/work/linux/tools/build/Makefile.build:96:
-/home/yury/work/linux/build/arm/tools/perf/arch/arm/util/auxtrace.o]
-Error 1
+- Naresh

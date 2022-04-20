@@ -2,93 +2,95 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DD7A508527
-	for <lists+linux-next@lfdr.de>; Wed, 20 Apr 2022 11:45:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 671B1508552
+	for <lists+linux-next@lfdr.de>; Wed, 20 Apr 2022 11:58:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351754AbiDTJsD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 20 Apr 2022 05:48:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43806 "EHLO
+        id S1377418AbiDTKBS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 20 Apr 2022 06:01:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243155AbiDTJsD (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 20 Apr 2022 05:48:03 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13A6D1F60C;
-        Wed, 20 Apr 2022 02:45:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=sKYagvR6CfauZc5SfVdvqjzzNgqk07AuGu+1B6sV42o=; b=P3YgYiJgq5rd0fveUG035inBvs
-        WwVWo3pEOg9TaLW7DaXoNWDFwXJJ+lR0CJw5Wg57IlE2Bs08iJWnBs1YIyz6iITbGVyVQo/xAVO7d
-        953xU0+vy5WQjNtJuGjinhvBONG8ZS0++76jD9UYQor+gMcetNSIfSuozs4r5GakMs9wpM1FKc1op
-        M1jOEIOQqt3+es6Z+RiQN3lzszW2uw77Mrs1g2PlMY7WXhpmPS+8nPKadqdH1LnZOkQOKNeTJq2d1
-        BsGulgEvxejBbyZX67HxKoTginAklK3D1GTaQXiF2FkGINe0jSHMDbDAUq8Q5wLo10xe6oE7N8pC4
-        4d7vIrdg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:58340)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1nh6tW-00025n-JN; Wed, 20 Apr 2022 10:45:06 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1nh6tO-0001h2-TE; Wed, 20 Apr 2022 10:44:58 +0100
-Date:   Wed, 20 Apr 2022 10:44:58 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        max.krummenacher@toradex.com, Shawn Guo <shawnguo@kernel.org>,
-        Stefano Stabellini <stefano.stabellini@xilinx.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>
-Subject: Re: [next] arm: boot failed - PC is at cpu_ca15_set_pte_ext
-Message-ID: <Yl/WGnHXASYSBXct@shell.armlinux.org.uk>
-References: <CA+G9fYuACgY2hcAgh_LwVb9AURjodMJbV6SsJb90wj-0aJKUOw@mail.gmail.com>
- <Yl8GInPZyl2PqK7D@shell.armlinux.org.uk>
- <CA+G9fYvRdg6t6OnoJy62Vte5XnSymyL6B6kARC_1Jao52h6ZYg@mail.gmail.com>
+        with ESMTP id S1377401AbiDTKBN (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 20 Apr 2022 06:01:13 -0400
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEE593C71E;
+        Wed, 20 Apr 2022 02:58:26 -0700 (PDT)
+Received: by mail-qt1-f172.google.com with SMTP id ay11so585210qtb.4;
+        Wed, 20 Apr 2022 02:58:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3wU49MG03D+M8OtsmGdiD3cYVYIgAsNZvGgteteaKNo=;
+        b=C17CqwmJ+XIF9t1S7bnqE6u/WJIe3/MHQrYaTcD4PEm9fJMvwU3UIe0zJPfuBTb0y1
+         VfT9rFMqTovbV4SQuNL2TGLP9FehYlo7R0djscGML0Z6Sgz4+oWXFj3iHIC/dsZD9yFZ
+         xYefk4l+6/ixru2c/IDkdGadz5danbHSUckyZNXRJ4PQkM1YLiHl8ccja0LJFvEcTaJo
+         o70ExLO2dyjs9Atcenaqs1AGxmZ36VFBOC9yvwKaBtVqgBygaFFTEVxGzL6JwNddK409
+         lrUtUf6RBQsZ9KRc1N08r8q738djv+6v1F/XaM5IKPuZtu5X8oFFYivdQGSDK6eWDRgW
+         sBIQ==
+X-Gm-Message-State: AOAM533Ige2T5yHFGEk1AKveEpN0teN7eGbdF/OMx1ofBTyAmY8784Vy
+        zUMvHOsMqb43aLea0YWX95SYMx6p5kL1+Q==
+X-Google-Smtp-Source: ABdhPJwJW1gR/1/6QSs/qljEsGdCUYw2OPItozBWu1poMjIGVMnBwPXIj3RvEIFh7qFETYsfDGa6rQ==
+X-Received: by 2002:a05:622a:1211:b0:2f2:167:55dc with SMTP id y17-20020a05622a121100b002f2016755dcmr8194727qtx.105.1650448705917;
+        Wed, 20 Apr 2022 02:58:25 -0700 (PDT)
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com. [209.85.219.174])
+        by smtp.gmail.com with ESMTPSA id x4-20020a05620a258400b0067d47fb5aa4sm1280578qko.63.2022.04.20.02.58.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Apr 2022 02:58:25 -0700 (PDT)
+Received: by mail-yb1-f174.google.com with SMTP id p65so1882740ybp.9;
+        Wed, 20 Apr 2022 02:58:25 -0700 (PDT)
+X-Received: by 2002:a25:9e89:0:b0:63c:ad37:a5de with SMTP id
+ p9-20020a259e89000000b0063cad37a5demr19016820ybq.342.1650448705364; Wed, 20
+ Apr 2022 02:58:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYvRdg6t6OnoJy62Vte5XnSymyL6B6kARC_1Jao52h6ZYg@mail.gmail.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220420145517.445e41b1@canb.auug.org.au>
+In-Reply-To: <20220420145517.445e41b1@canb.auug.org.au>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 20 Apr 2022 11:58:14 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdW2ve9WHRO=ghNvu5z8hpFHd-14zMTPvWFsrAbkvD5b3w@mail.gmail.com>
+Message-ID: <CAMuHMdW2ve9WHRO=ghNvu5z8hpFHd-14zMTPvWFsrAbkvD5b3w@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the pinctrl-renesas tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 02:25:32PM +0530, Naresh Kamboju wrote:
-> On Wed, 20 Apr 2022 at 00:28, Russell King (Oracle)
-> <linux@armlinux.org.uk> wrote:
-> >
-> > On Tue, Apr 19, 2022 at 04:28:52PM +0530, Naresh Kamboju wrote:
-> > > Linux next 20220419 boot failed on arm architecture qemu_arm and BeagleBoard
-> > > x15 device.
-> >
-> > Was the immediately previous linux-next behaving correctly?
-> 
-> This crash started happening from the next-20220413 tag.
+Hi Stephen,
 
-That rules out any arm32 specific changes - the last time my tree
-changed in for-next was 1st April.
+On Wed, Apr 20, 2022 at 6:55 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> After merging the pinctrl-renesas tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+>
+> In file included from include/asm-generic/bug.h:22,
+>                  from arch/x86/include/asm/bug.h:87,
+>                  from include/linux/bug.h:5,
+>                  from include/linux/io.h:11,
+>                  from drivers/pinctrl/renesas/core.c:16:
+> drivers/pinctrl/renesas/core.c: In function 'sh_pfc_check_info':
+> include/linux/kern_levels.h:5:25: error: format '%u' expects argument of type 'unsigned int', but argument 4 has type 'long unsigned int' [-Werror=format=]
 
-Ard points out that the pte table is on the stack, which it really
-should not be. I'm guessing there's some inappropriate generic
-kernel change that has broken arm32. A pte table should never ever
-appear on a kernel stack.
+> Caused by commit
+>
+>   be1a0d45cdd5 ("pinctrl: renesas: checker: Rework drive and bias pin iteration")
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Thanks  for the report!
+I have fixed the offending commit.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

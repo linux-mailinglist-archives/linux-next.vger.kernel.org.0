@@ -2,77 +2,48 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D35750AA19
-	for <lists+linux-next@lfdr.de>; Thu, 21 Apr 2022 22:36:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA05050AAF9
+	for <lists+linux-next@lfdr.de>; Thu, 21 Apr 2022 23:50:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1392405AbiDUUjQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 21 Apr 2022 16:39:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51666 "EHLO
+        id S1442217AbiDUVx2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 21 Apr 2022 17:53:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1392406AbiDUUjL (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 21 Apr 2022 16:39:11 -0400
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B84624DF4C;
-        Thu, 21 Apr 2022 13:36:20 -0700 (PDT)
-Received: by mail-oi1-x22b.google.com with SMTP id t15so6881987oie.1;
-        Thu, 21 Apr 2022 13:36:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=pR+ivXQjQ4mpc3bU1lbKrf1OTqhPO5O1eEWuchyFYYM=;
-        b=aUgy7ZQPy9VWQ3sdol3HV/TdeP/hqQr5zfOdNWWD6QeduBPQ0/ElwdKLnErBtzgTGb
-         WCkwtX3AUMiqG3IWexPlK3SDIJzDzLYBTmKfnxRtfnx4smznqkM6F7j2j8FT+l+dl3Kg
-         4/CfCcjq51ubOP/yQEX4ACp6GktE/PUK5na1g0xy+sKXWainyCu3ZdX0NvSbgJXZsG/l
-         9iHOqfYrb75TqJwtaHW7ioSsBv0n+ZxKJuHBNGeSDwh1eLKGkob/fGeRCf4CAHmvUc0W
-         slDG+J55kEkR6bUrAGBuFfpuKrl40ENcSoT555XLpq8RcN3/aKmA3u6bIV2Yxztp9dAk
-         6gOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=pR+ivXQjQ4mpc3bU1lbKrf1OTqhPO5O1eEWuchyFYYM=;
-        b=uBCwBu3iT40KqqsKhFGqzod4XltxUhrof2LvpCIfk5pYvxsmH6EF1SN1k8e+NSzazs
-         XRiCUM0YiKmkIBYClKS0xXLf9g+REpG2IPSTLrAADN3WXrzY6TG6n7bt8bms27qZzzUf
-         eUyeV0AVnJSTnxDIwehCqDQ3j6B9sSdQu/WsOZnOQDY1bM7Mjf8nWAbQE0VdAlQkWK4s
-         2+PssFXlbKxq164DxqdYdvyvfpjumN+RWQxSgI5dEhjoQtRxnc0h1+y2RqNu6H8f+8d5
-         8PnsCm+tkGTic0gsrqP6sPgXoKQT3cXprXvrCk047mRbuJeFWTHfmjkft2OskCdKN3kp
-         fa2A==
-X-Gm-Message-State: AOAM53234oHqxSBznD/LMGefkO/u2KNcbC5n6Ecpm9k/50HieDWMe0QW
-        FJ73SbwgYhvFYK2UUw7ONwWggPoLmmM=
-X-Google-Smtp-Source: ABdhPJzvQDBpW8i8W67TKQjDDBb4cpOmkXvirm1Nq4saLvrBEWABE0GZmwKCUokZxD/YPpaqiqgYJA==
-X-Received: by 2002:a05:6808:e8d:b0:322:4fbe:8c5f with SMTP id k13-20020a0568080e8d00b003224fbe8c5fmr5198699oil.284.1650573378654;
-        Thu, 21 Apr 2022 13:36:18 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a37-20020a9d2628000000b0060563c52952sm15698otb.8.2022.04.21.13.36.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Apr 2022 13:36:17 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <15b38d01-702c-b39e-7053-54c3905a0794@roeck-us.net>
-Date:   Thu, 21 Apr 2022 13:36:15 -0700
+        with ESMTP id S1349020AbiDUVx1 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 21 Apr 2022 17:53:27 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B027939801;
+        Thu, 21 Apr 2022 14:50:31 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KkrnF6PlPz4x7V;
+        Fri, 22 Apr 2022 07:50:25 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1650577826;
+        bh=v5D8x6mWy3R6bxOB+7bHkFTUlqaCMYDNqLBwRz57FU8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=GYYfzcnl/hpv5n0BBqjr9Uq2vbIGZ0d8vJyH8VE5xva26yROLXoa3lAtJB9PiiAP+
+         MisgvMBuI8mskQejvEp2TWXBK4sEkBiEHQoKLyzF7xzM+qWELHte6R1eJhQha3w02s
+         4K+alfsg8adf+pF3ZgwoChpagmgJbBon23VXCtyptOFThBqMDOYNwknXR1HLj5BQB+
+         Pzt1rPhCwPrjsAeahN11D/8iFtkymcSEFPQnyNvcV+xyhR2A29EvgDDu8uiDhnSoDZ
+         jr+AOEU36qpt9NpA+yEJTIZSQyZAfxKQhB0c9dtRxISBRQr4aGKQvQ6wh255S989cB
+         HD8RNWL09ewBA==
+Date:   Fri, 22 Apr 2022 07:50:24 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>
+Cc:     Atish Patra <atishp@rivosinc.com>,
+        Anup Patel <anup@brainfault.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tags need some work in the kvm-fixes tree
+Message-ID: <20220422075024.161914a8@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-US
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, linux-usb@vger.kernel.org
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        heikki.krogerus@linux.intel.com
-References: <CA+G9fYvdfYBq+Q=-XUJcKHSYXdubdoqhExRpjrqCgf_N3pPpHQ@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: drivers/usb/typec/tcpm/tcpm.c:4724:3: error: case label does not
- reduce to an integer constant
-In-Reply-To: <CA+G9fYvdfYBq+Q=-XUJcKHSYXdubdoqhExRpjrqCgf_N3pPpHQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: multipart/signed; boundary="Sig_/ceZP+XRH1xEcsrJaB0i9I9N";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,21 +51,58 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 4/21/22 12:03, Naresh Kamboju wrote:
-> Linux mainline and linux next arm64 builds failed with gcc-7.3.x.
-> 
-> drivers/usb/typec/tcpm/tcpm.c: In function 'run_state_machine':
-> drivers/usb/typec/tcpm/tcpm.c:4724:3: error: case label does not
-> reduce to an integer constant
->     case BDO_MODE_TESTDATA:
->     ^~~~
-> make[4]: *** [scripts/Makefile.build:288: drivers/usb/typec/tcpm/tcpm.o] Error 1
->                                        ^
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> 
-> --
+--Sig_/ceZP+XRH1xEcsrJaB0i9I9N
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-That code is several years old, the define is a constant, and I don't see
-a recent change in the code. What am I missing ?
+Hi all,
 
-Guenter
+In commit
+
+  38d9a4ac65f2 ("RISC-V: KVM: Restrict the extensions that can be disabled")
+
+Fixes tag
+
+  Fixes: 92ad82002c39 ("RISC-V: KVM: Implement
+
+has these problem(s):
+
+  - Subject has leading but no trailing parentheses
+  - Subject has leading but no trailing quotes
+
+In commit
+
+  3ab75a793e49 ("RISC-V: KVM: Remove 's' & 'u' as valid ISA extension")
+
+Fixes tag
+
+  Fixes: a33c72faf2d7 ("RISC-V: KVM: Implement VCPU create, init and
+
+has these problem(s):
+
+  - Subject has leading but no trailing parentheses
+  - Subject has leading but no trailing quotes
+
+Please do not split Fixes tags over more than one line.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/ceZP+XRH1xEcsrJaB0i9I9N
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJh0aAACgkQAVBC80lX
+0Gwhngf/aLYbBhANTfzllxLMgdfjd+whtNSPhRSTYd6dvz4tMVQ+llBxeRvLrOF8
+HVuFAn0innWIdUO8vI8Wc+i1QU93rLWbouFCxAkbAVbr3TB3HSBZdMLTBC0mDVGL
+RZ+mOaXqUXWYCbLSmxPQs/D6ueJgiwl76YFieA4t1oqJTGwmK4YrWz08mEcyx5iI
+/5WH8Uyl4DQKWxH6GPHrowlnTfwOYEkuTI5/81VxymzEGl8lcJfazGEY04Zyzsvl
+XxpYmcp0ouJ3cL39FBjCxbbzs72sWShfhrHqpxV3F9EtHOnJnJBsAgvVXTz9TNn/
+j1uO55RY/4AnYEoL/VS4cXQDZ4swtQ==
+=bhza
+-----END PGP SIGNATURE-----
+
+--Sig_/ceZP+XRH1xEcsrJaB0i9I9N--

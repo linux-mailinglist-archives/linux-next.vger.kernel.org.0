@@ -2,52 +2,56 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95BA050A446
-	for <lists+linux-next@lfdr.de>; Thu, 21 Apr 2022 17:32:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B45B950A497
+	for <lists+linux-next@lfdr.de>; Thu, 21 Apr 2022 17:45:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231889AbiDUPfZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 21 Apr 2022 11:35:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60988 "EHLO
+        id S1390257AbiDUPs1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 21 Apr 2022 11:48:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229985AbiDUPfY (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 21 Apr 2022 11:35:24 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 613A3B847;
-        Thu, 21 Apr 2022 08:32:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=UlrK2UBvxdMqDUsjxJEXKn2pxD/qQjI/AOd8I2Jov7k=; b=FnY3bky969vzjNorLHSkfXetcF
-        G5APoF9zoTeF2Ar4VEr2KoaVMxpqwYjBU6GFNGQkHCG2OvTx7jwbeEpaqulM3M0LeHfu7o+G/Nyq6
-        7nDZjBwM2O9yVFW0jajDjs7rPQg42o7UumUdenJ8OZrMrWN4lgOCRnBM69WxOcdLA8s8hojtBD6O3
-        YlzIg5tCildFIjzRpUfJk+5RgSfqW+vjsh/uMILJma57NDgDJE02I6YT2jiXwqpeaMfshbCp0cKoD
-        /T/vVEHF57ujO5sU6Qq9TYxYKz2SwG6WTbH+C5ZOMtrxIdwOAqP1arugT0JFJ91agq+rRiVp3ao3i
-        2uJWziHA==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nhYnG-005D0K-Ou; Thu, 21 Apr 2022 15:32:31 +0000
-Message-ID: <d7b81bef-5f51-2b42-6f84-ec09d9b469ff@infradead.org>
-Date:   Thu, 21 Apr 2022 08:32:24 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [next] s390: build failed
-Content-Language: en-US
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>, lkft-triage@lists.linaro.org
+        with ESMTP id S1390262AbiDUPsZ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 21 Apr 2022 11:48:25 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13F92BE3D;
+        Thu, 21 Apr 2022 08:45:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650555936; x=1682091936;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FzYWfiReT6mX/53xH+cwrZM/uep1Ta2xXeOKpV1XB4M=;
+  b=gqjW6V2h2P2GO3HLHeYLH5gTbx78w7M98EhYwFr8vIswH1mbckwnlS2x
+   YHkQarBlj1GG0LQ0f8AKu5eX57dPVptboTdO7hDqw5uOyR1Z4TdDn1+rX
+   mm9upHIukrwBHKaHpfvG19BSsa7g5jHSwb53V+EBCKmm9e25siYyzGgB9
+   7+KqgO4v8y7ISm8s1b082z7VELTXMOnKBU4ai/gnK8pK8kOiUY8Z6JLHn
+   sGjZg4KuGQ6SXa0v3GhF1jmRu3LR4dQW2U+FfkkTWWBJbccWfyE83p49Z
+   vwg6KB3/xqFAaQzNiJuPOxEzgZxGn4RXQEWYUDiAjUsHhmTEPsnsjCcDo
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="327300594"
+X-IronPort-AV: E=Sophos;i="5.90,279,1643702400"; 
+   d="scan'208";a="327300594"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 08:45:35 -0700
+X-IronPort-AV: E=Sophos;i="5.90,279,1643702400"; 
+   d="scan'208";a="626569670"
+Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 08:45:35 -0700
+Date:   Thu, 21 Apr 2022 08:45:34 -0700
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
 Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Peter Xu <peterx@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <CA+G9fYvA9e760hFH==n2_gn8zNQeGBQ1=8_+Ot1sMCwoPiS15g@mail.gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <CA+G9fYvA9e760hFH==n2_gn8zNQeGBQ1=8_+Ot1sMCwoPiS15g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: [PATCH] topology/sysfs: Fix allnoconfig build breakage.
+Message-ID: <YmF8Hrq5kgDdfvtS@agluck-desk3.sc.intel.com>
+References: <20220421152645.3a849198@canb.auug.org.au>
+ <YmD+geU9CmjoVnN9@kroah.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YmD+geU9CmjoVnN9@kroah.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,47 +59,45 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+drivers/base/topology.c: In function 'topology_is_visible':
+drivers/base/topology.c:158:24: warning: unused variable 'dev' [-Wunused-variable]
+  158 |         struct device *dev = kobj_to_dev(kobj);
 
+This is because the topology_ppin(dev->id) macro expands to:
 
-On 4/21/22 02:57, Naresh Kamboju wrote:
-> Linux next-20220421 s390 tinyconfig and allnoconfig builds failed [1].
-> 
-> Regressions found on s390:
->   - s390-clang-nightly-tinyconfig
->   - s390-gcc-10-tinyconfig
->   - s390-gcc-11-tinyconfig
->   - s390-clang-14-allnoconfig
->   - s390-clang-nightly-allnoconfig
->   - s390-clang-14-tinyconfig
->   - s390-clang-13-tinyconfig
->   - s390-gcc-10-allnoconfig
->   - s390-clang-13-allnoconfig
->   - s390-gcc-9-allnoconfig
->   - s390-gcc-9-tinyconfig
->   - s390-gcc-11-allnoconfig
->   - s390-gcc-8-tinyconfig
->   - s390-gcc-8-allnoconfig
-> 
-> In file included from arch/s390/mm/pageattr.c:6:
-> include/linux/hugetlb.h:414:25: error: unknown type name
-> 'zap_flags_t'; did you mean 'vm_flags_t'?
->   414 |                         zap_flags_t zap_flags)
->       |                         ^~~~~~~~~~~
->       |                         vm_flags_t
-> make[3]: *** [scripts/Makefile.build:284: arch/s390/mm/pageattr.o] Error 1
-> 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> 
+	(cpu_data(dev->id).ppin)
 
-Here's a fix:
+and with CONFIG_SMP=n the cpu_data() macro expands to boot_cpu_data
+(ignoring its argument) with the end result:
 
-https://lore.kernel.org/lkml/20220421014723.5802-1-rdunlap@infradead.org/
+	boot_cpu_data.ppin
 
-> --
-> Linaro LKFT
-> https://lkft.linaro.org
-> 
-> [1] https://builds.tuxbuild.com/2868Z0YrLSpSGSk9QDqRKYMJPug/
+My CPP-fu wasn't up to a modification to topology_ppin(), so I added a
+(probably redundant) check for "dev" being a NULL pointer.
 
+Fixes: c3702a746ff5 ("topology/sysfs: Hide PPIN on systems that do not support it.")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Tony Luck <tony.luck@intel.com>
+
+---
+Better fixes with clever CPP macro tricks gratefully welcomed
+---
+ drivers/base/topology.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/base/topology.c b/drivers/base/topology.c
+index 706dbf8bf249..31fae51fd340 100644
+--- a/drivers/base/topology.c
++++ b/drivers/base/topology.c
+@@ -157,7 +157,7 @@ static umode_t topology_is_visible(struct kobject *kobj,
+ {
+ 	struct device *dev = kobj_to_dev(kobj);
+ 
+-	if (attr == &dev_attr_ppin.attr && !topology_ppin(dev->id))
++	if (!dev || (attr == &dev_attr_ppin.attr && !topology_ppin(dev->id)))
+ 		return 0;
+ 
+ 	return attr->mode;
 -- 
-~Randy
+2.35.1
+

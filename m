@@ -2,111 +2,133 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27AF7509DD5
-	for <lists+linux-next@lfdr.de>; Thu, 21 Apr 2022 12:41:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DF3F509E05
+	for <lists+linux-next@lfdr.de>; Thu, 21 Apr 2022 12:49:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231448AbiDUKnF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 21 Apr 2022 06:43:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32776 "EHLO
+        id S1388563AbiDUKwH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 21 Apr 2022 06:52:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388506AbiDUKmy (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 21 Apr 2022 06:42:54 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 734C4632F;
-        Thu, 21 Apr 2022 03:40:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650537604; x=1682073604;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NddSWJoAozQ1EYJ37VPzzZinpQJPIh7Wk/vDkRTtCkE=;
-  b=SqhSbONwGwAjtROqoYblMnOBy+bmGoWnlak6zyQZvORHorV47lqqsEGM
-   zBSz6X3zo/lUChlRheiXdxlo2F07WsmUFWh1cdrTs2QUCPGAzfSKw4Jk+
-   eYHHFE2hZJ/s9zFFqIz/KLC7TVViyZdiT2Vb6sPFBKgOgiBHgdv5lVYc5
-   dCuaFZ2K5CY8rZa82Q8Gok5djCVYid81R8huq8tNHlIGDLCjXzWN2PAjs
-   iDVdR5bh/TvyCtRWfYQ8NA54buwttsbADspo3z9SHD0pxBirEZXsrmUlT
-   nZcNd+ihOs8+KnkibAqtgka3IaczL6Fm3ulc+DTB56fJ6h4zR6UbWVMHz
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="264076423"
-X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="264076423"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 03:40:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="562520470"
-Received: from boxer.igk.intel.com (HELO boxer) ([10.102.20.173])
-  by fmsmga007.fm.intel.com with ESMTP; 21 Apr 2022 03:40:01 -0700
-Date:   Thu, 21 Apr 2022 12:40:01 +0200
-From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the bpf-next tree
-Message-ID: <YmE0geKVcfQtsBmz@boxer>
-References: <20220419115620.65580586@canb.auug.org.au>
- <20220421103200.2b4e8424@canb.auug.org.au>
- <ac093b0a-dba7-b8b8-8a70-fccbed8fee76@iogearbox.net>
+        with ESMTP id S1388555AbiDUKwG (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 21 Apr 2022 06:52:06 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BFA329C82
+        for <linux-next@vger.kernel.org>; Thu, 21 Apr 2022 03:49:17 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id b95so8036874ybi.1
+        for <linux-next@vger.kernel.org>; Thu, 21 Apr 2022 03:49:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=BQ0CLsTXT42vFbYOeRl03igvGnE16091WeuDyL+jVf4=;
+        b=LTvf19NnKXJimjRK01dVNnocqskdXFhHxxWcuUhM+Pm4NKHJj4m49ZCfwZGqk6RxnD
+         Rj9ZtBzTzaj6mKrxS0UGtbSJJ4YPT/AlQZcOlOdP4gIXhh9kqHNWNkKVTkOnkvJmxmGa
+         BUTCfaDtQXfwOFBTN7Kb1hkJidhkZIbF7gSDIeNZjVZ8LdIysJCS69c5giEmws4XD1Ak
+         F0SnlJJtIb5WnXG6a7fYOG6mNOyBDMSf/VaUPYTy2owrQwI7QzMoFXoVHues9TIuEcFu
+         V9GdVCiUDUGu4sBQdH5P4PoU0WYNxqih5SmzNwGyBX6k8BK8Fgul6OQvh/7a8JJ2b4aa
+         Y7AQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=BQ0CLsTXT42vFbYOeRl03igvGnE16091WeuDyL+jVf4=;
+        b=0ITVOOht8hB4HAo4/gHYHu/IuAlL959X6RLuWZr9mlaArDCqfgxwVk6N9I8UZ54/X3
+         BAJaQa53h6QA2nkvi7sP7gGXevZ+2X1UO65booUjMfhAE9Qm4GygZ4L7NPyqELUg7Nv+
+         smiOYbuU1YV3HoM/mS7UrlfcqvOLVVvx1qgtVVdyTTVs7kAGAGy+qXt0rGm4n33vSsmK
+         rGzOWXj5CLvrkDJAsj8zGSWJxVzFxeMOsDebSKeAk+tbvrF0oTCpWo4UAJlgbWVHodTI
+         M6rOKbki/sT/zZ7npz/puKvqAeudniUAYtYIql2pdMcIOItD8JFk/nrByPTEydiher+t
+         VSlg==
+X-Gm-Message-State: AOAM530L1HeitxLh9/iY9Ip2CZfPsRMzlQOevtnl+CTVBTX6t54kCfzI
+        15w2ZnACAyTJn7NU5ofLFts7aSV+FGr04mjhRT7oWeWi+ZkJ675t
+X-Google-Smtp-Source: ABdhPJzJtPgo/lx5O03SPinhaB+c3NAb+x84sJgadXvgRzJK9w5kOO3zpF7r9W2DbkCbFipkU3OPlEs4awZRZsxCAbs=
+X-Received: by 2002:a25:dd02:0:b0:645:76bb:e38d with SMTP id
+ u2-20020a25dd02000000b0064576bbe38dmr1529379ybg.88.1650538155724; Thu, 21 Apr
+ 2022 03:49:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ac093b0a-dba7-b8b8-8a70-fccbed8fee76@iogearbox.net>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 21 Apr 2022 16:19:04 +0530
+Message-ID: <CA+G9fYvnf3Ys+ptCJf1fNOc1rjTiSEEY9Gxbc49eOrx227xOoQ@mail.gmail.com>
+Subject: [next] riscv: sifive/fu540-c000.dtsi:171.4-42: ERROR
+ (duplicate_property_names): /soc/dma@3000000:compatible: Duplicate property name
+To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        lkft-triage@lists.linaro.org
+Cc:     Zong Li <zong.li@sifive.com>, Palmer Dabbelt <palmer@rivosinc.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Bin Meng <bmeng.cn@gmail.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 11:45:46AM +0200, Daniel Borkmann wrote:
-> On 4/21/22 2:32 AM, Stephen Rothwell wrote:
-> > Hi all,
-> 
-> Maciej, I presume you are already working on a follow-up for the below?
+Linux next-20220421 riscv defconfig builds failed [1].
 
-Yikes! I missed that, let's blame easter break for that.
-I'm on it.
+Regressions found on riscv:
 
-> 
-> > On Tue, 19 Apr 2022 11:56:20 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> > > 
-> > > After merging the bpf-next tree, today's linux-next build
-> > > (x86_64 allmodconfig) failed like this:
-> > > 
-> > > In file included from include/linux/compiler_types.h:73,
-> > >                   from <command-line>:
-> > > drivers/net/ethernet/intel/i40e/i40e_xsk.c: In function 'i40e_run_xdp_zc':
-> > > include/linux/compiler_attributes.h:222:41: error: attribute 'fallthrough' not preceding a case label or default label [-Werror]
-> > >    222 | # define fallthrough                    __attribute__((__fallthrough__))
-> > >        |                                         ^~~~~~~~~~~~~
-> > > drivers/net/ethernet/intel/i40e/i40e_xsk.c:192:17: note: in expansion of macro 'fallthrough'
-> > >    192 |                 fallthrough; /* handle aborts by dropping packet */
-> > >        |                 ^~~~~~~~~~~
-> > > cc1: all warnings being treated as errors
-> > > In file included from include/linux/compiler_types.h:73,
-> > >                   from <command-line>:
-> > > drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c: In function 'ixgbe_run_xdp_zc':
-> > > include/linux/compiler_attributes.h:222:41: error: attribute 'fallthrough' not preceding a case label or default label [-Werror]
-> > >    222 | # define fallthrough                    __attribute__((__fallthrough__))
-> > >        |                                         ^~~~~~~~~~~~~
-> > > drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c:147:17: note: in expansion of macro 'fallthrough'
-> > >    147 |                 fallthrough; /* handle aborts by dropping packet */
-> > >        |                 ^~~~~~~~~~~
-> > > cc1: all warnings being treated as errors
-> > > 
-> > > Caused by commits
-> > > 
-> > >    b8aef650e549 ("i40e, xsk: Terminate Rx side of NAPI when XSK Rx queue gets full")
-> > >    c7dd09fd4628 ("ixgbe, xsk: Terminate Rx side of NAPI when XSK Rx queue gets full")
-> > > 
-> > > I have used the bpf-next tree from next-20220414 for today.
-> > 
-> > I am still getting these failures ...
-> > 
-> 
+   - riscv-clang-13-defconfig
+   - riscv-clang-12-defconfig
+   - riscv-gcc-10-defconfig
+   - riscv-clang-nightly-defconfig
+   - riscv-clang-11-defconfig
+   - riscv-gcc-8-defconfig
+   - riscv-clang-14-defconfig
+   - riscv-gcc-9-defconfig
+   - riscv-gcc-11-defconfig
+
+arch/riscv/boot/dts/sifive/fu540-c000.dtsi:171.4-42: ERROR
+(duplicate_property_names): /soc/dma@3000000:compatible: Duplicate
+property name
+ERROR: Input tree has errors, aborting (use -f to force output)
+make[3]: *** [scripts/Makefile.lib:376:
+arch/riscv/boot/dts/sifive/hifive-unleashed-a00.dtb] Error 2
+
+drivers/pci/pci-driver.c:533:12: warning:
+'pci_restore_standard_config' defined but not used [-Wunused-function]
+  533 | static int pci_restore_standard_config(struct pci_dev *pci_dev)
+      |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+make[1]: Target '__all' not remade because of errors.
+make: *** [Makefile:226: __sub-make] Error 2
+
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+The recent patch on this file.
+I will run my bisect script and get back to you.
+---
+riscv: dts: Add dma-channels property and modify compatible
+
+
+Add dma-channels property, then we can determine how many channels there
+by device tree, in addition, we add the pdma versioning scheme for
+compatible.
+
+Signed-off-by: Zong Li <zong.li@sifive.com>
+Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Reviewed-by: Bin Meng <bmeng.cn@gmail.com>
+Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+
+Steps to reproduce:
+------------------
+# To install tuxmake on your system globally:
+# sudo pip3 install -U tuxmake
+#
+# See https://docs.tuxmake.org/ for complete documentation.
+# Original tuxmake command with fragments listed below.
+
+tuxmake --runtime podman --target-arch riscv --toolchain gcc-11
+--kconfig defconfig
+
+
+--
+Linaro LKFT
+https://lkft.linaro.org
+
+[1] https://builds.tuxbuild.com/2868anlKwTP8aavo19LT6KRIq1T/

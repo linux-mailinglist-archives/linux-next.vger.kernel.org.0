@@ -2,97 +2,108 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E36A550A4BA
-	for <lists+linux-next@lfdr.de>; Thu, 21 Apr 2022 17:54:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE04B50A555
+	for <lists+linux-next@lfdr.de>; Thu, 21 Apr 2022 18:25:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390321AbiDUP4x (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 21 Apr 2022 11:56:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50556 "EHLO
+        id S230423AbiDUQ1v (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 21 Apr 2022 12:27:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244480AbiDUP4w (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 21 Apr 2022 11:56:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5629515722;
-        Thu, 21 Apr 2022 08:54:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 159A8B82427;
-        Thu, 21 Apr 2022 15:54:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E3D0C385A5;
-        Thu, 21 Apr 2022 15:53:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650556439;
-        bh=SPGqcsm/mPwauQNxS2M/UVf4wunx/J8ixR6fXQi/vgw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ay6LPA6X8qf16TL6LPrVDn82pO394X1oys0Gg86eGgMOUBFHPdE7kbPEmagMSDVKk
-         KtMKJWvM+bPeCDzG93MJlYzItvrfr4lDAYKbSaXO1iCJhyYXx7TVvusObmjjpAzEqC
-         C/H5vbcG+IegQVh0FegjgBnNYH0flpf4c6cxi4M8=
-Date:   Thu, 21 Apr 2022 17:53:57 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "Luck, Tony" <tony.luck@intel.com>
+        with ESMTP id S1390684AbiDUQWv (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 21 Apr 2022 12:22:51 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01B4D63AE;
+        Thu, 21 Apr 2022 09:20:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650558001; x=1682094001;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3A6zp59+CXbCtLUTRaBcmCTCcB/VbVNvDqbxb0ss9Wc=;
+  b=EXBZbzjA8WH51v04aZqdN5UKuxK4m6PYPdE/m8yHJW7GWvbnEH6ZRFkU
+   hZlPoEfcy17KlEndu/BcvP/WbZnePNXk3W6OoPhu/w3JkCm0cBJ/yCe1z
+   svLevC5OoKVT8gFSKa8xhBdWUpb+2zt1wXh2up365rxasgTGCqTXVCHj2
+   zO3bwZ0R2MzSD+vH4MdBaHd61rBPX7DIG6m0+ZA4Nch0y/7Y6kgpwEFK4
+   u4ycv0EO8qfJxNmOVj8pz+F1+GS2IrB+N+AuUCQ883HKL4af2A/9MDvvE
+   jcgdDjvkVwP91fDqaBltrhks9zUqyY1suGWOUMCgNpKpmRsmiWiMTDCSk
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="263872592"
+X-IronPort-AV: E=Sophos;i="5.90,279,1643702400"; 
+   d="scan'208";a="263872592"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 09:20:00 -0700
+X-IronPort-AV: E=Sophos;i="5.90,279,1643702400"; 
+   d="scan'208";a="648200010"
+Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 09:20:00 -0700
+Date:   Thu, 21 Apr 2022 09:19:59 -0700
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
 Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: [PATCH] topology/sysfs: Fix allnoconfig build breakage.
-Message-ID: <YmF+FTxgu2U4/oPA@kroah.com>
+Subject: [PATCH v2] topology/sysfs: Fix allnoconfig build breakage.
+Message-ID: <YmGEL2klp4S97UiH@agluck-desk3.sc.intel.com>
 References: <20220421152645.3a849198@canb.auug.org.au>
  <YmD+geU9CmjoVnN9@kroah.com>
  <YmF8Hrq5kgDdfvtS@agluck-desk3.sc.intel.com>
+ <YmF+FTxgu2U4/oPA@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YmF8Hrq5kgDdfvtS@agluck-desk3.sc.intel.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YmF+FTxgu2U4/oPA@kroah.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 08:45:34AM -0700, Luck, Tony wrote:
-> drivers/base/topology.c: In function 'topology_is_visible':
-> drivers/base/topology.c:158:24: warning: unused variable 'dev' [-Wunused-variable]
->   158 |         struct device *dev = kobj_to_dev(kobj);
-> 
-> This is because the topology_ppin(dev->id) macro expands to:
-> 
-> 	(cpu_data(dev->id).ppin)
-> 
-> and with CONFIG_SMP=n the cpu_data() macro expands to boot_cpu_data
-> (ignoring its argument) with the end result:
-> 
-> 	boot_cpu_data.ppin
-> 
-> My CPP-fu wasn't up to a modification to topology_ppin(), so I added a
-> (probably redundant) check for "dev" being a NULL pointer.
-> 
-> Fixes: c3702a746ff5 ("topology/sysfs: Hide PPIN on systems that do not support it.")
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Signed-off-by: Tony Luck <tony.luck@intel.com>
-> 
-> ---
-> Better fixes with clever CPP macro tricks gratefully welcomed
-> ---
->  drivers/base/topology.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/base/topology.c b/drivers/base/topology.c
-> index 706dbf8bf249..31fae51fd340 100644
-> --- a/drivers/base/topology.c
-> +++ b/drivers/base/topology.c
-> @@ -157,7 +157,7 @@ static umode_t topology_is_visible(struct kobject *kobj,
->  {
->  	struct device *dev = kobj_to_dev(kobj);
->  
-> -	if (attr == &dev_attr_ppin.attr && !topology_ppin(dev->id))
-> +	if (!dev || (attr == &dev_attr_ppin.attr && !topology_ppin(dev->id)))
+drivers/base/topology.c: In function 'topology_is_visible':
+drivers/base/topology.c:158:24: warning: unused variable 'dev' [-Wunused-variable]
+  158 |         struct device *dev = kobj_to_dev(kobj);
 
-!dev is impossible to ever hit, that's the sign that the code is wrong
-and needs to be fixed :(
+This is because the topology_ppin(dev->id) macro expands to:
 
-Sorry, this is not going to be an acceptable change.
+	(cpu_data(dev->id).ppin)
 
-greg k-h
+and with CONFIG_SMP=n the cpu_data() macro expands to boot_cpu_data
+(ignoring its argument) with the end result:
+
+	boot_cpu_data.ppin
+
+Fix by just checking whether the boot_cpu has a PPIN instead of whether
+this specific CPU has one.
+
+Fixes: c3702a746ff5 ("topology/sysfs: Hide PPIN on systems that do not support it.")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Tony Luck <tony.luck@intel.com>
+
+---
+I don't believe it will ever be possible to have no PPIN on the boot CPU,
+but somehow have PPINs on other CPUs (or vice versa)
+
+ drivers/base/topology.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/drivers/base/topology.c b/drivers/base/topology.c
+index 706dbf8bf249..11a56a10188d 100644
+--- a/drivers/base/topology.c
++++ b/drivers/base/topology.c
+@@ -155,9 +155,7 @@ static struct attribute *default_attrs[] = {
+ static umode_t topology_is_visible(struct kobject *kobj,
+ 				   struct attribute *attr, int unused)
+ {
+-	struct device *dev = kobj_to_dev(kobj);
+-
+-	if (attr == &dev_attr_ppin.attr && !topology_ppin(dev->id))
++	if (attr == &dev_attr_ppin.attr && !boot_cpu_data.ppin)
+ 		return 0;
+ 
+ 	return attr->mode;
+-- 
+2.35.1
+

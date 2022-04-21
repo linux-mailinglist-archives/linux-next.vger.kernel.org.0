@@ -2,82 +2,99 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4741D50A8BA
-	for <lists+linux-next@lfdr.de>; Thu, 21 Apr 2022 21:05:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D35750AA19
+	for <lists+linux-next@lfdr.de>; Thu, 21 Apr 2022 22:36:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386991AbiDUTGM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 21 Apr 2022 15:06:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48912 "EHLO
+        id S1392405AbiDUUjQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 21 Apr 2022 16:39:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1391721AbiDUTGL (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 21 Apr 2022 15:06:11 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 301164C432
-        for <linux-next@vger.kernel.org>; Thu, 21 Apr 2022 12:03:21 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id v10so1627002ybe.5
-        for <linux-next@vger.kernel.org>; Thu, 21 Apr 2022 12:03:21 -0700 (PDT)
+        with ESMTP id S1392406AbiDUUjL (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 21 Apr 2022 16:39:11 -0400
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B84624DF4C;
+        Thu, 21 Apr 2022 13:36:20 -0700 (PDT)
+Received: by mail-oi1-x22b.google.com with SMTP id t15so6881987oie.1;
+        Thu, 21 Apr 2022 13:36:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=unnM4fXSMJiSpgzSnbjZz/++wfkdNxCsxaJNQt54SI8=;
-        b=yYOJAm4NGLIM7VhPfoM0A7UQlxtEAXOJ5Za+zj3E+xbN5syIkkj2m+fituMnbqpqbj
-         MAiDcU2LdLTMxmLpV0AKC0h/NbvsMeDpzZgxGjbjWsKQPMZgaKP9BIJDVQd0zMPYF9po
-         Vin2Od6SxsI63H8+mR9FZkeZAgbUt390qhzMJ9L9VZglAp21KMC75thGdhMQ1B/aHqYS
-         JHgmzlaJBQfQHcw6bMyAtY2KogmKKIQN5yTLCjgmdRSeFobyeCCjcO+9mQ4aXUcqs74N
-         9pdTeqIqkQGDgy1DRsyG6X3HORECTQ/njdqXVjfcy3maBanaXCuvlLBjXy9yoTbWWI7Y
-         BNuQ==
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:content-language:to
+         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=pR+ivXQjQ4mpc3bU1lbKrf1OTqhPO5O1eEWuchyFYYM=;
+        b=aUgy7ZQPy9VWQ3sdol3HV/TdeP/hqQr5zfOdNWWD6QeduBPQ0/ElwdKLnErBtzgTGb
+         WCkwtX3AUMiqG3IWexPlK3SDIJzDzLYBTmKfnxRtfnx4smznqkM6F7j2j8FT+l+dl3Kg
+         4/CfCcjq51ubOP/yQEX4ACp6GktE/PUK5na1g0xy+sKXWainyCu3ZdX0NvSbgJXZsG/l
+         9iHOqfYrb75TqJwtaHW7ioSsBv0n+ZxKJuHBNGeSDwh1eLKGkob/fGeRCf4CAHmvUc0W
+         slDG+J55kEkR6bUrAGBuFfpuKrl40ENcSoT555XLpq8RcN3/aKmA3u6bIV2Yxztp9dAk
+         6gOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=unnM4fXSMJiSpgzSnbjZz/++wfkdNxCsxaJNQt54SI8=;
-        b=lMU4QqIsM4/TyZia4wlabE/XWGgHLdW4gzdxJj29kECpTX4Q2AOS0+1Q3wlhaORcry
-         XvBUr/0PhEm57a7qz4wP8ztNLRVS2K9VgA3Vq+0XGFqiamcP1KhLEpRgV4jmJ9Bg1KCZ
-         qmrYRKpgFRb9iUwwIAO+fFH9YiuOVEqhwZJQZ+ztcVVL4PwnjdMEYHVCi6Qq41s+sNTJ
-         vsfOF6mCC/NVTOMmj3YyMTWk0VlDN6xTdEiInAipUzDO+k3AaRaWbeK/cxETwkZcGlxJ
-         UAlzvLmerMY9AeXqN4CHDigDkjBc13vSW7gnIp8clkuBJybcTZWslq5I/zyz0w+f1RJ+
-         rDVw==
-X-Gm-Message-State: AOAM530MzQ5yP8zjLamitN78cQgPvALTKxVX72aD2CpaR1n9eRcwv1C1
-        sHu8tbiXpxcKqhtkU89D3UCwcxPcSNGiDPuMmJ0Cj8sLX2RATFdd
-X-Google-Smtp-Source: ABdhPJyHzNIYg5C4PJ/cejBQRmSKW/dyS0OVtZsBDIZ2e0UwpSgBZ6Gk8wH3JAqmB8QausXlAat9W0SAdbIea4rEv4c=
-X-Received: by 2002:a25:ae45:0:b0:641:ba5c:7745 with SMTP id
- g5-20020a25ae45000000b00641ba5c7745mr1147553ybe.537.1650567799668; Thu, 21
- Apr 2022 12:03:19 -0700 (PDT)
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=pR+ivXQjQ4mpc3bU1lbKrf1OTqhPO5O1eEWuchyFYYM=;
+        b=uBCwBu3iT40KqqsKhFGqzod4XltxUhrof2LvpCIfk5pYvxsmH6EF1SN1k8e+NSzazs
+         XRiCUM0YiKmkIBYClKS0xXLf9g+REpG2IPSTLrAADN3WXrzY6TG6n7bt8bms27qZzzUf
+         eUyeV0AVnJSTnxDIwehCqDQ3j6B9sSdQu/WsOZnOQDY1bM7Mjf8nWAbQE0VdAlQkWK4s
+         2+PssFXlbKxq164DxqdYdvyvfpjumN+RWQxSgI5dEhjoQtRxnc0h1+y2RqNu6H8f+8d5
+         8PnsCm+tkGTic0gsrqP6sPgXoKQT3cXprXvrCk047mRbuJeFWTHfmjkft2OskCdKN3kp
+         fa2A==
+X-Gm-Message-State: AOAM53234oHqxSBznD/LMGefkO/u2KNcbC5n6Ecpm9k/50HieDWMe0QW
+        FJ73SbwgYhvFYK2UUw7ONwWggPoLmmM=
+X-Google-Smtp-Source: ABdhPJzvQDBpW8i8W67TKQjDDBb4cpOmkXvirm1Nq4saLvrBEWABE0GZmwKCUokZxD/YPpaqiqgYJA==
+X-Received: by 2002:a05:6808:e8d:b0:322:4fbe:8c5f with SMTP id k13-20020a0568080e8d00b003224fbe8c5fmr5198699oil.284.1650573378654;
+        Thu, 21 Apr 2022 13:36:18 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id a37-20020a9d2628000000b0060563c52952sm15698otb.8.2022.04.21.13.36.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Apr 2022 13:36:17 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <15b38d01-702c-b39e-7053-54c3905a0794@roeck-us.net>
+Date:   Thu, 21 Apr 2022 13:36:15 -0700
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 22 Apr 2022 00:33:08 +0530
-Message-ID: <CA+G9fYvdfYBq+Q=-XUJcKHSYXdubdoqhExRpjrqCgf_N3pPpHQ@mail.gmail.com>
-Subject: drivers/usb/typec/tcpm/tcpm.c:4724:3: error: case label does not
- reduce to an integer constant
-To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
         open list <linux-kernel@vger.kernel.org>,
         lkft-triage@lists.linaro.org, linux-usb@vger.kernel.org
 Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        heikki.krogerus@linux.intel.com, Guenter Roeck <linux@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        heikki.krogerus@linux.intel.com
+References: <CA+G9fYvdfYBq+Q=-XUJcKHSYXdubdoqhExRpjrqCgf_N3pPpHQ@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: drivers/usb/typec/tcpm/tcpm.c:4724:3: error: case label does not
+ reduce to an integer constant
+In-Reply-To: <CA+G9fYvdfYBq+Q=-XUJcKHSYXdubdoqhExRpjrqCgf_N3pPpHQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Linux mainline and linux next arm64 builds failed with gcc-7.3.x.
+On 4/21/22 12:03, Naresh Kamboju wrote:
+> Linux mainline and linux next arm64 builds failed with gcc-7.3.x.
+> 
+> drivers/usb/typec/tcpm/tcpm.c: In function 'run_state_machine':
+> drivers/usb/typec/tcpm/tcpm.c:4724:3: error: case label does not
+> reduce to an integer constant
+>     case BDO_MODE_TESTDATA:
+>     ^~~~
+> make[4]: *** [scripts/Makefile.build:288: drivers/usb/typec/tcpm/tcpm.o] Error 1
+>                                        ^
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> 
+> --
 
-drivers/usb/typec/tcpm/tcpm.c: In function 'run_state_machine':
-drivers/usb/typec/tcpm/tcpm.c:4724:3: error: case label does not
-reduce to an integer constant
-   case BDO_MODE_TESTDATA:
-   ^~~~
-make[4]: *** [scripts/Makefile.build:288: drivers/usb/typec/tcpm/tcpm.o] Error 1
-                                      ^
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+That code is several years old, the define is a constant, and I don't see
+a recent change in the code. What am I missing ?
 
---
-Linaro LKFT
-https://lkft.linaro.org
-
-https://ci.linaro.org/view/lkft/job/openembedded-lkft-linux-mainline/DISTRO=lkft,MACHINE=hikey,label=docker-buster-lkft/4259/consoleText
+Guenter

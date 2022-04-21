@@ -2,108 +2,78 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE04B50A555
-	for <lists+linux-next@lfdr.de>; Thu, 21 Apr 2022 18:25:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E990D50A7DC
+	for <lists+linux-next@lfdr.de>; Thu, 21 Apr 2022 20:10:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230423AbiDUQ1v (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 21 Apr 2022 12:27:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36844 "EHLO
+        id S243787AbiDUSNc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 21 Apr 2022 14:13:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390684AbiDUQWv (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 21 Apr 2022 12:22:51 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01B4D63AE;
-        Thu, 21 Apr 2022 09:20:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650558001; x=1682094001;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3A6zp59+CXbCtLUTRaBcmCTCcB/VbVNvDqbxb0ss9Wc=;
-  b=EXBZbzjA8WH51v04aZqdN5UKuxK4m6PYPdE/m8yHJW7GWvbnEH6ZRFkU
-   hZlPoEfcy17KlEndu/BcvP/WbZnePNXk3W6OoPhu/w3JkCm0cBJ/yCe1z
-   svLevC5OoKVT8gFSKa8xhBdWUpb+2zt1wXh2up365rxasgTGCqTXVCHj2
-   zO3bwZ0R2MzSD+vH4MdBaHd61rBPX7DIG6m0+ZA4Nch0y/7Y6kgpwEFK4
-   u4ycv0EO8qfJxNmOVj8pz+F1+GS2IrB+N+AuUCQ883HKL4af2A/9MDvvE
-   jcgdDjvkVwP91fDqaBltrhks9zUqyY1suGWOUMCgNpKpmRsmiWiMTDCSk
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="263872592"
-X-IronPort-AV: E=Sophos;i="5.90,279,1643702400"; 
-   d="scan'208";a="263872592"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 09:20:00 -0700
-X-IronPort-AV: E=Sophos;i="5.90,279,1643702400"; 
-   d="scan'208";a="648200010"
-Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 09:20:00 -0700
-Date:   Thu, 21 Apr 2022 09:19:59 -0700
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: [PATCH v2] topology/sysfs: Fix allnoconfig build breakage.
-Message-ID: <YmGEL2klp4S97UiH@agluck-desk3.sc.intel.com>
-References: <20220421152645.3a849198@canb.auug.org.au>
- <YmD+geU9CmjoVnN9@kroah.com>
- <YmF8Hrq5kgDdfvtS@agluck-desk3.sc.intel.com>
- <YmF+FTxgu2U4/oPA@kroah.com>
+        with ESMTP id S229747AbiDUSNb (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 21 Apr 2022 14:13:31 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A56A4AE2C
+        for <linux-next@vger.kernel.org>; Thu, 21 Apr 2022 11:10:40 -0700 (PDT)
+Received: from [192.168.1.107] ([37.4.249.94]) by mrelayeu.kundenserver.de
+ (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1M1pk0-1njn2M0Qm0-002H3L; Thu, 21 Apr 2022 20:05:10 +0200
+Message-ID: <7be89f17-8993-c0e9-3965-4ca5db3c4b57@i2se.com>
+Date:   Thu, 21 Apr 2022 20:05:08 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YmF+FTxgu2U4/oPA@kroah.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: linux-next: build warning after merge of the pinctrl tree
+Content-Language: en-US
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20220421171116.6dbe87cb@canb.auug.org.au>
+ <CACRpkdYW81iLveJoNu2RDEpySqRcXWqq4XGhGFMYdLvBzhRsUw@mail.gmail.com>
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+In-Reply-To: <CACRpkdYW81iLveJoNu2RDEpySqRcXWqq4XGhGFMYdLvBzhRsUw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:EVtiik8/dSmwP3H2lw0tuXN//9pN2Fsr+moOQlE9wMzlbK6EuzT
+ 9nf5OwVSCP1J8JA9lr/Rc0Ln8/3HFyIWJK3NooRSblS+uWSg8LQ/6N1hqvu34QkLEb2FFFf
+ mGOhGK9Cwnt0nzJ8OAxXqpgAoBQ9g8GkdkgvBRy2xzYzf/gXYoPZIZFg3DHGkUTRUT/6yGJ
+ bcWWcwhUydvEgi3qc3IQg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:7QmUpVDjjGw=:Vh6onroOFiDsphk5KR9E97
+ NLpOH56MSYxn+ebdi6kB+FzDFLwaRpuuk1IrPmL0yCmaKx9TWE2W6qmZV1miJNQU0dJ6TroNs
+ IgIGPIr+WU+depqAUefAKdzDrW2qR0AAZLxjZUChbwXDw2Y7bDEp77iCD0lOg5Z3y9vCtd/jg
+ pivnfEL4y7pBsCEjIaVZXS8NFeFcSm+UY7VGjKbmDSSY9NVOkmtwvE27n31FO745YO2Cy99cH
+ p9f5FIA9+fnCDLLK6tZGJxKB9JMWAeIPKDFF0CkhRFvpwq0CojjIkaUtY2MwRWKuoNIKz+ZIx
+ w+yU14aeZCcvLMRmzUBosFI8a9+dWpDzA4yIUUbi4BGUQk5a0KUqlZMtGiiG2T3zE6v2JsyFa
+ DAUM/sCYD0Y8yk8UhQkXGSXsU24AHxTVtmzG52TGWkdvFLGtzGAFmKdcgWn/1dDXMqoDD60ba
+ k7lMWCh1giRfNe9L8V1haDFiNqUyPgMn3cXp7a9kveKJgsm50vOA3CyJTMly70iUdFBUvX/bN
+ wZFUAdUeyMaMJMu6eCT9NnMno+2wFVDOMQbXbWOlMvMJEewfP/DYAAEZZx3/0l96hBwMKQ5eC
+ 5XV8/z1QpfbxTeyU8J7RMX8zqoMwv3fUzZqxADrtJF8iXZhp5V3C4/spT3s8Mm9P8gSIQFIUr
+ sJAB0uryx72bzjGzkZQxhauGQbehUa0qEDnzWXjBxxaMEdNVIYHnKY7JkbcgM8H9tTSyJ6W2c
+ OI9WQwhwQk6t/3ua
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-drivers/base/topology.c: In function 'topology_is_visible':
-drivers/base/topology.c:158:24: warning: unused variable 'dev' [-Wunused-variable]
-  158 |         struct device *dev = kobj_to_dev(kobj);
-
-This is because the topology_ppin(dev->id) macro expands to:
-
-	(cpu_data(dev->id).ppin)
-
-and with CONFIG_SMP=n the cpu_data() macro expands to boot_cpu_data
-(ignoring its argument) with the end result:
-
-	boot_cpu_data.ppin
-
-Fix by just checking whether the boot_cpu has a PPIN instead of whether
-this specific CPU has one.
-
-Fixes: c3702a746ff5 ("topology/sysfs: Hide PPIN on systems that do not support it.")
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Signed-off-by: Tony Luck <tony.luck@intel.com>
-
----
-I don't believe it will ever be possible to have no PPIN on the boot CPU,
-but somehow have PPINs on other CPUs (or vice versa)
-
- drivers/base/topology.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/drivers/base/topology.c b/drivers/base/topology.c
-index 706dbf8bf249..11a56a10188d 100644
---- a/drivers/base/topology.c
-+++ b/drivers/base/topology.c
-@@ -155,9 +155,7 @@ static struct attribute *default_attrs[] = {
- static umode_t topology_is_visible(struct kobject *kobj,
- 				   struct attribute *attr, int unused)
- {
--	struct device *dev = kobj_to_dev(kobj);
--
--	if (attr == &dev_attr_ppin.attr && !topology_ppin(dev->id))
-+	if (attr == &dev_attr_ppin.attr && !boot_cpu_data.ppin)
- 		return 0;
- 
- 	return attr->mode;
--- 
-2.35.1
-
+Am 21.04.22 um 16:12 schrieb Linus Walleij:
+> On Thu, Apr 21, 2022 at 9:11 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+>> After merging the pinctrl tree, today's linux-next build (htmldocs)
+>> produced this warning:
+>>
+>> include/linux/gpio/driver.h:507: warning: Incorrect use of kernel-doc format:          * @of_gpio_ranges_fallback
+>> include/linux/gpio/driver.h:518: warning: Function parameter or member 'of_gpio_ranges_fallback' not described in 'gpio_chip'
+>>
+>> Introduced by commit
+>>
+>>    a9491df0c4ae ("gpiolib: of: Introduce hook for missing gpio-ranges")
+> Thanks, I just folded in a quick fix into the offending commit, a
+> single missing colon.
+Thanks
+>
+> Yours,
+> Linus Walleij

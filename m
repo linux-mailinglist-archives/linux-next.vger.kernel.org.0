@@ -2,85 +2,154 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B83EF50AE13
-	for <lists+linux-next@lfdr.de>; Fri, 22 Apr 2022 04:52:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B2E750AEAC
+	for <lists+linux-next@lfdr.de>; Fri, 22 Apr 2022 06:02:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443536AbiDVCx4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 21 Apr 2022 22:53:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45352 "EHLO
+        id S1443837AbiDVEC1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 22 Apr 2022 00:02:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346148AbiDVCx4 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 21 Apr 2022 22:53:56 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8748731361;
-        Thu, 21 Apr 2022 19:51:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650595864; x=1682131864;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/zDeu1maS4StPpX2cIeVhckAYcmm2fpQM1uG5EBWJfM=;
-  b=bWZPcgI3ryS0Kf4relQOgf0iXT0pe+Y8eM6xDi8RpfhgevfigPSKHrKY
-   gdO4zf8qfAEjzFL3bo7QQ94ODf4YCdPYZr+SLqfnKwA9nzUJMtWyh1JHo
-   9+0SPKWZm+zvJvSx8DXeNNSLbckMCkAzUR3JZuAVVkt+XhmVgYaAfTgD5
-   yBUky8TIdi3sTZVG2yGPUGY0dWUiwFHLTWmdvujrmgWh6SRxYBsgcR9On
-   YoR+PXNeg4WSxejR/TdhgCAhyvNG0WtCKrmiAOBPI7mHeBKR4njr08BNp
-   eZkDz5H+Yd3YtqjCBFRQvuBUJxv4HmdhcS2RLdrEZkJ6YriBpO8IQTyWX
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="350989550"
-X-IronPort-AV: E=Sophos;i="5.90,280,1643702400"; 
-   d="scan'208";a="350989550"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 19:51:04 -0700
-X-IronPort-AV: E=Sophos;i="5.90,280,1643702400"; 
-   d="scan'208";a="556122543"
-Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 19:51:04 -0700
-Date:   Thu, 21 Apr 2022 19:51:02 -0700
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        with ESMTP id S1443835AbiDVEC0 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 22 Apr 2022 00:02:26 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E61B4E3B0;
+        Thu, 21 Apr 2022 20:59:34 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Kl0z44z9fz4x7V;
+        Fri, 22 Apr 2022 13:59:28 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1650599969;
+        bh=rgfSwER6bjjFEk0VhZ1xkozEkvdXCtQbyj9SLWydRJM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=d2XWQipTXyCDaSy1KrjLfPO2c6ew7K0ZMo8wXW7FGuAGtdVvfR10zoAt3fw71WKCj
+         JX4TW2A5c+kxlvF4BRnYbkP+rls32/rf7GY6YbWw7PzZ6xZ1ceiHDUy/OoS6zjqB5s
+         dLBPwoeJ/d2dbh3PN7FGWPsdohTZWczy13W5J5Tz6TOl+KbKFtzsgD0icFB2ceuuR/
+         uGrtedtExlOosr+Z4/Yj7N1zf25jX8bHMYq/Gf+NM+Lr3FsuVkVH4mmXqRMmKOKKEn
+         e5rTD7xHDrTm0jspF+EBvXcKAGrlbrOoO+mf/W4wHbPHQOMrxxP4wzFa4rVBtq4EJv
+         P+lZZEkER9oKw==
+Date:   Fri, 22 Apr 2022 13:59:27 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Theodore Ts'o <tytso@mit.edu>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Eric Biggers <ebiggers@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: [PATCH v2] topology/sysfs: Fix allnoconfig build breakage.
-Message-ID: <YmIYFjI/B+33PQn+@agluck-desk3.sc.intel.com>
-References: <20220421152645.3a849198@canb.auug.org.au>
- <YmD+geU9CmjoVnN9@kroah.com>
- <YmF8Hrq5kgDdfvtS@agluck-desk3.sc.intel.com>
- <YmF+FTxgu2U4/oPA@kroah.com>
- <YmGEL2klp4S97UiH@agluck-desk3.sc.intel.com>
- <20220422092247.5c638079@canb.auug.org.au>
- <90d0e2c9b4a74c92bcdd5fc4313a7629@intel.com>
- <20220422100054.74cadded@canb.auug.org.au>
+Subject: linux-next: manual merge of the random tree with the jc_docs tree
+Message-ID: <20220422135927.7fa82fa4@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220422100054.74cadded@canb.auug.org.au>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/kafs3okMNST.qMw/HSwm.8S";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 10:00:54AM +1000, Stephen Rothwell wrote:
-> I assume that there is some good reason that topology_ppin() is not
-> implemented as a static inline function?
+--Sig_/kafs3okMNST.qMw/HSwm.8S
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I don't think so. I just cut & pasted how all the other topology_*()
-things were implemented.
+Hi all,
 
-Making it a static inline appears to fix this problem. But before
-embarrassing myself with a third broken version I'll let zero day
-crunch on:
+Today's linux-next merge of the random tree got a conflict in:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/aegl/linux.git hide_ppin
+  Documentation/security/siphash.rst
 
-to see if there is some subtle config or arch where the inline trick
-doesn't work.
+between commits:
 
-Thanks for the idea! :-)
+  dc701cfc5b26 ("Documentation: siphash: convert danger note to warning for=
+ HalfSipHash")
+  561fb3cd5ec2 ("Documentation: siphash: enclose HalfSipHash usage example =
+in the literal block")
 
--Tony
+from the jc_docs tree and commit:
+
+  91afe794c070 ("siphash: update the hsiphash documentation")
+
+from the random tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc Documentation/security/siphash.rst
+index 06d793e68086,79ac8101406c..000000000000
+--- a/Documentation/security/siphash.rst
++++ b/Documentation/security/siphash.rst
+@@@ -121,15 -121,23 +121,25 @@@ even scarier, uses an easily brute-forc
+  instead of SipHash's 128-bit key. However, this may appeal to some
+  high-performance `jhash` users.
+ =20
++ HalfSipHash support is provided through the "hsiphash" family of function=
+s.
++=20
+ -**Danger!** Do not ever use the hsiphash functions except for as a hashta=
+ble key
+ -function, and only then when you can be absolutely certain that the outpu=
+ts will
+ -never be transmitted out of the kernel. This is only remotely useful over
+ -`jhash` as a means of mitigating hashtable flooding denial of service att=
+acks.
+ +.. warning::
+ +   Do not ever use HalfSipHash except for as a hashtable key function, and
+ +   only then when you can be absolutely certain that the outputs will nev=
+er
+ +   be transmitted out of the kernel. This is only remotely useful over
+ +   `jhash` as a means of mitigating hashtable flooding denial of service
+ +   attacks.
+ =20
+- Generating a HalfSipHash key
+- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D
++ On 64-bit kernels, the hsiphash functions actually implement SipHash-1-3,=
+ a
++ reduced-round variant of SipHash, instead of HalfSipHash-1-3. This is bec=
+ause in
++ 64-bit code, SipHash-1-3 is no slower than HalfSipHash-1-3, and can be fa=
+ster.
++ Note, this does *not* mean that in 64-bit kernels the hsiphash functions =
+are the
++ same as the siphash ones, or that they are secure; the hsiphash functions=
+ still
++ use a less secure reduced-round algorithm and truncate their outputs to 32
++ bits.
++=20
++ Generating a hsiphash key
++ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D
+ =20
+  Keys should always be generated from a cryptographically secure source of
+  random numbers, either using get_random_bytes or get_random_once::
+
+--Sig_/kafs3okMNST.qMw/HSwm.8S
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJiKB8ACgkQAVBC80lX
+0GwXnQf/Z0krKKoLxskBQJodAXyEJqSf8EDFNUGMB6MYWg9he8A5lCYSBvw5Nkcz
+zdw9anD5zIBqoFvdukbJLBjet6WJMto1AjBPqWlGV9zyAMwy4pqne4VdtIC38hQK
+7FZVv4vvSMf2CQRpRlUjCrUDcuIWCkGmuKMXDW3+JkRTfcraafZnSNYrwp71YQZi
+W01x3TIGmO0Lr1X9oo1CcHN3f43fBsIFUqOzky1IHymAxSZW7MZx8iMFPS6Fb8aB
+BKWeqVw6gT/5aN/cHhslk4dDgt2S2RlVv6/mqB4+vduRQyA6pIwFTBRbd+vyeyAE
+KVvT8VuLu3w1FBvEfoIpDD0qG55qxw==
+=Iq2B
+-----END PGP SIGNATURE-----
+
+--Sig_/kafs3okMNST.qMw/HSwm.8S--

@@ -2,52 +2,48 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A561750AC99
-	for <lists+linux-next@lfdr.de>; Fri, 22 Apr 2022 02:01:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D16E50AD1B
+	for <lists+linux-next@lfdr.de>; Fri, 22 Apr 2022 03:14:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442188AbiDVADw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 21 Apr 2022 20:03:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58110 "EHLO
+        id S1443024AbiDVBRm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 21 Apr 2022 21:17:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381767AbiDVADu (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 21 Apr 2022 20:03:50 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A3673EF17;
-        Thu, 21 Apr 2022 17:00:57 -0700 (PDT)
+        with ESMTP id S239067AbiDVBRi (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 21 Apr 2022 21:17:38 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0FBB3ED2D;
+        Thu, 21 Apr 2022 18:14:45 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Kkvgq6myvz4x7V;
-        Fri, 22 Apr 2022 10:00:55 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KkxJv1RSRz4xPw;
+        Fri, 22 Apr 2022 11:14:39 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1650585656;
-        bh=jyMua1JM5/19m6/LHbydkO3JFid9AKYADiYEgJ3fXMk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=QGftkvzG4k0wI+vlqiiV8GmECKnBzelEU3jdZuLwPAGeMmN+9JKb3kLGZpmOfhHam
-         r0k5NVYYcDOajlhzPDZOW8L8kAPqdQujQRz7LK3oTPELw+RWaLgsVkrYbK8g0s0mxn
-         +JBw8mKASnf5ENpw/2dVrLAEhVMnUVSHiJzbaPiNEIi4oVy7cFuwAHoWz+JbeW16Hq
-         tDLBTXkYYNydMB7Q/3djkmsTaGilAqf344XtIrponhpMXr05ORYpf0rP0ElxzSsl1P
-         LPp4BZA3cyyEss8iVzq7i7Kb5/2hW1Rwm5ufC8V4aJOEM3x8QiG5DcIwg50DwANbCq
-         xL6q6+OdmXO/g==
-Date:   Fri, 22 Apr 2022 10:00:54 +1000
+        s=201702; t=1650590080;
+        bh=PDwdWAr3d36JH4WWt/FccU1tk8rwMVXRWseC7stMlsM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Gb0CDA7eukAe0P/i42k0HOKCRwRH1jA0+DZp3nt5xb6JkQ0rWrOxTtzbS5rtS9cAv
+         m/ID0RHAA+E/piY2anrEQd5QWOOlJoOnGbpUDDsWmwZarEAHd96x5Xfdyb/0xRtKli
+         jaB8pUmxihzbcKKPSdjUj9g6VFjN8HaVt8QJOLW7yQ/umCokGXl3jqn1BmpQdi69RZ
+         QS/r6LCAsohc24zzjcrIkr8+qfXhqY4bvWJlSlsj/IKYqkDFIvzUDcoqZIOTtmZt0J
+         nvG7qNLx+AksBZXA1fJwifkgEQFuxI8SeaVpgjQvl9ky6J1/sRhwQkhU3g9ddUBYaY
+         8Bhl8Thc6Z31Q==
+Date:   Fri, 22 Apr 2022 11:14:38 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
+To:     Juergen Gross <jgross@suse.com>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Xen Devel <xen-devel@lists.xenproject.org>
+Cc:     Stefano Stabellini <stefano.stabellini@xilinx.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: [PATCH v2] topology/sysfs: Fix allnoconfig build breakage.
-Message-ID: <20220422100054.74cadded@canb.auug.org.au>
-In-Reply-To: <90d0e2c9b4a74c92bcdd5fc4313a7629@intel.com>
-References: <20220421152645.3a849198@canb.auug.org.au>
-        <YmD+geU9CmjoVnN9@kroah.com>
-        <YmF8Hrq5kgDdfvtS@agluck-desk3.sc.intel.com>
-        <YmF+FTxgu2U4/oPA@kroah.com>
-        <YmGEL2klp4S97UiH@agluck-desk3.sc.intel.com>
-        <20220422092247.5c638079@canb.auug.org.au>
-        <90d0e2c9b4a74c92bcdd5fc4313a7629@intel.com>
+Subject: linux-next: Signed-off-by missing for commit in the xen-tip tree
+Message-ID: <20220422111438.3946dbae@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/QDaG+i/BcEViymA_OO6Rbib";
+Content-Type: multipart/signed; boundary="Sig_/Acwu5MAWinYu7DVgoSV1rm.";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -58,52 +54,36 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/QDaG+i/BcEViymA_OO6Rbib
+--Sig_/Acwu5MAWinYu7DVgoSV1rm.
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Tony,
+Hi all,
 
-On Thu, 21 Apr 2022 23:38:28 +0000 "Luck, Tony" <tony.luck@intel.com> wrote:
->
-> >> Fixes: c3702a746ff5 ("topology/sysfs: Hide PPIN on systems that do not=
- support it.") =20
-> >
-> > This is actually commit aa63a74d4535. =20
->=20
-> Doh! I looked in my tree, not in Greg's.
->=20
-> Doesn't matter much, Greg is going to revert as I haven't come up with a =
-good[1]
-> way to fix this.
->=20
-> -Tony
->=20
-> [1] I found two bad ways. First one made Greg barf. This one breaks the b=
-uild for over
-> 50% of supported architectures :-(
+Commit
 
-I assume that there is some good reason that topology_ppin() is not
-implemented as a static inline function?
+  b12d41716e32 ("arm/xen: Fix some refcount leaks")
+
+is missing a Signed-off-by from its committer.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/QDaG+i/BcEViymA_OO6Rbib
+--Sig_/Acwu5MAWinYu7DVgoSV1rm.
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJh8DYACgkQAVBC80lX
-0GwzbAf+LuLlFTK6JAMSbPf8A8gnPo4xr+iVf9lG8eHDQnrVFhKVSyo+B9fEUB0h
-oPv3yRZG1KktlrfmbfFjBQSEq+AX/p/pJhtlk4Oc97hO0JUr0mgwW8okdeYL7tEM
-SMw3/UkVaBMphYklW2Y6kb7Vx1VSS+GVDaV9f7t05vS7Fmcr79/776MPaj2lyCKu
-lT570KoHabGrGUQs23lJwo316w+USWsGMs3WQa6VobFfiscyr7+ytG1KugXAMkSw
-A+xf/Ymip2f+vfxz26KtoUzUAbAvFd6J72eEaHZ+LTwY/3I3UAn4XQiBbWlD9pRg
-RNAsdlIk8+m6+Pmne6iCTSbMx1ocaA==
-=tSPX
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJiAX4ACgkQAVBC80lX
+0GzLbQf/cAY5DZMoJcCtPP8hz0H5FOYfij/KKWzsQQ2SwET5tZnJunLuHEgGyaMQ
+nAZK8EBg4cGBoabLnmdSzYL1gT68MlQJu3YPkBDPXmiJwZ0byd1LYMdex5z3isG/
+ttkeb6VzAflpwtMGT3rS/C9ClH/WdISXofDOHK8jrQVKgZyg9fuC1pi0yfwlw80O
+WgKGPAjawSdG6rh4urP0M9RoFH0bDoV1T66NYPflGMUqXC3pEQpEFiq27mXkwu38
+5yk0zlGMy8YsW9J0pmgDU3foENCua+CqYppn61WgA+FDrfzPCVu6Q2BWdRfuHBh0
+QvlCAOMLaHN4AL9g6aiI/X1YtqWZQQ==
+=kNGi
 -----END PGP SIGNATURE-----
 
---Sig_/QDaG+i/BcEViymA_OO6Rbib--
+--Sig_/Acwu5MAWinYu7DVgoSV1rm.--

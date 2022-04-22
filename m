@@ -2,60 +2,67 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8762050B3DE
-	for <lists+linux-next@lfdr.de>; Fri, 22 Apr 2022 11:18:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0D0B50B42D
+	for <lists+linux-next@lfdr.de>; Fri, 22 Apr 2022 11:36:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244590AbiDVJUg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 22 Apr 2022 05:20:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35160 "EHLO
+        id S1357063AbiDVJjG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 22 Apr 2022 05:39:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1445872AbiDVJU3 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 22 Apr 2022 05:20:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BAC256426;
-        Fri, 22 Apr 2022 02:16:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3D192B82B0E;
-        Fri, 22 Apr 2022 09:16:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16259C385A4;
-        Fri, 22 Apr 2022 09:16:16 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Nm35tUwo"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1650618974;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZxKZTmMR0fxvcFScAWIaAotfvQtArVbDqcf74lzw3NE=;
-        b=Nm35tUwoqwGaX4PWGNhSbkqbvHA/Xlpceq0dE1nWgqDo7fN3XzQzHAH1QOC8tZ5w53v9B9
-        2MYqo9N6xgtiPiDGPceLI+57N94NmaQ620Aj/xLZngBfI17mVAmEzma+dlWXx+swKeQxxe
-        4HphdveCQ/wwWOXKZOEL2rJ2EmsYqJI=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 69716d1a (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Fri, 22 Apr 2022 09:16:14 +0000 (UTC)
-Date:   Fri, 22 Apr 2022 11:16:12 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     Eric Biggers <ebiggers@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the random tree with the jc_docs tree
-Message-ID: <YmJyXEg6O5vxKYFO@zx2c4.com>
-References: <20220422135927.7fa82fa4@canb.auug.org.au>
- <YmJMBnBV8wO4aco9@sol.localdomain>
- <87wnfhzip7.fsf@meer.lwn.net>
- <YmJvKZcYMsypQRZJ@zx2c4.com>
+        with ESMTP id S1445907AbiDVJjE (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 22 Apr 2022 05:39:04 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C46D1CFCD
+        for <linux-next@vger.kernel.org>; Fri, 22 Apr 2022 02:36:11 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id l127so7481305pfl.6
+        for <linux-next@vger.kernel.org>; Fri, 22 Apr 2022 02:36:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=6yy0qRwtEmmS9JnCFg1N5H+x2LYK24zklTWONxIg2m0=;
+        b=6xMbD81gR1cwr5oVrwxZvNWwOuOGsFcsUwVeL4zihVhv6NOwMmatDsvpNAA2c5YGcT
+         EVIOTiu77C2Qjhc+n5Q+079MvhCmlhtJ+KT7wAh9b/N5ELfXfX1AZUckj4BgeflRDc5u
+         oG5GEDklIa3hl9wrXPWV+RpbFl2bJz5ug2Y3LfzpA3tulC5W3AxOQ58cpOBKzNvGUrQJ
+         Mq7PJ+MAjPUvx3SUJm800pAQ+/jKkw0s1jZ0x85x5ccu3Yl15Uv8e3+hpGj3RTLcsSv5
+         ME9yUjGW5eVYmzOESQe4mBnWS71k0c+4uQyl+Asxkwddg0i7WEL/cquJ5CJV5NAr5/2P
+         dR3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=6yy0qRwtEmmS9JnCFg1N5H+x2LYK24zklTWONxIg2m0=;
+        b=aL7BXCUM+qfhhprt3xxJewtnu3RxtYSQekaTS/0RjJy9bLVzP+r8ze1wtoIHhXN+7K
+         xPOhr6dVwr/NFeQKOJqIGqZupthauMJm9+viigmXQ18uO2G5Mr2DDA/Plbgz25XC8Ei+
+         d+209v/3EcIEqer3ddcxyYuLff7Ysp+4g5ctSJcm8oK8yeVMVsmo+e2i3JoQXnpxxN/T
+         gg983WXI6zIdaHM/VyUO9RXEp/f+ktOfHzPazs0s5VSU1b+nJREgQOo8wn/B0jMK1JjO
+         dh/e3mstiygBO5EKYeIDI+413sNUQhXOTBfEB/1h7HTBAzmn+hO8PyuZsS/UxRQDMYtm
+         DcWg==
+X-Gm-Message-State: AOAM533F+eb2mhINjKObxnjBQtqrzvw/frrj3xyCRQu8s86juXy5M9Dp
+        49HrTO1XvDtcoCzjSrQY6IcHfSqxXms+iDqQa9c=
+X-Google-Smtp-Source: ABdhPJw6RXlpauxjOVDczQitFZ8FztvPfPmEeMtWTmZIsExffJnxM9blZjm02Ldxbb/gNx13ze/IbA==
+X-Received: by 2002:a62:ab10:0:b0:50a:c9dd:c142 with SMTP id p16-20020a62ab10000000b0050ac9ddc142mr4060024pff.19.1650620170688;
+        Fri, 22 Apr 2022 02:36:10 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id u10-20020a17090a890a00b001cb14240c4csm4295674pjn.1.2022.04.22.02.36.10
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Apr 2022 02:36:10 -0700 (PDT)
+Message-ID: <6262770a.1c69fb81.bc24e.baae@mx.google.com>
+Date:   Fri, 22 Apr 2022 02:36:10 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YmJvKZcYMsypQRZJ@zx2c4.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: next-20220422
+X-Kernelci-Report-Type: build
+X-Kernelci-Tree: next
+X-Kernelci-Branch: master
+Subject: next/master build: 14 builds: 0 failed, 14 passed,
+ 12 warnings (next-20220422)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,22 +70,149 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hey again,
+next/master build: 14 builds: 0 failed, 14 passed, 12 warnings (next-202204=
+22)
 
-On Fri, Apr 22, 2022 at 11:02:33AM +0200, Jason A. Donenfeld wrote:
-> > Meanwhile, Jason, if you want to pick up the offending patches directly,
-> > I can drop them from docs-next.
-> 
-> Ah, I hadn't seen that other patch because it wasn't CC'd to me, but
-> that makes sense since it was mostly a docs fix rather than a
-> substantive technical change. Since we've now got both going on at once,
-> I'll just take the docs one to make the conflict easier, so sure, drop
-> it from your tree, and I'll apply it to mine.
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20220422/
 
-Done, with the build conflicts fixed up. These are now in my tree:
+Tree: next
+Branch: master
+Git Describe: next-20220422
+Git Commit: e7d6987e09a328d4a949701db40ef63fbb970670
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 3 unique architectures
 
-- 3608cbde2518 ("Documentation: siphash: convert danger note to warning for HalfSipHash")
-- 3addb633c82f ("Documentation: siphash: enclose HalfSipHash usage example in the literal block")
-- 1ed2075e7202 ("Documentation: siphash: disambiguate HalfSipHash algorithm from hsiphash functions")
+Warnings Detected:
 
-Jason
+arm64:
+
+arm:
+    cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (clang-13): 6 =
+warnings
+    cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (clang-13=
+): 6 warnings
+
+x86_64:
+
+
+Warnings summary:
+
+    12   clang: warning: argument unused during compilation: '-march=3Darmv=
+7-a' [-Wunused-command-line-argument]
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (arm64, clang-13=
+) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chromebook=
+ (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatch=
+es
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
+tches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
+tches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-chrom=
+ebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
+matches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
+=E2=80=94 PASS, 0 errors, 6 warnings, 0 section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
+3) =E2=80=94 PASS, 0 errors, 6 warnings, 0 section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86-chr=
+omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86-chr=
+omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-chro=
+mebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (x86_64, clang=
+-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chromebook=
+ (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatc=
+hes
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 wa=
+rnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors=
+, 0 warnings, 0 section mismatches
+
+---
+For more info write to <info@kernelci.org>

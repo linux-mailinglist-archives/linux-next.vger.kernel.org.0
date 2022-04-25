@@ -2,105 +2,85 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3FEE50E068
-	for <lists+linux-next@lfdr.de>; Mon, 25 Apr 2022 14:34:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FE1B50E1EC
+	for <lists+linux-next@lfdr.de>; Mon, 25 Apr 2022 15:34:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230048AbiDYMhH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 25 Apr 2022 08:37:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47328 "EHLO
+        id S232364AbiDYNgY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 25 Apr 2022 09:36:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237362AbiDYMhB (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 25 Apr 2022 08:37:01 -0400
-X-Greylist: delayed 373 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 25 Apr 2022 05:33:52 PDT
-Received: from proxmox1.postmarketos.org (proxmox1.postmarketos.org [213.239.216.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 054929A99C
-        for <linux-next@vger.kernel.org>; Mon, 25 Apr 2022 05:33:51 -0700 (PDT)
-Received: from [192.168.0.33] (cpc78119-cwma10-2-0-cust590.7-3.cable.virginm.net [81.96.50.79])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by proxmox1.postmarketos.org (Postfix) with ESMTPSA id E0D111401AA;
-        Mon, 25 Apr 2022 12:27:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=postmarketos.org;
-        s=donut; t=1650889656;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JvZasaRue4LULzli2YoizhY0uu4LfZQCutAOVvrO+Lk=;
-        b=jtcM6Z6fsk02UkmXstWVp6K+wBrCR3oZFZ84/iA/4c93TR3UAfA6CLNvsLjjKbXAt3TWOx
-        S7+eqWQ4rnlzNNTejHoH+ld0PmQCJN5TObro8dOtYlnrW2y/ERkmtG6nutBLG5ace+7vjB
-        5B93nYc2RPs9GSRhyrwmrfBQHcLej/0=
-Message-ID: <bf90c37b-0184-845c-dd6a-c2f4a038b075@postmarketos.org>
-Date:   Mon, 25 Apr 2022 13:27:35 +0100
+        with ESMTP id S242113AbiDYNgX (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 25 Apr 2022 09:36:23 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C1F31150
+        for <linux-next@vger.kernel.org>; Mon, 25 Apr 2022 06:33:19 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id r189so27059815ybr.6
+        for <linux-next@vger.kernel.org>; Mon, 25 Apr 2022 06:33:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tnGDk2mXj8ducKZ6TjV0CCxMODc0uQNA4u/k6GAYohE=;
+        b=Ru6CMFDL+759FDN0Z+W8VThj6ZOWjiqunT3Ldu7hr9+T/EwHJ2ill2Bu8QHwYvuSAJ
+         7dKDDU5+92cjc7riK3wLgypUn1DzhEiOL9atp+b4uHycuIbPimmCeKShAzX3/lEkWClR
+         Dw2NBC/VWTnBFQz+EwaDuGAPMCRx5eDKSvbaXRIiTCMVvdOcx71g4s8y03U9A5Yqfk9a
+         x5hIjscu80Kro5O/30lo0/Sc7GCIThTycK8Ke4jCFwjwWctzEXd4/X3ORRR8i9V61+nl
+         ueObE4uewQRN9FEHR07RR5YAM4Y118mzN8MbKAPq/riqju6hAdF621UPSpiO9WZo8tWU
+         VXLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tnGDk2mXj8ducKZ6TjV0CCxMODc0uQNA4u/k6GAYohE=;
+        b=SCh1lXRH1JwYrf1Bq1RWUhSmVfOBYtEAtf87qDiirypOEFOgX8r6RFBY296TnZr46Y
+         WSCry2ZrODh7dQQP07iEVsjoL3NtBjRkw5Crec5W25tXnIeY15+VuaJpCKIeW7XD37qt
+         fmBAIccDoue/TuL+nfohfMFIy/bUljffr7O4CFPoWtQE3IjxkzfeZGS9kbBXqW/rWdj8
+         j4Ysbd8Itv2Up/ABYzd5yaA7xuAJoshGJu/4RShy2wdGkKQMB7DQ1fQKqh05LUnffaS7
+         drxzuqYu3X9e0Fg4i/BfEdaFQIP3+GN7ehmJKrUbc+PfnkftV25Lkems90bNiS9k+AO0
+         w3Vw==
+X-Gm-Message-State: AOAM532HxaRp12LgLoHfXscB/ulK+YA8AgKoKID8A3jGLfulWR0V0TXK
+        C8e4EJECAObSaYgSgQC6K4PA6/uqJ90o5rv6I90OoQ==
+X-Google-Smtp-Source: ABdhPJxT1xHvYnJnmKXomu4Hq7g2Z8f4tfldPU9/2l3zAc4G9If5Or8Dwfh4kiaoWtqonKY9HjM1w65uQiZFxTj56RY=
+X-Received: by 2002:a25:aa94:0:b0:648:62f2:ef4e with SMTP id
+ t20-20020a25aa94000000b0064862f2ef4emr4562504ybi.626.1650893598522; Mon, 25
+ Apr 2022 06:33:18 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-From:   Caleb Connolly <kc@postmarketos.org>
+References: <20220421091055.12d6465c@canb.auug.org.au> <CACRpkdaD1G9J+jTJH4oGrcF_dinMjBjHCGMJqRZh8FC0dy+Xfw@mail.gmail.com>
+ <bf90c37b-0184-845c-dd6a-c2f4a038b075@postmarketos.org>
+In-Reply-To: <bf90c37b-0184-845c-dd6a-c2f4a038b075@postmarketos.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 25 Apr 2022 15:33:06 +0200
+Message-ID: <CACRpkday2DXDNJJJ7srC5-Fj_d9iiqX-nqY9np1TnsBsOG6sCg@mail.gmail.com>
 Subject: Re: linux-next: Fixes tags need some work in the pinctrl tree
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Caleb Connolly <kc@postmarketos.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220421091055.12d6465c@canb.auug.org.au>
- <CACRpkdaD1G9J+jTJH4oGrcF_dinMjBjHCGMJqRZh8FC0dy+Xfw@mail.gmail.com>
-Content-Language: en-US
-In-Reply-To: <CACRpkdaD1G9J+jTJH4oGrcF_dinMjBjHCGMJqRZh8FC0dy+Xfw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi both,
+On Mon, Apr 25, 2022 at 2:27 PM Caleb Connolly <kc@postmarketos.org> wrote:
 
-Apologies, I made a silly mistake when submitting this series.
+> The patch shouldn't be backported to stable as it will introduce a bug if ported
+> without the second patch (and as above, I don't think this series should be
+> backported at all). Could you let me know how to get this dropped from backporting?
 
-Patch 2 
-(https://lore.kernel.org/linux-rockchip/20220328005005.72492-3-kc@postmarketos.org/), 
-contains a fix which should have been squashed into patch one - the first hunk 
-of the diff, the bug is a bitwise compare to an enum which isn't bitwise:
+If Greg or Sasha etc propose the patch for stable (which will not happen
+automatically unless you explicitly add Cc: stable@vger.kernel.org)
+they send out a proposal "I will add this patch to stable", with CC to the
+author, and then you can say you don't want it backported.
 
-if (param == (PIN_CONFIG_OUTPUT | PIN_CONFIG_INPUT_ENABLE))
+Many Fixes:-tagged patches do not get picked up for stable, it is not
+what the tag means, if you want things to be picked for stable, the
+rule is Cc: stable@, it's just that sometimes the stable maintainers
+(and an AI!) pick some Fixes: patches anyways.
 
-In hindsight, I think it was a mistake the add a Fixes tag to the first patch, 
-it doesn't fix a "bug" it just adds behaviour which arguably should have been 
-implemented in the patch it fixes.
-
-The patch shouldn't be backported to stable as it will introduce a bug if ported 
-without the second patch (and as above, I don't think this series should be 
-backported at all). Could you let me know how to get this dropped from backporting?
-
-Again, sorry for the hassle this has caused.
-
-Kind regards,
-Caleb
-
-On 22/04/2022 21:57, Linus Walleij wrote:
-> On Thu, Apr 21, 2022 at 1:11 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> 
->> In commit
->>
->>    6548c9dc711d ("pinctrl/rockchip: support deferring other gpio params")
->>
->> Fixes tags
->>
->>    Fixes: e7165b1d ("pinctrl/rockchip: add a queue for deferred pin output settings on probe")
->>    Fixes: 59dd178e ("gpio/rockchip: fetch deferred output settings on probe")
->>
->> have these problem(s):
->>
->>    - SHA1 should be at least 12 digits long
->>      This can be fixed for the future by setting core.abbrev to 12 (or
->>      more) or (for git v2.11 or later) just making sure it is not set
->>      (or set to "auto").
-> 
-> Fixed it up by rebasing, thanks!
-> 
-> Yours,
-> Linus Walleij
+Yours,
+Linus Walleij

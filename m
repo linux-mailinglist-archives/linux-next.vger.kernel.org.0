@@ -2,79 +2,105 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFB2E50D993
-	for <lists+linux-next@lfdr.de>; Mon, 25 Apr 2022 08:41:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3FEE50E068
+	for <lists+linux-next@lfdr.de>; Mon, 25 Apr 2022 14:34:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237429AbiDYGnm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 25 Apr 2022 02:43:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38078 "EHLO
+        id S230048AbiDYMhH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 25 Apr 2022 08:37:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiDYGnh (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 25 Apr 2022 02:43:37 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E0885FC9;
-        Sun, 24 Apr 2022 23:40:31 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S237362AbiDYMhB (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 25 Apr 2022 08:37:01 -0400
+X-Greylist: delayed 373 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 25 Apr 2022 05:33:52 PDT
+Received: from proxmox1.postmarketos.org (proxmox1.postmarketos.org [213.239.216.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 054929A99C
+        for <linux-next@vger.kernel.org>; Mon, 25 Apr 2022 05:33:51 -0700 (PDT)
+Received: from [192.168.0.33] (cpc78119-cwma10-2-0-cust590.7-3.cable.virginm.net [81.96.50.79])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KmwPQ6wRzz4x7V;
-        Mon, 25 Apr 2022 16:40:26 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1650868827;
-        bh=J0KzaBi6vTqwiyg2folawIJK4/TDle8h1QEj5kxLEnw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=E2hu4fQooBTb47zxFjaECW3j73eAaE15GCtqNNB/rZeMW0JWne/YS2ZvH2UfFp3wP
-         bxiFX6hWijwLrzSBjiLRswFaDXFnPxjpE7OO04CzkgnPmt4NMM2t5Sxj8ElGPsJZLF
-         b+6v3eK4Sc1rw1Q1psivASKi7O8j1pQwgiYayPJNgFRInNzRKVrdWiLlB1ew9m0wOi
-         7MeLs86TE6OZTjuT6uJkdB9Qsmt2emYanDl2W5F3ldrCp7DAMF8AQ0HeyqhB3sC3Xa
-         MfgFKF/sPmELjNv0cRaFEQFNjy3z43Lqp4QdNZiiZE00OYtyRH0o7IBE/EdfIYDWRN
-         5ctsqk+LGl8mA==
-Date:   Mon, 25 Apr 2022 16:40:25 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: no release today
-Message-ID: <20220425164025.4a55844b@canb.auug.org.au>
+        by proxmox1.postmarketos.org (Postfix) with ESMTPSA id E0D111401AA;
+        Mon, 25 Apr 2022 12:27:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=postmarketos.org;
+        s=donut; t=1650889656;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JvZasaRue4LULzli2YoizhY0uu4LfZQCutAOVvrO+Lk=;
+        b=jtcM6Z6fsk02UkmXstWVp6K+wBrCR3oZFZ84/iA/4c93TR3UAfA6CLNvsLjjKbXAt3TWOx
+        S7+eqWQ4rnlzNNTejHoH+ld0PmQCJN5TObro8dOtYlnrW2y/ERkmtG6nutBLG5ace+7vjB
+        5B93nYc2RPs9GSRhyrwmrfBQHcLej/0=
+Message-ID: <bf90c37b-0184-845c-dd6a-c2f4a038b075@postmarketos.org>
+Date:   Mon, 25 Apr 2022 13:27:35 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/27ySs0VuE7wSEaayARmxvyQ";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,LOCALPART_IN_SUBJECT,SPF_HELO_PASS,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+From:   Caleb Connolly <kc@postmarketos.org>
+Subject: Re: linux-next: Fixes tags need some work in the pinctrl tree
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20220421091055.12d6465c@canb.auug.org.au>
+ <CACRpkdaD1G9J+jTJH4oGrcF_dinMjBjHCGMJqRZh8FC0dy+Xfw@mail.gmail.com>
+Content-Language: en-US
+In-Reply-To: <CACRpkdaD1G9J+jTJH4oGrcF_dinMjBjHCGMJqRZh8FC0dy+Xfw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/27ySs0VuE7wSEaayARmxvyQ
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi both,
 
-Hi all,
+Apologies, I made a silly mistake when submitting this series.
 
-Sorry, I forgot to mention on Frdiay that there will be no release
-today (ANZAC day here in OZ).
+Patch 2 
+(https://lore.kernel.org/linux-rockchip/20220328005005.72492-3-kc@postmarketos.org/), 
+contains a fix which should have been squashed into patch one - the first hunk 
+of the diff, the bug is a bitwise compare to an enum which isn't bitwise:
 
---=20
-Cheers,
-Stephen Rothwell
+if (param == (PIN_CONFIG_OUTPUT | PIN_CONFIG_INPUT_ENABLE))
 
---Sig_/27ySs0VuE7wSEaayARmxvyQ
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+In hindsight, I think it was a mistake the add a Fixes tag to the first patch, 
+it doesn't fix a "bug" it just adds behaviour which arguably should have been 
+implemented in the patch it fixes.
 
------BEGIN PGP SIGNATURE-----
+The patch shouldn't be backported to stable as it will introduce a bug if ported 
+without the second patch (and as above, I don't think this series should be 
+backported at all). Could you let me know how to get this dropped from backporting?
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJmQlkACgkQAVBC80lX
-0Gy57gf/eVjlGwqAyQSPp4Wr7NRp31Ra+XQGBsw00B9yYFVj6Y5RA6CV/xjMlee7
-x4DCjXCRnu1PDCmsSs/+9EMNe0Thgfp4aC/IcjFzeiFU3jt4zHHqlEfI8waYucQH
-/qHZG67o31vjpjP2xEkBXYHU4rUEf2H6iCFgu6dhES7NfHatOnzzkWRX81N/M2+W
-jf/YSPgxJK7uZJJiDM7r6LzgcFXISPH9Mg7ELNPCQ+2QRkxFZGYLoaL1DB/ZFCBJ
-3e15MEjii+T4JGyXb//3PCER1Jsopj58zlfrWYg4IwSTLu3ewuRUd4A6eYNjfz9J
-XaS6v4BqIvyYSxKORcfI4jx621nLEg==
-=wevx
------END PGP SIGNATURE-----
+Again, sorry for the hassle this has caused.
 
---Sig_/27ySs0VuE7wSEaayARmxvyQ--
+Kind regards,
+Caleb
+
+On 22/04/2022 21:57, Linus Walleij wrote:
+> On Thu, Apr 21, 2022 at 1:11 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> 
+>> In commit
+>>
+>>    6548c9dc711d ("pinctrl/rockchip: support deferring other gpio params")
+>>
+>> Fixes tags
+>>
+>>    Fixes: e7165b1d ("pinctrl/rockchip: add a queue for deferred pin output settings on probe")
+>>    Fixes: 59dd178e ("gpio/rockchip: fetch deferred output settings on probe")
+>>
+>> have these problem(s):
+>>
+>>    - SHA1 should be at least 12 digits long
+>>      This can be fixed for the future by setting core.abbrev to 12 (or
+>>      more) or (for git v2.11 or later) just making sure it is not set
+>>      (or set to "auto").
+> 
+> Fixed it up by rebasing, thanks!
+> 
+> Yours,
+> Linus Walleij

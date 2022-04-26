@@ -2,46 +2,51 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12D5750F02F
-	for <lists+linux-next@lfdr.de>; Tue, 26 Apr 2022 07:27:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6825350F0CB
+	for <lists+linux-next@lfdr.de>; Tue, 26 Apr 2022 08:16:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239775AbiDZFaz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 26 Apr 2022 01:30:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58564 "EHLO
+        id S229695AbiDZGTc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 26 Apr 2022 02:19:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231786AbiDZFax (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 26 Apr 2022 01:30:53 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B05312AD6;
-        Mon, 25 Apr 2022 22:27:46 -0700 (PDT)
+        with ESMTP id S244795AbiDZGT1 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 26 Apr 2022 02:19:27 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10BE7DFA0;
+        Mon, 25 Apr 2022 23:16:20 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KnVl03kKKz4xXW;
-        Tue, 26 Apr 2022 15:27:40 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KnWq556BKz4xLb;
+        Tue, 26 Apr 2022 16:16:17 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1650950861;
-        bh=VP83oNnfSmxK+GqykxZKWgk2eDZxQ/ru3oQHu9AxHbE=;
+        s=201702; t=1650953779;
+        bh=Rz7R1qcyRB/h7ziJSljHEn9CO+x/cgNygE/+4YeJmAg=;
         h=Date:From:To:Cc:Subject:From;
-        b=ItQJutjyqzlY8udohpP5+LFu27eZgJ4HSZcm0wL5R+edaLS598Bi+VVL2gi+vSnEa
-         5UGi54OUKdLnVbQ+Z4qzwm/tMWEnbNr1d0jfDYFjuvUi4q/9T6YPEJTUsPo5k1UaMz
-         gZjAzUApb49Ulh6NSInVAT5bich/00kMYOZWXp8S/FdzNYvxQJIhZtY6OtJRtZ+7CI
-         QPaRpYcAMhUnfnyZuQgn1vzIyH/tJDvcDvtF50U/9ifIkG7L9gkBt7a2DLcdeIOswp
-         ySIOl2tA/0t9DL3O0PhfqCvap3dbJwSfVd4LfpossKa31b1s8JkkVZUzFNE9CJY+pE
-         NS85lyq0UO7Og==
-Date:   Tue, 26 Apr 2022 15:27:39 +1000
+        b=cTji6UeS2v073elvvX37udVMF5efKJJC7pqoBaFpeih3CeuZuGB4aB+lolS/22Brg
+         GXmsuYQ7oCErbO+7DhYHaLeqvqMnvCNPgyanqLJxl56MdmKM58Pst+Ywr+yU8oCeCc
+         iXKC287S0aIvxtX1NcKM7ZMCXFRU7dDEsLzUM7qK5WhRWUPu4hCKsxgHXZ+WlTfPfJ
+         u+RxQdeJ2g3Fu4uC5LNEPeh6zJz4/XtmGzVbsOvD4BzMjcyL8A4y5+iO9abNU6St2g
+         cbQD8KwtrNc+63RlP7zpWBr4MSW6rPf50h4pkKwMKM89DFHl5Y+sKOz9rdULTCiJ1W
+         vRE3ZV7+EcQSA==
+Date:   Tue, 26 Apr 2022 16:16:16 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Chanwoo Choi <cw00.choi@samsung.com>, Greg KH <greg@kroah.com>
-Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+To:     Ard Biesheuvel <ardb@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Borislav Petkov <bp@suse.de>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the extcon tree with the usb tree
-Message-ID: <20220426152739.62f6836e@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>
+Subject: linux-next: manual merge of the efi tree with the tip tree
+Message-ID: <20220426161616.798cf1f2@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/FeCk1B0BdNXZDJMsTzOyuNv";
+Content-Type: multipart/signed; boundary="Sig_/t4oeLJikwLUO0H4lJCq9nSO";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -52,88 +57,79 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/FeCk1B0BdNXZDJMsTzOyuNv
+--Sig_/t4oeLJikwLUO0H4lJCq9nSO
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the extcon tree got a conflict in:
+Today's linux-next merge of the efi tree got conflicts in:
 
-  drivers/usb/dwc3/drd.c
+  drivers/virt/Kconfig
+  drivers/virt/Makefile
 
-between commit:
+between commits:
 
-  0f0101719138 ("usb: dwc3: Don't switch OTG -> peripheral if extcon is pre=
-sent")
+  fce96cf04430 ("virt: Add SEV-SNP guest driver")
+  9617f2f48310 ("virt: sevguest: Rename the sevguest dir and files to sev-g=
+uest")
 
-from the usb tree and commit:
+from the tip tree and commit:
 
-  88490c7f43c4 ("extcon: Fix extcon_get_extcon_dev() error handling")
+  cbabf03c3ef3 ("virt: Add efi_secret module to expose confidential computi=
+ng secrets")
 
-from the extcon tree.
+from the efi tree.
 
-I fixed it up (the former moved the code modified by the latter, so I
-used the former version of this files and added the following merge fix
-patch) and can carry the fix as necessary. This is now fixed as far as
-linux-next is concerned, but any non trivial conflicts should be
-mentioned to your upstream maintainer when your tree is submitted for
-merging.  You may also want to consider cooperating with the maintainer
-of the conflicting tree to minimise any particularly complex conflicts.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Tue, 26 Apr 2022 15:24:04 +1000
-Subject: [PATCH] fixup for "usb: dwc3: Don't switch OTG -> peripheral if ex=
-tcon is present"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/usb/dwc3/core.c | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 2345a54b848b..950e238c65bf 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -1649,13 +1649,8 @@ static struct extcon_dev *dwc3_get_extcon(struct dwc=
-3 *dwc)
- 	 * This device property is for kernel internal use only and
- 	 * is expected to be set by the glue code.
- 	 */
--	if (device_property_read_string(dev, "linux,extcon-name", &name) =3D=3D 0=
-) {
--		edev =3D extcon_get_extcon_dev(name);
--		if (!edev)
--			return ERR_PTR(-EPROBE_DEFER);
--
--		return edev;
--	}
-+	if (device_property_read_string(dev, "linux,extcon-name", &name) =3D=3D 0)
-+		return extcon_get_extcon_dev(name);
-=20
- 	/*
- 	 * Try to get an extcon device from the USB PHY controller's "port"
---=20
-2.35.1
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/FeCk1B0BdNXZDJMsTzOyuNv
+diff --cc drivers/virt/Kconfig
+index 0c1bba7c5c66,c877da072d4d..000000000000
+--- a/drivers/virt/Kconfig
++++ b/drivers/virt/Kconfig
+@@@ -48,6 -48,6 +48,8 @@@ source "drivers/virt/nitro_enclaves/Kco
+ =20
+  source "drivers/virt/acrn/Kconfig"
+ =20
+ +source "drivers/virt/coco/sev-guest/Kconfig"
+ +
++ source "drivers/virt/coco/efi_secret/Kconfig"
++=20
+  endif
+diff --cc drivers/virt/Makefile
+index b2e6e864ebbe,067b5427f40f..000000000000
+--- a/drivers/virt/Makefile
++++ b/drivers/virt/Makefile
+@@@ -9,4 -9,4 +9,5 @@@ obj-y				+=3D vboxguest
+ =20
+  obj-$(CONFIG_NITRO_ENCLAVES)	+=3D nitro_enclaves/
+  obj-$(CONFIG_ACRN_HSM)		+=3D acrn/
+ +obj-$(CONFIG_SEV_GUEST)		+=3D coco/sev-guest/
++ obj-$(CONFIG_EFI_SECRET)	+=3D coco/efi_secret/
+
+--Sig_/t4oeLJikwLUO0H4lJCq9nSO
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJngssACgkQAVBC80lX
-0GwbRgf/c9hKe+5y1t7rehI0/4/CSFI9pvrcGvrZIYV1wAU7L10AgYaMNqAxEf5T
-wXFyX3Qer9TGM0/8+HOgVXxzty0/Hbx816FjTsbiOZRSH4BOtfvn1GPiueP8MYrY
-Ie1CkqJATAh6yQ7CJaSlwfGNCJu938JuY9X57TRlryF8yu01ls30FMuJZFJXMrg0
-6BfmnhO6a7E8ci3CrzeYP0IlLXKxQ7vshG0KMQjhbJqJpsQ05MfMsE8BAm21kWWU
-ZdzsCdExF4FM+FE4nlNrK5+8MnBdiGm8wKWEcU6DQQKw+xC51lVKU91SGt9cxTpb
-h8NHM30ShaZTHbhneqUgmDGvdK98SQ==
-=ruC8
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJnjjAACgkQAVBC80lX
+0GwtqQf9HPq5y/eYfvrTvd5/685bvFK2DEGd61OkthwypVVxPcy9NpUo030oxyqg
+smy4RST/wCm9OfK8Xq5/uU47IfHZv4fL0jR0M/VbUegl0YDL/iuLLt8vbFiWsB+t
+ldw40tS82WLYVLVSj2kREppOXYC376tStn2KW34MPpHuEspCjfyZ0eNsK706b8J5
+ECnzpLg0R/TyDM2NxYBgRtV4obbPqJ6AP7W7Mmg0/V4UzPRNnz+5u84I2BW+8vAR
+9jmymeRCjMhS7vhYW7evzqOXJqPjDATrQMQds6Q/H8Md/VePzTsqXKPzom6xaSsu
+mWzGsQ7uzc410KoxyAa/WDOlDCzwdA==
+=YQeW
 -----END PGP SIGNATURE-----
 
---Sig_/FeCk1B0BdNXZDJMsTzOyuNv--
+--Sig_/t4oeLJikwLUO0H4lJCq9nSO--

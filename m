@@ -2,50 +2,71 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1E9F50F4C5
-	for <lists+linux-next@lfdr.de>; Tue, 26 Apr 2022 10:37:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D15350F908
+	for <lists+linux-next@lfdr.de>; Tue, 26 Apr 2022 11:44:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345273AbiDZIkK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 26 Apr 2022 04:40:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58758 "EHLO
+        id S239498AbiDZJMd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 26 Apr 2022 05:12:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345739AbiDZIj1 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 26 Apr 2022 04:39:27 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 050C3403CF;
-        Tue, 26 Apr 2022 01:30:50 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KnZpJ590lz4ySW;
-        Tue, 26 Apr 2022 18:30:48 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1650961849;
-        bh=czivHZ+lHH63w67c3ZACNKHQwiMOwH0QCqtUPgwwvkY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=O0ddEM8aWOARzU3HQ4thaICH0oW6pKC0o1Wx3m353ZeRhbk4GF520x/4x0+CblV7u
-         U5VQ09sni2bDzd4CCUzCX4aHTD7mt7hZIC1xsB9aTe3sDVqlyz2mydn0GrjFxREaVB
-         EZwS1avtkOEcfxCE9WHDT9NTBsILOVa2kbwhbRZaFZJCxXpZMtqEatWeis156gdTYQ
-         guzV2la6qSMbaTFZBz7uWLWlLBdtL3wHy8p4J78ax3pYhO5+rdn4WxIe/sQSb0JbVL
-         mpKpK5aBFpaYJpMRXNvnQCzbFk4/HU/taJLoXO+rSxG+zyvR0WopkAYGnuU12eQlRs
-         VFTsRznQpyabw==
-Date:   Tue, 26 Apr 2022 18:30:48 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>
-Cc:     Amadeusz =?UTF-8?B?U8WCYXdpxYRza2k=?= 
-        <amadeuszx.slawinski@linux.intel.com>,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the sound-asoc tree
-Message-ID: <20220426183048.5f1cb899@canb.auug.org.au>
+        with ESMTP id S1346254AbiDZJH3 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 26 Apr 2022 05:07:29 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 962161759D4;
+        Tue, 26 Apr 2022 01:48:28 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id e2so18129214wrh.7;
+        Tue, 26 Apr 2022 01:48:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=iHo8yEw9vi6ApvW9lREs3BsO/SztyDLEl+71H8g0jpU=;
+        b=VN1eJoSUpgw+fEiVLbAQqhxhv2kBlRYd8XppnJMJZihec2fPd9TDx1BawH28JfstJ4
+         MZGiQzfZyiade6E40jIsx2nB2EHHy4ghLMSIVu3f/1AEIK1j8MmMOT0EdcQR0Fa/KYu/
+         YenaRIDsLY0GZOFU7xhlRt915PShWqXv8pk8AJa3mNJD8h48/MVhKEUKjq87k9d+Q9dF
+         67G8ODzTX8xqtN4Thyv+u2ISk4AcFdK63c2xoYkumqzsp01RXkqZE7MBmZxhV/DF4WI+
+         4sZzFl59rGb59ctGzr33iTIilpZGoNcDyMxaaeq9el0k6lbQgPaRcayoqUPC1c0SmY7Z
+         Wzqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=iHo8yEw9vi6ApvW9lREs3BsO/SztyDLEl+71H8g0jpU=;
+        b=DZvc71mDU9/OnEdtDObdTwXfg4Vf73JVskdHAi/QSgPRpif+EgzFqRbirbnuFOlb3x
+         pz3L5iiatMEJ6yT8NeimzsQ7J2LYTpt5lp9l+mxEy2E1fIX9vzG1ZgDptuOYzgCPQFe2
+         EYcQO5bS5gxOD+tuz5qoYiFE/SuwnGxfDCuKTR2iGxTEVNbzs3XZZeXoSMeYtwrAcHkU
+         Fg5v0GEm8SaQuuG1SfuEICRpHnX6R4KzU4LROTQDupY+rhBLN2lZTgAgZZgXHqaHTbNn
+         C/gIe4AykST+T9ZX1vJgORGGDTn0oxmg1NtcFUfhs4qOaAWZyFS64rC4pU0N580drvfl
+         Kztw==
+X-Gm-Message-State: AOAM530NaWRQENU8A+4kZurSt+xBBQGllmHLc61aHBsMrj1QNRFkx6ne
+        9J7FvrWHBLfj1dK9tDy/KQ3uaR+X+dL+Hw==
+X-Google-Smtp-Source: ABdhPJwK/gdxNbR5wcwzCjZbJ0uPzi5O3qeN6FpU1jS1wRJBjccxbWHo8LB3JeEZkNOTKlhLjf7S3g==
+X-Received: by 2002:a05:6000:18a8:b0:20a:8a52:5c7e with SMTP id b8-20020a05600018a800b0020a8a525c7emr17783246wri.355.1650962907085;
+        Tue, 26 Apr 2022 01:48:27 -0700 (PDT)
+Received: from [192.168.0.43] (static-35-180-85-188.ipcom.comunitel.net. [188.85.180.35])
+        by smtp.gmail.com with ESMTPSA id g13-20020a5d64ed000000b0020a9e488976sm11890834wri.25.2022.04.26.01.48.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Apr 2022 01:48:26 -0700 (PDT)
+Message-ID: <60b73431-ea41-bcca-8374-1836488b399c@gmail.com>
+Date:   Tue, 26 Apr 2022 10:48:25 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_//xfg1wYZ3AWTI/N/W5SjHei";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: linux-next: Signed-off-by missing for commit in the mediatek tree
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20220426080706.26c6816b@canb.auug.org.au>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220426080706.26c6816b@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,83 +74,27 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_//xfg1wYZ3AWTI/N/W5SjHei
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Stephen,
 
-Hi all,
+On 26/04/2022 00:07, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Commits
+> 
+>    775ef8aaa66e ("arm64: dts: mediatek: align thermal zone node names with dtschema")
+>    c8b8db1a173d ("arm64: dts: mediatek: align operating-points table name with dtschema")
+>    c01d9aa630b8 ("arm64: dts: mediatek: mt8183: align Google CROS EC PWM node name with dtschema")
+>    75a3c81bc634 ("arm64: dts: hisilicon: align 'freq-table-hz' with dtschema in UFS")
+> 
+> are missing a Signed-off-by from their committer.
+> 
 
-After merging the sound-asoc tree, today's linux-next build (powerpc
-allyesconfig) failed like this:
+These patches are taken by Krysztof and merge into my tree via a tag [1] to 
+avoid any conflicts. Please let me know if there is anything I need to do to fix 
+this problem.
 
-sound/soc/intel/avs/path.c: In function 'avs_copier_create':
-sound/soc/intel/avs/path.c:186:31: error: invalid use of undefined type 'st=
-ruct nhlt_specific_cfg'
-  186 |                 data =3D ep_blob->caps;
-      |                               ^~
-sound/soc/intel/avs/path.c:187:36: error: invalid use of undefined type 'st=
-ruct nhlt_specific_cfg'
-  187 |                 data_size =3D ep_blob->size;
-      |                                    ^~
-sound/soc/intel/avs/path.c:210:31: error: invalid use of undefined type 'st=
-ruct nhlt_specific_cfg'
-  210 |                 data =3D ep_blob->caps;
-      |                               ^~
-sound/soc/intel/avs/path.c:211:36: error: invalid use of undefined type 'st=
-ruct nhlt_specific_cfg'
-  211 |                 data_size =3D ep_blob->size;
-      |                                    ^~
+Regards,
+Matthias
 
-Caused by commit
-
-  274d79e51875 ("ASoC: Intel: avs: Configure modules according to their typ=
-e")
-
-I have applied the following patch for today:
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Tue, 26 Apr 2022 17:49:37 +1000
-Subject: [PATCH] fixup for "ASoC: Intel: avs: Configure modules according t=
-o their type"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- sound/soc/intel/avs/path.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/sound/soc/intel/avs/path.c b/sound/soc/intel/avs/path.c
-index 3d46dd5e5bc4..6f47ac44de87 100644
---- a/sound/soc/intel/avs/path.c
-+++ b/sound/soc/intel/avs/path.c
-@@ -9,6 +9,7 @@
- #include <sound/intel-nhlt.h>
- #include <sound/pcm_params.h>
- #include <sound/soc.h>
-+#include <sound/intel-nhlt.h>
- #include "avs.h"
- #include "path.h"
- #include "topology.h"
---=20
-2.35.1
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_//xfg1wYZ3AWTI/N/W5SjHei
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJnrbgACgkQAVBC80lX
-0GwRlwgAhchvrLBL9nPU25RzDVnerN3LCUd0syA1/9xlw4aig7ZRj7V7+XuBKKr0
-oIbDDP6EjODXIz+LeypGGMDcBD5wzpaDtedCY6mdV8nrsGK7DYmnv1lLW4uPF4GC
-G1BWKzvyAavdjscXRLBLOPgebYUV/NI9SQyf2jhmr9yWolcFw5SfRK7kH0+ra92+
-7R5NH6IU1i//3fty567PSYauKeVTB2/5GCl7ISO/hsYiLvu8QPo9ssTwJ35M6cl6
-AlhmH5ZjaFsWxd+D7niu7Vxyyu2G6x7ZjEtHxR2soXrdclRpQazwVBPJvo/5kU+u
-matStPxcUJmx2AwqEsHGrf5tNF55fA==
-=zCsj
------END PGP SIGNATURE-----
-
---Sig_//xfg1wYZ3AWTI/N/W5SjHei--
+[1] 
+https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git/log/?h=for-v5.19/arm-dts64-cleanups

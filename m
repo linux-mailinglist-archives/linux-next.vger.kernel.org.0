@@ -2,54 +2,67 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6825350F0CB
-	for <lists+linux-next@lfdr.de>; Tue, 26 Apr 2022 08:16:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23EB450F0E0
+	for <lists+linux-next@lfdr.de>; Tue, 26 Apr 2022 08:21:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbiDZGTc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 26 Apr 2022 02:19:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48806 "EHLO
+        id S237427AbiDZGYF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 26 Apr 2022 02:24:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244795AbiDZGT1 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 26 Apr 2022 02:19:27 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10BE7DFA0;
-        Mon, 25 Apr 2022 23:16:20 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KnWq556BKz4xLb;
-        Tue, 26 Apr 2022 16:16:17 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1650953779;
-        bh=Rz7R1qcyRB/h7ziJSljHEn9CO+x/cgNygE/+4YeJmAg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=cTji6UeS2v073elvvX37udVMF5efKJJC7pqoBaFpeih3CeuZuGB4aB+lolS/22Brg
-         GXmsuYQ7oCErbO+7DhYHaLeqvqMnvCNPgyanqLJxl56MdmKM58Pst+Ywr+yU8oCeCc
-         iXKC287S0aIvxtX1NcKM7ZMCXFRU7dDEsLzUM7qK5WhRWUPu4hCKsxgHXZ+WlTfPfJ
-         u+RxQdeJ2g3Fu4uC5LNEPeh6zJz4/XtmGzVbsOvD4BzMjcyL8A4y5+iO9abNU6St2g
-         cbQD8KwtrNc+63RlP7zpWBr4MSW6rPf50h4pkKwMKM89DFHl5Y+sKOz9rdULTCiJ1W
-         vRE3ZV7+EcQSA==
-Date:   Tue, 26 Apr 2022 16:16:16 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Ard Biesheuvel <ardb@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Borislav Petkov <bp@suse.de>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>
-Subject: linux-next: manual merge of the efi tree with the tip tree
-Message-ID: <20220426161616.798cf1f2@canb.auug.org.au>
+        with ESMTP id S235274AbiDZGYF (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 26 Apr 2022 02:24:05 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A52111378A
+        for <linux-next@vger.kernel.org>; Mon, 25 Apr 2022 23:20:58 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id p8so17049836pfh.8
+        for <linux-next@vger.kernel.org>; Mon, 25 Apr 2022 23:20:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=Fq1s+MyeXQZIqyRYtT+0WK6e74foRq0rJBKrJ5RnuaQ=;
+        b=AMwjIlXoDRkIy5LQBH5i3iIzyiLY7XfsOGpYyOML1GAgEADtMh5bRjHG/GF1odFswK
+         kuwZKkTIC9PpJyIRMz9yhdGmVJ6EqAjKnwTB8CLWIGfDFefcqHnuBOy1NU+iE+jPm9Sq
+         ALaT5WpYmYBVr8vp7rVirY93rxiTpzGcYgTvz75uVgdfSEvVCzN/9XD/hQahEg9UgqER
+         AMBfnbc7KS8tjMDCtr5SG6oAmUW2oollgS3gGiFPdQoW6kXA46D9MyFy/Li19LOJWeki
+         wMsllKEkXAbVrMw/IiZnh7vv346E8852WYLYMrPWhx+agnFdPLvdEi602FvcsEFPMj4P
+         SBbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=Fq1s+MyeXQZIqyRYtT+0WK6e74foRq0rJBKrJ5RnuaQ=;
+        b=J8DmaILkUFEFA/lZPDaapYOiKwg8cMvkWjsx9URp573aWxWVjzZyz29/VxSlqRU+T1
+         dnSzi8L/jP9LzX7DCpzYfc4dCVn/IH6G8ylsUdEA3XlLcUJoa8E2vW14nm2cO4HivXFj
+         Tb7wYDBEnKW95kNLbCZxk70oq/JEm8pB8XRpY2chp12iljXE12anRzgRjhZeMuWj5fgP
+         TUbg/57bPNGyHTqCTwxBBSQZtA8jJwTP6K+QQ4EQBQJPVAeiLvHSl78l34nC0AdXsFth
+         OLqs7PlT4rsCagCy1+Z3KG0A+n4BtmXygl+0wqzv6jGUsG87dZxEHmT+Mr9s+Zt90nsf
+         tDyw==
+X-Gm-Message-State: AOAM530u3iTC2nncRfEJ7hWVI9DAJ+zjcbIta+tO9MtzM13PagwGxpET
+        0ytbenkG2268VEDgIALcnnxX8q6qmDQDGhhbEng=
+X-Google-Smtp-Source: ABdhPJzg4KhVNEO92zuVUoECC3jdUA7Gy2FPiMrXePqfhm3SrocODIxgBrDu8jQgPiLFtU8DaGDlRw==
+X-Received: by 2002:a05:6a00:849:b0:50d:4069:60b with SMTP id q9-20020a056a00084900b0050d4069060bmr8667987pfk.76.1650954057789;
+        Mon, 25 Apr 2022 23:20:57 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id r29-20020a63441d000000b003a97e8f71e7sm11768187pga.88.2022.04.25.23.20.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Apr 2022 23:20:57 -0700 (PDT)
+Message-ID: <62678f49.1c69fb81.4ba54.ccf0@mx.google.com>
+Date:   Mon, 25 Apr 2022 23:20:57 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/t4oeLJikwLUO0H4lJCq9nSO";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v5.18-rc4-305-g34e5025f24df
+X-Kernelci-Report-Type: test
+X-Kernelci-Tree: next
+X-Kernelci-Branch: pending-fixes
+Subject: next/pending-fixes baseline: 436 runs,
+ 4 regressions (v5.18-rc4-305-g34e5025f24df)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,79 +70,188 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/t4oeLJikwLUO0H4lJCq9nSO
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/pending-fixes baseline: 436 runs, 4 regressions (v5.18-rc4-305-g34e502=
+5f24df)
 
-Hi all,
+Regressions Summary
+-------------------
 
-Today's linux-next merge of the efi tree got conflicts in:
+platform                 | arch   | lab           | compiler | defconfig   =
+                 | regressions
+-------------------------+--------+---------------+----------+-------------=
+-----------------+------------
+asus-C523NA-A20057-coral | x86_64 | lab-collabora | gcc-10   | x86_64_defco=
+n...6-chromebook | 1          =
 
-  drivers/virt/Kconfig
-  drivers/virt/Makefile
+da850-lcdk               | arm    | lab-baylibre  | gcc-10   | davinci_all_=
+defconfig        | 1          =
 
-between commits:
+imx8mn-ddr4-evk          | arm64  | lab-baylibre  | gcc-10   | defconfig+CO=
+N...OMIZE_BASE=3Dy | 1          =
 
-  fce96cf04430 ("virt: Add SEV-SNP guest driver")
-  9617f2f48310 ("virt: sevguest: Rename the sevguest dir and files to sev-g=
-uest")
+rk3399-gru-kevin         | arm64  | lab-collabora | gcc-10   | defconfig+ar=
+m64-chromebook   | 1          =
 
-from the tip tree and commit:
 
-  cbabf03c3ef3 ("virt: Add efi_secret module to expose confidential computi=
-ng secrets")
+  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
+v5.18-rc4-305-g34e5025f24df/plan/baseline/
 
-from the efi tree.
+  Test:     baseline
+  Tree:     next
+  Branch:   pending-fixes
+  Describe: v5.18-rc4-305-g34e5025f24df
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      34e5025f24dff5c012acd52202829323e8f67c82 =
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
 
---=20
-Cheers,
-Stephen Rothwell
 
-diff --cc drivers/virt/Kconfig
-index 0c1bba7c5c66,c877da072d4d..000000000000
---- a/drivers/virt/Kconfig
-+++ b/drivers/virt/Kconfig
-@@@ -48,6 -48,6 +48,8 @@@ source "drivers/virt/nitro_enclaves/Kco
+Test Regressions
+---------------- =
+
+
+
+platform                 | arch   | lab           | compiler | defconfig   =
+                 | regressions
+-------------------------+--------+---------------+----------+-------------=
+-----------------+------------
+asus-C523NA-A20057-coral | x86_64 | lab-collabora | gcc-10   | x86_64_defco=
+n...6-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6267734324d352ed08ff9459
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: x86_64_defconfig+x86-chromebook
+  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.18-rc4-3=
+05-g34e5025f24df/x86_64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabor=
+a/baseline-asus-C523NA-A20057-coral.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.18-rc4-3=
+05-g34e5025f24df/x86_64/x86_64_defconfig+x86-chromebook/gcc-10/lab-collabor=
+a/baseline-asus-C523NA-A20057-coral.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220422.0/x86/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6267734324d352ed08ff9=
+45a
+        new failure (last pass: v5.18-rc3-381-g1e9235a24947) =
+
+ =
+
+
+
+platform                 | arch   | lab           | compiler | defconfig   =
+                 | regressions
+-------------------------+--------+---------------+----------+-------------=
+-----------------+------------
+da850-lcdk               | arm    | lab-baylibre  | gcc-10   | davinci_all_=
+defconfig        | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/626757427b5995ab7eff9468
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: davinci_all_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.18-rc4-3=
+05-g34e5025f24df/arm/davinci_all_defconfig/gcc-10/lab-baylibre/baseline-da8=
+50-lcdk.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.18-rc4-3=
+05-g34e5025f24df/arm/davinci_all_defconfig/gcc-10/lab-baylibre/baseline-da8=
+50-lcdk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220422.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/626757427b5995a=
+b7eff946c
+        failing since 92 days (last pass: v5.16-11577-gffd79fec234d, first =
+fail: v5.17-rc1-180-g86539e2bdb99)
+        3 lines
+
+    2022-04-26T02:21:34.484503  kern  :alert : BUG: Bad page state in proce=
+ss kworker/u2:0  pfn:c3000
+    2022-04-26T02:21:34.484770  kern  :alert : BUG: Bad page state in proce=
+ss kworker/u2:0  pfn:c3400
+    2022-04-26T02:21:34.484962  kern  :alert : BUG: Bad page state in proce=
+ss kworker/u2:0  pfn:c3800
+    2022-04-26T02:21:34.528291  <8><LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Dale=
+rt RESULT=3Dfail UNITS=3Dlines MEASUREMENT=3D3>   =
+
+ =
+
+
+
+platform                 | arch   | lab           | compiler | defconfig   =
+                 | regressions
+-------------------------+--------+---------------+----------+-------------=
+-----------------+------------
+imx8mn-ddr4-evk          | arm64  | lab-baylibre  | gcc-10   | defconfig+CO=
+N...OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62675d13ecc19602efff9471
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.18-rc4-3=
+05-g34e5025f24df/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-bayli=
+bre/baseline-imx8mn-ddr4-evk.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.18-rc4-3=
+05-g34e5025f24df/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-bayli=
+bre/baseline-imx8mn-ddr4-evk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220422.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62675d13ecc19602efff9=
+472
+        new failure (last pass: v5.18-rc3-381-g1e9235a24947) =
+
+ =
+
+
+
+platform                 | arch   | lab           | compiler | defconfig   =
+                 | regressions
+-------------------------+--------+---------------+----------+-------------=
+-----------------+------------
+rk3399-gru-kevin         | arm64  | lab-collabora | gcc-10   | defconfig+ar=
+m64-chromebook   | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6267597ec03d67cc94ff94ef
+
+  Results:     88 PASS, 4 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.18-rc4-3=
+05-g34e5025f24df/arm64/defconfig+arm64-chromebook/gcc-10/lab-collabora/base=
+line-rk3399-gru-kevin.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.18-rc4-3=
+05-g34e5025f24df/arm64/defconfig+arm64-chromebook/gcc-10/lab-collabora/base=
+line-rk3399-gru-kevin.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220422.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.rockchip-i2s1-probed: https://kernelci.org/test/case/id=
+/6267597ec03d67cc94ff954b
+        failing since 57 days (last pass: v5.17-rc5-244-gd77a1b37f796, firs=
+t fail: v5.17-rc6-176-gb4e03e0dde48)
+
+    2022-04-26T02:31:02.796383  /lava-6178967/1/../bin/lava-test-case
+    2022-04-26T02:31:02.806909  <8>[   35.005196] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Drockchip-i2s1-probed RESULT=3Dfail>   =
+
  =20
-  source "drivers/virt/acrn/Kconfig"
- =20
- +source "drivers/virt/coco/sev-guest/Kconfig"
- +
-+ source "drivers/virt/coco/efi_secret/Kconfig"
-+=20
-  endif
-diff --cc drivers/virt/Makefile
-index b2e6e864ebbe,067b5427f40f..000000000000
---- a/drivers/virt/Makefile
-+++ b/drivers/virt/Makefile
-@@@ -9,4 -9,4 +9,5 @@@ obj-y				+=3D vboxguest
- =20
-  obj-$(CONFIG_NITRO_ENCLAVES)	+=3D nitro_enclaves/
-  obj-$(CONFIG_ACRN_HSM)		+=3D acrn/
- +obj-$(CONFIG_SEV_GUEST)		+=3D coco/sev-guest/
-+ obj-$(CONFIG_EFI_SECRET)	+=3D coco/efi_secret/
-
---Sig_/t4oeLJikwLUO0H4lJCq9nSO
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJnjjAACgkQAVBC80lX
-0GwtqQf9HPq5y/eYfvrTvd5/685bvFK2DEGd61OkthwypVVxPcy9NpUo030oxyqg
-smy4RST/wCm9OfK8Xq5/uU47IfHZv4fL0jR0M/VbUegl0YDL/iuLLt8vbFiWsB+t
-ldw40tS82WLYVLVSj2kREppOXYC376tStn2KW34MPpHuEspCjfyZ0eNsK706b8J5
-ECnzpLg0R/TyDM2NxYBgRtV4obbPqJ6AP7W7Mmg0/V4UzPRNnz+5u84I2BW+8vAR
-9jmymeRCjMhS7vhYW7evzqOXJqPjDATrQMQds6Q/H8Md/VePzTsqXKPzom6xaSsu
-mWzGsQ7uzc410KoxyAa/WDOlDCzwdA==
-=YQeW
------END PGP SIGNATURE-----
-
---Sig_/t4oeLJikwLUO0H4lJCq9nSO--

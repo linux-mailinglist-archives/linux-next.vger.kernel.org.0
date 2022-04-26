@@ -2,85 +2,110 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DC4250EE03
-	for <lists+linux-next@lfdr.de>; Tue, 26 Apr 2022 03:16:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3424750EE3C
+	for <lists+linux-next@lfdr.de>; Tue, 26 Apr 2022 03:48:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234533AbiDZBTP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 25 Apr 2022 21:19:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58234 "EHLO
+        id S231363AbiDZBvj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 25 Apr 2022 21:51:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbiDZBTN (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 25 Apr 2022 21:19:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AE2EF2A23;
-        Mon, 25 Apr 2022 18:16:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S230262AbiDZBvi (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 25 Apr 2022 21:51:38 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 686A554BED;
+        Mon, 25 Apr 2022 18:48:32 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A9891616DA;
-        Tue, 26 Apr 2022 01:16:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EF77C385A7;
-        Tue, 26 Apr 2022 01:15:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650935761;
-        bh=ou9+D4xM38y3LrtcSIGVGiykcsqxGIu8qkR07Ifu0U4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IQ9Qd3Xc/YVuUqQ2Jv7tLx9L2Cioz35oU8K0kHw82vf9ilO6zIpr6musdrrDUcrYW
-         vLKKEQKP7FPkrylJbgPwiwhrSDAxITcpXB1FT6ijacIQXYbyGp6fpYyZYS79+PTYhq
-         U5Cw4ms/xQpns+U/pOIdt0C5skQCL9PYewryxFLcv3mE4w3yJIXMkbPSJLum5iZe8l
-         uYNiA7/vRUAqfX/LURTDSapwsEKWxdtD9q+dkkW0WytadTyWPUoRP73Inew6yGy0ok
-         J+i3FBqge5L1YoK+ddfrNuWSB+UXcUb1AldYGTc7fZtXEQ77J6hU/+KuwHiqnKIzzh
-         veO1Lu5t8Jofg==
-Date:   Tue, 26 Apr 2022 09:15:55 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Alison Wang <alison.wang@nxp.com>,
-        Changming Huang <jerry.huang@nxp.com>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KnPt22mnPz4xLb;
+        Tue, 26 Apr 2022 11:48:25 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1650937707;
+        bh=9kBhR8QSUgvJZYnXsARchbPfp7Jz9CUax/1FT05p1lA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Nh89AaDkqmpMgnPTvTYxJZIaoHWXHQrt09qUESfqG1L33T7CadwFMY6nDTSOylOO/
+         +Mgo1zvutf1AatIgIKLXZvGbYAtGaWuFBspjffWb3KXC1ThItQnxqtd6c0AA9Rdbg0
+         mN7lDCIv7mlavS91/Avbr6PPwaIg41Vx5JgZo/ERW6ko6oY77L3FnbnGkpDO8WoRoC
+         9bzpDVF3gkET4JZNgHQz5aZu1c1tE02r4IJfV7akO/cx5XWN4DLD8xSCX6S3U6xcIn
+         Nu4nVcePRXJvg+kYkXcrcW9bC9PdNO9XzLZ6DzugmMzyeAVjY4YmZqQBIrqtv491PE
+         AB8dLgTmDbPfQ==
+Date:   Tue, 26 Apr 2022 11:48:25 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Dave Airlie <airlied@linux.ie>
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the imx-mxs tree
-Message-ID: <20220426011555.GA14615@dragon>
-References: <20220426100659.0e3f3ca8@canb.auug.org.au>
+Subject: Re: linux-next: manual merge of the drm-misc tree with the
+ drm-misc-fixes tree
+Message-ID: <20220426114825.7a07c67c@canb.auug.org.au>
+In-Reply-To: <20220414094715.4c2e0127@canb.auug.org.au>
+References: <20220414094715.4c2e0127@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220426100659.0e3f3ca8@canb.auug.org.au>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/YL0fxYxeUKXBwDs+mgbDYqx";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 10:06:59AM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the imx-mxs tree, today's linux-next build (arm
-> multi_v7_defconfig) produced this warning:
-> 
-> arch/arm/boot/dts/ls1021a-iot.dts:150.3-26: Warning (clocks_property): /soc/i2c@2180000/audio-codec@2a:clocks: cell 1 is not a phandle reference
-> arch/arm/boot/dts/ls1021a-iot.dts:144.27-151.4: Warning (clocks_property): /soc/i2c@2180000/audio-codec@2a: Missing property '#clock-cells' in node /soc/interrupt-controller@1400000 or bad phandle (referred from clocks[1])
-> 
-> Introduced by commit
-> 
->   23f550d5f7f6 ("ARM: dts: Add initial LS1021A IoT board dts support")
+--Sig_/YL0fxYxeUKXBwDs+mgbDYqx
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Changming,
+Hi all,
 
-I fixed it up with the following change.  Let me know if you disagree.
+On Thu, 14 Apr 2022 09:47:15 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> Today's linux-next merge of the drm-misc tree got a conflict in:
+>=20
+>   drivers/gpu/drm/radeon/radeon_sync.c
+>=20
+> between commit:
+>=20
+>   022074918042 ("drm/radeon: fix logic inversion in radeon_sync_resv")
+>=20
+> from the drm-misc-fixes tree and commit:
+>=20
+>   7bc80a5462c3 ("dma-buf: add enum dma_resv_usage v4")
+>=20
+> from the drm-misc tree.
+>=20
+> I fixed it up (I just used the latter version) and can carry the fix as
+> necessary. This is now fixed as far as linux-next is concerned, but any
+> non trivial conflicts should be mentioned to your upstream maintainer
+> when your tree is submitted for merging.  You may also want to consider
+> cooperating with the maintainer of the conflicting tree to minimise any
+> particularly complex conflicts.
 
-diff --git a/arch/arm/boot/dts/ls1021a-iot.dts b/arch/arm/boot/dts/ls1021a-iot.dts
-index bdb7186f3590..66bcdaf4b6f9 100644
---- a/arch/arm/boot/dts/ls1021a-iot.dts
-+++ b/arch/arm/boot/dts/ls1021a-iot.dts
-@@ -147,7 +147,7 @@ sgtl5000: audio-codec@2a {
-                reg = <0x2a>;
-                VDDA-supply = <&reg_3p3v>;
-                VDDIO-supply = <&reg_2p5v>;
--               clocks = <&sys_mclk 1>;
-+               clocks = <&sys_mclk>;
-        };
- 
-        max1239: adc@35 {
+This is now a conflict between the drm tree and Linus' tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/YL0fxYxeUKXBwDs+mgbDYqx
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJnT2kACgkQAVBC80lX
+0GwXPQf7BQigK2+/T5d8A50Z/8M751oZO4FLYt30HQT8qgT98F/AjQcYo6eTKEQx
+iqvQfCBGkHv2tjMT1BDykx0VyWFAEZ60BG26odiFZ7Qoelx7/MYdbYe5MPurGEr1
+r/xaWxAgmJDg6JzNYbyDLEFAb3Q1Ofa8TyggINUuPitYHR+m821DRSgLwa2ZaAVA
++tGhybE04y85sV1Sme2LhbF6lvrhG4lYe6QoPWk2/MRrmaQgsgvOVagMjsFo6YJ9
+Eg1HTePL5GopCLA1dyHaA5wWtQvMNj+Vy5d2LKRyQZZrdpbk8Y41MkhAdkN+McCK
+YweRcvJgHysqZ7WQt5nt5czwLp8XbA==
+=McuI
+-----END PGP SIGNATURE-----
+
+--Sig_/YL0fxYxeUKXBwDs+mgbDYqx--

@@ -2,79 +2,91 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BE4550F1EB
-	for <lists+linux-next@lfdr.de>; Tue, 26 Apr 2022 09:12:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57CBE50F2B2
+	for <lists+linux-next@lfdr.de>; Tue, 26 Apr 2022 09:37:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238080AbiDZHPT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 26 Apr 2022 03:15:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57652 "EHLO
+        id S240109AbiDZHkP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 26 Apr 2022 03:40:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343706AbiDZHPR (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 26 Apr 2022 03:15:17 -0400
-Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65B1D3A730;
-        Tue, 26 Apr 2022 00:12:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1650957131;
-  x=1682493131;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=fO9Z+yHYY09DcsKMPz1mk/C4AZ0Cbm0swq59IvDbhoY=;
-  b=SCkzJABVXlgSktYP3rSOsDwi/mLV55zFELINr2stJGY9ig1od8hPS9/Z
-   Y5Go6k54/OxYAzKDMd2ITefeoxsAcFjtKkbWHyL/DYJznjF1dOIMWI44z
-   C9E4U3U9DWRd4hUtliA9Pasc5FhUxjPIQcr6QCNEPYQLQhIANuudpMJGG
-   aWAiOiikhxXWr31Gtkux2/TlBwpnrvvkAbGBy18YJCqL9wc8LjS+UA++G
-   mmUuTyJ7yZO80dC1Z0as9tYJw5X8OMFXin5bFPEVV0bjbvsTCRWcMQKWc
-   G6WGyIJ0NvdRizj44HfZFxz1Gs6SjRy0NqxHdUSmtY8WxzjEWt4bvTG3L
-   g==;
-Message-ID: <96d1e6ab-4faa-05b5-9894-af9971dc0e5e@axis.com>
-Date:   Tue, 26 Apr 2022 09:12:07 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: linux-next: Fixes tag needs some work in the hwmon-staging tree
-Content-Language: en-US
+        with ESMTP id S1344086AbiDZHkJ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 26 Apr 2022 03:40:09 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C013FD09;
+        Tue, 26 Apr 2022 00:37:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650958622; x=1682494622;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=S3egy43WTJExLU3u7/k2FT8QCl0oLX3uS9BX5mAWDfo=;
+  b=XcA+cL+wgB+W1k7iSFPniozzMSxbeHS1t4nDiyJKL95vcRv2P8wI5NLP
+   dtXQ051jkZ2p53lMEX5C1MLkBchg2iT4QXjExJ7d1KMP0lDUQH9WmpAkM
+   35ny3nfqEm+AHrr9ZomeaiqC8D4JEunL5ycPOa4gIv1Ktfoley8Am1Iqr
+   3iPIAl7a0VqG7vd6sIDQIyhkR3Vp7znOEteYyF7kw/UKtk91mXu2xCxlr
+   loFB7AYMAK6GzJNk4Hd+DDkfiGWVnPgp2BnU43gmmE1hz8JIe401kExb0
+   fS5SQM0rV+fF30U79+q2XfkgMgzSHh2qww7ZZndcfgEYxuSQNf6SgSDaZ
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="247417826"
+X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
+   d="scan'208";a="247417826"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 00:36:56 -0700
+X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
+   d="scan'208";a="532528422"
+Received: from vhlushch-mobl.ger.corp.intel.com (HELO localhost) ([10.249.132.136])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 00:36:52 -0700
+From:   Jani Nikula <jani.nikula@linux.intel.com>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Guenter Roeck <linux@roeck-us.net>
-CC:     Camel Guo <camel.guo@axis.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Christoph Hellwig <hch@lst.de>, Zhi Wang <zhi.a.wang@intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220426082824.04f63d08@canb.auug.org.au>
-From:   Camel Guo <camelg@axis.com>
-In-Reply-To: <20220426082824.04f63d08@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.0.5.60]
-X-ClientProxiedBy: se-mail01w.axis.com (10.20.40.7) To se-mail03w.axis.com
- (10.20.40.9)
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: linux-next: build failure after merge of the drm-intel tree
+In-Reply-To: <20220426120802.574a9659@canb.auug.org.au>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20220426120802.574a9659@canb.auug.org.au>
+Date:   Tue, 26 Apr 2022 10:36:50 +0300
+Message-ID: <87a6c8uwh9.fsf@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 4/26/22 00:28, Stephen Rothwell wrote:
+On Tue, 26 Apr 2022, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 > Hi all,
-> 
-> In commit
-> 
->    251a486d3a93 ("hwmon: (tmp401) Fix incorrect return value of tmp401_init_client")
-> 
-> Fixes tag
-> 
->    Fixes: c825ca044988 ("hwmon: (tmp401) Add support of three advanced features")
-> 
-> has these problem(s):
-> 
->    - Target SHA1 does not exist
-> 
-> Maybe you meant
-> 
-> Fixes: a7e1e934855c ("hwmon: (tmp401) Add support of three advanced features")
-> 
+>
+> After merging the drm-intel tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+>
+> ERROR: modpost: "intel_runtime_pm_put" [drivers/gpu/drm/i915/kvmgt.ko] undefined!
+>
+> Possibly caused by commit
+>
+>   8b750bf74418 ("drm/i915/gvt: move the gvt code into kvmgt.ko")
+>
+> or one of tehe follow ups.
+>
+> I have used the drm-intel tree from next-20220422 for today.
 
-Saw that this Fixes tag has been removed from hwmon-staging. Sorry for 
-the mess and thanks for this fix.
+Details at [1], fix at [2].
+
+BR,
+Jani.
+
+[1] https://lore.kernel.org/r/87ilqxuyu3.fsf@intel.com
+[2] https://lore.kernel.org/r/20220425220331.24865-1-zhi.a.wang@intel.com
+
+
+-- 
+Jani Nikula, Intel Open Source Graphics Center

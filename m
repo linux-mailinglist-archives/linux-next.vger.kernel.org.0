@@ -2,71 +2,55 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D15350F908
-	for <lists+linux-next@lfdr.de>; Tue, 26 Apr 2022 11:44:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CB7250F815
+	for <lists+linux-next@lfdr.de>; Tue, 26 Apr 2022 11:42:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239498AbiDZJMd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 26 Apr 2022 05:12:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39642 "EHLO
+        id S242083AbiDZJP4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 26 Apr 2022 05:15:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346254AbiDZJH3 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 26 Apr 2022 05:07:29 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 962161759D4;
-        Tue, 26 Apr 2022 01:48:28 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id e2so18129214wrh.7;
-        Tue, 26 Apr 2022 01:48:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=iHo8yEw9vi6ApvW9lREs3BsO/SztyDLEl+71H8g0jpU=;
-        b=VN1eJoSUpgw+fEiVLbAQqhxhv2kBlRYd8XppnJMJZihec2fPd9TDx1BawH28JfstJ4
-         MZGiQzfZyiade6E40jIsx2nB2EHHy4ghLMSIVu3f/1AEIK1j8MmMOT0EdcQR0Fa/KYu/
-         YenaRIDsLY0GZOFU7xhlRt915PShWqXv8pk8AJa3mNJD8h48/MVhKEUKjq87k9d+Q9dF
-         67G8ODzTX8xqtN4Thyv+u2ISk4AcFdK63c2xoYkumqzsp01RXkqZE7MBmZxhV/DF4WI+
-         4sZzFl59rGb59ctGzr33iTIilpZGoNcDyMxaaeq9el0k6lbQgPaRcayoqUPC1c0SmY7Z
-         Wzqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=iHo8yEw9vi6ApvW9lREs3BsO/SztyDLEl+71H8g0jpU=;
-        b=DZvc71mDU9/OnEdtDObdTwXfg4Vf73JVskdHAi/QSgPRpif+EgzFqRbirbnuFOlb3x
-         pz3L5iiatMEJ6yT8NeimzsQ7J2LYTpt5lp9l+mxEy2E1fIX9vzG1ZgDptuOYzgCPQFe2
-         EYcQO5bS5gxOD+tuz5qoYiFE/SuwnGxfDCuKTR2iGxTEVNbzs3XZZeXoSMeYtwrAcHkU
-         Fg5v0GEm8SaQuuG1SfuEICRpHnX6R4KzU4LROTQDupY+rhBLN2lZTgAgZZgXHqaHTbNn
-         C/gIe4AykST+T9ZX1vJgORGGDTn0oxmg1NtcFUfhs4qOaAWZyFS64rC4pU0N580drvfl
-         Kztw==
-X-Gm-Message-State: AOAM530NaWRQENU8A+4kZurSt+xBBQGllmHLc61aHBsMrj1QNRFkx6ne
-        9J7FvrWHBLfj1dK9tDy/KQ3uaR+X+dL+Hw==
-X-Google-Smtp-Source: ABdhPJwK/gdxNbR5wcwzCjZbJ0uPzi5O3qeN6FpU1jS1wRJBjccxbWHo8LB3JeEZkNOTKlhLjf7S3g==
-X-Received: by 2002:a05:6000:18a8:b0:20a:8a52:5c7e with SMTP id b8-20020a05600018a800b0020a8a525c7emr17783246wri.355.1650962907085;
-        Tue, 26 Apr 2022 01:48:27 -0700 (PDT)
-Received: from [192.168.0.43] (static-35-180-85-188.ipcom.comunitel.net. [188.85.180.35])
-        by smtp.gmail.com with ESMTPSA id g13-20020a5d64ed000000b0020a9e488976sm11890834wri.25.2022.04.26.01.48.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Apr 2022 01:48:26 -0700 (PDT)
-Message-ID: <60b73431-ea41-bcca-8374-1836488b399c@gmail.com>
-Date:   Tue, 26 Apr 2022 10:48:25 +0200
+        with ESMTP id S1347805AbiDZJO4 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 26 Apr 2022 05:14:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FFE618BCA8;
+        Tue, 26 Apr 2022 01:52:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 85614B81CFA;
+        Tue, 26 Apr 2022 08:52:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D69C9C385A4;
+        Tue, 26 Apr 2022 08:52:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650963129;
+        bh=A+GuVHwpyiG1afiPHUmB2r/eX3p9A86Y0GUAumP2gyc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=DE/GSRm3DgTO6XGg6UheoZx6ytHxe9pJedqh5u9t1wv3frcJO3js7EYDfB0ag2GaG
+         nNcbITdVU8a3rljKaef7nfMfyyaTvgkgMHSCcwZhwM8+YhsyZdYfw1aQGO9dG+Oq8w
+         RefXnUc8wiFU5v96e/+YxIDllFkRQ/K+vj2ss3YlYcMN3/1cY+M98vpTcGS2fLuJGs
+         kIrD0e00T14mIHhQdDlSb21OZmbPuvoOgFxL0SNtqZMUcW/UZUJj+n6dKL3A3aF8gZ
+         R89SdknxGKep1xycEyjpN3f1sz0/WM0w6Tio9TBXCI5TwDHVTLwpyM3YjxRSGK0ec0
+         j2bYtDUGtilug==
+Message-ID: <55c9dd79-2703-b7f5-f593-3324d09085e5@kernel.org>
+Date:   Tue, 26 Apr 2022 10:52:04 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
+ Thunderbird/91.7.0
 Subject: Re: linux-next: Signed-off-by missing for commit in the mediatek tree
 Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Krzysztof Kozlowski <krzk@kernel.org>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
 References: <20220426080706.26c6816b@canb.auug.org.au>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20220426080706.26c6816b@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ <60b73431-ea41-bcca-8374-1836488b399c@gmail.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <60b73431-ea41-bcca-8374-1836488b399c@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,27 +58,39 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
-
-On 26/04/2022 00:07, Stephen Rothwell wrote:
-> Hi all,
+On 26/04/2022 10:48, Matthias Brugger wrote:
+> Hi Stephen,
 > 
-> Commits
+> On 26/04/2022 00:07, Stephen Rothwell wrote:
+>> Hi all,
+>>
+>> Commits
+>>
+>>    775ef8aaa66e ("arm64: dts: mediatek: align thermal zone node names with dtschema")
+>>    c8b8db1a173d ("arm64: dts: mediatek: align operating-points table name with dtschema")
+>>    c01d9aa630b8 ("arm64: dts: mediatek: mt8183: align Google CROS EC PWM node name with dtschema")
+>>    75a3c81bc634 ("arm64: dts: hisilicon: align 'freq-table-hz' with dtschema in UFS")
+>>
+>> are missing a Signed-off-by from their committer.
+>>
 > 
->    775ef8aaa66e ("arm64: dts: mediatek: align thermal zone node names with dtschema")
->    c8b8db1a173d ("arm64: dts: mediatek: align operating-points table name with dtschema")
->    c01d9aa630b8 ("arm64: dts: mediatek: mt8183: align Google CROS EC PWM node name with dtschema")
->    75a3c81bc634 ("arm64: dts: hisilicon: align 'freq-table-hz' with dtschema in UFS")
-> 
-> are missing a Signed-off-by from their committer.
-> 
+> These patches are taken by Krysztof and merge into my tree via a tag [1] to 
+> avoid any conflicts. Please let me know if there is anything I need to do to fix 
+> this problem.
 
-These patches are taken by Krysztof and merge into my tree via a tag [1] to 
-avoid any conflicts. Please let me know if there is anything I need to do to fix 
-this problem.
+Hi Matthias,
 
-Regards,
-Matthias
+Before you merged my branch, which was fine, but later you rebased all
+this thus making yourself committer. Commits pulled from other trees
+should in general not be rebased, because it creates duplicates - there
+are ones in my tree, and separate in yours.
 
-[1] 
-https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git/log/?h=for-v5.19/arm-dts64-cleanups
+Additionally, such rebase changes the author, so you need your SoB.
+
+Since you already rebased it, I propose you add your own SoB to Mediatek
+patches and drop the one hisilicon (75a3c81bc634). I will do the reverse
+- drop Mediatek and keep hisilicon.
+
+
+Best regards,
+Krzysztof

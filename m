@@ -2,91 +2,129 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57CBE50F2B2
-	for <lists+linux-next@lfdr.de>; Tue, 26 Apr 2022 09:37:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33B7C50F4CC
+	for <lists+linux-next@lfdr.de>; Tue, 26 Apr 2022 10:37:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240109AbiDZHkP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 26 Apr 2022 03:40:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52026 "EHLO
+        id S1345286AbiDZIkP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 26 Apr 2022 04:40:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344086AbiDZHkJ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 26 Apr 2022 03:40:09 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C013FD09;
-        Tue, 26 Apr 2022 00:37:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650958622; x=1682494622;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=S3egy43WTJExLU3u7/k2FT8QCl0oLX3uS9BX5mAWDfo=;
-  b=XcA+cL+wgB+W1k7iSFPniozzMSxbeHS1t4nDiyJKL95vcRv2P8wI5NLP
-   dtXQ051jkZ2p53lMEX5C1MLkBchg2iT4QXjExJ7d1KMP0lDUQH9WmpAkM
-   35ny3nfqEm+AHrr9ZomeaiqC8D4JEunL5ycPOa4gIv1Ktfoley8Am1Iqr
-   3iPIAl7a0VqG7vd6sIDQIyhkR3Vp7znOEteYyF7kw/UKtk91mXu2xCxlr
-   loFB7AYMAK6GzJNk4Hd+DDkfiGWVnPgp2BnU43gmmE1hz8JIe401kExb0
-   fS5SQM0rV+fF30U79+q2XfkgMgzSHh2qww7ZZndcfgEYxuSQNf6SgSDaZ
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="247417826"
-X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
-   d="scan'208";a="247417826"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 00:36:56 -0700
-X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
-   d="scan'208";a="532528422"
-Received: from vhlushch-mobl.ger.corp.intel.com (HELO localhost) ([10.249.132.136])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 00:36:52 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Christoph Hellwig <hch@lst.de>, Zhi Wang <zhi.a.wang@intel.com>,
+        with ESMTP id S1345699AbiDZIjZ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 26 Apr 2022 04:39:25 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACDED3F335;
+        Tue, 26 Apr 2022 01:30:45 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KnZpB4td1z4ySS;
+        Tue, 26 Apr 2022 18:30:42 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1650961843;
+        bh=6qdUyVxgeCgLFwTIptoWNyNCeFYc5FP46XpU2AKVH6g=;
+        h=Date:From:To:Cc:Subject:From;
+        b=kLpjEZwiKBoGP/x65ktIG/TEyWbEceeKdebGPLHMaFS2BLu/Fdd/hwIVf5SmxqVRG
+         oBZIXrtYXnQD8mEd9Xf4f7hJhXbrC/7BhJ0HpEy48T3IlAEmNcGm7E/KZJGLH+IMxo
+         1exdA+RBNpKJAJJTUl2HB08RTjmhJC9bC0sNtVpZO5U5MPSSIPprXa2Q6bj6QMDhGz
+         zKXb1GOV4uVY+7wpLa7x9MOevmMmnrI70H/RDkYcNiOtiIP+QjccWrEdAxHdvGl+rH
+         BcPVbdaIP54Ag0RiJXqry6ZDnESwMZRmznS7PS64PbvJ8PrDX5+TqyyHdNMb1migVN
+         s3O9TNfF0S65Q==
+Date:   Tue, 26 Apr 2022 18:30:41 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>
+Cc:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the drm-intel tree
-In-Reply-To: <20220426120802.574a9659@canb.auug.org.au>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20220426120802.574a9659@canb.auug.org.au>
-Date:   Tue, 26 Apr 2022 10:36:50 +0300
-Message-ID: <87a6c8uwh9.fsf@intel.com>
+Subject: linux-next: build failure after merge of the sound-asoc tree
+Message-ID: <20220426183041.2593d35f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/NxqUWlCimMaacaTvPYFSjET";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, 26 Apr 2022, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> Hi all,
->
-> After merging the drm-intel tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
->
-> ERROR: modpost: "intel_runtime_pm_put" [drivers/gpu/drm/i915/kvmgt.ko] undefined!
->
-> Possibly caused by commit
->
->   8b750bf74418 ("drm/i915/gvt: move the gvt code into kvmgt.ko")
->
-> or one of tehe follow ups.
->
-> I have used the drm-intel tree from next-20220422 for today.
+--Sig_/NxqUWlCimMaacaTvPYFSjET
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Details at [1], fix at [2].
+Hi all,
 
-BR,
-Jani.
+After merging the sound-asoc tree, today's linux-next build (powerpc
+allyesconfig) failed like this:
 
-[1] https://lore.kernel.org/r/87ilqxuyu3.fsf@intel.com
-[2] https://lore.kernel.org/r/20220425220331.24865-1-zhi.a.wang@intel.com
+ld: sound/soc/sof/mediatek/mt8186/mt8186-clk.o:(.opd+0x18): multiple defini=
+tion of `adsp_clock_on'; sound/soc/sof/mediatek/mt8195/mt8195-clk.o:(.opd+0=
+x60): first defined here
+ld: sound/soc/sof/mediatek/mt8186/mt8186-clk.o: in function `.adsp_clock_on=
+':
+mt8186-clk.c:(.text.adsp_clock_on+0x0): multiple definition of `.adsp_clock=
+_on'; sound/soc/sof/mediatek/mt8195/mt8195-clk.o:mt8195-clk.c:(.text.adsp_c=
+lock_on+0x0): first defined here
+ld: sound/soc/sof/mediatek/mt8186/mt8186-clk.o:(.opd+0x30): multiple defini=
+tion of `adsp_clock_off'; sound/soc/sof/mediatek/mt8195/mt8195-clk.o:(.opd+=
+0x78): first defined here
+ld: sound/soc/sof/mediatek/mt8186/mt8186-clk.o: in function `.adsp_clock_of=
+f':
+mt8186-clk.c:(.text.adsp_clock_off+0x0): multiple definition of `.adsp_cloc=
+k_off'; sound/soc/sof/mediatek/mt8195/mt8195-clk.o:mt8195-clk.c:(.text.adsp=
+_clock_off+0x0): first defined here
+ld: sound/soc/sof/mediatek/mt8186/mt8186-loader.o:(.opd+0x0): multiple defi=
+nition of `sof_hifixdsp_boot_sequence'; sound/soc/sof/mediatek/mt8195/mt819=
+5-loader.o:(.opd+0x0): first defined here
+ld: sound/soc/sof/mediatek/mt8186/mt8186-loader.o: in function `.sof_hifixd=
+sp_boot_sequence':
+mt8186-loader.c:(.text.sof_hifixdsp_boot_sequence+0x0): multiple definition=
+ of `.sof_hifixdsp_boot_sequence'; sound/soc/sof/mediatek/mt8195/mt8195-loa=
+der.o:mt8195-loader.c:(.text.sof_hifixdsp_boot_sequence+0x0): first defined=
+ here
+ld: sound/soc/sof/mediatek/mt8186/mt8186-loader.o:(.opd+0x18): multiple def=
+inition of `sof_hifixdsp_shutdown'; sound/soc/sof/mediatek/mt8195/mt8195-lo=
+ader.o:(.opd+0x18): first defined here
+ld: sound/soc/sof/mediatek/mt8186/mt8186-loader.o: in function `.sof_hifixd=
+sp_shutdown':
+mt8186-loader.c:(.text.sof_hifixdsp_shutdown+0x0): multiple definition of `=
+.sof_hifixdsp_shutdown'; sound/soc/sof/mediatek/mt8195/mt8195-loader.o:mt81=
+95-loader.c:(.text.sof_hifixdsp_shutdown+0x0): first defined here
 
+Caused by commits
 
--- 
-Jani Nikula, Intel Open Source Graphics Center
+  570c14dc92d5 ("ASoC: SOF: mediatek: Add mt8186 sof fw loader and dsp ops")
+  210b3ab932f7 ("ASoC: SOF: mediatek: Add mt8186 dsp clock support")
+
+I have reverted those commits and the following
+
+  0e0b83cc7ec7 ("ASoC: SOF: mediatek: Add DSP system PM callback for mt8186=
+")
+
+for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/NxqUWlCimMaacaTvPYFSjET
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJnrbEACgkQAVBC80lX
+0Gz9egf/bQzoSbhllOei4arxYI2pvPMl/chnh5rTJIvf5PE5nYFNITFpcyZzlxZ3
+gwi2cBvWLM6M89d/c8lP06X6CpFc3HoOl+sNS8Ib+tXlyHw7KBTGO/5W4hXacqpi
+zdodoL4fW/uP956vHEwVG0Fnymt0/YlvL1J22JpUl78xdQh5AyMFB+iAzUoNRAyE
+vADYZ5balFjYiA0MNn7Pi48aLjssqx5+Klf3KVYevIvuOUfOQTwuaS7lyitjCtC2
+1WralgP9RWB216l2gzosjeBY4qIHTWbZczXrFqCLZEnNhQWlC3jemNQkrn4L2dPS
+cScN5UVR75A5L0QRu+ssMuaAUsmDZQ==
+=9T3O
+-----END PGP SIGNATURE-----
+
+--Sig_/NxqUWlCimMaacaTvPYFSjET--

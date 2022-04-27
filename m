@@ -2,67 +2,47 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDFC0512198
-	for <lists+linux-next@lfdr.de>; Wed, 27 Apr 2022 20:49:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4CC1512559
+	for <lists+linux-next@lfdr.de>; Thu, 28 Apr 2022 00:37:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229984AbiD0SwO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 27 Apr 2022 14:52:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40982 "EHLO
+        id S231418AbiD0Wjm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 27 Apr 2022 18:39:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230240AbiD0SwE (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 27 Apr 2022 14:52:04 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D91D3AD6C2
-        for <linux-next@vger.kernel.org>; Wed, 27 Apr 2022 11:37:26 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id j6so2251401pfe.13
-        for <linux-next@vger.kernel.org>; Wed, 27 Apr 2022 11:37:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=8IIVGBMa1BU5mCmVVEOLRBwtkg4E6OhlRXi3Ac0LW2w=;
-        b=NrL6iIkp3ASDEdE5owakG3UVWFJopuzuEQ/hY/VqaMM0mB/VvlSOy2bduchQW244kX
-         mixf3YzUeVfOiPBwripdqXSgLu7cMwZFCdKziuyFP60ctAUmvCuQaEluLxXlSdUVOjM/
-         Gxz5MoTQ24AfqtjrMDHK5xTztyX62q63HeDZvLIKkJABNrex0vslwAyHigxLAfwlVpvv
-         t47rvrckdBHhuCUTMrEfPmhogrsMVfMgwhzibLVg4M9B/WOw3Mx+lhosks93XiwDxOtU
-         c8Fn98yNEFJMIp2uWdVUr7tvydDskQ5MWlRE1bq6LIcMOrPgl0R/Q3his63ktD4oWgjD
-         G72A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=8IIVGBMa1BU5mCmVVEOLRBwtkg4E6OhlRXi3Ac0LW2w=;
-        b=jEBDV5R0KpZmNwojLOFwE509DszCmyhYJ2v7sVA6nLj74m/j/J2QHIRBaoXWsf4Z0t
-         2UWTwlh8kJTz4K3+ttqsv+VXy6yCe+l94sHS6oRaldUozVvNYTBkoX9nRAdsF5UKQgkb
-         IJ5IKupmlMuJ+muIVXQlEemID2UrNIFNdbVo+ciPga+DNHko2J9Zfze6t78xpvZcd9EQ
-         6eqa/Mv344y9+sypi0+RRvXvoL7OtgrayMS/AioNNeIKPXQBymD4iHS9v+YmwJvzJe7G
-         IpLxALIOR72KdYuYlEOscHjbMA6BdpPx2p65m3wrzh4xxHdcM94+Iaw6rGEFLlWTxK5o
-         zMNw==
-X-Gm-Message-State: AOAM532fNyQGK8sXbRRpYlU4DIF4hja548dvcZTXjxxZ2wMElDnlZ+7c
-        rXpjuGLeiWxHZ9yTyu20V+tU0IhK8N/4mch+VFY=
-X-Google-Smtp-Source: ABdhPJwfRB5Opr3KrHblJ0XmCV4RcEBOQ/zAye5JaBauGEf1pMO3klOVYRy4Y8Z21R6z1sG5zK0GqA==
-X-Received: by 2002:a62:8601:0:b0:50d:7eb3:a2e3 with SMTP id x1-20020a628601000000b0050d7eb3a2e3mr5294131pfd.52.1651084645780;
-        Wed, 27 Apr 2022 11:37:25 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id h12-20020a17090a130c00b001d6a79768b6sm3379076pja.49.2022.04.27.11.37.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 11:37:25 -0700 (PDT)
-Message-ID: <62698d65.1c69fb81.cbb92.7387@mx.google.com>
-Date:   Wed, 27 Apr 2022 11:37:25 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S238234AbiD0Wj0 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 27 Apr 2022 18:39:26 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 575ABA7;
+        Wed, 27 Apr 2022 15:36:10 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KpYW926KGz4xNl;
+        Thu, 28 Apr 2022 08:36:05 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1651098966;
+        bh=CVc1pHXe+LoYxpb4zAZj3he9Z6Nbc6APPLnq8Jgno6o=;
+        h=Date:From:To:Cc:Subject:From;
+        b=AnBbwbA0PagS7YZTrZBE75UovDEebnSt+SVxlAb9qwWDmfmvSxYylLXXfnR9+7oUX
+         kTQVKngLkJX0br0fZDPLDmUC983haO0JwwHunFRqvRcy8ru//nC/qQnILa9O8t0ZD0
+         Lcs8IdUiyFknc+DG3sINbBodNdHsTAJwLw0Dyd60c9c8YgbcqNwKwjsCwHu+Q+gStG
+         rFckYiXE5WAfBzC8pn8386coTVsBiM3K/ZFOH/5USE4kQnfKylUXN7Ei40GjxVYN5R
+         27CIoIFCps5eYZYWdMnk3rXyi3fvyz1DgKJG0AaEzS0cI/IPPiKHrYv4sofFUlC9Ty
+         Raon1ALEBW3xA==
+Date:   Thu, 28 Apr 2022 08:36:04 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Xu Yu <xuyu@linux.alibaba.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the mm-hotfixes tree
+Message-ID: <20220428083604.0872e25a@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.18-rc4-351-gcc8162e0f820
-X-Kernelci-Report-Type: test
-X-Kernelci-Tree: next
-X-Kernelci-Branch: pending-fixes
-Subject: next/pending-fixes baseline: 303 runs,
- 1 regressions (v5.18-rc4-351-gcc8162e0f820)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: multipart/signed; boundary="Sig_/tEeY0os.jP=m3xOo1jZg+2u";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,76 +50,62 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes baseline: 303 runs, 1 regressions (v5.18-rc4-351-gcc8162=
-e0f820)
+--Sig_/tEeY0os.jP=m3xOo1jZg+2u
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Regressions Summary
--------------------
+Hi all,
 
-platform   | arch | lab          | compiler | defconfig             | regre=
-ssions
------------+------+--------------+----------+-----------------------+------=
-------
-da850-lcdk | arm  | lab-baylibre | gcc-10   | davinci_all_defconfig | 1    =
-      =
+In commit
 
+  9d4dacd9cc3f ("Revert "mm/memory-failure.c: skip huge_zero_page in memory=
+_failure()"")
 
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v5.18-rc4-351-gcc8162e0f820/plan/baseline/
+Fixes tag
 
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v5.18-rc4-351-gcc8162e0f820
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      cc8162e0f8207113e116a4e58cf655677b8daab7 =
+  Fixes: d173d5417fb ("mm/memory-failure.c: skip huge_zero_page in memory_f=
+ailure()")
 
+has these problem(s):
 
+  - SHA1 should be at least 12 digits long
 
-Test Regressions
----------------- =
+In commit
 
+  7b5cc291112f ("mm/huge_memory: do not overkill when splitting huge_zero_p=
+age")
 
+Fixes tag
 
-platform   | arch | lab          | compiler | defconfig             | regre=
-ssions
------------+------+--------------+----------+-----------------------+------=
-------
-da850-lcdk | arm  | lab-baylibre | gcc-10   | davinci_all_defconfig | 1    =
-      =
+  Fixes: d173d5417fb ("mm/memory-failure.c: skip huge_zero_page in memory_f=
+ailure()")
 
+has these problem(s):
 
-  Details:     https://kernelci.org/test/plan/id/6269540518ee166870ff9467
+  - SHA1 should be at least 12 digits long
 
-  Results:     5 PASS, 1 FAIL, 1 SKIP
-  Full config: davinci_all_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.18-rc4-3=
-51-gcc8162e0f820/arm/davinci_all_defconfig/gcc-10/lab-baylibre/baseline-da8=
-50-lcdk.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.18-rc4-3=
-51-gcc8162e0f820/arm/davinci_all_defconfig/gcc-10/lab-baylibre/baseline-da8=
-50-lcdk.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220422.0/armel/rootfs.cpio.gz =
+These are probably not worth rebasing for but this can be fixed for the
+future by setting core.abbrev to 12 (or more) or (for git v2.11 or later)
+just making sure it is not set (or set to "auto").
 
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/tEeY0os.jP=m3xOo1jZg+2u
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-  * baseline.dmesg.alert: https://kernelci.org/test/case/id/6269540518ee166=
-870ff946b
-        failing since 93 days (last pass: v5.16-11577-gffd79fec234d, first =
-fail: v5.17-rc1-180-g86539e2bdb99)
-        3 lines
+-----BEGIN PGP SIGNATURE-----
 
-    2022-04-27T14:32:20.172634  kern  :alert : BUG: Bad page state in proce=
-ss kworker/u2:0  pfn:c3000
-    2022-04-27T14:32:20.172905  kern  :alert : BUG: Bad page state in proce=
-ss kworker/u2:0  pfn:c3400
-    2022-04-27T14:32:20.173070  kern  :alert : BUG: Bad page state in proce=
-ss kworker/u2:0  pfn:c3800
-    2022-04-27T14:32:20.215413  <8><LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Dale=
-rt RESULT=3Dfail UNITS=3Dlines MEASUREMENT=3D3>   =
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJpxVQACgkQAVBC80lX
+0Gy6IAgAplqiDG6SrYozWsfSrqR383BGVsmzctGlEQtOElxcIzx1ibqymLYTnB5+
+fHoRwVzbyvN56y0SwV2C2jO7Oo326d4l6jvo88XanDlMX6nmOqREbzAor8h+UOqK
+O33t2aNeg8562E3dIls12ciNSYCF4BIaD/jT5GbqcVqmGEk4BD/bCp+z6cH0dbvA
+ZLze02RVVzxCuoyiLPs54/3kXoBm+ARiyZRZiijBp08xlycZdNnHpk+HL4rRSVBM
+m3Oq485eC2ZroTwWxJWDgXeNImzI9jnTYoxzyeDZgF27T6Yp/Q8ZVJH1ONL2Z7D0
+gEYrHwHl16k32icQN9A/8owc2ZAIuQ==
+=o7L/
+-----END PGP SIGNATURE-----
 
- =20
+--Sig_/tEeY0os.jP=m3xOo1jZg+2u--

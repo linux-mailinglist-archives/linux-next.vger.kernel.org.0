@@ -2,119 +2,185 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6DDD51129E
-	for <lists+linux-next@lfdr.de>; Wed, 27 Apr 2022 09:36:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B8115112B4
+	for <lists+linux-next@lfdr.de>; Wed, 27 Apr 2022 09:41:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359006AbiD0HjM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 27 Apr 2022 03:39:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44350 "EHLO
+        id S1358964AbiD0Hof (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 27 Apr 2022 03:44:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358894AbiD0Hik (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 27 Apr 2022 03:38:40 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD61939A6
-        for <linux-next@vger.kernel.org>; Wed, 27 Apr 2022 00:35:29 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id y21so632779wmi.2
-        for <linux-next@vger.kernel.org>; Wed, 27 Apr 2022 00:35:29 -0700 (PDT)
+        with ESMTP id S1358961AbiD0Hoe (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 27 Apr 2022 03:44:34 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFF392E9FE
+        for <linux-next@vger.kernel.org>; Wed, 27 Apr 2022 00:41:23 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id p6so851164plf.9
+        for <linux-next@vger.kernel.org>; Wed, 27 Apr 2022 00:41:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=muUs/1r9ptuJbX+Vh9bf6M6IYHJPt62nbZRMFin7LdA=;
-        b=QJQzpzK87eIOm203lDLMli33vwjYXCAqHCNurNsGhL+iVdJU4yyNXz7iQD6IQFash4
-         ysFXU7Ee6y4J+shKrgxRa9hjm/Kr8W7R6h2DX+e6obBMfzhiNQtYhE57bth4cX9I6SIF
-         auXeKcPx3G3pcdwXnbG+D6Vs6Ybclvbap12lfU4c5lKIpko95azN3kwTONqTdNYwH0fr
-         nQRiF4aGEkVwjf+6IqI53V+h0lZYWgINIaxZ3AtYoNWjnDOsv985txovtWypJIVA0gXE
-         bYPhp0zAUUmH4BK6AP5OcN8dOaui8WbZcJaUS1valtt3RVRpnCZSsXYe9uz3Aaxs/fcy
-         pOMQ==
+        d=broadcom.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IhWkMWmSJul/DRYq6Hyw4AzBeR4VjLWAWCupcyeax+c=;
+        b=V5bx4OETum5G2CpukKig+IPh4QhWKQB/aJNEOwgBMbV05tdZO8MR5fBU812QejFxU4
+         EAJvyUET9h1EPFhggSziTObMzk2wlRoosaFh5mx+lZoreiPgr+9WpfWxd1TtVCLTjUSm
+         e/h+IFXPIwNjhxogKgTAtjQ+EJ+Xpa2wbJLRE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=muUs/1r9ptuJbX+Vh9bf6M6IYHJPt62nbZRMFin7LdA=;
-        b=f/vv+ofg0IV2oVzTWIeHvFX+3OWD48KFLoHv65kgRF7s9arjLM5dx0e0+QBHpqOE48
-         qy8+9utPQbXXzc1/G9NM9IlpSaKYoA1SbQRycWVFDuuEOACBy2dcEYiCtwG1T+FFstgV
-         +epmUSiRLsYGv3E1iGOj+49XoHOor8JK1YSn2kSxyJQTMZbPOl5qWLuTEpOJ/VGhfCu+
-         o7Dr3RGZsvo746L8dwa2f4Ic9ep+IZSgHOIa6GAgUXXPv4M/ZnzTMKfucKPk+Uep2ckS
-         JevI9e1FGmYHHS9oPmRiskYkdc/7wsPN0C+W0l2j3ioAKm5SfFWpQGk8JFZyHxfkzueW
-         jZcg==
-X-Gm-Message-State: AOAM533LVh+HtkAjAXaSoAWVRwle86KnKATcxZloWCIxCbygGaJWw9ml
-        A2cfxs8xj9l8Z86X0ANZxLavBA==
-X-Google-Smtp-Source: ABdhPJwCFigJLocUXJ/JkTw6VAdQ/g9b/r/592gJWjQfhB+Ek5mVkeCgP2mRsrVFvwkXPjNwvWpEHA==
-X-Received: by 2002:a7b:c0d0:0:b0:392:a02c:28ab with SMTP id s16-20020a7bc0d0000000b00392a02c28abmr33748563wmh.2.1651044927893;
-        Wed, 27 Apr 2022 00:35:27 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id w12-20020adfbacc000000b0020aeed10962sm958731wrg.61.2022.04.27.00.35.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 00:35:27 -0700 (PDT)
-Date:   Wed, 27 Apr 2022 08:35:25 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Fabien Parent <fparent@baylibre.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IhWkMWmSJul/DRYq6Hyw4AzBeR4VjLWAWCupcyeax+c=;
+        b=HlmPv1aTc8ptsR0ExOZIa5EySqUzuyF93tsms6st/TfHTiL0IMB/gd+2b/1+EWIqxF
+         8ohka6WubQ7+Hryi5AR7vIokhUCMPa3WjcmKSVckZ0XjRM3PJJHcgNtak+Cc1Ni4d4CD
+         on5aIRcxoNzQAM53dVzzoXBYSvldBX/slpk+kmtluyJN6ioglBj7ojcOuBG3zYS0BiN9
+         rWGncjRw63GpLzgf70HNdQqKustUICk6nxFw79c7RDYftf/qUq9Ns8Cq02vaDXlGkCel
+         wOnGt3rsrJSYsFZ7NK4TOVKuwcBVQT26396iFB9tdh9kl/zUuZUP+nghOZsTGseGHV3y
+         +1CQ==
+X-Gm-Message-State: AOAM5319opXVru76FLsbvKFRsQ/5F7fj+cpr9FZAjBTSqfsg6Vu1L+5k
+        52XmHnOubUVUXr33VDqR18O0Mt/ycoVyNvSEZO/Y0v74HU7sUiX4
+X-Google-Smtp-Source: ABdhPJwsS84UDqhJjBnMdh7wbkEZl+fadfU2naxsKstjtnGVKmbv8nRKohdmf/TcwXwYNn/M4wIG/bmGk3BuYaFMu9M=
+X-Received: by 2002:a17:90b:1c07:b0:1d9:6360:307 with SMTP id
+ oc7-20020a17090b1c0700b001d963600307mr17778671pjb.182.1651045283361; Wed, 27
+ Apr 2022 00:41:23 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220427133851.6ff8b0cf@canb.auug.org.au>
+In-Reply-To: <20220427133851.6ff8b0cf@canb.auug.org.au>
+From:   Sumit Saxena <sumit.saxena@broadcom.com>
+Date:   Wed, 27 Apr 2022 13:10:57 +0530
+Message-ID: <CAL2rwxpdHGuFKCEJmOVOx-p3ri8_PLFqCDJm_5Ar6D66iQ-W9Q@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the scsi-mkp tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the input tree
-Message-ID: <YmjyPSliv+WncweU@google.com>
-References: <20220427104825.15a04680@canb.auug.org.au>
- <20220427065318.bdn5h6rdcvdpxdd2@radium>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220427065318.bdn5h6rdcvdpxdd2@radium>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000a50c1a05dd9deff1"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, 27 Apr 2022, Fabien Parent wrote:
+--000000000000a50c1a05dd9deff1
+Content-Type: text/plain; charset="UTF-8"
 
-> Hi,
-> 
-> On Wed, Apr 27, 2022 at 10:48:25AM +1000, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > After merging the input tree, today's linux-next build (x86_64
-> > allmodconfig) failed like this:
-> > 
-> > drivers/input/keyboard/mtk-pmic-keys.c:93:36: error: 'MT6359_TOPSTATUS' undeclared here (not in a function); did you mean 'MT6358_TOPSTATUS'?
-> >    93 |                 MTK_PMIC_KEYS_REGS(MT6359_TOPSTATUS,
-> >       |                                    ^~~~~~~~~~~~~~~~
-> > drivers/input/keyboard/mtk-pmic-keys.c:48:35: note: in definition of macro 'MTK_PMIC_KEYS_REGS'
-> >    48 |         .deb_reg                = _deb_reg,             \
-> >       |                                   ^~~~~~~~
-> > drivers/input/keyboard/mtk-pmic-keys.c:98:25: error: 'MT6359_TOP_RST_MISC' undeclared here (not in a function); did you mean 'MT6358_TOP_RST_MISC'?
-> >    98 |         .pmic_rst_reg = MT6359_TOP_RST_MISC,
-> >       |                         ^~~~~~~~~~~~~~~~~~~
-> >       |                         MT6358_TOP_RST_MISC
-> > 
-> > Caused by commit
-> > 
-> >   0f97adf64314 ("Input: mtk-pmic-keys - add support for MT6359")
-> > 
-> > I have used the input tree from next-20220426 for today.
-> 
-> The commit is depending on another commit from the same patch serie: [0]. That
-> patch has been merged in the tree of the MFD maintainer: [1].
-> 
-> [0] https://lore.kernel.org/all/20220426135313.245466-3-fparent@baylibre.com/
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git/log/?h=for-mfd-next
+On Wed, Apr 27, 2022 at 9:08 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> After merging the scsi-mkp tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+Hi Stephen,
 
-Looks like you only sent me 2 of the 8 patches in the set.
+Could you please try if the below patch fixes this build failure:
 
-In future, if there are dependencies between patches, you must send
-all of the patches to everyone.  That way, we can organise a merge
-strategy that does not break -next, or worse Mainline during the
-merge-window.
+From a78f9deaab456948b123c39950dff6f85b13875a Mon Sep 17 00:00:00 2001
+From: Sumit Saxena <sumit.saxena@broadcom.com>
+Date: Wed, 27 Apr 2022 03:35:34 -0400
+Subject: [PATCH] uapi: include <linux/types.h> header in scsi_bsg_mpi3mr.h
 
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Signed-off-by: Sumit Saxena <sumit.saxena@broadcom.com>
+---
+ include/uapi/scsi/scsi_bsg_mpi3mr.h | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/include/uapi/scsi/scsi_bsg_mpi3mr.h
+b/include/uapi/scsi/scsi_bsg_mpi3mr.h
+index 46c33efcff19..a0ddad7d84f7 100644
+--- a/include/uapi/scsi/scsi_bsg_mpi3mr.h
++++ b/include/uapi/scsi/scsi_bsg_mpi3mr.h
+@@ -10,6 +10,8 @@
+ #ifndef SCSI_BSG_MPI3MR_H_INCLUDED
+ #define SCSI_BSG_MPI3MR_H_INCLUDED
+
++#include <linux/types.h>
++
+ /* Definitions for BSG commands */
+ #define MPI3MR_IOCTL_VERSION                   0x06
+
+Thanks,
+Sumit
+
+--000000000000a50c1a05dd9deff1
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+GmgWG68YahkDuVSTTt2beZdyMeDwq/KifJFo18EkhcL3e7rmDAh8SniUI/0o3HX6hrgdmUI1wSdz
+uIVL/m6Ok9mIl2U5kvguitOSC0bVaQPfNzlj+7PCKBECAwEAAaOCAdowggHWMA4GA1UdDwEB/wQE
+AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
+c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
+AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
+TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
+bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
+L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJAYDVR0R
+BB0wG4EZc3VtaXQuc2F4ZW5hQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNV
+HSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUNz+JSIXEXl2uQ4Utcnx7FnFi
+hhowDQYJKoZIhvcNAQELBQADggEBAL0HLbxgPSW4BFbbIMN3A/ifBg4Lzaph8ARJOnZpGQivo9jG
+kQOd95knQi9Lm95JlBAJZCqXXj7QS+dnE71tsFeHWcHNNxHrTSwn4Xi5EqaRjLC6g4IEPyZHWDrD
+zzJidgfwQvfZONkf4IXnnrIEFle+26/gPs2kOjCeLMo6XGkNC4HNla1ol1htToQaNN8974pCqwIC
+rTXcWqD03VkqSOo+oPP/NAgFAZVfpeuBoK2Xv8zYlrF49Q4hxgFpWhaiDsZUSdWIS7vg1ak1n+6L
+3aHRY/lheSkOn/uJWXsqsTDp613hVtOTEDsHSQK32yTGr8jN/oRQgJASuUqQFdD4VzAxggJtMIIC
+aQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQD
+EyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwoQTpBmhDxj9JoN1ow
+DQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEILnh/EGGdSLR9QAxLF4scYeOzVfv3m0Y
+ln3uQe9yqSKiMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIyMDQy
+NzA3NDEyM1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCG
+SAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQC
+ATANBgkqhkiG9w0BAQEFAASCAQAbN9UchKVGnQqVyptIp3fr/7dGtCK9gvYN50TDjnPVLJl2OkS/
+WZ6hzt9sM74ObMZkc7B2V32NllJHcDz0dEjjPMQgemkwWI99ljKu8JaoXwFHplLHBWotC6BtyHCY
+UNA+473Y2QBCWMlvM4nLu2bO9tYFQbmNRXEUXUtnzyU5vVUegIaN1zGfqsQSLvqBPaZYEAM1HC/8
+AY6l6DHPVYQjJCFTo8YBkZoUDFhIQGG8Ty5r+HF7HZTxxQrDWd1tsVKA3qdcG2n+xqS/+cbrzSgX
+KwMxUEWE9aJKsn1UwXjNczUdUyi5ktOuPY5NXOmLbtsjTt4lddzLNh30bfVsAaix
+--000000000000a50c1a05dd9deff1--

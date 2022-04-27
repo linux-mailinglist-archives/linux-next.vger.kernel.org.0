@@ -2,91 +2,95 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A82E450FBBB
-	for <lists+linux-next@lfdr.de>; Tue, 26 Apr 2022 13:10:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BBBD510D0C
+	for <lists+linux-next@lfdr.de>; Wed, 27 Apr 2022 02:11:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349437AbiDZLNc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 26 Apr 2022 07:13:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44498 "EHLO
+        id S243996AbiD0AOV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 26 Apr 2022 20:14:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349440AbiDZLNT (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 26 Apr 2022 07:13:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 041F2443F3;
-        Tue, 26 Apr 2022 04:10:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S229520AbiD0AOU (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 26 Apr 2022 20:14:20 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16E4E37BC5;
+        Tue, 26 Apr 2022 17:11:07 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CC271617D8;
-        Tue, 26 Apr 2022 11:10:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7D6DC385A0;
-        Tue, 26 Apr 2022 11:10:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650971408;
-        bh=5EReWZ/S2vsSFANL3cQAeE/lPZvpLXKMlPmcAr0JfD8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=W/CUQl7TEVoz6fkk9iPNkCygfiVYSkElsrlK7WckrVdIG0IRj5r6th+ZW4g5nxSJD
-         1v0M6tRL1mEsBLPKYY7KUc17lCUVDanDQN1fDTf9N6//NZaFFu+J/wYaG+0a3k0FTD
-         dJ0D/t7IsC/EMCQtFt4D1bZXPwLJD2Ss+sBmGwNcK5PDQttza6VHn3WeEgqwaM47X3
-         wqAg/EqMfBvl64fmIrEXAx4rqNzxF6jYDKUgxUXaVJngNoMjXEEwat6oa3qxv/MjJh
-         1StQzVQEFRCWMGhVvS90XMd6I5WF0wROaLoDwzqQiVWMOfL/scWpAcOq9z5k3iOkK/
-         CzMAES9B0wekA==
-Date:   Tue, 26 Apr 2022 12:10:03 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Amadeusz =?utf-8?B?U8WCYXdpxYRza2k=?= 
-        <amadeuszx.slawinski@linux.intel.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Liam Girdwood <lgirdwood@gmail.com>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Knzg90bM8z4yST;
+        Wed, 27 Apr 2022 10:11:00 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1651018262;
+        bh=rc6ouf0q7clHmR3t+iRyYoy2gBHvA2Kpy8t+RH03srM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=i8DJb/m9la4nUh9WbxLUdksWkSHI/bnhEN52UKh75dhJXzwVzrx00/MsnkiLXv9gb
+         mL5uUSdKpFPhlT25hsOkNPbOsN8ttkH3k8kusBxJP8G9n40MXiej4ci1f7Mr5pDmTD
+         97eoLqWS3g2bU5a1hqtDoGeUakV/pbotw8iVH26VB2quS5Q7lwjU3t/GzOJyQRNKlI
+         NqyOix/MB50Ecu3xGuYQ9NsFXHOp2W6pb059ZpCAUFxZKyrvtoyupORGloTRZvmPeV
+         3r/r7ESLamega59/MqZwSlwqc/EQHIcbUU9xSPQatGInfFZqza5QE5n505fJ4L6bDK
+         h6i62CQ4H8IcQ==
+Date:   Wed, 27 Apr 2022 10:10:59 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Borislav Petkov <bp@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the sound-asoc tree
-Message-ID: <YmfTC4krVp35kg1j@sirena.org.uk>
-References: <20220426183044.4f72059b@canb.auug.org.au>
- <263f190b-b618-4f88-2965-551af939652a@linux.intel.com>
+Subject: linux-next: build warnings after merge of the tip tree
+Message-ID: <20220427101059.3bf55262@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6WdDUAwIbxc9kkC0"
-Content-Disposition: inline
-In-Reply-To: <263f190b-b618-4f88-2965-551af939652a@linux.intel.com>
-X-Cookie: I'm a Lisp variable -- bind me!
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/Z_9JhSAR0Hmyk3B.PLdtIuD";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-
---6WdDUAwIbxc9kkC0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+--Sig_/Z_9JhSAR0Hmyk3B.PLdtIuD
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 26, 2022 at 11:00:59AM +0200, Amadeusz S=C5=82awi=C5=84ski wrot=
-e:
+Hi all,
 
-> On the other hand I guess we can just leave X86 with COMPILE_TEST and move
-> ACPI to depends on, without COMPILE_TEST.
+After merging the tip tree, today's linux-next build (htmldocs) produced
+these warnings:
 
-> Mark, what do you think?
+Documentation/virt/index.rst:7: WARNING: toctree contains reference to none=
+xisting document 'virt/coco/sev-guest'
+Documentation/virt/coco/sevguest.rst: WARNING: document isn't included in a=
+ny toctree
 
-The above seems sensible.
+Introduced by commit
 
---6WdDUAwIbxc9kkC0
-Content-Type: application/pgp-signature; name="signature.asc"
+  9617f2f48310 ("virt: sevguest: Rename the sevguest dir and files to sev-g=
+uest")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Z_9JhSAR0Hmyk3B.PLdtIuD
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJn0woACgkQJNaLcl1U
-h9BGmAf/cLnJF7x4V3W8tuIeyhKEGiLvEmUFUdOYlnDiYlt2CrKmC3gMS+1tcXJE
-xDecU84Udvzo70fEQIGCuywCWVUKTzz2BfZ9ptpgme7gJuz/yiUXijKmqmcOZ49U
-NnzPsjUThncc4sE6GS0AKyjmOINUIU1L/c3cqz1Y0N0uY/081cOReFlpDsZcBvwg
-VuUqDQv8/J4Q5eyMGFVMmIA5vqqh1DWbdZAqQUc4FRCY3UqJTkHT+W05RsSqLmAq
-BTMMdpV+A7vlOhyvuoMGfWzvltidSLsawlRIrdl2UJBMPczXfBi5Tpwu1QoRkIJB
-8I9dTx6DmfDJ4Vc6arwW+qaY6Kx7Xg==
-=irm5
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJoihQACgkQAVBC80lX
+0Gy45QgAgTABkU0bgbyt76BS5pG5oeSkJaoueIvA2Xd6e/n57oklURjTlVBCAL4e
+994AFxZEswSqqS+oZtSEirOJMPXBm/b2vlR0CujkG7Cvy1cnrY7LLDlMtIl0Yxxx
+z/8UCS6IZ0rqCf1lfYXIL8RqB0DwWmQRYw0kjTuNQlqIySab4+XZXGHHQn4Vmgw4
+Nm6J+lMoyTXATIZ0hd3Rarl9In0459VZXMkbUcNj1/i6xnfttjy+Tbn0K1Tus1re
+fXG/j8+hfec69oRCHzb7F6KR/BaQ4hc3O0WyoIlM5gsheVD6uaaZ9+3YFq6jABlg
+N394+Xj97HT9EWx3gA92/H5V74kiTQ==
+=ahdu
 -----END PGP SIGNATURE-----
 
---6WdDUAwIbxc9kkC0--
+--Sig_/Z_9JhSAR0Hmyk3B.PLdtIuD--

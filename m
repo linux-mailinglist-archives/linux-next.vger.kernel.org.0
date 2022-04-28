@@ -2,166 +2,188 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20F055133BD
-	for <lists+linux-next@lfdr.de>; Thu, 28 Apr 2022 14:32:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C14F513A76
+	for <lists+linux-next@lfdr.de>; Thu, 28 Apr 2022 18:56:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346172AbiD1Mfm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 28 Apr 2022 08:35:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55630 "EHLO
+        id S236452AbiD1RAC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 28 Apr 2022 13:00:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231824AbiD1Mfl (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 28 Apr 2022 08:35:41 -0400
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB70AF1DA;
-        Thu, 28 Apr 2022 05:32:27 -0700 (PDT)
-Received: by mail-yb1-f180.google.com with SMTP id g28so8706235ybj.10;
-        Thu, 28 Apr 2022 05:32:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=amQgG2NV0agE1gFMqpWGUu4pyR1fiuJMmDfgJJelPdE=;
-        b=bVLMzhutNwwkZ4FUraWEI0jCdXUq6nJyZmC7+gmCSp3jFeDD1mcENDl7+9Cvr3vW4e
-         eUa+mSve1dk8rLa9Pi9rQmeQ3OQK0ngurdc13Nku02dyAeBACDkTofZkTTOpq4u+dMsI
-         KIgUfx+3TQw6qujwp2phpKsWSGZx0bdTU1AZ4gA12DNFts2sfBlqzH1LGHpK9j1OSMrM
-         mVN0jfGlbVgcgP3SLNmyfpWqtNyeZhvSO1Mu5FbQnqxunnbPVIYZAlcs9IpF6Sw+kM80
-         6SfJW47I0h7Tati+GJJu5bb2zyAbrWDy2VwXKXUU2l186mDLrNwCIu09dXRAffVajA8d
-         Xogg==
-X-Gm-Message-State: AOAM533xTrbZjp6E+5BookqKSOeTDAR6ylZ+27Rc650HKX0akqDO1pGh
-        mAzmxcc49BRyMC9nA/3w1V7HW8hpf8C5WsOxrAOIodwi
-X-Google-Smtp-Source: ABdhPJwB/+EX5t6EBt1I6NzQqBAxtEOgLKJBxNB7rsFDwFQlTIAs+vmPs2QnCqLkeGnc6TfFZ56SC22ETSFI9jCLGt4=
-X-Received: by 2002:a05:6902:187:b0:63d:9c95:edca with SMTP id
- t7-20020a056902018700b0063d9c95edcamr29265812ybh.81.1651149146464; Thu, 28
- Apr 2022 05:32:26 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220428110030.7090a45b@canb.auug.org.au> <78577b67126a3f63424059f414702a799d6baf3e.camel@intel.com>
-In-Reply-To: <78577b67126a3f63424059f414702a799d6baf3e.camel@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 28 Apr 2022 14:32:14 +0200
-Message-ID: <CAJZ5v0gAnt3=NK9BgtWYawgyc2CaQ5xbx_fMznbuUJuqX1mn9A@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the pm tree
-To:     Zhang Rui <rui.zhang@intel.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        with ESMTP id S236416AbiD1RAA (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 28 Apr 2022 13:00:00 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94E41B6D27
+        for <linux-next@vger.kernel.org>; Thu, 28 Apr 2022 09:56:45 -0700 (PDT)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23SGnvuC019612;
+        Thu, 28 Apr 2022 16:56:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : content-type :
+ content-transfer-encoding : mime-version : subject : message-id : date :
+ cc : to; s=pp1; bh=09Qldj27/moUuxYCBxURGTZMO6alaJEEoIU1xpyCJJ8=;
+ b=ABmokKLTBztD4RGWizpFWCEO4/D538eAFAldNx5HlEp4+udH/Aak66FfR0fBd3FBlcuO
+ W9FES5DQmG8Qi1j+6qb+kKdXiFQf4C2QdjlYOw1tawtvLYqH3RhIfSZn4a2acu2zHCCp
+ RRAeriM89tSyG+v4vBiFrI8V2tKX+gPl10bNAt3ka06jRmFHRJdMSMyXyEo6qhDRW9io
+ gq84pIqANNcN60hzKE299nOE6MjKn6dNKLOTRjkz6di8m/0ARk+u8yXEXiggMe27Dv9r
+ JRHXygY0JKICp/V0Ky1T5pii1cF7MvtvMv6htzmpbyRK9DGaN/qLQ/bjxgHfrjfAklTY 8g== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqxsvr3nx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 28 Apr 2022 16:56:39 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23SGqie8005448;
+        Thu, 28 Apr 2022 16:56:38 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma03ams.nl.ibm.com with ESMTP id 3fm938ytyd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 28 Apr 2022 16:56:37 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23SGuZJa29294874
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 28 Apr 2022 16:56:35 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B62BB52054;
+        Thu, 28 Apr 2022 16:56:35 +0000 (GMT)
+Received: from smtpclient.apple (unknown [9.43.29.180])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id DC98C52050;
+        Thu, 28 Apr 2022 16:56:34 +0000 (GMT)
+From:   Sachin Sant <sachinp@linux.ibm.com>
+Content-Type: text/plain;
+        charset=us-ascii
+Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
+Subject: [powerpc] kernel BUG at mm/mmap.c:3164! w/ltp(mmapstress03)
+Message-Id: <B5C26080-14D5-4B16-ABDA-FCB040E7503A@linux.ibm.com>
+Date:   Thu, 28 Apr 2022 22:26:33 +0530
+Cc:     linuxppc-dev@lists.ozlabs.org
+To:     linux-next@vger.kernel.org, linux-mm@kvack.org
+X-Mailer: Apple Mail (2.3696.80.82.1.1)
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: rg49UFS1o8o4O2KWXNwhWh-KE6nk9vvM
+X-Proofpoint-ORIG-GUID: rg49UFS1o8o4O2KWXNwhWh-KE6nk9vvM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-28_02,2022-04-28_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 impostorscore=0
+ adultscore=0 spamscore=0 mlxlogscore=999 bulkscore=0 lowpriorityscore=0
+ mlxscore=0 priorityscore=1501 phishscore=0 suspectscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2204280099
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 10:56 AM Zhang Rui <rui.zhang@intel.com> wrote:
->
-> Resend with linux-pm mailing list CCed.
->
-> On Thu, 2022-04-28 at 11:00 +1000, Stephen Rothwell wrote:
-> > Hi all,
-> >
-> > After merging the pm tree, today's linux-next build (x86_64
-> > allmodconfig)
-> > failed like this:
-> >
-> > drivers/idle/intel_idle.c: In function 'adl_idle_state_table_update':
-> > drivers/idle/intel_idle.c:1701:17: error: 'disable_promotion_to_c1e'
-> > undeclared (first use in this function)
-> >  1701 |                 disable_promotion_to_c1e = true;
-> >       |                 ^~~~~~~~~~~~~~~~~~~~~~~~
-> > drivers/idle/intel_idle.c:1701:17: note: each undeclared identifier
-> > is reported only once for each function it appears in
-> > drivers/idle/intel_idle.c:1706:9: error: implicit declaration of
-> > function 'c1e_promotion_enable' [-Werror=implicit-function-
-> > declaration]
-> >  1706 |         c1e_promotion_enable();
-> >       |         ^~~~~~~~~~~~~~~~~~~~
-> > drivers/idle/intel_idle.c: At top level:
-> > drivers/idle/intel_idle.c:1854:13: error: conflicting types for
-> > 'c1e_promotion_enable'; have 'void(void)' [-Werror]
-> >  1854 | static void c1e_promotion_enable(void)
-> >       |             ^~~~~~~~~~~~~~~~~~~~
-> > drivers/idle/intel_idle.c:1854:13: error: static declaration of
-> > 'c1e_promotion_enable' follows non-static declaration
-> > drivers/idle/intel_idle.c:1706:9: note: previous implicit declaration
-> > of 'c1e_promotion_enable' with type 'void(void)'
-> >  1706 |         c1e_promotion_enable();
-> >       |         ^~~~~~~~~~~~~~~~~~~~
-> >
-> > Caused by commit
-> >
-> >   39c184a6a9a7 ("intel_idle: Fix the 'preferred_cstates' module
-> > parameter")
-> >
-> > interacting with commit
-> >
-> >   cc6e234b8264 ("intel_idle: Add AlderLake support")
-> >
-> > Presumably this should have been fixed up in commit
-> >
-> >   55ecda6f25ef ("Merge branch 'intel-idle' into linux-next")
-> >
-> > I have used the pm tree from next-20220427 for today.
-> >
-> TBH, I'm not quite sure about the Fixes tag below.
->
-> Although commit 39c184a6a9a7 is merged later and breaks commit
-> cc6e234b8264, but given that commit 39c184a6a9a7 is for -rc material
-> and commit cc6e234b8264 and this patch are for next merge window, so I
-> still use the orginal ADL intel_idle commit for Fixes tag.
+While running LTP tests (mmapstress03 specifically) against =
+5.18.0-rc4-next-20220428
+booted on IBM Power server mentioned BUG is encountered.
 
-Thanks for the fix.
+# ./mmapstress03
+mmapstress03    0  TINFO  :  uname.machine=3Dppc64le kernel is 64bit
+mmapstress03: errno =3D 12: failed to fiddle with brk at the end
+mmapstress03    1  TFAIL  :  mmapstress03.c:212: Test failed
+[   32.396145] mmap: mmapstress03 (3023): VmData 18446744073706799104 =
+exceed data ulimit 18446744073709551615. Update limits or use boot =
+option ignore_rlimit_data.
+[   32.396192] ------------[ cut here ]------------
+[   32.396193] kernel BUG at mm/mmap.c:3164!
+[   32.396195] Oops: Exception in kernel mode, sig: 5 [#1]
+[   32.396210] LE PAGE_SIZE=3D64K MMU=3DRadix SMP NR_CPUS=3D2048 NUMA =
+pSeries
+[   32.396213] Modules linked in: dm_mod mptcp_diag xsk_diag tcp_diag =
+udp_diag raw_diag inet_diag unix_diag af_packet_diag netlink_diag =
+nft_fib_inet nft_fib_ipv4 nft_fib_ipv6 nft_fib nft_reject_inet =
+nf_reject_ipv4 nf_reject_ipv6 nft_reject nft_ct nft_chain_nat nf_nat =
+nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 rfkill ip_set bonding tls =
+nf_tables nfnetlink sunrpc binfmt_misc pseries_rng drm =
+drm_panel_orientation_quirks xfs libcrc32c sd_mod t10_pi sr_mod =
+crc64_rocksoft_generic cdrom crc64_rocksoft crc64 sg ibmvscsi =
+scsi_transport_srp ibmveth xts vmx_crypto fuse
+[   32.396262] CPU: 5 PID: 3023 Comm: mmapstress03 Not tainted =
+5.18.0-rc4-next-20220428 #16
+[   32.396267] NIP:  c0000000004c4750 LR: c0000000004c4730 CTR: =
+c0000000004bf5d0
+[   32.396270] REGS: c00000001abeb810 TRAP: 0700   Not tainted  =
+(5.18.0-rc4-next-20220428)
+[   32.396274] MSR:  8000000000029033 <SF,EE,ME,IR,DR,RI,LE>  CR: =
+22002224  XER: 00000000
+[   32.396283] CFAR: c0000000008af740 IRQMASK: 0=20
+[   32.396283] GPR00: c0000000004c4730 c00000001abebab0 c000000002a71300 =
+0000000000000000=20
+[   32.396283] GPR04: c000000079dcd000 ffffffffffffffff 0000000000000008 =
+ffffffffffffffff=20
+[   32.396283] GPR08: 0000000000000008 0000000000000001 0000000000000000 =
+c000000079dcd040=20
+[   32.396283] GPR12: c000000079dcd008 c00000087fffa300 0000000000000000 =
+0000000000000000=20
+[   32.396283] GPR16: 0000000000000000 0000000000000000 0000000000000000 =
+0000000000000000=20
+[   32.396283] GPR20: 0000000000000000 0000000000000000 0000000000000000 =
+c000000002aaae85=20
+[   32.396283] GPR24: 0000000000000000 0000000000000000 00007fffaa5c1200 =
+c000000020de3660=20
+[   32.396283] GPR28: 000000000000000c c000000020de3600 000000000000000d =
+0000000000000000=20
+[   32.396320] NIP [c0000000004c4750] exit_mmap+0x190/0x390
+[   32.396327] LR [c0000000004c4730] exit_mmap+0x170/0x390
+[   32.396332] Call Trace:
+[   32.396334] [c00000001abebab0] [c0000000004c4730] =
+exit_mmap+0x170/0x390 (unreliable)
+[   32.396340] [c00000001abebbd0] [c0000000001700f4] __mmput+0x54/0x200
+[   32.396344] [c00000001abebc10] [c00000000017fe5c] exit_mm+0xfc/0x190
+[   32.396348] [c00000001abebc50] [c00000000018016c] do_exit+0x27c/0x5a0
+[   32.396352] [c00000001abebcf0] [c00000000018063c] =
+do_group_exit+0x4c/0xd0
+[   32.396356] [c00000001abebd30] [c0000000001806e4] =
+sys_exit_group+0x24/0x30
+[   32.396360] [c00000001abebd50] [c000000000037084] =
+system_call_exception+0x254/0x550
+[   32.396364] [c00000001abebe10] [c00000000000bfe8] =
+system_call_vectored_common+0xe8/0x278
+[   32.396369] --- interrupt: 3000 at 0x7fffaa318d04
+[   32.396374] NIP:  00007fffaa318d04 LR: 0000000000000000 CTR: =
+0000000000000000
+[   32.396377] REGS: c00000001abebe80 TRAP: 3000   Not tainted  =
+(5.18.0-rc4-next-20220428)
+[   32.396380] MSR:  800000000280f033 =
+<SF,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE>  CR: 42002222  XER: 00000000
+[   32.396389] IRQMASK: 0=20
+[   32.396389] GPR00: 00000000000000ea 00007fffe43f3420 00007fffaa457100 =
+0000000000000001=20
+[   32.396389] GPR04: 0000000000000000 0000000011a602a0 00007fffaa5c1200 =
+0000000000000000=20
+[   32.396389] GPR08: 0000000000000000 0000000000000000 0000000000000000 =
+0000000000000000=20
+[   32.396389] GPR12: 0000000000000000 00007fffaa5ca500 0000000000000000 =
+0000000000000000=20
+[   32.396389] GPR16: 0000000000000000 0000000000000000 0000000000000000 =
+0000000000000000=20
+[   32.396389] GPR20: 0000000000000000 0000000000000000 0000000000000000 =
+0000000000000001=20
+[   32.396389] GPR24: 00007fffaa450938 0000000000000000 0000000000000001 =
+00007fffaa4529f8=20
+[   32.396389] GPR28: 0000000000000001 00007fffaa5c3510 fffffffffffff000 =
+0000000000000001=20
+[   32.396425] NIP [00007fffaa318d04] 0x7fffaa318d04
+[   32.396427] LR [0000000000000000] 0x0
+[   32.396429] --- interrupt: 3000
+[   32.396431] Instruction dump:
+[   32.396433] 60000000 3880ffff 38610020 483eff5d 60000000 7c7f1b79 =
+4082ffb8 813d0058=20
+[   32.396439] 7d29f278 7d290034 5529d97e 69290001 <0b090000> 60000000 =
+7fa3eb78 483e328d=20
+[   32.396447] ---[ end trace 0000000000000000 ]---
+[   32.398759]=20
+[   33.398760] Kernel panic - not syncing: Fatal exception
 
-I think I'll redo the ADL support commit with the below folded in.
+This problem was introduced with 5.18.0-rc4-next-20220427. I am unable =
+to
+complete the git bisect due to build failure related to =
+mapletree-vs-khugepaged
+issue.
 
-> From 9b784d7f9ea5593a92eb6d616523b5f47464e981 Mon Sep 17 00:00:00 2001
-> From: Zhang Rui <rui.zhang@intel.com>
-> Date: Thu, 28 Apr 2022 09:37:10 +0800
-> Subject: [PATCH] intel_idle: fix C1E handling for AlderLake
->
-> commit cc6e234b8264 ("intel_idle: Add AlderLake support") disables the C1E
-> promotion using the 'disable_promotion_to_c1e' variable, but enables the
-> the C1E promotion by invoking c1e_promotion_enable() directly.
->
-> Then, commit 39c184a6a9a7 ("intel_idle: Fix the 'preferred_cstates' module
-> parameter") removes the 'disable_promotion_to_c1e' variable and introduces
-> a new tri-state 'c1e_promotion' variable that can be used for both
-> enabling and disabling C1E promotion, on a per CPU basis.
->
-> Switch to use the new 'c1e_promotion' variable to fix the build failure,
-> and also to do C1E promotion bit update on all CPUs.
->
-> Fixes: commit cc6e234b8264 ("intel_idle: Add AlderLake support")
-> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-> ---
->  drivers/idle/intel_idle.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-> index 7c081ed26b64..2de6e0a2d9a1 100644
-> --- a/drivers/idle/intel_idle.c
-> +++ b/drivers/idle/intel_idle.c
-> @@ -1698,12 +1698,12 @@ static void __init adl_idle_state_table_update(void)
->                 cpuidle_state_table[1].flags |= CPUIDLE_FLAG_UNUSABLE;
->
->                 /* Disable C1E by clearing the "C1E promotion" bit. */
-> -               disable_promotion_to_c1e = true;
-> +               c1e_promotion = C1E_PROMOTION_DISABLE;
->                 return;
->         }
->  end:
->         /* Make sure C1E is enabled by default */
-> -       c1e_promotion_enable();
-> +       c1e_promotion = C1E_PROMOTION_ENABLE;
->  }
->
->  /**
-> --
-> 2.17.1
->
->
+Thanks
+-Sachin=

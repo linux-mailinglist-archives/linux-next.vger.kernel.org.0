@@ -2,44 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE182512D25
-	for <lists+linux-next@lfdr.de>; Thu, 28 Apr 2022 09:38:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A034512D3E
+	for <lists+linux-next@lfdr.de>; Thu, 28 Apr 2022 09:44:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245582AbiD1HlQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 28 Apr 2022 03:41:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54482 "EHLO
+        id S245643AbiD1HrW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 28 Apr 2022 03:47:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231637AbiD1HlO (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 28 Apr 2022 03:41:14 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FE6A9AE40;
-        Thu, 28 Apr 2022 00:38:01 -0700 (PDT)
+        with ESMTP id S245494AbiD1HrU (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 28 Apr 2022 03:47:20 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB7D49D05D;
+        Thu, 28 Apr 2022 00:44:06 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KpnXR4JKlz4ySd;
-        Thu, 28 Apr 2022 17:37:59 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KpngN6jzpz4xNl;
+        Thu, 28 Apr 2022 17:44:00 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1651131479;
-        bh=GtVgEMNzYXFitX4K7tRFEYy1V7GBnIDa+hRD9HEBRFw=;
+        s=201702; t=1651131842;
+        bh=amNapjCLjURLE0UVrVvkvdsxtrh346rHjxYHltNNEeY=;
         h=Date:From:To:Cc:Subject:From;
-        b=ud5kZN5ERg+nPN0sorjQG7dsS8WJXMiQmhWqwkxpApkebAGs7qGkcq0uOryXKlJT0
-         QFJ9wqCQ6TaeaiprptPwe8r0MmZfYv0guuXmuXJnOEhRiV0wcBXmzAzB0Quu4A61Ir
-         EgNr4u1IoFulLbvK9kegayOhfs3amRRajvSqDNH7nKeB8Ix8z5RED4UMWRWuYCe3Gg
-         Y8kULMAsnZcHf5SoUyX/yhX/EhK4ni6dqA7ZQ8KK9v4YVeAalG7CFN6z3PxRxEO/fC
-         aWERVotgSO6nOlSGpxGb0zvPS/MYf2Iz7/kLYKDQPxCHJRP3p9z+248lvAuK5i21mU
-         u6apdUlLVLa+A==
-Date:   Thu, 28 Apr 2022 17:37:58 +1000
+        b=ZLcRj0w8WNV3FzPMqwSXsHgKIYpt6MkiHWqaSkxfEGMUcxeO5/J/ByOxobTk/9OQ+
+         jzLO2wcPEnCItilFVAXbBDXJOppJLS6lhs0ACRKGL2r3zO2ZScRpx8Vn1ebL8lR1PK
+         6eO3XfXYR2xPyfrQzW3JLKvorfUwhkXTwo0BEQGmwn0CNgTL69oECFqqz+OiuU+bSE
+         Zj1dsBIN30lm3rDzl40ZtpucWURxl1zTDXvLHcAhccfdF7z8yoE3BNK+vaZPwR2UGc
+         bPF46cN0VLyhO80Wqn1tv+qYD75bQjlr9tZkRj3nP0gxWVNv13x5ZtjrppcePSeFP0
+         ewZo0Docus5TA==
+Date:   Thu, 28 Apr 2022 17:44:00 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Jiajian Ye <yejiajian2018@email.szu.edu.cn>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the iio tree
-Message-ID: <20220428173758.2e642f54@canb.auug.org.au>
+Subject: linux-next: build warning after merge of the mm tree
+Message-ID: <20220428174400.5b1a4b9b@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/UfM71HFKtnp02yQG/os.HlS";
+Content-Type: multipart/signed; boundary="Sig_/Yr0Yq6fdL165bm17a.+CqnV";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -50,41 +50,45 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/UfM71HFKtnp02yQG/os.HlS
+--Sig_/Yr0Yq6fdL165bm17a.+CqnV
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the iio tree, today's linux-next build (htmldocs) produced
+After merging the mm tree, today's linux-next build (htmldocs) produced
 this warning:
 
-include/linux/iio/iio.h:319: warning: This comment starts with '/**', but i=
-sn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
- * Device operating modes
+Documentation/vm/page_owner.rst:176: WARNING: Literal block expected; none =
+found.
 
 Introduced by commit
 
-  831d87089ca8 ("iio: core: Clarify the modes")
+  0613ea580918 ("tools/vm/page_owner_sort.c: support sorting blocks by mult=
+iple keys")
+
+or commit
+
+  0996cc55c8e3 ("Merge branch 'linus' into mm-stable")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/UfM71HFKtnp02yQG/os.HlS
+--Sig_/Yr0Yq6fdL165bm17a.+CqnV
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJqRFYACgkQAVBC80lX
-0GxhDAf/e8tiIt9JnFdA2OL5SI3f36VBmoGfXUQZJJpkGkDFhtlno7D0qe3M1Sz/
-cQOXc04Ll9GeOvosWAy0K+58wkpTv+B0+k1JtP3LMDl/acnl+iNrpPvI9LWLD6Lt
-GS76IpCIaElSa6sZgdztLqUPIRVdd34/opuRJHyF+PHqSwXRxjJTygUGG/i1TGss
-E8CyQEzuVK9aTvA6iv2dshJ81xLfO0uW44eg+e+OQOlknOqqHd/Kv1ro6BorLBk4
-QIPHFnS2rRGshRXOLOlin2nD1RxcPX7fzUQekhyf+EEjmyFZRMvmM9FJthJ2MY+6
-xXHogbIYSbqdtrOpbLgkenlbe8cVNQ==
-=Ohg9
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJqRcAACgkQAVBC80lX
+0Gz3igf8DaXC/bODXD1VTuoT5LAOy3dQGZ77BKhm+XPXUoiN1UQdA+UG+ReVfKKF
+YcbTk72SRVnROfKGgPYUtcxQEuqIz92f632P1a+J2XbDHQZCRkKDUU+5ngMUaDu1
+3jft1cywCaugeMRP8aMRZrmcp5Y4JfU6LM+nWmJTkQur+ot4sIstHpVlDOvwXpgJ
+lFEu9Gdy4TJXebYGnmpBZRtZdfuSiz+eiLHbbk6GUqGlXfRLhamhRdqOiGLXr4ix
+iNTduWnMkZkJlcnWHSSYsRvjXCGxvlzfQXq7qBLmg1b6vwtOEKGlvtrmtxXrhRuh
+l2ukDUtnlS9Rt3SZsPqMHq2ftfCHVg==
+=z3+1
 -----END PGP SIGNATURE-----
 
---Sig_/UfM71HFKtnp02yQG/os.HlS--
+--Sig_/Yr0Yq6fdL165bm17a.+CqnV--

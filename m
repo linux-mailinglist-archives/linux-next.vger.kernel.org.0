@@ -2,93 +2,82 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A034512D3E
-	for <lists+linux-next@lfdr.de>; Thu, 28 Apr 2022 09:44:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77CC7512DC0
+	for <lists+linux-next@lfdr.de>; Thu, 28 Apr 2022 10:07:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245643AbiD1HrW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 28 Apr 2022 03:47:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40476 "EHLO
+        id S233548AbiD1IKt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 28 Apr 2022 04:10:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245494AbiD1HrU (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 28 Apr 2022 03:47:20 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB7D49D05D;
-        Thu, 28 Apr 2022 00:44:06 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KpngN6jzpz4xNl;
-        Thu, 28 Apr 2022 17:44:00 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1651131842;
-        bh=amNapjCLjURLE0UVrVvkvdsxtrh346rHjxYHltNNEeY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=ZLcRj0w8WNV3FzPMqwSXsHgKIYpt6MkiHWqaSkxfEGMUcxeO5/J/ByOxobTk/9OQ+
-         jzLO2wcPEnCItilFVAXbBDXJOppJLS6lhs0ACRKGL2r3zO2ZScRpx8Vn1ebL8lR1PK
-         6eO3XfXYR2xPyfrQzW3JLKvorfUwhkXTwo0BEQGmwn0CNgTL69oECFqqz+OiuU+bSE
-         Zj1dsBIN30lm3rDzl40ZtpucWURxl1zTDXvLHcAhccfdF7z8yoE3BNK+vaZPwR2UGc
-         bPF46cN0VLyhO80Wqn1tv+qYD75bQjlr9tZkRj3nP0gxWVNv13x5ZtjrppcePSeFP0
-         ewZo0Docus5TA==
-Date:   Thu, 28 Apr 2022 17:44:00 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Jiajian Ye <yejiajian2018@email.szu.edu.cn>,
+        with ESMTP id S1343809AbiD1IKl (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 28 Apr 2022 04:10:41 -0400
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D25905FF22;
+        Thu, 28 Apr 2022 01:07:23 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id A3CCB20014;
+        Thu, 28 Apr 2022 08:07:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1651133242;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=OgdzcTozFEXOc5nis4y/bqNo2BFl7HCpt8t/Qg1ao2I=;
+        b=mHEA5MLCK9+jcAr3vWQsAIKpZckVY+FUgOCNMiMP1SXRkfVtqtuiRep8XuKxBEaZ0cs2kc
+        iKXOwY4qOoi+rW2ZE5l2bTTNh0bFNG9bVklK5w4slvIEvYCFKAFXvXZMjGF0NAgAJOY7gP
+        T3qCFl41r6YkAwVYHv/e/heC14i7SW+vCqZfygdtjQmuXbGA4S8zdm4OgbgGBNuUS0VYuO
+        wH+GMaFVo45+Hb7F+Z64gjFkv6H1XeIeRDcfW7Dsah4BhMZXJPlLPcckRaYq3U79XglayW
+        hZKw5LR3F1i7O0rkyCCjn8hSrbBENOyAuBr+XORQSpkz1OYXAe+qPg16mC1E6g==
+Date:   Thu, 28 Apr 2022 10:07:19 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the mm tree
-Message-ID: <20220428174400.5b1a4b9b@canb.auug.org.au>
+Subject: Re: linux-next: build warning after merge of the iio tree
+Message-ID: <20220428100719.4a29e68f@xps13>
+In-Reply-To: <20220428173758.2e642f54@canb.auug.org.au>
+References: <20220428173758.2e642f54@canb.auug.org.au>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Yr0Yq6fdL165bm17a.+CqnV";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Yr0Yq6fdL165bm17a.+CqnV
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hello,
 
-Hi all,
+sfr@canb.auug.org.au wrote on Thu, 28 Apr 2022 17:37:58 +1000:
 
-After merging the mm tree, today's linux-next build (htmldocs) produced
-this warning:
+> Hi all,
+>=20
+> After merging the iio tree, today's linux-next build (htmldocs) produced
+> this warning:
+>=20
+> include/linux/iio/iio.h:319: warning: This comment starts with '/**', but=
+ isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+>  * Device operating modes
+>=20
+> Introduced by commit
+>=20
+>   831d87089ca8 ("iio: core: Clarify the modes")
 
-Documentation/vm/page_owner.rst:176: WARNING: Literal block expected; none =
-found.
+Looks like there is no kdoc specific format for #define's
+(Documentation/doc-guide/kernel-doc.rst), which is disappointing, I
+really hoped this could be brought to the developer's attention this
+way.
 
-Introduced by commit
+But that's not a big deal. Jonathan, if you don't mind, you may just
+drop that extra start s|/**|/*| to make the htmldocs target happy
+again.
 
-  0613ea580918 ("tools/vm/page_owner_sort.c: support sorting blocks by mult=
-iple keys")
-
-or commit
-
-  0996cc55c8e3 ("Merge branch 'linus' into mm-stable")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/Yr0Yq6fdL165bm17a.+CqnV
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJqRcAACgkQAVBC80lX
-0Gz3igf8DaXC/bODXD1VTuoT5LAOy3dQGZ77BKhm+XPXUoiN1UQdA+UG+ReVfKKF
-YcbTk72SRVnROfKGgPYUtcxQEuqIz92f632P1a+J2XbDHQZCRkKDUU+5ngMUaDu1
-3jft1cywCaugeMRP8aMRZrmcp5Y4JfU6LM+nWmJTkQur+ot4sIstHpVlDOvwXpgJ
-lFEu9Gdy4TJXebYGnmpBZRtZdfuSiz+eiLHbbk6GUqGlXfRLhamhRdqOiGLXr4ix
-iNTduWnMkZkJlcnWHSSYsRvjXCGxvlzfQXq7qBLmg1b6vwtOEKGlvtrmtxXrhRuh
-l2ukDUtnlS9Rt3SZsPqMHq2ftfCHVg==
-=z3+1
------END PGP SIGNATURE-----
-
---Sig_/Yr0Yq6fdL165bm17a.+CqnV--
+Thanks,
+Miqu=C3=A8l

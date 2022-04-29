@@ -2,167 +2,116 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1397514F2D
-	for <lists+linux-next@lfdr.de>; Fri, 29 Apr 2022 17:21:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64A7F515031
+	for <lists+linux-next@lfdr.de>; Fri, 29 Apr 2022 18:03:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378305AbiD2PYc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 29 Apr 2022 11:24:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55600 "EHLO
+        id S1378758AbiD2QGo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 29 Apr 2022 12:06:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377870AbiD2PYb (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 29 Apr 2022 11:24:31 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 278E450B2E
-        for <linux-next@vger.kernel.org>; Fri, 29 Apr 2022 08:21:12 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id y76so15097943ybe.1
-        for <linux-next@vger.kernel.org>; Fri, 29 Apr 2022 08:21:12 -0700 (PDT)
+        with ESMTP id S1378762AbiD2QGm (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 29 Apr 2022 12:06:42 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9095E72E0F;
+        Fri, 29 Apr 2022 09:03:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=Y9ZcDqJuLqa5JXE44N2GTKKL7QLt6s4hAdWbOVk4GKA=;
-        b=Ui44ujrM/Zb0gG6w993gsGhOHJJo4hJpMy5YNqMlQ1UBxypMqUeZmQ0vQR7zv43aoq
-         ysDTzwPOaXcMJdAgaQ75aaFaKccNh9YzoWgUyuBazDKHo05B72uXLnf6GOuFGr+YjOhb
-         CqmBqnbFsKscTmFpZomlQtNTgyCMw6ijgNKi9RtxOdjwtTfEQZUtxW5GY0kFI7vmbPEd
-         iyQjLd93QR48gkJfiDsyihFfeFvPeCdY0ygAs4xaGmcwpoglEDViVmR2LTurXIY2q4cB
-         4yV5cGfoba+QxaXmO6t+ligH1pohAdpq21zsLB0z5rlHCgxpRDTt3W3Lre8Dxe82rSsU
-         +OFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=Y9ZcDqJuLqa5JXE44N2GTKKL7QLt6s4hAdWbOVk4GKA=;
-        b=PLi7FNec3PvVATcxp6flV9v2WGq/DD+gu6hahxhSNGUlKhXijG1IJJtznwn/Kc8PoM
-         cXleozJGxNMcCi/f9x/FvkNiviLeWkQds9OFAAou4EC5oBKKj+aitkomjS2mJi9KLgFS
-         1DTmDqPiiQnFp1Guqj9JJhvqALv0PSdHMk+U6CHjXAfsu2aIQQjXrNLcjYTDfHGg91gW
-         JQjR+bGw/GB9l9UTCI+WIxCZ/KPap+MbdCz+6JHT1LRgQBUdrZGA8oHJJqqQBVcGdtXT
-         /HG1xqxjURN93azMy3pufI9kAes8eoST3FsJqsf6zUiJA36cgy9a+JefaRYPbwRrIPM3
-         QgeQ==
-X-Gm-Message-State: AOAM530Di4PfHCzenEVeDifigitOslmKUuyZbQMVvGP5BF5rOdkCpXYm
-        4I1ARarT7rAm+61nxQg1n2pIe5D/yBeOY28yPSAL+AfoJnLiqg==
-X-Google-Smtp-Source: ABdhPJwLCCaV2PcxMcgGMdB0/M2/IvKlelR9da+uyTInErh3cDr6csPbgJ1kHhRHPIcQAkVXAy/BgNTq4VYaz6VK/f4=
-X-Received: by 2002:a25:9909:0:b0:624:57e:d919 with SMTP id
- z9-20020a259909000000b00624057ed919mr36075867ybn.494.1651245670446; Fri, 29
- Apr 2022 08:21:10 -0700 (PDT)
-MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 29 Apr 2022 20:50:59 +0530
-Message-ID: <CA+G9fYu2kS0wR4WqMRsj2rePKV9XLgOU1PiXnMvpT+Z=c2ucHA@mail.gmail.com>
-Subject: [next] i386: kunit: ASSERTION FAILED at mm/kfence/kfence_test.c:547
-To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1651248204; x=1682784204;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=sSK/o9FhKlUdMjW2NdP5Bg7dQkRtO4bEr5mQPkXPNXs=;
+  b=tP5uiMhaIEVwDhNNk++kQsCk2nBi9S34OJdiD03ws7NkRWf4Znij5z/u
+   W3EhPQXpcoybhPU/fBorMt33oYchbgJJpicbuc0SuTN53fqTJ1gPa+Qep
+   nOys+pnbPvmBquqxxpVrtYdc81gkakqZ3wZm1+CLrBSuguCn8NAT4T7cy
+   4=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 29 Apr 2022 09:03:24 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 09:03:23 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 29 Apr 2022 09:03:22 -0700
+Received: from qian (10.80.80.8) by nalasex01a.na.qualcomm.com (10.47.209.196)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 29 Apr
+ 2022 09:03:19 -0700
+Date:   Fri, 29 Apr 2022 12:03:17 -0400
+From:   Qian Cai <quic_qiancai@quicinc.com>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+CC:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
         open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, linux-mm <linux-mm@kvack.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
+        <lkft-triage@lists.linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Will Deacon <will@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Arnd Bergmann <arnd@arndb.de>, "Zi Yan" <ziy@nvidia.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "David Hildenbrand" <david@redhat.com>,
+        Eric Ren <renzhengeek@gmail.com>,
+        "kernel test robot" <lkp@intel.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        "Mike Rapoport" <rppt@linux.ibm.com>,
+        Minchan Kim <minchan@kernel.org>,
+        "Oscar Salvador" <osalvador@suse.de>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Chen Wandun <chenwandun@huawei.com>, NeilBrown <neilb@suse.de>,
+        <joao.m.martins@oracle.com>, <mawupeng1@huawei.com>,
+        Wei Yang <richard.weiyang@gmail.com>,
+        Song Liu <song@kernel.org>
+Subject: Re: [next] mm: libhugetlbfs: WARNING: at mm/page_alloc.c:5368
+ __alloc_pages
+Message-ID: <20220429160317.GA71@qian>
+References: <CA+G9fYveMF-NU-rvrsbaora2g2QWxrkF7AWViuDrJyN9mNScJg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYveMF-NU-rvrsbaora2g2QWxrkF7AWViuDrJyN9mNScJg@mail.gmail.com>
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Following kernel regressions have been noticed on Linux next-20220426
-(till date) on qemu_i386. This is a special build with KFENCE and KUNIT enabled
-but not KASAN on i386.
+On Fri, Apr 29, 2022 at 04:50:25PM +0530, Naresh Kamboju wrote:
+> Following kernel warning notices on Linux next-20220427 till date next-20220429
+> on qemu_arm64 and arm64 devices.
+> 
+> While testing libhugetlbfs test suite and ltp mm and hugetlb.
+> 
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> 
+> Test log:
+> ----------
+> truncate_above_4GB (2M: 64): PASS
+> brk_near_huge (2M: 64): brk_near_huge: malloc.c:2401: sysmalloc:
+> Assertion `(old_top == initial_top (av) && old_size == 0) ||
+> ((unsigned long) (old_size) >= MINSIZE && prev_inuse (old_top) &&
+> ((unsigned long) old_end & (pagesize - 1)) == 0)' failed.
+> [   15.685019] audit: type=1701 audit(1651222753.772:25):
+> auid=4294967295 uid=0 gid=0 ses=4294967295 pid=454
+> comm=\"brk_near_huge\"
+> exe=\"/usr/lib/libhugetlbfs/tests/obj64/brk_near_huge\" sig=6 res=1
+> [   15.685629] ------------[ cut here ]------------
+> [   15.685631] WARNING: CPU: 2 PID: 454 at mm/page_alloc.c:5368
 
-snippet of Kconfigs from the build:
-    CONFIG_CC_HAS_KASAN_GENERIC=y
-    CONFIG_KFENCE=y
-    CONFIG_KFENCE_KUNIT_TEST=y
-    CONFIG_KUNIT=y
-    CONFIG_KUNIT_DEBUGFS=y
-    CONFIG_KUNIT_TEST=y
-    CONFIG_KUNIT_EXAMPLE_TEST=y
-    CONFIG_KUNIT_ALL_TESTS=y
+Naresh, I am having difficult to reproduce this reliablely. If you have
+spare cycles, do you mind reverting those to see if you can still
+reproduce? I can't seems to find other recent commits more suspicious
+than that series.
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+37e73e3b0a9d drivers: virtio_mem: use pageblock size as the minimum virtio_mem size.
+d2b9cd2acb2b mm: cma: use pageblock_order as the single alignment
+7f125582227e mm: page_isolation: enable arbitrary range page isolation.
+fb009b307b21 mm: make alloc_contig_range work at pageblock granularity
+7c7e18d510f4 mm: page_isolation: check specified range for unmovable pages
+6a242a94b883 mm: page_isolation: move has_unmovable_pages() to mm/page_isolation.c
 
-Regressions found on qemu_i386;:
-
-   - kunit/test_free_bulk
-   - kunit/test_memcache_typesafe_by_rcu
-   - kunit/test_out_of_bounds_read-memcache
-   - kunit/test_invalid_access
-   - kunit/test_krealloc
-   - kunit/test_invalid_addr_free
-   - kunit/test_gfpzero
-   - kunit/test_kmalloc_aligned_oob_write
-   - kunit/kfence
-   - kunit/test_out_of_bounds_read
-   - kunit/test_out_of_bounds_write
-   - kunit/test_invalid_addr_free-memcache
-   - kunit/test_double_free
-   - kunit/test_corruption-memcache
-   - kunit/test_use_after_free_read-memcache
-   - kunit/test_corruption
-   - kunit/test_use_after_free_read
-   - kunit/test_shrink_memcache
-   - kunit/test_double_free-memcache
-   - kunit/test_out_of_bounds_write-memcache
-   - kunit/test_kmalloc_aligned_oob_read
-
-
-full test log link [1]
-
-snippet of test log:
-[    4.168302]     # test_free_bulk: test_alloc: size=271, gfp=cc0,
-policy=right, cache=0
-[    4.271599]     # test_free_bulk: test_alloc: size=271, gfp=cc0,
-policy=none, cache=0
-[    4.271611]     # test_free_bulk: test_alloc: size=271, gfp=cc0,
-policy=left, cache=0
-[    4.687568]     # test_free_bulk: test_alloc: size=271, gfp=cc0,
-policy=none, cache=0
-[    4.687581]     # test_free_bulk: test_alloc: size=271, gfp=cc0,
-policy=none, cache=0
-[    4.687616]     # test_free_bulk: ASSERTION FAILED at
-mm/kfence/kfence_test.c:547
-[    4.687616]     Expected report_available() to be false, but is true
-[    4.687789]     not ok 13 - test_free_bulk
-...
-[   33.294007]     # test_memcache_typesafe_by_rcu: EXPECTATION FAILED
-at mm/kfence/kfence_test.c:687
-[   33.294007]     Expected report_matches(&expect) to be true, but is false
-[   33.294182]     not ok 23 - test_memcache_typesafe_by_rcu
-[   33.294183] kunit_try_catch (209) used greatest stack depth: 5840 bytes left
-[   33.294619]     # test_krealloc: test_alloc: size=32, gfp=cc0,
-policy=any, cache=0
-[   33.391637]     # test_krealloc: ASSERTION FAILED at
-mm/kfence/kfence_test.c:724
-[   33.391637]     Expected report_available() to be false, but is true
-[   33.391658]     not ok 24 - test_krealloc
-[   33.391902]     # test_memcache_alloc_bulk: setup_test_cache:
-size=32, ctor=0x0
-[   33.495801]     ok 25 - test_memcache_alloc_bulk
-[   33.495808] # kfence: pass:3 fail:20 skip:2 total:25
-[   33.495817] # Totals: pass:3 fail:20 skip:2 total:25
-[   33.495833] not ok 1 - kfence
-
-
-metadata:
-  git_ref: master
-  git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-  git_sha: 088fb7eff3496e0f61fdf68bda89b81a4d0a4434
-  git_describe: next-20220426
-  kernel-config: https://builds.tuxbuild.com/28KafYBlDWOxI3qyNmGDwb63GuX/config
-
---
-Linaro LKFT
-https://lkft.linaro.org
-
-[1] https://lkft.validation.linaro.org/scheduler/job/4950383#L770
-[2] https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220426/testrun/9235043/suite/kunit/test/test_use_after_free_read/log
+$ git revert --no-edit e389355485b7..37e73e3b0a9d

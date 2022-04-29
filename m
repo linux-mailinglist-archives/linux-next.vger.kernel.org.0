@@ -2,216 +2,153 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5176B5146E7
-	for <lists+linux-next@lfdr.de>; Fri, 29 Apr 2022 12:39:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CED0D5147F8
+	for <lists+linux-next@lfdr.de>; Fri, 29 Apr 2022 13:20:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357534AbiD2Klg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 29 Apr 2022 06:41:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50044 "EHLO
+        id S234235AbiD2LX4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 29 Apr 2022 07:23:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235651AbiD2Klf (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 29 Apr 2022 06:41:35 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2046.outbound.protection.outlook.com [40.107.236.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0A4B3BF88;
-        Fri, 29 Apr 2022 03:38:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mn6IH8vQu2GWl6YsOJkY7IafUl2JVLlbn7QP3AmXupJ/RgNFM6G0I07fC66IWI6t+g0J3/qjNMPJ5fTis2rYUVKjEveA1EH+wAQ3xMLFWKiR8behk8ricTR5RB09J+LG1Yobqssymn5lRPa2EhCkU3PfrK3bXq9PoX5ww8s/3OMmNKFk9EXvotPPrDPD8OlitfMuyZUgQ+O2GhN9fZqdxvPyQ4XKbPW4c/mJjj7cAOOj8JlGJeKV/3Chfy6e8uv85ttWHL7xoB90Y5hz0vFu73+EsHiV0uUAAhHxCVFg9mKIIxOweMExNie9aFzQpdg/Ga1CXLTZpiNQSz9oHdD7PA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=F1PtUvqypmRGjP9T8c3r3wsfEavZafnWDcvxXDO2jFI=;
- b=ZBrN6iqJ82yOk896e4lOt4lnxzsRPvfg7q8lJRQY3lscEvJAOqWsEKus4KW/JM8qCJHsQUnRaxVcjbkLfxKXpkyGbr9AbQ5s5uHGLKNFbKisGUFLZvUZXrqjMXr7san5z3lA0Nk5kRQPnAs+Q+tGJ5jxtW8XHhfRv10DUxtOhZJIH4oDEHv1FYicsuhkCEsZMfUS1NqJMcfEuoV/pxu3Q9E48oPcmr6jZ1nmbcrw6L021zL8t0FbpV4KWwwJDknjIrbvcWumwDs4xyjlynaJAmIk/vO1lur+jnXqQ6zBX+2QT6u6zI4L95e5Fe5A2fDrMEHZFWpL3GXWwaopsGE4aQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=F1PtUvqypmRGjP9T8c3r3wsfEavZafnWDcvxXDO2jFI=;
- b=Yt7/otQ802af0QAvZdOJqdBiFmH26yAZH0G//bDG29SyrVnutg35A0vmY3S9b3zr5myo+Lf/yAKmLIMb1PDSIS6tE7RgDhSY/qwCgYqcuVyVu6bp/NGMcM6L5NvoWL2ihgGcfbIqw/I9ZwKzWoloq583H1emFifqJV1F2bqMcXo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by MN0PR12MB6029.namprd12.prod.outlook.com (2603:10b6:208:3cf::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.21; Fri, 29 Apr
- 2022 10:38:13 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::a5fb:7137:5e64:cf8]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::a5fb:7137:5e64:cf8%5]) with mapi id 15.20.5186.021; Fri, 29 Apr 2022
- 10:38:13 +0000
-Message-ID: <17b8fbf1-0765-5189-6a8b-cd1d05bcd052@amd.com>
-Date:   Fri, 29 Apr 2022 12:38:07 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: linux-next: manual merge of the amdgpu tree with the drm-misc
- tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Alex Deucher <alexdeucher@gmail.com>,
-        Dave Airlie <airlied@linux.ie>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220406103405.299c06b9@canb.auug.org.au>
- <20220413101014.6b6c4db2@canb.auug.org.au>
- <20220429111354.197c6dee@canb.auug.org.au>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <20220429111354.197c6dee@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR2P281CA0024.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:14::11) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        with ESMTP id S1358250AbiD2LXz (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 29 Apr 2022 07:23:55 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AE961A81A
+        for <linux-next@vger.kernel.org>; Fri, 29 Apr 2022 04:20:38 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id g28so13859248ybj.10
+        for <linux-next@vger.kernel.org>; Fri, 29 Apr 2022 04:20:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=L3mmxFtGGGPbCeO9YHS/N6LzY/l/JGVOv9dCdQDbPNA=;
+        b=v4ydqymfzbbinHbmpn+hBq8uSnEiCvdVlotwirwsRqxK6gUTGJGNMshQskwZCgauM5
+         qBXrWgAGWPQJYv7NEcpJBhIYi+obXpxQWJbSkc2rFXnosLkK/YshFyOVqul1Q0tp/JqG
+         WU9EU1Rfvb7UxVUH1xu7odM9ak9L85U+OfzMpmmHnjmmwjIPEX5tb5yo7/vusBwFdiUe
+         ws+kg0iYqIyGQ9Hgc7wOysVantu2dzUBM52h6I+ZFrO9SiX9/kYDcTYs/XwstEvcTrAQ
+         5QwkDKrutr6pkrzRGn2lYNC01/wsBedauFFpvsoAnnvCQw/N5Jvrg7DGhKjFFnHay5mK
+         RH0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=L3mmxFtGGGPbCeO9YHS/N6LzY/l/JGVOv9dCdQDbPNA=;
+        b=vs1UL7jJJS8Sc2OXinY/V1EYrs8QKFHg4PQHbjseImQJzsryBgFSpIaWpwsZ1F6VI9
+         UZ9/TblGFm+JVONYbYcrdXybyOhk6tRcRA/jorLjqwOs7WFJXRARO94JCIpdqJsvuJSq
+         Je9cTY0abJ7zdmBiLlw3tshTYrPfSjxfLTIW9cg+GpGkZPlJZYX13OiM+acb7zTYr/Uy
+         SSskEL/MsDnGApG/wyWoKgwpLA8lTNRJKKhvbkdI54gK5sgDuA0J5sT8/dbQ7JcpYTJ2
+         gk2e27QCODKxIHW9o9kN870B2OvS8NE4nannLhF47+DsfO3WVnlJamc+sOWPUj539bo7
+         XRAg==
+X-Gm-Message-State: AOAM532fdrgDA9WWI/nfEpQiDTHh2BIvVYHBkI1M4MVNwuvEg4SpHazR
+        +fMwK6NSaHGEmU617BlmqwXZp+8YjRdvaPD5xOGJNVaOn60STw==
+X-Google-Smtp-Source: ABdhPJwNU9A1Z3lCZgNROQWO8s2EA4fUJXM7JgFQFeQAv9PTvfbLB3X3D3g85+IjxYnSg8lUYWaD1WX3nVLJqQLnqMg=
+X-Received: by 2002:a25:9909:0:b0:624:57e:d919 with SMTP id
+ z9-20020a259909000000b00624057ed919mr34989975ybn.494.1651231236398; Fri, 29
+ Apr 2022 04:20:36 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5b516b10-9cfe-455c-87b0-08da29cc5c52
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6029:EE_
-X-Microsoft-Antispam-PRVS: <MN0PR12MB6029C21B1598F7AA41E6143D83FC9@MN0PR12MB6029.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tllpxUAkljkIsSoFXvz8riJmb1IFNCg2YgdngL6T8B/5nODN3QA4XCwcxwjhlv4wAyVc94/ukJgsHUzri8jtOt5ZIRzUFWKZn1lS2UGJvi8k1TBWjkFJqmyTWhDP/r416QckCccXHegV9MXcDPHJ13gDFp5pb8MbMaOSVZG1qPnVKSl6aUk0wW/OMRUz43vkwt0sWIn8t2dU0gUFoyt/Nq2P9IETsp22RYB1Bwt27UBh1u4gfEqYPRgn+GFGgezISflcfOJfwBMbUUULGOjd3ZyrevY5tB8AeNTJzw+MuQZ1iefXXnNcAVqIY8wc2IsgsFdHzrUWYwllz9Y/xI8amTInojawaTvXQbVFxu3AvYlypDgdFUPFfzu0OxLA5P0Lmu5RWSEnYG1hVkbtO/3AfC6JdXpyPLmKZ1O5+LTNzWyUqvcZMvF2Z8RtCnvLCNTUbrPBkC1mf6uROqsLY7uIBbKWi5RfPYmBWQJKY2JV1fQPV394W4RkRc4qSB/pay7IRdK27BzJTNsGBDgDm9ore+rWw5dQ/tD4ZSZKUE5/56H+NEofkuR74KAy+R3yuKyUfIWd/oVOB9Zp1NoQDKzIchE6Ecyl9IoqgCvanGILpULcWI7VjzitmAGS/36CnEVee8z8DFYpK9nwzZ+TCvYJ/X0TxVnH90Br4qlBrr3Ut0960JYyj9QLBrPejHCT7mRFCG/z1BIKMOeO+Og3Oh48zSNuNfyk4zo9XnXrRjHyANI=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(38100700002)(2616005)(83380400001)(54906003)(66946007)(8676002)(31686004)(66556008)(4326008)(36756003)(66476007)(110136005)(316002)(508600001)(6486002)(31696002)(6666004)(6506007)(53546011)(86362001)(2906002)(6512007)(186003)(8936002)(5660300002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MEFSL1djRTlSQXY5VXJPN3ZVcEZ0aU42U0ZlbFpQcXZOczBIS0xUSjJUaVBB?=
- =?utf-8?B?eUhmeUdiOFRVRnUrSy93cVZDMTJLSVpaUDZJUUxVTlVOVXk1d3lTSTFwczVi?=
- =?utf-8?B?V1g1THJ0YzdzZEhKcStheGR6SEhTaEJOUE5IZVNLVTVpd0dNb2hHcVkvWUVs?=
- =?utf-8?B?RWdXWE1mblhlRForNEZyeUUybFp0WWNZYk1ZeGkvUjJBbFBEQVlQM1RlRlNy?=
- =?utf-8?B?WUwxN2RjVWtIMUU2UTFUS1QyMS80U2VmUzdBZlNmNEN2ZXlaQStrMi94Si9E?=
- =?utf-8?B?R2E5YU1CU1h6VjZneTJPb2VIK1A2TitITFgrQVNQM3RMSEdlaU5pcnQ5SW52?=
- =?utf-8?B?aUFGaTE2aGVvYkVFKysvRFVyUk9vMVRtMis4UG56NUZaVm5TL0lWMmJMSnZi?=
- =?utf-8?B?aHFzbFdOMllaTXR3NDVBUHZsQ1ZQRm5ZL3h2eWVjc2RFdHB0UnE3ci84ZTBr?=
- =?utf-8?B?enhLZ0h1SUlmaHA3ejFJaXRJbE1qdTFndHRuR0FGR1Y5QnhLaDhhYU1ZY3dG?=
- =?utf-8?B?TTBtTUFnaW1sMTdndkdvdkQrVW1Xem5HMk93anpoMmpVS0tFRnJtZGpEUVN1?=
- =?utf-8?B?eXM3MXpHVU1LYTIrZ2RLSXNFb3ZqdCthZzdtWW9xczM5d3o4OXhRM3hpblJz?=
- =?utf-8?B?c0tkZmgvQ3pUZmZuYm9jV2R0R1hYemNENVFPTEExV0llWDM4QnVhKzl5Zlov?=
- =?utf-8?B?VG4rbi9ZNWJIYjBzWGNoVDlScEZmd3VCdFdUUHo0QkJxbUVZbHA4cEdiVVpv?=
- =?utf-8?B?bmJEWTNueGxWVGhBd0YzMXNEVEh0TTVzOUdUSnBFU0dvNkxoSStrSjZMZnlT?=
- =?utf-8?B?bTh0TjJnSy81NytZNUlvcUNHRituVUJoSGFEQmdOOTBzZFJpSTB1bDkyazNl?=
- =?utf-8?B?MzBvUjlFR0JUVFk1dmVNcTB1clY1bmtXRVR3RitnN0FDcHpzcWxrN0VDVTRt?=
- =?utf-8?B?RXpMNjFaTXZRTHFjMStYOEJYNXFUZVRkb2VQR0ZpNVV6eFE2K0UvbTA0WC9B?=
- =?utf-8?B?R25JMFZXQ090a1ozRUgraGE1N0RNRDR3Z2JLVGVKYklma2hpeHcrMWJSUFE5?=
- =?utf-8?B?RzN2MFRnbUhqYWFmQWhIOUlmenlUcmh1d0YvTVFtOE91SGJUbTVJVDd6Njlp?=
- =?utf-8?B?SS91eUZLclJXd2g1TEM0QWpQS0ZpQXlpZXJpNmNMaFQvamdaOThaKzk2eHYr?=
- =?utf-8?B?YVdGcW1wcUpXSUZYdjB1RHE3YjJIQzlRdlVMYkVXNnVTUnlmNlFLcGsyV1h4?=
- =?utf-8?B?dkVNQ0Vab2dqa0ptd2dBQjdscXdQODlTcHJ4UEN0eC92R3J5NmJsZGlRVzZr?=
- =?utf-8?B?cnBiTHFWL29DWFpId3NPd28wSlcwenc2OHhwWktVK3FhdFlaRC9CYi85NTNm?=
- =?utf-8?B?Z1ZjRjFrUDBYcVlSajd1WkdQQUJMWUdnZ3NPTWRYSmVMUDBUd2JtUW02Vm9P?=
- =?utf-8?B?K0xiTVM4a0EvNGZoT0tnYTNLS3hUYTY5ZkVEdnNjVzd6anNTN3BudUNoS0sx?=
- =?utf-8?B?cjFLaGxDRVJMelAzM25xYUtUcitFd3VlSmlWWFczQXlBNytCV0pRZUYzMVpi?=
- =?utf-8?B?MEJZS21yWjBUTXVwdlZkd2JCQTBzSFlLaDB0NlpRTUNFSU50RDFWQmFTOHcw?=
- =?utf-8?B?ZWE4VEhTbkE0LzdtLzBaQy9Ra0hGZHRkeTBFY1NxMUlJcjRWZld5SG56bUVl?=
- =?utf-8?B?QWsyVFVNd2t5L2lWRXlTZnY5aGdPejBiZSttNzA1K252Umk1UHlzRnFicjNs?=
- =?utf-8?B?VVF6TXRDRjFIcEVPWGphRk9QZzVpbFZwN3dmd1ByVEZoOTF4R3F0d3VVSy9a?=
- =?utf-8?B?MUFYVHQrcmpjYk5xM3BwbDZhUzR6cUVKVHFQWkxoSEsyTFZoSHhYL3BUZFFv?=
- =?utf-8?B?S0FRT1A0OTFDZURpa2Y2SktFRmZwWk5lcHpsRk5iRnlhTHpadm9JWFU2dGFB?=
- =?utf-8?B?NXFQMU5RNmRCcTBzdFF0RU5EVi93RG1oQ0d5YW9RamNUNHZBN1Q4Q1dCbHAw?=
- =?utf-8?B?SCtFRUtzQmpNOUNUYzQyMXdIWDZzeTdub0NoTEZQeThLZlJXL3d6aHd5ZXJC?=
- =?utf-8?B?cWVyTGpkS3dIRWRoYXpkTHJIck96eWNVS1JhTkpLN0R2U0tsUjlUTldkOGhI?=
- =?utf-8?B?YTBuUm1CT2dtRS9lOWJFSGdGQUgvbk4zQzB4VGtDN2VUdlkwdkJCVm9sL3d3?=
- =?utf-8?B?UUZXU3V4V0tubVB6ZmRVbkJCbUhxT2ZleEpXeHNabzBHSllKcWJ2QllWazRs?=
- =?utf-8?B?MXNaME5MbTBGK3RsamxmUnJmSy9BQzloYW5jRm1pb1B4K3lMRmFIek5FT2pq?=
- =?utf-8?B?Y3NVSlJtd3ZpR21TS1dxZXh4cTBqeEZNbE43d0p6ZFJFNmNrcWQ3cndPMGIw?=
- =?utf-8?Q?oy0P3UDnbl7YsBfLy21CfmHT+UglMCD1xd+d/emeEAj3y?=
-X-MS-Exchange-AntiSpam-MessageData-1: 3Ag+WYXvXpo9vw==
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5b516b10-9cfe-455c-87b0-08da29cc5c52
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Apr 2022 10:38:12.9232
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7V4PMn6nOXKJaMvMvkUfTlbFtAOXLVmjpNd2Nz/gw4pXFjOYcnA803UA2bxouMi2
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6029
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 29 Apr 2022 16:50:25 +0530
+Message-ID: <CA+G9fYveMF-NU-rvrsbaora2g2QWxrkF7AWViuDrJyN9mNScJg@mail.gmail.com>
+Subject: [next] mm: libhugetlbfs: WARNING: at mm/page_alloc.c:5368 __alloc_pages
+To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Arnd Bergmann <arnd@arndb.de>, Zi Yan <ziy@nvidia.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        David Hildenbrand <david@redhat.com>,
+        Eric Ren <renzhengeek@gmail.com>,
+        kernel test robot <lkp@intel.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Oscar Salvador <osalvador@suse.de>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Chen Wandun <chenwandun@huawei.com>, NeilBrown <neilb@suse.de>,
+        joao.m.martins@oracle.com, mawupeng1@huawei.com,
+        Wei Yang <richard.weiyang@gmail.com>,
+        Song Liu <song@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Am 29.04.22 um 03:13 schrieb Stephen Rothwell:
-> Hi all,
->
-> On Wed, 13 Apr 2022 10:10:14 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->> On Wed, 6 Apr 2022 10:34:05 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->>> Today's linux-next merge of the amdgpu tree got a conflict in:
->>>
->>>    drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c
->>>
->>> between commit:
->>>
->>>    fee2ede15542 ("drm/ttm: rework bulk move handling v5")
->>>
->>> from the drm-misc tree and commit:
->>>
->>>    184a69ca4d41 ("drm/amdgpu: separate VM PT handling into amdgpu_vm_pt.c")
->>>
->>> from the amdgpu tree.
->>>
->>> I fixed it up (I used this file from the latter and added the following
->>> patch) and can carry the fix as necessary. This is now fixed as far as
->>> linux-next is concerned, but any non trivial conflicts should be mentioned
->>> to your upstream maintainer when your tree is submitted for merging.
->>> You may also want to consider cooperating with the maintainer of the
->>> conflicting tree to minimise any particularly complex conflicts.
->>>
->>> From: Stephen Rothwell <sfr@canb.auug.org.au>
->>> Date: Wed, 6 Apr 2022 10:28:53 +1000
->>> Subject: [PATCH] fix up for "drm/ttm: rework bulk move handling v5"
->>>
->>> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
->>> ---
->>>   drivers/gpu/drm/amd/amdgpu/amdgpu_vm_pt.c | 9 +++++++--
->>>   1 file changed, 7 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_vm_pt.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_vm_pt.c
->>> index 958d7ed97882..a29933fa001f 100644
->>> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_vm_pt.c
->>> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_vm_pt.c
->>> @@ -630,7 +630,14 @@ static void amdgpu_vm_pt_free(struct amdgpu_vm_bo_base *entry)
->>>   
->>>   	if (!entry->bo)
->>>   		return;
->>> +
->>>   	shadow = amdgpu_bo_shadowed(entry->bo);
->>> +	if (shadow) {
->>> +		ttm_bo_set_bulk_move(&shadow->tbo, NULL);
->>> +		amdgpu_bo_unref(&shadow);
->>> +	}
->>> +
->>> +	ttm_bo_set_bulk_move(&entry->bo->tbo, NULL);
->>>   	entry->bo->vm_bo = NULL;
->>>   	list_del(&entry->vm_status);
->>>   	amdgpu_bo_unref(&shadow);
->>> @@ -653,8 +660,6 @@ static void amdgpu_vm_pt_free_dfs(struct amdgpu_device *adev,
->>>   	struct amdgpu_vm_pt_cursor cursor;
->>>   	struct amdgpu_vm_bo_base *entry;
->>>   
->>> -	vm->bulk_moveable = false;
->>> -
->>>   	for_each_amdgpu_vm_pt_dfs_safe(adev, vm, start, cursor, entry)
->>>   		amdgpu_vm_pt_free(entry);
->>>   
->>> -- 
->>> 2.35.1
->> This is now a conflict between the drm tree and the amdgpu tree.
-> I noticed that commit 184a69ca4d41 was merged into the drm tree but
-> only the second hunk of this merge fixup was applied.  So is the first
-> hunk above unnecessary?
+Following kernel warning notices on Linux next-20220427 till date next-20220429
+on qemu_arm64 and arm64 devices.
 
-Ah! Thanks a lot for noticing this.
+While testing libhugetlbfs test suite and ltp mm and hugetlb.
 
-And the hunk is absolutely necessary and we already have a bug report 
-that it is missing wondering why I can't reproduce this.
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Thanks,
-Christian.
+Test log:
+----------
+truncate_above_4GB (2M: 64): PASS
+brk_near_huge (2M: 64): brk_near_huge: malloc.c:2401: sysmalloc:
+Assertion `(old_top == initial_top (av) && old_size == 0) ||
+((unsigned long) (old_size) >= MINSIZE && prev_inuse (old_top) &&
+((unsigned long) old_end & (pagesize - 1)) == 0)' failed.
+[   15.685019] audit: type=1701 audit(1651222753.772:25):
+auid=4294967295 uid=0 gid=0 ses=4294967295 pid=454
+comm=\"brk_near_huge\"
+exe=\"/usr/lib/libhugetlbfs/tests/obj64/brk_near_huge\" sig=6 res=1
+[   15.685629] ------------[ cut here ]------------
+[   15.685631] WARNING: CPU: 2 PID: 454 at mm/page_alloc.c:5368
+__alloc_pages+0x624/0xd50
+[   15.688908] Modules linked in: rfkill crct10dif_ce fuse
+[   15.689714] CPU: 2 PID: 454 Comm: brk_near_huge Not tainted
+5.18.0-rc4-next-20220429 #1
+[   15.691218] Hardware name: linux,dummy-virt (DT)
+[   15.691716] pstate: 20400005 (nzCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[   15.693109] pc : __alloc_pages+0x624/0xd50
+[   15.693686] lr : alloc_pages+0xb8/0x170
+[   15.694358] sp : ffff800008813630
+[   15.694662] x29: ffff800008813630 x28: 000000000000000e x27: ffffbc6414591650
+[   15.695663] x26: ffff0000c089f800 x25: ffff800008813c58 x24: 000000000000000e
+[   15.697045] x23: 0000000000000dc0 x22: 0000000000000000 x21: 000000000000000e
+[   15.697866] x20: ffffbc64160189a0 x19: 0000000000040dc0 x18: ffffffffffffffff
+[   15.699028] x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
+[   15.700073] x14: 0000000000000000 x13: 0000000000000000 x12: ffff0000ff7f5b58
+[   15.701344] x11: 0000000000000068 x10: ffffbc6414f7d000 x9 : ffffbc6413530e78
+[   15.702773] x8 : fffffc000321c001 x7 : 00000000f0000000 x6 : 0000000000000001
+[   15.703659] x5 : 0000000000000000 x4 : ffff0000c1a930c0 x3 : 0000000000000000
+[   15.705314] x2 : 0000000000000000 x1 : 0000000000000001 x0 : 0000000000040dc0
+[   15.706179] Call trace:
+[   15.706712]  __alloc_pages+0x624/0xd50
+[   15.707231]  alloc_pages+0xb8/0x170
+[   15.707870]  kmalloc_order+0x40/0x100
+[   15.708482]  kmalloc_order_trace+0x38/0x130
+[   15.709246]  __kmalloc+0x37c/0x3e0
+[   15.709691]  __regset_get+0xa0/0x104
+[   15.710131]  regset_get_alloc+0x20/0x2c
+[   15.710524]  elf_core_dump+0x3a8/0xd10
+[   15.711065]  do_coredump+0xe50/0x138c
+[   15.711640]  get_signal+0x860/0x920
+[   15.712249]  do_notify_resume+0x184/0x1480
+[   15.712723]  el0_svc+0xa8/0xc0
+[   15.713052]  el0t_64_sync_handler+0xbc/0x140
+[   15.713741]  el0t_64_sync+0x18c/0x190
+[   15.714206] ---[ end trace 0000000000000000 ]---
+task-size-overrun (2M: 64): PASS
+
+metadata:
+  git_ref: master
+  git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+  git_sha: 5469f0c06732a077c70a759a81f2a1f00b277694
+  git_describe: next-20220429
+  kernel_version: 5.18.0-rc4
+  kernel-config: https://builds.tuxbuild.com/28SmyZKz6g9xF6bf4J2YibE8Lo0/config
+  kernel-config: https://builds.tuxbuild.com/28SmyZKz6g9xF6bf4J2YibE8Lo0/config
+  vmlinux : https://builds.tuxbuild.com/28SmyZKz6g9xF6bf4J2YibE8Lo0/vmlinux.xz
+  System.map : https://builds.tuxbuild.com/28SmyZKz6g9xF6bf4J2YibE8Lo0/System.map
+
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+--
+Linaro LKFT
+https://lkft.linaro.org

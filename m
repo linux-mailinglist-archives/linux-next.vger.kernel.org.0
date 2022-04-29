@@ -2,62 +2,68 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84638514DF8
-	for <lists+linux-next@lfdr.de>; Fri, 29 Apr 2022 16:46:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1397514F2D
+	for <lists+linux-next@lfdr.de>; Fri, 29 Apr 2022 17:21:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377785AbiD2Oth (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 29 Apr 2022 10:49:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39372 "EHLO
+        id S1378305AbiD2PYc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 29 Apr 2022 11:24:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377889AbiD2OtS (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 29 Apr 2022 10:49:18 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C1F68231B
-        for <linux-next@vger.kernel.org>; Fri, 29 Apr 2022 07:45:59 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id i38so14819788ybj.13
-        for <linux-next@vger.kernel.org>; Fri, 29 Apr 2022 07:45:59 -0700 (PDT)
+        with ESMTP id S1377870AbiD2PYb (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 29 Apr 2022 11:24:31 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 278E450B2E
+        for <linux-next@vger.kernel.org>; Fri, 29 Apr 2022 08:21:12 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id y76so15097943ybe.1
+        for <linux-next@vger.kernel.org>; Fri, 29 Apr 2022 08:21:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:from:date:message-id:subject:to:cc;
-        bh=f0pLuqeZXYz1sWaSkPXGqX7Ka9Gz3+f93gXtOcRk6zE=;
-        b=sg76t27J/gyCTdgIN57AbjYzistMTapWVkGILL67jpyduU/WbdWJXIc4VGLnSttIYn
-         hNGApEWtHCSwnxDURtP54N2ZLF60H9UgJq02rR82FSv1GK177WNDXPhjQGkfWKZsALnL
-         BmTKKyP0ssXeCKBfT55o9dekWFj17VSC7Z+fZvkO4rUIi/TQIE37u157A4RlwbL9o8BJ
-         8RPwQ9k21QlkIiL3BQAC/2XeJfKe5extkSGRU8EvUGSWXP+Mmq/r3ovudUR5WaUoUrnG
-         ulovb0ucLpqI44pMZrrDg9fhHVxXVA0NjBgZVUFZKNHAcZS/GzYvSiogD0SPCrTy2dLM
-         TkYQ==
+        bh=Y9ZcDqJuLqa5JXE44N2GTKKL7QLt6s4hAdWbOVk4GKA=;
+        b=Ui44ujrM/Zb0gG6w993gsGhOHJJo4hJpMy5YNqMlQ1UBxypMqUeZmQ0vQR7zv43aoq
+         ysDTzwPOaXcMJdAgaQ75aaFaKccNh9YzoWgUyuBazDKHo05B72uXLnf6GOuFGr+YjOhb
+         CqmBqnbFsKscTmFpZomlQtNTgyCMw6ijgNKi9RtxOdjwtTfEQZUtxW5GY0kFI7vmbPEd
+         iyQjLd93QR48gkJfiDsyihFfeFvPeCdY0ygAs4xaGmcwpoglEDViVmR2LTurXIY2q4cB
+         4yV5cGfoba+QxaXmO6t+ligH1pohAdpq21zsLB0z5rlHCgxpRDTt3W3Lre8Dxe82rSsU
+         +OFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=f0pLuqeZXYz1sWaSkPXGqX7Ka9Gz3+f93gXtOcRk6zE=;
-        b=h+CEaUSCbMsg6KplOF10FtM3/pCEJshnx3GPUgiXPatC/17Ffdp67a+0W+IHbERXZJ
-         yyJ9AzmWC4CBpjt4hdXOKd3OwGaU4hh7ZOEoFn0+PDhKkOKUVxceRQ7ksOs59jCMy8mV
-         h+r6ZobF0lPeted3lXkw4mGDUcZPx124fweSQgfW4OTTL0m7nlmVuPjl8KwxDmVhoUSx
-         auAkQxM2HWBHV4gCD1o3AZBeP3DlUqTnHfXKR+NYYT9x5xGG90Yy9BAvDkPFbCs8iEnr
-         oOksRQKcF2xhviA2o5C5tEVyv36E8Gj6SRZHyPweyeLEpT38tzsvvvNW/Zn0H8rK+X4q
-         X/tQ==
-X-Gm-Message-State: AOAM533rk4GyJsYzaPOUGY0qHVpUbcG9fU+6h+URu95g+7NAxzTMTqrR
-        R/XtXqgp/gzUyyX+PRJO5xK22aJ7gTim1O9t+DBLpb/iBh2xYg==
-X-Google-Smtp-Source: ABdhPJwebZPW8eNXr7R6EmFQmtAGmoO8i+DbeZ/yF9SoTg6ttJi1GAZwMgxz8AT0N8FkWFM0f6Rztj4uwwWpuIStN6k=
-X-Received: by 2002:a25:20d4:0:b0:645:d55b:f0df with SMTP id
- g203-20020a2520d4000000b00645d55bf0dfmr32821553ybg.537.1651243558063; Fri, 29
- Apr 2022 07:45:58 -0700 (PDT)
+        bh=Y9ZcDqJuLqa5JXE44N2GTKKL7QLt6s4hAdWbOVk4GKA=;
+        b=PLi7FNec3PvVATcxp6flV9v2WGq/DD+gu6hahxhSNGUlKhXijG1IJJtznwn/Kc8PoM
+         cXleozJGxNMcCi/f9x/FvkNiviLeWkQds9OFAAou4EC5oBKKj+aitkomjS2mJi9KLgFS
+         1DTmDqPiiQnFp1Guqj9JJhvqALv0PSdHMk+U6CHjXAfsu2aIQQjXrNLcjYTDfHGg91gW
+         JQjR+bGw/GB9l9UTCI+WIxCZ/KPap+MbdCz+6JHT1LRgQBUdrZGA8oHJJqqQBVcGdtXT
+         /HG1xqxjURN93azMy3pufI9kAes8eoST3FsJqsf6zUiJA36cgy9a+JefaRYPbwRrIPM3
+         QgeQ==
+X-Gm-Message-State: AOAM530Di4PfHCzenEVeDifigitOslmKUuyZbQMVvGP5BF5rOdkCpXYm
+        4I1ARarT7rAm+61nxQg1n2pIe5D/yBeOY28yPSAL+AfoJnLiqg==
+X-Google-Smtp-Source: ABdhPJwLCCaV2PcxMcgGMdB0/M2/IvKlelR9da+uyTInErh3cDr6csPbgJ1kHhRHPIcQAkVXAy/BgNTq4VYaz6VK/f4=
+X-Received: by 2002:a25:9909:0:b0:624:57e:d919 with SMTP id
+ z9-20020a259909000000b00624057ed919mr36075867ybn.494.1651245670446; Fri, 29
+ Apr 2022 08:21:10 -0700 (PDT)
 MIME-Version: 1.0
 From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 29 Apr 2022 20:15:47 +0530
-Message-ID: <CA+G9fYvSqtsOMEiL7_kffPKnnO-Snhe2cup6g3qRngiwRO+RfA@mail.gmail.com>
-Subject: [next] powerpc: multiple definition of `____cacheline_aligned';
- sound/core/oss/pcm_oss.o:(.bss+0x40): first defined here
+Date:   Fri, 29 Apr 2022 20:50:59 +0530
+Message-ID: <CA+G9fYu2kS0wR4WqMRsj2rePKV9XLgOU1PiXnMvpT+Z=c2ucHA@mail.gmail.com>
+Subject: [next] i386: kunit: ASSERTION FAILED at mm/kfence/kfence_test.c:547
 To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
         open list <linux-kernel@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        lkft-triage@lists.linaro.org
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        aul Mackerras <paulus@samba.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Baoquan He <bhe@redhat.com>, Christoph Hellwig <hch@lst.de>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
+        lkft-triage@lists.linaro.org, linux-mm <linux-mm@kvack.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Evgenii Stepanov <eugenis@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Will Deacon <will@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -69,74 +75,94 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Following powerpc builds failed on Linux next-20220428 and next-20220429.
+Following kernel regressions have been noticed on Linux next-20220426
+(till date) on qemu_i386. This is a special build with KFENCE and KUNIT enabled
+but not KASAN on i386.
 
-Regressions found on powerpc:
-   - gcc-11-ppc64e_defconfig
-   - gcc-10-ppc64e_defconfig
-   - gcc-9-ppc64e_defconfig
-   - gcc-8-ppc64e_defconfig
-   - clang-14-ppc64e_defconfig
-   - clang-nightly-ppc64e_defconfig
-   - clang-13-ppc64e_defconfig
-
-
-Build error:
--------------
-Error: Section .bss not empty in prom_init.c
-make[3]: *** [arch/powerpc/kernel/Makefile:191:
-arch/powerpc/kernel/prom_init_check] Error 1
-make[3]: Target '__build' not remade because of errors.
-make[2]: *** [scripts/Makefile.build:595: arch/powerpc/kernel] Error 2
-make[2]: Target '__build' not remade because of errors.
-make[1]: *** [Makefile:1996: arch/powerpc] Error 2
-powerpc64le-linux-gnu-ld: sound/core/oss/pcm_plugin.o:(.bss+0x0):
-multiple definition of `____cacheline_aligned';
-sound/core/oss/pcm_oss.o:(.bss+0x40): first defined here
-make[4]: *** [scripts/Makefile.build:530: sound/core/oss/snd-pcm-oss.o] Error 1
-make[4]: Target '__build' not remade because of errors.
-make[3]: *** [scripts/Makefile.build:595: sound/core/oss] Error 2
-powerpc64le-linux-gnu-ld: sound/core/seq/seq_clientmgr.o:(.bss+0x900):
-multiple definition of `____cacheline_aligned';
-sound/core/seq/seq_lock.o:(.bss+0x0): first defined here
-powerpc64le-linux-gnu-ld: sound/core/seq/seq_memory.o:(.bss+0x0):
-multiple definition of `____cacheline_aligned';
-sound/core/seq/seq_lock.o:(.bss+0x0): first defined here
-powerpc64le-linux-gnu-ld: sound/core/seq/seq_queue.o:(.bss+0x140):
-multiple definition of `____cacheline_aligned';
-sound/core/seq/seq_lock.o:(.bss+0x0): first defined here
-powerpc64le-linux-gnu-ld: sound/core/seq/seq_fifo.o:(.bss+0x0):
-multiple definition of `____cacheline_aligned';
-sound/core/seq/seq_lock.o:(.bss+0x0): first defined here
-powerpc64le-linux-gnu-ld: sound/core/seq/seq_timer.o:(.bss+0x0):
-multiple definition of `____cacheline_aligned';
-sound/core/seq/seq_lock.o:(.bss+0x0): first defined here
-powerpc64le-linux-gnu-ld: sound/core/seq/seq_system.o:(.bss+0x0):
-multiple definition of `____cacheline_aligned';
-sound/core/seq/seq_lock.o:(.bss+0x0): first defined here
-powerpc64le-linux-gnu-ld: sound/core/seq/seq_ports.o:(.bss+0x0):
-multiple definition of `____cacheline_aligned';
-sound/core/seq/seq_lock.o:(.bss+0x0): first defined here
-powerpc64le-linux-gnu-ld: sound/core/seq/seq_info.o:(.bss+0x40):
-multiple definition of `____cacheline_aligned';
-sound/core/seq/seq_lock.o:(.bss+0x0): first defined here
-make[4]: *** [scripts/Makefile.build:530: sound/core/seq/snd-seq.o] Error 1
-make[4]: Target '__build' not remade because of errors.
-
+snippet of Kconfigs from the build:
+    CONFIG_CC_HAS_KASAN_GENERIC=y
+    CONFIG_KFENCE=y
+    CONFIG_KFENCE_KUNIT_TEST=y
+    CONFIG_KUNIT=y
+    CONFIG_KUNIT_DEBUGFS=y
+    CONFIG_KUNIT_TEST=y
+    CONFIG_KUNIT_EXAMPLE_TEST=y
+    CONFIG_KUNIT_ALL_TESTS=y
 
 Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
+Regressions found on qemu_i386;:
 
-steps to reproduce:
--------------------
-# To install tuxmake on your system globally:
-# sudo pip3 install -U tuxmake
+   - kunit/test_free_bulk
+   - kunit/test_memcache_typesafe_by_rcu
+   - kunit/test_out_of_bounds_read-memcache
+   - kunit/test_invalid_access
+   - kunit/test_krealloc
+   - kunit/test_invalid_addr_free
+   - kunit/test_gfpzero
+   - kunit/test_kmalloc_aligned_oob_write
+   - kunit/kfence
+   - kunit/test_out_of_bounds_read
+   - kunit/test_out_of_bounds_write
+   - kunit/test_invalid_addr_free-memcache
+   - kunit/test_double_free
+   - kunit/test_corruption-memcache
+   - kunit/test_use_after_free_read-memcache
+   - kunit/test_corruption
+   - kunit/test_use_after_free_read
+   - kunit/test_shrink_memcache
+   - kunit/test_double_free-memcache
+   - kunit/test_out_of_bounds_write-memcache
+   - kunit/test_kmalloc_aligned_oob_read
 
-tuxmake --runtime podman --target-arch powerpc --toolchain gcc-11
---kconfig ppc64e_defconfig
+
+full test log link [1]
+
+snippet of test log:
+[    4.168302]     # test_free_bulk: test_alloc: size=271, gfp=cc0,
+policy=right, cache=0
+[    4.271599]     # test_free_bulk: test_alloc: size=271, gfp=cc0,
+policy=none, cache=0
+[    4.271611]     # test_free_bulk: test_alloc: size=271, gfp=cc0,
+policy=left, cache=0
+[    4.687568]     # test_free_bulk: test_alloc: size=271, gfp=cc0,
+policy=none, cache=0
+[    4.687581]     # test_free_bulk: test_alloc: size=271, gfp=cc0,
+policy=none, cache=0
+[    4.687616]     # test_free_bulk: ASSERTION FAILED at
+mm/kfence/kfence_test.c:547
+[    4.687616]     Expected report_available() to be false, but is true
+[    4.687789]     not ok 13 - test_free_bulk
+...
+[   33.294007]     # test_memcache_typesafe_by_rcu: EXPECTATION FAILED
+at mm/kfence/kfence_test.c:687
+[   33.294007]     Expected report_matches(&expect) to be true, but is false
+[   33.294182]     not ok 23 - test_memcache_typesafe_by_rcu
+[   33.294183] kunit_try_catch (209) used greatest stack depth: 5840 bytes left
+[   33.294619]     # test_krealloc: test_alloc: size=32, gfp=cc0,
+policy=any, cache=0
+[   33.391637]     # test_krealloc: ASSERTION FAILED at
+mm/kfence/kfence_test.c:724
+[   33.391637]     Expected report_available() to be false, but is true
+[   33.391658]     not ok 24 - test_krealloc
+[   33.391902]     # test_memcache_alloc_bulk: setup_test_cache:
+size=32, ctor=0x0
+[   33.495801]     ok 25 - test_memcache_alloc_bulk
+[   33.495808] # kfence: pass:3 fail:20 skip:2 total:25
+[   33.495817] # Totals: pass:3 fail:20 skip:2 total:25
+[   33.495833] not ok 1 - kfence
+
+
+metadata:
+  git_ref: master
+  git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+  git_sha: 088fb7eff3496e0f61fdf68bda89b81a4d0a4434
+  git_describe: next-20220426
+  kernel-config: https://builds.tuxbuild.com/28KafYBlDWOxI3qyNmGDwb63GuX/config
 
 --
 Linaro LKFT
 https://lkft.linaro.org
 
-[1] https://builds.tuxbuild.com/28Sn15hB2la1PweieGMLrUdbFMQ/
+[1] https://lkft.validation.linaro.org/scheduler/job/4950383#L770
+[2] https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220426/testrun/9235043/suite/kunit/test/test_use_after_free_read/log

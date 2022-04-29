@@ -2,74 +2,51 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C14F513A76
-	for <lists+linux-next@lfdr.de>; Thu, 28 Apr 2022 18:56:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72536513FEB
+	for <lists+linux-next@lfdr.de>; Fri, 29 Apr 2022 03:03:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236452AbiD1RAC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 28 Apr 2022 13:00:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39596 "EHLO
+        id S1353640AbiD2BGz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 28 Apr 2022 21:06:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236416AbiD1RAA (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 28 Apr 2022 13:00:00 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94E41B6D27
-        for <linux-next@vger.kernel.org>; Thu, 28 Apr 2022 09:56:45 -0700 (PDT)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23SGnvuC019612;
-        Thu, 28 Apr 2022 16:56:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : content-type :
- content-transfer-encoding : mime-version : subject : message-id : date :
- cc : to; s=pp1; bh=09Qldj27/moUuxYCBxURGTZMO6alaJEEoIU1xpyCJJ8=;
- b=ABmokKLTBztD4RGWizpFWCEO4/D538eAFAldNx5HlEp4+udH/Aak66FfR0fBd3FBlcuO
- W9FES5DQmG8Qi1j+6qb+kKdXiFQf4C2QdjlYOw1tawtvLYqH3RhIfSZn4a2acu2zHCCp
- RRAeriM89tSyG+v4vBiFrI8V2tKX+gPl10bNAt3ka06jRmFHRJdMSMyXyEo6qhDRW9io
- gq84pIqANNcN60hzKE299nOE6MjKn6dNKLOTRjkz6di8m/0ARk+u8yXEXiggMe27Dv9r
- JRHXygY0JKICp/V0Ky1T5pii1cF7MvtvMv6htzmpbyRK9DGaN/qLQ/bjxgHfrjfAklTY 8g== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqxsvr3nx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 28 Apr 2022 16:56:39 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23SGqie8005448;
-        Thu, 28 Apr 2022 16:56:38 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma03ams.nl.ibm.com with ESMTP id 3fm938ytyd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 28 Apr 2022 16:56:37 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23SGuZJa29294874
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 28 Apr 2022 16:56:35 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B62BB52054;
-        Thu, 28 Apr 2022 16:56:35 +0000 (GMT)
-Received: from smtpclient.apple (unknown [9.43.29.180])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id DC98C52050;
-        Thu, 28 Apr 2022 16:56:34 +0000 (GMT)
-From:   Sachin Sant <sachinp@linux.ibm.com>
-Content-Type: text/plain;
-        charset=us-ascii
-Content-Transfer-Encoding: quoted-printable
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
-Subject: [powerpc] kernel BUG at mm/mmap.c:3164! w/ltp(mmapstress03)
-Message-Id: <B5C26080-14D5-4B16-ABDA-FCB040E7503A@linux.ibm.com>
-Date:   Thu, 28 Apr 2022 22:26:33 +0530
-Cc:     linuxppc-dev@lists.ozlabs.org
-To:     linux-next@vger.kernel.org, linux-mm@kvack.org
-X-Mailer: Apple Mail (2.3696.80.82.1.1)
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: rg49UFS1o8o4O2KWXNwhWh-KE6nk9vvM
-X-Proofpoint-ORIG-GUID: rg49UFS1o8o4O2KWXNwhWh-KE6nk9vvM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-28_02,2022-04-28_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 impostorscore=0
- adultscore=0 spamscore=0 mlxlogscore=999 bulkscore=0 lowpriorityscore=0
- mlxscore=0 priorityscore=1501 phishscore=0 suspectscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2204280099
+        with ESMTP id S1353637AbiD2BGy (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 28 Apr 2022 21:06:54 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40809BC847;
+        Thu, 28 Apr 2022 18:03:37 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KqDkp6DzMz4xLb;
+        Fri, 29 Apr 2022 11:03:30 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1651194212;
+        bh=xo1K2yhVNcgqOXprCRsSenw+oPXTxS/DnUeEiRmb6Rw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=i5aBr1flOKZzH+G5Q1/erhaYZaSb2KKccduJM5dJAkP00PFpPC5w3C684D3tduHOS
+         zmp5E8A4KAXZRqPonwiTtH63EU25+FZ34V1voTHJt0tY+bweUnY7JYT5NYL4iZAtqD
+         l95MA/dJJF74Q5TVFjXkYhVJ64LwUSe6jm1vWu8cZa6ZvEWDon7wihT6e1dNT+jQaQ
+         hxKKfoWeG1jMVTus8CeWl/2nUEAvvI5AgcAv8quyCvXOs1WbVv7lmUYx+27NF/kqNr
+         T8SgklxIDxssBG+Ym5EkGeB5tDf0k1xSmtWPIajP9QBt/8G542kVhS7M9WqwYJBAdb
+         CPNvccwanrFNQ==
+Date:   Fri, 29 Apr 2022 11:03:29 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>,
+        Dave Airlie <airlied@linux.ie>
+Cc:     DRI <dri-devel@lists.freedesktop.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Philip Yang <Philip.Yang@amd.com>
+Subject: linux-next: manual merge of the amdgpu tree with the drm tree
+Message-ID: <20220429110329.79f6b628@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/_ZRu82WkLRPVC.nC+GhUmxt";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,113 +54,86 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-While running LTP tests (mmapstress03 specifically) against =
-5.18.0-rc4-next-20220428
-booted on IBM Power server mentioned BUG is encountered.
+--Sig_/_ZRu82WkLRPVC.nC+GhUmxt
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-# ./mmapstress03
-mmapstress03    0  TINFO  :  uname.machine=3Dppc64le kernel is 64bit
-mmapstress03: errno =3D 12: failed to fiddle with brk at the end
-mmapstress03    1  TFAIL  :  mmapstress03.c:212: Test failed
-[   32.396145] mmap: mmapstress03 (3023): VmData 18446744073706799104 =
-exceed data ulimit 18446744073709551615. Update limits or use boot =
-option ignore_rlimit_data.
-[   32.396192] ------------[ cut here ]------------
-[   32.396193] kernel BUG at mm/mmap.c:3164!
-[   32.396195] Oops: Exception in kernel mode, sig: 5 [#1]
-[   32.396210] LE PAGE_SIZE=3D64K MMU=3DRadix SMP NR_CPUS=3D2048 NUMA =
-pSeries
-[   32.396213] Modules linked in: dm_mod mptcp_diag xsk_diag tcp_diag =
-udp_diag raw_diag inet_diag unix_diag af_packet_diag netlink_diag =
-nft_fib_inet nft_fib_ipv4 nft_fib_ipv6 nft_fib nft_reject_inet =
-nf_reject_ipv4 nf_reject_ipv6 nft_reject nft_ct nft_chain_nat nf_nat =
-nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 rfkill ip_set bonding tls =
-nf_tables nfnetlink sunrpc binfmt_misc pseries_rng drm =
-drm_panel_orientation_quirks xfs libcrc32c sd_mod t10_pi sr_mod =
-crc64_rocksoft_generic cdrom crc64_rocksoft crc64 sg ibmvscsi =
-scsi_transport_srp ibmveth xts vmx_crypto fuse
-[   32.396262] CPU: 5 PID: 3023 Comm: mmapstress03 Not tainted =
-5.18.0-rc4-next-20220428 #16
-[   32.396267] NIP:  c0000000004c4750 LR: c0000000004c4730 CTR: =
-c0000000004bf5d0
-[   32.396270] REGS: c00000001abeb810 TRAP: 0700   Not tainted  =
-(5.18.0-rc4-next-20220428)
-[   32.396274] MSR:  8000000000029033 <SF,EE,ME,IR,DR,RI,LE>  CR: =
-22002224  XER: 00000000
-[   32.396283] CFAR: c0000000008af740 IRQMASK: 0=20
-[   32.396283] GPR00: c0000000004c4730 c00000001abebab0 c000000002a71300 =
-0000000000000000=20
-[   32.396283] GPR04: c000000079dcd000 ffffffffffffffff 0000000000000008 =
-ffffffffffffffff=20
-[   32.396283] GPR08: 0000000000000008 0000000000000001 0000000000000000 =
-c000000079dcd040=20
-[   32.396283] GPR12: c000000079dcd008 c00000087fffa300 0000000000000000 =
-0000000000000000=20
-[   32.396283] GPR16: 0000000000000000 0000000000000000 0000000000000000 =
-0000000000000000=20
-[   32.396283] GPR20: 0000000000000000 0000000000000000 0000000000000000 =
-c000000002aaae85=20
-[   32.396283] GPR24: 0000000000000000 0000000000000000 00007fffaa5c1200 =
-c000000020de3660=20
-[   32.396283] GPR28: 000000000000000c c000000020de3600 000000000000000d =
-0000000000000000=20
-[   32.396320] NIP [c0000000004c4750] exit_mmap+0x190/0x390
-[   32.396327] LR [c0000000004c4730] exit_mmap+0x170/0x390
-[   32.396332] Call Trace:
-[   32.396334] [c00000001abebab0] [c0000000004c4730] =
-exit_mmap+0x170/0x390 (unreliable)
-[   32.396340] [c00000001abebbd0] [c0000000001700f4] __mmput+0x54/0x200
-[   32.396344] [c00000001abebc10] [c00000000017fe5c] exit_mm+0xfc/0x190
-[   32.396348] [c00000001abebc50] [c00000000018016c] do_exit+0x27c/0x5a0
-[   32.396352] [c00000001abebcf0] [c00000000018063c] =
-do_group_exit+0x4c/0xd0
-[   32.396356] [c00000001abebd30] [c0000000001806e4] =
-sys_exit_group+0x24/0x30
-[   32.396360] [c00000001abebd50] [c000000000037084] =
-system_call_exception+0x254/0x550
-[   32.396364] [c00000001abebe10] [c00000000000bfe8] =
-system_call_vectored_common+0xe8/0x278
-[   32.396369] --- interrupt: 3000 at 0x7fffaa318d04
-[   32.396374] NIP:  00007fffaa318d04 LR: 0000000000000000 CTR: =
-0000000000000000
-[   32.396377] REGS: c00000001abebe80 TRAP: 3000   Not tainted  =
-(5.18.0-rc4-next-20220428)
-[   32.396380] MSR:  800000000280f033 =
-<SF,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE>  CR: 42002222  XER: 00000000
-[   32.396389] IRQMASK: 0=20
-[   32.396389] GPR00: 00000000000000ea 00007fffe43f3420 00007fffaa457100 =
-0000000000000001=20
-[   32.396389] GPR04: 0000000000000000 0000000011a602a0 00007fffaa5c1200 =
-0000000000000000=20
-[   32.396389] GPR08: 0000000000000000 0000000000000000 0000000000000000 =
-0000000000000000=20
-[   32.396389] GPR12: 0000000000000000 00007fffaa5ca500 0000000000000000 =
-0000000000000000=20
-[   32.396389] GPR16: 0000000000000000 0000000000000000 0000000000000000 =
-0000000000000000=20
-[   32.396389] GPR20: 0000000000000000 0000000000000000 0000000000000000 =
-0000000000000001=20
-[   32.396389] GPR24: 00007fffaa450938 0000000000000000 0000000000000001 =
-00007fffaa4529f8=20
-[   32.396389] GPR28: 0000000000000001 00007fffaa5c3510 fffffffffffff000 =
-0000000000000001=20
-[   32.396425] NIP [00007fffaa318d04] 0x7fffaa318d04
-[   32.396427] LR [0000000000000000] 0x0
-[   32.396429] --- interrupt: 3000
-[   32.396431] Instruction dump:
-[   32.396433] 60000000 3880ffff 38610020 483eff5d 60000000 7c7f1b79 =
-4082ffb8 813d0058=20
-[   32.396439] 7d29f278 7d290034 5529d97e 69290001 <0b090000> 60000000 =
-7fa3eb78 483e328d=20
-[   32.396447] ---[ end trace 0000000000000000 ]---
-[   32.398759]=20
-[   33.398760] Kernel panic - not syncing: Fatal exception
+Hi all,
 
-This problem was introduced with 5.18.0-rc4-next-20220427. I am unable =
-to
-complete the git bisect due to build failure related to =
-mapletree-vs-khugepaged
-issue.
+Today's linux-next merge of the amdgpu tree got a conflict in:
 
-Thanks
--Sachin=
+  drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
+
+between commit:
+
+  047a1b877ed4 ("dma-buf & drm/amdgpu: remove dma_resv workaround")
+
+from the drm tree and commit:
+
+  3da2c38231a4 ("drm/amdgpu: Free user pages if amdgpu_cs_parser_bos failed=
+")
+
+from the amdgpu tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
+index 01853431249d,67bd506fa141..000000000000
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
+@@@ -636,9 -642,26 +636,21 @@@ static int amdgpu_cs_parser_bos(struct=20
+  	}
+ =20
+  error_validate:
+ -	if (r) {
+ -		amdgpu_bo_list_for_each_entry(e, p->bo_list) {
+ -			dma_fence_chain_free(e->chain);
+ -			e->chain =3D NULL;
+ -		}
+ +	if (r)
+  		ttm_eu_backoff_reservation(&p->ticket, &p->validated);
+- out:
+ -	}
++=20
++ out_free_user_pages:
++ 	if (r) {
++ 		amdgpu_bo_list_for_each_userptr_entry(e, p->bo_list) {
++ 			struct amdgpu_bo *bo =3D ttm_to_amdgpu_bo(e->tv.bo);
++=20
++ 			if (!e->user_pages)
++ 				continue;
++ 			amdgpu_ttm_tt_get_user_pages_done(bo->tbo.ttm);
++ 			kvfree(e->user_pages);
++ 			e->user_pages =3D NULL;
++ 		}
++ 	}
+  	return r;
+  }
+ =20
+
+--Sig_/_ZRu82WkLRPVC.nC+GhUmxt
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJrOWEACgkQAVBC80lX
+0GyGKAf/ehT5fosMx9Vc4L1ZZG/fp3A3g1odV2zqD7lEc9m4qTzdzYK6klwEr3qa
+qljZB5lzWiFHcqELkbYLrIAreffkoVamMTyilcsZSYDynFmh06TQx5qCxkYobffQ
+Vjvl6Pqn4CqAjOJ7s9SlgR4cm5Bqv/PrgudjQLJFyTwxTsLt+Cc2I0h7ax1QxQvq
+a/0gLli9LgcFyTth5PfhvzSkN4irJHubZBQAcQ1qgla0St1el0qfHcUPxP1VxTTC
+mSag4rMy/Vji4ZFxGfVBn6OfQtghu7ev7T3oBD6DS1sAjupiVHh0/XDRhILKvI3m
+5KaSAH4XKKi1YLadEePyc1H6ycFa5Q==
+=+m8V
+-----END PGP SIGNATURE-----
+
+--Sig_/_ZRu82WkLRPVC.nC+GhUmxt--

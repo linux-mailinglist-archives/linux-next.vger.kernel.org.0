@@ -2,63 +2,63 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85379514089
-	for <lists+linux-next@lfdr.de>; Fri, 29 Apr 2022 04:15:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 588B7514119
+	for <lists+linux-next@lfdr.de>; Fri, 29 Apr 2022 05:48:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237621AbiD2CSl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 28 Apr 2022 22:18:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48242 "EHLO
+        id S235017AbiD2DNr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 28 Apr 2022 23:13:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235150AbiD2CSk (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 28 Apr 2022 22:18:40 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E7ABFC
-        for <linux-next@vger.kernel.org>; Thu, 28 Apr 2022 19:15:21 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id bg9so5436015pgb.9
-        for <linux-next@vger.kernel.org>; Thu, 28 Apr 2022 19:15:20 -0700 (PDT)
+        with ESMTP id S235305AbiD2DNq (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 28 Apr 2022 23:13:46 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AFB1165B1
+        for <linux-next@vger.kernel.org>; Thu, 28 Apr 2022 20:10:28 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id cu23-20020a17090afa9700b001d98d8e53b7so7187426pjb.0
+        for <linux-next@vger.kernel.org>; Thu, 28 Apr 2022 20:10:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernelci-org.20210112.gappssmtp.com; s=20210112;
         h=message-id:date:mime-version:content-transfer-encoding:subject:to
          :from;
-        bh=so2RCyqtBrkpv8HqRHcrGDtDerjGAD5qGeGnUsOD40U=;
-        b=2dcFqjOKtIz800LshpzbQHmmJf7b4k+tI5qJUHbTKv5cN6pWzj1z2vS7DnRh1H83Ak
-         dtBqObgwxGiiLeWNagYGM6A6LzuxnOKwH6gVh2XfQAukZT6luIUuZQVy2MB+EHCSVUn3
-         JQlOXQ1t8fZhYDUhiSNWMzCaxvuGD5c+Tm/mVYiLjIoS9I3YpIGqotHaiQSctUGayzpa
-         GI/UWjUzIFFJy+RhLkMbARFCFg3Tq4ei9RhlTPj+prFbrer39Qg2AqT/D8x7SckGTHWg
-         aZZ2NL207XX4ZqFzBQvLZcFFHVfLoZHgJlg/jnqJoGFL6OJpGw4QmpaHsXUu9ar+Wg7b
-         uAxQ==
+        bh=pBV/r6eZNIX6NXEeW6odpWsDUb7lkqy5Vo3jiXcYBps=;
+        b=r1wK0F4XT1ZhypDtgj+PSi4AuUA7F5Q4s0OxXBYA8vPD914VQ79b8Gd0pgd4FKpXb+
+         tdr4GJkAzDd3q0lHUJqbRVQsm7uhWKANhxakS8gk+dkL1v46/vaG7qcETLmrmlHAveQs
+         7hxiq6oCDsFtmE0frr2wdUZfmWvRCWDCN7pxxao8JlSlamFwwFmNIpg+XxlBSAPo+ZrS
+         hMrlXKE4dMZR0DK5kcTjyOHQyGpb05+POl8M8pknpdjJy4rZkg9nMmUgS2PhOVFYmv7X
+         KymUMqvSoyiFZd/6tLZx7EWyfDPZjAzIreX0IIZvdCchipqwvSmoH5QenRR1a6wW1mtr
+         tdJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version
          :content-transfer-encoding:subject:to:from;
-        bh=so2RCyqtBrkpv8HqRHcrGDtDerjGAD5qGeGnUsOD40U=;
-        b=tgzBgFfeNHosWf5FtxXD/Wx2mFiYYbBaR4hYHMVnsqjTP0HcAs1jVhLwow+oIq3+kh
-         wOKgcJoPC9EprWaf/5Itn435/w6Bn28xWmGZXzIJbEmmqyw3wXh0mPGpkExMgI1t373d
-         hb+igTjII2TlXDCLbgq5QpXTWPn8psBRWAbnXdEDpAkbiDrHNafRVCXA4znctNJAyHn6
-         c3i6UyMtCJG33gZyAcNuNzFIJ2LcdSXswYh+uPP25dAUJUq39T91Uo0qQQNpFG2RTxm/
-         WV0L0gWV/DRNU4hrkZU53GHc5LstGYIlNCDRCD2bC6ASfbBgUqCWwVRNdGZIjbmqlMLs
-         7qVA==
-X-Gm-Message-State: AOAM5314ODBJH+Y1UcQJBHABZC7GaTZWbe4bWP7+SAXOSLrCfaHL3ndC
-        YGSnZ1AR7zqnU+TOHcrlBZwQ33cXPwcnV/ufZCc=
-X-Google-Smtp-Source: ABdhPJwrBPuPgqex2X0Zna1Ny0C4rM5bNyqWoHViU/Khk4FKhDzwVXecUAiuoMihPxXsdHZkIa8kQA==
-X-Received: by 2002:a05:6a00:140b:b0:4e1:2cbd:30ba with SMTP id l11-20020a056a00140b00b004e12cbd30bamr38066578pfu.46.1651198519214;
-        Thu, 28 Apr 2022 19:15:19 -0700 (PDT)
+        bh=pBV/r6eZNIX6NXEeW6odpWsDUb7lkqy5Vo3jiXcYBps=;
+        b=lTFL+3dfViiFLDlLUnDoKOOUdNKtp8YtBUJh0c84J/KIDM7mBRAzWHiYXrgv3nUZ30
+         EzLTUj9NIuW/nSAt5LVHEE1ZGCUm8SRMdq5X30sNjJrXzsjyBaR42gTh76eJydcYQt/i
+         kbT8sABy3iliPhGALFtViDJVYJrkd0A+la+T9M3tlgDl72+UcglH7gvWC+7p5zJyPQRf
+         BsrXF/UiZxq0iKHtzBbjFwfvII3ZoFSkPAyhnNfDxrF57pjnupObyFc1jO5Gii7S7QJK
+         WVmLrKeeXhgG0tBOM9Ph1RCqtP1EmBH2Pah/j8Gp1dTBveQWK3CFRUDstWELFsmIgNBE
+         ND4w==
+X-Gm-Message-State: AOAM531AR/EDv1PH2KBUeTVKJus5RGHJinelIbor4YfVmzAaURDp1V65
+        rONrTWJfcLWqskzTL8L16KGpMyWIDkZ84uGYTFg=
+X-Google-Smtp-Source: ABdhPJzQ/Wlzag9nwEbXLtpvtAMeC2ezBfVlOwBIJ06YtdT6W+hK+W+0dX4xnGm4TdgD0qrQdpGhcA==
+X-Received: by 2002:a17:90b:4f81:b0:1db:d37d:7636 with SMTP id qe1-20020a17090b4f8100b001dbd37d7636mr1617546pjb.194.1651201826744;
+        Thu, 28 Apr 2022 20:10:26 -0700 (PDT)
 Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id k1-20020a63ff01000000b003c14af505f5sm3855373pgi.13.2022.04.28.19.15.18
+        by smtp.gmail.com with ESMTPSA id g12-20020a62f94c000000b0050b7a347e4csm1196150pfm.96.2022.04.28.20.10.26
         for <linux-next@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Apr 2022 19:15:18 -0700 (PDT)
-Message-ID: <626b4a36.1c69fb81.6ac97.a59b@mx.google.com>
-Date:   Thu, 28 Apr 2022 19:15:18 -0700 (PDT)
+        Thu, 28 Apr 2022 20:10:26 -0700 (PDT)
+Message-ID: <626b5722.1c69fb81.2560f.4540@mx.google.com>
+Date:   Thu, 28 Apr 2022 20:10:26 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: next-20220428
+X-Kernelci-Kernel: v5.18-rc4-406-gd941dcb423c7
 X-Kernelci-Report-Type: build
 X-Kernelci-Tree: next
-X-Kernelci-Branch: master
-Subject: next/master build: 207 builds: 10 failed, 197 passed, 27 errors,
- 80 warnings (next-20220428)
+X-Kernelci-Branch: pending-fixes
+Subject: next/pending-fixes build: 200 builds: 2 failed, 198 passed, 6 errors,
+ 6 warnings (v5.18-rc4-406-gd941dcb423c7)
 To:     linux-next@vger.kernel.org
 From:   "kernelci.org bot" <bot@kernelci.org>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -70,108 +70,57 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master build: 207 builds: 10 failed, 197 passed, 27 errors, 80 warning=
-s (next-20220428)
+next/pending-fixes build: 200 builds: 2 failed, 198 passed, 6 errors, 6 war=
+nings (v5.18-rc4-406-gd941dcb423c7)
 
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20220428/
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v5.18-rc4-406-gd941dcb423c7/
 
 Tree: next
-Branch: master
-Git Describe: next-20220428
-Git Commit: bdc61aad77faf67187525028f1f355eff3849f22
+Branch: pending-fixes
+Git Describe: v5.18-rc4-406-gd941dcb423c7
+Git Commit: d941dcb423c78651680d5bf9b11725b0b1523f14
 Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
 Built: 7 unique architectures
 
 Build Failures Detected:
 
-arm64:
-    allmodconfig: (clang-14) FAIL
-
 arm:
-    allmodconfig: (clang-14) FAIL
-    allmodconfig: (gcc-10) FAIL
-    imote2_defconfig: (gcc-10) FAIL
     rpc_defconfig: (gcc-10) FAIL
-    spear3xx_defconfig: (gcc-10) FAIL
-
-i386:
-    allmodconfig: (clang-14) FAIL
-    i386_defconfig+kselftest: (gcc-10) FAIL
 
 mips:
     decstation_64_defconfig: (gcc-10) FAIL
 
-x86_64:
-    allmodconfig: (clang-14) FAIL
-
 Errors and Warnings Detected:
 
 arc:
-    haps_hs_smp_defconfig+kselftest (gcc-10): 4 warnings
 
 arm64:
-    allmodconfig (clang-14): 2 errors
 
 arm:
-    allmodconfig (gcc-10): 4 errors, 1 warning
-    allmodconfig (clang-14): 1 error, 13 warnings
-    aspeed_g5_defconfig (clang-14): 10 warnings
-    gemini_defconfig (gcc-10): 1 warning
-    keystone_defconfig (gcc-10): 1 warning
-    multi_v5_defconfig (clang-14): 2 warnings
-    multi_v7_defconfig (clang-14): 12 warnings
-    multi_v7_defconfig+kselftest (gcc-10): 4 warnings
     rpc_defconfig (gcc-10): 2 errors
-    spear3xx_defconfig (gcc-10): 8 errors
 
 i386:
-    allmodconfig (clang-14): 1 error
-    allnoconfig (clang-14): 2 warnings
-    i386_defconfig+kselftest (gcc-10): 4 errors, 1 warning
 
 mips:
     32r2el_defconfig (gcc-10): 1 warning
     32r2el_defconfig+debug (gcc-10): 1 warning
-    bigsur_defconfig (gcc-10): 1 warning
+    32r2el_defconfig+kselftest (gcc-10): 1 warning
     fuloong2e_defconfig (gcc-10): 1 error
-    ip27_defconfig (gcc-10): 1 warning
-    lemote2f_defconfig (gcc-10): 1 error, 1 warning
-    loongson2k_defconfig (gcc-10): 1 error, 1 warning
+    lemote2f_defconfig (gcc-10): 1 error
+    loongson2k_defconfig (gcc-10): 1 error
     loongson3_defconfig (gcc-10): 1 error
     rb532_defconfig (gcc-10): 1 warning
-    sb1250_swarm_defconfig (gcc-10): 1 warning
 
 riscv:
-    defconfig (gcc-10): 1 warning
-    defconfig+CONFIG_EFI=3Dn (clang-14): 2 warnings
-    defconfig+debug (gcc-10): 1 warning
-    rv32_defconfig (gcc-10): 1 warning
 
 x86_64:
-    allmodconfig (clang-14): 1 error, 16 warnings
+    x86_64_defconfig+debug (gcc-10): 2 warnings
 
 Errors summary:
 
-    8    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=
-=98__compiletime_assert_254=E2=80=99 declared with attribute error: BUILD_B=
-UG_ON failed: sizeof(*edid) !=3D EDID_LENGTH
-    4    drivers/misc/lkdtm/cfi.c:62:3: error: cast to pointer from integer=
- of different size [-Werror=3Dint-to-pointer-cast]
-    4    drivers/misc/lkdtm/cfi.c:62:30: error: cast from pointer to intege=
-r of different size [-Werror=3Dpointer-to-int-cast]
     4    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=
 =80=98-mhard-float=E2=80=99
-    2    include/linux/fortify-string.h:328:4: error: call to __write_overf=
-low_field declared with 'warning' attribute: detected write beyond size of =
-field (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warni=
-ng]
-    1    sound/soc/intel/avs/path.c:815:18: error: stack frame size (2192) =
-exceeds limit (2048) in 'avs_path_create' [-Werror,-Wframe-larger-than]
-    1    lib/maple_tree.c:4207:20: error: stack frame size (1144) exceeds l=
-imit (1024) in 'mas_wr_modify' [-Werror,-Wframe-larger-than]
-    1    lib/maple_tree.c:4207:20: error: stack frame size (1076) exceeds l=
-imit (1024) in 'mas_wr_modify' [-Werror,-Wframe-larger-than]
     1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
 =3D0x'
     1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
@@ -179,78 +128,12 @@ imit (1024) in 'mas_wr_modify' [-Werror,-Wframe-larger-than]
 
 Warnings summary:
 
-    23   clang: warning: argument unused during compilation: '-march=3Darmv=
-6k' [-Wunused-command-line-argument]
-    10   clang: warning: argument unused during compilation: '-march=3Darmv=
-7-a' [-Wunused-command-line-argument]
-    8    drivers/pci/pci-driver.c:533:12: warning: =E2=80=98pci_restore_sta=
-ndard_config=E2=80=99 defined but not used [-Wunused-function]
-    4    drivers/misc/lkdtm/cfi.c:62:3: warning: cast to pointer from integ=
-er of different size [-Wint-to-pointer-cast]
-    4    drivers/misc/lkdtm/cfi.c:62:30: warning: cast from pointer to inte=
-ger of different size [-Wpointer-to-int-cast]
-    4    1 warning generated.
-    2    net/core/rtnetlink.c:3557:1: warning: the frame size of 1136 bytes=
- is larger than 1024 bytes [-Wframe-larger-than=3D]
-    2    cc1: all warnings being treated as errors
     2    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
 e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
 ted "0,0"
-    1    vmlinux.o: warning: objtool: vc_switch_off_ist()+0x8e: call to mem=
-cpy() leaves .noinstr.text section
-    1    vmlinux.o: warning: objtool: sync_regs()+0x24: call to memcpy() le=
-aves .noinstr.text section
-    1    vmlinux.o: warning: objtool: fixup_bad_iret()+0x36: call to memset=
-() leaves .noinstr.text section
-    1    vmlinux.o: warning: objtool: __startup_64() falls through to next =
-function startup_64_setup_env()
-    1    vmlinux.o: warning: objtool: __sev_put_ghcb()+0x35: call to memcpy=
-() leaves .noinstr.text section
-    1    vmlinux.o: warning: objtool: __sev_get_ghcb()+0xa0: call to memcpy=
-() leaves .noinstr.text section
-    1    lib/maple_tree.c:4207:20: warning: stack frame size (1104) exceeds=
- limit (1024) in 'mas_wr_modify' [-Wframe-larger-than]
-    1    lib/maple_tree.c:4207:20: warning: stack frame size (1096) exceeds=
- limit (1024) in 'mas_wr_modify' [-Wframe-larger-than]
-    1    lib/maple_tree.c:4207:20: warning: stack frame size (1076) exceeds=
- limit (1024) in 'mas_wr_modify' [-Wframe-larger-than]
-    1    fs/reiserfs/reiserfs.prelink.o: warning: objtool: leaf_copy_items_=
-entirely()+0x7fd: stack state mismatch: cfa1=3D4+240 cfa2=3D4+232
-    1    drivers/video/fbdev/udlfb.prelink.o: warning: objtool: dlfb_ops_wr=
-ite() falls through to next function dlfb_ops_setcolreg()
-    1    drivers/video/fbdev/smscufx.prelink.o: warning: objtool: ufx_ops_w=
-rite() falls through to next function ufx_ops_setcolreg()
-    1    drivers/soc/qcom/qcom_rpmh.prelink.o: warning: objtool: rpmh_rsc_w=
-rite_ctrl_data() falls through to next function trace_raw_output_rpmh_tx_do=
-ne()
-    1    drivers/scsi/mpi3mr/mpi3mr.prelink.o: warning: objtool: mpi3mr_op_=
-request_post() falls through to next function mpi3mr_check_rh_fault_ioc()
-    1    drivers/pci/pci-driver.c:533:12: warning: unused function 'pci_res=
-tore_standard_config' [-Wunused-function]
-    1    drivers/gpu/drm/radeon/radeon.prelink.o: warning: objtool: sumo_dp=
-m_set_power_state() falls through to next function sumo_dpm_post_set_power_=
-state()
     1    cc1: warning: result of =E2=80=98-117440512 << 16=E2=80=99 require=
 s 44 bits to represent, but =E2=80=98int=E2=80=99 only has 32 bits [-Wshift=
 -overflow=3D]
-    1    arch/x86/kvm/kvm.prelink.o: warning: objtool: paging64_update_acce=
-ssed_dirty_bits()+0x39e: call to __ubsan_handle_load_invalid_value() with U=
-ACCESS enabled
-    1    arch/x86/kvm/kvm.prelink.o: warning: objtool: paging32_update_acce=
-ssed_dirty_bits()+0x390: call to __ubsan_handle_load_invalid_value() with U=
-ACCESS enabled
-    1    arch/x86/kvm/kvm.prelink.o: warning: objtool: ept_update_accessed_=
-dirty_bits()+0x435: call to __ubsan_handle_load_invalid_value() with UACCES=
-S enabled
-    1    arch/x86/kvm/kvm.prelink.o: warning: objtool: emulator_cmpxchg_emu=
-lated()+0x72b: call to __ubsan_handle_load_invalid_value() with UACCESS ena=
-bled
-
-Section mismatches summary:
-
-    1    WARNING: modpost: vmlinux.o(.text+0x15d3d7): Section mismatch in r=
-eference from the function __next_node() to the variable .init.data:numa_no=
-des_parsed
 
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
@@ -281,141 +164,22 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-allmodconfig (i386, clang-14) =E2=80=94 FAIL, 1 error, 0 warnings, 0 sectio=
-n mismatches
+32r2el_defconfig+kselftest (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warni=
+ng, 0 section mismatches
 
-Errors:
-    lib/maple_tree.c:4207:20: error: stack frame size (1076) exceeds limit =
-(1024) in 'mas_wr_modify' [-Werror,-Wframe-larger-than]
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
 
 ---------------------------------------------------------------------------=
 -----
-allmodconfig (arm, gcc-10) =E2=80=94 FAIL, 4 errors, 1 warning, 0 section m=
-ismatches
-
-Errors:
-    drivers/misc/lkdtm/cfi.c:62:30: error: cast from pointer to integer of =
-different size [-Werror=3Dpointer-to-int-cast]
-    drivers/misc/lkdtm/cfi.c:62:3: error: cast to pointer from integer of d=
-ifferent size [-Werror=3Dint-to-pointer-cast]
-    drivers/misc/lkdtm/cfi.c:62:30: error: cast from pointer to integer of =
-different size [-Werror=3Dpointer-to-int-cast]
-    drivers/misc/lkdtm/cfi.c:62:3: error: cast to pointer from integer of d=
-ifferent size [-Werror=3Dint-to-pointer-cast]
-
-Warnings:
-    cc1: all warnings being treated as errors
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm, clang-14) =E2=80=94 FAIL, 1 error, 13 warnings, 0 sectio=
-n mismatches
-
-Errors:
-    lib/maple_tree.c:4207:20: error: stack frame size (1144) exceeds limit =
-(1024) in 'mas_wr_modify' [-Werror,-Wframe-larger-than]
-
-Warnings:
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
+allmodconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
 
 ---------------------------------------------------------------------------=
 -----
 allmodconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm64, clang-14) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 sect=
-ion mismatches
-
-Errors:
-    sound/soc/intel/avs/path.c:815:18: error: stack frame size (2192) excee=
-ds limit (2048) in 'avs_path_create' [-Werror,-Wframe-larger-than]
-    include/linux/fortify-string.h:328:4: error: call to __write_overflow_f=
-ield declared with 'warning' attribute: detected write beyond size of field=
- (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
-
----------------------------------------------------------------------------=
------
-allmodconfig (x86_64, clang-14) =E2=80=94 FAIL, 1 error, 16 warnings, 0 sec=
-tion mismatches
-
-Errors:
-    include/linux/fortify-string.h:328:4: error: call to __write_overflow_f=
-ield declared with 'warning' attribute: detected write beyond size of field=
- (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
-
-Warnings:
-    vmlinux.o: warning: objtool: __startup_64() falls through to next funct=
-ion startup_64_setup_env()
-    vmlinux.o: warning: objtool: sync_regs()+0x24: call to memcpy() leaves =
-.noinstr.text section
-    vmlinux.o: warning: objtool: vc_switch_off_ist()+0x8e: call to memcpy()=
- leaves .noinstr.text section
-    vmlinux.o: warning: objtool: fixup_bad_iret()+0x36: call to memset() le=
-aves .noinstr.text section
-    vmlinux.o: warning: objtool: __sev_get_ghcb()+0xa0: call to memcpy() le=
-aves .noinstr.text section
-    vmlinux.o: warning: objtool: __sev_put_ghcb()+0x35: call to memcpy() le=
-aves .noinstr.text section
-    arch/x86/kvm/kvm.prelink.o: warning: objtool: emulator_cmpxchg_emulated=
-()+0x72b: call to __ubsan_handle_load_invalid_value() with UACCESS enabled
-    arch/x86/kvm/kvm.prelink.o: warning: objtool: paging64_update_accessed_=
-dirty_bits()+0x39e: call to __ubsan_handle_load_invalid_value() with UACCES=
-S enabled
-    arch/x86/kvm/kvm.prelink.o: warning: objtool: paging32_update_accessed_=
-dirty_bits()+0x390: call to __ubsan_handle_load_invalid_value() with UACCES=
-S enabled
-    arch/x86/kvm/kvm.prelink.o: warning: objtool: ept_update_accessed_dirty=
-_bits()+0x435: call to __ubsan_handle_load_invalid_value() with UACCESS ena=
-bled
-    drivers/soc/qcom/qcom_rpmh.prelink.o: warning: objtool: rpmh_rsc_write_=
-ctrl_data() falls through to next function trace_raw_output_rpmh_tx_done()
-    fs/reiserfs/reiserfs.prelink.o: warning: objtool: leaf_copy_items_entir=
-ely()+0x7fd: stack state mismatch: cfa1=3D4+240 cfa2=3D4+232
-    drivers/video/fbdev/udlfb.prelink.o: warning: objtool: dlfb_ops_write()=
- falls through to next function dlfb_ops_setcolreg()
-    drivers/video/fbdev/smscufx.prelink.o: warning: objtool: ufx_ops_write(=
-) falls through to next function ufx_ops_setcolreg()
-    drivers/gpu/drm/radeon/radeon.prelink.o: warning: objtool: sumo_dpm_set=
-_power_state() falls through to next function sumo_dpm_post_set_power_state=
-()
-    drivers/scsi/mpi3mr/mpi3mr.prelink.o: warning: objtool: mpi3mr_op_reque=
-st_post() falls through to next function mpi3mr_check_rh_fault_ioc()
-
-Section mismatches:
-    WARNING: modpost: vmlinux.o(.text+0x15d3d7): Section mismatch in refere=
-nce from the function __next_node() to the variable .init.data:numa_nodes_p=
-arsed
-
----------------------------------------------------------------------------=
------
-allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
 n mismatches
 
 ---------------------------------------------------------------------------=
@@ -430,18 +194,8 @@ ismatches
 
 ---------------------------------------------------------------------------=
 -----
-allnoconfig (x86_64, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (i386, clang-14) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sectio=
+allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
 n mismatches
-
-Warnings:
-    lib/maple_tree.c:4207:20: warning: stack frame size (1076) exceeds limi=
-t (1024) in 'mas_wr_modify' [-Wframe-larger-than]
-    1 warning generated.
 
 ---------------------------------------------------------------------------=
 -----
@@ -457,33 +211,6 @@ n mismatches
 -----
 aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
 ection mismatches
-
----------------------------------------------------------------------------=
------
-aspeed_g5_defconfig (arm, clang-14) =E2=80=94 PASS, 0 errors, 10 warnings, =
-0 section mismatches
-
-Warnings:
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
 
 ---------------------------------------------------------------------------=
 -----
@@ -547,12 +274,8 @@ ction mismatches
 
 ---------------------------------------------------------------------------=
 -----
-bigsur_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    drivers/pci/pci-driver.c:533:12: warning: =E2=80=98pci_restore_standard=
-_config=E2=80=99 defined but not used [-Wunused-function]
+bigsur_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -651,12 +374,8 @@ s, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mi=
-smatches
-
-Warnings:
-    drivers/pci/pci-driver.c:533:12: warning: =E2=80=98pci_restore_standard=
-_config=E2=80=99 defined but not used [-Wunused-function]
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -665,18 +384,8 @@ ismatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_EFI=3Dn (riscv, clang-14) =E2=80=94 PASS, 0 errors, 2 warn=
-ings, 0 section mismatches
-
-Warnings:
-    drivers/pci/pci-driver.c:533:12: warning: unused function 'pci_restore_=
-standard_config' [-Wunused-function]
-    1 warning generated.
+defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -685,27 +394,33 @@ ction mismatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig+debug (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    drivers/pci/pci-driver.c:533:12: warning: =E2=80=98pci_restore_standard=
-_config=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-defconfig+debug (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+defconfig+debug (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
 tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+defconfig+ima (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
  section mismatches
+
+---------------------------------------------------------------------------=
+-----
+dove_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
 
 ---------------------------------------------------------------------------=
 -----
 e55_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
 n mismatches
+
+---------------------------------------------------------------------------=
+-----
+ep93xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -743,12 +458,8 @@ on mismatches
 
 ---------------------------------------------------------------------------=
 -----
-gemini_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    drivers/pci/pci-driver.c:533:12: warning: =E2=80=98pci_restore_standard=
-_config=E2=80=99 defined but not used [-Wunused-function]
+gemini_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -787,18 +498,8 @@ ngs, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-haps_hs_smp_defconfig+kselftest (arc, gcc-10) =E2=80=94 PASS, 0 errors, 4 w=
+haps_hs_smp_defconfig+kselftest (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 w=
 arnings, 0 section mismatches
-
-Warnings:
-    drivers/misc/lkdtm/cfi.c:62:30: warning: cast from pointer to integer o=
-f different size [-Wpointer-to-int-cast]
-    drivers/misc/lkdtm/cfi.c:62:3: warning: cast to pointer from integer of=
- different size [-Wint-to-pointer-cast]
-    drivers/misc/lkdtm/cfi.c:62:30: warning: cast from pointer to integer o=
-f different size [-Wpointer-to-int-cast]
-    drivers/misc/lkdtm/cfi.c:62:3: warning: cast to pointer from integer of=
- different size [-Wint-to-pointer-cast]
 
 ---------------------------------------------------------------------------=
 -----
@@ -817,36 +518,13 @@ on mismatches
 
 ---------------------------------------------------------------------------=
 -----
-i386_defconfig (i386, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
 i386_defconfig+debug (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
  section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 FAIL, 4 errors, 1 warning=
-, 0 section mismatches
-
-Errors:
-    drivers/misc/lkdtm/cfi.c:62:30: error: cast from pointer to integer of =
-different size [-Werror=3Dpointer-to-int-cast]
-    drivers/misc/lkdtm/cfi.c:62:3: error: cast to pointer from integer of d=
-ifferent size [-Werror=3Dint-to-pointer-cast]
-    drivers/misc/lkdtm/cfi.c:62:30: error: cast from pointer to integer of =
-different size [-Werror=3Dpointer-to-int-cast]
-    drivers/misc/lkdtm/cfi.c:62:3: error: cast to pointer from integer of d=
-ifferent size [-Werror=3Dint-to-pointer-cast]
-
-Warnings:
-    cc1: all warnings being treated as errors
-
----------------------------------------------------------------------------=
------
-imote2_defconfig (arm, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 sect=
-ion mismatches
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -865,17 +543,18 @@ section mismatches
 
 ---------------------------------------------------------------------------=
 -----
+iop32x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
 ip22_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
 on mismatches
 
 ---------------------------------------------------------------------------=
 -----
-ip27_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    drivers/pci/pci-driver.c:533:12: warning: =E2=80=98pci_restore_standard=
-_config=E2=80=99 defined but not used [-Wunused-function]
+ip27_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -904,12 +583,8 @@ section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-keystone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    drivers/pci/pci-driver.c:533:12: warning: =E2=80=98pci_restore_standard=
-_config=E2=80=99 defined but not used [-Wunused-function]
+keystone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -918,16 +593,12 @@ n mismatches
 
 ---------------------------------------------------------------------------=
 -----
-lemote2f_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 1 warning, 0 sec=
-tion mismatches
+lemote2f_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 se=
+ction mismatches
 
 Errors:
     cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
 =98-mhard-float=E2=80=99
-
-Warnings:
-    net/core/rtnetlink.c:3557:1: warning: the frame size of 1136 bytes is l=
-arger than 1024 bytes [-Wframe-larger-than=3D]
 
 ---------------------------------------------------------------------------=
 -----
@@ -941,16 +612,12 @@ loongson1c_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
 
 ---------------------------------------------------------------------------=
 -----
-loongson2k_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 1 warning, 0 s=
-ection mismatches
+loongson2k_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 =
+section mismatches
 
 Errors:
     cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
 =98-mhard-float=E2=80=99
-
-Warnings:
-    net/core/rtnetlink.c:3557:1: warning: the frame size of 1136 bytes is l=
-arger than 1024 bytes [-Wframe-larger-than=3D]
 
 ---------------------------------------------------------------------------=
 -----
@@ -1078,48 +745,8 @@ ction mismatches
 
 ---------------------------------------------------------------------------=
 -----
-multi_v5_defconfig (arm, clang-14) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
-section mismatches
-
-Warnings:
-    lib/maple_tree.c:4207:20: warning: stack frame size (1096) exceeds limi=
-t (1024) in 'mas_wr_modify' [-Wframe-larger-than]
-    1 warning generated.
-
----------------------------------------------------------------------------=
------
 multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
 ction mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, clang-14) =E2=80=94 PASS, 0 errors, 12 warnings, 0=
- section mismatches
-
-Warnings:
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    lib/maple_tree.c:4207:20: warning: stack frame size (1104) exceeds limi=
-t (1024) in 'mas_wr_modify' [-Wframe-larger-than]
-    1 warning generated.
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
 
 ---------------------------------------------------------------------------=
 -----
@@ -1143,23 +770,23 @@ multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
 
 ---------------------------------------------------------------------------=
 -----
+multi_v7_defconfig+crypto (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
 multi_v7_defconfig+debug (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
 , 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 4 warn=
-ings, 0 section mismatches
+multi_v7_defconfig+ima (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
 
-Warnings:
-    drivers/misc/lkdtm/cfi.c:62:30: warning: cast from pointer to integer o=
-f different size [-Wpointer-to-int-cast]
-    drivers/misc/lkdtm/cfi.c:62:3: warning: cast to pointer from integer of=
- different size [-Wint-to-pointer-cast]
-    drivers/misc/lkdtm/cfi.c:62:30: warning: cast from pointer to integer o=
-f different size [-Wpointer-to-int-cast]
-    drivers/misc/lkdtm/cfi.c:62:3: warning: cast to pointer from integer of=
- different size [-Wint-to-pointer-cast]
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1210,6 +837,11 @@ nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
 -----
 nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
 s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+omap1_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1332,12 +964,8 @@ tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
-rv32_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    drivers/pci/pci-driver.c:533:12: warning: =E2=80=98pci_restore_standard=
-_config=E2=80=99 defined but not used [-Wunused-function]
+rv32_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1366,12 +994,8 @@ on mismatches
 
 ---------------------------------------------------------------------------=
 -----
-sb1250_swarm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, =
-0 section mismatches
-
-Warnings:
-    drivers/pci/pci-driver.c:533:12: warning: =E2=80=98pci_restore_standard=
-_config=E2=80=99 defined but not used [-Wunused-function]
+sb1250_swarm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1400,34 +1024,8 @@ ection mismatches
 
 ---------------------------------------------------------------------------=
 -----
-spear3xx_defconfig (arm, gcc-10) =E2=80=94 FAIL, 8 errors, 0 warnings, 0 se=
+spear3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
 ction mismatches
-
-Errors:
-    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=98__c=
-ompiletime_assert_254=E2=80=99 declared with attribute error: BUILD_BUG_ON =
-failed: sizeof(*edid) !=3D EDID_LENGTH
-    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=98__c=
-ompiletime_assert_254=E2=80=99 declared with attribute error: BUILD_BUG_ON =
-failed: sizeof(*edid) !=3D EDID_LENGTH
-    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=98__c=
-ompiletime_assert_254=E2=80=99 declared with attribute error: BUILD_BUG_ON =
-failed: sizeof(*edid) !=3D EDID_LENGTH
-    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=98__c=
-ompiletime_assert_254=E2=80=99 declared with attribute error: BUILD_BUG_ON =
-failed: sizeof(*edid) !=3D EDID_LENGTH
-    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=98__c=
-ompiletime_assert_254=E2=80=99 declared with attribute error: BUILD_BUG_ON =
-failed: sizeof(*edid) !=3D EDID_LENGTH
-    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=98__c=
-ompiletime_assert_254=E2=80=99 declared with attribute error: BUILD_BUG_ON =
-failed: sizeof(*edid) !=3D EDID_LENGTH
-    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=98__c=
-ompiletime_assert_254=E2=80=99 declared with attribute error: BUILD_BUG_ON =
-failed: sizeof(*edid) !=3D EDID_LENGTH
-    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=98__c=
-ompiletime_assert_254=E2=80=99 declared with attribute error: BUILD_BUG_ON =
-failed: sizeof(*edid) !=3D EDID_LENGTH
 
 ---------------------------------------------------------------------------=
 -----
@@ -1476,8 +1074,8 @@ on mismatches
 
 ---------------------------------------------------------------------------=
 -----
-tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
+tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1486,8 +1084,8 @@ smatches
 
 ---------------------------------------------------------------------------=
 -----
-tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
+tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1546,11 +1144,6 @@ ction mismatches
 
 ---------------------------------------------------------------------------=
 -----
-x86_64_defconfig (x86_64, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
 x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
 ection mismatches
 
@@ -1566,8 +1159,14 @@ gs, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-x86_64_defconfig+debug (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+x86_64_defconfig+debug (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 2 warning=
 s, 0 section mismatches
+
+Warnings:
+    lib/strncpy_from_user.o: warning: objtool: strncpy_from_user()+0x86: ca=
+ll to do_strncpy_from_user() with UACCESS enabled
+    lib/strnlen_user.o: warning: objtool: strnlen_user()+0x59: call to do_s=
+trnlen_user() with UACCESS enabled
 
 ---------------------------------------------------------------------------=
 -----

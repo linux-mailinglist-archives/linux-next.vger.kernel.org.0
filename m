@@ -2,127 +2,221 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 654B451582B
-	for <lists+linux-next@lfdr.de>; Sat, 30 Apr 2022 00:12:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB8CA515919
+	for <lists+linux-next@lfdr.de>; Sat, 30 Apr 2022 01:42:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355176AbiD2WPT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 29 Apr 2022 18:15:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34216 "EHLO
+        id S239895AbiD2XqN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 29 Apr 2022 19:46:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381436AbiD2WPO (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 29 Apr 2022 18:15:14 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98B2FDCA9C
-        for <linux-next@vger.kernel.org>; Fri, 29 Apr 2022 15:11:54 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id e12so16734655ybc.11
-        for <linux-next@vger.kernel.org>; Fri, 29 Apr 2022 15:11:54 -0700 (PDT)
+        with ESMTP id S239891AbiD2XqN (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 29 Apr 2022 19:46:13 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289E5D4C8B
+        for <linux-next@vger.kernel.org>; Fri, 29 Apr 2022 16:42:53 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id u9so7788980plf.6
+        for <linux-next@vger.kernel.org>; Fri, 29 Apr 2022 16:42:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kQmy1DozY+MQOT3hFFbQpwCpNXFgxLxF1Kty1xOxQWk=;
-        b=NXqbBHZ9VwKIGp+CDR7YbK8pDPAtXozUwHomoZTwJmAZ2M3hstU8pa1vh7vhM4oOf8
-         yKlzpf12tt3NEbYWw/M3P2JssWpEIlYCNGtpE20iS30ujXNRHzhWXTR/TS9X+H6QVMqv
-         RmFG5RG94XX0N/XsMzpk7hJ8g/y6PNSmuAvfoWguTAm8NZWeh/xflsMvQpd+dKRWmZrL
-         bFsRsKO9rJg47tTn2cjJqVWrVuHf81ODE/rxIVKA6yp0cALACqLr1pdjwakTPIH1FrNB
-         ZwyPw69sPfUuQVP9+cm4VRXVZoCdkgL6LujmOptTta/Igd85lrUN3OYsWDikeNfwUynu
-         lKCA==
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=LaUFA/cc6bHYK8MHp0scL40kNeFfBjX1dI46TLdSPiA=;
+        b=qMKa1Y3aeuJZM7iB8vmxmyfdITerIBy0qQ0VJCVoOVPYlALvbXWeJETlfr6kmS8owe
+         LzOrt4W2v+XSEhqoqVwUD+jxJVApR//HodtrV3k1UAqy9EupTL4bi163iDM75s9Al7yX
+         mfx5fQxTiIyGNtKwAY8Zpz50hXQOO1KPpmpJUPTVw3jO+EoqqF0hjZZocEnZwu0jMGwG
+         BV3Q/WoJXwEP0EXycV9L0ysaGjhuIWhfR0raX7TAGeWRJYiY8gb0nB8yvLzIPgwOWrO8
+         Wab6VNppdLDL8h4PMf3fQ4foXu6FMZoXlNUsNcC7irKh6IdYLpTTa8H9xTQoKpDsVDqj
+         gpeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kQmy1DozY+MQOT3hFFbQpwCpNXFgxLxF1Kty1xOxQWk=;
-        b=Bm4gFNhMJLDfUtUBhWQcwlOCQDZWsS7pfXX+fKPOo/+6w320h63UUq4p4mzpOoTaDG
-         yANyDqlRS7hkDQxzl7lj0F/DAPL+Ze0mC5VLxmKXgcJ/9zi7QEpn78D4tiSizPEy2SEr
-         Yhhc8NRELqgVqUiGZ3U0YdjN+k2UZDyMF9FGJQ0V7oU4hoMIZl+gzwuvB9hFA1s6H3NZ
-         gqQ/Si6frljtCS/sDlLP7qsK7nO8/fseeyyxqU6o64XVfhUBJHgxpMNEpJ7z9+2yd9cM
-         yOfu2o7O8R2133vj6zdkNwlxWdAt8GLYdi/7yZ9o5JhtExnu1fVFcPphsUK5o9fpzEWq
-         SI0Q==
-X-Gm-Message-State: AOAM530OsgP1ee+1vkMDddJSwh7+Rvnapjpo8/0tJ9AGqLI8L4ea2eFx
-        lVWsmC0Fi0o/wxoeAnGzViFeXgmHveXwMDgtNJpj5w==
-X-Google-Smtp-Source: ABdhPJxzIJP/0PkOy5+GtHE3C3pGZwvHAQEfBkVhZ6+DOtcVRXUTJB9lIYq49Ni06eLmgj6PImuYp5yRHVO65D+B7j0=
-X-Received: by 2002:a25:242:0:b0:648:76ff:88a8 with SMTP id
- 63-20020a250242000000b0064876ff88a8mr1646913ybc.603.1651270313696; Fri, 29
- Apr 2022 15:11:53 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=LaUFA/cc6bHYK8MHp0scL40kNeFfBjX1dI46TLdSPiA=;
+        b=kGKNeQhzHl+v8icNY/+QSZSHcw1+EH6cNsDqPPq6kupx+6McLvzyIIJAyZhL5ZpICk
+         Y150dyFy5PMOwcjxX/xLgKqh8QA/+ZUg3nzLNrY6hxXQcIwuYrcdsFb0qnQfa3zgzk2m
+         HFjdm/WNY9xwd7fL8P13W/GYUXS+OnJglVYOrg56RJ3C+ktpsw3+FGrFf1aDtUFGLTFp
+         xACT+01xJeM7OBXJhldKhBy9Zfs8Qhy33QGwGaNLP4r2BGUn6KI6l3yVUEomWBsv8wnO
+         WJbEZR2Av5CP7/fW2wprlYIERw1g0b8oDc6B3fxygLKx6sYL6zoseoKDJkOPjeOFHhEh
+         vaeA==
+X-Gm-Message-State: AOAM5315myjZA3J7Tt6++iZCF/IbWu5tGFQDtnDEtiVzpnbLVpZ9gTgE
+        RESh9CI27SJJjBiWgm9AjTEj6cuavLa4Jg+ksJU=
+X-Google-Smtp-Source: ABdhPJxty7kJAP3WVHaYm+CbrBADgNYomSa1JgsrfNIh27NuUq1u/XWkoH2eUxXv2LJRyshoXNArXA==
+X-Received: by 2002:a17:90a:710c:b0:1d9:bf09:7004 with SMTP id h12-20020a17090a710c00b001d9bf097004mr6505461pjk.220.1651275772550;
+        Fri, 29 Apr 2022 16:42:52 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id 5-20020a630305000000b003c14af505ffsm6735713pgd.23.2022.04.29.16.42.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Apr 2022 16:42:52 -0700 (PDT)
+Message-ID: <626c77fc.1c69fb81.7451d.0d7d@mx.google.com>
+Date:   Fri, 29 Apr 2022 16:42:52 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <CA+G9fYveMF-NU-rvrsbaora2g2QWxrkF7AWViuDrJyN9mNScJg@mail.gmail.com>
- <20220429160317.GA71@qian>
-In-Reply-To: <20220429160317.GA71@qian>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Sat, 30 Apr 2022 03:41:41 +0530
-Message-ID: <CA+G9fYui9OuyFbg7SV8D_4ueC_Jc=71ybbhBeif0bczo957Hqg@mail.gmail.com>
-Subject: Re: [next] mm: libhugetlbfs: WARNING: at mm/page_alloc.c:5368 __alloc_pages
-To:     Qian Cai <quic_qiancai@quicinc.com>
-Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Arnd Bergmann <arnd@arndb.de>, Zi Yan <ziy@nvidia.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        David Hildenbrand <david@redhat.com>,
-        Eric Ren <renzhengeek@gmail.com>,
-        kernel test robot <lkp@intel.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Oscar Salvador <osalvador@suse.de>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Chen Wandun <chenwandun@huawei.com>, NeilBrown <neilb@suse.de>,
-        joao.m.martins@oracle.com, mawupeng1@huawei.com,
-        Wei Yang <richard.weiyang@gmail.com>,
-        Song Liu <song@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: v5.18-rc4-464-g425675974eb3
+X-Kernelci-Report-Type: test
+Subject: next/pending-fixes baseline: 205 runs,
+ 3 regressions (v5.18-rc4-464-g425675974eb3)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, 29 Apr 2022 at 21:33, Qian Cai <quic_qiancai@quicinc.com> wrote:
->
-> On Fri, Apr 29, 2022 at 04:50:25PM +0530, Naresh Kamboju wrote:
-> > Following kernel warning notices on Linux next-20220427 till date next-20220429
-> > on qemu_arm64 and arm64 devices.
-> >
-> > While testing libhugetlbfs test suite and ltp mm and hugetlb.
-> >
-> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> >
-> > Test log:
-> > ----------
-> > truncate_above_4GB (2M: 64): PASS
-> > brk_near_huge (2M: 64): brk_near_huge: malloc.c:2401: sysmalloc:
-> > Assertion `(old_top == initial_top (av) && old_size == 0) ||
-> > ((unsigned long) (old_size) >= MINSIZE && prev_inuse (old_top) &&
-> > ((unsigned long) old_end & (pagesize - 1)) == 0)' failed.
-> > [   15.685019] audit: type=1701 audit(1651222753.772:25):
-> > auid=4294967295 uid=0 gid=0 ses=4294967295 pid=454
-> > comm=\"brk_near_huge\"
-> > exe=\"/usr/lib/libhugetlbfs/tests/obj64/brk_near_huge\" sig=6 res=1
-> > [   15.685629] ------------[ cut here ]------------
-> > [   15.685631] WARNING: CPU: 2 PID: 454 at mm/page_alloc.c:5368
->
-> Naresh, I am having difficult to reproduce this reliablely. If you have
-> spare cycles, do you mind reverting those to see if you can still
-> reproduce? I can't seems to find other recent commits more suspicious
-> than that series.
->
-> 37e73e3b0a9d drivers: virtio_mem: use pageblock size as the minimum virtio_mem size.
-> d2b9cd2acb2b mm: cma: use pageblock_order as the single alignment
-> 7f125582227e mm: page_isolation: enable arbitrary range page isolation.
-> fb009b307b21 mm: make alloc_contig_range work at pageblock granularity
-> 7c7e18d510f4 mm: page_isolation: check specified range for unmovable pages
-> 6a242a94b883 mm: page_isolation: move has_unmovable_pages() to mm/page_isolation.c
->
-> $ git revert --no-edit e389355485b7..37e73e3b0a9d
+next/pending-fixes baseline: 205 runs, 3 regressions (v5.18-rc4-464-g425675=
+974eb3)
 
-The reported kernel warning was not solved by reverted above patches.
+Regressions Summary
+-------------------
+
+platform         | arch  | lab           | compiler | defconfig            =
+        | regressions
+-----------------+-------+---------------+----------+----------------------=
+--------+------------
+da850-lcdk       | arm   | lab-baylibre  | gcc-10   | davinci_all_defconfig=
+        | 1          =
+
+jetson-tk1       | arm   | lab-baylibre  | gcc-10   | multi_v7_defc...G_ARM=
+_LPAE=3Dy | 1          =
+
+rk3399-gru-kevin | arm64 | lab-collabora | gcc-10   | defconfig+arm64-chrom=
+ebook   | 1          =
 
 
-- Naresh
+  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
+v5.18-rc4-464-g425675974eb3/plan/baseline/
+
+  Test:     baseline
+  Tree:     next
+  Branch:   pending-fixes
+  Describe: v5.18-rc4-464-g425675974eb3
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      425675974eb3b9f285cc9c23faf27a10aa04324c =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform         | arch  | lab           | compiler | defconfig            =
+        | regressions
+-----------------+-------+---------------+----------+----------------------=
+--------+------------
+da850-lcdk       | arm   | lab-baylibre  | gcc-10   | davinci_all_defconfig=
+        | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/626c3e5f7a62c88084bf6055
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: davinci_all_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.18-rc4-4=
+64-g425675974eb3/arm/davinci_all_defconfig/gcc-10/lab-baylibre/baseline-da8=
+50-lcdk.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.18-rc4-4=
+64-g425675974eb3/arm/davinci_all_defconfig/gcc-10/lab-baylibre/baseline-da8=
+50-lcdk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220422.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/626c3e5f7a62c88=
+084bf605d
+        failing since 95 days (last pass: v5.16-11577-gffd79fec234d, first =
+fail: v5.17-rc1-180-g86539e2bdb99)
+        3 lines
+
+    2022-04-29T19:36:48.176590  <8><LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Dcri=
+t RESULT=3Dpass UNITS=3Dlines MEASUREMENT=3D0>
+    2022-04-29T19:36:48.302190  kern  :alert : BUG: Bad page state in proce=
+ss kworker/u2:0  pfn:c3000
+    2022-04-29T19:36:48.302469  kern  :alert : BUG: Bad page state in proce=
+ss kworker/u2:0  pfn:c3400
+    2022-04-29T19:36:48.302640  kern  :alert : BUG: Bad page state in proce=
+ss kworker/u2:0  pfn:c3800
+    2022-04-29T19:36:48.346224  <8><LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Dale=
+rt RESULT=3Dfail UNITS=3Dlines MEASUREMENT=3D3>   =
+
+ =
+
+
+
+platform         | arch  | lab           | compiler | defconfig            =
+        | regressions
+-----------------+-------+---------------+----------+----------------------=
+--------+------------
+jetson-tk1       | arm   | lab-baylibre  | gcc-10   | multi_v7_defc...G_ARM=
+_LPAE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/626c45755a3ef5e8bdbf5fe7
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.18-rc4-4=
+64-g425675974eb3/arm/multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/=
+gcc-10/lab-baylibre/baseline-jetson-tk1.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.18-rc4-4=
+64-g425675974eb3/arm/multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/=
+gcc-10/lab-baylibre/baseline-jetson-tk1.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220422.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/626c45755a3ef5e8bdbf5=
+fe8
+        new failure (last pass: v5.18-rc2-366-ga3e1163f7eb1a) =
+
+ =
+
+
+
+platform         | arch  | lab           | compiler | defconfig            =
+        | regressions
+-----------------+-------+---------------+----------+----------------------=
+--------+------------
+rk3399-gru-kevin | arm64 | lab-collabora | gcc-10   | defconfig+arm64-chrom=
+ebook   | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/626c47b0fb6d3f9e11bf6038
+
+  Results:     88 PASS, 4 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.18-rc4-4=
+64-g425675974eb3/arm64/defconfig+arm64-chromebook/gcc-10/lab-collabora/base=
+line-rk3399-gru-kevin.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.18-rc4-4=
+64-g425675974eb3/arm64/defconfig+arm64-chromebook/gcc-10/lab-collabora/base=
+line-rk3399-gru-kevin.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220422.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.rockchip-i2s1-probed: https://kernelci.org/test/case/id=
+/626c47b0fb6d3f9e11bf605a
+        failing since 60 days (last pass: v5.17-rc5-244-gd77a1b37f796, firs=
+t fail: v5.17-rc6-176-gb4e03e0dde48)
+
+    2022-04-29T20:16:29.062657  /lava-6211101/1/../bin/lava-test-case   =
+
+ =20

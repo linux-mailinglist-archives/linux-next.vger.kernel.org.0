@@ -2,112 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2BD45166D7
-	for <lists+linux-next@lfdr.de>; Sun,  1 May 2022 20:01:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10B535168AB
+	for <lists+linux-next@lfdr.de>; Mon,  2 May 2022 00:35:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353633AbiEASE7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 1 May 2022 14:04:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59208 "EHLO
+        id S1353027AbiEAWjL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 1 May 2022 18:39:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353631AbiEASE6 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 1 May 2022 14:04:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E0CD369E3;
-        Sun,  1 May 2022 11:01:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S1355778AbiEAWix (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 1 May 2022 18:38:53 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DC0F19C32;
+        Sun,  1 May 2022 15:35:23 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6437CB80E9F;
-        Sun,  1 May 2022 18:01:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 655F6C385AA;
-        Sun,  1 May 2022 18:01:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651428089;
-        bh=mQ5z/2/gMvNxLbhWmeTsQypZp/LJsH4r9iPhByXwQo8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=e64OFrHSq/TLL5FsVHn4J/HK5UCqexybkALjKeKHqOAy9cObzQZkzi3vmm5whsgrt
-         3fjnxwJQ5aH49QMA5C237irX8B739kR9IP6B41gdkfd5MrmQwvDTYM4KaKoCmpWBEn
-         tijPgGYy8ehuEb6vXPiRb2XwjYpdPiJ/4mPc3Uv4cMWmBtTLDjq8jlk61L3vsX3D+N
-         lX4im5rQGDZ41qhg0xQxgTat9kVBwrYlNHxZmUM5icNVqV26cEii9CJYMNwioFEfLl
-         Y72SCgYGgDBFeiBYqBKTI9GH8LH8IhZjkNAqZho6ox0+G8cgqpTbdWEzeXcLQgHmfU
-         hHY9x9XV6g22A==
-Date:   Sun, 1 May 2022 19:09:43 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
-        Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>,
-        Jose Cazarin <joseespiriki@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Ks1JR0T09z4ySV;
+        Mon,  2 May 2022 08:35:19 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1651444519;
+        bh=I6PWU7Bb5XXt1zwPzGfD6cV4tmw/FGmxLXRTOvcdR7I=;
+        h=Date:From:To:Cc:Subject:From;
+        b=FHCrYXwEPx1tBfk65OrM2PE7o0PQ6W7s4J+jqcP89s4GuknXL9TE0BiMA3ZH5ybXS
+         mrV3fByVn1a1p4cIn7e/cv1eIeB10TBqVpC6xivYwEH+7btzPP/hHMIYPS4LSfXqkC
+         Ow9qZUOu/vzYEdJp+6kfKRPp4Z2aziHKLhC/yubSKOWF3/10zLJ2JgOVH6SvId/4vl
+         n7K2Hu8cwzaM77qazUeHqc/V2K+7cSuIptluAOg21zCTId7dGGv28FUIisitBzMkuQ
+         79AB+6aGBZUISfugHZD60l0R+ciKbnsCJORmOd08Sh9W4JZRjx+4tuAqP+SaUjmapd
+         jmrLuvzBKcHuQ==
+Date:   Mon, 2 May 2022 08:35:04 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Rob Clark <robdclark@gmail.com>, Sean Paul <seanpaul@chromium.org>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Peter Rosin <peda@axentia.se>
-Subject: Re: linux-next: manual merge of the iio tree with the
- char-misc.current tree
-Message-ID: <20220501190943.28ec3d4c@jic23-huawei>
-In-Reply-To: <20220429144721.63ae260f@canb.auug.org.au>
-References: <20220429143517.75be9c04@canb.auug.org.au>
-        <20220429144721.63ae260f@canb.auug.org.au>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the drm-msm tree
+Message-ID: <20220502083504.4a31cfdc@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/OMen9LlIAkjJuHkgXbkShij";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, 29 Apr 2022 14:47:21 +1000
-Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+--Sig_/OMen9LlIAkjJuHkgXbkShij
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> Hi all,
-> 
-> On Fri, 29 Apr 2022 14:35:17 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >
-> > diff --cc drivers/iio/dac/ti-dac5571.c
-> > index 0b775f943db3,96b86e2dcc6b..000000000000
-> > --- a/drivers/iio/dac/ti-dac5571.c
-> > +++ b/drivers/iio/dac/ti-dac5571.c
-> > @@@ -393,15 -386,16 +394,16 @@@ static int dac5571_remove(struct i2c_cl
-> >   }
-> >   
-> >   static const struct of_device_id dac5571_of_id[] = {
-> >  -	{.compatible = "ti,dac5571"},
-> >  -	{.compatible = "ti,dac6571"},
-> >  -	{.compatible = "ti,dac7571"},
-> >  -	{.compatible = "ti,dac5574"},
-> >  -	{.compatible = "ti,dac6574"},
-> >  -	{.compatible = "ti,dac7574"},
-> >  -	{.compatible = "ti,dac5573"},
-> >  -	{.compatible = "ti,dac6573"},
-> >  -	{.compatible = "ti,dac7573"},
-> >  -	{.compatible = "ti,dac121c081"},
-> >  +	{.compatible = "ti,dac5571", .data = (void *)single_8bit},
-> >  +	{.compatible = "ti,dac6571", .data = (void *)single_10bit},
-> >  +	{.compatible = "ti,dac7571", .data = (void *)single_12bit},
-> >  +	{.compatible = "ti,dac5574", .data = (void *)quad_8bit},
-> >  +	{.compatible = "ti,dac6574", .data = (void *)quad_10bit},
-> >  +	{.compatible = "ti,dac7574", .data = (void *)quad_12bit},
-> >  +	{.compatible = "ti,dac5573", .data = (void *)quad_8bit},
-> >  +	{.compatible = "ti,dac6573", .data = (void *)quad_10bit},
-> >  +	{.compatible = "ti,dac7573", .data = (void *)quad_12bit},
-> > ++	{.compatible = "ti,dac121c081", data = (void *)single_12bit},  
->                                         ^
-> I fixed up the missing '.'
-> 
+Hi all,
 
-Thanks Stephen and sorry I missed this one locally! Trying to sneak
-a last few patches in at the end of the day is always a bad idea -
-particularly my memory of what is going through my various branches is
-clearly less than perfect!
+In commit
 
-I've decided to back the series out for now and resolve it once the
-fix in char-misc fix filters back to my tree.
+  4845d89f94a3 ("drm/msm: select DRM_DP_AUX_BUS for the AUX bus support")
 
-Thanks as ever for your hard work!
+Fixes tag
 
-Jonathan
+  Fixes: 82c59ed16695 ("drm/msm/dp: Add eDP support via aux_bus")
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: 0d682843bfee ("drm/msm/dp: Add eDP support via aux_bus")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/OMen9LlIAkjJuHkgXbkShij
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJvCxgACgkQAVBC80lX
+0GwZywf/W6GHRqwng5RzdkaX3lDQH6gLil9biJ6rceu2i3S3Sxnjd4MNe+cmS32O
+5yIaMYZ9P+2tALbbB/RePd5+x/LDJQxOe59SDQqS6HPIvlmqcC05wmR5XJcwb++G
+jSs4kXyJCruWd53of89x/LE6eY+kN7LJCVmYi/b/EEYKosdWXRwz2rmAYmC3L9Ty
+suE/j3mUh9b1bZnknQWvsPlMvl73NM9UqgQUFtX9/XfHy60/kDNxQU2RlVWmY0M2
+fOROvfznkgc7va0L2vlrDEka+j/rbOl9Qg/CU1Pjt5jghUexVaUrxO2AZsO4R/VB
+JHQSAc5U5LOu6eIHl1pK+Pss+ZmnEg==
+=BBak
+-----END PGP SIGNATURE-----
+
+--Sig_/OMen9LlIAkjJuHkgXbkShij--

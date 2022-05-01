@@ -2,69 +2,58 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D378A516099
-	for <lists+linux-next@lfdr.de>; Sat, 30 Apr 2022 23:08:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2BD45166D7
+	for <lists+linux-next@lfdr.de>; Sun,  1 May 2022 20:01:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239512AbiD3VLi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 30 Apr 2022 17:11:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48508 "EHLO
+        id S1353633AbiEASE7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 1 May 2022 14:04:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233148AbiD3VLh (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 30 Apr 2022 17:11:37 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 587A8644E2;
-        Sat, 30 Apr 2022 14:08:14 -0700 (PDT)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1651352891;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JYiEoXgZa+1xAFGzJ6pdbgZS9bMkYlHMr5G8hxuq7k0=;
-        b=X5/Hv1szmlnx+Kn4ZVFxkz6yfaMIt6UJ+l1gY8T/a9sG0fqV6nIwpUMxSmWEhoRWuWGkUf
-        pw6spnQlELZ2G7HacGwrDq7/RWAAix7kyb7bHlFcOzjSSClc0GssKym4B0ZdtbB4NUaN3w
-        0q4BDOIEz6gigZA0s6uqWtNw7Fg/O/O/BvM9Om6BsdyH5Ck7dctYYgArOt0Sp6r32/9X1W
-        GjPXgN99BYpZItZfVhUFqvXd5S8Wz0mB+k7reHJyIp6AxxSU5Y4pby8R+Lme/J7lgCpNVa
-        O6OJ9WgQFC10tOvqwbGyHuRELT8BxVaCvr9J4pvKTkoMimgdw2PUvOpkUQf0zw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1651352891;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JYiEoXgZa+1xAFGzJ6pdbgZS9bMkYlHMr5G8hxuq7k0=;
-        b=P4+uquywNx3JFpUdyBVMRf/LWCCPvN3ivrNp3YBAvJLOvyGr87StS76UpIdomH9o8F0KTN
-        IaZ2p7Pc009IwgBA==
-To:     Marco Elver <elver@google.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Petr Mladek <pmladek@suse.com>
-Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, linux-mm <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Will Deacon <will@kernel.org>
-Subject: Re: [next] i386: kunit: ASSERTION FAILED at
- mm/kfence/kfence_test.c:547
-In-Reply-To: <YmwPocGA9vRSvAEN@elver.google.com>
-References: <CA+G9fYu2kS0wR4WqMRsj2rePKV9XLgOU1PiXnMvpT+Z=c2ucHA@mail.gmail.com>
- <YmwPocGA9vRSvAEN@elver.google.com>
-Date:   Sat, 30 Apr 2022 23:14:10 +0206
-Message-ID: <87fslup9dx.fsf@jogness.linutronix.de>
+        with ESMTP id S1353631AbiEASE6 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 1 May 2022 14:04:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E0CD369E3;
+        Sun,  1 May 2022 11:01:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6437CB80E9F;
+        Sun,  1 May 2022 18:01:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 655F6C385AA;
+        Sun,  1 May 2022 18:01:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651428089;
+        bh=mQ5z/2/gMvNxLbhWmeTsQypZp/LJsH4r9iPhByXwQo8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=e64OFrHSq/TLL5FsVHn4J/HK5UCqexybkALjKeKHqOAy9cObzQZkzi3vmm5whsgrt
+         3fjnxwJQ5aH49QMA5C237irX8B739kR9IP6B41gdkfd5MrmQwvDTYM4KaKoCmpWBEn
+         tijPgGYy8ehuEb6vXPiRb2XwjYpdPiJ/4mPc3Uv4cMWmBtTLDjq8jlk61L3vsX3D+N
+         lX4im5rQGDZ41qhg0xQxgTat9kVBwrYlNHxZmUM5icNVqV26cEii9CJYMNwioFEfLl
+         Y72SCgYGgDBFeiBYqBKTI9GH8LH8IhZjkNAqZho6ox0+G8cgqpTbdWEzeXcLQgHmfU
+         hHY9x9XV6g22A==
+Date:   Sun, 1 May 2022 19:09:43 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
+        Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>,
+        Jose Cazarin <joseespiriki@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Peter Rosin <peda@axentia.se>
+Subject: Re: linux-next: manual merge of the iio tree with the
+ char-misc.current tree
+Message-ID: <20220501190943.28ec3d4c@jic23-huawei>
+In-Reply-To: <20220429144721.63ae260f@canb.auug.org.au>
+References: <20220429143517.75be9c04@canb.auug.org.au>
+        <20220429144721.63ae260f@canb.auug.org.au>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,73 +61,53 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Marco,
+On Fri, 29 Apr 2022 14:47:21 +1000
+Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-On 2022-04-29, Marco Elver <elver@google.com> wrote:
-> And looking at your log [1], it shows that KFENCE is working just
-> fine, but the logic that is supposed to intercept the kernel log (via
-> tracepoint) to check that reports are being generated correctly seems
-> to be broken.
->
-> And this is not only i386-specific, it's also broken on a x86-64
-> build.
->
-> At first I thought maybe with the printk changes we'd now have to call
-> pr_flush(), but that doesn't work, so I'm missing something still:
->
->  | --- a/mm/kfence/kfence_test.c
->  | +++ b/mm/kfence/kfence_test.c
->  | @@ -73,11 +73,18 @@ static void probe_console(void *ignore, const char *buf, size_t len)
->  |  }
->  |  
->  |  /* Check if a report related to the test exists. */
->  | -static bool report_available(void)
->  | +static bool __report_available(void)
->  |  {
->  |  	return READ_ONCE(observed.nlines) == ARRAY_SIZE(observed.lines);
->  |  }
->  |  
->  | +/* Check if a report related to the test exists; may sleep. */
->  | +static bool report_available(void)
->  | +{
->  | +	pr_flush(0, true);
->  | +	return __report_available();
->  | +}
->  | +
+> Hi all,
+> 
+> On Fri, 29 Apr 2022 14:35:17 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >
+> > diff --cc drivers/iio/dac/ti-dac5571.c
+> > index 0b775f943db3,96b86e2dcc6b..000000000000
+> > --- a/drivers/iio/dac/ti-dac5571.c
+> > +++ b/drivers/iio/dac/ti-dac5571.c
+> > @@@ -393,15 -386,16 +394,16 @@@ static int dac5571_remove(struct i2c_cl
+> >   }
+> >   
+> >   static const struct of_device_id dac5571_of_id[] = {
+> >  -	{.compatible = "ti,dac5571"},
+> >  -	{.compatible = "ti,dac6571"},
+> >  -	{.compatible = "ti,dac7571"},
+> >  -	{.compatible = "ti,dac5574"},
+> >  -	{.compatible = "ti,dac6574"},
+> >  -	{.compatible = "ti,dac7574"},
+> >  -	{.compatible = "ti,dac5573"},
+> >  -	{.compatible = "ti,dac6573"},
+> >  -	{.compatible = "ti,dac7573"},
+> >  -	{.compatible = "ti,dac121c081"},
+> >  +	{.compatible = "ti,dac5571", .data = (void *)single_8bit},
+> >  +	{.compatible = "ti,dac6571", .data = (void *)single_10bit},
+> >  +	{.compatible = "ti,dac7571", .data = (void *)single_12bit},
+> >  +	{.compatible = "ti,dac5574", .data = (void *)quad_8bit},
+> >  +	{.compatible = "ti,dac6574", .data = (void *)quad_10bit},
+> >  +	{.compatible = "ti,dac7574", .data = (void *)quad_12bit},
+> >  +	{.compatible = "ti,dac5573", .data = (void *)quad_8bit},
+> >  +	{.compatible = "ti,dac6573", .data = (void *)quad_10bit},
+> >  +	{.compatible = "ti,dac7573", .data = (void *)quad_12bit},
+> > ++	{.compatible = "ti,dac121c081", data = (void *)single_12bit},  
+>                                         ^
+> I fixed up the missing '.'
+> 
 
-I am not familiar with how this works. Is the tracepoint getting set on
-call_console_drivers()? Or on call_console_driver()?
+Thanks Stephen and sorry I missed this one locally! Trying to sneak
+a last few patches in at the end of the day is always a bad idea -
+particularly my memory of what is going through my various branches is
+clearly less than perfect!
 
-If so, there are a couple problems with that. First off, the prototype
-for that function has changed. Second, that function is called when text
-is printed, but this is not when the text was created. With the
-kthreads, the printing can be significantly delayed.
+I've decided to back the series out for now and resolve it once the
+fix in char-misc fix filters back to my tree.
 
-Since printk() is now lockless and console printing is delayed, it
-becomes a bit tricky to parse the records in the existing code using a
-tracepoint.
+Thanks as ever for your hard work!
 
-I wonder if creating a NOP function for the kfence probe to attach to
-would be more appropriate. In printk_sprint() we get the text after
-space has been reserved, but before the text is committed to the
-ringbuffer. This is guaranteed to be called from within the printk()
-context.
-
-Here is an example of what I am thinking...
-
---- a/kernel/printk/printk.c
-+++ b/kernel/printk/printk.c
-@@ -2227,6 +2227,10 @@ static u16 printk_sprint(char *text, u16 size, int facility,
- 		}
- 	}
- 
-+#ifdef CONFIG_KFENCE_KUNIT_TEST
-+	printk_kfence_check(text, text_len);
-+#endif
-+
- 	return text_len;
- }
- 
-The probe_console() could attach to a NOP function printk_kfence_check().
-
-John
+Jonathan

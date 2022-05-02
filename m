@@ -2,146 +2,192 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5A21516B61
-	for <lists+linux-next@lfdr.de>; Mon,  2 May 2022 09:43:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4753516B70
+	for <lists+linux-next@lfdr.de>; Mon,  2 May 2022 09:51:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357953AbiEBHrK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 2 May 2022 03:47:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58828 "EHLO
+        id S231542AbiEBHzY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 2 May 2022 03:55:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350995AbiEBHrJ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 2 May 2022 03:47:09 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 202E72715D;
-        Mon,  2 May 2022 00:43:38 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KsFT26MdJz4xXk;
-        Mon,  2 May 2022 17:43:34 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1651477416;
-        bh=nxcY+wlkmUEFwHJpOpv1mcBXCb0BZLBH2dC8Mvqgl5U=;
-        h=Date:From:To:Cc:Subject:From;
-        b=X372vutKHx2ANNxVi4FFyKrBjYWazZy8UwGQR7xghPuDkPwHzzbxbcUSsCZClM6c1
-         tBZy+34TcqoIBuacpadUO7PL8ev7DzVm7Trvzm5b4VdTZf5pepSwc0WcMA14AQ1+Dk
-         iX7HiKzF6wJCYL3oHIV4s70dF7JzpSHXNCDRI+LtttBVuphbZ+2zo0OxtWd5VlSJmL
-         ib3Y1fK/snCg4gQbVcfgfhW3HXdM42ywuJVWbh4voNGI0kB4DmSGj5+d4cmH13HL7i
-         zYTj23KD66K7FZNGgFhvoPSyk7wpSPgMOxXC+H0Nbg+2QPpkt6iGleHr64mJfA4XxP
-         q5DcfEUR3ZoCg==
-Date:   Mon, 2 May 2022 17:43:33 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Matthew Wilcox <willy@infradead.org>,
-        David Sterba <dsterba@suse.cz>
-Cc:     Christoph Hellwig <hch@lst.de>, David Sterba <dsterba@suse.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the folio tree with the btrfs tree
-Message-ID: <20220502174305.1cbf7b40@canb.auug.org.au>
+        with ESMTP id S1359020AbiEBHzY (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 2 May 2022 03:55:24 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7606B2C64B
+        for <linux-next@vger.kernel.org>; Mon,  2 May 2022 00:51:55 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id i5so18508734wrc.13
+        for <linux-next@vger.kernel.org>; Mon, 02 May 2022 00:51:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=f/iZcbm+HsfS7NtVRG8PqR/TcI1wEubO1WbobcyN2js=;
+        b=NrF1p/vNwCzwdOYH7qCK1EBvF/CKACJY2M9sKOXdr6oQJseU4N4LwaXAB6h2h5cNWq
+         0lxfrVjHZkVZV/LXmNg4T9vhuLCrzjRXijIwClM9wI1G3XRMOYjNobEoosZIiOgOvzZq
+         2mDl8j8F0eKZuYiYPNOQ0ONvaf7yL+d1UqgN6bWUHX41ncUrQLxCnVRxSvADN2hGmRgK
+         WOS4Yn/c06NzsBUhv3MFLh+ln9zmVdzkPTAuPdRRp3Ir4TDN8edrajtGYYe+yla24mpZ
+         it1GjNJoKk3JzC6K+QNAqqptIH41WfOJXzIcTejDGsFy3SCtiiogW7z7Xg0EZowfP/VF
+         N+kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=f/iZcbm+HsfS7NtVRG8PqR/TcI1wEubO1WbobcyN2js=;
+        b=tj+8ZWCdWW2sJpCHZmas4XMs1wEVBDPJyMpFaebSf0r0lLUewhXIyz+32JG9IAZKXS
+         FoMV/UxjlIbBH5EYgXZ4TbJbQNjsfQbqPWC3quKZXJOY6B+A11RIaJc5wId4LyEDDP47
+         oTNEqbxs2USNFP7CYeGSneFl3dG1eBrQFTTuqSxbxypJIccIsCcEr6KLLk+BVQU4h5HL
+         1X+ldZBJkEqQoTydSLSncJAmbOf1/CaZS8/IeDbawbCcgs58uVQrAO25DIqxapC+wApK
+         xYHQr0RaZr1Y5ANys/q3KGt36GeuIrsNRmkxIP6TtLoe7QER4NhCaRo7T7hqjWstQoTY
+         9r/A==
+X-Gm-Message-State: AOAM530LXa22vOJy1wbNwA4wNaPXBfYDPmJB32KnbAXyOgfvSPWjDzK0
+        85urWa7yAscDT3mVVqp8L2sw1gLANKw+lQ==
+X-Google-Smtp-Source: ABdhPJxsSzLA8P20zIPWb1gO6clHzj+py+j7QZhWipmTlyvk1D+UG5nDQrYdqbUSvV1EkldQMALWLw==
+X-Received: by 2002:adf:f0cb:0:b0:20a:ef39:d42b with SMTP id x11-20020adff0cb000000b0020aef39d42bmr8699587wro.8.1651477913781;
+        Mon, 02 May 2022 00:51:53 -0700 (PDT)
+Received: from elver.google.com ([2a00:79e0:15:13:ee30:3795:2e49:1a19])
+        by smtp.gmail.com with ESMTPSA id z10-20020a1c4c0a000000b003942a244f54sm5668256wmf.45.2022.05.02.00.51.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 May 2022 00:51:53 -0700 (PDT)
+Date:   Mon, 2 May 2022 09:51:46 +0200
+From:   Marco Elver <elver@google.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, linux-mm <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Evgenii Stepanov <eugenis@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [next] i386: kunit: ASSERTION FAILED at
+ mm/kfence/kfence_test.c:547
+Message-ID: <Ym+NkkglHI5D89Dx@elver.google.com>
+References: <CA+G9fYu2kS0wR4WqMRsj2rePKV9XLgOU1PiXnMvpT+Z=c2ucHA@mail.gmail.com>
+ <YmwPocGA9vRSvAEN@elver.google.com>
+ <87fslup9dx.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/jn1Ms63ppBkLEKtFyZNOA4W";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87fslup9dx.fsf@jogness.linutronix.de>
+User-Agent: Mutt/2.1.4 (2021-12-11)
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/jn1Ms63ppBkLEKtFyZNOA4W
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Sat, Apr 30, 2022 at 11:14PM +0206, John Ogness wrote:
+[...]
+> I am not familiar with how this works. Is the tracepoint getting set on
+> call_console_drivers()? Or on call_console_driver()?
 
-Hi all,
+It's at the start of call_console_drivers(). See trace_console_rcuidle()
+call.
 
-Today's linux-next merge of the folio tree got conflicts in:
+> If so, there are a couple problems with that. First off, the prototype
+> for that function has changed. Second, that function is called when text
+> is printed, but this is not when the text was created. With the
+> kthreads, the printing can be significantly delayed.
+> 
+> Since printk() is now lockless and console printing is delayed, it
+> becomes a bit tricky to parse the records in the existing code using a
+> tracepoint.
+> 
+> I wonder if creating a NOP function for the kfence probe to attach to
+> would be more appropriate. In printk_sprint() we get the text after
+> space has been reserved, but before the text is committed to the
+> ringbuffer. This is guaranteed to be called from within the printk()
+> context.
 
-  fs/btrfs/ctree.h
-  fs/btrfs/inode.c
+I think we just need to fix the existing tracepoint, since it has
+changed its semantics vs. what it was intended to be:
 
-between commit:
+ | commit 95100358491abaa2e9a5483811370059bbca4645
+ | Author: Johannes Berg <johannes.berg@intel.com>
+ | Date:   Thu Nov 24 20:03:08 2011 +0100
+ |
+ |     printk/tracing: Add console output tracing
+ |
+ |     Add a printk.console trace point to record any printk
+ |     messages into the trace, regardless of the current
+ |     console loglevel. This can help correlate (existing)
+ |     printk debugging with other tracing.
+ |
+ |     Link: http://lkml.kernel.org/r/1322161388.5366.54.camel@jlt3.sipsolutions.net
+ |
+ |     Acked-by: Frederic Weisbecker <fweisbec@gmail.com>
+ |     Cc: Christoph Hellwig <hch@infradead.org>
+ |     Cc: Ingo Molnar <mingo@redhat.com>
+ |     Acked-by: Peter Zijlstra <a.p.zijlstra@chello.nl>
+ |     Acked-by: Thomas Gleixner <tglx@linutronix.de>
+ |     Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+ |     Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
 
-  a3e4d924b41d ("btrfs: move btrfs_readpage to extent_io.c")
+Specifically using it to "correlate (existing) printk debugging with
+other tracing" is now broken.
 
-from the btrfs tree and commit:
+> Here is an example of what I am thinking...
+> 
+> --- a/kernel/printk/printk.c
+> +++ b/kernel/printk/printk.c
+> @@ -2227,6 +2227,10 @@ static u16 printk_sprint(char *text, u16 size, int facility,
+>  		}
+>  	}
+>  
+> +#ifdef CONFIG_KFENCE_KUNIT_TEST
+> +	printk_kfence_check(text, text_len);
+> +#endif
+> +
+>  	return text_len;
+>  }
+>  
+> The probe_console() could attach to a NOP function printk_kfence_check().
 
-  5a912a9c68ac ("btrfs: Convert btrfs to read_folio")
+Thanks for this! However, I think we can't have a KFENCE-specific
+helper, it needs to be a tracepoint, because there are more tests that
+want to check console output (kernel/kcsan/kcsan_test.c did this before
+the KFENCE test actually).
 
-from the folio tree.
+My proposal would be to fix the tracepoint like so:
 
-I fixed it up (I used the conflicting parts of the above files from the
-former and applied the below patch) and can carry the fix as necessary.
-This is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+ | --- a/kernel/printk/printk.c
+ | +++ b/kernel/printk/printk.c
+ | @@ -2002,8 +2002,6 @@ static void call_console_driver(struct console *con, const char *text, size_t le
+ |  {
+ |  	size_t dropped_len;
+ |  
+ | -	trace_console_rcuidle(text, len);
+ | -
+ |  	if (con->dropped && dropped_text) {
+ |  		dropped_len = snprintf(dropped_text, DROPPED_TEXT_MAX,
+ |  				       "** %lu printk messages dropped **\n",
+ | @@ -2178,6 +2176,8 @@ static u16 printk_sprint(char *text, u16 size, int facility,
+ |  		}
+ |  	}
+ |  
+ | +	trace_console_rcuidle(text, text_len);
+ | +
+ |  	return text_len;
+ |  }
 
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Mon, 2 May 2022 17:21:26 +1000
-Subject: [PATCH] fix up for "btrfs: move btrfs_readpage to extent_io.c"
+This fixes the KFENCE and KCSAN tests.
 
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- fs/btrfs/extent_io.c | 3 ++-
- fs/btrfs/extent_io.h | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+Unless I hear objections, I'll prepare a patch explaining why we need to
+fix the tracepoint.
 
-diff --git a/fs/btrfs/extent_io.c b/fs/btrfs/extent_io.c
-index 5de09556b1c3..aa8905a0d63a 100644
---- a/fs/btrfs/extent_io.c
-+++ b/fs/btrfs/extent_io.c
-@@ -3792,8 +3792,9 @@ static int btrfs_do_readpage(struct page *page, struc=
-t extent_map **em_cached,
- 	return ret;
- }
-=20
--int btrfs_readpage(struct file *file, struct page *page)
-+int btrfs_read_folio(struct file *file, struct folio *folio)
- {
-+	struct page *page =3D &folio->page;
- 	struct btrfs_inode *inode =3D BTRFS_I(page->mapping->host);
- 	u64 start =3D page_offset(page);
- 	u64 end =3D start + PAGE_SIZE - 1;
-diff --git a/fs/btrfs/extent_io.h b/fs/btrfs/extent_io.h
-index 375a721c48eb..4a2205fd189a 100644
---- a/fs/btrfs/extent_io.h
-+++ b/fs/btrfs/extent_io.h
-@@ -166,7 +166,7 @@ typedef struct extent_map *(get_extent_t)(struct btrfs_=
-inode *inode,
- int try_release_extent_mapping(struct page *page, gfp_t mask);
- int try_release_extent_buffer(struct page *page);
-=20
--int btrfs_readpage(struct file *file, struct page *page);
-+int btrfs_read_folio(struct file *file, struct folio *folio);
- int extent_write_full_page(struct page *page, struct writeback_control *wb=
-c);
- int extent_write_locked_range(struct inode *inode, u64 start, u64 end);
- int extent_writepages(struct address_space *mapping,
---=20
-2.35.1
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/jn1Ms63ppBkLEKtFyZNOA4W
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJvi6YACgkQAVBC80lX
-0GzL2Qf+JmpUJDiYOmb7QWDIaPWWF1+L0XINehDtxVS6WKRPzQn/v6Y3fCLedqxz
-yAhRgMPY2fcI0I3oCnTLET6rIKgXF+bn6xA4hMHDjSerWKN0qYtFv2QpYs0oIymU
-mkolecA410LZENlpe9KjlQ0yUaCKnQoey/qAyL3SWOFaQGoLcGSl92Q+2GCx7LR1
-/bfmtLcViVDhEi2g245x8PkTz++krGdSTi51hMK03HzbXep8h9s4Qv5uspJSxoYd
-gheEx+KTBbUjCUEqi7qT7jWrJdeXfgA+DflYtmrTAnI3rzSy+Ix2wkA90iM/FF+7
-b7YYTjq5Ol9ZbB+hOxgKcXKx0lCVhg==
-=HzLx
------END PGP SIGNATURE-----
-
---Sig_/jn1Ms63ppBkLEKtFyZNOA4W--
+Thanks,
+-- Marco

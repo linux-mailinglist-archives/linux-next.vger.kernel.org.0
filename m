@@ -2,69 +2,50 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1338516D40
-	for <lists+linux-next@lfdr.de>; Mon,  2 May 2022 11:20:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD8DE516D52
+	for <lists+linux-next@lfdr.de>; Mon,  2 May 2022 11:25:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384150AbiEBJYG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 2 May 2022 05:24:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50406 "EHLO
+        id S235883AbiEBJ3V (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 2 May 2022 05:29:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384255AbiEBJYB (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 2 May 2022 05:24:01 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFBFB6149;
-        Mon,  2 May 2022 02:20:33 -0700 (PDT)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1651483232;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rzfdL55sKTwT/KWa9oyx9CtM+emKdBvooXpdLahQrpU=;
-        b=j8CmyZoLzBOC0GXUd5JxjOeb0G3xhiKAMqdvpix3YrULTPsGMUg8u2dkETM4tANAnK2hQt
-        VwOo0gJvZs+/ifhnW7U2L9Caf5r8VNTP7lUfnh4BMffWqMBn8QoJG6v5guk50DtPfAOMpR
-        YzrHkf/dbt8N1GhtNgWtf0T5vgGGBiPJSiJDM3wxgyPBon6UIwfXxELweaBEeokBpJTVZe
-        w4HQOJkgIrwq5UQebHJEK4PnuBraQ7D3/XBEn0LZgSbivVIKJpRRWuvnuUgHxF4Rq+2MUM
-        uXMmVh/GGpgyVFxM6CDXFCyt6eS2sCmnGh2OJNaHPymdaMaGwkv4GRn12RIHJA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1651483232;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rzfdL55sKTwT/KWa9oyx9CtM+emKdBvooXpdLahQrpU=;
-        b=ypr5ktzoRR9yKPEgwzApJC1WmvpkyzQ9I1B6fwNKOqIWB5S1Ua0CEpFbf0/mUuc3CViB8t
-        VuZ9NafLOLpuHZCg==
-To:     Petr Mladek <pmladek@suse.com>, Marco Elver <elver@google.com>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, linux-mm <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Will Deacon <will@kernel.org>
-Subject: Re: [next] i386: kunit: ASSERTION FAILED at
- mm/kfence/kfence_test.c:547
-In-Reply-To: <Ym+WqKStCg/EHfh3@alley>
-References: <CA+G9fYu2kS0wR4WqMRsj2rePKV9XLgOU1PiXnMvpT+Z=c2ucHA@mail.gmail.com>
- <YmwPocGA9vRSvAEN@elver.google.com> <87fslup9dx.fsf@jogness.linutronix.de>
- <Ym+NkkglHI5D89Dx@elver.google.com> <Ym+WqKStCg/EHfh3@alley>
-Date:   Mon, 02 May 2022 11:26:31 +0206
-Message-ID: <87czgwmgtc.fsf@jogness.linutronix.de>
+        with ESMTP id S1384173AbiEBJ2z (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 2 May 2022 05:28:55 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3769A2DEA;
+        Mon,  2 May 2022 02:25:24 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KsHkQ69N6z4yST;
+        Mon,  2 May 2022 19:25:18 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1651483519;
+        bh=IcZ6omKND5FLEVyamlgI53r/grm7FjajqIZhCPrHX0I=;
+        h=Date:From:To:Cc:Subject:From;
+        b=FdM3Gx8df/La5cv/wlCtKvE0MafYao7+4eSTbRaue9Yu/Uxg+tmWZNszlnwwRrwt+
+         /Rx9g22y5vc4DZlH2A2lSxTN8TI0957Xl6O6MHJoffuFaRF7UBqaETbEnMhp/5ygTo
+         KN3+Ikwj9w48jFeSLbeyppZ/XSWXw6FbSH0F1ybf2J9WkOipiTbNWnQZ68i1MS8uJA
+         B+ADeG4BIv2ouqjtsvUTLqIGLV1kF5r81bIzRaIlG5Sr5t3QWCmydk88Tm4XMorb5B
+         +4dY5vG0fIoSyx/qIV1RY0e+Fzg4jnZtpfeMReyqi/HQ7gLTM2JQzFj0diud/M7eVa
+         u2bS3fyULr8RQ==
+Date:   Mon, 2 May 2022 19:25:17 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>
+Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Peter Collingbourne <pcc@google.com>
+Subject: linux-next: manual merge of the mm tree with the slab tree
+Message-ID: <20220502192517.28161b32@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; boundary="Sig_/z3zMWuT4tSOkpA1Q=w1ja6e";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,43 +53,86 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 2022-05-02, Petr Mladek <pmladek@suse.com> wrote:
->> My proposal would be to fix the tracepoint like so:
->> 
->>  | --- a/kernel/printk/printk.c
->>  | +++ b/kernel/printk/printk.c
->>  | @@ -2002,8 +2002,6 @@ static void call_console_driver(struct console *con, const char *text, size_t le
->>  |  {
->>  |  	size_t dropped_len;
->>  |  
->>  | -	trace_console_rcuidle(text, len);
->>  | -
->>  |  	if (con->dropped && dropped_text) {
->>  |  		dropped_len = snprintf(dropped_text, DROPPED_TEXT_MAX,
->>  |  				       "** %lu printk messages dropped **\n",
->>  | @@ -2178,6 +2176,8 @@ static u16 printk_sprint(char *text, u16 size, int facility,
->>  |  		}
->>  |  	}
->>  |  
->>  | +	trace_console_rcuidle(text, text_len);
->>  | +
->>  |  	return text_len;
->>  |  }
->> 
->> This fixes the KFENCE and KCSAN tests.
->> 
->> Unless I hear objections, I'll prepare a patch explaining why we need to
->> fix the tracepoint.
->
-> It makes perfect sense to me.
+--Sig_/z3zMWuT4tSOkpA1Q=w1ja6e
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-This is the easiest place for it. However, it should be clear that in
-the context of trace_console_rcuidle(), the message is not yet visible
-to any readers. The message _will_ get committed and definitely _will_
-become visible at some point. But it is not (yet) visible at _this_
-point. Maybe that is OK for what it is being used for.
+Hi all,
 
-If trace_console_rcuidle() must be called at the point of visibility for
-readers, it becomes more complicated.
+Today's linux-next merge of the mm tree got a conflict in:
 
-John
+  include/linux/slab.h
+
+between commit:
+
+  71aeb554a274 ("mm: slab: fix comment for __assume_kmalloc_alignment")
+
+from the slab tree and commits:
+
+  3f0cd9a623ec ("mm: make minimum slab alignment a runtime property")
+  78c0585fdbac ("mm-make-minimum-slab-alignment-a-runtime-property-fix")
+
+from the mm tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc include/linux/slab.h
+index 58bb9392775d,3d2f2a3ca17e..000000000000
+--- a/include/linux/slab.h
++++ b/include/linux/slab.h
+@@@ -216,10 -209,22 +216,22 @@@ void kmem_dump_obj(void *object)
+  #define ARCH_SLAB_MINALIGN __alignof__(unsigned long long)
+  #endif
+ =20
++ /*
++  * Arches can define this function if they want to decide the minimum slab
++  * alignment at runtime. The value returned by the function must be a pow=
+er
++  * of two and >=3D ARCH_SLAB_MINALIGN.
++  */
++ #ifndef arch_slab_minalign
++ static inline unsigned int arch_slab_minalign(void)
++ {
++ 	return ARCH_SLAB_MINALIGN;
++ }
++ #endif
++=20
+  /*
+ - * kmalloc and friends return ARCH_KMALLOC_MINALIGN aligned
+ - * pointers. kmem_cache_alloc and friends return ARCH_SLAB_MINALIGN
+ - * aligned pointers.
+ + * kmem_cache_alloc and friends return pointers aligned to ARCH_SLAB_MINA=
+LIGN.
+ + * kmalloc and friends return pointers aligned to both ARCH_KMALLOC_MINAL=
+IGN
+ + * and ARCH_SLAB_MINALIGN, but here we only assume the former alignment.
+   */
+  #define __assume_kmalloc_alignment __assume_aligned(ARCH_KMALLOC_MINALIGN)
+  #define __assume_slab_alignment __assume_aligned(ARCH_SLAB_MINALIGN)
+
+--Sig_/z3zMWuT4tSOkpA1Q=w1ja6e
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJvo30ACgkQAVBC80lX
+0GxLDgf/UIPTnpHeUkb6fDuQEabpZf2lWKmUpCY7uzBn0sBwakfMkZzQfu25UiC8
+GF6bqSAW/5I2gX7Xmc0EW7FMcCf8d3i672QD2vyd2VfCIYVxvudu6hQzV1S9l2s+
+SNKDkhGZD4H7KVCUkJeKCAfc3TwFvd+6rsGwuq6rk2NAYn171gbGzNtGEQyS0J6v
+IEtnXYbKETakQmORSHOBrRsVVFcRD4Kgg9bTCm0mOhATax+//9JwAsoHagnSo2TA
+ug+Z13SX6vHF7xo0ce1q/yqEMU3XLUEJXNBw7tqaLsYQOWB14yx824l2rceFrUMv
+ni6iq0Y+PNXm+0FohfJfTsob+uZjng==
+=uNBC
+-----END PGP SIGNATURE-----
+
+--Sig_/z3zMWuT4tSOkpA1Q=w1ja6e--

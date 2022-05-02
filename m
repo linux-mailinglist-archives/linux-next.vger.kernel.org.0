@@ -2,113 +2,176 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7BD3516A3A
-	for <lists+linux-next@lfdr.de>; Mon,  2 May 2022 07:16:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D4D7516AF4
+	for <lists+linux-next@lfdr.de>; Mon,  2 May 2022 08:46:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239174AbiEBFTZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 2 May 2022 01:19:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43700 "EHLO
+        id S1383513AbiEBGtg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 2 May 2022 02:49:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242649AbiEBFTY (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 2 May 2022 01:19:24 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6DE0BE25;
-        Sun,  1 May 2022 22:15:56 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id 15so10917598pgf.4;
-        Sun, 01 May 2022 22:15:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=P0VubNrQWYHk4IlQD+kxXHZzHAldnrU5eq+ivCmkfLU=;
-        b=KkR7X/snPIE3XMgJ0HxwJcymPlARTygWmRMP8MpCKWyk8oS+hH89cSkJMaHhGkC22D
-         zRvT8HIrXpoORVRsjzQbtTbsiQGfzoeDVs75Z6Egv0jwOLHJKnSC0UmFzvwIqmjDbah3
-         hyedoI6C5mwFuM+VksuOKzMkVGY/qPue01ozH0VoGIDEllcH97XAxWqaO3+q88mDez5n
-         175zLK5dFhak10yCfxrT8DJXOTdc13rgDwRw5VLzJodkhRfge88st/GJQW6MXuDo9GSY
-         i2o/3/ipIE9ghWnmaR5DDpRv9rU7VQAfNNvmFaDjyEcNj9kHZQu2/cp9+PP42+O8z+EX
-         d/LA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=P0VubNrQWYHk4IlQD+kxXHZzHAldnrU5eq+ivCmkfLU=;
-        b=XLniLXXNNYy+tc9B56N6vS89sAL3PGZySb7NPilVU731vUMIRz2mWsuDyrlx3WHYs4
-         irxgspRlE+Qs4i4+uyptWxtjbZrKJnCjS9jCAXztH/Lv2PoL9jyvdiPO2JBju/xdzhtH
-         l952s8VH1L8qbZ5qPHuHAZp1ptANLq6pvI+9IBVQbr3EeeZSjgLcRXa1Js9sfDgAIZOb
-         3J3zy0AoUbLQA+lVyFfTW/yDWuVUBmpKFNc8mSbAAoTO37uo1Ra2x06pVjFK79ts9TwP
-         WiuyBmo8d6PRKYnv86+r3qMnhM6glHIyCeOCtF7fEXCBMl8kAATB2y1XlLUYE/rflwjm
-         5LVg==
-X-Gm-Message-State: AOAM5339nk0Evr5CQGo55t5+YGCenwaKzxbPVznO1E+xw0HmGQSlh0HR
-        KG6E1UyRUDhs0FhS6HdwGHLVtC0q/vjKig==
-X-Google-Smtp-Source: ABdhPJw/YEtcJ3NYNLsPSznJMmKPEcHZcURomlUZzqjadz4cqXXix5uDPn+SrqlvcdEwvtv1UHCuvA==
-X-Received: by 2002:a65:6e92:0:b0:3c1:c903:e5fe with SMTP id bm18-20020a656e92000000b003c1c903e5femr8529040pgb.424.1651468555540;
-        Sun, 01 May 2022 22:15:55 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-92.three.co.id. [180.214.232.92])
-        by smtp.gmail.com with ESMTPSA id g14-20020aa7874e000000b0050dc7628139sm3849561pfo.19.2022.05.01.22.15.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 May 2022 22:15:55 -0700 (PDT)
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     linux-doc@vger.kernel.org
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
+        with ESMTP id S1383509AbiEBGtf (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 2 May 2022 02:49:35 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A93322CE31;
+        Sun,  1 May 2022 23:46:04 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KsDBZ2hlsz4yST;
+        Mon,  2 May 2022 16:45:58 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1651473959;
+        bh=cv1v5tbo/xmzZTbekmVXWWQW6pw/SMOAYxx313R0thY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=NWiHWOidjS3ATJyCuqUj3/timFPReo2a+ks8Wm+W9KM3lMQMow/kItQFqTpFCP93c
+         h6FkwK2dhchfSTPRS0BbrxLQbtOIkHh33St2w0y7O/+QfO6O5Zux0Cu9GAbUY3RMAB
+         thjI4rv8ubaNYWGxRUM6YLt1nASh43bN+N3mqyuIpYecvR1qtT3S1Q2mp9kWUY2/Gx
+         splwfvY019iVOEL7Re0cf72juxjJCY4tI5+AHj5Ui0REvzGyosW9Z8OSEsgovnNTwr
+         tZ8m00/3dm1tIV4D8MdqxBWS1+kWbsNiOrO8TcUga2gJ9UD7PZ8iI+bbV04Yc7Ix8e
+         qpCeVrVyXOWIA==
+Date:   Mon, 2 May 2022 16:45:57 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Fabien Dessenne <fabien.dessenne@foss.st.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: [PATCH] firmware_loader: describe 'module' parameter of firmware_upload_register()
-Date:   Mon,  2 May 2022 12:14:56 +0700
-Message-Id: <20220502051456.30741-1-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.36.0
+Subject: linux-next: manual merge of the pinctrl tree with the gpio-intel
+ tree
+Message-ID: <20220502164557.3cbb18ca@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/C4XRv.Z1y/fAR2p2UX_RBh+";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Stephen Rothwell reported kernel-doc warning:
+--Sig_/C4XRv.Z1y/fAR2p2UX_RBh+
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-drivers/base/firmware_loader/sysfs_upload.c:285: warning: Function parameter or member 'module' not described in 'firmware_upload_register'
+Hi all,
 
-Fix the warning by describing the 'module' parameter.
+Today's linux-next merge of the pinctrl tree got a conflict in:
 
-Fixes: 97730bbb242cde ("firmware_loader: Add firmware-upload support")
-Link: https://lore.kernel.org/linux-next/20220502083658.266d55f8@canb.auug.org.au/
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Russ Weight <russell.h.weight@intel.com>
-Cc: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Cc: Linux Next Mailing List <linux-next@vger.kernel.org>
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
- This patch is based on driver-core-next tree.
+  drivers/pinctrl/stm32/pinctrl-stm32.c
 
- drivers/base/firmware_loader/sysfs_upload.c | 1 +
- 1 file changed, 1 insertion(+)
+between commit:
 
-diff --git a/drivers/base/firmware_loader/sysfs_upload.c b/drivers/base/firmware_loader/sysfs_upload.c
-index 8cdcf3516c7e94..87044d52322aa2 100644
---- a/drivers/base/firmware_loader/sysfs_upload.c
-+++ b/drivers/base/firmware_loader/sysfs_upload.c
-@@ -266,6 +266,7 @@ int fw_upload_start(struct fw_sysfs *fw_sysfs)
- 
- /**
-  * firmware_upload_register() - register for the firmware upload sysfs API
-+ * @module: kernel module of this device
-  * @parent: parent device instantiating firmware upload
-  * @name: firmware name to be associated with this device
-  * @ops: pointer to structure of firmware upload ops
+  bb949ed9b16b ("pinctrl: stm32: Switch to use for_each_gpiochip_node() hel=
+per")
 
-base-commit: f8ae07f4b8bfde0f33761e1a1aaee45a4e85e9d6
--- 
-An old man doll... just what I always wanted! - Clara
+from the gpio-intel tree and commit:
 
+  c954531bc5d8 ("pinctrl: stm32: improve bank clocks management")
+
+from the pinctrl tree.
+
+I fixed it up (I think, see below) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/pinctrl/stm32/pinctrl-stm32.c
+index 7aecd0efde07,b308e7bb7487..000000000000
+--- a/drivers/pinctrl/stm32/pinctrl-stm32.c
++++ b/drivers/pinctrl/stm32/pinctrl-stm32.c
+@@@ -1544,34 -1508,44 +1506,38 @@@ int stm32_pctl_probe(struct platform_de
+  		return -ENOMEM;
+ =20
+  	i =3D 0;
+ -	for_each_available_child_of_node(np, child) {
+ +	for_each_gpiochip_node(dev, child) {
+  		struct stm32_gpio_bank *bank =3D &pctl->banks[i];
+ +		struct device_node *np =3D to_of_node(child);
+ =20
+ -		if (of_property_read_bool(child, "gpio-controller")) {
+ -			bank->rstc =3D of_reset_control_get_exclusive(child,
+ -								    NULL);
+ -			if (PTR_ERR(bank->rstc) =3D=3D -EPROBE_DEFER) {
+ -				of_node_put(child);
+ -				return -EPROBE_DEFER;
+ -			}
+ -
+ -			bank->clk =3D of_clk_get_by_name(child, NULL);
+ -			if (IS_ERR(bank->clk)) {
+ -				if (PTR_ERR(bank->clk) !=3D -EPROBE_DEFER)
+ -					dev_err(dev,
+ -						"failed to get clk (%ld)\n",
+ -						PTR_ERR(bank->clk));
+ -				of_node_put(child);
+ -				return PTR_ERR(bank->clk);
+ -			}
+ -			i++;
+ +		bank->rstc =3D of_reset_control_get_exclusive(np, NULL);
+ +		if (PTR_ERR(bank->rstc) =3D=3D -EPROBE_DEFER) {
+ +			fwnode_handle_put(child);
+ +			return -EPROBE_DEFER;
+  		}
+ -	}
+ =20
+ -	for_each_available_child_of_node(np, child) {
+ -		if (of_property_read_bool(child, "gpio-controller")) {
+ -			ret =3D stm32_gpiolib_register_bank(pctl, child);
+ -			if (ret) {
+ -				of_node_put(child);
+ +		bank->clk =3D of_clk_get_by_name(np, NULL);
+ +		if (IS_ERR(bank->clk)) {
+ +			if (PTR_ERR(bank->clk) !=3D -EPROBE_DEFER)
+ +				dev_err(dev, "failed to get clk (%ld)\n", PTR_ERR(bank->clk));
+ +			fwnode_handle_put(child);
+ +			return PTR_ERR(bank->clk);
+ +		}
+ +		i++;
+ +	}
+ =20
+ -				for (i =3D 0; i < pctl->nbanks; i++)
+ -					clk_disable_unprepare(pctl->banks[i].clk);
+ +	for_each_gpiochip_node(dev, child) {
+ +		ret =3D stm32_gpiolib_register_bank(pctl, child);
+ +		if (ret) {
+ +			fwnode_handle_put(child);
++=20
+ -				return ret;
+ -			}
+++			for (i =3D 0; i < pctl->nbanks; i++)
+++				clk_disable_unprepare(pctl->banks[i].clk);
++=20
+ -			pctl->nbanks++;
+ +			return ret;
+  		}
+ +
+ +		pctl->nbanks++;
+  	}
+ =20
+  	dev_info(dev, "Pinctrl STM32 initialized\n");
+
+--Sig_/C4XRv.Z1y/fAR2p2UX_RBh+
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJvfiUACgkQAVBC80lX
+0GwXVwf9FFN5pt22fnKTt8bzG4sU1/RTSNEgQyvlEHNo9ZbrWn36CFX1EeoNTVnc
+82EMuetW4I2oo5Uq8JBt6D/kmnc2nwp2h8rp3qwY/cSu4X8MD9vonXkKhbPebB7C
+oum+K/hk9o1asdHD/KjlaxXgLXg+A/nUjOKYBobVBLvRsgglqpCDYZRXrcMPUqAJ
++BOvQ8EczPl4007zlp5Y10U507Z924qa/JhmgRqKJm0LtYy+5FhZSo2yF1yg0pBA
+kLE0ZsaLF3PU/8WhbIK0pEngcrPsKh+dTdqwnpwi7l+Mspawt4TrNDLPdinRApOA
+TH+CuhcAFvjOW1sakelp/5GymImpVQ==
+=6y8B
+-----END PGP SIGNATURE-----
+
+--Sig_/C4XRv.Z1y/fAR2p2UX_RBh+--

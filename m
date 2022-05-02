@@ -2,48 +2,39 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42750516D73
-	for <lists+linux-next@lfdr.de>; Mon,  2 May 2022 11:36:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6711C516DCF
+	for <lists+linux-next@lfdr.de>; Mon,  2 May 2022 12:01:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349381AbiEBJjl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 2 May 2022 05:39:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35436 "EHLO
+        id S1384532AbiEBKFS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 2 May 2022 06:05:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384257AbiEBJjh (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 2 May 2022 05:39:37 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C472D36699;
-        Mon,  2 May 2022 02:36:06 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KsHyr4Zdjz4xLS;
-        Mon,  2 May 2022 19:36:04 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1651484165;
-        bh=Tl85NKAKsV+hP4G9r7CY88kWbQ/hZj5rpBTRcLc6UF8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=ZUsBlQXzxTdvtBvvM+o68aVlXtDQGEXWk5zVOrYwwV67p+7SjC8tCnhdAg0a64GiT
-         pdQGjPdDssqBbv/esz3GX3AGM2+OcznN7ANNkucmUqc+27ak3Q3mSRqWiFRi/Fbj4W
-         CZkSiY2oSdzLKg+igLXliWvPf4PhXrh6efNmOWaz67m8b+55O1QHtlDGoWdinM7wOh
-         JCWUBIpG05AQ5IDQDEKta2PsO7HVFh20+W6uH+laTEBSPh1LmZndXwpGPKgXn7fM2B
-         DnLjcnygIFF/yFQKugJU9bBMuCESpFeuJ+az8OPXyiDr1iktbkg7jliGC4hszIyl5n
-         TYvwTayzggqbQ==
-Date:   Mon, 2 May 2022 19:36:03 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        NeilBrown <neilb@suse.de>
-Subject: linux-next: manual merge of the mm tree with the folio tree
-Message-ID: <20220502193603.77d31442@canb.auug.org.au>
+        with ESMTP id S1384502AbiEBKFI (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 2 May 2022 06:05:08 -0400
+Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF0363F8;
+        Mon,  2 May 2022 03:01:24 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R371e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VC-hchj_1651485680;
+Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VC-hchj_1651485680)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Mon, 02 May 2022 18:01:22 +0800
+Date:   Mon, 2 May 2022 18:01:20 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Matthew Wilcox <willy@infradead.org>, Gao Xiang <xiang@kernel.org>,
+        Jeffle Xu <jefflexu@linux.alibaba.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the folio tree
+Message-ID: <Ym+r8OK3eWUihmr6@B-P7TQMD6M-0146.local>
+References: <20220502180425.7305c335@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/+lqtycQY9/F/58=Rsx8/1UA";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220502180425.7305c335@canb.auug.org.au>
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,54 +42,108 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/+lqtycQY9/F/58=Rsx8/1UA
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Stephen,
 
-Hi all,
+On Mon, May 02, 2022 at 06:04:25PM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the folio tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+> 
+> fs/erofs/fscache.c:255:10: error: 'const struct address_space_operations' has no member named 'readpage'
+>   255 |         .readpage = erofs_fscache_meta_readpage,
+>       |          ^~~~~~~~
+> fs/erofs/fscache.c:255:21: error: initialization of 'int (*)(struct page *, struct writeback_control *)' from incompatible pointer type 'int (*)(struct file *, struct page *)' [-Werror=incompatible-pointer-types]
+>   255 |         .readpage = erofs_fscache_meta_readpage,
+>       |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+> fs/erofs/fscache.c:255:21: note: (near initialization for 'erofs_fscache_meta_aops.writepage')
+> fs/erofs/fscache.c:259:10: error: 'const struct address_space_operations' has no member named 'readpage'
+>   259 |         .readpage = erofs_fscache_readpage,
+>       |          ^~~~~~~~
+> fs/erofs/fscache.c:259:21: error: initialization of 'int (*)(struct page *, struct writeback_control *)' from incompatible pointer type 'int (*)(struct file *, struct page *)' [-Werror=incompatible-pointer-types]
+>   259 |         .readpage = erofs_fscache_readpage,
+>       |                     ^~~~~~~~~~~~~~~~~~~~~~
+> fs/erofs/fscache.c:259:21: note: (near initialization for 'erofs_fscache_access_aops.writepage')
+> 
+> Caused by commit
+> 
+>   00da6d4b7219 ("mm,fs: Remove stray references to ->readpage")
+> 
+> interacting with commits
+> 
+>   60aa7e805f00 ("erofs: implement fscache-based metadata read")
+>   e472f468adbe ("erofs: implement fscache-based data read for non-inline layout")
+> 
+> from the erofs tree.
+> 
+> I have applied the following merge fix patch.
+> 
 
-Today's linux-next merge of the mm tree got a conflict in:
+That looks good to me, will point out this conflict then.
 
-  mm/page_io.c
+Thanks,
+Gao Xiang
 
-between commit:
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Mon, 2 May 2022 17:57:39 +1000
+> Subject: [PATCH] fixup for "mm,fs: Remove stray references to ->readpage"
+> 
+> interacting with commits
+> 
+>   60aa7e805f00 ("erofs: implement fscache-based metadata read")
+>   e472f468adbe ("erofs: implement fscache-based data read for non-inline layout")
+> 
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  fs/erofs/fscache.c | 10 ++++------
+>  1 file changed, 4 insertions(+), 6 deletions(-)
+> 
+> diff --git a/fs/erofs/fscache.c b/fs/erofs/fscache.c
+> index a402d8f0a063..1bb2d0fc19c8 100644
+> --- a/fs/erofs/fscache.c
+> +++ b/fs/erofs/fscache.c
+> @@ -59,10 +59,9 @@ static int erofs_fscache_read_folios(struct fscache_cookie *cookie,
+>  	return ret;
+>  }
+>  
+> -static int erofs_fscache_meta_readpage(struct file *data, struct page *page)
+> +static int erofs_fscache_meta_read_folio(struct file *data, struct folio *folio)
+>  {
+>  	int ret;
+> -	struct folio *folio = page_folio(page);
+>  	struct super_block *sb = folio_mapping(folio)->host->i_sb;
+>  	struct erofs_map_dev mdev = {
+>  		.m_deviceid = 0,
+> @@ -110,9 +109,8 @@ static int erofs_fscache_readpage_inline(struct folio *folio,
+>  	return 0;
+>  }
+>  
+> -static int erofs_fscache_readpage(struct file *file, struct page *page)
+> +static int erofs_fscache_read_folio(struct file *file, struct folio *folio)
+>  {
+> -	struct folio *folio = page_folio(page);
+>  	struct inode *inode = folio_mapping(folio)->host;
+>  	struct super_block *sb = inode->i_sb;
+>  	struct erofs_map_blocks map;
+> @@ -252,11 +250,11 @@ static void erofs_fscache_readahead(struct readahead_control *rac)
+>  }
+>  
+>  static const struct address_space_operations erofs_fscache_meta_aops = {
+> -	.readpage = erofs_fscache_meta_readpage,
+> +	.read_folio = erofs_fscache_meta_read_folio,
+>  };
+>  
+>  const struct address_space_operations erofs_fscache_access_aops = {
+> -	.readpage = erofs_fscache_readpage,
+> +	.read_folio = erofs_fscache_read_folio,
+>  	.readahead = erofs_fscache_readahead,
+>  };
+>  
+> -- 
+> 2.35.1
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
 
-  f6c95ae9b2c7 ("mm: Convert swap_readpage to call read_folio instead of re=
-adpage")
 
-from the folio tree and commits:
-
-  152ac2c67212 ("mm: introduce ->swap_rw and use it for reads from SWP_FS_O=
-PS swap-space")
-  8272c4afbe68 ("mm: submit multipage reads for SWP_FS_OPS swap-space")
-
-from the mm tree.
-
-I fixed it up (I just dorpped the folio tree change) and can carry the
-fix as necessary. This is now fixed as far as linux-next is concerned,
-but any non trivial conflicts should be mentioned to your upstream
-maintainer when your tree is submitted for merging.  You may also want
-to consider cooperating with the maintainer of the conflicting tree to
-minimise any particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/+lqtycQY9/F/58=Rsx8/1UA
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJvpgMACgkQAVBC80lX
-0GyjgAf/WjVBXl+jJ0+1fspCiEkIaUxQEv3sufEc/dMRUugTXEQqlcFVkfduL6wc
-5qaGUEqDAvFAD8K+w9jEY4gvGzPtvVosd6JZtRgXZrxHZKZmuCdo/DoEInyWHKga
-/cnVaWuv+aW89exrdW7/Sy9v1cJTS9tQsFRMhB6N9ZUF8PrnpVIGG7/l7NlMXtp9
-jmAJZlXBvRVlU+0WhRsWkMJOQwErCm9bkYElEW2YQ60fUR4BJGqLbIObU64ls09f
-KSUgMeYvwPuoXfPFnbM/biJlp5iSvA3k08YL9VCTuIF/hm5IibgFEF08hrlRPxUH
-QiIhDvp78JW+r/sHsgaAHZ2Ry+K0tA==
-=VV2J
------END PGP SIGNATURE-----
-
---Sig_/+lqtycQY9/F/58=Rsx8/1UA--

@@ -2,105 +2,129 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E851517579
-	for <lists+linux-next@lfdr.de>; Mon,  2 May 2022 19:09:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13E585175E1
+	for <lists+linux-next@lfdr.de>; Mon,  2 May 2022 19:33:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380032AbiEBRNC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 2 May 2022 13:13:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51854 "EHLO
+        id S1386655AbiEBRg2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 2 May 2022 13:36:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386521AbiEBRM6 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 2 May 2022 13:12:58 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C594E5F8B
-        for <linux-next@vger.kernel.org>; Mon,  2 May 2022 10:09:28 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id l11-20020a17090a49cb00b001d923a9ca99so13224342pjm.1
-        for <linux-next@vger.kernel.org>; Mon, 02 May 2022 10:09:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=YBdd2ryEYbQhNto7V+FEIeigFcKN5dcvsQcbEloBsSw=;
-        b=XYRI5MqlUqBCgnv3M/9BUQuzTOPzzNxiJdVK1orCZnzHz7dA6reJYKPqYCU1tcPmtq
-         cUigVtCagPxRxAmkyrVrK0V062Z1GofJ9KKeCG9eWm39/CqCM8nBoKs+Y0dZmtWHeDt7
-         VZL6umn0BklTenRO/3A0Ow1+x28lU2+ZRRdLQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=YBdd2ryEYbQhNto7V+FEIeigFcKN5dcvsQcbEloBsSw=;
-        b=EwJNS0gJn5kKBhs4HLHahbn18/fPneiSneWIHYD76ew0rbJWqbjiTzZgOlth3DTmf4
-         ClY1S+B3e5uvFdSH459DQ0yqYqZOgA4H7FAfFe4rjnvDCGj+V5hbYMll7n6GnddXQQW7
-         PRKIbmzALe32yztW4PpceW+zPWnZp9Juv1u14+3Z9rPbzs22/AxXb5pkvQBMNxq6D3x6
-         hOA19/h2A6vq0vtZGaRckLL3t1zXw+94Nf2/8BzZzNT856cY5XZFUT/3t2udH+nDf7dP
-         dv1CsSkTkGPJQbtb1al410a+DbAldMBHYiAc/YZYvQBfawYbaC7R+Ebq2FcvbsrWMHX3
-         p8dw==
-X-Gm-Message-State: AOAM532Cs7zzxYEfizMNWUrqSnV6GWhTFvhT5kPNVRGmOdvIT41RRi/Y
-        0xLgg7rKTDdy0vFE7yJJYhSOwQ==
-X-Google-Smtp-Source: ABdhPJxkgIjQEoLrqIr9pTzpjKkepzj3G16lxAM5zrjtg1fwCIRZhywsUjgqUg/oWK4ovXfHbqsB0Q==
-X-Received: by 2002:a17:902:cec5:b0:15d:1e53:6f1a with SMTP id d5-20020a170902cec500b0015d1e536f1amr12831600plg.2.1651511368310;
-        Mon, 02 May 2022 10:09:28 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:c272:7186:601f:66e6])
-        by smtp.gmail.com with UTF8SMTPSA id co21-20020a17090afe9500b001cd4989fedcsm19210563pjb.40.2022.05.02.10.09.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 May 2022 10:09:27 -0700 (PDT)
-Date:   Mon, 2 May 2022 10:09:25 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Greg KH <greg@kroah.com>
+        with ESMTP id S241242AbiEBRg1 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 2 May 2022 13:36:27 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD4525DE;
+        Mon,  2 May 2022 10:32:58 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id D072E5C00A4;
+        Mon,  2 May 2022 13:32:55 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Mon, 02 May 2022 13:32:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1651512775; x=1651599175; bh=O38fQ+vhsG
+        3gGTdn+UJjK1HqNAThZrZHdOVpoaDuDIc=; b=MfRDZYe8MasDLw7mnSR0nMcXO6
+        4/BCqUrbkFqYZBEg0l+kIuUu6oDux71JQEo4L3/7mxaUcoK9AFLnkicX5gwhdHWN
+        jBxjAWO3MdnwOVQ4ez83ZxnoyOWmbSp3YHhyqleeDE+HBesK93l7m5KUTujlaJ8s
+        0PfRo43FJ5WOdd31QrOF/H5kAAr1twj/vgproC2yiRYRGE/Ps1kgFFmTd/pXRfzq
+        SjRGwbqxkBL4PpMVh+fKGoFh4FytcqeAv/9sbZ1uW7rO+2+vt6/PULnkpeLPP9x9
+        LKs3sNjOxlENZiGVC6uRyUrH7ww1I2j+NxJC0BAW5qRnjCwxSdv3/OqZy9mA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1651512775; x=
+        1651599175; bh=O38fQ+vhsG3gGTdn+UJjK1HqNAThZrZHdOVpoaDuDIc=; b=E
+        NFahZAk5ymZsCbb2bg/Gia3AhsCEykD3oglo8tKhbCiyBDXqLGzlxuhGI01p+To5
+        xGR77tObewUcCG1ALI5rvG54B/1fmHLfECDhSGCvgYxovwQVDBLlBXXRHutaex9C
+        Buo7PTm/0Fs+wPvPzrxTSfuCqr/RgtbVqKsxgvfTAYcWcfCb5rFzY39I4bCYR/vg
+        4mDbX9Dqj4F7zO63SFgbu7DIV0eWuT88dmqa5aadVsIOp2mofsdrc8U69OufaHIE
+        ta8fV8z06i0MxmsYBU+0llN98//hGRCrBQqQq/zQkQFWTY35/TefXboiOnkqwUmk
+        GbTlug8kJY/sjPd7XT2bg==
+X-ME-Sender: <xms:xxVwYhy2SpiN1vpHDohvZSnkv7UOWSEA1CYaZrVUV1sy2y8L7CX8gg>
+    <xme:xxVwYhTOMmlbD4v814N_qBA2LzTYZwNHjENTONxPWKC2WM7lOyEGKEEMsVEV8lWS6
+    EIEEGsK_uEiSg>
+X-ME-Received: <xmr:xxVwYrUOmLnZKFDuC0Xcj0dGMzd_MNZh8xq0GZyyemV9Jl-kk1JnShAYy1j3wEy8qbeM76wOARdSAKSVdul1zR8syJ8DQXU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehgdduudefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
+    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
+    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
+    hhrdgtohhm
+X-ME-Proxy: <xmx:xxVwYjhNtGyCWWcsHe0GmGDF8X-J5IFvMV_pQLxcl2kmHgXxXJ8uIQ>
+    <xmx:xxVwYjD1CEJmfWGEmVqyU_0Qy-CEFvziBfrFk8CZ-XESFJqJ-EpBfg>
+    <xmx:xxVwYsIhQFO4fw5hIX51dstWR7fAk8I8saF5VsyRJZzy8Mu2Qp9khQ>
+    <xmx:xxVwYn4zV4CuB7AdrMyFHv8zUngSDZ9eWG1s_x4BaKa8GF7ENN6_MQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 2 May 2022 13:32:55 -0400 (EDT)
+Date:   Mon, 2 May 2022 19:32:54 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Matthias Kaehlcke <mka@chromium.org>
 Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Ravi Chandra Sadineni <ravisadineni@chromium.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Douglas Anderson <dianders@chromium.org>
 Subject: Re: linux-next: build failure after merge of the usb tree
-Message-ID: <YnAQRQWK6ozI8DZJ@google.com>
+Message-ID: <YnAVxtQNOOhtz3lO@kroah.com>
 References: <20220502210728.0b36f3cd@canb.auug.org.au>
  <Ym/DPS99n8K8Lltu@kroah.com>
+ <YnAQRQWK6ozI8DZJ@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Ym/DPS99n8K8Lltu@kroah.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YnAQRQWK6ozI8DZJ@google.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, May 02, 2022 at 01:40:45PM +0200, Greg KH wrote:
-> On Mon, May 02, 2022 at 09:07:28PM +1000, Stephen Rothwell wrote:
-> > Hi all,
+On Mon, May 02, 2022 at 10:09:25AM -0700, Matthias Kaehlcke wrote:
+> On Mon, May 02, 2022 at 01:40:45PM +0200, Greg KH wrote:
+> > On Mon, May 02, 2022 at 09:07:28PM +1000, Stephen Rothwell wrote:
+> > > Hi all,
+> > > 
+> > > After merging the usb tree, today's linux-next build (x86_64
+> > > modules_install) failed like this:
+> > > 
+> > > depmod: ERROR: Cycle detected: usbcore -> onboard_usb_hub -> usbcore
+> > > depmod: ERROR: Found 2 modules in dependency cycles!
+> > > 
+> > > Caused by commit
+> > > 
+> > >   c40b62216c1a ("usb: core: hcd: Create platform devices for onboard hubs in probe()")
+> > > 
+> > > I have reverted that commit for today.
 > > 
-> > After merging the usb tree, today's linux-next build (x86_64
-> > modules_install) failed like this:
-> > 
-> > depmod: ERROR: Cycle detected: usbcore -> onboard_usb_hub -> usbcore
-> > depmod: ERROR: Found 2 modules in dependency cycles!
-> > 
-> > Caused by commit
-> > 
-> >   c40b62216c1a ("usb: core: hcd: Create platform devices for onboard hubs in probe()")
-> > 
-> > I have reverted that commit for today.
+> > argh, I thought the build issues were fixed :(
 > 
-> argh, I thought the build issues were fixed :(
+> Sorry about that :(
+> 
+> The *build* issues were actually fixed, however I did not try
+> modules_install ...
+> 
+> > I'll go revert that series from my tree later today, thanks for the
+> > report.
+> 
+> I think the dependency situation can only be resolved by linking
+> onboard_hub_create/destroy_pdevs() into the USB core module. My initial
+> idea was to build them into the kernel binary, however that doesn't
+> work because onboard_hub_create_pdevs() calls usb_of_get_device_node(),
+> which is part of the core module when CONFIG_USB=m. The two function
+> are relatively lightweight and don't depend on internals of the
+> onboard_usb_hub driver (besides the device id table) so linking them
+> into the core module doesn't seem too ugly.
 
-Sorry about that :(
+I'll try to look at this next week, it shouldn't be that complex.  If it
+is, something feels wrong...
 
-The *build* issues were actually fixed, however I did not try
-modules_install ...
+thanks,
 
-> I'll go revert that series from my tree later today, thanks for the
-> report.
-
-I think the dependency situation can only be resolved by linking
-onboard_hub_create/destroy_pdevs() into the USB core module. My initial
-idea was to build them into the kernel binary, however that doesn't
-work because onboard_hub_create_pdevs() calls usb_of_get_device_node(),
-which is part of the core module when CONFIG_USB=m. The two function
-are relatively lightweight and don't depend on internals of the
-onboard_usb_hub driver (besides the device id table) so linking them
-into the core module doesn't seem too ugly.
+greg k-h

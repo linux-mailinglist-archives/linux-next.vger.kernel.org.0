@@ -2,362 +2,182 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B132517218
-	for <lists+linux-next@lfdr.de>; Mon,  2 May 2022 17:00:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 540A2517316
+	for <lists+linux-next@lfdr.de>; Mon,  2 May 2022 17:43:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348651AbiEBPEG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 2 May 2022 11:04:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40896 "EHLO
+        id S1344739AbiEBPqm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 2 May 2022 11:46:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385675AbiEBPEF (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 2 May 2022 11:04:05 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6811BDEE5
-        for <linux-next@vger.kernel.org>; Mon,  2 May 2022 08:00:36 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id 6so250393pgb.13
-        for <linux-next@vger.kernel.org>; Mon, 02 May 2022 08:00:36 -0700 (PDT)
+        with ESMTP id S241392AbiEBPql (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 2 May 2022 11:46:41 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 169A5B92;
+        Mon,  2 May 2022 08:43:12 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id y3so28448308ejo.12;
+        Mon, 02 May 2022 08:43:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=NyQO1vvT2gQD9I7qp6f23VaKHKxlx4EoryYhgOxseyM=;
-        b=wtcxA6cooMv07QmxsFF1wLblKyIek3W3YwMJb69LMnHhDdpArAm0tjE6csTJPzynze
-         gwX3bEzs82VChBjo3W4ClKerKFXPuBXarKawXJA1Fi9be31ImubwHaZja2/l95qchDAL
-         8YG0FfjCtPL1l8UoJIxivVUoZ5GhSEc+x6ExI5wLshQCxKEYLzYh9mbdQsYp4GQLY+eB
-         uEeq/+BGpHYlGq/Jollka/dDAkhVX9OP4BiaTdb1G3JB65DttrdcR5U2lqYHugWEw6rG
-         VHXI2Zm7vdDYrbOqFrQCc9kYVkcYsyC+XXq+X5af3XpOmE1369UjxMDNN6Wz8PHDFJ3h
-         TNxw==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=AjFRgeqn9Z/mHKiToXMOXpMUQKhByRvH8NHC9cBSak4=;
+        b=dcs05AyxQY0SurUNVWPgJgvK8LLXk9f5qGT2X3c4mI1SS12yrtGRrwFG3bXYAE3HBN
+         u/TquAfYlnsgu0CDFAS2IYlgU6UQQtL95oi+Uc/DuyfaSe9JROyR4QO7HYnwKyinduwW
+         uRr8EJbqU93Cb9S64XO99OotNGbGHcAuvhR68p+Q6FW5JN7fdrzHAVF5G5AETe+hSGZd
+         PuFiNZ6ozMNEtMqS3YUYbDRcNe2fRkGnKXaCQ4CdStGDdLYnvDzKCpk67ivSLan4eoUF
+         GIJQbifN4a8MU1EPd/oJaJJ0OHyf/05qVezaHRPoCig7ys808tpalSQhANsINLFcR1P1
+         sLKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=NyQO1vvT2gQD9I7qp6f23VaKHKxlx4EoryYhgOxseyM=;
-        b=TxZly2IYVpobs6mlZYzV65B2mFpNEASasi7p+yZ1hh6iKJ0QhKZTs4rVRMfcpyBLIM
-         Sbl9GRd2XiQkOwJE/gOsQduH4P4dMWndW0Fx7M4ieAnk5+gZGOILjPxq72eZK1nqiYFm
-         1rcO5wppf+p+ggY1NJYQRtVp3Qf5TDScmzqeMxBz+TCy6uDpIECbP7EVFZYr/IT62UTy
-         JwAKSbz0O236s3D8R6Ww6CyJG7/aqp3GEwglaPzOCdo7B2rlM3wj21KZvGXyek0jqo/8
-         JM15wtED2vuMf04gMtpbCVng+ba29wiJil7LENN4kycRDJN4k75InEK1kHTiuZiVogbv
-         7dLQ==
-X-Gm-Message-State: AOAM532V2+DyDwT2I/VEKIaKwmmuTAW5Fpa2/EtI+xbWoXi/d7bleJSQ
-        KMV7i4bGq9ENSLc8jm5Svi1qb3fxytXKcxu5WMU=
-X-Google-Smtp-Source: ABdhPJyjj3nf/zB+9UGrS16X4SSztWnACfEKWHkTpdJ50nt5ByaTKBehJk7wHPOU4aerC/Pd2idqFg==
-X-Received: by 2002:a63:e51:0:b0:3a4:9d22:1fd5 with SMTP id 17-20020a630e51000000b003a49d221fd5mr10222762pgo.586.1651503635547;
-        Mon, 02 May 2022 08:00:35 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id j24-20020aa78d18000000b0050dc76281bbsm4930929pfe.149.2022.05.02.08.00.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 May 2022 08:00:35 -0700 (PDT)
-Message-ID: <626ff213.1c69fb81.8da24.bcc1@mx.google.com>
-Date:   Mon, 02 May 2022 08:00:35 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AjFRgeqn9Z/mHKiToXMOXpMUQKhByRvH8NHC9cBSak4=;
+        b=sxlQCOA3YGPGjWsjCNwNi2d8dWN1VnJirQb9NlGYc96SGq1ipfDigO6hy5vVhd7hTH
+         BD8PDCNJ+vPUbxP1K2huimMfSyp7m9tlvuj6BjHhrWxBUNozme6LMsjL6DaHZpzaHQet
+         Kv4ZraWgdL5jU5QjLd63Sf6zLPLhvewVScvhTi53XQH3UYVFgjujhQtSTQAnQu3BxhOd
+         /rRABzwSVByQVX6501/Z6KpXqZ4uaAKxka1LrJ7g/VZGBfy5qzgrBJoQvkQSi5aqGvvB
+         2vvcZ0SeWFGW+ufHkEd8FTBrGCCAn3ZqAZoT49SWNP3Xe3jgIL/oEF8U4J/pCQRbJZaH
+         w+wQ==
+X-Gm-Message-State: AOAM533U37bLAsR4DqoF+kv1zWwROzdU5jqsa9JslNzTn9aknDpGG9T0
+        4PqHNlTC2j/UP2cvxKFWosEBKz/LBfkfHfbynvc=
+X-Google-Smtp-Source: ABdhPJwmhjZIF781k5jQnI0bM4revnE4BFmfozMQdI1ybDOI+aak+5cGQFZlOlIrri+uALZ6UW56hpaV1qQnjzlOvjM=
+X-Received: by 2002:a17:907:968e:b0:6db:aed5:43c8 with SMTP id
+ hd14-20020a170907968e00b006dbaed543c8mr11815421ejc.636.1651506190563; Mon, 02
+ May 2022 08:43:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: v5.18-rc5-153-g9ad6e3a34136
-X-Kernelci-Report-Type: test
-Subject: next/pending-fixes baseline: 377 runs,
- 7 regressions (v5.18-rc5-153-g9ad6e3a34136)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220502164557.3cbb18ca@canb.auug.org.au>
+In-Reply-To: <20220502164557.3cbb18ca@canb.auug.org.au>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 2 May 2022 17:42:34 +0200
+Message-ID: <CAHp75VddQMK7b-xbPy91rQ0QskXerhnY_sRiT0ZfGraRmKpL_Q@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the pinctrl tree with the gpio-intel tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Fabien Dessenne <fabien.dessenne@foss.st.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes baseline: 377 runs, 7 regressions (v5.18-rc5-153-g9ad6e3=
-a34136)
-
-Regressions Summary
--------------------
-
-platform                   | arch  | lab           | compiler | defconfig  =
-                  | regressions
----------------------------+-------+---------------+----------+------------=
-------------------+------------
-da850-lcdk                 | arm   | lab-baylibre  | gcc-10   | davinci_all=
-_defconfig        | 1          =
-
-jetson-tk1                 | arm   | lab-baylibre  | gcc-10   | multi_v7_de=
-fc...G_ARM_LPAE=3Dy | 1          =
-
-odroid-xu3                 | arm   | lab-collabora | gcc-10   | multi_v7_de=
-fc...MB2_KERNEL=3Dy | 1          =
-
-qemu_arm64-virt-gicv2-uefi | arm64 | lab-baylibre  | gcc-10   | defconfig+d=
-ebug              | 1          =
-
-qemu_arm64-virt-gicv2-uefi | arm64 | lab-broonie   | gcc-10   | defconfig+d=
-ebug              | 1          =
-
-qemu_arm64-virt-gicv3-uefi | arm64 | lab-baylibre  | gcc-10   | defconfig+d=
-ebug              | 1          =
-
-qemu_arm64-virt-gicv3-uefi | arm64 | lab-broonie   | gcc-10   | defconfig+d=
-ebug              | 1          =
-
-
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v5.18-rc5-153-g9ad6e3a34136/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v5.18-rc5-153-g9ad6e3a34136
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      9ad6e3a34136f42aa96ab4690342aa75fd9783a7 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                   | arch  | lab           | compiler | defconfig  =
-                  | regressions
----------------------------+-------+---------------+----------+------------=
-------------------+------------
-da850-lcdk                 | arm   | lab-baylibre  | gcc-10   | davinci_all=
-_defconfig        | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/626fbc0689c1c03d5b75dcb9
-
-  Results:     5 PASS, 1 FAIL, 1 SKIP
-  Full config: davinci_all_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.18-rc5-1=
-53-g9ad6e3a34136/arm/davinci_all_defconfig/gcc-10/lab-baylibre/baseline-da8=
-50-lcdk.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.18-rc5-1=
-53-g9ad6e3a34136/arm/davinci_all_defconfig/gcc-10/lab-baylibre/baseline-da8=
-50-lcdk.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220428.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.dmesg.alert: https://kernelci.org/test/case/id/626fbc0689c1c03=
-d5b75dcbd
-        failing since 98 days (last pass: v5.16-11577-gffd79fec234d, first =
-fail: v5.17-rc1-180-g86539e2bdb99)
-        3 lines
-
-    2022-05-02T11:09:39.693198  kern  :alert : BUG: Bad page state in proce=
-ss kworker/u2:0  pfn:c3000
-    2022-05-02T11:09:39.693513  kern  :alert : BUG: Bad page state in proce=
-ss kworker/u2:0  pfn:c3400
-    2022-05-02T11:09:39.693702  kern  :alert : BUG: Bad page state in proce=
-ss kworker/u2:0  pfn:c3800
-    2022-05-02T11:09:39.735975  <8><LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Dale=
-rt RESULT=3Dfail UNITS=3Dlines MEASUREMENT=3D3>   =
-
- =
-
-
-
-platform                   | arch  | lab           | compiler | defconfig  =
-                  | regressions
----------------------------+-------+---------------+----------+------------=
-------------------+------------
-jetson-tk1                 | arm   | lab-baylibre  | gcc-10   | multi_v7_de=
-fc...G_ARM_LPAE=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/626fbd1d0d607e222d75dca6
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.18-rc5-1=
-53-g9ad6e3a34136/arm/multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/=
-gcc-10/lab-baylibre/baseline-jetson-tk1.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.18-rc5-1=
-53-g9ad6e3a34136/arm/multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/=
-gcc-10/lab-baylibre/baseline-jetson-tk1.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220428.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/626fbd1d0d607e222d75d=
-ca7
-        failing since 2 days (last pass: v5.18-rc2-366-ga3e1163f7eb1a, firs=
-t fail: v5.18-rc4-464-g425675974eb3) =
-
- =
-
-
-
-platform                   | arch  | lab           | compiler | defconfig  =
-                  | regressions
----------------------------+-------+---------------+----------+------------=
-------------------+------------
-odroid-xu3                 | arm   | lab-collabora | gcc-10   | multi_v7_de=
-fc...MB2_KERNEL=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/626fceb07f1880f91575dc81
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.18-rc5-1=
-53-g9ad6e3a34136/arm/multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab=
--collabora/baseline-odroid-xu3.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.18-rc5-1=
-53-g9ad6e3a34136/arm/multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab=
--collabora/baseline-odroid-xu3.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220428.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/626fceb07f1880f91575d=
-c82
-        failing since 53 days (last pass: v5.17-rc6-312-gf15bf60c638f, firs=
-t fail: v5.17-rc7-200-gfb8a41b34095) =
-
- =
-
-
-
-platform                   | arch  | lab           | compiler | defconfig  =
-                  | regressions
----------------------------+-------+---------------+----------+------------=
-------------------+------------
-qemu_arm64-virt-gicv2-uefi | arm64 | lab-baylibre  | gcc-10   | defconfig+d=
-ebug              | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/626fbeaaa74e6a980075dc80
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+debug
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.18-rc5-1=
-53-g9ad6e3a34136/arm64/defconfig+debug/gcc-10/lab-baylibre/baseline-qemu_ar=
-m64-virt-gicv2-uefi.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.18-rc5-1=
-53-g9ad6e3a34136/arm64/defconfig+debug/gcc-10/lab-baylibre/baseline-qemu_ar=
-m64-virt-gicv2-uefi.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220428.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/626fbeaaa74e6a980075d=
-c81
-        new failure (last pass: v5.18-rc4-464-g425675974eb3) =
-
- =
-
-
-
-platform                   | arch  | lab           | compiler | defconfig  =
-                  | regressions
----------------------------+-------+---------------+----------+------------=
-------------------+------------
-qemu_arm64-virt-gicv2-uefi | arm64 | lab-broonie   | gcc-10   | defconfig+d=
-ebug              | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/626fbcb2272701dcff75dc8a
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+debug
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.18-rc5-1=
-53-g9ad6e3a34136/arm64/defconfig+debug/gcc-10/lab-broonie/baseline-qemu_arm=
-64-virt-gicv2-uefi.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.18-rc5-1=
-53-g9ad6e3a34136/arm64/defconfig+debug/gcc-10/lab-broonie/baseline-qemu_arm=
-64-virt-gicv2-uefi.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220428.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/626fbcb2272701dcff75d=
-c8b
-        new failure (last pass: v5.18-rc4-464-g425675974eb3) =
-
- =
-
-
-
-platform                   | arch  | lab           | compiler | defconfig  =
-                  | regressions
----------------------------+-------+---------------+----------+------------=
-------------------+------------
-qemu_arm64-virt-gicv3-uefi | arm64 | lab-baylibre  | gcc-10   | defconfig+d=
-ebug              | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/626fbebf7971e749b875dc63
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+debug
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.18-rc5-1=
-53-g9ad6e3a34136/arm64/defconfig+debug/gcc-10/lab-baylibre/baseline-qemu_ar=
-m64-virt-gicv3-uefi.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.18-rc5-1=
-53-g9ad6e3a34136/arm64/defconfig+debug/gcc-10/lab-baylibre/baseline-qemu_ar=
-m64-virt-gicv3-uefi.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220428.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/626fbebf7971e749b875d=
-c64
-        new failure (last pass: v5.18-rc4-464-g425675974eb3) =
-
- =
-
-
-
-platform                   | arch  | lab           | compiler | defconfig  =
-                  | regressions
----------------------------+-------+---------------+----------+------------=
-------------------+------------
-qemu_arm64-virt-gicv3-uefi | arm64 | lab-broonie   | gcc-10   | defconfig+d=
-ebug              | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/626fbcb4272701dcff75dc90
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+debug
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.18-rc5-1=
-53-g9ad6e3a34136/arm64/defconfig+debug/gcc-10/lab-broonie/baseline-qemu_arm=
-64-virt-gicv3-uefi.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.18-rc5-1=
-53-g9ad6e3a34136/arm64/defconfig+debug/gcc-10/lab-broonie/baseline-qemu_arm=
-64-virt-gicv3-uefi.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220428.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/626fbcb4272701dcff75d=
-c91
-        new failure (last pass: v5.18-rc4-464-g425675974eb3) =
-
- =20
+On Mon, May 2, 2022 at 5:39 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> Today's linux-next merge of the pinctrl tree got a conflict in:
+>
+>   drivers/pinctrl/stm32/pinctrl-stm32.c
+>
+> between commit:
+>
+>   bb949ed9b16b ("pinctrl: stm32: Switch to use for_each_gpiochip_node() helper")
+>
+> from the gpio-intel tree and commit:
+>
+>   c954531bc5d8 ("pinctrl: stm32: improve bank clocks management")
+>
+> from the pinctrl tree.
+>
+> I fixed it up (I think, see below) and can carry the fix as
+> necessary. This is now fixed as far as linux-next is concerned, but any
+> non trivial conflicts should be mentioned to your upstream maintainer
+> when your tree is submitted for merging.  You may also want to consider
+> cooperating with the maintainer of the conflicting tree to minimise any
+> particularly complex conflicts.
+
+Thanks for the fix. I think the best course of action is that Linus W.
+can pull the same branch that GPIO tree has into the pin control tree
+and resolve that, because the drivers touched are all pin control
+drivers while the core part of GPIO subsystem was updated.
+
+> --
+> Cheers,
+> Stephen Rothwell
+>
+> diff --cc drivers/pinctrl/stm32/pinctrl-stm32.c
+> index 7aecd0efde07,b308e7bb7487..000000000000
+> --- a/drivers/pinctrl/stm32/pinctrl-stm32.c
+> +++ b/drivers/pinctrl/stm32/pinctrl-stm32.c
+> @@@ -1544,34 -1508,44 +1506,38 @@@ int stm32_pctl_probe(struct platform_de
+>                 return -ENOMEM;
+>
+>         i = 0;
+>  -      for_each_available_child_of_node(np, child) {
+>  +      for_each_gpiochip_node(dev, child) {
+>                 struct stm32_gpio_bank *bank = &pctl->banks[i];
+>  +              struct device_node *np = to_of_node(child);
+>
+>  -              if (of_property_read_bool(child, "gpio-controller")) {
+>  -                      bank->rstc = of_reset_control_get_exclusive(child,
+>  -                                                                  NULL);
+>  -                      if (PTR_ERR(bank->rstc) == -EPROBE_DEFER) {
+>  -                              of_node_put(child);
+>  -                              return -EPROBE_DEFER;
+>  -                      }
+>  -
+>  -                      bank->clk = of_clk_get_by_name(child, NULL);
+>  -                      if (IS_ERR(bank->clk)) {
+>  -                              if (PTR_ERR(bank->clk) != -EPROBE_DEFER)
+>  -                                      dev_err(dev,
+>  -                                              "failed to get clk (%ld)\n",
+>  -                                              PTR_ERR(bank->clk));
+>  -                              of_node_put(child);
+>  -                              return PTR_ERR(bank->clk);
+>  -                      }
+>  -                      i++;
+>  +              bank->rstc = of_reset_control_get_exclusive(np, NULL);
+>  +              if (PTR_ERR(bank->rstc) == -EPROBE_DEFER) {
+>  +                      fwnode_handle_put(child);
+>  +                      return -EPROBE_DEFER;
+>                 }
+>  -      }
+>
+>  -      for_each_available_child_of_node(np, child) {
+>  -              if (of_property_read_bool(child, "gpio-controller")) {
+>  -                      ret = stm32_gpiolib_register_bank(pctl, child);
+>  -                      if (ret) {
+>  -                              of_node_put(child);
+>  +              bank->clk = of_clk_get_by_name(np, NULL);
+>  +              if (IS_ERR(bank->clk)) {
+>  +                      if (PTR_ERR(bank->clk) != -EPROBE_DEFER)
+>  +                              dev_err(dev, "failed to get clk (%ld)\n", PTR_ERR(bank->clk));
+>  +                      fwnode_handle_put(child);
+>  +                      return PTR_ERR(bank->clk);
+>  +              }
+>  +              i++;
+>  +      }
+>
+>  -                              for (i = 0; i < pctl->nbanks; i++)
+>  -                                      clk_disable_unprepare(pctl->banks[i].clk);
+>  +      for_each_gpiochip_node(dev, child) {
+>  +              ret = stm32_gpiolib_register_bank(pctl, child);
+>  +              if (ret) {
+>  +                      fwnode_handle_put(child);
+> +
+>  -                              return ret;
+>  -                      }
+> ++                      for (i = 0; i < pctl->nbanks; i++)
+> ++                              clk_disable_unprepare(pctl->banks[i].clk);
+> +
+>  -                      pctl->nbanks++;
+>  +                      return ret;
+>                 }
+>  +
+>  +              pctl->nbanks++;
+>         }
+>
+>         dev_info(dev, "Pinctrl STM32 initialized\n");
+
+
+
+-- 
+With Best Regards,
+Andy Shevchenko

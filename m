@@ -2,76 +2,97 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C97D518DC1
-	for <lists+linux-next@lfdr.de>; Tue,  3 May 2022 22:05:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 127A7519028
+	for <lists+linux-next@lfdr.de>; Tue,  3 May 2022 23:36:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234984AbiECUJP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 3 May 2022 16:09:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37758 "EHLO
+        id S242921AbiECVfo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 3 May 2022 17:35:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237119AbiECUI5 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 3 May 2022 16:08:57 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73CD72DFA;
-        Tue,  3 May 2022 13:05:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=6y73UrLkuBeZbqQWQxE1t7/fvOkdPG7FrQgvW5TbCZk=; b=uV47lbaYCI77SzKFgjANFlLdPi
-        L02iSgJfX9+DktwQKv2+gW04aiFG88sPWwCOpfbWVfsKcu5mcv6/fSFU+nTtYhp4/nG6vb6sK6vO1
-        VuOYw0zbi0N5oB1BXqerDMF7l1psgHzPI174q4fF7eoDfL7w+JUkH5bAerAOHbru+Yd3kpigqC8Qv
-        qaW65HJ2rsoeJpsMNjSwiawKJyE5v7ztmXTNDLnq1z+n3rPjhh/MtEwPoeXxzP0/w7t/fjkR8jMOD
-        yUESiFI99BpsJg2J6h3EUzozTZNBVnIfNljmTXGlRhcUON7mxblWtRdlKKftawmCl9vCGYK6Z3Mag
-        IuaQzkHg==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nlylv-007UQd-7t; Tue, 03 May 2022 20:05:23 +0000
-Date:   Tue, 3 May 2022 13:05:23 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     linux-doc@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
+        with ESMTP id S242923AbiECVfn (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 3 May 2022 17:35:43 -0400
+X-Greylist: delayed 595 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 03 May 2022 14:32:09 PDT
+Received: from zeus.flokli.de (mail.zeus.flokli.de [88.198.15.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1012130F50
+        for <linux-next@vger.kernel.org>; Tue,  3 May 2022 14:32:08 -0700 (PDT)
+Received: from localhost (unknown [95.179.247.40])
+        (using TLSv1.2 with cipher AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: flokli@flokli.de)
+        by zeus.flokli.de (Postfix) with ESMTPSA id 751E713053D4;
+        Tue,  3 May 2022 21:22:09 +0000 (UTC)
+Date:   Tue, 3 May 2022 23:22:10 +0200
+From:   Florian Klink <flokli@flokli.de>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: [PATCH] firmware_loader: describe 'module' parameter of
- firmware_upload_register()
-Message-ID: <YnGLA92KGlloOsLf@bombadil.infradead.org>
-References: <20220502051456.30741-1-bagasdotme@gmail.com>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        ValdikSS <iam@valdikss.org.ru>
+Subject: Re: linux-next: Signed-off-by missing for commits in the hid tree
+Message-ID: <20220503212210.mqv3kxderfxesrue@tp.flokli.de>
+References: <20220503073428.219a0ed8@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="4jchgaoyic3wz72q"
 Content-Disposition: inline
-In-Reply-To: <20220502051456.30741-1-bagasdotme@gmail.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220503073428.219a0ed8@canb.auug.org.au>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, May 02, 2022 at 12:14:56PM +0700, Bagas Sanjaya wrote:
-> Stephen Rothwell reported kernel-doc warning:
-> 
-> drivers/base/firmware_loader/sysfs_upload.c:285: warning: Function parameter or member 'module' not described in 'firmware_upload_register'
-> 
-> Fix the warning by describing the 'module' parameter.
-> 
-> Fixes: 97730bbb242cde ("firmware_loader: Add firmware-upload support")
-> Link: https://lore.kernel.org/linux-next/20220502083658.266d55f8@canb.auug.org.au/
-> Cc: Stephen Rothwell <sfr@canb.auug.org.au>
-> Cc: Russ Weight <russell.h.weight@intel.com>
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-> Cc: Linux Next Mailing List <linux-next@vger.kernel.org>
-> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
-Acked-by: Luis Chamberlain <mcgrof@kernel.org>
+--4jchgaoyic3wz72q
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
 
-  Luis
+Hey Stephen,
+
+On 22-05-03 07:34:28, Stephen Rothwell wrote:
+>Hi all,
+>
+>Commits
+>
+>  5c9b8fae88bc ("HID: lenovo: Add note about different report numbers")
+>  a0a5c2a69699 ("HID: lenovo: Sync Fn-lock state on button press for Compact and TrackPoint II keyboards")
+>  24401f291dcc ("HID: lenovo: Add support for ThinkPad TrackPoint Keyboard II")
+>
+>are missing a Signed-off-by from their author.
+>
+
+Yes, this is "intentional"/expected. See
+https://lore.kernel.org/all/20220121124116.cj6xtxvzw7rbkcs6@tp/.
+
+TL;DR: ValdikSS doesn't want to use a real name, and asked someone else
+to send this over (what I did).
+
+ From my email linked there:
+
+> It seems the "real name" requirement only applies to the Signed-Off-By
+> (not Author) field, and sending a contribution provided by some other
+> person is covered by (c) in the DCO 1.1.
+
+Regards,
+Florian
+
+--4jchgaoyic3wz72q
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCAAdFiEEdQpT8aoDC+ls4wqU86BgVS9TAioFAmJxnQIACgkQ86BgVS9T
+AioWSQf/VnCCI6BpVnr8UEdcvuhoXUBINxKuXbzd33QwU2nqY4B8zpnrUT4WDgCa
+MYegYkEotroZy9UMWTGHuXYinPAjKIDdQwlbxCeGxpqsdnwATi3d/B3oGZAYDQBj
+OUUQ36bMPWzP9Euv6D/x+ImX+qS5tXeFgiUnT9Kl8qfJTc3cAxL4QHywly+qmxgW
+SziBhbI9kzQpfbfeazZNlxMW8OjUFLcwZKASBfaHn5qZIyDs5SrtV3kmmarNDBWg
+Y7hKjbrMQVSTN9Kj6wi82HrpUqs1uk3fCjfPjDtpw5301g6ErqiBaa3WIxFYcEMc
+RqoDQrIuSXlh37fgB71J5Y7jNzQbew==
+=7cP3
+-----END PGP SIGNATURE-----
+
+--4jchgaoyic3wz72q--

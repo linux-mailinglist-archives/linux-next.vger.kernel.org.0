@@ -2,44 +2,43 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47416517ECD
-	for <lists+linux-next@lfdr.de>; Tue,  3 May 2022 09:24:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA5CB517EDE
+	for <lists+linux-next@lfdr.de>; Tue,  3 May 2022 09:26:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232180AbiECH0p (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 3 May 2022 03:26:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39840 "EHLO
+        id S232218AbiECH3u (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 3 May 2022 03:29:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232249AbiECH0h (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 3 May 2022 03:26:37 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 715A6393DB;
-        Tue,  3 May 2022 00:23:05 -0700 (PDT)
+        with ESMTP id S232237AbiECH3t (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 3 May 2022 03:29:49 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37ADB36692;
+        Tue,  3 May 2022 00:26:18 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Ksryr41Q6z4xR7;
-        Tue,  3 May 2022 17:23:00 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Kss2c3dT6z4xR7;
+        Tue,  3 May 2022 17:26:16 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1651562580;
-        bh=sZTsM1OSLdaRyALwSuPxkejmgWLuY/kECFE+3QS64h0=;
+        s=201702; t=1651562776;
+        bh=hhik5NJxEhsqkUYGQ5DJB3BUsR7PKS/ZPUlsKriqvZI=;
         h=Date:From:To:Cc:Subject:From;
-        b=n1WbPR5u4rggkNOm7EX8bgnju+SIn5G32iYp5uFWcSwsLqCkp1x38Jkv7OPKl6eHU
-         gfHWV3ZfFGzignyqg2isnNevqVa8iXJURavtXNGM27v21DuExxaQAhIaAHEaZzG1Ly
-         kqcCTjtjRHjT7s687zHLh9eNDbo9YxOcQXLD1K+cMsn3PNSTP5V1XWfVZMVATCOmiS
-         NbTdIlTBfG1Ws8iDrZIh6NHQ8+MQPgZ6f46dm803IjiR7xsiv+hm8LZn+zk5dYK6Px
-         YnwolPg9pA2cmfMNIhHO49yMPGuEC3FsxGcucp8bZBuHz9ArQwYMq6W4r3AMD+JZ3q
-         cEWNGlQIK6gOA==
-Date:   Tue, 3 May 2022 17:22:59 +1000
+        b=a6fyuLPS8RL+1q0UJod8RTDQqiq9jU2JEMXHOqkyOtdSwiBcfgEYCVQtl/ksQJemR
+         tGNNX/bAscOva9jiRH3nVAU/3nrJAd0nqghIB61zHJCpPzLyX3cbHkP+oCO5lQA06v
+         gzWNbUmHHctjWHbeMtyP6yyHxmTZj23OllrDSskJnO479O0csmoyvEi8W3+IgPslc9
+         DifY40ulGpxNydCVtfUzhuLTVmzeW+BelUFSuoWeXxfYSJr/oHUnLCD4k+YrA7Q6JD
+         F+42nD1ziSbRk/awXsYlbB3MEttoozAW6QBo0NIiuirhMusc1LUFcn41r6ZSe+kc9T
+         B5p5eLFiRap3g==
+Date:   Tue, 3 May 2022 17:26:15 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Michael Walle <michael@walle.cc>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the hwmon-staging tree
-Message-ID: <20220503172259.294a15a1@canb.auug.org.au>
+Subject: linux-next: build warnings after merge of the folio tree
+Message-ID: <20220503172615.1a5f1c52@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/UpC=4M6k7ZxZlDU5S/d88Ah";
+Content-Type: multipart/signed; boundary="Sig_/5qRXg0rnPfbIM_kljiubDeT";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -50,40 +49,43 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/UpC=4M6k7ZxZlDU5S/d88Ah
+--Sig_/5qRXg0rnPfbIM_kljiubDeT
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the hwmon-staging tree, today's linux-next build (htmldocs)
-produced this warning:
+After merging the folio tree, today's linux-next build (htmldocs)
+produced these warnings:
 
-Documentation/hwmon/lan966x.rst: WARNING: document isn't included in any to=
-ctree
+fs/jbd2/transaction.c:2149: warning: Function parameter or member 'folio' n=
+ot described in 'jbd2_journal_try_to_free_buffers'
+fs/jbd2/transaction.c:2149: warning: Excess function parameter 'page' descr=
+iption in 'jbd2_journal_try_to_free_buffers'
 
 Introduced by commit
 
-  14ed2cdb02e0 ("hwmon: add driver for the Microchip LAN966x SoC")
+  13e184c175b2 ("jbd2: Convert jbd2_journal_try_to_free_buffers to take a f=
+olio")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/UpC=4M6k7ZxZlDU5S/d88Ah
+--Sig_/5qRXg0rnPfbIM_kljiubDeT
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJw2FMACgkQAVBC80lX
-0GxF4Qf9GFSUQb29U0npMfBYc5RjDlEBeC6Pfw+zyZBcabk6imkPkv4SB0fNSc7P
-aiUV1ADf89wq/DkWgRkHjIt2bLC8taovG66N6DPlQeqBYWV6sZJr06SNJ8Xrt91e
-dUaltTDxLG0Ggz1vfjIyMjRzDsSJbTmQBEVD6qHBIPXWBamCK+coZy69ukCqx3xW
-FBPlaMFaWX/PLDNzRwl2Dzexo1vy8RIJy1dOrgY1JY1S20eStOi/G0OGsCc1qYi8
-QbuUr+SGjexBPymq6v7U5Pb13ZjmvzMY/phTQomKZ77oxiDnOAbKEDIi9GwOqcDK
-KsyIwvrCkki+EEzc7DTFE7a0xdu2Eg==
-=vwzR
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJw2RcACgkQAVBC80lX
+0Gxi+wf/RSbzYsrV6vz/nc9cwAJzcKDQDCp376MJixWIaC/f+xJ4heCoCCC4W074
+oKjFsOKPjOwlKwyWZcJv32BxPXad2Oa1gQgz4+WduCVyNDbmEbiQyy2E1hDMfkf6
+9XNXZ/ZfN1xN8nlhD5Cv1Fvm9k6yJnVZDdKnzo8RXjbLWQaFEdB2Tp7/wDlkAEa4
+0WWgfLOyXvgcInG8XGbhGAzyUfSmJSZShmT8GsDSgF4s94UTjCow0fqoObsNB2Bm
+I0a9JAkuRf2hY4zmBgd7u+CEWuMyrLhiKXUza9jXpsKTeuZXRu+hFjPUgfJx1+W9
+zI5VsQGTz9GlR7wgpmIsHZ04BMfgKQ==
+=kqKd
 -----END PGP SIGNATURE-----
 
---Sig_/UpC=4M6k7ZxZlDU5S/d88Ah--
+--Sig_/5qRXg0rnPfbIM_kljiubDeT--

@@ -2,222 +2,141 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6BF65185FF
-	for <lists+linux-next@lfdr.de>; Tue,  3 May 2022 16:03:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E90A55186D3
+	for <lists+linux-next@lfdr.de>; Tue,  3 May 2022 16:36:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236585AbiECOG5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 3 May 2022 10:06:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50364 "EHLO
+        id S237129AbiECOk0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 3 May 2022 10:40:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235030AbiECOG4 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 3 May 2022 10:06:56 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CBB91B79E;
-        Tue,  3 May 2022 07:03:24 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4Kt1rp48Bmz9sT9;
-        Tue,  3 May 2022 16:03:22 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id RhOOOXYqV50a; Tue,  3 May 2022 16:03:22 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4Kt1rp30xWz9sT8;
-        Tue,  3 May 2022 16:03:22 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 4DB408B77B;
-        Tue,  3 May 2022 16:03:22 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id VIfoSnOpUyFD; Tue,  3 May 2022 16:03:22 +0200 (CEST)
-Received: from [192.168.202.20] (unknown [192.168.202.20])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 2975E8B763;
-        Tue,  3 May 2022 16:03:21 +0200 (CEST)
-Message-ID: <8e1e4a9c-6ef8-a1a7-ad1f-84b5bf2a0b7d@csgroup.eu>
-Date:   Tue, 3 May 2022 16:03:20 +0200
+        with ESMTP id S237127AbiECOkZ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 3 May 2022 10:40:25 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 596252AE32;
+        Tue,  3 May 2022 07:36:53 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id E17A5320094C;
+        Tue,  3 May 2022 10:36:51 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Tue, 03 May 2022 10:36:52 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1651588611; x=1651675011; bh=wr1yEbLhma
+        vCHn4YSc6slYBn0rcn1MuXeUqJmQnuax0=; b=RslftU20R/juV/ALfzf3oGCJSZ
+        QESr632f4o07zZh+Pbth4vcSXsmv7+9SUYRTg/CeSFhFXYU125KB72Igwi4ZYsK6
+        8oslyn6TUrsAekDjk1Az0gV9JFkpiC+qJ6W4PhJpFSQXXl+V36te5vVLiqDz8tkM
+        fW8yznmVaTyNeK8fxOHJ85upJ2KdKl2J0idxWaSmcDYvbx95ah6RbOrSPuOqZmp1
+        J4a8nKuiq1I0Dsarf5thOxjxGIMFjbX+UyPuOsvVra1p9Bj4fcgNXBLDg4PwfADH
+        ieJKBOlC4tINlTGJ+0nUmi0U0Yix9Khs0CjSoxRXWfcI5OGmLZfDPamlWxvw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1651588611; x=
+        1651675011; bh=wr1yEbLhmavCHn4YSc6slYBn0rcn1MuXeUqJmQnuax0=; b=t
+        87Uz7VKSJFjqm0z5f8OEV36+lst3ZW9L5d+5mwYsceXRLDi2YtvxZe24eFxeA+M0
+        KXM0V+ydauwI4srYW9GBTauMap5+5Y7SLFbioVVgIvk1UdS3YVHPM1/BwmuYltMd
+        Jsg04Mq6vgEc8fmwo+9I01sr4CBqPppO/jTaNiuS3NTwjr17n1OoQVWawkb1fMu8
+        A4CipH60iWcEGzr6TSh/tniLqNpUYsooPH6VW/ftKsFCkDio0XL9KKf1+3q4RgyO
+        gvvWNso4EZ3QFOeIEDTxsIr/TG8T2ZpTz9E0T/WzQtwGVWw+Y1HrVo74vfeJPCQ9
+        UfNBEh+Av7Eggl5MsVtrg==
+X-ME-Sender: <xms:Aj5xYpUQUiJc5hXGBP1Y6de-XjaDkx61sK89iioPad0JpcPmv56cAA>
+    <xme:Aj5xYpkJKR_5WbUY1vs5FfzXdyxAF31_CM-B-s_2vWskVReWo3PyXlbi-3tEZ2Mrk
+    QZ4XiuVC9IrYQ>
+X-ME-Received: <xmr:Aj5xYlbkhKHgfW9rtdS-Bw7V9AaOevoe4Ew19j_Zo2GGwejKkRvi_JUYMayX2JguJR4fHKfKW4B1OJTdtajo3khXo4RR>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdejgdejkecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
+    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehgedvve
+    dvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhushht
+    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
+    drtghomh
+X-ME-Proxy: <xmx:Aj5xYsXo5YJ8VJIwfy6Z_tnaSukvBZmzIoG2veha1Lh7B1b4d-mUag>
+    <xmx:Aj5xYjne5PLYxCzoEooJh2NZ9-sHTye5bZaL96dwRpJjbw2cKpYuqA>
+    <xmx:Aj5xYpdwjNas8iWccbS90AF343uwPghE1jsZXp-aGWetDc61tdaVQA>
+    <xmx:Az5xYl6OLfuPgOm26kLGvmwnb7GTtsfsirZWnYMYpdb00Mv6tCashg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 3 May 2022 10:36:50 -0400 (EDT)
+Date:   Tue, 3 May 2022 16:36:48 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Sven Peter <sven@svenpeter.dev>
+Subject: Re: linux-next: manual merge of the usb tree with the usb.current
+ tree
+Message-ID: <YnE+ABsiKpUFbZUo@kroah.com>
+References: <20220426150842.473be40e@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [next] powerpc: multiple definition of `____cacheline_aligned';
- sound/core/oss/pcm_oss.o:(.bss+0x40): first defined here
-Content-Language: fr-FR
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        lkft-triage@lists.linaro.org, Peter Collingbourne <pcc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Baoquan He <bhe@redhat.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        aul Mackerras <paulus@samba.org>,
-        Christoph Hellwig <hch@lst.de>
-References: <CA+G9fYvSqtsOMEiL7_kffPKnnO-Snhe2cup6g3qRngiwRO+RfA@mail.gmail.com>
- <e3c8b2bf-b55d-4c2c-a1cf-d5e9941e26b0@csgroup.eu>
-In-Reply-To: <e3c8b2bf-b55d-4c2c-a1cf-d5e9941e26b0@csgroup.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220426150842.473be40e@canb.auug.org.au>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+On Tue, Apr 26, 2022 at 03:08:42PM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the usb tree got a conflict in:
+> 
+>   drivers/usb/dwc3/drd.c
+> 
+> between commit:
+> 
+>   ab7aa2866d29 ("usb: dwc3: Try usb-role-switch first in dwc3_drd_init")
+> 
+> from the usb.current tree and commit:
+> 
+>   0f0101719138 ("usb: dwc3: Don't switch OTG -> peripheral if extcon is present")
+> 
+> from the usb tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
+> 
+> diff --cc drivers/usb/dwc3/drd.c
+> index 8cad9e7d3368,f277bebdaa09..000000000000
+> --- a/drivers/usb/dwc3/drd.c
+> +++ b/drivers/usb/dwc3/drd.c
+> @@@ -585,14 -539,11 +539,10 @@@ int dwc3_drd_init(struct dwc3 *dwc
+>   	int ret, irq;
+>   
+>   	if (ROLE_SWITCH &&
+>  -	    device_property_read_bool(dwc->dev, "usb-role-switch")) {
+>  -		ret = dwc3_setup_role_switch(dwc);
+>  -		if (ret < 0)
+>  -			return ret;
+>  -	} else if (dwc->edev) {
+>  +	    device_property_read_bool(dwc->dev, "usb-role-switch"))
+>  +		return dwc3_setup_role_switch(dwc);
+>  +
+> - 	dwc->edev = dwc3_get_extcon(dwc);
+> - 	if (IS_ERR(dwc->edev))
+> - 		return PTR_ERR(dwc->edev);
+> - 
+>  +	if (dwc->edev) {
+>   		dwc->edev_nb.notifier_call = dwc3_drd_notifier;
+>   		ret = extcon_register_notifier(dwc->edev, EXTCON_USB_HOST,
+>   					       &dwc->edev_nb);
 
+This should now be resolved in my tree, thanks!
 
-Le 03/05/2022 à 15:10, Christophe Leroy a écrit :
-> 
-> 
-> Le 29/04/2022 à 16:45, Naresh Kamboju a écrit :
->> Following powerpc builds failed on Linux next-20220428 and next-20220429.
->>
->> Regressions found on powerpc:
->>     - gcc-11-ppc64e_defconfig
->>     - gcc-10-ppc64e_defconfig
->>     - gcc-9-ppc64e_defconfig
->>     - gcc-8-ppc64e_defconfig
->>     - clang-14-ppc64e_defconfig
->>     - clang-nightly-ppc64e_defconfig
->>     - clang-13-ppc64e_defconfig
->>
->>
->> Build error:
->> -------------
->> Error: Section .bss not empty in prom_init.c
->> make[3]: *** [arch/powerpc/kernel/Makefile:191:
->> arch/powerpc/kernel/prom_init_check] Error 1
->> make[3]: Target '__build' not remade because of errors.
->> make[2]: *** [scripts/Makefile.build:595: arch/powerpc/kernel] Error 2
->> make[2]: Target '__build' not remade because of errors.
->> make[1]: *** [Makefile:1996: arch/powerpc] Error 2
->> powerpc64le-linux-gnu-ld: sound/core/oss/pcm_plugin.o:(.bss+0x0):
->> multiple definition of `____cacheline_aligned';
->> sound/core/oss/pcm_oss.o:(.bss+0x40): first defined here
->> make[4]: *** [scripts/Makefile.build:530: 
->> sound/core/oss/snd-pcm-oss.o] Error 1
->> make[4]: Target '__build' not remade because of errors.
->> make[3]: *** [scripts/Makefile.build:595: sound/core/oss] Error 2
->> powerpc64le-linux-gnu-ld: sound/core/seq/seq_clientmgr.o:(.bss+0x900):
->> multiple definition of `____cacheline_aligned';
->> sound/core/seq/seq_lock.o:(.bss+0x0): first defined here
->> powerpc64le-linux-gnu-ld: sound/core/seq/seq_memory.o:(.bss+0x0):
->> multiple definition of `____cacheline_aligned';
->> sound/core/seq/seq_lock.o:(.bss+0x0): first defined here
->> powerpc64le-linux-gnu-ld: sound/core/seq/seq_queue.o:(.bss+0x140):
->> multiple definition of `____cacheline_aligned';
->> sound/core/seq/seq_lock.o:(.bss+0x0): first defined here
->> powerpc64le-linux-gnu-ld: sound/core/seq/seq_fifo.o:(.bss+0x0):
->> multiple definition of `____cacheline_aligned';
->> sound/core/seq/seq_lock.o:(.bss+0x0): first defined here
->> powerpc64le-linux-gnu-ld: sound/core/seq/seq_timer.o:(.bss+0x0):
->> multiple definition of `____cacheline_aligned';
->> sound/core/seq/seq_lock.o:(.bss+0x0): first defined here
->> powerpc64le-linux-gnu-ld: sound/core/seq/seq_system.o:(.bss+0x0):
->> multiple definition of `____cacheline_aligned';
->> sound/core/seq/seq_lock.o:(.bss+0x0): first defined here
->> powerpc64le-linux-gnu-ld: sound/core/seq/seq_ports.o:(.bss+0x0):
->> multiple definition of `____cacheline_aligned';
->> sound/core/seq/seq_lock.o:(.bss+0x0): first defined here
->> powerpc64le-linux-gnu-ld: sound/core/seq/seq_info.o:(.bss+0x40):
->> multiple definition of `____cacheline_aligned';
->> sound/core/seq/seq_lock.o:(.bss+0x0): first defined here
->> make[4]: *** [scripts/Makefile.build:530: sound/core/seq/snd-seq.o] 
->> Error 1
->> make[4]: Target '__build' not remade because of errors.
->>
->>
->> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
->>
->>
->> steps to reproduce:
->> -------------------
->> # To install tuxmake on your system globally:
->> # sudo pip3 install -U tuxmake
->>
->> tuxmake --runtime podman --target-arch powerpc --toolchain gcc-11
->> --kconfig ppc64e_defconfig
->>
->> -- 
->> Linaro LKFT
->> https://lkft.linaro.org
->>
->> [1] https://builds.tuxbuild.com/28Sn15hB2la1PweieGMLrUdbFMQ/
-> 
-> Bisected to:
-> 
-> 366e7b61ca1f115d38138236467068d8aacabcbc is the first bad commit
-> commit 366e7b61ca1f115d38138236467068d8aacabcbc
-> Author: Peter Collingbourne <pcc@google.com>
-> Date:   Fri Apr 29 14:42:51 2022 -0700
-> 
->      printk: stop including cache.h from printk.h
-> 
->      An inclusion of cache.h in printk.h was added in 2014 in commit
->      c28aa1f0a847 ("printk/cache: mark printk_once test variable
->      __read_mostly") in order to bring in the definition of 
-> __read_mostly.  The
->      usage of __read_mostly was later removed in commit 3ec25826ae33 
-> ("printk:
->      Tie printk_once / printk_deferred_once into .data.once for reset") 
-> which
->      made the inclusion of cache.h unnecessary, so remove it.
-> 
->      We have a small amount of code that depended on the inclusion of 
-> cache.h
->      from printk.h; fix that code to include the appropriate header.
-> 
->      This fixes a circular inclusion on arm64 (linux/printk.h -> 
-> linux/cache.h
->      -> asm/cache.h -> linux/kasan-enabled.h -> linux/static_key.h ->
->      linux/jump_label.h -> linux/bug.h -> asm/bug.h -> linux/printk.h) that
->      would otherwise be introduced by the next patch.
-> 
->      Build tested using {allyesconfig,defconfig} x {arm64,x86_64}.
-> 
->      Link: 
-> https://linux-review.googlesource.com/id/I8fd51f72c9ef1f2d6afd3b2cbc875aa4792c1fba 
-> 
->      Link: 
-> https://lkml.kernel.org/r/20220427195820.1716975-1-pcc@google.com
->      Signed-off-by: Peter Collingbourne <pcc@google.com>
->      Cc: Alexander Potapenko <glider@google.com>
->      Cc: Andrey Konovalov <andreyknvl@gmail.com>
->      Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
->      Cc: Catalin Marinas <catalin.marinas@arm.com>
->      Cc: David Rientjes <rientjes@google.com>
->      Cc: Dmitry Vyukov <dvyukov@google.com>
->      Cc: Eric W. Biederman <ebiederm@xmission.com>
->      Cc: Herbert Xu <herbert@gondor.apana.org.au>
->      Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
->      Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
->      Cc: Kees Cook <keescook@chromium.org>
->      Cc: Pekka Enberg <penberg@kernel.org>
->      Cc: Roman Gushchin <roman.gushchin@linux.dev>
->      Cc: Vlastimil Babka <vbabka@suse.cz>
->      Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-> 
->   arch/arm64/include/asm/mte-kasan.h | 1 +
->   arch/arm64/include/asm/percpu.h    | 1 +
->   arch/csky/include/asm/processor.h  | 2 +-
->   drivers/firmware/smccc/kvm_guest.c | 1 +
->   include/linux/printk.h             | 1 -
->   kernel/bpf/bpf_lru_list.h          | 1 +
->   6 files changed, 5 insertions(+), 2 deletions(-)
-
-
-I think you need to fix all files that use ____cacheline_aligned without 
-including linux/cache.h
-
-You can locate them with:
-
-	git grep -L linux/cache.h `git grep -l ____cacheline_aligned `
-
-
-Christophe
+greg k-h

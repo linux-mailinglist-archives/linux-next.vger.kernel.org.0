@@ -2,114 +2,100 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF9ED5184A4
-	for <lists+linux-next@lfdr.de>; Tue,  3 May 2022 14:57:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43A91518525
+	for <lists+linux-next@lfdr.de>; Tue,  3 May 2022 15:09:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235616AbiECNAw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 3 May 2022 09:00:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40368 "EHLO
+        id S234449AbiECNMc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 3 May 2022 09:12:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231546AbiECNAv (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 3 May 2022 09:00:51 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B090A3464B
-        for <linux-next@vger.kernel.org>; Tue,  3 May 2022 05:57:19 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id v12so23218900wrv.10
-        for <linux-next@vger.kernel.org>; Tue, 03 May 2022 05:57:19 -0700 (PDT)
+        with ESMTP id S231795AbiECNMb (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 3 May 2022 09:12:31 -0400
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 997572B259;
+        Tue,  3 May 2022 06:08:58 -0700 (PDT)
+Received: by mail-oi1-x22a.google.com with SMTP id l203so18152427oif.0;
+        Tue, 03 May 2022 06:08:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=7TOGHcHekaFO7f+j1SO70Y08InL8fjzFxY4wwxiSXjw=;
-        b=WZNnFAlWBEChTl7JJwhHsz0KIWVztdcwcPGm6WtEO7sSYLYRvuiE7XVmbxki9Lxl9t
-         J1gw1g3JkLrQtCweng0CkMSvcGoXhJcrrzGgTmz0LnRyp9ljMtpHfBt8wzlU5Aid9WSd
-         rQT+TNxTVD5BrJXxGvX6gZf48cAJl9wTNNPWTJM8XlWDYg9AWHWVKRBZeSuzmQjMKkrU
-         gHmf7WMRvccxjrDildUwjEJ9IYvlSmpytp1yjBOwnx3D6hhiuB6g83cAuebbwtlpWocp
-         FCBRCalzX//G6xI3Hf3CrpFInT35v3OyKqz9h7nAlMoWYMSwcNn0BqbRt2TedoCKracH
-         g6mg==
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=K5L1V6+k4xNcdQ9TAb0X4k6sNdC8CWPzZSB0oyYsbZg=;
+        b=VxBcwfGjnWLmTnRRGCQVsFW+v6sIC0+PMx7SQFV1jM1u0pMSgV+6CHwmAHEUFXHVG3
+         PShRVdf1M/kmFdfDOr0X/624JOb1v3Mfv5dHMs9AGRT2QdoDbcSD7MkB84RqN7W+6L2k
+         gz7p+rbz4m2xDD3xZAwg4L5gsyKcDurnNW9aYAWmyAt8fmPKfgsVzj0FaHdR6rdR7tgj
+         vCFXo5uW+uO1fmmG0S4zfjbTwJyTAHwuVyO8EWiYt78fzgL5iuGaf0t+AesS6iD6ToIA
+         wsP97oP0ruakFE2zvanrTGqU99HibW0mD1x1aqky0pntWaWFceCybjvlELsom47tDX2h
+         nYPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=7TOGHcHekaFO7f+j1SO70Y08InL8fjzFxY4wwxiSXjw=;
-        b=hiSPvMp/+VgJI1JrYgiFQykVfFZdDOy6RNof+Hl3jQPcZK5zGaYceFYJrjXfpZBTZc
-         +icAsWuNxfKFOieOxZBdFG121zU/z8U9qwPyHKWFmJ5p3ZMKuXgr4yVW65bCBG+p2bYe
-         7468l84XMy+15yT2F1I4M6KN4lpHmvztSwdSHHiIdlqyJx1leG/ME1Bdga6GM3H4hwaf
-         kdv654F7eZbds/Rht4HMfSONdShelmHLlnxaxSAk/gaPPuib5abcLssm0OmlEespoDuE
-         jui/Pnrj8qlIKr5XbWv+wM3O/tOSWSAoJYcRLjmDUnzB5TOqinQotDnpdKJy57BeXAKC
-         eciw==
-X-Gm-Message-State: AOAM532phu/2PB7WIR7QsAMYBm9tDzoro8QYuT4LOmKGV3lHTwBDEX8S
-        TNgIb5woNMvJwrcNWAiAAY4st3vhfrg=
-X-Google-Smtp-Source: ABdhPJyACMAxlwOUexEGUv4JG0sbXOKH/dNSDovFdslBk135KLi8SAffI19mcarc1+dSpUbWBQ3Bhg==
-X-Received: by 2002:a5d:4dd1:0:b0:20a:d74d:e33b with SMTP id f17-20020a5d4dd1000000b0020ad74de33bmr12265185wru.222.1651582638131;
-        Tue, 03 May 2022 05:57:18 -0700 (PDT)
-Received: from orome ([62.96.65.119])
-        by smtp.gmail.com with ESMTPSA id p21-20020a05600c205500b00394517e7d98sm1112346wmg.25.2022.05.03.05.57.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 05:57:16 -0700 (PDT)
-Date:   Tue, 3 May 2022 14:57:14 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Dipen Patel <dipenp@nvidia.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-next@vger.kernel.org
-Subject: HTE tree for linux-next
-Message-ID: <YnEmqsfZu7uWsm8s@orome>
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=K5L1V6+k4xNcdQ9TAb0X4k6sNdC8CWPzZSB0oyYsbZg=;
+        b=3Lm5lL4FuMlYeHDq0W0+9shxMLbP9MdPaBFHiS84DA5qUfLWZ3fZwT55TCwQHeCPDJ
+         z1AKBstehPESIALQjxutYalD2ZRkqNK0qzSxGupimAsZINwCSjZ0wHksq8XPvO6pYwLU
+         Q7lpotE+VX9wxlov2v27s5oxGpfrGyqVKnx1IJxFkK2X2CUk5SOz3wnukHRjGSLN23Jn
+         ZppV/txcDVXyyq9CFW+WxonnCGxGeP1q9qzIXjl9qSnZ38zat5KsEakXTQEaf1SpXAkQ
+         lwV1hkCKJf1t32ZZVqWatihVrZwM+79ME2PstWR3Ib+Zq3FhF1Th5Thm9m1PPSWJJuJq
+         CHeg==
+X-Gm-Message-State: AOAM5310IlTz3Uch/kYa8DK5eKDCbvBahGpzZ9LFHpYvra28ZtKoJvqm
+        Y4lv0OrVltM7VqYULoK9Y3HhsGw1o6L9DQ==
+X-Google-Smtp-Source: ABdhPJyp4O3dFqFSB3wJfnt9ZnNY0j8O8wDrc7ss7C9zsdoMjcdQSpfRu/V/1y4v0QTfOvoT1v/VoA==
+X-Received: by 2002:a05:6808:1526:b0:323:1194:d3bf with SMTP id u38-20020a056808152600b003231194d3bfmr1716642oiw.120.1651583337923;
+        Tue, 03 May 2022 06:08:57 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id v15-20020a4ae6cf000000b0035eb4e5a6cdsm4841560oot.35.2022.05.03.06.08.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 May 2022 06:08:56 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <997daccd-94e0-fa8a-83de-a97f53314989@roeck-us.net>
+Date:   Tue, 3 May 2022 06:08:54 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="QeghdRDFK1YNlpjx"
-Content-Disposition: inline
-User-Agent: Mutt/2.2.1 (c8109e14) (2022-02-19)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: linux-next: build warning after merge of the hwmon-staging tree
+Content-Language: en-US
+To:     Michael Walle <michael@walle.cc>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20220503172259.294a15a1@canb.auug.org.au>
+ <02ca2b24427d1ad4a8cb84cbf131c64e@walle.cc>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <02ca2b24427d1ad4a8cb84cbf131c64e@walle.cc>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+On 5/3/22 00:34, Michael Walle wrote:
+> Hi,
+> 
+> Am 2022-05-03 09:22, schrieb Stephen Rothwell:
+>> After merging the hwmon-staging tree, today's linux-next build (htmldocs)
+>> produced this warning:
+>>
+>> Documentation/hwmon/lan966x.rst: WARNING: document isn't included in any toctree
+>>
+>> Introduced by commit
+>>
+>>   14ed2cdb02e0 ("hwmon: add driver for the Microchip LAN966x SoC")
+> 
+> Ouch. Guenter, should I send a fix on top or will you fix it in
+> your tree?
+> 
 
---QeghdRDFK1YNlpjx
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I'll fix it up.
 
-Hi Stephen,
+Guenter
 
-Dipen has been working on a new subsystem for hardware timestamping and
-Linus Walleij suggested to put it in linux-next to give it a bit of soak
-time before we propose it for inclusion in mainline.
-
-To simplify things, I've pushed a branch with the patches to the Tegra
-repository for now, but longer term the plan is to get Dipen set up with
-the necessary keys to maintain this in a separate tree.
-
-	git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git#hte/for-next
-
-Can you add this to the list of trees for linux-next?
-
-Thanks,
-Thierry
-
---QeghdRDFK1YNlpjx
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmJxJqgACgkQ3SOs138+
-s6H5uw//YLegKG4VX/M0LHEmFbT0Kn5WEhRITK/2nAuln6wfL654wPwul+35LBqu
-Kl7jGFu9glbMjYaLxnAMHo0Q2K7YRVP2T0nH1vcx0KmZC0bMEFcSv03p0G65Vb6Y
-PLo+cQcAUmviw3XHPiQhYknCTmazTqOWsfjK8IWZdFsTZB1x/V2m+nZXI1ZRYNNz
-Mt1rHabzz7ddt2jh0J9ApTcXGSDO7thlvso30+knzUxpN3MclAYyUddLnXo1dI4N
-1eb5FPuLOMOIBhZO+kVQ2XnYz+pvoUu98NWfJJlHKkH2IifV9LsX1i5EQPqussLU
-rY/YkLFvUWIElm3Aqo0HWNt5qEkZYdndnMVinOs1drdGUU4SAtv038ZDZPh7SDHS
-IBZPdP/cj/Yw2hOf8gQJecVnXdSVAdImHASh0QT32rMkcyU+2t3+y1UnyWi1PfLJ
-csuwafjbbR1cugbKhqNOnwaD3xlyKn5qBrj6EenAE3WCbf0mgHAYLEXbPfAib1W7
-tQ/EWN1diDiNwQJOhGOppCyKh42h7fupmAaL8RvS6vSpW1WOoRWZIbgBeCHGwnO9
-6r7oI0jj8SfqCPpcWmcbtNn+JZYwHUAZz9pbt09WjX/ItVpREc/CP48bT85fFMHn
-BamdckIZ7enWZzsrVUs9wsYhq0dMKDaJPUgXB3qCbp9hrc36yeI=
-=JVOp
------END PGP SIGNATURE-----
-
---QeghdRDFK1YNlpjx--

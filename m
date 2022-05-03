@@ -2,47 +2,68 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6960D518546
-	for <lists+linux-next@lfdr.de>; Tue,  3 May 2022 15:19:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6BF65185FF
+	for <lists+linux-next@lfdr.de>; Tue,  3 May 2022 16:03:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236003AbiECNXV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 3 May 2022 09:23:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43510 "EHLO
+        id S236585AbiECOG5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 3 May 2022 10:06:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235861AbiECNXR (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 3 May 2022 09:23:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D93232EFB;
-        Tue,  3 May 2022 06:19:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E585EB81DB6;
-        Tue,  3 May 2022 13:19:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88EEEC385A4;
-        Tue,  3 May 2022 13:19:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651583981;
-        bh=Usf56hEji5OSaJGoSpPSmECSptB1mnaO17bXUC0M1HE=;
-        h=Subject:To:From:Date:From;
-        b=tezfwnkojdPxwCCYI15JRC5dJK5eb0L2hIxBW4AYlyUplQaNMOPc+BOZtd6GEUIgT
-         9n/YNfZ+Lw1HCXX9oX7uk+ukIl/SezoUa/MEVbokYBX8AoRFvsnK4iex3W79Kve+43
-         wUIEzSSHYCwmFkUWWzHmcFCGkFrwkyiWHvUXs1r8=
-Subject: patch "firmware_loader: describe 'module' parameter of" added to driver-core-testing
-To:     bagasdotme@gmail.com, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        mcgrof@kernel.org, rafael@kernel.org, russell.h.weight@intel.com,
-        sfr@canb.auug.org.au
-From:   <gregkh@linuxfoundation.org>
-Date:   Tue, 03 May 2022 15:19:40 +0200
-Message-ID: <1651583980554@kroah.com>
+        with ESMTP id S235030AbiECOG4 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 3 May 2022 10:06:56 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CBB91B79E;
+        Tue,  3 May 2022 07:03:24 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4Kt1rp48Bmz9sT9;
+        Tue,  3 May 2022 16:03:22 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id RhOOOXYqV50a; Tue,  3 May 2022 16:03:22 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4Kt1rp30xWz9sT8;
+        Tue,  3 May 2022 16:03:22 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 4DB408B77B;
+        Tue,  3 May 2022 16:03:22 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id VIfoSnOpUyFD; Tue,  3 May 2022 16:03:22 +0200 (CEST)
+Received: from [192.168.202.20] (unknown [192.168.202.20])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 2975E8B763;
+        Tue,  3 May 2022 16:03:21 +0200 (CEST)
+Message-ID: <8e1e4a9c-6ef8-a1a7-ad1f-84b5bf2a0b7d@csgroup.eu>
+Date:   Tue, 3 May 2022 16:03:20 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ANSI_X3.4-1968
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [next] powerpc: multiple definition of `____cacheline_aligned';
+ sound/core/oss/pcm_oss.o:(.bss+0x40): first defined here
+Content-Language: fr-FR
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        lkft-triage@lists.linaro.org, Peter Collingbourne <pcc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Baoquan He <bhe@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        aul Mackerras <paulus@samba.org>,
+        Christoph Hellwig <hch@lst.de>
+References: <CA+G9fYvSqtsOMEiL7_kffPKnnO-Snhe2cup6g3qRngiwRO+RfA@mail.gmail.com>
+ <e3c8b2bf-b55d-4c2c-a1cf-d5e9941e26b0@csgroup.eu>
+In-Reply-To: <e3c8b2bf-b55d-4c2c-a1cf-d5e9941e26b0@csgroup.eu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -50,65 +71,153 @@ List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
 
-This is a note to let you know that I've just added the patch titled
 
-    firmware_loader: describe 'module' parameter of
+Le 03/05/2022 à 15:10, Christophe Leroy a écrit :
+> 
+> 
+> Le 29/04/2022 à 16:45, Naresh Kamboju a écrit :
+>> Following powerpc builds failed on Linux next-20220428 and next-20220429.
+>>
+>> Regressions found on powerpc:
+>>     - gcc-11-ppc64e_defconfig
+>>     - gcc-10-ppc64e_defconfig
+>>     - gcc-9-ppc64e_defconfig
+>>     - gcc-8-ppc64e_defconfig
+>>     - clang-14-ppc64e_defconfig
+>>     - clang-nightly-ppc64e_defconfig
+>>     - clang-13-ppc64e_defconfig
+>>
+>>
+>> Build error:
+>> -------------
+>> Error: Section .bss not empty in prom_init.c
+>> make[3]: *** [arch/powerpc/kernel/Makefile:191:
+>> arch/powerpc/kernel/prom_init_check] Error 1
+>> make[3]: Target '__build' not remade because of errors.
+>> make[2]: *** [scripts/Makefile.build:595: arch/powerpc/kernel] Error 2
+>> make[2]: Target '__build' not remade because of errors.
+>> make[1]: *** [Makefile:1996: arch/powerpc] Error 2
+>> powerpc64le-linux-gnu-ld: sound/core/oss/pcm_plugin.o:(.bss+0x0):
+>> multiple definition of `____cacheline_aligned';
+>> sound/core/oss/pcm_oss.o:(.bss+0x40): first defined here
+>> make[4]: *** [scripts/Makefile.build:530: 
+>> sound/core/oss/snd-pcm-oss.o] Error 1
+>> make[4]: Target '__build' not remade because of errors.
+>> make[3]: *** [scripts/Makefile.build:595: sound/core/oss] Error 2
+>> powerpc64le-linux-gnu-ld: sound/core/seq/seq_clientmgr.o:(.bss+0x900):
+>> multiple definition of `____cacheline_aligned';
+>> sound/core/seq/seq_lock.o:(.bss+0x0): first defined here
+>> powerpc64le-linux-gnu-ld: sound/core/seq/seq_memory.o:(.bss+0x0):
+>> multiple definition of `____cacheline_aligned';
+>> sound/core/seq/seq_lock.o:(.bss+0x0): first defined here
+>> powerpc64le-linux-gnu-ld: sound/core/seq/seq_queue.o:(.bss+0x140):
+>> multiple definition of `____cacheline_aligned';
+>> sound/core/seq/seq_lock.o:(.bss+0x0): first defined here
+>> powerpc64le-linux-gnu-ld: sound/core/seq/seq_fifo.o:(.bss+0x0):
+>> multiple definition of `____cacheline_aligned';
+>> sound/core/seq/seq_lock.o:(.bss+0x0): first defined here
+>> powerpc64le-linux-gnu-ld: sound/core/seq/seq_timer.o:(.bss+0x0):
+>> multiple definition of `____cacheline_aligned';
+>> sound/core/seq/seq_lock.o:(.bss+0x0): first defined here
+>> powerpc64le-linux-gnu-ld: sound/core/seq/seq_system.o:(.bss+0x0):
+>> multiple definition of `____cacheline_aligned';
+>> sound/core/seq/seq_lock.o:(.bss+0x0): first defined here
+>> powerpc64le-linux-gnu-ld: sound/core/seq/seq_ports.o:(.bss+0x0):
+>> multiple definition of `____cacheline_aligned';
+>> sound/core/seq/seq_lock.o:(.bss+0x0): first defined here
+>> powerpc64le-linux-gnu-ld: sound/core/seq/seq_info.o:(.bss+0x40):
+>> multiple definition of `____cacheline_aligned';
+>> sound/core/seq/seq_lock.o:(.bss+0x0): first defined here
+>> make[4]: *** [scripts/Makefile.build:530: sound/core/seq/snd-seq.o] 
+>> Error 1
+>> make[4]: Target '__build' not remade because of errors.
+>>
+>>
+>> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>>
+>>
+>> steps to reproduce:
+>> -------------------
+>> # To install tuxmake on your system globally:
+>> # sudo pip3 install -U tuxmake
+>>
+>> tuxmake --runtime podman --target-arch powerpc --toolchain gcc-11
+>> --kconfig ppc64e_defconfig
+>>
+>> -- 
+>> Linaro LKFT
+>> https://lkft.linaro.org
+>>
+>> [1] https://builds.tuxbuild.com/28Sn15hB2la1PweieGMLrUdbFMQ/
+> 
+> Bisected to:
+> 
+> 366e7b61ca1f115d38138236467068d8aacabcbc is the first bad commit
+> commit 366e7b61ca1f115d38138236467068d8aacabcbc
+> Author: Peter Collingbourne <pcc@google.com>
+> Date:   Fri Apr 29 14:42:51 2022 -0700
+> 
+>      printk: stop including cache.h from printk.h
+> 
+>      An inclusion of cache.h in printk.h was added in 2014 in commit
+>      c28aa1f0a847 ("printk/cache: mark printk_once test variable
+>      __read_mostly") in order to bring in the definition of 
+> __read_mostly.  The
+>      usage of __read_mostly was later removed in commit 3ec25826ae33 
+> ("printk:
+>      Tie printk_once / printk_deferred_once into .data.once for reset") 
+> which
+>      made the inclusion of cache.h unnecessary, so remove it.
+> 
+>      We have a small amount of code that depended on the inclusion of 
+> cache.h
+>      from printk.h; fix that code to include the appropriate header.
+> 
+>      This fixes a circular inclusion on arm64 (linux/printk.h -> 
+> linux/cache.h
+>      -> asm/cache.h -> linux/kasan-enabled.h -> linux/static_key.h ->
+>      linux/jump_label.h -> linux/bug.h -> asm/bug.h -> linux/printk.h) that
+>      would otherwise be introduced by the next patch.
+> 
+>      Build tested using {allyesconfig,defconfig} x {arm64,x86_64}.
+> 
+>      Link: 
+> https://linux-review.googlesource.com/id/I8fd51f72c9ef1f2d6afd3b2cbc875aa4792c1fba 
+> 
+>      Link: 
+> https://lkml.kernel.org/r/20220427195820.1716975-1-pcc@google.com
+>      Signed-off-by: Peter Collingbourne <pcc@google.com>
+>      Cc: Alexander Potapenko <glider@google.com>
+>      Cc: Andrey Konovalov <andreyknvl@gmail.com>
+>      Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
+>      Cc: Catalin Marinas <catalin.marinas@arm.com>
+>      Cc: David Rientjes <rientjes@google.com>
+>      Cc: Dmitry Vyukov <dvyukov@google.com>
+>      Cc: Eric W. Biederman <ebiederm@xmission.com>
+>      Cc: Herbert Xu <herbert@gondor.apana.org.au>
+>      Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+>      Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
+>      Cc: Kees Cook <keescook@chromium.org>
+>      Cc: Pekka Enberg <penberg@kernel.org>
+>      Cc: Roman Gushchin <roman.gushchin@linux.dev>
+>      Cc: Vlastimil Babka <vbabka@suse.cz>
+>      Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+> 
+>   arch/arm64/include/asm/mte-kasan.h | 1 +
+>   arch/arm64/include/asm/percpu.h    | 1 +
+>   arch/csky/include/asm/processor.h  | 2 +-
+>   drivers/firmware/smccc/kvm_guest.c | 1 +
+>   include/linux/printk.h             | 1 -
+>   kernel/bpf/bpf_lru_list.h          | 1 +
+>   6 files changed, 5 insertions(+), 2 deletions(-)
 
-to my driver-core git tree which can be found at
-    git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git
-in the driver-core-testing branch.
 
-The patch will show up in the next release of the linux-next tree
-(usually sometime within the next 24 hours during the week.)
+I think you need to fix all files that use ____cacheline_aligned without 
+including linux/cache.h
 
-The patch will be merged to the driver-core-next branch sometime soon,
-after it passes testing, and the merge window is open.
+You can locate them with:
 
-If you have any questions about this process, please let me know.
+	git grep -L linux/cache.h `git grep -l ____cacheline_aligned `
 
 
-From 6370b04f24bc10c1f2056c0f12dd651ac0121a6f Mon Sep 17 00:00:00 2001
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-Date: Mon, 2 May 2022 12:14:56 +0700
-Subject: firmware_loader: describe 'module' parameter of
- firmware_upload_register()
-
-Stephen Rothwell reported kernel-doc warning:
-
-drivers/base/firmware_loader/sysfs_upload.c:285: warning: Function parameter or member 'module' not described in 'firmware_upload_register'
-
-Fix the warning by describing the 'module' parameter.
-
-Link: https://lore.kernel.org/linux-next/20220502083658.266d55f8@canb.auug.org.au/
-Fixes: 97730bbb242cde ("firmware_loader: Add firmware-upload support")
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Russ Weight <russell.h.weight@intel.com>
-Cc: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Cc: Linux Next Mailing List <linux-next@vger.kernel.org>
-Reviewed-by: Russ Weight <russell.h.weight@intel.com>
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
-Link: https://lore.kernel.org/r/20220502051456.30741-1-bagasdotme@gmail.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/base/firmware_loader/sysfs_upload.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/base/firmware_loader/sysfs_upload.c b/drivers/base/firmware_loader/sysfs_upload.c
-index 8cdcf3516c7e..87044d52322a 100644
---- a/drivers/base/firmware_loader/sysfs_upload.c
-+++ b/drivers/base/firmware_loader/sysfs_upload.c
-@@ -266,6 +266,7 @@ int fw_upload_start(struct fw_sysfs *fw_sysfs)
- 
- /**
-  * firmware_upload_register() - register for the firmware upload sysfs API
-+ * @module: kernel module of this device
-  * @parent: parent device instantiating firmware upload
-  * @name: firmware name to be associated with this device
-  * @ops: pointer to structure of firmware upload ops
--- 
-2.36.0
-
-
+Christophe

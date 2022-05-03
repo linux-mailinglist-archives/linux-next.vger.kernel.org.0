@@ -2,141 +2,446 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E90A55186D3
-	for <lists+linux-next@lfdr.de>; Tue,  3 May 2022 16:36:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CBD7518728
+	for <lists+linux-next@lfdr.de>; Tue,  3 May 2022 16:48:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237129AbiECOk0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 3 May 2022 10:40:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35880 "EHLO
+        id S234458AbiECOvf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 3 May 2022 10:51:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237127AbiECOkZ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 3 May 2022 10:40:25 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 596252AE32;
-        Tue,  3 May 2022 07:36:53 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id E17A5320094C;
-        Tue,  3 May 2022 10:36:51 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Tue, 03 May 2022 10:36:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1651588611; x=1651675011; bh=wr1yEbLhma
-        vCHn4YSc6slYBn0rcn1MuXeUqJmQnuax0=; b=RslftU20R/juV/ALfzf3oGCJSZ
-        QESr632f4o07zZh+Pbth4vcSXsmv7+9SUYRTg/CeSFhFXYU125KB72Igwi4ZYsK6
-        8oslyn6TUrsAekDjk1Az0gV9JFkpiC+qJ6W4PhJpFSQXXl+V36te5vVLiqDz8tkM
-        fW8yznmVaTyNeK8fxOHJ85upJ2KdKl2J0idxWaSmcDYvbx95ah6RbOrSPuOqZmp1
-        J4a8nKuiq1I0Dsarf5thOxjxGIMFjbX+UyPuOsvVra1p9Bj4fcgNXBLDg4PwfADH
-        ieJKBOlC4tINlTGJ+0nUmi0U0Yix9Khs0CjSoxRXWfcI5OGmLZfDPamlWxvw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1651588611; x=
-        1651675011; bh=wr1yEbLhmavCHn4YSc6slYBn0rcn1MuXeUqJmQnuax0=; b=t
-        87Uz7VKSJFjqm0z5f8OEV36+lst3ZW9L5d+5mwYsceXRLDi2YtvxZe24eFxeA+M0
-        KXM0V+ydauwI4srYW9GBTauMap5+5Y7SLFbioVVgIvk1UdS3YVHPM1/BwmuYltMd
-        Jsg04Mq6vgEc8fmwo+9I01sr4CBqPppO/jTaNiuS3NTwjr17n1OoQVWawkb1fMu8
-        A4CipH60iWcEGzr6TSh/tniLqNpUYsooPH6VW/ftKsFCkDio0XL9KKf1+3q4RgyO
-        gvvWNso4EZ3QFOeIEDTxsIr/TG8T2ZpTz9E0T/WzQtwGVWw+Y1HrVo74vfeJPCQ9
-        UfNBEh+Av7Eggl5MsVtrg==
-X-ME-Sender: <xms:Aj5xYpUQUiJc5hXGBP1Y6de-XjaDkx61sK89iioPad0JpcPmv56cAA>
-    <xme:Aj5xYpkJKR_5WbUY1vs5FfzXdyxAF31_CM-B-s_2vWskVReWo3PyXlbi-3tEZ2Mrk
-    QZ4XiuVC9IrYQ>
-X-ME-Received: <xmr:Aj5xYlbkhKHgfW9rtdS-Bw7V9AaOevoe4Ew19j_Zo2GGwejKkRvi_JUYMayX2JguJR4fHKfKW4B1OJTdtajo3khXo4RR>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdejgdejkecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
-    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehgedvve
-    dvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhushht
-    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
-    drtghomh
-X-ME-Proxy: <xmx:Aj5xYsXo5YJ8VJIwfy6Z_tnaSukvBZmzIoG2veha1Lh7B1b4d-mUag>
-    <xmx:Aj5xYjne5PLYxCzoEooJh2NZ9-sHTye5bZaL96dwRpJjbw2cKpYuqA>
-    <xmx:Aj5xYpdwjNas8iWccbS90AF343uwPghE1jsZXp-aGWetDc61tdaVQA>
-    <xmx:Az5xYl6OLfuPgOm26kLGvmwnb7GTtsfsirZWnYMYpdb00Mv6tCashg>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 3 May 2022 10:36:50 -0400 (EDT)
-Date:   Tue, 3 May 2022 16:36:48 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Sven Peter <sven@svenpeter.dev>
-Subject: Re: linux-next: manual merge of the usb tree with the usb.current
- tree
-Message-ID: <YnE+ABsiKpUFbZUo@kroah.com>
-References: <20220426150842.473be40e@canb.auug.org.au>
+        with ESMTP id S229655AbiECOvf (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 3 May 2022 10:51:35 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7995063EA
+        for <linux-next@vger.kernel.org>; Tue,  3 May 2022 07:48:02 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id a11so14909318pff.1
+        for <linux-next@vger.kernel.org>; Tue, 03 May 2022 07:48:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=YfKJpfw0I17oHGsi9/e0jHDd+RnNSUeEzYj2a8IJ2r4=;
+        b=F3MVNF5BjTBmwjXG/+s+TXbUE+pWLoQPjMA9MXNGKDkSY58qNZ2jED+1cbNwU/fspI
+         ZgTyZN8g4d4kXIwA3NQvtLWiZJBiewX/N+6rB9f9IupfvrcAco8ESr0ogWnkj+FJivX6
+         KiTphUFJ6sGNLyo5HUw2Sn7EJp7m0IWAiYK8+cMf7qJS41KKnuo+XyCSjA+LhJqLzqIv
+         0EeqAUfr9iVNdr+X97s1DlZfysc2nd1dnuSnouiIjjmjeRn5Puao8WPglMH2NPSmDLWE
+         IuBiEVDXZ79Ydl4x4Oes3gWrtE8nLG3Aci0Xo3p99Q9AN6KHcDM+4Nbna9juJnrhcbyx
+         26kQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=YfKJpfw0I17oHGsi9/e0jHDd+RnNSUeEzYj2a8IJ2r4=;
+        b=mXMMSrq4DVJYTnJ6lPT/cvWd8k4wbMTgw24tV+uRpHRBZ50iXEXnORsXhbOSJSLFnu
+         PC7y5rbOLt1aoYVC1f5lcSkaUCIE7X/3OUfMQDQMNjpUewfY5AmG8FzsC8mmJpwnQ7Yb
+         +j8d8ecphlfH01v7shb4clmgzRDLLc9alCa3cFmLVaNYm/OkD7rZ5iVWqws5swOVGPkm
+         onNaMTp7kyYbXNjv3Hy8Q1Otn4eLX5OszFxw4Y6AxrOQOSH4i4OgjIbdPgz9NIIhTLLy
+         Z5J5mRZhlPVn8j/7/jUfcz/MydYRhjGti6TiMOzjeHxeW5gVDstlkdqbES+dNOs4qoFG
+         2UIw==
+X-Gm-Message-State: AOAM53211fsArWVmRQ4yzTo88bzd5EVAUsP6j3T8Pun08uqI3JSZaTWj
+        4BAHOttOcP7c3bnootU7mgHqa4BfsKLYiUwlV9s=
+X-Google-Smtp-Source: ABdhPJzwJgXQnz0rJXykNnIvcQVpU75Nb726gTBw3tsTGMoJsg26kw0XMzP0oCrRY+3SFNi9/GyaKw==
+X-Received: by 2002:a62:ea17:0:b0:50d:8d25:a17 with SMTP id t23-20020a62ea17000000b0050d8d250a17mr16441198pfh.67.1651589281697;
+        Tue, 03 May 2022 07:48:01 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id 3-20020aa79143000000b0050dc76281e6sm6392655pfi.192.2022.05.03.07.48.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 May 2022 07:48:01 -0700 (PDT)
+Message-ID: <627140a1.1c69fb81.bc545.fb14@mx.google.com>
+Date:   Tue, 03 May 2022 07:48:01 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220426150842.473be40e@canb.auug.org.au>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: next-20220503
+X-Kernelci-Report-Type: test
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+Subject: next/master baseline: 15 runs, 11 regressions (next-20220503)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 03:08:42PM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the usb tree got a conflict in:
-> 
->   drivers/usb/dwc3/drd.c
-> 
-> between commit:
-> 
->   ab7aa2866d29 ("usb: dwc3: Try usb-role-switch first in dwc3_drd_init")
-> 
-> from the usb.current tree and commit:
-> 
->   0f0101719138 ("usb: dwc3: Don't switch OTG -> peripheral if extcon is present")
-> 
-> from the usb tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
-> 
-> diff --cc drivers/usb/dwc3/drd.c
-> index 8cad9e7d3368,f277bebdaa09..000000000000
-> --- a/drivers/usb/dwc3/drd.c
-> +++ b/drivers/usb/dwc3/drd.c
-> @@@ -585,14 -539,11 +539,10 @@@ int dwc3_drd_init(struct dwc3 *dwc
->   	int ret, irq;
->   
->   	if (ROLE_SWITCH &&
->  -	    device_property_read_bool(dwc->dev, "usb-role-switch")) {
->  -		ret = dwc3_setup_role_switch(dwc);
->  -		if (ret < 0)
->  -			return ret;
->  -	} else if (dwc->edev) {
->  +	    device_property_read_bool(dwc->dev, "usb-role-switch"))
->  +		return dwc3_setup_role_switch(dwc);
->  +
-> - 	dwc->edev = dwc3_get_extcon(dwc);
-> - 	if (IS_ERR(dwc->edev))
-> - 		return PTR_ERR(dwc->edev);
-> - 
->  +	if (dwc->edev) {
->   		dwc->edev_nb.notifier_call = dwc3_drd_notifier;
->   		ret = extcon_register_notifier(dwc->edev, EXTCON_USB_HOST,
->   					       &dwc->edev_nb);
+next/master baseline: 15 runs, 11 regressions (next-20220503)
 
-This should now be resolved in my tree, thanks!
+Regressions Summary
+-------------------
 
-greg k-h
+platform                   | arch  | lab           | compiler | defconfig  =
+                | regressions
+---------------------------+-------+---------------+----------+------------=
+----------------+------------
+qemu_arm64-virt-gicv2      | arm64 | lab-baylibre  | clang-13 | defconfig+a=
+rm64-chromebook | 1          =
+
+qemu_arm64-virt-gicv2      | arm64 | lab-broonie   | clang-13 | defconfig+a=
+rm64-chromebook | 1          =
+
+qemu_arm64-virt-gicv2-uefi | arm64 | lab-baylibre  | clang-13 | defconfig+a=
+rm64-chromebook | 1          =
+
+qemu_arm64-virt-gicv2-uefi | arm64 | lab-broonie   | clang-13 | defconfig+a=
+rm64-chromebook | 1          =
+
+qemu_arm64-virt-gicv3      | arm64 | lab-baylibre  | clang-13 | defconfig+a=
+rm64-chromebook | 1          =
+
+qemu_arm64-virt-gicv3      | arm64 | lab-broonie   | clang-13 | defconfig+a=
+rm64-chromebook | 1          =
+
+qemu_arm64-virt-gicv3-uefi | arm64 | lab-baylibre  | clang-13 | defconfig+a=
+rm64-chromebook | 1          =
+
+qemu_arm64-virt-gicv3-uefi | arm64 | lab-broonie   | clang-13 | defconfig+a=
+rm64-chromebook | 1          =
+
+rk3399-gru-kevin           | arm64 | lab-collabora | clang-13 | defconfig+a=
+rm64-chromebook | 3          =
+
+
+  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
+220503/plan/baseline/
+
+  Test:     baseline
+  Tree:     next
+  Branch:   master
+  Describe: next-20220503
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      44a2f39e611ac0bc1f17c288a583d7f2e5684aa7 =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform                   | arch  | lab           | compiler | defconfig  =
+                | regressions
+---------------------------+-------+---------------+----------+------------=
+----------------+------------
+qemu_arm64-virt-gicv2      | arm64 | lab-baylibre  | clang-13 | defconfig+a=
+rm64-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62712d02893f26dc5edc7b6d
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-++20220126092033+75e33=
+f71c2da-1~exp1~20220126212112.63)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220503/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-baylibre/baseline-qemu_arm64-virt=
+-gicv2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220503/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-baylibre/baseline-qemu_arm64-virt=
+-gicv2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220428.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62712d02893f26dc5edc7=
+b6e
+        new failure (last pass: next-20220429) =
+
+ =
+
+
+
+platform                   | arch  | lab           | compiler | defconfig  =
+                | regressions
+---------------------------+-------+---------------+----------+------------=
+----------------+------------
+qemu_arm64-virt-gicv2      | arm64 | lab-broonie   | clang-13 | defconfig+a=
+rm64-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62711674c4a81bf245dc7b2e
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-++20220126092033+75e33=
+f71c2da-1~exp1~20220126212112.63)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220503/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-broonie/baseline-qemu_arm64-virt-=
+gicv2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220503/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-broonie/baseline-qemu_arm64-virt-=
+gicv2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220428.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62711674c4a81bf245dc7=
+b2f
+        new failure (last pass: next-20220429) =
+
+ =
+
+
+
+platform                   | arch  | lab           | compiler | defconfig  =
+                | regressions
+---------------------------+-------+---------------+----------+------------=
+----------------+------------
+qemu_arm64-virt-gicv2-uefi | arm64 | lab-baylibre  | clang-13 | defconfig+a=
+rm64-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62712ca0893f26dc5edc7b2d
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-++20220126092033+75e33=
+f71c2da-1~exp1~20220126212112.63)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220503/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-baylibre/baseline-qemu_arm64-virt=
+-gicv2-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220503/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-baylibre/baseline-qemu_arm64-virt=
+-gicv2-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220428.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62712ca0893f26dc5edc7=
+b2e
+        new failure (last pass: next-20220429) =
+
+ =
+
+
+
+platform                   | arch  | lab           | compiler | defconfig  =
+                | regressions
+---------------------------+-------+---------------+----------+------------=
+----------------+------------
+qemu_arm64-virt-gicv2-uefi | arm64 | lab-broonie   | clang-13 | defconfig+a=
+rm64-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62711624fa15e4b12fdc7b36
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-++20220126092033+75e33=
+f71c2da-1~exp1~20220126212112.63)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220503/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-broonie/baseline-qemu_arm64-virt-=
+gicv2-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220503/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-broonie/baseline-qemu_arm64-virt-=
+gicv2-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220428.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62711624fa15e4b12fdc7=
+b37
+        new failure (last pass: next-20220429) =
+
+ =
+
+
+
+platform                   | arch  | lab           | compiler | defconfig  =
+                | regressions
+---------------------------+-------+---------------+----------+------------=
+----------------+------------
+qemu_arm64-virt-gicv3      | arm64 | lab-baylibre  | clang-13 | defconfig+a=
+rm64-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62712cc6a0dae2b7f7dc7b51
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-++20220126092033+75e33=
+f71c2da-1~exp1~20220126212112.63)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220503/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-baylibre/baseline-qemu_arm64-virt=
+-gicv3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220503/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-baylibre/baseline-qemu_arm64-virt=
+-gicv3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220428.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62712cc6a0dae2b7f7dc7=
+b52
+        new failure (last pass: next-20220429) =
+
+ =
+
+
+
+platform                   | arch  | lab           | compiler | defconfig  =
+                | regressions
+---------------------------+-------+---------------+----------+------------=
+----------------+------------
+qemu_arm64-virt-gicv3      | arm64 | lab-broonie   | clang-13 | defconfig+a=
+rm64-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62711626adaa238100dc7b28
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-++20220126092033+75e33=
+f71c2da-1~exp1~20220126212112.63)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220503/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-broonie/baseline-qemu_arm64-virt-=
+gicv3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220503/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-broonie/baseline-qemu_arm64-virt-=
+gicv3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220428.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62711626adaa238100dc7=
+b29
+        new failure (last pass: next-20220429) =
+
+ =
+
+
+
+platform                   | arch  | lab           | compiler | defconfig  =
+                | regressions
+---------------------------+-------+---------------+----------+------------=
+----------------+------------
+qemu_arm64-virt-gicv3-uefi | arm64 | lab-baylibre  | clang-13 | defconfig+a=
+rm64-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62712d3e8b50f227a3dc7b37
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-++20220126092033+75e33=
+f71c2da-1~exp1~20220126212112.63)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220503/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-baylibre/baseline-qemu_arm64-virt=
+-gicv3-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220503/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-baylibre/baseline-qemu_arm64-virt=
+-gicv3-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220428.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62712d3e8b50f227a3dc7=
+b38
+        new failure (last pass: next-20220429) =
+
+ =
+
+
+
+platform                   | arch  | lab           | compiler | defconfig  =
+                | regressions
+---------------------------+-------+---------------+----------+------------=
+----------------+------------
+qemu_arm64-virt-gicv3-uefi | arm64 | lab-broonie   | clang-13 | defconfig+a=
+rm64-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62711675c4a81bf245dc7b40
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-++20220126092033+75e33=
+f71c2da-1~exp1~20220126212112.63)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220503/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-broonie/baseline-qemu_arm64-virt-=
+gicv3-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220503/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-broonie/baseline-qemu_arm64-virt-=
+gicv3-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220428.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62711675c4a81bf245dc7=
+b41
+        new failure (last pass: next-20220429) =
+
+ =
+
+
+
+platform                   | arch  | lab           | compiler | defconfig  =
+                | regressions
+---------------------------+-------+---------------+----------+------------=
+----------------+------------
+rk3399-gru-kevin           | arm64 | lab-collabora | clang-13 | defconfig+a=
+rm64-chromebook | 3          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62711215b11b019277dc7b52
+
+  Results:     85 PASS, 7 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-++20220126092033+75e33=
+f71c2da-1~exp1~20220126212112.63)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220503/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-collabora/baseline-rk3399-gru-kev=
+in.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220503/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-collabora/baseline-rk3399-gru-kev=
+in.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220428.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.cros-ec-sensors-gyro0-probed: https://kernelci.org/test=
+/case/id/62711215b11b019277dc7b9b
+        failing since 5 days (last pass: next-20220422, first fail: next-20=
+220427)
+
+    2022-05-03T11:29:04.018627  <8>[   55.443469] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dcros-ec-sensors-accel1-probed RESULT=3Dfail>
+    2022-05-03T11:29:05.036945  /lava-6249947/1/../bin/lava-test-case
+    2022-05-03T11:29:05.050212  <8>[   56.473950] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dcros-ec-sensors-gyro0-probed RESULT=3Dfail>   =
+
+
+  * baseline.bootrr.cros-ec-sensors-accel0-probed: https://kernelci.org/tes=
+t/case/id/62711215b11b019277dc7b9c
+        failing since 5 days (last pass: next-20220422, first fail: next-20=
+220427)
+
+    2022-05-03T11:29:02.091527  <4>[   53.511953] cdn-dp fec00000.dp: Direc=
+t firmware load for rockchip/dptx.bin failed with error -2
+    2022-05-03T11:29:02.988826  /lava-6249947/1/../bin/lava-test-case
+    2022-05-03T11:29:03.002262  <8>[   54.425746] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dcros-ec-sensors-accel0-probed RESULT=3Dfail>   =
+
+
+  * baseline.bootrr.cros-ec-sensors-accel1-probed: https://kernelci.org/tes=
+t/case/id/62711215b11b019277dc7bb0
+        failing since 5 days (last pass: next-20220422, first fail: next-20=
+220427)
+
+    2022-05-03T11:29:04.005993  /lava-6249947/1/../bin/lava-test-case   =
+
+ =20

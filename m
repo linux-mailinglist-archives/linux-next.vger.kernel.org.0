@@ -2,95 +2,89 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1F22519DE9
-	for <lists+linux-next@lfdr.de>; Wed,  4 May 2022 13:25:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C64CC519F17
+	for <lists+linux-next@lfdr.de>; Wed,  4 May 2022 14:18:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345970AbiEDL3a (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 4 May 2022 07:29:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40546 "EHLO
+        id S1344513AbiEDMVs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 4 May 2022 08:21:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243785AbiEDL33 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 4 May 2022 07:29:29 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E87E91DA4C
-        for <linux-next@vger.kernel.org>; Wed,  4 May 2022 04:25:53 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id gj17-20020a17090b109100b001d8b390f77bso4927174pjb.1
-        for <linux-next@vger.kernel.org>; Wed, 04 May 2022 04:25:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=5mO6F1EOrQXM0niTfrnYByiFhvGDeihM4EKAM1KLnBE=;
-        b=qd/tf+lgyDOp6PwSYhwcCPZg/ueUtY5F6beEU8PGWzlKMUyyqWdDN4WlCy7UXmxOO0
-         zhxNXbjXsHsShD+r7OjaNob9/d4ikbBnB+QatUmSmRI/yPgTZNEQQsRHYMyCcfcV6dbD
-         ESKy6b3a1lbd1AhEAEAvHbB9pP91pVGwRXiCAZEqdMvtgbehdvOcj8D2tQMxPKMXNG0d
-         6bVCQQCYwlxEh9n30XhR1Lis+RzLSpFaZRzKGAM+JARolal1HzSbVBCHDfkyeMy38I1T
-         GIEeuxjQai51T2mtz5pBczpa5quGZycMKAUr8cABRWK+iU8k9gVCbd9VMBZAilVNcWT7
-         P/tA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=5mO6F1EOrQXM0niTfrnYByiFhvGDeihM4EKAM1KLnBE=;
-        b=7cXGu/aFqfD8KyNptOP3xyj/y/ZPiUBBFwybPKrWTjLLYnljN7dWMfE1BUZBki8IAb
-         N2SgrR6h6lYaRP0zNdRhoy0IIax9DT176QaCR4PfdTEhqnJbsc4P2AkcPkt73e5r/yB1
-         u7jIwv7cw21f+tlcJgUCoBtrCxk4Iko7DxgAdzGQ7FUsqKr6Ena+/bZU7IyyZhMsn3pe
-         VSt5xMD6uzOxzqyU/6/km744jaCUaLTWe1Y+x3XAvxriRqkL7t0Ss3xb3a2LqKAl4bDB
-         Ff+XnkgUg6vcJpz3QaPLn3Pq8PSLRK8gkWDfWWkVObAr8MedmqaTLa9SVQz0YBvgCed9
-         6N+A==
-X-Gm-Message-State: AOAM531JWFHycphLtQMDXTmxbHFjfn57R6+hXU/XI6ypB0896OgXl5rp
-        C/Y26f1NO0ui2CDdbrbMDwiBww==
-X-Google-Smtp-Source: ABdhPJxqqqrvzTPqgyL2pdh/okD59AmwKigCkPQUbGkQFASydql8esLb16vUQyp7oCaCmJJy6DxtJw==
-X-Received: by 2002:a17:902:d505:b0:15e:8b5c:bbe3 with SMTP id b5-20020a170902d50500b0015e8b5cbbe3mr20725950plg.38.1651663553340;
-        Wed, 04 May 2022 04:25:53 -0700 (PDT)
-Received: from [192.168.4.166] (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
-        by smtp.gmail.com with ESMTPSA id v21-20020a631515000000b003c14af50603sm14807220pgl.27.2022.05.04.04.25.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 May 2022 04:25:52 -0700 (PDT)
-Message-ID: <a4844963-3887-ffe6-d219-efee3e859356@kernel.dk>
-Date:   Wed, 4 May 2022 05:25:51 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: linux-next: build failure after merge of the block tree
-Content-Language: en-US
+        with ESMTP id S243515AbiEDMVs (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 4 May 2022 08:21:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FD712CC90;
+        Wed,  4 May 2022 05:18:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DAB26B8239E;
+        Wed,  4 May 2022 12:18:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7681BC385AF;
+        Wed,  4 May 2022 12:18:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651666689;
+        bh=6C67VGLCuUaGiRz3EE0II5UI9nzEfV+Tp+DmoxgCEGg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ACd0jXZ5o+Ptqt8JtK31bPHENHFd6SfUCS/sRLZ7z7knqdiObE2hhUEqsUXtWIbNv
+         QpJAjd9CQP84+itG/b9gNycw6K9Qr0Pd7TlB9TldaAl0zqjOyVXF0iJZZHUn6jRB21
+         Px2mPlvsMeI85f5zscA0KoCUICAqb2Unwz3tV+8Iem59HqIeEVPPS91HVylmb24d+e
+         vymCz2mBuTPKPS3ZbfUawFtBd9Q08wifc9ieYDtaFigixnn5uVyWI9ZBcmDRwtpDKC
+         83SR175Dlnem25Oo0FQeDLer9diUzOD+x2maEnGNC6x7DOZabxp0rFTnwUV8IkjAKo
+         Ep5xqNxdiZZYA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nmDxH-008taa-4Z; Wed, 04 May 2022 13:18:07 +0100
+Date:   Wed, 04 May 2022 13:18:07 +0100
+Message-ID: <875yml8pa8.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Christoph Hellwig <hch@lst.de>,
+Cc:     Christoffer Dall <cdall@cs.columbia.edu>,
+        Raghavendra Rao Ananta <rananta@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220504114031.40747e03@canb.auug.org.au>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20220504114031.40747e03@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: linux-next: build warning after merge of the kvm-arm tree
+In-Reply-To: <20220504205627.18f46380@canb.auug.org.au>
+References: <20220504205627.18f46380@canb.auug.org.au>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: sfr@canb.auug.org.au, cdall@cs.columbia.edu, rananta@google.com, linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 5/3/22 7:40 PM, Stephen Rothwell wrote:
+On Wed, 04 May 2022 11:56:27 +0100,
+Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> 
 > Hi all,
 > 
-> After merging the block tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
+> After merging the kvm-arm tree, today's linux-next build (htmldocs)
+> produced this warning:
 > 
-> drivers/block/xen-blkback/xenbus.c: In function 'xen_blkbk_discard':
-> drivers/block/xen-blkback/xenbus.c:578:31: error: unused variable 'q' [-Werror=unused-variable]
->   578 |         struct request_queue *q = bdev_get_queue(bdev);
->       |                               ^
-> cc1: all warnings being treated as errors
+> Documentation/virt/kvm/arm/index.rst:7: WARNING: toctree contains reference to nonexisting document 'virt/kvm/arm/psci'
+> Documentation/virt/kvm/arm/hypercalls.rst: WARNING: document isn't included in any toctree
 > 
-> Caused by commit
+> Introduced by commit
 > 
->   c899b2353386 ("xen-blkback: use bdev_discard_alignment")
+>   f1ced23a9be5 ("Docs: KVM: Rename psci.rst to hypercalls.rst")
+> 
 
-Thanks, folded in the fix.
+Thanks for the heads up, I have now pushed out a fix.
+
+	M.
 
 -- 
-Jens Axboe
-
+Without deviation from the norm, progress is not possible.

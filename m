@@ -2,154 +2,110 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB6E45197D6
-	for <lists+linux-next@lfdr.de>; Wed,  4 May 2022 09:05:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCC975197DB
+	for <lists+linux-next@lfdr.de>; Wed,  4 May 2022 09:06:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345277AbiEDHJG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 4 May 2022 03:09:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35314 "EHLO
+        id S1345246AbiEDHJm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 4 May 2022 03:09:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345224AbiEDHIr (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 4 May 2022 03:08:47 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAE5924092;
-        Wed,  4 May 2022 00:04:43 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id q23so706077wra.1;
-        Wed, 04 May 2022 00:04:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=hwnWHQrJtOET5MQj1pPppw1nYJRoSiyVm+kRApnh+UY=;
-        b=NvvPxoGth3gCZQ/uVIR4uOd4733Wv2984GTPvpnzXlo2s1UwxlSAIsqrIIdIoeC6C9
-         5GkX+f4sVeo844VtSmzDA95PjKK1jd8O6f+lt/d8I7cn0DRq6aUMcCMgvU55FLgnVMxz
-         rYzbwI/5o6doxM1fFOvNXeLn5EgwQSY0FMFOnzzf3Z9OcnbIU6TXJOey3obrFnu0kW8k
-         +foaHpws42fMArjhdQeBYHsjqJ47woOGdlFfrfVlgf5XmANfbt58psIH8pk5g6LDo7tb
-         zjJ5A6p1NZA3/NTPpK36orF8aMOO15UWArInr0ho6O33sdQ9+VbtgD9BQ8GFFJxOAjed
-         2pxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=hwnWHQrJtOET5MQj1pPppw1nYJRoSiyVm+kRApnh+UY=;
-        b=8KvIYRAGODd0sS3UFPcDAcle41lnk+mVAyyDazR2gi6Wm5f2l4/4AacGkQflPBXjsX
-         pg3MPVnwZk3lp83XPFEv6Z00zL2KuL89FvgRukxdCrOXb1GKYQFi3fBw5IbUGyi91nxJ
-         8t87OedPGKka2EGDoHgANUH8wegccbeT6grBZx0C3/UVJi+lC5nefKw43M+efoOzVVv5
-         +//dMR47biX0SorizvG+B5+g3fdAND6dDjySqoyN8qXGdECuLAut8QjiFlHfU3gJIxJk
-         H0HQH8By4GE4utnzSAH/++P18BQsJWAWef8DyEm0BdTUD5S9bkG+JZFfGeKKeZJ/CbXh
-         0lpQ==
-X-Gm-Message-State: AOAM5335jyC6138dkVlYkZ6ihxpf0SgiWPWiQIezC3IpR1DDrab1Pej5
-        DHghVJnXMVIN5V5Wy/yi3lg=
-X-Google-Smtp-Source: ABdhPJxEgsx5wSC/VpXT7/TrJwylLRNn5oTYH2sIhlsZGzhxr4P0pytGwa0vjfL02rpPGAIJzbVFPw==
-X-Received: by 2002:a5d:5012:0:b0:20a:d9a9:44dc with SMTP id e18-20020a5d5012000000b0020ad9a944dcmr15278192wrt.627.1651647882175;
-        Wed, 04 May 2022 00:04:42 -0700 (PDT)
-Received: from orome ([62.96.65.119])
-        by smtp.gmail.com with ESMTPSA id j7-20020a05600c190700b003944821105esm3536802wmq.2.2022.05.04.00.04.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 00:04:41 -0700 (PDT)
-Date:   Wed, 4 May 2022 09:04:39 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
+        with ESMTP id S1345307AbiEDHJf (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 4 May 2022 03:09:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B44223153;
+        Wed,  4 May 2022 00:06:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 07ED7B80DB7;
+        Wed,  4 May 2022 07:05:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9693C385A5;
+        Wed,  4 May 2022 07:05:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651647957;
+        bh=PLF8cZci2CLas9CTO5yBNBglie9vUKaC3WIlntvt3Pc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=mD8c49kfF/nqjr2Ldd5KK0Eb7hoVZTnlH04rqi/ErmVw5pzK1v4ZEfgC4CTFXJiKY
+         Oa757NeHHRz5iyJ3WLLnb/RL2sKk76OxNzBShkfhTgs3U8a8W68JKQrvpdpkJGgRsY
+         Cr3rNCgKsIHrTvuo50jgclfQRyT+Et/0NKZHIaXKnuJrtu8VS/HoJ1oG16wliBLaR+
+         lhwCrs5DYOggbP7rm0G7Tw7FJH3d99iLbvMIxuLwL3krJdvnAsxMu6QYhKkewMPW+5
+         7PkgqmUbW83vAel9TeqHYhiu5KgE6srhsSj2akZbkCWi/xWeIswue4zSNH5K56mlYG
+         zzJjFyDPNaLyw==
+Received: from 82-132-235-80.dab.02.net ([82.132.235.80] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nm958-008pH6-VE; Wed, 04 May 2022 08:05:55 +0100
+Date:   Wed, 04 May 2022 08:06:07 +0100
+Message-ID: <877d71ixpc.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Dipen Patel <dipenp@nvidia.com>,
+Cc:     Christoffer Dall <cdall@cs.columbia.edu>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the hte tree
-Message-ID: <YnIlh++OJDRrK9sz@orome>
-References: <20220504165956.531c4b53@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="yy3WkBucFs3BdxCk"
-Content-Disposition: inline
-In-Reply-To: <20220504165956.531c4b53@canb.auug.org.au>
-User-Agent: Mutt/2.2.1 (c8109e14) (2022-02-19)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Oliver Upton <oupton@google.com>
+Subject: Re: linux-next: manual merge of the kvm-arm tree with the arm64 tree
+In-Reply-To: <20220504143529.4060ab27@canb.auug.org.au>
+References: <20220504143529.4060ab27@canb.auug.org.au>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 82.132.235.80
+X-SA-Exim-Rcpt-To: sfr@canb.auug.org.au, cdall@cs.columbia.edu, catalin.marinas@arm.com, will@kernel.org, alexandru.elisei@arm.com, linux-kernel@vger.kernel.org, linux-next@vger.kernel.org, oupton@google.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-
---yy3WkBucFs3BdxCk
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, May 04, 2022 at 04:59:56PM +1000, Stephen Rothwell wrote:
+On Wed, 04 May 2022 05:35:29 +0100,
+Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> 
+> [1  <text/plain; US-ASCII (quoted-printable)>]
 > Hi all,
->=20
-> After merging the hte tree, today's linux-next build (arm
-> multi_v7_defconfig) failed like this:
->=20
-> drivers/gpio/gpiolib-cdev.c:572:8: error: unknown type name 'hte_return_t'
->   572 | static hte_return_t process_hw_ts_thread(void *p)
->       |        ^~~~~~~~~~~~
-> drivers/gpio/gpiolib-cdev.c:623:8: error: unknown type name 'hte_return_t'
->   623 | static hte_return_t process_hw_ts(struct hte_ts_data *ts, void *p)
->       |        ^~~~~~~~~~~~
-> drivers/gpio/gpiolib-cdev.c: In function 'hte_edge_setup':
-> drivers/gpio/gpiolib-cdev.c:851:41: error: passing argument 2 of 'hte_req=
-uest_ts_ns' from incompatible pointer type [-Werror=3Dincompatible-pointer-=
-types]
->   851 |         return hte_request_ts_ns(hdesc, process_hw_ts,
->       |                                         ^~~~~~~~~~~~~
->       |                                         |
->       |                                         int (*)(struct hte_ts_dat=
-a *, void *)
-> In file included from drivers/gpio/gpiolib-cdev.c:27:
-> include/linux/hte.h:234:75: note: expected 'hte_ts_cb_t' {aka 'enum hte_r=
-eturn (*)(struct hte_ts_data *, void *)'} but argument is of type 'int (*)(=
-struct hte_ts_data *, void *)'
->   234 | static inline int hte_request_ts_ns(struct hte_ts_desc *desc, hte=
-_ts_cb_t cb,
->       |                                                               ~~~=
-~~~~~~~~~^~
-> drivers/gpio/gpiolib-cdev.c:852:34: error: passing argument 3 of 'hte_req=
-uest_ts_ns' from incompatible pointer type [-Werror=3Dincompatible-pointer-=
-types]
->   852 |                                  process_hw_ts_thread, line);
->       |                                  ^~~~~~~~~~~~~~~~~~~~
->       |                                  |
->       |                                  int (*)(void *)
-> In file included from drivers/gpio/gpiolib-cdev.c:27:
-> include/linux/hte.h:235:53: note: expected 'hte_ts_sec_cb_t' {aka 'enum h=
-te_return (*)(void *)'} but argument is of type 'int (*)(void *)'
->   235 |                                     hte_ts_sec_cb_t tcb, void *da=
-ta)
->       |                                     ~~~~~~~~~~~~~~~~^~~
-> cc1: some warnings being treated as errors
->=20
-> Something has been missed in the contruction of the git tree :-(
->=20
-> I have dropped the hte tree for today.
+> 
+> Today's linux-next merge of the kvm-arm tree got a conflict in:
+> 
+>   arch/arm64/kvm/sys_regs.c
+> 
+> between commit:
+> 
+>   0b12620fddb8 ("KVM: arm64: Treat ESR_EL2 as a 64-bit register")
+> 
+> from the arm64 tree and commits:
+> 
+>   e65197666773 ("KVM: arm64: Wire up CP15 feature registers to their AArch64 equivalents")
+>   9369bc5c5e35 ("KVM: arm64: Plumb cp10 ID traps through the AArch64 sysreg handler")
+> 
+> from the kvm-arm tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-Yeah, oddly I didn't catch that when I was doing the test build. Let me
-recheck what went wrong there.
+Thanks Stephen.
 
-Sorry for the mess,
-Thierry
+I've added a fix to address the 'u32 esr' instances that were
+introduced by Oliver's series. Catalin, do you want me to merge the
+ESR series in the kvm-arm tree in order to avoid the minor conflict?
 
---yy3WkBucFs3BdxCk
-Content-Type: application/pgp-signature; name="signature.asc"
+Cheers,
 
------BEGIN PGP SIGNATURE-----
+	M.
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmJyJYcACgkQ3SOs138+
-s6G8Qw//Rx/sm+z5HOp/4SyYnB2804YIZvXUJ4Z4U+54y7BpUcAaG3Nugezm1mPj
-CT1BSAMxxUUCIPRw/evJMYVGbHn4qsick1dT2OluWYTZ/U+Ffjk5y/uNttUtv60/
-1NdVEbedTMAsfheU84NTz22lD3TwA13PqE9H5L2qpwdT5sVqKC3Qo26mNDsEPe1U
-8DhwPOMhZClfPd1hMFRhBaJl8jUtMu3R9JG67tgnoKSe6a59QujKWA6TBBv3XcGl
-5GeE4JIe9AvYY68axDdolpSuRqpOurwTxsojry3gdvvMEoO4490ydY29cJV3Wbwc
-4PuyJyYm8JKozwYL8VEwb7y+lXdpl0I799hB0r6f/ukZDu8ERtBj3ZT64odqlbQf
-fInFJk59+j8LBIoBl0p1uB28NULZxjHCM6j/mraKcm9wkoUdW2jtzNE0q6yUG1N8
-3u3x27YP/s76+bbeAbSjvqhXKMdYPMZiUyS86FgCl7dQlc4X/AZZUANtCKO8B989
-916LDrOzj7CUWPm6ypH3mYxA6gT9ihaGxqWsPjB+twUOE1w7H4RZWZMU/5jXFm+c
-kokRZNaTEoupyTXdElI7IUyhlVBXNuo1ae9DUUZa62X6PaPptJAf9/EfB0zD9HPO
-b/mFD74H34fk9lV9y410dp68Qrzn4HnnFn4N3B4emqTYsjU9yYg=
-=fvlN
------END PGP SIGNATURE-----
-
---yy3WkBucFs3BdxCk--
+-- 
+Without deviation from the norm, progress is not possible.

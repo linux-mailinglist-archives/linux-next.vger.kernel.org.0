@@ -2,44 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FC9D51938B
-	for <lists+linux-next@lfdr.de>; Wed,  4 May 2022 03:40:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAB8E519581
+	for <lists+linux-next@lfdr.de>; Wed,  4 May 2022 04:35:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239545AbiEDBoO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 3 May 2022 21:44:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49190 "EHLO
+        id S230140AbiEDCjH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 3 May 2022 22:39:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235416AbiEDBoO (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 3 May 2022 21:44:14 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 325891A80F;
-        Tue,  3 May 2022 18:40:38 -0700 (PDT)
+        with ESMTP id S231478AbiEDCjG (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 3 May 2022 22:39:06 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B11117A99;
+        Tue,  3 May 2022 19:35:30 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KtKKF1wQhz4xTX;
-        Wed,  4 May 2022 11:40:32 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KtLXc5BZWz4xR1;
+        Wed,  4 May 2022 12:35:28 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1651628434;
-        bh=QxQ5k3WeRy9fAPYUqZ8f27VNj5G0iGKr5OMkwJuFqZU=;
+        s=201702; t=1651631728;
+        bh=XpFSs3KZ/F/CYqhArlyJEAcGaiDhgsZ9RU2Sk+s5tHE=;
         h=Date:From:To:Cc:Subject:From;
-        b=ZzrTCVnG49PdQY6hsudTqAGovpdIRJR5tPZ6yz2ifD5EL087CmVZFkve8QTptVqd0
-         zy3NIx4Ph2jgL2BADQXz5wbykwSuxUyZB1Li1jklyjXOfhAsB4hosWeQM+kuaAo7Z4
-         cZ/rJ8X1Ra3NsT9+EdoQfkzw01AI+7866YbklF1zWSDCq64Webx+YvEkRKrYqzGC+1
-         4zZlHZiVDmhrwZuCK8qHZhVi/x46O3saXsq6yjPMDgkElpe4MpL9Wy1L22zSkgkMUF
-         nelLrkGAC9wzTpDn30yrceS0iq7pkw23QrCl2iGCFb1cQEE4siqQtYnWG6r7qlMun6
-         sSOr5qcOlKVRQ==
-Date:   Wed, 4 May 2022 11:40:31 +1000
+        b=X86FtbT/F5+nqtIZnrsh3J2sTc4MDTt5ktJcqbVZiFk0pO8dCeo0s/KgdeUHM5tpG
+         gp1PzCmHEjNxdt7R7jJ0j/xPtz5219yPtounJZvIEaugTIqIlasCqRUXQgYqZ3xWA+
+         Tm25OJZnDnzZ+Tcs/fl8IipgZc7+Eb9Gfiln//+t/GHeWvjpN6IK3yuiekH6vdFAL9
+         blUh/F202ImJOXWvs0hHGCMop5Y9Msndzoa1ygXqK8zw9PDrv7rF/1S6X2szsrelDe
+         eODI0uI+LnIU4/X0Kuiuqqv0XVzUxOcJYeHBMiBicXZQiO2l7oclxWyKhNNewOdaRu
+         9Hx8b/Cv5fdxg==
+Date:   Wed, 4 May 2022 12:35:27 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Christoph Hellwig <hch@lst.de>,
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     "Sicelo A. Mhlongo" <absicsz@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the block tree
-Message-ID: <20220504114031.40747e03@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the battery tree
+Message-ID: <20220504123527.537c9b3f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/hX0vgwFIKurJsaX.xISZtGw";
+Content-Type: multipart/signed; boundary="Sig_/_96lf0jbh_3j8FNN7WT+lIF";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -50,52 +50,54 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/hX0vgwFIKurJsaX.xISZtGw
+--Sig_/_96lf0jbh_3j8FNN7WT+lIF
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the block tree, today's linux-next build (x86_64
+After merging the battery tree, today's linux-next build (x86_64
 allmodconfig) failed like this:
 
-drivers/block/xen-blkback/xenbus.c: In function 'xen_blkbk_discard':
-drivers/block/xen-blkback/xenbus.c:578:31: error: unused variable 'q' [-Wer=
-ror=3Dunused-variable]
-  578 |         struct request_queue *q =3D bdev_get_queue(bdev);
-      |                               ^
+drivers/power/supply/bq27xxx_battery.c: In function 'bq27xxx_battery_update=
+':
+drivers/power/supply/bq27xxx_battery.c:1767:14: error: unused variable 'has=
+_ci_flag' [-Werror=3Dunused-variable]
+ 1767 |         bool has_ci_flag =3D di->opts & BQ27XXX_O_HAS_CI;
+      |              ^~~~~~~~~~~
 cc1: all warnings being treated as errors
 
 Caused by commit
 
-  c899b2353386 ("xen-blkback: use bdev_discard_alignment")
+  698502318f51 ("power: supply: bq27xxx: expose battery data when CI=3D1")
 
-I have applied the following fix patch for today.
+I have applied the following patch for today:
 
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Wed, 4 May 2022 11:26:59 +1000
-Subject: [PATCH] xen-blkback: remove unused variable
+Date: Wed, 4 May 2022 12:31:47 +1000
+Subject: [PATCH] power: supply: bq27xxx: remove unused variable
 
-Fixes: c899b2353386 ("xen-blkback: use bdev_discard_alignment")
+Fixes: 698502318f51 ("power: supply: bq27xxx: expose battery data when CI=
+=3D1")
 Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 ---
- drivers/block/xen-blkback/xenbus.c | 1 -
+ drivers/power/supply/bq27xxx_battery.c | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/drivers/block/xen-blkback/xenbus.c b/drivers/block/xen-blkback=
-/xenbus.c
-index 04c90cb8955f..97de13b14175 100644
---- a/drivers/block/xen-blkback/xenbus.c
-+++ b/drivers/block/xen-blkback/xenbus.c
-@@ -575,7 +575,6 @@ static void xen_blkbk_discard(struct xenbus_transaction=
- xbt, struct backend_info
- 	int err;
- 	int state =3D 0;
- 	struct block_device *bdev =3D be->blkif->vbd.bdev;
--	struct request_queue *q =3D bdev_get_queue(bdev);
+diff --git a/drivers/power/supply/bq27xxx_battery.c b/drivers/power/supply/=
+bq27xxx_battery.c
+index 9adc7f43bbfd..35e6a394c0df 100644
+--- a/drivers/power/supply/bq27xxx_battery.c
++++ b/drivers/power/supply/bq27xxx_battery.c
+@@ -1764,7 +1764,6 @@ static int bq27xxx_battery_read_health(struct bq27xxx=
+_device_info *di)
+ void bq27xxx_battery_update(struct bq27xxx_device_info *di)
+ {
+ 	struct bq27xxx_reg_cache cache =3D {0, };
+-	bool has_ci_flag =3D di->opts & BQ27XXX_O_HAS_CI;
+ 	bool has_singe_flag =3D di->opts & BQ27XXX_O_ZERO;
 =20
- 	if (!xenbus_read_unsigned(dev->nodename, "discard-enable", 1))
- 		return;
+ 	cache.flags =3D bq27xxx_read(di, BQ27XXX_REG_FLAGS, has_singe_flag);
 --=20
 2.35.1
 
@@ -103,20 +105,20 @@ index 04c90cb8955f..97de13b14175 100644
 Cheers,
 Stephen Rothwell
 
---Sig_/hX0vgwFIKurJsaX.xISZtGw
+--Sig_/_96lf0jbh_3j8FNN7WT+lIF
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEyBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJx2Y8ACgkQAVBC80lX
-0GwNhQf47figcnswL2Xb/amERNfqXFce8a5yN7B8wxqYYEckDD27lB3L6irl7zrE
-V7HGi/B219Pw5Cml7SKBk/pldokFeDd7y1ERUFqeVySDqMSsKuZeAv4W2y6v26cR
-z5iFoZ/gfkE/sS38t0nhwCvRBwpaeoSfedLaMylmn9blS93JINvcSmSQK7gTjZ0S
-o2jgnkcntsf3ZeFlnaD61aWmeVY7Kkcnqb/qYLtmAh4Wikep6csJIusxZdJepymE
-0+V88MPV/uWg6ruBLXIrAHV8JlZQP9Opbu38QD0V5FLlHQYGHJfrrNBdkluCWYCe
-QlvuQowqct6uWLCLofON175y0XRd
-=YgK5
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJx5m8ACgkQAVBC80lX
+0Gx1JAf9Gwm/lhHOJODRfVOKbmn7JpnXJ9z26p2AHbNgtYazXUYTZGQqWRi/TgAa
+VCX6Xo+xgUITeo5hFpmBP4KG/REq/xKjRsJtLOzdgdmndt3y4XpNF297Nedy2PoG
+Mm+RCxEynP14pVCOBU0gVvz9wXvqfjlHtrS1XGO+u5nDPDh+CP18RssW1gaav1Fr
+d40Qofc5nlXjLIsX3bBF/Vbzqo5fsn+EcpWEIg7sH5yxSau4bXOC1TTBcEAN6H1s
+uzIGr855g+90hQB1XUjIY/iE7T5TE0b/cSlqs1egBCEQ7Dos4FQUueDBawPaVR3/
+Y/IGx3A/moxVCg8v/Vry7ZaU2qNrOw==
+=hNhw
 -----END PGP SIGNATURE-----
 
---Sig_/hX0vgwFIKurJsaX.xISZtGw--
+--Sig_/_96lf0jbh_3j8FNN7WT+lIF--

@@ -2,171 +2,159 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1F6251B564
-	for <lists+linux-next@lfdr.de>; Thu,  5 May 2022 03:49:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3C6251B60D
+	for <lists+linux-next@lfdr.de>; Thu,  5 May 2022 04:43:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235887AbiEEBwt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 4 May 2022 21:52:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60386 "EHLO
+        id S229643AbiEECqG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 4 May 2022 22:46:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235781AbiEEBws (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 4 May 2022 21:52:48 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A61A34C7A8;
-        Wed,  4 May 2022 18:49:10 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KtxSc12pYz4xTX;
-        Thu,  5 May 2022 11:49:03 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1651715349;
-        bh=eOGlpGpxB8mZv+swMCGeOmhKXRrt+JfX+vQ3ZqDz7CI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=IB89NgK/Rvv8TIF+aeZs6zPMsv50fDDSDhPxC3NaIgt+3fL3smzpdCKBVVvbnn5yG
-         kfdKbs/Cd9szZ3rIIANjSOii2bz+Hqez5/BDVGnMlJBS535VWZxkjftde9nM6mWsbK
-         a383qG9OZSrTS/4unDnh+FMvJpMYhE9SG4wMFjTt+0gxWnt4GRPeLpmci92q82kFUV
-         FwSVaQ1FWhAW2UfNx4cdW2AH6/soBdsaZF66iEJIuwEOAgtnhK4P69GWTKOmQOQDD1
-         QgXOBJMdl0PIEiovAEaEciuGs95iLVeI4/ReTIB26a80ItwRYTgTWIDW5jkHnZ7WuT
-         G0zCdGaDLt7qw==
-Date:   Thu, 5 May 2022 11:48:59 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Rob Clark <robdclark@gmail.com>, Sean Paul <seanpaul@chromium.org>,
-        Dave Airlie <airlied@linux.ie>
-Cc:     DRI <dri-devel@lists.freedesktop.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the drm-msm tree
-Message-ID: <20220505114859.654eb7f0@canb.auug.org.au>
+        with ESMTP id S239805AbiEECqE (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 4 May 2022 22:46:04 -0400
+Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A690E4D9E8
+        for <linux-next@vger.kernel.org>; Wed,  4 May 2022 19:42:26 -0700 (PDT)
+Received: by mail-vs1-xe2c.google.com with SMTP id q2so2989305vsr.5
+        for <linux-next@vger.kernel.org>; Wed, 04 May 2022 19:42:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=TxHlq8yop8LH/FlkX6AhN8L6sqaOjtwhTLWOKH2lmRQ=;
+        b=AN+C5OaBX9rsIG/YOpu5xZq7/VB8wXw6MEILuJsJJx93W6jJIGruqLObp5FFLDSnWl
+         3U/D7EjOAdNFKr5gyrEsEafseWvgDBCKU3+cN7elsfS7RMh084n8CaHIKlYDXsqcuTdK
+         7CoDEzPvefzsxgdIhx83vF5/oO3YbJ/a6lio+kgeMb0d6s0xPamDS3R6Dn4AxCY8v/Kr
+         zFPq/9/648pqThK8fXse3nymqfSZoU7DsNUS8GRpjeVo93alLjhbW3z/OgdaDMfC/OYf
+         pDgw4+4w+uP+Yz4MdLL9I16gxtnl7h6kH9EcagHJC8pE8wuixPn9UQuHdtt6+U8VomLt
+         r5/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=TxHlq8yop8LH/FlkX6AhN8L6sqaOjtwhTLWOKH2lmRQ=;
+        b=R/cf5iLlbH7gdNYoq6KYpOMRKHK3IN/4jOQXC8ZAKCS0wueKUQ/ZOXtP9bx3sFmgv4
+         gRFTbe/gopmcWoxc8XNA9NbbevjDFg035U7Z8tyTLhOXeFp2pl5Nhh1c/ZmVyPPWzLYU
+         jJG9vfMGtESTeKpn3U8Tk0ePK/ty3vFLjGa4JoCduGdtBgEekvr7zcymATGLc4nIz6Gs
+         AS50aEIJRVGb4u8P6WPoY/F/uCdZPDwFkliEbCuPseKgieGyT1WeynIRJCGAQtWCufQ2
+         FtxKD5m9xJtVrFJO8c+IRp6L8O8nu8dgRzh+oK5pVT6UDeVED2P04aV9PShCdC40m9LC
+         hd8w==
+X-Gm-Message-State: AOAM5326mogdTBQQzamynK9rehDtvdZMBjyH59YICFnvN4sa7X4j5NGU
+        4x+1sfPPJt3E+Ws2WeThMEX9D1hy0UDdfBUmFEE=
+X-Google-Smtp-Source: ABdhPJxUrrmxTaPjBq7XrryqE7Y5JalZ+N4PJFdvW74W4Bwf6J/vNYDE2ALkqwym7qxhWOXdX4fOj1Tw/az3MtAZfJw=
+X-Received: by 2002:a67:fe17:0:b0:32c:e77e:c3b4 with SMTP id
+ l23-20020a67fe17000000b0032ce77ec3b4mr7612274vsr.11.1651718545550; Wed, 04
+ May 2022 19:42:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/tRqYI3wCpidvLUmvMjB.9aW";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a59:c501:0:b0:2ab:54ee:cb22 with HTTP; Wed, 4 May 2022
+ 19:42:24 -0700 (PDT)
+Reply-To: revmikelivecom842@gmail.com
+From:   "DR.ADAMS ROSE" <michael1james333@gmail.com>
+Date:   Wed, 4 May 2022 19:42:24 -0700
+Message-ID: <CAFzT2rQLhDdOsuoAb4gh0ZopPvZaRgu5msCoi38dLMHFRnt6RQ@mail.gmail.com>
+Subject: Attention Beneficiary.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=7.9 required=5.0 tests=ADVANCE_FEE_2_NEW_FRM_MNY,
+        BAYES_50,DEAR_BENEFICIARY,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,
+        DKIM_VALID_EF,FILL_THIS_FORM,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,LOTS_OF_MONEY,MONEY_FORM,
+        MONEY_FRAUD_3,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,UNDISC_MONEY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:e2c listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [revmikelivecom842[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [michael1james333[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [michael1james333[at]gmail.com]
+        *  0.0 DEAR_BENEFICIARY BODY: Dear Beneficiary:
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  0.2 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  0.0 FILL_THIS_FORM Fill in a form with personal information
+        *  0.0 MONEY_FORM Lots of money if you fill out a form
+        *  2.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+        *  0.0 ADVANCE_FEE_2_NEW_FRM_MNY Advance Fee fraud form and lots of
+        *      money
+        *  0.0 MONEY_FRAUD_3 Lots of money and several fraud phrases
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/tRqYI3wCpidvLUmvMjB.9aW
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Attention Beneficiary.
 
-Hi all,
 
-After merging the drm-msm tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+Your Bank Draft worth of ($4.5million)has been credited in ATM VISA
 
-In file included from drivers/gpu/drm/msm/msm_gpu.h:17,
-                 from drivers/gpu/drm/msm/adreno/adreno_gpu.h:15,
-                 from drivers/gpu/drm/msm/adreno/a3xx_gpu.h:10,
-                 from drivers/gpu/drm/msm/adreno/a3xx_gpu.c:9:
-drivers/gpu/drm/msm/msm_drv.h:33:10: fatal error: drm/drm_dsc.h: No such fi=
-le or directory
-   33 | #include <drm/drm_dsc.h>
-      |          ^~~~~~~~~~~~~~~
-In file included from drivers/gpu/drm/msm/msm_gpu.h:17,
-                 from drivers/gpu/drm/msm/adreno/adreno_gpu.h:15,
-                 from drivers/gpu/drm/msm/adreno/adreno_gpu.c:19:
-drivers/gpu/drm/msm/msm_drv.h:33:10: fatal error: drm/drm_dsc.h: No such fi=
-le or directory
-   33 | #include <drm/drm_dsc.h>
-      |          ^~~~~~~~~~~~~~~
-In file included from drivers/gpu/drm/msm/msm_gpu.h:17,
-                 from drivers/gpu/drm/msm/adreno/adreno_gpu.h:15,
-                 from drivers/gpu/drm/msm/adreno/adreno_device.c:9:
-drivers/gpu/drm/msm/msm_drv.h:33:10: fatal error: drm/drm_dsc.h: No such fi=
-le or directory
-   33 | #include <drm/drm_dsc.h>
-      |          ^~~~~~~~~~~~~~~
-In file included from drivers/gpu/drm/msm/msm_gpu.h:17,
-                 from drivers/gpu/drm/msm/adreno/adreno_gpu.h:15,
-                 from drivers/gpu/drm/msm/adreno/a2xx_gpu.h:7,
-                 from drivers/gpu/drm/msm/adreno/a2xx_gpu.c:4:
-drivers/gpu/drm/msm/msm_drv.h:33:10: fatal error: drm/drm_dsc.h: No such fi=
-le or directory
-   33 | #include <drm/drm_dsc.h>
-      |          ^~~~~~~~~~~~~~~
+CARD by the issuing Bank, be inform that you can not withdraw more
 
-Caused by commits
+than
 
-  b9080324d6ca ("drm/msm/dsi: add support for dsc data")
-  c110cfd1753e ("drm/msm/disp/dpu1: Add support for DSC")
+$20,000 per day this is what the Bank said you will see the rest
 
-interacting with commit
+details when you receive it ,I have also registered your ATM VISA CARD
 
-  2a64b147350f ("drm/display: Move DSC header and helpers into display-help=
-er module")
+Sum ($4.5million) with (DHL) Express Company reconfirm your contact
 
-from the drm tree.
+information as follows.
 
-I have applied the following merge fix patch.
 
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Thu, 5 May 2022 11:31:20 +1000
-Subject: [PATCH] fix up for "drm/display: Move DSC header and helpers into =
-display-helper module"
+Your full name
 
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h | 2 +-
- drivers/gpu/drm/msm/msm_drv.h              | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Delivery Address
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h b/drivers/gpu/drm/m=
-sm/disp/dpu1/dpu_hw_dsc.h
-index 164e5f5b1002..b39ee4ed32f7 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h
-@@ -4,7 +4,7 @@
- #ifndef _DPU_HW_DSC_H
- #define _DPU_HW_DSC_H
-=20
--#include <drm/drm_dsc.h>
-+#include <drm/display/drm_dsc.h>
-=20
- #define DSC_MODE_SPLIT_PANEL            BIT(0)
- #define DSC_MODE_MULTIPLEX              BIT(1)
-diff --git a/drivers/gpu/drm/msm/msm_drv.h b/drivers/gpu/drm/msm/msm_drv.h
-index fdbaad53eb84..08388d742d65 100644
---- a/drivers/gpu/drm/msm/msm_drv.h
-+++ b/drivers/gpu/drm/msm/msm_drv.h
-@@ -30,7 +30,7 @@
- #include <drm/drm_plane_helper.h>
- #include <drm/drm_probe_helper.h>
- #include <drm/drm_fb_helper.h>
--#include <drm/drm_dsc.h>
-+#include <drm/display/drm_dsc.h>
- #include <drm/msm_drm.h>
- #include <drm/drm_gem.h>
-=20
---=20
-2.35.1
+Telephone Number
 
---=20
-Cheers,
-Stephen Rothwell
+Your state and
 
---Sig_/tRqYI3wCpidvLUmvMjB.9aW
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+Your Country.
 
------BEGIN PGP SIGNATURE-----
+Contact person REV.MIKE EDWARD
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJzLQsACgkQAVBC80lX
-0Gz4BAgAivmZ+AnLWan0/jPKLFtVm0209C7US8SGJXO2ri8EYt8YRqZhpBLQqr5S
-OWh8VLnbx5H1HhKi5i9wI6U+SYlMhncN1jofYmvRYB+19UCe3gpDAqHs8wyiSikf
-vXQ7XPpAgonDjj+ACpzoJ1STURGk3s1b7IOXaoY7yjRWfzA0jOLqt/+zVgMPrGkc
-9uwZjqy1bCmRkj+4Zj5jQsXHMWVL7DDDS8+1T8E8/xMiS9pK0GThCW3/IQgYmIzw
-bRZyzjuEXx2CZl4SkRlnbUytJGk2X9jUdZqfZtbrNjAEDTl4Ubtksf6MSrDt09vT
-KzLuYJ+hkeafHLm3NKjaUycL/IGnPA==
-=Kgh2
------END PGP SIGNATURE-----
+Email; ( revmikelivecom842@gmail.com)
 
---Sig_/tRqYI3wCpidvLUmvMjB.9aW--
+Phone number +234-9015065394
+
+
+So I have pay for delivering and insurance charges, I paid it, so the
+
+only money you will pay them is security keeping fee which the state said
+
+that I will not pay for, but the keeping fee is $125 dollars,and
+
+I deposited it yesterday been 4/05/2022, And I did not contact you
+
+yesterday due to low connection, so that is why i did not pay for
+
+keeping fee, So I want you to contact urgent to avoid increase of
+
+their keeping fee.
+
+
+Your faith fully
+
+DR.ADAMS ROSE.

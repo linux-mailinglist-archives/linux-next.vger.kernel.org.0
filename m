@@ -2,120 +2,150 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB0C251B94F
-	for <lists+linux-next@lfdr.de>; Thu,  5 May 2022 09:40:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D825751BA72
+	for <lists+linux-next@lfdr.de>; Thu,  5 May 2022 10:29:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230469AbiEEHoP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 5 May 2022 03:44:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50790 "EHLO
+        id S1349057AbiEEIdS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 5 May 2022 04:33:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235142AbiEEHoN (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 5 May 2022 03:44:13 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C14D015FEE;
-        Thu,  5 May 2022 00:40:29 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Kv5G318bNz4xLb;
-        Thu,  5 May 2022 17:40:27 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1651736427;
-        bh=IdQFe9+XKU10DJC7a/VpNCylBdCaz9iU1nuEjSmC5Yc=;
-        h=Date:From:To:Cc:Subject:From;
-        b=LjRnWkLZusSAOi3M4N0PGM003dn9YbykceA1nNRTNTpyKvNVxB6hhXBSFJiafMIs/
-         xPV5xxgdm2+WiKKBcy2z5vntSfs/kOGh2etYdTvZ9BwYPZgg0jJtY7kQ6lBo1iITtX
-         LeGBrFQ/CycbEwyPYsNnUnDsftlo98Y2UCRuShYBBDLrtemd87J6DuYdsqTegV7QlN
-         2w7NMYmoQr9w6r3evvzIxf/zZNUq2E9LYFsi3MBbwAYzUQ/JxebCqx8g79yzXmsbnI
-         FYiaHmG8ZKdOTHhgpUeDaynZWq+K/euGRlluWMpWhzH3vCqAEfq6RrMqF4rr+53CVt
-         TM/ih/8WUiifg==
-Date:   Thu, 5 May 2022 17:40:25 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the kspp tree
-Message-ID: <20220505174025.07cc9967@canb.auug.org.au>
+        with ESMTP id S1349307AbiEEIdQ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 5 May 2022 04:33:16 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C7AA48E7F;
+        Thu,  5 May 2022 01:29:31 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id x12so3113880pgj.7;
+        Thu, 05 May 2022 01:29:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=I8iVQ2ATolZdL4GQyg4h1Y4q3ydgZAtJB0uwbzpCqt4=;
+        b=GTcOdExtfyRJhz8aDfh5mhtDoBS1Y93kgUCo55M4c/Z/BFRCdXjjdn6gPL6QFeM0Ly
+         4iiHVpkQGFHhtr31Y0TNHbicHkQl1oM0iDRNduxdnxg7gLbIaaHHRjHXrmEJZbFZGOfX
+         15eoI5xaKxuUAmiOuc2S215pU/T9qw9swnGFNlxXnaBrDdObLu0A/zTp8LjeQvQpFhr2
+         Fpfb2qnC55dZa80kryYCU5b8bomWevgM39MXd4kdtmHAXuxgNPBPr/MiB2NmJrZ1VYt+
+         iHdWUc3mI4IxtoCPrO0j6idWhQMzAsXC9QKneRgMaLXXeJINpNpDr7bM66Y/E0ui3qfM
+         5kXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=I8iVQ2ATolZdL4GQyg4h1Y4q3ydgZAtJB0uwbzpCqt4=;
+        b=6xqPxasQ5jWUWulVxH8eGjAoMCBCgHbqvula8mNa++4CSLCIw9G3DhzmcHM+lIUqOn
+         YzNXyjNcn06ryyW2XU7PplycfTZUu8RA7aqIuEnyXnqHkjCKqvwEyCCIs5xFnjY/Vmtx
+         7MO9pFzxmuWOwR38ZnId/s2QejSblTcJXIhjmtP8yyndCjD2vf2wFDdhTx6gHRkwouna
+         HujYZnh8dvGsv7Hl8DAtM8A98XJFONv6fwchbOaNUp5eUB4dJfbefKKQemt1rRMFozCW
+         t3+pJYun2KRmZ7+6jP+ogqIEiTgNv6c7zl6d0hjVgsU6DodBk7bin2tZxInn70whiNau
+         b/2Q==
+X-Gm-Message-State: AOAM532NWiBSw3zrme2LfcGgDsalYK0WZAq22qiRVZtDFl9pS1WIwIqO
+        Rak7rmZeFBW+hdaAd+MQNeu2n6GAIg0=
+X-Google-Smtp-Source: ABdhPJwc55yYRNJ/FOrc+sUPpxXfL1QM4Xm2y7Gqhl3HqNsK60zzWpWzqeracH/TkfTiOGUFQzzLKA==
+X-Received: by 2002:aa7:848a:0:b0:510:44da:223d with SMTP id u10-20020aa7848a000000b0051044da223dmr6083466pfn.66.1651739370043;
+        Thu, 05 May 2022 01:29:30 -0700 (PDT)
+Received: from debian.me (subs03-180-214-233-73.three.co.id. [180.214.233.73])
+        by smtp.gmail.com with ESMTPSA id x3-20020a17090aa38300b001cd4989febcsm4761861pjp.8.2022.05.05.01.29.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 May 2022 01:29:29 -0700 (PDT)
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     linux-doc@vger.kernel.org
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Ben Greear <greearb@candelatech.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>, netdev@vger.kernel.org,
+        linux-next@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v2] net/core: use ReST block quote in __dev_queue_xmit() comment
+Date:   Thu,  5 May 2022 15:29:07 +0700
+Message-Id: <20220505082907.42393-1-bagasdotme@gmail.com>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/M5RX/1U.XNv/liR8=s_9veL";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/M5RX/1U.XNv/liR8=s_9veL
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+When merging net-next for linux-next tree, Stephen Rothwell reported
+htmldocs warning:
 
-Hi all,
+Documentation/networking/kapi:92: net/core/dev.c:4101: WARNING: Missing matching underline for section title overline.
 
-After merging the kspp tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+-----------------------------------------------------------------------------------
+     I notice this method can also return errors from the queue disciplines,
+     including NET_XMIT_DROP, which is a positive value.  So, errors can also
 
-drivers/misc/lkdtm/stackleak.c: In function 'check_stackleak_irqoff':
-drivers/misc/lkdtm/stackleak.c:30:46: error: implicit declaration of functi=
-on 'stackleak_task_low_bound' [-Werror=3Dimplicit-function-declaration]
-   30 |         const unsigned long task_stack_low =3D stackleak_task_low_b=
-ound(current);
-      |                                              ^~~~~~~~~~~~~~~~~~~~~~=
-~~
-drivers/misc/lkdtm/stackleak.c:31:47: error: implicit declaration of functi=
-on 'stackleak_task_high_bound'; did you mean 'stackleak_task_init'? [-Werro=
-r=3Dimplicit-function-declaration]
-   31 |         const unsigned long task_stack_high =3D stackleak_task_high=
-_bound(current);
-      |                                               ^~~~~~~~~~~~~~~~~~~~~=
-~~~~
-      |                                               stackleak_task_init
-drivers/misc/lkdtm/stackleak.c:33:50: error: 'struct task_struct' has no me=
-mber named 'lowest_stack'; did you mean 'ret_stack'?
-   33 |         const unsigned long lowest_sp =3D current->lowest_stack;
-      |                                                  ^~~~~~~~~~~~
-      |                                                  ret_stack
-drivers/misc/lkdtm/stackleak.c:74:23: error: implicit declaration of functi=
-on 'stackleak_find_top_of_poison' [-Werror=3Dimplicit-function-declaration]
-   74 |         poison_high =3D stackleak_find_top_of_poison(task_stack_low=
-, untracked_high);
-      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-cc1: all warnings being treated as errors
+The warning is due to comment quote by Ben from commit af191367a75262
+("[NET]: Document ->hard_start_xmit() locking in comments.") interacts
+with commit c526fd8f9f4f21 ("net: inline dev_queue_xmit()").
 
-Caused by commit
+Fix the warning by using ReST block quote syntax for the comment quote.
+Note that the actual description for the method will be rendered above
+"Description" section instead of below of it. However, preserve the
+comment quote for now.
 
-  f4cfacd92972 ("lkdtm/stackleak: rework boundary management")
+Fixes: c526fd8f9f4f21 ("net: inline dev_queue_xmit()")
+Link: https://lore.kernel.org/linux-next/20220503073420.6d3f135d@canb.auug.org.au/
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Ben Greear <greearb@candelatech.com>
+Cc: Pavel Begunkov <asml.silence@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Akira Yokosawa <akiyks@gmail.com>
+Cc: netdev@vger.kernel.org
+Cc: linux-next@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+---
+ Changes since v1 [1]:
+   - Use ReST block quote instead of deleting the comment quote
+   - Mention the originating commit that introduces the quote
 
-or maybe commit
+ [1]: https://lore.kernel.org/linux-doc/20220503072949.27336-1-bagasdotme@gmail.com/
+ net/core/dev.c | 19 ++++++++++---------
+ 1 file changed, 10 insertions(+), 9 deletions(-)
 
-  cbe7edb47d3c ("stackleak: rework stack low bound handling")
+diff --git a/net/core/dev.c b/net/core/dev.c
+index c2d73595a7c369..bcb47b889f5857 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -4099,17 +4099,18 @@ struct netdev_queue *netdev_core_pick_tx(struct net_device *dev,
+  *	to congestion or traffic shaping.
+  *
+  * -----------------------------------------------------------------------------------
+- *      I notice this method can also return errors from the queue disciplines,
+- *      including NET_XMIT_DROP, which is a positive value.  So, errors can also
+- *      be positive.
+  *
+- *      Regardless of the return value, the skb is consumed, so it is currently
+- *      difficult to retry a send to this method.  (You can bump the ref count
+- *      before sending to hold a reference for retry if you are careful.)
++ *        I notice this method can also return errors from the queue disciplines,
++ *        including NET_XMIT_DROP, which is a positive value.  So, errors can also
++ *        be positive.
+  *
+- *      When calling this method, interrupts MUST be enabled.  This is because
+- *      the BH enable code must have IRQs enabled so that it will not deadlock.
+- *          --BLG
++ *        Regardless of the return value, the skb is consumed, so it is currently
++ *        difficult to retry a send to this method.  (You can bump the ref count
++ *        before sending to hold a reference for retry if you are careful.)
++ *
++ *        When calling this method, interrupts MUST be enabled.  This is because
++ *        the BH enable code must have IRQs enabled so that it will not deadlock.
++ *        --BLG
+  */
+ int __dev_queue_xmit(struct sk_buff *skb, struct net_device *sb_dev)
+ {
 
-CONFIG_GCC_PLUGIN_STACKLEAK is not set for this build.
+base-commit: 4950b6990e3b1efae64a5f6fc5738d25e3b816b3
+-- 
+An old man doll... just what I always wanted! - Clara
 
-I have used the kspp tree from next-20220504 for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/M5RX/1U.XNv/liR8=s_9veL
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJzf2kACgkQAVBC80lX
-0GxSlAf/QEeNiidSGw2AWgcvsbeeicmb9sLLdgYFJ5Fe0ox7IJcemW4OdTpLq/QX
-c7tMvFr1yosmrfZC/AkeKqCL4R2i2QqQVW8QDA7dw83ZFfXBn5GwrT4Ri9HLVc2n
-OkQtmV5Tjiau0UQFsBNgR0EZYnLf8x6djlbMQaT74jbNm8k6gVZ+7AtX55MkfBlu
-QFz+9M7Zv+fdEJDH451Yr33E0bqyMv8/R7fJwUxrG80wBU4AyeJYJyHJnTqvGkNq
-HECT/rF0fMs8JG1HOZRZBGOvcOYp2tSnHWfQqKbys7mqAIifgkm1r04OJxKSnZHQ
-5xYcHLkRkOKQThe48kctcjvIjOnNQA==
-=G9NT
------END PGP SIGNATURE-----
-
---Sig_/M5RX/1U.XNv/liR8=s_9veL--

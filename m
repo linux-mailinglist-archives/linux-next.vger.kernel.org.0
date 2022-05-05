@@ -2,163 +2,127 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8298A51BD64
-	for <lists+linux-next@lfdr.de>; Thu,  5 May 2022 12:42:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50B4251BDF9
+	for <lists+linux-next@lfdr.de>; Thu,  5 May 2022 13:27:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354351AbiEEKqP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 5 May 2022 06:46:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54124 "EHLO
+        id S232168AbiEELbE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 5 May 2022 07:31:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352217AbiEEKqL (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 5 May 2022 06:46:11 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AF5353716;
-        Thu,  5 May 2022 03:42:32 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id q4so1125144plr.11;
-        Thu, 05 May 2022 03:42:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=VwJgS7EQVPINql3/IWkqXNQpE3klGJYH+DfKyFv2JQY=;
-        b=KScEbK/eLpYZn24jwF/V+qYRxX8O/bC1VEZvrmcsUkkJu4xqN8E5HS5Qvwka7XPO49
-         5or89yjGgo9Yn5/NV+02Q5SNhQIyCDWey8hzkvXBh5WygVRjT5xAy+FGXRp7Zw6VjIqV
-         7yLhmcTbdrmz9jNKLeHbn9tZhP/LZTsFJ2CoGkyfP2YnUhsSHoSlinnudG2p9F73Fo7a
-         7qqAZBw+wMLobNXMovDXCTZ7k67QmS96xA7OnpIjPqRm+xN+4RJBV+RkUKSKK5rgY6Bd
-         KRcweSrM3/OHbqzTseBZX1mG3A811JeVF3+3SaCo83JpRLR0J4x/n+b6sBgctJgm/9kg
-         fORA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=VwJgS7EQVPINql3/IWkqXNQpE3klGJYH+DfKyFv2JQY=;
-        b=eKKpsNp/eKTXKgMga182+RHIfmPcSmzX/Y7Ptu954QISrcItUYhZm5C7noLWCa0lw9
-         aWS8DAlINh8JTTZKG1xlLrrH5VGRwS/V3hto3HQ1RsnbzHh+bfZ442h+3nzwzC1O4HRF
-         3AoPVrxQjFz1YBP3Wuvyeix5A29sRmrtse495O7yKeTCUWneBMGJ4Y7RQNCMbsF3PKlk
-         WWukw0UmROe0zsr86NEdubO+NbYaMbEXSBRjRJe+Coymh5uQlajgV0LOpShD6vvEy+9i
-         BXh+0PvPfyivtr6mriY3IyVjdx9DTc7hclJHGM1klJ3ghZ7HIfhOi6kVk/B5eSKQJJvS
-         L1kA==
-X-Gm-Message-State: AOAM531hgjgzdAfDYyKwzk8Oz75iRNZqy1W/pdWWBGEN8A5U8R5h6lyO
-        5ASUvVeboBeNNiUUl/mcFEtiAju6W2s=
-X-Google-Smtp-Source: ABdhPJzwPf1b02txXmiAhAdw7c4vm2/gjm8vTxHsLDx9RjanrKorKqFZ30wz0saply+QWDTItl3umg==
-X-Received: by 2002:a17:90b:1d83:b0:1dc:4362:61bd with SMTP id pf3-20020a17090b1d8300b001dc436261bdmr5338472pjb.126.1651747352073;
-        Thu, 05 May 2022 03:42:32 -0700 (PDT)
-Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id d20-20020a056a00199400b0050dc7628156sm1098222pfl.48.2022.05.05.03.42.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 May 2022 03:42:31 -0700 (PDT)
-Message-ID: <c7a501cc-0a09-9f3d-8200-50fc3a854853@gmail.com>
-Date:   Thu, 5 May 2022 19:42:26 +0900
+        with ESMTP id S230376AbiEELbD (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 5 May 2022 07:31:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFF764AE19;
+        Thu,  5 May 2022 04:27:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5847361BB6;
+        Thu,  5 May 2022 11:27:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4EF9C385A4;
+        Thu,  5 May 2022 11:27:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651750042;
+        bh=fnNI5C558oOhnx11/zpZ9dGyJmeljeFfP9Tjkcnh56A=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Se58sKjMCaroYzvmi+GwU3ni6/Vv1rNomhlwS1J3u+cnz75TbqC5zHSx+EysQIqgF
+         A66AUKykh2wtbdW+NwA+Qu02wxeaJ4h3h8hD3F95w6zUVOxo3H7Ro4LOPXH6X/jTsU
+         MB+Re/UaxLzI7DkzQuyqv8tmvF8VAf9T0dHFpQ6pahr9a6j8KkRad8ZmvEOcJlrOVW
+         2wWSYdqCozcV6/ptJd5oTzvVxx4bURpFy/EhThFhTwjfxALH/Tt0qt8YjmW/xYw70R
+         WpBPTt4Ec7OgQYTtNqsGus2S+UB0cg7NqCYqv4nt33OMhOk+In0i93kAzalRKcYFrZ
+         ENIEbb02gH6yQ==
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nmZdg-009Bfm-37; Thu, 05 May 2022 12:27:20 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH net-next v2] net/core: use ReST block quote in
- __dev_queue_xmit() comment
-Content-Language: en-US
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Ben Greear <greearb@candelatech.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-next@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20220505082907.42393-1-bagasdotme@gmail.com>
-From:   Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <20220505082907.42393-1-bagasdotme@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Date:   Thu, 05 May 2022 12:27:19 +0100
+From:   Marc Zyngier <maz@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Christoffer Dall <cdall@cs.columbia.edu>,
+        Oliver Upton <oupton@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the kvm-arm tree
+In-Reply-To: <20220505201156.65decdc8@canb.auug.org.au>
+References: <20220505201005.7ab164c0@canb.auug.org.au>
+ <20220505201156.65decdc8@canb.auug.org.au>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <fb9f82ae7d3a37356fe16ca41285cc1d@kernel.org>
+X-Sender: maz@kernel.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: sfr@canb.auug.org.au, cdall@cs.columbia.edu, oupton@google.com, linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 2022/05/05 17:29,
-Bagas Sanjaya wrote:
-> When merging net-next for linux-next tree, Stephen Rothwell reported
-> htmldocs warning:
+On 2022-05-05 11:11, Stephen Rothwell wrote:
+> Hi all,
 > 
-> Documentation/networking/kapi:92: net/core/dev.c:4101: WARNING: Missing matching underline for section title overline.
+> On Thu, 5 May 2022 20:10:05 +1000 Stephen Rothwell 
+> <sfr@canb.auug.org.au> wrote:
+>> 
+>> After merging the kvm-arm tree, today's linux-next build (htmldocs)
+>> failed like this:
+>> 
+>> Sphinx parallel build error:
+>> docutils.utils.SystemMessage: 
+>> /home/sfr/next/next/Documentation/virt/kvm/api.rst:6175: (SEVERE/4) 
+>> Title level inconsistent:
+>> 
+>> For arm/arm64:
+>> ^^^^^^^^^^^^^^
+>> 
+>> Caused by commit
+>> 
+>>   bfbab4456877 ("KVM: arm64: Implement PSCI SYSTEM_SUSPEND")
+>> 
+>> I have applied the following patch for today (I don't  know if it is
+>> correct, but it does build).
 > 
-> -----------------------------------------------------------------------------------
->      I notice this method can also return errors from the queue disciplines,
->      including NET_XMIT_DROP, which is a positive value.  So, errors can also
+> oops :-)
 > 
-> The warning is due to comment quote by Ben from commit af191367a75262
-> ("[NET]: Document ->hard_start_xmit() locking in comments.") interacts
-> with commit c526fd8f9f4f21 ("net: inline dev_queue_xmit()").
-
-I don't see why the change in commit c526fd8f9f4f21 caused the new
-warning.
-Please explain.  Just saying "interacts with" does not explain
-anything.
-
-        Thanks, Akria
-
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Thu, 5 May 2022 20:06:34 +1000
+> Subject: [PATCH] fix up for "VM: arm64: Implement PSCI SYSTEM_SUSPEND"
 > 
-> Fix the warning by using ReST block quote syntax for the comment quote.
-> Note that the actual description for the method will be rendered above
-> "Description" section instead of below of it. However, preserve the
-> comment quote for now.
-> 
-> Fixes: c526fd8f9f4f21 ("net: inline dev_queue_xmit()")
-> Link: https://lore.kernel.org/linux-next/20220503073420.6d3f135d@canb.auug.org.au/
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Cc: Ben Greear <greearb@candelatech.com>
-> Cc: Pavel Begunkov <asml.silence@gmail.com>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Akira Yokosawa <akiyks@gmail.com>
-> Cc: netdev@vger.kernel.org
-> Cc: linux-next@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 > ---
->  Changes since v1 [1]:
->    - Use ReST block quote instead of deleting the comment quote
->    - Mention the originating commit that introduces the quote
+>  Documentation/virt/kvm/api.rst | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
->  [1]: https://lore.kernel.org/linux-doc/20220503072949.27336-1-bagasdotme@gmail.com/
->  net/core/dev.c | 19 ++++++++++---------
->  1 file changed, 10 insertions(+), 9 deletions(-)
+> diff --git a/Documentation/virt/kvm/api.rst 
+> b/Documentation/virt/kvm/api.rst
+> index deeb95dabc64..e5d685d4de11 100644
+> --- a/Documentation/virt/kvm/api.rst
+> +++ b/Documentation/virt/kvm/api.rst
+> @@ -6173,7 +6173,7 @@ Valid values for 'type' are:
+>     the VM.
 > 
-> diff --git a/net/core/dev.c b/net/core/dev.c
-> index c2d73595a7c369..bcb47b889f5857 100644
-> --- a/net/core/dev.c
-> +++ b/net/core/dev.c
-> @@ -4099,17 +4099,18 @@ struct netdev_queue *netdev_core_pick_tx(struct net_device *dev,
->   *	to congestion or traffic shaping.
->   *
->   * -----------------------------------------------------------------------------------
-> - *      I notice this method can also return errors from the queue disciplines,
-> - *      including NET_XMIT_DROP, which is a positive value.  So, errors can also
-> - *      be positive.
->   *
-> - *      Regardless of the return value, the skb is consumed, so it is currently
-> - *      difficult to retry a send to this method.  (You can bump the ref count
-> - *      before sending to hold a reference for retry if you are careful.)
-> + *        I notice this method can also return errors from the queue disciplines,
-> + *        including NET_XMIT_DROP, which is a positive value.  So, errors can also
-> + *        be positive.
->   *
-> - *      When calling this method, interrupts MUST be enabled.  This is because
-> - *      the BH enable code must have IRQs enabled so that it will not deadlock.
-> - *          --BLG
-> + *        Regardless of the return value, the skb is consumed, so it is currently
-> + *        difficult to retry a send to this method.  (You can bump the ref count
-> + *        before sending to hold a reference for retry if you are careful.)
-> + *
-> + *        When calling this method, interrupts MUST be enabled.  This is because
-> + *        the BH enable code must have IRQs enabled so that it will not deadlock.
-> + *        --BLG
->   */
->  int __dev_queue_xmit(struct sk_buff *skb, struct net_device *sb_dev)
->  {
+>  For arm/arm64:
+> -^^^^^^^^^^^^^^
+> +--------------
 > 
-> base-commit: 4950b6990e3b1efae64a5f6fc5738d25e3b816b3
+>     KVM_SYSTEM_EVENT_SUSPEND exits are enabled with the
+>     KVM_CAP_ARM_SYSTEM_SUSPEND VM capability. If a guest invokes the 
+> PSCI
+> --
+> 2.35.1
+
+Thanks, I've taken this patch in my branch.
+
+         M.
+-- 
+Jazz is not dead. It just smells funny...

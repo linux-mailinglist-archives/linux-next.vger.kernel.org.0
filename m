@@ -2,44 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0446251CB4E
-	for <lists+linux-next@lfdr.de>; Thu,  5 May 2022 23:36:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C78D51CB54
+	for <lists+linux-next@lfdr.de>; Thu,  5 May 2022 23:37:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382031AbiEEVj6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 5 May 2022 17:39:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35306 "EHLO
+        id S1344123AbiEEVlf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 5 May 2022 17:41:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385971AbiEEVjd (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 5 May 2022 17:39:33 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E67613F3F;
-        Thu,  5 May 2022 14:35:43 -0700 (PDT)
+        with ESMTP id S233533AbiEEVle (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 5 May 2022 17:41:34 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5069C13D74;
+        Thu,  5 May 2022 14:37:52 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KvRnk6sWQz4ySp;
-        Fri,  6 May 2022 07:35:38 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KvRrG0jqzz4x7Y;
+        Fri,  6 May 2022 07:37:50 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1651786539;
-        bh=TKYTWsX4lxZyG270zY2XF4ob3AKxxzYGWlcANa+09ik=;
+        s=201702; t=1651786670;
+        bh=n86/8gYxEzhlOHGFJmxvxteK50CUVJlT53soZq0ISz0=;
         h=Date:From:To:Cc:Subject:From;
-        b=o73HXEMle4I3ZMjdCHFBuDmpwBgyQcDw/OwGeV4OG0BvY2AVJtgEO8y5Ts3dB1AOu
-         RV0y+8LTlJnYuDm60U7+JUOPqWBiF8Vkx5rIOb5Z5IlHDymL13cDqYhYe7J39fdeaq
-         r+5XGnrMJJiHZ1wta2nBpqhoUs+UcdOxAHSXIvlXrSjdUO7t95LRpVUrU5A1/6GsL+
-         FaosLx66y0UOZycJ0zkSe8QXZy6JqoPAV9YtRkyj081Iv4yhEdCI3efIR/eowyVcHI
-         WpGT443GXh5263vlit9eXQKkcFt9IBFdkjNWe6NlsIlyBIeESuZfeQgF3u5mIO0Zhz
-         Y7SgZk8gPwnGg==
-Date:   Fri, 6 May 2022 07:35:37 +1000
+        b=pCPdGBf86azeityq2xd+PvMPv7ZGkN161d9IGCD2RUskEF5Tc23qjql1w8Y8554Xy
+         1USCQrDPohRpsTRK/He8lQYx/uUmU1Nrgrd9bW8xKwuATljhl32Drx1yfDyDYAY8Sb
+         fY5iLhnAnLHFhw1/bb2qDrvPFLBGTMa4Pp7UnPUkapkgZGT+FVkpgQGYG12aDueGrk
+         zgvvv0mc09UJqOJUknDE48wc1wqaszF5gBRV2AoFS4WVMY4lSvJoHll5oigmGGUCRO
+         t+XasvV4LyB069rhJqFJhY9sj2yKJHe8/n/n2mrf3MizWT9h8AuM4pz8XywhAm0r4V
+         BEHnReBEoERRw==
+Date:   Fri, 6 May 2022 07:37:49 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the mm tree
-Message-ID: <20220506073537.6da48a27@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the mm tree
+Message-ID: <20220506073749.73215f1d@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/cHvJ=en=fANYcvp=Kp+707r";
+Content-Type: multipart/signed; boundary="Sig_/ooJ7YSPsEE=6riEtJyTjeKO";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -50,42 +50,41 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/cHvJ=en=fANYcvp=Kp+707r
+--Sig_/ooJ7YSPsEE=6riEtJyTjeKO
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
 After merging the mm tree, today's linux-next build (i386 allmodconfig
-clang14) produced this warning:
+clang14) failed like this:
 
-mm/shmem.c:1704:7: error: variable 'folio' is used uninitialized whenever '=
-if' condition is true [-Werror,-Wsometimes-uninitialized]
+mm/shmem.c:2337:8: error: variable 'page' is uninitialized when used here [=
+-Werror,-Wuninitialized]
 
 Introduced by commit
 
-  2b58b3f33ba2 ("mm/shmem: convert shmem_swapin_page() to shmem_swapin_foli=
-o()")
+  b0bb08b2d5f3 ("mm/shmem: turn shmem_alloc_page() into shmem_alloc_folio()=
+")
 
-'folio' is used in the error path.
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/cHvJ=en=fANYcvp=Kp+707r
+--Sig_/ooJ7YSPsEE=6riEtJyTjeKO
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJ0QykACgkQAVBC80lX
-0GwuZAf9ESrn7xp83mL3rPSMWph52bx+qqUQATtsHgHXWQyPmlWBRooE32KmfxB4
-yuoZTaz6koy4MyJuDXczywV4e9epc+tN/1zfJQhSxFiQ2Fkog/+wpMRY6PJIZcBv
-+pgFIIqOn65dY3sW0gv9zFhKvDJcHNm7eZvhaAQDER9nfawSUlEhDYOgnkG1Q4oQ
-UCZT+XsSjQx59nXXbmKtwpBD7lUUgUAn/1+cGgJBvnrpRfVt5FCxBD04vXa6uDry
-QIW8HJSZPwRzhUfU4p2HsYeQuWXlIMNsd9anOTvW364ZhFbk/Hsa6a5fsJW/WROL
-7th5sHItSUPikSaseMJ7uG+NC7V3Qw==
-=ZWQI
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJ0Q60ACgkQAVBC80lX
+0GzX1Qf8DnRxCSIR4kwcm29Maar1xyboUM1ov3P1q0baFAdULzKYBInQdWCJc+ZU
+ddnNT6BJjdBEf0/ayMtbt7nrXHSdKEakAMMt/viqjcbF78QjA0K1U58jd+vWDcW5
+1dteuDNzdPwzenK2+6GRBBeIYUYOwbj5UdCrcbuDm28vwL/GAsp7vBAjiCMQIqUH
+UGjag1o2snEm1HuxUyjlGFAG24SaTdF4YBCp/zFhSzuRIySIcH1t3nfvlqIqiZDp
+N+TLtJjSojxAvNbZcx7w/mJpF3O0/ctBpvYB4rVudn3645oFmkvJ1pjN4XkJ88pj
+tN8AH9KxAkP5CS+JiOlzvHv74uLY/A==
+=qfuW
 -----END PGP SIGNATURE-----
 
---Sig_/cHvJ=en=fANYcvp=Kp+707r--
+--Sig_/ooJ7YSPsEE=6riEtJyTjeKO--

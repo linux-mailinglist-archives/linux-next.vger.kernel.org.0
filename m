@@ -2,48 +2,48 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9030151B557
-	for <lists+linux-next@lfdr.de>; Thu,  5 May 2022 03:43:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1F6251B564
+	for <lists+linux-next@lfdr.de>; Thu,  5 May 2022 03:49:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235951AbiEEBqx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 4 May 2022 21:46:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56856 "EHLO
+        id S235887AbiEEBwt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 4 May 2022 21:52:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235887AbiEEBqx (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 4 May 2022 21:46:53 -0400
+        with ESMTP id S235781AbiEEBws (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 4 May 2022 21:52:48 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04CCF4C41E;
-        Wed,  4 May 2022 18:43:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A61A34C7A8;
+        Wed,  4 May 2022 18:49:10 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KtxKr1qPSz4xXS;
-        Thu,  5 May 2022 11:43:12 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KtxSc12pYz4xTX;
+        Thu,  5 May 2022 11:49:03 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1651714993;
-        bh=TtMfVqytzBjCR0qUWr+CTwB6YM9CYPM1mDOpJiblGJc=;
+        s=201702; t=1651715349;
+        bh=eOGlpGpxB8mZv+swMCGeOmhKXRrt+JfX+vQ3ZqDz7CI=;
         h=Date:From:To:Cc:Subject:From;
-        b=QVpJlN7F1fjtI06Pzr5J23Bta3i1MLD/IVdXxywARhGWkNDvvqnThpIG+2ptNIbOS
-         Rsv4iTmDHTZ773tlen8bvJu0rT+TZ36LG6Uo3kY6Ky6D7vfzIK0BffcPtabeF94db3
-         1lCHBTjACCaE4whuBaP3ayLccOWLlohTTI/Rk3BWhLPYau87WcAcfIt6WNci1oxWqN
-         UnVnyo/AcyZMpLL8xdHABA/7Qe81hklzeBU5hTadZ/DqXKnnxXQHgIrZ+z6jKuTaUl
-         eP10cH5iaz4iItf8sNCB2SDYYkE270RWnbCck+gqCFDxG3FvxWYX3ffljoVun3YOtD
-         HhQ4r0Fz49OFw==
-Date:   Thu, 5 May 2022 11:43:11 +1000
+        b=IB89NgK/Rvv8TIF+aeZs6zPMsv50fDDSDhPxC3NaIgt+3fL3smzpdCKBVVvbnn5yG
+         kfdKbs/Cd9szZ3rIIANjSOii2bz+Hqez5/BDVGnMlJBS535VWZxkjftde9nM6mWsbK
+         a383qG9OZSrTS/4unDnh+FMvJpMYhE9SG4wMFjTt+0gxWnt4GRPeLpmci92q82kFUV
+         FwSVaQ1FWhAW2UfNx4cdW2AH6/soBdsaZF66iEJIuwEOAgtnhK4P69GWTKOmQOQDD1
+         QgXOBJMdl0PIEiovAEaEciuGs95iLVeI4/ReTIB26a80ItwRYTgTWIDW5jkHnZ7WuT
+         G0zCdGaDLt7qw==
+Date:   Thu, 5 May 2022 11:48:59 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Rob Clark <robdclark@gmail.com>, Sean Paul <seanpaul@chromium.org>,
         Dave Airlie <airlied@linux.ie>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+Cc:     DRI <dri-devel@lists.freedesktop.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
         Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        DRI <dri-devel@lists.freedesktop.org>,
+        Vinod Koul <vkoul@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
 Subject: linux-next: build failure after merge of the drm-msm tree
-Message-ID: <20220505114311.18e7786f@canb.auug.org.au>
+Message-ID: <20220505114859.654eb7f0@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/teBL01mlIaMgI0/1eR149Pp";
+Content-Type: multipart/signed; boundary="Sig_/tRqYI3wCpidvLUmvMjB.9aW";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -54,55 +54,98 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/teBL01mlIaMgI0/1eR149Pp
+--Sig_/tRqYI3wCpidvLUmvMjB.9aW
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the drm-msm tree, today's linux-next build (arm
-multi_v7_defconfig) failed like this:
+After merging the drm-msm tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-drivers/gpu/drm/msm/dp/dp_display.c:13:10: fatal error: drm/dp/drm_dp_aux_b=
-us.h: No such file or directory
-   13 | #include <drm/dp/drm_dp_aux_bus.h>
-      |          ^~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from drivers/gpu/drm/msm/msm_gpu.h:17,
+                 from drivers/gpu/drm/msm/adreno/adreno_gpu.h:15,
+                 from drivers/gpu/drm/msm/adreno/a3xx_gpu.h:10,
+                 from drivers/gpu/drm/msm/adreno/a3xx_gpu.c:9:
+drivers/gpu/drm/msm/msm_drv.h:33:10: fatal error: drm/drm_dsc.h: No such fi=
+le or directory
+   33 | #include <drm/drm_dsc.h>
+      |          ^~~~~~~~~~~~~~~
+In file included from drivers/gpu/drm/msm/msm_gpu.h:17,
+                 from drivers/gpu/drm/msm/adreno/adreno_gpu.h:15,
+                 from drivers/gpu/drm/msm/adreno/adreno_gpu.c:19:
+drivers/gpu/drm/msm/msm_drv.h:33:10: fatal error: drm/drm_dsc.h: No such fi=
+le or directory
+   33 | #include <drm/drm_dsc.h>
+      |          ^~~~~~~~~~~~~~~
+In file included from drivers/gpu/drm/msm/msm_gpu.h:17,
+                 from drivers/gpu/drm/msm/adreno/adreno_gpu.h:15,
+                 from drivers/gpu/drm/msm/adreno/adreno_device.c:9:
+drivers/gpu/drm/msm/msm_drv.h:33:10: fatal error: drm/drm_dsc.h: No such fi=
+le or directory
+   33 | #include <drm/drm_dsc.h>
+      |          ^~~~~~~~~~~~~~~
+In file included from drivers/gpu/drm/msm/msm_gpu.h:17,
+                 from drivers/gpu/drm/msm/adreno/adreno_gpu.h:15,
+                 from drivers/gpu/drm/msm/adreno/a2xx_gpu.h:7,
+                 from drivers/gpu/drm/msm/adreno/a2xx_gpu.c:4:
+drivers/gpu/drm/msm/msm_drv.h:33:10: fatal error: drm/drm_dsc.h: No such fi=
+le or directory
+   33 | #include <drm/drm_dsc.h>
+      |          ^~~~~~~~~~~~~~~
 
-Caused by commit
+Caused by commits
 
-  c3bf8e21b38a ("drm/msm/dp: Add eDP support via aux_bus")
+  b9080324d6ca ("drm/msm/dsi: add support for dsc data")
+  c110cfd1753e ("drm/msm/disp/dpu1: Add support for DSC")
 
 interacting with commit
 
-  da68386d9edb ("drm: Rename dp/ to display/")
+  2a64b147350f ("drm/display: Move DSC header and helpers into display-help=
+er module")
 
 from the drm tree.
 
-I have applied the following merge fix patch for today.
+I have applied the following merge fix patch.
 
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Thu, 5 May 2022 11:41:09 +1000
-Subject: [PATCH] fix up for "drm: Rename dp/ to display/"
+Date: Thu, 5 May 2022 11:31:20 +1000
+Subject: [PATCH] fix up for "drm/display: Move DSC header and helpers into =
+display-helper module"
 
 Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 ---
- drivers/gpu/drm/msm/dp/dp_display.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h | 2 +-
+ drivers/gpu/drm/msm/msm_drv.h              | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/d=
-p_display.c
-index ed4e26ed20e4..c68d6007c2c6 100644
---- a/drivers/gpu/drm/msm/dp/dp_display.c
-+++ b/drivers/gpu/drm/msm/dp/dp_display.c
-@@ -10,7 +10,7 @@
- #include <linux/component.h>
- #include <linux/of_irq.h>
- #include <linux/delay.h>
--#include <drm/dp/drm_dp_aux_bus.h>
-+#include <drm/display/drm_dp_aux_bus.h>
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h b/drivers/gpu/drm/m=
+sm/disp/dpu1/dpu_hw_dsc.h
+index 164e5f5b1002..b39ee4ed32f7 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h
+@@ -4,7 +4,7 @@
+ #ifndef _DPU_HW_DSC_H
+ #define _DPU_HW_DSC_H
 =20
- #include "msm_drv.h"
- #include "msm_kms.h"
+-#include <drm/drm_dsc.h>
++#include <drm/display/drm_dsc.h>
+=20
+ #define DSC_MODE_SPLIT_PANEL            BIT(0)
+ #define DSC_MODE_MULTIPLEX              BIT(1)
+diff --git a/drivers/gpu/drm/msm/msm_drv.h b/drivers/gpu/drm/msm/msm_drv.h
+index fdbaad53eb84..08388d742d65 100644
+--- a/drivers/gpu/drm/msm/msm_drv.h
++++ b/drivers/gpu/drm/msm/msm_drv.h
+@@ -30,7 +30,7 @@
+ #include <drm/drm_plane_helper.h>
+ #include <drm/drm_probe_helper.h>
+ #include <drm/drm_fb_helper.h>
+-#include <drm/drm_dsc.h>
++#include <drm/display/drm_dsc.h>
+ #include <drm/msm_drm.h>
+ #include <drm/drm_gem.h>
+=20
 --=20
 2.35.1
 
@@ -110,20 +153,20 @@ index ed4e26ed20e4..c68d6007c2c6 100644
 Cheers,
 Stephen Rothwell
 
---Sig_/teBL01mlIaMgI0/1eR149Pp
+--Sig_/tRqYI3wCpidvLUmvMjB.9aW
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJzK68ACgkQAVBC80lX
-0GxfmAf/bh2STLE2WuZawybH3tOZoRkCOAI1s9AYEDPZqTTDgVJwzhcaaTdoYVwX
-r/hRBDe+UtOzg0oDcRpM4lwQl0GJaeW28XbZDqYomNvfpANMRqSlWievOEOEOm3h
-Ct/m5UyyL1vWyAEOkq+xu/Syw2wIu5QP/PKwC0XomdROQ+gt5/s7LipVab5z7tKb
-8FuMGJVj0pxZsLDHQM87sXsbmo67eovH+hKzqTO9qQQwPXPBfRyfbjPbbY/05KbY
-RacuxoZgWZcv6bQsvSskLP6dS0u+fFjNCmbaHq+3VDEXGIE23ZGem9x8/5tOHGqo
-AF3rckl2InIENa0CQPpfTVSjTISfDQ==
-=zrUm
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJzLQsACgkQAVBC80lX
+0Gz4BAgAivmZ+AnLWan0/jPKLFtVm0209C7US8SGJXO2ri8EYt8YRqZhpBLQqr5S
+OWh8VLnbx5H1HhKi5i9wI6U+SYlMhncN1jofYmvRYB+19UCe3gpDAqHs8wyiSikf
+vXQ7XPpAgonDjj+ACpzoJ1STURGk3s1b7IOXaoY7yjRWfzA0jOLqt/+zVgMPrGkc
+9uwZjqy1bCmRkj+4Zj5jQsXHMWVL7DDDS8+1T8E8/xMiS9pK0GThCW3/IQgYmIzw
+bRZyzjuEXx2CZl4SkRlnbUytJGk2X9jUdZqfZtbrNjAEDTl4Ubtksf6MSrDt09vT
+KzLuYJ+hkeafHLm3NKjaUycL/IGnPA==
+=Kgh2
 -----END PGP SIGNATURE-----
 
---Sig_/teBL01mlIaMgI0/1eR149Pp--
+--Sig_/tRqYI3wCpidvLUmvMjB.9aW--

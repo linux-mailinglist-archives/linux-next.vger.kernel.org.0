@@ -2,831 +2,2193 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15FD751D371
-	for <lists+linux-next@lfdr.de>; Fri,  6 May 2022 10:30:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 730EB51D645
+	for <lists+linux-next@lfdr.de>; Fri,  6 May 2022 13:08:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345140AbiEFIdk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 6 May 2022 04:33:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49882 "EHLO
+        id S1391178AbiEFLMQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 6 May 2022 07:12:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386333AbiEFIdk (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 6 May 2022 04:33:40 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84A506832F;
-        Fri,  6 May 2022 01:29:54 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KvkJc2241z4xbN;
-        Fri,  6 May 2022 18:29:52 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1651825792;
-        bh=03IjjKoJ4IFDYq5gy/LgeEmIxSQGMQyevSZksIjQ1B4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=DzUzhWq2A0IaWuHe5/JBFIvVgtHY1T3gFqzyugX7C2xgOhmt5RT1B2T/7thEM2UzI
-         CmkLpo5uR/v3TO21ki94JZgxCrP+9HGivRnrYp9K4DCsPeuoFBzqRSjV0TzGyMFpZ4
-         Oi3/7Yn876eYK91IeFmvheQX/ileavN2vBYRz2bN3bhpDX2SsZOXJk+wIDCj+NUBEX
-         IAmctkFVm2JW/zvDmjO0JXC/bzIM00a+2xEEBBrXro2DgNR+UpYMCY6yxbx8dgleON
-         JBKdb654QahG1CduNHH/qgABJ8JnHgx3O/J6mcxgbqpaYGoyBTp5kRO04JdZ5ysSi0
-         qAaH7/OgOpViw==
-Date:   Fri, 6 May 2022 18:29:51 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Tree for May 6
-Message-ID: <20220506182951.46136dd9@canb.auug.org.au>
+        with ESMTP id S1391186AbiEFLMH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 6 May 2022 07:12:07 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E09352E4B
+        for <linux-next@vger.kernel.org>; Fri,  6 May 2022 04:08:22 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id i17so7066321pla.10
+        for <linux-next@vger.kernel.org>; Fri, 06 May 2022 04:08:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=2Ceqik2kqJd0vb/q1xt+DJr4OWP1pcUREmtIYE8ZWl0=;
+        b=mXhg62yeJa019VjMLuHPX0WXReyXTroumP0bgmbkLTM3UxI8EADc9LDENdogXeewcN
+         iPFHuIkKZ6i5G6XGVcrMDbiPNFwYNZJqGSz6kclJAimYi9GFH4JcpWY/xGKaBbisP9Pz
+         99ifKhHhW0guutYNUOLxOCmz+vLGrmOz+IBfRuY1PyJLnc8KyzdMOSIb7mhGJUzNBBW0
+         W+yWaROz/x131ByZE0dR6cxeX8xVgA+wHkaD2UIQ5YC0X3KFIH/4gwNkP39JwYZcIJ7K
+         o3IwgQzPxQ9CanQvxBD8u08glFVBwagQUgBwE1otvEWr6xWJd0K9HZvmvzcoNzezA3gY
+         nhVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=2Ceqik2kqJd0vb/q1xt+DJr4OWP1pcUREmtIYE8ZWl0=;
+        b=1iFlwpuWbByLsFZGYWcLwADmqr1QlspRte0VyOnyV7284HSiXy6bSCTrmBuaDySYWu
+         KtDTXX+AFQUlFESFy3JIoSikeTKa/Xiyw3tGGnrHngvAIeNWbRRVwz8u5plGfU/Rr+p8
+         Q1Fv/FdJHUbGUstUbLrYHNORrXTBSuxo+pdKjnQ7n6ZA6AnuCrNs8MUP8IUhlFOqi9tm
+         hzIJrDuGeABtLA8T5q4iVWdZaQvzH8tGTlPBnwKbElMNFEyau4rnkK7S5YKQAxqj5wA/
+         H30ZgONx+UZswTZ/fGl9ytjQXMJsoJcOs09yQrN/cpoydulVOu3Xi9llX0I0tm9tkkUy
+         8n8g==
+X-Gm-Message-State: AOAM531ugaPnZSBC6yHn4IxdbTKw8+DNQL2NsVmg4HVILMPUhb3HJ84Q
+        t8wSe00NB0RiO7Nf8cpJUMHkhvIw5HkbyN860sw=
+X-Google-Smtp-Source: ABdhPJzEuOweEVHdqzfr/Wh2iVM3j2+YOvCdM7imuVhI7V8erMsoQAGo6Iqbmj2DbB/jrNpGPAJ87g==
+X-Received: by 2002:a17:902:c94d:b0:15e:9f59:9aa6 with SMTP id i13-20020a170902c94d00b0015e9f599aa6mr3001616pla.70.1651835300446;
+        Fri, 06 May 2022 04:08:20 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id i15-20020a17090332cf00b0015e8d4eb29asm1441518plr.228.2022.05.06.04.08.19
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 May 2022 04:08:19 -0700 (PDT)
+Message-ID: <627501a3.1c69fb81.91eda.31ca@mx.google.com>
+Date:   Fri, 06 May 2022 04:08:19 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/UF92WqDWu0AcFBaLma+CE/q";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,LOCALPART_IN_SUBJECT,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Tree: next
+X-Kernelci-Branch: master
+X-Kernelci-Kernel: next-20220506
+Subject: next/master build: 217 builds: 53 failed, 164 passed, 131 errors,
+ 121 warnings (next-20220506)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/UF92WqDWu0AcFBaLma+CE/q
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/master build: 217 builds: 53 failed, 164 passed, 131 errors, 121 warni=
+ngs (next-20220506)
 
-Hi all,
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20220506/
 
-Changes since 20220505:
+Tree: next
+Branch: master
+Git Describe: next-20220506
+Git Commit: 38a288f5941ef03752887ad86f2d85442358c99a
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 7 unique architectures
 
-The amdgpu tree gained a build failure so I used the version from
-next-20220505.
+Build Failures Detected:
 
-The input tree lost its build failure.
+arm64:
+    cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config: (clang-13) =
+FAIL
+    cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chrome=
+book: (clang-13) FAIL
+    cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chr=
+omebook: (clang-13) FAIL
+    cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chr=
+omebook: (clang-13) FAIL
+    cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-c=
+hromebook: (clang-13) FAIL
+    allmodconfig: (clang-14) FAIL
 
-The iommu tree gained a conflict against the arm-soc tree.
+arm:
+    cros://chromeos-5.10/armel/chromiumos-arm.flavour.config: (clang-13) FA=
+IL
+    cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config: (clang-1=
+3) FAIL
+    allmodconfig: (clang-14) FAIL
+    allmodconfig: (gcc-10) FAIL
+    assabet_defconfig: (gcc-10) FAIL
+    cerfcube_defconfig: (gcc-10) FAIL
+    collie_defconfig: (gcc-10) FAIL
+    corgi_defconfig: (gcc-10) FAIL
+    eseries_pxa_defconfig: (gcc-10) FAIL
+    h3600_defconfig: (gcc-10) FAIL
+    jornada720_defconfig: (gcc-10) FAIL
+    lubbock_defconfig: (gcc-10) FAIL
+    multi_v7_defconfig+kselftest: (gcc-10) FAIL
+    neponset_defconfig: (gcc-10) FAIL
+    omap2plus_defconfig: (gcc-10) FAIL
+    pxa_defconfig: (gcc-10) FAIL
+    rpc_defconfig: (gcc-10) FAIL
+    shannon_defconfig: (gcc-10) FAIL
+    simpad_defconfig: (gcc-10) FAIL
+    spear3xx_defconfig: (gcc-10) FAIL
+    spitz_defconfig: (gcc-10) FAIL
+    trizeps4_defconfig: (gcc-10) FAIL
+    viper_defconfig: (gcc-10) FAIL
+    zeus_defconfig: (gcc-10) FAIL
 
-The nvmem tree gained a conflict against the arm-soc tree.
+i386:
+    allmodconfig: (clang-14) FAIL
+    i386_defconfig: (clang-14) FAIL
+    i386_defconfig+kselftest: (gcc-10) FAIL
 
-The kspp tree still has its build failure so I used the version from
-next-20220504.
+mips:
+    32r2el_defconfig: (gcc-10) FAIL
+    32r2el_defconfig+debug: (gcc-10) FAIL
+    32r2el_defconfig+kselftest: (gcc-10) FAIL
+    ci20_defconfig: (gcc-10) FAIL
+    cu1000-neo_defconfig: (gcc-10) FAIL
+    cu1830-neo_defconfig: (gcc-10) FAIL
+    db1xxx_defconfig: (gcc-10) FAIL
+    decstation_64_defconfig: (gcc-10) FAIL
+    loongson2k_defconfig: (gcc-10) FAIL
+    loongson3_defconfig: (gcc-10) FAIL
+    omega2p_defconfig: (gcc-10) FAIL
+    vocore2_defconfig: (gcc-10) FAIL
 
-The mm tree still had its build failures for which I applied a supplied
-patch.
+x86_64:
+    cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86=
+-chromebook: (clang-13) FAIL
+    cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86=
+-chromebook: (clang-13) FAIL
+    cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-=
+chromebook: (clang-13) FAIL
+    cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config: (clang-13=
+) FAIL
+    cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chrome=
+book: (clang-13) FAIL
+    x86_64_defconfig+x86-chromebook: (clang-13) FAIL
+    allmodconfig: (clang-14) FAIL
+    x86_64_defconfig: (clang-14) FAIL
 
-Non-merge commits (relative to Linus' tree): 8808
- 9082 files changed, 643790 insertions(+), 191917 deletions(-)
+Errors and Warnings Detected:
 
-----------------------------------------------------------------------------
+arc:
+    haps_hs_smp_defconfig+kselftest (gcc-10): 4 warnings
 
-I have created today's linux-next tree at
-git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
-are tracking the linux-next tree using git, you should not use "git pull"
-to do so as that will try to merge the new linux-next release with the
-old one.  You should use "git fetch" and checkout or reset to the new
-master.
+arm64:
+    allmodconfig (clang-14): 2 errors, 2 warnings
+    cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (clang-13): =
+2 errors, 2 warnings
+    cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chrome=
+book (clang-13): 2 errors, 2 warnings
+    cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chr=
+omebook (clang-13): 2 errors, 2 warnings
+    cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chr=
+omebook (clang-13): 2 errors, 2 warnings
+    cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-c=
+hromebook (clang-13): 2 errors, 2 warnings
+    defconfig+arm64-chromebook (clang-13): 6 warnings
 
-You can see which trees have been included by looking in the Next/Trees
-file in the source.  There are also quilt-import.log and merge.log
-files in the Next directory.  Between each merge, the tree was built
-with a ppc64_defconfig for powerpc, an allmodconfig for x86_64, a
-multi_v7_defconfig for arm and a native build of tools/perf. After
-the final fixups (if any), I do an x86_64 modules_install followed by
-builds for x86_64 allnoconfig, powerpc allnoconfig (32 and 64 bit),
-ppc44x_defconfig, allyesconfig and pseries_le_defconfig and i386,
-arm64, sparc and sparc64 defconfig and htmldocs. And finally, a simple
-boot test of the powerpc pseries_le_defconfig kernel in qemu (with and
-without kvm enabled).
+arm:
+    allmodconfig (clang-14): 2 errors, 15 warnings
+    allmodconfig (gcc-10): 1 error
+    aspeed_g4_defconfig (gcc-10): 1 warning
+    aspeed_g5_defconfig (gcc-10): 1 warning
+    aspeed_g5_defconfig (clang-14): 13 warnings
+    assabet_defconfig (gcc-10): 4 errors, 1 warning
+    at91_dt_defconfig (gcc-10): 1 warning
+    bcm2835_defconfig (gcc-10): 1 warning
+    cerfcube_defconfig (gcc-10): 4 errors, 1 warning
+    collie_defconfig (gcc-10): 4 errors, 1 warning
+    corgi_defconfig (gcc-10): 4 errors, 1 warning
+    cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (clang-13): 2 =
+errors, 7 warnings
+    cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (clang-13=
+): 2 errors, 7 warnings
+    eseries_pxa_defconfig (gcc-10): 4 errors, 1 warning
+    h3600_defconfig (gcc-10): 4 errors, 1 warning
+    jornada720_defconfig (gcc-10): 4 errors, 1 warning
+    lubbock_defconfig (gcc-10): 4 errors, 1 warning
+    multi_v5_defconfig (clang-14): 6 warnings
+    multi_v7_defconfig+kselftest (gcc-10): 1 error
+    neponset_defconfig (gcc-10): 4 errors, 1 warning
+    omap2plus_defconfig (gcc-10): 1 error
+    pxa_defconfig (gcc-10): 4 errors, 1 warning
+    rpc_defconfig (gcc-10): 2 errors
+    shannon_defconfig (gcc-10): 4 errors, 1 warning
+    simpad_defconfig (gcc-10): 4 errors, 1 warning
+    spear3xx_defconfig (gcc-10): 10 errors
+    spitz_defconfig (gcc-10): 4 errors, 1 warning
+    trizeps4_defconfig (gcc-10): 4 errors, 1 warning
+    viper_defconfig (gcc-10): 4 errors, 1 warning
+    zeus_defconfig (gcc-10): 4 errors, 1 warning
 
-Below is a summary of the state of the merge.
+i386:
+    allmodconfig (clang-14): 2 errors, 2 warnings
+    allnoconfig (clang-14): 3 warnings
+    i386_defconfig (clang-14): 1 error, 1 warning
+    i386_defconfig+kselftest (gcc-10): 4 errors, 1 warning
 
-I am currently merging 348 trees (counting Linus' and 94 trees of bug
-fix patches pending for the current merge release).
+mips:
+    32r2el_defconfig (gcc-10): 1 error, 1 warning
+    32r2el_defconfig+debug (gcc-10): 1 error, 1 warning
+    32r2el_defconfig+kselftest (gcc-10): 1 error, 1 warning
+    ci20_defconfig (gcc-10): 1 error
+    cu1000-neo_defconfig (gcc-10): 1 error
+    cu1830-neo_defconfig (gcc-10): 1 error
+    db1xxx_defconfig (gcc-10): 1 error
+    fuloong2e_defconfig (gcc-10): 1 error
+    lemote2f_defconfig (gcc-10): 1 error
+    loongson2k_defconfig (gcc-10): 1 error
+    loongson3_defconfig (gcc-10): 1 error
+    omega2p_defconfig (gcc-10): 1 error
+    rb532_defconfig (gcc-10): 1 warning
+    vocore2_defconfig (gcc-10): 1 error
 
-Stats about the size of the tree over time can be seen at
-http://neuling.org/linux-next-size.html .
+riscv:
+    defconfig+CONFIG_EFI=3Dn (clang-14): 3 warnings
 
-Status of my local build tests will be at
-http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
-advice about cross compilers/configs that work, we are always open to add
-more builds.
+x86_64:
+    allmodconfig (clang-14): 2 errors, 2 warnings
+    allnoconfig (clang-14): 3 warnings
+    cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86=
+-chromebook (clang-13): 2 errors, 2 warnings
+    cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86=
+-chromebook (clang-13): 2 errors, 2 warnings
+    cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-=
+chromebook (clang-13): 2 errors, 2 warnings
+    cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (clang-13)=
+: 2 errors, 2 warnings
+    cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chrome=
+book (clang-13): 2 errors, 2 warnings
+    x86_64_defconfig (clang-14): 1 error, 1 warning
+    x86_64_defconfig+x86-chromebook (clang-13): 1 error, 1 warning
 
-Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
-Gortmaker for triage and bug fixes.
+Errors summary:
 
---=20
-Cheers,
-Stephen Rothwell
+    19   mm/shmem.c:1704:7: error: variable 'folio' is used uninitialized w=
+henever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+    16   mm/shmem.c:2337:8: error: variable 'page' is uninitialized when us=
+ed here [-Werror,-Wuninitialized]
+    16   drivers/pcmcia/soc_common.c:888:1: error: version control conflict=
+ marker in file
+    16   drivers/pcmcia/soc_common.c:886:1: error: version control conflict=
+ marker in file
+    16   drivers/pcmcia/soc_common.c:884:1: error: version control conflict=
+ marker in file
+    16   drivers/pcmcia/soc_common.c:832:3: error: label =E2=80=98out_err_5=
+=E2=80=99 used but not defined
+    10   ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=
+=98__compiletime_assert_253=E2=80=99 declared with attribute error: BUILD_B=
+UG_ON failed: sizeof(*edid) !=3D EDID_LENGTH
+    2    drivers/misc/lkdtm/cfi.c:62:3: error: cast to pointer from integer=
+ of different size [-Werror=3Dint-to-pointer-cast]
+    2    drivers/misc/lkdtm/cfi.c:62:30: error: cast from pointer to intege=
+r of different size [-Werror=3Dpointer-to-int-cast]
+    2    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=
+=80=98-mhard-float=E2=80=99
+    2    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=
+=98__compiletime_assert_286=E2=80=99 declared with attribute error: BUILD_B=
+UG failed
+    2    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=
+=98__compiletime_assert_285=E2=80=99 declared with attribute error: BUILD_B=
+UG failed
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
+=3D0x'
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
+=3D0x'
+    1    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=
+=98__compiletime_assert_406=E2=80=99 declared with attribute error: BUILD_B=
+UG failed
+    1    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=
+=98__compiletime_assert_397=E2=80=99 declared with attribute error: BUILD_B=
+UG failed
+    1    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=
+=98__compiletime_assert_396=E2=80=99 declared with attribute error: BUILD_B=
+UG failed
+    1    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=
+=98__compiletime_assert_387=E2=80=99 declared with attribute error: BUILD_B=
+UG failed
+    1    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=
+=98__compiletime_assert_315=E2=80=99 declared with attribute error: BUILD_B=
+UG failed
+    1    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=
+=98__compiletime_assert_307=E2=80=99 declared with attribute error: BUILD_B=
+UG failed
+    1    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=
+=98__compiletime_assert_305=E2=80=99 declared with attribute error: BUILD_B=
+UG failed
+    1    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=
+=98__compiletime_assert_295=E2=80=99 declared with attribute error: BUILD_B=
+UG failed
+    1    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=
+=98__compiletime_assert_289=E2=80=99 declared with attribute error: BUILD_B=
+UG failed
+    1    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=
+=98__compiletime_assert_284=E2=80=99 declared with attribute error: BUILD_B=
+UG failed
 
-$ git checkout master
-$ git reset --hard stable
-Merging origin/master (0f5d752b1395 Merge tag 's390-5.18-4' of git://git.ke=
-rnel.org/pub/scm/linux/kernel/git/s390/linux)
-Merging fixes/fixes (d06c942efea4 Merge tag 'for_linus' of git://git.kernel=
-.org/pub/scm/linux/kernel/git/mst/vhost)
-Merging mm-hotfixes/mm-hotfixes-unstable (10663622a1e5 arm[64]/memremap: do=
-n't abuse pfn_valid() to ensure presence of linear map)
-Merging kbuild-current/fixes (312310928417 Linux 5.18-rc1)
-Merging arc-current/for-curr (c6ed4d84a2c4 ARC: remove redundant READ_ONCE(=
-) in cmpxchg loop)
-Merging arm-current/fixes (9be4c88bb792 ARM: 9191/1: arm/stacktrace, kasan:=
- Silence KASAN warnings in unwind_frame())
-Merging arm64-fixes/for-next/fixes (c35fe2a68f29 elf: Fix the arm64 MTE ELF=
- segment name and value)
-Merging arm-soc-fixes/arm/fixes (2391e0d7bd0e Merge tag 'aspeed-v5.18-fixes=
-' of git://git.kernel.org/pub/scm/linux/kernel/git/joel/bmc into arm/fixes)
-Merging drivers-memory-fixes/fixes (73039c6c7f36 memory: renesas-rpc-if: Fi=
-x HF/OSPI data transfer in Manual Mode)
-Merging tee-fixes/fixes (98268f2a2a9f Merge branch 'optee_ffa_probe_fix_for=
-_v5.18' into fixes)
-Merging m68k-current/for-linus (0d52a01a266b m68k: defconfig: Disable fbdev=
- on Sun3/3x)
-Merging powerpc-fixes/fixes (6d65028eb67d powerpc/vdso: Fix incorrect CFI i=
-n gettimeofday.S)
-Merging s390-fixes/fixes (a06afe838308 KVM: s390: vsie/gmap: reduce gmap_rm=
-ap overhead)
-Merging sparc/master (05a59d79793d Merge git://git.kernel.org:/pub/scm/linu=
-x/kernel/git/netdev/net)
-Merging fscrypt-current/for-stable (80f6e3080bfc fs-verity: fix signed inte=
-ger overflow with i_size near S64_MAX)
-Merging net/master (68533eb1fb19 Merge tag 'net-5.18-rc6' of git://git.kern=
-el.org/pub/scm/linux/kernel/git/netdev/net)
-Merging bpf/master (a0df71948e95 tls: Skip tls_append_frag on zero copy siz=
-e)
-Merging ipsec/master (79396934e289 net: dsa: b53: convert to phylink_pcs)
-Merging netfilter/master (05ae2fba821c netfilter: nft_socket: make cgroup m=
-atch work in input too)
-Merging ipvs/master (05ae2fba821c netfilter: nft_socket: make cgroup match =
-work in input too)
-Merging wireless/main (86af062f40a7 mac80211: Reset MBSSID parameters upon =
-connection)
-Merging rdma-fixes/for-rc (ef91271c65c1 RDMA/siw: Fix a condition race issu=
-e in MPA request processing)
-Merging sound-current/for-linus (eb9d84b0ffe3 ALSA: fireworks: fix wrong re=
-turn count shorter than expected by 4 bytes)
-Merging sound-asoc-fixes/for-linus (17a2abd041c8 Merge remote-tracking bran=
-ch 'asoc/for-5.17' into asoc-linus)
-Merging regmap-fixes/for-linus (312310928417 Linux 5.18-rc1)
-Merging regulator-fixes/for-linus (c3e3ca05dae3 regulator: core: Fix enable=
-_count imbalance with EXCLUSIVE_GET)
-Merging spi-fixes/for-linus (f724c296f2f2 spi: cadence-quadspi: fix Direct =
-Access Mode disable for SoCFPGA)
-Merging pci-current/for-linus (134b5ce3ed33 PCI: qcom: Remove ddrss_sf_tbu =
-clock from SC8180X)
-Merging driver-core.current/driver-core-linus (672c0c517342 Linux 5.18-rc5)
-Merging tty.current/tty-linus (672c0c517342 Linux 5.18-rc5)
-Merging usb.current/usb-linus (672c0c517342 Linux 5.18-rc5)
-Merging usb-gadget-fixes/fixes (e49d033bddf5 Linux 5.12-rc6)
-Merging usb-serial-fixes/usb-linus (870b1eee2d84 USB: serial: qcserial: add=
- support for Sierra Wireless EM7590)
-Merging phy/fixes (2c8045d48dee phy: amlogic: fix error path in phy_g12a_us=
-b3_pcie_probe())
-Merging staging.current/staging-linus (ce522ba9ef7e Linux 5.18-rc2)
-Merging iio-fixes/fixes-togreg (fe18894930a0 iio: mma8452: fix probe fail w=
-hen device tree compatible is used.)
-Merging counter-fixes/fixes-togreg (ce522ba9ef7e Linux 5.18-rc2)
-Merging char-misc.current/char-misc-linus (672c0c517342 Linux 5.18-rc5)
-Merging soundwire-fixes/fixes (312310928417 Linux 5.18-rc1)
-Merging thunderbolt-fixes/fixes (672c0c517342 Linux 5.18-rc5)
-Merging input-current/for-linus (4352e23a7ff2 Input: cros-ec-keyb - only re=
-gister keyboard if rows/columns exist)
-Merging crypto-current/master (aa8e73eed7d3 crypto: x86/sm3 - Fixup SLS)
-Merging vfio-fixes/for-linus (1ef3342a934e vfio/pci: Fix vf_token mechanism=
- when device-specific VF drivers are used)
-Merging kselftest-fixes/fixes (e8f0c8965932 selftest/vm: add skip support t=
-o mremap_test)
-Merging modules-fixes/modules-linus (dc0ce6cc4b13 lib/test: use after free =
-in register_test_dev_kmod())
-Merging dmaengine-fixes/fixes (9889fc4f19e0 dmaengine: idxd: Fix the error =
-handling path in idxd_cdev_register())
-Merging backlight-fixes/for-backlight-fixes (a38fd8748464 Linux 5.12-rc2)
-Merging mtd-fixes/mtd/fixes (ba7542eb2dd5 mtd: rawnand: qcom: fix memory co=
-rruption that causes panic)
-Merging mfd-fixes/for-mfd-fixes (a61f4661fba4 mfd: intel_quark_i2c_gpio: Re=
-vert "Constify static struct resources")
-Merging v4l-dvb-fixes/fixes (d4cb77112c7b media: isl7998x: select V4L2_FWNO=
-DE to fix build error)
-Merging reset-fixes/reset/fixes (03cb66463b55 dt-bindings: reset: Add paren=
-t "resets" property as optional)
-Merging mips-fixes/mips-fixes (f0a6c68f6998 MIPS: Fix CP0 counter erratum d=
-etection for R4k CPUs)
-Merging at91-fixes/at91-fixes (0c640d9544d0 ARM: dts: at91: fix pinctrl pha=
-ndles)
-Merging omap-fixes/fixes (46ff3df87215 ARM: dts: logicpd-som-lv: Fix wrong =
-pinmuxing on OMAP35)
-Merging kvm-fixes/master (f751d8eac176 KVM: x86: work around QEMU issue wit=
-h synthetic CPUID leaves)
-Merging kvms390-fixes/master (4aa5ac75bf79 KVM: s390: Fix lockdep issue in =
-vm memop)
-Merging hwmon-fixes/hwmon (3481551f0357 hwmon: (tmp401) Add OF device ID ta=
-ble)
-Merging nvdimm-fixes/libnvdimm-fixes (d28820419ca3 cxl/pci: Drop shadowed v=
-ariable)
-Merging cxl-fixes/fixes (fae8817ae804 cxl/mem: Fix memory device capacity p=
-robing)
-Merging btrfs-fixes/next-fixes (48de4dc26894 Merge branch 'misc-5.18' into =
-next-fixes)
-Merging vfs-fixes/fixes (9d2231c5d74e lib/iov_iter: initialize "flags" in n=
-ew pipe_buffer)
-Merging dma-mapping-fixes/for-linus (18a3c5f7abfd Merge tag 'for_linus' of =
-git://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost)
-Merging i3c-fixes/i3c/fixes (fe07bfda2fb9 Linux 5.12-rc1)
-Merging drivers-x86-fixes/fixes (eb2fd9b43fae platform/x86/intel: pmc/core:=
- change pmc_lpm_modes to static)
-Merging samsung-krzk-fixes/fixes (436ce66003d5 ARM: s3c: mark as deprecated=
- and schedule removal)
-Merging pinctrl-samsung-fixes/fixes (ac875df4d854 pinctrl: samsung: fix mis=
-sing GPIOLIB on ARM64 Exynos config)
-Merging devicetree-fixes/dt/linus (5dc463042651 dt-bindings: pci: apple,pci=
-e: Drop max-link-speed from example)
-Merging scsi-fixes/fixes (26f9ce53817a scsi: qla2xxx: Fix missed DMA unmap =
-for aborted commands)
-Merging drm-fixes/drm-fixes (9d9f720733b7 Merge tag 'amd-drm-fixes-5.18-202=
-2-04-27' of https://gitlab.freedesktop.org/agd5f/linux into drm-fixes)
-Merging amdgpu-fixes/drm-fixes (2c409ba81be2 drm/radeon: fix si_enable_smc_=
-cac() failed issue)
-Merging drm-intel-fixes/for-linux-next-fixes (f7e1089f4376 drm/i915/fbc: Co=
-nsult hw.crtc instead of uapi.crtc)
-Merging mmc-fixes/fixes (3e5a8e8494a8 mmc: sdhci-msm: Reset GCC_SDCC_BCR re=
-gister for SDHC)
-Merging rtc-fixes/rtc-fixes (bd33335aa93d rtc: cmos: Disable irq around dir=
-ect invocation of cmos_interrupt())
-Merging gnss-fixes/gnss-linus (312310928417 Linux 5.18-rc1)
-Merging hyperv-fixes/hyperv-fixes (eaa03d345358 Drivers: hv: vmbus: Replace=
- smp_store_mb() with virt_store_mb())
-Merging soc-fsl-fixes/fix (a222fd854139 soc: fsl: qe: Check of ioremap retu=
-rn value)
-Merging risc-v-fixes/fixes (c6fe81191bd7 RISC-V: relocate DTB if it's outsi=
-de memory region)
-Merging pidfd-fixes/fixes (03ba0fe4d09f file: simplify logic in __close_ran=
-ge())
-Merging fpga-fixes/fixes (312310928417 Linux 5.18-rc1)
-Merging spdx/spdx-linus (312310928417 Linux 5.18-rc1)
-Merging gpio-brgl-fixes/gpio/for-current (171865dab096 gpio: visconti: Fix =
-fwnode of GPIO IRQ)
-Merging gpio-intel-fixes/fixes (0c2cae09a765 gpiolib: acpi: Convert type fo=
-r pin to be unsigned)
-Merging pinctrl-intel-fixes/fixes (0be0b70df661 pinctrl: alderlake: Fix reg=
-ister offsets for ADL-N variant)
-Merging erofs-fixes/fixes (8b1ac84dcf2c Documentation/ABI: sysfs-fs-erofs: =
-Fix Sphinx errors)
-Merging integrity-fixes/fixes (843385694721 evm: Fix a small race in init_d=
-esc())
-Merging kunit-fixes/kunit-fixes (02c7efa43627 Documentation: kunit: fix pat=
-h to .kunitconfig in start.rst)
-Merging ubifs-fixes/fixes (c3c07fc25f37 ubi: fastmap: Return error code if =
-memory allocation fails in add_aeb())
-Merging memblock-fixes/fixes (c94afc46cae7 memblock: use kfree() to release=
- kmalloced memblock regions)
-Merging cel-fixes/for-rc (4d5004451ab2 SUNRPC: Fix the svc_deferred_event t=
-race class)
-Merging irqchip-fixes/irq/irqchip-fixes (544808f7e21c irqchip/gic, gic-v3: =
-Prevent GSI to SGI translations)
-Merging renesas-fixes/fixes (432b52eea3dc ARM: shmobile: defconfig: Restore=
- graphical consoles)
-Merging perf-current/perf/urgent (8013d1d3d2e3 Merge tag 'soc-fixes-5.18-3'=
- of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc)
-Merging efi-fixes/urgent (9feaf8b387ee efi: fix return value of __setup han=
-dlers)
-Merging zstd-fixes/zstd-linus (88a309465b3f lib: zstd: clean up double word=
- in comment.)
-Merging drm-misc-fixes/for-linux-next-fixes (841e512ffb64 drm/bridge: ite-i=
-t6505: add missing Kconfig option select)
-Merging kbuild/for-next (902416965b6c modpost: split new_symbol() to symbol=
- allocation and hash table addition)
-Merging perf/perf/core (4e411ee400c1 perf vendor events intel: Add uncore e=
-vent list for Sapphirerapids)
-Merging compiler-attributes/compiler-attributes (7c00621dcaee compiler_type=
-s: mark __compiletime_assert failure as __noreturn)
-Merging dma-mapping/for-next (3cb4503a3301 x86: remove cruft from <asm/dma-=
-mapping.h>)
-Merging asm-generic/master (fba2689ee77e Merge branch 'remove-h8300' of git=
-://git.infradead.org/users/hch/misc into asm-generic)
-CONFLICT (modify/delete): Documentation/devicetree/bindings/memory-controll=
-ers/renesas,h8300-bsc.yaml deleted in asm-generic/master and modified in HE=
-AD.  Version HEAD of Documentation/devicetree/bindings/memory-controllers/r=
-enesas,h8300-bsc.yaml left in tree.
-$ git rm -f Documentation/devicetree/bindings/memory-controllers/renesas,h8=
-300-bsc.yaml
-Merging arc/for-next (6aa98f621786 ARC: bpf: define uapi for BPF_PROG_TYPE_=
-PERF_EVENT program type)
-Merging arm/for-next (012d2fb6c8c9 Merge branch 'devel-stable' into for-nex=
-t)
-CONFLICT (content): Merge conflict in arch/arm/Kconfig
-CONFLICT (content): Merge conflict in arch/arm/Kconfig
-CONFLICT (content): Merge conflict in arch/arm/Kconfig.debug
-CONFLICT (content): Merge conflict in arch/arm/boot/compressed/Makefile
-CONFLICT (content): Merge conflict in arch/arm/include/asm/switch_to.h
-CONFLICT (content): Merge conflict in arch/arm/kernel/traps.c
-Merging arm64/for-next/core (f2807a27b26d Merge branch 'for-next/misc' into=
- for-next/core)
-Merging arm-perf/for-next/perf (602c873eb52e perf: Replace acpi_bus_get_dev=
-ice())
-Merging arm-soc/for-next (6a9b10670022 Merge branch 'arm/defconfig' into fo=
-r-next)
-CONFLICT (content): Merge conflict in arch/arm/Kconfig
-Merging actions/for-next (444d018d8d38 ARM: dts: owl-s500-roseapplepi: Add =
-ATC2603C PMIC)
-Merging amlogic/for-next (ed532523b458 Merge branch 'v5.18/fixes' into for-=
-next)
-Merging aspeed/for-next (d9540eeaa3d1 Merge branches 'nuvoton-dt-for-v5.18'=
- and 'dt-for-v5.18' into for-next)
-Merging at91/at91-next (c9a1e633e105 ARM: configs: sama7: enable CONFIG_RES=
-ET_CONTROLLER)
-Merging drivers-memory/for-next (d2fd434f2e1c Merge branch 'mem-ctrl-next' =
-into for-next)
-Merging imx-mxs/for-next (cf97232efd97 Merge branch 'imx/defconfig' into fo=
-r-next)
-Merging keystone/next (cb293d3b430e Merge branch 'for_5.15/drivers-soc' int=
-o next)
-Merging mediatek/for-next (54715794cbcd Merge branch 'v5.18-next/soc' into =
-for-next)
-Merging mvebu/for-next (8885ae5142a4 Merge branch 'mvebu/dt64' into mvebu/f=
-or-next)
-Merging omap/for-next (b5418fc0478c Merge branch 'omap-for-v5.19/dt' into f=
-or-next)
-Merging qcom/for-next (32ebdb3eeeee Merge branches 'arm64-for-5.19', 'arm64=
--defconfig-for-5.19', 'clk-for-5.19', 'defconfig-for-5.19', 'drivers-for-5.=
-19', 'dts-for-5.19' and 'arm64-fixes-for-5.18' into for-next)
-Merging raspberrypi/for-next (c5915b53d4c2 dt-bindings: soc: bcm: Convert b=
-rcm,bcm2835-vchiq to json-schema)
-Merging renesas/next (d51e220c34ad Merge branches 'renesas-arm-dt-for-v5.19=
-', 'renesas-arm-soc-for-v5.19', 'renesas-drivers-for-v5.19' and 'renesas-dt=
--bindings-for-v5.19' into renesas-next)
-Merging reset/reset/next (2ca065dc9468 dt-bindings: reset: st,sti-powerdown=
-: Convert to yaml)
-Merging rockchip/for-next (29cd342258c8 Merge branch 'v5.19-armsoc/dts64' i=
-nto for-next)
-Merging samsung-krzk/for-next (88fb0c4d0aff Merge branch 'next/dt64' into f=
-or-next)
-Merging scmi/for-linux-next (7d9c90c48ca9 Merge tag 'ffa-updates-5.19' of g=
-it://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux into for-li=
-nux-next)
-Merging stm32/stm32-next (5b7e58313a77 ARM: dts: stm32: Add SCMI version of=
- STM32 boards (DK1/DK2/ED1/EV1))
-Merging sunxi/sunxi/for-next (c275d16eb08d Merge branch 'sunxi/dt-for-5.19'=
- into sunxi/for-next)
-Merging tee/next (db30e53bf897 Merge branch 'tee_cleanup_for_v5.19' into ne=
-xt)
-Merging tegra/for-next (616b8a9f6e30 Merge branch for-5.19/arm64/defconfig =
-into for-next)
-Merging ti/ti-next (f2e957cb095a Merge branch 'ti-drivers-soc-next' into ti=
--next)
-Merging xilinx/for-next (312310928417 Linux 5.18-rc1)
-Merging clk/clk-next (b473708bf4b5 Merge branch 'clk-airoha' into clk-next)
-Merging clk-imx/for-next (43896f56b59e clk: imx8mp: add clkout1/2 support)
-Merging clk-renesas/renesas-clk (2e0e144796fb clk: renesas: r9a09g011: Add =
-eth clock and reset entries)
-Merging clk-samsung/for-next (45bd8166a1d8 clk: samsung: Add initial Exynos=
-7885 clock driver)
-Merging csky/linux-next (c5acdf12cc24 csky: atomic: Add conditional atomic =
-operations' optimization)
-Merging m68k/for-next (a96e4ebf3ded m68k: defconfig: Update defconfigs for =
-v5.18-rc1)
-Merging m68knommu/for-next (42742038db06 m68k: fix typos in comments)
-Merging microblaze/next (78b5f52ab6f6 microblaze: fix typos in comments)
-Merging mips/mips-next (912a4427bec0 MIPS: adding a safety check for cpu_ha=
-s_fpu)
-Merging nios2/for-next (7f7bc20bc41a nios2: Don't use _end for calculating =
-min_low_pfn)
-Merging openrisc/for-next (862cf8d5fd98 openrisc/boot: Remove unnecessary i=
-nitialisation in memcpy().)
-Merging parisc-hd/for-next (e34799ccc126 parisc: Change MAX_ADDRESS to beco=
-me unsigned long long)
-Merging powerpc/next (f06351f8c0c8 powerpc/eeh: Remove unused inline functi=
-ons)
-Merging soc-fsl/next (1ce93cb102e7 soc: fsl: qe: Check of ioremap return va=
-lue)
-Merging risc-v/for-next (d26eee72d9b9 riscv: dts: rename the node name of d=
-ma)
-Merging s390/for-next (52132d2ab904 Merge branch 'features' into for-next)
-Merging sh/for-next (8518e694203d sh: pgtable-3level: Fix cast to pointer f=
-rom integer of different size)
-Merging sparc-next/master (dd0d718152e4 Merge tag 'spi-fix-v5.8-rc2' of git=
-://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi)
-Merging uml/linux-next (82017457957a um: run_helper: Write error message to=
- kernel log on exec failure on host)
-Merging xtensa/xtensa-for-next (7f9c97417481 xtensa: clean up labels in the=
- kernel entry assembly)
-Merging pidfd/for-next (0014edaedfd8 fs: unset MNT_WRITE_HOLD on failure)
-Merging fscrypt/master (a7a5bc5fe8ac fscrypt: log when starting to use inli=
-ne encryption)
-Merging fscache/fscache-next (312310928417 Linux 5.18-rc1)
-Merging afs/afs-next (26291c54e111 Linux 5.17-rc2)
-Merging btrfs/for-next (ee13d3e82868 Merge branch 'for-next-next-v5.18-2022=
-0429' into for-next-20220429)
-Merging ceph/master (7acae6183cf3 ceph: fix possible NULL pointer dereferen=
-ce for req->r_session)
-Merging cifs/for-next (4cfa6d6563b6 cifs: cache dirent names for cached dir=
-ectories)
-Merging configfs/for-next (84ec758fb2da configfs: fix a race in configfs_{,=
-un}register_subsystem())
-Merging ecryptfs/next (682a8e2b41ef Merge tag 'ecryptfs-5.13-rc1-updates' o=
-f git://git.kernel.org/pub/scm/linux/kernel/git/tyhicks/ecryptfs)
-Merging erofs/dev (011c045788ed erofs: add 'fsid' mount option)
-Merging exfat/dev (1d404b899e32 exfat: reduce block requests when zeroing a=
- cluster)
-Merging ext3/for_next (cfb73d370782 Pull evictable fsnotify marks work from=
- Amir.)
-Merging ext4/dev (23e3d7f7061f jbd2: fix a potential race while discarding =
-reserved buffers after an abort)
-Merging f2fs/dev (2f70350d04f7 f2fs: fix deadloop in foreground GC)
-Merging fsverity/fsverity (07c99001312c fs-verity: support reading signatur=
-e with ioctl)
-Merging fuse/for-next (6b49bc9d8a5f fuse: avoid unnecessary spinlock bump)
-Merging gfs2/for-next (db0c1968e935 gfs2: Variable rename)
-Merging jfs/jfs-next (0d4837fdb796 fs: jfs: fix possible NULL pointer deref=
-erence in dbFree())
-Merging ksmbd/ksmbd-for-next (22da5264abf4 Merge tag '5.18-rc3-ksmbd-fixes'=
- of git://git.samba.org/ksmbd)
-Merging nfs/linux-next (a3d0562d4dc0 Revert "SUNRPC: attempt AF_LOCAL conne=
-ct on setup")
-Merging nfs-anna/linux-next (d19e0183a883 NFS: Do not report writeback erro=
-rs in nfs_getattr())
-Merging nfsd/for-next (5c2cb3833940 SUNRPC: Remove svc_rqst::rq_xprt_hlen)
-Merging ntfs3/master (52e00ea6b26e fs/ntfs3: Update valid size if -EIOCBQUE=
-UED)
-Merging orangefs/for-next (40a74870b2d1 orangefs: Fix the size of a memory =
-allocation in orangefs_bufmap_alloc())
-Merging overlayfs/overlayfs-next (94fd19752b28 ovl: don't fail copy up if n=
-o fileattr support on upper)
-Merging ubifs/next (705757274599 ubifs: rename_whiteout: correct old_dir si=
-ze computing)
-Merging v9fs/9p-next (22e424feb665 Revert "fs/9p: search open fids first")
-Merging xfs/for-next (86810a9ebd9e Merge branch 'guilt/xfs-5.19-fuzz-fixes'=
- into xfs-5.19-for-next)
-Merging zonefs/for-next (31a644b3c2ae documentation: zonefs: Document sysfs=
- attributes)
-CONFLICT (content): Merge conflict in fs/zonefs/super.c
-Merging iomap/iomap-for-next (ebb7fb1557b1 xfs, iomap: limit individual ioe=
-nd chain lengths in writeback)
-Merging djw-vfs/vfs-for-next (49df34221804 fs: fix an infinite loop in ioma=
-p_fiemap)
-Merging file-locks/locks-next (80d8e4d3f313 fs/locks: fix fcntl_getlk64/fcn=
-tl_setlk64 stub prototypes)
-Merging vfs/for-next (fd78f28f9f50 Merge branch 'work.namei' into for-next)
-Merging printk/for-next (bfc1f2749c23 Merge branch 'rework/kthreads' into f=
-or-next)
-Merging pci/next (99ddcbbf5ade Merge branch 'remotes/lorenzo/pci/versatile')
-Merging pstore/for-next/pstore (8126b1c73108 pstore: Don't use semaphores i=
-n always-atomic-context code)
-Merging hid/for-next (eb3f85f0fc6e Merge branch 'for-5.19/wacom' into for-n=
-ext)
-CONFLICT (content): Merge conflict in drivers/hid/Kconfig
-CONFLICT (content): Merge conflict in drivers/hid/Makefile
-Merging i2c/i2c/for-next (ef736ba3ca8e Merge branch 'i2c/for-mergewindow' i=
-nto i2c/for-next)
-Merging i3c/i3c/next (6742ca620bd9 dt-bindings: i3c: Convert snps,dw-i3c-ma=
-ster to DT schema)
-Merging dmi/dmi-for-next (f97a2103f1a7 firmware: dmi: Move product_sku info=
- to the end of the modalias)
-Merging hwmon-staging/hwmon-next (e21a58f67b9b hwmon: (pmbus) Add get_volta=
-ge/set_voltage ops)
-Merging jc_docs/docs-next (81c653659d34 Documentation/sysctl: document max_=
-rcu_stall_to_panic)
-Merging v4l-dvb/master (3d59142ad94c media: dvb-usb: dib0700_devices: use a=
-n enum for the device number)
-Merging v4l-dvb-next/master (6c1c1eb8c87d media: ext-ctrls-codec.rst: fix i=
-ndentation)
-Merging pm/linux-next (1fb89757668a Merge branch 'acpi-osl' into linux-next)
-Merging cpufreq-arm/cpufreq/arm/linux-next (a3b8d1b12c6b cpufreq: mediatek:=
- Fix NULL pointer dereference in mediatek-cpufreq)
-Merging cpupower/cpupower (312310928417 Linux 5.18-rc1)
-Merging devfreq/devfreq-next (5d521a307526 PM / devfreq: rk3399_dmc: Avoid =
-static (reused) profile)
-Merging opp/opp/linux-next (22079af7df5a opp: Reorder definition of ceil/fl=
-oor helpers)
-Merging thermal/thermal/linux-next (c07a7c8dbcd8 tools/thermal: Add thermal=
- daemon skeleton)
-Merging ieee1394/for-next (54b3bd99f094 firewire: nosy: switch from 'pci_' =
-to 'dma_' API)
-Merging dlm/next (8e51ec6146fd dlm: use kref_put_lock in __put_lkb)
-Merging rdma/for-next (ff815a89398d RDMA/core: Avoid flush_workqueue(system=
-_unbound_wq) usage)
-Merging net-next/master (c8227d568ddf Merge git://git.kernel.org/pub/scm/li=
-nux/kernel/git/netdev/net)
-Merging bpf-next/for-next (20b87e7c29df selftests/bpf: Fix two memory leaks=
- in prog_tests)
-Merging ipsec-next/master (6e28f56c0d1d Merge branch 'adin1100-industrial-P=
-HY-support')
-Merging mlx5-next/mlx5-next (2984287c4c19 net/mlx5: Remove not-implemented =
-IPsec capabilities)
-Merging netfilter-next/master (0c7b27616fbd selftests: netfilter: add fib e=
-xpression forward test case)
-Merging ipvs-next/master (0c7b27616fbd selftests: netfilter: add fib expres=
-sion forward test case)
-Merging bluetooth/master (a99a4899aae6 Bluetooth: btusb: Add a new PID/VID =
-0489/e0c8 for MT7921)
-Merging wireless-next/main (1ca980168669 mac80211: support disabling EHT mo=
-de)
-Merging mtd/mtd/next (43823c5c56f2 mtd: cfi_cmdset_0002: Rename chip_ready =
-variables)
-Merging nand/nand/next (079d6348f3be Merge tag 'mtd/mtk-spi-nand-for-5.19' =
-into nand/next)
-Merging spi-nor/spi-nor/next (5ad784d990ac mtd: spi-nor: amend the rdsr dum=
-my cycles documentation)
-Merging crypto/master (11aeb93089ce hwrng: optee - remove redundant initial=
-ization to variable rng_size)
-Merging drm/drm-next (8d62a974ac5f drm/amdgpu: fix drm-next merge fallout)
-Merging drm-misc/for-linux-next (d792ec62ae12 drm/nouveau/gr/gf100-: Clean =
-up some inconsistent indenting)
-Merging amdgpu/drm-next (e7b25ac8f27f drm/amdgpu/discovery: enable mes supp=
-ort for GC v11.0.1)
-CONFLICT (content): Merge conflict in drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
-$ git reset --hard HEAD^
-Merging next-20220505 version of amdgpu
-CONFLICT (content): Merge conflict in drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
-[master a0440d7278eb] next-20220505/amdgpu
-Applying: mark CONFIG_DRM_AMDGPU as depending on !CONFIG_CPU_BIG_ENDIAN
-[master a162f36faed5] next-20220505/amdgpu
-Merging drm-intel/for-linux-next (949665a6e237 drm/i915: Respect VBT seamle=
-ss DRRS min refresh rate)
-Merging drm-tegra/drm/tegra/for-next (b53c24f69199 drm/tegra: Support YVYU,=
- VYUY and YU24 formats)
-Merging drm-msm/msm-next (f1fc2b87de47 drm/msm: drop old eDP block support =
-(again))
-CONFLICT (content): Merge conflict in drivers/gpu/drm/msm/Kconfig
-CONFLICT (modify/delete): drivers/gpu/drm/msm/edp/edp.h deleted in drm-msm/=
-msm-next and modified in HEAD.  Version HEAD of drivers/gpu/drm/msm/edp/edp=
-.h left in tree.
-CONFLICT (modify/delete): drivers/gpu/drm/msm/edp/edp_ctrl.c deleted in drm=
--msm/msm-next and modified in HEAD.  Version HEAD of drivers/gpu/drm/msm/ed=
-p/edp_ctrl.c left in tree.
-$ git rm -f drivers/gpu/drm/msm/edp/edp.h drivers/gpu/drm/msm/edp/edp_ctrl.c
-Applying: fix up for "drm/display: Move DSC header and helpers into display=
--helper module"
-Applying: fix up for "drm: Rename dp/ to display/"
-Merging imx-drm/imx-drm/next (927d8fd465ad drm/imx: ipuv3-plane: Remove red=
-undant color encoding and range initialisation)
-Merging etnaviv/etnaviv/next (2829a9fcb738 drm/etnaviv: reap idle softpin m=
-appings when necessary)
-Merging fbdev/for-next (f443e374ae13 Linux 5.17)
-Merging regmap/for-next (eedd8a8542b9 regmap: Custom bulk operations for re=
-gmaps)
-Merging sound/for-next (011b559be832 ALSA: pcm: Check for null pointer of p=
-ointer substream before dereferencing it)
-Merging sound-asoc/for-next (e637f5d66d1c Merge remote-tracking branch 'aso=
-c/for-5.19' into asoc-next)
-Merging modules/modules-next (442b86c2608f module: Introduce module unload =
-taint tracking)
-Merging input/next (ec648fc0a003 Input: sun4i-lradc-keys - add support for =
-R329 and D1)
-Merging block/for-next (bf0dd0a663c1 Merge branch 'for-5.19/io_uring-passth=
-rough' into for-next)
-Merging device-mapper/for-next (4edadf6dcb54 dm: improve abnormal bio proce=
-ssing)
-Merging libata/for-next (0cb63670d505 ata: Make use of the helper function =
-devm_platform_ioremap_resource())
-Merging pcmcia/pcmcia-next (3928cf08334e pcmcia: db1xxx_ss: restrict to MIP=
-S_DB1XXX boards)
-Merging mmc/next (0662d797d596 Merge branch 'fixes' into next)
-Merging mfd/for-mfd-next (3474b838f420 dt-bindings: Drop undocumented i.MX =
-iomuxc-gpr bindings in examples)
-Merging backlight/for-backlight-next (023a8830a628 backlight: backlight: Sl=
-ighly simplify devm_of_find_backlight())
-Merging battery/for-next (d96a89407e5f power: supply: bq24190_charger: usin=
-g pm_runtime_resume_and_get instead of pm_runtime_get_sync)
-Merging regulator/for-next (7f503ad35f07 Merge remote-tracking branch 'regu=
-lator/for-5.19' into regulator-next)
-Merging security/next-testing (047843bdb316 Merge branch 'landlock_lsm_v34'=
- into next-testing)
-Merging apparmor/apparmor-next (c2489617b3b9 apparmor: Fix undefined refere=
-nce to `zlib_deflate_workspacesize')
-Merging integrity/next-integrity (891163adf180 ima: remove the IMA_TEMPLATE=
- Kconfig option)
-Merging keys/keys-next (2d743660786e Merge branch 'fixes' of git://git.kern=
-el.org/pub/scm/linux/kernel/git/viro/vfs)
-Merging safesetid/safesetid-next (1b8b71922919 LSM: SafeSetID: Mark safeset=
-id_initialized as __initdata)
-Merging selinux/next (c29722fad4aa selinux: log anon inode class name)
-Merging smack/next (ba6b652bd863 smack: Remove redundant assignments)
-Merging tomoyo/master (5015b3b61696 workqueue: Wrap flush_workqueue() using=
- a macro)
-Merging tpmdd/next (fad7eba9464e certs: Explain the rationale to call panic=
-())
-Merging watchdog/master (672c0c517342 Linux 5.18-rc5)
-Merging iommu/next (faf93cfaadfa Merge branches 'iommu/fixes', 'apple/dart'=
-, 'arm/mediatek', 'arm/msm', 'ppc/pamu', 'x86/amd' and 'core' into next)
-CONFLICT (content): Merge conflict in MAINTAINERS
-CONFLICT (content): Merge conflict in drivers/iommu/amd/iommu.c
-Merging audit/next (312310928417 Linux 5.18-rc1)
-Merging devicetree/for-next (fa2024c31513 dt-bindings: timer: Convert rda,8=
-810pl-timer to YAML)
-Merging mailbox/mailbox-for-next (1b0d0f7c12d5 dt-bindings: mailbox: add de=
-finition for mt8186)
-Merging spi/for-next (1066d97fe812 Merge remote-tracking branch 'spi/for-5.=
-19' into spi-next)
-Merging tip/master (a69def3ee085 Merge x86/misc into tip/master)
-CONFLICT (content): Merge conflict in Documentation/admin-guide/kernel-para=
-meters.txt
-CONFLICT (content): Merge conflict in kernel/sysctl.c
-Merging clockevents/timers/drivers/next (49c14f94ccfe clocksource/drivers/t=
-imer-of: check return value of of_iomap in timer_of_base_init())
-Merging edac/edac-for-next (cd2ef50eb483 Merge edac-alloc-cleanup into for-=
-next)
-Merging irqchip/irq/irqchip-next (389d92be3062 Merge branch irq/misc-5.19 i=
-nto irq/irqchip-next)
-Merging ftrace/for-next (c87857e21486 Merge branch 'trace/for-next-rtla' in=
-to trace/for-next)
-Merging rcu/rcu/next (4ccb27d8a0f2 rcutorture: Simplify rcu_torture_read_ex=
-it_child() loop)
-Merging kvm/next (71d7c575a673 Merge branch 'kvm-fixes-for-5.18-rc5' into H=
-EAD)
-Merging kvm-arm/next (46be21cde6c6 Merge branch kvm-arm64/hcall-selection i=
-nto kvmarm-master/next)
-CONFLICT (content): Merge conflict in Documentation/virt/kvm/api.rst
-CONFLICT (content): Merge conflict in arch/arm64/kvm/sys_regs.c
-CONFLICT (content): Merge conflict in include/uapi/linux/kvm.h
-Applying: fix up for "VM: arm64: Implement PSCI SYSTEM_SUSPEND"
-Merging kvms390/next (4aa5ac75bf79 KVM: s390: Fix lockdep issue in vm memop)
-Merging xen-tip/linux-next (533bec143a4c arm/xen: Fix some refcount leaks)
-Merging percpu/for-next (4e1f82dce05b Merge branch 'for-5.16-fixes' into fo=
-r-next)
-Merging workqueues/for-next (10a5a651e3af workqueue: Restrict kworker in th=
-e offline CPU pool running on housekeeping CPUs)
-Merging drivers-x86/for-next (b0c07116c894 platform/x86: amd-pmc: Avoid rea=
-ding SMU version at probe time)
-Merging chrome-platform/for-next (c9bc1a0ef9f6 platform/chrome: cros_ec_lpc=
-s: reserve the MEC LPC I/O ports first)
-Merging hsi/for-next (43c14f8d18a7 HSI: omap_ssi: Fix refcount leak in ssi_=
-probe)
-Merging leds/for-next (9fa2762110dd leds: Add PWM multicolor driver)
-Merging ipmi/for-next (4a00e5fff2c2 ipmi: remove unnecessary type castings)
-Merging driver-core/driver-core-next (6370b04f24bc firmware_loader: describ=
-e 'module' parameter of firmware_upload_register())
-Merging usb/usb-next (1a9517a0a430 Revert "of/platform: Add stubs for of_pl=
-atform_device_create/destroy()")
-Merging thunderbolt/next (8e1de7042596 thunderbolt: Add support for XDomain=
- lane bonding)
-Merging usb-gadget/next (e49d033bddf5 Linux 5.12-rc6)
-Merging usb-serial/usb-next (1b30499ace5b USB: serial: ftdi_sio: clean up p=
-rintk format specifier)
-Merging tty/tty-next (9e6a90790357 Merge 5.18-rc5 into tty-next)
-Merging char-misc/char-misc-next (35a7609639c4 Merge 5.18-rc5 into char-mis=
-c-next)
-Merging coresight/next (8c1d3f79d9ca coresight: core: Fix coresight device =
-probe failure issue)
-Merging fpga/for-next (eee1071ee7df fpga: Use tab instead of space indentat=
-ion)
-Merging icc/icc-next (cc64beca6cd4 Merge branch 'icc-const' into icc-next)
-Merging iio/togreg (eda75f8238b0 iio: ti-ads8688: use of_device_id for OF m=
-atching)
-Merging phy-next/next (d413a34932f9 phy: qcom-qmp: rename error labels)
-Merging soundwire/next (60657fb9b19d dt-bindings: soundwire: qcom: Add bind=
-ings for audio clock reset control property)
-Merging extcon/extcon-next (ef799ab8dc5c extcon: Modify extcon device to be=
- created after driver data is set)
-CONFLICT (content): Merge conflict in drivers/usb/dwc3/drd.c
-Applying: fixup for "usb: dwc3: Don't switch OTG -> peripheral if extcon is=
- present"
-Merging gnss/gnss-next (312310928417 Linux 5.18-rc1)
-Merging vfio/next (af2d861d4cd2 Linux 5.18-rc4)
-Merging staging/staging-next (5fe7856ad59a staging: vt6655: Replace MACvRea=
-dISR with VNSvInPortD)
-Merging mux/for-next (0fcfb00b28c0 Linux 5.16-rc4)
-Merging dmaengine/next (99faef48e7a3 dmaengine: mv_xor_v2 : Move spin_lock_=
-bh() to spin_lock())
-Merging cgroup/for-next (953da11e98e0 Merge branch 'for-5.18-fixes' into fo=
-r-next)
-Merging scsi/for-next (f223697cc840 Merge branch 'misc' into for-next)
-Merging scsi-mkp/for-next (f304d35e5995 scsi: mpi3mr: Update driver version=
- to 8.0.0.69.0)
-Merging vhost/linux-next (1c80cf031e02 vdpa: mlx5: synchronize driver statu=
-s with CVQ)
-Merging rpmsg/for-next (e8d9d4560c51 Merge branches 'rpmsg-next', 'rproc-ne=
-xt' and 'hwspinlock-next' into for-next)
-Merging gpio/for-next (7ac554888233 MAINTAINERS: Remove reference to non-ex=
-isting file)
-Merging gpio-brgl/gpio/for-next (86bfb916df59 Merge branch 'irq/gpio-immuta=
-ble' of git://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms int=
-o gpio/for-next)
-Merging gpio-intel/for-next (edc5601db664 pinctrl: meson: Replace custom co=
-de by gpiochip_node_count() call)
-Merging gpio-sim/gpio/gpio-sim (0fcfb00b28c0 Linux 5.16-rc4)
-Merging pinctrl/for-next (b2d71227cf09 Merge branch 'devel' into for-next)
-CONFLICT (content): Merge conflict in Documentation/devicetree/bindings/int=
-errupt-controller/qcom,pdc.txt
-Merging pinctrl-intel/for-next (0be0b70df661 pinctrl: alderlake: Fix regist=
-er offsets for ADL-N variant)
-Merging pinctrl-renesas/renesas-pinctrl (fc883ed5a43e pinctrl: renesas: che=
-cker: Add reserved field checks)
-Merging pinctrl-samsung/for-next (ac875df4d854 pinctrl: samsung: fix missin=
-g GPIOLIB on ARM64 Exynos config)
-Merging pwm/for-next (2bf8ee0faa98 dt-bindings: pwm: Add interrupts propert=
-y for MediaTek MT8192)
-Merging userns/for-next (38cd5b12b785 ipc: Remove extra braces)
-Merging ktest/for-next (170f4869e662 ktest.pl: Fix the logic for truncating=
- the size of the log file for email)
-Merging kselftest/next (c7b607fa9325 selftests/resctrl: Fix null pointer de=
-reference on open failed)
-Merging livepatching/for-next (0e1b951d6de0 Merge branch 'for-5.18/selftest=
-s-fixes' into for-next)
-Merging rtc/rtc-next (312310928417 Linux 5.18-rc1)
-Merging nvdimm/libnvdimm-for-next (d43fae7c4d3e testing: nvdimm: asm/mce.h =
-is not needed in nfit.c)
-Merging at24/at24/for-next (312310928417 Linux 5.18-rc1)
-Merging ntb/ntb-next (e9d0fa5e2482 IDT: Fix Build warnings on some 32bit ar=
-chitectures.)
-Merging seccomp/for-next/seccomp (5e91d2a41469 selftests/seccomp: Fix spell=
-ing mistake "Coud" -> "Could")
-Merging cisco/for-next (9e98c678c2d6 Linux 5.1-rc1)
-Merging fsi/next (f2af60bb7ce2 fsi: Add trace events in initialization path)
-Merging slimbus/for-next (54bf672111ee slimbus: qcom: Fix IRQ check in qcom=
-_slim_probe)
-Merging nvmem/for-next (0f07cbb92a28 nvmem: sfp: Add support for TA 2.1 dev=
-ices)
-CONFLICT (content): Merge conflict in MAINTAINERS
-Merging xarray/main (63b1898fffcd XArray: Disallow sibling entries of nodes)
-Merging hyperv/hyperv-next (6733dd4af781 drm/hyperv: Add error message for =
-fb size greater than allocated)
-Merging auxdisplay/auxdisplay (13de23494f38 auxdisplay: lcd2s: Use array si=
-ze explicitly in lcd2s_gotoxy())
-Merging kgdb/kgdb/for-next (c1cb81429df4 kdb: Fix the putarea helper functi=
-on)
-Merging hmm/hmm (312310928417 Linux 5.18-rc1)
-Merging kunit/test (312310928417 Linux 5.18-rc1)
-Merging cfi/cfi/next (312310928417 Linux 5.18-rc1)
-Merging kunit-next/kunit (38289a26e1b8 kunit: fix debugfs code to use enum =
-kunit_status, not bool)
-CONFLICT (content): Merge conflict in drivers/thunderbolt/test.c
-CONFLICT (content): Merge conflict in net/mctp/test/route-test.c
-CONFLICT (content): Merge conflict in security/apparmor/policy_unpack_test.c
-Merging trivial/for-next (081c8919b02b Documentation: remove trivial tree)
-Merging mhi/mhi-next (3388f276d707 bus: mhi: host: Add support for Foxconn =
-T99W373 and T99W368)
-Merging memblock/for-next (58ffc34896db memblock tests: Add TODO and README=
- files)
-Merging init/init-user-pointers (38b082236e77 initramfs: use vfs_utimes in =
-do_copy)
-Merging counters/counters (e71ba9452f0b Linux 5.11-rc2)
-Merging cxl/next (280302f0e8f6 cxl/mbox: Replace NULL check with IS_ERR() a=
-fter vmemdup_user())
-Merging folio-iomap/folio-iomap (4d7bd0eb72e5 iomap: Inline __iomap_zero_it=
-er into its caller)
-Merging zstd/zstd-next (88a309465b3f lib: zstd: clean up double word in com=
-ment.)
-Merging efi/next (736e0f2179d3 efi/arm64: libstub: run image in place if ra=
-ndomized by the loader)
-CONFLICT (content): Merge conflict in drivers/virt/Kconfig
-CONFLICT (content): Merge conflict in drivers/virt/Makefile
-Merging unicode/for-next (b500d6d7243d unicode: Handle memory allocation fa=
-ilures in mkutf8data)
-Merging slab/for-next (6b2d72729581 Merge branches 'slab/for-5.19/stackdepo=
-t' and 'slab/for-5.19/refactor' into slab/for-next)
-Merging random/master (3978032756dc random: do not pretend to handle premat=
-ure next security model)
-Merging landlock/next (312310928417 Linux 5.18-rc1)
-Merging rust/rust-next (011150424cd9 rust: avoid all GCC plugins, not just =
-the randstruct one)
-CONFLICT (content): Merge conflict in Makefile
-Merging sysctl/sysctl-next (a467257ffe4b kernel/kexec_core: move kexec_core=
- sysctls into its own file)
-CONFLICT (content): Merge conflict in kernel/rcu/rcu.h
-Merging folio/for-next (5d5754741171 fs: Remove aops->freepage)
-CONFLICT (content): Merge conflict in fs/btrfs/ctree.h
-CONFLICT (content): Merge conflict in fs/btrfs/inode.c
-Applying: fix up for "btrfs: move btrfs_readpage to extent_io.c"
-Applying: fixup for "mm,fs: Remove stray references to ->readpage"
-Merging execve/for-next/execve (70578ff3367d binfmt_flat: Remove shared lib=
-rary support)
-Merging bitmap/bitmap-for-next (a64dd2225fa6 drm/amd/pm: use bitmap_{from,t=
-o}_arr32 where appropriate)
-Merging hte/hte/for-next (e263d33ceccf MAINTAINERS: Add HTE Subsystem)
-Merging kspp/for-next/kspp (d46ac904fd35 arm64: entry: use stackleak_erase_=
-on_task_stack())
-CONFLICT (content): Merge conflict in drivers/misc/lkdtm/stackleak.c
-$ git reset --hard HEAD^
-Merging next-20220504 version of kspp
-Merging kspp-gustavo/for-next/kspp (0cf2b91d74b7 Merge branch 'for-next/ksp=
-p-stringop-overflow' into for-next/kspp)
-Merging mm-stable/mm-stable (059342d1dd4e mm/damon/reclaim: fix the timer a=
-lways stays active)
-CONFLICT (content): Merge conflict in arch/x86/mm/Makefile
-Merging mm-nonmm-stable/mm-nonmm-stable (f6e2c20ca760 fs: sysv: check sbi->=
-s_firstdatazone in complete_read_super)
-Merging mm/mm-everything (cdb5a08f5c15 Merge branch 'mm-nonmm-unstable' int=
-o mm-everything)
-CONFLICT (content): Merge conflict in fs/nfs/file.c
-CONFLICT (content): Merge conflict in include/linux/slab.h
-CONFLICT (content): Merge conflict in mm/page_io.c
-Applying: linux-next: build failure after merge of the mm tree
-$ git checkout -b akpm remotes/origin/akpm/master
-$ git rebase --onto master remotes/origin/akpm/master-base
-Merging akpm/master (ac4b650dd553 kselftest/vm: override TARGETS from argum=
-ents)
+Warnings summary:
 
---Sig_/UF92WqDWu0AcFBaLma+CE/q
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+    25   mm/shmem.c:1685:21: note: initialize the variable 'folio' to silen=
+ce this warning
+    23   clang: warning: argument unused during compilation: '-march=3Darmv=
+6k' [-Wunused-command-line-argument]
+    16   mm/shmem.c:2318:19: note: initialize the variable 'page' to silenc=
+e this warning
+    16   drivers/pcmcia/soc_common.c:769:13: warning: =E2=80=98soc_pcmcia_u=
+nmap_iospace=E2=80=99 defined but not used [-Wunused-function]
+    10   clang: warning: argument unused during compilation: '-march=3Darmv=
+7-a' [-Wunused-command-line-argument]
+    8    1 warning generated.
+    6    mm/shmem.c:1704:7: warning: variable 'folio' is used uninitialized=
+ whenever 'if' condition is true [-Wsometimes-uninitialized]
+    3    mm/shmem.c:1761:5: warning: =E2=80=98folio=E2=80=99 is used uninit=
+ialized in this function [-Wuninitialized]
+    3    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+    2    drivers/misc/lkdtm/cfi.c:62:3: warning: cast to pointer from integ=
+er of different size [-Wint-to-pointer-cast]
+    2    drivers/misc/lkdtm/cfi.c:62:30: warning: cast from pointer to inte=
+ger of different size [-Wpointer-to-int-cast]
+    1    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 fo=
+rming offset [20, 23] is out of the bounds [0, 20] [-Warray-bounds]
+    1    drivers/i2c/busses/i2c-at91-master.c:707:6: warning: variable 'dma=
+_buf' is used uninitialized whenever 'if' condition is false [-Wsometimes-u=
+ninitialized]
+    1    drivers/i2c/busses/i2c-at91-master.c:659:13: note: initialize the =
+variable 'dma_buf' to silence this warning
+    1    drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c:253:22: warnin=
+g: variable 'mode' is uninitialized when used here [-Wuninitialized]
+    1    drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c:250:37: note: =
+initialize the variable 'mode' to silence this warning
+    1    cc1: warning: result of =E2=80=98-117440512 << 16=E2=80=99 require=
+s 44 bits to represent, but =E2=80=98int=E2=80=99 only has 32 bits [-Wshift=
+-overflow=3D]
+    1    cc1: all warnings being treated as errors
 
------BEGIN PGP SIGNATURE-----
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJ03H8ACgkQAVBC80lX
-0GyyMwf8CQ03Qaw2QApciArUWKVicnGqcgIpOlCcV7Xj9XT8icpXmVTuoZcNbgf5
-sYyha0gxF8Kbch1xuVhtbCXQGoXkbNCg1BGCLWi83sMPsggGQxFPuzPz1/P+pyx+
-AKUwLNLAckKunHuZCZDwkoIZipj2p7Z/CZTdWgD6PoXw6Y/r/Tz+f/fLPARE59eh
-UtqMT2o+kiLMp6bBpuTFPcZxGtTVSNG48d43g5Oq8Ri0c5GmkVc5lRxOOEW2scSw
-msb9S0EgZ0DxIhRUQ/JcRMXM08WOVJM7wfGX2L6xvzcnAJwGgSbuuuU4OmjvRnGs
-BWX77i7GmceW5ammvC3sWBUZI++0xg==
-=nQ0h
------END PGP SIGNATURE-----
+Detailed per-defconfig build reports:
 
---Sig_/UF92WqDWu0AcFBaLma+CE/q--
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 secti=
+on mismatches
+
+Errors:
+    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=98__c=
+ompiletime_assert_387=E2=80=99 declared with attribute error: BUILD_BUG fai=
+led
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+debug (mips, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0=
+ section mismatches
+
+Errors:
+    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=98__c=
+ompiletime_assert_396=E2=80=99 declared with attribute error: BUILD_BUG fai=
+led
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+kselftest (mips, gcc-10) =E2=80=94 FAIL, 1 error, 1 warnin=
+g, 0 section mismatches
+
+Errors:
+    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=98__c=
+ompiletime_assert_397=E2=80=99 declared with attribute error: BUILD_BUG fai=
+led
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, clang-14) =E2=80=94 FAIL, 2 errors, 15 warnings, 0 secti=
+on mismatches
+
+Errors:
+    mm/shmem.c:1704:7: error: variable 'folio' is used uninitialized whenev=
+er 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+    mm/shmem.c:2337:8: error: variable 'page' is uninitialized when used he=
+re [-Werror,-Wuninitialized]
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    mm/shmem.c:1685:21: note: initialize the variable 'folio' to silence th=
+is warning
+    mm/shmem.c:2318:19: note: initialize the variable 'page' to silence thi=
+s warning
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (i386, clang-14) =E2=80=94 FAIL, 2 errors, 2 warnings, 0 secti=
+on mismatches
+
+Errors:
+    mm/shmem.c:1704:7: error: variable 'folio' is used uninitialized whenev=
+er 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+    mm/shmem.c:2337:8: error: variable 'page' is uninitialized when used he=
+re [-Werror,-Wuninitialized]
+
+Warnings:
+    mm/shmem.c:1685:21: note: initialize the variable 'folio' to silence th=
+is warning
+    mm/shmem.c:2318:19: note: initialize the variable 'page' to silence thi=
+s warning
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (x86_64, clang-14) =E2=80=94 FAIL, 2 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Errors:
+    mm/shmem.c:1704:7: error: variable 'folio' is used uninitialized whenev=
+er 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+    mm/shmem.c:2337:8: error: variable 'page' is uninitialized when used he=
+re [-Werror,-Wuninitialized]
+
+Warnings:
+    mm/shmem.c:1685:21: note: initialize the variable 'folio' to silence th=
+is warning
+    mm/shmem.c:2318:19: note: initialize the variable 'page' to silence thi=
+s warning
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, clang-14) =E2=80=94 FAIL, 2 errors, 2 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    mm/shmem.c:1704:7: error: variable 'folio' is used uninitialized whenev=
+er 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+    mm/shmem.c:2337:8: error: variable 'page' is uninitialized when used he=
+re [-Werror,-Wuninitialized]
+
+Warnings:
+    mm/shmem.c:1685:21: note: initialize the variable 'folio' to silence th=
+is warning
+    mm/shmem.c:2318:19: note: initialize the variable 'page' to silence thi=
+s warning
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section m=
+ismatches
+
+Errors:
+    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=98__c=
+ompiletime_assert_307=E2=80=99 declared with attribute error: BUILD_BUG fai=
+led
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, clang-14) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    mm/shmem.c:1704:7: warning: variable 'folio' is used uninitialized when=
+ever 'if' condition is true [-Wsometimes-uninitialized]
+    mm/shmem.c:1685:21: note: initialize the variable 'folio' to silence th=
+is warning
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, clang-14) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    mm/shmem.c:1704:7: warning: variable 'folio' is used uninitialized when=
+ever 'if' condition is true [-Wsometimes-uninitialized]
+    mm/shmem.c:1685:21: note: initialize the variable 'folio' to silence th=
+is warning
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+am200epdkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ar7_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    mm/shmem.c:1761:5: warning: =E2=80=98folio=E2=80=99 is used uninitializ=
+ed in this function [-Wuninitialized]
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    mm/shmem.c:1761:5: warning: =E2=80=98folio=E2=80=99 is used uninitializ=
+ed in this function [-Wuninitialized]
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, clang-14) =E2=80=94 PASS, 0 errors, 13 warnings, =
+0 section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    mm/shmem.c:1704:7: warning: variable 'folio' is used uninitialized when=
+ever 'if' condition is true [-Wsometimes-uninitialized]
+    mm/shmem.c:1685:21: note: initialize the variable 'folio' to silence th=
+is warning
+    1 warning generated.
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+assabet_defconfig (arm, gcc-10) =E2=80=94 FAIL, 4 errors, 1 warning, 0 sect=
+ion mismatches
+
+Errors:
+    drivers/pcmcia/soc_common.c:884:1: error: version control conflict mark=
+er in file
+    drivers/pcmcia/soc_common.c:886:1: error: version control conflict mark=
+er in file
+    drivers/pcmcia/soc_common.c:888:1: error: version control conflict mark=
+er in file
+    drivers/pcmcia/soc_common.c:832:3: error: label =E2=80=98out_err_5=E2=
+=80=99 used but not defined
+
+Warnings:
+    drivers/pcmcia/soc_common.c:769:13: warning: =E2=80=98soc_pcmcia_unmap_=
+iospace=E2=80=99 defined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+at91_dt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    mm/shmem.c:1761:5: warning: =E2=80=98folio=E2=80=99 is used uninitializ=
+ed in this function [-Wuninitialized]
+
+---------------------------------------------------------------------------=
+-----
+ath25_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath79_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axm55xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+badge4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm2835_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [20, 23] is out of the bounds [0, 20] [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+bcm47xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm63xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+bigsur_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bmips_be_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+bmips_stb_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+capcella_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+cavium_octeon_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cerfcube_defconfig (arm, gcc-10) =E2=80=94 FAIL, 4 errors, 1 warning, 0 sec=
+tion mismatches
+
+Errors:
+    drivers/pcmcia/soc_common.c:884:1: error: version control conflict mark=
+er in file
+    drivers/pcmcia/soc_common.c:886:1: error: version control conflict mark=
+er in file
+    drivers/pcmcia/soc_common.c:888:1: error: version control conflict mark=
+er in file
+    drivers/pcmcia/soc_common.c:832:3: error: label =E2=80=98out_err_5=E2=
+=80=99 used but not defined
+
+Warnings:
+    drivers/pcmcia/soc_common.c:769:13: warning: =E2=80=98soc_pcmcia_unmap_=
+iospace=E2=80=99 defined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+ci20_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 sectio=
+n mismatches
+
+Errors:
+    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=98__c=
+ompiletime_assert_284=E2=80=99 declared with attribute error: BUILD_BUG fai=
+led
+
+---------------------------------------------------------------------------=
+-----
+cm_x300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+cobalt_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+collie_defconfig (arm, gcc-10) =E2=80=94 FAIL, 4 errors, 1 warning, 0 secti=
+on mismatches
+
+Errors:
+    drivers/pcmcia/soc_common.c:884:1: error: version control conflict mark=
+er in file
+    drivers/pcmcia/soc_common.c:886:1: error: version control conflict mark=
+er in file
+    drivers/pcmcia/soc_common.c:888:1: error: version control conflict mark=
+er in file
+    drivers/pcmcia/soc_common.c:832:3: error: label =E2=80=98out_err_5=E2=
+=80=99 used but not defined
+
+Warnings:
+    drivers/pcmcia/soc_common.c:769:13: warning: =E2=80=98soc_pcmcia_unmap_=
+iospace=E2=80=99 defined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+corgi_defconfig (arm, gcc-10) =E2=80=94 FAIL, 4 errors, 1 warning, 0 sectio=
+n mismatches
+
+Errors:
+    drivers/pcmcia/soc_common.c:884:1: error: version control conflict mark=
+er in file
+    drivers/pcmcia/soc_common.c:886:1: error: version control conflict mark=
+er in file
+    drivers/pcmcia/soc_common.c:888:1: error: version control conflict mark=
+er in file
+    drivers/pcmcia/soc_common.c:832:3: error: label =E2=80=98out_err_5=E2=
+=80=99 used but not defined
+
+Warnings:
+    drivers/pcmcia/soc_common.c:769:13: warning: =E2=80=98soc_pcmcia_unmap_=
+iospace=E2=80=99 defined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (arm64, clang-13=
+) =E2=80=94 FAIL, 2 errors, 2 warnings, 0 section mismatches
+
+Errors:
+    mm/shmem.c:1704:7: error: variable 'folio' is used uninitialized whenev=
+er 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+    mm/shmem.c:2337:8: error: variable 'page' is uninitialized when used he=
+re [-Werror,-Wuninitialized]
+
+Warnings:
+    mm/shmem.c:1685:21: note: initialize the variable 'folio' to silence th=
+is warning
+    mm/shmem.c:2318:19: note: initialize the variable 'page' to silence thi=
+s warning
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chromebook=
+ (arm64, clang-13) =E2=80=94 FAIL, 2 errors, 2 warnings, 0 section mismatch=
+es
+
+Errors:
+    mm/shmem.c:1704:7: error: variable 'folio' is used uninitialized whenev=
+er 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+    mm/shmem.c:2337:8: error: variable 'page' is uninitialized when used he=
+re [-Werror,-Wuninitialized]
+
+Warnings:
+    mm/shmem.c:1685:21: note: initialize the variable 'folio' to silence th=
+is warning
+    mm/shmem.c:2318:19: note: initialize the variable 'page' to silence thi=
+s warning
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 FAIL, 2 errors, 2 warnings, 0 section misma=
+tches
+
+Errors:
+    mm/shmem.c:1704:7: error: variable 'folio' is used uninitialized whenev=
+er 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+    mm/shmem.c:2337:8: error: variable 'page' is uninitialized when used he=
+re [-Werror,-Wuninitialized]
+
+Warnings:
+    mm/shmem.c:1685:21: note: initialize the variable 'folio' to silence th=
+is warning
+    mm/shmem.c:2318:19: note: initialize the variable 'page' to silence thi=
+s warning
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 FAIL, 2 errors, 2 warnings, 0 section misma=
+tches
+
+Errors:
+    mm/shmem.c:1704:7: error: variable 'folio' is used uninitialized whenev=
+er 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+    mm/shmem.c:2337:8: error: variable 'page' is uninitialized when used he=
+re [-Werror,-Wuninitialized]
+
+Warnings:
+    mm/shmem.c:1685:21: note: initialize the variable 'folio' to silence th=
+is warning
+    mm/shmem.c:2318:19: note: initialize the variable 'page' to silence thi=
+s warning
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-chrom=
+ebook (arm64, clang-13) =E2=80=94 FAIL, 2 errors, 2 warnings, 0 section mis=
+matches
+
+Errors:
+    mm/shmem.c:1704:7: error: variable 'folio' is used uninitialized whenev=
+er 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+    mm/shmem.c:2337:8: error: variable 'page' is uninitialized when used he=
+re [-Werror,-Wuninitialized]
+
+Warnings:
+    mm/shmem.c:1685:21: note: initialize the variable 'folio' to silence th=
+is warning
+    mm/shmem.c:2318:19: note: initialize the variable 'page' to silence thi=
+s warning
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
+=E2=80=94 FAIL, 2 errors, 7 warnings, 0 section mismatches
+
+Errors:
+    mm/shmem.c:1704:7: error: variable 'folio' is used uninitialized whenev=
+er 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+    mm/shmem.c:2337:8: error: variable 'page' is uninitialized when used he=
+re [-Werror,-Wuninitialized]
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    mm/shmem.c:1685:21: note: initialize the variable 'folio' to silence th=
+is warning
+    mm/shmem.c:2318:19: note: initialize the variable 'page' to silence thi=
+s warning
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
+3) =E2=80=94 FAIL, 2 errors, 7 warnings, 0 section mismatches
+
+Errors:
+    mm/shmem.c:1704:7: error: variable 'folio' is used uninitialized whenev=
+er 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+    mm/shmem.c:2337:8: error: variable 'page' is uninitialized when used he=
+re [-Werror,-Wuninitialized]
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    mm/shmem.c:1685:21: note: initialize the variable 'folio' to silence th=
+is warning
+    mm/shmem.c:2318:19: note: initialize the variable 'page' to silence thi=
+s warning
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86-chr=
+omebook (x86_64, clang-13) =E2=80=94 FAIL, 2 errors, 2 warnings, 0 section =
+mismatches
+
+Errors:
+    mm/shmem.c:1704:7: error: variable 'folio' is used uninitialized whenev=
+er 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+    mm/shmem.c:2337:8: error: variable 'page' is uninitialized when used he=
+re [-Werror,-Wuninitialized]
+
+Warnings:
+    mm/shmem.c:1685:21: note: initialize the variable 'folio' to silence th=
+is warning
+    mm/shmem.c:2318:19: note: initialize the variable 'page' to silence thi=
+s warning
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86-chr=
+omebook (x86_64, clang-13) =E2=80=94 FAIL, 2 errors, 2 warnings, 0 section =
+mismatches
+
+Errors:
+    mm/shmem.c:1704:7: error: variable 'folio' is used uninitialized whenev=
+er 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+    mm/shmem.c:2337:8: error: variable 'page' is uninitialized when used he=
+re [-Werror,-Wuninitialized]
+
+Warnings:
+    mm/shmem.c:1685:21: note: initialize the variable 'folio' to silence th=
+is warning
+    mm/shmem.c:2318:19: note: initialize the variable 'page' to silence thi=
+s warning
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-chro=
+mebook (x86_64, clang-13) =E2=80=94 FAIL, 2 errors, 2 warnings, 0 section m=
+ismatches
+
+Errors:
+    mm/shmem.c:1704:7: error: variable 'folio' is used uninitialized whenev=
+er 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+    mm/shmem.c:2337:8: error: variable 'page' is uninitialized when used he=
+re [-Werror,-Wuninitialized]
+
+Warnings:
+    mm/shmem.c:1685:21: note: initialize the variable 'folio' to silence th=
+is warning
+    mm/shmem.c:2318:19: note: initialize the variable 'page' to silence thi=
+s warning
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (x86_64, clang=
+-13) =E2=80=94 FAIL, 2 errors, 2 warnings, 0 section mismatches
+
+Errors:
+    mm/shmem.c:1704:7: error: variable 'folio' is used uninitialized whenev=
+er 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+    mm/shmem.c:2337:8: error: variable 'page' is uninitialized when used he=
+re [-Werror,-Wuninitialized]
+
+Warnings:
+    mm/shmem.c:1685:21: note: initialize the variable 'folio' to silence th=
+is warning
+    mm/shmem.c:2318:19: note: initialize the variable 'page' to silence thi=
+s warning
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chromebook=
+ (x86_64, clang-13) =E2=80=94 FAIL, 2 errors, 2 warnings, 0 section mismatc=
+hes
+
+Errors:
+    mm/shmem.c:1704:7: error: variable 'folio' is used uninitialized whenev=
+er 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+    mm/shmem.c:2337:8: error: variable 'page' is uninitialized when used he=
+re [-Werror,-Wuninitialized]
+
+Warnings:
+    mm/shmem.c:1685:21: note: initialize the variable 'folio' to silence th=
+is warning
+    mm/shmem.c:2318:19: note: initialize the variable 'page' to silence thi=
+s warning
+
+---------------------------------------------------------------------------=
+-----
+cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 =
+section mismatches
+
+Errors:
+    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=98__c=
+ompiletime_assert_286=E2=80=99 declared with attribute error: BUILD_BUG fai=
+led
+
+---------------------------------------------------------------------------=
+-----
+cu1830-neo_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 =
+section mismatches
+
+Errors:
+    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=98__c=
+ompiletime_assert_286=E2=80=99 declared with attribute error: BUILD_BUG fai=
+led
+
+---------------------------------------------------------------------------=
+-----
+davinci_all_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+db1xxx_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=98__c=
+ompiletime_assert_305=E2=80=99 declared with attribute error: BUILD_BUG fai=
+led
+
+---------------------------------------------------------------------------=
+-----
+decstation_64_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_r4k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_EFI=3Dn (riscv, clang-14) =E2=80=94 PASS, 0 errors, 3 warn=
+ings, 0 section mismatches
+
+Warnings:
+    mm/shmem.c:1704:7: warning: variable 'folio' is used uninitialized when=
+ever 'if' condition is true [-Wsometimes-uninitialized]
+    mm/shmem.c:1685:21: note: initialize the variable 'folio' to silence th=
+is warning
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 6 wa=
+rnings, 0 section mismatches
+
+Warnings:
+    mm/shmem.c:1704:7: warning: variable 'folio' is used uninitialized when=
+ever 'if' condition is true [-Wsometimes-uninitialized]
+    mm/shmem.c:1685:21: note: initialize the variable 'folio' to silence th=
+is warning
+    1 warning generated.
+    drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c:253:22: warning: va=
+riable 'mode' is uninitialized when used here [-Wuninitialized]
+    drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c:250:37: note: initi=
+alize the variable 'mode' to silence this warning
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+defconfig+debug (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+ima (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+e55_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+eseries_pxa_defconfig (arm, gcc-10) =E2=80=94 FAIL, 4 errors, 1 warning, 0 =
+section mismatches
+
+Errors:
+    drivers/pcmcia/soc_common.c:884:1: error: version control conflict mark=
+er in file
+    drivers/pcmcia/soc_common.c:886:1: error: version control conflict mark=
+er in file
+    drivers/pcmcia/soc_common.c:888:1: error: version control conflict mark=
+er in file
+    drivers/pcmcia/soc_common.c:832:3: error: label =E2=80=98out_err_5=E2=
+=80=99 used but not defined
+
+Warnings:
+    drivers/pcmcia/soc_common.c:769:13: warning: =E2=80=98soc_pcmcia_unmap_=
+iospace=E2=80=99 defined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+exynos_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ezx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+footbridge_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+fuloong2e_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 s=
+ection mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+gcw0_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+gemini_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+gpr_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+h3600_defconfig (arm, gcc-10) =E2=80=94 FAIL, 4 errors, 1 warning, 0 sectio=
+n mismatches
+
+Errors:
+    drivers/pcmcia/soc_common.c:884:1: error: version control conflict mark=
+er in file
+    drivers/pcmcia/soc_common.c:886:1: error: version control conflict mark=
+er in file
+    drivers/pcmcia/soc_common.c:888:1: error: version control conflict mark=
+er in file
+    drivers/pcmcia/soc_common.c:832:3: error: label =E2=80=98out_err_5=E2=
+=80=99 used but not defined
+
+Warnings:
+    drivers/pcmcia/soc_common.c:769:13: warning: =E2=80=98soc_pcmcia_unmap_=
+iospace=E2=80=99 defined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+h5000_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+hackkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+debug (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warni=
+ngs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+kselftest (arc, gcc-10) =E2=80=94 PASS, 0 errors, 4 w=
+arnings, 0 section mismatches
+
+Warnings:
+    drivers/misc/lkdtm/cfi.c:62:30: warning: cast from pointer to integer o=
+f different size [-Wpointer-to-int-cast]
+    drivers/misc/lkdtm/cfi.c:62:3: warning: cast to pointer from integer of=
+ different size [-Wint-to-pointer-cast]
+    drivers/misc/lkdtm/cfi.c:62:30: warning: cast from pointer to integer o=
+f different size [-Wpointer-to-int-cast]
+    drivers/misc/lkdtm/cfi.c:62:3: warning: cast to pointer from integer of=
+ different size [-Wint-to-pointer-cast]
+
+---------------------------------------------------------------------------=
+-----
+hisi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+hsdk_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, clang-14) =E2=80=94 FAIL, 1 error, 1 warning, 0 secti=
+on mismatches
+
+Errors:
+    mm/shmem.c:1704:7: error: variable 'folio' is used uninitialized whenev=
+er 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+
+Warnings:
+    mm/shmem.c:1685:21: note: initialize the variable 'folio' to silence th=
+is warning
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+debug (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 FAIL, 4 errors, 1 warning=
+, 0 section mismatches
+
+Errors:
+    drivers/misc/lkdtm/cfi.c:62:30: error: cast from pointer to integer of =
+different size [-Werror=3Dpointer-to-int-cast]
+    drivers/misc/lkdtm/cfi.c:62:3: error: cast to pointer from integer of d=
+ifferent size [-Werror=3Dint-to-pointer-cast]
+    drivers/misc/lkdtm/cfi.c:62:30: error: cast from pointer to integer of =
+different size [-Werror=3Dpointer-to-int-cast]
+    drivers/misc/lkdtm/cfi.c:62:3: error: cast to pointer from integer of d=
+ifferent size [-Werror=3Dint-to-pointer-cast]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+imx_v4_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip22_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip27_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip28_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip32_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ixp4xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+jazz_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+jornada720_defconfig (arm, gcc-10) =E2=80=94 FAIL, 4 errors, 1 warning, 0 s=
+ection mismatches
+
+Errors:
+    drivers/pcmcia/soc_common.c:884:1: error: version control conflict mark=
+er in file
+    drivers/pcmcia/soc_common.c:886:1: error: version control conflict mark=
+er in file
+    drivers/pcmcia/soc_common.c:888:1: error: version control conflict mark=
+er in file
+    drivers/pcmcia/soc_common.c:832:3: error: label =E2=80=98out_err_5=E2=
+=80=99 used but not defined
+
+Warnings:
+    drivers/pcmcia/soc_common.c:769:13: warning: =E2=80=98soc_pcmcia_unmap_=
+iospace=E2=80=99 defined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+keystone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+lart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+lemote2f_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 se=
+ction mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+loongson1b_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson1c_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson2k_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 =
+section mismatches
+
+Errors:
+    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=98__c=
+ompiletime_assert_315=E2=80=99 declared with attribute error: BUILD_BUG fai=
+led
+
+---------------------------------------------------------------------------=
+-----
+loongson3_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 s=
+ection mismatches
+
+Errors:
+    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=98__c=
+ompiletime_assert_406=E2=80=99 declared with attribute error: BUILD_BUG fai=
+led
+
+---------------------------------------------------------------------------=
+-----
+lpc18xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpc32xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpd270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lubbock_defconfig (arm, gcc-10) =E2=80=94 FAIL, 4 errors, 1 warning, 0 sect=
+ion mismatches
+
+Errors:
+    drivers/pcmcia/soc_common.c:884:1: error: version control conflict mark=
+er in file
+    drivers/pcmcia/soc_common.c:886:1: error: version control conflict mark=
+er in file
+    drivers/pcmcia/soc_common.c:888:1: error: version control conflict mark=
+er in file
+    drivers/pcmcia/soc_common.c:832:3: error: label =E2=80=98out_err_5=E2=
+=80=99 used but not defined
+
+Warnings:
+    drivers/pcmcia/soc_common.c:769:13: warning: =E2=80=98soc_pcmcia_unmap_=
+iospace=E2=80=99 defined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+magician_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mainstone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_kvm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_qemu_32r6_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaaprp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_eva_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_xpa_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+milbeaut_m10v_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mini2440_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mmp2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+moxart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mpc30x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mps2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+mtx1_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v4t_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, clang-14) =E2=80=94 PASS, 0 errors, 6 warnings, 0 =
+section mismatches
+
+Warnings:
+    mm/shmem.c:1704:7: warning: variable 'folio' is used uninitialized when=
+ever 'if' condition is true [-Wsometimes-uninitialized]
+    mm/shmem.c:1685:21: note: initialize the variable 'folio' to silence th=
+is warning
+    1 warning generated.
+    drivers/i2c/busses/i2c-at91-master.c:707:6: warning: variable 'dma_buf'=
+ is used uninitialized whenever 'if' condition is false [-Wsometimes-uninit=
+ialized]
+    drivers/i2c/busses/i2c-at91-master.c:659:13: note: initialize the varia=
+ble 'dma_buf' to silence this warning
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-10) =E2=80=94 PASS, =
+0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0=
+ warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
+ errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warni=
+ngs, 0 section mismatches
+
+Errors:
+    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=98__c=
+ompiletime_assert_289=E2=80=99 declared with attribute error: BUILD_BUG fai=
+led
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mxs_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+neponset_defconfig (arm, gcc-10) =E2=80=94 FAIL, 4 errors, 1 warning, 0 sec=
+tion mismatches
+
+Errors:
+    drivers/pcmcia/soc_common.c:884:1: error: version control conflict mark=
+er in file
+    drivers/pcmcia/soc_common.c:886:1: error: version control conflict mark=
+er in file
+    drivers/pcmcia/soc_common.c:888:1: error: version control conflict mark=
+er in file
+    drivers/pcmcia/soc_common.c:832:3: error: label =E2=80=98out_err_5=E2=
+=80=99 used but not defined
+
+Warnings:
+    drivers/pcmcia/soc_common.c:769:13: warning: =E2=80=98soc_pcmcia_unmap_=
+iospace=E2=80=99 defined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+netwinder_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+nhk8815_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_sdcard_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+omap2plus_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 se=
+ction mismatches
+
+Errors:
+    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=98__c=
+ompiletime_assert_295=E2=80=99 declared with attribute error: BUILD_BUG fai=
+led
+
+---------------------------------------------------------------------------=
+-----
+omega2p_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 sec=
+tion mismatches
+
+Errors:
+    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=98__c=
+ompiletime_assert_285=E2=80=99 declared with attribute error: BUILD_BUG fai=
+led
+
+---------------------------------------------------------------------------=
+-----
+orion5x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+oxnas_v6_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+palmz72_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pcm027_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pic32mzda_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+pleb_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa168_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa255-idp_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa910_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa_defconfig (arm, gcc-10) =E2=80=94 FAIL, 4 errors, 1 warning, 0 section =
+mismatches
+
+Errors:
+    drivers/pcmcia/soc_common.c:884:1: error: version control conflict mark=
+er in file
+    drivers/pcmcia/soc_common.c:886:1: error: version control conflict mark=
+er in file
+    drivers/pcmcia/soc_common.c:888:1: error: version control conflict mark=
+er in file
+    drivers/pcmcia/soc_common.c:832:3: error: label =E2=80=98out_err_5=E2=
+=80=99 used but not defined
+
+Warnings:
+    drivers/pcmcia/soc_common.c:769:13: warning: =E2=80=98soc_pcmcia_unmap_=
+iospace=E2=80=99 defined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+qcom_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+qi_lb60_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+rb532_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    cc1: warning: result of =E2=80=98-117440512 << 16=E2=80=99 requires 44 =
+bits to represent, but =E2=80=98int=E2=80=99 only has 32 bits [-Wshift-over=
+flow=3D]
+
+---------------------------------------------------------------------------=
+-----
+rbtx49xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+realview_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+rm200_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rpc_defconfig (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 section=
+ mismatches
+
+Errors:
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=3D0x'
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=3D0x'
+
+---------------------------------------------------------------------------=
+-----
+rs90_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+rt305x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rv32_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s3c2410_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s3c6400_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s5pv210_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sb1250_swarm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+shannon_defconfig (arm, gcc-10) =E2=80=94 FAIL, 4 errors, 1 warning, 0 sect=
+ion mismatches
+
+Errors:
+    drivers/pcmcia/soc_common.c:884:1: error: version control conflict mark=
+er in file
+    drivers/pcmcia/soc_common.c:886:1: error: version control conflict mark=
+er in file
+    drivers/pcmcia/soc_common.c:888:1: error: version control conflict mark=
+er in file
+    drivers/pcmcia/soc_common.c:832:3: error: label =E2=80=98out_err_5=E2=
+=80=99 used but not defined
+
+Warnings:
+    drivers/pcmcia/soc_common.c:769:13: warning: =E2=80=98soc_pcmcia_unmap_=
+iospace=E2=80=99 defined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+shmobile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+simpad_defconfig (arm, gcc-10) =E2=80=94 FAIL, 4 errors, 1 warning, 0 secti=
+on mismatches
+
+Errors:
+    drivers/pcmcia/soc_common.c:884:1: error: version control conflict mark=
+er in file
+    drivers/pcmcia/soc_common.c:886:1: error: version control conflict mark=
+er in file
+    drivers/pcmcia/soc_common.c:888:1: error: version control conflict mark=
+er in file
+    drivers/pcmcia/soc_common.c:832:3: error: label =E2=80=98out_err_5=E2=
+=80=99 used but not defined
+
+Warnings:
+    drivers/pcmcia/soc_common.c:769:13: warning: =E2=80=98soc_pcmcia_unmap_=
+iospace=E2=80=99 defined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+socfpga_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear13xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear3xx_defconfig (arm, gcc-10) =E2=80=94 FAIL, 10 errors, 0 warnings, 0 s=
+ection mismatches
+
+Errors:
+    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=98__c=
+ompiletime_assert_253=E2=80=99 declared with attribute error: BUILD_BUG_ON =
+failed: sizeof(*edid) !=3D EDID_LENGTH
+    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=98__c=
+ompiletime_assert_253=E2=80=99 declared with attribute error: BUILD_BUG_ON =
+failed: sizeof(*edid) !=3D EDID_LENGTH
+    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=98__c=
+ompiletime_assert_253=E2=80=99 declared with attribute error: BUILD_BUG_ON =
+failed: sizeof(*edid) !=3D EDID_LENGTH
+    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=98__c=
+ompiletime_assert_253=E2=80=99 declared with attribute error: BUILD_BUG_ON =
+failed: sizeof(*edid) !=3D EDID_LENGTH
+    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=98__c=
+ompiletime_assert_253=E2=80=99 declared with attribute error: BUILD_BUG_ON =
+failed: sizeof(*edid) !=3D EDID_LENGTH
+    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=98__c=
+ompiletime_assert_253=E2=80=99 declared with attribute error: BUILD_BUG_ON =
+failed: sizeof(*edid) !=3D EDID_LENGTH
+    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=98__c=
+ompiletime_assert_253=E2=80=99 declared with attribute error: BUILD_BUG_ON =
+failed: sizeof(*edid) !=3D EDID_LENGTH
+    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=98__c=
+ompiletime_assert_253=E2=80=99 declared with attribute error: BUILD_BUG_ON =
+failed: sizeof(*edid) !=3D EDID_LENGTH
+    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=98__c=
+ompiletime_assert_253=E2=80=99 declared with attribute error: BUILD_BUG_ON =
+failed: sizeof(*edid) !=3D EDID_LENGTH
+    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=98__c=
+ompiletime_assert_253=E2=80=99 declared with attribute error: BUILD_BUG_ON =
+failed: sizeof(*edid) !=3D EDID_LENGTH
+
+---------------------------------------------------------------------------=
+-----
+spear6xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+spitz_defconfig (arm, gcc-10) =E2=80=94 FAIL, 4 errors, 1 warning, 0 sectio=
+n mismatches
+
+Errors:
+    drivers/pcmcia/soc_common.c:884:1: error: version control conflict mark=
+er in file
+    drivers/pcmcia/soc_common.c:886:1: error: version control conflict mark=
+er in file
+    drivers/pcmcia/soc_common.c:888:1: error: version control conflict mark=
+er in file
+    drivers/pcmcia/soc_common.c:832:3: error: label =E2=80=98out_err_5=E2=
+=80=99 used but not defined
+
+Warnings:
+    drivers/pcmcia/soc_common.c:769:13: warning: =E2=80=98soc_pcmcia_unmap_=
+iospace=E2=80=99 defined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+stm32_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sunxi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+tb0219_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+tb0226_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+tb0287_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+tct_hammer_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+trizeps4_defconfig (arm, gcc-10) =E2=80=94 FAIL, 4 errors, 1 warning, 0 sec=
+tion mismatches
+
+Errors:
+    drivers/pcmcia/soc_common.c:884:1: error: version control conflict mark=
+er in file
+    drivers/pcmcia/soc_common.c:886:1: error: version control conflict mark=
+er in file
+    drivers/pcmcia/soc_common.c:888:1: error: version control conflict mark=
+er in file
+    drivers/pcmcia/soc_common.c:832:3: error: label =E2=80=98out_err_5=E2=
+=80=99 used but not defined
+
+Warnings:
+    drivers/pcmcia/soc_common.c:769:13: warning: =E2=80=98soc_pcmcia_unmap_=
+iospace=E2=80=99 defined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+u8500_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+versatile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+vexpress_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vf610m4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+viper_defconfig (arm, gcc-10) =E2=80=94 FAIL, 4 errors, 1 warning, 0 sectio=
+n mismatches
+
+Errors:
+    drivers/pcmcia/soc_common.c:884:1: error: version control conflict mark=
+er in file
+    drivers/pcmcia/soc_common.c:886:1: error: version control conflict mark=
+er in file
+    drivers/pcmcia/soc_common.c:888:1: error: version control conflict mark=
+er in file
+    drivers/pcmcia/soc_common.c:832:3: error: label =E2=80=98out_err_5=E2=
+=80=99 used but not defined
+
+Warnings:
+    drivers/pcmcia/soc_common.c:769:13: warning: =E2=80=98soc_pcmcia_unmap_=
+iospace=E2=80=99 defined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+vocore2_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 sec=
+tion mismatches
+
+Errors:
+    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=98__c=
+ompiletime_assert_285=E2=80=99 declared with attribute error: BUILD_BUG fai=
+led
+
+---------------------------------------------------------------------------=
+-----
+vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+workpad_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, clang-14) =E2=80=94 FAIL, 1 error, 1 warning, 0 s=
+ection mismatches
+
+Errors:
+    mm/shmem.c:1704:7: error: variable 'folio' is used uninitialized whenev=
+er 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+
+Warnings:
+    mm/shmem.c:1685:21: note: initialize the variable 'folio' to silence th=
+is warning
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+crypto (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+debug (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+ima (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 FAIL, 1 error,=
+ 1 warning, 0 section mismatches
+
+Errors:
+    mm/shmem.c:1704:7: error: variable 'folio' is used uninitialized whenev=
+er 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+
+Warnings:
+    mm/shmem.c:1685:21: note: initialize the variable 'folio' to silence th=
+is warning
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, =
+0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 e=
+rrors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook+kselftest (x86_64, gcc-10) =E2=80=94 PASS, =
+0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86_kvm_guest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0=
+ warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+xcep_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+zeus_defconfig (arm, gcc-10) =E2=80=94 FAIL, 4 errors, 1 warning, 0 section=
+ mismatches
+
+Errors:
+    drivers/pcmcia/soc_common.c:884:1: error: version control conflict mark=
+er in file
+    drivers/pcmcia/soc_common.c:886:1: error: version control conflict mark=
+er in file
+    drivers/pcmcia/soc_common.c:888:1: error: version control conflict mark=
+er in file
+    drivers/pcmcia/soc_common.c:832:3: error: label =E2=80=98out_err_5=E2=
+=80=99 used but not defined
+
+Warnings:
+    drivers/pcmcia/soc_common.c:769:13: warning: =E2=80=98soc_pcmcia_unmap_=
+iospace=E2=80=99 defined but not used [-Wunused-function]
+
+---
+For more info write to <info@kernelci.org>

@@ -2,47 +2,63 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32DB051CC5F
-	for <lists+linux-next@lfdr.de>; Fri,  6 May 2022 00:58:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ED3151CDD5
+	for <lists+linux-next@lfdr.de>; Fri,  6 May 2022 02:26:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386468AbiEEXCG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 5 May 2022 19:02:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41148 "EHLO
+        id S1387542AbiEFA3j (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 5 May 2022 20:29:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386483AbiEEXCF (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 5 May 2022 19:02:05 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3C8B5F26A;
-        Thu,  5 May 2022 15:58:23 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KvTd528d6z4ySt;
-        Fri,  6 May 2022 08:58:16 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1651791498;
-        bh=ulHf3pZ7Bcd379ocJhrqh4GtTsz+fjXWpoCg96g0S4E=;
-        h=Date:From:To:Cc:Subject:From;
-        b=r5d0ocPCpwsX6BAJ6EbWnPBHc3Vor+zsV51/sX3Uidapy5YjnwyNC8FH8P1Cfd/nv
-         3uPE//Y4aCzC2frvNt3ANbHnzz3KLyUX5Q+uAsJcAzwux8FG3MiDUxWDkqF7MzdwNe
-         5ZhyzSUysIRryvrMd4nN1kVq594XK4tyWfMqQKOXzH+f8O/jxB14XNkQSXFIMPohOQ
-         3FPFuX1jDPob6eGeXvT4FiwyNx2Q63yr9VQ8bagjoQiA+LFlO30+tT94K1LMoYO0p9
-         BUh7/+Fk7BpHBPigT7wm3L9VSNe/QGU9Mee7/O2u4wExYz3uzPaQzB3ni71hgZhc+X
-         8XcQa/QCKOjQg==
-Date:   Fri, 6 May 2022 08:58:15 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        ARM <linux-arm-kernel@lists.infradead.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warnings after merge of the arm-soc tree
-Message-ID: <20220506085815.5a3cfa83@canb.auug.org.au>
+        with ESMTP id S1387544AbiEFA3j (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 5 May 2022 20:29:39 -0400
+Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F30AD13CC8;
+        Thu,  5 May 2022 17:25:51 -0700 (PDT)
+Received: by mail-vs1-xe2b.google.com with SMTP id a127so5767672vsa.3;
+        Thu, 05 May 2022 17:25:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QAkK4SrhA/bock8oo1T7lBqM1M3V+LitUKvmLyL1MpA=;
+        b=ZXgQzX/+0Vzl0EIdb0PBR503txgI+ab5b7tUVLY8lGOTO1Ydwg2Ng1SBOsq7uZgCxv
+         dahSl0jVM+R8MUZxtIaWLa6QjAcC2mLS0mEcgOhkLFp2Cf5wnrqeY2j1C2tihwvHxMHc
+         D36hyKzIrWMWJoLBAeusM/WIdXfEu3UyaM6HysVqT6b4qxmrjTUoUPAA4Qw6Z2QmUGqL
+         bmmTRsyujgL+OcA8h8fVvOjvEXW4WZkEyqv3AD3gwYJi24p4Gfbi5+njIpAHXWaMjnMX
+         IjcenNhQsPWj8MRiTBZyD4hdVWeMOFmt7LRLvZVYpUsSvb6JQxFY+/tlXT6NyiYXqcFO
+         nsaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QAkK4SrhA/bock8oo1T7lBqM1M3V+LitUKvmLyL1MpA=;
+        b=z1AkHhHcT9q5S1GJKpWdx65q7V5luvIfyG2Zt7fbllxiIWctvxfZgZDxTXimSg5wvI
+         xrMuLROlFZGlHz6PxiLE85FtLYgwLJQMPRayH0LkIKsvMQ0kfpeaxPPrBIjR/AIXZsBI
+         yZJ/6qf502ylwaRoXIo6WE/EjpDqvMNiRFkLXd6j/odBksiXA9zKoilMEwZ1N1LKfFw7
+         l8ZQ1ya3J6WLk9vD+umXnaArioqefg9LZkvqDUtnGJpsYEPfS85kY/VM7S5av/nIqkqx
+         JdHHVV3rhF1ymZ03N3JcoF+37JmPUxiX2ldnRnb7BNoY+yYECYu6EsvBn7Gn+s7LfFYd
+         l0SQ==
+X-Gm-Message-State: AOAM530L2OaUcC4SZbm/6MQMXpR2Dmm6G38YwXazi1e/olzDRU0hIdHH
+        XWYbHB/edOVLRAB+SkyavCvL2JbKHcsuFs+inPzHZNC8
+X-Google-Smtp-Source: ABdhPJx9NZEgOil3xmWCH5JGBqs9KTx7udNiZP5vc6xRzj9HSLwHbzX5+CafkLHQgXJH9vqC7+O79O/v7qFBaPjXMsw=
+X-Received: by 2002:a05:6102:aca:b0:32a:1acf:5ff8 with SMTP id
+ m10-20020a0561020aca00b0032a1acf5ff8mr213559vsh.81.1651796751020; Thu, 05 May
+ 2022 17:25:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/gHF8k2jQ5Od62eB7rhX/E.2";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220427104825.15a04680@canb.auug.org.au> <20220502121736.57b06150@canb.auug.org.au>
+In-Reply-To: <20220502121736.57b06150@canb.auug.org.au>
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Date:   Thu, 5 May 2022 17:25:39 -0700
+Message-ID: <CAKdAkRQN48WjsW1BAztTn3-c0pf68tP9+G0028ZyXB4-8aCtKQ@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the input tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Fabien Parent <fparent@baylibre.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,80 +66,38 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/gHF8k2jQ5Od62eB7rhX/E.2
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Sun, May 1, 2022 at 7:17 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> On Wed, 27 Apr 2022 10:48:25 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >
+> > After merging the input tree, today's linux-next build (x86_64
+> > allmodconfig) failed like this:
+> >
+> > drivers/input/keyboard/mtk-pmic-keys.c:93:36: error: 'MT6359_TOPSTATUS' undeclared here (not in a function); did you mean 'MT6358_TOPSTATUS'?
+> >    93 |                 MTK_PMIC_KEYS_REGS(MT6359_TOPSTATUS,
+> >       |                                    ^~~~~~~~~~~~~~~~
+> > drivers/input/keyboard/mtk-pmic-keys.c:48:35: note: in definition of macro 'MTK_PMIC_KEYS_REGS'
+> >    48 |         .deb_reg                = _deb_reg,             \
+> >       |                                   ^~~~~~~~
+> > drivers/input/keyboard/mtk-pmic-keys.c:98:25: error: 'MT6359_TOP_RST_MISC' undeclared here (not in a function); did you mean 'MT6358_TOP_RST_MISC'?
+> >    98 |         .pmic_rst_reg = MT6359_TOP_RST_MISC,
+> >       |                         ^~~~~~~~~~~~~~~~~~~
+> >       |                         MT6358_TOP_RST_MISC
+> >
+> > Caused by commit
+> >
+> >   0f97adf64314 ("Input: mtk-pmic-keys - add support for MT6359")
+> >
+> > I have used the input tree from next-20220426 for today.
+>
+> I am still getting this failure.
 
-Hi all,
+Sorry for sitting on this. I dropped the patches from my tree, we can
+either push them through MFD, or retry after the merge window.
 
-After merging the arm-soc tree, today's linux-next build (arm
-multi_v7_defconfig) produced these warnings:
+Thanks.
 
-arch/arm/boot/dts/bcm953012hr.dts:57.3-33: Warning (reg_format): /nand-cont=
-roller@18028000/nand@0/partition@0:reg: property has invalid length (8 byte=
-s) (#address-cells =3D=3D 2, #size-cells =3D=3D 1)
-arch/arm/boot/dts/bcm953012hr.dts:62.3-33: Warning (reg_format): /nand-cont=
-roller@18028000/nand@0/partition@200000:reg: property has invalid length (8=
- bytes) (#address-cells =3D=3D 2, #size-cells =3D=3D 1)
-arch/arm/boot/dts/bcm953012hr.dts:66.3-33: Warning (reg_format): /nand-cont=
-roller@18028000/nand@0/partition@600000:reg: property has invalid length (8=
- bytes) (#address-cells =3D=3D 2, #size-cells =3D=3D 1)
-arch/arm/boot/dts/bcm953012hr.dts:70.3-33: Warning (reg_format): /nand-cont=
-roller@18028000/nand@0/partition@1000000:reg: property has invalid length (=
-8 bytes) (#address-cells =3D=3D 2, #size-cells =3D=3D 1)
-arch/arm/boot/dts/bcm953012hr.dtb: Warning (pci_device_reg): Failed prerequ=
-isite 'reg_format'
-arch/arm/boot/dts/bcm953012hr.dtb: Warning (pci_device_bus_num): Failed pre=
-requisite 'reg_format'
-arch/arm/boot/dts/bcm953012hr.dtb: Warning (i2c_bus_reg): Failed prerequisi=
-te 'reg_format'
-arch/arm/boot/dts/bcm953012hr.dtb: Warning (spi_bus_reg): Failed prerequisi=
-te 'reg_format'
-arch/arm/boot/dts/bcm953012hr.dts:55.14-59.4: Warning (avoid_default_addr_s=
-ize): /nand-controller@18028000/nand@0/partition@0: Relying on default #add=
-ress-cells value
-arch/arm/boot/dts/bcm953012hr.dts:55.14-59.4: Warning (avoid_default_addr_s=
-ize): /nand-controller@18028000/nand@0/partition@0: Relying on default #siz=
-e-cells value
-arch/arm/boot/dts/bcm953012hr.dts:60.19-63.4: Warning (avoid_default_addr_s=
-ize): /nand-controller@18028000/nand@0/partition@200000: Relying on default=
- #address-cells value
-arch/arm/boot/dts/bcm953012hr.dts:60.19-63.4: Warning (avoid_default_addr_s=
-ize): /nand-controller@18028000/nand@0/partition@200000: Relying on default=
- #size-cells value
-arch/arm/boot/dts/bcm953012hr.dts:64.19-67.4: Warning (avoid_default_addr_s=
-ize): /nand-controller@18028000/nand@0/partition@600000: Relying on default=
- #address-cells value
-arch/arm/boot/dts/bcm953012hr.dts:64.19-67.4: Warning (avoid_default_addr_s=
-ize): /nand-controller@18028000/nand@0/partition@600000: Relying on default=
- #size-cells value
-arch/arm/boot/dts/bcm953012hr.dts:68.20-71.4: Warning (avoid_default_addr_s=
-ize): /nand-controller@18028000/nand@0/partition@1000000: Relying on defaul=
-t #address-cells value
-arch/arm/boot/dts/bcm953012hr.dts:68.20-71.4: Warning (avoid_default_addr_s=
-ize): /nand-controller@18028000/nand@0/partition@1000000: Relying on defaul=
-t #size-cells value
-
-I don't know what caused this now.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/gHF8k2jQ5Od62eB7rhX/E.2
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJ0VocACgkQAVBC80lX
-0Gz74Af/bAh/Nxuf7Iqp0ZYFzVlW+zeGkD7xS0U6n+Z6pPWDplHM2J0tymMU403v
-X9NWgfyyWh93IzFniQZ8+7eGI5Y+6FGkAmNYU/6WciN+VAx0z7fzdK0HMVsFWB/N
-+aOrCpP+eR5fZovYfixHzGB0FRx2LMBi/PZTt8/4Vz/oUHaewszQUx2OvayVTzl5
-ZD+sW0KhGkXiTyNiRrdzrG1GkPjh/S4sQUKoVO89BLOr4iglZHcM5bZo9qOF248Q
-OuTG2g5RPOsg34IuybNudgrAEYQQ2LShVYPsiTMPXTz6m6GTgjfuTu2iWdCtc6qI
-KSICnyqP/mtXt/382lmc5EelNeWuUw==
-=Ct30
------END PGP SIGNATURE-----
-
---Sig_/gHF8k2jQ5Od62eB7rhX/E.2--
+-- 
+Dmitry

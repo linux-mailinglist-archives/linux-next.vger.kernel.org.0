@@ -2,90 +2,134 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 318D051E8E2
-	for <lists+linux-next@lfdr.de>; Sat,  7 May 2022 19:18:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C50AE51EBED
+	for <lists+linux-next@lfdr.de>; Sun,  8 May 2022 07:42:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444050AbiEGRWI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 7 May 2022 13:22:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43660 "EHLO
+        id S231217AbiEHFpx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 8 May 2022 01:45:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236727AbiEGRWH (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 7 May 2022 13:22:07 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3993D252AC
-        for <linux-next@vger.kernel.org>; Sat,  7 May 2022 10:18:20 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id a11so8811581pff.1
-        for <linux-next@vger.kernel.org>; Sat, 07 May 2022 10:18:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=eKNedDDZfJ4ci5b7bFFqS85iYr1ECe/8cGsLZUJPlMU=;
-        b=OunbZzN9WxFNeLIyIWFxffNjd70Cv2S8fskn+yi3F/zqKhfW9VTmAVBh2EOwpDTKs0
-         i7JdXP207AWKuPuMr4sSrZ6J0xM34xHkOJIVYVb8OLmkP4rBOEjkaYWi9HagX8wvjJcu
-         DZVToWU/ZfhoHgCwW4X7JSc6pJG/vANOBgfhs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=eKNedDDZfJ4ci5b7bFFqS85iYr1ECe/8cGsLZUJPlMU=;
-        b=i+WWD+dhKHkI9bC7M5qOJwhwWT/JODJEnb8XJ+TTl0GmD3pRI/VN31spOeajnkUNlz
-         nfio6KTe+ikOuYRKREWo9GRQD8MJKHj9zrMZJarNhkUydMarnV/CzQ7ns/Av8N1/iB5z
-         jR+1yPusMEfvw+Y7bb+hlWj3/0o4JrAracpMUKup7pVggnzqY9nPX9P+amRHyxtvWSp5
-         WCKhP0PSzk9nSHX7SpoEn1cF7Br/gxQNKw/JvXA9H/TRd4FPj0C7ZVQ/rAOSIJYiXw4K
-         8GTJogUyd6Memsl+dsrKt6k6vd2J4SGfQBaBYSPSVBS3cNh2WONgMyEvq0IvbvZan8e3
-         M1VA==
-X-Gm-Message-State: AOAM530VvEUZ1QKzJE2/1ZTimZWkgbxzAr6Y3B5NVyPl/syJlWNHzxIU
-        G3Cfd3EWz9kOmwJAoy19GJbIaQ==
-X-Google-Smtp-Source: ABdhPJzZud4xEczlEpaWj6i0hJdD2WC6JoekhZsoal2NcPjLhS9Axq5tyLRHzLkzraChV7ItFkPPIA==
-X-Received: by 2002:a05:6a00:23ce:b0:50d:823f:981 with SMTP id g14-20020a056a0023ce00b0050d823f0981mr8861123pfc.10.1651943899731;
-        Sat, 07 May 2022 10:18:19 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id c6-20020a170902724600b0015e8d4eb2e6sm3839174pll.304.2022.05.07.10.18.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 May 2022 10:18:19 -0700 (PDT)
-Date:   Sat, 7 May 2022 10:18:18 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the kspp tree
-Message-ID: <202205071017.A93125B0E@keescook>
-References: <20220505174025.07cc9967@canb.auug.org.au>
+        with ESMTP id S231214AbiEHFpw (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 8 May 2022 01:45:52 -0400
+Received: from a48-37.smtp-out.amazonses.com (a48-37.smtp-out.amazonses.com [54.240.48.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DC2CE010;
+        Sat,  7 May 2022 22:42:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1651988519;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+        bh=ZNZ47G/iGXwnCMBtBwZ9v4Bz4MNbeBnlap0WwiKo/Vs=;
+        b=GYX4C5G8mB1QS+XivpQcwt+YQOoahL3bOg/YtY2BRSupHhZnM3LsCAWfo/kNyBzU
+        +YuVajIlM40I8480Ukqg/AShqPGL2OHpdRbCqJVMXO7gJ7tsbDFrHt96PgGg2Vmre4u
+        X3c3u9x/P4GiNRUQU1V5X3QH7hlIHLgLDIZW+jvE=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=6gbrjpgwjskckoa6a5zn6fwqkn67xbtw; d=amazonses.com; t=1651988519;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+        bh=ZNZ47G/iGXwnCMBtBwZ9v4Bz4MNbeBnlap0WwiKo/Vs=;
+        b=Jsayz/UHabU7joCFN38BrTn6i77DmyNaHtLWTS8fvBzxS1ftVIHQuGJgdvSwRlD3
+        VTSQ4HHsgSEPE4tKB/FRt/bsuJ/wDTJxRLTczLpkgEZK4wFs2vdlIXPjwUzFLKg1pZy
+        moGNJR12cGNlPabHO2bg9c5CjMLtn5PFPfXBFTrk=
+From:   lkft@linaro.org
+To:     lkft@linaro.org
+Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        linux-next@vger.kernel.org, shuah@kernel.org
+Subject: lkft kselftest for next-20220315
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220505174025.07cc9967@canb.auug.org.au>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Message-ID: <01000180a230564e-e40f5540-e20e-4365-b90c-2f969ef7a71f-000000@email.amazonses.com>
+Date:   Sun, 8 May 2022 05:41:58 +0000
+Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
+X-SES-Outgoing: 2022.05.08-54.240.48.37
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TO_EQ_FM_DIRECT_MX,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, May 05, 2022 at 05:40:25PM +1000, Stephen Rothwell wrote:
-> After merging the kspp tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
-> 
-> [...]
-> 
-> Caused by commit
-> 
->   f4cfacd92972 ("lkdtm/stackleak: rework boundary management")
-> 
-> or maybe commit
-> 
->   cbe7edb47d3c ("stackleak: rework stack low bound handling")
-> 
-> CONFIG_GCC_PLUGIN_STACKLEAK is not set for this build.
-> 
-> I have used the kspp tree from next-20220504 for today.
+## Build
+* kernel: 5.17.0-rc8
+* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+* git branch: master
+* git commit: a32cd981a6da2373c093d471ee4405a915e217d5
+* git describe: next-20220315
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220315
 
-Thanks! Sorry for the glitch; Mark's fix should be visible now.
+## Test Regressions (compared to next-20220302)
+No test regressions found.
 
--- 
-Kees Cook
+## Metric Regressions (compared to next-20220302)
+No metric regressions found.
+
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+
+## Test Fixes (compared to next-20220302)
+No test fixes found.
+
+## Metric Fixes (compared to next-20220302)
+No metric fixes found.
+
+## Test result summary
+total: 2020, pass: 1067, fail: 118, skip: 835, xfail: 0
+
+## Build Summary
+
+## Test suites summary
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+
+--
+Linaro LKFT
+https://lkft.linaro.org

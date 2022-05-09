@@ -2,89 +2,254 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C064851F4FA
-	for <lists+linux-next@lfdr.de>; Mon,  9 May 2022 09:18:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1865B51F63B
+	for <lists+linux-next@lfdr.de>; Mon,  9 May 2022 10:01:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233321AbiEIHJU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 9 May 2022 03:09:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54930 "EHLO
+        id S230174AbiEIH6p (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 9 May 2022 03:58:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234609AbiEIHDr (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 9 May 2022 03:03:47 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59DC2393D7;
-        Sun,  8 May 2022 23:59:54 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id j14so13008230plx.3;
-        Sun, 08 May 2022 23:59:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=ukKPvUkS4+sda6n7hZd5RfiYJTJ8bOEAkMXzOtPmIYQ=;
-        b=RkZKGCXUY3WLo3y2zRC0HADNs7mY1Izvrx0xzLpIlB2hf3bjErAGfhwZoj7SpkH506
-         P5MGGJJI+9l2PmkcWbIcatsvwBsE5iDuFfT4y96sbiBzxojagNVQSZjHGvfhytDdQMdE
-         PO2kSfCjpUsTIvSOLWfa69ZR0857+HjEY2JokReKHoSyhgzfnugX9EjEQQQnKDpejEAh
-         tGUx0wD/aGNVaqW5sPkVOeVDSSAfgPrM0lWalyHC7yf85CJuSN4+Qp5dtH6muyBnhHAT
-         Fu7nSrpciTO4kz/JsFkAynPJwhmFqcu7SkyPdSmHRE2fk7a1n5ujHMPklFJ7onpRrc+r
-         0v2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=ukKPvUkS4+sda6n7hZd5RfiYJTJ8bOEAkMXzOtPmIYQ=;
-        b=PE7HbRkKwz+drFlSXurrTk4jcNjIV4svpgZrYSHJVFsPIJYiPYinukTiqgys0ZicY7
-         cJafQmhYOUX61mQH34ufPxeU3PrQIb0Lrw+GHC0f3sdlpBBItZDTJTbFdH5P8ygfBjYQ
-         zACsWUTGMkFCFZ8tcg9xclZuxHqYUEsBPIi1mTMdpuK4sMnpJa2yl7HiIt+qhhF8Ogse
-         l0VUGmue8HQu30+f5uudeo2Vm6ry+V6kJSqOjMImEJJFoTkj71337ROUr7ytiVWfQOZy
-         ScwGk4FGCqPhawrUNoWmQ8Dg9Lio3VwPyUM/roUzBsNmLlDT/x5c/Lukik96nTkDRH9I
-         eQsQ==
-X-Gm-Message-State: AOAM532IAKOxUqpOQP0PF16i/kFe/84plXFHUTR9qccircDTAugrq1Cb
-        K/pPSHNUUBFd5jbsx5Xcl6+oQSmIRPw=
-X-Google-Smtp-Source: ABdhPJwEWqRa848Y6b0nbhIetgmKuAHRwCdA9NXKfZeIWxhg4L+prw9ifbQbd3A3SFzUkc97mZUjXw==
-X-Received: by 2002:a17:90b:4b42:b0:1dc:15f8:821b with SMTP id mi2-20020a17090b4b4200b001dc15f8821bmr25322886pjb.131.1652079593876;
-        Sun, 08 May 2022 23:59:53 -0700 (PDT)
-Received: from [192.168.43.80] (subs32-116-206-28-19.three.co.id. [116.206.28.19])
-        by smtp.gmail.com with ESMTPSA id a13-20020aa794ad000000b0050dc76281desm7840546pfl.184.2022.05.08.23.59.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 08 May 2022 23:59:53 -0700 (PDT)
-Message-ID: <4dd26a0e-819d-8414-8b71-1783e263209c@gmail.com>
-Date:   Mon, 9 May 2022 13:59:48 +0700
+        with ESMTP id S235877AbiEIHpE (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 9 May 2022 03:45:04 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 413361A055;
+        Mon,  9 May 2022 00:41:09 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KxY4z6mFdz4xdK;
+        Mon,  9 May 2022 17:41:07 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1652082068;
+        bh=i0aeTdQw+3JrPXHk8PlA8SvtwJ+ifxuMK43yX2iCLSQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=VAFmLUDaiqLp5Qsrmgm5VS629PvqFw5tpiWzQv8pgKhY7ql1tRLh2eWx9FML/WanV
+         HxO8udSPblN+aSlj8QdXAw5ydeXAXHxuLHOJiPfvyK7Xt2NN1njefRZvQ7KHtrUdIr
+         LqVqq/uv45cthYyZv4+Y6RA+HqJyIzMAYHyjoXDhcJ4Gm+vEl1kkm5UtqAsV94/iTK
+         ynC9CpivVEe5b0kt428smcMEimLXctjvCj+kbhWo2u9Gp2PRBGV5dCURVGrJ4X7WPc
+         wfTH9ojKQkLCZyCPn3dO1Q54KNgbnfNqxkElv5dFUTnsMZ0/qfSI34WFe/3GNUpZTv
+         ZyfmNpg77bHuw==
+Date:   Mon, 9 May 2022 17:41:06 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Matthew Wilcox <willy@infradead.org>,
+        Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     Daeho Jeong <daehojeong@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the folio tree with the f2fs tree
+Message-ID: <20220509174106.323ac148@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH net-next v3] net/core: Rephrase function description of
- __dev_queue_xmit()
-Content-Language: en-US
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Akira Yokosawa <akiyks@gmail.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Ben Greear <greearb@candelatech.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        linux-next@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20220507084643.18278-1-bagasdotme@gmail.com>
- <0cf2306a-2218-2cd5-ad54-0d73e25680a7@gmail.com> <Yni6nBTq+0LrBvQN@debian.me>
-In-Reply-To: <Yni6nBTq+0LrBvQN@debian.me>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/soev6gK5Yjbb8FVlyI=yQq/";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 5/9/22 13:54, Bagas Sanjaya wrote:
-> I'm in favor of this patch. Thanks.
-> 
+--Sig_/soev6gK5Yjbb8FVlyI=yQq/
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Oops, I mean I'm in favor of your patch suggestion.
+Hi all,
 
--- 
-An old man doll... just what I always wanted! - Clara
+Today's linux-next merge of the folio tree got a conflict in:
+
+  fs/f2fs/data.c
+
+between commit:
+
+  3d7ad9c30607 ("f2fs: change the current atomic write way")
+
+from the f2fs tree and commit:
+
+  bd5533ee6fb4 ("f2fs: Convert to release_folio")
+
+from the folio tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc fs/f2fs/data.c
+index 54a7a8ad994d,8f38c26bb16c..000000000000
+--- a/fs/f2fs/data.c
++++ b/fs/f2fs/data.c
+@@@ -3313,103 -3314,8 +3314,102 @@@ unlock_out
+  	return err;
+  }
+ =20
+ +static int __find_data_block(struct inode *inode, pgoff_t index,
+ +				block_t *blk_addr)
+ +{
+ +	struct dnode_of_data dn;
+ +	struct page *ipage;
+ +	struct extent_info ei =3D {0, };
+ +	int err =3D 0;
+ +
+ +	ipage =3D f2fs_get_node_page(F2FS_I_SB(inode), inode->i_ino);
+ +	if (IS_ERR(ipage))
+ +		return PTR_ERR(ipage);
+ +
+ +	set_new_dnode(&dn, inode, ipage, ipage, 0);
+ +
+ +	if (f2fs_lookup_extent_cache(inode, index, &ei)) {
+ +		dn.data_blkaddr =3D ei.blk + index - ei.fofs;
+ +	} else {
+ +		/* hole case */
+ +		err =3D f2fs_get_dnode_of_data(&dn, index, LOOKUP_NODE);
+ +		if (err) {
+ +			dn.data_blkaddr =3D NULL_ADDR;
+ +			err =3D 0;
+ +		}
+ +	}
+ +	*blk_addr =3D dn.data_blkaddr;
+ +	f2fs_put_dnode(&dn);
+ +	return err;
+ +}
+ +
+ +static int __reserve_data_block(struct inode *inode, pgoff_t index,
+ +				block_t *blk_addr, bool *node_changed)
+ +{
+ +	struct f2fs_sb_info *sbi =3D F2FS_I_SB(inode);
+ +	struct dnode_of_data dn;
+ +	struct page *ipage;
+ +	int err =3D 0;
+ +
+ +	f2fs_do_map_lock(sbi, F2FS_GET_BLOCK_PRE_AIO, true);
+ +
+ +	ipage =3D f2fs_get_node_page(sbi, inode->i_ino);
+ +	if (IS_ERR(ipage)) {
+ +		err =3D PTR_ERR(ipage);
+ +		goto unlock_out;
+ +	}
+ +	set_new_dnode(&dn, inode, ipage, ipage, 0);
+ +
+ +	err =3D f2fs_get_block(&dn, index);
+ +
+ +	*blk_addr =3D dn.data_blkaddr;
+ +	*node_changed =3D dn.node_changed;
+ +	f2fs_put_dnode(&dn);
+ +
+ +unlock_out:
+ +	f2fs_do_map_lock(sbi, F2FS_GET_BLOCK_PRE_AIO, false);
+ +	return err;
+ +}
+ +
+ +static int prepare_atomic_write_begin(struct f2fs_sb_info *sbi,
+ +			struct page *page, loff_t pos, unsigned int len,
+ +			block_t *blk_addr, bool *node_changed)
+ +{
+ +	struct inode *inode =3D page->mapping->host;
+ +	struct inode *cow_inode =3D F2FS_I(inode)->cow_inode;
+ +	pgoff_t index =3D page->index;
+ +	int err =3D 0;
+ +	block_t ori_blk_addr;
+ +
+ +	/* If pos is beyond the end of file, reserve a new block in COW inode */
+ +	if ((pos & PAGE_MASK) >=3D i_size_read(inode))
+ +		return __reserve_data_block(cow_inode, index, blk_addr,
+ +					node_changed);
+ +
+ +	/* Look for the block in COW inode first */
+ +	err =3D __find_data_block(cow_inode, index, blk_addr);
+ +	if (err)
+ +		return err;
+ +	else if (*blk_addr !=3D NULL_ADDR)
+ +		return 0;
+ +
+ +	/* Look for the block in the original inode */
+ +	err =3D __find_data_block(inode, index, &ori_blk_addr);
+ +	if (err)
+ +		return err;
+ +
+ +	/* Finally, we should reserve a new block in COW inode for the update */
+ +	err =3D __reserve_data_block(cow_inode, index, blk_addr, node_changed);
+ +	if (err)
+ +		return err;
+ +
+ +	if (ori_blk_addr !=3D NULL_ADDR)
+ +		*blk_addr =3D ori_blk_addr;
+ +	return 0;
+ +}
+ +
+  static int f2fs_write_begin(struct file *file, struct address_space *mapp=
+ing,
+- 		loff_t pos, unsigned len, unsigned flags,
+- 		struct page **pagep, void **fsdata)
++ 		loff_t pos, unsigned len, struct page **pagep, void **fsdata)
+  {
+  	struct inode *inode =3D mapping->host;
+  	struct f2fs_sb_info *sbi =3D F2FS_I_SB(inode);
+@@@ -3617,24 -3525,33 +3617,26 @@@ void f2fs_invalidate_folio(struct foli
+  	folio_detach_private(folio);
+  }
+ =20
+- int f2fs_release_page(struct page *page, gfp_t wait)
++ bool f2fs_release_folio(struct folio *folio, gfp_t wait)
+  {
+- 	/* If this is dirty page, keep PagePrivate */
+- 	if (PageDirty(page))
+- 		return 0;
++ 	struct f2fs_sb_info *sbi;
++=20
++ 	/* If this is dirty folio, keep private data */
++ 	if (folio_test_dirty(folio))
++ 		return false;
+ =20
+- 	if (test_opt(F2FS_P_SB(page), COMPRESS_CACHE)) {
+- 		struct inode *inode =3D page->mapping->host;
+ -	/* This is atomic written page, keep Private */
+ -	if (page_private_atomic(&folio->page))
+ -		return false;
+ -
++ 	sbi =3D F2FS_M_SB(folio->mapping);
++ 	if (test_opt(sbi, COMPRESS_CACHE)) {
++ 		struct inode *inode =3D folio->mapping->host;
+ =20
+- 		if (inode->i_ino =3D=3D F2FS_COMPRESS_INO(F2FS_I_SB(inode)))
+- 			clear_page_private_data(page);
++ 		if (inode->i_ino =3D=3D F2FS_COMPRESS_INO(sbi))
++ 			clear_page_private_data(&folio->page);
+  	}
+ =20
+- 	clear_page_private_gcing(page);
++ 	clear_page_private_gcing(&folio->page);
+ =20
+- 	detach_page_private(page);
+- 	set_page_private(page, 0);
+- 	return 1;
++ 	folio_detach_private(folio);
++ 	return true;
+  }
+ =20
+  static bool f2fs_dirty_data_folio(struct address_space *mapping,
+
+--Sig_/soev6gK5Yjbb8FVlyI=yQq/
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJ4xZIACgkQAVBC80lX
+0GzH4wf8CfB5UhGgK1r0d7qDhleUR0fDcn55O+7IuMrIXIZfdlprqTBQMnR/pdNg
+JuM1PeDYrF1fHcH5mbwTMlv8GrBcGrM2pk50QQVAReCdsq12A6nX9YaWZ9wvmYUT
+Cwpz1dvIZ3kPqHcXYFgexwMct2K77D9TjPIIQfWP6Q2495bMam6f/ujmgDFvvKWX
+a4P44ozobnTFjb97dIhsoLAso6/Wv2Wr9VkzJ36LhfXZH2C224x/iiYI9Wdl+ziX
+U4CdS9wI38XvhLNxj24qdUja5zEvOFS6MCfPEfwo2lNbUX1j0NIwdiOO0PQ44fXI
+Rr9Thx+nyf5yg9mcg/oMITwDS1z3Iw==
+=aTeQ
+-----END PGP SIGNATURE-----
+
+--Sig_/soev6gK5Yjbb8FVlyI=yQq/--

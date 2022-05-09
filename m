@@ -2,45 +2,45 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1865B51F63B
-	for <lists+linux-next@lfdr.de>; Mon,  9 May 2022 10:01:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFED451F823
+	for <lists+linux-next@lfdr.de>; Mon,  9 May 2022 11:28:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230174AbiEIH6p (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 9 May 2022 03:58:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59790 "EHLO
+        id S234778AbiEIJcZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 9 May 2022 05:32:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235877AbiEIHpE (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 9 May 2022 03:45:04 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 413361A055;
-        Mon,  9 May 2022 00:41:09 -0700 (PDT)
+        with ESMTP id S237270AbiEII6F (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 9 May 2022 04:58:05 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4630E185C82;
+        Mon,  9 May 2022 01:54:06 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KxY4z6mFdz4xdK;
-        Mon,  9 May 2022 17:41:07 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KxZhp06rmz4xVP;
+        Mon,  9 May 2022 18:53:45 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1652082068;
-        bh=i0aeTdQw+3JrPXHk8PlA8SvtwJ+ifxuMK43yX2iCLSQ=;
+        s=201702; t=1652086427;
+        bh=w2m/tGdQTAx8CwiRbW9Lja4zBI/P+IiqXkEUWMZqfCc=;
         h=Date:From:To:Cc:Subject:From;
-        b=VAFmLUDaiqLp5Qsrmgm5VS629PvqFw5tpiWzQv8pgKhY7ql1tRLh2eWx9FML/WanV
-         HxO8udSPblN+aSlj8QdXAw5ydeXAXHxuLHOJiPfvyK7Xt2NN1njefRZvQ7KHtrUdIr
-         LqVqq/uv45cthYyZv4+Y6RA+HqJyIzMAYHyjoXDhcJ4Gm+vEl1kkm5UtqAsV94/iTK
-         ynC9CpivVEe5b0kt428smcMEimLXctjvCj+kbhWo2u9Gp2PRBGV5dCURVGrJ4X7WPc
-         wfTH9ojKQkLCZyCPn3dO1Q54KNgbnfNqxkElv5dFUTnsMZ0/qfSI34WFe/3GNUpZTv
-         ZyfmNpg77bHuw==
-Date:   Mon, 9 May 2022 17:41:06 +1000
+        b=e2GM/8uSu5SjESnNE0p9acMvp8bVUZNsXbkNiGSxqIyq06J4AC7AP7fUu3V/jH8Q3
+         MKEtPFO+XonUfEZcJcuSZ8vawRAx1WropuIYSR+/9uCuOyCZbw9t6MBPctClHelYHC
+         GaUuNn7qHbUe389wFFZ+oZPnPNnfQqzlbgvkUs5ff/rCSQOcEqq8czI+HDu0gLNJ2m
+         BI7kQsEGLCamaYDL8FYgC7P+3lQGWsv5MMXqjsDlh7cfIN4W5xftM8PkmqkX9IaeUn
+         6LPFUX9YbnE102GXGE9IrUsZ5YAl0rAduTaRQR6rKROfssljIrqjBBK7/i0SMfomzV
+         8BOpacsFVs4Cg==
+Date:   Mon, 9 May 2022 18:53:44 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Matthew Wilcox <willy@infradead.org>,
-        Jaegeuk Kim <jaegeuk@kernel.org>
-Cc:     Daeho Jeong <daehojeong@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the folio tree with the f2fs tree
-Message-ID: <20220509174106.323ac148@canb.auug.org.au>
+To:     Kees Cook <keescook@chromium.org>, Greg KH <greg@kroah.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Subject: linux-next: manual merge of the kspp tree with the char-misc tree
+Message-ID: <20220509185344.3fe1a354@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/soev6gK5Yjbb8FVlyI=yQq/";
+Content-Type: multipart/signed; boundary="Sig_/5Ha/EJ=CPT6QZVqs7X+t+uA";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -51,25 +51,26 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/soev6gK5Yjbb8FVlyI=yQq/
+--Sig_/5Ha/EJ=CPT6QZVqs7X+t+uA
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the folio tree got a conflict in:
+Today's linux-next merge of the kspp tree got a conflict in:
 
-  fs/f2fs/data.c
+  drivers/misc/lkdtm/stackleak.c
 
 between commit:
 
-  3d7ad9c30607 ("f2fs: change the current atomic write way")
+  73f62e60d80c ("lkdtm: Move crashtype definitions into each category")
 
-from the f2fs tree and commit:
+from the char-misc tree and commits:
 
-  bd5533ee6fb4 ("f2fs: Convert to release_folio")
+  c393c0b98d75 ("lkdtm/stackleak: prevent unexpected stack usage")
+  932c12ae7963 ("lkdtm/stackleak: fix CONFIG_GCC_PLUGIN_STACKLEAK=3Dn")
 
-from the folio tree.
+from the kspp tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -82,174 +83,59 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc fs/f2fs/data.c
-index 54a7a8ad994d,8f38c26bb16c..000000000000
---- a/fs/f2fs/data.c
-+++ b/fs/f2fs/data.c
-@@@ -3313,103 -3314,8 +3314,102 @@@ unlock_out
-  	return err;
-  }
- =20
- +static int __find_data_block(struct inode *inode, pgoff_t index,
- +				block_t *blk_addr)
- +{
- +	struct dnode_of_data dn;
- +	struct page *ipage;
- +	struct extent_info ei =3D {0, };
- +	int err =3D 0;
- +
- +	ipage =3D f2fs_get_node_page(F2FS_I_SB(inode), inode->i_ino);
- +	if (IS_ERR(ipage))
- +		return PTR_ERR(ipage);
- +
- +	set_new_dnode(&dn, inode, ipage, ipage, 0);
- +
- +	if (f2fs_lookup_extent_cache(inode, index, &ei)) {
- +		dn.data_blkaddr =3D ei.blk + index - ei.fofs;
- +	} else {
- +		/* hole case */
- +		err =3D f2fs_get_dnode_of_data(&dn, index, LOOKUP_NODE);
- +		if (err) {
- +			dn.data_blkaddr =3D NULL_ADDR;
- +			err =3D 0;
- +		}
- +	}
- +	*blk_addr =3D dn.data_blkaddr;
- +	f2fs_put_dnode(&dn);
- +	return err;
- +}
- +
- +static int __reserve_data_block(struct inode *inode, pgoff_t index,
- +				block_t *blk_addr, bool *node_changed)
- +{
- +	struct f2fs_sb_info *sbi =3D F2FS_I_SB(inode);
- +	struct dnode_of_data dn;
- +	struct page *ipage;
- +	int err =3D 0;
- +
- +	f2fs_do_map_lock(sbi, F2FS_GET_BLOCK_PRE_AIO, true);
- +
- +	ipage =3D f2fs_get_node_page(sbi, inode->i_ino);
- +	if (IS_ERR(ipage)) {
- +		err =3D PTR_ERR(ipage);
- +		goto unlock_out;
- +	}
- +	set_new_dnode(&dn, inode, ipage, ipage, 0);
- +
- +	err =3D f2fs_get_block(&dn, index);
- +
- +	*blk_addr =3D dn.data_blkaddr;
- +	*node_changed =3D dn.node_changed;
- +	f2fs_put_dnode(&dn);
- +
- +unlock_out:
- +	f2fs_do_map_lock(sbi, F2FS_GET_BLOCK_PRE_AIO, false);
- +	return err;
- +}
- +
- +static int prepare_atomic_write_begin(struct f2fs_sb_info *sbi,
- +			struct page *page, loff_t pos, unsigned int len,
- +			block_t *blk_addr, bool *node_changed)
- +{
- +	struct inode *inode =3D page->mapping->host;
- +	struct inode *cow_inode =3D F2FS_I(inode)->cow_inode;
- +	pgoff_t index =3D page->index;
- +	int err =3D 0;
- +	block_t ori_blk_addr;
- +
- +	/* If pos is beyond the end of file, reserve a new block in COW inode */
- +	if ((pos & PAGE_MASK) >=3D i_size_read(inode))
- +		return __reserve_data_block(cow_inode, index, blk_addr,
- +					node_changed);
- +
- +	/* Look for the block in COW inode first */
- +	err =3D __find_data_block(cow_inode, index, blk_addr);
- +	if (err)
- +		return err;
- +	else if (*blk_addr !=3D NULL_ADDR)
- +		return 0;
- +
- +	/* Look for the block in the original inode */
- +	err =3D __find_data_block(inode, index, &ori_blk_addr);
- +	if (err)
- +		return err;
- +
- +	/* Finally, we should reserve a new block in COW inode for the update */
- +	err =3D __reserve_data_block(cow_inode, index, blk_addr, node_changed);
- +	if (err)
- +		return err;
- +
- +	if (ori_blk_addr !=3D NULL_ADDR)
- +		*blk_addr =3D ori_blk_addr;
- +	return 0;
- +}
- +
-  static int f2fs_write_begin(struct file *file, struct address_space *mapp=
-ing,
-- 		loff_t pos, unsigned len, unsigned flags,
-- 		struct page **pagep, void **fsdata)
-+ 		loff_t pos, unsigned len, struct page **pagep, void **fsdata)
-  {
-  	struct inode *inode =3D mapping->host;
-  	struct f2fs_sb_info *sbi =3D F2FS_I_SB(inode);
-@@@ -3617,24 -3525,33 +3617,26 @@@ void f2fs_invalidate_folio(struct foli
-  	folio_detach_private(folio);
-  }
- =20
-- int f2fs_release_page(struct page *page, gfp_t wait)
-+ bool f2fs_release_folio(struct folio *folio, gfp_t wait)
-  {
-- 	/* If this is dirty page, keep PagePrivate */
-- 	if (PageDirty(page))
-- 		return 0;
-+ 	struct f2fs_sb_info *sbi;
-+=20
-+ 	/* If this is dirty folio, keep private data */
-+ 	if (folio_test_dirty(folio))
-+ 		return false;
- =20
-- 	if (test_opt(F2FS_P_SB(page), COMPRESS_CACHE)) {
-- 		struct inode *inode =3D page->mapping->host;
- -	/* This is atomic written page, keep Private */
- -	if (page_private_atomic(&folio->page))
- -		return false;
- -
-+ 	sbi =3D F2FS_M_SB(folio->mapping);
-+ 	if (test_opt(sbi, COMPRESS_CACHE)) {
-+ 		struct inode *inode =3D folio->mapping->host;
- =20
-- 		if (inode->i_ino =3D=3D F2FS_COMPRESS_INO(F2FS_I_SB(inode)))
-- 			clear_page_private_data(page);
-+ 		if (inode->i_ino =3D=3D F2FS_COMPRESS_INO(sbi))
-+ 			clear_page_private_data(&folio->page);
+diff --cc drivers/misc/lkdtm/stackleak.c
+index 210c84dfe1d2,82369c6f889e..000000000000
+--- a/drivers/misc/lkdtm/stackleak.c
++++ b/drivers/misc/lkdtm/stackleak.c
+@@@ -81,11 -115,21 +115,29 @@@ out
   	}
- =20
-- 	clear_page_private_gcing(page);
-+ 	clear_page_private_gcing(&folio->page);
- =20
-- 	detach_page_private(page);
-- 	set_page_private(page, 0);
-- 	return 1;
-+ 	folio_detach_private(folio);
-+ 	return true;
   }
  =20
-  static bool f2fs_dirty_data_folio(struct address_space *mapping,
+ -void lkdtm_STACKLEAK_ERASING(void)
+++static void lkdtm_STACKLEAK_ERASING(void)
++ {
++ 	unsigned long flags;
++=20
++ 	local_irq_save(flags);
++ 	check_stackleak_irqoff();
++ 	local_irq_restore(flags);
++ }
++ #else /* defined(CONFIG_GCC_PLUGIN_STACKLEAK) */
+ -void lkdtm_STACKLEAK_ERASING(void)
+++static void lkdtm_STACKLEAK_ERASING(void)
++ {
++ 	if (IS_ENABLED(CONFIG_HAVE_ARCH_STACKLEAK)) {
++ 		pr_err("XFAIL: stackleak is not enabled (CONFIG_GCC_PLUGIN_STACKLEAK=3D=
+n)\n");
++ 	} else {
++ 		pr_err("XFAIL: stackleak is not supported on this arch (HAVE_ARCH_STACK=
+LEAK=3Dn)\n");
++ 	}
++ }
++ #endif /* defined(CONFIG_GCC_PLUGIN_STACKLEAK) */
+ +static struct crashtype crashtypes[] =3D {
+ +	CRASHTYPE(STACKLEAK_ERASING),
+ +};
+ +
+ +struct crashtype_category stackleak_crashtypes =3D {
+ +	.crashtypes =3D crashtypes,
+ +	.len	    =3D ARRAY_SIZE(crashtypes),
+ +};
 
---Sig_/soev6gK5Yjbb8FVlyI=yQq/
+--Sig_/5Ha/EJ=CPT6QZVqs7X+t+uA
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJ4xZIACgkQAVBC80lX
-0GzH4wf8CfB5UhGgK1r0d7qDhleUR0fDcn55O+7IuMrIXIZfdlprqTBQMnR/pdNg
-JuM1PeDYrF1fHcH5mbwTMlv8GrBcGrM2pk50QQVAReCdsq12A6nX9YaWZ9wvmYUT
-Cwpz1dvIZ3kPqHcXYFgexwMct2K77D9TjPIIQfWP6Q2495bMam6f/ujmgDFvvKWX
-a4P44ozobnTFjb97dIhsoLAso6/Wv2Wr9VkzJ36LhfXZH2C224x/iiYI9Wdl+ziX
-U4CdS9wI38XvhLNxj24qdUja5zEvOFS6MCfPEfwo2lNbUX1j0NIwdiOO0PQ44fXI
-Rr9Thx+nyf5yg9mcg/oMITwDS1z3Iw==
-=aTeQ
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJ41pgACgkQAVBC80lX
+0GzSJQgAo2yWwRCvJeEsi5G+3VFHcO7Td3MoNPir3QwJtaxbswj46G40PP1rAJm3
+JWyB2bFnvhc1oVNGK+zkE1OM8r2CzBalcHKz9EtUyx4rjHN3Z6iWFBJu9sPm8uPz
+7Y/K3SIqT+/yD+XAbsqUcBi7T3/zL1G5ijaY7APWg0altdcSbjY9toI+xndrzZ+R
+pYIIneJ+n3DAVFeoRfk70aPzvb+sAZ0x6tauTXe/MOPujGy9JPe9srQiKVPQyPqa
+YGiwK1+9we7QlJDLj0XpFwIffoOubaykEfLj/YixCzWTg9yarJFqP3fGRxRVhJBM
+LXSNmB2V3yEqxXm6i90NrU0JuYuZHA==
+=LMbm
 -----END PGP SIGNATURE-----
 
---Sig_/soev6gK5Yjbb8FVlyI=yQq/--
+--Sig_/5Ha/EJ=CPT6QZVqs7X+t+uA--

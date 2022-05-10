@@ -2,82 +2,80 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50BBF521DBE
-	for <lists+linux-next@lfdr.de>; Tue, 10 May 2022 17:10:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 175B0521E09
+	for <lists+linux-next@lfdr.de>; Tue, 10 May 2022 17:18:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243296AbiEJPOD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 10 May 2022 11:14:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56842 "EHLO
+        id S1345575AbiEJPWw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 10 May 2022 11:22:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345278AbiEJPNl (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 10 May 2022 11:13:41 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45C9560D8A;
-        Tue, 10 May 2022 07:48:05 -0700 (PDT)
-Received: from mail-yw1-f178.google.com ([209.85.128.178]) by
- mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1M1q8m-1nmE9b2wTg-002GmE; Tue, 10 May 2022 16:42:59 +0200
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-2f7d7e3b5bfso182137287b3.5;
-        Tue, 10 May 2022 07:42:59 -0700 (PDT)
-X-Gm-Message-State: AOAM530FSQkAfD3GksMgAfQKJ8QmISIesRAaA6gDGKcnEOsIoQgIbDzT
-        HedQ7Z/s/0EwdBpX8SHgGNFzKLLcJ2vDoby70aY=
-X-Google-Smtp-Source: ABdhPJwxKQ6d9jt+Yv+entvJRKrKZC81R4C2ZX6MOezwKffIsRSzpa0gsgLnXqv21LvrFBjVwDYCHdd6/+Cbqv0pQEE=
-X-Received: by 2002:a0d:fc83:0:b0:2e5:b0f4:c125 with SMTP id
- m125-20020a0dfc83000000b002e5b0f4c125mr20662747ywf.347.1652193778427; Tue, 10
- May 2022 07:42:58 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220510094102.099d5e54@canb.auug.org.au> <5ca7ddc9-dfe6-a897-a0b7-09d04316cf28@linaro.org>
-In-Reply-To: <5ca7ddc9-dfe6-a897-a0b7-09d04316cf28@linaro.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 10 May 2022 16:42:41 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0N0EGGY7RQR2BBXk1RzUjRw9hwZmzYvKXjFb6M8kq3dw@mail.gmail.com>
-Message-ID: <CAK8P3a0N0EGGY7RQR2BBXk1RzUjRw9hwZmzYvKXjFb6M8kq3dw@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the mvebu tree with the arm-soc tree
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+        with ESMTP id S1346127AbiEJPWM (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 10 May 2022 11:22:12 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 244F234642;
+        Tue, 10 May 2022 08:05:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=zomQ09MasjYYPBWxQCtJv93X39Y9KJpEdOg9RwSYDXo=; b=OXoO3ZXIsd+8Ur5z4w2Pe9mL9y
+        kzudrLhCkjg0gpejSNFjq1vrobSB32LNCkDO8x6X1nmJORQwFkbzB5FiTYnRsYHbZbAtfhzSzJA9f
+        6ss8u2WraOGDeod93K8QHNDOoeS2e5ilpD+fbWLDxpktuAkZgAt+P2Z99cjvW4w6xmw+uXfcHfCIW
+        D37c0E0hE46wgZ5HI1IDYq5Z548fAUknoa9H5WNLc+eE2JPQqiHuO9CSrC/vZUhoao8wgdTeX368G
+        /b1FnO809d2VeEqy2nDWtAWAQcvDlzx1p67r8Q+JVCLZx/H7qEuVltTiZKUpPWjiCOm0WoF/Re3LF
+        KiEV25Yw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1noRPw-004YZz-TA; Tue, 10 May 2022 15:04:53 +0000
+Date:   Tue, 10 May 2022 16:04:52 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Filipe Manana <fdmanana@suse.com>
 Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        ARM <linux-arm-kernel@lists.infradead.org>,
+        David Sterba <dsterba@suse.cz>,
+        David Sterba <dsterba@suse.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Robert Marko <robert.marko@sartura.hr>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Andrew Lunn <andrew@lunn.ch>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:R6Xm9aZBPlwyzKuCdFzoEYooqetSZqIaYT2iTFlpfhtiM6jQks8
- qJN1V3fA90nLiU06sEnnPLPZsGeQwi8wUROd+haLYI8GzeoBJnyDFqCx5LIIj9R+NN/5ww2
- 4x1yDaxHvzoL/1a1OknZ5f2pQQm0hv0p8Hb/6zNEcL+4wV+nH3itWAJnJQVWf6GrUU71YaG
- msLmgpcvu1OLJyvIayAbg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:bsJ5p3zx7xU=:1qAoQCiLw33B/Ya6R62S9l
- PQfehRVmqyKAxu5BY8HOqbDNmwoEhQq7PCwCItkXUxeRTAdmTdFTChbC1jly5SN9/zgFl56BP
- A6u9UapKsOMiQcggiJQ+5DPYv3n57DH5mxMHyb8hCVLwToQGorK3w1RdZ+4vnhwnDIaIRoYUj
- CxmjafKAN5zkpYqtNp8GaLPX0P4dusH5QNfQ4Tv4+DEOhkZIvXKTx57SN0WXj1rZx5fhvlFCI
- TQw/aDd1lKCDIF3vDBakeo2vTTcrsaNA3bOXAbCXc7JQdXm/qYQhtmO5PxX7GP11kdOIOVH1/
- vZ5D1qY5cpFkcdUsX0sFVgK8j4zNFnKZ2+s5J7ZzuilUjcCV5t2R5CX80Udr6mEYjYr4vEoW2
- qegSeqGhxf19cTMcZJRbbTwHadgOtunzM5hsa6OR7xe1mSUe6KMdapjZV3l3+uLN/puHoGtQH
- QyrSERkvqFaltyiPs5e+WHAERVQG8GK6ylbhCRlszFzM1m7y2cPqe/1OFotsXJn9WAyjLGD1L
- ifbnTsdE7IAGak2Ct9U4XvSC+MFRFsCdbaU37IV+/ml+Q9fRchWc2yAzTe7XdfgzWQtZEC0DV
- KjRxP+npVObWi+d5RlCi6KxrcKQ6Qx8VnUXglZW1uCHTgrAjGUJrk/WUVW8nJPUXa0Qc13POG
- hqVtPeEn768cHmgl/+uybkQb7nz7+ioMkii1oQ9WRgA6k1CAeB4hwjIiLHRbXUTVAnQY=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the folio tree with the btrfs tree
+Message-ID: <Ynp/FDvASFnsVf13@casper.infradead.org>
+References: <20220510183908.7571cb73@canb.auug.org.au>
+ <55f4b515-1d1c-fd3e-0f93-4cda45261c91@suse.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <55f4b515-1d1c-fd3e-0f93-4cda45261c91@suse.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, May 10, 2022 at 3:59 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
-> On 10/05/2022 01:41, Stephen Rothwell wrote:
->
-> This conflict will come to you when Gregory sends Marvel SoC pull request.
->
-> The correct resolution is to take my commit 2f00bb4a69c7 ("arm64: dts:
-> marvell: align SPI NOR node name with dtschema"), so the node name
-> should be "flash", not "spi-flash".
+On Tue, May 10, 2022 at 10:43:07AM +0100, Filipe Manana wrote:
+> On 10/05/22 09:39, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > Today's linux-next merge of the folio tree got a conflict in:
+> > 
+> >   fs/btrfs/send.c
+> > 
+> > between commit:
+> > 
+> >   d1a1a97304b4 ("btrfs: send: keep the current inode open while processing it")
+> > 
+> > from the btrfs tree and commit:
+> > 
+> >   2ebdd1df3166 ("mm/readahead: Convert page_cache_async_readahead to take a folio")
+> > 
+> > from the folio tree.
+> > 
+> > I fixed it up (I think - see below) and can carry the fix as
+> 
+> Looks correct to me.
 
-Ok, thanks for the heads-up!
-
-       Arnd
+Me too.  The patch this one enables is rather sad.  It's yet another
+reminder that we suck at streaming workloads.  But until we fix that,
+don't you want to use invalidate_inode_pages2_range() rather than
+truncate_inode_pages_range()?  If your send conflicts with someone
+else's write(), you'll erase their write to the page cache.

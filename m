@@ -2,114 +2,106 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7418A520C24
-	for <lists+linux-next@lfdr.de>; Tue, 10 May 2022 05:37:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DF8F520C9F
+	for <lists+linux-next@lfdr.de>; Tue, 10 May 2022 06:18:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235451AbiEJDlQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 9 May 2022 23:41:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44830 "EHLO
+        id S236362AbiEJEVy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 10 May 2022 00:21:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235699AbiEJDlG (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 9 May 2022 23:41:06 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D533656C;
-        Mon,  9 May 2022 20:37:10 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id gj17-20020a17090b109100b001d8b390f77bso975663pjb.1;
-        Mon, 09 May 2022 20:37:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:references:cc:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding;
-        bh=Tuw5rwdDw674mRKOWTVNmxFb45NMy2jQBbhpZfnBSUw=;
-        b=YiFnFgxquAvcN9oAz4bKdkvIgiIB+a2cUP7hrsWWe9xQIDFp1zXiH07J5MVLpOKV/F
-         4/25W0/6ytNqxy3QYpPHcfhrYm8fbk4jtIa38qc/7YG8XgaO4w9kFZwmTxTO9O1aNc4v
-         EjGHqCZP6qg/s3Q+L/Yg4wze1XawIv1A28OydYVAtQr4qhhFmYw36rs67e3HT6AezUaN
-         uXXBqjOWSVnAUwgw6WjU0gW10lKfbhbF4aKFF5V4l5B3bvRlljJy1/KRTxsxlZ12Jw3x
-         C1qi6IhGu1Xg/QbTVzm+dPbsqsEow9KliIFgFZbD8z4XZKUQRxNzL5phc0oFNwUvTM49
-         WVVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:references:cc:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding;
-        bh=Tuw5rwdDw674mRKOWTVNmxFb45NMy2jQBbhpZfnBSUw=;
-        b=FGHc/vxmnBRetQTaaDV+EgAqfYzLs2v5THw/iGbJbSTE60GnMOR9GIgnZT7u1MDGxU
-         jOjqcxqb8nifPLuPFqO2Gcd0bRlct29mqkaGRlyf5F9jkiVmz7p8IUvbl5MkunHWGgYv
-         kBqfYOOVrNKd5zrmPb2hSjetgN6AFR6hp+DU9n4dJ5NzjOeoLSgtEhyCIBdOPOU8PjE/
-         h1uPDG+f62hmf1K76vlj2o2JSVE/e6xKzdkhFlsTW3mBVBGwzh2HaNUJU+L38oQzd5S3
-         Kck00fNpuBeHJ6J3M1JRTDFt0nxVATS+Ce6wF952QBUAb8POEDekHroM98ymIg3PeEeV
-         1B/w==
-X-Gm-Message-State: AOAM533/Kfy4zAUVPuN2CseE4jtoDvKz420LEQZV9JQODFSWv0ZA5mni
-        3x+S0dSuDH+UubhkUhIk7ZniX40gwjQ=
-X-Google-Smtp-Source: ABdhPJwK/iXQY2YYJRwx8AcP5nD0enihRlu5tvzOsqIZ7H1RA2DlLUk7LB1M8Zr7G0Yu4mvm8wVUFw==
-X-Received: by 2002:a17:90a:1f4f:b0:1d8:23d9:de1e with SMTP id y15-20020a17090a1f4f00b001d823d9de1emr21105172pjy.42.1652153829547;
-        Mon, 09 May 2022 20:37:09 -0700 (PDT)
-Received: from [10.1.1.24] (222-155-0-244-adsl.sparkbb.co.nz. [222.155.0.244])
-        by smtp.gmail.com with ESMTPSA id c5-20020a170903234500b0015e8d4eb1f6sm708896plh.64.2022.05.09.20.37.05
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 09 May 2022 20:37:08 -0700 (PDT)
+        with ESMTP id S236180AbiEJEUt (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 10 May 2022 00:20:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7894539173;
+        Mon,  9 May 2022 21:15:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EC267B81B0D;
+        Tue, 10 May 2022 04:15:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9156BC385C8;
+        Tue, 10 May 2022 04:15:49 +0000 (UTC)
+Message-ID: <798b6222-d21e-d6b7-8cea-afcd536f094f@linux-m68k.org>
+Date:   Tue, 10 May 2022 14:15:46 +1000
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
 Subject: Re: linux-next: manual merge of the m68knommu tree with the m68k tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Greg Ungerer <gerg@linux-m68k.org>,
+Content-Language: en-US
+To:     Michael Schmitz <schmitzmic@gmail.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
         Geert Uytterhoeven <geert@linux-m68k.org>
-References: <20220510094442.26826532@canb.auug.org.au>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-From:   Michael Schmitz <schmitzmic@gmail.com>
-Message-ID: <7bcb1248-7329-9aee-5d81-7e846cd1e461@gmail.com>
-Date:   Tue, 10 May 2022 15:37:03 +1200
-User-Agent: Mozilla/5.0 (X11; Linux ppc; rv:45.0) Gecko/20100101
- Icedove/45.4.0
-MIME-Version: 1.0
-In-Reply-To: <20220510094442.26826532@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220510094442.26826532@canb.auug.org.au>
+ <7bcb1248-7329-9aee-5d81-7e846cd1e461@gmail.com>
+From:   Greg Ungerer <gerg@linux-m68k.org>
+In-Reply-To: <7bcb1248-7329-9aee-5d81-7e846cd1e461@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+Hi Michael,
 
-apologies on my part - I had thought that I had copied in Greg on my 
-patch series. And I evidently missed that his ELF patch would have 
-clashed with mine.
+On 10/5/22 13:37, Michael Schmitz wrote:
+> Hi Stephen,
+> 
+> apologies on my part - I had thought that I had copied in Greg on my patch series. And I evidently missed that his ELF patch would have clashed with mine.
 
-Geert and Greg coordinate well as a rule, and both patches had been seen 
-on the linux-m68k mailing list (just too far apart to jog my memory).
-
-Won't happen again this decade (I hope).
-
-Cheers,
-
-	Michael
+You definitely did, I still have your patches in my inbox too :-)
 
 
-Am 10.05.2022 um 11:44 schrieb Stephen Rothwell:
-> Hi all,
->
-> Today's linux-next merge of the m68knommu tree got a conflict in:
->
->   arch/m68k/kernel/ptrace.c
->
-> between commit:
->
->   c862fe70b023 ("m68k: Wire up syscall_trace_enter/leave for m68k")
->
-> from the m68k tree and commit:
->
->   0d91043d8bdf ("m68knommu: implement minimal regset support")
->
-> from the m68knommu tree.
->
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->
+> Geert and Greg coordinate well as a rule, and both patches had been seen on the linux-m68k mailing list (just too far apart to jog my memory).
+
+Yeah, this was really an accident of timing between Geert applying your series
+to his for-next branch, and me applying the regset changes to my for-next
+branch.
+
+The two changes are quite distinct, but they overlap in location within
+ptrace.c file. The fixup patch is pretty strait forward, and Stephen has that
+right.
+
+Regards
+Greg
+
+
+
+> Won't happen again this decade (I hope).
+> 
+> Cheers,
+> 
+>      Michael
+> 
+> 
+> Am 10.05.2022 um 11:44 schrieb Stephen Rothwell:
+>> Hi all,
+>>
+>> Today's linux-next merge of the m68knommu tree got a conflict in:
+>>
+>>   arch/m68k/kernel/ptrace.c
+>>
+>> between commit:
+>>
+>>   c862fe70b023 ("m68k: Wire up syscall_trace_enter/leave for m68k")
+>>
+>> from the m68k tree and commit:
+>>
+>>   0d91043d8bdf ("m68knommu: implement minimal regset support")
+>>
+>> from the m68knommu tree.
+>>
+>> I fixed it up (see below) and can carry the fix as necessary. This
+>> is now fixed as far as linux-next is concerned, but any non trivial
+>> conflicts should be mentioned to your upstream maintainer when your tree
+>> is submitted for merging.  You may also want to consider cooperating
+>> with the maintainer of the conflicting tree to minimise any particularly
+>> complex conflicts.
+>>

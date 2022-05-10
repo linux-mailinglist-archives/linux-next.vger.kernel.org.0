@@ -2,45 +2,45 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 684D052155F
-	for <lists+linux-next@lfdr.de>; Tue, 10 May 2022 14:26:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AF1852158D
+	for <lists+linux-next@lfdr.de>; Tue, 10 May 2022 14:35:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241306AbiEJMaL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 10 May 2022 08:30:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37272 "EHLO
+        id S241050AbiEJMji (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 10 May 2022 08:39:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241318AbiEJMaI (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 10 May 2022 08:30:08 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF9116D4BC;
-        Tue, 10 May 2022 05:26:08 -0700 (PDT)
+        with ESMTP id S241848AbiEJMjg (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 10 May 2022 08:39:36 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E9A02B1640;
+        Tue, 10 May 2022 05:35:34 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KyHMJ38cxz4xXS;
-        Tue, 10 May 2022 22:26:04 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KyHZC5WCjz4xbN;
+        Tue, 10 May 2022 22:35:31 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1652185564;
-        bh=xFfKRkicEM6exIkb81xPoFhftB5Z/tdYHdSeBEndofw=;
+        s=201702; t=1652186132;
+        bh=MLWzkWE0Q+XzgwkdnYJywkMBFuvMtuO7i/ibU6SGfDo=;
         h=Date:From:To:Cc:Subject:From;
-        b=od9YBjg5qYWzXZGUTgNUeqqookvMyd5Rs9zDevTmNJqf4+a9mKCd1gEcdLwUXU/dm
-         c9Ee6RQX7AM8YhRlKoZqFLHcAfsIWHL3pEw+ZEFYBHdPpMCAuFHFiDqmtfgVb+VgUU
-         eL/BrZbXLSXGn+TOPeWFpCOlhI+9xN4TOI+fqtJi88qU8dg89TItmVq1DYY1YsH5dd
-         6gpg7iboY0B4ZImLOs7MIZygWluc1dqPG/fGKKyO22vgQOOxIaVn3Qf/odbK1iolux
-         ufHgC47Gy7BMnXbr/svrdlEfzdMzlc4eOJTEjvgc8YRFSf90IRsnY/aUx2QEIbOJOR
-         sLwr/A4l2aqZQ==
-Date:   Tue, 10 May 2022 22:26:03 +1000
+        b=VfHL2M6dK1qr2xB7cfAHy6zIG40UaooA2Nr4BQ0zRCE0fsXdkis0XiST1KqaH1AFv
+         VCA1osVkxA8/Sp90FDIwDZPYuRIfg0VPovqHoYzRS1wrnRQdeR5ABtks+LAKFRlQB2
+         BGIJ7qhBmjNVNJZTiWnFKlUkJweE6KLz536Hr6ZET7NjiPtn0v9rRZLBXVUQw5uwgI
+         pWLyog8f/42bnA3inytUYppBdWdKCPdGyQZLpMknTHvzwnQKotsCqWrPn2g/Rj0aKo
+         wtiFnFlASvSdBkvMFQE7MQjaG4QuU+qYcLKxcb5Se6PA+8W9S/4pCSCYk6HiUctc4H
+         SeHflxOUaGlSw==
+Date:   Tue, 10 May 2022 22:35:30 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Zev Weiss <zev@bewilderbeest.net>,
-        Denis Pauk <pauk.denis@gmail.com>,
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Chengming Zhou <zhouchengming@bytedance.com>,
+        Joel Savitz <jsavitz@redhat.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the hwmon-staging tree
-Message-ID: <20220510222603.0d675ce2@canb.auug.org.au>
+Subject: linux-next: manual merge of the akpm tree with the mm-hotfixes tree
+Message-ID: <20220510223530.67d9a27f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/LZSeDj+9=VIS2/G0KGzZcCM";
+Content-Type: multipart/signed; boundary="Sig_/aVcrujEU3rvicBxN0Eaj.x3";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
@@ -51,84 +51,51 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/LZSeDj+9=VIS2/G0KGzZcCM
+--Sig_/aVcrujEU3rvicBxN0Eaj.x3
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the hwmon-staging tree, today's linux-next build (powerpc
-allyesconfig) failed like this:
+Today's linux-next merge of the akpm tree got a conflict in:
 
-ld: drivers/hwmon/nct6775-platform.o: in function `.nct6775_wmi_reg_write':
-nct6775-platform.c:(.text.nct6775_wmi_reg_write+0x38): undefined reference =
-to `.nct6775_reg_is_word_sized'
-ld: drivers/hwmon/nct6775-platform.o: in function `.nct6775_wmi_reg_read':
-nct6775-platform.c:(.text.nct6775_wmi_reg_read+0x38): undefined reference t=
-o `.nct6775_reg_is_word_sized'
-ld: drivers/hwmon/nct6775-platform.o: in function `.nct6775_resume':
-nct6775-platform.c:(.text.nct6775_resume+0x61c): undefined reference to `.n=
-ct6775_reg_is_word_sized'
-ld: drivers/hwmon/nct6775-platform.o: in function `.nct6775_platform_probe':
-nct6775-platform.c:(.text.nct6775_platform_probe+0x14c): undefined referenc=
-e to `.nct6775_probe'
-ld: drivers/hwmon/nct6775-platform.o: in function `.nct6775_reg_read':
-nct6775-platform.c:(.text.nct6775_reg_read+0x5c): undefined reference to `.=
-nct6775_reg_is_word_sized'
-ld: drivers/hwmon/nct6775-platform.o: in function `.nct6775_reg_write':
-nct6775-platform.c:(.text.nct6775_reg_write+0x5c): undefined reference to `=
-.nct6775_reg_is_word_sized'
-ld: drivers/hwmon/nct6775-platform.o:(.data.rel.sensor_dev_attr_beep_enable=
-+0x28): undefined reference to `nct6775_show_beep'
-ld: drivers/hwmon/nct6775-platform.o:(.data.rel.sensor_dev_attr_beep_enable=
-+0x30): undefined reference to `nct6775_store_beep'
-ld: drivers/hwmon/nct6775-platform.o:(.data.rel.sensor_dev_attr_intrusion0_=
-alarm+0x28): undefined reference to `nct6775_show_alarm'
-ld: drivers/hwmon/nct6775-platform.o:(.data.rel.sensor_dev_attr_intrusion0_=
-beep+0x28): undefined reference to `nct6775_show_beep'
-ld: drivers/hwmon/nct6775-platform.o:(.data.rel.sensor_dev_attr_intrusion0_=
-beep+0x30): undefined reference to `nct6775_store_beep'
-ld: drivers/hwmon/nct6775-platform.o:(.data.rel.sensor_dev_attr_intrusion1_=
-alarm+0x28): undefined reference to `nct6775_show_alarm'
-ld: drivers/hwmon/nct6775-platform.o:(.data.rel.sensor_dev_attr_intrusion1_=
-beep+0x28): undefined reference to `nct6775_show_beep'
-ld: drivers/hwmon/nct6775-platform.o:(.data.rel.sensor_dev_attr_intrusion1_=
-beep+0x30): undefined reference to `nct6775_store_beep'
-ld: drivers/hwmon/nct6775-i2c.o: in function `.nct6775_i2c_read':
-nct6775-i2c.c:(.text.nct6775_i2c_read+0x108): undefined reference to `.nct6=
-775_reg_is_word_sized'
-ld: drivers/hwmon/nct6775-i2c.o: in function `.nct6775_i2c_probe':
-nct6775-i2c.c:(.text.nct6775_i2c_probe+0x134): undefined reference to `.nct=
-6775_probe'
+  tools/testing/selftests/vm/Makefile
 
-Probably caused by commit
+between commit:
 
-  a2105efee6e7 ("hwmon: (nct6775) Split core and platform driver")
+  e33ebf536f3e ("selftests: vm: Makefile: rename TARGETS to VMTARGETS")
 
-I have reverted that commit for today - and the following commits
+from the mm-hotfixes tree and patch:
 
-  4dcbcf34a249 ("hwmon: (nct6775) add ASUS PRO H410T / PRIME H410M-R / ROG =
-X570-E GAMING WIFI II")
-  58f1d9ebfce6 ("hwmon: (nct6775) Add i2c driver")
+  "kselftest/vm: override TARGETS from arguments"
+
+from the akpm tree.
+
+I fixed it up the obvious way and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/LZSeDj+9=VIS2/G0KGzZcCM
+--Sig_/aVcrujEU3rvicBxN0Eaj.x3
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJ6WdsACgkQAVBC80lX
-0Gxnbgf8DeH4ri0xSEjzqTkdAlLkOJTKpmQKtA8693I0kY8sYxTVbWBqqkwRotPl
-fZmotek3SavgJRo/3a6csiCZmXcaVrXD2JvktRO69Vm3W1GaVx8JJYLp7lp+SoOe
-WWRL9dPX5907KXILDZ1uJ0nG7JXybF/qp84OHK5XUNKxDt0v8hLfpz0ZABjk6ffp
-vuuGkP69ectDffz5St0r2uNM+Qs40JeNwNvReVZPnLEY2VxEcKDjLy5SxhXyVO5u
-e7W4gxVZtqQ7zJbDKZAaS+e0FoTagYwVE8W0/d3xEAiKVHUGNj8q1GvErcojBEje
-zdCNgeaDZnmN+01Ju9wTqBabxwIVsA==
-=M9LF
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJ6XBIACgkQAVBC80lX
+0GzvEQgAnc3P1NsJcmx90FSEyN4Bt9kdiHCK64Mrb0Q/Pw3sRdGglvI02hnvQ0mM
+fnPUuyo8yzLpUiq7T47xL4/Hsb1uQUfej4gTOnnq9rPvpOCAa9zr3UpkelKp6x96
+OYzD5hTBQNo1r8qZX/NxZkHFLRjtr4QNGHgvD4dAOt4ALpi9P4WkjF2gnnIAxw7N
+x8pJDMcqQkdkLIUtSYR2gDVXmR9uQZ8ec35xTrVa4TxCnhTjvU8s7xUXHpYzs7b6
+dVY/nsDgJotLPHqb8K6UNr5GNrRekybSXdXkVXADzDlz6dH1cWVLq/hQfrXTyU3E
+9ldmn+8Kx7SL8pBYOhhO/bYpeywFcg==
+=7Ooe
 -----END PGP SIGNATURE-----
 
---Sig_/LZSeDj+9=VIS2/G0KGzZcCM--
+--Sig_/aVcrujEU3rvicBxN0Eaj.x3--

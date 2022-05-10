@@ -2,146 +2,114 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D749520BB2
-	for <lists+linux-next@lfdr.de>; Tue, 10 May 2022 05:06:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7418A520C24
+	for <lists+linux-next@lfdr.de>; Tue, 10 May 2022 05:37:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235067AbiEJDKG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 9 May 2022 23:10:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55666 "EHLO
+        id S235451AbiEJDlQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 9 May 2022 23:41:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233370AbiEJDKF (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 9 May 2022 23:10:05 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9B17517DF;
-        Mon,  9 May 2022 20:06:04 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Ky2x30FVWz4xTX;
-        Tue, 10 May 2022 13:05:58 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1652151959;
-        bh=A1G4GSy0V0Cm3Vv6oTLpnNeT8n3BdkJrtvfBTJhZVvU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=THo5jTMknwC2YJqQqOtZXL6T+1rf9QmtFPiTct8ZZdpI59+drAPL5AorOp1LKHLKy
-         JnTQQKPIL7T6q3Ap24FUh8usOomM6WP7qtNiJk2YLApnZmPleKCEv5S4cNpYlBCp2U
-         tkPMBb+4M5cYCoRcQ2lhZ0oNU1xRhNAJQfKmc+klawbxmUE1SoFDnhr4q9ucFZxoyM
-         RdCO5zh7Dr+Bu6WKY9AqA9izlwwqffAaSRam2/UUJP2RDZgOOB8UkhkViIGR5p7K+J
-         P6p7S+Haym1wXfki77fv0f2NE3pXDUOGo8xC72coNmKSpFJT5EQxya7N+ib0bbQ+zm
-         1uJIOQrYCGAVg==
-Date:   Tue, 10 May 2022 13:05:56 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Taehee Yoo <ap420073@gmail.com>,
-        Martin Habets <habetsm.xilinx@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        with ESMTP id S235699AbiEJDlG (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 9 May 2022 23:41:06 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D533656C;
+        Mon,  9 May 2022 20:37:10 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id gj17-20020a17090b109100b001d8b390f77bso975663pjb.1;
+        Mon, 09 May 2022 20:37:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:references:cc:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding;
+        bh=Tuw5rwdDw674mRKOWTVNmxFb45NMy2jQBbhpZfnBSUw=;
+        b=YiFnFgxquAvcN9oAz4bKdkvIgiIB+a2cUP7hrsWWe9xQIDFp1zXiH07J5MVLpOKV/F
+         4/25W0/6ytNqxy3QYpPHcfhrYm8fbk4jtIa38qc/7YG8XgaO4w9kFZwmTxTO9O1aNc4v
+         EjGHqCZP6qg/s3Q+L/Yg4wze1XawIv1A28OydYVAtQr4qhhFmYw36rs67e3HT6AezUaN
+         uXXBqjOWSVnAUwgw6WjU0gW10lKfbhbF4aKFF5V4l5B3bvRlljJy1/KRTxsxlZ12Jw3x
+         C1qi6IhGu1Xg/QbTVzm+dPbsqsEow9KliIFgFZbD8z4XZKUQRxNzL5phc0oFNwUvTM49
+         WVVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:references:cc:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding;
+        bh=Tuw5rwdDw674mRKOWTVNmxFb45NMy2jQBbhpZfnBSUw=;
+        b=FGHc/vxmnBRetQTaaDV+EgAqfYzLs2v5THw/iGbJbSTE60GnMOR9GIgnZT7u1MDGxU
+         jOjqcxqb8nifPLuPFqO2Gcd0bRlct29mqkaGRlyf5F9jkiVmz7p8IUvbl5MkunHWGgYv
+         kBqfYOOVrNKd5zrmPb2hSjetgN6AFR6hp+DU9n4dJ5NzjOeoLSgtEhyCIBdOPOU8PjE/
+         h1uPDG+f62hmf1K76vlj2o2JSVE/e6xKzdkhFlsTW3mBVBGwzh2HaNUJU+L38oQzd5S3
+         Kck00fNpuBeHJ6J3M1JRTDFt0nxVATS+Ce6wF952QBUAb8POEDekHroM98ymIg3PeEeV
+         1B/w==
+X-Gm-Message-State: AOAM533/Kfy4zAUVPuN2CseE4jtoDvKz420LEQZV9JQODFSWv0ZA5mni
+        3x+S0dSuDH+UubhkUhIk7ZniX40gwjQ=
+X-Google-Smtp-Source: ABdhPJwK/iXQY2YYJRwx8AcP5nD0enihRlu5tvzOsqIZ7H1RA2DlLUk7LB1M8Zr7G0Yu4mvm8wVUFw==
+X-Received: by 2002:a17:90a:1f4f:b0:1d8:23d9:de1e with SMTP id y15-20020a17090a1f4f00b001d823d9de1emr21105172pjy.42.1652153829547;
+        Mon, 09 May 2022 20:37:09 -0700 (PDT)
+Received: from [10.1.1.24] (222-155-0-244-adsl.sparkbb.co.nz. [222.155.0.244])
+        by smtp.gmail.com with ESMTPSA id c5-20020a170903234500b0015e8d4eb1f6sm708896plh.64.2022.05.09.20.37.05
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 09 May 2022 20:37:08 -0700 (PDT)
+Subject: Re: linux-next: manual merge of the m68knommu tree with the m68k tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+References: <20220510094442.26826532@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the net-next tree
-Message-ID: <20220510130556.52598fe2@canb.auug.org.au>
+From:   Michael Schmitz <schmitzmic@gmail.com>
+Message-ID: <7bcb1248-7329-9aee-5d81-7e846cd1e461@gmail.com>
+Date:   Tue, 10 May 2022 15:37:03 +1200
+User-Agent: Mozilla/5.0 (X11; Linux ppc; rv:45.0) Gecko/20100101
+ Icedove/45.4.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/S5P4vjS+eFW2D4is1FV5ZOw";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220510094442.26826532@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/S5P4vjS+eFW2D4is1FV5ZOw
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Stephen,
 
-Hi all,
+apologies on my part - I had thought that I had copied in Greg on my 
+patch series. And I evidently missed that his ELF patch would have 
+clashed with mine.
 
-After merging the net-next tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+Geert and Greg coordinate well as a rule, and both patches had been seen 
+on the linux-m68k mailing list (just too far apart to jog my memory).
 
-drivers/net/ethernet/sfc/ptp.c:2191:35: error: 'efx_copy_channel' undeclare=
-d here (not in a function); did you mean 'efx_ptp_channel'?
- 2191 |         .copy                   =3D efx_copy_channel,
-      |                                   ^~~~~~~~~~~~~~~~
-      |                                   efx_ptp_channel
+Won't happen again this decade (I hope).
 
-Caused by commit
-
-  54fccfdd7c66 ("sfc: efx_default_channel_type APIs can be static")
-
-interacting with commit
-
-  49e6123c65da ("net: sfc: fix memory leak due to ptp channel")
-
-from the net tree.
-
-I have added the following merge fix patch.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Tue, 10 May 2022 12:56:18 +1000
-Subject: [PATCH] fix up for "net: sfc: fix memory leak due to ptp channel"
-
-This is a partial revert of
-
-  54fccfdd7c66 ("sfc: efx_default_channel_type APIs can be static")
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/net/ethernet/sfc/efx_channels.c | 1 -
- drivers/net/ethernet/sfc/efx_channels.h | 1 +
- 2 files changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/ethernet/sfc/efx_channels.c b/drivers/net/ethernet=
-/sfc/efx_channels.c
-index ec913f62790b..79df636d6df8 100644
---- a/drivers/net/ethernet/sfc/efx_channels.c
-+++ b/drivers/net/ethernet/sfc/efx_channels.c
-@@ -598,7 +598,6 @@ void efx_fini_channels(struct efx_nic *efx)
- /* Allocate and initialise a channel structure, copying parameters
-  * (but not resources) from an old channel structure.
-  */
--static
- struct efx_channel *efx_copy_channel(const struct efx_channel *old_channel)
- {
- 	struct efx_rx_queue *rx_queue;
-diff --git a/drivers/net/ethernet/sfc/efx_channels.h b/drivers/net/ethernet=
-/sfc/efx_channels.h
-index 64abb99a56b8..46b702648721 100644
---- a/drivers/net/ethernet/sfc/efx_channels.h
-+++ b/drivers/net/ethernet/sfc/efx_channels.h
-@@ -39,6 +39,7 @@ int efx_set_channels(struct efx_nic *efx);
- void efx_remove_channel(struct efx_channel *channel);
- void efx_remove_channels(struct efx_nic *efx);
- void efx_fini_channels(struct efx_nic *efx);
-+struct efx_channel *efx_copy_channel(const struct efx_channel *old_channel=
-);
- void efx_start_channels(struct efx_nic *efx);
- void efx_stop_channels(struct efx_nic *efx);
-=20
---=20
-2.35.1
-
---=20
 Cheers,
-Stephen Rothwell
 
---Sig_/S5P4vjS+eFW2D4is1FV5ZOw
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+	Michael
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJ51pUACgkQAVBC80lX
-0GzvHwf9EXy4w+uGpo0tk+2WihFJ/UZdyu+oOvJ7oTwzstQeXxhGeVKmVEy4PQHB
-ZH8eGfJkOB7STfEWjndNAKeTBJcd6zuOVNZIj9Wtyylrh4CbI8YZS4tqxLvwVbFp
-UvtZAbxTIzbjq7BQls/I4Xa3O5XB4XMj3KZE2W+ZSm3XYAVlhJkQwnylbReg8PeK
-6InMQkZ4mHjkn2AerjPUkAHMn8uC1vNNJcU/9ctl2NVhaaGk19z5P1RqXJATpO70
-dysS0c2OeWuDpL876/FO1fqVnEgc2wCqV/vgHsxkeCUXvQq87aCR8IyPCWlYfG0P
-Y9ufcIfmk5IMIe1PezKD6N1O+AQZvA==
-=7VI9
------END PGP SIGNATURE-----
-
---Sig_/S5P4vjS+eFW2D4is1FV5ZOw--
+Am 10.05.2022 um 11:44 schrieb Stephen Rothwell:
+> Hi all,
+>
+> Today's linux-next merge of the m68knommu tree got a conflict in:
+>
+>   arch/m68k/kernel/ptrace.c
+>
+> between commit:
+>
+>   c862fe70b023 ("m68k: Wire up syscall_trace_enter/leave for m68k")
+>
+> from the m68k tree and commit:
+>
+>   0d91043d8bdf ("m68knommu: implement minimal regset support")
+>
+> from the m68knommu tree.
+>
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>

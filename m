@@ -2,55 +2,119 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C45BE5235C4
-	for <lists+linux-next@lfdr.de>; Wed, 11 May 2022 16:40:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F7595237E0
+	for <lists+linux-next@lfdr.de>; Wed, 11 May 2022 17:57:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229622AbiEKOki (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 11 May 2022 10:40:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51258 "EHLO
+        id S1344183AbiEKP5A (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 11 May 2022 11:57:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbiEKOkh (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 11 May 2022 10:40:37 -0400
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCCF96CA80;
-        Wed, 11 May 2022 07:40:36 -0700 (PDT)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 63DE168CFE; Wed, 11 May 2022 16:40:33 +0200 (CEST)
-Date:   Wed, 11 May 2022 16:40:33 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Christoph Hellwig <hch@lst.de>, Conor.Dooley@microchip.com,
-        sfr@canb.auug.org.au, linux-next@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: linux-next: Tree for May 3
-Message-ID: <20220511144033.GA1478@lst.de>
-References: <dd946220-eaf6-773a-06b4-307cda466c9c@microchip.com> <505d41d1-1bc8-c8bc-5ebb-8a2b7934f3de@microchip.com> <20220511062232.GA32524@lst.de> <102578f2-5c10-e9c2-c1ef-e76ba90d011e@microchip.com> <20220511064832.GA761@lst.de> <2c0e2fbe-4e45-4acc-c2a7-4f4dcf9161a3@microchip.com> <20220511123724.GA25121@lst.de> <YnvDdPz4S5IJ7l/5@kernel.org> <20220511141034.GA31732@lst.de> <YnvKPu5uQ8rqEcvV@kernel.org>
+        with ESMTP id S229783AbiEKP5A (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 11 May 2022 11:57:00 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 816E72E9D7
+        for <linux-next@vger.kernel.org>; Wed, 11 May 2022 08:56:58 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-2f7d7e3b5bfso26354867b3.5
+        for <linux-next@vger.kernel.org>; Wed, 11 May 2022 08:56:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=tMbUWE6GUv1nmWn5jY/d3TbzjqfiRal7mnHyl6mSSAY=;
+        b=KaGFtloNmAoNwJfWR5TNS23GuxmZdqJRVen/7BY9wcaeCroaDVyBsrIpdbO9uKT+ac
+         XWYRXQ8edgM5QIiVJ4UGKY00foAZTP1Pq8C50boOAvll3mKwxqJarpcfvi3N5v9fci6I
+         SPS14F+aRRHEwYEI+K0QNKkypvWJ8GiUPZzS8qPrZUtolninNqTBdJ0Swbo5p8IVyb7P
+         TCZmiQmARQkeyYYY5rwXrYaj4LExgxbY70aGIT6PSfMEG+w8u3b277fAayMrHLcBMa3B
+         YZMh8vVKLrvqL1tkejKXZEycIX6WxkIFEUCr9TrQXoP+t6AFk1IJUnXo2TcDLLxo09pq
+         44Zw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=tMbUWE6GUv1nmWn5jY/d3TbzjqfiRal7mnHyl6mSSAY=;
+        b=d5gRMuuAexA7cdJu4tW1jjdVFqFs2s5EFVpDkfaLPYBtr7n/gRnMZF/avkOyc7fSUc
+         qRg22PHpcsPBy8Sc4PKt45RPZghTM9fH22eW1PqRzEMaBbeSvqwWrlEk2TnZC00a+7B9
+         Zff2E73diaqLmhdTLV//uOM+S5PfzsgIM2JAHjOR6/BUNPdOF1ULwW0g4ar5ibfgsmwI
+         U7w/0NPwChkG43oYqotfqrMzS/9swWqLWviXfWDoBzCt7VY4hh3BugWXSqCv0EV6LieF
+         sfqFQM6Fj/unaiwFMKndU/HTloJsFXQ+q9pI5N0wi10wHogcl93Q6gvOvo7xooEpQwJB
+         jQzw==
+X-Gm-Message-State: AOAM532R/Fm9g4evxqnSRN/dRChZ1oR/SEOIjTeWPiv7HrLlYKduy+oP
+        gvaAfCMSlmiJ5+aoqcUOAvspPY7nYEOJnr06jn5CWXeHPFI0AQ==
+X-Google-Smtp-Source: ABdhPJwfiCk+4rp6a194iwdP+jNLBhayr3fsevneoNtL9o8x2f3f80taDnfHY+cFI2s/+XLcOt34GlbnTgv+Bez/bYc=
+X-Received: by 2002:a0d:d88c:0:b0:2f7:bb41:1bd0 with SMTP id
+ a134-20020a0dd88c000000b002f7bb411bd0mr25320456ywe.199.1652284616800; Wed, 11
+ May 2022 08:56:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YnvKPu5uQ8rqEcvV@kernel.org>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 11 May 2022 21:26:45 +0530
+Message-ID: <CA+G9fYtS5fXzbODO3+Rz7VE4VvjY_1c99Da5UhruXi16jcVGbw@mail.gmail.com>
+Subject: [next] sh: hugetlb.h:27:1: error: no return statement in function
+ returning non-void [-Werror=return-type]
+To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>, lkft-triage@lists.linaro.org
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Xu <peterx@redhat.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        David Hildenbrand <david@redhat.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jerome Glisse <jglisse@redhat.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, May 11, 2022 at 05:37:50PM +0300, Mike Rapoport wrote:
-> Presuming that devices see [0x1000200000-0x103fffffff] as
-> [0x200000-0x3fffffff] we may try something like
-> 
-> 	min = memblock_start_of_DRAM();
-> 	max = min + 0xffffffff;
-> 
-> 	if (flags & SWIOTLB_ANY)
-> 		max = MEMBLOCK_ALLOC_ACCESSIBLE;
-> 
-> 	tlb = memblock_alloc_try_nid(bytes, PAGE_SIZE, min, max, NUMA_NO_NODE);
+Following build regressions were noticed on sh builds on linux next-20220511
+with gcc-11, gcc-10, gcc-9 and gcc-8.
 
-While there is still no guarantee the first 32-bits worth of DRAM
-are actually mapped to a usable address, this looks like a much better
-default than what we have right now.
+Regressions found on sh:
+
+   - gcc-11-microdev_defconfig
+   - gcc-11-shx3_defconfig
+   - gcc-8-defconfig
+   - gcc-9-shx3_defconfig
+   - gcc-8-dreamcast_defconfig
+   - gcc-10-defconfig
+   - gcc-10-microdev_defconfig
+   - gcc-8-shx3_defconfig
+   - gcc-8-microdev_defconfig
+   - gcc-11-dreamcast_defconfig
+   - gcc-9-microdev_defconfig
+   - gcc-10-dreamcast_defconfig
+   - gcc-11-defconfig
+   - gcc-10-shx3_defconfig
+   - gcc-9-defconfig
+   - gcc-9-dreamcast_defconfig
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+In file included from include/linux/hugetlb.h:757,
+                 from mm/filemap.c:36:
+arch/sh/include/asm/hugetlb.h: In function 'huge_ptep_clear_flush':
+arch/sh/include/asm/hugetlb.h:27:1: error: no return statement in
+function returning non-void [-Werror=return-type]
+   27 | }
+      | ^
+cc1: some warnings being treated as errors
+make[2]: *** [scripts/Makefile.build:295: mm/filemap.o] Error 1
+
+
+Build url: https://builds.tuxbuild.com/291BWxg5eELaKSwUXNLIqh5w1k3/
+
+
+--
+Linaro LKFT
+https://lkft.linaro.org

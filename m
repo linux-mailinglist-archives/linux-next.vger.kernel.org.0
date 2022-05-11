@@ -2,85 +2,91 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B55A0523CAD
-	for <lists+linux-next@lfdr.de>; Wed, 11 May 2022 20:37:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A00052410A
+	for <lists+linux-next@lfdr.de>; Thu, 12 May 2022 01:28:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344294AbiEKShr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 11 May 2022 14:37:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47854 "EHLO
+        id S245183AbiEKX20 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 11 May 2022 19:28:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240757AbiEKShn (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 11 May 2022 14:37:43 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 109A64B1F2;
-        Wed, 11 May 2022 11:37:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=BI1saOr2o22TYZFAvLdljrzElw0LGv3iZn79hoIGbjg=; b=ah5Z5rQNhZ9sru+uOjYIakHJc+
-        cLY2PYPEMQX5zK5sh1iuPa/YWz7lt/vvJRj7gdUK+pntmccrtePyZB0sbCu75482aO8mhch+n/or/
-        CZ2I2UPDYdIMyTaGWQAiQc6fq3gejE97zLCSIEfAZbhuOgyuE2XBgg31a5YJm+8eOkKyq2FPtAY0e
-        FQSHiOUtj7JRIhCRQGBTSDc2ipk0KwYcbRZj7mbIxmeid5ccdtnNVP2prkflVuhOHGuoas+pUHSXX
-        qi6bmqD7nqmDVvLD2+2ohDoPmmnHFP1TRa3lW3bKPnboDBTQ3hR3OnEL3hjuqoiaHeUakkQQBbWvl
-        KiUrzLug==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1norDA-005gSg-4q; Wed, 11 May 2022 18:37:24 +0000
-Date:   Wed, 11 May 2022 19:37:24 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>
-Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>, lkft-triage@lists.linaro.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Xu <peterx@redhat.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        David Hildenbrand <david@redhat.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jerome Glisse <jglisse@redhat.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [next] sh: hugetlb.h:27:1: error: no return statement in
- function returning non-void [-Werror=return-type]
-Message-ID: <YnwCZMldIQiQUrKt@casper.infradead.org>
-References: <CA+G9fYtS5fXzbODO3+Rz7VE4VvjY_1c99Da5UhruXi16jcVGbw@mail.gmail.com>
+        with ESMTP id S1349336AbiEKX2J (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 11 May 2022 19:28:09 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 265D720CA65;
+        Wed, 11 May 2022 16:28:06 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KzB0g1Hm9z4xXS;
+        Thu, 12 May 2022 09:28:02 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1652311683;
+        bh=F4a8cFIWYBgLdrztn/8QlwsOJpA1TPC1PSpSLZ/gjpY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=dCrsTU93W0iKh2tyyFdN5bgrKOsBsOnHxFo/+FAz0eFJ6LskoE1oFLGKmzZF05oA9
+         Cxg4XShhGXh3iM6SpCZr9v3dbaYwBDR5UUpkvTi8ujoRBddTdW31mZpiDbGCzmG1cF
+         nlzfzKx60DPeED8Gytr48pR57QodX4oBE2GSI2y/WcyFuX+4EVHmUFAyHvjB1XYQJs
+         pqYW4OwLbaZHTxCPSkOrtYpHDG6iJVIxfFYTDLM5i40kL1WnATiCJslj4sPxr6MTwr
+         yZdPrReY7z6Q1lDeuXGU5xkq15UeLStOkc6kXMEzow8cnQXx7n/7Ja8yoUDf9bfHsk
+         Jz78kM/EToY3A==
+Date:   Thu, 12 May 2022 09:28:01 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the mm tree
+Message-ID: <20220512092801.1e6b146a@canb.auug.org.au>
+In-Reply-To: <0009a4cd-2826-e8be-e671-f050d4f18d5d@linux.alibaba.com>
+References: <20220511181531.7f27a5c1@canb.auug.org.au>
+        <0009a4cd-2826-e8be-e671-f050d4f18d5d@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYtS5fXzbODO3+Rz7VE4VvjY_1c99Da5UhruXi16jcVGbw@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/FnK09nfmWQXADwUYmVdoIlO";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, May 11, 2022 at 09:26:45PM +0530, Naresh Kamboju wrote:
-> arch/sh/include/asm/hugetlb.h: In function 'huge_ptep_clear_flush':
-> arch/sh/include/asm/hugetlb.h:27:1: error: no return statement in
-> function returning non-void [-Werror=return-type]
->    27 | }
->       | ^
-> cc1: some warnings being treated as errors
+--Sig_/FnK09nfmWQXADwUYmVdoIlO
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-It's easy enough to figure out whose patch this was.
+Hi Baolin,
 
-$ git log -p next-20220511 arch/sh/include/asm/hugetlb.h
+On Wed, 11 May 2022 16:42:17 +0800 Baolin Wang <baolin.wang@linux.alibaba.c=
+om> wrote:
+>
+> Sorry again. I think I also missed other ARCHs' changes. Need include bel=
+ow fixes.
 
-commit 083af99303b9
-Author: Baolin Wang <baolin.wang@linux.alibaba.com>
-Date:   Tue May 10 17:47:33 2022 -0700
+I will add that to my fix up patch today (unless Andrew does a new
+release).
 
-    mm: change huge_ptep_clear_flush() to return the original pte
+Thanks.
+--=20
+Cheers,
+Stephen Rothwell
 
-You don't have to spray everybody who's ever touched the MM with email.
+--Sig_/FnK09nfmWQXADwUYmVdoIlO
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJ8RoEACgkQAVBC80lX
+0GwDvgf/YtjLd8xr7DxcW+LjsclqkCxwKvu9bXoI1lJ/obw4XJDlLxUurvQpWrMY
+Cku5dU/dMmWZRIiKAdretcr+YcCK3BPp+HygCd6GQk19+zxFoboELW8H+ltdq9Gy
+PRJ7yDx9I5fV7Nh/crE8CNcUjl86MYHReVpWkt1GaNZW/ClaasRpdTvMqIaUXEgp
+/u5Q5s4UO6/RdK09pArp+16CMxb2vX1AddaJ6X+Phan5zYEOiWO4I/e+jl7TzJI5
+PFA7g64fBuz8PT/uhcfQVFGGTqqyYkvazb3hGQZP6Ft1iR75QYm+VLyfxCtBSnSj
+hMotFTarZe3XprVnYbbWrEawjpyc8A==
+=V2oW
+-----END PGP SIGNATURE-----
+
+--Sig_/FnK09nfmWQXADwUYmVdoIlO--

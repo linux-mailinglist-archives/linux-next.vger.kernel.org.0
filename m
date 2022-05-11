@@ -2,24 +2,24 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38D0D522E50
-	for <lists+linux-next@lfdr.de>; Wed, 11 May 2022 10:26:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95AE2522E97
+	for <lists+linux-next@lfdr.de>; Wed, 11 May 2022 10:42:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234522AbiEKI0q (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 11 May 2022 04:26:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38496 "EHLO
+        id S244120AbiEKImM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 11 May 2022 04:42:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232959AbiEKI0k (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 11 May 2022 04:26:40 -0400
-Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 147104FC65;
-        Wed, 11 May 2022 01:26:33 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0VCvRsTk_1652257590;
-Received: from 30.30.99.144(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VCvRsTk_1652257590)
+        with ESMTP id S244061AbiEKIlo (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 11 May 2022 04:41:44 -0400
+Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BCFC644D5;
+        Wed, 11 May 2022 01:41:41 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0VCvCvO-_1652258498;
+Received: from 30.30.99.144(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VCvCvO-_1652258498)
           by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 11 May 2022 16:26:31 +0800
-Message-ID: <c87d88dc-6d99-9fbb-4d1b-f7a5a62a7ef4@linux.alibaba.com>
-Date:   Wed, 11 May 2022 16:27:09 +0800
+          Wed, 11 May 2022 16:41:39 +0800
+Message-ID: <0009a4cd-2826-e8be-e671-f050d4f18d5d@linux.alibaba.com>
+Date:   Wed, 11 May 2022 16:42:17 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
@@ -43,7 +43,7 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+
 
 On 5/11/2022 4:15 PM, Stephen Rothwell wrote:
 > Hi all,
@@ -72,8 +72,64 @@ On 5/11/2022 4:15 PM, Stephen Rothwell wrote:
 > 
 > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 
-Sorry for my mistake. LGTM.
-Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+Sorry again. I think I also missed other ARCHs' changes. Need include 
+below fixes.
+
+diff --git a/arch/ia64/include/asm/hugetlb.h 
+b/arch/ia64/include/asm/hugetlb.h
+index 65d3811..026ead4 100644
+--- a/arch/ia64/include/asm/hugetlb.h
++++ b/arch/ia64/include/asm/hugetlb.h
+@@ -26,6 +26,7 @@ static inline int is_hugepage_only_range(struct 
+mm_struct *mm,
+  static inline pte_t huge_ptep_clear_flush(struct vm_area_struct *vma,
+                                           unsigned long addr, pte_t *ptep)
+  {
++       return *ptep;
+  }
+
+  #include <asm-generic/hugetlb.h>
+diff --git a/arch/parisc/include/asm/hugetlb.h 
+b/arch/parisc/include/asm/hugetlb.h
+index 25bc560..f7f078c 100644
+--- a/arch/parisc/include/asm/hugetlb.h
++++ b/arch/parisc/include/asm/hugetlb.h
+@@ -31,6 +31,7 @@ static inline int prepare_hugepage_range(struct file 
+*file,
+  static inline pte_t huge_ptep_clear_flush(struct vm_area_struct *vma,
+                                           unsigned long addr, pte_t *ptep)
+  {
++       return *ptep;
+  }
+
+  #define __HAVE_ARCH_HUGE_PTEP_SET_WRPROTECT
+diff --git a/arch/sh/include/asm/hugetlb.h b/arch/sh/include/asm/hugetlb.h
+index e727cc9..4d3ba39 100644
+--- a/arch/sh/include/asm/hugetlb.h
++++ b/arch/sh/include/asm/hugetlb.h
+@@ -24,6 +24,7 @@ static inline int prepare_hugepage_range(struct file 
+*file,
+  static inline pte_t huge_ptep_clear_flush(struct vm_area_struct *vma,
+                                           unsigned long addr, pte_t *ptep)
+  {
++       return *ptep;
+  }
+
+  static inline void arch_clear_hugepage_flags(struct page *page)
+diff --git a/arch/sparc/include/asm/hugetlb.h 
+b/arch/sparc/include/asm/hugetlb.h
+index b50aa6f..0a26cca 100644
+--- a/arch/sparc/include/asm/hugetlb.h
++++ b/arch/sparc/include/asm/hugetlb.h
+@@ -24,6 +24,7 @@ pte_t huge_ptep_get_and_clear(struct mm_struct *mm, 
+unsigned long addr,
+  static inline pte_t huge_ptep_clear_flush(struct vm_area_struct *vma,
+                                           unsigned long addr, pte_t *ptep)
+  {
++       return *ptep;
+  }
+
+  #define __HAVE_ARCH_HUGE_PTEP_SET_WRPROTECT
 
 > ---
 >   arch/sparc/include/asm/hugetlb.h | 1 +

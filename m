@@ -2,107 +2,112 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CEAE5228A9
-	for <lists+linux-next@lfdr.de>; Wed, 11 May 2022 03:10:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F0AB5229ED
+	for <lists+linux-next@lfdr.de>; Wed, 11 May 2022 04:47:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239982AbiEKBKW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 10 May 2022 21:10:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46108 "EHLO
+        id S238048AbiEKCrW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 10 May 2022 22:47:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239940AbiEKBKV (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 10 May 2022 21:10:21 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE8B21553E;
-        Tue, 10 May 2022 18:10:19 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KycK145GZz4xR1;
-        Wed, 11 May 2022 11:10:13 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1652231415;
-        bh=/50pI0KRJ589VMgCiJQAiMLEFbliv21CbjUjnNtZiPA=;
-        h=Date:From:To:Cc:Subject:From;
-        b=C1IctHzFNLEjbF+bo+9BwpBiCrwgjM17YB1Yzpxy0/enrkLyxo6VE3N4aTH6O5/5I
-         6DjLWSL2xFeat8Y2Eg+vxYa8YEqmrW7bD+BnMmR//LcpwKFH1wiU+W7s0KphUsurjn
-         nMyS21z4lt7wF37XTDXOswFcBpBFI6WoW4IPAMXWKSRDG+uoWw2agLnPPcEzrrA8pq
-         swathpHuVvjWHsHclj5UabQsFpoRacZ85S3/6xjPBWn+EE8nLQRCbDr3ePTU5BrsPT
-         P132Y9k7sgY2w6GNQYMMI/0G4btU45S66OmDSmaWjMokl160X65B87+4Ykm+5QbAGK
-         zmFazGykk+qAA==
-Date:   Wed, 11 May 2022 11:10:12 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        David Miller <davem@davemloft.net>
-Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Tonghao Zhang <xiangxia.m.yue@gmail.com>
-Subject: linux-next: manual merge of the bpf-next tree with the net-next
- tree
-Message-ID: <20220511111012.22c08135@canb.auug.org.au>
+        with ESMTP id S242980AbiEKCjB (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 10 May 2022 22:39:01 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DF7820F4C4
+        for <linux-next@vger.kernel.org>; Tue, 10 May 2022 19:39:00 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id m12so552179plb.4
+        for <linux-next@vger.kernel.org>; Tue, 10 May 2022 19:39:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=XdwUILghIFnaQ4lSsZT1htaVoKumfQMYT3jqJYosKNA=;
+        b=i5c1+zS+FSpwrUaNVuDvQTY0xFvyrmvn5873w+h5Yj2cfxoceGhQ9egJQXtEAs9rxF
+         SP03CINEoRY8mK7VWPjxN70Wv5Lp1yixqUYQ0YE5+e01wvqNCd4vV4fJIus9yKqpPPwD
+         sFsdpKTjUbc53RxTg87IbakyNXYAVh0C7lKaGYdhBApe/5gzuj9cWFnBSyEhaKAxIF/z
+         s1QVUGBuUBGmgL89jCX5tDMhFiQolH9b18S5ZRFKDPoqmKqalQ64tPXTh8vut68A3SIu
+         fTcBKyVXHT2DAG+VPe4hU6VsbptPp+RlC2joZfwEqT0DlsCFYsoXfvk5kSJ+yiEGDLBt
+         uErQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=XdwUILghIFnaQ4lSsZT1htaVoKumfQMYT3jqJYosKNA=;
+        b=zQu6CI4lFf9qDXVsYXisxP8makodIUUjNUc2Lz4pSlfVVUwQToo8MLOqGoDYwGD4PM
+         f+z8eEtciEv/f8kokqq021NImWYKt2EARuWP61rsksuZsxgLVsFa8Xq8Q7GjFSP5PXMg
+         uXZiX6azf1PtS5bdlJLfLk9YF7xjQ41KGQrUvheJ0T4Lb53Bbn99XJADMYr1ojnrat8I
+         d0obshwdSJXon519s4boXyFSz3xInAIFHdk6dHph37IGv45pS1KUJ/j1noT4loh+MNhA
+         rnHGtuAqlgEpI6yU0quVFxRKDkCdMOt7IWN5EtUDeLEzoI9ALHFy+z2UYY0R1Fiqxa2n
+         F78Q==
+X-Gm-Message-State: AOAM531QbVDJwi3skazrSV17h8z2s9Us2N8BBoJOYhyFQMVfxGE7XvFX
+        IAXFTSVpFnt78Sh8ddhjwIgksg==
+X-Google-Smtp-Source: ABdhPJxKKz513DNbIu55JU7Xrut5nX2qxvbofXieCTjFOhYRH+R7Xokop4Uj//+7mhnxyME5ZhVdKQ==
+X-Received: by 2002:a17:902:d4c2:b0:15e:abd0:926f with SMTP id o2-20020a170902d4c200b0015eabd0926fmr23607731plg.129.1652236739734;
+        Tue, 10 May 2022 19:38:59 -0700 (PDT)
+Received: from [10.70.253.117] ([139.177.225.250])
+        by smtp.gmail.com with ESMTPSA id bj10-20020a170902850a00b0015e8d4eb20fsm336783plb.89.2022.05.10.19.38.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 May 2022 19:38:59 -0700 (PDT)
+Message-ID: <41a1d78a-3446-0c94-ed8a-0c383a2c010e@bytedance.com>
+Date:   Wed, 11 May 2022 10:38:54 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/+e5uSlANdXi62TvsRbQbd.C";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.8.1
+Subject: Re: [External] Re: linux-next: manual merge of the akpm tree with the
+ mm-hotfixes tree
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Joel Savitz <jsavitz@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20220510223530.67d9a27f@canb.auug.org.au>
+ <20220510095608.41b0f63a41a5e7f76c1fa187@linux-foundation.org>
+ <20220511083542.7f175f4b@canb.auug.org.au>
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+In-Reply-To: <20220511083542.7f175f4b@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/+e5uSlANdXi62TvsRbQbd.C
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 2022/5/11 06:35, Stephen Rothwell wrote:
+> Hi Andrew,
+> 
+> On Tue, 10 May 2022 09:56:08 -0700 Andrew Morton <akpm@linux-foundation.org> wrote:
+>>
+>> On Tue, 10 May 2022 22:35:30 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>>
+>>> Today's linux-next merge of the akpm tree got a conflict in:
+>>>
+>>>   tools/testing/selftests/vm/Makefile
+>>>
+>>> between commit:
+>>>
+>>>   e33ebf536f3e ("selftests: vm: Makefile: rename TARGETS to VMTARGETS")
+>>>
+>>> from the mm-hotfixes tree and patch:
+>>>
+>>>   "kselftest/vm: override TARGETS from arguments"
+>>>
+>>> from the akpm tree.  
+>>
+>> Thanks.  Let's just drop
+>> kselftest-vm-override-targets-from-arguments.patch for now - a new
+>> version is in the works.
+> 
+> OK, done.
+> 
 
-Hi all,
+I just pulled akpm and linux-next tree, saw that you have fixed the conflict
+in the commit 526a655c5849 ("kselftest/vm: override TARGETS from arguments").
 
-Today's linux-next merge of the bpf-next tree got a conflict in:
+It looks good to me, so I should have nothing to do.
 
-  net/core/sysctl_net_core.c
-
-between commits:
-
-  bd8a53675c0d ("net: sysctl: use shared sysctl macro")
-  4c7f24f857c7 ("net: sysctl: introduce sysctl SYSCTL_THREE")
-
-from the net-next tree and commit:
-
-  f922c8972fb5 ("net: sysctl: Use SYSCTL_TWO instead of &two")
-
-from the bpf-next tree.
-
-I fixed it up (bd8a53675c0d and f922c8972fb5 delete the same line) and
-can carry the fix as necessary. This is now fixed as far as linux-next
-is concerned, but any non trivial conflicts should be mentioned to your
-upstream maintainer when your tree is submitted for merging.  You may
-also want to consider cooperating with the maintainer of the conflicting
-tree to minimise any particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/+e5uSlANdXi62TvsRbQbd.C
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJ7DPQACgkQAVBC80lX
-0Gx1wQgAi7w6IumhPsHFhfGCD8bYRT3RWZ9nARJ/Fcq+05mEqjAo9UNWWw8uOZsH
-cUVBaDEXzgaD/LeH2T1bNYpFz9XF8kZzWpcWes4Zd7Ezl3sca3LaPXDPVC0I328y
-JBH6NJsVkvSctusAinAvBVwa6AYIN7n+NjIPLxkKvjXNtOBiSP22pz2p4BoVH7Vp
-hR5WoRizcb3AmICnekeHyJIX5x9CNJEB4t9UD83eEQTHG+rWnn3c1zTikUU1BCMW
-Yxkk6L5KzCMFYTh4uiLXHZwisZE8XFVXlWJIlHWPBRqNEyh3kNFYq1iBrTE8ANxr
-r1RPBL/zQps1b7upUbLNxQvNALaGtA==
-=gbic
------END PGP SIGNATURE-----
-
---Sig_/+e5uSlANdXi62TvsRbQbd.C--
+Thanks.

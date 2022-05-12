@@ -2,98 +2,139 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6795C524D84
-	for <lists+linux-next@lfdr.de>; Thu, 12 May 2022 14:51:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA2D1524E43
+	for <lists+linux-next@lfdr.de>; Thu, 12 May 2022 15:28:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243538AbiELMvN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 12 May 2022 08:51:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44350 "EHLO
+        id S1354396AbiELN21 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 12 May 2022 09:28:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352089AbiELMvM (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 12 May 2022 08:51:12 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 049EE3ED3D;
-        Thu, 12 May 2022 05:51:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=WSIXDWoWhUX8n7imNCPH8e48agYhT4xUKD1pQ6vTWU8=; b=ljjOYQwaLTm69ZjncJWJrVQt4d
-        7rlw+tAxAfv5KDuhx+0zhSl8IqqRc2cF9pfZsCeiIX8SD5URBmD70dRoiP3LKsaU+6pW1VlnuOFlV
-        8BrL/LjySLhAL9pDJSj+wWhXuf3Dn8zyue0WgMJ3Yms4/uwSLaNfFMuAN4vrkmUncr7pGOhx1/y8r
-        tNt9lW1eC1OTvZczWe4SDuo5fesUmiaM86fLMKydghZgbWmMfDMhsdzt1nD5eqf/bBfCqOk9whbgz
-        9n7Wp3dLrleWRnSZtSC24PwHFKwDl9Av0a9iZ2uivd16nJL9POPr0Ndmtnlo/D6tVgNCfDy4xJGEw
-        qpNxtRlw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1np8HY-006OiR-0D; Thu, 12 May 2022 12:51:04 +0000
-Date:   Thu, 12 May 2022 13:51:03 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Ryusuke Konishi <konishi.ryusuke@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
+        with ESMTP id S1354384AbiELN20 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 12 May 2022 09:28:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 158395FF1B;
+        Thu, 12 May 2022 06:28:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 993EA60F47;
+        Thu, 12 May 2022 13:28:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7451DC34114;
+        Thu, 12 May 2022 13:28:22 +0000 (UTC)
+Date:   Thu, 12 May 2022 14:28:18 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Will Deacon <will@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Yang Li <yang.lee@linux.alibaba.com>
-Subject: Re: linux-next: manual merge of the mm tree with the folio tree
-Message-ID: <Yn0Ct66Ww44HDj7S@casper.infradead.org>
-References: <20220512182650.7d1a94c7@canb.auug.org.au>
- <CAKFNMokFYi4AGd8+B6sT73Pu9k_bAu53-d_u1=0fsiHbz3Jgxg@mail.gmail.com>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the mm tree
+Message-ID: <Yn0LctZl8dTsezFu@arm.com>
+References: <20220512193855.4f6ce32f@canb.auug.org.au>
+ <YnzqffV7STYS24Yn@arm.com>
+ <188f7cb2-ba21-a53a-828d-7242b17b0c72@linux.alibaba.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAKFNMokFYi4AGd8+B6sT73Pu9k_bAu53-d_u1=0fsiHbz3Jgxg@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <188f7cb2-ba21-a53a-828d-7242b17b0c72@linux.alibaba.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, May 12, 2022 at 08:52:17PM +0900, Ryusuke Konishi wrote:
-> On Thu, May 12, 2022 at 5:26 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >
-> > Hi all,
-> >
-> > Today's linux-next merge of the mm tree got a conflict in:
-> >
-> >   fs/nilfs2/inode.c
-> >
-> > between commit:
-> >
-> >   f132ab7d3ab0 ("fs: Convert mpage_readpage to mpage_read_folio")
-> >
-> > from the folio tree and commit:
-> >
-> >   e38ed506c42f ("nilfs2: Fix some kernel-doc comments")
-> >
-> > from the mm tree.
-> >
-> > I fixed it up (see below) and can carry the fix as necessary. This
-> > is now fixed as far as linux-next is concerned, but any non trivial
-> > conflicts should be mentioned to your upstream maintainer when your tree
-> > is submitted for merging.  You may also want to consider cooperating
-> > with the maintainer of the conflicting tree to minimise any particularly
-> > complex conflicts.
+On Thu, May 12, 2022 at 07:13:18PM +0800, Baolin Wang wrote:
+> On 5/12/2022 7:07 PM, Catalin Marinas wrote:
+> > On Thu, May 12, 2022 at 07:38:55PM +1000, Stephen Rothwell wrote:
+> > > After merging the mm tree, today's linux-next build (arm64 defconfig)
+> > > failed like this:
+> > > 
+> > > arch/arm64/mm/hugetlbpage.c: In function 'huge_ptep_clear_flush':
+> > > arch/arm64/mm/hugetlbpage.c:493:16: error: implicit declaration of function 'get_clear_flush'; did you mean 'ptep_clear_flush'? [-Werror=implicit-function-declaration]
+> > >    493 |         return get_clear_flush(vma->vm_mm, addr, ptep, pgsize, ncontig);
+> > >        |                ^~~~~~~~~~~~~~~
+> > >        |                ptep_clear_flush
+> > > arch/arm64/mm/hugetlbpage.c:493:16: error: incompatible types when returning type 'int' but 'pte_t' was expected
+> > >    493 |         return get_clear_flush(vma->vm_mm, addr, ptep, pgsize, ncontig);
+> > >        |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > > arch/arm64/mm/hugetlbpage.c:494:1: error: control reaches end of non-void function [-Werror=return-type]
+> > >    494 | }
+> > >        | ^
+> > > 
+> > > Caused by commit
+> > > 
+> > >    00df1f1a133b ("mm: change huge_ptep_clear_flush() to return the original pte")
+> > > 
+> > > interacting with commit
+> > > 
+> > >    fb396bb459c1 ("arm64/hugetlb: Drop TLB flush from get_clear_flush()")
+> > > 
+> > > I have applied the following merg fix patch for today.
+> > > 
+> > > From: Stephen Rothwell <sfr@canb.auug.org.au>
+> > > Date: Thu, 12 May 2022 19:33:11 +1000
+> > > Subject: [PATCH] fixup for "mm: change huge_ptep_clear_flush() to return the original pte"
+> > > 
+> > > It interacts with commit
+> > > 
+> > >    fb396bb459c1 ("arm64/hugetlb: Drop TLB flush from get_clear_flush()")
+> > > 
+> > > from the arm64 tree
+> > > 
+> > > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> > > ---
+> > >   arch/arm64/mm/hugetlbpage.c | 2 +-
+> > >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > > 
+> > > diff --git a/arch/arm64/mm/hugetlbpage.c b/arch/arm64/mm/hugetlbpage.c
+> > > index 5bdf913dedc7..30f5b76aabe9 100644
+> > > --- a/arch/arm64/mm/hugetlbpage.c
+> > > +++ b/arch/arm64/mm/hugetlbpage.c
+> > > @@ -490,7 +490,7 @@ pte_t huge_ptep_clear_flush(struct vm_area_struct *vma,
+> > >   		return ptep_clear_flush(vma, addr, ptep);
+> > >   	ncontig = find_num_contig(vma->vm_mm, addr, ptep, &pgsize);
+> > > -	return get_clear_flush(vma->vm_mm, addr, ptep, pgsize, ncontig);
+> > > +	return get_clear_contig(vma->vm_mm, addr, ptep, pgsize, ncontig);
+> > >   }
+> > 
+> > Note that after the arm64 commit, get_clear_contig() no longer flushes
+> > the TLB. So maybe something like:
+> > 
+> > diff --git a/arch/arm64/mm/hugetlbpage.c b/arch/arm64/mm/hugetlbpage.c
+> > index 30f5b76aabe9..9a999550df8e 100644
+> > --- a/arch/arm64/mm/hugetlbpage.c
+> > +++ b/arch/arm64/mm/hugetlbpage.c
+> > @@ -485,12 +485,15 @@ pte_t huge_ptep_clear_flush(struct vm_area_struct *vma,
+> >   {
+> >   	size_t pgsize;
+> >   	int ncontig;
+> > +	pte_t orig_pte;
+> > 
+> >   	if (!pte_cont(READ_ONCE(*ptep)))
+> >   		return ptep_clear_flush(vma, addr, ptep);
+> > 
+> >   	ncontig = find_num_contig(vma->vm_mm, addr, ptep, &pgsize);
+> > -	return get_clear_contig(vma->vm_mm, addr, ptep, pgsize, ncontig);
+> > +	orig_pte = get_clear_contig(vma->vm_mm, addr, ptep, pgsize, ncontig);
+> > +	flush_tlb_range(vma, addr, addr + pgsize * ncontig);
+> > +	return orig_pte;
+> >   }
 > 
-> Thanks, Stephen.
+> Yes, after checking this fb396bb459c1 ("arm64/hugetlb: Drop TLB flush from
+> get_clear_flush()"), I also realized it will miss TLB flush.
 > 
-> Andrew,  please once drop
+> So I am not sure I need send a incremental patch to fix this issue? Or
+> resend my patch set [1] with rebasing on the arm64 changes?
 > 
->  e38ed506c42f ("nilfs2: Fix some kernel-doc comments")
-> 
-> from -mm tree.   I will resend a modified patch after the folio patch is merged
-> to the mainline.
+> Catalin and Andrew, how do you think? Thanks.
 
-I'd be happy to take this patch through my tree instead, if you point me
-to where I can pick it up (I don't see it on fsdevel or mm).
+Andrew folding the diff in is fine by me. I presume the mm patches are
+applied on top of the rest of linux-next (and the arm64 commits).
 
-Although I do think we need to consider whether implementations of
-fs entry points (aops, fops, iops, etc) should have documentation in
-the individual filesystems.  I understand why individual filesystem
-authors want that, but it would be better if we had really
-good central documentation of VFS/FS requirements (and honestly
-Documentation/filesystems/{locking.rst,vfs.rst} aren't bad) instead of
-reiterating them in each individual filesystem.
+-- 
+Catalin

@@ -2,44 +2,65 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A20C6524B17
-	for <lists+linux-next@lfdr.de>; Thu, 12 May 2022 13:12:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB248524C28
+	for <lists+linux-next@lfdr.de>; Thu, 12 May 2022 13:52:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352992AbiELLMr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 12 May 2022 07:12:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46482 "EHLO
+        id S1353381AbiELLwg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 12 May 2022 07:52:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352988AbiELLMp (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 12 May 2022 07:12:45 -0400
-Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBED7527EC;
-        Thu, 12 May 2022 04:12:42 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R841e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VD-YkUJ_1652353959;
-Received: from 30.39.157.75(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VD-YkUJ_1652353959)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 12 May 2022 19:12:40 +0800
-Message-ID: <188f7cb2-ba21-a53a-828d-7242b17b0c72@linux.alibaba.com>
-Date:   Thu, 12 May 2022 19:13:18 +0800
+        with ESMTP id S1353469AbiELLwb (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 12 May 2022 07:52:31 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CFB95A17F;
+        Thu, 12 May 2022 04:52:30 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-2ebf4b91212so53031807b3.8;
+        Thu, 12 May 2022 04:52:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/dMbgdBJ7v3pnBezXlQe7FuBpjFL4Jdp9pglUsY9h+E=;
+        b=bwHSTj48doUHYMQ03ZT9x79VcE56FNIvqBd+wFsZM3TVznihbaMuCWZrYpMTrmBklt
+         WFPbz53jGcC4FiOJKnhl7gnA/SlM1WZoYzQxo8rGv5lBcgqU62caUKliesftqzSd4BkD
+         XzCuCpODHIpFS0FO1ue8i75Qcem8Cm6DvYvDRfmYQs/IzNeO5gsbDRWb9hj+VUwbM7B0
+         +0NFK4h2BIb0E8yakepy8H7HFoFsjqNp/0K/YLLfJuCL3uJMmR06xGXeUky0oLuNDmYu
+         PijqAwOwJwGfD03qyuo5R5F/eSWr3iflL+dU0on0zgyBOZFgYMqNhJO3Ojyd8H4E8//x
+         f+/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/dMbgdBJ7v3pnBezXlQe7FuBpjFL4Jdp9pglUsY9h+E=;
+        b=ty5FVNEgjVHlqlTY3XyYUa/4ecz6bsl7G5rEPVc7eUIcXt6QMLCZPH7zag/tznrzkw
+         6RAcPpeZacvsI+yXKcDgwJeNm1uKcMlstQG4+i3VLch5NIKuEK6LJWgpU/LK+zjEO9Vy
+         BXIhO5s0uQtwB5o/eSmCrz35rH0C0v5K0gAw+tCeDBNK+ZhPyIrmAGEbcmbFS2Jxwc2b
+         29YdC5ZzoTeNG23xuLeWxNKOOKtvB0wm7cig+yjmbivo+ckJt23qLXVtFqzXEp7DKxBA
+         X4RPFUneiAmdZlJplPCzqLzNlU5ITYdWUOHwjM1wNOZfOKUGJt3NjuZJcsajQrOSQLy1
+         RBqw==
+X-Gm-Message-State: AOAM530WWywum6LCCkEWd2LNHC75kAS1QwuFlFk/hGu5NYi6DtVKoNUT
+        +rAfAN4S+7aq2wDhzK9xcRLimYfI8tz9TSlBTSDxV7KY3KY=
+X-Google-Smtp-Source: ABdhPJyHLt04itFWvdt6UCYnDY2Rhaj5egWy7kMuPfcxwY3R63u4BIUcD0LZ8nE5vpIUqDGrHIsEzSsL2I9GB7R4E9U=
+X-Received: by 2002:a81:949:0:b0:2f7:c45b:e291 with SMTP id
+ 70-20020a810949000000b002f7c45be291mr30288622ywj.503.1652356349352; Thu, 12
+ May 2022 04:52:29 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: linux-next: build failure after merge of the mm tree
-To:     Catalin Marinas <catalin.marinas@arm.com>,
+References: <20220512182650.7d1a94c7@canb.auug.org.au>
+In-Reply-To: <20220512182650.7d1a94c7@canb.auug.org.au>
+From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
+Date:   Thu, 12 May 2022 20:52:17 +0900
+Message-ID: <CAKFNMokFYi4AGd8+B6sT73Pu9k_bAu53-d_u1=0fsiHbz3Jgxg@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the mm tree with the folio tree
+To:     Andrew Morton <akpm@linux-foundation.org>,
         Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Will Deacon <will@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
+Cc:     Matthew Wilcox <willy@infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220512193855.4f6ce32f@canb.auug.org.au>
- <YnzqffV7STYS24Yn@arm.com>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <YnzqffV7STYS24Yn@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-12.8 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Yang Li <yang.lee@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,92 +68,39 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+On Thu, May 12, 2022 at 5:26 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> Today's linux-next merge of the mm tree got a conflict in:
+>
+>   fs/nilfs2/inode.c
+>
+> between commit:
+>
+>   f132ab7d3ab0 ("fs: Convert mpage_readpage to mpage_read_folio")
+>
+> from the folio tree and commit:
+>
+>   e38ed506c42f ("nilfs2: Fix some kernel-doc comments")
+>
+> from the mm tree.
+>
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
+Thanks, Stephen.
 
-On 5/12/2022 7:07 PM, Catalin Marinas wrote:
-> On Thu, May 12, 2022 at 07:38:55PM +1000, Stephen Rothwell wrote:
->> After merging the mm tree, today's linux-next build (arm64 defconfig)
->> failed like this:
->>
->> arch/arm64/mm/hugetlbpage.c: In function 'huge_ptep_clear_flush':
->> arch/arm64/mm/hugetlbpage.c:493:16: error: implicit declaration of function 'get_clear_flush'; did you mean 'ptep_clear_flush'? [-Werror=implicit-function-declaration]
->>    493 |         return get_clear_flush(vma->vm_mm, addr, ptep, pgsize, ncontig);
->>        |                ^~~~~~~~~~~~~~~
->>        |                ptep_clear_flush
->> arch/arm64/mm/hugetlbpage.c:493:16: error: incompatible types when returning type 'int' but 'pte_t' was expected
->>    493 |         return get_clear_flush(vma->vm_mm, addr, ptep, pgsize, ncontig);
->>        |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> arch/arm64/mm/hugetlbpage.c:494:1: error: control reaches end of non-void function [-Werror=return-type]
->>    494 | }
->>        | ^
->>
->> Caused by commit
->>
->>    00df1f1a133b ("mm: change huge_ptep_clear_flush() to return the original pte")
->>
->> interacting with commit
->>
->>    fb396bb459c1 ("arm64/hugetlb: Drop TLB flush from get_clear_flush()")
->>
->> I have applied the following merg fix patch for today.
->>
->> From: Stephen Rothwell <sfr@canb.auug.org.au>
->> Date: Thu, 12 May 2022 19:33:11 +1000
->> Subject: [PATCH] fixup for "mm: change huge_ptep_clear_flush() to return the original pte"
->>
->> It interacts with commit
->>
->>    fb396bb459c1 ("arm64/hugetlb: Drop TLB flush from get_clear_flush()")
->>
->> from the arm64 tree
->>
->> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
->> ---
->>   arch/arm64/mm/hugetlbpage.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/arch/arm64/mm/hugetlbpage.c b/arch/arm64/mm/hugetlbpage.c
->> index 5bdf913dedc7..30f5b76aabe9 100644
->> --- a/arch/arm64/mm/hugetlbpage.c
->> +++ b/arch/arm64/mm/hugetlbpage.c
->> @@ -490,7 +490,7 @@ pte_t huge_ptep_clear_flush(struct vm_area_struct *vma,
->>   		return ptep_clear_flush(vma, addr, ptep);
->>   
->>   	ncontig = find_num_contig(vma->vm_mm, addr, ptep, &pgsize);
->> -	return get_clear_flush(vma->vm_mm, addr, ptep, pgsize, ncontig);
->> +	return get_clear_contig(vma->vm_mm, addr, ptep, pgsize, ncontig);
->>   }
-> 
-> Note that after the arm64 commit, get_clear_contig() no longer flushes
-> the TLB. So maybe something like:
-> 
-> diff --git a/arch/arm64/mm/hugetlbpage.c b/arch/arm64/mm/hugetlbpage.c
-> index 30f5b76aabe9..9a999550df8e 100644
-> --- a/arch/arm64/mm/hugetlbpage.c
-> +++ b/arch/arm64/mm/hugetlbpage.c
-> @@ -485,12 +485,15 @@ pte_t huge_ptep_clear_flush(struct vm_area_struct *vma,
->   {
->   	size_t pgsize;
->   	int ncontig;
-> +	pte_t orig_pte;
-> 
->   	if (!pte_cont(READ_ONCE(*ptep)))
->   		return ptep_clear_flush(vma, addr, ptep);
-> 
->   	ncontig = find_num_contig(vma->vm_mm, addr, ptep, &pgsize);
-> -	return get_clear_contig(vma->vm_mm, addr, ptep, pgsize, ncontig);
-> +	orig_pte = get_clear_contig(vma->vm_mm, addr, ptep, pgsize, ncontig);
-> +	flush_tlb_range(vma, addr, addr + pgsize * ncontig);
-> +	return orig_pte;
->   }
+Andrew,  please once drop
 
-Yes, after checking this fb396bb459c1 ("arm64/hugetlb: Drop TLB flush 
-from get_clear_flush()"), I also realized it will miss TLB flush.
+ e38ed506c42f ("nilfs2: Fix some kernel-doc comments")
 
-So I am not sure I need send a incremental patch to fix this issue? Or 
-resend my patch set [1] with rebasing on the arm64 changes?
+from -mm tree.   I will resend a modified patch after the folio patch is merged
+to the mainline.
 
-Catalin and Andrew, how do you think? Thanks.
-
-[1] 
-https://lore.kernel.org/all/cover.1652270205.git.baolin.wang@linux.alibaba.com/
+Thanks,
+Ryusuke Konishi

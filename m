@@ -2,48 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 511CF525562
-	for <lists+linux-next@lfdr.de>; Thu, 12 May 2022 21:10:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A71A52562F
+	for <lists+linux-next@lfdr.de>; Thu, 12 May 2022 22:02:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357877AbiELTKe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 12 May 2022 15:10:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41308 "EHLO
+        id S1358254AbiELUCZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 12 May 2022 16:02:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231944AbiELTKe (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 12 May 2022 15:10:34 -0400
+        with ESMTP id S1358242AbiELUCZ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 12 May 2022 16:02:25 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D03A3274A29;
-        Thu, 12 May 2022 12:10:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 593DA5E746;
+        Thu, 12 May 2022 13:02:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8D7ADB8290E;
-        Thu, 12 May 2022 19:10:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2972C385B8;
-        Thu, 12 May 2022 19:10:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1A9AFB827FB;
+        Thu, 12 May 2022 20:02:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96D15C385B8;
+        Thu, 12 May 2022 20:02:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1652382630;
-        bh=cnAMAMi9fYJo3US7em6lDWG28E0G0iYdwQhQjunOp9w=;
+        s=korg; t=1652385741;
+        bh=xG3M7ynp6fXPzsJnjU3A+JFihfWe3iaUA5pquCim2sU=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=FnbPoU5nJ4fEo9AA3m5+U8zpLvDz2nxndZrtvgFI58X61AqiSUnnPn5yHypcsW635
-         o3iahGjneTuN3CgOqOYzep8qwU7DtC9zz/h25TCV4v3ebR97M//kpIQTK5eNucWfAf
-         iyMNWVicBC3FH7DznyHN+2KylEpp4tqPU37GNauk=
-Date:   Thu, 12 May 2022 12:10:29 -0700
+        b=AVcp7CBfdHGYEFvfDESyEdAZ1feYNiZoDWO3vwFtQIfA8ucSKBeZ03Sddmky7z1Om
+         0K6odpTnmMUgiz4dfjn1l5XWw438aePX4/39ttywu4ri7NZx3ojjKQICkRBs77wEWx
+         +XZSQiynewY0za0DfJ+ENcNlo68HfXxEDzGe46Tk=
+Date:   Thu, 12 May 2022 13:02:20 -0700
 From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Will Deacon <will@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the mm tree
-Message-Id: <20220512121029.8157e99756b3172e85ccb474@linux-foundation.org>
-In-Reply-To: <Yn0LctZl8dTsezFu@arm.com>
-References: <20220512193855.4f6ce32f@canb.auug.org.au>
-        <YnzqffV7STYS24Yn@arm.com>
-        <188f7cb2-ba21-a53a-828d-7242b17b0c72@linux.alibaba.com>
-        <Yn0LctZl8dTsezFu@arm.com>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>
+Subject: Re: linux-next: manual merge of the mm-nonmm-stable tree with the
+ userns tree
+Message-Id: <20220512130220.c9ec9b150c9d5f3848ef3389@linux-foundation.org>
+In-Reply-To: <20220512182215.2b7c4383@canb.auug.org.au>
+References: <20220512182215.2b7c4383@canb.auug.org.au>
 X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -58,31 +54,33 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, 12 May 2022 14:28:18 +0100 Catalin Marinas <catalin.marinas@arm.com> wrote:
+On Thu, 12 May 2022 18:22:15 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-> > > -	return get_clear_contig(vma->vm_mm, addr, ptep, pgsize, ncontig);
-> > > +	orig_pte = get_clear_contig(vma->vm_mm, addr, ptep, pgsize, ncontig);
-> > > +	flush_tlb_range(vma, addr, addr + pgsize * ncontig);
-> > > +	return orig_pte;
-> > >   }
-> > 
-> > Yes, after checking this fb396bb459c1 ("arm64/hugetlb: Drop TLB flush from
-> > get_clear_flush()"), I also realized it will miss TLB flush.
-> > 
-> > So I am not sure I need send a incremental patch to fix this issue? Or
-> > resend my patch set [1] with rebasing on the arm64 changes?
-> > 
-> > Catalin and Andrew, how do you think? Thanks.
+> Hi all,
 > 
-> Andrew folding the diff in is fine by me. I presume the mm patches are
-> applied on top of the rest of linux-next (and the arm64 commits).
+> Today's linux-next merge of the mm-nonmm-stable tree got a conflict in:
+> 
+>   include/linux/ptrace.h
+> 
+> between commit:
+> 
+>   c200e4bb44e8 ("ptrace/um: Replace PT_DTRACE with TIF_SINGLESTEP")
+> 
+> from the userns tree and commit:
+> 
+>   a9866bef5171 ("ptrace: fix wrong comment of PT_DTRACE")
+> 
+> from the mm-nonmm-stable tree.
+> 
+> I fixed it up (the former removed the line modified by the latter, so I
+> just removed it) and can carry the fix as necessary. This is now fixed
+> as far as linux-next is concerned, but any non trivial conflicts should
+> be mentioned to your upstream maintainer when your tree is submitted for
+> merging.  You may also want to consider cooperating with the maintainer
+> of the conflicting tree to minimise any particularly complex conflicts.
 
-No, the mm patches are based on
-git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm master branch,
-which is -rc4 or thereabouts.
+Thanks.
 
-So one of us needs to ensure that Linus gets that patch after the
-second of us merges up.  I can't test it so I nominate you ;) Against
-linux-next or the mm-everything branch at
-git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm?
+Eric, I'll send that patch to you for inclusion in the userns tree,
+please.
 

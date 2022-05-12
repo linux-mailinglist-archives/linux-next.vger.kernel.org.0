@@ -2,139 +2,104 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA2D1524E43
-	for <lists+linux-next@lfdr.de>; Thu, 12 May 2022 15:28:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DCE3524FFF
+	for <lists+linux-next@lfdr.de>; Thu, 12 May 2022 16:31:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354396AbiELN21 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 12 May 2022 09:28:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38948 "EHLO
+        id S1355027AbiELOb5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 12 May 2022 10:31:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354384AbiELN20 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 12 May 2022 09:28:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 158395FF1B;
-        Thu, 12 May 2022 06:28:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 993EA60F47;
-        Thu, 12 May 2022 13:28:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7451DC34114;
-        Thu, 12 May 2022 13:28:22 +0000 (UTC)
-Date:   Thu, 12 May 2022 14:28:18 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Will Deacon <will@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
+        with ESMTP id S1353993AbiELOb4 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 12 May 2022 10:31:56 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F95F53700;
+        Thu, 12 May 2022 07:31:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=VZJ1WsTQ5SKJzbWkNRYklpcb3FUCcmNSggyJUBGGeA0=; b=MZv7v/GFSJnPmNpsbPmVj2qtKZ
+        ighxhqGSTRN5amZEfnpXh2R278E6Bp7m5zrq0W4h9yMty38gu5V0h2jGgRWuDye7CsxA0t+vI/BiR
+        WvH0jHGwYIZ4QGMTUIpcHuGebLcj3o4YFneU8+BFV53rRSnuo+FNr9YWK21ijDkXVxO6P7bPeSKO6
+        fSXlP0i9V33l5vAvB5qhWMUZOYwlI1OmvuKAxGIuTb4kbyVDs5nej2FXajlBsTE5eexE3fdGaZWrC
+        oEX+Y4rGZ2Zc+mXk9bXi5ItL04TqyCy92euCoePFaiFfdRKlRTLD6HmrfrW9VS5l2Y6BUucezs7If
+        EStQN2bQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1np9qT-00DWhp-4i; Thu, 12 May 2022 14:31:13 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A321E3001DD;
+        Thu, 12 May 2022 16:31:12 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 4CE18201E11D2; Thu, 12 May 2022 16:31:12 +0200 (CEST)
+Date:   Thu, 12 May 2022 16:31:12 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Zucheng Zheng <zhengzucheng@huawei.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the mm tree
-Message-ID: <Yn0LctZl8dTsezFu@arm.com>
-References: <20220512193855.4f6ce32f@canb.auug.org.au>
- <YnzqffV7STYS24Yn@arm.com>
- <188f7cb2-ba21-a53a-828d-7242b17b0c72@linux.alibaba.com>
+Subject: Re: linux-next: Signed-off-by missing for commit in the tip tree
+Message-ID: <Yn0aMFQ0pBm2F2BX@hirez.programming.kicks-ass.net>
+References: <20220512204444.29f3c634@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qwCJ+XPpmHXKzL6/"
 Content-Disposition: inline
-In-Reply-To: <188f7cb2-ba21-a53a-828d-7242b17b0c72@linux.alibaba.com>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220512204444.29f3c634@canb.auug.org.au>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, May 12, 2022 at 07:13:18PM +0800, Baolin Wang wrote:
-> On 5/12/2022 7:07 PM, Catalin Marinas wrote:
-> > On Thu, May 12, 2022 at 07:38:55PM +1000, Stephen Rothwell wrote:
-> > > After merging the mm tree, today's linux-next build (arm64 defconfig)
-> > > failed like this:
-> > > 
-> > > arch/arm64/mm/hugetlbpage.c: In function 'huge_ptep_clear_flush':
-> > > arch/arm64/mm/hugetlbpage.c:493:16: error: implicit declaration of function 'get_clear_flush'; did you mean 'ptep_clear_flush'? [-Werror=implicit-function-declaration]
-> > >    493 |         return get_clear_flush(vma->vm_mm, addr, ptep, pgsize, ncontig);
-> > >        |                ^~~~~~~~~~~~~~~
-> > >        |                ptep_clear_flush
-> > > arch/arm64/mm/hugetlbpage.c:493:16: error: incompatible types when returning type 'int' but 'pte_t' was expected
-> > >    493 |         return get_clear_flush(vma->vm_mm, addr, ptep, pgsize, ncontig);
-> > >        |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > > arch/arm64/mm/hugetlbpage.c:494:1: error: control reaches end of non-void function [-Werror=return-type]
-> > >    494 | }
-> > >        | ^
-> > > 
-> > > Caused by commit
-> > > 
-> > >    00df1f1a133b ("mm: change huge_ptep_clear_flush() to return the original pte")
-> > > 
-> > > interacting with commit
-> > > 
-> > >    fb396bb459c1 ("arm64/hugetlb: Drop TLB flush from get_clear_flush()")
-> > > 
-> > > I have applied the following merg fix patch for today.
-> > > 
-> > > From: Stephen Rothwell <sfr@canb.auug.org.au>
-> > > Date: Thu, 12 May 2022 19:33:11 +1000
-> > > Subject: [PATCH] fixup for "mm: change huge_ptep_clear_flush() to return the original pte"
-> > > 
-> > > It interacts with commit
-> > > 
-> > >    fb396bb459c1 ("arm64/hugetlb: Drop TLB flush from get_clear_flush()")
-> > > 
-> > > from the arm64 tree
-> > > 
-> > > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > > ---
-> > >   arch/arm64/mm/hugetlbpage.c | 2 +-
-> > >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > > diff --git a/arch/arm64/mm/hugetlbpage.c b/arch/arm64/mm/hugetlbpage.c
-> > > index 5bdf913dedc7..30f5b76aabe9 100644
-> > > --- a/arch/arm64/mm/hugetlbpage.c
-> > > +++ b/arch/arm64/mm/hugetlbpage.c
-> > > @@ -490,7 +490,7 @@ pte_t huge_ptep_clear_flush(struct vm_area_struct *vma,
-> > >   		return ptep_clear_flush(vma, addr, ptep);
-> > >   	ncontig = find_num_contig(vma->vm_mm, addr, ptep, &pgsize);
-> > > -	return get_clear_flush(vma->vm_mm, addr, ptep, pgsize, ncontig);
-> > > +	return get_clear_contig(vma->vm_mm, addr, ptep, pgsize, ncontig);
-> > >   }
-> > 
-> > Note that after the arm64 commit, get_clear_contig() no longer flushes
-> > the TLB. So maybe something like:
-> > 
-> > diff --git a/arch/arm64/mm/hugetlbpage.c b/arch/arm64/mm/hugetlbpage.c
-> > index 30f5b76aabe9..9a999550df8e 100644
-> > --- a/arch/arm64/mm/hugetlbpage.c
-> > +++ b/arch/arm64/mm/hugetlbpage.c
-> > @@ -485,12 +485,15 @@ pte_t huge_ptep_clear_flush(struct vm_area_struct *vma,
-> >   {
-> >   	size_t pgsize;
-> >   	int ncontig;
-> > +	pte_t orig_pte;
-> > 
-> >   	if (!pte_cont(READ_ONCE(*ptep)))
-> >   		return ptep_clear_flush(vma, addr, ptep);
-> > 
-> >   	ncontig = find_num_contig(vma->vm_mm, addr, ptep, &pgsize);
-> > -	return get_clear_contig(vma->vm_mm, addr, ptep, pgsize, ncontig);
-> > +	orig_pte = get_clear_contig(vma->vm_mm, addr, ptep, pgsize, ncontig);
-> > +	flush_tlb_range(vma, addr, addr + pgsize * ncontig);
-> > +	return orig_pte;
-> >   }
-> 
-> Yes, after checking this fb396bb459c1 ("arm64/hugetlb: Drop TLB flush from
-> get_clear_flush()"), I also realized it will miss TLB flush.
-> 
-> So I am not sure I need send a incremental patch to fix this issue? Or
-> resend my patch set [1] with rebasing on the arm64 changes?
-> 
-> Catalin and Andrew, how do you think? Thanks.
 
-Andrew folding the diff in is fine by me. I presume the mm patches are
-applied on top of the rest of linux-next (and the arm64 commits).
+--qwCJ+XPpmHXKzL6/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--- 
-Catalin
+On Thu, May 12, 2022 at 08:44:44PM +1000, Stephen Rothwell wrote:
+> Hi all,
+>=20
+> Commit
+>=20
+>   2cc6edea3673 ("perf/x86/amd: Remove unused variable 'hwc'")
+>=20
+> is missing a Signed-off-by from its author.
+
+Urgh, my script got thrown off by all the '---------' in the original
+post. Fixed now.
+
+Thanks!
+
+--qwCJ+XPpmHXKzL6/
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEv3OU3/byMaA0LqWJdkfhpEvA5LoFAmJ9GikACgkQdkfhpEvA
+5LqDPg//eeXzwf1lkh1UmOH9z4GlAS8yEmmg6y8+3grJAhbUivbUgIyxeJxhEWWa
+3CWuouGNSa32yD4HiN6Ypiq7wXyHUv4rlAD4YqF5a1jJAxY28b1ZlazocL2JxP+/
+0XVN0UPTlw2LNL+y4TVFpjVeUmcKJRBqQInNhj+jdL1xmtmGYur2h3sI/8mAUTbj
+nGgFTGsQXvLjrxiXax5NXqyaCgdkFJUxKSWA97OavYp0464VpVwMVE7PEQbu+Dru
++yfbZJChKZdqoWlOR07zLQGAnYcY34PS5DYVxneoz30bFkdaTGIolCVl+Yc20lym
+a708b6alhX6/vwbBm3WEDhFfAowhzd7R+aF+OX0KH8alWDobk3IkzsM1tDwo2xVP
+LDoRyNwqElPvgThmr8o7diUi/BK2td2YOSkL8mfOSznNtpyQ/b1ur0P6pcDT2Xv9
+SAiFIsbOkgxI6BhMjaFkwlay/F4JWrZK+zEr0MW+w/9cSwgPxRZ2zQMhVyRb7T23
+xhGf47J2djCIVsMpMndnmpYjuE739FexJOl/yxHeklyQ97qf0++wEOrTQKNJRCTc
+5kFGUHBzk4+el9azw6eSn+i9XdF250flT03/EAfZ23LAlvVR9kUhJW8de8iYKVZw
+T8KurAOQsITrO5cjoST0pvqp4vhN9KNa5Cuizi0lRhKSLX3sST0=
+=UnyS
+-----END PGP SIGNATURE-----
+
+--qwCJ+XPpmHXKzL6/--

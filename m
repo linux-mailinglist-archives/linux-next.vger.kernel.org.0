@@ -2,111 +2,114 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB5B6525E82
-	for <lists+linux-next@lfdr.de>; Fri, 13 May 2022 11:19:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72E44525DF4
+	for <lists+linux-next@lfdr.de>; Fri, 13 May 2022 11:18:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378554AbiEMItq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 13 May 2022 04:49:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44940 "EHLO
+        id S1378970AbiEMJSg convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-next@lfdr.de>); Fri, 13 May 2022 05:18:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378581AbiEMItp (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 13 May 2022 04:49:45 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 439952B0327;
-        Fri, 13 May 2022 01:49:43 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L02QF6Y0fz4xXS;
-        Fri, 13 May 2022 18:49:41 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1652431782;
-        bh=7vQCyjKCbqzpIcTmFM2G6yNt/XS4nNkQs/JghES7AEo=;
-        h=Date:From:To:Cc:Subject:From;
-        b=o/FY5ZlyHQfJdRRA+yLOQvTHoWn5t0bIfdwFwggI9nDP36BytYG2tDw7y4w2SL6WC
-         W2S91vOd3+6kfTVB9+SLPb26WqztLjz6TyTreNJxWyIYE81p2f+4SH3Aeih7QgyIfk
-         +ISaje4uB+uwGpepA7RjKec8ABNpA0DeGFycu9cKkKe/l6CNE1HSWak/R9ESisX14r
-         3HCk40jS/++JcSviS+h+5TWjbGMUR2rnwRtAtv3Py48DJ0jFlSJv5KvHVJiJXgdjdc
-         jEqJwSEN79QCyu5n86vzkDCaLkF9gz+FaFmXQFvX0yz36vLam+0Zw6bPNl97j4tw5T
-         TRQvEVVbxTZXw==
-Date:   Fri, 13 May 2022 18:49:41 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Miaoqian Lin <linmq006@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the v4l-dvb-next tree
-Message-ID: <20220513184941.37b08b2a@canb.auug.org.au>
+        with ESMTP id S1378971AbiEMJSd (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 13 May 2022 05:18:33 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C5A15E74C;
+        Fri, 13 May 2022 02:18:29 -0700 (PDT)
+Received: from mail-yb1-f180.google.com ([209.85.219.180]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MmyzH-1oEZVb0Kt5-00kAoY; Fri, 13 May 2022 11:18:28 +0200
+Received: by mail-yb1-f180.google.com with SMTP id y76so14329357ybe.1;
+        Fri, 13 May 2022 02:18:27 -0700 (PDT)
+X-Gm-Message-State: AOAM5303CDn8ppRYW2dEw2sBsvsw96NIHrE3XqPvmxdto69Pb3zIC8ij
+        GYbSIhFCjvqKG2XEbMD9CMzf37dK4572NFyJ3ps=
+X-Google-Smtp-Source: ABdhPJzWhKU1AHupx7S1zjfD+kxbZoybdLGRgPZF8fYtv0ubcCFBrL+uhzTP2ciCWXA+iR8431cs7DZFsZ/UlHLEmLQ=
+X-Received: by 2002:a25:d3c2:0:b0:645:74df:f43d with SMTP id
+ e185-20020a25d3c2000000b0064574dff43dmr3753633ybf.394.1652433506801; Fri, 13
+ May 2022 02:18:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/nDcRZLJBkrvo6iVl/Rd1FMj";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220506085815.5a3cfa83@canb.auug.org.au> <20220513172933.5dbf4ffb@canb.auug.org.au>
+In-Reply-To: <20220513172933.5dbf4ffb@canb.auug.org.au>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 13 May 2022 11:18:10 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a27bPttwrOBKPwNZ=B1zGZqKV=Js-zWcO7ofnqc=xyHQA@mail.gmail.com>
+Message-ID: <CAK8P3a27bPttwrOBKPwNZ=B1zGZqKV=Js-zWcO7ofnqc=xyHQA@mail.gmail.com>
+Subject: Re: linux-next: build warnings after merge of the arm-soc tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Provags-ID: V03:K1:zuEH0IY2nkJkL6fmf+tietaTulDelKeKaN5PE7gswSn1OztESPM
+ 6CqUWeuUmdwwZ/v9FqSrFc0zXi4ZDMqo2nO3SO+P2d/VYes0PXmQFvgVSwTOgUoMHMY/Kag
+ Ckr5PAzdHsTdBTtqiW4Dz7+uWOU0RP03I8FoPOM0anCLksdHh7sXA0SpZD+2pkLGs4EmxdC
+ sY7T7IWYhUSpZ2vyjZcVA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:y8OJOJ7JzrY=:abGRqrY3e5I0Yy8UHJho2a
+ sj+po0ZXPwpwLW23O2U5kd/uiEMrchOOxrPTvR/A7SZvnqB2MRUer3BHs1ZCVKh2ghzk/B2oM
+ 6V5J8US+T5qh7vIO5quN07zj4ZHsMGZWZnLfYJ3GmTELuh5mdHLqN6QhAdO+Ng145g//VGehg
+ ZtoPiPf5precRtI2Hi28ykK0ydx8JYUKGRpGhREEF5zz0StwgLJFrI/9oRJyuDypLsKNqgc+O
+ ySTG0DmTlX+DpnT0LbjiuNGurxq5aweWbTF5Vzj/LDN8lZA596Vo3gcZLLKCE0fGGv0lCdUrt
+ dxO0LFm1TW4jOyPZmpJkMnbGX9RHa/W7ei8NO7AB3jxw+itW2/6/5iMvvDdXfAr6+XeZ5K/EE
+ j4qmN4JyQRqC1dzKeFtY3w+dOU1cpWhbms6gt9dXciDIew3m5W6iPH0F00XvYzLcWQESWjByl
+ VnhYq9cRGHzRSxXyX/iuR0nv5hSdACNN4gStsO0tYDSnLee+rf8ZVvg9ILTHcfvtIq/ZDxV3y
+ XTy3Vdy4IGuGZs64dLu/T8d/tBjoOgduvx1m0Nk1niWNkXDXq5xYxbcFYA7ZhqTRyia3Ej6ub
+ 2QoGKIG2SgbASNY2Fq4a+qzzQn5ZUjIJUiIfmwv6qC8+b0IfoL1K75XomHUlZEiYusUlrtoPq
+ aTtvemFeMaGnKS1fvgK6/qugJLykyDH6xgR7hOOdbtBjoBeWwu7nh+o1fzFvDZ//WButbSu19
+ TmsU4SeFYOw185t/Z2OcjcoeyJ6hP1lx05aRvyQ0S3P3vH9EX/MKEIIQ440IY1u2d6mfMq3FH
+ xaPS/rdFAuWXT/Etchh4PTj9Irnv66UHtzZ+cxAuyWYIfQCmhk=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/nDcRZLJBkrvo6iVl/Rd1FMj
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, May 13, 2022 at 9:29 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> On Fri, 6 May 2022 08:58:15 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >
+> > After merging the arm-soc tree, today's linux-next build (arm
+> > multi_v7_defconfig) produced these warnings:
+> >
+> > arch/arm/boot/dts/bcm953012hr.dts:57.3-33: Warning (reg_format): /nand-controller@18028000/nand@0/partition@0:reg: property has invalid length (8 bytes) (#address-cells == 2, #size-cells == 1)
+> > arch/arm/boot/dts/bcm953012hr.dts:62.3-33: Warning (reg_format): /nand-controller@18028000/nand@0/partition@200000:reg: property has invalid length (8 bytes) (#address-cells == 2, #size-cells == 1)
+> > arch/arm/boot/dts/bcm953012hr.dts:66.3-33: Warning (reg_format): /nand-controller@18028000/nand@0/partition@600000:reg: property has invalid length (8 bytes) (#address-cells == 2, #size-cells == 1)
+> > arch/arm/boot/dts/bcm953012hr.dts:70.3-33: Warning (reg_format): /nand-controller@18028000/nand@0/partition@1000000:reg: property has invalid length (8 bytes) (#address-cells == 2, #size-cells == 1)
+> > arch/arm/boot/dts/bcm953012hr.dtb: Warning (pci_device_reg): Failed prerequisite 'reg_format'
+> > arch/arm/boot/dts/bcm953012hr.dtb: Warning (pci_device_bus_num): Failed prerequisite 'reg_format'
+> > arch/arm/boot/dts/bcm953012hr.dtb: Warning (i2c_bus_reg): Failed prerequisite 'reg_format'
+> > arch/arm/boot/dts/bcm953012hr.dtb: Warning (spi_bus_reg): Failed prerequisite 'reg_format'
+> > arch/arm/boot/dts/bcm953012hr.dts:55.14-59.4: Warning (avoid_default_addr_size): /nand-controller@18028000/nand@0/partition@0: Relying on default #address-cells value
+> > arch/arm/boot/dts/bcm953012hr.dts:55.14-59.4: Warning (avoid_default_addr_size): /nand-controller@18028000/nand@0/partition@0: Relying on default #size-cells value
+> > arch/arm/boot/dts/bcm953012hr.dts:60.19-63.4: Warning (avoid_default_addr_size): /nand-controller@18028000/nand@0/partition@200000: Relying on default #address-cells value
+> > arch/arm/boot/dts/bcm953012hr.dts:60.19-63.4: Warning (avoid_default_addr_size): /nand-controller@18028000/nand@0/partition@200000: Relying on default #size-cells value
+> > arch/arm/boot/dts/bcm953012hr.dts:64.19-67.4: Warning (avoid_default_addr_size): /nand-controller@18028000/nand@0/partition@600000: Relying on default #address-cells value
+> > arch/arm/boot/dts/bcm953012hr.dts:64.19-67.4: Warning (avoid_default_addr_size): /nand-controller@18028000/nand@0/partition@600000: Relying on default #size-cells value
+> > arch/arm/boot/dts/bcm953012hr.dts:68.20-71.4: Warning (avoid_default_addr_size): /nand-controller@18028000/nand@0/partition@1000000: Relying on default #address-cells value
+> > arch/arm/boot/dts/bcm953012hr.dts:68.20-71.4: Warning (avoid_default_addr_size): /nand-controller@18028000/nand@0/partition@1000000: Relying on default #size-cells value
+> >
+> > I don't know what caused this now.
+>
+> I am still getting these warnings.
 
-Hi all,
+Thank you for the reminder, I have now reverted commit 90103611d573 ("ARM: dts:
+BCM5301X: Fix DTC warning for NAND node"), which caused the problem.
 
-In commit
+The patch was meant to fix a different warning
 
-  e62cc3ab0fc7 ("media: atmel: atmel-isc: Fix PM disable depth imbalance in=
- atmel_isc_probe")
+Warning (avoid_unnecessary_addr_size):
+/nand-controller@18028000/nand@0: unnecessary
+#address-cells/#size-cells without "ranges" or child "reg" property
 
-Fixes tag
+but I don't see that here, so I don't know if it was actually required.
 
-  Fixes: 0a0e265 ("media: atmel: atmel-isc: split driver into driver base a=
-nd isc")
+Arınç, Rafał, Florian: if the original problem comes back now, please
+send a follow-up patch
+that addresses all the warnings.
 
-has these problem(s):
-
-  - SHA1 should be at least 12 digits long
-
-In commit
-
-  3d18e7e0aa2d ("media: st-delta: Fix PM disable depth imbalance in delta_p=
-robe")
-
-Fixes tag
-
-  Fixes: f386509 ("[media] st-delta: STiH4xx multi-format video decoder v4l=
-2 driver")
-
-has these problem(s):
-
-  - SHA1 should be at least 12 digits long
-
-This can be fixed for the future by setting core.abbrev to 12 (or
-more) or (for git v2.11 or later) just making sure it is not set
-(or set to "auto").
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/nDcRZLJBkrvo6iVl/Rd1FMj
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEyBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJ+G6UACgkQAVBC80lX
-0Gwqmwf4gpCf/Szo/hIdSdFPke3TomcGIZ1bUM0USULgumOB+BcYHTIp/mqQnUiJ
-9dYXQeVYpv2ChN8eBoLM2+5Aw/AEwPzh9nXIgHiQcpNOiiA/ZTK/9d0zsLdEYYXB
-rZPstVsV9oT/8xIr/hZ0Nh7s0KToEKxnAuaHj0Z25X6XwBvM7DBWKkK6dFGanmXu
-U1cr/7uJAYvSA0q0bkRwH6tJe52dCqK6Cr1JBbpMCwyPVzawqea7qB2unDU6oNd1
-c61tkdy2PoxAVymF6/hMhv5g5g4LmPCQsrwhwILq7d5pNlveU4EuMFCaXUu8BtvF
-q0u0SkNOb4e5JXtyu8kJuADVaiHY
-=+hR/
------END PGP SIGNATURE-----
-
---Sig_/nDcRZLJBkrvo6iVl/Rd1FMj--
+      Arnd

@@ -2,63 +2,63 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5055E526894
-	for <lists+linux-next@lfdr.de>; Fri, 13 May 2022 19:39:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82CF75269EF
+	for <lists+linux-next@lfdr.de>; Fri, 13 May 2022 21:14:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354148AbiEMRjt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 13 May 2022 13:39:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39852 "EHLO
+        id S230493AbiEMTO0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 13 May 2022 15:14:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233707AbiEMRjt (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 13 May 2022 13:39:49 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D392235DF0
-        for <linux-next@vger.kernel.org>; Fri, 13 May 2022 10:39:46 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id cq17-20020a17090af99100b001dc0386cd8fso8379605pjb.5
-        for <linux-next@vger.kernel.org>; Fri, 13 May 2022 10:39:46 -0700 (PDT)
+        with ESMTP id S230352AbiEMTOZ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 13 May 2022 15:14:25 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04B642DC4
+        for <linux-next@vger.kernel.org>; Fri, 13 May 2022 12:14:22 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id x88so8893872pjj.1
+        for <linux-next@vger.kernel.org>; Fri, 13 May 2022 12:14:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernelci-org.20210112.gappssmtp.com; s=20210112;
         h=message-id:date:mime-version:content-transfer-encoding:subject:to
          :from;
-        bh=9YYY9b1KnhSHDBrakip7R1Obv9bzK/0jY/Z5MSEelL0=;
-        b=ggHGJ9fzYYwvc/nY+h6Swj57VZxW1YjmXzDSpTUu+NecXidPDXt4o940nyMJ4fvt1f
-         +ONXcB3aSLO1D/jORylSJwmVaTYK2kuvX5YcX2i4SJ1tlWQC7KHzMJcyWPnnqYSTkiHI
-         6uIKxPv1s+DCguenxZor+/xbYGPkpIN6R+ejZ4jEltec6+6VJJFQ6ffraPAavfOFJ0np
-         Bwu4Eq/FBiGBjjpuMlaxXZ907vy/TEK3ZEkQvvzKDu6IQdk2Ybcca1EwSuYCd15o7211
-         eun6G70m0krzHwYaq/4h/sssZUywIZeTeeeI2SeqKxo+ogtlJ8NeQkGCZ2R2HjBsDd6S
-         n9tQ==
+        bh=irdPeYs/Ej3pyGMniFwAx1GQPFmuVn3oCOeCe3Vsz+U=;
+        b=EXrp/329O/2e5AGH6KFHCPdGIt9Kc28jKupFM0c0+/s8Mu3FeV3dn2JTW0qHUl8LZl
+         4Plfo7Pocc4y+Io7W4N2icIkKbv+SbXq5R2CXAx/xzZTAS76K8lR5KyMSnNP8iPTjyTS
+         3EZrsmVkXjaAOmWWJmojyUd3wPO/KdKztYZ7UuZhk+7zLY9vS/V+9s8P8GPWmzMYavUa
+         FP1x9MQZAM/IUmYAsiX4gNY5mWQBA4AXSIZDJJLJ8/lCCHRgr0btzCq5mVczmHIIVEb2
+         2eOTvR5urZty1wWVQjyvdzU6hUfeKBglYBLYT4WSDwPL2HdcVO/lvF8KAC8yHL0qPeDd
+         lXMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version
          :content-transfer-encoding:subject:to:from;
-        bh=9YYY9b1KnhSHDBrakip7R1Obv9bzK/0jY/Z5MSEelL0=;
-        b=5i3e1ZFe6c+XWNJgY9JLoWEHnvVZmzADwx343gSCOrzPipH+C+6iHMtDM9xJddvGe1
-         h6+EJ7cNqj0Cm3rpJR65qaI2toulADlEh+/oPPJ958+lqYlBkbPee2ryiWfGQ7TIgP8L
-         wjSZEuJtomOuDabAli63oihGL9X31GQ4Chj6eh+/7LfrvHX1Zhb6I/MGuoF7WwLqURwS
-         +h0rHMEmW7pJVD9x0jckO8yeffyq5H2TQy6KM1JiWFhJkpCc2/h4uXyQeWrWTjNxgcq/
-         g2TgUMtaTLjACBCHJvW7ut0SrqsNHQfbkIhPSDyBHuasFM9nAFWr5xVRYcT2RNSD/utq
-         olQw==
-X-Gm-Message-State: AOAM530VSlSVIFQT6jY2rpyBAry8eV8EwDh9z3dvPIBOjSorP0aPhmFZ
-        ksiEkiknV4tAdWLRnhqnXgHDPQ2DRPPlnhti8Vw=
-X-Google-Smtp-Source: ABdhPJx0wbXQGj+s4KTABs0lj/OO4MwxxU78lD1zpdB5ZOhXXp/R7hTYrypTwcjZ28SY3V2By+aL2A==
-X-Received: by 2002:a17:90b:3b42:b0:1dc:5cdf:5649 with SMTP id ot2-20020a17090b3b4200b001dc5cdf5649mr17261227pjb.239.1652463585377;
-        Fri, 13 May 2022 10:39:45 -0700 (PDT)
+        bh=irdPeYs/Ej3pyGMniFwAx1GQPFmuVn3oCOeCe3Vsz+U=;
+        b=Uglwlez9rtXz7yAOOpKaI43ZP84PoxSXQ4gfF8mIK+1K1kD5GQ3HpPYmSemj5xvWVL
+         Ko7sA3egKfVYxiSQAv3p4BQplJF/2gOsbJJcvqNUsxs9gNPjIndC6rjVHAWW+RU5Ti3O
+         BZDwfIfkSLBWZOtjXQOGp34I1zIdnaLnfYP00lRxHXOEpeulCAHu+4RRBqR/r95IvSfn
+         ZvFaKK6BVmZdf9T8VdxZGnnAYxi6oLgu4Ncgx6bZKEw2W13O9YD5S7NJ6LRSifxBJTsa
+         3vKr+9TZAbpiN4U2wOZsrmFmctV0c9RwJBFmDtQ7dKMCnPgRqdTUvDWZ1DYy4rlaWaeH
+         sqyA==
+X-Gm-Message-State: AOAM5326WRmT9SwEQ9ZRsxxue8CsBpaH4V/O8SrKPkLLlzvlG/+tdWPS
+        XDBBgRyja+EKAcXJoa1ZEWCcdHdAkboZRTTcleg=
+X-Google-Smtp-Source: ABdhPJxKolIfyr2Hb6asTLlhy/cfS9vcV+vYUJNWN/XiFXgVvy0SDDywC6CiuNdtts0YayHWX/Ts7g==
+X-Received: by 2002:a17:90b:1d8a:b0:1dc:588b:cd5d with SMTP id pf10-20020a17090b1d8a00b001dc588bcd5dmr17728317pjb.229.1652469260467;
+        Fri, 13 May 2022 12:14:20 -0700 (PDT)
 Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id i12-20020a17090ad34c00b001d96bc27a57sm1858499pjx.54.2022.05.13.10.39.44
+        by smtp.gmail.com with ESMTPSA id n8-20020a170902968800b0015e8d4eb26bsm2188159plp.181.2022.05.13.12.14.19
         for <linux-next@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 May 2022 10:39:45 -0700 (PDT)
-Message-ID: <627e97e1.1c69fb81.cc824.4bcf@mx.google.com>
-Date:   Fri, 13 May 2022 10:39:45 -0700 (PDT)
+        Fri, 13 May 2022 12:14:19 -0700 (PDT)
+Message-ID: <627eae0b.1c69fb81.7f4e4.5a52@mx.google.com>
+Date:   Fri, 13 May 2022 12:14:19 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-Kernelci-Report-Type: build
 X-Kernelci-Tree: next
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Kernel: v5.18-rc6-269-g2619e2a210cc
-Subject: next/pending-fixes build: 207 builds: 2 failed, 205 passed, 6 errors,
- 4 warnings (v5.18-rc6-269-g2619e2a210cc)
+X-Kernelci-Branch: master
+X-Kernelci-Kernel: next-20220513
+Subject: next/master build: 218 builds: 7 failed, 211 passed, 23 errors,
+ 66 warnings (next-20220513)
 To:     linux-next@vger.kernel.org
 From:   "kernelci.org bot" <bot@kernelci.org>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -70,23 +70,32 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes build: 207 builds: 2 failed, 205 passed, 6 errors, 4 war=
-nings (v5.18-rc6-269-g2619e2a210cc)
+next/master build: 218 builds: 7 failed, 211 passed, 23 errors, 66 warnings=
+ (next-20220513)
 
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.18-rc6-269-g2619e2a210cc/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20220513/
 
 Tree: next
-Branch: pending-fixes
-Git Describe: v5.18-rc6-269-g2619e2a210cc
-Git Commit: 2619e2a210ccc4a0e03d18bc042acb61521eeab1
+Branch: master
+Git Describe: next-20220513
+Git Commit: 1e1b28b936aed946122b4e0991e7144fdbbfd77e
 Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
 Built: 7 unique architectures
 
 Build Failures Detected:
 
+arm64:
+    allmodconfig: (clang-14) FAIL
+
 arm:
+    allmodconfig: (clang-14) FAIL
     rpc_defconfig: (gcc-10) FAIL
+    spear3xx_defconfig: (gcc-10) FAIL
+
+i386:
+    allmodconfig: (clang-14) FAIL
+    i386_defconfig+kselftest: (gcc-10) FAIL
 
 mips:
     decstation_64_defconfig: (gcc-10) FAIL
@@ -94,18 +103,30 @@ mips:
 Errors and Warnings Detected:
 
 arc:
+    haps_hs_smp_defconfig+kselftest (gcc-10): 4 warnings
 
 arm64:
+    allmodconfig (clang-14): 3 errors, 1 warning
 
 arm:
+    allmodconfig (clang-14): 1 error, 13 warnings
+    aspeed_g5_defconfig (clang-14): 10 warnings
+    bcm2835_defconfig (gcc-10): 1 warning
+    multi_v5_defconfig (clang-14): 5 warnings
+    multi_v7_defconfig (clang-14): 15 warnings
+    multi_v7_defconfig+kselftest (gcc-10): 6 warnings
     rpc_defconfig (gcc-10): 2 errors
+    spear3xx_defconfig (gcc-10): 8 errors
 
 i386:
+    allmodconfig (clang-14): 1 error
+    allnoconfig (clang-14): 2 warnings
+    i386_defconfig+kselftest (gcc-10): 4 errors, 1 warning
 
 mips:
     32r2el_defconfig (gcc-10): 1 warning
     32r2el_defconfig+debug (gcc-10): 1 warning
-    32r2el_defconfig+kselftest (gcc-10): 1 warning
+    32r2el_defconfig+kselftest (gcc-10): 5 warnings
     fuloong2e_defconfig (gcc-10): 1 error
     lemote2f_defconfig (gcc-10): 1 error
     loongson2k_defconfig (gcc-10): 1 error
@@ -118,8 +139,28 @@ x86_64:
 
 Errors summary:
 
+    8    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=
+=98__compiletime_assert_256=E2=80=99 declared with attribute error: BUILD_B=
+UG_ON failed: sizeof(*edid) !=3D EDID_LENGTH
     4    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=
 =80=98-mhard-float=E2=80=99
+    2    drivers/misc/lkdtm/cfi.c:62:3: error: cast to pointer from integer=
+ of different size [-Werror=3Dint-to-pointer-cast]
+    2    drivers/misc/lkdtm/cfi.c:62:30: error: cast from pointer to intege=
+r of different size [-Werror=3Dpointer-to-int-cast]
+    1    sound/soc/intel/avs/path.c:815:18: error: stack frame size (2192) =
+exceeds limit (2048) in 'avs_path_create' [-Werror,-Wframe-larger-than]
+    1    lib/maple_tree.c:4203:20: error: stack frame size (1144) exceeds l=
+imit (1024) in 'mas_wr_modify' [-Werror,-Wframe-larger-than]
+    1    lib/maple_tree.c:4203:20: error: stack frame size (1072) exceeds l=
+imit (1024) in 'mas_wr_modify' [-Werror,-Wframe-larger-than]
+    1    include/linux/fortify-string.h:344:4: error: call to __write_overf=
+low_field declared with 'warning' attribute: detected write beyond size of =
+field (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warni=
+ng]
+    1    drivers/i2c/busses/i2c-at91-master.c:707:6: error: variable 'dma_b=
+uf' is used uninitialized whenever 'if' condition is false [-Werror,-Wsomet=
+imes-uninitialized]
     1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
 =3D0x'
     1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
@@ -127,12 +168,38 @@ Errors summary:
 
 Warnings summary:
 
+    23   clang: warning: argument unused during compilation: '-march=3Darmv=
+6k' [-Wunused-command-line-argument]
+    10   clang: warning: argument unused during compilation: '-march=3Darmv=
+7-a' [-Wunused-command-line-argument]
+    6    drivers/misc/lkdtm/cfi.c:62:3: warning: cast to pointer from integ=
+er of different size [-Wint-to-pointer-cast]
+    6    drivers/misc/lkdtm/cfi.c:62:30: warning: cast from pointer to inte=
+ger of different size [-Wpointer-to-int-cast]
+    5    1 warning generated.
+    3    drivers/i2c/busses/i2c-at91-master.c:659:13: note: initialize the =
+variable 'dma_buf' to silence this warning
     3    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
 e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
 ted "0,0"
+    2    include/linux/fortify-string.h:344:4: warning: call to =E2=80=98__=
+write_overflow_field=E2=80=99 declared with attribute warning: detected wri=
+te beyond size of field (1st parameter); maybe use struct_group()? [-Wattri=
+bute-warning]
+    2    drivers/i2c/busses/i2c-at91-master.c:707:6: warning: variable 'dma=
+_buf' is used uninitialized whenever 'if' condition is false [-Wsometimes-u=
+ninitialized]
+    1    lib/maple_tree.c:4203:20: warning: stack frame size (1104) exceeds=
+ limit (1024) in 'mas_wr_modify' [-Wframe-larger-than]
+    1    lib/maple_tree.c:4203:20: warning: stack frame size (1088) exceeds=
+ limit (1024) in 'mas_wr_modify' [-Wframe-larger-than]
+    1    lib/maple_tree.c:4203:20: warning:   CC      lib/plist.o
+    1    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 fo=
+rming offset [20, 23] is out of the bounds [0, 20] [-Warray-bounds]
     1    cc1: warning: result of =E2=80=98-117440512 << 16=E2=80=99 require=
 s 44 bits to represent, but =E2=80=98int=E2=80=99 only has 32 bits [-Wshift=
 -overflow=3D]
+    1    cc1: all warnings being treated as errors
 
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
@@ -163,23 +230,105 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-32r2el_defconfig+kselftest (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warni=
-ng, 0 section mismatches
+32r2el_defconfig+kselftest (mips, gcc-10) =E2=80=94 PASS, 0 errors, 5 warni=
+ngs, 0 section mismatches
 
 Warnings:
     arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
 ): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
 0,0"
+    drivers/misc/lkdtm/cfi.c:62:30: warning: cast from pointer to integer o=
+f different size [-Wpointer-to-int-cast]
+    drivers/misc/lkdtm/cfi.c:62:3: warning: cast to pointer from integer of=
+ different size [-Wint-to-pointer-cast]
+    drivers/misc/lkdtm/cfi.c:62:30: warning: cast from pointer to integer o=
+f different size [-Wpointer-to-int-cast]
+    drivers/misc/lkdtm/cfi.c:62:3: warning: cast to pointer from integer of=
+ different size [-Wint-to-pointer-cast]
 
 ---------------------------------------------------------------------------=
 -----
-allmodconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
+allmodconfig (i386, clang-14) =E2=80=94 FAIL, 1 error, 0 warnings, 0 sectio=
+n mismatches
+
+Errors:
+    lib/maple_tree.c:4203:20: error: stack frame size (1072) exceeds limit =
+(1024) in 'mas_wr_modify' [-Werror,-Wframe-larger-than]
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, clang-14) =E2=80=94 FAIL, 1 error, 13 warnings, 0 sectio=
+n mismatches
+
+Errors:
+    lib/maple_tree.c:4203:20: error: stack frame size (1144) exceeds limit =
+(1024) in 'mas_wr_modify' [-Werror,-Wframe-larger-than]
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, clang-14) =E2=80=94 FAIL, 3 errors, 1 warning, 0 secti=
+on mismatches
+
+Errors:
+    sound/soc/intel/avs/path.c:815:18: error: stack frame size (2192) excee=
+ds limit (2048) in 'avs_path_create' [-Werror,-Wframe-larger-than]
+    drivers/i2c/busses/i2c-at91-master.c:707:6: error: variable 'dma_buf' i=
+s used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-=
+uninitialized]
+    include/linux/fortify-string.h:344:4: error: call to __write_overflow_f=
+ield declared with 'warning' attribute: detected write beyond size of field=
+ (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
+
+Warnings:
+    drivers/i2c/busses/i2c-at91-master.c:659:13: note: initialize the varia=
+ble 'dma_buf' to silence this warning
 
 ---------------------------------------------------------------------------=
 -----
 allmodconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
 n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, clang-14) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    lib/maple_tree.c:4203:20: warning:   CC      lib/plist.o
+    1 warning generated.
 
 ---------------------------------------------------------------------------=
 -----
@@ -193,8 +342,8 @@ mismatches
 
 ---------------------------------------------------------------------------=
 -----
-allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
+allnoconfig (x86_64, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -215,6 +364,33 @@ ection mismatches
 -----
 aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
 ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, clang-14) =E2=80=94 PASS, 0 errors, 10 warnings, =
+0 section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
 
 ---------------------------------------------------------------------------=
 -----
@@ -258,8 +434,12 @@ ion mismatches
 
 ---------------------------------------------------------------------------=
 -----
-bcm2835_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
+bcm2835_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [20, 23] is out of the bounds [0, 20] [-Warray-bounds]
 
 ---------------------------------------------------------------------------=
 -----
@@ -383,8 +563,33 @@ ismatches
 
 ---------------------------------------------------------------------------=
 -----
+defconfig (arm64, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_16K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-14) =E2=80=94 PASS, 0 er=
+rors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
 defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
 s, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_EFI=3Dn (riscv, clang-14) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -413,13 +618,13 @@ tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig+ima (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
+defconfig+debug (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
+defconfig+ima (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -428,18 +633,13 @@ defconfig+kselftest (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
 
 ---------------------------------------------------------------------------=
 -----
-dove_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
+defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
 
 ---------------------------------------------------------------------------=
 -----
 e55_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
 n mismatches
-
----------------------------------------------------------------------------=
------
-ep93xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -517,8 +717,18 @@ ngs, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-haps_hs_smp_defconfig+kselftest (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 w=
+haps_hs_smp_defconfig+kselftest (arc, gcc-10) =E2=80=94 PASS, 0 errors, 4 w=
 arnings, 0 section mismatches
+
+Warnings:
+    drivers/misc/lkdtm/cfi.c:62:30: warning: cast from pointer to integer o=
+f different size [-Wpointer-to-int-cast]
+    drivers/misc/lkdtm/cfi.c:62:3: warning: cast to pointer from integer of=
+ different size [-Wint-to-pointer-cast]
+    drivers/misc/lkdtm/cfi.c:62:30: warning: cast from pointer to integer o=
+f different size [-Wpointer-to-int-cast]
+    drivers/misc/lkdtm/cfi.c:62:3: warning: cast to pointer from integer of=
+ different size [-Wint-to-pointer-cast]
 
 ---------------------------------------------------------------------------=
 -----
@@ -532,6 +742,11 @@ n mismatches
 
 ---------------------------------------------------------------------------=
 -----
+i386_defconfig (i386, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
 i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
 on mismatches
 
@@ -542,8 +757,21 @@ i386_defconfig+debug (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
 
 ---------------------------------------------------------------------------=
 -----
-i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 FAIL, 4 errors, 1 warning=
+, 0 section mismatches
+
+Errors:
+    drivers/misc/lkdtm/cfi.c:62:30: error: cast from pointer to integer of =
+different size [-Werror=3Dpointer-to-int-cast]
+    drivers/misc/lkdtm/cfi.c:62:3: error: cast to pointer from integer of d=
+ifferent size [-Werror=3Dint-to-pointer-cast]
+    drivers/misc/lkdtm/cfi.c:62:30: error: cast from pointer to integer of =
+different size [-Werror=3Dpointer-to-int-cast]
+    drivers/misc/lkdtm/cfi.c:62:3: error: cast to pointer from integer of d=
+ifferent size [-Werror=3Dint-to-pointer-cast]
+
+Warnings:
+    cc1: all warnings being treated as errors
 
 ---------------------------------------------------------------------------=
 -----
@@ -557,13 +785,13 @@ ection mismatches
 
 ---------------------------------------------------------------------------=
 -----
-integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
+imxrt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
 
 ---------------------------------------------------------------------------=
 -----
-iop32x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
+integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -764,6 +992,58 @@ ction mismatches
 
 ---------------------------------------------------------------------------=
 -----
+multi_v5_defconfig (arm, clang-14) =E2=80=94 PASS, 0 errors, 5 warnings, 0 =
+section mismatches
+
+Warnings:
+    lib/maple_tree.c:4203:20: warning: stack frame size (1088) exceeds limi=
+t (1024) in 'mas_wr_modify' [-Wframe-larger-than]
+    1 warning generated.
+    drivers/i2c/busses/i2c-at91-master.c:707:6: warning: variable 'dma_buf'=
+ is used uninitialized whenever 'if' condition is false [-Wsometimes-uninit=
+ialized]
+    drivers/i2c/busses/i2c-at91-master.c:659:13: note: initialize the varia=
+ble 'dma_buf' to silence this warning
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, clang-14) =E2=80=94 PASS, 0 errors, 15 warnings, 0=
+ section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    lib/maple_tree.c:4203:20: warning: stack frame size (1104) exceeds limi=
+t (1024) in 'mas_wr_modify' [-Wframe-larger-than]
+    1 warning generated.
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    drivers/i2c/busses/i2c-at91-master.c:707:6: warning: variable 'dma_buf'=
+ is used uninitialized whenever 'if' condition is false [-Wsometimes-uninit=
+ialized]
+    drivers/i2c/busses/i2c-at91-master.c:659:13: note: initialize the varia=
+ble 'dma_buf' to silence this warning
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
 multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
 ction mismatches
 
@@ -789,18 +1069,31 @@ multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
 
 ---------------------------------------------------------------------------=
 -----
-multi_v7_defconfig+crypto (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
 multi_v7_defconfig+debug (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
 , 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-multi_v7_defconfig+ima (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 6 warn=
+ings, 0 section mismatches
+
+Warnings:
+    drivers/misc/lkdtm/cfi.c:62:30: warning: cast from pointer to integer o=
+f different size [-Wpointer-to-int-cast]
+    drivers/misc/lkdtm/cfi.c:62:3: warning: cast to pointer from integer of=
+ different size [-Wint-to-pointer-cast]
+    drivers/misc/lkdtm/cfi.c:62:30: warning: cast from pointer to integer o=
+f different size [-Wpointer-to-int-cast]
+    drivers/misc/lkdtm/cfi.c:62:3: warning: cast to pointer from integer of=
+ different size [-Wint-to-pointer-cast]
+    include/linux/fortify-string.h:344:4: warning: call to =E2=80=98__write=
+_overflow_field=E2=80=99 declared with attribute warning: detected write be=
+yond size of field (1st parameter); maybe use struct_group()? [-Wattribute-=
+warning]
+    include/linux/fortify-string.h:344:4: warning: call to =E2=80=98__write=
+_overflow_field=E2=80=99 declared with attribute warning: detected write be=
+yond size of field (1st parameter); maybe use struct_group()? [-Wattribute-=
+warning]
 
 ---------------------------------------------------------------------------=
 -----
@@ -851,11 +1144,6 @@ nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
 -----
 nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
 s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-omap1_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1038,8 +1326,34 @@ ection mismatches
 
 ---------------------------------------------------------------------------=
 -----
-spear3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+spear3xx_defconfig (arm, gcc-10) =E2=80=94 FAIL, 8 errors, 0 warnings, 0 se=
 ction mismatches
+
+Errors:
+    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=98__c=
+ompiletime_assert_256=E2=80=99 declared with attribute error: BUILD_BUG_ON =
+failed: sizeof(*edid) !=3D EDID_LENGTH
+    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=98__c=
+ompiletime_assert_256=E2=80=99 declared with attribute error: BUILD_BUG_ON =
+failed: sizeof(*edid) !=3D EDID_LENGTH
+    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=98__c=
+ompiletime_assert_256=E2=80=99 declared with attribute error: BUILD_BUG_ON =
+failed: sizeof(*edid) !=3D EDID_LENGTH
+    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=98__c=
+ompiletime_assert_256=E2=80=99 declared with attribute error: BUILD_BUG_ON =
+failed: sizeof(*edid) !=3D EDID_LENGTH
+    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=98__c=
+ompiletime_assert_256=E2=80=99 declared with attribute error: BUILD_BUG_ON =
+failed: sizeof(*edid) !=3D EDID_LENGTH
+    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=98__c=
+ompiletime_assert_256=E2=80=99 declared with attribute error: BUILD_BUG_ON =
+failed: sizeof(*edid) !=3D EDID_LENGTH
+    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=98__c=
+ompiletime_assert_256=E2=80=99 declared with attribute error: BUILD_BUG_ON =
+failed: sizeof(*edid) !=3D EDID_LENGTH
+    ./../include/linux/compiler_types.h:352:38: error: call to =E2=80=98__c=
+ompiletime_assert_256=E2=80=99 declared with attribute error: BUILD_BUG_ON =
+failed: sizeof(*edid) !=3D EDID_LENGTH
 
 ---------------------------------------------------------------------------=
 -----
@@ -1088,8 +1402,8 @@ on mismatches
 
 ---------------------------------------------------------------------------=
 -----
-tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
+tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1098,8 +1412,8 @@ tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
 
 ---------------------------------------------------------------------------=
 -----
-tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
+tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1160,6 +1474,11 @@ ction mismatches
 -----
 x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
 ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
 
 ---------------------------------------------------------------------------=
 -----

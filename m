@@ -2,60 +2,130 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B30E527173
-	for <lists+linux-next@lfdr.de>; Sat, 14 May 2022 15:58:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C775A527688
+	for <lists+linux-next@lfdr.de>; Sun, 15 May 2022 11:11:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232772AbiENN6M (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 14 May 2022 09:58:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55164 "EHLO
+        id S236033AbiEOJLz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 15 May 2022 05:11:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232767AbiENN6L (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 14 May 2022 09:58:11 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A7A452601;
-        Sat, 14 May 2022 06:58:09 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 51B3192009C; Sat, 14 May 2022 15:58:08 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 42D9392009B;
-        Sat, 14 May 2022 14:58:08 +0100 (BST)
-Date:   Sat, 14 May 2022 14:58:08 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-cc:     Jonathan Corbet <corbet@lwn.net>,
+        with ESMTP id S233340AbiEOJLy (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 15 May 2022 05:11:54 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A4F2BB3D;
+        Sun, 15 May 2022 02:11:52 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id 204so11477315pfx.3;
+        Sun, 15 May 2022 02:11:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:to:cc:references:subject
+         :content-language:from:in-reply-to:content-transfer-encoding;
+        bh=hfMVvEM6vaHEBJKHF5ti7tr+GNbeVh1Fj7Lz2XuFJas=;
+        b=SKdkUX8smXfIVh75dXPn/LgIXpyOmdAoijupL4g/kIA8g9JeXMK7b+Z344rZFKM3jq
+         zgA7PjVaTg8ifJs6TE6Yqb18v0lWJHlv8r9Vf6B0KESH8bOfmRBZROVrcofhpP8nTDXs
+         Kiwd7KPtTq8QbGqio+c24HjZZ3x0ZT8PN1YHWPxIzBzRIFVd0IlBTO6fyRkDEVFX3IqT
+         s1d5L6dhN8q40R4EDwiSuPhp24Qq2t4hAdHUeG7ifOBnP61yaz3EIv7wfyUpqzuThi4G
+         y0TQJEJSJytFYD7InHLQmcRfV0jOsgJgUzODPQrKRbbRGghQXEeh4XmV23dnG9hjnhse
+         NcNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:to:cc
+         :references:subject:content-language:from:in-reply-to
+         :content-transfer-encoding;
+        bh=hfMVvEM6vaHEBJKHF5ti7tr+GNbeVh1Fj7Lz2XuFJas=;
+        b=7CB0ZZBYDFOkEBOm3YTXc1dClwiWOPz0uBl5SsXDFLPHb9lcYBCBGF2CRLpwYVbOZt
+         MuSuSVhKas8bYEBfNlDhMnS4nJ7+EzmFVHlgC/SpVL5rUsvf2RgGgVT9BnckkgqQWYKr
+         5bts7N6q0NXyxB/+QYsawzSuWqk6dc71p55ec60UXmOCpTHIXtltwznWwD6knMoZcbBE
+         9Yb6BjselnWL5uaUt+6xJBcwfRfh6VdxgWVy8ZNdIIVFUqno56bEKEme4jdMReZSNnce
+         5OfwTSONO6r5WSNZdEOjTZsvdrFrHI+zfRbjJDqZd8l6j5EmsGYHYEDLwiC4bASCQL3c
+         UY2g==
+X-Gm-Message-State: AOAM532sUZgzm8ZqzoG57bu8uatKEz2ba9si8G4n0VG12WhhzXTPCABv
+        3d6yOQMREofZ3Z0M0NVlK8o=
+X-Google-Smtp-Source: ABdhPJzQ26g/dK+hBG4nIji59oNyIp7QYa2TAHLdsXCiQIbXoIyj4m0AqCey4lEXiAeEL3j4FdDqCg==
+X-Received: by 2002:aa7:88d1:0:b0:510:3ee2:3f25 with SMTP id k17-20020aa788d1000000b005103ee23f25mr12370982pff.41.1652605911755;
+        Sun, 15 May 2022 02:11:51 -0700 (PDT)
+Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id y1-20020a17090322c100b0015e8d4eb2besm4768941plg.264.2022.05.15.02.11.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 15 May 2022 02:11:51 -0700 (PDT)
+Message-ID: <f4d40da6-756b-9e75-b867-cc9eedc4b232@gmail.com>
+Date:   Sun, 15 May 2022 18:11:47 +0900
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jirislaby@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org
-Subject: Re: [PATCH 3/3] Documentation: Wire Oxford Semiconductor PCIe
- (Tornado) 950
-In-Reply-To: <c6f4a479-6689-1ce6-60fb-c24f2635ad28@gmail.com>
-Message-ID: <alpine.DEB.2.21.2205141454350.10656@angie.orcam.me.uk>
-References: <alpine.DEB.2.21.2205131712410.10656@angie.orcam.me.uk> <alpine.DEB.2.21.2205131727070.10656@angie.orcam.me.uk> <02a1d5a9-4a95-ce58-d401-962d8ea5a0a2@gmail.com> <c6f4a479-6689-1ce6-60fb-c24f2635ad28@gmail.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        linux-serial@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+References: <alpine.DEB.2.21.2205131712410.10656@angie.orcam.me.uk>
+Subject: Re: [PATCH 0/3] Documentation: Fix issues with Oxford Semiconductor
+ PCIe (Tornado) 950
+Content-Language: en-US
+From:   Akira Yokosawa <akiyks@gmail.com>
+In-Reply-To: <alpine.DEB.2.21.2205131712410.10656@angie.orcam.me.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Sat, 14 May 2022, Bagas Sanjaya wrote:
+Hi Maciej,
 
-> > Shouldn't this patch be squashed into [1/2]?
-> > 
+On Fri, 13 May 2022 23:41:57 +0100 (BST),
+Maciej W. Rozycki wrote:
+> Hi,
 > 
-> Oops, I mean patch [1/3].
+[...]
+> 
+>  For the latter command however I need to note that several other 
+> documents in our Documentation/ tree suffer from a problem that causes 
+> `make pdfdocs' to fail (and the failure cannot be worked around with 
+> make's `-k -i' options, i.e. no output is ever produced), e.g.:
+> 
+> Markup is unsupported in LaTeX:
+> filesystems/9p:: nested tables are not yet implemented.
+> 
+> and similarly for: filesystems/erofs, filesystems/f2fs, filesystems/ntfs, 
+> networking/device_drivers/ethernet/dlink/dl2k, scsi/arcmsr_spec, 
+> scsi/g_NCR5380, scsi/ncr53c8xx, and scsi/sym53c8xx_2.  I don't know if it 
+> is a known problem, possibly addressed in a newer version of tools, so 
+> I've thought it might be worth reporting.
+> 
+[...]
+> 
+>  NB XeTeX, Version 3.14159265-2.6-0.99999 (TeX Live 2019/dev/Debian) and 
+> Sphinx 1.8.4 here.
 
- Possibly, but I chose to keep one self-contained change per patch as per 
-the cover letter and also concluded it makes no sense to wire the document 
-while it's still broken.  I'm leaving it up to the maintainers to decide 
-and I will repost an updated change if required.
+As mentioned in the section titled "PDF and LaTeX builds" in
+Documentation/doc-guide/sphinx.rst, "make pdfdocs" requires Sphinx 2.4 or
+later.
 
-  Maciej
+Another hint for you.
+
+You can say "make SPHINXDIRS=<sub dir> htmldocs pdfdocs" to
+test-build docs under Documentation/<sub dir>/.
+You might see false warnings of "WARNING: undefined label: ..."
+which you wouldn't see in full builds, though.
+
+Hope this helps.
+
+I see there is no mention of the SPHINXDIRS make variable in the
+doc-guide.  I'll see it can be explained somewhere in sphinx.rst.
+
+        Thanks, Akira
+> 
+>  The issues are not directly related to the changes proposed here though,
+> so please apply them.
+> 
+>   Maciej
+

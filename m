@@ -2,68 +2,67 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57D89528738
-	for <lists+linux-next@lfdr.de>; Mon, 16 May 2022 16:38:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B244752876F
+	for <lists+linux-next@lfdr.de>; Mon, 16 May 2022 16:49:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241836AbiEPOiD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 16 May 2022 10:38:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37748 "EHLO
+        id S239133AbiEPOtD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 16 May 2022 10:49:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbiEPOiC (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 16 May 2022 10:38:02 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71B082C11D
-        for <linux-next@vger.kernel.org>; Mon, 16 May 2022 07:37:57 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-2ff1ed64f82so4464117b3.1
-        for <linux-next@vger.kernel.org>; Mon, 16 May 2022 07:37:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kTB0WxbI7pNKziLAOm0Rj4onIqJzYX3pDVUnNfUI1io=;
-        b=f2noysl2zQeqrEgraTrbm5eIDW9y7aF4He2L+WhdMWL3Jed6jjFrGT5Z7TR9vRbBOi
-         Nq9r+fbYtjXvN+13e+UP7dAUDCPan7jRMMp7+Xk+ssS7cIIf9gRVKKmMxkddMUq+BYTA
-         srFAOGlacayVNCmaEBD+GPMTrRuN+D2r1CYdIY2+4FdOauuGGeVeTupX+TWgGZD4jO9a
-         /u6GQ/x16tfcv8GEUHVmZ7vY9oRHY4fqgc4u+Z50SpGqAbnzw8nUh79MVOPdoPD2CHab
-         /ph5+GQw4CQagic4Js86pIR468L9yuQqnrtFnWF2o3gMCTRufY2w56Vg5p0vpdiGxWX5
-         NN9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kTB0WxbI7pNKziLAOm0Rj4onIqJzYX3pDVUnNfUI1io=;
-        b=p0FbTwhgF3VPBS/nlDF9LxUB8StVRV9M5I3S0Lyaymyfdke9wleejF0VuQagx1NlqY
-         5KieLjmSf/S+setcJNEitS5QsctuqzrhHjPcwJb5e2JObLMz8rLMmUfNFo6LHbOUJUMC
-         WC/qCRoGiPjm6MnNr1Mi6eb9UzNkQACnby3819oteD+YTdhSZ200fj5IVWSd6cXcfAu9
-         1Sz9pSh0/Hl0iDWVkhgS4hVHKBhdeOsk9QswU7R7wc3oVMosng82vf0hnj1tf1I0tdhr
-         vkjIWAMl551gCB604rqXlFCRzg0vPtqOU9RPe78JiLCmKpL5LDe6J7ZWWhZXo7aDQH7O
-         8CnQ==
-X-Gm-Message-State: AOAM533Z2FS4YVQAxPBlmcJ6mB0jPbn5dpXNssx/729tzjFyJnoalRMI
-        6MqJVDxdMKJxaOkHV7LRljIdon69hT55pnYaPzTqkQ==
-X-Google-Smtp-Source: ABdhPJwv43CtwkpKD1bPIxvSd/VT/IBz3YSs4otXb88oEdQFyDBVIq5Q8MhVJ5VPRySQku9SwyVn/AAVGsWYUp8h7bE=
-X-Received: by 2002:a81:478b:0:b0:2ea:da8c:5c21 with SMTP id
- u133-20020a81478b000000b002eada8c5c21mr20894327ywa.189.1652711876582; Mon, 16
- May 2022 07:37:56 -0700 (PDT)
-MIME-Version: 1.0
-References: <CA+G9fYtsp-1pi6d4J71BPYh-msjzbVt_-v3YrUu12dXPeyqTDg@mail.gmail.com>
- <87o7zylztd.wl-maz@kernel.org> <CA+G9fYtLP1Kf1Ck-33XrLFQ5uc_p1z1S5Sr1x=9ZRGi=D851PQ@mail.gmail.com>
-In-Reply-To: <CA+G9fYtLP1Kf1Ck-33XrLFQ5uc_p1z1S5Sr1x=9ZRGi=D851PQ@mail.gmail.com>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Mon, 16 May 2022 20:07:45 +0530
-Message-ID: <CA+G9fYtW58D057A=gdA2JCk5QTHwXywpEeRfLXBELouUzBsugw@mail.gmail.com>
-Subject: Re: Unexpected kernel BRK exception at EL1 - Internal error: BRK
- handler: f20003e8 - gic_dist_config
-To:     Marc Zyngier <maz@kernel.org>
+        with ESMTP id S232753AbiEPOtC (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 16 May 2022 10:49:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0EAB2EA22;
+        Mon, 16 May 2022 07:49:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E505614E2;
+        Mon, 16 May 2022 14:49:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D592CC385AA;
+        Mon, 16 May 2022 14:49:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652712540;
+        bh=EKoHX+5y+RbWGcamK+8qjsOXmOiTTL6e7+ONLetrMnk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=bF9VnhLjpkIZY3AxG/5MyQud5PChf1hzlgY0CEQldaHDIbGMsBdsBSbT1vQlky/Tt
+         YJlcysBwqx9dKeyc6vfSbXFSuvnAo0Wl5t7QTXwqZ7nCg+Z9UfBYXcFd+uqpb0kl1W
+         h0MGyprG5aFKJfmPxKu71FMlojCR6N1cBm3Gq81x3kZinc+Evkyrm2y6p3OHzfmZiG
+         37A/xzwQmgPtsgJ1cbkizeW7No94c1U7MuPqMbsEl3RyT12FoUfxUzQ39a8sib9k/r
+         Gk+zfl6lb+x+oAYqQz+TFtmPV7PFGmiBQWc8SrvBmiiGuEIvCclMVFsiY9O+235azV
+         F51q6o5iKwzmA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nqc1p-00BdrO-T0; Mon, 16 May 2022 15:48:58 +0100
+Date:   Mon, 16 May 2022 15:48:57 +0100
+Message-ID: <87k0al5y92.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
 Cc:     open list <linux-kernel@vger.kernel.org>,
         Linux-Next Mailing List <linux-next@vger.kernel.org>,
         lkft-triage@lists.linaro.org,
         Stephen Rothwell <sfr@canb.auug.org.au>,
         Thomas Gleixner <tglx@linutronix.de>, pali@kernel.org,
         Ingo Molnar <mingo@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Subject: Re: Unexpected kernel BRK exception at EL1 - Internal error: BRK handler: f20003e8 - gic_dist_config
+In-Reply-To: <CA+G9fYtLP1Kf1Ck-33XrLFQ5uc_p1z1S5Sr1x=9ZRGi=D851PQ@mail.gmail.com>
+References: <CA+G9fYtsp-1pi6d4J71BPYh-msjzbVt_-v3YrUu12dXPeyqTDg@mail.gmail.com>
+        <87o7zylztd.wl-maz@kernel.org>
+        <CA+G9fYtLP1Kf1Ck-33XrLFQ5uc_p1z1S5Sr1x=9ZRGi=D851PQ@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: naresh.kamboju@linaro.org, linux-kernel@vger.kernel.org, linux-next@vger.kernel.org, lkft-triage@lists.linaro.org, sfr@canb.auug.org.au, tglx@linutronix.de, pali@kernel.org, mingo@kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,16 +70,13 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Marc,
-
-FYI,
-
-On Mon, 16 May 2022 at 19:28, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
->
+On Mon, 16 May 2022 14:58:28 +0100,
+Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+> 
 > Hi Marc,
->
+> 
 > Thanks for looking into this report.
->
+> 
 > On Mon, 16 May 2022 at 12:38, Marc Zyngier <maz@kernel.org> wrote:
 > >
 > > On Mon, 16 May 2022 07:16:22 +0100,
@@ -88,7 +84,79 @@ On Mon, 16 May 2022 at 19:28, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
 > > >
 > > > The kernel crash reported on arm64 juno-r2 device with kselftest-merge config
 > > > while booting Linux next-20220513 kernel  [1].
+> 
+> <trim>
+> 
+> >
+> > Huh. Who inserts random BRKs like this?
+> >
+> > > [    0.000000] Internal error: BRK handler: f20003e8 [#1] PREEMPT SMP
+> > > [    0.000000] Modules linked in:
+> > > [    0.000000] CPU: 0 PID: 0 Comm: swapper/0 Not tainted
+> > > 5.18.0-rc6-next-20220513 #1
+> > > [    0.000000] Hardware name: ARM Juno development board (r2) (DT)
+> > > [    0.000000] pstate: 600000c5 (nZCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> > > [    0.000000] pc : gic_dist_config+0x4c/0x68
+> > > [    0.000000] lr : gic_init_bases+0xd4/0x248
+> >
+> > Please provide a disassembly of this function.
+> 
+> objdump snipper is here.
+> http://ix.io/3XUW
 
-This is happening only with the gcc-7.3.x built kernel on arm64 juno-r2 device.
+Wrong function (I wasn't clear I wanted the breaking function, not the
+caller).
 
-- Naresh
+> The vmlinux file is located in this url
+> Please make use of it.
+> http://snapshots.linaro.org/openembedded/lkft/lkft/sumo/juno/lkft/linux-next/1226/
+
+ffff8000087f9908 <gic_dist_config>:
+ffff8000087f9908:       a9bd7bfd        stp     x29, x30, [sp, #-48]!
+ffff8000087f990c:       910003fd        mov     x29, sp
+ffff8000087f9910:       a90153f3        stp     x19, x20, [sp, #16]
+ffff8000087f9914:       f90013f5        str     x21, [sp, #32]
+ffff8000087f9918:       2a0103f3        mov     w19, w1
+ffff8000087f991c:       aa0003f4        mov     x20, x0
+ffff8000087f9920:       aa0203f5        mov     x21, x2
+ffff8000087f9924:       aa1e03e0        mov     x0, x30
+ffff8000087f9928:       97e0de72        bl      ffff8000080312f0 <_mcount>
+ffff8000087f992c:       7100827f        cmp     w19, #0x20
+ffff8000087f9930:       54000149        b.ls    ffff8000087f9958 <gic_dist_config+0x50>  // b.plast
+ffff8000087f9934:       52800402        mov     w2, #0x20                       // #32
+ffff8000087f9938:       53027c40        lsr     w0, w2, #2
+ffff8000087f993c:       91300000        add     x0, x0, #0xc00
+ffff8000087f9940:       8b000280        add     x0, x20, x0
+ffff8000087f9944:       b900001f        str     wzr, [x0]
+ffff8000087f9948:       11004042        add     w2, w2, #0x10
+ffff8000087f994c:       6b02027f        cmp     w19, w2
+ffff8000087f9950:       54ffff48        b.hi    ffff8000087f9938 <gic_dist_config+0x30>  // b.pmore
+ffff8000087f9954:       d4207d00        brk     #0x3e8
+
+What the hell is this??? This function has no WARN_ON, no BUG_ON, the
+allowed values for the immediate are:
+
+#define KPROBES_BRK_IMM                 0x004
+#define UPROBES_BRK_IMM                 0x005
+#define KPROBES_BRK_SS_IMM              0x006
+#define FAULT_BRK_IMM                   0x100
+#define KGDB_DYN_DBG_BRK_IMM            0x400
+#define KGDB_COMPILED_DBG_BRK_IMM       0x401
+#define BUG_BRK_IMM                     0x800
+#define KASAN_BRK_IMM                   0x900
+#define KASAN_BRK_MASK                  0x0ff
+
+and 0x3e8 isn't one of them. This seems like a GCC 'division by zero'
+hack, but there are no divisions by zero here. Your kernel is also
+full of the stuff.
+
+What sort of odd options do you have? I can't help but notice that you
+have the Rust stuff in your tree. Can you please start by disabling
+this, just in case there is an interaction with your toolchain?
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

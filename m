@@ -2,68 +2,72 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA6C8527DA8
-	for <lists+linux-next@lfdr.de>; Mon, 16 May 2022 08:35:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7793527DDF
+	for <lists+linux-next@lfdr.de>; Mon, 16 May 2022 08:52:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240313AbiEPGfG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 16 May 2022 02:35:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50696 "EHLO
+        id S240466AbiEPGvc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 16 May 2022 02:51:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235353AbiEPGfF (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 16 May 2022 02:35:05 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE2DC2DAA7
-        for <linux-next@vger.kernel.org>; Sun, 15 May 2022 23:35:04 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-2fee9fe48c2so20168047b3.3
-        for <linux-next@vger.kernel.org>; Sun, 15 May 2022 23:35:04 -0700 (PDT)
+        with ESMTP id S240652AbiEPGvR (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 16 May 2022 02:51:17 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F1BD218A
+        for <linux-next@vger.kernel.org>; Sun, 15 May 2022 23:51:16 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-2fee9fe48c2so20473277b3.3
+        for <linux-next@vger.kernel.org>; Sun, 15 May 2022 23:51:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:from:date:message-id:subject:to:cc;
-        bh=iR9aLyTCUrCQTmGQIq1Vjzn6XchFor3q3vBzEcA+Dwo=;
-        b=M5o3yifV/slzgFkpgWrzXE9fAPU/VJSxh1jDp0BmdMwrGB3oG/o3ATfop+5rsa9bDq
-         PGNUxC7MyRtlLJjvL7y1LX4b9SxyCj01wvoeDh7jZgWdqdazeLKgYy7tQU7jnTmFgjAr
-         iU3qKTzIKhiAc7SGSp3wvns1FptUuEkL9C/9dxjJIpOedcvS38mSVDjQ3cBWIJYbupU/
-         PFCVO1lfTGC0w61UOiLb1VIuPdRjywt9IwDlIHempEeRtc6CJbYotuHxuJxAvWcM/2NK
-         ktUJNWj9BxKKl6wOeVnZQzUb5vaGeJRoLfKKyALoXrp/6nSeXDhBbOSlwYLZr1luhNLV
-         7gWg==
+        bh=WtJcp6p7F7Zx5ASUnudcGO+8dHaIwXHyfKly8cDbuMA=;
+        b=oB2Ym7tGmxL3Mlm+Wc1BXaW8WLPTji+h+AaKCmX2oOE1nEnLZi9o83zPuBaDTSladG
+         LC7dVQHIRm5V1RDgF9NS0qR3UaEUy9kvm6P0jx1CDCs4WE1Ev2BPY88pTRgqM/xDn8KN
+         EeW6jdO0/EJ086wo/u53BxdRlojUD1DJVxq0J4TricFtGgMSda8uHaMOnSC4FU+1Nu+A
+         vtAH/FQmLLG9MTqLaQ+QgabCdfwOFXRUhGiNSkqDbwT7JH0Ds+9W7z7KictLR52hMQ6R
+         Zg97pjSruiAqRBSaqDyOYetlLuJLVC5WxbaWIvwLn2LOut6Y0y564psgFxVuFzfnsv68
+         wBkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=iR9aLyTCUrCQTmGQIq1Vjzn6XchFor3q3vBzEcA+Dwo=;
-        b=8QS+cuuMpEfdmTWb9cNko4DwMLw8fTkcDrWoenkiC7BDrrSJBp5iJihtyhud9FmlrO
-         hHwbwVW4q33g+YUnR+NkSJv9LMF/g7tHVJbD1VtLjOhZy6iS7aNts/wIhosxE1cLy6p/
-         /EbKQl6UhJap5/t2umnEa5Rb49gCTTWDRYpWSmjSqpCyAEwYXVksfotLNrne+h8y3WQF
-         hTTGRJccBG1JI6W3IDa9h+qCfUfueb9WVadaWL9gw9yIquuRgk6xRXLmZEiYnoAp0Hhr
-         j/URehilTRIHBc5w93mZEd13HBJLRLTUQCrZz9hM3PU/1e2xZC+Ds6Tue0NSa3OVr4hw
-         9Vbw==
-X-Gm-Message-State: AOAM53064gI+y9WzzFCrgdfgfKXLP3m1sSP7AeY2ZJEX/lWHGpnAUbnQ
-        f5nDBc0GEY0q28C3ttNb8EF1r14JjLlHH8ftzlIL8g==
-X-Google-Smtp-Source: ABdhPJzqvgg34QoFkC3e7GY8miDyWhpODxkBdYQD8rxFuXcOsJtoGO8d9h7uSkJ6pO7KHiMVJlz2ZNTrtpulrAi84x8=
-X-Received: by 2002:a81:478b:0:b0:2ea:da8c:5c21 with SMTP id
- u133-20020a81478b000000b002eada8c5c21mr18734148ywa.189.1652682903905; Sun, 15
- May 2022 23:35:03 -0700 (PDT)
+        bh=WtJcp6p7F7Zx5ASUnudcGO+8dHaIwXHyfKly8cDbuMA=;
+        b=dGHOg4oR2QvQ0urGURycm00DqrnSHyKHu0mR7zu8WRJyPnKDkCwtYGfJlRiaRtgSJ7
+         T6WqL8TvtWbXc5LsM0UiCbQQ1/9Fb+94m4wUYo3vQgyV9A9lJZtY04Zfu6NoCRuvWUZw
+         7M+m3icbxlwRSGZyqhg3kQZg4qfJKRFJK8cxmbZ4VkC4QR34aod0uTOgf1GIiIoSDdLC
+         Ryo9mqRGHye8uifgZfRPzA8r3o30OfOIDvL9FmvwkwqKotZ5p420Bf5qnXjke6z/EI3I
+         K0g3Ef5TvdS044K82RPgT4dDe6NZFUR65gRW7gU6ScmtwESdrYiwGHkOoKMgWizgRscX
+         Cifw==
+X-Gm-Message-State: AOAM5320ZU/ca+LY48G6sT4lIr71GPs/8nXOmrc4mOSY6sbIHJHfvy4z
+        BUQcseCZYav3nsJlmQFS6KTOAAVLOGtTrlhQ37EGwS57V8nA2w==
+X-Google-Smtp-Source: ABdhPJzlok8aacHYgGi100CNNq62mWJ4OfwGkBms8SJ6eKfBCxXNgSs1LakblRxkgfX/CqfHP+t6a2ECtWrIWmBWeK0=
+X-Received: by 2002:a81:2f8c:0:b0:2fe:ed42:21ca with SMTP id
+ v134-20020a812f8c000000b002feed4221camr4783213ywv.120.1652683874940; Sun, 15
+ May 2022 23:51:14 -0700 (PDT)
 MIME-Version: 1.0
 From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Mon, 16 May 2022 12:04:53 +0530
-Message-ID: <CA+G9fYuOHwkkqTdcqGa7kazBwCOF-P0Kw0gthvAzjU0t5EVSAQ@mail.gmail.com>
-Subject: BUG: kernel NULL pointer dereference, address: 00000004 - mas_update_gap
-To:     open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        "Liam R. Howlett" <liam.howlett@oracle.com>,
+Date:   Mon, 16 May 2022 12:21:04 +0530
+Message-ID: <CA+G9fYtU7i356bhfGSVaZUkeqE2gE-GE0NQ1iqxJEH_u4BZjSw@mail.gmail.com>
+Subject: [next ] kernel BUG at mm/mmap.c:3235! - invalid opcode: 0000 [#1]
+ PREEMPT SMP NOPTI
+To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org
+Cc:     Yang Shi <shy828301@gmail.com>, Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Song Liu <songliubraving@fb.com>,
+        Rik van Riel <riel@surriel.com>,
+        Matthew Wilcox <willy@infradead.org>, Zi Yan <ziy@nvidia.com>,
+        "Theodore Ts'o" <tytso@mit.edu>, Song Liu <song@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
         David Howells <dhowells@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        SeongJae Park <sj@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
+        SeongJae Park <sj@kernel.org>, Will Deacon <will@kernel.org>,
         Davidlohr Bueso <dave@stgolabs.net>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,79 +75,137 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-While running LTP sched tests on i386 the following kernel BUG noticed on
-Linux next-20220513 [1].
+While running LTP mm tests on x86_64 the following kernel BUG was noticed
+on Linux next-20220513 [1].
 
-Running with 50*40 (== 2000) tasks.
-Time: 7.618
-Running with 20*40 (== 800) tasks.
-[   75.590440] BUG: kernel NULL pointer dereference, address: 00000004
-[   75.596710] #PF: supervisor read access in kernel mode
-[   75.601842] #PF: error_code(0x0000) - not-present page
-[   75.606979] *pde = 00000000
-[   75.609858] Oops: 0000 [#1] PREEMPT SMP
-[   75.613697] CPU: 1 PID: 2694 Comm: hackbench Not tainted
+mmapstress01    1  TPASS  :  Test passed
+mmapstress02    1  TPASS  :  Test passed
+mmapstress03    0  TINFO  :  uname.machine=x86_64 kernel is 64bit
+mmapstress03    1  TPASS  :  Test passed
+[  666.897222] ------------[ cut here ]------------
+[  666.897260] kernel BUG at mm/mmap.c:3235!
+[  666.897285] invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
+[  666.899420] CPU: 3 PID: 25230 Comm: mmapstress03 Not tainted
 5.18.0-rc6-next-20220513 #1
-[   75.621427] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
-2.0b 07/27/2017
-[   75.628898] EIP: mas_update_gap+0xa9/0x290
-[   75.632996] Code: 02 89 4d e8 0f 84 ef 01 00 00 89 d6 8b 4d ec 8b
-55 f0 81 e6 00 ff ff ff 89 75 e0 21 d1 31 d2 83 f9 06 75 06 8d 96 a8
-00 00 00 <3b> 3c 82 0f 84 73 ff ff ff 83 7d e8 01 8b 4d f0 19 d2 83 e2
-fc 83
-[   75.651735] EAX: 00000001 EBX: e507fd2c ECX: 00000086 EDX: 00000000
-[   75.657992] ESI: c6030500 EDI: 40152000 EBP: e507f8ec ESP: e507f8cc
-[   75.664248] DS: 007b ES: 007b FS: 00d8 GS: 0033 SS: 0068 EFLAGS: 00010202
-[   75.671024] CR0: 80050033 CR2: 00000004 CR3: 25e5f000 CR4: 003506d0
-[   75.677283] DR0: 00000000 DR1: 00000000 DR2: 00000000 DR3: 00000000
-[   75.683541] DR6: fffe0ff0 DR7: 00000400
-[   75.687372] Call Trace:
-[   75.689817]  mas_wr_modify+0x193/0x1c20
-[   75.693665]  mas_wr_store_entry.isra.0+0x187/0x4d0
-[   75.698465]  mas_store_prealloc+0x44/0xe0
-[   75.702477]  vma_mas_store+0x2f/0x80
-[   75.706057]  __vma_adjust+0x334/0x8e0
-[   75.709724]  __split_vma+0x148/0x160
-[   75.713303]  do_mas_align_munmap.constprop.0+0xd3/0x3f0
-[   75.718529]  ? find_idlest_group+0xdb/0x7f0
-[   75.722714]  do_mas_munmap+0x7d/0xb0
-[   75.726294]  mmap_region+0x11e/0x6b0
-[   75.729875]  ? selinux_msg_queue_msgctl+0xc0/0xc0
-[   75.734579]  ? security_mmap_addr+0x2a/0x40
-[   75.738765]  ? get_unmapped_area+0x74/0xe0
-[   75.742864]  do_mmap+0x3f8/0x500
-[   75.746096]  ? file_map_prot_check+0x190/0x190
-[   75.750532]  vm_mmap_pgoff+0xc6/0x160
-[   75.754192]  ksys_mmap_pgoff+0x50/0x200
-[   75.758032]  __ia32_sys_mmap_pgoff+0x2f/0x40
-[   75.762302]  __do_fast_syscall_32+0x4c/0xc0
-[   75.766478]  do_fast_syscall_32+0x32/0x70
-[   75.770482]  do_SYSENTER_32+0x15/0x20
-[   75.774141]  entry_SYSENTER_32+0x98/0xf1
-[   75.778068] EIP: 0xb7fcf549
-[   75.780868] Code: 03 74 c0 01 10 05 03 74 b8 01 10 06 03 74 b4 01
-10 07 03 74 b0 01 10 08 03 74 d8 01 00 00 00 00 00 51 52 55 89 e5 0f
-34 cd 80 <5d> 5a 59 c3 90 90 90 90 8d 76 00 58 b8 77 00 00 00 cd 80 90
-8d 76
-[   75.799613] EAX: ffffffda EBX: 00000000 ECX: 00005000 EDX: 00000000
-[   75.805878] ESI: 00020022 EDI: ffffffff EBP: 00000000 ESP: bfeab8ec
-[   75.812134] DS: 007b ES: 007b FS: 0000 GS: 0033 SS: 007b EFLAGS: 00000246
-[   75.818915] Modules linked in: x86_pkg_temp_thermal
-[   75.823792] CR2: 0000000000000004
-[   75.827104] ---[ end trace 0000000000000000 ]---
-[   75.827105] EIP: mas_update_gap+0xa9/0x290
-[   75.827107] Code: 02 89 4d e8 0f 84 ef 01 00 00 89 d6 8b 4d ec 8b
-55 f0 81 e6 00 ff ff ff 89 75 e0 21 d1 31 d2 83 f9 06 75 06 8d 96 a8
-00 00 00 <3b> 3c 82 0f 84 73 ff ff ff 83 7d e8 01 8b 4d f0 19 d2 83 e2
-fc 83
-[   75.827108] EAX: 00000001 EBX: e507fd2c ECX: 00000086 EDX: 00000000
-[   75.827109] ESI: c6030500 EDI: 40152000 EBP: e507f8ec ESP: e507f8cc
-[   75.827110] DS: 007b ES: 007b FS: 00d8 GS: 0033 SS: 0068 EFLAGS: 00010202
-[   75.827111] CR0: 80050033 CR2: 00000004 CR3: 25e5f000 CR4: 003506d0
-[   75.827111] DR0: 00000000 DR1: 00000000 DR2: 00000000 DR3: 00000000
-[   75.827112] DR6: fffe0ff0 DR7: 00000400
+[  666.900552] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
+BIOS 1.12.0-1 04/01/2014
+[  666.901868] RIP: 0010:exit_mmap+0x32c/0x3a0
+[  666.902542] Code: 87 78 03 00 00 00 00 00 02 0f 84 41 fe ff ff 4c
+89 ff e8 37 bb fa ff f0 41 80 8f 7a 03 00 00 20 e9 2b fe ff ff e8 74
+e5 e1 00 <0f> 0b 65 8b 05 b3 ab 63 55 89 c0 48 0f a3 05 39 4b f0 01 0f
+83 36
+[  666.905542] RSP: 0018:ffff991342abbd10 EFLAGS: 00010202
+[  666.906334] RAX: 0000000000000000 RBX: 0000000000000000 RCX: ffff93ea0353540c
+[  666.907464] RDX: ffffffffffffffff RSI: 0000000000000000 RDI: ffff991342abbd18
+[  666.908589] RBP: ffff991342abbe08 R08: 00007ffe337a6fff R09: 0000000000000009
+[  666.909745] R10: ffffffffffffff00 R11: ffff991342abbd40 R12: 0000000000000058
+[  666.910810] R13: ffff991342abbd18 R14: 0000000000000012 R15: ffff93ea07f8d800
+[  666.911940] FS:  00007fad8494b580(0000) GS:ffff93ea3bd80000(0000)
+knlGS:0000000000000000
+[  666.913153] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  666.914147] CR2: 0000000000bba268 CR3: 0000000075610000 CR4: 00000000003506e0
+[  666.915119] Call Trace:
+[  666.915473]  <TASK>
+[  666.915805]  __mmput+0x47/0x100
+[  666.916280]  mmput+0x20/0x30
+[  666.916677]  exit_mm+0xe7/0x150
+[  666.917116]  do_exit+0x1c5/0xa40
+[  666.917566]  ? __audit_syscall_entry+0x109/0x130
+[  666.918220]  do_group_exit+0x54/0xb0
+[  666.918708]  __do_sys_exit_group+0xf/0x10
+[  666.919249]  __se_sys_exit_group+0xe/0x10
+[  666.919790]  __x64_sys_exit_group+0x12/0x20
+[  666.920356]  do_syscall_64+0x35/0x60
+[  666.920876]  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+[  666.921561] RIP: 0033:0x7fad842c1846
+[  666.922095] Code: Unable to access opcode bytes at RIP 0x7fad842c181c.
+[  666.922959] RSP: 002b:00007ffe336ad8b8 EFLAGS: 00000246 ORIG_RAX:
+00000000000000e7
+[  666.923954] RAX: ffffffffffffffda RBX: 00007fad845a9740 RCX: 00007fad842c1846
+[  666.924895] RDX: 0000000000000000 RSI: 000000000000003c RDI: 0000000000000000
+[  666.925846] RBP: 0000000000000000 R08: 00000000000000e7 R09: ffffffffffffff80
+[  666.926779] R10: 0000000000000002 R11: 0000000000000246 R12: 00007fad845a9740
+[  666.927711] R13: 0000000000000001 R14: 00007fad845b2628 R15: 0000000000000000
+[  666.928671]  </TASK>
+[  666.928976] Modules linked in:
+[  666.929491] ---[ end trace 0000000000000000 ]---
+[  666.929502] RIP: 0010:exit_mmap+0x32c/0x3a0
+[  666.929508] Code: 87 78 03 00 00 00 00 00 02 0f 84 41 fe ff ff 4c
+89 ff e8 37 bb fa ff f0 41 80 8f 7a 03 00 00 20 e9 2b fe ff ff e8 74
+e5 e1 00 <0f> 0b 65 8b 05 b3 ab 63 55 89 c0 48 0f a3 05 39 4b f0 01 0f
+83 36
+[  666.929511] RSP: 0018:ffff991342abbd10 EFLAGS: 00010202
+[  666.929513] RAX: 0000000000000000 RBX: 0000000000000000 RCX: ffff93ea0353540c
+[  666.929516] RDX: ffffffffffffffff RSI: 0000000000000000 RDI: ffff991342abbd18
+[  666.929518] RBP: ffff991342abbe08 R08: 00007ffe337a6fff R09: 0000000000000009
+[  666.929520] R10: ffffffffffffff00 R11: ffff991342abbd40 R12: 0000000000000058
+[  666.929522] R13: ffff991342abbd18 R14: 0000000000000012 R15: ffff93ea07f8d800
+[  666.929527] FS:  00007fad8494b580(0000) GS:ffff93ea3bd80000(0000)
+knlGS:0000000000000000
+[  666.929531] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  666.929535] CR2: 0000000000bba268 CR3: 0000000075610000 CR4: 00000000003506e0
+[  666.929540] Fixing recursive fault but reboot is needed!
+[  666.929544] BUG: using smp_processor_id() in preemptible [00000000]
+code: mmapstress03/25230
+[  666.929562] caller is debug_smp_processor_id+0x17/0x20
+[  666.929575] CPU: 3 PID: 25230 Comm: mmapstress03 Tainted: G      D
+         5.18.0-rc6-next-20220513 #1
+[  666.929580] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
+BIOS 1.12.0-1 04/01/2014
+[  666.929582] Call Trace:
+[  666.929584]  <TASK>
+[  666.929586]  dump_stack_lvl+0x6c/0x9a
+[  666.929590]  dump_stack+0x10/0x12
+[  666.929594]  check_preemption_disabled+0x10f/0x120
+[  666.929606]  debug_smp_processor_id+0x17/0x20
+[  666.929609]  __schedule+0x36/0x600
+[  666.929618]  ? trace_preempt_on+0x31/0x40
+[  666.929634]  do_task_dead+0x41/0x50
+[  666.929661]  make_task_dead+0xd3/0xe0
+[  666.929664]  rewind_stack_and_make_dead+0x17/0x18
+[  666.929702] RIP: 0033:0x7fad842c1846
+[  666.929705] Code: Unable to access opcode bytes at RIP 0x7fad842c181c.
+[  666.929706] RSP: 002b:00007ffe336ad8b8 EFLAGS: 00000246 ORIG_RAX:
+00000000000000e7
+[  666.929709] RAX: ffffffffffffffda RBX: 00007fad845a9740 RCX: 00007fad842c1846
+[  666.929710] RDX: 0000000000000000 RSI: 000000000000003c RDI: 0000000000000000
+[  666.929711] RBP: 0000000000000000 R08: 00000000000000e7 R09: ffffffffffffff80
+[  666.929712] R10: 0000000000000002 R11: 0000000000000246 R12: 00007fad845a9740
+[  666.929714] R13: 0000000000000001 R14: 00007fad845b2628 R15: 0000000000000000
+[  666.929717]  </TASK>
+[  666.929718] BUG: scheduling while atomic: mmapstress03/25230/0x00000000
+[  666.929721] Modules linked in:
+[  666.929722] Preemption disabled at:
+[  666.929728] [<ffffffffaa82a574>] do_task_dead+0x24/0x50
+[  666.929733] CPU: 3 PID: 25230 Comm: mmapstress03 Tainted: G      D
+         5.18.0-rc6-next-20220513 #1
+[  666.929736] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
+BIOS 1.12.0-1 04/01/2014
+[  666.929738] Call Trace:
+[  666.929739]  <TASK>
+[  666.929739]  dump_stack_lvl+0x6c/0x9a
+[  666.929743]  ? do_task_dead+0x24/0x50
+[  666.929747]  dump_stack+0x10/0x12
+[  666.929750]  __schedule_bug+0xd2/0x100
+[  666.929753]  __schedule+0x471/0x600
+[  666.929756]  ? trace_preempt_on+0x31/0x40
+[  666.929759]  do_task_dead+0x41/0x50
+[  666.929763]  make_task_dead+0xd3/0xe0
+[  666.929766]  rewind_stack_and_make_dead+0x17/0x18
+[  666.929768] RIP: 0033:0x7fad842c1846
+[  666.929771] Code: Unable to access opcode bytes at RIP 0x7fad842c181c.
+[  666.929772] RSP: 002b:00007ffe336ad8b8 EFLAGS: 00000246 ORIG_RAX:
+00000000000000e7
+[  666.929774] RAX: ffffffffffffffda RBX: 00007fad845a9740 RCX: 00007fad842c1846
+[  666.929775] RDX: 0000000000000000 RSI: 000000000000003c RDI: 0000000000000000
+[  666.929777] RBP: 0000000000000000 R08: 00000000000000e7 R09: ffffffffffffff80
+[  666.929778] R10: 0000000000000002 R11: 0000000000000246 R12: 00007fad845a9740
+[  666.929779] R13: 0000000000000001 R14: 00007fad845b2628 R15:
+0000000000000000Running with 50*40 (== 2000) tasks.
+
 
 Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
 
 metadata:
   git_ref: master
@@ -151,13 +213,13 @@ metadata:
   git_sha: 1e1b28b936aed946122b4e0991e7144fdbbfd77e
   git_describe: next-20220513
   kernel_version: 5.18.0-rc6
-  kernel-config: https://builds.tuxbuild.com/296PiI1oM7N6Vk7m9lxuipmXW7B/config
+  kernel-config: https://builds.tuxbuild.com/296PqKcUcCQSykZbASUqmdlP33g/config
   build-url: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/-/pipelines/538244935
-  artifact-location: https://builds.tuxbuild.com/296PiI1oM7N6Vk7m9lxuipmXW7B
-  toolchain: gcc-11
+  artifact-location: https://builds.tuxbuild.com/296PqKcUcCQSykZbASUqmdlP33g
+  toolchain: clang-12
 
 --
 Linaro LKFT
 https://lkft.linaro.org
 
-[1] https://lkft.validation.linaro.org/scheduler/job/5021335#L1718
+[1] https://lkft.validation.linaro.org/scheduler/job/5021584#L2916

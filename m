@@ -2,78 +2,61 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7849529B0B
-	for <lists+linux-next@lfdr.de>; Tue, 17 May 2022 09:38:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60FF2529B79
+	for <lists+linux-next@lfdr.de>; Tue, 17 May 2022 09:52:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235250AbiEQHh6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 17 May 2022 03:37:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35452 "EHLO
+        id S240213AbiEQHwG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 17 May 2022 03:52:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241958AbiEQHgJ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 17 May 2022 03:36:09 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98DD249F02;
-        Tue, 17 May 2022 00:35:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652772935; x=1684308935;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=d6imrCBiGBbVz2D/NUzP92KgMzg0Fvwm4TsGR5xbZNw=;
-  b=B2wTHYVaXkep9y+Q6rCJGt65EOVhVcTRagbVxERv8N5EtT1SfE0FId01
-   skm2fYaXaRrLJlbvntOsLLg8BGiR6WuXgDavbSm7qdUJUTVx/821H5kUu
-   1n7E11AVWFMdb0sYIjonu2y4fjhnqfsvzrFL5p24fdVcmxijjWGdvrGTi
-   ruv/SlbRoJ1KTHtzLd3UvbE3tJq2/gRpubXxkAphQGMmaSyWMiyzc4poR
-   ZWQhqme9RB8EvkrOL3fBKRjg6nBCyKo/7zo8h2LT6o5Bc6oYLC/5AQKz2
-   X7wPBTLweWzU7VDl1H0s1I5UGYvQCEHN2vHdngWojue+PGjZMmDJymPc5
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="271041373"
-X-IronPort-AV: E=Sophos;i="5.91,232,1647327600"; 
-   d="scan'208";a="271041373"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 00:35:35 -0700
-X-IronPort-AV: E=Sophos;i="5.91,232,1647327600"; 
-   d="scan'208";a="596991454"
-Received: from aghafar-mobl1.ger.corp.intel.com (HELO [10.213.210.37]) ([10.213.210.37])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 00:35:33 -0700
-Message-ID: <d7310d85-4e8e-6b3b-2ec5-3a56bb9babeb@linux.intel.com>
-Date:   Tue, 17 May 2022 08:35:31 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: linux-next: Tree for May 16 (drm/i915/gt/intel_gt_sysfs_pm.c)
-Content-Language: en-US
+        with ESMTP id S242014AbiEQHwE (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 17 May 2022 03:52:04 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECF6B1CB02;
+        Tue, 17 May 2022 00:52:01 -0700 (PDT)
+Received: from canpemm500007.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4L2SwJ0nT3z1JCGB;
+        Tue, 17 May 2022 15:50:40 +0800 (CST)
+Received: from [10.174.179.215] (10.174.179.215) by
+ canpemm500007.china.huawei.com (7.192.104.62) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 17 May 2022 15:51:59 +0800
+Subject: Re: linux-next: Tree for May 16 (drm/msm: kconfig warning)
 To:     Randy Dunlap <rdunlap@infradead.org>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        intel-gfx@lists.freedesktop.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>
+CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>
 References: <20220516205718.2c5a52f9@canb.auug.org.au>
- <1af2e702-2ea4-02ad-7682-e39cee20cc13@infradead.org>
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Corporation UK Plc
-In-Reply-To: <1af2e702-2ea4-02ad-7682-e39cee20cc13@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+ <e61b5844-2595-4138-bf64-5b4d48ec8a4f@infradead.org>
+From:   YueHaibing <yuehaibing@huawei.com>
+Message-ID: <65ec4f4f-5fba-73eb-e73c-81366d94ac0b@huawei.com>
+Date:   Tue, 17 May 2022 15:51:58 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
+MIME-Version: 1.0
+In-Reply-To: <e61b5844-2595-4138-bf64-5b4d48ec8a4f@infradead.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.179.215]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500007.china.huawei.com (7.192.104.62)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-
-Hi,
-
-On 16/05/2022 22:22, Randy Dunlap wrote:
-> 
+On 2022/5/16 23:10, Randy Dunlap wrote:
 > 
 > On 5/16/22 03:57, Stephen Rothwell wrote:
 >> Hi all,
@@ -81,30 +64,17 @@ On 16/05/2022 22:22, Randy Dunlap wrote:
 >> Changes since 20220513:
 >>
 > 
-> on i386:
+> on i386 or x86_64:
 > 
->    CC      drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.o
-> ../drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c: In function ‘act_freq_mhz_show’:
-> ../drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c:276:20: error: implicit declaration of function ‘sysfs_gt_attribute_r_max_func’ [-Werror=implicit-function-declaration]
->    u32 actual_freq = sysfs_gt_attribute_r_max_func(dev, attr,
->                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> ../drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c: In function ‘boost_freq_mhz_store’:
-> ../drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c:327:9: error: implicit declaration of function ‘sysfs_gt_attribute_w_func’ [-Werror=implicit-function-declaration]
->    return sysfs_gt_attribute_w_func(dev, attr,
->           ^~~~~~~~~~~~~~~~~~~~~~~~~
-> ../drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c: In function ‘min_freq_mhz_show’:
-> ../drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c:416:17: error: implicit declaration of function ‘sysfs_gt_attribute_r_min_func’ [-Werror=implicit-function-declaration]
->    u32 min_freq = sysfs_gt_attribute_r_min_func(dev, attr,
->                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> cc1: some warnings being treated as errors
+> WARNING: unmet direct dependencies detected for DRM_DP_AUX_BUS
+>   Depends on [n]: HAS_IOMEM [=y] && DRM [=y] && OF [=n]
+>   Selected by [y]:
+>   - DRM_MSM [=y] && HAS_IOMEM [=y] && DRM [=y] && (ARCH_QCOM || SOC_IMX5 || COMPILE_TEST [=y]) && COMMON_CLK [=y] && IOMMU_SUPPORT [=y] && (QCOM_OCMEM [=n] || QCOM_OCMEM [=n]=n) && (QCOM_LLCC [=n] || QCOM_LLCC [=n]=n) && (QCOM_COMMAND_DB [=n] || QCOM_COMMAND_DB [=n]=n)
+
+This is fixed by
+https://www.spinics.net/lists/kernel/msg4349168.html
+
 > 
 > 
 > Full randconfig file is attached.
-
-There is a fix for this in 09708b6d82ef ("drm/i915/gt: Fix build error 
-without CONFIG_PM") queued up, waiting for the next pull request, which 
-the plan was to send out next week or so. Is that okay?
-
-Regards,
-
-Tvrtko
+> 

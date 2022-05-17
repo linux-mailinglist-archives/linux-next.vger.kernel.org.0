@@ -2,52 +2,53 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D2E452A0B7
-	for <lists+linux-next@lfdr.de>; Tue, 17 May 2022 13:50:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D05052A2BF
+	for <lists+linux-next@lfdr.de>; Tue, 17 May 2022 15:09:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345464AbiEQLuV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 17 May 2022 07:50:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53530 "EHLO
+        id S245234AbiEQNJe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 17 May 2022 09:09:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345447AbiEQLuU (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 17 May 2022 07:50:20 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1FB7286E2
-        for <linux-next@vger.kernel.org>; Tue, 17 May 2022 04:50:19 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id j12-20020a056e02218c00b002d1425ededaso523262ila.16
-        for <linux-next@vger.kernel.org>; Tue, 17 May 2022 04:50:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=ohu20Gei/ORrqs2QS7qZhTZWRQML4W4vk+6nw675mBs=;
-        b=rmDvuFatwcwAcl2vWZ26S6/sWxLUbMiqZOAqbEolY44HfsUudUfH9VITHRI8l09xlC
-         zOZpbh2nK++SByftuos075IxpBn8oE4NDPiF27bmFeTsnPqB35rElDsfFfIekO5a4skx
-         cKvc+nkXNVCXP0f327p88YZ6I+sIFM6pSy8xmxPSFJWjlGl5Efn+lfe14LsoaYoaCeSs
-         5GzRxnZVv0UmRWSnqEe0zrcmgJ8fNkgszYgoJJwsM5cIPNb8QBlz3oQAVATlo5RuToz3
-         2S1Jpfj6RE/Yv27lSej+EfUDt31cySLhM4jCeuQMz04NZ2Nbd5QZ/Jb4liOXcz9lZUrU
-         scSg==
-X-Gm-Message-State: AOAM533ys0O8Zpi2+qiVuauFjMEygaaSQG5fYq1kMCWt5KrSK36H2MpR
-        pVFD44vEMrUsP6LAkkHJTV7rxFyCBwNS1KGWY/4+D6FQu+kd
-X-Google-Smtp-Source: ABdhPJzGQpSEEHGpXaDF+BwJwyVS5yee9rx2BeXMo+M4VKfJGc/JNONGpbBDwPiPxS5/InacMv1SoM7iYfNMnRNAlUiGhc/OEguL
+        with ESMTP id S235536AbiEQNJd (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 17 May 2022 09:09:33 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23F5435267;
+        Tue, 17 May 2022 06:09:33 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: usama.anjum)
+        with ESMTPSA id A2E9B1F444FA
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1652792971;
+        bh=xNlpc1F54muTtr/z6RaIWW7IyIDJ/ccOrpEag1kxRY0=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=KDnZ/Esd0KFmaNmaa2agEpHbzNnQooi2fseRoNXogH+pvDy/sxy4EmcyjYFBrZ/5c
+         C1Bx0BJBxy2S+6pCPAScHlJKK2wuVGFaT+dX+jb5Qadmg3AR4zozG2aLIxSy1PCDpW
+         6j1/ocxXbpPbpkSVlCc8/8K57nSVbCyKrV5nl9Fc4iy3pHoSMWiwWFqB7x9nO45bLl
+         B8ThvCr0NOV5h/U0Tflcsokrydi3VK4V+iJ6f8fUekNXdgWjB6OlelYPzLQpasuWyA
+         KmpEiitplMjeySVR61i+RsdclsBaodOEu2Uc1Jwh/J4JLaOpQcrLItsV5rv4Pn3Weu
+         d3G5iA4fmtm5A==
+Message-ID: <5d148732-c14d-4e96-f8fc-31acc8932534@collabora.com>
+Date:   Tue, 17 May 2022 18:09:25 +0500
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:400d:b0:65d:bff5:4f35 with SMTP id
- bk13-20020a056602400d00b0065dbff54f35mr10076844iob.199.1652788219320; Tue, 17
- May 2022 04:50:19 -0700 (PDT)
-Date:   Tue, 17 May 2022 04:50:19 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b3a1f405df33be01@google.com>
-Subject: [syzbot] linux-next build error (13)
-From:   syzbot <syzbot+7013da477748d0b624b9@syzkaller.appspotmail.com>
-To:     axboe@fb.com, hch@lst.de, james.smart@broadcom.com,
-        kbusch@kernel.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org, linux-nvme@lists.infradead.org,
-        sagi@grimberg.me, sfr@canb.auug.org.au,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Cc:     usama.anjum@collabora.com, Tzung-Bi Shih <tzungbi@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the chrome-platform tree
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Benson Leung <bleung@google.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+References: <20220516213832.19127535@canb.auug.org.au>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <20220516213832.19127535@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,26 +56,25 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hello,
+On 5/16/22 4:38 PM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the chrome-platform tree, today's linux-next build
+> (htmldocs) produced this warning:
+> 
+> Documentation/ABI/testing/sysfs-driver-chromeos-acpi:2: WARNING: Unexpected indentation.
+> Documentation/ABI/testing/sysfs-driver-chromeos-acpi:11: WARNING: Unexpected indentation.
+> Documentation/ABI/testing/sysfs-driver-chromeos-acpi:22: WARNING: Unexpected indentation.
+> Documentation/ABI/testing/sysfs-driver-chromeos-acpi:56: WARNING: Unexpected indentation.
+> 
+> Introduced by commit
+> 
+>   0a4cad9c11ad ("platform/chrome: Add ChromeOS ACPI device driver")
+> 
+I've found these warnings in local build. But I'm unable to fix them.
+Apparently, there doesn't seem any unexpected indentation. This kind of
+same warnings have also appeared on some more files before this commit
+without any reason.
 
-syzbot found the following issue on:
-
-HEAD commit:    47c1c54d1bcd Add linux-next specific files for 20220517
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=137f0301f00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=95ad7f734b04ada9
-dashboard link: https://syzkaller.appspot.com/bug?extid=7013da477748d0b624b9
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+7013da477748d0b624b9@syzkaller.appspotmail.com
-
-drivers/nvme/host/fc.c:1914: undefined reference to `blkcg_get_fc_appid'
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+-- 
+Muhammad Usama Anjum

@@ -2,135 +2,109 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F029C529913
-	for <lists+linux-next@lfdr.de>; Tue, 17 May 2022 07:34:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7849529B0B
+	for <lists+linux-next@lfdr.de>; Tue, 17 May 2022 09:38:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235641AbiEQFer (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 17 May 2022 01:34:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44840 "EHLO
+        id S235250AbiEQHh6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 17 May 2022 03:37:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230125AbiEQFep (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 17 May 2022 01:34:45 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E787640916;
-        Mon, 16 May 2022 22:34:43 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L2PvM043Fz4xXj;
-        Tue, 17 May 2022 15:34:38 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1652765679;
-        bh=+teQEkoVE0NcOfaTzwnoVR40DyApB6GlzBhfcfYjvAI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=BKn917nPlFZ7u5ZO206YY2ITn06347RaRzfU122QJ1+kJg/txlgIaVHbESFoNqwTw
-         J//seSlwAvnuUmCLlPR/z7eFYXAv9z79x+xQF6qQS5K+bIfEs9Z3/e0SZxBuW99tFr
-         FYw7puHBYmg3JBT0ij/tZEzSbOb5PKwYX8dVNhhMasrRDdPt1EduOEIyMks/zxy9he
-         hrM7LC3CpJyv6/ek+Wo176vMup1WuNdQ2VwmuUrvJEuSYWrGskWgg1arW7rbkfVsJp
-         Q5I5fcF38jTgcMZ5M1ngfl5JyOg2nu85xxCkOEYYzKmiFtB/Ql/yonnHkbWoFzVoaQ
-         9WQSOz60JpeVA==
-Date:   Tue, 17 May 2022 15:34:35 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Dave Jiang <dave.jiang@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the dmaengine tree with Linus' tree
-Message-ID: <20220517153435.645a9313@canb.auug.org.au>
+        with ESMTP id S241958AbiEQHgJ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 17 May 2022 03:36:09 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98DD249F02;
+        Tue, 17 May 2022 00:35:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652772935; x=1684308935;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=d6imrCBiGBbVz2D/NUzP92KgMzg0Fvwm4TsGR5xbZNw=;
+  b=B2wTHYVaXkep9y+Q6rCJGt65EOVhVcTRagbVxERv8N5EtT1SfE0FId01
+   skm2fYaXaRrLJlbvntOsLLg8BGiR6WuXgDavbSm7qdUJUTVx/821H5kUu
+   1n7E11AVWFMdb0sYIjonu2y4fjhnqfsvzrFL5p24fdVcmxijjWGdvrGTi
+   ruv/SlbRoJ1KTHtzLd3UvbE3tJq2/gRpubXxkAphQGMmaSyWMiyzc4poR
+   ZWQhqme9RB8EvkrOL3fBKRjg6nBCyKo/7zo8h2LT6o5Bc6oYLC/5AQKz2
+   X7wPBTLweWzU7VDl1H0s1I5UGYvQCEHN2vHdngWojue+PGjZMmDJymPc5
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="271041373"
+X-IronPort-AV: E=Sophos;i="5.91,232,1647327600"; 
+   d="scan'208";a="271041373"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 00:35:35 -0700
+X-IronPort-AV: E=Sophos;i="5.91,232,1647327600"; 
+   d="scan'208";a="596991454"
+Received: from aghafar-mobl1.ger.corp.intel.com (HELO [10.213.210.37]) ([10.213.210.37])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 00:35:33 -0700
+Message-ID: <d7310d85-4e8e-6b3b-2ec5-3a56bb9babeb@linux.intel.com>
+Date:   Tue, 17 May 2022 08:35:31 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/c4t0jNTZlCZXPEXCew1.RyN";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: linux-next: Tree for May 16 (drm/i915/gt/intel_gt_sysfs_pm.c)
+Content-Language: en-US
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        intel-gfx@lists.freedesktop.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>
+References: <20220516205718.2c5a52f9@canb.auug.org.au>
+ <1af2e702-2ea4-02ad-7682-e39cee20cc13@infradead.org>
+From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Organization: Intel Corporation UK Plc
+In-Reply-To: <1af2e702-2ea4-02ad-7682-e39cee20cc13@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/c4t0jNTZlCZXPEXCew1.RyN
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi,
 
-Today's linux-next merge of the dmaengine tree got a conflict in:
+On 16/05/2022 22:22, Randy Dunlap wrote:
+> 
+> 
+> On 5/16/22 03:57, Stephen Rothwell wrote:
+>> Hi all,
+>>
+>> Changes since 20220513:
+>>
+> 
+> on i386:
+> 
+>    CC      drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.o
+> ../drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c: In function ‘act_freq_mhz_show’:
+> ../drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c:276:20: error: implicit declaration of function ‘sysfs_gt_attribute_r_max_func’ [-Werror=implicit-function-declaration]
+>    u32 actual_freq = sysfs_gt_attribute_r_max_func(dev, attr,
+>                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> ../drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c: In function ‘boost_freq_mhz_store’:
+> ../drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c:327:9: error: implicit declaration of function ‘sysfs_gt_attribute_w_func’ [-Werror=implicit-function-declaration]
+>    return sysfs_gt_attribute_w_func(dev, attr,
+>           ^~~~~~~~~~~~~~~~~~~~~~~~~
+> ../drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c: In function ‘min_freq_mhz_show’:
+> ../drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c:416:17: error: implicit declaration of function ‘sysfs_gt_attribute_r_min_func’ [-Werror=implicit-function-declaration]
+>    u32 min_freq = sysfs_gt_attribute_r_min_func(dev, attr,
+>                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> cc1: some warnings being treated as errors
+> 
+> 
+> Full randconfig file is attached.
 
-  drivers/dma/idxd/device.c
+There is a fix for this in 09708b6d82ef ("drm/i915/gt: Fix build error 
+without CONFIG_PM") queued up, waiting for the next pull request, which 
+the plan was to send out next week or so. Is that okay?
 
-between commit:
+Regards,
 
-  1cd8e751d96c ("dmaengine: idxd: skip clearing device context when device =
-is read-only")
-
-from Linus' tree and commit:
-
-  cf4ac3fef338 ("dmaengine: idxd: fix lockdep warning on device driver remo=
-val")
-
-from the dmaengine tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/dma/idxd/device.c
-index f652da6ab47d,1143886f4a80..000000000000
---- a/drivers/dma/idxd/device.c
-+++ b/drivers/dma/idxd/device.c
-@@@ -699,21 -716,23 +716,26 @@@ static void idxd_device_wqs_clear_state
-  		struct idxd_wq *wq =3D idxd->wqs[i];
- =20
-  		if (wq->state =3D=3D IDXD_WQ_ENABLED) {
-+ 			mutex_lock(&wq->wq_lock);
-  			idxd_wq_disable_cleanup(wq);
- -			idxd_wq_device_reset_cleanup(wq);
-  			wq->state =3D IDXD_WQ_DISABLED;
-+ 			mutex_unlock(&wq->wq_lock);
-  		}
- +		idxd_wq_device_reset_cleanup(wq);
-  	}
-  }
- =20
-  void idxd_device_clear_state(struct idxd_device *idxd)
-  {
- +	if (!test_bit(IDXD_FLAG_CONFIGURABLE, &idxd->flags))
- +		return;
- +
-+ 	idxd_device_wqs_clear_state(idxd);
-+ 	spin_lock(&idxd->dev_lock);
-  	idxd_groups_clear_state(idxd);
-  	idxd_engines_clear_state(idxd);
-- 	idxd_device_wqs_clear_state(idxd);
-+ 	idxd->state =3D IDXD_DEV_DISABLED;
-+ 	spin_unlock(&idxd->dev_lock);
-  }
- =20
-  static void idxd_group_config_write(struct idxd_group *group)
-
---Sig_/c4t0jNTZlCZXPEXCew1.RyN
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKDM+sACgkQAVBC80lX
-0GyXKAf9Err06CkA4FC2G72Ulc/oN1x/Yz1ru53R2bhw2yT/J3RuERy8jeA2Jqas
-Ok5tnzwjWEo+anqC8c5w4MJsU03VMdiUGdrQ5CKM3fCo+H9xQYIjozaIr91am7vo
-H2fwPDEfa5zF7AY3SD5Pf8bd+bfa+g5MgYuq8VFTBMR/2HJGqUHUK+bh7xhA6DLb
-QPupcy/kSgQOgURW1cSpx5y+cAswMClm5GVccJF9Xj/9+py5tITM+B6xwpNeXYMA
-WrrBdt6GRvIbFzZpn7wuZ17DM4l+OdyYXYhHAkE526onNQNWzkQKLdyyQQyi8wUL
-EthiRvDxZ/1KkOHlT22bppuju7hWcA==
-=JxJP
------END PGP SIGNATURE-----
-
---Sig_/c4t0jNTZlCZXPEXCew1.RyN--
+Tvrtko

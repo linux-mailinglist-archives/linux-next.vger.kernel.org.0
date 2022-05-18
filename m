@@ -2,62 +2,52 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39C4652C158
-	for <lists+linux-next@lfdr.de>; Wed, 18 May 2022 19:50:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C08B52C564
+	for <lists+linux-next@lfdr.de>; Wed, 18 May 2022 23:22:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241187AbiERRpo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 18 May 2022 13:45:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37010 "EHLO
+        id S242972AbiERVFx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 18 May 2022 17:05:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241174AbiERRpn (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 18 May 2022 13:45:43 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 917FCDFB;
-        Wed, 18 May 2022 10:45:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652895942; x=1684431942;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=/MoSLRj2DcpOgWl7GCdrN80cWuUgwatF4OfOyEpMYzg=;
-  b=Emm0867kWW9mtega68cic9/Vm5L9GMUQHw3VObebyN5//BhMaIfPm+v9
-   neb+vIpRKNB/A331nKNPGqYcVOPkV+Kfn+UwEWJhgV3iVH6q57PPRfxmT
-   9Nw3Yl1yR+KGhY8zROcg4HjKN+YeO2YEt/r0+6Gx6cXkMSnj16YUWoJe7
-   a9z0XGVo2Se16yeyDeRG3qw60mg72BUmZ68aJo9t8wPNuCSxEUxFjX2XE
-   +yc6o5cmgDXjST2wtNJu2xDMa7i0IMgU+Rsr88W3yJMzJZn5HnXRny7V0
-   fgJiqkE8Z3Xqx4fcevEx0KxUUQsLFQG4gikEC2GyjBsedgwG2doFohjJB
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10351"; a="271492326"
-X-IronPort-AV: E=Sophos;i="5.91,235,1647327600"; 
-   d="scan'208";a="271492326"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 10:21:00 -0700
-X-IronPort-AV: E=Sophos;i="5.91,235,1647327600"; 
-   d="scan'208";a="700706711"
-Received: from djiang5-mobl1.amr.corp.intel.com (HELO [10.212.11.158]) ([10.212.11.158])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 10:21:00 -0700
-Message-ID: <a6df0b8a-dc42-51e4-4b7b-62d1d11c7800@intel.com>
-Date:   Wed, 18 May 2022 10:20:59 -0700
+        with ESMTP id S243029AbiERVFv (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 18 May 2022 17:05:51 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 222C123BC5;
+        Wed, 18 May 2022 14:05:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=5RhvSiqa1rf3ZIn8UM8Az2UmpI0VdzrL0ZhZPdtUWQU=; b=OFSPHtTLXfglvvoWmjonNs+6Q1
+        lpgYB+FEPtM/6mbGAmnujphLiAS+rMHdDKBSO96nt3xCPomcFFyQdNhI1tN8dku3p+sPyf64kli9/
+        ZtunTUe6rvovNLHmg36UmHsP4pJTXxHRlQ63zFV+W+uo7eIgz6FfhmcLyE4Mi7+qvBR/Z2gjz9CC3
+        HJWkrnzXzd9so/OM6qGwjYyQxYPIWy19GohZbm+tgSmF9XrASs849DHdet/mkiSfRgOl1xdEHAyGP
+        WjLJgCWgTo7CpMYGAubapGwGCX2RDcQIfJiMsOWk12kD5JjhAn2yKRe92J1C7MB8VVVUVXCzpI1Rg
+        pZTdauNA==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nrQrO-001eW1-3F; Wed, 18 May 2022 21:05:34 +0000
+Message-ID: <8ead0da9-9545-b10d-e3db-7df1a1f219e4@infradead.org>
+Date:   Wed, 18 May 2022 14:05:28 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.9.0
-Subject: Re: linux-next: manual merge of the dmaengine tree with Linus' tree
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: linux-next: Tree for May 18
+ (arch/x86/kernel/cpu/microcode/intel.o)
 Content-Language: en-US
-To:     Vinod Koul <vkoul@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220517153435.645a9313@canb.auug.org.au>
- <YoTcmqygoMm/gmsZ@matsya>
-From:   Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <YoTcmqygoMm/gmsZ@matsya>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        X86 ML <x86@kernel.org>, Borislav Petkov <bp@alien8.de>
+References: <20220518202934.730a8aba@canb.auug.org.au>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220518202934.730a8aba@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -65,84 +55,39 @@ List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
 
-On 5/18/2022 4:46 AM, Vinod Koul wrote:
-> On 17-05-22, 15:34, Stephen Rothwell wrote:
->> Hi all,
->>
->> Today's linux-next merge of the dmaengine tree got a conflict in:
->>
->>    drivers/dma/idxd/device.c
->>
->> between commit:
->>
->>    1cd8e751d96c ("dmaengine: idxd: skip clearing device context when device is read-only")
->>
->> from Linus' tree and commit:
->>
->>    cf4ac3fef338 ("dmaengine: idxd: fix lockdep warning on device driver removal")
-> Thank you Stephen, the merge looks right to me. Dave pls verify and test
-> -next
->
->> from the dmaengine tree.
->>
->> I fixed it up (see below) and can carry the fix as necessary. This
->> is now fixed as far as linux-next is concerned, but any non trivial
->> conflicts should be mentioned to your upstream maintainer when your tree
->> is submitted for merging.  You may also want to consider cooperating
->> with the maintainer of the conflicting tree to minimise any particularly
->> complex conflicts.
->>
->> -- 
->> Cheers,
->> Stephen Rothwell
->>
->> diff --cc drivers/dma/idxd/device.c
->> index f652da6ab47d,1143886f4a80..000000000000
->> --- a/drivers/dma/idxd/device.c
->> +++ b/drivers/dma/idxd/device.c
->> @@@ -699,21 -716,23 +716,26 @@@ static void idxd_device_wqs_clear_state
->>    		struct idxd_wq *wq = idxd->wqs[i];
->>    
->>    		if (wq->state == IDXD_WQ_ENABLED) {
->> + 			mutex_lock(&wq->wq_lock);
->>    			idxd_wq_disable_cleanup(wq);
->>   -			idxd_wq_device_reset_cleanup(wq);
->>    			wq->state = IDXD_WQ_DISABLED;
->> + 			mutex_unlock(&wq->wq_lock);
->>    		}
->>   +		idxd_wq_device_reset_cleanup(wq);
+
+On 5/18/22 03:29, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Changes since 20220517:
+> 
+
+on x86_64:
+
+CONFIG_PROCESSOR_SELECT=y
+# CONFIG_CPU_SUP_INTEL is not set   <<<<<
+CONFIG_CPU_SUP_AMD=y
+# CONFIG_CPU_SUP_HYGON is not set
+CONFIG_CPU_SUP_CENTAUR=y
+CONFIG_CPU_SUP_ZHAOXIN=y
+
+CONFIG_MICROCODE=y
+CONFIG_MICROCODE_INTEL=y   <<<<<
+CONFIG_MICROCODE_AMD=y
+
+causes:
+
+ld: ld: DWARF error: could not find abbrev number 71
+arch/x86/kernel/cpu/microcode/intel.o: in function `__load_ucode_intel':
+intel.c:(.text+0xe9b): undefined reference to `intel_cpu_collect_info'
+ld: arch/x86/kernel/cpu/microcode/intel.o: in function `reload_ucode_intel':
+intel.c:(.text+0x130d): undefined reference to `intel_cpu_collect_info'
+ld: arch/x86/kernel/cpu/microcode/intel.o: in function `save_microcode_in_initrd_intel':
+intel.c:(.init.text+0x108): undefined reference to `intel_cpu_collect_info'
+ld: ld: DWARF error: could not find abbrev number 609515
+drivers/platform/x86/intel/ifs/load.o: in function `ifs_load_firmware':
+load.c:(.text+0x479): undefined reference to `intel_cpu_collect_info'
 
 
-The lock needs to go around both functions, we can move it outside the 
-if().
-
-  + 		mutex_lock(&wq->wq_lock);
-   		if (wq->state == IDXD_WQ_ENABLED) {
-   			idxd_wq_disable_cleanup(wq);
-  -			idxd_wq_device_reset_cleanup(wq);
-   			wq->state = IDXD_WQ_DISABLED;
-   		}
-  +		idxd_wq_device_reset_cleanup(wq);
-  + 		mutex_unlock(&wq->wq_lock);
-
-
->>    	}
->>    }
->>    
->>    void idxd_device_clear_state(struct idxd_device *idxd)
->>    {
->>   +	if (!test_bit(IDXD_FLAG_CONFIGURABLE, &idxd->flags))
->>   +		return;
->>   +
->> + 	idxd_device_wqs_clear_state(idxd);
->> + 	spin_lock(&idxd->dev_lock);
->>    	idxd_groups_clear_state(idxd);
->>    	idxd_engines_clear_state(idxd);
->> - 	idxd_device_wqs_clear_state(idxd);
->> + 	idxd->state = IDXD_DEV_DISABLED;
->> + 	spin_unlock(&idxd->dev_lock);
->>    }
->>    
->>    static void idxd_group_config_write(struct idxd_group *group)
->
->
+-- 
+~Randy

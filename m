@@ -2,48 +2,55 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C43552B92F
-	for <lists+linux-next@lfdr.de>; Wed, 18 May 2022 13:55:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FD3B52B99A
+	for <lists+linux-next@lfdr.de>; Wed, 18 May 2022 14:14:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235842AbiERLqq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 18 May 2022 07:46:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53762 "EHLO
+        id S235971AbiERL5A (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 18 May 2022 07:57:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235849AbiERLqp (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 18 May 2022 07:46:45 -0400
+        with ESMTP id S235879AbiERL47 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 18 May 2022 07:56:59 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB0C429CB7;
-        Wed, 18 May 2022 04:46:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FD14F45;
+        Wed, 18 May 2022 04:56:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4E0A8B81F02;
-        Wed, 18 May 2022 11:46:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B6E9C385AA;
-        Wed, 18 May 2022 11:46:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E909EB81F93;
+        Wed, 18 May 2022 11:56:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71455C385AA;
+        Wed, 18 May 2022 11:56:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652874399;
-        bh=++nifCX4OwZdI6hDHnzOn+jSgJ415rwWdFwmWJJ95RQ=;
+        s=k20201202; t=1652875014;
+        bh=9vOoc0v+BIYkpytw8iBPivZ+HzNBFguqZOXNLAw6pLI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=L4HxbNU9sdP033LrajcXnHhbjJ8Z5anyJkcLz7GXTRMI4YLG9Z3QE5RXRwydn0vfp
-         iUNdE1pZ4sfAECa7yWY7Nvghbw+6lg+GYzGTu4b/4Z5/lj6lYyufOPGJMY7Mv6zTgP
-         cf5F0bDmHYowOBuByHaGWWBC2BPviSOEAjLM/VnJvA2GcFyyF7NdYYF9ejo8m27jLz
-         eo6FwA6ikO1M899KBsw8iPgLoiVoXj8gl7TnPbdqsxiG59JBU2ePnFZv7hjyPH/Zrx
-         vxT2G6HkUgFKYvhjXmSfJmpRmF+t0vibrKzjMIZRGiL6hyJZygfW8lNhHTHokvLMbT
-         Pw7om22H0hKFw==
-Date:   Wed, 18 May 2022 17:16:34 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Dave Jiang <dave.jiang@intel.com>,
+        b=Irbz9HalufQgGqTpCt8jY8Xm1siWggiektz9izx5891iEwNqN+DXa2Lu7Hwz/yMgM
+         7AjzcF1Wv0whPCL1zeMQkL8a/R21522q487O5jeyHJAlPKveanVPxAbeBfCI7vL+qP
+         EgPyXb6pgvfARMWftzyE/11KCHVPcUjXofl0GqZzbAmtTbDgwcM36nRkYTEHgF04wC
+         O+vLlTlKQEEhW8QD8Q+EjqR20fM3NzFISDbB7K376Juo+VNDh6pl4dtFVqHqYMXECp
+         UTouosNDQQ1BlRF5gsdStQtZx4TBAn6Hrgogn6ILgm3J4v8moGLtqaEN7JOAh/17+e
+         i0TLaJ5G63Hpg==
+Date:   Wed, 18 May 2022 19:56:50 +0800
+From:   Tzung-Bi Shih <tzungbi@kernel.org>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     linux-doc@vger.kernel.org, Benson Leung <bleung@google.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the dmaengine tree with Linus' tree
-Message-ID: <YoTcmqygoMm/gmsZ@matsya>
-References: <20220517153435.645a9313@canb.auug.org.au>
+Subject: Re: [PATCH v2 0/2] Documentation update for Chrome OS ACPI
+Message-ID: <YoTfArGLd85jaG2Y@google.com>
+References: <20220518083524.37380-1-bagasdotme@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220517153435.645a9313@canb.auug.org.au>
+In-Reply-To: <20220518083524.37380-1-bagasdotme@gmail.com>
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -54,73 +61,20 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 17-05-22, 15:34, Stephen Rothwell wrote:
-> Hi all,
+On Wed, May 18, 2022 at 03:35:22PM +0700, Bagas Sanjaya wrote:
+> Two documentation patches touching Chrome OS ACPI sysfs.
 > 
-> Today's linux-next merge of the dmaengine tree got a conflict in:
+>   1. Patch [1/2] fixes htmldocs warning reported in linux-next and should
+>      be merged before upcoming merge window.
+>   2. Patch [2/2] rewrites symbol descriptions to use imperative mood. It
+>      can be merged when appropriate, independent of previous patch
+>      above.
 > 
->   drivers/dma/idxd/device.c
-> 
-> between commit:
-> 
->   1cd8e751d96c ("dmaengine: idxd: skip clearing device context when device is read-only")
-> 
-> from Linus' tree and commit:
-> 
->   cf4ac3fef338 ("dmaengine: idxd: fix lockdep warning on device driver removal")
+> [...]
 
-Thank you Stephen, the merge looks right to me. Dave pls verify and test
--next
+Applied, thanks!
 
-> 
-> from the dmaengine tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
-> 
-> diff --cc drivers/dma/idxd/device.c
-> index f652da6ab47d,1143886f4a80..000000000000
-> --- a/drivers/dma/idxd/device.c
-> +++ b/drivers/dma/idxd/device.c
-> @@@ -699,21 -716,23 +716,26 @@@ static void idxd_device_wqs_clear_state
->   		struct idxd_wq *wq = idxd->wqs[i];
->   
->   		if (wq->state == IDXD_WQ_ENABLED) {
-> + 			mutex_lock(&wq->wq_lock);
->   			idxd_wq_disable_cleanup(wq);
->  -			idxd_wq_device_reset_cleanup(wq);
->   			wq->state = IDXD_WQ_DISABLED;
-> + 			mutex_unlock(&wq->wq_lock);
->   		}
->  +		idxd_wq_device_reset_cleanup(wq);
->   	}
->   }
->   
->   void idxd_device_clear_state(struct idxd_device *idxd)
->   {
->  +	if (!test_bit(IDXD_FLAG_CONFIGURABLE, &idxd->flags))
->  +		return;
->  +
-> + 	idxd_device_wqs_clear_state(idxd);
-> + 	spin_lock(&idxd->dev_lock);
->   	idxd_groups_clear_state(idxd);
->   	idxd_engines_clear_state(idxd);
-> - 	idxd_device_wqs_clear_state(idxd);
-> + 	idxd->state = IDXD_DEV_DISABLED;
-> + 	spin_unlock(&idxd->dev_lock);
->   }
->   
->   static void idxd_group_config_write(struct idxd_group *group)
-
-
-
--- 
-~Vinod
+[1/2] platform/chrome: Use tables for values lists of ChromeOS ACPI sysfs ABI
+      commit: 596cbc6ab0abd18206b3247aaeaa225788afaf8c
+[2/2] platform/chrome: Use imperative mood for ChromeOS ACPI sysfs ABI descriptions
+      commit: 7bff62406671dd89e9d1a7bf00169197f2833c41

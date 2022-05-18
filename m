@@ -2,58 +2,51 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AAD252B8D1
-	for <lists+linux-next@lfdr.de>; Wed, 18 May 2022 13:32:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C43552B92F
+	for <lists+linux-next@lfdr.de>; Wed, 18 May 2022 13:55:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235593AbiERL1s (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 18 May 2022 07:27:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38296 "EHLO
+        id S235842AbiERLqq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 18 May 2022 07:46:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235637AbiERL1r (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 18 May 2022 07:27:47 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C815C166455;
-        Wed, 18 May 2022 04:27:45 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: usama.anjum)
-        with ESMTPSA id 545681F449B3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652873264;
-        bh=rBbCjdKWBmSyC6DxT/Ml286Uzl18qmi9zuCiDKlWOYc=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=hxETIbvhCXlF07VtM55O17KnEffGaMX0AFK2f/GIVWDG85eLSv1sKOYhVYZ5YtezQ
-         6TiPUkUn21A7yKRS/tu+jQBMDeA+8JXttz9J8r5z06zYzwG8vGM3WniTpiP6ccSB2r
-         CiXnGzUAZAX1MnhUAg9NYoZcQyNQ7qQAY4LK9BkP/S6iMVYW3HjoIOvAZW2ehHIMJn
-         0xadwx32BRSsO+goqBa+Q1FFplkxgh55p/735ifSr9kFOA2d8rv32sSb6vyBVkz6P/
-         5CNeGIeVEIf/Ifd1yMcI4moFLbHGN+RQOSgP9BFDpy9xTaaoJ7/zgPfKvIRD6Lp4QZ
-         zNXZ3Wh/ky7UQ==
-Message-ID: <890ae132-cf86-8c82-8280-291869183f5f@collabora.com>
-Date:   Wed, 18 May 2022 16:27:35 +0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Cc:     usama.anjum@collabora.com, Benson Leung <bleung@google.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Tzung-Bi Shih <tzungbi@kernel.org>,
+        with ESMTP id S235849AbiERLqp (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 18 May 2022 07:46:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB0C429CB7;
+        Wed, 18 May 2022 04:46:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4E0A8B81F02;
+        Wed, 18 May 2022 11:46:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B6E9C385AA;
+        Wed, 18 May 2022 11:46:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652874399;
+        bh=++nifCX4OwZdI6hDHnzOn+jSgJ415rwWdFwmWJJ95RQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=L4HxbNU9sdP033LrajcXnHhbjJ8Z5anyJkcLz7GXTRMI4YLG9Z3QE5RXRwydn0vfp
+         iUNdE1pZ4sfAECa7yWY7Nvghbw+6lg+GYzGTu4b/4Z5/lj6lYyufOPGJMY7Mv6zTgP
+         cf5F0bDmHYowOBuByHaGWWBC2BPviSOEAjLM/VnJvA2GcFyyF7NdYYF9ejo8m27jLz
+         eo6FwA6ikO1M899KBsw8iPgLoiVoXj8gl7TnPbdqsxiG59JBU2ePnFZv7hjyPH/Zrx
+         vxT2G6HkUgFKYvhjXmSfJmpRmF+t0vibrKzjMIZRGiL6hyJZygfW8lNhHTHokvLMbT
+         Pw7om22H0hKFw==
+Date:   Wed, 18 May 2022 17:16:34 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Dave Jiang <dave.jiang@intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: [PATCH v2 2/2] platform/chrome: Use imperative mood for ChromeOS
- ACPI sysfs ABI descriptions
-Content-Language: en-US
-To:     Bagas Sanjaya <bagasdotme@gmail.com>, linux-doc@vger.kernel.org
-References: <20220518083524.37380-1-bagasdotme@gmail.com>
- <20220518083524.37380-3-bagasdotme@gmail.com>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <20220518083524.37380-3-bagasdotme@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Subject: Re: linux-next: manual merge of the dmaengine tree with Linus' tree
+Message-ID: <YoTcmqygoMm/gmsZ@matsya>
+References: <20220517153435.645a9313@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220517153435.645a9313@canb.auug.org.au>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,28 +54,73 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 5/18/22 1:35 PM, Bagas Sanjaya wrote:
-> The current descriptions all begin with ("This file shows something")
-> clause, which is incorrect wording since these mean return value from
-> sysfs.
+On 17-05-22, 15:34, Stephen Rothwell wrote:
+> Hi all,
 > 
-> Use imperative mood ("Returns something") instead, in line with
-> corresponding ACPI documentation at firmware-guide/.
+> Today's linux-next merge of the dmaengine tree got a conflict in:
 > 
-> Cc: Benson Leung <bleung@google.com>
-> Cc: Guenter Roeck <groeck@chromium.org>
-> Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> Cc: Enric Balletbo i Serra <enric.balletbo@collabora.com>
-> Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> Cc: Tzung-Bi Shih <tzungbi@kernel.org>
-> Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-> Cc: Linux Next Mailing List <linux-next@vger.kernel.org>
-> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+>   drivers/dma/idxd/device.c
+> 
+> between commit:
+> 
+>   1cd8e751d96c ("dmaengine: idxd: skip clearing device context when device is read-only")
+> 
+> from Linus' tree and commit:
+> 
+>   cf4ac3fef338 ("dmaengine: idxd: fix lockdep warning on device driver removal")
 
-Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Thank you Stephen, the merge looks right to me. Dave pls verify and test
+-next
+
+> 
+> from the dmaengine tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
+> 
+> diff --cc drivers/dma/idxd/device.c
+> index f652da6ab47d,1143886f4a80..000000000000
+> --- a/drivers/dma/idxd/device.c
+> +++ b/drivers/dma/idxd/device.c
+> @@@ -699,21 -716,23 +716,26 @@@ static void idxd_device_wqs_clear_state
+>   		struct idxd_wq *wq = idxd->wqs[i];
+>   
+>   		if (wq->state == IDXD_WQ_ENABLED) {
+> + 			mutex_lock(&wq->wq_lock);
+>   			idxd_wq_disable_cleanup(wq);
+>  -			idxd_wq_device_reset_cleanup(wq);
+>   			wq->state = IDXD_WQ_DISABLED;
+> + 			mutex_unlock(&wq->wq_lock);
+>   		}
+>  +		idxd_wq_device_reset_cleanup(wq);
+>   	}
+>   }
+>   
+>   void idxd_device_clear_state(struct idxd_device *idxd)
+>   {
+>  +	if (!test_bit(IDXD_FLAG_CONFIGURABLE, &idxd->flags))
+>  +		return;
+>  +
+> + 	idxd_device_wqs_clear_state(idxd);
+> + 	spin_lock(&idxd->dev_lock);
+>   	idxd_groups_clear_state(idxd);
+>   	idxd_engines_clear_state(idxd);
+> - 	idxd_device_wqs_clear_state(idxd);
+> + 	idxd->state = IDXD_DEV_DISABLED;
+> + 	spin_unlock(&idxd->dev_lock);
+>   }
+>   
+>   static void idxd_group_config_write(struct idxd_group *group)
+
+
 
 -- 
-Muhammad Usama Anjum
+~Vinod

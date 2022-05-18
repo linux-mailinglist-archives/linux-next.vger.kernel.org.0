@@ -2,55 +2,53 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE7A752B1DE
-	for <lists+linux-next@lfdr.de>; Wed, 18 May 2022 07:30:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F02A52B1E5
+	for <lists+linux-next@lfdr.de>; Wed, 18 May 2022 07:36:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230188AbiERFWN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 18 May 2022 01:22:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52484 "EHLO
+        id S230282AbiERFe0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 18 May 2022 01:34:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230176AbiERFWL (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 18 May 2022 01:22:11 -0400
+        with ESMTP id S230314AbiERFeM (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 18 May 2022 01:34:12 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7040EBF40;
-        Tue, 17 May 2022 22:22:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A855205CC;
+        Tue, 17 May 2022 22:34:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=9zSaPciRCpiv/xQYeO4hUNPBcoEshe/eajOHecf8ojs=; b=dTOE6lgUFAxiXZ8vauK3TGnJbX
-        GFVPOB7v7VdupgFP+YQhDD6w7BEgMc8BE8/JAByplMNCBFMlovY+aNvEPYi5LbSZtczykxOWPhNQZ
-        Q7t+9/kkHqxzNuadwCnQTFUOVS9ELd2GPOLWBGxQ0sYkfCJEURPBXqQE5bd8RmvOOgM8nErd8mHcJ
-        b7L4Njbg5WtKtH9V7cXdsTIMO2VY7ahLftHR4vz/9Qz7eIPPSzEnfwPuQvATQ6egYma/iLO/nrJ2I
-        TF+k76uNt6njjuBS65s0OweJX+kFvguwEOifaaf26AcTx65m6vhQxD24e91amwhvfW82UCy2OKo4g
-        nRJrzJGw==;
+        In-Reply-To:From:References:To:Subject:MIME-Version:Date:Message-ID:Sender:
+        Reply-To:Cc:Content-ID:Content-Description;
+        bh=YSN+WtsO0fZFIV6KhoO12+ocgcJf0i8ccKnsR6saRAU=; b=wNXbbFByzCAFxzM/RFy0NeldX8
+        +oL1HLlG+dAOQMTF93PAgj7krqYKbkbL7SJNY/npRpqHTsOdijFe/w7F3trQTlvjYULiX51ulq7YC
+        Lljy0FyVi9fFRrCmn6OZNBDl5vxav1DV03IuoyeAOq2LiLycfkvMXi0GyXewZCIFs3IcAD6gyncXk
+        tlREWaHScE07UAYmql5Yry9okQ+AIl318H2t2ar3FhS0d40+7MJ8AZW6b7dInBPTJQQbVHWdQadMX
+        NXvep3ApsZJsDlO0lJvo5DnrJGTIpprjpM40Us6ya1k7rbPzXVeoSWgkK4kxLZ/cCc9kCov5evop5
+        BpdUY97g==;
 Received: from [2601:1c0:6280:3f0::aa0b]
         by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nrC8F-00BSuL-JJ; Wed, 18 May 2022 05:21:59 +0000
-Message-ID: <e2f636e1-33ff-3d9f-a793-960f239d0bc2@infradead.org>
-Date:   Tue, 17 May 2022 22:21:53 -0700
+        id 1nrCJo-00BTgP-Oc; Wed, 18 May 2022 05:33:57 +0000
+Message-ID: <f964a040-b9eb-75ae-ce01-6e8a62dc4d20@infradead.org>
+Date:   Tue, 17 May 2022 22:33:52 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.0
-Subject: Re: linux-next: Tree for May 17 (drivers/nvme/host/fc.o)
+Subject: Re: [syzbot] linux-next build error (13)
 Content-Language: en-US
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        James Smart <james.smart@broadcom.com>,
-        linux-nvme@lists.infradead.org
-References: <20220517194118.2caa01b8@canb.auug.org.au>
- <5958ccea-d89c-8b1a-15d3-19d8cacd141d@infradead.org>
- <20220518045704.GA30131@lst.de>
+To:     syzbot <syzbot+7013da477748d0b624b9@syzkaller.appspotmail.com>,
+        axboe@fb.com, hch@lst.de, james.smart@broadcom.com,
+        kbusch@kernel.org, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org, linux-nvme@lists.infradead.org,
+        sagi@grimberg.me, sfr@canb.auug.org.au,
+        syzkaller-bugs@googlegroups.com
+References: <000000000000b3a1f405df33be01@google.com>
 From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220518045704.GA30131@lst.de>
+In-Reply-To: <000000000000b3a1f405df33be01@google.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -59,32 +57,34 @@ X-Mailing-List: linux-next@vger.kernel.org
 
 
 
-On 5/17/22 21:57, Christoph Hellwig wrote:
-> The patch that adds nvme_fc_io_getuuid need something like this
-> folded in:
+On 5/17/22 04:50, syzbot wrote:
+> Hello,
 > 
-> diff --git a/drivers/nvme/host/fc.c b/drivers/nvme/host/fc.c
-> index a11c69e681180..3c778bb0c2944 100644
-> --- a/drivers/nvme/host/fc.c
-> +++ b/drivers/nvme/host/fc.c
-> @@ -1911,7 +1911,9 @@ char *nvme_fc_io_getuuid(struct nvmefc_fcp_req *req)
->  	struct nvme_fc_fcp_op *op = fcp_req_to_fcp_op(req);
->  	struct request *rq = op->rq;
->  
-> -	return rq->bio ? blkcg_get_fc_appid(rq->bio) : NULL;
-> +	if (!IS_ENABLED(CONFIG_BLK_CGROUP_FC_APPID) || !rq->bio)
-> +		return NULL;
-> +	return blkcg_get_fc_appid(rq->bio);
->  }
->  EXPORT_SYMBOL_GPL(nvme_fc_io_getuuid);
->  
+> syzbot found the following issue on:
+> 
+> HEAD commit:    47c1c54d1bcd Add linux-next specific files for 20220517
+> git tree:       linux-next
+> console output: https://syzkaller.appspot.com/x/log.txt?x=137f0301f00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=95ad7f734b04ada9
+> dashboard link: https://syzkaller.appspot.com/bug?extid=7013da477748d0b624b9
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+7013da477748d0b624b9@syzkaller.appspotmail.com
+> 
+> drivers/nvme/host/fc.c:1914: undefined reference to `blkcg_get_fc_appid'
+> 
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-Thanks. You can add
+Fix is here:
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
-Tested-by: Randy Dunlap <rdunlap@infradead.org>
-
-to the patch.
+https://lore.kernel.org/lkml/e2f636e1-33ff-3d9f-a793-960f239d0bc2@infradead.org/T/#m2cca6716362ec3f367d15798c0af05f6c3f879a0
 
 -- 
 ~Randy

@@ -2,39 +2,54 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E458F52B348
-	for <lists+linux-next@lfdr.de>; Wed, 18 May 2022 09:28:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E91CE52B50D
+	for <lists+linux-next@lfdr.de>; Wed, 18 May 2022 10:38:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231947AbiERHTS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 18 May 2022 03:19:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35336 "EHLO
+        id S233302AbiERIfl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 18 May 2022 04:35:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232050AbiERHTM (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 18 May 2022 03:19:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B29441116D7;
-        Wed, 18 May 2022 00:19:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 32053612B7;
-        Wed, 18 May 2022 07:19:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 667EAC385AA;
-        Wed, 18 May 2022 07:19:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652858348;
-        bh=UXWz6D3Zwmn9H6FOYGxCt9ZshmaaEUHF1r8ufbfHFmM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FY69pe6QTiP3ifpkkLUY1UXmEMze6rlhPtyljVRTXLKJGOdTDeCXIVboNHgmUyUVr
-         cyuHxNJryle2KK1G/6XBkY7wW7JsI32SJyoIgNhhVzLETyWdyf9NizTi9dFe7I/kBf
-         a8N50aaaqVSxvFZMeQV3kDOo7vhSC279ZuqQJQ7hKNRvqFFQHqOMVtXn/ox61tLedT
-         0WEqJ3ewLfrnLHTm8lD31rfj6ZsiGLhvo38o2cPp/pD/fOeAIDXsjsN+hWVrclXxFd
-         ZGQwJyN6w+C0NTGewwXDYUoiWHjpLyD5YWpCPnphpegrg6IheF68c5Vjl8r4cXDm/1
-         JffpS2BmJZRGA==
-Date:   Wed, 18 May 2022 15:19:04 +0800
-From:   Tzung-Bi Shih <tzungbi@kernel.org>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     linux-doc@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>,
+        with ESMTP id S233312AbiERIfk (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 18 May 2022 04:35:40 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42E2A4ECCB;
+        Wed, 18 May 2022 01:35:39 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id l14so1343343pjk.2;
+        Wed, 18 May 2022 01:35:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fP2fbOCLOJBQ4ZmPFu380tszq7XyGeACGdg9Wxs7b6o=;
+        b=pSFmTzZIFnrcw2fal89T3gmAqy5brVXf4T3ueXyCgI5iaaqddc4YvjjZ3/MprJ+lj/
+         asTRvgaVph7wKEuajTO0Y2TFTrCZzah4TedzrPk2SX8B71fIbmBWNYzCjFwiKwc84AHd
+         vsk2yM1whBiAZSuzsETaTtY+MsvzCvw99bWMEGcEi/ve5ZCJ4rMv2sp9TbaHXA/2PovF
+         lBVk6bBjbX+o+VJ31SdJt9o/hj3bxXRIMVetnjdOqE8AEd62nrDWaXO+kBrb0MZ24hvM
+         8ociGDH6kj74sNnvU68rbBj8ptiKo8QXCKyTrFTjyTsoiImKQrDM84dsPtDuCrUCrcKX
+         Jf4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fP2fbOCLOJBQ4ZmPFu380tszq7XyGeACGdg9Wxs7b6o=;
+        b=RlD9cc2lXbQYg7fEqb2skStALfaNnLy9nWAkoqYK0G+Aqu472UFoOOKkiD4uZS8dI0
+         qLLIC/P6nKMk+u7RxR80N1d5XrdkDaS/n7D7pNoKyGrE3VB+gqEi/sQczOv0UtBlsQqT
+         YLYRn1sDbVYwIzL5NQvBcjcEFf2WS2E9ZAW2lfB7bi4TBydAQ8BVcLgBGAYlCejDnJ/Z
+         PZYAonH6AGd+k9N4iJ1x6pOYRqHmeDhkZV9ysIs9jRU6jhznDvnifBy4nvfvxvxbr0yi
+         /4jLNGtn9j/2aG0FiBHfa5Z/rwYyo6+oU9nUUYINAY6p8QyHRN4h2CF9KbgFNTEM01IP
+         059w==
+X-Gm-Message-State: AOAM532STFw/GUbWXyhiqsyjqPgJFJd0z2+GVbRfslz/NB06/qDtJC8L
+        VGGKWe13QJA/K7wLnM92RFhdLa+xCKM=
+X-Google-Smtp-Source: ABdhPJz6YKcuquMaQGW6SbulhPY0jRLE8ZoBzgdNAHmDuzlfS5pP1Gae450qtbDHl949zNgMORmsfA==
+X-Received: by 2002:a17:90b:3a86:b0:1dc:228f:6a1f with SMTP id om6-20020a17090b3a8600b001dc228f6a1fmr40671731pjb.230.1652862938273;
+        Wed, 18 May 2022 01:35:38 -0700 (PDT)
+Received: from debian.me (subs32-116-206-28-58.three.co.id. [116.206.28.58])
+        by smtp.gmail.com with ESMTPSA id gc10-20020a17090b310a00b001df313f6628sm3029837pjb.21.2022.05.18.01.35.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 May 2022 01:35:37 -0700 (PDT)
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     linux-doc@vger.kernel.org
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
         Benson Leung <bleung@google.com>,
         Guenter Roeck <groeck@chromium.org>,
         Andy Shevchenko <andy.shevchenko@gmail.com>,
@@ -43,56 +58,86 @@ Cc:     linux-doc@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>,
         Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Enric Balletbo i Serra <enric.balletbo@collabora.com>,
         Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Tzung-Bi Shih <tzungbi@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: [PATCH 1/2] platform/chrome: Use tables for values lists of
- ChromeOS ACPI sysfs ABI
-Message-ID: <YoSd6NQBvX41y7Fb@google.com>
-References: <20220518031750.21923-1-bagasdotme@gmail.com>
- <20220518031750.21923-2-bagasdotme@gmail.com>
- <YoRp/49OA9tqMd9N@google.com>
- <2816e961-08f9-407b-e8f8-b63f844d864c@gmail.com>
+Subject: [PATCH v2 0/2] Documentation update for Chrome OS ACPI
+Date:   Wed, 18 May 2022 15:35:22 +0700
+Message-Id: <20220518083524.37380-1-bagasdotme@gmail.com>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2816e961-08f9-407b-e8f8-b63f844d864c@gmail.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, May 18, 2022 at 01:50:26PM +0700, Bagas Sanjaya wrote:
-> On 5/18/22 10:37, Tzung-Bi Shih wrote:
-> > On Wed, May 18, 2022 at 10:17:50AM +0700, Bagas Sanjaya wrote:
-> >>  What:		/sys/bus/platform/devices/GGL0001:*/CHSW
-> >>  Date:		May 2022
-> >>  KernelVersion:	5.19
-> >>  Description:
-> >>  		This file shows the switch position for the Chrome OS specific
-> >> -		hardware switches.
-> >> -		  * 0   - No changes.
-> >> -		  * 2   - Recovery button was pressed when firmware booted.
-> >> -		  * 4   - Recovery button was pressed when EC firmware booted.
-> >> -		  * 32  - Developer switch was enabled when firmware booted.
-> >> -		  * 512 - Firmware write protection was disabled when firmware
-> >> -			  booted.
-> >> +		hardware switches when the firmare is booted.
-> > 
-> > s/firmare/firmware/.
-> > 
-> > Could you fix it in v2 and also Cc to <chrome-platform@lists.linux.dev>?
-> 
-> OK, but regarding the schedule, we are on -rc7 (official mainline release
-> will be imminent). Maybe I can send the v2 immediately, or should I wait
-> for a day?
+Two documentation patches touching Chrome OS ACPI sysfs.
 
-I think either way is fine.  The patch introduced the sphinx warning is still
-in chrome-platform's for-next branch[1].  And it should send to mainline when 
-the next merge window opens.
+  1. Patch [1/2] fixes htmldocs warning reported in linux-next and should
+     be merged before upcoming merge window.
+  2. Patch [2/2] rewrites symbol descriptions to use imperative mood. It
+     can be merged when appropriate, independent of previous patch
+     above.
 
-[1]: https://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux.git/commit/?h=for-next&id=0a4cad9c11ad46662ede48d94f08ecb7cd9f6916
+Changes since v1 [1]:
+  - Firmware typofix
+
+Range-diff against v1 [1]:
+1:  88fa56e47fd5ad ! 1:  10eface6e5ad4e platform/chrome: Use tables for values lists of ChromeOS ACPI sysfs ABI
+    @@ Documentation/ABI/testing/sysfs-driver-chromeos-acpi: KernelVersion:	5.19
+     -		  * 32  - Developer switch was enabled when firmware booted.
+     -		  * 512 - Firmware write protection was disabled when firmware
+     -			  booted.
+    -+		hardware switches when the firmare is booted.
+    ++		hardware switches when the firmware is booted.
+     +
+     +		==== ===========================================
+     +		0    No changes.
+2:  9b4751a2cefc7a ! 2:  17d581296f6dfb platform/chrome: Use imperative mood for ChromeOS ACPI sysfs ABI descriptions
+    @@ Documentation/ABI/testing/sysfs-driver-chromeos-acpi: What:		/sys/bus/platform/d
+      KernelVersion:	5.19
+      Description:
+     -		This file shows the switch position for the Chrome OS specific
+    --		hardware switches when the firmare is booted.
+    +-		hardware switches when the firmware is booted.
+     +		Returns switch position for Chrome OS specific hardware
+    -+		switches when the firmare is booted (integer).
+    ++		switches when the firmware is booted (integer).
+      
+      		==== ===========================================
+      		0    No changes.
+
+[1]: https://lore.kernel.org/linux-doc/20220518031750.21923-1-bagasdotme@gmail.com/
+
+Cc: Benson Leung <bleung@google.com>
+Cc: Guenter Roeck <groeck@chromium.org>
+Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc: Enric Balletbo i Serra <enric.balletbo@collabora.com>
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc: Tzung-Bi Shih <tzungbi@kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc: Linux Next Mailing List <linux-next@vger.kernel.org>
+
+Bagas Sanjaya (2):
+  platform/chrome: Use tables for values lists of ChromeOS ACPI sysfs
+    ABI
+  platform/chrome: Use imperative mood for ChromeOS ACPI sysfs ABI
+    descriptions
+
+ .../ABI/testing/sysfs-driver-chromeos-acpi    | 113 ++++++++++--------
+ 1 file changed, 62 insertions(+), 51 deletions(-)
+
+
+base-commit: 0a4cad9c11ad46662ede48d94f08ecb7cd9f6916
+-- 
+An old man doll... just what I always wanted! - Clara
+

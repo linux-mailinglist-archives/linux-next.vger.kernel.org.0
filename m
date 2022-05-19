@@ -2,153 +2,88 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1315D52DFF0
-	for <lists+linux-next@lfdr.de>; Fri, 20 May 2022 00:22:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99ACB52E000
+	for <lists+linux-next@lfdr.de>; Fri, 20 May 2022 00:32:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238319AbiESWWz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 19 May 2022 18:22:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49796 "EHLO
+        id S245475AbiESWc0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 19 May 2022 18:32:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231989AbiESWWz (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 19 May 2022 18:22:55 -0400
-Received: from a48-34.smtp-out.amazonses.com (a48-34.smtp-out.amazonses.com [54.240.48.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B9A6622A;
-        Thu, 19 May 2022 15:22:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1652998972;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=W5dL5IIIiJA2zdge9PK5/lbWNC80HjqnMb1aFoZBBK4=;
-        b=hw9pB8LwzpVh9y4gAkThxxwBWltpCbH6QNC2bWm8QSIug+7qsljk3aG5dn8mjGoq
-        O6gG4usmMEdkaxypEdvmW/7Ip1rs/OihCSwKY/5ddhxpCakC4sZQu3lNTmQ+Mj4r2n+
-        mhfJmipltF6eBB3NfLrzLkg5QAxGMKqwlxb4Gyqc=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=6gbrjpgwjskckoa6a5zn6fwqkn67xbtw; d=amazonses.com; t=1652998972;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=W5dL5IIIiJA2zdge9PK5/lbWNC80HjqnMb1aFoZBBK4=;
-        b=Ad2127uXoNQBMhwvHwtkovqgiszDIjWl0Euxzjs+uDXB/cs234EqTIZRWRhv0oka
-        x0qfa6dlr9r3fdDj67y1wUBuGpwMUiuDnqjotiQ26KpwoZsckdRUUvrdodPyC+zNZmF
-        S/r+b24VrY5nkDKzrYJ0XxFTvFINfxj6D7is+7Cc=
-From:   lkft@linaro.org
-To:     lkft@linaro.org
-Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
-        linux-next@vger.kernel.org, shuah@kernel.org
-Subject: [REGRESSION] lkft kselftest for next-20220518
+        with ESMTP id S239262AbiESWcZ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 19 May 2022 18:32:25 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 888B4B2278;
+        Thu, 19 May 2022 15:32:23 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L44Nf37HFz4xDB;
+        Fri, 20 May 2022 08:32:18 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1652999538;
+        bh=HsQ3C+KXpMZzUUB1bcGRf24npFJKXVif+oFEDfFYg/U=;
+        h=Date:From:To:Cc:Subject:From;
+        b=hhTX3+FNE9kINdQxIXA3nBvIDv8k6ROmGJXsPNRdnx3hMHmHqvDT9r/RFdE7+NR/h
+         eYkH8mqvzPWsOVWcJVoJx+3Tk2/KPLW+lYdkvnRc4h0r93BebEyOvv4lT306KbNPTl
+         pUfZW7Ehm7rZCZxAILZ9oJ2DaA+prhfmw/cvAlS9mAIGAPCI8JYcnk03sVir3B28/M
+         2IAOIOHoIyIYkz1tJOHctMGCBP2nOb5bckcJDvxbcDNf0yXxSIoviESKr+NjISfld7
+         UFGIo5RM8TQeQKJawFfpVSqPvHMW1w11wh3vwn+jKsNr5BiugEPtMPFsL5GVK4Vh3d
+         URQ7bPHMwjYRA==
+Date:   Fri, 20 May 2022 08:31:50 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     PowerPC <linuxppc-dev@lists.ozlabs.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the powerpc tree
+Message-ID: <20220520083150.57e953fc@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-Message-ID: <01000180de6aa3ac-3a1408f3-2645-4338-87dc-b580b034dad8-000000@email.amazonses.com>
-Date:   Thu, 19 May 2022 22:22:52 +0000
-Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2022.05.19-54.240.48.34
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        TO_EQ_FM_DIRECT_MX,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/ndsHKp=ZuOV6h9zKNpo9eGL";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-## Build
-* kernel: 5.18.0-rc7
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-* git branch: master
-* git commit: 736ee37e2e8eed7fe48d0a37ee5a709514d478b3
-* git describe: next-20220518
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220518
+--Sig_/ndsHKp=ZuOV6h9zKNpo9eGL
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-## Test Regressions (compared to next-20220506)
-* qemu-arm64-mte, kselftest-cgroup
-  - cgroup.test_freezer
+Hi all,
 
-* x86, kselftest-kvm
-  - kvm.evmcs_test
-  - kvm.hyperv_clock
-  - kvm.smm_test
-  - kvm.state_test
-  - kvm.vmx_preemption_timer_test
+Commits
 
+  03a2e65f54b3 ("KVM: PPC: Book3S Nested: Use explicit 4096 LPID maximum")
+  18827eeef022 ("KVM: PPC: Remove kvmppc_claim_lpid")
 
-## Metric Regressions (compared to next-20220506)
-No metric regressions found.
+are missing a Signed-off-by from their authors.
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+The first is just "Signed-of-by" misspelling.  The second is missing.
 
+--=20
+Cheers,
+Stephen Rothwell
 
-## Test Fixes (compared to next-20220506)
-* dragonboard-845c, kselftest-proc
-  - proc.proc-uptime-001
+--Sig_/ndsHKp=ZuOV6h9zKNpo9eGL
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-* dragonboard-845c, kselftest-rtc
-  - rtc.rtctest.rtc.uie_select
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKGxVYACgkQAVBC80lX
+0GyDoAf9E20H9DPEXMUmMGq6Fl+hHTneXt69+Z6XYed7k/bxZw87kUKvSB/91h1E
+pYDW4UMClBEKDKp19992vnl47QyuyI75rSLqcLzBeiOi1zdQpXkpmBNJ4kJTmH4B
+UEQrH/NycFvH6mFuHjGGaE5hfqc8ETFqfvekLlJPRrR1Ujl4oVC9ime2tknaJUA8
+GLm0BHCcGU8pleu6jRg9kvikIJr/ivFADd0fIIX0yAZBWEflfaUFQUd53sdYYzyI
+eedhkAGE7wrAz61cfPjMvgDFc1T42MQfjXUP7oEQ4b4SpgiPwpXd0XNSVBHZc/zq
+4qgkWrwEkwhsA9FI5Ih//86jaF2R2w==
+=q8SX
+-----END PGP SIGNATURE-----
 
-## Metric Fixes (compared to next-20220506)
-No metric fixes found.
-
-## Test result summary
-total: 5265, pass: 2783, fail: 537, skip: 1945, xfail: 0
-
-## Build Summary
-
-## Test suites summary
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-
---
-Linaro LKFT
-https://lkft.linaro.org
+--Sig_/ndsHKp=ZuOV6h9zKNpo9eGL--

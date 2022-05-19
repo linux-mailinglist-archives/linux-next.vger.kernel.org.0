@@ -2,51 +2,48 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B83552C6A3
-	for <lists+linux-next@lfdr.de>; Thu, 19 May 2022 00:52:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F60F52C900
+	for <lists+linux-next@lfdr.de>; Thu, 19 May 2022 02:55:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229766AbiERWwy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 18 May 2022 18:52:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59220 "EHLO
+        id S230457AbiESAzZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 18 May 2022 20:55:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiERWwx (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 18 May 2022 18:52:53 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08D0E14C76D;
-        Wed, 18 May 2022 15:52:52 -0700 (PDT)
+        with ESMTP id S232399AbiESAzS (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 18 May 2022 20:55:18 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92579F599;
+        Wed, 18 May 2022 17:55:14 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L3Stn61FBz4xYC;
-        Thu, 19 May 2022 08:52:48 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L3Wbt52bxz4xbC;
+        Thu, 19 May 2022 10:55:06 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1652914370;
-        bh=hFcqQpeaD1yYwsfoGIgWqtytR6mHB/YbSEYYDRNxBbY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ae8tYABEbdx/ZRsoweomMO1gz+eVGAItH3mnegZu3mYzC51fd15I+I8oplGXHcL+q
-         +PKQ9Tg9jalfTLLJCh6ixll00X7yd4cTj7Z4QPeGRdP1WaHWJCWrIryzcxYPD0BxUl
-         /6q0a7syTpIWCm+tXjEnvsAT2Oo7xjQB5PR4sRjAwEsOTkxvWfPFxcfkzPgHOSAf2x
-         ERYNftScW0eqKvzokGT8Sa/9c2omAtlN55D0pS8Of2HfI7t5Kaj0GX3o45M7bWjhLm
-         SCCLv/dgvm0REEpmCCZDEy33c3BU7URpzjgcX1f5AAkfITPtSO+ocT8HPajOd1ViRo
-         qE/mHsg/V2Q5g==
-Date:   Thu, 19 May 2022 08:52:47 +1000
+        s=201702; t=1652921710;
+        bh=V3JqrlsADLhfhJ+MRSPiBplQsRqXjbCZz+kuhT1z+5I=;
+        h=Date:From:To:Cc:Subject:From;
+        b=tGnDh6e8GZDsZhvcI03y6kbnHjxCHdYasXOHwJCVrJFfdJuYOR8uHIm3GGA3a2NMR
+         gFGoiDj6/B1pzdH5cYr4Ae1+tYWKjzEyjx1u7nHWfY4GSIMUjDnX3YshppxKfiyg2Y
+         6ftOM6RgKYXzl76CLu5je43k88T5JLZnvj4QeiX0Y52vs+GnkSo96hqHm+ryPKVFUe
+         gg20FwAwp65Gg2xAGCXep9w+2CO2PQmUfLgKnF/cDrLhFCH/JEwHp2ZSFhi4Ald8pl
+         uafNTHZ2xmPOhILS+PKUPB1XZNR0+BvO7emXSJc9x1L5xhuBUoRsSsEDXSbmx27hJM
+         cmOqforM/NnBg==
+Date:   Thu, 19 May 2022 10:54:48 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>
-Cc:     Florian Westphal <fw@strlen.de>,
-        Networking <netdev@vger.kernel.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Cc:     Bob Moore <robert.moore@intel.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: Re: linux-next: build warning after merge of the net-next tree
-Message-ID: <20220519085247.4ba8284a@canb.auug.org.au>
-In-Reply-To: <20220517112532.GE5118@breakpoint.cc>
-References: <20220517110303.723a7148@canb.auug.org.au>
-        <20220517190332.4506f7e8@canb.auug.org.au>
-        <20220517112532.GE5118@breakpoint.cc>
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: linux-next: manual merge of the pm tree with the loongarch tree
+Message-ID: <20220519105448.74a4447e@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/NB7+72UJCjrsjCKMy.NMG_j";
+Content-Type: multipart/signed; boundary="Sig_/BQv5phBh_Tx=7u+niI6=_CH";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -57,65 +54,202 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/NB7+72UJCjrsjCKMy.NMG_j
+--Sig_/BQv5phBh_Tx=7u+niI6=_CH
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Tue, 17 May 2022 13:25:32 +0200 Florian Westphal <fw@strlen.de> wrote:
->
-> Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >=20
-> > On Tue, 17 May 2022 11:03:03 +1000 Stephen Rothwell <sfr@canb.auug.org.=
-au> wrote: =20
-> > >
-> > > After merging the net-next tree, today's linux-next build (powerpc
-> > > ppc64_defconfig) produced this warning:
-> > >=20
-> > > net/netfilter/nf_conntrack_netlink.c:1717:12: warning: 'ctnetlink_dum=
-p_one_entry' defined but not used [-Wunused-function]
-> > >  1717 | static int ctnetlink_dump_one_entry(struct sk_buff *skb,
-> > >       |            ^~~~~~~~~~~~~~~~~~~~~~~~
-> > >=20
-> > > Introduced by commit
-> > >=20
-> > >   8a75a2c17410 ("netfilter: conntrack: remove unconfirmed list") =20
-> >=20
-> > So for my i386 defconfig build this became on error, so I have applied
-> > the following patch for today.
-> >=20
-> > From: Stephen Rothwell <sfr@canb.auug.org.au>
-> > Date: Tue, 17 May 2022 18:58:43 +1000
-> > Subject: [PATCH] fix up for "netfilter: conntrack: remove unconfirmed l=
-ist"
-> >=20
-> > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au> =20
->=20
-> Thanks Stephen.
->=20
-> Acked-by: Florian Westphal <fw@strlen.de>
+Today's linux-next merge of the pm tree got a conflict in:
 
-This is still not fixed in the net-next (or the netfilter-next) tree.
+  include/acpi/actbl2.h
+
+between commit:
+
+  cb41f313b29e ("ACPICA: MADT: Add LoongArch APICs support")
+
+from the loongarch tree and commit:
+
+  da6a9bbedc79 ("ACPICA: iASL/MADT: Add OEM-defined subtable")
+
+from the pm tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/NB7+72UJCjrsjCKMy.NMG_j
+diff --cc include/acpi/actbl2.h
+index 2419f9e397e2,655102bc6d14..000000000000
+--- a/include/acpi/actbl2.h
++++ b/include/acpi/actbl2.h
+@@@ -762,14 -865,8 +865,15 @@@ enum acpi_madt_type=20
+  	ACPI_MADT_TYPE_GENERIC_REDISTRIBUTOR =3D 14,
+  	ACPI_MADT_TYPE_GENERIC_TRANSLATOR =3D 15,
+  	ACPI_MADT_TYPE_MULTIPROC_WAKEUP =3D 16,
+ -	ACPI_MADT_TYPE_RESERVED =3D 17,	/* 17 to 0x7F are reserved */
+ +	ACPI_MADT_TYPE_CORE_PIC =3D 17,
+ +	ACPI_MADT_TYPE_LIO_PIC =3D 18,
+ +	ACPI_MADT_TYPE_HT_PIC =3D 19,
+ +	ACPI_MADT_TYPE_EIO_PIC =3D 20,
+ +	ACPI_MADT_TYPE_MSI_PIC =3D 21,
+ +	ACPI_MADT_TYPE_BIO_PIC =3D 22,
+ +	ACPI_MADT_TYPE_LPC_PIC =3D 23,
+- 	ACPI_MADT_TYPE_RESERVED =3D 24	/* 24 and greater are reserved */
+++	ACPI_MADT_TYPE_RESERVED =3D 24	/* 24 to 0x7F are reserved */
++ 	ACPI_MADT_TYPE_OEM_RESERVED =3D 0x80	/* 0x80 to 0xFF are reserved for OE=
+M use */
+  };
+ =20
+  /*
+@@@ -999,120 -1096,10 +1103,125 @@@ struct acpi_madt_multiproc_wakeup_mailb
+ =20
+  #define ACPI_MP_WAKE_COMMAND_WAKEUP    1
+ =20
+ +/* Values for Version field above */
+ +
+ +enum acpi_madt_core_pic_version {
+ +	ACPI_MADT_CORE_PIC_VERSION_NONE =3D 0,
+ +	ACPI_MADT_CORE_PIC_VERSION_V1 =3D 1,
+ +	ACPI_MADT_CORE_PIC_VERSION_RESERVED =3D 2	/* 2 and greater are reserved =
+*/
+ +};
+ +
+ +enum acpi_madt_lio_pic_version {
+ +	ACPI_MADT_LIO_PIC_VERSION_NONE =3D 0,
+ +	ACPI_MADT_LIO_PIC_VERSION_V1 =3D 1,
+ +	ACPI_MADT_LIO_PIC_VERSION_RESERVED =3D 2	/* 2 and greater are reserved */
+ +};
+ +
+ +enum acpi_madt_eio_pic_version {
+ +	ACPI_MADT_EIO_PIC_VERSION_NONE =3D 0,
+ +	ACPI_MADT_EIO_PIC_VERSION_V1 =3D 1,
+ +	ACPI_MADT_EIO_PIC_VERSION_RESERVED =3D 2	/* 2 and greater are reserved */
+ +};
+ +
+ +enum acpi_madt_ht_pic_version {
+ +	ACPI_MADT_HT_PIC_VERSION_NONE =3D 0,
+ +	ACPI_MADT_HT_PIC_VERSION_V1 =3D 1,
+ +	ACPI_MADT_HT_PIC_VERSION_RESERVED =3D 2	/* 2 and greater are reserved */
+ +};
+ +
+ +enum acpi_madt_bio_pic_version {
+ +	ACPI_MADT_BIO_PIC_VERSION_NONE =3D 0,
+ +	ACPI_MADT_BIO_PIC_VERSION_V1 =3D 1,
+ +	ACPI_MADT_BIO_PIC_VERSION_RESERVED =3D 2	/* 2 and greater are reserved */
+ +};
+ +
+ +enum acpi_madt_msi_pic_version {
+ +	ACPI_MADT_MSI_PIC_VERSION_NONE =3D 0,
+ +	ACPI_MADT_MSI_PIC_VERSION_V1 =3D 1,
+ +	ACPI_MADT_MSI_PIC_VERSION_RESERVED =3D 2	/* 2 and greater are reserved */
+ +};
+ +
+ +enum acpi_madt_lpc_pic_version {
+ +	ACPI_MADT_LPC_PIC_VERSION_NONE =3D 0,
+ +	ACPI_MADT_LPC_PIC_VERSION_V1 =3D 1,
+ +	ACPI_MADT_LPC_PIC_VERSION_RESERVED =3D 2	/* 2 and greater are reserved */
+ +};
+ +
+ +/* Core Interrupt Controller */
+ +
+ +struct acpi_madt_core_pic {
+ +	struct acpi_subtable_header header;
+ +	u8 version;
+ +	u32 processor_id;
+ +	u32 core_id;
+ +	u32 flags;
+ +};
+ +
+ +/* Legacy I/O Interrupt Controller */
+ +
+ +struct acpi_madt_lio_pic {
+ +	struct acpi_subtable_header header;
+ +	u8 version;
+ +	u64 address;
+ +	u16 size;
+ +	u8 cascade[2];
+ +	u32 cascade_map[2];
+ +};
+ +
+ +/* Extend I/O Interrupt Controller */
+ +
+ +struct acpi_madt_eio_pic {
+ +	struct acpi_subtable_header header;
+ +	u8 version;
+ +	u8 cascade;
+ +	u8 node;
+ +	u64 node_map;
+ +};
+ +
+ +/* HT Interrupt Controller */
+ +
+ +struct acpi_madt_ht_pic {
+ +	struct acpi_subtable_header header;
+ +	u8 version;
+ +	u64 address;
+ +	u16 size;
+ +	u8 cascade[8];
+ +};
+ +
+ +/* Bridge I/O Interrupt Controller */
+ +
+ +struct acpi_madt_bio_pic {
+ +	struct acpi_subtable_header header;
+ +	u8 version;
+ +	u64 address;
+ +	u16 size;
+ +	u16 id;
+ +	u16 gsi_base;
+ +};
+ +
+ +/* MSI Interrupt Controller */
+ +
+ +struct acpi_madt_msi_pic {
+ +	struct acpi_subtable_header header;
+ +	u8 version;
+ +	u64 msg_address;
+ +	u32 start;
+ +	u32 count;
+ +};
+ +
+ +/* LPC Interrupt Controller */
+ +
+ +struct acpi_madt_lpc_pic {
+ +	struct acpi_subtable_header header;
+ +	u8 version;
+ +	u64 address;
+ +	u16 size;
+ +	u8 cascade;
+++
++ /* 17: OEM data */
++=20
++ struct acpi_madt_oem_data {
++ 	u8 oem_data[0];
+  };
+ =20
+  /*
+
+--Sig_/BQv5phBh_Tx=7u+niI6=_CH
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKFeL8ACgkQAVBC80lX
-0Gxwswf/Vs9Kczh9t6wKs/dDv03h1zTg07abzK0nI7p3xkAnnS6YDpnSadcN8ZW1
-aej/Aplu6w1ObQ6oSpxWiedVn1fk3M9q/FnrvzWauhD7SRkOerOqHkQ6Nj69+r4T
-3vV3pEmZZXTHLH16CCtMFsXUtUdtb+29YqkdRhhT/eGaNSbK45CDT1snHoAFqGkY
-7Qr8dYkYWMKq2EblmMBkxKoNvT6Yw3ffT38uVXwsUgeAcDgcB9Aa9m+SySQ8okf8
-DSwl5V+fb8DRESPdT3L94Z6EjtcrqR5ix5ZSAVrxJqMD5BgCsNgUWASz3VHa4Jbc
-QCct9hc7m2MgTmzL9TfjRVcXas9+Hw==
-=bCvB
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKFlVgACgkQAVBC80lX
+0GxrRgf/WpfGX+SERF916VHuCBgGmllOrsZwdHf3LAO74utNjyXFeURmFXdaWqSf
+jdNGriuAKP4+aLyp1wQ5mSNfyhbMuvFAwk2QdysZp2BTvhjOyis4uqO0uBKhJCzB
+dRvFdo/7W6zllaDbIlJJFRZGDDbnCuf0epggo+Ylygw4A9gApEz07frzy//u7t/F
+3flb8xX3t/rVIc2+CaQlShHfewL0UA6n9210m29U4QtgT9x3Y/BOBhcYHIJGvZJs
+ofMv0vpL5/SOLsW7aPb8Ng6c2rKTgLkvY9Wsvv0fL0CfSBmYsytte3kndG3fx0qn
+gdj7XVSTazhaqvEUzcTZP+pPWduBjg==
+=e1kZ
 -----END PGP SIGNATURE-----
 
---Sig_/NB7+72UJCjrsjCKMy.NMG_j--
+--Sig_/BQv5phBh_Tx=7u+niI6=_CH--

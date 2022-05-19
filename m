@@ -2,43 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B68452E011
-	for <lists+linux-next@lfdr.de>; Fri, 20 May 2022 00:42:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9FD552E036
+	for <lists+linux-next@lfdr.de>; Fri, 20 May 2022 01:03:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231268AbiESWmF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 19 May 2022 18:42:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48654 "EHLO
+        id S245628AbiESXCN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 19 May 2022 19:02:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230521AbiESWmF (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 19 May 2022 18:42:05 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1FD95676D;
-        Thu, 19 May 2022 15:42:02 -0700 (PDT)
+        with ESMTP id S234288AbiESXCM (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 19 May 2022 19:02:12 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AAC524F3C;
+        Thu, 19 May 2022 16:02:11 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L44bs4CCHz4xD8;
-        Fri, 20 May 2022 08:42:01 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L45336NB3z4xD9;
+        Fri, 20 May 2022 09:02:07 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1653000121;
-        bh=GIVENiCMlvc6aPH0Jy6HumlSK7xSBXFznM7oT3mXn2I=;
+        s=201702; t=1653001328;
+        bh=rBUXIaYvBaLHaORqdPDKoBqIalDVISEvroC7wciMFRs=;
         h=Date:From:To:Cc:Subject:From;
-        b=ArI0K3cRM22z01h3o5rMH0hUgavM6mt0JIkEi5d9ZH2o/0juFVuv1LkvgU+0CDYuL
-         hiBbKwoKLZYieDcCHWbhayJxh2VFh6i46sshF+2IIJuYbVkjzBC+3TUlzO7O/Ommq9
-         pNpOJiBlNA59N03oe1o5eOBm1sfNgOwpQhcFc6GUMvkaIgjUCvosycHvYOofM+LJA6
-         OhZGlPFJDODzEro6WnU5QutvKPBqVAfpX4z61R15IkKDLz2P2zOUTNMJ7rHqP+hIxR
-         9enG79y0FN8J3i0uSzUOLSgpYXQgmlhdFEluim1exGOhPO6ZFaG0R88UgV7kMgR3B6
-         To49bGxCg7tOQ==
-Date:   Fri, 20 May 2022 08:42:00 +1000
+        b=DXvGdvxIJGIjqOTTbAb4jqH7yOm6OeRsQWHIOdCZuP1yY09QBvbivWGBVSbCH7ySg
+         gTiydclLD1HGBOe7clVnvzLtKlj5YoVs+phHpkBmKt+gEYyYt6fsP4kfmlspaxElxH
+         M5o/PBjcBX7r8R7ohfhsYTyGrlmLyumnAPjiRQSBRbusYddjyOgs6IIu077TSyuOk8
+         f+WbWyqo051NSmvT1gfYlTJ3IXfFpIsmDlACMaFw3hjg77Yyc8mq/YiqMv1R0qirgu
+         3IzPgoejKCWSvwAkL2H3DeL/X48Sg8oMKz/ESIRwJOiLtyHFtzyr4VeghRJSIO8k40
+         v9T+iUYAEMJ8A==
+Date:   Fri, 20 May 2022 09:02:06 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Theodore Ts'o <tytso@mit.edu>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the ext4 tree
-Message-ID: <20220520084200.7262142d@canb.auug.org.au>
+Subject: linux-next: Fixes tag needs some work in the pm tree
+Message-ID: <20220520090206.2cf07c2d@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Inb/zo2=/phR0AxxSqv7dGb";
+Content-Type: multipart/signed; boundary="Sig_/maXGSWe_ezXCDx0N01I=6ek";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -49,38 +50,49 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Inb/zo2=/phR0AxxSqv7dGb
+--Sig_/maXGSWe_ezXCDx0N01I=6ek
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Commits
+In commit
 
-  cb8435dc8ba3 ("ext4: reject the 'commit' option on ext2 filesystems")
-  6493792d3299 ("ext4: convert symlink external data block mapping to bdev")
-  9558cf14e8d2 ("ext4: add nowait mode for ext4_getblk()")
+  42d2607d91c4 ("PM / devfreq: passive: Return non-error when not-supported=
+ event is required")
 
-are missing a Signed-off-by from their committer.
+Fixes tag
+
+  Fixes: ce9a0d88d97a ("PM / devfreq: Add cpu based scaling support to pass=
+ive governor")
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: a03dacb0316f ("PM / devfreq: Add cpu based scaling support to passiv=
+e governor")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/Inb/zo2=/phR0AxxSqv7dGb
+--Sig_/maXGSWe_ezXCDx0N01I=6ek
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKGx7gACgkQAVBC80lX
-0GxeAAf+MYIRZ+Ah5ankEfdLLI0I8SuHl6sjo6iivOzcM4kYV6bEbNvIyCSXze7p
-7iv4xNs2FDlKFTfnbGbjlOyzRPmlkv4lgxsMMMYWbu6SUhfCDmC/4QeOzK0ZCDGF
-ulpQQn8wRm+4MWoPpwj37gGaXpjhS/2nOpUA1ia4uN7R9Lq+3LUfFrK8tx3KeECx
-TwrNibcY6p34HPNFC3YjPTnqt0wJnIs49dURkHqYbARxw7ziQ32CzTqvSzjA4dpH
-O7VfO2lEYgoRrXu9H7nfCm/v7Pw0zrAHYwurRv/+qkZY/KE0kPA1vrVyX7OOHIkt
-X5oaWbAXMk/J8KTmXWoAvFRd5VG+dQ==
-=T+am
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKGzG4ACgkQAVBC80lX
+0Gz4QAgAjzUIAzBDkMMxjT/ImwQZKyITOhl91INMf6vym+ZCv5Zzwv809YHekjOr
+MJuc7zqVLibb+9Y/NP3w9olqVsWzhMDaObpv+1WWTey4jMw1VjKpHsL7+Ems0Kfm
+u3wE1z6SUB/vt5XRQ8enMCNJMrf4uHsorZ6GH5DpvJRllHRcjD9gll/a/Hotxk0o
+XEZJJyynsgEr9LhBE1HJQfpez1c3mrDiTb5Ik4wAKtKLmlMFUdSY4LfIrsvODGn5
+QHVb+/qMKK54FcJA+YKFuoCmO9K0uh5aV3uoUGUTURoArQwZjAwEfIeVpfmiJ069
+EOiE+/TJJ3lFkqVpBmNEFbQee6YGTw==
+=SKjy
 -----END PGP SIGNATURE-----
 
---Sig_/Inb/zo2=/phR0AxxSqv7dGb--
+--Sig_/maXGSWe_ezXCDx0N01I=6ek--

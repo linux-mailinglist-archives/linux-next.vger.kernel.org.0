@@ -2,97 +2,79 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9FD552E036
-	for <lists+linux-next@lfdr.de>; Fri, 20 May 2022 01:03:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 136B552E06F
+	for <lists+linux-next@lfdr.de>; Fri, 20 May 2022 01:17:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245628AbiESXCN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 19 May 2022 19:02:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34132 "EHLO
+        id S1343517AbiESXRd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 19 May 2022 19:17:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234288AbiESXCM (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 19 May 2022 19:02:12 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AAC524F3C;
-        Thu, 19 May 2022 16:02:11 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S237386AbiESXRb (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 19 May 2022 19:17:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 895F3E8BA0;
+        Thu, 19 May 2022 16:17:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L45336NB3z4xD9;
-        Fri, 20 May 2022 09:02:07 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1653001328;
-        bh=rBUXIaYvBaLHaORqdPDKoBqIalDVISEvroC7wciMFRs=;
-        h=Date:From:To:Cc:Subject:From;
-        b=DXvGdvxIJGIjqOTTbAb4jqH7yOm6OeRsQWHIOdCZuP1yY09QBvbivWGBVSbCH7ySg
-         gTiydclLD1HGBOe7clVnvzLtKlj5YoVs+phHpkBmKt+gEYyYt6fsP4kfmlspaxElxH
-         M5o/PBjcBX7r8R7ohfhsYTyGrlmLyumnAPjiRQSBRbusYddjyOgs6IIu077TSyuOk8
-         f+WbWyqo051NSmvT1gfYlTJ3IXfFpIsmDlACMaFw3hjg77Yyc8mq/YiqMv1R0qirgu
-         3IzPgoejKCWSvwAkL2H3DeL/X48Sg8oMKz/ESIRwJOiLtyHFtzyr4VeghRJSIO8k40
-         v9T+iUYAEMJ8A==
-Date:   Fri, 20 May 2022 09:02:06 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
+        by ams.source.kernel.org (Postfix) with ESMTPS id 437D8B828D4;
+        Thu, 19 May 2022 23:17:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEF9FC385AA;
+        Thu, 19 May 2022 23:17:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653002248;
+        bh=FDxKvt20YoDXr8Bm7tgCaGymC59FE8E9GRHh3mTeuEU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=PHMZ4EJyOqhsf4Uvougsi717EDEZosl7F2qLKJ5kjUoJgCwXwGG1qbNSlcZr9M9fr
+         c9Wbpqz5qiK9FfjAv48d+zr5xhyw4ldPzOx4I0/H3YGblRJLqW6atvsvHG7QRDova3
+         3YfdnmwqcRDDS/9E9zYwqpewqA4ukN72uFdt4aTRF4fLUtSOA9MKB0Qqh7yhJClpZM
+         XTijom0LhGHQ4Y+knwKN63CrrWkci8yqJEGr9e/1spYOYUszFN2ryRYISsa0A+KGZK
+         SmtMpzN/xmIJ8wuhKcUBO4+M5zlxuLBBj7avbjvPSs2gwZldUMmFEzY3JFvblVRvaU
+         eEU0rOyiOGMPw==
+Date:   Thu, 19 May 2022 16:17:26 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the pm tree
-Message-ID: <20220520090206.2cf07c2d@canb.auug.org.au>
+        Network Development <netdev@vger.kernel.org>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>
+Subject: Re: linux-next: Tree for May 19 (net/ethernet/mellanox/mlx5/core/)
+Message-ID: <20220519161726.08cd9301@kernel.org>
+In-Reply-To: <47e365e7-60a3-62ea-65e2-e046cbdcc999@infradead.org>
+References: <20220519194922.5d1bac4a@canb.auug.org.au>
+        <47e365e7-60a3-62ea-65e2-e046cbdcc999@infradead.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/maXGSWe_ezXCDx0N01I=6ek";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/maXGSWe_ezXCDx0N01I=6ek
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, 19 May 2022 13:57:05 -0700 Randy Dunlap wrote:
+> On 5/19/22 02:49, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > Changes since 20220518:  
+> 
+> on i386 or x86_64:
+> 
+> drivers/net/ethernet/mellanox/mlx5/core/lag/lag.o: in function `mlx5_lag_mpesw_init':
+> lag.c:(.text+0x408): multiple definition of `mlx5_lag_mpesw_init'; ld: DWARF error: could not find abbrev number 25
+> drivers/net/ethernet/mellanox/mlx5/core/lag/debugfs.o:debugfs.c:(.text+0x41c): first defined here
+> ld: drivers/net/ethernet/mellanox/mlx5/core/lag/lag.o: in function `mlx5_lag_mpesw_cleanup':
+> lag.c:(.text+0x40e): multiple definition of `mlx5_lag_mpesw_cleanup'; drivers/net/ethernet/mellanox/mlx5/core/lag/debugfs.o:debugfs.c:(.text+0x422): first defined here
+> 
+> 
+> x86_64 randconfig file is attached.
 
-Hi all,
+Thanks, should be fixed by commit d935053a62fa ("net/mlx5: fix multiple
+definitions of mlx5_lag_mpesw_init / mlx5_lag_mpesw_cleanup") in net-next.
 
-In commit
-
-  42d2607d91c4 ("PM / devfreq: passive: Return non-error when not-supported=
- event is required")
-
-Fixes tag
-
-  Fixes: ce9a0d88d97a ("PM / devfreq: Add cpu based scaling support to pass=
-ive governor")
-
-has these problem(s):
-
-  - Target SHA1 does not exist
-
-Maybe you meant
-
-Fixes: a03dacb0316f ("PM / devfreq: Add cpu based scaling support to passiv=
-e governor")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/maXGSWe_ezXCDx0N01I=6ek
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKGzG4ACgkQAVBC80lX
-0Gz4QAgAjzUIAzBDkMMxjT/ImwQZKyITOhl91INMf6vym+ZCv5Zzwv809YHekjOr
-MJuc7zqVLibb+9Y/NP3w9olqVsWzhMDaObpv+1WWTey4jMw1VjKpHsL7+Ems0Kfm
-u3wE1z6SUB/vt5XRQ8enMCNJMrf4uHsorZ6GH5DpvJRllHRcjD9gll/a/Hotxk0o
-XEZJJyynsgEr9LhBE1HJQfpez1c3mrDiTb5Ik4wAKtKLmlMFUdSY4LfIrsvODGn5
-QHVb+/qMKK54FcJA+YKFuoCmO9K0uh5aV3uoUGUTURoArQwZjAwEfIeVpfmiJ069
-EOiE+/TJJ3lFkqVpBmNEFbQee6YGTw==
-=SKjy
------END PGP SIGNATURE-----
-
---Sig_/maXGSWe_ezXCDx0N01I=6ek--

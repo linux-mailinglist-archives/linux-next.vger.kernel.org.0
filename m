@@ -2,118 +2,76 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98AB252E46F
-	for <lists+linux-next@lfdr.de>; Fri, 20 May 2022 07:41:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AA4652E519
+	for <lists+linux-next@lfdr.de>; Fri, 20 May 2022 08:35:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345576AbiETFlG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 20 May 2022 01:41:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33394 "EHLO
+        id S1345806AbiETGf1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 20 May 2022 02:35:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244469AbiETFlA (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 20 May 2022 01:41:00 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3BB6596;
-        Thu, 19 May 2022 22:40:58 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S235315AbiETGfZ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 20 May 2022 02:35:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B192B14CA0C;
+        Thu, 19 May 2022 23:35:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L4FvD4Mklz4xD3;
-        Fri, 20 May 2022 15:40:56 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1653025257;
-        bh=UONhc8eOK/71SNVc91VCVNl1YuVFpgEjRpX1+7pNizk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=pkRBMsur2B3BhsBaN/fhKRM0jls04iK8jbzxf5ky4TlnmVl8ySkWieIodaQIuNLeK
-         9Di2bppIXcMNTZenLp0MCJGYTeBbLPmGBLvzC+B36hu6jwJcjICINk9vd37gM7P3LS
-         UduvBuMm+Bm7i/7ilYM2qoN+5vo8Axr17pe+B8DsD+RKuGVaGfDXP/3bw/AlxJAhBT
-         98spG6oQreMQndjr2+WeyBVBFnwVUjKtXVcgQ+IctYWSfo9Fw7Y238EAWb2vO3s5Ys
-         vnXejexnSNdmsl8L/6K9ZnVcZCqJo6f8J2lqZCXbJizQ+osn0Pp64dwPF2eCvSbCqi
-         aTkOVArxreMiw==
-Date:   Fri, 20 May 2022 15:40:55 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Luis Chamberlain <mcgrof@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     PowerPC <linuxppc-dev@lists.ozlabs.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Daniel Axtens <dja@axtens.net>,
+        by ams.source.kernel.org (Postfix) with ESMTPS id 42507B82A54;
+        Fri, 20 May 2022 06:35:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D008EC385A9;
+        Fri, 20 May 2022 06:35:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653028522;
+        bh=XM96//q8lbt5Q1f2WxeOpV1cLLFzDh8DpqoI888z93Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OO2+C68Qygl/BD3VJVJ4XfoQweXZt3IJp1Nr8Gi7/KmwfY/pojHXacbVeZdrjTDgl
+         g/HdlmJNPXyJwXBwGyFTcavcLWljtHidHWHaWgCg/GtE1KyFeOEffPbMllQiykUR4K
+         rtWiolTh1ldGi+u1wY8yHfusD6S9MJpPWsVR8ztoRCB1/aD1fzzx4B1pv2G6R4F2XY
+         VnWmfGmZ+jFBgtR36yuqAQE+wRxU6jujoNPFMWOQqTsREiWiWC4LUr+LJqAf3YbIpd
+         /27D328i8mvz80hHj4ummK4sG2YmgeTs7G52WAMacYPRbM1G5zspQbWz9gylkHwIYI
+         Kx04jLO409G/Q==
+Date:   Thu, 19 May 2022 23:35:20 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Theodore Ts'o <tytso@mit.edu>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Paul Mackerras <paulus@ozlabs.org>
-Subject: linux-next: manual merge of the modules tree with the powerpc tree
-Message-ID: <20220520154055.7f964b76@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the ext4 tree
+Message-ID: <Yoc2qBFeU1UoNRpV@sol.localdomain>
+References: <20220520110313.48a824c4@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Ml1LI=C+bnA21TFNLpzgu/Z";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220520110313.48a824c4@canb.auug.org.au>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Ml1LI=C+bnA21TFNLpzgu/Z
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, May 20, 2022 at 11:03:13AM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the ext4 tree, today's linux-next build (powerpc
+> ppc64_defconfig) produced this warning:
+> 
+> fs/ext4/super.c: In function 'ext4_check_test_dummy_encryption':
+> fs/ext4/super.c:2677:36: warning: unused variable 'sbi' [-Wunused-variable]
+>  2677 |         const struct ext4_sb_info *sbi = EXT4_SB(sb);
+>       |                                    ^~~
+> 
+> Introduced by commit
+> 
+>   0df27ddf69f3 ("ext4: only allow test_dummy_encryption when supported")
+> 
 
-Hi all,
+The kernel test robot beat you to it!  This warning happens when
+!CONFIG_FS_ENCRYPTION.  v4 of the patch fixes this
+(https://lore.kernel.org/r/20220519204437.61645-1-ebiggers@kernel.org).
 
-Today's linux-next merge of the modules tree got a conflict in:
-
-  arch/powerpc/Kconfig
-
-between commit:
-
-  b91d4eea5bff ("powerpc: Book3S 64-bit outline-only KASAN support")
-
-from the powerpc tree and commit:
-
-  eeaec7801c42 ("powerpc: Select ARCH_WANTS_MODULES_DATA_IN_VMALLOC on book=
-3s/32 and 8xx")
-
-from the modules tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc arch/powerpc/Kconfig
-index dddace39d005,0b7bcfa63d0d..000000000000
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@@ -158,7 -157,7 +158,8 @@@ config PP
-  	select ARCH_WANT_IPC_PARSE_VERSION
-  	select ARCH_WANT_IRQS_OFF_ACTIVATE_MM
-  	select ARCH_WANT_LD_ORPHAN_WARN
-+ 	select ARCH_WANTS_MODULES_DATA_IN_VMALLOC	if PPC_BOOK3S_32 || PPC_8xx
- +	select ARCH_WANTS_NO_INSTR
-  	select ARCH_WEAK_RELEASE_ACQUIRE
-  	select BINFMT_ELF
-  	select BUILDTIME_TABLE_SORT
-
---Sig_/Ml1LI=C+bnA21TFNLpzgu/Z
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKHKecACgkQAVBC80lX
-0GwlHQf/S3qRdP5k+dcQG+Yj3WvfJImJHURFgwIL9uouwq5sUADT8/nApe2iMiH3
-XW54r6Owe8pl44NMShLjbMp/joGenxif+5Um8cdBK1zodt4/ZpyGc8iEiRH0wSRt
-JuuzQ4C0MiKojlfs/5WVZbShfjA/PD469e24fmrHChRCcOTHhG0ucFcacltGcdpn
-qM6oolDxo1Rcgof3MiGoN9HqqKCpHPGBOmujZrCQA+jZT2E5w2QAHBUOCoG+gwxM
-HAZVBzavS2HcqSwfT8BURCDM6sgmHDF8Ydrw1YvkV4kq8G8mhMnKJaMF7/gW42ID
-k75uDMR3ywGjK4yrw+pFYPId2JDrIg==
-=vU84
------END PGP SIGNATURE-----
-
---Sig_/Ml1LI=C+bnA21TFNLpzgu/Z--
+- Eric

@@ -2,91 +2,67 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEC3052E44E
+	by mail.lfdr.de (Postfix) with ESMTP id 830C552E44D
 	for <lists+linux-next@lfdr.de>; Fri, 20 May 2022 07:21:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345089AbiETFUU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 20 May 2022 01:20:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58828 "EHLO
+        id S1345549AbiETFUy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 20 May 2022 01:20:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236946AbiETFUT (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 20 May 2022 01:20:19 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48A7914ACB7;
-        Thu, 19 May 2022 22:20:18 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id l14so7089651pjk.2;
-        Thu, 19 May 2022 22:20:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:subject:to:cc:references:in-reply-to:mime-version
-         :message-id:content-transfer-encoding;
-        bh=K/PLBiF8Pr/q148VNplDk1LNNEks0HlLVS4FECpFtk0=;
-        b=a45I9bHlZV03TA7eJ0Gqj3Yo+YCLPnzGR4M3xiFGag+OkiHUoIbvwcm3PAgpDSXyd7
-         HZccCAHPSm2HIZurxjkVdift9KYhmqlKevSifKh0/uohYNDtcCpsyenlpNBzAPalqIsz
-         PH54PqmMif6iYj1H1U48MFxrJJXFanHiAzL85jQ769Mp44bhlpphQqb7XrSMEr2Q8MgM
-         4ze9lqLA2x7V0f1FkDPIu/gZaklrBHRME9LGRvtC54LHh9BlALkR+YVEAn5ky0hE6No7
-         owHzghdSWtsgw/oyJ4rj6Eq5KxnfgjClgl2/gquH2AT0rf99whsYfapUZUblItJi/b21
-         dS/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
-         :mime-version:message-id:content-transfer-encoding;
-        bh=K/PLBiF8Pr/q148VNplDk1LNNEks0HlLVS4FECpFtk0=;
-        b=36g1KYGZfFLwZpKseVuFZK5Rxjpr1SL8yvTdhu3+WNktJcQw82Zt4FezQv9GnHjRCK
-         T5kzCftMLtxG7cZ9N/mAiV7xE3VvFAuXhbUCZGwteiLlGHoyfrekghHAt6HV3O3IH8l8
-         pbr1ukj9tqwqYjuPCOKLgav0OTvV9r61ph8TJSxc6AGsprl9iiknnM1PlkoMflRv8FPZ
-         E28LEq5tfozNMgHlcGF5amsL+1Ech15kOQu3DoiZ/ZiNWPl9py7hyiVsH0kKOYHJxAbe
-         2u6kFxUKd+urQIiGCjOOCls1Lixs03+kbihzhwfwJBIGrTethVnu5qcgJsyGBSEvX8+P
-         /APA==
-X-Gm-Message-State: AOAM532LS4SRGFeiLWjl9i13J4Q2PORFu9ywiGr8Sh3ZMhpzkkzBHwDv
-        o471bm4O4dfvAB3lMO8qNec=
-X-Google-Smtp-Source: ABdhPJzLLdrQb7wEGqpXwdFGZfgit5YL1MLncUe7A4KvktQcB+Cd07elCLJYs79pl9bpMbEEnunm3w==
-X-Received: by 2002:a17:90a:a614:b0:1df:8aec:cc71 with SMTP id c20-20020a17090aa61400b001df8aeccc71mr8842631pjq.82.1653024017882;
-        Thu, 19 May 2022 22:20:17 -0700 (PDT)
-Received: from localhost ([203.87.15.124])
-        by smtp.gmail.com with ESMTPSA id y76-20020a62ce4f000000b004fa743ba3f9sm711520pfg.2.2022.05.19.22.20.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 22:20:17 -0700 (PDT)
-Date:   Fri, 20 May 2022 15:20:12 +1000
-From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: linux-next: Signed-off-by missing for commit in the powerpc tree
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>
-References: <20220520083150.57e953fc@canb.auug.org.au>
-In-Reply-To: <20220520083150.57e953fc@canb.auug.org.au>
+        with ESMTP id S1345565AbiETFUw (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 20 May 2022 01:20:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A8FDEA2;
+        Thu, 19 May 2022 22:20:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 19349B82284;
+        Fri, 20 May 2022 05:20:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 830A5C385A9;
+        Fri, 20 May 2022 05:20:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653024045;
+        bh=QJiubypnOugW2LWFSMDSWtUO8LuydGdAMAKASRYoeaQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=W76Zviaoo1OFn3UwVSvGvmr3oY8rSubrNxk6DsF2FFk5GJwRFvLLiqiJ7NOZExx0F
+         hZoWp7CYEQNQtsHYerqBsA5wSGMZgelmJBmWIZS6xcMUunl5BVSHUEra3+0SOKMxPJ
+         +jIFb3lme8eOqsT8ddUFtEK1NoRNHR6Q6dQAGzfUSoyfFU1lM0zsfrA3ViU9QfR9tU
+         GMWrUdmnrxrAhy+ALWGwI2t0Efi0Nfd+ObX9Le5yMnnsVWFz4dOvwma8f/CPKHU57X
+         1+su1eR7qtSvMwbc+OwBJN5Q1+5N7KFO6BLvrAeY8AvniVuSACDYtJWbTEFvxrLnI4
+         2QNMEe3QQhtFQ==
+Date:   Thu, 19 May 2022 22:20:44 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Felix Fietkau <nbd@nbd.name>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the net-next tree
+Message-ID: <20220519222044.1106dbd7@kernel.org>
+In-Reply-To: <20220520145957.1ec50e44@canb.auug.org.au>
+References: <20220520145957.1ec50e44@canb.auug.org.au>
 MIME-Version: 1.0
-Message-Id: <1653023904.pbe3pabbua.astroid@bobo.none>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Excerpts from Stephen Rothwell's message of May 20, 2022 8:31 am:
+On Fri, 20 May 2022 14:59:57 +1000 Stephen Rothwell wrote:
 > Hi all,
->=20
-> Commits
->=20
->   03a2e65f54b3 ("KVM: PPC: Book3S Nested: Use explicit 4096 LPID maximum"=
-)
->   18827eeef022 ("KVM: PPC: Remove kvmppc_claim_lpid")
->=20
-> are missing a Signed-off-by from their authors.
+> 
+> After merging the net-next tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
 
-Sorry.
-
-> The first is just "Signed-of-by" misspelling.  The second is missing.
-
-My laptop's 'f' key has got much worse since then :(
-
-Thanks,
-Nick
+FWIW just merged the fix, if you pull again you'll get this and a fix
+for the netfilter warning about ctnetlink_dump_one_entry().

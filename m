@@ -2,123 +2,108 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFF2352F21F
-	for <lists+linux-next@lfdr.de>; Fri, 20 May 2022 20:11:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC8CA52F3A7
+	for <lists+linux-next@lfdr.de>; Fri, 20 May 2022 21:08:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230318AbiETSLp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 20 May 2022 14:11:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33444 "EHLO
+        id S1344894AbiETTIV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 20 May 2022 15:08:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237996AbiETSLo (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 20 May 2022 14:11:44 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3FCE5D653;
-        Fri, 20 May 2022 11:11:42 -0700 (PDT)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24KFVNQx016707;
-        Fri, 20 May 2022 18:11:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
- to : cc : references : in-reply-to : message-id : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=24Dvykp2KUkjJ6d/E8Qq50Ojk1N4J0gGWIZsa/gjTL0=;
- b=VMngJluL69wMtwtlGk9gS7JO/bSTSL9qWSn8K8qjSPLan8xC0Sm9QoNmBRlFgyD3w6L2
- n32qZYGGav2KQZ1SvCv8ERgAKljGXVv361JlkqdbXUf0xUCQaFS4Ko57NPKEHGOXlA12
- nWohyJRw+vicYNDs/HVwf1iS3TGqlBEkCKOU2EUeEq0WIAwIWpi4wSIDIa+yq+THIIfs
- P43LWjq42vYi1JDxyCK626BMPYfWFV3G+ouWb8K1OAHk5MlJkVJgGdRpbfMH8RXImDnI
- 4zeF0pPf0CRCFrx9D7/NXWWnhIQV92JUoPrSBIsEurSVbJkJbuvHVEV2h7WtFIax1jOR vA== 
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g6b7eenye-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 20 May 2022 18:11:20 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24KHv39v001053;
-        Fri, 20 May 2022 18:11:18 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma01fra.de.ibm.com with ESMTP id 3g242902yr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 20 May 2022 18:11:18 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24KIBG5p43647418
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 20 May 2022 18:11:16 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0EF7A42041;
-        Fri, 20 May 2022 18:11:16 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 990E84203F;
-        Fri, 20 May 2022 18:11:15 +0000 (GMT)
-Received: from localhost (unknown [9.43.91.35])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 20 May 2022 18:11:15 +0000 (GMT)
-Date:   Fri, 20 May 2022 23:41:13 +0530
-From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: linux-next: changed messages in qemu boot
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        with ESMTP id S236050AbiETTIU (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 20 May 2022 15:08:20 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B1519669A;
+        Fri, 20 May 2022 12:08:18 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id DFE7B5C016A;
+        Fri, 20 May 2022 15:08:17 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Fri, 20 May 2022 15:08:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1653073697; x=1653160097; bh=fI8NrSEa2V
+        /LQ+RtZc+UGGY9Ev/Xm4uci6IiTsPxdm0=; b=mVuXap/RdqY0CvhUGgMfElVx0T
+        U9LM1li5Mg5dC5OM8Mt+9VWghQqzlOMLZ7cT1e3KVprX+OpRKD7a0V3Q1ZlkTisR
+        TW7Vy0SkARKo4v4l7gpGFdHRbNqRJnhDBvgQw57hE71vKUwPm8XpQ8Yz7QRtAS3K
+        tzkNsq1BYNa8WdnAlOWZG93eiOkbddYSBMjZAc0NgdOKx+uh1Zy2bElCWhj01lM9
+        Bu7Fj5W8oXAjn/+vlnXiC1ZhSpQ/NqzJef168MN6tFODcMNIFeJKXy/K3x0W0GEy
+        IHG8VELdzHdMndDFA0zsEspnrNGuWnYpOEO2/JDYTmhEd9gQ16wJmQUcchmA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1653073697; x=1653160097; bh=fI8NrSEa2V/LQ+RtZc+UGGY9Ev/X
+        m4uci6IiTsPxdm0=; b=K75/26GGy9haXDqF17xfsWj9ns3399+u3gZd5HQLxrA8
+        XHRYOEp8JOYP9zbnv0KVIzRDWcoZtEPTF98fmATkp8sSB5kItXzhv+ak5WU9zN8t
+        O7uQKGGujTWmcqv2g5KE9/m2u00CY1sFHqgn4Y1KwG3IK/XKZOoD65stdszoCvFD
+        BZBD7PIgeG8o3RHbT21oJi8HdNji/LtkIQA4fAFDtcovcSVJ7Bl0ZjfimaPFVCK5
+        4PI/Qw9o9sy/w3e1kNPITFzsLknIk1PTRgtIPlpkC9A9b5dbuYbQjNaSWin9fU3m
+        S0pVw2OOCKH7qVb2G1/pwVP/p5usIVw772Nge/aB2w==
+X-ME-Sender: <xms:IeeHYro-TUUodLyLv9VS8vYxb2mNdgy3Jnp4aBvtlEy1UfWaSbVMdg>
+    <xme:IeeHYlrtrE-XtgNqQGzXYFGXwCVN3FjAMSX9CNg0BYmi6QlR2rVcr8uKutB6bn9Ab
+    vtt98hhVmvGkA>
+X-ME-Received: <xmr:IeeHYoNDOBy2QrfUEXu5qzd4GUdBOEJ6jdZ9RT8tmxcghAjWGCk7Fs2mMsV-rmOmhLSsJFiPulhbGW7s2pivwHEsA-kJz1E2>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrieefgddufeduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
+    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
+    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
+    hhrdgtohhm
+X-ME-Proxy: <xmx:IeeHYu7cQ6ykwawDcKZE-fmkCajyFv7AF5D1olUQMDVeHU0AcMSMgA>
+    <xmx:IeeHYq6pDp1ryo-i1GpFkO2TqqVZBkVtrpvYNr4c2hgvVfe9bi-XNA>
+    <xmx:IeeHYmgv_9wW4u5sulX4GID-60xztjPDR2BatiogiPbb-qHep7UHag>
+    <xmx:IeeHYssS24m3zGQTaOOUWEZiB2B7qEk5xFIr4dS7SY43-KoLx96aVA>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 20 May 2022 15:08:16 -0400 (EDT)
+Date:   Fri, 20 May 2022 21:08:13 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Samuel Thibault <samuel.thibault@ens-lyon.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>
-References: <20220520233602.2738d87c@canb.auug.org.au>
-In-Reply-To: <20220520233602.2738d87c@canb.auug.org.au>
-User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
-Message-Id: <1653069342.3xtfot6wli.naveen@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Wi4CIOHTYoPB9DtNtrBg2pnd-QI3Mc4e
-X-Proofpoint-ORIG-GUID: Wi4CIOHTYoPB9DtNtrBg2pnd-QI3Mc4e
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the char-misc tree
+Message-ID: <YofnHcOa5AkhXnbX@kroah.com>
+References: <20220520194637.03824f7f@canb.auug.org.au>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-20_05,2022-05-20_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
- suspectscore=0 lowpriorityscore=0 malwarescore=0 mlxlogscore=999
- priorityscore=1501 impostorscore=0 bulkscore=0 adultscore=0 clxscore=1011
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205200116
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220520194637.03824f7f@canb.auug.org.au>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Stephen Rothwell wrote:
+On Fri, May 20, 2022 at 07:46:37PM +1000, Stephen Rothwell wrote:
 > Hi all,
->=20
-> Today's linux-next bboot of the powerpc pseries_le_defconfig build
-> produced these different kernel messages (diff from yesterday's tree):
->=20
-> - ftrace: allocating 33658 entries in 13 pages
-> - ftrace: allocated 13 pages with 3 groups
-> + ftrace-powerpc: Address of ftrace_regs_caller out of range of kernel_to=
-c.
+> 
+> After merging the soundwire tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+> 
+> make[4]: *** Deleting file 'drivers/accessibility/speakup/mapdata.h'
+> can't open ./include/linux/input.h
+> make[4]: *** [/home/sfr/next/next/drivers/accessibility/speakup/Makefile:46: drivers/accessibility/speakup/mapdata.h] Error 1
+> make[3]: *** [/home/sfr/next/next/scripts/Makefile.build:542: drivers/accessibility/speakup] Error 2
+> 
+> Caused by commit
+> 
+>   6646b95aab5f ("speakup: Generate speakupmap.h automatically")
+> 
+> I have used the char-misc tree from next-20220519 for today.
 
-Thanks for the report. I think that is due to:
-https://patchwork.ozlabs.org/project/linuxppc-dev/patch/bb6626e884acffe87b5=
-8736291df57db3deaa9b9.1652074503.git.christophe.leroy@csgroup.eu/
+Ugh, odd, this worked for me.  I'll go revert this.  Samuel, can you
+rework this again?
 
-The below diff fixes it for me:
+thanks,
 
-diff --git a/arch/powerpc/kernel/trace/ftrace.c b/arch/powerpc/kernel/trace=
-/ftrace.c
-index 46c002a8388804..7418da705d43ac 100644
---- a/arch/powerpc/kernel/trace/ftrace.c
-+++ b/arch/powerpc/kernel/trace/ftrace.c
-@@ -746,7 +746,7 @@ int __init ftrace_dyn_arch_init(void)
-=20
-        reladdr =3D addr - kernel_toc_addr();
-=20
--       if (reladdr >=3D SZ_2G || reladdr < -SZ_2G) {
-+       if (reladdr >=3D SZ_2G || reladdr < -_UL(SZ_2G)) {
-                pr_err("Address of %ps out of range of kernel_toc.\n",
-                                (void *)addr);
-                return -1;
-
-
-- Naveen
-
+greg k-h

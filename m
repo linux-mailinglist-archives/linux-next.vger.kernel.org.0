@@ -2,44 +2,46 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBB7F52E947
-	for <lists+linux-next@lfdr.de>; Fri, 20 May 2022 11:46:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6C2552ECB6
+	for <lists+linux-next@lfdr.de>; Fri, 20 May 2022 14:54:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243916AbiETJqt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 20 May 2022 05:46:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42258 "EHLO
+        id S245400AbiETMyI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 20 May 2022 08:54:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244958AbiETJqr (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 20 May 2022 05:46:47 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03660328;
-        Fri, 20 May 2022 02:46:45 -0700 (PDT)
+        with ESMTP id S236511AbiETMyH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 20 May 2022 08:54:07 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6481C6A054;
+        Fri, 20 May 2022 05:54:04 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L4MLl1wQBz4xDK;
-        Fri, 20 May 2022 19:46:39 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L4RVx72tRz4xD9;
+        Fri, 20 May 2022 22:54:01 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1653040000;
-        bh=UdX0I3S31U4Zq+mgg99EGlxgpDh9JmkS37nsxtBDFIQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=IGKTJKRMAdfBREvqln3jTPMS3OccS9zWfTh3TIJ0nlnaB/P8I/p6HW/DCW+XBJbuk
-         VUouuId7y7lckOJGfMlIR/IUDCoKKtKVt80JBe00YYywBcT42k2hrIfMQmSsoBPw0+
-         6A7WeoULlOeu7zTx8icQhmm5njSaCN3jNw7dAPNIo9RXbPe++K+udAo+AOropQ1QSg
-         Hig4s1hcJLMtdlYmg1IsZ9PEPPEZaCxvymqbTRLZZjNRd3UgV3gX02+8mutqXb4CwJ
-         zkT3OQevDVD5mxJeD83DWJnzymCgZnIiwN4Hx5mdcUbstkmuiI8NN2Zy6gn35jc9Wu
-         ankyXPmPU5uLw==
-Date:   Fri, 20 May 2022 19:46:37 +1000
+        s=201702; t=1653051242;
+        bh=xX70sbq84o7TSNzvXVmq0pVAVoppAgjs373K3Ng4Xtw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Akb2B4+uVCG0ySD1cWoOIlz+8DrVRJeaODOwNJI08oYO7ouM8FwBasUJ77rIj97fq
+         Y0xZmTDl8djQdiSPlYBDS++o4Knlow/SWs95UcW6zqunRoyR4IjzKwzIeCvTVQUtD5
+         TsbKnIzxbMQYZI2yEwznTEpJdFI9tlC6CssvFNfjllLvtMvRTb1+oYwG6o3hQLYLxF
+         6QJ6OaExOlg0+CjHPcowyihAXBgi8qCLf1G0bPwD4wvHUO6E/+erj8+HRMhF4yUeAg
+         iuXgZqLFOBVH63aftfntBU6Kdun0SyMlG+noTpHOOTZM9Q2vGl3h45qukBuk7RtXnV
+         gNZ1RCvcxOHlw==
+Date:   Fri, 20 May 2022 22:54:00 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>
-Cc:     Samuel Thibault <samuel.thibault@ens-lyon.org>,
+To:     Theodore Ts'o <tytso@mit.edu>
+Cc:     Eric Biggers <ebiggers@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the char-misc tree
-Message-ID: <20220520194637.03824f7f@canb.auug.org.au>
+Subject: Re: linux-next: build warning after merge of the ext4 tree
+Message-ID: <20220520225400.089f9d4a@canb.auug.org.au>
+In-Reply-To: <20220520110313.48a824c4@canb.auug.org.au>
+References: <20220520110313.48a824c4@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/i4CIhAztvp3LxxFc+knzPA+";
+Content-Type: multipart/signed; boundary="Sig_/Edo9hu13=AH5BRA7qYadgR/";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -50,46 +52,86 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/i4CIhAztvp3LxxFc+knzPA+
+--Sig_/Edo9hu13=AH5BRA7qYadgR/
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the soundwire tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+On Fri, 20 May 2022 11:03:13 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
 
-make[4]: *** Deleting file 'drivers/accessibility/speakup/mapdata.h'
-can't open ./include/linux/input.h
-make[4]: *** [/home/sfr/next/next/drivers/accessibility/speakup/Makefile:46=
-: drivers/accessibility/speakup/mapdata.h] Error 1
-make[3]: *** [/home/sfr/next/next/scripts/Makefile.build:542: drivers/acces=
-sibility/speakup] Error 2
+>=20
+> After merging the ext4 tree, today's linux-next build (powerpc
+> ppc64_defconfig) produced this warning:
+>=20
+> fs/ext4/super.c: In function 'ext4_check_test_dummy_encryption':
+> fs/ext4/super.c:2677:36: warning: unused variable 'sbi' [-Wunused-variabl=
+e]
+>  2677 |         const struct ext4_sb_info *sbi =3D EXT4_SB(sb);
+>       |                                    ^~~
+>=20
+> Introduced by commit
+>=20
+>   0df27ddf69f3 ("ext4: only allow test_dummy_encryption when supported")
 
-Caused by commit
+This becomes an error in an i386 defconfig build, so I have applied the
+following hack for today.
 
-  6646b95aab5f ("speakup: Generate speakupmap.h automatically")
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Fri, 20 May 2022 22:48:55 +1000
+Subject: [PATCH] hack fixup for "ext4: only allow test_dummy_encryption whe=
+n supported"
 
-I have used the char-misc tree from next-20220519 for today.
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ fs/ext4/super.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+index 5168d894c41e..f9a3ad683b4a 100644
+--- a/fs/ext4/super.c
++++ b/fs/ext4/super.c
+@@ -2674,7 +2674,6 @@ static int ext4_check_test_dummy_encryption(const str=
+uct fs_context *fc,
+ 					    struct super_block *sb)
+ {
+ 	const struct ext4_fs_context *ctx =3D fc->fs_private;
+-	const struct ext4_sb_info *sbi =3D EXT4_SB(sb);
+=20
+ 	if (!IS_ENABLED(CONFIG_FS_ENCRYPTION) ||
+ 	    !(ctx->spec & EXT4_SPEC_DUMMY_ENCRYPTION))
+@@ -2692,7 +2691,7 @@ static int ext4_check_test_dummy_encryption(const str=
+uct fs_context *fc,
+ 	 * it to be specified during remount, but only if there is no change.
+ 	 */
+ 	if (fc->purpose =3D=3D FS_CONTEXT_FOR_RECONFIGURE &&
+-	    !DUMMY_ENCRYPTION_ENABLED(sbi)) {
++	    !DUMMY_ENCRYPTION_ENABLED(EXT4_SB(sb))) {
+ 		ext4_msg(NULL, KERN_WARNING,
+ 			 "Can't set test_dummy_encryption on remount");
+ 		return -EINVAL;
+--=20
+2.35.1
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/i4CIhAztvp3LxxFc+knzPA+
+--Sig_/Edo9hu13=AH5BRA7qYadgR/
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKHY30ACgkQAVBC80lX
-0GyKSQf/V4H1+pqw22P4eNQPHNkgTmIFlNx8k6uYJ0eCDeAXtv+ni/A+N2Oh9t3n
-iEonVw0NJ3JRTmFm0Y1zSL82xkeAdaRpXp/ZkAMf52mwhc9EpQsvF1Q/6wXSNySf
-xmLMDQraBooQT2ET3+U+vM8KPja4ql1qVufCDDjt7pTUa6Hh1Pcsm+uVaKp9Zx22
-b6RIz40cGPcwg7zygJdlDVJS6KGboyoUZyYB23WxNU6XSsS6o0Qq0TIttDG6cBsF
-jV5vOMGC2GONcDnjj+BHWOsfpnN9Vnm8nk8gAtMttytAObdiJTg4qtm8DCVamRnJ
-sEDo132deuWMGKTjZGuPrtlFHNO74Q==
-=kmCz
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKHj2gACgkQAVBC80lX
+0Gz8ZQgAmJnoasBrbyUJWu4kvv6hp5S4O6dWa3JgP1z43NzkdNK7MaCuVT01is1G
++s5bIo/ZcGZtb7V3PYI3SK69YLFdOKjpCeC81NEdRZ3NuZD1HESrRlv6lrt2rgce
+WkQCr6wq2j2i196bvmrkHwJSpvWPvh0qw/F+1qTk3t0GhAAn9OVWdGwcdg+RCV1O
+PkiFtI4QLhAomots8CybnlLnhncqXI9uAGfIFq+pG2CeiXmnF4S51tXjHau1nAmO
+QGCU9y7sfZrUHL6DChfz3IrgHCq8BRfd8JRkmszd2yQp1VJ+OlVkKV3OexwQgt4+
+q9cA5LTrZIu0O940UAygcx1WK4og7A==
+=Exi2
 -----END PGP SIGNATURE-----
 
---Sig_/i4CIhAztvp3LxxFc+knzPA+--
+--Sig_/Edo9hu13=AH5BRA7qYadgR/--

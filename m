@@ -2,45 +2,47 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48A985306EB
-	for <lists+linux-next@lfdr.de>; Mon, 23 May 2022 02:57:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEC055306F9
+	for <lists+linux-next@lfdr.de>; Mon, 23 May 2022 03:10:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232711AbiEWA5q (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 22 May 2022 20:57:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48058 "EHLO
+        id S233067AbiEWBKa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 22 May 2022 21:10:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230095AbiEWA5o (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 22 May 2022 20:57:44 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00EEC33A19;
-        Sun, 22 May 2022 17:57:42 -0700 (PDT)
+        with ESMTP id S231186AbiEWBK3 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 22 May 2022 21:10:29 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24329377C6;
+        Sun, 22 May 2022 18:10:26 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L5zSy5xLWz4xD2;
-        Mon, 23 May 2022 10:57:38 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L5zlg4BlGz4xXg;
+        Mon, 23 May 2022 11:10:23 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1653267459;
-        bh=fUDCzyj8Af0DxC4DaymxJY9DuT/QAHJbfvkEmZ++sfc=;
+        s=201702; t=1653268224;
+        bh=eOTK4n9SkYDRGWdogVlDv82mfD+vR0bPl0p1Xhqr6eM=;
         h=Date:From:To:Cc:Subject:From;
-        b=YfwlUuXGEhtBQES05yQLIcEpzB6pQMTo2r47U1ydiszQ3c2IoF9GKQFTblM9f+6Av
-         mg7d4eKtd2cEQ9rhLj62q5rVioJ8gwFe1DwuV9ZjjJbUevmFm83KdW5Gw++IxZmciS
-         8hmIJawlOYxw8xX97rhGGwyrCXyIaa4+fCpnqogFZT5HxpCFo2bk2Nfa+xmThUJfGl
-         LMu4dlwD/MTQ54nCAI8N2IyLCwxHVz1dodcxj07S8UvcoLRCdSbQ1EA/aiQ/NdUWXZ
-         dn4FV8e5kB9wFxWlMiqtaJyTIPrY/Qcg75PpGypG0JmBQy9Tdb7U3QWjf0nAe9T7yT
-         2xLVxK77Y1Jng==
-Date:   Mon, 23 May 2022 10:57:36 +1000
+        b=E2yhFzALr25iM+46FmkqyyYqGRptGHYevdNixYgMSVGZvGB3tjkd2rGx1dJVPvOFB
+         tjmq1XPfEwHzy4PhSV1OFmUK3LtSi7lADyQgmU+9w9SpDTeH8VzsAwIFNOaxVsenkb
+         97c44yEAaBGCpH1Q8yigFyQSgDRxhGs9RDvzZlklDwfrTvUq3ghc0iFoHTyRYovHjk
+         h4cLkVWeKG5efqbLHtxzTYhcbu5QrYj05yWg3xd0FZF4Akj3hsIIWSlp4lTvqZHCVL
+         j2Rj3Y0tZ3TXi6+fv8XYytLWJXtd+fsqxTOD/N1y6ksa6+EY+PkSXMCvxdcBaZoXEI
+         UlhoHqN28GhgA==
+Date:   Mon, 23 May 2022 11:10:21 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Steve French <smfrench@gmail.com>
-Cc:     CIFS <linux-cifs@vger.kernel.org>,
-        Enzo Matsumiya <ematsumiya@suse.de>,
+To:     David Miller <davem@davemloft.net>
+Cc:     Networking <netdev@vger.kernel.org>,
+        Harini Katakam <harini.katakam@xilinx.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the cifs tree
-Message-ID: <20220523105736.1f42b837@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Robert Hancock <robert.hancock@calian.com>
+Subject: linux-next: manual merge of the net-next tree with the net tree
+Message-ID: <20220523111021.31489367@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/6yHFA/DI6U9t6CSTyBAS29o";
+Content-Type: multipart/signed; boundary="Sig_/rJVZW_6UKvrEmkhGS8oX/mw";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -51,44 +53,122 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/6yHFA/DI6U9t6CSTyBAS29o
+--Sig_/rJVZW_6UKvrEmkhGS8oX/mw
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the cifs tree, today's linux-next build (powerpc
-ppc64_defconfig) produced this warning:
+Today's linux-next merge of the net-next tree got a conflict in:
 
-fs/cifs/connect.c: In function 'is_path_remote':
-fs/cifs/connect.c:3436:14: warning: unused variable 'nodfs' [-Wunused-varia=
-ble]
- 3436 |         bool nodfs =3D cifs_sb->mnt_cifs_flags & CIFS_MOUNT_NO_DFS;
-      |              ^~~~~
+  drivers/net/ethernet/cadence/macb_main.c
 
-Introduced by commit
+between commit:
 
-  421ef3d56513 ("cifs: don't call cifs_dfs_query_info_nonascii_quirk() if n=
-odfs was set")
+  5cebb40bc955 ("net: macb: Fix PTP one step sync support")
+
+from the net tree and commit:
+
+  138badbc21a0 ("net: macb: use NAPI for TX completion path")
+
+from the net-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/6yHFA/DI6U9t6CSTyBAS29o
+diff --cc drivers/net/ethernet/cadence/macb_main.c
+index 3a1b5ac48ca5,d6cdb97bfb38..000000000000
+--- a/drivers/net/ethernet/cadence/macb_main.c
++++ b/drivers/net/ethernet/cadence/macb_main.c
+@@@ -1123,57 -1119,20 +1120,50 @@@ static void macb_tx_error_task(struct w
+  	macb_writel(bp, NCR, macb_readl(bp, NCR) | MACB_BIT(TSTART));
+ =20
+  	spin_unlock_irqrestore(&bp->lock, flags);
++ 	napi_enable(&queue->napi_tx);
+  }
+ =20
+ +static bool ptp_one_step_sync(struct sk_buff *skb)
+ +{
+ +	struct ptp_header *hdr;
+ +	unsigned int ptp_class;
+ +	u8 msgtype;
+ +
+ +	/* No need to parse packet if PTP TS is not involved */
+ +	if (likely(!(skb_shinfo(skb)->tx_flags & SKBTX_HW_TSTAMP)))
+ +		goto not_oss;
+ +
+ +	/* Identify and return whether PTP one step sync is being processed */
+ +	ptp_class =3D ptp_classify_raw(skb);
+ +	if (ptp_class =3D=3D PTP_CLASS_NONE)
+ +		goto not_oss;
+ +
+ +	hdr =3D ptp_parse_header(skb, ptp_class);
+ +	if (!hdr)
+ +		goto not_oss;
+ +
+ +	if (hdr->flag_field[0] & PTP_FLAG_TWOSTEP)
+ +		goto not_oss;
+ +
+ +	msgtype =3D ptp_get_msgtype(hdr, ptp_class);
+ +	if (msgtype =3D=3D PTP_MSGTYPE_SYNC)
+ +		return true;
+ +
+ +not_oss:
+ +	return false;
+ +}
+ +
+- static void macb_tx_interrupt(struct macb_queue *queue)
++ static int macb_tx_complete(struct macb_queue *queue, int budget)
+  {
+- 	unsigned int tail;
+- 	unsigned int head;
+- 	u32 status;
+  	struct macb *bp =3D queue->bp;
+  	u16 queue_index =3D queue - bp->queues;
++ 	unsigned int tail;
++ 	unsigned int head;
++ 	int packets =3D 0;
+ =20
+- 	status =3D macb_readl(bp, TSR);
+- 	macb_writel(bp, TSR, status);
+-=20
+- 	if (bp->caps & MACB_CAPS_ISR_CLEAR_ON_WRITE)
+- 		queue_writel(queue, ISR, MACB_BIT(TCOMP));
+-=20
+- 	netdev_vdbg(bp->dev, "macb_tx_interrupt status =3D 0x%03lx\n",
+- 		    (unsigned long)status);
+-=20
++ 	spin_lock(&queue->tx_ptr_lock);
+  	head =3D queue->tx_head;
+- 	for (tail =3D queue->tx_tail; tail !=3D head; tail++) {
++ 	for (tail =3D queue->tx_tail; tail !=3D head && packets < budget; tail++=
+) {
+  		struct macb_tx_skb	*tx_skb;
+  		struct sk_buff		*skb;
+  		struct macb_dma_desc	*desc;
+
+--Sig_/rJVZW_6UKvrEmkhGS8oX/mw
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKK3AAACgkQAVBC80lX
-0Gy8FQf/Y/Lv0gfLSOK2iF9IloLXDFfqU+OpGTraYddMNTO++b5tBmagQWLfe7NS
-R0wGQvryOFThdngSEhFmN43A07W2QUi5QG1A0khY4h5TXSUoVSHNvZ716Or0SgS2
-vnUOkHh9isFqcFCQnsIndRAvsofq313K852Hsd9N6K5Jqbfz6phZm5F39V2IXLNP
-1n0gWXUurZ046LHQf5T5yLd3/LOxPnVyyrktl6JQKAELAsmDBEF4zlOIKXnS9SnJ
-6+TQMKnhEOr5/YBefeWCx7SN3lHlCiPkRD8GBmgVTbzht80INQ5wUdiI5SKzlSvY
-yURyBYynK2/mOkVUbO+3OxCgu28j5w==
-=w341
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKK3v4ACgkQAVBC80lX
+0Gw5mwf8DC0QHsCJrn+g1jKU4ysIqP+XePG2ugM2/sEWkQE2JNkKa88RV6DxMFG1
+lgSmV4iFK2qD0Aj7ntlYnPgNUZnNDIpXwnZmAcAGHaCoY0Wc/uR3BrkLHNPMEhWV
+EMubNwhRHJnqs/qr3c2SAdgpZkkRCXmpWHIh22AVJDEt/3LFCH21/kzdRpCsS6gr
+cR8AmKCP0MiLgzgQnrPKl9uF5QwP63WkV8uDGMKZlmDsXh5gFY0B7e/vqpaBLdwB
+4D1IQKZZuIhJdBDmehjg9v1nTTcpOjCudDH0eSLcjgNn69USIqmTWrkM42ckDnD+
+dmEugOlnXGYOnrrCmSyDOh4WkFnP8w==
+=nSlw
 -----END PGP SIGNATURE-----
 
---Sig_/6yHFA/DI6U9t6CSTyBAS29o--
+--Sig_/rJVZW_6UKvrEmkhGS8oX/mw--

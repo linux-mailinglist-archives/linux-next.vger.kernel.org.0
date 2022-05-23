@@ -2,262 +2,215 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E673530AC3
-	for <lists+linux-next@lfdr.de>; Mon, 23 May 2022 10:01:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76CF0530A9A
+	for <lists+linux-next@lfdr.de>; Mon, 23 May 2022 10:01:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230134AbiEWHjk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 23 May 2022 03:39:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40282 "EHLO
+        id S230456AbiEWHtZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 23 May 2022 03:49:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229952AbiEWHjg (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 23 May 2022 03:39:36 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31155B7D7;
-        Mon, 23 May 2022 00:39:34 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L66zT4KDFz4xDK;
-        Mon, 23 May 2022 16:36:04 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1653287766;
-        bh=+0vivFk/Z067mjX8nd9BkvwUKAQ5iry4PW1fq/uku9o=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=SsoTGujOhHXaP3KkRyCCTMa3dTq9WxGjkSXpTPXv15OdMUiGAzZ/Ul13tm019YcwP
-         EDbOZJearfSHoyX0nf5rSPwTiInVNIfQ0JWDI69oMXom9v4yDPlIghkl++m1q3Gf7N
-         ntHvW9hD9WxrFaL+QOEvDn7c4/twwXHGddfKYe6oF+WrrEJKoyxj9LVIb98y56iz3e
-         zFZeT5jMFbwaoYJ+AoChc5RJWnsH86T62DnGx9429MHUZe5Ki9Uj59O8UtUFI5iqtj
-         /HqC1kLH0/UfuooaZYU/vGniCkCx6TAQrZkRSNqiHh+/Xh5lEilZEYnzReHEBCBZMG
-         XNj6oorXpIzGg==
-Date:   Mon, 23 May 2022 16:36:03 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Christoffer Dall <cdall@cs.columbia.edu>,
-        Marc Zyngier <maz@kernel.org>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Oliver Upton <oupton@google.com>, KVM <kvm@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the kvm-arm tree with the arm64
- tree
-Message-ID: <20220523163603.580fddfa@canb.auug.org.au>
-In-Reply-To: <20220504143529.4060ab27@canb.auug.org.au>
-References: <20220504143529.4060ab27@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/.hrk+MfNx9SbylaWUw_miKR";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+        with ESMTP id S231147AbiEWHtX (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 23 May 2022 03:49:23 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F226DF6E
+        for <linux-next@vger.kernel.org>; Mon, 23 May 2022 00:49:20 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24N5An6J006309;
+        Mon, 23 May 2022 07:03:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : content-type :
+ content-transfer-encoding : mime-version : subject : message-id : date :
+ cc : to; s=pp1; bh=fN5rcwKHMYcD1hSROG4JlEnSkuUCq2AX83oEc7dz2nM=;
+ b=HyMI8hIiErnWupGnFmkl82wuXVi6RkgTxjWkKHwF6NO+MeUkqGxF5ShuqJ6aBdpWQu0v
+ 7gyWqYk1rPvkQ/uUo5zCFjIRv10wlY6bcYp9mB4S/3+49P4++8+ZPolr7eYDwssz2yBJ
+ ZNXeoTYSAAJbIhcYSzb6IRwVLNNcTkirqYoqmzRvYSI3RgWFXTVYcj/lAKEeXByqENIF
+ dggVpYeX4KV2qzU+5T4/IbMevGEa3T8dHZ40UJeK8xGmOxU9AETeNaA3Twx6sNt42W3a
+ bMKHVpuhj0JaFWhweuJSD0MEnj5uBOTnhCF+Lb1pNzHDi7u//fMQBSDGGuHCC3mK9Tsv QA== 
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g79rgwp3r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 23 May 2022 07:03:38 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24N6cFQZ010017;
+        Mon, 23 May 2022 07:03:36 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma01fra.de.ibm.com with ESMTP id 3g6qq8tkgr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 23 May 2022 07:03:36 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24N73XUK34144718
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 23 May 2022 07:03:33 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 69F764203F;
+        Mon, 23 May 2022 07:03:33 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 917B042042;
+        Mon, 23 May 2022 07:03:32 +0000 (GMT)
+Received: from smtpclient.apple (unknown [9.43.16.118])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 23 May 2022 07:03:32 +0000 (GMT)
+From:   Sachin Sant <sachinp@linux.ibm.com>
+Content-Type: text/plain;
+        charset=us-ascii
+Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
+Subject: [powerpc] linux-next 20220520 boot failure (drc_pmem_query_stats)
+Message-Id: <6B3A522A-6A5F-4CC9-B268-0C63AA6E07D3@linux.ibm.com>
+Date:   Mon, 23 May 2022 12:33:31 +0530
+Cc:     linux-next@vger.kernel.org, vaibhav@linux.ibm.com
+To:     linuxppc-dev@lists.ozlabs.org
+X-Mailer: Apple Mail (2.3696.80.82.1.1)
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: C2G17f9uc5TNmcTgDjloczBiYg46O1rh
+X-Proofpoint-GUID: C2G17f9uc5TNmcTgDjloczBiYg46O1rh
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-23_02,2022-05-20_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ phishscore=0 spamscore=0 clxscore=1015 suspectscore=0 lowpriorityscore=0
+ mlxlogscore=495 malwarescore=0 impostorscore=0 bulkscore=0 mlxscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205230037
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/.hrk+MfNx9SbylaWUw_miKR
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+While booting linux-next (5.18.0-rc7-next-20220520) on a Power10 LPAR
+configure with pmem following oops is seen. The LPAR fails to boot to
+login prompt.
 
-Hi all,
+[   10.948211] papr_scm ibm,persistent-memory:ibm,pmemory@44104001: =
+Permission denied while accessing performance stats
+[   10.948536] Kernel attempted to write user page (1c) - exploit =
+attempt? (uid: 0)
+[   10.948539] BUG: Kernel NULL pointer dereference on write at =
+0x0000001c
+[   10.948540] Faulting instruction address: 0xc008000001b90844
+[   10.948542] Oops: Kernel access of bad area, sig: 11 [#1]
+[   10.948563] LE PAGE_SIZE=3D64K MMU=3DRadix SMP NR_CPUS=3D2048 NUMA =
+pSeries
+[   10.948568] Modules linked in: papr_scm(E+) libnvdimm(E) =
+vmx_crypto(E) ext4(E) mbcache(E) jbd2(E) sd_mod(E) t10_pi(E) =
+crc64_rocksoft(E) crc64(E) sg(E) ibmvscsi(E) scsi_transport_srp(E) =
+ibmveth(E) fuse(E)
+[   10.948587] CPU: 25 PID: 796 Comm: systemd-udevd Tainted: G           =
+ E     5.18.0-rc7-next-20220520 #2
+[   10.948592] NIP:  c008000001b90844 LR: c008000001b92794 CTR: =
+c008000001b907f8
+[   10.948595] REGS: c00000003082b110 TRAP: 0300   Tainted: G            =
+E      (5.18.0-rc7-next-20220520)
+[   10.948600] MSR:  800000000280b033 <SF,VEC,VSX,EE,FP,ME,IR,DR,RI,LE>  =
+CR: 44222822  XER: 00000001
+[   10.948613] CFAR: c00000000007c744 DAR: 000000000000001c DSISR: =
+42000000 IRQMASK: 0=20
+[   10.948613] GPR00: c008000001b92794 c00000003082b3b0 c008000001bc8000 =
+c00000000941bc00=20
+[   10.948613] GPR04: 0000000000000010 0000000000000000 c000000016001800 =
+c00000003082b420=20
+[   10.948613] GPR08: 000000000000001c 0000000001000000 0000000053544154 =
+c008000001b92c98=20
+[   10.948613] GPR12: c008000001b907f8 c000000abfd02b00 c00000003082bd00 =
+00000001372bd8b0=20
+[   10.948613] GPR16: 000000000000ff20 c0080000008911b8 c008000000890000 =
+00000000000011d0=20
+[   10.948613] GPR20: 0000000000000001 c00000003082bbc0 c008000001bc0a88 =
+0000000000000000=20
+[   10.948613] GPR24: 0000000000000000 c000000002950e30 00000000ffffffff =
+0000000000000010=20
+[   10.948613] GPR28: c00000000941bc00 0000000000000010 0000000000000020 =
+c00000000941bc00=20
+[   10.948660] NIP [c008000001b90844] drc_pmem_query_stats+0x5c/0x270 =
+[papr_scm]
+[   10.948667] LR [c008000001b92794] papr_scm_probe+0x2ac/0x6ec =
+[papr_scm]
+[   10.948673] Call Trace:
+[   10.948675] [c00000003082b3b0] [c00000000941bca0] 0xc00000000941bca0 =
+(unreliable)
+[   10.948680] [c00000003082b460] [c008000001b92794] =
+papr_scm_probe+0x2ac/0x6ec [papr_scm]
+[   10.948687] [c00000003082b550] [c0000000009809b8] =
+platform_probe+0x98/0x150
+[   10.948694] [c00000003082b5d0] [c00000000097bf2c] =
+really_probe+0xfc/0x510
+[   10.948699] [c00000003082b650] [c00000000097c4bc] =
+__driver_probe_device+0x17c/0x230
+[   10.948704] [c00000003082b6d0] [c00000000097c5c8] =
+driver_probe_device+0x58/0x120
+[   10.948709] [c00000003082b710] [c00000000097ce0c] =
+__driver_attach+0xfc/0x230
+[   10.948714] [c00000003082b790] [c000000000978458] =
+bus_for_each_dev+0xa8/0x130
+[   10.948718] [c00000003082b7f0] [c00000000097b2c4] =
+driver_attach+0x34/0x50
+[   10.948722] [c00000003082b810] [c00000000097a508] =
+bus_add_driver+0x1e8/0x350
+[   10.948729] [c00000003082b8a0] [c00000000097def8] =
+driver_register+0x98/0x1a0
+[   10.948736] [c00000003082b910] [c0000000009804a8] =
+__platform_driver_register+0x38/0x50
+[   10.948741] [c00000003082b930] [c008000001b92c10] =
+papr_scm_init+0x3c/0x78 [papr_scm]
+[   10.948747] [c00000003082b960] [c000000000011ff0] =
+do_one_initcall+0x60/0x2d0
+[   10.948753] [c00000003082ba30] [c00000000023627c] =
+do_init_module+0x6c/0x2d0
+[   10.948760] [c00000003082bab0] [c000000000239650] =
+load_module+0x1e90/0x2290
+[   10.948765] [c00000003082bc90] [c000000000239d9c] =
+__do_sys_finit_module+0xdc/0x180
+[   10.948771] [c00000003082bdb0] [c0000000000335fc] =
+system_call_exception+0x17c/0x350
+[   10.948777] [c00000003082be10] [c00000000000c53c] =
+system_call_common+0xec/0x270
+[   10.948782] --- interrupt: c00 at 0x7fffa3f2f1d4
+[   10.948785] NIP:  00007fffa3f2f1d4 LR: 00007fffa456ea9c CTR: =
+0000000000000000
+[   10.948789] REGS: c00000003082be80 TRAP: 0c00   Tainted: G            =
+E      (5.18.0-rc7-next-20220520)
+[   10.948793] MSR:  800000000280f033 =
+<SF,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE>  CR: 28222204  XER: 00000000
+[   10.948805] IRQMASK: 0=20
+[   10.948805] GPR00: 0000000000000161 00007fffd70550b0 00007fffa4007300 =
+0000000000000011=20
+[   10.948805] GPR04: 00007fffa457ad30 0000000000000000 0000000000000011 =
+0000000000000000=20
+[   10.948805] GPR08: 0000000000000000 0000000000000000 0000000000000000 =
+0000000000000000=20
+[   10.948805] GPR12: 0000000000000000 00007fffa4656580 0000000000020000 =
+00000001372bd8b0=20
+[   10.948805] GPR16: 0000000137300108 00000001372c5c68 0000000000000000 =
+0000000000000000=20
+[   10.948805] GPR20: 0000000000000000 00000001372c5ca0 000000016f049240 =
+00007fffd70552d0=20
+[   10.948805] GPR24: 0000000137300128 0000000000020000 0000000000000000 =
+000000016f038a80=20
+[   10.948805] GPR28: 00007fffa457ad30 0000000000020000 0000000000000000 =
+000000016f049240=20
+[   10.948849] NIP [00007fffa3f2f1d4] 0x7fffa3f2f1d4
+[   10.948851] LR [00007fffa456ea9c] 0x7fffa456ea9c
+[   10.948854] --- interrupt: c00
+[   10.948856] Instruction dump:
+[   10.948859] f8010010 f821ff51 e92d0c80 f9210088 39200000 41820118 =
+3d405354 614a4154=20
+[   10.948869] 2fa50000 3d200100 391d000c 3bc00020 <7ca0452c> 913d0008 =
+794a07c6 654a534d=20
+[   10.948878] ---[ end trace 0000000000000000 ]---
+[   10.951576]=20
+[   11.951579] Kernel panic - not syncing: Fatal exception
 
-On Wed, 4 May 2022 14:35:29 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> Today's linux-next merge of the kvm-arm tree got a conflict in:
->=20
->   arch/arm64/kvm/sys_regs.c
->=20
-> between commit:
->=20
->   0b12620fddb8 ("KVM: arm64: Treat ESR_EL2 as a 64-bit register")
->=20
-> from the arm64 tree and commits:
->=20
->   e65197666773 ("KVM: arm64: Wire up CP15 feature registers to their AArc=
-h64 equivalents")
->   9369bc5c5e35 ("KVM: arm64: Plumb cp10 ID traps through the AArch64 sysr=
-eg handler")
->=20
-> from the kvm-arm tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->=20
-> diff --cc arch/arm64/kvm/sys_regs.c
-> index a4ef986adb5e,031d913cd79e..000000000000
-> --- a/arch/arm64/kvm/sys_regs.c
-> +++ b/arch/arm64/kvm/sys_regs.c
-> @@@ -2351,6 -2355,123 +2355,123 @@@ static int kvm_handle_cp_64(struct kv=
-m_
->   	return 1;
->   }
->  =20
-> + static bool emulate_sys_reg(struct kvm_vcpu *vcpu, struct sys_reg_param=
-s *params);
-> +=20
-> + /*
-> +  * The CP10 ID registers are architecturally mapped to AArch64 feature
-> +  * registers. Abuse that fact so we can rely on the AArch64 handler for=
- accesses
-> +  * from AArch32.
-> +  */
->  -static bool kvm_esr_cp10_id_to_sys64(u32 esr, struct sys_reg_params *pa=
-rams)
-> ++static bool kvm_esr_cp10_id_to_sys64(u64 esr, struct sys_reg_params *pa=
-rams)
-> + {
-> + 	u8 reg_id =3D (esr >> 10) & 0xf;
-> + 	bool valid;
-> +=20
-> + 	params->is_write =3D ((esr & 1) =3D=3D 0);
-> + 	params->Op0 =3D 3;
-> + 	params->Op1 =3D 0;
-> + 	params->CRn =3D 0;
-> + 	params->CRm =3D 3;
-> +=20
-> + 	/* CP10 ID registers are read-only */
-> + 	valid =3D !params->is_write;
-> +=20
-> + 	switch (reg_id) {
-> + 	/* MVFR0 */
-> + 	case 0b0111:
-> + 		params->Op2 =3D 0;
-> + 		break;
-> + 	/* MVFR1 */
-> + 	case 0b0110:
-> + 		params->Op2 =3D 1;
-> + 		break;
-> + 	/* MVFR2 */
-> + 	case 0b0101:
-> + 		params->Op2 =3D 2;
-> + 		break;
-> + 	default:
-> + 		valid =3D false;
-> + 	}
-> +=20
-> + 	if (valid)
-> + 		return true;
-> +=20
-> + 	kvm_pr_unimpl("Unhandled cp10 register %s: %u\n",
-> + 		      params->is_write ? "write" : "read", reg_id);
-> + 	return false;
-> + }
-> +=20
-> + /**
-> +  * kvm_handle_cp10_id() - Handles a VMRS trap on guest access to a 'Med=
-ia and
-> +  *			  VFP Register' from AArch32.
-> +  * @vcpu: The vCPU pointer
-> +  *
-> +  * MVFR{0-2} are architecturally mapped to the AArch64 MVFR{0-2}_EL1 re=
-gisters.
-> +  * Work out the correct AArch64 system register encoding and reroute to=
- the
-> +  * AArch64 system register emulation.
-> +  */
-> + int kvm_handle_cp10_id(struct kvm_vcpu *vcpu)
-> + {
-> + 	int Rt =3D kvm_vcpu_sys_get_rt(vcpu);
->  -	u32 esr =3D kvm_vcpu_get_esr(vcpu);
-> ++	u64 esr =3D kvm_vcpu_get_esr(vcpu);
-> + 	struct sys_reg_params params;
-> +=20
-> + 	/* UNDEF on any unhandled register access */
-> + 	if (!kvm_esr_cp10_id_to_sys64(esr, &params)) {
-> + 		kvm_inject_undefined(vcpu);
-> + 		return 1;
-> + 	}
-> +=20
-> + 	if (emulate_sys_reg(vcpu, &params))
-> + 		vcpu_set_reg(vcpu, Rt, params.regval);
-> +=20
-> + 	return 1;
-> + }
-> +=20
-> + /**
-> +  * kvm_emulate_cp15_id_reg() - Handles an MRC trap on a guest CP15 acce=
-ss where
-> +  *			       CRn=3D0, which corresponds to the AArch32 feature
-> +  *			       registers.
-> +  * @vcpu: the vCPU pointer
-> +  * @params: the system register access parameters.
-> +  *
-> +  * Our cp15 system register tables do not enumerate the AArch32 feature
-> +  * registers. Conveniently, our AArch64 table does, and the AArch32 sys=
-tem
-> +  * register encoding can be trivially remapped into the AArch64 for the=
- feature
-> +  * registers: Append op0=3D3, leaving op1, CRn, CRm, and op2 the same.
-> +  *
-> +  * According to DDI0487G.b G7.3.1, paragraph "Behavior of VMSAv8-32 32-=
-bit
-> +  * System registers with (coproc=3D0b1111, CRn=3D=3Dc0)", read accesses=
- from this
-> +  * range are either UNKNOWN or RES0. Rerouting remains architectural as=
- we
-> +  * treat undefined registers in this range as RAZ.
-> +  */
-> + static int kvm_emulate_cp15_id_reg(struct kvm_vcpu *vcpu,
-> + 				   struct sys_reg_params *params)
-> + {
-> + 	int Rt =3D kvm_vcpu_sys_get_rt(vcpu);
-> +=20
-> + 	/* Treat impossible writes to RO registers as UNDEFINED */
-> + 	if (params->is_write) {
-> + 		unhandled_cp_access(vcpu, params);
-> + 		return 1;
-> + 	}
-> +=20
-> + 	params->Op0 =3D 3;
-> +=20
-> + 	/*
-> + 	 * All registers where CRm > 3 are known to be UNKNOWN/RAZ from AArch3=
-2.
-> + 	 * Avoid conflicting with future expansion of AArch64 feature registers
-> + 	 * and simply treat them as RAZ here.
-> + 	 */
-> + 	if (params->CRm > 3)
-> + 		params->regval =3D 0;
-> + 	else if (!emulate_sys_reg(vcpu, params))
-> + 		return 1;
-> +=20
-> + 	vcpu_set_reg(vcpu, Rt, params->regval);
-> + 	return 1;
-> + }
-> +=20
->   /**
->    * kvm_handle_cp_32 -- handles a mrc/mcr trap on a guest CP14/CP15 acce=
-ss
->    * @vcpu: The VCPU pointer
+Following patch seems to be the cause for this regression.
+commit 8b8fb1355917=20
+    powerpc/papr_scm: Fix leaking nvdimm_events_map elements
 
-This is now a conflict between the kvm tree and the arm64 tree.
+Reverting this patch helps to boot the kernel.=20
 
---=20
-Cheers,
-Stephen Rothwell
+This crash is only seen with following option disabled(profile) for the =
+said LPAR
+Enable Performance Information Collection
 
---Sig_/.hrk+MfNx9SbylaWUw_miKR
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKLK1MACgkQAVBC80lX
-0Gykrwf/TE/fMdxVa5FSwNyHf9GknoxlGKakukzHDMxelELHyc+Gf7pyr3lR+Yo8
-bfqsJAPJHPhm0hR0PYdPSSWLA3cIokKv4Lxw3VYsUnuqblPf+l5hSPUAukugW5IL
-OqUbWxOSFfTKtnZpYFk65u7xo+l/ih5k+Hbjp7rsBoWeCahiEeKsgNnAK+YmVydk
-y6juX8p0fY4svYEqwR1WtRZVlG2hsTbYosMTL+cA8SyiYx3qD4f4J9AsslMJR2Kp
-tUPieghcLHlNS5MPRdSzgdzx7rpiuyu4ex3OMmbAfb3r62pdn2oDgVO2UImqEa3G
-3tb2Ulc4HeX/H12ygh/gLVVipgZS+A==
-=PPU8
------END PGP SIGNATURE-----
-
---Sig_/.hrk+MfNx9SbylaWUw_miKR--
+- Sachin=

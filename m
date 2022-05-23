@@ -2,92 +2,91 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94266531488
-	for <lists+linux-next@lfdr.de>; Mon, 23 May 2022 18:25:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60B7D53139F
+	for <lists+linux-next@lfdr.de>; Mon, 23 May 2022 18:24:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237150AbiEWOkP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 23 May 2022 10:40:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50870 "EHLO
+        id S238465AbiEWQBp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 23 May 2022 12:01:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237143AbiEWOkO (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 23 May 2022 10:40:14 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46A032C7;
-        Mon, 23 May 2022 07:40:11 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id en5so19439528edb.1;
-        Mon, 23 May 2022 07:40:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CHInJSNSNbi/9IsXYhqIDLfRLKuMZvSOB9ICsHy+xGs=;
-        b=hf/CuAh4w8ydzt4S6oiTyYphf6Y3Cu91fMDD+KVCxU6ouMCImv/QzIoxg4JDTcMBtv
-         SYD9haVBKYbwkly2VSyisZV8Vf9Pq8hNT/gcKzdY9Zlud28+ncs+qgPTPRLNjgT6cYbF
-         CVqsI0x9eNx2TdAPviJs2JKxsvy8rVWSPW8Yy4jEEfucYBSAX4NhXEEx6xtsb7AvMfgn
-         cFHlPvwuhUmuGLERCK3VJIr5it+YtEj5IkRO4ZXPpoGCqlPHscXeR/XgcHGSXD3Xmt2u
-         Jf1dQi6e+Z/eIbnvW3wm5Ny9K26eYdx3XtVOTQK7BBFD1Xk7LVKb4dFyp8d0rghE2xTm
-         gU/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CHInJSNSNbi/9IsXYhqIDLfRLKuMZvSOB9ICsHy+xGs=;
-        b=j+GjUBn/lqWUw6oOsvdVGMCAFKyetB13bXFYakhPx5uoByqyb3V2m43r0BOuCRp+Vq
-         83XHdGThg61nAodQEcq8yrqa8FkoZ8u7bz0taGGaCN5oDyvzKejYkarRGVHTkpgVwRU6
-         92BN1U27njv2DhZhhD8npW/rH0Ll1Mi9JuII09VSIwnT9ssZDuMJ8XJk7JQ557Txne+n
-         35ifsC/A83kRTn53q0Q90FUj8CgGc6dQIkMn2nss/k/PZzHS4Oid3YXJ2Zc0gNV3BndA
-         PTfcqd4OsO120AF6mRZD/JaRxQ4vvXUC7b9aT1HIsgNDhfLG8isvzXR+ywzKZJU6PqKi
-         XOQg==
-X-Gm-Message-State: AOAM530JlKborlYsMybfuvQ92d6s66DCjxt/Cb/VltgOWq1og6vqaLgj
-        qIKxeK7OehHxyBdy+e7xEHX749JKGcz/G/EUYyPYYLs=
-X-Google-Smtp-Source: ABdhPJxDjTYy7IdZIhIVspU1ND/ZK1G1NZBzfzttih8jd38AONVLGwesNGkRYAIpbbXoi47i+QzrVCqHs+UxCBmFoQY=
-X-Received: by 2002:aa7:c79a:0:b0:42a:762e:769c with SMTP id
- n26-20020aa7c79a000000b0042a762e769cmr24118054eds.155.1653316809635; Mon, 23
- May 2022 07:40:09 -0700 (PDT)
+        with ESMTP id S238522AbiEWQBj (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 23 May 2022 12:01:39 -0400
+X-Greylist: delayed 37374 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 23 May 2022 09:01:35 PDT
+Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D16E0186D0;
+        Mon, 23 May 2022 09:01:31 -0700 (PDT)
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171]) (authenticated)
+        by conssluserg-02.nifty.com with ESMTP id 24NG1I0J011245;
+        Tue, 24 May 2022 01:01:18 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 24NG1I0J011245
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1653321678;
+        bh=nzqFcuEyx/MuWRxIhkFKZ05YKWhIDvaI4AOGehk/eQU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=bpM6k/YREumRwR1wV+o7WygPJZgEEa/ctjJYwTEJ2ioa2gRSkcevQOL8I0abhh7Xk
+         G/tWYUOtcRwjNcFKoWRKOzI1nUBzx1Y3ivuoc3ARyHb5v2h3LJB52aWS+NYVksXhHd
+         Bbqrbvr1E7VxpwMgEkxJva53m7AJJUYHJGzXTt7bJ4kPtU6KVhMJPOgUcybTMksFla
+         ix4527FtvqcaoqZIg3ArIW/z0u+0L5GNAs+OTkIB5yJTXG42cT/74FPkwDZWb3EgOT
+         RPc3QAYRPbgCVo/VdPYIx5N+Wrot0PuGrz4Sru6a4/pEVfu6i5w4lH0o98zfzKGO4A
+         izfINEMOoUHJw==
+X-Nifty-SrcIP: [209.85.210.171]
+Received: by mail-pf1-f171.google.com with SMTP id w200so14084353pfc.10;
+        Mon, 23 May 2022 09:01:18 -0700 (PDT)
+X-Gm-Message-State: AOAM531kBuuFzLRS32QQX1pZBecFePtF3LTKuGXfLubjA6/aPlOXC5QH
+        lvc1MbSVSyZ5NisZWR22rfbv1Hy10mjp6bvkzWk=
+X-Google-Smtp-Source: ABdhPJz8T55c2giO315+2kau6VgxZ8KUP01sqeHrFD1N0OM+wHS+FuNhPvqHv8mULyzZO18CHDXB1DoEzgUCF1xv0V4=
+X-Received: by 2002:a65:48c1:0:b0:3fa:74c6:3997 with SMTP id
+ o1-20020a6548c1000000b003fa74c63997mr3019714pgs.352.1653321677651; Mon, 23
+ May 2022 09:01:17 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220523140525.4ad591d0@canb.auug.org.au> <4d5c0dee-b32a-158c-e243-de2c4af7e103@linaro.org>
-In-Reply-To: <4d5c0dee-b32a-158c-e243-de2c4af7e103@linaro.org>
-From:   Rob Herring <robherring2@gmail.com>
-Date:   Mon, 23 May 2022 09:39:57 -0500
-Message-ID: <CAL_Jsq+ohio4ELL=RszN2vavg_sZ9S-N0R_TeQ9qpjB+ehCwTA@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the mailbox tree with the devicetree tree
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Jassi Brar <jaswinder.singh@linaro.org>,
-        David Heidelberg <david@ixit.cz>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
+References: <20220523205927.4dbeb49f@canb.auug.org.au>
+In-Reply-To: <20220523205927.4dbeb49f@canb.auug.org.au>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 24 May 2022 00:59:57 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQjc5h-Ffg4Mx0--hs2C35_n_Db2yTiyzmeguH+F0mLaA@mail.gmail.com>
+Message-ID: <CAK7LNAQjc5h-Ffg4Mx0--hs2C35_n_Db2yTiyzmeguH+F0mLaA@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the kbuild tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, May 23, 2022 at 9:33 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
+On Mon, May 23, 2022 at 7:59 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 >
-> On 23/05/2022 06:05, Stephen Rothwell wrote:
-> > Hi all,
-> >
-> > Today's linux-next merge of the mailbox tree got a conflict in:
-> >
-> >   Documentation/devicetree/bindings/mailbox/qcom-ipcc.yaml
-> >
-> > between commit:
-> >
-> >   b20eee62ee89 ("dt-bindings: mailbox: qcom-ipcc: add missing properties into example")
+> Hi all,
 >
-> This commit should be rather dropped, because it duplicated my work
-> which entirely removed the example.
+> After merging the kbuild tree, today's linux-next build (sparc64
+> defconfig) failed like this:
 >
-> Rob,
-> Can you drop that commit from your tree?
+> make[3]: *** Deleting file 'arch/sparc/vdso/vclock_gettime.o'
+> scripts/check-local-export: line 36: symbol_types[${name}]: bad array subscript
+>
+> Caused by commit
+>
+>   86e4cdec74f0 ("kbuild: check static EXPORT_SYMBOL* by script instead of modpost")
+>
+> I have reverted that commit for today.
+>
+> --
+> Cheers,
+> Stephen Rothwell
 
-No, but I've reverted it.
 
-Rob
+Thanks.
+I fixed my branch.
+I confirmed a successful build for sparc64 defconfig.
+
+
+
+
+-- 
+Best Regards
+Masahiro Yamada

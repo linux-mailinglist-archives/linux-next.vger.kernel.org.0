@@ -2,113 +2,120 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09A2953095F
-	for <lists+linux-next@lfdr.de>; Mon, 23 May 2022 08:12:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 055755309C5
+	for <lists+linux-next@lfdr.de>; Mon, 23 May 2022 09:05:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230211AbiEWGMj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 23 May 2022 02:12:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43142 "EHLO
+        id S229738AbiEWHEM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 23 May 2022 03:04:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236374AbiEWGMF (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 23 May 2022 02:12:05 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7518AE3D;
-        Sun, 22 May 2022 23:12:04 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        with ESMTP id S229574AbiEWHEL (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 23 May 2022 03:04:11 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF5819C14;
+        Sun, 22 May 2022 23:56:54 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 968A71F383;
-        Mon, 23 May 2022 06:05:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1653285913; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=A48QX/vupAuDBBHOJLZZB2SN4uoXt1Za4zzMoiIYE6M=;
-        b=NUPGG7/Cyb8PISM5MQxuSK/EtfR77Nk33xy/KVu+F1Y55Kruti902KJPmGMnxMWEzCwe3Z
-        OojVdGzwPekil0h+LKdnJ2ZLrDrZ8bBpm4rbDCUvVCPQIWwlBM3MS4KkS6CA7NRd/Yse0I
-        ENeLjrrNb+U5ef1j9y7FD0KvuSX5tNo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1653285913;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=A48QX/vupAuDBBHOJLZZB2SN4uoXt1Za4zzMoiIYE6M=;
-        b=AZLHrLi9ozj4GGOxPypKkh9E2+zcGbXAWjfJzhE2IDXmfNR4y7bw0+qvaL5pEATHPz2oHS
-        QXXScIvxSgAQyFCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5C93D13AA5;
-        Mon, 23 May 2022 06:05:12 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 9YIHCBgki2IHdwAAMHmgww
-        (envelope-from <colyli@suse.de>); Mon, 23 May 2022 06:05:12 +0000
-Message-ID: <f1a9c46e-59a6-7b68-fd17-6f2563e24e98@suse.de>
-Date:   Mon, 23 May 2022 14:05:08 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.1
-Subject: Re: linux-next: build failure after merge of the block tree
-Content-Language: en-US
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L66sG0b1tz4xD8;
+        Mon, 23 May 2022 16:30:41 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1653287444;
+        bh=xgg1hS9BSFr5BuV1JPPaBTBshDJNljlVHdKXJO5tQ78=;
+        h=Date:From:To:Cc:Subject:From;
+        b=sYnPmLi8oYAqcYCjY6GHNChs5KYvus+P0r4Ha+hu2Qpo4kVIGVj3bhfLVwJn2ECT9
+         PItx4IuEgzjyncJt2ukJrkkvkgo/Fv1BP4r3Sg01O985QC2dDBSVqergEj1J6aeBmX
+         ixUmaX8DtshIG85goiSPBdK6QLcd+4Upjjm8mwLFnhm21hocfXOfWy3xy9rOrqLOqU
+         ah63LfYwt5wNL9w1tP47lwxGiCsdZJRhodfw3bW4nWXtmpm5os/6fD7q7RffpbUVdE
+         GDUC0EEl/UfPdyuTfLneQT6/f8y+tw87u/TO1lbIuDfaV7ECB1+RjP5meIVBOmXYfT
+         GTl8/z/PRXEbg==
+Date:   Mon, 23 May 2022 16:30:40 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Juergen Gross <jgross@suse.com>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Xen Devel <xen-devel@lists.xenproject.org>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-References: <20220523124921.7d6bbf34@canb.auug.org.au>
- <df3ffbac-2f4e-df03-8b29-8e2e4bb69fac@kernel.dk>
-From:   Coly Li <colyli@suse.de>
-In-Reply-To: <df3ffbac-2f4e-df03-8b29-8e2e4bb69fac@kernel.dk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Maximilian Heyne <mheyne@amazon.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: linux-next: manual merge of the xen-tip tree with the pm tree
+Message-ID: <20220523163040.6064b190@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/LHaDpV_gDAUXQ2VrDx=4El=";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 5/23/22 10:52 AM, Jens Axboe wrote:
-> On 5/22/22 8:49 PM, Stephen Rothwell wrote:
->> Hi all,
->>
->> After merging the block tree, today's linux-next build (x86_64
->> allmodconfig) failed like this:
->>
->> drivers/md/bcache/btree.c: In function 'bch_btree_check':
->> drivers/md/bcache/btree.c:2073:1: error: the frame size of 2184 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]
->>   2073 | }
->>        | ^
->>
->> Caused by commit
->>
->>    c766acd3d78e ("bcache: improve multithreaded bch_btree_check()")
->>
->> struct btree_check_state is very large to put on the stack :-(
->>
->> I have reverted that commit for today.
+--Sig_/LHaDpV_gDAUXQ2VrDx=4El=
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Hi Jens,
+Hi all,
 
-> Thanks, I'll drop it. It's not part of the initial request sent to
-> Linus, exactly because it arrived late.
->
-> Coly, I'm dropping this series.
+Today's linux-next merge of the xen-tip tree got a conflict in:
 
-Yes please. Should I re-submit the fixed series to you in later -RC 
-round, or wait for 5.20 merge window?
+  arch/x86/xen/enlighten_pv.c
 
+between commit:
 
-Thanks.
+  f089ab674cea ("xen/x86: Use do_kernel_power_off()")
 
-Coly Li
+from the pm tree and commit:
 
+  1591a65f55bc ("x86: xen: remove STACK_FRAME_NON_STANDARD from xen_cpuid")
 
+from the xen-tip tree.
 
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc arch/x86/xen/enlighten_pv.c
+index af1f6e886225,ca85d1409917..000000000000
+--- a/arch/x86/xen/enlighten_pv.c
++++ b/arch/x86/xen/enlighten_pv.c
+@@@ -30,8 -30,6 +30,7 @@@
+  #include <linux/pci.h>
+  #include <linux/gfp.h>
+  #include <linux/edd.h>
+- #include <linux/objtool.h>
+ +#include <linux/reboot.h>
+ =20
+  #include <xen/xen.h>
+  #include <xen/events.h>
+
+--Sig_/LHaDpV_gDAUXQ2VrDx=4El=
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKLKhAACgkQAVBC80lX
+0GwP1QgAm4zlmI0lzfyk52XGg8pKpPdKKocChsJEtTH1iwbUUM+owKfGB6L7OMlY
+bRZFmQUgIy581cwpFPqYhi1vOcTkOX3E6npA1fhBdamYar7tCqu4xwq2f1A0rTjZ
+Zb9+lcJZHYcp5nApkqC0Us7UICIrvI0ylGXF3okKtscKsoMLPT1jfqrUGo8UIjyA
+l2jPDtIFntlk5bKhcjH4Bk1igoNW/hX97iPzsgj9KTrtVwQ2ISq5PjptZToaiaS0
+JCE4UGrHdiXjmzaDo7saPc5lEs9cUpvLm1TV+9VHYDfs3/UJvS29BTlCHra02K6e
+j3xKHiad9zTxderG5aSSt88c1YZ3AA==
+=BbA2
+-----END PGP SIGNATURE-----
+
+--Sig_/LHaDpV_gDAUXQ2VrDx=4El=--

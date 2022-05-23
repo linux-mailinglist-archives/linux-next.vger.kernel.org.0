@@ -2,104 +2,160 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70E885307D8
-	for <lists+linux-next@lfdr.de>; Mon, 23 May 2022 04:59:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D426530833
+	for <lists+linux-next@lfdr.de>; Mon, 23 May 2022 06:05:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239751AbiEWC65 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 22 May 2022 22:58:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51428 "EHLO
+        id S240807AbiEWEFe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 23 May 2022 00:05:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234387AbiEWC65 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 22 May 2022 22:58:57 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567CF37A3E
-        for <linux-next@vger.kernel.org>; Sun, 22 May 2022 19:58:55 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id n18so11891337plg.5
-        for <linux-next@vger.kernel.org>; Sun, 22 May 2022 19:58:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=JYI4hxtQWs8QIvdZkiaIHH+G2sDwWzCIkLUOgnf5B6Q=;
-        b=JhF7LtraRZMNB9EOjvD8+qUU7bFCMUE4ySVunQJvSZndC6TsJGeWQBwbvl+ipSLrQF
-         GICnxUjGL+r7gaqBNke5I4TIfl06jIMNhjsKW/mNffHq94h4itXE1KU4GeTn0zWenBjJ
-         T8BY+dvxw1f2Fndc8hRGjpCoAMon98ILs4MvIv3ycsrvnro3LE/92vJgjxtvKeNynGbm
-         do0r1JxwwUtJ+jo+gkOXJAe7w3atIBfmj6qxmCToi/E7jDAZWhgucjdDBS6UFs+BJxb4
-         rmVP9D5jcFkSjzjNGSMEl0nc+cj1T3sOy6mdx6fY05XVHhD+uYnne95pU8u0ztI9TC3s
-         Xh1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=JYI4hxtQWs8QIvdZkiaIHH+G2sDwWzCIkLUOgnf5B6Q=;
-        b=LP9CZYkD6d15oBt6GUajYEzFFcZPbUTmW8e+QSQCioV03K+2YklxHXr2MkQNbuau1D
-         j0dfyR+gylOOFxNmMKxuGQN9LM2M9kU/+hogyoWENaHoubJC7VTIAdioXqUny1dzCefH
-         MvOicKnV1wqQ/I/aTtld/mFv4ncuLocP7lUBfIj5Y/mqhu+9uEwpLvP+mbtX2zcmmUkV
-         RM5LmuueuuAEQ8EXo1aU1aVhh4FOaYQdwHB5Y/N/rrSArMC9ORfigd44hpq/disQeHpu
-         rapEkSOvEppDMr9H9PyUEIILHX76XPskkNO9TnvhUqAOnvQvSDCkDalsgC36GfMBN1jm
-         akyQ==
-X-Gm-Message-State: AOAM53137oaKfaGOdHUBGxU/Fg4oia06kAmJNX2p3wHAw/EPTWOz1yCZ
-        jvEgdYewrDN+LPfpIS7wAq78JyUwZ1l/ZQ==
-X-Google-Smtp-Source: ABdhPJwvmVfdIQ4Kob1VBnYgYAZv7OOxEaDSN2rnRstzDdI4EEH44wEGzuEPJzx1lRN4zWlpSxCRqg==
-X-Received: by 2002:a17:90a:7041:b0:1df:cc3a:10e2 with SMTP id f59-20020a17090a704100b001dfcc3a10e2mr23657280pjk.48.1653274734663;
-        Sun, 22 May 2022 19:58:54 -0700 (PDT)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id n3-20020a170902d2c300b0015e8d4eb277sm3796176plc.193.2022.05.22.19.58.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 22 May 2022 19:58:54 -0700 (PDT)
-Message-ID: <0b1ceba8-fca1-3b47-411b-434c4c46ac45@kernel.dk>
-Date:   Sun, 22 May 2022 20:58:53 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: linux-next: manual merge of the block tree with the vfs tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Dylan Yudaken <dylany@fb.com>,
+        with ESMTP id S233803AbiEWEFc (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 23 May 2022 00:05:32 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D19C5637B;
+        Sun, 22 May 2022 21:05:29 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L63df6XHSz4xD7;
+        Mon, 23 May 2022 14:05:26 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1653278728;
+        bh=Fzn4hoMSmZbg4otScjy8jrN/eCp69Sk3KAuu65T0H78=;
+        h=Date:From:To:Cc:Subject:From;
+        b=np2nYaEFc7uz/Wfbg7Ku/8dpkEX2TSR3PdQBiQtPUE8o+HFiJQu4dWsJVggvDsJQr
+         nKp3eWSMLA5zuqxr6VjuDBWqNyXT1Nhj2rzqGGIrcmbQZPjvK6QN8Dbijp6ogWZUMo
+         qIKk6kFUTPcawFXKY04++2tzCSg+sjMLDz9j8CfWJYI6ux8QYq7+T0HI5pznRleu1W
+         zi9DDTmowz6jCEBoEDPNZeEq2QBFdorxxJd9n3n1qO03x0wrpY0sjAm9QZWrrRweDA
+         jK4sRMqIrFuKTxeyNm2Ni2q+z4wCc0n5WbWcIbxJAgUSeDfv9IzNZUmx5tZ6t9dkld
+         swUAjXqjAnHig==
+Date:   Mon, 23 May 2022 14:05:25 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jassi Brar <jaswinder.singh@linaro.org>,
+        Rob Herring <robherring2@gmail.com>
+Cc:     David Heidelberg <david@ixit.cz>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220523122827.657f2ab8@canb.auug.org.au>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20220523122827.657f2ab8@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Rob Herring <robh@kernel.org>
+Subject: linux-next: manual merge of the mailbox tree with the devicetree
+ tree
+Message-ID: <20220523140525.4ad591d0@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/=rAw.59tZ1cA61PxWG775Ar";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 5/22/22 8:28 PM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the block tree got a conflict in:
-> 
->   fs/io_uring.c
-> 
-> between commit:
-> 
->   4329490a78b6 ("io_uring_enter(): don't leave f.flags uninitialized")
-> 
-> from the vfs tree and commit:
-> 
->   3e813c902672 ("io_uring: rework io_uring_enter to simplify return value")
-> 
-> from the block tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+--Sig_/=rAw.59tZ1cA61PxWG775Ar
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Fixup looks good, thanks.
+Hi all,
 
--- 
-Jens Axboe
+Today's linux-next merge of the mailbox tree got a conflict in:
 
+  Documentation/devicetree/bindings/mailbox/qcom-ipcc.yaml
+
+between commit:
+
+  b20eee62ee89 ("dt-bindings: mailbox: qcom-ipcc: add missing properties in=
+to example")
+
+from the devicetree tree and commit:
+
+  cd285535b8ee ("dt-bindings: mailbox: qcom-ipcc: simplify the example")
+
+from the mailbox tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc Documentation/devicetree/bindings/mailbox/qcom-ipcc.yaml
+index 50f9aa72c670,dfdc72345a2a..000000000000
+--- a/Documentation/devicetree/bindings/mailbox/qcom-ipcc.yaml
++++ b/Documentation/devicetree/bindings/mailbox/qcom-ipcc.yaml
+@@@ -62,28 -61,14 +62,28 @@@ additionalProperties: fals
+ =20
+  examples:
+    - |
+-         #include <dt-bindings/interrupt-controller/arm-gic.h>
+-         #include <dt-bindings/mailbox/qcom-ipcc.h>
++     #include <dt-bindings/interrupt-controller/arm-gic.h>
++     #include <dt-bindings/mailbox/qcom-ipcc.h>
+ =20
+-         mailbox@408000 {
+-                 compatible =3D "qcom,sm8250-ipcc", "qcom,ipcc";
+-                 reg =3D <0x408000 0x1000>;
+-                 interrupts =3D <GIC_SPI 229 IRQ_TYPE_LEVEL_HIGH>;
+-                 interrupt-controller;
+-                 #interrupt-cells =3D <3>;
+-                 #mbox-cells =3D <2>;
+-         };
++     mailbox@408000 {
++         compatible =3D "qcom,sm8250-ipcc", "qcom,ipcc";
++         reg =3D <0x408000 0x1000>;
++         interrupts =3D <GIC_SPI 229 IRQ_TYPE_LEVEL_HIGH>;
++         interrupt-controller;
++         #interrupt-cells =3D <3>;
++         #mbox-cells =3D <2>;
++     };
+ +
+-         smp2p-modem {
+-                 compatible =3D "qcom,smp2p";
+-                 qcom,smem =3D <443>, <429>;
+-                 interrupts-extended =3D <&ipcc IPCC_CLIENT_LPASS
+-                                              IPCC_MPROC_SIGNAL_SMP2P
+-                                              IRQ_TYPE_EDGE_RISING>;
+-                 mboxes =3D <&ipcc IPCC_CLIENT_LPASS
+-                                 IPCC_MPROC_SIGNAL_SMP2P>;
+++    smp2p-modem {
+++        compatible =3D "qcom,smp2p";
+++        qcom,smem =3D <443>, <429>;
+++        interrupts-extended =3D <&ipcc IPCC_CLIENT_LPASS
+++                                     IPCC_MPROC_SIGNAL_SMP2P
+++                                     IRQ_TYPE_EDGE_RISING>;
+++        mboxes =3D <&ipcc IPCC_CLIENT_LPASS
+++                        IPCC_MPROC_SIGNAL_SMP2P>;
+ +
+-                 qcom,local-pid =3D <0>;
+-                 qcom,remote-pid =3D <2>;
+-                 /* Other SMP2P fields */
+-         };
+++        qcom,local-pid =3D <0>;
+++        qcom,remote-pid =3D <2>;
+++        /* Other SMP2P fields */
+++    };
+
+--Sig_/=rAw.59tZ1cA61PxWG775Ar
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKLCAUACgkQAVBC80lX
+0Gwojgf/cR82xL5ati0hnrmEAMdVEmCro6867KtJMJGl2PLJLd0Dbu3ddup8w1oI
+X45Ygca6jXzz2w5BYFO7IfkKVrYHa4nT2zy6vq7uZDUD/CczkoPCzsw3q6uU6bYO
+hrkIPjVsmHLliXV34JresvCKKZ1AoSjxOxO6PT1gDAJ4zwWcgEQFw3Q1juqmi1Q3
+/B2AClq38vYDdPSCPgezTqwNhAc3D9lwkbUqn8HzlVjzEtuD/dVg5P/bWpkFo5L7
+eTKnxVt6KqwyrLgd2TPzEtq+RUxY2T6ik5N5MGT0p9snJbPNKMgISnflXcbf1yGy
+wluyUqDDQ6BhzO7sqx87VDHGkswsxg==
+=J6Cr
+-----END PGP SIGNATURE-----
+
+--Sig_/=rAw.59tZ1cA61PxWG775Ar--

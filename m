@@ -2,106 +2,115 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61131530840
-	for <lists+linux-next@lfdr.de>; Mon, 23 May 2022 06:24:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDA165308E8
+	for <lists+linux-next@lfdr.de>; Mon, 23 May 2022 07:41:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233803AbiEWEYj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 23 May 2022 00:24:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49774 "EHLO
+        id S230271AbiEWFlc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 23 May 2022 01:41:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbiEWEYh (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 23 May 2022 00:24:37 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94486236;
-        Sun, 22 May 2022 21:24:36 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L643j53gWz4xXg;
-        Mon, 23 May 2022 14:24:33 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1653279874;
-        bh=hszSGSEAWYFbEEGQMO1SFV7XS8z86K6y58+ZDF+bDu0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=dcJSr6zm3JToIwAOPBc0mCrU3K7XFQzdmKbEy7CYTfBlx2u2vXXuUwvuMObh3hFuv
-         ByzKZC87h9K9qQtnXppHuay9emJYbgilNO2hubbfEK8iy9QyAcrdQpsDwoRkvoT80P
-         muXV+HJBFy2p+Ni9zTz5PMKt+fZghho0fy9FqnI8yVl/+f4RGwQ+dcazMgI4YJ4vFG
-         DBres6aKVr66Z1jz8rQsVIwvbLVyrVN8BSbnIYUDILXLmbTC5SslEhJPAww3bR6cvo
-         Cro7+v2YAr7YzSPUTJcoG/DSnsHI5LmuB28OQiEZPYIlTTV6hM09y0NRrRELgPuiWd
-         3pqwficJKYx5Q==
-Date:   Mon, 23 May 2022 14:24:31 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>,
+        with ESMTP id S1344540AbiEWFl3 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 23 May 2022 01:41:29 -0400
+Received: from condef-01.nifty.com (condef-01.nifty.com [202.248.20.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF44612611
+        for <linux-next@vger.kernel.org>; Sun, 22 May 2022 22:41:26 -0700 (PDT)
+Received: from conssluserg-06.nifty.com ([10.126.8.85])by condef-01.nifty.com with ESMTP id 24N5cfxP018466
+        for <linux-next@vger.kernel.org>; Mon, 23 May 2022 14:38:41 +0900
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172]) (authenticated)
+        by conssluserg-06.nifty.com with ESMTP id 24N5c6tX016050;
+        Mon, 23 May 2022 14:38:06 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 24N5c6tX016050
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1653284286;
+        bh=8k0/bkhtuM/BaYqS5/Paa+cIIhtF8ZJBatVMjJ7NYMk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ncCjg6BqdAPQQVB7Tnaa9iyoMCid23CmMHKF2DfcVUMF38oWckgbuF1xpQvLgLFjf
+         SImQYh7/jqMtDlZkzn/IzULgSuJyU7A5Q32gCKLzAsaKGk/IPOddlqUDNjM59KfR/J
+         luUd3Jtg7lrcDR8HrWwPpk7YS5wo7GBQVw3xcbdfLtrN8EF22Rnr24KM9eBTHozRL7
+         Yw/qitH4qRQIqjXyxrqCwjzc+V9s2N1AmOc3bG37M0E9DaPskHyAoHyLB+aYBxD+h0
+         SaEE3td+rq4Q12+Q2voPj/IorLF3nLfYGx2GnzSzhQq9TFyT/K4UdTDSq8BbpK9rqR
+         pJCXxBSTWWkxw==
+X-Nifty-SrcIP: [209.85.215.172]
+Received: by mail-pg1-f172.google.com with SMTP id 31so12742698pgp.8;
+        Sun, 22 May 2022 22:38:06 -0700 (PDT)
+X-Gm-Message-State: AOAM5321FzyIQgbr/e1mYbnYjpDd4YFbrzn6hYNkyFWaFTSZYUSmwRSM
+        sJ8/yc/IQhpT1wBn9QrrGsO4r7u5B+Ao80LSAOQ=
+X-Google-Smtp-Source: ABdhPJzG1VZG3WAjvz75BL+VNo9jo0YV4zcGj4QGDXFHIDPBgYuDI5HvMgqvfHfhyFCLrc2AuDCK0FwDUu/P1z3R/ZA=
+X-Received: by 2002:a63:fc5e:0:b0:3db:5804:f3b with SMTP id
+ r30-20020a63fc5e000000b003db58040f3bmr19090498pgk.126.1653284285678; Sun, 22
+ May 2022 22:38:05 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220523142431.10ff2f77@canb.auug.org.au>
+In-Reply-To: <20220523142431.10ff2f77@canb.auug.org.au>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Mon, 23 May 2022 14:37:28 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQcRsuKrepsMiV20D+SSQQYWRqeoWqpo4UoQMtdW2A8SQ@mail.gmail.com>
+Message-ID: <CAK7LNAQcRsuKrepsMiV20D+SSQQYWRqeoWqpo4UoQMtdW2A8SQ@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the tip tree with the kbuild tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>,
         "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: linux-next: manual merge of the tip tree with the kbuild tree
-Message-ID: <20220523142431.10ff2f77@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/eB6BtpQ0AHS=obKOXHznCjx";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/eB6BtpQ0AHS=obKOXHznCjx
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, May 23, 2022 at 1:24 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> Today's linux-next merge of the tip tree got a conflict in:
+>
+>   scripts/Makefile.build
+>
+> between commit:
+>
+>   0212301af7bb ("kbuild: do not create *.prelink.o for Clang LTO or IBT")
+>
+> from the kbuild tree and commit:
+>
+>   753da4179d08 ("objtool: Remove --lto and --vmlinux in favor of --link")
+>
+> from the tip tree.
+>
+> I am not sure if I fixed this up correctly, please check the final result
+> when linux-next is released.
+>
+> I fixed it up (I used the former version) and can carry the fix as
+> necessary. This is now fixed as far as linux-next is concerned, but any
+> non trivial conflicts should be mentioned to your upstream maintainer
+> when your tree is submitted for merging.  You may also want to consider
+> cooperating with the maintainer of the conflicting tree to minimise any
+> particularly complex conflicts.
+>
+> --
+> Cheers,
+> Stephen Rothwell
 
-Hi all,
 
-Today's linux-next merge of the tip tree got a conflict in:
+I think you can fix up around line 420
+of scripts/Makefile.build
 
-  scripts/Makefile.build
 
-between commit:
+$(multi-obj-m): objtool-enabled := $(delay-objtool)
+$(multi-obj-m): part-of-module := y
+$(multi-obj-m): linked-object := y                        <--- Add this
+$(multi-obj-m): %.o: %.mod FORCE
+        $(call if_changed_rule,ld_multi_m)
 
-  0212301af7bb ("kbuild: do not create *.prelink.o for Clang LTO or IBT")
 
-from the kbuild tree and commit:
 
-  753da4179d08 ("objtool: Remove --lto and --vmlinux in favor of --link")
 
-from the tip tree.
-
-I am not sure if I fixed this up correctly, please check the final result
-when linux-next is released.
-
-I fixed it up (I used the former version) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/eB6BtpQ0AHS=obKOXHznCjx
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKLDH8ACgkQAVBC80lX
-0GwdTAf/c6FzAJfisb6g7dTTTyHS/8MuDFYYhhSiHl9naP8p8QU+GyZMzUSFU7Ru
-sYGotjAHR3V8h/zG4ogT3KN7NLTcFMdS7Iy1BE3QMNZ4YeyUOk6WcdZmnBoWFq3s
-nBd7JfANZCe5clge10zqcRBKS49vrggFYqEeyBvNZn4JFxMdgRqvToOdykUegOXq
-8gR/ynGFnYXjl0vkwyTmXTxaKrlJYn2U/2h1oFXbOqci9Tbme54y1UlYXM9lOWRt
-0RLGXHQ0RffU7HH/PE3V99AkUaeFTQefYazE3n8lgH0wq+DbSxYoEX30C+aLL0N1
-+nC4n0GG9aVs6/3JkS76RxyjkUXquw==
-=sdy5
------END PGP SIGNATURE-----
-
---Sig_/eB6BtpQ0AHS=obKOXHznCjx--
+-- 
+Best Regards
+Masahiro Yamada

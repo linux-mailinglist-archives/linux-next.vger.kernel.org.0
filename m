@@ -2,78 +2,67 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCE4F5328F1
-	for <lists+linux-next@lfdr.de>; Tue, 24 May 2022 13:27:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13CF2532BED
+	for <lists+linux-next@lfdr.de>; Tue, 24 May 2022 16:04:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232171AbiEXL05 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 24 May 2022 07:26:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45368 "EHLO
+        id S237253AbiEXODW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 24 May 2022 10:03:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236442AbiEXL0w (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 24 May 2022 07:26:52 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E62A3546AB
-        for <linux-next@vger.kernel.org>; Tue, 24 May 2022 04:26:51 -0700 (PDT)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24OBGcT1029020;
-        Tue, 24 May 2022 11:26:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : in-reply-to : references : date : message-id : content-type :
- mime-version; s=pp1; bh=FZemrtj7hyyNEZyDNAQIfUn2Sqj/xK4CJXQu/UsB/XQ=;
- b=OTMDQ9tocwJY27djBtOrP4UsgU0TOB35wPzwyE5cjp1L152tN7jrtPtPuvKiQjygmV/T
- hOJsLQDPfkUvs2IwU9tFwbqkZi3QhHBoNNm5jakRwBhO/xxm47HcaBLyv3TkTf3GLJWr
- vzKjeTqTyRLlKsjw4DYmQ6qnZRfo5wcjoxMe/mlSxNyLtzm8LHc7hX4CdTcJ97rM79oh
- iDPM4WZ8vdFOilhMv6q+nyG62z/i/UWgvmalbmZdpgCCvqUvTMEUP46PfQ4os8e36oWW
- Ro6q6qfjDdvoqfDwooHP53U9p+zQJKUjhtGkP+Pjii6DOUS1+77b35K8750/E385umbe Kg== 
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g8xbmr56s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 24 May 2022 11:26:47 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24OBCD6h027258;
-        Tue, 24 May 2022 11:26:46 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma06ams.nl.ibm.com with ESMTP id 3g6qbjcbr2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 24 May 2022 11:26:45 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24OBPrNQ20316526
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 24 May 2022 11:25:53 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 981DA42042;
-        Tue, 24 May 2022 11:26:42 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8F0F84203F;
-        Tue, 24 May 2022 11:26:40 +0000 (GMT)
-Received: from vajain21.in.ibm.com (unknown [9.43.16.48])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with SMTP;
-        Tue, 24 May 2022 11:26:40 +0000 (GMT)
-Received: by vajain21.in.ibm.com (sSMTP sendmail emulation); Tue, 24 May 2022 16:56:39 +0530
-From:   Vaibhav Jain <vaibhav@linux.ibm.com>
-To:     Sachin Sant <sachinp@linux.ibm.com>, linuxppc-dev@lists.ozlabs.org
-Cc:     linux-next@vger.kernel.org
-Subject: Re: [powerpc] linux-next 20220520 boot failure (drc_pmem_query_stats)
-In-Reply-To: <6B3A522A-6A5F-4CC9-B268-0C63AA6E07D3@linux.ibm.com>
-References: <6B3A522A-6A5F-4CC9-B268-0C63AA6E07D3@linux.ibm.com>
-Date:   Tue, 24 May 2022 16:56:39 +0530
-Message-ID: <87o7znf9xs.fsf@vajain21.in.ibm.com>
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: vv9JaRYY37n90xqjm4T3nMFUx2FL0URP
-X-Proofpoint-ORIG-GUID: vv9JaRYY37n90xqjm4T3nMFUx2FL0URP
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        with ESMTP id S232788AbiEXODV (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 24 May 2022 10:03:21 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B14058CCDC
+        for <linux-next@vger.kernel.org>; Tue, 24 May 2022 07:03:19 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id y1so506054pfr.6
+        for <linux-next@vger.kernel.org>; Tue, 24 May 2022 07:03:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=kSyM/USfS7Pb7khLu6zBnGxMxsVQblFViaqZFN9Nd2Y=;
+        b=BZ8qEqM6i2bqtDforFfCmDzJEW3UPVjlakDiRq/vWicc7Kkvqygky05YuQFUNS1uPe
+         5c8cw4pmYsGpunzRsi/C9wehiY/0lEav/kwyDEwQnaxudWuRc5daZSiXI7aXKxeCf9Uh
+         jL7L21eEjtwMcjdTBriAWdQrPFvmCHKZh3NouOWgUA9ScieXRDaB9k43Lz+kdX44L81L
+         n+W74tP2OzSGCP6w9bRcAU/d5FulOvD8WpEwN69CwjGLPJ8Ixu5ZQTNvCzHzFOzVcfER
+         q/5aDZOiKo/2zVR6Gn5yjMBGfhSwNGhoEAQLWVboQ11725braTGSleIvMm7tPAZ9HsMQ
+         S+iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=kSyM/USfS7Pb7khLu6zBnGxMxsVQblFViaqZFN9Nd2Y=;
+        b=FCg8Wiz/Gy3JQbl9GYTJFBixZlMvHZObfefn6ASAJ4B2/+efcPd6stkJgK6lWI1/ED
+         0kk/1zVeehFzPKtswL+xXSU6yMAYRX+mo1FuLlM9QRr8YTMi15nMTkFKca9U2CaCst1Y
+         KY0UAB4G9iLBksfScwomXm8wKvAdzKxH0E8jMiU8c+f0Exl9UcljIZ1yvVbpQn3zU93f
+         vzcWfoSgwyGgaIXMUIVnuNDoY6sK8JRy125jr3t57/mFfud1oikYMDzZurBZuodNBV0I
+         YyzmsOATuT1nzuDCvlHdA8l0aSigm5WZw54SdacVe6JPRWQ/1eUGC2PgQ0NF9ZkUV2AV
+         M9ug==
+X-Gm-Message-State: AOAM530X1fLbpMdQ9xFxfx5FEXb8hB5h6rAuZmqa4QoE+2Eo7MhGWUyA
+        IBTEUB7oF2n/VhGf61ejNQJMEPhTNjFygxOKpNw=
+X-Google-Smtp-Source: ABdhPJwDHuUUBQ4yo7qxgJqfPhgNQUpQOV5TsmI7QoJo4sPW2Pu+HoXkOymcI7kCJCpZD/E1RhgiDA==
+X-Received: by 2002:a05:6a00:1688:b0:517:cf7b:9293 with SMTP id k8-20020a056a00168800b00517cf7b9293mr28873955pfc.7.1653400998801;
+        Tue, 24 May 2022 07:03:18 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id n18-20020a6563d2000000b003f655cf45c0sm6605216pgv.63.2022.05.24.07.03.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 May 2022 07:03:18 -0700 (PDT)
+Message-ID: <628ce5a6.1c69fb81.af8f6.f701@mx.google.com>
+Date:   Tue, 24 May 2022 07:03:18 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-24_06,2022-05-23_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
- lowpriorityscore=0 spamscore=0 malwarescore=0 mlxlogscore=772 bulkscore=0
- phishscore=0 priorityscore=1501 clxscore=1011 suspectscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2205240057
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Kernel: v5.18-1222-g391cf5a1244f
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+Subject: next/pending-fixes baseline: 466 runs,
+ 14 regressions (v5.18-1222-g391cf5a1244f)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,94 +70,555 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Thanks for reporting this Sachin,
+next/pending-fixes baseline: 466 runs, 14 regressions (v5.18-1222-g391cf5a1=
+244f)
 
-I have posted a fix for this at
-https://lore.kernel.org/nvdimm/20220524112353.1718454-1-vaibhav@linux.ibm.com
+Regressions Summary
+-------------------
+
+platform                   | arch  | lab          | compiler | defconfig   =
+                 | regressions
+---------------------------+-------+--------------+----------+-------------=
+-----------------+------------
+da850-lcdk                 | arm   | lab-baylibre | gcc-10   | davinci_all_=
+defconfig        | 1          =
+
+jetson-tk1                 | arm   | lab-baylibre | gcc-10   | multi_v7_def=
+c...G_ARM_LPAE=3Dy | 1          =
+
+jetson-tk1                 | arm   | lab-baylibre | gcc-10   | multi_v7_def=
+config+crypto    | 1          =
+
+jetson-tk1                 | arm   | lab-baylibre | gcc-10   | multi_v7_def=
+config+ima       | 1          =
+
+jetson-tk1                 | arm   | lab-baylibre | gcc-10   | multi_v7_def=
+c...MB2_KERNEL=3Dy | 1          =
+
+jetson-tk1                 | arm   | lab-baylibre | gcc-10   | multi_v7_def=
+config           | 1          =
+
+jetson-tk1                 | arm   | lab-baylibre | gcc-10   | tegra_defcon=
+fig              | 1          =
+
+qemu_arm64-virt-gicv2      | arm64 | lab-baylibre | gcc-10   | defconfig+de=
+bug              | 1          =
+
+qemu_arm64-virt-gicv2      | arm64 | lab-broonie  | gcc-10   | defconfig+de=
+bug              | 1          =
+
+qemu_arm64-virt-gicv2-uefi | arm64 | lab-baylibre | gcc-10   | defconfig+de=
+bug              | 1          =
+
+qemu_arm64-virt-gicv2-uefi | arm64 | lab-broonie  | gcc-10   | defconfig+de=
+bug              | 1          =
+
+qemu_arm64-virt-gicv3-uefi | arm64 | lab-baylibre | gcc-10   | defconfig+de=
+bug              | 1          =
+
+qemu_arm64-virt-gicv3-uefi | arm64 | lab-broonie  | gcc-10   | defconfig+de=
+bug              | 1          =
+
+sun50i-a64-bananapi-m64    | arm64 | lab-clabbe   | gcc-10   | defconfig+de=
+bug              | 1          =
 
 
-Sachin Sant <sachinp@linux.ibm.com> writes:
+  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
+v5.18-1222-g391cf5a1244f/plan/baseline/
 
-> While booting linux-next (5.18.0-rc7-next-20220520) on a Power10 LPAR
-> configure with pmem following oops is seen. The LPAR fails to boot to
-> login prompt.
->
-> [   10.948211] papr_scm ibm,persistent-memory:ibm,pmemory@44104001: Permission denied while accessing performance stats
-> [   10.948536] Kernel attempted to write user page (1c) - exploit attempt? (uid: 0)
-> [   10.948539] BUG: Kernel NULL pointer dereference on write at 0x0000001c
-> [   10.948540] Faulting instruction address: 0xc008000001b90844
-> [   10.948542] Oops: Kernel access of bad area, sig: 11 [#1]
-> [   10.948563] LE PAGE_SIZE=64K MMU=Radix SMP NR_CPUS=2048 NUMA pSeries
-> [   10.948568] Modules linked in: papr_scm(E+) libnvdimm(E) vmx_crypto(E) ext4(E) mbcache(E) jbd2(E) sd_mod(E) t10_pi(E) crc64_rocksoft(E) crc64(E) sg(E) ibmvscsi(E) scsi_transport_srp(E) ibmveth(E) fuse(E)
-> [   10.948587] CPU: 25 PID: 796 Comm: systemd-udevd Tainted: G            E     5.18.0-rc7-next-20220520 #2
-> [   10.948592] NIP:  c008000001b90844 LR: c008000001b92794 CTR: c008000001b907f8
-> [   10.948595] REGS: c00000003082b110 TRAP: 0300   Tainted: G            E      (5.18.0-rc7-next-20220520)
-> [   10.948600] MSR:  800000000280b033 <SF,VEC,VSX,EE,FP,ME,IR,DR,RI,LE>  CR: 44222822  XER: 00000001
-> [   10.948613] CFAR: c00000000007c744 DAR: 000000000000001c DSISR: 42000000 IRQMASK: 0 
-> [   10.948613] GPR00: c008000001b92794 c00000003082b3b0 c008000001bc8000 c00000000941bc00 
-> [   10.948613] GPR04: 0000000000000010 0000000000000000 c000000016001800 c00000003082b420 
-> [   10.948613] GPR08: 000000000000001c 0000000001000000 0000000053544154 c008000001b92c98 
-> [   10.948613] GPR12: c008000001b907f8 c000000abfd02b00 c00000003082bd00 00000001372bd8b0 
-> [   10.948613] GPR16: 000000000000ff20 c0080000008911b8 c008000000890000 00000000000011d0 
-> [   10.948613] GPR20: 0000000000000001 c00000003082bbc0 c008000001bc0a88 0000000000000000 
-> [   10.948613] GPR24: 0000000000000000 c000000002950e30 00000000ffffffff 0000000000000010 
-> [   10.948613] GPR28: c00000000941bc00 0000000000000010 0000000000000020 c00000000941bc00 
-> [   10.948660] NIP [c008000001b90844] drc_pmem_query_stats+0x5c/0x270 [papr_scm]
-> [   10.948667] LR [c008000001b92794] papr_scm_probe+0x2ac/0x6ec [papr_scm]
-> [   10.948673] Call Trace:
-> [   10.948675] [c00000003082b3b0] [c00000000941bca0] 0xc00000000941bca0 (unreliable)
-> [   10.948680] [c00000003082b460] [c008000001b92794] papr_scm_probe+0x2ac/0x6ec [papr_scm]
-> [   10.948687] [c00000003082b550] [c0000000009809b8] platform_probe+0x98/0x150
-> [   10.948694] [c00000003082b5d0] [c00000000097bf2c] really_probe+0xfc/0x510
-> [   10.948699] [c00000003082b650] [c00000000097c4bc] __driver_probe_device+0x17c/0x230
-> [   10.948704] [c00000003082b6d0] [c00000000097c5c8] driver_probe_device+0x58/0x120
-> [   10.948709] [c00000003082b710] [c00000000097ce0c] __driver_attach+0xfc/0x230
-> [   10.948714] [c00000003082b790] [c000000000978458] bus_for_each_dev+0xa8/0x130
-> [   10.948718] [c00000003082b7f0] [c00000000097b2c4] driver_attach+0x34/0x50
-> [   10.948722] [c00000003082b810] [c00000000097a508] bus_add_driver+0x1e8/0x350
-> [   10.948729] [c00000003082b8a0] [c00000000097def8] driver_register+0x98/0x1a0
-> [   10.948736] [c00000003082b910] [c0000000009804a8] __platform_driver_register+0x38/0x50
-> [   10.948741] [c00000003082b930] [c008000001b92c10] papr_scm_init+0x3c/0x78 [papr_scm]
-> [   10.948747] [c00000003082b960] [c000000000011ff0] do_one_initcall+0x60/0x2d0
-> [   10.948753] [c00000003082ba30] [c00000000023627c] do_init_module+0x6c/0x2d0
-> [   10.948760] [c00000003082bab0] [c000000000239650] load_module+0x1e90/0x2290
-> [   10.948765] [c00000003082bc90] [c000000000239d9c] __do_sys_finit_module+0xdc/0x180
-> [   10.948771] [c00000003082bdb0] [c0000000000335fc] system_call_exception+0x17c/0x350
-> [   10.948777] [c00000003082be10] [c00000000000c53c] system_call_common+0xec/0x270
-> [   10.948782] --- interrupt: c00 at 0x7fffa3f2f1d4
-> [   10.948785] NIP:  00007fffa3f2f1d4 LR: 00007fffa456ea9c CTR: 0000000000000000
-> [   10.948789] REGS: c00000003082be80 TRAP: 0c00   Tainted: G            E      (5.18.0-rc7-next-20220520)
-> [   10.948793] MSR:  800000000280f033 <SF,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE>  CR: 28222204  XER: 00000000
-> [   10.948805] IRQMASK: 0 
-> [   10.948805] GPR00: 0000000000000161 00007fffd70550b0 00007fffa4007300 0000000000000011 
-> [   10.948805] GPR04: 00007fffa457ad30 0000000000000000 0000000000000011 0000000000000000 
-> [   10.948805] GPR08: 0000000000000000 0000000000000000 0000000000000000 0000000000000000 
-> [   10.948805] GPR12: 0000000000000000 00007fffa4656580 0000000000020000 00000001372bd8b0 
-> [   10.948805] GPR16: 0000000137300108 00000001372c5c68 0000000000000000 0000000000000000 
-> [   10.948805] GPR20: 0000000000000000 00000001372c5ca0 000000016f049240 00007fffd70552d0 
-> [   10.948805] GPR24: 0000000137300128 0000000000020000 0000000000000000 000000016f038a80 
-> [   10.948805] GPR28: 00007fffa457ad30 0000000000020000 0000000000000000 000000016f049240 
-> [   10.948849] NIP [00007fffa3f2f1d4] 0x7fffa3f2f1d4
-> [   10.948851] LR [00007fffa456ea9c] 0x7fffa456ea9c
-> [   10.948854] --- interrupt: c00
-> [   10.948856] Instruction dump:
-> [   10.948859] f8010010 f821ff51 e92d0c80 f9210088 39200000 41820118 3d405354 614a4154 
-> [   10.948869] 2fa50000 3d200100 391d000c 3bc00020 <7ca0452c> 913d0008 794a07c6 654a534d 
-> [   10.948878] ---[ end trace 0000000000000000 ]---
-> [   10.951576] 
-> [   11.951579] Kernel panic - not syncing: Fatal exception
->
-> Following patch seems to be the cause for this regression.
-> commit 8b8fb1355917 
->     powerpc/papr_scm: Fix leaking nvdimm_events_map elements
->
-> Reverting this patch helps to boot the kernel. 
->
-> This crash is only seen with following option disabled(profile) for the said LPAR
-> Enable Performance Information Collection
->
-> - Sachin
+  Test:     baseline
+  Tree:     next
+  Branch:   pending-fixes
+  Describe: v5.18-1222-g391cf5a1244f
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      391cf5a1244fc835667a6b845706a63b65b7275f =
 
--- 
-Cheers
-~ Vaibhav
+
+
+Test Regressions
+---------------- =
+
+
+
+platform                   | arch  | lab          | compiler | defconfig   =
+                 | regressions
+---------------------------+-------+--------------+----------+-------------=
+-----------------+------------
+da850-lcdk                 | arm   | lab-baylibre | gcc-10   | davinci_all_=
+defconfig        | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/628cab82e81a7df578a39bec
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: davinci_all_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.18-1222-=
+g391cf5a1244f/arm/davinci_all_defconfig/gcc-10/lab-baylibre/baseline-da850-=
+lcdk.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.18-1222-=
+g391cf5a1244f/arm/davinci_all_defconfig/gcc-10/lab-baylibre/baseline-da850-=
+lcdk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220513.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/628cab82e81a7df=
+578a39bf4
+        failing since 120 days (last pass: v5.16-11577-gffd79fec234d, first=
+ fail: v5.17-rc1-180-g86539e2bdb99)
+        3 lines
+
+    2022-05-24T09:54:47.498298  kern  :alert : BUG: Bad page state in proce=
+ss kworker/u2:0  pfn:c3000
+    2022-05-24T09:54:47.499247  kern  :alert : BUG: Bad page state in proce=
+ss kworker/u2:0  pfn:c3400
+    2022-05-24T09:54:47.501655  kern  :alert : BUG: Bad page state in proce=
+ss kworker/u2:0  pfn:c3800
+    2022-05-24T09:54:47.542142  <8><LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Dale=
+rt RESULT=3Dfail UNITS=3Dlines MEASUREMENT=3D3>   =
+
+ =
+
+
+
+platform                   | arch  | lab          | compiler | defconfig   =
+                 | regressions
+---------------------------+-------+--------------+----------+-------------=
+-----------------+------------
+jetson-tk1                 | arm   | lab-baylibre | gcc-10   | multi_v7_def=
+c...G_ARM_LPAE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/628caf0558f74d97d6a39c0e
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.18-1222-=
+g391cf5a1244f/arm/multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/gcc=
+-10/lab-baylibre/baseline-jetson-tk1.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.18-1222-=
+g391cf5a1244f/arm/multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/gcc=
+-10/lab-baylibre/baseline-jetson-tk1.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220513.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/628caf0558f74d97d6a39=
+c0f
+        failing since 24 days (last pass: v5.18-rc2-366-ga3e1163f7eb1a, fir=
+st fail: v5.18-rc4-464-g425675974eb3) =
+
+ =
+
+
+
+platform                   | arch  | lab          | compiler | defconfig   =
+                 | regressions
+---------------------------+-------+--------------+----------+-------------=
+-----------------+------------
+jetson-tk1                 | arm   | lab-baylibre | gcc-10   | multi_v7_def=
+config+crypto    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/628cafa557834d3437a39d34
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+crypto
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.18-1222-=
+g391cf5a1244f/arm/multi_v7_defconfig+crypto/gcc-10/lab-baylibre/baseline-je=
+tson-tk1.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.18-1222-=
+g391cf5a1244f/arm/multi_v7_defconfig+crypto/gcc-10/lab-baylibre/baseline-je=
+tson-tk1.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220513.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/628cafa557834d3437a39=
+d35
+        failing since 0 day (last pass: v5.18-rc7-251-g195d7f7a62c6, first =
+fail: v5.18-155-gb82692513a38) =
+
+ =
+
+
+
+platform                   | arch  | lab          | compiler | defconfig   =
+                 | regressions
+---------------------------+-------+--------------+----------+-------------=
+-----------------+------------
+jetson-tk1                 | arm   | lab-baylibre | gcc-10   | multi_v7_def=
+config+ima       | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/628cb456de50eb88d4a39d04
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+ima
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.18-1222-=
+g391cf5a1244f/arm/multi_v7_defconfig+ima/gcc-10/lab-baylibre/baseline-jetso=
+n-tk1.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.18-1222-=
+g391cf5a1244f/arm/multi_v7_defconfig+ima/gcc-10/lab-baylibre/baseline-jetso=
+n-tk1.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220513.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/628cb456de50eb88d4a39=
+d05
+        failing since 4 days (last pass: v5.18-rc7-165-g2424086909d29, firs=
+t fail: v5.18-rc7-251-g195d7f7a62c6) =
+
+ =
+
+
+
+platform                   | arch  | lab          | compiler | defconfig   =
+                 | regressions
+---------------------------+-------+--------------+----------+-------------=
+-----------------+------------
+jetson-tk1                 | arm   | lab-baylibre | gcc-10   | multi_v7_def=
+c...MB2_KERNEL=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/628cb60eab2e56df75a39c1a
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.18-1222-=
+g391cf5a1244f/arm/multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab-ba=
+ylibre/baseline-jetson-tk1.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.18-1222-=
+g391cf5a1244f/arm/multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab-ba=
+ylibre/baseline-jetson-tk1.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220513.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/628cb60eab2e56df75a39=
+c1b
+        failing since 4 days (last pass: v5.18-rc7-165-g2424086909d29, firs=
+t fail: v5.18-rc7-251-g195d7f7a62c6) =
+
+ =
+
+
+
+platform                   | arch  | lab          | compiler | defconfig   =
+                 | regressions
+---------------------------+-------+--------------+----------+-------------=
+-----------------+------------
+jetson-tk1                 | arm   | lab-baylibre | gcc-10   | multi_v7_def=
+config           | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/628cb7c6d16064b514a39bd8
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.18-1222-=
+g391cf5a1244f/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-jetson-tk=
+1.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.18-1222-=
+g391cf5a1244f/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-jetson-tk=
+1.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220513.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/628cb7c6d16064b514a39=
+bd9
+        failing since 4 days (last pass: v5.18-rc7-165-g2424086909d29, firs=
+t fail: v5.18-rc7-251-g195d7f7a62c6) =
+
+ =
+
+
+
+platform                   | arch  | lab          | compiler | defconfig   =
+                 | regressions
+---------------------------+-------+--------------+----------+-------------=
+-----------------+------------
+jetson-tk1                 | arm   | lab-baylibre | gcc-10   | tegra_defcon=
+fig              | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/628cad61933f7ecf37a39bcd
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: tegra_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.18-1222-=
+g391cf5a1244f/arm/tegra_defconfig/gcc-10/lab-baylibre/baseline-jetson-tk1.t=
+xt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.18-1222-=
+g391cf5a1244f/arm/tegra_defconfig/gcc-10/lab-baylibre/baseline-jetson-tk1.h=
+tml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220513.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/628cad61933f7ecf37a39=
+bce
+        failing since 4 days (last pass: v5.18-rc7-165-g2424086909d29, firs=
+t fail: v5.18-rc7-251-g195d7f7a62c6) =
+
+ =
+
+
+
+platform                   | arch  | lab          | compiler | defconfig   =
+                 | regressions
+---------------------------+-------+--------------+----------+-------------=
+-----------------+------------
+qemu_arm64-virt-gicv2      | arm64 | lab-baylibre | gcc-10   | defconfig+de=
+bug              | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/628cb33fd240127d86a39bf2
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+debug
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.18-1222-=
+g391cf5a1244f/arm64/defconfig+debug/gcc-10/lab-baylibre/baseline-qemu_arm64=
+-virt-gicv2.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.18-1222-=
+g391cf5a1244f/arm64/defconfig+debug/gcc-10/lab-baylibre/baseline-qemu_arm64=
+-virt-gicv2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220513.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/628cb33fd240127d86a39=
+bf3
+        new failure (last pass: v5.18-155-gb82692513a38) =
+
+ =
+
+
+
+platform                   | arch  | lab          | compiler | defconfig   =
+                 | regressions
+---------------------------+-------+--------------+----------+-------------=
+-----------------+------------
+qemu_arm64-virt-gicv2      | arm64 | lab-broonie  | gcc-10   | defconfig+de=
+bug              | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/628cb5d75e5d3e7849a39c35
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+debug
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.18-1222-=
+g391cf5a1244f/arm64/defconfig+debug/gcc-10/lab-broonie/baseline-qemu_arm64-=
+virt-gicv2.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.18-1222-=
+g391cf5a1244f/arm64/defconfig+debug/gcc-10/lab-broonie/baseline-qemu_arm64-=
+virt-gicv2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220513.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/628cb5d75e5d3e7849a39=
+c36
+        new failure (last pass: v5.18-155-gb82692513a38) =
+
+ =
+
+
+
+platform                   | arch  | lab          | compiler | defconfig   =
+                 | regressions
+---------------------------+-------+--------------+----------+-------------=
+-----------------+------------
+qemu_arm64-virt-gicv2-uefi | arm64 | lab-baylibre | gcc-10   | defconfig+de=
+bug              | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/628cb3413a65b1222ba39bd0
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+debug
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.18-1222-=
+g391cf5a1244f/arm64/defconfig+debug/gcc-10/lab-baylibre/baseline-qemu_arm64=
+-virt-gicv2-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.18-1222-=
+g391cf5a1244f/arm64/defconfig+debug/gcc-10/lab-baylibre/baseline-qemu_arm64=
+-virt-gicv2-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220513.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/628cb3413a65b1222ba39=
+bd1
+        failing since 13 days (last pass: v5.18-rc5-178-g63184bc90d435, fir=
+st fail: v5.18-rc6-217-gd854612e01df) =
+
+ =
+
+
+
+platform                   | arch  | lab          | compiler | defconfig   =
+                 | regressions
+---------------------------+-------+--------------+----------+-------------=
+-----------------+------------
+qemu_arm64-virt-gicv2-uefi | arm64 | lab-broonie  | gcc-10   | defconfig+de=
+bug              | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/628cb5ffdd7ccfb02ea39c1a
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+debug
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.18-1222-=
+g391cf5a1244f/arm64/defconfig+debug/gcc-10/lab-broonie/baseline-qemu_arm64-=
+virt-gicv2-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.18-1222-=
+g391cf5a1244f/arm64/defconfig+debug/gcc-10/lab-broonie/baseline-qemu_arm64-=
+virt-gicv2-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220513.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/628cb5ffdd7ccfb02ea39=
+c1b
+        failing since 13 days (last pass: v5.18-rc5-178-g63184bc90d435, fir=
+st fail: v5.18-rc6-217-gd854612e01df) =
+
+ =
+
+
+
+platform                   | arch  | lab          | compiler | defconfig   =
+                 | regressions
+---------------------------+-------+--------------+----------+-------------=
+-----------------+------------
+qemu_arm64-virt-gicv3-uefi | arm64 | lab-baylibre | gcc-10   | defconfig+de=
+bug              | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/628cb31aeac1403a91a39bd7
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+debug
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.18-1222-=
+g391cf5a1244f/arm64/defconfig+debug/gcc-10/lab-baylibre/baseline-qemu_arm64=
+-virt-gicv3-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.18-1222-=
+g391cf5a1244f/arm64/defconfig+debug/gcc-10/lab-baylibre/baseline-qemu_arm64=
+-virt-gicv3-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220513.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/628cb31aeac1403a91a39=
+bd8
+        failing since 13 days (last pass: v5.18-rc5-178-g63184bc90d435, fir=
+st fail: v5.18-rc6-217-gd854612e01df) =
+
+ =
+
+
+
+platform                   | arch  | lab          | compiler | defconfig   =
+                 | regressions
+---------------------------+-------+--------------+----------+-------------=
+-----------------+------------
+qemu_arm64-virt-gicv3-uefi | arm64 | lab-broonie  | gcc-10   | defconfig+de=
+bug              | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/628cb5ebdd7ccfb02ea39c0a
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+debug
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.18-1222-=
+g391cf5a1244f/arm64/defconfig+debug/gcc-10/lab-broonie/baseline-qemu_arm64-=
+virt-gicv3-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.18-1222-=
+g391cf5a1244f/arm64/defconfig+debug/gcc-10/lab-broonie/baseline-qemu_arm64-=
+virt-gicv3-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220513.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/628cb5ebdd7ccfb02ea39=
+c0b
+        failing since 13 days (last pass: v5.18-rc5-178-g63184bc90d435, fir=
+st fail: v5.18-rc6-217-gd854612e01df) =
+
+ =
+
+
+
+platform                   | arch  | lab          | compiler | defconfig   =
+                 | regressions
+---------------------------+-------+--------------+----------+-------------=
+-----------------+------------
+sun50i-a64-bananapi-m64    | arm64 | lab-clabbe   | gcc-10   | defconfig+de=
+bug              | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/628cb340eac1403a91a39bed
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+debug
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.18-1222-=
+g391cf5a1244f/arm64/defconfig+debug/gcc-10/lab-clabbe/baseline-sun50i-a64-b=
+ananapi-m64.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.18-1222-=
+g391cf5a1244f/arm64/defconfig+debug/gcc-10/lab-clabbe/baseline-sun50i-a64-b=
+ananapi-m64.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220513.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/628cb340eac1403a91a39=
+bee
+        failing since 4 days (last pass: v5.18-rc7-165-g2424086909d29, firs=
+t fail: v5.18-rc7-251-g195d7f7a62c6) =
+
+ =20

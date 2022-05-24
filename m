@@ -2,46 +2,46 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D85F531EE9
-	for <lists+linux-next@lfdr.de>; Tue, 24 May 2022 00:54:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB820532053
+	for <lists+linux-next@lfdr.de>; Tue, 24 May 2022 03:44:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231819AbiEWWym (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 23 May 2022 18:54:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36390 "EHLO
+        id S232511AbiEXBoW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 23 May 2022 21:44:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbiEWWyl (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 23 May 2022 18:54:41 -0400
+        with ESMTP id S229783AbiEXBoV (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 23 May 2022 21:44:21 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B06D29BAC9;
-        Mon, 23 May 2022 15:54:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA747092B;
+        Mon, 23 May 2022 18:44:20 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L6XhY3wCJz4xD9;
-        Tue, 24 May 2022 08:54:37 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L6cSB4Vjxz4xYY;
+        Tue, 24 May 2022 11:44:09 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1653346478;
-        bh=kQ61I5q06RiORbU81KMm+TpsZhtefb8NNgB/lmR8l2g=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=lzrZmzIvKCl7FIvSIrwPZF+wpdULBxluYlM9pb7GqXEcczEV2iYkvgo4RuQWkXgkU
-         VUbzSOAjW5ZwIhPZolENAmDoIANDubDW5YtO2Kv0Rmf9kzZj0YQVeSo+TSXNJeRjn3
-         hr0tNsTYc0NIPVYokD/aHEL3VkcEXw2oaw5w54lmfoBERAG314borKFWku6NoLG4V5
-         7BbPCISE4RflTeBKwCUW/rFG77leDQtHseR/kd3Mp/n7HFSxa9pB7x9WZLp1hushpi
-         ro4U2EcafDe6kNV2yduvqclPMfxfL8To+3Jj1lMvkPE1o6Gc9Fcuu8tBjw7v4mSZJV
-         xQnWMH6R5snLw==
-Date:   Tue, 24 May 2022 08:54:35 +1000
+        s=201702; t=1653356655;
+        bh=nOHRLgVCMvcJflPH5QlQEy42qO/vMFVCr0/3VzWgpQg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=bUHvLJATj/H+PYuPKJDhh5JXS4HEpE5NDmFx3ctQpYU68xoKOVIYXDkZ3GlqIFIR7
+         4DACAW3di9bjGzxvERUYiTPN5tZPv9JHNXLTjWe/WhAUGAsPQ4fnjTcRq+0TlKK2nK
+         pOimqO/GTGXqaxWaonT8DAedRDmp22JBPQoDkqM/Tv+139m7vXU9RUJTpogtNylZVC
+         H2b6MuesMZO3iPbDYxio2FuakAXgnHiIydMuvdP1uySFtgWt53Yl8fvgiChUeUeq5k
+         5dXvNEs0gkcDXnN4cD5HiMIes+tPyaPJld7Ai0sC2s5ZSRX1aRFkX063U9y5mRXYhR
+         C+5ch935yoA+w==
+Date:   Tue, 24 May 2022 11:44:08 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Jens Axboe <axboe@kernel.dk>, Dylan Yudaken <dylany@fb.com>,
+To:     David Miller <davem@davemloft.net>
+Cc:     Networking <netdev@vger.kernel.org>,
+        Guangguan Wang <guangguan.wang@linux.alibaba.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the block tree with the vfs tree
-Message-ID: <20220524085435.1763fcfb@canb.auug.org.au>
-In-Reply-To: <20220523122827.657f2ab8@canb.auug.org.au>
-References: <20220523122827.657f2ab8@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        liuyacan <liuyacan@corp.netease.com>
+Subject: linux-next: manual merge of the net-next tree with the net tree
+Message-ID: <20220524114408.4bf1af38@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_//s_58=aJ5yUnfz4Eu5betNS";
+Content-Type: multipart/signed; boundary="Sig_/Zk89goQck+R.n2x3uj1nBJb";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -52,74 +52,70 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_//s_58=aJ5yUnfz4Eu5betNS
+--Sig_/Zk89goQck+R.n2x3uj1nBJb
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Mon, 23 May 2022 12:28:27 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> Today's linux-next merge of the block tree got a conflict in:
->=20
->   fs/io_uring.c
->=20
-> between commit:
->=20
->   4329490a78b6 ("io_uring_enter(): don't leave f.flags uninitialized")
->=20
-> from the vfs tree and commit:
->=20
->   3e813c902672 ("io_uring: rework io_uring_enter to simplify return value=
-")
->=20
-> from the block tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->=20
-> diff --cc fs/io_uring.c
-> index 82a1eac73de7,fd47002e669d..000000000000
-> --- a/fs/io_uring.c
-> +++ b/fs/io_uring.c
-> @@@ -10840,8 -12060,9 +12060,8 @@@ iopoll_locked
->   out:
->   	percpu_ref_put(&ctx->refs);
->   out_fput:
->  -	if (!(flags & IORING_ENTER_REGISTERED_RING))
->  -		fdput(f);
->  +	fdput(f);
-> - 	return submitted ? submitted : ret;
-> + 	return ret;
->   }
->  =20
->   #ifdef CONFIG_PROC_FS
+Today's linux-next merge of the net-next tree got a conflict in:
 
+  net/smc/af_smc.c
 
-This is now a conflict between Linus' tree and the vfs tree.
+between commit:
+
+  75c1edf23b95 ("net/smc: postpone sk_refcnt increment in connect()")
+
+from the net tree and commit:
+
+  3aba103006bc ("net/smc: align the connect behaviour with TCP")
+
+from the net-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_//s_58=aJ5yUnfz4Eu5betNS
+diff --cc net/smc/af_smc.c
+index d3de54b70c05,5f70642a8044..000000000000
+--- a/net/smc/af_smc.c
++++ b/net/smc/af_smc.c
+@@@ -1564,9 -1584,11 +1584,11 @@@ static int smc_connect(struct socket *s
+  	if (rc && rc !=3D -EINPROGRESS)
+  		goto out;
+ =20
+- 	if (smc->use_fallback)
+ -	sock_hold(&smc->sk); /* sock put in passive closing */
++ 	if (smc->use_fallback) {
++ 		sock->state =3D rc ? SS_CONNECTING : SS_CONNECTED;
+  		goto out;
++ 	}
+ +	sock_hold(&smc->sk); /* sock put in passive closing */
+  	if (flags & O_NONBLOCK) {
+  		if (queue_work(smc_hs_wq, &smc->connect_work))
+  			smc->connect_nonblock =3D 1;
+
+--Sig_/Zk89goQck+R.n2x3uj1nBJb
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKMEKsACgkQAVBC80lX
-0GxzvggAgUZBYeFC28p6bDG6SAJfv/uowSl8o0GYst0PvoolGwemW4EdM7mfZola
-f1k2fBWa3wcoQVkSFxTBtadDyHzjhOQHdo4RL2I0wXprdD44Zsh1lWIGwez8GscJ
-4U26TwRr2QZy9sxX7eFafoKH4FeoKkjFnp6dWkEijLtQT0QaTzW1G0WvSJLs3+rx
-haAyq/cqLuceN7Dj3sJFcILKTW6JADbNGxKbY0MtokcrZB3AEQhYjenD4MzAumDO
-I7cyb6Bn0DtbRGEIScWP/i8krHRUDnywxnhpZSSH425Hl4okBSUWj/oRyB5rL9LA
-GJYyTOk+/Wyx2HF71ga+MyF754wWVA==
-=wgrv
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKMOGgACgkQAVBC80lX
+0GzjqggAofBaqfeYFlkPgPQg6oj4xhagsdVwWACKLcyiO+y6E9+fl+loxSz4Nzbq
+rjbtv6gaDwd/1OUJL19sF/mZ3yINTgbORZjqXUVPlCvYwybrjSD8sb6vr2t0EIP4
+VeDevAqepIDcRptSyJe/dumKogOwW23YYCEDD8UK7Z528WWjR/EMsUFmaAhEDAKQ
+HS4Jkh0JMDaOxZuPK1Jmv4rpcNAfuxXj4caE8AlzsI0/D8q3CiKyAEvwBnRJCV2o
+HtQZBPwOFBtrTZ880kODlI8IvHLL3a9aw6YL5Bfo+Gh1dv2Z7Ut6RUf7Zd7lgZx4
+qA+OJ9SbfiXGaUXg2Qc0AsMnIKm3WQ==
+=LOHp
 -----END PGP SIGNATURE-----
 
---Sig_//s_58=aJ5yUnfz4Eu5betNS--
+--Sig_/Zk89goQck+R.n2x3uj1nBJb--

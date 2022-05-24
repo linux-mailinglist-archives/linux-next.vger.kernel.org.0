@@ -2,164 +2,93 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38B725331C6
-	for <lists+linux-next@lfdr.de>; Tue, 24 May 2022 21:32:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF6785332CE
+	for <lists+linux-next@lfdr.de>; Tue, 24 May 2022 23:07:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240918AbiEXTce (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 24 May 2022 15:32:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60172 "EHLO
+        id S240614AbiEXVH3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 24 May 2022 17:07:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236870AbiEXTcd (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 24 May 2022 15:32:33 -0400
-Received: from a48-34.smtp-out.amazonses.com (a48-34.smtp-out.amazonses.com [54.240.48.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 414EC6EC53;
-        Tue, 24 May 2022 12:32:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1653420750;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=IJedmS05+kboVVK12Nv37a8D22aNWRZlaAOsTaUkhFs=;
-        b=FR79051D2hDkrXrqY0oIlrAPi8jxJTDhYOkO0QXamg7zSN3rf3d/qnOZEr3hLj/W
-        Zk9fRGUTIE6Oj3HnZAvw9AoDIQzf2L6Ws61Ig4bVS2IiJATTSpfql5CXS3dHrL5tFvu
-        MFGxEVKaYtuO50LJUo0hTznNVsQbyM4kUHYDmv4w=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=6gbrjpgwjskckoa6a5zn6fwqkn67xbtw; d=amazonses.com; t=1653420750;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=IJedmS05+kboVVK12Nv37a8D22aNWRZlaAOsTaUkhFs=;
-        b=Etu99vIZsRRk6rAtjRp+5hJKbaBKusD5hSs1G2/e6vIwEld0uxRcdPUpOc5+EGdq
-        /FasmcWArIdM6aI4MF8W72tFuB8JLnjuujZShpAMc5+Vos+9hZB6+HLEUvRfAk6gRFt
-        yqRbZ53WGbxYYW2cO8Hg+ZtmHvoYBy3Kx86x5OzQ=
-From:   lkft@linaro.org
-To:     lkft@linaro.org
-Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
-        linux-next@vger.kernel.org, shuah@kernel.org
-Subject: [REGRESSION] lkft kselftest for next-20220524
+        with ESMTP id S241787AbiEXVH2 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 24 May 2022 17:07:28 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F7C03E5DE;
+        Tue, 24 May 2022 14:07:26 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L76GN3j4rz4xD1;
+        Wed, 25 May 2022 07:07:24 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1653426444;
+        bh=s989OmAEi4p3w9Bi09XinAJ1xsV0kn3UP6gq+AbmcrI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=j+2aB3UxJ1VCzRSS5oFteNcu6nIMzoR0XgagiAJSBKCElkqHP7BOTYynoBT7wNkYk
+         jto8h2sZ5dNpXWPdd71CUUvRDrqfEMHtRTiacGoiJrtyjlJHncBHAE93/o9+iiUUr7
+         m/4oD6QLvsozcrtEl0rukGTB2udEcikvs3IlDiuwDWIZswV2sEIPVppD6MaXMfRy5V
+         5hctE788ndt4RyQ6Sx6BF+1vxZearNbWw9f0Qku95uOr7J6t+oPS4J76VKwzv4y/iY
+         8TMXZUF8oCIujo56NR54YVz9HlioO4xH/vhPZA0qqhHKb9iouIRFSu3Hg8cZVU9Uim
+         DKVs5H1ZKbeMA==
+Date:   Wed, 25 May 2022 07:07:23 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Bjorn Helgaas <bhelgaas@google.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the pci tree
+Message-ID: <20220525070723.426cbfd4@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-Message-ID: <01000180f78e751a-1e3b8568-cbd3-4ab2-bdf6-53c8c4caac50-000000@email.amazonses.com>
-Date:   Tue, 24 May 2022 19:32:30 +0000
-Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2022.05.24-54.240.48.34
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        TO_EQ_FM_DIRECT_MX,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/6zjDcR09dd3KsxmmAHcysbt";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-## Build
-* kernel: 5.18.0
-* git: ['', 'https://gitlab.com/Linaro/lkft/mirrors/next/linux-next']
-* git branch: master
-* git commit: 09ce5091ff971cdbfd67ad84dc561ea27f10d67a
-* git describe: next-20220524
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220524
+--Sig_/6zjDcR09dd3KsxmmAHcysbt
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-## Test Regressions (compared to next-20220520)
-* dragonboard-410c, kselftest-rtc
-  - rtc.rtctest.rtc.uie_read
+Hi all,
 
-* dragonboard-845c, kselftest-proc
-  - proc.proc-uptime-001
+Commits
 
-* qemu_x86_64, kselftest-timers
-  - timers.rtcpie
+  5db490f54497 ("dt-bindings: PCI: qcom: Add schema for sc7280 chipset")
+  ee485c61f0e5 ("dt-bindings: PCI: qcom: Specify reg-names explicitly")
+  3d49f91acbcc ("dt-bindings: PCI: qcom: Do not require resets on msm8996 p=
+latforms")
+  e93dde4b6768 ("dt-bindings: PCI: qcom: Convert to YAML")
+  ed5e8fe0db30 ("PCI: qcom: Fix unbalanced PHY init on probe errors")
+  f36120778857 ("PCI: qcom: Fix runtime PM imbalance on probe errors")
+  53063d1437e5 ("PCI: qcom: Fix pipe clock imbalance")
+  5945b7056322 ("PCI: qcom: Add SM8150 SoC support")
+  ddd0cc4df5a1 ("dt-bindings: pci: qcom: Document PCIe bindings for SM8150 =
+SoC")
 
+are missing a Signed-off-by from their committer.
 
-## Metric Regressions (compared to next-20220520)
-No metric regressions found.
+--=20
+Cheers,
+Stephen Rothwell
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+--Sig_/6zjDcR09dd3KsxmmAHcysbt
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
 
-## Test Fixes (compared to next-20220520)
-* dragonboard-845c, kselftest-timers
-  - timers.rtcpie
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKNSQsACgkQAVBC80lX
+0Gx6dwgAhASq+SSTvdXxXwZ2HmEghuvUncpullUMwIFUbBAS/15OajMSgmimr6R4
+QG6G67qZ9QJPU/IVuT5G4MKkVaDlZ/wCkJFFI5wyxTN2BMbBFIpZtrC5GS9PXmkw
+ks2Z2pN98KPmauTsJYumKuEs6xd0AA3RQI+wpR14SIl6var0ueWMiUYs1Xj1fW6F
+rsqBCUBkdQVcj0wxIaPJa0erjpllwGjxeyB/9wqgI69IJ7tQ9LZpB+HSOC6lmEp+
+O57O4xcoDoCl/DoR1M3/5m2kxQTtvjSBSk4SYluwmqXz3Jd2H6AmmO+h88K6iYYN
+3HxixM1ODZLrXgEa1f1KE1n296L35A==
+=W+Ew
+-----END PGP SIGNATURE-----
 
-* qemu-arm64-gic-version2, kselftest-cgroup
-  - cgroup.test_freezer
-
-* qemu-arm64-gic-version3, kselftest-timers
-  - timers.rtcpie
-
-* qemu-arm64-mte, kselftest-cgroup
-  - cgroup.test_freezer
-
-* qemu_arm, kselftest-pidfd
-  - pidfd.pidfd_poll_test
-
-* qemu_arm, kselftest-timers
-  - timers.rtcpie
-
-
-## Metric Fixes (compared to next-20220520)
-No metric fixes found.
-
-## Test result summary
-total: 5813, pass: 3119, fail: 608, skip: 2086, xfail: 0
-
-## Build Summary
-
-## Test suites summary
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-
---
-Linaro LKFT
-https://lkft.linaro.org
+--Sig_/6zjDcR09dd3KsxmmAHcysbt--

@@ -1,218 +1,238 @@
 Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5531B533B15
-	for <lists+linux-next@lfdr.de>; Wed, 25 May 2022 12:58:17 +0200 (CEST)
+Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id 70FE5533C3B
+	for <lists+linux-next@lfdr.de>; Wed, 25 May 2022 14:07:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237281AbiEYK57 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 25 May 2022 06:57:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44998 "EHLO
+        id S230147AbiEYMHF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 25 May 2022 08:07:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230281AbiEYK56 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 25 May 2022 06:57:58 -0400
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2075.outbound.protection.outlook.com [40.107.212.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87F3012623;
-        Wed, 25 May 2022 03:57:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nWBQwLp1HC0UJX5FE/M0ROQKcFcCJFjQ3fcRrcLAxgR3LCo2fou+Eu+Wa46Wf1t9G2bp3pNTh+QSuPje5eE7zWjCxNI0ZjN3nzuk42x3qLIXcwloimgPpsoApTjFsbYwcyUrcKeKBRqogIrVtFQOh6gNRClW8/8gmmOSxSBB7/o8VY7tQ2WumBp4mFkTY/OILxvmfYcYTRrWLtdluSV9DXQLRSp8VBW9bbNcDtPN69sdut2fdW+6dLB/e6ARC39Rv04r7sFSslMQIGxpQP1XsYKj+kkcrKx1ldj5gua4VFilhBfFO8z/nhJplAkXYxmam+u27Voy94x9FlM5nzNYNg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dj3y9VonRoYLoTCldxt/e+yeLZe/koz09jDBZdj4v3E=;
- b=h9z6grwAGUO4s1UBS6wue7JH62DyP3mHdljv4KRdPdaVGwC329m6AxM08jYFMndL1rbH0rbD3mck0U8rdrQH5BwdCHWtan6UCypoi8GFxQiWdPzYatnx+ObOtfQyneTLB0eCSH5QGQSss9hT4lTZkRnqurMEQe7QPuKD+3Ie6+mmNzPS/JxlxsgEMfKNZfaEGEoSvm7D9/kVs38YJmXSXHJy7kAlZUyXpP7EDNwKuWdJfWid4JZfEYXCFdJJBxAyO20ENPzW2znyMICGl4szoEuxjOGtIa6OQCeGII8rVYcY2i53w7xUPoFbBPO12nMl/TPh4r2XvgvB2bg6kr6wgA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dj3y9VonRoYLoTCldxt/e+yeLZe/koz09jDBZdj4v3E=;
- b=h68YB367+VO/TDCT7AGZVjTEdi24xLu3aKUiEyU7YGVuPTrdcPMF/gBLncWe40psLIGcPyH5vFEV/e8OKi8Edx6kqcyagsorjLks/pGh070STpABOuMKxpGs1rSruiP7sy0FjoJm6ft3Il6o4kEMhQUuLr+K/CK2C5Ow/qcuwSi7lqLG19kvZWyhfUNNhhBA8DJtQgm51HexMU+tgoIVz/frgooKKnRozZI4p5C4n+r/c8lfoyFJ4LeJod+nkIilSOQ9kZ+3XTfFWY2Q0DEmmgu7DvhaFRzE74Mh3LiNIXVzGGLqeKUmzIqsfQ6QLQ/2FedeIhOWtyQG9nvSJgBv6w==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DS7PR12MB5744.namprd12.prod.outlook.com (2603:10b6:8:73::18) by
- DM6PR12MB3081.namprd12.prod.outlook.com (2603:10b6:5:38::27) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5273.21; Wed, 25 May 2022 10:57:55 +0000
-Received: from DS7PR12MB5744.namprd12.prod.outlook.com
- ([fe80::f993:a9a1:3730:a7a5]) by DS7PR12MB5744.namprd12.prod.outlook.com
- ([fe80::f993:a9a1:3730:a7a5%5]) with mapi id 15.20.5293.013; Wed, 25 May 2022
- 10:57:55 +0000
-From:   Zi Yan <ziy@nvidia.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the mm tree
-Date:   Wed, 25 May 2022 06:57:53 -0400
-X-Mailer: MailMate (1.14r5870)
-Message-ID: <6CA81704-417D-4843-940E-F901803A908C@nvidia.com>
-In-Reply-To: <20220525155401.4a72ad6b@canb.auug.org.au>
-References: <20220525155401.4a72ad6b@canb.auug.org.au>
-Content-Type: multipart/signed;
- boundary="=_MailMate_B4925A09-6453-4FFD-99BE-7159977DFBFC_=";
- micalg=pgp-sha512; protocol="application/pgp-signature"
-X-ClientProxiedBy: MN2PR06CA0012.namprd06.prod.outlook.com
- (2603:10b6:208:23d::17) To DS7PR12MB5744.namprd12.prod.outlook.com
- (2603:10b6:8:73::18)
+        with ESMTP id S234048AbiEYMHE (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 25 May 2022 08:07:04 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EAD3DFC6
+        for <linux-next@vger.kernel.org>; Wed, 25 May 2022 05:07:00 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id 202so12044547pfu.0
+        for <linux-next@vger.kernel.org>; Wed, 25 May 2022 05:07:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=codr62OuC16YgfPcqBCpQMHTPSYLwRt2/Q7celjlnqA=;
+        b=6eoafhgUolZwdavtTJys41b468J7dLRWwNkxccaoNrnFkV8vBH6WyfkHcy8d25EnRl
+         4KITsUD0JMQUZnx+oeSl5YfIg/lkXnXPWAH2YHjTob0AFOQU6mNGR/Y1xQ6caOWr7KbL
+         Z6rkVjg+3oz7jfLicFZ8VXE9r4c6C1IS6m7wNT9XsQ969sM0a2XF0QMoaKaUA02jM/XP
+         s6IqvAtgttc/u0iDuD/dNTdqNU43C/B4crtyOiA6XOLPQ492TrZ0glAwxtvHIJ5YTmdT
+         g2IusILomennmnO6aXlPHlNmb0O4plsfSgGQ1CLoD/M0HI2guZMlViUyuvF6JK5jX5ZY
+         sLKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=codr62OuC16YgfPcqBCpQMHTPSYLwRt2/Q7celjlnqA=;
+        b=NvkXplg3xaScGX3PfxUOVeBTDfIryFVBSdAY+9Rx6wjmsdjn9uTrsi8tYPEjyzZ3ab
+         FYFqQgmxJGr5KgG9Qhh9F9rvbDriNXjA8RrkJAShhIbwQ8zeDALgkWnqoh1gC69qM7u/
+         pw7DbidBiD/A2EXt0vU/cj3Fbszm7ggF0sraw3eG2hpXarpABFtys2XlvPQykSu98ju5
+         10+KEjd4nockhco6wfh6BwFFe0dLi9Zu+LB9ub2ZaCrNIXYu2VqVvIcXcVhr+5dzkdYz
+         yu7pV7SeEDtjSRdaIhWRvamTTsz+JIMTmrTqomhvU41amC3F/T+49uEoYmKlBuoLkY81
+         ct7w==
+X-Gm-Message-State: AOAM5327qNichWdBYLUktdTIcmwjpRSB39i/4AbgdCGrQP75lcouTWyE
+        g8oXWtArhJHIRxc6EhruYZVk11bFuZzXtlB201M=
+X-Google-Smtp-Source: ABdhPJxR8JWec7KBsTGIggyZz8qNKaM602Ei+XQFUFmT3/I9scE5tsuO0z/nRDXRNYloNQCB91BiGQ==
+X-Received: by 2002:a05:6a00:15c2:b0:518:9911:4952 with SMTP id o2-20020a056a0015c200b0051899114952mr16025327pfu.64.1653480419896;
+        Wed, 25 May 2022 05:06:59 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id jp10-20020a17090ae44a00b001cd4989ff47sm1522049pjb.14.2022.05.25.05.06.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 May 2022 05:06:59 -0700 (PDT)
+Message-ID: <628e1be3.1c69fb81.f06ed.3732@mx.google.com>
+Date:   Wed, 25 May 2022 05:06:59 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7b981e2e-7711-4163-f60f-08da3e3d6c09
-X-MS-TrafficTypeDiagnostic: DM6PR12MB3081:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR12MB30811E38E3745BE230C1F5E8C2D69@DM6PR12MB3081.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ZuNtbxu4DXRaM+P8fI7LBBv0NI46GNv+ZU2ExHKN+b2YbQNzqs8r2p3w9R7TFJxsc2UhJ3Bj1/3E6Nr3TuWKncuVAYJl5oXCMTZ0uQoAW4vJacUZH/ye1gKTQOnkh63+SmvnhQd59sJChfaGYXulcAyqqbu1Z5zPBiRMmVAZqzC9UVpcWXQGmfCHeC/x40oJM1c6bMfDiCqhqFcn2encKSADmExB0Htd/u5uV0J2eiZVZEMJKoviLWj7IkGOQ9pgGxrCpawunuOpsRGrjrkVILN1GeVrxSdj7CoZ5/rO90h4EWydkExVIN6g9sGFc8CZ9AfnLWgZ7Fcm0U4goZ86NEtkZ5iR0X3s++vDdc8OTH8SKi5LKQ2rx2D2osgjyJQc8r91YNFBbC48NvrYO9b3h709PfNgbISwQq3LE0Q3xFVrg4vvnnGTfNkO3zcgxq+lsxH0Xkems5qR36ZTbhOAMTHwlN3oRbiTZqAbm/i/iEp1cx3Su1/x6I+9a976X7zCvKJ/79xtl6v1mEd/Ln4f8LeyPnwl+QnrLwEXBEtMpES9fPCA4fBLsdafLpoYcX/xcVI8hUK566Absa8dzD6Wdd/MTgqy2WjJ+rXiWOHD1vADSoRoQz+B2BcLQY3O1Jmcke6cxyz7+KSBpdyNaGL8b4dc3qp5srfthujz0qxd5N/dUNXO7w90Ea6MZqXMW5LIa5J8ydg9WdSbO6xgklksxoO6K8ShHkhcut2ZxdmOqmI=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB5744.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66556008)(66946007)(86362001)(66476007)(4326008)(21480400003)(83380400001)(36756003)(8676002)(186003)(2616005)(6486002)(2906002)(33656002)(54906003)(8936002)(316002)(5660300002)(26005)(53546011)(235185007)(6512007)(38100700002)(6916009)(6506007)(508600001)(72826004)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ZYZdICY5mkxvu0arT+I/tGZvnZHdir9lc4THM3khH93qVDSNWALsrNTC77l5?=
- =?us-ascii?Q?YPIC2khAeYMJzxf51ycZzYDFvRSpIyUIk9a74jHizOXySu8r/h5rQurAFDL6?=
- =?us-ascii?Q?P4yFlRolTuLaHxV7+6b5LOvVnE5GCn1vkm3O49/633YznNqokL9K1MCx66gL?=
- =?us-ascii?Q?2MpYEnXl51PKlOOsDyghQ++givbBl3jqfetRWzdTZJjFJVkTS950atpKTqho?=
- =?us-ascii?Q?YR5nRDXPbuL9juwH2vLzqW8a18YVgJjbiksULZ/IhL2fkjHOfW4RckwSHqLA?=
- =?us-ascii?Q?1y30vMs19t/tuBYuBHC8vXC1IYSKy/2zDfOtiSQsWBkOdVIZyqo9FOjTNRMd?=
- =?us-ascii?Q?bWRgpn0duMbUq4Kd89FvBIYnVrKvLKQvqb8KhmGp5RbZYeG9V/ZrHjPWI967?=
- =?us-ascii?Q?tpI0Z60qTrBlnPd4MdoH2tKWEFqyuix4YIgOtoigzSxnHQtfQCwQy1z2WsUH?=
- =?us-ascii?Q?4qUWgf2ku058TGjMc8sstVHZHD0QTYkYPgM8xpCuEdHeaTFbpLd8snAyX7wU?=
- =?us-ascii?Q?9lx2+AQSNO76mGAQ4NHrBQvmTOCw/alv25sU/KIkOY59txf7ur96M9I3ivVQ?=
- =?us-ascii?Q?kMfBh0mBIA1W5N/73ea5WI4sCy8WJ2uYjX2lO60G6f9nKgi/I8y9f6cQ08no?=
- =?us-ascii?Q?We1mNszIc5+MHGBwuVAbUYfkJAX3KO3vSmfsG3eHoV6guZ9hSGpqVCk04Kdi?=
- =?us-ascii?Q?e/C4jQDtv6AefVeD8Hk7vCnEOUGnQ0pm4xwDXxAumlqk7PaeStObQg/wCXQv?=
- =?us-ascii?Q?2YxHN6ESKzQoNUrjk2fg9Wjj4MbXTtr90OaY4SW9D0uYYWqMGyPk/u5EsGXs?=
- =?us-ascii?Q?CshlRpr7rZYX5n49cKdBmVxdbgEsZXjkSBmZfliX/s8xhcS22FIns258GCaI?=
- =?us-ascii?Q?Yp8aEu9bU13Xs46SH9C7ZvqvUrVck2E93tqYAX0ATrbFZ0JMDK4nALcxQ78z?=
- =?us-ascii?Q?9guvG5+wbhdzI6sAz/1iGzPMv4Tvpxq5rTlBsWKdYfyLSr1Q/59xHE9xd8s7?=
- =?us-ascii?Q?yajMRJCoSwTQ37+CFJTVbVm47gFGaH7lxkkiO8h0ZiVlVb6q40lMczXLyx5i?=
- =?us-ascii?Q?NrPP6K8D07gfyhyRciBLUfOK45K+jRPyRUnC0HelTsLR8bcOAmFAN6EzA1PW?=
- =?us-ascii?Q?dirlUfI2jRpS2E7C/B6uvGMZoCJrWTOPk7Yj2YvdjP7qc9Ap1JL9ww/8ypTN?=
- =?us-ascii?Q?lo2wm1ViDTXqZz/MsPbHS3S1EmcVAG7Ke3fi/6xDbvU842f6Mc5kdZIQH39D?=
- =?us-ascii?Q?7GH/um8mgOuEZYxJJd6nqY+wBI5/u1AIcdeY0A+QEhx2dESztukdmNMCUfrb?=
- =?us-ascii?Q?Cvs/QbG13Zn/2TmWb/hWR9rZHUiTuY1PLfUSmaoGr8yuMhcb2DyhTRjxMxik?=
- =?us-ascii?Q?g/SSU8/Dv9RU8LiyhFoWwh/xqkVEXwaoyZT4AE3CzUBJUPY4pK8BV1whtA+S?=
- =?us-ascii?Q?VbXCJIUezEnChiegmIlcCH4eMST8Zgsb3X5TPKT3uRVrxC8Puwjo/URb547h?=
- =?us-ascii?Q?g7uRFZ5xHaUl46ZbfTPW/Mvryek27HjRdl3/QcKZ+twp+MqrlNL2EOBc0nQO?=
- =?us-ascii?Q?mMhNjjJZEjrCrUU6zXwrGNs+RLeeaphVs+qpjT1VcZ2Dga8ZO8xhHAS5Y3NU?=
- =?us-ascii?Q?m7Kn5cwOZGRF9J4niCEK4/W+/7MmSQoDqZsEWKZKisgCHAgjvXkD4S3n27Y0?=
- =?us-ascii?Q?w9VTH6EgA5IxwurRFZqaY9IL10UGV7LM5o9ku9tAO6WpXmR05wuHZO9TxkOv?=
- =?us-ascii?Q?XmIyFPp0xA=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7b981e2e-7711-4163-f60f-08da3e3d6c09
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB5744.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 May 2022 10:57:55.4740
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: vmPSlerqRBML4M1EaPnlZnGqSikBNIg+7pksvc1Wxtf6wr5pOk0dXFx9JTD0Te97
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3081
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Kernel: next-20220525
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+Subject: next/master baseline: 47 runs, 5 regressions (next-20220525)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---=_MailMate_B4925A09-6453-4FFD-99BE-7159977DFBFC_=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+next/master baseline: 47 runs, 5 regressions (next-20220525)
 
-On 25 May 2022, at 1:54, Stephen Rothwell wrote:
+Regressions Summary
+-------------------
 
-> Hi all,
->
-> After merging the mm tree, today's linux-next build (sparc64 defconfig)=
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+mt8183-kukui-...uniper-sku16 | arm64 | lab-collabora | clang-13 | defconfig=
++arm64-chromebook   | 1          =
 
-> produced this warning:
->
-> In file included from include/linux/kernel.h:26,
->                  from include/linux/cpumask.h:10,
->                  from include/linux/smp.h:13,
->                  from include/linux/lockdep.h:14,
->                  from include/linux/spinlock.h:62,
->                  from include/linux/mmzone.h:8,
->                  from include/linux/gfp.h:6,
->                  from include/linux/mm.h:7,
->                  from mm/page_alloc.c:19:
-> mm/page_alloc.c: In function 'split_free_page':
-> include/linux/minmax.h:20:35: warning: comparison of distinct pointer t=
-ypes lacks a cast
->    20 |         (!!(sizeof((typeof(x) *)1 =3D=3D (typeof(y) *)1)))
->       |                                   ^~
-> include/linux/minmax.h:26:18: note: in expansion of macro '__typecheck'=
+rk3399-gru-kevin             | arm64 | lab-collabora | clang-13 | cros://ch=
+rome...4-chromebook | 1          =
 
->    26 |                 (__typecheck(x, y) && __no_side_effects(x, y))
->       |                  ^~~~~~~~~~~
-> include/linux/minmax.h:36:31: note: in expansion of macro '__safe_cmp'
->    36 |         __builtin_choose_expr(__safe_cmp(x, y), \
->       |                               ^~~~~~~~~~
-> include/linux/minmax.h:45:25: note: in expansion of macro '__careful_cm=
-p'
->    45 | #define min(x, y)       __careful_cmp(x, y, <)
->       |                         ^~~~~~~~~~~~~
-> mm/page_alloc.c:1138:35: note: in expansion of macro 'min'
->  1138 |                 free_page_order =3D min(pfn ? __ffs(pfn) : orde=
-r, __fls(split_pfn_offset));
->       |                                   ^~~
->
-> Introduced by commit
->
->   29a8af92b874 ("mm: fix a potential infinite loop in start_isolate_pag=
-e_range()")
+rk3399-gru-kevin             | arm64 | lab-collabora | clang-13 | defconfig=
++arm64-chromebook   | 3          =
 
-Hi Stephen,
 
-The patch below should fix it:
+  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
+220525/plan/baseline/
 
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 6eec0211e0be..dbbfe4a079d3 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -1123,7 +1123,9 @@ void split_free_page(struct page *free_page,
-             pfn < free_page_pfn + (1UL << order);) {
-                int mt =3D get_pfnblock_migratetype(pfn_to_page(pfn), pfn=
-);
+  Test:     baseline
+  Tree:     next
+  Branch:   master
+  Describe: next-20220525
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      8cb8311e95e3bb58bd84d6350365f14a718faa6d =
 
--               free_page_order =3D min(pfn ? __ffs(pfn) : order, __fls(s=
-plit_pfn_offset));
-+               free_page_order =3D min_t(unsigned long,
-+                                       pfn ? __ffs(pfn) : order,
-+                                       __fls(split_pfn_offset));
-                __free_one_page(pfn_to_page(pfn), pfn, zone, free_page_or=
-der,
-                                mt, FPI_NONE);
-                pfn +=3D 1UL << free_page_order;
 
---
-Best Regards,
-Yan, Zi
 
---=_MailMate_B4925A09-6453-4FFD-99BE-7159977DFBFC_=
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-Content-Type: application/pgp-signature; name="signature.asc"
+Test Regressions
+---------------- =
 
------BEGIN PGP SIGNATURE-----
 
-iQJDBAEBCgAtFiEE6rR4j8RuQ2XmaZol4n+egRQHKFQFAmKOC7EPHHppeUBudmlk
-aWEuY29tAAoJEOJ/noEUByhUXKkQAJgxJ8zqF3IOtBitI21EXjdirYrgcBbvdrhM
-cXE4vp6KnbxpYCEUN7A8IcnD5U37jPOXzgm+WEQW25AmWbmomWsJ1aZm7k3O7xyr
-WMTFjgVeKBfZKIg1a1Cu+dkU2Z1o5c/f7+vb29rHeuaa9GyVh6qvpsBLZdUcW25y
-5/Jp5gyo6x9O+TGTjETEnA8oH9HvNiUOqIhROQipIzn3yyigLypA9RUCgQulx09V
-k6M9TSwn8d7axBniAajuQvqJlCW6ZKzd9/EPxVijEOGOtkRNB+C/NN0/Liy3KAvC
-7y9WSYBxl3j3GGsne6l+WfI/7nZT0mQBcRkKS28ysaq+f3iprI4F971IuTRBt6Sm
-eJwKi6xSSubZZjl4xzh4Gnxs3tz80HuTDJkW3AKTlUJgBHE4ZR286ElN+J+85dmD
-BLhZxcb82vCqEjLTp3d1pRMg71Qz70AD1G1FpDDjldi+FxcKIg0WVs3chUd3lfwH
-kErE45xqo+oVn8rTbpTxE6VJ+6o1egcoQ6vBvRlscpOjijqmjJOVLNyBVNwe9DOC
-r/grEmLPrbA17/VAqjsuLPVLfz6z5ed4kuOJPlbmPsg+QaARPsDP0Gt39TnZGo7t
-6CgFw951pTQBoNdge9BTaOMkEyy4+qVbnkuqd1XRUaMZZNLbCDYfDABB62j8jsl3
-Jcma1QVc
-=S0Ob
------END PGP SIGNATURE-----
 
---=_MailMate_B4925A09-6453-4FFD-99BE-7159977DFBFC_=--
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+mt8183-kukui-...uniper-sku16 | arm64 | lab-collabora | clang-13 | defconfig=
++arm64-chromebook   | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/628de9394e3400107aa39be8
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-++20220126092033+75e33=
+f71c2da-1~exp1~20220126212112.63)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220525/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-collabora/baseline-mt8183-kukui-j=
+acuzzi-juniper-sku16.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220525/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-collabora/baseline-mt8183-kukui-j=
+acuzzi-juniper-sku16.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220513.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/628de9394e3400107aa39=
+be9
+        failing since 12 days (last pass: next-20220506, first fail: next-2=
+0220512) =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+rk3399-gru-kevin             | arm64 | lab-collabora | clang-13 | cros://ch=
+rome...4-chromebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/628de742a2d62eef85a39bf6
+
+  Results:     73 PASS, 19 FAIL, 0 SKIP
+  Full config: cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+a=
+rm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-++20220126092033+75e33=
+f71c2da-1~exp1~20220126212112.63)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220525/arm6=
+4/cros---chromeos-5.10-arm64-chromiumos-arm64.flavour.config+arm64-chromebo=
+ok/clang-13/lab-collabora/baseline-rk3399-gru-kevin.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220525/arm6=
+4/cros---chromeos-5.10-arm64-chromiumos-arm64.flavour.config+arm64-chromebo=
+ok/clang-13/lab-collabora/baseline-rk3399-gru-kevin.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220513.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.cros-ec-sensors-accel1-probed: https://kernelci.org/tes=
+t/case/id/628de742a2d62eef85a39c4f
+        failing since 27 days (last pass: next-20220422, first fail: next-2=
+0220427)
+
+    2022-05-25T08:22:01.574642  /lava-6463266/1/../bin/lava-test-case
+    2022-05-25T08:22:01.587436  <8>[   25.466581] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dcros-ec-sensors-accel1-probed RESULT=3Dfail>   =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+rk3399-gru-kevin             | arm64 | lab-collabora | clang-13 | defconfig=
++arm64-chromebook   | 3          =
+
+
+  Details:     https://kernelci.org/test/plan/id/628dedf6fbf172ab9aa39bcd
+
+  Results:     84 PASS, 7 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    clang-13 (Debian clang version 13.0.1-++20220126092033+75e33=
+f71c2da-1~exp1~20220126212112.63)
+  Plain log:   https://storage.kernelci.org//next/master/next-20220525/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-collabora/baseline-rk3399-gru-kev=
+in.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20220525/arm6=
+4/defconfig+arm64-chromebook/clang-13/lab-collabora/baseline-rk3399-gru-kev=
+in.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220513.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.cros-ec-sensors-gyro0-probed: https://kernelci.org/test=
+/case/id/628dedf7fbf172ab9aa39c10
+        failing since 27 days (last pass: next-20220422, first fail: next-2=
+0220427)
+
+    2022-05-25T08:50:38.567449  <8>[   58.279818] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dcros-ec-sensors-accel1-probed RESULT=3Dfail>
+    2022-05-25T08:50:39.570219  /lava-6463375/1/../bin/lava-test-case
+    2022-05-25T08:50:39.587206  <8>[   59.298224] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dcros-ec-sensors-gyro0-probed RESULT=3Dfail>   =
+
+
+  * baseline.bootrr.cros-ec-sensors-accel1-probed: https://kernelci.org/tes=
+t/case/id/628dedf7fbf172ab9aa39c11
+        failing since 27 days (last pass: next-20220422, first fail: next-2=
+0220427)
+
+    2022-05-25T08:50:38.551997  /lava-6463375/1/../bin/lava-test-case   =
+
+
+  * baseline.bootrr.cros-ec-sensors-accel0-probed: https://kernelci.org/tes=
+t/case/id/628dedf7fbf172ab9aa39c12
+        failing since 27 days (last pass: next-20220422, first fail: next-2=
+0220427)
+
+    2022-05-25T08:50:36.880013  <4>[   56.589864] cdn-dp fec00000.dp: Direc=
+t firmware load for rockchip/dptx.bin failed with error -2
+    2022-05-25T08:50:37.533173  /lava-6463375/1/../bin/lava-test-case
+    2022-05-25T08:50:37.546695  <8>[   57.260169] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dcros-ec-sensors-accel0-probed RESULT=3Dfail>   =
+
+ =20

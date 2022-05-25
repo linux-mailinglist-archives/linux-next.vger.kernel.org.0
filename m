@@ -2,235 +2,217 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55D8853389C
-	for <lists+linux-next@lfdr.de>; Wed, 25 May 2022 10:37:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5531B533B15
+	for <lists+linux-next@lfdr.de>; Wed, 25 May 2022 12:58:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231262AbiEYIhd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 25 May 2022 04:37:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53964 "EHLO
+        id S237281AbiEYK57 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 25 May 2022 06:57:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229981AbiEYIhc (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 25 May 2022 04:37:32 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A2F1ADBD
-        for <linux-next@vger.kernel.org>; Wed, 25 May 2022 01:37:30 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id fw21-20020a17090b129500b001df9f62edd6so3636608pjb.0
-        for <linux-next@vger.kernel.org>; Wed, 25 May 2022 01:37:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=gWDOGXPPqAtRmRVUN24CmZl3zbD8OyVyUEJ1L5O8+Wc=;
-        b=m9B30uvHMbfy72Dy2O6V79PUAEkD3xVSu7NjBwhWA04NhRNDFXc9AFvoYc5SenCDK9
-         qv0NTI5DwsaGVM8aRb7FkZlifDeOLm//R3CFr+QsFot3Fcfp1/PLNPxfgN+UPjtZ/1Le
-         hNml7eRdcvC7kBu6WQRxPCCr9nhA89dA+bRn+EIKf+JvUqE2q137wIYKc8GJeloj56QX
-         b9AgtOYPjI/3PC7TrwRJDmD7RBSTQzKBPFyuhZTBuA9CnemZbEBzMkfB7XCKtuVrRnN2
-         zOB5LqcoN0ceUtx9zcd23bWWoEjozi/M24dbe9ppLhyiqY2zYm1B0RXAojzwg5CNlIw9
-         d9Fw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=gWDOGXPPqAtRmRVUN24CmZl3zbD8OyVyUEJ1L5O8+Wc=;
-        b=Y7p6s902nTMoE0T3w3S46LCtn2XaaT6gOOjGGCYRpFHqC3LA74equxLUOU1uxWcoA6
-         rpYBooHCW9c65WqgBpttFlcNuWVafBrktW8PXOov3KO5i4XqYuq55DP9ZM9jzyCNOfWQ
-         z1p09BqTRyd+UA+6a/UG9V4z981np4jdpRPyA7v60bxfxIcnXAl+ug8akOnCDoQZKLWh
-         iL1V1M+iG1Fs4/I/4/a6wQuXetUa9o5cB3ENSPltbzbGY2gZhyPLENtMelZ0yEzlyJsW
-         Br7s8xvhzwzqDZe4WM376LdgQh0NTiTmQ4nR6Z8h64v7j7qjtg16qm7Kzx2siAkMI6r+
-         kBZg==
-X-Gm-Message-State: AOAM532dcFgpCXzakJSIbo9mFGQQWP1psfTqsiRNPs9GN+LZmmmAx7Uc
-        RDxfVBe+ycgzQhI1N/EMJleSV+k2zbsBrFpTbyE=
-X-Google-Smtp-Source: ABdhPJwqG1hCTQfDWHxFxDahZpclvenN5kEpESG6lbEUSyeIGJw5wirfjdffIOZEer58H7DmBIa3Og==
-X-Received: by 2002:a17:90b:3142:b0:1df:77f2:e169 with SMTP id ip2-20020a17090b314200b001df77f2e169mr8995007pjb.245.1653467850098;
-        Wed, 25 May 2022 01:37:30 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id m8-20020a170902bb8800b0015e8d4eb1dfsm8641375pls.41.2022.05.25.01.37.29
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 01:37:29 -0700 (PDT)
-Message-ID: <628deac9.1c69fb81.2b645.4d74@mx.google.com>
-Date:   Wed, 25 May 2022 01:37:29 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S230281AbiEYK56 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 25 May 2022 06:57:58 -0400
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2075.outbound.protection.outlook.com [40.107.212.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87F3012623;
+        Wed, 25 May 2022 03:57:57 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nWBQwLp1HC0UJX5FE/M0ROQKcFcCJFjQ3fcRrcLAxgR3LCo2fou+Eu+Wa46Wf1t9G2bp3pNTh+QSuPje5eE7zWjCxNI0ZjN3nzuk42x3qLIXcwloimgPpsoApTjFsbYwcyUrcKeKBRqogIrVtFQOh6gNRClW8/8gmmOSxSBB7/o8VY7tQ2WumBp4mFkTY/OILxvmfYcYTRrWLtdluSV9DXQLRSp8VBW9bbNcDtPN69sdut2fdW+6dLB/e6ARC39Rv04r7sFSslMQIGxpQP1XsYKj+kkcrKx1ldj5gua4VFilhBfFO8z/nhJplAkXYxmam+u27Voy94x9FlM5nzNYNg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dj3y9VonRoYLoTCldxt/e+yeLZe/koz09jDBZdj4v3E=;
+ b=h9z6grwAGUO4s1UBS6wue7JH62DyP3mHdljv4KRdPdaVGwC329m6AxM08jYFMndL1rbH0rbD3mck0U8rdrQH5BwdCHWtan6UCypoi8GFxQiWdPzYatnx+ObOtfQyneTLB0eCSH5QGQSss9hT4lTZkRnqurMEQe7QPuKD+3Ie6+mmNzPS/JxlxsgEMfKNZfaEGEoSvm7D9/kVs38YJmXSXHJy7kAlZUyXpP7EDNwKuWdJfWid4JZfEYXCFdJJBxAyO20ENPzW2znyMICGl4szoEuxjOGtIa6OQCeGII8rVYcY2i53w7xUPoFbBPO12nMl/TPh4r2XvgvB2bg6kr6wgA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dj3y9VonRoYLoTCldxt/e+yeLZe/koz09jDBZdj4v3E=;
+ b=h68YB367+VO/TDCT7AGZVjTEdi24xLu3aKUiEyU7YGVuPTrdcPMF/gBLncWe40psLIGcPyH5vFEV/e8OKi8Edx6kqcyagsorjLks/pGh070STpABOuMKxpGs1rSruiP7sy0FjoJm6ft3Il6o4kEMhQUuLr+K/CK2C5Ow/qcuwSi7lqLG19kvZWyhfUNNhhBA8DJtQgm51HexMU+tgoIVz/frgooKKnRozZI4p5C4n+r/c8lfoyFJ4LeJod+nkIilSOQ9kZ+3XTfFWY2Q0DEmmgu7DvhaFRzE74Mh3LiNIXVzGGLqeKUmzIqsfQ6QLQ/2FedeIhOWtyQG9nvSJgBv6w==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DS7PR12MB5744.namprd12.prod.outlook.com (2603:10b6:8:73::18) by
+ DM6PR12MB3081.namprd12.prod.outlook.com (2603:10b6:5:38::27) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5273.21; Wed, 25 May 2022 10:57:55 +0000
+Received: from DS7PR12MB5744.namprd12.prod.outlook.com
+ ([fe80::f993:a9a1:3730:a7a5]) by DS7PR12MB5744.namprd12.prod.outlook.com
+ ([fe80::f993:a9a1:3730:a7a5%5]) with mapi id 15.20.5293.013; Wed, 25 May 2022
+ 10:57:55 +0000
+From:   Zi Yan <ziy@nvidia.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the mm tree
+Date:   Wed, 25 May 2022 06:57:53 -0400
+X-Mailer: MailMate (1.14r5870)
+Message-ID: <6CA81704-417D-4843-940E-F901803A908C@nvidia.com>
+In-Reply-To: <20220525155401.4a72ad6b@canb.auug.org.au>
+References: <20220525155401.4a72ad6b@canb.auug.org.au>
+Content-Type: multipart/signed;
+ boundary="=_MailMate_B4925A09-6453-4FFD-99BE-7159977DFBFC_=";
+ micalg=pgp-sha512; protocol="application/pgp-signature"
+X-ClientProxiedBy: MN2PR06CA0012.namprd06.prod.outlook.com
+ (2603:10b6:208:23d::17) To DS7PR12MB5744.namprd12.prod.outlook.com
+ (2603:10b6:8:73::18)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: next-20220525
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-Subject: next/master build: 13 builds: 1 failed, 12 passed, 1 error,
- 13 warnings (next-20220525)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7b981e2e-7711-4163-f60f-08da3e3d6c09
+X-MS-TrafficTypeDiagnostic: DM6PR12MB3081:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR12MB30811E38E3745BE230C1F5E8C2D69@DM6PR12MB3081.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ZuNtbxu4DXRaM+P8fI7LBBv0NI46GNv+ZU2ExHKN+b2YbQNzqs8r2p3w9R7TFJxsc2UhJ3Bj1/3E6Nr3TuWKncuVAYJl5oXCMTZ0uQoAW4vJacUZH/ye1gKTQOnkh63+SmvnhQd59sJChfaGYXulcAyqqbu1Z5zPBiRMmVAZqzC9UVpcWXQGmfCHeC/x40oJM1c6bMfDiCqhqFcn2encKSADmExB0Htd/u5uV0J2eiZVZEMJKoviLWj7IkGOQ9pgGxrCpawunuOpsRGrjrkVILN1GeVrxSdj7CoZ5/rO90h4EWydkExVIN6g9sGFc8CZ9AfnLWgZ7Fcm0U4goZ86NEtkZ5iR0X3s++vDdc8OTH8SKi5LKQ2rx2D2osgjyJQc8r91YNFBbC48NvrYO9b3h709PfNgbISwQq3LE0Q3xFVrg4vvnnGTfNkO3zcgxq+lsxH0Xkems5qR36ZTbhOAMTHwlN3oRbiTZqAbm/i/iEp1cx3Su1/x6I+9a976X7zCvKJ/79xtl6v1mEd/Ln4f8LeyPnwl+QnrLwEXBEtMpES9fPCA4fBLsdafLpoYcX/xcVI8hUK566Absa8dzD6Wdd/MTgqy2WjJ+rXiWOHD1vADSoRoQz+B2BcLQY3O1Jmcke6cxyz7+KSBpdyNaGL8b4dc3qp5srfthujz0qxd5N/dUNXO7w90Ea6MZqXMW5LIa5J8ydg9WdSbO6xgklksxoO6K8ShHkhcut2ZxdmOqmI=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB5744.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66556008)(66946007)(86362001)(66476007)(4326008)(21480400003)(83380400001)(36756003)(8676002)(186003)(2616005)(6486002)(2906002)(33656002)(54906003)(8936002)(316002)(5660300002)(26005)(53546011)(235185007)(6512007)(38100700002)(6916009)(6506007)(508600001)(72826004)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ZYZdICY5mkxvu0arT+I/tGZvnZHdir9lc4THM3khH93qVDSNWALsrNTC77l5?=
+ =?us-ascii?Q?YPIC2khAeYMJzxf51ycZzYDFvRSpIyUIk9a74jHizOXySu8r/h5rQurAFDL6?=
+ =?us-ascii?Q?P4yFlRolTuLaHxV7+6b5LOvVnE5GCn1vkm3O49/633YznNqokL9K1MCx66gL?=
+ =?us-ascii?Q?2MpYEnXl51PKlOOsDyghQ++givbBl3jqfetRWzdTZJjFJVkTS950atpKTqho?=
+ =?us-ascii?Q?YR5nRDXPbuL9juwH2vLzqW8a18YVgJjbiksULZ/IhL2fkjHOfW4RckwSHqLA?=
+ =?us-ascii?Q?1y30vMs19t/tuBYuBHC8vXC1IYSKy/2zDfOtiSQsWBkOdVIZyqo9FOjTNRMd?=
+ =?us-ascii?Q?bWRgpn0duMbUq4Kd89FvBIYnVrKvLKQvqb8KhmGp5RbZYeG9V/ZrHjPWI967?=
+ =?us-ascii?Q?tpI0Z60qTrBlnPd4MdoH2tKWEFqyuix4YIgOtoigzSxnHQtfQCwQy1z2WsUH?=
+ =?us-ascii?Q?4qUWgf2ku058TGjMc8sstVHZHD0QTYkYPgM8xpCuEdHeaTFbpLd8snAyX7wU?=
+ =?us-ascii?Q?9lx2+AQSNO76mGAQ4NHrBQvmTOCw/alv25sU/KIkOY59txf7ur96M9I3ivVQ?=
+ =?us-ascii?Q?kMfBh0mBIA1W5N/73ea5WI4sCy8WJ2uYjX2lO60G6f9nKgi/I8y9f6cQ08no?=
+ =?us-ascii?Q?We1mNszIc5+MHGBwuVAbUYfkJAX3KO3vSmfsG3eHoV6guZ9hSGpqVCk04Kdi?=
+ =?us-ascii?Q?e/C4jQDtv6AefVeD8Hk7vCnEOUGnQ0pm4xwDXxAumlqk7PaeStObQg/wCXQv?=
+ =?us-ascii?Q?2YxHN6ESKzQoNUrjk2fg9Wjj4MbXTtr90OaY4SW9D0uYYWqMGyPk/u5EsGXs?=
+ =?us-ascii?Q?CshlRpr7rZYX5n49cKdBmVxdbgEsZXjkSBmZfliX/s8xhcS22FIns258GCaI?=
+ =?us-ascii?Q?Yp8aEu9bU13Xs46SH9C7ZvqvUrVck2E93tqYAX0ATrbFZ0JMDK4nALcxQ78z?=
+ =?us-ascii?Q?9guvG5+wbhdzI6sAz/1iGzPMv4Tvpxq5rTlBsWKdYfyLSr1Q/59xHE9xd8s7?=
+ =?us-ascii?Q?yajMRJCoSwTQ37+CFJTVbVm47gFGaH7lxkkiO8h0ZiVlVb6q40lMczXLyx5i?=
+ =?us-ascii?Q?NrPP6K8D07gfyhyRciBLUfOK45K+jRPyRUnC0HelTsLR8bcOAmFAN6EzA1PW?=
+ =?us-ascii?Q?dirlUfI2jRpS2E7C/B6uvGMZoCJrWTOPk7Yj2YvdjP7qc9Ap1JL9ww/8ypTN?=
+ =?us-ascii?Q?lo2wm1ViDTXqZz/MsPbHS3S1EmcVAG7Ke3fi/6xDbvU842f6Mc5kdZIQH39D?=
+ =?us-ascii?Q?7GH/um8mgOuEZYxJJd6nqY+wBI5/u1AIcdeY0A+QEhx2dESztukdmNMCUfrb?=
+ =?us-ascii?Q?Cvs/QbG13Zn/2TmWb/hWR9rZHUiTuY1PLfUSmaoGr8yuMhcb2DyhTRjxMxik?=
+ =?us-ascii?Q?g/SSU8/Dv9RU8LiyhFoWwh/xqkVEXwaoyZT4AE3CzUBJUPY4pK8BV1whtA+S?=
+ =?us-ascii?Q?VbXCJIUezEnChiegmIlcCH4eMST8Zgsb3X5TPKT3uRVrxC8Puwjo/URb547h?=
+ =?us-ascii?Q?g7uRFZ5xHaUl46ZbfTPW/Mvryek27HjRdl3/QcKZ+twp+MqrlNL2EOBc0nQO?=
+ =?us-ascii?Q?mMhNjjJZEjrCrUU6zXwrGNs+RLeeaphVs+qpjT1VcZ2Dga8ZO8xhHAS5Y3NU?=
+ =?us-ascii?Q?m7Kn5cwOZGRF9J4niCEK4/W+/7MmSQoDqZsEWKZKisgCHAgjvXkD4S3n27Y0?=
+ =?us-ascii?Q?w9VTH6EgA5IxwurRFZqaY9IL10UGV7LM5o9ku9tAO6WpXmR05wuHZO9TxkOv?=
+ =?us-ascii?Q?XmIyFPp0xA=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7b981e2e-7711-4163-f60f-08da3e3d6c09
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB5744.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 May 2022 10:57:55.4740
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: vmPSlerqRBML4M1EaPnlZnGqSikBNIg+7pksvc1Wxtf6wr5pOk0dXFx9JTD0Te97
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3081
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master build: 13 builds: 1 failed, 12 passed, 1 error, 13 warnings (ne=
-xt-20220525)
+--=_MailMate_B4925A09-6453-4FFD-99BE-7159977DFBFC_=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20220525/
+On 25 May 2022, at 1:54, Stephen Rothwell wrote:
 
-Tree: next
-Branch: master
-Git Describe: next-20220525
-Git Commit: 8cb8311e95e3bb58bd84d6350365f14a718faa6d
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 3 unique architectures
+> Hi all,
+>
+> After merging the mm tree, today's linux-next build (sparc64 defconfig)=
 
-Build Failure Detected:
+> produced this warning:
+>
+> In file included from include/linux/kernel.h:26,
+>                  from include/linux/cpumask.h:10,
+>                  from include/linux/smp.h:13,
+>                  from include/linux/lockdep.h:14,
+>                  from include/linux/spinlock.h:62,
+>                  from include/linux/mmzone.h:8,
+>                  from include/linux/gfp.h:6,
+>                  from include/linux/mm.h:7,
+>                  from mm/page_alloc.c:19:
+> mm/page_alloc.c: In function 'split_free_page':
+> include/linux/minmax.h:20:35: warning: comparison of distinct pointer t=
+ypes lacks a cast
+>    20 |         (!!(sizeof((typeof(x) *)1 =3D=3D (typeof(y) *)1)))
+>       |                                   ^~
+> include/linux/minmax.h:26:18: note: in expansion of macro '__typecheck'=
 
-x86_64:
-    cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-=
-chromebook: (clang-13) FAIL
+>    26 |                 (__typecheck(x, y) && __no_side_effects(x, y))
+>       |                  ^~~~~~~~~~~
+> include/linux/minmax.h:36:31: note: in expansion of macro '__safe_cmp'
+>    36 |         __builtin_choose_expr(__safe_cmp(x, y), \
+>       |                               ^~~~~~~~~~
+> include/linux/minmax.h:45:25: note: in expansion of macro '__careful_cm=
+p'
+>    45 | #define min(x, y)       __careful_cmp(x, y, <)
+>       |                         ^~~~~~~~~~~~~
+> mm/page_alloc.c:1138:35: note: in expansion of macro 'min'
+>  1138 |                 free_page_order =3D min(pfn ? __ffs(pfn) : orde=
+r, __fls(split_pfn_offset));
+>       |                                   ^~~
+>
+> Introduced by commit
+>
+>   29a8af92b874 ("mm: fix a potential infinite loop in start_isolate_pag=
+e_range()")
 
-Errors and Warnings Detected:
+Hi Stephen,
 
-arm64:
+The patch below should fix it:
 
-arm:
-    cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (clang-13): 6 =
-warnings
-    cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (clang-13=
-): 6 warnings
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 6eec0211e0be..dbbfe4a079d3 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -1123,7 +1123,9 @@ void split_free_page(struct page *free_page,
+             pfn < free_page_pfn + (1UL << order);) {
+                int mt =3D get_pfnblock_migratetype(pfn_to_page(pfn), pfn=
+);
 
-x86_64:
-    cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-=
-chromebook (clang-13): 1 error, 1 warning
+-               free_page_order =3D min(pfn ? __ffs(pfn) : order, __fls(s=
+plit_pfn_offset));
++               free_page_order =3D min_t(unsigned long,
++                                       pfn ? __ffs(pfn) : order,
++                                       __fls(split_pfn_offset));
+                __free_one_page(pfn_to_page(pfn), pfn, zone, free_page_or=
+der,
+                                mt, FPI_NONE);
+                pfn +=3D 1UL << free_page_order;
 
-Errors summary:
+--
+Best Regards,
+Yan, Zi
 
-    1    drivers/misc/cardreader/rts5261.c:406:13: error: variable 'setting=
-_reg2' is used uninitialized whenever 'if' condition is false [-Werror,-Wso=
-metimes-uninitialized]
+--=_MailMate_B4925A09-6453-4FFD-99BE-7159977DFBFC_=
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Warnings summary:
+-----BEGIN PGP SIGNATURE-----
 
-    12   clang: warning: argument unused during compilation: '-march=3Darmv=
-7-a' [-Wunused-command-line-argument]
-    1    drivers/misc/cardreader/rts5261.c:364:32: note: initialize the var=
-iable 'setting_reg2' to silence this warning
+iQJDBAEBCgAtFiEE6rR4j8RuQ2XmaZol4n+egRQHKFQFAmKOC7EPHHppeUBudmlk
+aWEuY29tAAoJEOJ/noEUByhUXKkQAJgxJ8zqF3IOtBitI21EXjdirYrgcBbvdrhM
+cXE4vp6KnbxpYCEUN7A8IcnD5U37jPOXzgm+WEQW25AmWbmomWsJ1aZm7k3O7xyr
+WMTFjgVeKBfZKIg1a1Cu+dkU2Z1o5c/f7+vb29rHeuaa9GyVh6qvpsBLZdUcW25y
+5/Jp5gyo6x9O+TGTjETEnA8oH9HvNiUOqIhROQipIzn3yyigLypA9RUCgQulx09V
+k6M9TSwn8d7axBniAajuQvqJlCW6ZKzd9/EPxVijEOGOtkRNB+C/NN0/Liy3KAvC
+7y9WSYBxl3j3GGsne6l+WfI/7nZT0mQBcRkKS28ysaq+f3iprI4F971IuTRBt6Sm
+eJwKi6xSSubZZjl4xzh4Gnxs3tz80HuTDJkW3AKTlUJgBHE4ZR286ElN+J+85dmD
+BLhZxcb82vCqEjLTp3d1pRMg71Qz70AD1G1FpDDjldi+FxcKIg0WVs3chUd3lfwH
+kErE45xqo+oVn8rTbpTxE6VJ+6o1egcoQ6vBvRlscpOjijqmjJOVLNyBVNwe9DOC
+r/grEmLPrbA17/VAqjsuLPVLfz6z5ed4kuOJPlbmPsg+QaARPsDP0Gt39TnZGo7t
+6CgFw951pTQBoNdge9BTaOMkEyy4+qVbnkuqd1XRUaMZZNLbCDYfDABB62j8jsl3
+Jcma1QVc
+=S0Ob
+-----END PGP SIGNATURE-----
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (arm64, clang-13=
-) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chromebook=
- (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatch=
-es
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chromeb=
-ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
-tches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
-ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
-tches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-chrom=
-ebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
-matches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
-=E2=80=94 PASS, 0 errors, 6 warnings, 0 section mismatches
-
-Warnings:
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
-3) =E2=80=94 PASS, 0 errors, 6 warnings, 0 section mismatches
-
-Warnings:
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86-chr=
-omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-chro=
-mebook (x86_64, clang-13) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mis=
-matches
-
-Errors:
-    drivers/misc/cardreader/rts5261.c:406:13: error: variable 'setting_reg2=
-' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometim=
-es-uninitialized]
-
-Warnings:
-    drivers/misc/cardreader/rts5261.c:364:32: note: initialize the variable=
- 'setting_reg2' to silence this warning
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (x86_64, clang=
--13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chromebook=
- (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatc=
-hes
-
----------------------------------------------------------------------------=
------
-defconfig+arm64-chromebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 wa=
-rnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors=
-, 0 warnings, 0 section mismatches
-
----
-For more info write to <info@kernelci.org>
+--=_MailMate_B4925A09-6453-4FFD-99BE-7159977DFBFC_=--

@@ -2,44 +2,47 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 573C5534668
-	for <lists+linux-next@lfdr.de>; Thu, 26 May 2022 00:24:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C96C5534679
+	for <lists+linux-next@lfdr.de>; Thu, 26 May 2022 00:29:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240853AbiEYWY3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 25 May 2022 18:24:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54120 "EHLO
+        id S233580AbiEYW3A (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 25 May 2022 18:29:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233263AbiEYWY2 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 25 May 2022 18:24:28 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BC63BA99C;
-        Wed, 25 May 2022 15:24:26 -0700 (PDT)
+        with ESMTP id S229695AbiEYW27 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 25 May 2022 18:28:59 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5A3FAA;
+        Wed, 25 May 2022 15:28:58 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L7lwj5Z1Bz4xYN;
-        Thu, 26 May 2022 08:24:21 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L7m1v2f7Zz4xXF;
+        Thu, 26 May 2022 08:28:51 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1653517461;
-        bh=GcX1zrOslcSNVPuexCtnllZ4TxAh4B75ZOdxWYYivCE=;
+        s=201702; t=1653517735;
+        bh=8sw0EjH/yh4w8LPwC3xKzJioRAkW2JnXa+cOOSbYv8A=;
         h=Date:From:To:Cc:Subject:From;
-        b=DkXT4v6cH1j9iN4srmywiCpQ4lNNzHZwLjF3PQS8w80r8svq2RkBJVQ6dN7x9JcEp
-         rtkoTR6cANTCTDi25RrDarYGuRrL9XsvjngPuyDkzpEAbMv25CpesObP9qNcHFbrZ9
-         eofnzzIPWc99OFL7w8FilscGwT+x+NbExQ/CW3s5o2W6S5+mf4rT9JvzN6W68XGW89
-         0neoReuYioTitAlerlyhjTDcxj5mnA4rbkZys4qE/ZZkME4rtnCH5Dq/Ut/EidguST
-         NxMPI7ZP6e91T8FYJV6BTpCB+H/wc5pV1aZctpQTYEqbOIJPyRYDL440GcaWgUpuLu
-         Ce3tflQa7zOqw==
-Date:   Thu, 26 May 2022 08:24:20 +1000
+        b=YS23RNjAFEhnRbC2Gs4ktZ9kqVe6AyQABs6s/Odf8T1LL01Ic4hVqggyYVpjtzMKT
+         JeWB54NhvyXI9JUUwSeBjzyjve8IBXuRTE+CCSkkG9sJdAV8p4rq0cUW/lvrCNoCGx
+         EcHiYW5I1SXU1DLEHycSYptOkJm2FMqe4Hc1u8g47XE0ZiTPAhyUwxvYr6fSRDHt/k
+         oEegGexvojEzEoG3bs6dxw0lje4AjsmDyztHrePGzX8FyLxezanmeFzuvpNXyS1Y8b
+         4WiBYL+Sv9DWt68UhVOkgDhJfrhUl79cYaoTZbiIUhHy48THFZCvQMCHO3A89riYzY
+         1nAeoOlBBVGog==
+Date:   Thu, 26 May 2022 08:28:50 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Steve French <smfrench@gmail.com>,
-        CIFS <linux-cifs@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Kan Liang <kan.liang@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the cifs tree
-Message-ID: <20220526082420.0717c1f4@canb.auug.org.au>
+Subject: linux-next: Signed-off-by missing for commit in the tip tree
+Message-ID: <20220526082850.5869472e@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_//JY2oR0yxyzAzNk9jrfEofX";
+Content-Type: multipart/signed; boundary="Sig_/Ghwb6o.H_z6TVvxam3=ChPf";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -50,40 +53,38 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_//JY2oR0yxyzAzNk9jrfEofX
+--Sig_/Ghwb6o.H_z6TVvxam3=ChPf
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Commits
+Commit
 
-  a92c6daedb08 ("cifs: Remove unused code")
-  d0c4bb4b3c12 ("cifs: Change the I/O paths to use an iterator rather than =
-a page list")
-  da59e9982665 ("cifs: Add a function to read into an iter from a socket")
-  13ae847ba07e ("cifs: Add some helper functions")
+  e281c26b08b3 ("Merge branch into tip/master: 'perf/urgent'")
 
-are missing a Signed-off-by from their committer.
+is missing a Signed-off-by from its author.
+
+And for some reason, it is not actually a merge commit.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_//JY2oR0yxyzAzNk9jrfEofX
+--Sig_/Ghwb6o.H_z6TVvxam3=ChPf
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKOrJQACgkQAVBC80lX
-0GwFUgf/RP+nXfORLMUFrIUoJRxJbFD2qX2590trrgmZmSXDircgQM+UOx1s8iWq
-ndO+kJLpnLdzqGLqGcH32QRbceM/aJr6nzmGw4c7VV0BTFFo7logN6R9i9Q595Jf
-lpaDZbpHsLj2t4GcCni7ix4qoboDmzvU5tg7x6577pIM8kgzVUjrZT5rX0IBqfK+
-86h+eDNEA96/f2z+htbU6maOEV2Ps+s1dq/b97G334aFU8awKn3XS3F/38CumcQC
-PyZtyxWRCkieqVZc/+MQLAq1W+0XbCOKDjHMlXlAkzODgvunfzOpVhn6dk/8YXlu
-daV3ZmZ+stVNPm0pFtv66mCmzYyGhw==
-=cfgT
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKOraIACgkQAVBC80lX
+0Gwo+gf/a4W3BDP7/Z3HDm2zxFuQacYEQhi/oCth/qOLtYzyM9kUyOrywhixabIo
+bn3VXYztL3vs4uTPp6F3hME0ZdLvzP0hX3H5cC/91qk19MWKwgVl60DFVZCuAjah
+lsypWxq1tDNqxKMPfjNcAmQP8NqtCPCRriWniAwCMGm9Z86C996mWGuBrKJdp81h
+Ayip/HywEb3KoO7yUbNsBUWaTnJJ5mnAkvQHEcEwnMlXzSscNP46G35sSAzZm4qZ
+UUXViqlm/unl8W/iiiwXIuA4oKamaGKJ6N6kDR2VR48DSSjadXpFsuIpEbgcQZ4+
+Y//tKALafcnyRqSmcUk7Ms9j3J/jqw==
+=63zc
 -----END PGP SIGNATURE-----
 
---Sig_//JY2oR0yxyzAzNk9jrfEofX--
+--Sig_/Ghwb6o.H_z6TVvxam3=ChPf--

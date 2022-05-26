@@ -2,99 +2,126 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB33D5348F0
-	for <lists+linux-next@lfdr.de>; Thu, 26 May 2022 04:43:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C75F534929
+	for <lists+linux-next@lfdr.de>; Thu, 26 May 2022 05:02:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230388AbiEZCnK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 25 May 2022 22:43:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57816 "EHLO
+        id S1343740AbiEZDCi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 25 May 2022 23:02:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235742AbiEZCnJ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 25 May 2022 22:43:09 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 705C5A5010;
-        Wed, 25 May 2022 19:43:02 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id f9so644957ejc.0;
-        Wed, 25 May 2022 19:43:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Iji6/qx50HM9mugQAAZFzqNwMWEZ4NiXrC4wwL5plK0=;
-        b=FNnAl3u5Raha6JvLBX1X0s8ScB07hNmFt2jqpf2RR3gBZh3HRsqrriMEgUgCFglB/3
-         GTgdemVxTBjJeJL4+yfHvfzBUATUah0VBDNGwnDrgYU0lcQO97NW2c3q2gTVuoARtYB2
-         ByrJwXQOFCBEPb4faiP1R16zul7ZoKZY+eBzDes/CupOEjwFkvaH+pAZ4ThfcEI9ne2s
-         u9TAfoazNks6t4HxyQJa0VRxJt/NzwEB3yerArkL2pTIoRQ/CIx6Mhe7JbW4JdIXWccm
-         tQq1OOzqvEzdhu66sjFP4f12nCuXn+D+Ij4wZKkqcz4sofkOHJpnP/Huo3G0LFXDx1ML
-         ZMgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=Iji6/qx50HM9mugQAAZFzqNwMWEZ4NiXrC4wwL5plK0=;
-        b=g8gbxUh8ljl3k4kY2pEE8oIIS1Np1RADv57YUOL7FHGOSqGI9q0fcV/0BnnGs1uKZw
-         PM56HczO9QrE1SxRw/QI+7Yb8Yeszx/zFCDHQmFgDv2qT3LJlr8GC2tP8Oltlf10UtjP
-         QLClZGAHVmukQyW26xT4AYk11tNb/0MZFcgj2whyhIUsq4y1DBnFDRi7nO4lKC9p6aKm
-         cUR4rZT0fJeaR9MEPcn57YSW0stNPAD01Seqn6tslJ8WBBP1pgkhTKIVpwbxwls8TedM
-         Rblz7yuHziEOobXP0b+HrGee0RUKQKfbub1rFQuUtOwPM+J/kecbaW0Yb7PV6XZXDFzf
-         Cp2Q==
-X-Gm-Message-State: AOAM532kFdDzFpTieHEfzq2M31nNgVj3ar3/SdWF8wJ5ohT4UGIsUpW0
-        /5IPy98gE4nLFLwWeTBA7cQ=
-X-Google-Smtp-Source: ABdhPJxhG5Ou+xqvL9zi16Kzz3X6qIMPkTdxsqM9GhM06UDYs1eLvfzgAFK7DcPdoJxMy442z63YCw==
-X-Received: by 2002:a17:906:58ca:b0:6fe:c53a:68f6 with SMTP id e10-20020a17090658ca00b006fec53a68f6mr20094635ejs.10.1653532980970;
-        Wed, 25 May 2022 19:43:00 -0700 (PDT)
-Received: from gmail.com (0526E16E.dsl.pool.telekom.hu. [5.38.225.110])
-        by smtp.gmail.com with ESMTPSA id h6-20020a170906590600b006feece1e053sm98294ejq.90.2022.05.25.19.42.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 19:43:00 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Thu, 26 May 2022 04:42:56 +0200
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        with ESMTP id S244248AbiEZDCg (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 25 May 2022 23:02:36 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20B30A5006;
+        Wed, 25 May 2022 20:02:34 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L7t5d4YdFz4xD7;
+        Thu, 26 May 2022 13:02:29 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1653534152;
+        bh=Y1CWBrTGeBug7/NRRfM5Ch83WIwakEjgYsahfyMDPPA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=pFawtkQGTV/y66bZ1SLwz7dvat11iqg5B3nFfUnA7VlvTtEIEepq0OddtFxpVlnlT
+         b+igWxlpbqp6BLl0MtrL0iHWNJ/s5Dt4MgMXxW/ryFaR7oUQE8PBnpsS/YZqIA5teY
+         vksqUXUChZsCqXd2zTAP4PU93HJukWh2DxoXz/pAo9PHWz0cvfT+6puSHIE/vImws+
+         7bBl3m1xp/3mqPH9uFy0iy9YlKoStfMxXjnpEnzHhuPsHeXtkGk91IhkUXwbD44nJZ
+         +ce7LKc2TJrIpsEAhmI1xfTnotIz7jBGNNxfETOrv7cw/gtGHWHB0Z9rBVFwiTVR+e
+         kGkpy5E62rKwA==
+Date:   Thu, 26 May 2022 13:02:28 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>,
         "H. Peter Anvin" <hpa@zytor.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul@pwsan.com>
+Cc:     Guo Ren <guoren@kernel.org>, Guo Ren <guoren@linux.alibaba.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Juerg Haefliger <juerg.haefliger@canonical.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commit in the tip tree
-Message-ID: <Yo7pMP7QWWJRimt1@gmail.com>
-References: <20220526082850.5869472e@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Subject: linux-next: manual merge of the tip tree with the risc-v tree
+Message-ID: <20220526130228.332e59a7@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220526082850.5869472e@canb.auug.org.au>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/ugnS0S/C+hwX6FgrZ2SYL2n";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+--Sig_/ugnS0S/C+hwX6FgrZ2SYL2n
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-* Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+Hi all,
 
-> Hi all,
-> 
-> Commit
-> 
->   e281c26b08b3 ("Merge branch into tip/master: 'perf/urgent'")
-> 
-> is missing a Signed-off-by from its author.
-> 
-> And for some reason, it is not actually a merge commit.
+Today's linux-next merge of the tip tree got a conflict in:
 
-Script fail on my side: a new script of mine handling the tip:master merge 
-tree didn't handle fast-forward merges particularly well.
+  arch/x86/Kconfig
 
-I've fixed it via --no-ff & re-spun the -next branch. There's no difference 
-in the resulting kernel source tree.
+between commit:
 
-Thanks,
+  0cbed0ee1dbc ("arch: Add SYSVIPC_COMPAT for all architectures")
 
-	Ingo
+from the risc-v tree and commit:
+
+  758cd94a0e16 ("x86/Kconfig: Fix indentation and add endif comments to arc=
+h/x86/Kconfig")
+
+from the tip tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc arch/x86/Kconfig
+index 98eaa8870f28,4d610ae216ce..000000000000
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@@ -2869,7 -2861,11 +2867,7 @@@ config COMPA
+  if COMPAT
+  config COMPAT_FOR_U64_ALIGNMENT
+  	def_bool y
+- endif
+ -
+ -config SYSVIPC_COMPAT
+ -	def_bool y
+ -	depends on SYSVIPC
++ endif # COMPAT
+ =20
+  endmenu
+ =20
+
+--Sig_/ugnS0S/C+hwX6FgrZ2SYL2n
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKO7cQACgkQAVBC80lX
+0GwVhwf+Ih7Sk6dvVrNDkZ7ishMucMzwdtmcwP6ICHXD8UlB9O5HDnf94gmVl9cK
+sDLJE0Axx2kShnpXl2k9K1xBywQzDkEKH5oMJPyKDJTgDNMez68NP+hZQ08iiSdk
+mHu957rSMzAHIgErtOTCV60aig2QyL3d6A0/JuuWqHeDbRt9OrY6DE2TYskhvCQk
+bOBO4XMqkYEILzAE1Dv09hgKXMdGyoGwhk2S1xSW4CHdbHxMdye8NN3khwLVaUmG
+C05VuJmkqQUJNfKJA5Ql5l0e4R+XFjT4VpPtGt1utOpubeUh7ljSZc6OMMu/9rZG
+J5GPOX4cGdOuRkOSbJ8g99vTbxjBMw==
+=nVH8
+-----END PGP SIGNATURE-----
+
+--Sig_/ugnS0S/C+hwX6FgrZ2SYL2n--

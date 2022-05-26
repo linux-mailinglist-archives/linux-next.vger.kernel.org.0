@@ -2,134 +2,127 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 569E9534A4E
-	for <lists+linux-next@lfdr.de>; Thu, 26 May 2022 08:09:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5876E534A68
+	for <lists+linux-next@lfdr.de>; Thu, 26 May 2022 08:35:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235567AbiEZGJH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 26 May 2022 02:09:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39936 "EHLO
+        id S238750AbiEZGfW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 26 May 2022 02:35:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234775AbiEZGJG (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 26 May 2022 02:09:06 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34E1EBC6EB;
-        Wed, 25 May 2022 23:09:04 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S236456AbiEZGfT (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 26 May 2022 02:35:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4AA5C0381;
+        Wed, 25 May 2022 23:35:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L7yDt1fl6z4xXj;
-        Thu, 26 May 2022 16:09:02 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1653545342;
-        bh=ZGlsmdHZc+bJQ+gjaUCeYAQ3T1F2tJlVrpJacxrW88Q=;
-        h=Date:From:To:Cc:Subject:From;
-        b=HNy5NiMJXOPh7GPG25A7wNEV3m720JH8J4sFzLjsG3UPrhCNiziQOowVOvTASxou1
-         6zkUgdsOltrXPZeacHhflvqarekRjXA++hsLCrHw2fWJvX5yf5YETgrwygCrrjan0c
-         iTVQ5srKQFkdBkgpycvtbhaq6o3YUH1CeXRiegED3FIU88/hoxQ4eRPfwSsVHaYipl
-         fscLG4vzQE2EAeJ17mb+oXe3z9AB0ee8BzapJOCfPDVh115y4WceDIG7XCCLxEAn5a
-         x7CPgmoSGn1OxIV88rkAspajpwcn3d0A5oM3Bd2dMQzpjngDr6MjyRCuc+DrzGa1x8
-         PiW2xXx8XvN0w==
-Date:   Thu, 26 May 2022 16:09:00 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Oliver Glitta <glittao@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>
-Subject: linux-next: manual merge of the mm tree with Linus' tree
-Message-ID: <20220526160900.1a61ba44@canb.auug.org.au>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CE02A61A59;
+        Thu, 26 May 2022 06:35:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A16EC3411E;
+        Thu, 26 May 2022 06:35:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653546917;
+        bh=1cAp80bTJyt3PM3tkIBsRd7S7DG4whv4JC7Lw2p4wIc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=MlqWG47+sc/mUnoO6pxKGQYI6aiWZnfSKY62JguCW/fsks1pcBQGbuuxEH88Bqqrs
+         lNjH8u81l+yWhu8dYKV1ZmOuxq/9hVhlh9pK5bg935/iE22LRjR+r5CbTaHvmEbhCu
+         v2uCShFwRovXW7icOebhWh8PgMDyMGg1zU+ol5uU5OqfKYzkxuWic+N2xkSWFpLQZx
+         DFi3LyQxhOGcDRUmhgJX6Qqpem9tQtaR9orQshlrHWWUBRdgqo5gGX+EOYoxjb7enu
+         76vqsARjhv7f+3x8sopGy0kvqsGKOukY7IQolz3JbCQGKBnyQNxDbWXV20lrIxxNEU
+         jsF4gki85PaEQ==
+Received: by mail-vs1-f53.google.com with SMTP id 68so547276vse.11;
+        Wed, 25 May 2022 23:35:17 -0700 (PDT)
+X-Gm-Message-State: AOAM532ne1VDJGn352thTDfeNskYg3aw9mFMxHmnLyubA7W4Dk/izt01
+        ti30HW+WRBTjzNCr8b2VZbD42Gi5L8V/AJKC1lQ=
+X-Google-Smtp-Source: ABdhPJxTTY4z6afDlpjeqiscSirX/OECn/GIIqVJf8IOJmpD5wMNmExm18nHWlQYCagHM/GbRYqNvx6AVYYZESENOmA=
+X-Received: by 2002:a67:d71b:0:b0:337:e6b7:1158 with SMTP id
+ p27-20020a67d71b000000b00337e6b71158mr2893990vsj.2.1653546915886; Wed, 25 May
+ 2022 23:35:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/J4xZ7xDfQ4Lf.WDoeViPoo5";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220526130228.332e59a7@canb.auug.org.au>
+In-Reply-To: <20220526130228.332e59a7@canb.auug.org.au>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Thu, 26 May 2022 14:35:04 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQDjTAOjFBCL4oJCx0NnuBc_16M=1HEs54q+ehGX-mW3w@mail.gmail.com>
+Message-ID: <CAJF2gTQDjTAOjFBCL4oJCx0NnuBc_16M=1HEs54q+ehGX-mW3w@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the tip tree with the risc-v tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul@pwsan.com>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Juerg Haefliger <juerg.haefliger@canonical.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/J4xZ7xDfQ4Lf.WDoeViPoo5
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Safe manual merge, thx.
 
-Hi all,
+On Thu, May 26, 2022 at 11:02 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> Today's linux-next merge of the tip tree got a conflict in:
+>
+>   arch/x86/Kconfig
+>
+> between commit:
+>
+>   0cbed0ee1dbc ("arch: Add SYSVIPC_COMPAT for all architectures")
+>
+> from the risc-v tree and commit:
+>
+>   758cd94a0e16 ("x86/Kconfig: Fix indentation and add endif comments to arch/x86/Kconfig")
+>
+> from the tip tree.
+>
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>
+> --
+> Cheers,
+> Stephen Rothwell
+>
+> diff --cc arch/x86/Kconfig
+> index 98eaa8870f28,4d610ae216ce..000000000000
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@@ -2869,7 -2861,11 +2867,7 @@@ config COMPA
+>   if COMPAT
+>   config COMPAT_FOR_U64_ALIGNMENT
+>         def_bool y
+> - endif
+>  -
+>  -config SYSVIPC_COMPAT
+>  -      def_bool y
+>  -      depends on SYSVIPC
+> + endif # COMPAT
+>
+>   endmenu
+>
 
-Today's linux-next merge of the mm tree got conflicts in:
 
-  init/Kconfig
-  lib/Kconfig.debug
+-- 
+Best Regards
+ Guo Ren
 
-between commit:
-
-  5cf909c553e9 ("mm/slub: use stackdepot to save stack trace in objects")
-
-from Linus' tree and commit:
-
-  21445ae47041 ("mm: Kconfig: reorganize misplaced mm options")
-
-from the mm tree.
-
-I fixed it up (I used the latter version of this file and applied the
-following merge fix patch) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Thu, 26 May 2022 16:05:37 +1000
-Subject: [PATCH] fix up for "mm: Kconfig: reorganize misplaced mm options"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- mm/Kconfig.debug | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/mm/Kconfig.debug b/mm/Kconfig.debug
-index 197eb287bf82..ce8dded36de9 100644
---- a/mm/Kconfig.debug
-+++ b/mm/Kconfig.debug
-@@ -57,6 +57,7 @@ config SLUB_DEBUG
- 	default y
- 	bool "Enable SLUB debugging support" if EXPERT
- 	depends on SLUB && SYSFS
-+	select STACKDEPOT if STACKTRACE_SUPPORT
- 	help
- 	  SLUB has extensive debug support features. Disabling these can
- 	  result in significant savings in code size. This also disables
-@@ -66,6 +67,7 @@ config SLUB_DEBUG
- config SLUB_DEBUG_ON
- 	bool "SLUB debugging on by default"
- 	depends on SLUB && SLUB_DEBUG
-+	select STACKDEPOT_ALWAYS_INIT if STACKTRACE_SUPPORT
- 	default n
- 	help
- 	  Boot with debugging on by default. SLUB boots by default with
---=20
-2.35.1
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/J4xZ7xDfQ4Lf.WDoeViPoo5
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKPGXwACgkQAVBC80lX
-0Gy5MQf/fCahqIbB+7Lzbu7NuFgb2qdmlg+fWOWuMldxXhZi6A47HX8K5nUxquDr
-3LyFj2zciyGNI9iOuWCNRWZ+nkMI7VTc3+VuvZ2UiFMqGnM849cqXWjSbzhY8ZRl
-2VDh1f2Czbg1EoUxkPNaCWXAqw8r6TdFnAnN074SJ2whcfjSA0bWiFCad7yFkaxL
-audavUJzAdKBVRcGxpCYtAgpzuwuUkrw8HieLjeYJsxpVUdWL6uUcvX4QVkw4vdV
-sllSDgiJYwtWkix1pVUt107w3JFsWl/alQeuic8Lr1qOSBrkT/Z/JFxf4ehI/VRH
-oLj1ozzLnk2kjzeZ2Boim+fEkQLkjg==
-=n8bh
------END PGP SIGNATURE-----
-
---Sig_/J4xZ7xDfQ4Lf.WDoeViPoo5--
+ML: https://lore.kernel.org/linux-csky/

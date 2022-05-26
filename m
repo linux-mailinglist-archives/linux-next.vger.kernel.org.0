@@ -2,122 +2,99 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 500145347B1
-	for <lists+linux-next@lfdr.de>; Thu, 26 May 2022 02:47:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB33D5348F0
+	for <lists+linux-next@lfdr.de>; Thu, 26 May 2022 04:43:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236156AbiEZArX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 25 May 2022 20:47:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35932 "EHLO
+        id S230388AbiEZCnK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 25 May 2022 22:43:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345330AbiEZArP (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 25 May 2022 20:47:15 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42C3A65B6;
-        Wed, 25 May 2022 17:46:54 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L7q576JFYz4xD7;
-        Thu, 26 May 2022 10:46:51 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1653526012;
-        bh=prRDMbc48ZhiOQbW7OeU9AvVQRnsu/2pVUDXu6O8GRo=;
-        h=Date:From:To:Cc:Subject:From;
-        b=CGmxWPoEAAV0A5GIyTONt7wgrP/PxU4543afU10SSfXrl7ko8qt6C1Z9Aq8IrxmJx
-         ucBdWDlU1qdn425eAZJQeQGwu5036JgWQxu5adYfpAaTPXrLCCcU/Hyn13bhy3+aBe
-         EDy2lPGoJ7mWi3E+YqkrW5Vw676wPuMn8b+4ML8xkIw42oPu7csis/u7VDbfPRXhgp
-         jFYeQdNqF+ERBdy+AP2KdmuaMyxSWuoxW9dpFKADFkI2JPmHFbrOZLKalqZZnj3zgm
-         la/wq+5HSadXIRE+UJ6FWLckLclEn5ZyyZBic8iPxEcv1P3DgLIbYRHNSV816f3n99
-         AK1gW2vlRaCng==
-Date:   Thu, 26 May 2022 10:46:50 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jeff Layton <jlayton@kernel.org>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        David Howells <dhowells@redhat.com>
-Cc:     Jakob Koschel <jakobkoschel@gmail.com>,
+        with ESMTP id S235742AbiEZCnJ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 25 May 2022 22:43:09 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 705C5A5010;
+        Wed, 25 May 2022 19:43:02 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id f9so644957ejc.0;
+        Wed, 25 May 2022 19:43:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Iji6/qx50HM9mugQAAZFzqNwMWEZ4NiXrC4wwL5plK0=;
+        b=FNnAl3u5Raha6JvLBX1X0s8ScB07hNmFt2jqpf2RR3gBZh3HRsqrriMEgUgCFglB/3
+         GTgdemVxTBjJeJL4+yfHvfzBUATUah0VBDNGwnDrgYU0lcQO97NW2c3q2gTVuoARtYB2
+         ByrJwXQOFCBEPb4faiP1R16zul7ZoKZY+eBzDes/CupOEjwFkvaH+pAZ4ThfcEI9ne2s
+         u9TAfoazNks6t4HxyQJa0VRxJt/NzwEB3yerArkL2pTIoRQ/CIx6Mhe7JbW4JdIXWccm
+         tQq1OOzqvEzdhu66sjFP4f12nCuXn+D+Ij4wZKkqcz4sofkOHJpnP/Huo3G0LFXDx1ML
+         ZMgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=Iji6/qx50HM9mugQAAZFzqNwMWEZ4NiXrC4wwL5plK0=;
+        b=g8gbxUh8ljl3k4kY2pEE8oIIS1Np1RADv57YUOL7FHGOSqGI9q0fcV/0BnnGs1uKZw
+         PM56HczO9QrE1SxRw/QI+7Yb8Yeszx/zFCDHQmFgDv2qT3LJlr8GC2tP8Oltlf10UtjP
+         QLClZGAHVmukQyW26xT4AYk11tNb/0MZFcgj2whyhIUsq4y1DBnFDRi7nO4lKC9p6aKm
+         cUR4rZT0fJeaR9MEPcn57YSW0stNPAD01Seqn6tslJ8WBBP1pgkhTKIVpwbxwls8TedM
+         Rblz7yuHziEOobXP0b+HrGee0RUKQKfbub1rFQuUtOwPM+J/kecbaW0Yb7PV6XZXDFzf
+         Cp2Q==
+X-Gm-Message-State: AOAM532kFdDzFpTieHEfzq2M31nNgVj3ar3/SdWF8wJ5ohT4UGIsUpW0
+        /5IPy98gE4nLFLwWeTBA7cQ=
+X-Google-Smtp-Source: ABdhPJxhG5Ou+xqvL9zi16Kzz3X6qIMPkTdxsqM9GhM06UDYs1eLvfzgAFK7DcPdoJxMy442z63YCw==
+X-Received: by 2002:a17:906:58ca:b0:6fe:c53a:68f6 with SMTP id e10-20020a17090658ca00b006fec53a68f6mr20094635ejs.10.1653532980970;
+        Wed, 25 May 2022 19:43:00 -0700 (PDT)
+Received: from gmail.com (0526E16E.dsl.pool.telekom.hu. [5.38.225.110])
+        by smtp.gmail.com with ESMTPSA id h6-20020a170906590600b006feece1e053sm98294ejq.90.2022.05.25.19.42.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 May 2022 19:43:00 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Thu, 26 May 2022 04:42:56 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Kan Liang <kan.liang@linux.intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the ceph tree with the fscache tree
-Message-ID: <20220526104650.73fc943f@canb.auug.org.au>
+Subject: Re: linux-next: Signed-off-by missing for commit in the tip tree
+Message-ID: <Yo7pMP7QWWJRimt1@gmail.com>
+References: <20220526082850.5869472e@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/lVEfP7kHOadeEQiyB/kpruW";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220526082850.5869472e@canb.auug.org.au>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/lVEfP7kHOadeEQiyB/kpruW
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+* Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-Today's linux-next merge of the ceph tree got a conflict in:
+> Hi all,
+> 
+> Commit
+> 
+>   e281c26b08b3 ("Merge branch into tip/master: 'perf/urgent'")
+> 
+> is missing a Signed-off-by from its author.
+> 
+> And for some reason, it is not actually a merge commit.
 
-  fs/ceph/caps.c
+Script fail on my side: a new script of mine handling the tip:master merge 
+tree didn't handle fast-forward merges particularly well.
 
-between commit:
+I've fixed it via --no-ff & re-spun the -next branch. There's no difference 
+in the resulting kernel source tree.
 
-  713423282ae1 ("netfs: Fix gcc-12 warning by embedding vfs inode in netfs_=
-i_context")
+Thanks,
 
-from the fscache tree and commit:
-
-  3ffa9d6f991f ("ceph: replace usage of found with dedicated list iterator =
-variable")
-
-from the ceph tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc fs/ceph/caps.c
-index a0467bca39fa,bf2e94005598..000000000000
---- a/fs/ceph/caps.c
-+++ b/fs/ceph/caps.c
-@@@ -3181,11 -3202,10 +3202,10 @@@ void ceph_put_cap_refs_no_check_caps(st
-  void ceph_put_wrbuffer_cap_refs(struct ceph_inode_info *ci, int nr,
-  				struct ceph_snap_context *snapc)
-  {
- -	struct inode *inode =3D &ci->vfs_inode;
- +	struct inode *inode =3D &ci->netfs.inode;
-- 	struct ceph_cap_snap *capsnap =3D NULL;
-+ 	struct ceph_cap_snap *capsnap =3D NULL, *iter;
-  	int put =3D 0;
-  	bool last =3D false;
-- 	bool found =3D false;
-  	bool flush_snaps =3D false;
-  	bool complete_capsnap =3D false;
- =20
-
---Sig_/lVEfP7kHOadeEQiyB/kpruW
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKOzfoACgkQAVBC80lX
-0Gy+Twf9H1wwOql1ft1TnkVW/nFJVJEEwdskdwc5jrpx/q2gIjKsKH03RWZcbfyN
-9FjEXKTvQsCuRdJSscHzEcxlcsBlYOgtQUp7vPTzFEWRfGehLRBDXTCTJdGQ1NVU
-mHtbBpaD9xiYQXE96iIvyH00db/S2tdk5X71RlCTefT4/DIcipdbLu9u2NqjX5qK
-jXCFzUU1wmKyNuDrM8oZBdRBWRAFZ9ncP35aRqslJWNioS1sUHfCoKI3NHi6STkH
-W6Te1VGg1dyMNcNTmodHwWjoXdachcUoDyZMapTp//Gn27wzCgn92WAzC8KkDBcX
-j1gyjAdWR45ElXREfMkwPXiZpRQ0LA==
-=pAr8
------END PGP SIGNATURE-----
-
---Sig_/lVEfP7kHOadeEQiyB/kpruW--
+	Ingo

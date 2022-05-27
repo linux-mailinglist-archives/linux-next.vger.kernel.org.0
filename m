@@ -2,143 +2,130 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A58915358BE
-	for <lists+linux-next@lfdr.de>; Fri, 27 May 2022 07:21:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D2E853590B
+	for <lists+linux-next@lfdr.de>; Fri, 27 May 2022 08:06:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232161AbiE0FVI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 27 May 2022 01:21:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51106 "EHLO
+        id S234025AbiE0GGv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 27 May 2022 02:06:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231840AbiE0FVH (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 27 May 2022 01:21:07 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE21A8889;
-        Thu, 26 May 2022 22:21:01 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L8Y6y2WFFz4xYY;
-        Fri, 27 May 2022 15:20:58 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1653628859;
-        bh=ibK13A/3tHbpREzEni/xsDgo3KPLS5KPT0yq1eh6Xjw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=lKGkTIsT5LI3C9Tk245V8D2Hhv31jxdc5uTS6DAXcRqeVnkLVTmKr+bpIEVqse9sL
-         EfTbYgTUYkL6nOjYSkyEu7Xh0oWbKkTx1yapzKRrjMfZePhl9LNVarmBn/j1IabnM0
-         JVfp6CTQO9sH1GQrDBcvhOJWdDzXDWrL6IxkiqI9+YYjAo2qbuuqZwNDq1CS1mqZ6M
-         Zxue/MvF0N3Woi4/+zBhreG4N6Xu8KBgya2JZAoO3VDzF8Qhn/Jio507OQH42fA8kW
-         b3GJk2OhJRmg+klFNtBf+Z8+zsCXMRm4N2l3mQjftwN7stLrk27pwfgO7eYQUQ6K6z
-         JFUDQyllHctqQ==
-Date:   Fri, 27 May 2022 15:20:57 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     David Disseldorp <ddiss@suse.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: linux-next: manual merge of the mm-nonmm-stable tree with the
- ftrace tree
-Message-ID: <20220527152057.399bfc2b@canb.auug.org.au>
+        with ESMTP id S233378AbiE0GGu (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 27 May 2022 02:06:50 -0400
+Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E96BD13D2A;
+        Thu, 26 May 2022 23:06:48 -0700 (PDT)
+Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175]) (authenticated)
+        by conssluserg-01.nifty.com with ESMTP id 24R66Ki6015921;
+        Fri, 27 May 2022 15:06:20 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 24R66Ki6015921
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1653631580;
+        bh=uOIDWJ8nKzaQ9BGe8N8M3AtTjWOiIAuF9sunOv+fNxY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Q/hghU838DgUDVdTkg2Jck4N4OhCRplB5FYYBOPWKSYFF9sxNLbnBBgLvNrg5CtLo
+         VX+78YcZyJNpBCd5r3QpBQsVDYLuQui6aryDrTagkb/Lw7CKBbWSb/NGQUx1afJw1W
+         jwqypzo9drZ7n/1mY7FtHffNVqtGU0FkLrYmH4fl6wbG520+ooJK4PTCf+puGmuQ+l
+         hwNuEqMlyvn1/jlzypyH597omXMz0me0FneCFJ4ge+WgnmvscndxBlFY9ne5ZDSiNg
+         RwJAUNdPsXtzqGoTOgXxlgoTXg4GKoRJGtwDIv2vavGcWJmPE3BBO+JUPCXyP8CzaO
+         Pw9XClt8tYOWg==
+X-Nifty-SrcIP: [209.85.215.175]
+Received: by mail-pg1-f175.google.com with SMTP id 137so3124178pgb.5;
+        Thu, 26 May 2022 23:06:20 -0700 (PDT)
+X-Gm-Message-State: AOAM532DJMlndZFkmrXPZ3RfOiHDoXQLSlp7y3uGlCaEZEaKXXzyw+63
+        1TuvB2nTIIDV9X1CSQAT4pSH/vVa75brYbQX0pw=
+X-Google-Smtp-Source: ABdhPJzzO5dyztT/2btdqC4Zkc22mLsfsDF2KfG2J/NwIT8XsiiObhGku8b0kdM9W+kSN8gAWSNG43N2Q47sjPYEGJQ=
+X-Received: by 2002:a05:6a00:234b:b0:519:c7c:e58b with SMTP id
+ j11-20020a056a00234b00b005190c7ce58bmr8125105pfj.32.1653631579782; Thu, 26
+ May 2022 23:06:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/I7USWoSPXy.qoAqEvaVM1/r";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220523142431.10ff2f77@canb.auug.org.au> <20220523154758.11668628@canb.auug.org.au>
+ <20220523162307.45dycvqld7maaj7l@treble> <CAK7LNAR5XWPhmTJV42sYiFCDan6DfB8gsOCJOWiqz4MV1cdE4Q@mail.gmail.com>
+ <20220527044711.hrqxx5gz3jghydax@treble>
+In-Reply-To: <20220527044711.hrqxx5gz3jghydax@treble>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Fri, 27 May 2022 15:04:57 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATeHZK+qv9e375fsZwtiuUE_MrfBA9Rhzz3uY8tF4EXUg@mail.gmail.com>
+Message-ID: <CAK7LNATeHZK+qv9e375fsZwtiuUE_MrfBA9Rhzz3uY8tF4EXUg@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the tip tree with the kbuild tree
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/I7USWoSPXy.qoAqEvaVM1/r
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, May 27, 2022 at 1:47 PM Josh Poimboeuf <jpoimboe@kernel.org> wrote:
+>
+> On Fri, May 27, 2022 at 11:19:02AM +0900, Masahiro Yamada wrote:
+> > [1] original behavior in Josh's commit
+> >
+> > $ git checkout 753da4179d08b625d8df72e97724e22749969fd3
+> > $ make defconfig
+> > $ make -j8 kernel/
+> > $ head -n 1   kernel/.fork.o.cmd
+> >
+> >
+> > I do not see the "--linked" parameter in the objtool command.
+> >
+> >
+> >
+> >
+> > [2] behavior in linux-next
+> >
+> >
+> > $ git checkout next-20220523
+> > $ make defconfig
+> > $ make -j8 kernel/
+> > $ head -n 1   kernel/.fork.o.cmd
+> >
+> > I see the "--linked" parameter in the objtool command.
+> >
+> > kernel/fork.o  is a direct output from GCC,
+> > not from linker.
+>
+> Yes, good catch.  That flag should only be used for linked objects like
+> vmlinux.o or some_module.o.
+>
+> Objtool only runs on such objects when CONFIG_LTO_CLANG,
+> CONFIG_X86_KERNEL_IBT, or CONFIG_NOINSTR_VALIDATION (vmlinux.o-only) is
+> enabled.
+>
+> --
+> Josh
 
-Hi all,
 
-Today's linux-next merge of the mm-nonmm-stable tree got a conflict in:
+When CONFIG_LTO_CLANG=y or CONFIG_X86_KERNEL_IBT=y
+is "--linked" necessary for single-object modules?
 
-  init/Kconfig
 
-between commit:
+"single-object module" means a module that consists of only one object.
 
-  a2a9d67a26ec ("bootconfig: Support embedding a bootconfig file in kernel")
+See this figure:
+https://patchwork.kernel.org/project/linux-kbuild/patch/20220513113930.10488-6-masahiroy@kernel.org/
 
-from the ftrace tree and commit:
 
-  1274aea127b2 ("initramfs: add INITRAMFS_PRESERVE_MTIME Kconfig option")
 
-from the mm-nonmm-stable tree.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+In your commit, --linked is passed to all *.prelink.o
+whether it consists of a single object or links
+multiple objects.
 
---=20
-Cheers,
-Stephen Rothwell
 
-diff --cc init/Kconfig
-index 006e086f2724,90cb1ac936db..000000000000
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@@ -1370,25 -1361,16 +1370,35 @@@ config BOOT_CONFI
- =20
-  	  If unsure, say Y.
- =20
- +config BOOT_CONFIG_EMBED
- +	bool "Embed bootconfig file in the kernel"
- +	depends on BOOT_CONFIG
- +	help
- +	  Embed a bootconfig file given by BOOT_CONFIG_EMBED_FILE in the
- +	  kernel. Usually, the bootconfig file is loaded with the initrd
- +	  image. But if the system doesn't support initrd, this option will
- +	  help you by embedding a bootconfig file while building the kernel.
- +
- +	  If unsure, say N.
- +
- +config BOOT_CONFIG_EMBED_FILE
- +	string "Embedded bootconfig file path"
- +	depends on BOOT_CONFIG_EMBED
- +	help
- +	  Specify a bootconfig file which will be embedded to the kernel.
- +	  This bootconfig will be used if there is no initrd or no other
- +	  bootconfig in the initrd.
- +
-+ config INITRAMFS_PRESERVE_MTIME
-+ 	bool "Preserve cpio archive mtimes in initramfs"
-+ 	default y
-+ 	help
-+ 	  Each entry in an initramfs cpio archive carries an mtime value. When
-+ 	  enabled, extracted cpio items take this mtime, with directory mtime
-+ 	  setting deferred until after creation of any child entries.
-+=20
-+ 	  If unsure, say Y.
-+=20
-  choice
-  	prompt "Compiler optimization level"
-  	default CC_OPTIMIZE_FOR_PERFORMANCE
 
---Sig_/I7USWoSPXy.qoAqEvaVM1/r
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKQX7kACgkQAVBC80lX
-0Gw8kAf/SBYC/hUFcIrLqgoKn+1n02iq4DctJIUXI9Y1wzOrxfvQRjx5v0dCPYAq
-TS+7XBEPGlCq9SuzaT06KRzFG6SwesK8wG0tCCyeSI3IIv2aWMDppwKQmKiH0wra
-Esj+rBZN+hsUSoTSXdlnu0TG6cdYPqOTQNej/cK67YibcbsHKqI9iNBxECxXOgad
-etwlFUQqY9WkOVAYheM64KGs+12gWzbfmKyuxbB/oLnIoeBiIeMStkVm67r7uYIW
-8B6IlxfAJ97i0rE/+W7l5SJ/1J97toCZakRIIe4eu0PvuQc1jsNwExqPlWMqwHtg
-NmYZBHDcnNgeJzcEkzmABEfBabHfIA==
-=G7a/
------END PGP SIGNATURE-----
-
---Sig_/I7USWoSPXy.qoAqEvaVM1/r--
+-- 
+Best Regards
+Masahiro Yamada

@@ -2,49 +2,45 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3B09535669
-	for <lists+linux-next@lfdr.de>; Fri, 27 May 2022 01:34:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3507C5356F9
+	for <lists+linux-next@lfdr.de>; Fri, 27 May 2022 02:08:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238521AbiEZXeG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 26 May 2022 19:34:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32824 "EHLO
+        id S236677AbiE0AIt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 26 May 2022 20:08:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232203AbiEZXeG (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 26 May 2022 19:34:06 -0400
+        with ESMTP id S230461AbiE0AIt (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 26 May 2022 20:08:49 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78F6D91570;
-        Thu, 26 May 2022 16:34:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 812AAB7F6;
+        Thu, 26 May 2022 17:08:47 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L8PQW6nDfz4xDK;
-        Fri, 27 May 2022 09:33:55 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L8QBj4THNz4xXF;
+        Fri, 27 May 2022 10:08:45 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1653608036;
-        bh=XFoNMtB3cc6oq9Q1Rkr5wkpH62qt/IyUA02WEP+IHQ8=;
+        s=201702; t=1653610126;
+        bh=yXc1Vj6Ng/ZkgZVPKtn4790haHxx3QlUg5uPQgSyWig=;
         h=Date:From:To:Cc:Subject:From;
-        b=C5ajthcUmM8YIBIjZZP66TPF04V7lJLpdHa7h7NKmyRmdHzKUN52rXyHvNuGNDKWx
-         SFQBkknGbqthqLTwyo2I5q93rQlerWiER9Cu10qvxZeaKKIl7KFsGQs8fExMsWtJnh
-         nWYn4dB1RwvDjqqBCVI3oYLlXX/27Z9jCg758zvfyxmVJqvvyuMtTQ72tyJDOTe0pS
-         cqV6Yg+NXnt/PWKP4hnhe4KrqoyTTRdKaJ/zgbhrS59DdqWhZBO2FJ9MWTpH6Pt/wr
-         FwrvgTGlt1JCIvpv45XPLbjkz/16oyqBN1fSJFTWWhcOmL1Dd8++ctCjosDYk38F+P
-         mQ+ovD//qbrSQ==
-Date:   Fri, 27 May 2022 09:33:54 +1000
+        b=hae/8BwCQdWy1rr+q2J8u5lxnlZEaiX4rnKvcvtp5J+Jjaw59uUgMseKXJ5NJt5Zl
+         RfTHFBaTDIHTfhJDCIclxeXlCey2ofsmGegNGm0jeb7idxOOpWtPoY8mt2DSBnna/+
+         qGy4AQQYDxJMmBQ0U4VDdj1Q4G1nFdV7ZfCCocUuI5kQB7OfAXo2LuHBzKOzsDwys1
+         hZo+fIPD3rQzRVSsLWmTA6+YUwaiI8LHJZOQEmFAG+QMULfC4+/Gqfw/k0LXEy0oSg
+         wJMyfS/tlxS2SI099ZWrK5e1oGrJxdCr0AkkInhnqonE5mhwiPC1+cMJorw2ImonCl
+         naYYQybXYAaAw==
+Date:   Fri, 27 May 2022 10:08:44 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Shuah Khan <shuah@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Axel Rasmussen <axelrasmussen@google.com>,
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sidhartha Kumar <sidhartha.kumar@oracle.com>,
-        Suren Baghdasaryan <surenb@google.com>
-Subject: linux-next: manual merge of the kselftest-fixes tree with Linus'
- tree
-Message-ID: <20220527093354.27316445@canb.auug.org.au>
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>
+Subject: linux-next: manual merge of the kbuild tree with Linus' tree
+Message-ID: <20220527100844.2f8ded56@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/obFMnZXiSG7AxV3ULKZ53le";
+Content-Type: multipart/signed; boundary="Sig_/LeBg_RW4Rk8ePdqykqaNwe5";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -55,53 +51,127 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/obFMnZXiSG7AxV3ULKZ53le
+--Sig_/LeBg_RW4Rk8ePdqykqaNwe5
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the kselftest-fixes tree got a conflict in:
+Today's linux-next merge of the kbuild tree got a conflict in:
 
-  tools/testing/selftests/vm/run_vmtests.sh
+  scripts/Makefile.build
 
-between commits:
+between commit:
 
-  b67bd551201a ("selftests: vm: refactor run_vmtests.sh to reduce boilerpla=
-te")
-  33776141b812 ("selftests: vm: add process_mrelease tests")
+  753da4179d08 ("objtool: Remove --lto and --vmlinux in favor of --link")
 
-from Linus' tree and commit:
+from Linus' tree and commits:
 
-  e8f0c8965932 ("selftest/vm: add skip support to mremap_test")
+  3eec672cbc9b ("kbuild: do not create *.prelink.o for Clang LTO or IBT")
+  7414d89fd7cd ("kbuild: make *.mod rule robust against too long argument e=
+rror")
 
-from the kselftest-fixes tree.
+from the kbuild tree.
 
-I fixed it up (I used the former version of this file which seems to have
-included the latter) and can carry the fix as necessary. This is now fixed
-as far as linux-next is concerned, but any non trivial conflicts should
-be mentioned to your upstream maintainer when your tree is submitted for
-merging.  You may also want to consider cooperating with the maintainer
-of the conflicting tree to minimise any particularly complex conflicts.
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/obFMnZXiSG7AxV3ULKZ53le
+diff --cc scripts/Makefile.build
+index 06400504150b,1754adba7010..000000000000
+--- a/scripts/Makefile.build
++++ b/scripts/Makefile.build
+@@@ -226,23 -226,18 +230,19 @@@ objtool_args =3D							=09
+  cmd_objtool =3D $(if $(objtool-enabled), ; $(objtool) $(objtool_args) $@)
+  cmd_gen_objtooldep =3D $(if $(objtool-enabled), { echo ; echo '$@: $$(wil=
+dcard $(objtool))' ; } >> $(dot-target).cmd)
+ =20
+ -endif # CONFIG_STACK_VALIDATION
+ +endif # CONFIG_OBJTOOL
+ =20
+- ifneq ($(CONFIG_LTO_CLANG)$(CONFIG_X86_KERNEL_IBT),)
+-=20
+- # Skip objtool for LLVM bitcode
+- $(obj)/%.o: objtool-enabled :=3D
+-=20
+- else
+ =20
+  # 'OBJECT_FILES_NON_STANDARD :=3D y': skip objtool checking for a directo=
+ry
+  # 'OBJECT_FILES_NON_STANDARD_foo.o :=3D 'y': skip objtool checking for a =
+file
+  # 'OBJECT_FILES_NON_STANDARD_foo.o :=3D 'n': override directory skip for =
+a file
+ =20
+- $(obj)/%.o: objtool-enabled =3D $(if $(filter-out y%, \
+- 	$(OBJECT_FILES_NON_STANDARD_$(basetarget).o)$(OBJECT_FILES_NON_STANDARD)=
+n),y)
++ is-standard-object =3D $(if $(filter-out y%, $(OBJECT_FILES_NON_STANDARD_=
+$(basetarget).o)$(OBJECT_FILES_NON_STANDARD)n),y)
+ =20
+- endif
++ delay-objtool :=3D $(or $(CONFIG_LTO_CLANG),$(CONFIG_X86_KERNEL_IBT))
++=20
++ $(obj)/%.o: objtool-enabled =3D $(if $(is-standard-object),$(if $(delay-o=
+bjtool),$(is-single-obj-m),y))
+++$(obj)/%.o: linked-object :=3D y
+ =20
+  ifdef CONFIG_TRIM_UNUSED_KSYMS
+  cmd_gen_ksymdeps =3D \
+@@@ -421,18 -408,18 +413,19 @@@ $(obj)/modules.order: $(obj-m) FORC
+  $(obj)/lib.a: $(lib-y) FORCE
+  	$(call if_changed,ar)
+ =20
+- ifneq ($(CONFIG_LTO_CLANG)$(CONFIG_X86_KERNEL_IBT),)
+- quiet_cmd_link_multi-m =3D AR [M]  $@
+- cmd_link_multi-m =3D						\
+- 	rm -f $@; 						\
+- 	$(AR) cDPrsT $@ @$(patsubst %.o,%.mod,$@)
+- else
+- quiet_cmd_link_multi-m =3D LD [M]  $@
+-       cmd_link_multi-m =3D $(LD) $(ld_flags) -r -o $@ @$(patsubst %.o,%.m=
+od,$@)
+- endif
++ quiet_cmd_ld_multi_m =3D LD [M]  $@
++       cmd_ld_multi_m =3D $(LD) $(ld_flags) -r -o $@ @$(patsubst %.o,%.mod=
+,$@) $(cmd_objtool)
++=20
++ define rule_ld_multi_m
++ 	$(call cmd_and_savecmd,ld_multi_m)
++ 	$(call cmd,gen_objtooldep)
++ endef
+ =20
++ $(multi-obj-m): objtool-enabled :=3D $(delay-objtool)
++ $(multi-obj-m): part-of-module :=3D y
+++$(multi-obj-m): linked-object :=3D y
+  $(multi-obj-m): %.o: %.mod FORCE
+- 	$(call if_changed,link_multi-m)
++ 	$(call if_changed_rule,ld_multi_m)
+  $(call multi_depend, $(multi-obj-m), .o, -objs -y -m)
+ =20
+  targets :=3D $(filter-out $(PHONY), $(targets))
+
+--Sig_/LeBg_RW4Rk8ePdqykqaNwe5
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKQDmIACgkQAVBC80lX
-0GwNEgf+MXNwmAlMGcUwFzrhGXM9SA3cSPweJrRikUq4EiBtip+XowZEfz6AULqh
-mAiYBpK+iy7eLyVglrRZnfDj1ZccYzZ2eZv9yHUcEdmr7CklgVyCsY1vWVPNv8OH
-DHi+kqgK8U4WP04jDACFK+zhW8sMzRjxcvv4IQxae9/2SxXkmFPqjjvsTcelbHgY
-OfidCnqsSk6yTDd5tnGPlFwm6PZD6sn6/CFJu0rD5YbsgSc6znsU+wNpOp5bb1mN
-DYlNDRGnM1hxLDts0VDvRSp8Iq2z4YFGg8n1DpBSsyt8RutfYeY9vM3o7Nd9vtDn
-le+baFm6wsBTCI+IshXsFcxlIG46MA==
-=1Mvw
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKQFowACgkQAVBC80lX
+0GxkdQf9Hd27VcbmwumdyDRaXeXfZKj5YTEbVD3KgyBDFdCokE6MxuCVjtetXWHp
+Nzjs4g840rhNyrZu44QalK5uGliNnuGwhViYMfDZNyGf6wlRqUv6KmMq5c0fbBGM
+bL605lnA7um9yjaCcXhfd8fU823OywpUdgfu5o6OT2yIMOmg9KihlUrMYrhz+RJE
+VjYIeK7X8Ga1ZTo96E2tWmOm9nVSfdBCSqGVOCEOx0Uk1SomCctYWzZrfN1nYPXW
+iWLJrnnJjxoodSAkNXXqAFPuIddv70oqE62TRgi2dRLq8LS1E9hzXQABgbngUGNR
+Uedr+i3OxAOJheHLj+FGW/KraBvvNA==
+=oG2M
 -----END PGP SIGNATURE-----
 
---Sig_/obFMnZXiSG7AxV3ULKZ53le--
+--Sig_/LeBg_RW4Rk8ePdqykqaNwe5--

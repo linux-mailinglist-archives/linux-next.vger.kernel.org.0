@@ -2,47 +2,50 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E899653589D
-	for <lists+linux-next@lfdr.de>; Fri, 27 May 2022 06:56:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A58915358BE
+	for <lists+linux-next@lfdr.de>; Fri, 27 May 2022 07:21:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230267AbiE0E4Y (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 27 May 2022 00:56:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54098 "EHLO
+        id S232161AbiE0FVI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 27 May 2022 01:21:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238400AbiE0E4V (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 27 May 2022 00:56:21 -0400
-Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DC4811A32;
-        Thu, 26 May 2022 21:56:18 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0VEVggNJ_1653627374;
-Received: from 30.32.82.202(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VEVggNJ_1653627374)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 27 May 2022 12:56:15 +0800
-Message-ID: <548a60d7-80bb-7551-cdc1-f9a58071a76b@linux.alibaba.com>
-Date:   Fri, 27 May 2022 12:56:42 +0800
+        with ESMTP id S231840AbiE0FVH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 27 May 2022 01:21:07 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE21A8889;
+        Thu, 26 May 2022 22:21:01 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L8Y6y2WFFz4xYY;
+        Fri, 27 May 2022 15:20:58 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1653628859;
+        bh=ibK13A/3tHbpREzEni/xsDgo3KPLS5KPT0yq1eh6Xjw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=lKGkTIsT5LI3C9Tk245V8D2Hhv31jxdc5uTS6DAXcRqeVnkLVTmKr+bpIEVqse9sL
+         EfTbYgTUYkL6nOjYSkyEu7Xh0oWbKkTx1yapzKRrjMfZePhl9LNVarmBn/j1IabnM0
+         JVfp6CTQO9sH1GQrDBcvhOJWdDzXDWrL6IxkiqI9+YYjAo2qbuuqZwNDq1CS1mqZ6M
+         Zxue/MvF0N3Woi4/+zBhreG4N6Xu8KBgya2JZAoO3VDzF8Qhn/Jio507OQH42fA8kW
+         b3GJk2OhJRmg+klFNtBf+Z8+zsCXMRm4N2l3mQjftwN7stLrk27pwfgO7eYQUQ6K6z
+         JFUDQyllHctqQ==
+Date:   Fri, 27 May 2022 15:20:57 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Cc:     David Disseldorp <ddiss@suse.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: linux-next: manual merge of the mm-nonmm-stable tree with the
+ ftrace tree
+Message-ID: <20220527152057.399bfc2b@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: mm: change huge_ptep_clear_flush() to return the original pte
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        Linux regressions mailing list <regressions@lists.linux.dev>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>
-References: <CA+G9fYtDBZaBGkEp5tRMM5C1xHEKeyyNK1S4WoKvrOoFxGm4KQ@mail.gmail.com>
- <ac245d62-2295-8cf6-6808-4a6eb6bdbd21@linux.alibaba.com>
- <CAHk-=wjgGW_jsjZxKLcKCf4Di22vzJU6K56j0Oe8Td6RgKrc+A@mail.gmail.com>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <CAHk-=wjgGW_jsjZxKLcKCf4Di22vzJU6K56j0Oe8Td6RgKrc+A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+Content-Type: multipart/signed; boundary="Sig_/I7USWoSPXy.qoAqEvaVM1/r";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,33 +53,92 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+--Sig_/I7USWoSPXy.qoAqEvaVM1/r
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-On 5/27/2022 11:42 AM, Linus Torvalds wrote:
-> On Thu, May 26, 2022 at 8:36 PM Baolin Wang
-> <baolin.wang@linux.alibaba.com> wrote:
->>
->> That is caused by commit:
->>
->> 00df1f1a133b ("mm: change huge_ptep_clear_flush() to return the original
->> pte")
->>
->> interacting with commit:
->>
->> fb396bb459c1 ("arm64/hugetlb: Drop TLB flush from get_clear_flush()")
->>
->> And Catalin has fixed the conflict with below changes [1], not sure why
->> it is not merged.
-> 
-> Argh. Nobody informed me (or if they did, I clearly missed it).
-> 
->> Linus, should I send a proper patch to fix this conflict for you?
-> 
-> Yeah, somebody please send me a proper tested fix-up patch with commit
-> message etc.
+Today's linux-next merge of the mm-nonmm-stable tree got a conflict in:
 
-Sure. I send out a fix patch [1] which is already tested in linux-next 
-for several days.
+  init/Kconfig
 
-[1] 
-https://lore.kernel.org/all/814e20c19b110209ee12ecae7cb05f8a78d021c8.1653625820.git.baolin.wang@linux.alibaba.com/
+between commit:
+
+  a2a9d67a26ec ("bootconfig: Support embedding a bootconfig file in kernel")
+
+from the ftrace tree and commit:
+
+  1274aea127b2 ("initramfs: add INITRAMFS_PRESERVE_MTIME Kconfig option")
+
+from the mm-nonmm-stable tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc init/Kconfig
+index 006e086f2724,90cb1ac936db..000000000000
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@@ -1370,25 -1361,16 +1370,35 @@@ config BOOT_CONFI
+ =20
+  	  If unsure, say Y.
+ =20
+ +config BOOT_CONFIG_EMBED
+ +	bool "Embed bootconfig file in the kernel"
+ +	depends on BOOT_CONFIG
+ +	help
+ +	  Embed a bootconfig file given by BOOT_CONFIG_EMBED_FILE in the
+ +	  kernel. Usually, the bootconfig file is loaded with the initrd
+ +	  image. But if the system doesn't support initrd, this option will
+ +	  help you by embedding a bootconfig file while building the kernel.
+ +
+ +	  If unsure, say N.
+ +
+ +config BOOT_CONFIG_EMBED_FILE
+ +	string "Embedded bootconfig file path"
+ +	depends on BOOT_CONFIG_EMBED
+ +	help
+ +	  Specify a bootconfig file which will be embedded to the kernel.
+ +	  This bootconfig will be used if there is no initrd or no other
+ +	  bootconfig in the initrd.
+ +
++ config INITRAMFS_PRESERVE_MTIME
++ 	bool "Preserve cpio archive mtimes in initramfs"
++ 	default y
++ 	help
++ 	  Each entry in an initramfs cpio archive carries an mtime value. When
++ 	  enabled, extracted cpio items take this mtime, with directory mtime
++ 	  setting deferred until after creation of any child entries.
++=20
++ 	  If unsure, say Y.
++=20
+  choice
+  	prompt "Compiler optimization level"
+  	default CC_OPTIMIZE_FOR_PERFORMANCE
+
+--Sig_/I7USWoSPXy.qoAqEvaVM1/r
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKQX7kACgkQAVBC80lX
+0Gw8kAf/SBYC/hUFcIrLqgoKn+1n02iq4DctJIUXI9Y1wzOrxfvQRjx5v0dCPYAq
+TS+7XBEPGlCq9SuzaT06KRzFG6SwesK8wG0tCCyeSI3IIv2aWMDppwKQmKiH0wra
+Esj+rBZN+hsUSoTSXdlnu0TG6cdYPqOTQNej/cK67YibcbsHKqI9iNBxECxXOgad
+etwlFUQqY9WkOVAYheM64KGs+12gWzbfmKyuxbB/oLnIoeBiIeMStkVm67r7uYIW
+8B6IlxfAJ97i0rE/+W7l5SJ/1J97toCZakRIIe4eu0PvuQc1jsNwExqPlWMqwHtg
+NmYZBHDcnNgeJzcEkzmABEfBabHfIA==
+=G7a/
+-----END PGP SIGNATURE-----
+
+--Sig_/I7USWoSPXy.qoAqEvaVM1/r--

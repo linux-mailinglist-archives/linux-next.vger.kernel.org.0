@@ -2,169 +2,105 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E42A535779
-	for <lists+linux-next@lfdr.de>; Fri, 27 May 2022 04:21:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D282F5357F9
+	for <lists+linux-next@lfdr.de>; Fri, 27 May 2022 04:58:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233988AbiE0CVC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 26 May 2022 22:21:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47878 "EHLO
+        id S237245AbiE0C4i (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 26 May 2022 22:56:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233975AbiE0CVB (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 26 May 2022 22:21:01 -0400
-Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A05CAE2782;
-        Thu, 26 May 2022 19:20:56 -0700 (PDT)
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45]) (authenticated)
-        by conssluserg-02.nifty.com with ESMTP id 24R2KP5F014480;
-        Fri, 27 May 2022 11:20:25 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 24R2KP5F014480
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1653618025;
-        bh=qaXGWm36XsMpK0YHSBcEjrBjV1N23G1+rvNZIJeUxz0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=cVlG5rLeqP7ynBhNw8kq8O+Ix/y26Q/eFRFfYAyvjQ/BlMBEuZv3QNulfQOHoO2DY
-         bMYkKWBs+NzbaE3LExgOq03BkGJgOxg/Cvv1QIWbRA15NUscIDA1bv3MuXxIT1rV7L
-         bGz8k46bG83yD7P3bOtY21+1OMW82WZ4xvHQlonJdUyz3SD6NGeo1fA0eyzf9rxt+d
-         z2UiYqKua1WATfcVQN05p5+VUzTc64mdw0PsStZJVmP08KCgm1r6W6wKp2xSKKpf7d
-         i3tgrA74cOKaTwLXtRfbVSXu5yrmmShcoGlYmS/vK/9KgCRhfKtYF67+W16BWUfAU9
-         /2hG5f7mt94FA==
-X-Nifty-SrcIP: [209.85.216.45]
-Received: by mail-pj1-f45.google.com with SMTP id nn3-20020a17090b38c300b001e0e091cf03so2009839pjb.1;
-        Thu, 26 May 2022 19:20:25 -0700 (PDT)
-X-Gm-Message-State: AOAM530R9/Wej8twHRZsQXFsVq+Xzgzzrk84LHspK4uDUsK32YZv9ELy
-        GW9RASThjbZy9WbqLXgOKnllVtEJuls+22jtA/4=
-X-Google-Smtp-Source: ABdhPJw18G/tZO61wmb0rN2KnjQCfnb44OFAHqqsrbPt3jMhR5jcSY59Xc0L4ljUHZTVF8bfNqgoMkYhe1v8eBMQU1s=
-X-Received: by 2002:a17:903:1205:b0:15e:8cbc:fd2b with SMTP id
- l5-20020a170903120500b0015e8cbcfd2bmr40916303plh.99.1653618024744; Thu, 26
- May 2022 19:20:24 -0700 (PDT)
+        with ESMTP id S236312AbiE0C4h (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 26 May 2022 22:56:37 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C0DDF6C
+        for <linux-next@vger.kernel.org>; Thu, 26 May 2022 19:56:36 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id x137so5834214ybg.5
+        for <linux-next@vger.kernel.org>; Thu, 26 May 2022 19:56:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=JiJSTbLByeBUbNjihqq4ucy2aU+Ryl5bPLbQLP/9oss=;
+        b=Ozb63YSSQHn8iwOg65YeWkay62ruIsX1IEUZM8RRaeZYTflINNHYytQTiqfgbZ61mu
+         5mws/emmuO8H4TIhbNyq7HBsb0ZcExk9JtYfcWdaUKyjqpUt5zZ2H/eH7WPCvqznRTFU
+         vn7z21rNg+0FKzGwGC9M0KcNwx40GaOIjq45cGhlequzhpnACcMJ/+Xb2XWymOXsJSjK
+         FHBURfxDYZRZMuQY1HY768u1aNFpEir4fmRDiCOJ3PWbyieKxv2ohaA375ldJ5/MrzP+
+         WSKiAAV7xCfNim5mKz3ZAqarDnkz+HbFjS9MCp5Ne18S74uqYffqKc5zK4Fe93zkeNEC
+         ayLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=JiJSTbLByeBUbNjihqq4ucy2aU+Ryl5bPLbQLP/9oss=;
+        b=chYIid22ct4WvyukvCZTFHiQhmeL4hd4Vb6Q3XgyrMymBZ8Gp4YeJNLIx4nB56BNle
+         8yATRo2ollkH43hJ7C3awvN3+Ow14jix0sA4DVlzV+WPYs+3XgnBGaT7E3Mo5gZfS75w
+         gZSjyVbOOd7+cx7Q3m09ps6aYF2SxzpBAxld7Tno0CL4XAXwriVaDOXB9paaYxeVyySY
+         sfaLG3yclS/K3MXZubbbiPpqy1ueRJwU/9vqL/IqYJeTFOS3YxviFIwBkAjnQHoj6n3u
+         N3I/BGsg6XsyashYAktiqv1hI1x5wSnJP4n0v5J3Xmprc6eaNcGS1IRLCuQ606rl+Z3W
+         SBSg==
+X-Gm-Message-State: AOAM531ar0+Ma6Iy1AsdCkAvgThsGMLn6wZkbhmeBPxVv3YVWnRqDvff
+        uVSqwy3iiUH0vwWTvM3HCHqBeeZr3ofk3MzKHpdF3w==
+X-Google-Smtp-Source: ABdhPJyGNTNv40JneTza56EAdqP+zzrItZRZlcDCfYTGf+w+A+P3IpJdqxt7uCEizAutTcCZGWFNaFobAekuwi5gQ/s=
+X-Received: by 2002:a25:814a:0:b0:64f:f06c:cf6d with SMTP id
+ j10-20020a25814a000000b0064ff06ccf6dmr19551467ybm.88.1653620195396; Thu, 26
+ May 2022 19:56:35 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220523142431.10ff2f77@canb.auug.org.au> <20220523154758.11668628@canb.auug.org.au>
- <20220523162307.45dycvqld7maaj7l@treble>
-In-Reply-To: <20220523162307.45dycvqld7maaj7l@treble>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Fri, 27 May 2022 11:19:02 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAR5XWPhmTJV42sYiFCDan6DfB8gsOCJOWiqz4MV1cdE4Q@mail.gmail.com>
-Message-ID: <CAK7LNAR5XWPhmTJV42sYiFCDan6DfB8gsOCJOWiqz4MV1cdE4Q@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the tip tree with the kbuild tree
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 27 May 2022 08:26:24 +0530
+Message-ID: <CA+G9fYtDBZaBGkEp5tRMM5C1xHEKeyyNK1S4WoKvrOoFxGm4KQ@mail.gmail.com>
+Subject: Re: mm: change huge_ptep_clear_flush() to return the original pte
+To:     open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, regressions@lists.linux.dev
 Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
+        Andrew Morton <akpm@linux-foundation.org>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen, Josh,
+Following build failures noticed on arm64 on Linux mainline tree.
 
-On Tue, May 24, 2022 at 1:23 AM Josh Poimboeuf <jpoimboe@kernel.org> wrote:
->
-> On Mon, May 23, 2022 at 03:47:58PM +1000, Stephen Rothwell wrote:
-> > Hi all,
-> >
-> > On Mon, 23 May 2022 14:24:31 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> > >
-> > > Today's linux-next merge of the tip tree got a conflict in:
-> > >
-> > >   scripts/Makefile.build
-> > >
-> > > between commit:
-> > >
-> > >   0212301af7bb ("kbuild: do not create *.prelink.o for Clang LTO or IBT")
-> > >
-> > > from the kbuild tree and commit:
-> > >
-> > >   753da4179d08 ("objtool: Remove --lto and --vmlinux in favor of --link")
-> > >
-> > > from the tip tree.
-> > >
-> > > I am not sure if I fixed this up correctly, please check the final result
-> > > when linux-next is released.
-> > >
-> > > I fixed it up (I used the former version) and can carry the fix as
-> > > necessary. This is now fixed as far as linux-next is concerned, but any
-> > > non trivial conflicts should be mentioned to your upstream maintainer
-> > > when your tree is submitted for merging.  You may also want to consider
-> > > cooperating with the maintainer of the conflicting tree to minimise any
-> > > particularly complex conflicts.
-> >
-> > That produced may warnings :-(   so I tried the below resolution instead.
->
-> Looks good to me.  I guess the confusing bit was that in most cases,
-> CONFIG_STACK_VALIDATION has been replaced with CONFIG_OBJTOOL.
->
-> --
-> Josh
+Which was detected and discussed at this email thread.
+https://lore.kernel.org/all/20220512193855.4f6ce32f@canb.auug.org.au/T/
 
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Is this really a correct fix up?
+Build errors:
+arch/arm64/mm/hugetlbpage.c: In function 'huge_ptep_clear_flush':
+arch/arm64/mm/hugetlbpage.c:515:16: error: implicit declaration of
+function 'get_clear_flush'; did you mean 'ptep_clear_flush'?
+[-Werror=implicit-function-declaration]
+  515 |         return get_clear_flush(vma->vm_mm, addr, ptep, pgsize, ncontig);
+      |                ^~~~~~~~~~~~~~~
+      |                ptep_clear_flush
+arch/arm64/mm/hugetlbpage.c:515:16: error: incompatible types when
+returning type 'int' but 'pte_t' was expected
+  515 |         return get_clear_flush(vma->vm_mm, addr, ptep, pgsize, ncontig);
+      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+arch/arm64/mm/hugetlbpage.c:516:1: error: control reaches end of
+non-void function [-Werror=return-type]
+  516 | }
+      | ^
+cc1: some warnings being treated as errors
 
-I checked the linux-next.
-
-It added:
-
-$(obj)/%.o: linked-object := y
-
-so, --linked is always passed.
-
-
-Apparently, it changed the behavior.
-
-
-
-[1] original behavior in Josh's commit
-
-$ git checkout 753da4179d08b625d8df72e97724e22749969fd3
-$ make defconfig
-$ make -j8 kernel/
-$ head -n 1   kernel/.fork.o.cmd
-
-
-I do not see the "--linked" parameter in the objtool command.
-
-
-
-
-[2] behavior in linux-next
-
-
-$ git checkout next-20220523
-$ make defconfig
-$ make -j8 kernel/
-$ head -n 1   kernel/.fork.o.cmd
-
-I see the "--linked" parameter in the objtool command.
-
-kernel/fork.o  is a direct output from GCC,
-not from linker.
-
-
-
-
-
-
-Josh,
-Could you tell me:
-when should --linked be added?
-(and when should --linked not be added?)
-
-
-
-
-
-
+metadata:
+    git_repo: https://gitlab.com/Linaro/lkft/mirrors/torvalds/linux-mainline
+    git_describe: v5.18-9901-g7f50d4dfe816
+    git_sha: 7f50d4dfe816dd916a7cbf39039674825c2b388b
+    git_short_log: 7f50d4dfe816 (\Merge tag 'for-linus' of
+https://github.com/openrisc/linux\)
+    target_arch: arm64
+    toolchain: gcc-11
 
 
 --
-Best Regards
-Masahiro Yamada
+Linaro LKFT
+https://lkft.linaro.org

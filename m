@@ -2,47 +2,43 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10443535727
-	for <lists+linux-next@lfdr.de>; Fri, 27 May 2022 02:39:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E70B9535735
+	for <lists+linux-next@lfdr.de>; Fri, 27 May 2022 02:50:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229747AbiE0Aj1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 26 May 2022 20:39:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47872 "EHLO
+        id S230115AbiE0AuL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 26 May 2022 20:50:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbiE0AjY (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 26 May 2022 20:39:24 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B33F4E5281;
-        Thu, 26 May 2022 17:39:22 -0700 (PDT)
+        with ESMTP id S230105AbiE0AuK (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 26 May 2022 20:50:10 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAE09E5287;
+        Thu, 26 May 2022 17:50:09 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L8Qsy71lrz4xDK;
-        Fri, 27 May 2022 10:39:18 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L8R6P0hHZz4xDK;
+        Fri, 27 May 2022 10:50:04 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1653611961;
-        bh=Urg5QK4WXDiWxbV0Ora75ObG3bel4emUqwm77YJPP/s=;
+        s=201702; t=1653612605;
+        bh=6OKsQwubDd4Th9ZVB0QUsCkySIFZVgivSJg7yv4p6NY=;
         h=Date:From:To:Cc:Subject:From;
-        b=CWg5OK1jRA5dpywKbojkXHjQlBbzbjFVf5nFnRIpiB4fBdkgKzqkWcMLTh93QvmwM
-         oHEItQWVWAJW/i7nHeq0Z4u46WNyimDCIhMTTGIMJF4PFLvostqqQkI6Pu5xQAI2Qh
-         /164+AwMIVeR8xDsz/IZVYCpMy+et4jqRcQOgnflOVk2qfaC4dIXszV5xZgoje4cpy
-         a1cqOh58KNTcKaYoLaskW44RRwVRQcbXUUIQaOkb0lJWqsQ33ipMEEtf6qZu1LeZr1
-         ZrRQ2aQMN38fyl8PASeRKBTq2rAzzcuIuzc0f1bu9Ef/rpH6EjodsbyrAzWt9zMdg9
-         elQ6BIkmLuUFA==
-Date:   Fri, 27 May 2022 10:39:16 +1000
+        b=pWoYbU2BvN7SDgrvmSDJGFXaETSO7SfBnPAifT58T0SxO4Ec52hCzbtz1YowkxpQm
+         CjAZi1daYDfQNRqmLSGwLCskum99AKpyVHOfL30xH5HBerO8MbGllM/8h4TPHHVZD+
+         9koZBmdB8NqsRUUa0lS0f9eYcUUtRvDVHx/Kl349n9MALV3g03jj5PGBFZWJiJ+g5I
+         gBrAuqrSwtwq/HLtTyUNm3fLZzf52dEAz8oHzVhb7H2xr4kzfxHFU5QPP6lT7PhatJ
+         7JFQHrthSBy7RB7GdizOiR15URXVcvA0rjnaSL4hRxgvkcWIR0ao5FFOaxgu7/yXyK
+         T7bdQjEobrtnw==
+Date:   Fri, 27 May 2022 10:50:03 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        ARM <linux-arm-kernel@lists.infradead.org>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Laurent Vivier <laurent@vivier.eu>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Nick Hawkins <nick.hawkins@hpe.com>
-Subject: linux-next: manual merge of the arm-soc tree with Linus' tree
-Message-ID: <20220527103916.52768f74@canb.auug.org.au>
+To:     Leo Li <leoyang.li@nxp.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: please clean up the soc-fsl tree
+Message-ID: <20220527105003.1392a238@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/A4WshG/iaHUmiVjQ9d8usu6";
+Content-Type: multipart/signed; boundary="Sig_/39rztP6qs1ZOa0t9Re4a3bS";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -53,62 +49,34 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/A4WshG/iaHUmiVjQ9d8usu6
+--Sig_/39rztP6qs1ZOa0t9Re4a3bS
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the arm-soc tree got a conflict in:
-
-  drivers/clocksource/Makefile
-
-between commit:
-
-  c92e7ef16400 ("clocksource/drivers: Add a goldfish-timer clocksource")
-
-from Linus' tree and commit:
-
-  5184f4bf151b ("clocksource/drivers/timer-gxp: Add HPE GXP Timer")
-
-from the arm-soc tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+The soc-fsl tree has not been updated since early January, and all its
+changess appear to be upstream (though as different commits), so please
+clean it up as it has started causing conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/clocksource/Makefile
-index 833cfb7a96c1,98017abf6c03..000000000000
---- a/drivers/clocksource/Makefile
-+++ b/drivers/clocksource/Makefile
-@@@ -85,4 -88,4 +85,5 @@@ obj-$(CONFIG_GX6605S_TIMER)		+=3D timer-g
-  obj-$(CONFIG_HYPERV_TIMER)		+=3D hyperv_timer.o
-  obj-$(CONFIG_MICROCHIP_PIT64B)		+=3D timer-microchip-pit64b.o
-  obj-$(CONFIG_MSC313E_TIMER)		+=3D timer-msc313e.o
- +obj-$(CONFIG_GOLDFISH_TIMER)		+=3D timer-goldfish.o
-+ obj-$(CONFIG_GXP_TIMER)			+=3D timer-gxp.o
-
---Sig_/A4WshG/iaHUmiVjQ9d8usu6
+--Sig_/39rztP6qs1ZOa0t9Re4a3bS
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKQHbUACgkQAVBC80lX
-0GxmkAf+IlXFtVv11tdgfgbTGeykCJuCJBfmzl1/ebiKhg6cfnSdsAMTE9UM0y1d
-bCokBkLpoo8M1T6+ar5F503I96b5sxrQKo6/cxhYnTp7N7vveZKvK/g+7u0QFg4b
-daPaRVQjwAZ8hBgAm3QPDw4H5dCvZt6/sasiB+HTg81OTZlgmEQ4Bw4yG+oIs5qA
-iwCx2QlqW6eJrGkjfMFErZWxsJW998NP/Y2PTlYuZzGJMtqZGbfYwpdjXFfhn2E1
-hO07SFobezM0yMS6pTXdDJIQvXun10lr4/0SXWP2fFReDg2MhU9dw7jHG+aHFAKW
-lO2vPmB/MRTWy9BEu3LV+tCfXKzc2g==
-=Yef4
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKQIDsACgkQAVBC80lX
+0GyrjAf/ayvjtTqwwQeg2RcqamVSzaUO9c6DuX4OYcuQvBPMGN20knsEbirU3iry
+ylp/qDNfYtA15H0iKsSW2LRDWGTrcdkI3IlZQNn1pScNih7rfYKoUvOa11vfqtqw
+us+FBOHd4y6j5JiS3yJT0MmCYBhixaswav/viK7brMjUV5soQmN1M2aIkaGvvZPF
+tn3IoBXOQxU7cOn/pu5o7lQSbkx3LxP8SB0t6MVyotBfe+A/fe9K03new6HzlWoE
+0VoROvlhXV7X0e/IS8Gn83NN4buvobd8gq/qNWdCY2lK8y0BcSRdQfJ54JzzAtrt
+H8WcLhwxvI+BPQhIzzdwjORKDIpCow==
+=KIcl
 -----END PGP SIGNATURE-----
 
---Sig_/A4WshG/iaHUmiVjQ9d8usu6--
+--Sig_/39rztP6qs1ZOa0t9Re4a3bS--

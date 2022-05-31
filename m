@@ -2,154 +2,131 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96420538E93
-	for <lists+linux-next@lfdr.de>; Tue, 31 May 2022 12:13:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15C09538EB2
+	for <lists+linux-next@lfdr.de>; Tue, 31 May 2022 12:19:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245514AbiEaKNN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 31 May 2022 06:13:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48746 "EHLO
+        id S237728AbiEaKTc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 31 May 2022 06:19:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245485AbiEaKNM (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 31 May 2022 06:13:12 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9FEB21BF
-        for <linux-next@vger.kernel.org>; Tue, 31 May 2022 03:13:09 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id p10so17973635wrg.12
-        for <linux-next@vger.kernel.org>; Tue, 31 May 2022 03:13:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=iWvVonGaj99CPPHQeMvdX15FpeMw9uh/+VNnPQUgAC4=;
-        b=P1DRWa9WWEYDwDhLkPx/UVzj3T80I04Pendr35Rtuojp/bLOO6u6IiwrFvxfsI5Gfj
-         viMLSMiJMe1b5L9Hv7K3MOsJlXL0h7sBiQUwHde/HeqdlyHQ9rl1ai51NzrfetcnsW6m
-         vJ22FAg1C09Dv28Lhsv4Jov1Q4s3/vHFJ4Vj+Mfd/SSDW+6+dg+gDnTddHQBJ2utLe2f
-         IV4Lye1d5Zb3TTIjji3S8QzIGV51a9mdLuST08AEEoZQ8WBBOCWkiRU5En9WgabteEnc
-         pnTnYmnux0jI5E9Waj70m0VzbTfxk3lsU5AV36Yjild15/aHW3Nzvlsc7h0udfUfAEQR
-         6aEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=iWvVonGaj99CPPHQeMvdX15FpeMw9uh/+VNnPQUgAC4=;
-        b=fAv7nXDfzx9DwpT4AAQKnjh8ee5Zoc7JNxtoD8GUVhJb+6fihGJyTgtvyJ3cYDnkve
-         X8J3BKocTJAwABraBlssiw5q20fe7Pf9cp4pm5lg2tTgN6BlsJx0MWSQ4jyDualQfpNJ
-         iSN6ODu4oIEd60In9TPk0/d90kDWns7R2x71wrZh54jHCbvg0k+xTzABQ1M4jidYyxuZ
-         23lFPl4ZwGiTCm0969J1f3V+mcVc+hT1QF3Kji3Y85/21Ef6BcUfME5PXcUnvoL96dLD
-         zUIhaO2tUqnDZgiDiL/V1Z5sdD7xPzOChbNTiAYMo3lGETRM5Rzt8vbjp0egnqfkCrY3
-         VRHg==
-X-Gm-Message-State: AOAM530MRiUiecUl1M5oTA7/HnwpKGVlzYElAg7Ku3bS+RGZIRZb/wOF
-        dtsWCSgkpwyAibpdrz4E0Otx/caP/ODV7Q==
-X-Google-Smtp-Source: ABdhPJzYTmuaAcYnlCwHwxECyJuDxzR/vCZhjqvS8gExIF8I7z0BnIxZh+GGvaGJdmvj0WpimgZNSQ==
-X-Received: by 2002:a05:6000:38c:b0:20f:24f:24a with SMTP id u12-20020a056000038c00b0020f024f024amr44209212wrf.230.1653991988340;
-        Tue, 31 May 2022 03:13:08 -0700 (PDT)
-Received: from helium ([88.160.162.107])
-        by smtp.gmail.com with ESMTPSA id o15-20020a056000010f00b0020d09f0b766sm10919718wrx.71.2022.05.31.03.13.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 May 2022 03:13:07 -0700 (PDT)
-Date:   Tue, 31 May 2022 12:13:03 +0200
-From:   Fabien Parent <fparent@baylibre.com>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the input tree
-Message-ID: <20220531101303.fj5hvc67qfld5ykj@helium>
-References: <20220427104825.15a04680@canb.auug.org.au>
- <20220502121736.57b06150@canb.auug.org.au>
- <CAKdAkRQN48WjsW1BAztTn3-c0pf68tP9+G0028ZyXB4-8aCtKQ@mail.gmail.com>
+        with ESMTP id S232936AbiEaKTb (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 31 May 2022 06:19:31 -0400
+Received: from a8-81.smtp-out.amazonses.com (a8-81.smtp-out.amazonses.com [54.240.8.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 581238D693;
+        Tue, 31 May 2022 03:19:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=r5f3hr7pzmhv6xwu5spgpns3mj2fddpz; d=linaro.org; t=1653992369;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+        bh=a3aOFmgkqy81ADLTe0+YNqiBLGk3o3QNrG8FV8LAgXY=;
+        b=Qj8NZiGi0Fxm0U/x+NcDk1XliAx47fJ4ON5cWZfljZ92D1EcCJCyJKBAsIOpzExk
+        HHYVwgibq9OrECxrfXYs0WW0KFTHM+G3yzj8f4JuxujZDdhBRZNlGrS7sLDfHlvLCrJ
+        Xygy2z+KUwuST6NvzsAYxQeNJx5tujSHtlUsbF0Q=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=6gbrjpgwjskckoa6a5zn6fwqkn67xbtw; d=amazonses.com; t=1653992369;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+        bh=a3aOFmgkqy81ADLTe0+YNqiBLGk3o3QNrG8FV8LAgXY=;
+        b=jPBn5MRoTnLmfqmcwYiv0sTx8PmfF1RWBdUJ8NnbtCKI9CzzoEqOvJeI9XFHbH+x
+        3ClL/OnWtQcZcnIjiYSEaCcRFD5n84omIBO0kALfrzpuw76kFPfO0pap+sIyHmYG+QV
+        YJW51VGTTjJVlBcJVUEQ+7pVfiTVQe4K/S8Mj9X8=
+From:   lkft@linaro.org
+To:     lkft@linaro.org
+Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        linux-next@vger.kernel.org, shuah@kernel.org
+Subject: lkft kselftest for next-20220531
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="eiyocpgkl2o64d4g"
-Content-Disposition: inline
-In-Reply-To: <CAKdAkRQN48WjsW1BAztTn3-c0pf68tP9+G0028ZyXB4-8aCtKQ@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Message-ID: <0100018119a0abfb-d49f87eb-b4f1-4b17-b086-37eea9088f67-000000@email.amazonses.com>
+Date:   Tue, 31 May 2022 10:19:29 +0000
+Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
+X-SES-Outgoing: 2022.05.31-54.240.8.81
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        TO_EQ_FM_DIRECT_MX,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+## Build
+* kernel: 5.18.0
+* git: ['', 'https://gitlab.com/Linaro/lkft/mirrors/next/linux-next']
+* git branch: master
+* git commit: 3b46e4e4418027a622c17d1b7c40c3f565115d03
+* git describe: next-20220531
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220531
 
---eiyocpgkl2o64d4g
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+## Test Regressions (compared to next-20220527)
+No test regressions found.
 
-Hi Dmitry,
+## Metric Regressions (compared to next-20220527)
+No metric regressions found.
 
-On Thu, May 05, 2022 at 05:25:39PM -0700, Dmitry Torokhov wrote:
-> On Sun, May 1, 2022 at 7:17 PM Stephen Rothwell <sfr@canb.auug.org.au> wr=
-ote:
-> >
-> > Hi all,
-> >
-> > On Wed, 27 Apr 2022 10:48:25 +1000 Stephen Rothwell <sfr@canb.auug.org.=
-au> wrote:
-> > >
-> > > After merging the input tree, today's linux-next build (x86_64
-> > > allmodconfig) failed like this:
-> > >
-> > > drivers/input/keyboard/mtk-pmic-keys.c:93:36: error: 'MT6359_TOPSTATU=
-S' undeclared here (not in a function); did you mean 'MT6358_TOPSTATUS'?
-> > >    93 |                 MTK_PMIC_KEYS_REGS(MT6359_TOPSTATUS,
-> > >       |                                    ^~~~~~~~~~~~~~~~
-> > > drivers/input/keyboard/mtk-pmic-keys.c:48:35: note: in definition of =
-macro 'MTK_PMIC_KEYS_REGS'
-> > >    48 |         .deb_reg                =3D _deb_reg,             \
-> > >       |                                   ^~~~~~~~
-> > > drivers/input/keyboard/mtk-pmic-keys.c:98:25: error: 'MT6359_TOP_RST_=
-MISC' undeclared here (not in a function); did you mean 'MT6358_TOP_RST_MIS=
-C'?
-> > >    98 |         .pmic_rst_reg =3D MT6359_TOP_RST_MISC,
-> > >       |                         ^~~~~~~~~~~~~~~~~~~
-> > >       |                         MT6358_TOP_RST_MISC
-> > >
-> > > Caused by commit
-> > >
-> > >   0f97adf64314 ("Input: mtk-pmic-keys - add support for MT6359")
-> > >
-> > > I have used the input tree from next-20220426 for today.
-> >
-> > I am still getting this failure.
->=20
-> Sorry for sitting on this. I dropped the patches from my tree, we can
-> either push them through MFD, or retry after the merge window.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-The MFD patches have been merged into linus tree. Now the Input patches can
-be applied without breaking the build.
 
-If you want me to resend them, please let me know.
+## Test Fixes (compared to next-20220527)
+* qemu_arm, kselftest-timers
+  - timers.rtcpie
 
-Thanks,
-Fabien
+* qemu_arm, kselftest-user
+  - user.test_user_copy.sh
 
-> Thanks.
->=20
-> --=20
-> Dmitry
 
---eiyocpgkl2o64d4g
-Content-Type: application/pgp-signature; name="signature.asc"
+## Metric Fixes (compared to next-20220527)
+No metric fixes found.
 
------BEGIN PGP SIGNATURE-----
+## Test result summary
+total: 523, pass: 261, fail: 105, skip: 157, xfail: 0
 
-iQIzBAABCgAdFiEEQyJHfU3UNW7IG61XVJKc6g3CeAAFAmKV6i8ACgkQVJKc6g3C
-eACBgg/+P/r7DqM77Tefmr3DQBOwf/mu0UYcM2cyUjfQJK11LNfyQPI1PqzSzPb1
-LTE+gs/V1eRYa2BtAIsZnYNFQqTevVSPaFb3EV8b+jsOc5PtCyaUJL7bfAeyhaCt
-4Zg3LOG0QNC3sY5q9V3ex+b4NsNYwDssn+YkcC2/lPvq6VcJO0NqN5ALHrPrdgcV
-ffFC2km/k7tBb75yVZNr//8vUZdEEPjO2Eo7xHAq4Y+OqkQYB/Rwl0diHKHV90Aw
-gld3jhYKCClQeVDVLHndyq0Urj4UT9SQa27nz1uJdRHNFaNZT9MiQIkd/SkB4Ozb
-zbg5fhWU4DilRh5eTEVsYZio/pUYSQEHirVTV0WPXMCW+HYd5X88kb9TV0+0eLVG
-wZMWgX8c6B5qE4nDFEB0vz1GR+mjRhMeNXWjpt7M3S6B4Y3Syxw+6M+6Y/8dCTir
-vs7yYlOsg+cseJviIis42mqOWgDt11Rrgwiw00MmtZVbbJgBj894jAndQMunMxA6
-ZNJCqjGomQNaegyVpuCQFpQoj7hPcT1MvAArDveQ7sNrf+uQlMr3cpT/T2EGFA9j
-+WgbgebFHH8sVTvGOfoJR5QKEVujFfeDXp6NVuePTVN2ddLhJ8HVzgm5IbGO1DoO
-/SWsAzW9tQuh9GfjOm9smN29YM67Z5tcsuYg0kR7mNU147g3drE=
-=zJmX
------END PGP SIGNATURE-----
+## Build Summary
 
---eiyocpgkl2o64d4g--
+## Test suites summary
+* kselftest-android
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-gpio
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kvm
+* kselftest-lib
+* kselftest-membarrier
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-zram
+
+--
+Linaro LKFT
+https://lkft.linaro.org

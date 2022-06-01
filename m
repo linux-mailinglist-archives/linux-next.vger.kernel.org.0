@@ -2,103 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7963539AD8
-	for <lists+linux-next@lfdr.de>; Wed,  1 Jun 2022 03:42:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0840E539B46
+	for <lists+linux-next@lfdr.de>; Wed,  1 Jun 2022 04:26:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347934AbiFABmt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 31 May 2022 21:42:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38034 "EHLO
+        id S1348200AbiFAC0G (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 31 May 2022 22:26:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231584AbiFABmt (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 31 May 2022 21:42:49 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 830FB69B50;
-        Tue, 31 May 2022 18:42:47 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LCX2p2B9Mz4xXJ;
-        Wed,  1 Jun 2022 11:42:42 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1654047762;
-        bh=siGya32yABE06OPBh8rD0LfumbDaJXyKE6rA7GhzRLI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=pRNROhzQFTSlxgkixk/RLD3flanipsyJQcEt9d1B7qHe6xsD60CD7qwp6EysdPGjM
-         OOFeT5zLkZrL5OBXkpnnWtYufSHU25giFSQ20LD9rTyE6C77xl/osOy8N4Pt/3L2VZ
-         aqa+WCSjVrzfC6ArJ0eg9Qqyotlu73jAq/CRpG1eGQ1T2xv5vtWt+DbwrtqK0OPKMX
-         zqXXximBR6FO//JEHecYBy2uET6vXdtzC60fGO8AabhNmr+1307x1PLGysl9IQZZFe
-         shxGX6pvlVY8c0TJ6NaEawJSvbH9UlqB7XhwSs5R7rGN0WpI93lLkF60SOpCuR5X2a
-         VpV5kE2F3exwg==
-Date:   Wed, 1 Jun 2022 11:42:40 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Bo Liu <liubo03@inspur.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the vhost tree
-Message-ID: <20220601114240.1dafefc6@canb.auug.org.au>
+        with ESMTP id S231981AbiFAC0G (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 31 May 2022 22:26:06 -0400
+Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75ED58723D;
+        Tue, 31 May 2022 19:26:05 -0700 (PDT)
+Received: by mail-vs1-xe32.google.com with SMTP id w10so341148vsa.4;
+        Tue, 31 May 2022 19:26:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YpXzXAPejgWgPrC0CnOM+GA27MWRTR2lw+J/3W1An1g=;
+        b=I9BZQdCtgWQDSRXmH2jzuW8s1CG3TtW/pYGutaIn6W9tvPPOkT46hdmcqp8IS/ewdy
+         OwQ/EB4rQgeSVkeWKX43xO+Xn4BHNUpWlBu9WgWw1OlSFwQgbk5ZpqlF/njkx5mCwj/v
+         sqeHpw8wYRne2V1AjCua/TiVpqvTV5I+mOQ8ed5Gw8qVlVUahIqn/ALQgN1/jhbBLUJv
+         NyQzIxMzp0Q5KrWGffdNjls1D0ggnyElBeV5J74qPMPU0qDN+yZKwaD5C4TYVFv0MBoJ
+         47XYatXLBQ/wo2U9cdmz7t16UMi6m3jOxqTLAw4LME4QczqmIwMhkuHtJ8EWue+i4+NO
+         KkDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YpXzXAPejgWgPrC0CnOM+GA27MWRTR2lw+J/3W1An1g=;
+        b=5Yqt3v8FHPhTXOXSzOJ/9BJCc/sd1y+IRPGSIz1i+7XGCtB3MJ5ENA3pM+HKs/d7RU
+         ZsZYxncipUa2BPjNhISiQu7hmN/qXiOnCT7rPLkzFdwRUUMq4Im+lmwx3DW6aHvS0P6u
+         HtTbXjxuCuoCc8s8x1E30nGbue0bNXZnyP5KDzp7pgww+hND7lRhE4oDH7nYaHBAt3vY
+         twIzHWckAzPR/WJ5U3DvsfXskgLeyuMQABnD8dW456KaoIB/cSP/m7uNVRo9S0HwB5v+
+         xpu1Dwub3fBXhl/tuzAhjHGMf2sfx04flsW53eN5M80B2kMKeNe+dCFkz54krLswMOX5
+         6ScA==
+X-Gm-Message-State: AOAM531PA77unKIUTC+bi/s2EVLaBXLRWhmEo14FBM1LbqY0cBkPi7Q5
+        tVfPTvCL7TWbvdKokqU4R4o82eisk7gHd+UkJuS9ieg=
+X-Google-Smtp-Source: ABdhPJzpkKT6PL/qsAp0D0vVWeqB7UAmy4qxR3oYi/Cz+vdxMyZWo7DiMN+/Lm0o1d50l06bPUt6Sv+Td1cnMp9jJbo=
+X-Received: by 2002:a05:6102:50a4:b0:335:bfc3:5cda with SMTP id
+ bl36-20020a05610250a400b00335bfc35cdamr25255705vsb.85.1654050364452; Tue, 31
+ May 2022 19:26:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/lhaLPNCK4pASe4+RX.9ttxE";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220601082959.2fefa1e7@canb.auug.org.au> <YpaYEtWSEyD7WKCU@pendragon.ideasonboard.com>
+In-Reply-To: <YpaYEtWSEyD7WKCU@pendragon.ideasonboard.com>
+From:   Rob Herring <robherring2@gmail.com>
+Date:   Tue, 31 May 2022 21:25:53 -0500
+Message-ID: <CAL_Jsq+52mozs2-9kYerNPLQzQ+p0JR1aeDxkdB3fc4RTK2vKA@mail.gmail.com>
+Subject: Re: linux-next: Fixes tag needs some work in the devicetree-fixes tree
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/lhaLPNCK4pASe4+RX.9ttxE
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, May 31, 2022 at 5:35 PM Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> wrote:
+>
+> On Wed, Jun 01, 2022 at 08:29:59AM +1000, Stephen Rothwell wrote:
+> > Hi all,
+> >
+> > In commit
+> >
+> >   adb97f9f8442 ("dt-bindings: soc: imx8mp-media-blk-ctrl: Fix DT example")
+> >
+> > Fixes tag
+> >
+> >   Fixes: 584d6dd668e2 ("dt-bindings: soc: Add i.MX8MP media block control DT bindings")
+> >
+> > has these problem(s):
+> >
+> >   - Target SHA1 does not exist
+> >
+> > Maybe you meant
+> >
+> > Fixes: 8b3dd27bfe47 ("dt-bindings: soc: Add i.MX8MP media block control DT bindings")
+>
+> My bad, that's the correct SHA1.
 
-Hi all,
+Now fixed.
 
-After merging the vhost tree, today's linux-next build (powerpc
-ppc64_defconfig) failed like this:
-
-drivers/virtio/virtio_ring.c: In function 'virtqueue_add':
-drivers/virtio/virtio_ring.c:1783:16: error: 'vq' undeclared (first use in =
-this function); did you mean '_vq'?
- 1783 |         return vq->packed_ring ? virtqueue_add_packed(_vq, sgs, tot=
-al_sg,
-      |                ^~
-      |                _vq
-drivers/virtio/virtio_ring.c:1783:16: note: each undeclared identifier is r=
-eported only once for each function it appears in
-drivers/virtio/virtio_ring.c:1787:1: error: control reaches end of non-void=
- function [-Werror=3Dreturn-type]
- 1787 | }
-      | ^
-
-Caused by commit
-
-  a50f09346a34 ("virtio_ring: remove unused variable in virtqueue_add()")
-
-I am sorry, but I expect better review and build testing than this :-(
-
-I have used the vhost tree from next-20220531 for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/lhaLPNCK4pASe4+RX.9ttxE
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKWxBEACgkQAVBC80lX
-0GwA7Af+LZt1S294FZe5clfzMjmWLa1YBEtsHA456ozl9p7EP738LjANHXomOKmJ
-KZEHTbHuMulxGHlubL4aEi3OuEo6idIy5SOnXtQ6gkyR3uSen+T1xfmnW2/bSw1t
-5dqtL9hHckll6LKXAOmt3IdP9Lh3YThetu0xFrvDs9kRUnhMEll83ftiYpnJJc2H
-eTlcpqstfHI+wO5Alpq894RHrcXglTRVBQ65JV3lmlJDbZP3K2/3Y00eElQF3jLL
-08NyUD/TBljqppOBA9dNEYdf3uJcLm5CAGzEUSgLxEfLYPOle71ZFnZE8pmEXUMC
-psg97RCsGwtFoymGnBsYQHl7A/UcyQ==
-=o4BZ
------END PGP SIGNATURE-----
-
---Sig_/lhaLPNCK4pASe4+RX.9ttxE--
+Rob

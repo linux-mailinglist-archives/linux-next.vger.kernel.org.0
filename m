@@ -2,94 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBE2C53AAB7
-	for <lists+linux-next@lfdr.de>; Wed,  1 Jun 2022 18:08:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24CF653AFDF
+	for <lists+linux-next@lfdr.de>; Thu,  2 Jun 2022 00:51:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349714AbiFAQId (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 1 Jun 2022 12:08:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43694 "EHLO
+        id S232038AbiFAV5T (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 1 Jun 2022 17:57:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355979AbiFAQIb (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 1 Jun 2022 12:08:31 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C165F59309;
-        Wed,  1 Jun 2022 09:08:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=tTMeQSlVN/jki7gY30nXBiHUEabl86oFmR3MDB8WTos=; b=kyiJeT+HyMH3qWkHr4M/GNDhVQ
-        he0vs1nHlDJumZTaCqAhyI7XGiLhP5COE+01Z7IJa+HwSy366FQWqStsxj1JqUM1nOswZsj7WWVeI
-        4udEx97HSIXoUBnAgUA5MwNAseseUtVRx+w2cAKqZa+5neeh9UoFA37oFcXJs1Wo4h9wKKPB9KJo1
-        t/Fdq7UooJyG1DN1qOm11lM0GpIH1WuWScjUsUQD6R24cKP2YYp0H/jsz0B1tliYLhv2pX0u2dcpG
-        bB5mNALQC3eacnn7udZ6FPO5djIC58FGvpGACjmtP0Qe6JVqooWssI7hS0A8MX+pqK2iEoAbhqdoi
-        VUq+pJaA==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nwQtS-003pQZ-7K; Wed, 01 Jun 2022 16:08:23 +0000
-Message-ID: <b9c831a3-44ab-0374-34f8-8bd8bc311e5c@infradead.org>
-Date:   Wed, 1 Jun 2022 09:08:16 -0700
+        with ESMTP id S232026AbiFAV5S (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 1 Jun 2022 17:57:18 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E521F263F;
+        Wed,  1 Jun 2022 14:57:15 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LD3071zltz4xD8;
+        Thu,  2 Jun 2022 07:57:11 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1654120631;
+        bh=yvSCr6+mFfHoPs0BMYIjNhhHwb+zbDE6id+dGN/jzt4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=sagrtn97riSgqBd8d/TMOFq26SJnMxboIi/+YmCbItktfpN/rca5W0KQQUiT2EbVa
+         hm3sVFG2xUYletebdKhcFyS3oX7OVpoXSTqF+JgEujse6VDRuBrcs4jg4kzhkD236T
+         CeiWV+ie96LOddX2mfwGmdrKLvpG5QzpOP6j6BHpR57t+uAWOn657aTvfX0vkEcsNs
+         5bRxmPZGmdxNuc/7C3sm3CvYxv5LMVrpZZ7cLZY5vfe/3x6Z6Tu+jL9pC6tlTq3rYO
+         ZWxxECtYAL/u2eKwvoiJrPrS4goZkj7fkJ8oLfn/KToX0iH74owYTQ5MQUo1kW/8Lt
+         A33UVQgnq2LXA==
+Date:   Thu, 2 Jun 2022 07:57:09 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Dillon Varone <dillon.varone@amd.com>,
+        Fangzhi Zuo <Jerry.Zuo@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the amdgpu tree
+Message-ID: <20220602075709.65484abe@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] RISCV: kexec: Fix build error without CONFIG_MODULES
-Content-Language: en-US
-To:     Li Zhengyu <lizhengyu3@huawei.com>, palmer@rivosinc.com
-Cc:     paul.walmsley@sifive.com, aou@eecs.berkeley.edu,
-        liaochang1@huawei.com, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, ebiederm@xmission.com,
-        kexec@lists.infradead.org, linux-next@vger.kernel.org
-References: <20220601063924.13037-1-lizhengyu3@huawei.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220601063924.13037-1-lizhengyu3@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/qvRlcWE8f3OGIrdx6TsDbC6";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi--
+--Sig_/qvRlcWE8f3OGIrdx6TsDbC6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On 5/31/22 23:39, Li Zhengyu wrote:
-> When CONFIG_MODULES is not set/enabled:
-> 
-> ../arch/riscv/kernel/elf_kexec.c:353:9: error: unknown type name 'Elf_Rela'; did you mean 'Elf64_Rela'?
->   353 |         Elf_Rela *relas;
->       |         ^~~~~~~~
->       |         Elf64_Rela
-> 
-> Replace Elf_Rela by Elf64_Rela to avoid relying on CONFIG_MODULES.
-> 
+Hi all,
 
-BTW, does this mean that RISC-V kexec is only available on 64BIT
-and not on 32BIT?
+Commit
 
-thanks.
+  bd92bf3976c6 ("drm/amd/display: Ensure that DMCUB fw in use is loaded by =
+DC and not VBIOS")
 
-> Signed-off-by: Li Zhengyu <lizhengyu3@huawei.com>
-> ---
->  arch/riscv/kernel/elf_kexec.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/riscv/kernel/elf_kexec.c b/arch/riscv/kernel/elf_kexec.c
-> index 9cb85095fd45..0cb94992c15b 100644
-> --- a/arch/riscv/kernel/elf_kexec.c
-> +++ b/arch/riscv/kernel/elf_kexec.c
-> @@ -349,7 +349,7 @@ int arch_kexec_apply_relocations_add(struct purgatory_info *pi,
->  {
->  	const char *strtab, *name, *shstrtab;
->  	const Elf_Shdr *sechdrs;
-> -	Elf_Rela *relas;
-> +	Elf64_Rela *relas;
->  	int i, r_type;
->  
->  	/* String & section header string table */
+is missing a Signed-off-by from its author.
 
--- 
-~Randy
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/qvRlcWE8f3OGIrdx6TsDbC6
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKX4LUACgkQAVBC80lX
+0GyY/ggApQQ36pUu41eM/9FnYE/DXVZeT8ZOvlEstvxPlPNfqN7Mjv0yHZ6k6roC
+JLMjLcRCvFZCG7+X0UcZPBIRKNaZ7oC3mZVaEGMUZ8NbFUo/UiqnSxcPRab3P10r
+LXug2O7u0/FVgtS8kF3vhoFJK00qF5bQgKrlTG9DuQS3QZ95yodhMgPbH+gRQns8
+CAO78AsGLohJ0f8XY0b0RjPkSvgRvIiFKxC1cne/VxjkBHY7myiSMa5EbmOlYuzU
+XalkYPbavMdxZOpnwANKxoFAtXxoRU/65soorCUZeb7iXrLSRq9b/Ac0IE+rkQg6
+Xn/qRJN9YcUpNkWZYrDwbGTOqnJhSw==
+=3ew8
+-----END PGP SIGNATURE-----
+
+--Sig_/qvRlcWE8f3OGIrdx6TsDbC6--

@@ -2,792 +2,2747 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C157A53B2BE
-	for <lists+linux-next@lfdr.de>; Thu,  2 Jun 2022 06:29:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3350753B38E
+	for <lists+linux-next@lfdr.de>; Thu,  2 Jun 2022 08:29:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbiFBE3n (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 2 Jun 2022 00:29:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45238 "EHLO
+        id S230156AbiFBG1f (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 2 Jun 2022 02:27:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbiFBE3n (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 2 Jun 2022 00:29:43 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28A62144FC5;
-        Wed,  1 Jun 2022 21:29:38 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LDChw0smxz4xD9;
-        Thu,  2 Jun 2022 14:29:36 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1654144176;
-        bh=Fw7LtEXmWwXyLItkgjBPyiadDvjSskhHocWT2MDpPtE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=iGK3qeogg2sHbHVmsZQYE2KsQbCq6yzk3gZ0UQspEEGvpxRz8sdjE7kL2dyuZo17+
-         6SOV2bm1YKoIZlLkDTa0JBttsCRsuhqkzfsgkWBGaUpZivzUXlex9wLuLS1dflRCLR
-         oQtHlv8jOjixsvZqSJJ8t0avs6ittwDmfoJcb62n8gUBd3IsNRd+ClI6ewkldii4zn
-         aF65oQfUCBPGQcoKUWO9PhdqDhCjv1QsNq1kYa/WuNtRRRTm5LESWq1X2ArD2c73wm
-         KJZ1K3zozPXGmBX9cAfGwHEY0DYf5IxTwTe4x/gdAZgaWxTnSjleejdQoO9Sv6ICln
-         jYlyvLX97gNOA==
-Date:   Thu, 2 Jun 2022 14:29:34 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Tree for Jun 2
-Message-ID: <20220602142934.72d640cb@canb.auug.org.au>
+        with ESMTP id S230407AbiFBG1b (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 2 Jun 2022 02:27:31 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8300AEE38
+        for <linux-next@vger.kernel.org>; Wed,  1 Jun 2022 23:27:26 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id u12-20020a17090a1d4c00b001df78c7c209so8467078pju.1
+        for <linux-next@vger.kernel.org>; Wed, 01 Jun 2022 23:27:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=z30GcWHQbGtoHLa/MDqABoPCi8vrBIKzbIiBolWXMFk=;
+        b=gUjr4JsNcb6vNXWKj/8sp6bq3USakaPjez/Omhdwn0en7m9ife8RLOiyZmgAmz2hzl
+         eG5ei/JrRHRPANY65Yus83ySTaMk2c5m+PS9fTjOZYC02O1UtBtvjVAhY5bYVgHawv/q
+         nPQmy5Je6/i07ardHmMZROa/fSKXbWHgQYGi+rz+THJoZabyjrcqnEE4Q9J7so7k+8mJ
+         dDhKrKvP49H+t6GsYu4258FaA1A4s7Au9N08+osqh2ZuC0x/vraQmil0bobsCWkNeDpU
+         ZeldksHMDzURNKzNFFjUtCsGTcWq1aJulRkx0I80x81csrh45G2XanJlUAgDx9oTZUBS
+         DMTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=z30GcWHQbGtoHLa/MDqABoPCi8vrBIKzbIiBolWXMFk=;
+        b=1qgT7qJqjHhCPs9M3jpA+c8kzwxG1QF3UeLVVzG1LmldOVfjcyoN/rYZVTHFUDbwNL
+         uR6WCSOcITeG4J+IuVBH9C/y5X92PXJ5rMtEm7to8UDF4HaghEYAHXAcpWeUGRXGI/EQ
+         nRDz+Lu/lZVTAXNG5w0qVY/1P/E7HuwSt6d/rWuOYyXxUI3X82x3BAlM27FgswR+YgCl
+         osSpo67IgscMV5Y3phJIXB6T/VqJkc8MK4Y3Ld8rZEAfofDWo8uGvOOyJw0hqPku1tmN
+         dkvEiDmYFGtjMFgJFT8RB21KdRjaERruIXkRO0UcTUcRwUesdvmRBoJuV+PjnEsoy2gM
+         wxCg==
+X-Gm-Message-State: AOAM531BWCur0chkxp42Y0SLpefI/o48qp2HnU/VYbEptLw7Et0U7alf
+        gze3oRx+LxITRK1fT0KfwiiP4HJjFc8WyOVy
+X-Google-Smtp-Source: ABdhPJzMFeYyYOTWL2Zs3rMDTbaIG9E0DPGNUwH4ZjtRKiXa7qhGxiHi5+JGzStXODU1Y3JOw7+Ulw==
+X-Received: by 2002:a17:903:241:b0:15c:ee52:cbf2 with SMTP id j1-20020a170903024100b0015cee52cbf2mr3304364plh.10.1654151243614;
+        Wed, 01 Jun 2022 23:27:23 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id x6-20020a170902ea8600b00163e5f99ee9sm2590763plb.166.2022.06.01.23.27.21
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jun 2022 23:27:21 -0700 (PDT)
+Message-ID: <62985849.1c69fb81.fd664.6a04@mx.google.com>
+Date:   Wed, 01 Jun 2022 23:27:21 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/e3pbslOyTKacWtQgdOQ8OFX";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,LOCALPART_IN_SUBJECT,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: next-20220602
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+Subject: next/master build: 211 builds: 23 failed, 188 passed, 52 errors,
+ 104 warnings (next-20220602)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/e3pbslOyTKacWtQgdOQ8OFX
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/master build: 211 builds: 23 failed, 188 passed, 52 errors, 104 warnin=
+gs (next-20220602)
 
-Hi all,
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20220602/
 
-Note: please do not add any v5.20 material to your linux-next included
-branches until after v5.19-rc1 has been related.
+Tree: next
+Branch: master
+Git Describe: next-20220602
+Git Commit: 2e776ccffa840ce53ee1c21bde54cbe4bc102c3b
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 7 unique architectures
 
-Changes since 20220601:
+Build Failures Detected:
 
-The amdgpu tree gained a build failure so I used the version from
-next-20220601.
+arm64:
+    cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config: (clang-13) =
+FAIL
+    cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chrome=
+book: (clang-13) FAIL
+    cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chr=
+omebook: (clang-13) FAIL
+    cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chr=
+omebook: (clang-13) FAIL
+    cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-c=
+hromebook: (clang-13) FAIL
 
-The vhost tree lost its build failure.
+arm:
+    cros://chromeos-5.10/armel/chromiumos-arm.flavour.config: (clang-13) FA=
+IL
+    cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config: (clang-1=
+3) FAIL
+    allmodconfig: (clang-15) FAIL
+    allmodconfig: (gcc-10) FAIL
+    omap1_defconfig: (gcc-10) FAIL
+    rpc_defconfig: (gcc-10) FAIL
+    sama7_defconfig: (gcc-10) FAIL
 
-Non-merge commits (relative to Linus' tree): 2304
- 2659 files changed, 160358 insertions(+), 38773 deletions(-)
+i386:
+    allmodconfig: (clang-15) FAIL
 
-----------------------------------------------------------------------------
+mips:
+    decstation_64_defconfig: (gcc-10) FAIL
+    loongson2k_defconfig: (gcc-10) FAIL
 
-I have created today's linux-next tree at
-git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
-are tracking the linux-next tree using git, you should not use "git pull"
-to do so as that will try to merge the new linux-next release with the
-old one.  You should use "git fetch" and checkout or reset to the new
-master.
+riscv:
+    defconfig+CONFIG_EFI=3Dn: (clang-15) FAIL
 
-You can see which trees have been included by looking in the Next/Trees
-file in the source.  There are also quilt-import.log and merge.log
-files in the Next directory.  Between each merge, the tree was built
-with a ppc64_defconfig for powerpc, an allmodconfig for x86_64, a
-multi_v7_defconfig for arm and a native build of tools/perf. After
-the final fixups (if any), I do an x86_64 modules_install followed by
-builds for x86_64 allnoconfig, powerpc allnoconfig (32 and 64 bit),
-ppc44x_defconfig, allyesconfig and pseries_le_defconfig and i386,
-arm64, sparc and sparc64 defconfig and htmldocs. And finally, a simple
-boot test of the powerpc pseries_le_defconfig kernel in qemu (with and
-without kvm enabled).
+x86_64:
+    cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86=
+-chromebook: (clang-13) FAIL
+    cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86=
+-chromebook: (clang-13) FAIL
+    cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-=
+chromebook: (clang-13) FAIL
+    cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config: (clang-13=
+) FAIL
+    allmodconfig: (clang-15) FAIL
+    x86_64_defconfig+ima: (gcc-10) FAIL
+    x86_64_defconfig+x86-chromebook+amdgpu: (gcc-10) FAIL
 
-Below is a summary of the state of the merge.
+Errors and Warnings Detected:
 
-I am currently merging 350 trees (counting Linus' and 94 trees of bug
-fix patches pending for the current merge release).
+arc:
 
-Stats about the size of the tree over time can be seen at
-http://neuling.org/linux-next-size.html .
+arm64:
+    cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (clang-13): =
+1 error
+    cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chrome=
+book (clang-13): 1 error
+    cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chr=
+omebook (clang-13): 1 error
+    cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chr=
+omebook (clang-13): 1 error
+    cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-c=
+hromebook (clang-13): 1 error
 
-Status of my local build tests will be at
-http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
-advice about cross compilers/configs that work, we are always open to add
-more builds.
+arm:
+    allmodconfig (clang-15): 1 error, 13 warnings
+    allmodconfig (gcc-10): 1 error, 1 warning
+    am200epdkit_defconfig (gcc-10): 1 warning
+    aspeed_g5_defconfig (clang-15): 10 warnings
+    bcm2835_defconfig (gcc-10): 2 warnings
+    cm_x300_defconfig (gcc-10): 1 warning
+    colibri_pxa270_defconfig (gcc-10): 1 warning
+    corgi_defconfig (gcc-10): 1 warning
+    cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (clang-13): 1 =
+error, 5 warnings
+    cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (clang-13=
+): 1 error, 5 warnings
+    davinci_all_defconfig (gcc-10): 1 warning
+    exynos_defconfig (gcc-10): 1 warning
+    ezx_defconfig (gcc-10): 1 warning
+    imx_v6_v7_defconfig (gcc-10): 1 warning
+    magician_defconfig (gcc-10): 1 warning
+    mini2440_defconfig (gcc-10): 1 warning
+    multi_v5_defconfig (clang-15): 2 warnings
+    multi_v7_defconfig (gcc-10): 1 warning
+    multi_v7_defconfig (clang-15): 12 warnings
+    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (gcc-10): 1 warni=
+ng
+    multi_v7_defconfig+CONFIG_SMP=3Dn (gcc-10): 1 warning
+    multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (gcc-10): 1 warning
+    multi_v7_defconfig+debug (gcc-10): 1 warning
+    multi_v7_defconfig+kselftest (gcc-10): 2 warnings
+    mvebu_v7_defconfig (gcc-10): 1 warning
+    nhk8815_defconfig (gcc-10): 1 warning
+    omap2plus_defconfig (gcc-10): 1 warning
+    pxa_defconfig (gcc-10): 1 warning
+    qcom_defconfig (gcc-10): 1 warning
+    rpc_defconfig (gcc-10): 2 errors
+    s5pv210_defconfig (gcc-10): 1 warning
+    sama7_defconfig (gcc-10): 1 error, 1 warning
+    simpad_defconfig (gcc-10): 1 warning
+    spitz_defconfig (gcc-10): 1 warning
+    tegra_defconfig (gcc-10): 1 warning
+    trizeps4_defconfig (gcc-10): 1 warning
+    u8500_defconfig (gcc-10): 1 warning
+    viper_defconfig (gcc-10): 1 warning
+    zeus_defconfig (gcc-10): 1 warning
 
-Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
-Gortmaker for triage and bug fixes.
+i386:
+    allmodconfig (clang-15): 1 error
 
---=20
-Cheers,
-Stephen Rothwell
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
+    32r2el_defconfig+debug (gcc-10): 1 warning
+    32r2el_defconfig+kselftest (gcc-10): 1 warning
+    fuloong2e_defconfig (gcc-10): 1 error
+    lemote2f_defconfig (gcc-10): 1 error
+    loongson2k_defconfig (gcc-10): 1 error, 1 warning
+    loongson3_defconfig (gcc-10): 1 error
+    rb532_defconfig (gcc-10): 1 warning
 
-$ git checkout master
-$ git reset --hard stable
-Merging origin/master (54eb8462f21f Merge tag 'rtc-5.19' of git://git.kerne=
-l.org/pub/scm/linux/kernel/git/abelloni/linux)
-Merging fixes/fixes (d06c942efea4 Merge tag 'for_linus' of git://git.kernel=
-.org/pub/scm/linux/kernel/git/mst/vhost)
-Merging mm-hotfixes/mm-hotfixes-unstable (b41f9e6a0b57 mm/oom_kill.c: fix v=
-m_oom_kill_table[] ifdeffery)
-Merging kbuild-current/fixes (7e284070abe5 Merge tag 'for-5.19/dm-changes' =
-of git://git.kernel.org/pub/scm/linux/kernel/git/device-mapper/linux-dm)
-Merging arc-current/for-curr (c6ed4d84a2c4 ARC: remove redundant READ_ONCE(=
-) in cmpxchg loop)
-Merging arm-current/fixes (3cfb30199796 ARM: 9197/1: spectre-bhb: fix loop8=
- sequence for Thumb2)
-Merging arm64-fixes/for-next/fixes (1d0cb4c8864a arm64: mte: Ensure the cle=
-ared tags are visible before setting the PTE)
-Merging arm-soc-fixes/arm/fixes (609a097f5f06 Merge tag 'v5.18-rockchip-dts=
-fixes1' of git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockch=
-ip into arm/fixes)
-Merging drivers-memory-fixes/fixes (73039c6c7f36 memory: renesas-rpc-if: Fi=
-x HF/OSPI data transfer in Manual Mode)
-Merging tee-fixes/fixes (98268f2a2a9f Merge branch 'optee_ffa_probe_fix_for=
-_v5.18' into fixes)
-Merging m68k-current/for-linus (30b5e6ef4a32 m68k: atari: Make Atari ROM po=
-rt I/O write macros return void)
-Merging powerpc-fixes/fixes (6112bd00e84e Merge tag 'powerpc-5.19-1' of git=
-://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux)
-Merging s390-fixes/fixes (a06afe838308 KVM: s390: vsie/gmap: reduce gmap_rm=
-ap overhead)
-Merging sparc/master (05a59d79793d Merge git://git.kernel.org:/pub/scm/linu=
-x/kernel/git/netdev/net)
-Merging fscrypt-current/for-stable (80f6e3080bfc fs-verity: fix signed inte=
-ger overflow with i_size near S64_MAX)
-Merging net/master (86360030cc51 net/sched: act_api: fix error code in tcf_=
-ct_flow_table_fill_tuple_ipv6())
-Merging bpf/master (e0491b11c131 bpf, arm64: Clear prog->jited_len along pr=
-og->jited)
-Merging ipsec/master (6821ad877034 xfrm: do not set IPv4 DF flag when encap=
-sulating IPv6 frames <=3D 1280 bytes.)
-Merging netfilter/master (7fb0269720d7 Merge tag 'for-net-2022-05-23' of gi=
-t://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth)
-Merging ipvs/master (05ae2fba821c netfilter: nft_socket: make cgroup match =
-work in input too)
-Merging wireless/for-next (2965c4cdf7ad wifi: mac80211: fix use-after-free =
-in chanctx code)
-Merging rdma-fixes/for-rc (c5eb0a61238d Linux 5.18-rc6)
-Merging sound-current/for-linus (672362cbe6df Merge tag 'asoc-fix-v5.19-rc0=
-' of https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound into for=
--linus)
-Merging sound-asoc-fixes/for-linus (36513d56b7d5 Merge remote-tracking bran=
-ch 'asoc/for-5.18' into asoc-linus)
-Merging regmap-fixes/for-linus (312310928417 Linux 5.18-rc1)
-Merging regulator-fixes/for-linus (e4296f8578b5 Merge remote-tracking branc=
-h 'regulator/for-5.18' into regulator-linus)
-Merging spi-fixes/for-linus (ebf2a3521738 spi: core: Display return code wh=
-en failing to transfer message)
-Merging pci-current/for-linus (833e53a4ffe9 MAINTAINERS: Update Lorenzo Pie=
-ralisi's email address)
-Merging driver-core.current/driver-core-linus (42226c989789 Linux 5.18-rc7)
-Merging tty.current/tty-linus (42226c989789 Linux 5.18-rc7)
-Merging usb.current/usb-linus (42226c989789 Linux 5.18-rc7)
-Merging usb-gadget-fixes/fixes (e49d033bddf5 Linux 5.12-rc6)
-Merging usb-serial-fixes/usb-linus (42226c989789 Linux 5.18-rc7)
-Merging phy/fixes (2c8045d48dee phy: amlogic: fix error path in phy_g12a_us=
-b3_pcie_probe())
-Merging staging.current/staging-linus (ce522ba9ef7e Linux 5.18-rc2)
-Merging iio-fixes/fixes-togreg (e104588d3fe4 iio:humidity:hts221: rearrange=
- iio trigger get and register)
-Merging counter-fixes/fixes-togreg (ce522ba9ef7e Linux 5.18-rc2)
-Merging char-misc.current/char-misc-linus (42226c989789 Linux 5.18-rc7)
-Merging soundwire-fixes/fixes (312310928417 Linux 5.18-rc1)
-Merging thunderbolt-fixes/fixes (4b0986a3613c Linux 5.18)
-Merging input-current/for-linus (5f92df8ddacb Input: raspberrypi-ts - add m=
-issing HAS_IOMEM dependency)
-Merging crypto-current/master (e4e62bbc6aba hwrng: omap3-rom - fix using wr=
-ong clk_disable() in omap_rom_rng_runtime_resume())
-Merging vfio-fixes/for-linus (1ef3342a934e vfio/pci: Fix vf_token mechanism=
- when device-specific VF drivers are used)
-Merging kselftest-fixes/fixes (e8f0c8965932 selftest/vm: add skip support t=
-o mremap_test)
-CONFLICT (content): Merge conflict in tools/testing/selftests/vm/run_vmtest=
-s.sh
-Merging modules-fixes/modules-linus (7390b94a3c2d module: merge check_expor=
-ted_symbol() into find_exported_symbol_in_section())
-Merging dmaengine-fixes/fixes (b00ed48bb0a7 Merge tag 'dmaengine-5.19-rc1' =
-of git://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine)
-Merging backlight-fixes/for-backlight-fixes (a38fd8748464 Linux 5.12-rc2)
-Merging mtd-fixes/mtd/fixes (ba7542eb2dd5 mtd: rawnand: qcom: fix memory co=
-rruption that causes panic)
-Merging mfd-fixes/for-mfd-fixes (a61f4661fba4 mfd: intel_quark_i2c_gpio: Re=
-vert "Constify static struct resources")
-Merging v4l-dvb-fixes/fixes (d4cb77112c7b media: isl7998x: select V4L2_FWNO=
-DE to fix build error)
-Merging reset-fixes/reset/fixes (03cb66463b55 dt-bindings: reset: Add paren=
-t "resets" property as optional)
-Merging mips-fixes/mips-fixes (f0a6c68f6998 MIPS: Fix CP0 counter erratum d=
-etection for R4k CPUs)
-Merging at91-fixes/at91-fixes (0c640d9544d0 ARM: dts: at91: fix pinctrl pha=
-ndles)
-Merging omap-fixes/fixes (46ff3df87215 ARM: dts: logicpd-som-lv: Fix wrong =
-pinmuxing on OMAP35)
-Merging kvm-fixes/master (17718410388f KVM: Don't null dereference ops->des=
-troy)
-Merging kvms390-fixes/master (242c04f01377 KVM: s390: selftests: Use TAP in=
-terface in the reset test)
-Merging hwmon-fixes/hwmon (42226c989789 Linux 5.18-rc7)
-Merging nvdimm-fixes/libnvdimm-fixes (d28820419ca3 cxl/pci: Drop shadowed v=
-ariable)
-Merging cxl-fixes/fixes (fae8817ae804 cxl/mem: Fix memory device capacity p=
-robing)
-Merging btrfs-fixes/next-fixes (48de4dc26894 Merge branch 'misc-5.18' into =
-next-fixes)
-Merging vfs-fixes/fixes (fb4554c2232e Fix double fget() in vhost_net_set_ba=
-ckend())
-Merging dma-mapping-fixes/for-linus (18a3c5f7abfd Merge tag 'for_linus' of =
-git://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost)
-Merging i3c-fixes/i3c/fixes (fe07bfda2fb9 Linux 5.12-rc1)
-Merging drivers-x86-fixes/fixes (44acfc22c7d0 platform/surface: aggregator:=
- Fix initialization order when compiling as builtin module)
-Merging samsung-krzk-fixes/fixes (436ce66003d5 ARM: s3c: mark as deprecated=
- and schedule removal)
-CONFLICT (content): Merge conflict in arch/arm/Kconfig
-Merging pinctrl-samsung-fixes/fixes (ac875df4d854 pinctrl: samsung: fix mis=
-sing GPIOLIB on ARM64 Exynos config)
-Merging devicetree-fixes/dt/linus (0a1e19c8a639 dt-bindings: net: Fix uneva=
-luatedProperties warnings in examples)
-Merging scsi-fixes/fixes (d5d92b644084 scsi: ufs: core: Fix referencing inv=
-alid rsp field)
-Merging drm-fixes/drm-fixes (4b0986a3613c Linux 5.18)
-Merging amdgpu-fixes/drm-fixes (2c409ba81be2 drm/radeon: fix si_enable_smc_=
-cac() failed issue)
-Merging drm-intel-fixes/for-linux-next-fixes (4b0986a3613c Linux 5.18)
-Merging mmc-fixes/fixes (479260419fa4 dt-bindings: mmc: Fix unevaluatedProp=
-erties warnings in examples)
-Merging rtc-fixes/rtc-fixes (bd33335aa93d rtc: cmos: Disable irq around dir=
-ect invocation of cmos_interrupt())
-Merging gnss-fixes/gnss-linus (312310928417 Linux 5.18-rc1)
-Merging hyperv-fixes/hyperv-fixes (eaa03d345358 Drivers: hv: vmbus: Replace=
- smp_store_mb() with virt_store_mb())
-Merging soc-fsl-fixes/fix (4b0986a3613c Linux 5.18)
-Merging risc-v-fixes/fixes (c932edeaf6d6 riscv: dts: microchip: fix gpio1 r=
-eg property typo)
-Merging pidfd-fixes/fixes (03ba0fe4d09f file: simplify logic in __close_ran=
-ge())
-Merging fpga-fixes/fixes (312310928417 Linux 5.18-rc1)
-Merging spdx/spdx-linus (53c83d6d8e39 siphash: add SPDX tags as sole licens=
-ing authority)
-Merging gpio-brgl-fixes/gpio/for-current (43624eda86c9 gpio: pca953x: use t=
-he correct register address to do regcache sync)
-Merging gpio-intel-fixes/fixes (0c2cae09a765 gpiolib: acpi: Convert type fo=
-r pin to be unsigned)
-Merging pinctrl-intel-fixes/fixes (7b923e67a4a7 pinctrl: intel: Fix kernel =
-doc format, i.e. add return sections)
-Merging erofs-fixes/fixes (8b1ac84dcf2c Documentation/ABI: sysfs-fs-erofs: =
-Fix Sphinx errors)
-Merging integrity-fixes/fixes (843385694721 evm: Fix a small race in init_d=
-esc())
-Merging kunit-fixes/kunit-fixes (02c7efa43627 Documentation: kunit: fix pat=
-h to .kunitconfig in start.rst)
-Merging ubifs-fixes/fixes (c3c07fc25f37 ubi: fastmap: Return error code if =
-memory allocation fails in add_aeb())
-Merging memblock-fixes/fixes (c94afc46cae7 memblock: use kfree() to release=
- kmalloced memblock regions)
-Merging cel-fixes/for-rc (9ff9f77f34e4 MAINTAINERS: reciprocal co-maintaine=
-rship for file locking and nfsd)
-Merging irqchip-fixes/irq/irqchip-fixes (544808f7e21c irqchip/gic, gic-v3: =
-Prevent GSI to SGI translations)
-Merging renesas-fixes/fixes (432b52eea3dc ARM: shmobile: defconfig: Restore=
- graphical consoles)
-Merging perf-current/perf/urgent (eaea45fc0e7b Merge tag 'perf-tools-fixes-=
-for-v5.18-2022-05-21' of git://git.kernel.org/pub/scm/linux/kernel/git/acme=
-/linux)
-Merging efi-fixes/urgent (9feaf8b387ee efi: fix return value of __setup han=
-dlers)
-Merging zstd-fixes/zstd-linus (88a309465b3f lib: zstd: clean up double word=
- in comment.)
-Merging drm-misc-fixes/for-linux-next-fixes (6e516faf0431 drm/panfrost: Job=
- should reference MMU not file_priv)
-Merging kbuild/for-next (bcc450ecc136 scripts: kconfig: nconf: make nconfig=
- accept jk keybindings)
-Merging clang-format/clang-format (781121a7f6d1 clang-format: Fix space aft=
-er for_each macros)
-Merging perf/perf/core (9dde6cadb92b tools arch x86: Sync the msr-index.h c=
-opy with the kernel sources)
-Merging compiler-attributes/compiler-attributes (7c00621dcaee compiler_type=
-s: mark __compiletime_assert failure as __noreturn)
-Merging dma-mapping/for-next (4a37f3dd9a83 dma-direct: don't over-decrypt m=
-emory)
-Merging asm-generic/master (b2441b3bdce6 h8300: remove stale bindings and s=
-ymlink)
-Merging arc/for-next (6aa98f621786 ARC: bpf: define uapi for BPF_PROG_TYPE_=
-PERF_EVENT program type)
-Merging arm/for-next (d2ca1fd2bc70 ARM: 9207/1: amba: fix refcount underflo=
-w if amba_device_add() fails)
-Merging arm64/for-next/core (ff979b2a9d97 ftrace/fgraph: fix increased miss=
-ing-prototypes warnings)
-Merging arm-perf/for-next/perf (c5781212985a perf/arm-cmn: Decode CAL devic=
-es properly in debugfs)
-Merging arm-soc/for-next (cd4a1a61fd72 soc: document merges)
-Merging actions/for-next (444d018d8d38 ARM: dts: owl-s500-roseapplepi: Add =
-ATC2603C PMIC)
-Merging amlogic/for-next (1dac6e1d8385 Merge branch 'v5.20/drivers' into fo=
-r-next)
-Merging aspeed/for-next (bfcbea2c93e5 ARM: dts: aspeed: nuvia: rename vendo=
-r nuvia to qcom)
-Merging at91/at91-next (3519476d99a4 Merge branch 'at91-dt' into at91-next)
-Merging drivers-memory/for-next (1e2b798e9664 Merge branch 'for-v5.19/tegra=
--mc' into for-next)
-Merging imx-mxs/for-next (6ed2affe8f7f Merge branch 'imx/defconfig' into fo=
-r-next)
-Merging keystone/next (cb293d3b430e Merge branch 'for_5.15/drivers-soc' int=
-o next)
-Merging mediatek/for-next (8434c5a06e3c Merge branch 'v5.18-next/soc' into =
-for-next)
-Merging mvebu/for-next (58ec0844bd13 Merge branch 'mvebu/dt64' into mvebu/f=
-or-next)
-Merging omap/for-next (b5418fc0478c Merge branch 'omap-for-v5.19/dt' into f=
-or-next)
-Merging qcom/for-next (5faa5cd718a4 Merge branches 'arm64-for-5.19', 'arm64=
--defconfig-for-5.19', 'clk-for-5.19', 'defconfig-for-5.19', 'drivers-for-5.=
-19', 'dts-for-5.19' and 'arm64-fixes-for-5.18' into for-next)
-Merging raspberrypi/for-next (c5915b53d4c2 dt-bindings: soc: bcm: Convert b=
-rcm,bcm2835-vchiq to json-schema)
-Merging renesas/next (7ae962c56cea Merge branch 'renesas-arm-dt-for-v5.19' =
-into renesas-next)
-Merging reset/reset/next (2ca065dc9468 dt-bindings: reset: st,sti-powerdown=
-: Convert to yaml)
-Merging rockchip/for-next (09711f1d1f03 Merge branch 'v5.19-clk/next' into =
-for-next)
-Merging samsung-krzk/for-next (88fb0c4d0aff Merge branch 'next/dt64' into f=
-or-next)
-Merging scmi/for-linux-next (4b0986a3613c Linux 5.18)
-Merging stm32/stm32-next (747a29b9a5a5 dt-bindings: clock: stm32mp1: adapt =
-example for "st,stm32mp1-rcc-secure")
-Merging sunxi/sunxi/for-next (073220ee354d Merge branch 'sunxi/dt-for-5.19'=
- into sunxi/for-next)
-Merging tee/next (db30e53bf897 Merge branch 'tee_cleanup_for_v5.19' into ne=
-xt)
-Merging tegra/for-next (864067632632 Merge branch for-5.19/arm64/defconfig =
-into for-next)
-Merging ti/ti-next (4cc89036bc4f Merge branch 'ti-k3-dts-next' into ti-next)
-Merging xilinx/for-next (63623390c0d6 arm64: dts: zynqmp: add AMS driver to=
- device tree)
-Merging clk/clk-next (71cc785d2955 Merge branch 'clk-qcom' into clk-next)
-Merging clk-imx/for-next (cf7f3f4fa9e5 clk: imx8mp: fix usb_root_clk parent)
-Merging clk-renesas/renesas-clk (23426d1be3c2 clk: renesas: r9a09g011: Add =
-eth clock and reset entries)
-Merging clk-samsung/for-next (b35f27fe73d8 clk: samsung: exynosautov9: add =
-cmu_peric1 clock support)
-Merging csky/linux-next (64d83f067746 csky: Move $(core-y) into arch/csky/K=
-build)
-Merging loongarch/loongarch-next (6e86125eef7e MAINTAINERS: Add maintainer =
-information for LoongArch)
-Merging m68k/for-next (30b5e6ef4a32 m68k: atari: Make Atari ROM port I/O wr=
-ite macros return void)
-Merging m68knommu/for-next (6b8be804ff37 m68knommu: fix 68000 CPU link with=
- no platform selected)
-Merging microblaze/next (78b5f52ab6f6 microblaze: fix typos in comments)
-Merging mips/mips-next (7e4fd16b3892 MIPS: RALINK: Define pci_remap_iospace=
- under CONFIG_PCI_DRIVERS_GENERIC)
-Merging nios2/for-next (7f7bc20bc41a nios2: Don't use _end for calculating =
-min_low_pfn)
-Merging openrisc/for-next (83da38d82b2f openrisc: Allow power off handler o=
-verriding)
-Merging parisc-hd/for-next (b73b2a2fb547 parisc: Drop CONFIG_SCHED_MC)
-Merging powerpc/next (6112bd00e84e Merge tag 'powerpc-5.19-1' of git://git.=
-kernel.org/pub/scm/linux/kernel/git/powerpc/linux)
-Merging soc-fsl/next (4b0986a3613c Linux 5.18)
-Merging risc-v/for-next (35b51afd23c9 Merge tag 'riscv-for-linus-5.19-mw0' =
-of git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux)
-Merging s390/for-next (31c0e4c11a0f Merge branch 'features' into for-next)
-Merging sh/for-next (8518e694203d sh: pgtable-3level: Fix cast to pointer f=
-rom integer of different size)
-Merging sparc-next/master (dd0d718152e4 Merge tag 'spi-fix-v5.8-rc2' of git=
-://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi)
-Merging uml/linux-next (2a4a62a14be1 um: Fix out-of-bounds read in LDT setu=
-p)
-Merging xtensa/xtensa-for-next (dc60001e1a30 xtensa: Return true/false (not=
- 1/0) from bool function)
-Merging pidfd/for-next (e1bbcd277a53 fs: hold writers when changing mount's=
- idmapping)
-Merging fscrypt/master (218d921b581e fscrypt: add new helper functions for =
-test_dummy_encryption)
-Merging fscache/fscache-next (713423282ae1 netfs: Fix gcc-12 warning by emb=
-edding vfs inode in netfs_i_context)
-CONFLICT (content): Merge conflict in include/linux/netfs.h
-Merging afs/afs-next (26291c54e111 Linux 5.17-rc2)
-Merging btrfs/for-next (0a05fafe9def btrfs: zoned: introduce a minimal zone=
- size 4M and reject mount)
-Merging ceph/master (b24d20af4c2e fscrypt: add fscrypt_context_for_new_inod=
-e)
-CONFLICT (content): Merge conflict in fs/ceph/caps.c
-Merging cifs/for-next (cc391b694ff0 cifs: fix potential deadlock in direct =
-reclaim)
-Merging configfs/for-next (84ec758fb2da configfs: fix a race in configfs_{,=
-un}register_subsystem())
-Merging ecryptfs/next (682a8e2b41ef Merge tag 'ecryptfs-5.13-rc1-updates' o=
-f git://git.kernel.org/pub/scm/linux/kernel/git/tyhicks/ecryptfs)
-Merging erofs/dev (4398d3c31b58 erofs: fix 'backmost' member of z_erofs_dec=
-ompress_frontend)
-Merging exfat/dev (64ba4b15e5c0 exfat: check if cluster num is valid)
-Merging ext3/for_next (5c905e1a0180 Pull typo fix from Julia Lawall.)
-Merging ext4/dev (5f41fdaea63d ext4: only allow test_dummy_encryption when =
-supported)
-Merging f2fs/dev (2d1fe8a86bf5 f2fs: fix to tag gcing flag on page during f=
-ile defragment)
-Merging fsverity/fsverity (e6af1bb07704 fs-verity: Use struct_size() helper=
- in enable_verity())
-Merging fuse/for-next (6b49bc9d8a5f fuse: avoid unnecessary spinlock bump)
-Merging gfs2/for-next (c360abbb9db2 gfs2: Convert function bh_get to use io=
-map)
-Merging jfs/jfs-next (e471e5942c00 fs/jfs: Remove dead code)
-Merging ksmbd/ksmbd-for-next (e5b020871332 Merge tag '5.19-rc-ksmbd-server-=
-fixes' of git://git.samba.org/ksmbd)
-Merging nfs/linux-next (42226c989789 Linux 5.18-rc7)
-Merging nfs-anna/linux-next (118f09eda21d NFSv4.1 mark qualified async oper=
-ations as MOVEABLE tasks)
-Merging nfsd/for-next (08af54b3e572 NFSD: nfsd_file_put() can sleep)
-Merging ntfs3/master (724bbe49c5e4 fs/ntfs3: provide block_invalidate_folio=
- to fix memory leak)
-Merging orangefs/for-next (40a74870b2d1 orangefs: Fix the size of a memory =
-allocation in orangefs_bufmap_alloc())
-Merging overlayfs/overlayfs-next (bc70682a497c ovl: support idmapped layers)
-Merging ubifs/next (8c03a1c21d72 ubi: ubi_create_volume: Fix use-after-free=
- when volume creation failed)
-Merging v9fs/9p-next (22e424feb665 Revert "fs/9p: search open fids first")
-Merging xfs/for-next (7146bda743e6 Merge branch 'guilt/xfs-5.19-larp-cleanu=
-ps' into xfs-5.19-for-next)
-Merging zonefs/for-next (31a644b3c2ae documentation: zonefs: Document sysfs=
- attributes)
-Merging iomap/iomap-for-next (e9c3a8e820ed iomap: don't invalidate folios a=
-fter writeback errors)
-Merging djw-vfs/vfs-for-next (49df34221804 fs: fix an infinite loop in ioma=
-p_fiemap)
-Merging file-locks/locks-next (80d8e4d3f313 fs/locks: fix fcntl_getlk64/fcn=
-tl_setlk64 stub prototypes)
-Merging vfs/for-next (e9921ffd594f Merge branches 'work.namei', 'work.mount=
-' and 'work.fd' into for-next)
-CONFLICT (content): Merge conflict in fs/io_uring.c
-Merging printk/for-next (d55663695b60 Merge branch 'rework/kthreads' into f=
-or-next)
-Merging pci/next (32f479d05a44 Merge branch 'remotes/lorenzo/pci/vmd')
-Merging pstore/for-next/pstore (8126b1c73108 pstore: Don't use semaphores i=
-n always-atomic-context code)
-Merging hid/for-next (b01c83388f54 Revert "HID: Driver for Google Hangouts =
-Meet Speakermic")
-Merging i2c/i2c/for-next (44e66c3bda45 Merge branch 'i2c/for-mergewindow' i=
-nto i2c/for-next)
-Merging i3c/i3c/next (66ed42caf286 MAINTAINERS: rectify entries for some i3=
-c drivers after dt conversion)
-Merging dmi/dmi-for-next (f97a2103f1a7 firmware: dmi: Move product_sku info=
- to the end of the modalias)
-Merging hwmon-staging/hwmon-next (8877ecb0fc8d hwmon: (aquacomputer_d5next)=
- Fix an error handling path in aqc_probe())
-Merging jc_docs/docs-next (a27e51b45e1b documentation: Format button_dev as=
- a pointer.)
-Merging v4l-dvb/master (340ce50f75a6 media: hantro: Enable HOLD_CAPTURE_BUF=
- for H.264)
-Merging v4l-dvb-next/master (340ce50f75a6 media: hantro: Enable HOLD_CAPTUR=
-E_BUF for H.264)
-Merging pm/linux-next (2517a0ba026a Merge branch 'acpi-osl' into linux-next)
-Merging cpufreq-arm/cpufreq/arm/linux-next (39b360102f3a cpufreq: mediatek:=
- Add support for MT8186)
-Merging cpupower/cpupower (312310928417 Linux 5.18-rc1)
-Merging devfreq/devfreq-next (2e691421a2c9 PM / devfreq: rk3399_dmc: Block =
-PMU during transitions)
-Merging opp/opp/linux-next (22079af7df5a opp: Reorder definition of ceil/fl=
-oor helpers)
-Merging thermal/thermal/linux-next (72b3fc61c752 thermal: k3_j72xx_bandgap:=
- Add the bandgap driver support)
-Merging ieee1394/for-next (54b3bd99f094 firewire: nosy: switch from 'pci_' =
-to 'dma_' API)
-Merging dlm/next (8e51ec6146fd dlm: use kref_put_lock in __put_lkb)
-Merging rdma/for-next (9c477178a0a1 RDMA/rtrs-clt: Fix one kernel-doc comme=
-nt)
-Merging net-next/master (7e062cda7d90 Merge tag 'net-next-5.19' of git://gi=
-t.kernel.org/pub/scm/linux/kernel/git/netdev/net-next)
-Merging bpf-next/for-next (7e062cda7d90 Merge tag 'net-next-5.19' of git://=
-git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next)
-Merging ipsec-next/master (0f9008e5c510 Merge  branch 'Be explicit with XFR=
-M offload direction')
-Merging mlx5-next/mlx5-next (846e437387e7 net/mlx5: Expose mlx5_sriov_block=
-ing_notifier_register / unregister APIs)
-Merging netfilter-next/master (677fb7525331 Merge git://git.kernel.org/pub/=
-scm/linux/kernel/git/netdev/net)
-Merging ipvs-next/master (0c7b27616fbd selftests: netfilter: add fib expres=
-sion forward test case)
-Merging bluetooth/master (9271cf2ecc9a Bluetooth: hci_qca: Return wakeup fo=
-r qca_wakeup)
-Merging wireless-next/for-next (805cb5aadc2a Merge git://git.kernel.org/pub=
-/scm/linux/kernel/git/netfilter/nf-next)
-Merging mtd/mtd/next (2c51d0d88020 Merge tag 'nand/for-5.19' into mtd/next)
-Merging nand/nand/next (6a2277a0ebe7 mtd: rawnand: renesas: Use runtime PM =
-instead of the raw clock API)
-Merging spi-nor/spi-nor/next (c47452194641 mtd: spi-nor: debugfs: fix forma=
-t specifier)
-Merging crypto/master (e4e62bbc6aba hwrng: omap3-rom - fix using wrong clk_=
-disable() in omap_rom_rng_runtime_resume())
-Merging drm/drm-next (bf23729c7a5f Merge tag 'amd-drm-next-5.19-2022-05-26-=
-2' of https://gitlab.freedesktop.org/agd5f/linux into drm-next)
-Merging drm-misc/for-linux-next (5ee8c8f930ba drm/rockchip: Change register=
- space names in vop2)
-Merging amdgpu/drm-next (4ad5768e1b3b drm/amdgpu: fix sdma doorbell issue o=
-n SDMA v6.0 and NBIO v7.7)
-$ git reset --hard HEAD^
-Merging next-20220601 version of amdgpu
-Merging drm-intel/for-linux-next (0ea917819d12 drm/i915/dsi: fix VBT send p=
-acket port selection for ICL+)
-Merging drm-tegra/drm/tegra/for-next (b53c24f69199 drm/tegra: Support YVYU,=
- VYUY and YU24 formats)
-Merging drm-msm/msm-next (24df12013853 MAINTAINERS: Add Dmitry as MSM DRM d=
-river co-maintainer)
-Merging imx-drm/imx-drm/next (927d8fd465ad drm/imx: ipuv3-plane: Remove red=
-undant color encoding and range initialisation)
-Merging etnaviv/etnaviv/next (2829a9fcb738 drm/etnaviv: reap idle softpin m=
-appings when necessary)
-Merging fbdev/for-next (4b0986a3613c Linux 5.18)
-Merging regmap/for-next (5c422f0b970d regmap: Add missing map->bus check)
-Merging sound/for-next (672362cbe6df Merge tag 'asoc-fix-v5.19-rc0' of http=
-s://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound into for-linus)
-Merging sound-asoc/for-next (36513d56b7d5 Merge remote-tracking branch 'aso=
-c/for-5.18' into asoc-linus)
-Merging modules/modules-next (7390b94a3c2d module: merge check_exported_sym=
-bol() into find_exported_symbol_in_section())
-Merging input/next (69cf890d8b28 Input: mtk-pmic-keys - move long press deb=
-ounce mask to mtk_pmic_regs)
-Merging block/for-next (bde0d7374edc Merge branch 'io_uring-5.19' into for-=
-next)
-Merging device-mapper/for-next (4caae58406f8 dm verity: set DM_TARGET_IMMUT=
-ABLE feature flag)
-Merging libata/for-next (71abb4df2981 ata: pata_ftide010: Remove unneeded E=
-RROR check before clk_disable_unprepare)
-Merging pcmcia/pcmcia-next (2ef4bb24ff39 pcmcia: Use platform_get_irq() to =
-get the interrupt)
-Merging mmc/next (ded2c4c34500 mmc: sdhci-of-arasan: Add NULL check for dat=
-a field)
-Merging mfd/for-mfd-next (f93afd8e7567 dt-bindings: cros-ec: Fix a typo in =
-description)
-Merging backlight/for-backlight-next (023a8830a628 backlight: backlight: Sl=
-ighly simplify devm_of_find_backlight())
-Merging battery/for-next (da50aad6d867 Merge power-supply 'fixes' branch)
-Merging regulator/for-next (e4296f8578b5 Merge remote-tracking branch 'regu=
-lator/for-5.18' into regulator-linus)
-Merging security/next-testing (047843bdb316 Merge branch 'landlock_lsm_v34'=
- into next-testing)
-Merging apparmor/apparmor-next (c2489617b3b9 apparmor: Fix undefined refere=
-nce to `zlib_deflate_workspacesize')
-CONFLICT (content): Merge conflict in security/apparmor/policy_unpack_test.c
-Merging integrity/next-integrity (048ae41bb080 integrity: Fix sparse warnin=
-gs in keyring_handler)
-Merging keys/keys-next (2d743660786e Merge branch 'fixes' of git://git.kern=
-el.org/pub/scm/linux/kernel/git/viro/vfs)
-Merging safesetid/safesetid-next (1b8b71922919 LSM: SafeSetID: Mark safeset=
-id_initialized as __initdata)
-Merging selinux/next (1af0e4a0233f security: declare member holding string =
-literal const)
-Merging smack/next (ba6b652bd863 smack: Remove redundant assignments)
-Merging tomoyo/master (3b8d1c0d6306 workqueue: Wrap flush_workqueue() using=
- a macro)
-Merging tpmdd/next (7f3113e3b9f7 MAINTAINERS: add KEYS-TRUSTED-CAAM)
-Merging watchdog/master (5d24df3d6908 watchdog: ts4800_wdt: Fix refcount le=
-ak in ts4800_wdt_probe)
-Merging iommu/next (b0dacee202ef Merge branches 'apple/dart', 'arm/mediatek=
-', 'arm/msm', 'arm/smmu', 'ppc/pamu', 'x86/vt-d', 'x86/amd' and 'vfio-notif=
-ier-fix' into next)
-Merging audit/next (312310928417 Linux 5.18-rc1)
-Merging devicetree/for-next (d036d915b61f of/irq: fix typo in comment)
-Merging mailbox/mailbox-for-next (79f9fbe30352 mailbox: qcom-ipcc: Fix -Wun=
-used-function with CONFIG_PM_SLEEP=3Dn)
-Merging spi/for-next (ebf2a3521738 spi: core: Display return code when fail=
-ing to transfer message)
-Merging tip/master (f3c3debf7700 Merge branch 'x86/microcode')
-CONFLICT (content): Merge conflict in arch/x86/Kconfig
-Merging clockevents/timers/drivers/next (ff714ee7191b clocksource/drivers/t=
-imer-ti-dm: Add compatible for am6 SoCs)
-Merging edac/edac-for-next (92705c9f9956 Merge edac-misc into for-next)
-Merging irqchip/irq/irqchip-next (492449ae4f0a Merge branch irq/gic-v3-nmi-=
-fixes-5.19 into irq/irqchip-next)
-Merging ftrace/for-next (01dca6d03bb3 Merge branch 'trace/for-next-rtla' in=
-to trace/for-next)
-Merging rcu/rcu/next (409db57c8d45 Merge branch 'lkmm.2022.05.03a' into HEA=
-D)
-Merging kvm/next (85165781c5d9 KVM: Do not pin pages tracked by gfn=3D>pfn =
-caches)
-Merging kvm-arm/next (5c0ad551e9aa Merge branch kvm-arm64/its-save-restore-=
-fixes-5.19 into kvmarm-master/next)
-Merging kvms390/next (b1edf7f159a6 KVM: s390: selftests: Use TAP interface =
-in the reset test)
-Merging xen-tip/linux-next (41925b105e34 xen: replace xen_remap() with memr=
-emap())
-Merging percpu/for-next (4e1f82dce05b Merge branch 'for-5.16-fixes' into fo=
-r-next)
-Merging workqueues/for-next (10a5a651e3af workqueue: Restrict kworker in th=
-e offline CPU pool running on housekeeping CPUs)
-Merging drivers-x86/for-next (badb81a58b9e platform/x86/intel/ifs: Add CPU_=
-SUP_INTEL dependency)
-Merging chrome-platform/for-next (abd4fd43f2af platform/chrome: Use imperat=
-ive mood for ChromeOS ACPI sysfs ABI descriptions)
-Merging hsi/for-next (43c14f8d18a7 HSI: omap_ssi: Fix refcount leak in ssi_=
-probe)
-Merging leds/for-next (e98a860f6542 leds: qcom-lpg: Require pattern to foll=
-ow documentation)
-Merging ipmi/for-next (a508e33956b5 ipmi:ipmb: Fix refcount leak in ipmi_ip=
-mb_probe)
-Merging driver-core/driver-core-next (b232b02bf3c2 driver core: fix deadloc=
-k in __device_attach)
-Merging usb/usb-next (97fa5887cf28 USB: new quirk for Dell Gen 2 devices)
-CONFLICT (content): Merge conflict in drivers/thunderbolt/test.c
-Merging thunderbolt/next (c7c99a09ef0e thunderbolt: Add KUnit test for devi=
-ces with no DisplayPort adapters)
-Merging usb-gadget/next (e49d033bddf5 Linux 5.12-rc6)
-Merging usb-serial/usb-next (33b7af2f459d USB: serial: option: add Quectel =
-BG95 modem)
-Merging tty/tty-next (25e02ba60f0f tty: Rework receive flow control char lo=
-gic)
-Merging char-misc/char-misc-next (90de6805267f habanalabs: use separate str=
-ucture info for each error collect data)
-CONFLICT (content): Merge conflict in MAINTAINERS
-CONFLICT (content): Merge conflict in drivers/misc/lkdtm/stackleak.c
-CONFLICT (content): Merge conflict in drivers/slimbus/qcom-ctrl.c
-CONFLICT (content): Merge conflict in drivers/usb/dwc3/drd.c
-Applying: fixup for "usb: dwc3: Don't switch OTG -> peripheral if extcon is=
- present"
-Merging coresight/next (1adff542d67a coresight: cpu-debug: Replace mutex wi=
-th mutex_trylock on panic notifier)
-Merging fpga/for-next (ae23f746d744 fpga: dfl: Allow Port to be linked to F=
-ME's DFL)
-Merging icc/icc-next (3be0ec65fd17 dt-bindings: interconnect: Remove sc7180=
-/sdx55 ipa compatibles)
-Merging iio/togreg (c321674386d8 iio: adc: rzg2l_adc: Remove unnecessary ch=
-annel check from rzg2l_adc_read_label())
-Merging phy-next/next (d413a34932f9 phy: qcom-qmp: rename error labels)
-Merging soundwire/next (74da272400b4 soundwire: qcom: adjust autoenumeratio=
-n timeout)
-Merging extcon/extcon-next (5dcc2afe716d extcon: Modify extcon device to be=
- created after driver data is set)
-Merging gnss/gnss-next (312310928417 Linux 5.18-rc1)
-Merging vfio/next (421cfe6596f6 vfio: remove VFIO_GROUP_NOTIFY_SET_KVM)
-Merging staging/staging-next (6a31a95135da staging: r8188eu: remove include=
-/rtw_debug.h)
-CONFLICT (content): Merge conflict in drivers/net/wireless/silabs/wfx/sta.c
-Merging mux/for-next (0fcfb00b28c0 Linux 5.16-rc4)
-Merging dmaengine/next (b00ed48bb0a7 Merge tag 'dmaengine-5.19-rc1' of git:=
-//git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine)
-Merging cgroup/for-next (8a4f243bd5cf Merge branch 'for-5.19' into for-next)
-Merging scsi/for-next (c4068bc397c5 Merge branch 'misc' into for-next)
-Merging scsi-mkp/for-next (f9f0a46141e2 scsi: myrb: Fix up null pointer acc=
-ess on myrb_cleanup())
-Merging vhost/linux-next (bd8bb9aed56b vdpa: ifcvf: set pci driver data in =
-probe)
-Merging rpmsg/for-next (01a1a0c8d456 Merge branches 'rproc-next', 'rpmsg-ne=
-xt' and 'hwspinlock-next' into for-next)
-Merging gpio/for-next (7ac554888233 MAINTAINERS: Remove reference to non-ex=
-isting file)
-Merging gpio-brgl/gpio/for-next (5a7cb9f3978d gpio: sifive: Make the irqchi=
-p immutable)
-Merging gpio-intel/for-next (edc5601db664 pinctrl: meson: Replace custom co=
-de by gpiochip_node_count() call)
-Merging gpio-sim/gpio/gpio-sim (0fcfb00b28c0 Linux 5.16-rc4)
-Merging pinctrl/for-next (83969805cc71 pinctrl: apple: Use a raw spinlock f=
-or the regmap)
-Merging pinctrl-intel/for-next (7b923e67a4a7 pinctrl: intel: Fix kernel doc=
- format, i.e. add return sections)
-Merging pinctrl-renesas/renesas-pinctrl (fc883ed5a43e pinctrl: renesas: che=
-cker: Add reserved field checks)
-Merging pinctrl-samsung/for-next (ac875df4d854 pinctrl: samsung: fix missin=
-g GPIOLIB on ARM64 Exynos config)
-Merging pwm/for-next (3d593b6e80ad pwm: pwm-cros-ec: Add channel type suppo=
-rt)
-Merging userns/for-next (a58ea318d8b9 Merge of per-namespace-ipc-sysctls-fo=
-r-v5.19, kthread-cleanups-for-v5.19, ptrace_stop-cleanup-for-v5.19, and uco=
-unt-rlimits-cleanups-for-v5.19 for testing in linux-next)
-CONFLICT (modify/delete): arch/h8300/kernel/process.c deleted in HEAD and m=
-odified in userns/for-next.  Version userns/for-next of arch/h8300/kernel/p=
-rocess.c left in tree.
-CONFLICT (content): Merge conflict in arch/x86/kernel/process.c
-CONFLICT (content): Merge conflict in include/linux/ptrace.h
-$ git rm -f arch/h8300/kernel/process.c
-Merging ktest/for-next (170f4869e662 ktest.pl: Fix the logic for truncating=
- the size of the log file for email)
-Merging kselftest/next (15477b31db10 kselftests/ir : Improve readability of=
- modprobe error message)
-Merging livepatching/for-next (0e11f2076e7f Merge branch 'for-5.19/cleanup'=
- into for-next)
-Merging rtc/rtc-next (f78e3d407a33 rtc: mxc: Silence a clang warning)
-Merging nvdimm/libnvdimm-for-next (f42e8e5088b9 pmem: implement pmem_recove=
-ry_write())
-Merging at24/at24/for-next (312310928417 Linux 5.18-rc1)
-Merging ntb/ntb-next (e9d0fa5e2482 IDT: Fix Build warnings on some 32bit ar=
-chitectures.)
-Merging seccomp/for-next/seccomp (73a8dbafd31a selftests/seccomp: Fix compi=
-le warning when CC=3Dclang)
-Merging cisco/for-next (9e98c678c2d6 Linux 5.1-rc1)
-Merging fsi/next (f2af60bb7ce2 fsi: Add trace events in initialization path)
-Merging slimbus/for-next (54bf672111ee slimbus: qcom: Fix IRQ check in qcom=
-_slim_probe)
-CONFLICT (content): Merge conflict in drivers/slimbus/qcom-ctrl.c
-Merging nvmem/for-next (0f07cbb92a28 nvmem: sfp: Add support for TA 2.1 dev=
-ices)
-CONFLICT (content): Merge conflict in MAINTAINERS
-Merging xarray/main (63b1898fffcd XArray: Disallow sibling entries of nodes)
-Merging hyperv/hyperv-next (d27423bf048d hv_balloon: Fix balloon_probe() an=
-d balloon_remove() error handling)
-Merging auxdisplay/auxdisplay (13de23494f38 auxdisplay: lcd2s: Use array si=
-ze explicitly in lcd2s_gotoxy())
-Merging kgdb/kgdb/for-next (c1cb81429df4 kdb: Fix the putarea helper functi=
-on)
-Merging hmm/hmm (312310928417 Linux 5.18-rc1)
-Merging kunit/test (312310928417 Linux 5.18-rc1)
-Merging cfi/cfi/next (312310928417 Linux 5.18-rc1)
-Merging kunit-next/kunit (e7eaffce47b7 kunit: tool: Use qemu-system-i386 fo=
-r i386 runs)
-Merging trivial/for-next (081c8919b02b Documentation: remove trivial tree)
-Merging mhi/mhi-next (13b9b814da2d bus: mhi: host: Add support for Foxconn =
-T99W373 and T99W368)
-Merging memblock/for-next (000605cd1b14 memblock tests: remove completed TO=
-DO item)
-Merging init/init-user-pointers (38b082236e77 initramfs: use vfs_utimes in =
-do_copy)
-Merging counters/counters (e71ba9452f0b Linux 5.11-rc2)
-Merging cxl/next (34e37b4c432c cxl/port: Enable HDM Capability after valida=
-ting DVSEC Ranges)
-Merging folio-iomap/folio-iomap (4d7bd0eb72e5 iomap: Inline __iomap_zero_it=
-er into its caller)
-Merging zstd/zstd-next (88a309465b3f lib: zstd: clean up double word in com=
-ment.)
-Merging efi/next (75ed63d91940 efi: clean up Kconfig dependencies on CONFIG=
-_EFI)
-Merging unicode/for-next (b500d6d7243d unicode: Handle memory allocation fa=
-ilures in mkutf8data)
-Merging slab/for-next (6b2d72729581 Merge branches 'slab/for-5.19/stackdepo=
-t' and 'slab/for-5.19/refactor' into slab/for-next)
-Merging random/master (e3aaf22fb3db random: always mix cycle counter in add=
-_latent_entropy())
-Merging landlock/next (fdaf9a5840ac Merge tag 'folio-5.19' of git://git.inf=
-radead.org/users/willy/pagecache)
-Merging rust/rust-next (9a5fe747d99e init/Kconfig: Specify the interpreter =
-for rust-is-available.sh)
-CONFLICT (content): Merge conflict in Makefile
-CONFLICT (content): Merge conflict in include/uapi/linux/android/binder.h
-Merging sysctl/sysctl-next (494dcdf46e5c sched: Fix build warning without C=
-ONFIG_SYSCTL)
-Merging folio/for-next (516edb456f12 nilfs2: Fix some kernel-doc comments)
-Merging execve/for-next/execve (70578ff3367d binfmt_flat: Remove shared lib=
-rary support)
-Merging bitmap/bitmap-for-next (db7b4edf37fe nodemask: Fix return values to=
- be unsigned)
-CONFLICT (content): Merge conflict in arch/x86/kvm/hyperv.c
-Merging hte/hte/for-next (af583852d2ef dt-bindings: Renamed hte directory t=
-o timestamp)
-Merging kspp/for-next/kspp (e1d337335207 cfi: Fix __cfi_slowpath_diag RCU u=
-sage with cpuidle)
-Merging kspp-gustavo/for-next/kspp (0cf2b91d74b7 Merge branch 'for-next/ksp=
-p-stringop-overflow' into for-next/kspp)
-Merging mm-stable/mm-stable (54eb8462f21f Merge tag 'rtc-5.19' of git://git=
-.kernel.org/pub/scm/linux/kernel/git/abelloni/linux)
-Merging mm-nonmm-stable/mm-nonmm-stable (662ce1dc9caf delayacct: track dela=
-ys from write-protect copy)
-Merging mm/mm-everything (2408f140000f Merge branch 'mm-nonmm-unstable' int=
-o mm-everything)
-$ git checkout -b akpm remotes/origin/akpm/master
-$ git rebase --onto master remotes/origin/akpm/master-base
-Merging akpm/master (f8e209e8ad23 Merge branch 'mm-everything' of git://git=
-.kernel.org/pub/scm/linux/kernel/git/akpm/mm)
+riscv:
+    defconfig+CONFIG_EFI=3Dn (clang-15): 30 errors
 
---Sig_/e3pbslOyTKacWtQgdOQ8OFX
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+x86_64:
+    allmodconfig (clang-15): 1 error, 16 warnings
+    cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86=
+-chromebook (clang-13): 1 error, 1 warning
+    cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86=
+-chromebook (clang-13): 1 error
+    cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-=
+chromebook (clang-13): 1 error, 1 warning
+    cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (clang-13)=
+: 1 error
 
------BEGIN PGP SIGNATURE-----
+Errors summary:
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKYPK4ACgkQAVBC80lX
-0GxHVAf+N5rV70f3TmhWTSZKXb7ZwvVf4x9Y2x9WDCex+/k8K2FP6qvUVWpdZyCU
-IYmjQnlv5h8YOXue/wU6DAN2uruU2sKeaGDNCcDYXyEKz9rSst4DqoQ3MImN1yYK
-SZerwC9AD5+PCzZj8zXTle1aibj9zZavkS5+GcjHaItfVsn8/8WZ48tnCf7GpsxO
-dIaYuopl7QicWwZLBANCMe0FyaLnHxEwCHMT9Az3sQO5Pohxto/qcQWTkG9q+QF4
-ZWqX21a1UPPGwZZqAyj3j2xfOm8BNLVynDhKP3Fo/xb7mADaiOQKn33THvToE/Xu
-EdnJstAzzUghcUT1lh0lK3jS4Gm9yQ==
-=til6
------END PGP SIGNATURE-----
+    19   arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-t=
+ime absolute expression
+    8    ERROR: modpost: Section mismatches detected.
+    6    arch/riscv/include/asm/pgtable-64.h:121:2: error: expected assembl=
+y-time absolute expression
+    4    arch/riscv/include/asm/pgtable-64.h:105:2: error: expected assembl=
+y-time absolute expression
+    3    drivers/misc/cardreader/rts5261.c:406:13: error: variable 'setting=
+_reg2' is used uninitialized whenever 'if' condition is false [-Werror,-Wso=
+metimes-uninitialized]
+    3    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=
+=80=98-mhard-float=E2=80=99
+    2    lib/maple_tree.c:4203:20: error: stack frame size (1096) exceeds l=
+imit (1024) in function 'mas_wr_modify' [-Werror,-Wframe-larger-than]
+    1    lib/maple_tree.c:4203:20: error: stack frame size (1144) exceeds l=
+imit (1024) in 'mas_wr_modify' [-Werror,-Wframe-larger-than]
+    1    lib/maple_tree.c:4203:20: error: stack frame size (1072) exceeds l=
+imit (1024) in 'mas_wr_modify' [-Werror,-Wframe-larger-than]
+    1    include/linux/fortify-string.h:344:4: error: call to =E2=80=98__wr=
+ite_overflow_field=E2=80=99 declared with attribute warning: detected write=
+ beyond size of field (1st parameter); maybe use struct_group()? [-Werror=
+=3Dattribute-warning]
+    1    fatal error: too many errors emitted, stopping now [-ferror-limit=
+=3D]
+    1    drivers/irqchip/irq-loongson-liointc.c:60:13: error: implicit decl=
+aration of function =E2=80=98cpu_logical_map=E2=80=99 [-Werror=3Dimplicit-f=
+unction-declaration]
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
+=3D0x'
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
+=3D0x'
 
---Sig_/e3pbslOyTKacWtQgdOQ8OFX--
+Warnings summary:
+
+    30   include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 fo=
+rming offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=
+=80=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+    22   clang: warning: argument unused during compilation: '-march=3Darmv=
+6k' [-Wunused-command-line-argument]
+    20   clang: warning: argument unused during compilation: '-march=3Darmv=
+7-a' [-Wunused-command-line-argument]
+    3    drivers/misc/cardreader/rts5261.c:364:32: note: initialize the var=
+iable 'setting_reg2' to silence this warning
+    3    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+    2    include/linux/fortify-string.h:344:4: warning: call to =E2=80=98__=
+write_overflow_field=E2=80=99 declared with attribute warning: detected wri=
+te beyond size of field (1st parameter); maybe use struct_group()? [-Wattri=
+bute-warning]
+    2    1 warning generated.
+    1    vmlinux.o: warning: objtool: vc_switch_off_ist+0xbe: call to memcp=
+y() leaves .noinstr.text section
+    1    vmlinux.o: warning: objtool: sync_regs+0x24: call to memcpy() leav=
+es .noinstr.text section
+    1    vmlinux.o: warning: objtool: fixup_bad_iret+0x36: call to memset()=
+ leaves .noinstr.text section
+    1    vmlinux.o: warning: objtool: __startup_64() falls through to next =
+function startup_64_setup_env()
+    1    vmlinux.o: warning: objtool: __sev_put_ghcb+0x35: call to memcpy()=
+ leaves .noinstr.text section
+    1    vmlinux.o: warning: objtool: __sev_get_ghcb+0xa6: call to memcpy()=
+ leaves .noinstr.text section
+    1    lib/maple_tree.c:4203:20: warning: stack frame size (1096) exceeds=
+ limit (1024) in 'mas_wr_modify' [-Wframe-larger-than]
+    1    lib/maple_tree.c:4203:20: warning: stack frame size (1088) exceeds=
+ limit (1024) in 'mas_wr_modify' [-Wframe-larger-than]
+    1    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 fo=
+rming offset [20, 23] is out of the bounds [0, 20] [-Warray-bounds]
+    1    drivers/video/fbdev/udlfb.o: warning: objtool: dlfb_ops_write() fa=
+lls through to next function dlfb_ops_setcolreg()
+    1    drivers/video/fbdev/smscufx.o: warning: objtool: ufx_ops_write() f=
+alls through to next function ufx_ops_setcolreg()
+    1    drivers/soc/qcom/qcom_rpmh.o: warning: objtool: rpmh_rsc_write_ctr=
+l_data() falls through to next function trace_raw_output_rpmh_tx_done()
+    1    drivers/scsi/mpi3mr/mpi3mr.o: warning: objtool: mpi3mr_op_request_=
+post() falls through to next function mpi3mr_check_rh_fault_ioc()
+    1    drivers/gpu/drm/radeon/radeon.o: warning: objtool: sumo_dpm_set_po=
+wer_state() falls through to next function sumo_dpm_post_set_power_state()
+    1    cc1: warning: result of =E2=80=98-117440512 << 16=E2=80=99 require=
+s 44 bits to represent, but =E2=80=98int=E2=80=99 only has 32 bits [-Wshift=
+-overflow=3D]
+    1    cc1: some warnings being treated as errors
+    1    cc1: all warnings being treated as errors
+    1    arch/x86/kvm/kvm.o: warning: objtool: paging64_update_accessed_dir=
+ty_bits+0x3a6: call to __ubsan_handle_load_invalid_value() with UACCESS ena=
+bled
+    1    arch/x86/kvm/kvm.o: warning: objtool: paging32_update_accessed_dir=
+ty_bits+0x398: call to __ubsan_handle_load_invalid_value() with UACCESS ena=
+bled
+    1    arch/x86/kvm/kvm.o: warning: objtool: ept_update_accessed_dirty_bi=
+ts+0x454: call to __ubsan_handle_load_invalid_value() with UACCESS enabled
+    1    arch/x86/kvm/kvm.o: warning: objtool: emulator_cmpxchg_emulated+0x=
+71b: call to __ubsan_handle_load_invalid_value() with UACCESS enabled
+    1    : warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+
+Section mismatches summary:
+
+    89   WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Sec=
+tion mismatch in reference from the variable __ksymtab_mdio_bus_init to the=
+ function .init.text:mdio_bus_init()
+    79   WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): S=
+ection mismatch in reference from the variable __ksymtab_xfrm4_protocol_ini=
+t to the function .init.text:xfrm4_protocol_init()
+    13   WARNING: modpost: vmlinux.o(___ksymtab_gpl+xen_xlate_map_ballooned=
+_pages+0x0): Section mismatch in reference from the variable __ksymtab_xen_=
+xlate_map_ballooned_pages to the function .init.text:xen_xlate_map_balloone=
+d_pages()
+    12   WARNING: modpost: drivers/net/phy/libphy.o(___ksymtab_gpl+mdio_bus=
+_init+0x0): Section mismatch in reference from the variable __ksymtab_mdio_=
+bus_init to the function .init.text:mdio_bus_init()
+    1    WARNING: modpost: vmlinux.o(___ksymtab_gpl+hv_init_clocksource+0x0=
+): Section mismatch in reference from the variable __ksymtab_hv_init_clocks=
+ource to the function .init.text:hv_init_clocksource()
+    1    WARNING: modpost: vmlinux.o(___ksymtab+prom_init_numa_memory+0x0):=
+ Section mismatch in reference from the variable __ksymtab_prom_init_numa_m=
+emory to the function .init.text:prom_init_numa_memory()
+    1    WARNING: modpost: vmlinux.o(.text.unlikely+0x2138): Section mismat=
+ch in reference from the function at91_pm_secure_init() to the (unknown ref=
+erence) .init.rodata:(unknown)
+    1    WARNING: modpost: net/ipv6/ipv6.o(___ksymtab+seg6_hmac_init+0x0): =
+Section mismatch in reference from the variable __ksymtab_seg6_hmac_init to=
+ the function .init.text:seg6_hmac_init()
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+debug (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, =
+0 section mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+kselftest (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warni=
+ng, 0 section mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, clang-15) =E2=80=94 FAIL, 1 error, 13 warnings, 0 sectio=
+n mismatches
+
+Errors:
+    lib/maple_tree.c:4203:20: error: stack frame size (1144) exceeds limit =
+(1024) in 'mas_wr_modify' [-Werror,-Wframe-larger-than]
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    : warning: argument unused during compilation: '-march=3Darmv6k' [-Wunu=
+sed-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (x86_64, clang-15) =E2=80=94 FAIL, 1 error, 16 warnings, 0 sec=
+tion mismatches
+
+Errors:
+    drivers/misc/cardreader/rts5261.c:406:13: error: variable 'setting_reg2=
+' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometim=
+es-uninitialized]
+
+Warnings:
+    vmlinux.o: warning: objtool: __startup_64() falls through to next funct=
+ion startup_64_setup_env()
+    vmlinux.o: warning: objtool: sync_regs+0x24: call to memcpy() leaves .n=
+oinstr.text section
+    vmlinux.o: warning: objtool: vc_switch_off_ist+0xbe: call to memcpy() l=
+eaves .noinstr.text section
+    vmlinux.o: warning: objtool: fixup_bad_iret+0x36: call to memset() leav=
+es .noinstr.text section
+    vmlinux.o: warning: objtool: __sev_get_ghcb+0xa6: call to memcpy() leav=
+es .noinstr.text section
+    vmlinux.o: warning: objtool: __sev_put_ghcb+0x35: call to memcpy() leav=
+es .noinstr.text section
+    arch/x86/kvm/kvm.o: warning: objtool: emulator_cmpxchg_emulated+0x71b: =
+call to __ubsan_handle_load_invalid_value() with UACCESS enabled
+    arch/x86/kvm/kvm.o: warning: objtool: paging64_update_accessed_dirty_bi=
+ts+0x3a6: call to __ubsan_handle_load_invalid_value() with UACCESS enabled
+    arch/x86/kvm/kvm.o: warning: objtool: paging32_update_accessed_dirty_bi=
+ts+0x398: call to __ubsan_handle_load_invalid_value() with UACCESS enabled
+    arch/x86/kvm/kvm.o: warning: objtool: ept_update_accessed_dirty_bits+0x=
+454: call to __ubsan_handle_load_invalid_value() with UACCESS enabled
+    drivers/soc/qcom/qcom_rpmh.o: warning: objtool: rpmh_rsc_write_ctrl_dat=
+a() falls through to next function trace_raw_output_rpmh_tx_done()
+    drivers/misc/cardreader/rts5261.c:364:32: note: initialize the variable=
+ 'setting_reg2' to silence this warning
+    drivers/video/fbdev/udlfb.o: warning: objtool: dlfb_ops_write() falls t=
+hrough to next function dlfb_ops_setcolreg()
+    drivers/video/fbdev/smscufx.o: warning: objtool: ufx_ops_write() falls =
+through to next function ufx_ops_setcolreg()
+    drivers/scsi/mpi3mr/mpi3mr.o: warning: objtool: mpi3mr_op_request_post(=
+) falls through to next function mpi3mr_check_rh_fault_ioc()
+    drivers/gpu/drm/radeon/radeon.o: warning: objtool: sumo_dpm_set_power_s=
+tate() falls through to next function sumo_dpm_post_set_power_state()
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+xen_xlate_map_ballooned_page=
+s+0x0): Section mismatch in reference from the variable __ksymtab_xen_xlate=
+_map_ballooned_pages to the function .init.text:xen_xlate_map_ballooned_pag=
+es()
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+hv_init_clocksource+0x0): Se=
+ction mismatch in reference from the variable __ksymtab_hv_init_clocksource=
+ to the function .init.text:hv_init_clocksource()
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mi=
+smatches
+
+Errors:
+    include/linux/fortify-string.h:344:4: error: call to =E2=80=98__write_o=
+verflow_field=E2=80=99 declared with attribute warning: detected write beyo=
+nd size of field (1st parameter); maybe use struct_group()? [-Werror=3Dattr=
+ibute-warning]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(.text.unlikely+0x2138): Section mismatch in=
+ reference from the function at91_pm_secure_init() to the (unknown referenc=
+e) .init.rodata:(unknown)
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (i386, clang-15) =E2=80=94 FAIL, 1 error, 0 warnings, 0 sectio=
+n mismatches
+
+Errors:
+    lib/maple_tree.c:4203:20: error: stack frame size (1072) exceeds limit =
+(1024) in 'mas_wr_modify' [-Werror,-Wframe-larger-than]
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+xen_xlate_map_ballooned_page=
+s+0x0): Section mismatch in reference from the variable __ksymtab_xen_xlate=
+_map_ballooned_pages to the function .init.text:xen_xlate_map_ballooned_pag=
+es()
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+    WARNING: modpost: drivers/net/phy/libphy.o(___ksymtab_gpl+mdio_bus_init=
++0x0): Section mismatch in reference from the variable __ksymtab_mdio_bus_i=
+nit to the function .init.text:mdio_bus_init()
+    WARNING: modpost: net/ipv6/ipv6.o(___ksymtab+seg6_hmac_init+0x0): Secti=
+on mismatch in reference from the variable __ksymtab_seg6_hmac_init to the =
+function .init.text:seg6_hmac_init()
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, clang-15) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+am200epdkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
+section mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, clang-15) =E2=80=94 PASS, 0 errors, 10 warnings, =
+0 section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+assabet_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+at91_dt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+ath79_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axm55xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+axs103_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+axs103_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+bcm2835_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [20, 23] is out of the bounds [0, 20] [-Warray-bounds]
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+bcm47xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+bcm63xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+bmips_be_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+bmips_stb_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+capcella_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+    WARNING: modpost: drivers/net/phy/libphy.o(___ksymtab_gpl+mdio_bus_init=
++0x0): Section mismatch in reference from the variable __ksymtab_mdio_bus_i=
+nit to the function .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+cerfcube_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+ci20_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+cm_x300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+cobalt_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning,=
+ 0 section mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+collie_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+corgi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+    WARNING: modpost: drivers/net/phy/libphy.o(___ksymtab_gpl+mdio_bus_init=
++0x0): Section mismatch in reference from the variable __ksymtab_mdio_bus_i=
+nit to the function .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (arm64, clang-13=
+) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section mismatches
+
+Errors:
+    ERROR: modpost: Section mismatches detected.
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chromebook=
+ (arm64, clang-13) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section mismatches
+
+Errors:
+    ERROR: modpost: Section mismatches detected.
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section mismat=
+ches
+
+Errors:
+    ERROR: modpost: Section mismatches detected.
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section mismat=
+ches
+
+Errors:
+    ERROR: modpost: Section mismatches detected.
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-chrom=
+ebook (arm64, clang-13) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section mism=
+atches
+
+Errors:
+    ERROR: modpost: Section mismatches detected.
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
+=E2=80=94 FAIL, 1 error, 5 warnings, 0 section mismatches
+
+Errors:
+    lib/maple_tree.c:4203:20: error: stack frame size (1096) exceeds limit =
+(1024) in function 'mas_wr_modify' [-Werror,-Wframe-larger-than]
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
+3) =E2=80=94 FAIL, 1 error, 5 warnings, 0 section mismatches
+
+Errors:
+    lib/maple_tree.c:4203:20: error: stack frame size (1096) exceeds limit =
+(1024) in function 'mas_wr_modify' [-Werror,-Wframe-larger-than]
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86-chr=
+omebook (x86_64, clang-13) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mi=
+smatches
+
+Errors:
+    drivers/misc/cardreader/rts5261.c:406:13: error: variable 'setting_reg2=
+' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometim=
+es-uninitialized]
+
+Warnings:
+    drivers/misc/cardreader/rts5261.c:364:32: note: initialize the variable=
+ 'setting_reg2' to silence this warning
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86-chr=
+omebook (x86_64, clang-13) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section m=
+ismatches
+
+Errors:
+    ERROR: modpost: Section mismatches detected.
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-chro=
+mebook (x86_64, clang-13) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mis=
+matches
+
+Errors:
+    drivers/misc/cardreader/rts5261.c:406:13: error: variable 'setting_reg2=
+' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometim=
+es-uninitialized]
+
+Warnings:
+    drivers/misc/cardreader/rts5261.c:364:32: note: initialize the variable=
+ 'setting_reg2' to silence this warning
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (x86_64, clang=
+-13) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section mismatches
+
+Errors:
+    ERROR: modpost: Section mismatches detected.
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+cu1830-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+davinci_all_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
+section mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+db1xxx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_64_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings=
+, 0 section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+decstation_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+xen_xlate_map_ballooned_page=
+s+0x0): Section mismatch in reference from the variable __ksymtab_xen_xlate=
+_map_ballooned_pages to the function .init.text:xen_xlate_map_ballooned_pag=
+es()
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, clang-15) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+xen_xlate_map_ballooned_page=
+s+0x0): Section mismatch in reference from the variable __ksymtab_xen_xlate=
+_map_ballooned_pages to the function .init.text:xen_xlate_map_ballooned_pag=
+es()
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_16K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+xen_xlate_map_ballooned_page=
+s+0x0): Section mismatch in reference from the variable __ksymtab_xen_xlate=
+_map_ballooned_pages to the function .init.text:xen_xlate_map_ballooned_pag=
+es()
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+xen_xlate_map_ballooned_page=
+s+0x0): Section mismatch in reference from the variable __ksymtab_xen_xlate=
+_map_ballooned_pages to the function .init.text:xen_xlate_map_ballooned_pag=
+es()
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+xen_xlate_map_ballooned_page=
+s+0x0): Section mismatch in reference from the variable __ksymtab_xen_xlate=
+_map_ballooned_pages to the function .init.text:xen_xlate_map_ballooned_pag=
+es()
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_EFI=3Dn (riscv, clang-15) =E2=80=94 FAIL, 30 errors, 0 war=
+nings, 0 section mismatches
+
+Errors:
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time a=
+bsolute expression
+    fatal error: too many errors emitted, stopping now [-ferror-limit=3D]
+    arch/riscv/include/asm/pgtable-64.h:121:2: error: expected assembly-tim=
+e absolute expression
+    arch/riscv/include/asm/pgtable-64.h:121:2: error: expected assembly-tim=
+e absolute expression
+    arch/riscv/include/asm/pgtable-64.h:105:2: error: expected assembly-tim=
+e absolute expression
+    arch/riscv/include/asm/pgtable-64.h:105:2: error: expected assembly-tim=
+e absolute expression
+    arch/riscv/include/asm/pgtable-64.h:121:2: error: expected assembly-tim=
+e absolute expression
+    arch/riscv/include/asm/pgtable-64.h:121:2: error: expected assembly-tim=
+e absolute expression
+    arch/riscv/include/asm/pgtable-64.h:105:2: error: expected assembly-tim=
+e absolute expression
+    arch/riscv/include/asm/pgtable-64.h:105:2: error: expected assembly-tim=
+e absolute expression
+    arch/riscv/include/asm/pgtable-64.h:121:2: error: expected assembly-tim=
+e absolute expression
+    arch/riscv/include/asm/pgtable-64.h:121:2: error: expected assembly-tim=
+e absolute expression
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+xen_xlate_map_ballooned_page=
+s+0x0): Section mismatch in reference from the variable __ksymtab_xen_xlate=
+_map_ballooned_pages to the function .init.text:xen_xlate_map_ballooned_pag=
+es()
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+xen_xlate_map_ballooned_page=
+s+0x0): Section mismatch in reference from the variable __ksymtab_xen_xlate=
+_map_ballooned_pages to the function .init.text:xen_xlate_map_ballooned_pag=
+es()
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+defconfig+crypto (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+xen_xlate_map_ballooned_page=
+s+0x0): Section mismatch in reference from the variable __ksymtab_xen_xlate=
+_map_ballooned_pages to the function .init.text:xen_xlate_map_ballooned_pag=
+es()
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+defconfig+debug (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+xen_xlate_map_ballooned_page=
+s+0x0): Section mismatch in reference from the variable __ksymtab_xen_xlate=
+_map_ballooned_pages to the function .init.text:xen_xlate_map_ballooned_pag=
+es()
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+defconfig+debug (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+defconfig+ima (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+xen_xlate_map_ballooned_page=
+s+0x0): Section mismatch in reference from the variable __ksymtab_xen_xlate=
+_map_ballooned_pages to the function .init.text:xen_xlate_map_ballooned_pag=
+es()
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+xen_xlate_map_ballooned_page=
+s+0x0): Section mismatch in reference from the variable __ksymtab_xen_xlate=
+_map_ballooned_pages to the function .init.text:xen_xlate_map_ballooned_pag=
+es()
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+e55_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+eseries_pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+exynos_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+ezx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+footbridge_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+fuloong2e_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 s=
+ection mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+Section mismatches:
+    WARNING: modpost: drivers/net/phy/libphy.o(___ksymtab_gpl+mdio_bus_init=
++0x0): Section mismatch in reference from the variable __ksymtab_mdio_bus_i=
+nit to the function .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+gcw0_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+gpr_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+h3600_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+h5000_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+hackkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+debug (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warni=
+ngs, 0 section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+kselftest (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 w=
+arnings, 0 section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+hisi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+hsdk_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, clang-15) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+debug (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+imx_v4_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+imx_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+imxrt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip22_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+    WARNING: modpost: drivers/net/phy/libphy.o(___ksymtab_gpl+mdio_bus_init=
++0x0): Section mismatch in reference from the variable __ksymtab_mdio_bus_i=
+nit to the function .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+ip27_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+ip28_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+jazz_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+jornada720_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+keystone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+lart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+lemote2f_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 se=
+ction mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+loongson1b_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+loongson1c_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+loongson2k_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 s=
+ection mismatches
+
+Errors:
+    drivers/irqchip/irq-loongson-liointc.c:60:13: error: implicit declarati=
+on of function =E2=80=98cpu_logical_map=E2=80=99 [-Werror=3Dimplicit-functi=
+on-declaration]
+
+Warnings:
+    cc1: some warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+loongson3_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 s=
+ection mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab+prom_init_numa_memory+0x0): Sect=
+ion mismatch in reference from the variable __ksymtab_prom_init_numa_memory=
+ to the function .init.text:prom_init_numa_memory()
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+lpc18xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpc32xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+lpd270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lubbock_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+magician_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+mainstone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+    WARNING: modpost: drivers/net/phy/libphy.o(___ksymtab_gpl+mdio_bus_init=
++0x0): Section mismatch in reference from the variable __ksymtab_mdio_bus_i=
+nit to the function .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+malta_kvm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+    WARNING: modpost: drivers/net/phy/libphy.o(___ksymtab_gpl+mdio_bus_init=
++0x0): Section mismatch in reference from the variable __ksymtab_mdio_bus_i=
+nit to the function .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+malta_qemu_32r6_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+maltaaprp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_eva_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+maltaup_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+maltaup_xpa_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+    WARNING: modpost: drivers/net/phy/libphy.o(___ksymtab_gpl+mdio_bus_init=
++0x0): Section mismatch in reference from the variable __ksymtab_mdio_bus_i=
+nit to the function .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+milbeaut_m10v_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mini2440_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+mmp2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+moxart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mpc30x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+mps2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+mtx1_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+    WARNING: modpost: drivers/net/phy/libphy.o(___ksymtab_gpl+mdio_bus_init=
++0x0): Section mismatch in reference from the variable __ksymtab_mdio_bus_i=
+nit to the function .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+multi_v4t_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, clang-15) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
+section mismatches
+
+Warnings:
+    lib/maple_tree.c:4203:20: warning: stack frame size (1088) exceeds limi=
+t (1024) in 'mas_wr_modify' [-Wframe-larger-than]
+    1 warning generated.
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, clang-15) =E2=80=94 PASS, 0 errors, 12 warnings, 0=
+ section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    lib/maple_tree.c:4203:20: warning: stack frame size (1096) exceeds limi=
+t (1024) in 'mas_wr_modify' [-Wframe-larger-than]
+    1 warning generated.
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-10) =E2=80=94 PASS, =
+0 errors, 0 warnings, 0 section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-10) =E2=80=
+=94 PASS, 0 errors, 1 warning, 0 section mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1=
+ warning, 0 section mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
+ errors, 1 warning, 0 section mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+debug (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning,=
+ 0 section mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warn=
+ings, 0 section mismatches
+
+Warnings:
+    include/linux/fortify-string.h:344:4: warning: call to =E2=80=98__write=
+_overflow_field=E2=80=99 declared with attribute warning: detected write be=
+yond size of field (1st parameter); maybe use struct_group()? [-Wattribute-=
+warning]
+    include/linux/fortify-string.h:344:4: warning: call to =E2=80=98__write=
+_overflow_field=E2=80=99 declared with attribute warning: detected write be=
+yond size of field (1st parameter); maybe use struct_group()? [-Wattribute-=
+warning]
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+mxs_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+netwinder_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+nhk8815_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_sdcard_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+omap1_defconfig (arm, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+omap2plus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+omega2p_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+orion5x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+palmz72_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pcm027_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pic32mzda_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+pleb_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa168_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa255-idp_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+qcom_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+qi_lb60_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+rb532_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    cc1: warning: result of =E2=80=98-117440512 << 16=E2=80=99 requires 44 =
+bits to represent, but =E2=80=98int=E2=80=99 only has 32 bits [-Wshift-over=
+flow=3D]
+
+---------------------------------------------------------------------------=
+-----
+rbtx49xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+rm200_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+    WARNING: modpost: drivers/net/phy/libphy.o(___ksymtab_gpl+mdio_bus_init=
++0x0): Section mismatch in reference from the variable __ksymtab_mdio_bus_i=
+nit to the function .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+rpc_defconfig (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 section=
+ mismatches
+
+Errors:
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=3D0x'
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=3D0x'
+
+---------------------------------------------------------------------------=
+-----
+rs90_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+rt305x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+rv32_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+s3c6400_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s5pv210_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+sama5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+sama7_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 section=
+ mismatches
+
+Errors:
+    ERROR: modpost: Section mismatches detected.
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+sb1250_swarm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+shannon_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+shmobile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+simpad_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+socfpga_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+spear13xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+spear6xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+spitz_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+    WARNING: modpost: drivers/net/phy/libphy.o(___ksymtab_gpl+mdio_bus_init=
++0x0): Section mismatch in reference from the variable __ksymtab_mdio_bus_i=
+nit to the function .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+stm32_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sunxi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+tb0219_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+tb0226_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+tb0287_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+tct_hammer_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+trizeps4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+u8500_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+versatile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+vexpress_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+vf610m4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+viper_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+Section mismatches:
+    WARNING: modpost: drivers/net/phy/libphy.o(___ksymtab_gpl+mdio_bus_init=
++0x0): Section mismatch in reference from the variable __ksymtab_mdio_bus_i=
+nit to the function .init.text:mdio_bus_init()
+
+---------------------------------------------------------------------------=
+-----
+vocore2_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+workpad_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, clang-15) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+crypto (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+debug (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+ima (x86_64, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, =
+0 warnings, 0 section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors=
+, 0 warnings, 0 section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook+amdgpu (x86_64, gcc-10) =E2=80=94 FAIL, 0 e=
+rrors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook+kselftest (x86_64, gcc-10) =E2=80=94 PASS, =
+0 errors, 0 warnings, 0 section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86_kvm_guest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0=
+ warnings, 0 section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab_gpl+mdio_bus_init+0x0): Section =
+mismatch in reference from the variable __ksymtab_mdio_bus_init to the func=
+tion .init.text:mdio_bus_init()
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+xcep_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(___ksymtab+xfrm4_protocol_init+0x0): Sectio=
+n mismatch in reference from the variable __ksymtab_xfrm4_protocol_init to =
+the function .init.text:xfrm4_protocol_init()
+
+---------------------------------------------------------------------------=
+-----
+zeus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    include/linux/bitmap.h:261:2: warning: =E2=80=98memcpy=E2=80=99 forming=
+ offset [4, 7] is out of the bounds [0, 4] of object =E2=80=98flags=E2=80=
+=99 with type =E2=80=98long unsigned int[1]=E2=80=99 [-Warray-bounds]
+
+---
+For more info write to <info@kernelci.org>

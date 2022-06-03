@@ -2,45 +2,45 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5203353C0A7
-	for <lists+linux-next@lfdr.de>; Fri,  3 Jun 2022 00:12:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8F7853C3D0
+	for <lists+linux-next@lfdr.de>; Fri,  3 Jun 2022 06:43:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239546AbiFBWMu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 2 Jun 2022 18:12:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58386 "EHLO
+        id S230381AbiFCEnZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 3 Jun 2022 00:43:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235682AbiFBWMt (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 2 Jun 2022 18:12:49 -0400
+        with ESMTP id S229665AbiFCEnX (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 3 Jun 2022 00:43:23 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 218D21FCDB;
-        Thu,  2 Jun 2022 15:12:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5428C36B59;
+        Thu,  2 Jun 2022 21:43:22 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LDgHZ1Tmxz4xXg;
-        Fri,  3 Jun 2022 08:12:42 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LDqyD49Hlz4xD7;
+        Fri,  3 Jun 2022 14:43:16 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1654207962;
-        bh=ve61wgSuXEc6WPnIRJgC9ELhgl1i/D1lrVDNLVYUKjY=;
+        s=201702; t=1654231397;
+        bh=bglz4sZohKUx/6D+QBESld/9ICNrShVB8JDfs7YyIfU=;
         h=Date:From:To:Cc:Subject:From;
-        b=vEJL08WRJiZlnom5QB+PQslzLJlBorZIw374e4gw8P/8IGMHDYMJwqFNk8n5r4UoU
-         VU2w4rroS2tselmtvnHRG0hwrsR/6YhYtiK6PXzzquGy6A0+xdbzjtQprNlhzCflNa
-         shdpXoI0DqZnANrib8ZD/RIGTbpeafkTykVFqFF6G+pgpM7eXn+Ufa59u9ZZ0qDLRl
-         cFxoRvI5yqiANje2vpLNm2zrHKlI91vOtzQ+x5qFujDzSa92Tpm30DpaFuxeQgijok
-         V1iQwOTFSASfFWIAGXmLftgD8w+DTYKukPHe8GDtIKRO3yL24ayNyE5Mzv8X05Ocsq
-         SCyq6gFLHRY4Q==
-Date:   Fri, 3 Jun 2022 08:12:40 +1000
+        b=qJKuHNmJMjJi2+NNFWARfHNNivpwFUibxTpUMp0e0yuQxEOW2/0jengOgLE24Gkjv
+         gnO0HpLlEcI3Vkw9MhDk8FAGjhDXNHNJcrqsg9mKVJujPlsp9lY0S2V1vnsxwh9J+A
+         dZqDwrmC9XYzqXjPOppnSgOhhveI1CrkeQeDKgFdeaeMiMKTIo/lRKSkxU9hA4yfad
+         3qxuNVMEsKvEgAy0ssDYLT44Vy/EL/B1G6DmtpG3VIl9sPzFT1yTJIYd9LqKav9CWC
+         8q6KBpTI/oNZwmjbHG54iz5gI0tkoRFc5J7h2OEYQvgcYiAZsYdWp63Ih0zN8UBui8
+         UeX0q7WDtd5fg==
+Date:   Fri, 3 Jun 2022 14:43:15 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Steven Whitehouse <swhiteho@redhat.com>,
-        Bob Peterson <rpeterso@redhat.com>
-Cc:     Andreas Gruenbacher <agruenba@redhat.com>,
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Aurabindo Pillai <aurabindo.pillai@amd.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the gfs2 tree
-Message-ID: <20220603081240.3d2b99af@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Dave Airlie <airlied@linux.ie>
+Subject: linux-next: build failure after merge of the amdgpu tree
+Message-ID: <20220603144315.5adcddbf@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Ltvi4GXKjRGZ3A2bSDihkiz";
+Content-Type: multipart/signed; boundary="Sig_/Iqqin6z3DvvDMuKuw08d4Nm";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -51,36 +51,62 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Ltvi4GXKjRGZ3A2bSDihkiz
+--Sig_/Iqqin6z3DvvDMuKuw08d4Nm
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Commit
+After merging the amdgpu tree, today's linux-next build (powerpc
+allyesconfig) failed like this:
 
-  c70bac321715 ("gfs2: Remove redundant NULL check before kfree")
+drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c: I=
+n function 'dml32_ModeSupportAndSystemConfigurationFull':
+drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c:38=
+35:1: error: the frame size of 2752 bytes is larger than 2048 bytes [-Werro=
+r=3Dframe-larger-than=3D]
+ 3835 | } // ModeSupportAndSystemConfigurationFull
+      | ^
+cc1: all warnings being treated as errors
+make[5]: *** [scripts/Makefile.build:250: drivers/gpu/drm/amd/amdgpu/../dis=
+play/dc/dml/dcn32/display_mode_vba_32.o] Error 1
+gcc: error: unrecognized command-line option '-msse'
+gcc: error: unrecognized command-line option '-msse2'
+make[5]: *** [scripts/Makefile.build:251: drivers/gpu/drm/amd/amdgpu/../dis=
+play/dc/dcn32/dcn32_resource.o] Error 1
+gcc: error: unrecognized command-line option '-msse'
+gcc: error: unrecognized command-line option '-msse2'
 
-is missing a Signed-off-by from its committer.
+Caused (probably) by commits
 
+  5cbb369e32bd ("drm/amd/display: DML changes for DCN32/321")
+  b5dbe04a9c8c ("drm/amd/display: add CLKMGR changes for DCN32/321")
+  4f185390597e ("drm/amd/display: add DCN32/321 specific files for Display =
+Core")
+
+I have used the amdgpu tree from next-20220601 again for today.
+
+Is this new stuff really for the current merge window?  If so, it has
+arrived pretty late.  If not then it should not have been in linux-next
+at all ...
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/Ltvi4GXKjRGZ3A2bSDihkiz
+--Sig_/Iqqin6z3DvvDMuKuw08d4Nm
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKZNdgACgkQAVBC80lX
-0GwBzQf/ZqYvnAeiI2SZqa/EFo/fQePhN1myTEuQ6lHZk1yiPO0YCMCg8YIYbx1h
-Th1V+s2812nw+wtbfNlVlQMxD/MDMUJEN4U4RSc45cRS1ew9AUEXpVK+8pHFoqgK
-k5kuzRbvgVOH/oqqoNKDPh3wQENzW9GDJY64Tf86e+66urx/K/ubwyBvJvkuYJab
-fp9A1JIKSrnRwWvMFf7qIZluj35t9/csxAwNkgKD7pKTmNsRLi6oIvB/092LNChd
-ufLNt3yZkFzDMUVdzOooW5/LF6Yc/ySgsSB0uToc+xm3aIt3J4ZvM61peaZozf2W
-vMREg4CthcRexRoA1oJnT9Ik15ZM6Q==
-=xP+Y
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKZkWMACgkQAVBC80lX
+0Gx4EAf/ZSx9kndMooybyfvl/xs9uQbnbTSizQDEhArCiLJM1qLiygS/A0Mdtbzn
+P9kRJifpo59SKkvwyFuFpYXwoyXyDME26Ju7yJRVsNSCObTNS/CF3qb75Nb/Assf
+Ch3rSAPHVgoHmOwrK0RFzIx33fcx+KdSNYL3OVG76CwByphadhRWMk8ptrZviWbz
+u2FW4Tvn6xoQBBdgoowEZ5sNixC4WuFsTSkY/lEMHZp1z6wP05y64uNFmX+zoZXL
+2meaojU51kUHzT5UfEHq3n7DVbgOGyHevG562utM0Vh/IV0+hd+hJZgWMVrsbCyG
+H6jMzQLkwfLTzvY4MkSYqqRu7Np2tw==
+=6k6h
 -----END PGP SIGNATURE-----
 
---Sig_/Ltvi4GXKjRGZ3A2bSDihkiz--
+--Sig_/Iqqin6z3DvvDMuKuw08d4Nm--

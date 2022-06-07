@@ -2,52 +2,52 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ECB653F9E5
-	for <lists+linux-next@lfdr.de>; Tue,  7 Jun 2022 11:35:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2CB853F9F4
+	for <lists+linux-next@lfdr.de>; Tue,  7 Jun 2022 11:37:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231984AbiFGJfk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 7 Jun 2022 05:35:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36456 "EHLO
+        id S239810AbiFGJhS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 7 Jun 2022 05:37:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239764AbiFGJfT (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 7 Jun 2022 05:35:19 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E26BE64D7;
-        Tue,  7 Jun 2022 02:35:16 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id w13-20020a17090a780d00b001e8961b355dso3125270pjk.5;
-        Tue, 07 Jun 2022 02:35:16 -0700 (PDT)
+        with ESMTP id S239767AbiFGJhR (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 7 Jun 2022 05:37:17 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB1822C5;
+        Tue,  7 Jun 2022 02:37:10 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d22so14348098plr.9;
+        Tue, 07 Jun 2022 02:37:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=/7EAFJgdonloPk0n/CJ/zciAeZ6ggjWIIfAJFu04Kc4=;
-        b=S1qC8HOeFifIMvVV7Ym8+VedrgGuml+FLWbRZJtWYWp2ddutmxt1jZh9nW1uaFdcP9
-         96r3gzbtnk3ex+h3r7BfV2K5VchL8Tx8o6sjpOAGg4EetIWYaBltqJDH29yt82KhuX6o
-         N2gDEoVoKxGdXYw3GzlLTGTrv/D0yHGWcEV7QJPYASc3ccnGoVXNYLQTs378SsxriSRy
-         VtvDsgfIMSF7B9piY1LNyOe4wK8iokWcZ5ZK/PgewvtfSxFqMgNm9YW+z9WJzsMEflT9
-         hJif8d/zv3kDz7ETAE75U+2euTntkYJA8WGiCfh9k/Iq8CPyd8Kdb5fB+UiZdb3p4fu5
-         9zZg==
+        bh=Gxs0+aWvYM3LWxC7EUUZ0v49Q04+LWa6qfJ61uUqW8g=;
+        b=itMtcieRDU81frhTBFtGjbAXgvv62YzbLl8XRi7v/gXGpy/tIM3BYjMKK5ECQAfPOB
+         03sfW6r2inxS0tC9t3Wd4oKlafJW5M8VyVTCvYWhod8n9gfgXGYVl9s5pPVMbQL4DBga
+         0P385VzeZYDMhyCAnwfSEL2Bbsvd4ONTAuvIQadPIQzTToZJhmKSdNMJpM9A0r2SRd5b
+         T2EKmwPlNaetQrQ1WTfXGWXiTrO0SGXherfMFEzyZ/TjQAcchxEynd2Q8OyjN5isFrxz
+         imO6VmrkTIwFvVIMsytoqp64ejZOj6LQ512hzOFbBh4c1ODe2iGYwqNLa3LqzBtT1Oys
+         l1iA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=/7EAFJgdonloPk0n/CJ/zciAeZ6ggjWIIfAJFu04Kc4=;
-        b=4DzfbDfBj11UgnKVmli5fzswFKrvbhvm/y931u+hyTi3TIAk8tb9OgFTsiuYnC9GcC
-         l1etp8OYGrBxDo1iHbbW0chwtDRlDwY4rPlcEqmGcB4Yakq3kwpErc14dnwHqhYUs70R
-         UzLMWAnYmqhicJq7vxwb4lwJTtndMDivC80QEWZ95MSpsFnQGs4S1hFRVnOKILAL0Whq
-         YkfI3tsmDD2TA0ZgjDaRRuYxD2pjG5BgS+ApqdrZN2lEaL26oj2/PelUr8PmyKzKsaYH
-         zDgQJn//DyDayqXh4z19V8nPwMM87SGsmC3ue87Rd4QqAosQxDzSPDDhW6xyQvDxg9KK
-         IcJw==
-X-Gm-Message-State: AOAM533EMk5piFz8zPU1nVH3OWRsOAJFtXsv8SjrjXmRhfi+0eEZNu5k
-        jC0X1L03ZZvVPPXQK67kG3WQIWj3+lg=
-X-Google-Smtp-Source: ABdhPJz6KP2YgSIRKs2hKh8e1UIylOlLROEWvw7Unv2OlluDBrIgSrrDYuWMc7+eJZ2wZ4C1CPEdUw==
-X-Received: by 2002:a17:90a:2c0c:b0:1ea:14c0:f0ca with SMTP id m12-20020a17090a2c0c00b001ea14c0f0camr169736pjd.143.1654594515102;
-        Tue, 07 Jun 2022 02:35:15 -0700 (PDT)
+        bh=Gxs0+aWvYM3LWxC7EUUZ0v49Q04+LWa6qfJ61uUqW8g=;
+        b=f9NvTc5GVf/CXvSi6pIr12gGpDLqHJw0d4XXm6793L24amxcW5WjIopKamomt/OsPW
+         s6Pz8LExlZI+EhSzcI4yqrhjts3BITZWwm9icEiJU7kjp5uXO8GzTjvTQTKW2dNnbKKm
+         CVX+XP6sSx93zRxM0UTx5o4V54n4wJsehUd9ddrn7d1UgSsp1gQHf2epUG/3SaxsFjj7
+         YXwCOLh0suarzvVe/JEa0Ato+Q1Kw3br/wiXIzseWfrFtVXTpyA2gzoYF0jeFVBi/zDi
+         f8kQ+IUrVuJT5Ft7cC6hqEVuTLUTmSBILjreAlD9XKizG4aX6Ti1dlj8/f6hP0uV6ABa
+         jXLw==
+X-Gm-Message-State: AOAM532m4rgEEKfz1MH6UDBaZr7VODHPGoqcO7+tv2mDd+/5Le/yMWxK
+        oFN6V9FfL/KmKIMSpnZ0A85kGZ3eONg=
+X-Google-Smtp-Source: ABdhPJxraJAaBzAWGKH5jd/RrR8C7QJhzYi9X0l8/MFx2nfDP7LAo4FI4dWrWi/EW0pd0RtCLb81VA==
+X-Received: by 2002:a17:90b:503:b0:1e2:f129:5135 with SMTP id r3-20020a17090b050300b001e2f1295135mr31179593pjz.22.1654594630407;
+        Tue, 07 Jun 2022 02:37:10 -0700 (PDT)
 Received: from localhost (subs28-116-206-12-32.three.co.id. [116.206.12.32])
-        by smtp.gmail.com with ESMTPSA id jg15-20020a17090326cf00b001640594376dsm12017207plb.183.2022.06.07.02.35.13
+        by smtp.gmail.com with ESMTPSA id f6-20020a170902ab8600b0015e8d4eb25fsm11971380plr.169.2022.06.07.02.37.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jun 2022 02:35:14 -0700 (PDT)
-Date:   Tue, 7 Jun 2022 16:35:11 +0700
+        Tue, 07 Jun 2022 02:37:09 -0700 (PDT)
+Date:   Tue, 7 Jun 2022 16:37:07 +0700
 From:   Bagas Sanjaya <bagasdotme@gmail.com>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Guenter Roeck <linux@roeck-us.net>,
@@ -55,12 +55,12 @@ Cc:     Guenter Roeck <linux@roeck-us.net>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         linux-doc@vger.kernel.org
 Subject: Re: linux-next: build warnings after merge of the hwmon-staging tree
-Message-ID: <Yp8bz4Yo45Bq4VfR@debian.me>
-References: <20220607142301.3eb8a53c@canb.auug.org.au>
+Message-ID: <Yp8cQ1BcDXuZ9Cv4@debian.me>
+References: <20220607141958.1e31971d@canb.auug.org.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220607142301.3eb8a53c@canb.auug.org.au>
+In-Reply-To: <20220607141958.1e31971d@canb.auug.org.au>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -71,28 +71,77 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Jun 07, 2022 at 02:23:01PM +1000, Stephen Rothwell wrote:
+On Tue, Jun 07, 2022 at 02:19:58PM +1000, Stephen Rothwell wrote:
 > Hi all,
 > 
 > After merging the hwmon-staging tree, today's linux-next build (htmldocs)
 > produced these warnings:
 > 
-> Documentation/hwmon/lm90.rst:493: WARNING: Bullet list ends without a blank line; unexpected unindent.
-> Documentation/hwmon/lm90.rst:494: WARNING: Bullet list ends without a blank line; unexpected unindent.
+> Documentation/hwmon/lt7182s.rst:2: WARNING: Explicit markup ends without a blank line; unexpected unindent.
+> Documentation/hwmon/lt7182s.rst:75: WARNING: Malformed table.
+> Text in column margin in table line 33.
+> 
+> ======================  ====================================
+> curr[1-2]_label         "iin[12]"
+> curr[1-2]_input         Measured input current
+> curr[1-2]_max           Maximum input current
+> curr[1-2]_max_alarm     Current high alarm
+> 
+> curr[3-4]_label         "iout[1-2]"
+> curr[3-4]_input         Measured output current
+> curr[3-4]_highest       Highest measured output current
+> curr[3-4]_max           Maximum output current
+> curr[3-4]_max_alarm     Output current high alarm
+> 
+> in[1-2]_label           "vin[12]"
+> in[1-2]_input           Measured input voltage
+> in[1-2]_highest         Highest measured input voltage
+> in[1-2]_crit            Critical maximum input voltage
+> in[1-2]_crit_alarm      Input voltage critical high alarm
+> in[1-2]_min             Minimum input voltage
+> in[1-2]_min_alarm       Input voltage low alarm
+> in[1-2]_rated_min       Rated minimum input voltage
+> in[1-2]_rated_max       Rated maximum input voltage
+> in1_reset_history       Write to reset history for all attributes
+> 
+> in[3-5]_label           "vmon[1-3]"
+> in[3-5]_input           Measured voltage on ITH1/ITH2/EXTVCC pins
+>                         Only available if enabled with MFR_ADC_CONTROL_LT7182S
+>                         command.
+> 
+> in[3-4|6-7]_label       "vout[1-2]"
+> in[3-4|6-7]_input       Measured output voltage
+> in[3-4|6-7]_highest     Highest measured output voltage
+> in[3-4|6-7]_lcrit       Critical minimum output voltage
+> in[3-4|6-7]_lcrit_alarm Output voltage critical low alarm
+> in[3-4|6-7]_min         Minimum output voltage
+> in[3-4|6-7]_max_alarm   Output voltage low alarm
+> in[3-4|6-7]_max         Maximum output voltage
+> in[3-4|6-7]_max_alarm   Output voltage high alarm
+> in[3-4|6-7]_crit        Critical maximum output voltage
+> in[3-4|6-7]_crit_alarm  Output voltage critical high alarm
+> 
+> power[1-2]_label        "pout[1-2]"
+> power[1-2]_input        Measured output power
+> 
+> temp1_input             Measured temperature
+> temp1_crit              Critical high temperature
+> temp1_crit_alarm        Chip temperature critical high alarm
+> temp1_max               Maximum temperature
+> temp1_max_alarm         Chip temperature high alarm
+> ======================  ====================================
 > 
 > Introduced by commit
 > 
->   7dd47c2603aa ("hwmon: (lm90) Support MAX1617 and LM84")
->
+>   3d6bcaa21fbd ("hwmon: (pmbus) Add support for Analog Devices LT7182S")
+> 
 
 Hi Stephen,
 
-These warnings above doesn't appear when doing htmldocs build using
-Sphinx installed from pip on my system.
+The warning above doesn't appear when doing htmldocs build using Sphinx
+installed from pip on my system.
 
 Cc-ing linux-doc list.
-
-Thanks.
 
 -- 
 An old man doll... just what I always wanted! - Clara

@@ -2,110 +2,105 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DFBF53FB2B
-	for <lists+linux-next@lfdr.de>; Tue,  7 Jun 2022 12:28:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C230353FF04
+	for <lists+linux-next@lfdr.de>; Tue,  7 Jun 2022 14:39:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240986AbiFGK2G (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 7 Jun 2022 06:28:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50176 "EHLO
+        id S234996AbiFGMjn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 7 Jun 2022 08:39:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241002AbiFGK2F (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 7 Jun 2022 06:28:05 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89E968BD0D
-        for <linux-next@vger.kernel.org>; Tue,  7 Jun 2022 03:28:04 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id e184so30367317ybf.8
-        for <linux-next@vger.kernel.org>; Tue, 07 Jun 2022 03:28:04 -0700 (PDT)
+        with ESMTP id S233295AbiFGMjk (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 7 Jun 2022 08:39:40 -0400
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9E1B1E0;
+        Tue,  7 Jun 2022 05:39:36 -0700 (PDT)
+Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-e656032735so23039955fac.0;
+        Tue, 07 Jun 2022 05:39:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lLb4OstT3sRsRSOzWSrE/P7lW42UYdWQsdQ0kmyUq3w=;
-        b=pCE60kVDw2MImA3LMLKXGPwLWoHbYh3JLP0GUT87HFqfaKmFBv/ReQSW0JJHa/Ix53
-         dH+UtzW9JX977Qi0MrS3OXG5uD485M/CUkNH068x00Uxuoe52+M2BjozYvWdP7TyXUlq
-         ByKNbzCe6n4lAvFnOcfrQ3ASctplUIjZ0CTh+40kssFrI1FdW6D7pEQC4bd7q7dXi1xI
-         Z0YFyCFhZgKWp+TkKtnp5UsUenGdtau3pTfr7bTveX32n903KMJ4gFQv4hSUlraiX18k
-         P5OD/58Kj9LqVbwv9staYVQYt6fG58glp/46sWLLwIdoFfoZCTtNHUNG0WNk5ent5wvD
-         XIlw==
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=HiYTeaH2Ytvy9J3xHvGT5KfgL81gOulpVWevU/JIGjQ=;
+        b=Pa+E2AI+vhzby88jLf87j+HCaBZNNBmAxlyecZ1p+WVUqS/UlmKhq0yL6alWbBO6P3
+         SuLQP30pwhVd2MzPhZRtiS0A5i01/zQOgUqza4LvIGv1ouf1YnWjL0V7Zkyw+cDSyh3E
+         NEBT9iEUH058arGgfX67qm5pTiLIL79GTpV+qxWko3VtrgYblbdtpriu1/0SDu6x3LPG
+         l5fCXojmDNm6B1EFK9SXBLrKV/6/e0zXGlvjtqeOlxJgvAVhCMJIhYX2TUKhxsO1uIvr
+         YXCnDa2iBcFb1MdLIdbVwV3N+NO9qdrHvNgW9WSCSHEuDVbAjUwj/OXXlxNVXF5JnYPI
+         aW3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lLb4OstT3sRsRSOzWSrE/P7lW42UYdWQsdQ0kmyUq3w=;
-        b=dz5il2sJJY3xHGqaT7tQ2zJMtljO4GCBcy0YVkCh26j56zn84Q5i51eJ8kVgauj+rl
-         wVPV3vSQVUyfOLKVRjkZWE3mn4RyisqfazHck+mN/Z9YxJ7BQvoK3/NyKJ1lnT0f+upq
-         0waqA6IN3z05iaSGTgEAqHifgF57799HR4UDwReFRz0/tq4uW/plvZSeZ4qESqkmPBcZ
-         vsse5UGWDBDllc1bTk0RRh7qgU+/fpT7Gd2TPO/O10pjJNgd+u1Bjg0X6QqDli39vA8p
-         OYsH04O05Yc+flfdc24RK5iE7ZCytg1r9xJZDweV0n1HcRcE/m4Pyph6p2WqfJmGc1/X
-         2VXQ==
-X-Gm-Message-State: AOAM532XrbwiEjSvqKT2x5Y/5LpgjA6iCf5vBTcvg5PYNvp9ckZRtaqd
-        i11Pz/We9XtVVeDjBN804gTtsJu0lunBdhz0FR7ZbA==
-X-Google-Smtp-Source: ABdhPJwKT2UmpuK+kDxqDiEIkG8TF0esYpFi4IVr32ervm1z3rjq6TIlEmUWrJNsgH3MWaBpO5f9Rfu/L0y/NukH9mc=
-X-Received: by 2002:a25:4705:0:b0:65d:43f8:5652 with SMTP id
- u5-20020a254705000000b0065d43f85652mr28527025yba.389.1654597683604; Tue, 07
- Jun 2022 03:28:03 -0700 (PDT)
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=HiYTeaH2Ytvy9J3xHvGT5KfgL81gOulpVWevU/JIGjQ=;
+        b=ba0BZaX9fgAltmnSe6D3hTKPo/gHgfN/Ai6HyWOmRDCgSxunbQWkVbwOA6BHVhSlWi
+         KCSjd6I3fwwCXF5ZqqcWfgCgXLlpJ9HtQ9jaRMqANfAWVF17Zw48sNTbd3ZqG0Yw/UeO
+         F172nnich6DuWY0folvYecD5AzHQflsWoFhy7j9yDyMsl4MVYtLVZITKQ5UCHZoEvQta
+         u+FapaVP70BRQo+aHvfmgK3cbJEzE2oyTP6O5UI2T4u5MSgPIeFOUwzJUQEim9/SSxep
+         +2+aNEMllNRr9W5Sxu/07nH9qVxuFFkmsd0NoZrI1YpMJRqxN5NdffOUNAamDBitkcG0
+         gSkw==
+X-Gm-Message-State: AOAM530S6EHu/tfu8TtJG/iyGPR4HwPFOyrXnUoP/PYUj5uX2vOJZSEU
+        HpRv5PRmXgimbPKfi0+UtR4=
+X-Google-Smtp-Source: ABdhPJyDzD0MEf/liZAcbSAJnd3NBluQuapP26Cwm4kXdWHdOYC1Dn5nWZetS+yLUXOjPVYFqZrilg==
+X-Received: by 2002:a05:6870:6005:b0:e6:515c:da5a with SMTP id t5-20020a056870600500b000e6515cda5amr16559042oaa.183.1654605576010;
+        Tue, 07 Jun 2022 05:39:36 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id v10-20020a056870424a00b000f317901b29sm8273081oac.4.2022.06.07.05.39.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Jun 2022 05:39:34 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <a015840d-1457-f874-c7a5-b7c91e639fd6@roeck-us.net>
+Date:   Tue, 7 Jun 2022 05:39:33 -0700
 MIME-Version: 1.0
-References: <CA+G9fYv7fESqpGoeKmHoJsst6wfRNMi2wQLGm+PsjbLDuDjdMQ@mail.gmail.com>
- <CA+G9fYsJThWFAxXTbAcJmjshx+oYxVVd+gMM680hS0X1z37+FQ@mail.gmail.com>
- <20220607162504.7fd5a92a@canb.auug.org.au> <CALvZod5XBjw7MZfYSNv-UnE7pHMKTquUNomqyC5T05Qu_ef6Zw@mail.gmail.com>
- <CALvZod4DhM00LXsPty=cnYyv3Ci5YS5otasu_tr9o7ujQekKLw@mail.gmail.com>
-In-Reply-To: <CALvZod4DhM00LXsPty=cnYyv3Ci5YS5otasu_tr9o7ujQekKLw@mail.gmail.com>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 7 Jun 2022 15:57:52 +0530
-Message-ID: <CA+G9fYve1faH7AmpEa-p_ySb_WCgc4DdjqyS6fSdiJYsaEi=rA@mail.gmail.com>
-Subject: Re: [next] arm64: boot failed - next-20220606
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        regressions@lists.linux.dev, lkft-triage@lists.linaro.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-mm <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Raghuram Thammiraju <raghuram.thammiraju@arm.com>,
-        Mark Brown <broonie@kernel.org>, Will Deacon <will@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Vasily Averin <vvs@openvz.org>,
-        Qian Cai <quic_qiancai@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: linux-next: build warnings after merge of the hwmon-staging tree
+Content-Language: en-US
+To:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        linux-doc@vger.kernel.org
+References: <20220607142301.3eb8a53c@canb.auug.org.au>
+ <Yp8bz4Yo45Bq4VfR@debian.me>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <Yp8bz4Yo45Bq4VfR@debian.me>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Shakeel,
+On 6/7/22 02:35, Bagas Sanjaya wrote:
+> On Tue, Jun 07, 2022 at 02:23:01PM +1000, Stephen Rothwell wrote:
+>> Hi all,
+>>
+>> After merging the hwmon-staging tree, today's linux-next build (htmldocs)
+>> produced these warnings:
+>>
+>> Documentation/hwmon/lm90.rst:493: WARNING: Bullet list ends without a blank line; unexpected unindent.
+>> Documentation/hwmon/lm90.rst:494: WARNING: Bullet list ends without a blank line; unexpected unindent.
+>>
+>> Introduced by commit
+>>
+>>    7dd47c2603aa ("hwmon: (lm90) Support MAX1617 and LM84")
+>>
+> 
+> Hi Stephen,
+> 
+> These warnings above doesn't appear when doing htmldocs build using
+> Sphinx installed from pip on my system.
+> 
 
-> > > Can you test v5.19-rc1, please?  If that does not fail, then you could
-> > > bisect between that and next-20220606 ...
-> > >
-> >
-> > This is already reported at
-> > https://lore.kernel.org/all/Yp4F6n2Ie32re7Ed@qian/ and I think we know
-> > the underlying issue (which is calling virt_to_page() on a vmalloc
-> > address).
->
-> Sorry, I might be wrong. Just checked the stacktrace again and it
-> seems like the failure is happening in early boot in this report.
-> Though the error "Unable to handle kernel paging request at virtual
-> address" is happening in the function mem_cgroup_from_obj().
->
-> Naresh, can you repro the issue if you revert the patch "net: set
-> proper memcg for net_init hooks allocations"?
+That is possibly because I already fixed it up (in one place a '-'
+instead of '*' had slipped in).
 
-yes. You are right !
-19ee3818b7c6 ("net: set proper memcg for net_init hooks allocations")
-After reverting this single commit I am able to boot arm64 successfully.
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Guenter

@@ -2,152 +2,155 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2731F544B79
-	for <lists+linux-next@lfdr.de>; Thu,  9 Jun 2022 14:14:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA9E85450B1
+	for <lists+linux-next@lfdr.de>; Thu,  9 Jun 2022 17:23:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245211AbiFIMOV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 9 Jun 2022 08:14:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56630 "EHLO
+        id S1344449AbiFIPXs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 9 Jun 2022 11:23:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242944AbiFIMOU (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 9 Jun 2022 08:14:20 -0400
-Received: from smtp28.bhosted.nl (smtp28.bhosted.nl [IPv6:2a02:9e0:8000::40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77D4E121CC7
-        for <linux-next@vger.kernel.org>; Thu,  9 Jun 2022 05:14:17 -0700 (PDT)
+        with ESMTP id S1344030AbiFIPXi (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 9 Jun 2022 11:23:38 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A6B8FF8
+        for <linux-next@vger.kernel.org>; Thu,  9 Jun 2022 08:23:37 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id bo5so21366259pfb.4
+        for <linux-next@vger.kernel.org>; Thu, 09 Jun 2022 08:23:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=protonic.nl; s=202111;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc:to:from:
-         from;
-        bh=B/M5r4B90mbTkpJzac0CttJDuKdqEl0o8kb84irHerE=;
-        b=o6HzE3W8Ij5m1xQnFcTjjKq6lS2+eQtAgGGHD6sihovrqSSJJnxOzaQglQ4byIMoZwkIAbd7RGY5g
-         37hFqf6tCbEURL8luaZQG2i89IQVM0owNP2JV/hT5o5ZVOU0ncfJZRnSCLLRsZYkJrJzAsx4dDOe7m
-         /UNeWQcZr4imCE6RaYw+Bs15bDAepftCPzslHmzXnxdYe9XFTPvA8zHbX87ZuwcsCdhpS+xz6PkWVd
-         mVOMga98vqwcYxw52YXTNk53FxncTVGYm1109IKlHIxG+h0sdTip7HFeX+nhMa13hxiic1x5mwwv98
-         rW9c19Zlw6CJRuAclIa6PFb6y0RVITA==
-X-MSG-ID: ae2393fb-e7ed-11ec-a2aa-0050569d11ae
-From:   David Jander <david@protonic.nl>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        David Jander <david@protonic.nl>
-Subject: [PATCH] spi: Fix per-cpu stats access on 32 bit systems
-Date:   Thu,  9 Jun 2022 14:13:34 +0200
-Message-Id: <20220609121334.2984808-1-david@protonic.nl>
-X-Mailer: git-send-email 2.32.0
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YV7RC7djtxI0kHw5S5FDRQb2joRqGeuY1mF5zw0phKk=;
+        b=lSf0tQldx/w/ULdeiOjWFksRRZOHkwFQ+zi7S6eUMpPE+euTNq3HfakFsiKn+akZgA
+         BYsNOZN6AKF8VG7tGzdoYC3XsUS9zpNzK4OTBz8SkU/vOjzA6DCrzImFZh8K5L5045nO
+         gtaGCeNE0sEYaJtDzQI5dYct1BCJ/LUA0kDrZ29TbBynMGr3m+1dUjIO/8+rinAeI8Ge
+         ZM4yM/D1Q/S8svh4b8VSGnrbrPC6w7hLXcJ2xNJO9bZ0AbME7FRMvC58Wsw5XYedMd43
+         VYw31UYqRn0Gr/rFapRiPydIJmWwSdOVdFFbZ/5OT8ysrKDH3W9qbrHeYJTS7UfCRGnm
+         J0ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YV7RC7djtxI0kHw5S5FDRQb2joRqGeuY1mF5zw0phKk=;
+        b=V8CuOJeKVZ5AWuQ+yns87rSQD+bvlca8OL6kOxtwBuJZgqDJXBgT+dAbW6iaL3vYEo
+         WgzQKcaY9F5evqPgRX1JHcCzfQxQWqdvvEAfg9FR6aLhThCHuqHR4nBpbCvb7168OFpa
+         EguEgmis0MgITotJMXYh7nqZCex9sXJLy7omZ0OUZWMPOZine2aOQO9pLaWtGQGyWAdD
+         gtGOLRWFy9WND5KxEJm68YW+HwW+KX8Tcpla3OrTmbi4MyZbNlr5xXXExPxgd85H4xzc
+         cC0pqrEikx1JBiXqdh56IMgCns0XqfVY/U/piSu1EP55TS0rXGNMOn6NITJXWFeLSKyg
+         b5og==
+X-Gm-Message-State: AOAM533MJ3ZNeJ4aZ6QFe44edXdo3Uri8jboEmnRcNglEf+KQQh7JolE
+        fkGEM9GntpSH3MIZYz3XPRazaTjHbXX/BiOalLazNQ==
+X-Google-Smtp-Source: ABdhPJy/KwvUBHnh2VRlvCqbK+o5hSwHlwE0i9AJu6gcHX/fyizWfCV7lcs5p6BiMXf7TYQ8FWcrUdEhtuopEnRW2Zg=
+X-Received: by 2002:a05:6a00:889:b0:510:91e6:6463 with SMTP id
+ q9-20020a056a00088900b0051091e66463mr40895230pfj.58.1654788216841; Thu, 09
+ Jun 2022 08:23:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <CA+G9fYsJThWFAxXTbAcJmjshx+oYxVVd+gMM680hS0X1z37+FQ@mail.gmail.com>
+ <20220607162504.7fd5a92a@canb.auug.org.au> <CALvZod5XBjw7MZfYSNv-UnE7pHMKTquUNomqyC5T05Qu_ef6Zw@mail.gmail.com>
+ <CALvZod4DhM00LXsPty=cnYyv3Ci5YS5otasu_tr9o7ujQekKLw@mail.gmail.com>
+ <CA+G9fYve1faH7AmpEa-p_ySb_WCgc4DdjqyS6fSdiJYsaEi=rA@mail.gmail.com>
+ <CALvZod72bp9ejY+KghaUGkoXDrOMMbs_ofsopGib=MY4jzhRkg@mail.gmail.com>
+ <CA+G9fYu6mayYrrYK+0Rn1K7HOM6WbaOhnJSx-Wv6CaKBDpaT2g@mail.gmail.com>
+ <2a4cc632-c936-1e42-4fdc-572334c58ee1@openvz.org> <44530040-0384-796e-143f-b7293886753c@huawei.com>
+ <20220609101153.GB2187@willie-the-truck> <YqHKs19RBubUNrve@arm.com>
+In-Reply-To: <YqHKs19RBubUNrve@arm.com>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Thu, 9 Jun 2022 08:23:25 -0700
+Message-ID: <CALvZod4ukk_iSytn7v_aTdU4XQ2Xs7YK8Fq_PogtN9ARGL9urA@mail.gmail.com>
+Subject: Re: [next] arm64: boot failed - next-20220606
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Will Deacon <will@kernel.org>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Vasily Averin <vvs@openvz.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        regressions@lists.linux.dev, lkft-triage@lists.linaro.org,
+        linux-mm <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Raghuram Thammiraju <raghuram.thammiraju@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Qian Cai <quic_qiancai@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 32 bit systems, the following kernel BUG is hit:
+On Thu, Jun 9, 2022 at 3:26 AM Catalin Marinas <catalin.marinas@arm.com> wrote:
+>
+> On Thu, Jun 09, 2022 at 11:11:54AM +0100, Will Deacon wrote:
+> > On Thu, Jun 09, 2022 at 11:44:09AM +0800, Kefeng Wang wrote:
+> > > On 2022/6/9 10:49, Vasily Averin wrote:
+> > > > mem_cgroup_from_obj():
+> > > > ffff80000836cf40:       d503245f        bti     c
+> > > > ffff80000836cf44:       d503201f        nop
+> > > > ffff80000836cf48:       d503201f        nop
+> > > > ffff80000836cf4c:       d503233f        paciasp
+> > > > ffff80000836cf50:       d503201f        nop
+> > > > ffff80000836cf54:       d2e00021        mov     x1, #0x1000000000000            // #281474976710656
+> > > > ffff80000836cf58:       8b010001        add     x1, x0, x1
+> > > > ffff80000836cf5c:       b25657e4        mov     x4, #0xfffffc0000000000         // #-4398046511104
+> > > > ffff80000836cf60:       d34cfc21        lsr     x1, x1, #12
+> > > > ffff80000836cf64:       d37ae421        lsl     x1, x1, #6
+> > > > ffff80000836cf68:       8b040022        add     x2, x1, x4
+> > > > ffff80000836cf6c:       f9400443        ldr     x3, [x2, #8]
+> > > >
+> > > > x5 : ffff80000a96f000 x4 : fffffc0000000000 x3 : ffff80000ad5e680
+> > > > x2 : fffffe00002bc240 x1 : 00000200002bc240 x0 : ffff80000af09740
+> > > >
+> > > > x0 = 0xffff80000af09740 is an argument of mem_cgroup_from_obj()
+> > > > according to System.map it is init_net
+> > > >
+> > > > This issue is caused by calling virt_to_page() on address of static variable init_net.
+> > > > Arm64 consider that addresses of static variables are not valid virtual addresses.
+> > > > On x86_64 the same API works without any problem.
+> >
+> > This just depends on whether or not the kernel is running out of the linear
+> > mapping or not. On arm64, we use the vmalloc area for the kernel image and
+> > so virt_to_page() won't work, just like it won't work for modules on other
+> > architectures.
+> >
+> > How are module addresses handled by mem_cgroup_from_obj()?
+>
+> It doesn't look like they are handled in any way. It just expects the
+> pointer to be a linear map one.
 
-BUG: using smp_processor_id() in preemptible [00000000] code: swapper/0/1
-caller is debug_smp_processor_id+0x18/0x24
-CPU: 1 PID: 1 Comm: swapper/0 Not tainted 5.19.0-rc1-00001-g6ae0aec8a366 #181
-Hardware name: Freescale i.MX6 Quad/DualLite (Device Tree)
-Backtrace:
- dump_backtrace from show_stack+0x20/0x24
- r7:81024ffd r6:00000000 r5:81024ffd r4:60000013
- show_stack from dump_stack_lvl+0x60/0x78
- dump_stack_lvl from dump_stack+0x14/0x1c
- r7:81024ffd r6:80f652de r5:80bec180 r4:819a2500
- dump_stack from check_preemption_disabled+0xc8/0xf0
- check_preemption_disabled from debug_smp_processor_id+0x18/0x24
- r8:8119b7e0 r7:81205534 r6:819f5c00 r5:819f4c00 r4:c083d724
- debug_smp_processor_id from __spi_sync+0x78/0x220
- __spi_sync from spi_sync+0x34/0x4c
- r10:bb7bf4e0 r9:c083d724 r8:00000007 r7:81a068c0 r6:822a83c0 r5:c083d724
- r4:819f4c00
- spi_sync from spi_mem_exec_op+0x338/0x370
- r5:000000b4 r4:c083d910
- spi_mem_exec_op from spi_nor_read_id+0x98/0xdc
- r10:bb7bf4e0 r9:00000000 r8:00000000 r7:00000000 r6:00000000 r5:82358040
- r4:819f7c40
- spi_nor_read_id from spi_nor_detect+0x38/0x114
- r7:82358040 r6:00000000 r5:819f7c40 r4:819f7c40
- spi_nor_detect from spi_nor_scan+0x11c/0xbec
- r10:bb7bf4e0 r9:00000000 r8:00000000 r7:c083da4c r6:00000000 r5:00010101
- r4:819f7c40
- spi_nor_scan from spi_nor_probe+0x10c/0x2d0
- r10:bb7bf4e0 r9:bb7bf4d0 r8:00000000 r7:819f4c00 r6:00000000 r5:00000000
- r4:819f7c40
+Yes, that is correct.
 
-per-cpu access needs to be guarded against preemption.
+> Something like below:
+>
+> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> index 27cebaa53472..795bf3673fa7 100644
+> --- a/mm/memcontrol.c
+> +++ b/mm/memcontrol.c
+> @@ -2860,6 +2860,11 @@ struct mem_cgroup *mem_cgroup_from_obj(void *p)
+>         if (mem_cgroup_disabled())
+>                 return NULL;
+>
+> +       if (is_module_address((unsigned long)p))
+> +               return NULL;
+> +       else if (is_kernel((unsigned long)p))
+> +               return NULL;
+> +
 
-Fixes: 6598b91b5ac3 ("spi: spi.c: Convert statistics to per-cpu u64_stats_t")
-Reported-by: Marc Kleine-Budde <mkl@pengutronix.de>
-Signed-off-by: David Jander <david@protonic.nl>
----
- drivers/spi/spi.c       |  5 ++++-
- include/linux/spi/spi.h | 10 ++++++++--
- 2 files changed, 12 insertions(+), 3 deletions(-)
+How about just is_vmalloc_addr(p) check? It should cover modules and
+also arm64 using vmalloc for kernel image cases.
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index d94822bf3cec..ac61824b87b5 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -314,11 +314,13 @@ static void spi_statistics_add_transfer_stats(struct spi_statistics *pcpu_stats,
- 					      struct spi_controller *ctlr)
- {
- 	int l2len = min(fls(xfer->len), SPI_STATISTICS_HISTO_SIZE) - 1;
--	struct spi_statistics *stats = this_cpu_ptr(pcpu_stats);
-+	struct spi_statistics *stats;
- 
- 	if (l2len < 0)
- 		l2len = 0;
- 
-+	get_cpu();
-+	stats = this_cpu_ptr(pcpu_stats);
- 	u64_stats_update_begin(&stats->syncp);
- 
- 	u64_stats_inc(&stats->transfers);
-@@ -333,6 +335,7 @@ static void spi_statistics_add_transfer_stats(struct spi_statistics *pcpu_stats,
- 		u64_stats_add(&stats->bytes_rx, xfer->len);
- 
- 	u64_stats_update_end(&stats->syncp);
-+	put_cpu();
- }
- 
- /*
-diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-index 2e63b4935deb..c96f526d9a20 100644
---- a/include/linux/spi/spi.h
-+++ b/include/linux/spi/spi.h
-@@ -84,18 +84,24 @@ struct spi_statistics {
- 
- #define SPI_STATISTICS_ADD_TO_FIELD(pcpu_stats, field, count)		\
- 	do {								\
--		struct spi_statistics *__lstats = this_cpu_ptr(pcpu_stats); \
-+		struct spi_statistics *__lstats;			\
-+		get_cpu();						\
-+		__lstats = this_cpu_ptr(pcpu_stats);			\
- 		u64_stats_update_begin(&__lstats->syncp);		\
- 		u64_stats_add(&__lstats->field, count);			\
- 		u64_stats_update_end(&__lstats->syncp);			\
-+		put_cpu();						\
- 	} while (0)
- 
- #define SPI_STATISTICS_INCREMENT_FIELD(pcpu_stats, field)		\
- 	do {								\
--		struct spi_statistics *__lstats = this_cpu_ptr(pcpu_stats); \
-+		struct spi_statistics *__lstats;			\
-+		get_cpu();						\
-+		__lstats = this_cpu_ptr(pcpu_stats);			\
- 		u64_stats_update_begin(&__lstats->syncp);		\
- 		u64_stats_inc(&__lstats->field);			\
- 		u64_stats_update_end(&__lstats->syncp);			\
-+		put_cpu();						\
- 	} while (0)
- 
- /**
--- 
-2.32.0
-
+>         folio = virt_to_folio(p);
+>
+>         /*
+>
+> --
+> Catalin

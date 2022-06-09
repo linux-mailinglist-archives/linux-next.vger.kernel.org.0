@@ -2,32 +2,59 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C2775452F1
-	for <lists+linux-next@lfdr.de>; Thu,  9 Jun 2022 19:27:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 010A254534D
+	for <lists+linux-next@lfdr.de>; Thu,  9 Jun 2022 19:47:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239112AbiFIR1J (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 9 Jun 2022 13:27:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42026 "EHLO
+        id S243974AbiFIRru (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 9 Jun 2022 13:47:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237749AbiFIR1J (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 9 Jun 2022 13:27:09 -0400
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99F4341331;
-        Thu,  9 Jun 2022 10:27:06 -0700 (PDT)
-Date:   Thu, 9 Jun 2022 10:26:56 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1654795624;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Fl6So+Ej9exgsUXTC/97xxsMfquTGV2omEvXuuP14p8=;
-        b=iJp5ABnPxl8kOUnNiJVuOYNFcws9P2HBlTCNcn5T1rR5WYKMKGMZFs0AAbXmRo+lBiBQbX
-        KI4UuZk4z31qspJ0AWATk+AqTWOu0LVnWRpGbKsq0Pzag7Of1148EjB1PZmFj0hu/S9cZP
-        QWNGUPCGpDsFSWpRMuFXeWqf1caJsgI=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        with ESMTP id S245530AbiFIRrr (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 9 Jun 2022 13:47:47 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 505872A3066
+        for <linux-next@vger.kernel.org>; Thu,  9 Jun 2022 10:47:47 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id e24so22022619pjt.0
+        for <linux-next@vger.kernel.org>; Thu, 09 Jun 2022 10:47:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=b9oolEZCMKFW54fooG59c84yEUWgHZBbtR7AfCAYdYI=;
+        b=X41D9Z1M9z11lUWedCO5eNRFRapXlxPrsuECpK13PvOvf2i1VqGFPiimjY6gh8oGqa
+         7HbfsPGMpMPCFR49lDG9d9wCISozqdegH3GP7WkRN5d/3FvL7KAKpGG3rneRsYiCASfU
+         ch6bjD6f9Nz1TEmXrL5N8RmhaZc9l6PQZdecdH12/5/rLoM5uGhhW3lbKW/DbeL2nM1g
+         pfyhzA+c7lyHLYow3MzkHrR8Z262rXzMRhAuzarc7VQQklAckxSTD+KVDXMjlw9y65jM
+         uB/nlOgdxjm86dKvsVqxi//096hBdFfWihztJAZ1SDFmxoQuPe+C7eKaEYHialep6Iko
+         lXUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=b9oolEZCMKFW54fooG59c84yEUWgHZBbtR7AfCAYdYI=;
+        b=TzVPKjw2yLwUdfLKXxCbeDwLJUY4wd9RDjLfD9LUMTadEaH9boDxhhM2YJE7ForFZC
+         lqy70oDp84lyCA2/LMgSqlDpB/4eujOsuCAHv1N7KLJ3bHGCPvYmHw3ByEW+ON8ilGVC
+         +WlP1CyqbaFkqSvDrl7gUJZPlxzqPM0OefyAehApGfS/5dRpZgCuiuNctGPXm2KjHQlk
+         u+yQzBDUPmW7k4z7yHuTuIK2aaoD7eKe9UyuUDxvoI/jtTJLDxjczn77zMGgQgHBd2yi
+         wBXDI4ZTCv7kl+PtRh7F0meI0uCqh2Q895Lcxmby71Z4jWelXkZKfY6oYDUAlg4BJRQY
+         sgUA==
+X-Gm-Message-State: AOAM531oXWWz0eJSZtDJG3+Bc20tZ6D0ZSmXFOdcNnvoQrH1cfnLWQny
+        4Gsbr8AX6woXL6beft/CdmVJdYemp0PJnBU/mu5APg==
+X-Google-Smtp-Source: ABdhPJxLjqCNbzof1vIJhdH5pog7yCXy+y68VQTqER1z0tqe95qssQwKtKqsASY83T43LyDA+aIwt77I/KrM0pJHgEA=
+X-Received: by 2002:a17:90b:4a4e:b0:1e6:6757:d085 with SMTP id
+ lb14-20020a17090b4a4e00b001e66757d085mr4470182pjb.207.1654796866625; Thu, 09
+ Jun 2022 10:47:46 -0700 (PDT)
+MIME-Version: 1.0
+References: <CA+G9fYv7fESqpGoeKmHoJsst6wfRNMi2wQLGm+PsjbLDuDjdMQ@mail.gmail.com>
+ <CA+G9fYsJThWFAxXTbAcJmjshx+oYxVVd+gMM680hS0X1z37+FQ@mail.gmail.com> <YqItYKEIvsw4Yzjx@carbon>
+In-Reply-To: <YqItYKEIvsw4Yzjx@carbon>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Thu, 9 Jun 2022 10:47:35 -0700
+Message-ID: <CALvZod6ojDd8Bc0VcyFEk-ZrdkFezvQPUvbGg3wyzae+NOp_4A@mail.gmail.com>
+Subject: Re: [next] arm64: boot failed - next-20220606
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
         open list <linux-kernel@vger.kernel.org>,
         regressions@lists.linux.dev, lkft-triage@lists.linaro.org,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
@@ -39,215 +66,37 @@ Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Raghuram Thammiraju <raghuram.thammiraju@arm.com>,
         Mark Brown <broonie@kernel.org>, Will Deacon <will@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
         Vasily Averin <vvs@openvz.org>,
         Qian Cai <quic_qiancai@quicinc.com>
-Subject: Re: [next] arm64: boot failed - next-20220606
-Message-ID: <YqItYKEIvsw4Yzjx@carbon>
-References: <CA+G9fYv7fESqpGoeKmHoJsst6wfRNMi2wQLGm+PsjbLDuDjdMQ@mail.gmail.com>
- <CA+G9fYsJThWFAxXTbAcJmjshx+oYxVVd+gMM680hS0X1z37+FQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYsJThWFAxXTbAcJmjshx+oYxVVd+gMM680hS0X1z37+FQ@mail.gmail.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Jun 07, 2022 at 11:00:39AM +0530, Naresh Kamboju wrote:
-> On Mon, 6 Jun 2022 at 17:16, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
-> >
-> > Linux next-20220606 arm64 boot failed. The kernel boot log is empty.
-> > I am bisecting this problem.
-> >
-> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> >
-> > The initial investigation show that,
-> >
-> > GOOD: next-20220603
-> > BAD:  next-20220606
-> >
-> > Boot log:
-> > Starting kernel ...
-> 
-> Linux next-20220606 and next-20220607 arm64 boot failed.
-> The kernel panic log showing after earlycon.
-> 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+On Thu, Jun 9, 2022 at 10:27 AM Roman Gushchin <roman.gushchin@linux.dev> wrote:
+>
+[...]
+> +struct mem_cgroup *mem_cgroup_from_obj(void *p)
+> +{
+> +       struct folio *folio;
+> +
+> +       if (mem_cgroup_disabled())
+> +               return NULL;
+> +
+> +       if (unlikely(is_vmalloc_addr(p)))
+> +               folio = page_folio(vmalloc_to_page(p));
 
-Naresh, can you, please, check if the following patch resolves the issue?
-(completely untested except for building)
+Do we need to check for NULL from vmalloc_to_page(p)?
 
---
-
-From 6a454876c9a1886e3cf8e9b66dae19b326f8901a Mon Sep 17 00:00:00 2001
-From: Roman Gushchin <roman.gushchin@linux.dev>
-Date: Thu, 9 Jun 2022 10:03:20 -0700
-Subject: [PATCH] mm: kmem: make mem_cgroup_from_obj() vmalloc()-safe
-
-Currently mem_cgroup_from_obj() is not working properly with objects
-allocated using vmalloc(). It creates problems in some cases, when
-it's called for static objects belonging to  modules or generally
-allocated using vmalloc().
-
-This patch makes mem_cgroup_from_obj() safe to be called on objects
-allocated using vmalloc().
-
-It also introduces mem_cgroup_from_slab_obj(), which is a faster
-version to use in places when we know the object is either a slab
-object or a generic slab page (e.g. when adding an object to a lru
-list).
-
-Suggested-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
----
- include/linux/memcontrol.h |  6 ++++
- mm/list_lru.c              |  2 +-
- mm/memcontrol.c            | 71 +++++++++++++++++++++++++++-----------
- 3 files changed, 57 insertions(+), 22 deletions(-)
-
-diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-index 0d7584e2f335..4d31ce55b1c0 100644
---- a/include/linux/memcontrol.h
-+++ b/include/linux/memcontrol.h
-@@ -1761,6 +1761,7 @@ static inline int memcg_kmem_id(struct mem_cgroup *memcg)
- }
- 
- struct mem_cgroup *mem_cgroup_from_obj(void *p);
-+struct mem_cgroup *mem_cgroup_from_slab_obj(void *p);
- 
- static inline void count_objcg_event(struct obj_cgroup *objcg,
- 				     enum vm_event_item idx)
-@@ -1858,6 +1859,11 @@ static inline struct mem_cgroup *mem_cgroup_from_obj(void *p)
- 	return NULL;
- }
- 
-+static inline struct mem_cgroup *mem_cgroup_from_slab_obj(void *p)
-+{
-+	return NULL;
-+}
-+
- static inline void count_objcg_event(struct obj_cgroup *objcg,
- 				     enum vm_event_item idx)
- {
-diff --git a/mm/list_lru.c b/mm/list_lru.c
-index ba76428ceece..a05e5bef3b40 100644
---- a/mm/list_lru.c
-+++ b/mm/list_lru.c
-@@ -71,7 +71,7 @@ list_lru_from_kmem(struct list_lru *lru, int nid, void *ptr,
- 	if (!list_lru_memcg_aware(lru))
- 		goto out;
- 
--	memcg = mem_cgroup_from_obj(ptr);
-+	memcg = mem_cgroup_from_slab_obj(ptr);
- 	if (!memcg)
- 		goto out;
- 
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index 4093062c5c9b..8c408d681377 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -783,7 +783,7 @@ void __mod_lruvec_kmem_state(void *p, enum node_stat_item idx, int val)
- 	struct lruvec *lruvec;
- 
- 	rcu_read_lock();
--	memcg = mem_cgroup_from_obj(p);
-+	memcg = mem_cgroup_from_slab_obj(p);
- 
- 	/*
- 	 * Untracked pages have no memcg, no lruvec. Update only the
-@@ -2833,27 +2833,9 @@ int memcg_alloc_slab_cgroups(struct slab *slab, struct kmem_cache *s,
- 	return 0;
- }
- 
--/*
-- * Returns a pointer to the memory cgroup to which the kernel object is charged.
-- *
-- * A passed kernel object can be a slab object or a generic kernel page, so
-- * different mechanisms for getting the memory cgroup pointer should be used.
-- * In certain cases (e.g. kernel stacks or large kmallocs with SLUB) the caller
-- * can not know for sure how the kernel object is implemented.
-- * mem_cgroup_from_obj() can be safely used in such cases.
-- *
-- * The caller must ensure the memcg lifetime, e.g. by taking rcu_read_lock(),
-- * cgroup_mutex, etc.
-- */
--struct mem_cgroup *mem_cgroup_from_obj(void *p)
-+static __always_inline
-+struct mem_cgroup *mem_cgroup_from_obj_folio(struct folio *folio, void *p)
- {
--	struct folio *folio;
--
--	if (mem_cgroup_disabled())
--		return NULL;
--
--	folio = virt_to_folio(p);
--
- 	/*
- 	 * Slab objects are accounted individually, not per-page.
- 	 * Memcg membership data for each individual object is saved in
-@@ -2886,6 +2868,53 @@ struct mem_cgroup *mem_cgroup_from_obj(void *p)
- 	return page_memcg_check(folio_page(folio, 0));
- }
- 
-+/*
-+ * Returns a pointer to the memory cgroup to which the kernel object is charged.
-+ *
-+ * A passed kernel object can be a slab object, vmalloc object or a generic
-+ * kernel page, so different mechanisms for getting the memory cgroup pointer
-+ * should be used.
-+ *
-+ * In certain cases (e.g. kernel stacks or large kmallocs with SLUB) the caller
-+ * can not know for sure how the kernel object is implemented.
-+ * mem_cgroup_from_obj() can be safely used in such cases.
-+ *
-+ * The caller must ensure the memcg lifetime, e.g. by taking rcu_read_lock(),
-+ * cgroup_mutex, etc.
-+ */
-+struct mem_cgroup *mem_cgroup_from_obj(void *p)
-+{
-+	struct folio *folio;
-+
-+	if (mem_cgroup_disabled())
-+		return NULL;
-+
-+	if (unlikely(is_vmalloc_addr(p)))
-+		folio = page_folio(vmalloc_to_page(p));
-+	else
-+		folio = virt_to_folio(p);
-+
-+	return mem_cgroup_from_obj_folio(folio, p);
-+}
-+
-+/*
-+ * Returns a pointer to the memory cgroup to which the kernel object is charged.
-+ * Similar to mem_cgroup_from_obj(), but faster and not suitable for objects,
-+ * allocated using vmalloc().
-+ *
-+ * A passed kernel object must be a slab object or a generic kernel page.
-+ *
-+ * The caller must ensure the memcg lifetime, e.g. by taking rcu_read_lock(),
-+ * cgroup_mutex, etc.
-+ */
-+struct mem_cgroup *mem_cgroup_from_slab_obj(void *p)
-+{
-+	if (mem_cgroup_disabled())
-+		return NULL;
-+
-+	return mem_cgroup_from_obj_folio(virt_to_folio(p), p);
-+}
-+
- static struct obj_cgroup *__get_obj_cgroup_from_memcg(struct mem_cgroup *memcg)
- {
- 	struct obj_cgroup *objcg = NULL;
--- 
-2.35.3
-
+> +       else
+> +               folio = virt_to_folio(p);
+> +
+> +       return mem_cgroup_from_obj_folio(folio, p);
+> +}

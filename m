@@ -2,50 +2,71 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9B025441CD
-	for <lists+linux-next@lfdr.de>; Thu,  9 Jun 2022 05:15:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92ECC544210
+	for <lists+linux-next@lfdr.de>; Thu,  9 Jun 2022 05:44:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237529AbiFIDPH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 8 Jun 2022 23:15:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48854 "EHLO
+        id S231231AbiFIDoR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 8 Jun 2022 23:44:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230414AbiFIDPH (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 8 Jun 2022 23:15:07 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E844562F2;
-        Wed,  8 Jun 2022 20:15:04 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LJTjb0c86z4xD1;
-        Thu,  9 Jun 2022 13:14:59 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1654744499;
-        bh=S+jXWrp5osNxAjIG20y4ZnatpHi8Kk2mowmjjJQL3As=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=SVjUK9C2H9yTPTA3uwZGIl0O9HO7GdnJqidQQQffjuD6sIkEC/Yb587kVSRFc/HnB
-         H8stgLrNQTClsRQC88te9UY4XuvAQ1EjUY0VKBi0Oshw7ShP8t7PmANQnxxq7HjbG8
-         sB/Lbop5Eq7Uayix75mOvPZGofeii34r+6eXI9ccqd3i228TGLR1bD66fe6X5Ebet1
-         MeuFf+jsvnoxpqwSS6TAvE6YRKt572N0FTk1QBDrwoRPXY2sz4RIcWGKIZPIc1bRam
-         YGVb8XRGOGbjXCkvNX3v6N9t2triDCUvbFewaLX+wnUKnIAGUXs3Iaogbl4Ugas3yQ
-         /TeJJ/0SF9HNg==
-Date:   Thu, 9 Jun 2022 13:14:57 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Aurabindo Pillai <aurabindo.pillai@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Dave Airlie <airlied@linux.ie>
-Subject: Re: linux-next: build failure after merge of the amdgpu tree
-Message-ID: <20220609131457.57f3b602@canb.auug.org.au>
-In-Reply-To: <20220603144315.5adcddbf@canb.auug.org.au>
-References: <20220603144315.5adcddbf@canb.auug.org.au>
+        with ESMTP id S229590AbiFIDoQ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 8 Jun 2022 23:44:16 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6726A237CA8;
+        Wed,  8 Jun 2022 20:44:13 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LJVHZ3v74zRhVr;
+        Thu,  9 Jun 2022 11:40:58 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 9 Jun 2022 11:44:11 +0800
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 9 Jun 2022 11:44:10 +0800
+Message-ID: <44530040-0384-796e-143f-b7293886753c@huawei.com>
+Date:   Thu, 9 Jun 2022 11:44:09 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/76yUxgoUC8Ke8zmAiwpOtLP";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [next] arm64: boot failed - next-20220606
+Content-Language: en-US
+To:     Vasily Averin <vvs@openvz.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+CC:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        <regressions@lists.linux.dev>, <lkft-triage@lists.linaro.org>,
+        linux-mm <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Ard Biesheuvel" <ardb@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Raghuram Thammiraju <raghuram.thammiraju@arm.com>,
+        Mark Brown <broonie@kernel.org>, Will Deacon <will@kernel.org>,
+        "Roman Gushchin" <roman.gushchin@linux.dev>,
+        Qian Cai <quic_qiancai@quicinc.com>
+References: <CA+G9fYv7fESqpGoeKmHoJsst6wfRNMi2wQLGm+PsjbLDuDjdMQ@mail.gmail.com>
+ <CA+G9fYsJThWFAxXTbAcJmjshx+oYxVVd+gMM680hS0X1z37+FQ@mail.gmail.com>
+ <20220607162504.7fd5a92a@canb.auug.org.au>
+ <CALvZod5XBjw7MZfYSNv-UnE7pHMKTquUNomqyC5T05Qu_ef6Zw@mail.gmail.com>
+ <CALvZod4DhM00LXsPty=cnYyv3Ci5YS5otasu_tr9o7ujQekKLw@mail.gmail.com>
+ <CA+G9fYve1faH7AmpEa-p_ySb_WCgc4DdjqyS6fSdiJYsaEi=rA@mail.gmail.com>
+ <CALvZod72bp9ejY+KghaUGkoXDrOMMbs_ofsopGib=MY4jzhRkg@mail.gmail.com>
+ <CA+G9fYu6mayYrrYK+0Rn1K7HOM6WbaOhnJSx-Wv6CaKBDpaT2g@mail.gmail.com>
+ <2a4cc632-c936-1e42-4fdc-572334c58ee1@openvz.org>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <2a4cc632-c936-1e42-4fdc-572334c58ee1@openvz.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,64 +74,60 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/76yUxgoUC8Ke8zmAiwpOtLP
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
-
-On Fri, 3 Jun 2022 14:43:15 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
+On 2022/6/9 10:49, Vasily Averin wrote:
+> Dear ARM developers,
+> could you please help me to find the reason of this problem?
+Hi,
+> mem_cgroup_from_obj():
+> ffff80000836cf40:       d503245f        bti     c
+> ffff80000836cf44:       d503201f        nop
+> ffff80000836cf48:       d503201f        nop
+> ffff80000836cf4c:       d503233f        paciasp
+> ffff80000836cf50:       d503201f        nop
+> ffff80000836cf54:       d2e00021        mov     x1, #0x1000000000000            // #281474976710656
+> ffff80000836cf58:       8b010001        add     x1, x0, x1
+> ffff80000836cf5c:       b25657e4        mov     x4, #0xfffffc0000000000         // #-4398046511104
+> ffff80000836cf60:       d34cfc21        lsr     x1, x1, #12
+> ffff80000836cf64:       d37ae421        lsl     x1, x1, #6
+> ffff80000836cf68:       8b040022        add     x2, x1, x4
+> ffff80000836cf6c:       f9400443        ldr     x3, [x2, #8]
 >
-> After merging the amdgpu tree, today's linux-next build (powerpc
-> allyesconfig) failed like this:
->=20
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c:=
- In function 'dml32_ModeSupportAndSystemConfigurationFull':
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c:=
-3835:1: error: the frame size of 2752 bytes is larger than 2048 bytes [-Wer=
-ror=3Dframe-larger-than=3D]
->  3835 | } // ModeSupportAndSystemConfigurationFull
->       | ^
-> cc1: all warnings being treated as errors
-> make[5]: *** [scripts/Makefile.build:250: drivers/gpu/drm/amd/amdgpu/../d=
-isplay/dc/dml/dcn32/display_mode_vba_32.o] Error 1
-> gcc: error: unrecognized command-line option '-msse'
-> gcc: error: unrecognized command-line option '-msse2'
-> make[5]: *** [scripts/Makefile.build:251: drivers/gpu/drm/amd/amdgpu/../d=
-isplay/dc/dcn32/dcn32_resource.o] Error 1
-> gcc: error: unrecognized command-line option '-msse'
-> gcc: error: unrecognized command-line option '-msse2'
->=20
-> Caused (probably) by commits
->=20
->   5cbb369e32bd ("drm/amd/display: DML changes for DCN32/321")
->   b5dbe04a9c8c ("drm/amd/display: add CLKMGR changes for DCN32/321")
->   4f185390597e ("drm/amd/display: add DCN32/321 specific files for Displa=
-y Core")
->=20
-> I have used the amdgpu tree from next-20220601 again for today.
+> x5 : ffff80000a96f000 x4 : fffffc0000000000 x3 : ffff80000ad5e680
+> x2 : fffffe00002bc240 x1 : 00000200002bc240 x0 : ffff80000af09740
+>
+> x0 = 0xffff80000af09740 is an argument of mem_cgroup_from_obj()
+> according to System.map it is init_net
+>
+> This issue is caused by calling virt_to_page() on address of static variable init_net.
+> Arm64 consider that addresses of static variables are not valid virtual addresses.
+> On x86_64 the same API works without any problem.
+>
+> Unfortunately I do not understand the cause of the problem.
+> I do not see any bugs in my patch.
+> I'm using an existing API, mem_cgroup_from_obj(), to find the memory cgroup used
+> to account for the specified object.
+> In particular, in the current case, I wanted to get the memory cgroup of the
+> specified network namespace by the name taken from for_each_net().
+> The first object in this list is the static structure unit_net
 
-I am still getting these failures.
+root@test:~# cat /proc/kallsyms |grep -w _data
+ffff80000a110000 D _data
+root@test:~# cat /proc/kallsyms |grep -w _end
+ffff80000a500000 B _end
+root@test:~# cat /proc/kallsyms |grep -w init_net
+ffff80000a4eb980 B init_net
 
---=20
-Cheers,
-Stephen Rothwell
+the init_net is located in data section, on arm64, it is allowed by 
+vmalloc, see
 
---Sig_/76yUxgoUC8Ke8zmAiwpOtLP
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+     map_kernel_segment(pgdp, _data, _end, PAGE_KERNEL, &vmlinux_data, 
+0, 0);
 
------BEGIN PGP SIGNATURE-----
+and the arm has same behavior.
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKhZbEACgkQAVBC80lX
-0GxlZQf/evQehEh8429L+22Ejt2EmoYjdIxcJx82xbRDQs7ZzxYSOorpWHAzCf6O
-jYAxmE/zlCHMYoRXgci4oLvZisVXHqGM6UUhfxkjlQVXa1oc5mQqy74qlG6uIN66
-Gzbr6LURMidZrbItFwABqL7Ki3gbEy6damY9+YTVosfXSu9Md0rMR2YrZjzfi/nP
-AOVyXfhI0MicyY1V1FnX5LgNQspf2G1mZ+iMFPgPdivI6pi4AxtIeM1qS4Yu2UrG
-uhO+30ttJpBbqWUC/FfiM9seuB3ASHu1rselqbVyzGNjRQtHysolnEhLrwqCH9wX
-uLNKC6/qQjvdR+VLUDpeL8b+cN37XQ==
-=4QpF
------END PGP SIGNATURE-----
+We could let init_net be allocated dynamically, but I think it could 
+change a lot.
 
---Sig_/76yUxgoUC8Ke8zmAiwpOtLP--
+Any better sugguestion, Catalin?
+

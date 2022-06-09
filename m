@@ -2,92 +2,118 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1AFF543DC4
-	for <lists+linux-next@lfdr.de>; Wed,  8 Jun 2022 22:48:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 080B6544099
+	for <lists+linux-next@lfdr.de>; Thu,  9 Jun 2022 02:33:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232990AbiFHUrC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 8 Jun 2022 16:47:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46728 "EHLO
+        id S233871AbiFIAd0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 8 Jun 2022 20:33:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229965AbiFHUqp (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 8 Jun 2022 16:46:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFC18EBE95;
-        Wed,  8 Jun 2022 13:46:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S231710AbiFIAdZ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 8 Jun 2022 20:33:25 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB4D611A28;
+        Wed,  8 Jun 2022 17:33:19 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 882F8B82AD5;
-        Wed,  8 Jun 2022 20:46:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18903C34116;
-        Wed,  8 Jun 2022 20:46:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654721201;
-        bh=udUB2vdgzbcLCJhRmJJ6lL9erLr3XMY3MY5ztaq+DZM=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=dXuv9pwKGuKFH73K8UJqRujqHEBsOcgbNrQY9EWMzGLcAdfWbGeDA347OJFue0nIN
-         vf4fiDPzGC5bZz/DtaIwy6QR/GLFPkS0Ffq/lo0ALQe2nAydi/+KD6hufN6o2gn76g
-         YwLWHoA3nbzq9+NO7Sd0xINIgIH4Bpt4DvXztwRj4Daw7/6AgVwMMg1IE3TfGtr/9Y
-         JDGYOeylgEYLxmKHPsRVd1VN+c0MlYvzE4F9nNzQY/4SjI7nadgV7CZKiXImKVnm82
-         9OTxUJCi+04dbOaWZzBE1Sv6AHL07muWYDqDbuuDYqIWL26X54uWPcx/tnfTBUc2WW
-         DRVbm1SCugYNQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     david@protonic.nl
-Cc:     linux-kernel@vger.kernel.org, sfr@canb.auug.org.au,
-        andy.shevchenko@gmail.com, linux-next@vger.kernel.org,
-        linux-spi@vger.kernel.org
-In-Reply-To: <20220608153309.2899565-1-david@protonic.nl>
-References: <20220608153309.2899565-1-david@protonic.nl>
-Subject: Re: [PATCH v2] spi: <linux/spi/spi.h>: Add missing documentation for struct members
-Message-Id: <165472119981.3018494.3607522399467236617.b4-ty@kernel.org>
-Date:   Wed, 08 Jun 2022 21:46:39 +0100
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LJQ6z0bVRz4xXD;
+        Thu,  9 Jun 2022 10:33:15 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1654734795;
+        bh=yGik6OUtan7WWJyZq3UlVKhKyLFGDZiTq/DnPBlfoEM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ZasjAYD+Y4Oa11tuMoTPulV4bmIYtWrYftkXI3VOzy8fRuZfuBEBCfeYGxBxN3KrT
+         HL70cKLyoq8Dl6SVNpmMpS+m0gyP2GL9URvIXpiaActaMhsil856EFVSazKn0EIIBn
+         bJB7UC0Gc7oKX3f+ND9J0pX7SmP98HzYMJC+N7xTY+O1LkOsq7SIbKqbp0QO4wvcMZ
+         y5FEQWuxyvgteTO7aK70iwRwUbBDVUqH1W5puioa0tptf5jwbzrQEO+ryjHFEW/q7w
+         acX/Sm4CznZahwOMtyYDjxpwig61R8ZdjLDG1V2SE5jh8vZxC/vZ22tlBxV345HABg
+         ri43BsAFsNcbQ==
+Date:   Thu, 9 Jun 2022 10:33:13 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>
+Cc:     Chenyi Qiang <chenyi.qiang@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Tao Xu <tao3.xu@intel.com>, Xiaoyao Li <xiaoyao.li@intel.com>
+Subject: linux-next: manual merge of the kvm tree with Linus' tree
+Message-ID: <20220609103313.0f05e4b5@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/KdtGegsGOUrQOwgR3MG0I2N";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, 8 Jun 2022 17:33:09 +0200, David Jander wrote:
-> Fixes these "make htmldocs" warnings:
-> 
-> include/linux/spi/spi.h:82: warning: Function parameter or member 'syncp' not described in 'spi_statistics'
-> include/linux/spi/spi.h:213: warning: Function parameter or member 'pcpu_statistics' not described in 'spi_device'
-> include/linux/spi/spi.h:676: warning: Function parameter or member 'pcpu_statistics' not described in 'spi_controller'
-> 
-> 
-> [...]
+--Sig_/KdtGegsGOUrQOwgR3MG0I2N
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Applied to
+Hi all,
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Today's linux-next merge of the kvm tree got a conflict in:
 
-Thanks!
+  arch/x86/kvm/x86.c
 
-[1/1] spi: <linux/spi/spi.h>: Add missing documentation for struct members
-      commit: 5dfac65b621733e69b789150a0a3f1bf2f9095a3
+between commit:
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+  6cd88243c7e0 ("KVM: x86: do not report a vCPU as preempted outside instru=
+ction boundaries")
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+from Linus' tree and commit:
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+  2f4073e08f4c ("KVM: VMX: Enable Notify VM exit")
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+from the kvm tree.
 
-Thanks,
-Mark
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc arch/x86/kvm/x86.c
+index 2ec6a110ec6c,79efdc19b4c8..000000000000
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@@ -296,9 -284,8 +284,10 @@@ const struct _kvm_stats_desc kvm_vcpu_s
+  	STATS_DESC_COUNTER(VCPU, nested_run),
+  	STATS_DESC_COUNTER(VCPU, directed_yield_attempted),
+  	STATS_DESC_COUNTER(VCPU, directed_yield_successful),
+ +	STATS_DESC_COUNTER(VCPU, preemption_reported),
+ +	STATS_DESC_COUNTER(VCPU, preemption_other),
+- 	STATS_DESC_ICOUNTER(VCPU, guest_mode)
++ 	STATS_DESC_ICOUNTER(VCPU, guest_mode),
++ 	STATS_DESC_COUNTER(VCPU, notify_window_exits),
+  };
+ =20
+  const struct kvm_stats_header kvm_vcpu_stats_header =3D {
+
+--Sig_/KdtGegsGOUrQOwgR3MG0I2N
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKhP8oACgkQAVBC80lX
+0GyBYwf/Xl33nd4uOU7Nvnaj3aMg+lsBjcTKAHwL6MIcLM/8DnaJVdERZG0B6pGL
+ZlrqDjc2V6HKq0bhaQXCPyfS/9yOU6a3BamJ4OF970TiLcck7GAUrfpd+eeF8G+o
+1/hng47aDuBYajtV/K1mqh5u3n8xUJtc4HmbddGE9d0zZ40FBTx72AwcqYLT6l+K
+rSXAXdY6f2NUi+QWLagFP0IFA61U3ODV3Fgf65GteeU88IoQ7QmxrBxfa1T3defj
+41qIz4DzpNqtDCDSBGviFpVhnj80FnyVaX4IxsCka5Tm0o4vGc0wq8NpMtO9NKTB
+Nkt52IFDkH3Ntwsc19YSUuhZJ0SeBQ==
+=neXc
+-----END PGP SIGNATURE-----
+
+--Sig_/KdtGegsGOUrQOwgR3MG0I2N--

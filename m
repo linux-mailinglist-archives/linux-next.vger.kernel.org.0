@@ -2,46 +2,68 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF9BC545BBA
-	for <lists+linux-next@lfdr.de>; Fri, 10 Jun 2022 07:36:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 455FB545C1F
+	for <lists+linux-next@lfdr.de>; Fri, 10 Jun 2022 08:13:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346143AbiFJFfw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 10 Jun 2022 01:35:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40276 "EHLO
+        id S1346439AbiFJGNb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 10 Jun 2022 02:13:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346133AbiFJFfw (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 10 Jun 2022 01:35:52 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAB4A4B1F8;
-        Thu,  9 Jun 2022 22:35:48 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LK8nb2xt3z4xD8;
-        Fri, 10 Jun 2022 15:35:47 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1654839347;
-        bh=/CNX8pxrsTE0++tbjcMSH0k6NdvYUyvGTP7Bm7OSyqE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=nNPdnqgH68PcoZRxZG/jSFwHCNzeaXIaWW3LHlJbmN3Bvkp508seFUgmlLzkkfdlR
-         DCvrhfUOUAr7wQ1feWA68lp9N+1S/VSaGq5pUDwjGVY0TDE5MHwWilGLAafI4lILsS
-         pWm23OsiBWpUb39SiJYEqg2iDFbXL3kYO34H0IG/bbXVmkg4jyJHmueFYY2D6BPuqO
-         25XeWKcnz6kT9G4bi5UtKYrNi9+BQdX/hSxww0q4wZ63NkXRRcRpnFlVsjrYWX3yAU
-         HbotOwZaaBCmDYJf8qxEbjptIamg2nyGxwVLjal1zlUvgZGL/DUQZPc/CzTmZ+ptuw
-         HwJ2N3eGK4W9A==
-Date:   Fri, 10 Jun 2022 15:35:44 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Tree for Jun 10
-Message-ID: <20220610153544.1865621b@canb.auug.org.au>
+        with ESMTP id S1346432AbiFJGN2 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 10 Jun 2022 02:13:28 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5771322AE47
+        for <linux-next@vger.kernel.org>; Thu,  9 Jun 2022 23:13:20 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id s14so22012535plk.8
+        for <linux-next@vger.kernel.org>; Thu, 09 Jun 2022 23:13:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=BcF6fFw36NQHiFFifWuDBgbpfcz4FZH1yCmxNn2tQmw=;
+        b=KCfUFeCK/VoCaK8udk2nCeahtX+yaKLABAFJZNUH90ZHVI7KjVsmLisiMAFAqTc6gN
+         dFsbwXB8/d+3+shEKfl83MHg/1fcQ7fzl4qkMf1whHtzdNxRRJyivEJ0MzWVlF0ku91s
+         BxbrJTWQwcMewYRQXry42aN/6kjtB6EU++o+tzB7R4Wf7j3mZQmU81Urs3aHlIAXZanU
+         qw3KDRa+Zlf/dH2DHyI//1wb+sWwHQzs1qA7+PZqixK7gxUj6Qs9R75yW5GZm1SQvINj
+         riroRfgiuGbdnEkuuPj31SDmX/gaxsDIgTochNT75UbLAAJLiZF/RuYkKHIwt5vXFdbA
+         Xk2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=BcF6fFw36NQHiFFifWuDBgbpfcz4FZH1yCmxNn2tQmw=;
+        b=Cf+pqCT4cme3nafQ31c64dpGjeOjJ+FOOORHDEAbQU9iUrrv8b0AjgcBGhnwfWA5QW
+         kHz1jxCIGnk6Gg7ukeETHuGiwZFRC9rCX/Z8Q5Xcgpr0qao0psUf3CwTekq/5gMjC1rt
+         agUzVB9UmiPKurJm1exLw9QMMYRr8jXmWBHw8YD3zcdoO6Ln1cPmBGNV+9aPOOL9qVzP
+         l8HCijMyDh9zfEJky0C0e+EQU+CLOzoBVPLtQPi81FxcsZFdpcCL759XkdAz5ccDWrYa
+         GAn0JyGxnRitQiKxOF0ABzcv4J9b0EXibC8usQcyK5bwsK9dAH/jsEa46yIc//tiY0PS
+         tEkw==
+X-Gm-Message-State: AOAM533YZIOKrEveZdHWYwZSvB/GFHihe3kQOMiZzL4hCsWrwbm5VHGj
+        T2TZx1yVihe3o95ZlFXNKO6isTEOG2I75hCvt9c=
+X-Google-Smtp-Source: ABdhPJzaGoiCyq1tu8tXmmhtIAxh0RoENElgoMJXmd5jX77cnn+pE3Sf3vRJtyhPiAYAh/SMcHqaKw==
+X-Received: by 2002:a17:902:eb85:b0:168:b028:573b with SMTP id q5-20020a170902eb8500b00168b028573bmr5157649plg.158.1654841598800;
+        Thu, 09 Jun 2022 23:13:18 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id o7-20020a170902bcc700b00163f6428657sm17833673pls.6.2022.06.09.23.13.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jun 2022 23:13:18 -0700 (PDT)
+Message-ID: <62a2e0fe.1c69fb81.3e341.2b69@mx.google.com>
+Date:   Thu, 09 Jun 2022 23:13:18 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/T=o523Pc9lDOi/QjaPgyqWQ";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,LOCALPART_IN_SUBJECT,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Kernel: v5.19-rc1-331-g13bdc020d5006
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+Subject: next/pending-fixes baseline: 552 runs,
+ 58 regressions (v5.19-rc1-331-g13bdc020d5006)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,735 +71,2101 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/T=o523Pc9lDOi/QjaPgyqWQ
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/pending-fixes baseline: 552 runs, 58 regressions (v5.19-rc1-331-g13bdc=
+020d5006)
 
-Hi all,
+Regressions Summary
+-------------------
 
-News: there will be no linux-next release on Monday.
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+at91-sama5d4_xplained        | arm   | lab-baylibre    | gcc-10   | multi_v=
+7_defconfig+ima       | 1          =
 
-Changes since 20220609:
+at91-sama5d4_xplained        | arm   | lab-baylibre    | gcc-10   | multi_v=
+7_defconfig+crypto    | 1          =
 
-New tree: battery-fixes
+beaglebone-black             | arm   | lab-broonie     | gcc-10   | omap2pl=
+us_defconfig          | 1          =
 
-The drm-misc tree gained a conflict against Linus' tree.  It also gained
-a build failure for which I reverted a commit.
+da850-lcdk                   | arm   | lab-baylibre    | gcc-10   | davinci=
+_all_defconfig        | 1          =
 
-The amdgpu tree still had its build failures, so I used the
-version from next-20220601 again.
+imx6ul-pico-hobbit           | arm   | lab-pengutronix | gcc-10   | imx_v6_=
+v7_defconfig          | 1          =
 
-The dmaengine tree gained a build failure so I used the version from
-next-20220609.
+imx6ul-pico-hobbit           | arm   | lab-pengutronix | gcc-10   | multi_v=
+7_defc...CONFIG_SMP=3Dn | 1          =
 
-Non-merge commits (relative to Linus' tree): 2044
- 2116 files changed, 161610 insertions(+), 27503 deletions(-)
+imx6ul-pico-hobbit           | arm   | lab-pengutronix | gcc-10   | multi_v=
+7_defconfig           | 1          =
 
-----------------------------------------------------------------------------
+imx6ul-pico-hobbit           | arm   | lab-pengutronix | gcc-10   | multi_v=
+7_defconfig+ima       | 1          =
 
-I have created today's linux-next tree at
-git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
-are tracking the linux-next tree using git, you should not use "git pull"
-to do so as that will try to merge the new linux-next release with the
-old one.  You should use "git fetch" and checkout or reset to the new
-master.
+imx6ul-pico-hobbit           | arm   | lab-pengutronix | gcc-10   | multi_v=
+7_defconfig+crypto    | 1          =
 
-You can see which trees have been included by looking in the Next/Trees
-file in the source.  There are also quilt-import.log and merge.log
-files in the Next directory.  Between each merge, the tree was built
-with a ppc64_defconfig for powerpc, an allmodconfig for x86_64, a
-multi_v7_defconfig for arm and a native build of tools/perf. After
-the final fixups (if any), I do an x86_64 modules_install followed by
-builds for x86_64 allnoconfig, powerpc allnoconfig (32 and 64 bit),
-ppc44x_defconfig, allyesconfig and pseries_le_defconfig and i386,
-arm64, sparc and sparc64 defconfig and htmldocs. And finally, a simple
-boot test of the powerpc pseries_le_defconfig kernel in qemu (with and
-without kvm enabled).
+imx6ul-pico-hobbit           | arm   | lab-pengutronix | gcc-10   | multi_v=
+7_defc...MB2_KERNEL=3Dy | 1          =
 
-Below is a summary of the state of the merge.
+imx8mn-ddr4-evk              | arm64 | lab-baylibre    | gcc-10   | defconf=
+ig                    | 1          =
 
-I am currently merging 353 trees (counting Linus' and 96 trees of bug
-fix patches pending for the current merge release).
+imx8mn-ddr4-evk              | arm64 | lab-nxp         | gcc-10   | defconf=
+ig                    | 1          =
 
-Stats about the size of the tree over time can be seen at
-http://neuling.org/linux-next-size.html .
+jetson-tk1                   | arm   | lab-baylibre    | gcc-10   | multi_v=
+7_defconfig           | 1          =
 
-Status of my local build tests will be at
-http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
-advice about cross compilers/configs that work, we are always open to add
-more builds.
+jetson-tk1                   | arm   | lab-baylibre    | gcc-10   | multi_v=
+7_defconfig+ima       | 1          =
 
-Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
-Gortmaker for triage and bug fixes.
+jetson-tk1                   | arm   | lab-baylibre    | gcc-10   | multi_v=
+7_defconfig+crypto    | 1          =
 
---=20
-Cheers,
-Stephen Rothwell
+jetson-tk1                   | arm   | lab-baylibre    | gcc-10   | multi_v=
+7_defc...G_ARM_LPAE=3Dy | 1          =
 
-$ git checkout master
-$ git reset --hard stable
-Merging origin/master (874c8ca1e60b netfs: Fix gcc-12 warning by embedding =
-vfs inode in netfs_i_context)
-Merging fixes/fixes (d06c942efea4 Merge tag 'for_linus' of git://git.kernel=
-.org/pub/scm/linux/kernel/git/mst/vhost)
-Merging mm-hotfixes/mm-hotfixes-unstable (a0553c7c0f1a mm/kfence: select ra=
-ndom number before taking raw lock)
-Merging kbuild-current/fixes (da4288b95baa scripts/check-local-export: avoi=
-d 'wait $!' for process substitution)
-Merging arc-current/for-curr (f978e8023f33 ARC: bitops: Change __fls to ret=
-urn unsigned long)
-Merging arm-current/fixes (3cfb30199796 ARM: 9197/1: spectre-bhb: fix loop8=
- sequence for Thumb2)
-Merging arm64-fixes/for-next/fixes (f539316fe810 arm64/sme: Fix SVE/SME typ=
-o in ABI documentation)
-Merging arm-soc-fixes/arm/fixes (609a097f5f06 Merge tag 'v5.18-rockchip-dts=
-fixes1' of git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockch=
-ip into arm/fixes)
-Merging drivers-memory-fixes/fixes (1332661e0930 memory: samsung: exynos542=
-2-dmc: Fix refcount leak in of_get_dram_timings)
-Merging tee-fixes/fixes (98268f2a2a9f Merge branch 'optee_ffa_probe_fix_for=
-_v5.18' into fixes)
-Merging m68k-current/for-linus (30b5e6ef4a32 m68k: atari: Make Atari ROM po=
-rt I/O write macros return void)
-Merging powerpc-fixes/fixes (8e1278444446 powerpc/32: Fix overread/overwrit=
-e of thread_struct via ptrace)
-Merging s390-fixes/fixes (f2906aa86338 Linux 5.19-rc1)
-Merging sparc/master (05a59d79793d Merge git://git.kernel.org:/pub/scm/linu=
-x/kernel/git/netdev/net)
-Merging fscrypt-current/for-stable (80f6e3080bfc fs-verity: fix signed inte=
-ger overflow with i_size near S64_MAX)
-Merging net/master (825464e79db4 Merge tag 'net-5.19-rc2' of git://git.kern=
-el.org/pub/scm/linux/kernel/git/netdev/net)
-Merging bpf/master (825464e79db4 Merge tag 'net-5.19-rc2' of git://git.kern=
-el.org/pub/scm/linux/kernel/git/netdev/net)
-Merging ipsec/master (f85daf0e7253 xfrm: xfrm_policy: fix a possible double=
- xfrm_pols_put() in xfrm_bundle_lookup())
-Merging netfilter/master (7fb0269720d7 Merge tag 'for-net-2022-05-23' of gi=
-t://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth)
-Merging ipvs/master (05ae2fba821c netfilter: nft_socket: make cgroup match =
-work in input too)
-Merging wireless/for-next (58f9d52ff689 Merge tag 'net-5.19-rc1' of git://g=
-it.kernel.org/pub/scm/linux/kernel/git/netdev/net)
-Merging rdma-fixes/for-rc (118f767413ad RDMA/qedr: Fix reporting QP timeout=
- attribute)
-Merging sound-current/for-linus (5f3d696eea91 ALSA: hda/realtek: Add quirk =
-for HP Dev One)
-Merging sound-asoc-fixes/for-linus (3d0ac945fe7d Merge remote-tracking bran=
-ch 'asoc/for-5.18' into asoc-linus)
-Merging regmap-fixes/for-linus (cc993887f347 Merge remote-tracking branch '=
-regmap/for-5.18' into regmap-linus)
-Merging regulator-fixes/for-linus (122e951eb804 regulator: qcom_smd: correc=
-t MP5496 ranges)
-Merging spi-fixes/for-linus (6aa27071e435 spi: dt-bindings: Fix unevaluated=
-Properties warnings in examples)
-Merging pci-current/for-linus (f2906aa86338 Linux 5.19-rc1)
-Merging driver-core.current/driver-core-linus (f2906aa86338 Linux 5.19-rc1)
-Merging tty.current/tty-linus (f2906aa86338 Linux 5.19-rc1)
-Merging usb.current/usb-linus (f2906aa86338 Linux 5.19-rc1)
-Merging usb-gadget-fixes/fixes (e49d033bddf5 Linux 5.12-rc6)
-Merging usb-serial-fixes/usb-linus (158f7585bfce USB: serial: option: add s=
-upport for Cinterion MV31 with new baseline)
-Merging phy/fixes (f2906aa86338 Linux 5.19-rc1)
-Merging staging.current/staging-linus (96f0a54e8e65 staging: r8188eu: Fix w=
-arning of array overflow in ioctl_linux.c)
-Merging iio-fixes/fixes-togreg (dee61a0ffff5 iio: adc: vf610: fix conversio=
-n mode sysfs node name)
-Merging counter-fixes/fixes-togreg (f2906aa86338 Linux 5.19-rc1)
-Merging char-misc.current/char-misc-linus (f2906aa86338 Linux 5.19-rc1)
-Merging soundwire-fixes/fixes (f2906aa86338 Linux 5.19-rc1)
-Merging thunderbolt-fixes/fixes (f2906aa86338 Linux 5.19-rc1)
-Merging input-current/for-linus (6ab2e51898cd Input: soc_button_array - als=
-o add Lenovo Yoga Tablet2 1051F to dmi_use_low_level_irq)
-Merging crypto-current/master (e4e62bbc6aba hwrng: omap3-rom - fix using wr=
-ong clk_disable() in omap_rom_rng_runtime_resume())
-Merging vfio-fixes/for-linus (1ef3342a934e vfio/pci: Fix vf_token mechanism=
- when device-specific VF drivers are used)
-Merging kselftest-fixes/fixes (f2906aa86338 Linux 5.19-rc1)
-Merging modules-fixes/modules-linus (7390b94a3c2d module: merge check_expor=
-ted_symbol() into find_exported_symbol_in_section())
-Merging dmaengine-fixes/fixes (a7cd3cf0b2e5 dmaengine: imx-sdma: Allow imx8=
-m for imx7 FW revs)
-Merging backlight-fixes/for-backlight-fixes (a38fd8748464 Linux 5.12-rc2)
-Merging mtd-fixes/mtd/fixes (2c5947cffd81 Revert "mtd: rawnand: add support=
- for Toshiba TC58NVG0S3HTA00 NAND flash")
-Merging mfd-fixes/for-mfd-fixes (a61f4661fba4 mfd: intel_quark_i2c_gpio: Re=
-vert "Constify static struct resources")
-Merging v4l-dvb-fixes/fixes (d4cb77112c7b media: isl7998x: select V4L2_FWNO=
-DE to fix build error)
-Merging reset-fixes/reset/fixes (03cb66463b55 dt-bindings: reset: Add paren=
-t "resets" property as optional)
-Merging mips-fixes/mips-fixes (41e456400212 MIPS: Loongson-3: fix compile m=
-ips cpu_hwmon as module build error.)
-Merging at91-fixes/at91-fixes (0c640d9544d0 ARM: dts: at91: fix pinctrl pha=
-ndles)
-Merging omap-fixes/fixes (46ff3df87215 ARM: dts: logicpd-som-lv: Fix wrong =
-pinmuxing on OMAP35)
-Merging kvm-fixes/master (6cd88243c7e0 KVM: x86: do not report a vCPU as pr=
-eempted outside instruction boundaries)
-Merging kvms390-fixes/master (242c04f01377 KVM: s390: selftests: Use TAP in=
-terface in the reset test)
-Merging hwmon-fixes/hwmon (ac6888ac5a11 hwmon: (occ) Lock mutex in shutdown=
- to prevent race with occ_active)
-Merging nvdimm-fixes/libnvdimm-fixes (d28820419ca3 cxl/pci: Drop shadowed v=
-ariable)
-Merging cxl-fixes/fixes (fae8817ae804 cxl/mem: Fix memory device capacity p=
-robing)
-Merging btrfs-fixes/next-fixes (5f414c4e30de Merge branch 'misc-5.19' into =
-next-fixes)
-Merging vfs-fixes/fixes (fb4554c2232e Fix double fget() in vhost_net_set_ba=
-ckend())
-Merging dma-mapping-fixes/for-linus (18a3c5f7abfd Merge tag 'for_linus' of =
-git://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost)
-Merging i3c-fixes/i3c/fixes (fe07bfda2fb9 Linux 5.12-rc1)
-Merging drivers-x86-fixes/fixes (44acfc22c7d0 platform/surface: aggregator:=
- Fix initialization order when compiling as builtin module)
-Merging samsung-krzk-fixes/fixes (c4c79525042a ARM: exynos: Fix refcount le=
-ak in exynos_map_pmu)
-Merging pinctrl-samsung-fixes/fixes (f2906aa86338 Linux 5.19-rc1)
-Merging devicetree-fixes/dt/linus (927c63e07810 dt-bindings: Drop more redu=
-ndant 'maxItems/minItems' in if/then schemas)
-Merging scsi-fixes/fixes (ec1e8adcbdf6 scsi: pmcraid: Fix missing resource =
-cleanup in error case)
-Merging drm-fixes/drm-fixes (f2906aa86338 Linux 5.19-rc1)
-Merging amdgpu-fixes/drm-fixes (2c409ba81be2 drm/radeon: fix si_enable_smc_=
-cac() failed issue)
-Merging drm-intel-fixes/for-linux-next-fixes (f2906aa86338 Linux 5.19-rc1)
-Merging mmc-fixes/fixes (f616ec25d0bf mmc: sdhci-pci-o2micro: Fix card dete=
-ct by dealing with debouncing)
-Merging rtc-fixes/rtc-fixes (bd33335aa93d rtc: cmos: Disable irq around dir=
-ect invocation of cmos_interrupt())
-Merging gnss-fixes/gnss-linus (f2906aa86338 Linux 5.19-rc1)
-Merging hyperv-fixes/hyperv-fixes (f5f93d7f5a5c HID: hyperv: Correctly acce=
-ss fields declared as __le16)
-Merging soc-fsl-fixes/fix (4b0986a3613c Linux 5.18)
-Merging risc-v-fixes/fixes (f2906aa86338 Linux 5.19-rc1)
-Merging risc-v-mc-fixes/dt-fixes (f2906aa86338 Linux 5.19-rc1)
-Merging pidfd-fixes/fixes (03ba0fe4d09f file: simplify logic in __close_ran=
-ge())
-Merging fpga-fixes/fixes (f2906aa86338 Linux 5.19-rc1)
-Merging spdx/spdx-linus (f2906aa86338 Linux 5.19-rc1)
-Merging gpio-brgl-fixes/gpio/for-current (7219b824e3bc Merge tag 'intel-gpi=
-o-v5.19-2' of gitolite.kernel.org:pub/scm/linux/kernel/git/andy/linux-gpio-=
-intel into gpio/for-current)
-Merging gpio-intel-fixes/fixes (b93a8b2c5161 gpio: dln2: make irq_chip immu=
-table)
-Merging pinctrl-intel-fixes/fixes (ba79c5e45eec MAINTAINERS: Update Intel p=
-in control to Supported)
-Merging erofs-fixes/fixes (8b1ac84dcf2c Documentation/ABI: sysfs-fs-erofs: =
-Fix Sphinx errors)
-Merging integrity-fixes/fixes (843385694721 evm: Fix a small race in init_d=
-esc())
-Merging kunit-fixes/kunit-fixes (f2906aa86338 Linux 5.19-rc1)
-Merging ubifs-fixes/fixes (c3c07fc25f37 ubi: fastmap: Return error code if =
-memory allocation fails in add_aeb())
-Merging memblock-fixes/fixes (c94afc46cae7 memblock: use kfree() to release=
- kmalloced memblock regions)
-Merging cel-fixes/for-rc (da9e94fe000e SUNRPC: Remove pointer type casts fr=
-om xdr_get_next_encode_buffer())
-Merging irqchip-fixes/irq/irqchip-fixes (e3f056a7aafa irqchip/uniphier-aide=
-t: Add compatible string for NX1 SoC)
-Merging renesas-fixes/fixes (432b52eea3dc ARM: shmobile: defconfig: Restore=
- graphical consoles)
-Merging perf-current/perf/urgent (eaea45fc0e7b Merge tag 'perf-tools-fixes-=
-for-v5.18-2022-05-21' of git://git.kernel.org/pub/scm/linux/kernel/git/acme=
-/linux)
-Merging efi-fixes/urgent (9feaf8b387ee efi: fix return value of __setup han=
-dlers)
-Merging zstd-fixes/zstd-linus (88a309465b3f lib: zstd: clean up double word=
- in comment.)
-Merging battery-fixes/fixes (093d27bb6f2d power: supply: core: Fix boundary=
- conditions in interpolation)
-Merging drm-misc-fixes/for-linux-next-fixes (4527d47bb63a drm/atomic: fix w=
-arning of unused variable)
-Merging kbuild/for-next (44688ffd111a Merge tag 'objtool-urgent-2022-06-05'=
- of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip)
-Merging clang-format/clang-format (781121a7f6d1 clang-format: Fix space aft=
-er for_each macros)
-Merging perf/perf/core (9886142c7a22 Merge tag 'input-for-v5.19-rc1' of git=
-://git.kernel.org/pub/scm/linux/kernel/git/dtor/input)
-Merging compiler-attributes/compiler-attributes (7c00621dcaee compiler_type=
-s: mark __compiletime_assert failure as __noreturn)
-Merging dma-mapping/for-next (e15db62bc564 swiotlb: fix setting ->force_bou=
-nce)
-Merging asm-generic/master (b2441b3bdce6 h8300: remove stale bindings and s=
-ymlink)
-Merging arc/for-next (f2906aa86338 Linux 5.19-rc1)
-Merging arm/for-next (bafa10435c4f ARM: 9209/1: Spectre-BHB: avoid pr_info(=
-) every time a CPU comes out of idle)
-Merging arm64/for-next/core (78c09c0f4df8 kselftest/arm64: signal: Skip SVE=
- signal test if not enough VLs supported)
-Merging arm-perf/for-next/perf (c5781212985a perf/arm-cmn: Decode CAL devic=
-es properly in debugfs)
-Merging arm-soc/for-next (cd4a1a61fd72 soc: document merges)
-CONFLICT (content): Merge conflict in arch/arm/Kconfig
-CONFLICT (content): Merge conflict in arch/arm/Makefile
-CONFLICT (modify/delete): arch/arm/configs/imote2_defconfig deleted in Temp=
-orary merge branch 2 and modified in Temporary merge branch 1.  Version Tem=
-porary merge branch 1 of arch/arm/configs/imote2_defconfig left in tree.
-Merging actions/for-next (444d018d8d38 ARM: dts: owl-s500-roseapplepi: Add =
-ATC2603C PMIC)
-Merging amlogic/for-next (1dac6e1d8385 Merge branch 'v5.20/drivers' into fo=
-r-next)
-Merging aspeed/for-next (bfcbea2c93e5 ARM: dts: aspeed: nuvia: rename vendo=
-r nuvia to qcom)
-Merging at91/at91-next (3519476d99a4 Merge branch 'at91-dt' into at91-next)
-Merging drivers-memory/for-next (44a5f0330d32 Merge branch 'mem-ctrl-next' =
-into for-next)
-Merging imx-mxs/for-next (6ed2affe8f7f Merge branch 'imx/defconfig' into fo=
-r-next)
-Merging keystone/next (cb293d3b430e Merge branch 'for_5.15/drivers-soc' int=
-o next)
-Merging mediatek/for-next (b7fb186ebab3 Merge branch 'v5.19-next/soc' into =
-for-next)
-Merging mvebu/for-next (58ec0844bd13 Merge branch 'mvebu/dt64' into mvebu/f=
-or-next)
-Merging omap/for-next (b5418fc0478c Merge branch 'omap-for-v5.19/dt' into f=
-or-next)
-Merging qcom/for-next (5faa5cd718a4 Merge branches 'arm64-for-5.19', 'arm64=
--defconfig-for-5.19', 'clk-for-5.19', 'defconfig-for-5.19', 'drivers-for-5.=
-19', 'dts-for-5.19' and 'arm64-fixes-for-5.18' into for-next)
-Merging raspberrypi/for-next (c5915b53d4c2 dt-bindings: soc: bcm: Convert b=
-rcm,bcm2835-vchiq to json-schema)
-Merging renesas/next (6f4a1ec70aec Merge branch 'renesas-arm-dt-for-v5.20' =
-into renesas-next)
-Merging reset/reset/next (2ca065dc9468 dt-bindings: reset: st,sti-powerdown=
-: Convert to yaml)
-Merging rockchip/for-next (f7898b33dbb0 Merge branch 'v5.20-armsoc/dts64' i=
-nto for-next)
-Merging samsung-krzk/for-next (97eab4d7fd79 Merge branch 'next/soc' into fo=
-r-next)
-Merging scmi/for-linux-next (9cbe729756e4 Merge branch 'for-next/scmi' of g=
-it://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux into for-li=
-nux-next)
-Merging stm32/stm32-next (f2906aa86338 Linux 5.19-rc1)
-Merging sunxi/sunxi/for-next (076b8d7194c3 Merge branch 'sunxi/dt-for-5.20'=
- into sunxi/for-next)
-Merging tee/next (db30e53bf897 Merge branch 'tee_cleanup_for_v5.19' into ne=
-xt)
-Merging tegra/for-next (22cd13a29127 Merge branch for-5.20/arm64/defconfig =
-into for-next)
-Merging ti/ti-next (f2906aa86338 Linux 5.19-rc1)
-Merging xilinx/for-next (63623390c0d6 arm64: dts: zynqmp: add AMS driver to=
- device tree)
-Merging clk/clk-next (f2906aa86338 Linux 5.19-rc1)
-Merging clk-imx/for-next (cf7f3f4fa9e5 clk: imx8mp: fix usb_root_clk parent)
-Merging clk-renesas/renesas-clk (02c96ed9e4cd clk: renesas: rzg2l: Fix rese=
-t status function)
-Merging clk-samsung/for-next (b35f27fe73d8 clk: samsung: exynosautov9: add =
-cmu_peric1 clock support)
-Merging csky/linux-next (64d83f067746 csky: Move $(core-y) into arch/csky/K=
-build)
-Merging loongarch/loongarch-next (8be4493119b0 MAINTAINERS: Add maintainer =
-information for LoongArch)
-Merging m68k/for-next (30b5e6ef4a32 m68k: atari: Make Atari ROM port I/O wr=
-ite macros return void)
-Merging m68knommu/for-next (c5ac8a9fcfab m68k: coldfire/device.c: protect F=
-LEXCAN blocks)
-Merging microblaze/next (78b5f52ab6f6 microblaze: fix typos in comments)
-Merging mips/mips-next (f2906aa86338 Linux 5.19-rc1)
-Merging nios2/for-next (7f7bc20bc41a nios2: Don't use _end for calculating =
-min_low_pfn)
-Merging openrisc/for-next (83da38d82b2f openrisc: Allow power off handler o=
-verriding)
-Merging parisc-hd/for-next (1d0811b03eb3 parisc/stifb: Fix fb_is_primary_de=
-vice() only available with CONFIG_FB_STI)
-Merging powerpc/next (6112bd00e84e Merge tag 'powerpc-5.19-1' of git://git.=
-kernel.org/pub/scm/linux/kernel/git/powerpc/linux)
-Merging soc-fsl/next (4b0986a3613c Linux 5.18)
-Merging risc-v/for-next (f2906aa86338 Linux 5.19-rc1)
-Merging risc-v-mc/dt-for-next (294b2111ff10 riscv: dts: microchip: remove s=
-pi-max-frequency property)
-Merging s390/for-next (f2906aa86338 Linux 5.19-rc1)
-Merging sh/for-next (8518e694203d sh: pgtable-3level: Fix cast to pointer f=
-rom integer of different size)
-Merging sparc-next/master (dd0d718152e4 Merge tag 'spi-fix-v5.8-rc2' of git=
-://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi)
-Merging uml/linux-next (2a4a62a14be1 um: Fix out-of-bounds read in LDT setu=
-p)
-Merging xtensa/xtensa-for-next (dc60001e1a30 xtensa: Return true/false (not=
- 1/0) from bool function)
-Merging pidfd/for-next (e1bbcd277a53 fs: hold writers when changing mount's=
- idmapping)
-Merging fscrypt/master (218d921b581e fscrypt: add new helper functions for =
-test_dummy_encryption)
-Merging fscache/fscache-next (713423282ae1 netfs: Fix gcc-12 warning by emb=
-edding vfs inode in netfs_i_context)
-CONFLICT (content): Merge conflict in fs/ceph/caps.c
-CONFLICT (content): Merge conflict in include/linux/netfs.h
-Merging afs/afs-next (26291c54e111 Linux 5.17-rc2)
-Merging btrfs/for-next (4077c8c19c72 Merge branch 'for-next-next-v5.19-2022=
-0608' into for-next-20220608)
-Merging ceph/master (b24d20af4c2e fscrypt: add fscrypt_context_for_new_inod=
-e)
-Merging cifs/for-next (8c7a741fd417 cifs: populate empty hostnames for extr=
-a channels)
-Merging configfs/for-next (84ec758fb2da configfs: fix a race in configfs_{,=
-un}register_subsystem())
-Merging ecryptfs/next (682a8e2b41ef Merge tag 'ecryptfs-5.13-rc1-updates' o=
-f git://git.kernel.org/pub/scm/linux/kernel/git/tyhicks/ecryptfs)
-Merging erofs/dev (94f870f13595 MAINTAINERS: erofs: add myself as reviewer)
-Merging exfat/dev (204e6ceaa103 exfat: use updated exfat_chain directly dur=
-ing renaming)
-Merging ext3/for_next (537e11cdc7a6 quota: Prevent memory allocation recurs=
-ion while holding dq_lock)
-Merging ext4/dev (5f41fdaea63d ext4: only allow test_dummy_encryption when =
-supported)
-Merging f2fs/dev (b69c95858779 f2fs: use the updated test_dummy_encryption =
-helper functions)
-Merging fsverity/fsverity (e6af1bb07704 fs-verity: Use struct_size() helper=
- in enable_verity())
-Merging fuse/for-next (6b49bc9d8a5f fuse: avoid unnecessary spinlock bump)
-Merging gfs2/for-next (565f82b57abe gfs2: Rewrap overlong comment in do_pro=
-mote)
-Merging jfs/jfs-next (e471e5942c00 fs/jfs: Remove dead code)
-Merging ksmbd/ksmbd-for-next (f2906aa86338 Linux 5.19-rc1)
-Merging nfs/linux-next (42226c989789 Linux 5.18-rc7)
-Merging nfs-anna/linux-next (304791255a2d sunrpc: set cl_max_connect when c=
-loning an rpc_clnt)
-Merging nfsd/for-next (f2906aa86338 Linux 5.19-rc1)
-Merging ntfs3/master (19e890ff3bed fs/ntfs3: Use the same order for acl poi=
-nter check in ntfs_init_acl)
-Merging orangefs/for-next (40a74870b2d1 orangefs: Fix the size of a memory =
-allocation in orangefs_bufmap_alloc())
-Merging overlayfs/overlayfs-next (bc70682a497c ovl: support idmapped layers)
-Merging ubifs/next (8c03a1c21d72 ubi: ubi_create_volume: Fix use-after-free=
- when volume creation failed)
-Merging v9fs/9p-next (22e424feb665 Revert "fs/9p: search open fids first")
-Merging xfs/for-next (7146bda743e6 Merge branch 'guilt/xfs-5.19-larp-cleanu=
-ps' into xfs-5.19-for-next)
-Merging zonefs/for-next (31a644b3c2ae documentation: zonefs: Document sysfs=
- attributes)
-Merging iomap/iomap-for-next (e9c3a8e820ed iomap: don't invalidate folios a=
-fter writeback errors)
-Merging djw-vfs/vfs-for-next (49df34221804 fs: fix an infinite loop in ioma=
-p_fiemap)
-Merging file-locks/locks-next (80d8e4d3f313 fs/locks: fix fcntl_getlk64/fcn=
-tl_setlk64 stub prototypes)
-Merging vfs/for-next (e9921ffd594f Merge branches 'work.namei', 'work.mount=
-' and 'work.fd' into for-next)
-Merging printk/for-next (d55663695b60 Merge branch 'rework/kthreads' into f=
-or-next)
-Merging pci/next (f2906aa86338 Linux 5.19-rc1)
-Merging pstore/for-next/pstore (8126b1c73108 pstore: Don't use semaphores i=
-n always-atomic-context code)
-Merging hid/for-next (353539023e4f Merge branch 'for-5.19/upstream-fixes' i=
-nto for-next)
-Merging i2c/i2c/for-next (fbecd5a0d391 Merge branch 'i2c/for-mergewindow' i=
-nto i2c/for-next)
-Merging i3c/i3c/next (f2906aa86338 Linux 5.19-rc1)
-Merging dmi/dmi-for-next (f97a2103f1a7 firmware: dmi: Move product_sku info=
- to the end of the modalias)
-Merging hwmon-staging/hwmon-next (92b620bee45d hwmon: (pmbus) fix build err=
-or unused-function)
-Merging jc_docs/docs-next (387c67afccbb docs: arm: tcm: Fix typo in descrip=
-tion of TCM and MMU usage)
-Merging v4l-dvb/master (f2906aa86338 Linux 5.19-rc1)
-Merging v4l-dvb-next/master (f2906aa86338 Linux 5.19-rc1)
-Merging pm/linux-next (afc38f63a539 Merge branch 'pm-cpuidle' into linux-ne=
-xt)
-Merging cpufreq-arm/cpufreq/arm/linux-next (39b360102f3a cpufreq: mediatek:=
- Add support for MT8186)
-Merging cpupower/cpupower (f2906aa86338 Linux 5.19-rc1)
-Merging devfreq/devfreq-next (9f3ec0f65421 PM / devfreq: mediatek: Introduc=
-e MediaTek CCI devfreq driver)
-Merging opp/opp/linux-next (10630adca5a0 OPP: Use generic key finding helpe=
-rs for bandwidth key)
-Merging thermal/thermal/linux-next (72b3fc61c752 thermal: k3_j72xx_bandgap:=
- Add the bandgap driver support)
-Merging ieee1394/for-next (54b3bd99f094 firewire: nosy: switch from 'pci_' =
-to 'dma_' API)
-Merging dlm/next (8e51ec6146fd dlm: use kref_put_lock in __put_lkb)
-Merging rdma/for-next (158e71bb69e3 RDMA/mlx5: Add a umr recovery flow)
-Merging net-next/master (263efe85a4b6 net: macb: change return type for gem=
-_ptp_set_one_step_sync())
-Merging bpf-next/for-next (fe92833524e3 libbpf: Fix uprobe symbol file offs=
-et calculation logic)
-Merging ipsec-next/master (0f9008e5c510 Merge  branch 'Be explicit with XFR=
-M offload direction')
-Merging mlx5-next/mlx5-next (f2906aa86338 Linux 5.19-rc1)
-Merging netfilter-next/master (677fb7525331 Merge git://git.kernel.org/pub/=
-scm/linux/kernel/git/netdev/net)
-Merging ipvs-next/master (0c7b27616fbd selftests: netfilter: add fib expres=
-sion forward test case)
-Merging bluetooth/master (0b537674e072 Bluetooth: use memset avoid memory l=
-eaks)
-Merging wireless-next/for-next (85393ca610de wifi: rtw89: support MULTI_BSS=
-ID and correct BSSID mask of H2C)
-Merging mtd/mtd/next (6f6536a0e309 mtd: st_spi_fsm: Simplify error checking=
- in .probe() a bit)
-Merging nand/nand/next (fc602b4f692c mtd: spinand: Add support for ATO25D1G=
-A)
-Merging spi-nor/spi-nor/next (c47452194641 mtd: spi-nor: debugfs: fix forma=
-t specifier)
-Merging crypto/master (e4e62bbc6aba hwrng: omap3-rom - fix using wrong clk_=
-disable() in omap_rom_rng_runtime_resume())
-Merging drm/drm-next (f2906aa86338 Linux 5.19-rc1)
-Merging drm-misc/for-linux-next (efeeaefe9be5 drm: Add support for the Logi=
-CVC display controller)
-CONFLICT (content): Merge conflict in include/uapi/linux/dma-buf.h
-Merging drm-intel/for-linux-next (5c57c099f442 drm/i915/display: Fix handli=
-ng of enable_psr parameter)
-CONFLICT (content): Merge conflict in drivers/gpu/drm/i915/display/intel_dm=
-c_regs.h
-CONFLICT (content): Merge conflict in drivers/gpu/drm/i915/gt/intel_rps.c
-Merging drm-tegra/drm/tegra/for-next (b53c24f69199 drm/tegra: Support YVYU,=
- VYUY and YU24 formats)
-Merging drm-msm/msm-next (24df12013853 MAINTAINERS: Add Dmitry as MSM DRM d=
-river co-maintainer)
-Merging imx-drm/imx-drm/next (927d8fd465ad drm/imx: ipuv3-plane: Remove red=
-undant color encoding and range initialisation)
-Merging etnaviv/etnaviv/next (2829a9fcb738 drm/etnaviv: reap idle softpin m=
-appings when necessary)
-Merging fbdev/for-next (f1b03cf05746 fbcon: Fix accelerated fbdev scrolling=
- while logo is still shown)
-Merging regmap/for-next (687e2ae18602 Merge remote-tracking branch 'regmap/=
-for-5.20' into regmap-next)
-Merging sound/for-next (5f3d696eea91 ALSA: hda/realtek: Add quirk for HP De=
-v One)
-Merging sound-asoc/for-next (30c802148845 Merge remote-tracking branch 'aso=
-c/for-5.20' into asoc-next)
-Merging modules/modules-next (7390b94a3c2d module: merge check_exported_sym=
-bol() into find_exported_symbol_in_section())
-Merging input/next (69cf890d8b28 Input: mtk-pmic-keys - move long press deb=
-ounce mask to mtk_pmic_regs)
-Merging block/for-next (75d6654eb3ab Merge branch 'for-5.19/block' into for=
--next)
-Merging device-mapper/for-next (d5a37b199837 block: remove bioset_init_from=
-_src)
-Merging libata/for-next (d326e046e3a5 ata: libata-core: fix sloppy typing i=
-n ata_id_n_sectors())
-Merging pcmcia/pcmcia-next (2ef4bb24ff39 pcmcia: Use platform_get_irq() to =
-get the interrupt)
-Merging mmc/next (6aa26be14d2a dt-bindings: mmc: renesas,sdhi: Document R-C=
-ar S4-8 and generic Gen4 support)
-Merging mfd/for-mfd-next (f93afd8e7567 dt-bindings: cros-ec: Fix a typo in =
-description)
-Merging backlight/for-backlight-next (023a8830a628 backlight: backlight: Sl=
-ighly simplify devm_of_find_backlight())
-Merging battery/for-next (e08f8a118514 power: supply: ab8500: Exit maintena=
-nce if too low voltage)
-Merging regulator/for-next (aa3562673c25 Merge remote-tracking branch 'regu=
-lator/for-5.20' into regulator-next)
-Merging security/next-testing (047843bdb316 Merge branch 'landlock_lsm_v34'=
- into next-testing)
-Merging apparmor/apparmor-next (c2489617b3b9 apparmor: Fix undefined refere=
-nce to `zlib_deflate_workspacesize')
-CONFLICT (content): Merge conflict in security/apparmor/policy_unpack_test.c
-Merging integrity/next-integrity (048ae41bb080 integrity: Fix sparse warnin=
-gs in keyring_handler)
-Merging keys/keys-next (2d743660786e Merge branch 'fixes' of git://git.kern=
-el.org/pub/scm/linux/kernel/git/viro/vfs)
-Merging safesetid/safesetid-next (1b8b71922919 LSM: SafeSetID: Mark safeset=
-id_initialized as __initdata)
-Merging selinux/next (4d3d0ed60ee0 selinux: drop unnecessary NULL check)
-Merging smack/next (ba6b652bd863 smack: Remove redundant assignments)
-Merging tomoyo/master (f2906aa86338 Linux 5.19-rc1)
-Merging tpmdd/next (dda5384313a4 KEYS: trusted: tpm2: Fix migratable logic)
-Merging watchdog/master (b6c8cd80ace3 watchdog: gxp: Add missing MODULE_LIC=
-ENSE)
-Merging iommu/next (b0dacee202ef Merge branches 'apple/dart', 'arm/mediatek=
-', 'arm/msm', 'arm/smmu', 'ppc/pamu', 'x86/vt-d', 'x86/amd' and 'vfio-notif=
-ier-fix' into next)
-Merging audit/next (5ee6cfdd11aa audit: remove redundant data_len check)
-Merging devicetree/for-next (38a85b9d95c7 dt-bindings: sram: qcom,imem: add=
- IMEM memory region)
-Merging mailbox/mailbox-for-next (79f9fbe30352 mailbox: qcom-ipcc: Fix -Wun=
-used-function with CONFIG_PM_SLEEP=3Dn)
-Merging spi/for-next (9c1d6487398e Merge remote-tracking branch 'spi/for-5.=
-20' into spi-next)
-Merging tip/master (23e79f6c0760 Merge branch into tip/master: 'x86/mm')
-CONFLICT (content): Merge conflict in arch/x86/Kconfig
-CONFLICT (content): Merge conflict in arch/x86/Kconfig
-Merging clockevents/timers/drivers/next (ff714ee7191b clocksource/drivers/t=
-imer-ti-dm: Add compatible for am6 SoCs)
-Merging edac/edac-for-next (92705c9f9956 Merge edac-misc into for-next)
-Merging irqchip/irq/irqchip-next (492449ae4f0a Merge branch irq/gic-v3-nmi-=
-fixes-5.19 into irq/irqchip-next)
-Merging ftrace/for-next (01dca6d03bb3 Merge branch 'trace/for-next-rtla' in=
-to trace/for-next)
-Merging rcu/rcu/next (504312bb6d39 rcu-tasks: Update comments)
-CONFLICT (content): Merge conflict in kernel/rcu/rcu.h
-Merging kvm/next (b172862241b4 KVM: x86: PIT: Preserve state of speaker por=
-t data bit)
-CONFLICT (content): Merge conflict in arch/x86/kvm/x86.c
-Merging kvm-arm/next (5c0ad551e9aa Merge branch kvm-arm64/its-save-restore-=
-fixes-5.19 into kvmarm-master/next)
-Merging kvms390/next (b1edf7f159a6 KVM: s390: selftests: Use TAP interface =
-in the reset test)
-Merging xen-tip/linux-next (dbac14a5a05f xen: unexport __init-annotated xen=
-_xlate_map_ballooned_pages())
-Merging percpu/for-next (4e1f82dce05b Merge branch 'for-5.16-fixes' into fo=
-r-next)
-Merging workqueues/for-next (873a400938b3 workqueue: Fix type of cpu in tra=
-ce event)
-Merging drivers-x86/for-next (f2906aa86338 Linux 5.19-rc1)
-Merging chrome-platform/for-next (8d5976089c97 platform/chrome: cros_ec_com=
-mands: Fix syntax errors in comments)
-Merging hsi/for-next (43c14f8d18a7 HSI: omap_ssi: Fix refcount leak in ssi_=
-probe)
-Merging leds/for-next (f2906aa86338 Linux 5.19-rc1)
-Merging ipmi/for-next (a508e33956b5 ipmi:ipmb: Fix refcount leak in ipmi_ip=
-mb_probe)
-Merging driver-core/driver-core-next (f2906aa86338 Linux 5.19-rc1)
-Merging usb/usb-next (f2906aa86338 Linux 5.19-rc1)
-Merging thunderbolt/next (7ec58378a985 thunderbolt: Add support for Intel R=
-aptor Lake)
-Merging usb-gadget/next (e49d033bddf5 Linux 5.12-rc6)
-Merging usb-serial/usb-next (f2906aa86338 Linux 5.19-rc1)
-Merging tty/tty-next (f2906aa86338 Linux 5.19-rc1)
-Merging char-misc/char-misc-next (f2906aa86338 Linux 5.19-rc1)
-Applying: fixup for "usb: dwc3: Don't switch OTG -> peripheral if extcon is=
- present"
-Merging coresight/next (1adff542d67a coresight: cpu-debug: Replace mutex wi=
-th mutex_trylock on panic notifier)
-Merging fpga/for-next (a5e3d775d088 fpga: Directly use ida_alloc()/free())
-Merging icc/icc-next (3be0ec65fd17 dt-bindings: interconnect: Remove sc7180=
-/sdx55 ipa compatibles)
-Merging iio/togreg (c321674386d8 iio: adc: rzg2l_adc: Remove unnecessary ch=
-annel check from rzg2l_adc_read_label())
-Merging phy-next/next (e991c2ee65e9 phy: qcom-qmp-usb: use bulk reset_contr=
-ol API)
-Merging soundwire/next (f2906aa86338 Linux 5.19-rc1)
-Merging extcon/extcon-next (51bd0abd873d extcon: fsa9480: Drop no-op remove=
- function)
-Merging gnss/gnss-next (f2906aa86338 Linux 5.19-rc1)
-Merging vfio/next (421cfe6596f6 vfio: remove VFIO_GROUP_NOTIFY_SET_KVM)
-Merging staging/staging-next (3e763d3dc626 staging: r8188eu: use u8, u16 in=
- issue_action_BA prototype)
-Merging mux/for-next (0fcfb00b28c0 Linux 5.16-rc4)
-Merging dmaengine/next (cb4e34856b77 MAINTAINERS: Add ADMAC driver under AR=
-M/APPLE MACHINE)
-$ git reset --hard HEAD^
-Merging next-20220609 version of dmaengine
-Merging cgroup/for-next (5f69a6577bc3 psi: dont alloc memory for psi by def=
-ault)
-Merging scsi/for-next (ec1e8adcbdf6 scsi: pmcraid: Fix missing resource cle=
-anup in error case)
-Merging scsi-mkp/for-next (3fd3a52ca672 scsi: core: iscsi: Directly use ida=
-_alloc()/ida_free())
-Merging vhost/linux-next (00d1f546470d vdpa: make get_vq_group and set_grou=
-p_asid optional)
-Merging rpmsg/for-next (01a1a0c8d456 Merge branches 'rproc-next', 'rpmsg-ne=
-xt' and 'hwspinlock-next' into for-next)
-Merging gpio/for-next (7ac554888233 MAINTAINERS: Remove reference to non-ex=
-isting file)
-Merging gpio-brgl/gpio/for-next (f2906aa86338 Linux 5.19-rc1)
-Merging gpio-intel/for-next (b93a8b2c5161 gpio: dln2: make irq_chip immutab=
-le)
-Merging gpio-sim/gpio/gpio-sim (0fcfb00b28c0 Linux 5.16-rc4)
-Merging pinctrl/for-next (83969805cc71 pinctrl: apple: Use a raw spinlock f=
-or the regmap)
-Merging pinctrl-intel/for-next (ba79c5e45eec MAINTAINERS: Update Intel pin =
-control to Supported)
-Merging pinctrl-renesas/renesas-pinctrl (5223c511eb4f pinctrl: renesas: rzg=
-2l: Return -EINVAL for pins which have input disabled)
-Merging pinctrl-samsung/for-next (c98ebe065e07 pinctrl: samsung: do not use=
- bindings header with constants)
-Merging pwm/for-next (3d593b6e80ad pwm: pwm-cros-ec: Add channel type suppo=
-rt)
-Merging userns/for-next (a58ea318d8b9 Merge of per-namespace-ipc-sysctls-fo=
-r-v5.19, kthread-cleanups-for-v5.19, ptrace_stop-cleanup-for-v5.19, and uco=
-unt-rlimits-cleanups-for-v5.19 for testing in linux-next)
-Merging ktest/for-next (170f4869e662 ktest.pl: Fix the logic for truncating=
- the size of the log file for email)
-Merging kselftest/next (f2906aa86338 Linux 5.19-rc1)
-Merging livepatching/for-next (0e11f2076e7f Merge branch 'for-5.19/cleanup'=
- into for-next)
-Merging rtc/rtc-next (f2906aa86338 Linux 5.19-rc1)
-Merging nvdimm/libnvdimm-for-next (f42e8e5088b9 pmem: implement pmem_recove=
-ry_write())
-Merging at24/at24/for-next (312310928417 Linux 5.18-rc1)
-Merging ntb/ntb-next (e9d0fa5e2482 IDT: Fix Build warnings on some 32bit ar=
-chitectures.)
-Merging seccomp/for-next/seccomp (73a8dbafd31a selftests/seccomp: Fix compi=
-le warning when CC=3Dclang)
-Merging cisco/for-next (9e98c678c2d6 Linux 5.1-rc1)
-Merging fsi/next (f2af60bb7ce2 fsi: Add trace events in initialization path)
-Merging slimbus/for-next (4ad3deabeea2 slimbus: messaging: fix typos in com=
-ments)
-Merging nvmem/for-next (6b291610dd57 nvmem: microchip-otpc: add support)
-Merging xarray/main (63b1898fffcd XArray: Disallow sibling entries of nodes)
-Merging hyperv/hyperv-next (d27423bf048d hv_balloon: Fix balloon_probe() an=
-d balloon_remove() error handling)
-Merging auxdisplay/auxdisplay (13de23494f38 auxdisplay: lcd2s: Use array si=
-ze explicitly in lcd2s_gotoxy())
-Merging kgdb/kgdb/for-next (c1cb81429df4 kdb: Fix the putarea helper functi=
-on)
-Merging hmm/hmm (457c42326fb9 RDMA/erdma: Add driver to kernel build enviro=
-nment)
-Merging kunit/test (f2906aa86338 Linux 5.19-rc1)
-Merging cfi/cfi/next (312310928417 Linux 5.18-rc1)
-Merging kunit-next/kunit (f2906aa86338 Linux 5.19-rc1)
-Merging trivial/for-next (081c8919b02b Documentation: remove trivial tree)
-Merging mhi/mhi-next (13b9b814da2d bus: mhi: host: Add support for Foxconn =
-T99W373 and T99W368)
-Merging memblock/for-next (000605cd1b14 memblock tests: remove completed TO=
-DO item)
-Merging init/init-user-pointers (38b082236e77 initramfs: use vfs_utimes in =
-do_copy)
-Merging counters/counters (e71ba9452f0b Linux 5.11-rc2)
-Merging cxl/next (34e37b4c432c cxl/port: Enable HDM Capability after valida=
-ting DVSEC Ranges)
-Merging folio-iomap/folio-iomap (4d7bd0eb72e5 iomap: Inline __iomap_zero_it=
-er into its caller)
-Merging zstd/zstd-next (88a309465b3f lib: zstd: clean up double word in com=
-ment.)
-Merging efi/next (75ed63d91940 efi: clean up Kconfig dependencies on CONFIG=
-_EFI)
-Merging unicode/for-next (b500d6d7243d unicode: Handle memory allocation fa=
-ilures in mkutf8data)
-Merging slab/for-next (6b2d72729581 Merge branches 'slab/for-5.19/stackdepo=
-t' and 'slab/for-5.19/refactor' into slab/for-next)
-Merging random/master (9efdb19590e8 random: remove rng_has_arch_random())
-Merging landlock/next (fdaf9a5840ac Merge tag 'folio-5.19' of git://git.inf=
-radead.org/users/willy/pagecache)
-Merging rust/rust-next (9a5fe747d99e init/Kconfig: Specify the interpreter =
-for rust-is-available.sh)
-CONFLICT (content): Merge conflict in Makefile
-CONFLICT (content): Merge conflict in include/uapi/linux/android/binder.h
-Merging sysctl/sysctl-next (acdc07ace871 kernel/sysctl.c: Clean up indentat=
-ion, replace spaces with tab.)
-Merging folio/for-next (e0e31b46c7fc mm/folio-compat: Remove migration comp=
-atibility functions)
-Merging execve/for-next/execve (70578ff3367d binfmt_flat: Remove shared lib=
-rary support)
-Merging bitmap/bitmap-for-next (0dfe54071d7c nodemask: Fix return values to=
- be unsigned)
-Merging hte/hte/for-next (5dad4eccd2b4 dt-bindings: timestamp: Correct id p=
-ath)
-Merging kspp/for-next/kspp (e1d337335207 cfi: Fix __cfi_slowpath_diag RCU u=
-sage with cpuidle)
-Merging kspp-gustavo/for-next/kspp (f2906aa86338 Linux 5.19-rc1)
-Merging mm-stable/mm-stable (f2906aa86338 Linux 5.19-rc1)
-Merging mm-nonmm-stable/mm-nonmm-stable (f2906aa86338 Linux 5.19-rc1)
-Merging mm/mm-everything (947f6381caa5 Merge branch 'mm-nonmm-unstable' int=
-o mm-everything)
-Merging amdgpu/drm-next (64f6516e60b0 drm/amdgpu: always flush the TLB on g=
-fx8)
-$ git reset --hard HEAD^
-Merging next-20220601 version of amdgpu
-Applying: Revert "fbdev: vesafb: Allow to be built if COMPILE_TEST is enabl=
-ed"
-$ git checkout -b akpm remotes/origin/akpm/master
-$ git rebase --onto master remotes/origin/akpm/master-base
-Merging akpm/master (2c9f55126535 Revert "fbdev: vesafb: Allow to be built =
-if COMPILE_TEST is enabled")
+jetson-tk1                   | arm   | lab-baylibre    | gcc-10   | multi_v=
+7_defc...MB2_KERNEL=3Dy | 1          =
 
---Sig_/T=o523Pc9lDOi/QjaPgyqWQ
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+jetson-tk1                   | arm   | lab-baylibre    | gcc-10   | tegra_d=
+efconfig              | 1          =
 
------BEGIN PGP SIGNATURE-----
+kontron-kbox-a-230-ls        | arm64 | lab-kontron     | gcc-10   | defconf=
+ig+debug              | 1          =
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKi2DAACgkQAVBC80lX
-0Gyavwf8CA1EC8gI/eCU+JIbNXZ6PR84vsFVCVcGO2+MILabduR+8OUUQ7Khz+RD
-CWSPmGBbilxGmDtPqpHEJc3EJtSwDgiu2fszeR5GCy/xjtk9xJNACpwrv0eS/iEK
-xbZ/flSjGS9BXkw4c1Ckr05A9ugYdMZLGB+Ap1U79uhfgAw24fC2VUCM1E6AF9HA
-EUeshrOkIn2ZFGKWMOELdBL7wuxH4mtiefassvbiDdFnd45UO1/Oj+tFhODg4MxS
-oNyHTZ4mQqpOA4uUIJtYdA2py01WgY/XToGu4IcIJVPMGnEGBF9lDMvaQEUAcxbm
-oVinoiLujeSoHp4WAhpOScIcloBmgQ==
-=aDJk
------END PGP SIGNATURE-----
+odroid-xu3                   | arm   | lab-collabora   | gcc-10   | multi_v=
+7_defc...MB2_KERNEL=3Dy | 1          =
 
---Sig_/T=o523Pc9lDOi/QjaPgyqWQ--
+qemu_arm64-virt-gicv2        | arm64 | lab-baylibre    | gcc-10   | defconf=
+ig+debug              | 1          =
+
+qemu_arm64-virt-gicv2        | arm64 | lab-broonie     | gcc-10   | defconf=
+ig+debug              | 1          =
+
+qemu_arm64-virt-gicv2-uefi   | arm64 | lab-baylibre    | gcc-10   | defconf=
+ig+debug              | 1          =
+
+qemu_arm64-virt-gicv2-uefi   | arm64 | lab-broonie     | gcc-10   | defconf=
+ig+debug              | 1          =
+
+qemu_arm64-virt-gicv3-uefi   | arm64 | lab-baylibre    | gcc-10   | defconf=
+ig+debug              | 1          =
+
+qemu_arm64-virt-gicv3-uefi   | arm64 | lab-broonie     | gcc-10   | defconf=
+ig+debug              | 1          =
+
+rk3399-gru-kevin             | arm64 | lab-collabora   | gcc-10   | defconf=
+ig+arm64-chromebook   | 4          =
+
+sun50i-a64-bananapi-m64      | arm64 | lab-clabbe      | gcc-10   | defconf=
+ig+CON...OMIZE_BASE=3Dy | 1          =
+
+sun50i-a64-bananapi-m64      | arm64 | lab-clabbe      | gcc-10   | defconf=
+ig+ima                | 1          =
+
+sun50i-a64-bananapi-m64      | arm64 | lab-clabbe      | gcc-10   | defconf=
+ig                    | 1          =
+
+sun50i-a64-pine64-plus       | arm64 | lab-broonie     | gcc-10   | defconf=
+ig+CON...BIG_ENDIAN=3Dy | 1          =
+
+sun50i-a64-pine64-plus       | arm64 | lab-broonie     | gcc-10   | defconf=
+ig+ima                | 1          =
+
+sun50i-h5-nanopi-neo-plus2   | arm64 | lab-clabbe      | gcc-10   | defconf=
+ig+CON...OMIZE_BASE=3Dy | 1          =
+
+sun50i-h5-nanopi-neo-plus2   | arm64 | lab-clabbe      | gcc-10   | defconf=
+ig+CON...BIG_ENDIAN=3Dy | 1          =
+
+sun50i-h5-nanopi-neo-plus2   | arm64 | lab-clabbe      | gcc-10   | defconf=
+ig+ima                | 1          =
+
+sun50i-h5-nanopi-neo-plus2   | arm64 | lab-clabbe      | gcc-10   | defconf=
+ig                    | 1          =
+
+sun50i-h6-pine-h64           | arm64 | lab-collabora   | gcc-10   | defconf=
+ig+ima                | 1          =
+
+sun50i-h6-pine-h64           | arm64 | lab-collabora   | gcc-10   | defconf=
+ig                    | 1          =
+
+sun8i-a33-olinuxino          | arm   | lab-clabbe      | gcc-10   | multi_v=
+7_defconfig           | 1          =
+
+sun8i-a33-olinuxino          | arm   | lab-clabbe      | gcc-10   | multi_v=
+7_defconfig+ima       | 1          =
+
+sun8i-a33-olinuxino          | arm   | lab-clabbe      | gcc-10   | multi_v=
+7_defconfig+crypto    | 1          =
+
+sun8i-a33-olinuxino          | arm   | lab-clabbe      | gcc-10   | multi_v=
+7_defc...MB2_KERNEL=3Dy | 1          =
+
+sun8i-a83t-bananapi-m3       | arm   | lab-clabbe      | gcc-10   | multi_v=
+7_defconfig+crypto    | 1          =
+
+sun8i-a83t-bananapi-m3       | arm   | lab-clabbe      | gcc-10   | multi_v=
+7_defc...MB2_KERNEL=3Dy | 1          =
+
+sun8i-a83t-bananapi-m3       | arm   | lab-clabbe      | gcc-10   | sunxi_d=
+efconfig              | 1          =
+
+sun8i-h2-plus...ch-all-h3-cc | arm   | lab-baylibre    | gcc-10   | multi_v=
+7_defconfig+crypto    | 1          =
+
+sun8i-h2-plus...ch-all-h3-cc | arm   | lab-baylibre    | gcc-10   | sunxi_d=
+efconfig              | 1          =
+
+sun8i-h2-plus-orangepi-zero  | arm   | lab-baylibre    | gcc-10   | multi_v=
+7_defconfig           | 1          =
+
+sun8i-h2-plus-orangepi-zero  | arm   | lab-baylibre    | gcc-10   | multi_v=
+7_defconfig+crypto    | 1          =
+
+sun8i-h3-bananapi-m2-plus    | arm   | lab-baylibre    | gcc-10   | multi_v=
+7_defconfig           | 1          =
+
+sun8i-r40-bananapi-m2-ultra  | arm   | lab-clabbe      | gcc-10   | multi_v=
+7_defconfig           | 1          =
+
+sun8i-r40-bananapi-m2-ultra  | arm   | lab-clabbe      | gcc-10   | multi_v=
+7_defconfig+ima       | 1          =
+
+sun8i-r40-bananapi-m2-ultra  | arm   | lab-clabbe      | gcc-10   | multi_v=
+7_defc...MB2_KERNEL=3Dy | 1          =
+
+sun8i-r40-bananapi-m2-ultra  | arm   | lab-clabbe      | gcc-10   | multi_v=
+7_defc...BIG_ENDIAN=3Dy | 1          =
+
+sun8i-r40-bananapi-m2-ultra  | arm   | lab-clabbe      | gcc-10   | sunxi_d=
+efconfig              | 1          =
+
+
+  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
+v5.19-rc1-331-g13bdc020d5006/plan/baseline/
+
+  Test:     baseline
+  Tree:     next
+  Branch:   pending-fixes
+  Describe: v5.19-rc1-331-g13bdc020d5006
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      13bdc020d5006f316a1611655052969d60237b33 =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+at91-sama5d4_xplained        | arm   | lab-baylibre    | gcc-10   | multi_v=
+7_defconfig+ima       | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2ab105406ccd289a39be1
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+ima
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig+ima/gcc-10/lab-baylibre/baseline-a=
+t91-sama5d4_xplained.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig+ima/gcc-10/lab-baylibre/baseline-a=
+t91-sama5d4_xplained.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2ab105406ccd289a39=
+be2
+        failing since 10 days (last pass: v5.18-1222-g391cf5a1244f, first f=
+ail: v5.18-11575-gceccc06b624ed) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+at91-sama5d4_xplained        | arm   | lab-baylibre    | gcc-10   | multi_v=
+7_defconfig+crypto    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2abc6cbbcf8ac22a39bd7
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+crypto
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig+crypto/gcc-10/lab-baylibre/baselin=
+e-at91-sama5d4_xplained.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig+crypto/gcc-10/lab-baylibre/baselin=
+e-at91-sama5d4_xplained.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2abc6cbbcf8ac22a39=
+bd8
+        new failure (last pass: v5.19-rc1-144-g9b6181f62e678) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+beaglebone-black             | arm   | lab-broonie     | gcc-10   | omap2pl=
+us_defconfig          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2a9dab145e17916a39bd7
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: omap2plus_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/omap2plus_defconfig/gcc-10/lab-broonie/baseline-beagl=
+ebone-black.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/omap2plus_defconfig/gcc-10/lab-broonie/baseline-beagl=
+ebone-black.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2a9dab145e17916a39=
+bd8
+        new failure (last pass: v5.19-rc1-144-g9b6181f62e678) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+da850-lcdk                   | arm   | lab-baylibre    | gcc-10   | davinci=
+_all_defconfig        | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2a9c7a2d1c0ee35a39bd3
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: davinci_all_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/davinci_all_defconfig/gcc-10/lab-baylibre/baseline-da=
+850-lcdk.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/davinci_all_defconfig/gcc-10/lab-baylibre/baseline-da=
+850-lcdk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/62a2a9c7a2d1c0e=
+e35a39bdb
+        failing since 137 days (last pass: v5.16-11577-gffd79fec234d, first=
+ fail: v5.17-rc1-180-g86539e2bdb99)
+        3 lines
+
+    2022-06-10T02:17:25.062293  kern  :alert : BUG: Bad page state in proce=
+ss kworker/u2:0  pfn:c3000
+    2022-06-10T02:17:25.062837  kern  :alert : BUG: Bad page state in proce=
+ss kworker/u2:0  pfn:c3400
+    2022-06-10T02:17:25.065578  kern  :alert : BUG: Bad page state in proce=
+ss kworker/u2:0  pfn:c3800
+    2022-06-10T02:17:25.113013  <8><LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Dale=
+rt RESULT=3Dfail UNITS=3Dlines MEASUREMENT=3D3>   =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+imx6ul-pico-hobbit           | arm   | lab-pengutronix | gcc-10   | imx_v6_=
+v7_defconfig          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2cbfeb5757967f8a39bd6
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: imx_v6_v7_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/imx_v6_v7_defconfig/gcc-10/lab-pengutronix/baseline-i=
+mx6ul-pico-hobbit.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/imx_v6_v7_defconfig/gcc-10/lab-pengutronix/baseline-i=
+mx6ul-pico-hobbit.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2cbfeb5757967f8a39=
+bd7
+        failing since 10 days (last pass: v5.16-rc4-241-g3e464b455df7, firs=
+t fail: v5.18-11575-gceccc06b624ed) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+imx6ul-pico-hobbit           | arm   | lab-pengutronix | gcc-10   | multi_v=
+7_defc...CONFIG_SMP=3Dn | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2c14a0db980be7aa39bd8
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-10/lab-pengutro=
+nix/baseline-imx6ul-pico-hobbit.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-10/lab-pengutro=
+nix/baseline-imx6ul-pico-hobbit.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2c14a0db980be7aa39=
+bd9
+        failing since 10 days (last pass: v5.16-rc4-356-ga119cd39dcbf, firs=
+t fail: v5.18-11575-gceccc06b624ed) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+imx6ul-pico-hobbit           | arm   | lab-pengutronix | gcc-10   | multi_v=
+7_defconfig           | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2c1d671b8d60378a39c08
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig/gcc-10/lab-pengutronix/baseline-im=
+x6ul-pico-hobbit.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig/gcc-10/lab-pengutronix/baseline-im=
+x6ul-pico-hobbit.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2c1d671b8d60378a39=
+c09
+        failing since 10 days (last pass: v5.16-rc4-241-g3e464b455df7, firs=
+t fail: v5.18-11575-gceccc06b624ed) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+imx6ul-pico-hobbit           | arm   | lab-pengutronix | gcc-10   | multi_v=
+7_defconfig+ima       | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2c55a307c96ca86a39bce
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+ima
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig+ima/gcc-10/lab-pengutronix/baselin=
+e-imx6ul-pico-hobbit.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig+ima/gcc-10/lab-pengutronix/baselin=
+e-imx6ul-pico-hobbit.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2c55a307c96ca86a39=
+bcf
+        failing since 10 days (last pass: v5.16-rc4-356-ga119cd39dcbf, firs=
+t fail: v5.18-11575-gceccc06b624ed) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+imx6ul-pico-hobbit           | arm   | lab-pengutronix | gcc-10   | multi_v=
+7_defconfig+crypto    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2c82ab67bbb868ba39bcd
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+crypto
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig+crypto/gcc-10/lab-pengutronix/base=
+line-imx6ul-pico-hobbit.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig+crypto/gcc-10/lab-pengutronix/base=
+line-imx6ul-pico-hobbit.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2c82ab67bbb868ba39=
+bce
+        failing since 10 days (last pass: v5.16-rc4-356-ga119cd39dcbf, firs=
+t fail: v5.18-11575-gceccc06b624ed) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+imx6ul-pico-hobbit           | arm   | lab-pengutronix | gcc-10   | multi_v=
+7_defc...MB2_KERNEL=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2cc8a321f4ab57da39bd3
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/la=
+b-pengutronix/baseline-imx6ul-pico-hobbit.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/la=
+b-pengutronix/baseline-imx6ul-pico-hobbit.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2cc8a321f4ab57da39=
+bd4
+        failing since 10 days (last pass: v5.16-rc4-356-ga119cd39dcbf, firs=
+t fail: v5.18-11575-gceccc06b624ed) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+imx8mn-ddr4-evk              | arm64 | lab-baylibre    | gcc-10   | defconf=
+ig                    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2b13e4090f14863a39c06
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm64/defconfig/gcc-10/lab-baylibre/baseline-imx8mn-ddr4-=
+evk.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm64/defconfig/gcc-10/lab-baylibre/baseline-imx8mn-ddr4-=
+evk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2b13e4090f14863a39=
+c07
+        new failure (last pass: v5.18-11575-gceccc06b624ed) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+imx8mn-ddr4-evk              | arm64 | lab-nxp         | gcc-10   | defconf=
+ig                    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2afec55de9a99c9a39bce
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm64/defconfig/gcc-10/lab-nxp/baseline-imx8mn-ddr4-evk.t=
+xt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm64/defconfig/gcc-10/lab-nxp/baseline-imx8mn-ddr4-evk.h=
+tml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2afec55de9a99c9a39=
+bcf
+        new failure (last pass: v5.18-11575-gceccc06b624ed) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+jetson-tk1                   | arm   | lab-baylibre    | gcc-10   | multi_v=
+7_defconfig           | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2c4f986d8976df7a39bcd
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-jetso=
+n-tk1.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-jetso=
+n-tk1.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2c4f986d8976df7a39=
+bce
+        failing since 21 days (last pass: v5.18-rc7-165-g2424086909d29, fir=
+st fail: v5.18-rc7-251-g195d7f7a62c6) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+jetson-tk1                   | arm   | lab-baylibre    | gcc-10   | multi_v=
+7_defconfig+ima       | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2c7dc8c81d30aeaa39bda
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+ima
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig+ima/gcc-10/lab-baylibre/baseline-j=
+etson-tk1.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig+ima/gcc-10/lab-baylibre/baseline-j=
+etson-tk1.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2c7dc8c81d30aeaa39=
+bdb
+        failing since 21 days (last pass: v5.18-rc7-165-g2424086909d29, fir=
+st fail: v5.18-rc7-251-g195d7f7a62c6) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+jetson-tk1                   | arm   | lab-baylibre    | gcc-10   | multi_v=
+7_defconfig+crypto    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2cbb15b2387d979a39bcd
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+crypto
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig+crypto/gcc-10/lab-baylibre/baselin=
+e-jetson-tk1.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig+crypto/gcc-10/lab-baylibre/baselin=
+e-jetson-tk1.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2cbb15b2387d979a39=
+bce
+        failing since 17 days (last pass: v5.18-rc7-251-g195d7f7a62c6, firs=
+t fail: v5.18-155-gb82692513a38) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+jetson-tk1                   | arm   | lab-baylibre    | gcc-10   | multi_v=
+7_defc...G_ARM_LPAE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2d0b3a54d904bf6a39bdb
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy=
+/gcc-10/lab-baylibre/baseline-jetson-tk1.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy=
+/gcc-10/lab-baylibre/baseline-jetson-tk1.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2d0b3a54d904bf6a39=
+bdc
+        failing since 41 days (last pass: v5.18-rc2-366-ga3e1163f7eb1a, fir=
+st fail: v5.18-rc4-464-g425675974eb3) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+jetson-tk1                   | arm   | lab-baylibre    | gcc-10   | multi_v=
+7_defc...MB2_KERNEL=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2d512dbb9613a3fa39bce
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/la=
+b-baylibre/baseline-jetson-tk1.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/la=
+b-baylibre/baseline-jetson-tk1.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2d512dbb9613a3fa39=
+bcf
+        failing since 21 days (last pass: v5.18-rc7-165-g2424086909d29, fir=
+st fail: v5.18-rc7-251-g195d7f7a62c6) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+jetson-tk1                   | arm   | lab-baylibre    | gcc-10   | tegra_d=
+efconfig              | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2cf42a6e59b3093a39bdb
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: tegra_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/tegra_defconfig/gcc-10/lab-baylibre/baseline-jetson-t=
+k1.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/tegra_defconfig/gcc-10/lab-baylibre/baseline-jetson-t=
+k1.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2cf42a6e59b3093a39=
+bdc
+        failing since 4 days (last pass: v5.18-12139-gb5db4eaa8649, first f=
+ail: v5.18-14068-g9e633753407a5) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+kontron-kbox-a-230-ls        | arm64 | lab-kontron     | gcc-10   | defconf=
+ig+debug              | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2b17d5a90de0266a39c1a
+
+  Results:     94 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig+debug
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm64/defconfig+debug/gcc-10/lab-kontron/baseline-kontron=
+-kbox-a-230-ls.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm64/defconfig+debug/gcc-10/lab-kontron/baseline-kontron=
+-kbox-a-230-ls.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.mscc_felix-probed: https://kernelci.org/test/case/id/62=
+a2b17d5a90de0266a39c27
+        failing since 10 days (last pass: v5.18-5613-ge079cf8f6817, first f=
+ail: v5.18-11575-gceccc06b624ed)
+
+    2022-06-10T02:50:12.725676  /lava-125943/1/../bin/lava-test-case
+    2022-06-10T02:50:12.826649  <8>[   40.378836][  T317] <LAVA_SIGNAL_TEST=
+CASE TEST_CASE_ID=3Dmscc_felix-probed RESULT=3Dfail>   =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+odroid-xu3                   | arm   | lab-collabora   | gcc-10   | multi_v=
+7_defc...MB2_KERNEL=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2bd25ea72a2770ea39bdd
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/la=
+b-collabora/baseline-odroid-xu3.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/la=
+b-collabora/baseline-odroid-xu3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/62a2bd25ea72a27=
+70ea39be4
+        new failure (last pass: v5.18-14068-g9e633753407a5)
+        1 lines
+
+    2022-06-10T03:39:57.991047  kern  :emerg : Disabling IRQ #150
+    2022-06-10T03:39:58.004947  + set +x
+    2022-06-10T03:39:58.022580  <8>[   22.620420] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Demerg RESULT=3Dfail UNITS=3Dlines MEASUREMENT=3D1>
+    2022-06-10T03:39:58.023065  <8>[   22.622500] <LAVA_SIGNAL_ENDRUN 0_dme=
+sg 6579650_1.5.2.4.1>   =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+qemu_arm64-virt-gicv2        | arm64 | lab-baylibre    | gcc-10   | defconf=
+ig+debug              | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2b1e2bb17b0f69ea39bdc
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+debug
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm64/defconfig+debug/gcc-10/lab-baylibre/baseline-qemu_a=
+rm64-virt-gicv2.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm64/defconfig+debug/gcc-10/lab-baylibre/baseline-qemu_a=
+rm64-virt-gicv2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2b1e2bb17b0f69ea39=
+bdd
+        failing since 3 days (last pass: v5.18-14068-g9e633753407a5, first =
+fail: v5.19-rc1-102-g5a749a6e62f23) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+qemu_arm64-virt-gicv2        | arm64 | lab-broonie     | gcc-10   | defconf=
+ig+debug              | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2b2411984f8918fa39be1
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+debug
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm64/defconfig+debug/gcc-10/lab-broonie/baseline-qemu_ar=
+m64-virt-gicv2.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm64/defconfig+debug/gcc-10/lab-broonie/baseline-qemu_ar=
+m64-virt-gicv2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2b2411984f8918fa39=
+be2
+        failing since 3 days (last pass: v5.18-14068-g9e633753407a5, first =
+fail: v5.19-rc1-102-g5a749a6e62f23) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+qemu_arm64-virt-gicv2-uefi   | arm64 | lab-baylibre    | gcc-10   | defconf=
+ig+debug              | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2b1f6bb17b0f69ea39bfa
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+debug
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm64/defconfig+debug/gcc-10/lab-baylibre/baseline-qemu_a=
+rm64-virt-gicv2-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm64/defconfig+debug/gcc-10/lab-baylibre/baseline-qemu_a=
+rm64-virt-gicv2-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2b1f6bb17b0f69ea39=
+bfb
+        failing since 30 days (last pass: v5.18-rc5-178-g63184bc90d435, fir=
+st fail: v5.18-rc6-217-gd854612e01df) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+qemu_arm64-virt-gicv2-uefi   | arm64 | lab-broonie     | gcc-10   | defconf=
+ig+debug              | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2b255ed3fa92abba39be5
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+debug
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm64/defconfig+debug/gcc-10/lab-broonie/baseline-qemu_ar=
+m64-virt-gicv2-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm64/defconfig+debug/gcc-10/lab-broonie/baseline-qemu_ar=
+m64-virt-gicv2-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2b255ed3fa92abba39=
+be6
+        failing since 30 days (last pass: v5.18-rc5-178-g63184bc90d435, fir=
+st fail: v5.18-rc6-217-gd854612e01df) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+qemu_arm64-virt-gicv3-uefi   | arm64 | lab-baylibre    | gcc-10   | defconf=
+ig+debug              | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2b1e6bb17b0f69ea39bec
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+debug
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm64/defconfig+debug/gcc-10/lab-baylibre/baseline-qemu_a=
+rm64-virt-gicv3-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm64/defconfig+debug/gcc-10/lab-baylibre/baseline-qemu_a=
+rm64-virt-gicv3-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2b1e6bb17b0f69ea39=
+bed
+        failing since 30 days (last pass: v5.18-rc5-178-g63184bc90d435, fir=
+st fail: v5.18-rc6-217-gd854612e01df) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+qemu_arm64-virt-gicv3-uefi   | arm64 | lab-broonie     | gcc-10   | defconf=
+ig+debug              | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2b256ed3fa92abba39be8
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+debug
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm64/defconfig+debug/gcc-10/lab-broonie/baseline-qemu_ar=
+m64-virt-gicv3-uefi.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm64/defconfig+debug/gcc-10/lab-broonie/baseline-qemu_ar=
+m64-virt-gicv3-uefi.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2b256ed3fa92abba39=
+be9
+        failing since 30 days (last pass: v5.18-rc5-178-g63184bc90d435, fir=
+st fail: v5.18-rc6-217-gd854612e01df) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+rk3399-gru-kevin             | arm64 | lab-collabora   | gcc-10   | defconf=
+ig+arm64-chromebook   | 4          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2ad4bab1bf025c3a39be2
+
+  Results:     85 PASS, 7 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm64/defconfig+arm64-chromebook/gcc-10/lab-collabora/bas=
+eline-rk3399-gru-kevin.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm64/defconfig+arm64-chromebook/gcc-10/lab-collabora/bas=
+eline-rk3399-gru-kevin.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.rockchip-i2s1-probed: https://kernelci.org/test/case/id=
+/62a2ad4bab1bf025c3a39c05
+        failing since 102 days (last pass: v5.17-rc5-244-gd77a1b37f796, fir=
+st fail: v5.17-rc6-176-gb4e03e0dde48)
+
+    2022-06-10T02:32:21.315659  /lava-6579698/1/../bin/lava-test-case
+    2022-06-10T02:32:21.330188  <8>[   53.975790] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Drockchip-i2s1-probed RESULT=3Dfail>   =
+
+
+  * baseline.bootrr.cros-ec-sensors-gyro0-probed: https://kernelci.org/test=
+/case/id/62a2ad4bab1bf025c3a39c28
+        failing since 10 days (last pass: v5.18-5613-ge079cf8f6817, first f=
+ail: v5.18-11575-gceccc06b624ed)
+
+    2022-06-10T02:32:19.702344  /lava-6579698/1/../bin/lava-test-case
+    2022-06-10T02:32:19.719258  <8>[   52.362757] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dcros-ec-sensors-gyro0-probed RESULT=3Dfail>   =
+
+
+  * baseline.bootrr.cros-ec-sensors-accel1-probed: https://kernelci.org/tes=
+t/case/id/62a2ad4bab1bf025c3a39c29
+        failing since 10 days (last pass: v5.18-5613-ge079cf8f6817, first f=
+ail: v5.18-11575-gceccc06b624ed)
+
+    2022-06-10T02:32:18.683684  /lava-6579698/1/../bin/lava-test-case
+    2022-06-10T02:32:18.714266  <8>[   51.343698] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dcros-ec-sensors-accel1-probed RESULT=3Dfail>   =
+
+
+  * baseline.bootrr.cros-ec-sensors-accel0-probed: https://kernelci.org/tes=
+t/case/id/62a2ad4bab1bf025c3a39c2a
+        failing since 10 days (last pass: v5.18-5613-ge079cf8f6817, first f=
+ail: v5.18-11575-gceccc06b624ed)
+
+    2022-06-10T02:32:16.642276  <8>[   49.288903] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dcros-ec-sensors-driver-present RESULT=3Dpass>
+    2022-06-10T02:32:17.023529  <4>[   49.670901] cdn-dp fec00000.dp: Direc=
+t firmware load for rockchip/dptx.bin failed with error -2
+    2022-06-10T02:32:17.661789  /lava-6579698/1/../bin/lava-test-case
+    2022-06-10T02:32:17.678157  <8>[   50.325797] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dcros-ec-sensors-accel0-probed RESULT=3Dfail>   =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+sun50i-a64-bananapi-m64      | arm64 | lab-clabbe      | gcc-10   | defconf=
+ig+CON...OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2ab5f6129db6438a39be7
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-clab=
+be/baseline-sun50i-a64-bananapi-m64.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-clab=
+be/baseline-sun50i-a64-bananapi-m64.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2ab5f6129db6438a39=
+be8
+        failing since 3 days (last pass: v5.18-14068-g9e633753407a5, first =
+fail: v5.19-rc1-102-g5a749a6e62f23) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+sun50i-a64-bananapi-m64      | arm64 | lab-clabbe      | gcc-10   | defconf=
+ig+ima                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2ae94ed4070c479a39c03
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm64/defconfig+ima/gcc-10/lab-clabbe/baseline-sun50i-a64=
+-bananapi-m64.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm64/defconfig+ima/gcc-10/lab-clabbe/baseline-sun50i-a64=
+-bananapi-m64.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2ae94ed4070c479a39=
+c04
+        failing since 15 days (last pass: v5.18-rc7-216-g98dca003a752b, fir=
+st fail: v5.18-5613-ge079cf8f6817) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+sun50i-a64-bananapi-m64      | arm64 | lab-clabbe      | gcc-10   | defconf=
+ig                    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2afe8b03a2f5109a39c88
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm64/defconfig/gcc-10/lab-clabbe/baseline-sun50i-a64-ban=
+anapi-m64.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm64/defconfig/gcc-10/lab-clabbe/baseline-sun50i-a64-ban=
+anapi-m64.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2afe8b03a2f5109a39=
+c89
+        failing since 3 days (last pass: v5.18-14068-g9e633753407a5, first =
+fail: v5.19-rc1-102-g5a749a6e62f23) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+sun50i-a64-pine64-plus       | arm64 | lab-broonie     | gcc-10   | defconf=
+ig+CON...BIG_ENDIAN=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2ae27f5b02c1833a39bcd
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm64/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-10/lab-broo=
+nie/baseline-sun50i-a64-pine64-plus.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm64/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-10/lab-broo=
+nie/baseline-sun50i-a64-pine64-plus.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/arm64be/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2ae27f5b02c1833a39=
+bce
+        new failure (last pass: v5.19-rc1-144-g9b6181f62e678) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+sun50i-a64-pine64-plus       | arm64 | lab-broonie     | gcc-10   | defconf=
+ig+ima                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2af90edf24be72da39c03
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm64/defconfig+ima/gcc-10/lab-broonie/baseline-sun50i-a6=
+4-pine64-plus.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm64/defconfig+ima/gcc-10/lab-broonie/baseline-sun50i-a6=
+4-pine64-plus.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2af90edf24be72da39=
+c04
+        failing since 15 days (last pass: v5.18-rc7-165-g2424086909d29, fir=
+st fail: v5.18-5613-ge079cf8f6817) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+sun50i-h5-nanopi-neo-plus2   | arm64 | lab-clabbe      | gcc-10   | defconf=
+ig+CON...OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2aaa1fffc831149a39bef
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-clab=
+be/baseline-sun50i-h5-nanopi-neo-plus2.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-clab=
+be/baseline-sun50i-h5-nanopi-neo-plus2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2aaa1fffc831149a39=
+bf0
+        new failure (last pass: v5.19-rc1-102-g5a749a6e62f23) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+sun50i-h5-nanopi-neo-plus2   | arm64 | lab-clabbe      | gcc-10   | defconf=
+ig+CON...BIG_ENDIAN=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2aeaf7ec7b9ea45a39bd5
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm64/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-10/lab-clab=
+be/baseline-sun50i-h5-nanopi-neo-plus2.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm64/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-10/lab-clab=
+be/baseline-sun50i-h5-nanopi-neo-plus2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/arm64be/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2aeaf7ec7b9ea45a39=
+bd6
+        failing since 2 days (last pass: v5.19-rc1-102-g5a749a6e62f23, firs=
+t fail: v5.19-rc1-144-g9b6181f62e678) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+sun50i-h5-nanopi-neo-plus2   | arm64 | lab-clabbe      | gcc-10   | defconf=
+ig+ima                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2b01795b0919ab3a39bd0
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm64/defconfig+ima/gcc-10/lab-clabbe/baseline-sun50i-h5-=
+nanopi-neo-plus2.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm64/defconfig+ima/gcc-10/lab-clabbe/baseline-sun50i-h5-=
+nanopi-neo-plus2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2b01795b0919ab3a39=
+bd1
+        new failure (last pass: v5.18-12139-gb5db4eaa8649) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+sun50i-h5-nanopi-neo-plus2   | arm64 | lab-clabbe      | gcc-10   | defconf=
+ig                    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2b17e5a90de0266a39c7b
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm64/defconfig/gcc-10/lab-clabbe/baseline-sun50i-h5-nano=
+pi-neo-plus2.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm64/defconfig/gcc-10/lab-clabbe/baseline-sun50i-h5-nano=
+pi-neo-plus2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2b17e5a90de0266a39=
+c7c
+        new failure (last pass: v5.19-rc1-102-g5a749a6e62f23) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+sun50i-h6-pine-h64           | arm64 | lab-collabora   | gcc-10   | defconf=
+ig+ima                | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2ae5171aa7ce343a39bf8
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+ima
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm64/defconfig+ima/gcc-10/lab-collabora/baseline-sun50i-=
+h6-pine-h64.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm64/defconfig+ima/gcc-10/lab-collabora/baseline-sun50i-=
+h6-pine-h64.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2ae5171aa7ce343a39=
+bf9
+        failing since 10 days (last pass: v5.18-5613-ge079cf8f6817, first f=
+ail: v5.18-11575-gceccc06b624ed) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+sun50i-h6-pine-h64           | arm64 | lab-collabora   | gcc-10   | defconf=
+ig                    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2af2309f4e72b16a39ce5
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm64/defconfig/gcc-10/lab-collabora/baseline-sun50i-h6-p=
+ine-h64.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm64/defconfig/gcc-10/lab-collabora/baseline-sun50i-h6-p=
+ine-h64.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2af2309f4e72b16a39=
+ce6
+        new failure (last pass: v5.19-rc1-102-g5a749a6e62f23) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+sun8i-a33-olinuxino          | arm   | lab-clabbe      | gcc-10   | multi_v=
+7_defconfig           | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2b8802d8caf4e0ba39bcd
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig/gcc-10/lab-clabbe/baseline-sun8i-a=
+33-olinuxino.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig/gcc-10/lab-clabbe/baseline-sun8i-a=
+33-olinuxino.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2b8802d8caf4e0ba39=
+bce
+        new failure (last pass: v5.19-rc1-102-g5a749a6e62f23) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+sun8i-a33-olinuxino          | arm   | lab-clabbe      | gcc-10   | multi_v=
+7_defconfig+ima       | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2b9d5bbf2af2672a39bd3
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+ima
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig+ima/gcc-10/lab-clabbe/baseline-sun=
+8i-a33-olinuxino.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig+ima/gcc-10/lab-clabbe/baseline-sun=
+8i-a33-olinuxino.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2b9d5bbf2af2672a39=
+bd4
+        failing since 4 days (last pass: v5.18-12248-g882f1d1979b5, first f=
+ail: v5.19-rc1-102-g5a749a6e62f23) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+sun8i-a33-olinuxino          | arm   | lab-clabbe      | gcc-10   | multi_v=
+7_defconfig+crypto    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2bba16a21b33e2ea39bcd
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+crypto
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig+crypto/gcc-10/lab-clabbe/baseline-=
+sun8i-a33-olinuxino.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig+crypto/gcc-10/lab-clabbe/baseline-=
+sun8i-a33-olinuxino.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2bba16a21b33e2ea39=
+bce
+        new failure (last pass: v5.19-rc1-144-g9b6181f62e678) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+sun8i-a33-olinuxino          | arm   | lab-clabbe      | gcc-10   | multi_v=
+7_defc...MB2_KERNEL=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2bcf5a233746f9ca39bda
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/la=
+b-clabbe/baseline-sun8i-a33-olinuxino.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/la=
+b-clabbe/baseline-sun8i-a33-olinuxino.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2bcf5a233746f9ca39=
+bdb
+        new failure (last pass: v5.18-14068-g9e633753407a5) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+sun8i-a83t-bananapi-m3       | arm   | lab-clabbe      | gcc-10   | multi_v=
+7_defconfig+crypto    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2b552d2a6de04c3a39be6
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+crypto
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig+crypto/gcc-10/lab-clabbe/baseline-=
+sun8i-a83t-bananapi-m3.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig+crypto/gcc-10/lab-clabbe/baseline-=
+sun8i-a83t-bananapi-m3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2b552d2a6de04c3a39=
+be7
+        new failure (last pass: v5.19-rc1-144-g9b6181f62e678) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+sun8i-a83t-bananapi-m3       | arm   | lab-clabbe      | gcc-10   | multi_v=
+7_defc...MB2_KERNEL=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2b6a7fe39c61987a39c1a
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/la=
+b-clabbe/baseline-sun8i-a83t-bananapi-m3.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/la=
+b-clabbe/baseline-sun8i-a83t-bananapi-m3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2b6a7fe39c61987a39=
+c1b
+        new failure (last pass: v5.18-14068-g9e633753407a5) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+sun8i-a83t-bananapi-m3       | arm   | lab-clabbe      | gcc-10   | sunxi_d=
+efconfig              | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2ad5984607161a1a39be9
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: sunxi_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/sunxi_defconfig/gcc-10/lab-clabbe/baseline-sun8i-a83t=
+-bananapi-m3.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/sunxi_defconfig/gcc-10/lab-clabbe/baseline-sun8i-a83t=
+-bananapi-m3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2ad5984607161a1a39=
+bea
+        new failure (last pass: v5.19-rc1-102-g5a749a6e62f23) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+sun8i-h2-plus...ch-all-h3-cc | arm   | lab-baylibre    | gcc-10   | multi_v=
+7_defconfig+crypto    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2b270d53b556aa3a39bd4
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+crypto
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig+crypto/gcc-10/lab-baylibre/baselin=
+e-sun8i-h2-plus-libretech-all-h3-cc.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig+crypto/gcc-10/lab-baylibre/baselin=
+e-sun8i-h2-plus-libretech-all-h3-cc.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2b270d53b556aa3a39=
+bd5
+        new failure (last pass: v5.19-rc1-144-g9b6181f62e678) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+sun8i-h2-plus...ch-all-h3-cc | arm   | lab-baylibre    | gcc-10   | sunxi_d=
+efconfig              | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2ac1be0c39b677ca39be8
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: sunxi_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/sunxi_defconfig/gcc-10/lab-baylibre/baseline-sun8i-h2=
+-plus-libretech-all-h3-cc.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/sunxi_defconfig/gcc-10/lab-baylibre/baseline-sun8i-h2=
+-plus-libretech-all-h3-cc.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2ac1be0c39b677ca39=
+be9
+        new failure (last pass: v5.19-rc1-102-g5a749a6e62f23) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+sun8i-h2-plus-orangepi-zero  | arm   | lab-baylibre    | gcc-10   | multi_v=
+7_defconfig           | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2ad56ab1bf025c3a39c61
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-sun8i=
+-h2-plus-orangepi-zero.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-sun8i=
+-h2-plus-orangepi-zero.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2ad56ab1bf025c3a39=
+c62
+        new failure (last pass: v5.19-rc1-102-g5a749a6e62f23) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+sun8i-h2-plus-orangepi-zero  | arm   | lab-baylibre    | gcc-10   | multi_v=
+7_defconfig+crypto    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2b1debb17b0f69ea39bcf
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+crypto
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig+crypto/gcc-10/lab-baylibre/baselin=
+e-sun8i-h2-plus-orangepi-zero.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig+crypto/gcc-10/lab-baylibre/baselin=
+e-sun8i-h2-plus-orangepi-zero.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2b1debb17b0f69ea39=
+bd0
+        failing since 2 days (last pass: v5.19-rc1-102-g5a749a6e62f23, firs=
+t fail: v5.19-rc1-144-g9b6181f62e678) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+sun8i-h3-bananapi-m2-plus    | arm   | lab-baylibre    | gcc-10   | multi_v=
+7_defconfig           | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2abd0cbbcf8ac22a39be1
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-sun8i=
+-h3-bananapi-m2-plus.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-sun8i=
+-h3-bananapi-m2-plus.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2abd0cbbcf8ac22a39=
+be2
+        failing since 10 days (last pass: v5.18-1222-g391cf5a1244f, first f=
+ail: v5.18-11575-gceccc06b624ed) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+sun8i-r40-bananapi-m2-ultra  | arm   | lab-clabbe      | gcc-10   | multi_v=
+7_defconfig           | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2c5b6258f52678da39bcd
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig/gcc-10/lab-clabbe/baseline-sun8i-r=
+40-bananapi-m2-ultra.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig/gcc-10/lab-clabbe/baseline-sun8i-r=
+40-bananapi-m2-ultra.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2c5b6258f52678da39=
+bce
+        failing since 4 days (last pass: v5.18-12248-g882f1d1979b5, first f=
+ail: v5.19-rc1-102-g5a749a6e62f23) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+sun8i-r40-bananapi-m2-ultra  | arm   | lab-clabbe      | gcc-10   | multi_v=
+7_defconfig+ima       | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2c70acb384b2746a39be4
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+ima
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig+ima/gcc-10/lab-clabbe/baseline-sun=
+8i-r40-bananapi-m2-ultra.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig+ima/gcc-10/lab-clabbe/baseline-sun=
+8i-r40-bananapi-m2-ultra.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2c70acb384b2746a39=
+be5
+        new failure (last pass: v5.19-rc1-102-g5a749a6e62f23) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+sun8i-r40-bananapi-m2-ultra  | arm   | lab-clabbe      | gcc-10   | multi_v=
+7_defc...MB2_KERNEL=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2c92630491baf88a39bd5
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/la=
+b-clabbe/baseline-sun8i-r40-bananapi-m2-ultra.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/la=
+b-clabbe/baseline-sun8i-r40-bananapi-m2-ultra.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2c92630491baf88a39=
+bd6
+        new failure (last pass: v5.18-14068-g9e633753407a5) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+sun8i-r40-bananapi-m2-ultra  | arm   | lab-clabbe      | gcc-10   | multi_v=
+7_defc...BIG_ENDIAN=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2ca7a67029614d0a39bcd
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-10/l=
+ab-clabbe/baseline-sun8i-r40-bananapi-m2-ultra.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-10/l=
+ab-clabbe/baseline-sun8i-r40-bananapi-m2-ultra.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/armeb/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2ca7a67029614d0a39=
+bce
+        new failure (last pass: v5.18-12139-gb5db4eaa8649) =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | regressions
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+------------
+sun8i-r40-bananapi-m2-ultra  | arm   | lab-clabbe      | gcc-10   | sunxi_d=
+efconfig              | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/62a2c46219d5fa318ea39bea
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: sunxi_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/sunxi_defconfig/gcc-10/lab-clabbe/baseline-sun8i-r40-=
+bananapi-m2-ultra.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc1-3=
+31-g13bdc020d5006/arm/sunxi_defconfig/gcc-10/lab-clabbe/baseline-sun8i-r40-=
+bananapi-m2-ultra.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220603.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/62a2c46219d5fa318ea39=
+beb
+        new failure (last pass: v5.19-rc1-102-g5a749a6e62f23) =
+
+ =20

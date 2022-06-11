@@ -2,94 +2,99 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8EF854736D
-	for <lists+linux-next@lfdr.de>; Sat, 11 Jun 2022 11:55:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE4CF5476AF
+	for <lists+linux-next@lfdr.de>; Sat, 11 Jun 2022 18:57:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229479AbiFKJzZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 11 Jun 2022 05:55:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43674 "EHLO
+        id S237379AbiFKQ5S (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 11 Jun 2022 12:57:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbiFKJzY (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 11 Jun 2022 05:55:24 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E0E6E018;
-        Sat, 11 Jun 2022 02:55:21 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LKtVW4lpTz4xXg;
-        Sat, 11 Jun 2022 19:55:15 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1654941315;
-        bh=Oxwts3TEmw7fsmjHq7CsECLDet+E9N56KaFBSPnM8No=;
-        h=Date:From:To:Cc:Subject:From;
-        b=h8PHER7vwmgar4Ul/LrpQY22qxUzDzZx8GXrgw6uONbpp5ETheKJCNZul/t6WCcG1
-         hG0lYQ8ZQM9w1LYoe6wxJNN7yRs97sOYd9KCRybzoKj3Nu+Nuy7EkI1VITMsBWUQhA
-         CS9l3dRgNx+5HZvWVWpZV2jRIPLIaYPpDIx6d2myQsKECmAF2lwmX2bCE9xkqWQ92l
-         MoeGjmUeNh+umOh1XFG4V+VeV+HcZOvobnNfQ5+sepqdGQ6V66Jk4nb94hHVr1PV2g
-         GVH75O70SMz8qwM9AI6M2hXyph+3E0FEt03xA5tpPTwIYFcM1qamBzS83vI5pg25hi
-         xAfpphjSafz/Q==
-Date:   Sat, 11 Jun 2022 19:55:13 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Aurabindo Pillai <aurabindo.pillai@amd.com>,
+        with ESMTP id S230515AbiFKQ5R (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 11 Jun 2022 12:57:17 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 318BB197
+        for <linux-next@vger.kernel.org>; Sat, 11 Jun 2022 09:57:16 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id b8so2400327edj.11
+        for <linux-next@vger.kernel.org>; Sat, 11 Jun 2022 09:57:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=W83l/pLxbVmfdY4Bh3kAV9FBhPiwp545eDF2N1BjQ/0=;
+        b=QZFxcEKrwiT/RpVaiTi05b84+BOEJXjGP0UMn3IqGzce/BDk93ukoGPtqbDYlqaeML
+         WwwEbRGvqg0gN2HFDwZCwSPNECNvzPHHpYwbsRW/PpLrRQpmpYITmQ292c5X/16X6nAB
+         XC3OXxSNmfDTBC0Q369g5kF7e+6gGX27oEtkM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=W83l/pLxbVmfdY4Bh3kAV9FBhPiwp545eDF2N1BjQ/0=;
+        b=JbyOh6liorMLF3X/c8EgKHlj8vw4FmbAJHNWGLl7Oq/D/T8eiLL47MPMIbQCqPN389
+         ZoKxe465qU77B5hDxt2LIVQ5XQ72QJpABkag6Jn/Vi0nSet9+xEFIKsfCa3EYyHYkzRx
+         gRPiEySPr5PEDCZANEr1YbGZ/pd5YtnRQ2RLFtpWSBco4xvkPj7Vdd2GZYDg/f9wUdKk
+         vV0Kc6vWiQNDCnTXgNiYiDMPEhttWwG2V/CsSFWuw1gSqqHRIroXhSNvIZlU+dMBYOqj
+         6iI0fBOfyLa2mD7cmjiWbBaEiLEMWaFu+DCAJhhqijnnF4UA9P0MW4Z0bH1KKMRuOU9Y
+         88xg==
+X-Gm-Message-State: AOAM531H8n036uvosAA/okFlv5jkzglxwCaEMPwEZwsyxHgQJiQEVH0z
+        DyglsU5/rX3G96ooWTxM5QFarUWBV28ffo96J8U=
+X-Google-Smtp-Source: ABdhPJxZZ0288TwIRhAWuerUYfFQCwjZ2xV6jG9CqYJuRxgB9deKkwAJ/51sg1Xnrwz5Kf7it5s08A==
+X-Received: by 2002:aa7:d456:0:b0:42d:d7d9:34c1 with SMTP id q22-20020aa7d456000000b0042dd7d934c1mr57337043edr.21.1654966634351;
+        Sat, 11 Jun 2022 09:57:14 -0700 (PDT)
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com. [209.85.128.43])
+        by smtp.gmail.com with ESMTPSA id m23-20020a170906161700b0071216de7710sm1235819ejd.153.2022.06.11.09.57.13
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 11 Jun 2022 09:57:13 -0700 (PDT)
+Received: by mail-wm1-f43.google.com with SMTP id i64-20020a1c3b43000000b0039c6fd897b4so249687wma.4
+        for <linux-next@vger.kernel.org>; Sat, 11 Jun 2022 09:57:13 -0700 (PDT)
+X-Received: by 2002:a05:600c:591:b0:39c:4544:b814 with SMTP id
+ o17-20020a05600c059100b0039c4544b814mr5603093wmd.118.1654966633270; Sat, 11
+ Jun 2022 09:57:13 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220611182119.4e115fba@canb.auug.org.au>
+In-Reply-To: <20220611182119.4e115fba@canb.auug.org.au>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Sat, 11 Jun 2022 09:57:01 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=X2cwr_s3bQJk0hOb88-zPrZR-2fKxP8yKSAy9vuKFtzQ@mail.gmail.com>
+Message-ID: <CAD=FV=X2cwr_s3bQJk0hOb88-zPrZR-2fKxP8yKSAy9vuKFtzQ@mail.gmail.com>
+Subject: Re: linux-next: build warnings after merge of the drm-misc tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the amdgpu tree
-Message-ID: <20220611195513.58207a99@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Zz5z8M3ouNN5uPi5BRCU=b6";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Zz5z8M3ouNN5uPi5BRCU=b6
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi,
 
-Hi all,
+On Sat, Jun 11, 2022 at 1:21 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> After merging the drm-misc tree, today's linux-next build (htmldocs)
+> produced these warnings:
+>
+> Documentation/gpu/drm-kms-helpers:241: include/drm/display/drm_dp_helper.h:377: WARNING: Unexpected indentation.
+> Documentation/gpu/drm-kms-helpers:241: include/drm/display/drm_dp_helper.h:378: WARNING: Block quote ends without a blank line; unexpected unindent.
+>
+> Introduced by commit
+>
+>   69ef4a192bba ("drm: Document the power requirements for DP AUX transfers")
 
-In commit
+Thanks for the report. Fixed by:
 
-  4768e2f5653e ("drm/amd/display: dml: move some variables to heap")
+https://lore.kernel.org/r/20220611095445.1.I534072d346b1ebbf0db565b714de9b65cbb24651@changeid
 
-Fixes tag
+I'll plan to land it as soon as I see a Reviewed-by.
 
-  Fixes: d03037269bf2 ("drm/amd/display: DML changes for DCN32/321")
-
-has these problem(s):
-
-  - Target SHA1 does not exist
-
-Maybe you meant
-
-Fixes: dda4fb85e433 ("drm/amd/display: DML changes for DCN32/321")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/Zz5z8M3ouNN5uPi5BRCU=b6
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKkZoEACgkQAVBC80lX
-0GzwHAgAm2SymXvik7VrMC/X3IXrOr4CJ6n6PNcB5HoSmU/Hzv+2bTPHrZKRxGXe
-0J8u4UaEgARLwlNrzR3tgSOF/QWM08uHrNPxXr3apIm9dWEXAAGwvpjOqNc7DNfO
-X/c6P2KYnPSU4f8akQuqO3z3T/rMCh9MWVgMcp0JbgzN4zTmjvkEopEwIlHqzgf5
-7W6vyTbP2x9d8RaDkb5ICOS5S4flrctqYxaizpqPGYwIjEHpqbuHBsCvXdaILT3Q
-F1KQRBBlUfUJJqlJX4MVV4QQAiarb+zAGh7hbqCoJQQDoNLHRnP92KptBoJIhjg3
-XdMOcf2XNAdXm/W7Ozenvd6ELqTogg==
-=Lnh/
------END PGP SIGNATURE-----
-
---Sig_/Zz5z8M3ouNN5uPi5BRCU=b6--
+-Doug

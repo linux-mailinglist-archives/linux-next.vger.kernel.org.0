@@ -2,117 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0668A5469FB
-	for <lists+linux-next@lfdr.de>; Fri, 10 Jun 2022 17:59:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 405E15472D4
+	for <lists+linux-next@lfdr.de>; Sat, 11 Jun 2022 10:21:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349422AbiFJP7L (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 10 Jun 2022 11:59:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48622 "EHLO
+        id S229661AbiFKIVc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 11 Jun 2022 04:21:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236196AbiFJP7I (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 10 Jun 2022 11:59:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E73451DAE50;
-        Fri, 10 Jun 2022 08:59:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S229623AbiFKIVa (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 11 Jun 2022 04:21:30 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DAC211C12;
+        Sat, 11 Jun 2022 01:21:28 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9BBB3B83633;
-        Fri, 10 Jun 2022 15:59:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52C0AC3411B;
-        Fri, 10 Jun 2022 15:59:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654876744;
-        bh=PEBI4IefY8pKprvXaRActK32wag0WXWO8S1y+vUL8Os=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=hJ49vzeTcDLAu/mb3y7ZmY9KCIeF8R/yGUKRqMtdAavyBbkZ2hgKPX1eUiIcqJEpp
-         XywDV/ubbKQHoreetGe1lRtfpfk0ahl/S5Pp38RVrjSBE9F7XJwUPU9mopSLxiSItD
-         V0oQ4ZTWK7Ojj+iCr6OXnekGzFzlfR6kv7/L+IRcF8z4dHmjTW+To6cP0VrtjT3Gaf
-         NmJ0KGj8QCppzY5SEaE9CetnJVY2niDvpFoBH6GaKaYxTXJeTAynWp/c8BiR5nQ8mv
-         Dq2bGO8+npyDGmWc3Pfbg+B3umAf3Qk96nCchSZzATs9GZoYQxV7JrQOSYojl8W8HP
-         sLhS1g4D4Bk8g==
-From:   Mark Brown <broonie@kernel.org>
-To:     david@protonic.nl
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mkl@pengutronix.de, linux-next@vger.kernel.org
-In-Reply-To: <20220609121334.2984808-1-david@protonic.nl>
-References: <20220609121334.2984808-1-david@protonic.nl>
-Subject: Re: [PATCH] spi: Fix per-cpu stats access on 32 bit systems
-Message-Id: <165487674305.1756526.15679160461201421253.b4-ty@kernel.org>
-Date:   Fri, 10 Jun 2022 16:59:03 +0100
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LKrQ95RrZz4xZ4;
+        Sat, 11 Jun 2022 18:21:21 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1654935682;
+        bh=ZeeofygISUlKgJuLt9vZMtTqPke/ZoxpfwDT3rX/RPg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=rKu3NU811N8Q41IZIJHZ466djR070ylBN6Q223DtAaTw9oSj0g5FL2nmybpb0meXD
+         wgF1vk9nGV9UQqDMHSQNfpiJFjdddzg5DjLoej+YKC3cU0pDbnewC1JQlo5nLGCNr3
+         q6wzoR3DJenMyGEfHaXNF4NKnMwaqe7NnPRd5ouzkCCuHM/C8xzuMYLvlh26xgjux4
+         CEIpQMu2iVTaEbTYl1oLeWupctnMFmRbXDsLybleZ9K47sEkXzm5sdIKayeG3j6qvi
+         3aEbHtYtBG/i/qUWNf/z9YO6kKuvefjUlviWLZJY1M3F+wdk3wxXCKQiTE6u347HBp
+         1zp/+gNPZ0qNg==
+Date:   Sat, 11 Jun 2022 18:21:19 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Douglas Anderson <dianders@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warnings after merge of the drm-misc tree
+Message-ID: <20220611182119.4e115fba@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/+H+b07IYNTOp+oLDZpTHRFQ";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, 9 Jun 2022 14:13:34 +0200, David Jander wrote:
-> On 32 bit systems, the following kernel BUG is hit:
-> 
-> BUG: using smp_processor_id() in preemptible [00000000] code: swapper/0/1
-> caller is debug_smp_processor_id+0x18/0x24
-> CPU: 1 PID: 1 Comm: swapper/0 Not tainted 5.19.0-rc1-00001-g6ae0aec8a366 #181
-> Hardware name: Freescale i.MX6 Quad/DualLite (Device Tree)
-> Backtrace:
->  dump_backtrace from show_stack+0x20/0x24
->  r7:81024ffd r6:00000000 r5:81024ffd r4:60000013
->  show_stack from dump_stack_lvl+0x60/0x78
->  dump_stack_lvl from dump_stack+0x14/0x1c
->  r7:81024ffd r6:80f652de r5:80bec180 r4:819a2500
->  dump_stack from check_preemption_disabled+0xc8/0xf0
->  check_preemption_disabled from debug_smp_processor_id+0x18/0x24
->  r8:8119b7e0 r7:81205534 r6:819f5c00 r5:819f4c00 r4:c083d724
->  debug_smp_processor_id from __spi_sync+0x78/0x220
->  __spi_sync from spi_sync+0x34/0x4c
->  r10:bb7bf4e0 r9:c083d724 r8:00000007 r7:81a068c0 r6:822a83c0 r5:c083d724
->  r4:819f4c00
->  spi_sync from spi_mem_exec_op+0x338/0x370
->  r5:000000b4 r4:c083d910
->  spi_mem_exec_op from spi_nor_read_id+0x98/0xdc
->  r10:bb7bf4e0 r9:00000000 r8:00000000 r7:00000000 r6:00000000 r5:82358040
->  r4:819f7c40
->  spi_nor_read_id from spi_nor_detect+0x38/0x114
->  r7:82358040 r6:00000000 r5:819f7c40 r4:819f7c40
->  spi_nor_detect from spi_nor_scan+0x11c/0xbec
->  r10:bb7bf4e0 r9:00000000 r8:00000000 r7:c083da4c r6:00000000 r5:00010101
->  r4:819f7c40
->  spi_nor_scan from spi_nor_probe+0x10c/0x2d0
->  r10:bb7bf4e0 r9:bb7bf4d0 r8:00000000 r7:819f4c00 r6:00000000 r5:00000000
->  r4:819f7c40
-> 
-> [...]
+--Sig_/+H+b07IYNTOp+oLDZpTHRFQ
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Applied to
+Hi all,
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+After merging the drm-misc tree, today's linux-next build (htmldocs)
+produced these warnings:
 
-Thanks!
+Documentation/gpu/drm-kms-helpers:241: include/drm/display/drm_dp_helper.h:=
+377: WARNING: Unexpected indentation.
+Documentation/gpu/drm-kms-helpers:241: include/drm/display/drm_dp_helper.h:=
+378: WARNING: Block quote ends without a blank line; unexpected unindent.
 
-[1/1] spi: Fix per-cpu stats access on 32 bit systems
-      commit: 67b9d64139e13621d3ab8bb0daad7602e5fe0778
+Introduced by commit
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+  69ef4a192bba ("drm: Document the power requirements for DP AUX transfers")
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+--=20
+Cheers,
+Stephen Rothwell
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+--Sig_/+H+b07IYNTOp+oLDZpTHRFQ
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+-----BEGIN PGP SIGNATURE-----
 
-Thanks,
-Mark
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKkUIAACgkQAVBC80lX
+0Gz6nwf/Z8yBlPN9G9VaT7Ebp/99txDRoKWZIjXf5gv2u1s09n8ZDTA0k/8uyCdg
+OuSX7bDcDH0fPT1qn9+92x+9BzEZBjdr/3sVTww5kDTFdJ/hpmXDT2k67YwQUquA
+SK8Zh4Mbk0Fc928br2rxir2FEPFa+uwBQz4TORjOjg+ZdBotGCnfyY7OnNvO4/jF
+OSofVI9jz+jIp8eCcyDVHlPMOjKbVczmv/PivrQjQLXfVWdVXKMaazmEui4+gSuc
+W7zcQIwVVdfRN/eEaKRFgLvC0sKRqHZ2eizzXnq+Aon9dYsGM64ZJwDvaefBaZaH
+hshKRUi9A0TW7eF6B6uq0wkcNQS1Vg==
+=6AMN
+-----END PGP SIGNATURE-----
+
+--Sig_/+H+b07IYNTOp+oLDZpTHRFQ--

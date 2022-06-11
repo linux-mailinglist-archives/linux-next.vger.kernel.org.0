@@ -2,85 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB9315472FA
-	for <lists+linux-next@lfdr.de>; Sat, 11 Jun 2022 10:47:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8EF854736D
+	for <lists+linux-next@lfdr.de>; Sat, 11 Jun 2022 11:55:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231200AbiFKIrR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 11 Jun 2022 04:47:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55896 "EHLO
+        id S229479AbiFKJzZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 11 Jun 2022 05:55:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230224AbiFKIrQ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 11 Jun 2022 04:47:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 081BDF7
-        for <linux-next@vger.kernel.org>; Sat, 11 Jun 2022 01:47:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654937233;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XJ/XB0hPB6YEke6/WY/jqhc9csftj6k56SQkV083ieI=;
-        b=O7E1BKsU11dOsqOoxOpW7A88UA+SL7iLybKyhplKcpKUYLiiajNDWOx/cEoPyCVmEk8ZRq
-        z+ebJzLSZ/c7f5xGqdlve8kbjxQt3stwB0sZoPNdNF0sFz06zF741tRBLhzvcswwDOT/N6
-        giO3A7NNM0SG1RGYTn7FAgunn7cHIAY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-563-HFvGpZxcOb6W7lWa6yjb5Q-1; Sat, 11 Jun 2022 04:47:11 -0400
-X-MC-Unique: HFvGpZxcOb6W7lWa6yjb5Q-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        with ESMTP id S230035AbiFKJzY (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 11 Jun 2022 05:55:24 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E0E6E018;
+        Sat, 11 Jun 2022 02:55:21 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2C7FA185A794;
-        Sat, 11 Jun 2022 08:47:11 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.62])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 67E0218EA7;
-        Sat, 11 Jun 2022 08:47:10 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20220611183642.0a519e07@canb.auug.org.au>
-References: <20220611183642.0a519e07@canb.auug.org.au>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     dhowells@redhat.com,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LKtVW4lpTz4xXg;
+        Sat, 11 Jun 2022 19:55:15 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1654941315;
+        bh=Oxwts3TEmw7fsmjHq7CsECLDet+E9N56KaFBSPnM8No=;
+        h=Date:From:To:Cc:Subject:From;
+        b=h8PHER7vwmgar4Ul/LrpQY22qxUzDzZx8GXrgw6uONbpp5ETheKJCNZul/t6WCcG1
+         hG0lYQ8ZQM9w1LYoe6wxJNN7yRs97sOYd9KCRybzoKj3Nu+Nuy7EkI1VITMsBWUQhA
+         CS9l3dRgNx+5HZvWVWpZV2jRIPLIaYPpDIx6d2myQsKECmAF2lwmX2bCE9xkqWQ92l
+         MoeGjmUeNh+umOh1XFG4V+VeV+HcZOvobnNfQ5+sepqdGQ6V66Jk4nb94hHVr1PV2g
+         GVH75O70SMz8qwM9AI6M2hXyph+3E0FEt03xA5tpPTwIYFcM1qamBzS83vI5pg25hi
+         xAfpphjSafz/Q==
+Date:   Sat, 11 Jun 2022 19:55:13 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Aurabindo Pillai <aurabindo.pillai@amd.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commit in the fscache tree
+Subject: linux-next: Fixes tag needs some work in the amdgpu tree
+Message-ID: <20220611195513.58207a99@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <856785.1654937229.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Sat, 11 Jun 2022 09:47:09 +0100
-Message-ID: <856786.1654937229@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/Zz5z8M3ouNN5uPi5BRCU=b6";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+--Sig_/Zz5z8M3ouNN5uPi5BRCU=b6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> Commit
-> =
+Hi all,
 
->   d3b63ddec3f8 ("netfs: Further cleanups after struct netfs_inode wrappe=
-r introduced")
-> =
+In commit
 
-> is missing a Signed-off-by from its author.
+  4768e2f5653e ("drm/amd/display: dml: move some variables to heap")
 
-Yeah - Linus pulled it without adding his S-o-b.  I'll drop the patches fr=
-om
-my fscache-next branch.
+Fixes tag
 
-David
+  Fixes: d03037269bf2 ("drm/amd/display: DML changes for DCN32/321")
 
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: dda4fb85e433 ("drm/amd/display: DML changes for DCN32/321")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Zz5z8M3ouNN5uPi5BRCU=b6
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKkZoEACgkQAVBC80lX
+0GzwHAgAm2SymXvik7VrMC/X3IXrOr4CJ6n6PNcB5HoSmU/Hzv+2bTPHrZKRxGXe
+0J8u4UaEgARLwlNrzR3tgSOF/QWM08uHrNPxXr3apIm9dWEXAAGwvpjOqNc7DNfO
+X/c6P2KYnPSU4f8akQuqO3z3T/rMCh9MWVgMcp0JbgzN4zTmjvkEopEwIlHqzgf5
+7W6vyTbP2x9d8RaDkb5ICOS5S4flrctqYxaizpqPGYwIjEHpqbuHBsCvXdaILT3Q
+F1KQRBBlUfUJJqlJX4MVV4QQAiarb+zAGh7hbqCoJQQDoNLHRnP92KptBoJIhjg3
+XdMOcf2XNAdXm/W7Ozenvd6ELqTogg==
+=Lnh/
+-----END PGP SIGNATURE-----
+
+--Sig_/Zz5z8M3ouNN5uPi5BRCU=b6--

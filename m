@@ -2,99 +2,149 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE4CF5476AF
-	for <lists+linux-next@lfdr.de>; Sat, 11 Jun 2022 18:57:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94E225477FC
+	for <lists+linux-next@lfdr.de>; Sun, 12 Jun 2022 02:02:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237379AbiFKQ5S (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 11 Jun 2022 12:57:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39728 "EHLO
+        id S232590AbiFLACl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 11 Jun 2022 20:02:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230515AbiFKQ5R (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 11 Jun 2022 12:57:17 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 318BB197
-        for <linux-next@vger.kernel.org>; Sat, 11 Jun 2022 09:57:16 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id b8so2400327edj.11
-        for <linux-next@vger.kernel.org>; Sat, 11 Jun 2022 09:57:16 -0700 (PDT)
+        with ESMTP id S230028AbiFLACl (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 11 Jun 2022 20:02:41 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4F8B7D5;
+        Sat, 11 Jun 2022 17:02:39 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id r71so2527996pgr.0;
+        Sat, 11 Jun 2022 17:02:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=W83l/pLxbVmfdY4Bh3kAV9FBhPiwp545eDF2N1BjQ/0=;
-        b=QZFxcEKrwiT/RpVaiTi05b84+BOEJXjGP0UMn3IqGzce/BDk93ukoGPtqbDYlqaeML
-         WwwEbRGvqg0gN2HFDwZCwSPNECNvzPHHpYwbsRW/PpLrRQpmpYITmQ292c5X/16X6nAB
-         XC3OXxSNmfDTBC0Q369g5kF7e+6gGX27oEtkM=
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=qlCbmERsrvq9foWWuo9aQIBttb9mEbAqhvDWRZ6oSQQ=;
+        b=LUOwWBl2WUW0c8E5DKEdURyPyWBcZLYrOlDkCtu43KdaPin/uxXePQLYVNje4MA1Zw
+         owrlkXxR6B2lhjeqQKH4mK/7U7pwELDvONjmE9WhNTBQzwG9D7VpD9bh/duwaVq085j1
+         aDcywihszdG0kFvWRmEwezOb0cTUXk4Hs3kbwbEEDW8jBsM/eSGqn6jFYxa5UkQcn+Np
+         fBJLv6P0wbyWx74goE79F22rQFjy+LEXk7THgs9oIEbbwWevkl3YJxQAUT7Fse4iWhXN
+         QvCJ6CjhV7poOfc+hHKYg71zYojOaecTVa169bHpnaKF5oRMRZH2fbodrwP3hUdI2Wfv
+         E+AQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=W83l/pLxbVmfdY4Bh3kAV9FBhPiwp545eDF2N1BjQ/0=;
-        b=JbyOh6liorMLF3X/c8EgKHlj8vw4FmbAJHNWGLl7Oq/D/T8eiLL47MPMIbQCqPN389
-         ZoKxe465qU77B5hDxt2LIVQ5XQ72QJpABkag6Jn/Vi0nSet9+xEFIKsfCa3EYyHYkzRx
-         gRPiEySPr5PEDCZANEr1YbGZ/pd5YtnRQ2RLFtpWSBco4xvkPj7Vdd2GZYDg/f9wUdKk
-         vV0Kc6vWiQNDCnTXgNiYiDMPEhttWwG2V/CsSFWuw1gSqqHRIroXhSNvIZlU+dMBYOqj
-         6iI0fBOfyLa2mD7cmjiWbBaEiLEMWaFu+DCAJhhqijnnF4UA9P0MW4Z0bH1KKMRuOU9Y
-         88xg==
-X-Gm-Message-State: AOAM531H8n036uvosAA/okFlv5jkzglxwCaEMPwEZwsyxHgQJiQEVH0z
-        DyglsU5/rX3G96ooWTxM5QFarUWBV28ffo96J8U=
-X-Google-Smtp-Source: ABdhPJxZZ0288TwIRhAWuerUYfFQCwjZ2xV6jG9CqYJuRxgB9deKkwAJ/51sg1Xnrwz5Kf7it5s08A==
-X-Received: by 2002:aa7:d456:0:b0:42d:d7d9:34c1 with SMTP id q22-20020aa7d456000000b0042dd7d934c1mr57337043edr.21.1654966634351;
-        Sat, 11 Jun 2022 09:57:14 -0700 (PDT)
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com. [209.85.128.43])
-        by smtp.gmail.com with ESMTPSA id m23-20020a170906161700b0071216de7710sm1235819ejd.153.2022.06.11.09.57.13
-        for <linux-next@vger.kernel.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=qlCbmERsrvq9foWWuo9aQIBttb9mEbAqhvDWRZ6oSQQ=;
+        b=vpul7NaHBPBSuj9/ZOE1KOMevhZvho3sADL7+c9VkDyRQZE/ZtaSqKZOkwl1KNTOQm
+         cXjV3Og9ngj4lM+3aqAPjv7XmB9UNTiD1O149AYMczM07k/lTBEJrR34hKnIb4FtoM1I
+         PeGX/LafvwknvrQZNacm6qMDgD7mxPhgdNatIsjeip9rzmoOaoHYPa9m23Hhk0XZ3MQE
+         BzgKqrrbLWvYTJRuqbwEXXkzT0mq53r2ithAJZytWGIqR1hp5MhVON1LcX1mJamWK8s1
+         gGpWJiJh9HrlocTU9moXQqnPfq6OzIrI5hLy32tSvcqmuSIRy88SV2HYIwnMwxtcN3Do
+         Bi/Q==
+X-Gm-Message-State: AOAM531ZCRlKCNjSMv/lMxet0TNefJsANtHhHg6dzNeEySnKuij+BQ17
+        OauE7rRVvwAmWnZQvzIJsjc=
+X-Google-Smtp-Source: ABdhPJwXENdcrMLJ2Rp7LfygdsphfOJNXYIuLbOQkUMLMFtN5VNvw4MeGziCBzGp7jJvQ9OTvni6Cw==
+X-Received: by 2002:a63:9c4:0:b0:401:a7b6:ad18 with SMTP id 187-20020a6309c4000000b00401a7b6ad18mr12331093pgj.523.1654992158671;
+        Sat, 11 Jun 2022 17:02:38 -0700 (PDT)
+Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id b6-20020a62a106000000b0051826824d90sm2189885pff.177.2022.06.11.17.02.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 11 Jun 2022 09:57:13 -0700 (PDT)
-Received: by mail-wm1-f43.google.com with SMTP id i64-20020a1c3b43000000b0039c6fd897b4so249687wma.4
-        for <linux-next@vger.kernel.org>; Sat, 11 Jun 2022 09:57:13 -0700 (PDT)
-X-Received: by 2002:a05:600c:591:b0:39c:4544:b814 with SMTP id
- o17-20020a05600c059100b0039c4544b814mr5603093wmd.118.1654966633270; Sat, 11
- Jun 2022 09:57:13 -0700 (PDT)
+        Sat, 11 Jun 2022 17:02:37 -0700 (PDT)
+Message-ID: <84cdc48a-feb8-4aa5-7d96-a68f2c556e25@gmail.com>
+Date:   Sun, 12 Jun 2022 09:02:33 +0900
 MIME-Version: 1.0
-References: <20220611182119.4e115fba@canb.auug.org.au>
-In-Reply-To: <20220611182119.4e115fba@canb.auug.org.au>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Sat, 11 Jun 2022 09:57:01 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=X2cwr_s3bQJk0hOb88-zPrZR-2fKxP8yKSAy9vuKFtzQ@mail.gmail.com>
-Message-ID: <CAD=FV=X2cwr_s3bQJk0hOb88-zPrZR-2fKxP8yKSAy9vuKFtzQ@mail.gmail.com>
-Subject: Re: linux-next: build warnings after merge of the drm-misc tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] gpio: Fix kernel-doc comments to nested union
+Content-Language: en-US
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org
+Cc:     Joey Gouly <joey.gouly@arm.com>, Marc Zyngier <maz@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org
+References: <27612e81-d843-d161-ecd2-c653c7d5bae9@gmail.com>
+From:   Akira Yokosawa <akiyks@gmail.com>
+In-Reply-To: <27612e81-d843-d161-ecd2-c653c7d5bae9@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi,
+On Mon, 6 Jun 2022 13:44:24 +0900, Akira Yokosawa wrote:
+> Commit 48ec13d36d3f ("gpio: Properly document parent data union")
+> is supposed to have fixed a warning from "make htmldocs" regarding
+> kernel-doc comments to union members.  However, the same warning
+> still remains [1].
+> 
+> Fix the issue by following the example found in section "Nested
+> structs/unions" of Documentation/doc-guide/kernel-doc.rst.
+> 
+> Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Fixes: 48ec13d36d3f ("gpio: Properly document parent data union")
+> Link: https://lore.kernel.org/r/20220606093302.21febee3@canb.auug.org.au/ [1]
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
+> Cc: Joey Gouly <joey.gouly@arm.com>
+> Cc: Marc Zyngier <maz@kernel.org>
+Gentle ping to gpio maintainers.
 
-On Sat, Jun 11, 2022 at 1:21 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> After merging the drm-misc tree, today's linux-next build (htmldocs)
-> produced these warnings:
->
-> Documentation/gpu/drm-kms-helpers:241: include/drm/display/drm_dp_helper.h:377: WARNING: Unexpected indentation.
-> Documentation/gpu/drm-kms-helpers:241: include/drm/display/drm_dp_helper.h:378: WARNING: Block quote ends without a blank line; unexpected unindent.
->
-> Introduced by commit
->
->   69ef4a192bba ("drm: Document the power requirements for DP AUX transfers")
+I thought this fix would go through brgl's tree.
 
-Thanks for the report. Fixed by:
+        Thanks, Akira
 
-https://lore.kernel.org/r/20220611095445.1.I534072d346b1ebbf0db565b714de9b65cbb24651@changeid
-
-I'll plan to land it as soon as I see a Reviewed-by.
-
--Doug
+> ---
+>  include/linux/gpio/driver.h | 29 ++++++++++++++++-------------
+>  1 file changed, 16 insertions(+), 13 deletions(-)
+> 
+> diff --git a/include/linux/gpio/driver.h b/include/linux/gpio/driver.h
+> index b1e0f1f8ee2e..54c3c6506503 100644
+> --- a/include/linux/gpio/driver.h
+> +++ b/include/linux/gpio/driver.h
+> @@ -167,21 +167,24 @@ struct gpio_irq_chip {
+>  	 */
+>  	irq_flow_handler_t parent_handler;
+>  
+> -	/**
+> -	 * @parent_handler_data:
+> -	 *
+> -	 * If @per_parent_data is false, @parent_handler_data is a single
+> -	 * pointer used as the data associated with every parent interrupt.
+> -	 *
+> -	 * @parent_handler_data_array:
+> -	 *
+> -	 * If @per_parent_data is true, @parent_handler_data_array is
+> -	 * an array of @num_parents pointers, and is used to associate
+> -	 * different data for each parent. This cannot be NULL if
+> -	 * @per_parent_data is true.
+> -	 */
+>  	union {
+> +		/**
+> +		 * @parent_handler_data:
+> +		 *
+> +		 * If @per_parent_data is false, @parent_handler_data is a
+> +		 * single pointer used as the data associated with every
+> +		 * parent interrupt.
+> +		 */
+>  		void *parent_handler_data;
+> +
+> +		/**
+> +		 * @parent_handler_data_array:
+> +		 *
+> +		 * If @per_parent_data is true, @parent_handler_data_array is
+> +		 * an array of @num_parents pointers, and is used to associate
+> +		 * different data for each parent. This cannot be NULL if
+> +		 * @per_parent_data is true.
+> +		 */
+>  		void **parent_handler_data_array;
+>  	};
+>  
+> 
+> base-commit: f2906aa863381afb0015a9eb7fefad885d4e5a56

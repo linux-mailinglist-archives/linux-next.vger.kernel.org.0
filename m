@@ -2,92 +2,90 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ACBD54A210
-	for <lists+linux-next@lfdr.de>; Tue, 14 Jun 2022 00:24:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCC1F54A2BE
+	for <lists+linux-next@lfdr.de>; Tue, 14 Jun 2022 01:34:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232462AbiFMWYg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 13 Jun 2022 18:24:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33922 "EHLO
+        id S229892AbiFMXeM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 13 Jun 2022 19:34:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230339AbiFMWYf (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Jun 2022 18:24:35 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73E1730F41;
-        Mon, 13 Jun 2022 15:24:34 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LMR254LXbz4xXD;
-        Tue, 14 Jun 2022 08:24:29 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1655159070;
-        bh=aT25+qFi2ASsveLSmhiMwh2DQNJSO4mLealoIl2BhVE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=IPPjs5hP5YMAjtLiQ+A0u2seIPNRaKGx9S4K74iIAK/w9UTTjtTJGvAfJpn5u8TxR
-         yxsxK7oFT856eU7sKOWMevhQI4aNtD/v54pimS7Ogt174gO9n8RW8/4feeScAyUJBz
-         ymkJZg5GiEnhCJpnC68pCm6+l4m5xX+MnEpoBwEBcCzL8+i1qmm9JyHivARyGrnsg4
-         WD1G5pzV8n8egAcAtIcJAaIUSOK/aEJbGXA3rud9JpjzuebBmrj9+7DbWv50uXZcgO
-         iKPNd2qdXZJRtvNQbSgyJKihBCXPlsELL2yJ7p2vOV2CyNQr6BN734CdEV3gtfvuUT
-         ZNEDPcdWh4geA==
-Date:   Tue, 14 Jun 2022 08:24:25 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Paul Moore <paul@paul-moore.com>
+        with ESMTP id S233513AbiFMXeL (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Jun 2022 19:34:11 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3322E3191C
+        for <linux-next@vger.kernel.org>; Mon, 13 Jun 2022 16:34:10 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id q15so8903584wrc.11
+        for <linux-next@vger.kernel.org>; Mon, 13 Jun 2022 16:34:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xGYiKa6mXP0iZOXOQm7kCvDLrx3D14bnw7gw1UJaDHY=;
+        b=Q+qj4tgzGC0W3T7fwxnpleP1RH8nFiUZ+6PltDb2osyo96YS0SaAnAL3gcP90t3uW9
+         bVhf20bfbfCis0UBI4wK4VvpBeUJcK2hur0uOIuFfFULpyXglo5fZog21X1vnbEpj8R0
+         f6+zigzJU2zRTaJoqvIYo5YzbnY8d+1qrYUFqmo4w+mQlSNvXR9i6eJaLInvHYOHb/aY
+         6fiB6f/aniXoNg2wTLroaIxPaB3oJKzuSYKh5lCz+fTdshNh365tkVBZeJ4xIDEF/5mP
+         8GqWXaXYU08FP4yV7maeP7Pw2orru0HBjntNANVH9SAmRzpHbIVUC2XlLdPpRG+uV9IO
+         438A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xGYiKa6mXP0iZOXOQm7kCvDLrx3D14bnw7gw1UJaDHY=;
+        b=JP2J+LZODIw2dm1KqNIKj+TO8/hH1IP4BvJ/1d7W5EnTvS4BFJNAT2IDDo0L/GxUFq
+         g4bGaoRBmDEuA5nhTBB5nH5gMMBoyFVfJHZD8ife12hTqfVV+ixxIQQY4H+BM4+gZqxw
+         tPS5fSZgj9mEGFI+wwbZKW9mpeMgjm56E3bHGCR+vm18YZLbmiXzuOhqebvYHepY3yO1
+         HmHOfdiDbv0yF7VHKBLuMTpJ/2rCs1C8ekFIJ1MpGcfBiw9TPRi7nJ/mwCvCYLwl1eNb
+         CzdbBlAdFHYC9FSjx/h6oauyVC2xsjDksCNbC0RIJIseIFldMjGrtdcWhbxlPqa2s5KK
+         O8MA==
+X-Gm-Message-State: AJIora8xdMu4oaotuhdj00P5bwiSaG23TqzyPwcEk8cqXcej2pB+HQB5
+        Fr512iJ7fPkxF7j2ITzEQWe8wgE/XWA6kRurB++XSaOHJQ==
+X-Google-Smtp-Source: AGRyM1vupl+waimCKX6BURP8frkXJ72r3v3eqI+2I8C6U17IP2g6be79mtg7PPeYV5f/qLsklq4q5mwUcv6/2+XPdpw=
+X-Received: by 2002:a05:6000:1008:b0:210:3e9a:324c with SMTP id
+ a8-20020a056000100800b002103e9a324cmr1964810wrx.89.1655163248675; Mon, 13 Jun
+ 2022 16:34:08 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220614082425.415adffc@canb.auug.org.au>
+In-Reply-To: <20220614082425.415adffc@canb.auug.org.au>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Mon, 13 Jun 2022 19:33:58 -0400
+Message-ID: <CAHC9VhT9QUdfu5TCZcAuzcC8wBaA8VR2MKWiQE3RWEv5M65tJA@mail.gmail.com>
+Subject: Re: linux-next: Fixes tag needs some work in the selinux tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Randy Dunlap <rdunlap@infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the selinux tree
-Message-ID: <20220614082425.415adffc@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/3Zgp=F4bWVmC3DV9u_ejB9m";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/3Zgp=F4bWVmC3DV9u_ejB9m
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Jun 13, 2022 at 6:24 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> In commit
+>
+>   e81ee824e8a1 ("docs: selinux: add '=' signs to kernel boot options")
+>
+> Fixes tag
+>
+>   Fixes: ^1da177e4c3f4 ("Linux-2.6.12-rc2")
+>
+> has these problem(s):
+>
+>   - No SHA1 recognised
+>
+> Also, I don't think that is a relevent or useful Fixes tag anyway.
 
-Hi all,
+Good point Stephen.  I just dropped the tag in the offending commit
+and did a force push back to selinux/next; sorry for the noise.
 
-In commit
-
-  e81ee824e8a1 ("docs: selinux: add '=3D' signs to kernel boot options")
-
-Fixes tag
-
-  Fixes: ^1da177e4c3f4 ("Linux-2.6.12-rc2")
-
-has these problem(s):
-
-  - No SHA1 recognised
-
-Also, I don't think that is a relevent or useful Fixes tag anyway.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/3Zgp=F4bWVmC3DV9u_ejB9m
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKnuRkACgkQAVBC80lX
-0GwVcAf/SFo4WbqtCM3a1OJNIDEIQh18GKho0TVPbNHqlUH7GiS2A7DxlBYzSPDN
-gtzDOQedB4Et997GICKV/YUjjemV3UcoGwX/JnFxk20C0bY/NlTV3kvkCNcRz9gh
-d8Oh+IKHC5HAsh98KNjxZwjoFGhJv7zI7mkMUGKorMVJx+fnFN1hgvMdiIxvfFpU
-G/vAlLddpV+mkWt94rPDfjRw8CyXLDmCVQhokHsAbQTYhkv6S3pUtKqmHk5WhIgo
-sN8juH6VrLodUyNTg5WYzoiaQInW27NWzkgrSkQDTYUk8B9LyEXb75nAaKXqsBTb
-tHugIyhObBQU4YKURvbjVvUXB3aPug==
-=/Axo
------END PGP SIGNATURE-----
-
---Sig_/3Zgp=F4bWVmC3DV9u_ejB9m--
+-- 
+paul-moore.com

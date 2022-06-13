@@ -2,86 +2,87 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 325DF54A208
-	for <lists+linux-next@lfdr.de>; Tue, 14 Jun 2022 00:21:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D410554A1FD
+	for <lists+linux-next@lfdr.de>; Tue, 14 Jun 2022 00:16:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229892AbiFMWVV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 13 Jun 2022 18:21:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57478 "EHLO
+        id S231726AbiFMWP7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 13 Jun 2022 18:15:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230240AbiFMWVU (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Jun 2022 18:21:20 -0400
-X-Greylist: delayed 574 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 13 Jun 2022 15:21:19 PDT
-Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D91F92DD5C
-        for <linux-next@vger.kernel.org>; Mon, 13 Jun 2022 15:21:19 -0700 (PDT)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id D6197C009; Tue, 14 Jun 2022 00:11:42 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1655158302; bh=Ux/4hT39c14afeoew7+c9hXnBH4Wop2/T43c8QUzsXE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=3MtmjjnW/1Y+i6EFALMsGOv6GfF2dSqFOyZoeJvzGxVBIvRudwj8YIKRzJveL5GMu
-         2MAy7S+5LT9dNvm0JsDLy0iO5CANeWwe1wlnhuqR9/Gd++UEQTmj2znYka9o/BS/ca
-         FbJsQIPh4aGwFjELvjZOm/pDVBHLktrC8GgQvfxQhGN2fT9PO5TY6RMJo1TBXavJlm
-         0docKaQFwaFt0b4KJx2yOWpEtENC6Bj+H9XL/tez/m1kcErCGO16xmor3nJlRW6+PS
-         J0IOIRsX+RdgA482DF7/leFBggU79O8ywcTh3S0m5Fzz7BP+3EX6kYVMX2ZsZ8avhl
-         ZucXbIv1ioS1Q==
+        with ESMTP id S230494AbiFMWP6 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Jun 2022 18:15:58 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 038642C67F;
+        Mon, 13 Jun 2022 15:15:57 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LMQrC1q5qz4xYS;
+        Tue, 14 Jun 2022 08:15:55 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1655158555;
+        bh=CPqoRx6jFf/Uk//ngMt58JurfE00cR2plqehG6AYzk0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=SJFlxhw46CIu8v+9QZmIlSkwz9Kb1aw18UMKo6V9IBL8L+d9KHB08/QADvbYcGW2l
+         TJQV6qqmYIGe12IThQr3H6HTr7oyt0cmtlUXWMKI2z8Eb7iUFOtCub+qdg/0DrEG0y
+         2roC4giGGWI3et005vAY6wqq9CduhFUc8DU/Lb88uHmfpnfjlabVYspyKHkz0/9C/Z
+         jcc2YxLJYGv2fiOLbb8Kb3UormSa4WWo7PmLp/SHmsMoj6uYmvhoExLoV3S+zRdjST
+         Y1AEuulvfw2Ps6SrK9MJeKLyMnESegSwVXns5kLswb7/qZC3pTNe3ZNUdEZlUYUYE0
+         39Je0amaZWvZA==
+Date:   Tue, 14 Jun 2022 08:15:54 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     Jack Qiu <jack.qiu@huawei.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the f2fs tree
+Message-ID: <20220614081554.2be34f1a@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/w1k2f2relOWYd8oA5cH+AJo";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id 8156BC009;
-        Tue, 14 Jun 2022 00:11:41 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1655158302; bh=Ux/4hT39c14afeoew7+c9hXnBH4Wop2/T43c8QUzsXE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=3MtmjjnW/1Y+i6EFALMsGOv6GfF2dSqFOyZoeJvzGxVBIvRudwj8YIKRzJveL5GMu
-         2MAy7S+5LT9dNvm0JsDLy0iO5CANeWwe1wlnhuqR9/Gd++UEQTmj2znYka9o/BS/ca
-         FbJsQIPh4aGwFjELvjZOm/pDVBHLktrC8GgQvfxQhGN2fT9PO5TY6RMJo1TBXavJlm
-         0docKaQFwaFt0b4KJx2yOWpEtENC6Bj+H9XL/tez/m1kcErCGO16xmor3nJlRW6+PS
-         J0IOIRsX+RdgA482DF7/leFBggU79O8ywcTh3S0m5Fzz7BP+3EX6kYVMX2ZsZ8avhl
-         ZucXbIv1ioS1Q==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 5e5af06f;
-        Mon, 13 Jun 2022 22:11:36 +0000 (UTC)
-Date:   Tue, 14 Jun 2022 07:11:21 +0900
-From:   Dominique Martinet <asmadeus@codewreck.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: bad commits in the v9fs tree
-Message-ID: <Yqe2CT0whmf8mYLj@codewreck.org>
-References: <20220614075223.5c2ea764@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220614075223.5c2ea764@canb.auug.org.au>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Stephen Rothwell wrote on Tue, Jun 14, 2022 at 07:52:23AM +1000:
->   04608d78b66c ("Linux 5.19-rc1")
->   9383b9134c66 ("fix the breakage in close_fd_get_file() calling conventions change")
-> 
-> look like they were rebased or cherry-picked from Linus' tree.from
-> Linus' tree.  From commits f2906aa86338 and 40a1926022d1 respectively.
+--Sig_/w1k2f2relOWYd8oA5cH+AJo
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Ugh, thank you for noticing.
-I had an overly eager `rebase -i` that are usually noop and don't touch
-the top patches if left alone, but that only works if no merge is
-involved and that wasn't the case here -- I'll be more careful with my
-rebase root from now on so it hopefully won't happen again.
+Hi all,
 
-Fixed my 9p-next branch so these two should be gone next time you
-update.
+Commit
 
+  dd43bcc205ab ("f2fs: optimize error handling in redirty_blocks")
 
-Thanks,
--- 
-Dominique
+is missing a Signed-off-by from its author.
 
+Maybe all patch postings to the linux-f2fs-devel@lists.sourceforge.net
+should have an explicit From: line at the top of the body.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/w1k2f2relOWYd8oA5cH+AJo
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKntxoACgkQAVBC80lX
+0GzeuggAmqpIJ+Fq+YnAvxIQ9dMGGizzicjgQ3StNgOLYZFAB6FEBXx+JJxWrKWB
+03KW44uPpeFxhefd5U42dYXDIW3X9s6dlPvHDM4tBof0R2rwxinnHzjIYWLTixr3
+iSuZSmXj8S1z8ZkwxaPVvtpulY7+xmNE87HDaeMovRcdJTUGEaDjJItyVH+DaaOO
+EquWtDw9R6tnGYHf/pom5CCkfn9zpStRpnFQVZ+s5ahABIEQtjZGW8SXC5EhH44K
+eCHrjM2GYYu/nkyj5mETumz3/PUkLqpH5y98YelA7BNI3tN0HZJtbZsyN6Z29gG+
+0yjhwJlSC4ORp0NEOg6547pbL2cxzQ==
+=1MTK
+-----END PGP SIGNATURE-----
+
+--Sig_/w1k2f2relOWYd8oA5cH+AJo--

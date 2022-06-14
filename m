@@ -2,101 +2,107 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0086354A97C
-	for <lists+linux-next@lfdr.de>; Tue, 14 Jun 2022 08:32:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AD3254A99E
+	for <lists+linux-next@lfdr.de>; Tue, 14 Jun 2022 08:42:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351830AbiFNGbA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 14 Jun 2022 02:31:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35302 "EHLO
+        id S235223AbiFNGmC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 14 Jun 2022 02:42:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352215AbiFNGaz (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Jun 2022 02:30:55 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2C3937AAD;
-        Mon, 13 Jun 2022 23:30:54 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LMdqJ3cvPz4xZC;
-        Tue, 14 Jun 2022 16:30:49 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1655188253;
-        bh=2+7hOK7gai0sj/jHj1GNsLi8oVlT7BdZ+2vF94lvkBs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=BBYxG8ZDO43GhHop6xv5xDXEfJ6Z6LjQ4pvj9+Z59wKhgqTTF9NmRbEaEzLS5GisG
-         nEo81W4pcx2eOFb4BWGYGXsiKVU/5BcI0Y4DgHxJ/B/RAS/i3ybciVjkWP1q48TB1p
-         O12sCQGTVk7o+89SW4ZrAv5aKmdYunChMTyUwR6rwsrjvF6c8tZ8OQCeGJGQANibl8
-         NRlyaw1BZ17s7oLAHWvYQtc4LW2uT4vK4GAirml9KmUuBF2HLOmHbN0hDq9v3ljhWv
-         3AW2kpzpXf+guzr91WMdNL7Lu5QPTK0Eq9UkNbL+78stGxugMs2ByybDw4sKzowXOU
-         nkR1+7Pdi4xZA==
-Date:   Tue, 14 Jun 2022 16:30:48 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Neal Liu <neal_liu@aspeedtech.com>
-Cc:     Greg KH <greg@kroah.com>, Joel Stanley <joel@jms.id.au>,
+        with ESMTP id S231724AbiFNGmB (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Jun 2022 02:42:01 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E799A37BEA;
+        Mon, 13 Jun 2022 23:42:00 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id D19C2320091A;
+        Tue, 14 Jun 2022 02:41:58 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Tue, 14 Jun 2022 02:41:59 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1655188918; x=1655275318; bh=0GVeg8KJ3g
+        v6/noA3jrPtD5CzBoTVbxkxVqws6wFWQw=; b=MlrvnrpAPM7OjF+UY2PtuMCVeZ
+        H8VQQQ5t/hsXtoM3CGGIIK71gXQ2j1h32FcEFT+rob0bZx3eJ2AUNEBollIyLvzr
+        0077Wemd5evUJ2/5VUHiHqYPNHE182mZGW+Z2vvVMYB9n/PD/+UgcRNJzMnZsX3R
+        XnpMDpr0vTdG5OXLk3ZjfM6617sKhKgpl21v/PqMj8ojS6wbTuFe3mpw8Xpu5kmK
+        nGItFFegrox4kstlM0BJJNzJj/iO7cslyPwpBRd1Ny2Lw/FSQtbUGjkcLNh8XyjH
+        Pkjlcg4zeIrWzUy+E5mfvHAn7quoDZ/WGKdj7zW3/poAcXObaOWtI0IHUaLA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1655188918; x=1655275318; bh=0GVeg8KJ3gv6/noA3jrPtD5CzBoT
+        VbxkxVqws6wFWQw=; b=IpDAOxE8cOSaQcAywsKtXyiKTztg5etLgRr7r//fxDW8
+        hthSmcedfjzSAc+N9L7r4UxvBZT2gi64DuyqlDaVM+YxuqFJCSCHEuh9TfAD7IzI
+        RaS6Zy09Qfb6aAFyue+OMbtUUnqmrvc3W/pFw0UdORV2gdRaV+KrhFv1oLgRbhE7
+        /7YebcIdNko2Ay+qkAboSwj1rlFKdvNL8lFWepJNATegB07FXquvKqKc0civ2avd
+        cmSZx/iswlHnMwFWd7yeTVd0NMJmE4Khodc4rFdfBsFPvMVrkhmRz71j94m+7dzB
+        QI0z1hN9aiLk+ziZSRzh7QMGMX+T7sGrkcv7rjUHew==
+X-ME-Sender: <xms:tS2oYqyIRH__gglnRVlWHyo-98lKPihCg2DwyUkZ6KcuNu58eCx7ZQ>
+    <xme:tS2oYmTVfjFMrbE-cd3IIuwu5qcotc1qgI8r4XxAMhZqt5GuSBG8pYyn3swxoSTwQ
+    H4aGA6xIWSDMA>
+X-ME-Received: <xmr:tS2oYsULSW4tMSDQCcCaihdncKJSVRt7eKs5E6hnaQnsZowLpf9NHSxePHWZrH8ClTplsup-_IViqXVTgedUFuNEesXTq_18>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedruddukedguddtkecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgv
+    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehge
+    dvvedvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhu
+    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhroh
+    grhhdrtghomh
+X-ME-Proxy: <xmx:tS2oYghtLIr9ZYdjOXaxK33oWeeFGgg9ny5C2LPOA7icuWfaWN9x9Q>
+    <xmx:tS2oYsBgg27xlGSnKa35J_s1rOUjbdfrZPStOg1ouNhF3yjw5uuyIg>
+    <xmx:tS2oYhJOw0j0Jm_j9-3dcV3pmpPWenHeg7oNXpXDvw9zDuAvOUX1Ow>
+    <xmx:ti2oYu1w1fLnrDz-FrzK1hGeVg3XpKRO4m9_PRLEfhwzcSmqPu749Q>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 14 Jun 2022 02:41:57 -0400 (EDT)
+Date:   Tue, 14 Jun 2022 08:41:53 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Neal Liu <neal_liu@aspeedtech.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
 Subject: Re: linux-next: build failure after merge of the usb tree
-Message-ID: <20220614163048.0e49ab29@canb.auug.org.au>
-In-Reply-To: <HK0PR06MB32025AFD8869F26343CE22AB80AA9@HK0PR06MB3202.apcprd06.prod.outlook.com>
+Message-ID: <YqgtsXSNZKds2bDl@kroah.com>
 References: <20220614120833.06cec8e7@canb.auug.org.au>
-        <HK0PR06MB32025AFD8869F26343CE22AB80AA9@HK0PR06MB3202.apcprd06.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/PXhiYUj6=hjtLQ2dUprUMMK";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220614120833.06cec8e7@canb.auug.org.au>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/PXhiYUj6=hjtLQ2dUprUMMK
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Jun 14, 2022 at 12:08:33PM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the usb tree, today's linux-next build (arm
+> multi_v7_defconfig) failed like this:
+> 
+> 
 
-Hi Neal,
+Failed like what?
 
-On Tue, 14 Jun 2022 02:41:41 +0000 Neal Liu <neal_liu@aspeedtech.com> wrote:
->
-> > After merging the usb tree, today's linux-next build (arm
-> > multi_v7_defconfig) failed like this:
-> >=20
-> >=20
-> > Caused by commit
-> >=20
-> >   2cee50bf4590 ("ARM: dts: aspeed: Add USB2.0 device controller node")
-> >=20
-> > I have used the usb tree from next-20220610 for today.
->=20
-> Looks like the same patch is already merged by Joe, how's that coming fro=
-m?
->=20
-> commit c9cb67c3a650 ("ARM: dts: aspeed: Add USB2.0 device controller node=
-")
+> Caused by commit
+> 
+>   2cee50bf4590 ("ARM: dts: aspeed: Add USB2.0 device controller node")
+> 
+> I have used the usb tree from next-20220610 for today.
 
-Its in Linus' tree before v5.19-rc1
+Odd, ok, I'll try to revert the offending dts change from my tree.  If I
+can get a hint as to what went wrong with the build, that would also be
+great :)
 
---=20
-Cheers,
-Stephen Rothwell
+thanks,
 
---Sig_/PXhiYUj6=hjtLQ2dUprUMMK
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKoKxgACgkQAVBC80lX
-0GyvEwgAhcPXESyXubSuFlGqRoUh1roPZF9UvdANLYp0JITZOXdT6vZiddfqctco
-G0kkBA4wyA3CUmsKl4OjwohZFyIvR3ijGIJJKKg2AIsKQR+K94ZA7KaWof+jfdYH
-sOrjONuwY/zII//NlkjZaw4nsUqL2K+pQx397nkCONAQJbdSaTYPT2/Aocg0B9r6
-jRKnT+ZQvXcXfeGCe2EU7QNSevuT65D8sVU1LGBIiEXP5oGBq168FdsMVICQ1Dzb
-ZNWDGUGW2cUlMyq1Fzys7pXT1dLNMvErT+6VfMwJX+tQSLN4qcIrKTQmmfK/hu75
-afSd7uaxekdm/7tiQhJeqJ/RJt4SfQ==
-=illB
------END PGP SIGNATURE-----
-
---Sig_/PXhiYUj6=hjtLQ2dUprUMMK--
+greg k-h

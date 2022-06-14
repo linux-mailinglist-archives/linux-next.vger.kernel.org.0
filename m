@@ -2,136 +2,87 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDC9A54BCAD
-	for <lists+linux-next@lfdr.de>; Tue, 14 Jun 2022 23:19:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D133E54BD93
+	for <lists+linux-next@lfdr.de>; Wed, 15 Jun 2022 00:24:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243673AbiFNVT1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 14 Jun 2022 17:19:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44478 "EHLO
+        id S235108AbiFNWX5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 14 Jun 2022 18:23:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233624AbiFNVT0 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Jun 2022 17:19:26 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27A564EA12
-        for <linux-next@vger.kernel.org>; Tue, 14 Jun 2022 14:19:25 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id p13so17315596ybm.1
-        for <linux-next@vger.kernel.org>; Tue, 14 Jun 2022 14:19:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=0pe/7jZrdd4wA9KSKjRVId1XeZmrdKxUsF6jrAi1z9o=;
-        b=TgovzMs4TKHp7QCrRx5ht9Sl4xwsIf7ncFERmJDn40Zeu5Qb+8aao1rzSn+Q/z7H5D
-         0cNDgb6FkXe0RHzt68CaEh38mcjws3v9CbBGI/mZZnS4Trs0mYSZevof6SdFRcm1sXm8
-         4PmvuhJbd92Ns3GOCvkZSTW9Rh5PQAjjunJYEQRubOEPkTm5LpqbaBWwLEI9M60sCG6B
-         qg/sap2Nvy3Z+BrKB3kGZgf5iOsXbX2qQC4EZ7GScU9H2CuwnC2qRFbaCvdvacToW0bP
-         DOUJP3ZzXRzMqa+r1/U8QJFxD60EEi3NWRo8ZCk9gXq/rLbNp8zTc5Hp9v0eEzni18Pb
-         ZbaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=0pe/7jZrdd4wA9KSKjRVId1XeZmrdKxUsF6jrAi1z9o=;
-        b=dWrHIYeEfHQlEu2J7Azwr+fBOH8MLMLfKCJlYjvs6FYZyYSOfn7Fq5pDJDgAKwBOn0
-         h+lbdyhtp2//zNqMaBSAEj20gtfXwka2SXHC8u1fSwR/C17j32FOxXvR9ZHtULL/KzG2
-         D6wbdRqQMFJyQJMjNIFN1m/TCJwSytGhtXFi4+tlwRM69N7G81JGNy/IRfgXIbBynKIi
-         WmMYKuHwu3rmbTjcS7i9Jt4CbBesSkcqwC15TOFjj6PKkGlfFiGeILd+f+qeUKIT4TST
-         CL1EqWWeOP7T6vtrNY7RcooIQ2H7CzXqZIZ6nWCuMLLDjI+FnduyumTzPfmHOD6yd499
-         4/VQ==
-X-Gm-Message-State: AJIora9du8Ihwb8GmLitIpsSABMZqEiKxvSubI1C3v6huoJ3kAhMxM2c
-        /3qAnlsRNWgY6QFRbzbZ8QuODHs36z+fRQWmbdNGGg==
-X-Google-Smtp-Source: AGRyM1ujTcRYf1QhEgbwhq2UxYbzHPM1wCsUxk2r/ecN8hXJGuS+HdqinfwfW57GaqHYU8vFGo1aOKGcDTBYjA2MYWw=
-X-Received: by 2002:a25:d913:0:b0:664:67a5:29e3 with SMTP id
- q19-20020a25d913000000b0066467a529e3mr7363860ybg.592.1655241564154; Tue, 14
- Jun 2022 14:19:24 -0700 (PDT)
+        with ESMTP id S229969AbiFNWX4 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Jun 2022 18:23:56 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B02F24D604;
+        Tue, 14 Jun 2022 15:23:54 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LN2ys6y6Gz4xXF;
+        Wed, 15 Jun 2022 08:23:49 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1655245430;
+        bh=cijYic4Yqf393NE68L/sY4Cjec66pbDgVeVxDejtf7Q=;
+        h=Date:From:To:Cc:Subject:From;
+        b=GlZoe9kh2EForDHqWY5MVHEejvw3LAQktNn62muv51sD0r9H+3XF+9Udh0v80kSjK
+         k/FsubCOcnG7282G9ar4K8c8r74tnEWSGjp3eN9cwrqd6fRtnYohSicnUkq4eGLRn+
+         7D6FkdBOcIAkr7mP6ZFkhsqKYeJvpe0T7S+mF8pPa3SIIIwwPWUmK4U08Y4Jp03cq5
+         KYyXhA5uYKOF95uO3O8gYd0r6UzwMZqc48ZXMsYZr8lp7QsgXsR9lHkMoEbUeNCq4v
+         2vtOH+vez2RyFnSjWi4gM31hZoKtltWGGE7nkWbrWRnjddTFYW+lLju6qVcDB6in7v
+         EUOz6WnwIOTSw==
+Date:   Wed, 15 Jun 2022 08:23:48 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jeff Layton <jlayton@kernel.org>, Ilya Dryomov <idryomov@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the ceph tree
+Message-ID: <20220615082348.3e55ec40@canb.auug.org.au>
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 15 Jun 2022 02:49:13 +0530
-Message-ID: <CA+G9fYsP05V+bVoZsPto-ZdZra3Mo4unBjNqyk1dOjfMEK1XWg@mail.gmail.com>
-Subject: [next] arm64: db410c: WARNING: CPU: 0 PID: 1 at drivers/opp/core.c:2265
- dev_pm_opp_clear_config+0x174/0x17c
-To:     open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        regressions@lists.linux.dev
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Nicolas Dechesne <nicolas.dechesne@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/NW+AP.cIWz1E2BU5hGDoeCZ";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Following kernel crash reported while booting arm64 db410c board with
-Linux next-20220614 [1] kfence enabled on this kernel.
+--Sig_/NW+AP.cIWz1E2BU5hGDoeCZ
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Hi all,
 
-Boot log:
----------
-[    0.850420] WARNING: CPU: 0 PID: 1 at drivers/opp/core.c:2265
-dev_pm_opp_clear_config+0x174/0x17c
-[    0.850447] Modules linked in:
-[    0.850459] CPU: 0 PID: 1 Comm: swapper/0 Not tainted
-5.19.0-rc1-next-20220610 #1
-[    0.850470] Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
-[    0.850477] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[    0.850489] pc : dev_pm_opp_clear_config+0x174/0x17c
-[    0.850501] lr : dt_cpufreq_probe+0x1e4/0x4a0
-[    0.850513] sp : ffff80000802bb00
-[    0.850518] x29: ffff80000802bb00 x28: ffff80000ada1c30 x27: 0000000000000000
-[    0.850538] x26: 00000000fffffdfb x25: ffff00000311f410 x24: ffff00000389ec90
-[    0.850557] x23: ffff80000a9eea98 x22: ffff80000a9eed00 x21: ffff80000ada1b68
-[    0.850576] x20: ffff00000389ec80 x19: ffff00003fc41308 x18: ffffffffffffffff
-[    0.850595] x17: ffff800009f21700 x16: ffff8000080955c0 x15: ffff0000031c2a1c
-[    0.850614] x14: 0000000000000001 x13: 0a6b636f6c632064 x12: 6e69662074276e64
-[    0.850632] x11: 0000000000000040 x10: 0000000000000020 x9 : ffff800009006964
-[    0.850650] x8 : 0000000000000020 x7 : ffffffffffffffff x6 : 0000000000000000
-[    0.850668] x5 : 0000000000000000 x4 : 0000000000000000 x3 : 0000000000000000
-[    0.850686] x2 : 0000000000000004 x1 : 0000000000000000 x0 : 0000000000000000
-[    0.850704] Call trace:
-[    0.850708]  dev_pm_opp_clear_config+0x174/0x17c
-[    0.850722]  platform_probe+0x74/0xf0
-[    0.850735]  really_probe+0x19c/0x3f0
-[    0.850745]  __driver_probe_device+0x11c/0x190
-[    0.850755]  driver_probe_device+0x44/0xf4
-[    0.850765]  __driver_attach+0xd8/0x200
-[    0.850775]  bus_for_each_dev+0x7c/0xe0
-[    0.850790]  driver_attach+0x30/0x40
-[    0.850799]  bus_add_driver+0x154/0x240
-[    0.850813]  driver_register+0x84/0x140
-[    0.850824]  __platform_driver_register+0x34/0x40
-[    0.850835]  dt_cpufreq_platdrv_init+0x28/0x34
-[    0.850848]  do_one_initcall+0x50/0x2b0
-[    0.850861]  kernel_init_freeable+0x24c/0x2d4
-[    0.850871]  kernel_init+0x30/0x140
-[    0.850884]  ret_from_fork+0x10/0x20
-[    0.850897] ---[ end trace 0000000000000000 ]---
+Commits
 
+  39be3f3c2896 ("fscrypt: add fscrypt_context_for_new_inode")
+  93d0d0af009d ("fscrypt: export fscrypt_fname_encrypt and fscrypt_fname_en=
+crypted_size")
 
-metadata:
-  git_ref: master
-  git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-  git_sha: 35d872b9ea5b3ad784d7479ea728dcb688df2db7
-  git_describe: next-20220614
-  kernel_version: 5.19.0-rc2
-  kernel-config: https://builds.tuxbuild.com/2AYbNeAYdcbtKeaEoYNvOAwsMQf/config
-  build-url: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/-/pipelines/563047963
-  artifact-location: https://builds.tuxbuild.com/2AYbNeAYdcbtKeaEoYNvOAwsMQf
-  System.map: https://builds.tuxbuild.com/2AYbNeAYdcbtKeaEoYNvOAwsMQf/System.map
-  vmlinux: https://builds.tuxbuild.com/2AYbNeAYdcbtKeaEoYNvOAwsMQf/vmlinux.xz
-  toolchain: gcc-11
+are missing a Signed-off-by from their committer.
 
+One of the downsides of rebasing.
 
-[1]
-https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220614/testrun/10154254/suite/log-parser-boot/test/check-kernel-bug-5169280/details/
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/NW+AP.cIWz1E2BU5hGDoeCZ
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
---
-Linaro LKFT
-https://lkft.linaro.org
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKpCnQACgkQAVBC80lX
+0GzwbQf9FUabwiX5dUlrHTWzDY0TVzmHO/sMIipl9cTXyto8uGXSws3iHyTLPNQ6
+uJsaWCL2c7QHIfUlxa1qS9twdJde8z2Xt7M5h2OEY+60OPi7IPswtHr8yUVZ1QTv
+Tu8q4dW/zF8Y5LtMTkdmW/dMr3SWA91pFUiPe9QfX/iXq7hHurG6mNKGSMRTFpNN
+0orrmPqSSfygBKQcxyTodqDI5nqVt7cyZcE/m6L42nGxu/xybRBOUkTXT4QHrJT1
+yrEBNzjjtyW6Y0/Nlfm/pJHlmSeRBa2qUW5z2/QPf+vPoFH5RuZTIV8HqOYiJyVZ
+Mr9dvNF0P46v8eugwm7+ke9MJ+OY2Q==
+=ZUKc
+-----END PGP SIGNATURE-----
+
+--Sig_/NW+AP.cIWz1E2BU5hGDoeCZ--

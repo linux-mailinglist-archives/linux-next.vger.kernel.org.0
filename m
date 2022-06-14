@@ -2,43 +2,46 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D133E54BD93
-	for <lists+linux-next@lfdr.de>; Wed, 15 Jun 2022 00:24:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EEE054BDB0
+	for <lists+linux-next@lfdr.de>; Wed, 15 Jun 2022 00:34:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235108AbiFNWX5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 14 Jun 2022 18:23:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48164 "EHLO
+        id S236992AbiFNWeB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 14 Jun 2022 18:34:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbiFNWX4 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Jun 2022 18:23:56 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B02F24D604;
-        Tue, 14 Jun 2022 15:23:54 -0700 (PDT)
+        with ESMTP id S236535AbiFNWeB (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Jun 2022 18:34:01 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F41D25C46;
+        Tue, 14 Jun 2022 15:34:00 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LN2ys6y6Gz4xXF;
-        Wed, 15 Jun 2022 08:23:49 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LN3BX6HBvz4xXj;
+        Wed, 15 Jun 2022 08:33:56 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1655245430;
-        bh=cijYic4Yqf393NE68L/sY4Cjec66pbDgVeVxDejtf7Q=;
-        h=Date:From:To:Cc:Subject:From;
-        b=GlZoe9kh2EForDHqWY5MVHEejvw3LAQktNn62muv51sD0r9H+3XF+9Udh0v80kSjK
-         k/FsubCOcnG7282G9ar4K8c8r74tnEWSGjp3eN9cwrqd6fRtnYohSicnUkq4eGLRn+
-         7D6FkdBOcIAkr7mP6ZFkhsqKYeJvpe0T7S+mF8pPa3SIIIwwPWUmK4U08Y4Jp03cq5
-         KYyXhA5uYKOF95uO3O8gYd0r6UzwMZqc48ZXMsYZr8lp7QsgXsR9lHkMoEbUeNCq4v
-         2vtOH+vez2RyFnSjWi4gM31hZoKtltWGGE7nkWbrWRnjddTFYW+lLju6qVcDB6in7v
-         EUOz6WnwIOTSw==
-Date:   Wed, 15 Jun 2022 08:23:48 +1000
+        s=201702; t=1655246037;
+        bh=OWV3XBMgJCK4V+jIDJ5aUoVALutHtEtz+lth47xTA1I=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=JxEo0MWK5umTb0QaMy9Y54yg300D5V/falPuwoC1vtz32ctMABBcgFivzcabhmKGF
+         e1x7Mite6OppkYsS6+fQaldbrLsYeiUN7ufCmzxlAAqeKT0BD/W9kqX7unAdY7Xjew
+         B49ibg6zlkduWJraZz0ZCANHGbXyF7Xan509UBS56elRJ/XdItOyEIio6hdRskgEoW
+         4L6ud8gbeozrsZ2de2C5O46OoBj2oEM1vD22mQPEX/WClZeWeOMvsybvc3RMXdbWuT
+         fjhvBAAM+utQTVY4FzT0rWJmeydhEYIi3NU4rGQou2APfJ8liCjBgO6UfUa4LKUk62
+         z/1kELcUO+ayw==
+Date:   Wed, 15 Jun 2022 08:33:55 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jeff Layton <jlayton@kernel.org>, Ilya Dryomov <idryomov@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Aurabindo Pillai <aurabindo.pillai@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the ceph tree
-Message-ID: <20220615082348.3e55ec40@canb.auug.org.au>
+Subject: Re: linux-next: Fixes tag needs some work in the amdgpu tree
+Message-ID: <20220615083355.5be9ead7@canb.auug.org.au>
+In-Reply-To: <20220611195513.58207a99@canb.auug.org.au>
+References: <20220611195513.58207a99@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/NW+AP.cIWz1E2BU5hGDoeCZ";
+Content-Type: multipart/signed; boundary="Sig_/M5A5HR8UzFSEDdGPf9rDDm6";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -49,40 +52,51 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/NW+AP.cIWz1E2BU5hGDoeCZ
+--Sig_/M5A5HR8UzFSEDdGPf9rDDm6
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Commits
+On Sat, 11 Jun 2022 19:55:13 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>=20
+> In commit
+>=20
+>   4768e2f5653e ("drm/amd/display: dml: move some variables to heap")
 
-  39be3f3c2896 ("fscrypt: add fscrypt_context_for_new_inode")
-  93d0d0af009d ("fscrypt: export fscrypt_fname_encrypt and fscrypt_fname_en=
-crypted_size")
+This is now commit 9a0efb51178c.
 
-are missing a Signed-off-by from their committer.
-
-One of the downsides of rebasing.
+> Fixes tag
+>=20
+>   Fixes: d03037269bf2 ("drm/amd/display: DML changes for DCN32/321")
+>=20
+> has these problem(s):
+>=20
+>   - Target SHA1 does not exist
+>=20
+> Maybe you meant
+>=20
+> Fixes: dda4fb85e433 ("drm/amd/display: DML changes for DCN32/321")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/NW+AP.cIWz1E2BU5hGDoeCZ
+--Sig_/M5A5HR8UzFSEDdGPf9rDDm6
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKpCnQACgkQAVBC80lX
-0GzwbQf9FUabwiX5dUlrHTWzDY0TVzmHO/sMIipl9cTXyto8uGXSws3iHyTLPNQ6
-uJsaWCL2c7QHIfUlxa1qS9twdJde8z2Xt7M5h2OEY+60OPi7IPswtHr8yUVZ1QTv
-Tu8q4dW/zF8Y5LtMTkdmW/dMr3SWA91pFUiPe9QfX/iXq7hHurG6mNKGSMRTFpNN
-0orrmPqSSfygBKQcxyTodqDI5nqVt7cyZcE/m6L42nGxu/xybRBOUkTXT4QHrJT1
-yrEBNzjjtyW6Y0/Nlfm/pJHlmSeRBa2qUW5z2/QPf+vPoFH5RuZTIV8HqOYiJyVZ
-Mr9dvNF0P46v8eugwm7+ke9MJ+OY2Q==
-=ZUKc
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKpDNMACgkQAVBC80lX
+0GzrXgf9Gv3MeSXi7vdtRT2N/yNhiA/P+xv57J4ncikmzh6wGwX6pp9IM4G9P9xJ
+UpzMohsPl/hzcPR5elpil+gCqE3QHwERlF3vc1QCPk+6mcIFhMW4IuSTXcmnS0dZ
+NaKwjuM3vTeKKKNO5NSKI05DKkkLUK3BHywzls6xYLY1eK8AEOS4Mm2s6omvoEGR
+84secJ7GNEwGpwXprrhtIgK41manrzctWnD4z7U0yCpukHH+J2XbZybBXD7qlAKj
+o7Jq1ROU2wNBNOwFRXJ48bb5FKTe4/snX4CUyuqsSp1OScgH6MAfV+YLr5bOri8k
+0PNdNjd18KwT9EifQaTC83PPNb9U4A==
+=A0wQ
 -----END PGP SIGNATURE-----
 
---Sig_/NW+AP.cIWz1E2BU5hGDoeCZ--
+--Sig_/M5A5HR8UzFSEDdGPf9rDDm6--

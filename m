@@ -2,96 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CF4754AF1B
-	for <lists+linux-next@lfdr.de>; Tue, 14 Jun 2022 13:12:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68B8354AFFA
+	for <lists+linux-next@lfdr.de>; Tue, 14 Jun 2022 14:11:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356207AbiFNLLY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 14 Jun 2022 07:11:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35368 "EHLO
+        id S1356555AbiFNMK3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 14 Jun 2022 08:10:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356191AbiFNLLX (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Jun 2022 07:11:23 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63B51DEAF;
-        Tue, 14 Jun 2022 04:11:19 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LMm2s318dz4xZC;
-        Tue, 14 Jun 2022 21:11:17 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1655205078;
-        bh=iZi7VXD/BQU3IcvSqC2JWvaTS297BwmoOBbqIwBTF5Q=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=G+uEXtJB77egfNtm4fRMXhvXGQj53V1OC1m633XgfopNtTUkNgWG3QvuiPlA3wCDb
-         YB/8NalgxaV1PEjORlBwfy1evl2GzBuu0hRtKx5rHG76CI0sSh9yhIU+92F2kenmdI
-         4iYQS/8D7B4ikof2rmlbwR9x18Gtk8GkDaNxFsAfb7I1UUQvEclGu4nspZ6KQnsfOr
-         DCimXJCEvP83znV2RzXTfgUC7LoULrIlbYqLyN5lo4C9Gx9y43F7HLZmYeCnxfiOLz
-         LQfrIA2WY8bTCJyLjLlKMCmglm2zUCUAnUrH08Ab/++2PoMWu7ClG7pCMWI7XQJZM7
-         CcnEX/A9CBtqw==
-Date:   Tue, 14 Jun 2022 21:11:16 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Greg KH <greg@kroah.com>, Neal Liu <neal_liu@aspeedtech.com>,
+        with ESMTP id S1356483AbiFNMK0 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Jun 2022 08:10:26 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C93F748E7B;
+        Tue, 14 Jun 2022 05:10:24 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id s37so5708824pfg.11;
+        Tue, 14 Jun 2022 05:10:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=Mw0EQvrU7rnu0xsHd/85d5zmXokM1828mn5qv/9/7pY=;
+        b=IdHqyEQ5ZxrIpPpcXsfUe9kU0utW++E7PzruvcWj2bH+qq5j1rOoA/Zs4KRgJVDPJB
+         FwZEQH8gRuSUbEkeKH2O+CdzNYuYbC+yWsBpHAF3CuF5mTw231bjPkiuSq8dPiGJ8cRw
+         9C9qIkH6p3LbKyEVfCuH1mg6kttUOxvHFG1IBoCip6r/l6GK0U4YY65FjfOsnfvWY2qt
+         cVdRNmNhAH6OAxTV4+xu4PWGbKHX/qMoVIwVf3CC79ULH5BhY14zUz3Ory00Dc8wGq+v
+         v+OBeshLEcU0L5wQeEXDBuLURFZEhz4LFh4jkntnUVKau4UJaYHuzJJT2I67n4eL3qYm
+         yXtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Mw0EQvrU7rnu0xsHd/85d5zmXokM1828mn5qv/9/7pY=;
+        b=6Qyp9tJ9D22Np8w1GIGhJbfZ9tnTskJwEDUqnhVCMXA9/VMcztepSyAYtY4jMP97Go
+         O4vpA59MKwpmN+/oq16+jHT8BBazRNykT/YGC558iTGyDFwqrn02QN5A8ovdqQjPlyAq
+         5nHJaha9O+jwdXikfbtT8tyia4AO377ZKO4ovGuqVhh0b0WdBjiD/XgLEctNjcQaienA
+         9AdAnJNajIj34OPLi9RyB2Y26++sEL9W2LUYlJHhzesFHGhPyWPJ8bFGqjTIdPNn/1RM
+         nq2/H2pOHHLBImW/NMVhKH1mUHPogT02yhwq3NvqkXOCRojatQLg4QODTk11Vpd+4NBQ
+         WDSQ==
+X-Gm-Message-State: AOAM533Ubjkg6VqXN+dNOJG2Efyzwfr5y/PBceac9ESwVEL3w6CtjDbp
+        JQ/pN8CewUZuRCsMY1EY6Kw=
+X-Google-Smtp-Source: ABdhPJw4eED7I9ElEerUgaqmPKpAQIi60hKd1blZwLF8Y8+rUFNbj0QxxKpNqFpkHgkfj5dWcsQQZA==
+X-Received: by 2002:a05:6a00:9a7:b0:51c:3e28:1501 with SMTP id u39-20020a056a0009a700b0051c3e281501mr4414402pfg.86.1655208624312;
+        Tue, 14 Jun 2022 05:10:24 -0700 (PDT)
+Received: from localhost (subs02-180-214-232-21.three.co.id. [180.214.232.21])
+        by smtp.gmail.com with ESMTPSA id f125-20020a62db83000000b0051be7a8c008sm7435411pfg.30.2022.06.14.05.10.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jun 2022 05:10:23 -0700 (PDT)
+Date:   Tue, 14 Jun 2022 19:10:20 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the usb tree
-Message-ID: <20220614211116.1557b95e@canb.auug.org.au>
-In-Reply-To: <YqhCZoA4SukXq9lf@debian.me>
-References: <20220614120833.06cec8e7@canb.auug.org.au>
-        <YqgtsXSNZKds2bDl@kroah.com>
-        <20220614175247.30b02dc2@canb.auug.org.au>
-        <YqhCZoA4SukXq9lf@debian.me>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Subject: Re: [PATCH] tty: Add closing marker into comment in tty_ldisc.h
+Message-ID: <Yqh6rL7nNvR3B5Ix@debian.me>
+References: <9bc6d45d-48c8-519-1646-78ba22505b1f@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/pVG0HKi1sIFI_zgWgSr3WdT";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <9bc6d45d-48c8-519-1646-78ba22505b1f@linux.intel.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/pVG0HKi1sIFI_zgWgSr3WdT
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Jun 14, 2022 at 10:50:54AM +0300, Ilpo Järvinen wrote:
+> The closing `` is missing. Add it.
+> 
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Fixes: 6bb6fa6908eb ("tty: Implement lookahead to process XON/XOFF timely")
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> 
 
-Hi Bagas,
+Hi Ilpo,
 
-On Tue, 14 Jun 2022 15:10:14 +0700 Bagas Sanjaya <bagasdotme@gmail.com> wro=
-te:
->
-> I mean the missing error you reported was:
->=20
->   DTC     arch/arm/boot/dts/aspeed-ast2500-evb.dtb
->   DTC     arch/arm/boot/dts/aspeed-ast2600-evb-a1.dtb
-> arch/arm/boot/dts/aspeed-g6.dtsi:320.21-328.5: ERROR (duplicate_node_name=
-s): /ahb/usb@1e6a2000: Duplicate node name
-> ERROR: Input tree has errors, aborting (use -f to force output)
+I have already posted the same fix at [1]. Thanks anyway.
 
-Right, thanks.
+[1]: https://lore.kernel.org/linux-doc/20220614091214.511791-1-bagasdotme@gmail.com/
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/pVG0HKi1sIFI_zgWgSr3WdT
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKobNQACgkQAVBC80lX
-0Gy9gQf/bEUThYasyZV9JYaf2h9nHhtDMtE70J+1hq1BuJNs3ItJ2GSs67XI++jt
-RcMS2x8AjhckJN+9nit53BzO54yygiJqsMUmoBuljqkJSAYR+HE9+V9/JWB+xrwT
-fOefpgTBQV8msSQwdojymuocvx3kD+AT7vk31JLMZK8pPfy4IP+XpO68PfhomNYD
-aQ3QXO1qS39tFJ2d6C3oQb4fevlCKhP/B6VwJV96OMiww3XZFhazFM61JhwjUp3v
-AlJ+vOlc0HIvlhT1aUpDo15jodIkhNQrb4e6WSEToP/FVgcP3aJvQOUbJQZb/fy2
-rmA1IT+Y/HDU3UGJltvCW1ZOpwYQMQ==
-=tl4v
------END PGP SIGNATURE-----
-
---Sig_/pVG0HKi1sIFI_zgWgSr3WdT--
+-- 
+An old man doll... just what I always wanted! - Clara

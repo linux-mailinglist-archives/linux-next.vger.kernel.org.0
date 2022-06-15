@@ -2,84 +2,97 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DE7B54CFE9
-	for <lists+linux-next@lfdr.de>; Wed, 15 Jun 2022 19:31:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06D5654D0C8
+	for <lists+linux-next@lfdr.de>; Wed, 15 Jun 2022 20:17:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357603AbiFORbQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 15 Jun 2022 13:31:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41578 "EHLO
+        id S1345717AbiFOSRu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 15 Jun 2022 14:17:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357385AbiFORaz (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 15 Jun 2022 13:30:55 -0400
-X-Greylist: delayed 407 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 15 Jun 2022 10:30:34 PDT
-Received: from hutie.ust.cz (unknown [IPv6:2a03:3b40:fe:f0::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 295514DF74
-        for <linux-next@vger.kernel.org>; Wed, 15 Jun 2022 10:30:34 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
-        t=1655313819; bh=ix8DuR7FVhlX1QFc3YVDpB6U+OMwX3Iyaeweg0Q0V5g=;
-        h=Subject:From:In-Reply-To:Date:Cc:References:To;
-        b=i/ajhs61AwEz0DHh1hHE75q/NqJnwpTVYAKzTBsBz82OO/tDa+YuylRBkcnv8A3wY
-         +CoFqyytpaWwe59entSjJYypvIRTr2VnJGhp11D6wH59fKHy7X50D/8fKlvcNWgYTZ
-         PQoTr7SZjw/k0qQ0DQfewKbWP0f/G9kpzcELljPY=
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
-Subject: Re: linux-next: Tree for Jun 15 (drivers/dma/apple-admac.c)
-From:   =?utf-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>
-In-Reply-To: <CAK8P3a2mQiWKyVux+bfAJiRH=72q76UTLZnBbPCLVFVoXpGfaw@mail.gmail.com>
-Date:   Wed, 15 Jun 2022 19:23:37 +0200
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        with ESMTP id S241258AbiFOSRt (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 15 Jun 2022 14:17:49 -0400
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 850AC13F40;
+        Wed, 15 Jun 2022 11:17:48 -0700 (PDT)
+Received: by mail-oi1-x235.google.com with SMTP id i25so3527900oii.7;
+        Wed, 15 Jun 2022 11:17:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VfW4+MFPGYeBUUr9P3m8Mr/ICDd1RbPLolMwpeyHPXw=;
+        b=LLXs0L+hC2JKEo/iJb6wyEmAI4PvVxBlb4jdgsUbSFsLQyIxiT5rdaa7Or4WLWzzy6
+         oa/AQSOsQvMayo/+fttKFCsn0oIII9lUTBvF3K30555B1FJKxN2x0+G/IE3z0A55ET8J
+         UaVLLh86CUGGDO0leJax6pH3QcjdR7xX+3hJBLHav2XAeKAVSwq1x59hmuuEYSZwcbbQ
+         aebNjE0CfRLWa9VX7dqAiqTfPe5XXZGZ0pNRzjf0Gou7c6Rq730MSqmnT9+sl9aD5f6y
+         yC9yAuZrxwm4V1BkSJxw+fq8GIgdoC3EfYRD5tZPkouZYpFI2wwiwiMkgGxRgygO26im
+         pOWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VfW4+MFPGYeBUUr9P3m8Mr/ICDd1RbPLolMwpeyHPXw=;
+        b=DH2HgkCeAbzmjsXCKBxmL/0iMaYO08wNUCNsSs51c3VDCD6tNQx7/UPUgnKGjWlKXg
+         IEb3jKPzO0coXLSl7jR+yaSMj3UCswm0FOzHO9+QEstyXzd633SraiR41uRs/SpsdpTW
+         E9UibThX56YZabjoJZcmkABW9eEB7w42sakU4SWxIKZao04jyjovkD9h+xxdChfc+d40
+         UZ+M+cIeAo/Cc0xltDG5fXDZuVqXfI3XjAScwoWhv4tpIrLingwsP26jiGEXyWX+mP+A
+         MoHJ4A/hjfpxHLoHvS/ofXY7DYHf4U7amQF6vGgYw2oXwWKZh9dN0AZMnTkhO8eTEtcX
+         +uVA==
+X-Gm-Message-State: AJIora90HSnv76B4pnpzPx/cJi8fJEOvbYVg7vo6vQ+v8dtAUlhxzcn2
+        pTBVWuR/a6ITdurONG8TBwGFv7kNhdIvzpiu5vg=
+X-Google-Smtp-Source: AGRyM1traN0gacOxob9SpEeyGEaRItKOhsSsdeU9jcXCJziZD7bVNJHk7waH6kB659qzEWw3GHyGSXrCQGdpzLdsPmU=
+X-Received: by 2002:a05:6808:23c6:b0:331:3ab2:6fb9 with SMTP id
+ bq6-20020a05680823c600b003313ab26fb9mr436913oib.200.1655317067646; Wed, 15
+ Jun 2022 11:17:47 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220615143758.6139959f@canb.auug.org.au>
+In-Reply-To: <20220615143758.6139959f@canb.auug.org.au>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Wed, 15 Jun 2022 14:17:36 -0400
+Message-ID: <CADnq5_OXYpzdWk+x3SsKDVF1rFNJ2UWXwA+cLQSjX1L3zeP=cw@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the amdgpu tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Harry Wentland <harry.wentland@amd.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        dmaengine@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <334755C8-8FF2-49D3-ACC3-C76F3BCCBB4F@cutebit.org>
-References: <20220615160116.528c324b@canb.auug.org.au>
- <1f8095db-a08f-7b6b-2cee-f530d914b9f8@infradead.org>
- <CAK8P3a2mQiWKyVux+bfAJiRH=72q76UTLZnBbPCLVFVoXpGfaw@mail.gmail.com>
-To:     Arnd Bergmann <arnd@arndb.de>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_FAIL,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+On Wed, Jun 15, 2022 at 12:38 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> After merging the amdgpu tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+>
+> drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_resource.c:1835:13: error: 'remove_hpo_dp_link_enc_from_ctx' defined but not used [-Werror=unused-function]
+>  1835 | static void remove_hpo_dp_link_enc_from_ctx(struct resource_context *res_ctx,
+>       |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> cc1: all warnings being treated as errors
+>
+> Caused by commit
+>
+>   4e1db0119c64 ("Revert "drm/amdgpu/display: Protect some functions with CONFIG_DRM_AMD_DC_DCN"")
+>
+> That function is only used when CONFIG_DRM_AMD_DC_DCN is set.
 
-> On 15. 6. 2022, at 19:10, Arnd Bergmann <arnd@arndb.de> wrote:
->=20
-> On Wed, Jun 15, 2022 at 6:28 PM Randy Dunlap <rdunlap@infradead.org> =
-wrote:
+Sorry, I had the fix in my tree, but forgot to push it.  It's there now.
 
->> On 6/14/22 23:01, Stephen Rothwell wrote:
->>> Hi all,
->>>=20
->>> Changes since 20220614:
->>>=20
->>=20
->> on i386:
->>=20
->> ../drivers/dma/apple-admac.c: In function =
-'admac_cyclic_write_one_desc':
->> ../drivers/dma/apple-admac.c:213:22: warning: right shift count >=3D =
-width of type [-Wshift-count-overflow]
->>  writel_relaxed(addr >> 32,       ad->base + REG_DESC_WRITE(channo));
->>                      ^
->=20
-> This should probably use lower_32_bits()/upper_32_bits() then.
->=20
->       Arnd
+Alex
 
-Here=E2=80=99s a patch to use lower/upper_32_bits that=E2=80=99s been =
-posted.
-
-=
-https://lore.kernel.org/dmaengine/20220614074915.1443629-1-geert@linux-m68=
-k.org/
-
-Martin
-
+>
+> I have reverted that commit for today.
+>
+> Could you please add an x86_64 allmodconfig build to your CI?
+>
+> --
+> Cheers,
+> Stephen Rothwell

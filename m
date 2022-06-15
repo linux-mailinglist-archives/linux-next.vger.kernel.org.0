@@ -2,48 +2,62 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4449E54D524
-	for <lists+linux-next@lfdr.de>; Thu, 16 Jun 2022 01:22:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69C2254D542
+	for <lists+linux-next@lfdr.de>; Thu, 16 Jun 2022 01:30:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354229AbiFOXRU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 15 Jun 2022 19:17:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58666 "EHLO
+        id S230172AbiFOX0e (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 15 Jun 2022 19:26:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356144AbiFOXQv (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 15 Jun 2022 19:16:51 -0400
+        with ESMTP id S1344042AbiFOX0e (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 15 Jun 2022 19:26:34 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DF713BBDB;
-        Wed, 15 Jun 2022 16:16:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5394310FFF;
+        Wed, 15 Jun 2022 16:26:32 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LNh5J1Rhgz4xbN;
-        Thu, 16 Jun 2022 09:16:36 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LNhJj4D37z4xXj;
+        Thu, 16 Jun 2022 09:26:29 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1655334996;
-        bh=i56oAXNwE3Q5VLAEiK9NM/Mnc/C+L7RsLPNrpupmL6Y=;
+        s=201702; t=1655335590;
+        bh=4c1p9aoakWvVGQikpvG/RIE/yTK1928napcIErEfrMw=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=rbP1XFqz52rd67eFs+BTKOvnyqAEL1G9B3afIov4ehKT8WgN2oNR0XMNXlw+glkd2
-         cUwqoxiZYo9RvyFSEZPCC1L5gab7U1Omn40gb26IcZTqFEBSTq+sN6pHI+UJhlXJEl
-         y/Ci3/6yo69/MhqPziHEILp2efGfjwnuVLvcthAABKI7+6rAakr72XhvgJgjgPnnc9
-         as7idqpV1TFdWpZk+YaTXHnj6UdQRm9kbWlZ8TgWlzKiR7UYVCuEJ1hd6y3aTAufgF
-         oZDJq2APRPWqMarpFg8+UgbSZC0D0GuMOSsQ30jfgjyJuf7sre3Jp9nZsHac/k6o7+
-         6kxPd4KP5S85A==
-Date:   Thu, 16 Jun 2022 09:16:34 +1000
+        b=HqUXuBYrsYaQ9Agq+kquqWaFmqiy8v/6WqkfJS6gGemEapRtskCM/z71qyu2/Og7v
+         GRIe0wYNZp0swHZ8MhCq377lEbfYIWCtqDirAksUi4vGPshLDcUgeJkdRdYHYQ/eSA
+         W0OqIi8uvV0405Lz88IqG4bqMxnKjmNb7oIyett5cvS00/bzoOlKoTwXI23N/mkAHD
+         ksP293/YTB9AQAC/aUirOfEZ9x5BBgdsP+Cj3U99r979hQRcQmlmKAbRtGBFlbFszh
+         Io+/X7QzK/q5t8hlduK/u3rKtRPw7z9oaMzjEDO/iU3iUrW5deCc4sO1BPG1Xf280d
+         SrJZLy9CwaM7w==
+Date:   Thu, 16 Jun 2022 09:26:28 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Kees Cook <keescook@chromium.org>, llvm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
-Subject: Re: Contextual conflict between kspp and rcu trees
-Message-ID: <20220616091634.55ebbdb0@canb.auug.org.au>
-In-Reply-To: <Yqo5SequJuC2qX6S@dev-arch.thelio-3990X>
-References: <Yqo5SequJuC2qX6S@dev-arch.thelio-3990X>
+To:     Nathan Chancellor <nathan@kernel.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     Alex Deucher <alexdeucher@gmail.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        Bhanuprakash Modem <bhanuprakash.modem@intel.com>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        Jani Nikula <jani.nikula@intel.com>
+Subject: Re: linux-next: Tree for Jun 15
+ (drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c)
+Message-ID: <20220616092628.7cd86f4c@canb.auug.org.au>
+In-Reply-To: <YqpGknQvigfwZU6b@dev-arch.thelio-3990X>
+References: <20220615160116.528c324b@canb.auug.org.au>
+        <d1a48a84-6d07-e8f7-5fd8-d24a7a1cf187@infradead.org>
+        <CADnq5_N6gfaPfZJAX4+poWFFruxNdFKZqzXZXosj1A55e-O1mA@mail.gmail.com>
+        <YqpACmvbwiEcUfta@dev-arch.thelio-3990X>
+        <CADnq5_OnrxUiM+aTWRLjixp=vY6adV3w4p2cfTkdS32uq_UsiQ@mail.gmail.com>
+        <YqpGknQvigfwZU6b@dev-arch.thelio-3990X>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/3no60Zq5C=H6WqeVvlYJFXM";
+Content-Type: multipart/signed; boundary="Sig_/bgju8kcfbeT8uFOogwBdnTS";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,
@@ -54,101 +68,200 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/3no60Zq5C=H6WqeVvlYJFXM
-Content-Type: text/plain; charset=US-ASCII
+--Sig_/bgju8kcfbeT8uFOogwBdnTS
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-Hi Nathan,
+Hi all,
 
-On Wed, 15 Jun 2022 12:55:53 -0700 Nathan Chancellor <nathan@kernel.org> wr=
+On Wed, 15 Jun 2022 13:52:34 -0700 Nathan Chancellor <nathan@kernel.org> wr=
 ote:
 >
-> There is a contextual conflict between commit e1d337335207 ("cfi: Fix
-> __cfi_slowpath_diag RCU usage with cpuidle") in the kspp tree and commit
-> dcc0c11aa87b ("rcu/context-tracking: Remove rcu_irq_enter/exit()") in
-> the rcu tree, which is visible when building ARCH=3Darm64 defconfig +
-> CONFIG_LTO_CLANG_THIN=3Dy + CONFIG_CFI_CLANG=3Dy with clang:
->=20
->   kernel/cfi.c:298:3: error: call to undeclared function 'rcu_irq_enter';=
- ISO C99 and later do not support implicit function declarations [-Wimplici=
+> On Wed, Jun 15, 2022 at 04:45:16PM -0400, Alex Deucher wrote:
+> > On Wed, Jun 15, 2022 at 4:24 PM Nathan Chancellor <nathan@kernel.org> w=
+rote: =20
+> > >
+> > > On Wed, Jun 15, 2022 at 03:28:52PM -0400, Alex Deucher wrote: =20
+> > > > On Wed, Jun 15, 2022 at 3:01 PM Randy Dunlap <rdunlap@infradead.org=
+> wrote: =20
+> > > > >
+> > > > >
+> > > > >
+> > > > > On 6/14/22 23:01, Stephen Rothwell wrote: =20
+> > > > > > Hi all,
+> > > > > >
+> > > > > > Changes since 20220614:
+> > > > > > =20
+> > > > >
+> > > > > on i386:
+> > > > > # CONFIG_DEBUG_FS is not set
+> > > > >
+> > > > >
+> > > > > ../drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c: I=
+n function =E2=80=98amdgpu_dm_crtc_late_register=E2=80=99:
+> > > > > ../drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:65=
+99:2: error: implicit declaration of function =E2=80=98crtc_debugfs_init=E2=
+=80=99; did you mean =E2=80=98amdgpu_debugfs_init=E2=80=99? [-Werror=3Dimpl=
+icit-function-declaration]
+> > > > >   crtc_debugfs_init(crtc);
+> > > > >   ^~~~~~~~~~~~~~~~~
+> > > > >   amdgpu_debugfs_init
+> > > > >
+> > > > >
+> > > > > Full randconfig file is attached. =20
+> > > >
+> > > > I tried building with your config and I can't repro this.  As Harry
+> > > > noted, that function and the whole secure display feature depend on
+> > > > debugfs.  It should never be built without CONFIG_DEBUG_FS.  See
+> > > > drivers/gpu/drm/amd/display/Kconfig:
+> > > > =20
+> > > > > config DRM_AMD_SECURE_DISPLAY
+> > > > >         bool "Enable secure display support"
+> > > > >         default n
+> > > > >         depends on DEBUG_FS
+> > > > >         depends on DRM_AMD_DC_DCN
+> > > > >         help
+> > > > >             Choose this option if you want to
+> > > > >             support secure display
+> > > > >
+> > > > >             This option enables the calculation
+> > > > >             of crc of specific region via debugfs.
+> > > > >             Cooperate with specific DMCU FW. =20
+> > > >
+> > > > amdgpu_dm_crtc_late_register is guarded by
+> > > > CONIG_DRM_AMD_SECURE_DISPLAY.  It's not clear to me how we could hit
+> > > > this. =20
+> > >
+> > > I think the problem is that you are not looking at the right tree.
+> > >
+> > > The kernel test robot reported [1] [2] this error is caused by commit
+> > > 4cd79f614b50 ("drm/amd/display: Move connector debugfs to drm"), which
+> > > is in the drm-misc tree on the drm-misc-next branch. That change remo=
+ves
+> > > the #ifdef around amdgpu_dm_crtc_late_register(), meaning that
+> > > crtc_debugfs_init() can be called without CONFIG_DRM_AMD_SECURE_DISPL=
+AY
+> > > and CONFIG_DEBUG_FS.
+> > >
+> > >   $ git show -s --format=3D'%h ("%s")'
+> > >   abf0ba5a34ea ("drm/bridge: it6505: Add missing CRYPTO_HASH dependen=
+cy")
+> > >
+> > >   $ make -skj"$(nproc)" ARCH=3Dx86_64 mrproper defconfig
+> > >
+> > >   $ scripts/config -d BLK_DEV_IO_TRACE -d DEBUG_FS -e DRM_AMDGPU
+> > >
+> > >   $ make -skj"$(nproc)" ARCH=3Dx86_64 olddefconfig drivers/gpu/drm/am=
+d/amdgpu/../display/amdgpu_dm/amdgpu_dm.o
+> > >   drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c: In fun=
+ction =E2=80=98amdgpu_dm_crtc_late_register=E2=80=99:
+> > >   drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:6622:9:=
+ error: implicit declaration of function =E2=80=98crtc_debugfs_init=E2=80=
+=99; did you mean =E2=80=98amdgpu_debugfs_init=E2=80=99? [-Werror=3Dimplici=
 t-function-declaration]
->                   rcu_irq_enter();
->                   ^
->   kernel/cfi.c:298:3: note: did you mean 'ct_irq_enter'?
->   ./include/linux/context_tracking_irq.h:6:6: note: 'ct_irq_enter' declar=
-ed here
->   void ct_irq_enter(void);
->        ^
->   kernel/cfi.c:307:3: error: call to undeclared function 'rcu_irq_exit'; =
-ISO C99 and later do not support implicit function declarations [-Wimplicit=
--function-declaration]
->                   rcu_irq_exit();
->                   ^
->   kernel/cfi.c:307:3: note: did you mean 'ct_irq_exit'?
->   ./include/linux/context_tracking_irq.h:7:6: note: 'ct_irq_exit' declare=
-d here
->   void ct_irq_exit(void);
->        ^
->   2 errors generated.
+> > >    6622 |         crtc_debugfs_init(crtc);
+> > >         |         ^~~~~~~~~~~~~~~~~
+> > >         |         amdgpu_debugfs_init
+> > >   cc1: all warnings being treated as errors
+> > >
+> > > Contrast that with the current top of your tree:
+> > >
+> > >   $ git show -s --format=3D'%h ("%s")'
+> > >   c435f61d0eb3 ("drm/amd/display: Drop unnecessary guard from DC reso=
+urce")
+> > >
+> > >   $ make -skj"$(nproc)" ARCH=3Dx86_64 mrproper defconfig
+> > >
+> > >   $ scripts/config -d BLK_DEV_IO_TRACE -d DEBUG_FS -e DRM_AMDGPU
+> > >
+> > >   $ make -skj"$(nproc)" ARCH=3Dx86_64 olddefconfig drivers/gpu/drm/am=
+d/amdgpu/../display/amdgpu_dm/amdgpu_dm.o
+> > >
+> > >   $ echo $?
+> > >   0
+> > >
+> > > Randy's patch [3] seems like it should resolve the issue just fine but
+> > > it needs to be applied to drm-misc-next, not the amdgpu tree. =20
+> >=20
+> > Thanks for tracking this down.  I think something like the attached
+> > patch is cleaner since the whole thing is only valid for debugfs. =20
 >=20
+> Makes sense! I tested the below patch with and without DEBUG_FS and saw
+> no errors.
 >=20
-> Per the above RCU commit and commit 6c5218715286 ("context_tracking:
-> Take IRQ eqs entrypoints over RCU"), it appears that the following diff
-> is the proper fix up. Would you mind applying it to the merge of
-> whichever tree comes second if possible? I did build and boot test it
-> but it would not be a bad idea for Sami and Frederic to verify that it
-> is correct so that Kees/Paul can mention it to Linus :)
+> > From b0bcacd86344998e0ca757f89c6c4cd3b6298999 Mon Sep 17 00:00:00 2001
+> > From: Alex Deucher <alexander.deucher@amd.com>
+> > Date: Wed, 15 Jun 2022 16:40:39 -0400
+> > Subject: [PATCH] drm/amdgpu/display: fix build when CONFIG_DEBUG_FS is =
+not set
+> >=20
+> > amdgpu_dm_crtc_late_register is only used when CONFIG_DEBUG_FS
+> > so make it dependent on that.
+> >=20
+> > Fixes: 4cd79f614b50 ("drm/amd/display: Move connector debugfs to drm")
+> > Reported-by: Randy Dunlap <rdunlap@infradead.org>
+> > Reported-by: Nathan Chancellor <nathan@kernel.org> =20
 >=20
-> Cheers,
-> Nathan
+> Tested-by: Nathan Chancellor <nathan@kernel.org> # build
 >=20
-> diff --git a/kernel/cfi.c b/kernel/cfi.c
-> index 08102d19ec15..2046276ee234 100644
-> --- a/kernel/cfi.c
-> +++ b/kernel/cfi.c
-> @@ -295,7 +295,7 @@ static inline cfi_check_fn find_check_fn(unsigned lon=
-g ptr)
->  	rcu_idle =3D !rcu_is_watching();
->  	if (rcu_idle) {
->  		local_irq_save(flags);
-> -		rcu_irq_enter();
-> +		ct_irq_enter();
->  	}
-> =20
->  	if (IS_ENABLED(CONFIG_CFI_CLANG_SHADOW))
-> @@ -304,7 +304,7 @@ static inline cfi_check_fn find_check_fn(unsigned lon=
-g ptr)
->  		fn =3D find_module_check_fn(ptr);
-> =20
->  	if (rcu_idle) {
-> -		rcu_irq_exit();
-> +		ct_irq_exit();
->  		local_irq_restore(flags);
->  	}
-> =20
+> > Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+> > ---
+> >  drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> >=20
+> > diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/driver=
+s/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> > index c9004f7e700d..33cd7a3d4ecb 100644
+> > --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> > +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> > @@ -6594,12 +6594,14 @@ dm_crtc_duplicate_state(struct drm_crtc *crtc)
+> >  	return &state->base;
+> >  }
+> > =20
+> > +#ifdef CONFIG_DEBUG_FS
+> >  static int amdgpu_dm_crtc_late_register(struct drm_crtc *crtc)
+> >  {
+> >  	crtc_debugfs_init(crtc);
+> > =20
+> >  	return 0;
+> >  }
+> > +#endif
+> > =20
+> >  static inline int dm_set_vupdate_irq(struct drm_crtc *crtc, bool enabl=
+e)
+> >  {
+> > @@ -6693,7 +6695,9 @@ static const struct drm_crtc_funcs amdgpu_dm_crtc=
+_funcs =3D {
+> >  	.enable_vblank =3D dm_enable_vblank,
+> >  	.disable_vblank =3D dm_disable_vblank,
+> >  	.get_vblank_timestamp =3D drm_crtc_vblank_helper_get_vblank_timestamp,
+> > +#if defined(CONFIG_DEBUG_FS)
+> >  	.late_register =3D amdgpu_dm_crtc_late_register,
+> > +#endif
+> >  };
+> > =20
+> >  static enum drm_connector_status
 
-I will apply that to the merge of the rcu tree today (unless Paul finds
-time to update (and test :-) ) the rcu tree before I get to it) as the
-CFI fix is now in Linus' tree.
-
+OK, I will apply that patch to the merge of the drm-misc tree from
+today (until someone actaully applies it to some tree).
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/3no60Zq5C=H6WqeVvlYJFXM
+--Sig_/bgju8kcfbeT8uFOogwBdnTS
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKqaFMACgkQAVBC80lX
-0GxMBgf+IZMzcN6XlmZSjaMP4poWD8ue8PXIFK8AC3CHx00YzJrLHI8XtGAXwD7G
-jmJLuJs4IogmJoEKDLVfl5jnNOmIypuKtSDsM59WaQeXwvdSFvhWStMXRKv75MZv
-7AsT2+/miaSp9F5y7H77NA//rezbpUVMaX/ypdsZ7JVAWUAjcSZgKfLB8FeCXaWC
-/rfLYqBStCdhc3A2fKryVYiyYH13x1x26XENLsKXjNn8yrCUR0oh+aMqk3mi12Ft
-f1VfjQNjMpElEx1yq+JXGTKAM6zh/eqyJTuU0yOBAYad7ZcTHT2OIynjQINbD9y/
-iYbsPjnSpd6mETGVim+95TqYFogVOA==
-=7PdO
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKqaqQACgkQAVBC80lX
+0Gwcggf9FBLTZUiwJO9ig0WmWxcqNdVIvnVUNHUD5Cu20ZtR8edh9MasQwu6j9EI
+4cJk0mnwG+5YNPs1/0dhL1HWa/RFCbg5UGaE1pAl+SBzoF/ukzGIVPV4xh7lRTbs
+MHfpLq+5KROvTQKQkVqsONnCDBIzUVQ99dBxwmsS+Qx4VtMkjWwXSro8NX+JHbqP
+0SqudKT+sTUDa9eRYWhC98ceDPwCsVdXc1kI5f68kC37T6euQalqK4LVmlyVMKha
+tIf+HlJrrrfnVgb4DCFxthesDymiObGWqWtCSk3hIOR1xlMqylvwThnEo/gIJsPh
+mJ0JJQjKySO+SoNTHxZkRvND+lqc7g==
+=Fcu+
 -----END PGP SIGNATURE-----
 
---Sig_/3no60Zq5C=H6WqeVvlYJFXM--
+--Sig_/bgju8kcfbeT8uFOogwBdnTS--

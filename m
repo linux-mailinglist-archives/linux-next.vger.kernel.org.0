@@ -2,66 +2,60 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5505D54D27B
-	for <lists+linux-next@lfdr.de>; Wed, 15 Jun 2022 22:25:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E20E754D287
+	for <lists+linux-next@lfdr.de>; Wed, 15 Jun 2022 22:28:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231317AbiFOUZe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 15 Jun 2022 16:25:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49156 "EHLO
+        id S1344979AbiFOU2K (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 15 Jun 2022 16:28:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233573AbiFOUZd (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 15 Jun 2022 16:25:33 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D41D850E0D
-        for <linux-next@vger.kernel.org>; Wed, 15 Jun 2022 13:25:31 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id r5so5675816pgr.3
-        for <linux-next@vger.kernel.org>; Wed, 15 Jun 2022 13:25:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=fSbaUdWMc4ZCN4x6T7HO7Oazr6+FjS4D1nOKI+4v+qI=;
-        b=eoBnV1ab6mcOB4xykNYFQaZW+Qi3dcgSQdsqak3tENQPcuOUClkzPwbUWUNWFP+QVK
-         bQwrpLsOSl1k9EqZEIsTmvr6JEEssRSqiHDlJNMXVJ30VXU0dndaTEks0xtZFx1PwQpi
-         jGw5dC7e0N7xdUVRy+kS0fs6FXid54A1kOOiE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=fSbaUdWMc4ZCN4x6T7HO7Oazr6+FjS4D1nOKI+4v+qI=;
-        b=ai1jbXxzaHFDK7WbWHkd99Iuyk1ulTlGh2htwWkrkKK8UAjmr+kbrsdOwG2djKUxI4
-         344s3dGfvfrlQItbleuTd4kKH8mMlhkfEnEALVsSgiU8WTu9DmJbqx6lPrL6RaXfZ13o
-         Lyh8xFsNo4Cn6Opal+E9olvNIvawHdaUUX95UNpgwaSsbIaWnE38LrOXDotseIuQ+7se
-         2WIoXgRWNDoyj4IxqdWwf5p0tmuT+8qR7gmqealUdkWGvXweqsbbxhPuQ3dO44pZsw/D
-         9pmBt1YRbFOdIVElkhUKbBiNNHRz/pwBfzeq+Np0FA1MJsqYKWYmDiEN4abhkNa7Ge16
-         XQDA==
-X-Gm-Message-State: AJIora+aLH/8K4YkeEwnzdM2CThMp8hDXEaxhpb+hq99P2BOFA76y3K+
-        14cvbzqGHXHyUKsV5skB/Kx9pA==
-X-Google-Smtp-Source: AGRyM1tESwgbtAytnIPSYcv5RqPofftOKrovVEa2JmH58Vpoe8CgFFE/Ium5XvKSgg8sm3hMrzT/lg==
-X-Received: by 2002:a63:135b:0:b0:3fd:876c:975a with SMTP id 27-20020a63135b000000b003fd876c975amr1347239pgt.538.1655324731197;
-        Wed, 15 Jun 2022 13:25:31 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id b13-20020a1709027e0d00b00163aba9a2a5sm40235plm.106.2022.06.15.13.25.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 13:25:30 -0700 (PDT)
-Date:   Wed, 15 Jun 2022 13:25:30 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>, llvm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
-Subject: Re: Contextual conflict between kspp and rcu trees
-Message-ID: <202206151323.4D78044D8@keescook>
-References: <Yqo5SequJuC2qX6S@dev-arch.thelio-3990X>
+        with ESMTP id S1345400AbiFOU1x (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 15 Jun 2022 16:27:53 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D6012D17;
+        Wed, 15 Jun 2022 13:27:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=ZyYyezCf/BUfWvp3SS0tJHgG622dktRJVLjhG8Bed+o=; b=t6FThO6AzVoLedjjG9EdaVxiL8
+        5ktznfR8LrGVb+WtjLEaRaSPViEyhNC143ZMJFCtlJU/zT8amLEUnucDXb5ENS3H59PTNZquZ+Fa0
+        Is9l/e4AR6SHp6qzDScX0ZF6rhkdzRYxnXopaTJJqarY/3hxC1JpEYI6HfNyUs0JZDGVaLrfDCgjL
+        Xrik5yF6YlY/KX1BghnObD0aBBV5lrK67UbASiGXgXRRIYKnDPFFhCogrUGjxL1rAXm4BfLjVqgDF
+        y5W+Dy2xB9h3n7h9dGbkBZMLsRtaePaC9ZFF3Oix9dr+tNqYL4zOzRYGsXKeZYIozG36zzYg4Jz0e
+        JleW347g==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o1Zc6-001Ldf-Hc; Wed, 15 Jun 2022 20:27:42 +0000
+Message-ID: <3581d1bc-9442-c3e6-7fbd-c7a7a691a839@infradead.org>
+Date:   Wed, 15 Jun 2022 13:27:37 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yqo5SequJuC2qX6S@dev-arch.thelio-3990X>
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: linux-next: Tree for Jun 15
+ (drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c)
+Content-Language: en-US
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+References: <20220615160116.528c324b@canb.auug.org.au>
+ <d1a48a84-6d07-e8f7-5fd8-d24a7a1cf187@infradead.org>
+ <CADnq5_N6gfaPfZJAX4+poWFFruxNdFKZqzXZXosj1A55e-O1mA@mail.gmail.com>
+ <fb53cab1-f693-5309-e06a-0fe0fc932c2c@infradead.org>
+ <CADnq5_Nz9cw3L6_Ab=7WQZ4_y8OTSiwZmoQup+9OjaaZPCqUqQ@mail.gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <CADnq5_Nz9cw3L6_Ab=7WQZ4_y8OTSiwZmoQup+9OjaaZPCqUqQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,41 +63,80 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 12:55:53PM -0700, Nathan Chancellor wrote:
-> Hi Stephen et al.,
-> 
-> There is a contextual conflict between commit e1d337335207 ("cfi: Fix
-> __cfi_slowpath_diag RCU usage with cpuidle") in the kspp tree and commit
-> dcc0c11aa87b ("rcu/context-tracking: Remove rcu_irq_enter/exit()") in
-> the rcu tree, which is visible when building ARCH=arm64 defconfig +
-> CONFIG_LTO_CLANG_THIN=y + CONFIG_CFI_CLANG=y with clang:
-> 
->   kernel/cfi.c:298:3: error: call to undeclared function 'rcu_irq_enter'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
->                   rcu_irq_enter();
->                   ^
->   kernel/cfi.c:298:3: note: did you mean 'ct_irq_enter'?
->   ./include/linux/context_tracking_irq.h:6:6: note: 'ct_irq_enter' declared here
->   void ct_irq_enter(void);
->        ^
->   kernel/cfi.c:307:3: error: call to undeclared function 'rcu_irq_exit'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
->                   rcu_irq_exit();
->                   ^
->   kernel/cfi.c:307:3: note: did you mean 'ct_irq_exit'?
->   ./include/linux/context_tracking_irq.h:7:6: note: 'ct_irq_exit' declared here
->   void ct_irq_exit(void);
->        ^
->   2 errors generated.
-> 
-> 
-> Per the above RCU commit and commit 6c5218715286 ("context_tracking:
-> Take IRQ eqs entrypoints over RCU"), it appears that the following diff
-> is the proper fix up. Would you mind applying it to the merge of
-> whichever tree comes second if possible? I did build and boot test it
-> but it would not be a bad idea for Sami and Frederic to verify that it
-> is correct so that Kees/Paul can mention it to Linus :)
+Hi--
 
-Ah! Thanks for tracking this down! Maybe dcc0c11aa87b should be updated
-to leave an alias until the next merge window?
+On 6/15/22 13:13, Alex Deucher wrote:
+> On Wed, Jun 15, 2022 at 3:44 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+>>
+>>
+>>
+>> On 6/15/22 12:28, Alex Deucher wrote:
+>>> On Wed, Jun 15, 2022 at 3:01 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+>>>>
+>>>>
+>>>>
+>>>> On 6/14/22 23:01, Stephen Rothwell wrote:
+>>>>> Hi all,
+>>>>>
+>>>>> Changes since 20220614:
+>>>>>
+>>>>
+>>>> on i386:
+>>>> # CONFIG_DEBUG_FS is not set
+>>>>
+>>>>
+>>>> ../drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c: In function ‘amdgpu_dm_crtc_late_register’:
+>>>> ../drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:6599:2: error: implicit declaration of function ‘crtc_debugfs_init’; did you mean ‘amdgpu_debugfs_init’? [-Werror=implicit-function-declaration]
+>>>>   crtc_debugfs_init(crtc);
+>>>>   ^~~~~~~~~~~~~~~~~
+>>>>   amdgpu_debugfs_init
+>>>>
+>>>>
+>>>> Full randconfig file is attached.
+>>>
+>>> I tried building with your config and I can't repro this.  As Harry
+>>> noted, that function and the whole secure display feature depend on
+>>> debugfs.  It should never be built without CONFIG_DEBUG_FS.  See
+>>> drivers/gpu/drm/amd/display/Kconfig:
+>>
+>> Did you try building with today's linux-next tree?
+>> (whatever is in it)
+>>
+>> I have seen this build error multiple times so it shouldn't
+>> be so difficult to repro it.
+>>
+>>
+>>>> config DRM_AMD_SECURE_DISPLAY
+>>>>         bool "Enable secure display support"
+>>>>         default n
+>>>>         depends on DEBUG_FS
+>>>>         depends on DRM_AMD_DC_DCN
+>>>>         help
+>>>>             Choose this option if you want to
+>>>>             support secure display
+>>>>
+>>>>             This option enables the calculation
+>>>>             of crc of specific region via debugfs.
+>>>>             Cooperate with specific DMCU FW.
+>>>
+>>> amdgpu_dm_crtc_late_register is guarded by
+>>> CONIG_DRM_AMD_SECURE_DISPLAY.  It's not clear to me how we could hit
+>>> this.
+>
+
+I was just about to ask what the paragraph above means.
+It was confusing to say the least.
+ 
+> I was able to repro it.  In linux-next the
+> CONFIG_DRM_AMD_SECURE_DISPLAY ifdefs in
+> drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c seem to be missing.
+> I guess they were lost when the amdgpu branch was merged into
+> linux-next.  The attached patch restores the
+> CONFIG_DRM_AMD_SECURE_DISPLAY protections.
+
+OK, that builds for me.
+
+Thanks.
 
 -- 
-Kees Cook
+~Randy

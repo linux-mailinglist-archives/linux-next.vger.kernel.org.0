@@ -2,157 +2,128 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E97754D189
-	for <lists+linux-next@lfdr.de>; Wed, 15 Jun 2022 21:26:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEC0D54D198
+	for <lists+linux-next@lfdr.de>; Wed, 15 Jun 2022 21:29:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232127AbiFOT0Y (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 15 Jun 2022 15:26:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56914 "EHLO
+        id S242953AbiFOT3G (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 15 Jun 2022 15:29:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345686AbiFOT0X (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 15 Jun 2022 15:26:23 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34C383BF8F
-        for <linux-next@vger.kernel.org>; Wed, 15 Jun 2022 12:26:22 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id v22so22258017ybd.5
-        for <linux-next@vger.kernel.org>; Wed, 15 Jun 2022 12:26:22 -0700 (PDT)
+        with ESMTP id S1346151AbiFOT3F (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 15 Jun 2022 15:29:05 -0400
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A415353C67;
+        Wed, 15 Jun 2022 12:29:04 -0700 (PDT)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-1016409cf0bso6672996fac.12;
+        Wed, 15 Jun 2022 12:29:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+7ap878U9WJiqZiLJtB8+WDoIVBGF2CyyeANmhqBwmc=;
-        b=KtA+QsE4mywVenk5Gy1ER0/poJuM4+WHV2wmlEIamfsUNz3E2CsoWt3w0Iyctc7xJZ
-         x7KBpuIuC1qg7FsAwX7Vhwx6S5DExH4A8OQn4MVmzx5fD4HUKu+tt/AYxmc1pYXf0dHo
-         F+kMNtE3HrY3F+iYbkNSP6exnXcLXMXDKgqkk5X44eFrGHqgney3cPXC6Ax9vnHi756j
-         t+E076K7D4yVrNA155k1K3Ke/v7Mb90yeD3jbz0rGTDAFDZZwJxmRjCY5TbEoYqU5UKe
-         RLt4TRmayzVNLcEll4soeaPO2Y7Iqy7HMbxYAdBL5sawr/b4CEjnlsjf43KZcI0Pukyb
-         Yg4w==
+         :cc:content-transfer-encoding;
+        bh=Y4NhrC9ap1cWsoDMhoc9arNxoObzeSf6cpbEcoKtqOY=;
+        b=B/P70sGpq6xUOe94W78uBcFHRfunszNgH2mj+2oSKF0RN2ETvCjk9qWg0+MBR1dD7z
+         HDlN0nI0BAlnrbqt0yrF6OD5MP0cjwu0t5C17naQiodA9+aVXlZLXBm9LmD4XvgFme06
+         NKi+mNb1yZ0AKl7PmFo989PYS4uLU1dSDTr5a9CxvcpoOKqWNbmqWw0NwhK9oH3MTTJs
+         sbj/6Lv652bL7DVtJjlPZBRnvk3aRLF/DFUIodXdRdEdTC6Qr7UnZYCReGbJP6ka7nvi
+         vmPC1NEw/S/tMwl+uincKChUGO6fRGdDzFvdk5Rmwq4P/62MmPWMB/0sZBDO+GtUHqBe
+         yYcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+7ap878U9WJiqZiLJtB8+WDoIVBGF2CyyeANmhqBwmc=;
-        b=szqiNGezjZuQM+A9dLVuk3TFU6hl3dpR2gpXaQnuftQHquuQNvtpL5GpmkdXadTg9p
-         7XS9yJCA/urzdzgi1oFcRtmEqARAdP32WCNskzG90+rwnZhf8/kzYH+152ShAsIYTWI5
-         vOwl0gxD5q4OKtllW0ge3QRGn9VHLxQ26ZvJW7bGWU6hUpowfDRvOQvRLEcTDUWk4HEy
-         Z1Pb3ij4GCOZ5HAGS8LTXE6p53Mi0JV0v8csm1BmhH8lgXg6Ioc+xpGEuNza08B6Zno4
-         kMhvBi60v0IcOczgbvh/wX9CH717wT7x2bAqdFQQHZp5bUmiiytSBcqOLpT9hPvgLXYv
-         5aIg==
-X-Gm-Message-State: AJIora9FBAGV2jcNL8w9+iGKWTLSZgPCVIajBMe33Avc6pssuXs2GZSg
-        UI86fHS9bJuvelQRP5fT0wRJrgGlYVNtM5DysA/rfA==
-X-Google-Smtp-Source: AGRyM1tvrcUsHTOVHdrJSj+Bv5J/r8X/AQcZj0tTScEAnnW9cIKrg6CY2Nf/BMod6r2Ss+T6SGurUcC9KPzrigBne9Q=
-X-Received: by 2002:a25:b51:0:b0:663:4ff1:d20d with SMTP id
- 78-20020a250b51000000b006634ff1d20dmr1499507ybl.608.1655321181295; Wed, 15
- Jun 2022 12:26:21 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Y4NhrC9ap1cWsoDMhoc9arNxoObzeSf6cpbEcoKtqOY=;
+        b=K2FWr/HkvND7zTJpFtMe1LZevI58TSRo0eZ2HLh01sSJe+0k6jA0OGwXXCxX6/QPq/
+         VLFDK7En3S94eEY76TRj1PnLrarSbGxKufZNyEiEPS/eTjB/ar/cRpUD4DmA3Q0yqD+D
+         Unkkrd1TNgoj/vjVAsUn9PwdaxbQLXM0hOnosS+pHxVv4iKRkhbobXwdsEpki8s2DEsL
+         UT94KxLyNLqROYtfgv3KO8RQABkyUtY+0zJgYLBXC7gw3eiCVdy/ShyRA/avkqs4cwMo
+         nkahbYV34QsxGS8CpF9cILaghtLcdK9fl4VHihXCE0FgaEM5qMYuVvxjyBayHnK+5Diy
+         j4RA==
+X-Gm-Message-State: AJIora8yEtiEHg0AXPfXATpddxf2rvLIdayrFGjxgIOxZVP/Yy+gQi4i
+        SxGHYELQCR7SGYqQMlYuMI5qYlbQMcLGk9UW4oTct/tLz4c=
+X-Google-Smtp-Source: AGRyM1sh5C6I86k34hmYg98ITPYaf2PCUY3hNVmQHMGJbMzCs6kHfAYa838vIEBejr/TrpvyKV6eZFFbyFvDSQFyMUs=
+X-Received: by 2002:a05:6870:538b:b0:101:17f2:d6e with SMTP id
+ h11-20020a056870538b00b0010117f20d6emr6296051oan.200.1655321343622; Wed, 15
+ Jun 2022 12:29:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <CA+G9fYsP05V+bVoZsPto-ZdZra3Mo4unBjNqyk1dOjfMEK1XWg@mail.gmail.com>
- <20220615052503.6dvtnuq2ai45pmro@vireshk-i7>
-In-Reply-To: <20220615052503.6dvtnuq2ai45pmro@vireshk-i7>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 16 Jun 2022 00:56:10 +0530
-Message-ID: <CA+G9fYvifz5xDDNjoJBt2MRfdqwDtNf53teWXUs5QCOn2uhbfw@mail.gmail.com>
-Subject: Re: [next] arm64: db410c: WARNING: CPU: 0 PID: 1 at
- drivers/opp/core.c:2265 dev_pm_opp_clear_config+0x174/0x17c
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        regressions@lists.linux.dev,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Nicolas Dechesne <nicolas.dechesne@linaro.org>
+References: <20220615160116.528c324b@canb.auug.org.au> <d1a48a84-6d07-e8f7-5fd8-d24a7a1cf187@infradead.org>
+In-Reply-To: <d1a48a84-6d07-e8f7-5fd8-d24a7a1cf187@infradead.org>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Wed, 15 Jun 2022 15:28:52 -0400
+Message-ID: <CADnq5_N6gfaPfZJAX4+poWFFruxNdFKZqzXZXosj1A55e-O1mA@mail.gmail.com>
+Subject: Re: linux-next: Tree for Jun 15 (drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c)
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Viresh,
-
-On Wed, 15 Jun 2022 at 10:55, Viresh Kumar <viresh.kumar@linaro.org> wrote:
+On Wed, Jun 15, 2022 at 3:01 PM Randy Dunlap <rdunlap@infradead.org> wrote:
 >
-> On 15-06-22, 02:49, Naresh Kamboju wrote:
-> > Following kernel crash reported while booting arm64 db410c board with
-> > Linux next-20220614 [1] kfence enabled on this kernel.
+>
+>
+> On 6/14/22 23:01, Stephen Rothwell wrote:
+> > Hi all,
 > >
-> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> > Changes since 20220614:
 > >
-> > Boot log:
-> > ---------
-> > [    0.850420] WARNING: CPU: 0 PID: 1 at drivers/opp/core.c:2265
 >
-> A print like this normally comes when we hit a WARN or something.
+> on i386:
+> # CONFIG_DEBUG_FS is not set
 >
-> Here is the line 2265 from above tag
 >
-> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/drivers/opp/core.c?h=next-20220614#n2265
+> ../drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c: In functi=
+on =E2=80=98amdgpu_dm_crtc_late_register=E2=80=99:
+> ../drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:6599:2: er=
+ror: implicit declaration of function =E2=80=98crtc_debugfs_init=E2=80=99; =
+did you mean =E2=80=98amdgpu_debugfs_init=E2=80=99? [-Werror=3Dimplicit-fun=
+ction-declaration]
+>   crtc_debugfs_init(crtc);
+>   ^~~~~~~~~~~~~~~~~
+>   amdgpu_debugfs_init
 >
-> which doesn't have any such WARNs there. I wonder where exactly we hit the WARN
-> here and why it isn't showing up properly.
 >
-> > dev_pm_opp_clear_config+0x174/0x17c
-> > [    0.850447] Modules linked in:
-> > [    0.850459] CPU: 0 PID: 1 Comm: swapper/0 Not tainted
-> > 5.19.0-rc1-next-20220610 #1
-> > [    0.850470] Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
-> > [    0.850477] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> > [    0.850489] pc : dev_pm_opp_clear_config+0x174/0x17c
-> > [    0.850501] lr : dt_cpufreq_probe+0x1e4/0x4a0
-> > [    0.850513] sp : ffff80000802bb00
-> > [    0.850518] x29: ffff80000802bb00 x28: ffff80000ada1c30 x27: 0000000000000000
-> > [    0.850538] x26: 00000000fffffdfb x25: ffff00000311f410 x24: ffff00000389ec90
-> > [    0.850557] x23: ffff80000a9eea98 x22: ffff80000a9eed00 x21: ffff80000ada1b68
-> > [    0.850576] x20: ffff00000389ec80 x19: ffff00003fc41308 x18: ffffffffffffffff
-> > [    0.850595] x17: ffff800009f21700 x16: ffff8000080955c0 x15: ffff0000031c2a1c
-> > [    0.850614] x14: 0000000000000001 x13: 0a6b636f6c632064 x12: 6e69662074276e64
-> > [    0.850632] x11: 0000000000000040 x10: 0000000000000020 x9 : ffff800009006964
-> > [    0.850650] x8 : 0000000000000020 x7 : ffffffffffffffff x6 : 0000000000000000
-> > [    0.850668] x5 : 0000000000000000 x4 : 0000000000000000 x3 : 0000000000000000
-> > [    0.850686] x2 : 0000000000000004 x1 : 0000000000000000 x0 : 0000000000000000
-> > [    0.850704] Call trace:
-> > [    0.850708]  dev_pm_opp_clear_config+0x174/0x17c
-> > [    0.850722]  platform_probe+0x74/0xf0
->
-> Nevertheless, I see one place from where such a WARN can be hit, which can be
-> fixed with:
->
-> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-> index 58eae9de4b91..c3d4058d33fc 100644
-> --- a/drivers/opp/core.c
-> +++ b/drivers/opp/core.c
-> @@ -2437,7 +2437,7 @@ EXPORT_SYMBOL_GPL(dev_pm_opp_set_config);
->   */
->  void dev_pm_opp_clear_config(struct opp_table *opp_table)
->  {
-> -       if (WARN_ON(!opp_table))
-> +       if (!opp_table)
->                 return;
->
->         _opp_detach_genpd(opp_table);
->
-> Not sure it fixes the issue you reported here though.
->
-> Can you run the tests for my branch once, it has the updated fix as well.
+> Full randconfig file is attached.
 
-As per your suggestion, I have tested [1] this tree and branch and it worked.
-The reported kernel warning has been fixed.
-Thank you.
+I tried building with your config and I can't repro this.  As Harry
+noted, that function and the whole secure display feature depend on
+debugfs.  It should never be built without CONFIG_DEBUG_FS.  See
+drivers/gpu/drm/amd/display/Kconfig:
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
+> config DRM_AMD_SECURE_DISPLAY
+>         bool "Enable secure display support"
+>         default n
+>         depends on DEBUG_FS
+>         depends on DRM_AMD_DC_DCN
+>         help
+>             Choose this option if you want to
+>             support secure display
 >
-> git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/linux-next
+>             This option enables the calculation
+>             of crc of specific region via debugfs.
+>             Cooperate with specific DMCU FW.
+
+amdgpu_dm_crtc_late_register is guarded by
+CONIG_DRM_AMD_SECURE_DISPLAY.  It's not clear to me how we could hit
+this.
+
+Alex
+
+
 >
 > --
-> viresh
-
-[1] https://lkft.validation.linaro.org/scheduler/job/5179605
-
---
-Linaro LKFT
-https://lkft.linaro.org
+> ~Randy

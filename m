@@ -2,123 +2,153 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F59254D4F5
-	for <lists+linux-next@lfdr.de>; Thu, 16 Jun 2022 01:09:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4449E54D524
+	for <lists+linux-next@lfdr.de>; Thu, 16 Jun 2022 01:22:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346367AbiFOXJz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 15 Jun 2022 19:09:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54006 "EHLO
+        id S1354229AbiFOXRU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 15 Jun 2022 19:17:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346086AbiFOXJz (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 15 Jun 2022 19:09:55 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BA082A95E;
-        Wed, 15 Jun 2022 16:09:54 -0700 (PDT)
+        with ESMTP id S1356144AbiFOXQv (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 15 Jun 2022 19:16:51 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DF713BBDB;
+        Wed, 15 Jun 2022 16:16:38 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LNgxX0GKbz4xXj;
-        Thu, 16 Jun 2022 09:09:52 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LNh5J1Rhgz4xbN;
+        Thu, 16 Jun 2022 09:16:36 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1655334592;
-        bh=EVxR2J81ilaDwpyXIWH6IEIolXowPFYXdyTYaBs9sHo=;
+        s=201702; t=1655334996;
+        bh=i56oAXNwE3Q5VLAEiK9NM/Mnc/C+L7RsLPNrpupmL6Y=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=UYU/23Ah/nNXU+n0nW3/fhmVeII0whPnfrkXcbUy9NXYaQQpHjU4NSFBgQ5Y7m6xu
-         WkWO8BM8RBnlYcEhbNyjMDe6fWDpSABOqMZ5WucVMSWCnCxA8+f+udjPRmLtJB0Sfs
-         SlyBCmWWvwsnDGKACth1oqbqwFTSRaSZ/EANTvpeyQLSKxHjVn2VuFfKd0ZY68yPg+
-         SK2aCzboZ8m4TEqB06FAyI07EKJR53QMbr26DaNTCh5rLRjrX6VZazLaTO/nKDdT/L
-         tW/4mtCxQhMmnCnJBP+fx/LncaxLgbyvzLFe33oWkOsc5s5FE2tmWpqrlTbubm2SiW
-         WHdHPlHdljnhg==
-Date:   Thu, 16 Jun 2022 09:09:51 +1000
+        b=rbP1XFqz52rd67eFs+BTKOvnyqAEL1G9B3afIov4ehKT8WgN2oNR0XMNXlw+glkd2
+         cUwqoxiZYo9RvyFSEZPCC1L5gab7U1Omn40gb26IcZTqFEBSTq+sN6pHI+UJhlXJEl
+         y/Ci3/6yo69/MhqPziHEILp2efGfjwnuVLvcthAABKI7+6rAakr72XhvgJgjgPnnc9
+         as7idqpV1TFdWpZk+YaTXHnj6UdQRm9kbWlZ8TgWlzKiR7UYVCuEJ1hd6y3aTAufgF
+         oZDJq2APRPWqMarpFg8+UgbSZC0D0GuMOSsQ30jfgjyJuf7sre3Jp9nZsHac/k6o7+
+         6kxPd4KP5S85A==
+Date:   Thu, 16 Jun 2022 09:16:34 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
         Frederic Weisbecker <frederic@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>, llvm@lists.linux.dev,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Kees Cook <keescook@chromium.org>, llvm@lists.linux.dev,
         linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
 Subject: Re: Contextual conflict between kspp and rcu trees
-Message-ID: <20220616090951.6db6a36f@canb.auug.org.au>
-In-Reply-To: <20220615211220.GJ1790663@paulmck-ThinkPad-P17-Gen-1>
+Message-ID: <20220616091634.55ebbdb0@canb.auug.org.au>
+In-Reply-To: <Yqo5SequJuC2qX6S@dev-arch.thelio-3990X>
 References: <Yqo5SequJuC2qX6S@dev-arch.thelio-3990X>
-        <202206151326.E34CDE453@keescook>
-        <YqpCkAVTwpNn+6p9@dev-arch.thelio-3990X>
-        <20220615211220.GJ1790663@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ym87/RxWZO0REqS4MS/BmLz";
+Content-Type: multipart/signed; boundary="Sig_/3no60Zq5C=H6WqeVvlYJFXM";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/ym87/RxWZO0REqS4MS/BmLz
+--Sig_/3no60Zq5C=H6WqeVvlYJFXM
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Nathan,
 
-On Wed, 15 Jun 2022 14:12:20 -0700 "Paul E. McKenney" <paulmck@kernel.org> =
-wrote:
+On Wed, 15 Jun 2022 12:55:53 -0700 Nathan Chancellor <nathan@kernel.org> wr=
+ote:
 >
-> On Wed, Jun 15, 2022 at 01:35:28PM -0700, Nathan Chancellor wrote:
-> > On Wed, Jun 15, 2022 at 01:28:00PM -0700, Kees Cook wrote: =20
-> > > On Wed, Jun 15, 2022 at 12:55:53PM -0700, Nathan Chancellor wrote: =20
-> > > > Per the above RCU commit and commit 6c5218715286 ("context_tracking:
-> > > > Take IRQ eqs entrypoints over RCU"), it appears that the following =
-diff
-> > > > is the proper fix up. Would you mind applying it to the merge of
-> > > > whichever tree comes second if possible? I did build and boot test =
-it
-> > > > but it would not be a bad idea for Sami and Frederic to verify that=
- it
-> > > > is correct so that Kees/Paul can mention it to Linus :) =20
-> > >=20
-> > > Actually, the CFI fix (and a few others) are meant to be sent for
-> > > -rc3, so if the ct_irq_enter() change is in -next, this can maybe get
-> > > sorted out? =20
-> >=20
-> > Ah, I had assumed that branch was destined for the next release. If it
-> > is for 5.19 and they make -rc3 then it should be trivial for Paul to
-> > either rebase the changes on -rc3 and apply that diff as part of
-> > "context_tracking: Take IRQ eqs entrypoints over RCU" (if his tree is
-> > mutable) or just merge -rc3 and apply that diff as part of the merge. I
-> > don't really care how it gets resolved, just so long as it does :) =20
+> There is a contextual conflict between commit e1d337335207 ("cfi: Fix
+> __cfi_slowpath_diag RCU usage with cpuidle") in the kspp tree and commit
+> dcc0c11aa87b ("rcu/context-tracking: Remove rcu_irq_enter/exit()") in
+> the rcu tree, which is visible when building ARCH=3Darm64 defconfig +
+> CONFIG_LTO_CLANG_THIN=3Dy + CONFIG_CFI_CLANG=3Dy with clang:
 >=20
-> My tree will remain mutable for a few more weeks, so we should be
-> good.  ;-)
+>   kernel/cfi.c:298:3: error: call to undeclared function 'rcu_irq_enter';=
+ ISO C99 and later do not support implicit function declarations [-Wimplici=
+t-function-declaration]
+>                   rcu_irq_enter();
+>                   ^
+>   kernel/cfi.c:298:3: note: did you mean 'ct_irq_enter'?
+>   ./include/linux/context_tracking_irq.h:6:6: note: 'ct_irq_enter' declar=
+ed here
+>   void ct_irq_enter(void);
+>        ^
+>   kernel/cfi.c:307:3: error: call to undeclared function 'rcu_irq_exit'; =
+ISO C99 and later do not support implicit function declarations [-Wimplicit=
+-function-declaration]
+>                   rcu_irq_exit();
+>                   ^
+>   kernel/cfi.c:307:3: note: did you mean 'ct_irq_exit'?
+>   ./include/linux/context_tracking_irq.h:7:6: note: 'ct_irq_exit' declare=
+d here
+>   void ct_irq_exit(void);
+>        ^
+>   2 errors generated.
+>=20
+>=20
+> Per the above RCU commit and commit 6c5218715286 ("context_tracking:
+> Take IRQ eqs entrypoints over RCU"), it appears that the following diff
+> is the proper fix up. Would you mind applying it to the merge of
+> whichever tree comes second if possible? I did build and boot test it
+> but it would not be a bad idea for Sami and Frederic to verify that it
+> is correct so that Kees/Paul can mention it to Linus :)
+>=20
+> Cheers,
+> Nathan
+>=20
+> diff --git a/kernel/cfi.c b/kernel/cfi.c
+> index 08102d19ec15..2046276ee234 100644
+> --- a/kernel/cfi.c
+> +++ b/kernel/cfi.c
+> @@ -295,7 +295,7 @@ static inline cfi_check_fn find_check_fn(unsigned lon=
+g ptr)
+>  	rcu_idle =3D !rcu_is_watching();
+>  	if (rcu_idle) {
+>  		local_irq_save(flags);
+> -		rcu_irq_enter();
+> +		ct_irq_enter();
+>  	}
+> =20
+>  	if (IS_ENABLED(CONFIG_CFI_CLANG_SHADOW))
+> @@ -304,7 +304,7 @@ static inline cfi_check_fn find_check_fn(unsigned lon=
+g ptr)
+>  		fn =3D find_module_check_fn(ptr);
+> =20
+>  	if (rcu_idle) {
+> -		rcu_irq_exit();
+> +		ct_irq_exit();
+>  		local_irq_restore(flags);
+>  	}
+> =20
 
-The CFI fix is in Linus' tree today.
+I will apply that to the merge of the rcu tree today (unless Paul finds
+time to update (and test :-) ) the rcu tree before I get to it) as the
+CFI fix is now in Linus' tree.
 
-Paul, you could just merge commit 1dfbe9fcda4a ("usercopy: Make
-usercopy resilient against ridiculously large copies") from Linus' tree
-(or rebase on top of that or 30306f6194ca "Merge tag
-"hardening-v5.19-rc3' of git://git.kernel.org/pub/scm/linux/kernel/git/kees=
-/linux"
-since it is based on -rc2).
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/ym87/RxWZO0REqS4MS/BmLz
+--Sig_/3no60Zq5C=H6WqeVvlYJFXM
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKqZr8ACgkQAVBC80lX
-0Gw7egf/bLTeP0zJ0wTcxbtxYY58bGgOo1TmzQoMVhzMfRVlBCc3r2/ErQn4x15Z
-cV2DRq4fS8RHLdF09GDJV8pWT7Dq+rwiuVLudlc0nAaJTNc6b1ZJM1elGk9j8moJ
-hlXuGJ0w+7cW2aQlHDSGONTWBiIU0Ev47vSWb7s6VgfOldHilCFvbL4pi1gzItkD
-fn8BQCBEmq7fzI7VNeaMNJXjfuW/GyBqh3NzTpIEOotTQUWMFeCZ8IBKnKugh2G/
-WObBzbcdv9ffAvZVZ/9hJ+hIp60cj7n2nttkbfCL1zXMrrNK999IozTxGu53rNmX
-MdtB/OuDDZAh6Vdn8fSLZYwRjlGxKw==
-=w+wS
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKqaFMACgkQAVBC80lX
+0GxMBgf+IZMzcN6XlmZSjaMP4poWD8ue8PXIFK8AC3CHx00YzJrLHI8XtGAXwD7G
+jmJLuJs4IogmJoEKDLVfl5jnNOmIypuKtSDsM59WaQeXwvdSFvhWStMXRKv75MZv
+7AsT2+/miaSp9F5y7H77NA//rezbpUVMaX/ypdsZ7JVAWUAjcSZgKfLB8FeCXaWC
+/rfLYqBStCdhc3A2fKryVYiyYH13x1x26XENLsKXjNn8yrCUR0oh+aMqk3mi12Ft
+f1VfjQNjMpElEx1yq+JXGTKAM6zh/eqyJTuU0yOBAYad7ZcTHT2OIynjQINbD9y/
+iYbsPjnSpd6mETGVim+95TqYFogVOA==
+=7PdO
 -----END PGP SIGNATURE-----
 
---Sig_/ym87/RxWZO0REqS4MS/BmLz--
+--Sig_/3no60Zq5C=H6WqeVvlYJFXM--

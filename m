@@ -2,107 +2,143 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40D8954C0F8
-	for <lists+linux-next@lfdr.de>; Wed, 15 Jun 2022 07:07:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81C0A54C11F
+	for <lists+linux-next@lfdr.de>; Wed, 15 Jun 2022 07:29:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243160AbiFOFAS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 15 Jun 2022 01:00:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56778 "EHLO
+        id S1345985AbiFOFZJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 15 Jun 2022 01:25:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242811AbiFOFAS (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 15 Jun 2022 01:00:18 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D99742EC9;
-        Tue, 14 Jun 2022 22:00:17 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LNCmG65TDz4xYL;
-        Wed, 15 Jun 2022 15:00:14 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1655269215;
-        bh=2I6Hz9b1Qxy3zQMcWY/zCUhk7UnIlJJ9z8VjkIyipTY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=t6cqBzxtqAT61MfG6WYRqC+8r2Upijo7XAfSxOnKzy9SHh8Wr4qSpbJvnC9ywyTln
-         pMiNLv2tgdHFbGY1SZCa3RGq4JKB+eTZcexiDv1CM5tfzUsal3jHtooitFM4bTlkUH
-         XU/wtDyKslbMhsV3JYHKo/WK+RpmlQ3Ng4lLITHmHPWAps7hRclT4PwZ5io/u0teeJ
-         105ZhwobCbA2aF5PAjVnfglj+ywiQQDtqu+NJdzefRsuBuXAtnaGalymE7JRP9/xan
-         rvGhlEHBtCbXBsYtUsQD1V55cliQLWE2v9dU/WtpQg7WlsUQStes8ol95fHFB3ssl2
-         VuIgQ6QlstxPA==
-Date:   Wed, 15 Jun 2022 15:00:13 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Aurabindo Pillai <aurabindo.pillai@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Dave Airlie <airlied@linux.ie>
-Subject: Re: linux-next: build failure after merge of the amdgpu tree
-Message-ID: <20220615150013.30c9d7ad@canb.auug.org.au>
-In-Reply-To: <20220603144315.5adcddbf@canb.auug.org.au>
-References: <20220603144315.5adcddbf@canb.auug.org.au>
+        with ESMTP id S1344439AbiFOFZI (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 15 Jun 2022 01:25:08 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04D1E48E6F
+        for <linux-next@vger.kernel.org>; Tue, 14 Jun 2022 22:25:07 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id mh16-20020a17090b4ad000b001e8313301f1so2605070pjb.1
+        for <linux-next@vger.kernel.org>; Tue, 14 Jun 2022 22:25:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=pGeqO4UYbPjEpueFQQzkGuJa78VBFe2OGHm+1nShac0=;
+        b=DNajTQmeSO+SYkqEP2ISK2l0hgbr8KRNFEXaQ8NnViOlc3F5D94YL/OLjpnDBQJwwP
+         xSHTJqkXvi4GTvke57PM7+VB9BOXiRgP4SyyiK3uEzMhFgjvnG9xPcInHE2Aeu9ExNVV
+         s9gTBcBlQK7K6S1Rr35C6fUVBpbgP5h+3pA8paeHgw+dEmQuE+wmT5Rg7Ez5zIybWvJ0
+         x/1+9UfAwqed2j374GtIXVET+jlOh+ZloJp6a2QMGEqJHgYWY6mudi8jvygCga/cHaKa
+         ueVqoewdaXnWCSHodRxQU4bPPbHsYYiIRHpvsbQQVCYYI0Cn1NbjUWmH9dOMf4yq+k9o
+         2Mtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pGeqO4UYbPjEpueFQQzkGuJa78VBFe2OGHm+1nShac0=;
+        b=r+2xHAiNqQ1TPZBapI8wxw6Z5rPiUcnp5tzGNdBYXvlpR6TdMCYnMpW2eQC5JvTLdA
+         6snj7oW0AdjIpy+xMNfrNIOqWHw4mMPmNqEluXGFBfgTZzN74V8Ys5Ke0ibgjOYcmwTB
+         hw1ErZZQbXDkgx6QdSc1TBC8+3+xZjvHHsb1OZVvQ+ui9ZoEPmh8xkojnBEgI5MDHPWp
+         r9/2v0Jq17RZ+CMEU2Pc4t1nB24CIwih7YuCwtWF0pomzXBOiT1nzVtZNCpxFkfwNPgJ
+         BOjg0pPgteSxMYovbdSFb0kPZLZZJKTTbhs0pSiKYJnNseHLsEKHWVGCkDG+NwD+k998
+         jXZw==
+X-Gm-Message-State: AJIora/dXVlYSHIUeBHAhcrvnUsHnuY+G0r+EL3vy2KR9KOSq9F+fJTw
+        58fvLCd3UQwjmF/NRkstYAcJAQ==
+X-Google-Smtp-Source: AGRyM1ti86Qt00H0607v2/YgsHCgzhTX2lNkz2oGZq+mJRwXwRtPq1rCzO3pJcstWnHsxogh8xIWOg==
+X-Received: by 2002:a17:902:c94c:b0:168:f73b:f824 with SMTP id i12-20020a170902c94c00b00168f73bf824mr1033345pla.103.1655270706262;
+        Tue, 14 Jun 2022 22:25:06 -0700 (PDT)
+Received: from localhost ([122.162.234.2])
+        by smtp.gmail.com with ESMTPSA id y16-20020a17090264d000b0016362da9a03sm8128077pli.245.2022.06.14.22.25.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jun 2022 22:25:05 -0700 (PDT)
+Date:   Wed, 15 Jun 2022 10:55:03 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        regressions@lists.linux.dev,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Nicolas Dechesne <nicolas.dechesne@linaro.org>
+Subject: Re: [next] arm64: db410c: WARNING: CPU: 0 PID: 1 at
+ drivers/opp/core.c:2265 dev_pm_opp_clear_config+0x174/0x17c
+Message-ID: <20220615052503.6dvtnuq2ai45pmro@vireshk-i7>
+References: <CA+G9fYsP05V+bVoZsPto-ZdZra3Mo4unBjNqyk1dOjfMEK1XWg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/GfF5FNPPFHk2DES6nnecO+1";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYsP05V+bVoZsPto-ZdZra3Mo4unBjNqyk1dOjfMEK1XWg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/GfF5FNPPFHk2DES6nnecO+1
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 15-06-22, 02:49, Naresh Kamboju wrote:
+> Following kernel crash reported while booting arm64 db410c board with
+> Linux next-20220614 [1] kfence enabled on this kernel.
+> 
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> 
+> Boot log:
+> ---------
+> [    0.850420] WARNING: CPU: 0 PID: 1 at drivers/opp/core.c:2265
 
-Hi all,
+A print like this normally comes when we hit a WARN or something.
 
-On Fri, 3 Jun 2022 14:43:15 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> After merging the amdgpu tree, today's linux-next build (powerpc
-> allyesconfig) failed like this:
->=20
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c:=
- In function 'dml32_ModeSupportAndSystemConfigurationFull':
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c:=
-3835:1: error: the frame size of 2752 bytes is larger than 2048 bytes [-Wer=
-ror=3Dframe-larger-than=3D]
->  3835 | } // ModeSupportAndSystemConfigurationFull
->       | ^
-> cc1: all warnings being treated as errors
+Here is the line 2265 from above tag
 
-I am still getting the above failure.
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/drivers/opp/core.c?h=next-20220614#n2265
 
-> gcc: error: unrecognized command-line option '-msse'
-> gcc: error: unrecognized command-line option '-msse2'
-> make[5]: *** [scripts/Makefile.build:251: drivers/gpu/drm/amd/amdgpu/../d=
-isplay/dc/dcn32/dcn32_resource.o] Error 1
-> gcc: error: unrecognized command-line option '-msse'
-> gcc: error: unrecognized command-line option '-msse2'
+which doesn't have any such WARNs there. I wonder where exactly we hit the WARN
+here and why it isn't showing up properly.
 
-These are fixed.
+> dev_pm_opp_clear_config+0x174/0x17c
+> [    0.850447] Modules linked in:
+> [    0.850459] CPU: 0 PID: 1 Comm: swapper/0 Not tainted
+> 5.19.0-rc1-next-20220610 #1
+> [    0.850470] Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
+> [    0.850477] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [    0.850489] pc : dev_pm_opp_clear_config+0x174/0x17c
+> [    0.850501] lr : dt_cpufreq_probe+0x1e4/0x4a0
+> [    0.850513] sp : ffff80000802bb00
+> [    0.850518] x29: ffff80000802bb00 x28: ffff80000ada1c30 x27: 0000000000000000
+> [    0.850538] x26: 00000000fffffdfb x25: ffff00000311f410 x24: ffff00000389ec90
+> [    0.850557] x23: ffff80000a9eea98 x22: ffff80000a9eed00 x21: ffff80000ada1b68
+> [    0.850576] x20: ffff00000389ec80 x19: ffff00003fc41308 x18: ffffffffffffffff
+> [    0.850595] x17: ffff800009f21700 x16: ffff8000080955c0 x15: ffff0000031c2a1c
+> [    0.850614] x14: 0000000000000001 x13: 0a6b636f6c632064 x12: 6e69662074276e64
+> [    0.850632] x11: 0000000000000040 x10: 0000000000000020 x9 : ffff800009006964
+> [    0.850650] x8 : 0000000000000020 x7 : ffffffffffffffff x6 : 0000000000000000
+> [    0.850668] x5 : 0000000000000000 x4 : 0000000000000000 x3 : 0000000000000000
+> [    0.850686] x2 : 0000000000000004 x1 : 0000000000000000 x0 : 0000000000000000
+> [    0.850704] Call trace:
+> [    0.850708]  dev_pm_opp_clear_config+0x174/0x17c
+> [    0.850722]  platform_probe+0x74/0xf0
 
---=20
-Cheers,
-Stephen Rothwell
+Nevertheless, I see one place from where such a WARN can be hit, which can be
+fixed with:
 
---Sig_/GfF5FNPPFHk2DES6nnecO+1
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index 58eae9de4b91..c3d4058d33fc 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -2437,7 +2437,7 @@ EXPORT_SYMBOL_GPL(dev_pm_opp_set_config);
+  */
+ void dev_pm_opp_clear_config(struct opp_table *opp_table)
+ {
+-       if (WARN_ON(!opp_table))
++       if (!opp_table)
+                return;
 
------BEGIN PGP SIGNATURE-----
+        _opp_detach_genpd(opp_table);
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKpZ10ACgkQAVBC80lX
-0GxxeQf/aZTmoG3Ugse8aakXQ4ydv4Amgfn6LL9NtEfr05RkUYRvpVGV956Y4QYV
-TlnlzWCJb3YcQYMwAkGLS/QOD16u62fDA5MyHXdIfJVDG9RNVnnUkoCbrb8Jo87G
-UNuvdqKEaK8Ti+F0CA+BQZVKT3lOWisICtb0geylFAl7x32Ia7LYBDW6P8wO+0ab
-wqs2/qNOkuUrHOJenzgk+cYhd4C55ITwj+PjRnmLi8jwbXTh+4pbjR/JlLa1s6D6
-yZ88/iQaq9CiVZ9Vj21vDc8OvanvEy4Pan0kSyc46ACDD8nubLJInQqP3rOT/wz7
-mj8xNUXiwq8MKLPe9yv+0gAFTHyhwA==
-=JEeY
------END PGP SIGNATURE-----
+Not sure it fixes the issue you reported here though.
 
---Sig_/GfF5FNPPFHk2DES6nnecO+1--
+Can you run the tests for my branch once, it has the updated fix as well.
+
+git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/linux-next
+
+-- 
+viresh

@@ -2,54 +2,69 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 310E754CA69
-	for <lists+linux-next@lfdr.de>; Wed, 15 Jun 2022 15:55:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF8E954CB18
+	for <lists+linux-next@lfdr.de>; Wed, 15 Jun 2022 16:20:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245544AbiFONzf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 15 Jun 2022 09:55:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38264 "EHLO
+        id S243659AbiFOOT6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 15 Jun 2022 10:19:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238853AbiFONze (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 15 Jun 2022 09:55:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3ECF255AF;
-        Wed, 15 Jun 2022 06:55:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6FBA561B23;
-        Wed, 15 Jun 2022 13:55:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC44BC34115;
-        Wed, 15 Jun 2022 13:55:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655301332;
-        bh=d+8lzxk/kDyn5dLFABLSgfNZYo8yluhEL/UrzIgZfGc=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=SoEi8z37HGLzRUqHBB4XEH+zLh5P/4QAvyOGu8fUwndms7aDNIFFo1q+RAlO8xnYc
-         GMdjId1hrnNUeViOfGIofs8q6efgByPCv9y8AvQiOc/rQIHS1dQG4JuBE9JCMHOG9S
-         iQzfVnlhYWwAE8foN7LemIfR0xUEb4LPL/SYOOHZKvglCXJYGUZS/hEp+GTQ/H110L
-         ysaF4Ao0bbgh6w3ESBC//iGk0FGhpVLY2Q98vEhxMdtJFr4udkrhl0FSLjKRq9ek5G
-         gwtkhq7cpj+vt8arGTa5rme0NTGjGq256pvXM8i6mT7lP1raC39IwxI99+uiV3Uu7C
-         ZxWuug4jwR4UQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 7CE3C5C00D9; Wed, 15 Jun 2022 06:55:32 -0700 (PDT)
-Date:   Wed, 15 Jun 2022 06:55:32 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Frederic Weisbecker <frederic@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the rcu tree
-Message-ID: <20220615135532.GJ1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220615153802.49eeb827@canb.auug.org.au>
+        with ESMTP id S1345379AbiFOOT5 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 15 Jun 2022 10:19:57 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FC2F443D1
+        for <linux-next@vger.kernel.org>; Wed, 15 Jun 2022 07:19:45 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id w20so19130710lfa.11
+        for <linux-next@vger.kernel.org>; Wed, 15 Jun 2022 07:19:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:content-language:to:cc:from
+         :subject:content-transfer-encoding;
+        bh=A9RmSO/OHnan4DfbcCHEVVY9M4r3MnYRFQBaUW6bNWA=;
+        b=MNuMF3PuaRY/+6YKpSGtGwP/4IuvRcZKjZOwztV73IB8RG1NWUXPWaU2BFUwCr5ux6
+         nBrrd+8xchQCtImhgEfLaO4XTIbMV5XSVMTLk6ED6SSBDT0nTF4DGaiqTC5iP57OnHyd
+         UnMT+znTe8UDArIKd/v8jCrb2b01rK/7rRWt77ff2CTsrz/hjzgoF/Q79oG63L1TXG8b
+         ODyf6yIpWkuPxejCxOUmlcetemEUmOZJ/PHWn0J42S4FAhLHKTsGRd/YiVUb0Kd/SYd7
+         u2l+ZoFA8i/WTSrXUIWOCnXlVFg0Im6YEETIIqQZfPzvhp+69RfGTUlaHICOsYkfT2DP
+         jaMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:from:subject:content-transfer-encoding;
+        bh=A9RmSO/OHnan4DfbcCHEVVY9M4r3MnYRFQBaUW6bNWA=;
+        b=Fv5KvW0yaSoTHY/gG/QW7S6YRZyvuD/JCtSdlOiGo8ZGcViEEDPgJyxf6BxBAVN0bp
+         9nMX8aQAuiefFsQUSgrUTUnfDj8Y0mxCmf0TBzmkMqnroqCGAkPL0PbusdYPNXEeg9ik
+         4l9l3F8253fV7NXnPNURzAn1l1Z5lH777j83mC/91f4GLIbvc2FrXQ1HFOSFB0ERw6Xu
+         qGsuOZVkGr7jmSwwG59y/dgyzavUATgsY0PRwzBxnksn1WfjYQVU/pyVoJxp2mH2D/5C
+         dJNk9HhGge9nfYCmDY7x6MqPCI65P6uH+0oKWvmffVFchJGYVEH2r2xOnNAliqhcHAcH
+         ErhA==
+X-Gm-Message-State: AJIora8ysUYZdfgHRFZb3cmKLhmWZ3YCxf1FbPZz0Jn2/YxVxwDJSRtl
+        tOiNVPIy3w8owQ0iZNCfkVd2pA==
+X-Google-Smtp-Source: AGRyM1ugCc/2OaezlkOsaaKljgQlyk2WvF+Ik7GaQdltNSp7JiRkOQRFbTxT/C1eeTM0SUyJMfAG8w==
+X-Received: by 2002:ac2:58d6:0:b0:479:5b9:74a with SMTP id u22-20020ac258d6000000b0047905b9074amr6019118lfo.551.1655302783810;
+        Wed, 15 Jun 2022 07:19:43 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id v5-20020ac258e5000000b0047255d210fcsm1818418lfo.43.2022.06.15.07.19.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Jun 2022 07:19:43 -0700 (PDT)
+Message-ID: <5dbc0159-cb33-db5b-20cc-05f3027af15e@linaro.org>
+Date:   Wed, 15 Jun 2022 17:19:42 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220615153802.49eeb827@canb.auug.org.au>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Content-Language: en-GB
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     linux-next@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rob Clark <robdclark@gmail.com>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: Please add another drm/msm tree to the linux-next
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,33 +72,25 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 03:38:02PM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the rcu tree, today's linux-next build (htmldocs) produced
-> this warning:
-> 
-> Documentation/RCU/Design/Requirements/Requirements.rst:2220: WARNING: Malformed table.
-> 
-> +-----------------------------------------------------------------------+
-> | **Quick Quiz**:                                                       |
-> +-----------------------------------------------------------------------+
-> | But what if my driver has a hardware interrupt handler that can run   |
-> | for many seconds? I cannot invoke schedule() from an hardware         |
-> | interrupt handler, after all!                                         |
-> +-----------------------------------------------------------------------+
-> | **Answer**:                                                           |
-> +-----------------------------------------------------------------------+
-> | One approach is to do ``ct_irq_exit();ct_irq_enter();`` every so    |
-> | often. But given that long-running interrupt handlers can cause other |
-> | problems, not least for response time, shouldn't you work to keep     |
-> | your interrupt handler's runtime within reasonable bounds?            |
-> +-----------------------------------------------------------------------+
-> 
-> Introduced by commit
-> 
->   6c5218715286 ("context_tracking: Take IRQ eqs entrypoints over RCU")
+Hi Stephen,
 
-Apologies and thank you, will fix.
+I would appreciate if you could add
 
-							Thanx, Paul
+https://gitlab.freedesktop.org/lumag/msm.git msm-next-lumag
+
+to the linux-next tree.
+
+This tree is a part of drm/msm maintenance structure. As a co-maintainer 
+I collect and test display patches, while Rob concenctrates on GPU part 
+of the driver. Later during the release cycle these patchesare pulled by 
+Rob Clark directly into msm-next.
+
+During last cycle Rob suggested adding this tree to the linux-next 
+effort, so that the patches receive better integration testing during 
+the Linux development cycle.
+
+Thanks!
+
+-- 
+With best wishes
+Dmitry

@@ -2,74 +2,62 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA06254DA2B
-	for <lists+linux-next@lfdr.de>; Thu, 16 Jun 2022 08:07:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAB2854DA3A
+	for <lists+linux-next@lfdr.de>; Thu, 16 Jun 2022 08:09:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348986AbiFPGHJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 16 Jun 2022 02:07:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53964 "EHLO
+        id S1358858AbiFPGIB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 16 Jun 2022 02:08:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241798AbiFPGHI (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 16 Jun 2022 02:07:08 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81A7821AB
-        for <linux-next@vger.kernel.org>; Wed, 15 Jun 2022 23:07:07 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id o17so480285pla.6
-        for <linux-next@vger.kernel.org>; Wed, 15 Jun 2022 23:07:07 -0700 (PDT)
+        with ESMTP id S1358986AbiFPGH6 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 16 Jun 2022 02:07:58 -0400
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 367E325C78
+        for <linux-next@vger.kernel.org>; Wed, 15 Jun 2022 23:07:51 -0700 (PDT)
+Received: by mail-qv1-xf2f.google.com with SMTP id o43so842366qvo.4
+        for <linux-next@vger.kernel.org>; Wed, 15 Jun 2022 23:07:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=FzWTxlTEFKqkIMF8VbZ/u79TNhEtmzp0He+3d50zpFI=;
-        b=gluYI+a2xyVpoiDSRgRE3aiBySLr/MvVpJhF/5gH6NQ/IzZ5FBsroCTSnkAer7SxZz
-         W6fvUIoaXyksi09EF38+yDEhuCr6ISFS9WLGoqsKdwJxIrOmq3f6awfAjrFtqk9Z2Hln
-         S6+CjFTUqSxcRm4xE+iktjVPZFTZoOJBAd6gIyhHJM0t2/3GINPkAVOwR8IwUtDJxw6+
-         WyMce/7H8xQPnd6K4L9mgoxsF9orwEK3zLUZS2p61QDJCBlXxWqP9dHqNpDxCNCZe6yP
-         iqJFrJt/A2Hpr88pklbj4Gmi4nOxcHONmk9BnypVTTMUt+EDBunXkq4YjNO1HqcQnrxp
-         8AdQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OSikkE+MEEMjueKMGZL5HcqfjXaJL8eeDSb1s5a5Lws=;
+        b=RoCzOgxXeL5ZbiNFy131xVGTqFXAlwIj+lwtmGkBrF4tCm5VCP0QnB8WNCjuP9mo+A
+         Bl0uGyDDvaocUFhaY1J7DVhPCUXiDwb2viE2yZjjQTHtqomOLxEm2tuBxpBXYd85Qzo/
+         KxMO/EpE4bZ3to9er5RwjIU6352uC54c2+xxbJwarH8WM9eFR1H1ED0U1K2VqTHMi4xa
+         CqFJbaX0Pb/VNhKeTcKA4oSOGL15uvDnywGgZa2S3NPGgBeBMsNRG96MHZE7NiNix59q
+         7+AzL5IQahF8tbNaT2FS+fKaawEgzZfDRGVjvLMq09+czhigMPkNtFZtl4KJx4JHWGYq
+         YU/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=FzWTxlTEFKqkIMF8VbZ/u79TNhEtmzp0He+3d50zpFI=;
-        b=5JO5bF9QaFZf6ZYMRoMSHmU256Ar1Z1qR7h4YG8AeI4eELRm6JAqRQD2WBGlc1in/k
-         KuC8F6xk95yc6rkZDPjsb6fo0Zv/PekB2k+P74aaoZZe9LfNqmCeYc0hfLyKGqa+w1hk
-         fgUt20hvMZEBzLNgqaLrGlpv9LSYH3upbHxLvhsmzx/z8b98ElSJ9FDWdMM7UnpcBV+e
-         N9cW4lEo7pQ0uZ4+5g7WvNY5OF6c8V1xmlaijkOXvKWPp8fbhVJScIl+A9PVgG5Qedmf
-         EUrMu9ofyUkJp9owhe7AIemYkqOpDpQwLtP6G0wthrKM3/smJ/GA5AWjJyGq11AVZCFd
-         gyvg==
-X-Gm-Message-State: AJIora+GnJF4PlPpaM1sDLUMXlXFXZjZ66d8pUFgPiqR1chUG6r+vr52
-        eZtfxJ8LK2cs33Q+4Le2HRTU+A==
-X-Google-Smtp-Source: AGRyM1uFVCYBfTZ45/hWPa8qzjODUT5VMMm2n4TRbyVDluISTJi+yoWsZCF8oFjXmUxFfWbuNSVw8g==
-X-Received: by 2002:a17:90b:3a8b:b0:1e8:3056:10fc with SMTP id om11-20020a17090b3a8b00b001e8305610fcmr3349878pjb.145.1655359627030;
-        Wed, 15 Jun 2022 23:07:07 -0700 (PDT)
-Received: from localhost ([122.162.234.2])
-        by smtp.gmail.com with ESMTPSA id j3-20020a170903024300b00161947ecc82sm695345plh.199.2022.06.15.23.07.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 23:07:06 -0700 (PDT)
-Date:   Thu, 16 Jun 2022 11:37:04 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        regressions@lists.linux.dev,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Nicolas Dechesne <nicolas.dechesne@linaro.org>
-Subject: Re: [next] arm64: db410c: WARNING: CPU: 0 PID: 1 at
- drivers/opp/core.c:2265 dev_pm_opp_clear_config+0x174/0x17c
-Message-ID: <20220616060704.xcxdqlm5fo7e7et4@vireshk-i7>
-References: <CA+G9fYsP05V+bVoZsPto-ZdZra3Mo4unBjNqyk1dOjfMEK1XWg@mail.gmail.com>
- <20220615052503.6dvtnuq2ai45pmro@vireshk-i7>
- <CA+G9fYvifz5xDDNjoJBt2MRfdqwDtNf53teWXUs5QCOn2uhbfw@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OSikkE+MEEMjueKMGZL5HcqfjXaJL8eeDSb1s5a5Lws=;
+        b=4WC53uw8uU6YHuLR3zbmlCyyc4o8wHcAQe4C3MrDWLEtW7F8cKGrY7LBt0Lenps55G
+         zKCEQ9F8E2xYKfxRQ8yB0XEsvRMy6qQ54NkQutrXRV0Tpg3M3dU2meZckQ/l+bgm1Lib
+         ON+C0KcQK95QsFN42UGqYn5zvS2okHkxI3PCo6zYZti3oAmsf2XaPrhSJoCFZL8hsmHa
+         iypl1qCdggC1rUj8W7AOwDeyVXBzbjF1bubVRQGFBvumTtGa7SSe/59OocaygUuiTJ9O
+         o0Ffbdi9Q0SitrH2QY95CclPkVMPLCttd4mNSYl7PAtYnF2INIw1xWRGgW+/MBIQamxd
+         bj4g==
+X-Gm-Message-State: AJIora+x8WS6tS7gUbQilk9JKhq3HerNxOC8zL1+6SaB1dgw/vYnZRE8
+        WeZt2MwvvaAlWxBSqnIZxUxZf2Ph/TCAihFnHcKwhA==
+X-Google-Smtp-Source: AGRyM1t8qy+xXgFGDVWFOe+JTBKrhzpPWs4Eq0C7HOrf5Cc35GA39MII73qeuavrDgjgPVyf9lDy0jlJ2zdeiwyknKM=
+X-Received: by 2002:ad4:5aa4:0:b0:465:2b11:cfd with SMTP id
+ u4-20020ad45aa4000000b004652b110cfdmr2913827qvg.55.1655359669605; Wed, 15 Jun
+ 2022 23:07:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYvifz5xDDNjoJBt2MRfdqwDtNf53teWXUs5QCOn2uhbfw@mail.gmail.com>
+References: <20220616085937.2de4c9a5@canb.auug.org.au>
+In-Reply-To: <20220616085937.2de4c9a5@canb.auug.org.au>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Thu, 16 Jun 2022 09:07:38 +0300
+Message-ID: <CAA8EJpqa=dU_w7P=Tm=rhw8MMjFCQ-bmK7eiRks7tAr2nyFaaw@mail.gmail.com>
+Subject: Re: linux-next: Fixes tags need some work in the drm-msm-lumag tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,14 +65,61 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 16-06-22, 00:56, Naresh Kamboju wrote:
-> As per your suggestion, I have tested [1] this tree and branch and it worked.
-> The reported kernel warning has been fixed.
-> Thank you.
-> 
-> Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Hi Stephen,
 
-Thanks Naresh.
+On Thu, 16 Jun 2022 at 01:59, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> Hi all,
+>
+> In commit
+>
+>   c2bff24488ca ("drm/msm/dpu: remove hard-coded linewidth limit for writeback")
+>
+> Fixes tag
+>
+>   Fixes: d7d0e73f7de3 ("introduce the dpu_encoder_phys_* for writeback")
+>
+> has these problem(s):
+>
+>   - Subject does not match target commit subject
+>     Just use
+>         git log -1 --format='Fixes: %h ("%s")'
+>
+> Fixes: d7d0e73f7de3 ("drm/msm/dpu: introduce the dpu_encoder_phys_* for writeback")
+>
+> In commit
+>
+>   583e280ebb28 ("drm/msm/dpu: fix maxlinewidth for writeback block")
+>
+> Fixes tag
+>
+>   Fixes: 53324b99bd7b ("add writeback blocks to the sm8250 DPU catalog")
+>
+> has these problem(s):
+>
+>   - Subject does not match target commit subject
+>     Just use
+>         git log -1 --format='Fixes: %h ("%s")'
+>
+> Fixes: 53324b99bd7b ("drm/msm/dpu: add writeback blocks to the sm8250 DPU catalog")
+>
+> In commit
+>
+>   defeb127761a ("drm/msm/dp: check core_initialized before disable interrupts at dp_display_unbind()")
+>
+> Fixes tag
+>
+>   Fixes: a65c95ff88f2 ("drm/msm/dp: stop event kernel thread when DP unbind")
+>
+> has these problem(s):
+>
+>   - Target SHA1 does not exist
+>
+> Maybe you meant
+>
+> Fixes; 570d3e5d28db ("drm/msm/dp: stop event kernel thread when DP unbind")
+
+Thanks for the notice. All three commits will be fixed in the next update.
 
 -- 
-viresh
+With best wishes
+Dmitry

@@ -2,181 +2,726 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEF9855110A
-	for <lists+linux-next@lfdr.de>; Mon, 20 Jun 2022 09:12:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29299551217
+	for <lists+linux-next@lfdr.de>; Mon, 20 Jun 2022 10:03:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239105AbiFTHMQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 20 Jun 2022 03:12:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49728 "EHLO
+        id S239731AbiFTIDE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 20 Jun 2022 04:03:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239145AbiFTHML (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 20 Jun 2022 03:12:11 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2CC9E092
-        for <linux-next@vger.kernel.org>; Mon, 20 Jun 2022 00:12:09 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id i15so12531689ybp.1
-        for <linux-next@vger.kernel.org>; Mon, 20 Jun 2022 00:12:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=W4HgBL+rarePRfhToeCDFreePibGLonEGtpm7wVJr5M=;
-        b=I2cwsbInE4YE+M/nciNA1a3jf9o6ZJiJzkLTwACB4ctl+mf6GwJAg3y5bE9U3MuKRC
-         ZBi4z/b2qsRihjxkPs5Mhst6hFIJ7l+Kx6QYtsCspiFvtw+VG8MSa0z9hovtnuxDZ88U
-         8VuWt7Cmn0gNISnGss0oC3Pxcufi0d+AK3EBAZyi8t7STPePyCF6qb7KQP83wg8SFSnr
-         HX594jybe01mCEH6sC/82/zdAf6tTDXiPsXzohvL5cxlyyCAZhA3iLO4hmnKSN0O3eeW
-         MUKDZdnV9ci6Dkwa7CQ69uic2oCT5xyCfAIE9GpFIXXgTcND/xeqGAx5ypxsH47pq8K8
-         LMoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=W4HgBL+rarePRfhToeCDFreePibGLonEGtpm7wVJr5M=;
-        b=1YjTe7LJEaq9ufqYf90vzumdEHIrfwIcsrSameEZ+hfXfwSuF/q+kcSJSxQAf6u0+h
-         yuplG1wcQTl+MXgtsqysn6HQypma0QhhdjeA8fXpBNxGy5Ryw/y/uQlXn7rM/lelB8xb
-         ltT97B4wbGfCok4fyo9sVub9ea+HNd8wDoSchvslCv47Pebb2sVFsGF8v2ZSbsR++qDf
-         855NaFE8PH+6z1zpsa/GQ3bo93Ffp02CnUNPLKChWR+3uLnsu5fRUEC4jutHa35eFGYR
-         xyKTxymwo9T2FY545oyOvFuy0tUEEYdnI5LRWaaNc32m8gDTdF19lUczawuj7Yj9HAnL
-         XtxA==
-X-Gm-Message-State: AJIora8ikkpuATvwTemxSMaO25DgmoYejqak8Lp//c+1K2e583Ns9HYl
-        er31w/cgkHkPWo8+Zu+7+oUIVu1Jye7LBLTR4kVItg==
-X-Google-Smtp-Source: AGRyM1tAzOpmCC+WVAOJqdbYbrfNbOsH7WtWuoJedfT4Ju14UIBTBqKFkmWmj9obQqB5rYInTZyAWjMvx9/RLmMqK8A=
-X-Received: by 2002:a25:d146:0:b0:668:aa24:c321 with SMTP id
- i67-20020a25d146000000b00668aa24c321mr19499821ybg.89.1655709128850; Mon, 20
- Jun 2022 00:12:08 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220620164246.0d3f7784@canb.auug.org.au>
-In-Reply-To: <20220620164246.0d3f7784@canb.auug.org.au>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Mon, 20 Jun 2022 15:11:31 +0800
-Message-ID: <CAMZfGtWmGOr1LRBnKGVeqP8p47xyaA0ny_rotdHmgLx8DOk6xg@mail.gmail.com>
-Subject: Re: linux-next: build failures after merge of the mm tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        with ESMTP id S239831AbiFTICv (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 20 Jun 2022 04:02:51 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 447A211A27;
+        Mon, 20 Jun 2022 01:02:44 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LRMZT6rdcz4xZ0;
+        Mon, 20 Jun 2022 18:02:41 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1655712162;
+        bh=yLr6oN2+1xTY/fIcYwD9oBugUagbqWD8uCnxze+92bU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=I9WgX/ZnTGkuYBI4N8eOdG05EA1Jt38bFUL34iAHlH1xJIeeaBIsk5DTE+qV/SgdG
+         su1quB38rFPQblC9CbuIyQqyEq1mF5nQFlZ+pCJ3azaK+VIXCNojORtJFAfdY745mc
+         Ga3rw1U9Htss4RDYzhXY0POKXnWN5fpSHb7Itbi/m80z6+mPH/2tog3xxmChL3RFoP
+         P44wNQBNseN776+iGEqfq8NKrD5sBVqrfTOz+B3jcKRKpv+4KYH2rzCRMOQLZhZpGg
+         OZ/6zOcWqqq9NA1QiFHSYhUgswWVHfXN3QQQR0ZEvsjrHgg2JdZG37m+qjSG7GDVR3
+         zC4OYOl9uVDQw==
+Date:   Mon, 20 Jun 2022 18:02:40 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Theodore Ts'o <tytso@mit.edu>,
+        Wang Jianjian <wangjianjian3@huawei.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Oscar Salvador <osalvador@suse.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warnings after merge of the origin tree
+Message-ID: <20220620180240.1eb2cf90@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/uQbwBF/j8+zgA/eN+vQ6Hxb";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Thanks for your report. It is fixed in thread [1].
+--Sig_/uQbwBF/j8+zgA/eN+vQ6Hxb
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-https://lore.kernel.org/all/20220619133851.68184-3-songmuchun@bytedance.com/ [1]
+Hi all,
 
-On Mon, Jun 20, 2022 at 2:42 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> After merging the mm tree, today's linux-next build (x86_64 allnoconfig)
-> failed like this:
->
-> In file included from arch/x86/include/asm/page.h:86,
->                  from arch/x86/include/asm/thread_info.h:12,
->                  from include/linux/thread_info.h:60,
->                  from arch/x86/include/asm/preempt.h:7,
->                  from include/linux/preempt.h:78,
->                  from include/linux/spinlock.h:55,
->                  from include/linux/mmzone.h:8,
->                  from include/linux/gfp.h:6,
->                  from include/linux/slab.h:15,
->                  from include/linux/crypto.h:20,
->                  from arch/x86/kernel/asm-offsets.c:9:
-> include/linux/mm.h: In function 'destroy_large_folio':
-> include/asm-generic/memory_model.h:35:21: error: implicit declaration of function 'page_to_section'; did you mean 'present_section'? [-Werror=implicit-function-declaration]
->    35 |         int __sec = page_to_section(__pg);                      \
->       |                     ^~~~~~~~~~~~~~~
-> include/asm-generic/memory_model.h:40:32: note: in definition of macro '__pfn_to_page'
->    40 | ({      unsigned long __pfn = (pfn);                    \
->       |                                ^~~
-> include/asm-generic/memory_model.h:52:21: note: in expansion of macro '__page_to_pfn'
->    52 | #define page_to_pfn __page_to_pfn
->       |                     ^~~~~~~~~~~~~
-> include/linux/mm.h:214:38: note: in expansion of macro 'page_to_pfn'
->   214 | #define nth_page(page,n) pfn_to_page(page_to_pfn((page)) + (n))
->       |                                      ^~~~~~~~~~~
-> include/linux/page-flags.h:312:33: note: in expansion of macro 'nth_page'
->   312 | #define folio_page(folio, n)    nth_page(&(folio)->page, n)
->       |                                 ^~~~~~~~
-> include/linux/mm.h:928:38: note: in expansion of macro 'folio_page'
->   928 |         enum compound_dtor_id dtor = folio_page(folio, 1)->compound_dtor;
->       |                                      ^~~~~~~~~~
-> In file included from include/linux/memcontrol.h:20,
->                  from include/linux/swap.h:9,
->                  from include/linux/suspend.h:5,
->                  from arch/x86/kernel/asm-offsets.c:13:
-> include/linux/mm.h: At top level:
-> include/linux/mm.h:1556:29: error: conflicting types for 'page_to_section'; have 'long unsigned int(const struct page *)'
->  1556 | static inline unsigned long page_to_section(const struct page *page)
->       |                             ^~~~~~~~~~~~~~~
-> In file included from arch/x86/include/asm/page.h:86,
->                  from arch/x86/include/asm/thread_info.h:12,
->                  from include/linux/thread_info.h:60,
->                  from arch/x86/include/asm/preempt.h:7,
->                  from include/linux/preempt.h:78,
->                  from include/linux/spinlock.h:55,
->                  from include/linux/mmzone.h:8,
->                  from include/linux/gfp.h:6,
->                  from include/linux/slab.h:15,
->                  from include/linux/crypto.h:20,
->                  from arch/x86/kernel/asm-offsets.c:9:
-> include/asm-generic/memory_model.h:35:21: note: previous implicit declaration of 'page_to_section' with type 'int()'
->    35 |         int __sec = page_to_section(__pg);                      \
->       |                     ^~~~~~~~~~~~~~~
-> include/asm-generic/memory_model.h:40:32: note: in definition of macro '__pfn_to_page'
->    40 | ({      unsigned long __pfn = (pfn);                    \
->       |                                ^~~
-> include/asm-generic/memory_model.h:52:21: note: in expansion of macro '__page_to_pfn'
->    52 | #define page_to_pfn __page_to_pfn
->       |                     ^~~~~~~~~~~~~
-> include/linux/mm.h:214:38: note: in expansion of macro 'page_to_pfn'
->   214 | #define nth_page(page,n) pfn_to_page(page_to_pfn((page)) + (n))
->       |                                      ^~~~~~~~~~~
-> include/linux/page-flags.h:312:33: note: in expansion of macro 'nth_page'
->   312 | #define folio_page(folio, n)    nth_page(&(folio)->page, n)
->       |                                 ^~~~~~~~
-> include/linux/mm.h:928:38: note: in expansion of macro 'folio_page'
->   928 |         enum compound_dtor_id dtor = folio_page(folio, 1)->compound_dtor;
->       |                                      ^~~~~~~~~~
-> cc1: some warnings being treated as errors
->
-> Caused by commit (I think)
->
->   d3b90b76e101 ("mm: convert destroy_compound_page() to destroy_large_folio()")
->
-> I have reverted these commits fot today:
->
-> 56629699b3dd mm/swap: convert __delete_from_swap_cache() to a folio
-> e5085f2cc241 mm/swap: convert delete_from_swap_cache() to take a folio
-> 169f02f4efb1 mm: convert page_swap_flags to folio_swap_flags
-> d3b90b76e101 mm: convert destroy_compound_page() to destroy_large_folio()
->
-> Then I got:
->
-> mm/hugetlb_vmemmap.c: In function 'vmemmap_optimizable_pages':
-> mm/hugetlb_vmemmap.c:110:24: error: implicit declaration of function 'sparse_decode_mem_map' [-Werror=implicit-function-declaration]
->   110 |         vmemmap_page = sparse_decode_mem_map(ms->section_mem_map,
->       |                        ^~~~~~~~~~~~~~~~~~~~~
-> mm/hugetlb_vmemmap.c:110:22: warning: assignment to 'struct page *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
->   110 |         vmemmap_page = _sparsedecode_mem_map(ms->section_mem_map,
->       |                      ^
-> cc1: some warnings being treated as errors
->
-> from my arm64 defconfig build.
->
-> Caused by commit
->
->   10a768735470 ("mm: memory_hotplug: make hugetlb_optimize_vmemmap compatible with memmap_on_memory")
->
-> So I gave up and used the mm tree from next-20220617 for today.
-> --
-> Cheers,
-> Stephen Rothwell
+After merging the origin tree, today's linux-next build (htmldocs)
+produced these warnings:
+
+Documentation/filesystems/ext4/ifork.rst:5: WARNING: Malformed table.
+
++---------------------+----------------------------------------------------=
+---------------------------------------------------------------------------=
+---------------------------------------------------------------------------=
+--------------------+
+| i.i_block Offset   | Where It Points                                     =
+                                                                           =
+                                                                           =
+                   |
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+
+| 0 to 11             | Direct map to file blocks 0 to 11.                 =
+                                                                           =
+                                                                           =
+                    |
++---------------------+----------------------------------------------------=
+---------------------------------------------------------------------------=
+---------------------------------------------------------------------------=
+--------------------+
+| 12                  | Indirect block: (file blocks 12 to (``$block_size``=
+ / 4) + 11, or 12 to 1035 if 4KiB blocks)                                  =
+                                                                           =
+                    |
+|                     |                                                    =
+                                                                           =
+                                                                           =
+                    |
+|                     | +------------------------------+-------------------=
+-------------------------------------------------+                         =
+                                                                           =
+                    |
+|                     | | Indirect Block Offset        | Where It Points   =
+                                                 |                         =
+                                                                           =
+                    |
+|                     | +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D+                                                  =
+                                                                      |
+|                     | | 0 to (``$block_size`` / 4)   | Direct map to (``$=
+block_size`` / 4) blocks (1024 if 4KiB blocks)   |                         =
+                                                                           =
+                    |
+|                     | +------------------------------+-------------------=
+-------------------------------------------------+                         =
+                                                                           =
+                    |
++---------------------+----------------------------------------------------=
+---------------------------------------------------------------------------=
+---------------------------------------------------------------------------=
+--------------------+
+| 13                  | Double-indirect block: (file blocks ``$block_size``=
+/4 + 12 to (``$block_size`` / 4) ^ 2 + (``$block_size`` / 4) + 11, or 1036 =
+to 1049611 if 4KiB blocks)                                                 =
+                    |
+|                     |                                                    =
+                                                                           =
+                                                                           =
+                    |
+|                     | +--------------------------------+-----------------=
+---------------------------------------------------------------------------=
+-------------+                                                             =
+                    |
+|                     | | Double Indirect Block Offset   | Where It Points =
+                                                                           =
+             |                                                             =
+                    |
+|                     | +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+        =
+                                                                         |
+|                     | | 0 to (``$block_size`` / 4)     | Map to (``$block=
+_size`` / 4) indirect blocks (1024 if 4KiB blocks)                         =
+             |                                                             =
+                    |
+|                     | |                                |                 =
+                                                                           =
+             |                                                             =
+                    |
+|                     | |                                | +---------------=
+---------------+-----------------------------------------------------------=
+---------+   |                                                             =
+                    |
+|                     | |                                | | Indirect Block=
+ Offset        | Where It Points                                           =
+         |   |                                                             =
+                    |
+|                     | |                                | +=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+   |             =
+                                                                    |
+|                     | |                                | | 0 to (``$block=
+_size`` / 4)   | Direct map to (``$block_size`` / 4) blocks (1024 if 4KiB b=
+locks)   |   |                                                             =
+                    |
+|                     | |                                | +---------------=
+---------------+-----------------------------------------------------------=
+---------+   |                                                             =
+                    |
+|                     | +--------------------------------+-----------------=
+---------------------------------------------------------------------------=
+-------------+                                                             =
+                    |
++---------------------+----------------------------------------------------=
+---------------------------------------------------------------------------=
+---------------------------------------------------------------------------=
+--------------------+
+| 14                  | Triple-indirect block: (file blocks (``$block_size`=
+` / 4) ^ 2 + (``$block_size`` / 4) + 12 to (``$block_size`` / 4) ^ 3 + (``$=
+block_size`` / 4) ^ 2 + (``$block_size`` / 4) + 12, or 1049612 to 107479143=
+6 if 4KiB blocks)   |
+|                     |                                                    =
+                                                                           =
+                                                                           =
+                    |
+|                     | +--------------------------------+-----------------=
+---------------------------------------------------------------------------=
+----------------------------------------------------+                      =
+                    |
+|                     | | Triple Indirect Block Offset   | Where It Points =
+                                                                           =
+                                                    |                      =
+                    |
+|                     | +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+                                         =
+ |
+|                     | | 0 to (``$block_size`` / 4)     | Map to (``$block=
+_size`` / 4) double indirect blocks (1024 if 4KiB blocks)                  =
+                                                    |                      =
+                    |
+|                     | |                                |                 =
+                                                                           =
+                                                    |                      =
+                    |
+|                     | |                                | +---------------=
+-----------------+---------------------------------------------------------=
+------------------------------------------------+   |                      =
+                    |
+|                     | |                                | | Double Indirec=
+t Block Offset   | Where It Points                                         =
+                                                |   |                      =
+                    |
+|                     | |                                | +=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D+   |                                          |
+|                     | |                                | | 0 to (``$block=
+_size`` / 4)     | Map to (``$block_size`` / 4) indirect blocks (1024 if 4K=
+iB blocks)                                      |   |                      =
+                    |
+|                     | |                                | |               =
+                 |                                                         =
+                                                |   |                      =
+                    |
+|                     | |                                | |               =
+                 | +------------------------------+------------------------=
+--------------------------------------------+   |   |                      =
+                    |
+|                     | |                                | |               =
+                 | | Indirect Block Offset        | Where It Points        =
+                                            |   |   |                      =
+                    |
+|                     | |                                | |               =
+                 | +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D+   |   |                                          |
+|                     | |                                | |               =
+                 | | 0 to (``$block_size`` / 4)   | Direct map to (``$block=
+_size`` / 4) blocks (1024 if 4KiB blocks)   |   |   |                      =
+                    |
+|                     | |                                | |               =
+                 | +------------------------------+------------------------=
+--------------------------------------------+   |   |                      =
+                    |
+|                     | |                                | +---------------=
+-----------------+---------------------------------------------------------=
+------------------------------------------------+   |                      =
+                    |
+|                     | +--------------------------------+-----------------=
+---------------------------------------------------------------------------=
+----------------------------------------------------+                      =
+                    |
++---------------------+----------------------------------------------------=
+---------------------------------------------------------------------------=
+---------------------------------------------------------------------------=
+--------------------+
+Documentation/filesystems/ext4/blockmap.rst:3: WARNING: Malformed table.
+
++---------------------+----------------------------------------------------=
+---------------------------------------------------------------------------=
+---------------------------------------------------------------------------=
+--------------------+
+| i.i_block Offset   | Where It Points                                     =
+                                                                           =
+                                                                           =
+                   |
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+
+| 0 to 11             | Direct map to file blocks 0 to 11.                 =
+                                                                           =
+                                                                           =
+                    |
++---------------------+----------------------------------------------------=
+---------------------------------------------------------------------------=
+---------------------------------------------------------------------------=
+--------------------+
+| 12                  | Indirect block: (file blocks 12 to (``$block_size``=
+ / 4) + 11, or 12 to 1035 if 4KiB blocks)                                  =
+                                                                           =
+                    |
+|                     |                                                    =
+                                                                           =
+                                                                           =
+                    |
+|                     | +------------------------------+-------------------=
+-------------------------------------------------+                         =
+                                                                           =
+                    |
+|                     | | Indirect Block Offset        | Where It Points   =
+                                                 |                         =
+                                                                           =
+                    |
+|                     | +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D+                                                  =
+                                                                      |
+|                     | | 0 to (``$block_size`` / 4)   | Direct map to (``$=
+block_size`` / 4) blocks (1024 if 4KiB blocks)   |                         =
+                                                                           =
+                    |
+|                     | +------------------------------+-------------------=
+-------------------------------------------------+                         =
+                                                                           =
+                    |
++---------------------+----------------------------------------------------=
+---------------------------------------------------------------------------=
+---------------------------------------------------------------------------=
+--------------------+
+| 13                  | Double-indirect block: (file blocks ``$block_size``=
+/4 + 12 to (``$block_size`` / 4) ^ 2 + (``$block_size`` / 4) + 11, or 1036 =
+to 1049611 if 4KiB blocks)                                                 =
+                    |
+|                     |                                                    =
+                                                                           =
+                                                                           =
+                    |
+|                     | +--------------------------------+-----------------=
+---------------------------------------------------------------------------=
+-------------+                                                             =
+                    |
+|                     | | Double Indirect Block Offset   | Where It Points =
+                                                                           =
+             |                                                             =
+                    |
+|                     | +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+        =
+                                                                         |
+|                     | | 0 to (``$block_size`` / 4)     | Map to (``$block=
+_size`` / 4) indirect blocks (1024 if 4KiB blocks)                         =
+             |                                                             =
+                    |
+|                     | |                                |                 =
+                                                                           =
+             |                                                             =
+                    |
+|                     | |                                | +---------------=
+---------------+-----------------------------------------------------------=
+---------+   |                                                             =
+                    |
+|                     | |                                | | Indirect Block=
+ Offset        | Where It Points                                           =
+         |   |                                                             =
+                    |
+|                     | |                                | +=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+   |             =
+                                                                    |
+|                     | |                                | | 0 to (``$block=
+_size`` / 4)   | Direct map to (``$block_size`` / 4) blocks (1024 if 4KiB b=
+locks)   |   |                                                             =
+                    |
+|                     | |                                | +---------------=
+---------------+-----------------------------------------------------------=
+---------+   |                                                             =
+                    |
+|                     | +--------------------------------+-----------------=
+---------------------------------------------------------------------------=
+-------------+                                                             =
+                    |
++---------------------+----------------------------------------------------=
+---------------------------------------------------------------------------=
+---------------------------------------------------------------------------=
+--------------------+
+| 14                  | Triple-indirect block: (file blocks (``$block_size`=
+` / 4) ^ 2 + (``$block_size`` / 4) + 12 to (``$block_size`` / 4) ^ 3 + (``$=
+block_size`` / 4) ^ 2 + (``$block_size`` / 4) + 12, or 1049612 to 107479143=
+6 if 4KiB blocks)   |
+|                     |                                                    =
+                                                                           =
+                                                                           =
+                    |
+|                     | +--------------------------------+-----------------=
+---------------------------------------------------------------------------=
+----------------------------------------------------+                      =
+                    |
+|                     | | Triple Indirect Block Offset   | Where It Points =
+                                                                           =
+                                                    |                      =
+                    |
+|                     | +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+                                         =
+ |
+|                     | | 0 to (``$block_size`` / 4)     | Map to (``$block=
+_size`` / 4) double indirect blocks (1024 if 4KiB blocks)                  =
+                                                    |                      =
+                    |
+|                     | |                                |                 =
+                                                                           =
+                                                    |                      =
+                    |
+|                     | |                                | +---------------=
+-----------------+---------------------------------------------------------=
+------------------------------------------------+   |                      =
+                    |
+|                     | |                                | | Double Indirec=
+t Block Offset   | Where It Points                                         =
+                                                |   |                      =
+                    |
+|                     | |                                | +=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D+   |                                          |
+|                     | |                                | | 0 to (``$block=
+_size`` / 4)     | Map to (``$block_size`` / 4) indirect blocks (1024 if 4K=
+iB blocks)                                      |   |                      =
+                    |
+|                     | |                                | |               =
+                 |                                                         =
+                                                |   |                      =
+                    |
+|                     | |                                | |               =
+                 | +------------------------------+------------------------=
+--------------------------------------------+   |   |                      =
+                    |
+|                     | |                                | |               =
+                 | | Indirect Block Offset        | Where It Points        =
+                                            |   |   |                      =
+                    |
+|                     | |                                | |               =
+                 | +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D+   |   |                                          |
+|                     | |                                | |               =
+                 | | 0 to (``$block_size`` / 4)   | Direct map to (``$block=
+_size`` / 4) blocks (1024 if 4KiB blocks)   |   |   |                      =
+                    |
+|                     | |                                | |               =
+                 | +------------------------------+------------------------=
+--------------------------------------------+   |   |                      =
+                    |
+|                     | |                                | +---------------=
+-----------------+---------------------------------------------------------=
+------------------------------------------------+   |                      =
+                    |
+|                     | +--------------------------------+-----------------=
+---------------------------------------------------------------------------=
+----------------------------------------------------+                      =
+                    |
++---------------------+----------------------------------------------------=
+---------------------------------------------------------------------------=
+---------------------------------------------------------------------------=
+--------------------+
+Documentation/filesystems/ext4/dynamic.rst:5: WARNING: Malformed table.
+
++---------------------+----------------------------------------------------=
+---------------------------------------------------------------------------=
+---------------------------------------------------------------------------=
+--------------------+
+| i.i_block Offset   | Where It Points                                     =
+                                                                           =
+                                                                           =
+                   |
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+
+| 0 to 11             | Direct map to file blocks 0 to 11.                 =
+                                                                           =
+                                                                           =
+                    |
++---------------------+----------------------------------------------------=
+---------------------------------------------------------------------------=
+---------------------------------------------------------------------------=
+--------------------+
+| 12                  | Indirect block: (file blocks 12 to (``$block_size``=
+ / 4) + 11, or 12 to 1035 if 4KiB blocks)                                  =
+                                                                           =
+                    |
+|                     |                                                    =
+                                                                           =
+                                                                           =
+                    |
+|                     | +------------------------------+-------------------=
+-------------------------------------------------+                         =
+                                                                           =
+                    |
+|                     | | Indirect Block Offset        | Where It Points   =
+                                                 |                         =
+                                                                           =
+                    |
+|                     | +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D+                                                  =
+                                                                      |
+|                     | | 0 to (``$block_size`` / 4)   | Direct map to (``$=
+block_size`` / 4) blocks (1024 if 4KiB blocks)   |                         =
+                                                                           =
+                    |
+|                     | +------------------------------+-------------------=
+-------------------------------------------------+                         =
+                                                                           =
+                    |
++---------------------+----------------------------------------------------=
+---------------------------------------------------------------------------=
+---------------------------------------------------------------------------=
+--------------------+
+| 13                  | Double-indirect block: (file blocks ``$block_size``=
+/4 + 12 to (``$block_size`` / 4) ^ 2 + (``$block_size`` / 4) + 11, or 1036 =
+to 1049611 if 4KiB blocks)                                                 =
+                    |
+|                     |                                                    =
+                                                                           =
+                                                                           =
+                    |
+|                     | +--------------------------------+-----------------=
+---------------------------------------------------------------------------=
+-------------+                                                             =
+                    |
+|                     | | Double Indirect Block Offset   | Where It Points =
+                                                                           =
+             |                                                             =
+                    |
+|                     | +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+        =
+                                                                         |
+|                     | | 0 to (``$block_size`` / 4)     | Map to (``$block=
+_size`` / 4) indirect blocks (1024 if 4KiB blocks)                         =
+             |                                                             =
+                    |
+|                     | |                                |                 =
+                                                                           =
+             |                                                             =
+                    |
+|                     | |                                | +---------------=
+---------------+-----------------------------------------------------------=
+---------+   |                                                             =
+                    |
+|                     | |                                | | Indirect Block=
+ Offset        | Where It Points                                           =
+         |   |                                                             =
+                    |
+|                     | |                                | +=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+   |             =
+                                                                    |
+|                     | |                                | | 0 to (``$block=
+_size`` / 4)   | Direct map to (``$block_size`` / 4) blocks (1024 if 4KiB b=
+locks)   |   |                                                             =
+                    |
+|                     | |                                | +---------------=
+---------------+-----------------------------------------------------------=
+---------+   |                                                             =
+                    |
+|                     | +--------------------------------+-----------------=
+---------------------------------------------------------------------------=
+-------------+                                                             =
+                    |
++---------------------+----------------------------------------------------=
+---------------------------------------------------------------------------=
+---------------------------------------------------------------------------=
+--------------------+
+| 14                  | Triple-indirect block: (file blocks (``$block_size`=
+` / 4) ^ 2 + (``$block_size`` / 4) + 12 to (``$block_size`` / 4) ^ 3 + (``$=
+block_size`` / 4) ^ 2 + (``$block_size`` / 4) + 12, or 1049612 to 107479143=
+6 if 4KiB blocks)   |
+|                     |                                                    =
+                                                                           =
+                                                                           =
+                    |
+|                     | +--------------------------------+-----------------=
+---------------------------------------------------------------------------=
+----------------------------------------------------+                      =
+                    |
+|                     | | Triple Indirect Block Offset   | Where It Points =
+                                                                           =
+                                                    |                      =
+                    |
+|                     | +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+                                         =
+ |
+|                     | | 0 to (``$block_size`` / 4)     | Map to (``$block=
+_size`` / 4) double indirect blocks (1024 if 4KiB blocks)                  =
+                                                    |                      =
+                    |
+|                     | |                                |                 =
+                                                                           =
+                                                    |                      =
+                    |
+|                     | |                                | +---------------=
+-----------------+---------------------------------------------------------=
+------------------------------------------------+   |                      =
+                    |
+|                     | |                                | | Double Indirec=
+t Block Offset   | Where It Points                                         =
+                                                |   |                      =
+                    |
+|                     | |                                | +=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D+   |                                          |
+|                     | |                                | | 0 to (``$block=
+_size`` / 4)     | Map to (``$block_size`` / 4) indirect blocks (1024 if 4K=
+iB blocks)                                      |   |                      =
+                    |
+|                     | |                                | |               =
+                 |                                                         =
+                                                |   |                      =
+                    |
+|                     | |                                | |               =
+                 | +------------------------------+------------------------=
+--------------------------------------------+   |   |                      =
+                    |
+|                     | |                                | |               =
+                 | | Indirect Block Offset        | Where It Points        =
+                                            |   |   |                      =
+                    |
+|                     | |                                | |               =
+                 | +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D+   |   |                                          |
+|                     | |                                | |               =
+                 | | 0 to (``$block_size`` / 4)   | Direct map to (``$block=
+_size`` / 4) blocks (1024 if 4KiB blocks)   |   |   |                      =
+                    |
+|                     | |                                | |               =
+                 | +------------------------------+------------------------=
+--------------------------------------------+   |   |                      =
+                    |
+|                     | |                                | +---------------=
+-----------------+---------------------------------------------------------=
+------------------------------------------------+   |                      =
+                    |
+|                     | +--------------------------------+-----------------=
+---------------------------------------------------------------------------=
+----------------------------------------------------+                      =
+                    |
++---------------------+----------------------------------------------------=
+---------------------------------------------------------------------------=
+---------------------------------------------------------------------------=
+--------------------+
+
+Introduced by commit
+
+  3103084afcf2 ("ext4, doc: remove unnecessary escaping")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/uQbwBF/j8+zgA/eN+vQ6Hxb
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKwKaAACgkQAVBC80lX
+0GwcoQgAo2lczCZvuMeSa9MhtxOVwqPBWQRteJhqRBunmkCbfHF+CS5GJ0aqjuiv
+yqWdyvW4gP5xIivMNNYU8RVOt5XB68AvWRE53/lkDF/c3ZznJsryOUr17Ac9c9xP
+gy1VL4ARn5M+XDYqaUVrH3KIwnO7ON28C8TOhuJDIWHFiDrD0f8wfjHRSpETz7bJ
+GyMicsEmcqtXUujtRv6auoPa+itAO3YMGiL2w1vQ2dfUOXYOd12EMlTCe8EXd7jv
+K1UoSP78VKQUnTFDauL9MkaPT97zofyPdnaguEwCg7DSpu0UAOwuosEvrpzcMlKP
+dygG8ZAGlugksILDMaVXEe9gm4PxRA==
+=4wu0
+-----END PGP SIGNATURE-----
+
+--Sig_/uQbwBF/j8+zgA/eN+vQ6Hxb--

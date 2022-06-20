@@ -2,123 +2,195 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97EDF550F17
-	for <lists+linux-next@lfdr.de>; Mon, 20 Jun 2022 05:53:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BD3B5510A8
+	for <lists+linux-next@lfdr.de>; Mon, 20 Jun 2022 08:45:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232659AbiFTDxt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 19 Jun 2022 23:53:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42234 "EHLO
+        id S238829AbiFTGpY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 20 Jun 2022 02:45:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231237AbiFTDxs (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 19 Jun 2022 23:53:48 -0400
+        with ESMTP id S239027AbiFTGnD (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 20 Jun 2022 02:43:03 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 229BFBE2E;
-        Sun, 19 Jun 2022 20:53:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ECCC2615;
+        Sun, 19 Jun 2022 23:42:55 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LRG3D64V6z4xXj;
-        Mon, 20 Jun 2022 13:53:44 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LRKpP51hpz4xL4;
+        Mon, 20 Jun 2022 16:42:53 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1655697225;
-        bh=157GQDrY1KVl7TcujMT7k2WMX8cvZBlGubIwKBZm018=;
+        s=201702; t=1655707374;
+        bh=6ScCn/tWBEgOW+PpVwGFcbwlDIs836qEcGcwdghtMpo=;
         h=Date:From:To:Cc:Subject:From;
-        b=VwQv+k/0xPMkbPvtjZwEa4Cha3TLUtzAIRehfTHQujCiNkwA5aNrJCOzj7tvjWDkm
-         UESYFCgw7lk3a4QAxjUDw5ZELydPwkQTYxIdqwuEIGAbytmxqFR7qlF0JT1KPNU1po
-         HXwQvVTZ+sf/NfczF9kgzQS9Sm5/s2oDsLQfgFAnhOAUS8hXIAKr0aC/ssFEYY3qGy
-         UUWYk7NsGqO0zc3hdEmFS54pbEGFUuj8RAO2JkL1X8aZNmpPF/LvJL7VEBi4I2//TR
-         Qf86tPtMZwclZFHdX3xVhQfXHyv8sPNUCTTZaTwv8PCaoGU/n/Z6uOLt2MNZoi4xSq
-         MQgu6jSm2nvLQ==
-Date:   Mon, 20 Jun 2022 13:53:43 +1000
+        b=cTaZWbdLiwpJ+TYms1iOnk5ACjxSopTTyaUq27+qGejHKq2VwQG6BenHIDnyKrQho
+         xdMlkJT9FlbWZSsQyL2Sc/bx9NIT/pbVAU0J69hifjuHsL1i64SqJUVoFJTIzrRYok
+         3NWL5hmz9hFgAOMNIk6lB4LW71ZHuiTXXoT1wH2HKS0Lzrzp64lgdFlI1fh0eC4Zs5
+         udl9tXGXXYCGHnQDFpCat7vcDhDNtn+y1vcUue2nxnG6CaLrKtppz/Votk+RdEDWY2
+         bXaHxu2vH8Bnb79rFmXY7009uX3jvJhdl9dvxfbBR8+YIUhYOfvf5p3npomeLLzgDP
+         DhL+RAvmKXtUg==
+Date:   Mon, 20 Jun 2022 16:42:46 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the mm tree with the folio tree
-Message-ID: <20220620135343.52f96bee@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Oscar Salvador <osalvador@suse.de>
+Subject: linux-next: build failures after merge of the mm tree
+Message-ID: <20220620164246.0d3f7784@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Ny926Ybvw2czoxn3dpkVEUT";
+Content-Type: multipart/signed; boundary="Sig_/nEvQrf=/_4PARQsuSG08h03";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEXHASH_WORD,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Ny926Ybvw2czoxn3dpkVEUT
+--Sig_/nEvQrf=/_4PARQsuSG08h03
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the mm tree got a conflict in:
+After merging the mm tree, today's linux-next build (x86_64 allnoconfig)
+failed like this:
 
-  include/linux/pagevec.h
+In file included from arch/x86/include/asm/page.h:86,
+                 from arch/x86/include/asm/thread_info.h:12,
+                 from include/linux/thread_info.h:60,
+                 from arch/x86/include/asm/preempt.h:7,
+                 from include/linux/preempt.h:78,
+                 from include/linux/spinlock.h:55,
+                 from include/linux/mmzone.h:8,
+                 from include/linux/gfp.h:6,
+                 from include/linux/slab.h:15,
+                 from include/linux/crypto.h:20,
+                 from arch/x86/kernel/asm-offsets.c:9:
+include/linux/mm.h: In function 'destroy_large_folio':
+include/asm-generic/memory_model.h:35:21: error: implicit declaration of fu=
+nction 'page_to_section'; did you mean 'present_section'? [-Werror=3Dimplic=
+it-function-declaration]
+   35 |         int __sec =3D page_to_section(__pg);                      \
+      |                     ^~~~~~~~~~~~~~~
+include/asm-generic/memory_model.h:40:32: note: in definition of macro '__p=
+fn_to_page'
+   40 | ({      unsigned long __pfn =3D (pfn);                    \
+      |                                ^~~
+include/asm-generic/memory_model.h:52:21: note: in expansion of macro '__pa=
+ge_to_pfn'
+   52 | #define page_to_pfn __page_to_pfn
+      |                     ^~~~~~~~~~~~~
+include/linux/mm.h:214:38: note: in expansion of macro 'page_to_pfn'
+  214 | #define nth_page(page,n) pfn_to_page(page_to_pfn((page)) + (n))
+      |                                      ^~~~~~~~~~~
+include/linux/page-flags.h:312:33: note: in expansion of macro 'nth_page'
+  312 | #define folio_page(folio, n)    nth_page(&(folio)->page, n)
+      |                                 ^~~~~~~~
+include/linux/mm.h:928:38: note: in expansion of macro 'folio_page'
+  928 |         enum compound_dtor_id dtor =3D folio_page(folio, 1)->compou=
+nd_dtor;
+      |                                      ^~~~~~~~~~
+In file included from include/linux/memcontrol.h:20,
+                 from include/linux/swap.h:9,
+                 from include/linux/suspend.h:5,
+                 from arch/x86/kernel/asm-offsets.c:13:
+include/linux/mm.h: At top level:
+include/linux/mm.h:1556:29: error: conflicting types for 'page_to_section';=
+ have 'long unsigned int(const struct page *)'
+ 1556 | static inline unsigned long page_to_section(const struct page *page)
+      |                             ^~~~~~~~~~~~~~~
+In file included from arch/x86/include/asm/page.h:86,
+                 from arch/x86/include/asm/thread_info.h:12,
+                 from include/linux/thread_info.h:60,
+                 from arch/x86/include/asm/preempt.h:7,
+                 from include/linux/preempt.h:78,
+                 from include/linux/spinlock.h:55,
+                 from include/linux/mmzone.h:8,
+                 from include/linux/gfp.h:6,
+                 from include/linux/slab.h:15,
+                 from include/linux/crypto.h:20,
+                 from arch/x86/kernel/asm-offsets.c:9:
+include/asm-generic/memory_model.h:35:21: note: previous implicit declarati=
+on of 'page_to_section' with type 'int()'
+   35 |         int __sec =3D page_to_section(__pg);                      \
+      |                     ^~~~~~~~~~~~~~~
+include/asm-generic/memory_model.h:40:32: note: in definition of macro '__p=
+fn_to_page'
+   40 | ({      unsigned long __pfn =3D (pfn);                    \
+      |                                ^~~
+include/asm-generic/memory_model.h:52:21: note: in expansion of macro '__pa=
+ge_to_pfn'
+   52 | #define page_to_pfn __page_to_pfn
+      |                     ^~~~~~~~~~~~~
+include/linux/mm.h:214:38: note: in expansion of macro 'page_to_pfn'
+  214 | #define nth_page(page,n) pfn_to_page(page_to_pfn((page)) + (n))
+      |                                      ^~~~~~~~~~~
+include/linux/page-flags.h:312:33: note: in expansion of macro 'nth_page'
+  312 | #define folio_page(folio, n)    nth_page(&(folio)->page, n)
+      |                                 ^~~~~~~~
+include/linux/mm.h:928:38: note: in expansion of macro 'folio_page'
+  928 |         enum compound_dtor_id dtor =3D folio_page(folio, 1)->compou=
+nd_dtor;
+      |                                      ^~~~~~~~~~
+cc1: some warnings being treated as errors
 
-between commit:
+Caused by commit (I think)
 
-  132a550f50c4 ("filemap: Remove find_get_pages_range() and associated func=
-tions")
+  d3b90b76e101 ("mm: convert destroy_compound_page() to destroy_large_folio=
+()")
 
-from the folio tree and commit:
+I have reverted these commits fot today:
 
-  229d98bdddcb ("mm/swap: make __pagevec_lru_add static")
+56629699b3dd mm/swap: convert __delete_from_swap_cache() to a folio
+e5085f2cc241 mm/swap: convert delete_from_swap_cache() to take a folio
+169f02f4efb1 mm: convert page_swap_flags to folio_swap_flags
+d3b90b76e101 mm: convert destroy_compound_page() to destroy_large_folio()
 
-from the mm tree.
+Then I got:
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+mm/hugetlb_vmemmap.c: In function 'vmemmap_optimizable_pages':
+mm/hugetlb_vmemmap.c:110:24: error: implicit declaration of function 'spars=
+e_decode_mem_map' [-Werror=3Dimplicit-function-declaration]
+  110 |         vmemmap_page =3D sparse_decode_mem_map(ms->section_mem_map,
+      |                        ^~~~~~~~~~~~~~~~~~~~~
+mm/hugetlb_vmemmap.c:110:22: warning: assignment to 'struct page *' from 'i=
+nt' makes pointer from integer without a cast [-Wint-conversion]
+  110 |         vmemmap_page =3D _sparsedecode_mem_map(ms->section_mem_map,
+      |                      ^
+cc1: some warnings being treated as errors
 
+from my arm64 defconfig build.
+
+Caused by commit
+
+  10a768735470 ("mm: memory_hotplug: make hugetlb_optimize_vmemmap compatib=
+le with memmap_on_memory")
+
+So I gave up and used the mm tree from next-20220617 for today.
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc include/linux/pagevec.h
-index 6649154a2115,b0e3540f3a4c..000000000000
---- a/include/linux/pagevec.h
-+++ b/include/linux/pagevec.h
-@@@ -26,7 -26,16 +26,6 @@@ struct pagevec=20
-  };
- =20
-  void __pagevec_release(struct pagevec *pvec);
-- void __pagevec_lru_add(struct pagevec *pvec);
- -unsigned pagevec_lookup_range(struct pagevec *pvec,
- -			      struct address_space *mapping,
- -			      pgoff_t *start, pgoff_t end);
- -static inline unsigned pagevec_lookup(struct pagevec *pvec,
- -				      struct address_space *mapping,
- -				      pgoff_t *start)
- -{
- -	return pagevec_lookup_range(pvec, mapping, start, (pgoff_t)-1);
- -}
- -
-  unsigned pagevec_lookup_range_tag(struct pagevec *pvec,
-  		struct address_space *mapping, pgoff_t *index, pgoff_t end,
-  		xa_mark_t tag);
-
---Sig_/Ny926Ybvw2czoxn3dpkVEUT
+--Sig_/nEvQrf=/_4PARQsuSG08h03
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKv70cACgkQAVBC80lX
-0Gx/7wf9GVy9uyNjInEII05/0v1OnT77jS/8HAVLFdnA4B5r/wiL8XU/omjsRu85
-qEHnrHWnKjsz1jf007GBcJSUSU5AlWtieSxWFK8JUT6Bg+l1EvJrqr5xMumOHZpX
-x313jT48eTgTOVz+RnNew6sbqhkK/P98Iiu+ecRS99eBJgw55HkTsloyyjLTGyd9
-PE2n+83XTorCe+CHIsxaejqJioxQcgQaJKFELkFHA7Rp215XGZqShX65v42pnRNk
-G9xWWonsmJRkQBQiI8j/YL51sLNyZKzzSkfWimUqUzSCZW+VRk0HsF25nfzdAJyN
-cexFREQyP8DAOTuNvkB7TMdHeFYvmQ==
-=aqM4
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKwFuYACgkQAVBC80lX
+0Gw7AwgAinOzy8+RCKYZpkajQdvJZH6fDAZ/vSsE8TitrcHKzWbiXCl7aDpC+T/4
+HWFkx9jsqF8RBcLzI2BeqEVHa2K9xZyUm0csx9PFTLJUCluBKpi9unziAtPLX2yB
+1reGCPL285oBpEaXvsAfaZK0ajLy4lkOpZ00Gy60wIr3IUcTK1CyNaHVXK/v6bmX
+GHImsBOWHjxu+4UdsVShnUMmIsQVJzW5cAUmPz1nnZQ9TapC3ZfoMZPdyUAdRnXR
+dJgVYXR8zo4+wSBnoRW8CtpdgQMZMZVGrG5pgCyJLTdvfCec6/x0uUsr6E+WhLtI
+eNgPXkoq6lbAbRrfd0oN8PS5dPbmGw==
+=UdCX
 -----END PGP SIGNATURE-----
 
---Sig_/Ny926Ybvw2czoxn3dpkVEUT--
+--Sig_/nEvQrf=/_4PARQsuSG08h03--

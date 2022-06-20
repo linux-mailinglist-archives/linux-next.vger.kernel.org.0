@@ -2,49 +2,81 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAE0255249E
-	for <lists+linux-next@lfdr.de>; Mon, 20 Jun 2022 21:34:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29853552595
+	for <lists+linux-next@lfdr.de>; Mon, 20 Jun 2022 22:15:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242638AbiFTTee (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 20 Jun 2022 15:34:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49126 "EHLO
+        id S1344566AbiFTUM3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 20 Jun 2022 16:12:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233184AbiFTTed (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 20 Jun 2022 15:34:33 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F81D1C128
-        for <linux-next@vger.kernel.org>; Mon, 20 Jun 2022 12:34:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A5A9DCE170E
-        for <linux-next@vger.kernel.org>; Mon, 20 Jun 2022 19:34:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E347C3411B;
-        Mon, 20 Jun 2022 19:34:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655753665;
-        bh=hPL7ASEhq5ZtZ46qW7+ocF2cU3uLg5ZciRIYxY22cvU=;
-        h=Date:To:From:Subject:From;
-        b=jzEjcprM/CEuuuU6QYaAXjmpuzcxkcjyzby6IOYq1OnhDQ6wAyf1U7QlbChGmtjcL
-         i8nWtGJjuH89oKaMuon1yR6q8a0bbZTvD2wOUc+7DB6BxS9lXAIKj/XgPOEP7f/feg
-         GH21z1CQvSLjoLE9hhLnsI/B6doKZtJdI7TXbQQWB5hJCSxp9HZh/LO1AWHzpFheFO
-         OLp962Juyf9HoHczq4li/bwLqdVi5AZJK03eIGSdV0Ft6u/i+vMJRtPERyNKV4+joC
-         UYsrDRXZando93sUv5GYM9qysHuHXD3b5uuHOoRuESnsLH/R7jMjtBWiNJ6u15zrfP
-         Hz8DpkCSpZuDA==
-Message-ID: <b2e86d7a-401d-f48f-2c02-e8253885ab51@kernel.org>
-Date:   Mon, 20 Jun 2022 21:34:22 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Content-Language: en-US
-To:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        with ESMTP id S245663AbiFTUMF (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 20 Jun 2022 16:12:05 -0400
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9108C21828;
+        Mon, 20 Jun 2022 13:09:18 -0700 (PDT)
+Received: from [192.168.1.103] (178.176.78.78) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Mon, 20 Jun
+ 2022 23:07:40 +0300
+Subject: Re: linux-next: build warning after merge of the libata tree
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
         Stephen Rothwell <sfr@canb.auug.org.au>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Subject: Include in next: krzk/linux-dt
-Content-Type: text/plain; charset=UTF-8
+CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20220620103400.6b03f8d9@canb.auug.org.au>
+ <20220620182108.5efb3107@canb.auug.org.au>
+ <387885f0-999f-3746-0238-77052f10b25c@opensource.wdc.com>
+ <8e0717c2-d3c0-c81c-3a33-afdc045d123c@omp.ru>
+ <71cca7ed-6409-3066-8878-cdc647b17057@opensource.wdc.com>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <54db2644-aa04-82cc-88cd-1cb40a2b2d77@omp.ru>
+Date:   Mon, 20 Jun 2022 23:07:40 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
+MIME-Version: 1.0
+In-Reply-To: <71cca7ed-6409-3066-8878-cdc647b17057@opensource.wdc.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Originating-IP: [178.176.78.78]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 06/20/2022 19:47:14
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 171243 [Jun 20 2022]
+X-KSE-AntiSpam-Info: Version: 5.9.20.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 490 490 64947c9fe6ec4170c45683de1592f92a9c3bac07
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.78.78 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.78.78 in (user)
+ dbl.spamhaus.org}
+X-KSE-AntiSpam-Info: d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;omp.ru:7.1.1;127.0.0.199:7.1.2
+X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.78.78
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 06/20/2022 19:50:00
+X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 6/20/2022 5:27:00 PM
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -53,21 +85,53 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+On 6/20/22 2:07 PM, Damien Le Moal wrote:
 
-Please kindly include in linux-next my new tree:
-https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-dt.git
+[...]
+>>>>> After merging the libata tree, today's linux-next build (powercp
+>>>>> ppc64_defconfig) produced this warning:
+>>>>>
+>>>>> In file included from include/linux/device.h:15,
+>>>>>                  from arch/powerpc/include/asm/io.h:27,
+>>>>>                  from include/linux/io.h:13,
+>>>>>                  from include/linux/irq.h:20,
+>>>>>                  from arch/powerpc/include/asm/hardirq.h:6,
+>>>>>                  from include/linux/hardirq.h:11,
+>>>>>                  from include/linux/highmem.h:11,
+>>>>>                  from include/linux/bvec.h:10,
+>>>>>                  from include/linux/blk_types.h:10,
+>>>>>                  from include/linux/blkdev.h:9,
+>>>>>                  from drivers/ata/pata_macio.c:18:
+>>>>> drivers/ata/pata_macio.c: In function 'pmac_macio_calc_timing_masks':
+>>>>> drivers/ata/pata_macio.c:1031:28: warning: format '%lx' expects argument of type 'long unsigned int', but argument 4 has type 'unsigned int' [-Wformat=]
+>>>>>  1031 |         dev_dbg(priv->dev, "Supported masks: PIO=%lx, MWDMA=%lx, UDMA=%lx\n",
+>>>>
+>>>> 	.
+>>>> 	.
+>>>> 	.
+>>>>
+>>>>> Introduced by commit
+>>>>>
+>>>>>   f0a6d77b351c ("ata: make transfer mode masks *unsigned int*")
+>>
+>>    Oops, sorry about that!>
+>>>> This turned into a build failure in my powerpc allyesconfig build, so I
+>>>> reverted the above commit for today.
+>>>
+>>> I pushed the fix already. It is in ata for-next branch.
+>>
+>>    Thank you!
+>>    Note that your Fixes: tag doesn't look right -- the asterisks are missing
+>> in the summary...
+> 
+> Fixed. Copy-paste from the mailer (build failure report email), the
+> asterisks are gone and "unsigned int" shown with bold font. Please stop
 
-branch: for-next
-branch for pending-fixes: fixes
+   Strange, I'm seeing both asterisks and bold font there. What kind of MUA
+you use? :-)
 
-I tend to create a lot of cleanup patches for Devicetree bindings and
-DTS files. Since some time I started to pick them up to my Samsung SoC
-tree and send to arm-soc (Arnd, Olof). This way I will split it from
-Samsung SoC work to independent cleanup stuff.
+> with the markdown style emphasis. That creates problems.
 
-The tree will be sent with pull requests to arm-soc (Arnd, Olof) or to
-DT (Rob Herring).
+   Mhm, OK...
 
-Best regards,
-Krzysztof
+MBR, Sergey

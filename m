@@ -2,95 +2,104 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9333552C55
-	for <lists+linux-next@lfdr.de>; Tue, 21 Jun 2022 09:48:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2BA0552CA8
+	for <lists+linux-next@lfdr.de>; Tue, 21 Jun 2022 10:16:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344495AbiFUHsj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 21 Jun 2022 03:48:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46684 "EHLO
+        id S1348059AbiFUIP7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 21 Jun 2022 04:15:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347610AbiFUHsW (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 21 Jun 2022 03:48:22 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C13BC19;
-        Tue, 21 Jun 2022 00:48:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655797701; x=1687333701;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=1o3EYbTpbgd5QipYqiu/4GXWQ1ks5o+4O3O/+SFVrXk=;
-  b=JTZSBUCJ7aDV/kh3bGgG7/gE7AbsHcPvUhpE5Lpc3auCQ4S884p21/Nd
-   DUma+WphhS56GQ2YNuk4EpzTGDP3JDAIsz9LvcpdSr6eIdfICJCrRiPRK
-   EXuHgGDmuAuvFW53ta+m0ki4qI6TOPEGphjps47F0R/YtwkST5lFsdA2Q
-   lAKOzeiez1OCsPCcc6EKoUKFGYXy3/uTSHOmV6RnKb98zrQmcaeOma+TF
-   C6o0dxndD5fzHdcAqumJEKVEw+jKKLHBQVTJr5HDjbUrJjrkuis3eiaHK
-   HNxCEvPpWEyGFsA/R9Gs9XQjHhFvY+3BV72knEtH2r7g933TBsl7A42vT
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10384"; a="259876326"
-X-IronPort-AV: E=Sophos;i="5.92,209,1650956400"; 
-   d="scan'208";a="259876326"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 00:48:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,209,1650956400"; 
-   d="scan'208";a="729727279"
-Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.163])
-  by fmsmga001.fm.intel.com with SMTP; 21 Jun 2022 00:48:18 -0700
-Received: by stinkbox (sSMTP sendmail emulation); Tue, 21 Jun 2022 10:48:17 +0300
-Date:   Tue, 21 Jun 2022 10:48:17 +0300
-From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
+        with ESMTP id S229695AbiFUIP6 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 21 Jun 2022 04:15:58 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DB91237F2;
+        Tue, 21 Jun 2022 01:15:57 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LRzqD1yqlz4xXj;
+        Tue, 21 Jun 2022 18:15:52 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1655799353;
+        bh=2E5PwMW/yllmF5gZzd1wmtssdamJ4jkSGbKOb/quYE4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=asZT9zsoSemrmQ4dOL6TgHf3lUY6OkIoDhv+OGuVHaziL/+om0P0Vhe91xshCiUi0
+         LrVycbCbF0l0jcjv9C6qCT7/oPB3WZp8c2LiXBBqi0DYPaoWhLwIqTf4/3NuxNDV4f
+         3U16zLHQvJ6Oyeqb1vZNC9faGpwg84m3hmuN3VcmBT5DUziM/aIESMnMnivNRMqpge
+         jv10okWJRp2ZHpLaBzg8AocHhc45AX6fjLnl9aKLKTMmTc2Q5iX3bYw5hy0C20uRWM
+         IBQoilkbh8rnbhOQ1YZzaGDvNn6C5AlBii4m5UcahOkc1ktvOBUkyWQqb5h3/Vdotl
+         WcmDGun/rgZLw==
+Date:   Tue, 21 Jun 2022 18:15:51 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Aurabindo Pillai <aurabindo.pillai@amd.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the drm-misc tree
-Message-ID: <YrF3wfumVi3q3bFj@intel.com>
-References: <20220621123656.7a479ad9@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Dave Airlie <airlied@linux.ie>
+Subject: Re: linux-next: build failure after merge of the amdgpu tree
+Message-ID: <20220621181551.5eb294f5@canb.auug.org.au>
+In-Reply-To: <20220615150013.30c9d7ad@canb.auug.org.au>
+References: <20220603144315.5adcddbf@canb.auug.org.au>
+        <20220615150013.30c9d7ad@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220621123656.7a479ad9@canb.auug.org.au>
-X-Patchwork-Hint: comment
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/f6qfnfBBJQs_iRqqx2rm3rV";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 12:36:56PM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the drm-misc tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
-> 
-> drivers/gpu/drm/xlnx/zynqmp_disp.c: In function 'zynqmp_disp_create_planes':
-> drivers/gpu/drm/xlnx/zynqmp_disp.c:1260:17: error: implicit declaration of function 'drm_plane_create_zpos_immutable_property'; did you mean 'drm_plane_create_scaling_filter_property'? [-Werror=implicit-function-declaration]
->  1260 |                 drm_plane_create_zpos_immutable_property(&layer->plane, i);
->       |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->       |                 drm_plane_create_scaling_filter_property
-> drivers/gpu/drm/xlnx/zynqmp_disp.c:1262:25: error: implicit declaration of function 'drm_plane_create_alpha_property'; did you mean 'drm_plane_create_color_properties'? [-Werror=implicit-function-declaration]
->  1262 |                         drm_plane_create_alpha_property(&layer->plane);
->       |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->       |                         drm_plane_create_color_properties
-> cc1: all warnings being treated as errors
-> 
-> Presumably caused by one of the commits that dropped includes from
-> drm-ctrc.h.
-> 
-> I have used the drm-misc tree from next-20220620 for today.
+--Sig_/f6qfnfBBJQs_iRqqx2rm3rV
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Sorry about that. Looks like my .config was missing some
-dependencies of the zynqmp driver so it wasn't getting built.
-I'll cook up a fix.
+Hi all,
 
--- 
-Ville Syrjälä
-Intel
+On Wed, 15 Jun 2022 15:00:13 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> On Fri, 3 Jun 2022 14:43:15 +1000 Stephen Rothwell <sfr@canb.auug.org.au>=
+ wrote:
+> >
+> > After merging the amdgpu tree, today's linux-next build (powerpc
+> > allyesconfig) failed like this:
+> >=20
+> > drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.=
+c: In function 'dml32_ModeSupportAndSystemConfigurationFull':
+> > drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.=
+c:3835:1: error: the frame size of 2752 bytes is larger than 2048 bytes [-W=
+error=3Dframe-larger-than=3D]
+> >  3835 | } // ModeSupportAndSystemConfigurationFull
+> >       | ^
+> > cc1: all warnings being treated as errors =20
+>=20
+> I am still getting the above failure.
+
+I am still getting the above failure ... it has now been 19 days :-(
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/f6qfnfBBJQs_iRqqx2rm3rV
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKxfjcACgkQAVBC80lX
+0GxosAf7BLe7e+Qep9x9TBOTlKPRU4VoCcfu4xWob7k9buU7HMEZ2Z85aNEuPcGx
+anaR5Iwjsa57j+afexJjik+/2fyjFNDta9EXMF3W4meWXhNjCpdQZWpQAkrDPGpS
+hmnAODD20wIOgqJs7VPgdnAtMTaCIRmO0pZYO4udYGiO8sI8DCDuO+Ep5xVYxOMx
+byBugvDiL6sJPzyCmrHBSAi2ryY8KiiQ+DVLcT5jvAWgqlrHUNdOgWYuqJ13E+Sa
+tttkfLK2D0noQ5FYhFY9kgVv84g7Ddwecq6/ZocYrgcKtGGIj69sGeY5brCx9cyV
+GfNO+0K2+OxRtgk/N0FLSduTSemLHA==
+=h3cq
+-----END PGP SIGNATURE-----
+
+--Sig_/f6qfnfBBJQs_iRqqx2rm3rV--

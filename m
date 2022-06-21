@@ -2,127 +2,106 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72DC9553E4F
-	for <lists+linux-next@lfdr.de>; Wed, 22 Jun 2022 00:07:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6F1C553E7E
+	for <lists+linux-next@lfdr.de>; Wed, 22 Jun 2022 00:29:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352338AbiFUWHg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 21 Jun 2022 18:07:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45944 "EHLO
+        id S1354526AbiFUW3E (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 21 Jun 2022 18:29:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238847AbiFUWHf (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 21 Jun 2022 18:07:35 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A3B72ED4C;
-        Tue, 21 Jun 2022 15:07:33 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S1353136AbiFUW3C (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 21 Jun 2022 18:29:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66A4D165AA;
+        Tue, 21 Jun 2022 15:29:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LSLGl56xqz4xYD;
-        Wed, 22 Jun 2022 08:07:27 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1655849248;
-        bh=eBdXdgqNPOsV0ZFNPKzo3btFsOvgFrYvNq2S8WgVF7M=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0288F6172C;
+        Tue, 21 Jun 2022 22:29:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07347C3411C;
+        Tue, 21 Jun 2022 22:28:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1655850539;
+        bh=v/bPfL+wicBxL4Cwn7dvyPEgySC6Ary5WdDIT4LuuH4=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=FNRd62G0hnWpVd0t9txhQD+ISIKd+z4KTsLfDXWO54mW4FrL0B6UMekihuFTHxjA4
-         mWqiXvSZaBqMoPjaZkTpqu3W32iI3deEG2SPuOOk3V1t+Ogfo04hn9wfS1OSh42CY1
-         40x0JKZbgu1Vc2gPMUdSdEVm0htaqlCsjzqmRRFj3YAxfSqai2zSrTEUgk9ycr1bUf
-         zEuzE/1fgq3xszRENwLrSf5jlC6iTdMY3MPBaOyfRDZZVK2Ih8TRD30XJyXoqvySzW
-         OLHzz0OEFCYwbN8CI0JXYwTfcHyCZdnXKnZBBwpeZBE/ojgJphCwj/J26s8QTpBy5I
-         oUEaqZW6DaZQA==
-Date:   Wed, 22 Jun 2022 08:07:26 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Aurabindo Pillai <aurabindo.pillai@amd.com>,
+        b=V7HL8fiSNh2nVOnGhaLT5mzFKGO0bFhfX8xmizxycfuBJD6OReItV2Ye2lESwbFDM
+         WQQnyIYKrp6ZHbSfcJVahfARMxD0JhrSDAHbdfdFZj4DKsFBlc7HR8gZf87UtxNVIr
+         zH5mlNbi2C1qH/6F7bOQXvXuBm8pgOPeWsesOEq0=
+Date:   Tue, 21 Jun 2022 15:28:45 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Muchun Song <songmuchun@bytedance.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Dave Airlie <airlied@linux.ie>
-Subject: Re: linux-next: build failure after merge of the amdgpu tree
-Message-ID: <20220622080726.39cbeb14@canb.auug.org.au>
-In-Reply-To: <CADnq5_OxNm9EwLDXishu+pMfT2mgOSTvkmgSm+cm98JiCsiJog@mail.gmail.com>
-References: <20220603144315.5adcddbf@canb.auug.org.au>
-        <20220615150013.30c9d7ad@canb.auug.org.au>
-        <20220621181551.5eb294f5@canb.auug.org.au>
-        <CADnq5_OxNm9EwLDXishu+pMfT2mgOSTvkmgSm+cm98JiCsiJog@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Ul+wBTZxn1nqnP+YuJF3goI";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Oscar Salvador <osalvador@suse.de>
+Subject: Re: linux-next: build failures after merge of the mm tree
+Message-Id: <20220621152845.16c801b4efd747173dc08559@linux-foundation.org>
+In-Reply-To: <YrB7Vq/WlGK99fxz@casper.infradead.org>
+References: <20220620164246.0d3f7784@canb.auug.org.au>
+        <CAMZfGtWmGOr1LRBnKGVeqP8p47xyaA0ny_rotdHmgLx8DOk6xg@mail.gmail.com>
+        <YrB7Vq/WlGK99fxz@casper.infradead.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Ul+wBTZxn1nqnP+YuJF3goI
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, 20 Jun 2022 14:51:18 +0100 Matthew Wilcox <willy@infradead.org> wrote:
 
-Hi Alex,
+> On Mon, Jun 20, 2022 at 03:11:31PM +0800, Muchun Song wrote:
+> > Thanks for your report. It is fixed in thread [1].
+> > 
+> > https://lore.kernel.org/all/20220619133851.68184-3-songmuchun@bytedance.com/ [1]
+> 
+> No, it's a different problem.  I suggest dropping/reverting
+> 
+> https://lore.kernel.org/linux-mm/20220617175020.717127-20-willy@infradead.org/
 
-On Tue, 21 Jun 2022 11:02:30 -0400 Alex Deucher <alexdeucher@gmail.com> wro=
-te:
->
-> On Tue, Jun 21, 2022 at 4:15 AM Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
-> >
-> > On Wed, 15 Jun 2022 15:00:13 +1000 Stephen Rothwell <sfr@canb.auug.org.=
-au> wrote: =20
-> > >
-> > > On Fri, 3 Jun 2022 14:43:15 +1000 Stephen Rothwell <sfr@canb.auug.org=
-.au> wrote: =20
-> > > >
-> > > > After merging the amdgpu tree, today's linux-next build (powerpc
-> > > > allyesconfig) failed like this:
-> > > >
-> > > > drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba=
-_32.c: In function 'dml32_ModeSupportAndSystemConfigurationFull':
-> > > > drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba=
-_32.c:3835:1: error: the frame size of 2752 bytes is larger than 2048 bytes=
- [-Werror=3Dframe-larger-than=3D]
-> > > >  3835 | } // ModeSupportAndSystemConfigurationFull
-> > > >       | ^
-> > > > cc1: all warnings being treated as errors =20
-> > >
-> > > I am still getting the above failure. =20
-> >
-> > I am still getting the above failure ... it has now been 19 days :-( =20
->=20
-> Is it still the same error or something else?  I thought this was
-> fixed in this patch:
-> https://gitlab.freedesktop.org/agd5f/linux/-/commit/d6aa8424bcac64b260845=
-2589c9a09984251c01c
+Dropping that creates awkwardness.  How about just uninlining it?
 
-Here is the message I got yesterday:
+--- a/include/linux/mm.h~mm-convert-destroy_compound_page-to-destroy_large_folio-fix
++++ a/include/linux/mm.h
+@@ -923,13 +923,7 @@ static inline void set_compound_page_dto
+ 	page[1].compound_dtor = compound_dtor;
+ }
+ 
+-static inline void destroy_large_folio(struct folio *folio)
+-{
+-	enum compound_dtor_id dtor = folio_page(folio, 1)->compound_dtor;
+-
+-	VM_BUG_ON_FOLIO(dtor >= NR_COMPOUND_DTORS, folio);
+-	compound_page_dtors[dtor](&folio->page);
+-}
++void destroy_large_folio(struct folio *folio);
+ 
+ static inline int head_compound_pincount(struct page *head)
+ {
+--- a/mm/page_alloc.c~mm-convert-destroy_compound_page-to-destroy_large_folio-fix
++++ a/mm/page_alloc.c
+@@ -822,6 +822,14 @@ void prep_compound_page(struct page *pag
+ 	prep_compound_head(page, order);
+ }
+ 
++void destroy_large_folio(struct folio *folio)
++{
++	enum compound_dtor_id dtor = folio_page(folio, 1)->compound_dtor;
++
++	VM_BUG_ON_FOLIO(dtor >= NR_COMPOUND_DTORS, folio);
++	compound_page_dtors[dtor](&folio->page);
++}
++
+ #ifdef CONFIG_DEBUG_PAGEALLOC
+ unsigned int _debug_guardpage_minorder;
+ 
+_
 
-drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c: I=
-n function 'dml32_ModeSupportAndSystemConfigurationFull':
-drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c:38=
-33:1: error: the frame size of 2720 bytes is larger than 2048 bytes [-Werro=
-r=3Dframe-larger-than=3D]
- 3833 | } // ModeSupportAndSystemConfigurationFull
-      | ^
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/Ul+wBTZxn1nqnP+YuJF3goI
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKyQR4ACgkQAVBC80lX
-0Gyy4Qf+MTOK27A9uUCkRmWgbIuRfoGzmMhnLQynnOICyJ3P+sQC2YWOgf2cPuQE
-VyVxglP+YR7soZRXcKfm4KVoGT1sNfDWV9H3+QU1WlEaougsUtwA2o3stqTBWl06
-BSo6XKjKDMIo1a0xm9ZIpa5sZQNssaZfVoDQ45l5ND13rGBp3NpeICHbIVXSRpEP
-E8PNGQvA3XKObDrzQRh5wPs6MAiVwAPLwrEpU4hcGLXvSVNuEFv+Xlj41XRIoXha
-bAfWpUiFajtaWKdPY2VQtx3cRwtw24KoKRhBtyEkkefmUhLFJFaKSoy5Lb1bJpiV
-/bkcUPfc8nFq9+pOa0sduQ/MIuOSEQ==
-=KZM8
------END PGP SIGNATURE-----
-
---Sig_/Ul+wBTZxn1nqnP+YuJF3goI--

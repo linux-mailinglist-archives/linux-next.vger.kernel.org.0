@@ -2,44 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F204655538D
-	for <lists+linux-next@lfdr.de>; Wed, 22 Jun 2022 20:50:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FF175553DE
+	for <lists+linux-next@lfdr.de>; Wed, 22 Jun 2022 20:59:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377229AbiFVStr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 22 Jun 2022 14:49:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37314 "EHLO
+        id S1376375AbiFVS7e (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 22 Jun 2022 14:59:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376918AbiFVStr (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 22 Jun 2022 14:49:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B205313BF;
-        Wed, 22 Jun 2022 11:49:45 -0700 (PDT)
+        with ESMTP id S235707AbiFVS7c (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 22 Jun 2022 14:59:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABC012E0B3;
+        Wed, 22 Jun 2022 11:59:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C9482B8208E;
-        Wed, 22 Jun 2022 18:49:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A37FC34114;
-        Wed, 22 Jun 2022 18:49:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4639261D55;
+        Wed, 22 Jun 2022 18:59:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C59DAC34114;
+        Wed, 22 Jun 2022 18:59:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1655923782;
-        bh=UGwK8U1CCaVfUgZAsLw+SYJ97g3dLCKIIomeuZiBQ1w=;
+        s=korg; t=1655924370;
+        bh=QQ6cuo8RAZmbdEridoZ6FW1VaSlmNyzCEQ2IWmydrZY=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=bZVT9UVsA84wtb28RRbkCP0+NC6uhTn6OwNN8hldf7jfAOb4e8eihS1G4q19GfWvm
-         aRdf7WUvX08IC68x4Slo5jEg54I5AYWVjqIr/WQyDwyLgQOeuIxP4uxlaBeYMdU58e
-         cXCLzglwW9AfkLEPqvNsN0YZ8ut6Uek+6XAR7TLA=
-Date:   Wed, 22 Jun 2022 11:49:30 -0700
+        b=p0B7D55DYDaSLRTKdFR6id2nhj2h3mTjIemRLAhadA4QcFGmJZz9h5CYOCk/opCWk
+         zREnGfkqG/Vx65TSSBYVQ3w8SsRrk4w7UQoYnOfJDs+5TFWM8Y+SbTpaQikwGyZ0dG
+         gIluXlq+P9vA3WDqZ4jAlpX4vqCAiteNB6bJPuhA=
+Date:   Wed, 22 Jun 2022 11:59:17 -0700
 From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Mike Kravetz <mike.kravetz@oracle.com>
+To:     Muchun Song <songmuchun@bytedance.com>
 Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Matthew Wilcox <willy@infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the mm tree
-Message-Id: <20220622114930.c907cbd361a7f71fb83eaf8f@linux-foundation.org>
-In-Reply-To: <YrNF0i01rU/r3yQn@monkey>
-References: <20220622155408.3ba2a9b7@canb.auug.org.au>
-        <20220622171117.70850960@canb.auug.org.au>
-        <YrNF0i01rU/r3yQn@monkey>
+Subject: Re: linux-next: manual merge of the mm tree with the folio tree
+Message-Id: <20220622115917.5268aeea70b22a566c90be8c@linux-foundation.org>
+In-Reply-To: <CAMZfGtVQr=7pUevVbbNK9teskfGsjcoif2sfHQ-YrDx5qHNiXg@mail.gmail.com>
+References: <20220622153815.6f2e671a@canb.auug.org.au>
+        <CAMZfGtVQr=7pUevVbbNK9teskfGsjcoif2sfHQ-YrDx5qHNiXg@mail.gmail.com>
 X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -54,28 +54,24 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, 22 Jun 2022 09:39:46 -0700 Mike Kravetz <mike.kravetz@oracle.com> wrote:
+On Wed, 22 Jun 2022 15:22:35 +0800 Muchun Song <songmuchun@bytedance.com> wrote:
 
-> > --- a/mm/hugetlb.c
-> > +++ b/mm/hugetlb.c
-> > @@ -6905,10 +6905,8 @@ unsigned long hugetlb_mask_last_page(struct hstate *h)
-> >  /* See description above.  Architectures can provide their own version. */
-> >  __weak unsigned long hugetlb_mask_last_page(struct hstate *h)
-> >  {
-> > -	unsigned long hp_size = huge_page_size(h);
-> > -
-> >  #ifdef CONFIG_ARCH_WANT_HUGE_PMD_SHARE
-> > -	if (hp_size == PMD_SIZE)
-> > +	if (huge_page_size(h) == PMD_SIZE)
-> >  		return PUD_SIZE - PMD_SIZE;
-> >  #endif
-> >  	return 0UL;
-> > -- 
+> > Today's linux-next merge of the mm tree got a conflict in:
+> >
+> >   mm/vmscan.c
+> >
+> > between commit:
+> >
+> >   15077be8badc ("vmscan: Add check_move_unevictable_folios()")
 > 
-> Thanks Stephen,  my bad for not building !CONFIG_ARCH_WANT_HUGE_PMD_SHARE and,
-> the error is pretty obvious. :(
-> 
-> Andrew, do you want me to send an updated version of the patch?  Or,
-> would you prefer to include Stephen's fix?
+> Sorry for the conflicts, I didn't see this change in the mm-unstable branch
+> yesterday. Based on this commit, I have reworked the following commit
+> (see attachment, mainly changes are about check_move_unevictable_folios()).
+> Andrew can pick it up if he wants to replace the original patch with
+> the new one.
 
-I added Stephen's fix, thanks.
+Your comments in
+https://lkml.kernel.org/r/YrM2XCwzu65cb81r@FVFYT0MHHV2J.googleapis.com
+make me wonder whether simply dropping cca700a8e695 ("mm: lru: use
+lruvec lock to serialize memcg changes") would be best?
+

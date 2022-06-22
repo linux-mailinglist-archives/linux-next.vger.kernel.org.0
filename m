@@ -2,370 +2,194 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 766CA553FDA
-	for <lists+linux-next@lfdr.de>; Wed, 22 Jun 2022 03:05:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3021553FE6
+	for <lists+linux-next@lfdr.de>; Wed, 22 Jun 2022 03:12:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230182AbiFVBFN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 21 Jun 2022 21:05:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59932 "EHLO
+        id S1355612AbiFVBLx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 21 Jun 2022 21:11:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229990AbiFVBFM (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 21 Jun 2022 21:05:12 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79E3831929;
-        Tue, 21 Jun 2022 18:05:10 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LSQCh4vQ6z4xD9;
-        Wed, 22 Jun 2022 11:05:03 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1655859905;
-        bh=6Wjb0uO4MuZpIMApUk52dwtBGgeFbM2Wn3vL3VkInMk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=K4x4mDjyHAgW06UifO5sAwvGITMG+N5vHm9eapfJCnV0Q2Cse7+0Cgv2bkw1YngDG
-         4lhjcoiyxLS7d1T+Sb2E15JjTULRore1GNToOao3D7cVkPQJcldCyALyEl/k00cJAD
-         jdqft7z1mfNeZSbVtEqWbw28JOhaSIapN4fw80m5xzNcjiVcKmLJNIQJES2+aWXeXb
-         LYBYvjnfTVN4UZ2U+alVbBROs2h+yVthVj+p+ldAZ+eur9eiZCaD447O6K2u+7JR4x
-         qaqE+CnTNeX5nec2cFapr4O1+NdAzwnT4VRF/oCGLDM+edMRXxkazYI9vi4MXBMkHX
-         LAEWU31MtO/Dg==
-Date:   Wed, 22 Jun 2022 11:04:51 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Ville =?UTF-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the drm-misc tree
-Message-ID: <20220622110451.27c68263@canb.auug.org.au>
-In-Reply-To: <YrF3wfumVi3q3bFj@intel.com>
-References: <20220621123656.7a479ad9@canb.auug.org.au>
-        <YrF3wfumVi3q3bFj@intel.com>
+        with ESMTP id S1355607AbiFVBLr (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 21 Jun 2022 21:11:47 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1292B3204D
+        for <linux-next@vger.kernel.org>; Tue, 21 Jun 2022 18:11:44 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id o9so12489884edt.12
+        for <linux-next@vger.kernel.org>; Tue, 21 Jun 2022 18:11:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=DqCQfjcZfJ+ruuhSkMvBw9XJIfHviZVa7mY8XvJJhLs=;
+        b=SLJUM6trAm7TO3ucIxX1VwKotldGWdIAwF+2+JPs2Rb0WOT0Pr/irD+RaeaoLh5JlF
+         7cg+MqVf+Q/vRVER8umKWFwcv3kIwOWvUlkppgehx1QccUh1aBLc6RZtwVeAUrDGuvoJ
+         XotRir3ilnfjGIaPMcya2V+71wHnW6EiqQOyncKdeL2kIvo0aGypjxI0xXUMgfVkNDAu
+         34FeQjL9DskkkzzelvXLpFB8oLATx1gewBJCCvcOOSgNQIfIhuP/Y13HCTfLLCXFDbcj
+         ZRq9SkWY52ag/wVbAynwp4Bp5h4TrHeuRmBgLHVz5HMHy6DZFG/0jLykm0uaTyAZ9PSm
+         oNcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=DqCQfjcZfJ+ruuhSkMvBw9XJIfHviZVa7mY8XvJJhLs=;
+        b=nda6y4t60vFnJiVzMX9JDDGSXjsauXV5cUNU5Gkw2qYN4tN6BOMDYvdZ3t0dBR4bLN
+         cNDK05RiaS0b2jYVxCZdGVPPph58kl/gAxjEcAD7XRVIwcdYMtc/xmG7cCVCbGU9uy4q
+         gHjvOdQt+zRLxCyQs2nRhN+QPhE/q3PBbY89xbk9kiebGeJSucVC2SJuppiC3FO51lb6
+         v0ugQsnM6MYPz4JI/6RRA9rxQ1TnDmrckXKoKsRWR2hiPzjmbkx3Cx9RSMVhrnc5uPd4
+         /EXmmOIZ8Cri98BN9SugH2q8vNuynqf5rAVA/H4UlLfQ1dS0BjsB90RrqeLDc4ijphXW
+         7yeA==
+X-Gm-Message-State: AJIora91v0jCoh0DpXoSBXiaGZQaBnieK2ClxgwpcyPnjpN1M73Z07zc
+        tgjU2zvmE3BHL+u/lg+mSxPM1brvuyeJNR+l2x1dKeLH0lQuPw==
+X-Google-Smtp-Source: AGRyM1uz/tRqIq8YRugq2/2SBCewMkEcozj0l41jEk/kpZwBaB6ESrqjTZhYh/C3AJm3TktK1Xu3vGPzCwJawitcA/s=
+X-Received: by 2002:a05:6402:249c:b0:431:3883:967a with SMTP id
+ q28-20020a056402249c00b004313883967amr1135089eda.264.1655860301822; Tue, 21
+ Jun 2022 18:11:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/DaBt2U5eE6eb97Ubf0U=Ci3";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 22 Jun 2022 06:41:30 +0530
+Message-ID: <CA+G9fYv4S2TqZ53oH5FEK07qHV+LwkZEx7+KNiCa5wZWruDSfA@mail.gmail.com>
+Subject: [next] Unable to handle kernel execute from non-executable memory at
+ virtual address - devm_clk_release
+To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        regressions@lists.linux.dev, lkft-triage@lists.linaro.org
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alexandru Ardelean <aardelean@deviqon.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Peng Fan <peng.fan@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/DaBt2U5eE6eb97Ubf0U=Ci3
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+The following kernel crash was noticed on arm64 Raspberry Pi 4 Model B
+devices while booting. This crash is always reproducible.
 
-Hi all,
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-On Tue, 21 Jun 2022 10:48:17 +0300 Ville Syrj=C3=A4l=C3=A4 <ville.syrjala@l=
-inux.intel.com> wrote:
->
-> On Tue, Jun 21, 2022 at 12:36:56PM +1000, Stephen Rothwell wrote:
-> >=20
-> > After merging the drm-misc tree, today's linux-next build (x86_64
-> > allmodconfig) failed like this:
-> >=20
-> > drivers/gpu/drm/xlnx/zynqmp_disp.c: In function 'zynqmp_disp_create_pla=
-nes':
-> > drivers/gpu/drm/xlnx/zynqmp_disp.c:1260:17: error: implicit declaration=
- of function 'drm_plane_create_zpos_immutable_property'; did you mean 'drm_=
-plane_create_scaling_filter_property'? [-Werror=3Dimplicit-function-declara=
-tion]
-> >  1260 |                 drm_plane_create_zpos_immutable_property(&layer=
-->plane, i);
-> >       |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >       |                 drm_plane_create_scaling_filter_property
-> > drivers/gpu/drm/xlnx/zynqmp_disp.c:1262:25: error: implicit declaration=
- of function 'drm_plane_create_alpha_property'; did you mean 'drm_plane_cre=
-ate_color_properties'? [-Werror=3Dimplicit-function-declaration]
-> >  1262 |                         drm_plane_create_alpha_property(&layer-=
->plane);
-> >       |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >       |                         drm_plane_create_color_properties
-> > cc1: all warnings being treated as errors
-> >=20
-> > Presumably caused by one of the commits that dropped includes from
-> > drm-ctrc.h.
-> >=20
-> > I have used the drm-misc tree from next-20220620 for today. =20
->=20
-> Sorry about that. Looks like my .config was missing some
-> dependencies of the zynqmp driver so it wasn't getting built.
-> I'll cook up a fix.
+metadata:
+  git_ref: master
+  git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+  git_sha: 1e502319853ceebfe7480a436ba22ab01372fa0c
+  git_describe: next-20220620
+  kernel_version: 5.19.0-rc3
+  kernel-config: https://builds.tuxbuild.com/2ApqivCh2DP6v2QxI17B2GnWiUk/config
+  build-url: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/-/pipelines/567830223
+  artifact-location: https://builds.tuxbuild.com/2ApqivCh2DP6v2QxI17B2GnWiUk
+  toolchain: gcc-11
 
-And today, I get these:
+Crash log:
+----------
+[    0.000000] Linux version 5.19.0-rc3-next-20220620
+(tuxmake@tuxmake) (aarch64-linux-gnu-gcc (Debian 11.3.0-3) 11.3.0, GNU
+ld (GNU Binutils for Debian) 2.38) #1 SMP PREEMPT @1655717238
+[    0.000000] Machine model: Raspberry Pi 4 Model B
+<trim>
 
-In file included from include/linux/list.h:5,
-                 from include/linux/preempt.h:11,
-                 from include/linux/spinlock.h:55,
-                 from include/linux/mmzone.h:8,
-                 from include/linux/gfp.h:6,
-                 from include/linux/mm.h:7,
-                 from include/linux/hyperv.h:17,
-                 from drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:6:
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c: In function 'hyperv_blit_to_vr=
-am_rect':
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:25:48: error: invalid use of un=
-defined type 'struct drm_framebuffer'
-   25 |         struct hyperv_drm_device *hv =3D to_hv(fb->dev);
-      |                                                ^~
-include/linux/container_of.h:18:33: note: in definition of macro 'container=
-_of'
-   18 |         void *__mptr =3D (void *)(ptr);                            =
-       \
-      |                                 ^~~
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:25:40: note: in expansion of ma=
-cro 'to_hv'
-   25 |         struct hyperv_drm_device *hv =3D to_hv(fb->dev);
-      |                                        ^~~~~
-In file included from include/linux/bits.h:22,
-                 from include/linux/ratelimit_types.h:5,
-                 from include/linux/printk.h:9,
-                 from include/asm-generic/bug.h:22,
-                 from arch/x86/include/asm/bug.h:87,
-                 from include/linux/bug.h:5,
-                 from include/linux/mmdebug.h:5,
-                 from include/linux/mm.h:6,
-                 from include/linux/hyperv.h:17,
-                 from drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:6:
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:25:48: error: invalid use of un=
-defined type 'struct drm_framebuffer'
-   25 |         struct hyperv_drm_device *hv =3D to_hv(fb->dev);
-      |                                                ^~
-include/linux/build_bug.h:78:56: note: in definition of macro '__static_ass=
-ert'
-   78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-      |                                                        ^~~~
-include/linux/container_of.h:19:9: note: in expansion of macro 'static_asse=
-rt'
-   19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||  =
-     \
-      |         ^~~~~~~~~~~~~
-include/linux/container_of.h:19:23: note: in expansion of macro '__same_typ=
-e'
-   19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||  =
-     \
-      |                       ^~~~~~~~~~~
-drivers/gpu/drm/hyperv/hyperv_drm.h:40:21: note: in expansion of macro 'con=
-tainer_of'
-   40 | #define to_hv(_dev) container_of(_dev, struct hyperv_drm_device, de=
-v)
-      |                     ^~~~~~~~~~~~
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:25:40: note: in expansion of ma=
-cro 'to_hv'
-   25 |         struct hyperv_drm_device *hv =3D to_hv(fb->dev);
-      |                                        ^~~~~
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:25:48: error: invalid use of un=
-defined type 'struct drm_framebuffer'
-   25 |         struct hyperv_drm_device *hv =3D to_hv(fb->dev);
-      |                                                ^~
-include/linux/build_bug.h:78:56: note: in definition of macro '__static_ass=
-ert'
-   78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-      |                                                        ^~~~
-include/linux/container_of.h:19:9: note: in expansion of macro 'static_asse=
-rt'
-   19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||  =
-     \
-      |         ^~~~~~~~~~~~~
-include/linux/container_of.h:20:23: note: in expansion of macro '__same_typ=
-e'
-   20 |                       __same_type(*(ptr), void),                   =
-     \
-      |                       ^~~~~~~~~~~
-drivers/gpu/drm/hyperv/hyperv_drm.h:40:21: note: in expansion of macro 'con=
-tainer_of'
-   40 | #define to_hv(_dev) container_of(_dev, struct hyperv_drm_device, de=
-v)
-      |                     ^~~~~~~~~~~~
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:25:40: note: in expansion of ma=
-cro 'to_hv'
-   25 |         struct hyperv_drm_device *hv =3D to_hv(fb->dev);
-      |                                        ^~~~~
-include/linux/compiler_types.h:293:27: error: expression in static assertio=
-n is not an integer
-  293 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), t=
-ypeof(b))
-      |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-include/linux/build_bug.h:78:56: note: in definition of macro '__static_ass=
-ert'
-   78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-      |                                                        ^~~~
-include/linux/container_of.h:19:9: note: in expansion of macro 'static_asse=
-rt'
-   19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||  =
-     \
-      |         ^~~~~~~~~~~~~
-include/linux/container_of.h:19:23: note: in expansion of macro '__same_typ=
-e'
-   19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||  =
-     \
-      |                       ^~~~~~~~~~~
-drivers/gpu/drm/hyperv/hyperv_drm.h:40:21: note: in expansion of macro 'con=
-tainer_of'
-   40 | #define to_hv(_dev) container_of(_dev, struct hyperv_drm_device, de=
-v)
-      |                     ^~~~~~~~~~~~
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:25:40: note: in expansion of ma=
-cro 'to_hv'
-   25 |         struct hyperv_drm_device *hv =3D to_hv(fb->dev);
-      |                                        ^~~~~
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:33:37: error: invalid use of un=
-defined type 'struct drm_framebuffer'
-   33 |         dst +=3D drm_fb_clip_offset(fb->pitches[0], fb->format, rec=
-t);
-      |                                     ^~
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:33:53: error: invalid use of un=
-defined type 'struct drm_framebuffer'
-   33 |         dst +=3D drm_fb_clip_offset(fb->pitches[0], fb->format, rec=
-t);
-      |                                                     ^~
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:34:35: error: invalid use of un=
-defined type 'struct drm_framebuffer'
-   34 |         drm_fb_memcpy_toio(dst, fb->pitches[0], vmap, fb, rect);
-      |                                   ^~
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c: In function 'hyperv_blit_to_vr=
-am_fullscreen':
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:46:25: error: invalid use of un=
-defined type 'struct drm_framebuffer'
-   46 |                 .x2 =3D fb->width,
-      |                         ^~
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:48:25: error: invalid use of un=
-defined type 'struct drm_framebuffer'
-   48 |                 .y2 =3D fb->height,
-      |                         ^~
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c: In function 'hyperv_connector_=
-get_modes':
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:58:17: error: implicit declarat=
-ion of function 'drm_add_modes_noedid' [-Werror=3Dimplicit-function-declara=
-tion]
-   58 |         count =3D drm_add_modes_noedid(connector,
-      |                 ^~~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:61:9: error: implicit declarati=
-on of function 'drm_set_preferred_mode'; did you mean 'drm_mm_reserve_node'=
-? [-Werror=3Dimplicit-function-declaration]
-   61 |         drm_set_preferred_mode(connector, hv->preferred_width,
-      |         ^~~~~~~~~~~~~~~~~~~~~~
-      |         drm_mm_reserve_node
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c: In function 'hyperv_check_size=
-':
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:93:27: error: invalid use of un=
-defined type 'struct drm_framebuffer'
-   93 |                 pitch =3D fb->pitches[0];
-      |                           ^~
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c: In function 'hyperv_pipe_enabl=
-e':
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:112:48: error: invalid use of u=
-ndefined type 'struct drm_framebuffer'
-  112 |                                 plane_state->fb->pitches[0]);
-      |                                                ^~
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c: In function 'hyperv_pipe_check=
-':
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:123:15: error: invalid use of u=
-ndefined type 'struct drm_framebuffer'
-  123 |         if (fb->format->format !=3D DRM_FORMAT_XRGB8888)
-      |               ^~
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:126:15: error: invalid use of u=
-ndefined type 'struct drm_framebuffer'
-  126 |         if (fb->pitches[0] * fb->height > hv->fb_size) {
-      |               ^~
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:126:32: error: invalid use of u=
-ndefined type 'struct drm_framebuffer'
-  126 |         if (fb->pitches[0] * fb->height > hv->fb_size) {
-      |                                ^~
-In file included from include/linux/device.h:15,
-                 from include/linux/hyperv.h:23,
-                 from drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:6:
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:128:42: error: invalid use of u=
-ndefined type 'struct drm_framebuffer'
-  128 |                         current->comm, fb->width, fb->height, fb->p=
-itches[0], hv->fb_size);
-      |                                          ^~
-include/linux/dev_printk.h:110:37: note: in definition of macro 'dev_printk=
-_index_wrap'
-  110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                  =
-     \
-      |                                     ^~~~~~~~~~~
-include/drm/drm_print.h:425:9: note: in expansion of macro 'dev_err'
-  425 |         dev_##level##type((drm)->dev, "[drm] " fmt, ##__VA_ARGS__)
-      |         ^~~~
-include/drm/drm_print.h:438:9: note: in expansion of macro '__drm_printk'
-  438 |         __drm_printk((drm), err,, "*ERROR* " fmt, ##__VA_ARGS__)
-      |         ^~~~~~~~~~~~
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:127:17: note: in expansion of m=
-acro 'drm_err'
-  127 |                 drm_err(&hv->dev, "fb size requested by %s for %dX%=
-d (pitch %d) greater than %ld\n",
-      |                 ^~~~~~~
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:128:53: error: invalid use of u=
-ndefined type 'struct drm_framebuffer'
-  128 |                         current->comm, fb->width, fb->height, fb->p=
-itches[0], hv->fb_size);
-      |                                                     ^~
-include/linux/dev_printk.h:110:37: note: in definition of macro 'dev_printk=
-_index_wrap'
-  110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                  =
-     \
-      |                                     ^~~~~~~~~~~
-include/drm/drm_print.h:425:9: note: in expansion of macro 'dev_err'
-  425 |         dev_##level##type((drm)->dev, "[drm] " fmt, ##__VA_ARGS__)
-      |         ^~~~
-include/drm/drm_print.h:438:9: note: in expansion of macro '__drm_printk'
-  438 |         __drm_printk((drm), err,, "*ERROR* " fmt, ##__VA_ARGS__)
-      |         ^~~~~~~~~~~~
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:127:17: note: in expansion of m=
-acro 'drm_err'
-  127 |                 drm_err(&hv->dev, "fb size requested by %s for %dX%=
-d (pitch %d) greater than %ld\n",
-      |                 ^~~~~~~
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:128:65: error: invalid use of u=
-ndefined type 'struct drm_framebuffer'
-  128 |                         current->comm, fb->width, fb->height, fb->p=
-itches[0], hv->fb_size);
-      |                                                                 ^~
-include/linux/dev_printk.h:110:37: note: in definition of macro 'dev_printk=
-_index_wrap'
-  110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                  =
-     \
-      |                                     ^~~~~~~~~~~
-include/drm/drm_print.h:425:9: note: in expansion of macro 'dev_err'
-  425 |         dev_##level##type((drm)->dev, "[drm] " fmt, ##__VA_ARGS__)
-      |         ^~~~
-include/drm/drm_print.h:438:9: note: in expansion of macro '__drm_printk'
-  438 |         __drm_printk((drm), err,, "*ERROR* " fmt, ##__VA_ARGS__)
-      |         ^~~~~~~~~~~~
-drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:127:17: note: in expansion of m=
-acro 'drm_err'
-  127 |                 drm_err(&hv->dev, "fb size requested by %s for %dX%=
-d (pitch %d) greater than %ld\n",
-      |                 ^~~~~~~
-cc1: all warnings being treated as errors
+[   18.462465] Bluetooth: HCI UART protocol Broadcom registered
+[   18.462543] Bluetooth: HCI UART protocol QCA registered
+[   18.462633] Bluetooth: HCI UART protocol Marvell registered
+[   18.464172] hci_uart_bcm serial0-0: supply vbat not found, using
+dummy regulator
+[   18.464478] hci_uart_bcm serial0-0: supply vddio not found, using
+dummy regulator
+[   18.464942] cfg80211: Loaded X.509 cert 'sforshee: 00b28ddf47aef9cea7'
+[   18.465655] platform regulatory.0: Direct firmware load for
+regulatory.db failed with error -2
+[   18.465683] cfg80211: failed to load regulatory.db
+[   18.465928] bcm2835-power bcm2835-power: Timeout waiting for grafx power OK
+[   18.472964] bcm2835-power bcm2835-power: Timeout waiting for grafx power OK
+[   18.475203] raspberrypi-firmware soc:firmware: Request 0x00030066
+returned status 0x80000001
+[   18.475231] vc4-drm gpu: [drm] Couldn't stop firmware display driver: -22
+[   18.490782] vc4-drm gpu: bound fe400000.hvs (ops vc4_hvs_ops [vc4])
+[   18.500428] Unable to handle kernel execute from non-executable
+memory at virtual address ffff000040241c10
+[   18.500455] Mem abort info:
+[   18.500465]   ESR = 0x000000008600000f
+[   18.500477]   EC = 0x21: IABT (current EL), IL = 32 bits
+[   18.500491]   SET = 0, FnV = 0
+[   18.500503]   EA = 0, S1PTW = 0
+[   18.500514]   FSC = 0x0f: level 3 permission fault
+[   18.500527] swapper pgtable: 4k pages, 48-bit VAs, pgdp=00000000020b6000
+[   18.500542] [ffff000040241c10] pgd=18000000fbff8003,
+p4d=18000000fbff8003, pud=18000000fbe2a003, pmd=18000000fbe28003,
+pte=0068000040241707
+[   18.500612] Internal error: Oops: 8600000f [#1] PREEMPT SMP
+[   18.500624] Modules linked in: hci_uart vc4(+) btqca btbcm cec
+bluetooth drm_display_helper cfg80211 crct10dif_ce v3d drm_cma_helper
+clk_raspberrypi drm_shmem_helper reset_raspberrypi raspberrypi_hwmon
+drm_kms_helper gpu_sched rfkill bcm2711_thermal iproc_rng200
+pwm_bcm2835 i2c_bcm2835 drm rng_core pcie_brcmstb fuse
+[   18.500752] CPU: 0 PID: 246 Comm: systemd-udevd Not tainted
+5.19.0-rc3-next-20220620 #1
+[   18.500765] Hardware name: Raspberry Pi 4 Model B (DT)
+[   18.500772] pstate: 80000005 (Nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[   18.500785] pc : 0xffff000040241c10
+[   18.500800] lr : devm_clk_release+0x30/0x50
+[   18.500817] sp : ffff80000b42b6f0
+[   18.500823] x29: ffff80000b42b6f0 x28: ffff0000423bad50 x27: 0000000000000000
+[   18.500845] x26: 00000000fffffdfb x25: ffff800009cc7d80 x24: ffff80000a98ea78
+[   18.500866] x23: ffff80000a0d7008 x22: ffff000040241c10 x21: ffff80000b42b7a8
+[   18.500886] x20: ffff00004893c600 x19: ffff00004893d300 x18: 000000003957dc32
+[   18.500906] x17: 000000000000001c x16: 000000005d75779c x15: 00000000c3027b0d
+[   18.500926] x14: 000000000000001a x13: 0000000000000000 x12: ffff000042d25338
+[   18.500946] x11: 0000000000000040 x10: ffff000042d25240 x9 : ffff800008a4d774
+[   18.500965] x8 : ffff000042d25268 x7 : 0000000000000000 x6 : ffff80000a98f000
+[   18.500984] x5 : ffff800008a4d780 x4 : fffffc0001224f20 x3 : ffff00004893c700
+[   18.501003] x2 : ffff80000886d9d0 x1 : ffff000040241c10 x0 : ffff000040104700
+[   18.501022] Call trace:
+[   18.501028]  0xffff000040241c10
+[   18.501037]  release_nodes+0x64/0x104
+[   18.501052]  devres_release_group+0xd8/0x14c
+[   18.501063]  component_bind_all+0x144/0x290
+[   18.501079]  vc4_drm_bind+0x118/0x2f4 [vc4]
+[   18.501181]  try_to_bring_up_aggregate_device+0x230/0x320
+[   18.501198]  component_master_add_with_match+0xbc/0x10c
+[   18.501212]  vc4_platform_drm_probe+0xcc/0x10c [vc4]
+[   18.501300]  platform_probe+0x74/0xf0
+[   18.501318]  really_probe+0xc8/0x3f0
+[   18.501331]  __driver_probe_device+0x11c/0x190
+[   18.501344]  driver_probe_device+0x44/0x100
+[   18.501357]  __driver_attach+0xd8/0x200
+[   18.501370]  bus_for_each_dev+0x7c/0xe0
+[   18.501381]  driver_attach+0x30/0x40
+[   18.501393]  bus_add_driver+0x154/0x240
+[   18.501405]  driver_register+0x84/0x140
+[   18.501419]  __platform_driver_register+0x34/0x40
+[   18.501434]  vc4_drm_register+0x5c/0x1000 [vc4]
+[   18.501520]  do_one_initcall+0x50/0x2b0
+[   18.501533]  do_init_module+0x50/0x200
+[   18.501544]  load_module+0x1b80/0x1f40
+[   18.501553]  __do_sys_finit_module+0xac/0x12c
+[   18.501562]  __arm64_sys_finit_module+0x2c/0x40
+[   18.501571]  invoke_syscall+0x50/0x120
+[   18.501588]  el0_svc_common.constprop.0+0x104/0x124
+[   18.501604]  do_el0_svc+0x3c/0xcc
+[   18.501619]  el0_svc+0x38/0xc0
+[   18.501633]  el0t_64_sync_handler+0xbc/0x140
+[   18.501647]  el0t_64_sync+0x18c/0x190
+[   18.501663] Code: 40a43e00 ffff0000 ffffffff 00000000 (40a43e00)
+[   18.501674] ---[ end trace 0000000000000000 ]---
 
-Please do some allmodconfig builds.
 
-I have used the drm-misc tree from next-20220620 again for today.
---=20
-Cheers,
-Stephen Rothwell
+URL:
+[1] https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220620/testrun/10270853/suite/ltp-sched-tests/test/cfs_bandwidth01/details/
+[2] https://lkft.validation.linaro.org/scheduler/job/5191948#L810
 
---Sig_/DaBt2U5eE6eb97Ubf0U=Ci3
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKyarMACgkQAVBC80lX
-0Gx1IAgAi0+rRfrP+pQqJVFqdO7+LV4fuhNO5+znr5R1NADfACsREQ7zne4U802p
-n/cholc1NOJA3OQPQf4bK+9qTLOH0gu3vQOyfKKcZ870Tt+gjtYgm396jIt5mYT4
-DRgo2gfNdsFnanJoNEth8Czz9Qr6bYn+WCDrRnDGtWmML7oP3A9AgQFNPIbtv294
-eHnkBI8lB6GkUl2VnEKVDb8y/GyaKu9SAuZ1oPZ53pHfB8ft6aZ7ibrREPF+vVWA
-e07x/iMK55m15+InEVWsVtdbxFJyCiL/z2es169i2HJSgxvSygVKQ5r7Zywz84MY
-Xsrn5m+Tt5YhnLBJQ5FqMi3e1xQvzQ==
-=KInL
------END PGP SIGNATURE-----
-
---Sig_/DaBt2U5eE6eb97Ubf0U=Ci3--
+--
+Linaro LKFT
+https://lkft.linaro.org

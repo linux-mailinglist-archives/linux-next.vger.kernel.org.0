@@ -2,109 +2,99 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1883E556F3B
-	for <lists+linux-next@lfdr.de>; Thu, 23 Jun 2022 01:44:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30BA25570F7
+	for <lists+linux-next@lfdr.de>; Thu, 23 Jun 2022 04:15:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233252AbiFVXor (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 22 Jun 2022 19:44:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53072 "EHLO
+        id S1377046AbiFWCPv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 22 Jun 2022 22:15:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbiFVXor (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 22 Jun 2022 19:44:47 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E75C42A17
-        for <linux-next@vger.kernel.org>; Wed, 22 Jun 2022 16:44:46 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id d5so16677512plo.12
-        for <linux-next@vger.kernel.org>; Wed, 22 Jun 2022 16:44:46 -0700 (PDT)
+        with ESMTP id S239454AbiFWCPu (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 22 Jun 2022 22:15:50 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2610833EA4
+        for <linux-next@vger.kernel.org>; Wed, 22 Jun 2022 19:15:47 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-2ef5380669cso180614507b3.9
+        for <linux-next@vger.kernel.org>; Wed, 22 Jun 2022 19:15:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=xiuf6zzvbLG03UYs0C2KLwj/eVIRqceMt7/BlzFnYGs=;
-        b=xg+bSaA4gWWCgUv2DixZs6U6w9neQ3CWRdkRAs7h7X8ylApaGxfOBVIYZHibDzA0BO
-         qwwctctan+VZXqN+VpninBE7FM0Mwa2fmYOmg+GDLRWiVGXjWktKj6Nk5DMvSg3R3FBJ
-         uueM3ZRs+Y6MptlF/jEk4fOA/lpGOYb+HNjx3210xZu0FDVkMYI8iNyUAbPapoSas5WO
-         5JiQd0jeov/ucQRwrOIToeDPpZQQ0kqZt2pqelfTChiW0Pnwg8sAL2AissCoyUljQwfF
-         cEdS+6rx95FbvJwSetOHDT3zgMtj3djbS5bDsL9R2MPXQy8DVnr64Wf1ZsqccpxpGb2P
-         62tg==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5C+XiHaOAuGr9ITlyPSDvgchDu5ILHwN6mWwq8+shYQ=;
+        b=RMUg4hFqzCPu+TwayaHdoFw1lEbENOR5xl7OVHaaEiPmKSiuW3Kv90JlK7sqZ6l10G
+         l+HgfjYGmez3OLT2bYaEshICznR44QsKw3PKKnmd8QUZJYNxScpifo0BsC5K6dOw9iwA
+         BkpzezUlxh2ElDJoRYqiE4r9vZhA/WX22xWN223+4yKu7xAMTnQtD0d8v4qMtoTPnEze
+         8ZhCJxsH6zs2HBu2lZ7BLoTq7y/QdEVDrOs6WLZ496MQeB2kHV9ALEEu3SVZfsObKgYW
+         3o84Af8L9ggU9AQ7/Amd/kLnSEULTzT5zFqxvz1HM+aAuIV/aTvcSAz9pvB9xBrcmuzZ
+         az1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=xiuf6zzvbLG03UYs0C2KLwj/eVIRqceMt7/BlzFnYGs=;
-        b=dPwXQfGYjJrkyWwaGVnQB0AVwzJZd1hgrvnFsF/auflFbQmGAH3EpD71cdCy9PXVdY
-         JFigijwOj6VTu5kA1/2U8cRwk0AuwRhbyXQT3J1YVtOG2Bjij5wIMi1X8XG5umqO+ulI
-         fZz5D3xYESymfcbERXBhPxsiIh1Pq6oL7OrgubHennK6NT51W5NMOFWs5uhlpM7KynUb
-         1vr+C2jKvIQAUuu8lkhEscmFlaf0ubHAnIBgNQe/ytPpMVE1EQTKOKMYKKZyBBUJFE15
-         j1K1qTkr0wapbRFhUO1g8+7lMF9mQne6oK8ZreQqUtMV/p7PrahFY25JQTEUJYsy4+Kr
-         /SQw==
-X-Gm-Message-State: AJIora/94FOLlPcwWLjBFyyVBjZ4cTUJNVPygg9BwQkDqXQRrJKOL/Qg
-        z26IDCfmx7wuFmCpK31LpBoiNQ==
-X-Google-Smtp-Source: AGRyM1uilk/Jr0x+syRpFZ/nF+4NI/OGSgvao9e50J8tXM/WSqNrc24QNGuHDvCaqAtgKFS0vAZM3w==
-X-Received: by 2002:a17:90b:354c:b0:1ec:9ef2:8a0e with SMTP id lt12-20020a17090b354c00b001ec9ef28a0emr936394pjb.72.1655941485638;
-        Wed, 22 Jun 2022 16:44:45 -0700 (PDT)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id md17-20020a17090b23d100b001e2f383110bsm357045pjb.11.2022.06.22.16.44.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Jun 2022 16:44:45 -0700 (PDT)
-Message-ID: <fb6f3d33-2d56-cf3b-25e8-85c24dcbb3d8@kernel.dk>
-Date:   Wed, 22 Jun 2022 17:44:43 -0600
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5C+XiHaOAuGr9ITlyPSDvgchDu5ILHwN6mWwq8+shYQ=;
+        b=6bEssR9lgT87APyb/+q0bmZWQfCW9pSUxk8FbAhsnOMNPLsYEOKVLHI1zKwI/B5Ccu
+         ykri3OiNnwNbc5wC2z2XZ3qVF4XSEH5hF/o8YZxCuyM+n+ASeH5kcYrmyzuABxpFHTwv
+         T0Z991/jkhtKPxUjQ4i/OLX9QMXYTTSTGoEZ3fuzmw3JuSccNVMF/FG4vcxqBUbtcOkD
+         c7iU8oNWPZa6KQ0taiwqYh4uDMSfVNCeyyFqO9EW46zCHaBGbWrIM7be+eP1fbyJwn5d
+         ZbkwX6C87nr3L5weWhM3Wo1wqyHU3fW4wDMvbNSY0eG2kKBXsYKWpYbTrBDsD2fghbLV
+         WvLQ==
+X-Gm-Message-State: AJIora8v4FhPrS3iR3ABRu4eI131KweMSP/YUbP+tGnPpamH+xshjlDV
+        RH/lFkLK+PXJlQsFsW1z9EXnC2tKiM6MMYJ+0+OdEow1BePkRpbK
+X-Google-Smtp-Source: AGRyM1tLIkOQVRgWFenL32+zjV3O6TY+8dBQMEHu+tQIvlvZxfX6Z8ZhPGrxlxJ98TDk6yZ4UWzV9dtLUCpv4I232TE=
+X-Received: by 2002:a81:2fd8:0:b0:314:eaa:bbc1 with SMTP id
+ v207-20020a812fd8000000b003140eaabbc1mr8055504ywv.141.1655950546326; Wed, 22
+ Jun 2022 19:15:46 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: linux-next: Fixes tag needs some work in the block tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Dylan Yudaken <dylany@fb.com>,
+References: <20220622153815.6f2e671a@canb.auug.org.au> <CAMZfGtVQr=7pUevVbbNK9teskfGsjcoif2sfHQ-YrDx5qHNiXg@mail.gmail.com>
+ <20220622115917.5268aeea70b22a566c90be8c@linux-foundation.org>
+In-Reply-To: <20220622115917.5268aeea70b22a566c90be8c@linux-foundation.org>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Thu, 23 Jun 2022 10:15:09 +0800
+Message-ID: <CAMZfGtUQonnzoUOgZBnt5AoTbG6PGo00C-86TBQYM7DqPdLHVQ@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the mm tree with the folio tree
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Matthew Wilcox <willy@infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220623092143.2b9d2e7e@canb.auug.org.au>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20220623092143.2b9d2e7e@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 6/22/22 5:21 PM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> In commit
-> 
->   1da6baa4e4c2 ("io_uring: move io_uring_get_opcode out of TP_printk")
-> 
-> Fixes tag
-> 
->   Fixes: 033b87d2 ("io_uring: use the text representation of ops in trace")
-> 
-> has these problem(s):
-> 
->   - SHA1 should be at least 12 digits long
->     This can be fixed for the future by setting core.abbrev to 12 (or
->     more) or (for git v2.11 or later) just making sure it is not set
->     (or set to "auto").
+On Thu, Jun 23, 2022 at 2:59 AM Andrew Morton <akpm@linux-foundation.org> wrote:
+>
+> On Wed, 22 Jun 2022 15:22:35 +0800 Muchun Song <songmuchun@bytedance.com> wrote:
+>
+> > > Today's linux-next merge of the mm tree got a conflict in:
+> > >
+> > >   mm/vmscan.c
+> > >
+> > > between commit:
+> > >
+> > >   15077be8badc ("vmscan: Add check_move_unevictable_folios()")
+> >
+> > Sorry for the conflicts, I didn't see this change in the mm-unstable branch
+> > yesterday. Based on this commit, I have reworked the following commit
+> > (see attachment, mainly changes are about check_move_unevictable_folios()).
+> > Andrew can pick it up if he wants to replace the original patch with
+> > the new one.
+>
+> Your comments in
+> https://lkml.kernel.org/r/YrM2XCwzu65cb81r@FVFYT0MHHV2J.googleapis.com
+> make me wonder whether simply dropping cca700a8e695 ("mm: lru: use
+> lruvec lock to serialize memcg changes") would be best?
+>
 
-I'll rebase on -rc4 anyway, I'll fix thie one up.
+Hi Andrew,
 
-Dylan, here's what I use for adding Fixes tags:
+Well, I think we can drop this now. After memcg reparenting work stabilizes,
+I will resend this patch again.
 
-[pretty]
-        fixes = Fixes: %h (\"%s\")
-
-and then I just do:
-
-git fixes 033b87d2
-Fixes: 033b87d24f72 ("io_uring: use the text representation of ops in trace")
-
-to generate it.
-
--- 
-Jens Axboe
-
+Thanks.

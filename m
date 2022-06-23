@@ -2,114 +2,188 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 217395571FC
-	for <lists+linux-next@lfdr.de>; Thu, 23 Jun 2022 06:57:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B98855572DC
+	for <lists+linux-next@lfdr.de>; Thu, 23 Jun 2022 08:09:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232427AbiFWEpX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 23 Jun 2022 00:45:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43604 "EHLO
+        id S229766AbiFWGID (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 23 Jun 2022 02:08:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242166AbiFWDnI (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 22 Jun 2022 23:43:08 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6496811A08;
-        Wed, 22 Jun 2022 20:43:06 -0700 (PDT)
+        with ESMTP id S229732AbiFWGHt (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 23 Jun 2022 02:07:49 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB0264477F;
+        Wed, 22 Jun 2022 23:07:46 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LT5gT2f72z4xYL;
-        Thu, 23 Jun 2022 13:43:01 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LT8tN2J1hz4xZj;
+        Thu, 23 Jun 2022 16:07:40 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1655955781;
-        bh=0Iy4OEIOAU8zNkxPzQHF1oZRYaY+Gs5GZUVJpOQqm6U=;
+        s=201702; t=1655964462;
+        bh=DIECM9rabt+6+wTd58y+akkzG6KhfGCuRfy6xDMDTaE=;
         h=Date:From:To:Cc:Subject:From;
-        b=ljmLcDfgNKT7tCXEBhGwtXtk9yyYQL74Hzrdh9wPpXDUQ416zvWnd3y8nNZhT89L4
-         Scm1DNEakRlhCeFuYMh9aLH0DGmgopyCOuDFkAw7Z9BEjFMd9gAeQSjNtbF2N7U1q6
-         5mQW0C8ExfJDLRVydjBNwF//EQzF//s+PTEZpUTGR87izG9T0HcrSDidpxGTEuexZa
-         u/CdCe2/OFDku+YaC5HVUqBRiLqTTqYERXMumxgYZc/W3K6SIpaaPfO5mV5noQ1Bdt
-         +feu50jjzFpOAaL/o1O57pxD9XA8R+5sbgxETbLi8BTsn6XIeZF3/YDDZ+GpHiKzDg
-         GGdRz4WVFlDow==
-Date:   Thu, 23 Jun 2022 13:42:59 +1000
+        b=Vjb8nXaI3FUenZyvhRKP/nNNKBkQWcF1uwuloyaQUJa6x0qf77R9yzI6CfRpRKdlx
+         B2gfJyh1isX7i2t+MFMv/1i1j91k1Z6VFcevzHOx94MOzS7mOc0qEoQd6kf7a8CrJO
+         dtSMhn26GsNM4By9LqDVhYFwgvdfi0yU4qKB19IGSfiyhPxDx5KUuWpT8nXolAk6hI
+         YooH+duggbpBGbu+bPGZvLjOJXNTJG/l2oHExJyzkFUmXJoxoPwCWS2f1fuT5NMEIQ
+         Xz1tUUCSNJquSaaVmn+GCSHFzMaZcjSmpoI+6ubp6YNxu/3jMmGFjioQdeYhm8Y2Ke
+         Ss9Gkms52m9Vw==
+Date:   Thu, 23 Jun 2022 16:07:23 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>, Mark Brown <broonie@kernel.org>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
+To:     Alex Deucher <alexdeucher@gmail.com>, Greg KH <greg@kroah.com>
+Cc:     Somalapuram Amaranath <Amaranath.Somalapuram@amd.com>,
+        Duoming Zhou <duoming@zju.edu.cn>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dave Airlie <airlied@linux.ie>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the usb tree with the spi tree
-Message-ID: <20220623134259.03af40f6@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the amdgpu tree
+Message-ID: <20220623160723.7a44b573@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/E/VbeL2eq.0rP8GbAN0KS4w";
+Content-Type: multipart/signed; boundary="Sig_/WGFqr7wXQvk8d+QUrjBo9mH";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/E/VbeL2eq.0rP8GbAN0KS4w
+--Sig_/WGFqr7wXQvk8d+QUrjBo9mH
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the usb tree got a conflict in:
+After merging the amdgpu tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-  MAINTAINERS
+In file included from include/linux/radix-tree.h:12,
+                 from include/linux/idr.h:15,
+                 from include/linux/kernfs.h:12,
+                 from include/linux/sysfs.h:16,
+                 from include/linux/kobject.h:20,
+                 from include/linux/energy_model.h:7,
+                 from include/linux/device.h:16,
+                 from include/linux/power_supply.h:15,
+                 from drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:28:
+drivers/gpu/drm/amd/amdgpu/amdgpu_device.c: In function 'amdgpu_reset_captu=
+re_coredumpm':
+include/linux/gfp.h:337:25: error: passing argument 5 of 'dev_coredumpm' ma=
+kes pointer from integer without a cast [-Werror=3Dint-conversion]
+  337 | #define GFP_KERNEL      (__GFP_RECLAIM | __GFP_IO | __GFP_FS)
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                         |
+      |                         unsigned int
+drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:4726:55: note: in expansion of m=
+acro 'GFP_KERNEL'
+ 4726 |         dev_coredumpm(dev->dev, THIS_MODULE, adev, 0, GFP_KERNEL,
+      |                                                       ^~~~~~~~~~
+In file included from drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:35:
+include/linux/devcoredump.h:59:30: note: expected 'ssize_t (*)(char *, loff=
+_t,  size_t,  void *, size_t)' {aka 'long int (*)(char *, long long int,  l=
+ong unsigned int,  void *, long unsigned int)'} but argument is of type 'un=
+signed int'
+   59 |                    ssize_t (*read)(char *buffer, loff_t offset, siz=
+e_t count,
+      |                    ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
+~~~~~~~~~~
+   60 |                                    void *data, size_t datalen),
+      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:4727:23: error: passing argument=
+ 6 of 'dev_coredumpm' from incompatible pointer type [-Werror=3Dincompatibl=
+e-pointer-types]
+ 4727 |                       amdgpu_devcoredump_read, amdgpu_devcoredump_f=
+ree);
+      |                       ^~~~~~~~~~~~~~~~~~~~~~~
+      |                       |
+      |                       ssize_t (*)(char *, loff_t,  size_t,  void *,=
+ size_t) {aka long int (*)(char *, long long int,  long unsigned int,  void=
+ *, long unsigned int)}
+In file included from drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:35:
+include/linux/devcoredump.h:61:27: note: expected 'void (*)(void *)' but ar=
+gument is of type 'ssize_t (*)(char *, loff_t,  size_t,  void *, size_t)' {=
+aka 'long int (*)(char *, long long int,  long unsigned int,  void *, long =
+unsigned int)'}
+   61 |                    void (*free)(void *data));
+      |                    ~~~~~~~^~~~~~~~~~~~~~~~~
+drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:4726:9: error: too many argument=
+s to function 'dev_coredumpm'
+ 4726 |         dev_coredumpm(dev->dev, THIS_MODULE, adev, 0, GFP_KERNEL,
+      |         ^~~~~~~~~~~~~
+In file included from drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:35:
+include/linux/devcoredump.h:57:6: note: declared here
+   57 | void dev_coredumpm(struct device *dev, struct module *owner,
+      |      ^~~~~~~~~~~~~
+cc1: all warnings being treated as errors
 
-between commit:
+Caused by commit
 
-  f303c6b26ced ("MAINTAINERS: add spi to PolarFire SoC entry")
+  3d8785f6c04a ("drm/amdgpu: adding device coredump support")
 
-from the spi tree and commit:
+interacting with commit
 
-  4a691b8c157a ("MAINTAINERS: add musb to PolarFire SoC entry")
+  77515ebaf019 ("devcoredump: remove the useless gfp_t parameter in dev_cor=
+edumpv and dev_coredumpm")
 
-from the usb tree.
+from the driver-core tree.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+I have applied the following merge resolution patch for today.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Thu, 23 Jun 2022 15:56:22 +1000
+Subject: [PATCH] fix up for "devcoredump: remove the useless gfp_t paramete=
+r in dev_coredumpv and dev_coredumpm"
+
+interacting with
+
+  3d8785f6c04a ("drm/amdgpu: adding device coredump support")
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/gpu/drm/amd/amdgpu/amdgpu_device.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c b/drivers/gpu/drm/a=
+md/amdgpu/amdgpu_device.c
+index f2a4c268ac72..9d6418bb963e 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+@@ -4723,7 +4723,7 @@ static void amdgpu_reset_capture_coredumpm(struct amd=
+gpu_device *adev)
+ 	struct drm_device *dev =3D adev_to_drm(adev);
+=20
+ 	ktime_get_ts64(&adev->reset_time);
+-	dev_coredumpm(dev->dev, THIS_MODULE, adev, 0, GFP_KERNEL,
++	dev_coredumpm(dev->dev, THIS_MODULE, adev, 0,
+ 		      amdgpu_devcoredump_read, amdgpu_devcoredump_free);
+ }
+ #endif
+--=20
+2.35.1
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc MAINTAINERS
-index fcaa66ea848b,e73c77d479bb..000000000000
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@@ -17225,7 -17169,7 +17232,8 @@@ S:	Supporte
-  F:	arch/riscv/boot/dts/microchip/
-  F:	drivers/mailbox/mailbox-mpfs.c
-  F:	drivers/soc/microchip/
- +F:	drivers/spi/spi-microchip-core.c
-+ F:	drivers/usb/musb/mpfs.c
-  F:	include/soc/microchip/mpfs.h
- =20
-  RNBD BLOCK DRIVERS
-
---Sig_/E/VbeL2eq.0rP8GbAN0KS4w
+--Sig_/WGFqr7wXQvk8d+QUrjBo9mH
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKz4UMACgkQAVBC80lX
-0GwcBQf+OuIXeWzcmZAswkWlIzS3ucWc5npCDzGPxbA7hTkS0tScBpXd0QvajdB7
-c0TlhkxBnrcUvlDNitJkx7jypSJYAxRxSItUPq33TOd3SX+KyQveCIYmum7G+MZ6
-RO6keSv3ymYOtSBtW8Ma0BgGQM56XwdA6cSc4K1275y2JC/uNco53js6txzN8eX9
-D+QBPDpCXAzmygOMGPwRwEC9WP0i3pL+2WjjawrAozr7lIZcKZW1aFeifRXAuTZN
-58ifu6UsCXP9PKCKZ5VzXYiuERlAbRBFOvpbIoxNkLZN532GQ5u0tJB31KGSBxfc
-yAPMIGAyXaTorNSZkm1piAnh6vK0gw==
-=2uj1
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmK0AxsACgkQAVBC80lX
+0GxKKggAph9gBasqfVPiZkSSFWEaS536wSbZ05kPaC3YBGfIU5aJqtrQblXFovlX
+zLP+xlYTTghd5gnFIOdcfUuj8dyJoKOdCpO2Qikn6j0ycrhWsPDQ4i3FbwHEbQe5
+baN2ld4WbV9WjDJA6aa5qySIBy1aaPRUcCXKdiDJmKHE2w6Zz3HIiqFvkD+i/jDJ
+yFPqUJ2hZPk9Fwyi2HkE2xi5N81cq8xuzFWo9isWlLfiOnMna4Uvm2h2vnB9oWxT
+92/fYO/x4LPfMGZB4HaDrdlLxoJ07TE1UscVYIZ85e5vNMisTu9wNNm/mXZSRNCY
+X0xdpcRbzQpMUbDHtA5SuMmp1u389Q==
+=hbFV
 -----END PGP SIGNATURE-----
 
---Sig_/E/VbeL2eq.0rP8GbAN0KS4w--
+--Sig_/WGFqr7wXQvk8d+QUrjBo9mH--

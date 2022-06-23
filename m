@@ -2,90 +2,93 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E563B557462
-	for <lists+linux-next@lfdr.de>; Thu, 23 Jun 2022 09:47:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 488DA557465
+	for <lists+linux-next@lfdr.de>; Thu, 23 Jun 2022 09:48:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbiFWHrw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 23 Jun 2022 03:47:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60538 "EHLO
+        id S230507AbiFWHr7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 23 Jun 2022 03:47:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229763AbiFWHrv (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 23 Jun 2022 03:47:51 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A7D646C94;
-        Thu, 23 Jun 2022 00:47:46 -0700 (PDT)
+        with ESMTP id S230456AbiFWHr6 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 23 Jun 2022 03:47:58 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A1D2FFD;
+        Thu, 23 Jun 2022 00:47:53 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LTC5n33rQz4xDH;
-        Thu, 23 Jun 2022 17:47:41 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LTC5y4yXnz4xZj;
+        Thu, 23 Jun 2022 17:47:50 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1655970461;
-        bh=lCVSLYnDLg+PNjd9UfgZeb1MsdZoUP47+6Sm5hqdtfI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=HUv1zsddFMk8QapOJwc1BVGvlev1TOO/wz/oWduCJTbK3gP73GHqev1WKDAim8kyv
-         xpPCayP3JogyN/ugwHTI8vLJY0Jt8HCZYnVYxUxzsb+QbmsceWwrVEaKVy59nApX9m
-         UuKJy3KboBiOicui/ytgWIPZTjqe3BhSiniDV9s400zHG0EeJE/Yo0s6eIHVivrjaK
-         ITDOaxER32CtwXAgnU60lJ6mIox+eK5QhwfoCgQD2qfQQ+HL4U+bTmNCqEK89xMe+M
-         m355aDVgHinRSipO3faikvEY1Nuwz34i3E+tztwarxu1vD8Js1DAPiZ73uwa58bsfL
-         hq7CAoKX518tQ==
-Date:   Thu, 23 Jun 2022 17:47:40 +1000
+        s=201702; t=1655970471;
+        bh=ix/DajIzg43HKlGKICbftZP/HTh2T/l0UKcK7J6EmxA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=jNGeEVXUPTw0ziOduhBHXMzl74s/2YIGSTZ9obIaZEYgoQzr9CB+IKQxGJpaTNkhI
+         ieggZjn3A8dwyAGv328xM6uA2n3CQCO4ZoquhpuFci3dFqw+DDFAFx4kBpAjlbX6SR
+         xT/pMGme8Ro0UTwOZPlvQV3s3+HZL7r5SuWzJIE42Pz/uz0P4WRs8W5YyVnUP0FVyW
+         LPj8Xc695ivX55WdanOmkffAzLxrzipJG5xevXuFE2oocMlf57W4sqWZ62SeCp89IL
+         6RmNain/YOOQLOMgLQN+6rFI5uMd4Gj8fTyzHxu/KNMEIrpH+gkmt/0uChhm2T9qjg
+         70N8Qhf1uc86w==
+Date:   Thu, 23 Jun 2022 17:47:50 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
+Cc:     Aurabindo Pillai <aurabindo.pillai@amd.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the amdgpu tree
-Message-ID: <20220623174740.67b3cd85@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Dave Airlie <airlied@linux.ie>
+Subject: Re: linux-next: build failure after merge of the amdgpu tree
+Message-ID: <20220623174750.49e01139@canb.auug.org.au>
+In-Reply-To: <CADnq5_MZ1HqM3C49MNn=4+nufbWOQbQhDtVpAeqtKzKOC+e1ew@mail.gmail.com>
+References: <20220603144315.5adcddbf@canb.auug.org.au>
+ <20220615150013.30c9d7ad@canb.auug.org.au>
+ <20220621181551.5eb294f5@canb.auug.org.au>
+ <CADnq5_OxNm9EwLDXishu+pMfT2mgOSTvkmgSm+cm98JiCsiJog@mail.gmail.com>
+ <20220622080726.39cbeb14@canb.auug.org.au>
+ <CADnq5_MZ1HqM3C49MNn=4+nufbWOQbQhDtVpAeqtKzKOC+e1ew@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/OF.n70kBoLZ5ero4vXl2DaO";
+Content-Type: multipart/signed; boundary="Sig_/L9kKsRWbDOiF2C1dORFQW=J";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/OF.n70kBoLZ5ero4vXl2DaO
+--Sig_/L9kKsRWbDOiF2C1dORFQW=J
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Alex,
 
-After merging the amdgpu tree, today's linux-next build (htmldocs)
-produced this warning:
+On Wed, 22 Jun 2022 10:48:50 -0400 Alex Deucher <alexdeucher@gmail.com> wro=
+te:
+>
+> Thanks.  I think I fixed it.  Patch sent out.
 
-drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:5094: warning: expecting prototy=
-pe for amdgpu_device_gpu_recover_imp(). Prototype was for amdgpu_device_gpu=
-_recover() instead
-
-Introduced by commit
-
-  cf727044144d ("drm/amdgpu: Rename amdgpu_device_gpu_recover_imp back to a=
-mdgpu_device_gpu_recover")
+Yes, that got it.  Thanks.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/OF.n70kBoLZ5ero4vXl2DaO
+--Sig_/L9kKsRWbDOiF2C1dORFQW=J
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmK0GpwACgkQAVBC80lX
-0GyIVAf7BijYY8gpfOVjM1NmO3j1GDmIBe4MXC4n7g0z6Rud8LWqP6kP1l9+fJxb
-R0S/JPEcepHE/Zr42WRsGmI1WQTm0HrJwLs7KUjGJ7D8JdyNqqJw0Fmp5RDnV9Sh
-cbjYpSnvosBpnK0oeI0JAup681WWgU+s2lbD/UHeQ834TkI6tuxd5ZZUiJlW4yrt
-p/TjjoSVa/dOovEVI43FikGI7Ht54PkdlyzxuV5autSRu2tvN6jnUOYgJMyMaaNi
-v61rqpa9DWnkIigBy+p3Wk+G6N0XKsknTQx/nzsPly4b3skK5+UokyUC5nFyBfT2
-ria6reNhbRAU4mSpI3DsWecB0b5VqA==
-=sPri
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmK0GqYACgkQAVBC80lX
+0Gz28wf+IB2XHQPT0dyiMky1xSPDeSNu5OXHxMm1VR+e/kWzoXPe3OkazoZfdtDu
+ff6s6jmrEEjgRnWwRa7nAyaDpZJVqlyU64m+8gHqtQkHVromQgOzRiUSp8YC7jT1
+w4thsbyw04/jvmUFXS+AkNowf1gPGTvGadqqjd6bEcLmMViuvR/m76el7RQWQCgM
+wA//dGCinK3x9StWBm8uF2WqfoPE1KZrdotBDuRLiy68+knbNVZGq/lzofHgsrJp
+WJfyWNttgc9Gxlr0uizE5RxnNNv+UcZ6ZlvH49whWDsJtwA4DvMBFp/rZFgMF2dg
+/LTTB8QqHjgg5SojeD1bx/pMaWKktw==
+=iagx
 -----END PGP SIGNATURE-----
 
---Sig_/OF.n70kBoLZ5ero4vXl2DaO--
+--Sig_/L9kKsRWbDOiF2C1dORFQW=J--

@@ -2,44 +2,46 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B85855B45A
-	for <lists+linux-next@lfdr.de>; Mon, 27 Jun 2022 01:08:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27DDA55B46C
+	for <lists+linux-next@lfdr.de>; Mon, 27 Jun 2022 01:15:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbiFZWlX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 26 Jun 2022 18:41:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35098 "EHLO
+        id S229516AbiFZXPZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 26 Jun 2022 19:15:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229867AbiFZWlW (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 26 Jun 2022 18:41:22 -0400
+        with ESMTP id S229492AbiFZXPY (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 26 Jun 2022 19:15:24 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AB0F2ACF;
-        Sun, 26 Jun 2022 15:41:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED9B2BD6;
+        Sun, 26 Jun 2022 16:15:22 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LWQnS569Dz4xDH;
-        Mon, 27 Jun 2022 08:41:16 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LWRXm4yzvz4xD9;
+        Mon, 27 Jun 2022 09:15:20 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1656283276;
-        bh=v0M0/nb6YdMx4nugtyCRHV2oZo4XfWKPM1RTmB3XRuc=;
+        s=201702; t=1656285321;
+        bh=IgefZHhFuM9sbkBISfbpAynRkxG4jpozZiSwolv7ZaQ=;
         h=Date:From:To:Cc:Subject:From;
-        b=lX+qlPMxpTptuaFDqiOAohJMfeB6EmrhhpPQH/733TsFZJPpCKRozkyHKwSDI+8N0
-         bJYWHHAaY5BTVqAKmVxJAB2oK59N6ZeTVpu8XC4e0qixc1yNfBgWEruJQvWicHmrRl
-         YvxIB8nvW4Hx4QsgjAtYt6eSBPnFJqliaaeFggY9AQdUBUJwxlTp/lGTE7jOoLbo10
-         m9fFOgxSpiWbJmtCco3li3kagUNEdQ8PoLG+w7Y26FpwHvjXoKDjLuqgyG1nMRr6RY
-         NW3pd66BhV3MR8Qnp80YARxIs4BF6E/ksJ8wURZ/Q8ieIoLlfav/2xbzpLlTQAEoXC
-         s7NoJAHE5RwYQ==
-Date:   Mon, 27 Jun 2022 08:41:15 +1000
+        b=EaDT/iUjbgPd3Ini6wFSpjWXiiQREdArs+neNqr93JUxG4rSFTa7gAUq86NUmDbyH
+         0DjRBcSqW/loqoOKFe5j2aeA4mzcV5EFDQnAS8yfeEdicfHA4Vaj3B9p/h2KR3m3Wt
+         Vfv7VXg4AD/xy2pjAn+O4Z1EDKchjgL+cfYVHLfoUFnx37bSWGnA/2n34xBDPmXv4S
+         AWQYIg2cpPeLUOiEZMPNNMw5/EQIyfj9aXZUcW9EHAcBmL4Sye3T8KjX6GbHD+pal2
+         x5UoDHLtMPxNMjGj0xCaY68MWQJwU2uEodqZs/l0YjvRb+1nDDk2cFxzrbhwj08dVY
+         +2CjZphdnjruA==
+Date:   Mon, 27 Jun 2022 09:15:19 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Joerg Roedel <joro@8bytes.org>
-Cc:     Vasant Hegde <vasant.hegde@amd.com>,
+To:     Colin Cross <ccross@android.com>, Olof Johansson <olof@lixom.net>,
+        Thierry Reding <treding@nvidia.com>
+Cc:     Bitan Biswas <bbiswas@nvidia.com>,
+        Jon Hunter <jonathanh@nvidia.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the iommu tree
-Message-ID: <20220627084115.559a257f@canb.auug.org.au>
+Subject: linux-next: build warning after merge of the tegra tree
+Message-ID: <20220627091519.323d5a82@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/XFzdjH5IlC.vLRq6PnFL5/I";
+Content-Type: multipart/signed; boundary="Sig_/VYf1j_4Pda_vtrnQvZlYQDd";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -50,59 +52,48 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/XFzdjH5IlC.vLRq6PnFL5/I
+--Sig_/VYf1j_4Pda_vtrnQvZlYQDd
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Commits
+After merging the tegra tree, today's linux-next build (arm
+multi_v7_defconfig) produced this warning:
 
-  145c15624f39 ("iommu/amd: Update amd_iommu_fault structure to include PCI=
- seg ID")
-  58f1c71a0e84 ("iommu/amd: Update device_state structure to include PCI se=
-g ID")
-  964d21a7654c ("iommu/amd: Print PCI segment ID in error log messages")
-  58e5ca96cb16 ("iommu/amd: Flush upto last_bdf only")
-  5a903a691117 ("iommu/amd: Convert to use per PCI segment rlookup_table")
-  a0eedb5738c3 ("iommu/amd: Convert to use per PCI segment irq_lookup_table=
-")
-  f1bd29bde636 ("iommu/amd: Introduce per PCI segment rlookup table size")
-  d59145a5e129 ("iommu/amd: Introduce per PCI segment alias table size")
-  ad967e9639e3 ("iommu/amd: Introduce per PCI segment device table size")
-  89e9f3d6219d ("iommu/amd: Introduce per PCI segment last_bdf")
-  e202b39618b3 ("iommu/amd: Introduce per PCI segment unity map list")
-  a42d9be7f4e9 ("iommu/amd: Introduce per PCI segment dev_data_list")
-  65ad39268837 ("iommu/amd: Introduce per PCI segment irq_lookup_table")
-  ec6f20c037c8 ("iommu/amd: Introduce pci segment structure")
-  98496c13a2b6 ("iommu/amd: Update struct iommu_dev_data definition")
+In file included from drivers/soc/tegra/fuse/fuse-tegra.c:7:
+include/linux/device.h:136:33: warning: 'dev_attr_production' defined but n=
+ot used [-Wunused-variable]
+  136 |         struct device_attribute dev_attr_##_name =3D __ATTR_RO(_nam=
+e)
+      |                                 ^~~~~~~~~
+drivers/soc/tegra/fuse/fuse-tegra.c:441:8: note: in expansion of macro 'DEV=
+ICE_ATTR_RO'
+  441 | static DEVICE_ATTR_RO(production);
+      |        ^~~~~~~~~~~~~~
 
-are missing a Signed-off-by from their authors.
+Introduced by commit
 
-What is really happening here is that the iommu@lists.linux-foundation.org
-mailing list is changing the From: header in the email submissions.
-The solution is to either use th Reply-To: header for these mails, get
-an off list copy of the patch, or make sure that all patch submissions
-to that list have a From: line at eth start of the body.
+  2258fe488a20 ("soc/tegra: fuse: Expose Tegra production status")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/XFzdjH5IlC.vLRq6PnFL5/I
+--Sig_/VYf1j_4Pda_vtrnQvZlYQDd
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmK44IsACgkQAVBC80lX
-0GwxJQf+Mp94gqA8MsYludSJbMcQYnqIM3tyBgx+XUP1lMfHUBBypfGka642XnUo
-mWyayygkYYHwoHFvLE64xkfUHkQcljurrdB2w4tTPeK0JwDmerb3B9DR4lVmW7K3
-NgS/+nP0PdfQVLvQTu8M4GugbnMN/M9ZuiLMNxACQypEdfBwRe8d7Cj81OLubbPv
-nlO7rQcvW8bGADlOh4LZEERRqMLIfgX3vNt4GI+Oa6fUn4geihTlm2fWrbHEH+W2
-bnZBSS4QFYn39zgS1/SUZOxkMjnXsZnEfve1ahsGUm5HC10osApQkiA+51JCruY4
-kWh7c7s23YwPOmI/lKnoecYelr4BUw==
-=VAMY
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmK46IcACgkQAVBC80lX
+0GzuHwgAolcXRGX3E8lcPbENno+c7gK0zaI/OKlslrIOCpu4M/kDeUol3WXNzvKD
+5RHQ1TvrI8N6O7vC4UsHVBlyb9Q97Og+8kAi8/UB9aBuO1v2hNN/mzsXCTR7JNNM
+iSckR+j/FeevB2ZTmASG3dUOvY3RF1cMCFj7A+x1dCiGoNog3abyMLpLXTPxtu/2
+bdt+Rkv3d7pcNRKzavLpwl97Rq8jq8xP0j07vpY9/WMCrZ61ZUmotlfcck9RliLG
+41UhJAhOIPkIZQxFEJfoYZ75+9bMRd1ZBKaveWz4I3ZuT6xcFsWe9eCkhehRF+uI
+GDWSEI/S1W4qeloZxIk8SsB3iugLoA==
+=Q1ux
 -----END PGP SIGNATURE-----
 
---Sig_/XFzdjH5IlC.vLRq6PnFL5/I--
+--Sig_/VYf1j_4Pda_vtrnQvZlYQDd--

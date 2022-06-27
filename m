@@ -2,92 +2,112 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4717955E220
-	for <lists+linux-next@lfdr.de>; Tue, 28 Jun 2022 15:35:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAF5555CE38
+	for <lists+linux-next@lfdr.de>; Tue, 28 Jun 2022 15:04:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229955AbiF0ITn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 27 Jun 2022 04:19:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49034 "EHLO
+        id S233330AbiF0I3j (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 27 Jun 2022 04:29:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231998AbiF0ITm (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 27 Jun 2022 04:19:42 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85868E45;
-        Mon, 27 Jun 2022 01:19:40 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LWgcp4plPz4xDB;
-        Mon, 27 Jun 2022 18:19:38 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1656317979;
-        bh=7g/3i3juQG76SYtldFCyXOFRWfeOFgQJvo6kNSgX9JI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=kINRBB6qxfkklttarj7+0VGOt5rZIjAxq447Pa0H5xUJiTpA2lcfOp6nhvO09b0lh
-         OMzTBBpfwxsqLxo5J4MmP1GSj2rJpl8ApTyQjlXvfH11k/eZdwPKVBj9hHXRCBVTiV
-         kISKyB3igW0g7qalbY4BjreIly5e8uNBWjyjrsbK0dYLxE/JwBgvxWpsqdU4sXEOvv
-         HDX7cqKS2onLozI/Lu75XBqhycFXBVXzDT48eDh9MUbzO24DMCGGvF8gnr+39UM9Td
-         m3pzW26YIUMU7GgadRtMk76upq7YkUt5urTbv0yY3RPGtdBcZQ9D0Jr3zUo1uGLBhn
-         0Qy5mDUJAOeTQ==
-Date:   Mon, 27 Jun 2022 18:19:37 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>
-Cc:     Ben Gardon <bgardon@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the kvm tree
-Message-ID: <20220627181937.3be67263@canb.auug.org.au>
+        with ESMTP id S232821AbiF0I3i (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 27 Jun 2022 04:29:38 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47B5F625B;
+        Mon, 27 Jun 2022 01:29:37 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id 65so8279608pfw.11;
+        Mon, 27 Jun 2022 01:29:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ukkF+qHOzzJMvCgB5J2nCt+SiXX4tns6CZy4txdYFbU=;
+        b=XxyEOMZwFzVx5EqLSOdfvMnVEC1pw/bEOwoadIsKwf1nVcHANtQJ22GQmY1QPa/0n/
+         fx7Nqz9oO4lusnDOnJQq/hBe0NL62WNXNxb2FVZKsAGwv7jjJl6KgArZ5IuCfU4WtYrk
+         clOJhaaue+7migoHXRwutGvYSWZXu0fPYEe9X6VF+sQT2ulz7yn9PeutINSUiZ5kw7Z5
+         295/GFrIzBjTkxAcs4s+iMb9rerAqOmbWJ1vG70DgxWYzx7Kg8ZEWYkdd1t8/e7o8fOZ
+         OIbccFFmOvAVQGWX11VoQl8Timd35Qy3RvBGIWwPnO7YZAzwkZXdiOXMT9kG5f1hpfdz
+         V75g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ukkF+qHOzzJMvCgB5J2nCt+SiXX4tns6CZy4txdYFbU=;
+        b=cfxkCd+NLvKNwQt6BZ+BD8e1/FYfjTU/Y4GD3VXuvNjEY2lhsM8tzY94SyxKVM6E0h
+         /miGbysuLgkArtlluVMQMbhMJM4sC751Jrdr10LwU29vgxsryDvo04uaPbJMZYhYjDQs
+         1YkxinOVgCxW7gHHI+9iSGpwDag23dYtbbIP+DnTwI/Zpf2E6z45VcIJmdvt4niHDvec
+         jMtqeYPkHjP7/3fyYQJtFpqy47dvD11tIM7QPE+qiG+P9WX8nbD3ezBKPgKwcduiXElD
+         Hcyetd+veNLNw4ae9BRr2Z6XGQPTF3PEv2XxASiEXgGrrlvIqs4K+AuYMMuCEu/72LvI
+         2E3Q==
+X-Gm-Message-State: AJIora8XpkWgrz+Svd7GyO3srs7GyEgCzWCVp59mUpZbYvhfygnLL3Ac
+        3pNcK3HBIc7sIT/iv++gm7U=
+X-Google-Smtp-Source: AGRyM1t5rT9Mx8i6fAAE3TL6UtytoFVyXcLJMuFRwjYYPjWjgJuidF7BRMqT7CWr0IQsni4W0A7WMA==
+X-Received: by 2002:aa7:8e9e:0:b0:525:1d15:8fb8 with SMTP id a30-20020aa78e9e000000b005251d158fb8mr13469032pfr.35.1656318576800;
+        Mon, 27 Jun 2022 01:29:36 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-68.three.co.id. [180.214.232.68])
+        by smtp.gmail.com with ESMTPSA id bf27-20020a056a000d9b00b0051bd9981ccbsm6497050pfb.39.2022.06.27.01.29.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 01:29:36 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id B3DDC10388D; Mon, 27 Jun 2022 15:29:30 +0700 (WIB)
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     linux-doc@vger.kernel.org
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Allison Randal <allison@lohutok.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-next@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH RESEND next] Documentation: samsung-s3c24xx: Add blank line after SPDX directive
+Date:   Mon, 27 Jun 2022 15:29:28 +0700
+Message-Id: <20220627082928.11239-1-bagasdotme@gmail.com>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/+j5HvyYz1P499cVlhWwTAPs";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/+j5HvyYz1P499cVlhWwTAPs
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+After merging spdx tree for linux-next testing, Stephen Rothwell reported
+htmldocs warning:
 
-Hi all,
+Documentation/arm/samsung-s3c24xx/cpufreq.rst:2: WARNING: Explicit markup ends without a blank line; unexpected unindent.
 
-After merging the kvm tree, today's linux-next build (htmldocs) produced
-this warning:
+It is due to missing blank line separator between SPDX directive and
+page title.
 
-Documentation/virt/kvm/api.rst:8210: WARNING: Title underline too short.
+Add the blank line to fix the warning.
 
-8.38 KVM_CAP_VM_DISABLE_NX_HUGE_PAGES
----------------------------
-Documentation/virt/kvm/api.rst:8217: WARNING: Unexpected indentation.
+Link: https://lore.kernel.org/linux-next/20220614164506.6afd65a6@canb.auug.org.au/
+Fixes: b7bc1c9e5b04da ("treewide: Replace GPLv2 boilerplate/reference with SPDX - gpl-2.0_147.RULE")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Allison Randal <allison@lohutok.net>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: linux-next@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+---
+ Documentation/arm/samsung-s3c24xx/cpufreq.rst | 1 +
+ 1 file changed, 1 insertion(+)
 
-Introduced by commit
+diff --git a/Documentation/arm/samsung-s3c24xx/cpufreq.rst b/Documentation/arm/samsung-s3c24xx/cpufreq.rst
+index ed19ce1a462921..cd22697cf60660 100644
+--- a/Documentation/arm/samsung-s3c24xx/cpufreq.rst
++++ b/Documentation/arm/samsung-s3c24xx/cpufreq.rst
+@@ -1,4 +1,5 @@
+ .. SPDX-License-Identifier: GPL-2.0-only
++
+ =======================
+ S3C24XX CPUfreq support
+ =======================
+-- 
+An old man doll... just what I always wanted! - Clara
 
-  084cc29f8bbb ("KVM: x86/MMU: Allow NX huge pages to be disabled on a per-=
-vm basis")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/+j5HvyYz1P499cVlhWwTAPs
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmK5aBkACgkQAVBC80lX
-0Gz2HAf8DYtPt/dHj5EvB7SbRpRlmFjmtN3UB+bz7NtUsFXFXf0prtUCPDq9qBl7
-ty4Pa0KPgEItbcgfBBldD8pvE/IWFfuNdjiu+Asz3NjURfLaQDhCB+N5wFl/GfbO
-W4dK0fwbiADyLwvOanpwmNY/qkGdB53Kvi6XPad1sETaDEwVDZpZzKnewHaa6O6y
-wqgubhL2NYWT1GIOXHopImATlA3il9LDwCB+krWgYrtV+HeWBRvZNmuO7H/SQNjU
-UHaMIZ6XyfDeVndPGmdkZNS8Vp2CvHtOmA1aBEhGwBMoXpwZFkHeWSZuhsVGjUNn
-E8S+FulQWwgPBIvQFdMCluczCcu1ww==
-=tz3s
------END PGP SIGNATURE-----
-
---Sig_/+j5HvyYz1P499cVlhWwTAPs--

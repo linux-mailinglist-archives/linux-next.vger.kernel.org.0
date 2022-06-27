@@ -2,106 +2,153 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8318E55CCEA
-	for <lists+linux-next@lfdr.de>; Tue, 28 Jun 2022 15:02:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AABCD55D6FD
+	for <lists+linux-next@lfdr.de>; Tue, 28 Jun 2022 15:17:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237707AbiF0P5S (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 27 Jun 2022 11:57:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59674 "EHLO
+        id S239890AbiF0Q6K (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 27 Jun 2022 12:58:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235477AbiF0P5R (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 27 Jun 2022 11:57:17 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E124D79;
-        Mon, 27 Jun 2022 08:57:17 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id p14so9417390pfh.6;
-        Mon, 27 Jun 2022 08:57:17 -0700 (PDT)
+        with ESMTP id S235496AbiF0Q6K (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 27 Jun 2022 12:58:10 -0400
+Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E58ADDEB;
+        Mon, 27 Jun 2022 09:58:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Q7ZSEV4LTD7LAEM2Qop9QWeKPyT8Eo98shgP/WcfAJM=;
-        b=TD25yDZjhKN9TW36xDeM7TC/WXolSNS4MNswQEtngcUO1oXtqBPpHKRVemyWExAlFW
-         TqyvvXlQnhbGsHE73jVzf9Y9myNUkq+LmwxSgmvbIrAkTKRE8ajBfNydza4Fe1PWDCGo
-         XN9lsNhRoOlrS3Twls6Nfrj9RBXQIGwY5DmVwoSfnp2Ara+fYn8fsBgPHgdzCdEMq0mO
-         UMFJ0JsZO9r/GyZxyRU76iYGgF/7rl0zwXLixDbWPgyWOQ63wjrZwwnOr3K1Jnv7a9PF
-         QKEiklV9Wc5SFJuofCme726CpZgab0fToWe4ZqGpSUmTSEqY0DkQgIKX3LCCrRr03tgp
-         bLGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Q7ZSEV4LTD7LAEM2Qop9QWeKPyT8Eo98shgP/WcfAJM=;
-        b=aM5eFQd+hGMVAWRlr5jUU/6dHIi/lKYY2f1TbZCQ9FgwVpEnbEzCVASW1CbbN2oHcb
-         tzkvgeywhHPPgWBCdHQr4PxLPmDoS7f5vFZZUQ7w1gIEekeqfe1VaLtlU2B2nU+Om/hf
-         37oy2FZu2tTV9R/J0fxJHXjY3YjohGveXmFoYJoLkbrf1zMT9wjA79Z7cKiJ+WQnTbCL
-         gltOnsOevi1aOM85ANDSTQTh1ZTy6FWaCAsGju2Eun5G+3zCP0HUKdZvT+1cU4t7lly3
-         MEMyQyz5FZtDqOVmxWQwVzqZh6bF77EcjGIHU7DPIziNqyzBVhE8Gk44OelcCHdpxZpM
-         k1fA==
-X-Gm-Message-State: AJIora+NVseYGC0rXIHiYew8l/iGA56gXJaJC3X4JT2GKelcnTsBG+vv
-        a3uYz7ZW1E/OTyd7gt8g69Wle+sxRXxqDg==
-X-Google-Smtp-Source: AGRyM1v0/J58YZ3w/3MSk7WzTC+fbEwFJrbTeOxEdqpHzith/X6cEbp8QvXyQ3UyKtR/zcQ/eIEfuw==
-X-Received: by 2002:a05:6a00:1a0c:b0:523:1a23:957f with SMTP id g12-20020a056a001a0c00b005231a23957fmr15619816pfv.45.1656345436401;
-        Mon, 27 Jun 2022 08:57:16 -0700 (PDT)
-Received: from octofox.hsd1.ca.comcast.net ([2601:641:401:1d20:26dc:1818:7133:85db])
-        by smtp.gmail.com with ESMTPSA id h4-20020a056a001a4400b005252e524d1csm7499932pfv.211.2022.06.27.08.57.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 08:57:15 -0700 (PDT)
-From:   Max Filippov <jcmvbkbc@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-next@vger.kernel.org, ntb@lists.linux.dev,
-        Alexander Fomichev <a.fomichev@yadro.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Jon Mason <jdmason@kudzu.us>, Max Filippov <jcmvbkbc@gmail.com>
-Subject: [PATCH] drivers/ntb/test: avoid 64-bit modulus operation
-Date:   Mon, 27 Jun 2022 08:57:10 -0700
-Message-Id: <20220627155710.2067032-1-jcmvbkbc@gmail.com>
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1656349089; x=1687885089;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Y6XvG9/U51igKius4IaKDqx8Gy6lPi0Xal5PaG7hwgI=;
+  b=J/AQW9HsiF4+Dxkq+zNvWJ9js8k1koNJ1aYuSdCZaUc9DyZwy4DitiYN
+   OKbPd7JaYfrNNxFnH7Vwa3RlkUtvlPvKf0vyG0ezyJ9bB1bXdFL+Tqy5v
+   49e/3XurHHxhYiBsP8R5gLer9bFX5Z6NjaG+x8uJ0HRFEKQEJqL8h9aow
+   c=;
+X-IronPort-AV: E=Sophos;i="5.92,226,1650931200"; 
+   d="scan'208";a="102367407"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2a-2dbf0206.us-west-2.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP; 27 Jun 2022 16:36:54 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2a-2dbf0206.us-west-2.amazon.com (Postfix) with ESMTPS id 7A9C4A2BB3;
+        Mon, 27 Jun 2022 16:36:52 +0000 (UTC)
+Received: from EX13D04ANC001.ant.amazon.com (10.43.157.89) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.36; Mon, 27 Jun 2022 16:36:51 +0000
+Received: from 88665a182662.ant.amazon.com.com (10.43.160.124) by
+ EX13D04ANC001.ant.amazon.com (10.43.157.89) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.36; Mon, 27 Jun 2022 16:36:49 +0000
+From:   Kuniyuki Iwashima <kuniyu@amazon.com>
+To:     <sachinp@linux.ibm.com>
+CC:     <davem@davemloft.net>, <kuniyu@amazon.com>,
+        <linux-next@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
+        <netdev@vger.kernel.org>
+Subject: Re: [powerpc] Fingerprint systemd service fails to start (next-20220624)
+Date:   Mon, 27 Jun 2022 09:36:40 -0700
+Message-ID: <20220627163640.74890-1-kuniyu@amazon.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <B2AA3091-796D-475E-9A11-0021996E1C00@linux.ibm.com>
+References: <B2AA3091-796D-475E-9A11-0021996E1C00@linux.ibm.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.43.160.124]
+X-ClientProxiedBy: EX13D07UWB001.ant.amazon.com (10.43.161.238) To
+ EX13D04ANC001.ant.amazon.com (10.43.157.89)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Redefine RESCHEDULE_RATIO to a closest power of 2 so that the following
-code in the perf_run_latency
+Hi Sachin,
+Thanks for the report.
 
-	/* Avoid processor soft lock-ups */
-	if (!(pthr->tries % RESCHEDULE_RATIO))
-		schedule();
+From:   Sachin Sant <sachinp@linux.ibm.com>
+Date:   Mon, 27 Jun 2022 10:28:27 +0530
+> With the latest -next I have observed a peculiar issue on IBM Power
+> server running -next(5.19.0-rc3-next-20220624) .
+> 
+> Fingerprint authentication systemd service (fprintd) fails to start while
+> attempting OS login after kernel boot. There is a visible delay of 18-20
+> seconds before being prompted for OS login password.
+> 
+> Kernel 5.19.0-rc3-next-20220624 on an ppc64le
+> 
+> ltcden8-lp6 login: root
+> <<=======.  delay of 18-20 seconds
+> Password: 
+> 
+> Following messages(fprintd service) are seen in /var/log/messages:
+> 
+> systemd[1]: Startup finished in 1.842s (kernel) + 1.466s (initrd) + 29.230s (userspace) = 32.540s.
 
-doesn't do 64-bit modulus operation.
-This fixes the following build failures on 32-bit architectures visible
-in linux-next:
+It seems the kernel finishes its job immediately but userspace takes more
+time on retrying or something.  The service_start_timeout seems to be the
+timeout period.
 
-  ERROR: modpost: "__umoddi3" [drivers/ntb/test/ntb_perf.ko] undefined!
 
-Fixes: dc150dfb081f ("ntb_perf: extend with burst latency measurement")
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
----
- drivers/ntb/test/ntb_perf.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> NetworkManager[1100]: <info>  [1656304146.6686] manager: startup complete
+> dbus-daemon[1027]: [system] Activating via systemd: service name='net.reactivated.Fprint' unit='fprintd.service' requested by ':1.21' (uid=0 pid=1502 comm="/bin/login -p --      ")
+> systemd[1]: Starting Fingerprint Authentication Daemon...
+> fprintd[2521]: (fprintd:2521): fprintd-WARNING **: 00:29:08.568: Failed to open connection to bus: Could not connect: Connection refused
 
-diff --git a/drivers/ntb/test/ntb_perf.c b/drivers/ntb/test/ntb_perf.c
-index 23e154bd41b9..536fab0030f3 100644
---- a/drivers/ntb/test/ntb_perf.c
-+++ b/drivers/ntb/test/ntb_perf.c
-@@ -126,7 +126,7 @@ MODULE_DESCRIPTION("PCIe NTB Performance Measurement Tool");
- #define PERF_BUF_LEN 1024
- 
- #define LAT_MIN_TRIES	20
--#define RESCHEDULE_RATIO	10000
-+#define RESCHEDULE_RATIO	8192 /* power of 2, to avoid actual division */
- 
- static unsigned long max_mw_size;
- module_param(max_mw_size, ulong, 0644);
--- 
-2.30.2
+I think this message comes from here.
+https://github.com/freedesktop/libfprint-fprintd/blob/master/src/main.c#L183-L189
+
+I'm not sure what the program does though, I guess it failed to find a peer
+socket in the hash table while calling connect()/sendmsg() syscalls and got
+-ECONNREFUSED in unix_find_bsd() or unix_find_abstract().
+
+
+> systemd[1]: fprintd.service: Main process exited, code=exited, status=1/FAILURE
+> systemd[1]: fprintd.service: Failed with result 'exit-code'.
+> systemd[1]: Failed to start Fingerprint Authentication Daemon.
+> dbus-daemon[1027]: [system] Failed to activate service 'net.reactivated.Fprint': timed out (service_start_timeout=25000ms)
+> 
+> Mainline (5.19.0-rc3) or older -next does not have this problem.
+> 
+> Git bisect between mainline & -next points to the following patch:
+> 
+> # git bisect bad
+> cf2f225e2653734e66e91c09e1cbe004bfd3d4a7 is the first bad commit
+> commit cf2f225e2653734e66e91c09e1cbe004bfd3d4a7
+> 
+> Date:   Tue Jun 21 10:19:12 2022 -0700
+> 
+>     af_unix: Put a socket into a per-netns hash table.
+> 
+> I don’t know how the above identified patch is related to the failure,
+> but given that I can consistently recreate the issue assume the bisect
+> result can be trusted.
+
+Before the commit, all of sockets on the host are linked in a global hash
+table, and after the commit, they are linked in their network namespace's
+hash table.  So, I believe there is no change visible to userspace.
+
+
+> I have attached dmesg log for reference. Let me know if any additional
+> Information is required.
+
+* Could you provide
+  * dmesg and /var/log/messages on a successful case? (without the commit)
+  * Unit file
+  * repro steps
+
+* Is it reproducible after login? (e.g. systemctl restart)
+  * If so, please provide
+    * the result of strace -t -ff
+
+* Does it happen on only powerpc? How about x86 or arm64?
+
+* What does the service does?
+  * connect() or sendmsg()
+  * protocol family
+  * abstract or BSD socket
+
+Best regards,
+Kuniyuki
 

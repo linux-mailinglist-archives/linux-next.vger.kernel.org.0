@@ -2,46 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27DDA55B46C
-	for <lists+linux-next@lfdr.de>; Mon, 27 Jun 2022 01:15:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2310955B4AE
+	for <lists+linux-next@lfdr.de>; Mon, 27 Jun 2022 02:38:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229516AbiFZXPZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 26 Jun 2022 19:15:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44768 "EHLO
+        id S229468AbiF0Adz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 26 Jun 2022 20:33:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbiFZXPY (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 26 Jun 2022 19:15:24 -0400
+        with ESMTP id S229732AbiF0Ady (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 26 Jun 2022 20:33:54 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED9B2BD6;
-        Sun, 26 Jun 2022 16:15:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7720CD8F;
+        Sun, 26 Jun 2022 17:33:51 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LWRXm4yzvz4xD9;
-        Mon, 27 Jun 2022 09:15:20 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LWTHK54kWz4xDH;
+        Mon, 27 Jun 2022 10:33:49 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1656285321;
-        bh=IgefZHhFuM9sbkBISfbpAynRkxG4jpozZiSwolv7ZaQ=;
+        s=201702; t=1656290030;
+        bh=dxBX31GVCNAdZ1uAyn2cnF+nj9OyO//pM/osEPOjVrU=;
         h=Date:From:To:Cc:Subject:From;
-        b=EaDT/iUjbgPd3Ini6wFSpjWXiiQREdArs+neNqr93JUxG4rSFTa7gAUq86NUmDbyH
-         0DjRBcSqW/loqoOKFe5j2aeA4mzcV5EFDQnAS8yfeEdicfHA4Vaj3B9p/h2KR3m3Wt
-         Vfv7VXg4AD/xy2pjAn+O4Z1EDKchjgL+cfYVHLfoUFnx37bSWGnA/2n34xBDPmXv4S
-         AWQYIg2cpPeLUOiEZMPNNMw5/EQIyfj9aXZUcW9EHAcBmL4Sye3T8KjX6GbHD+pal2
-         x5UoDHLtMPxNMjGj0xCaY68MWQJwU2uEodqZs/l0YjvRb+1nDDk2cFxzrbhwj08dVY
-         +2CjZphdnjruA==
-Date:   Mon, 27 Jun 2022 09:15:19 +1000
+        b=jnKcjtOAxBiJgJbGuYYxvWLn/IV243hNhpQatgFePZYyWonZIW9Bzia1/4Sr25Kok
+         mehd/VpvIFTeeDdDv2rRMB3dqOzF86khs/dwy6Vs9KYXVetNEWhOwTRPofMWFRz3qI
+         0oPkxGmlPgt1LLqXU0T990W6nc20k77zhTEQ35meAPrO10sU8v3Kxyo5m8vxApK7ZS
+         YO9Rr7IIAnglGAIjqfKH3EJjU8U4poSgDPI2wDiIxTostX10gcebKnsx2MPxz/NeUB
+         tAEN7A7JgRKkUTSQpqq0+fkzVn61Lz3NiC84bjbc1wcSpfGaBDxiuIPK12Axty4oRL
+         Pus2K6R3UynkQ==
+Date:   Mon, 27 Jun 2022 10:33:48 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Colin Cross <ccross@android.com>, Olof Johansson <olof@lixom.net>,
-        Thierry Reding <treding@nvidia.com>
-Cc:     Bitan Biswas <bbiswas@nvidia.com>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the tegra tree
-Message-ID: <20220627091519.323d5a82@canb.auug.org.au>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Rob Clark <robdclark@chromium.org>
+Subject: linux-next: manual merge of the drm-msm-lumag tree with Linus' tree
+Message-ID: <20220627103348.2e9fc4f9@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/VYf1j_4Pda_vtrnQvZlYQDd";
+Content-Type: multipart/signed; boundary="Sig_/Be7PE3xcqyhgLsFb_d+3qxr";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -52,48 +50,76 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/VYf1j_4Pda_vtrnQvZlYQDd
+--Sig_/Be7PE3xcqyhgLsFb_d+3qxr
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the tegra tree, today's linux-next build (arm
-multi_v7_defconfig) produced this warning:
+Today's linux-next merge of the drm-msm-lumag tree got a conflict in:
 
-In file included from drivers/soc/tegra/fuse/fuse-tegra.c:7:
-include/linux/device.h:136:33: warning: 'dev_attr_production' defined but n=
-ot used [-Wunused-variable]
-  136 |         struct device_attribute dev_attr_##_name =3D __ATTR_RO(_nam=
-e)
-      |                                 ^~~~~~~~~
-drivers/soc/tegra/fuse/fuse-tegra.c:441:8: note: in expansion of macro 'DEV=
-ICE_ATTR_RO'
-  441 | static DEVICE_ATTR_RO(production);
-      |        ^~~~~~~~~~~~~~
+  drivers/gpu/drm/msm/msm_fence.c
 
-Introduced by commit
+between commit:
 
-  2258fe488a20 ("soc/tegra: fuse: Expose Tegra production status")
+  3c7a52217a8c ("drm/msm: Drop update_fences()")
+
+from Linus' tree and commit:
+
+  bda2eac959ae ("drm/msm: Fix fence rollover issue")
+
+from the drm-msm-lumag tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/VYf1j_4Pda_vtrnQvZlYQDd
+diff --cc drivers/gpu/drm/msm/msm_fence.c
+index 38e3323bc232,a35a6746c7cd..000000000000
+--- a/drivers/gpu/drm/msm/msm_fence.c
++++ b/drivers/gpu/drm/msm/msm_fence.c
+@@@ -46,14 -54,13 +54,15 @@@ bool msm_fence_completed(struct msm_fen
+  		(int32_t)(*fctx->fenceptr - fence) >=3D 0;
+  }
+ =20
+- /* called from irq handler and workqueue (in recover path) */
++ /* called from irq handler */
+  void msm_update_fence(struct msm_fence_context *fctx, uint32_t fence)
+  {
+ -	spin_lock(&fctx->spinlock);
+ +	unsigned long flags;
+ +
+ +	spin_lock_irqsave(&fctx->spinlock, flags);
+- 	fctx->completed_fence =3D max(fence, fctx->completed_fence);
++ 	if (fence_after(fence, fctx->completed_fence))
++ 		fctx->completed_fence =3D fence;
+ -	spin_unlock(&fctx->spinlock);
+ +	spin_unlock_irqrestore(&fctx->spinlock, flags);
+  }
+ =20
+  struct msm_fence {
+
+--Sig_/Be7PE3xcqyhgLsFb_d+3qxr
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmK46IcACgkQAVBC80lX
-0GzuHwgAolcXRGX3E8lcPbENno+c7gK0zaI/OKlslrIOCpu4M/kDeUol3WXNzvKD
-5RHQ1TvrI8N6O7vC4UsHVBlyb9Q97Og+8kAi8/UB9aBuO1v2hNN/mzsXCTR7JNNM
-iSckR+j/FeevB2ZTmASG3dUOvY3RF1cMCFj7A+x1dCiGoNog3abyMLpLXTPxtu/2
-bdt+Rkv3d7pcNRKzavLpwl97Rq8jq8xP0j07vpY9/WMCrZ61ZUmotlfcck9RliLG
-41UhJAhOIPkIZQxFEJfoYZ75+9bMRd1ZBKaveWz4I3ZuT6xcFsWe9eCkhehRF+uI
-GDWSEI/S1W4qeloZxIk8SsB3iugLoA==
-=Q1ux
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmK4+uwACgkQAVBC80lX
+0GyTDwgAhpm9xjOv+BvN8kbatE1ZBEj1+CJGqHISwE12ojGvAETF/IqOe3C3Hc9D
+JxpmOukOKWKFuVFrPpH1pXkcp4KpMnLL9JQzODC2qjZZP0flz932ajwju4MHW2+y
+XcMSj89JOIUK+F+uC/poyQ/MqqjxvmOcn5N6smm0vWv1BIy/hVreSHoAXEr0DFFh
+6ArAN2kj1I48fkgVUFiOCfTGW0UJR7/luqhSTpg82j4N0AwCFsnLMj7ola24lsK+
+fxf63+lC+oOWxLyHtRoi+W1i5/ou0nuoqN3SF5Imf6tWAn3JbvrPu945wWOmaLQu
+YscNJVgdZH2Q0pW8g82bf81VhI68ng==
+=zNKw
 -----END PGP SIGNATURE-----
 
---Sig_/VYf1j_4Pda_vtrnQvZlYQDd--
+--Sig_/Be7PE3xcqyhgLsFb_d+3qxr--

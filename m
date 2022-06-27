@@ -2,164 +2,106 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EFE755DBD1
-	for <lists+linux-next@lfdr.de>; Tue, 28 Jun 2022 15:25:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8318E55CCEA
+	for <lists+linux-next@lfdr.de>; Tue, 28 Jun 2022 15:02:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235257AbiF0Okz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 27 Jun 2022 10:40:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54810 "EHLO
+        id S237707AbiF0P5S (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 27 Jun 2022 11:57:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234816AbiF0Okz (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 27 Jun 2022 10:40:55 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69190F68;
-        Mon, 27 Jun 2022 07:40:54 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id CDA215C00A1;
-        Mon, 27 Jun 2022 10:40:53 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Mon, 27 Jun 2022 10:40:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1656340853; x=1656427253; bh=yLd/tFyFBX
-        Pfe4WL4650xXMRPu9U8zL44cPGtXj0tuw=; b=Swb2iaAcnVPoeH4cVNNzg/u60L
-        xp9UyyL4m0zZn2NnbslisrRlxjNg7yQHzz3j0pUdS5TWLp3lTTVLpLYYUPcgFmD4
-        q0QgLoDHJwj9FYLoq8qkkvPnHHXXyxWdp+VK40p9P1jJuwWlAEuu/LNRM2f0IwWM
-        L40siopL5y36sbMLRjGxWZ3FXuTD385n409ac45Z/fwk35HkAIX0ip2BqU/Tn+6+
-        dRf8cPOc4IEMAaYtco76BkrZycptb43lNmDqE/rTu/bfrhZovBMuSqw1jNN1hFMz
-        4pz74464XBPrLU+dloGrFlnIxVSIXDPcmKw/HnYukzo4gAZBbb+RieNZBVKg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1656340853; x=1656427253; bh=yLd/tFyFBXPfe4WL4650xXMRPu9U
-        8zL44cPGtXj0tuw=; b=DCNwxgQsuY49OnDxnuWk37BEcm5WNAttBictH0+a6qlD
-        C3cHwClZyqRq3zKSa46ImNcSJGMxZ2eHRA5U2c6+qV05k4piPVlDADmEBy7tRlUU
-        fi1iiV3kkShlFPLXm3Q63fKujBInZbWG9Tn62CryH0L1KXuXgChS6Hqqm5U9rcqc
-        c8SUcl29kS9T3OKSuz8HhPUYWqwdrRPALfzrNft0lzvufLKUTyFn22hr4WV3ExJS
-        tWaJigYXyhrlNPlQWBA054jjJ1fIGFa31i/ArnKLjQsZk0Dp2Z76NdM9TKXT1IW/
-        47pMyovX3kszS9m9vTHST9RTZGirTG1CwfE3QZwieA==
-X-ME-Sender: <xms:dMG5YpJgFuekJRpqcxw1nBIbRzvFUQ2ZEmeCxEtz-nHe34Dx1vnRTw>
-    <xme:dMG5YlJm2GnneGXT7ZiMJPr6Jnvahld0GfrVzG_gZf2Q9TD4QBMgdHnZFcxhVS1RF
-    tNgn4thLaIPPg>
-X-ME-Received: <xmr:dMG5YhuVCeSZbOy8p20Z_kaLAbjWnqAwBn_BMWue1Z8rxETbArOxZAFAjhc9hBRcxWtoPp0ZbY72NFC0wGQSIXyD7piFnidg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudeghedgkeduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
-    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
-    hhrdgtohhm
-X-ME-Proxy: <xmx:dMG5YqYq0teEk3zK_N2dqPkC4BHmFoopf2vT1bRKUfptGzLYLjp4ng>
-    <xmx:dMG5YgYRGTirzGzw4-7BM2gSefa5Ed0X-Hf_Diosc5vMFr34fd-VQA>
-    <xmx:dMG5YuA_Zs7iuv7cwjmFdLpkI0O30rYQGxqY7u5iDZpYM88LuxuStA>
-    <xmx:dcG5YsTJdhXWuXrX7qNkJKtD33ZPFvk5YEwo0XQn50VROSN5yD7GlQ>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 27 Jun 2022 10:40:52 -0400 (EDT)
-Date:   Mon, 27 Jun 2022 16:40:50 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Alex Deucher <alexdeucher@gmail.com>,
-        Somalapuram Amaranath <Amaranath.Somalapuram@amd.com>,
-        Duoming Zhou <duoming@zju.edu.cn>,
-        Dave Airlie <airlied@linux.ie>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the amdgpu tree
-Message-ID: <YrnBcobDaStH8/83@kroah.com>
-References: <20220623160723.7a44b573@canb.auug.org.au>
+        with ESMTP id S235477AbiF0P5R (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 27 Jun 2022 11:57:17 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E124D79;
+        Mon, 27 Jun 2022 08:57:17 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id p14so9417390pfh.6;
+        Mon, 27 Jun 2022 08:57:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Q7ZSEV4LTD7LAEM2Qop9QWeKPyT8Eo98shgP/WcfAJM=;
+        b=TD25yDZjhKN9TW36xDeM7TC/WXolSNS4MNswQEtngcUO1oXtqBPpHKRVemyWExAlFW
+         TqyvvXlQnhbGsHE73jVzf9Y9myNUkq+LmwxSgmvbIrAkTKRE8ajBfNydza4Fe1PWDCGo
+         XN9lsNhRoOlrS3Twls6Nfrj9RBXQIGwY5DmVwoSfnp2Ara+fYn8fsBgPHgdzCdEMq0mO
+         UMFJ0JsZO9r/GyZxyRU76iYGgF/7rl0zwXLixDbWPgyWOQ63wjrZwwnOr3K1Jnv7a9PF
+         QKEiklV9Wc5SFJuofCme726CpZgab0fToWe4ZqGpSUmTSEqY0DkQgIKX3LCCrRr03tgp
+         bLGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Q7ZSEV4LTD7LAEM2Qop9QWeKPyT8Eo98shgP/WcfAJM=;
+        b=aM5eFQd+hGMVAWRlr5jUU/6dHIi/lKYY2f1TbZCQ9FgwVpEnbEzCVASW1CbbN2oHcb
+         tzkvgeywhHPPgWBCdHQr4PxLPmDoS7f5vFZZUQ7w1gIEekeqfe1VaLtlU2B2nU+Om/hf
+         37oy2FZu2tTV9R/J0fxJHXjY3YjohGveXmFoYJoLkbrf1zMT9wjA79Z7cKiJ+WQnTbCL
+         gltOnsOevi1aOM85ANDSTQTh1ZTy6FWaCAsGju2Eun5G+3zCP0HUKdZvT+1cU4t7lly3
+         MEMyQyz5FZtDqOVmxWQwVzqZh6bF77EcjGIHU7DPIziNqyzBVhE8Gk44OelcCHdpxZpM
+         k1fA==
+X-Gm-Message-State: AJIora+NVseYGC0rXIHiYew8l/iGA56gXJaJC3X4JT2GKelcnTsBG+vv
+        a3uYz7ZW1E/OTyd7gt8g69Wle+sxRXxqDg==
+X-Google-Smtp-Source: AGRyM1v0/J58YZ3w/3MSk7WzTC+fbEwFJrbTeOxEdqpHzith/X6cEbp8QvXyQ3UyKtR/zcQ/eIEfuw==
+X-Received: by 2002:a05:6a00:1a0c:b0:523:1a23:957f with SMTP id g12-20020a056a001a0c00b005231a23957fmr15619816pfv.45.1656345436401;
+        Mon, 27 Jun 2022 08:57:16 -0700 (PDT)
+Received: from octofox.hsd1.ca.comcast.net ([2601:641:401:1d20:26dc:1818:7133:85db])
+        by smtp.gmail.com with ESMTPSA id h4-20020a056a001a4400b005252e524d1csm7499932pfv.211.2022.06.27.08.57.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 08:57:15 -0700 (PDT)
+From:   Max Filippov <jcmvbkbc@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-next@vger.kernel.org, ntb@lists.linux.dev,
+        Alexander Fomichev <a.fomichev@yadro.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Jon Mason <jdmason@kudzu.us>, Max Filippov <jcmvbkbc@gmail.com>
+Subject: [PATCH] drivers/ntb/test: avoid 64-bit modulus operation
+Date:   Mon, 27 Jun 2022 08:57:10 -0700
+Message-Id: <20220627155710.2067032-1-jcmvbkbc@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220623160723.7a44b573@canb.auug.org.au>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 04:07:23PM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the amdgpu tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
-> 
-> In file included from include/linux/radix-tree.h:12,
->                  from include/linux/idr.h:15,
->                  from include/linux/kernfs.h:12,
->                  from include/linux/sysfs.h:16,
->                  from include/linux/kobject.h:20,
->                  from include/linux/energy_model.h:7,
->                  from include/linux/device.h:16,
->                  from include/linux/power_supply.h:15,
->                  from drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:28:
-> drivers/gpu/drm/amd/amdgpu/amdgpu_device.c: In function 'amdgpu_reset_capture_coredumpm':
-> include/linux/gfp.h:337:25: error: passing argument 5 of 'dev_coredumpm' makes pointer from integer without a cast [-Werror=int-conversion]
->   337 | #define GFP_KERNEL      (__GFP_RECLAIM | __GFP_IO | __GFP_FS)
->       |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->       |                         |
->       |                         unsigned int
-> drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:4726:55: note: in expansion of macro 'GFP_KERNEL'
->  4726 |         dev_coredumpm(dev->dev, THIS_MODULE, adev, 0, GFP_KERNEL,
->       |                                                       ^~~~~~~~~~
-> In file included from drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:35:
-> include/linux/devcoredump.h:59:30: note: expected 'ssize_t (*)(char *, loff_t,  size_t,  void *, size_t)' {aka 'long int (*)(char *, long long int,  long unsigned int,  void *, long unsigned int)'} but argument is of type 'unsigned int'
->    59 |                    ssize_t (*read)(char *buffer, loff_t offset, size_t count,
->       |                    ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    60 |                                    void *data, size_t datalen),
->       |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:4727:23: error: passing argument 6 of 'dev_coredumpm' from incompatible pointer type [-Werror=incompatible-pointer-types]
->  4727 |                       amdgpu_devcoredump_read, amdgpu_devcoredump_free);
->       |                       ^~~~~~~~~~~~~~~~~~~~~~~
->       |                       |
->       |                       ssize_t (*)(char *, loff_t,  size_t,  void *, size_t) {aka long int (*)(char *, long long int,  long unsigned int,  void *, long unsigned int)}
-> In file included from drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:35:
-> include/linux/devcoredump.h:61:27: note: expected 'void (*)(void *)' but argument is of type 'ssize_t (*)(char *, loff_t,  size_t,  void *, size_t)' {aka 'long int (*)(char *, long long int,  long unsigned int,  void *, long unsigned int)'}
->    61 |                    void (*free)(void *data));
->       |                    ~~~~~~~^~~~~~~~~~~~~~~~~
-> drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:4726:9: error: too many arguments to function 'dev_coredumpm'
->  4726 |         dev_coredumpm(dev->dev, THIS_MODULE, adev, 0, GFP_KERNEL,
->       |         ^~~~~~~~~~~~~
-> In file included from drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:35:
-> include/linux/devcoredump.h:57:6: note: declared here
->    57 | void dev_coredumpm(struct device *dev, struct module *owner,
->       |      ^~~~~~~~~~~~~
-> cc1: all warnings being treated as errors
-> 
-> Caused by commit
-> 
->   3d8785f6c04a ("drm/amdgpu: adding device coredump support")
-> 
-> interacting with commit
-> 
->   77515ebaf019 ("devcoredump: remove the useless gfp_t parameter in dev_coredumpv and dev_coredumpm")
-> 
-> from the driver-core tree.
-> 
-> I have applied the following merge resolution patch for today.
-> 
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Thu, 23 Jun 2022 15:56:22 +1000
-> Subject: [PATCH] fix up for "devcoredump: remove the useless gfp_t parameter in dev_coredumpv and dev_coredumpm"
-> 
-> interacting with
-> 
->   3d8785f6c04a ("drm/amdgpu: adding device coredump support")
-> 
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  drivers/gpu/drm/amd/amdgpu/amdgpu_device.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Redefine RESCHEDULE_RATIO to a closest power of 2 so that the following
+code in the perf_run_latency
 
-Sorry for the delay, the driver-core tree has now reverted this, so all
-should be good.
+	/* Avoid processor soft lock-ups */
+	if (!(pthr->tries % RESCHEDULE_RATIO))
+		schedule();
 
-greg k-h
+doesn't do 64-bit modulus operation.
+This fixes the following build failures on 32-bit architectures visible
+in linux-next:
+
+  ERROR: modpost: "__umoddi3" [drivers/ntb/test/ntb_perf.ko] undefined!
+
+Fixes: dc150dfb081f ("ntb_perf: extend with burst latency measurement")
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+---
+ drivers/ntb/test/ntb_perf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/ntb/test/ntb_perf.c b/drivers/ntb/test/ntb_perf.c
+index 23e154bd41b9..536fab0030f3 100644
+--- a/drivers/ntb/test/ntb_perf.c
++++ b/drivers/ntb/test/ntb_perf.c
+@@ -126,7 +126,7 @@ MODULE_DESCRIPTION("PCIe NTB Performance Measurement Tool");
+ #define PERF_BUF_LEN 1024
+ 
+ #define LAT_MIN_TRIES	20
+-#define RESCHEDULE_RATIO	10000
++#define RESCHEDULE_RATIO	8192 /* power of 2, to avoid actual division */
+ 
+ static unsigned long max_mw_size;
+ module_param(max_mw_size, ulong, 0644);
+-- 
+2.30.2
+

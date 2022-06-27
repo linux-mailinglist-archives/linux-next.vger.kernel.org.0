@@ -2,65 +2,65 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAF5555CE38
-	for <lists+linux-next@lfdr.de>; Tue, 28 Jun 2022 15:04:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E72E755CBED
+	for <lists+linux-next@lfdr.de>; Tue, 28 Jun 2022 15:00:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233330AbiF0I3j (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 27 Jun 2022 04:29:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56768 "EHLO
+        id S234143AbiF0JwD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 27 Jun 2022 05:52:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232821AbiF0I3i (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 27 Jun 2022 04:29:38 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47B5F625B;
-        Mon, 27 Jun 2022 01:29:37 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id 65so8279608pfw.11;
-        Mon, 27 Jun 2022 01:29:37 -0700 (PDT)
+        with ESMTP id S234121AbiF0JwC (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 27 Jun 2022 05:52:02 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA05263F3;
+        Mon, 27 Jun 2022 02:52:00 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id w24so8721775pjg.5;
+        Mon, 27 Jun 2022 02:52:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=ukkF+qHOzzJMvCgB5J2nCt+SiXX4tns6CZy4txdYFbU=;
-        b=XxyEOMZwFzVx5EqLSOdfvMnVEC1pw/bEOwoadIsKwf1nVcHANtQJ22GQmY1QPa/0n/
-         fx7Nqz9oO4lusnDOnJQq/hBe0NL62WNXNxb2FVZKsAGwv7jjJl6KgArZ5IuCfU4WtYrk
-         clOJhaaue+7migoHXRwutGvYSWZXu0fPYEe9X6VF+sQT2ulz7yn9PeutINSUiZ5kw7Z5
-         295/GFrIzBjTkxAcs4s+iMb9rerAqOmbWJ1vG70DgxWYzx7Kg8ZEWYkdd1t8/e7o8fOZ
-         OIbccFFmOvAVQGWX11VoQl8Timd35Qy3RvBGIWwPnO7YZAzwkZXdiOXMT9kG5f1hpfdz
-         V75g==
+        bh=2cG8fbzR7+gSe64OpxIhFg9qrmMhTpmF6O45hxZflsM=;
+        b=GWZnMH8B8gSPfjfFy6K8OY0ryGr0AlIE5f5FllGrc2v3EOFqd3Qm9XGAVYT/mDzAqy
+         S/Aha1zwB11XwyNRz4bkUq4EvC4F/RQ2/wjwB//TD9/9M4+hgt62Plyft3icFPNTDG/F
+         OYuc4pvJYiLwiN9JA0YhsJ6Sks+d2Mkf1eND4EwfGuv7S0x69+HkxrNNU5OncpbHPSnv
+         GnGnloQgFHPdSRUXoc7q6hTGZB2eZcUZ3sfT1P9yHzsYJSqGclSWpgBVGAxIMfVjhiDG
+         TGdDtXgU598R+6lQvR0RZoZv+fn3iaCx36p7nO0L0UhGR9MrHAXJO6aNwh6EjSkhmE+c
+         4Tlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=ukkF+qHOzzJMvCgB5J2nCt+SiXX4tns6CZy4txdYFbU=;
-        b=cfxkCd+NLvKNwQt6BZ+BD8e1/FYfjTU/Y4GD3VXuvNjEY2lhsM8tzY94SyxKVM6E0h
-         /miGbysuLgkArtlluVMQMbhMJM4sC751Jrdr10LwU29vgxsryDvo04uaPbJMZYhYjDQs
-         1YkxinOVgCxW7gHHI+9iSGpwDag23dYtbbIP+DnTwI/Zpf2E6z45VcIJmdvt4niHDvec
-         jMtqeYPkHjP7/3fyYQJtFpqy47dvD11tIM7QPE+qiG+P9WX8nbD3ezBKPgKwcduiXElD
-         Hcyetd+veNLNw4ae9BRr2Z6XGQPTF3PEv2XxASiEXgGrrlvIqs4K+AuYMMuCEu/72LvI
-         2E3Q==
-X-Gm-Message-State: AJIora8XpkWgrz+Svd7GyO3srs7GyEgCzWCVp59mUpZbYvhfygnLL3Ac
-        3pNcK3HBIc7sIT/iv++gm7U=
-X-Google-Smtp-Source: AGRyM1t5rT9Mx8i6fAAE3TL6UtytoFVyXcLJMuFRwjYYPjWjgJuidF7BRMqT7CWr0IQsni4W0A7WMA==
-X-Received: by 2002:aa7:8e9e:0:b0:525:1d15:8fb8 with SMTP id a30-20020aa78e9e000000b005251d158fb8mr13469032pfr.35.1656318576800;
-        Mon, 27 Jun 2022 01:29:36 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-68.three.co.id. [180.214.232.68])
-        by smtp.gmail.com with ESMTPSA id bf27-20020a056a000d9b00b0051bd9981ccbsm6497050pfb.39.2022.06.27.01.29.34
+        bh=2cG8fbzR7+gSe64OpxIhFg9qrmMhTpmF6O45hxZflsM=;
+        b=QieuS6UvqHBvTlK++ofa5ZwgxGJvAs+t4uzsYPw+LczJf4SQDa+WHymPt9UP4FNW0z
+         3fK3TUwSaXTvsLtEH4KWuBb0qeQ4iFr6JD8E4K56UjY8DkW9QaNuxbHGy4VohOMU2R+u
+         IFJKJJuAEGhHNWQAb2NSggfRiU6T6qXTW+9a2iR+fi5BF2R55NSTo1Gm2rEyjQJTeruR
+         /wQTBOg7r3BcdQUohrAgWtqGl4SJBa4apuERXun4lvNuFRrYdHkSGlHCmAdieivgvVqM
+         2vEyXoUHEJ0IBcqxGPwne4e1T1OIm6NFvIRpfER6hCX44rYk0LwS8iRG+cMWLSQdq6Sy
+         L5Gg==
+X-Gm-Message-State: AJIora/QNz9oTNIyBc+4M39VQhXaDOH4ZGCfocjGZ4Y/n5H8WG4mETqw
+        I3k2lRK9fvBTdNRUjnCOB7o=
+X-Google-Smtp-Source: AGRyM1v+OC+sotsqxlAGI9ck77bnETYvYZSfr5HQbc3snuIdWwbtWhQu0mtmcXGPK+sXUaLUzeHUgg==
+X-Received: by 2002:a17:902:b216:b0:16a:854:e641 with SMTP id t22-20020a170902b21600b0016a0854e641mr13288272plr.154.1656323520115;
+        Mon, 27 Jun 2022 02:52:00 -0700 (PDT)
+Received: from debian.me (subs03-180-214-233-72.three.co.id. [180.214.233.72])
+        by smtp.gmail.com with ESMTPSA id p6-20020a170902eac600b0016a6e9a2ec8sm6022128pld.250.2022.06.27.02.51.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 01:29:36 -0700 (PDT)
+        Mon, 27 Jun 2022 02:51:59 -0700 (PDT)
 Received: by debian.me (Postfix, from userid 1000)
-        id B3DDC10388D; Mon, 27 Jun 2022 15:29:30 +0700 (WIB)
+        id 396CB1038BD; Mon, 27 Jun 2022 16:51:56 +0700 (WIB)
 From:   Bagas Sanjaya <bagasdotme@gmail.com>
 To:     linux-doc@vger.kernel.org
 Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Paolo Bonzini <pbonzini@redhat.com>,
         Jonathan Corbet <corbet@lwn.net>,
-        Allison Randal <allison@lohutok.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-next@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH RESEND next] Documentation: samsung-s3c24xx: Add blank line after SPDX directive
-Date:   Mon, 27 Jun 2022 15:29:28 +0700
-Message-Id: <20220627082928.11239-1-bagasdotme@gmail.com>
+        David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
+        kvm@vger.kernel.org, linux-next@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH next 0/2] Documentation: KVM: KVM_CAP_VM_DISABLE_NX_HUGE_PAGES documentation fixes
+Date:   Mon, 27 Jun 2022 16:51:49 +0700
+Message-Id: <20220627095151.19339-1-bagasdotme@gmail.com>
 X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -74,40 +74,39 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-After merging spdx tree for linux-next testing, Stephen Rothwell reported
-htmldocs warning:
+After merging kvm tree for linux-next, Stephen Rothwell reported
+htmldocs warnings on KVM_CAP_VM_DISABLE_NX_HUGE_PAGES capability
+documentation:
 
-Documentation/arm/samsung-s3c24xx/cpufreq.rst:2: WARNING: Explicit markup ends without a blank line; unexpected unindent.
+Documentation/virt/kvm/api.rst:8210: WARNING: Title underline too short.
 
-It is due to missing blank line separator between SPDX directive and
-page title.
+8.38 KVM_CAP_VM_DISABLE_NX_HUGE_PAGES
+---------------------------
+Documentation/virt/kvm/api.rst:8217: WARNING: Unexpected indentation.
 
-Add the blank line to fix the warning.
+Fix these warnings by:
 
-Link: https://lore.kernel.org/linux-next/20220614164506.6afd65a6@canb.auug.org.au/
-Fixes: b7bc1c9e5b04da ("treewide: Replace GPLv2 boilerplate/reference with SPDX - gpl-2.0_147.RULE")
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+  [1/2]: extend the heading underline
+  [2/2]: properly format the capability table
+
+Cc: Paolo Bonzini <pbonzini@redhat.com>
 Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: Allison Randal <allison@lohutok.net>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: David Matlack <dmatlack@google.com>
+Cc: Ben Gardon <bgardon@google.com>
+Cc: Peter Xu <peterx@redhat.com>
+Cc: kvm@vger.kernel.org
 Cc: linux-next@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
- Documentation/arm/samsung-s3c24xx/cpufreq.rst | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/arm/samsung-s3c24xx/cpufreq.rst b/Documentation/arm/samsung-s3c24xx/cpufreq.rst
-index ed19ce1a462921..cd22697cf60660 100644
---- a/Documentation/arm/samsung-s3c24xx/cpufreq.rst
-+++ b/Documentation/arm/samsung-s3c24xx/cpufreq.rst
-@@ -1,4 +1,5 @@
- .. SPDX-License-Identifier: GPL-2.0-only
-+
- =======================
- S3C24XX CPUfreq support
- =======================
+Bagas Sanjaya (2):
+  Documentation: KVM: extend KVM_CAP_VM_DISABLE_NX_HUGE_PAGES heading
+    underline
+  KVM: x86/MMU: properly format KVM_CAP_VM_DISABLE_NX_HUGE_PAGES
+    capability table
+
+ Documentation/virt/kvm/api.rst | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
 -- 
 An old man doll... just what I always wanted! - Clara
 

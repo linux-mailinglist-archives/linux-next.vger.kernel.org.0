@@ -2,109 +2,144 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EC1F560398
-	for <lists+linux-next@lfdr.de>; Wed, 29 Jun 2022 16:50:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1C985607A6
+	for <lists+linux-next@lfdr.de>; Wed, 29 Jun 2022 19:48:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233341AbiF2Osf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 29 Jun 2022 10:48:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54934 "EHLO
+        id S229874AbiF2RsF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 29 Jun 2022 13:48:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233682AbiF2Osd (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 29 Jun 2022 10:48:33 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8672CB7E5
-        for <linux-next@vger.kernel.org>; Wed, 29 Jun 2022 07:48:31 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id z18-20020a056e02089200b002dab7cef3d2so2176550ils.16
-        for <linux-next@vger.kernel.org>; Wed, 29 Jun 2022 07:48:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=piY2rqjjpLSURcBVOJ67ylQE4JJjSD/EdRDbwcjkkEw=;
-        b=bONVnT/ZbJQBNFeM+6+WHp4q0AXarrHVasMeKZ5CniSvb6CP/Ur9HfbDgHVma0cwmx
-         I3fP5HTW8zkvkpp7MGe7SpYXfb05sGyEWkst7/LqDbhh8Xr2cuWgqJy2Ox3zZBS5QmNa
-         hAJWo48we2HMMxgKMDwgMCFiJsc/PgEDWiBH7nf75P2Tq00d6Cd0LrcAjNOa5LgPoiMz
-         6+FMt3g7qcl+yIbFGxDP5CRZ/sf5zlMwWw6sgzCG0wRxzz65hj422mq2sUpF/9YDa++3
-         aK2/fFihJPxAMEDUlvWr+c8iSTBh/4lE6E5zBQyusAP2FV+ziGaOtzfa6dhZ6Stk5PrO
-         HhYw==
-X-Gm-Message-State: AJIora9np7OKQ82zDiERguMnvZ6bLgal1aIY2rFaDMuALayNmi8q3God
-        WvNTpMNNg3tdWNFkyZKlDswbjePwND3Rb3nnukrR9CIKSEDd
-X-Google-Smtp-Source: AGRyM1sUZ9tCojVibTV7y72NWNfIQpGOeRuHkb2gvuxp3tttZu+oPGZn5RsZrt2EH9ny3swAAA0KvfrzRFhuhwRVzPQt0CMJrniG
+        with ESMTP id S229635AbiF2RsA (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 29 Jun 2022 13:48:00 -0400
+Received: from smtp-fw-33001.amazon.com (smtp-fw-33001.amazon.com [207.171.190.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79D0B3D1E5;
+        Wed, 29 Jun 2022 10:47:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1656524879; x=1688060879;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=ZQt8BrZncvEXonYqD8ln2HEUss6QJGKaiw+Ny1S0QT4=;
+  b=l7I6f4UoEyLElsi68apVpB5MhJvU6QZ3KQFhNmxglsCpG7U6X9brISIT
+   vH6xYjRe2H+hmy2PzpnDMIMkGMDhKOubKinLzect1qlzvG+Y2sOh4xtsZ
+   LxbYnWLCMoqJMZoAjwhzBMlAyL6JoDQNMrl+LmTlHSJrb/biv0bpW12GX
+   0=;
+X-IronPort-AV: E=Sophos;i="5.92,231,1650931200"; 
+   d="scan'208";a="206136409"
+Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-pdx-2a-5bed4ba5.us-west-2.amazon.com) ([10.43.8.2])
+  by smtp-border-fw-33001.sea14.amazon.com with ESMTP; 29 Jun 2022 17:47:42 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2a-5bed4ba5.us-west-2.amazon.com (Postfix) with ESMTPS id 37F4B91D4A;
+        Wed, 29 Jun 2022 17:47:40 +0000 (UTC)
+Received: from EX13D04ANC001.ant.amazon.com (10.43.157.89) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.36; Wed, 29 Jun 2022 17:47:39 +0000
+Received: from 88665a182662.ant.amazon.com (10.43.160.95) by
+ EX13D04ANC001.ant.amazon.com (10.43.157.89) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.36; Wed, 29 Jun 2022 17:47:37 +0000
+From:   Kuniyuki Iwashima <kuniyu@amazon.com>
+To:     <sachinp@linux.ibm.com>
+CC:     <davem@davemloft.net>, <kuniyu@amazon.com>,
+        <linux-next@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
+        <netdev@vger.kernel.org>
+Subject: Re: [powerpc] Fingerprint systemd service fails to start (next-20220624)
+Date:   Wed, 29 Jun 2022 10:47:29 -0700
+Message-ID: <20220629174729.6744-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <FAA64E21-B3FE-442A-BA6B-D865006CBE3E@linux.ibm.com>
+References: <FAA64E21-B3FE-442A-BA6B-D865006CBE3E@linux.ibm.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:dc4:b0:33c:c2c5:50ab with SMTP id
- m4-20020a0566380dc400b0033cc2c550abmr2093334jaj.26.1656514110924; Wed, 29 Jun
- 2022 07:48:30 -0700 (PDT)
-Date:   Wed, 29 Jun 2022 07:48:30 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000025abbc05e2973f52@google.com>
-Subject: [syzbot] linux-next boot error: WARNING in blk_mq_release
-From:   syzbot <syzbot+7582a7c7cf0affa6c9be@syzkaller.appspotmail.com>
-To:     axboe@kernel.dk, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.43.160.95]
+X-ClientProxiedBy: EX13D48UWA001.ant.amazon.com (10.43.163.52) To
+ EX13D04ANC001.ant.amazon.com (10.43.157.89)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hello,
+From:   Sachin Sant <sachinp@linux.ibm.com>
+Date:   Tue, 28 Jun 2022 12:41:35 +0530
+>>> I have attached dmesg log for reference. Let me know if any additional
+>>> Information is required.
+>> 
+>> * Could you provide
+>> * dmesg and /var/log/messages on a successful case? (without the commit)
+>> * Unit file
+>> * repro steps
+> 
+> I have attached the relevant log files. The attached tarball contains
+> dmesg, /var/log/messages and strace o/p for fprintd service collected
+> for working case and failure case.
 
-syzbot found the following issue on:
-
-HEAD commit:    c4ef528bd006 Add linux-next specific files for 20220629
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=115f9f4c080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=39ac31f5c81daa7c
-dashboard link: https://syzkaller.appspot.com/bug?extid=7582a7c7cf0affa6c9be
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+7582a7c7cf0affa6c9be@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 2226 at block/blk-mq.c:3876 blk_mq_release+0xf8/0x3e0 block/blk-mq.c:3876
-Modules linked in:
-CPU: 0 PID: 2226 Comm: kworker/0:3 Not tainted 5.19.0-rc4-next-20220629-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: events blkg_free_workfn
-RIP: 0010:blk_mq_release+0xf8/0x3e0 block/blk-mq.c:3876
-Code: fd 4c 8d a3 a8 02 00 00 4c 89 e0 48 c1 e8 03 80 3c 28 00 0f 85 14 02 00 00 48 8b 83 a8 02 00 00 49 39 c4 75 b1 e8 28 af 97 fd <0f> 0b eb a8 e8 1f af 97 fd 48 8b 44 24 10 48 05 38 05 00 00 48 89
-RSP: 0000:ffffc90009837ba0 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: ffff88801bd5c000 RCX: 0000000000000000
-RDX: ffff888024193a80 RSI: ffffffff83e307e8 RDI: 0000000000000000
-RBP: dffffc0000000000 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000000001 R12: ffff88801bd5c2a8
-R13: ffff88801d898190 R14: ffff88801d898048 R15: 0000000000000000
-FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffff88823ffff000 CR3: 000000000ba8e000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- blk_release_queue+0x15b/0x280 block/blk-sysfs.c:782
- kobject_cleanup lib/kobject.c:673 [inline]
- kobject_release lib/kobject.c:704 [inline]
- kref_put include/linux/kref.h:65 [inline]
- kobject_put+0x1be/0x4c0 lib/kobject.c:721
- blkg_free_workfn+0x128/0x210 block/blk-cgroup.c:96
- process_one_work+0x991/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2e9/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
- </TASK>
+Thanks for your help!
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+>> * Is it reproducible after login? (e.g. systemctl restart)
+>> * If so, please provide
+>> * the result of strace -t -ff
+>> 
+> Yes, the problem can be recreated after login. I have collected the strace
+> logs.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+I confirmed fprintd failed to launch with this message on failure case.
+
+===
+ltcden8-lp6 fprintd[2516]: (fprintd:2516): fprintd-WARNING **: 01:56:45.705: Failed to open connection to bus: Could not connect: Connection refused
+===
+
+
+But in the strace log of both cases, only one socket is created and
+following connect() completes without an error.  And the peer socket
+does not seem to be d-bus one.
+
+===
+$ cat working-case/strace-fprintd-service.log | grep "socket("
+01:52:08 socket(AF_UNIX, SOCK_STREAM|SOCK_CLOEXEC|SOCK_NONBLOCK, 0) = 3
+$ cat working-case/strace-fprintd-service.log | grep "socket(" -A 10
+01:52:08 socket(AF_UNIX, SOCK_STREAM|SOCK_CLOEXEC|SOCK_NONBLOCK, 0) = 3
+...
+01:52:08 connect(3, {sa_family=AF_UNIX, sun_path="/run/systemd/private"}, 22) = 0
+...
+$ cat not-working-case/strace-fprintd-service.log | grep "socket("
+01:58:14 socket(AF_UNIX, SOCK_STREAM|SOCK_CLOEXEC|SOCK_NONBLOCK, 0) = 3
+$ cat not-working-case/strace-fprintd-service.log | grep "socket(" -A 10
+01:58:14 socket(AF_UNIX, SOCK_STREAM|SOCK_CLOEXEC|SOCK_NONBLOCK, 0) = 3
+...
+01:58:14 connect(3, {sa_family=AF_UNIX, sun_path="/run/systemd/private"}, 22) = 0
+===
+
+So I think the error message part is not traced well.
+Could you try to strace directly for the command in ExecStart section of
+its unit file?
+
+
+>> * Does it happen on only powerpc? How about x86 or arm64?
+>> 
+> I have attempted this only on powerpc. Don’t have access to arm or x86
+> setup to attempt it.
+
+I tried on my machine but fprintd launched successfully in both cases.
+And few minutes later, it exited because there was no dedicated device for
+fprintd, I think.
+
+===
+$ sudo systemctl status fprintd
+● fprintd.service - Fingerprint Authentication Daemon
+   Loaded: loaded (/usr/lib/systemd/system/fprintd.service; static; vendor preset: disabled)
+   Active: inactive (dead)
+     Docs: man:fprintd(1)
+
+Jun 29 05:46:22 ip-10-0-0-163.ap-northeast-1.compute.internal systemd[1]: Starting Fingerprint Authentication Daemon...
+Jun 29 05:46:22 ip-10-0-0-163.ap-northeast-1.compute.internal systemd[1]: Started Fingerprint Authentication Daemon.
+Jun 29 05:46:22 ip-10-0-0-163.ap-northeast-1.compute.internal fprintd[1291]: Launching FprintObject
+Jun 29 05:46:22 ip-10-0-0-163.ap-northeast-1.compute.internal fprintd[1291]: D-Bus service launched with name: net.reactivated.Fprint
+Jun 29 05:46:22 ip-10-0-0-163.ap-northeast-1.compute.internal fprintd[1291]: entering main loop
+Jun 29 05:46:52 ip-10-0-0-163.ap-northeast-1.compute.internal fprintd[1291]: No devices in use, exit
+===

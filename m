@@ -2,101 +2,193 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A00DF561642
-	for <lists+linux-next@lfdr.de>; Thu, 30 Jun 2022 11:25:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42E4C56165D
+	for <lists+linux-next@lfdr.de>; Thu, 30 Jun 2022 11:32:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230511AbiF3JZS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 30 Jun 2022 05:25:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58048 "EHLO
+        id S232742AbiF3JcX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 30 Jun 2022 05:32:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230131AbiF3JZR (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 30 Jun 2022 05:25:17 -0400
-Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B04023A71C;
-        Thu, 30 Jun 2022 02:25:16 -0700 (PDT)
-Received: by mail-qk1-f177.google.com with SMTP id b125so13908923qkg.11;
-        Thu, 30 Jun 2022 02:25:16 -0700 (PDT)
+        with ESMTP id S229446AbiF3JcW (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 30 Jun 2022 05:32:22 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E744E42ECF
+        for <linux-next@vger.kernel.org>; Thu, 30 Jun 2022 02:32:20 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id o17-20020a056e02115100b002d95d6881e4so10273281ill.19
+        for <linux-next@vger.kernel.org>; Thu, 30 Jun 2022 02:32:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=24CMEFCHWbIRhmYUqpqkC6kLf9aI1+ezMoPxKMAQOcI=;
-        b=jFRXSa75d0zEeKwjwWGD1OrDUceTJJ/FgqNOhaGBT6JP8kE6ngIYNGmlYcZHLia8AC
-         PZmrwG3xSWDyeiF7JcopSBFeY24RwsIAWmhQOQCnZv3M2s/PFhiQPpEgaN8S7+lMTpir
-         LvtE7EdzpqTFhDz1GcHRyzd/KwiAkDVw/z5928i6LSOi21k7uI3/d4rtE7uchq+PPnsv
-         56Kktn7jVbmwAmZgPQnh6jaipRiPQbRe4dgX0zTSzWuLJ7foFC76KLXvq9N36cClavUa
-         DCIdsgJpi46TG7Amc3WJRQAcDZH0zxWrh+H6nBAuzfTIgdQjEHBTy/GNEnf+uKKT0xHX
-         S3nQ==
-X-Gm-Message-State: AJIora8Jp9I/sbGt2w6t6ncSXN1BANmRHp5/7KiSaQRqWDouWcNuYFvA
-        hKlzPNwCPwOBCIOQRgz9j+Oib/owCYfAug==
-X-Google-Smtp-Source: AGRyM1vokc57zFo9ipAcAkPXJhSncE7N62Y6Zngrak6WmiVFgVZESiU5Tfap7pTOWk5+gprSxMLcfw==
-X-Received: by 2002:a37:bb06:0:b0:6af:1396:733a with SMTP id l6-20020a37bb06000000b006af1396733amr5415781qkf.19.1656581115510;
-        Thu, 30 Jun 2022 02:25:15 -0700 (PDT)
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com. [209.85.128.171])
-        by smtp.gmail.com with ESMTPSA id bk32-20020a05620a1a2000b006af1d3e8080sm11009475qkb.85.2022.06.30.02.25.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Jun 2022 02:25:15 -0700 (PDT)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-31772f8495fso172895027b3.4;
-        Thu, 30 Jun 2022 02:25:14 -0700 (PDT)
-X-Received: by 2002:a81:574c:0:b0:317:7c3a:45be with SMTP id
- l73-20020a81574c000000b003177c3a45bemr9028878ywb.316.1656581114644; Thu, 30
- Jun 2022 02:25:14 -0700 (PDT)
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=Aqv+uR4xJVCILY0FJU8Eeg6DETdWn8J1zwf9rn3G8z0=;
+        b=hUkO5zk8h09ZIerjdfNZq+nkITtu68fB5yGRoVAPrcBKt+0jsJ8OrLHg7yYMd+HtW5
+         euNtyfKgXGfDzXrPgvNdFYa6SEKzJx/GM+BCKy6zIFRfzRml1lVyu4aEBjuQlIPF4ziO
+         bfD0h/87PM/8QLG6Wzs4ILHGKxrhBs0SKaItLyE5S+o/fudjvyWFEz7fNasRX0TzXOJn
+         0YNXdRXgMHqsUROdSbAJtNz4O8YgiRfF+30OSQtzGq/Ap9xN7fm8PQ0g6F2ncyQky7HY
+         0CXAcmlVBhICIesJbo5zqe0U7pcoV94EogE7pCVjGaJSV/53UnDTvpZTCYhwEqqTKgog
+         5IIw==
+X-Gm-Message-State: AJIora+1EtXtDE+ez/w53Habn+Kh/USeK0NW4AcuBOfXJSWN01EMObLC
+        DiPdbc0HiDdxB9b36X52il4/qjBiPXpgWtEdcno3ovcCAfDU
+X-Google-Smtp-Source: AGRyM1tQnCRMVWqdnKP691JsDC+C/VhOGWuSIMBmaC32Fz51TGwXC4HTF9SRQpsDPD2ZrP/W2dfjDjkdO+9p+kxH/SsN10TMbvdu
 MIME-Version: 1.0
-References: <20220630151511.58281e52@canb.auug.org.au>
-In-Reply-To: <20220630151511.58281e52@canb.auug.org.au>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 30 Jun 2022 11:25:03 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVD0XZg5grY251D4tqxmJ6bH4MWK2s_4+yLRBdUzPBLTg@mail.gmail.com>
-Message-ID: <CAMuHMdVD0XZg5grY251D4tqxmJ6bH4MWK2s_4+yLRBdUzPBLTg@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the pinctrl-renesas tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Phil Edworthy <phil.edworthy@renesas.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
+X-Received: by 2002:a02:85e3:0:b0:339:cf24:68f6 with SMTP id
+ d90-20020a0285e3000000b00339cf2468f6mr4806247jai.161.1656581540305; Thu, 30
+ Jun 2022 02:32:20 -0700 (PDT)
+Date:   Thu, 30 Jun 2022 02:32:20 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000040624a05e2a6f2db@google.com>
+Subject: [syzbot] linux-next boot error: general protection fault in add_mtd_device
+From:   syzbot <syzbot+fe013f55a2814a9e8cfd@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-next@vger.kernel.org, miquel.raynal@bootlin.com,
+        richard@nod.at, sfr@canb.auug.org.au,
+        syzkaller-bugs@googlegroups.com, vigneshr@ti.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+Hello,
 
-On Thu, Jun 30, 2022 at 7:15 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> After merging the pinctrl-renesas tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
->
-> drivers/pinctrl/renesas/pinctrl-rzv2m.c: In function 'rzv2m_dt_subnode_to_map':
-> drivers/pinctrl/renesas/pinctrl-rzv2m.c:37:33: error: implicit declaration of function 'FIELD_GET' [-Werror=implicit-function-declaration]
->    37 | #define MUX_FUNC(pinconf)       FIELD_GET(MUX_FUNC_MASK, (pinconf))
->       |                                 ^~~~~~~~~
-> drivers/pinctrl/renesas/pinctrl-rzv2m.c:306:31: note: in expansion of macro 'MUX_FUNC'
->   306 |                 psel_val[i] = MUX_FUNC(value);
->       |                               ^~~~~~~~
-> cc1: all warnings being treated as errors
->
-> Caused by commit
->
->   1e18476c392f ("pinctrl: renesas: Add RZ/V2M pin and gpio controller driver")
->
-> I have used the pinctrl-renesas tree from next-20220629 for today.
+syzbot found the following issue on:
 
-Thanks for the report.  This was missing an include of <linux/bitfield.h>,
-which is included implicitly on arm64.
+HEAD commit:    6cc11d2a1759 Add linux-next specific files for 20220630
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=1640f850080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=54f75b620e3845dd
+dashboard link: https://syzkaller.appspot.com/bug?extid=fe013f55a2814a9e8cfd
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Fixed and updated.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+fe013f55a2814a9e8cfd@syzkaller.appspotmail.com
 
-Gr{oetje,eeting}s,
+Block layer SCSI generic (bsg) driver version 0.4 loaded (major 240)
+io scheduler mq-deadline registered
+io scheduler kyber registered
+io scheduler bfq registered
+input: Power Button as /devices/LNXSYSTM:00/LNXPWRBN:00/input/input0
+ACPI: button: Power Button [PWRF]
+input: Sleep Button as /devices/LNXSYSTM:00/LNXSLPBN:00/input/input1
+ACPI: button: Sleep Button [SLPF]
+ACPI: \_SB_.LNKC: Enabled at IRQ 11
+virtio-pci 0000:00:03.0: virtio_pci: leaving for legacy driver
+ACPI: \_SB_.LNKD: Enabled at IRQ 10
+virtio-pci 0000:00:04.0: virtio_pci: leaving for legacy driver
+ACPI: \_SB_.LNKB: Enabled at IRQ 10
+virtio-pci 0000:00:06.0: virtio_pci: leaving for legacy driver
+virtio-pci 0000:00:07.0: virtio_pci: leaving for legacy driver
+N_HDLC line discipline registered with maxframe=4096
+Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
+00:03: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
+00:04: ttyS1 at I/O 0x2f8 (irq = 3, base_baud = 115200) is a 16550A
+00:05: ttyS2 at I/O 0x3e8 (irq = 6, base_baud = 115200) is a 16550A
+00:06: ttyS3 at I/O 0x2e8 (irq = 7, base_baud = 115200) is a 16550A
+Non-volatile memory driver v1.3
+Linux agpgart interface v0.103
+ACPI: bus type drm_connector registered
+[drm] Initialized vgem 1.0.0 20120112 for vgem on minor 0
+[drm] Initialized vkms 1.0.0 20180514 for vkms on minor 1
+Console: switching to colour frame buffer device 128x48
+platform vkms: [drm] fb0: vkmsdrmfb frame buffer device
+usbcore: registered new interface driver udl
+brd: module loaded
+loop: module loaded
+zram: Added device: zram0
+null_blk: disk nullb0 created
+null_blk: module loaded
+Guest personality initialized and is inactive
+VMCI host device registered (name=vmci, major=10, minor=119)
+Initialized host personality
+usbcore: registered new interface driver rtsx_usb
+usbcore: registered new interface driver viperboard
+usbcore: registered new interface driver dln2
+usbcore: registered new interface driver pn533_usb
+nfcsim 0.2 initialized
+usbcore: registered new interface driver port100
+usbcore: registered new interface driver nfcmrvl
+Loading iSCSI transport class v2.0-870.
+scsi host0: Virtio SCSI HBA
+st: Version 20160209, fixed bufsize 32768, s/g segs 256
+Rounding down aligned max_sectors from 4294967295 to 4294967288
+db_root: cannot open: /etc/target
+slram: not enough parameters.
+general protection fault, probably for non-canonical address 0xdffffc00000000ac: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000560-0x0000000000000567]
+CPU: 1 PID: 1 Comm: swapper/0 Not tainted 5.19.0-rc4-next-20220630-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/18/2022
+RIP: 0010:dev_of_node include/linux/device.h:862 [inline]
+RIP: 0010:mtd_check_of_node drivers/mtd/mtdcore.c:563 [inline]
+RIP: 0010:add_mtd_device+0xbc8/0x1520 drivers/mtd/mtdcore.c:721
+Code: 48 81 fd 60 fe ff ff 0f 84 90 fd ff ff e8 b0 10 97 fc 48 8d bd 60 05 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 da 08 00 00 48 8b ad 60 05 00 00 48 85 ed 0f 84
+RSP: 0000:ffffc90000067c98 EFLAGS: 00010206
+RAX: dffffc0000000000 RBX: ffff88801ebf2000 RCX: 0000000000000000
+RDX: 00000000000000ac RSI: ffffffff84e3a650 RDI: 0000000000000560
+RBP: 0000000000000000 R08: 0000000000000006 R09: 0000000000000000
+R10: ffffffff89c00000 R11: 0000000000000001 R12: ffff88801ebf2004
+R13: ffff88801ebf2028 R14: 0000000000000000 R15: 0000000005a00000
+FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000000000 CR3: 000000000ba8e000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ mtd_device_parse_register+0x50c/0x850 drivers/mtd/mtdcore.c:1032
+ mtdram_init_device+0x291/0x350 drivers/mtd/devices/mtdram.c:146
+ init_mtdram+0xe5/0x177 drivers/mtd/devices/mtdram.c:171
+ do_one_initcall+0xfe/0x650 init/main.c:1300
+ do_initcall_level init/main.c:1375 [inline]
+ do_initcalls init/main.c:1391 [inline]
+ do_basic_setup init/main.c:1410 [inline]
+ kernel_init_freeable+0x6b1/0x73a init/main.c:1617
+ kernel_init+0x1a/0x1d0 init/main.c:1506
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:dev_of_node include/linux/device.h:862 [inline]
+RIP: 0010:mtd_check_of_node drivers/mtd/mtdcore.c:563 [inline]
+RIP: 0010:add_mtd_device+0xbc8/0x1520 drivers/mtd/mtdcore.c:721
+Code: 48 81 fd 60 fe ff ff 0f 84 90 fd ff ff e8 b0 10 97 fc 48 8d bd 60 05 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 da 08 00 00 48 8b ad 60 05 00 00 48 85 ed 0f 84
+RSP: 0000:ffffc90000067c98 EFLAGS: 00010206
+RAX: dffffc0000000000 RBX: ffff88801ebf2000 RCX: 0000000000000000
+RDX: 00000000000000ac RSI: ffffffff84e3a650 RDI: 0000000000000560
+RBP: 0000000000000000 R08: 0000000000000006 R09: 0000000000000000
+R10: ffffffff89c00000 R11: 0000000000000001 R12: ffff88801ebf2004
+R13: ffff88801ebf2028 R14: 0000000000000000 R15: 0000000005a00000
+FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffff88823ffff000 CR3: 000000000ba8e000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	48 81 fd 60 fe ff ff 	cmp    $0xfffffffffffffe60,%rbp
+   7:	0f 84 90 fd ff ff    	je     0xfffffd9d
+   d:	e8 b0 10 97 fc       	callq  0xfc9710c2
+  12:	48 8d bd 60 05 00 00 	lea    0x560(%rbp),%rdi
+  19:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  20:	fc ff df
+  23:	48 89 fa             	mov    %rdi,%rdx
+  26:	48 c1 ea 03          	shr    $0x3,%rdx
+* 2a:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
+  2e:	0f 85 da 08 00 00    	jne    0x90e
+  34:	48 8b ad 60 05 00 00 	mov    0x560(%rbp),%rbp
+  3b:	48 85 ed             	test   %rbp,%rbp
+  3e:	0f                   	.byte 0xf
+  3f:	84                   	.byte 0x84
 
-                        Geert
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

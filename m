@@ -2,70 +2,67 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B858561767
-	for <lists+linux-next@lfdr.de>; Thu, 30 Jun 2022 12:14:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 658E756177D
+	for <lists+linux-next@lfdr.de>; Thu, 30 Jun 2022 12:17:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234603AbiF3KN6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 30 Jun 2022 06:13:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51690 "EHLO
+        id S233367AbiF3KQl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 30 Jun 2022 06:16:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234508AbiF3KN6 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 30 Jun 2022 06:13:58 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D18644A20;
-        Thu, 30 Jun 2022 03:13:57 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id r66so18061619pgr.2;
-        Thu, 30 Jun 2022 03:13:57 -0700 (PDT)
+        with ESMTP id S234252AbiF3KQk (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 30 Jun 2022 06:16:40 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51AEC4504F;
+        Thu, 30 Jun 2022 03:16:39 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id dw10-20020a17090b094a00b001ed00a16eb4so2343592pjb.2;
+        Thu, 30 Jun 2022 03:16:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=yHS730e4vBBXm7TzAGTuOdImtTpJ1+sTID/QkZphy1Y=;
-        b=QednnHhV8MfZXVkfpPnF/2EDXwk3hWGuh8w4qVSLxaEI9Vi8S/VygZMjopq6QHH+/0
-         UG6ZglWPVwR/vfNVT+v8/DcUCSO0taqAyE4dRWo6WZlnczZzXeJECeDjluQTIU2YiGzN
-         BhziIkcdSy0Z2u2ET9Rm0urj4BGOF5z+ueZRT9vfeK+sGMiId7GKN4Y97v3zV6dkxIdH
-         OItGIo9RU9Y6vMBH5+Uvc9nbTSQpKwQ7u07WXA5EABGvpkF8fJSFNZdY1djMYhIYu0ZF
-         mUIabd8D1fli6bzVVzGPPjoplsOu5IylZskWPem5rjLUgaxP9eZC1JaMke/SBME/SGud
-         yyog==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=0LVkgORs6ngGfjYpIi6ByVM3qFgrI0AIRiGjFoIOLRk=;
+        b=ivPSRzkcZt1GgHxSMUeImsZkd4ybgFyoLsiiYbw59HNPxovCL5WieAm5NWyQ2JOb6j
+         kn/JySIZ/SXP6BAcz2WlDCFK8BNTb90IY2PugTLlkFVUCaccR9ADOQpS0dxselvANGzm
+         oKngqXFR5RV+buwUQgOhmqVQyBAW+Xa7zf1ME/zFCrFarYpMg987TeKTUUrVZjVpe+AK
+         r5WizShhl2WLfJ72N69Kr+nywNl9SZbZStIa/NAYeHhck4T034PmVNtf5n4eCO3YPdW9
+         pAC1yW8g2FwiZJxyxYtYP1uAiMXetfLLySF6jU9vmJNJrFEmY0f1Y2/5PpB+iGyHbcGD
+         sT6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=yHS730e4vBBXm7TzAGTuOdImtTpJ1+sTID/QkZphy1Y=;
-        b=f3WP2li1HC49xl1Ea4h1GV5qSBT1ctQlCmAvTHGTj2rcucGrx8wC7UdI8rVvFMtf6z
-         gViJAFwEahJGOOuy9Z+kDbGz+d0ZzDmved1MSWPwJ2fGwrcFDxzmUremqErty2yK9iIO
-         yA6EffvXijzxqDD9nFX3l8fzKA1ucZHufUyfzv/MEX52mpQe+K/S1if6fJqi76uD2EXG
-         aIYfQxv4AkiTsc0H4z7HUlz78COrSNn1KQse16QYs3YsaVmxQEjbgSEGQVHCjvhG442F
-         fJUs/uK2ebtgCVThAjbnVkALxj9EsTUIROtUYDpHcDC3jlvjwCrcrf5RFunK94je8yl0
-         BAKQ==
-X-Gm-Message-State: AJIora+3pusf/aQuVDWSe0U85yphnyRPb7wPQVxyKFjeGdQd1tQy/DaI
-        FMBp7i9rLkygKxwKMota1ds=
-X-Google-Smtp-Source: AGRyM1uhJ9hpMKkSHpSlnFoGHFrFu8+IvkcXxYGmxVIhD72S3fLnguDrTs6neMjBXaIuaq7eoTWC1w==
-X-Received: by 2002:a05:6a00:2410:b0:522:9837:581f with SMTP id z16-20020a056a00241000b005229837581fmr15105934pfh.11.1656584036579;
-        Thu, 30 Jun 2022 03:13:56 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=0LVkgORs6ngGfjYpIi6ByVM3qFgrI0AIRiGjFoIOLRk=;
+        b=eLmQ2qCj/YfF8kOKokTfeJ6fSFXIAMqHdRi/NbtX6JyWmmr8UU/t7g560aBz9GH19F
+         jbI9Vejf1UEcK5/FT3JeEY/ybdqhdXxWt4XJ/5b8mVvQmoMDOf8FylniaaMwdjMDF+Vr
+         11burx9yHJq0k+4mTQpsk5en+BXmrpdnFJbJrLIc/TmaD8gV+GIXu7lrb7dzSMGXt0Tv
+         bogqvvjn7+d+wD6h/JmOWEfMBaOO7vcT3/L+xqb14Ui6hsDjx9hAJQBz0O492UT2o9Gi
+         b0F/tceQP4EhaIr3OIfhEZG0WFCcBoisTYrxyJ322eF1/eNBrnuNV1UumJ+jtnDguDwy
+         Dr+Q==
+X-Gm-Message-State: AJIora+eShTvn4uYdEIymWKCUZT5pzYQX5PvmvlzQUBeuYuzEmLMoAS9
+        QwA2UKwI7ma1VJ7E8sOsFZQEtYm5jg4=
+X-Google-Smtp-Source: AGRyM1uGIQU2HXkwr4g8C+kPrDHWataMoplXIBeLEX8CJPk7MuEMoDCW026Q3lnEFBp8mE6oMJI3xA==
+X-Received: by 2002:a17:902:e94f:b0:16a:214e:46c1 with SMTP id b15-20020a170902e94f00b0016a214e46c1mr13813582pll.89.1656584198830;
+        Thu, 30 Jun 2022 03:16:38 -0700 (PDT)
 Received: from debian.me (subs02-180-214-232-27.three.co.id. [180.214.232.27])
-        by smtp.gmail.com with ESMTPSA id y11-20020a170902d64b00b0016782c55790sm13043107plh.232.2022.06.30.03.13.55
+        by smtp.gmail.com with ESMTPSA id k63-20020a632442000000b003fd3a3db089sm12696262pgk.11.2022.06.30.03.16.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jun 2022 03:13:55 -0700 (PDT)
+        Thu, 30 Jun 2022 03:16:38 -0700 (PDT)
 Received: by debian.me (Postfix, from userid 1000)
-        id 77EA8103901; Thu, 30 Jun 2022 17:13:51 +0700 (WIB)
+        id B6DD91038FD; Thu, 30 Jun 2022 17:16:35 +0700 (WIB)
+Date:   Thu, 30 Jun 2022 17:16:35 +0700
 From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     linux-doc@vger.kernel.org
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>, Jonathan Corbet <corbet@lwn.net>,
-        Rob Herring <robh@kernel.org>, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-next@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: [PATCH next] Documentation: coresight: escape coresight bindings file wildcard
-Date:   Thu, 30 Jun 2022 17:13:17 +0700
-Message-Id: <20220630101317.102680-1-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.36.0
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the coresight tree
+Message-ID: <Yr14AyVYbhjmRa+b@debian.me>
+References: <20220630173801.41bf22a2@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220630173801.41bf22a2@canb.auug.org.au>
 X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
@@ -76,48 +73,22 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Stephen Rothwell reported htmldocs warning:
+On Thu, Jun 30, 2022 at 05:38:01PM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the coresight tree, today's linux-next build (htmldocs)
+> produced this warning:
+> 
+> Documentation/trace/coresight/coresight.rst:133: WARNING: Inline emphasis start-string without end-string.
+> 
+> Introduced by commit
+> 
+>   3c15fddf3121 ("dt-bindings: arm: Convert CoreSight bindings to DT schema")
+> 
 
-Documentation/trace/coresight/coresight.rst:133: WARNING: Inline emphasis start-string without end-string.
+I have sent the fix at [1]. Thanks.
 
-The warning above is due to unescaped wildcard asterisk (*) on CoreSight
-devicetree binding filename, which confuses Sphinx as emphasis instead.
+[1]: https://lore.kernel.org/linux-doc/20220630101317.102680-1-bagasdotme@gmail.com/
 
-Escape the wildcard to fix the warning.
-
-Link: https://lore.kernel.org/linux-next/20220630173801.41bf22a2@canb.auug.org.au/
-Fixes: 3c15fddf312120 ("dt-bindings: arm: Convert CoreSight bindings to DT schema")
-Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc: Mike Leach <mike.leach@linaro.org>
-Cc: Leo Yan <leo.yan@linaro.org>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: Rob Herring <robh@kernel.org>
-Cc: coresight@lists.linaro.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-next@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
- Documentation/trace/coresight/coresight.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/Documentation/trace/coresight/coresight.rst b/Documentation/trace/coresight/coresight.rst
-index 529b7c80e6f353..1644a0244ad10a 100644
---- a/Documentation/trace/coresight/coresight.rst
-+++ b/Documentation/trace/coresight/coresight.rst
-@@ -130,7 +130,7 @@ Misc:
- Device Tree Bindings
- --------------------
- 
--See Documentation/devicetree/bindings/arm/arm,coresight-*.yaml for details.
-+See Documentation/devicetree/bindings/arm/arm,coresight-\*.yaml for details.
- 
- As of this writing drivers for ITM, STMs and CTIs are not provided but are
- expected to be added as the solution matures.
-
-base-commit: 6cc11d2a1759275b856e464265823d94aabd5eaf
 -- 
 An old man doll... just what I always wanted! - Clara
-

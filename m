@@ -2,140 +2,96 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC25C565F97
-	for <lists+linux-next@lfdr.de>; Tue,  5 Jul 2022 01:14:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8F62565FAC
+	for <lists+linux-next@lfdr.de>; Tue,  5 Jul 2022 01:17:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230060AbiGDXOL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 4 Jul 2022 19:14:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53732 "EHLO
+        id S233806AbiGDXRZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 4 Jul 2022 19:17:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229877AbiGDXOK (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 4 Jul 2022 19:14:10 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 142CA2BE4;
-        Mon,  4 Jul 2022 16:14:08 -0700 (PDT)
+        with ESMTP id S230149AbiGDXRY (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 4 Jul 2022 19:17:24 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD01101E4;
+        Mon,  4 Jul 2022 16:17:23 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LcM7b4dcFz4xMW;
-        Tue,  5 Jul 2022 09:14:03 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LcMCP6cQNz4xTt;
+        Tue,  5 Jul 2022 09:17:21 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1656976444;
-        bh=gGAy9HKPmq6/KevfTSABt8eUjrOxgMipgIQUBB1dcaY=;
+        s=201702; t=1656976642;
+        bh=1vLTo+qnd53//VVI0HxVN4P2k6b4rqQR/tYhThL5JLw=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=S9y4UWVJaLAxVUq52BpcaEUakpbO/FXhfhyrlNjgTxLq8ZqW5p4HTa8t9DfJS7nEj
-         2igx91RxX8RABh34N2Rv9RjrOJ58FihX31MuGgAFuQce+UPUTmBDFGsEJxtyBZbxC+
-         WCx6IPo8Mtt4/QSCrdnHnq2jlkKVtRsqaN8Ofkjey67CmIMYNUvQHdIlUtZINZ+0RV
-         rK+uw+4QUkWoZYc3/vWCgsFhnhDleCGrnkz4XQrGQ4N8IyJm5qEFs75K1UUqBheGGF
-         jSrKCMrWHIeI80MlYhtuGMWLuAdUJK/ZGuXe+c0X9yiVWVVXQcQuihjNYj8ZfmVdoi
-         U4tj8/8EWfkTQ==
-Date:   Tue, 5 Jul 2022 09:13:52 +1000
+        b=RXEF6WfAwx+fuUXYAjFKUQYacvxtqI4WCSuVEueqd5jmWRuivcxJjnEeP9ivDSUN5
+         RbksYaKwIUvT6Ijzdy8vTesXl4ePYUG8qwe7imCkfh3f14890SMujS6301zTH7XcIA
+         DlGxH0rBFoW3y/EKxyTqWrMjktyNxdryFHajJw8I1hqGFZjoC2YhSrOj+C7ip7zkt9
+         71UZI9Jz4j6/8/UkTxaeXtaUJ21M4Hxx8nleB4QjCBywklRMPrqwKOci4MTFKclf6o
+         heiaCNzcpoK0ZPfQOwnrv92kUOYo4oS12R4Slu5rxIEQ9GdzfJOCQ2iuHeZDRjUjog
+         rHCZVwfOe5okg==
+Date:   Tue, 5 Jul 2022 09:17:20 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     John Johansen <john.johansen@canonical.com>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        David Gow <davidgow@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Ricardo Ribalda <ribalda@chromium.org>
-Subject: Re: linux-next: manual merge of the kunit-next tree with the
- apparmor tree
-Message-ID: <20220705091352.15150c7f@canb.auug.org.au>
-In-Reply-To: <20220405125540.2135d81d@canb.auug.org.au>
-References: <20220405125540.2135d81d@canb.auug.org.au>
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the kunit-next tree
+Message-ID: <20220705091720.7b7e327c@canb.auug.org.au>
+In-Reply-To: <20220427161901.6522f1cf@canb.auug.org.au>
+References: <20220427161901.6522f1cf@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/r9u35FtCzJJEvCNUmSpZDPE";
+Content-Type: multipart/signed; boundary="Sig_/_xjPfU7g3QFOG_H94can3zI";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/r9u35FtCzJJEvCNUmSpZDPE
+--Sig_/_xjPfU7g3QFOG_H94can3zI
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Tue, 5 Apr 2022 12:55:40 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> Today's linux-next merge of the kunit-next tree got a conflict in:
+On Wed, 27 Apr 2022 16:19:01 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
 >=20
->   security/apparmor/policy_unpack_test.c
+> After merging the kunit-next tree, today's linux-next build (htmldocs)
+> produced this warning:
 >=20
-> between commit:
+> Documentation/dev-tools/kunit/api/test:9: include/kunit/test.h:318: WARNI=
+NG: Inline interpreted text or phrase reference start-string without end-st=
+ring.
 >=20
->   d86d1652ab13 ("apparmor: test: Remove some casts which are no-longer re=
-quired")
+> Introduced by commit
 >=20
-> from the apparmor tree and commit:
->=20
->   5f91bd9f1e7a ("apparmor: test: Use NULL macros")
->=20
-> from the kunit-next tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->=20
->=20
-> diff --cc security/apparmor/policy_unpack_test.c
-> index 399dce3781aa,5c18d2f19862..000000000000
-> --- a/security/apparmor/policy_unpack_test.c
-> +++ b/security/apparmor/policy_unpack_test.c
-> @@@ -408,8 -408,8 +408,8 @@@ static void policy_unpack_test_unpack_u
->  =20
->   	size =3D unpack_u16_chunk(puf->e, &chunk);
->  =20
->  -	KUNIT_EXPECT_EQ(test, size, (size_t)0);
->  +	KUNIT_EXPECT_EQ(test, size, 0);
-> - 	KUNIT_EXPECT_PTR_EQ(test, chunk, NULL);
-> + 	KUNIT_EXPECT_NULL(test, chunk);
->   	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos, puf->e->end - 1);
->   }
->  =20
-> @@@ -430,8 -430,8 +430,8 @@@ static void policy_unpack_test_unpack_u
->  =20
->   	size =3D unpack_u16_chunk(puf->e, &chunk);
->  =20
->  -	KUNIT_EXPECT_EQ(test, size, (size_t)0);
->  +	KUNIT_EXPECT_EQ(test, size, 0);
-> - 	KUNIT_EXPECT_PTR_EQ(test, chunk, NULL);
-> + 	KUNIT_EXPECT_NULL(test, chunk);
->   	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos, puf->e->start + TEST_U16_OFFSET=
-);
->   }
->  =20
+>   9bf2eed995f9 ("kunit: add support for kunit_suites that reference init =
+code")
 
-This is now a conflict between the apparmor tree and Linus' tree.
-
+I am still getting this warning. (Its on line 324 now)
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/r9u35FtCzJJEvCNUmSpZDPE
+--Sig_/_xjPfU7g3QFOG_H94can3zI
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLDdDAACgkQAVBC80lX
-0GzbrQf/VcMxgYzo/wSPHsfNd/FLzRzhvareF0a/zzjPH5A+EowGTL6iUFClFxgS
-QCsBZ/p8UhYVQjlDOL5s6Plemt3+FUxxntpgQEx7hSfkiXaErhmzLYxFCn9BMkyc
-La4GyM8g0crlvZu+bUne7on3sTM3nJPtCzC1qgnFVAkyedQLUqSp+HL4YM61Ehjo
-DqGVmV1Y6aqgbdgWDlRY1O7u3S1KZikEc5H3AQGqTHjnNnJr1qTxUYlob3KltjxE
-LODVgXZpYFR2MIuKSjue2Tsab301gYjWzi2X+CzHqw5gAoQ4fuoXOF9VzntMcRYd
-wgOAXNvE5QyfBQGmFkYU2yj46lK4MQ==
-=Kw/g
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLDdQAACgkQAVBC80lX
+0GwNzQf9EyNb+dpXE4IhX59F40w+9xlYDv1ykRnYuQpgPA6mPTrPsLjHDk2jx05F
+kUO3HIc41vHWNy3WOhathYu7hqdof/CmWSW1uGWOQyvKVS7GmOx7mMl34MbbNWx+
+GPAN8ul90IqJ9QN4knG93ofgyU9TC+pJHU7rDYm0RgZGOjgX74yaxpGwpuRldShU
+CU8bh0hVe+TUkumpZuuDv1H9tsrIIhq2FqNzdIScBgPzCXVZD5bYkgKhXp8Sgxt9
+CeWYmJbaqipuoICwWhRtIdx2kf7Z2h03CyGykVb1rnpgq5Vi1iVO5gGRO2qgqCuP
+ZQsEBF7uOIBKW/QPLfxxJI2ZK+CikA==
+=SD9c
 -----END PGP SIGNATURE-----
 
---Sig_/r9u35FtCzJJEvCNUmSpZDPE--
+--Sig_/_xjPfU7g3QFOG_H94can3zI--

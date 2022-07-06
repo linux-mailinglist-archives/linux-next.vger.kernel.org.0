@@ -2,124 +2,121 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4F8A567D76
-	for <lists+linux-next@lfdr.de>; Wed,  6 Jul 2022 06:47:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68999567D81
+	for <lists+linux-next@lfdr.de>; Wed,  6 Jul 2022 06:51:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229605AbiGFErF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 6 Jul 2022 00:47:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56560 "EHLO
+        id S229989AbiGFEu5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 6 Jul 2022 00:50:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiGFErD (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 6 Jul 2022 00:47:03 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44CB51C928;
-        Tue,  5 Jul 2022 21:47:02 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Ld6TF1kgYz4xD9;
-        Wed,  6 Jul 2022 14:46:57 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1657082818;
-        bh=37dZnU5e8vGCV4yrp5k6NCnfhctKFwY0o/cpzafXxhc=;
-        h=Date:From:To:Cc:Subject:From;
-        b=DqyQxraeXDz+EgAagnLf057oT+FE6d8ZBwjVke0GFG1V0YjkL75sYQImEq9Lx6v1X
-         mZTNKYTvuMWyRxN3/kyx1J4xekZdoFoGzQxh1AiQN6ff0HteWtOBGwl4AM3j1uohd4
-         NOrGZF+Kt2K9x/F9BUL24qnp6iFNQIkB8y+rrLgLz47xWDr4KgBQYf9HC+owt4HY5s
-         CIn4pJpiJJz5TM9YvTtdxpqc9agVtgMzKLET1AUfMO7+SvHZqj0xU0NmJWyJEYRaub
-         KB+W+8qagd84+8JOyD7+lpNJgMxdVLyfLyAYlh9XND2wFTYnb7+ZZF/rRk0zBbnft8
-         smgRgHilgrl0A==
-Date:   Wed, 6 Jul 2022 14:46:52 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Williamson <alex.williamson@redhat.com>
-Cc:     Jason Gunthorpe <jgg@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>
-Subject: linux-next: manual merge of the vfio tree with the vfio-fixes tree
-Message-ID: <20220706144652.1b254c76@canb.auug.org.au>
+        with ESMTP id S229454AbiGFEu4 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 6 Jul 2022 00:50:56 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4B4CEEE0C;
+        Tue,  5 Jul 2022 21:50:53 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3B94B152B;
+        Tue,  5 Jul 2022 21:50:53 -0700 (PDT)
+Received: from [10.163.43.16] (unknown [10.163.43.16])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B20893F70D;
+        Tue,  5 Jul 2022 21:50:50 -0700 (PDT)
+Message-ID: <ef6ee347-4248-9f06-f1a1-9f18613e97dc@arm.com>
+Date:   Wed, 6 Jul 2022 10:20:48 +0530
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/NHzqA7IVgl+jcg=a+E2Na51";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] xtensa: noMMU: fix vm_get_page_prot definition
+Content-Language: en-US
+To:     Max Filippov <jcmvbkbc@gmail.com>, linux-xtensa@linux-xtensa.org
+Cc:     Chris Zankel <chris@zankel.net>, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20220705221411.3381797-1-jcmvbkbc@gmail.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <20220705221411.3381797-1-jcmvbkbc@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/NHzqA7IVgl+jcg=a+E2Na51
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hello Max,
 
-Hi all,
+I could reproduce the build failure with nommu_kc705_defconfig.
 
-Today's linux-next merge of the vfio tree got a conflict in:
+On 7/6/22 03:44, Max Filippov wrote:
+> Don't define protection_map and don't use DECLARE_VM_GET_PAGE_PROT in
+> noMMU configs, because in that case the definition for vm_get_page_prot
+> is provided by the include/linux/mm.h
 
-  drivers/vfio/vfio.c
+Right, a fallback (!CONFIG_MMU) stub definition is provided there.
+ 
+> 
+> Fixes: 61ab8053710f ("xtensa/mm: enable ARCH_HAS_VM_GET_PAGE_PROT")
+> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+> ---
+>  arch/xtensa/mm/init.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/arch/xtensa/mm/init.c b/arch/xtensa/mm/init.c
+> index fb830ec8183c..b2587a1a7c46 100644
+> --- a/arch/xtensa/mm/init.c
+> +++ b/arch/xtensa/mm/init.c
+> @@ -217,6 +217,7 @@ static int __init parse_memmap_opt(char *str)
+>  }
+>  early_param("memmap", parse_memmap_opt);
+>  
+> +#ifdef CONFIG_MMU
+>  static const pgprot_t protection_map[16] = {
+>  	[VM_NONE]					= PAGE_NONE,
+>  	[VM_READ]					= PAGE_READONLY,
+> @@ -236,3 +237,4 @@ static const pgprot_t protection_map[16] = {
+>  	[VM_SHARED | VM_EXEC | VM_WRITE | VM_READ]	= PAGE_SHARED_EXEC
+>  };
+>  DECLARE_VM_GET_PAGE_PROT
+> +#endif
 
-between commit:
+LGTM and fixes the build problem.
 
-  afe4e376ac5d ("vfio: Move IOMMU_CAP_CACHE_COHERENCY test to after we know=
- we have a group")
+Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
 
-from the vfio-fixes tree and commit:
+Reviewing CONFIG_MMU dependency for other platforms ....
 
-  3b498b665621 ("vfio: Use device_iommu_capable()")
+* powerpc    - No CONFIG_MMU found - config MMU - bool default y
+* sparc      - No CONFIG_MMU found - config MMU - bool default y
+* arm64      - No CONFIG_MMU found - config MMU - bool default y
+* x86        - No CONFIG_MMU found - config MMU - bool default y
+* microblaze - No CONFIG_MMU found - config MMU - bool default y
+* loongarch  - No CONFIG_MMU found - config MMU - bool default y
+* openrisc   - No CONFIG_MMU found - config MMU - bool default y
+* xtensa     - This fix here
+* hexagon    - No CONFIG_MMU found - config MMU - bool default y
+* parisc     - No CONFIG_MMU found - config MMU - bool default y
+* alpha      - No CONFIG_MMU found - config MMU - bool default y
+* nios2      - No CONFIG_MMU found - config MMU - bool default y
+* riscv	     - Both protection_map[] and DECLARE_VM_GET_PAGE_PROT
+               are inside CONFIG_MMU
+* csky       - No CONFIG_MMU found - config MMU - bool default y
+* s390       - No CONFIG_MMU found - config MMU - bool default y
+* ia64       - No CONFIG_MMU found - config MMU - bool default y
+* mips       - No CONFIG_MMU found - config MMU - bool default y
+* m68k	     - Both protection_map[] and DECLARE_VM_GET_PAGE_PROT
+               are inside CONFIG_MMU (SUN3, MOTOROLA, COLDFIRE)
+* arc        - No CONFIG_MMU found - config MMU - bool default y
+* arm	     - Both protection_map[] and DECLARE_VM_GET_PAGE_PROT
+               are inside CONFIG_MMU
+* um         - No CONFIG_MMU found - config MMU - bool default y
+* sh	     - Both protection_map[] and DECLARE_VM_GET_PAGE_PROT
+               needs to be moved inside CONFIG_MMU, will send a
+	       patch soon.
 
-from the vfio tree.
+So apart from xtensa and sh, no other platform seems to have this
+CONFIG_MMU related build problem. But please do let me know if I
+might have missed something.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/vfio/vfio.c
-index e60b06f2ac22,bd84ca7c5e35..100a3d84380c
---- a/drivers/vfio/vfio.c
-+++ b/drivers/vfio/vfio.c
-@@@ -549,16 -551,6 +551,16 @@@ static struct vfio_group *vfio_group_fi
-  	if (!iommu_group)
-  		return ERR_PTR(-EINVAL);
- =20
- +	/*
- +	 * VFIO always sets IOMMU_CACHE because we offer no way for userspace to
- +	 * restore cache coherency. It has to be checked here because it is only
- +	 * valid for cases where we are using iommu groups.
- +	 */
-- 	if (!iommu_capable(dev->bus, IOMMU_CAP_CACHE_COHERENCY)) {
-++	if (!device_iommu_capable(dev, IOMMU_CAP_CACHE_COHERENCY)) {
- +		iommu_group_put(iommu_group);
- +		return ERR_PTR(-EINVAL);
- +	}
- +
-  	group =3D vfio_group_get_from_iommu(iommu_group);
-  	if (!group)
-  		group =3D vfio_create_group(iommu_group, VFIO_IOMMU);
-
---Sig_/NHzqA7IVgl+jcg=a+E2Na51
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLFE70ACgkQAVBC80lX
-0GwWyQgAiu66Ldsd3ExZ3lzoPIS72M1dv5BWBmvFD5E4fR/p8LTVtyCmq2OVM/Cq
-7ulguEnOYuGi8r0LKWtd167E6BtcJshvwcukwfmBGgzQr50tPNoRDvzlZggWyB5r
-JYSge6uMHKymacBZt/yhg5IXSumLPllx09kdy+ewePks581+6AiKIYPGmMx8tKXQ
-3Sm84cblVJc11BcPeG6j6YTTxKntBOHh+Ya80MTfXPFlOPueCf3DtMo7AgB9v72H
-4I59zBu+6aefEM6fs8A4bvq4jeY7+MGBmpvT8/SFv/s//bQcTm9YvwnAgwlCRKxT
-xruFqlV8mgTUyS2gp7V236wE4A6S9g==
-=B/S1
------END PGP SIGNATURE-----
-
---Sig_/NHzqA7IVgl+jcg=a+E2Na51--
+- Anshuman

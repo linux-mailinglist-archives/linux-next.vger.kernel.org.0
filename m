@@ -2,47 +2,45 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C46F3567BB4
-	for <lists+linux-next@lfdr.de>; Wed,  6 Jul 2022 03:55:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4F8A567D76
+	for <lists+linux-next@lfdr.de>; Wed,  6 Jul 2022 06:47:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230155AbiGFBzn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 5 Jul 2022 21:55:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47736 "EHLO
+        id S229605AbiGFErF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 6 Jul 2022 00:47:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbiGFBzm (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 5 Jul 2022 21:55:42 -0400
+        with ESMTP id S229454AbiGFErD (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 6 Jul 2022 00:47:03 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3BD6F5A7;
-        Tue,  5 Jul 2022 18:55:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44CB51C928;
+        Tue,  5 Jul 2022 21:47:02 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Ld2gT1CJjz4xD9;
-        Wed,  6 Jul 2022 11:55:33 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Ld6TF1kgYz4xD9;
+        Wed,  6 Jul 2022 14:46:57 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1657072534;
-        bh=mazlfcTvHDFdNxv/WJ27nG9eAXcn0s8xLMFVyimG1WU=;
+        s=201702; t=1657082818;
+        bh=37dZnU5e8vGCV4yrp5k6NCnfhctKFwY0o/cpzafXxhc=;
         h=Date:From:To:Cc:Subject:From;
-        b=EUfUiGCAvodUOjzeDFdT6nhshGqvcbvXwjDfv53XpEn74FKfsth8NhjUCkd4ebXls
-         V5vMerl1OJOoHyeUaUFiCIdnT+ejo6KBUnJrVsAhRj8+CKr3Q/ZF4PbNTtlcXxeK+U
-         YNxtFKc/mYFHRDgT6Y+hgKtwnYFxhx/u7aQDgUTFENv1YGzEO9MDqfxpx5PbaQEyoi
-         0dzftqW2mO0DdMG0VymHXTtc01wdPw0GpmNZFu9wzenruPIO3j5JtG6lCWs7GiYyBD
-         RDWB4gjlYoGmCnvVgvkD/SstS5jqtBCVy+m30la40neyPUnJ7uJPTHic5eXqvBy/JB
-         FcZ44vBIZOFRg==
-Date:   Wed, 6 Jul 2022 11:55:29 +1000
+        b=DqyQxraeXDz+EgAagnLf057oT+FE6d8ZBwjVke0GFG1V0YjkL75sYQImEq9Lx6v1X
+         mZTNKYTvuMWyRxN3/kyx1J4xekZdoFoGzQxh1AiQN6ff0HteWtOBGwl4AM3j1uohd4
+         NOrGZF+Kt2K9x/F9BUL24qnp6iFNQIkB8y+rrLgLz47xWDr4KgBQYf9HC+owt4HY5s
+         CIn4pJpiJJz5TM9YvTtdxpqc9agVtgMzKLET1AUfMO7+SvHZqj0xU0NmJWyJEYRaub
+         KB+W+8qagd84+8JOyD7+lpNJgMxdVLyfLyAYlh9XND2wFTYnb7+ZZF/rRk0zBbnft8
+         smgRgHilgrl0A==
+Date:   Wed, 6 Jul 2022 14:46:52 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>
-Cc:     Amadeusz =?UTF-8?B?U8WCYXdpxYRza2k=?= 
-        <amadeuszx.slawinski@linux.intel.com>,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
+To:     Alex Williamson <alex.williamson@redhat.com>
+Cc:     Jason Gunthorpe <jgg@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the sound-asoc tree
-Message-ID: <20220706115529.7deea289@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>
+Subject: linux-next: manual merge of the vfio tree with the vfio-fixes tree
+Message-ID: <20220706144652.1b254c76@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/VFzInB2RX5dS4iDcD.IhnYZ";
+Content-Type: multipart/signed; boundary="Sig_/NHzqA7IVgl+jcg=a+E2Na51";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,
@@ -53,54 +51,75 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/VFzInB2RX5dS4iDcD.IhnYZ
+--Sig_/NHzqA7IVgl+jcg=a+E2Na51
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the sound-asoc tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+Today's linux-next merge of the vfio tree got a conflict in:
 
-sound/soc/intel/avs/boards/i2s_test.c: In function 'avs_i2s_test_probe':
-sound/soc/intel/avs/boards/i2s_test.c:130:60: error: format '%ld' expects a=
-rgument of type 'long int', but argument 4 has type 'int' [-Werror=3Dformat=
-=3D]
-  130 |         card->name =3D devm_kasprintf(dev, GFP_KERNEL, "ssp%ld-loop=
-back", ssp_port);
-      |                                                          ~~^       =
-     ~~~~~~~~
-      |                                                            |       =
-     |
-      |                                                            long int=
-     int
-      |                                                          %d
-cc1: all warnings being treated as errors
+  drivers/vfio/vfio.c
 
-Caused by commit
+between commit:
 
-  e39acc4cfd92 ("ASoC: Intel: avs: Add I2S-test machine board")
+  afe4e376ac5d ("vfio: Move IOMMU_CAP_CACHE_COHERENCY test to after we know=
+ we have a group")
 
-I have used the sound-asoc tree from next-20220705 for today.
+from the vfio-fixes tree and commit:
+
+  3b498b665621 ("vfio: Use device_iommu_capable()")
+
+from the vfio tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/VFzInB2RX5dS4iDcD.IhnYZ
+diff --cc drivers/vfio/vfio.c
+index e60b06f2ac22,bd84ca7c5e35..100a3d84380c
+--- a/drivers/vfio/vfio.c
++++ b/drivers/vfio/vfio.c
+@@@ -549,16 -551,6 +551,16 @@@ static struct vfio_group *vfio_group_fi
+  	if (!iommu_group)
+  		return ERR_PTR(-EINVAL);
+ =20
+ +	/*
+ +	 * VFIO always sets IOMMU_CACHE because we offer no way for userspace to
+ +	 * restore cache coherency. It has to be checked here because it is only
+ +	 * valid for cases where we are using iommu groups.
+ +	 */
+- 	if (!iommu_capable(dev->bus, IOMMU_CAP_CACHE_COHERENCY)) {
+++	if (!device_iommu_capable(dev, IOMMU_CAP_CACHE_COHERENCY)) {
+ +		iommu_group_put(iommu_group);
+ +		return ERR_PTR(-EINVAL);
+ +	}
+ +
+  	group =3D vfio_group_get_from_iommu(iommu_group);
+  	if (!group)
+  		group =3D vfio_create_group(iommu_group, VFIO_IOMMU);
+
+--Sig_/NHzqA7IVgl+jcg=a+E2Na51
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLE65EACgkQAVBC80lX
-0GzS0Af/YSwIFMvvWYfFz6A4lqsFBy75/UVdGQ/xGjEej28WnHpTsiLLvOHIu/xg
-3DOGtdk3Hk0ze3XeV/b1w4xovV/qIb2maCFPxqxHCsxDPGP8QvjyKI20FxzuJhyi
-XvDVDcAYgjKCZ0ub/v5x8xGzS57j4friorhPDjVZ9RYb2ZdPmJrGMrviLVCT2t0+
-d1eIHYFxkF4/SW/psM3J86B/uw61uHl/cP6XjOcgxUiJaKjNU1zwjND1IH5sye1K
-jhQX5NJ4NoUYsusxvJ3oDYiryPERNhKPsBSyxwWsOawbjWZZ1yR6TmStZe5ymf5u
-/FNdcxVmtyWmw1Ea6xLFpvpI85fPjg==
-=ByeV
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLFE70ACgkQAVBC80lX
+0GwWyQgAiu66Ldsd3ExZ3lzoPIS72M1dv5BWBmvFD5E4fR/p8LTVtyCmq2OVM/Cq
+7ulguEnOYuGi8r0LKWtd167E6BtcJshvwcukwfmBGgzQr50tPNoRDvzlZggWyB5r
+JYSge6uMHKymacBZt/yhg5IXSumLPllx09kdy+ewePks581+6AiKIYPGmMx8tKXQ
+3Sm84cblVJc11BcPeG6j6YTTxKntBOHh+Ya80MTfXPFlOPueCf3DtMo7AgB9v72H
+4I59zBu+6aefEM6fs8A4bvq4jeY7+MGBmpvT8/SFv/s//bQcTm9YvwnAgwlCRKxT
+xruFqlV8mgTUyS2gp7V236wE4A6S9g==
+=B/S1
 -----END PGP SIGNATURE-----
 
---Sig_/VFzInB2RX5dS4iDcD.IhnYZ--
+--Sig_/NHzqA7IVgl+jcg=a+E2Na51--

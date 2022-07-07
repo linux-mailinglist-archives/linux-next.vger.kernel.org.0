@@ -2,89 +2,93 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 067F756A18D
-	for <lists+linux-next@lfdr.de>; Thu,  7 Jul 2022 13:59:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1FF156A1B8
+	for <lists+linux-next@lfdr.de>; Thu,  7 Jul 2022 14:03:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235188AbiGGL6v (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 7 Jul 2022 07:58:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56920 "EHLO
+        id S234884AbiGGMDt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 7 Jul 2022 08:03:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235750AbiGGL50 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 7 Jul 2022 07:57:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6D595A2DD;
-        Thu,  7 Jul 2022 04:55:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S234790AbiGGMDt (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 7 Jul 2022 08:03:49 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB63564F9;
+        Thu,  7 Jul 2022 05:03:47 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 775E9B8213C;
-        Thu,  7 Jul 2022 11:55:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BD74C3411E;
-        Thu,  7 Jul 2022 11:55:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657194933;
-        bh=IQJDPVLJ4H47AUx8Ljjae/JPRhou/gHAHrF0+znEb8E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=D+rdZAHylfBWCoO2RrECPmnBMH0cZjere+QAfwBFw8GFnHbrSoQT9D9ZlBfqxyrTb
-         PDPXgBP0RriwGv9jRQO5zvcI02Yi0lTaKT5WCoAYUQJxOartyudNb39sMYX2mruqXI
-         NaE/l4mBa7S4H9cttaqmX+ineSZwlndYxZy8NiB/n81J3M43BsENl5bQCzH+nwnb4s
-         KYOGHyr0j2yDziaK8UDrBzUkQZv5dAfVOS+R+GsHxBSXRZUpcQaANgM2JhJb85Tplr
-         zi1lcv+vf15CVi5jAQB4RztIlt1oyAu9AwvDwJw2rWvbZIW+2I95qN5h0piVa9qmdl
-         4DYwd0CMJqueg==
-Date:   Thu, 7 Jul 2022 12:55:28 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     "Mukunda,Vijendar" <vijendar.mukunda@amd.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Liam Girdwood <lgirdwood@gmail.com>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Ldw6l1QM9z4xDB;
+        Thu,  7 Jul 2022 22:03:42 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1657195423;
+        bh=YC/2OozYTGWuIXVFqvGcKXNJFtQMKiJOfOeSbGoL3v8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=gGLCNrRD3X/IqnbeA4V+qfCrmER7TsrFOnupgQEOQHzkeiDXoKKDCkU9POUatYYLP
+         WpSIOUR4Yhj3nLF0tqJtp7TkFYxk7HoS3rQgNP5iaYSkRz+mfMQJ4M1/AgkrOlJEg2
+         dvGs0qRBjD4RLCaBjiC+zODI6fQi8cQYEUttnz4uXfmFmre7YiL+P/wKM7nJQduNt+
+         DvkJ4AEOO414rh9aml/Z+h40gqwnwBEFzAf1bH5sPtjtAoy1nEbWBPEgomhGQRPQkI
+         wbFQknKEO9+VmZ+qFycokRUUkmVKStze0jBIjvxVxPi3x2IO3bcwunuLPf2KqlwfMa
+         BOAXsopphNDYg==
+Date:   Thu, 7 Jul 2022 22:03:35 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>,
+        Juerg Haefliger <juerg.haefliger@canonical.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the sound-asoc tree
-Message-ID: <YsbJsMzNVUpxBMNh@sirena.org.uk>
-References: <20220707200428.3eb1a20e@canb.auug.org.au>
- <872891aa-11ea-ed60-5090-940e8e7e4458@amd.com>
- <9f4d8898-eb5f-aa91-57d3-66a78e9c4316@amd.com>
+Subject: Re: linux-next: manual merge of the random tree with the powerpc
+ tree
+Message-ID: <20220707220335.36087d5e@canb.auug.org.au>
+In-Reply-To: <CAHmME9qCTZpRKrvXVDhCGTD6z15BwDFupX0Z5QwhoWCCT2w2Fw@mail.gmail.com>
+References: <20220707173252.5fff21f2@canb.auug.org.au>
+        <CAHmME9qCTZpRKrvXVDhCGTD6z15BwDFupX0Z5QwhoWCCT2w2Fw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="NixQ1HU3mERZ+lRc"
-Content-Disposition: inline
-In-Reply-To: <9f4d8898-eb5f-aa91-57d3-66a78e9c4316@amd.com>
-X-Cookie: Tell me what to think!!!
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/RZw/=ITfff_AmIDTe9mkTMr";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+--Sig_/RZw/=ITfff_AmIDTe9mkTMr
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
---NixQ1HU3mERZ+lRc
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Hi Jason,
 
-On Thu, Jul 07, 2022 at 05:12:31PM +0530, Mukunda,Vijendar wrote:
+On Thu, 7 Jul 2022 12:52:54 +0200 "Jason A. Donenfeld" <Jason@zx2c4.com> wr=
+ote:
+>
+> Oh darn. Any clever tricks to prevent the merge conflict from
+> happening? Or is this trivial enough that we'll let Linus deal with
+> it?
 
-> If we have to submit the patch freshly then earlier patch should be
-> reverted in for-next branch.
-> Should we resend the fix again or else should we submit patch freshly?
+Just leave it for Linus, its pretty trivial.
 
-If you have already sent a fix there's no need to resend.
+--=20
+Cheers,
+Stephen Rothwell
 
---NixQ1HU3mERZ+lRc
-Content-Type: application/pgp-signature; name="signature.asc"
+--Sig_/RZw/=ITfff_AmIDTe9mkTMr
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLGybAACgkQJNaLcl1U
-h9AFMQf+KDF7TnuBRZxBUkRorxs4XsvW9Yli+TPSF+Ak1MOL1pC/Dw83uEygrEeM
-iVGuhmJ/xhnrsi9oUdKhHHZmKnqzY1jt8rWKFgwiJ9VAOuPw90WwBJkBb+d7rJmT
-bFCSK2kzg3fsEWapNjZnEe8kcJh4Qc1M5yMkWdjHLgyRhZia9415z07nP/+mYmyp
-ls9Sbc3fQKR5SQ2VNMCl7RzmyDKFN9W3umOUiOkDtceM+SinUP9HfogEKZMTaVyf
-7GEwdStTkNW23kZ3aG7MfBdlc5GeJ4jauoJjtrKDNBizzp5Rf+FMMIEVAFFqH2GW
-Z8m29KJ4J/r8HWTwX42V4ggsT6eqPg==
-=Hhnj
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLGy5cACgkQAVBC80lX
+0Gxswgf+P5svBBU4WZUfNjPdqEFVlotiBELcLj9aQQOVg43ggtrYWXuMUPEZmgw3
+3mhRaBpjQ9uTbNw7+rLZhDmhe/FNN5kol/KKwLS29AM2zvLRM0sexabHmSdKjsDM
+tc/Z++3JKRah5n/RGNt+WQVZjDrxSQozsvhNsmQ2w8kbkWHNDXewy0+shkdDE5sL
+CVAWw/XHYKWWNfBqkryf63tPy3Dlxe38Mxg7CpBFO+S32XmUnmemGRm244aYqnkW
+p0B4T+QUkW2st0siclSvWnA/xTNoZdj0HrYjZgK617mlJEYuVmGu0T1n1BpjEIIq
+pEeE/QK8EMkdhepSJ+zr9aP9CBQ+Mw==
+=nulz
 -----END PGP SIGNATURE-----
 
---NixQ1HU3mERZ+lRc--
+--Sig_/RZw/=ITfff_AmIDTe9mkTMr--

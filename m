@@ -2,76 +2,102 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5853A569A10
-	for <lists+linux-next@lfdr.de>; Thu,  7 Jul 2022 07:54:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4321569BD1
+	for <lists+linux-next@lfdr.de>; Thu,  7 Jul 2022 09:43:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229927AbiGGFx2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 7 Jul 2022 01:53:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38150 "EHLO
+        id S234925AbiGGHhF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 7 Jul 2022 03:37:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbiGGFx2 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 7 Jul 2022 01:53:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E9C8E0F0;
-        Wed,  6 Jul 2022 22:53:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S234936AbiGGHgy (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 7 Jul 2022 03:36:54 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AE98326D2;
+        Thu,  7 Jul 2022 00:36:08 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 43CB8B81FF8;
-        Thu,  7 Jul 2022 05:53:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B05CC3411E;
-        Thu,  7 Jul 2022 05:53:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657173204;
-        bh=Hm0V5AZBxOdfjJJarJ/m/nrDDbAsODcvlXQWn0EIiOI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MVvMjKCfEFUbNtcCMVEzfXq62PvzKMDmP0aQUctWM2koFjwdDZSbGxaFwiaCC9Cb8
-         8uEGzrmZk8JtpVrOQEDcNRPQax5zi94s6NoH7xj3EOyneiKKRMRJRWTqWVRI/u6SVs
-         rQQ9v30rn8MFIBSaHZkZE4QLEOaRnULb94qGF0KG6CWuIuhnnZVHhbRIBzd3HiyjsB
-         nAJmkWjV4cj1FcbFioj2p0AAw9gmAT5jwVbcvAjVl3yQXCdbmNiVwEUXfCFaac4Ws7
-         3/9TlWWGvzQoEVjTXgT3DsIF/QVwqpprxz4BimHYGsYlpZ9jNmLqE6f3PjqpV8J8S8
-         F8U8CHHOzBR4Q==
-Date:   Thu, 7 Jul 2022 11:23:20 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Ldp9x3mG9z4xbm;
+        Thu,  7 Jul 2022 17:36:05 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1657179366;
+        bh=vJnXxPcjofl/dIJrG3s69roSNP0Kb5CB+IRWv7rORRU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=gHtGI2X0vmZHZixH4ZZI+WRrjaGc64TL9zROPmNVrw30p9Y1UVdbPUlajGvYhwCjv
+         m86XwVgMJ4whkOqsU2S8nMlVOUJk2I/6+0IbydzL8efm0z45dTGdkfmrN2HDci05iT
+         I4p447ZUA8xXIQkhwVo8U3tHfUfv8cFB9HMO9el6ENsal+PFQkD6SFPpGHQLSTIrYY
+         JfytQO4kmg8BtO6UqgAdN/NuZ94GSuiZhOKSLnHMzgYQuO9rIMs3MEruV/a/F+Dn1r
+         Lji6kxxSEBuYjmZMFDwb5rY86N+0TtTyjasZOP62RNfdlQjfIjFH/PzmlREdL4sP0W
+         7BuqNfOZOFVjA==
+Date:   Thu, 7 Jul 2022 17:32:52 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Theodore Ts'o <tytso@mit.edu>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     PowerPC <linuxppc-dev@lists.ozlabs.org>,
+        Juerg Haefliger <juerg.haefliger@canonical.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the phy-next tree
-Message-ID: <YsZ00HwryKI++qTa@matsya>
-References: <20220707153941.668cd6d5@canb.auug.org.au>
+Subject: linux-next: manual merge of the random tree with the powerpc tree
+Message-ID: <20220707173252.5fff21f2@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220707153941.668cd6d5@canb.auug.org.au>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/e5AqtJECmuDQE_Wb4bb0LJU";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 07-07-22, 15:39, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the phy-next tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
-> 
-> drivers/phy/qualcomm/phy-qcom-qmp-combo.c: In function 'qcom_qmp_phy_combo_vreg_init':
-> drivers/phy/qualcomm/phy-qcom-qmp-combo.c:2004:9: error: 'Return' undeclared (first use in this function)
->  2004 |         Return 0;
->       |         ^~~~~~
-> drivers/phy/qualcomm/phy-qcom-qmp-combo.c:2004:9: note: each undeclared identifier is reported only once for each function it appears in
-> drivers/phy/qualcomm/phy-qcom-qmp-combo.c:2004:15: error: expected ';' before numeric constant
->  2004 |         Return 0;
+--Sig_/e5AqtJECmuDQE_Wb4bb0LJU
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks I have fixed that up and pushed updated tree
+Hi all,
 
+Today's linux-next merge of the random tree got a conflict in:
 
+  arch/powerpc/Kconfig
 
--- 
-~Vinod
+between commit:
+
+  cea9d62b64c9 ("powerpc: Kconfig: Replace tabs with whitespaces")
+
+from the powerpc tree and commit:
+
+  a2ff4b7600cd ("random: remove CONFIG_ARCH_RANDOM")
+
+from the random tree.
+
+I fixed it up (the latter removed some lines updated by the former) and
+can carry the fix as necessary. This is now fixed as far as linux-next
+is concerned, but any non trivial conflicts should be mentioned to your
+upstream maintainer when your tree is submitted for merging.  You may
+also want to consider cooperating with the maintainer of the conflicting
+tree to minimise any particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/e5AqtJECmuDQE_Wb4bb0LJU
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLGjCUACgkQAVBC80lX
+0Gzc1wf9Ecu/28vZactDStc5fH3/HRfTbzKkFbYUF1KJILODaEiaY2CQpOsiD9OP
+gfgbJbZzimGQJXXsQef2Q8PFaZB54zryJIJz6NQmLOke380U7EFETj5uEPlhDP6i
+gahF6cUCQVq9UZvwd5dq38ZmeBW+xBQ3RYv0juOwphXzJuD40a98/yuaXUGgAaRA
+A+awkuyzhI+FiAPLHvyQOH5SC5fMgJYBEfJhnxBED3ciZ9xZ4V63352XhxU5cIyO
+QgLfcvXiviRQKWgklcBITAcmgmisf3RYytJAkzGoJ2Lh19fUlNl9wkztgCNrqQ94
+wpsHrq5MDnbLKNC6hY5OO0143Y5j0A==
+=fyUJ
+-----END PGP SIGNATURE-----
+
+--Sig_/e5AqtJECmuDQE_Wb4bb0LJU--

@@ -2,155 +2,104 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E83056B496
-	for <lists+linux-next@lfdr.de>; Fri,  8 Jul 2022 10:40:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE08B56B568
+	for <lists+linux-next@lfdr.de>; Fri,  8 Jul 2022 11:30:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237702AbiGHIkC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 8 Jul 2022 04:40:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41070 "EHLO
+        id S237705AbiGHJ0j (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 8 Jul 2022 05:26:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237654AbiGHIkA (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 8 Jul 2022 04:40:00 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D53B9814B9;
-        Fri,  8 Jul 2022 01:39:58 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S237374AbiGHJ0i (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 8 Jul 2022 05:26:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC04FD134;
+        Fri,  8 Jul 2022 02:26:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LfRY86xT5z4xD2;
-        Fri,  8 Jul 2022 18:39:56 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1657269597;
-        bh=W7oRczXqKJ3bTDS/OVxF3kAupvYBCW29Q9o/B8lDUrI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=iB7/lFPdPPjmwfdeJ0yf1WpilNVobJHZEIKqlIOMxSJeQlshnFzYZX3KbUdQRwVCp
-         6A7DR48qJPfUOaraI6QNv6Q2m/Rbhnrh2fjVoBc/41xe/AHl5XFc1KbW7m0qa0Nv4U
-         kUVO4oEx2gT8OTaBkFPolXKnodzeBlJJ+q7lhy2BHoZaXC3xezrOvF6HoDQkWHoMFg
-         jB+lkXaeoKg/KG8fz0sAlFNer8tcQZBj1DEuIR0X3wyhtvpcloJEw5nWDnXG4gXaTV
-         mlBwXD8ew7Iq28fFo9tb5BBT9ezqAy7c8Sz7dwokYI3WaBa7I2MkN5ZwdNdi2T/PGX
-         mkCfjxbb6LMrQ==
-Date:   Fri, 8 Jul 2022 18:39:55 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Mike Rapoport <rppt@linux.ibm.com>
-Subject: linux-next: manual merge of the mm-stable tree with the jc_docs
- tree
-Message-ID: <20220708183955.34212f5e@canb.auug.org.au>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 93E7DB82547;
+        Fri,  8 Jul 2022 09:26:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B004C341C0;
+        Fri,  8 Jul 2022 09:26:35 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="pkqND3Bm"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1657272393;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9HeHlnsW1JkxCnRYtTnfqUp3XvLQS0O+ZMfaM6JuHTA=;
+        b=pkqND3BmqSbPOit4Mj5DT7X7YDRtI4zI7ej6QO6XmUtlnWTRQiztuwTVTxkSF4floPVPF3
+        wONKVWOSD1FRpYgm/JX3WWShHVacfbrE/ETIJDTaYNshOkRnXfUF96isK0PDZGi0pY6E2f
+        VAZd8GYkwetZVfgCFTQ883t1gkuyj4A=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 38c5eef7 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Fri, 8 Jul 2022 09:26:33 +0000 (UTC)
+Received: by mail-io1-xd33.google.com with SMTP id n7so8623580ioo.7;
+        Fri, 08 Jul 2022 02:26:33 -0700 (PDT)
+X-Gm-Message-State: AJIora+BySM/lK8OjemrfbfLRVAe/P3JwA7bF6jt6m566hljETBJb10q
+        IJ1RanavNkBFlXEegIctnK75eJQrECYP/0EkNyI=
+X-Google-Smtp-Source: AGRyM1sLt4kVkbV8Gy6AgNOWbg/i+iKMh6Rjk1K7PZRGWXSuBZYL3v1vJfikjc33S9848G5nx2yxV9as9TJsIF5FCNU=
+X-Received: by 2002:a02:9709:0:b0:339:ef87:c30b with SMTP id
+ x9-20020a029709000000b00339ef87c30bmr1513477jai.214.1657272091980; Fri, 08
+ Jul 2022 02:21:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/tb_uU/FVC3Xmh2SQZmg_1FX";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SORTED_RECIPS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Received: by 2002:a05:6e02:16cc:0:0:0:0 with HTTP; Fri, 8 Jul 2022 02:21:31
+ -0700 (PDT)
+In-Reply-To: <YsfnDyOaKXA3iIj4@zn.tnic>
+References: <20220708171030.135b12cd@canb.auug.org.au> <YsfnDyOaKXA3iIj4@zn.tnic>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Fri, 8 Jul 2022 11:21:31 +0200
+X-Gmail-Original-Message-ID: <CAHmME9o052ooE6pC-Sa4EzohW7yRdepNy0zZAFFX6qr9Q+MoHA@mail.gmail.com>
+Message-ID: <CAHmME9o052ooE6pC-Sa4EzohW7yRdepNy0zZAFFX6qr9Q+MoHA@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the random tree with the tip tree
+To:     Borislav Petkov <bp@suse.de>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Jonathan McDowell <noodles@fb.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/tb_uU/FVC3Xmh2SQZmg_1FX
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+On 7/8/22, Borislav Petkov <bp@suse.de> wrote:
+> On Fri, Jul 08, 2022 at 05:10:30PM +1000, Stephen Rothwell wrote:
+>> Hi all,
+>>
+>> Today's linux-next merge of the random tree got conflicts in:
+>>
+>>   arch/x86/include/uapi/asm/bootparam.h
+>>   arch/x86/kernel/kexec-bzimage64.c
+>>   arch/x86/kernel/setup.c
+>>
+>> between commit:
+>>
+>>   b69a2afd5afc ("x86/kexec: Carry forward IMA measurement log on kexec")
+>>
+>> from the tip tree and commit:
+>>
+>>   c337d5c7ec9b ("x86/setup: Use rng seeds from setup_data")
+>
+> Why is a x86 patch in the random tree?
+>
+> And it doesn't even have a single x86 person ack?
+>
+> https://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git/commit/?id=c337d5c7ec9bc1d11006fd628e99c65f08455803
+>
+> This is not now the process works.
 
-Hi all,
+Sorry; I pushed it there temporarily to kick some CI to test it and
+forgot to remove it.
 
-Today's linux-next merge of the mm-stable tree got conflicts in:
-
-  Documentation/translations/zh_CN/mm/free_page_reporting.rst
-  Documentation/translations/zh_CN/mm/frontswap.rst
-  Documentation/translations/zh_CN/mm/page_frags.rst
-  Documentation/translations/zh_CN/mm/zsmalloc.rst
-
-between commits:
-
-  5fe84fe446d8 ("docs: zh_CN: page_frags.rst: fix a broken reference")
-  36395fb365df ("docs: zh_CN/vm: fix a typo for page reporting ReST file")
-  97e937dec70d ("docs: zh_CN/vm/zsmalloc.rst: fix a typo")
-
-from the jc_docs tree and commit:
-
-  ee65728e103b ("docs: rename Documentation/vm to Documentation/mm")
-
-from the mm-stable tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc Documentation/translations/zh_CN/mm/free_page_reporting.rst
-index 14336a3aa5f4,83b14cce9adf..000000000000
---- a/Documentation/translations/zh_CN/mm/free_page_reporting.rst
-+++ b/Documentation/translations/zh_CN/mm/free_page_reporting.rst
-@@@ -1,6 -1,6 +1,6 @@@
-  .. include:: ../disclaimer-zh_CN.rst
- =20
-- :Original: Documentation/vm/free_page_reporting.rst
- -:Original: Documentation/mm/_free_page_reporting.rst
-++:Original: Documentation/mm/free_page_reporting.rst
- =20
-  :=E7=BF=BB=E8=AF=91:
- =20
-diff --cc Documentation/translations/zh_CN/mm/frontswap.rst
-index 98aa6f581ea7,5c18ea2be04f..000000000000
---- a/Documentation/translations/zh_CN/mm/frontswap.rst
-+++ b/Documentation/translations/zh_CN/mm/frontswap.rst
-@@@ -1,4 -1,4 +1,4 @@@
-- :Original: Documentation/vm/free_page_reporting.rst
- -:Original: Documentation/mm/_free_page_reporting.rst
-++:Original: Documentation/mm/free_page_reporting.rst
- =20
-  :=E7=BF=BB=E8=AF=91:
- =20
-diff --cc Documentation/translations/zh_CN/mm/page_frags.rst
-index 38ecddb9e1c0,320952ca93af..000000000000
---- a/Documentation/translations/zh_CN/mm/page_frags.rst
-+++ b/Documentation/translations/zh_CN/mm/page_frags.rst
-@@@ -1,4 -1,4 +1,4 @@@
-- :Original: Documentation/vm/page_frags.rst
- -:Original: Documentation/mm/page_frag.rst
-++:Original: Documentation/mm/page_frags.rst
- =20
-  :=E7=BF=BB=E8=AF=91:
- =20
-diff --cc Documentation/translations/zh_CN/mm/zsmalloc.rst
-index 45a9b7ab2a51,b5596ea08ae4..000000000000
---- a/Documentation/translations/zh_CN/mm/zsmalloc.rst
-+++ b/Documentation/translations/zh_CN/mm/zsmalloc.rst
-@@@ -1,4 -1,4 +1,4 @@@
-- :Original: Documentation/vm/zsmalloc.rst
- -:Original: Documentation/mm/zs_malloc.rst
-++:Original: Documentation/mm/zsmalloc.rst
- =20
-  :=E7=BF=BB=E8=AF=91:
- =20
-
---Sig_/tb_uU/FVC3Xmh2SQZmg_1FX
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLH7VsACgkQAVBC80lX
-0GxYYwf/UKOwgevNdRGPyiHiQSZBW0W0O+bSqJgyVtfys5SwH2HKjcgnklHdg1S4
-1p4GHSmx8PVkL+OjPFvZgK6TENItZkVf2y5EyeCPikuxLl9DOh9SncFMnQSlgbEE
-GSMN0igxGKaqZJK1GC69S+odtxyvdjUzZbnWWhPxxoibX4ugTPWXk4DEAsyyoWE/
-9VUIVuFKiBpks8FlqZ98giTHPZ9CIgw960s1qIDGG4fkqqfsYl0EqjV70NEBIcId
-5AweHEat/o/z2zHgXVOtIudtXKbSUJVGLMveRAXk8rJ8oDJ9mVkNdiAqVau670x9
-5yrNAMs2wR7tNh3f8kcmiCSyAZ0MkA==
-=NOUX
------END PGP SIGNATURE-----
-
---Sig_/tb_uU/FVC3Xmh2SQZmg_1FX--
+Jason

@@ -2,98 +2,111 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CECF56B3CE
-	for <lists+linux-next@lfdr.de>; Fri,  8 Jul 2022 09:49:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4452056B43A
+	for <lists+linux-next@lfdr.de>; Fri,  8 Jul 2022 10:13:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236513AbiGHHs3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 8 Jul 2022 03:48:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54254 "EHLO
+        id S237523AbiGHINL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 8 Jul 2022 04:13:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237058AbiGHHs1 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 8 Jul 2022 03:48:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B8995;
-        Fri,  8 Jul 2022 00:48:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S237260AbiGHINJ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 8 Jul 2022 04:13:09 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF4387E034;
+        Fri,  8 Jul 2022 01:13:08 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CE8E9625AD;
-        Fri,  8 Jul 2022 07:48:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B4E1C341C0;
-        Fri,  8 Jul 2022 07:48:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657266504;
-        bh=1x7ORP/e34KlMltGH5I/g4CnsThKO3CPBd61O5n3IDk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=nsYezn0NoYdW9sVGZEGNf64VcfwffgE6kPBdyk/kxRfm54B50lqzW3LrhqRuHRNan
-         0a5kk7hy0zdSJUaFl8j3Qz9ri1Frjs6NnaP/YmEJ+kLHgEFBFNbRYudbi6DRtKGa6t
-         SPoGqKA6JpP0F4w7hIiLT+ZE/n7aA0edq9FItP6aaolZzu2YhNJesnX7dXnqsdKUkH
-         TQb2qQYBPpK2r1hNYk/W+qcpNzTaluIUcTMuQRJ0FbnFskAZkfg4VorEImxMfD4i5W
-         8kUoxbjZQS5MUVAlWMRRnbx6/CrCZqR5WCDWssP7VSTYrujHanrb5N5JWOL7Rzq8fM
-         eDoF3qYgvM+4Q==
-Received: from [213.208.244.172] (helo=wait-a-minute.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1o9iir-0065nt-Vh;
-        Fri, 08 Jul 2022 08:48:22 +0100
-Date:   Fri, 08 Jul 2022 08:48:20 +0100
-Message-ID: <87v8s8kptn.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 9A9AD1FDCD;
+        Fri,  8 Jul 2022 08:13:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1657267987; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=O72/ULjlx1PPQxVgkKAhi3HE1nEYzbRyfStC39U6aww=;
+        b=XvIyS2rnvR1sDwnGj6PqQ0qU1WcH6P5xyL1PttlBCTFSs1sS/RDyIRgY/dlv75tgVSeRXs
+        5QIZ+S/riisSa8RNJFeVtxgcpGElifbkEhrIkaJSZ+OsaGMuDdmrTIcTu3eR4Ti+UBCtz8
+        ruHn2kcGFY1NyZ4vDxIWhzMB46b7ruE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1657267987;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=O72/ULjlx1PPQxVgkKAhi3HE1nEYzbRyfStC39U6aww=;
+        b=hvoQFgVOf/qzagXOrxMRqCJabbNmSMKTxATQ4uzLWrs2xtna62JpY859zxethlufWQm8DF
+        CJREkEXrSFjPdzCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8DAD813A80;
+        Fri,  8 Jul 2022 08:13:07 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id MGWPIhPnx2J5JwAAMHmgww
+        (envelope-from <bp@suse.de>); Fri, 08 Jul 2022 08:13:07 +0000
+Date:   Fri, 8 Jul 2022 10:13:03 +0200
+From:   Borislav Petkov <bp@suse.de>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Samuel Holland <samuel@sholland.org>,
+Cc:     Theodore Ts'o <tytso@mit.edu>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Jonathan McDowell <noodles@fb.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the irqchip tree
-In-Reply-To: <20220708141344.3b521664@canb.auug.org.au>
-References: <20220708141344.3b521664@canb.auug.org.au>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
- (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 213.208.244.172
-X-SA-Exim-Rcpt-To: sfr@canb.auug.org.au, samuel@sholland.org, linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: linux-next: manual merge of the random tree with the tip tree
+Message-ID: <YsfnDyOaKXA3iIj4@zn.tnic>
+References: <20220708171030.135b12cd@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220708171030.135b12cd@canb.auug.org.au>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, 08 Jul 2022 05:13:44 +0100,
-Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> 
-> [1  <text/plain; US-ASCII (quoted-printable)>]
+On Fri, Jul 08, 2022 at 05:10:30PM +1000, Stephen Rothwell wrote:
 > Hi all,
 > 
-> After merging the irqchip tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
+> Today's linux-next merge of the random tree got conflicts in:
 > 
-> drivers/pci/controller/pci-hyperv.c: In function 'hv_compose_msi_req_v2':
-> drivers/pci/controller/pci-hyperv.c:1654:42: error: passing argument 1 of 'hv_compose_msi_req_get_cpu' discards 'const' qualifier from pointer target type [-Werror=discarded-qualifiers]
->  1654 |         cpu = hv_compose_msi_req_get_cpu(affinity);
->       |                                          ^~~~~~~~
-> drivers/pci/controller/pci-hyperv.c:1638:55: note: expected 'struct cpumask *' but argument is of type 'const struct cpumask *'
->  1638 | static int hv_compose_msi_req_get_cpu(struct cpumask *affinity)
->       |                                       ~~~~~~~~~~~~~~~~^~~~~~~~
-> drivers/pci/controller/pci-hyperv.c: In function 'hv_compose_msi_req_v3':
-> drivers/pci/controller/pci-hyperv.c:1674:42: error: passing argument 1 of 'hv_compose_msi_req_get_cpu' discards 'const' qualifier from pointer target type [-Werror=discarded-qualifiers]
->  1674 |         cpu = hv_compose_msi_req_get_cpu(affinity);
->       |                                          ^~~~~~~~
-> drivers/pci/controller/pci-hyperv.c:1638:55: note: expected 'struct cpumask *' but argument is of type 'const struct cpumask *'
->  1638 | static int hv_compose_msi_req_get_cpu(struct cpumask *affinity)
->       |                                       ~~~~~~~~~~~~~~~~^~~~~~~~
-> cc1: all warnings being treated as errors
+>   arch/x86/include/uapi/asm/bootparam.h
+>   arch/x86/kernel/kexec-bzimage64.c
+>   arch/x86/kernel/setup.c
+> 
+> between commit:
+> 
+>   b69a2afd5afc ("x86/kexec: Carry forward IMA measurement log on kexec")
+> 
+> from the tip tree and commit:
+> 
+>   c337d5c7ec9b ("x86/setup: Use rng seeds from setup_data")
 
-I've now merged Samuel's quick fix. Thanks both.
+Why is a x86 patch in the random tree?
 
-	M.
+And it doesn't even have a single x86 person ack?
+
+https://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git/commit/?id=c337d5c7ec9bc1d11006fd628e99c65f08455803
+
+This is not now the process works.
 
 -- 
-Without deviation from the norm, progress is not possible.
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH
+GF: Ivo Totev, Andrew Myers, Andrew McDonald, Martje Boudien Moerman
+(HRB 36809, AG Nürnberg)

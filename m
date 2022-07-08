@@ -2,46 +2,47 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F0C356AF01
-	for <lists+linux-next@lfdr.de>; Fri,  8 Jul 2022 01:28:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C6E456B144
+	for <lists+linux-next@lfdr.de>; Fri,  8 Jul 2022 06:12:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236728AbiGGX2q (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 7 Jul 2022 19:28:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38006 "EHLO
+        id S236655AbiGHEM5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 8 Jul 2022 00:12:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236491AbiGGX2p (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 7 Jul 2022 19:28:45 -0400
+        with ESMTP id S230230AbiGHEM4 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 8 Jul 2022 00:12:56 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E79919298;
-        Thu,  7 Jul 2022 16:28:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D0CA74DF1;
+        Thu,  7 Jul 2022 21:12:53 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LfCK22BwWz4xL4;
-        Fri,  8 Jul 2022 09:28:38 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LfKcx21kSz4xRC;
+        Fri,  8 Jul 2022 14:12:49 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1657236518;
-        bh=CrMKnJMPN9f3mCAwl6Rh6j8UtkWI5IywlvNYWCVU2Wo=;
+        s=201702; t=1657253571;
+        bh=fX2Jian+dbqZD4Xi7DB/wdjnbqHwKsZxYbiT10AEIp0=;
         h=Date:From:To:Cc:Subject:From;
-        b=WIfpuv7FV3sNqt7iCzPadtMvhHYbxcH/tyBeZqrkJn83SalQbgzsFe4UYFwtpPjSn
-         Ar+lWC5C2co1C89/J6A3ne8dZymGYiyngIpo/oEpAfXqOxQLvlLIm2uQJaWmyZFyrH
-         uhW8oT2AoenuCA7W2XmlyGIMO+D6xVHN8BD5/2rvh8nYF0zs03czY9+to5cfPgTOkD
-         nLtzXjPgkSzbF5scIdB5hcfRGt3M2c+7FzoLJMcfvdJtqUWVYgqp9Y1oWNwrYbnw8Y
-         kLF0XSpZztloy+9uFTqei+p3ZUwrWbU/6PJdUMRDAJxsSYi61mza6wgF9e3mNYN2og
-         d73Sqfwl8/3Rg==
-Date:   Fri, 8 Jul 2022 09:28:36 +1000
+        b=XyQI7NLOVt6P+WYM5Pakkd8XUv3Pl12Fj7AdKcheTa6RIgvvfSqdTjn5dOVScwJxm
+         Ct58BDA0CyJFzcV6KW5qxGfl6ytCsSRVS4NUJYFE0kV8CfNF8xJLAzZrEu0IvCbvZf
+         0i5YQq82XwZ4LZhN7ICKD+2/VAptH9e3izfWsnN4nJZbln0k8rp2I5dF7XFR+RFx3n
+         ZSJSXZeI4KBmyDlmLdrxblQz15gxY4SZhqrwcG45gqwOEP238yBQOpDnIMCDNk6gt3
+         Uf2SCmHvcbF6CbpGXhddUgAPxmNWH83Eh4aw+oLIL/m3hgHg4kdQfh9ahh5OtSPNXy
+         kt7ce8TEUPcxQ==
+Date:   Fri, 8 Jul 2022 14:12:46 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Cc:     Arnaldo Carvalho de Melo <acme@redhat.com>,
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Huacai Chen <chenhuacai@loongson.cn>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ravi Bangoria <ravi.bangoria@amd.com>
-Subject: linux-next: manual merge of the perf tree with Linus' tree
-Message-ID: <20220708092836.1a24d5c2@canb.auug.org.au>
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: linux-next: manual merge of the rcu tree with Linus' tree
+Message-ID: <20220708141246.43111241@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/contwonC74Yzn8dqmovPQcs";
+Content-Type: multipart/signed; boundary="Sig_/MrJwq6tgl.9IFjTw3EWcIVo";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -52,25 +53,25 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/contwonC74Yzn8dqmovPQcs
+--Sig_/MrJwq6tgl.9IFjTw3EWcIVo
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the perf tree got a conflict in:
+Today's linux-next merge of the rcu tree got a conflict in:
 
-  tools/perf/util/evsel.c
+  arch/loongarch/Kconfig
 
 between commit:
 
-  49c692b7dfc9 ("perf offcpu: Accept allowed sample types only")
+  7fd6ef61a5d6 ("LoongArch: Drop these obsolete selects in Kconfig")
 
 from Linus' tree and commit:
 
-  9ab95b0b15a0 ("perf record ibs: Warn about sampling period skew")
+  24a9c54182b3 ("context_tracking: Split user tracking Kconfig")
 
-from the perf tree.
+from the rcu tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -83,36 +84,35 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc tools/perf/util/evsel.c
-index 094b0a9c0bc0,8fea51a9cd90..000000000000
---- a/tools/perf/util/evsel.c
-+++ b/tools/perf/util/evsel.c
-@@@ -1373,8 -1372,7 +1378,10 @@@ void evsel__config(struct evsel *evsel
-  	if (evsel__is_dummy_event(evsel))
-  		evsel__reset_sample_bit(evsel, BRANCH_STACK);
- =20
- +	if (evsel__is_offcpu_event(evsel))
- +		evsel->core.attr.sample_type &=3D OFFCPU_SAMPLE_TYPES;
-++
-+ 	arch__post_evsel_config(evsel, attr);
-  }
- =20
-  int evsel__set_filter(struct evsel *evsel, const char *filter)
+diff --cc arch/loongarch/Kconfig
+index 53a912befb62,130dc65f3c85..000000000000
+--- a/arch/loongarch/Kconfig
++++ b/arch/loongarch/Kconfig
+@@@ -75,7 -76,8 +75,7 @@@ config LOONGARC
+  	select HAVE_ARCH_TRACEHOOK
+  	select HAVE_ARCH_TRANSPARENT_HUGEPAGE
+  	select HAVE_ASM_MODVERSIONS
+- 	select HAVE_CONTEXT_TRACKING
++ 	select HAVE_CONTEXT_TRACKING_USER
+ -	select HAVE_COPY_THREAD_TLS
+  	select HAVE_DEBUG_STACKOVERFLOW
+  	select HAVE_DMA_CONTIGUOUS
+  	select HAVE_EXIT_THREAD
 
---Sig_/contwonC74Yzn8dqmovPQcs
+--Sig_/MrJwq6tgl.9IFjTw3EWcIVo
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLHbCQACgkQAVBC80lX
-0GyfmAf/Q6m9gbCivfMChtl3jlKMHDI/oBbK5hrL5Ewdv0+1gxQef5ciuY7Sb5OU
-PbCBu/4duEwmDuxUqVjWn2MKg+qKYabTclQLOa0S0bWL8YXwDtem/zyIT552lJV/
-X+dvn/IKPw3d0roCsB5KYlFBa3UAtAKMDBYRJ/ZUrVVIUM97mj0/EVPOXo5+l4i4
-sqMNFHUcJ9uKBbwu9Jb3K25B6me8s+CduLVmk9XRSeL+U7h8AK+4CzsLtSwq4s+/
-5TG7EyKzXJq/ziaJaO9oImDfWiBMnNeU3gtqzZns0pBd+NlA8KnEMXWPeCG0Ppt1
-jnDyt/4m2lymQEhkiKyeMjlEXT2ddQ==
-=/KCH
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLHrr4ACgkQAVBC80lX
+0Gw24Af/TcuFP3cBucEwyeVefWX2brhTs1Ig8v/3XRcTrFftPwFswVyXjMLl24a0
+hHjwwK+3WDKfwsRhqfHwVMcLgq4XGizFvPmK6inLMO20ddoCD5mOvpS78wTKPGkw
+X0+Nkb+E6SP403QmxLYJeKQ2GTa9/iqBOvg/cAPCEiW/VGlIn+h94yMY/Zs5TJo5
+VMvWsQ61b9sZPdy5mrDXKs8p+AeC+8JAPUvhxUGX0dtFN4P8NKPp67ydVaavnaYA
+LqgyVXb4hSPBt8//7Hkd/IT3F3QPvCg7meup75i7MyZRdi56ojwy5iOiZehuKTXR
+PgKGhaTsDxzP4R6OsQI+jSmY7ZMtFg==
+=qjwJ
 -----END PGP SIGNATURE-----
 
---Sig_/contwonC74Yzn8dqmovPQcs--
+--Sig_/MrJwq6tgl.9IFjTw3EWcIVo--

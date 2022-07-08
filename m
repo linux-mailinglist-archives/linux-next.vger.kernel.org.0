@@ -2,49 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBE4456B31C
-	for <lists+linux-next@lfdr.de>; Fri,  8 Jul 2022 09:10:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AB9056B3CB
+	for <lists+linux-next@lfdr.de>; Fri,  8 Jul 2022 09:47:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237092AbiGHHKo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 8 Jul 2022 03:10:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51990 "EHLO
+        id S237339AbiGHHrn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 8 Jul 2022 03:47:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236803AbiGHHKn (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 8 Jul 2022 03:10:43 -0400
+        with ESMTP id S237316AbiGHHrn (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 8 Jul 2022 03:47:43 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11DFE7694E;
-        Fri,  8 Jul 2022 00:10:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2A4C7D1E4;
+        Fri,  8 Jul 2022 00:47:41 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LfPZ564nVz4xRC;
-        Fri,  8 Jul 2022 17:10:37 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LfQNp3q1wz4xXD;
+        Fri,  8 Jul 2022 17:47:38 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1657264240;
-        bh=g2bE+8fl/oBbo7lnGZqOvhPk3U8/hBGpGnWzWC/HYSY=;
+        s=201702; t=1657266460;
+        bh=BufiTmFOjOTRKTxthIni/3WqGCUldD57kd+VeVSwYLc=;
         h=Date:From:To:Cc:Subject:From;
-        b=cvdvol/JK1lXHXiWkyY3umERUj6tSYIV0GepFBnv/X3K+XSPQNEsEKHEp0La6O6rf
-         oVYJB6S9dFT8DN0/Np4OqM+z4Xpw+YCboY908C0CyjBceHVzoYSMVKIvxWfJ8WxER9
-         JfkVaybPAAGCcshgpGZJSdaS7euDEzp46igAt3Kxfkr30fyd+ELYJlUXxnBfMVN2Mo
-         /8hkDebDg5t7DKQwa7X4BD0Chdr6SDCxXeuf5NmbxpIE9CfhWQ/zYSWhP1RxO9KZPa
-         XH9pqPtCHubC5cdihDsNmwUCHm0cbXiDe0wi5pmReJkylVQhCMpFseVMS4zL/SaI8p
-         SJRVCgyd3FDwg==
-Date:   Fri, 8 Jul 2022 17:10:30 +1000
+        b=aX56pxlG/2Wuw25ozUllP6Pjl+Vrz6E9WVq1as29r4ToQZlyI8EjXipFxbqSYHxKJ
+         dXwcQEqWWdoclHnf2DFHlR30N2CH5ovO92qq3nDcOISR+8Ix+mjOV5Ygryc/GbmzLH
+         i673RtW61oL1ZJZEnk/2TlNWGfEdWrzgwuJgoAxb8NZ7A/eQ+rqyfsnDHaJgrvot9y
+         Aq9PjVEIlQDMupLUFYEq4rj7/dbmkfv44cN0ANACOxa1/X+dGe4ZmSR5aisx44ZxFK
+         rP1GS5PQDaxGIrd8F090ARv4ebCfRBebJ/svr6Oh3/B37OdisLQ5JWihz7uJjRVXE8
+         nBmd4F/R2ob3w==
+Date:   Fri, 8 Jul 2022 17:47:37 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Theodore Ts'o <tytso@mit.edu>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Borislav Petkov <bp@suse.de>, Jonathan McDowell <noodles@fb.com>,
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Paul Menzel <pmenzel@molgen.mpg.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the random tree with the tip tree
-Message-ID: <20220708171030.135b12cd@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the bitmap tree
+Message-ID: <20220708174737.52d569c8@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Avnb=Jv4FeixyahQTk7zHJk";
+Content-Type: multipart/signed; boundary="Sig_/QE_j9YWfk8R.jkLw/IhID=R";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -55,122 +50,80 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Avnb=Jv4FeixyahQTk7zHJk
+--Sig_/QE_j9YWfk8R.jkLw/IhID=R
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the random tree got conflicts in:
+After merging the bitmap tree, today's linux-next build (powerpc
+ppc64_defconfig) failed like this:
 
-  arch/x86/include/uapi/asm/bootparam.h
-  arch/x86/kernel/kexec-bzimage64.c
-  arch/x86/kernel/setup.c
+lib/bitmap.c:351:6: error: conflicting types for '__bitmap_set'; have 'void=
+(long unsigned int *, unsigned int,  unsigned int)'
+  351 | void __bitmap_set(unsigned long *map, unsigned int start, unsigned =
+int len)
+      |      ^~~~~~~~~~~~
+In file included from lib/bitmap.c:7:
+include/linux/bitmap.h:167:6: note: previous declaration of '__bitmap_set' =
+with type 'void(long unsigned int *, unsigned int,  int)'
+  167 | void __bitmap_set(unsigned long *map, unsigned int start, int len);
+      |      ^~~~~~~~~~~~
+In file included from include/linux/linkage.h:7,
+                 from include/linux/printk.h:8,
+                 from include/asm-generic/bug.h:22,
+                 from arch/powerpc/include/asm/bug.h:158,
+                 from include/linux/bug.h:5,
+                 from lib/bitmap.c:9:
+lib/bitmap.c:370:15: error: conflicting types for '__bitmap_set'; have 'voi=
+d(long unsigned int *, unsigned int,  unsigned int)'
+  370 | EXPORT_SYMBOL(__bitmap_set);
+      |               ^~~~~~~~~~~~
+include/linux/export.h:87:28: note: in definition of macro '___EXPORT_SYMBO=
+L'
+   87 |         extern typeof(sym) sym;                                    =
+             \
+      |                            ^~~
+include/linux/export.h:147:41: note: in expansion of macro '__EXPORT_SYMBOL'
+  147 | #define _EXPORT_SYMBOL(sym, sec)        __EXPORT_SYMBOL(sym, sec, "=
+")
+      |                                         ^~~~~~~~~~~~~~~
+include/linux/export.h:150:41: note: in expansion of macro '_EXPORT_SYMBOL'
+  150 | #define EXPORT_SYMBOL(sym)              _EXPORT_SYMBOL(sym, "")
+      |                                         ^~~~~~~~~~~~~~
+lib/bitmap.c:370:1: note: in expansion of macro 'EXPORT_SYMBOL'
+  370 | EXPORT_SYMBOL(__bitmap_set);
+      | ^~~~~~~~~~~~~
+In file included from lib/bitmap.c:7:
+include/linux/bitmap.h:167:6: note: previous declaration of '__bitmap_set' =
+with type 'void(long unsigned int *, unsigned int,  int)'
+  167 | void __bitmap_set(unsigned long *map, unsigned int start, int len);
+      |      ^~~~~~~~~~~~
 
-between commit:
+Caused by commit
 
-  b69a2afd5afc ("x86/kexec: Carry forward IMA measurement log on kexec")
+  aaa4ab5ec044 ("lib/bitmap: Make length parameter `len` unsigned")
 
-from the tip tree and commit:
-
-  c337d5c7ec9b ("x86/setup: Use rng seeds from setup_data")
-
-from the random tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+I have reverted that commit for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc arch/x86/include/uapi/asm/bootparam.h
-index ca0796ac4403,a60676b8d1d4..000000000000
---- a/arch/x86/include/uapi/asm/bootparam.h
-+++ b/arch/x86/include/uapi/asm/bootparam.h
-@@@ -11,7 -11,7 +11,8 @@@
-  #define SETUP_APPLE_PROPERTIES		5
-  #define SETUP_JAILHOUSE			6
-  #define SETUP_CC_BLOB			7
- -#define SETUP_RNG_SEED			8
- +#define SETUP_IMA			8
-++#define SETUP_RNG_SEED			9
- =20
-  #define SETUP_INDIRECT			(1<<31)
- =20
-diff --cc arch/x86/kernel/kexec-bzimage64.c
-index c63974e94272,13b2c55ebbf0..000000000000
---- a/arch/x86/kernel/kexec-bzimage64.c
-+++ b/arch/x86/kernel/kexec-bzimage64.c
-@@@ -217,7 -212,8 +239,8 @@@ static in
-  setup_boot_parameters(struct kimage *image, struct boot_params *params,
-  		      unsigned long params_load_addr,
-  		      unsigned int efi_map_offset, unsigned int efi_map_sz,
-- 		      unsigned int setup_data_offset)
- -		      unsigned int efi_setup_data_offset,
-++		      unsigned int setup_data_offset,
-+ 		      unsigned int rng_seed_setup_data_offset)
-  {
-  	unsigned int nr_e820_entries;
-  	unsigned long long mem_k, start, end;
-@@@ -435,12 -427,10 +461,14 @@@ static void *bzImage64_load(struct kima
-  	params_cmdline_sz =3D ALIGN(params_cmdline_sz, 16);
-  	kbuf.bufsz =3D params_cmdline_sz + ALIGN(efi_map_sz, 16) +
-  				sizeof(struct setup_data) +
-- 				sizeof(struct efi_setup_data);
-+ 				sizeof(struct efi_setup_data) +
-+ 				sizeof(struct setup_data) +
-+ 				RNG_SEED_LENGTH;
- =20
- +	if (IS_ENABLED(CONFIG_IMA_KEXEC))
- +		kbuf.bufsz +=3D sizeof(struct setup_data) +
- +			      sizeof(struct ima_setup_data);
- +
-  	params =3D kzalloc(kbuf.bufsz, GFP_KERNEL);
-  	if (!params)
-  		return ERR_PTR(-ENOMEM);
-diff --cc arch/x86/kernel/setup.c
-index 53f863f28b4c,409de5308a8c..000000000000
---- a/arch/x86/kernel/setup.c
-+++ b/arch/x86/kernel/setup.c
-@@@ -415,9 -356,15 +416,18 @@@ static void __init parse_setup_data(voi
-  		case SETUP_EFI:
-  			parse_efi_setup(pa_data, data_len);
-  			break;
- +		case SETUP_IMA:
- +			add_early_ima_buffer(pa_data);
- +			break;
-+ 		case SETUP_RNG_SEED:
-+ 			data =3D early_memremap(pa_data, data_len);
-+ 			add_bootloader_randomness(data->data, data->len);
-+ 			/* Zero seed for forward secrecy. */
-+ 			memzero_explicit(data->data, data->len);
-+ 			/* Zero length in case we find ourselves back here by accident. */
-+ 			memzero_explicit(&data->len, sizeof(data->len));
-+ 			early_memunmap(data, data_len);
-+ 			break;
-  		default:
-  			break;
-  		}
-
---Sig_/Avnb=Jv4FeixyahQTk7zHJk
+--Sig_/QE_j9YWfk8R.jkLw/IhID=R
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLH2GYACgkQAVBC80lX
-0Gyptgf/UryjIQXJ/UAbkaQGeEkhF+b7gmeNmjrSWtf4rdHP2EKo7J7IfN4XXT2u
-4hWw4CVjHTTfB9w/T9N0Bgw04UJv6wVUyE6ySWkDL+EKI+wQPKaw1qsSMovHdIbx
-pWc4jk8M2B9OBS9SRYJzJ5Qhe++rGRUdbSzc6IslLtgS/iwLJ6vjyIjhALOCl0+i
-BXA95abPBAdxRiGgS96ZZbGSPEQZXdSjcCMDnKqiJBwFT7Z4qDHuhDhcxCCbISCc
-xPjre+L/14TnwyUP4MkrDoLEblFok3rR776IzkhC0fuMHZv5Bzwi+oZGluBgDzw/
-oPbaBMNLHGx7wKvBH+m+bzcjvDSKzw==
-=kNmJ
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLH4RkACgkQAVBC80lX
+0GzC4wf/fZvuuy8PT/HsMWEk0gbxdXRLtobp2h471ccc0PE85+oTUMMZ68G+5FyM
+DnT8kNucZNxCbJdCcsbXBaGwcAF8DkJQqdkmWdxroe/y3yPllGzzeLprVY6uNmM9
+sWrJL2s9HPpUPwRW3r0mKQPPkH99pORB+5Pm39r8suN+sNZm3HpW/mbSziwyeM5M
+/HGU5fmDgCeXf9gfkPw/NWQ+e3LgMjxL5uFWoeBAJQ4/pSxbZF/zgXUxqnbmf5HU
+n574GCfFJ16XwI54ZMdl1XJORifjWNZcNUF3dl0O3et6Jw9MCWapjIN3h5VjGyxy
+KvG4gJfL8j2liPoVGnaVJdt4hd9wrA==
+=0app
 -----END PGP SIGNATURE-----
 
---Sig_/Avnb=Jv4FeixyahQTk7zHJk--
+--Sig_/QE_j9YWfk8R.jkLw/IhID=R--

@@ -2,50 +2,54 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DBE056BDE3
-	for <lists+linux-next@lfdr.de>; Fri,  8 Jul 2022 18:09:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9F9756BDC8
+	for <lists+linux-next@lfdr.de>; Fri,  8 Jul 2022 18:08:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237964AbiGHPRy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 8 Jul 2022 11:17:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38130 "EHLO
+        id S233022AbiGHPXX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 8 Jul 2022 11:23:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237557AbiGHPRy (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 8 Jul 2022 11:17:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D4AF61D5F;
-        Fri,  8 Jul 2022 08:17:53 -0700 (PDT)
+        with ESMTP id S237631AbiGHPXV (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 8 Jul 2022 11:23:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D79F6D559;
+        Fri,  8 Jul 2022 08:23:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BE66860C28;
-        Fri,  8 Jul 2022 15:17:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D141C341C0;
-        Fri,  8 Jul 2022 15:17:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CE8CB611DC;
+        Fri,  8 Jul 2022 15:23:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36808C341C0;
+        Fri,  8 Jul 2022 15:23:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657293472;
-        bh=fMS2TMVcPi33mOSwxDvEXXKaUPeXrEIY1JwXpnbyJXw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ImDFrdj/O5jazkje+qbfCc95iH+0JWTL6o2u2SFapFTM6iRGXBlgNT9cxSisP/rif
-         zGEmKjM8YYtlpB2fnIzKt08NGhNJoL7fC1rrvBWL/CLtt42pDuXFYrkwpjWp0YDbeO
-         qReiy+DPQscnIfE/pk+nbAonBhPYIBATvaz+5KftCR/+j/owUlJbFO3e86MjHyviSV
-         umMYhXEiGWSkXgpCUJw7G5nusKsbKPqwZQiv5Ddi607pLxc9qx6kbGKaQUlqyVLhSj
-         mRAqg0ntRiSpR00ROL3QKRsYMZXTYlG1WEiX6T8xNNnZKWQH7+UveZvEvtrRk05vUk
-         2GGZchLWXzTeg==
-Date:   Fri, 8 Jul 2022 08:17:51 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
+        s=k20201202; t=1657293800;
+        bh=ZcgjiUXsY2nVzDJIVwV5cYUXobg29wTGZ1OMibhE4ls=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=O2M3khxdqUno1UAN7PwcZYfpvHkHY/ehW83XX5vYBg9Nqu99m26BEi+jhvSBIs9bm
+         YHmT5suNUC+p9yLxbjm5s7qg6HObXb26MzggTi77lJeONjwny4EiZZTR7gLUCCtFqP
+         63/PVys9Z/IK73VjcFhQxKN/AxKYk1FzC+/ft3hu7Yk1kgjTLHyuAFv9q0BrR0vecG
+         hjWYzYWFCx0+fYXquqYd/IZnRJOGTU/f1c5vOtosNCBfbl8dyofQjPiAI6AkByTmd2
+         quNvr3LsfKJclvDbfDUMjmlOd4s1aYETeIhXNl2zK3v3lUN5odp9u/gWmuGjD0089K
+         i4c/ikvV1pTfw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id B38A15C0328; Fri,  8 Jul 2022 08:23:19 -0700 (PDT)
+Date:   Fri, 8 Jul 2022 08:23:19 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        David Chinner <david@fromorbit.com>, linux-xfs@vger.kernel.org,
-        Shiyang Ruan <ruansy.fnst@fujitsu.com>,
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Huacai Chen <chenhuacai@loongson.cn>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the mm tree
-Message-ID: <YshKnxb4VwXycPO8@magnolia>
-References: <20220708194437.7eafe774@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: Re: linux-next: manual merge of the rcu tree with Linus' tree
+Message-ID: <20220708152319.GS1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220708141246.43111241@canb.auug.org.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220708194437.7eafe774@canb.auug.org.au>
+In-Reply-To: <20220708141246.43111241@canb.auug.org.au>
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -56,118 +60,51 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Jul 08, 2022 at 07:44:37PM +1000, Stephen Rothwell wrote:
+On Fri, Jul 08, 2022 at 02:12:46PM +1000, Stephen Rothwell wrote:
 > Hi all,
 > 
-> After merging the mm tree, today's linux-next build (x86_64 allmodconfig)
-> failed like this:
+> Today's linux-next merge of the rcu tree got a conflict in:
 > 
-> fs/xfs/xfs_notify_failure.c: In function 'xfs_dax_notify_ddev_failure':
-> fs/xfs/xfs_notify_failure.c:126:44: error: passing argument 1 of 'xfs_alloc_read_agf' from incompatible pointer type [-Werror=incompatible-pointer-types]
->   126 |                 error = xfs_alloc_read_agf(mp, tp, agno, 0, &agf_bp);
->       |                                            ^~
->       |                                            |
->       |                                            struct xfs_mount *
-> In file included from fs/xfs/xfs_notify_failure.c:12:
-> fs/xfs/libxfs/xfs_alloc.h:173:42: note: expected 'struct xfs_perag *' but argument is of type 'struct xfs_mount *'
->   173 | int xfs_alloc_read_agf(struct xfs_perag *pag, struct xfs_trans *tp, int flags,
->       |                        ~~~~~~~~~~~~~~~~~~^~~
-> fs/xfs/xfs_notify_failure.c:126:25: error: too many arguments to function 'xfs_alloc_read_agf'
->   126 |                 error = xfs_alloc_read_agf(mp, tp, agno, 0, &agf_bp);
->       |                         ^~~~~~~~~~~~~~~~~~
-> In file included from fs/xfs/xfs_notify_failure.c:12:
-> fs/xfs/libxfs/xfs_alloc.h:173:5: note: declared here
->   173 | int xfs_alloc_read_agf(struct xfs_perag *pag, struct xfs_trans *tp, int flags,
->       |     ^~~~~~~~~~~~~~~~~~
-> cc1: all warnings being treated as errors
+>   arch/loongarch/Kconfig
 > 
-> Caused by commit
+> between commit:
 > 
->   469a9c74c119 ("xfs: implement ->notify_failure() for XFS")
+>   7fd6ef61a5d6 ("LoongArch: Drop these obsolete selects in Kconfig")
 > 
-> interacting with commit
+> from Linus' tree and commit:
 > 
->   c4829aba9c8d ("xfs: pass perag to xfs_alloc_read_agf()")
+>   24a9c54182b3 ("context_tracking: Split user tracking Kconfig")
 > 
-> from the xfs tree.
+> from the rcu tree.
 > 
-> I have applied the following merge fix patch.
-> 
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Fri, 8 Jul 2022 19:11:56 +1000
-> Subject: [PATCH] fix up for "xfs: pass perag to xfs_alloc_read_agf()"
-> 
-> interacting with "xfs: implement ->notify_failure() for XFS"
-> 
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  fs/xfs/xfs_notify_failure.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/fs/xfs/xfs_notify_failure.c b/fs/xfs/xfs_notify_failure.c
-> index aa8dc27c599c..f3c62c19475e 100644
-> --- a/fs/xfs/xfs_notify_failure.c
-> +++ b/fs/xfs/xfs_notify_failure.c
-> @@ -18,6 +18,7 @@
->  #include "xfs_rmap_btree.h"
->  #include "xfs_rtalloc.h"
->  #include "xfs_trans.h"
-> +#include "xfs_ag.h"
->  
->  #include <linux/mm.h>
->  #include <linux/dax.h>
-> @@ -122,8 +123,10 @@ xfs_dax_notify_ddev_failure(
->  		struct failure_info	notify;
->  		struct xfs_agf		*agf;
->  		xfs_agblock_t		agend;
-> +		struct xfs_perag	*pag;
->  
-> -		error = xfs_alloc_read_agf(mp, tp, agno, 0, &agf_bp);
-> +		pag = xfs_perag_get(mp, agno);
-> +		error = xfs_alloc_read_agf(pag, tp, 0, &agf_bp);
->  		if (error)
->  			break;
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-This isn't quite correct -- references to xfs_perag objects must be
-released once they are acquired.  The following patch against today's
-tree fixes this problem:
+Thank you, Stephen!  I have noted this for my pull request.
 
-diff --git a/fs/xfs/xfs_notify_failure.c b/fs/xfs/xfs_notify_failure.c
-index f3c62c19475e..69d9c83ea4b2 100644
---- a/fs/xfs/xfs_notify_failure.c
-+++ b/fs/xfs/xfs_notify_failure.c
-@@ -127,10 +127,12 @@ xfs_dax_notify_ddev_failure(
- 
- 		pag = xfs_perag_get(mp, agno);
- 		error = xfs_alloc_read_agf(pag, tp, 0, &agf_bp);
--		if (error)
-+		if (error) {
-+			xfs_perag_put(pag);
- 			break;
-+		}
- 
--		cur = xfs_rmapbt_init_cursor(mp, tp, agf_bp, agf_bp->b_pag);
-+		cur = xfs_rmapbt_init_cursor(mp, tp, agf_bp, pag);
- 
- 		/*
- 		 * Set the rmap range from ri_low to ri_high, which represents
-@@ -151,6 +153,7 @@ xfs_dax_notify_ddev_failure(
- 				xfs_dax_failure_fn, &notify);
- 		xfs_btree_del_cursor(cur, error);
- 		xfs_trans_brelse(tp, agf_bp);
-+		xfs_perag_put(pag);
- 		if (error)
- 			break;
- 
+							Thanx, Paul
 
---D
-
->  
-> -- 
-> 2.35.1
-> 
 > -- 
 > Cheers,
 > Stephen Rothwell
+> 
+> diff --cc arch/loongarch/Kconfig
+> index 53a912befb62,130dc65f3c85..000000000000
+> --- a/arch/loongarch/Kconfig
+> +++ b/arch/loongarch/Kconfig
+> @@@ -75,7 -76,8 +75,7 @@@ config LOONGARC
+>   	select HAVE_ARCH_TRACEHOOK
+>   	select HAVE_ARCH_TRANSPARENT_HUGEPAGE
+>   	select HAVE_ASM_MODVERSIONS
+> - 	select HAVE_CONTEXT_TRACKING
+> + 	select HAVE_CONTEXT_TRACKING_USER
+>  -	select HAVE_COPY_THREAD_TLS
+>   	select HAVE_DEBUG_STACKOVERFLOW
+>   	select HAVE_DMA_CONTIGUOUS
+>   	select HAVE_EXIT_THREAD
 
 

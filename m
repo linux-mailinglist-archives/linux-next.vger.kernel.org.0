@@ -2,111 +2,120 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57EA756CD96
-	for <lists+linux-next@lfdr.de>; Sun, 10 Jul 2022 09:08:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCF4856D1CD
+	for <lists+linux-next@lfdr.de>; Mon, 11 Jul 2022 00:28:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229547AbiGJHID (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 10 Jul 2022 03:08:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47434 "EHLO
+        id S229552AbiGJW2Q (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 10 Jul 2022 18:28:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiGJHIB (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 10 Jul 2022 03:08:01 -0400
-Received: from polaris.svanheule.net (polaris.svanheule.net [IPv6:2a00:c98:2060:a004:1::200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F1CF1261E
-        for <linux-next@vger.kernel.org>; Sun, 10 Jul 2022 00:08:01 -0700 (PDT)
-Received: from [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd] (unknown [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd])
+        with ESMTP id S229463AbiGJW2P (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 10 Jul 2022 18:28:15 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90FBA13EBC;
+        Sun, 10 Jul 2022 15:28:13 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        (Authenticated sender: sander@svanheule.net)
-        by polaris.svanheule.net (Postfix) with ESMTPSA id C91812F8519;
-        Sun, 10 Jul 2022 09:07:57 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
-        s=mail1707; t=1657436878;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=98eZSVAq1zDGzv3qQXiSN9bWKqJX1e7UtCrshS/cBJw=;
-        b=HQuj5cM8WTNUM6V9zh3pHUHOSJr+wlh+UJjuviPbRwC3hGtYYOJ5JJS8mIeO7N74SdYgJ5
-        BwDJoJsiZBeRk1Z2ze6wZnb+FwQ1kbhtL7kTltFb9SHJsZxRe98g3DxspPDyHVPwuX6xQA
-        rrW5VkA6bZUUdsCbwV1YysYHBVWzlGpeA0I/zw/Ix/kRkywGZB2512xL9jEZZky/2uHa39
-        uvF+G6jLNVKqut+vjktzyMeXmbkXjbBZbT7zsTePNh9tT6gfsZWyzYlSJLshgrEIt3fZvr
-        h3NcnGVKlD2XJy76bDsfBM3fBEIR16SK5AMr5ZXiJW6Zo4dmAFp76cLcMpND/g==
-Message-ID: <54caa91f8b430e03770854d916f6eae27a7d63f9.camel@svanheule.net>
-Subject: Re: linux-next: manual merge of the mm tree with the bitmap tree
-From:   Sander Vanheule <sander@svanheule.net>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yury Norov <yury.norov@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Lh1qq71Bzz4xhn;
+        Mon, 11 Jul 2022 08:28:07 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1657492088;
+        bh=t2x2etyRIE9UyBEZxb6gCj5pB9F+yYo2kF1BwbNXc80=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=M11jrNWPw7pyiQvQhFU7d4enjLEA8FLuj6KPKofCJFSmYWXdVhJSNCIqm/jbDWZfS
+         6QlmKRmkXdsNG9pYExPQEI10FePRb4GdkDLuBEmWbM2E4lkR0CPwZ7x9cL9ct8MKHQ
+         yYoHry4Gd5Yqpx0hMeIL9NusFmpvNE8jEkHeUFlptmmHQmb9+hDb73mt/SnS5l0Y12
+         8qmYZpRc3rvVgbdVPOXGpYsZKCiujIUZ/9kSFn+7FoGWEnfpBgYY5b/XxQ3dwVogRz
+         NNa3G0yMDg4kkAsE65nDnfZ6JoxppeFQ74aKOlHe4qiBf3WpoUIa8sWZMRwaoc5OXa
+         7HxSN9ksaSwWA==
+Date:   Mon, 11 Jul 2022 08:28:07 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        David Chinner <david@fromorbit.com>, linux-xfs@vger.kernel.org,
+        Shiyang Ruan <ruansy.fnst@fujitsu.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Date:   Sun, 10 Jul 2022 09:07:56 +0200
-In-Reply-To: <20220704172609.27ec5d8c@canb.auug.org.au>
-References: <20220704165841.1637cfff@canb.auug.org.au>
-         <20220704172609.27ec5d8c@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
+Subject: Re: linux-next: build failure after merge of the mm tree
+Message-ID: <20220711082807.745ee22d@canb.auug.org.au>
+In-Reply-To: <YshKnxb4VwXycPO8@magnolia>
+References: <20220708194437.7eafe774@canb.auug.org.au>
+        <YshKnxb4VwXycPO8@magnolia>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/7D3RKxNX24FwTFPfEbTajvY";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+--Sig_/7D3RKxNX24FwTFPfEbTajvY
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 2022-07-04 at 17:26 +1000, Stephen Rothwell wrote:
-> Hi all,
+Hi Darrick,
+
+On Fri, 8 Jul 2022 08:17:51 -0700 "Darrick J. Wong" <djwong@kernel.org> wro=
+te:
+>
+> This isn't quite correct -- references to xfs_perag objects must be
+> released once they are acquired.  The following patch against today's
+> tree fixes this problem:
 >=20
-> On Mon, 4 Jul 2022 16:58:41 +1000 Stephen Rothwell <sfr@canb.auug.org.au>
-> wrote:
-> >=20
-> > Today's linux-next merge of the mm tree got a conflict in:
-> >=20
-> > =C2=A0 include/linux/cpumask.h
-> >=20
-> > between commits:
-> >=20
-> > =C2=A0 50e413c31800 ("lib/cpumask: change return types to unsigned")
-> > =C2=A0 e32bd0390739 ("lib/cpumask: move one-line wrappers around find_b=
-it to the
-> > header")
-> >=20
-> > from the bitmap tree and commits:
-> >=20
-> > =C2=A0 2b0b9f2665b2 ("cpumask: Fix invalid uniprocessor mask assumption=
-")
-> > =C2=A0 284d22458843 ("cpumask: update cpumask_next_wrap() signature")
-> >=20
-> > from the mm tree.
-> >=20
-> > I fixed it up (I hope, see below) and can carry the fix as necessary. T=
-his
-> > is now fixed as far as linux-next is concerned, but any non trivial
-> > conflicts should be mentioned to your upstream maintainer when your tre=
-e
-> > is submitted for merging.=C2=A0 You may also want to consider cooperati=
-ng
-> > with the maintainer of the conflicting tree to minimise any particularl=
-y
-> > complex conflicts.
->=20
+> diff --git a/fs/xfs/xfs_notify_failure.c b/fs/xfs/xfs_notify_failure.c
+> index f3c62c19475e..69d9c83ea4b2 100644
+> --- a/fs/xfs/xfs_notify_failure.c
+> +++ b/fs/xfs/xfs_notify_failure.c
+> @@ -127,10 +127,12 @@ xfs_dax_notify_ddev_failure(
+> =20
+>  		pag =3D xfs_perag_get(mp, agno);
+>  		error =3D xfs_alloc_read_agf(pag, tp, 0, &agf_bp);
+> -		if (error)
+> +		if (error) {
+> +			xfs_perag_put(pag);
+>  			break;
+> +		}
+> =20
+> -		cur =3D xfs_rmapbt_init_cursor(mp, tp, agf_bp, agf_bp->b_pag);
+> +		cur =3D xfs_rmapbt_init_cursor(mp, tp, agf_bp, pag);
+> =20
+>  		/*
+>  		 * Set the rmap range from ri_low to ri_high, which represents
+> @@ -151,6 +153,7 @@ xfs_dax_notify_ddev_failure(
+>  				xfs_dax_failure_fn, &notify);
+>  		xfs_btree_del_cursor(cur, error);
+>  		xfs_trans_brelse(tp, agf_bp);
+> +		xfs_perag_put(pag);
+>  		if (error)
+>  			break;
+> =20
 
-Thanks for solving the conflicts, looks fine to me. I've asked Andrew to re=
-order
-my patches. The end result for the series should be the same though, and I =
-don't
-think my patches should require too many changes anymore.
+Thanks, I will add that to the resolution from today.
 
-If further merge conflicts arise with Yury's cpumask patches, I'm also fine=
- with
-them being run as one series if that would make things easier.
+--=20
+Cheers,
+Stephen Rothwell
 
-Best,
-Sander
+--Sig_/7D3RKxNX24FwTFPfEbTajvY
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLLUncACgkQAVBC80lX
+0GwlqAf/WeUw62MEgfmaLpCUh5mt5gqu50WTo4hdDHEOXVoMxDFqz1EY/LbzAcUu
+twtMKf60dMR1IS3zbgekFKLVuAjGu4Nwrjvj+nha6EOjxyf/4o4a3IZyL69NN8HY
+/hJsw3hQ7Fj1N7PfdF/gbj90+IU5Tpejdx4gDTqdMfoLuzjsatQVc4zM3IKneB3h
+gqDYttyBbQA33VwvCxPmkh3kSfk5ZnGN+bWTcAUyqk0WMDma3XTENZgMpIGP5308
+3OMHayMLhsJQL/TXfcLLKNm1qbQuJV2JvB4ayp1X1D7zQ9bO5yeorZAGVy/r3qyJ
+DYQVDxlSJxWcnvkpmsCopzdIy0aoYQ==
+=RLOP
+-----END PGP SIGNATURE-----
+
+--Sig_/7D3RKxNX24FwTFPfEbTajvY--

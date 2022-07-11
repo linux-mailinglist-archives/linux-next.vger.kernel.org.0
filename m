@@ -2,90 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C99A3570046
-	for <lists+linux-next@lfdr.de>; Mon, 11 Jul 2022 13:23:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 601A3570054
+	for <lists+linux-next@lfdr.de>; Mon, 11 Jul 2022 13:25:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229955AbiGKLXd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 11 Jul 2022 07:23:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33430 "EHLO
+        id S231221AbiGKLZQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 11 Jul 2022 07:25:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230500AbiGKLWu (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 11 Jul 2022 07:22:50 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CAB637FA2;
-        Mon, 11 Jul 2022 03:49:35 -0700 (PDT)
+        with ESMTP id S231252AbiGKLZC (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 11 Jul 2022 07:25:02 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FC0D9D524;
+        Mon, 11 Jul 2022 03:56:01 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LhLHK5lmXz4xXD;
-        Mon, 11 Jul 2022 20:49:33 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LhLQl11NXz4xD9;
+        Mon, 11 Jul 2022 20:55:58 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1657536574;
-        bh=sUZIg/fS4jnuFTZnbWEUaFcFqhHRGZ8fwMtBDgUIf9c=;
+        s=201702; t=1657536959;
+        bh=U/KYNMY+7+7To8WFTCWm5uU7LB27krSvLn/u4CKUVjc=;
         h=Date:From:To:Cc:Subject:From;
-        b=ItykgBef6rptaGNkbeHj7o/om75/WKAGw0pWJIpBPh32/qUFqc5igzNVMQuOa2K5Q
-         sXkllhYWkHQTyH/1fJw7lnRAU7wCU2/wR6wfj9S8TfUwzs7va2nFysby3T3rqVgL1C
-         8LuczKivT4CrmzNf6sYn98VfiY2DNcTfnuv806XRDgDcVUk1+OtZZTJvp3ONuSjlw/
-         FJLvvq0B54eAowe/wvOFDBxm79/uEplVarcBbwjSCE/WLqpC6UOrGYNRFQ535IIKTt
-         AEa+f1vJx77Zh2T/8zZPQgPQp014/eCi2FhpS3m0ywWhTrbs04bVKdNlWfEWxcM73X
-         FHJyOZ3WxeISw==
-Date:   Mon, 11 Jul 2022 20:49:32 +1000
+        b=OzS6MTHB8GFG1yBEVKJIOsA6JPpoUcB+9astOxj9LlJzPaGEK72e84CAEJXa6hum+
+         Fwq5mIX73wM/MdCAPbKVZMYh22sR1wp69W9zVIE0/2enQsRPttO5mDzgIZJBWXjW5v
+         qnVKh4Un36J6xbZBzdAfKHyn8sWml60cvr1XiUouDBhE63CI1CqMCVerbHAljyfsdG
+         ElUVl9sjIykNDe1UMmcUQ/bwxxlrTHHReHnjbnZtp7DhLTv5Do24guWeudQGFcVQOl
+         uj6lFuVaFgeYJcCZaQwDQyNzIaUiCcqj/jJRKrFQfTI+5zMezv4z525CtsOYzwsrDh
+         /7tLJXnCsjvLw==
+Date:   Mon, 11 Jul 2022 20:55:57 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Linux Crypto List <linux-crypto@vger.kernel.org>,
-        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
-        Tomasz Kowallik <tomaszx.kowalik@intel.com>,
+To:     Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>
+Cc:     Matthew Rosato <mjrosato@linux.ibm.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the crypto tree
-Message-ID: <20220711204932.333379b4@canb.auug.org.au>
+Subject: linux-next: build warning after merge of the kvms390 tree
+Message-ID: <20220711205557.183c3b14@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/nCM=dB/dX0wifWLX.Kzp7UJ";
+Content-Type: multipart/signed; boundary="Sig_//y.urvOQWaMAJ.2mvOZmL_w";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/nCM=dB/dX0wifWLX.Kzp7UJ
+--Sig_//y.urvOQWaMAJ.2mvOZmL_w
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the crypto tree, today's linux-next build (KCONFIG_NAME)
+After merging the kvms390 tree, today's linux-next build (KCONFIG_NAME)
 produced this warning:
 
-Documentation/ABI/testing/sysfs-driver-qat:24: WARNING: Unexpected indentat=
-ion.
+Documentation/virt/kvm/api.rst:5959: WARNING: Title underline too short.
+
+4.137 KVM_S390_ZPCI_OP
+--------------------
 
 Introduced by commit
 
-  d4cfb144f605 ("crypto: qat - expose device config through sysfs for 4xxx")
+  a0c4d1109d6c ("KVM: s390: add KVM_S390_ZPCI_OP to manage guest zPCI devic=
+es")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/nCM=dB/dX0wifWLX.Kzp7UJ
+--Sig_//y.urvOQWaMAJ.2mvOZmL_w
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLMADwACgkQAVBC80lX
-0Gy5RAf8CczHwKTt7mCLsuIc5aln2zWjSMajKmTcWPD0M+jcSxWZsEs8DTKBbBBp
-omFXGTlDbZBQUaYmT9bdOaiNWPuMLv+oaVFb3H0/BqRGDNb+pWLY5WeexdB99uvD
-/N0Qksm/pSShsvyP+RcrzSvbVAHo5TEN6FCQ5auPgc+0KoXc/DUqoGeGeVR6cUGL
-Tcy+KAezSgS2/PZ2SYKZ1UNyqxc20rYZjCqpaN6vaTqbTxtoyLs+GRvb+QZ9E8E3
-V9BPK7LBoksCiE+bglAiX3e7AF/WaZm7xJe0dazBNXJHU/UOpCurlAsGKmi/hpN8
-WFZPIkavPR4SgkeXUv9U53uaSqSqEg==
-=P2ZC
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLMAb0ACgkQAVBC80lX
+0Gzg7gf/WX4aS+xXbKB+6HaB1bMFEhoTYPRwF8YaFOMd9Utp6u0xwfwu6uuAA07l
+8Yro1AyxvAQnK7MUzC+qDzlvWqt1l5bcaMMz34KNdM6ihcsH6vNFZpVdPIgqavXG
+Pw6b5x0TtduOUccK7bgpQeNctk+ua9dyUS80fKCCMRUHBUdWZcXqpU3qNrProRte
+549oKzjaMBsc1g9YCv1OszUEprBoPic7lY5kfTJs6QwjNXgVV5dgm0Tcy1SXROZp
+Ywgdox0VTTPD5oMgnXeY/UOKFK4XnnFdj+9hcvmhH1cMOpYfWMCW03GiYIuj4tMA
+/lJGxhEwiwWwwRgW5YFtifaij87a4A==
+=Kg9q
 -----END PGP SIGNATURE-----
 
---Sig_/nCM=dB/dX0wifWLX.Kzp7UJ--
+--Sig_//y.urvOQWaMAJ.2mvOZmL_w--

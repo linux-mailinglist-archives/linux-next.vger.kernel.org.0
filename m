@@ -2,74 +2,76 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAAC356D237
-	for <lists+linux-next@lfdr.de>; Mon, 11 Jul 2022 02:34:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62BA856D2D0
+	for <lists+linux-next@lfdr.de>; Mon, 11 Jul 2022 04:02:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229518AbiGKAeZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 10 Jul 2022 20:34:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39730 "EHLO
+        id S229598AbiGKCCZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 10 Jul 2022 22:02:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbiGKAeY (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 10 Jul 2022 20:34:24 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC3DD63DF;
-        Sun, 10 Jul 2022 17:34:22 -0700 (PDT)
+        with ESMTP id S229552AbiGKCCZ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 10 Jul 2022 22:02:25 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F61918340;
+        Sun, 10 Jul 2022 19:02:21 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Lh4dN5LR1z4xXj;
-        Mon, 11 Jul 2022 10:34:16 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Lh6Zz2RM1z4xbn;
+        Mon, 11 Jul 2022 12:02:18 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1657499657;
-        bh=g8nUc2vrjLqbAhzxUgKGnKRtz0OKsUg950t4UTQmsp4=;
+        s=201702; t=1657504939;
+        bh=xqBFKK6qf7Ib3HJxYp7IZT2SldM0zLDbqM3KeFXB0c8=;
         h=Date:From:To:Cc:Subject:From;
-        b=Z301i0/uikn8CUgfH2+bDfOykMRhmBiNMYC4C2pUSWpUYPURaNWM9ZId7Bjf64x/v
-         IbMqKXMSd/ndx9Iq9KKxNMXm1umw0U1BUT1oy4S1f2N1pNXguO5pQrY2r+i3Oq+hUX
-         ftQWNcdDbQSV227VRd5mjbEGyWY6Kg3Hwa/5DJsew+kNcTHEuqz8PaVbRU7ZeANSfK
-         ZjZfNHkFz7wS9VE89c5HO/3UkPaDtKajShDpJ6xti9tiRnXe3S2U22PPQ1h7WeWB2l
-         /8G2yQ8FASqIR5SzqVxbTh6NiUVXoaxDoMwyQj/fxyUCoWucBNa/X+UkWCwrGzpDMJ
-         Ob+Em63tZ/XMg==
-Date:   Mon, 11 Jul 2022 10:34:15 +1000
+        b=hJANgGzYNQxpuf2k1CO5wvyhRVINxJUSUsRe+Q0zUzlGUAKWhjov/1pF8TntFIgYK
+         QHrPAgHHYeFrPb5ghk3m0o3qv+pepVmgt4k7ImQ9Y1QD87MR3rtgqLbHwFJ13ke+Q6
+         BHqI2ZEX6PikvBv1B9yiz5TSX0NYEfyANWtwbKfxUst5RAIAtOevNH6znaVB7C2HRW
+         fT9O+zoydA5KuFmTBc6CrXju78F6YZsdzn4TYxHTr4ftfGvNJvMfl0gzfm6hjfUcMt
+         Aml33ogJ70PNakO57Sq3HqIGDfBnHyv8li17viOkXF7b3YMycAbzZ+xRJwTupFCa8F
+         D/m9cAywSXBpQ==
+Date:   Mon, 11 Jul 2022 12:02:11 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Al Viro <viro@ZenIV.linux.org.uk>, David Sterba <dsterba@suse.cz>
-Cc:     David Sterba <dsterba@suse.com>, Filipe Manana <fdmanana@suse.com>,
+To:     David Miller <davem@davemloft.net>
+Cc:     Networking <netdev@vger.kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the vfs tree with the btrfs tree
-Message-ID: <20220711103415.41685daa@canb.auug.org.au>
+Subject: linux-next: manual merge of the net-next tree with the net tree
+Message-ID: <20220711120211.7c8b7cba@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/86LkagoEDZiU+_Nw13S3VCn";
+Content-Type: multipart/signed; boundary="Sig_/2REdDITgtcduHSgUid.oAVa";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/86LkagoEDZiU+_Nw13S3VCn
+--Sig_/2REdDITgtcduHSgUid.oAVa
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the vfs tree got a conflict in:
+Today's linux-next merge of the net-next tree got a conflict in:
 
-  fs/btrfs/file.c
+  include/net/sock.h
 
 between commit:
 
-  c8223467948b ("btrfs: don't fallback to buffered IO for NOWAIT direct IO =
-writes")
+  310731e2f161 ("net: Fix data-races around sysctl_mem.")
 
-from the btrfs tree and commit:
+from the net tree and commit:
 
-  eacdf4eaca63 ("btrfs: use IOMAP_DIO_NOSYNC")
+  e70f3c701276 ("Revert "net: set SK_MEM_QUANTUM to 4096"")
 
-from the vfs tree.
+from the net-next tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -82,83 +84,47 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc fs/btrfs/file.c
-index 1876072dee9d,30e6aef9739f..000000000000
---- a/fs/btrfs/file.c
-+++ b/fs/btrfs/file.c
-@@@ -1846,36 -1846,8 +1846,35 @@@ static ssize_t check_direct_IO(struct b
-  	return 0;
+diff --cc include/net/sock.h
+index 9fa54762e077,0dd43c3df49b..000000000000
+--- a/include/net/sock.h
++++ b/include/net/sock.h
+@@@ -1521,22 -1541,10 +1541,10 @@@ void __sk_mem_reclaim(struct sock *sk,=20
+  #define SK_MEM_SEND	0
+  #define SK_MEM_RECV	1
+ =20
+- /* sysctl_mem values are in pages, we convert them in SK_MEM_QUANTUM unit=
+s */
++ /* sysctl_mem values are in pages */
+  static inline long sk_prot_mem_limits(const struct sock *sk, int index)
+  {
+- 	long val =3D READ_ONCE(sk->sk_prot->sysctl_mem[index]);
+-=20
+- #if PAGE_SIZE > SK_MEM_QUANTUM
+- 	val <<=3D PAGE_SHIFT - SK_MEM_QUANTUM_SHIFT;
+- #elif PAGE_SIZE < SK_MEM_QUANTUM
+- 	val >>=3D SK_MEM_QUANTUM_SHIFT - PAGE_SHIFT;
+- #endif
+- 	return val;
+ -	return sk->sk_prot->sysctl_mem[index];
+++	return READ_ONCE(sk->sk_prot->sysctl_mem[index]);
   }
  =20
- +static size_t dio_fault_in_size(const struct kiocb *iocb,
- +				const struct iov_iter *iov,
- +				size_t prev_left)
- +{
- +	const size_t left =3D iov_iter_count(iov);
- +	size_t size =3D PAGE_SIZE;
- +
- +	/*
- +	 * If there's no progress since the last time we had to fault in pages,
- +	 * then we fault in at most 1 page. Faulting in more than that may
- +	 * result in making very slow progress or falling back to buffered IO,
- +	 * because by the time we retry the DIO operation some of the first
- +	 * remaining pages may have been evicted in order to fault in other pages
- +	 * that follow them. That can happen when we are under memory pressure a=
-nd
- +	 * the iov represents a large buffer.
- +	 */
- +	if (left !=3D prev_left) {
- +		int dirty_tresh =3D current->nr_dirtied_pause - current->nr_dirtied;
- +
- +		size =3D max(dirty_tresh, 8) << PAGE_SHIFT;
- +		size =3D min_t(size_t, SZ_1M, size);
- +	}
- +	size -=3D offset_in_page(iocb->ki_pos);
- +
- +	return min(left, size);
- +}
- +
-  static ssize_t btrfs_direct_write(struct kiocb *iocb, struct iov_iter *fr=
-om)
-  {
-- 	const bool is_sync_write =3D (iocb->ki_flags & IOCB_DSYNC);
-  	struct file *file =3D iocb->ki_filp;
-  	struct inode *inode =3D file_inode(file);
-  	struct btrfs_fs_info *fs_info =3D btrfs_sb(inode->i_sb);
-@@@ -1993,17 -1954,7 +1983,10 @@@ again
- =20
-  	btrfs_inode_unlock(inode, ilock_flags);
- =20
-- 	/*
-- 	 * Add back IOCB_DSYNC. Our caller, btrfs_file_write_iter(), will do
-- 	 * the fsync (call generic_write_sync()).
-- 	 */
-- 	if (is_sync_write)
-- 		iocb->ki_flags |=3D IOCB_DSYNC;
--=20
- -	/* If 'err' is -ENOTBLK then it means we must fallback to buffered IO. */
- +	/*
- +	 * If 'err' is -ENOTBLK or we have not written all data, then it means
- +	 * we must fallback to buffered IO.
- +	 */
-  	if ((err < 0 && err !=3D -ENOTBLK) || !iov_iter_count(from))
-  		goto out;
- =20
+  static inline int sk_mem_pages(int amt)
 
---Sig_/86LkagoEDZiU+_Nw13S3VCn
+--Sig_/2REdDITgtcduHSgUid.oAVa
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLLcAcACgkQAVBC80lX
-0GxRqgf9FugW9YMDrncdybNoM9hXJeIedTisKZ+dPtY+2Kg30BmnV4wglx0l5nnN
-UjO4AJr6GVccZZj10tQJ1CW8J2U18zQxf8IK74L8qio4U71agBe7vA1V9S7gRk3g
-J56WSEEuVKpxLCkZ0EjS9fCDovf3b0LdEm7IbRTkMUM/Obs84Vo5wTN1ujVQEAnh
-BmGgF9Lh7U+OJyc/l6dG8NPD1XdiXEpuw76SaThwcb/VmeMb8wssRSsyNfVvR107
-+l9xKJDILvP6gRxbthGrL8qkU+bVtOzKr1LQYAbuNR7WFS86DP0lPQWvcr45Rnvx
-NSkuBqesnHILyYs2CyQiytQ6WEEzNQ==
-=I9Ev
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLLhKMACgkQAVBC80lX
+0GzuqQf/XT2dktWH13klD45XChcgFkdIidFCA/v3Uql4IiVzIJjmHtwKGhsuhbbw
+QptsNRGPrRV5wsOszqL2yWUTZO9MQdayubx0O7m1jKBdO62wzvC/jRJ2dHm2zwrS
+94IHUVsAPxi+8DLxTP5asgAImeRbkvcXML9alP42O2vqw3HQaGCoByZvGtfF92+C
+WXYH1pM4Fzf8lpO5o2NWJ3HLACTl0Pn29maGuezLcSoAtQVUh0ly0eKrrHQdn09E
+H+0d0j4Ue6mHuCmF6SCJ2ZKl6o9X4s90N0RdQLlCtHFkG2TpPiBmJT+jFtOvTEyQ
+2Gd7VSJlolF3g3q9AnVOggEpFV3prQ==
+=/tyl
 -----END PGP SIGNATURE-----
 
---Sig_/86LkagoEDZiU+_Nw13S3VCn--
+--Sig_/2REdDITgtcduHSgUid.oAVa--

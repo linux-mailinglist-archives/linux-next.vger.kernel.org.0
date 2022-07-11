@@ -2,122 +2,104 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F59656D789
-	for <lists+linux-next@lfdr.de>; Mon, 11 Jul 2022 10:15:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF45256D78C
+	for <lists+linux-next@lfdr.de>; Mon, 11 Jul 2022 10:15:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229918AbiGKIPF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 11 Jul 2022 04:15:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50976 "EHLO
+        id S229874AbiGKIPr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 11 Jul 2022 04:15:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbiGKIOp (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 11 Jul 2022 04:14:45 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA58013F46;
-        Mon, 11 Jul 2022 01:14:30 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S229837AbiGKIP2 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 11 Jul 2022 04:15:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43F7B1DA5F;
+        Mon, 11 Jul 2022 01:15:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LhGrK2MPwz4xbn;
-        Mon, 11 Jul 2022 18:14:25 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1657527266;
-        bh=h+M4Jcz3tcEssYonG7T7apPq9JSRl1tVYCyueBu9jkw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=qhiBd0dOxF+c3g6GKDSUuFXHSb5ZZG7Mem9THLspP5WD1/CfVWSj+4DM0OReU7u/P
-         hDTRi1zOqwIZZ58Z6/ZFaOeueruoQPlP2mgUxTjBjeV2R1I9WiCDWu23rKoBPQuOz8
-         vIGHnAtryfWaUH5rwraQbcDamUiN6zjoYVIeKWVldgCcBbt0/O4VKN5+EON26coUEd
-         PjfpTNwGQNfQYxaPGIW9vcapv63QaVfcZJ8pznXFwP8v6wSzHt0RZiM+mazdNJslmj
-         gJ8VLF0oHRPfDrVPn6sqVQ6gM/l8eTtsJesLBdVBNvFmIsi6t5HGLStZoaXH01qqKQ
-         IzOoXmHKsFVtQ==
-Date:   Mon, 11 Jul 2022 18:14:24 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
-Cc:     ARM <linux-arm-kernel@lists.infradead.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        by ams.source.kernel.org (Postfix) with ESMTPS id DEE7BB80E41;
+        Mon, 11 Jul 2022 08:15:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F614C34115;
+        Mon, 11 Jul 2022 08:15:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657527321;
+        bh=bHT6yX754bDNr+YlySEm4rQB15/WYr8mKVfdle6pm9c=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=nM9gmnfPlCOHIBGv6E//DWjkYWhBo2srCG3m5iQ2CyVDPW2GPbmqov9snxszAo6wf
+         SxyfAvqmfGeeYCHc/K9GSyaoxmYRQ2wp3n7XhhhP+duEEs6kPgINr3Bd7r+Wj6B2H2
+         in0gCtSiG071XUtbEddFv6G7nzzqVrTFX8sdxigHkHV1uZrvE4az+tk+l2G4y9aRLY
+         tRMS+F9z60e1nM7kPGDk6qrhFsLNskQJDFIQFDuvR4Xr4J9SI629iwTFbPGCVgaYNS
+         6NobdIb6yRNX7rqSjVFtuQpjJQJ5WrnVFJBulpAYDP+M+NrPEMQJAm9K0fi1fFZPZx
+         53KZp4jOO/CpQ==
+Received: from [213.208.244.172] (helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oAoZb-006aag-JT;
+        Mon, 11 Jul 2022 09:15:19 +0100
+Date:   Mon, 11 Jul 2022 09:15:19 +0100
+Message-ID: <87mtdgkqug.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the rtc tree with the arm-soc-fixes
- tree
-Message-ID: <20220711181424.70195b52@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/X9DcZDdyUOHWlvTL.w1xqt5";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: linux-next: build failure after merge of the irqchip tree
+In-Reply-To: <20220711154252.4b88a601@canb.auug.org.au>
+References: <20220711154252.4b88a601@canb.auug.org.au>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 213.208.244.172
+X-SA-Exim-Rcpt-To: sfr@canb.auug.org.au, linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/X9DcZDdyUOHWlvTL.w1xqt5
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, 11 Jul 2022 06:42:52 +0100,
+Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> 
+> Hi all,
+> 
+> After merging the irqchip tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+> 
+> In file included from drivers/gpio/gpio-thunderx.c:18:
+> include/asm-generic/msi.h:32:3: error: conflicting types for 'msi_alloc_info_t'; have 'struct msi_alloc_info'
+>    32 | } msi_alloc_info_t;
+>       |   ^~~~~~~~~~~~~~~~
+> In file included from include/linux/gpio/driver.h:15,
+>                  from drivers/gpio/gpio-thunderx.c:10:
+> arch/x86/include/asm/msi.h:7:31: note: previous declaration of 'msi_alloc_info_t' with type 'msi_alloc_info_t' {aka 'struct irq_alloc_info'}
+>     7 | typedef struct irq_alloc_info msi_alloc_info_t;
+>       |                               ^~~~~~~~~~~~~~~~
+> drivers/gpio/gpio-thunderx.c: In function 'thunderx_gpio_populate_parent_alloc_info':
+> drivers/gpio/gpio-thunderx.c:416:34: error: initialization of 'msi_alloc_info_t *' {aka 'struct msi_alloc_info *'} from incompatible pointer type 'msi_alloc_info_t *' {aka 'struct irq_alloc_info *'} [-Werror=incompatible-pointer-types]
+>   416 |         msi_alloc_info_t *info = &gfwspec->msiinfo;
+>       |                                  ^
+> cc1: all warnings being treated as errors
+> 
+> Caused by commit
+> 
+>   91a29af413de ("gpio: Remove dynamic allocation from populate_parent_alloc_arg()")
+> 
+> I have used the irqchip tree from next-20220707 again for today.
 
-Hi all,
+Huh. Twice sorry about that one. Patch sent to fix the breakage, and
+will push this into irqchip-next shortly.
 
-Today's linux-next merge of the rtc tree got a conflict in:
+Thanks,
 
-  MAINTAINERS
+	M.
 
-between commit:
-
-  2058dc831ff8 ("MAINTAINERS: add polarfire rng, pci and clock drivers")
-
-from the arm-soc-fixes tree and commit:
-
-  1bdb08c180e8 ("MAINTAINERS: add PolarFire SoC's RTC")
-
-from the rtc tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc MAINTAINERS
-index 2f618be2906f,69a960561e37..000000000000
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@@ -17443,13 -17141,9 +17443,14 @@@ M:	Daire McNamara <daire.mcnamara@micro
-  L:	linux-riscv@lists.infradead.org
-  S:	Supported
-  F:	arch/riscv/boot/dts/microchip/
- +F:	drivers/char/hw_random/mpfs-rng.c
- +F:	drivers/clk/microchip/clk-mpfs.c
-  F:	drivers/mailbox/mailbox-mpfs.c
- +F:	drivers/pci/controller/pcie-microchip-host.c
-+ F:	drivers/rtc/rtc-mpfs.c
-  F:	drivers/soc/microchip/
- +F:	drivers/spi/spi-microchip-core.c
- +F:	drivers/usb/musb/mpfs.c
-  F:	include/soc/microchip/mpfs.h
- =20
-  RNBD BLOCK DRIVERS
-
---Sig_/X9DcZDdyUOHWlvTL.w1xqt5
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLL2+AACgkQAVBC80lX
-0GxfIQgAoVgli0HBZGny4OhVRSX4257QV2bJyb/+xI9UjpQEUTVo/rnazskKZHgf
-rykQetoq3tpP7n04+4s/YrGgg0RibsNS504E/Lk+30dnxN4S63275ZG0lWtIyhmM
-NEqNaKEHYh4ZdyIV/i+v1rcyldccT6RzF9A6BjSX0/vsdOgP/+8hOJnJ8CX9WFYI
-2HHxVu5BfaRwxhPyv+SxS70sGMbiFee7yCv45wRSH5nup1VPDDXekzijdqBzdSQ3
-2llgsGx+ixAMJPb5dB9AmwZ13EuWZ9A99qLs2Z3SmoJtLRTy+oXRFTRZK3TfoCzw
-TMWNq47erOa0sInGgnXl/N2SPq0QFg==
-=yPvP
------END PGP SIGNATURE-----
-
---Sig_/X9DcZDdyUOHWlvTL.w1xqt5--
+-- 
+Without deviation from the norm, progress is not possible.

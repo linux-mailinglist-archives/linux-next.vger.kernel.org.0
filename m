@@ -2,139 +2,164 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7321C56D73F
-	for <lists+linux-next@lfdr.de>; Mon, 11 Jul 2022 10:00:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8FD256D762
+	for <lists+linux-next@lfdr.de>; Mon, 11 Jul 2022 10:06:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229500AbiGKIAb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 11 Jul 2022 04:00:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41210 "EHLO
+        id S229707AbiGKIGD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 11 Jul 2022 04:06:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbiGKIAb (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 11 Jul 2022 04:00:31 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 411A31CB26;
-        Mon, 11 Jul 2022 01:00:30 -0700 (PDT)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26B7dMnF013422;
-        Mon, 11 Jul 2022 08:00:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=xGRh9784j+XL7fT3gPOzqy0OXO59e948uj3leVo7td4=;
- b=JaQvACYNvfKpXTOmQyVwXHDmWQ59LUww8dcubPGvGa3aD0sFh04ROpO05t1Ti/bn3U1F
- 44sDCy8c6ooquxMofN2BeHEEn5JVn1nGLQpsy8CtsARDhWN3bJpN2whAPbihHUkfxsYL
- 6dLrvlQmH+MtQiTn8B/ePXBKesrdbWl82KQsU0D1X3WhQGJLCfsb2L5Z2KSmxNP343ef
- 7ZZGEl2CXovzYSINaHlDvTBQ+yfLmohHUzUP5ppJzj9lsEgSzROXKGMSjTV08fZceVnJ
- gL9RX6IWadLCwskqAA4Q2IdHwOZTP077LlJ0UL7HaliyTUpp1dG/UdMA0UsV+4P7nbsD rA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h82jx4uv7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 11 Jul 2022 08:00:27 +0000
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26B73m9G005350;
-        Mon, 11 Jul 2022 08:00:27 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h82jx4utw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 11 Jul 2022 08:00:27 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26B7p9jH010360;
-        Mon, 11 Jul 2022 08:00:24 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma02fra.de.ibm.com with ESMTP id 3h71a8ht97-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 11 Jul 2022 08:00:24 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26B80LYH19661142
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 11 Jul 2022 08:00:21 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 805614C04A;
-        Mon, 11 Jul 2022 08:00:21 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 35AA84C040;
-        Mon, 11 Jul 2022 08:00:21 +0000 (GMT)
-Received: from [9.171.15.135] (unknown [9.171.15.135])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 11 Jul 2022 08:00:21 +0000 (GMT)
-Message-ID: <0f498561-4bd3-3247-4ef4-796dc15cdaf3@de.ibm.com>
-Date:   Mon, 11 Jul 2022 10:00:20 +0200
-MIME-Version: 1.0
+        with ESMTP id S229688AbiGKIF7 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 11 Jul 2022 04:05:59 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2054.outbound.protection.outlook.com [40.107.220.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC9F51D0E2;
+        Mon, 11 Jul 2022 01:05:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=O+2qG/y+L5Plnf4pA7z2x6ILKUfWDJlGRofwU9SXKk7BuXgdttDesUO3951AF+4WTOE3VIrBubHku1XT18Z9Qen1cR+8qXvgsSQXYkJ/b5hdWWlqezrKFdIZvQ+gM0xdxRrB775Wz3tgW5JyOhmDW/6/PoWMKUchZwuk6LASwQEmmeY3ZWOiSbDY32BBkhXuEAIr8klsGNJDO0TvZopnjWzy3U4LKwpXIZuKneMhuMT8e8cVjwyeVIeq9nkyzjm8VAlDMpMR3z9GoP5tupPCZaJQXt/LAjHRW+NOkRZ+Ds59137thM7rsxyYPwm/BCUKlwUh1tMC0roeuIuVpszhgg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=AShQGiUOJkL+QN9HjFT1tpZk9/MlPWUgTxspdXuYH5s=;
+ b=ZLoUkTlXP0/wf8JxexTEq3MR0HF4HNh4uKmCwPKlIFIb58RCGqJ+YvhgS2EmRXLRLAcTicyfEWJXYskftoNOhb97j3g2mYPm9VXvvhGDMy001g8v/RanxVZHfBQMYqL9A0xOaP/k2BSWqsNphzfI9C14jw/brds54BALPptUNNWZ1VIWVtzg01/NV27UwaqL9lbNkKsmMahzvattXC5tZ0zHus4IQCknPf4oAs5QO8GOLbgHRwiQcsUiFk514jHxcQ6JqWSd/YOtmy8G0hm2d3EF4zOh5bS6gjQCOevDbhuriGTwYcs/0DziWyblLxpZE4gOfLmY+46FoJktdrIvgA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=AShQGiUOJkL+QN9HjFT1tpZk9/MlPWUgTxspdXuYH5s=;
+ b=yCOOrw5niXStAu9qd8YcEIgs6HAGG8CFRIh5DA57HUmMVKLFJvQpUjRV0IRFlYGjcp++j3O1COjC02aDNFzalITPLXrvFjxfiI7B4OAb+0W9du09BouDcVFu/ImSLX0VlmIqaHa2MubF6Lf4wmVBfyXsLpwDZto/+LrdBehlSFs=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by SN6PR12MB4751.namprd12.prod.outlook.com (2603:10b6:805:df::33) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.26; Mon, 11 Jul
+ 2022 08:05:51 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::905:1701:3b51:7e39]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::905:1701:3b51:7e39%2]) with mapi id 15.20.5417.025; Mon, 11 Jul 2022
+ 08:05:51 +0000
+Message-ID: <6e60d396-2a52-d1fa-f125-3c585605b531@amd.com>
+Date:   Mon, 11 Jul 2022 10:05:45 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: linux-next: manual merge of the vfio tree with the kvms390 tree
+ Thunderbird/91.9.1
+Subject: Re: linux-next: manual merge of the drm tree with the drm-misc-fixes
+ tree
 Content-Language: en-US
 To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Janosch Frank <frankja@linux.ibm.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Matthew Rosato <mjrosato@linux.ibm.com>
-References: <20220711171353.2b8eb09a@canb.auug.org.au>
-From:   Christian Borntraeger <borntraeger@de.ibm.com>
-In-Reply-To: <20220711171353.2b8eb09a@canb.auug.org.au>
+        Dave Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Arunpravin Paneer Selvam <Arunpravin.PaneerSelvam@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20220711124742.3b151992@canb.auug.org.au>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20220711124742.3b151992@canb.auug.org.au>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Rhy5Yv5kkC8Q2_CF2lQJZvV1QA16GxZu
-X-Proofpoint-ORIG-GUID: RVYl-DW9PBJRTD6KsXDTkxUgDCrkZ94c
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-11_13,2022-07-08_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
- phishscore=0 mlxlogscore=999 suspectscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 impostorscore=0 adultscore=0 mlxscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207110031
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-ClientProxiedBy: FR0P281CA0015.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:15::20) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 68869396-f461-4a1c-6c19-08da63142bea
+X-MS-TrafficTypeDiagnostic: SN6PR12MB4751:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: yAgGBG4jTpFjRyimtq6wPO13YrRC9Iy/7xY6UpHOAHJPKwKxiElQGavgIkC+sUkkWvecGwXSwazM+26naIea6eZxWej67/S9timzD+rD74w2TZlcc38zKBMFcfwcByxngRhcAUb8aY9DC4/hdbmU6NOoNp96tcQTPWwWBdqs/dJv66hDlezYIXUeYGF+hKEXAEpwOrT2TmTcUqUiM19kd+PtPTrTiVMbDyq0cVdqxMnTri6JPym1RkvzzTiWIehfEXZRX7hKjzjJ3uFST0JDhV2TIlSh72+vNJN/nNGAB/Pv1d/IhlgT+7NWwK7qOkhO3kPFOS0kuPt+CH2oCUr3V2h5+ef9J/3YdNW6HTLja9kGernerVGjXQAFeI8E42UR1Zskr5qn/4e9XuMZ6sTCcwdqGOLIJHRHSsrqB2ZV2orWe8ByxdoHM2pcFZAeHbl0qrmJ9muhViy39XV0C78Nsb7iU88SorO4gLgaktTrpT1w0H3FPD2kz9yb5APramo5vJgdaAz6S4utD7lCD+8t29Lo3vc+vi0XPjqcYBCHjzvDO3+ia4lDsc5KNPnZC2EPiceovcnUv8B7eFQgFj2rbcsJO+ASJ1dWPL0jncEMdFXUfwlDG3qVIll0uOWJQ/LhdGTBND6sZkI8d2MmD9TFfvnyKRLcXOx0cov4eOOUlHv3Nt0/j5LUYj+hvOwvgxRZNeKmeGEpCQxsGS1l4oGYLr0/SHU+2kfRPtnddeYK/zHeuuvcSmp6MCSergUoDNWYG5YQ5RiaKDpljBq1gc/xq3DOQGP4VHciXaKzlImhTLqvfbFWkPIxE5IaMBI7jIRONE49Nj5/Q0Wjxq+dhFtbWhwffkQiba4Xixn73j66+C4=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(136003)(39860400002)(396003)(376002)(366004)(36756003)(8936002)(4326008)(4744005)(31686004)(110136005)(6506007)(6666004)(38100700002)(54906003)(41300700001)(26005)(2616005)(6512007)(66476007)(2906002)(66556008)(8676002)(66946007)(316002)(6486002)(478600001)(5660300002)(186003)(86362001)(31696002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cUxoYVlMN2VBWEJTQWpPK1V1eU9BdGVYeWl4K0EyK3pacU5abitNb2RobW5W?=
+ =?utf-8?B?UWcza290Z204amxJcWZvNHFuZXJpSGxMTTAzWUwvSFk1Sk9idHl5VFB0M3ZB?=
+ =?utf-8?B?Y2o3YXpJTEVlbSs1bkY5c3lXYUMwMmhYc2FDTHlLNHE1S24ycERJajhMbmw4?=
+ =?utf-8?B?ZTQ2Yys5ZW5tN2tpMzVmOUlMdWxvYnlYNGRQYldVUEQ5OEI1VlQ1ZlVucVNN?=
+ =?utf-8?B?Tnc3MWdSWkVJWWhldzAxN1pKNVlJdUgyQzhhcXZ3QnBsNzZXY2RtN2plTFU2?=
+ =?utf-8?B?S3FlQnRlREFpSDlHQm5lb0pQVkpuRWtSTUNPUW1BUE9XMUZKVVRuem1FNzBj?=
+ =?utf-8?B?NEtod3BxWmRLMUZhSFozYXdySlJ6a2Qvak83WmZDcXRWMjVSU1Boa1Zra2hr?=
+ =?utf-8?B?YkNQUjh1RUFQM1dZTGczdTFlYzNHWEtuZTJOb0ZYOTRISS9ra21NSlI0SVBx?=
+ =?utf-8?B?VFpWSTY1Q0dJcU9neWN5WjVTbnFsZS9iWnB1S3hRWGpaeVRsbS9qWkhhQU5s?=
+ =?utf-8?B?alJoTG1lTGd4QVQ3WXpNanJNWUJpY0VzeHl5RFFMRVpseEVuN2ZqRmRIejlz?=
+ =?utf-8?B?d1hRSVAwU0pJQWpYdDBndjdtSkxxS2hMMkIzc0JvR2FSSThsY080OVZ6YUlj?=
+ =?utf-8?B?QnNjUGhabzIwbXptdjgraGhJcG9uRlFEV3BRRjIzV0I2VTZZWXVEUnhHN3Bw?=
+ =?utf-8?B?Vm1yK0FIaUJZK0ZaRzJ6eDRLUWx0em9BZXJtVS9xWUwrb0ZTeDlVMHJ0eHhq?=
+ =?utf-8?B?OVoxWkxjTWJCOHozSFVQazZOUzFUZDlleG01bCs1RFAxRSsvQnRlRWxjcGtl?=
+ =?utf-8?B?TFhkM24wcktjaEhVcnZPUEFidkloZHk5cHVKd2p4WjFuTDVQcHdBdnFYSHJz?=
+ =?utf-8?B?Y09NQUVPWFVSMU1wampSOFZHZUF3TG1tRkY0NUJTcEp0aW5WRU5LbFpYVnNJ?=
+ =?utf-8?B?ZDF2VmV6aGZOL1JZQ256WkhTYjh2UGc1Qi9yYUhHUjI0cVF2VjZZbGR5V0hh?=
+ =?utf-8?B?bDNYbFJhMDlwN29ZUjBHajZaSDdjWDlpMGZWcklOYktYMU9OMi9RYThMUE5z?=
+ =?utf-8?B?b1V6U1hINExReEs0SnpzWE5abUdzR3AwOEFGZi9TbSt5OUtSSEVzQXYyS2s2?=
+ =?utf-8?B?RDZheFVnYVhFai9aWFptM0lVaktKc0VGaC9hS2dhUi85U2pHWlhKVlZWb0hB?=
+ =?utf-8?B?NllIOVhnZS95RS9qVkpuZXhUOC9lWTRuSzAwVnE5cE1VQWZDRGZTS2hROVJh?=
+ =?utf-8?B?NVNZNVZndmpZUEoyNXh3SU1NaU1yR2ZEWkY2dTdDd3lVc3pwNlpzeHhwdnc3?=
+ =?utf-8?B?VllLbVRSMjlsaERTNU5kb2tRcWFXRkxDUEhURFVYTk5meThlRWFxQ2M1MnRR?=
+ =?utf-8?B?SjlPVVBielQrWGl2dTlMOSt4UUt3TlB3a3FhZFRLcTdaREJ5TFVqZ29EMzBL?=
+ =?utf-8?B?NmJUUVBlRHlpNUJFTmRvUmJSUE9ydEdFWE5SbFFsSDh4K0kyNklVTVlubWRG?=
+ =?utf-8?B?YjBxb3dhRDR6TUZNZTRvenpQaE9oREx6TWpxL2NjWldIZEJDZ0czZGVKNmlG?=
+ =?utf-8?B?cFdEbFNpWHYraDRsMkhZRUkrQVgwd1Y2Z1pxTjNTSmdBUGlJWGR5MWxzdUNB?=
+ =?utf-8?B?bU9JMjdBRnhVWHVpOGpDangxR2JtVWtJTXFLRCtPVWgyallERmE0UVNKanpR?=
+ =?utf-8?B?TTc4S3ZHTHlGeEhpTUxnaWh1aUc5bnBtUXIvTmx5ZEhzSGp5a0g5S1VtYTUz?=
+ =?utf-8?B?ZHFBQ2RnT1JvWWdCT0FjMkZiZkdqZzlNeDRsWExmTkVvRkhqcmhhUlN6b3hF?=
+ =?utf-8?B?NXM3ZUFFVGVKRmsxdjg3QmJML2tleGVaUXhmUlArSTY0UDdscUFnVHQySlFS?=
+ =?utf-8?B?K1JCSllYK0hUbVRTb05pOUcybWZ1SVVuTVJKK0J3QjNtTll1YzVhT0wycXVz?=
+ =?utf-8?B?VzQvSFppRllaZWNHdU1JMWFocWIvcElBZzBQS0s4eThDcFhHL05aZUd3MS96?=
+ =?utf-8?B?LzV3YlRET1dwa0tYblBvSHE1TVpWQXI1ZXhwMFFhUkR2RkhGWUttYVJXVmVG?=
+ =?utf-8?B?R1B0UU05NHR4TmJTWVI0VGltcXNYdFNlbVp0RWtqeUFFUHErbTY1NzVZUS9X?=
+ =?utf-8?Q?8VRlMpfTqvyApm13yp7Gf/KIY?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 68869396-f461-4a1c-6c19-08da63142bea
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jul 2022 08:05:51.7219
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: vN/qXaRD+K/YwjRqNHL+z8Oi+FndnW3v+i+eXIrizxITrSFMdOCUpEfVTYvopshC
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR12MB4751
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Am 11.07.22 um 09:13 schrieb Stephen Rothwell:
-> Betreff:
-> linux-next: manual merge of the vfio tree with the kvms390 tree
-> Von:
-> Stephen Rothwell <sfr@canb.auug.org.au>
-> Datum:
-> 11.07.22, 09:13
-> 
-> An:
-> Alex Williamson <alex.williamson@redhat.com>, Christian Borntraeger <borntraeger@de.ibm.com>, Janosch Frank <frankja@linux.ibm.com>
-> Kopie (CC):
-> Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List <linux-next@vger.kernel.org>, Matthew Rosato <mjrosato@linux.ibm.com>
-> 
-> 
+Hi Stephen,
+
+Am 11.07.22 um 04:47 schrieb Stephen Rothwell:
 > Hi all,
-> 
-> Today's linux-next merge of the vfio tree got a conflict in:
-> 
->    include/linux/vfio_pci_core.h
-> 
-> between commits:
-> 
->    b6a7066f4e9b ("vfio/pci: introduce CONFIG_VFIO_PCI_ZDEV_KVM")
->    6518ebc68c72 ("vfio-pci/zdev: add open/close device hooks")
-> 
-> from the kvms390 tree and commit:
-> 
->    d1877e639bc6 ("vfio: de-extern-ify function prototypes")
-> 
-> from the vfio tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-> 
+>
+> Today's linux-next merge of the drm tree got a conflict in:
+>
+>    drivers/gpu/drm/amd/amdgpu/amdgpu_vram_mgr.c
+>
+> between commit:
+>
+>    925b6e59138c ("Revert "drm/amdgpu: add drm buddy support to amdgpu"")
+>
+> from the drm-misc-fixes tree and commit:
+>
+>    5e3f1e7729ec ("drm/amdgpu: fix start calculation in amdgpu_vram_mgr_new")
+>
+> from the drm tree.
+>
+> This is a mess :-(  I have just reverted the above revert before mergin
+> the drm tree for today, please fix it up.
 
-Alex, Paolo,
+Sorry for the noise, the patch "5e3f1e7729ec ("drm/amdgpu: fix start 
+calculation in amdgpu_vram_mgr_new")" and another one is going to be 
+reverted from the drm tree as well.
 
-I do have a topic branch that we could merge, but I think the conflict is trivial enough for the time being.
+It's just that -fixes patches where faster than -next patches.
+
+Regards,
+Christian.
+
+
+>
+

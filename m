@@ -2,109 +2,96 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7268D571504
-	for <lists+linux-next@lfdr.de>; Tue, 12 Jul 2022 10:47:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DAB15715B0
+	for <lists+linux-next@lfdr.de>; Tue, 12 Jul 2022 11:30:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232420AbiGLIrl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 12 Jul 2022 04:47:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48282 "EHLO
+        id S232726AbiGLJaH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 12 Jul 2022 05:30:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232394AbiGLIrj (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 12 Jul 2022 04:47:39 -0400
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41F8EA6F20;
-        Tue, 12 Jul 2022 01:47:38 -0700 (PDT)
-Received: by mail-qt1-f169.google.com with SMTP id 23so8850452qtt.3;
-        Tue, 12 Jul 2022 01:47:38 -0700 (PDT)
+        with ESMTP id S231753AbiGLJaG (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 12 Jul 2022 05:30:06 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 467618CC8F;
+        Tue, 12 Jul 2022 02:30:05 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id c15so1938437pla.6;
+        Tue, 12 Jul 2022 02:30:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KSWKtf+HOXEP2Iy9qbz9E1JdXsJZP2Aba+49oBaWWkM=;
+        b=iRoE7B2VQSel1PTmtQjL2Ip6l9klnV5wHDsH+FspryhHVv4h3dMyCXsmeSXkS6Fd6F
+         HsDnW/en31hYf7uolkN6SYDPNAg5lNMM9A688ITzwGi7dVe6085wxS+Lsn73IQQZOnhf
+         zxQcPWewCEaoc5+SOlE8pVgfnnpSStHRGQrsmnI55ENgTC4vXiB7AL+VcdexGQ9dEE3h
+         LT+z//BmoS7c6dMk+aVqewFayfDO1ob0KEEqzau99gBXT0IkAZIm3fdg4D8OsglATSsv
+         JXxv7xgga9pTK3C0+zETXvD++GFfg58qaSY6iC0X5Rxv9LOpNrnflKoMdDhtSJggQbPk
+         EeyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FH/b2a6H8GyarbPO1fevZpm1/zS2ziSIONXtWtQHlSY=;
-        b=y5kCTM6jjpaHfvKGk+TOgRcktTzQgBlaqMnm3UG9ZvkoxuZ3ffplJ6xcDZUkF5dQoB
-         yCrL8U6woduRnKQ2Dbm9ds7o0xfWGGOcz17s4gqn1RhFB3RfMBWs0IFOxQXGiLxGTqyk
-         T6fKg0juWJrGqaegFxbSW3B0Hau5Lw3octXMA9M56kb5vGj8o/cgtyFURT7ICiDx2bJo
-         /+qK60or+5PN+euCJQYFdS9sB/81wj7snPnsjzBVc1g9jedI3/L2RzEZfzhcM1VsOW5k
-         C1S15QrBgThAIUapgvRQqZhm0HepBucaI+MutODaPgcLKS/0xc0NAJ/2VO1g6zEIw3Ci
-         w58Q==
-X-Gm-Message-State: AJIora8RlgppUfrVV1zSdeecLvoZ4WJrIsmSwXUWXh0I3CbOqeFnUoiT
-        qDfr7lUFBZhb7ECRVZPU+nCkoIffdQO51g==
-X-Google-Smtp-Source: AGRyM1tjq6cRALvUhymGuGAJRQtDFVeRB++hdwTrfWhITkkimGRg5dOJOb/lCPOpBRAjYoy5oOyvnQ==
-X-Received: by 2002:ac8:5a49:0:b0:31e:78fc:1f3 with SMTP id o9-20020ac85a49000000b0031e78fc01f3mr17465602qta.90.1657615657205;
-        Tue, 12 Jul 2022 01:47:37 -0700 (PDT)
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com. [209.85.128.182])
-        by smtp.gmail.com with ESMTPSA id f4-20020a05620a408400b006b5a63947e3sm699941qko.79.2022.07.12.01.47.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Jul 2022 01:47:36 -0700 (PDT)
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-31bf3656517so73624667b3.12;
-        Tue, 12 Jul 2022 01:47:35 -0700 (PDT)
-X-Received: by 2002:a0d:c787:0:b0:31b:a963:e1de with SMTP id
- j129-20020a0dc787000000b0031ba963e1demr23551067ywd.283.1657615655563; Tue, 12
- Jul 2022 01:47:35 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KSWKtf+HOXEP2Iy9qbz9E1JdXsJZP2Aba+49oBaWWkM=;
+        b=fC+AEGQL10HgkNCRH0D1Pmkxsqt/bZJEp4650+cBA+Dh/EKHRlYZZdvEbZx2py3plv
+         OkZh7nDAKpitLBz5RPScPSiInTcf4gJwVJ12WN/eq9qKdShsdoNXBVeviIsvxQD4tDFx
+         1jOM5RvlHxKs3cD5U+HtS+hAWmHXuLYIDsGIW+K7U42q75tjv6ZuR6n+2mo8/OP0ToV6
+         kVyM5pWnn1pQlQe3/q7F16RkAyy0o5x7TpNuPHjLXZrKtxZ6xBV2c9T2aZ/voo1C/WVJ
+         SEkat3OQhx0VmxF/SodpSHa7PA+ac7dYdhBxr6/oqR3PSQ0OSB+oAfpmSXsz73q7NFmA
+         /ULQ==
+X-Gm-Message-State: AJIora+teX/xfIzcjaPxLiG/Stxc1i0XAPUfcZeY19UcCRZpbPSWSwim
+        rHHUcgXvoDkUfMcj9Upti6MVWh/KZmk=
+X-Google-Smtp-Source: AGRyM1vYHASuN6dD+nTPrkbCU2e/DP46HinfkU5OQJy/G0bvrFrajB6piNmd1yIdnNYwABRPnhDmSA==
+X-Received: by 2002:a17:90b:3910:b0:1f0:2e50:6f3f with SMTP id ob16-20020a17090b391000b001f02e506f3fmr3260396pjb.233.1657618204823;
+        Tue, 12 Jul 2022 02:30:04 -0700 (PDT)
+Received: from debian.me (subs03-180-214-233-9.three.co.id. [180.214.233.9])
+        by smtp.gmail.com with ESMTPSA id o21-20020a635d55000000b00415320bc31dsm5656763pgm.32.2022.07.12.02.30.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Jul 2022 02:30:04 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 2BECF103980; Tue, 12 Jul 2022 16:29:58 +0700 (WIB)
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     linux-doc@vger.kernel.org
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org, kvm@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-s390@vger.kernel.org
+Subject: [PATCH next 0/3] miscellaneous documentation fixes for linux-next
+Date:   Tue, 12 Jul 2022 16:29:51 +0700
+Message-Id: <20220712092954.142027-1-bagasdotme@gmail.com>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
-References: <20220712184238.3670f277@canb.auug.org.au>
-In-Reply-To: <20220712184238.3670f277@canb.auug.org.au>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 12 Jul 2022 10:47:24 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUdFwoHqwtH-eL3dc3s612fV4v7gYteuCZxZnPpHOFh-Q@mail.gmail.com>
-Message-ID: <CAMuHMdUdFwoHqwtH-eL3dc3s612fV4v7gYteuCZxZnPpHOFh-Q@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the mm tree with the m68k tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Zhang Jiaming <jiaming@nfschina.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+Here are documentation fixes for recent warnings reported in linux-next.
 
-On Tue, Jul 12, 2022 at 10:42 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> Today's linux-next merge of the mm tree got a conflict in:
->
->   arch/m68k/include/asm/sun3_pgtable.h
->
-> between commit:
->
->   c2a6236024b7 ("m68k: sun3: Fix spelling mistake")
->
-> from the m68k tree and commit:
->
->   e7911fea382d ("m68k/mm: enable ARCH_HAS_VM_GET_PAGE_PROT")
->
-> from the mm tree.
->
-> I fixed it up (the latter removed the comment that the former updated)
-> and can carry the fix as necessary. This is now fixed as far as linux-next
-> is concerned, but any non trivial conflicts should be mentioned to your
-> upstream maintainer when your tree is submitted for merging.  You may
-> also want to consider cooperating with the maintainer of the conflicting
-> tree to minimise any particularly complex conflicts.
+This series is based on next-20220611 and Mauro's cross-ref and doc fixes
+series [1]:
 
-Ah, right. The previous version of the m68k/mm patch didn't remove
-the comment, so I thought the spelling fix was safe to apply.
+[1]: https://lore.kernel.org/linux-doc/cover.1657360984.git.mchehab@kernel.org/
 
-I'll drop the spelling fix from the m68k for-v5.20 branch.
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-next@vger.kernel.org
+Cc: kvm@vger.kernel.org
+Cc: linux-crypto@vger.kernel.org
+Cc: linux-s390@vger.kernel.org
 
-Thanks for reporting!
+Bagas Sanjaya (3):
+  Documentation: qat: Use code block for qat sysfs example
+  Documentation: qat: rewrite description
+  Documentation: kvm: extend KVM_S390_ZPCI_OP subheading underline
 
-Gr{oetje,eeting}s,
+ Documentation/ABI/testing/sysfs-driver-qat | 37 ++++++++--------------
+ Documentation/virt/kvm/api.rst             |  2 +-
+ 2 files changed, 14 insertions(+), 25 deletions(-)
 
-                        Geert
+-- 
+An old man doll... just what I always wanted! - Clara
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

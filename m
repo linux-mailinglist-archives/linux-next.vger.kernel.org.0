@@ -2,61 +2,47 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0C05571A86
-	for <lists+linux-next@lfdr.de>; Tue, 12 Jul 2022 14:53:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BDDC5720A9
+	for <lists+linux-next@lfdr.de>; Tue, 12 Jul 2022 18:21:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233310AbiGLMxD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 12 Jul 2022 08:53:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40428 "EHLO
+        id S232161AbiGLQVL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 12 Jul 2022 12:21:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233286AbiGLMxC (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 12 Jul 2022 08:53:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49A88B3D5C;
-        Tue, 12 Jul 2022 05:53:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DB0506171A;
-        Tue, 12 Jul 2022 12:53:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFC3AC3411C;
-        Tue, 12 Jul 2022 12:52:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657630381;
-        bh=jJin7lOWMTaJyTA//FjzideMNMuqj8Mr/pLMpaUWtcc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=khWAjOj6JT+x/wK40kEyMmNV61m7fqDMoi6FBMkE326WiBbCn5y+sxfj1QdUPpRgd
-         DGCCduZxJPMqD4sOushQAxkz+pNNaxwzE+5JzQ2cTTyVI24CCuxsPAGrFxbN9SOS5d
-         2CPr5bZ0vU91CfUrdNQ7ryIhA5vRqDVTwf6s7KmoLLab83pBZypaoArma8fGsMftlH
-         TPxo8kCfi9dFW8f7BRxK55v5JCNOY9xSDu5N3AnFm+J4FzlYWWhXVyebQ/9OL3dlrx
-         8E/HJ2NCj9r9UG+OYZtIadr46E6k+AkaTijwGLdZs4NhJexcFyzwbFztRJC0nICegd
-         2kiwt646wHQ/w==
-Date:   Tue, 12 Jul 2022 13:52:55 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        open list <linux-kernel@vger.kernel.org>,
+        with ESMTP id S231485AbiGLQVK (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 12 Jul 2022 12:21:10 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BFBC8CAF28;
+        Tue, 12 Jul 2022 09:21:09 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EF0841596;
+        Tue, 12 Jul 2022 09:21:09 -0700 (PDT)
+Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.30.157])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E3AAA3F73D;
+        Tue, 12 Jul 2022 09:21:07 -0700 (PDT)
+Date:   Tue, 12 Jul 2022 17:21:00 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     open list <linux-kernel@vger.kernel.org>,
         Linux-Next Mailing List <linux-next@vger.kernel.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
         lkft-triage@lists.linaro.org, regressions@lists.linux.dev,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Mark Brown <broonie@kernel.org>, Will Deacon <will@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
         Anders Roxell <anders.roxell@linaro.org>,
         Aishwarya TCV <Aishwarya.TCV@arm.com>
 Subject: Re: FVP: kernel BUG at arch/arm64/kernel/traps.c:497 - Internal
  error: Oops - BUG: 0
-Message-ID: <Ys1up5DBGV5c2MG0@sirena.org.uk>
+Message-ID: <Ys2fbFm/qeLE2zol@FVFF77S0Q05N.cambridge.arm.com>
 References: <CA+G9fYtOX-6=f70FA5PuDVA=kX=2L4spXKXS8=LHkUphafXowg@mail.gmail.com>
  <Ys1t8win0pVPPuig@FVFF77S0Q05N.cambridge.arm.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="VloPA9NQFi1jxZ57"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <Ys1t8win0pVPPuig@FVFF77S0Q05N.cambridge.arm.com>
-X-Cookie: I like your SNOOPY POSTER!!
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,33 +50,48 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-
---VloPA9NQFi1jxZ57
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
 On Tue, Jul 12, 2022 at 01:49:55PM +0100, Mark Rutland wrote:
+> On Tue, Jul 12, 2022 at 03:27:09PM +0530, Naresh Kamboju wrote:
+> > [    0.500613] ------------[ cut here ]------------
+> > [    0.500709] kernel BUG at arch/arm64/kernel/traps.c:497!
+> > [    0.500777] Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
+> > [    0.500860] Modules linked in:
+> > [    0.500947] CPU: 0 PID: 1 Comm: swapper/0 Tainted: G        W
+> >    5.19.0-rc6-next-20220711 #1
+> > [    0.501034] Hardware name: FVP Base RevC (DT)
+> > [    0.501109] pstate: 00400009 (nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> > [    0.501209] pc : do_undefinstr+0x284/0x2b4
+> > [    0.501381] lr : do_undefinstr+0x150/0x2b4
+> > [    0.501509] sp : ffff80000affbbc0
+> > [    0.501509] x29: ffff80000affbbc0 x28: ffff000800330000 x27: ffff800009f00444
+> > [    0.501759] x26: ffff800009fe6038 x25: 0000000000000001 x24: ffff80000a115968
+> > [    0.501923] x23: 0000000040400009 x22: ffff800009f80de0 x21: ffff80000affbd90
+> > [    0.502109] x20: 0000000001000000 x19: ffff80000affbc40 x18: ffffffffffffffff
+> > [    0.502309] x17: 000000000000003f x16: 000000000000000a x15: ffff0008002b1a1c
+> > [    0.502422] x14: ffffffffffffffff x13: ffff0008002b1268 x12: 20726f20746e6573
+> > [    0.502683] x11: ffff80000aa12950 x10: 0000000000000073 x9 : ffff8000093bcd6c
+> > [    0.502856] x8 : 000000003d4d554e x7 : ffff80000affbce0 x6 : 0000000000000001
+> > [    0.503030] x5 : ffff80000a9ef000 x4 : ffff80000a9ef2e0 x3 : 0000000000000000
+> > [    0.503234] x2 : ffff000800330000 x1 : ffff000800330000 x0 : 0000000040400009
+> > [    0.503409] Call trace:
+> > [    0.503480]  do_undefinstr+0x284/0x2b4
+> > [    0.503562]  el1_undef+0x30/0x60
+> > [    0.503709]  el1h_64_sync_handler+0x84/0xd0
+> > [    0.503811]  el1h_64_sync+0x64/0x68
+> > [    0.503909]  net_sysctl_init+0x8/0x7c
+> > [    0.504053]  do_one_initcall+0x50/0x2b0
+> > [    0.504158]  kernel_init_freeable+0x24c/0x2d4
+> > [    0.504245]  kernel_init+0x30/0x140
+> > [    0.504381]  ret_from_fork+0x10/0x20
+> > [    0.504509] Code: 17ffff98 a9425bf5 17ffffbb a9025bf5 (d4210000)
+> > [    0.504627] ---[ end trace 0000000000000000 ]---
+> 
+> We should really improve this WARN to something that tells us about the actual
+> failing instruction.
 
-> ...  and it boots perfectly fine under:
+FWIW, I've put together a series to improve the reporting here:
 
-> * An FVP Base RevC model using the latest boot-wrapper
+  https://lore.kernel.org/linux-arm-kernel/20220712161452.4142444-1-mark.rutland@arm.com
 
-Also with TF-A and u-boot (both some random recentish tip of tree
-whenever I last built them).
-
---VloPA9NQFi1jxZ57
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLNbqYACgkQJNaLcl1U
-h9A3uAf+MhpLUtT4NKLJxPxbuc1ffEyWrJ9PDg3u2fRg6AJxuaFvZajeSMQBpgF4
-M+M71of0EFqD/nJxyjFBfm/tcbUFm5Z77JJvJCx4FipGd3WFy75u6ML2hJcz7APH
-bDvyMVdIRsnlwO2jaieYvD7difM25+nE5g0SBg+KDGAJkLWll/7ENLPa1aBFKyJy
-8GJeznsuVpEc89xdJJm8LzmJ0+1h4osh9GQ0q0FBFbnbGng6lgMDTVTGqgOCrDPb
-hxN7qwzxn8KwTYW934IFNUlV7p/Ac48g+WHhfWJIwhrZQihp5yIMxUjMdhcYqc14
-12/TSOkBZQEMkaSqgYD744YXmHyG3A==
-=Pl6k
------END PGP SIGNATURE-----
-
---VloPA9NQFi1jxZ57--
+Thanks,
+Mark.

@@ -2,64 +2,63 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD58857318D
-	for <lists+linux-next@lfdr.de>; Wed, 13 Jul 2022 10:49:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F061D5731B4
+	for <lists+linux-next@lfdr.de>; Wed, 13 Jul 2022 10:57:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235208AbiGMItZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 13 Jul 2022 04:49:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59386 "EHLO
+        id S235906AbiGMI53 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 13 Jul 2022 04:57:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235842AbiGMItK (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 13 Jul 2022 04:49:10 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB25713DC5;
-        Wed, 13 Jul 2022 01:48:51 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id y14-20020a17090a644e00b001ef775f7118so2556374pjm.2;
-        Wed, 13 Jul 2022 01:48:51 -0700 (PDT)
+        with ESMTP id S235859AbiGMI5R (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 13 Jul 2022 04:57:17 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FBDFF272F;
+        Wed, 13 Jul 2022 01:57:15 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id d10so9673038pfd.9;
+        Wed, 13 Jul 2022 01:57:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=UIoh9NHxanWIu9MKPpKAF1viSnOBb2X/cB+otoNiyAI=;
-        b=NwmwNoJ9ooQtARwNewttG01efjd4nOv9Hb1L1CSb9sSNyZWvRSf6Zp4oJKQKjUqyM7
-         LFzUFM/ed7cWTlGy1uGAgMCkBXQDnoFPD6ITBZlVqt6fs+c8veLMo6uNJEpXMZJhZp6P
-         5okNGO1RH+78g7xsUAfpy5/a7lh5aIqqIUZEL/igyRgJr+aTsD5ZisbqMJNF7nBtj6vD
-         lHWxJHI9C16S9HqropbcoY0A02w6laCL0GYzrlYDXk8lJGaiSg7c+/sxruYd3yRW1JUe
-         2ZD/F9brWyW8AAM8IV51byRUkGdTQ7bGxj4Wn21JXmODEKjA3OdoHvnANpKNJPo+Dp1V
-         2RBA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8Cn3qMvUiEDmK/nPYV0HSMPYWM/tSk3wzAm7Cpq40Dk=;
+        b=M5/0GWZgf9t/HA0Ket9kH8p8xKxM/ioUpyEk18hA4+J5bez71ILiJWSOTaD+9NSvy1
+         8Pd2XAqBAuu/WmB+5YRu02HSfmGPqzVpnDrOFxCrGkphNVYPQ/PAvP+WoKh2tBue0XMN
+         ZWklmPECextNKytmuGT5AyVdjT773KtdMgarxoObXnT+3VjiBsPoKvPbE3owG3gJXtro
+         7kd5yMmIe26lIu6HEA8LfN+8RfOyxU/vsDCBUc3adzG1PUIHWPkvF+MqWXIeGXBI5Q2M
+         Tpc2Zj9IiGANSY4Jl5ATV/fLH6tIkiAsbTMrlbM8+W8C/Qui7orOizYhPGPFYqaogDBo
+         wVrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=UIoh9NHxanWIu9MKPpKAF1viSnOBb2X/cB+otoNiyAI=;
-        b=j1cipUR6h9MYnzoxQmF5lxeMCSTXkSLMArLP+maEXvF2kzvw557Uaid1BMYJ9/uYLV
-         o2globJ38WjQCNZ4megfr3nQ+OD3v5cGRxgFxwplChHmvadbbIWl+jpH7ydgkg26TrXo
-         mIj+k3F65R0D5ceDHIy048YPl6BvcqYkp8CI1svbAROhWZvsa9TwJH+e1h4rqgq4IRGx
-         u2sPLorBvOs1BsR53JAxcFdA+jvHZGeokafN83ozjz9EpcDChLfC5BfXlssgZsqvPZhD
-         oXpP5iiq526oXPcrR9xA/ZnwuUuUzooItZD1/cvZ1w80bl0YSQkHxzKeX+TDOpha/QgF
-         XbZw==
-X-Gm-Message-State: AJIora/yQXNOmmpXKZ2/qIoyqULwczbSbAqireC81gV06MlDz6gv7CfT
-        9Gd0/qn/FmxAW5zWmxT2iSuMmNotl00=
-X-Google-Smtp-Source: AGRyM1vdMa5JxdLDERhFxTImec2iKAG9Oo0H3NUBuB7MwfIOjRQpopjkN+4Af7TawxI31k0hvRhrug==
-X-Received: by 2002:a17:902:f391:b0:16b:f995:43ac with SMTP id f17-20020a170902f39100b0016bf99543acmr2405768ple.32.1657702130130;
-        Wed, 13 Jul 2022 01:48:50 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-1.three.co.id. [180.214.232.1])
-        by smtp.gmail.com with ESMTPSA id i6-20020a056a00004600b00528bbf8245dsm8323921pfk.79.2022.07.13.01.48.49
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8Cn3qMvUiEDmK/nPYV0HSMPYWM/tSk3wzAm7Cpq40Dk=;
+        b=E1+4wNBBsjRqMYoVDRSf2bL+RUZWcFHsUy3HzvHzXQXXBjr068Qd69SClzfFWk9don
+         zowg5Ue2aT8z0OpPWNypo13deJzrmt6U1OpWg4uCdHtGZCED+OTOkJ6wo6sBIMOdtQAC
+         +OnHrwtxq7UqklasoJ5qBRG70xHP66mFCSKuLQ44i3OcbQzFTxebRVPMCXUFMg9nqVFL
+         8RTHyBMiJIbhwRNxi7owvL3BGNQElyaDuuDTIchD4vFpQbFd2NIGH+r5jWUslRCJBqXs
+         39P6fDLibWQKRlyqnanWAAmNHovxzkToHObHcot0YAeyMKLPp9l6exBzGQsiybT4JOE2
+         ySpQ==
+X-Gm-Message-State: AJIora902Rn7bGKaBETF21ZYSZyggibMKH9LIPkLMKMEsFEguQFTb9Jq
+        UZpFnyBL5D+g9OQF2Mu2FXsze5VHgGA=
+X-Google-Smtp-Source: AGRyM1v3xnTGYf+B+DLE2nQQf8NEsmNfuu700MRrsqOw+5A+arnmHX1YMqBRbtKgjgEB4laGmnGNCg==
+X-Received: by 2002:a63:e446:0:b0:412:937b:5a3c with SMTP id i6-20020a63e446000000b00412937b5a3cmr2119838pgk.316.1657702634930;
+        Wed, 13 Jul 2022 01:57:14 -0700 (PDT)
+Received: from debian.me (subs09a-223-255-225-69.three.co.id. [223.255.225.69])
+        by smtp.gmail.com with ESMTPSA id a10-20020aa78e8a000000b005254535a2cfsm8331962pfr.136.2022.07.13.01.57.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 01:48:49 -0700 (PDT)
+        Wed, 13 Jul 2022 01:57:14 -0700 (PDT)
 Received: by debian.me (Postfix, from userid 1000)
-        id 6FA5F1038C5; Wed, 13 Jul 2022 15:48:46 +0700 (WIB)
-Date:   Wed, 13 Jul 2022 15:48:46 +0700
+        id 65BD010397C; Wed, 13 Jul 2022 15:57:11 +0700 (WIB)
 From:   Bagas Sanjaya <bagasdotme@gmail.com>
 To:     linux-doc@vger.kernel.org, linux-next@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org
-Subject: Re: [PATCH 0/2] Documentation: qat: documentation fixes
-Message-ID: <Ys6G7pERa+fUoKwl@debian.me>
-References: <20220713030332.158525-1-bagasdotme@gmail.com>
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org
+Subject: [PATCH RESEND v2 0/2] Documentation: qat: documentation fixes
+Date:   Wed, 13 Jul 2022 15:56:26 +0700
+Message-Id: <20220713085627.175604-1-bagasdotme@gmail.com>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220713030332.158525-1-bagasdotme@gmail.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
@@ -70,24 +69,30 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 10:03:31AM +0700, Bagas Sanjaya wrote:
-> Here are documentation fixes for qat driver, as recently reported in
-> linux-next.
-> 
-> Changes since v1 [1]:
->   - based on next-20220712
->   - Drop kvms390 (already applied by respective maintainer)
->   - Focused on qat driver
->   - Drop "initialize" from [2/2]
->   - Collect Acked-by from Giovanni Cabiddu
-> 
-> [1]: https://lore.kernel.org/linux-doc/20220712092954.142027-1-bagasdotme@gmail.com/
-> 
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-crypto@vger.kernel.org
-> 
+Here are documentation fixes for qat driver, as recently reported in
+linux-next. This is resend of [1], due to missing v2 subject prefix.
+Sorry for noise.
 
-Oops, missing v2 subject prefix. Will resend.
+Changes since v1 [2]:
+  - based on next-20220712
+  - Drop kvms390 (already applied by respective maintainer)
+  - Focused on qat driver
+  - Drop "initialize" from [2/2]
+  - Collect Acked-by from Giovanni Cabiddu
+
+[1]: https://lore.kernel.org/linux-doc/20220713030332.158525-1-bagasdotme@gmail.com/
+[2]: https://lore.kernel.org/linux-doc/20220712092954.142027-1-bagasdotme@gmail.com/
+
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-crypto@vger.kernel.org
+
+Bagas Sanjaya (2):
+  Documentation: qat: Use code block for qat sysfs example
+  Documentation: qat: rewrite description
+
+ Documentation/ABI/testing/sysfs-driver-qat | 37 ++++++++--------------
+ 1 file changed, 13 insertions(+), 24 deletions(-)
 
 -- 
 An old man doll... just what I always wanted! - Clara
+

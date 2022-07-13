@@ -2,113 +2,113 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB6D3573FF6
-	for <lists+linux-next@lfdr.de>; Thu, 14 Jul 2022 01:13:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CE47574006
+	for <lists+linux-next@lfdr.de>; Thu, 14 Jul 2022 01:26:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230358AbiGMXNb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 13 Jul 2022 19:13:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35528 "EHLO
+        id S230144AbiGMX0r (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 13 Jul 2022 19:26:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230234AbiGMXNa (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 13 Jul 2022 19:13:30 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DC544B4BB;
-        Wed, 13 Jul 2022 16:13:29 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Ljthf4MRTz4xZB;
-        Thu, 14 Jul 2022 09:13:22 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1657754005;
-        bh=8QDhy/yafq+zddNmXsnWB3SOgiThHS2yHFHT/LoOpPE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=rhhdHVpJFja5h2fSgLdZya6P+U7TbBDSn6rRH4VHqMSUaB3LGcs5Hmh3RdvubQru9
-         LdzS+/GJIrXRwyAKvmvxb5af9C6RrpugtIqakDrK+uxEgZOJgvSNhAwEHDYv4YFJ6X
-         yGBLHCPRC9TX3wfFJZ9NwVj6n4w8Sx0wcR3lARL2DL0C/0JRgxTNrEefXNR4R45pXK
-         /4rEEzwDSzPP9MwJhISz0/XcgksoVoMYg2UDRM9PnD02nzdRt/dyPd/sm0Dw42Ge22
-         PyvfWTurVrmfv1oMugdeg5/mfbJrFKh/Esq+3BghM+tL6K1pTGtoWNg+vMIm9f61QL
-         lu8p/nFB9bEUQ==
-Date:   Thu, 14 Jul 2022 09:13:21 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>, Olof Johansson <olof@lixom.net>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        with ESMTP id S229451AbiGMX0q (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 13 Jul 2022 19:26:46 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82BF146D82;
+        Wed, 13 Jul 2022 16:26:44 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id o3-20020a17090a744300b001ef8f7f3dddso560565pjk.3;
+        Wed, 13 Jul 2022 16:26:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=PnsH/rzjlHhH91hBVi1N1J8lv6U1Lk9dQ+G06Dj91pc=;
+        b=k8rO8PGtaYTYg3cEA+f5u/w7Rav+orTpIczJ1DQsYtLTfS4OF5+3ByCAP/PVZ/MzpR
+         y0ETgXeXrpQVG/0MW+grpKDjpImI23flwTQb066kzUaYsZrYfzhF2SSK8x3DtrTTNY0t
+         UXjd28kalMawS+FZ7GgTg83PNL4LbHBkv8mtaUWQflA5wPGEgFWMpyaaDuGbEsWZ7dZn
+         lYirkc9W1pB6PYbBHK3rdUBBR8dQJl1VgV2br3hrHUBk4JgQ1Kzy0i55AT7eSgl82m+W
+         wHDiXK9C/9VZvt0ctyWRB9rkWwbGXYpoBgBZOyX4sWFGLxIsNTF1WLx/1fzHnorav8jn
+         ynMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=PnsH/rzjlHhH91hBVi1N1J8lv6U1Lk9dQ+G06Dj91pc=;
+        b=PGzmkvyQTKMjbOHkLWbSiYx+Z0xgdaJU2KzZeJ/0A0c1D3d5M71aukfZ4L5JTaMCaI
+         3WO6wiJ1zLpnduelISEj1+u9KQEpYrj4TjauGJIiawuk9xlq/Zo/6VfFjGjtiNoWSzQN
+         TqrWTfSraNKuAhyevKqaDi/YTGeHtnhCQl+WrvqAcvXDND3wHxjQAZPYEQWdVJ05Qe8O
+         VpIJpN5N++9B9EoTIxk38iYwxsHGXKUVBS7Cwc7ccpyyID4VVJFei4a2BXouN/ii6uYG
+         WIWpOpX3bJn0r/OcTEEWHAbFtEy5FV4NUtmt4Lt6Iu5PXXG1aA9eh/64Dfu+ghR5VmXi
+         DeQA==
+X-Gm-Message-State: AJIora+/XhJ0xTpzV5u/2Ve8reMKWpmLxxJKLsmTbqelxipOIvB5fPD/
+        VvplbqcW5lsPKswiCfPwkAc=
+X-Google-Smtp-Source: AGRyM1tFZ4adlJu3CfLsP7JosSH3B5ELiXwpY8eowsQR36GEWeBo6GYD8IGt8yckPWzB9t8GrlWb6A==
+X-Received: by 2002:a17:903:2308:b0:16c:47a6:c026 with SMTP id d8-20020a170903230800b0016c47a6c026mr5439247plh.160.1657754803904;
+        Wed, 13 Jul 2022 16:26:43 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id 31-20020a63165f000000b00416073ced8csm5894141pgw.73.2022.07.13.16.26.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Jul 2022 16:26:43 -0700 (PDT)
+Message-ID: <8a37363d-f4d9-669c-9cc6-3e76b9417352@gmail.com>
+Date:   Wed, 13 Jul 2022 16:26:33 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: linux-next: manual merge of the broadcom tree with the spdx tree
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>, Greg KH <greg@kroah.com>,
+        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         William Zhang <william.zhang@broadcom.com>,
         ARM <linux-arm-kernel@lists.infradead.org>
-Subject: Re: linux-next: manual merge of the broadcom tree with the spdx
- tree
-Message-ID: <20220714091321.4ecfe830@canb.auug.org.au>
-In-Reply-To: <20220711095520.4fad4c97@canb.auug.org.au>
 References: <20220711095520.4fad4c97@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ekux/TwU2iZousa/RrxmrUB";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+ <20220714091321.4ecfe830@canb.auug.org.au>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220714091321.4ecfe830@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/ekux/TwU2iZousa/RrxmrUB
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 7/13/22 16:13, Stephen Rothwell wrote:
+> Hi all,
+> 
+> On Mon, 11 Jul 2022 09:55:20 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>>
+>> Today's linux-next merge of the broadcom tree got a conflict in:
+>>
+>>    arch/arm/mach-bcm/bcm63xx.c
+>>
+>> between commit:
+>>
+>>    52e6676ef56f ("treewide: Replace GPLv2 boilerplate/reference with SPDX - gpl-2.0_30.RULE (part 1)")
+>>
+>> from the spdx tree and commit:
+>>
+>>    889390f83d4e ("arm: bcmbca: Move BCM63138 ARCH_BCM_63XX to ARCH_BCMBCA")
+>>
+>> from the broadcom tree.
+>>
+>> I fixed it up (I just removed the file) and can carry the fix as
+>> necessary. This is now fixed as far as linux-next is concerned, but any
+>> non trivial conflicts should be mentioned to your upstream maintainer
+>> when your tree is submitted for merging.  You may also want to consider
+>> cooperating with the maintainer of the conflicting tree to minimise any
+>> particularly complex conflicts.
+> 
+> This is now a conflict between the arm-soc tree and the spdx tree.
 
-Hi all,
-
-On Mon, 11 Jul 2022 09:55:20 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->=20
-> Today's linux-next merge of the broadcom tree got a conflict in:
->=20
->   arch/arm/mach-bcm/bcm63xx.c
->=20
-> between commit:
->=20
->   52e6676ef56f ("treewide: Replace GPLv2 boilerplate/reference with SPDX =
-- gpl-2.0_30.RULE (part 1)")
->=20
-> from the spdx tree and commit:
->=20
->   889390f83d4e ("arm: bcmbca: Move BCM63138 ARCH_BCM_63XX to ARCH_BCMBCA")
->=20
-> from the broadcom tree.
->=20
-> I fixed it up (I just removed the file) and can carry the fix as
-> necessary. This is now fixed as far as linux-next is concerned, but any
-> non trivial conflicts should be mentioned to your upstream maintainer
-> when your tree is submitted for merging.  You may also want to consider
-> cooperating with the maintainer of the conflicting tree to minimise any
-> particularly complex conflicts.
-
-This is now a conflict between the arm-soc tree and the spdx tree.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/ekux/TwU2iZousa/RrxmrUB
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLPUZEACgkQAVBC80lX
-0Gy92gf8C1qZ21pWn3/VKWtP0JOV2I9uvqpJH4DWoDDbfqOpINgqTBEn2Gvqk9b1
-6N7fK+C71ZZl99pkNgAM7o5pHPEFqhiVTX2M5VXCCNjqxfJCN40NY7L5OAS7TA9e
-rkHsyUywQexnADKUKuhtjwR5ebH5peteu32xsXOE/D7rmrbCunvWt34HkEWliCNH
-3OhVZ4K6lhe9JDPYA4Mb5qf/5BDsdNx+NLuP6sPi8QJ3BM6lk2fTTvzGW0ynhAJI
-zyguUGi/j0Oa58N8RB1G+0OGWIcHTvs6ar+r7neGdmG+sH7upnsY3saVZC2F0zuw
-gbsxc89VGhNA1vb3Tu4GqXcTGIYpkA==
-=RNOJ
------END PGP SIGNATURE-----
-
---Sig_/ekux/TwU2iZousa/RrxmrUB--
+There was a link in the cover letter that I sent to the arm-soc 
+maintainers referencing your first email. Not sure what else we could 
+have done to prevent that conflict.
+-- 
+Florian

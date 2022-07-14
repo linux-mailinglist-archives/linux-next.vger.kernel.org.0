@@ -2,59 +2,59 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FD61574C4A
-	for <lists+linux-next@lfdr.de>; Thu, 14 Jul 2022 13:37:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 716B8574C5A
+	for <lists+linux-next@lfdr.de>; Thu, 14 Jul 2022 13:42:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238458AbiGNLhK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 14 Jul 2022 07:37:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50368 "EHLO
+        id S230167AbiGNLmT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 14 Jul 2022 07:42:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238050AbiGNLhJ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 14 Jul 2022 07:37:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75EFF5A2DE;
-        Thu, 14 Jul 2022 04:37:08 -0700 (PDT)
+        with ESMTP id S238003AbiGNLmT (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 14 Jul 2022 07:42:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A7E65B782;
+        Thu, 14 Jul 2022 04:42:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1297061C47;
-        Thu, 14 Jul 2022 11:37:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB3ECC34115;
-        Thu, 14 Jul 2022 11:37:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0D29FB824D2;
+        Thu, 14 Jul 2022 11:42:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4593C34114;
+        Thu, 14 Jul 2022 11:42:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657798627;
-        bh=xkb6opBAxI+SFBAgLXN/9AryGAOZRikgAkC+i4w8Uhc=;
+        s=k20201202; t=1657798935;
+        bh=451mWwuI9AcPCzu1ImZErrLyn7VNOtMxUA6oD0ptuxk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SwPu+c5quI97M2cWmKO6K7vaWUI4RQvjpT6IsTzFnJMQLAXq9gM1oaA1Jx9Dau2Nq
-         q7iTyQDdzGgEBRbeVR5dcOBbVF4PsKnZg3WIpYk1Na/3n9qcOhFDQkpJIHMGMRZULE
-         p0tejvniIrSHXf2IxO9E+O4Rko6pklnRtypdwnMmczcH6Xklk3ZNs3oFlyJKfnbSIv
-         Eqm++NccuvVRK5oZ59GPy8Hn+0CD77+41mCovNW6MwxBxTTfahqCna1l9kLpdIID9/
-         r8x4Xc90cQXk+qW/MKFozgovbz+1TNejz4ASQvqNFTvW21WsUtIBWMjT4VC9rsVPPw
-         G2i++Mx6esFOQ==
-Date:   Thu, 14 Jul 2022 12:37:01 +0100
+        b=US1VNGygEHXBSUfDyO21KxZpT3Cj3CzXEVksTUgh4WZLXPLN4nQFG3kDu1GBmMDrj
+         4Ak4s3uspIXlqoDyFVvEkRz/hXgE072CYbST+tJCI3niYz6+OZjwQ5laxJUVz1gSlO
+         /JPZa14rBbWk3SnCZGVLWkru/U3WmVselAclZ4Veo/KBL/ooVSGgJPiZttPY/OJfxj
+         wnq9B9Mkyl+R0c9Qtd7pJS1hAcFodCCCMZXyfadfVz4qRFMT62BYC65mT6XmnTVfZ5
+         5nJwDnGfbqrlAoTsBKJr8JUS10WJyj5JiBA8Zfu0mr4BtVB759K5bg4rwJ7NNYLayx
+         rXXYpf8L2T1Jg==
+Date:   Thu, 14 Jul 2022 12:42:08 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     open list <linux-kernel@vger.kernel.org>,
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>,
         Linux-Next Mailing List <linux-next@vger.kernel.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
         lkft-triage@lists.linaro.org, regressions@lists.linux.dev,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
         Anders Roxell <anders.roxell@linaro.org>,
         Aishwarya TCV <Aishwarya.TCV@arm.com>
 Subject: Re: FVP: kernel BUG at arch/arm64/kernel/traps.c:497 - Internal
  error: Oops - BUG: 0
-Message-ID: <Ys//3Vf7kNSfFsdE@sirena.org.uk>
+Message-ID: <YtABEDylGJkYLXrJ@sirena.org.uk>
 References: <CA+G9fYtOX-6=f70FA5PuDVA=kX=2L4spXKXS8=LHkUphafXowg@mail.gmail.com>
  <Ys1g8PH4M2W7Z50U@sirena.org.uk>
  <CA+G9fYu7mJ6X3_xhboODP_cjABE4QTJCON_NMduQ60x4Z7N78Q@mail.gmail.com>
+ <Ys/9TSV5muvKXN6W@FVFF77S0Q05N>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mp2w4DZId8/NmPQ+"
+        protocol="application/pgp-signature"; boundary="v0q6NINr4Hz+BhXJ"
 Content-Disposition: inline
-In-Reply-To: <CA+G9fYu7mJ6X3_xhboODP_cjABE4QTJCON_NMduQ60x4Z7N78Q@mail.gmail.com>
+In-Reply-To: <Ys/9TSV5muvKXN6W@FVFF77S0Q05N>
 X-Cookie: The devil finds work for idle glands.
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -67,81 +67,51 @@ List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
 
---mp2w4DZId8/NmPQ+
+--v0q6NINr4Hz+BhXJ
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jul 14, 2022 at 01:07:32AM +0530, Naresh Kamboju wrote:
+On Thu, Jul 14, 2022 at 12:26:05PM +0100, Mark Rutland wrote:
 
-> Here I am providing the available data.
-> Let me know what I am missing here, so that I will update my setup.
-> Thanks in advance.
+> I note that your log has:
 
-> Fast Models 11.17.21 (Feb 16 2022)
+> | Hit any key to stop autoboot:  1  0=20
+> | smh_open: ERROR fd -1 for file 'boot.img'
+> | smh_open: ERROR fd -1 for file 'Image'
+> | smh_open: ERROR fd -1 for file 'devtree.dtb'
+> | smh_open: ERROR fd -1 for file 'ramdisk.img'
 
-11.18 was released since (not that it should make any difference to this
-issue).
+=2E..
 
-> https://storage.tuxboot.com/fvp-aemva/tf-bl1.bin
-> https://storage.tuxboot.com/fvp-aemva/fvp-base-revc.dtb
-> https://storage.tuxboot.com/fvp-aemva/fip-uboot.bin
+> | Hit any key to stop autoboot:  0  =20
+> | smh_open: ERROR fd -1 for file 'boot.img'
+> | loaded file Image from 80080000 to 82F299FF, 02EA9A00 bytes
+> | smh_open: ERROR fd -1 for file 'devtree.dtb'
+> | smh_open: ERROR fd -1 for file 'ramdisk.img'
+> | fdt - flattened device tree utility commands
 
-Where did you get the TF-A and u-boot from - what versions are they and
-how are they configured and built?  Especially TF-A, u-boot isn't likely
-to cause any issues here since it isn't responsible for initialising the
-higher ELs.
+> ... and I wonder if that has something to do with it, given it appears th=
+at
+> your Image is corrupted somehow.
 
-That said I do seem to be able to boot with those images on my system -
-it looks like a debug build of TF-A 2.5 and a modified version of u-boot
-2021.04.  There's newer releases of both, especially with TF-A I'd
-recommend keeping up with new releases though it doesn't *immediately*
-look like your issue here.
+Naresh's command line is putting Image directly into RAM with
 
-> https://builds.tuxbuild.com/2BnQMpJj3kDTJXoCwd2pY5gW9CN/Image.gz
-> https://builds.tuxbuild.com/2BnQMpJj3kDTJXoCwd2pY5gW9CN/modules.tar.xz
+    --data cluster0.cpu0=3D/tuxrun-r4_1075p-lava-1/Image@0x80080000
 
->   --data cluster0.cpu0=3D/tuxrun-r4_1075p-lava-1/fvp-base-revc.dtb@0x8600=
-0000
->   --data cluster0.cpu0=3D/tuxrun-r4_1075p-lava-1/Image@0x80080000
->    -C pctl.startup=3D0.0.0.0
->    -C bp.secure_memory=3D0
-
-You don't seem to have
-
-	-C cluster0.mpidr_layout=3D1=20
-	-C cluster1.mpidr_layout=3D1=20
-
-though I would expect that the system wouldn't get as far as it was
-without that, it doesn't seem to when I try testing here - it dies
-running TF-A.
-
-You might also want to turn on a few more options
-
-	-C cluster0.has_fgt=3D1
-	-C cluster1.has_fgt=3D1
-	-C cluster0.memory_tagging_support_level=3D3
-	-C cluster1.memory_tagging_support_level=3D3
-	-C bp.dram_metadata.is_enabled=3D1=20
-
-to turn on fine grained traps and MTE, plus at least the newer model has
-more base architecture extensions, though these shouldn't be the issue
-here.  They don't seem to be (and shouldn't be) relevant here though.
-FGT is an EL2 feature so it'd die earlier.
-
---mp2w4DZId8/NmPQ+
+--v0q6NINr4Hz+BhXJ
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLP/9wACgkQJNaLcl1U
-h9CO2wgAgqBbvnchOc5rWP9J6VZBafqaSkOTJ+F0vZMUJlnTHoJkxMniYeLj6mwH
-/z+5LKxlGS6P9OyoQ6mwpZxBJyuBgZDp2ps/vqnZiEUEvNhyve017Ad3vZZ7no2I
-65W4ZuuokYI0RnXo74cnqDJDwch3XR8l60LAis92D6pmoqKP5+MYgN15DrhEfTHr
-pi6+Zx08ZqkcMLxeeUq77g9nTYZ4iSwH5+D1Dm2YxT+jSFneogfH/6zLFf/w1Cgo
-yAruxTrk2EzaHs3b/sqnpogLvFUREqrMlkN2n1EHlmSJv7LQD0WnSLZyvMEbsBnl
-LM65RgF0G5UWCsgBIwFpqAnIxFtWDw==
-=KuQS
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLQARAACgkQJNaLcl1U
+h9D2zwf+N2o/jcPsfrNlnvFCPpVpPafkerd8QYDMB56/fvTZqGJNUs1iMPbXkUvf
+dpYghnZZCTTCVpNJyYe8qVeZIbpItGPabW8+CfQgVcKqUeNM3OrcOMZbu6GreTa7
+Cmmcz58RyqC/KQFvNIuANf5h3dbcM4RdWqgo4lh8zwfXO1a/pFbPp+apu4akAopi
+Cg86TOKBETletb+YaZUAR+6aU5Evzi4eaDC565SPytiA/GCjmj8X62HmKWgS4Rvm
+4xHGXXFdDWmlaXtpL0dz/2FP9akc6mnkS87BcxQdDz6D80mvkN8pkQ8z+5GhJjAJ
+mycFQ8JUgg0sPDpdoLxe+iuNEhATlw==
+=DdaV
 -----END PGP SIGNATURE-----
 
---mp2w4DZId8/NmPQ+--
+--v0q6NINr4Hz+BhXJ--

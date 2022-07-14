@@ -2,98 +2,168 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EBC657421A
-	for <lists+linux-next@lfdr.de>; Thu, 14 Jul 2022 06:10:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB0B7574622
+	for <lists+linux-next@lfdr.de>; Thu, 14 Jul 2022 09:49:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231642AbiGNEKz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 14 Jul 2022 00:10:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43366 "EHLO
+        id S237770AbiGNHtg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 14 Jul 2022 03:49:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbiGNEKy (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 14 Jul 2022 00:10:54 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9692325286;
-        Wed, 13 Jul 2022 21:10:50 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Lk1Hl650nz4xv2;
-        Thu, 14 Jul 2022 14:10:43 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1657771845;
-        bh=EUpWvg4QeToN890n80xBxk7BRkOA+3mQaqTGlvqBQmM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=F+jvUdKbNgqi3JGovX1u5sSpDI+E59O/McJVyBG1/HCTGDHiAIhMJnit7oDAJ93K8
-         3S4nOKpCWBsWvAk7D9b7aEMPL3D8Shcbh0GuBrL0WJZf1sg0KZto8FS7RihIGTl4M3
-         iLJxiTOvnueniGambMW15iQfDcKqq4JwyEma+Q/rjIvaN5kFzAwGNmod/vzcGzadNZ
-         Cqd1RsrBUYXxpaVCe77VIGgie/KsQ7MHbkR1HcxB0vnVbzSupB5os6iC98v5MjhR9r
-         jqCznz5VGDqRyUMJOPhBoRSRtolDzIrwDupDWHstjx0zNMD/ICm+KpP/74dGDY3xnX
-         7jzAVyAjI/DXw==
-Date:   Thu, 14 Jul 2022 14:10:19 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Greg KH <greg@kroah.com>, Olof Johansson <olof@lixom.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        William Zhang <william.zhang@broadcom.com>,
-        ARM <linux-arm-kernel@lists.infradead.org>
-Subject: Re: linux-next: manual merge of the broadcom tree with the spdx
- tree
-Message-ID: <20220714141019.43b45f68@canb.auug.org.au>
-In-Reply-To: <8a37363d-f4d9-669c-9cc6-3e76b9417352@gmail.com>
-References: <20220711095520.4fad4c97@canb.auug.org.au>
-        <20220714091321.4ecfe830@canb.auug.org.au>
-        <8a37363d-f4d9-669c-9cc6-3e76b9417352@gmail.com>
+        with ESMTP id S237748AbiGNHtM (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 14 Jul 2022 03:49:12 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD6253DBC3
+        for <linux-next@vger.kernel.org>; Thu, 14 Jul 2022 00:47:50 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id v12so1307101edc.10
+        for <linux-next@vger.kernel.org>; Thu, 14 Jul 2022 00:47:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=j4QfK2iQAnum2nLeQTWlegafxzZD5NZOg4pgJLg01dE=;
+        b=Ob/iDl7slzxs6s1Nb24Ut1I908w4BBEZs3y45dQIbbgQRW2Bchged3fvN70UJ+fyWa
+         VI7tpv0BXfNCh4vxB8vUl++0/hQclfaaGz6EZN71BRZam77903CT2hFzVAJ0yRN3mhJW
+         O32U9HZ+kpLGobXtM3iBZgHBIAl0ME2xRb9uaNjN7UmxuBSbylu2heXjW2zF6ZUjw/b1
+         wCfHNXH9+Fl2Ub65sYkqbFd32O8V2UX26XELw47ntiFYJN4/kV1FsaHBJoRLtwPbyH00
+         CIG5gPaobIxJR9q7lzP+He4mAC2SQbJ/fmC/Guau+FgzWfunLqMXAZ/yw4X7H1sM97Tz
+         QNiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=j4QfK2iQAnum2nLeQTWlegafxzZD5NZOg4pgJLg01dE=;
+        b=nJQxCbj9xHKtVTvR30weB5jwcpMfEQbPi5vS/sfmysTIvsio/Kml9PEQ8MpF7iCIAX
+         lJLkYKYfvhZYFXFfkSbvbU4jf03gRMw+5ufvrPKsLGXMopXfMJUqWbsbucCONlQnEU11
+         6CFypNbWNEsS99pZjhRDKQaIpg94DwxPfeVusrH5az//OPjCdcPrslgLIwp+uJKfIttn
+         0CHmQGfpSKFEPWnPUxiJj+gDP4DQmraBPpXFCheVkpdP0wl+qR4+wvzdfKISYexDWgZr
+         9ZK+edeNBLquE2jo1LEhXIKEvFevX9hBpK4p/1r1sWT4aaPCIuTlxkLZe0ySN62fRJTv
+         uOdA==
+X-Gm-Message-State: AJIora9lLawLnF4cHViDgncplphaDyUUyMNegUoCL9E03de7jGGS1VrS
+        dGBk7RAboPDavz/4CMjbwVX3Q2SGvZcTPrh/T8wl+7C3xbL3wg==
+X-Google-Smtp-Source: AGRyM1tMHx1easLYFa9xYvefclce1EiBewHWg20ENwcZg56sE6aT7znvw62lycVMsNnzxTeLelmexmFPGb0ofeGxrV8=
+X-Received: by 2002:a05:6402:2812:b0:43a:9041:d5db with SMTP id
+ h18-20020a056402281200b0043a9041d5dbmr10342886ede.208.1657784867856; Thu, 14
+ Jul 2022 00:47:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/lJqVZN6pv+jUawIO4gp_rCc";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 14 Jul 2022 13:17:36 +0530
+Message-ID: <CA+G9fYuxp2Ge1JGwuXase633r8_7zPZkxrD6doCKi6aYY3mfPw@mail.gmail.com>
+Subject: [next] Kernel panic - not syncing: swiotlb_init_remap: nslabs = 0 too small
+To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, regressions@lists.linux.dev,
+        linux-mm <linux-mm@kvack.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Christoph Hellwig <hch@lst.de>,
+        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>, conor@kernel.org,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/lJqVZN6pv+jUawIO4gp_rCc
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+[Please ignore this email if it is already reported]
 
-Hi Florian,
+Linux next-20220713 boot failed on arm, arm64, x86_64 and i386 [1].
 
-On Wed, 13 Jul 2022 16:26:33 -0700 Florian Fainelli <f.fainelli@gmail.com> =
-wrote:
->
-> There was a link in the cover letter that I sent to the arm-soc
-> maintainers referencing your first email. Not sure what else we could
-> have done to prevent that conflict.
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
 
-Nothing really.  Hopefully between the 2 notifications, the arm-soc and
-spdx guys will remember to let Linus know ...
+metadata:
+  git_ref: master
+  git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+  git_sha: 4662b7adea50bb62e993a67f611f3be625d3df0d
+  git_describe: next-20220713
+  kernel_version: 5.19.0-rc6
+  kernel-config: https://builds.tuxbuild.com/2BtFIR2DegCrbRCCTSZF93YVeiO/config
+  build-url: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/-/pipelines/586982028
+  artifact-location: https://builds.tuxbuild.com/2BtFIR2DegCrbRCCTSZF93YVeiO
+  vmlinux.xz: https://builds.tuxbuild.com/2BtFIR2DegCrbRCCTSZF93YVeiO/vmlinux.xz
+  System.map: https://builds.tuxbuild.com/2BtFIR2DegCrbRCCTSZF93YVeiO/System.map
+  toolchain: gcc-11
 
---=20
-Cheers,
-Stephen Rothwell
+Here is the boot log output from arm64 juno-r2 device.
 
---Sig_/lJqVZN6pv+jUawIO4gp_rCc
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+[    0.000000] Booting Linux on physical CPU 0x0000000100 [0x410fd033]
+[    0.000000] Linux version 5.19.0-rc6-next-20220713
+(tuxmake@tuxmake) (aarch64-linux-gnu-gcc (Debian 11.3.0-3) 11.3.0, GNU
+ld (GNU Binutils for Debian) 2.38) #1 SMP PREEMPT @1657717522
+[    0.000000] Machine model: ARM Juno development board (r2)
+[    0.000000] earlycon: pl11 at MMIO 0x000000007ff80000 (options '')
+[    0.000000] printk: bootconsole [pl11] enabled
+[    0.000000] efi: UEFI not found.
+[    0.000000] NUMA: No NUMA configuration found
+[    0.000000] NUMA: Faking a node at [mem
+0x0000000080000000-0x00000009ffffffff]
+[    0.000000] NUMA: NODE_DATA [mem 0x9fefd1b40-0x9fefd3fff]
+[    0.000000] Zone ranges:
+[    0.000000]   DMA      [mem 0x0000000080000000-0x00000000ffffffff]
+[    0.000000]   DMA32    empty
+[    0.000000]   Normal   [mem 0x0000000100000000-0x00000009ffffffff]
+[    0.000000] Movable zone start for each node
+[    0.000000] Early memory node ranges
+[    0.000000]   node   0: [mem 0x0000000080000000-0x00000000feffffff]
+[    0.000000]   node   0: [mem 0x0000000880000000-0x00000009ffffffff]
+[    0.000000] Initmem setup node 0 [mem 0x0000000080000000-0x00000009ffffffff]
+[    0.000000] On node 0, zone Normal: 4096 pages in unavailable ranges
+[    0.000000] cma: Reserved 32 MiB at 0x00000000fd000000
+[    0.000000] psci: probing for conduit method from DT.
+[    0.000000] psci: PSCIv1.1 detected in firmware.
+[    0.000000] psci: Using standard PSCI v0.2 function IDs
+[    0.000000] psci: Trusted OS migration not required
+[    0.000000] psci: SMC Calling Convention v1.0
+[    0.000000] percpu: Embedded 30 pages/cpu s82856 r8192 d31832 u122880
+[    0.000000] Detected VIPT I-cache on CPU0
+[    0.000000] CPU features: detected: ARM erratum 843419
+[    0.000000] CPU features: detected: ARM erratum 845719
+[    0.000000] Fallback order for Node 0: 0
+[    0.000000] Built 1 zonelists, mobility grouping on.  Total pages: 2060288
+[    0.000000] Policy zone: Normal
+[    0.000000] Kernel command line: console=ttyAMA0,115200n8
+root=/dev/nfs rw
+nfsroot=10.66.16.120:/var/lib/lava/dispatcher/tmp/5283518/extract-nfsrootfs-ulkeoqdy,tcp,hard,vers=3,wsize=65536
+earlycon=pl011,0x7ff80000 console_msg_format=syslog earlycon
+default_hugepagesz=2M hugepages=256
+sky2.mac_address=0x00,0x02,0xF7,0x00,0x68,0x51 ip=dhcp
+<6>[    0.000000] Dentry cache hash table entries: 1048576 (order: 11,
+8388608 bytes, linear)
+<6>[    0.000000] Inode-cache hash table entries: 524288 (order: 10,
+4194304 bytes, linear)
+<6>[    0.000000] mem auto-init: stack:off, heap alloc:off, heap free:off
+<0>[    0.000000] Kernel panic - not syncing: swiotlb_init_remap:
+nslabs = 0 too small
+<4>[    0.000000] CPU: 0 PID: 0 Comm: swapper Not tainted
+5.19.0-rc6-next-20220713 #1
+<4>[    0.000000] Hardware name: ARM Juno development board (r2) (DT)
+<4>[    0.000000] Call trace:
+<4>[    0.000000]  dump_backtrace+0xe8/0x130
+<4>[    0.000000]  show_stack+0x24/0x60
+<4>[    0.000000]  dump_stack_lvl+0x8c/0xb8
+<4>[    0.000000]  dump_stack+0x18/0x34
+<4>[    0.000000]  panic+0x188/0x38c
+<4>[    0.000000]  swiotlb_init_remap+0x50/0x54
+<4>[    0.000000]  swiotlb_init+0x20/0x2c
+<4>[    0.000000]  mem_init+0x38/0x48
+<4>[    0.000000]  start_kernel+0x448/0x738
+<4>[    0.000000]  __primary_switched+0xb8/0xc0
+<0>[    0.000000] ---[ end Kernel panic - not syncing:
+swiotlb_init_remap: nslabs = 0 too small ]---
 
------BEGIN PGP SIGNATURE-----
+Full test log link,
+[1] https://lkft.validation.linaro.org/scheduler/job/5283518#L582
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLPlysACgkQAVBC80lX
-0GzBtgf/d6Z8/LmHBwqo8RoTs1coEoOF30gOGkb95r0e+qTlMtjyfS7oFA/+Jrok
-qdLmsdKDnzLNBXTJQ0tAg8BAmKY99YKKfn7Fx0Z9yu3+IfgWLwCT3FntpzH2oUKE
-MQqirs1slSI5iR3m3/s72/Ivgoh9I1ddIwI+d4J496MRRUZJkbZ6Tf5V2Yb3nRS/
-mHFdcQbWn4nNpf1fT4BcXaR2HZ8e5lG4OjJoAmirp1rKexMn0Nr650+zr84L/aap
-9fq+dBiw0urhl4bBIfqyYHNjY5s2GF00B0Jdm7h0rmqAolWQPXDkDUyt2FFARV9w
-u0/aEJB4QuwDekcuMjQ5hKfthNQ1Kw==
-=suHo
------END PGP SIGNATURE-----
+Best regards
+Naresh Kamboju
 
---Sig_/lJqVZN6pv+jUawIO4gp_rCc--
+
+--
+Linaro LKFT
+https://lkft.linaro.org

@@ -2,114 +2,150 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 007DD57614F
-	for <lists+linux-next@lfdr.de>; Fri, 15 Jul 2022 14:28:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 753EE5761C1
+	for <lists+linux-next@lfdr.de>; Fri, 15 Jul 2022 14:34:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234262AbiGOM2x (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 15 Jul 2022 08:28:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42632 "EHLO
+        id S229782AbiGOMeJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 15 Jul 2022 08:34:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234794AbiGOM2h (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 15 Jul 2022 08:28:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6187D10BB;
-        Fri, 15 Jul 2022 05:28:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S234250AbiGOMdz (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 15 Jul 2022 08:33:55 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 100AE13CF5;
+        Fri, 15 Jul 2022 05:33:54 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 01048B82BE8;
-        Fri, 15 Jul 2022 12:28:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AD41C34115;
-        Fri, 15 Jul 2022 12:28:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657888112;
-        bh=1WQoyyAkCDerK4uyFTm/h5bbBttlBNT3gkioRS+yT4Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GtQSWdXWimjAGo9or4zJmG2+2tsw4HN0iHXYVpGNl89aAImmBwL64ArkXHldkKw/I
-         bcGKV1BefgjFF++jixQWnTgaMAnTUx8lGwKv3eYOFFrIY+GqVy/tGdfDlatSjypDVc
-         +vNamPpzPcODKA8y0sUT7EAT3OscJ3cLneHRmJW1uRzXNbqIsz+QM4pHW49ed/CAIc
-         OzrC8zBQmDWAwzBwC+DVCMcnKnbGza6fopTQEAf2C671TLy8PZ8J/rxRHDMRNvH8XG
-         MAs5rUAFiO6gPN0z/i+rNACDwsqCh+Rd5zXlYGkjChseWipB5euOtoGEXkSYm3sJNc
-         QA2OvVZlCct8g==
-Date:   Fri, 15 Jul 2022 13:28:26 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        lkft-triage@lists.linaro.org, regressions@lists.linux.dev,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Aishwarya TCV <Aishwarya.TCV@arm.com>
-Subject: Re: FVP: kernel BUG at arch/arm64/kernel/traps.c:497 - Internal
- error: Oops - BUG: 0
-Message-ID: <YtFdarmJKQbV2Wz8@sirena.org.uk>
-References: <CA+G9fYtOX-6=f70FA5PuDVA=kX=2L4spXKXS8=LHkUphafXowg@mail.gmail.com>
- <Ys1g8PH4M2W7Z50U@sirena.org.uk>
- <CA+G9fYu7mJ6X3_xhboODP_cjABE4QTJCON_NMduQ60x4Z7N78Q@mail.gmail.com>
- <Ys/9TSV5muvKXN6W@FVFF77S0Q05N>
- <YtABEDylGJkYLXrJ@sirena.org.uk>
- <YtASzuHo1MXe5LJH@FVFF77S0Q05N.cambridge.arm.com>
- <YtAU1AHLLgK/v7RP@FVFF77S0Q05N.cambridge.arm.com>
- <YtAcW9DRrdun/pW9@FVFF77S0Q05N.cambridge.arm.com>
- <CA+G9fYvmrraS7ANdRA0XDoM-u-oVvcHFWsrFuBya9Es_WN3fkw@mail.gmail.com>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LkrPr2PlXz4xXj;
+        Fri, 15 Jul 2022 22:33:52 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1657888432;
+        bh=4lUg+65kneLGl7gYSIshGHUepuaNzX+XMZkKnDR7tT4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=qL27tNYTbuy6rpBcH48cwqvXTbf6YuW89b+ZKQhLh6x1P0tzqJMGYuF2rBKnV+y0S
+         g3hr3UKj2hYci7bd6bYXB9inHMNz8MzUvAulZbM5TO2XwqaxPc72DCpMVhftfH5sLX
+         Q5m/FC7eeEzSjRh8udzaH9eP9usStbqKR7hxLoZXJZ1eXR2w80DD1Rho2WLy0FDRcz
+         e+wDYC0xHFXC0+XzARWADnh7dj+39gpToqsU1lqG6gXPLsuXb4QPKSnM6P/gxEIyse
+         /vzNhdkrHiWs88keA4Xc6W1X+Y+u3VAMYxdE8ssJkEr10ZUgikOo6KhdRfjfs8vgVZ
+         08MrtVZX5o2SA==
+Date:   Fri, 15 Jul 2022 22:33:51 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Dylan Yudaken <dylany@fb.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the block tree
+Message-ID: <20220715223351.2e8c856e@canb.auug.org.au>
+In-Reply-To: <20220715135232.74b81bec@canb.auug.org.au>
+References: <20220715135232.74b81bec@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="H1Sr8Wku87tqrIFD"
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYvmrraS7ANdRA0XDoM-u-oVvcHFWsrFuBya9Es_WN3fkw@mail.gmail.com>
-X-Cookie: You dialed 5483.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/lBfOV4Gxbf1czM/GxNJwJhc";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-
---H1Sr8Wku87tqrIFD
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+--Sig_/lBfOV4Gxbf1czM/GxNJwJhc
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jul 14, 2022 at 07:35:50PM +0530, Naresh Kamboju wrote:
-> On Thu, 14 Jul 2022 at 19:09, Mark Rutland <mark.rutland@arm.com> wrote:
+Hi all,
 
-> > When *only* using the initial loading into memory, that blows up in sta=
-ckdepot
-> > and with a subsequent bogus pointer dereference (full log below), and w=
-hen
-> > loaded via semihosting that just works. Note that my kernel is based on=
- the
-> > arm64 for-next/core branch, which itself is based on v5.19-rc3.
-
-> > Naresh, please can you fix your boot flow before reporting any further =
-issues?
+On Fri, 15 Jul 2022 13:52:32 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
 >=20
-> Yes.
+> After merging the block tree, today's linux-next build (arm
+> multi_v7_defconfig) produced this warning:
+>=20
+> In file included from include/linux/slab.h:16,
+>                  from io_uring/net.c:5:
+> io_uring/net.c: In function 'io_recvmsg_multishot_overflow':
+> include/linux/overflow.h:67:22: warning: comparison of distinct pointer t=
+ypes lacks a cast
+>    67 |         (void) (&__a =3D=3D &__b);                  \
+>       |                      ^~
+> io_uring/net.c:332:13: note: in expansion of macro 'check_add_overflow'
+>   332 |         if (check_add_overflow(sizeof(struct io_uring_recvmsg_out=
+),
+>       |             ^~~~~~~~~~~~~~~~~~
+> include/linux/overflow.h:68:22: warning: comparison of distinct pointer t=
+ypes lacks a cast
+>    68 |         (void) (&__a =3D=3D __d);                   \
+>       |                      ^~
+> io_uring/net.c:332:13: note: in expansion of macro 'check_add_overflow'
+>   332 |         if (check_add_overflow(sizeof(struct io_uring_recvmsg_out=
+),
+>       |             ^~~~~~~~~~~~~~~~~~
+> include/linux/overflow.h:67:22: warning: comparison of distinct pointer t=
+ypes lacks a cast
+>    67 |         (void) (&__a =3D=3D &__b);                  \
+>       |                      ^~
+> io_uring/net.c:335:13: note: in expansion of macro 'check_add_overflow'
+>   335 |         if (check_add_overflow(hdr, iomsg->controllen, &hdr))
+>       |             ^~~~~~~~~~~~~~~~~~
+>=20
+> Introduced by commit
+>=20
+>   a8b38c4ce724 ("io_uring: support multishot in recvmsg")
 
-If you don't *need* to use u-boot for any reason then it might be worth
-looking into using EDK2 instead, it will dynamically place loaded images
-so you don't need to worry about size issues unless you actually run out
-of memory which is a whole other problem.
+This became a build failure in my i386 defconfig build.  So I have
+applied the following (probably not correct) patch that makes it build.
 
---H1Sr8Wku87tqrIFD
-Content-Type: application/pgp-signature; name="signature.asc"
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Fri, 15 Jul 2022 21:55:32 +1000
+Subject: [PATCH] fix up for "io_uring: support multishot in recvmsg"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ io_uring/net.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/io_uring/net.c b/io_uring/net.c
+index 616d5f04cc74..187822e18dd6 100644
+--- a/io_uring/net.c
++++ b/io_uring/net.c
+@@ -329,10 +329,10 @@ static bool io_recvmsg_multishot_overflow(struct io_a=
+sync_msghdr *iomsg)
+ {
+ 	unsigned long hdr;
+=20
+-	if (check_add_overflow(sizeof(struct io_uring_recvmsg_out),
++	if (check_add_overflow((unsigned long)sizeof(struct io_uring_recvmsg_out),
+ 			       (unsigned long)iomsg->namelen, &hdr))
+ 		return true;
+-	if (check_add_overflow(hdr, iomsg->controllen, &hdr))
++	if (check_add_overflow(hdr, (unsigned long)iomsg->controllen, &hdr))
+ 		return true;
+ 	if (hdr > INT_MAX)
+ 		return true;
+--=20
+2.35.1
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/lBfOV4Gxbf1czM/GxNJwJhc
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLRXWkACgkQJNaLcl1U
-h9Dsggf8CuVIwr2J6sCd8w1lFG4bdwpcsGZVeZQTGRFo7mhscUcQA/DVbERphMa5
-rm/R+juwkEXldiHj1CHQvCBsNsW3a8WuDVVx5BWgiSuwFmKUmr95T4Sj2mNsCXPb
-T3qKNT9Ub1TA/h1zIpo53co/2p4kl+BaQO9cQm64TTuP4ACX+X8wH7q8oSp/kC2n
-/Xux0I+gA/BX2U6ppSGaIdBvck/hl5kF4NSaMx6kcojedaX/lpQjdZxUTOsz6rVj
-DfJ7E2nB38IVH+QJor1+274rd+zPrUNaHJRhKmuEtLMQb+iiSvRBq7se5lHVHFen
-JxJtedtwJe2QJQkEjSvrSoH6dM3/6Q==
-=hWus
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLRXq8ACgkQAVBC80lX
+0GzTOAgAopI7rp2ln4TRvOS2Bw/kot8mIvaSyqzVVCRjLdbWjbHOC4+BwEjwCFXC
+vzBCkRaV5+/bfJ5Z3QTjfMQXGwsHWRrPHvnNDIoxLpDbc/Ap1hR+P//5m8HRFbkz
+jSeHzvh7/zhIzWG8PUPxXOFSG7okqx+qMz1dZe/LAN4W0KRMd8WyfubUI/X4KVL7
+VB+pPLBVUpEqt21X0FI6mZ+FYPekrjedFHDkCYxVgRPNpTWRYsbeIAH+RQpT7fzF
+yJUHlQNUBBsHUfzvVT65jj2f/kpO8rIPZ8lPsz/xc/PKuB+6N/49L++bgPFgBgJr
+o63y8APBYIgoMaoNx5Wm6VGZkBnB8A==
+=zv9s
 -----END PGP SIGNATURE-----
 
---H1Sr8Wku87tqrIFD--
+--Sig_/lBfOV4Gxbf1czM/GxNJwJhc--

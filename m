@@ -2,108 +2,73 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35E62576731
-	for <lists+linux-next@lfdr.de>; Fri, 15 Jul 2022 21:12:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BED9B576A01
+	for <lists+linux-next@lfdr.de>; Sat, 16 Jul 2022 00:39:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231172AbiGOTK2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 15 Jul 2022 15:10:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47846 "EHLO
+        id S231690AbiGOWjo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 15 Jul 2022 18:39:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231142AbiGOTKU (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 15 Jul 2022 15:10:20 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E474A42AC3;
-        Fri, 15 Jul 2022 12:10:18 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-31c8a1e9e33so55870927b3.5;
-        Fri, 15 Jul 2022 12:10:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0eFPkxDRT819KSGBw+2IxjOO0RG/iHGVi8eAb/xqty0=;
-        b=f/4f6JFFnBU9uTKjuUmeSdJ/6vp/353/HUJvdgH72g+VRfZy6xjLgyy50GWODcB9qC
-         QSUphY6kFh7qSjOSb+3dQw0IEc3DMISeYErWmjW+kD/LonaJmtvnnKAZU5BywZUC2kn8
-         dWHsNEMx/Y/Mb89k5SrUBchJNiCuoxJF2x/2AUu3y7vqnIrsFcSwAx1tMjwxw5QNsdCX
-         UFvWf7lUphXKSi4mvpQKWB809WW/B1CCz5LBxnRQ3coPwdhBRXjxLjw2JAka7aHtlBwk
-         kjyQd0SUHlXdepEs6O1E813chUKsXzYhHrwTLL4wMzyMkIES2JdNHgFdzEi8/cWCrRGy
-         Q3rA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0eFPkxDRT819KSGBw+2IxjOO0RG/iHGVi8eAb/xqty0=;
-        b=kZLgdYHIhvfTRAfArFCyHUkiLhLOQvSfyvyaYcBOiGwaJkmvxgUPoQq8d0NJbA5lNz
-         zqUvaG4CYwLkpdnUIXDwcM6DkARrrwSWMb7L1xFF22dlZxx/K+CiSkVuSPQh2fpZgW+s
-         vTJPNRQ1bAZ9LgA6YCTd5MBoocQdtVIxdbpnuPVQT/5Gg6Q94b2wvuXRnB9ici7LB6MZ
-         1JUml11PrlY5pi8Vc/82OB7r6jP8YMdDCRs317Ri+Z4H8mpvapGNcvgM5/sNJ42rGso9
-         ReQc8l4VMz9kyYGEdz1HdZn5lLqfJygOilFMkFLbLaVon9r+Qa85e4OAaRZGeIw2/IS6
-         Mltw==
-X-Gm-Message-State: AJIora+6jQlVKbyMEpuUVI1sblBtbkXZ1EJdZafBhjdQIXNU8tMykHH7
-        wQGIE6BP8I90C79vseKq5Kc38s1P/finEJajFh/fmxiaSoE=
-X-Google-Smtp-Source: AGRyM1u0LfZ/5A73nKyjWxon9iGrwvZUGBIxQ1+PoIrjIXnaMtBrTrN8qxeJAwr/pBi1AmwazSDMtzOwsUqXDHdyBmU=
-X-Received: by 2002:a81:108f:0:b0:31c:d7ae:9ff1 with SMTP id
- 137-20020a81108f000000b0031cd7ae9ff1mr17042253ywq.18.1657912218072; Fri, 15
- Jul 2022 12:10:18 -0700 (PDT)
+        with ESMTP id S232040AbiGOWjj (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 15 Jul 2022 18:39:39 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 283073A4AB;
+        Fri, 15 Jul 2022 15:39:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=WRMz9a04tnIAZ9GS7HQeuHPFonwLT/V6r2dd9lADBLM=; b=rShIO1yplSN4QJePNMjNPYAItA
+        ixUkUMn5TTlqo8vRliL3vpqn2tmiKEgOpKdN0AuR5nXK2hTiR7pct4wAN+8be1Pt8KodI8hLoB5gp
+        i4LhG14Zz1gR5wuO87Qz5Z/jk9paR46D36Q0RwY+GmDNO7K2GWsrDNJ3tqxBjntz0n2dQbCYZ1jJt
+        xqwZmtHP0ZdCCyvVaTOQBp+WtFMTYhtY7eTnjh1GMjoEMLNpLwWY/AspSGx4iUp0j8ZsPqtwYGyKu
+        ox54NaOTKHNydoxxFYLS/byPlHhi5eUYOL86NDL0enXRneZ7Ct2eWqj3Z55/masAy3aOx5zy+qNX7
+        yXyiUVQQ==;
+Received: from [2601:1c0:6280:3f0::a6b3]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oCTyA-00ApdJ-3H; Fri, 15 Jul 2022 22:39:34 +0000
+Message-ID: <f8ac63e2-c6f1-0dbb-823e-543d6b1deee5@infradead.org>
+Date:   Fri, 15 Jul 2022 15:39:33 -0700
 MIME-Version: 1.0
-References: <20220715224443.46ce75ca@canb.auug.org.au> <87fsj2v3oq.wl-tiwai@suse.de>
-In-Reply-To: <87fsj2v3oq.wl-tiwai@suse.de>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 15 Jul 2022 21:09:41 +0200
-Message-ID: <CAHp75Vf1O0AEkdNvAoGQ-nM9Pbx-nFtA5-GH=z=TZF_xTgfY3A@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the sound tree
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Stefan Binding <sbinding@opensource.cirrus.com>,
-        Vitaly Rodionov <vitalyr@opensource.cirrus.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: linux-next: Tree for Jul 15 (nfsd)
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
+        Chuck Lever <chuck.lever@oracle.com>, jlayton@kernel.org
+References: <20220715225251.2e7f7ada@canb.auug.org.au>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220715225251.2e7f7ada@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 5:39 PM Takashi Iwai <tiwai@suse.de> wrote:
->
-> On Fri, 15 Jul 2022 14:44:43 +0200,
-> Stephen Rothwell wrote:
-> >
-> > Hi all,
-> >
-> > After merging the sound tree, today's linux-next build (powerpc
-> > allyesconfig) failed like this:
-> >
-> > sound/pci/hda/cs35l41_hda.c: In function 'cs35l41_get_acpi_sub_string':
-> > sound/pci/hda/cs35l41_hda.c:693:43: error: invalid use of undefined type 'struct acpi_device'
-> >   693 |         status = acpi_evaluate_object(adev->handle, "_SUB", NULL, &buffer);
-> >       |                                           ^~
-> >
-> > Caused by commit
-> >
-> >   d60b05b4c780 ("ALSA: hda: cs35l41: Allow compilation test on non-ACPI configurations")
-> >
-> > along with commit
-> >
-> >   eef375960210 ("ALSA: hda: cs35l41: Support reading subsystem id from ACPI")
-> >
-> > I have reverted commit d60b05b4c780 for today.
->
-> Thanks.  Now I reverted the commit on for-next branch as a workaround,
-> too.
 
-Thanks! OTOH it means it's working well :-)
 
-Nevertheless, I have prepared a series to deduplicate this _SUB code
-and I think the ACPI would stay as a compile dependency because of
-that change anyway.
+On 7/15/22 05:52, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Changes since 20220714:
+> 
+
+on i386 or x86_64:
+when CONFIG_NFSD_V4 is not st:
+
+../fs/nfsd/nfsctl.c: In function ‘nfsd_init_net’:
+../fs/nfsd/nfsctl.c:1504:24: error: ‘NFS4_CLIENTS_PER_GB’ undeclared (first use in this function)
+ 1504 |         max_clients *= NFS4_CLIENTS_PER_GB;
+      |                        ^~~~~~~~~~~~~~~~~~~
 
 
 -- 
-With Best Regards,
-Andy Shevchenko
+~Randy

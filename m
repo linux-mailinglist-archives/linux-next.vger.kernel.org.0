@@ -2,104 +2,61 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7609E575E5D
-	for <lists+linux-next@lfdr.de>; Fri, 15 Jul 2022 11:20:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9329575EC8
+	for <lists+linux-next@lfdr.de>; Fri, 15 Jul 2022 11:44:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231463AbiGOJUD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 15 Jul 2022 05:20:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38970 "EHLO
+        id S231442AbiGOJoS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 15 Jul 2022 05:44:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231168AbiGOJUD (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 15 Jul 2022 05:20:03 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99DD15F98A;
-        Fri, 15 Jul 2022 02:20:01 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Lkm666Rpfz4xXj;
-        Fri, 15 Jul 2022 19:19:58 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1657876800;
-        bh=DwsFSwXzYbJyvmexY1lfoxg4soPoIZNKP9oPL8Oe2QY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=gBShlSqETpygiIuVsnRryAut+u+r2jFwlZsidRp1h6kGPJz7br4Q+RCHNkDe3J5Mg
-         gtgEQUbU1PaUV1kdVqwTxObIEAXKNTfwU4u2gMvS5oyELj1FWkGYr5udtBqihgr9Eb
-         Ic4tRK6EQMNA4jLJ02OicYMUSwC/bFGr2X7gObaGQRq1MXCBMAO4u3HVANyNCsEkDM
-         gzZnk00F60QJlTZTtwWNuEflqOgWaV1NtQgGWOQtNuRwep5tmpjuEvdlgv9TSeEtbH
-         ySFoL9IqgdBy+fTs86inehjfe5pV+G9KkS/0EmyyQXWWN0+TD7ajfC/pxrawPEIPPS
-         KocG9Z914KLKQ==
-Date:   Fri, 15 Jul 2022 19:19:57 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Matthew Wilcox <willy@infradead.org>, Jens Axboe <axboe@kernel.dk>
-Cc:     Bart Van Assche <bvanassche@acm.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the folio tree with the block tree
-Message-ID: <20220715191957.63d3d644@canb.auug.org.au>
+        with ESMTP id S231347AbiGOJoR (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 15 Jul 2022 05:44:17 -0400
+X-Greylist: delayed 427 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 15 Jul 2022 02:44:14 PDT
+Received: from mailgw49.conoha.ne.jp (mailgw49-109.conoha.ne.jp [118.27.124.109])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C58DF774B1
+        for <linux-next@vger.kernel.org>; Fri, 15 Jul 2022 02:44:13 -0700 (PDT)
+Received: from www251.conoha.ne.jp (unknown [172.16.116.106])
+        by mailgw49.conoha.ne.jp (Postfix) with ESMTP id DFDF0100C8388
+        for <linux-next@vger.kernel.org>; Fri, 15 Jul 2022 18:37:04 +0900 (JST)
+Received: by www251.conoha.ne.jp (Postfix, from userid 10817)
+        id DF1307C205; Fri, 15 Jul 2022 18:37:04 +0900 (JST)
+To:     linux-next@vger.kernel.org
+Subject: =?UTF-8?B?S0lSQVJB5L+d6IKy5ZySICJoZWNtM2Ei?=
+X-PHP-Script: kirara-hoikuen-nishio.com/index.php for 91.149.225.172
+X-PHP-Filename: /home/c6445084/public_html/kirara-hoikuen-nishio.com/index.php REMOTE_ADDR: 91.149.225.172
+Date:   Fri, 15 Jul 2022 09:37:04 +0000
+From:   =?UTF-8?B?S0lSQVJB5L+d6IKy5ZyS?= 
+        <wordpress@kirara-hoikuen-nishio.com>
+Reply-To: nakanogou@katch.ne.jp
+Message-ID: <xOQC5ElStjJFeRn1zwXJjkd2gX31nhY61gAYaQaU5o@kirara-hoikuen-nishio.com>
+X-Mailer: PHPMailer 6.6.0 (https://github.com/PHPMailer/PHPMailer)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/syXU_ujpZLgbG6j3cSzLV1C";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_50,FORGED_SPF_HELO,
+        HEADER_FROM_DIFFERENT_DOMAINS,KHOP_HELO_FCRDNS,RCVD_IN_VALIDITY_RPBL,
+        SPF_HELO_PASS,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/syXU_ujpZLgbG6j3cSzLV1C
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+💘 Vicki want to meet you! Click Here: https://letsg0dancing.page.link/go?nq3 💘様
+ 
+このたびはお問い合わせありがとうございます。
 
-Hi all,
-
-Today's linux-next merge of the folio tree got a conflict in:
-
-  fs/buffer.c
-
-between commit:
-
-  1420c4a549bf ("fs/buffer: Combine two submit_bh() and ll_rw_block() argum=
-ents")
-
-from the block tree and commit:
-
-  215e71b6ee7a ("fs: remove the nobh helpers")
-
-from the folio tree.
-
-I fixed it up (the latter removed some code that was updated by the
-former) and can carry the fix as necessary. This is now fixed as far as
-linux-next is concerned, but any non trivial conflicts should be mentioned
-to your upstream maintainer when your tree is submitted for merging.
-You may also want to consider cooperating with the maintainer of the
-conflicting tree to minimise any particularly complex conflicts.
-
-BTW: the latter commit missed a reference to nobh_write_begin in
-Documentation/filesystems/porting.rst.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/syXU_ujpZLgbG6j3cSzLV1C
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLRMT4ACgkQAVBC80lX
-0GyJWwgAlFtRgC8ZcJ2X7QhKClWh6NaYM7tz5HZ1lPX3ewo0KzlD6gvZ5MkIjSYl
-iP9eImd8LQ++tjUvD70kmO+GgBexom7c7oNWqE5svki0TYxLt7qufOk/QRuw9qU4
-z3TPbPM99dKW7PUIxp309RlhmjaF+UsgL/IJSdB6ZwtJcd9gJBaEfVRWDbGWsff0
-40IK6zaCbeSca1qIBvXdd/SyxGDO4kJVZi7G87qUQccxCDlZdGrYoZqu9YyPH2fH
-pvrKnWkqO9VJwt8oPAtJUshMhBqoRcxm0lKwPYZIt3vJtVy669RMzDDuI334x4Gp
-pMkj73mTx/qfLqTGQG/NBxvOL/1ddA==
-=Eg9H
------END PGP SIGNATURE-----
-
---Sig_/syXU_ujpZLgbG6j3cSzLV1C--
+ご入力された内容は下記のとおりです。
+追ってご返信をいたしますので、もう少々お待ちください。
+ 
+==========
+お名前: 💘 Vicki want to meet you! Click Here: https://letsg0dancing.page.link/go?nq3 💘
+ 
+メールアドレス:  linux-next@vger.kernel.org
+ 
+題名:   hecm3a
+ 
+メッセージ本文:   d6ae50
+ 
+==========

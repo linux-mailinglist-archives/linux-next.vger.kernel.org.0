@@ -2,47 +2,49 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FF325757E2
-	for <lists+linux-next@lfdr.de>; Fri, 15 Jul 2022 01:12:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59F475758B6
+	for <lists+linux-next@lfdr.de>; Fri, 15 Jul 2022 02:52:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232541AbiGNXMM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 14 Jul 2022 19:12:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37316 "EHLO
+        id S240443AbiGOAwi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 14 Jul 2022 20:52:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbiGNXML (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 14 Jul 2022 19:12:11 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA14E13EB5;
-        Thu, 14 Jul 2022 16:12:09 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LkVcj1klCz4xj3;
-        Fri, 15 Jul 2022 09:12:05 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1657840325;
-        bh=5H/p7fC0T7O0CKL7lcUQrsN0T83Ij9Fuk1Fp22Ad9xs=;
-        h=Date:From:To:Cc:Subject:From;
-        b=T1t65oLaJwVKZsIJdfInsG64wh/mNEFDLOf3MPQE1biuH7YpHnJ95Z+Jov0YI4HhD
-         GXtvpKaLK6JOfAN1bn825Q0s8WODDqO0CXhEcBXrwTbsVcMNRMW8aI5ocWqZ/Le/Ue
-         l9jb8BqoRQdvNaizMj8BQRssyWBLNfiBMDwdSB1/nX4FQcEHUbLOWdGRo9olUVO/E9
-         HGJPqYMPGG60JM4tm+JRmuloAyywb380F/6ekF5sRPpQpN/NphCC+hYN41frRRPvvE
-         24XNRz4KFcGFT7PcPhpBZ0EhgkSvgjDm3UjP6HKZVP7y36qbZaWI6suaQ3cJUCTdHh
-         EHc0690fohrjA==
-Date:   Fri, 15 Jul 2022 09:11:49 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        with ESMTP id S232576AbiGOAwi (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 14 Jul 2022 20:52:38 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA9AF47B9C;
+        Thu, 14 Jul 2022 17:52:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Z8kOPQco54RZV7WyIfV3pg4It53JMw8lFGZmv04yyFI=; b=LpPeQBNyw1PqozGc6RwnbDkGpj
+        eAUPzpHMZFG2gJaR256d2Tgk3ya0g7W+g6OySThVLdDrxxuO2sdDWfQrd6ikfv62P+g5tF0LhVwHf
+        WbyKpt6Al1HFJDvqAoD6KPhWRNv6mse21Q3HYZOKr4d+JQHA6oisRfxnwG6XjHC7zr0U4zdayogct
+        5NItiuCUiTNkc6hn65V3difsAqr/TuOheaCaTTYcwxFSiog1LyP4AuqR3xdoTnAcIzevHLNTSLp8K
+        F92X1O0z0GAwbjTdNcgRxC0sFZCvBYKnNsZy1lOMw7Diu4KZUiDl6wI6ocnkzbcxmpqdmeOK8rvf1
+        5bSlaS5Q==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
+        id 1oC9ZB-00C8Ac-G5;
+        Fri, 15 Jul 2022 00:52:25 +0000
+Date:   Fri, 15 Jul 2022 01:52:25 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Keith Busch <kbusch@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the integrity tree
-Message-ID: <20220715091149.3136235c@canb.auug.org.au>
+Subject: Re: linux-next: manual merge of the block tree with the vfs tree
+Message-ID: <YtC6SUmyaCSKe2HX@ZenIV>
+References: <20220714120840.1e1f8c63@canb.auug.org.au>
+ <0904ae71-972f-f183-f295-bce3b8518fcf@kernel.dk>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/yloJtg/GQj0hytyyf=AnVtt";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0904ae71-972f-f183-f295-bce3b8518fcf@kernel.dk>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,37 +52,38 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/yloJtg/GQj0hytyyf=AnVtt
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, Jul 14, 2022 at 10:36:35AM -0600, Jens Axboe wrote:
+> On 7/13/22 8:08 PM, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > Today's linux-next merge of the block tree got a conflict in:
+> > 
+> >   block/bio.c
+> > 
+> > between commits:
+> > 
+> >   35006342b739 ("block: ensure iov_iter advances for added pages")
+> >   248022ffae3f ("block: ensure bio_iov_add_page can't fail")
+> >   7b1ccdf617ca ("block: fix leaking page ref on truncated direct io")
+> >   9a6469060316 ("block: convert to advancing variants of iov_iter_get_pages{,_alloc}()")
+> > 
+> > from the vfs tree and commits:
+> > 
+> >   5a044eef1265 ("block: ensure iov_iter advances for added pages")
+> >   ac3c48e32c04 ("block: ensure bio_iov_add_page can't fail")
+> >   44b6b0b0e980 ("block: fix leaking page ref on truncated direct io")
+> > 
+> > from the block tree.
+> 
+> I pinged Al about this the other day, but haven't heard back yet. It's
+> not clear to me what block bits he has in his tree. We'll get it sorted
+> out.
 
-Hi all,
+Ones from Keith's branch - #alignment-fixes-rebased in there.  Looks like
+one of the commits in it got changed since then - the difference in
+__bio_iov_iter_get_pages() (unsigned int i initialization).
 
-Commits
+Sigh...  I'll rebase on top of that.
 
-  47e766ce0c21 ("kexec: drop weak attribute from functions")
-  0ce9331cf85a ("kexec_file: drop weak attribute from functions")
-
-are missing a Signed-off-by from their committers.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/yloJtg/GQj0hytyyf=AnVtt
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLQorYACgkQAVBC80lX
-0GzLAAf/ap/GewdHdNr+KFZX/j2nooyvOcb6Na8NOTnx05yWjkZxy4Uf1pJdelm5
-MDVGDrYC8q2gEkHYrx+GX3ZfxabZ5pBS7OVwbRu35QG+fwuLCUGNPufyfO7Vi2ZY
-IlEJvRLnU0njIfu7DNPCUHxpYhE2Q5n1HaJZg65qTtuMyRyB5nosJhbnT2e6gxRd
-aG8DNAN5EVTQW8o0QhmKdQpEAQKY4Q1TDc/UUiNR/aMqOV1WLkHGah5uMZS39xdD
-YRa/FXHrdC/6CIcj4daNNOtzYvnl/hWNj+eX5ijQA0OyDUML+IfhMgXUBZeG94zN
-k3AT1HW9S589A6l7FGi87wgfrK1lNQ==
-=aHTc
------END PGP SIGNATURE-----
-
---Sig_/yloJtg/GQj0hytyyf=AnVtt--
+Al, digging through the vicinity of propagate_umount() and cursing himself
+and ebiederman in about equal proportions since the last weekend...

@@ -2,49 +2,78 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 753EE5761C1
-	for <lists+linux-next@lfdr.de>; Fri, 15 Jul 2022 14:34:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 709025761D4
+	for <lists+linux-next@lfdr.de>; Fri, 15 Jul 2022 14:37:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229782AbiGOMeJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 15 Jul 2022 08:34:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48332 "EHLO
+        id S233017AbiGOMhS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 15 Jul 2022 08:37:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234250AbiGOMdz (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 15 Jul 2022 08:33:55 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 100AE13CF5;
-        Fri, 15 Jul 2022 05:33:54 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LkrPr2PlXz4xXj;
-        Fri, 15 Jul 2022 22:33:52 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1657888432;
-        bh=4lUg+65kneLGl7gYSIshGHUepuaNzX+XMZkKnDR7tT4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=qL27tNYTbuy6rpBcH48cwqvXTbf6YuW89b+ZKQhLh6x1P0tzqJMGYuF2rBKnV+y0S
-         g3hr3UKj2hYci7bd6bYXB9inHMNz8MzUvAulZbM5TO2XwqaxPc72DCpMVhftfH5sLX
-         Q5m/FC7eeEzSjRh8udzaH9eP9usStbqKR7hxLoZXJZ1eXR2w80DD1Rho2WLy0FDRcz
-         e+wDYC0xHFXC0+XzARWADnh7dj+39gpToqsU1lqG6gXPLsuXb4QPKSnM6P/gxEIyse
-         /vzNhdkrHiWs88keA4Xc6W1X+Y+u3VAMYxdE8ssJkEr10ZUgikOo6KhdRfjfs8vgVZ
-         08MrtVZX5o2SA==
-Date:   Fri, 15 Jul 2022 22:33:51 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Dylan Yudaken <dylany@fb.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the block tree
-Message-ID: <20220715223351.2e8c856e@canb.auug.org.au>
-In-Reply-To: <20220715135232.74b81bec@canb.auug.org.au>
-References: <20220715135232.74b81bec@canb.auug.org.au>
+        with ESMTP id S229573AbiGOMhR (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 15 Jul 2022 08:37:17 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2A2B6B77D;
+        Fri, 15 Jul 2022 05:37:15 -0700 (PDT)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26FC5bCe007742;
+        Fri, 15 Jul 2022 12:37:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : content-type :
+ subject : message-id : date : cc : to : content-transfer-encoding :
+ mime-version; s=pp1; bh=QFI4HdS5nW/1YwyxtYgBSYN97hNea2MFZvGZ9zsBmzc=;
+ b=VdnGppwcp5owmt3EeyuSxwElSzptvsdvlIYUJcsNlkTWoglXut3snwucW8wm9ror1+gN
+ cAeU7F+wBB1cl7LuOBrMoYLiIBXO30yn1NYj7KJEuC7mLtKlqKgBCoknw2ZAzjq4o1Iu
+ X6flkD9SBcfM9UQ+8KvOIS6UjrTj08cxG2/tXq2w+VfgLVBN10TtabJLOmBcsIl9ufFj
+ /ouA3dlXZ1WTHaO3MCxJ75pSymmpHqG2tRhF0NW9g7UGwgCH8HqlPjTpn7lr1viiiNUo
+ J+E65XtT/DsSOm0hwdZRWFdVhGLXJYBQQ8BEmuGqa4W2MPNf/ztAxY+B2NOSTb1SvaS2 Zg== 
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3hb7xm0sv1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 15 Jul 2022 12:37:07 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26FCaQaB022883;
+        Fri, 15 Jul 2022 12:37:05 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma02fra.de.ibm.com with ESMTP id 3hama9h8r8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 15 Jul 2022 12:37:05 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26FCb3Pm24772888
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 15 Jul 2022 12:37:03 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8E34742045;
+        Fri, 15 Jul 2022 12:37:03 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 850784203F;
+        Fri, 15 Jul 2022 12:37:02 +0000 (GMT)
+Received: from smtpclient.apple (unknown [9.43.67.10])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 15 Jul 2022 12:37:02 +0000 (GMT)
+From:   Sachin Sant <sachinp@linux.ibm.com>
+Content-Type: text/plain;
+        charset=us-ascii
+Subject: Kernel crash(block/null_blk) while running blktests (block/10)
+Message-Id: <9CCFA12F-603C-4C70-844F-83B5C9580BAB@linux.ibm.com>
+Date:   Fri, 15 Jul 2022 18:07:01 +0530
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-next@vger.kernel.org
+To:     linux-block@vger.kernel.org, vincent.fu@samsung.com
+X-Mailer: Apple Mail (2.3696.100.31)
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: kC0omlGdZvdtU_noWsp7e5qdn6foHXs3
+X-Proofpoint-ORIG-GUID: kC0omlGdZvdtU_noWsp7e5qdn6foHXs3
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/lBfOV4Gxbf1czM/GxNJwJhc";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-15_05,2022-07-15_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=978
+ malwarescore=0 spamscore=0 mlxscore=0 adultscore=0 clxscore=1011
+ suspectscore=0 bulkscore=0 lowpriorityscore=0 priorityscore=1501
+ phishscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2206140000 definitions=main-2207150050
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,100 +81,122 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/lBfOV4Gxbf1czM/GxNJwJhc
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+While running blktests[*] (block/10) on a IBM Power server booted with
+5.19.0-rc6-next-20220714 following crash is seen:
 
-Hi all,
+[ 9089.636612] null_blk: disk nullb30 created
+[ 9089.640752] null_blk: disk nullb31 created
+[ 9089.640759] null_blk: module loaded
+[ 9134.099371] Kernel attempted to read user page (0) - exploit attempt? (u=
+id: 0)
+[ 9134.099396] BUG: Kernel NULL pointer dereference on read at 0x00000000
+[ 9134.099401] Faulting instruction address: 0xc0080000064b254c
+[ 9134.099407] Oops: Kernel access of bad area, sig: 11 [#1]
+[ 9134.099411] LE PAGE_SIZE=3D64K MMU=3DHash SMP NR_CPUS=3D2048 NUMA pSeries
+[ 9134.099417] Modules linked in: null_blk(E+) xfs(E) dm_delay(E) overlay(E=
+) dm_thin_pool(E) dm_persistent_data(E) dm_bio_prison(E) dm_flakey(E) dm_sn=
+apshot(E) dm_bufio(E) dm_zero(E) loop(E) dm_mod(E) nft_fib_inet(E) nft_fib_=
+ipv4(E) nft_fib_ipv6(E) nft_fib(E) nft_reject_inet(E) nf_reject_ipv4(E) nf_=
+reject_ipv6(E) nft_reject(E) nft_ct(E) nft_chain_nat(E) nf_nat(E) nf_conntr=
+ack(E) nf_defrag_ipv6(E) nf_defrag_ipv4(E) ip_set(E) bonding(E) rfkill(E) t=
+ls(E) nf_tables(E) libcrc32c(E) nfnetlink(E) sunrpc(E) pseries_rng(E) vmx_c=
+rypto(E) ext4(E) mbcache(E) jbd2(E) sr_mod(E) cdrom(E) sd_mod(E) sg(E) lpfc=
+(E) nvmet_fc(E) nvmet(E) ibmvscsi(E) scsi_transport_srp(E) ibmveth(E) nvme_=
+fc(E) nvme(E) nvme_fabrics(E) nvme_core(E) t10_pi(E) scsi_transport_fc(E) c=
+rc64_rocksoft(E) crc64(E) tg3(E) ipmi_devintf(E) ipmi_msghandler(E) fuse(E)=
+ [last unloaded: null_blk]
+[ 9134.099502] CPU: 26 PID: 2910448 Comm: modprobe Tainted: G            E =
+     5.19.0-rc6-next-20220714 #2
+[ 9134.099510] NIP:  c0080000064b254c LR: c0080000064b907c CTR: c0080000064=
+b8e80
+[ 9134.099515] REGS: c000000091573600 TRAP: 0300   Tainted: G            E =
+      (5.19.0-rc6-next-20220714)
+[ 9134.099520] MSR:  8000000002009033 <SF,VEC,EE,ME,IR,DR,RI,LE>  CR: 24222=
+424  XER: 00000000
+[ 9134.099534] CFAR: c00000000000c9dc DAR: 0000000000000000 DSISR: 40000000=
+ IRQMASK: 0=20
+[ 9134.099534] GPR00: c0080000064b907c c0000000915738a0 c0080000064e8100 00=
+00000000000000=20
+[ 9134.099534] GPR04: c0080000064e18e0 0000000000000cc0 0000000000000040 ff=
+ffffffffffffff=20
+[ 9134.099534] GPR08: 0000000000000058 0000000000000001 0000000000000001 00=
+000000000168a9=20
+[ 9134.099534] GPR12: c0080000064b8e80 c00000001ec20700 c000000091573d00 00=
+0001000c370950=20
+[ 9134.099534] GPR16: 000000000000ff20 c008000006243060 c008000006240000 00=
+00000000003078=20
+[ 9134.099534] GPR20: 0000000000000001 c000000091573bc0 c0080000064e1488 00=
+00000000000000=20
+[ 9134.099534] GPR24: 0000000000000000 c000000002960e40 c000000002960e70 c0=
+080000064e1480=20
+[ 9134.099534] GPR28: 0000000000000000 ffffffffffffffff c0080000064e1880 c0=
+080000064e02a8=20
+[ 9134.099598] NIP [c0080000064b254c] null_init_tag_set+0x74/0x180 [null_bl=
+k]
+[ 9134.099610] LR [c0080000064b907c] null_init+0x1fc/0x354 [null_blk]
+[ 9134.099619] Call Trace:
+[ 9134.099622] [c0000000915738a0] [c0000000915738e0] 0xc0000000915738e0 (un=
+reliable)
+[ 9134.099630] [c0000000915738c0] [c0080000064b907c] null_init+0x1fc/0x354 =
+[null_blk]
+[ 9134.099640] [c000000091573960] [c000000000011ff4] do_one_initcall+0x64/0=
+x300
+[ 9134.099650] [c000000091573a30] [c0000000002365bc] do_init_module+0x6c/0x=
+2d0
+[ 9134.099659] [c000000091573ab0] [c000000000239a54] load_module+0x1ed4/0x2=
+290
+[ 9134.099667] [c000000091573c90] [c00000000023a170] __do_sys_finit_module+=
+0xe0/0x180
+[ 9134.099675] [c000000091573db0] [c000000000032e7c] system_call_exception+=
+0x17c/0x350
+[ 9134.099683] [c000000091573e10] [c00000000000c53c] system_call_common+0xe=
+c/0x270
+[ 9134.099692] --- interrupt: c00 at 0x7fffa0edf164
+[ 9134.099696] NIP:  00007fffa0edf164 LR: 00000001212e04fc CTR: 00000000000=
+00000
+[ 9134.099701] REGS: c000000091573e80 TRAP: 0c00   Tainted: G            E =
+      (5.19.0-rc6-next-20220714)
+[ 9134.099706] MSR:  800000000000f033 <SF,EE,PR,FP,ME,IR,DR,RI,LE>  CR: 282=
+22244  XER: 00000000
+[ 9134.099720] IRQMASK: 0=20
+[ 9134.099720] GPR00: 0000000000000161 00007fffe62a6870 00007fffa0fb7300 00=
+00000000000003=20
+[ 9134.099720] GPR04: 000001000c370ec0 0000000000000000 0000000000000003 00=
+00000000000000=20
+[ 9134.099720] GPR08: 0000000000000000 0000000000000000 0000000000000000 00=
+00000000000000=20
+[ 9134.099720] GPR12: 0000000000000000 00007fffa14bca50 0000000000040000 00=
+0001000c370950=20
+[ 9134.099720] GPR16: 000001000c370950 0000000000000020 000001000c370950 00=
+00000000000000=20
+[ 9134.099720] GPR20: 0000000000000000 000000000000003a 000001000c370cb0 00=
+0000000000003a=20
+[ 9134.099720] GPR24: 00000001212eb068 000001000c370950 0000000000000000 00=
+0001000c370dc0=20
+[ 9134.099720] GPR28: 000001000c370ec0 0000000000040000 0000000000000000 00=
+0001000c370cb0=20
+[ 9134.099779] NIP [00007fffa0edf164] 0x7fffa0edf164
+[ 9134.099783] LR [00000001212e04fc] 0x1212e04fc
+[ 9134.099787] --- interrupt: c00
+[ 9134.099790] Instruction dump:
+[ 9134.099793] 7d0907b4 2ea90000 409600ec 814a0150 91440044 e9430000 e8ea01=
+3e 39000058=20
+[ 9134.099804] 39400001 90e40050 9104004c 91440058 <e9030000> 89480163 2f8a=
+0000 419e0010=20
+[ 9134.099817] ---[ end trace 0000000000000000 ]---
+[ 9134.116174]=20
+[ 9135.116180] Kernel panic - not syncing: Fatal exception
 
-On Fri, 15 Jul 2022 13:52:32 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->=20
-> After merging the block tree, today's linux-next build (arm
-> multi_v7_defconfig) produced this warning:
->=20
-> In file included from include/linux/slab.h:16,
->                  from io_uring/net.c:5:
-> io_uring/net.c: In function 'io_recvmsg_multishot_overflow':
-> include/linux/overflow.h:67:22: warning: comparison of distinct pointer t=
-ypes lacks a cast
->    67 |         (void) (&__a =3D=3D &__b);                  \
->       |                      ^~
-> io_uring/net.c:332:13: note: in expansion of macro 'check_add_overflow'
->   332 |         if (check_add_overflow(sizeof(struct io_uring_recvmsg_out=
-),
->       |             ^~~~~~~~~~~~~~~~~~
-> include/linux/overflow.h:68:22: warning: comparison of distinct pointer t=
-ypes lacks a cast
->    68 |         (void) (&__a =3D=3D __d);                   \
->       |                      ^~
-> io_uring/net.c:332:13: note: in expansion of macro 'check_add_overflow'
->   332 |         if (check_add_overflow(sizeof(struct io_uring_recvmsg_out=
-),
->       |             ^~~~~~~~~~~~~~~~~~
-> include/linux/overflow.h:67:22: warning: comparison of distinct pointer t=
-ypes lacks a cast
->    67 |         (void) (&__a =3D=3D &__b);                  \
->       |                      ^~
-> io_uring/net.c:335:13: note: in expansion of macro 'check_add_overflow'
->   335 |         if (check_add_overflow(hdr, iomsg->controllen, &hdr))
->       |             ^~~~~~~~~~~~~~~~~~
->=20
-> Introduced by commit
->=20
->   a8b38c4ce724 ("io_uring: support multishot in recvmsg")
+This regression was introduced in 5.19.0-rc6-next-20220713, next-20220712
+build was good.
 
-This became a build failure in my i386 defconfig build.  So I have
-applied the following (probably not correct) patch that makes it build.
+Git bisect leads me to following patch -
 
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Fri, 15 Jul 2022 21:55:32 +1000
-Subject: [PATCH] fix up for "io_uring: support multishot in recvmsg"
+commit 37ae152c7a0d
+     null_blk: add configfs variables for 2 options
 
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- io_uring/net.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Reverting this patch allows me to run the blktests to completion.
 
-diff --git a/io_uring/net.c b/io_uring/net.c
-index 616d5f04cc74..187822e18dd6 100644
---- a/io_uring/net.c
-+++ b/io_uring/net.c
-@@ -329,10 +329,10 @@ static bool io_recvmsg_multishot_overflow(struct io_a=
-sync_msghdr *iomsg)
- {
- 	unsigned long hdr;
-=20
--	if (check_add_overflow(sizeof(struct io_uring_recvmsg_out),
-+	if (check_add_overflow((unsigned long)sizeof(struct io_uring_recvmsg_out),
- 			       (unsigned long)iomsg->namelen, &hdr))
- 		return true;
--	if (check_add_overflow(hdr, iomsg->controllen, &hdr))
-+	if (check_add_overflow(hdr, (unsigned long)iomsg->controllen, &hdr))
- 		return true;
- 	if (hdr > INT_MAX)
- 		return true;
---=20
-2.35.1
+- Sachin
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/lBfOV4Gxbf1czM/GxNJwJhc
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLRXq8ACgkQAVBC80lX
-0GzTOAgAopI7rp2ln4TRvOS2Bw/kot8mIvaSyqzVVCRjLdbWjbHOC4+BwEjwCFXC
-vzBCkRaV5+/bfJ5Z3QTjfMQXGwsHWRrPHvnNDIoxLpDbc/Ap1hR+P//5m8HRFbkz
-jSeHzvh7/zhIzWG8PUPxXOFSG7okqx+qMz1dZe/LAN4W0KRMd8WyfubUI/X4KVL7
-VB+pPLBVUpEqt21X0FI6mZ+FYPekrjedFHDkCYxVgRPNpTWRYsbeIAH+RQpT7fzF
-yJUHlQNUBBsHUfzvVT65jj2f/kpO8rIPZ8lPsz/xc/PKuB+6N/49L++bgPFgBgJr
-o63y8APBYIgoMaoNx5Wm6VGZkBnB8A==
-=zv9s
------END PGP SIGNATURE-----
-
---Sig_/lBfOV4Gxbf1czM/GxNJwJhc--
+[*] -> https://github.com/osandov/blktests/=

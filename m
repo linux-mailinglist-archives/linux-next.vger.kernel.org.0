@@ -2,154 +2,168 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36B59575FA8
-	for <lists+linux-next@lfdr.de>; Fri, 15 Jul 2022 13:01:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A46A575FD5
+	for <lists+linux-next@lfdr.de>; Fri, 15 Jul 2022 13:14:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229579AbiGOLBT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 15 Jul 2022 07:01:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56322 "EHLO
+        id S232627AbiGOLOP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 15 Jul 2022 07:14:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbiGOLBS (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 15 Jul 2022 07:01:18 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A014985F99;
-        Fri, 15 Jul 2022 04:01:16 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id u6so3592926iop.5;
-        Fri, 15 Jul 2022 04:01:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wmRCA/LiungRB9dNg0L8Jv8y/3XJdg8KhXJdHQWBT8s=;
-        b=Qlx2ZfVFxy2UOWskdQiCPtPnqVYoYtwLvQq5Yu9diw8qStL3WTHIaJl75stp7d0aUw
-         Yd6/zCaCsSBGKqWMWy56CWnVwieafFIWdRENyBTPWuXjl1SQHbrRALJBxOLPZZz5Vv28
-         M/oZHoXBMV2ZWuGEzg0xCkVuobllCyMWGhXY+CsIfNrS9xtG1j19F/m/dkjWiBNUcs3v
-         KmTvPKwQheikTZk2M/+ekm5wA5r2YJfpgj7pZbW8Rk6GSh8H9rfKy/oqPQpBFd8JUB0x
-         7ulZauNFCa+n6F8Pzch2CD87W6t5upjGu+JL13DLLIdFeY7QOEg0pu29cyt+zrmDVTmw
-         W+yw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wmRCA/LiungRB9dNg0L8Jv8y/3XJdg8KhXJdHQWBT8s=;
-        b=B06e+o0m4BCPEAU1KiGPqj/NcSRYhRodSA/cTfFGRrRZx8TNTi8dLIr50+Y/uvPytY
-         ti6KCqpAEJyA8N3v1ehTqWxvCWUHYbx2oEQtjj58ljGe+Qj1WiGva9l0AxI/RbyERbAG
-         0qSbaRaCA0JXdp6eutK3ODq5jqNqPz9LHzkjnEu52Gl6PZhXFIjfSnHM/9e+QZfwe4DJ
-         d27+uK0lcHUWUKfqErli5tRsX7exfSAgMXB/ASwaxSI0ksF/sesNe4JKliXW5BAHTfXn
-         ot9LurnF59wKa4yQGnCz/RJp3i6bKkpYm7uaQGxmJ+6HiSYW6M9nwXIxVUthu53S9oYH
-         o5Pg==
-X-Gm-Message-State: AJIora+t60j7AMt0K7P0YyCIeba+U4cZrRe3NkzZzKj6Ea5cuXhfV/yh
-        5IJbmp9cNV4cwAHuicUBzE+o24aLodemRdb3GF8=
-X-Google-Smtp-Source: AGRyM1vZZ3UQOGfgMYDweQ9lVqTLy5z2IcTlGeyhos85Km9ll0NOv2JAsRTLHjSUhSRirc+NzEesoMLnm/TjyLhbKUY=
-X-Received: by 2002:a6b:e011:0:b0:67b:cf17:ddb8 with SMTP id
- z17-20020a6be011000000b0067bcf17ddb8mr4201071iog.44.1657882876035; Fri, 15
- Jul 2022 04:01:16 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220713203409.559c5464@canb.auug.org.au> <Ys6u88DqQdgmkWWf@hirez.programming.kicks-ass.net>
- <CANiq72k_dtr2=KX-WheUiM2v2370imAdWFawJR+8P41L7HjwpA@mail.gmail.com> <YtEs9H+JEDUq6NNm@worktop.programming.kicks-ass.net>
-In-Reply-To: <YtEs9H+JEDUq6NNm@worktop.programming.kicks-ass.net>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Fri, 15 Jul 2022 13:01:04 +0200
-Message-ID: <CANiq72=oOEdxY1bEA3YFwFkSiYk+Uwv=x-4yEwHgCz0SizY66w@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the rust tree with Linus' tree
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Adam Bratschi-Kaye <ark.email@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Antonio Terceiro <antonio.terceiro@linaro.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Boris-Chengbiao Zhou <bobo1239@web.de>,
-        Borislav Petkov <bp@suse.de>, Daniel Xu <dxu@dxuuu.xyz>,
-        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
-        David Gow <davidgow@google.com>,
-        Douglas Su <d0u9.su@outlook.com>, Finn Behrens <me@kloenk.de>,
-        Gary Guo <gary@garyguo.net>,
+        with ESMTP id S232330AbiGOLON (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 15 Jul 2022 07:14:13 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F17BD868B3;
+        Fri, 15 Jul 2022 04:14:11 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Lkpdt1LT8z4xD2;
+        Fri, 15 Jul 2022 21:14:10 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1657883650;
+        bh=prRPClwG5dDKLv8gzbu4Q7yzj5Dy8XbpxqLNQ+maTJY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=J0x98ho3k2SunugagjeGmWpIzoF23Dpcb1wjPEzF2TriSl7nidRB9SSzhuB+Enm9n
+         O24e0mM8zTX5o5IHlUCrURW0/I2orPLfSKazVpmfrRCPmPOpr8tGigvL3Yca6/T2b5
+         IL3AiGnTkUv/vfepUurSd6VoGecelqMX6zJ9nPnVDsRm3F+RdcHfV6vFeIr8uVIFyQ
+         MpVm4HFA/t2D6g8gKWW8gPvQQRtU5odizEOTNqTgXQwegarWye8K9zchzdh7u7FwUt
+         x75cWzRSMozweS0L5IC2ZspnIV8OArM0uYpKuMgxKTGMXK2Ij0kn2LwwerMPLS3DaC
+         hhOTXJQyq2avQ==
+Date:   Fri, 15 Jul 2022 21:14:09 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Yury Norov <yury.norov@gmail.com>
+Cc:     Ingo Molnar <mingo@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Miguel Cano <macanroj@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        joao@overdrivepizza.com, Kees Cook <keescook@chromium.org>,
-        Arthur Cohen <arthur.cohen@embecosm.com>,
-        Antoni Boucher <bouanto@zoho.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Philip Herron <philip.herron@embecosm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        NeilBrown <neilb@suse.de>
+Subject: linux-next: manual merge of the mm tree with the bitmap tree
+Message-ID: <20220715211409.4fba48e8@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/bPTZjtBukofTM.KiApIwdMX";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 11:02 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> Ok; I'm supposing that'll be sorted by the time rust happens.
+--Sig_/bPTZjtBukofTM.KiApIwdMX
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-No, it most likely won't, and I don't see why you would assume that,
-or why we would want to block Rust support on that.
+Hi all,
 
-> There's quite a few things affecting code-gen; rustc not using the exact
-> same compiler arguments is going to create a head-ache.
+Today's linux-next merge of the mm tree got a conflict in:
 
-Yes, a GCC-like driver in `rustc` would be nice for projects like the
-kernel. The GCC Rust project will support GCC-like flags, as far as I
-understand.
+  include/linux/gfp.h
 
-(Cc'ing Antoni, Arthur, Josh, Philip).
+between commit:
 
-> But does it support everything clang does now? If not, you need to
-> express that in Kconfig and disable the features it doesn't carry. So
-> even for a single rustc version will you need RUSTC_HAS_ stuff.
+  34973181c728 ("headers/deps: mm: Split <linux/gfp_types.h> out of <linux/=
+gfp.h>")
 
-You could still make everything work around the `RUST` symbol, no need
-to "litter everything" (as you said) just yet. :)
+from the bitmap tree and commit:
 
-> What about CC_HAS_IBT? Can rust generate sane IBT code? Current next
-> doesn't seem to have anything there, suggesting I can't build an IBT
-> enabled kernel if rust is on (or rather, it'll build, but it'll also
-> burn at boot).
->
-> What if LLVM were to grow -mindirect-branch-cs-prefix (please!) and rust
-> doesn't have it? Same if LLVM finally stops generating those pesky
-> conditional tail-calls, will rust continue emitting them?
->
-> I'm thinking of the kCFI work, will rustc support that from day 1 or
-> will that only work when not building any rust.
->
-> There being a single rustc is not a single target, every compiler
-> version grows (and breaks) new features. And for some reason we seem to
-> change the actual kernel calling convetion a lot of late :/
->
-> Currently we can support a feature when one compiler version supports it
-> (either gcc or clang), but the moment rust becomes a mandatory part of
-> the kernel build (and I dread that day) we'll need to
-> wait/update/wrangle at least two different toolchains to implement the
-> feature in a consistent manner before we can use it.
->
-> I also don't see any RUST -mfentry support...
+  c2cda11cec4f ("mm: discard __GFP_ATOMIC")
 
-I think you are getting way too ahead.
+from the mm tree.
 
-Merging the Rust support now is meant to evaluate whether Rust _as a
-language_ makes sense for the kernel, whether we can write enough % of
-kernel code in the safe subset (and whether that brings enough
-advantages), etc.
+I fixed it up (I used the former version of this file and then
+applied the following merge resolution patch) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
 
-It is not meant to provide "day 1 support" for everything. In fact,
-getting merged now is what will allow to grow support for everything
-needed everywhere: not just in terms of compiler flags, faster
-integration of LLVM codegen/mitigation features in `rustc`, new
-frontends and backends (`rustc_codegen_gcc` and GCC Rust), etc.; but
-also within the kernel, in terms of safe abstractions for kernel APIs,
-kernel maintainers' experience with Rust, etc.
+=46rom 40347cfa3f5fe59fbf04be561c669f0dda06ea35 Mon Sep 17 00:00:00 2001
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Fri, 15 Jul 2022 21:09:09 +1000
+Subject: [PATCH] fix up for "headers/deps: mm: Split <linux/gfp_types.h> out
+ of <linux/gfp.h>"
 
+interacting with "mm: discard __GFP_ATOMIC"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ include/linux/gfp_types.h | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
+
+diff --git a/include/linux/gfp_types.h b/include/linux/gfp_types.h
+index d88c46ca82e1..5088637fe5c2 100644
+--- a/include/linux/gfp_types.h
++++ b/include/linux/gfp_types.h
+@@ -31,7 +31,7 @@ typedef unsigned int __bitwise gfp_t;
+ #define ___GFP_IO		0x40u
+ #define ___GFP_FS		0x80u
+ #define ___GFP_ZERO		0x100u
+-#define ___GFP_ATOMIC		0x200u
++/* 0x200u unused */
+ #define ___GFP_DIRECT_RECLAIM	0x400u
+ #define ___GFP_KSWAPD_RECLAIM	0x800u
+ #define ___GFP_WRITE		0x1000u
+@@ -116,11 +116,8 @@ typedef unsigned int __bitwise gfp_t;
+  *
+  * %__GFP_HIGH indicates that the caller is high-priority and that granting
+  * the request is necessary before the system can make forward progress.
+- * For example, creating an IO context to clean pages.
+- *
+- * %__GFP_ATOMIC indicates that the caller cannot reclaim or sleep and is
+- * high priority. Users are typically interrupt handlers. This may be
+- * used in conjunction with %__GFP_HIGH
++ * For example creating an IO context to clean pages and requests
++ * from atomic context.
+  *
+  * %__GFP_MEMALLOC allows access to all memory. This should only be used w=
+hen
+  * the caller guarantees the allocation will allow more memory to be freed
+@@ -135,7 +132,6 @@ typedef unsigned int __bitwise gfp_t;
+  * %__GFP_NOMEMALLOC is used to explicitly forbid access to emergency rese=
+rves.
+  * This takes precedence over the %__GFP_MEMALLOC flag if both are set.
+  */
+-#define __GFP_ATOMIC	((__force gfp_t)___GFP_ATOMIC)
+ #define __GFP_HIGH	((__force gfp_t)___GFP_HIGH)
+ #define __GFP_MEMALLOC	((__force gfp_t)___GFP_MEMALLOC)
+ #define __GFP_NOMEMALLOC ((__force gfp_t)___GFP_NOMEMALLOC)
+@@ -329,7 +325,7 @@ typedef unsigned int __bitwise gfp_t;
+  * version does not attempt reclaim/compaction at all and is by default us=
+ed
+  * in page fault path, while the non-light is used by khugepaged.
+  */
+-#define GFP_ATOMIC	(__GFP_HIGH|__GFP_ATOMIC|__GFP_KSWAPD_RECLAIM)
++#define GFP_ATOMIC	(__GFP_HIGH|__GFP_KSWAPD_RECLAIM)
+ #define GFP_KERNEL	(__GFP_RECLAIM | __GFP_IO | __GFP_FS)
+ #define GFP_KERNEL_ACCOUNT (GFP_KERNEL | __GFP_ACCOUNT)
+ #define GFP_NOWAIT	(__GFP_KSWAPD_RECLAIM)
+--=20
+2.35.1
+
+
+
+--=20
 Cheers,
-Miguel
+Stephen Rothwell
+
+--Sig_/bPTZjtBukofTM.KiApIwdMX
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLRTAEACgkQAVBC80lX
+0Gy49Af6A2F9dat4KXXGm3ecMouR8tOwjWvrlp47+EgVb8F0mXz9Y6uGHsIXqJ8V
+kV9pQffJhdszurmNXV5940BmdZ+n/5T9RoasK+xb1G7CIGv8ESJ0TG1mF53Rna4d
+ZwcS2KFskashx5YaCDKoXYsWdDOyq400jrg6nEfWmjSEVSjGxlxKYxJZXVun+YuG
+SIyfD++RN64mlXGuhQBdZ5U3/Mvd+rgI7deAmysHjgSz/UhQuBgOZwC9ywvq5t4+
+cD1cDu60Yb1/bmB/W+bLHJjDF6ICnl/5DUJSBXw7UfNaMJhuLCk4G5x8cUXc0g7f
+bvmEo0rtivSuVdzHfdKWw6MAmn8XMA==
+=Hm1y
+-----END PGP SIGNATURE-----
+
+--Sig_/bPTZjtBukofTM.KiApIwdMX--

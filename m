@@ -2,98 +2,106 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D33C578168
-	for <lists+linux-next@lfdr.de>; Mon, 18 Jul 2022 13:58:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A73D1578282
+	for <lists+linux-next@lfdr.de>; Mon, 18 Jul 2022 14:40:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229535AbiGRL6M (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 18 Jul 2022 07:58:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46484 "EHLO
+        id S234888AbiGRMko (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 18 Jul 2022 08:40:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233271AbiGRL6K (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 18 Jul 2022 07:58:10 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4943E237C7;
-        Mon, 18 Jul 2022 04:58:09 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id r14so16709273wrg.1;
-        Mon, 18 Jul 2022 04:58:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=N3LEH81Z25w75kV+BKHYA+LYSQZAx957Bu+2bYG4ops=;
-        b=f2Ylauvh+LZhPDoDV0x7o/4b3NjPF6l+FTWp1u596iItVQHpldDANBkygoG9Vc9z9I
-         zGPeLOWMfU1QwfH4BG1fkHWC0ww8chaq198Wj+tTYtdMT8BZU7g65Z4yO9mHJy5j+ZgF
-         Z7EYYLtJ+7b/Xab32Id0cpe8Nsgj9BUCr4uC/qluqirfKSSfkKGOKaqUOxwN41a3FQcD
-         mBbRTdxtbgXsw9Q+4il1OHhMmijNhLMA6fQDnThQyutB5QBPYa5T6ma99tja+DcbgzJ5
-         AM5fp9VW0Qm3mxdkvDC48036GkQ33skupdaYVyCPACrHLdnQAT0eNv8h8To7TBoDMngj
-         Nxug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=N3LEH81Z25w75kV+BKHYA+LYSQZAx957Bu+2bYG4ops=;
-        b=eYuTwmidC4NLyS/PkqNLSRsFw/qIVggSUgaJSsmUnPuLgGTp4XWjUWuFBmKkkGAKEv
-         82vBi2wkYj4t95jz7/Zwc+C0yr6pZ9dHB/WYqix4cxu2+c2wOzeESTOPkaZwNRZahD0z
-         j/RTxZcilr4IN+2sMG7SviY7Rjtw8I+7wOmTaKJgZw1uVS4kIEFuPgFdUue2bRLR83ak
-         33lzPSCdHCNaa4u7Fxd11Dsk2OvVDTBKlfEk3n3vJQkxgmKcJ7r5o0vjuoohTMq/c+mq
-         KMqeLXbsexOb8NGnhxrCrj1S69E/dAEOIvar+6q6H4lpZNR+oFLhleoDc0hrwvVBC9uQ
-         CIVA==
-X-Gm-Message-State: AJIora/HaDNuLrk424ZqeI5LI4U4GbwG48nIHF0opFf6Fr/66ICpfY2S
-        5PK9hXWGVjM7VeY2WupZ+nU=
-X-Google-Smtp-Source: AGRyM1tbXMbXFgcOTYytep8f60Khh9PMKb8fceNUgo0N+hmSdO6us7eiO9wjKnFwiGLp8fJ3kilKJw==
-X-Received: by 2002:a05:6000:887:b0:21e:24a0:f302 with SMTP id ca7-20020a056000088700b0021e24a0f302mr2105288wrb.466.1658145487767;
-        Mon, 18 Jul 2022 04:58:07 -0700 (PDT)
-Received: from debian ([167.98.27.226])
-        by smtp.gmail.com with ESMTPSA id j9-20020a05600c190900b003a2fde6ef62sm16198830wmq.7.2022.07.18.04.58.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 04:58:07 -0700 (PDT)
-Date:   Mon, 18 Jul 2022 12:58:05 +0100
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Richard Zhu <hongxing.zhu@nxp.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>, Krzysztof@debian,
-        =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
-Subject: build failure of next-20220718 due to 'imx6_pcie_host_exit' defined
- but not used
-Message-ID: <YtVKzW4vh1nRSqbx@debian>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S233786AbiGRMkn (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 18 Jul 2022 08:40:43 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AF5823B;
+        Mon, 18 Jul 2022 05:40:42 -0700 (PDT)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26ICax3G012712;
+        Mon, 18 Jul 2022 12:40:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=content-type :
+ mime-version : subject : from : in-reply-to : date : cc :
+ content-transfer-encoding : message-id : references : to; s=pp1;
+ bh=JaG6Jg1iP6JRc4hKh1yNH9brztMAziIq7oii+Ehcmso=;
+ b=Iv+zlpU9nKnXtVAlosoF3tmHH3RXqF1vWchRY5RK8JIsKv3LrMxZWCYarhe99tD8QGzc
+ HySx33eDaeUsYZLOLEnPOiSSWDsh0BpuSMiMx/P1w/2443tJy9mA5xUv76C9GvCoaDtW
+ iyUB2u9srF8Q7lYj+l2i1IWeA6y8VevxrXiRwZAVc+pUkFGyXr9sj8CGsffkjZ+VaRzz
+ KGYpxaphtLhnrd+ZkZU/H8slXH0fdkZCVeNa3yR6R3jgm9qa5YHuZWtH69asNjFTZ+zv
+ JozqQV1yJee9TC1amETHh6cb2W3ehNKsTTcG8hLK3ZiQ1Axhwa26F+zRAC49djC72exL Bw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hd7e9g8wy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 18 Jul 2022 12:40:38 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26ICbAjw014622;
+        Mon, 18 Jul 2022 12:40:38 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hd7e9g8vy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 18 Jul 2022 12:40:38 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26ICag54005548;
+        Mon, 18 Jul 2022 12:40:35 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma01fra.de.ibm.com with ESMTP id 3hbmy8tnq1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 18 Jul 2022 12:40:35 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26ICeXI424314162
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 18 Jul 2022 12:40:33 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2EDD35204E;
+        Mon, 18 Jul 2022 12:40:33 +0000 (GMT)
+Received: from smtpclient.apple (unknown [9.43.36.77])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id B6B7852054;
+        Mon, 18 Jul 2022 12:40:31 +0000 (GMT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
+Subject: Re: BUG xfs_buf while running tests/xfs/435 (next-20220715)
+From:   Sachin Sant <sachinp@linux.ibm.com>
+In-Reply-To: <20220718080112.GS3861211@dread.disaster.area>
+Date:   Mon, 18 Jul 2022 18:10:30 +0530
+Cc:     dchinner@redhat.com, linux-xfs@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-next@vger.kernel.org,
+        riteshh@linux.ibm.com
+Content-Transfer-Encoding: 7bit
+Message-Id: <E1661B4B-D2BF-465F-8C65-935909A2E527@linux.ibm.com>
+References: <C6CAF8E3-0447-465D-9C83-F55910739BE2@linux.ibm.com>
+ <20220718080112.GS3861211@dread.disaster.area>
+To:     Dave Chinner <david@fromorbit.com>
+X-Mailer: Apple Mail (2.3696.100.31)
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: eCQpeuJwX6uModo8laEmqGSYPLva-8U0
+X-Proofpoint-GUID: -CNcpwPBoqeeOP1paBfubOvzUqzKa_1v
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-18_11,2022-07-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
+ mlxlogscore=999 clxscore=1011 priorityscore=1501 phishscore=0
+ impostorscore=0 mlxscore=0 spamscore=0 lowpriorityscore=0 malwarescore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207180054
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi All,
 
-Not sure if it has been reported, builds of alpha, csky, xtensa, riscv, s390 allmodsconfig
-have failed to build next-20220718 with the error:
+> Fix it by removing the xfs_buf_init/terminate wrappers that just
+> allocate and destroy the xfs_buf slab, and move them to the same
+> place that all the other slab caches are set up and destroyed.
+> 
+> Reported-by: Sachin Sant <sachinp@linux.ibm.com>
+> Fixes: 298f34224506 ("xfs: lockless buffer lookup")
+> Signed-off-by: Dave Chinner <dchinner@redhat.com>
+> ---
 
+Thanks. The patch fixes the reported problem for me.
 
-drivers/pci/controller/dwc/pci-imx6.c:973:13: error: 'imx6_pcie_host_exit' defined but not used [-Werror=unused-function]
-  973 | static void imx6_pcie_host_exit(struct dw_pcie_rp *pp)
-      |             ^~~~~~~~~~~~~~~~~~~
-drivers/pci/controller/dwc/pci-imx6.c:904:13: error: 'imx6_pcie_stop_link' defined but not used [-Werror=unused-function]
-  904 | static void imx6_pcie_stop_link(struct dw_pcie *pci)
-      |             ^~~~~~~~~~~~~~~~~~~
+Tested-by: Sachin Sant <sachinp@linux.ibm.com>
 
-
---
-Regards
-Sudip
+- Sachin

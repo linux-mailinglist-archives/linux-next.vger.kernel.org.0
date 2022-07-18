@@ -2,129 +2,337 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E87E0577B03
-	for <lists+linux-next@lfdr.de>; Mon, 18 Jul 2022 08:32:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B691577CFB
+	for <lists+linux-next@lfdr.de>; Mon, 18 Jul 2022 10:01:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232841AbiGRGcG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 18 Jul 2022 02:32:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50114 "EHLO
+        id S231806AbiGRIBR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 18 Jul 2022 04:01:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230009AbiGRGcG (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 18 Jul 2022 02:32:06 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A850D15FFE;
-        Sun, 17 Jul 2022 23:32:04 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LmXDw4Nktz4xXF;
-        Mon, 18 Jul 2022 16:32:00 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1658125921;
-        bh=u4m9TJdNGX1rL5MkxVo3l4zbaNKUTaSl0NLh/x38pZ0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=J6inUyhj8DzDty0nBomKyDNb/oIMQD0x598HOXpeIIriEeKpeSn1MoHBL8JZ2rfkY
-         6WHUEntbqFrbtb2YhRZA/ULxpEW2yRO+seJmgIQrxTO9aA7rQkWSH3pWdxSSufdhSI
-         C4KIwYWILxEzhQsYaqEEXlGTArOUIzR6qkCTuQ9oPDullhrWIVg90Xa7eHj3GyoAgk
-         Yd4KtjHiDWPIpgqx87x9w7tcF9w1fHFhui96aiOridkPnx7Cuaci/ZkWrEyi1tj0vO
-         Z/zM4PyXsXUXGTSOOmvbNoKOvSGdOHxN8d+973AShF7CPKC6M/q6hQ4AcDtHYnrWFr
-         IIjCZh5D48uFg==
-Date:   Mon, 18 Jul 2022 16:31:58 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>, Benson Leung <bleung@google.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Prashant Malani <pmalani@chromium.org>,
-        Tzung-Bi Shih <tzungbi@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the usb tree
-Message-ID: <20220718163158.42176b4e@canb.auug.org.au>
+        with ESMTP id S230033AbiGRIBR (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 18 Jul 2022 04:01:17 -0400
+Received: from mail104.syd.optusnet.com.au (mail104.syd.optusnet.com.au [211.29.132.246])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E1FDAF5BB;
+        Mon, 18 Jul 2022 01:01:15 -0700 (PDT)
+Received: from dread.disaster.area (pa49-181-2-147.pa.nsw.optusnet.com.au [49.181.2.147])
+        by mail104.syd.optusnet.com.au (Postfix) with ESMTPS id 9D31C62C7A1;
+        Mon, 18 Jul 2022 18:01:14 +1000 (AEST)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1oDLgm-002IGb-SV; Mon, 18 Jul 2022 18:01:12 +1000
+Date:   Mon, 18 Jul 2022 18:01:12 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     Sachin Sant <sachinp@linux.ibm.com>
+Cc:     dchinner@redhat.com, linux-xfs@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-next@vger.kernel.org,
+        riteshh@linux.ibm.com
+Subject: Re: BUG xfs_buf while running tests/xfs/435 (next-20220715)
+Message-ID: <20220718080112.GS3861211@dread.disaster.area>
+References: <C6CAF8E3-0447-465D-9C83-F55910739BE2@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/oBci1lv=tF9l4LwqQdfysoa";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <C6CAF8E3-0447-465D-9C83-F55910739BE2@linux.ibm.com>
+X-Optus-CM-Score: 0
+X-Optus-CM-Analysis: v=2.4 cv=e9dl9Yl/ c=1 sm=1 tr=0 ts=62d5134b
+        a=ivVLWpVy4j68lT4lJFbQgw==:117 a=ivVLWpVy4j68lT4lJFbQgw==:17
+        a=kj9zAlcOel0A:10 a=RgO8CyIxsXoA:10 a=7-415B0cAAAA:8 a=20KFwNOVAAAA:8
+        a=VnNF1IyMAAAA:8 a=HLe1o-Eu0s_4hV-mcYgA:9 a=CjuIK1q_8ugA:10
+        a=biEYGPWJfzWAr4FL6Ov7:22
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/oBci1lv=tF9l4LwqQdfysoa
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Jul 18, 2022 at 12:01:53PM +0530, Sachin Sant wrote:
+> While running xfstests (specifically xfs/435) on a IBM Power server booted with
+> 5.19.0-rc6-next-20220715 following warnings are seen:
+> 
+> 
+> [  110.954136] XFS (sdb2): Unmounting Filesystem
+> [  110.968860] XFS (sdb1): Unmounting Filesystem
+> [  111.115807] =============================================================================
+> [  111.115817] BUG xfs_buf (Tainted: G            E     ): Objects remaining in xfs_buf on __kmem_cache_shutdown()
+> [  111.115824] -----------------------------------------------------------------------------
+> [  111.115824] 
+> [  111.115828] Slab 0x0000000074cdc09a objects=170 used=1 fp=0x000000005f24a5e1 flags=0x13ffff800000200(slab|node=1|zone=0|lastcpupid=0x7ffff)
+> [  111.115840] CPU: 26 PID: 4704 Comm: modprobe Tainted: G            E      5.19.0-rc6-next-20220715 #3
+> [  111.115849] Call Trace:
+> [  111.115852] [c00000002985b9a0] [c000000000830bec] dump_stack_lvl+0x70/0xa4 (unreliable)
+> [  111.115867] [c00000002985b9e0] [c0000000004ef6f8] slab_err+0xd8/0xf0
+> [  111.115877] [c00000002985bad0] [c0000000004f6cbc] __kmem_cache_shutdown+0x1fc/0x560
+> [  111.115884] [c00000002985bbf0] [c0000000004534c8] kmem_cache_destroy+0xa8/0x1f0
+> [  111.115893] [c00000002985bc80] [c00800000ccf30e4] xfs_buf_terminate+0x2c/0x48 [xfs]
+> [  111.115977] [c00000002985bca0] [c00800000cd6f55c] exit_xfs_fs+0x90/0x20b34 [xfs]
+> [  111.116045] [c00000002985bcd0] [c00000000023b7e0] sys_delete_module+0x1e0/0x3c0
+> [  111.116053] [c00000002985bdb0] [c00000000003302c] system_call_exception+0x17c/0x350
+> [  111.116062] [c00000002985be10] [c00000000000c53c] system_call_common+0xec/0x270
+> [  111.116070] --- interrupt: c00 at 0x7fff8c158b88
+> [  111.116075] NIP:  00007fff8c158b88 LR: 000000013adb0398 CTR: 0000000000000000
+> [  111.116080] REGS: c00000002985be80 TRAP: 0c00   Tainted: G            E       (5.19.0-rc6-next-20220715)
+> [  111.116086] MSR:  800000000280f033 <SF,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE>  CR: 24008282  XER: 00000000
+> [  111.116103] IRQMASK: 0 
+> [  111.116103] GPR00: 0000000000000081 00007ffffe17dff0 00007fff8c227300 000001003f2f0c18 
+> [  111.116103] GPR04: 0000000000000800 000000000000000a 1999999999999999 0000000000000000 
+> [  111.116103] GPR08: 00007fff8c1b7830 0000000000000000 0000000000000000 0000000000000000 
+> [  111.116103] GPR12: 0000000000000000 00007fff8c72ca50 000000013adba650 000000013adba648 
+> [  111.116103] GPR16: 0000000000000000 0000000000000001 0000000000000000 000000013adba428 
+> [  111.116103] GPR20: 000000013ade0068 0000000000000000 00007ffffe17f948 000001003f2f02a0 
+> [  111.116103] GPR24: 0000000000000000 00007ffffe17f948 000001003f2f0c18 0000000000000000 
+> [  111.116103] GPR28: 0000000000000000 000001003f2f0bb0 000001003f2f0c18 000001003f2f0bb0 
+> [  111.116162] NIP [00007fff8c158b88] 0x7fff8c158b88
+> [  111.116166] LR [000000013adb0398] 0x13adb0398
+> [  111.116170] --- interrupt: c00
+> [  111.116173] Disabling lock debugging due to kernel taint
+> [  111.116184] Object 0x000000007e079655 @offset=18816
+> [  111.116189] =============================================================================
+> [  111.116193] BUG xfs_buf (Tainted: G    B       E     ): Objects remaining in xfs_buf on __kmem_cache_shutdown()
+> [  111.116198] -----------------------------------------------------------------------------
+> [  111.116198] 
+> [  111.116202] Slab 0x000000008186f78a objects=170 used=12 fp=0x000000008233ac7d flags=0x13ffff800000200(slab|node=1|zone=0|lastcpupid=0x7ffff)
+> [  111.116210] CPU: 26 PID: 4704 Comm: modprobe Tainted: G    B       E      5.19.0-rc6-next-20220715 #3
+> [  111.116216] Call Trace:
+> [  111.116218] [c00000002985b9a0] [c000000000830bec] dump_stack_lvl+0x70/0xa4 (unreliable)
+> [  111.116227] [c00000002985b9e0] [c0000000004ef6f8] slab_err+0xd8/0xf0
+> [  111.116234] [c00000002985bad0] [c0000000004f6cbc] __kmem_cache_shutdown+0x1fc/0x560
+> [  111.116241] [c00000002985bbf0] [c0000000004534c8] kmem_cache_destroy+0xa8/0x1f0
+> [  111.116248] [c00000002985bc80] [c00800000ccf30e4] xfs_buf_terminate+0x2c/0x48 [xfs]
+> [  111.116312] [c00000002985bca0] [c00800000cd6f55c] exit_xfs_fs+0x90/0x20b34 [xfs]
+> [  111.116379] [c00000002985bcd0] [c00000000023b7e0] sys_delete_module+0x1e0/0x3c0
+> [  111.116386] [c00000002985bdb0] [c00000000003302c] system_call_exception+0x17c/0x350
+> [  111.116392] [c00000002985be10] [c00000000000c53c] system_call_common+0xec/0x270
+> [  111.116400] --- interrupt: c00 at 0x7fff8c158b88
+> [  111.116404] NIP:  00007fff8c158b88 LR: 000000013adb0398 CTR: 0000000000000000
+> [  111.116409] REGS: c00000002985be80 TRAP: 0c00   Tainted: G    B       E       (5.19.0-rc6-next-20220715)
+> [  111.116414] MSR:  800000000280f033 <SF,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE>  CR: 24008282  XER: 00000000
+> [  111.116430] IRQMASK: 0 
+> [  111.116430] GPR00: 0000000000000081 00007ffffe17dff0 00007fff8c227300 000001003f2f0c18 
+> [  111.116430] GPR04: 0000000000000800 000000000000000a 1999999999999999 0000000000000000 
+> [  111.116430] GPR08: 00007fff8c1b7830 0000000000000000 0000000000000000 0000000000000000 
+> [  111.116430] GPR12: 0000000000000000 00007fff8c72ca50 000000013adba650 000000013adba648 
+> [  111.116430] GPR16: 0000000000000000 0000000000000001 0000000000000000 000000013adba428 
+> [  111.116430] GPR20: 000000013ade0068 0000000000000000 00007ffffe17f948 000001003f2f02a0 
+> [  111.116430] GPR24: 0000000000000000 00007ffffe17f948 000001003f2f0c18 0000000000000000 
+> [  111.116430] GPR28: 0000000000000000 000001003f2f0bb0 000001003f2f0c18 000001003f2f0bb0 
+> [  111.116488] NIP [00007fff8c158b88] 0x7fff8c158b88
+> [  111.116492] LR [000000013adb0398] 0x13adb0398
+> [  111.116496] --- interrupt: c00
+> [  111.116504] Object 0x000000002b93c535 @offset=5376
+> [  111.116508] Object 0x000000009be4058b @offset=16896
+> [  111.116511] Object 0x00000000c1d5c895 @offset=24960
+> [  111.116515] Object 0x0000000097fb6f84 @offset=30336
+> [  111.116518] Object 0x00000000213fb535 @offset=43008
+> [  111.116521] Object 0x0000000045473fa3 @offset=43392
+> [  111.116525] Object 0x000000006462ef89 @offset=44160
+> [  111.116528] Object 0x000000000c85ce0b @offset=44544
+> [  111.116531] Object 0x0000000059166af4 @offset=45312
+> [  111.116535] Object 0x00000000e7b40b45 @offset=46848
+> [  111.116538] Object 0x00000000bc6ce716 @offset=54528
+> [  111.116541] Object 0x000000005f7be1fa @offset=64512
+> [  111.116546] ------------[ cut here ]------------
 
-Hi all,
+Yup, Darrick reported this once and couldn't reproduce it. We know
+it's a result of result of converting the xfs_buffer cache to
+rcu-protected lockless lookups and for some reason and the rcu
+callbacks that free these objects seem not to have been processed
+before the module is removed. We have an rcu_barrier() in
+xfs_destroy_caches() to avoid this ......
 
-After merging the usb tree, today's linux-next build (arm
-multi_v7_defconfig) failed like this:
+Wait. What is xfs_buf_terminate()? I don't recall that function....
 
-drivers/platform/chrome/cros_typec_switch.c: In function 'cros_typec_cmd_mu=
-x_set':
-drivers/platform/chrome/cros_typec_switch.c:52:16: error: implicit declarat=
-ion of function 'cros_ec_command'; did you mean 'cros_ec_cmd'? [-Werror=3Di=
-mplicit-function-declaration]
-   52 |         return cros_ec_command(sdata->ec, 0, EC_CMD_TYPEC_CONTROL, =
-&req,
-      |                ^~~~~~~~~~~~~~~
-      |                cros_ec_cmd
-drivers/platform/chrome/cros_typec_switch.c: In function 'cros_typec_regist=
-er_switches':
-drivers/platform/chrome/cros_typec_switch.c:244:23: error: implicit declara=
-tion of function 'acpi_evaluate_integer'; did you mean 'acpi_evaluate_objec=
-t'? [-Werror=3Dimplicit-function-declaration]
-  244 |                 ret =3D acpi_evaluate_integer(adev->handle, "_ADR",=
- NULL, &index);
-      |                       ^~~~~~~~~~~~~~~~~~~~~
-      |                       acpi_evaluate_object
-drivers/platform/chrome/cros_typec_switch.c:244:49: error: invalid use of u=
-ndefined type 'struct acpi_device'
-  244 |                 ret =3D acpi_evaluate_integer(adev->handle, "_ADR",=
- NULL, &index);
-      |                                                 ^~
+Yeah, there's the bug.
 
-Caused by commit
+exit_xfs_fs(void)
+{
+....
+        xfs_buf_terminate();
+        xfs_mru_cache_uninit();
+        xfs_destroy_workqueues();
+        xfs_destroy_caches();
+....
 
-  e54369058f3d ("platform/chrome: cros_typec_switch: Add switch driver")
+xfs_buf_terminate() calls kmem_cache_destroy() before the
+rcu_barrier() call in xfs_destroy_caches().....
 
-and commits
+Try the (slightly smoke tested only) patch below.
 
-  34f375f0fdf6 ("platform/chrome: cros_typec_switch: Set EC retimer")
-  bb53ad958012 ("platform/chrome: cros_typec_switch: Add event check")
-
-interacting with commit
-
-  b1d288d9c3c5 ("platform/chrome: cros_ec_proto: Rename cros_ec_command fun=
-ction")
-
-from the chrome-platform tree.
-
-I have used the usb tree from next-20220715 for today.
-
-I will fix up the cros_ec_command() rename with a merge fix patch after
-the apci usage problem is solved.
-
---=20
 Cheers,
-Stephen Rothwell
 
---Sig_/oBci1lv=tF9l4LwqQdfysoa
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+Dave.
+-- 
+Dave Chinner
+david@fromorbit.com
 
------BEGIN PGP SIGNATURE-----
+xfs: xfs_buf cache destroy isn't RCU safe
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLU/l4ACgkQAVBC80lX
-0Gy3vAgAir7AzgK6yRr7V0wPpHR/OguTKRvhjU5NoBbnJOs/BMuBDfrng9pa5TzO
-TZmL3sKBLLUMaKWY/ymKtr/h7MA3KXNw/x0W97aEx+z+yt5pHUlYRp7dPJwSjKFv
-g/tgSiOrgtruqHhboAEI+jQG9QiDN7OEoy+Z3WTHjC0XwSuQ27iXkSx/8o2SBSTI
-iAtvvTCSwUrs2gRt9Qvnft0iiksLy/2cKGOev1yB1gVl7rZ+CUrxxsvNIaPTaabZ
-bpcWap1XCHWL1GT3GU3jFBQZ1JCjrXmImwmrB2+fjvf3mHa/pZ01Yl2Tl9cXwvcD
-BLZt84tO7tesN0F36fzL1smYNlQTBQ==
-=KyZ5
------END PGP SIGNATURE-----
+From: Dave Chinner <dchinner@redhat.com>
 
---Sig_/oBci1lv=tF9l4LwqQdfysoa--
+Darrick and Sachin Sant reported that xfs/435 and xfs/436 would
+report an non-empty xfs_buf slab on module remove. This isn't easily
+to reproduce, but is clearly a side effect of converting the buffer
+caceh to RUC freeing and lockless lookups. Sachin bisected and
+Darrick hit it when testing the patchset directly.
+
+Turns out that the xfs_buf slab is not destroyed when all the other
+XFS slab caches are destroyed. Instead, it's got it's own little
+wrapper function that gets called separately, and so it doesn't have
+an rcu_barrier() call in it that is needed to drain all the rcu
+callbacks before the slab is destroyed.
+
+Fix it by removing the xfs_buf_init/terminate wrappers that just
+allocate and destroy the xfs_buf slab, and move them to the same
+place that all the other slab caches are set up and destroyed.
+
+Reported-by: Sachin Sant <sachinp@linux.ibm.com>
+Fixes: 298f34224506 ("xfs: lockless buffer lookup")
+Signed-off-by: Dave Chinner <dchinner@redhat.com>
+---
+ fs/xfs/xfs_buf.c   | 25 +------------------------
+ fs/xfs/xfs_buf.h   |  6 ++----
+ fs/xfs/xfs_super.c | 22 +++++++++++++---------
+ 3 files changed, 16 insertions(+), 37 deletions(-)
+
+diff --git a/fs/xfs/xfs_buf.c b/fs/xfs/xfs_buf.c
+index 4affba7c6669..f8bdc4698492 100644
+--- a/fs/xfs/xfs_buf.c
++++ b/fs/xfs/xfs_buf.c
+@@ -21,7 +21,7 @@
+ #include "xfs_error.h"
+ #include "xfs_ag.h"
+ 
+-static struct kmem_cache *xfs_buf_cache;
++struct kmem_cache *xfs_buf_cache;
+ 
+ /*
+  * Locking orders
+@@ -2300,29 +2300,6 @@ xfs_buf_delwri_pushbuf(
+ 	return error;
+ }
+ 
+-int __init
+-xfs_buf_init(void)
+-{
+-	xfs_buf_cache = kmem_cache_create("xfs_buf", sizeof(struct xfs_buf), 0,
+-					 SLAB_HWCACHE_ALIGN |
+-					 SLAB_RECLAIM_ACCOUNT |
+-					 SLAB_MEM_SPREAD,
+-					 NULL);
+-	if (!xfs_buf_cache)
+-		goto out;
+-
+-	return 0;
+-
+- out:
+-	return -ENOMEM;
+-}
+-
+-void
+-xfs_buf_terminate(void)
+-{
+-	kmem_cache_destroy(xfs_buf_cache);
+-}
+-
+ void xfs_buf_set_ref(struct xfs_buf *bp, int lru_ref)
+ {
+ 	/*
+diff --git a/fs/xfs/xfs_buf.h b/fs/xfs/xfs_buf.h
+index f65ef4d34ff7..04ff86a8eeef 100644
+--- a/fs/xfs/xfs_buf.h
++++ b/fs/xfs/xfs_buf.h
+@@ -15,6 +15,8 @@
+ #include <linux/uio.h>
+ #include <linux/list_lru.h>
+ 
++extern struct kmem_cache *xfs_buf_cache;
++
+ /*
+  *	Base types
+  */
+@@ -307,10 +309,6 @@ extern int xfs_buf_delwri_submit(struct list_head *);
+ extern int xfs_buf_delwri_submit_nowait(struct list_head *);
+ extern int xfs_buf_delwri_pushbuf(struct xfs_buf *, struct list_head *);
+ 
+-/* Buffer Daemon Setup Routines */
+-extern int xfs_buf_init(void);
+-extern void xfs_buf_terminate(void);
+-
+ static inline xfs_daddr_t xfs_buf_daddr(struct xfs_buf *bp)
+ {
+ 	return bp->b_maps[0].bm_bn;
+diff --git a/fs/xfs/xfs_super.c b/fs/xfs/xfs_super.c
+index 4edee1d3784a..3d27ba1295c9 100644
+--- a/fs/xfs/xfs_super.c
++++ b/fs/xfs/xfs_super.c
+@@ -1967,11 +1967,19 @@ xfs_init_caches(void)
+ {
+ 	int		error;
+ 
++	xfs_buf_cache = kmem_cache_create("xfs_buf", sizeof(struct xfs_buf), 0,
++					 SLAB_HWCACHE_ALIGN |
++					 SLAB_RECLAIM_ACCOUNT |
++					 SLAB_MEM_SPREAD,
++					 NULL);
++	if (!xfs_buf_cache)
++		goto out;
++
+ 	xfs_log_ticket_cache = kmem_cache_create("xfs_log_ticket",
+ 						sizeof(struct xlog_ticket),
+ 						0, 0, NULL);
+ 	if (!xfs_log_ticket_cache)
+-		goto out;
++		goto out_destroy_buf_cache;
+ 
+ 	error = xfs_btree_init_cur_caches();
+ 	if (error)
+@@ -2145,6 +2153,8 @@ xfs_init_caches(void)
+ 	xfs_btree_destroy_cur_caches();
+  out_destroy_log_ticket_cache:
+ 	kmem_cache_destroy(xfs_log_ticket_cache);
++ out_destroy_buf_cache:
++	kmem_cache_destroy(xfs_buf_cache);
+  out:
+ 	return -ENOMEM;
+ }
+@@ -2178,6 +2188,7 @@ xfs_destroy_caches(void)
+ 	xfs_defer_destroy_item_caches();
+ 	xfs_btree_destroy_cur_caches();
+ 	kmem_cache_destroy(xfs_log_ticket_cache);
++	kmem_cache_destroy(xfs_buf_cache);
+ }
+ 
+ STATIC int __init
+@@ -2283,13 +2294,9 @@ init_xfs_fs(void)
+ 	if (error)
+ 		goto out_destroy_wq;
+ 
+-	error = xfs_buf_init();
+-	if (error)
+-		goto out_mru_cache_uninit;
+-
+ 	error = xfs_init_procfs();
+ 	if (error)
+-		goto out_buf_terminate;
++		goto out_mru_cache_uninit;
+ 
+ 	error = xfs_sysctl_register();
+ 	if (error)
+@@ -2346,8 +2353,6 @@ init_xfs_fs(void)
+ 	xfs_sysctl_unregister();
+  out_cleanup_procfs:
+ 	xfs_cleanup_procfs();
+- out_buf_terminate:
+-	xfs_buf_terminate();
+  out_mru_cache_uninit:
+ 	xfs_mru_cache_uninit();
+  out_destroy_wq:
+@@ -2373,7 +2378,6 @@ exit_xfs_fs(void)
+ 	kset_unregister(xfs_kset);
+ 	xfs_sysctl_unregister();
+ 	xfs_cleanup_procfs();
+-	xfs_buf_terminate();
+ 	xfs_mru_cache_uninit();
+ 	xfs_destroy_workqueues();
+ 	xfs_destroy_caches();

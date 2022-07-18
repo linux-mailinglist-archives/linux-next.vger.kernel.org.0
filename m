@@ -2,133 +2,104 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8733577D86
-	for <lists+linux-next@lfdr.de>; Mon, 18 Jul 2022 10:30:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 548EA577DCB
+	for <lists+linux-next@lfdr.de>; Mon, 18 Jul 2022 10:43:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233852AbiGRIaI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 18 Jul 2022 04:30:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37722 "EHLO
+        id S233994AbiGRIn0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 18 Jul 2022 04:43:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233813AbiGRIaF (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 18 Jul 2022 04:30:05 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 940721900E;
-        Mon, 18 Jul 2022 01:30:03 -0700 (PDT)
+        with ESMTP id S233926AbiGRInZ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 18 Jul 2022 04:43:25 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06D08192A7;
+        Mon, 18 Jul 2022 01:43:24 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LmZs31zTwz4xXD;
-        Mon, 18 Jul 2022 18:29:59 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Lmb8R6wRlz4xQt;
+        Mon, 18 Jul 2022 18:43:19 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1658133002;
-        bh=54kmAmnoYCcxmNMinGjy12Hzym0v8NfrO5fwMD3Ehzg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=WoOiYyczHtsedefj+PjZBGY/94UkOX3jKM+OT92vjzDcIPHN7bsSIo5e0eCwLAU2O
-         SIK63mJ7knOy+Ac9o963m1jqcIzfH5VwgrMhuwyF1YHtGRzaoihBSH4Avlopyv/Ast
-         fapsoC2bKJcce+GopXnw+y+PmxdrR57otjtcqQSHI3dLIzl7Mj/ldgfnwZ1BJvPYCX
-         hYgGQFcxVmyjI74xCj9R/yADGplvS6Ie1JhnGlTErLkLnkMPd8QIU7uUh9ziVZ/H6E
-         +ekLgvvv9ueegbzq1xMZX47lFsSQfCM4DU1W3N7Q8GQjFQABHKP/3WOc0/YXP6TEIj
-         vjlvrKPP64PrA==
-Date:   Mon, 18 Jul 2022 18:29:55 +1000
+        s=201702; t=1658133801;
+        bh=aXwcZQse9JvHSKXL22foLYLTQbulhGvhqdMm2a2O3Bg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=MqMyyMPiCO+4WBCLL3ucYNF7VXE+y2mhXmc372hIEC6CY6EzInpXg4ApFYEr3fuB3
+         8X6XcCHvecqCuX1vM8geFZ05FX/oWe7rMKtJPXZIRnWPb+UPRp+cQ0m3zvZEz0vXpC
+         Xd6fZklFN09iU0lfylyXWdC7PdhMmitGD2wIk0yOJXXY6N+ky99ent9GeL1+YFaHaR
+         OStlXZePqpIqCzQj1iO2hrnmafJw7zyumugYLnX1dM4NNDKHpZoL1kRKA3fwzOJ35K
+         HogMJdBAsej2HFE3D0NS4VSTZ1PhjgDNKiiR9h67515oPw1Bv9nqvfyDufzprnTCt1
+         CLEe1NW2aGmKA==
+Date:   Mon, 18 Jul 2022 18:43:18 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>,
-        Takashi Iwai <tiwai@suse.de>
-Cc:     Vinod Koul <vkoul@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
+To:     Theodore Ts'o <tytso@mit.edu>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Subject: Re: linux-next: manual merge of the soundwire tree with the
- sound-asoc tree
-Message-ID: <20220718182955.050c9678@canb.auug.org.au>
-In-Reply-To: <20220707152831.57f1e92d@canb.auug.org.au>
-References: <20220707152831.57f1e92d@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the random tree with the arm64 tree
+Message-ID: <20220718184318.25d75848@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ghlKLIEbt8+jgZxf19MZ0ir";
+Content-Type: multipart/signed; boundary="Sig_/Exd8vzD_W6MX5oj.bTwiiWK";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/ghlKLIEbt8+jgZxf19MZ0ir
+--Sig_/Exd8vzD_W6MX5oj.bTwiiWK
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Thu, 7 Jul 2022 15:28:31 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->=20
-> Today's linux-next merge of the soundwire tree got a conflict in:
->=20
->   drivers/soundwire/intel.c
->=20
-> between commit:
->=20
->   ca68202098a4 ("soundwire: intel: Migrate to new style legacy DAI naming=
- flag")
->=20
-> from the sound-asoc tree and commit:
->=20
->   3e9c9f90573f ("soundwire: intel: use pm_runtime_resume() on component p=
-robe")
->=20
-> from the soundwire tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->=20
->=20
-> diff --cc drivers/soundwire/intel.c
-> index 0268fa527c0c,95ce292994cc..000000000000
-> --- a/drivers/soundwire/intel.c
-> +++ b/drivers/soundwire/intel.c
-> @@@ -1097,9 -1114,9 +1114,10 @@@ static const struct snd_soc_dai_ops int
->   };
->  =20
->   static const struct snd_soc_component_driver dai_component =3D {
->  -	.name           =3D "soundwire",
->  -	.probe		=3D intel_component_probe,
->  -	.suspend	=3D intel_component_dais_suspend
->  +	.name			=3D "soundwire",
-> ++	.probe			=3D intel_component_probe,
->  +	.suspend		=3D intel_component_dais_suspend,
->  +	.legacy_dai_naming	=3D 1,
->   };
->  =20
->   static int intel_create_dai(struct sdw_cdns *cdns,
+Today's linux-next merge of the random tree got a conflict in:
 
-This is now a conflict between the char-misc tree and the sound tree.
+  arch/arm64/kernel/kaslr.c
+
+between commit:
+
+  fc5a89f75d2a ("arm64: kaslr: defer initialization to initcall where permi=
+tted")
+
+from the arm64 tree and commit:
+
+  29abd7758699 ("random: handle archrandom in plural words")
+
+from the random tree.
+
+I fixed it up (the former has removed tha call to
+arch_get_random_seed_words_early() that is updated in the latter) and
+can carry the fix as necessary. This is now fixed as far as linux-next
+is concerned, but any non trivial conflicts should be mentioned to your
+upstream maintainer when your tree is submitted for merging.  You may
+also want to consider cooperating with the maintainer of the conflicting
+tree to minimise any particularly complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/ghlKLIEbt8+jgZxf19MZ0ir
+--Sig_/Exd8vzD_W6MX5oj.bTwiiWK
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLVGgMACgkQAVBC80lX
-0GwvMAf+IAR1mGrjma/53li8iAr9U1sacxSzVcLPktLrGE9lwCCtsXSQcuMjCCay
-6s3f4gzVUOSbl6sh7xWfXn5AP31tF1+8b4MWvBRn3umnvpi2O18d7FoiFPwmQGs2
-XN8rra0dMwFDaA4oKx5/c0PAj++4Ruet/2OfJHd0rWlQkHRiSjEHTYMj+uFhJY4E
-zWpiAGLn7pk3Jrn5gYydbCJ+bXOMadThbyzfOqoxKOBmLEyT7pyk+Vy45XngOmwI
-UboLcpKBcCpIxAjX7EIUnIxhnehRK/u0xYxFcgLXW6mCBo9YRdoeznWxFdTMnttl
-Eprupbh7xi66eb3HLC0pipcjsex4iQ==
-=hdGA
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLVHSYACgkQAVBC80lX
+0Gyx+Af/c+NsnChpMNGKzfd2hlBsaJ/+6UIos2H9L4za1TGLwI2dAQkYqBe5GMNP
+pW4HibdyneuIAYVD2X7xD9+bvgpZGdslLSXQQHnhepREAa8wenlRaZbgMjCbEdYm
+gj0NE3gkJ6gaXVd8c73vrQ5kL8xGRXNfcIGeiuH/W1qa5IVtIWo1tY4RR+oUUd94
++oExrvP64j59MX1CzlUXzi+vqwOgu13/JMVKW/cWOwlyRElxmrIYcrnQ5xHkvF3w
+Ye+KzyVMagjTAgTvl/saIcAWvUjQ1hsFvUMbDLwFcWQTpfKMsVYhxlDc50twdr7p
+i4hsUpnMikEgL0dTO5N7u0rpXdzagw==
+=ngz3
 -----END PGP SIGNATURE-----
 
---Sig_/ghlKLIEbt8+jgZxf19MZ0ir--
+--Sig_/Exd8vzD_W6MX5oj.bTwiiWK--

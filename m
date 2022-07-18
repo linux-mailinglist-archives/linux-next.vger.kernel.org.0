@@ -2,52 +2,51 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCB385779AD
-	for <lists+linux-next@lfdr.de>; Mon, 18 Jul 2022 04:59:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32853577A37
+	for <lists+linux-next@lfdr.de>; Mon, 18 Jul 2022 06:58:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbiGRC7j (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 17 Jul 2022 22:59:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44228 "EHLO
+        id S230264AbiGRE6z (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 18 Jul 2022 00:58:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbiGRC7i (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 17 Jul 2022 22:59:38 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F104564FC;
-        Sun, 17 Jul 2022 19:59:36 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LmRWp6fy7z4xRC;
-        Mon, 18 Jul 2022 12:59:34 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1658113175;
-        bh=hDqWNclrxQIfskRhwBQjED7wen2Ep/lOsTe72198r+w=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=R/BzEbtj+86Wi/0t/msPANbdabvHY/JnRruaQP5FWuFbKP63bSFJCfAC1GJvqVFsl
-         L9TpS6iDXgEUW4jdPDUsJ2p0LBHZEFGdz+ZQk+tYkRDW9+tpiKJQvHwHt6c4biqOIk
-         x9SfXY4HWoQKnhYc492bw8F+6eogOlYKc/o3mB/+dJr0smX2xMRbWWg5UhVpWhyXLK
-         NifnGcWRsdasEdOHtvTnt+7GTFZxMj518LiZSnsb3rPJRUDm7QGLEe4DPB20G2DdJp
-         kHSPiGGyZ5KVfGLjcmD8ZgPtKei+I/M0s9ZOWzFoZvUtCKsSR+7fVqDa1XV7cS1d8r
-         SYsRxq/pAqzgA==
-Date:   Mon, 18 Jul 2022 12:59:32 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Al Viro <viro@zeniv.linux.org.uk>
+        with ESMTP id S232254AbiGRE6y (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 18 Jul 2022 00:58:54 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1134F25D7;
+        Sun, 17 Jul 2022 21:58:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=W66coHcVdjK50SJBSuDMbFx2/ta/bas/nj0lKOZUgsY=; b=sxiN0G5WAm3RnA2kEZVH04D2/t
+        DavaD2WsQTBonXYIWFGQjiaPXjOpXRsxV+w/bIwwt/6TftC+UPgA0h1AgCxkIVfumzVyb6HeMgCkd
+        vK3sMcUBVvp3n9AQqit0pg6on0jZWA3cZ9K1DiXAhLD6BG1z3spqVLq4IAjQXOZ6+wQlKiynodZxi
+        knQ8OBOhVJ+ojPaZ2O97N9pclF7/EilHOaNSf+Nwx5cFBGkESXQYtItEy+HeQSOTSdL8ogqtuSsvQ
+        MqIHfHVunxzMoBGETmnemA/vxJZwwgnzRXvvFTGwF4XOU6TbKbcye70lZaxpLDC2BjykZL/0fy2IC
+        99nB/5Iw==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
+        id 1oDIq4-00D8QI-9b;
+        Mon, 18 Jul 2022 04:58:36 +0000
+Date:   Mon, 18 Jul 2022 05:58:36 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Jens Axboe <axboe@kernel.dk>, Keith Busch <kbusch@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
 Subject: Re: linux-next: manual merge of the block tree with the vfs tree
-Message-ID: <20220718125932.1ab89122@canb.auug.org.au>
-In-Reply-To: <YtC9AgqezKXuUoy6@ZenIV>
+Message-ID: <YtTofKIkWU4eXvoK@ZenIV>
 References: <20220714120840.1e1f8c63@canb.auug.org.au>
-        <0904ae71-972f-f183-f295-bce3b8518fcf@kernel.dk>
-        <YtC6SUmyaCSKe2HX@ZenIV>
-        <YtC9AgqezKXuUoy6@ZenIV>
+ <0904ae71-972f-f183-f295-bce3b8518fcf@kernel.dk>
+ <YtC6SUmyaCSKe2HX@ZenIV>
+ <YtC9AgqezKXuUoy6@ZenIV>
+ <20220718125932.1ab89122@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/c3OrDG6utUWNfF7eydkpohV";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220718125932.1ab89122@canb.auug.org.au>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,47 +54,28 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/c3OrDG6utUWNfF7eydkpohV
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Jul 18, 2022 at 12:59:32PM +1000, Stephen Rothwell wrote:
+> Hi Al,
+> 
+> On Fri, 15 Jul 2022 02:04:02 +0100 Al Viro <viro@zeniv.linux.org.uk> wrote:
+> >
+> > On Fri, Jul 15, 2022 at 01:52:25AM +0100, Al Viro wrote:
+> > 
+> > > Ones from Keith's branch - #alignment-fixes-rebased in there.  Looks like
+> > > one of the commits in it got changed since then - the difference in
+> > > __bio_iov_iter_get_pages() (unsigned int i initialization).
+> > > 
+> > > Sigh...  I'll rebase on top of that.  
+> > 
+> > Rebased and pushed out (with copy_pipe_to_iter() fix folded in as well)
+> 
+> BTW, these still cause a conflict.  As long as you are sharing patches
+> (and then adding changes to the same areas), there will be conflicts.
+> You need to share commits i.e. a shared branch.
 
-Hi Al,
+Sigh...  That was (and is) a branch form Keith's tree.  Commits in block
+tree are, AFAICS, cherry-picked from it, with lore links and Jens' s-o-b
+added.
 
-On Fri, 15 Jul 2022 02:04:02 +0100 Al Viro <viro@zeniv.linux.org.uk> wrote:
->
-> On Fri, Jul 15, 2022 at 01:52:25AM +0100, Al Viro wrote:
->=20
-> > Ones from Keith's branch - #alignment-fixes-rebased in there.  Looks li=
-ke
-> > one of the commits in it got changed since then - the difference in
-> > __bio_iov_iter_get_pages() (unsigned int i initialization).
-> >=20
-> > Sigh...  I'll rebase on top of that. =20
->=20
-> Rebased and pushed out (with copy_pipe_to_iter() fix folded in as well)
-
-BTW, these still cause a conflict.  As long as you are sharing patches
-(and then adding changes to the same areas), there will be conflicts.
-You need to share commits i.e. a shared branch.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/c3OrDG6utUWNfF7eydkpohV
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLUzJQACgkQAVBC80lX
-0GwltAgAlbfgnNkfoM9Zq4GFya0yXAGAQhfJVDrrymIwCL7wiMLa3B2iEosBQD5z
-NIi/4zipJUQEkRi5AGDu8xfdFaqy0J/bADsfjg18yU0m32Jj3dEac3HMSziGVJFV
-TRuwErpOoVpo9wIyaPNMtWX1w8KXXREQixJY5UDl3Y4wegDhNEW24tbHuISQasJG
-pRU2c0XLW8sjw0QW2FsQYfdh3SkyTeX1z8l6wgsJfu87R+0Z3iiLVpJXrh9lU55c
-tooTMXKIFijHeIa7WhoeE0+PNL5czM33W1NJiOtng350A3txbBDqnavVF5zL1l9+
-eZ8g2WjOQV/K3wz4YOFA0A1wfISDcw==
-=znXe
------END PGP SIGNATURE-----
-
---Sig_/c3OrDG6utUWNfF7eydkpohV--
+I'm fine with using that, just tell me how to refer to the branch in
+question.  Jens?

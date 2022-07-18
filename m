@@ -2,80 +2,144 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32853577A37
-	for <lists+linux-next@lfdr.de>; Mon, 18 Jul 2022 06:58:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31978577A4F
+	for <lists+linux-next@lfdr.de>; Mon, 18 Jul 2022 07:19:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230264AbiGRE6z (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 18 Jul 2022 00:58:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57854 "EHLO
+        id S230218AbiGRFTg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 18 Jul 2022 01:19:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232254AbiGRE6y (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 18 Jul 2022 00:58:54 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1134F25D7;
-        Sun, 17 Jul 2022 21:58:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=W66coHcVdjK50SJBSuDMbFx2/ta/bas/nj0lKOZUgsY=; b=sxiN0G5WAm3RnA2kEZVH04D2/t
-        DavaD2WsQTBonXYIWFGQjiaPXjOpXRsxV+w/bIwwt/6TftC+UPgA0h1AgCxkIVfumzVyb6HeMgCkd
-        vK3sMcUBVvp3n9AQqit0pg6on0jZWA3cZ9K1DiXAhLD6BG1z3spqVLq4IAjQXOZ6+wQlKiynodZxi
-        knQ8OBOhVJ+ojPaZ2O97N9pclF7/EilHOaNSf+Nwx5cFBGkESXQYtItEy+HeQSOTSdL8ogqtuSsvQ
-        MqIHfHVunxzMoBGETmnemA/vxJZwwgnzRXvvFTGwF4XOU6TbKbcye70lZaxpLDC2BjykZL/0fy2IC
-        99nB/5Iw==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
-        id 1oDIq4-00D8QI-9b;
-        Mon, 18 Jul 2022 04:58:36 +0000
-Date:   Mon, 18 Jul 2022 05:58:36 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Jens Axboe <axboe@kernel.dk>, Keith Busch <kbusch@kernel.org>,
+        with ESMTP id S229680AbiGRFTf (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 18 Jul 2022 01:19:35 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADACC6323;
+        Sun, 17 Jul 2022 22:19:33 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LmVdH5dVyz4xbm;
+        Mon, 18 Jul 2022 15:19:31 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1658121572;
+        bh=B7cpHjbt5kcRv7FMz00EwdlkBbUF2kDdSz8ilusmmfg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=haMct5wFAsJuiog/mdopFUDOhVUSoPypTiwnZyMi9C5NP4iMucfGf213TB3DLitdq
+         WwJNLA8giKDRAZWsa5Hf4vQySnvtuPkJ4OSMxcLRt3SuCRvNeNl4XwUtQUXFRaOF5y
+         RG1G15RxeJ9XlpXrbJ5IubSHYhqFx1/ovnw93c+FrBuHFEXhPcdAO5tQs9qv4+Uz0+
+         rHV/NI5+3q2F/gYJbDAKD9Qyr/KXOaJ36LvO1ZRCngn11NtwLfSvv+VSFzeY3Nu8SZ
+         GKNVB0KmPayU5t3HzIHfQaob1ljqL55do+v5DMrICA70KKmDoSMwKyvboKOngDcEI+
+         i9wjjbIJowkfg==
+Date:   Mon, 18 Jul 2022 15:19:30 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Christoffer Dall <cdall@cs.columbia.edu>,
+        Marc Zyngier <maz@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     KVM <kvm@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the block tree with the vfs tree
-Message-ID: <YtTofKIkWU4eXvoK@ZenIV>
-References: <20220714120840.1e1f8c63@canb.auug.org.au>
- <0904ae71-972f-f183-f295-bce3b8518fcf@kernel.dk>
- <YtC6SUmyaCSKe2HX@ZenIV>
- <YtC9AgqezKXuUoy6@ZenIV>
- <20220718125932.1ab89122@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Sean Christopherson <seanjc@google.com>
+Subject: linux-next: manual merge of the kvm-arm tree with the kvm tree
+Message-ID: <20220718151930.42ae670f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220718125932.1ab89122@canb.auug.org.au>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/hjS3Ic2IcCL1BS9qDRACH88";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 12:59:32PM +1000, Stephen Rothwell wrote:
-> Hi Al,
-> 
-> On Fri, 15 Jul 2022 02:04:02 +0100 Al Viro <viro@zeniv.linux.org.uk> wrote:
-> >
-> > On Fri, Jul 15, 2022 at 01:52:25AM +0100, Al Viro wrote:
-> > 
-> > > Ones from Keith's branch - #alignment-fixes-rebased in there.  Looks like
-> > > one of the commits in it got changed since then - the difference in
-> > > __bio_iov_iter_get_pages() (unsigned int i initialization).
-> > > 
-> > > Sigh...  I'll rebase on top of that.  
-> > 
-> > Rebased and pushed out (with copy_pipe_to_iter() fix folded in as well)
-> 
-> BTW, these still cause a conflict.  As long as you are sharing patches
-> (and then adding changes to the same areas), there will be conflicts.
-> You need to share commits i.e. a shared branch.
+--Sig_/hjS3Ic2IcCL1BS9qDRACH88
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Sigh...  That was (and is) a branch form Keith's tree.  Commits in block
-tree are, AFAICS, cherry-picked from it, with lore links and Jens' s-o-b
-added.
+Hi all,
 
-I'm fine with using that, just tell me how to refer to the branch in
-question.  Jens?
+Today's linux-next merge of the kvm-arm tree got a conflict in:
+
+  tools/testing/selftests/kvm/aarch64/vgic_init.c
+
+between commits:
+
+  98f94ce42ac6 ("KVM: selftests: Move KVM_CREATE_DEVICE_TEST code to separa=
+te helper")
+  7ed397d107d4 ("KVM: selftests: Add TEST_REQUIRE macros to reduce skipping=
+ copy+paste")
+
+from the kvm tree and commit:
+
+  6a4f7fcd7504 ("KVM: arm64: selftests: Add support for GICv2 on v3")
+
+from the kvm-arm tree.
+
+I fixed it up (I think, see below) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc tools/testing/selftests/kvm/aarch64/vgic_init.c
+index e8cab9840aa3,21ba4002fc18..000000000000
+--- a/tools/testing/selftests/kvm/aarch64/vgic_init.c
++++ b/tools/testing/selftests/kvm/aarch64/vgic_init.c
+@@@ -661,9 -668,9 +661,9 @@@ int test_kvm_device(uint32_t gic_dev_ty
+  	other =3D VGIC_DEV_IS_V2(gic_dev_type) ? KVM_DEV_TYPE_ARM_VGIC_V3
+  					     : KVM_DEV_TYPE_ARM_VGIC_V2;
+ =20
+ -	if (!_kvm_create_device(v.vm, other, true, &fd)) {
+ -		ret =3D _kvm_create_device(v.vm, other, false, &fd);
+ +	if (!__kvm_test_create_device(v.vm, other)) {
+ +		ret =3D __kvm_test_create_device(v.vm, other);
+- 		TEST_ASSERT(ret && errno =3D=3D EINVAL,
++ 		TEST_ASSERT(ret && (errno =3D=3D EINVAL || errno =3D=3D EEXIST),
+  				"create GIC device while other version exists");
+  	}
+ =20
+@@@ -703,9 -711,15 +704,13 @@@ int main(int ac, char **av
+  	}
+ =20
+  	ret =3D test_kvm_device(KVM_DEV_TYPE_ARM_VGIC_V2);
+- 	__TEST_REQUIRE(!ret, "No GICv2 nor GICv3 support");
++ 	if (!ret) {
++ 		pr_info("Running GIC_v2 tests.\n");
++ 		run_tests(KVM_DEV_TYPE_ARM_VGIC_V2);
++ 		cnt_impl++;
++ 	}
++=20
+ -	if (!cnt_impl) {
+ -		print_skip("No GICv2 nor GICv3 support");
+ -		exit(KSFT_SKIP);
+ -	}
+++	__TEST_REQUIRE(!cnt_impl, "No GICv2 nor GICv3 support");
+ +
+- 	pr_info("Running GIC_v2 tests.\n");
+- 	run_tests(KVM_DEV_TYPE_ARM_VGIC_V2);
+  	return 0;
+  }
+
+--Sig_/hjS3Ic2IcCL1BS9qDRACH88
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLU7WIACgkQAVBC80lX
+0Gwd5QgAlVWVIOS4ZLrhgdVmGIL/iLZEuoWSNuNv1NJbm3iQmUKmdVZi1wXqRyAe
+caXEN62U4PSiPAD+Jr4eK0w/CnIe4A74y9bo/pLM8C3T6Lx/A4jaxDqEDmqzdV7v
+2e+C9DHmjdZBT2TFGIkcNuPGUI0ZMMwe060phjFSExenEz6ssDji+UAayjSX44fb
+Y11euD+Vpy/yrjooljP/YPIA4KEEN0SxjSHKf/wWYiVKyOH+//UjcGP8dlRQfgCg
+fWG8g8SHsa18kClp2lRtvbozi1EUxz5lJarIHjkGCF3VX3m2CLXsiap59odKxEIl
+Y0qIvpMhZ4jRJBH37JGceAu40GgN5g==
+=6Ygb
+-----END PGP SIGNATURE-----
+
+--Sig_/hjS3Ic2IcCL1BS9qDRACH88--

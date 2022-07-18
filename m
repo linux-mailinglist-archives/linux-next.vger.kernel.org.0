@@ -2,106 +2,104 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A73D1578282
-	for <lists+linux-next@lfdr.de>; Mon, 18 Jul 2022 14:40:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CED08578288
+	for <lists+linux-next@lfdr.de>; Mon, 18 Jul 2022 14:42:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234888AbiGRMko (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 18 Jul 2022 08:40:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59676 "EHLO
+        id S234981AbiGRMmi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 18 Jul 2022 08:42:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233786AbiGRMkn (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 18 Jul 2022 08:40:43 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AF5823B;
-        Mon, 18 Jul 2022 05:40:42 -0700 (PDT)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26ICax3G012712;
-        Mon, 18 Jul 2022 12:40:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=content-type :
- mime-version : subject : from : in-reply-to : date : cc :
- content-transfer-encoding : message-id : references : to; s=pp1;
- bh=JaG6Jg1iP6JRc4hKh1yNH9brztMAziIq7oii+Ehcmso=;
- b=Iv+zlpU9nKnXtVAlosoF3tmHH3RXqF1vWchRY5RK8JIsKv3LrMxZWCYarhe99tD8QGzc
- HySx33eDaeUsYZLOLEnPOiSSWDsh0BpuSMiMx/P1w/2443tJy9mA5xUv76C9GvCoaDtW
- iyUB2u9srF8Q7lYj+l2i1IWeA6y8VevxrXiRwZAVc+pUkFGyXr9sj8CGsffkjZ+VaRzz
- KGYpxaphtLhnrd+ZkZU/H8slXH0fdkZCVeNa3yR6R3jgm9qa5YHuZWtH69asNjFTZ+zv
- JozqQV1yJee9TC1amETHh6cb2W3ehNKsTTcG8hLK3ZiQ1Axhwa26F+zRAC49djC72exL Bw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hd7e9g8wy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 18 Jul 2022 12:40:38 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26ICbAjw014622;
-        Mon, 18 Jul 2022 12:40:38 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hd7e9g8vy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 18 Jul 2022 12:40:38 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26ICag54005548;
-        Mon, 18 Jul 2022 12:40:35 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma01fra.de.ibm.com with ESMTP id 3hbmy8tnq1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 18 Jul 2022 12:40:35 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26ICeXI424314162
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 18 Jul 2022 12:40:33 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2EDD35204E;
-        Mon, 18 Jul 2022 12:40:33 +0000 (GMT)
-Received: from smtpclient.apple (unknown [9.43.36.77])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id B6B7852054;
-        Mon, 18 Jul 2022 12:40:31 +0000 (GMT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
-Subject: Re: BUG xfs_buf while running tests/xfs/435 (next-20220715)
-From:   Sachin Sant <sachinp@linux.ibm.com>
-In-Reply-To: <20220718080112.GS3861211@dread.disaster.area>
-Date:   Mon, 18 Jul 2022 18:10:30 +0530
-Cc:     dchinner@redhat.com, linux-xfs@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-next@vger.kernel.org,
-        riteshh@linux.ibm.com
-Content-Transfer-Encoding: 7bit
-Message-Id: <E1661B4B-D2BF-465F-8C65-935909A2E527@linux.ibm.com>
-References: <C6CAF8E3-0447-465D-9C83-F55910739BE2@linux.ibm.com>
- <20220718080112.GS3861211@dread.disaster.area>
-To:     Dave Chinner <david@fromorbit.com>
-X-Mailer: Apple Mail (2.3696.100.31)
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: eCQpeuJwX6uModo8laEmqGSYPLva-8U0
-X-Proofpoint-GUID: -CNcpwPBoqeeOP1paBfubOvzUqzKa_1v
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-18_11,2022-07-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
- mlxlogscore=999 clxscore=1011 priorityscore=1501 phishscore=0
- impostorscore=0 mlxscore=0 spamscore=0 lowpriorityscore=0 malwarescore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207180054
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S234240AbiGRMmh (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 18 Jul 2022 08:42:37 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28AF31A068;
+        Mon, 18 Jul 2022 05:42:35 -0700 (PDT)
+Received: from mail-yb1-f174.google.com ([209.85.219.174]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1Ml3ym-1noIWk1QcO-00lVLF; Mon, 18 Jul 2022 14:42:34 +0200
+Received: by mail-yb1-f174.google.com with SMTP id 75so20514047ybf.4;
+        Mon, 18 Jul 2022 05:42:33 -0700 (PDT)
+X-Gm-Message-State: AJIora+Bs2UwQXoBtV6ct8cbngKY6WqL6shi9w4xPPyYH6VwoZN/sbmw
+        rltAH+g+YkRbd94JwtFaUI2fqm9fdmlrSd7mFlM=
+X-Google-Smtp-Source: AGRyM1sS3ea7c3HilOgs/Nxe1l1twVZnqz2GtJLQRGd0cq1YnLTsC/jtrEpc3UYWeODWD8muMDisZeWXdNvOW2J4vUM=
+X-Received: by 2002:a25:3b05:0:b0:66e:c216:4da3 with SMTP id
+ i5-20020a253b05000000b0066ec2164da3mr28311420yba.550.1658148152980; Mon, 18
+ Jul 2022 05:42:32 -0700 (PDT)
+MIME-Version: 1.0
+References: <YtVKzW4vh1nRSqbx@debian>
+In-Reply-To: <YtVKzW4vh1nRSqbx@debian>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 18 Jul 2022 14:42:16 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0MYMbRk1tVmWUBWfnD-1Z5P3fE+DvNycnXaffzqc3htw@mail.gmail.com>
+Message-ID: <CAK8P3a0MYMbRk1tVmWUBWfnD-1Z5P3fE+DvNycnXaffzqc3htw@mail.gmail.com>
+Subject: Re: build failure of next-20220718 due to 'imx6_pcie_host_exit'
+ defined but not used
+To:     "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+Cc:     Richard Zhu <hongxing.zhu@nxp.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:tjloAKR9xLc6+p0Q6Y6zY/oCyyDrm/eBFl1AY0QLATa0AhvVQwH
+ 2GxoI93nUUQpIQjieuzUE+H49cVK7UFmQ0ezwYeBTNxBD0n1bMqRJe0wyZCCNOKbRTnIo6x
+ 9m+XTffI+xfuuujlv5/xlrznQ6GcAby6xMnpJNlmY9CPbzXmgoF3wg/BMeopiyAtBaBHt9/
+ XBsu33urblo4ed2Z1YGTg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:JCK6NE6T8VE=:CjfW4h9i966oPuThifeZ3R
+ EjxCVZyYaMfaVbPVkxnr1Nr4+p5ggyixcLw2XBM8JbqAKvGzacW4447/5twlQwXPnKLcXSEoz
+ G4d4U3/VjWRAUvBUARE3YmeYQHc7Z5VteH0FsD3z4mdzQNqO61hqqOAoiWAaSuGMQgF2ciLX7
+ E9Tbq5oq3IYYIsPtFo9YB2KnlOwDqpIDbzSNjDtlJ6WYSFPdWLsZkl+F/oMfLTe5I1i5/tWAa
+ OrYWPalDATGjsaZcUPKr7TJy1bKSYR+gDDa8UACC6zl0b/6spgEGqmytVv+AdnDICyLwFA+qH
+ kAL8soQMSJdknXKQyfi0DABCPBBMBHRCFeGoBswwKIZ5tVOLlJCD4m4UQ73s5iIrjJbQMK8GT
+ ndXaVGKBmwUmke4eDlyVCfNwjm2ySAvXcm1PrMqP7jiWb9D5ikptB6Rdg/N588Z0L7Qxbttfq
+ wDiIA0YwEYT0h9hHsbOkv0sAKpv+sRY6ouheP3a8HDuVTB1FXMWG76tsQalwGgADeOMK0WgzV
+ S0WHHEl8qrhT1rSFwkxV07EeL/eW8F8tf8A9854AJLlAJy3Of6QETtpuUYxEYstqoxsGr3lbj
+ f7fP2uDXs7HynyZwmnq6QksSENr8fDMeHM+tKwOH81TMBx7OTQH5M9vEMf5unNOuX/fH2E+c9
+ pATxr0xHc0Y9djJ9SaPGVW+KwKMbB7c4/zfFYeHYsXKxm7HTD3pjErqiuRcbRL0PgoB0Oak1v
+ mQUH94xiejcsY9ASLNyJR+Uy9APT/tbFN6jHCt6SnmxCiyBcnxgTc/pRKnnXdbEXO3ykww0qA
+ cQdFrmIZlGMIRR7w4FOHIc3+VSY2YIYu5cBvHQlOb3AVjQFW/5fjLSvefNGgkJGcS+JQc6TsS
+ kBS09Ec2meKFklxfCodQ==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+On Mon, Jul 18, 2022 at 1:58 PM Sudip Mukherjee (Codethink)
+<sudipm.mukherjee@gmail.com> wrote:
+>
+> Hi All,
+>
+> Not sure if it has been reported, builds of alpha, csky, xtensa, riscv, s390 allmodsconfig
+> have failed to build next-20220718 with the error:
+>
+>
+> drivers/pci/controller/dwc/pci-imx6.c:973:13: error: 'imx6_pcie_host_exit' defined but not used [-Werror=unused-function]
+>   973 | static void imx6_pcie_host_exit(struct dw_pcie_rp *pp)
+>       |             ^~~~~~~~~~~~~~~~~~~
+> drivers/pci/controller/dwc/pci-imx6.c:904:13: error: 'imx6_pcie_stop_link' defined but not used [-Werror=unused-function]
+>   904 | static void imx6_pcie_stop_link(struct dw_pcie *pci)
+>       |             ^~~~~~~~~~~~~~~~~~~
+>
 
-> Fix it by removing the xfs_buf_init/terminate wrappers that just
-> allocate and destroy the xfs_buf slab, and move them to the same
-> place that all the other slab caches are set up and destroyed.
-> 
-> Reported-by: Sachin Sant <sachinp@linux.ibm.com>
-> Fixes: 298f34224506 ("xfs: lockless buffer lookup")
-> Signed-off-by: Dave Chinner <dchinner@redhat.com>
-> ---
+These are called from inside an "#ifdef CONFIG_PM_SLEEP" section. The best
+fix is to remove the #ifdef and replace SET_NOIRQ_SYSTEM_SLEEP_PM_OPS()
+with the new simpler NOIRQ_SYSTEM_SLEEP_PM_OPS().
 
-Thanks. The patch fixes the reported problem for me.
-
-Tested-by: Sachin Sant <sachinp@linux.ibm.com>
-
-- Sachin
+          Arnd

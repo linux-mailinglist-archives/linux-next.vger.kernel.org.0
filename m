@@ -2,149 +2,125 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93849579379
-	for <lists+linux-next@lfdr.de>; Tue, 19 Jul 2022 08:50:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7F0D579456
+	for <lists+linux-next@lfdr.de>; Tue, 19 Jul 2022 09:37:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbiGSGuT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 19 Jul 2022 02:50:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57544 "EHLO
+        id S232986AbiGSHg3 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-next@lfdr.de>); Tue, 19 Jul 2022 03:36:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229763AbiGSGuT (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 19 Jul 2022 02:50:19 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4167125281;
-        Mon, 18 Jul 2022 23:50:18 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 620DE5C00E2;
-        Tue, 19 Jul 2022 02:50:17 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Tue, 19 Jul 2022 02:50:17 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1658213417; x=1658299817; bh=X2tTQCC0iW
-        qSbqbwa0QEysUBUs9rRD+BzpgOCtc5qW4=; b=PLCtiG0KrasR6cYhrj6Uq6RmUi
-        o+LC82MDqgYNeVcZR6kpXJuKGsJ5WPjZiSPiZDqYMj8StuIjUMr/Ygnon/UgkGd4
-        E4fxL6UrgWzd8cCjJUDnNWfHmg+bg4+Zmqn8M/DqrssF2kiSynMKTMaWyFPGHO9i
-        EjsRBElneb+z5lSXHL/kpuwpIoksTwBOdWUmXV4AOU1DrSc00qbql6mNn1kIFzQ6
-        pcINglLqrZL4sHukGk1nfgmXgt9EDRbdyT0gfkTO8BX6I4wx1s0n2SUdu/P8ExJy
-        lRUcVktT209m5BvzBqGPzbrgQjLJ8genIAwuYbcCCRmMW9DNRq3Rv16/Ay9A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1658213417; x=1658299817; bh=X2tTQCC0iWqSbqbwa0QEysUBUs9r
-        RD+BzpgOCtc5qW4=; b=eSAFAG1GLUkeJbi8OSJ30x0DSvlb7H5OSEIMVkots+U0
-        K4R3/qGHA3Kb3qzEZ0cBDB6mQb3DCe/SM9EUYqCyzL4rxGCRn4qItExXzePCGNyQ
-        bfej1M50Vn8D+ZtoM9pNnyQc4LZLR2sIn/RQAeHmCf6S9uqG6pwlxnahJ/GQOfXv
-        fDtcKZcELDt2jz88ismjaHgsz6ylSmUPLMflFJesJB6WUCEy1kHHuz28Ei1MlNdW
-        roOpcuU481+htPSLsv4s424M2BObkX1FRrtxDXuwl3SaagK8yhHVxAOahD9PeOyn
-        JSDJ4qAfPzGMKYMTNO5j4NpdAt/1uO1v7kn8kSQXlg==
-X-ME-Sender: <xms:KVTWYrOuBuru8DGNwdMnU428eS5L52hBeMXUGj-MiId7bgqaIWFY_Q>
-    <xme:KVTWYl9QxzSL6F2pi7caxwqB1J_soHwLXWWygzGp-plFWy2u3eW2piiYcq5llBjHu
-    ilkG35fRM-frQ>
-X-ME-Received: <xmr:KVTWYqTqBvzf_QluVdfTWR7PPwFw6kgVPNM4cVJ9zndcBriKtewuiGY8-3NR>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudekledguddugecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgv
-    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehge
-    dvvedvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhu
-    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhroh
-    grhhdrtghomh
-X-ME-Proxy: <xmx:KVTWYvur1FHCNIiBqSKZOg84sK5kY2KGW4XPApcyzNzWZnS0y9kKtw>
-    <xmx:KVTWYjeAuFvpt9PPudg15Se2pE_LSO8JY-Qsm7vEp_Us6roVTaHVwA>
-    <xmx:KVTWYr2dWjaIn2_0jnNzgEpFydIv-qZ1KboD-E9aceMzAHBUVVrvKg>
-    <xmx:KVTWYu2wvtHIPlY0k2j-EkcW8noLDIFi-i0VUc_qHIxuvizpabYhuQ>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 19 Jul 2022 02:50:16 -0400 (EDT)
-Date:   Tue, 19 Jul 2022 08:50:14 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Benson Leung <bleung@google.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Tzung-Bi Shih <tzungbi@kernel.org>,
+        with ESMTP id S236987AbiGSHgI (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 19 Jul 2022 03:36:08 -0400
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89F889FE9;
+        Tue, 19 Jul 2022 00:35:47 -0700 (PDT)
+Received: by mail-qv1-f42.google.com with SMTP id l15so10511897qvo.11;
+        Tue, 19 Jul 2022 00:35:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=ri9Wtdrs9zsrpeBy+vnSCFNuGKAMpG2mmAMCu25LqXs=;
+        b=2nsF2Ba6r4kSb0Pjk8ijvX1VRU/cT7xeYRVf5hRX0F6Z+6AGRimvJ+H6xDgr6roNoI
+         vXcQE+TWdr2Di0h2U9zXxi3+myYaP1tsXnNOal6RhmeRcIUGh0EDJg44w8tWXNSxaH1C
+         2Nof+fQq8i8azVXkeIn66hOOBDJAK4acAvYD7GCKKJphawQxQfcKy7vdT6H6ganH+nRu
+         R3dzd2rnvF2sSmUWzPX3LG8rEWPnGN6QTwC3clmKGpMeQdGL8TefJkDAAFfNECsTICYA
+         eb7S8c0T2L8rjp7mTol6drggpxPxiDd/2O4Qkn7pj17DC0Adxlez1KiW7DvV9CZVtmoW
+         xRAQ==
+X-Gm-Message-State: AJIora/dFrkZ8DnV9G3NIWcT7FSD3JZfGXGdEZprVmCEbwCyZRwoqJX6
+        879qWDxpmHHCjOlLsr1SoYEYAT/uR4Ng2Q==
+X-Google-Smtp-Source: AGRyM1vckIRUfacgjfzK1tibQ97W2ioOOtRWS+cFjlrmybj/cOFm7qagoD2K8A5kftOf92M6QH80Ow==
+X-Received: by 2002:a05:6214:260b:b0:473:6ef4:491b with SMTP id gu11-20020a056214260b00b004736ef4491bmr23716899qvb.34.1658216146509;
+        Tue, 19 Jul 2022 00:35:46 -0700 (PDT)
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
+        by smtp.gmail.com with ESMTPSA id cd14-20020a05622a418e00b0031ef6a420d6sm1961353qtb.35.2022.07.19.00.35.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Jul 2022 00:35:46 -0700 (PDT)
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-31d85f82f0bso131723247b3.7;
+        Tue, 19 Jul 2022 00:35:46 -0700 (PDT)
+X-Received: by 2002:a81:84c1:0:b0:31e:4e05:e4f4 with SMTP id
+ u184-20020a8184c1000000b0031e4e05e4f4mr5036327ywf.384.1658216145796; Tue, 19
+ Jul 2022 00:35:45 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220711124742.3b151992@canb.auug.org.au> <6e60d396-2a52-d1fa-f125-3c585605b531@amd.com>
+ <20220718094453.2f1a1f09@canb.auug.org.au>
+In-Reply-To: <20220718094453.2f1a1f09@canb.auug.org.au>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 19 Jul 2022 09:35:34 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWzBy0O0kQTZxC52oL7At2EcFpL0C3nY4YAsBPzaEGW=w@mail.gmail.com>
+Message-ID: <CAMuHMdWzBy0O0kQTZxC52oL7At2EcFpL0C3nY4YAsBPzaEGW=w@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the drm tree with the drm-misc-fixes tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Dave Airlie <airlied@linux.ie>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Arunpravin Paneer Selvam <Arunpravin.PaneerSelvam@amd.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the usb tree
-Message-ID: <YtZUJr4oIIALgdO+@kroah.com>
-References: <20220718163158.42176b4e@canb.auug.org.au>
- <YtXF8TUZHNRUUyJh@kroah.com>
- <CACeCKafbgLmhLoYQiTTDkeeJ26HqFYBHXtcpwQkzOyO9LESEFw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACeCKafbgLmhLoYQiTTDkeeJ26HqFYBHXtcpwQkzOyO9LESEFw@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 02:41:23PM -0700, Prashant Malani wrote:
-> Hi Stephen & Greg,
-> 
-> On Mon, Jul 18, 2022 at 1:43 PM Greg KH <greg@kroah.com> wrote:
+Hi Stephen,
+
+On Mon, Jul 18, 2022 at 1:49 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> On Mon, 11 Jul 2022 10:05:45 +0200 Christian König <christian.koenig@amd.com> wrote:
+> > Am 11.07.22 um 04:47 schrieb Stephen Rothwell:
+> > >
+> > > Today's linux-next merge of the drm tree got a conflict in:
+> > >
+> > >    drivers/gpu/drm/amd/amdgpu/amdgpu_vram_mgr.c
+> > >
+> > > between commit:
+> > >
+> > >    925b6e59138c ("Revert "drm/amdgpu: add drm buddy support to amdgpu"")
+> > >
+> > > from the drm-misc-fixes tree and commit:
+> > >
+> > >    5e3f1e7729ec ("drm/amdgpu: fix start calculation in amdgpu_vram_mgr_new")
+> > >
+> > > from the drm tree.
+> > >
+> > > This is a mess :-(  I have just reverted the above revert before mergin
+> > > the drm tree for today, please fix it up.
 > >
-> > On Mon, Jul 18, 2022 at 04:31:58PM +1000, Stephen Rothwell wrote:
-> > > Hi all,
-> > >
-> > > After merging the usb tree, today's linux-next build (arm
-> > > multi_v7_defconfig) failed like this:
-> > >
-> > > drivers/platform/chrome/cros_typec_switch.c: In function 'cros_typec_cmd_mux_set':
-> > > drivers/platform/chrome/cros_typec_switch.c:52:16: error: implicit declaration of function 'cros_ec_command'; did you mean 'cros_ec_cmd'? [-Werror=implicit-function-declaration]
-> > >    52 |         return cros_ec_command(sdata->ec, 0, EC_CMD_TYPEC_CONTROL, &req,
-> > >       |                ^~~~~~~~~~~~~~~
-> > >       |                cros_ec_cmd
-> > > drivers/platform/chrome/cros_typec_switch.c: In function 'cros_typec_register_switches':
-> > > drivers/platform/chrome/cros_typec_switch.c:244:23: error: implicit declaration of function 'acpi_evaluate_integer'; did you mean 'acpi_evaluate_object'? [-Werror=implicit-function-declaration]
-> > >   244 |                 ret = acpi_evaluate_integer(adev->handle, "_ADR", NULL, &index);
-> > >       |                       ^~~~~~~~~~~~~~~~~~~~~
-> > >       |                       acpi_evaluate_object
-> > > drivers/platform/chrome/cros_typec_switch.c:244:49: error: invalid use of undefined type 'struct acpi_device'
-> > >   244 |                 ret = acpi_evaluate_integer(adev->handle, "_ADR", NULL, &index);
-> > >       |                                                 ^~
-> > >
-> > > Caused by commit
-> > >
-> > >   e54369058f3d ("platform/chrome: cros_typec_switch: Add switch driver")
-> > >
-> > > and commits
-> > >
-> > >   34f375f0fdf6 ("platform/chrome: cros_typec_switch: Set EC retimer")
-> > >   bb53ad958012 ("platform/chrome: cros_typec_switch: Add event check")
-> > >
-> > > interacting with commit
-> > >
-> > >   b1d288d9c3c5 ("platform/chrome: cros_ec_proto: Rename cros_ec_command function")
-> > >
-> > > from the chrome-platform tree.
-> 
-> I am very sorry about the conflicts.
-> 
-> I can think of a few ways to address this:
-> 1. A fixup patch on top of linux-next updating the function signature
-> to cros_ec_cmd() ; I will send this out if you'd like.
-> 2. Pull in Commit b1d288d9c3c5 ("platform/chrome: cros_ec_proto:
-> Rename cros_ec_command function") to usb-next.
-> We will also have to pull in dependent commit 015cd0043503
-> ("regulator: cros-ec: Use common cros_ec_command()")
-> 3. Revert the entire cros-typec-switch (patches 3-9) series from
-> usb-next and wait till after the merge window to apply it to
-> chrome-platform directly.
+> > Sorry for the noise, the patch "5e3f1e7729ec ("drm/amdgpu: fix start
+> > calculation in amdgpu_vram_mgr_new")" and another one is going to be
+> > reverted from the drm tree as well.
+> >
+> > It's just that -fixes patches where faster than -next patches.
+>
+> Here we are a week later, -rc7 has been released and as far as I can
+> tell (though I may have missed it), this is still a problem :-(
+>
+> I am still reverting 925b6e59138c (which is now in Linus' tree).
 
-I think I'll just do #3 to resolve the issue.  I'll do it in a few
-hours.
+Thanks for the hint! After reverting that commit, drm-next (sort of[1])
+merges cleanly into upstream again.
 
-thanks,
+[1] There's still a small conflict due to the removal of
+    force_dpms_off, cfr. the difference between commits
+    3283c83eb6fcfbda and cc79950bf0904f58 ("drm/amd/display:
+    Ensure valid event timestamp for cursor-only commits") in
+    v5.19-rc7 resp. drm-next.
 
-greg k-h
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

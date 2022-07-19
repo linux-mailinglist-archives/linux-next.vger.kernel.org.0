@@ -2,125 +2,107 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7F0D579456
-	for <lists+linux-next@lfdr.de>; Tue, 19 Jul 2022 09:37:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04085579496
+	for <lists+linux-next@lfdr.de>; Tue, 19 Jul 2022 09:52:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232986AbiGSHg3 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-next@lfdr.de>); Tue, 19 Jul 2022 03:36:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57186 "EHLO
+        id S234348AbiGSHwx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 19 Jul 2022 03:52:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236987AbiGSHgI (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 19 Jul 2022 03:36:08 -0400
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89F889FE9;
-        Tue, 19 Jul 2022 00:35:47 -0700 (PDT)
-Received: by mail-qv1-f42.google.com with SMTP id l15so10511897qvo.11;
-        Tue, 19 Jul 2022 00:35:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ri9Wtdrs9zsrpeBy+vnSCFNuGKAMpG2mmAMCu25LqXs=;
-        b=2nsF2Ba6r4kSb0Pjk8ijvX1VRU/cT7xeYRVf5hRX0F6Z+6AGRimvJ+H6xDgr6roNoI
-         vXcQE+TWdr2Di0h2U9zXxi3+myYaP1tsXnNOal6RhmeRcIUGh0EDJg44w8tWXNSxaH1C
-         2Nof+fQq8i8azVXkeIn66hOOBDJAK4acAvYD7GCKKJphawQxQfcKy7vdT6H6ganH+nRu
-         R3dzd2rnvF2sSmUWzPX3LG8rEWPnGN6QTwC3clmKGpMeQdGL8TefJkDAAFfNECsTICYA
-         eb7S8c0T2L8rjp7mTol6drggpxPxiDd/2O4Qkn7pj17DC0Adxlez1KiW7DvV9CZVtmoW
-         xRAQ==
-X-Gm-Message-State: AJIora/dFrkZ8DnV9G3NIWcT7FSD3JZfGXGdEZprVmCEbwCyZRwoqJX6
-        879qWDxpmHHCjOlLsr1SoYEYAT/uR4Ng2Q==
-X-Google-Smtp-Source: AGRyM1vckIRUfacgjfzK1tibQ97W2ioOOtRWS+cFjlrmybj/cOFm7qagoD2K8A5kftOf92M6QH80Ow==
-X-Received: by 2002:a05:6214:260b:b0:473:6ef4:491b with SMTP id gu11-20020a056214260b00b004736ef4491bmr23716899qvb.34.1658216146509;
-        Tue, 19 Jul 2022 00:35:46 -0700 (PDT)
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
-        by smtp.gmail.com with ESMTPSA id cd14-20020a05622a418e00b0031ef6a420d6sm1961353qtb.35.2022.07.19.00.35.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Jul 2022 00:35:46 -0700 (PDT)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-31d85f82f0bso131723247b3.7;
-        Tue, 19 Jul 2022 00:35:46 -0700 (PDT)
-X-Received: by 2002:a81:84c1:0:b0:31e:4e05:e4f4 with SMTP id
- u184-20020a8184c1000000b0031e4e05e4f4mr5036327ywf.384.1658216145796; Tue, 19
- Jul 2022 00:35:45 -0700 (PDT)
+        with ESMTP id S237002AbiGSHww (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 19 Jul 2022 03:52:52 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17EF124F09;
+        Tue, 19 Jul 2022 00:52:50 -0700 (PDT)
+Received: from mail-yb1-f171.google.com ([209.85.219.171]) by
+ mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1Mqro7-1njJ6O0NxB-00mvkw; Tue, 19 Jul 2022 09:52:49 +0200
+Received: by mail-yb1-f171.google.com with SMTP id f73so24955819yba.10;
+        Tue, 19 Jul 2022 00:52:48 -0700 (PDT)
+X-Gm-Message-State: AJIora9YwrRVjfUYtrlzUtsReG2idz5YbOVa5TkAUBNRn7ijCgNYhmWY
+        KJ0STyWO9vcujO6gOFDFiurRBW2gqmStOaRntVA=
+X-Google-Smtp-Source: AGRyM1sTlIiHTo89m0UXU/81kSNvZCwD8AnzAHR04IbPkzYG2NpiKx1JKX7ZwnY00TSJqPOcEi7rlTjfiXXFM/MSoSU=
+X-Received: by 2002:a25:3b05:0:b0:66e:c216:4da3 with SMTP id
+ i5-20020a253b05000000b0066ec2164da3mr32504793yba.550.1658217167726; Tue, 19
+ Jul 2022 00:52:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220711124742.3b151992@canb.auug.org.au> <6e60d396-2a52-d1fa-f125-3c585605b531@amd.com>
- <20220718094453.2f1a1f09@canb.auug.org.au>
-In-Reply-To: <20220718094453.2f1a1f09@canb.auug.org.au>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 19 Jul 2022 09:35:34 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWzBy0O0kQTZxC52oL7At2EcFpL0C3nY4YAsBPzaEGW=w@mail.gmail.com>
-Message-ID: <CAMuHMdWzBy0O0kQTZxC52oL7At2EcFpL0C3nY4YAsBPzaEGW=w@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the drm tree with the drm-misc-fixes tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Dave Airlie <airlied@linux.ie>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Arunpravin Paneer Selvam <Arunpravin.PaneerSelvam@amd.com>,
+References: <CAK8P3a0MYMbRk1tVmWUBWfnD-1Z5P3fE+DvNycnXaffzqc3htw@mail.gmail.com>
+ <20220718161439.GA1419930@bhelgaas>
+In-Reply-To: <20220718161439.GA1419930@bhelgaas>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 19 Jul 2022 09:52:30 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a31EeUBRs62=nR2Uj-d9dX2Mcc+fO=wE1nLYh+U1aNFfg@mail.gmail.com>
+Message-ID: <CAK8P3a31EeUBRs62=nR2Uj-d9dX2Mcc+fO=wE1nLYh+U1aNFfg@mail.gmail.com>
+Subject: Re: build failure of next-20220718 due to 'imx6_pcie_host_exit'
+ defined but not used
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
+        Richard Zhu <hongxing.zhu@nxp.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
+        Linux-Next Mailing List <linux-next@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:NfRZJ2hYJDzu1cOJsVTwCwJStSg+CsJuzGubLMd8N1+RTXgtTMn
+ 6rsGknIH6fjX06QcWuSkCaQilkuRvXcyC6TO0BPlqskrE6IxjwUgaeX7YqUWSgZrZLQurwj
+ HUaCaoVI3P0PETx2HecsDdcj+dK+PH9vZNNk1ShtigW1YBy4paVKlb/hr5qctL/0N1iJC2w
+ 5Cv56DMd970rCyV0jf8bA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:PlyapD2gSRw=:BdJsLc4N7WOIizo1UaNKMc
+ GnbdZCSald1oWqSmsOxuWk84wyzZrgyx9S69NMDqM+TYxEcIdRC4DjXZRJrouSLQKHMUkG2Js
+ 7Bez9P32iMh/myCYSIoxRkVHtJegfNvS3RqXkqdYdFXE0+PeTtWJ4t7kEyn6YYEUimxbFD/0U
+ q7ty9Gozf/XGW0J4h93bXPdsP0kBTogdhZNdWDoMt/7U2eWxvqSYs4idvWlA3LE9z+RYozgvK
+ Y0b0efYe42ze/NVUMCR3iTV2YZnkx3pAUutzaHMVEsuV770nipVREV6vnOx6NvNB7kXVb9GkS
+ 5DG0C0rqVrOTLAA0zckVt0J3DFgjXwIy7rAmyODVUdcTAShVfEkJhf9ec986tB2ZdF7rRk/Y7
+ By2pvxA2c15pz1Z2dWljdyEMQuZ2VP9C1XkX7G4XVwVrkJ1V5R1+WfFob3Ujo5oi7Vlk94KXC
+ DXR71FDsV7aBzx/AVRMCBWwQrxroFWYcVsmrgR8wPNj40j4ghLgH+7Cmr0ckC4Zi5cVxg/kj7
+ D1a/e2JL91OismykV+vfSRGrzqWw0AwKLTqSuGC+aeTHAvipNMZhsSIcic40BFfK1HBC9QoFz
+ 5225UhnbdG93JslZoL3b7pRwh5Jvc5ycnBeQKSCP2DW3SaWR+QI6AVU2SiCl3gaH/iQ5zpqC0
+ IDSICjjP7ilfT4Jzmx7y/WNkFqa1jSPcUza6OA0Lc21YhhbhA7lvcytU/cb2nnJJBdhEDER1C
+ 5sEx3667XoEfwrkemJ7wJOtWJrmtPwh70v1LtrpqkqyVmoHBCnJMXxidwVbfQbIdiRNd98rwH
+ toZPw5yhQamimYnIIxzwl+RRSDTRFeOhbUCMcxTzbGgGoxnjAHw5cfbqyAXNVzDIou3IlXzSK
+ wDbA/u7OVSD28HtFaHrVAiyWJZ1ir9J9v5o2Fq13E=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
-
-On Mon, Jul 18, 2022 at 1:49 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> On Mon, 11 Jul 2022 10:05:45 +0200 Christian König <christian.koenig@amd.com> wrote:
-> > Am 11.07.22 um 04:47 schrieb Stephen Rothwell:
-> > >
-> > > Today's linux-next merge of the drm tree got a conflict in:
-> > >
-> > >    drivers/gpu/drm/amd/amdgpu/amdgpu_vram_mgr.c
-> > >
-> > > between commit:
-> > >
-> > >    925b6e59138c ("Revert "drm/amdgpu: add drm buddy support to amdgpu"")
-> > >
-> > > from the drm-misc-fixes tree and commit:
-> > >
-> > >    5e3f1e7729ec ("drm/amdgpu: fix start calculation in amdgpu_vram_mgr_new")
-> > >
-> > > from the drm tree.
-> > >
-> > > This is a mess :-(  I have just reverted the above revert before mergin
-> > > the drm tree for today, please fix it up.
-> >
-> > Sorry for the noise, the patch "5e3f1e7729ec ("drm/amdgpu: fix start
-> > calculation in amdgpu_vram_mgr_new")" and another one is going to be
-> > reverted from the drm tree as well.
-> >
-> > It's just that -fixes patches where faster than -next patches.
+On Mon, Jul 18, 2022 at 6:14 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> On Mon, Jul 18, 2022 at 02:42:16PM +0200, Arnd Bergmann wrote:
 >
-> Here we are a week later, -rc7 has been released and as far as I can
-> tell (though I may have missed it), this is still a problem :-(
+> Might be simpler, but wow, it's hard to keep up with all the
+> permutations of sleep ops ;)
 >
-> I am still reverting 925b6e59138c (which is now in Linus' tree).
+> Unfortunately 1a3c7bb08826 ("PM: core: Add new *_PM_OPS macros,
+> deprecate old ones"), which added NOIRQ_SYSTEM_SLEEP_PM_OPS, didn't
+> add any hints near SET_NOIRQ_SYSTEM_SLEEP_PM_OPS.
+>
+> We have several PCI controller drivers that use the "#ifdef
+> CONFIG_PM_SLEEP" and SET_NOIRQ_SYSTEM_SLEEP_PM_OPS pattern or the
+> "__maybe_unused" + SET_NOIRQ_SYSTEM_SLEEP_PM_OPS pattern.  I guess we
+> need to look at all of them and figure out the best practice.
 
-Thanks for the hint! After reverting that commit, drm-next (sort of[1])
-merges cleanly into upstream again.
+Yes, this is a larger effort. It's been under discussion for many years until we
+could agree on a nicer way to handle this and avoid both the #ifdef  and the
+__maybe_unused annotations. There are hundreds of drivers using the older
+patterns, and I think there is an effort to address them one subsystem
+at a time,
+whenever someone finds the time.
 
-[1] There's still a small conflict due to the removal of
-    force_dpms_off, cfr. the difference between commits
-    3283c83eb6fcfbda and cc79950bf0904f58 ("drm/amd/display:
-    Ensure valid event timestamp for cursor-only commits") in
-    v5.19-rc7 resp. drm-next.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+       Arnd

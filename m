@@ -2,81 +2,84 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC772579852
-	for <lists+linux-next@lfdr.de>; Tue, 19 Jul 2022 13:24:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1906579F58
+	for <lists+linux-next@lfdr.de>; Tue, 19 Jul 2022 15:13:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234893AbiGSLYZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 19 Jul 2022 07:24:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60054 "EHLO
+        id S243515AbiGSNN6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 19 Jul 2022 09:13:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234587AbiGSLYY (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 19 Jul 2022 07:24:24 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D37E422BD9;
-        Tue, 19 Jul 2022 04:24:23 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id AD9505C00DA;
-        Tue, 19 Jul 2022 07:24:20 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Tue, 19 Jul 2022 07:24:20 -0400
+        with ESMTP id S243388AbiGSNNj (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 19 Jul 2022 09:13:39 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 692076B75C;
+        Tue, 19 Jul 2022 05:30:36 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 101C95C012F;
+        Tue, 19 Jul 2022 08:30:33 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Tue, 19 Jul 2022 08:30:33 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1658229860; x=
-        1658316260; bh=YPg2p7ZkJ19niAOLzOQ3N7cpJngdqDGzBZd0ivZIw/Q=; b=P
-        Ob6SkSVtdd4l7FeK45g4x8xul5U9/5ZE4xZp45yEvjWvCwnoOkS++8GkHgkYF8aI
-        bmR5OPtzLUWh2hcq51yQpIKkpbJWy+8C8OxosLvGkGav+Dhb+zE4VYWSk0jhcC6/
-        Cjs7fOD50lLw02HP+eSRQQYOnkrz9HdOfa1QQ2+06jyRAHSB5dzWUSMCiVlyRrUF
-        PZHajCLQqtYwU8/FDoaNxagXaUMHy4X0b3QyNZeZuXbfZb3KYUsdO7QkGOuQaILo
-        LF/40WtuxqJNkgbwxszu1X9VGSFTsw5K32m2R7vauZdcOKxrNDIdcr+RUCd93Bs/
-        ueKT3Qzm9IAKiKlPFKyNw==
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1658233833; x=1658320233; bh=9U1EtS+bl9
+        piaVSNmdqe4t1gv74fQ46TH+YS38s6hTI=; b=DE0E3SifcrcnNFbmCZa1AaELa4
+        ysDs1hTNfRFIkfw0txi80pUT8CIyxDw9kWM0NME7d7IzD39gAasl9wk3p5oqgp8x
+        JAZBI8ds9n3QRr/cswlSFq2u/TowsCRn4mBjPTEzr5847AhMxhkvhGlB9LwA7qfn
+        ryVNXH9OE1eptn3aJt/g43ud/UV1OufQKbhGr9BFEhsV5AO35dFPSC4Ktb1db9Pd
+        s43vrfUbbZSJViClWbt36MvHCWM24hvqmBkDDdiozt8ZSAU22LfRWrVrd9yBFmrh
+        3GExlLbdj/NT+0X0mkWkThAPfNN6pexKie/NhkkJUAtIleAI67bxpaKOPtrA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1658229860; x=
-        1658316260; bh=YPg2p7ZkJ19niAOLzOQ3N7cpJngdqDGzBZd0ivZIw/Q=; b=o
-        DdkFYjfQqwU/flglwh7Eyru0SpGUjAKEnysIlLN61htJdG76t2vUFer7cuVZskSk
-        c/NPSZVqM4+rL+rV1y9yk0GUc4xAykO2aJ1XMIAYhdsZH09+b3xR0HWMlPU6SwgN
-        wAK+BDELmX9mCDq0oJJLnrkdh4CZT6oPF/qY05oy8rsmOxs+CvufhU34oAUWZESp
-        l2OjhGDSOJS6cwbRrOMh9as5SsrCCvtVIL8uhxG6WchIdnCd8T/RAV6vy0yWnHne
-        C4nWfPezVrxUkL9JLXiz/IuxtCeLy2gomAWnBVfsNrtuJD22yGfGgD3UGn5uIjmz
-        esHrxzEhAjJDGQhttITbg==
-X-ME-Sender: <xms:ZJTWYj9CoUVzwX-nFSJky_YP7DaMVJU1UvMcJGNh14qiHJC9JMj16Q>
-    <xme:ZJTWYvvqN4PiKrp959earfJ4GWx8A6VF6HZ0VS0lYW1OV6K4RCFOxQ5nX9iCESsI1
-    kJu4XTrnBm2mQ>
-X-ME-Received: <xmr:ZJTWYhDnsFxgwWMyfHRKKR4LjyWp2RQm1Pv1q0zeDSorNRvJBziakVAbhnB3>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudeltddgfeelucetufdoteggodetrfdotf
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1658233833; x=1658320233; bh=9U1EtS+bl9piaVSNmdqe4t1gv74f
+        Q46TH+YS38s6hTI=; b=H1OUZ9jO/J9mPC9hHUhmGMxyaj0Ob+m0tppT7JogqtnD
+        PSa3GH+DMt6rnJj5MLUfsuP1KBU11GTi2G02EKDmKhN75syz7lXaO4MJ+rE2+L2Q
+        UM6RD3jM9h0W9cZ01KC4VzbDXbapsdv0YxuoDuoejTGLNUsBYsU7TJptSTkVWz6Y
+        6vG5Z918vG0XANAV3m3PyuWm2ldh7+AQPjhAa9Cpiggr29OSYuXfm+HY+G20Nrsw
+        lzFpgjm2WzKrc7SpmiyifYuB8seJBwKG70xHyv6jdz9pX2/yIbye8Dw2eJks9o9W
+        PmcfjtvK4bWMDcQLbizWSi1347XxjAlCiaoFcltT8Q==
+X-ME-Sender: <xms:6KPWYs_0XZRkvumOavAm7CL-J0KN1w6DP8mxMg2HWZ6-DMAlEEdegQ>
+    <xme:6KPWYktSvQ7N5HXXt2YDa8tEBJvbN6otOftY3wuZWdZy6aMEf9UQu0yk0ZGmzpuDR
+    JxXQgltZPZfgQ>
+X-ME-Received: <xmr:6KPWYiDEDz1o3uekzvKLLTa7MHZGx21BtZ6o-mA2U5iYAfFw9ubTq8aoTQ42>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudeltddgheefucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggugfgjsehtkeertddttdejnecuhfhrohhmpefirhgv
-    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpefgke
-    ffieefieevkeelteejvdetvddtledugfdvhfetjeejieduledtfefffedvieenucevlhhu
-    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhroh
-    grhhdrtghomh
-X-ME-Proxy: <xmx:ZJTWYvctjo7lLFj5gU0qQyimXstOsSUZtWu4iRx3K-XUXv_RTz-yrQ>
-    <xmx:ZJTWYoNAzT2bd12Eu6ai3qQ-ouOQGgEvJanhYv7GD6Itm5Mldrxamg>
-    <xmx:ZJTWYhnGBEzbkAxmfHY0ACMPs5NBLnnf_yF5GdHCEwzV3iDhtEMaog>
-    <xmx:ZJTWYkC1b0B-Y6Xe2lsszRD05TqyOe7An4zyzk_oDwdR8re7xf4viA>
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
+    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
+    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
+    hhrdgtohhm
+X-ME-Proxy: <xmx:6KPWYsetTvxqB-9oOzoCs1IdPH-RSFSvMpap7fikPpol3n83qAX5jQ>
+    <xmx:6KPWYhOMWB8L76IPijy4A8aZykqvWKMBjFKWqjosbbWntNiSJrAd9w>
+    <xmx:6KPWYmlS9wJF4MjJAPAQVucIMOsghvM6LPKyewero2kh8bqO1m3NVA>
+    <xmx:6aPWYom9_FCFrjCcWGSkEVbuxQuQBMyUUALWzWUV8WZ1wJJc8AayUQ>
 Feedback-ID: i787e41f1:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 19 Jul 2022 07:24:19 -0400 (EDT)
-Date:   Tue, 19 Jul 2022 13:24:18 +0200
+ 19 Jul 2022 08:30:32 -0400 (EDT)
+Date:   Tue, 19 Jul 2022 14:01:23 +0200
 From:   Greg KH <greg@kroah.com>
-To:     Maxim Devaev <mdevaev@gmail.com>
+To:     Prashant Malani <pmalani@chromium.org>
 Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Benson Leung <bleung@google.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Tzung-Bi Shih <tzungbi@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the usb tree
-Message-ID: <YtaUYmzTfKmx0Ek0@kroah.com>
-References: <20220719194337.64c490e0@canb.auug.org.au>
- <20220719132559.3348c163@reki>
+Subject: Re: linux-next: build failure after merge of the usb tree
+Message-ID: <YtadE201j+dt5jJx@kroah.com>
+References: <20220718163158.42176b4e@canb.auug.org.au>
+ <YtXF8TUZHNRUUyJh@kroah.com>
+ <CACeCKafbgLmhLoYQiTTDkeeJ26HqFYBHXtcpwQkzOyO9LESEFw@mail.gmail.com>
+ <YtZUJr4oIIALgdO+@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220719132559.3348c163@reki>
+In-Reply-To: <YtZUJr4oIIALgdO+@kroah.com>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -86,44 +89,67 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 01:25:59PM +0300, Maxim Devaev wrote:
-> В Tue, 19 Jul 2022 19:43:37 +1000
-> Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+On Tue, Jul 19, 2022 at 08:50:14AM +0200, Greg KH wrote:
+> On Mon, Jul 18, 2022 at 02:41:23PM -0700, Prashant Malani wrote:
+> > Hi Stephen & Greg,
+> > 
+> > On Mon, Jul 18, 2022 at 1:43 PM Greg KH <greg@kroah.com> wrote:
+> > >
+> > > On Mon, Jul 18, 2022 at 04:31:58PM +1000, Stephen Rothwell wrote:
+> > > > Hi all,
+> > > >
+> > > > After merging the usb tree, today's linux-next build (arm
+> > > > multi_v7_defconfig) failed like this:
+> > > >
+> > > > drivers/platform/chrome/cros_typec_switch.c: In function 'cros_typec_cmd_mux_set':
+> > > > drivers/platform/chrome/cros_typec_switch.c:52:16: error: implicit declaration of function 'cros_ec_command'; did you mean 'cros_ec_cmd'? [-Werror=implicit-function-declaration]
+> > > >    52 |         return cros_ec_command(sdata->ec, 0, EC_CMD_TYPEC_CONTROL, &req,
+> > > >       |                ^~~~~~~~~~~~~~~
+> > > >       |                cros_ec_cmd
+> > > > drivers/platform/chrome/cros_typec_switch.c: In function 'cros_typec_register_switches':
+> > > > drivers/platform/chrome/cros_typec_switch.c:244:23: error: implicit declaration of function 'acpi_evaluate_integer'; did you mean 'acpi_evaluate_object'? [-Werror=implicit-function-declaration]
+> > > >   244 |                 ret = acpi_evaluate_integer(adev->handle, "_ADR", NULL, &index);
+> > > >       |                       ^~~~~~~~~~~~~~~~~~~~~
+> > > >       |                       acpi_evaluate_object
+> > > > drivers/platform/chrome/cros_typec_switch.c:244:49: error: invalid use of undefined type 'struct acpi_device'
+> > > >   244 |                 ret = acpi_evaluate_integer(adev->handle, "_ADR", NULL, &index);
+> > > >       |                                                 ^~
+> > > >
+> > > > Caused by commit
+> > > >
+> > > >   e54369058f3d ("platform/chrome: cros_typec_switch: Add switch driver")
+> > > >
+> > > > and commits
+> > > >
+> > > >   34f375f0fdf6 ("platform/chrome: cros_typec_switch: Set EC retimer")
+> > > >   bb53ad958012 ("platform/chrome: cros_typec_switch: Add event check")
+> > > >
+> > > > interacting with commit
+> > > >
+> > > >   b1d288d9c3c5 ("platform/chrome: cros_ec_proto: Rename cros_ec_command function")
+> > > >
+> > > > from the chrome-platform tree.
+> > 
+> > I am very sorry about the conflicts.
+> > 
+> > I can think of a few ways to address this:
+> > 1. A fixup patch on top of linux-next updating the function signature
+> > to cros_ec_cmd() ; I will send this out if you'd like.
+> > 2. Pull in Commit b1d288d9c3c5 ("platform/chrome: cros_ec_proto:
+> > Rename cros_ec_command function") to usb-next.
+> > We will also have to pull in dependent commit 015cd0043503
+> > ("regulator: cros-ec: Use common cros_ec_command()")
+> > 3. Revert the entire cros-typec-switch (patches 3-9) series from
+> > usb-next and wait till after the merge window to apply it to
+> > chrome-platform directly.
 > 
-> > Hi all,
-> > 
-> > After merging the usb tree, today's linux-next build (htmldocs) produced
-> > this warning:
-> > 
-> > Documentation/ABI/testing/configfs-usb-gadget-mass-storage:17: WARNING: Malformed table.
-> > Text in column margin in table line 14.
-> > 
-> > ===========     ==============================================
-> > file            The path to the backing file for the LUN.
-> >                 Required if LUN is not marked as removable.
-> > ro              Flag specifying access to the LUN shall be
-> >                 read-only. This is implied if CD-ROM emulation
-> >                 is enabled as well as when it was impossible
-> >                 to open "filename" in R/W mode.
-> > removable       Flag specifying that LUN shall be indicated as
-> >                 being removable.
-> > cdrom           Flag specifying that LUN shall be reported as
-> >                 being a CD-ROM.
-> > nofua           Flag specifying that FUA flag
-> >                 in SCSI WRITE(10,12)
-> > forced_eject    This write-only file is useful only when
-> >                 the function is active. It causes the backing
-> >                 file to be forcibly detached from the LUN,
-> >                 regardless of whether the host has allowed it.
-> >                 Any non-zero number of bytes written will
-> >                 result in ejection.
-> > ===========     ==============================================
-> > 
-> > Introduced by commit
-> > 
-> >   421c8d9a20da ("usb: gadget: f_mass_storage: forced_eject attribute")
-> > 
-> 
-> Sorry. Should I send a patch?
+> I think I'll just do #3 to resolve the issue.  I'll do it in a few
+> hours.
 
-Yes please.
+Now all reverted from my tree.  Please send these changs through the
+platform tree after the next -rc1 is released so that you don't end up
+with build problems again.
+
+thanks,
+
+greg k-h

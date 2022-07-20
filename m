@@ -2,46 +2,47 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC8CB57C074
-	for <lists+linux-next@lfdr.de>; Thu, 21 Jul 2022 01:05:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74F9857C111
+	for <lists+linux-next@lfdr.de>; Thu, 21 Jul 2022 01:45:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231340AbiGTXFM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 20 Jul 2022 19:05:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54198 "EHLO
+        id S231488AbiGTXpU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 20 Jul 2022 19:45:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231362AbiGTXFK (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 20 Jul 2022 19:05:10 -0400
+        with ESMTP id S230396AbiGTXpT (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 20 Jul 2022 19:45:19 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF383BEB;
-        Wed, 20 Jul 2022 16:05:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D4DF196;
+        Wed, 20 Jul 2022 16:45:16 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LpB9n0g8pz4xCy;
-        Thu, 21 Jul 2022 09:05:01 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LpC4B3PCFz4xCy;
+        Thu, 21 Jul 2022 09:45:14 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1658358301;
-        bh=Pad65OonXhfHGXFjpCFpnwi3rdmoLZjXrU7Mm65EMcY=;
+        s=201702; t=1658360714;
+        bh=B6oBJpBn5kwOYuxtOQkLahb0ijspbEt8Qy8+bLJHnTU=;
         h=Date:From:To:Cc:Subject:From;
-        b=ItjMBJrm2vi3Jhp3rW2aYtQn5Qy4HYMJijwSoOoWd2ZrM3pZ6ZYGzvuhLaHw4/go1
-         JlLsTlx5hRwx/UMosP0Qs3nmLCltG/+V2ofsREsXUH3OXU+YhjLnNiCVi4TFl2h55O
-         VVYBmRs7sZYF+O9Zz8SQc4F12yBjNMJEk+naCxY22t4vpaYdQ++N7Vkyu6aad2Kb+J
-         CGt97ixtqlRw21tk6vBhDVRPtMZVe+hC40fXcifMgD3muDRvKGLlxOaY1jGuNc2TsY
-         tZfLJB6O7MFsCGHC/4WYYeaB2OWzC8dh5zJRK0vxJAoHeTTsnv2lzDi/QsXTM8Vt7i
-         LVE4nNBarZlxQ==
-Date:   Thu, 21 Jul 2022 09:05:00 +1000
+        b=X7n3BddCRkkS0HH5OGMinsjLvfRuehazHlZ8/wZn4crbZzI20rI0BRf4Y1uw4aFBz
+         xwimYxGLndw7MqdGyfHrNx+GraON7RxI9YwYCXaxXUZ0C2+DJ5S1Oo+0hBXnaRtieg
+         LwH4FtrNc+fGY8J+8m9Sdx6a10uAuQ11/0vaW2OpSOjj6eiJO+8ZVrq21N+y9Jj38S
+         Fiu+OjLZ0xTkPXJ9RTvA35qX/C+UrWkZkCyEHUYuqtHJo1pJvh35VZCz+c3B1M8kqV
+         TCW1OOtU+IAQAwKGQYrtOjTaQYP6QYNPA6jO8QJVwF2RwQMu/hhfOJnAcYxJOr9SLl
+         qI7i9ulNJ60mA==
+Date:   Thu, 21 Jul 2022 09:45:12 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Cc:     Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Ian Rogers <irogers@google.com>,
-        Ian Rogers <rogers.email@gmail.com>,
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the perf tree
-Message-ID: <20220721090500.35774b43@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Peter Collingbourne <pcc@google.com>
+Subject: linux-next: manual merge of the arm64 tree with the arm64-fixes
+ tree
+Message-ID: <20220721094512.5419f75f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/RlCDqEavVPgpxDi0rLi/j3c";
+Content-Type: multipart/signed; boundary="Sig_/KBXJMu5JXdPIEqwsVqetM.i";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
@@ -52,44 +53,55 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/RlCDqEavVPgpxDi0rLi/j3c
+--Sig_/KBXJMu5JXdPIEqwsVqetM.i
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the perf tree, today's linux-next build (native perf)
-failed like this:
+Today's linux-next merge of the arm64 tree got a conflict in:
 
-Traceback (most recent call last):
-  File "util/setup.py", line 31, in <module>
-    from setuptools import setup, Extension
-ImportError: No module named setuptools
+  arch/arm64/kernel/head.S
 
-Caused by commit
+between commit:
 
-  ee87a0841aa5 ("perf python: Avoid deprecation warning on distutils")
+  f7b4c3b82e7d ("arm64: set UXN on swapper page tables")
 
-I installed python3-setuptools.
+from the arm64-fixes tree and commits:
+
+  e42ade29e3bc ("arm64: head: split off idmap creation code")
+  c3cee924bd85 ("arm64: head: cover entire kernel image in initial ID map")
+
+from the arm64 tree.
+
+I didn't know if the change from the former was still needed after the
+changes in the latter, so I left it out for now.
+
+I fixed it up (see above) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/RlCDqEavVPgpxDi0rLi/j3c
+--Sig_/KBXJMu5JXdPIEqwsVqetM.i
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLYihwACgkQAVBC80lX
-0Gwl4Qf/V4b0eJpVOxcDE0+k98Lk8ulPlNb/UZ9GTNvXuO/9RYWZ6z2d0hdcbvNh
-H1IB5cxCFDeXIXKlwG+pJpJ2hWwwop1LjtYK4YlvnFSpfxaXjVWT8+XQKK0Co10w
-sAj3BAy7FlKEQb6Bk/Z9yGftZgfBXnHFo9rc8pcesemxM0mnY74zWAdaOgVHuqVJ
-cnzac0dlhiCxRUPZU28lsEmQWb2ja/T57hUw4yfFAN6x2+wOARZ9uGDQfPedcSbM
-FGOgj0PfRJ+3DJWr0ZLkXCkDzdE3wpTcHYDhZlRaNDvPv3O6vNgBjn4p7D6U1kAb
-d50OUbdNwK84yEtt4P7BuDOx+YCq7g==
-=E7O0
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLYk4gACgkQAVBC80lX
+0GwHowgAk/oYLn9GA3lAdx7Hm6kgOvo7F5ToYMQ+1f+Ghb7sPDyot4XSCRpSxBnL
+gwL202IlYzVmm0I1lHkoqyGq7GymTP0jZQTnTY4OvnSjqHL9SLLUZfM+/B6Hq71e
+LiT7yaLE4QTS+ZejBnLh71V+/PdEfPxQIXZJAD1pRhi/GELHxFyxPCWXvqHcDxwM
+jIxSongxEzE6GsvH+6lAz8tSTLzdu3hGDO3JY/KChANmwqQ+8e7OPKWsduTwvu0z
+WoIZkCSuQjnxuA1ldmcpAtX0lUJWlBV6b0xOruUtOVFlYKsSemyaSLsed2GzP1YT
+YRB02JBCOWtYrhuk9NCfM+17lSSmpQ==
+=RaKZ
 -----END PGP SIGNATURE-----
 
---Sig_/RlCDqEavVPgpxDi0rLi/j3c--
+--Sig_/KBXJMu5JXdPIEqwsVqetM.i--

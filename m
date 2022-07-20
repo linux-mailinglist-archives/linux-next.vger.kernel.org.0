@@ -2,91 +2,100 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9161057AF84
-	for <lists+linux-next@lfdr.de>; Wed, 20 Jul 2022 05:33:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4B0157AF8C
+	for <lists+linux-next@lfdr.de>; Wed, 20 Jul 2022 05:42:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230190AbiGTDdM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 19 Jul 2022 23:33:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34882 "EHLO
+        id S236845AbiGTDmX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 19 Jul 2022 23:42:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230101AbiGTDdL (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 19 Jul 2022 23:33:11 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 445AF4AD6D;
-        Tue, 19 Jul 2022 20:33:09 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Lnh9b4vxQz4x7X;
-        Wed, 20 Jul 2022 13:33:07 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1658287987;
-        bh=yeT0T8sl3f5CMlfElIi35zvn/RyvABpe2VQN0nmmo2o=;
-        h=Date:From:To:Cc:Subject:From;
-        b=TssjS2cfHeUzTMlN7CWzsdUy+8ymfIsCdx2oIaj1L3LJeoupxsZPugncaAkk8GGb6
-         XfmK9FO34z0GqPTCad6ih1oWPQYgbgqLqM7pOB6Ypit86j8hjYMMT0t0SXy0Wms2H+
-         WB5zrkk/ag+DTLbSWOYvI/sVyfceOgZQ1oR/93bzpXMUMYGKbJOr79afCfE3akPU5t
-         jBYi0ShwU0xZHcbBhIGLGYWnbgz03SPn3ez+mTUN6Wzr/AFvvd0ezO8lk1Qa0NuOiu
-         IDb9Cj0QcuN5n1h6EMqgKVDzRAeIthEOMEkM98wmgyRNzwc93kQMnCGFCMPoyFJVB7
-         xTEFt0jXYEqlg==
-Date:   Wed, 20 Jul 2022 13:33:06 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Pavel Begunkov <asml.silence@gmail.com>,
+        with ESMTP id S235442AbiGTDmW (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 19 Jul 2022 23:42:22 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF61568DD7;
+        Tue, 19 Jul 2022 20:42:21 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id m16so22121304edb.11;
+        Tue, 19 Jul 2022 20:42:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=A0OoNPUELJ/dSSGDR8KkMHB3StJZhXQRZj0KnIM+IGw=;
+        b=VIIQ8U7Ufmij10zNk1oSmGlrHgsRYf6ziCUT9ukZw+92okO4rvvYurKnINAnisfPY8
+         0ZkRGXTuG3TZHqpSf+Yb24NFQXc8FKn5Yxr5ToqW5YOisen5BM0jA4BkAi1nEOVboUKv
+         CDfQmgyb70nB7SuzyrdRXuN2GJCqDLO6aUZcpq3HBbTRCxqXxa8lu8BbRI4xBXn/OEYu
+         HEoXkWjXalBSN8lDiD3yOZBi7uIf94FxDvs8CxhGKaqEtV5KNYKeMh20OD7SruiqZfU8
+         flVsia8L19D9lubBjfV23ssib4wBRc2c8/ypUmwnkqumwe/EroUmngt1LYe1Q4djaioR
+         aZRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=A0OoNPUELJ/dSSGDR8KkMHB3StJZhXQRZj0KnIM+IGw=;
+        b=2d+M7zLKRo7kNI+id1MJBKMTxeG5vuzBRn0TBZikSgWrgKtYIk6dNlTKI/0n4jFTw0
+         8bgj2J+m7eEr3KME8Uehk1Qbx6pIzvgz7TgzjTn0EsLJsjPizYkRfht4H2LoPkeOiLv4
+         R2otr9alBPUSDGMuQIafZevHWzcbCts+QsMNCiyizgztHz9SZCa54DAzMqyG600pI8AL
+         97+l0g7kQ/pan0Tk6OTQh8UzD1v3imkF95LyBAfDz6kyh8a1ceIOzXn6/LaXcUMX70/J
+         oaf/VseAhQbIp5ZICCn2a4D6N11dg82yTzRsygno6LC0EdE9ntUsCNEgc6H5NpP+qF5/
+         +Hlg==
+X-Gm-Message-State: AJIora/84UyPDRFsLe2FfZ+HoMlipYBSCGfv6pUfZyE08gb8O/99U971
+        412GAUqSxejL1TrzcTIDaKqJ1qsuk55Ra2DS5lywjewQ
+X-Google-Smtp-Source: AGRyM1uInEkRlcwDbWJT8P/mXmZxsWQh0YNxSyLjjh0wFjK/WSWbHSm7Fqm00GFFtN9vBjiFWwqgLZGh7Zw4p11lHJM=
+X-Received: by 2002:aa7:d053:0:b0:43a:a164:2c3 with SMTP id
+ n19-20020aa7d053000000b0043aa16402c3mr47940490edo.333.1658288540354; Tue, 19
+ Jul 2022 20:42:20 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220720115956.3c27492f@canb.auug.org.au>
+In-Reply-To: <20220720115956.3c27492f@canb.auug.org.au>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 19 Jul 2022 20:42:09 -0700
+Message-ID: <CAADnVQ+xFuff3TRhzrPWkJD+MA16MdRvcprcniX4yzxL5Z+=UA@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the bpf-next tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the block tree
-Message-ID: <20220720133306.5f708750@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/GVlv/sUkjc4xueo0.6sgqv/";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/GVlv/sUkjc4xueo0.6sgqv/
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Jul 19, 2022 at 7:00 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> After merging the bpf-next tree, today's linux-next build (powerpc
+> ppc64_defconfig) failed like this:
+>
+> ld: warning: discarding dynamic section .glink
+> ld: warning: discarding dynamic section .plt
+> ld: linkage table error against `bpf_trampoline_unlink_cgroup_shim'
+> ld: stubs don't match calculated size
+> ld: can not build stubs: bad value
+> ld: kernel/bpf/cgroup.o: in function `.bpf_cgroup_link_release.part.0':
+> cgroup.c:(.text+0x2fc4): undefined reference to `.bpf_trampoline_unlink_cgroup_shim'
+> ld: kernel/bpf/cgroup.o: in function `.cgroup_bpf_release':
+> cgroup.c:(.text+0x33b0): undefined reference to `.bpf_trampoline_unlink_cgroup_shim'
+> ld: cgroup.c:(.text+0x33c0): undefined reference to `.bpf_trampoline_unlink_cgroup_shim'
+>
+> Caused by commit
+>
+>   3908fcddc65d ("bpf: fix lsm_cgroup build errors on esoteric configs")
+>
+> I have reverted that commit for today.
 
-Hi all,
+Argh.
 
-After merging the block tree, today's linux-next build (arm
-multi_v7_defconfig) produced this warning:
+Stan,
 
-io_uring/net.c: In function 'io_sendzc':
-io_uring/net.c:980:41: warning: cast from pointer to integer of different s=
-ize [-Wpointer-to-int-cast]
-  980 |                                         (u64)zc->buf, zc->len);
-      |                                         ^
-
-Introduced by commit
-
-  bb4019de9ea1 ("io_uring: sendzc with fixed buffers")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/GVlv/sUkjc4xueo0.6sgqv/
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLXd3IACgkQAVBC80lX
-0GwF3gf/YOFbnIPc4zS6C0YqScH6jM4tYQHH0stbuoYzNEV4CFZ17A4ncQM0Mugs
-I0gsKTEha0scQqzqgpW4vw0fR38XHsh/FahxNHw/JXjLcKlGnwINZt+LE1BlP9k5
-K3nmV+OHLuIxYEnVY7W6rsUwOWcaDRa8Iz+SUfCiTL5HjDQrRsm17ZZczlBl4gSY
-MD9ZD8UFSKWZwLyYAwwQlEvpiSRmytxX41OzXxpBw3vtLWgt//W32lK4nVHTwdM8
-77bgN7IaGp7c7jQOmwgkbqZCP4a2Xv98WSrO90rpC1NSPkpVO2lhvh9rwPJ5sjDD
-1wB8o5U/X0dnQfYjAbQldI4l4WeuSg==
-=Yj1k
------END PGP SIGNATURE-----
-
---Sig_/GVlv/sUkjc4xueo0.6sgqv/--
+please take a look.

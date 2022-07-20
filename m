@@ -2,88 +2,104 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65BD257A9CB
-	for <lists+linux-next@lfdr.de>; Wed, 20 Jul 2022 00:27:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3AC157AD72
+	for <lists+linux-next@lfdr.de>; Wed, 20 Jul 2022 04:00:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232110AbiGSW07 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 19 Jul 2022 18:26:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59642 "EHLO
+        id S240736AbiGTCAE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 19 Jul 2022 22:00:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233240AbiGSW0n (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 19 Jul 2022 18:26:43 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B74A342AEF;
-        Tue, 19 Jul 2022 15:26:42 -0700 (PDT)
+        with ESMTP id S240831AbiGTCAD (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 19 Jul 2022 22:00:03 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A981509CC;
+        Tue, 19 Jul 2022 19:00:01 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LnYN01lWyz4x1c;
-        Wed, 20 Jul 2022 08:26:39 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Lnf664W6Wz4x1T;
+        Wed, 20 Jul 2022 11:59:58 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1658269600;
-        bh=Dnd8XrokloWaq00/sVIBE41CvanndXephbaBFx7ZZ6E=;
+        s=201702; t=1658282399;
+        bh=bhdoEw1uXwDmJ3zb0O4cMwVb6jyiL7N3GRG/QYEShtw=;
         h=Date:From:To:Cc:Subject:From;
-        b=d5dZlRd15Qfhen+ZiGTDoKe+dcf8UX3U1NbBfmGMf6tX2yVxwDa0cpzMRgpVGG7Zw
-         3fagZWzYQyy2/8yx94pBX3jH2HNekwFI9d39Oq9/8BggnkdoTR+AZhxn0/HCO9F2gI
-         xuvhuLivgep+ck6XJYC4qxvpDlPYqiiyuC6W1ryrTkY6Kq39hAhHvFrM2bRjFH/f/F
-         bKrh+rWt2UvrtY5Qgs74XlMZxboR+WZAZkQd1P9WomZgj6zctrIWtCK2klAj06VINR
-         e0g8hVXrOjydO/if2v5zuNi20SBJi0ZDCvRG+NUvH3+0Sc7e8iM6FDPAWMoRkyPSbG
-         EKQ2P+NTnBA5g==
-Date:   Wed, 20 Jul 2022 08:26:39 +1000
+        b=j9b4R22bso+FdS4VOJxxEVkVaV0GMZw0Had6/899iQFPSVHq7YQCWctP/1kq4meJW
+         DOMpuPR3wf8ZCgSD4Zel6CrzDErTkrgHuIJMfl/50BD+1+v2v78UlJFGm+rdAY6djg
+         S/uxmCEbPP70SMPACjTMjrTEgNK+ATWPh53HZ4/pxiCD9NbZ9UJDRKe/nq1OuN5XPr
+         jNnag1EycWXxVfvI4MDRL8Mq5kiH3h6tbqYTD584Zt7SrvmhWLJVWIJybsS/o9zJZa
+         nVmdAuLQZe0QUr6ZDyd0XIgfc88tbe6xJh6MzCcT7DAnLaU3JGkhekJTusHrToPt4z
+         cDjx/wdF+ttwg==
+Date:   Wed, 20 Jul 2022 11:59:56 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>
-Cc:     Claudio Imbrenda <imbrenda@linux.ibm.com>,
+To:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commits in the kvms390 tree
-Message-ID: <20220720082639.72a0f57c@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the bpf-next tree
+Message-ID: <20220720115956.3c27492f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/kC/Zb8il+rXqi6SZHPMefJ5";
+Content-Type: multipart/signed; boundary="Sig_/Fv5//JLIpbwn5VwgxshyjFE";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/kC/Zb8il+rXqi6SZHPMefJ5
+--Sig_/Fv5//JLIpbwn5VwgxshyjFE
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Commits
+After merging the bpf-next tree, today's linux-next build (powerpc
+ppc64_defconfig) failed like this:
 
-  52db9dcc7b3b ("KVM: s390: resetting the Topology-Change-Report")
-  a20e4a94c7e8 ("KVM: s390: guest support for topology function")
-  117e052974c0 ("KVM: s390: Cleanup ipte lock access and SIIF facility chec=
-ks")
+ld: warning: discarding dynamic section .glink
+ld: warning: discarding dynamic section .plt
+ld: linkage table error against `bpf_trampoline_unlink_cgroup_shim'
+ld: stubs don't match calculated size
+ld: can not build stubs: bad value
+ld: kernel/bpf/cgroup.o: in function `.bpf_cgroup_link_release.part.0':
+cgroup.c:(.text+0x2fc4): undefined reference to `.bpf_trampoline_unlink_cgr=
+oup_shim'
+ld: kernel/bpf/cgroup.o: in function `.cgroup_bpf_release':
+cgroup.c:(.text+0x33b0): undefined reference to `.bpf_trampoline_unlink_cgr=
+oup_shim'
+ld: cgroup.c:(.text+0x33c0): undefined reference to `.bpf_trampoline_unlink=
+_cgroup_shim'
 
-are missing a Signed-off-by from their committer.
+Caused by commit
+
+  3908fcddc65d ("bpf: fix lsm_cgroup build errors on esoteric configs")
+
+I have reverted that commit for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/kC/Zb8il+rXqi6SZHPMefJ5
+--Sig_/Fv5//JLIpbwn5VwgxshyjFE
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLXL58ACgkQAVBC80lX
-0GzeQAf/WiiKfSL8yA5lp5keEUcXzuhHIPuZOiRwCcAPppnZpBE84rSabl+PpqUC
-euK71bKxMuBUU8m8o01fyjmYjSboRS1BrTH8fFpB5mRPeEEAtnRTDzOICREPtIIl
-6QrnaieCCNo5yWuayX16lI8l6slm5+7Vd8e3PBGm8VKaA6f/5QpER8GyqTgGF+dv
-P4Spp+uTbuu+JKVrBbsUNiNLC4WRUThve3SAmb2yGL1sw90gjtb/T25FVM0yo4LF
-+H+LFHkXphAQ8zBtdPNw/BH7j62yiuT7zAmefikoLT+7cL9R4yolsGEQ5ANzIMos
-4GhsTtInKLSR60Ep47ptfj/bIXI8Yg==
-=V4Du
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLXYZwACgkQAVBC80lX
+0GzSFQgAnaA2eOiMKp5wZmiIGDSXhtME62YtWbUflrm1QC+qZEpe+GxRevu795R0
+VKEl/qmAd2HuBmbL0CX/LiEp1IO4SQQ9u21qxcDyV/F18i8AYkgILz5jr0nV7kDN
+CdNhKwjjSTNNkOamEOUO39lz3jyv6nQfD5HDcQ+SDSIBoy+glrNTJKjDN8BXPD3Z
+0pEQrTEfbikPE6gEubcfJ1IPA5As2cxJWcFjbv3qRrq445kABxnOD5SymKWkBWAk
+qaqK1QOP0rUpZkRQyqMtQV6WFy4fgPRk/fe7SAPzSncJqyc5uJDpt0BVm/u+DGcc
+KtwBZJ14lfYb6T0fNFb13svtMfU5Jw==
+=AyPS
 -----END PGP SIGNATURE-----
 
---Sig_/kC/Zb8il+rXqi6SZHPMefJ5--
+--Sig_/Fv5//JLIpbwn5VwgxshyjFE--

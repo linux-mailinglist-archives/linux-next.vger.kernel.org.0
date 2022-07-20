@@ -2,80 +2,96 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C5CD57B995
-	for <lists+linux-next@lfdr.de>; Wed, 20 Jul 2022 17:28:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3F9457BAF6
+	for <lists+linux-next@lfdr.de>; Wed, 20 Jul 2022 17:58:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231215AbiGTP22 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 20 Jul 2022 11:28:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36288 "EHLO
+        id S234352AbiGTP6L (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 20 Jul 2022 11:58:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230348AbiGTP21 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 20 Jul 2022 11:28:27 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3024E5C94E;
-        Wed, 20 Jul 2022 08:28:27 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id x23-20020a05600c179700b003a30e3e7989so1516141wmo.0;
-        Wed, 20 Jul 2022 08:28:27 -0700 (PDT)
+        with ESMTP id S231147AbiGTP6H (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 20 Jul 2022 11:58:07 -0400
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D72D4BD16
+        for <linux-next@vger.kernel.org>; Wed, 20 Jul 2022 08:58:06 -0700 (PDT)
+Received: by mail-il1-x130.google.com with SMTP id c17so8503072ilq.5
+        for <linux-next@vger.kernel.org>; Wed, 20 Jul 2022 08:58:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=cGWm2LaSnYYJYm1MyhKCb/tBTbA1ULL7NivMKT7vo5g=;
-        b=JZki4U99MR4jnDGu3WD9VYGLq8lc6T41LsDK8HK9WqQMI2JLJGx7bhWduPxuAXfJxj
-         bRL00sAeFABhzZ8aL3l3dVvgI9Hee/VRzZxMA9I/5IqzXad/uShfOkoqRQx+40XGb3bA
-         n+hBkR/YV5dKfQb+OcCKxSJiRAy4QheRSEnJ0hgEM65xgLps8Kq9GZpVDxR3/c2A3iAF
-         OvrBoVllqAe+zGeRUtUhnU5o5oyQ3YbNJQwUE71WW+0XqrGxRFdBXhSElf+F290x+67m
-         T/1iURw41J4gjyQE2JjlrYNzzuVC+gEclTtjQpSq+cI7fqYJeixgsjfWCJZ9O5IWaX9j
-         nBaQ==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=UT6swPVSeMcHRK05+enKSBkos62byQoZHdG8lDo48kQ=;
+        b=jyoxlAGXQp9ccWODmnsqRSLHHgOzsw+KoDnEVyhAKhZwFk+6j59bLCma24eQnvNInr
+         nKauH4XJK90u8ObeWG3li7eHftlqaTxtF2vTgD1uNv6t4wPMB8Bx55BvUigjcIv8UliU
+         Q3whCX1a4Rl8m7v1NIAH9Dmv7qIqGkmWEeucNPx05WKu8eWS23djQMjeOkdpCAI37VtQ
+         xSYVfpxC4neSrddiaMtQoKy1cFufqTHQsNDnj+pwa6kBE6RvpHuOzygcCPA1+3Jg58Sb
+         CcSmegB/WmTzxWhraXSBgKzl5L3fYCnVrcGkO44J39AsSsYYWwjyHhQi1HLSuvbmEwvr
+         b2gg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=cGWm2LaSnYYJYm1MyhKCb/tBTbA1ULL7NivMKT7vo5g=;
-        b=XoueTRn5OKvFPyxe6f3fYmzcyDi8Q8GQjRrMgGfHtPmsIHNo696orTatEo7dIW1Unb
-         qEvBhgADeigwO8k2yixIphpsNuJ3zcnm5U/iKiwwWRnwZWWUAxE8WftT5GvB7XFdjIkD
-         RmM8igGFVxXNlKAPViI4quSkzmXy8LsMGL0QPp7FDITaN98JQUeFb+dVFa6NyR6ouBZt
-         jKThByG9mmvYh5wAIH6pOv27GdAU2+u/p7tuDO2XG/glvbAk6g28aOt2WbvdB7LBlQcB
-         idPq0onXLDjnn/Tbe77HToGfX2GOu4lMKkoSjCJgBKgfiRX9LRp12iGoCBj3pFTQZHhF
-         b/qg==
-X-Gm-Message-State: AJIora9rZhNFN9UvGUamA6HQLY1BejGWodRHHv+mM0luoOolbxPLmoYd
-        LgTuW9QVrxau7xNwlhrVtsM02gTM/0Q=
-X-Google-Smtp-Source: AGRyM1s4NEvUke5pHso9W2i1NlbHT8rWEL4fwU490EIWEWwy02wvzU8hyVhKfr0Wg8PkPqlM14ljHw==
-X-Received: by 2002:a05:600c:4f83:b0:3a1:9c7c:9ea3 with SMTP id n3-20020a05600c4f8300b003a19c7c9ea3mr4461800wmq.39.1658330905759;
-        Wed, 20 Jul 2022 08:28:25 -0700 (PDT)
-Received: from debian ([167.98.27.226])
-        by smtp.gmail.com with ESMTPSA id n9-20020a05600c3b8900b003a2d47d3051sm3753599wms.41.2022.07.20.08.28.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 08:28:25 -0700 (PDT)
-Date:   Wed, 20 Jul 2022 16:28:23 +0100
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
-Subject: build failure of next-20220720 due to undefined calls in modpost
-Message-ID: <YtgfF/jyk6WyVLZn@debian>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=UT6swPVSeMcHRK05+enKSBkos62byQoZHdG8lDo48kQ=;
+        b=5HNj3tZK+VP3xEaY44EUpEx1F72Wpt+6waTzR/nXYgTKhP0eacgBACMSCbwIQOH1Ae
+         OLnCRkZdPz3yWnMMihOwKODiDPHVaJj0onnAJKe+SE9rDhKHAPDv6J4giO++cd0u80Qo
+         X8v9xfkm5JGPVC6qsxhnB2V4vAW4nU+vNOX2rMWRvlHisKHXRiCHrwwqTGosKWCNy5j4
+         jfRNIm5zb2QXC47uZlkQqwP7qlqkHVzc8Qmw8E1W35FcXp2sNFpU9zyvUlWprcDoGM8Q
+         yTjKvM6eT30JljcinlB/Cm0K0EPLwSH2R3kUx3kR+FO+3XedTCtJjnuSTY45NORH2tc5
+         MTtw==
+X-Gm-Message-State: AJIora+RgU2MDaXuWb3nAShkTH1/D4HD6JmfyPcFM9uBM9pgtm9qZCxe
+        Agf9MIh8eCq7EdHXWaer2YN9PgbBKE5CHw==
+X-Google-Smtp-Source: AGRyM1t6s3XZL215X7zR+DK7aJBe5zrMXNCayg0r9b5as9Fpi5Z3tXXdOjRJl1Cnp8c2gWJkUzfzTQ==
+X-Received: by 2002:a05:6e02:178c:b0:2dc:2783:aac3 with SMTP id y12-20020a056e02178c00b002dc2783aac3mr19650396ilu.142.1658332685601;
+        Wed, 20 Jul 2022 08:58:05 -0700 (PDT)
+Received: from [192.168.1.172] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id b11-20020a92db0b000000b002dc3df1b345sm6990790iln.88.2022.07.20.08.58.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Jul 2022 08:58:04 -0700 (PDT)
+Message-ID: <eefe2a4c-03b0-0cbe-cead-fe316abfea3c@kernel.dk>
+Date:   Wed, 20 Jul 2022 09:58:03 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: linux-next: Signed-off-by missing for commit in the block tree
+Content-Language: en-US
+To:     Christoph Hellwig <hch@lst.de>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Song Liu <song@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20220720231659.5187722d@canb.auug.org.au>
+ <20220720132154.GA13957@lst.de>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20220720132154.GA13957@lst.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi All,
+On 7/20/22 7:21 AM, Christoph Hellwig wrote:
+> On Wed, Jul 20, 2022 at 11:16:59PM +1000, Stephen Rothwell wrote:
+>> Hi all,
+>>
+>> Commit
+>>
+>>   32389bb813f9 ("md: stop using for_each_mddev in md_notify_reboot")
+>>
+>> is missing a Signed-off-by from its author.
+> 
+> In case this can still be fixed:
+> 
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
 
-Not sure if it has been reported, builds of arm64 allmodconfig
-have failed to build next-20220720 with the error:
+At least we have it documented here, I don't think we need to rebase
+both repos.
 
-ERROR: modpost: "free_nmi" [drivers/soc/fujitsu/a64fx-diag.ko] undefined!
-ERROR: modpost: "request_nmi" [drivers/soc/fujitsu/a64fx-diag.ko] undefined!
-ERROR: modpost: "enable_nmi" [drivers/soc/fujitsu/a64fx-diag.ko] undefined!
+-- 
+Jens Axboe
 
-
---
-Regards
-Sudip

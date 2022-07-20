@@ -2,46 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F71E57BC30
-	for <lists+linux-next@lfdr.de>; Wed, 20 Jul 2022 19:02:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B06D57BC84
+	for <lists+linux-next@lfdr.de>; Wed, 20 Jul 2022 19:23:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbiGTRCO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 20 Jul 2022 13:02:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59436 "EHLO
+        id S239429AbiGTRXH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 20 Jul 2022 13:23:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbiGTRCN (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 20 Jul 2022 13:02:13 -0400
+        with ESMTP id S239402AbiGTRXG (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 20 Jul 2022 13:23:06 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0579A67C81;
-        Wed, 20 Jul 2022 10:02:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2540555092;
+        Wed, 20 Jul 2022 10:23:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=In-Reply-To:From:References:Cc:To:
         Subject:MIME-Version:Date:Message-ID:Content-Type:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=QL53SWd4S0+F3KnCuKyLI/hDMlKU+4Uiz0HhLbNjoQs=; b=XGCb2Kr71paWB4paysKbaryIr9
-        5CyKn989stY4xpwIyPjm/EsM/WP+1mqqoeSaqbbkhDjVRMfKwBnwD32y4gNimCJGhobXyByTz04CH
-        VVBQFdjVvW3CHiP92+bFgmdljOwimxvNdknfAd6Iegle7f3uU6qEC8ONh5Oouix6SAo6eeEmSmYiQ
-        WdsVzRBXwMAH7p7OwxTOvdQA+3yUEWNz5BBl3Uor1ry+/wpl3oxtjneyBpHca9/6Gs+LhSh9YhI3a
-        lOY8AkWznWEAJQvFvuW7wW2w3rtAF4e+VlLaHVFFYGq8HhH6BQgFQ+xqqz6oA6NmxV8NDNtr+UDk9
-        6xg7X8ug==;
+        bh=PqyeYe0nV4oKSGT7Nc5FBL0vT+LNOTX6/eSmVmE/A7s=; b=ooILSFbbJKdOnsA5avwzJ31jrt
+        79PhmE4z/brdcEdIN/U6Mk1W7mnjBCUuharsWq5+oldwknQqAVoROKd4QL64T/wxdKqslvOaLrk9z
+        q7kSsIfiN6HITsYbCD+Romm6X/XH8FLHWPEwx/vz4TqqRDSri5oqqy0zH+oz3GXzS6FMx5sTFC+ae
+        rjV4kM3xzVWNPsYaxjZhk4K5Z6Yvyg0cTX521pRvE6lcFK6WW9k8ZammUrVwtiNRr02m5psI67hOS
+        gShFkWjtCesxoVMY6NxbueDT6A4H7zuQ3rZumT3ad0eDMwxe7Ccdi5RrpawUSXm7TDHQxsSt0omtj
+        8RIQ/Vpg==;
 Received: from [2601:1c0:6280:3f0::a6b3]
         by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oED5N-008Rms-EZ; Wed, 20 Jul 2022 17:02:09 +0000
-Content-Type: multipart/mixed; boundary="------------A4dtV7Ct420HMDzg8nWNDakL"
-Message-ID: <a4ed17de-de0e-8267-851e-51a762223cc5@infradead.org>
-Date:   Wed, 20 Jul 2022 10:02:08 -0700
+        id 1oEDPb-008a0v-2t; Wed, 20 Jul 2022 17:23:03 +0000
+Content-Type: multipart/mixed; boundary="------------EBW0z9Cv4LlGW73mLo4hLhMe"
+Message-ID: <d2a4bfc7-e874-1c8f-ee1b-f24eace31200@infradead.org>
+Date:   Wed, 20 Jul 2022 10:23:02 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: linux-next: Tree for Jul 20 (I2C_I801)
+Subject: Re: linux-next: Tree for Jul 20 (QCOM_RPMPD)
 Content-Language: en-US
 To:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "open list:X86 PLATFORM DRIVERS" 
-        <platform-driver-x86@vger.kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
 References: <20220720225211.20f9fa80@canb.auug.org.au>
 From:   Randy Dunlap <rdunlap@infradead.org>
 In-Reply-To: <20220720225211.20f9fa80@canb.auug.org.au>
@@ -55,7 +53,7 @@ List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
 This is a multi-part message in MIME format.
---------------A4dtV7Ct420HMDzg8nWNDakL
+--------------EBW0z9Cv4LlGW73mLo4hLhMe
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
@@ -67,20 +65,20 @@ On 7/20/22 05:52, Stephen Rothwell wrote:
 > Changes since 20220719:
 > 
 
-on i386 or x86_64:
-when X86_PLATFORM_DEVICES is not set:
+on x86_64:
+when CONFIG_OF is not set:
 
-WARNING: unmet direct dependencies detected for P2SB
-  Depends on [n]: X86_PLATFORM_DEVICES [=n] && PCI [=y]
+WARNING: unmet direct dependencies detected for PM_GENERIC_DOMAINS_OF
+  Depends on [n]: PM_GENERIC_DOMAINS [=y] && OF [=n]
   Selected by [m]:
-  - I2C_I801 [=m] && I2C [=m] && HAS_IOMEM [=y] && PCI [=y] && X86 [=y]
+  - QCOM_RPMPD [=m] && PM [=y] && QCOM_SMD_RPM [=m]
 
 
 Full randconfig file is attached.
 
 -- 
 ~Randy
---------------A4dtV7Ct420HMDzg8nWNDakL
+--------------EBW0z9Cv4LlGW73mLo4hLhMe
 Content-Type: application/gzip; name="config-r4966.gz"
 Content-Disposition: attachment; filename="config-r4966.gz"
 Content-Transfer-Encoding: base64
@@ -780,4 +778,4 @@ Dk/sflrAVavc9idNj/yMJmJizyLN1ElX6KDNKUwCLrLuTlEdCbo4gk0yB+G6VOH0dWRJq6hc
 ey7yBvSGcj0ohlaAKdLzkgXUflJqlW+OLp6FTmAw7h+YnG0VTwA3cQ+7JJWFjokNp/CkyTY1
 4YaPCP0klKoeE8aUUZcHFQjlUpmnarp516oTHvV/79CY1S9FAgA=
 
---------------A4dtV7Ct420HMDzg8nWNDakL--
+--------------EBW0z9Cv4LlGW73mLo4hLhMe--

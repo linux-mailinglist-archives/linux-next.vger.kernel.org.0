@@ -2,84 +2,52 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 450C357B727
-	for <lists+linux-next@lfdr.de>; Wed, 20 Jul 2022 15:17:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35AF457B754
+	for <lists+linux-next@lfdr.de>; Wed, 20 Jul 2022 15:22:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229554AbiGTNRD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 20 Jul 2022 09:17:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45656 "EHLO
+        id S232678AbiGTNWG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 20 Jul 2022 09:22:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230018AbiGTNRD (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 20 Jul 2022 09:17:03 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 227FB43E5D;
-        Wed, 20 Jul 2022 06:17:02 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Lnx7J0g2Dz4xFy;
-        Wed, 20 Jul 2022 23:17:00 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1658323020;
-        bh=bi0g3gigB7KEiM3FxbXUu3NzA7MS0+rAKkrOWm1pVGE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=djdjsDhYBciTgaN2LBK5i5shrChjpNk4+//IHAiu0b+snb4OR5/SDj4g/7Nq8mtui
-         SjO6TPwoF7GGGHUbUptfhgInlRJnzDAOjBYXriT2QKs4vGQyc3qHGwN8QZyTRZ4Qml
-         LBhoJgQu4aHYqqyWXf9nr4CiXh3dS1BUKMLlpvYjYweE5N3Qc4dRrp6OjR/PkdOA7P
-         YzBIUDkOU8bB6OW+QpHt9gJEUg0CEdS14Fkn35m3VPf2UiSh5j3RyNChLb6lzcdOMN
-         xAmHxwRc8n2E5Jq9rswuSLVhYkpr8Kd8tqDdmWHuCKLuFjtPOyE222Zk/ISgDDdTDY
-         ZM56FGkLYv/YQ==
-Date:   Wed, 20 Jul 2022 23:16:59 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Christoph Hellwig <hch@lst.de>, Song Liu <song@kernel.org>,
+        with ESMTP id S232571AbiGTNWB (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 20 Jul 2022 09:22:01 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69BE44F1AF;
+        Wed, 20 Jul 2022 06:22:00 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 7BFB268BEB; Wed, 20 Jul 2022 15:21:55 +0200 (CEST)
+Date:   Wed, 20 Jul 2022 15:21:54 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
+        Song Liu <song@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the block tree
-Message-ID: <20220720231659.5187722d@canb.auug.org.au>
+Subject: Re: linux-next: Signed-off-by missing for commit in the block tree
+Message-ID: <20220720132154.GA13957@lst.de>
+References: <20220720231659.5187722d@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/A3vXLXau1KbtTOAO6_OA8D0";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220720231659.5187722d@canb.auug.org.au>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/A3vXLXau1KbtTOAO6_OA8D0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Jul 20, 2022 at 11:16:59PM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Commit
+> 
+>   32389bb813f9 ("md: stop using for_each_mddev in md_notify_reboot")
+> 
+> is missing a Signed-off-by from its author.
 
-Hi all,
+In case this can still be fixed:
 
-Commit
-
-  32389bb813f9 ("md: stop using for_each_mddev in md_notify_reboot")
-
-is missing a Signed-off-by from its author.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/A3vXLXau1KbtTOAO6_OA8D0
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLYAEsACgkQAVBC80lX
-0GytlQf9GyfnI+BCSrkPvuexJT/UnpSDGB5MB/49vcg1rEzbn19mNUosgR42iUWe
-1I4tvdeIrxDnfvUYx01iFlwfvptK+i5jDFT738XAl+ehn12FGcEL/YhCsSPJq+1f
-rLxMk6vVIPidUfnGzHKSvjDGdkUksOMTx4373QIBF4yeUEY+ZFoSR9Tud2QMN7gf
-5DFKlpFck0xNQJIRKTWMuISflmScN6nSzev+IhS9JIzHVVccR1QRKGYpKAyglK96
-NP98Hc+VjUIbqXxh7soYAqAWuwUkC1zw5/VC4b5wmy9WqmP8TF0Pmf3FgDDvVtmt
-36xykupxJfzIQX4IgzniZ4JA700l7g==
-=+4wd
------END PGP SIGNATURE-----
-
---Sig_/A3vXLXau1KbtTOAO6_OA8D0--
+Signed-off-by: Christoph Hellwig <hch@lst.de>

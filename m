@@ -2,125 +2,101 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D3E857B625
-	for <lists+linux-next@lfdr.de>; Wed, 20 Jul 2022 14:11:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB78E57B68F
+	for <lists+linux-next@lfdr.de>; Wed, 20 Jul 2022 14:36:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231796AbiGTMKu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 20 Jul 2022 08:10:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48234 "EHLO
+        id S236525AbiGTMgL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 20 Jul 2022 08:36:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238637AbiGTMKf (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 20 Jul 2022 08:10:35 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C52226AD8;
-        Wed, 20 Jul 2022 05:10:31 -0700 (PDT)
+        with ESMTP id S240873AbiGTMgK (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 20 Jul 2022 08:36:10 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC6C248EAF;
+        Wed, 20 Jul 2022 05:36:08 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LnvfW2y2Jz4xG0;
-        Wed, 20 Jul 2022 22:10:26 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LnwD473V1z4xG0;
+        Wed, 20 Jul 2022 22:36:04 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1658319027;
-        bh=CrlbbzDClGegwMtLL/xWjFcxi7456Yb9TXrYiNSjdwk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ZXv+oUBVOMfzBYfPWAzkepdJn2mrirxd9tDPPejGkm1wo8g0SEFDlCBWatjzRbjpz
-         LG7MooqQU0uY/edH/JZ2sO2H6K2u3KHkY+l0J2fX7PY8VdrkmfGzW86fOqKXQsFJE6
-         kv5ZGX0Shw+xgIpur1aUac7pn8F9iN3fFhS1NBHBW5VkVIiknwR8U9FN6iEMOnwC1i
-         wyE6tVv1d5PYLw4jeUKCPul/QZp8Hx0Mnis9h0SX3LwIA1hLcEKlyzdJ6v3oWR0oP4
-         EjIVCcUelRhVlj0WdXZ/GVGnsTzwqi/7XYLkHh3B3eYaA4U6Zshri+lMneQdabUquN
-         IFDiqUQxBlb5w==
-Date:   Wed, 20 Jul 2022 22:10:23 +1000
+        s=201702; t=1658320565;
+        bh=JBExvrmQSPyJUmd0NBwaT5zRWx3kYK1P62cysTsHQkE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=pVlDJZxah9QmtrcrIFC7bFftJVAxucQIJZV0cMOYTzucMr+B4czPZL59XgX5etpPQ
+         KGJH2zRR87sE8t8bb5VEF3I05hCqkbKj976d/ObHpOFMKmDOVeJGkLJovQx5nsKmeT
+         N2Sr/YN61sm72B0pWsXfiXC/Y2gjiV7rwTMzyp+t8sr9zg33hJR9BRyaciUgHNIzF+
+         oJJFnDuuCfy4knD6Sy3ztJGpi+W16bQwEDNmA1rSoe39Fupocsvcsfw19JhbNE0RtQ
+         PyJPNdvFj4SC7Kyc6E9eFj+KYfE6G+0T24cRN7KyuJ2JUIPirWhwCitQuPL+AzlP53
+         eEtRt+UVxvYsw==
+Date:   Wed, 20 Jul 2022 22:36:03 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Pavel Begunkov <asml.silence@gmail.com>,
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the block tree
-Message-ID: <20220720221023.6ec3ef0e@canb.auug.org.au>
-In-Reply-To: <20220720133306.5f708750@canb.auug.org.au>
-References: <20220720133306.5f708750@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the asm-generic tree
+Message-ID: <20220720223603.58acc431@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/+znOTWHMLCXSuHqWVWqzFnY";
+Content-Type: multipart/signed; boundary="Sig_/Mbh3QRHhWzFLbljdrtYu99v";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/+znOTWHMLCXSuHqWVWqzFnY
+--Sig_/Mbh3QRHhWzFLbljdrtYu99v
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Wed, 20 Jul 2022 13:33:06 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> After merging the block tree, today's linux-next build (arm
-> multi_v7_defconfig) produced this warning:
->=20
-> io_uring/net.c: In function 'io_sendzc':
-> io_uring/net.c:980:41: warning: cast from pointer to integer of different=
- size [-Wpointer-to-int-cast]
->   980 |                                         (u64)zc->buf, zc->len);
->       |                                         ^
->=20
-> Introduced by commit
->=20
->   bb4019de9ea1 ("io_uring: sendzc with fixed buffers")
+After merging the asm-generic tree, today's linux-next build (arm64
+defconfig) failed like this:
 
-This become an error in my i386 defconfig build, so I applied the
-following patch.
+drivers/char/mem.c: In function 'page_is_allowed':
+drivers/char/mem.c:66:16: error: implicit declaration of function 'devmem_i=
+s_allowed'; did you mean 'page_is_allowed'? [-Werror=3Dimplicit-function-de=
+claration]
+   66 |         return devmem_is_allowed(pfn);
+      |                ^~~~~~~~~~~~~~~~~
+      |                page_is_allowed
+cc1: some warnings being treated as errors
 
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Wed, 20 Jul 2022 21:19:15 +1000
-Subject: [PATCH] fix up for "io_uring: sendzc with fixed buffers"
+Caused by commit
 
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- io_uring/net.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+  cdfde8f61a00 ("asm-generic: correct reference to GENERIC_LIB_DEVMEM_IS_AL=
+LOWED")
 
-diff --git a/io_uring/net.c b/io_uring/net.c
-index 282401255ab4..903a0de689fb 100644
---- a/io_uring/net.c
-+++ b/io_uring/net.c
-@@ -977,7 +977,7 @@ int io_sendzc(struct io_kiocb *req, unsigned int issue_=
-flags)
-=20
- 	if (zc->flags & IORING_RECVSEND_FIXED_BUF) {
- 		ret =3D io_import_fixed(WRITE, &msg.msg_iter, req->imu,
--					(u64)zc->buf, zc->len);
-+					(u64)(unsigned long)zc->buf, zc->len);
- 		if (unlikely(ret))
- 				return ret;
- 	} else {
---=20
-2.35.1
+arm64 does not have a separate declaration of devmem_is_allowed() and
+was using the asm-generic one by accident ... some other architectures
+may be in the same boat.
+
+I have reverted that commit for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/+znOTWHMLCXSuHqWVWqzFnY
+--Sig_/Mbh3QRHhWzFLbljdrtYu99v
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLX8K8ACgkQAVBC80lX
-0GyNggf9H/Nxx6jT0i6WG06jJCU0ZsqjCx3aAzako1hJzEeENmBctQbDlKTBDBG9
-wv0QtdrGuJZMqg+ZqhM9116bFfxSS5mDG0oakcvyUzR0KpKAPl8qaOPv+QOZ6OaP
-gpiAV65xrY2osA2d1gPeEzoSMMF+JaFN9+PNUjlOLgfZEBc0IrSJ2XgrWdqHetYK
-MZhlu4yoQx6CkM+tRj7vLOvKGxmxgHodHNjRLJg+zLY+Zz0x6Qb32XTY+dQMCh/1
-paLDfTREdZd+HZ+7XUJkFghTAq+tspXAiwAeS1ZK8e7+tVKEYqX1pdcgH0xhtdf9
-5tEpw//2zmpOiVAnV8fnuXpQPJbdmQ==
-=u+Of
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLX9rMACgkQAVBC80lX
+0GxA1Af/WocvKzZW3GyaBhEGVBdGakz9Tr7umYNCqtYBqQjn+M1QBglvL5b7WTu6
+hFbcFV0jOhKoh+HsZlA5utI1uok7Lu/IbGdfLRiZqIFOyq9Qhw++fRLOr540vhcm
+2FpQF+4F8b2uCdSyRGfHBjsxYwxQjquclytbhV+yMA+gzBmL+MVtEgWHfurIlk3Q
+GgUsp+R/0MqxYLhujip+Fu9Kn8oRL2jrus/yXcUcBgrFYIRpD91uVqV7rNcMBhtR
+M9stCNYnoliVmkonmPhVi9695uqfrE7x4At48fS3TSzT0+7fZ0BHOYHVc5CMUMvu
+fbDoZaAUYeKk2HYdohHyzp6HDFplBg==
+=Uf+H
 -----END PGP SIGNATURE-----
 
---Sig_/+znOTWHMLCXSuHqWVWqzFnY--
+--Sig_/Mbh3QRHhWzFLbljdrtYu99v--

@@ -2,355 +2,214 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 047AB57C925
-	for <lists+linux-next@lfdr.de>; Thu, 21 Jul 2022 12:36:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7672957C943
+	for <lists+linux-next@lfdr.de>; Thu, 21 Jul 2022 12:45:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233342AbiGUKgz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 21 Jul 2022 06:36:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34700 "EHLO
+        id S231154AbiGUKpY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 21 Jul 2022 06:45:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233318AbiGUKgu (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 21 Jul 2022 06:36:50 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1345282475
-        for <linux-next@vger.kernel.org>; Thu, 21 Jul 2022 03:36:26 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id f11so1422254plr.4
-        for <linux-next@vger.kernel.org>; Thu, 21 Jul 2022 03:36:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=/udjK/dNCl0QVYKPnBIVnsjY8lt/2V9GwBBo6D3+Xjw=;
-        b=PfV3zYXynvEAcz/IC+nyWMvxIMqwNqPQ/gXKouR70A+4eLesq4ZJs027Oy23q2KLk/
-         +en33liAWh7AEnoX3tiJPI4t3UJLx4903PWTSv1tV10trJKB8qgSq8lqdfW4qo5oO4fQ
-         jjKyQIwkrx2F30dmawAXzE21HH5ppSVBssgaet6ArBefvWM/2fI9MVTuqwsHTXBKcGt+
-         jOI55AUBozgFhyLSX4S95leXZpX26x5XY1KH57dWQZmQwR1qYlG/1T39ZiowCTselhiW
-         Hsniyj5KbEHHAO17qlXZVzXOd5K3r+EWlJCeFhhKqRNqn2HV5FbtDiKKc8A7d8nOmq/m
-         K9Iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=/udjK/dNCl0QVYKPnBIVnsjY8lt/2V9GwBBo6D3+Xjw=;
-        b=ZWLHUJhg0dbbCisrFYI76mqkYkakPmIWJVVWME0pQy1Knh+nWJW1/ENJRM4rlW9yWe
-         WyJckOgsRSMBfK/JOZpWBnPlMyn5bhcovBsnQ6yMcCG65kjlTIg6Xij6Hk4VQ5dS4WYf
-         0xvRg6B1e1VdoOepTFJCXH8tiHqbuLrJ621VejRvwrKAvoxylZ7avxJm+b99r6+cNz0j
-         6bed4i7P/S6pc6IJ3cnziMWME8OxEoesqz1rev6E1jjJLX/gu/NqLSea0ChF/LY3sTkt
-         2Y7IRBQKTilBCHPFTihX/Q7ko39ykzl4o/UI1fVVn5KP43f/Spl9UxlKxInencAWUqNN
-         toMw==
-X-Gm-Message-State: AJIora8Z+lVxi0BcwhMTocMStYD9e9Czhyhwr0rcjT64hA6tTY+mgxZP
-        EhBI+AxncTPk/UwO3hCXH548zKdlIktJUeQIVeQ=
-X-Google-Smtp-Source: AGRyM1vKKyzDGr3ajShpPGfhtDgDXVlLUtBliL+bfKp6JHllVlugrc6KfBhpBtzLoTQt4AQIG+F3nA==
-X-Received: by 2002:a17:90b:4f8f:b0:1f2:1eab:b3ea with SMTP id qe15-20020a17090b4f8f00b001f21eabb3eamr7972793pjb.243.1658399785836;
-        Thu, 21 Jul 2022 03:36:25 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id c13-20020a170903234d00b0016c0408932dsm1337140plh.129.2022.07.21.03.36.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 03:36:25 -0700 (PDT)
-Message-ID: <62d92c29.1c69fb81.ed086.207d@mx.google.com>
-Date:   Thu, 21 Jul 2022 03:36:25 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S230104AbiGUKpX (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 21 Jul 2022 06:45:23 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3309515A0E;
+        Thu, 21 Jul 2022 03:45:20 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LpTjp309Vz4x1V;
+        Thu, 21 Jul 2022 20:45:18 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1658400318;
+        bh=XQfutRJTkxr0ARLfUh8ULmq6MYnQ2FxmuQIhzaEuqOA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Pb7Hs+JUD8C0mnjUlUgiGI6MwPGWXM3Gr3s8IOY57R2mH6qfGCVAyhCb7aLwlm7rF
+         KiiJ3UBjbnu58ff+bthgld6QAs/QXpCqO/D1p6LMXxjkDZJj+b8uO1kT/E75yaqPuz
+         YwyVr1kGvr77Yvu5+rs5ED0zcOaunf0KNfGx8H5GWr+f25a08XB/jt2SJGGjqsz/wN
+         K5HMsxPbKltW/CqEugkpCqm1foDQqdw/kSEifjK9uc30FmCFzebKsevWdEmPJZgnvo
+         dvMCYOgkezWB2fLEg449D8sj2TkstpTQwUWc941BOleQmB0+LctzHQBfVIdPk8cR5z
+         OglMQA8epWkzA==
+Date:   Thu, 21 Jul 2022 20:45:17 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Peter Collingbourne <pcc@google.com>
+Subject: Re: linux-next: manual merge of the arm64 tree with the arm64-fixes
+ tree
+Message-ID: <20220721204517.53bab2a3@canb.auug.org.au>
+In-Reply-To: <20220721094512.5419f75f@canb.auug.org.au>
+References: <20220721094512.5419f75f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: next
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v5.19-rc7-260-gaab2277715b66
-Subject: next/pending-fixes baseline: 433 runs,
- 7 regressions (v5.19-rc7-260-gaab2277715b66)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/iDsKAxl9Bdy0e8_vbt4Lrh+";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes baseline: 433 runs, 7 regressions (v5.19-rc7-260-gaab227=
-7715b66)
-
-Regressions Summary
--------------------
-
-platform            | arch  | lab             | compiler | defconfig       =
-             | regressions
---------------------+-------+-----------------+----------+-----------------=
--------------+------------
-imx6ul-pico-hobbit  | arm   | lab-pengutronix | gcc-10   | imx_v6_v7_defcon=
-fig          | 1          =
-
-imx6ul-pico-hobbit  | arm   | lab-pengutronix | gcc-10   | multi_v7_defc...=
-CONFIG_SMP=3Dn | 1          =
-
-imx6ul-pico-hobbit  | arm   | lab-pengutronix | gcc-10   | multi_v7_defconf=
-ig           | 1          =
-
-imx6ul-pico-hobbit  | arm   | lab-pengutronix | gcc-10   | multi_v7_defconf=
-ig+crypto    | 1          =
-
-imx6ul-pico-hobbit  | arm   | lab-pengutronix | gcc-10   | multi_v7_defc...=
-MB2_KERNEL=3Dy | 1          =
-
-jetson-tk1          | arm   | lab-baylibre    | gcc-10   | multi_v7_defc...=
-G_ARM_LPAE=3Dy | 1          =
-
-r8a77950-salvator-x | arm64 | lab-baylibre    | gcc-10   | defconfig+CON...=
-OMIZE_BASE=3Dy | 1          =
-
-
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v5.19-rc7-260-gaab2277715b66/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v5.19-rc7-260-gaab2277715b66
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      aab2277715b6685019135996862f1938eb05f14a =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform            | arch  | lab             | compiler | defconfig       =
-             | regressions
---------------------+-------+-----------------+----------+-----------------=
--------------+------------
-imx6ul-pico-hobbit  | arm   | lab-pengutronix | gcc-10   | imx_v6_v7_defcon=
-fig          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/62d8facf241ad7bdfbdaf076
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: imx_v6_v7_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc7-2=
-60-gaab2277715b66/arm/imx_v6_v7_defconfig/gcc-10/lab-pengutronix/baseline-i=
-mx6ul-pico-hobbit.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc7-2=
-60-gaab2277715b66/arm/imx_v6_v7_defconfig/gcc-10/lab-pengutronix/baseline-i=
-mx6ul-pico-hobbit.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220716.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/62d8facf241ad7bdfbdaf=
-077
-        failing since 1 day (last pass: v5.19-rc6-500-g27ca1dbc37a0, first =
-fail: v5.19-rc7-183-ga3866a7dc77d) =
-
- =
-
-
-
-platform            | arch  | lab             | compiler | defconfig       =
-             | regressions
---------------------+-------+-----------------+----------+-----------------=
--------------+------------
-imx6ul-pico-hobbit  | arm   | lab-pengutronix | gcc-10   | multi_v7_defc...=
-CONFIG_SMP=3Dn | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/62d8f274e69b6e92d1daf0a7
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc7-2=
-60-gaab2277715b66/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-10/lab-pengutro=
-nix/baseline-imx6ul-pico-hobbit.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc7-2=
-60-gaab2277715b66/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-10/lab-pengutro=
-nix/baseline-imx6ul-pico-hobbit.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220716.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/62d8f274e69b6e92d1daf=
-0a8
-        failing since 51 days (last pass: v5.16-rc4-356-ga119cd39dcbf, firs=
-t fail: v5.18-11575-gceccc06b624ed) =
-
- =
-
-
-
-platform            | arch  | lab             | compiler | defconfig       =
-             | regressions
---------------------+-------+-----------------+----------+-----------------=
--------------+------------
-imx6ul-pico-hobbit  | arm   | lab-pengutronix | gcc-10   | multi_v7_defconf=
-ig           | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/62d8f6e7a447868565daf0a2
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc7-2=
-60-gaab2277715b66/arm/multi_v7_defconfig/gcc-10/lab-pengutronix/baseline-im=
-x6ul-pico-hobbit.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc7-2=
-60-gaab2277715b66/arm/multi_v7_defconfig/gcc-10/lab-pengutronix/baseline-im=
-x6ul-pico-hobbit.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220716.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/62d8f6e7a447868565daf=
-0a3
-        failing since 25 days (last pass: v5.19-rc3-373-gd317111b3b1ae, fir=
-st fail: v5.19-rc3-470-g4fc9c7cb4051) =
-
- =
-
-
-
-platform            | arch  | lab             | compiler | defconfig       =
-             | regressions
---------------------+-------+-----------------+----------+-----------------=
--------------+------------
-imx6ul-pico-hobbit  | arm   | lab-pengutronix | gcc-10   | multi_v7_defconf=
-ig+crypto    | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/62d8f773353412f0e0daf05d
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+crypto
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc7-2=
-60-gaab2277715b66/arm/multi_v7_defconfig+crypto/gcc-10/lab-pengutronix/base=
-line-imx6ul-pico-hobbit.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc7-2=
-60-gaab2277715b66/arm/multi_v7_defconfig+crypto/gcc-10/lab-pengutronix/base=
-line-imx6ul-pico-hobbit.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220716.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/62d8f773353412f0e0daf=
-05e
-        failing since 51 days (last pass: v5.16-rc4-356-ga119cd39dcbf, firs=
-t fail: v5.18-11575-gceccc06b624ed) =
-
- =
-
-
-
-platform            | arch  | lab             | compiler | defconfig       =
-             | regressions
---------------------+-------+-----------------+----------+-----------------=
--------------+------------
-imx6ul-pico-hobbit  | arm   | lab-pengutronix | gcc-10   | multi_v7_defc...=
-MB2_KERNEL=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/62d8fb5b72f642cf15daf09e
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc7-2=
-60-gaab2277715b66/arm/multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/la=
-b-pengutronix/baseline-imx6ul-pico-hobbit.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc7-2=
-60-gaab2277715b66/arm/multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/la=
-b-pengutronix/baseline-imx6ul-pico-hobbit.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220716.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/62d8fb5b72f642cf15daf=
-09f
-        failing since 51 days (last pass: v5.16-rc4-356-ga119cd39dcbf, firs=
-t fail: v5.18-11575-gceccc06b624ed) =
-
- =
-
-
-
-platform            | arch  | lab             | compiler | defconfig       =
-             | regressions
---------------------+-------+-----------------+----------+-----------------=
--------------+------------
-jetson-tk1          | arm   | lab-baylibre    | gcc-10   | multi_v7_defc...=
-G_ARM_LPAE=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/62d8f6ea9d276a49c8daf0ad
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc7-2=
-60-gaab2277715b66/arm/multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy=
-/gcc-10/lab-baylibre/baseline-jetson-tk1.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc7-2=
-60-gaab2277715b66/arm/multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy=
-/gcc-10/lab-baylibre/baseline-jetson-tk1.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220716.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/62d8f6ea9d276a49c8daf=
-0ae
-        failing since 82 days (last pass: v5.18-rc2-366-ga3e1163f7eb1a, fir=
-st fail: v5.18-rc4-464-g425675974eb3) =
-
- =
-
-
-
-platform            | arch  | lab             | compiler | defconfig       =
-             | regressions
---------------------+-------+-----------------+----------+-----------------=
--------------+------------
-r8a77950-salvator-x | arm64 | lab-baylibre    | gcc-10   | defconfig+CON...=
-OMIZE_BASE=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/62d8f3dae30b5e25c4daf072
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.19-rc7-2=
-60-gaab2277715b66/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-bayl=
-ibre/baseline-r8a77950-salvator-x.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.19-rc7-2=
-60-gaab2277715b66/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-bayl=
-ibre/baseline-r8a77950-salvator-x.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220716.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/62d8f3dae30b5e25c4daf=
-073
-        new failure (last pass: v5.19-rc7-214-g7bc501036b62c) =
-
- =20
+--Sig_/iDsKAxl9Bdy0e8_vbt4Lrh+
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi all,
+
+On Thu, 21 Jul 2022 09:45:12 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> Today's linux-next merge of the arm64 tree got a conflict in:
+>=20
+>   arch/arm64/kernel/head.S
+>=20
+> between commit:
+>=20
+>   f7b4c3b82e7d ("arm64: set UXN on swapper page tables")
+>=20
+> from the arm64-fixes tree and commits:
+>=20
+>   e42ade29e3bc ("arm64: head: split off idmap creation code")
+>   c3cee924bd85 ("arm64: head: cover entire kernel image in initial ID map=
+")
+>=20
+> from the arm64 tree.
+>=20
+> I didn't know if the change from the former was still needed after the
+> changes in the latter, so I left it out for now.
+
+OK, so my arm64 defconfig build produced these errors:
+
+arch/arm64/kernel/head.S: Assembler messages:
+arch/arm64/kernel/head.S:334: Error: immediate cannot be moved by a single =
+instruction
+arch/arm64/kernel/head.S:343: Error: immediate cannot be moved by a single =
+instruction
+arch/arm64/kernel/head.S:354: Error: immediate cannot be moved by a single =
+instruction
+arch/arm64/kernel/head.S:379: Error: immediate cannot be moved by a single =
+instruction
+arch/arm64/mm/proc.S:296: Error: immediate cannot be moved by a single inst=
+ruction
+
+So I tried this patch:
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Thu, 21 Jul 2022 20:21:36 +1000
+Subject: [PATCH] fixup for "arm64: set UXN on swapper page tables"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ arch/arm64/kernel/head.S | 8 ++++----
+ arch/arm64/mm/proc.S     | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/arch/arm64/kernel/head.S b/arch/arm64/kernel/head.S
+index cefe6a73ee54..aa7c58689f68 100644
+--- a/arch/arm64/kernel/head.S
++++ b/arch/arm64/kernel/head.S
+@@ -331,7 +331,7 @@ SYM_FUNC_START_LOCAL(create_idmap)
+ 	adrp	x0, init_idmap_pg_dir
+ 	adrp	x3, _text
+ 	adrp	x6, _end + MAX_FDT_SIZE + SWAPPER_BLOCK_SIZE
+-	mov	x7, SWAPPER_RX_MMUFLAGS
++	mov_q	x7, SWAPPER_RX_MMUFLAGS
+=20
+ 	map_memory x0, x1, x3, x6, x7, x3, IDMAP_PGD_ORDER, x10, x11, x12, x13, x=
+14, EXTRA_SHIFT
+=20
+@@ -340,7 +340,7 @@ SYM_FUNC_START_LOCAL(create_idmap)
+ 	adrp	x2, init_pg_dir
+ 	adrp	x3, init_pg_end
+ 	bic	x4, x2, #SWAPPER_BLOCK_SIZE - 1
+-	mov	x5, SWAPPER_RW_MMUFLAGS
++	mov_q	x5, SWAPPER_RW_MMUFLAGS
+ 	mov	x6, #SWAPPER_BLOCK_SHIFT
+ 	bl	remap_region
+=20
+@@ -351,7 +351,7 @@ SYM_FUNC_START_LOCAL(create_idmap)
+ 	bfi	x22, x21, #0, #SWAPPER_BLOCK_SHIFT		// remapped FDT address
+ 	add	x3, x2, #MAX_FDT_SIZE + SWAPPER_BLOCK_SIZE
+ 	bic	x4, x21, #SWAPPER_BLOCK_SIZE - 1
+-	mov	x5, SWAPPER_RW_MMUFLAGS
++	mov_q	x5, SWAPPER_RW_MMUFLAGS
+ 	mov	x6, #SWAPPER_BLOCK_SHIFT
+ 	bl	remap_region
+=20
+@@ -376,7 +376,7 @@ SYM_FUNC_START_LOCAL(create_kernel_mapping)
+ 	adrp	x3, _text			// runtime __pa(_text)
+ 	sub	x6, x6, x3			// _end - _text
+ 	add	x6, x6, x5			// runtime __va(_end)
+-	mov	x7, SWAPPER_RW_MMUFLAGS
++	mov_q	x7, SWAPPER_RW_MMUFLAGS
+=20
+ 	map_memory x0, x1, x5, x6, x7, x3, (VA_BITS - PGDIR_SHIFT), x10, x11, x12=
+, x13, x14
+=20
+diff --git a/arch/arm64/mm/proc.S b/arch/arm64/mm/proc.S
+index 7837a69524c5..b4fe8e6e85cb 100644
+--- a/arch/arm64/mm/proc.S
++++ b/arch/arm64/mm/proc.S
+@@ -293,7 +293,7 @@ SYM_FUNC_START(idmap_kpti_install_ng_mappings)
+ 	isb
+=20
+ 	mov	temp_pte, x5
+-	mov	pte_flags, #KPTI_NG_PTE_FLAGS
++	mov_q	pte_flags, #KPTI_NG_PTE_FLAGS
+=20
+ 	/* Everybody is enjoying the idmap, so we can rewrite swapper. */
+ 	/* PGD */
+--=20
+2.35.1
+
+Which mostly worked, but produced this:
+
+arch/arm64/mm/proc.S: Assembler messages:
+arch/arm64/mm/proc.S:296: Error: bad expression
+arch/arm64/mm/proc.S:296: Error: found '(', expected: ')'
+arch/arm64/mm/proc.S:296: Error: found '(', expected: ')'
+arch/arm64/mm/proc.S:296: Error: found '(', expected: ')'
+arch/arm64/mm/proc.S:296: Error: junk at end of line, first unrecognized ch=
+aracter is `('
+arch/arm64/mm/proc.S:296: Error: bad expression
+arch/arm64/mm/proc.S:296: Error: found '(', expected: ')'
+arch/arm64/mm/proc.S:296: Error: found '(', expected: ')'
+arch/arm64/mm/proc.S:296: Error: found '(', expected: ')'
+arch/arm64/mm/proc.S:296: Error: junk at end of line, first unrecognized ch=
+aracter is `('
+arch/arm64/mm/proc.S:296: Error: bad expression at operand 2 -- `movz pte_f=
+lags,:abs_g3:#(((0)<<2)|((3<<0)|(1<<10)|(3<<8)|(1<<54)))'
+arch/arm64/mm/proc.S:296: Error: bad expression at operand 2 -- `movk pte_f=
+lags,:abs_g2_nc:#(((0)<<2)|((3<<0)|(1<<10)|(3<<8)|(1<<54)))'
+arch/arm64/mm/proc.S:296: Error: bad expression at operand 2 -- `movk pte_f=
+lags,:abs_g1_nc:#(((0)<<2)|((3<<0)|(1<<10)|(3<<8)|(1<<54)))'
+arch/arm64/mm/proc.S:296: Error: bad expression at operand 2 -- `movk pte_f=
+lags,:abs_g0_nc:#(((0)<<2)|((3<<0)|(1<<10)|(3<<8)|(1<<54)))'
+
+So I gave up and left arm64 broken for today :-(
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/iDsKAxl9Bdy0e8_vbt4Lrh+
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLZLj0ACgkQAVBC80lX
+0Gwbkwf+OibdDxkFIpJESPQm7UaZQogW2BzBebaS/zNqYOnfDXf3O6apMyDNT3CB
+8/hOtQQw61qsOUtDo2Xqo+3uZ9fnS74ZgSZJfqc/9NQFzZLYTFGETD1srlntiFK2
+84vif99q920iFirgPElnGGIJu3ZC63avmroQX2ZuSEJrT+L/JQ/aZ2jNLfEkJO0n
+g5eV8gTZaROO765P9zDP1jksZw4EqZFJt+0DToRlmjVT9Jxqdv1YaUwSCemL57Rn
+Kc90JWVQugFI80l/0JbvwHC0b39Kjh5CyDQwkKd9X0S6vIbAkV/U6D7r2XjOp+gi
+JpUnUHEOTCppNLOpIOoH5ueOMAmLzQ==
+=upJ2
+-----END PGP SIGNATURE-----
+
+--Sig_/iDsKAxl9Bdy0e8_vbt4Lrh+--

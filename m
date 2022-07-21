@@ -2,154 +2,119 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC8BC57C831
-	for <lists+linux-next@lfdr.de>; Thu, 21 Jul 2022 11:55:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC0EC57C8A2
+	for <lists+linux-next@lfdr.de>; Thu, 21 Jul 2022 12:11:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232372AbiGUJzT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 21 Jul 2022 05:55:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53522 "EHLO
+        id S232488AbiGUKLD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 21 Jul 2022 06:11:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232582AbiGUJzS (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 21 Jul 2022 05:55:18 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC9225EA6;
-        Thu, 21 Jul 2022 02:55:16 -0700 (PDT)
+        with ESMTP id S231739AbiGUKLC (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 21 Jul 2022 06:11:02 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B15E04B4A1;
+        Thu, 21 Jul 2022 03:11:00 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LpSby3PtPz4xFy;
-        Thu, 21 Jul 2022 19:55:10 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LpSyC06DBz4xD9;
+        Thu, 21 Jul 2022 20:10:58 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1658397310;
-        bh=KYojhQKQTwCcF2T7SoTSUYzFgZzQxy+uKu3TuySFYfs=;
+        s=201702; t=1658398259;
+        bh=sEgdxDtyfRSnTjr22k3su89zLrONxxZN72LRDIbVWz4=;
         h=Date:From:To:Cc:Subject:From;
-        b=n+bgNF5ZFXcWcrl4FYrPSs5pVmiUwgY+XJAJgTwlf//w3d96jNOy4uOwwajDQiBGe
-         HyuNc88qOtB5wpCA+Z5xwpJ053X4txQ85Am1Ow17rVfry2wPEhNfmcIoCye2HTmsfD
-         +2vUElv1LeI8N9yks8zWft7JLysRPM80ydrCMd3tcn7ryqZUgnKRHt+7GFcz7iMVny
-         00LGGFXN2qVfh43jsHoo72yOB0njQ7xTqEU3+rSUisgV16D25AttEn3N9UmogS7wwU
-         gVs/O+MvxPhFZMwxgT4fey3S9hgbXQaPnaXE403k6+OI6S+bdXi/XQ1pnx/oukIvvr
-         fY2dv25XWqFFQ==
-Date:   Thu, 21 Jul 2022 19:55:08 +1000
+        b=u3FIEyZhiF8wVDKfx+bhM301sQ59ownFwMK64EQInwf4DNodJgPHj0LnQKjGAF3tH
+         soYmTiguiKhqhQSOv/r8ClVtMRnPHHMAuTXMPI37r94aAabQQbhHGGJv8rJddsd8JS
+         OH9LywgtmFArHE5TRYheWTRie1A0HVNsk+nkcgc6b/1Ks6Ci2fKiCDfDaX3ukmsc1a
+         wRIHshA0ogIaCHoK8qxX7bQuGomsBlJFP+SorNkYdpcWT8MN2f9tR/5fVGPQPoRtCt
+         b0XXaw+LNa/q0vX5b394MViPL1O+tdIl38c/fL3DqUGCmXvxIF2cwfoINZ3GUDpVEM
+         Fhfxs/gopbvUg==
+Date:   Thu, 21 Jul 2022 20:10:58 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Zach O'Keefe <zokeefe@google.com>,
+To:     Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>
+Cc:     Alexander Gordeev <agordeev@linux.ibm.com>,
+        Tony Krowiak <akrowiak@linux.ibm.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: linux-next: build warning after merge of the mm tree
-Message-ID: <20220721195508.15f1e07a@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warnings after merge of the s390 tree
+Message-ID: <20220721201058.2a276286@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/3DBC.JRnzAsYpTNZ=6rFzL0";
+Content-Type: multipart/signed; boundary="Sig_/FlDX2OqGTG0pA9kWq21S_Za";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/3DBC.JRnzAsYpTNZ=6rFzL0
+--Sig_/FlDX2OqGTG0pA9kWq21S_Za
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the mm tree, today's linux-next build (powerpc
-ppc64_defconfig) produced this warning:
+After merging the s390 tree, today's linux-next build (htmldocs) produced
+these warnings:
 
-In file included from arch/powerpc/include/asm/book3s/64/mmu-hash.h:20,
-                 from arch/powerpc/include/asm/book3s/64/mmu.h:32,
-                 from arch/powerpc/include/asm/mmu.h:393,
-                 from arch/powerpc/include/asm/lppaca.h:46,
-                 from arch/powerpc/include/asm/paca.h:18,
-                 from arch/powerpc/include/asm/current.h:13,
-                 from include/linux/thread_info.h:23,
-                 from include/asm-generic/preempt.h:5,
-                 from ./arch/powerpc/include/generated/asm/preempt.h:1,
-                 from include/linux/preempt.h:78,
-                 from include/linux/spinlock.h:55,
-                 from include/linux/mmzone.h:8,
-                 from include/linux/gfp.h:7,
-                 from include/linux/mm.h:7,
-                 from mm/khugepaged.c:4:
-arch/powerpc/include/asm/book3s/64/pgtable.h:190:25: warning: "__pte_index_=
-size" is not defined, evaluates to 0 [-Wundef]
-  190 | #define PTE_INDEX_SIZE  __pte_index_size
-      |                         ^~~~~~~~~~~~~~~~
-arch/powerpc/include/asm/book3s/64/pgtable.h:241:39: note: in expansion of =
-macro 'PTE_INDEX_SIZE'
-  241 | #define PMD_SHIFT       (PAGE_SHIFT + PTE_INDEX_SIZE)
-      |                                       ^~~~~~~~~~~~~~
-include/linux/huge_mm.h:109:25: note: in expansion of macro 'PMD_SHIFT'
-  109 | #define HPAGE_PMD_SHIFT PMD_SHIFT
-      |                         ^~~~~~~~~
-include/linux/huge_mm.h:105:26: note: in expansion of macro 'HPAGE_PMD_SHIF=
-T'
-  105 | #define HPAGE_PMD_ORDER (HPAGE_PMD_SHIFT-PAGE_SHIFT)
-      |                          ^~~~~~~~~~~~~~~
-mm/khugepaged.c:95:5: note: in expansion of macro 'HPAGE_PMD_ORDER'
-   95 | #if HPAGE_PMD_ORDER < 16
-      |     ^~~~~~~~~~~~~~~
+Documentation/s390/vfio-ap-locking.rst:10: WARNING: Inline emphasis start-s=
+tring without end-string.
+Documentation/s390/vfio-ap-locking.rst:10: WARNING: Inline emphasis start-s=
+tring without end-string.
+Documentation/s390/vfio-ap-locking.rst:10: WARNING: Inline emphasis start-s=
+tring without end-string.
+Documentation/s390/vfio-ap-locking.rst:15: WARNING: Title underline too sho=
+rt.
+
+The Matrix Devices Lock (drivers/s390/crypto/vfio_ap_private.h)
+--------------------------------------------------------------
+Documentation/s390/vfio-ap-locking.rst:22: WARNING: Definition list ends wi=
+thout a blank line; unexpected unindent.
+Documentation/s390/vfio-ap-locking.rst:38: WARNING: Definition list ends wi=
+thout a blank line; unexpected unindent.
+Documentation/s390/vfio-ap-locking.rst:56: WARNING: Definition list ends wi=
+thout a blank line; unexpected unindent.
+Documentation/s390/vfio-ap-locking.rst:92: WARNING: Inline emphasis start-s=
+tring without end-string.
+Documentation/s390/vfio-ap-locking.rst:92: WARNING: Inline emphasis start-s=
+tring without end-string.
+Documentation/s390/vfio-ap-locking.rst:95: WARNING: Inline emphasis start-s=
+tring without end-string.
+Documentation/s390/vfio-ap-locking.rst:99: WARNING: Definition list ends wi=
+thout a blank line; unexpected unindent.
+Documentation/s390/vfio-ap-locking.rst:101: WARNING: Inline emphasis start-=
+string without end-string.
+Documentation/s390/vfio-ap-locking.rst: WARNING: document isn't included in=
+ any toctree
 
 Introduced by commit
 
-  adcc4e193b6b ("mm/khugepaged: use minimal bits to store num page < HPAGE_=
-PMD_NR")
-
-So HPAGE_PMD_ORDER is not a constant on ppc64 ...
-
-I applied this hack for today (which makes it build without warning and
-puts things more or less back as they were for ppo64).
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Thu, 21 Jul 2022 19:49:40 +1000
-Subject: [PATCH] fix up for "mm/khugepaged: use minimal bits to store num p=
-age < HPAGE_PMD_NR"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- mm/khugepaged.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-index 28cb8429dad4..d8e388106322 100644
---- a/mm/khugepaged.c
-+++ b/mm/khugepaged.c
-@@ -92,7 +92,9 @@ struct collapse_control {
- 	bool is_khugepaged;
-=20
- 	/* Num pages scanned per node */
--#if HPAGE_PMD_ORDER < 16
-+#if defined(CONFIG_PPC64)
-+	u32 node_load[MAX_NUMNODES];
-+#elif HPAGE_PMD_ORDER < 16
- 	u16 node_load[MAX_NUMNODES];
- #else
- 	u32 node_load[MAX_NUMNODES];
---=20
-2.35.1
+  e32d3827f3d5 ("s390/Docs: new doc describing lock usage by the vfio_ap de=
+vice driver")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/3DBC.JRnzAsYpTNZ=6rFzL0
+--Sig_/FlDX2OqGTG0pA9kWq21S_Za
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLZIn0ACgkQAVBC80lX
-0GySLAf8CMkjn8HhKwYM/PVsKI9tR98l7+NMQHww2AjzsU05aJUgSegKl/ngB7gm
-kCSItJrrRjw4LB4zdTUxB199rayaVMtkDgLvX9ei0853vDzpZMqlXfpSRDdYUGCL
-+YsrvmSIE7j2zq14vQmdsdkivPq6E5TG+umC0k2UMUHC+ScVeTKMnq0/VnEBQTNs
-98iQI8k6ZZUGvATlXxYcHASPMCQKnxF4Y69XxEJNjEp5zeNz1GLaU3r7AFewCETe
-NRKa2aBeoFWFEMyGbUMuReSTdQ9CO2s9/q+dvhyhW/NRAS+sin11aGAFRIJsd/pZ
-R7wwfmKnWQ7SibczwUU4MVU3GwOXJQ==
-=m03K
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLZJjIACgkQAVBC80lX
+0GzUBwgAiyoJNGinR6fM2hN2wFpxcrweFQocgh1GPerMzlyqnGmXNAWk55k1oC3K
+VKhu2ctyhOi7NMD3JqKKvHUh7UucayXkgyT1B63lAeHDqV9KWAK2RePcRGRJ+vWS
+C3N1648QqEXd0sjrD/J6qh+/HRfkQM4Psm36TRj2XfbgEhthhaRf/mmTjl6UO4dM
+gl52zyIv5Ww9P1n86pweBz6i68v4K8gwn/4gHcVd8ZSK6PmnuijOWF3jCNpglNBk
+9+0kmI/rOpeaNezShKAlIKznFRbXJvqeZxSHPFzavji3l+bwxnmc0naz3MINwane
+mJTj+Pfp5th4dI0Iyj0mxOpuvxUV4A==
+=AeYn
 -----END PGP SIGNATURE-----
 
---Sig_/3DBC.JRnzAsYpTNZ=6rFzL0--
+--Sig_/FlDX2OqGTG0pA9kWq21S_Za--

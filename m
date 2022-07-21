@@ -2,96 +2,83 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F23257D1FC
-	for <lists+linux-next@lfdr.de>; Thu, 21 Jul 2022 18:51:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C43C57D6BE
+	for <lists+linux-next@lfdr.de>; Fri, 22 Jul 2022 00:16:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbiGUQvi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 21 Jul 2022 12:51:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56142 "EHLO
+        id S233556AbiGUWQq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 21 Jul 2022 18:16:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbiGUQvh (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 21 Jul 2022 12:51:37 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED8F8BA93
-        for <linux-next@vger.kernel.org>; Thu, 21 Jul 2022 09:51:36 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id h145so1777156iof.9
-        for <linux-next@vger.kernel.org>; Thu, 21 Jul 2022 09:51:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=kBrKJZxEJZScbYIdNWQ41kmJ2go5hgyJDa02gwDJF0E=;
-        b=JGqQrlpABav9cLjPPE1rHTgN59BibGQ4hJ5TJSJYkj58k5n0aJ1eb75lj8ke5Y9Te+
-         BQ9FFJTBMeZYpEqc3h+SOjJ+zI5WNdSaJneaImxRcXc8PRLzRUeiU5whjQ0F0DB62ugN
-         ttV1bm2j3r+aGrJGyqlrgW6WO9qhu1Mep8Fg3DEqT1s66lMJ1RbmCBEp3Yn0CD0RzLHd
-         TA3hf7GxdEgMUi/v5f3Wru1phU6LvHeC+kPdmBAIfjxuTtKGEgW00rtOi+UmdJfsehkF
-         k7u9+SBqGfEFcS0av+EV2SRqRKmOnhlBDg/N0gVo5L5yof5t6KDKxttxSGpeDNYa+dPz
-         OJxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=kBrKJZxEJZScbYIdNWQ41kmJ2go5hgyJDa02gwDJF0E=;
-        b=Ceu+13WCxHo9hYntPSQYl6KWrineHDcKOswVtOrM9QOR04DetWgP6wyuPPWLTcHujS
-         JImuPFWLQMsUEDWpXgA4cygPUfuqOtdfAEmtgkaGerJKkaHiBvQ0/sztKNZz+C3FRiLm
-         haRyHE+ZhMAQOgg0KwQE5fxMbDIaSpWVd/ToVN0mWZE8+iX7wl7fC/4Hb3mJV125IBwA
-         D6/Dkxz8C8sNSKmybTsLdHG/uxYcPr+AS5wvY8Bv2UYSU1lIRJ9HKFCmGssxxuva2r9U
-         pZ2InDCCslUIHOMiQ44/LY+V8cC91qTa3+pNOrTUZSwl7EzMSihhDMnWuPEg2zBcgPYH
-         cJow==
-X-Gm-Message-State: AJIora+XMidgrwk6uXSBaQ0JWKdooMhvYwICPPBNWUqFG9F5sDSzXXMK
-        3+qtk45Ndp+6okhsvhDJ+Z0HSg==
-X-Google-Smtp-Source: AGRyM1uRD8hgPo4nuRYApW45Md6Bu64OmRjSJ3pILNJHFypbmR46S+hC6Vj5iy3RRAs4vImkzF7qPg==
-X-Received: by 2002:a05:6638:260a:b0:341:4bda:9c2c with SMTP id m10-20020a056638260a00b003414bda9c2cmr16638569jat.160.1658422296180;
-        Thu, 21 Jul 2022 09:51:36 -0700 (PDT)
-Received: from [192.168.1.172] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id n4-20020a056602340400b00674f9fb1531sm1019863ioz.30.2022.07.21.09.51.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Jul 2022 09:51:35 -0700 (PDT)
-Message-ID: <7ceaa46e-ae1c-5bf6-bb60-f1a67ddd1fde@kernel.dk>
-Date:   Thu, 21 Jul 2022 10:51:34 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: linux-next: build failure after merge of the block tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Christoph Hellwig <hch@lst.de>, Song Liu <song@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        with ESMTP id S233752AbiGUWQn (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 21 Jul 2022 18:16:43 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB9A19C1C;
+        Thu, 21 Jul 2022 15:16:36 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Lpn3Q4HRDz4xGC;
+        Fri, 22 Jul 2022 08:16:33 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1658441794;
+        bh=kFeJUu85GewLppY0RIt8DS0OhaFAkTyEUtGKA4W/In4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=DROt4CwCZ02uEw3njYblGbseKyMAbQ1VdCP3IM0FbEs7Zyy6/XwcuDoHGegKrZrVb
+         D1++jIS7knD3zIXnG0KW1yto7/UjaJoZ7gBBbJKFD1rOV2X7ycXVbA7VeIoKNQmvD7
+         jrac0CFQq1wteJHW88m6bH5jLLlaet7xtVnswKrHsApx1SrXUBbw8flaidS0i66f+1
+         zzung94XBW8nE/c572uKC5aoXLNwqlibvU+Un+o6RBCYdvby9n4au3xSCD8iloJPq3
+         0UkiIwGEeE4p1qLgcllFyw28b6xulBR3R5xYeQMU4X3MUPOO/rpDAtlMWZ92VEhia/
+         LzeOdH5yoL9fw==
+Date:   Fri, 22 Jul 2022 08:16:14 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220721131132.070be166@canb.auug.org.au>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20220721131132.070be166@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: linux-next: Signed-off-by missing for commit in the fuse tree
+Message-ID: <20220722081614.07e3261a@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/NMK6869ZzKqlQ_UhKDqYuzm";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 7/20/22 9:11 PM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the block tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
-> 
-> drivers/md/md.c:717:22: error: 'mddev_find' defined but not used [-Werror=unused-function]
->   717 | static struct mddev *mddev_find(dev_t unit)
->       |                      ^~~~~~~~~~
-> cc1: all warnings being treated as errors
-> 
-> Caused by commit
-> 
->   4500d5c17910 ("md: simplify md_open")
-> 
-> I have applied the following patch for today.
+--Sig_/NMK6869ZzKqlQ_UhKDqYuzm
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks, I turned that commit message into a real patch and added it.
+Hi all,
 
--- 
-Jens Axboe
+Commit
 
+  c8d80924ae02 ("virtio_fs: Modify format for virtio_fs_direct_access")
+
+is missing a Signed-off-by from its committer.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/NMK6869ZzKqlQ_UhKDqYuzm
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLZ0C4ACgkQAVBC80lX
+0GyVTQf/VNYj8r/e7dgv5CWfYdc4CQ1+RQX3ekoKhvV121gUMVsmmlMglMBqwIVN
+SG2KSuCFX67vSC907Vt0z1Hc7HxXgdLsj1/N+B08gzs+weK0pU1Byd7DLiHwmdvI
+1EVfEh56xSOp1Bs4CF9HzG4Ue8k+HHQlzrUCIBv1M7Ia9GzSGTrZKNPIPGacmA2q
+1dtaw9OJGWDX8vSQNviKWgiE2TwKlYonofnjZkJOCL9gQIPf2Rj36KY7nfXB4s66
+in1c18Mi2NRORPL4AiwBH+EB9phtVq12LM79k+TWkCBVq/cHKLF66MczOPrvRPCW
+JoAb2Ra4CQ1sFXCjV8Cj+XWlnJfy0Q==
+=5bxL
+-----END PGP SIGNATURE-----
+
+--Sig_/NMK6869ZzKqlQ_UhKDqYuzm--

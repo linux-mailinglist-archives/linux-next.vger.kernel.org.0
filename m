@@ -2,49 +2,66 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E566C57C229
-	for <lists+linux-next@lfdr.de>; Thu, 21 Jul 2022 04:16:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 252C657C255
+	for <lists+linux-next@lfdr.de>; Thu, 21 Jul 2022 04:36:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229515AbiGUCQ1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 20 Jul 2022 22:16:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35116 "EHLO
+        id S231684AbiGUCgB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 20 Jul 2022 22:36:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231598AbiGUCQ0 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 20 Jul 2022 22:16:26 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D5A56D2D9;
-        Wed, 20 Jul 2022 19:16:24 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LpGQW5q2Tz4x1h;
-        Thu, 21 Jul 2022 12:16:19 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1658369779;
-        bh=7VsGzyLSIlUXoL9tBmDBhsJtgMbbanTcoqRPv+zZg7E=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=WwQs4QDD1zAMQtopxEOdY7wlC4K1DRfuWDOiA65x3q4AQ4fihgDXZ2GKkcjSTFDMq
-         lsDST9rRDBFjFu87s07o918dqQT5PtiqDKcf1a6HEwy1FYsnZW0yLfy8/+PGPEMMxg
-         qPtkJeI56nurWdmHJ/oIH/OFxB1df1bbsnjl4CWLpeqP5X/wQzxSVHqMrSMLWC0cNM
-         /wEAYKVCGMsfcumSWLXrYaRHVhnOX+kyZWPWQAuKSfDF0mQN1yaRpWZYzWl+4Gs5kx
-         kYwCUFTJbptrTBvy7tQd3GJwNU4QXeEh1DG0DuIrIxvSQq+TNEmwVaJOuYCht06iMG
-         QgS1pjJWXtdWg==
-Date:   Thu, 21 Jul 2022 12:16:18 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the amdgpu tree
-Message-ID: <20220721121618.049b9c00@canb.auug.org.au>
-In-Reply-To: <20220720124732.4aeb3748@canb.auug.org.au>
-References: <20220719123607.63cbb3c5@canb.auug.org.au>
-        <20220720124732.4aeb3748@canb.auug.org.au>
+        with ESMTP id S229436AbiGUCgA (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 20 Jul 2022 22:36:00 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2A921D336
+        for <linux-next@vger.kernel.org>; Wed, 20 Jul 2022 19:35:59 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id u5so322946wrm.4
+        for <linux-next@vger.kernel.org>; Wed, 20 Jul 2022 19:35:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VqmzPsRoQUtQQLCqBZaksSJCZdedraAjaKBqFxITMf0=;
+        b=XwrCn5FUkCoJgYv24Y9WOPzewP9cZ+h84e8RO1ACno2pA0lyagADV+s//yvCpc5Usd
+         dvxBAxOQ4PDBlTcdiRhBdN4XmsS91P2rW+wkqtSUwtMN0wk7Bjo6j2nz0AJYilAXx8Yq
+         0liDzgRBePKy3qYqV6E/WaexRuEnW8hD8edEvoKjeLMxb2qbdY4MQODd0z9BhOopghrI
+         ZdBmXvBDcMCDaJ32hyCEXRjYxLmni1UFskDOYxYC+/V6ykBKHOqa4hYNA9FtlmWZlyN5
+         UnCpwiuyeMQ+LwyGsJtyuFRhoMsf+Rf4np+JNzY38ZGHTn6ZnKKaXCutrtAaQ8O1UjiZ
+         lk1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VqmzPsRoQUtQQLCqBZaksSJCZdedraAjaKBqFxITMf0=;
+        b=FiJn+fWFc6nsDwU+lZWdccQ7xCR90T0qufnPY4iqluyk9XYtPU120U51HRC+E8ogOj
+         5+Oab9CKKuICTpaIWjsKj1OCwCtiMVL5cCOhSNE2q6qixfoAzaNB/8LF41CsDZ3ucbKh
+         d6lFKuU4aasBDSyg56iZ7QvogBDdsKFGaQvS5n2zWyIEBF7S6zndvHVXoWepSqa2ggfj
+         CuED621l3TfOaVNGlTN2mLjcKCjEQWu5G40knkLo9AHptP9bTn+cV+pJlOJez04dpPvK
+         R50gpDsccnOdJNN5H4DUyURol1dJJ1K3/cY/cMbfxaZNLYtCmwg0VxLVivMmw/u1zuj+
+         W5Ng==
+X-Gm-Message-State: AJIora8omlkGEMHFVM/vvHe6WrCd8I+VLVH0Xf6ygMk9JIwyzVa6QiHO
+        6z+Tc0KlNlYPaFWr36K5K+7ZU3NiJohKLeN9Fuu3qHZ5Yqw=
+X-Google-Smtp-Source: AGRyM1vLldRzfJBxIPk3X5buyWrLNnStBvGVL8RiAnMbD2FCnu5GVC3c/94CrP+XUiDL5BR9sPQzj0WKVynUZ8o9yg4=
+X-Received: by 2002:adf:e28d:0:b0:21e:4c3b:b446 with SMTP id
+ v13-20020adfe28d000000b0021e4c3bb446mr3739209wri.300.1658370958022; Wed, 20
+ Jul 2022 19:35:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/PA5GB2es=AsdGUk3H1gfIHJ";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+References: <20220721090500.35774b43@canb.auug.org.au>
+In-Reply-To: <20220721090500.35774b43@canb.auug.org.au>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 20 Jul 2022 19:35:45 -0700
+Message-ID: <CAP-5=fV+Oo+__sWTgfqyVKwyr1FxYYSv9H6H72CgdQN_Jv1ZAQ@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the perf tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Ian Rogers <rogers.email@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,45 +69,32 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/PA5GB2es=AsdGUk3H1gfIHJ
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Jul 20, 2022 at 4:05 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> After merging the perf tree, today's linux-next build (native perf)
+> failed like this:
+>
+> Traceback (most recent call last):
+>   File "util/setup.py", line 31, in <module>
+>     from setuptools import setup, Extension
+> ImportError: No module named setuptools
+>
+> Caused by commit
+>
+>   ee87a0841aa5 ("perf python: Avoid deprecation warning on distutils")
+>
+> I installed python3-setuptools.
 
-Hi all,
+Thanks, could you give more details? Are you overriding python to be
+an older version on the command line? What does "python --version" and
+"python3 --version" show? Installing python3-setuptools should be what
+you need, but I'm not sure why that's not working for you.
 
-On Wed, 20 Jul 2022 12:47:32 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->=20
-> > drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.=
-c: In function 'dml32_ModeSupportAndSystemConfigurationFull':
-> > drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.=
-c:3799:1: error: the frame size of 2464 bytes is larger than 2048 bytes [-W=
-error=3Dframe-larger-than=3D]
-> >  3799 | } // ModeSupportAndSystemConfigurationFull
-> >       | ^ =20
->=20
-> This is still here, but the frame size is down to 2336.
+In any case. sorry for the inconvenience of this. Thanks,
+Ian
 
-Today it is down to 2128.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/PA5GB2es=AsdGUk3H1gfIHJ
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLYtvIACgkQAVBC80lX
-0Gxd3wf+Ojr46o/0kPWH0GRXLbSEqnau2ERG4Dle0ucSuoDsEgnks2qC3ffywsIG
-5kKK0CeaefHI4Dw22Bmh3zJB16dNmWhpmUJWPQtxHKsGKRkSOEgsWP6yC1qlLVs1
-46HEkTcmPXK4GEECyFjqfH1xx12HndxzPqi/E0Vw7TYeWlfGtIl9cbr1/HNyLXls
-8Ku1ONdAUMLFxEfROsqnyBm7Ah29NEOm9ujx/6njPxv3nbuSbxCkyhz1ZOLZw+WL
-aC4Y/hvfuvNITGV6mg5aA5AC2FbPMDxT4zeWPFtit6T7oLOKWIpoocisPqJNzWv5
-pPNdsF+XTZBAvGeSmSdrmlVLq9IlkQ==
-=VoWl
------END PGP SIGNATURE-----
-
---Sig_/PA5GB2es=AsdGUk3H1gfIHJ--
+> --
+> Cheers,
+> Stephen Rothwell

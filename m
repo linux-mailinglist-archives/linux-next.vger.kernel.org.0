@@ -2,132 +2,96 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED56257D136
-	for <lists+linux-next@lfdr.de>; Thu, 21 Jul 2022 18:17:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F23257D1FC
+	for <lists+linux-next@lfdr.de>; Thu, 21 Jul 2022 18:51:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233641AbiGUQRJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 21 Jul 2022 12:17:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42948 "EHLO
+        id S230036AbiGUQvi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 21 Jul 2022 12:51:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233883AbiGUQQy (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 21 Jul 2022 12:16:54 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 025878BABD;
-        Thu, 21 Jul 2022 09:15:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 50D06CE2665;
-        Thu, 21 Jul 2022 16:15:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EE73C3411E;
-        Thu, 21 Jul 2022 16:15:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658420104;
-        bh=bc+HNadWZW5/Ebtg39b5IGqTWAWv9J8k07Uo8LXCfew=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=e2BkRgffYqa1p0Ky6qJNOMVTlJp4lZExi6dbD0hPpPrBciRvRQBaV960i8l4PIEYY
-         4gNnbR0fq1l04GziqepX2uFXK3zboi7aNBlyFi4//ByHPgq97wgYWIlunTszyjmyf2
-         4rSp7iOqeQNOa/HyuzmhKWeaG1Re8dHRPWoOAbf/gHyCfigHEDbYfHWH136PVW8IEp
-         //0oi24afVkFn+Wntc4eVkZ0AbLbWQHbuQgxIZAjv9hTFeZwBddLZ89KZQqgNkTjK9
-         hhveIweq0F0ddhSamlvu+6u0fjlUWExrBdpyqu5CT0sI/Ei62Qhq2WvkZYQ5wtrbFZ
-         qRLDJBQ+WYCXQ==
-Date:   Thu, 21 Jul 2022 17:14:58 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Peter Collingbourne <pcc@google.com>
-Subject: Re: linux-next: manual merge of the arm64 tree with the arm64-fixes
- tree
-Message-ID: <20220721161458.GA17567@willie-the-truck>
-References: <20220721094512.5419f75f@canb.auug.org.au>
- <20220721204517.53bab2a3@canb.auug.org.au>
+        with ESMTP id S229750AbiGUQvh (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 21 Jul 2022 12:51:37 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED8F8BA93
+        for <linux-next@vger.kernel.org>; Thu, 21 Jul 2022 09:51:36 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id h145so1777156iof.9
+        for <linux-next@vger.kernel.org>; Thu, 21 Jul 2022 09:51:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=kBrKJZxEJZScbYIdNWQ41kmJ2go5hgyJDa02gwDJF0E=;
+        b=JGqQrlpABav9cLjPPE1rHTgN59BibGQ4hJ5TJSJYkj58k5n0aJ1eb75lj8ke5Y9Te+
+         BQ9FFJTBMeZYpEqc3h+SOjJ+zI5WNdSaJneaImxRcXc8PRLzRUeiU5whjQ0F0DB62ugN
+         ttV1bm2j3r+aGrJGyqlrgW6WO9qhu1Mep8Fg3DEqT1s66lMJ1RbmCBEp3Yn0CD0RzLHd
+         TA3hf7GxdEgMUi/v5f3Wru1phU6LvHeC+kPdmBAIfjxuTtKGEgW00rtOi+UmdJfsehkF
+         k7u9+SBqGfEFcS0av+EV2SRqRKmOnhlBDg/N0gVo5L5yof5t6KDKxttxSGpeDNYa+dPz
+         OJxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=kBrKJZxEJZScbYIdNWQ41kmJ2go5hgyJDa02gwDJF0E=;
+        b=Ceu+13WCxHo9hYntPSQYl6KWrineHDcKOswVtOrM9QOR04DetWgP6wyuPPWLTcHujS
+         JImuPFWLQMsUEDWpXgA4cygPUfuqOtdfAEmtgkaGerJKkaHiBvQ0/sztKNZz+C3FRiLm
+         haRyHE+ZhMAQOgg0KwQE5fxMbDIaSpWVd/ToVN0mWZE8+iX7wl7fC/4Hb3mJV125IBwA
+         D6/Dkxz8C8sNSKmybTsLdHG/uxYcPr+AS5wvY8Bv2UYSU1lIRJ9HKFCmGssxxuva2r9U
+         pZ2InDCCslUIHOMiQ44/LY+V8cC91qTa3+pNOrTUZSwl7EzMSihhDMnWuPEg2zBcgPYH
+         cJow==
+X-Gm-Message-State: AJIora+XMidgrwk6uXSBaQ0JWKdooMhvYwICPPBNWUqFG9F5sDSzXXMK
+        3+qtk45Ndp+6okhsvhDJ+Z0HSg==
+X-Google-Smtp-Source: AGRyM1uRD8hgPo4nuRYApW45Md6Bu64OmRjSJ3pILNJHFypbmR46S+hC6Vj5iy3RRAs4vImkzF7qPg==
+X-Received: by 2002:a05:6638:260a:b0:341:4bda:9c2c with SMTP id m10-20020a056638260a00b003414bda9c2cmr16638569jat.160.1658422296180;
+        Thu, 21 Jul 2022 09:51:36 -0700 (PDT)
+Received: from [192.168.1.172] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id n4-20020a056602340400b00674f9fb1531sm1019863ioz.30.2022.07.21.09.51.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Jul 2022 09:51:35 -0700 (PDT)
+Message-ID: <7ceaa46e-ae1c-5bf6-bb60-f1a67ddd1fde@kernel.dk>
+Date:   Thu, 21 Jul 2022 10:51:34 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220721204517.53bab2a3@canb.auug.org.au>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: linux-next: build failure after merge of the block tree
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Christoph Hellwig <hch@lst.de>, Song Liu <song@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20220721131132.070be166@canb.auug.org.au>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20220721131132.070be166@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
-
-On Thu, Jul 21, 2022 at 08:45:17PM +1000, Stephen Rothwell wrote:
-> On Thu, 21 Jul 2022 09:45:12 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >
-> > Today's linux-next merge of the arm64 tree got a conflict in:
-> > 
-> >   arch/arm64/kernel/head.S
-> > 
-> > between commit:
-> > 
-> >   f7b4c3b82e7d ("arm64: set UXN on swapper page tables")
-> > 
-> > from the arm64-fixes tree and commits:
-> > 
-> >   e42ade29e3bc ("arm64: head: split off idmap creation code")
-> >   c3cee924bd85 ("arm64: head: cover entire kernel image in initial ID map")
-> > 
-> > from the arm64 tree.
-> > 
-> > I didn't know if the change from the former was still needed after the
-> > changes in the latter, so I left it out for now.
+On 7/20/22 9:11 PM, Stephen Rothwell wrote:
+> Hi all,
 > 
-> OK, so my arm64 defconfig build produced these errors:
+> After merging the block tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
 > 
-> arch/arm64/kernel/head.S: Assembler messages:
-> arch/arm64/kernel/head.S:334: Error: immediate cannot be moved by a single instruction
-> arch/arm64/kernel/head.S:343: Error: immediate cannot be moved by a single instruction
-> arch/arm64/kernel/head.S:354: Error: immediate cannot be moved by a single instruction
-> arch/arm64/kernel/head.S:379: Error: immediate cannot be moved by a single instruction
-> arch/arm64/mm/proc.S:296: Error: immediate cannot be moved by a single instruction
+> drivers/md/md.c:717:22: error: 'mddev_find' defined but not used [-Werror=unused-function]
+>   717 | static struct mddev *mddev_find(dev_t unit)
+>       |                      ^~~~~~~~~~
+> cc1: all warnings being treated as errors
 > 
-> So I tried this patch:
+> Caused by commit
 > 
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Thu, 21 Jul 2022 20:21:36 +1000
-> Subject: [PATCH] fixup for "arm64: set UXN on swapper page tables"
+>   4500d5c17910 ("md: simplify md_open")
 > 
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  arch/arm64/kernel/head.S | 8 ++++----
->  arch/arm64/mm/proc.S     | 2 +-
->  2 files changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/arch/arm64/kernel/head.S b/arch/arm64/kernel/head.S
-> index cefe6a73ee54..aa7c58689f68 100644
-> --- a/arch/arm64/kernel/head.S
-> +++ b/arch/arm64/kernel/head.S
-> @@ -331,7 +331,7 @@ SYM_FUNC_START_LOCAL(create_idmap)
->  	adrp	x0, init_idmap_pg_dir
->  	adrp	x3, _text
->  	adrp	x6, _end + MAX_FDT_SIZE + SWAPPER_BLOCK_SIZE
-> -	mov	x7, SWAPPER_RX_MMUFLAGS
-> +	mov_q	x7, SWAPPER_RX_MMUFLAGS
+> I have applied the following patch for today.
 
-[...]
+Thanks, I turned that commit message into a real patch and added it.
 
-I think Marc posted something similar here:
+-- 
+Jens Axboe
 
-https://lore.kernel.org/r/20220721124244.903567-1-maz@kernel.org
-
-but in further discussion offline (and echoed on that thread), we've decided
-to drop f7b4c3b82e7d ("arm64: set UXN on swapper page tables") for now; the
-issue it addresses doesn't affect the hardware which is readily available at
-the moment so we'll just get it into -stable instead rather than disrupt
-everything at this stage in the release cycle.
-
-> So I gave up and left arm64 broken for today :-(
-
-No problem, thank you for trying and hopefully it will be better tomorrow
-once we've dropped that commit.
-
-Will

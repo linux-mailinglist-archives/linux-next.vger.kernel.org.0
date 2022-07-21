@@ -2,66 +2,47 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 252C657C255
-	for <lists+linux-next@lfdr.de>; Thu, 21 Jul 2022 04:36:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B8A157C294
+	for <lists+linux-next@lfdr.de>; Thu, 21 Jul 2022 05:11:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231684AbiGUCgB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 20 Jul 2022 22:36:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47348 "EHLO
+        id S229874AbiGUDLk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 20 Jul 2022 23:11:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiGUCgA (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 20 Jul 2022 22:36:00 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2A921D336
-        for <linux-next@vger.kernel.org>; Wed, 20 Jul 2022 19:35:59 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id u5so322946wrm.4
-        for <linux-next@vger.kernel.org>; Wed, 20 Jul 2022 19:35:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VqmzPsRoQUtQQLCqBZaksSJCZdedraAjaKBqFxITMf0=;
-        b=XwrCn5FUkCoJgYv24Y9WOPzewP9cZ+h84e8RO1ACno2pA0lyagADV+s//yvCpc5Usd
-         dvxBAxOQ4PDBlTcdiRhBdN4XmsS91P2rW+wkqtSUwtMN0wk7Bjo6j2nz0AJYilAXx8Yq
-         0liDzgRBePKy3qYqV6E/WaexRuEnW8hD8edEvoKjeLMxb2qbdY4MQODd0z9BhOopghrI
-         ZdBmXvBDcMCDaJ32hyCEXRjYxLmni1UFskDOYxYC+/V6ykBKHOqa4hYNA9FtlmWZlyN5
-         UnCpwiuyeMQ+LwyGsJtyuFRhoMsf+Rf4np+JNzY38ZGHTn6ZnKKaXCutrtAaQ8O1UjiZ
-         lk1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VqmzPsRoQUtQQLCqBZaksSJCZdedraAjaKBqFxITMf0=;
-        b=FiJn+fWFc6nsDwU+lZWdccQ7xCR90T0qufnPY4iqluyk9XYtPU120U51HRC+E8ogOj
-         5+Oab9CKKuICTpaIWjsKj1OCwCtiMVL5cCOhSNE2q6qixfoAzaNB/8LF41CsDZ3ucbKh
-         d6lFKuU4aasBDSyg56iZ7QvogBDdsKFGaQvS5n2zWyIEBF7S6zndvHVXoWepSqa2ggfj
-         CuED621l3TfOaVNGlTN2mLjcKCjEQWu5G40knkLo9AHptP9bTn+cV+pJlOJez04dpPvK
-         R50gpDsccnOdJNN5H4DUyURol1dJJ1K3/cY/cMbfxaZNLYtCmwg0VxLVivMmw/u1zuj+
-         W5Ng==
-X-Gm-Message-State: AJIora8omlkGEMHFVM/vvHe6WrCd8I+VLVH0Xf6ygMk9JIwyzVa6QiHO
-        6z+Tc0KlNlYPaFWr36K5K+7ZU3NiJohKLeN9Fuu3qHZ5Yqw=
-X-Google-Smtp-Source: AGRyM1vLldRzfJBxIPk3X5buyWrLNnStBvGVL8RiAnMbD2FCnu5GVC3c/94CrP+XUiDL5BR9sPQzj0WKVynUZ8o9yg4=
-X-Received: by 2002:adf:e28d:0:b0:21e:4c3b:b446 with SMTP id
- v13-20020adfe28d000000b0021e4c3bb446mr3739209wri.300.1658370958022; Wed, 20
- Jul 2022 19:35:58 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220721090500.35774b43@canb.auug.org.au>
-In-Reply-To: <20220721090500.35774b43@canb.auug.org.au>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 20 Jul 2022 19:35:45 -0700
-Message-ID: <CAP-5=fV+Oo+__sWTgfqyVKwyr1FxYYSv9H6H72CgdQN_Jv1ZAQ@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the perf tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Ian Rogers <rogers.email@gmail.com>,
+        with ESMTP id S229649AbiGUDLj (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 20 Jul 2022 23:11:39 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F1C520BDD;
+        Wed, 20 Jul 2022 20:11:37 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LpHfH32D2z4x1f;
+        Thu, 21 Jul 2022 13:11:34 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1658373096;
+        bh=WrX66Z+kbLW7AE5ClgZGgpn3AoDiYXk1lHbgmg5iv5E=;
+        h=Date:From:To:Cc:Subject:From;
+        b=R2XLmPyhlQ7Jw6zM5cN+G+NNPMd9pwMn6VTUDeDDrNSiCD0dudjEuJ7OcNj3nzm/E
+         8LatozH2kP8eKYDQWAyeFve2YoxpLH09pfx2apIyEyPKn6Vd62j4oxfMQpN3pxxyKc
+         vf0/6Aj4+PV+FXWKj77cVVrN6rQDNfe9kshcVk1+p6utR5B03/saRmC3erLwBZg/+S
+         bORLVt4wDai165uGxdhnXUDUIiw3Iz0hycGxdAUCVgDyK8aBSX+pCEqaF9nLbxmQCs
+         NL1okfgYHZ1FSi2cCRcbJeGHU3iHZGYEn9UA/GeovIuTKCOPfRq7DHCMgNFCwMpLxt
+         UtzJKvc972TBg==
+Date:   Thu, 21 Jul 2022 13:11:32 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Christoph Hellwig <hch@lst.de>, Song Liu <song@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Subject: linux-next: build failure after merge of the block tree
+Message-ID: <20220721131132.070be166@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/i_TL0w7IMtiRDWOEXsNOfGU";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,32 +50,76 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 4:05 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> After merging the perf tree, today's linux-next build (native perf)
-> failed like this:
->
-> Traceback (most recent call last):
->   File "util/setup.py", line 31, in <module>
->     from setuptools import setup, Extension
-> ImportError: No module named setuptools
->
-> Caused by commit
->
->   ee87a0841aa5 ("perf python: Avoid deprecation warning on distutils")
->
-> I installed python3-setuptools.
+--Sig_/i_TL0w7IMtiRDWOEXsNOfGU
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks, could you give more details? Are you overriding python to be
-an older version on the command line? What does "python --version" and
-"python3 --version" show? Installing python3-setuptools should be what
-you need, but I'm not sure why that's not working for you.
+Hi all,
 
-In any case. sorry for the inconvenience of this. Thanks,
-Ian
+After merging the block tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-> --
-> Cheers,
-> Stephen Rothwell
+drivers/md/md.c:717:22: error: 'mddev_find' defined but not used [-Werror=
+=3Dunused-function]
+  717 | static struct mddev *mddev_find(dev_t unit)
+      |                      ^~~~~~~~~~
+cc1: all warnings being treated as errors
+
+Caused by commit
+
+  4500d5c17910 ("md: simplify md_open")
+
+I have applied the following patch for today.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Thu, 21 Jul 2022 13:03:16 +1000
+Subject: [PATCH] fix for "md: simplify md_open"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/md/md.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/md/md.c b/drivers/md/md.c
+index fa500ae9863b..673a39042208 100644
+--- a/drivers/md/md.c
++++ b/drivers/md/md.c
+@@ -714,6 +714,7 @@ static dev_t mddev_alloc_unit(void)
+ 	return dev;
+ }
+=20
++#ifndef MODULE
+ static struct mddev *mddev_find(dev_t unit)
+ {
+ 	struct mddev *mddev;
+@@ -729,6 +730,7 @@ static struct mddev *mddev_find(dev_t unit)
+=20
+ 	return mddev;
+ }
++#endif
+=20
+ static struct mddev *mddev_alloc(dev_t unit)
+ {
+--=20
+2.35.1
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/i_TL0w7IMtiRDWOEXsNOfGU
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLYw+QACgkQAVBC80lX
+0GxWTQf/caRcsFoIuiMqcmcxvJ/isHvU7KhPxz7FAJV/dQS/VhS3ShYoOeGUfYB+
+57bJSa1pM7YvOee6JCjxWNNp67tRdDHq5ovePMiieX9e7fegC6x5GIbHhqQ861yL
+8dAkvjVfDkrhV/zTAypQT5DEHarhirkxTdTkjsaumXZQR5P9pOX61PgpKCEopdyg
+0x4KDEuuMx4stCTQ70ox8d/YlgN7BK9tB5YwEO93FuH5onncBtqWCKxoLFzSo1+p
+A/5oeZEauUk/+akUB3FdLAIbY14kp19YNJEmPITpTRaU4/jkVtFknjUWjUyLVceZ
+8H4gIU/rytxBe+OhUp46tPoL308eHw==
+=+ZKm
+-----END PGP SIGNATURE-----
+
+--Sig_/i_TL0w7IMtiRDWOEXsNOfGU--

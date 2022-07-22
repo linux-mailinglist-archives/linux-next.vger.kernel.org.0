@@ -2,63 +2,63 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A17157E9BD
-	for <lists+linux-next@lfdr.de>; Sat, 23 Jul 2022 00:34:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA5E757EA28
+	for <lists+linux-next@lfdr.de>; Sat, 23 Jul 2022 01:04:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236915AbiGVWe2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 22 Jul 2022 18:34:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54174 "EHLO
+        id S236333AbiGVXEy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 22 Jul 2022 19:04:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236950AbiGVWdr (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 22 Jul 2022 18:33:47 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDB1BB5546
-        for <linux-next@vger.kernel.org>; Fri, 22 Jul 2022 15:33:21 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id t3-20020a17090a3b4300b001f21eb7e8b0so8723096pjf.1
-        for <linux-next@vger.kernel.org>; Fri, 22 Jul 2022 15:33:21 -0700 (PDT)
+        with ESMTP id S232454AbiGVXEx (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 22 Jul 2022 19:04:53 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AA5485FA0
+        for <linux-next@vger.kernel.org>; Fri, 22 Jul 2022 16:04:51 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id b133so5618885pfb.6
+        for <linux-next@vger.kernel.org>; Fri, 22 Jul 2022 16:04:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernelci-org.20210112.gappssmtp.com; s=20210112;
         h=message-id:date:mime-version:content-transfer-encoding:subject:to
          :from;
-        bh=OpJ+gFbuz7hbk9VjK5pAjTRcZ+FwcL3M6BDiPDm8vR0=;
-        b=sXvTpezv5AS6OVbqU1SsWljUlLpfNLF+JUzWHK7ZnSfXrBXo4euDsqICjPeXINvpYu
-         rUs3OHj4vZi8uu0D2OqhV47XJMrKt5o0fua6OA9t1zclLViQE1Dn7MmFkEA0gBMhsI5w
-         NnBKXL33tAKIpfNRYRpy4W7gtIupt7g0YShIU6HDUtsDsLW7sy4WFMYA7e73YSBzDE7w
-         nR7uz+0rsSAtw6HTXSsDFxMYF5IhyLgnl7cSGsO1Z6Ops0PgzXOyTAozmVHoF6tDmk0y
-         PqONB8B26BpV8OBdEwmHkfYBEkDp9YZMhZxOv/fCsKdfI+C1uS5Bsd65Jvau9NwQV6vm
-         7ssQ==
+        bh=SW/7Z1TUmpZCxjbozjtmXLGllhdbJ4VF+2g1+CGV5J0=;
+        b=HH7bvRZj/Oa2sEa03v53CAMZ3bUMTv2CBnv1f2wFRkM5v0mWcIa9HzjdypHRTxpC/V
+         3ERSHWMGgJq6rdL18iSmFICAlgT2OgqUVDX6SCJKlKR19erCg1mO1od/jiwmjT4Botgm
+         K6mMH1tRJ90xAEcmyT+qT3skxu6ji4yTv6S4C8beptdGBvQOoLS57y1UmBtI1pkPBjcl
+         7pcLqtK0lEOlbtfOO/2kJGp2AW0Hs7ysWtNfD6aevaeTznDm7WIdrithyqZUpbWZBFAt
+         FYFD1gGv0jrOsNYAGRPz4dEfg2nxLnNh/Vo06YlW6KdqTnn4gED8xXwMhrvEwn9o7x3o
+         09zg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version
          :content-transfer-encoding:subject:to:from;
-        bh=OpJ+gFbuz7hbk9VjK5pAjTRcZ+FwcL3M6BDiPDm8vR0=;
-        b=j0m0cdZTPaegUlYCCzcemjhk8dJqR1kEafnpO6ygmRY8Y9JnTwvXeQ7meqJShbcZlG
-         8UrcmVAKeVZQDWJrIUC5dfPgoH6BNeTpBl0rgiwdU8qQdYEErxhFSY/Fy3h0AbUDu530
-         l14feywet8y5WmSNAeqG4fIvkpLaKl6jPUstbbJK/vctjLXkz9lPAddfPoiYCSAbvVPa
-         +YbLPlGPpoJEzKbM89GvC1Ep+RpTNMkUNUz2FYzXDwK9e3IrCAj5kyCLlILUHmbOZDU7
-         G11x27xugqBu7C69fK+K+9U5VwKP9tzM06m70QC2BFiJLmQ8Fk7T7Meqnk+NVwx4id4+
-         6kPg==
-X-Gm-Message-State: AJIora/7+ShvBHIEEFpeKUkOGcfLBVXgzUQbInURA5tYSk5uI33Kllqh
-        uS4eUr/b34vWSzbL92kdSUshANPMFLEifbDj
-X-Google-Smtp-Source: AGRyM1ttyZIX49VomrERzgk0M6vbzty/PkaTswHrj4d+fphxLW1A7gfuVRLN7QD8xWIRnWSvAyQ1Zg==
-X-Received: by 2002:a17:902:7e47:b0:16c:7115:84d6 with SMTP id a7-20020a1709027e4700b0016c711584d6mr1948485pln.93.1658529200435;
-        Fri, 22 Jul 2022 15:33:20 -0700 (PDT)
+        bh=SW/7Z1TUmpZCxjbozjtmXLGllhdbJ4VF+2g1+CGV5J0=;
+        b=zh0p42tG179OEcmKVKFfOWGGD87rWy+w3Brm9itLQNZZY9X5cqbULOQzFrx5Xw/cmf
+         /B11XNpakYUKBHUOK2szW3uTar2o1zp8bjhx9MHO17tm314EiSaRKVx4OHP1IhpZMhKJ
+         65bHbcfluWz5U9kQr7+QxXy9B9Sg6Jk+ZLpsOEB3l/wJMnPnNQ6enrvMh9NcujzpNeme
+         hobLxmI996CwKgfuBXcxCAPD+XYu0LkypYMsCD4dIGlnnC2TB2u+i2egz+VmPATkExqI
+         EsrCRtbBsR1l2Wu9HlY8QYXTV/dSmL0Gf633ZbIWvZVGSmgwSAtzpxty5Byf+7Oj99z2
+         WshA==
+X-Gm-Message-State: AJIora9MCJKu6TfL337WHTT9FwC8LsoLOPKnHmfxuMkKY8L/DKdg2cUL
+        phFfffPcrryve+lQ+3Jc0balIqoEigqgqEcm
+X-Google-Smtp-Source: AGRyM1uOuyPNOYskgzxOxtMT8iIiXMvf0gxNF8CP7sI3Lej79mh+EjF/VXYAUxCTaExabreVEflxgw==
+X-Received: by 2002:a05:6a00:10ca:b0:4f7:5af4:47b6 with SMTP id d10-20020a056a0010ca00b004f75af447b6mr2219047pfu.6.1658531089233;
+        Fri, 22 Jul 2022 16:04:49 -0700 (PDT)
 Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id a17-20020aa78e91000000b005254e44b748sm4405315pfr.84.2022.07.22.15.33.19
+        by smtp.gmail.com with ESMTPSA id r27-20020aa7989b000000b0052859441ad3sm4475393pfl.214.2022.07.22.16.04.48
         for <linux-next@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Jul 2022 15:33:20 -0700 (PDT)
-Message-ID: <62db25b0.1c69fb81.a2552.72a4@mx.google.com>
-Date:   Fri, 22 Jul 2022 15:33:20 -0700 (PDT)
+        Fri, 22 Jul 2022 16:04:48 -0700 (PDT)
+Message-ID: <62db2d10.1c69fb81.a2398.72f4@mx.google.com>
+Date:   Fri, 22 Jul 2022 16:04:48 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-Kernelci-Tree: next
-X-Kernelci-Branch: pending-fixes
+X-Kernelci-Branch: master
 X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: v5.19-rc7-273-gae7d06669281
-Subject: next/pending-fixes build: 199 builds: 1 failed, 198 passed, 4 errors,
- 4 warnings (v5.19-rc7-273-gae7d06669281)
+X-Kernelci-Kernel: next-20220722
+Subject: next/master build: 213 builds: 8 failed, 205 passed, 25 errors,
+ 76 warnings (next-20220722)
 To:     linux-next@vger.kernel.org
 From:   "kernelci.org bot" <bot@kernelci.org>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -70,40 +70,77 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes build: 199 builds: 1 failed, 198 passed, 4 errors, 4 war=
-nings (v5.19-rc7-273-gae7d06669281)
+next/master build: 213 builds: 8 failed, 205 passed, 25 errors, 76 warnings=
+ (next-20220722)
 
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.19-rc7-273-gae7d06669281/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20220722/
 
 Tree: next
-Branch: pending-fixes
-Git Describe: v5.19-rc7-273-gae7d06669281
-Git Commit: ae7d0666928179c7ae95db6d44d150ef95f04ae8
+Branch: master
+Git Describe: next-20220722
+Git Commit: 18c107a1f120d095404d141dfad8f594bdc44020
 Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
 Built: 7 unique architectures
 
-Build Failure Detected:
+Build Failures Detected:
+
+arm64:
+    allmodconfig: (clang-15) FAIL
+
+arm:
+    allmodconfig: (clang-15) FAIL
+    allmodconfig: (gcc-10) FAIL
+    rpc_defconfig: (gcc-10) FAIL
+
+i386:
+    allmodconfig: (clang-15) FAIL
+    i386_defconfig: (clang-15) FAIL
 
 mips:
     decstation_64_defconfig: (gcc-10) FAIL
+
+x86_64:
+    allmodconfig: (clang-15) FAIL
 
 Errors and Warnings Detected:
 
 arc:
 
 arm64:
+    allmodconfig (clang-15): 8 errors
+    defconfig (clang-15): 2 warnings
+    defconfig (gcc-10): 1 warning
+    defconfig+CONFIG_ARM64_16K_PAGES=3Dy (gcc-10): 1 warning
+    defconfig+CONFIG_ARM64_64K_PAGES=3Dy (clang-15): 2 warnings
+    defconfig+CONFIG_ARM64_64K_PAGES=3Dy (gcc-10): 1 warning
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (gcc-10): 1 warning
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy (gcc-10): 1 warning
+    defconfig+arm64-chromebook (gcc-10): 1 warning
+    defconfig+crypto (gcc-10): 1 warning
+    defconfig+ima (gcc-10): 1 warning
 
 arm:
+    allmodconfig (gcc-10): 1 error, 5 warnings
+    allmodconfig (clang-15): 1 error, 13 warnings
+    aspeed_g5_defconfig (clang-15): 12 warnings
+    multi_v5_defconfig (clang-15): 2 warnings
+    multi_v7_defconfig (clang-15): 12 warnings
+    rpc_defconfig (gcc-10): 2 errors
+    u8500_defconfig (gcc-10): 2 warnings
 
 i386:
+    allmodconfig (clang-15): 1 error
+    allnoconfig (clang-15): 2 warnings
+    i386_defconfig (clang-15): 1 error
 
 mips:
     32r2el_defconfig (gcc-10): 1 warning
     32r2el_defconfig+debug (gcc-10): 1 warning
     32r2el_defconfig+kselftest (gcc-10): 1 warning
     fuloong2e_defconfig (gcc-10): 1 error
-    lemote2f_defconfig (gcc-10): 1 error
+    ip27_defconfig (gcc-10): 1 warning
+    lemote2f_defconfig (gcc-10): 1 error, 1 warning
     loongson2k_defconfig (gcc-10): 1 error
     loongson3_defconfig (gcc-10): 1 error
     rb532_defconfig (gcc-10): 1 warning
@@ -111,26 +148,108 @@ mips:
 riscv:
 
 x86_64:
+    allmodconfig (clang-15): 7 errors, 10 warnings
 
 Errors summary:
 
     4    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=
 =80=98-mhard-float=E2=80=99
+    2    drivers/nvme/common/auth.c:81:23: error: address of array 'dhgroup=
+_map[i].name' will always evaluate to 'true' [-Werror,-Wpointer-bool-conver=
+sion]
+    2    drivers/nvme/common/auth.c:69:31: error: address of array 'dhgroup=
+_map[dhgroup_id].kpp' will always evaluate to 'true' [-Werror,-Wpointer-boo=
+l-conversion]
+    2    drivers/nvme/common/auth.c:59:31: error: address of array 'dhgroup=
+_map[dhgroup_id].name' will always evaluate to 'true' [-Werror,-Wpointer-bo=
+ol-conversion]
+    2    drivers/nvme/common/auth.c:152:25: error: address of array 'hash_m=
+ap[hmac_id].hmac' will always evaluate to 'true' [-Werror,-Wpointer-bool-co=
+nversion]
+    2    drivers/nvme/common/auth.c:139:20: error: address of array 'hash_m=
+ap[i].hmac' will always evaluate to 'true' [-Werror,-Wpointer-bool-conversi=
+on]
+    2    drivers/nvme/common/auth.c:127:25: error: address of array 'hash_m=
+ap[hmac_id].digest' will always evaluate to 'true' [-Werror,-Wpointer-bool-=
+conversion]
+    2    drivers/nvme/common/auth.c:117:25: error: address of array 'hash_m=
+ap[hmac_id].hmac' will always evaluate to 'true' [-Werror,-Wpointer-bool-co=
+nversion]
+    1    sound/soc/intel/avs/path.c:815:18: error: stack frame size (2176) =
+exceeds limit (2048) in 'avs_path_create' [-Werror,-Wframe-larger-than]
+    1    lib/maple_tree.c:4300:20: error: stack frame size (1136) exceeds l=
+imit (1024) in 'mas_wr_modify' [-Werror,-Wframe-larger-than]
+    1    lib/maple_tree.c:4300:20: error: stack frame size (1084) exceeds l=
+imit (1024) in 'mas_wr_modify' [-Werror,-Wframe-larger-than]
+    1    lib/maple_tree.c:4300:20: error: stack frame size (1076) exceeds l=
+imit (1024) in 'mas_wr_modify' [-Werror,-Wframe-larger-than]
+    1    include/linux/kern_levels.h:5:18: error: format =E2=80=98%lu=E2=80=
+=99 expects argument of type =E2=80=98long unsigned int=E2=80=99, but argum=
+ent 3 has type =E2=80=98size_t=E2=80=99 {aka =E2=80=98unsigned int=E2=80=99=
+} [-Werror=3Dformat=3D]
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
+=3D0x'
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
+=3D0x'
 
 Warnings summary:
 
+    23   clang: warning: argument unused during compilation: '-march=3Darmv=
+6k' [-Wunused-command-line-argument]
+    10   fs/btrfs/free-space-cache.c:929:24: warning: variable =E2=80=98map=
+ping=E2=80=99 set but not used [-Wunused-but-set-variable]
+    10   clang: warning: argument unused during compilation: '-march=3Darmv=
+7-a' [-Wunused-command-line-argument]
+    6    1 warning generated.
     3    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
 e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
 ted "0,0"
+    2    fs/btrfs/free-space-cache.c:929:24: warning: variable 'mapping' se=
+t but not used [-Wunused-but-set-variable]
+    2    517 |  printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
+    1    vmlinux.o: warning: objtool: vc_switch_off_ist+0xbe: call to memcp=
+y() leaves .noinstr.text section
+    1    vmlinux.o: warning: objtool: sync_regs+0x24: call to memcpy() leav=
+es .noinstr.text section
+    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x31: relocation to=
+ !ENDBR: machine_kexec_prepare+0x487
+    1    vmlinux.o: warning: objtool: fixup_bad_iret+0x36: call to memset()=
+ leaves .noinstr.text section
+    1    vmlinux.o: warning: objtool: __sev_put_ghcb+0x35: call to memcpy()=
+ leaves .noinstr.text section
+    1    vmlinux.o: warning: objtool: __sev_get_ghcb+0xaa: call to memcpy()=
+ leaves .noinstr.text section
+    1    lib/maple_tree.c:4300:20: warning: stack frame size (1104) exceeds=
+ limit (1024) in 'mas_wr_modify' [-Wframe-larger-than]
+    1    lib/maple_tree.c:4300:20: warning: stack frame size (1096) exceeds=
+ limit (1024) in 'mas_wr_modify' [-Wframe-larger-than]
+    1    lib/maple_tree.c:4300:20: warning: stack frame size (1088) exceeds=
+ limit (1024) in 'mas_wr_modify' [-Wframe-larger-than]
+    1    lib/maple_tree.c:4300:20: warning: stack frame size (1076) exceeds=
+ limit (1024) in 'mas_wr_modify' [-Wframe-larger-than]
+    1    include/linux/printk.h:517:9: note: in expansion of macro =E2=80=
+=98KERN_WARNING=E2=80=99
+    1    drivers/power/supply/ab8500_chargalg.c:493:13: warning: =E2=80=98a=
+b8500_chargalg_ex_ac_enable_toggle=E2=80=99 defined but not used [-Wunused-=
+variable]
+    1    drivers/power/supply/ab8500_chargalg.c:493:13: warning: unused var=
+iable =E2=80=98ab8500_chargalg_ex_ac_enable_toggle=E2=80=99 [-Wunused-varia=
+ble]
     1    cc1: warning: result of =E2=80=98-117440512 << 16=E2=80=99 require=
 s 44 bits to represent, but =E2=80=98int=E2=80=99 only has 32 bits [-Wshift=
 -overflow=3D]
-
-Section mismatches summary:
-
-    1    WARNING: modpost: vmlinux.o(___ksymtab+prom_init_numa_memory+0x0):=
- Section mismatch in reference from the variable __ksymtab_prom_init_numa_m=
-emory to the function .init.text:prom_init_numa_memory()
+    1    cc1: all warnings being treated as errors
+    1    arch/x86/kvm/kvm.o: warning: objtool: paging64_update_accessed_dir=
+ty_bits+0x3a6: call to __ubsan_handle_load_invalid_value() with UACCESS ena=
+bled
+    1    arch/x86/kvm/kvm.o: warning: objtool: paging32_update_accessed_dir=
+ty_bits+0x398: call to __ubsan_handle_load_invalid_value() with UACCESS ena=
+bled
+    1    arch/x86/kvm/kvm.o: warning: objtool: ept_update_accessed_dirty_bi=
+ts+0x458: call to __ubsan_handle_load_invalid_value() with UACCESS enabled
+    1    arch/x86/kvm/kvm.o: warning: objtool: emulator_cmpxchg_emulated+0x=
+70e: call to __ubsan_handle_load_invalid_value() with UACCESS enabled
+    1    12 | #define KERN_WARNING KERN_SOH "4" /* warning conditions */
 
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
@@ -171,13 +290,144 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-allmodconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
+allmodconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 5 warnings, 0 section m=
+ismatches
+
+Errors:
+    include/linux/kern_levels.h:5:18: error: format =E2=80=98%lu=E2=80=99 e=
+xpects argument of type =E2=80=98long unsigned int=E2=80=99, but argument 3=
+ has type =E2=80=98size_t=E2=80=99 {aka =E2=80=98unsigned int=E2=80=99} [-W=
+error=3Dformat=3D]
+
+Warnings:
+    517 |  printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
+    12 | #define KERN_WARNING KERN_SOH "4" /* warning conditions */
+    include/linux/printk.h:517:9: note: in expansion of macro =E2=80=98KERN=
+_WARNING=E2=80=99
+    517 |  printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
+    cc1: all warnings being treated as errors
 
 ---------------------------------------------------------------------------=
 -----
-allmodconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+allmodconfig (i386, clang-15) =E2=80=94 FAIL, 1 error, 0 warnings, 0 sectio=
 n mismatches
+
+Errors:
+    lib/maple_tree.c:4300:20: error: stack frame size (1076) exceeds limit =
+(1024) in 'mas_wr_modify' [-Werror,-Wframe-larger-than]
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, clang-15) =E2=80=94 FAIL, 1 error, 13 warnings, 0 sectio=
+n mismatches
+
+Errors:
+    lib/maple_tree.c:4300:20: error: stack frame size (1136) exceeds limit =
+(1024) in 'mas_wr_modify' [-Werror,-Wframe-larger-than]
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (x86_64, clang-15) =E2=80=94 FAIL, 7 errors, 10 warnings, 0 se=
+ction mismatches
+
+Errors:
+    drivers/nvme/common/auth.c:59:31: error: address of array 'dhgroup_map[=
+dhgroup_id].name' will always evaluate to 'true' [-Werror,-Wpointer-bool-co=
+nversion]
+    drivers/nvme/common/auth.c:69:31: error: address of array 'dhgroup_map[=
+dhgroup_id].kpp' will always evaluate to 'true' [-Werror,-Wpointer-bool-con=
+version]
+    drivers/nvme/common/auth.c:81:23: error: address of array 'dhgroup_map[=
+i].name' will always evaluate to 'true' [-Werror,-Wpointer-bool-conversion]
+    drivers/nvme/common/auth.c:117:25: error: address of array 'hash_map[hm=
+ac_id].hmac' will always evaluate to 'true' [-Werror,-Wpointer-bool-convers=
+ion]
+    drivers/nvme/common/auth.c:127:25: error: address of array 'hash_map[hm=
+ac_id].digest' will always evaluate to 'true' [-Werror,-Wpointer-bool-conve=
+rsion]
+    drivers/nvme/common/auth.c:139:20: error: address of array 'hash_map[i]=
+.hmac' will always evaluate to 'true' [-Werror,-Wpointer-bool-conversion]
+    drivers/nvme/common/auth.c:152:25: error: address of array 'hash_map[hm=
+ac_id].hmac' will always evaluate to 'true' [-Werror,-Wpointer-bool-convers=
+ion]
+
+Warnings:
+    vmlinux.o: warning: objtool: sync_regs+0x24: call to memcpy() leaves .n=
+oinstr.text section
+    vmlinux.o: warning: objtool: vc_switch_off_ist+0xbe: call to memcpy() l=
+eaves .noinstr.text section
+    vmlinux.o: warning: objtool: fixup_bad_iret+0x36: call to memset() leav=
+es .noinstr.text section
+    vmlinux.o: warning: objtool: __sev_get_ghcb+0xaa: call to memcpy() leav=
+es .noinstr.text section
+    vmlinux.o: warning: objtool: __sev_put_ghcb+0x35: call to memcpy() leav=
+es .noinstr.text section
+    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x31: relocation to !END=
+BR: machine_kexec_prepare+0x487
+    arch/x86/kvm/kvm.o: warning: objtool: emulator_cmpxchg_emulated+0x70e: =
+call to __ubsan_handle_load_invalid_value() with UACCESS enabled
+    arch/x86/kvm/kvm.o: warning: objtool: paging64_update_accessed_dirty_bi=
+ts+0x3a6: call to __ubsan_handle_load_invalid_value() with UACCESS enabled
+    arch/x86/kvm/kvm.o: warning: objtool: paging32_update_accessed_dirty_bi=
+ts+0x398: call to __ubsan_handle_load_invalid_value() with UACCESS enabled
+    arch/x86/kvm/kvm.o: warning: objtool: ept_update_accessed_dirty_bits+0x=
+458: call to __ubsan_handle_load_invalid_value() with UACCESS enabled
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, clang-15) =E2=80=94 FAIL, 8 errors, 0 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    drivers/nvme/common/auth.c:59:31: error: address of array 'dhgroup_map[=
+dhgroup_id].name' will always evaluate to 'true' [-Werror,-Wpointer-bool-co=
+nversion]
+    drivers/nvme/common/auth.c:69:31: error: address of array 'dhgroup_map[=
+dhgroup_id].kpp' will always evaluate to 'true' [-Werror,-Wpointer-bool-con=
+version]
+    drivers/nvme/common/auth.c:81:23: error: address of array 'dhgroup_map[=
+i].name' will always evaluate to 'true' [-Werror,-Wpointer-bool-conversion]
+    drivers/nvme/common/auth.c:117:25: error: address of array 'hash_map[hm=
+ac_id].hmac' will always evaluate to 'true' [-Werror,-Wpointer-bool-convers=
+ion]
+    drivers/nvme/common/auth.c:127:25: error: address of array 'hash_map[hm=
+ac_id].digest' will always evaluate to 'true' [-Werror,-Wpointer-bool-conve=
+rsion]
+    drivers/nvme/common/auth.c:139:20: error: address of array 'hash_map[i]=
+.hmac' will always evaluate to 'true' [-Werror,-Wpointer-bool-conversion]
+    drivers/nvme/common/auth.c:152:25: error: address of array 'hash_map[hm=
+ac_id].hmac' will always evaluate to 'true' [-Werror,-Wpointer-bool-convers=
+ion]
+    sound/soc/intel/avs/path.c:815:18: error: stack frame size (2176) excee=
+ds limit (2048) in 'avs_path_create' [-Werror,-Wframe-larger-than]
 
 ---------------------------------------------------------------------------=
 -----
@@ -186,8 +436,23 @@ ismatches
 
 ---------------------------------------------------------------------------=
 -----
+allnoconfig (x86_64, clang-15) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
 allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
 n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, clang-15) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    lib/maple_tree.c:4300:20: warning: stack frame size (1076) exceeds limi=
+t (1024) in 'mas_wr_modify' [-Wframe-larger-than]
+    1 warning generated.
 
 ---------------------------------------------------------------------------=
 -----
@@ -213,6 +478,36 @@ ection mismatches
 -----
 aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
 ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, clang-15) =E2=80=94 PASS, 0 errors, 12 warnings, =
+0 section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    lib/maple_tree.c:4300:20: warning: stack frame size (1104) exceeds limi=
+t (1024) in 'mas_wr_modify' [-Wframe-larger-than]
+    1 warning generated.
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
 
 ---------------------------------------------------------------------------=
 -----
@@ -283,11 +578,6 @@ ection mismatches
 -----
 bmips_stb_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
 section mismatches
-
----------------------------------------------------------------------------=
------
-capcella_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -371,23 +661,87 @@ s, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
+defconfig (arm64, clang-15) =E2=80=94 PASS, 0 errors, 2 warnings, 0 section=
+ mismatches
+
+Warnings:
+    fs/btrfs/free-space-cache.c:929:24: warning: variable 'mapping' set but=
+ not used [-Wunused-but-set-variable]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
 defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
 ismatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mi=
+smatches
+
+Warnings:
+    fs/btrfs/free-space-cache.c:929:24: warning: variable =E2=80=98mapping=
+=E2=80=99 set but not used [-Wunused-but-set-variable]
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_16K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 1 warning, 0 section mismatches
+
+Warnings:
+    fs/btrfs/free-space-cache.c:929:24: warning: variable =E2=80=98mapping=
+=E2=80=99 set but not used [-Wunused-but-set-variable]
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-15) =E2=80=94 PASS, 0 er=
+rors, 2 warnings, 0 section mismatches
+
+Warnings:
+    fs/btrfs/free-space-cache.c:929:24: warning: variable 'mapping' set but=
+ not used [-Wunused-but-set-variable]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 1 warning, 0 section mismatches
+
+Warnings:
+    fs/btrfs/free-space-cache.c:929:24: warning: variable =E2=80=98mapping=
+=E2=80=99 set but not used [-Wunused-but-set-variable]
 
 ---------------------------------------------------------------------------=
 -----
 defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
-s, 0 warnings, 0 section mismatches
+s, 1 warning, 0 section mismatches
+
+Warnings:
+    fs/btrfs/free-space-cache.c:929:24: warning: variable =E2=80=98mapping=
+=E2=80=99 set but not used [-Wunused-but-set-variable]
 
 ---------------------------------------------------------------------------=
 -----
-defconfig+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+defconfig+CONFIG_EFI=3Dn (riscv, clang-15) =E2=80=94 PASS, 0 errors, 0 warn=
 ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 1 warning, 0 section mismatches
+
+Warnings:
+    fs/btrfs/free-space-cache.c:929:24: warning: variable =E2=80=98mapping=
+=E2=80=99 set but not used [-Wunused-but-set-variable]
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 1 warn=
+ing, 0 section mismatches
+
+Warnings:
+    fs/btrfs/free-space-cache.c:929:24: warning: variable =E2=80=98mapping=
+=E2=80=99 set but not used [-Wunused-but-set-variable]
 
 ---------------------------------------------------------------------------=
 -----
@@ -396,8 +750,12 @@ rs, 0 warnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig+crypto (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
+defconfig+crypto (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    fs/btrfs/free-space-cache.c:929:24: warning: variable =E2=80=98mapping=
+=E2=80=99 set but not used [-Wunused-but-set-variable]
 
 ---------------------------------------------------------------------------=
 -----
@@ -411,8 +769,12 @@ tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig+ima (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
+defconfig+ima (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    fs/btrfs/free-space-cache.c:929:24: warning: variable =E2=80=98mapping=
+=E2=80=99 set but not used [-Wunused-but-set-variable]
 
 ---------------------------------------------------------------------------=
 -----
@@ -423,11 +785,6 @@ defconfig+kselftest (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
 -----
 defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
  section mismatches
-
----------------------------------------------------------------------------=
------
-e55_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -520,6 +877,15 @@ n mismatches
 
 ---------------------------------------------------------------------------=
 -----
+i386_defconfig (i386, clang-15) =E2=80=94 FAIL, 1 error, 0 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    lib/maple_tree.c:4300:20: error: stack frame size (1084) exceeds limit =
+(1024) in 'mas_wr_modify' [-Werror,-Wframe-larger-than]
+
+---------------------------------------------------------------------------=
+-----
 i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
 on mismatches
 
@@ -560,8 +926,12 @@ on mismatches
 
 ---------------------------------------------------------------------------=
 -----
-ip27_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
+ip27_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    fs/btrfs/free-space-cache.c:929:24: warning: variable =E2=80=98mapping=
+=E2=80=99 set but not used [-Wunused-but-set-variable]
 
 ---------------------------------------------------------------------------=
 -----
@@ -600,12 +970,16 @@ n mismatches
 
 ---------------------------------------------------------------------------=
 -----
-lemote2f_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 se=
-ction mismatches
+lemote2f_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 1 warning, 0 sec=
+tion mismatches
 
 Errors:
     cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
 =98-mhard-float=E2=80=99
+
+Warnings:
+    fs/btrfs/free-space-cache.c:929:24: warning: variable =E2=80=98mapping=
+=E2=80=99 set but not used [-Wunused-but-set-variable]
 
 ---------------------------------------------------------------------------=
 -----
@@ -634,11 +1008,6 @@ ection mismatches
 Errors:
     cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
 =98-mhard-float=E2=80=99
-
-Section mismatches:
-    WARNING: modpost: vmlinux.o(___ksymtab+prom_init_numa_memory+0x0): Sect=
-ion mismatch in reference from the variable __ksymtab_prom_init_numa_memory=
- to the function .init.text:prom_init_numa_memory()
 
 ---------------------------------------------------------------------------=
 -----
@@ -732,11 +1101,6 @@ ion mismatches
 
 ---------------------------------------------------------------------------=
 -----
-mpc30x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
 mps2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
 n mismatches
 
@@ -754,6 +1118,46 @@ ection mismatches
 -----
 multi_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
 ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, clang-15) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
+section mismatches
+
+Warnings:
+    lib/maple_tree.c:4300:20: warning: stack frame size (1088) exceeds limi=
+t (1024) in 'mas_wr_modify' [-Wframe-larger-than]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, clang-15) =E2=80=94 PASS, 0 errors, 12 warnings, 0=
+ section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    lib/maple_tree.c:4300:20: warning: stack frame size (1096) exceeds limi=
+t (1024) in 'mas_wr_modify' [-Wframe-larger-than]
+    1 warning generated.
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
 
 ---------------------------------------------------------------------------=
 -----
@@ -787,17 +1191,17 @@ multi_v7_defconfig+debug (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
 
 ---------------------------------------------------------------------------=
 -----
-multi_v7_defconfig+ima (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
 multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
 ings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
 mvebu_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
 ction mismatches
 
 ---------------------------------------------------------------------------=
@@ -942,6 +1346,15 @@ ion mismatches
 
 ---------------------------------------------------------------------------=
 -----
+rpc_defconfig (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 section=
+ mismatches
+
+Errors:
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=3D0x'
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=3D0x'
+
+---------------------------------------------------------------------------=
+-----
 rs90_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
 on mismatches
 
@@ -1007,6 +1420,11 @@ tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
+sp7021_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
 spear13xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
 ection mismatches
 
@@ -1037,21 +1455,6 @@ on mismatches
 
 ---------------------------------------------------------------------------=
 -----
-tb0219_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-tb0226_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-tb0287_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
 tct_hammer_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
 section mismatches
 
@@ -1059,6 +1462,11 @@ section mismatches
 -----
 tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
 on mismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1072,18 +1480,20 @@ ismatches
 
 ---------------------------------------------------------------------------=
 -----
-tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
 trizeps4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
 ction mismatches
 
 ---------------------------------------------------------------------------=
 -----
-u8500_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+u8500_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
 on mismatches
+
+Warnings:
+    drivers/power/supply/ab8500_chargalg.c:493:13: warning: unused variable=
+ =E2=80=98ab8500_chargalg_ex_ac_enable_toggle=E2=80=99 [-Wunused-variable]
+    drivers/power/supply/ab8500_chargalg.c:493:13: warning: =E2=80=98ab8500=
+_chargalg_ex_ac_enable_toggle=E2=80=99 defined but not used [-Wunused-varia=
+ble]
 
 ---------------------------------------------------------------------------=
 -----
@@ -1094,6 +1504,16 @@ ction mismatches
 -----
 vdk_hs38_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+versatile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+vexpress_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1117,13 +1537,13 @@ vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
 
 ---------------------------------------------------------------------------=
 -----
-workpad_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
 
 ---------------------------------------------------------------------------=
 -----
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
+x86_64_defconfig (x86_64, clang-15) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1159,6 +1579,11 @@ x86_64_defconfig+x86-chromebook (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, =
 -----
 x86_64_defconfig+x86-chromebook+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 e=
 rrors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook+kselftest (x86_64, gcc-10) =E2=80=94 PASS, =
+0 errors, 0 warnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----

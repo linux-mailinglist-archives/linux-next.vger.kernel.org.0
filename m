@@ -2,60 +2,63 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DEA957E251
-	for <lists+linux-next@lfdr.de>; Fri, 22 Jul 2022 15:30:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E03C57E761
+	for <lists+linux-next@lfdr.de>; Fri, 22 Jul 2022 21:29:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbiGVNar (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 22 Jul 2022 09:30:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44792 "EHLO
+        id S232272AbiGVT3b (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 22 Jul 2022 15:29:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233979AbiGVNaq (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 22 Jul 2022 09:30:46 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01C2882FAA;
-        Fri, 22 Jul 2022 06:30:46 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id b11so8537866eju.10;
-        Fri, 22 Jul 2022 06:30:45 -0700 (PDT)
+        with ESMTP id S231784AbiGVT3a (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 22 Jul 2022 15:29:30 -0400
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B1921EAD4;
+        Fri, 22 Jul 2022 12:29:29 -0700 (PDT)
+Received: by mail-qk1-x732.google.com with SMTP id c3so4380672qko.1;
+        Fri, 22 Jul 2022 12:29:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=loYefRsJFRIddRKsH8gC7LMjbqNjPpq3cIkCYbNRO3E=;
-        b=Rh01wbkfBC5ZZj1hDCS/aCtPIkGp/SWmMyexZiSGbgj4WsZeQCLFgmSbGDbSom5doo
-         O4AlubGbvMbwUZzlI2/SSAaXXshOjtdYmYIYk/Akg+5NPUeBQwGRo7K9tvtkJTg/kfyR
-         ZVKYSrjOMcLUEegv8cI8ok8k6vVdFvm9O169yV5knNWfKeAQ27QZI1hMkR7bKMOQ741b
-         6mLpTktYR//EXQ4vNz3Euvdw+WQHyfmIe5p1zDiJK1Zi5xIXGFPlzunSZvVtSTRDfpqZ
-         1sB8cY2kv9KlNDYpNBw1SjRdxE//5h53sFPntabeydt+go3aQJQdFmFBMO3IIaZizTlG
-         PpIw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=E/lAne3sWA7x+h1qQlZwY2RlcJ4V/1aOGrEnwYJSEqE=;
+        b=EOYXN1DWUDR7ro4rrVKShowkaEln3JbgK/2l8Hwjvfnfbp9kMOFo/TRFukmr3/H3Bi
+         YwOHSGzhd3Vg9NvflSJFJLW4uzz4yv8qq4ijh3ComKOrXYrUIuo00JmvNMZLcZ9dDOuc
+         GC6svKPYQj4wFfD0JHi++H1SuSOHPKlWYUKNpo2daSZAWhvtVy7XzoMmkwuIxUPH8sTG
+         J829iLNitSxiAsjX9QFZo5fmAbUjYLC1PSFvBbpjDkB7SL6rzUevhGie5wk+sLxP3Lyu
+         DMAtRP6v+S7TaSL7XWqsoeG5GYbOteovu0QA02n/MxHlr7nXx+873emMA/38pTO5PIN0
+         tO9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=loYefRsJFRIddRKsH8gC7LMjbqNjPpq3cIkCYbNRO3E=;
-        b=uWt9aYvDZuYQR2odmpSzXNx3U04Cl8NkcA0WH3R9fuU+sZvS2YoY5Ww97EG2BakmsT
-         dibRRMIa5Iy/TYemHFX9KvO9Nigvv37l47G4BDBxgbE4bqh04W9Etso+UyozC9J+Tl9N
-         Qz5Wu8dngXxooKNCdcPJpwcHpXTAcXxPZuqC5p8u2ldrgGPATPy9PmtKo7djwThF6KJs
-         6FH4aE8+jMHToNkgZhY31q14I+QmiyObg+LN2vugEiye4kmlq9fXO8GXUKxizTlDzgtn
-         tGqheY+rN2fGtHMrwFw9QBVFCg7HVOG5/9quu/xOcstJI6DPCtpfDNIVzBG/JD4y6WQu
-         UuzA==
-X-Gm-Message-State: AJIora/aDSbXilt2Sd6taClEcKnSdpFhNXeVHqUDXol4H0+8iWVWf1DP
-        6s4JNWhX8pr6uTbAHa0EDU2sbauXvkqvDL48wOp3e/MK
-X-Google-Smtp-Source: AGRyM1uj6Bf98bVaoiFb716jOFlfc4hB5SFO0a70HCy+/nha2uMDwFX1voSmi28H6LB5TNkkH0D/Pz0tyB+e/ciWZho=
-X-Received: by 2002:a17:907:a06f:b0:72b:564c:465b with SMTP id
- ia15-20020a170907a06f00b0072b564c465bmr519713ejc.344.1658496644409; Fri, 22
- Jul 2022 06:30:44 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220719123607.63cbb3c5@canb.auug.org.au> <20220720124732.4aeb3748@canb.auug.org.au>
- <20220721121618.049b9c00@canb.auug.org.au> <20220722125212.2af3601f@canb.auug.org.au>
-In-Reply-To: <20220722125212.2af3601f@canb.auug.org.au>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Fri, 22 Jul 2022 09:30:32 -0400
-Message-ID: <CADnq5_NdSQADn7xaLVJzgERist5aMMw07pqZQhSogatotF=y1w@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the amdgpu tree
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=E/lAne3sWA7x+h1qQlZwY2RlcJ4V/1aOGrEnwYJSEqE=;
+        b=QctKpkw1wFADc7qpzTx39DP8wQBKo+msJPW5FEeP/TpA6mtO7iHyuW45P48hdpByVk
+         5pJNm1CGlXVbxj8Sj82r8Kn68Rpy6x++sR5OjPuGwySbv/bDQl5PC3kGoMg7XCuyG4RM
+         TL3JqFOzU8NezO1Hk17f5JIrKQ5uWTSLr6nIOnmsic8Nx6KRXayRYPEi+s+YHH2wkRK9
+         ntMeJXThfAZYLXaADEJvtvIC99jgqSJi5mx7XPe3tDy0lyv6/MXodoSNTfPqB/nVbhQi
+         dNpAkWMGUt/f10rsYrG7T+KuQyWYzEEvHEhm3eroXYozq1i9J9WHd3ighwhi0bxdrLlW
+         0SNA==
+X-Gm-Message-State: AJIora+UOqyop5SBIzuQ+AozVSVkmlgcepcQxg+ca3hCMfJsX/h/zDQl
+        w8NWz4ofUpz37cL4LPuQFZsoDhrR1Qw=
+X-Google-Smtp-Source: AGRyM1tAezT3qSnSL7vVzjjbYkhwAQwQU9/v5Ht5yxZUm154jcTp4PBelIotRewaRt8XWGdQQt6kPw==
+X-Received: by 2002:ae9:e8d0:0:b0:6b5:bee3:51a7 with SMTP id a199-20020ae9e8d0000000b006b5bee351a7mr1131365qkg.345.1658518168509;
+        Fri, 22 Jul 2022 12:29:28 -0700 (PDT)
+Received: from localhost (c-69-254-185-160.hsd1.fl.comcast.net. [69.254.185.160])
+        by smtp.gmail.com with ESMTPSA id ck11-20020a05622a230b00b0031eeefd896esm3413388qtb.3.2022.07.22.12.29.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Jul 2022 12:29:28 -0700 (PDT)
+Date:   Fri, 22 Jul 2022 12:29:27 -0700
+From:   Yury Norov <yury.norov@gmail.com>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: linux-next: build failure after merge of the bitmap tree
+Message-ID: <Ytr6l2CHG8lbU+8Z@yury-laptop>
+References: <20220722191657.1d7282c2@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220722191657.1d7282c2@canb.auug.org.au>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -66,39 +69,25 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 10:52 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
+On Fri, Jul 22, 2022 at 07:16:57PM +1000, Stephen Rothwell wrote:
 > Hi all,
->
-> On Thu, 21 Jul 2022 12:16:18 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >
-> > Hi all,
-> >
-> > On Wed, 20 Jul 2022 12:47:32 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> > >
-> > > > drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c: In function 'dml32_ModeSupportAndSystemConfigurationFull':
-> > > > drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c:3799:1: error: the frame size of 2464 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]
-> > > >  3799 | } // ModeSupportAndSystemConfigurationFull
-> > > >       | ^
-> > >
-> > > This is still here, but the frame size is down to 2336.
-> >
-> > Today it is down to 2128.
->
-> And today we are back up to 2152.  I can only imagine that maybe things
-> are being inlined?
+ ...
 
-This is driving me crazy, there is almost nothing left on the stack at
-this point.
+> I am not sure which commit caused this.  Though I suspect
+> 
+>   bbe8fb1a3c53 ("lib/nodemask: inline next_node_in() and node_random()")
+> 
+> which added the include of random.h to nodemask.h
+> 
+> I have used the bitmap tree from next-20220721 for today.
 
-Alex
+Hi Stephen,
 
->
-> My compiler (in case it matters):
->
-> $ x86_64-linux-gnu-gcc --version
-> x86_64-linux-gnu-gcc (Debian 11.2.0-9) 11.2.0
->
-> --
-> Cheers,
-> Stephen Rothwell
+You're right. The problem in the last patch of the series. I've got
+the fix already, and testing it now.
+
+I'll drop the bbe8fb1a3c53 and submit it separately together with
+header fix.
+
+Thanks,
+Yury

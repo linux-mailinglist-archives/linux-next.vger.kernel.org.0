@@ -2,97 +2,70 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB7DB57EC41
-	for <lists+linux-next@lfdr.de>; Sat, 23 Jul 2022 08:11:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94B3E57EC65
+	for <lists+linux-next@lfdr.de>; Sat, 23 Jul 2022 09:14:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233193AbiGWGLV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 23 Jul 2022 02:11:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37606 "EHLO
+        id S232087AbiGWHOe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 23 Jul 2022 03:14:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbiGWGLU (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 23 Jul 2022 02:11:20 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1339130577;
-        Fri, 22 Jul 2022 23:11:19 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JshtXQl2pmIW1mIXZj77Dt7w8Z5sp53w94P6E9uCplj3D5oShcnq97Ot7R9L0VYmujDF5rkT1EDm9AO7GQp8v2DLkQiHIFQRb76fbH7INcoo/jMhDWvz5Q85abaUgV9RIObI+VczEdVx1Ep3bo2F+Ar0eOdFTZoqnpYAsoNzdJyVDpnceaafSiw8pmCLsRHyz+1kTyW5bxvFf3S18q6wWBrZOFufPl4BSdCZQjUloZ7x9acA19QhdqUhEfHuawvzW8GxXoej16KrLQgWbpiHMIXvqOzIFB3xAyit7pUbgTWeLa3xhAwOtQgEn+UzpiLvMr6NM2MM5tbK/VhBfzZCfQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yRXTQEaFzgEEIXj2IX2ESk39BWwqI9/7Qllerr/Qnxg=;
- b=NVJtgBwXGi10BxTuk8cnXK1ZNB3E5VX1UyR47Bp4KrBp81st3I98LNjUgr89Tnh1aY2vw8que0rRjT4xrlPXTYUf3B6fjgD+NkIjCZGXmoYnc81R1qRb/5O8Nt0nKpOzmivEqLZQxmaeWkr5WyN2q/FiZS3FEn4E1NNAPlynPd+vr9yxzE6YgfEm+Sdy8gX4CrH2LlM5AUA0LwtfOy7DZdjSEyiwMZomXah2thg+y564/YoWJFD90KJLwsQWtaWFKSeYUVsTtqW68JP+fL6NRPA42PGETHA7hqKZePsfUgNllr8ew011r2BvKHxpmRlUFKCoZvOkCO6LH5Bd6D9usA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yRXTQEaFzgEEIXj2IX2ESk39BWwqI9/7Qllerr/Qnxg=;
- b=5Goip/RgQ3b+EYDgwVcx7vUffDZil0BMW+kpnPeSQizip5aM+JbnRLYoCVwKv6IMJ14RsjqoPKuCNbMWJZ0j4aNgN+mEpGO25y5o9cWmsdbuaqMM1lW1SWEY+DZxIkE29ofwVbgvqUfnwWFjZ7YpU/nDqnFaY3u9uQygGuZNB7c=
-Received: from MW4PR03CA0115.namprd03.prod.outlook.com (2603:10b6:303:b7::30)
- by DM5PR12MB1353.namprd12.prod.outlook.com (2603:10b6:3:76::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.21; Sat, 23 Jul
- 2022 06:11:16 +0000
-Received: from CO1NAM11FT006.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:b7:cafe::bf) by MW4PR03CA0115.outlook.office365.com
- (2603:10b6:303:b7::30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.17 via Frontend
- Transport; Sat, 23 Jul 2022 06:11:16 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT006.mail.protection.outlook.com (10.13.174.246) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5458.17 via Frontend Transport; Sat, 23 Jul 2022 06:11:16 +0000
-Received: from jatayu.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Sat, 23 Jul
- 2022 01:11:13 -0500
-From:   Basavaraj Natikar <Basavaraj.Natikar@amd.com>
-To:     <jikos@kernel.org>, <benjamin.tissoires@redhat.com>,
-        <rdunlap@infradead.org>, <linux-input@vger.kernel.org>,
-        <linux-next@vger.kernel.org>
-CC:     <sfr@canb.auug.org.au>,
-        Basavaraj Natikar <Basavaraj.Natikar@amd.com>
-Subject: [PATCH for-next 2/2] HID: amd_sfh: Handle condition of "no sensors"
-Date:   Sat, 23 Jul 2022 11:40:33 +0530
-Message-ID: <20220723061033.1377061-3-Basavaraj.Natikar@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220723061033.1377061-1-Basavaraj.Natikar@amd.com>
-References: <20220723061033.1377061-1-Basavaraj.Natikar@amd.com>
+        with ESMTP id S229728AbiGWHOe (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 23 Jul 2022 03:14:34 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17E6846DA0;
+        Sat, 23 Jul 2022 00:14:33 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id n12so9154927wrc.8;
+        Sat, 23 Jul 2022 00:14:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=kFbhz9YIcWYk8daO1/U52qJaNS5RPsFummR8Ag7sOH0=;
+        b=nzblBlrUeZu2ABoGQG1E4Pxd6n3acJBTSkuopD/9LZV1tu+1sCOGFu0RVNuA/i/DmI
+         JLUc+fx2zET53Wm+8fjovbKGPbBRfsc5fd/4Zx9L+z/p0AjRpL29VqIQx7VAzuWZ3Yb9
+         TlBN9PHz6dxTMWZT1ZGAXlQBOSLVLSccPMccdAVt3W/+4ESOdJr8Ehzm/tCrtOMsplMr
+         pqxE0OABN/RG9cuBukTbDbiRH0IoF57i9ef5BC8v+QGRQYNXGluIhPo/2uar7PogxTzU
+         n9x33tXdIOaRkkR9pYHDswEmsc5xAo0RkVOmVWaDVDUCZZ8IMfejvzSSwGNiGbxAosgA
+         1k6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=kFbhz9YIcWYk8daO1/U52qJaNS5RPsFummR8Ag7sOH0=;
+        b=afSl1AVZcOAau+r+ADAMKJUKfSaZ5q1NqrQwZm60lyA25gGrQ0iSYnLKgV3iLBUm8n
+         jUYPZDoE0PwDG8llfYcu/Cf1ZKc7SrzNTtXvpJ3qJa2D6tQOBNeojk43ak0cQ5cb8QOO
+         IBrV/jZi6oBD3+n1MUARDysYEqxeJUXQLelgyDXzCycux/borlJpukW/0rwnhlSigVfj
+         6wcFBjvFP1AzJbxK23DnAGKLOH1EXEsbPPlyfEnFfiJCx6xjqHEm8t6xyBEbRruodWvd
+         2q3sXRPNFEU2F7+z9XL3Q/Ke8QpQ1OqVMw5JTx0To9FdoirWAKPLaF0vNnWqXxD8aB+9
+         0lyQ==
+X-Gm-Message-State: AJIora+7CdXzK8QMN8TuxYb+Bw905FWJ7W9X/ohMxkt/uK7EUoKKSHDC
+        ynlTD7blO8m6a1E19MPCZWEVzi0Zu3440A==
+X-Google-Smtp-Source: AGRyM1uMDcu67+t+bD8sku9/QUBXwQLqRL9EFwrgpKCq73Qj3OxM5KwmH2W+ANTQBLfoRgB5ceOZ2w==
+X-Received: by 2002:a5d:4689:0:b0:21e:477c:bb9e with SMTP id u9-20020a5d4689000000b0021e477cbb9emr2036555wrq.517.1658560471355;
+        Sat, 23 Jul 2022 00:14:31 -0700 (PDT)
+Received: from reki (62-44-238.netrun.cytanet.com.cy. [62.228.44.238])
+        by smtp.gmail.com with ESMTPSA id b18-20020adff912000000b0021d65675583sm6126304wrr.52.2022.07.23.00.14.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 23 Jul 2022 00:14:30 -0700 (PDT)
+Date:   Sat, 23 Jul 2022 10:14:28 +0300
+From:   Maxim Devaev <mdevaev@gmail.com>
+To:     Greg KH <greg@kroah.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the usb tree
+Message-ID: <20220723101428.347d941e@reki>
+In-Reply-To: <YtaUYmzTfKmx0Ek0@kroah.com>
+References: <20220719194337.64c490e0@canb.auug.org.au>
+        <20220719132559.3348c163@reki>
+        <YtaUYmzTfKmx0Ek0@kroah.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1ef730a9-095f-4d0f-9e2d-08da6c72270d
-X-MS-TrafficTypeDiagnostic: DM5PR12MB1353:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: R2aOIkC8eCvwxbQtHj/lLRoqbk9mtmIS95igP1R91C4zQYHz8XwOn4Zp8cjIcqkgcTDxHUdPxj3Qq4Qlz4fd+jhqvLPumcOUx6BNvumQuK3h+dhytA3hcgejf7JkNUUtU/qX/qkeKvxeX9OirWlwhz/qK7BGtCI4yxvWaMqOGfEu8PzBzEOlD3+omV4sNd+TuS+6xQ9cU4pA/TjQyKaXpebiRd8Z13NDkE0BBFaxtsqxFzwBfxPrWuirNQH8pvOp7OiVz/NxI1nh9gfm1kV7ub1AMiwEufhLb7WZY6wTe9fpRhDxJRdEnWJ0Arx6KkerE4Te7ABvwmaqXWLiQjAXGeI+idl9syFGshrjsjO2FoXnbj94CpgmN/MJqjZXwAEfT3iGQSuQX74EhIgrkRMzAyzJ3HJ6lTQC1PxScnBpZlCs6V7HOGFcOU3FOM4ozBieRdSzhUZ+2DyLdPOVNiRWvRU7jiPQohZUuqdJekLoFYv0KtD4n4HC6HtnSCwSGlHJpUnO7wyPcZknHgcRI3kI/f4ZA12iRgeWuZ4Fxrvhgir17+DGPdDUGJvj7oImb+BZn/XNN9dperBurRenIUX7Jugk5buI2nm6T0d4mvLf6iVHiu1s4jN/VTHhi6RClVlp4H20bbI0MV1cYEq6GmbGu4LkRm23+sZNMGM/HziwKEu8OGrS5VpLdcER1FCOm6uOwr0yFrKBH0GZxBzduPR5xUUg/+DVhDATNEacfH/STGBW7NdBVavF1+JFIlnh9sVKGlw3EbgQR+GBZhpp4+rWgkn9vOauJ3ZpvUCSG4kRfOOxw9fFQxP4hqFb/WZAUa+gRpHZA2aQ/f4t2FJ3bjmZdA==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(396003)(346002)(136003)(376002)(39860400002)(36840700001)(46966006)(40470700004)(82310400005)(8676002)(16526019)(40460700003)(40480700001)(316002)(6666004)(41300700001)(81166007)(110136005)(54906003)(4326008)(478600001)(70206006)(70586007)(7696005)(1076003)(36756003)(5660300002)(336012)(2906002)(8936002)(26005)(4744005)(186003)(36860700001)(82740400003)(356005)(2616005)(426003)(47076005)(86362001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jul 2022 06:11:16.1747
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1ef730a9-095f-4d0f-9e2d-08da6c72270d
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT006.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1353
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,28 +73,55 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Add a check for num_hid_devices to handle special case the situation
-of "no sensors".
+On Tue, 19 Jul 2022 13:24:18 +0200
+Greg KH <greg@kroah.com> wrote:
 
-Fixes: 4b2c53d93a4b ("SFH:Transport Driver to add support of AMD Sensor Fusion Hub (SFH)")
-Signed-off-by: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
----
- drivers/hid/amd-sfh-hid/amd_sfh_client.c | 2 ++
- 1 file changed, 2 insertions(+)
+> On Tue, Jul 19, 2022 at 01:25:59PM +0300, Maxim Devaev wrote:
+> > =D0=92 Tue, 19 Jul 2022 19:43:37 +1000
+> > Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >  =20
+> > > Hi all,
+> > >=20
+> > > After merging the usb tree, today's linux-next build (htmldocs) produ=
+ced
+> > > this warning:
+> > >=20
+> > > Documentation/ABI/testing/configfs-usb-gadget-mass-storage:17: WARNIN=
+G: Malformed table.
+> > > Text in column margin in table line 14.
+> > >=20
+> > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D     =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > > file            The path to the backing file for the LUN.
+> > >                 Required if LUN is not marked as removable.
+> > > ro              Flag specifying access to the LUN shall be
+> > >                 read-only. This is implied if CD-ROM emulation
+> > >                 is enabled as well as when it was impossible
+> > >                 to open "filename" in R/W mode.
+> > > removable       Flag specifying that LUN shall be indicated as
+> > >                 being removable.
+> > > cdrom           Flag specifying that LUN shall be reported as
+> > >                 being a CD-ROM.
+> > > nofua           Flag specifying that FUA flag
+> > >                 in SCSI WRITE(10,12)
+> > > forced_eject    This write-only file is useful only when
+> > >                 the function is active. It causes the backing
+> > >                 file to be forcibly detached from the LUN,
+> > >                 regardless of whether the host has allowed it.
+> > >                 Any non-zero number of bytes written will
+> > >                 result in ejection.
+> > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D     =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > >=20
+> > > Introduced by commit
+> > >=20
+> > >   421c8d9a20da ("usb: gadget: f_mass_storage: forced_eject attribute")
+> > >  =20
+> >=20
+> > Sorry. Should I send a patch? =20
+>=20
+> Yes please.
 
-diff --git a/drivers/hid/amd-sfh-hid/amd_sfh_client.c b/drivers/hid/amd-sfh-hid/amd_sfh_client.c
-index f95e623040f3..8275bba63611 100644
---- a/drivers/hid/amd-sfh-hid/amd_sfh_client.c
-+++ b/drivers/hid/amd-sfh-hid/amd_sfh_client.c
-@@ -225,6 +225,8 @@ int amd_sfh_hid_client_init(struct amd_mp2_dev *privdata)
- 	mp2_ops->resume = amd_sfh_resume;
- 
- 	cl_data->num_hid_devices = amd_mp2_get_sensor_num(privdata, &cl_data->sensor_idx[0]);
-+	if (cl_data->num_hid_devices == 0)
-+		return -ENODEV;
- 
- 	INIT_DELAYED_WORK(&cl_data->work, amd_sfh_work);
- 	INIT_DELAYED_WORK(&cl_data->work_buffer, amd_sfh_work_buffer);
--- 
-2.25.1
-
+JFYI the patch has been sent to linux-docs@, etc. I forgot to add you to CC.

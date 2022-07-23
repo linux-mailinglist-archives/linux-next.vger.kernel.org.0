@@ -2,63 +2,69 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 342C157EC78
-	for <lists+linux-next@lfdr.de>; Sat, 23 Jul 2022 09:42:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE86057EC8C
+	for <lists+linux-next@lfdr.de>; Sat, 23 Jul 2022 09:44:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230217AbiGWHmH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 23 Jul 2022 03:42:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53458 "EHLO
+        id S231769AbiGWHoe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 23 Jul 2022 03:44:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbiGWHmG (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 23 Jul 2022 03:42:06 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7836F491ED;
-        Sat, 23 Jul 2022 00:42:04 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id r9-20020a1c4409000000b003a34ac64bdfso442186wma.1;
-        Sat, 23 Jul 2022 00:42:04 -0700 (PDT)
+        with ESMTP id S231871AbiGWHod (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 23 Jul 2022 03:44:33 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB0094F1B5;
+        Sat, 23 Jul 2022 00:44:31 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id bu1so9194454wrb.9;
+        Sat, 23 Jul 2022 00:44:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YwmE8iWxtiJIxHdfEka47hXmPR+fBzQvfjsFdeTq40k=;
-        b=dIJNifz9/KyE/gCfpdTeA0jWzmSCHwKo5Fgd6aqTzeWnYxm8KSX8JaXU9ccjTtq9Yc
-         KsDkE5kACZz0wcGBKWpXx+QaU7mX7mxkAL2hi2JqYtbcQJ5YoLYnM3fJybwAgMjjgGbq
-         h04iPNGQvhvvxq+cvpWCaHTZp5iTQP21wGaLsPL2GQ1k9S2DDWYJon/fevd8ZRo8nGp6
-         V9I03uWDF4X3FGyVvTw37leIhDeeAh26jTZgf8wfKgcLOSuF5wQBrF0Ro0a29nnym8Qq
-         OqKbkJG+eV52bG/MI8krNz+5GJOC3bYqRmMHlOAjeBhf2TUOaa2wuc4Lf2uAbvoDLMQQ
-         zrIA==
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=tei8gU0z/ZZIONH6z+6TkIT0lbdV8NKJKoJnizWNnK8=;
+        b=D9I1oN72Ingdt2jgFG/SHwWaWOicdYnHo4aWcILnsJm4hhP3fu0jFxL+MfEMW9/HCb
+         4proD9X/CVY0pIwd+9PSmlYZlHFIqbadwOWS2u9ifCv9a4DTX7tYyKp4JBi1sdOBhxgo
+         bse7FusIgVUXpOCCoxvcXncuFRbcSHNH2saLkHyJY1wUQ8+mdRJpjtb/MZja+xoWz6Xg
+         DWSmzE4Dew2IkFambF9RLXohV8uYkTaaP1iaRIk6alcIm+iXyAWwKdQ7vs7or2zXRLoc
+         nxM8RtsxLCnYl5d88AcPkbaMBQw1xcjwlH0RGQ/ComepbrmTCIyEtAiHRyCUZmr2ohMv
+         oMYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YwmE8iWxtiJIxHdfEka47hXmPR+fBzQvfjsFdeTq40k=;
-        b=epL8FPaR+Gv/wmfE9+p6x4hvOPKOs17Iy8vr6UKa2PyX2cGU6w10qrvKHcGoLLoPpN
-         kViGrcAKGPiVwIxhfuBW4d74ta6bMJMzLwyJD9LFL2k6wUwrmbQ179KCu40AN6og8rFY
-         JmOzcOfYyDFxSFlJq39/h+AzKT9OGOHrWowF0XaBfBA0d4M6018ZwEz/fZ8drJHCsjh2
-         HaFDwu3pHOVr1PNduShb6XCuJ3yuxmaKR2AUx3Tg1Ezj6Qm2hKd29QN65CDMoSeH0bKs
-         CRPjgGBkzjDWswwXL3OQKWG3wQlDoquYSFq/IYnRpz/vnWBvTTJjPwd/OcupOmieWBnv
-         q2YA==
-X-Gm-Message-State: AJIora/6csqMDPEYhwcid8Bpa2qxBaBBwpaSVOdbvdxuJxLZFnE9suHj
-        ChZaO3Gucuy1tAk0fRTuaLGPBVsG0QkyyA==
-X-Google-Smtp-Source: AGRyM1tOGdhlSenDO0GdElEkAg8sTjaOGRyHGp/hjm0kiK9Iz8vT2m6yZxFjl0XF/oBxPW7pxT88MA==
-X-Received: by 2002:a05:600c:224c:b0:3a3:17b7:a229 with SMTP id a12-20020a05600c224c00b003a317b7a229mr15098728wmm.1.1658562122620;
-        Sat, 23 Jul 2022 00:42:02 -0700 (PDT)
-Received: from localhost.localdomain (62-44-238.netrun.cytanet.com.cy. [62.228.44.238])
-        by smtp.gmail.com with ESMTPSA id n6-20020adfe346000000b0021d7ad6b9fdsm6322786wrj.57.2022.07.23.00.42.01
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=tei8gU0z/ZZIONH6z+6TkIT0lbdV8NKJKoJnizWNnK8=;
+        b=Jhdt3eRyTzGkoeYSnERAtrswLruIslJUdxu4toBpKuFJG/l10BBHnMWMi/TM2B/DNz
+         TYkXmhTmJwziJF5JJJRK9ZseLTqPiSbnazJCBZdLTkxbsI2AD59WOM6EdGvIi1u80VaA
+         pbHxb4yTipFuTlzL4LxNKsYNndQrvdtSxAoY5MrHF2wI1iO3EDSiPZjETzA7jOq/H0aO
+         nfUcxOXyVKMaQKgUNDg3fDgyKG9+pfqGcLh9yiUlC2nhAaz4FMgMas3TOHp2W1SlbB1n
+         MWERq/8N7BARyp8pzXkIgnhUdJbX9jhYPn+DaGCYHKI/QbWuCpU1TodufYo9vQr5EcOW
+         RiOg==
+X-Gm-Message-State: AJIora8CoxaXoxX4z6P7Ygbuz6D5qxdDjzLI35eH7T1cyWVPlTUzlM9S
+        QwHXcoQ+6SAx+d+F2tBV+oTmF7ZFKR3BnQ==
+X-Google-Smtp-Source: AGRyM1uG+qSB9PlXY5p3neoZG2v5dChhA+3d1+xtdwn1vMGM4cVHu5hzFk2yf4cA5lJVz3BbVLe9rg==
+X-Received: by 2002:a5d:4352:0:b0:21e:4984:e607 with SMTP id u18-20020a5d4352000000b0021e4984e607mr2019855wrr.66.1658562270420;
+        Sat, 23 Jul 2022 00:44:30 -0700 (PDT)
+Received: from reki (62-44-238.netrun.cytanet.com.cy. [62.228.44.238])
+        by smtp.gmail.com with ESMTPSA id c7-20020a05600c0a4700b003a31f71c5b8sm13450506wmq.27.2022.07.23.00.44.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Jul 2022 00:42:02 -0700 (PDT)
+        Sat, 23 Jul 2022 00:44:30 -0700 (PDT)
+Date:   Sat, 23 Jul 2022 10:44:28 +0300
 From:   Maxim Devaev <mdevaev@gmail.com>
-To:     linux-doc@vger.kernel.org
-Cc:     linux-next@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mdevaev@gmail.com,
-        gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
-        sfr@canb.auug.org.au
-Subject: [PATCH v2] docs: fixed table margin in configfs-usb-gadget-mass-storage
-Date:   Sat, 23 Jul 2022 10:40:54 +0300
-Message-Id: <20220723074054.54995-1-mdevaev@gmail.com>
-X-Mailer: git-send-email 2.37.1
+To:     Greg KH <greg@kroah.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the usb tree
+Message-ID: <20220723104428.26941d85@reki>
+In-Reply-To: <Ytuip1C2LPmAxQxV@kroah.com>
+References: <20220719194337.64c490e0@canb.auug.org.au>
+        <20220719132559.3348c163@reki>
+        <YtaUYmzTfKmx0Ek0@kroah.com>
+        <20220723101428.347d941e@reki>
+        <Ytuip1C2LPmAxQxV@kroah.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -69,33 +75,66 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Fixes: 421c8d9a20da ("usb: gadget: f_mass_storage: forced_eject attribute")
-Signed-off-by: Maxim Devaev <mdevaev@gmail.com>
----
- v1 -> v2: Added Greg KH to CC so that he can accept this into his branch
+=D0=92 Sat, 23 Jul 2022 09:26:31 +0200
+Greg KH <greg@kroah.com> wrote:
 
- Documentation/ABI/testing/configfs-usb-gadget-mass-storage | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> On Sat, Jul 23, 2022 at 10:14:28AM +0300, Maxim Devaev wrote:
+> > On Tue, 19 Jul 2022 13:24:18 +0200
+> > Greg KH <greg@kroah.com> wrote:
+> >  =20
+> > > On Tue, Jul 19, 2022 at 01:25:59PM +0300, Maxim Devaev wrote: =20
+> > > > =D0=92 Tue, 19 Jul 2022 19:43:37 +1000
+> > > > Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> > > >    =20
+> > > > > Hi all,
+> > > > >=20
+> > > > > After merging the usb tree, today's linux-next build (htmldocs) p=
+roduced
+> > > > > this warning:
+> > > > >=20
+> > > > > Documentation/ABI/testing/configfs-usb-gadget-mass-storage:17: WA=
+RNING: Malformed table.
+> > > > > Text in column margin in table line 14.
+> > > > >=20
+> > > > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D     =3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > > > > file            The path to the backing file for the LUN.
+> > > > >                 Required if LUN is not marked as removable.
+> > > > > ro              Flag specifying access to the LUN shall be
+> > > > >                 read-only. This is implied if CD-ROM emulation
+> > > > >                 is enabled as well as when it was impossible
+> > > > >                 to open "filename" in R/W mode.
+> > > > > removable       Flag specifying that LUN shall be indicated as
+> > > > >                 being removable.
+> > > > > cdrom           Flag specifying that LUN shall be reported as
+> > > > >                 being a CD-ROM.
+> > > > > nofua           Flag specifying that FUA flag
+> > > > >                 in SCSI WRITE(10,12)
+> > > > > forced_eject    This write-only file is useful only when
+> > > > >                 the function is active. It causes the backing
+> > > > >                 file to be forcibly detached from the LUN,
+> > > > >                 regardless of whether the host has allowed it.
+> > > > >                 Any non-zero number of bytes written will
+> > > > >                 result in ejection.
+> > > > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D     =3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > > > >=20
+> > > > > Introduced by commit
+> > > > >=20
+> > > > >   421c8d9a20da ("usb: gadget: f_mass_storage: forced_eject attrib=
+ute")
+> > > > >    =20
+> > > >=20
+> > > > Sorry. Should I send a patch?   =20
+> > >=20
+> > > Yes please. =20
+> >=20
+> > JFYI the patch has been sent to linux-docs@, etc. I forgot to add you t=
+o CC. =20
+>=20
+> Then I'll not be able to take it into my tree to fix this up :(
 
-diff --git a/Documentation/ABI/testing/configfs-usb-gadget-mass-storage b/Documentation/ABI/testing/configfs-usb-gadget-mass-storage
-index d899adb57e81..fc0328069267 100644
---- a/Documentation/ABI/testing/configfs-usb-gadget-mass-storage
-+++ b/Documentation/ABI/testing/configfs-usb-gadget-mass-storage
-@@ -19,7 +19,7 @@ KernelVersion:	3.13
- Description:
- 		The attributes:
- 
--		===========	==============================================
-+		============	==============================================
- 		file		The path to the backing file for the LUN.
- 				Required if LUN is not marked as removable.
- 		ro		Flag specifying access to the LUN shall be
-@@ -38,4 +38,4 @@ Description:
- 				regardless of whether the host has allowed it.
- 				Any non-zero number of bytes written will
- 				result in ejection.
--		===========	==============================================
-+		============	==============================================
--- 
-2.37.1
-
+Ooops. Okay, I've sent it as with v2 tag and added your linuxfoundation add=
+r to CC.

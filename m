@@ -2,98 +2,99 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B42B57F2B3
-	for <lists+linux-next@lfdr.de>; Sun, 24 Jul 2022 04:49:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93D2F57F752
+	for <lists+linux-next@lfdr.de>; Mon, 25 Jul 2022 00:29:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231349AbiGXCtk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 23 Jul 2022 22:49:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34222 "EHLO
+        id S230517AbiGXW3F (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 24 Jul 2022 18:29:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiGXCtj (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 23 Jul 2022 22:49:39 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB7139B;
-        Sat, 23 Jul 2022 19:49:38 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id y9so7534768pff.12;
-        Sat, 23 Jul 2022 19:49:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=gSZBqo+GJpbLxWO7KUPdX/NIEOZXi3uHA6I5/h9Ae88=;
-        b=JpptwV03fN+pOYghJzEYoh4JLL/XC8Ly3sK+VAc2fYzO9PLQ5aWJUp31mjVV9FqupM
-         33uZjBtqtSBi/98glrdRi2L3R1j+cI5YqMUMWUo0K6Zm01IgQPbn5UL8fIMgRhLpqZLk
-         d76O9uR8bDjfrNgvSoKaxk+QLT1TD0LUFxzq9DHurAq5zVQavTyqSgrW1VMpXDQ6i3Gr
-         NoEPi0xun6zF+LZCDSVyNHwiuYIMQ38ot0X959afjv88i4mByuNumOfJbieL0MDHQ2dx
-         LN0kphXd2WxeAvmYyIMyPFuSf8KbdqdWj+6Irtm0BPlJcSrxw+oYLGUtT+Dn0ur6psSU
-         dDUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=gSZBqo+GJpbLxWO7KUPdX/NIEOZXi3uHA6I5/h9Ae88=;
-        b=KF5ykfctosdrnLdPTUEG+R0xomxdK1a/+ahtBkuc0l2ctwxurXPtnPSIuq3lGxHEEQ
-         mk9NHq/kU+Vft/6R9AX2kp8t//ckQo8yUcfpQfT94RqHDTUQcRxRUTYzzbPg2D6gZ6R4
-         0xcsgQwO6TYoWS2HzO9ut/iXaVfFhgaT23FYGBv6wusIYD6ymAqoDw/c+MDfGMRotv39
-         4Zo2D26pxs42ZT0ij7X/31udvpOfiaoEGjApgvfmR+DPmyRKO27c0QTaALeQ9SiPWBRP
-         fquABb1+nM7jDK4gendiikEZ8dHYBe9qNiW/WfwNhWTtAcHYDWXnlq8uBeyyX1EvjcZB
-         9D3w==
-X-Gm-Message-State: AJIora9VIAmnAQYnubOFfGIM9WSdBH4yn27UQsOzpUl65hA6IsORDqbv
-        yE6LnaSuC+R+63TWAIbhtew=
-X-Google-Smtp-Source: AGRyM1soUkXAdCXAvC/wf3HF5Sb42PzXzKJdqZxcowDy2J3LxksJuS4HfcKY1yxdZlNZoo/Ul4XJGw==
-X-Received: by 2002:a63:4b62:0:b0:41a:e5be:fe23 with SMTP id k34-20020a634b62000000b0041ae5befe23mr1290555pgl.140.1658630978263;
-        Sat, 23 Jul 2022 19:49:38 -0700 (PDT)
-Received: from [192.168.43.80] (subs03-180-214-233-16.three.co.id. [180.214.233.16])
-        by smtp.gmail.com with ESMTPSA id o42-20020a17090a0a2d00b001f21f0f6d7csm7819116pjo.25.2022.07.23.19.49.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 23 Jul 2022 19:49:37 -0700 (PDT)
-Message-ID: <5e13ade3-10a5-4eaf-2d9c-aa03fc23a374@gmail.com>
-Date:   Sun, 24 Jul 2022 09:49:33 +0700
+        with ESMTP id S229451AbiGXW3E (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 24 Jul 2022 18:29:04 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A5E31055B;
+        Sun, 24 Jul 2022 15:29:02 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LrdBJ6fG9z4xD0;
+        Mon, 25 Jul 2022 08:28:56 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1658701737;
+        bh=iilW9+TMDH6h08GDQ0vnPlEO5em55dNSW7JqlGE5XOs=;
+        h=Date:From:To:Cc:Subject:From;
+        b=TnqEBHqCq0J0a0GBWe9t8fs3D2GtwNv5uaZzkziLlibR31lYswYNvwQR+9E6h86bL
+         rJiEGGKoxiutlY4CU/wTfEUXVCBP62DzlrmM2Hmgse9DvzFLt3rbnJEJyQUNkN8EFl
+         T6ENYUBlrbJFyTmZLyVquXU1c2IjvGU+2mAqxxnoVsrv7tscp4OBhCurO679xaRaRx
+         D6v1kDoxAo+StLnKFdibVqrU1Mt3e4nY2B6Hrrv/QqRBdPx1oYaoniyjVMY34FGZ9L
+         n5D6R1E30hOP8X1KtEEx75zI7lhMvfN9w3gJlBZh2RZh+H5T9XNhjo4jD/GW4ASLdJ
+         B5EhRb1fJ1Rdg==
+Date:   Mon, 25 Jul 2022 07:53:50 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>
+Cc:     Zhengping Jiang <jiangzp@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the bluetooth tree
+Message-ID: <20220725075350.64662d13@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3] docs: fixed table margin in
- configfs-usb-gadget-mass-storage
-Content-Language: en-US
-To:     Maxim Devaev <mdevaev@gmail.com>, linux-doc@vger.kernel.org
-Cc:     linux-next@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
-        stern@rowland.harvard.edu, sfr@canb.auug.org.au
-References: <20220723101432.72178-1-mdevaev@gmail.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20220723101432.72178-1-mdevaev@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/K+8jN29FuRw4ve93x75mLCU";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 7/23/22 17:14, Maxim Devaev wrote:
-> After merging forced_eject patch, there was a broken margin
-> in the configfs parameters table in the ABI documentation.
-> This patch fixes it.
-> 
+--Sig_/K+8jN29FuRw4ve93x75mLCU
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Hi Maxim,
+Hi all,
 
-I think the patch message can be improved, like:
+In commit
 
-"Commit 421c8d9a20da ("usb: gadget: f_mass_storage: forced_eject attribute")
- adds force_eject entry to config-usb-gadget-mass-storage table.
- However, the table border for attribute name is short by one `=`,
- which triggers Sphinx warning.
+  68253f3cd715 ("Bluetooth: hci_sync: Fix resuming scan after suspend resum=
+e")
 
- Extend the border to cover the now-longest entry."
+Fixes tag
 
-Thanks.
+  Fixes: 3b42055388c30 (Bluetooth: hci_sync: Fix attempting to suspend with
 
--- 
-An old man doll... just what I always wanted! - Clara
+has these problem(s):
+
+  - Subject has leading but no trailing parentheses
+
+Please do not split Fixes tags over more than one line, just use:
+
+  git log -1 --format=3D'Fixes: %h ("%s")' <commit>
+
+Also, please keep all the commit message tags together at the end of
+the commit message.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/K+8jN29FuRw4ve93x75mLCU
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLdv24ACgkQAVBC80lX
+0GwR1Af+PfgV4gXNe+1QBqB6P/Kzzteb/3Tu/4CUBoztO1Hvjlm+za+rGsY5aF8b
+47cb6hjHNT3gfxTvVR3WVLHkUdeV4R6B74EoEylxflVusaGVV0nQV5n/deK5urQi
+cnBzGCymSqC4X7l9HxGK2PV0GZp60oc85gwPzSxvdh+WyWZID0YLLutlvjH1zHh+
+FkoCJy+8Q6KjBVZahMchJlG6UJ8Mp08h5+gZVKLWmBC6RJDxrs54Ak1Qct5I5WfL
+MGLyi/v1Fc1HYETVfChJzNGtnFPpNskoaPZEl/bEy+WoTjp7yDJeiPHjKo4duMSO
+sFiyNXfA3KRiN8YXD05tYJc+/EIxjA==
+=4ig3
+-----END PGP SIGNATURE-----
+
+--Sig_/K+8jN29FuRw4ve93x75mLCU--

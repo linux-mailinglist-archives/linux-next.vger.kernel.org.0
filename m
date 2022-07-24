@@ -2,88 +2,98 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC37857F0E8
-	for <lists+linux-next@lfdr.de>; Sat, 23 Jul 2022 20:11:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B42B57F2B3
+	for <lists+linux-next@lfdr.de>; Sun, 24 Jul 2022 04:49:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231489AbiGWSLY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 23 Jul 2022 14:11:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36856 "EHLO
+        id S231349AbiGXCtk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 23 Jul 2022 22:49:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231414AbiGWSLX (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 23 Jul 2022 14:11:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289DF175B1;
-        Sat, 23 Jul 2022 11:11:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BA3A0B80AEF;
-        Sat, 23 Jul 2022 18:11:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15C39C341C0;
-        Sat, 23 Jul 2022 18:11:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658599880;
-        bh=m6Q3tnXorif4RYbPtHxva7FixZkqHCVu3tsT2DxQEag=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=kOX0SPHToIYYSY70q5LMQo9taF+GllCp4Vm91T1yOjXx2JOygVkZOKVo3B1RBPxxy
-         8Q8t11Lu4qojKXeryd7q2NMYDqcg5WYdXM2qKZuZkCb3d2Wg1ShWoRtXZIimBawn9a
-         bSPtkfhtHspq+V05nHemqGfRgYQR8+mXxtKk07Aac9s0Ipoq2wQLubIpTz8Jb6O41J
-         EZe6vJ6sZltNn8ySHhUJo9kVSriZZmsakGwxUJ+S2rqWlkkYYhGgmLUICOhpe6sBnn
-         xgmHGCIN3Kz9o5HC2D8hcNwvcHo9OItZ+ok9c8XHyK2rivGrxPuSiPnabzKBxxjp5v
-         iQ/Zl5lf61xbw==
-Date:   Sat, 23 Jul 2022 20:11:16 +0200 (CEST)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Basavaraj Natikar <Basavaraj.Natikar@amd.com>
-cc:     benjamin.tissoires@redhat.com, rdunlap@infradead.org,
-        linux-input@vger.kernel.org, linux-next@vger.kernel.org,
-        sfr@canb.auug.org.au
-Subject: Re: [PATCH for-next 0/2] Fixes to amd_sfh driver 
-In-Reply-To: <20220723061033.1377061-1-Basavaraj.Natikar@amd.com>
-Message-ID: <nycvar.YFH.7.76.2207232011090.19850@cbobk.fhfr.pm>
-References: <20220723061033.1377061-1-Basavaraj.Natikar@amd.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        with ESMTP id S229602AbiGXCtj (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 23 Jul 2022 22:49:39 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB7139B;
+        Sat, 23 Jul 2022 19:49:38 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id y9so7534768pff.12;
+        Sat, 23 Jul 2022 19:49:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=gSZBqo+GJpbLxWO7KUPdX/NIEOZXi3uHA6I5/h9Ae88=;
+        b=JpptwV03fN+pOYghJzEYoh4JLL/XC8Ly3sK+VAc2fYzO9PLQ5aWJUp31mjVV9FqupM
+         33uZjBtqtSBi/98glrdRi2L3R1j+cI5YqMUMWUo0K6Zm01IgQPbn5UL8fIMgRhLpqZLk
+         d76O9uR8bDjfrNgvSoKaxk+QLT1TD0LUFxzq9DHurAq5zVQavTyqSgrW1VMpXDQ6i3Gr
+         NoEPi0xun6zF+LZCDSVyNHwiuYIMQ38ot0X959afjv88i4mByuNumOfJbieL0MDHQ2dx
+         LN0kphXd2WxeAvmYyIMyPFuSf8KbdqdWj+6Irtm0BPlJcSrxw+oYLGUtT+Dn0ur6psSU
+         dDUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=gSZBqo+GJpbLxWO7KUPdX/NIEOZXi3uHA6I5/h9Ae88=;
+        b=KF5ykfctosdrnLdPTUEG+R0xomxdK1a/+ahtBkuc0l2ctwxurXPtnPSIuq3lGxHEEQ
+         mk9NHq/kU+Vft/6R9AX2kp8t//ckQo8yUcfpQfT94RqHDTUQcRxRUTYzzbPg2D6gZ6R4
+         0xcsgQwO6TYoWS2HzO9ut/iXaVfFhgaT23FYGBv6wusIYD6ymAqoDw/c+MDfGMRotv39
+         4Zo2D26pxs42ZT0ij7X/31udvpOfiaoEGjApgvfmR+DPmyRKO27c0QTaALeQ9SiPWBRP
+         fquABb1+nM7jDK4gendiikEZ8dHYBe9qNiW/WfwNhWTtAcHYDWXnlq8uBeyyX1EvjcZB
+         9D3w==
+X-Gm-Message-State: AJIora9VIAmnAQYnubOFfGIM9WSdBH4yn27UQsOzpUl65hA6IsORDqbv
+        yE6LnaSuC+R+63TWAIbhtew=
+X-Google-Smtp-Source: AGRyM1soUkXAdCXAvC/wf3HF5Sb42PzXzKJdqZxcowDy2J3LxksJuS4HfcKY1yxdZlNZoo/Ul4XJGw==
+X-Received: by 2002:a63:4b62:0:b0:41a:e5be:fe23 with SMTP id k34-20020a634b62000000b0041ae5befe23mr1290555pgl.140.1658630978263;
+        Sat, 23 Jul 2022 19:49:38 -0700 (PDT)
+Received: from [192.168.43.80] (subs03-180-214-233-16.three.co.id. [180.214.233.16])
+        by smtp.gmail.com with ESMTPSA id o42-20020a17090a0a2d00b001f21f0f6d7csm7819116pjo.25.2022.07.23.19.49.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 23 Jul 2022 19:49:37 -0700 (PDT)
+Message-ID: <5e13ade3-10a5-4eaf-2d9c-aa03fc23a374@gmail.com>
+Date:   Sun, 24 Jul 2022 09:49:33 +0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3] docs: fixed table margin in
+ configfs-usb-gadget-mass-storage
+Content-Language: en-US
+To:     Maxim Devaev <mdevaev@gmail.com>, linux-doc@vger.kernel.org
+Cc:     linux-next@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
+        stern@rowland.harvard.edu, sfr@canb.auug.org.au
+References: <20220723101432.72178-1-mdevaev@gmail.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20220723101432.72178-1-mdevaev@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Sat, 23 Jul 2022, Basavaraj Natikar wrote:
+On 7/23/22 17:14, Maxim Devaev wrote:
+> After merging forced_eject patch, there was a broken margin
+> in the configfs parameters table in the ABI documentation.
+> This patch fixes it.
+> 
 
-> Changes includes to handle "no sensors" case and fix of implicit
-> declaration error on i386.
-> 
-> Link: https://lore.kernel.org/all/92ed10f9-2c84-ad42-20d1-f8a101f78f08@infradead.org/
-> '''
-> From: Randy Dunlap <rdunlap@infradead.org>
-> Changes since 20220721:
-> 
-> on i386:
-> 
-> ../drivers/hid/amd-sfh-hid/sfh1_1/amd_sfh_interface.c: In function ‘amd_stop_sensor’:
-> ../drivers/hid/amd-sfh-hid/sfh1_1/amd_sfh_interface.c:48:9: error: implicit declaration of function ‘writeq’; did you mean ‘writel’? [-Werror=implicit-function-declaration]
->    48 |         writeq(0x0, privdata->mmio + AMD_C2P_MSG(1));
->       |         ^~~~~~
->       |         writel
-> '''
-> 
-> Basavaraj Natikar (2):
->   HID: amd_sfh: Fix implicit declaration error on i386
->   HID: amd_sfh: Handle condition of "no sensors"
-> 
->  drivers/hid/amd-sfh-hid/amd_sfh_client.c           | 2 ++
->  drivers/hid/amd-sfh-hid/sfh1_1/amd_sfh_interface.c | 2 ++
->  2 files changed, 4 insertions(+)
+Hi Maxim,
 
-Queued in hid.git, thanks.
+I think the patch message can be improved, like:
+
+"Commit 421c8d9a20da ("usb: gadget: f_mass_storage: forced_eject attribute")
+ adds force_eject entry to config-usb-gadget-mass-storage table.
+ However, the table border for attribute name is short by one `=`,
+ which triggers Sphinx warning.
+
+ Extend the border to cover the now-longest entry."
+
+Thanks.
 
 -- 
-Jiri Kosina
-SUSE Labs
-
+An old man doll... just what I always wanted! - Clara

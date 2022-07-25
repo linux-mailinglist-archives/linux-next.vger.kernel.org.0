@@ -2,91 +2,122 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04D3757FE9E
-	for <lists+linux-next@lfdr.de>; Mon, 25 Jul 2022 13:50:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F06957FE2A
+	for <lists+linux-next@lfdr.de>; Mon, 25 Jul 2022 13:16:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230032AbiGYLu5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 25 Jul 2022 07:50:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45406 "EHLO
+        id S230087AbiGYLQ2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 25 Jul 2022 07:16:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230246AbiGYLu5 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 25 Jul 2022 07:50:57 -0400
-X-Greylist: delayed 2402 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 25 Jul 2022 04:50:55 PDT
-Received: from 5.mo561.mail-out.ovh.net (5.mo561.mail-out.ovh.net [87.98.178.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3C5F383
-        for <linux-next@vger.kernel.org>; Mon, 25 Jul 2022 04:50:54 -0700 (PDT)
-Received: from player687.ha.ovh.net (unknown [10.108.4.72])
-        by mo561.mail-out.ovh.net (Postfix) with ESMTP id 5AFC524142
-        for <linux-next@vger.kernel.org>; Mon, 25 Jul 2022 10:33:54 +0000 (UTC)
-Received: from milecki.pl (ip-194-187-74-233.konfederacka.maverick.com.pl [194.187.74.233])
-        (Authenticated sender: rafal@milecki.pl)
-        by player687.ha.ovh.net (Postfix) with ESMTPSA id 4FFA92CE895EB;
-        Mon, 25 Jul 2022 10:33:49 +0000 (UTC)
-Authentication-Results: garm.ovh; auth=pass (GARM-108S002738e379f-7450-47b0-8359-6da69f772e69,
-                    4E37C95A03F31501693E8CB0BA0B4A523DB5F384) smtp.auth=rafal@milecki.pl
-X-OVh-ClientIp: 194.187.74.233
-Message-ID: <df8f4765-a804-cb50-bbb5-475925ba2036@milecki.pl>
-Date:   Mon, 25 Jul 2022 12:33:48 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:96.0) Gecko/20100101
- Thunderbird/96.0
-Subject: Re: linux-next: build warnings after merge of the broadcom tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        with ESMTP id S229614AbiGYLQ2 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 25 Jul 2022 07:16:28 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ECD5A462;
+        Mon, 25 Jul 2022 04:16:24 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LryCf6cwnz4x1c;
+        Mon, 25 Jul 2022 21:16:14 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1658747775;
+        bh=os6g/YgnmlK/C/Z8Fjj6oNNrjzfPn11eWgMm5uHJVWw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=P243hvK9e4eZtLes7osp71Ue6sDylj/Bxv11z6hnNBg6tk261LslpEdrPXMK27Ehc
+         dQnRxDniKJr2zsTjtjFN7GlGD6/rbyKeq2yxuDNLWwEucvnPjPRTI17Je2IUw744YD
+         07pfjLP2n9Ik2L9KbHehH7sb6umhBq8OF+3HjhcVDcFE1al3yC4zkL+XuNKdBnTYR/
+         8ujgal65ID/9Hy+KVIUARWqQ6L+WBbLwLl69iQAszywDvmXpWL3JgT/1k7S1Ji7E9y
+         p1406edb2O88RwEZhXMFJ5JMX3urznEqrK4zKorI+hnWPTx2AoXIUmcanbSaoYj1Tf
+         FI45zSlwgUa3g==
+Date:   Mon, 25 Jul 2022 21:16:12 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220725095913.31e859ec@canb.auug.org.au>
-From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-In-Reply-To: <20220725095913.31e859ec@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Ovh-Tracer-Id: 8183603476842064765
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrvddtkedgvdeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvvehfhfgjtgfgsehtjeertddtfeejnecuhfhrohhmpeftrghfrghlucfoihhlvggtkhhiuceorhgrfhgrlhesmhhilhgvtghkihdrphhlqeenucggtffrrghtthgvrhhnpedtgeetheeutddvudekuddtkeetveehteegleehffetkeehjeetfffgveegkeefueenucfkpheptddrtddrtddrtddpudelgedrudekjedrjeegrddvfeefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrheikeejrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomheprhgrfhgrlhesmhhilhgvtghkihdrphhlpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqnhgvgihtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehiedu
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Subject: linux-next: build failure after merge of the amdgpu tree
+Message-ID: <20220725211612.7e3331ff@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/QKktcAAIFJeGUdWVtcJu.G6";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi,
+--Sig_/QKktcAAIFJeGUdWVtcJu.G6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On 25.07.2022 01:59, Stephen Rothwell wrote:
-> After merging the broadcom tree, today's linux-next build (arm
-> multi_v7_defconfig) produced these warnings:
-> 
-> arch/arm/boot/dts/bcm5301x.dtsi:240.21-246.5: Warning (pci_bridge): /axi@18000000/pcie@12000: missing ranges for PCI bridge (or not a bridge)
-> arch/arm/boot/dts/bcm5301x.dtsi:248.21-254.5: Warning (pci_bridge): /axi@18000000/pcie@13000: missing ranges for PCI bridge (or not a bridge)
-> arch/arm/boot/dts/bcm5301x.dtsi:256.21-262.5: Warning (pci_bridge): /axi@18000000/pcie@14000: missing ranges for PCI bridge (or not a bridge)
+Hi all,
 
-This is expected. My commit ef126d3f58d25 ("ARM: dts: BCM5301X: Add
-basic PCI controller properties") reduced following warnings:
+After merging the amdgpu tree, today's linux-next build (powerpc
+allyesconfig) failed like this:
 
-arch/arm/boot/dts/bcm47081-buffalo-wzr-600dhp2.dtb: pcie@12000: 'device_type' is a required property
-         From schema: /lib/python3.9/site-packages/dtschema/schemas/pci/pci-bus.yaml
-arch/arm/boot/dts/bcm47081-buffalo-wzr-600dhp2.dtb: pcie@12000: 'ranges' is a required property
-         From schema: /lib/python3.9/site-packages/dtschema/schemas/pci/pci-bus.yaml
-arch/arm/boot/dts/bcm47081-buffalo-wzr-600dhp2.dtb: pcie@12000: '#address-cells' is a required property
-         From schema: /lib/python3.9/site-packages/dtschema/schemas/pci/pci-bus.yaml
-arch/arm/boot/dts/bcm47081-buffalo-wzr-600dhp2.dtb: pcie@12000: '#size-cells' is a required property
-         From schema: /lib/python3.9/site-packages/dtschema/schemas/pci/pci-bus.yaml
+drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_crtc.c:297:26: er=
+ror: 'amdgpu_dm_crtc_late_register' undeclared here (not in a function); di=
+d you mean 'amdgpu_umc_ras_late_init'?
+  297 |         .late_register =3D amdgpu_dm_crtc_late_register,
+      |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                          amdgpu_umc_ras_late_init
 
+Caused by commit
 
-down to this one:
+  a6c0b96cb899 ("drm/amd/display: Create a file dedicated for CRTC")
 
-arch/arm/boot/dts/bcm47081-buffalo-wzr-600dhp2.dtb: pcie@12000: 'ranges' is a required property
-         From schema: /lib/python3.9/site-packages/dtschema/schemas/pci/pci-bus.yaml
+I have applied the following hack for today (just to make it build).
 
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Mon, 25 Jul 2022 20:48:29 +1000
+Subject: [PATCH] fixup for "drm/amd/display: Create a file dedicated for CR=
+TC"
 
-and basically does the right thing (adds required properties).
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c b/drive=
+rs/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c
+index 16b624828e0d..3eb6ea3709bc 100644
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c
+@@ -293,7 +293,7 @@ static const struct drm_crtc_funcs amdgpu_dm_crtc_funcs=
+ =3D {
+ 	.enable_vblank =3D dm_enable_vblank,
+ 	.disable_vblank =3D dm_disable_vblank,
+ 	.get_vblank_timestamp =3D drm_crtc_vblank_helper_get_vblank_timestamp,
+-#if defined(CONFIG_DEBUG_FS)
++#ifdef CONFIG_DRM_AMD_SECURE_DISPLAY
+ 	.late_register =3D amdgpu_dm_crtc_late_register,
+ #endif
+ };
+--=20
+2.35.1
 
-I'm fully aware "ranges" need to be added (it's mentioned in the commit)
-and it's one of next things on my BCM5301X list.
+--=20
+Cheers,
+Stephen Rothwell
 
-So while my commits triggers that problem it also reduces warnings so
-I'd say it's acceptable.
+--Sig_/QKktcAAIFJeGUdWVtcJu.G6
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLee3wACgkQAVBC80lX
+0GysoQgAl203WWglwrP+OiOpXuL6r5dW8lBcrmPO59mBIGY6cwL7A0PMp6gRnEej
+BjPZZ8Ni0TmkGsHXXH3ZAScxXghIjg5ll4halL5WWntmbMxRxixEkCdvLR34mfSH
+iG5rNxprW20irtAJ365nRHyfc35AkRKkhe6D281q/vhQPTvk3q56oD2FuLsSvZ4p
+/yzWboBOvq2qOohs87N0KiQ6iwELcQ4mK7Cu2maGs3mtyHzRAe6yyRIRPCystso7
+MHDXU4jjJxdIOmkRNmJd1qvJ8esnUl3kdcfE763/V2Kzf024/XvrNUkHT3OkMDfN
+oUJiKzvs5J+eMLtF7nlIL/uPQV0AuA==
+=dM7T
+-----END PGP SIGNATURE-----
+
+--Sig_/QKktcAAIFJeGUdWVtcJu.G6--

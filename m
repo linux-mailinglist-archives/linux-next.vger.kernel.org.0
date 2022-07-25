@@ -2,592 +2,141 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE2F257F7C9
-	for <lists+linux-next@lfdr.de>; Mon, 25 Jul 2022 02:24:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AC9357F7D1
+	for <lists+linux-next@lfdr.de>; Mon, 25 Jul 2022 02:46:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbiGYAYq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 24 Jul 2022 20:24:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50160 "EHLO
+        id S230306AbiGYAqJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 24 Jul 2022 20:46:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiGYAYq (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 24 Jul 2022 20:24:46 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C345E0E3;
-        Sun, 24 Jul 2022 17:24:43 -0700 (PDT)
+        with ESMTP id S229437AbiGYAqJ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 24 Jul 2022 20:46:09 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ACC4FD19;
+        Sun, 24 Jul 2022 17:46:07 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Lrgls0CqYz4xCy;
-        Mon, 25 Jul 2022 10:24:40 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LrhDV0w2Rz4xCy;
+        Mon, 25 Jul 2022 10:46:01 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1658708681;
-        bh=r3lKUOP5KtX+td5/WNL9plNDlW/EMqsSToeInNdw/UY=;
+        s=201702; t=1658709963;
+        bh=IZ+ONIlMRbSzJOCazcSJOiac0EEAgIdLc957tceZ6iY=;
         h=Date:From:To:Cc:Subject:From;
-        b=tFyvBUBAvZJ8z7LcfkNWb56nzQygcOAJAS7LjiMDCE99/UWqQHeR0EQdYam8MML30
-         eGApWe2DgJDJODCGV3EEZVN/HqGZN5mgz6jCB0RnZ+hnUHdZog+HWbCxftvys0kkQA
-         cAGLyAaDdHdWyg5Rv07g1GIdvfkvN8R0uEm4U8+RK05DDPqJ9KRi4OUyGyqc98h9M3
-         m3ggtVSPGsIv9GU7XzQ8qQk6dCOwhwlQDJsFgXgfZNgMaBXKyaKIbzN8iY+ugRLREj
-         /SI4bGRwxPTLyrCG20xYnIGt+owZ9rSKxCeEtbHY216FrGT7fxASIjrSFOA+7eHAb1
-         0j8//hZ+ZTTYQ==
-Date:   Mon, 25 Jul 2022 09:59:13 +1000
+        b=AjJK7YGsvvgoS0Ux1QQW2Uyz1P5j1SyTHkB9B3xLdQtx4veDmAP4Jh3i7Up+oKGg2
+         guGe2xXyaRdzR5lx07Xg4OKA/AcxrGhrXqyq7Z01si7QMhAXccVL+8Elec3ugzwFGe
+         uAzCE6iuMdfceLSRrekmMU/a14VT06ypS4NDK01eglgv0T/kOMJK4TcG+rIoPJ7EGr
+         eXrKGHR09aDldd/mCh+8RnUG3ce7UugkU2OUa0E13F6Xb2sxdqPyGWnKFwyWHd4SSN
+         od77nAG3Dnt2lnwqtfN9rFCqtvOd2XX9rmdnZetqwz4Sxgnd2Ccwl10+Q7YCEYKGNk
+         MeoBa2+j/N8dg==
+Date:   Mon, 25 Jul 2022 10:22:21 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warnings after merge of the broadcom tree
-Message-ID: <20220725095913.31e859ec@canb.auug.org.au>
+To:     Bjorn Helgaas <bhelgaas@google.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul@pwsan.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Stafford Horne <shorne@gmail.com>
+Subject: linux-next: manual merge of the pci tree with the risc-v tree
+Message-ID: <20220725102221.20fe2ca2@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/pdkNMXm06jGQ5hdM8WZ_0OO";
+Content-Type: multipart/signed; boundary="Sig_/IC/OQ.q28hFebuoQuJZbO=L";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/pdkNMXm06jGQ5hdM8WZ_0OO
+--Sig_/IC/OQ.q28hFebuoQuJZbO=L
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the broadcom tree, today's linux-next build (arm
-multi_v7_defconfig) produced these warnings:
+Today's linux-next merge of the pci tree got a conflict in:
 
-arch/arm/boot/dts/bcm5301x.dtsi:240.21-246.5: Warning (pci_bridge): /axi@18=
-000000/pcie@12000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:248.21-254.5: Warning (pci_bridge): /axi@18=
-000000/pcie@13000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:256.21-262.5: Warning (pci_bridge): /axi@18=
-000000/pcie@14000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm4708-asus-rt-ac68u.dtb: Warning (unit_address_format):=
- Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm4708-asus-rt-ac68u.dtb: Warning (pci_device_reg): Fail=
-ed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm4708-asus-rt-ac68u.dtb: Warning (pci_device_bus_num): =
-Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm5301x.dtsi:240.21-246.5: Warning (pci_bridge): /axi@18=
-000000/pcie@12000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:248.21-254.5: Warning (pci_bridge): /axi@18=
-000000/pcie@13000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:256.21-262.5: Warning (pci_bridge): /axi@18=
-000000/pcie@14000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm4708-buffalo-wzr-1750dhp.dtb: Warning (unit_address_fo=
-rmat): Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm4708-buffalo-wzr-1750dhp.dtb: Warning (pci_device_reg)=
-: Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm4708-buffalo-wzr-1750dhp.dtb: Warning (pci_device_bus_=
-num): Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm5301x.dtsi:240.21-246.5: Warning (pci_bridge): /axi@18=
-000000/pcie@12000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:248.21-254.5: Warning (pci_bridge): /axi@18=
-000000/pcie@13000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:256.21-262.5: Warning (pci_bridge): /axi@18=
-000000/pcie@14000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm4708-asus-rt-ac56u.dtb: Warning (unit_address_format):=
- Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm4708-asus-rt-ac56u.dtb: Warning (pci_device_reg): Fail=
-ed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm4708-asus-rt-ac56u.dtb: Warning (pci_device_bus_num): =
-Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm5301x.dtsi:240.21-246.5: Warning (pci_bridge): /axi@18=
-000000/pcie@12000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:248.21-254.5: Warning (pci_bridge): /axi@18=
-000000/pcie@13000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:256.21-262.5: Warning (pci_bridge): /axi@18=
-000000/pcie@14000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm4708-buffalo-wzr-1166dhp.dtb: Warning (unit_address_fo=
-rmat): Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm4708-buffalo-wzr-1166dhp.dtb: Warning (pci_device_reg)=
-: Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm4708-buffalo-wzr-1166dhp.dtb: Warning (pci_device_bus_=
-num): Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm5301x.dtsi:240.21-246.5: Warning (pci_bridge): /axi@18=
-000000/pcie@12000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:248.21-254.5: Warning (pci_bridge): /axi@18=
-000000/pcie@13000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:256.21-262.5: Warning (pci_bridge): /axi@18=
-000000/pcie@14000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm4708-buffalo-wzr-1166dhp2.dtb: Warning (unit_address_f=
-ormat): Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm4708-buffalo-wzr-1166dhp2.dtb: Warning (pci_device_reg=
-): Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm4708-buffalo-wzr-1166dhp2.dtb: Warning (pci_device_bus=
-_num): Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm5301x.dtsi:240.21-246.5: Warning (pci_bridge): /axi@18=
-000000/pcie@12000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:248.21-254.5: Warning (pci_bridge): /axi@18=
-000000/pcie@13000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:256.21-262.5: Warning (pci_bridge): /axi@18=
-000000/pcie@14000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm4708-linksys-ea6300-v1.dtb: Warning (unit_address_form=
-at): Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm4708-linksys-ea6300-v1.dtb: Warning (pci_device_reg): =
-Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm4708-linksys-ea6300-v1.dtb: Warning (pci_device_bus_nu=
-m): Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm5301x.dtsi:240.21-246.5: Warning (pci_bridge): /axi@18=
-000000/pcie@12000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:248.21-254.5: Warning (pci_bridge): /axi@18=
-000000/pcie@13000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:256.21-262.5: Warning (pci_bridge): /axi@18=
-000000/pcie@14000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm4708-luxul-xap-1510.dtb: Warning (unit_address_format)=
-: Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm4708-luxul-xap-1510.dtb: Warning (pci_device_reg): Fai=
-led prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm4708-luxul-xap-1510.dtb: Warning (pci_device_bus_num):=
- Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm5301x.dtsi:240.21-246.5: Warning (pci_bridge): /axi@18=
-000000/pcie@12000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:248.21-254.5: Warning (pci_bridge): /axi@18=
-000000/pcie@13000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:256.21-262.5: Warning (pci_bridge): /axi@18=
-000000/pcie@14000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm4708-linksys-ea6500-v2.dtb: Warning (unit_address_form=
-at): Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm4708-linksys-ea6500-v2.dtb: Warning (pci_device_reg): =
-Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm4708-linksys-ea6500-v2.dtb: Warning (pci_device_bus_nu=
-m): Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm5301x.dtsi:240.21-246.5: Warning (pci_bridge): /axi@18=
-000000/pcie@12000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:248.21-254.5: Warning (pci_bridge): /axi@18=
-000000/pcie@13000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:256.21-262.5: Warning (pci_bridge): /axi@18=
-000000/pcie@14000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm4708-luxul-xwc-1000.dtb: Warning (unit_address_format)=
-: Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm4708-luxul-xwc-1000.dtb: Warning (pci_device_reg): Fai=
-led prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm4708-luxul-xwc-1000.dtb: Warning (pci_device_bus_num):=
- Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm5301x.dtsi:240.21-246.5: Warning (pci_bridge): /axi@18=
-000000/pcie@12000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:248.21-254.5: Warning (pci_bridge): /axi@18=
-000000/pcie@13000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:256.21-262.5: Warning (pci_bridge): /axi@18=
-000000/pcie@14000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm4708-netgear-r6250.dtb: Warning (unit_address_format):=
- Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm4708-netgear-r6250.dtb: Warning (pci_device_reg): Fail=
-ed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm4708-netgear-r6250.dtb: Warning (pci_device_bus_num): =
-Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm5301x.dtsi:240.21-246.5: Warning (pci_bridge): /axi@18=
-000000/pcie@12000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:248.21-254.5: Warning (pci_bridge): /axi@18=
-000000/pcie@13000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:256.21-262.5: Warning (pci_bridge): /axi@18=
-000000/pcie@14000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm4708-netgear-r6300-v2.dtb: Warning (unit_address_forma=
-t): Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm4708-netgear-r6300-v2.dtb: Warning (pci_device_reg): F=
-ailed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm4708-netgear-r6300-v2.dtb: Warning (pci_device_bus_num=
-): Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm5301x.dtsi:240.21-246.5: Warning (pci_bridge): /axi@18=
-000000/pcie@12000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:248.21-254.5: Warning (pci_bridge): /axi@18=
-000000/pcie@13000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:256.21-262.5: Warning (pci_bridge): /axi@18=
-000000/pcie@14000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm4708-smartrg-sr400ac.dtb: Warning (unit_address_format=
-): Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm4708-smartrg-sr400ac.dtb: Warning (pci_device_reg): Fa=
-iled prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm4708-smartrg-sr400ac.dtb: Warning (pci_device_bus_num)=
-: Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm5301x.dtsi:240.21-246.5: Warning (pci_bridge): /axi@18=
-000000/pcie@12000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:248.21-254.5: Warning (pci_bridge): /axi@18=
-000000/pcie@13000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:256.21-262.5: Warning (pci_bridge): /axi@18=
-000000/pcie@14000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm47081-asus-rt-n18u.dtb: Warning (unit_address_format):=
- Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm47081-asus-rt-n18u.dtb: Warning (pci_device_reg): Fail=
-ed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm47081-asus-rt-n18u.dtb: Warning (pci_device_bus_num): =
-Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm5301x.dtsi:240.21-246.5: Warning (pci_bridge): /axi@18=
-000000/pcie@12000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:248.21-254.5: Warning (pci_bridge): /axi@18=
-000000/pcie@13000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:256.21-262.5: Warning (pci_bridge): /axi@18=
-000000/pcie@14000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm47081-buffalo-wzr-600dhp2.dtb: Warning (unit_address_f=
-ormat): Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm47081-buffalo-wzr-600dhp2.dtb: Warning (pci_device_reg=
-): Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm47081-buffalo-wzr-600dhp2.dtb: Warning (pci_device_bus=
-_num): Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm5301x.dtsi:240.21-246.5: Warning (pci_bridge): /axi@18=
-000000/pcie@12000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:248.21-254.5: Warning (pci_bridge): /axi@18=
-000000/pcie@13000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:256.21-262.5: Warning (pci_bridge): /axi@18=
-000000/pcie@14000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm47081-buffalo-wzr-900dhp.dtb: Warning (unit_address_fo=
-rmat): Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm47081-buffalo-wzr-900dhp.dtb: Warning (pci_device_reg)=
-: Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm47081-buffalo-wzr-900dhp.dtb: Warning (pci_device_bus_=
-num): Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm5301x.dtsi:240.21-246.5: Warning (pci_bridge): /axi@18=
-000000/pcie@12000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:248.21-254.5: Warning (pci_bridge): /axi@18=
-000000/pcie@13000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:256.21-262.5: Warning (pci_bridge): /axi@18=
-000000/pcie@14000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm47081-luxul-xap-1410.dtb: Warning (unit_address_format=
-): Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm47081-luxul-xap-1410.dtb: Warning (pci_device_reg): Fa=
-iled prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm47081-luxul-xap-1410.dtb: Warning (pci_device_bus_num)=
-: Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm5301x.dtsi:240.21-246.5: Warning (pci_bridge): /axi@18=
-000000/pcie@12000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:248.21-254.5: Warning (pci_bridge): /axi@18=
-000000/pcie@13000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:256.21-262.5: Warning (pci_bridge): /axi@18=
-000000/pcie@14000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm47081-tplink-archer-c5-v2.dtb: Warning (unit_address_f=
-ormat): Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm47081-tplink-archer-c5-v2.dtb: Warning (pci_device_reg=
-): Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm47081-tplink-archer-c5-v2.dtb: Warning (pci_device_bus=
-_num): Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm5301x.dtsi:240.21-246.5: Warning (pci_bridge): /axi@18=
-000000/pcie@12000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:248.21-254.5: Warning (pci_bridge): /axi@18=
-000000/pcie@13000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:256.21-262.5: Warning (pci_bridge): /axi@18=
-000000/pcie@14000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm4709-asus-rt-ac87u.dtb: Warning (unit_address_format):=
- Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm4709-asus-rt-ac87u.dtb: Warning (pci_device_reg): Fail=
-ed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm4709-asus-rt-ac87u.dtb: Warning (pci_device_bus_num): =
-Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm5301x.dtsi:240.21-246.5: Warning (pci_bridge): /axi@18=
-000000/pcie@12000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:248.21-254.5: Warning (pci_bridge): /axi@18=
-000000/pcie@13000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:256.21-262.5: Warning (pci_bridge): /axi@18=
-000000/pcie@14000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm47081-luxul-xwr-1200.dtb: Warning (unit_address_format=
-): Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm47081-luxul-xwr-1200.dtb: Warning (pci_device_reg): Fa=
-iled prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm47081-luxul-xwr-1200.dtb: Warning (pci_device_bus_num)=
-: Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm5301x.dtsi:240.21-246.5: Warning (pci_bridge): /axi@18=
-000000/pcie@12000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:248.21-254.5: Warning (pci_bridge): /axi@18=
-000000/pcie@13000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:256.21-262.5: Warning (pci_bridge): /axi@18=
-000000/pcie@14000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm4709-buffalo-wxr-1900dhp.dtb: Warning (unit_address_fo=
-rmat): Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm4709-buffalo-wxr-1900dhp.dtb: Warning (pci_device_reg)=
-: Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm4709-buffalo-wxr-1900dhp.dtb: Warning (pci_device_bus_=
-num): Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm5301x.dtsi:240.21-246.5: Warning (pci_bridge): /axi@18=
-000000/pcie@12000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:248.21-254.5: Warning (pci_bridge): /axi@18=
-000000/pcie@13000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:256.21-262.5: Warning (pci_bridge): /axi@18=
-000000/pcie@14000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm4709-linksys-ea9200.dtb: Warning (unit_address_format)=
-: Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm4709-linksys-ea9200.dtb: Warning (pci_device_reg): Fai=
-led prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm4709-linksys-ea9200.dtb: Warning (pci_device_bus_num):=
- Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm5301x.dtsi:240.21-246.5: Warning (pci_bridge): /axi@18=
-000000/pcie@12000: missing ranges for PCI bridge (or not a bridge)
-  also defined at arch/arm/boot/dts/bcm4709-netgear-r8000.dts:129.8-144.3
-arch/arm/boot/dts/bcm5301x.dtsi:248.21-254.5: Warning (pci_bridge): /axi@18=
-000000/pcie@13000: missing ranges for PCI bridge (or not a bridge)
-  also defined at arch/arm/boot/dts/bcm4709-netgear-r8000.dts:146.8-175.3
-arch/arm/boot/dts/bcm5301x.dtsi:256.21-262.5: Warning (pci_bridge): /axi@18=
-000000/pcie@14000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm4709-netgear-r8000.dtb: Warning (unit_address_format):=
- Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm4709-netgear-r8000.dtb: Warning (pci_device_reg): Fail=
-ed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm4709-netgear-r8000.dtb: Warning (pci_device_bus_num): =
-Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm5301x.dtsi:240.21-246.5: Warning (pci_bridge): /axi@18=
-000000/pcie@12000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:248.21-254.5: Warning (pci_bridge): /axi@18=
-000000/pcie@13000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:256.21-262.5: Warning (pci_bridge): /axi@18=
-000000/pcie@14000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm4709-netgear-r7000.dtb: Warning (unit_address_format):=
- Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm4709-netgear-r7000.dtb: Warning (pci_device_reg): Fail=
-ed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm4709-netgear-r7000.dtb: Warning (pci_device_bus_num): =
-Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm5301x.dtsi:240.21-246.5: Warning (pci_bridge): /axi@18=
-000000/pcie@12000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:248.21-254.5: Warning (pci_bridge): /axi@18=
-000000/pcie@13000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:256.21-262.5: Warning (pci_bridge): /axi@18=
-000000/pcie@14000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm47094-luxul-abr-4500.dtb: Warning (unit_address_format=
-): Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm47094-luxul-abr-4500.dtb: Warning (pci_device_reg): Fa=
-iled prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm47094-luxul-abr-4500.dtb: Warning (pci_device_bus_num)=
-: Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm5301x.dtsi:240.21-246.5: Warning (pci_bridge): /axi@18=
-000000/pcie@12000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:248.21-254.5: Warning (pci_bridge): /axi@18=
-000000/pcie@13000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:256.21-262.5: Warning (pci_bridge): /axi@18=
-000000/pcie@14000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dtb: Warning (unit_address_format)=
-: Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dtb: Warning (pci_device_reg): Fai=
-led prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dtb: Warning (pci_device_bus_num):=
- Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm5301x.dtsi:240.21-246.5: Warning (pci_bridge): /axi@18=
-000000/pcie@12000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:248.21-254.5: Warning (pci_bridge): /axi@18=
-000000/pcie@13000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:256.21-262.5: Warning (pci_bridge): /axi@18=
-000000/pcie@14000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm4709-tplink-archer-c9-v1.dtb: Warning (unit_address_fo=
-rmat): Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm4709-tplink-archer-c9-v1.dtb: Warning (pci_device_reg)=
-: Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm4709-tplink-archer-c9-v1.dtb: Warning (pci_device_bus_=
-num): Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm5301x.dtsi:240.21-246.5: Warning (pci_bridge): /axi@18=
-000000/pcie@12000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:248.21-254.5: Warning (pci_bridge): /axi@18=
-000000/pcie@13000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:256.21-262.5: Warning (pci_bridge): /axi@18=
-000000/pcie@14000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm47094-dlink-dir-885l.dtb: Warning (unit_address_format=
-): Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm47094-dlink-dir-885l.dtb: Warning (pci_device_reg): Fa=
-iled prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm47094-dlink-dir-885l.dtb: Warning (pci_device_bus_num)=
-: Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm5301x.dtsi:240.21-246.5: Warning (pci_bridge): /axi@18=
-000000/pcie@12000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:248.21-254.5: Warning (pci_bridge): /axi@18=
-000000/pcie@13000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:256.21-262.5: Warning (pci_bridge): /axi@18=
-000000/pcie@14000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm47094-luxul-xbr-4500.dtb: Warning (unit_address_format=
-): Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm47094-luxul-xbr-4500.dtb: Warning (pci_device_reg): Fa=
-iled prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm47094-luxul-xbr-4500.dtb: Warning (pci_device_bus_num)=
-: Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm5301x.dtsi:240.21-246.5: Warning (pci_bridge): /axi@18=
-000000/pcie@12000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:248.21-254.5: Warning (pci_bridge): /axi@18=
-000000/pcie@13000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:256.21-262.5: Warning (pci_bridge): /axi@18=
-000000/pcie@14000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm47094-linksys-panamera.dtb: Warning (unit_address_form=
-at): Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm47094-linksys-panamera.dtb: Warning (pci_device_reg): =
-Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm47094-linksys-panamera.dtb: Warning (pci_device_bus_nu=
-m): Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm5301x.dtsi:240.21-246.5: Warning (pci_bridge): /axi@18=
-000000/pcie@12000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:248.21-254.5: Warning (pci_bridge): /axi@18=
-000000/pcie@13000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:256.21-262.5: Warning (pci_bridge): /axi@18=
-000000/pcie@14000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm47094-luxul-xwc-2000.dtb: Warning (unit_address_format=
-): Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm47094-luxul-xwc-2000.dtb: Warning (pci_device_reg): Fa=
-iled prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm47094-luxul-xwc-2000.dtb: Warning (pci_device_bus_num)=
-: Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm5301x.dtsi:240.21-246.5: Warning (pci_bridge): /axi@18=
-000000/pcie@12000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:248.21-254.5: Warning (pci_bridge): /axi@18=
-000000/pcie@13000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:256.21-262.5: Warning (pci_bridge): /axi@18=
-000000/pcie@14000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm47094-luxul-xap-1610.dtb: Warning (unit_address_format=
-): Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm47094-luxul-xap-1610.dtb: Warning (pci_device_reg): Fa=
-iled prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm47094-luxul-xap-1610.dtb: Warning (pci_device_bus_num)=
-: Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm5301x.dtsi:240.21-246.5: Warning (pci_bridge): /axi@18=
-000000/pcie@12000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:248.21-254.5: Warning (pci_bridge): /axi@18=
-000000/pcie@13000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:256.21-262.5: Warning (pci_bridge): /axi@18=
-000000/pcie@14000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm47094-luxul-xwr-3100.dtb: Warning (unit_address_format=
-): Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm47094-luxul-xwr-3100.dtb: Warning (pci_device_reg): Fa=
-iled prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm47094-luxul-xwr-3100.dtb: Warning (pci_device_bus_num)=
-: Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm5301x.dtsi:240.21-246.5: Warning (pci_bridge): /axi@18=
-000000/pcie@12000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:248.21-254.5: Warning (pci_bridge): /axi@18=
-000000/pcie@13000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:256.21-262.5: Warning (pci_bridge): /axi@18=
-000000/pcie@14000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm47094-phicomm-k3.dtb: Warning (unit_address_format): F=
-ailed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm47094-phicomm-k3.dtb: Warning (pci_device_reg): Failed=
- prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm47094-phicomm-k3.dtb: Warning (pci_device_bus_num): Fa=
-iled prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm5301x.dtsi:240.21-246.5: Warning (pci_bridge): /axi@18=
-000000/pcie@12000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:248.21-254.5: Warning (pci_bridge): /axi@18=
-000000/pcie@13000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:256.21-262.5: Warning (pci_bridge): /axi@18=
-000000/pcie@14000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm47094-netgear-r8500.dtb: Warning (unit_address_format)=
-: Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm47094-netgear-r8500.dtb: Warning (pci_device_reg): Fai=
-led prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm47094-netgear-r8500.dtb: Warning (pci_device_bus_num):=
- Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm5301x.dtsi:240.21-246.5: Warning (pci_bridge): /axi@18=
-000000/pcie@12000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:248.21-254.5: Warning (pci_bridge): /axi@18=
-000000/pcie@13000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:256.21-262.5: Warning (pci_bridge): /axi@18=
-000000/pcie@14000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm53016-meraki-mr32.dtb: Warning (unit_address_format): =
-Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm53016-meraki-mr32.dtb: Warning (pci_device_reg): Faile=
-d prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm53016-meraki-mr32.dtb: Warning (pci_device_bus_num): F=
-ailed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm5301x.dtsi:240.21-246.5: Warning (pci_bridge): /axi@18=
-000000/pcie@12000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:248.21-254.5: Warning (pci_bridge): /axi@18=
-000000/pcie@13000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:256.21-262.5: Warning (pci_bridge): /axi@18=
-000000/pcie@14000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm47094-luxul-xwr-3150-v1.dtb: Warning (unit_address_for=
-mat): Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm47094-luxul-xwr-3150-v1.dtb: Warning (pci_device_reg):=
- Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm47094-luxul-xwr-3150-v1.dtb: Warning (pci_device_bus_n=
-um): Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm5301x.dtsi:240.21-246.5: Warning (pci_bridge): /axi@18=
-000000/pcie@12000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:248.21-254.5: Warning (pci_bridge): /axi@18=
-000000/pcie@13000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:256.21-262.5: Warning (pci_bridge): /axi@18=
-000000/pcie@14000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm94708.dtb: Warning (unit_address_format): Failed prere=
-quisite 'pci_bridge'
-arch/arm/boot/dts/bcm94708.dtb: Warning (pci_device_reg): Failed prerequisi=
-te 'pci_bridge'
-arch/arm/boot/dts/bcm94708.dtb: Warning (pci_device_bus_num): Failed prereq=
-uisite 'pci_bridge'
-arch/arm/boot/dts/bcm5301x.dtsi:240.21-246.5: Warning (pci_bridge): /axi@18=
-000000/pcie@12000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:248.21-254.5: Warning (pci_bridge): /axi@18=
-000000/pcie@13000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:256.21-262.5: Warning (pci_bridge): /axi@18=
-000000/pcie@14000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm94709.dtb: Warning (unit_address_format): Failed prere=
-quisite 'pci_bridge'
-arch/arm/boot/dts/bcm94709.dtb: Warning (pci_device_reg): Failed prerequisi=
-te 'pci_bridge'
-arch/arm/boot/dts/bcm94709.dtb: Warning (pci_device_bus_num): Failed prereq=
-uisite 'pci_bridge'
-arch/arm/boot/dts/bcm5301x.dtsi:240.21-246.5: Warning (pci_bridge): /axi@18=
-000000/pcie@12000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:248.21-254.5: Warning (pci_bridge): /axi@18=
-000000/pcie@13000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:256.21-262.5: Warning (pci_bridge): /axi@18=
-000000/pcie@14000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm953012er.dtb: Warning (unit_address_format): Failed pr=
-erequisite 'pci_bridge'
-arch/arm/boot/dts/bcm953012er.dtb: Warning (pci_device_reg): Failed prerequ=
-isite 'pci_bridge'
-arch/arm/boot/dts/bcm953012er.dtb: Warning (pci_device_bus_num): Failed pre=
-requisite 'pci_bridge'
-arch/arm/boot/dts/bcm5301x.dtsi:240.21-246.5: Warning (pci_bridge): /axi@18=
-000000/pcie@12000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:248.21-254.5: Warning (pci_bridge): /axi@18=
-000000/pcie@13000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:256.21-262.5: Warning (pci_bridge): /axi@18=
-000000/pcie@14000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm953012hr.dtb: Warning (unit_address_format): Failed pr=
-erequisite 'pci_bridge'
-arch/arm/boot/dts/bcm953012hr.dtb: Warning (pci_device_reg): Failed prerequ=
-isite 'pci_bridge'
-arch/arm/boot/dts/bcm953012hr.dtb: Warning (pci_device_bus_num): Failed pre=
-requisite 'pci_bridge'
-arch/arm/boot/dts/bcm5301x.dtsi:240.21-246.5: Warning (pci_bridge): /axi@18=
-000000/pcie@12000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:248.21-254.5: Warning (pci_bridge): /axi@18=
-000000/pcie@13000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:256.21-262.5: Warning (pci_bridge): /axi@18=
-000000/pcie@14000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm953012k.dtb: Warning (unit_address_format): Failed pre=
-requisite 'pci_bridge'
-arch/arm/boot/dts/bcm953012k.dtb: Warning (pci_device_reg): Failed prerequi=
-site 'pci_bridge'
-arch/arm/boot/dts/bcm953012k.dtb: Warning (pci_device_bus_num): Failed prer=
-equisite 'pci_bridge'
-arch/arm/boot/dts/bcm5301x.dtsi:240.21-246.5: Warning (pci_bridge): /axi@18=
-000000/pcie@12000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:248.21-254.5: Warning (pci_bridge): /axi@18=
-000000/pcie@13000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm5301x.dtsi:256.21-262.5: Warning (pci_bridge): /axi@18=
-000000/pcie@14000: missing ranges for PCI bridge (or not a bridge)
-arch/arm/boot/dts/bcm53015-meraki-mr26.dtb: Warning (unit_address_format): =
-Failed prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm53015-meraki-mr26.dtb: Warning (pci_device_reg): Faile=
-d prerequisite 'pci_bridge'
-arch/arm/boot/dts/bcm53015-meraki-mr26.dtb: Warning (pci_device_bus_num): F=
-ailed prerequisite 'pci_bridge'
+  arch/riscv/include/asm/pci.h
 
-Presumably introduced by commit
+between commit:
 
-  ef126d3f58d2 ("ARM: dts: BCM5301X: Add basic PCI controller properties")
+  bb356ddb78b2 ("RISC-V: PCI: Avoid handing out address 0 to devices")
+
+from the risc-v tree and commit:
+
+  a2912b45b082 ("asm-generic: Add new pci.h and use it")
+
+from the pci tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/pdkNMXm06jGQ5hdM8WZ_0OO
+diff --cc arch/riscv/include/asm/pci.h
+index 830ac621dbbc,6ef4a1426194..000000000000
+--- a/arch/riscv/include/asm/pci.h
++++ b/arch/riscv/include/asm/pci.h
+@@@ -12,31 -12,7 +12,10 @@@
+ =20
+  #include <asm/io.h>
+ =20
+ +#define PCIBIOS_MIN_IO		4
+ +#define PCIBIOS_MIN_MEM		16
+ +
+- /* RISC-V shim does not initialize PCI bus */
+- #define pcibios_assign_all_busses() 1
+-=20
+- #define ARCH_GENERIC_PCI_MMAP_RESOURCE 1
+-=20
+- extern int isa_dma_bridge_buggy;
+-=20
+- #ifdef CONFIG_PCI
+- static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
+- {
+- 	/* no legacy IRQ on risc-v */
+- 	return -ENODEV;
+- }
+-=20
+- static inline int pci_proc_domain(struct pci_bus *bus)
+- {
+- 	/* always show the domain in /proc */
+- 	return 1;
+- }
+-=20
+- #ifdef	CONFIG_NUMA
+-=20
++ #if defined(CONFIG_PCI) && defined(CONFIG_NUMA)
+  static inline int pcibus_to_node(struct pci_bus *bus)
+  {
+  	return dev_to_node(&bus->dev);
+
+--Sig_/IC/OQ.q28hFebuoQuJZbO=L
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLd3NEACgkQAVBC80lX
-0GzAqAf/TZcbORNdDDD7fK6Mx77dSRj7OgEu/jsnw0uzZwpkS/MJHl8L+XFrYrZC
-Im9nFkODY6PF3cpRTPwniWUSUgipCFGHtA2pLHA6ZCK2kcYyrCnfs5MhQjkVGnTj
-I5F67EmfvZmr18PLg0WAtCfuHBKp/39isScof8mTeqtZNuqqhCWkUjFw73RkIVPn
-/SYsCR03ujR0MOnI77RhW8PSyrVhC9PrkZr0Ca7hdQQ16UVyP+Xh5DunGMl0ktMA
-mP/ZcLMEx4IdBH6pAT6PzZ1K6r5kAseVHcGkOMR84a0wDBFsqvzYhe6he7HeKDgD
-sxCSbcHQBXaOlPBJtrqBS9jwOpGoYQ==
-=/zpV
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLd4j0ACgkQAVBC80lX
+0GxL5wf/XAZm3NHQ4Hswnc9OjQzFic3s6PB2lNAQcV/8HRdBOLYxskKRkOrIf5rF
+n7HZZsPbOcs0q4JzdyCNkaCjbk80FZGj6AjVRhl6uHizG5fW47ajTDHmMJ2nMVB6
+2PAbFePQ+C0r3qvgQh3g7D1u4fEIDHmewBANthgPmuARzb+4K5XUSSZJ3ULfBF71
+cR9zvMM6TP145HG/OEjHW0FSpCo3OOGNycwiMmrLpWzWrVizGlNgKN6rgSEdTLOl
+Z0ySVd3P0vvBO+l/FprRU9fHeTlSvGK6964qgJO8boM0VyHqL6UN8oLj14W89onk
+fMYNeUQT/zn0kJ58/8pq33S0CQFiAQ==
+=b8ap
 -----END PGP SIGNATURE-----
 
---Sig_/pdkNMXm06jGQ5hdM8WZ_0OO--
+--Sig_/IC/OQ.q28hFebuoQuJZbO=L--

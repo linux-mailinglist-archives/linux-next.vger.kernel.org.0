@@ -2,92 +2,96 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A7B1581C14
-	for <lists+linux-next@lfdr.de>; Wed, 27 Jul 2022 00:25:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CFF2581C62
+	for <lists+linux-next@lfdr.de>; Wed, 27 Jul 2022 01:23:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229713AbiGZWZz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 26 Jul 2022 18:25:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37388 "EHLO
+        id S239998AbiGZXXi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 26 Jul 2022 19:23:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbiGZWZz (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 26 Jul 2022 18:25:55 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C8ED18B32;
-        Tue, 26 Jul 2022 15:25:51 -0700 (PDT)
+        with ESMTP id S240008AbiGZXXh (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 26 Jul 2022 19:23:37 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83A053A494;
+        Tue, 26 Jul 2022 16:23:35 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Lss1j62rGz4x1T;
-        Wed, 27 Jul 2022 08:25:45 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LstJL1hN5z4x1b;
+        Wed, 27 Jul 2022 09:23:30 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1658874346;
-        bh=xGrZ3aTU/oPpYkeuyBcrBFuj6wgn2CesnAP18XIoYPk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=lKeaDuURvJOrx7CjEV3CXcb+LDbXXTFlJdwmYdQn7wtVV/6iwvw4j3/Nk/Hix1/bj
-         sPmHVxRWPpVQIpfQu2esIZEVm8Tip3uzLGH/Zouy+mfJXkONfGqmI6Vo0Dcg4AxVeC
-         04/vLXwGhkc0IXP81dr6A2gyJq48wQQ8j3ajXTKquC8skBiQYCWLHlv+OWDHnE/jMo
-         qdLbXfecMEjV4372YAzZmTdfKYB3GRroWx6F9mRx+BY+QdSOIVQaOZCeMrSjbGBPDf
-         wnQAaR52TK3X+e5A4IpI76tANxupM1tseMAf7NulXY9g2pRN/AZZtBF0zY5d/sPWeu
-         p46hGeEOOzO+A==
-Date:   Wed, 27 Jul 2022 08:25:22 +1000
+        s=201702; t=1658877810;
+        bh=EvHXjrk6xF6rN7U3dwOB3M7AgSYPOv26DlDFlEQ35ks=;
+        h=Date:From:To:Cc:Subject:From;
+        b=pzSB+9xswK8dC5tLrnhV2o4r7nLtZxLCfUQgSkxZYRNB03KT+r8K6PEq7KO57cXCg
+         50q4f/O5edazLFfLOTQA7iUTBou39oyvCCGY43XHGRG5mNn9+higw1yMT6VpKdyxRx
+         h5TY3IF7yzOpbbgVE6Vbj9od8CLZ9OT+kdHrLuB8PozcsHvk2Cwnhtz2YfOf/reOaX
+         LxYVr60G9Asw/EGvTvYh1dEr0+FMUGfqcgT08JQR9cu5HVi0NevyYr85fEP7VhWnKZ
+         mMkyTdLKCThq2CKt9+5Kh1LHe0heaIHicY/3Y79YfGIWuecqxap5oRJdr8hCWfm0JV
+         zySQGX7h1Cq5w==
+Date:   Wed, 27 Jul 2022 09:23:29 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Liam Howlett <liam.howlett@oracle.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Adam Sindelar <adam@wowsignal.io>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: run time warning after merge of the mm tree
-Message-ID: <20220727082522.65bff1b5@canb.auug.org.au>
-In-Reply-To: <20220726183217.37gnocd33nbjuguw@revolver>
-References: <20220726212340.72499268@canb.auug.org.au>
-        <20220726183217.37gnocd33nbjuguw@revolver>
+Subject: linux-next: Fixes tag needs some work in the mm tree
+Message-ID: <20220727092329.2a4aade0@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/rqjIFaMmisOSm9HorNiM89w";
+Content-Type: multipart/signed; boundary="Sig_/oSGI8OS/MXqIFmRBQWohqp9";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/rqjIFaMmisOSm9HorNiM89w
+--Sig_/oSGI8OS/MXqIFmRBQWohqp9
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Liam,
+Hi all,
 
-On Tue, 26 Jul 2022 18:32:23 +0000 Liam Howlett <liam.howlett@oracle.com> w=
-rote:
->
-> Where does pseries_le_defconfig come from?  I have a ppc le config that
-> I test, but cannot find a defconfig by that name in the git tree.  I
-> found a pseries_defconfig which is BE that I can try to see if I hit
-> this issue, but it appears you are running BE here?
+In commit
 
-If you do "make ARCH=3Dpowerpc pseries_le_defconfig", it is constructed
-from pseries_defconfig.  My build and boot test architecture is ppc64le.
+  1da6684b4930 ("selftests/vm: fix va_128TBswitch.sh permissions")
+
+Fixes tag
+
+  Fixes: 1afd01d43efc3 ("selftests/vm: Only run 128TBswitch with 5-level
+
+has these problem(s):
+
+  - Subject has leading but no trailing parentheses
+  - Subject has leading but no trailing quotes
+
+Please do not split Fixes tags over more than one line.  Also keep all
+the commit message tags together at the end of the commit message.
+
+This commit is also missing a Signed-off-by from its committer.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/rqjIFaMmisOSm9HorNiM89w
+--Sig_/oSGI8OS/MXqIFmRBQWohqp9
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLgadMACgkQAVBC80lX
-0GyO4Af9H8FPslb4O7QuUCb4S7wQSoHm0UzuaOMlXV/CkoV8W+OKxizuD98RAhbX
-W3wzHhMIkVL5IevS8J4f7aZlmt0YSeMRVeVpR0jT4CsZ1LktHvlMWqgJMoUALLX8
-ZTFQ/lBT6jha5lOCYtfSpGsu/4GHBGnsj7FxYeRFWeAJzvW8i82vqz8dzkqZ8bes
-M0abepo4UN5Zo4tW+VEFBsLCgXZkzBSqSZbQJXTk3fwa87vuvot+x/EJ/mtXaW7F
-QOefsIq1TyY4tPa6IgyOKaVFlYkqwNlWZ/ell1E9hG5TouWBzy4CiTnR8b6uZxgZ
-cYORV6cmM+JOpHOSYJUamgO+NxreNg==
-=T21h
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLgd3EACgkQAVBC80lX
+0GyF2gf/fX/3deboWxvaAE5ET6Rz9zK++8uowf0yydnDUlzOo7o2Nj/fM7m4tCHk
+ev+gkwdG+SZOL+BlDTfaD00xJeiE6xYKIQSYXVbikT53/2K+7FO2UmI7Iu8vy3oW
+BMmROZgcjoAzDqbxdCaK7mTOjruf9b9NO40g5GxyaTzjNXt26nCw3Vn2llm/ZMdy
+xM8fwrzx5OuetEUbwsXZZwa1DBpfojs0EiBVlgWIg9GPQ8UPMClfm5CUA6QRWflE
+jzE3oC5lwm/9E87gtA6cfVnylJimrUvvzFmE9hCY6CnvcFqOrMDXMgpd615wwpWn
+vG1pc66U8oiDYeXera9cvYgir2hw3g==
+=65xA
 -----END PGP SIGNATURE-----
 
---Sig_/rqjIFaMmisOSm9HorNiM89w--
+--Sig_/oSGI8OS/MXqIFmRBQWohqp9--

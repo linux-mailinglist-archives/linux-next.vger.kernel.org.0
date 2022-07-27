@@ -2,99 +2,113 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C42B581F8E
-	for <lists+linux-next@lfdr.de>; Wed, 27 Jul 2022 07:37:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B055758204A
+	for <lists+linux-next@lfdr.de>; Wed, 27 Jul 2022 08:44:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231147AbiG0Fhz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 27 Jul 2022 01:37:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42622 "EHLO
+        id S230041AbiG0Goh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 27 Jul 2022 02:44:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiG0Fhz (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 27 Jul 2022 01:37:55 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 928402BB0D;
-        Tue, 26 Jul 2022 22:37:54 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Lt2cH20g5z4x1c;
-        Wed, 27 Jul 2022 15:37:51 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1658900273;
-        bh=W3BFpgevI9hLcOGPoOT8iHlLjNtq9ZecOiT6kd2h8bI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=eTqkhS89cg8Tb9+To9uVlXiHlFRSHxdacs+912olxZpinxRr9sL3tsFtdqv/hb9lK
-         4Lvz9/70rw1zxzZYYmC9Hq1RfM5ps29xKbjurs2fNKERB4HjuqtAHH+6WIBZZYPbUn
-         sgM/RZF9i9IveeVarGP8IEacABrYiADk/ffOMzYnwVQyLNrvAokyMzB7rm0cGI0Juw
-         EiYKsvl234v42wTnz+Zkumgte/3IwcqZ5EI958muudCOt7As08xVLDXoQOVzCkP/Xt
-         yWs21YdjhPiRJPUyE6MIo5UclYSQY6kb3AJSMMkes+JafAOq1WoPHAS6+zost3/oLo
-         t0U6VuMQmSH1A==
-Date:   Wed, 27 Jul 2022 15:37:50 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dave Airlie <airlied@gmail.com>
-Cc:     Dave Airlie <airlied@linux.ie>,
-        Arunpravin Paneer Selvam <Arunpravin.PaneerSelvam@amd.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>
-Subject: Re: linux-next: manual merge of the drm tree with the
- drm-misc-fixes tree
-Message-ID: <20220727153750.00b4c033@canb.auug.org.au>
-In-Reply-To: <CAPM=9txm_fZX781zMr0RAS6uBD_FoE63THY-WaiB92xYEUrfTw@mail.gmail.com>
-References: <20220711124742.3b151992@canb.auug.org.au>
-        <6e60d396-2a52-d1fa-f125-3c585605b531@amd.com>
-        <20220718094453.2f1a1f09@canb.auug.org.au>
-        <20220727125508.1991f1e7@canb.auug.org.au>
-        <CAPM=9txm_fZX781zMr0RAS6uBD_FoE63THY-WaiB92xYEUrfTw@mail.gmail.com>
+        with ESMTP id S230452AbiG0GoW (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 27 Jul 2022 02:44:22 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ECDB3B94B
+        for <linux-next@vger.kernel.org>; Tue, 26 Jul 2022 23:44:10 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id j22so29858655ejs.2
+        for <linux-next@vger.kernel.org>; Tue, 26 Jul 2022 23:44:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=7iMcplvFrFuS0xFVwfzryrkAohaVYhMLEybsQJs2rsA=;
+        b=wdNXLAVsJZXFL2rKCa3aEnt3bq3gpHY9nBUggNpE8tRM8PxMeNxMk/ZwyuT71cBCtZ
+         rTugaTBqG8u902DbJmnCeCRsDXDNc4JYq/CxgSRXx55cTVXN/uEU8DYRnmEhrv1IThR8
+         AG1awXakW1QzpqwZsNlS7sbL4ekY2yRJeq0STmDhS1oxJDaIR05WFq2H1f8xFWSg+hmB
+         wZjuUG4uVj+LPb7oAMyFhmaG3SEA2388vp06upiX8Qd01YdZyzYgPkTPezl3edWRvP3q
+         GA0yzKIm/jifVprE02zD3rEpbeCLPB1+DIwtrXQF4a74fW6TY3jV2nP6bQRqoAczVtGz
+         u/Lw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=7iMcplvFrFuS0xFVwfzryrkAohaVYhMLEybsQJs2rsA=;
+        b=QyEH4lZiExhvi5pBA7w3NVfvaDQagRS6BRG9AlFFcqdYMRZrk4njdd7DyF5Ifmk3r6
+         TDlDCgkne+W8sLxXMalAuL7OQXGujUPTksYKvHddZkJDjhHDh5iBsDGczFl5bOv4+Mp8
+         reeCuPjeVSfWqGVvvenFT4NKQbSRDWEkd6K3byGtnYyHoL0ok9Jujb8RVhnaiuMpx7Z7
+         pg877hpjUoeoVtX0PJ/vcTKSWmWg8jn8KAE5VF12D/KWbC2J7GSmX+bHjfmCMwStH9TL
+         j8AQ8wLsLoLc7KBTfDuACbljQPTH8VDlVg1FYfrRGZlxsGQQfGi0lV2zdIXEhBNbAwlS
+         vV8A==
+X-Gm-Message-State: AJIora8ocobN17rRX7keov/uNTkow3qpKLbf8CPWJkqJVaA9RPAFWWCv
+        ROwpIKe2IqcHvH1zmvYew+r85/S5erLPnp1xFDoImw==
+X-Google-Smtp-Source: AGRyM1u0gHfYntmhyu/g5NBuMnMaO3JTwpA7i3/SJp0/ZkN1NFrHb7F3bDasWB7vs6g716IDu0ABdqfE6xZ0h4Zwkmk=
+X-Received: by 2002:a17:907:87b0:b0:72f:ceb6:5fd2 with SMTP id
+ qv48-20020a17090787b000b0072fceb65fd2mr12586914ejc.448.1658904248365; Tue, 26
+ Jul 2022 23:44:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/S+Jm_JAtWS4ZEjqD.3eEMr9";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 27 Jul 2022 12:13:57 +0530
+Message-ID: <CA+G9fYt_cc5SiNv1Vbse=HYY_+uc+9OYPZuJ-x59bROSaLN6fw@mail.gmail.com>
+Subject: [next] arm: PM: domains: Delete usage of driver_deferred_probe_check_state()
+To:     Saravana Kannan <saravanak@google.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/S+Jm_JAtWS4ZEjqD.3eEMr9
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Linux next arm BeagleBoard x15 device boot failed due to the
+following commit. The x15 did not event showed any crash log
+on the serial console.
+whereas, Linux mainline kernel boot pass.
 
-Hi Dave,
+Anders bisect this and found the first bad commit is
 
-On Wed, 27 Jul 2022 13:24:45 +1000 Dave Airlie <airlied@gmail.com> wrote:
->
-> My assumption is I fix this on sending my -next tree to Linus with a
-> resolution I create at that time?
->=20
-> Is there another option, we have this fixed in out drm-tip tree already.
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Sounds good, no problem.
+commit 5a46079a96451cfb15e4f5f01f73f7ba24ef851a
+Author: Saravana Kannan <saravanak@google.com>
+Date:   Wed Jun 1 00:06:57 2022 -0700
 
---=20
-Cheers,
-Stephen Rothwell
+    PM: domains: Delete usage of driver_deferred_probe_check_state()
 
---Sig_/S+Jm_JAtWS4ZEjqD.3eEMr9
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+    Now that fw_devlink=on by default and fw_devlink supports
+    "power-domains" property, the execution will never get to the point
+    where driver_deferred_probe_check_state() is called before the supplier
+    has probed successfully or before deferred probe timeout has expired.
 
------BEGIN PGP SIGNATURE-----
+    So, delete the call and replace it with -ENODEV.
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLgzy4ACgkQAVBC80lX
-0GwaSQgAgZHYGWcrMOkXIpee3BWW88sbFXX885guSGckGym/Fn3A75LulEe1d5Bc
-AeN5J6E+q7Sg3ihlTiW6wFdht8EDueyiwfXd+joQkEAgwtGuzr1M95mwckSNPPUs
-/W/Fy2iKEjHX+fc+9jG/3sG6t7+F3x0yx+ofDJ9Yl26ZqxvfOz8Rjb4SHVCwj7At
-571zQEZNFOBCPTWrEosO6uLRRE8REPt5fddCwnro63vGaXpuflbyCLsn87DiQkH4
-PkiuJ/J/ErU4QCVcMWeX+tsuH48K+Opbb5atBTFKjz1ETcsARi9iOw0fRnxMSxVk
-13edLDdDrf+zktsMlX5fw3p8K08FUA==
-=50DY
------END PGP SIGNATURE-----
+    Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+    Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+    Signed-off-by: Saravana Kannan <saravanak@google.com>
+    Link: https://lore.kernel.org/r/20220601070707.3946847-2-saravanak@google.com
+    Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
---Sig_/S+Jm_JAtWS4ZEjqD.3eEMr9--
+diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+index 739e52cd4aba..3e86772d5fac 100644
+--- a/drivers/base/power/domain.c
++++ b/drivers/base/power/domain.c
+@@ -2730,7 +2730,7 @@ static int __genpd_dev_pm_attach(struct device
+*dev, struct device *base_dev,
+                mutex_unlock(&gpd_list_lock);
+                dev_dbg(dev, "%s() failed to find PM domain: %ld\n",
+                        __func__, PTR_ERR(pd));
+-               return driver_deferred_probe_check_state(base_dev);
++               return -ENODEV;
+        }
+
+        dev_dbg(dev, "adding to PM domain %s\n", pd->name);
+
+
+
+--
+Linaro LKFT
+https://lkft.linaro.org

@@ -2,70 +2,47 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3A2E581E36
-	for <lists+linux-next@lfdr.de>; Wed, 27 Jul 2022 05:25:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE583581E86
+	for <lists+linux-next@lfdr.de>; Wed, 27 Jul 2022 06:09:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240301AbiG0DZB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 26 Jul 2022 23:25:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52480 "EHLO
+        id S240241AbiG0EJW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 27 Jul 2022 00:09:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240303AbiG0DY7 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 26 Jul 2022 23:24:59 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DCC13C164;
-        Tue, 26 Jul 2022 20:24:58 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id p5so8826810edi.12;
-        Tue, 26 Jul 2022 20:24:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=/7RZLsjyTI0R4ZfKKOyrHQdFEO+4TXaNSeF8vSSb7tI=;
-        b=cVFC+UPtE/3zcIq7u5nwCpzP8EzjiMSvS9+k/JFYwrMQT8j9A72UuXQV0mo7Ye6F/A
-         pLhefr7Z1Dx1hHC1Rvac0ay79PYaJlvHFF+ekEJ6voOIHyLAg0RgGk/ZCcN8+bQ33IG5
-         Z7uTGyaAhf8Oxzl2cXAK5uBBXFgPY/tojpZqg5iURMumJpPjbQfB1sMqE7kKyrzX3UNc
-         5f0kRMtkHt6d+UT9GG32eXUmBlkPJU0G5nUORkY4GL9uogZR/kzBdbqoIXptptqZgK1U
-         AgBQcTFzXF0nGUHzUyS7edENyjz99a/ZaCa1P1J+AT0HXgc9JJFjdIXCHJfGdeufATyn
-         4p+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=/7RZLsjyTI0R4ZfKKOyrHQdFEO+4TXaNSeF8vSSb7tI=;
-        b=3uMhHaNpktxbhXa9bXRhcbYk6a8jQExEoSk7Vfdgqc0XgflDvmN9oRlUohJsn29u7X
-         83+/tWGmT98GIo83XQS/i1WpzSxqfRjcZZzNElsNsMM+u1SM7PwAKnkT+o/QXP+FeP3S
-         dWDg6Fc+oRJxlDIEKqbDNggCGVTxIs6Gv5wESqnsWeQP9riNuXe2LsrwspOpDRBxSVjK
-         RgKhiHEastTYS4BCrmRzg+kKPwEbV2SS6VVU9f7b2pm6kL02peVkZ4TYXulxiH/rEpFo
-         /tLeEICBa/4Q4n99ri1nkm+HfjnQdFucWNQPUjamBHMR7jjnHmvDsEhM9hiBWEOLp/kV
-         MyFg==
-X-Gm-Message-State: AJIora8hjArDWhrMCNFjZFASIFxR6ZMEieZL7cT+zrrbxhQChW+DkHdB
-        vMfldYyYgvqm/BTctfjZr/6YjswCzG6LdTDLGO2id7IY
-X-Google-Smtp-Source: AGRyM1vxIL6k5kOgHXbW+8CMv2eWQF/THRb/39MgpPWjav/mjtDNp/blw3eauSZ+Vy+/ap3KtNHg0TKu8u0ei3KlclY=
-X-Received: by 2002:a05:6402:249b:b0:43c:8ce6:8890 with SMTP id
- q27-20020a056402249b00b0043c8ce68890mr3626994eda.74.1658892296672; Tue, 26
- Jul 2022 20:24:56 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220711124742.3b151992@canb.auug.org.au> <6e60d396-2a52-d1fa-f125-3c585605b531@amd.com>
- <20220718094453.2f1a1f09@canb.auug.org.au> <20220727125508.1991f1e7@canb.auug.org.au>
-In-Reply-To: <20220727125508.1991f1e7@canb.auug.org.au>
-From:   Dave Airlie <airlied@gmail.com>
-Date:   Wed, 27 Jul 2022 13:24:45 +1000
-Message-ID: <CAPM=9txm_fZX781zMr0RAS6uBD_FoE63THY-WaiB92xYEUrfTw@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the drm tree with the drm-misc-fixes tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Dave Airlie <airlied@linux.ie>,
-        Arunpravin Paneer Selvam <Arunpravin.PaneerSelvam@amd.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        with ESMTP id S240323AbiG0EJQ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 27 Jul 2022 00:09:16 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECAD12E9CA;
+        Tue, 26 Jul 2022 21:09:13 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Lt0f01pRwz4x1b;
+        Wed, 27 Jul 2022 14:09:11 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1658894952;
+        bh=HdMybXKiD136ksZcJduRwx5J+ELUOOdg7AtPYNgYzMg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=uDVutVSlXJ/OIo2VLBBSDWX/Ar3Vtu5A+EvRdCSChQyp4kHlsohqpAvSkVzzimAlg
+         EyZ8ZsMrXZAenQd0iZygTlK8MWnax/4v/iVc1S4Z0WpBo+07wyFLflDwHSMmaoykFN
+         prjpYBdh/j4XNKp7Dgx8arkWXoQLzrAWpr4YG6jtmwxBFUD186gl4NznCyv/gN59cv
+         W9ihorRHgwVOhmhad8hDkoGzCmNKCKYEttQUsuKvZqLXrCM8sTkqwmX/ySj91HyoBe
+         TaZZzy0f8U36BhShUW/hql5Q0DZIPKKu7kOjvzasxpbcwNUhPorL5+J51yPJJDE6ro
+         HQMI37ys+qtYg==
+Date:   Wed, 27 Jul 2022 14:09:10 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Pavel Begunkov <asml.silence@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the block tree
+Message-ID: <20220727140910.172a91c1@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/p_29Og4caOb4/bwF=FeFjcE";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,55 +50,60 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, 27 Jul 2022 at 12:55, Stephen Rothwell <sfr@canb.auug.org.au> wrote=
-:
->
-> Hi all,
->
-> On Mon, 18 Jul 2022 09:44:53 +1000 Stephen Rothwell <sfr@canb.auug.org.au=
-> wrote:
-> >
-> > On Mon, 11 Jul 2022 10:05:45 +0200 Christian K=C3=B6nig <christian.koen=
-ig@amd.com> wrote:
-> > >
-> > > Am 11.07.22 um 04:47 schrieb Stephen Rothwell:
-> > > >
-> > > > Today's linux-next merge of the drm tree got a conflict in:
-> > > >
-> > > >    drivers/gpu/drm/amd/amdgpu/amdgpu_vram_mgr.c
-> > > >
-> > > > between commit:
-> > > >
-> > > >    925b6e59138c ("Revert "drm/amdgpu: add drm buddy support to amdg=
-pu"")
-> > > >
-> > > > from the drm-misc-fixes tree and commit:
-> > > >
-> > > >    5e3f1e7729ec ("drm/amdgpu: fix start calculation in amdgpu_vram_=
-mgr_new")
-> > > >
-> > > > from the drm tree.
-> > > >
-> > > > This is a mess :-(  I have just reverted the above revert before me=
-rgin
-> > > > the drm tree for today, please fix it up.
-> > >
-> > > Sorry for the noise, the patch "5e3f1e7729ec ("drm/amdgpu: fix start
-> > > calculation in amdgpu_vram_mgr_new")" and another one is going to be
-> > > reverted from the drm tree as well.
-> > >
-> > > It's just that -fixes patches where faster than -next patches.
-> >
-> > Here we are a week later, -rc7 has been released and as far as I can
-> > tell (though I may have missed it), this is still a problem :-(
-> >
-> > I am still reverting 925b6e59138c (which is now in Linus' tree).
->
-> Ping?
+--Sig_/p_29Og4caOb4/bwF=FeFjcE
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-My assumption is I fix this on sending my -next tree to Linus with a
-resolution I create at that time?
+Hi all,
 
-Is there another option, we have this fixed in out drm-tip tree already.
+After merging the block tree, today's linux-next build (powerpc
+ppc64_defconfig) failed like this:
 
-Dave.
+In file included from include/linux/kernel.h:20,
+                 from io_uring/notif.c:1:
+io_uring/notif.c: In function 'io_alloc_notif':
+io_uring/notif.c:52:23: error: implicit declaration of function 'io_alloc_r=
+eq_refill'; did you mean 'io_rsrc_refs_refill'? [-Werror=3Dimplicit-functio=
+n-declaration]
+   52 |         if (unlikely(!io_alloc_req_refill(ctx)))
+      |                       ^~~~~~~~~~~~~~~~~~~
+include/linux/compiler.h:78:45: note: in definition of macro 'unlikely'
+   78 | # define unlikely(x)    __builtin_expect(!!(x), 0)
+      |                                             ^
+io_uring/notif.c:54:17: error: implicit declaration of function 'io_alloc_r=
+eq'; did you mean 'xa_alloc_irq'? [-Werror=3Dimplicit-function-declaration]
+   54 |         notif =3D io_alloc_req(ctx);
+      |                 ^~~~~~~~~~~~
+      |                 xa_alloc_irq
+io_uring/notif.c:54:15: warning: assignment to 'struct io_kiocb *' from 'in=
+t' makes pointer from integer without a cast [-Wint-conversion]
+   54 |         notif =3D io_alloc_req(ctx);
+      |               ^
+
+Caused by commit
+
+  fbe6f6bc3210 ("io_uring/zc: notification completion optimisation")
+
+I have used the block tree from next-20220726 for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/p_29Og4caOb4/bwF=FeFjcE
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLgumYACgkQAVBC80lX
+0GyNWgf+OI+2JKDjxr2l5G0pCbqFpaW6pdCad4Hjnt4NkTRa5XyjUPkJEHCqMWHF
+UGI5Mn5dwHFr6JMra95dXduwxRfbrU1ARAl92OFbVxjc/AbcviXtILSVeO7AQWx+
+jHMrHWvGoytG2bNh/C1d9G6jcC8urQBb1YdxXcAPd8ciIizsp/gUn+693FTOW/PJ
+Kvj0AKqbvMATlbNsA7RJxBm5ZMUeKN34rZzVjBeagfVzKsBReEjF/9lvSm6Ig/qc
+H5HjKE0PgKWHKQia2DyUs9G38h5aDtx5a+mYVU4PfaPt020pXTONqFVnmuE+cMTS
+gDWeE82//Oq1MwQnzNmhckO6YVpeMQ==
+=l2Wu
+-----END PGP SIGNATURE-----
+
+--Sig_/p_29Og4caOb4/bwF=FeFjcE--

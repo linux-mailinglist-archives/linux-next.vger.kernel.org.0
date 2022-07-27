@@ -2,137 +2,118 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09C77582B11
-	for <lists+linux-next@lfdr.de>; Wed, 27 Jul 2022 18:27:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B6475832D7
+	for <lists+linux-next@lfdr.de>; Wed, 27 Jul 2022 21:05:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235639AbiG0Q1B (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 27 Jul 2022 12:27:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49904 "EHLO
+        id S233804AbiG0TFp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 27 Jul 2022 15:05:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235176AbiG0Q0M (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 27 Jul 2022 12:26:12 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC3974D4C1;
-        Wed, 27 Jul 2022 09:23:42 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id oy13so32417241ejb.1;
-        Wed, 27 Jul 2022 09:23:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=++nWJk4Cva+vsdrhaueMv6rlXc4xrPaOvWuiySUp564=;
-        b=N6N1V+wZjLgUfbcM4Y+kxoXzi6s6DdSLzlDU5SNNa3b/KrkQR3nNblpl10rgwsfLe8
-         aOHBitqkf952yxl59Bd4AhbLjwF5U3ITnJAIodStpw0LttES8jr2VpDIBJmPrafv383d
-         6belogoHYAfyk3NtAJIC+cBoBVwqwGtL76YdC8CEwNwJKvPTeqzvk7xtUK3zP8nSmrG+
-         k1bqmbCxrVKpWpKoXwyyUfj7MyoqrX9liYhOPFEdj3hlto919ik/j8ExouVjbxhW0FPr
-         LhXxVn9ni42GRAnc0alEF4hj3ZgmnS4URS5kY333h3LVar31rtaWYoVIECLaibFoUrY8
-         jCdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=++nWJk4Cva+vsdrhaueMv6rlXc4xrPaOvWuiySUp564=;
-        b=QfgsD7mO61gNO6+VYbRTvuJ8sP17+dB/aP6mxsWOJOUfqUd/JTImaMRrAHqVJFGgxb
-         X1eKfmxgC0sLWmPgO+SXc95IatX2I6k/sicnv7PeRyhAcouRJOaocvFp+3rEFutpCIUE
-         SaYvA4u0Czkmp2McODCYVLjRxcAJCm3Nju08W8r0jkZq1chkvW7hOUBDC1gIQVfouDJ2
-         FwMxHnSaLiRv9LK0iz/KUR1EiwItkmgzQKCrxuLkU60IcTxASvdVYMQZLsEI5edlWhFM
-         RzriBnujxzBjWQPmUhyrFgVtt+6jOsCHP6j7w/WEOoJO67rn6eBAoy+ZYW/9TZV0UaX2
-         1E/w==
-X-Gm-Message-State: AJIora8LOwIG8+OQynKgyXHjXkUNjJnI/cxc02LmV9a/H/rJnNqngZZc
-        lkPtiaSLgca1Go01goKQ6qELGCjF/9OChpX3LGYH97WX
-X-Google-Smtp-Source: AGRyM1tZ/A8JpWOGX4VcAQo8Th3v85UKE/GuWnHTam94qRdbRNe3aCZcC8GzLjx7RgWZ0kF6BIznJOAIWh8jNnDFcJs=
-X-Received: by 2002:a17:907:a427:b0:72b:8cc5:5487 with SMTP id
- sg39-20020a170907a42700b0072b8cc55487mr18060749ejc.354.1658939020893; Wed, 27
- Jul 2022 09:23:40 -0700 (PDT)
+        with ESMTP id S233755AbiG0TF2 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 27 Jul 2022 15:05:28 -0400
+Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADEA0C50;
+        Wed, 27 Jul 2022 11:32:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:References:Cc:To:From:
+        MIME-Version:Date:Message-ID:content-disposition;
+        bh=SxqIxoB46XQQzufy517WF/ExkkxnsZ5pxzOa6F+2UDs=; b=F2Wd3ULW8xn5qjhM2xrw5lGl04
+        6wCCjtdhIn/taUdv6L/aNTC7OAfh544VNRi/pcpBj3UH3I+I0CycnBncTCxv8IR2eRnWCZjxEzMIw
+        kbtUgQMVjhqAwmq9b5ixP+OiZSFbgjxR3Cj9R2SYaaXLz+ueIYG2nHcF+QBpgWsQirsBUGAqeM9ke
+        s4xivoC6de24FOOrDX6HwATqbTWdjy9tbnYITd12YRzueNtWA+afQqKowXArcZHxXGkfY+/h1YA7J
+        u4uu6HiIDHGxdyU1UVEo/P3M+3kdg8SoZkWY7V4DU6ybq0938kP4eeZtiDW5hUkXe9HestBDMS4MM
+        24pD3cFQ==;
+Received: from s0106ac1f6bb1ecac.cg.shawcable.net ([70.73.163.230] helo=[192.168.11.155])
+        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <logang@deltatee.com>)
+        id 1oGlpO-001n9P-H9; Wed, 27 Jul 2022 12:32:16 -0600
+Message-ID: <838314fe-a85d-19be-71b6-264cad7e83c9@deltatee.com>
+Date:   Wed, 27 Jul 2022 12:32:12 -0600
 MIME-Version: 1.0
-References: <20220725211612.7e3331ff@canb.auug.org.au> <f10da3c3-f688-b948-c058-28a448bec0d5@amd.com>
-In-Reply-To: <f10da3c3-f688-b948-c058-28a448bec0d5@amd.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Wed, 27 Jul 2022 12:23:29 -0400
-Message-ID: <CADnq5_MQQJdZ9o6b9OXah+399zY6wCs8WX=g0cF4fXo=sR5kmw@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the amdgpu tree
-To:     Rodrigo Siqueira Jordao <Rodrigo.Siqueira@amd.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+From:   Logan Gunthorpe <logang@deltatee.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Christoph Hellwig <hch@lst.de>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+References: <20220727214807.6209642e@canb.auug.org.au>
+Content-Language: en-US
+In-Reply-To: <20220727214807.6209642e@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 70.73.163.230
+X-SA-Exim-Rcpt-To: sfr@canb.auug.org.au, hch@lst.de, linux-kernel@vger.kernel.org, linux-next@vger.kernel.org, corbet@lwn.net, linux-doc@vger.kernel.org
+X-SA-Exim-Mail-From: logang@deltatee.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: linux-next: build warning after merge of the dma-mapping tree
+X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
+X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Jul 27, 2022 at 12:21 PM Rodrigo Siqueira Jordao
-<Rodrigo.Siqueira@amd.com> wrote:
->
->
->
-> On 2022-07-25 07:16, Stephen Rothwell wrote:
-> > Hi all,
-> >
-> > After merging the amdgpu tree, today's linux-next build (powerpc
-> > allyesconfig) failed like this:
-> >
-> > drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_crtc.c:297:26: error: 'amdgpu_dm_crtc_late_register' undeclared here (not in a function); did you mean 'amdgpu_umc_ras_late_init'?
-> >    297 |         .late_register = amdgpu_dm_crtc_late_register,
-> >        |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >        |                          amdgpu_umc_ras_late_init
-> >
-> > Caused by commit
-> >
-> >    a6c0b96cb899 ("drm/amd/display: Create a file dedicated for CRTC")
-> >
-> > I have applied the following hack for today (just to make it build).
-> >
-> > From: Stephen Rothwell <sfr@canb.auug.org.au>
-> > Date: Mon, 25 Jul 2022 20:48:29 +1000
-> > Subject: [PATCH] fixup for "drm/amd/display: Create a file dedicated for CRTC"
-> >
-> > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > ---
-> >   drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c
-> > index 16b624828e0d..3eb6ea3709bc 100644
-> > --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c
-> > +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c
-> > @@ -293,7 +293,7 @@ static const struct drm_crtc_funcs amdgpu_dm_crtc_funcs = {
-> >       .enable_vblank = dm_enable_vblank,
-> >       .disable_vblank = dm_disable_vblank,
-> >       .get_vblank_timestamp = drm_crtc_vblank_helper_get_vblank_timestamp,
-> > -#if defined(CONFIG_DEBUG_FS)
-> > +#ifdef CONFIG_DRM_AMD_SECURE_DISPLAY
->
-> I guess we had a merge issue here?
->
-> If you check the original patch [1,2], you will see:
->
-> +#if defined(CONFIG_DRM_AMD_SECURE_DISPLAY)
-> +       .late_register = amdgpu_dm_crtc_late_register,
-> +#endif
->
-> Anyway, maybe you want to use the above code to keep both branches in sync.
->
-> 1.
-> https://lore.kernel.org/amd-gfx/20220715181705.1030401-10-Rodrigo.Siqueira@amd.com/
-> 2.
-> https://gitlab.freedesktop.org/agd5f/linux/-/blob/amd-staging-drm-next/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c#L297
->
 
-There was a conflict with another patch in drm-misc that changed this
-code.  I'ved fixed it up properly in my drm-next branch.
 
-Alex
+On 2022-07-27 05:48, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the dma-mapping tree, today's linux-next build (htmldocs)
+> produced this warning:
+> 
+> Documentation/driver-api/infrastructure:50: kernel/dma/mapping.c:258: WARNING: Option list ends without a blank line; unexpected unindent.
+> 
+> Introduced by commit
+> 
+>   7c2645a2a30a ("dma-mapping: allow EREMOTEIO return code for P2PDMA transfers")
 
-> Thanks
-> Siqueira
->
-> >       .late_register = amdgpu_dm_crtc_late_register,
-> >   #endif
-> >   };
->
+
+Oh, hmm, I thought I addressed this when I added the extra line at the
+end of the comment, but it seems the htmldocs is a bit fussier than that
+with the white space. 
+
+The only way I can seem to suppress that error is by adding another tab
+character in the list; see below.
+
+I'll send a full patch shortly.
+
+Logan
+
+--
+
+diff --git a/kernel/dma/mapping.c b/kernel/dma/mapping.c
+index 746d46825d08..99e1e0c9a295 100644
+--- a/kernel/dma/mapping.c
++++ b/kernel/dma/mapping.c
+@@ -249,15 +249,15 @@ EXPORT_SYMBOL(dma_map_sg_attrs);
+  * Returns 0 on success or a negative error code on error. The following
+  * error codes are supported with the given meaning:
+  *
+- *   -EINVAL	An invalid argument, unaligned access or other error
+- *		in usage. Will not succeed if retried.
+- *   -ENOMEM	Insufficient resources (like memory or IOVA space) to
+- *		complete the mapping. Should succeed if retried later.
+- *   -EIO	Legacy error code with an unknown meaning. eg. this is
+- *		returned if a lower level call returned DMA_MAPPING_ERROR.
+- *   -EREMOTEIO	The DMA device cannot access P2PDMA memory specified in
+- *		the sg_table. This will not succeed if retried.
+- *
++ *   -EINVAL		An invalid argument, unaligned access or other error
++ *			in usage. Will not succeed if retried.
++ *   -ENOMEM		Insufficient resources (like memory or IOVA space) to
++ *			complete the mapping. Should succeed if retried later.
++ *   -EIO		Legacy error code with an unknown meaning. eg. this is
++ *			returned if a lower level call returned
++ *			DMA_MAPPING_ERROR.
++ *   -EREMOTEIO		The DMA device cannot access P2PDMA memory specified
++ *			in the sg_table. This will not succeed if retried.
+  */
+ int dma_map_sgtable(struct device *dev, struct sg_table *sgt,
+ 		    enum dma_data_direction dir, unsigned long attrs)

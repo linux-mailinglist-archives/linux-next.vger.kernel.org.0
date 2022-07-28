@@ -2,99 +2,113 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3584583513
-	for <lists+linux-next@lfdr.de>; Thu, 28 Jul 2022 00:07:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 593E95836B6
+	for <lists+linux-next@lfdr.de>; Thu, 28 Jul 2022 04:11:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232120AbiG0WHO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 27 Jul 2022 18:07:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49426 "EHLO
+        id S233284AbiG1CLV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 27 Jul 2022 22:11:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbiG0WHM (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 27 Jul 2022 18:07:12 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C77B5142C;
-        Wed, 27 Jul 2022 15:07:10 -0700 (PDT)
+        with ESMTP id S232066AbiG1CLU (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 27 Jul 2022 22:11:20 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48A195A3E0;
+        Wed, 27 Jul 2022 19:11:17 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LtSYl2Lv4z4x1c;
-        Thu, 28 Jul 2022 08:07:06 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LtYzM1Hrhz4x1S;
+        Thu, 28 Jul 2022 12:11:11 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1658959628;
-        bh=09VF2SGH6MbHLa8PegHml9IXa/L6kZGN2zaiViFnXqg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=gyNOmpqGnWyZOiVhfFE2LiByNDTYU0zAyUQD3mmOJDt3HWp0UfMlQxRtMPv5DXHnS
-         VuF0nuRcfce4oFyjkJBrn10oUHTvvbQsY69r5WXD4KYe5O7AMWRM2gg30NmnjC27ub
-         7GhJ1MDzd2HhRYjPfH0sR6DElKlJ6Z02iqqXM3PnGVVWK36sJMSTqHbfb5jX+vdyzO
-         jm6hbPo7aYZui7/07rUhVqy+xoXlixVU8I5SuKwrqyyWULmPbObOpo9W4FDYG0WTLc
-         teaPgOrp/arr5q5hjcyFsG9zBlg3f/qOHGerFDV36xWFY12vrAdiyiPbB4oHkrVOAY
-         +o34mAjLgm9wg==
-Date:   Thu, 28 Jul 2022 08:06:48 +1000
+        s=201702; t=1658974272;
+        bh=6O6/rqSJEj1f964QR+2xiWyKfoEJUsDxH/8FzuSmliY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=hXmfrgkvp+XjkjP8rdcGoEBfVSTBp4ZY1yylGzESPK7v0dvsw/wm7VlnQJmfsMdX+
+         87wnAaKIVYlnwEiExK/7Jr+ku9EjI7wVdXricyfLi+ZOAV3h7AnOHGY0kaAf6/1Mh5
+         TzpcxVdLS2elc9zzx4SGd1/4pIeZp3vmGkOi5S+9orScB8/11bZuyADAOZlflhU6rl
+         xyHQwYZi8vo1YoZL7NWd2YBSztSfp2ivkpjSFXwXHmjNc5Oph48bzUOHBkRZheG6RU
+         QOFtafrO2uUrDgmB649tBTnahOaoJLZTi4fPvKQ3QIiDuT52iF5hXV/Vxo330FjzgB
+         kEuZ7jAfwa5hg==
+Date:   Thu, 28 Jul 2022 12:11:09 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Bean Huo <beanhuo@micron.com>, Christoph Hellwig <hch@lst.de>,
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Dave Airlie <airlied@linux.ie>
+Cc:     Alex Deucher <alexdeucher@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the block tree
-Message-ID: <20220728080648.767b4c94@canb.auug.org.au>
+Subject: Re: linux-next: build failure after merge of the amdgpu and
+ powerpc-fixes trees
+Message-ID: <20220728121109.0cf6cb51@canb.auug.org.au>
+In-Reply-To: <87leseabci.fsf@mpe.ellerman.id.au>
+References: <20220726205458.0b5ca446@canb.auug.org.au>
+        <87leseabci.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/4d0fwticbl6wKSP=.oLUbpW";
+Content-Type: multipart/signed; boundary="Sig_/bWz3G.CxO+f3lnQtrE/mONw";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/4d0fwticbl6wKSP=.oLUbpW
+--Sig_/bWz3G.CxO+f3lnQtrE/mONw
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-In commit
+On Thu, 28 Jul 2022 00:17:49 +1000 Michael Ellerman <mpe@ellerman.id.au> wr=
+ote:
+>
+> Stephen Rothwell <sfr@canb.auug.org.au> writes:
+> >
+> > After merging the amdgpu tree, today's linux-next build (powerpc
+> > allyesconfig) failed like this:
+> >
+> > ld: drivers/gpu/drm/amd/display/dc/dml/display_mode_lib.o uses hard flo=
+at, drivers/gpu/drm/amd/display/dc/dcn30/dcn30_optc.o uses soft float
+> > ld: failed to merge target specific data of file drivers/gpu/drm/amd/di=
+splay/dc/dcn30/dcn30_optc.o
+> >
+> > I have reverted commit
+> >
+> >   c653c591789b ("drm/amdgpu: Re-enable DCN for 64-bit powerpc")
+> >
+> > for today. =20
+>=20
+> It bisects to:
+>=20
+>   40b31e5355ba ("drm/amd/display: Remove FPU flags from DCN30 Makefile")
+>=20
+> So I guess there's still some float code in dcn30?
 
-  5509e85fd887 ("nvme: use command_id instead of req->tag in trace_nvme_com=
-plete_rq()")
-
-Fixes tag
-
-  Fixes: e7006de6c238 ("nvme: code command_id with a genctr for use authent=
-ication after release")
-
-has these problem(s):
-
-  - Subject does not match target commit subject
-    Just use
-	git log -1 --format=3D'Fixes: %h ("%s")'
-
-So
-
-Fixes: e7006de6c238 ("nvme: code command_id with a genctr for use-after-fre=
-e validation")
+I have reverted commit 40b31e5355ba from the merge of the drm tree today (s=
+ince
+it has been merged in there) instead of commit c653c591789b.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/4d0fwticbl6wKSP=.oLUbpW
+--Sig_/bWz3G.CxO+f3lnQtrE/mONw
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLhtvgACgkQAVBC80lX
-0GxFZgf/VN5b7W0XHErICzQktefpRUn4usABjo50rvUYMvmUBxlI62qSGBA6sZmz
-rPwrWdZNxhtqxaVrDq1zHfzwGiktY1jZC0RmWYuGumrfbSuQ9Ovurk8I2r/ivKg7
-D0Jjd5vzmjX2yFO4d3WaVjpPcRbqSbyrTpkWLc6oHR45b7BbmRvVIF44qNEWbPDZ
-HPb+066ucOF2r8Rbrs5F8qTpSHzO3hZT9EAu7FPwuLZNQRdNqU37UFcpI4czGHQE
-F3l6uB/0M9VY59Zk0rhCDDYv1UJZ8pdJ5DeydN+ljNwicx5U3aKYw/7WB7Mmo8II
-+taDV1IyXHaGmI183Vzp/RDZuX2gTA==
-=II5Z
+iQEyBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLh8D4ACgkQAVBC80lX
+0Gyppwf43NYAZ8NC3GRODxhT4uDmUsOTDyWGJXbPSAIDFaoNTFsxiNZiUyLCoUjG
+Bqbl1djk0WDY9mat8aDmp8YqSNHH93JFl7YnT7i5X8hS/jzcQYbgeNrkymGDBURX
+seTEhQDtKIU+nomYV0iiJikqEO5HNWjICR1MG4RAYSLwRVf+hJJG7eyVkXHXHw+o
+LhBHFtCAhKj/Mz3sPf64zlRsGQ85MZraqb0JK0U9bsPAPapXJa9X3WXI2URWr9Y/
+U259nlSB+qdvLA/dmhsbuLAnL3yudhyHuzPYHPLcNrMltfKY+soy5wOskXSr0xWY
+Q9RxHybQvA6+3DWrsjgyrYaZym1r
+=URjw
 -----END PGP SIGNATURE-----
 
---Sig_/4d0fwticbl6wKSP=.oLUbpW--
+--Sig_/bWz3G.CxO+f3lnQtrE/mONw--

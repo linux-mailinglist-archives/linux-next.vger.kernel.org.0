@@ -2,124 +2,108 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5551F58377D
-	for <lists+linux-next@lfdr.de>; Thu, 28 Jul 2022 05:23:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA55358378F
+	for <lists+linux-next@lfdr.de>; Thu, 28 Jul 2022 05:34:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237792AbiG1DXY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 27 Jul 2022 23:23:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41850 "EHLO
+        id S236535AbiG1De2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 27 Jul 2022 23:34:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233314AbiG1DXW (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 27 Jul 2022 23:23:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 19A9D5A142
-        for <linux-next@vger.kernel.org>; Wed, 27 Jul 2022 20:23:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658978600;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=v9LhRjSIf3o5u+vJMOmzrjg7t2ZrAPOj2TMz4HPmonI=;
-        b=hJqahIMkLYuShzAnkzycPeq9WgriwD2bv5DRoVKpaWKpzKWZllwZ2VqxyXpLcfTPa7JbfS
-        JgNRw5JV4KKoSZneFfz0TGV5gAxozQcpLcyoDDKKbqN83tKIKiG6NOcnhN5I8d/zVLKDml
-        /HAlRXQSg23YRUA4a82fkmp/fwUCVmY=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-91-zzHKPZ03OJCnh03EM3nw3w-1; Wed, 27 Jul 2022 23:23:17 -0400
-X-MC-Unique: zzHKPZ03OJCnh03EM3nw3w-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3435D3801F5C;
-        Thu, 28 Jul 2022 03:23:17 +0000 (UTC)
-Received: from T590 (ovpn-8-26.pek2.redhat.com [10.72.8.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id E462C492C3B;
-        Thu, 28 Jul 2022 03:23:11 +0000 (UTC)
-Date:   Thu, 28 Jul 2022 11:23:06 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Alasdair G Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the device-mapper tree with the
- block tree
-Message-ID: <YuIBGvDfMk+wDG8Q@T590>
-References: <20220728131459.7348fe5e@canb.auug.org.au>
+        with ESMTP id S234588AbiG1DeY (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 27 Jul 2022 23:34:24 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 719B35A2F7;
+        Wed, 27 Jul 2022 20:34:22 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id iw1so689977plb.6;
+        Wed, 27 Jul 2022 20:34:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=v5iO3DJsdBPM2eAKiUQEswEd2u5joVshDOWMCkBSEWI=;
+        b=WopjFI8tRQsKj7xA9eC0fUlEFtVpR2QGFKPdVL1gXuQFz/suaXcXYnPrqJhZyD/MgM
+         xPzRiKv2v6pruqFlUGtoK/cL3gvLBxtKYOupZ8Hrp0fjirRR1Kxb6diOiS4CwhdCl36x
+         hXl7jt3dOgauNq9ttRk/Pn2iJJ/gJ/7M/6uj4HKWYUwv/29yFPgeXIDCGeBQCerpJegW
+         TlbRGpXiokQGKtPRQQX2ZH6VUz9uW3j5VQ3b35UNwQIBvCUIGTKbkzmmXFC+HJoQt3IY
+         WKFQnNsLkQlJBU9i6/kRoPfhvR5PAJ0DyJOj33iB+6DYmkQ+m7//Ik9S+FeEXisYJe9J
+         OkZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=v5iO3DJsdBPM2eAKiUQEswEd2u5joVshDOWMCkBSEWI=;
+        b=GeS0joJLabDNBx+6P5iH+X8iX9s0Ustogl7FFLdnSrL5wStz7eN/sUMq9TlXuBfZoT
+         tMeDDQXAP6b7l43JoEPTbb0n81zucTC4mGSkYy2/ax8dJU4c7nekRR9a++uZg3IJcSUD
+         QfplXdYr1YVLAsa+eUgNSM8XMw64MCkvz/LfmBNqgOcgDoF/lqeJfwd9U/Z66L52zISD
+         U5zis4L/XLOt4U07bqjLAmZ8eNWZrkwtA+I7mTIofy38BIMXvMbu/f5NV/NFOUy1o/Su
+         w5CiCC1T//6U03E0qHDVvR8bYz/MPhKqpKsl1QL9ExzH91JGZ5bAgrPeZUPxOb1+iRa/
+         76AA==
+X-Gm-Message-State: AJIora+DopQd3v5RnJNncH3l7RaT6jdFcFM9rXnstS0KdKtsXInQKMnH
+        CsNalCv1iscctC52cB8LnUU=
+X-Google-Smtp-Source: AGRyM1vrkYDWEh+Q5CKXwHq6PQq+SAM34S/j5zh3ymhk2nd7NrnqZNL26drZbsS7S6b+1oQNZRzfMQ==
+X-Received: by 2002:a17:902:ef46:b0:168:bac3:2fd4 with SMTP id e6-20020a170902ef4600b00168bac32fd4mr24230479plx.132.1658979261953;
+        Wed, 27 Jul 2022 20:34:21 -0700 (PDT)
+Received: from debian.me (subs28-116-206-12-54.three.co.id. [116.206.12.54])
+        by smtp.gmail.com with ESMTPSA id d8-20020a17090a7bc800b001f2ef3c7956sm2598035pjl.25.2022.07.27.20.34.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Jul 2022 20:34:21 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id E106D104A91; Thu, 28 Jul 2022 10:34:16 +0700 (WIB)
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     linux-doc@vger.kernel.org, linux-next@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-doc-tw-discuss@lists.sourceforge.net
+Cc:     linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>, Alex Shi <alexs@kernel.org>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: [PATCH 0/3] Documentation: powerpc: documentation fixes for Documentation/powerpc/elf_hwcaps.rst
+Date:   Thu, 28 Jul 2022 10:33:30 +0700
+Message-Id: <20220728033332.27836-1-bagasdotme@gmail.com>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20220727220050.549db613@canb.auug.org.au>
+References: <20220727220050.549db613@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220728131459.7348fe5e@canb.auug.org.au>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 01:14:59PM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the device-mapper tree got a conflict in:
-> 
->   drivers/md/dm.c
-> 
-> between commit:
-> 
->   1be3479b8533 ("block: move ->bio_split to the gendisk")
-> 
-> from the block tree and commit:
-> 
->   8b211aaccb91 ("dm: add two stage requeue mechanism")
-> 
-> from the device-mapper tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
-> 
-> diff --cc drivers/md/dm.c
-> index b7458f2dd3e4,47bcc5081b2b..000000000000
-> --- a/drivers/md/dm.c
-> +++ b/drivers/md/dm.c
-> @@@ -962,6 -1001,58 +1001,58 @@@ static void __dm_io_complete(struct dm_
->   	}
->   }
->   
-> + static void dm_wq_requeue_work(struct work_struct *work)
-> + {
-> + 	struct mapped_device *md = container_of(work, struct mapped_device,
-> + 						requeue_work);
-> + 	unsigned long flags;
-> + 	struct dm_io *io;
-> + 
-> + 	/* reuse deferred lock to simplify dm_handle_requeue */
-> + 	spin_lock_irqsave(&md->deferred_lock, flags);
-> + 	io = md->requeue_list;
-> + 	md->requeue_list = NULL;
-> + 	spin_unlock_irqrestore(&md->deferred_lock, flags);
-> + 
-> + 	while (io) {
-> + 		struct dm_io *next = io->next;
-> + 
->  -		dm_io_rewind(io, &md->queue->bio_split);
-> ++		dm_io_rewind(io, &md->disk->bio_split);
+After merging powerpc tree for linux-next integration testing, Stephen
+Rothwell reported htmldocs warnings at [1]. Fix these with self-explanatory
+fixes in the shortlog below.
 
-This fix looks fine.
+[1]: https://lore.kernel.org/linuxppc-dev/20220727220050.549db613@canb.auug.org.au/
+
+Bagas Sanjaya (3):
+  Documentation: powerpc: fix indentation warnings
+  Documentation: use different label names for each arch's
+    elf_hwcaps.rst
+  Documentation: powerpc: add elf_hwcaps to table of contents
+
+ Documentation/arm64/elf_hwcaps.rst              |  2 +-
+ Documentation/powerpc/elf_hwcaps.rst            | 17 +++++++----------
+ Documentation/powerpc/index.rst                 |  1 +
+ .../translations/zh_CN/arm64/elf_hwcaps.rst     |  2 +-
+ .../translations/zh_TW/arm64/elf_hwcaps.rst     |  2 +-
+ 5 files changed, 11 insertions(+), 13 deletions(-)
 
 
-Thanks,
-Ming
+base-commit: d6b551b8f90cc92c7d3c09cf38c748efe305ecb4
+-- 
+An old man doll... just what I always wanted! - Clara
 

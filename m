@@ -2,103 +2,98 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 610EB583ACD
-	for <lists+linux-next@lfdr.de>; Thu, 28 Jul 2022 10:58:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9A9D583BA9
+	for <lists+linux-next@lfdr.de>; Thu, 28 Jul 2022 12:02:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235292AbiG1I6F (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 28 Jul 2022 04:58:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39102 "EHLO
+        id S235002AbiG1KCf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 28 Jul 2022 06:02:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235288AbiG1I6F (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 28 Jul 2022 04:58:05 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E487A65592;
-        Thu, 28 Jul 2022 01:58:02 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id c139so1400243pfc.2;
-        Thu, 28 Jul 2022 01:58:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=sszjawbarXDFBNDL6MVd3XJHGuLyws9W8rL+FnR9Zv8=;
-        b=Zr6Ld07bY5PNLNgmErOISs3vUW/7RpAxbMYFsBvSU9iRhNS0uq7QrzsMPq2QtiOP2f
-         JV7ac7Csj1tZyCpn49IXELH+dGn6H9se5UYZyq2fuvx0OO7iwU+1jc1lMj9RdrIECeoP
-         ohmc1DGM4oz0xTw/fbAalH6fyMYC0/DwAloLjXRlEF/MlFDQM3GHdjxiYChJyec3jkjf
-         Mzz+yLKAU/hY2Csy3YNYGkJmgILN+Gw3TR/M05oN2xqiwtSYnm3Slr3ZqHuhjZZHWXOm
-         p+AdKvshTy3X0Yc7p5YvDXo9WgLu1iGmh5NyoK/KwLl7zhEBp7vcKAmIg63Pju8fHOQI
-         VP1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=sszjawbarXDFBNDL6MVd3XJHGuLyws9W8rL+FnR9Zv8=;
-        b=Lcy3o/lyCrIIo0JR17UZK48enVarf/efa11SE1uuf72L8EMnlLkkAJzt742Xo9KFF2
-         viC5MrWMlrZ/Aj7Zs4R0LfBcDs+dkMorFyZYxJ7V3UWQFcHQ8l50fv+jxVmM/UA9lQ1V
-         eURKwDqpgqSnuXswgOQXEodLcz/r4BbMesGI5m9u2+qClh4EnAy/PocDJIAO6x/FPPAS
-         Pe6QTxNohY7Ef7xUU06cCImaLD22O9MEpqpR/13sQ+jQffQasFNKHkhPI8ZthTuDj8/u
-         tX1pCWyepKQz1JVFTzd4T6q5QHak82PiqVL5xIz+99+JhtC6l57B7H+BEp02twZK79q/
-         ZWKA==
-X-Gm-Message-State: AJIora+OKE3yOjP0473lvpnVVTryQ7D82Vu68AfQG/lRQ+JNQ6csLOgn
-        srUUfJL+3TvT48QvW1Q1nUQ=
-X-Google-Smtp-Source: AGRyM1vSgUqmM8aMJWH02JIKBFzVFYPls5sFHYRDUKXCx3LSYhSP1OXWBP2/oSidSYM3jQWWNv8MKA==
-X-Received: by 2002:a63:68c7:0:b0:405:1da9:ab69 with SMTP id d190-20020a6368c7000000b004051da9ab69mr22719798pgc.233.1658998682344;
-        Thu, 28 Jul 2022 01:58:02 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-83.three.co.id. [180.214.232.83])
-        by smtp.gmail.com with ESMTPSA id h27-20020a63211b000000b0040d48cf046csm505029pgh.55.2022.07.28.01.58.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jul 2022 01:58:02 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id DE9F6104A8A; Thu, 28 Jul 2022 15:57:58 +0700 (WIB)
-Date:   Thu, 28 Jul 2022 15:57:58 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Akira Yokosawa <akiyks@gmail.com>
-Cc:     Logan Gunthorpe <logang@deltatee.com>, corbet@lwn.net, hch@lst.de,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org, sfr@canb.auug.org.au
-Subject: Re: linux-next: build warning after merge of the dma-mapping tree
-Message-ID: <YuJPllC3SHqOR1ez@debian.me>
-References: <838314fe-a85d-19be-71b6-264cad7e83c9@deltatee.com>
- <8a3a24b5-1f2f-d2bd-f2c9-2bda9298e23c@gmail.com>
+        with ESMTP id S234891AbiG1KCd (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 28 Jul 2022 06:02:33 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7495742AFE;
+        Thu, 28 Jul 2022 03:02:30 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LtmR34rGLz4x1S;
+        Thu, 28 Jul 2022 20:02:23 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1659002545;
+        bh=sPwx65IXOXOfoP6X8JNfSvi/mfHaolNTY7UuZAPTHxM=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=bTJwS0MmN71BhGqdr8ToWBSJvA6AplKAolqClqT1iGsuHDBv64mAEpIcQQshIye2q
+         HKTuJo6OZRytt6xw62TKmUMiQ8vffCP2zL1Rsa+EXaeUil62i//DyOa1V+g/MTdp/t
+         +Lb7zXH4ZernE31Yo+B3raBw+pncu+fIqCuOvfROyGIJe8uNmRYA7JQX0O9MfYdthM
+         h70R+U6xgOLRCrQ8OuVyFYHmK1I2DobOEoV8Fbjp++jf48Anjmo8ZMVVFxPPzOR60+
+         sgaWV7Gi4u07L+19Pc3c6AZqqXBLbVgn7+L5aSVIZVcdTw55v4L7N7KO701LIXF5XQ
+         Wcmys6hA+Olpg==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>, linux-doc@vger.kernel.org,
+        linux-next@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-doc-tw-discuss@lists.sourceforge.net
+Cc:     linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>, Alex Shi <alexs@kernel.org>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: Re: [PATCH 0/3] Documentation: powerpc: documentation fixes for
+ Documentation/powerpc/elf_hwcaps.rst
+In-Reply-To: <20220728033332.27836-1-bagasdotme@gmail.com>
+References: <20220727220050.549db613@canb.auug.org.au>
+ <20220728033332.27836-1-bagasdotme@gmail.com>
+Date:   Thu, 28 Jul 2022 20:02:22 +1000
+Message-ID: <87fsila72p.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <8a3a24b5-1f2f-d2bd-f2c9-2bda9298e23c@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 11:23:34AM +0900, Akira Yokosawa wrote:
-> > Oh, hmm, I thought I addressed this when I added the extra line at the
-> > end of the comment, but it seems the htmldocs is a bit fussier than that
-> > with the white space. 
-> > 
-> > The only way I can seem to suppress that error is by adding another tab
-> > character in the list; see below.
-> 
-> I think all you need is to see the reference at:
-> https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#option-lists
-> 
-> There are examples for long options.
-> 
-
-Hi Akira,
-
-I read the reference, and for the long option case, I see:
-
-> --very-long-option  A VMS-style option.  Note the adjustment for
->                     the required two spaces.
+Bagas Sanjaya <bagasdotme@gmail.com> writes:
+> After merging powerpc tree for linux-next integration testing, Stephen
+> Rothwell reported htmldocs warnings at [1]. Fix these with self-explanatory
+> fixes in the shortlog below.
 >
-> --an-even-longer-option
->            The description can also start on the next line.
+> [1]: https://lore.kernel.org/linuxppc-dev/20220727220050.549db613@canb.auug.org.au/
+>
+> Bagas Sanjaya (3):
+>   Documentation: powerpc: fix indentation warnings
+>   Documentation: use different label names for each arch's
+>     elf_hwcaps.rst
+>   Documentation: powerpc: add elf_hwcaps to table of contents
+>
+>  Documentation/arm64/elf_hwcaps.rst              |  2 +-
+>  Documentation/powerpc/elf_hwcaps.rst            | 17 +++++++----------
+>  Documentation/powerpc/index.rst                 |  1 +
+>  .../translations/zh_CN/arm64/elf_hwcaps.rst     |  2 +-
+>  .../translations/zh_TW/arm64/elf_hwcaps.rst     |  2 +-
+>  5 files changed, 11 insertions(+), 13 deletions(-)
 
-I interpreted that for the first case above, two spaces separator between
-the first and second sentence of option description is required, right?
+Hi Bagas,
 
--- 
-An old man doll... just what I always wanted! - Clara
+I'd actually already fixed these locally, but I'll take your versions
+because you went to all the trouble of sending them :)
+
+I've modified patch 2 to only change the powerpc label name, I don't
+want to be touching the arm64 documentation this late in the development
+cycle.
+
+I've also installed every python package on earth and got my development
+machine setup to build the docs again, so hopefully I'll catch errors
+like this in future.
+
+cheers

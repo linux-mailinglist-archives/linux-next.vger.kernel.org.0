@@ -2,117 +2,103 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F157583823
-	for <lists+linux-next@lfdr.de>; Thu, 28 Jul 2022 07:35:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 610EB583ACD
+	for <lists+linux-next@lfdr.de>; Thu, 28 Jul 2022 10:58:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231166AbiG1FfG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 28 Jul 2022 01:35:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57770 "EHLO
+        id S235292AbiG1I6F (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 28 Jul 2022 04:58:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiG1FfF (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 28 Jul 2022 01:35:05 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5192F5465D
-        for <linux-next@vger.kernel.org>; Wed, 27 Jul 2022 22:35:03 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id oy13so1301301ejb.1
-        for <linux-next@vger.kernel.org>; Wed, 27 Jul 2022 22:35:03 -0700 (PDT)
+        with ESMTP id S235288AbiG1I6F (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 28 Jul 2022 04:58:05 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E487A65592;
+        Thu, 28 Jul 2022 01:58:02 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id c139so1400243pfc.2;
+        Thu, 28 Jul 2022 01:58:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sbR9raOV1zF+9/IjbCz4W1LZZHaNay6Pd9Un1mvpRiU=;
-        b=rToq43S7L9MRXvydWLR5igo2zcboAd2C5cejRmQzNE3woT9iU24zx/9sZzHmIRxMyk
-         bN7Az7+7dzs2RFq1JnDFGXDJQ4Z1KcHW97f8gQ3lrGMmEFy3EYSoLkMYa2ium8DGGySo
-         MNNxnDYP7eEfVdDM03cv4NZc31uetlrKx7lDz5KcvKty+B5OE2x6HeLR2olOms0hB+Fi
-         Bu02efRuP/LCFkVmfy5yVz+tyiChYa34rNQRBOx5dclMSwXpaL280kCG2kBskohwKOxn
-         GU1qdiwfHqg61iIB6FZt7l7Z+vZDBMeHFy1yhVX0Ic82+64qZ1I9RQ2fq6eRwtk0uSqG
-         2BLQ==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=sszjawbarXDFBNDL6MVd3XJHGuLyws9W8rL+FnR9Zv8=;
+        b=Zr6Ld07bY5PNLNgmErOISs3vUW/7RpAxbMYFsBvSU9iRhNS0uq7QrzsMPq2QtiOP2f
+         JV7ac7Csj1tZyCpn49IXELH+dGn6H9se5UYZyq2fuvx0OO7iwU+1jc1lMj9RdrIECeoP
+         ohmc1DGM4oz0xTw/fbAalH6fyMYC0/DwAloLjXRlEF/MlFDQM3GHdjxiYChJyec3jkjf
+         Mzz+yLKAU/hY2Csy3YNYGkJmgILN+Gw3TR/M05oN2xqiwtSYnm3Slr3ZqHuhjZZHWXOm
+         p+AdKvshTy3X0Yc7p5YvDXo9WgLu1iGmh5NyoK/KwLl7zhEBp7vcKAmIg63Pju8fHOQI
+         VP1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sbR9raOV1zF+9/IjbCz4W1LZZHaNay6Pd9Un1mvpRiU=;
-        b=Go323rAS9ajj4fyerVLes/lnhjU5fZRsJ9pSxl7JxwGoBFoxmj0VUjQJ//+NMdazgg
-         Sg+MYqAUTt3X3ZLOi+3fB7r6iF6x1eqQKholmqYz60e1lyT+PQ6vBOGs986Ita+E4ubU
-         uR8KNjyN61De/UaQiDZOTY4QuzTyulTcWmDN3IXyroYqiKXnb/5moSbeOImC/wBPFdNS
-         qcMo3boNImcU3s84oSzzmGPp2UMdaIGldBCJ6dGmkqZTG9OD0rtC9Dc7XzJg5T7D+1Ne
-         FDDtojdJ6MU7zjxGQGB8DiJF8QGxT0kUmzetzvbobTCXMS2Z+2rwNBcO+CpJkOCSD1ub
-         pS2g==
-X-Gm-Message-State: AJIora+aAs6L7jrHik8CHCHywVhiuoKYbty4J6G5VPBhtL8Qcnzdzpo/
-        JrAuKD8CXVTBG0WVAJ14a5pOwg/7sLWBausZChu+lQ==
-X-Google-Smtp-Source: AGRyM1sAlC/g2qMEZqaOZnp+L70k1DPQR5wX7uHWbhD+3nSoTyyN1BhOU3xKKS7zIwCMQxeAjd5T75k5nbC7zhZkjes=
-X-Received: by 2002:a17:907:7294:b0:72b:1ae:9c47 with SMTP id
- dt20-20020a170907729400b0072b01ae9c47mr19979458ejc.253.1658986501786; Wed, 27
- Jul 2022 22:35:01 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=sszjawbarXDFBNDL6MVd3XJHGuLyws9W8rL+FnR9Zv8=;
+        b=Lcy3o/lyCrIIo0JR17UZK48enVarf/efa11SE1uuf72L8EMnlLkkAJzt742Xo9KFF2
+         viC5MrWMlrZ/Aj7Zs4R0LfBcDs+dkMorFyZYxJ7V3UWQFcHQ8l50fv+jxVmM/UA9lQ1V
+         eURKwDqpgqSnuXswgOQXEodLcz/r4BbMesGI5m9u2+qClh4EnAy/PocDJIAO6x/FPPAS
+         Pe6QTxNohY7Ef7xUU06cCImaLD22O9MEpqpR/13sQ+jQffQasFNKHkhPI8ZthTuDj8/u
+         tX1pCWyepKQz1JVFTzd4T6q5QHak82PiqVL5xIz+99+JhtC6l57B7H+BEp02twZK79q/
+         ZWKA==
+X-Gm-Message-State: AJIora+OKE3yOjP0473lvpnVVTryQ7D82Vu68AfQG/lRQ+JNQ6csLOgn
+        srUUfJL+3TvT48QvW1Q1nUQ=
+X-Google-Smtp-Source: AGRyM1vSgUqmM8aMJWH02JIKBFzVFYPls5sFHYRDUKXCx3LSYhSP1OXWBP2/oSidSYM3jQWWNv8MKA==
+X-Received: by 2002:a63:68c7:0:b0:405:1da9:ab69 with SMTP id d190-20020a6368c7000000b004051da9ab69mr22719798pgc.233.1658998682344;
+        Thu, 28 Jul 2022 01:58:02 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-83.three.co.id. [180.214.232.83])
+        by smtp.gmail.com with ESMTPSA id h27-20020a63211b000000b0040d48cf046csm505029pgh.55.2022.07.28.01.58.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Jul 2022 01:58:02 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id DE9F6104A8A; Thu, 28 Jul 2022 15:57:58 +0700 (WIB)
+Date:   Thu, 28 Jul 2022 15:57:58 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Akira Yokosawa <akiyks@gmail.com>
+Cc:     Logan Gunthorpe <logang@deltatee.com>, corbet@lwn.net, hch@lst.de,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org, sfr@canb.auug.org.au
+Subject: Re: linux-next: build warning after merge of the dma-mapping tree
+Message-ID: <YuJPllC3SHqOR1ez@debian.me>
+References: <838314fe-a85d-19be-71b6-264cad7e83c9@deltatee.com>
+ <8a3a24b5-1f2f-d2bd-f2c9-2bda9298e23c@gmail.com>
 MIME-Version: 1.0
-References: <CA+G9fYt_cc5SiNv1Vbse=HYY_+uc+9OYPZuJ-x59bROSaLN6fw@mail.gmail.com>
- <CAGETcx8bGwDkPP=d2MtcY69YmTyckUSa8xAwNVOPOyTR8jPk=A@mail.gmail.com>
-In-Reply-To: <CAGETcx8bGwDkPP=d2MtcY69YmTyckUSa8xAwNVOPOyTR8jPk=A@mail.gmail.com>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 28 Jul 2022 11:04:49 +0530
-Message-ID: <CA+G9fYv0DFZi2rMPQTHvK8yD7g0LZTxN76iKZxP4pi4+8Rstxg@mail.gmail.com>
-Subject: Re: [next] arm: PM: domains: Delete usage of driver_deferred_probe_check_state()
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <8a3a24b5-1f2f-d2bd-f2c9-2bda9298e23c@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Saravana,
+On Thu, Jul 28, 2022 at 11:23:34AM +0900, Akira Yokosawa wrote:
+> > Oh, hmm, I thought I addressed this when I added the extra line at the
+> > end of the comment, but it seems the htmldocs is a bit fussier than that
+> > with the white space. 
+> > 
+> > The only way I can seem to suppress that error is by adding another tab
+> > character in the list; see below.
+> 
+> I think all you need is to see the reference at:
+> https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#option-lists
+> 
+> There are examples for long options.
+> 
 
-On Thu, 28 Jul 2022 at 00:19, Saravana Kannan <saravanak@google.com> wrote:
+Hi Akira,
+
+I read the reference, and for the long option case, I see:
+
+> --very-long-option  A VMS-style option.  Note the adjustment for
+>                     the required two spaces.
 >
-> On Tue, Jul 26, 2022 at 11:44 PM Naresh Kamboju
-> <naresh.kamboju@linaro.org> wrote:
-> >
-> > Linux next arm BeagleBoard x15 device boot failed due to the
->
-> Can you point me to the dts file that corresponds to this board
-> please? And if you know which devices are power domains, that'd be
-> handy too. For now, I'm reverting this patch.
-metadata:
-  git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-  git_sha: 9250d2f72dc46a808b6aa23bf50dd670f1f52ddc
-  git_describe: v5.19-rc7-13490-g9250d2f72dc4
-  git_ref: master
-  kernel_version: 5.19.0-rc8
-  kernel-config: https://builds.tuxbuild.com/2CWh3jswUGEkjvfXQPGXdOceMFH/config
-  artifact-location: https://builds.tuxbuild.com/2CWh3jswUGEkjvfXQPGXdOceMFH
-  toolchain: gcc-10
+> --an-even-longer-option
+>            The description can also start on the next line.
 
-I am sharing a few urls, metadata, test job link and device details link.
+I interpreted that for the first case above, two spaces separator between
+the first and second sentence of option description is required, right?
 
-      kernel:
-        url: https://builds.tuxbuild.com/2CWh3jswUGEkjvfXQPGXdOceMFH/zImage
-      dtb:
-        url: https://builds.tuxbuild.com/2CWh3jswUGEkjvfXQPGXdOceMFH/dtbs/am57xx-beagle-x15.dtb
-      modules:
-        url: https://builds.tuxbuild.com/2CWh3jswUGEkjvfXQPGXdOceMFH/modules.tar.xz
-
-Test jobs url:
-       - https://lkft.validation.linaro.org/scheduler/job/5326314#L1982
-
-Device details link,
-      - https://www.ti.com/tool/BEAGLEBOARD-X15
-
-metadata:
-  git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-  git_sha: 9250d2f72dc46a808b6aa23bf50dd670f1f52ddc
-  git_describe: v5.19-rc7-13490-g9250d2f72dc4
-  git_ref: master
-  kernel_version: 5.19.0-rc8
-  kernel-config: https://builds.tuxbuild.com/2CWh3jswUGEkjvfXQPGXdOceMFH/config
-  artifact-location: https://builds.tuxbuild.com/2CWh3jswUGEkjvfXQPGXdOceMFH
-  toolchain: gcc-10
-
-- Naresh
+-- 
+An old man doll... just what I always wanted! - Clara

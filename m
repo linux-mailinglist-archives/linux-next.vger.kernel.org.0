@@ -2,94 +2,124 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D231E58376A
-	for <lists+linux-next@lfdr.de>; Thu, 28 Jul 2022 05:18:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5551F58377D
+	for <lists+linux-next@lfdr.de>; Thu, 28 Jul 2022 05:23:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234751AbiG1DSP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 27 Jul 2022 23:18:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36706 "EHLO
+        id S237792AbiG1DXY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 27 Jul 2022 23:23:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235118AbiG1DSN (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 27 Jul 2022 23:18:13 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 477D6240A0;
-        Wed, 27 Jul 2022 20:18:12 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S233314AbiG1DXW (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 27 Jul 2022 23:23:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 19A9D5A142
+        for <linux-next@vger.kernel.org>; Wed, 27 Jul 2022 20:23:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658978600;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=v9LhRjSIf3o5u+vJMOmzrjg7t2ZrAPOj2TMz4HPmonI=;
+        b=hJqahIMkLYuShzAnkzycPeq9WgriwD2bv5DRoVKpaWKpzKWZllwZ2VqxyXpLcfTPa7JbfS
+        JgNRw5JV4KKoSZneFfz0TGV5gAxozQcpLcyoDDKKbqN83tKIKiG6NOcnhN5I8d/zVLKDml
+        /HAlRXQSg23YRUA4a82fkmp/fwUCVmY=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-91-zzHKPZ03OJCnh03EM3nw3w-1; Wed, 27 Jul 2022 23:23:17 -0400
+X-MC-Unique: zzHKPZ03OJCnh03EM3nw3w-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LtbSf4JbGz4x1V;
-        Thu, 28 Jul 2022 13:18:10 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1658978290;
-        bh=0a1SfDZjYD0OjVyntTUgHptnneGyXdJhKfGnfOBAcAk=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=a48R+Va3VM2n7bEBvtkDWOplWR6rP69PNaK3OuAIn8INxiKx7288pkLbBWhnRs16G
-         iYTj9nx+eF16wfWB51OkE0Le6h1HYKKmqagmGUL/GeuTdOGjdAl+CwvP+0EPhmznMS
-         pmXU69swH3Pi1WD7yCK9FCG2/G471to6MX9Lut3Pu2VaMkBJOpdzdrYekLYkzuzrA6
-         yspLWaTi3ljnnWDvHlwbL/hDkdnZ2Bd+5blK8aqa/TSfOBYfQnOO4/WadyGmYFedqC
-         emdvFN3PhdFum3waxqwwJSesFdnHrzFOVo5phJ40S/lewFI1hMBJGYTB3zPD9jro3a
-         cplF1dyD6Rf+w==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Laurent Dufour <ldufour@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-next@vger.kernel.org, Sachin Sant <sachinp@linux.ibm.com>
-Subject: Re: [PATCH] watchdog: Fix build error when
- CONFIG_SOFTLOCKUP_DETECTOR is not set
-In-Reply-To: <4dd9afa4-ddc1-c6c9-1205-bca28a858022@linux.ibm.com>
-References: <20220727092109.31362-1-ldufour@linux.ibm.com>
- <87sfmmaipn.fsf@mpe.ellerman.id.au>
- <4dd9afa4-ddc1-c6c9-1205-bca28a858022@linux.ibm.com>
-Date:   Thu, 28 Jul 2022 13:18:06 +1000
-Message-ID: <87ilni9b81.fsf@mpe.ellerman.id.au>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3435D3801F5C;
+        Thu, 28 Jul 2022 03:23:17 +0000 (UTC)
+Received: from T590 (ovpn-8-26.pek2.redhat.com [10.72.8.26])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id E462C492C3B;
+        Thu, 28 Jul 2022 03:23:11 +0000 (UTC)
+Date:   Thu, 28 Jul 2022 11:23:06 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Alasdair G Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>,
+        Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the device-mapper tree with the
+ block tree
+Message-ID: <YuIBGvDfMk+wDG8Q@T590>
+References: <20220728131459.7348fe5e@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220728131459.7348fe5e@canb.auug.org.au>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Laurent Dufour <ldufour@linux.ibm.com> writes:
-> Le 27/07/2022 =C3=A0 13:38, Michael Ellerman a =C3=A9crit=C2=A0:
->> Laurent Dufour <ldufour@linux.ibm.com> writes:
->>> Sachin reported the following build error when CONFIG_SOFTLOCKUP_DETECT=
-OR
->>> is not set:
->>>
->>> kernel/watchdog.c:597:20: error: static declaration of 'lockup_detector=
-_reconfigure' follows non-static declaration
->>>  static inline void lockup_detector_reconfigure(void)
->>>                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
->>> In file included from kernel/watchdog.c:17:
->>> ./include/linux/nmi.h:125:6: note: previous declaration of 'lockup_dete=
-ctor_reconfigure' was here
->>>  void lockup_detector_reconfigure(void);
->>>       ^~~~~~~~~~~~~~~~~~~~~~~~~~~
->>>
->>> The definition of lockup_detector_reconfigure should be exported even in
->>> that case, and __lockup_detector_reconfigure should remain static.
->>>
->>> Fixes: 24a1260705b7 ("watchdog: export lockup_detector_reconfigure")
->>> Reported-by: Sachin Sant <sachinp@linux.ibm.com>
->>> Signed-off-by: Laurent Dufour <ldufour@linux.ibm.com>
->>> ---
->>>  kernel/watchdog.c | 4 ++--
->>>  1 file changed, 2 insertions(+), 2 deletions(-)
->>=20
->> Thanks.
->>=20
->> I'll squash that in to the original commit.
->
-> Thanks Michael,
->
-> I was thinking this is too late for such a squash.
+On Thu, Jul 28, 2022 at 01:14:59PM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the device-mapper tree got a conflict in:
+> 
+>   drivers/md/dm.c
+> 
+> between commit:
+> 
+>   1be3479b8533 ("block: move ->bio_split to the gendisk")
+> 
+> from the block tree and commit:
+> 
+>   8b211aaccb91 ("dm: add two stage requeue mechanism")
+> 
+> from the device-mapper tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
+> 
+> diff --cc drivers/md/dm.c
+> index b7458f2dd3e4,47bcc5081b2b..000000000000
+> --- a/drivers/md/dm.c
+> +++ b/drivers/md/dm.c
+> @@@ -962,6 -1001,58 +1001,58 @@@ static void __dm_io_complete(struct dm_
+>   	}
+>   }
+>   
+> + static void dm_wq_requeue_work(struct work_struct *work)
+> + {
+> + 	struct mapped_device *md = container_of(work, struct mapped_device,
+> + 						requeue_work);
+> + 	unsigned long flags;
+> + 	struct dm_io *io;
+> + 
+> + 	/* reuse deferred lock to simplify dm_handle_requeue */
+> + 	spin_lock_irqsave(&md->deferred_lock, flags);
+> + 	io = md->requeue_list;
+> + 	md->requeue_list = NULL;
+> + 	spin_unlock_irqrestore(&md->deferred_lock, flags);
+> + 
+> + 	while (io) {
+> + 		struct dm_io *next = io->next;
+> + 
+>  -		dm_io_rewind(io, &md->queue->bio_split);
+> ++		dm_io_rewind(io, &md->disk->bio_split);
 
-It usually would be, if I was organised, so sending a follow-up was the
-correct thing for you to do :)
+This fix looks fine.
 
-cheers
+
+Thanks,
+Ming
+

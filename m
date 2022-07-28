@@ -2,142 +2,169 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DD265836D1
-	for <lists+linux-next@lfdr.de>; Thu, 28 Jul 2022 04:23:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E139D583761
+	for <lists+linux-next@lfdr.de>; Thu, 28 Jul 2022 05:15:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233438AbiG1CXn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 27 Jul 2022 22:23:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53506 "EHLO
+        id S237427AbiG1DP0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 27 Jul 2022 23:15:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231327AbiG1CXl (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 27 Jul 2022 22:23:41 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB4526AEC;
-        Wed, 27 Jul 2022 19:23:41 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id f65so394485pgc.12;
-        Wed, 27 Jul 2022 19:23:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:to:cc:references:subject
-         :content-language:from:in-reply-to:content-transfer-encoding;
-        bh=xyw7j0g2KRT16wsuVZKE8r3rotsnuHRNHRCOngZhLXo=;
-        b=UuFF+xMdty8ykiTDHXKEc0pvwioDzU/J5Y/+J3y4u2ZH0nwXhxMEfAbj6iepDH5rfU
-         0NFIwCcyCV1+qmQDjo8ZRKkLvx9U8hdKG222UuzRehSkjt7gez5fEpNYLYaBYYL+Jvob
-         WY7/P8YoE6/0qnZafIQ7nU9aVSaTt+qYF/Y3OORMVfWsHl7HlbXMQFYzt91oc5fzFCb4
-         cXuIMR7kVawoeYYYHko+oKhyTyY41ZE/lK5lc8uUi3KVmceaxE06AeBuptuxftol1kwa
-         x8Syy2KlZEmb7ZziIMT+4XrLLJP0mvBOMHWqBh8ttq1Xy4net91tGv0SzctLDhyEed8d
-         DDIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:to:cc
-         :references:subject:content-language:from:in-reply-to
-         :content-transfer-encoding;
-        bh=xyw7j0g2KRT16wsuVZKE8r3rotsnuHRNHRCOngZhLXo=;
-        b=BJneVChgG6kJJ7GUKPcclEgTtPaMQgqskJ3UEKKAu6seF54t5X2zL/u4D9LO6Y7UCf
-         myTCY6vQzOAACdDAixmURlKrQ0EUq4lCKXJLABdDgYWXQ6FaDLIO2G4XkRervk6PikY0
-         R0dYORrRtunX0J5xfl2361HzV0eLuKVPmN9ApXBjWGjkzvyfxol6u6xjnlb+IX8r8IW9
-         KHY5o2IZ85NapqZpI9dUVij1jAXFocAbWI+j6Ty1JWJb4GYl6Y2+FqrX8o7f51P3eJHI
-         K4GUYQs0/8/DTnfZWuH7pqOSn4MgTuWwWXwbj0LeINfuN9mk7YJoghDnFH4YCRNmQnp4
-         tcIw==
-X-Gm-Message-State: AJIora8bVjPflfKLx5SB3BQh7Sg2ris836tRI9/ArEL7P6Cuv26Jhhzs
-        9MHFBOuQthiPD2eGzYgUzHY=
-X-Google-Smtp-Source: AGRyM1sT9SvPu5Of46GAV94gca362Ake5Nh/hXddYEM8VgjL+CZlsIT8OZcWUqoiaUo8whNZKLaIBA==
-X-Received: by 2002:a05:6a00:bc5:b0:52b:49c9:d26c with SMTP id x5-20020a056a000bc500b0052b49c9d26cmr24551795pfu.73.1658975020400;
-        Wed, 27 Jul 2022 19:23:40 -0700 (PDT)
-Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id cp17-20020a170902e79100b0016c0c82e85csm14310373plb.75.2022.07.27.19.23.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Jul 2022 19:23:39 -0700 (PDT)
-Message-ID: <8a3a24b5-1f2f-d2bd-f2c9-2bda9298e23c@gmail.com>
-Date:   Thu, 28 Jul 2022 11:23:34 +0900
+        with ESMTP id S237443AbiG1DPU (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 27 Jul 2022 23:15:20 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20FDB1035;
+        Wed, 27 Jul 2022 20:15:10 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LtbP36b0wz4x1F;
+        Thu, 28 Jul 2022 13:15:03 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1658978105;
+        bh=7e66GShGF4d0fnCJXtFWm/XyPFNyJqkbIlauyHHtNrM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=gTpqC4AoSEqRgfLQH8/TbQvGsIcho4jyacCzRLCh0MgDCzx6RzObziV1xu2ebtu+W
+         1AImVGfysxwinJQuqw8Zuyp6f8e9tewdv6dYDpyOX0Wjx2o9IcTpHx6wxLL7dlR5Co
+         MWnFnZ4vfjzJ9ucxeYt+91cqkFvUAAW2VkguRwO73r1/njfEowBFggbh60lSaYr4xk
+         ZHZgI5NJ04k9gRRWsm2WquHgg/ZxUfCyCnc5/Tepe2YbSvS34DeeS/prY0FtyMD9ON
+         4NxgnyF93M/dT7N4kDuHxbOYJ2ZVYpBI1o0n0wrXNBK4q0BPPGwCOK7dslyQmgbi3a
+         nD82RujocNnFQ==
+Date:   Thu, 28 Jul 2022 13:14:59 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alasdair G Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>, Jens Axboe <axboe@kernel.dk>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Ming Lei <ming.lei@redhat.com>
+Subject: linux-next: manual merge of the device-mapper tree with the block
+ tree
+Message-ID: <20220728131459.7348fe5e@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-To:     Logan Gunthorpe <logang@deltatee.com>
-Cc:     corbet@lwn.net, hch@lst.de, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        sfr@canb.auug.org.au
-References: <838314fe-a85d-19be-71b6-264cad7e83c9@deltatee.com>
-Subject: Re: linux-next: build warning after merge of the dma-mapping tree
-Content-Language: en-US
-From:   Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <838314fe-a85d-19be-71b6-264cad7e83c9@deltatee.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/5kzJvbeoG5S8dV_9ABIRuFf";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi,
+--Sig_/5kzJvbeoG5S8dV_9ABIRuFf
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 27 Jul 2022 12:32:12 -0600, Logan Gunthorpe wrote:
-> On 2022-07-27 05:48, Stephen Rothwell wrote:
->> Hi all,
->> 
->> After merging the dma-mapping tree, today's linux-next build (htmldocs)
->> produced this warning:
->> 
->> Documentation/driver-api/infrastructure:50: kernel/dma/mapping.c:258: WARNING: Option list ends without a blank line; unexpected unindent.
->> 
->> Introduced by commit
->> 
->>   7c2645a2a30a ("dma-mapping: allow EREMOTEIO return code for P2PDMA transfers")
-> 
-> 
-> Oh, hmm, I thought I addressed this when I added the extra line at the
-> end of the comment, but it seems the htmldocs is a bit fussier than that
-> with the white space. 
-> 
-> The only way I can seem to suppress that error is by adding another tab
-> character in the list; see below.
+Hi all,
 
-I think all you need is to see the reference at:
-https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#option-lists
+Today's linux-next merge of the device-mapper tree got a conflict in:
 
-There are examples for long options.
+  drivers/md/dm.c
 
-        Thanks, Akira
+between commit:
 
-> 
-> I'll send a full patch shortly.
-> 
-> Logan
-> 
-> --
-> 
-> diff --git a/kernel/dma/mapping.c b/kernel/dma/mapping.c
-> index 746d46825d08..99e1e0c9a295 100644
-> --- a/kernel/dma/mapping.c
-> +++ b/kernel/dma/mapping.c
-> @@ -249,15 +249,15 @@ EXPORT_SYMBOL(dma_map_sg_attrs);
->   * Returns 0 on success or a negative error code on error. The following
->   * error codes are supported with the given meaning:
->   *
-> - *   -EINVAL	An invalid argument, unaligned access or other error
-> - *		in usage. Will not succeed if retried.
-> - *   -ENOMEM	Insufficient resources (like memory or IOVA space) to
-> - *		complete the mapping. Should succeed if retried later.
-> - *   -EIO	Legacy error code with an unknown meaning. eg. this is
-> - *		returned if a lower level call returned DMA_MAPPING_ERROR.
-> - *   -EREMOTEIO	The DMA device cannot access P2PDMA memory specified in
-> - *		the sg_table. This will not succeed if retried.
-> - *
-> + *   -EINVAL		An invalid argument, unaligned access or other error
-> + *			in usage. Will not succeed if retried.
-> + *   -ENOMEM		Insufficient resources (like memory or IOVA space) to
-> + *			complete the mapping. Should succeed if retried later.
-> + *   -EIO		Legacy error code with an unknown meaning. eg. this is
-> + *			returned if a lower level call returned
-> + *			DMA_MAPPING_ERROR.
-> + *   -EREMOTEIO		The DMA device cannot access P2PDMA memory specified
-> + *			in the sg_table. This will not succeed if retried.
->   */
->  int dma_map_sgtable(struct device *dev, struct sg_table *sgt,
->  		    enum dma_data_direction dir, unsigned long attrs)
+  1be3479b8533 ("block: move ->bio_split to the gendisk")
 
+from the block tree and commit:
+
+  8b211aaccb91 ("dm: add two stage requeue mechanism")
+
+from the device-mapper tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/md/dm.c
+index b7458f2dd3e4,47bcc5081b2b..000000000000
+--- a/drivers/md/dm.c
++++ b/drivers/md/dm.c
+@@@ -962,6 -1001,58 +1001,58 @@@ static void __dm_io_complete(struct dm_
+  	}
+  }
+ =20
++ static void dm_wq_requeue_work(struct work_struct *work)
++ {
++ 	struct mapped_device *md =3D container_of(work, struct mapped_device,
++ 						requeue_work);
++ 	unsigned long flags;
++ 	struct dm_io *io;
++=20
++ 	/* reuse deferred lock to simplify dm_handle_requeue */
++ 	spin_lock_irqsave(&md->deferred_lock, flags);
++ 	io =3D md->requeue_list;
++ 	md->requeue_list =3D NULL;
++ 	spin_unlock_irqrestore(&md->deferred_lock, flags);
++=20
++ 	while (io) {
++ 		struct dm_io *next =3D io->next;
++=20
+ -		dm_io_rewind(io, &md->queue->bio_split);
+++		dm_io_rewind(io, &md->disk->bio_split);
++=20
++ 		io->next =3D NULL;
++ 		__dm_io_complete(io, false);
++ 		io =3D next;
++ 	}
++ }
++=20
++ /*
++  * Two staged requeue:
++  *
++  * 1) io->orig_bio points to the real original bio, and the part mapped to
++  *    this io must be requeued, instead of other parts of the original bi=
+o.
++  *
++  * 2) io->orig_bio points to new cloned bio which matches the requeued dm=
+_io.
++  */
++ static void dm_io_complete(struct dm_io *io)
++ {
++ 	bool first_requeue;
++=20
++ 	/*
++ 	 * Only dm_io that has been split needs two stage requeue, otherwise
++ 	 * we may run into long bio clone chain during suspend and OOM could
++ 	 * be triggered.
++ 	 *
++ 	 * Also flush data dm_io won't be marked as DM_IO_WAS_SPLIT, so they
++ 	 * also aren't handled via the first stage requeue.
++ 	 */
++ 	if (dm_io_flagged(io, DM_IO_WAS_SPLIT))
++ 		first_requeue =3D true;
++ 	else
++ 		first_requeue =3D false;
++=20
++ 	__dm_io_complete(io, first_requeue);
++ }
++=20
+  /*
+   * Decrements the number of outstanding ios that a bio has been
+   * cloned into, completing the original io if necc.
+
+--Sig_/5kzJvbeoG5S8dV_9ABIRuFf
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLh/zQACgkQAVBC80lX
+0GxEXAgAgqMbzpLpuHEQyMYzu0nfLaFuMp1Fm593wv/jeH2XLvqmprBS3pH1Pl/I
+VuAsn2FtH6kOdSX4U0zlCQSswgfk3ALwKXAa/kG87DeJgDN2819gSH9xaUddyGyo
+gGcl0cMRa1UqMQZFGSsKD+418UcECRvAIrbds3lxmqXig9kkYLAW9TCDH4koKrlB
+Yt+4YXRSmyVLhIqrxfQL7YEvI4itWl5qW0MowZXpr/fT5wsHt3OQdjQuKuqGvs7H
+QTpefeMayB3LF6LKzzNe6c7d/DhqvzkGY224bcNK+GIUPXphdwUoitkQEfAahYa8
+qVpQy7qU+bVTPRYeE+ZOC6/y09JTvA==
+=9q3b
+-----END PGP SIGNATURE-----
+
+--Sig_/5kzJvbeoG5S8dV_9ABIRuFf--

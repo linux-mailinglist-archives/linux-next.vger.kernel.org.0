@@ -2,76 +2,99 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8957958486B
-	for <lists+linux-next@lfdr.de>; Fri, 29 Jul 2022 00:52:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CC28584965
+	for <lists+linux-next@lfdr.de>; Fri, 29 Jul 2022 03:44:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbiG1WwB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 28 Jul 2022 18:52:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55230 "EHLO
+        id S232050AbiG2Bon (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 28 Jul 2022 21:44:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbiG1Wv7 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 28 Jul 2022 18:51:59 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 698C14F1A1;
-        Thu, 28 Jul 2022 15:51:57 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Lv5Vx1qmBz4x1N;
-        Fri, 29 Jul 2022 08:51:53 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1659048713;
-        bh=JddId/71HJJ4bainsai6Zd4G+egkNDy/Bpv8mjqhd1o=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=UHgrRSsSBo0LKfF+3SWgSYSy16szwpZcEKdO9eD09QBV+L7WudC1qtrX+ZEbno4Na
-         LViJXHscU+GHvW8lmaiTWi5PIp0X1BcXUdLNTwrsrbKQa9Cdz3kEVfciBcbiIt7JwS
-         clOt3C2HfakqrylUxYAfvBHpOGyH0YCX0L3vMGqCESQil7EE4vzS/sztu4HIwGHg5t
-         nWfYntY9tO5okEg80p57knmCKyjJoRXA9dF+m9aiY3JPZhsP2ZLoMq4qO13YaUd8fG
-         Gi8wWTUVyT1sGK80I+/g8EKhDWFeyz4ZXkW6h+ZWYxtRpdzq59wSIk2o7OY6no95Am
-         T5Fc/OL406nCg==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Rodrigo Siqueira Jordao <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexdeucher@gmail.com>,
-        Melissa Wen <mwen@igalia.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the amdgpu and
- powerpc-fixes trees
-In-Reply-To: <ff2ea1b1-8039-369b-cc4c-b1d01d5cb02b@amd.com>
-References: <20220726205458.0b5ca446@canb.auug.org.au>
- <87leseabci.fsf@mpe.ellerman.id.au>
- <CADnq5_OkWWO+hNz-n+bw5Wptn3JsfyuXe+ScXYTKwFz6JJf8fQ@mail.gmail.com>
- <ff2ea1b1-8039-369b-cc4c-b1d01d5cb02b@amd.com>
-Date:   Fri, 29 Jul 2022 08:51:51 +1000
-Message-ID: <87v8rgc0l4.fsf@mpe.ellerman.id.au>
+        with ESMTP id S232005AbiG2Bom (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 28 Jul 2022 21:44:42 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90CBE1B7BE;
+        Thu, 28 Jul 2022 18:44:41 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id rq15so31486ejc.10;
+        Thu, 28 Jul 2022 18:44:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=aF9gxkNndIgzxO4AAV2+dCxMOnVAFOcQmkQ7z0dG0LQ=;
+        b=DkPDztBrjKGeUM8fYgh3HSkhbfjiQ1Do2/grF7UQtK9v28BIKg0JZ27vfyJNxRzttm
+         3vXvuKJWjqWpPD0HunGTmKg/NhUka0O07nOS+qJokOgHQPdsQNSmtpx8CNQ5VNJu9GTM
+         K8gFEH2/If39puZptjgci66b3Q5rd3xt58Ic0GZ/UGq7cjIcgzBZmU1KbvsnQzdN+S/5
+         1HtH07umLN1aiAf51mXocMACYoRm+LiMYIM8+N472n3L8bnHd+RNI4OqIh9het/5iGir
+         S8t12mQM6/hq7GEwheCmjTHUdxAy89NucTWTIQHKzq0Qs/+pAhLDR25D55Mp6YyGd3Y2
+         eM4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=aF9gxkNndIgzxO4AAV2+dCxMOnVAFOcQmkQ7z0dG0LQ=;
+        b=dFikAwW/psArOiKHKjuwHR3Um20rXhx7iyBrAns3yxeKoMmKQsSK4GIRPo+TLvVDMJ
+         ZewmAkoTCefJkXQ3PsdaPn53MAv2rsg1weBVppT8glbQVi9dreAQQ191R/RHDA0VwAvT
+         pIhITbRS2SObWcnY9LC0x3Tjk0E4A92tsGPmXjW3fVjlUVOL4AULmbbR9+OB5Unhi/rU
+         Noe3Y9Z1/bWWS0ASiymlR5OdIr104TrMK+7TaAGuK2LOkgDT/30FrhUW8MeC2VRW8CEv
+         HFcJvRexdYK8WWHtzMMmHeQp22cWFCWUsSfC8zaIu1+DSSzu7Lezl2sekIla5U0hChG6
+         R9UA==
+X-Gm-Message-State: AJIora+V3oSFFhsEA6MRIMpPblx4afkFW7X9rkA6tC28N+5GoEPYcLmV
+        j2yCdNz/JxTfQtgl96QMYoLnEevHqcaYpcrM9jXRqhTgjBo=
+X-Google-Smtp-Source: AGRyM1vjQcSp2ZAQaomxl7a1v4biiRSbfuqN2bNchtQAYfANA3sZxwrE0GMkEQoF47S8DtLsOTbRn0bVDeMbcPScxsM=
+X-Received: by 2002:a17:907:2ccc:b0:72b:6907:fce6 with SMTP id
+ hg12-20020a1709072ccc00b0072b6907fce6mr1155919ejc.115.1659059079918; Thu, 28
+ Jul 2022 18:44:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <4A5CBF60-9590-417D-ADE7-7C6FDA8520DB@linux.ibm.com>
+In-Reply-To: <4A5CBF60-9590-417D-ADE7-7C6FDA8520DB@linux.ibm.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 28 Jul 2022 18:44:28 -0700
+Message-ID: <CAEf4BzZPaYzhH6zoJVMrOyJOPOcs19xUkmmw2y0uRFF5Z_eznA@mail.gmail.com>
+Subject: Re: [next-20220721] Build failure powerpc (tools/bpf)
+To:     Sachin Sant <sachinp@linux.ibm.com>
+Cc:     linuxppc-dev@lists.ozlabs.org, Andrii Nakryiko <andrii@kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Rodrigo Siqueira Jordao <Rodrigo.Siqueira@amd.com> writes:
-> Hi Stephen/Michael,
+On Fri, Jul 22, 2022 at 12:04 AM Sachin Sant <sachinp@linux.ibm.com> wrote:
 >
-> I made this fix:
+> next-20220721 build fails on IBM Power server with following error:
 >
-> https://patchwork.freedesktop.org/series/106824/
+> libbpf.c: In function 'bpf_program__attach_ksyscall':
+> libbpf.c:10130:45: error: '%s' directive argument is null [-Werror=format-truncation=]
+>    snprintf(func_name, sizeof(func_name), "__%s_sys_%s",
+>                                              ^~
+> cc1: all warnings being treated as errors
+> make[4]: *** [/home/linux-next/tools/build/Makefile.build:96: /home/linux-next/tools/bpf/resolve_btfids/libbpf/staticobjs/libbpf.o] Error 1
+> make[3]: *** [Makefile:157: /home/linux-next/tools/bpf/resolve_btfids/libbpf/staticobjs/libbpf-in.o] Error 2
+> make[2]: *** [Makefile:55: /home/linux-next/tools/bpf/resolve_btfids//libbpf/libbpf.a] Error 2
+> make[1]: *** [Makefile:76: bpf/resolve_btfids] Error 2
+> make: *** [Makefile:1439: tools/bpf/resolve_btfids] Error 2
 >
-> Could you check if it fixes the issue for you?
+> next-20220719 was good. Git bisect points to following commit
+>
+> Commit 708ac5bea0ce
+>     libbpf: add ksyscall/kretsyscall sections support for syscall kprobes
+>
+>
 
-Thanks that fixes it here.
+This was addressed by [0], thanks for report!
 
-> If so, could you undo your revert?
+  [0] https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/commit/?id=64893e83f916
 
-Stephen is on vacation and not doing linux-next today, so I guess for
-testing you'll have to do a local revert.
-
-cheers
+> Reverting this commit allows me to build the kernel.
+>
+> Have attached .config used for build.
+>
+> - Sachin
+>

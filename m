@@ -2,59 +2,75 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F378585C35
-	for <lists+linux-next@lfdr.de>; Sat, 30 Jul 2022 23:10:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB8C75862AE
+	for <lists+linux-next@lfdr.de>; Mon,  1 Aug 2022 04:36:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232624AbiG3VJ7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 30 Jul 2022 17:09:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38090 "EHLO
+        id S236386AbiHACgt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 31 Jul 2022 22:36:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232244AbiG3VJ7 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 30 Jul 2022 17:09:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA02D65D2;
-        Sat, 30 Jul 2022 14:09:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7122AB80B4E;
-        Sat, 30 Jul 2022 21:09:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20A7FC433C1;
-        Sat, 30 Jul 2022 21:09:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659215395;
-        bh=ePqpEWYI6NuRsWft+lvrNOptjvzOQrmx491q5KinAVw=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=ndyN8CSrdlsjDcPhVIsaxHZ4YEF3xB2rzS/C+brd9fsD3iszC0Rvn4FI0njZ/iqqc
-         gNxXzYaGv21bea0XtXuTmzhCRxFEiuyiosjaEMtBVYy5lQSzwoK7MoDeTnIUdndmsz
-         Ijfl1ATZDneRrXnu6pzsncTcukFhhNxxX79K2Io6XpLzolvDPbEJrY1cxXkXd198Ja
-         6yVI0F4pKdc3QBGxW4deitGpV8te+bZKg+EnKFHhX8RgPGsLF4P4anpu/v0NRRZBHN
-         ZZ8Ylqu2Tj6jjCxok+hL5C5grj9gDg4Y48QeeJLCQjkpz4gf+f0Ft+7tyYXkNwrLHv
-         rEitkSY0gu9Mg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id BB4B05C034F; Sat, 30 Jul 2022 14:09:54 -0700 (PDT)
-Date:   Sat, 30 Jul 2022 14:09:54 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
-        sfr@canb.auug.org.au, harry.wentland@amd.com, sunpeng.li@amd.com,
-        arnd@arndb.de, alexander.deucher@amd.com,
-        linux-next@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: Stack-frame warnings in display_mode_vba_32.c
-Message-ID: <20220730210954.GU2860372@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220730022532.GA1234397@paulmck-ThinkPad-P17-Gen-1>
- <85a49b72-8bb7-b3b3-8a69-2c90cda8079d@igalia.com>
- <20220730051238.GR2860372@paulmck-ThinkPad-P17-Gen-1>
- <80410e6e-838b-fa3d-1f87-710eb3c751c5@roeck-us.net>
+        with ESMTP id S239165AbiHACgs (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 31 Jul 2022 22:36:48 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 389EE631A
+        for <linux-next@vger.kernel.org>; Sun, 31 Jul 2022 19:36:47 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id g12so9379601pfb.3
+        for <linux-next@vger.kernel.org>; Sun, 31 Jul 2022 19:36:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=/btFMtkRWmBmwZL2J5Giju8R89Pj69dl4iEYhrOPPD0=;
+        b=l14ypADMZwmwBX3PPuNnhfhC0pkWgO3nxHo/kcyqcDQQy6USdhzex+seukGsSkiqSF
+         CD7pjPOYfJb33Kd7/A6vDuOlVFJR69nqhta9PCeUDn5y37fM+EkdqrOWOxK0nM364cNI
+         2hS6W+ancz2HhSWKGABkGucgEiskAd7ylplsxyesLdgbKYAGyM0I/K+ZEXPCQJj/GkFL
+         8Y9XaXvYU44xz7LbcwFhfHWp3z3bb1GMR4qPIK58+MeCotpAY7lzMuOK025gYsWI0JgR
+         W00nJkIsFipx8cXltA+pedB7ltCKnQ+3K6ezUJJcMD8vPYZcKGA2QkZCWNkwtVcXUu7k
+         0vXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/btFMtkRWmBmwZL2J5Giju8R89Pj69dl4iEYhrOPPD0=;
+        b=Nn0PaqRG+0oh58bYg1dWNxj6KzLHgEn6uX1CV5IIR3O/t0CM8V5SM+hZxdfi6m6Q2d
+         Et8O01B3VUClJYE8i+JiYht9p4YXJtg/drOfbS/wsnOHz0dtkdDTlq8pViknKzVNb0vs
+         vlgga2n0LPuctOKELLTQmrTwwUlwe5SrffNP/JcqbEdnxoV2R2VZ4MltykCLcCka5t69
+         4Jly0ZuOFiRzTql8QGNLOVgjNb4ZqKXBC1AJePA/YbgydFov1i0jMtb3jTN0BYN3AS0w
+         GqZW9iD/oXVGN3AyEH+tbD/M/H9L5XdBzJiEbMKk04bgxql8N+dyNohOsVOw/fHoMrP+
+         cfdA==
+X-Gm-Message-State: AJIora91aIWax8Rv/DpUjI/E9Dfs4B0EtozuNEF5D8FuBF3sqcQEWJb6
+        kz2d0mTv8sz7iD9TqXByJLpUhA==
+X-Google-Smtp-Source: AGRyM1uWuPpbJThAzj8401hKyu6FavGanE+K+gT78KliFc+nSDEucI4aDKw5IqZW2VO01+cLRobseA==
+X-Received: by 2002:a05:6a00:24c6:b0:52b:ee89:eca9 with SMTP id d6-20020a056a0024c600b0052bee89eca9mr14043056pfv.78.1659321406689;
+        Sun, 31 Jul 2022 19:36:46 -0700 (PDT)
+Received: from localhost ([122.171.18.80])
+        by smtp.gmail.com with ESMTPSA id j11-20020a170902da8b00b0016d1f6d1b99sm8237530plx.49.2022.07.31.19.36.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 31 Jul 2022 19:36:46 -0700 (PDT)
+Date:   Mon, 1 Aug 2022 08:06:36 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mansur Alisha Shaik <mansur@codeaurora.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        regressions@lists.linux.dev, Linux PM <linux-pm@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>
+Subject: Re: WARNING: CPU: 4 PID: 326 at drivers/opp/core.c:2471
+ dev_pm_opp_set_config+0x344/0x620
+Message-ID: <20220801023636.p5ytjqasedpohmdy@vireshk-i7>
+References: <CA+G9fYuGFReF0Z9qj7-80eY0gz-J2C5MVpno_8NjrGSH5_RB0Q@mail.gmail.com>
+ <20220725102711.p6eerjjzgeqi4blu@vireshk-i7>
+ <f914f5c5-dd61-8495-b362-3043406582da@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <80410e6e-838b-fa3d-1f87-710eb3c751c5@roeck-us.net>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <f914f5c5-dd61-8495-b362-3043406582da@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,56 +78,13 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Sat, Jul 30, 2022 at 02:06:10AM -0700, Guenter Roeck wrote:
-> On 7/29/22 22:12, Paul E. McKenney wrote:
-> > On Fri, Jul 29, 2022 at 11:41:55PM -0300, André Almeida wrote:
-> > > Hi Paul,
-> > > 
-> > > Às 23:25 de 29/07/22, Paul E. McKenney escreveu:
-> > > > Hello!
-> > > > 
-> > > > I am seeing the following in allmodconfig builds of recent -next on x86:
-> > > > 
-> > > > drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c: In function ‘DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation’:
-> > > > drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c:1659:1: error: the frame size of 2144 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]
-> > > >   1659 | }
-> > > >        | ^
-> > > > drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c: In function ‘dml32_ModeSupportAndSystemConfigurationFull’:
-> > > > drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c:3799:1: error: the frame size of 2480 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]
-> > > >   3799 | } // ModeSupportAndSystemConfigurationFull
-> > > >        | ^
-> > > 
-> > > I think they are fixed at amd-staging-drm-next:
-> > > 
-> > > git log --oneline amd/amd-staging-drm-next
-> > > drivers/gpu/drm/amd/display/dc/dml/dcn32/display_mode_vba_32.c
-> > > 953daa61981b drm/amd/display: Reduce stack size in the mode support function
-> > > 361e705e712d drm/amd/display: reduce stack for
-> > > dml32_CalculatePrefetchSchedule
-> > > f2dbf5a4dd1e drm/amd/display: reduce stack for
-> > > dml32_CalculateWatermarksMALLUseAndDRAMSpeedChangeSupport
-> > > a0a68cda2ef8 drm/amd/display: reduce stack for dml32_CalculateVMRowAndSwath
-> > > ca6730ca0f01 drm/amd/display: reduce stack for
-> > > dml32_CalculateSwathAndDETConfiguration
-> > > 593eef8c1a5e drm/amd/display: reduce stack size in dcn32 dml (v2)
-> > > 
-> > > https://gitlab.freedesktop.org/agd5f/linux/-/commits/amd-staging-drm-next/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_mode_vba_32.c
-> > 
-> > Very good, thank you!  I will test again on the next -next.
-> > 
+On 25-07-22, 14:55, Stanimir Varbanov wrote:
+> Hi Viresh,
 > 
-> Did you try next-20220728 ?
-> 
-> groeck@server:~/src/linux-next$ git describe
-> next-20220728
-> groeck@server:~/src/linux-next$ git log --oneline drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c
-> 1b54a0121dba drm/amd/display: Reduce stack size in the mode support function
-> 86e4863e67a9 drm/amd/display: reduce stack for dml32_CalculatePrefetchSchedule
-> 3c3abac60117 drm/amd/display: reduce stack for dml32_CalculateWatermarksMALLUseAndDRAMSpeedChangeSupport
-> c3b3f9ba25e6 drm/amd/display: reduce stack for dml32_CalculateVMRowAndSwath
-> bac4b41d917a drm/amd/display: reduce stack for dml32_CalculateSwathAndDETConfiguration
-> 7acc487ab57e drm/amd/display: reduce stack size in dcn32 dml (v2)
+> I can take a look and provide a patch to fix that.
 
-Indeed, next-20220728 does avoid the problem, thank you!
+Any update on this ? I am going to send pull request for 5.20 very soon and it
+would have been much better if this was fixed before I send that.
 
-							Thanx, Paul
+-- 
+viresh

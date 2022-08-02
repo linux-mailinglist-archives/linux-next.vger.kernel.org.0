@@ -2,62 +2,43 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 562F35884CA
-	for <lists+linux-next@lfdr.de>; Wed,  3 Aug 2022 01:39:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B0DD5884F9
+	for <lists+linux-next@lfdr.de>; Wed,  3 Aug 2022 01:59:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230385AbiHBXjA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 2 Aug 2022 19:39:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41960 "EHLO
+        id S233140AbiHBX7Q (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 2 Aug 2022 19:59:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbiHBXi7 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 2 Aug 2022 19:38:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71A9A3DBC6;
-        Tue,  2 Aug 2022 16:38:58 -0700 (PDT)
+        with ESMTP id S232116AbiHBX7P (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 2 Aug 2022 19:59:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A35B1F26;
+        Tue,  2 Aug 2022 16:59:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ED5BA60DDD;
-        Tue,  2 Aug 2022 23:38:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F3DEC433D6;
-        Tue,  2 Aug 2022 23:38:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5EEC3B810B0;
+        Tue,  2 Aug 2022 23:59:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3A64C433D6;
+        Tue,  2 Aug 2022 23:59:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659483537;
-        bh=kE1gCYFgEihzpK3jhHTawC8I47E1q9R6kltPrsYq80w=;
+        s=k20201202; t=1659484752;
+        bh=3zynVtkDTgujG6R3R69iXj5aRl1n7katXwRdfFIKYVU=;
         h=From:To:Cc:Subject:Date:From;
-        b=j1/6I2sWf3sQdLxAFvIV6/Vxf37JTNlTXC1DTgkjJ6okwN15VUKctFDeDUPvMWC9w
-         vKvbpPncM4pr2oI4xnOOJx+iIyrUBlHXlWnjB+TVnFKL/8VEJ0fNQi5+/x+kJiX8w2
-         LzzWI72v/MURZ87qamD81fmnQl4HHwy45RVfkllkYNNHUJZfs+wQXeQNUOjNg07dTZ
-         KS6s/oPUKxdN7ED5fzmW8ESIvUgnqUgEn0L/2Vfo11jEQkP9/6zYuG5gCIf6ioxknY
-         eKLT0U+ygQ1/8PtYGEt8LzaXjUn/9eUr+XCIvT4r9k3eBtiFJCZC3/Wx4ijvkcRT7c
-         4MJ45p3pM14dQ==
+        b=lwQpMzUW187ua3mOPz/2EXN0B423TQ663ztoXSvhJfMLaI8I9ZxFsAwFtWvvux2Fh
+         ZkqEO7RQxMyRzZysyPAWAocJNE61zPnA7Etc93WeRqUpRTwL3DdNaKHCXzaXmDEHX4
+         2M0WpIxZCSc1llZW4YauF95ZNKfpzD4oJFAuBFOd8u8+etcQLkf0e+Zi0MhYlXFKGs
+         /uICmovnkr1CoV3JsFTacYSzZrmnpjqz+vBXV3zy5tWGjfxLrJ44PdqKtc0BpLXt4N
+         hcgr9QQVFZjuim4PV3yuNSJB9DvG9kqSVI5JW/dHW7OxYPO1S7URQhr/PA4dcXC6Va
+         RxI/hgE6WLgDA==
 From:   broonie@kernel.org
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     Adam Bratschi-Kaye <ark.email@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Antonio Terceiro <antonio.terceiro@linaro.org>,
-        =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Boris-Chengbiao Zhou <bobo1239@web.de>,
-        Daniel Xu <dxu@dxuuu.xyz>,
-        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
-        David Gow <davidgow@google.com>,
-        Douglas Su <d0u9.su@outlook.com>, Finn Behrens <me@kloenk.de>,
-        Gary Guo <gary@garyguo.net>,
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     "Jason A . Donenfeld" <Jason@zx2c4.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Miguel Cano <macanroj@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Tiago Lam <tiagolam@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>
-Subject: linux-next: manual merge of the rust tree with the kbuild tree
-Date:   Wed,  3 Aug 2022 00:38:44 +0100
-Message-Id: <20220802233844.2613013-1-broonie@kernel.org>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the bitmap tree with the random tree
+Date:   Wed,  3 Aug 2022 00:59:03 +0100
+Message-Id: <20220802235903.2660083-1-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -72,19 +53,19 @@ X-Mailing-List: linux-next@vger.kernel.org
 
 Hi all,
 
-Today's linux-next merge of the rust tree got a conflict in:
+Today's linux-next merge of the bitmap tree got a conflict in:
 
-  Makefile
+arch/powerpc/include/asm/archrandom.h
 
 between commit:
 
-  a6036a41bffba ("kbuild: drop support for CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE_O3")
+  d349ab99eec7a ("random: handle archrandom with multiple longs")
 
-from the kbuild tree and commit:
+from the random tree and commit:
 
-  fe24902ba8765 ("Kbuild: add Rust support")
+  3e731203153de ("powerpc: drop dependency on <asm/machdep.h> in archrandom.h")
 
-from the rust tree.
+from the bitmap tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -93,37 +74,79 @@ is submitted for merging.  You may also want to consider cooperating
 with the maintainer of the conflicting tree to minimise any particularly
 complex conflicts.
 
-diff --cc Makefile
-index 60a7e3e8b4787,cd1d545f316bc..0000000000000
---- a/Makefile
-+++ b/Makefile
-@@@ -758,10 -819,20 +822,17 @@@ KBUILD_CFLAGS	+= $(call cc-disable-warn
+diff --cc arch/powerpc/include/asm/archrandom.h
+index 564859e6a807c,21def59ef1a68..0000000000000
+--- a/arch/powerpc/include/asm/archrandom.h
++++ b/arch/powerpc/include/asm/archrandom.h
+@@@ -2,22 -2,41 +2,17 @@@
+  #ifndef _ASM_POWERPC_ARCHRANDOM_H
+  #define _ASM_POWERPC_ARCHRANDOM_H
   
-  ifdef CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE
-  KBUILD_CFLAGS += -O2
-+ KBUILD_RUSTFLAGS += -Copt-level=2
- -else ifdef CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE_O3
- -KBUILD_CFLAGS += -O3
- -KBUILD_RUSTFLAGS += -Copt-level=3
-  else ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
-  KBUILD_CFLAGS += -Os
-+ KBUILD_RUSTFLAGS += -Copt-level=s
-  endif
+ -#ifdef CONFIG_ARCH_RANDOM
+ +#include <asm/machdep.h>
   
-+ # Always set `debug-assertions` and `overflow-checks` because their default
-+ # depends on `opt-level` and `debug-assertions`, respectively.
-+ KBUILD_RUSTFLAGS += -Cdebug-assertions=$(if $(CONFIG_RUST_DEBUG_ASSERTIONS),y,n)
-+ KBUILD_RUSTFLAGS += -Coverflow-checks=$(if $(CONFIG_RUST_OVERFLOW_CHECKS),y,n)
-+ 
-  # Tell gcc to never replace conditional load with a non-conditional one
-  ifdef CONFIG_CC_IS_GCC
-  # gcc-10 renamed --param=allow-store-data-races=0 to
-@@@ -1098,7 -1178,7 +1178,8 @@@ export MODULES_NSDEPS := $(extmod_prefi
-  ifeq ($(KBUILD_EXTMOD),)
-  core-y			+= kernel/ certs/ mm/ fs/ ipc/ security/ crypto/
-  core-$(CONFIG_BLOCK)	+= block/
- +core-$(CONFIG_IO_URING)	+= io_uring/
-+ core-$(CONFIG_RUST)	+= rust/
+ -bool __must_check arch_get_random_seed_long(unsigned long *v);
+ -
+ -static inline bool __must_check arch_get_random_long(unsigned long *v)
+ +static inline size_t __must_check arch_get_random_longs(unsigned long *v, size_t max_longs)
+  {
+ -	return false;
+ +	return 0;
+  }
   
-  vmlinux-dirs	:= $(patsubst %/,%,$(filter %/, \
-  		     $(core-y) $(core-m) $(drivers-y) $(drivers-m) \
+- static inline size_t __must_check arch_get_random_seed_longs(unsigned long *v, size_t max_longs)
+ -static inline bool __must_check arch_get_random_int(unsigned int *v)
+--{
+- 	if (max_longs && ppc_md.get_random_seed && ppc_md.get_random_seed(v))
+- 		return 1;
+- 	return 0;
+ -	return false;
+ -}
+ -
+ -
+ -static inline bool __must_check arch_get_random_seed_int(unsigned int *v)
+ -{
+ -	unsigned long val;
+ -	bool rc;
+ -
+ -	rc = arch_get_random_seed_long(&val);
+ -	if (rc)
+ -		*v = val;
+ -
+ -	return rc;
+--}
+ -#endif /* CONFIG_ARCH_RANDOM */
+++size_t __must_check arch_get_random_seed_longs(unsigned long *v, size_t max_longs);
+  
+  #ifdef CONFIG_PPC_POWERNV
+ -int powernv_hwrng_present(void);
+ -int powernv_get_random_long(unsigned long *v);
+ -int powernv_get_random_real_mode(unsigned long *v);
+ -#else
+ -static inline int powernv_hwrng_present(void) { return 0; }
+ -static inline int powernv_get_random_real_mode(unsigned long *v) { return 0; }
+ +int pnv_get_random_long(unsigned long *v);
+  #endif
+  
+  #endif /* _ASM_POWERPC_ARCHRANDOM_H */
+diff --git a/arch/powerpc/kernel/setup-common.c b/arch/powerpc/kernel/setup-common.c
+index 3b1cf9ca4814b..951822145600e 100644
+--- a/arch/powerpc/kernel/setup-common.c
++++ b/arch/powerpc/kernel/setup-common.c
+@@ -172,12 +172,12 @@ void (*pm_power_off)(void);
+ EXPORT_SYMBOL_GPL(pm_power_off);
+ 
+ #ifdef CONFIG_ARCH_RANDOM
+-bool __must_check arch_get_random_seed_long(unsigned long *v)
++size_T __must_check arch_get_random_seed_longs(unsigned long *v, size_t max_longs)
+ {
+-	if (ppc_md.get_random_seed)
+-		return ppc_md.get_random_seed(v);
++	if (max_longs && ppc_md.get_random_seed && ppc_md.get_random_seed(v))
++		return 1;
+ 
+-	return false;
++	return 0;
+ }
+ EXPORT_SYMBOL(arch_get_random_seed_long);
+ 

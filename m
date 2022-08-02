@@ -2,44 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D65FB58824E
-	for <lists+linux-next@lfdr.de>; Tue,  2 Aug 2022 21:11:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 208215882E8
+	for <lists+linux-next@lfdr.de>; Tue,  2 Aug 2022 22:07:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229565AbiHBTLd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 2 Aug 2022 15:11:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40484 "EHLO
+        id S231263AbiHBUHH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 2 Aug 2022 16:07:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiHBTLc (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 2 Aug 2022 15:11:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904A252450;
-        Tue,  2 Aug 2022 12:11:31 -0700 (PDT)
+        with ESMTP id S231130AbiHBUHH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 2 Aug 2022 16:07:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0A1552455;
+        Tue,  2 Aug 2022 13:07:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2AE3A61458;
-        Tue,  2 Aug 2022 19:11:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ADC1C433D6;
-        Tue,  2 Aug 2022 19:11:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9AF08B8205F;
+        Tue,  2 Aug 2022 20:07:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE374C433C1;
+        Tue,  2 Aug 2022 20:07:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659467490;
-        bh=AdagszibE5bt3ilsNkn8aJFKv00GWBMAz4V1vX8QZUk=;
+        s=k20201202; t=1659470823;
+        bh=HwCCgESqSTo/2CN28EWAYXXLjrse6e9dUQkjjom2q+M=;
         h=From:To:Cc:Subject:Date:From;
-        b=EGvP9sDLBDkfd8Qs68lGvlJMSMWICuZUvJQxrvbXZri0BWiVW6T5Nb5FyoPJndzSm
-         8OFsnrXFeWBAlh7yUboluixTabw7jbQ1r8swN3E9h7P6YZgk0NyTTPtPIRt40HMEKA
-         k6yWrs0GO82KhXl2Mf8no2xGgUw8c2AuYVbDkWnVDJ4YKpP0CxHr5NS+wqihi5fAp8
-         36KW0rKzuzSt9CuaeQOzehyP1uajPjupcJ7oS82CPheuSixvPIbq5kliwyhh6Isu/j
-         TVen354FA8JyunNF0F6BQPkNbi5uHz5yMbcaU8N17kJVe9AcMuYmj0F577QYy7f3qm
-         En8dSVcYuvMnA==
+        b=mfDIeQT+Iu2H0brjp1DrXu6A3zhjPEh/l5DPTIwo/nvPaOMOWSDgHSEL8Ubye6+cI
+         lnzNEd2GvHY1k6P4wpip0k229b5O/qrhqt7o5RP0Idiu3EcA2QrPaLoEThFnaafVqt
+         X56WfBhqYmSz2OGgZMkKPTOzo07EguGA0omO7OeMHC1nJzz81de06Mt2vB9///TLLN
+         9VGpIZ42XaFUreDLhp0H7m4yuuObTRRsNXGjMZyJ9N7Xl0HFLWGxY1bz7AMO5ia7/2
+         d12o7pvtD49M4R8Zc0JT70TBL9dHjXT+Gev94pWBiFkVDd3ljjT5/o+dTSVvH61ak3
+         gmHNV4ArRvFng==
 From:   broonie@kernel.org
-To:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>
-Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Greg KH <greg@kroah.com>, Douglas Anderson <dianders@chromium.org>,
+        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Thomas Huth <thuth@redhat.com>
-Subject: linux-next: manual merge of the kvm tree with the kvms390-fixes tree
-Date:   Tue,  2 Aug 2022 20:11:24 +0100
-Message-Id: <20220802191124.1985308-1-broonie@kernel.org>
+        linux-serial@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: linux-next: build failure after merge of the tty tree
+Date:   Tue,  2 Aug 2022 21:06:49 +0100
+Message-Id: <20220802200649.2122084-1-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -54,86 +54,64 @@ X-Mailing-List: linux-next@vger.kernel.org
 
 Hi all,
 
-Today's linux-next merge of the kvm tree got a conflict in:
+After merging the tty tree, today's linux-next build (x86 allmodconfig)
+failed like this:
 
-  tools/testing/selftests/kvm/s390x/tprot.c
+In file included from /tmp/next/build/include/linux/device.h:15,
+                 from /tmp/next/build/include/linux/node.h:18,
+                 from /tmp/next/build/include/linux/cpu.h:17,
+                 from /tmp/next/build/include/linux/of_device.h:5,
+                 from /tmp/next/build/drivers/tty/serial/qcom_geni_serial.c:14:
+/tmp/next/build/drivers/tty/serial/qcom_geni_serial.c: In function 'qcom_geni_serial_set_termios':
+/tmp/next/build/drivers/tty/serial/qcom_geni_serial.c:1039:4: error: format '%lu' expects argument of type 'long unsigned int', but argument 3 has type 'unsigned int' [-Werror=format=]
+ 1039 |    "Couldn't find suitable clock rate for %lu\n",
+      |    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/tmp/next/build/include/linux/dev_printk.h:110:16: note: in definition of macro 'dev_printk_index_wrap'
+  110 |   _p_func(dev, fmt, ##__VA_ARGS__);   \
+      |                ^~~
+/tmp/next/build/include/linux/dev_printk.h:144:49: note: in expansion of macro 'dev_fmt'
+  144 |  dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+      |                                                 ^~~~~~~
+/tmp/next/build/drivers/tty/serial/qcom_geni_serial.c:1038:3: note: in expansion of macro 'dev_err'
+ 1038 |   dev_err(port->se.dev,
+      |   ^~~~~~~
+/tmp/next/build/drivers/tty/serial/qcom_geni_serial.c:1039:45: note: format string is defined here
+ 1039 |    "Couldn't find suitable clock rate for %lu\n",
+      |                                           ~~^
+      |                                             |
+      |                                             long unsigned int
+      |                                           %u
+In file included from /tmp/next/build/include/linux/printk.h:573,
+                 from /tmp/next/build/include/linux/kernel.h:29,
+                 from /tmp/next/build/include/linux/clk.h:13,
+                 from /tmp/next/build/drivers/tty/serial/qcom_geni_serial.c:7:
+/tmp/next/build/drivers/tty/serial/qcom_geni_serial.c:1044:24: error: format '%lu' expects argument of type 'long unsigned int', but argument 4 has type 'unsigned int' [-Werror=format=]
+ 1044 |  dev_dbg(port->se.dev, "desired_rate-%lu, clk_rate-%lu, clk_div-%u\n",
+      |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/tmp/next/build/include/linux/dynamic_debug.h:134:15: note: in definition of macro '__dynamic_func_call'
+  134 |   func(&id, ##__VA_ARGS__);  \
+      |               ^~~~~~~~~~~
+/tmp/next/build/include/linux/dynamic_debug.h:166:2: note: in expansion of macro '_dynamic_func_call'
+  166 |  _dynamic_func_call(fmt,__dynamic_dev_dbg,   \
+      |  ^~~~~~~~~~~~~~~~~~
+/tmp/next/build/include/linux/dev_printk.h:155:2: note: in expansion of macro 'dynamic_dev_dbg'
+  155 |  dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+      |  ^~~~~~~~~~~~~~~
+/tmp/next/build/include/linux/dev_printk.h:155:23: note: in expansion of macro 'dev_fmt'
+  155 |  dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+      |                       ^~~~~~~
+/tmp/next/build/drivers/tty/serial/qcom_geni_serial.c:1044:2: note: in expansion of macro 'dev_dbg'
+ 1044 |  dev_dbg(port->se.dev, "desired_rate-%lu, clk_rate-%lu, clk_div-%u\n",
+      |  ^~~~~~~
+/tmp/next/build/drivers/tty/serial/qcom_geni_serial.c:1044:40: note: format string is defined here
+ 1044 |  dev_dbg(port->se.dev, "desired_rate-%lu, clk_rate-%lu, clk_div-%u\n",
+      |                                      ~~^
+      |                                        |
+      |                                        long unsigned int
+      |                                      %u
 
-between commit:
+Caused by commit
 
-  fd35ba6add67a ("KVM: s390: selftests: Use TAP interface in the tprot test")
+  c474c775716edd46a5 ("tty: serial: qcom-geni-serial: Fix get_clk_div_rate() which otherwise could return a sub-optimal clock rate.")
 
-from the kvms390-fixes tree and commit:
-
-  0c073227df505 ("KVM: s390: selftests: Use TAP interface in the tprot test")
-
-and subsequent commits from the kvm tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-diff --cc tools/testing/selftests/kvm/s390x/memop.c
-index e704c6fa5758e,9113696d5178a..0000000000000
---- a/tools/testing/selftests/kvm/s390x/memop.c
-+++ b/tools/testing/selftests/kvm/s390x/memop.c
-diff --cc tools/testing/selftests/kvm/s390x/resets.c
-index 889449a22e7ad,19486084eb309..0000000000000
---- a/tools/testing/selftests/kvm/s390x/resets.c
-+++ b/tools/testing/selftests/kvm/s390x/resets.c
-diff --cc tools/testing/selftests/kvm/s390x/tprot.c
-index 14d74a9e7b3d4,a9a0b76e5fa45..0000000000000
---- a/tools/testing/selftests/kvm/s390x/tprot.c
-+++ b/tools/testing/selftests/kvm/s390x/tprot.c
-@@@ -183,30 -181,29 +181,35 @@@ static void guest_code(void
-  	GUEST_SYNC(perform_next_stage(&i, mapped_0));
-  }
-  
-- #define HOST_SYNC_NO_TAP(vmp, stage)						\
-- ({										\
-- 	struct kvm_vm *__vm = (vmp);						\
-- 	struct ucall uc;							\
-- 	int __stage = (stage);							\
-- 										\
-- 	vcpu_run(__vm, VCPU_ID);						\
-- 	get_ucall(__vm, VCPU_ID, &uc);						\
-- 	if (uc.cmd == UCALL_ABORT) {						\
-- 		TEST_FAIL("line %lu: %s, hints: %lu, %lu", uc.args[1],		\
-- 			  (const char *)uc.args[0], uc.args[2], uc.args[3]);	\
-- 	}									\
-- 	ASSERT_EQ(uc.cmd, UCALL_SYNC);						\
-- 	ASSERT_EQ(uc.args[1], __stage);						\
-+ #define HOST_SYNC_NO_TAP(vcpup, stage)				\
-+ ({								\
-+ 	struct kvm_vcpu *__vcpu = (vcpup);			\
-+ 	struct ucall uc;					\
-+ 	int __stage = (stage);					\
-+ 								\
-+ 	vcpu_run(__vcpu);					\
-+ 	get_ucall(__vcpu, &uc);					\
-+ 	if (uc.cmd == UCALL_ABORT)				\
-+ 		REPORT_GUEST_ASSERT_2(uc, "hints: %lu, %lu");	\
-+ 	ASSERT_EQ(uc.cmd, UCALL_SYNC);				\
-+ 	ASSERT_EQ(uc.args[1], __stage);				\
-+ })
-+ 
-+ #define HOST_SYNC(vcpu, stage)			\
-+ ({						\
-+ 	HOST_SYNC_NO_TAP(vcpu, stage);		\
-+ 	ksft_test_result_pass("" #stage "\n");	\
-  })
-  
- +#define HOST_SYNC(vmp, stage)			\
- +({						\
- +	HOST_SYNC_NO_TAP(vmp, stage);		\
- +	ksft_test_result_pass("" #stage "\n");	\
- +})
- +
-  int main(int argc, char *argv[])
-  {
-+ 	struct kvm_vcpu *vcpu;
-  	struct kvm_vm *vm;
-  	struct kvm_run *run;
-  	vm_vaddr_t guest_0_page;
+I have used the tree from 20220727 instead.

@@ -2,36 +2,37 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5F76587403
-	for <lists+linux-next@lfdr.de>; Tue,  2 Aug 2022 00:36:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA8D5587E87
+	for <lists+linux-next@lfdr.de>; Tue,  2 Aug 2022 17:04:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235434AbiHAWgm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 1 Aug 2022 18:36:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47390 "EHLO
+        id S236358AbiHBPEw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 2 Aug 2022 11:04:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232527AbiHAWgm (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 1 Aug 2022 18:36:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82A72474C2;
-        Mon,  1 Aug 2022 15:36:41 -0700 (PDT)
+        with ESMTP id S233060AbiHBPEv (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 2 Aug 2022 11:04:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D21237F4;
+        Tue,  2 Aug 2022 08:04:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D36360E74;
-        Mon,  1 Aug 2022 22:36:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4BA4C433D6;
-        Mon,  1 Aug 2022 22:36:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3E144B81F2C;
+        Tue,  2 Aug 2022 15:04:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 404B0C433C1;
+        Tue,  2 Aug 2022 15:04:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659393400;
-        bh=9JcV2Q8bWTkqF5wLFIVQqKEZQK5g+SQKeAUa9wTSna4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=aaMkcyp8Z3oMKRU20Cx4NyvY1XiEb1rsN5sSHyAWp+FU4zCHgIuJm4gKB0pu1nwim
-         sBse/O8TqWuavA5cppkOgj3824ZhTEumiVSrDrcBPqLttK/v33kXEWDCE0s1m9LaRl
-         AvnmWSO7I97YcfdEGIYwdREwav5AdcOqkqgV1oGytk8HGKw99fYJX9hXPDnTsck0Uv
-         jkZs4rggg/4/QIPLi059giGYjKH/lU92MHBL0IlKoLWzf5IVmUWQikE7CNl/FAzJQb
-         /aeFWQlOmYECJ37qMt3B/DQI5+KaKhpDi1dR70Egih9TcNcqEBBq+s9F9fpbKMXGvy
-         776nnQ2jS0fGQ==
-From:   broonie@kernel.org
+        s=k20201202; t=1659452688;
+        bh=iyTtJVEbln6OfBEVVllx/EGPV3y1Caz+SHF557VpTv8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Dp9q/XY4lvbNEjHTYjCxcYnlj7wSKJXBcKCh/vyk9m8CdB4UfxGV7lKtoh3vCd+SU
+         cuMWfGtJ/QpArlVzqLXdj4vfTGmWSAZcHXNv7hza3qeTBHc8taBkWgGR4O+25qaHeI
+         ntImp3rsukD6DwJLbLwaei0hao14DUQqtSMrX+V7ixxaX4rIJnnsyRe4WBkM/dR+jb
+         puvKh1Qvh/MKZyWAfg8hmvuoe9av+F3O7tpMdq9cpdcsTX03ixs9h4XH0LbrkdJ/9F
+         vdkdhSIZNEb/4SID5wBGYTH2fiIR4kMu0vRmC3C6twtE0y7QOVUuPIBeHjh0rXQCxi
+         FynKhgCkmnogw==
+Date:   Tue, 2 Aug 2022 16:04:43 +0100
+From:   Mark Brown <broonie@kernel.org>
 To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
         Zhang Rui <rui.zhang@intel.com>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
@@ -40,12 +41,15 @@ Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         linux-samsung-soc@vger.kernel.org
-Subject: linux-next: build failure after merge of the thermal tree
-Date:   Mon,  1 Aug 2022 23:35:09 +0100
-Message-Id: <20220801223509.3613888-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+Subject: Re: linux-next: build failure after merge of the thermal tree
+Message-ID: <Yuk9C07obs+uPQJ6@sirena.org.uk>
+References: <20220801223509.3613888-1-broonie@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="WFXrVHyTCSFT868G"
+Content-Disposition: inline
+In-Reply-To: <20220801223509.3613888-1-broonie@kernel.org>
+X-Cookie: Stay on the trail.
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -55,25 +59,36 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi all,
 
-After merging the thermal tree, today's linux-next build (x86
-allmodconfig) failed like this:
+--WFXrVHyTCSFT868G
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-/tmp/next/build/drivers/thermal/samsung/exynos_tmu.c:753:44: warning: 'struct thermal_zone' declared inside parameter list will not be visible outside of this definition or declaration
-  753 | static int exynos_tmu_set_emulation(struct thermal_zone *tz, int temp)
-      |                                            ^~~~~~~~~~~~
-/tmp/next/build/drivers/thermal/samsung/exynos_tmu.c:1002:19: error: initialization of 'int (*)(struct thermal_zone_device *, int)' from incompatible pointer type 'int (*)(struct thermal_zone *, int)' [-Werror=incompatible-pointer-types]
- 1002 |  .set_emul_temp = exynos_tmu_set_emulation,
-      |                   ^~~~~~~~~~~~~~~~~~~~~~~~
-/tmp/next/build/drivers/thermal/samsung/exynos_tmu.c:1002:19: note: (near initialization for 'exynos_sensor_ops.set_emul_temp')
-cc1: some warnings being treated as errors
+On Mon, Aug 01, 2022 at 11:35:09PM +0100, broonie@kernel.org wrote:
 
-Caused by commit
+> After merging the thermal tree, today's linux-next build (x86
+> allmodconfig) failed like this:
 
-  a5e9a144258bf898 ("thermal/drivers/samsung: Switch to new of thermal API")
+...
 
-which looks like it missed some conversions.
+> I'll figure out how to handle this tomorrow since I don't expect to
+> release today, I'm just droping the tree for now.
 
-I'll figure out how to handle this tomorrow since I don't expect to
-release today, I'm just droping the tree for now.
+The error persists, I have used the thermal tree from 20220828 instead.
+
+--WFXrVHyTCSFT868G
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLpPQoACgkQJNaLcl1U
+h9A1Twf/dizOI1Kgx43C5jAQoQzqH07HH6V5lnCkKLeiCJmN+0dGXvB2OmUiEQ0g
+rHjZTnLOc7cCLkIAXKyoiNCL9fKMGfxzcYlQfBxuKInMRgO7ko6WiDw1qFde5AtO
+Vryq/p8Sxn6JI1GypnU5wbwYN5zcaRxRPphmmph6oiL3XzDB+4VjVhcnj2V25TFR
+G6qbXb15xUO8EosODrmHCfqrGJY4MqjPv1tW6zXKFcLTNge1XPwEC7p8b1PBoC4s
+1umf5Di3RixE9WhNw9ydXJBXbYMltMr/HnUAYhQQa9ug/iHj8XcNg7D3o0A+eouM
+/HPTsb2oNXlz6n2ch3GjCPWrh4kz0g==
+=umee
+-----END PGP SIGNATURE-----
+
+--WFXrVHyTCSFT868G--

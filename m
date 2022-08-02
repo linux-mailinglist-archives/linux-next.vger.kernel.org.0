@@ -2,102 +2,138 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DEC9587EE5
-	for <lists+linux-next@lfdr.de>; Tue,  2 Aug 2022 17:19:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D65FB58824E
+	for <lists+linux-next@lfdr.de>; Tue,  2 Aug 2022 21:11:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237028AbiHBPTx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 2 Aug 2022 11:19:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58504 "EHLO
+        id S229565AbiHBTLd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 2 Aug 2022 15:11:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234847AbiHBPTu (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 2 Aug 2022 11:19:50 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C25A64C3
-        for <linux-next@vger.kernel.org>; Tue,  2 Aug 2022 08:19:48 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id l4so18323192wrm.13
-        for <linux-next@vger.kernel.org>; Tue, 02 Aug 2022 08:19:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=9wz2CvGTjf8QzBB82tcH4XUVcMY9Pl6sf5DDXzMIIqk=;
-        b=TmKcSuxNlNa/PWpgVvm08qnSw+ZTD4TnRIVW6wZ+IEOdN/43XukzrWpDaygWqDBy5q
-         sBF+TxrWN0OKcB17GOa9DPcZQ4Y3tAaLFHDbcK+1kyesZZ8zwmpHFDa6Q9FNPUufuqkm
-         7a7LfJWVBR5doTcZxKGIOCTwvKQAs1jdOxnhe460fQ0DP0LKLKYZsyiP2C6vOMr6G86h
-         tKgyDEyZI5Fs1vFhr3BpFpVEW8TzwCfOv1U6EplLR6Py6Vgr6XQT1rlmWL54IOT1xMl6
-         l/LgnsRxqDQpoCarXwudn9T1TuS7ERWkBjAshBbxyDEO45g/sU+OIPqDRA0yRdHE/DKX
-         F6YQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=9wz2CvGTjf8QzBB82tcH4XUVcMY9Pl6sf5DDXzMIIqk=;
-        b=j4QnDCDYrMIq22+ssG9e58RwQj4OBRuSF0pOSmNsu+o3gN+FzWN1WkU1H8uGCup9LF
-         e2zwJT4wKkKWKaRIjmOXBZ1zZpZ0qwTZpY1SSjSFeDRKDkzOjB2v1kY0agmJLBPu36ns
-         zY/ZjenIiqtNPAJ5YxZhrip1CuVDpBAjki92MK2u5ZbAK+w5GfTnmkW5pmmCl7td/D3w
-         tPhBr9pKpjnMP1LTk0xWv7KoOgwf9/jD8XEp12LsAs2QNGxzWiid9gHOmhtbCn4uSKSM
-         sqN1YGdmj2Ln8F5j1aua4P1E49MDaYbhb4ivpMbDA+zMhkdnPwfiTTQrqkK78RLCYXNT
-         rNhQ==
-X-Gm-Message-State: ACgBeo1KPb+sk9/ILYiWiXdj9qA1DsORalvYN7WXzBU0FZF/wvCvU675
-        gsmip2q62gGce83mpphabZmx8A==
-X-Google-Smtp-Source: AA6agR4t+h+O/wQAjvChvhMSKy6O5GiaDLGg/+u3TEG1q1mEY5E+NT7y16s5WqcK3e8dcHFVwpYJAA==
-X-Received: by 2002:a05:6000:15c8:b0:220:6362:e578 with SMTP id y8-20020a05600015c800b002206362e578mr6153301wry.68.1659453586849;
-        Tue, 02 Aug 2022 08:19:46 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:3da5:bc9a:ba8f:a5af? ([2a05:6e02:1041:c10:3da5:bc9a:ba8f:a5af])
-        by smtp.googlemail.com with ESMTPSA id h23-20020a05600c145700b003a35ec4bf4fsm19206473wmi.20.2022.08.02.08.19.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Aug 2022 08:19:46 -0700 (PDT)
-Message-ID: <60071751-1333-6e3d-cdaf-60b865ebe813@linaro.org>
-Date:   Tue, 2 Aug 2022 17:19:45 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: linux-next: build failure after merge of the thermal tree
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>, Zhang Rui <rui.zhang@intel.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        with ESMTP id S229450AbiHBTLc (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 2 Aug 2022 15:11:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904A252450;
+        Tue,  2 Aug 2022 12:11:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2AE3A61458;
+        Tue,  2 Aug 2022 19:11:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ADC1C433D6;
+        Tue,  2 Aug 2022 19:11:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659467490;
+        bh=AdagszibE5bt3ilsNkn8aJFKv00GWBMAz4V1vX8QZUk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=EGvP9sDLBDkfd8Qs68lGvlJMSMWICuZUvJQxrvbXZri0BWiVW6T5Nb5FyoPJndzSm
+         8OFsnrXFeWBAlh7yUboluixTabw7jbQ1r8swN3E9h7P6YZgk0NyTTPtPIRt40HMEKA
+         k6yWrs0GO82KhXl2Mf8no2xGgUw8c2AuYVbDkWnVDJ4YKpP0CxHr5NS+wqihi5fAp8
+         36KW0rKzuzSt9CuaeQOzehyP1uajPjupcJ7oS82CPheuSixvPIbq5kliwyhh6Isu/j
+         TVen354FA8JyunNF0F6BQPkNbi5uHz5yMbcaU8N17kJVe9AcMuYmj0F577QYy7f3qm
+         En8dSVcYuvMnA==
+From:   broonie@kernel.org
+To:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>
+Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-samsung-soc@vger.kernel.org
-References: <20220801223509.3613888-1-broonie@kernel.org>
- <Yuk9C07obs+uPQJ6@sirena.org.uk>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <Yuk9C07obs+uPQJ6@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Thomas Huth <thuth@redhat.com>
+Subject: linux-next: manual merge of the kvm tree with the kvms390-fixes tree
+Date:   Tue,  2 Aug 2022 20:11:24 +0100
+Message-Id: <20220802191124.1985308-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 02/08/2022 17:04, Mark Brown wrote:
-> On Mon, Aug 01, 2022 at 11:35:09PM +0100, broonie@kernel.org wrote:
-> 
->> After merging the thermal tree, today's linux-next build (x86
->> allmodconfig) failed like this:
-> 
-> ...
-> 
->> I'll figure out how to handle this tomorrow since I don't expect to
->> release today, I'm just droping the tree for now.
-> 
-> The error persists, I have used the thermal tree from 20220828 instead.
+Hi all,
 
-I've fixed the issue, I'll push the branch in a moment
+Today's linux-next merge of the kvm tree got a conflict in:
 
+  tools/testing/selftests/kvm/s390x/tprot.c
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+between commit:
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+  fd35ba6add67a ("KVM: s390: selftests: Use TAP interface in the tprot test")
+
+from the kvms390-fixes tree and commit:
+
+  0c073227df505 ("KVM: s390: selftests: Use TAP interface in the tprot test")
+
+and subsequent commits from the kvm tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+diff --cc tools/testing/selftests/kvm/s390x/memop.c
+index e704c6fa5758e,9113696d5178a..0000000000000
+--- a/tools/testing/selftests/kvm/s390x/memop.c
++++ b/tools/testing/selftests/kvm/s390x/memop.c
+diff --cc tools/testing/selftests/kvm/s390x/resets.c
+index 889449a22e7ad,19486084eb309..0000000000000
+--- a/tools/testing/selftests/kvm/s390x/resets.c
++++ b/tools/testing/selftests/kvm/s390x/resets.c
+diff --cc tools/testing/selftests/kvm/s390x/tprot.c
+index 14d74a9e7b3d4,a9a0b76e5fa45..0000000000000
+--- a/tools/testing/selftests/kvm/s390x/tprot.c
++++ b/tools/testing/selftests/kvm/s390x/tprot.c
+@@@ -183,30 -181,29 +181,35 @@@ static void guest_code(void
+  	GUEST_SYNC(perform_next_stage(&i, mapped_0));
+  }
+  
+- #define HOST_SYNC_NO_TAP(vmp, stage)						\
+- ({										\
+- 	struct kvm_vm *__vm = (vmp);						\
+- 	struct ucall uc;							\
+- 	int __stage = (stage);							\
+- 										\
+- 	vcpu_run(__vm, VCPU_ID);						\
+- 	get_ucall(__vm, VCPU_ID, &uc);						\
+- 	if (uc.cmd == UCALL_ABORT) {						\
+- 		TEST_FAIL("line %lu: %s, hints: %lu, %lu", uc.args[1],		\
+- 			  (const char *)uc.args[0], uc.args[2], uc.args[3]);	\
+- 	}									\
+- 	ASSERT_EQ(uc.cmd, UCALL_SYNC);						\
+- 	ASSERT_EQ(uc.args[1], __stage);						\
++ #define HOST_SYNC_NO_TAP(vcpup, stage)				\
++ ({								\
++ 	struct kvm_vcpu *__vcpu = (vcpup);			\
++ 	struct ucall uc;					\
++ 	int __stage = (stage);					\
++ 								\
++ 	vcpu_run(__vcpu);					\
++ 	get_ucall(__vcpu, &uc);					\
++ 	if (uc.cmd == UCALL_ABORT)				\
++ 		REPORT_GUEST_ASSERT_2(uc, "hints: %lu, %lu");	\
++ 	ASSERT_EQ(uc.cmd, UCALL_SYNC);				\
++ 	ASSERT_EQ(uc.args[1], __stage);				\
++ })
++ 
++ #define HOST_SYNC(vcpu, stage)			\
++ ({						\
++ 	HOST_SYNC_NO_TAP(vcpu, stage);		\
++ 	ksft_test_result_pass("" #stage "\n");	\
+  })
+  
+ +#define HOST_SYNC(vmp, stage)			\
+ +({						\
+ +	HOST_SYNC_NO_TAP(vmp, stage);		\
+ +	ksft_test_result_pass("" #stage "\n");	\
+ +})
+ +
+  int main(int argc, char *argv[])
+  {
++ 	struct kvm_vcpu *vcpu;
+  	struct kvm_vm *vm;
+  	struct kvm_run *run;
+  	vm_vaddr_t guest_0_page;

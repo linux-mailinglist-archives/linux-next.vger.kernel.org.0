@@ -2,49 +2,48 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B0DD5884F9
-	for <lists+linux-next@lfdr.de>; Wed,  3 Aug 2022 01:59:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FBA258853F
+	for <lists+linux-next@lfdr.de>; Wed,  3 Aug 2022 03:03:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233140AbiHBX7Q (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 2 Aug 2022 19:59:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55528 "EHLO
+        id S233568AbiHCBDg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 2 Aug 2022 21:03:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232116AbiHBX7P (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 2 Aug 2022 19:59:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A35B1F26;
-        Tue,  2 Aug 2022 16:59:14 -0700 (PDT)
+        with ESMTP id S229631AbiHCBDf (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 2 Aug 2022 21:03:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B3AF51A20;
+        Tue,  2 Aug 2022 18:03:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5EEC3B810B0;
-        Tue,  2 Aug 2022 23:59:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3A64C433D6;
-        Tue,  2 Aug 2022 23:59:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BBFCFB810B0;
+        Wed,  3 Aug 2022 01:03:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEC8CC433D6;
+        Wed,  3 Aug 2022 01:03:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659484752;
-        bh=3zynVtkDTgujG6R3R69iXj5aRl1n7katXwRdfFIKYVU=;
+        s=k20201202; t=1659488611;
+        bh=7w4Dyur9noVacYI2xbunChed9UXqfXV8yWPOuwSLVxA=;
         h=From:To:Cc:Subject:Date:From;
-        b=lwQpMzUW187ua3mOPz/2EXN0B423TQ663ztoXSvhJfMLaI8I9ZxFsAwFtWvvux2Fh
-         ZkqEO7RQxMyRzZysyPAWAocJNE61zPnA7Etc93WeRqUpRTwL3DdNaKHCXzaXmDEHX4
-         2M0WpIxZCSc1llZW4YauF95ZNKfpzD4oJFAuBFOd8u8+etcQLkf0e+Zi0MhYlXFKGs
-         /uICmovnkr1CoV3JsFTacYSzZrmnpjqz+vBXV3zy5tWGjfxLrJ44PdqKtc0BpLXt4N
-         hcgr9QQVFZjuim4PV3yuNSJB9DvG9kqSVI5JW/dHW7OxYPO1S7URQhr/PA4dcXC6Va
-         RxI/hgE6WLgDA==
+        b=URLI4lCs7bA3y7gBpj+H/jt63+bXnxw8biWjJZVACABO26BtY+6AB/MwzRvzVaKCk
+         utX9SgA0xvvQJ4SDpXidd8UTTufkyHFMBWvk6viLX/sMLra1z/JMYYvVltq/fjkzpW
+         NDPIubeRTmF5COl27UpqVnx4MgSA4NtKXkA0QJgSIW6a/7JJ3oLcoDaPV/j9VR3uX5
+         nb1orxtMcjMD9gOb8NKW57emnk+HR9/mQHScfRLNfPkhICXYVAa7vv3JMwDDSxZO/D
+         3+Vz8ffAdYWDmBVt5a0l9z0r79Oq5Vi/7PP/P6ADvvzSEeahBMxpGnMXsODyHXrO8N
+         7C6E1hF5NLt8A==
 From:   broonie@kernel.org
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     "Jason A . Donenfeld" <Jason@zx2c4.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the bitmap tree with the random tree
-Date:   Wed,  3 Aug 2022 00:59:03 +0100
-Message-Id: <20220802235903.2660083-1-broonie@kernel.org>
+To:     Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: Tree for Aug 2
+Date:   Wed,  3 Aug 2022 02:03:26 +0100
+Message-Id: <20220803010326.2814276-1-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        LOCALPART_IN_SUBJECT,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -53,100 +52,50 @@ X-Mailing-List: linux-next@vger.kernel.org
 
 Hi all,
 
-Today's linux-next merge of the bitmap tree got a conflict in:
+Changes since 20220728:
 
-arch/powerpc/include/asm/archrandom.h
+The hid tree gained a build failure which I fixed up.
 
-between commit:
+The thermal tree gained a build failure, I used the version from 20220728
+instead.
 
-  d349ab99eec7a ("random: handle archrandom with multiple longs")
+The net-next tree gained a conflict against the net tree.
 
-from the random tree and commit:
+The kvm tree gained a conflict with the kvms390-fixes tree.
 
-  3e731203153de ("powerpc: drop dependency on <asm/machdep.h> in archrandom.h")
+The pinctrl tree gained a build failure for which I reverted a commit.
 
-from the bitmap tree.
+Non-merge commits (relative to Linus' tree): 12734
+ 12594 files changed, 1319236 insertions(+), 278745 deletions(-)
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+----------------------------------------------------------------------------
 
-diff --cc arch/powerpc/include/asm/archrandom.h
-index 564859e6a807c,21def59ef1a68..0000000000000
---- a/arch/powerpc/include/asm/archrandom.h
-+++ b/arch/powerpc/include/asm/archrandom.h
-@@@ -2,22 -2,41 +2,17 @@@
-  #ifndef _ASM_POWERPC_ARCHRANDOM_H
-  #define _ASM_POWERPC_ARCHRANDOM_H
-  
- -#ifdef CONFIG_ARCH_RANDOM
- +#include <asm/machdep.h>
-  
- -bool __must_check arch_get_random_seed_long(unsigned long *v);
- -
- -static inline bool __must_check arch_get_random_long(unsigned long *v)
- +static inline size_t __must_check arch_get_random_longs(unsigned long *v, size_t max_longs)
-  {
- -	return false;
- +	return 0;
-  }
-  
-- static inline size_t __must_check arch_get_random_seed_longs(unsigned long *v, size_t max_longs)
- -static inline bool __must_check arch_get_random_int(unsigned int *v)
---{
-- 	if (max_longs && ppc_md.get_random_seed && ppc_md.get_random_seed(v))
-- 		return 1;
-- 	return 0;
- -	return false;
- -}
- -
- -
- -static inline bool __must_check arch_get_random_seed_int(unsigned int *v)
- -{
- -	unsigned long val;
- -	bool rc;
- -
- -	rc = arch_get_random_seed_long(&val);
- -	if (rc)
- -		*v = val;
- -
- -	return rc;
---}
- -#endif /* CONFIG_ARCH_RANDOM */
-++size_t __must_check arch_get_random_seed_longs(unsigned long *v, size_t max_longs);
-  
-  #ifdef CONFIG_PPC_POWERNV
- -int powernv_hwrng_present(void);
- -int powernv_get_random_long(unsigned long *v);
- -int powernv_get_random_real_mode(unsigned long *v);
- -#else
- -static inline int powernv_hwrng_present(void) { return 0; }
- -static inline int powernv_get_random_real_mode(unsigned long *v) { return 0; }
- +int pnv_get_random_long(unsigned long *v);
-  #endif
-  
-  #endif /* _ASM_POWERPC_ARCHRANDOM_H */
-diff --git a/arch/powerpc/kernel/setup-common.c b/arch/powerpc/kernel/setup-common.c
-index 3b1cf9ca4814b..951822145600e 100644
---- a/arch/powerpc/kernel/setup-common.c
-+++ b/arch/powerpc/kernel/setup-common.c
-@@ -172,12 +172,12 @@ void (*pm_power_off)(void);
- EXPORT_SYMBOL_GPL(pm_power_off);
- 
- #ifdef CONFIG_ARCH_RANDOM
--bool __must_check arch_get_random_seed_long(unsigned long *v)
-+size_T __must_check arch_get_random_seed_longs(unsigned long *v, size_t max_longs)
- {
--	if (ppc_md.get_random_seed)
--		return ppc_md.get_random_seed(v);
-+	if (max_longs && ppc_md.get_random_seed && ppc_md.get_random_seed(v))
-+		return 1;
- 
--	return false;
-+	return 0;
- }
- EXPORT_SYMBOL(arch_get_random_seed_long);
- 
+I have created today's linux-next tree at
+git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
+are tracking the linux-next tree using git, you should not use "git pull"
+to do so as that will try to merge the new linux-next release with the
+old one.  You should use "git fetch" and checkout or reset to the new
+master.
+
+You can see which trees have been included by looking in the Next/Trees
+file in the source.  There are also quilt-import.log and merge.log
+files in the Next directory.  Between each merge, the tree was built
+with an arm64 defconfig, an allmodconfig build for x86_64, a
+multi_v7_defconfig for arm and a native (arm64) build of tools/perf.
+
+Below is a summary of the state of the merge.
+
+I am currently merging 357 trees (counting Linus' and 98 trees of bug
+fix patches pending for the current merge release).
+
+Stats about the size of the tree over time can be seen at
+http://neuling.org/linux-next-size.html .
+
+Status of my local build tests will be at
+http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
+advice about cross compilers/configs that work, we are always open to add
+more builds.
+
+Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
+Gortmaker for triage and bug fixes.

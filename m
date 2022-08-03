@@ -2,70 +2,47 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEC51588E53
-	for <lists+linux-next@lfdr.de>; Wed,  3 Aug 2022 16:14:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9AD25891FF
+	for <lists+linux-next@lfdr.de>; Wed,  3 Aug 2022 20:02:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236517AbiHCOOc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 3 Aug 2022 10:14:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36924 "EHLO
+        id S232098AbiHCSCl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 3 Aug 2022 14:02:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234733AbiHCOOb (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 3 Aug 2022 10:14:31 -0400
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 467C411C12
-        for <linux-next@vger.kernel.org>; Wed,  3 Aug 2022 07:14:30 -0700 (PDT)
-Received: by mail-il1-x12b.google.com with SMTP id b12so7822534ils.9
-        for <linux-next@vger.kernel.org>; Wed, 03 Aug 2022 07:14:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=coSWDI5TPd206clMrpDHmTCH9S1/Zas/lvnlK0aNvZE=;
-        b=tmoJe5DcfLGdmWoMUbd50bNL+RfThJhg1Y3Q6ryxOIOH5QQirM7YLK9GQfjlx6jbFr
-         HNI4AdwMwK8oHwtxdIpZrl8/T8BAuc/m8UHGo+Uh22X2JfpvTBO3ouj5VDkdHrErk+mO
-         wUBvYaegHJg8eKr7jzu1sIAcEZF5x+CTlvWB14BNAtGZBeSSi1QNt7qqQM9nL0DH7Qf9
-         iWNOp/mMntG0vi5XdaWqIyE+KjfUiIg7xu9lUr4ctjNrqN1HtjU4OWwwg8nNHAmQkRKi
-         iCXvqEY3mdk2ddOo6GLflSCZji2Ys15gAqdLIyKg6MzMBQeAsPtU+GDOkrtvZDaQsPHx
-         oMbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=coSWDI5TPd206clMrpDHmTCH9S1/Zas/lvnlK0aNvZE=;
-        b=zIzrnnWX+GSd07VZL89AdJ7mlyUQ2eny/ObFylkem4wp2ySNM/WTkKzqBzWB8O16Ry
-         lzqEkWN2gQdBH0F0hmFB+pVog+X11GRA141uB+PSDdNGcNRaqWt3XRCVNRDovWfcGzDs
-         p1scgdmazIzgyfnFdMWRF5elLp1E9hlr0UBhVAeH8106EVn15+ffAwYJASPhRGKBeH6j
-         ZU2rsoVMf+Myfj43oQhySQC/cwoks9BetrJpGh0jzYf5bULihO9aY+HE5Xokh5G9+CeW
-         mehfJeI4DZHY36IXjcYUMDEvA6OmlWSSAkX5TXR4YMTBxwRwwZLHB1e0I5+eln47S7+B
-         R6Pg==
-X-Gm-Message-State: AJIora/miL8ma8CSooEo8S6bw+8r0M3EK829vYRc0etFPO1luHTC2Qld
-        YtdZP3MPWHClARoZK6Q8OyVVYmtKveKWyQ==
-X-Google-Smtp-Source: AGRyM1sJ2DZdUFuDRvolZP2VpM79J+5a4bsqB7qAIkfSlUYfimdhUQGByoup9L5s4uyBDetZw9f+mQ==
-X-Received: by 2002:a05:6e02:13c5:b0:2de:25c1:242 with SMTP id v5-20020a056e0213c500b002de25c10242mr9990149ilj.283.1659536069471;
-        Wed, 03 Aug 2022 07:14:29 -0700 (PDT)
-Received: from [192.168.1.172] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id v18-20020a02b912000000b0034264f6a809sm249856jan.14.2022.08.03.07.14.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Aug 2022 07:14:28 -0700 (PDT)
-Message-ID: <6e61b631-fea0-7152-1e24-4f67cfd33f48@kernel.dk>
-Date:   Wed, 3 Aug 2022 08:14:27 -0600
+        with ESMTP id S230062AbiHCSCl (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 3 Aug 2022 14:02:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A85319010;
+        Wed,  3 Aug 2022 11:02:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1271561208;
+        Wed,  3 Aug 2022 18:02:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA2D3C433C1;
+        Wed,  3 Aug 2022 18:02:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659549758;
+        bh=u/+RUZfjafvvpTieoAYWceYF/JHA231PECwkQjuH+vs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=R3YFfPJFlRVXrYrkT9X8Xo24hy1w3vJYkXXg0wWHWn25IFVLNkRoGC99JDbq6Lvu1
+         BfI3kHaqJ/FIicNnpaHJUpr3zmMtGIoxPDh/Q7BD3m7oJqKvTYxJmjYHvUA7Vfu/fE
+         +0ZoBI0kDfrT6l8JHd51WzGbKuu9u9PRiOayIjZBS/Cfs8Sp4RUtVjXBjYCc7ByN53
+         cLXST7PF20GxsZuVhuyUq4zyj1MGJ6JpregAAuh48Xm1aJAHYJNJLsxjcGwU6Abjms
+         YhcOWPz9A+Ce6PXnOhQfayb3FKaxshwTxZSeZfKh6osCDqj1pbCClGfv5cBi4Ap0Wz
+         PfHTkfmwAYFgg==
+From:   broonie@kernel.org
+To:     Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: Tree for Aug 3
+Date:   Wed,  3 Aug 2022 19:02:25 +0100
+Message-Id: <20220803180225.773206-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: linux-next: manual merge of the vfs tree with the origin tree
-Content-Language: en-US
-To:     broonie@kernel.org
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220803121815.54438-1-broonie@kernel.org>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20220803121815.54438-1-broonie@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        LOCALPART_IN_SUBJECT,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,46 +50,48 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 8/3/22 6:18 AM, broonie@kernel.org wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the vfs tree got a conflict in:
-> 
->   fs/io_uring.c
-> 
-> between commit:
-> 
->   ed29b0b4fd835 ("io_uring: move to separate directory")
-> 
-> from the origin tree and commit:
-> 
->   164f4064ca81e ("keep iocb_flags() result cached in struct file")
-> 
-> from the vfs tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-> 
-> diff --git a/io_uring/rw.c b/io_uring/rw.c
-> index 2b784795103cc..b20ba87e4926f 100644
-> --- a/io_uring/rw.c
-> +++ b/io_uring/rw.c
-> @@ -661,7 +661,7 @@ static int io_rw_init_file(struct io_kiocb *req, fmode_t mode)
->  	if (!io_req_ffs_set(req))
->  		req->flags |= io_file_get_flags(file) << REQ_F_SUPPORT_NOWAIT_BIT;
->  
-> -	kiocb->ki_flags = iocb_flags(file);
-> +	kiocb->ki_flags = file->f_iocb_flags;
->  	ret = kiocb_set_rw_flags(kiocb, rw->flags);
->  	if (unlikely(ret))
->  		return ret;
+Hi all,
 
-That's the right resolution, mentioned that in my pull request as well.
+Changes since 20220802:
 
--- 
-Jens Axboe
+The overlayfs tree gained a conflict with Linus' tree.
 
+The vfs tree gained a conflict with Linus' tree.
+
+The build failure in the thermal tree was fixed and replaced by a new build
+failure so the tree for 20220728 is still being used.
+
+Non-merge commits (relative to Linus' tree): 10626
+ 10534 files changed, 1225685 insertions(+), 240213 deletions(-)
+
+----------------------------------------------------------------------------
+
+I have created today's linux-next tree at
+git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
+are tracking the linux-next tree using git, you should not use "git pull"
+to do so as that will try to merge the new linux-next release with the
+old one.  You should use "git fetch" and checkout or reset to the new
+master.
+
+You can see which trees have been included by looking in the Next/Trees
+file in the source.  There are also quilt-import.log and merge.log
+files in the Next directory.  Between each merge, the tree was built
+with an arm64 defconfig, an allmodconfig cross build for x86_64, a
+multi_v7_defconfig for arm and a native build of tools/perf.
+
+Below is a summary of the state of the merge.
+
+I am currently merging 357 trees (counting Linus' and 98 trees of bug
+fix patches pending for the current merge release).
+
+Stats about the size of the tree over time can be seen at
+http://neuling.org/linux-next-size.html .
+
+Status of my local build tests will be at
+http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
+advice about cross compilers/configs that work, we are always open to add
+more builds.
+
+Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
+Gortmaker for triage and bug fixes.

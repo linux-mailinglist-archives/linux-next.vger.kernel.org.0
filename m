@@ -2,126 +2,176 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F38C588580
-	for <lists+linux-next@lfdr.de>; Wed,  3 Aug 2022 03:49:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 586CA588686
+	for <lists+linux-next@lfdr.de>; Wed,  3 Aug 2022 06:30:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232077AbiHCBtE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 2 Aug 2022 21:49:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57684 "EHLO
+        id S235022AbiHCEaQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 3 Aug 2022 00:30:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230029AbiHCBtD (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 2 Aug 2022 21:49:03 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86DFB26108;
-        Tue,  2 Aug 2022 18:49:02 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id 15-20020a17090a098f00b001f305b453feso527916pjo.1;
-        Tue, 02 Aug 2022 18:49:02 -0700 (PDT)
+        with ESMTP id S229457AbiHCEaP (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 3 Aug 2022 00:30:15 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF0CF10B0
+        for <linux-next@vger.kernel.org>; Tue,  2 Aug 2022 21:30:13 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id o3so15319074ple.5
+        for <linux-next@vger.kernel.org>; Tue, 02 Aug 2022 21:30:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=Eq2bNZKRTPBg/Erec8mPYF5Hp1Q9yAhnQPYCvx6UjBg=;
-        b=Pv2AGY0MFO0cMVcGdczfMNk6TbrOlpkS1uYKIJ2y8ZnWn0Ob6HJB/hO5eWzNRK+AXN
-         z/C/4WXNKKaBa9IyW2klipUwtwhfSAjcFHNRpkfOSCXrj4pOwUssCsyP+DFWm4VLz/Hm
-         OB8eVPL9L3QgMKFECyg/xvjE14mMHTGaHUWxG4HDHuft8nKx23RX/EVO8WjKF3FanHdQ
-         9eRkgFt+ZHART0w1blYCmvnvBAdKYyUZa0XzhYZB21Z6FaW2bbNAuF/m7FA4ggnPZP/t
-         C2cNACV46E1K2lConbYYv6L0YFfA8j6L1WccLk+LCSmIDsBTk8c7vASuRc05x8LFIbqB
-         rSnA==
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=pYtQQVdJ40E4X50kSCl+ciWvL0c0vltSjFrXrNpwjnQ=;
+        b=aCwnaMYqDxhdZ6Ys/BXGOyQoQ6oU5f5ICJ3xoRYn1dmCpS69VHxHx8MQmQtWBqB7OS
+         YW1Ppdlrk+iScNK7cLBS0+gpos1pD/Avm+5yN6cvjkcbqfDYqQGxnA7Ufqjb6PuSw0i3
+         1jZzghMCB4EKkikmrHZrFw9kwUsvL0DT+RjTY46aITbBDEtEYGZFY4OhDCnfgHE5XnVd
+         hDUrJ6+unpl0+NnHF8u7TNsRCv76bJH5jtQbpEdox6HMToHb3QPnpIZt0WpJS18KNrTq
+         tQMZsY+gmbzK3uTmhMHg6ygmZxDIYwbM/GYSddKk0UA/5OlZvXOp2BM6wN9Twl7pKWQZ
+         USnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=Eq2bNZKRTPBg/Erec8mPYF5Hp1Q9yAhnQPYCvx6UjBg=;
-        b=3TcTYRNFpvKAJplYCEwqu4UUmVSMh78cMkFLUjh3H6TYTJuzxmYgXx2LqZOg6bZEZt
-         lfgioNcknp6dpF6O2zqA/C6mTKJXczWr8J36iS8hemRGPsxb6iT5GHTKTFIpLgDy9RHM
-         yqxhBY1JHovpZ3PmWteb4wUv79nHcVTSyJygsPYxmnl+aU0XdHkelcrWsZ7mA4/Z2QE+
-         ZW4Uf6U0bZ68l/05gW83J4oQVrkzmqJp/Wcfd9yIqdgEtdXGMybUwTbMAlToDAwiBTiM
-         Z9BU4fNw8+D03fpKRJjJBqEjWD82RctFSVMI3dsOWZ7kqTaEcujnWKYjgHK9Ul6P/FO3
-         d3Lg==
-X-Gm-Message-State: ACgBeo09/3qDPQiBWfWxWpcxoP8/zeeH/Svpi1M7b0G7SErETB6fduv+
-        Tp7u2l+Sv84zgsn0KIMNvoOjlffCuyQ=
-X-Google-Smtp-Source: AA6agR5FbzZ+4i+MqGhdOutVudI24WXHqMCbg0DGun8EDKBuEmxFJwTq964y86XOTzQLRT7IU91hRQ==
-X-Received: by 2002:a17:90a:2b42:b0:1f4:fc9a:be32 with SMTP id y2-20020a17090a2b4200b001f4fc9abe32mr2329539pjc.221.1659491341961;
-        Tue, 02 Aug 2022 18:49:01 -0700 (PDT)
-Received: from [192.168.43.80] (subs02-180-214-232-86.three.co.id. [180.214.232.86])
-        by smtp.gmail.com with ESMTPSA id g18-20020aa79dd2000000b0052d4ffac466sm4297165pfq.188.2022.08.02.18.49.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Aug 2022 18:49:01 -0700 (PDT)
-Message-ID: <d1f90d44-a1e9-7490-f789-f928b85a1d26@gmail.com>
-Date:   Wed, 3 Aug 2022 08:48:58 +0700
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=pYtQQVdJ40E4X50kSCl+ciWvL0c0vltSjFrXrNpwjnQ=;
+        b=JD+dsxZH+31PXM4cm/KXIA87Lj6LkQGh14oThUrvNmjo9vt8d2FEbg4mJ98L84Ot8+
+         XFO3/m0n2QCHZ9RglgH9N5Z70qcL4HfTQ8mNGU+5sucsonSTjulF/YOgEDg/YjNozsEP
+         L7gq0Y8U8HXp09yf2OgDanvDjj4hBaD2X6T8ARNSH0yn6h6CQa7k7sNcdsqnpyQ3Zx3Y
+         ni9aNx8oRLt5Y3vbsmsgFcHRfv80+GFsSj5JwD6GRLHhxjdjtXhLyG11TV5bT2hCxBrF
+         rkRf35JyAm/mEtkhptGQp3etws2CZ1vU8vS+bNos5DLS5CID7PuKYYRfJe4GDr9VsrSl
+         qOFQ==
+X-Gm-Message-State: ACgBeo13bSYkiqw+NhamUsboTwyjSzxBH1qbAJRna63Enu5qiUKp2iDq
+        9kRxszeN8CsUXQ+dMgHk3/6f9fiRIVzQQqcF/I4=
+X-Google-Smtp-Source: AA6agR5Nm+7eqrfyaSMJmmNEbGC+TKhjIsO8gSGe7g8A3By0MOdt4PrBb9NNxRY6/+cOaOhV2Gv9cg==
+X-Received: by 2002:a17:903:244e:b0:16d:d5cd:c184 with SMTP id l14-20020a170903244e00b0016dd5cdc184mr22819016pls.44.1659501013051;
+        Tue, 02 Aug 2022 21:30:13 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id e7-20020a17090a7c4700b001f2ef3c7956sm409307pjl.25.2022.08.02.21.30.11
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Aug 2022 21:30:12 -0700 (PDT)
+Message-ID: <62e9f9d4.170a0220.99b58.0da9@mx.google.com>
+Date:   Tue, 02 Aug 2022 21:30:12 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: linux-next: Tree for Aug 2
-Content-Language: en-US
-To:     broonie@kernel.org,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220803010326.2814276-1-broonie@kernel.org>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20220803010326.2814276-1-broonie@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Tree: next
+X-Kernelci-Branch: master
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: next-20220802
+Subject: next/master build: 7 builds: 0 failed, 7 passed,
+ 12 warnings (next-20220802)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 8/3/22 08:03, broonie@kernel.org wrote:
-> Hi all,
-> 
-> Changes since 20220728:
-> 
-> The hid tree gained a build failure which I fixed up.
-> 
-> The thermal tree gained a build failure, I used the version from 20220728
-> instead.
-> 
-> The net-next tree gained a conflict against the net tree.
-> 
-> The kvm tree gained a conflict with the kvms390-fixes tree.
-> 
-> The pinctrl tree gained a build failure for which I reverted a commit.
-> 
-> Non-merge commits (relative to Linus' tree): 12734
->  12594 files changed, 1319236 insertions(+), 278745 deletions(-)
-> 
-> ----------------------------------------------------------------------------
-> 
-> I have created today's linux-next tree at
-> git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-> (patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
-> are tracking the linux-next tree using git, you should not use "git pull"
-> to do so as that will try to merge the new linux-next release with the
-> old one.  You should use "git fetch" and checkout or reset to the new
-> master.
-> 
-> You can see which trees have been included by looking in the Next/Trees
-> file in the source.  There are also quilt-import.log and merge.log
-> files in the Next directory.  Between each merge, the tree was built
-> with an arm64 defconfig, an allmodconfig build for x86_64, a
-> multi_v7_defconfig for arm and a native (arm64) build of tools/perf.
-> 
+next/master build: 7 builds: 0 failed, 7 passed, 12 warnings (next-20220802)
 
-Hi broonie,
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20220802/
 
-Thanks for keeping linux-next up while Stephen is on vacation.
+Tree: next
+Branch: master
+Git Describe: next-20220802
+Git Commit: 42d670bda02fdba0f3944c92f545984501e5788d
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 3 unique architectures
 
-What is missing here is powerpc build (ppc64_defconfig), since the
-architecture is often used for cross-compile test.
+Warnings Detected:
 
-And I think since we're at merge window for 6.0, we need to say
-"Please do not add material for 6.1 until 6.0-rc1 have been
-released".
+arm64:
 
-Thanks.
+arm:
+    cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (clang-13): 6 =
+warnings
+    cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (clang-13=
+): 6 warnings
 
--- 
-An old man doll... just what I always wanted! - Clara
+x86_64:
+
+
+Warnings summary:
+
+    12   clang: warning: argument unused during compilation: '-march=3Darmv=
+7-a' [-Wunused-command-line-argument]
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
+tches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
+tches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
+=E2=80=94 PASS, 0 errors, 6 warnings, 0 section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
+3) =E2=80=94 PASS, 0 errors, 6 warnings, 0 section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chromebook=
+ (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatc=
+hes
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 wa=
+rnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors=
+, 0 warnings, 0 section mismatches
+
+---
+For more info write to <info@kernelci.org>

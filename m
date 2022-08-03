@@ -2,50 +2,48 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 599EC588B8C
-	for <lists+linux-next@lfdr.de>; Wed,  3 Aug 2022 13:52:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3240F588B9E
+	for <lists+linux-next@lfdr.de>; Wed,  3 Aug 2022 13:58:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234522AbiHCLwE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 3 Aug 2022 07:52:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39036 "EHLO
+        id S235833AbiHCL6w (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 3 Aug 2022 07:58:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231537AbiHCLwD (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 3 Aug 2022 07:52:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04603205E3;
-        Wed,  3 Aug 2022 04:52:03 -0700 (PDT)
+        with ESMTP id S230272AbiHCL6v (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 3 Aug 2022 07:58:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D58FE481D5;
+        Wed,  3 Aug 2022 04:58:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 94C2561226;
-        Wed,  3 Aug 2022 11:52:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 174A8C433C1;
-        Wed,  3 Aug 2022 11:52:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 716136108A;
+        Wed,  3 Aug 2022 11:58:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DA87C433C1;
+        Wed,  3 Aug 2022 11:58:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659527521;
-        bh=SkQ8uBrmL3zyHryQ8RNaHRKITkAnNBPeCIkPX7+WCHQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pGUR/O3gxvOv9XIoMN0aGttCgsdILYpipPLpWwkIeZb7/kvPwXdC7V0GPTW1crQ59
-         /jQG2H/ryIdU9q7CA0NyITT82tGIZRIJTVDsOenI88c3jh7PmCmCEFBSoLjHmo6Ne/
-         yrRBfWo+E+t+x0ziJqk6GiE7xs3C36ntq2zOGJvCVSgjyfNGJ2ELOBi1EfQQW92vvd
-         hi48N0M1VgHmAW89fleBS5KCl5b3yxOiUat63GRbWNT55veeNG2kH0qx1StcL+Oyyi
-         Vh0i9d3zUkInqf/oDta8FjZS3/I4dHhcXBXnEgeMfRzyvINfH6HhFHRoXet4HIGCjM
-         jn9pO9/r9qUoQ==
-Date:   Wed, 3 Aug 2022 12:51:57 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: Tree for Aug 2
-Message-ID: <YuphXWlnKgTgnE6U@sirena.org.uk>
-References: <20220803010326.2814276-1-broonie@kernel.org>
- <d1f90d44-a1e9-7490-f789-f928b85a1d26@gmail.com>
+        s=k20201202; t=1659527929;
+        bh=uT6WmBah90ojSmn/01bz2BZzuwpY4jyvKO8tWuTrPrs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=HjKIOkDaG8oa9ZEOaRz5PpAkEKIgdc8USG9xTTv8V+oc44iLbb2Rutl/GJDmG6KFD
+         QaS0B7F3F9/mdt4fH75VTvba67iO1K+cRCckwkmZlyQJES5NivgPWvx+jTYq9v7MD2
+         yim3jm+RxzL1I8qOGN5Dqf+1oeAbuZ5KXCVEAjzajxnwS+uOFx+xcWxquKfcUviWOQ
+         SwI3Hb6B9qvNiN9WWcu35HTH2fiXR0vuHwHLpjx3akK4U0mYoVsWY9dDCzlVLchj0S
+         jqpeSPzrD7c4O+i8siI5mmNP2P2G+Ek2PneDc1S6W7KRqs33ybWbHhUUcO04o6dWcW
+         usJait1Cxkv8A==
+From:   broonie@kernel.org
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Miklos Szeredi <mszeredi@redhat.com>,
+        Yang Xu <xuyang2018.jy@fujitsu.com>
+Subject: linux-next: manual merge of the overlayfs tree with the origin tree
+Date:   Wed,  3 Aug 2022 12:58:44 +0100
+Message-Id: <20220803115844.53246-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="hO9CDiCpsVXVES1L"
-Content-Disposition: inline
-In-Reply-To: <d1f90d44-a1e9-7490-f789-f928b85a1d26@gmail.com>
-X-Cookie: Give him an evasive answer.
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -55,41 +53,28 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+Hi all,
 
---hO9CDiCpsVXVES1L
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+FIXME: Add owner of second tree to To:
+       Add author(s)/SOB of conflicting commits.
 
-On Wed, Aug 03, 2022 at 08:48:58AM +0700, Bagas Sanjaya wrote:
+Today's linux-next merge of the overlayfs tree got a conflict in:
 
-> What is missing here is powerpc build (ppc64_defconfig), since the
-> architecture is often used for cross-compile test.
+  fs/overlayfs/inode.c
 
-No, it's not missing.  Stephen's native PowerPC build has been
-deliberately replaced with a native arm64 defconfig build since that's
-the system I have access to and that's who's paying the bills here.
+between commit:
 
-> And I think since we're at merge window for 6.0, we need to say
-> "Please do not add material for 6.1 until 6.0-rc1 have been
-> released".
+  1aa5fef575a83 ("ovl: handle idmappings in ovl_get_acl()")
 
-Right, I didn't add a note about that.  Hopefully people are sensible
-enough to figure it out without the explicit statement in the -next
-mails.
+from the origin tree and commit:
 
---hO9CDiCpsVXVES1L
-Content-Type: application/pgp-signature; name="signature.asc"
+  ded536561a367 ("ovl: improve ovl_get_acl() if POSIX ACL support is off")
 
------BEGIN PGP SIGNATURE-----
+from the overlayfs tree.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLqYVwACgkQJNaLcl1U
-h9DJsgf/fx+sZB2Jz3BHGilY3tBeZvtVlkjfS2nKYbaMG+g59RUbV5IBEgRXxVTB
-ZaL/UkzG51ovTvPE8Mr0RP9lanRQvfpmIc6cDjHofP9IYa4n8IBhgtmF9nRcx3ju
-1yzg/DjHN6HWk0Psf2Y5BWcdt8nXFhv2CtnY+RLfNupInkJqhe34ybv7OEcEtU2q
-rmuM0P3FS/l1fADTGH7e0XCcHq7ibZ7YmAYt0xpjK1PWiQiYgpjcWW6nfA3l7dGc
-DPCzwtnBc3HxHRW8WzVNxqIU8Ks6BGB/JIn3fvaYHhZvTI5bjtmZwakAX/HfC+kc
-CohjqFgLDZJK8M/mMTH4clKkU9RqtA==
-=AUXC
------END PGP SIGNATURE-----
-
---hO9CDiCpsVXVES1L--
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.

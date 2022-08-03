@@ -2,111 +2,93 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31BE0588CE5
-	for <lists+linux-next@lfdr.de>; Wed,  3 Aug 2022 15:24:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A5E2588CEA
+	for <lists+linux-next@lfdr.de>; Wed,  3 Aug 2022 15:25:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237124AbiHCNYU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 3 Aug 2022 09:24:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44974 "EHLO
+        id S235935AbiHCNZw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 3 Aug 2022 09:25:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236318AbiHCNYU (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 3 Aug 2022 09:24:20 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AB7B63E6
-        for <linux-next@vger.kernel.org>; Wed,  3 Aug 2022 06:24:19 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id v3so20652637wrp.0
-        for <linux-next@vger.kernel.org>; Wed, 03 Aug 2022 06:24:19 -0700 (PDT)
+        with ESMTP id S232747AbiHCNZv (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 3 Aug 2022 09:25:51 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D26A38B5
+        for <linux-next@vger.kernel.org>; Wed,  3 Aug 2022 06:25:50 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id q7so18883722ljp.13
+        for <linux-next@vger.kernel.org>; Wed, 03 Aug 2022 06:25:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=85Z5S1iN+/J1slaGRiTGkYvAQoX6IpH8OXS3rjHMVr4=;
-        b=MyrqTM91dzwYerfXrXZ/cXTOA1Z6HQOjjV8VJEraHmsYJfXe5LAu3ZQiwW4O7//Rdc
-         6A81gMe6090bd8c/kjGWwuuQGFe3R2Wx69tvbxcv7TF+nRUD0kfDrAvNnNrOoFayoCp5
-         U/e6b0zQ8t5pY85hbndFtK1TgsJQe/ceeWPDm41jZBSO66k0J/iRsNUdCDvDZsSfOiBA
-         Wn+xCWEwRISv5m+CtYPXB2V7j83+iEJtFHjINrn27oacTn41IRi9eoc7rF7JOxTMFryu
-         PTHXHeElBwjdB2pbXW5KCRXP2+OKTL9cPA46bqF2SOgjrk//n39z7xXAVZzJXJa+AWGF
-         bImw==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=a8x2ZOr3OJQ7WkBJoA9idC49LScpgSTLREdRfqKOVe4=;
+        b=Hpjrj3yFlXvwFp3t6RTtHFk8oefoYyKwIDl4dYvJ2PwbTGiYF8u+lG1pfI/HVdm5kO
+         nGlVUFn8mr0KlqqyPAyIZFxPdv2c2v1Y7fkBGAyX7LoJnGAonrVICAlSx8sCdwwIIyC4
+         XiX39H4FUdkBGlz2Xqy2NuO0kpa3qbOVLZlVDDxOe1xiFmbDiFwhuVqLlcH87vL+LCCT
+         KR73i0Q3KfROnFpbEdPRK5Fv24tTITx94AuioQvIdrK9JfDKBRCcm+RzB7qiFF5/JYI/
+         eGO3ZY4r4yliBZicRATIrOMI9veQZwxpPdHW9YveYJ69gkOmdQAm8lNmxszRasO9qOza
+         vuww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=85Z5S1iN+/J1slaGRiTGkYvAQoX6IpH8OXS3rjHMVr4=;
-        b=JmemvZtPBXWZ98Q2RSdWeyCtUmqZXhaWZp94XeIYpm7+QwSHsgfBSUgo8mCWS4BUnR
-         Mh+BrRZzlBx8GI/Ien28U6hqIsVUdQmY1looAauoFCFERGXg5GLIzIqpEizJ+GIf1V60
-         3gAvgcKKvtsZCDc13WKFa7CHxYe3LBmRpjcqyS23pCS196kgYv/+VHLYDs7OXgXARt3i
-         5p+JMHOHbZjm7YnddkFPy9ITJaDFol4JlO2s91q7XES/5sZh5IrPyrfe4BXggZpat1yS
-         P0KModSbfTq0+ev9ipm5h4A5Ez+sbarRyUU4u2bQGFyKVsk16CNyWCAuFt7r2pkhjwMf
-         njwg==
-X-Gm-Message-State: ACgBeo3/Nc1XsbqXiaT4z09QJUPNGmMkmHe0L3IK6huuvaB06+FEcE1q
-        AsqLtdNxNyxQ85EOrPbV6mo5YQ==
-X-Google-Smtp-Source: AA6agR6SQuP403ZTGG7r8Fx2umHGu27U/OGO7H74VcE3w2OyPAkTBdWf1PbUbtghqBO32EAYSOKbXw==
-X-Received: by 2002:a05:6000:170b:b0:220:6535:26d8 with SMTP id n11-20020a056000170b00b00220653526d8mr8570089wrc.577.1659533057704;
-        Wed, 03 Aug 2022 06:24:17 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:6e48:fbdd:280d:6dac? ([2a05:6e02:1041:c10:6e48:fbdd:280d:6dac])
-        by smtp.googlemail.com with ESMTPSA id a1-20020adfe5c1000000b0021e491fd250sm12232819wrn.89.2022.08.03.06.24.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Aug 2022 06:24:17 -0700 (PDT)
-Message-ID: <17261234-9a06-bc12-b188-0fc8e90b3c23@linaro.org>
-Date:   Wed, 3 Aug 2022 15:24:16 +0200
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=a8x2ZOr3OJQ7WkBJoA9idC49LScpgSTLREdRfqKOVe4=;
+        b=DQzOzyoiPcY1AqCV2CRoFqss5wU3/kxEmr4EMQyoEEX+UGn/p7IY/2JqFbAhwDqFqR
+         Go5gwRvucXdIXDWCRl46wd1I5ukyBbvNDKaHQ3YWIEyIvaFWk72PDLIJGUYWH9z4Sh9V
+         xOy+VNN1ZrzCPx7cp13ttZfqTmAmqs6xrWDpqZjVx7NJxNtBK7v8TcikXtdU4UU9JZQ8
+         grr5aL9Fdqk/TPoFrjDsD546xr4TJbjlvNnzGQlJWSWkn9lI20A4oGrdKKqVAoJsZdyd
+         UHaszSajb1i7u7p6QBohq82a0UJlDvqRjEeomP+vunZCIV3eQ7ZCO4JFL38yetp8pBgN
+         ix1Q==
+X-Gm-Message-State: AJIora8v7TrCNIIcVIgXRyKAUdUmXM2My/3EbNy8G5gPu5MnA5ctm71a
+        OudmFr8MVjJZaL+XYuCz7l4werXYLtRnuSGtk1Y=
+X-Google-Smtp-Source: AGRyM1ulkRsENUwGtRpQkNk5/htgMGD3UngtRdTZAdPSX1oeQsgkmMvu6wJHDtE6RqVgH6YY6dVQKRqDzzLOWVdK2zg=
+X-Received: by 2002:a2e:a794:0:b0:25e:8d6:386 with SMTP id c20-20020a2ea794000000b0025e08d60386mr8398659ljf.42.1659533148764;
+ Wed, 03 Aug 2022 06:25:48 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: linux-next: build failure after merge of the thermal tree
-Content-Language: en-US
-To:     broonie@kernel.org, Zhang Rui <rui.zhang@intel.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220803130500.223005-1-broonie@kernel.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20220803130500.223005-1-broonie@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6500:da1:b0:14b:be7e:57fe with HTTP; Wed, 3 Aug 2022
+ 06:25:48 -0700 (PDT)
+Reply-To: thomasjoyec@yahoo.com
+From:   Joyce Thomas <thomasjoycetho12@gmail.com>
+Date:   Wed, 3 Aug 2022 06:25:48 -0700
+Message-ID: <CADijiqR85j_h9s2QjGt8WE5xszrDtgqJZQ2hEZv042+Th_uOPQ@mail.gmail.com>
+Subject: URGENT
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:232 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5021]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [thomasjoycetho12[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [thomasjoycetho12[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  3.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 03/08/2022 15:05, broonie@kernel.org wrote:
-> Hi all,
-> 
-> After merging the thermal tree, today's linux-next build (x86_64 allmodconfig)
-> failed like this:
-> 
-> /tmp/next/build/drivers/iio/adc/sun4i-gpadc-iio.c: In function 'sun4i_gpadc_probe':
-> /tmp/next/build/drivers/iio/adc/sun4i-gpadc-iio.c:640:44: error: passing argument 1 of 'thermal_of_zone_register' from incompatible pointer type [-Werror=incompatible-pointer-types]
->    640 |   info->tzd = thermal_of_zone_register(info->sensor_device,
->        |                                        ~~~~^~~~~~~~~~~~~~~
->        |                                            |
->        |                                            struct device *
-> In file included from /tmp/next/build/drivers/iio/adc/sun4i-gpadc-iio.c:31:
-> /tmp/next/build/include/linux/thermal.h:301:29: note: expected 'struct device_node *' but argument is of type 'struct device *'
->    301 | struct thermal_zone_device *thermal_of_zone_register(struct device_node *sensor, int id, void *data,
->        |                             ^~~~~~~~~~~~~~~~~~~~~~~~
-> /tmp/next/build/drivers/iio/adc/sun4i-gpadc-iio.c: In function 'sun4i_gpadc_remove':
-> /tmp/next/build/drivers/iio/adc/sun4i-gpadc-iio.c:684:2: error: implicit declaration of function 'thermal_zone_of_sensor_unregister'; did you mean 'thermal_zone_device_unregister'? [-Werror=implicit-function-declaration]
->    684 |  thermal_zone_of_sensor_unregister(info->sensor_device, info->tzd);
->        |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->        |  thermal_zone_device_unregister
-> cc1: all warnings being treated as errors
-> 
-> Caused by commit
-> 
->     990ee4496499ef61c06bbf ("iio/drivers/sun4i_gpadc: Switch to new of thermal API")
-
-Fixed and linux-next branch updated
-
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Hi my dear,
+Good day to you today and how are you doing; please I want to hear
+from you so that I will know what to do r regards to this matter.
+Please I wait to read from you as soon as you receive this mail.
+Mrs. Joyce Thomas

@@ -2,93 +2,117 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A5E2588CEA
-	for <lists+linux-next@lfdr.de>; Wed,  3 Aug 2022 15:25:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEC51588E53
+	for <lists+linux-next@lfdr.de>; Wed,  3 Aug 2022 16:14:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235935AbiHCNZw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 3 Aug 2022 09:25:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46398 "EHLO
+        id S236517AbiHCOOc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 3 Aug 2022 10:14:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232747AbiHCNZv (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 3 Aug 2022 09:25:51 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D26A38B5
-        for <linux-next@vger.kernel.org>; Wed,  3 Aug 2022 06:25:50 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id q7so18883722ljp.13
-        for <linux-next@vger.kernel.org>; Wed, 03 Aug 2022 06:25:50 -0700 (PDT)
+        with ESMTP id S234733AbiHCOOb (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 3 Aug 2022 10:14:31 -0400
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 467C411C12
+        for <linux-next@vger.kernel.org>; Wed,  3 Aug 2022 07:14:30 -0700 (PDT)
+Received: by mail-il1-x12b.google.com with SMTP id b12so7822534ils.9
+        for <linux-next@vger.kernel.org>; Wed, 03 Aug 2022 07:14:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=a8x2ZOr3OJQ7WkBJoA9idC49LScpgSTLREdRfqKOVe4=;
-        b=Hpjrj3yFlXvwFp3t6RTtHFk8oefoYyKwIDl4dYvJ2PwbTGiYF8u+lG1pfI/HVdm5kO
-         nGlVUFn8mr0KlqqyPAyIZFxPdv2c2v1Y7fkBGAyX7LoJnGAonrVICAlSx8sCdwwIIyC4
-         XiX39H4FUdkBGlz2Xqy2NuO0kpa3qbOVLZlVDDxOe1xiFmbDiFwhuVqLlcH87vL+LCCT
-         KR73i0Q3KfROnFpbEdPRK5Fv24tTITx94AuioQvIdrK9JfDKBRCcm+RzB7qiFF5/JYI/
-         eGO3ZY4r4yliBZicRATIrOMI9veQZwxpPdHW9YveYJ69gkOmdQAm8lNmxszRasO9qOza
-         vuww==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=coSWDI5TPd206clMrpDHmTCH9S1/Zas/lvnlK0aNvZE=;
+        b=tmoJe5DcfLGdmWoMUbd50bNL+RfThJhg1Y3Q6ryxOIOH5QQirM7YLK9GQfjlx6jbFr
+         HNI4AdwMwK8oHwtxdIpZrl8/T8BAuc/m8UHGo+Uh22X2JfpvTBO3ouj5VDkdHrErk+mO
+         wUBvYaegHJg8eKr7jzu1sIAcEZF5x+CTlvWB14BNAtGZBeSSi1QNt7qqQM9nL0DH7Qf9
+         iWNOp/mMntG0vi5XdaWqIyE+KjfUiIg7xu9lUr4ctjNrqN1HtjU4OWwwg8nNHAmQkRKi
+         iCXvqEY3mdk2ddOo6GLflSCZji2Ys15gAqdLIyKg6MzMBQeAsPtU+GDOkrtvZDaQsPHx
+         oMbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=a8x2ZOr3OJQ7WkBJoA9idC49LScpgSTLREdRfqKOVe4=;
-        b=DQzOzyoiPcY1AqCV2CRoFqss5wU3/kxEmr4EMQyoEEX+UGn/p7IY/2JqFbAhwDqFqR
-         Go5gwRvucXdIXDWCRl46wd1I5ukyBbvNDKaHQ3YWIEyIvaFWk72PDLIJGUYWH9z4Sh9V
-         xOy+VNN1ZrzCPx7cp13ttZfqTmAmqs6xrWDpqZjVx7NJxNtBK7v8TcikXtdU4UU9JZQ8
-         grr5aL9Fdqk/TPoFrjDsD546xr4TJbjlvNnzGQlJWSWkn9lI20A4oGrdKKqVAoJsZdyd
-         UHaszSajb1i7u7p6QBohq82a0UJlDvqRjEeomP+vunZCIV3eQ7ZCO4JFL38yetp8pBgN
-         ix1Q==
-X-Gm-Message-State: AJIora8v7TrCNIIcVIgXRyKAUdUmXM2My/3EbNy8G5gPu5MnA5ctm71a
-        OudmFr8MVjJZaL+XYuCz7l4werXYLtRnuSGtk1Y=
-X-Google-Smtp-Source: AGRyM1ulkRsENUwGtRpQkNk5/htgMGD3UngtRdTZAdPSX1oeQsgkmMvu6wJHDtE6RqVgH6YY6dVQKRqDzzLOWVdK2zg=
-X-Received: by 2002:a2e:a794:0:b0:25e:8d6:386 with SMTP id c20-20020a2ea794000000b0025e08d60386mr8398659ljf.42.1659533148764;
- Wed, 03 Aug 2022 06:25:48 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=coSWDI5TPd206clMrpDHmTCH9S1/Zas/lvnlK0aNvZE=;
+        b=zIzrnnWX+GSd07VZL89AdJ7mlyUQ2eny/ObFylkem4wp2ySNM/WTkKzqBzWB8O16Ry
+         lzqEkWN2gQdBH0F0hmFB+pVog+X11GRA141uB+PSDdNGcNRaqWt3XRCVNRDovWfcGzDs
+         p1scgdmazIzgyfnFdMWRF5elLp1E9hlr0UBhVAeH8106EVn15+ffAwYJASPhRGKBeH6j
+         ZU2rsoVMf+Myfj43oQhySQC/cwoks9BetrJpGh0jzYf5bULihO9aY+HE5Xokh5G9+CeW
+         mehfJeI4DZHY36IXjcYUMDEvA6OmlWSSAkX5TXR4YMTBxwRwwZLHB1e0I5+eln47S7+B
+         R6Pg==
+X-Gm-Message-State: AJIora/miL8ma8CSooEo8S6bw+8r0M3EK829vYRc0etFPO1luHTC2Qld
+        YtdZP3MPWHClARoZK6Q8OyVVYmtKveKWyQ==
+X-Google-Smtp-Source: AGRyM1sJ2DZdUFuDRvolZP2VpM79J+5a4bsqB7qAIkfSlUYfimdhUQGByoup9L5s4uyBDetZw9f+mQ==
+X-Received: by 2002:a05:6e02:13c5:b0:2de:25c1:242 with SMTP id v5-20020a056e0213c500b002de25c10242mr9990149ilj.283.1659536069471;
+        Wed, 03 Aug 2022 07:14:29 -0700 (PDT)
+Received: from [192.168.1.172] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id v18-20020a02b912000000b0034264f6a809sm249856jan.14.2022.08.03.07.14.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 Aug 2022 07:14:28 -0700 (PDT)
+Message-ID: <6e61b631-fea0-7152-1e24-4f67cfd33f48@kernel.dk>
+Date:   Wed, 3 Aug 2022 08:14:27 -0600
 MIME-Version: 1.0
-Received: by 2002:a05:6500:da1:b0:14b:be7e:57fe with HTTP; Wed, 3 Aug 2022
- 06:25:48 -0700 (PDT)
-Reply-To: thomasjoyec@yahoo.com
-From:   Joyce Thomas <thomasjoycetho12@gmail.com>
-Date:   Wed, 3 Aug 2022 06:25:48 -0700
-Message-ID: <CADijiqR85j_h9s2QjGt8WE5xszrDtgqJZQ2hEZv042+Th_uOPQ@mail.gmail.com>
-Subject: URGENT
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:232 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5021]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [thomasjoycetho12[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [thomasjoycetho12[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  3.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: linux-next: manual merge of the vfs tree with the origin tree
+Content-Language: en-US
+To:     broonie@kernel.org
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20220803121815.54438-1-broonie@kernel.org>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20220803121815.54438-1-broonie@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi my dear,
-Good day to you today and how are you doing; please I want to hear
-from you so that I will know what to do r regards to this matter.
-Please I wait to read from you as soon as you receive this mail.
-Mrs. Joyce Thomas
+On 8/3/22 6:18 AM, broonie@kernel.org wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the vfs tree got a conflict in:
+> 
+>   fs/io_uring.c
+> 
+> between commit:
+> 
+>   ed29b0b4fd835 ("io_uring: move to separate directory")
+> 
+> from the origin tree and commit:
+> 
+>   164f4064ca81e ("keep iocb_flags() result cached in struct file")
+> 
+> from the vfs tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+> 
+> diff --git a/io_uring/rw.c b/io_uring/rw.c
+> index 2b784795103cc..b20ba87e4926f 100644
+> --- a/io_uring/rw.c
+> +++ b/io_uring/rw.c
+> @@ -661,7 +661,7 @@ static int io_rw_init_file(struct io_kiocb *req, fmode_t mode)
+>  	if (!io_req_ffs_set(req))
+>  		req->flags |= io_file_get_flags(file) << REQ_F_SUPPORT_NOWAIT_BIT;
+>  
+> -	kiocb->ki_flags = iocb_flags(file);
+> +	kiocb->ki_flags = file->f_iocb_flags;
+>  	ret = kiocb_set_rw_flags(kiocb, rw->flags);
+>  	if (unlikely(ret))
+>  		return ret;
+
+That's the right resolution, mentioned that in my pull request as well.
+
+-- 
+Jens Axboe
+

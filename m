@@ -2,30 +2,30 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D00F589CB9
-	for <lists+linux-next@lfdr.de>; Thu,  4 Aug 2022 15:33:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A278589CC5
+	for <lists+linux-next@lfdr.de>; Thu,  4 Aug 2022 15:35:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239917AbiHDNdB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 4 Aug 2022 09:33:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37690 "EHLO
+        id S239939AbiHDNft (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 4 Aug 2022 09:35:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239889AbiHDNcq (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 4 Aug 2022 09:32:46 -0400
+        with ESMTP id S239915AbiHDNfp (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 4 Aug 2022 09:35:45 -0400
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 710CC3E74D;
-        Thu,  4 Aug 2022 06:32:45 -0700 (PDT)
-Received: from fraeml739-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Lz8gd6dbpz67KSZ;
-        Thu,  4 Aug 2022 21:28:29 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79FDC3B972;
+        Thu,  4 Aug 2022 06:35:44 -0700 (PDT)
+Received: from fraeml711-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Lz8kJ2RzGz67NKF;
+        Thu,  4 Aug 2022 21:30:48 +0800 (CST)
 Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- fraeml739-chm.china.huawei.com (10.206.15.220) with Microsoft SMTP Server
+ fraeml711-chm.china.huawei.com (10.206.15.60) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 4 Aug 2022 15:32:43 +0200
+ 15.1.2375.24; Thu, 4 Aug 2022 15:35:42 +0200
 Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
  (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 4 Aug
- 2022 14:32:42 +0100
-Date:   Thu, 4 Aug 2022 14:32:41 +0100
+ 2022 14:35:41 +0100
+Date:   Thu, 4 Aug 2022 14:35:40 +0100
 From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
 To:     Bagas Sanjaya <bagasdotme@gmail.com>
 CC:     <linux-doc@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
@@ -36,12 +36,12 @@ CC:     <linux-doc@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
         Ira Weiny <ira.weiny@intel.com>,
         "Ben Widawsky" <bwidawsk@kernel.org>,
         Dan Williams <dan.j.williams@intel.com>
-Subject: Re: [PATCH 3/3] Documentation: cxl: remove dangling kernel-doc
- reference
-Message-ID: <20220804143241.000065d7@huawei.com>
-In-Reply-To: <20220804075448.98241-4-bagasdotme@gmail.com>
+Subject: Re: [PATCH 2/3] cxl/region: describe targets and nr_targets members
+ of cxl_region_params
+Message-ID: <20220804143540.000041c2@huawei.com>
+In-Reply-To: <20220804075448.98241-3-bagasdotme@gmail.com>
 References: <20220804075448.98241-1-bagasdotme@gmail.com>
-        <20220804075448.98241-4-bagasdotme@gmail.com>
+        <20220804075448.98241-3-bagasdotme@gmail.com>
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
 Content-Type: text/plain; charset="US-ASCII"
@@ -59,40 +59,39 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu,  4 Aug 2022 14:54:48 +0700
+On Thu,  4 Aug 2022 14:54:47 +0700
 Bagas Sanjaya <bagasdotme@gmail.com> wrote:
 
-> Sphinx reported kernel-doc failure warning, pointing to non-existent
-> drivers/cxl/region.h (which doesn't also exist throughout repo history):
+> Sphinx reported undescribed parameters in cxl_region_params struct:
 > 
-> WARNING: kernel-doc './scripts/kernel-doc -rst -enable-lineno -sphinx-version 2.4.4 -no-doc-sections ./drivers/cxl/region.h' failed with return code 1
+> ./drivers/cxl/cxl.h:376: warning: Function parameter or member 'targets' not described in 'cxl_region_params'
+> ./drivers/cxl/cxl.h:376: warning: Function parameter or member 'nr_targets' not described in 'cxl_region_params'
 > 
-> Above cause error message to be displayed on htmldocs output.
+> Describe these members.
 > 
-> Delete the reference.
-> 
-> Fixes: 779dd20cfb56c5 ("cxl/region: Add region creation support")
-> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
-Ah. That went in some refactoring along the way.
+> Fixes: dd5ba0ebbdc414 ("cxl/region: Add a 'uuid' attribute")
+That seems unlikely to be right tag. Probably b9686e8c8e39
+
+With that tidied up.
 
 Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
+> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
 > ---
->  Documentation/driver-api/cxl/memory-devices.rst | 3 ---
->  1 file changed, 3 deletions(-)
+>  drivers/cxl/cxl.h | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/Documentation/driver-api/cxl/memory-devices.rst b/Documentation/driver-api/cxl/memory-devices.rst
-> index 66ddc58a21b159..5149ecdc53c796 100644
-> --- a/Documentation/driver-api/cxl/memory-devices.rst
-> +++ b/Documentation/driver-api/cxl/memory-devices.rst
-> @@ -364,9 +364,6 @@ CXL Core
->  
->  CXL Regions
->  -----------
-> -.. kernel-doc:: drivers/cxl/region.h
-> -   :identifiers:
-> -
->  .. kernel-doc:: drivers/cxl/core/region.c
->     :doc: cxl core region
->  
+> diff --git a/drivers/cxl/cxl.h b/drivers/cxl/cxl.h
+> index 75674400cc8d41..65aaf15aa17e29 100644
+> --- a/drivers/cxl/cxl.h
+> +++ b/drivers/cxl/cxl.h
+> @@ -362,6 +362,8 @@ enum cxl_config_state {
+>   * @interleave_ways: number of endpoints in the region
+>   * @interleave_granularity: capacity each endpoint contributes to a stripe
+>   * @res: allocated iomem capacity for this region
+> + * @targets: active ordered targets in current decoder configuration
+> + * @nr_targets: number of targets
+>   *
+>   * State transitions are protected by the cxl_region_rwsem
+>   */
 

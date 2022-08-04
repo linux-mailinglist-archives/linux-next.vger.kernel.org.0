@@ -2,113 +2,106 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73C295898CF
-	for <lists+linux-next@lfdr.de>; Thu,  4 Aug 2022 09:55:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D7B65899C5
+	for <lists+linux-next@lfdr.de>; Thu,  4 Aug 2022 11:15:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239366AbiHDHzT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 4 Aug 2022 03:55:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42208 "EHLO
+        id S239000AbiHDJPK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 4 Aug 2022 05:15:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239348AbiHDHzN (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 4 Aug 2022 03:55:13 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09072D93;
-        Thu,  4 Aug 2022 00:55:12 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id f11so17260341pgj.7;
-        Thu, 04 Aug 2022 00:55:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=wznkIL6qfpYzFMspwCeJlJB1nlJHNIimvzTogvlqPjs=;
-        b=EQfeXpQQ+Gxh0+9HaNXsT19uegX3KHWon6EzK8Q1KqNAxiGxPnLG0y2FiKkndJc5xF
-         exIIKjHRGPjtkV2FL3UXEqEbxBI2ESeMoy9s2gddJ3KyokGEeFqC+PEgwa6sROz7e6q6
-         4NOw6sknsMRjxjheq2etEc5kfb3MDkL48XTJj7rqhpfdimLxcV3YPd+N4n37Slid8bV7
-         +nL2Gxv4fc+fJ6G0bFIpJQNaUVXNvQIUpBkJk01m9kSznQzdDZN5c1UxrDM8fmSePnKu
-         7Z8X1yUyT+5CuFYfg4HUwf283LL0zUDqUVpkSY7WozZMzefl9RE1Ypoip+1IEQ8BfnVc
-         UBcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=wznkIL6qfpYzFMspwCeJlJB1nlJHNIimvzTogvlqPjs=;
-        b=sMKG6NoxWIPi1hUXlcBLlz/y80dzOFOR/c8SjYM1rLzoR1m/XVBEN+0ZPfU4ZTZUmT
-         p/T9l+E0ayTrjKz3wOA+10xBzST2vr7CDS3LSztaOF96GtZRdCXApexzBNh1+2OEEAIf
-         U0qr/t/IkYZ5R/p3zwoni0I0KhZlmGXbL+ycpIAbI+CNOfWMG2Rt/PdFt/alC5Jcs8YN
-         Y5KuvocTi2Sn1xGUJG4I6MridFqlzH78YN/0Lhmyk0QQfCJcRm+5C0Q/I64xAZdyU/ER
-         3xNIjxcLoJ3Xal384XW1Om734W8XNMzgIKhNIV5msXFHDPZQK4LfS0ki+kYoEVkXG0rq
-         HIfQ==
-X-Gm-Message-State: ACgBeo3tFwUiA7wZvmhnE7Aih/ouGvb1BT/CHF2DEeZcV3dcpjGwAZ2j
-        mBwsqAz523iXDYYdWJOgnpU=
-X-Google-Smtp-Source: AA6agR59WXR8HB1Fzh7rCwEA4pDHCxPXITi8cwSZjha7oKGw7AT6H5VKbOxGfJ0sYXJ6Xd/2pFUnAw==
-X-Received: by 2002:a05:6a00:1343:b0:52e:61b1:4a9f with SMTP id k3-20020a056a00134300b0052e61b14a9fmr793141pfu.6.1659599711410;
-        Thu, 04 Aug 2022 00:55:11 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-23.three.co.id. [180.214.232.23])
-        by smtp.gmail.com with ESMTPSA id a6-20020a170902710600b0016f02fceff4sm232053pll.57.2022.08.04.00.55.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Aug 2022 00:55:10 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 4ACEF103BFE; Thu,  4 Aug 2022 14:55:05 +0700 (WIB)
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     linux-doc@vger.kernel.org, linux-cxl@vger.kernel.org,
-        linux-next@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        with ESMTP id S238985AbiHDJPJ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 4 Aug 2022 05:15:09 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A731D65573;
+        Thu,  4 Aug 2022 02:15:08 -0700 (PDT)
+Received: from fraeml706-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Lz2xc18ybz67Qtq;
+        Thu,  4 Aug 2022 17:10:12 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml706-chm.china.huawei.com (10.206.15.55) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2375.24; Thu, 4 Aug 2022 11:15:06 +0200
+Received: from localhost (10.122.247.231) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 4 Aug
+ 2022 10:15:05 +0100
+Date:   Thu, 4 Aug 2022 10:15:03 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+CC:     <linux-doc@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
+        <linux-next@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
         Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
+        "Vishal Verma" <vishal.l.verma@intel.com>,
         Ira Weiny <ira.weiny@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: [PATCH 3/3] Documentation: cxl: remove dangling kernel-doc reference
-Date:   Thu,  4 Aug 2022 14:54:48 +0700
-Message-Id: <20220804075448.98241-4-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220804075448.98241-1-bagasdotme@gmail.com>
+        "Ben Widawsky" <bwidawsk@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>
+Subject: Re: [PATCH 1/3] cxl/regions: add padding for cxl_rr_ep_add nested
+ lists
+Message-ID: <20220804101503.000039ff@huawei.com>
+In-Reply-To: <20220804075448.98241-2-bagasdotme@gmail.com>
 References: <20220804075448.98241-1-bagasdotme@gmail.com>
+        <20220804075448.98241-2-bagasdotme@gmail.com>
+Organization: Huawei Technologies R&D (UK) Ltd.
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; x86_64-w64-mingw32)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1131; i=bagasdotme@gmail.com; h=from:subject; bh=blM3WPeKk4vfg8s8TUxTvxY5mz7mY5WMx84fxwCOq3E=; b=owGbwMvMwCn83935mHOB8QHG02pJDEmvqz0KfDb0sE19OcHfy9nwe/z6f6G+bHYPdR1m2DpZ/TsU znS2YyoLgzAng6yYIsubyt1iHB9WHu0P/p4JM4eVCWQIAxenAExkYQhjna71Sq1luoFpu9dMc4oV9j Lz+vrlxayDIbteHj0wz+G5efp/3R7HiyH7V+k8uGZgOotFmbGh/d/vWzXxRhICoX8nLfoSZPzqZKaP u5rcGsa6MlXGrTs3/5zz+t3vvQ1Sqzi3T1vaGWQEAA==
-X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=EC79BB1608F0A9C58F53F769FF4743C6437033C0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.122.247.231]
+X-ClientProxiedBy: lhreml741-chm.china.huawei.com (10.201.108.191) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Sphinx reported kernel-doc failure warning, pointing to non-existent
-drivers/cxl/region.h (which doesn't also exist throughout repo history):
+On Thu,  4 Aug 2022 14:54:46 +0700
+Bagas Sanjaya <bagasdotme@gmail.com> wrote:
 
-WARNING: kernel-doc './scripts/kernel-doc -rst -enable-lineno -sphinx-version 2.4.4 -no-doc-sections ./drivers/cxl/region.h' failed with return code 1
+> Sphinx reported indentation warnings:
+> 
+> Documentation/driver-api/cxl/memory-devices:457: ./drivers/cxl/core/region.c:732: WARNING: Unexpected indentation.
+> Documentation/driver-api/cxl/memory-devices:457: ./drivers/cxl/core/region.c:733: WARNING: Block quote ends without a blank line; unexpected unindent.
+> Documentation/driver-api/cxl/memory-devices:457: ./drivers/cxl/core/region.c:735: WARNING: Unexpected indentation.
+> 
+> These warnings above are due to missing blank line padding in the nested list
+> in kernel-doc comment for cxl_rr_ep_add().
+> 
+> Add the paddings to fix the warnings.
+> 
+> Fixes: 384e624bb211b4 ("cxl/region: Attach endpoint decoders")
+> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+Looks right to me.  Sphinx white space around lists is annoyingly fiddly but
+such is life.
 
-Above cause error message to be displayed on htmldocs output.
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-Delete the reference.
-
-Fixes: 779dd20cfb56c5 ("cxl/region: Add region creation support")
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
- Documentation/driver-api/cxl/memory-devices.rst | 3 ---
- 1 file changed, 3 deletions(-)
-
-diff --git a/Documentation/driver-api/cxl/memory-devices.rst b/Documentation/driver-api/cxl/memory-devices.rst
-index 66ddc58a21b159..5149ecdc53c796 100644
---- a/Documentation/driver-api/cxl/memory-devices.rst
-+++ b/Documentation/driver-api/cxl/memory-devices.rst
-@@ -364,9 +364,6 @@ CXL Core
- 
- CXL Regions
- -----------
--.. kernel-doc:: drivers/cxl/region.h
--   :identifiers:
--
- .. kernel-doc:: drivers/cxl/core/region.c
-    :doc: cxl core region
- 
--- 
-An old man doll... just what I always wanted! - Clara
+> ---
+>  drivers/cxl/core/region.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/cxl/core/region.c b/drivers/cxl/core/region.c
+> index dc71ec457608d2..616db51c4e78cf 100644
+> --- a/drivers/cxl/core/region.c
+> +++ b/drivers/cxl/core/region.c
+> @@ -728,11 +728,14 @@ static int cxl_rr_ep_add(struct cxl_region_ref *cxl_rr,
+>   * in particular decoder target lists.
+>   *
+>   * The steps are:
+> + *
+>   * - validate that there are no other regions with a higher HPA already
+>   *   associated with @port
+>   * - establish a region reference if one is not already present
+> + *
+>   *   - additionally allocate a decoder instance that will host @cxlr on
+>   *     @port
+> + *
+>   * - pin the region reference by the endpoint
+>   * - account for how many entries in @port's target list are needed to
+>   *   cover all of the added endpoints.
 

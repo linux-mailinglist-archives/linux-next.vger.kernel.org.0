@@ -2,53 +2,48 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6AD258AB2A
-	for <lists+linux-next@lfdr.de>; Fri,  5 Aug 2022 14:57:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DAD458ADA2
+	for <lists+linux-next@lfdr.de>; Fri,  5 Aug 2022 17:52:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236468AbiHEM5x (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 5 Aug 2022 08:57:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53360 "EHLO
+        id S241490AbiHEPwC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 5 Aug 2022 11:52:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236448AbiHEM5w (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 5 Aug 2022 08:57:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A03722BD1;
-        Fri,  5 Aug 2022 05:57:52 -0700 (PDT)
+        with ESMTP id S230223AbiHEPvX (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 5 Aug 2022 11:51:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E1A551A1C;
+        Fri,  5 Aug 2022 08:49:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CACD3B828BD;
-        Fri,  5 Aug 2022 12:57:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1E78C433D7;
-        Fri,  5 Aug 2022 12:57:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DDF3F61616;
+        Fri,  5 Aug 2022 15:49:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90D09C433B5;
+        Fri,  5 Aug 2022 15:49:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659704269;
-        bh=XY/seUO2FBE4LU769qrgj31/ob2I4U4o5EZgccv/cEU=;
+        s=k20201202; t=1659714576;
+        bh=Yd8bNnzi3urQ1HxqR4MVS0B8oT4VBgO3urZLScQdUOo=;
         h=From:To:Cc:Subject:Date:From;
-        b=ZzvNB/E6ZhpeCFStq9xeHuoZr0khrgjwoLQWhDmbtKdH8lNiRX16PvyeWnIR/Gi/G
-         IYM+CBQd5trG97Rn4z2XrGZpefngNCDyy2Y88taKDJVSCs8ijhg/f0Nxm+TsUvWBBt
-         iqTT4Sek9KWgSGDG3xKGlVTk3JC5waxw8dXMPOstr91YTqyH+F42OYW7DaYYZoRult
-         OwRpSq9TuwjHHHXYN3XZ0TKsSPWfUOIHuFAscHiYwBp2vkYAE2gnJTih/zPgaGGikH
-         NARvcCCGT+gf87Wtg6xWeyvOsdUXmuCuBS6tYwYpfwC3JAi9Kv3T2Taj4ll2bnzWHi
-         jEPzf0blRGblg==
+        b=mP1gr4Gji9IBDIpMIaPHT1+BF+hGMGZ4NfWewyiU+Vw/Gfs09NtIP3rPwss/qcwzn
+         FYP7t9eIoOv424MBCpLvM/BVhVcRaj95f4JlP7TXEerXLc+fXWgBM9tjS8cJlUXCEx
+         O7jwH5qQPjyQBYNJsPdi44XP+3pXAuPhCU+xvHD1p9C+cUmNv++wMmKfNIKp/4DSm4
+         EN4RhyAcAdYH6mNnsBuSRavq9O368GxNKEXYz+QlTwoUej2wjp+Q63hP+QiJfjySaK
+         t+JM6tZknqzvLvAK8sHudkdCYwGdAsszSZ/gn1uMSn25kkTe/FvzQE/bvAoRz/5oP9
+         0Y92WdQbVrI7g==
 From:   broonie@kernel.org
-To:     Alasdair G Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Nathan Huckleberry <nhuck@google.com>
-Subject: linux-next: manual merge of the device-mapper tree with the origin tree
-Date:   Fri,  5 Aug 2022 13:57:44 +0100
-Message-Id: <20220805125744.475531-1-broonie@kernel.org>
+To:     Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: Tree for Aug 5
+Date:   Fri,  5 Aug 2022 16:49:32 +0100
+Message-Id: <20220805154932.1108442-1-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        LOCALPART_IN_SUBJECT,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -57,37 +52,46 @@ X-Mailing-List: linux-next@vger.kernel.org
 
 Hi all,
 
-Today's linux-next merge of the device-mapper tree got a conflict in:
+Changes since 20220804:
 
-  drivers/md/dm-verity-target.c
+The perf tree gained a conflict against Linus' tree which I fixed up.
 
-between commit:
+The device-mapper tree gained a conflict against Linus' tree which I
+fixed up.
 
-  b6c1c5745ccc6 ("dm: Add verity helpers for LoadPin")
+Stephen should be back on Monday and normal service resumed.
 
-from the origin tree and commits:
+Non-merge commits (relative to Linus' tree): 3623
+ 3914 files changed, 275727 insertions(+), 60195 deletions(-)
 
-  ba2cce82ba1ba ("dm verity: conditionally enable branching for "try_verify_in_tasklet"")
-  5721d4e5a9cdb ("dm verity: Add optional "try_verify_in_tasklet" feature")
+----------------------------------------------------------------------------
 
-from the device-mapper tree.
+I have created today's linux-next tree at
+git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
+are tracking the linux-next tree using git, you should not use "git pull"
+to do so as that will try to merge the new linux-next release with the
+old one.  You should use "git fetch" and checkout or reset to the new
+master.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+You can see which trees have been included by looking in the Next/Trees
+file in the source.  There are also quilt-import.log and merge.log
+files in the Next directory.  Between each merge, the tree was built
+with an arm64 defconfig, an allmodconfig cross build for x86_64, a
+multi_v7_defconfig for arm and a native build of tools/perf.
 
-diff --cc drivers/md/dm-verity-target.c
-index 4fd853a56b1ab,981821f18a18c..0000000000000
---- a/drivers/md/dm-verity-target.c
-+++ b/drivers/md/dm-verity-target.c
-@@@ -16,6 -16,6 +16,7 @@@
-  #include "dm-verity.h"
-  #include "dm-verity-fec.h"
-  #include "dm-verity-verify-sig.h"
-++#include <linux/jump_label.h>
-  #include <linux/module.h>
-  #include <linux/reboot.h>
-  #include <linux/scatterlist.h>
+Below is a summary of the state of the merge.
+
+I am currently merging 357 trees (counting Linus' and 98 trees of bug
+fix patches pending for the current merge release).
+
+Stats about the size of the tree over time can be seen at
+http://neuling.org/linux-next-size.html .
+
+Status of my local build tests will be at
+http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
+advice about cross compilers/configs that work, we are always open to add
+more builds.
+
+Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
+Gortmaker for triage and bug fixes.

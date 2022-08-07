@@ -2,205 +2,95 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6986258B3F2
-	for <lists+linux-next@lfdr.de>; Sat,  6 Aug 2022 07:40:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F264958BAC0
+	for <lists+linux-next@lfdr.de>; Sun,  7 Aug 2022 14:03:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238876AbiHFFk1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 6 Aug 2022 01:40:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43234 "EHLO
+        id S232383AbiHGMDA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 7 Aug 2022 08:03:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230369AbiHFFkZ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 6 Aug 2022 01:40:25 -0400
+        with ESMTP id S231860AbiHGMDA (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 7 Aug 2022 08:03:00 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C4F65C2;
-        Fri,  5 Aug 2022 22:40:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9CE4BF4B;
+        Sun,  7 Aug 2022 05:02:58 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4M0BBR4s1lz4x1L;
-        Sat,  6 Aug 2022 15:40:15 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1659764416;
-        bh=yvU/ICCSlUwjAeapMvquNUrHdS+LFJEf/6r+t/RG2c8=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=R9kH81QPtVyWDzuF0Ky3fvhiyrKv5woe42/F/kJhUQrxbSExVWbF/4zNwam4DwC7T
-         ZZZ+AaDNtMPrjETJS6rMCwf8Z5Lu8pVekfrfDZZ9rm+0W6G+4MSwNCM5VwehfvqvPy
-         mA2+TSLcjRlM0PW/FEB6SILsHQvI7p5dxrslQb9ORY1BPBr23Kj9owuDtkdrVY/QID
-         PuHGKwgc4uvoVN3Lnp9T4yfdv6H2diaBwLfURgkKgo8qizNgLu5lUgsdrqfNpq9E+i
-         niyO4icUpVE64MhGHDaX5z2+KB9SqoCb/vJBMfg0GcdoCgDVODjfCqMYjXzTpK5J1H
-         AnfrEBXEVTVpA==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     broonie@kernel.org, Yury Norov <yury.norov@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     "Jason A . Donenfeld" <Jason@zx2c4.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the bitmap tree with the random tree
-In-Reply-To: <20220802235903.2660083-1-broonie@kernel.org>
-References: <20220802235903.2660083-1-broonie@kernel.org>
-Date:   Sat, 06 Aug 2022 15:40:15 +1000
-Message-ID: <87h72q9bgg.fsf@mpe.ellerman.id.au>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4M0ydT1Mp0z4x1J;
+        Sun,  7 Aug 2022 22:02:53 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1659873773;
+        bh=Q1lRgU4YZaTZwaMMtMZs3R16yzS3InZ4D3mBFloYCW8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=D4zlPiwrX1ONKunBbnD2L2+kekAT4ouRWWTJnN0yRk9PbJD3tXqmKu3wugVmNSpQo
+         0QIlmF4O9aTO/8NTgvzwWpJVhvpwWn0N94C6mdOEnrD1Ol1RFytIj39CT/oBlSKqIJ
+         csrvt0NPiaMkhRUyj4223bqT/lH2jRfz3929ZM9yKxh3/Q9WViLX2Xyz8bZIxQUuTv
+         vwJkBhutPzas5bYlBotSpDyDI03DCVyCQAmPy7m/TUCxAx6zcb/7/9VuACULd4b2ea
+         AdkrhDylowrWBS02fNEH4yoVAgj5bYGtXXP/z72R/khNDP97tABTQCe0HzwNxxTUg5
+         ub+/Unv7eyuEg==
+Date:   Sun, 7 Aug 2022 22:02:40 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: Tree for Jul 28
+Message-ID: <20220807220240.7ccec5de@canb.auug.org.au>
+In-Reply-To: <YugAzWWl++ArhhPS@sirena.org.uk>
+References: <20220728210236.76654a0e@canb.auug.org.au>
+        <YugAzWWl++ArhhPS@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/bTzDA883p2=0b2fGhwAZ6yF";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+--Sig_/bTzDA883p2=0b2fGhwAZ6yF
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
 Hi Mark,
 
-Thanks for doing linux-next in sfr's absence.
-
-The merge resolution below is not quite right ...
-
-broonie@kernel.org writes:
-> Hi all,
+On Mon, 1 Aug 2022 17:35:25 +0100 Mark Brown <broonie@kernel.org> wrote:
 >
-> Today's linux-next merge of the bitmap tree got a conflict in:
->
-> arch/powerpc/include/asm/archrandom.h
->
-> between commit:
->
->   d349ab99eec7a ("random: handle archrandom with multiple longs")
->
-> from the random tree and commit:
->
->   3e731203153de ("powerpc: drop dependency on <asm/machdep.h> in archrandom.h")
->
-> from the bitmap tree.
->
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->
-> diff --cc arch/powerpc/include/asm/archrandom.h
-> index 564859e6a807c,21def59ef1a68..0000000000000
-> --- a/arch/powerpc/include/asm/archrandom.h
-> +++ b/arch/powerpc/include/asm/archrandom.h
-> @@@ -2,22 -2,41 +2,17 @@@
->   #ifndef _ASM_POWERPC_ARCHRANDOM_H
->   #define _ASM_POWERPC_ARCHRANDOM_H
->   
->  -#ifdef CONFIG_ARCH_RANDOM
->  +#include <asm/machdep.h>
-  
-This include must be dropped.
+> On Thu, Jul 28, 2022 at 09:02:36PM +1000, Stephen Rothwell wrote:
+>=20
+> > News: the next linux-next release will be on Monday Aug 8th. =20
+>=20
+> I didn't notice this last week, I'll try to provide coverage for the
+> remainder of this week, hopefully the merge window should help this go
+> smoothly but no guarantees.
 
->  -bool __must_check arch_get_random_seed_long(unsigned long *v);
->  -
->  -static inline bool __must_check arch_get_random_long(unsigned long *v)
->  +static inline size_t __must_check arch_get_random_longs(unsigned long *v, size_t max_longs)
->   {
->  -	return false;
->  +	return 0;
->   }
->   
-> - static inline size_t __must_check arch_get_random_seed_longs(unsigned long *v, size_t max_longs)
->  -static inline bool __must_check arch_get_random_int(unsigned int *v)
-> --{
-> - 	if (max_longs && ppc_md.get_random_seed && ppc_md.get_random_seed(v))
-> - 		return 1;
-> - 	return 0;
->  -	return false;
->  -}
->  -
->  -
->  -static inline bool __must_check arch_get_random_seed_int(unsigned int *v)
->  -{
->  -	unsigned long val;
->  -	bool rc;
->  -
->  -	rc = arch_get_random_seed_long(&val);
->  -	if (rc)
->  -		*v = val;
->  -
->  -	return rc;
-> --}
->  -#endif /* CONFIG_ARCH_RANDOM */
-> ++size_t __must_check arch_get_random_seed_longs(unsigned long *v, size_t max_longs);
->   
->   #ifdef CONFIG_PPC_POWERNV
->  -int powernv_hwrng_present(void);
->  -int powernv_get_random_long(unsigned long *v);
->  -int powernv_get_random_real_mode(unsigned long *v);
->  -#else
->  -static inline int powernv_hwrng_present(void) { return 0; }
->  -static inline int powernv_get_random_real_mode(unsigned long *v) { return 0; }
->  +int pnv_get_random_long(unsigned long *v);
->   #endif
->   
->   #endif /* _ASM_POWERPC_ARCHRANDOM_H */
-> diff --git a/arch/powerpc/kernel/setup-common.c b/arch/powerpc/kernel/setup-common.c
-> index 3b1cf9ca4814b..951822145600e 100644
-> --- a/arch/powerpc/kernel/setup-common.c
-> +++ b/arch/powerpc/kernel/setup-common.c
-> @@ -172,12 +172,12 @@ void (*pm_power_off)(void);
->  EXPORT_SYMBOL_GPL(pm_power_off);
->  
->  #ifdef CONFIG_ARCH_RANDOM
+Thanks for throwing yourself on the grenade again :-)  I hope it wasn't
+too onerous.  I was supposed to be absent in the second half of the
+merge window.
 
-This ifdef must be dropped entirely, it was removed in Jason's tree.
+I will be back on board tomorrow.
+--=20
+Cheers,
+Stephen Rothwell
 
-> -bool __must_check arch_get_random_seed_long(unsigned long *v)
-> +size_T __must_check arch_get_random_seed_longs(unsigned long *v, size_t max_longs)
+--Sig_/bTzDA883p2=0b2fGhwAZ6yF
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-Typo, should be size_t.
+-----BEGIN PGP SIGNATURE-----
 
->  {
-> -	if (ppc_md.get_random_seed)
-> -		return ppc_md.get_random_seed(v);
-> +	if (max_longs && ppc_md.get_random_seed && ppc_md.get_random_seed(v))
-> +		return 1;
->  
-> -	return false;
-> +	return 0;
->  }
->  EXPORT_SYMBOL(arch_get_random_seed_long);
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLvqeEACgkQAVBC80lX
+0Gzslwf/Tr8tNna7kN5ZPxAUzclXGjJPBzUO/jNKWVZSJYaIrItenosyi1TH+sXD
+0sHIxOCL5MW1tlu+LHeAY9fAMfk9JsXpODmvLvxflOikRQvHW7uxJlS5SBbyf37N
+DbpcnmDcmNRxb+gomOFMPupLgivN39nfZRjnPjB1mnluL2Z+rVF+2ouNF+lus5si
+w9tglT/bz9rP6dZHA98wGpfDShigiQkPLXTRTk+tz15Fe6ba9HsrVDjJ43vmVGnD
+p8GHmt+RkSDGiydUu6xd5NrcLqHGRJZa6qf48dxk3xdHKXgSGv0LfeNRAF/pLQc/
+ioCUIQ/BazUe/05f8U0aLsFJp/9/ow==
+=zbG1
+-----END PGP SIGNATURE-----
 
-The export needs to be updated to "arch_get_random_seed_longs".
-
-I've attached the end state of archrandom.h and the hunk in
-setup-common.c below for reference.
-
-cheers
-
-==== arch/powerpc/kernel/setup-common.c ====
-...
-
-size_t __must_check arch_get_random_seed_longs(unsigned long *v, size_t max_longs)
-{
-	if (max_longs && ppc_md.get_random_seed && ppc_md.get_random_seed(v))
-		return 1;
-
-	return 0;
-}
-EXPORT_SYMBOL(arch_get_random_seed_longs);
-
-...
-
-==== arch/powerpc/include/asm/archrandom.h ====
-/* SPDX-License-Identifier: GPL-2.0 */
-#ifndef _ASM_POWERPC_ARCHRANDOM_H
-#define _ASM_POWERPC_ARCHRANDOM_H
-
-static inline size_t __must_check arch_get_random_longs(unsigned long *v, size_t max_longs)
-{
-	return 0;
-}
-
-size_t __must_check arch_get_random_seed_longs(unsigned long *v, size_t max_longs);
-
-#ifdef CONFIG_PPC_POWERNV
-int pnv_get_random_long(unsigned long *v);
-#endif
-
-#endif /* _ASM_POWERPC_ARCHRANDOM_H */
+--Sig_/bTzDA883p2=0b2fGhwAZ6yF--

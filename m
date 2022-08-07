@@ -2,95 +2,78 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F264958BAC0
-	for <lists+linux-next@lfdr.de>; Sun,  7 Aug 2022 14:03:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E712F58BBF9
+	for <lists+linux-next@lfdr.de>; Sun,  7 Aug 2022 19:21:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232383AbiHGMDA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 7 Aug 2022 08:03:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40792 "EHLO
+        id S232029AbiHGRVo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 7 Aug 2022 13:21:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231860AbiHGMDA (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 7 Aug 2022 08:03:00 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9CE4BF4B;
-        Sun,  7 Aug 2022 05:02:58 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4M0ydT1Mp0z4x1J;
-        Sun,  7 Aug 2022 22:02:53 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1659873773;
-        bh=Q1lRgU4YZaTZwaMMtMZs3R16yzS3InZ4D3mBFloYCW8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=D4zlPiwrX1ONKunBbnD2L2+kekAT4ouRWWTJnN0yRk9PbJD3tXqmKu3wugVmNSpQo
-         0QIlmF4O9aTO/8NTgvzwWpJVhvpwWn0N94C6mdOEnrD1Ol1RFytIj39CT/oBlSKqIJ
-         csrvt0NPiaMkhRUyj4223bqT/lH2jRfz3929ZM9yKxh3/Q9WViLX2Xyz8bZIxQUuTv
-         vwJkBhutPzas5bYlBotSpDyDI03DCVyCQAmPy7m/TUCxAx6zcb/7/9VuACULd4b2ea
-         AdkrhDylowrWBS02fNEH4yoVAgj5bYGtXXP/z72R/khNDP97tABTQCe0HzwNxxTUg5
-         ub+/Unv7eyuEg==
-Date:   Sun, 7 Aug 2022 22:02:40 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        with ESMTP id S230172AbiHGRVn (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 7 Aug 2022 13:21:43 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2B6725FF1
+        for <linux-next@vger.kernel.org>; Sun,  7 Aug 2022 10:21:42 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-59-LWUE5ESlNbeDEuBI7Kek9w-1; Sun, 07 Aug 2022 18:21:39 +0100
+X-MC-Unique: LWUE5ESlNbeDEuBI7Kek9w-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.36; Sun, 7 Aug 2022 18:21:38 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.036; Sun, 7 Aug 2022 18:21:38 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Zhang Boyang' <zhangboyang.id@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: Tree for Jul 28
-Message-ID: <20220807220240.7ccec5de@canb.auug.org.au>
-In-Reply-To: <YugAzWWl++ArhhPS@sirena.org.uk>
-References: <20220728210236.76654a0e@canb.auug.org.au>
-        <YugAzWWl++ArhhPS@sirena.org.uk>
+CC:     "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>
+Subject: RE: Please consider Linux 5.20 because it means "I love Linux" in
+ Chinese (Re: Linux 5.19)
+Thread-Topic: Please consider Linux 5.20 because it means "I love Linux" in
+ Chinese (Re: Linux 5.19)
+Thread-Index: AQHYqOzgM0Qib+ST+0+MwmDzg5l5/K2jsgyg
+Date:   Sun, 7 Aug 2022 17:21:38 +0000
+Message-ID: <7ba6f61ee9494fcc92268de4d32bf89e@AcuMS.aculab.com>
+References: <CAHk-=wgrz5BBk=rCz7W28Fj_o02s0Xi0OEQ3H1uQgOdFvHgx0w@mail.gmail.com>
+ <9bc1f1f4-3923-be9e-ee13-9c8252a56643@gmail.com>
+In-Reply-To: <9bc1f1f4-3923-be9e-ee13-9c8252a56643@gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/bTzDA883p2=0b2fGhwAZ6yF";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/bTzDA883p2=0b2fGhwAZ6yF
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+RnJvbTogWmhhbmcgQm95YW5nDQo+IFNlbnQ6IDA1IEF1Z3VzdCAyMDIyIDE4OjAwDQo+IA0KPiBP
+biAyMDIyLzgvMSAwNTo0MywgTGludXMgVG9ydmFsZHMgd3JvdGU6DQo+ID4gKCopIEknbGwgbGlr
+ZWx5IGNhbGwgaXQgNi4wIHNpbmNlIEknbSBzdGFydGluZyB0byB3b3JyeSBhYm91dCBnZXR0aW5n
+DQo+ID4gY29uZnVzZWQgYnkgYmlnIG51bWJlcnMgYWdhaW4uDQo+IA0KPiBDb3VsZCB5b3UgcGxl
+YXNlIGNvbnNpZGVyIHVzZSA1LjIwIGFzIG5leHQgdmVyc2lvbiBudW1iZXIgaW5zdGVhZCBvZg0K
+PiA2LjA/ICI1LjIwIiBpcyBhIHdvcmRwbGF5IG51bWJlciBpbiBDaGluZXNlLCB3aGljaCBtZWFu
+cyAiSSBsb3ZlIHlvdSIuDQo+IFRodXMgIkxpbnV4IDUuMjAiIGNhbiBiZSByZWFkIGFzICJJIGxv
+dmUgTGludXgiIGluIENoaW5lc2UuIFNvIEkgdGhpbmsNCj4gaXQncyBnb29kIHRoaW5nIHRvIHJl
+bGVhc2Ugc29tZXRoaW5nIGxpa2UgIkxpbnV4IDUuMjAgSSBsb3ZlIGxpbnV4DQo+IGVkaXRpb24i
+LCBqdXN0IGxpa2UgIkxpbnV4IEZvciBXb3JrZ3JvdXBzIDMuMTEiIGluIHRoZSBwYXN0Lg0KDQpJ
+IHdhcyB0aGlua2luZyBoZSBzaG91bGQgZG8gNS4yMCwgNS4yMSBhbmQgNS4yMiBiZWZvcmUgNi4w
+Lg0KSnVzdCB0byBzdG9wIGFueW9uZSB0aGlua2luZyBpdCBhbHdheXMgY2hhbmdlZCBhZnRlciAu
+MTkuDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkg
+Um9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlv
+biBObzogMTM5NzM4NiAoV2FsZXMpDQo=
 
-Hi Mark,
-
-On Mon, 1 Aug 2022 17:35:25 +0100 Mark Brown <broonie@kernel.org> wrote:
->
-> On Thu, Jul 28, 2022 at 09:02:36PM +1000, Stephen Rothwell wrote:
->=20
-> > News: the next linux-next release will be on Monday Aug 8th. =20
->=20
-> I didn't notice this last week, I'll try to provide coverage for the
-> remainder of this week, hopefully the merge window should help this go
-> smoothly but no guarantees.
-
-Thanks for throwing yourself on the grenade again :-)  I hope it wasn't
-too onerous.  I was supposed to be absent in the second half of the
-merge window.
-
-I will be back on board tomorrow.
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/bTzDA883p2=0b2fGhwAZ6yF
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLvqeEACgkQAVBC80lX
-0Gzslwf/Tr8tNna7kN5ZPxAUzclXGjJPBzUO/jNKWVZSJYaIrItenosyi1TH+sXD
-0sHIxOCL5MW1tlu+LHeAY9fAMfk9JsXpODmvLvxflOikRQvHW7uxJlS5SBbyf37N
-DbpcnmDcmNRxb+gomOFMPupLgivN39nfZRjnPjB1mnluL2Z+rVF+2ouNF+lus5si
-w9tglT/bz9rP6dZHA98wGpfDShigiQkPLXTRTk+tz15Fe6ba9HsrVDjJ43vmVGnD
-p8GHmt+RkSDGiydUu6xd5NrcLqHGRJZa6qf48dxk3xdHKXgSGv0LfeNRAF/pLQc/
-ioCUIQ/BazUe/05f8U0aLsFJp/9/ow==
-=zbG1
------END PGP SIGNATURE-----
-
---Sig_/bTzDA883p2=0b2fGhwAZ6yF--

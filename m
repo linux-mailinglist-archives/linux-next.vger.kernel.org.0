@@ -2,60 +2,85 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA2A658EAA4
-	for <lists+linux-next@lfdr.de>; Wed, 10 Aug 2022 12:46:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC9B258F00A
+	for <lists+linux-next@lfdr.de>; Wed, 10 Aug 2022 18:05:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbiHJKqf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 10 Aug 2022 06:46:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44110 "EHLO
+        id S233253AbiHJQEt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 10 Aug 2022 12:04:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiHJKqe (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 10 Aug 2022 06:46:34 -0400
-X-Greylist: delayed 427 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 10 Aug 2022 03:46:32 PDT
-Received: from vps758206.localdomain (51.ip-51-75-30.eu [51.75.30.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BD1185FAF
-        for <linux-next@vger.kernel.org>; Wed, 10 Aug 2022 03:46:32 -0700 (PDT)
-Received: by vps758206.localdomain (Postfix, from userid 10005)
-        id DE163187A21; Wed, 10 Aug 2022 12:39:23 +0200 (CEST)
-To:     linux-next@vger.kernel.org
-Subject: Urna Contact "FINANZKRISE KANN SIE REICH MACHEN!"
-Date:   Wed, 10 Aug 2022 10:39:23 +0000
-From:   Urna <contact@urnawp.com>
-Reply-To: no-reply@thembay.com
-Message-ID: <4a6f8f28561cc7bbbe00f88892151e60@www.provenceliterie.com>
-X-Mailer: PHPMailer 5.2.27 (https://github.com/PHPMailer/PHPMailer)
+        with ESMTP id S233393AbiHJQEs (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 10 Aug 2022 12:04:48 -0400
+Received: from a8-97.smtp-out.amazonses.com (a8-97.smtp-out.amazonses.com [54.240.8.97])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C7DA6580A;
+        Wed, 10 Aug 2022 09:04:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=r5f3hr7pzmhv6xwu5spgpns3mj2fddpz; d=linaro.org; t=1660147486;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+        bh=Rf/m8B9+Cw9kdwKV2esMY+p2eyZV4+cvATIOg1VdNaU=;
+        b=ZNKeqUuyPFnsBIYLgUVkumxYZuX0ToAf1GD5Cy2fClf7mNeZ3uFj9wPzmoBAykfW
+        lC4SjdlQkFxNLqAt1wHHEomlOn5fsCAiyS9id1F+lieKJK2sDZX8ZWO2mFfg9VcrpNN
+        z1WSFkNF5HldG6mmylwfU9xl3kmZgSWwTzkEz3GE=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=6gbrjpgwjskckoa6a5zn6fwqkn67xbtw; d=amazonses.com; t=1660147486;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+        bh=Rf/m8B9+Cw9kdwKV2esMY+p2eyZV4+cvATIOg1VdNaU=;
+        b=iW64heRAM2lkal7BQGT0XnrCagUS4AvmnTUZagcErXY+SW1MGiEwHY6aenQ7GX2j
+        ms/v+d3Re5GYHapOmT09NusuPpBEZCf2ZDobLCgufZDkBVwIgO15LUGz2wnKyJQpgT0
+        zN1nchxq9ySVGqkpitgKbG4VOhcz9iM1bGgzZrhI=
+From:   lkft@linaro.org
+To:     lkft@linaro.org
+Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        linux-next@vger.kernel.org, shuah@kernel.org
+Subject: lkft kselftest for next-20220810
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: Yes, score=6.4 required=5.0 tests=BAYES_50,
-        HEADER_FROM_DIFFERENT_DOMAINS,KHOP_HELO_FCRDNS,RCVD_IN_SBL_CSS,
-        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
-        *      [51.75.30.51 listed in zen.spamhaus.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.7 SPF_SOFTFAIL SPF: sender does not match SPF record (softfail)
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 HEADER_FROM_DIFFERENT_DOMAINS From and EnvelopeFrom 2nd level
-        *      mail domains are different
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  1.0 RDNS_DYNAMIC Delivered to internal network by host with
-        *      dynamic-looking rDNS
-        *  0.4 KHOP_HELO_FCRDNS Relay HELO differs from its IP's reverse DNS
-X-Spam-Level: ******
+Content-Transfer-Encoding: 7bit
+Message-ID: <0100018288804c9f-f631e70f-fc11-44d5-b66b-b8556d71639f-000000@email.amazonses.com>
+Date:   Wed, 10 Aug 2022 16:04:45 +0000
+Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
+X-SES-Outgoing: 2022.08.10-54.240.8.97
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        TO_EQ_FM_DIRECT_MX,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-From: GradySuits <linux-next@vger.kernel.org>
-Urna Contact Form
+## Build
+* kernel: 5.19.0
+* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+* git branch: master
+* git commit: bc6c6584ffb27b62e19ea89553b22b4cad1abaca
+* git describe: next-20220810
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220810
 
-Message Body:
-Kryptowahrung macht Sie zum Millionar https://telegra.ph/Passives-Einkommen-und-7500000-Euro-auf-KryptowГ¤hrung-376659-08-09
+## Test Regressions (compared to next-20220809)
+No test regressions found.
+
+## Metric Regressions (compared to next-20220809)
+No metric regressions found.
+
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+
+## Test Fixes (compared to next-20220809)
+No test fixes found.
+
+## Metric Fixes (compared to next-20220809)
+No metric fixes found.
+
+## Test result summary
+total: 0, pass: 0, fail: 0, skip: 0, xfail: 0
+
+## Build Summary
+
+## Test suites summary
 
 --
-This e-mail was sent from a contact form on Urna (https://urnawp.com)
-
+Linaro LKFT
+https://lkft.linaro.org

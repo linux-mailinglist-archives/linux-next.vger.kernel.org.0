@@ -2,85 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC9B258F00A
-	for <lists+linux-next@lfdr.de>; Wed, 10 Aug 2022 18:05:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FF3658F464
+	for <lists+linux-next@lfdr.de>; Thu, 11 Aug 2022 00:29:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233253AbiHJQEt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 10 Aug 2022 12:04:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33514 "EHLO
+        id S230006AbiHJW3d (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 10 Aug 2022 18:29:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233393AbiHJQEs (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 10 Aug 2022 12:04:48 -0400
-Received: from a8-97.smtp-out.amazonses.com (a8-97.smtp-out.amazonses.com [54.240.8.97])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C7DA6580A;
-        Wed, 10 Aug 2022 09:04:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=r5f3hr7pzmhv6xwu5spgpns3mj2fddpz; d=linaro.org; t=1660147486;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=Rf/m8B9+Cw9kdwKV2esMY+p2eyZV4+cvATIOg1VdNaU=;
-        b=ZNKeqUuyPFnsBIYLgUVkumxYZuX0ToAf1GD5Cy2fClf7mNeZ3uFj9wPzmoBAykfW
-        lC4SjdlQkFxNLqAt1wHHEomlOn5fsCAiyS9id1F+lieKJK2sDZX8ZWO2mFfg9VcrpNN
-        z1WSFkNF5HldG6mmylwfU9xl3kmZgSWwTzkEz3GE=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=6gbrjpgwjskckoa6a5zn6fwqkn67xbtw; d=amazonses.com; t=1660147486;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=Rf/m8B9+Cw9kdwKV2esMY+p2eyZV4+cvATIOg1VdNaU=;
-        b=iW64heRAM2lkal7BQGT0XnrCagUS4AvmnTUZagcErXY+SW1MGiEwHY6aenQ7GX2j
-        ms/v+d3Re5GYHapOmT09NusuPpBEZCf2ZDobLCgufZDkBVwIgO15LUGz2wnKyJQpgT0
-        zN1nchxq9ySVGqkpitgKbG4VOhcz9iM1bGgzZrhI=
-From:   lkft@linaro.org
-To:     lkft@linaro.org
-Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
-        linux-next@vger.kernel.org, shuah@kernel.org
-Subject: lkft kselftest for next-20220810
+        with ESMTP id S233209AbiHJW32 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 10 Aug 2022 18:29:28 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9A0D8D3FA;
+        Wed, 10 Aug 2022 15:29:26 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4M34Ny3M22z4x1P;
+        Thu, 11 Aug 2022 08:29:22 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1660170562;
+        bh=Yh8cEFXsUsPqRCWFXvS4zQ3WyZG92Bk9SCcCNWzyj1s=;
+        h=Date:From:To:Cc:Subject:From;
+        b=WBHpeY5F1FlxEH0Lar/nbIwK3eNQi5PcuuKrq5vtvGfTugyQce/Y22TDVbWIORDqf
+         tUVelTW1nc5qcpk8U/mvvJ/xdOTettA1oPe2BO4eICIApDhIP0UyP6MkROaiL2Mlos
+         z9Rph+7MtFVCRNnmw407nVt2hkPSGM6UOp611rwMPtfAz+iBkbpwzXaHo4MvsiL81B
+         dH8YnHANZCUk5CmI958SKKsOaB/+E9BtlM02FFZ2QU+Y2g5GtGyD9kNOI4ziBDem3m
+         odjgCL1s0s+LMDjU9wig8xdxaqSo5Ne58zOd5DkWelsvaoaPdXbrtK509nk2kAQ8C9
+         mBPe716jOT0qA==
+Date:   Thu, 11 Aug 2022 08:28:57 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the vhost tree
+Message-ID: <20220811082857.1ff15c69@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-Message-ID: <0100018288804c9f-f631e70f-fc11-44d5-b66b-b8556d71639f-000000@email.amazonses.com>
-Date:   Wed, 10 Aug 2022 16:04:45 +0000
-Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2022.08.10-54.240.8.97
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        TO_EQ_FM_DIRECT_MX,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/uKIkBrX1F/=qjIH_DvIOJgr";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-## Build
-* kernel: 5.19.0
-* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-* git branch: master
-* git commit: bc6c6584ffb27b62e19ea89553b22b4cad1abaca
-* git describe: next-20220810
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220810
+--Sig_/uKIkBrX1F/=qjIH_DvIOJgr
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-## Test Regressions (compared to next-20220809)
-No test regressions found.
+Hi all,
 
-## Metric Regressions (compared to next-20220809)
-No metric regressions found.
+In commit
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+  5be8d7869e2d ("Bluetooth: virtio_bt: fix an error code in probe()")
 
+Fixes tag
 
-## Test Fixes (compared to next-20220809)
-No test fixes found.
+  Fixes: 212a6e51a630 ("Bluetooth: virtio_bt: fix device removal")
 
-## Metric Fixes (compared to next-20220809)
-No metric fixes found.
+has these problem(s):
 
-## Test result summary
-total: 0, pass: 0, fail: 0, skip: 0, xfail: 0
+  - Target SHA1 does not exist
 
-## Build Summary
+Maybe you meant
 
-## Test suites summary
+Fixes: bdbbdac22c63 ("Bluetooth: virtio_bt: fix device removal")
 
---
-Linaro LKFT
-https://lkft.linaro.org
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/uKIkBrX1F/=qjIH_DvIOJgr
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmL0MSoACgkQAVBC80lX
+0GxO1wf/Rh0OVVpwMs6g4LSFjSvqtYQ/2/G8NBkkLlPWvwLPg/OO4Uzq9c4hyqCp
+ONM8QXUzuQUOBjKvvbMOyS774Mh85DXtofkTmq05zDoHxHtxtNQ93omJoIysTo5v
+qLJFSi24UKYN298L2Cqp4T4D8qesb7ZMmOYBkby2DdrJRWumQb+RAkgIzBK7LUaH
+dLSRqr3P8vL0UMw/bYHai9rmfjr/mJ8QfZ4nGMDPHqr62y5WEcGHhsj0Mef+D9GQ
+eZRI83bmjDyGwilm/MSYB91KbBzTULsVZI7Ef0KrED15elaXZejkUZ7NtovW6AmD
+lx8ChUHtZVy/SIyeEcvmpqGA42cC/A==
+=bDqY
+-----END PGP SIGNATURE-----
+
+--Sig_/uKIkBrX1F/=qjIH_DvIOJgr--

@@ -2,49 +2,49 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1592658E952
-	for <lists+linux-next@lfdr.de>; Wed, 10 Aug 2022 11:12:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A97258E959
+	for <lists+linux-next@lfdr.de>; Wed, 10 Aug 2022 11:14:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230429AbiHJJMX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 10 Aug 2022 05:12:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37380 "EHLO
+        id S230383AbiHJJNl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 10 Aug 2022 05:13:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231594AbiHJJMX (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 10 Aug 2022 05:12:23 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D47986C28
-        for <linux-next@vger.kernel.org>; Wed, 10 Aug 2022 02:12:22 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id f5-20020a056e020b4500b002df180f0997so10347529ilu.21
-        for <linux-next@vger.kernel.org>; Wed, 10 Aug 2022 02:12:22 -0700 (PDT)
+        with ESMTP id S232018AbiHJJNZ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 10 Aug 2022 05:13:25 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4918A86C38
+        for <linux-next@vger.kernel.org>; Wed, 10 Aug 2022 02:13:24 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id w6-20020a6bf006000000b006845b59a08bso6145790ioc.9
+        for <linux-next@vger.kernel.org>; Wed, 10 Aug 2022 02:13:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc;
-        bh=oZmlmPgFuLzTVeJwCUtsQn3jK92/Zbe9geTOC8F9kDE=;
-        b=AjPKQYCATBM9Tyuu15DC1/DjT+qdwbLaNRvLcj6ou39uPbV5TOmoOsPOxvq3LgXMzL
-         J7MFYptYkKvKFfrKp6lVyL8ljZ3GeNjDSbhF8H+LNNDPt9ec1Md9nXE8zwg2wPs0r+N9
-         2iZRyHNXf52lAfO+Ay+mPMdcjRqitmAKj8Kl+0O8AW3fh6NcJ+9allkb6svLmk5PU2eI
-         tHSkxz67wKFvtu0pHw1SS01PYf87VXHLcEPU73XTDVbE5XHfMpWWVaVIHAuOxxmpLGZU
-         TGhFn4hpAe07lI1fbxP4vmrq04euU7cIZqkL0BnYCJ7JQaicwlLOC082QnLmvoLPx4Ul
-         PfNw==
-X-Gm-Message-State: ACgBeo01Z9UCGpN9VxCilKPkwnsLHmGItxPyzNKRXSKiiGE402CP6pWf
-        oZNYfQoYKbv7cchDPb0OZPapDajR9UKoCoze0eCkMkme6THw
-X-Google-Smtp-Source: AA6agR5LGbZgJoKzBnPq44ScUexr0uehLu94E1e9uLvjC/b/BzoDxSbE4LKZtOlIcspat0kvmw6sWwbM7izBt45glwnwSIEVt8aR
+        bh=FKHfwpgy/oFXIvLPEAflHzsj253CYh/YxdrAewsnulk=;
+        b=tkN7DMTLdpzo58aWhZcm86voMoFYMBIHBsAeUAmJrfPZZnNOK2QE2O2cP9KvOOYzmm
+         QZ464RM5mZ+3rUU9DHhIl7t5EOXiROYikVY5gaEW2HpemE/Mbc/76Fwne1zrHkveWY5Z
+         k5uwai2DUbuZ+/erkjMFSNGtn0iG/FGaMHe1DhpzOsbiDWW1xfMoXGQe3FpTdDrVmVF5
+         w03K6fv+/nNbhOigqq9WxPBVHek7CHkA1CN2ejiXvk9+DnEvTOUeydMbBjqW0UymKL9E
+         wGBvs3yta6J2dGh4uJJ3WodCWNfLZF6pTt/b+paUU5cTbXJojKfrLJrXLBZH2wpCbS73
+         I/zQ==
+X-Gm-Message-State: ACgBeo20GQCymQhrVMvIybd5C7laOKKaQjVMVTWvr9qfcPXpeokVmByB
+        M4lBovEOw1C7hMY9zsVb00cDiLAbeXacoNmm4kbc/98nVVLG
+X-Google-Smtp-Source: AA6agR7y0Sx1zr94W68yQIMRI/9oi0yx8cNrw5sYZHUa/JS5pxAmszVcuN2pzmfx8+5crcfGvXgl1yaVEGMyoTp/8TLOwMSOuWkj
 MIME-Version: 1.0
-X-Received: by 2002:a02:6347:0:b0:342:8ad4:ef54 with SMTP id
- j68-20020a026347000000b003428ad4ef54mr12189351jac.162.1660122741600; Wed, 10
- Aug 2022 02:12:21 -0700 (PDT)
-Date:   Wed, 10 Aug 2022 02:12:21 -0700
+X-Received: by 2002:a92:ca4e:0:b0:2df:1aae:47c4 with SMTP id
+ q14-20020a92ca4e000000b002df1aae47c4mr12371069ilo.57.1660122803606; Wed, 10
+ Aug 2022 02:13:23 -0700 (PDT)
+Date:   Wed, 10 Aug 2022 02:13:23 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000004bffef05e5df7207@google.com>
-Subject: [syzbot] linux-next boot error: WARNING in copy_process
-From:   syzbot <syzbot+0f36653d0d34001e0b43@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, bigeasy@linutronix.de,
-        bpf@vger.kernel.org, brauner@kernel.org, david@redhat.com,
-        ebiederm@xmission.com, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org, luto@kernel.org, sfr@canb.auug.org.au,
-        syzkaller-bugs@googlegroups.com, tglx@linutronix.de
+Message-ID: <000000000000fe1d6705e5df7580@google.com>
+Subject: [syzbot] linux-next boot error: general protection fault in __switch_to
+From:   syzbot <syzbot+95ea0d29692df9761488@syzkaller.appspotmail.com>
+To:     bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        masahiroy@kernel.org, mingo@redhat.com, nathan@kernel.org,
+        peterz@infradead.org, sfr@canb.auug.org.au,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de, x86@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -62,45 +62,71 @@ syzbot found the following issue on:
 
 HEAD commit:    bc6c6584ffb2 Add linux-next specific files for 20220810
 git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=109b7021080000
+console output: https://syzkaller.appspot.com/x/log.txt?x=13f5fcd1080000
 kernel config:  https://syzkaller.appspot.com/x/.config?x=5784be4315a4403b
-dashboard link: https://syzkaller.appspot.com/bug?extid=0f36653d0d34001e0b43
+dashboard link: https://syzkaller.appspot.com/bug?extid=95ea0d29692df9761488
 compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+0f36653d0d34001e0b43@syzkaller.appspotmail.com
+Reported-by: syzbot+95ea0d29692df9761488@syzkaller.appspotmail.com
 
-------------[ cut here ]------------
-DEBUG_LOCKS_WARN_ON(!p->softirqs_enabled)
-WARNING: CPU: 0 PID: 1047 at kernel/fork.c:2115 copy_process+0x36c9/0x7120 kernel/fork.c:2115
-Modules linked in:
-CPU: 0 PID: 1047 Comm: kworker/u4:5 Not tainted 5.19.0-next-20220810-syzkaller #0
+general protection fault, maybe for address 0xffff888020655880: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 1089 Comm: kworker/u4:4 Not tainted 5.19.0-next-20220810-syzkaller #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-Workqueue: events_unbound call_usermodehelper_exec_work
-RIP: 0010:copy_process+0x36c9/0x7120 kernel/fork.c:2115
-Code: 0c 31 ff 89 de e8 a7 00 35 00 85 db 0f 85 c3 d7 ff ff e8 da 03 35 00 48 c7 c6 c0 11 eb 89 48 c7 c7 00 12 eb 89 e8 68 3a f3 07 <0f> 0b e9 a4 d7 ff ff e8 bb 03 35 00 0f 0b e8 b4 03 35 00 0f 0b e8
-RSP: 0000:ffffc90005187938 EFLAGS: 00010286
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: ffff88801f015880 RSI: ffffffff8161f1f8 RDI: fffff52000a30f19
-RBP: ffffc90005187ac8 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000080000000 R11: 0000000000000001 R12: ffff88802017002c
-R13: ffff888020170000 R14: ffffc90005187c10 R15: 0000000000808100
-FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+RIP: 0010:__switch_to+0x680/0x1050 arch/x86/kernel/process_64.c:661
+Code: 67 05 00 00 eb 13 0f 1f 00 66 8c d0 66 83 f8 18 74 07 b8 18 00 00 00 8e d0 48 83 c4 10 4c 89 e0 5b 5d 41 5c 41 5d 41 5e 41 5f <c3> 48 8d bd 28 18 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48
+RSP: 0000:ffffc900057cf530 EFLAGS: 00010086
+RAX: ffff888020655880 RBX: ffff000000000000 RCX: ffffffff812a921c
+RDX: 1ffff110040cab10 RSI: 0000000000000008 RDI: ffff888020523b00
+RBP: ffff000000000000 R08: 0000000000000001 R09: ffff888020523b07
+R10: ffffed10040a4760 R11: 0000000000000000 R12: ffff000000000000
+R13: ffff000000000000 R14: ffff000000000000 R15: ffff000000000000
+FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
 CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffff88823ffff000 CR3: 000000000bc8e000 CR4: 00000000003506f0
+CR2: 0000000000000000 CR3: 000000000bc8e000 CR4: 00000000003506e0
 DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
 DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 Call Trace:
  <TASK>
- kernel_clone+0xe7/0xab0 kernel/fork.c:2675
- user_mode_thread+0xad/0xe0 kernel/fork.c:2744
- call_usermodehelper_exec_work kernel/umh.c:174 [inline]
- call_usermodehelper_exec_work+0xcc/0x180 kernel/umh.c:160
- process_one_work+0x991/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2e4/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
  </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:__switch_to+0x680/0x1050 arch/x86/kernel/process_64.c:661
+Code: 67 05 00 00 eb 13 0f 1f 00 66 8c d0 66 83 f8 18 74 07 b8 18 00 00 00 8e d0 48 83 c4 10 4c 89 e0 5b 5d 41 5c 41 5d 41 5e 41 5f <c3> 48 8d bd 28 18 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48
+RSP: 0000:ffffc900057cf530 EFLAGS: 00010086
+RAX: ffff888020655880 RBX: ffff000000000000 RCX: ffffffff812a921c
+RDX: 1ffff110040cab10 RSI: 0000000000000008 RDI: ffff888020523b00
+RBP: ffff000000000000 R08: 0000000000000001 R09: ffff888020523b07
+R10: ffffed10040a4760 R11: 0000000000000000 R12: ffff000000000000
+R13: ffff000000000000 R14: ffff000000000000 R15: ffff000000000000
+FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000000000 CR3: 000000000bc8e000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	67 05 00 00 eb 13    	addr32 add $0x13eb0000,%eax
+   6:	0f 1f 00             	nopl   (%rax)
+   9:	66 8c d0             	mov    %ss,%ax
+   c:	66 83 f8 18          	cmp    $0x18,%ax
+  10:	74 07                	je     0x19
+  12:	b8 18 00 00 00       	mov    $0x18,%eax
+  17:	8e d0                	mov    %eax,%ss
+  19:	48 83 c4 10          	add    $0x10,%rsp
+  1d:	4c 89 e0             	mov    %r12,%rax
+  20:	5b                   	pop    %rbx
+  21:	5d                   	pop    %rbp
+  22:	41 5c                	pop    %r12
+  24:	41 5d                	pop    %r13
+  26:	41 5e                	pop    %r14
+  28:	41 5f                	pop    %r15
+* 2a:	c3                   	retq <-- trapping instruction
+  2b:	48 8d bd 28 18 00 00 	lea    0x1828(%rbp),%rdi
+  32:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  39:	fc ff df
+  3c:	48 89 fa             	mov    %rdi,%rdx
+  3f:	48                   	rex.W
 
 
 ---

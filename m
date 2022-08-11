@@ -2,112 +2,145 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBC6F58FB8E
-	for <lists+linux-next@lfdr.de>; Thu, 11 Aug 2022 13:44:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C941B58FC9C
+	for <lists+linux-next@lfdr.de>; Thu, 11 Aug 2022 14:43:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234658AbiHKLor (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 11 Aug 2022 07:44:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49124 "EHLO
+        id S235355AbiHKMn0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 11 Aug 2022 08:43:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234420AbiHKLoq (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 11 Aug 2022 07:44:46 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E66C910BB;
-        Thu, 11 Aug 2022 04:44:46 -0700 (PDT)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27BBfwei001906;
-        Thu, 11 Aug 2022 11:44:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=content-type : subject :
- from : in-reply-to : date : cc : message-id : references : to :
- content-transfer-encoding : mime-version; s=pp1;
- bh=k8OxMey6CLg0GXntxVvBFhpJY5/zsW848Xv+A0GjS6s=;
- b=N2cM+DWhRVUbq/fJTKxUHNeWzMwuC1VF/Cf5xLd72K5f8Q9BtYpEfpLiTzIaF1TgUmFH
- RlTLBf+ZXw42RwJuIbBbTnkTZy8P6iQz9Jlp6hf9JkshETUbhLy7LxkJO6AjYWoSHdv3
- 1sv1bDBUmQJyGCE9J89dWKLQEvEv5X+8uwDK/xagkBF1R+ScrjGCjXuCa2Ml6uxytMdh
- FtXS5NCAjYiZWQGfcy4RxBLRKAk0SCgZinTPrtOWClqgGgoav4QKUC2fMLSXN3QqiOVD
- PLgRmuW1ZH0+ekScsN4b6Qy6dnfVwsc8xG+4FIvsd2rGnv+ZOHm0yeiWhQeRuc2M2TJM zQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hw14dr1x8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 11 Aug 2022 11:44:41 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27BBgJO3002450;
-        Thu, 11 Aug 2022 11:44:41 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hw14dr1w9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 11 Aug 2022 11:44:41 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27BBZTgm017387;
-        Thu, 11 Aug 2022 11:44:38 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 3huwvg1yra-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 11 Aug 2022 11:44:38 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27BBiahf26280314
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 11 Aug 2022 11:44:36 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7500B11C04A;
-        Thu, 11 Aug 2022 11:44:36 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 823CD11C050;
-        Thu, 11 Aug 2022 11:44:35 +0000 (GMT)
-Received: from smtpclient.apple (unknown [9.43.75.173])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 11 Aug 2022 11:44:35 +0000 (GMT)
-Content-Type: text/plain;
-        charset=us-ascii
-Subject: Re: [5.19.0-next-20220811] Build failure drivers/vdpa
-From:   Sachin Sant <sachinp@linux.ibm.com>
-In-Reply-To: <CAGxU2F5V-qxurLSZhugvNLWkiDOM83tgKQrEUFB_PLd7=kTH3Q@mail.gmail.com>
-Date:   Thu, 11 Aug 2022 17:14:34 +0530
-Cc:     kvm@vger.kernel.org, linux-next@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org
-Message-Id: <7137A7BC-1036-49A3-885B-FEBC7985871F@linux.ibm.com>
-References: <A330513B-21C9-44D2-BA02-853327FC16CE@linux.ibm.com>
- <CAGxU2F5V-qxurLSZhugvNLWkiDOM83tgKQrEUFB_PLd7=kTH3Q@mail.gmail.com>
-To:     Stefano Garzarella <sgarzare@redhat.com>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Qoq6gJZ-p24hQfcSx8c9YSWViWxLr7kO
-X-Proofpoint-ORIG-GUID: vn0zB7nDtYDwZaBLZs4PbZ8c3O9kA7fe
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        with ESMTP id S235350AbiHKMnZ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 11 Aug 2022 08:43:25 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4853389827
+        for <linux-next@vger.kernel.org>; Thu, 11 Aug 2022 05:43:24 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id d4-20020a056e02214400b002df95f624a4so11471646ilv.1
+        for <linux-next@vger.kernel.org>; Thu, 11 Aug 2022 05:43:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=N4jbo9jFiiTWtuh64UuCXIlcP86sRdsnQIPlROsB+us=;
+        b=POGkImqzuTqM9TmkBIAHI5sV2/Pa2sFCHLJbTb+gBXXmdCJsSj+L53AnfBfqlviDRj
+         SPxEfdV9uGvLtgaYkDRJtoBpL5lJikxjnDqv8k6OFiDWp5Bt9inRyF5nhJOwwOIKE/BA
+         34m0S2a3GR56PtVlYcBfFX7TXiLTO3GgdvlMFyQlUP+1kJkdpWyZtCLCEPSERuE5D4eJ
+         iQmX/Z0svW6o6wdLg88fI/zlYAedF/0kcd/6DhxruP4BakL16Mj+CKUIgA1TxPvM3nCU
+         wLir5KxjiOPwlJIggeZtn8fxqvVHZLje4RWs2s4HoDmjPAcyWv2pYcio/CZSuQCKYCRJ
+         mDnQ==
+X-Gm-Message-State: ACgBeo3ZP5qswv+Yv84rgqeI3GdUrFO0f/Uj6i1MCYWnGC7M8OQxKknc
+        i/a7qF6T/AKf2iM8FgpHqI89cIpuOwEOgOzDjeIO7CMFfazw
+X-Google-Smtp-Source: AA6agR7h/5EcbcHx98azEJNc5+fbmcmEz27gcVSe61f94SUPHSgDsaZ9H+tm5dDBzNUjwrJus9VbAPAJQX05G/QFg2ZgN63os+tK
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-11_05,2022-08-11_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- mlxlogscore=843 impostorscore=0 mlxscore=0 suspectscore=0 clxscore=1015
- adultscore=0 bulkscore=0 phishscore=0 priorityscore=1501
- lowpriorityscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2207270000 definitions=main-2208110034
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:b106:0:b0:2dc:eebb:e6f6 with SMTP id
+ t6-20020a92b106000000b002dceebbe6f6mr14820842ilh.54.1660221803579; Thu, 11
+ Aug 2022 05:43:23 -0700 (PDT)
+Date:   Thu, 11 Aug 2022 05:43:23 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000d9cfcf05e5f68213@google.com>
+Subject: [syzbot] linux-next boot error: KASAN: out-of-bounds Read in rcu_cblist_dequeue
+From:   syzbot <syzbot+4f473a64b5132e9560d1@syzkaller.appspotmail.com>
+To:     Henry.Wang@arm.com, bigeasy@linutronix.de,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        longpeng2@huawei.com, sfr@canb.auug.org.au,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
+        vschneid@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    40d43a7507e1 Add linux-next specific files for 20220811
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=170595fd080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a5ae8cfa8d7075d1
+dashboard link: https://syzkaller.appspot.com/bug?extid=4f473a64b5132e9560d1
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+4f473a64b5132e9560d1@syzkaller.appspotmail.com
+
+==================================================================
+BUG: KASAN: out-of-bounds in rcu_cblist_dequeue+0xa4/0xe0 kernel/rcu/rcu_segcblist.c:75
+Read of size 8 at addr ffffc90004f08000 by task ksoftirqd/1/21
+
+CPU: 1 PID: 21 Comm: ksoftirqd/1 Not tainted 5.19.0-next-20220811-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:317 [inline]
+ print_report.cold+0x59/0x719 mm/kasan/report.c:433
+ kasan_report+0xb1/0x1e0 mm/kasan/report.c:495
+ rcu_cblist_dequeue+0xa4/0xe0 kernel/rcu/rcu_segcblist.c:75
+ rcu_do_batch kernel/rcu/tree.c:2234 [inline]
+ rcu_core+0x735/0x1890 kernel/rcu/tree.c:2505
+ __do_softirq+0x1d3/0x9c6 kernel/softirq.c:571
+ run_ksoftirqd kernel/softirq.c:934 [inline]
+ run_ksoftirqd+0x2d/0x60 kernel/softirq.c:926
+ smpboot_thread_fn+0x645/0x9c0 kernel/smpboot.c:164
+ kthread+0x2e4/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+ </TASK>
+
+The buggy address belongs to the virtual mapping at
+ [ffffc90004f08000, ffffc90004f11000) created by:
+ kernel_clone+0xe7/0xab0 kernel/fork.c:2675
+
+The buggy address belongs to the physical page:
+page:ffffea00007ed940 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1fb65
+flags: 0xfff00000000000(node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000000000 0000000000000000 dead000000000122 0000000000000000
+raw: 0000000000000000 0000000000000000 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Unmovable, gfp_mask 0x2dc2(GFP_KERNEL|__GFP_HIGHMEM|__GFP_NOWARN|__GFP_ZERO), pid 11, tgid 11 (kworker/u4:1), ts 8261677515, free_ts 0
+ prep_new_page mm/page_alloc.c:2532 [inline]
+ get_page_from_freelist+0x109b/0x2cd0 mm/page_alloc.c:4283
+ __alloc_pages+0x1c7/0x510 mm/page_alloc.c:5507
+ __alloc_pages_bulk+0x9fc/0x15a0 mm/page_alloc.c:5455
+ alloc_pages_bulk_array_mempolicy+0x1b3/0x360 mm/mempolicy.c:2365
+ vm_area_alloc_pages mm/vmalloc.c:2930 [inline]
+ __vmalloc_area_node mm/vmalloc.c:3026 [inline]
+ __vmalloc_node_range+0x576/0x13a0 mm/vmalloc.c:3196
+ alloc_thread_stack_node kernel/fork.c:312 [inline]
+ dup_task_struct kernel/fork.c:977 [inline]
+ copy_process+0x13cd/0x7120 kernel/fork.c:2088
+ kernel_clone+0xe7/0xab0 kernel/fork.c:2675
+ user_mode_thread+0xad/0xe0 kernel/fork.c:2744
+ call_usermodehelper_exec_work kernel/umh.c:174 [inline]
+ call_usermodehelper_exec_work+0xcc/0x180 kernel/umh.c:160
+ process_one_work+0x991/0x1610 kernel/workqueue.c:2289
+ worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+ kthread+0x2e4/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+page_owner free stack trace missing
+
+Memory state around the buggy address:
+ ffffc90004f07f00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+ ffffc90004f07f80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+>ffffc90004f08000: 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                   ^
+ ffffc90004f08080: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffffc90004f08100: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+==================================================================
 
 
-> On 11-Aug-2022, at 3:45 PM, Stefano Garzarella <sgarzare@redhat.com> wrot=
-e:
->=20
->> Date:   Wed Aug 10 11:43:47 2022 +0200
->>    vdpa_sim_blk: add support for discard and write-zeroes
->>=20
->=20
-> Thanks for the report, I already re-sent a new series with that patch fix=
-ed:
-> https://lore.kernel.org/virtualization/20220811083632.77525-1-sgarzare@re=
-dhat.com/T/#t
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Thanks. That patch works for me.
-
-- Sachin
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

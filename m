@@ -2,68 +2,82 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 521A058F7B3
-	for <lists+linux-next@lfdr.de>; Thu, 11 Aug 2022 08:37:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A681358F7D6
+	for <lists+linux-next@lfdr.de>; Thu, 11 Aug 2022 08:45:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234141AbiHKGg3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 11 Aug 2022 02:36:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43104 "EHLO
+        id S234167AbiHKGpS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 11 Aug 2022 02:45:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233851AbiHKGgI (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 11 Aug 2022 02:36:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0D16266133
-        for <linux-next@vger.kernel.org>; Wed, 10 Aug 2022 23:36:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660199766;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cyh9GNwkSeiWX8VVWJet6cmrStrv1Y1BhHYKMAKCy08=;
-        b=DGejfmar2tE4SaNR+SDBmc4o/mUh1Rsuh6LMHebzFBNS17iOFsMgte39QntvR9ogTQ/jM8
-        qSiYxq4JNVsJpMQp3Uo99HE4tzrSFcF86vrcgWjOAavGA/xqZo9HVWMvBWH/I+YmCTGpxX
-        b0wEgkKxiI5GjK/1jcspMwLjUkku0xA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-597-_VqZTjNYPU-EX3a7Wqfm8A-1; Thu, 11 Aug 2022 02:36:04 -0400
-X-MC-Unique: _VqZTjNYPU-EX3a7Wqfm8A-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        with ESMTP id S233923AbiHKGpR (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 11 Aug 2022 02:45:17 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B65A219F;
+        Wed, 10 Aug 2022 23:45:15 -0700 (PDT)
+Received: from [192.168.231.132] (unknown [213.194.152.135])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 15A2F85A599;
-        Thu, 11 Aug 2022 06:36:04 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C56112026D64;
-        Thu, 11 Aug 2022 06:36:03 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     linux-doc@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
-        kvm@vger.kernel.org, linux-next@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH next 0/2] Documentation: KVM: KVM_CAP_VM_DISABLE_NX_HUGE_PAGES documentation fixes
-Date:   Thu, 11 Aug 2022 02:36:01 -0400
-Message-Id: <20220811063601.195105-1-pbonzini@redhat.com>
-In-Reply-To: <20220627095151.19339-1-bagasdotme@gmail.com>
-References: 
+        (Authenticated sender: rcn)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 52AE666015AC;
+        Thu, 11 Aug 2022 07:45:12 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1660200312;
+        bh=jM6AiP2SN47ZqYg/7BuDiQQKFZaEHE0h63tXokKQuHQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=kNKYuG55u1269ihCw3pSztKie6FDmdvVsodjgOk8akrfIDeRP5Lcgh+1kDFB5k7hs
+         tlx8XCHR1TePfCmMPvPQ7u4VieqJVTNA5BAKdZ1Q/1INZGOaoe9i1JUr9RbCsRl16x
+         FqX7neFIvt9CN/BCxU3IaUc4Frog6EZDgjT77DhnWns5fqC9q5Mh27fFUYV7uUMLdM
+         pZXhSEvPVc6DmftqPxk1FDpep9WreRe37XsjKnmlyY1hecZHUjmKWddtZXbTpk2UKV
+         JADIHc/RydY9pSMIB6HvSorzmWaLvpgGCPddQ1KUd7niiMfr2IfIQ4ww0HeR8kkod8
+         yEQvfYu1ctPMg==
+Message-ID: <d74f15ba-8b76-3a76-a1f5-10855bf459b0@collabora.com>
+Date:   Thu, 11 Aug 2022 08:45:08 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,TVD_SPACE_RATIO,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: linux-next: build warning after merge of the vhost tree
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20220811115917.1b5c9a57@canb.auug.org.au>
+From:   =?UTF-8?Q?Ricardo_Ca=c3=b1uelo?= <ricardo.canuelo@collabora.com>
+In-Reply-To: <20220811115917.1b5c9a57@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Queued, thanks.
+Hi Stephen, Michael,
 
-Paolo
+On 11/8/22 3:59, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the vhost tree, today's linux-next build (htmldocs)
+> produced this warning:
+> 
+> Documentation/driver-api/index.rst:14: WARNING: toctree contains reference to nonexisting document 'driver-api/virtio/index'
+> 
+> Introduced by commit
+> 
+>    6355eeb59129 ("docs: driver-api: virtio: virtio on Linux")
+> 
 
+The patch that ended up in the vhost tree is only a part of the
+complete patch:
+https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git/commit/?h=linux-next&id=6355eeb59129a31aed0adb60d174df63a5630f8e
 
+The full patch is this:
+https://lore.kernel.org/linux-doc/20220810094004.1250-1-ricardo.canuelo@collabora.com/T/#t
+
+Cheers,
+Ricardo

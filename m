@@ -2,105 +2,179 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80AD058FDFE
-	for <lists+linux-next@lfdr.de>; Thu, 11 Aug 2022 16:02:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 215A9590013
+	for <lists+linux-next@lfdr.de>; Thu, 11 Aug 2022 17:37:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235408AbiHKOC0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 11 Aug 2022 10:02:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44510 "EHLO
+        id S236130AbiHKPhE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 11 Aug 2022 11:37:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235099AbiHKOCZ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 11 Aug 2022 10:02:25 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 761FC5B7A1;
-        Thu, 11 Aug 2022 07:02:24 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id 15-20020a17090a098f00b001f305b453feso5488160pjo.1;
-        Thu, 11 Aug 2022 07:02:24 -0700 (PDT)
+        with ESMTP id S236126AbiHKPgZ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 11 Aug 2022 11:36:25 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49E599DF9E
+        for <linux-next@vger.kernel.org>; Thu, 11 Aug 2022 08:33:19 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id 130so16752223pfv.13
+        for <linux-next@vger.kernel.org>; Thu, 11 Aug 2022 08:33:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:cc:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=vrnKifM0ZLpSw/+/Sb/S4IABPEo8OepBaLUHpQMQ85o=;
-        b=Fkvbms9kFV3Pibqo+Vrckm0kZEPkcNv6zqu5uIMBQavoc0SPZK/cBoN2rOMXSwEEIQ
-         HTqPkzgLsVDojGvM4/uBYyVtgDelCM01DXNuFucSEXJ7cIlOhVWDyN9+7iaGd+m2a8av
-         ptI8P/Nzv8WSqX9K8YE46EewUqHj9gcnbCRXVBvLvIP2q+XGsuoRpK9DfpHy8VxP50in
-         dFML/lerIDQFozlbPDhuRd96zJjyvYCmyjIBsSx5gcXWsYBvnSOA6p3aJvfNhiYN+LgR
-         gHJ1KRq/UwK71otqJQ5S7Rc4kxbUGD7blamPzj3CJJW6rEoaTHusQ4muw75VHS91uL8x
-         MOww==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=sGProeHom9fEq63o7Ycx3Nip30ePXZJ0gg0Exlq4IDI=;
+        b=UMWdbwOjt2wwwtmQmLKCxuxZoFP3P+Kg+NZEMPhle2UxLYNCN6r3p6U/q91ejgdpgO
+         CcUAw61fWjwB7OkJVP+7zU8FtK6AR5mbcNGJ+/4yoLmXV694kCngxiAKxViCcEu3Awed
+         gqWbkxyvPlgPMgYg3EB8cBaSS1czINm1JHFPY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:cc:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=vrnKifM0ZLpSw/+/Sb/S4IABPEo8OepBaLUHpQMQ85o=;
-        b=WWfmAosGz3rliOUdCP2S5mJDxH3UeWgovLyAeqAumvEpr3YQ5t8S9yHY0mGtjCKxY1
-         s/jhyXUqc2nEKeMp1kq63vNTxAREBYHIht9Tow9YIXa6NOZMD1ntiRegGyCBnRYQFL01
-         FOVLPzPFrjd9UEfirfaF243e3CWxEGOO7O3pbEIxNqWOo//fgrw6D/YGpfHouwT7QR/t
-         XJ4FbruOQk2aa64CrnXsimLmvgwn82IughTgEBI6krFKW/N1JcoC2lD0gwpLmHQsVuvJ
-         YB1aBVIQNJbH4Ap1zoTYHOxfovatdlYrUbVrNy8oSid76yPX5L0ecp08GTUcDwqNUZrY
-         cejg==
-X-Gm-Message-State: ACgBeo3WC2gwUqZvchvOixZ/rzHsfOFj1lRiI9exwzMWxjkjkFJh1LC3
-        p/U4GNk/YssJ3Vg9kYwJel4=
-X-Google-Smtp-Source: AA6agR7zj66dhmm11daztLHp3MA83nHVe9xBPvkuQo/mEMvIIpbZoc4I521AlVzHw3fG9Ic5h/rT4Q==
-X-Received: by 2002:a17:903:447:b0:16e:cbe3:29de with SMTP id iw7-20020a170903044700b0016ecbe329demr32457479plb.65.1660226543723;
-        Thu, 11 Aug 2022 07:02:23 -0700 (PDT)
-Received: from [0.0.0.0] (ec2-13-113-80-70.ap-northeast-1.compute.amazonaws.com. [13.113.80.70])
-        by smtp.gmail.com with ESMTPSA id t7-20020a170902e84700b0016d62ba5665sm14979500plg.254.2022.08.11.07.02.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Aug 2022 07:02:23 -0700 (PDT)
-Message-ID: <61d77412-af1a-5b00-9754-f156b1c63a74@gmail.com>
-Date:   Thu, 11 Aug 2022 22:02:15 +0800
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=sGProeHom9fEq63o7Ycx3Nip30ePXZJ0gg0Exlq4IDI=;
+        b=mpXvGeK0Mfjah5Me72mZZr68MYH5HLJ2NQjakHPFhPW4EF6HLm67yL7zI8cUFZRIkS
+         EALoHOiITgo7ZoH6rCd13rnOIjqCJ/Z2902yI8NlVlxRcxiJTOGKSESkjUtzVSA6C2kR
+         cS4QO9N3JqDqRO+0e78WIdUlaA7pqtNxZm6VEBvl0l4DspIu2b3Fs9jrTNDA3QKKMrOJ
+         wPN7fwAgqxoUFHxkiEtlejoilka9flUgPfIhiJ4OHG8/3mWXsGnpmjGG0O7h01eCYgLo
+         KO9W/DLE/yjH0+HDmAXCfgjB8+1QVk3G0rnf80MwDRD5XvP1hlGVAOmZ1Gox0oxQ8muh
+         YWvQ==
+X-Gm-Message-State: ACgBeo3fXIo3xhuM+yGeBR0dxRtkCKdMxLTaOca/cbrxbfxEmbC1o/NN
+        rO+BQ4S+QcF5CydJ37pwOuZ8sA==
+X-Google-Smtp-Source: AA6agR4pxsxSK4xz4ubUfvq9BeOZLm6V+TodQzH/llWgScehFC+RV76gVNLXyA1gZQZcrMvvoubtTA==
+X-Received: by 2002:a63:eb4d:0:b0:41b:db07:8b33 with SMTP id b13-20020a63eb4d000000b0041bdb078b33mr26791093pgk.89.1660231998253;
+        Thu, 11 Aug 2022 08:33:18 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id d6-20020a170902654600b0016a3f9e4865sm15086863pln.148.2022.08.11.08.33.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Aug 2022 08:33:17 -0700 (PDT)
+Date:   Thu, 11 Aug 2022 08:33:16 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     ebiederm@xmission.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-next@vger.kernel.org, sfr@canb.auug.org.au,
+        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk,
+        syzbot <syzbot+3250d9c8925ef29e975f@syzkaller.appspotmail.com>,
+        Ira Weiny <ira.weiny@intel.com>
+Subject: Re: [syzbot] linux-next boot error: BUG: unable to handle kernel
+ paging request in kernel_execve
+Message-ID: <202208110830.8F528D6737@keescook>
+References: <0000000000008c0ba505e5f22066@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: [RESEND] Please consider name next Linux release "I love Linux" (Re:
- Linux 5.19)
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <CAHk-=wgrz5BBk=rCz7W28Fj_o02s0Xi0OEQ3H1uQgOdFvHgx0w@mail.gmail.com>
-Cc:     linux-next@vger.kernel.org, song@kernel.org, wei.liu@kernel.org,
-        jszhang@kernel.org, chenhuacai@kernel.org, guoren@kernel.org,
-        xiang@kernel.org, chao@kernel.org, ming.lei@redhat.com,
-        bhe@redhat.com, longman@redhat.com, wqu@suse.com, yhs@fb.com,
-        haoluo@google.com, decui@microsoft.com, siyanteng@loongson.cn
-From:   Zhang Boyang <zhangboyang.id@gmail.com>
-In-Reply-To: <CAHk-=wgrz5BBk=rCz7W28Fj_o02s0Xi0OEQ3H1uQgOdFvHgx0w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0000000000008c0ba505e5f22066@google.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi,
+Hi Fabio,
 
-On 2022/8/1 05:43, Linus Torvalds wrote:
-> (*) I'll likely call it 6.0 since I'm starting to worry about getting
-> confused by big numbers again.
+It seems likely that the kmap change[1] might be causing this crash. Is
+there a boot-time setup race between kmap being available and early umh
+usage?
 
-Could you please consider name the next Linux release (5.20 or 6.0) "I 
-love linux" ? The number "5.20" is a wordplay in Chinese, which means "I 
-love you" [1], thus "Linux 5.20" can be read as "I love Linux" in Chinese.
+-Kees
 
-Even if next kernel version is 6.0, I think it's probably a good idea 
-for both Chinese-speakers and non-Chinese speakers to express our love 
-to Linux Kernel.
+[1] https://git.kernel.org/linus/c6e8e36c6ae4b11bed5643317afb66b6c3cadba8
 
-The name of Linux kernel release has a long history of play-on-words 
-[2]. For example, 5.15 is named "Trick or Treat" and 5.17 is named 
-"Superb Owl".
+On Thu, Aug 11, 2022 at 12:29:34AM -0700, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    bc6c6584ffb2 Add linux-next specific files for 20220810
+> git tree:       linux-next
+> console output: https://syzkaller.appspot.com/x/log.txt?x=115034c3080000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=5784be4315a4403b
+> dashboard link: https://syzkaller.appspot.com/bug?extid=3250d9c8925ef29e975f
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+3250d9c8925ef29e975f@syzkaller.appspotmail.com
+> 
+> BUG: unable to handle page fault for address: ffffdc0000000000
+> #PF: supervisor read access in kernel mode
+> #PF: error_code(0x0000) - not-present page
+> PGD 11826067 P4D 11826067 PUD 0 
+> Oops: 0000 [#1] PREEMPT SMP KASAN
+> CPU: 0 PID: 1100 Comm: kworker/u4:5 Not tainted 5.19.0-next-20220810-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+> RIP: 0010:strnlen+0x3b/0x70 lib/string.c:504
+> Code: 74 3c 48 bb 00 00 00 00 00 fc ff df 49 89 fc 48 89 f8 eb 09 48 83 c0 01 48 39 e8 74 1e 48 89 c2 48 89 c1 48 c1 ea 03 83 e1 07 <0f> b6 14 1a 38 ca 7f 04 84 d2 75 11 80 38 00 75 d9 4c 29 e0 48 83
+> RSP: 0000:ffffc90005c5fe10 EFLAGS: 00010246
+> RAX: ffff000000000000 RBX: dffffc0000000000 RCX: 0000000000000000
+> RDX: 1fffe00000000000 RSI: 0000000000020000 RDI: ffff000000000000
+> RBP: ffff000000020000 R08: 0000000000000005 R09: 0000000000000000
+> R10: 0000000000000006 R11: 0000000000000000 R12: ffff000000000000
+> R13: ffff88814764cc00 R14: ffff000000000000 R15: ffff88814764cc00
+> FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: ffffdc0000000000 CR3: 000000000bc8e000 CR4: 00000000003506f0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  strnlen include/linux/fortify-string.h:119 [inline]
+>  copy_string_kernel+0x26/0x250 fs/exec.c:616
+>  copy_strings_kernel+0xb3/0x190 fs/exec.c:655
+>  kernel_execve+0x377/0x500 fs/exec.c:1998
+>  call_usermodehelper_exec_async+0x2e3/0x580 kernel/umh.c:112
+>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+>  </TASK>
+> Modules linked in:
+> CR2: ffffdc0000000000
+> ---[ end trace 0000000000000000 ]---
+> RIP: 0010:strnlen+0x3b/0x70 lib/string.c:504
+> Code: 74 3c 48 bb 00 00 00 00 00 fc ff df 49 89 fc 48 89 f8 eb 09 48 83 c0 01 48 39 e8 74 1e 48 89 c2 48 89 c1 48 c1 ea 03 83 e1 07 <0f> b6 14 1a 38 ca 7f 04 84 d2 75 11 80 38 00 75 d9 4c 29 e0 48 83
+> RSP: 0000:ffffc90005c5fe10 EFLAGS: 00010246
+> RAX: ffff000000000000 RBX: dffffc0000000000 RCX: 0000000000000000
+> RDX: 1fffe00000000000 RSI: 0000000000020000 RDI: ffff000000000000
+> RBP: ffff000000020000 R08: 0000000000000005 R09: 0000000000000000
+> R10: 0000000000000006 R11: 0000000000000000 R12: ffff000000000000
+> R13: ffff88814764cc00 R14: ffff000000000000 R15: ffff88814764cc00
+> FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: ffffdc0000000000 CR3: 000000000bc8e000 CR4: 00000000003506f0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> ----------------
+> Code disassembly (best guess):
+>    0:	74 3c                	je     0x3e
+>    2:	48 bb 00 00 00 00 00 	movabs $0xdffffc0000000000,%rbx
+>    9:	fc ff df
+>    c:	49 89 fc             	mov    %rdi,%r12
+>    f:	48 89 f8             	mov    %rdi,%rax
+>   12:	eb 09                	jmp    0x1d
+>   14:	48 83 c0 01          	add    $0x1,%rax
+>   18:	48 39 e8             	cmp    %rbp,%rax
+>   1b:	74 1e                	je     0x3b
+>   1d:	48 89 c2             	mov    %rax,%rdx
+>   20:	48 89 c1             	mov    %rax,%rcx
+>   23:	48 c1 ea 03          	shr    $0x3,%rdx
+>   27:	83 e1 07             	and    $0x7,%ecx
+> * 2a:	0f b6 14 1a          	movzbl (%rdx,%rbx,1),%edx <-- trapping instruction
+>   2e:	38 ca                	cmp    %cl,%dl
+>   30:	7f 04                	jg     0x36
+>   32:	84 d2                	test   %dl,%dl
+>   34:	75 11                	jne    0x47
+>   36:	80 38 00             	cmpb   $0x0,(%rax)
+>   39:	75 d9                	jne    0x14
+>   3b:	4c 29 e0             	sub    %r12,%rax
+>   3e:	48                   	rex.W
+>   3f:	83                   	.byte 0x83
+> 
+> 
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-[1] https://en.wikipedia.org/wiki/Chinese_Internet_slang
-
-[2] https://en.wikipedia.org/wiki/Linux_kernel_version_history
-
-Thanks and regards,
-Zhang Boyang
+-- 
+Kees Cook

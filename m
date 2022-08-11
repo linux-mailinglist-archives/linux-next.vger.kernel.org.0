@@ -2,145 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C941B58FC9C
-	for <lists+linux-next@lfdr.de>; Thu, 11 Aug 2022 14:43:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7171B58FD65
+	for <lists+linux-next@lfdr.de>; Thu, 11 Aug 2022 15:30:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235355AbiHKMn0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 11 Aug 2022 08:43:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56920 "EHLO
+        id S235584AbiHKNas (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 11 Aug 2022 09:30:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235350AbiHKMnZ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 11 Aug 2022 08:43:25 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4853389827
-        for <linux-next@vger.kernel.org>; Thu, 11 Aug 2022 05:43:24 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id d4-20020a056e02214400b002df95f624a4so11471646ilv.1
-        for <linux-next@vger.kernel.org>; Thu, 11 Aug 2022 05:43:24 -0700 (PDT)
+        with ESMTP id S235451AbiHKNam (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 11 Aug 2022 09:30:42 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A69E6C109;
+        Thu, 11 Aug 2022 06:30:41 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id f30so16114612pfq.4;
+        Thu, 11 Aug 2022 06:30:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=01vDtU88eCW5oD/3dn74II/8dGaHIJjwfRBEKULz+Ko=;
+        b=WizdRfX4kJ9hcmdF4NeLaiTx+zNIwoHMN9U88yYQD2WZ0SX7p0018GcFFdSEAVZA/T
+         0RvjX3ePnH4gHEGue+d2o9tmGuYhiN8xaQ/ACOi4ktNRzu+7twhaDm/g5EOmi83dyvXs
+         qjR04olAmCHCZ54kngN3gIXK7TeJOzf6luHUinxGojbie0ixEiCCjOhpxkkufkuMzZZy
+         JE0FtSvN2+nplqnNMf8fX2YIyz6r0IUc3j/3fEI7UhMdiWr9HpVsvU4+ufAXHB2SerRR
+         dUsfea858QiBjWVqX51OZ0bRCsdhxYzKxnWGESIb2ar+ozMbCWVbcXP3rKB20jLhMdas
+         9jnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=N4jbo9jFiiTWtuh64UuCXIlcP86sRdsnQIPlROsB+us=;
-        b=POGkImqzuTqM9TmkBIAHI5sV2/Pa2sFCHLJbTb+gBXXmdCJsSj+L53AnfBfqlviDRj
-         SPxEfdV9uGvLtgaYkDRJtoBpL5lJikxjnDqv8k6OFiDWp5Bt9inRyF5nhJOwwOIKE/BA
-         34m0S2a3GR56PtVlYcBfFX7TXiLTO3GgdvlMFyQlUP+1kJkdpWyZtCLCEPSERuE5D4eJ
-         iQmX/Z0svW6o6wdLg88fI/zlYAedF/0kcd/6DhxruP4BakL16Mj+CKUIgA1TxPvM3nCU
-         wLir5KxjiOPwlJIggeZtn8fxqvVHZLje4RWs2s4HoDmjPAcyWv2pYcio/CZSuQCKYCRJ
-         mDnQ==
-X-Gm-Message-State: ACgBeo3ZP5qswv+Yv84rgqeI3GdUrFO0f/Uj6i1MCYWnGC7M8OQxKknc
-        i/a7qF6T/AKf2iM8FgpHqI89cIpuOwEOgOzDjeIO7CMFfazw
-X-Google-Smtp-Source: AA6agR7h/5EcbcHx98azEJNc5+fbmcmEz27gcVSe61f94SUPHSgDsaZ9H+tm5dDBzNUjwrJus9VbAPAJQX05G/QFg2ZgN63os+tK
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=01vDtU88eCW5oD/3dn74II/8dGaHIJjwfRBEKULz+Ko=;
+        b=ATzcaYI/Ai5Kkxq9AZWRrmXc75OuNhitG60oTqvQDIM4+wnaQKvFufg+6TwA3qEPQ7
+         QhmK7O44wBDcwjX9cn+n13jD6FaUZ5FjE7hF1dzA2DH8j08Dglh8MkNz8vr0si/vPuOE
+         CaeLkn4RjdcDdO43zdTqHpe0+R9pzJ4ASKsdrV9obmxAyo1ciYrGtf/lfd6/uy0qcJfz
+         R6tV18yhJCmDCo426F5vLKqGGoE7oUsLTbEtXkfm7kjA3l3paVu1B+RLpMP9ZzjNfRSH
+         giveSd8Tk1325p0yw+F1KE2yeyJP4LbXfN1S+HYScPy0h+658B7iYPnLivt4HMDP955H
+         uvlQ==
+X-Gm-Message-State: ACgBeo2z83hdb+Z3hRt9xEAe1zjvZH20pF8Wp0xKJ1WjSzwryC0XDEdO
+        vN0+XWoeT1UkxI0BbIzTbMQ=
+X-Google-Smtp-Source: AA6agR7RqRgGF7gnHBdcw3opMUr1MxD/qxKr4atILgFzBkbhrCw1horw85HYBR1is/Y0dbIQzLHz+A==
+X-Received: by 2002:aa7:88c4:0:b0:52f:755c:a354 with SMTP id k4-20020aa788c4000000b0052f755ca354mr15639081pff.81.1660224640865;
+        Thu, 11 Aug 2022 06:30:40 -0700 (PDT)
+Received: from [192.168.43.80] (subs32-116-206-28-16.three.co.id. [116.206.28.16])
+        by smtp.gmail.com with ESMTPSA id p2-20020a170902780200b00170d34cf7f3sm6563336pll.257.2022.08.11.06.30.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 Aug 2022 06:30:40 -0700 (PDT)
+Message-ID: <1db2a0cd-bef1-213c-a411-3d39d378743a@gmail.com>
+Date:   Thu, 11 Aug 2022 20:30:36 +0700
 MIME-Version: 1.0
-X-Received: by 2002:a92:b106:0:b0:2dc:eebb:e6f6 with SMTP id
- t6-20020a92b106000000b002dceebbe6f6mr14820842ilh.54.1660221803579; Thu, 11
- Aug 2022 05:43:23 -0700 (PDT)
-Date:   Thu, 11 Aug 2022 05:43:23 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d9cfcf05e5f68213@google.com>
-Subject: [syzbot] linux-next boot error: KASAN: out-of-bounds Read in rcu_cblist_dequeue
-From:   syzbot <syzbot+4f473a64b5132e9560d1@syzkaller.appspotmail.com>
-To:     Henry.Wang@arm.com, bigeasy@linutronix.de,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        longpeng2@huawei.com, sfr@canb.auug.org.au,
-        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
-        vschneid@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH next 0/2] Documentation: KVM:
+ KVM_CAP_VM_DISABLE_NX_HUGE_PAGES documentation fixes
+Content-Language: en-US
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-doc@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
+        kvm@vger.kernel.org, linux-next@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220811063601.195105-1-pbonzini@redhat.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20220811063601.195105-1-pbonzini@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hello,
+On 8/11/22 13:36, Paolo Bonzini wrote:
+> Queued, thanks.
+> 
+> Paolo
+> 
+> 
 
-syzbot found the following issue on:
+Thanks for picking this up. However, Stephen noted that the issue is
+already showed up on mainline [1]. Maybe this series should be queued
+for 6.0 release (as -rc fixes), right?
 
-HEAD commit:    40d43a7507e1 Add linux-next specific files for 20220811
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=170595fd080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a5ae8cfa8d7075d1
-dashboard link: https://syzkaller.appspot.com/bug?extid=4f473a64b5132e9560d1
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+[1]: https://lore.kernel.org/linux-next/20220809164147.131f87d0@canb.auug.org.au/
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+4f473a64b5132e9560d1@syzkaller.appspotmail.com
-
-==================================================================
-BUG: KASAN: out-of-bounds in rcu_cblist_dequeue+0xa4/0xe0 kernel/rcu/rcu_segcblist.c:75
-Read of size 8 at addr ffffc90004f08000 by task ksoftirqd/1/21
-
-CPU: 1 PID: 21 Comm: ksoftirqd/1 Not tainted 5.19.0-next-20220811-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:317 [inline]
- print_report.cold+0x59/0x719 mm/kasan/report.c:433
- kasan_report+0xb1/0x1e0 mm/kasan/report.c:495
- rcu_cblist_dequeue+0xa4/0xe0 kernel/rcu/rcu_segcblist.c:75
- rcu_do_batch kernel/rcu/tree.c:2234 [inline]
- rcu_core+0x735/0x1890 kernel/rcu/tree.c:2505
- __do_softirq+0x1d3/0x9c6 kernel/softirq.c:571
- run_ksoftirqd kernel/softirq.c:934 [inline]
- run_ksoftirqd+0x2d/0x60 kernel/softirq.c:926
- smpboot_thread_fn+0x645/0x9c0 kernel/smpboot.c:164
- kthread+0x2e4/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
- </TASK>
-
-The buggy address belongs to the virtual mapping at
- [ffffc90004f08000, ffffc90004f11000) created by:
- kernel_clone+0xe7/0xab0 kernel/fork.c:2675
-
-The buggy address belongs to the physical page:
-page:ffffea00007ed940 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1fb65
-flags: 0xfff00000000000(node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000000000 0000000000000000 dead000000000122 0000000000000000
-raw: 0000000000000000 0000000000000000 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x2dc2(GFP_KERNEL|__GFP_HIGHMEM|__GFP_NOWARN|__GFP_ZERO), pid 11, tgid 11 (kworker/u4:1), ts 8261677515, free_ts 0
- prep_new_page mm/page_alloc.c:2532 [inline]
- get_page_from_freelist+0x109b/0x2cd0 mm/page_alloc.c:4283
- __alloc_pages+0x1c7/0x510 mm/page_alloc.c:5507
- __alloc_pages_bulk+0x9fc/0x15a0 mm/page_alloc.c:5455
- alloc_pages_bulk_array_mempolicy+0x1b3/0x360 mm/mempolicy.c:2365
- vm_area_alloc_pages mm/vmalloc.c:2930 [inline]
- __vmalloc_area_node mm/vmalloc.c:3026 [inline]
- __vmalloc_node_range+0x576/0x13a0 mm/vmalloc.c:3196
- alloc_thread_stack_node kernel/fork.c:312 [inline]
- dup_task_struct kernel/fork.c:977 [inline]
- copy_process+0x13cd/0x7120 kernel/fork.c:2088
- kernel_clone+0xe7/0xab0 kernel/fork.c:2675
- user_mode_thread+0xad/0xe0 kernel/fork.c:2744
- call_usermodehelper_exec_work kernel/umh.c:174 [inline]
- call_usermodehelper_exec_work+0xcc/0x180 kernel/umh.c:160
- process_one_work+0x991/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2e4/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
-page_owner free stack trace missing
-
-Memory state around the buggy address:
- ffffc90004f07f00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
- ffffc90004f07f80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
->ffffc90004f08000: 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-                   ^
- ffffc90004f08080: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffffc90004f08100: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+-- 
+An old man doll... just what I always wanted! - Clara

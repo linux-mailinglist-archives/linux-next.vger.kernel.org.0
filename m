@@ -2,179 +2,108 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 215A9590013
-	for <lists+linux-next@lfdr.de>; Thu, 11 Aug 2022 17:37:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53E67590558
+	for <lists+linux-next@lfdr.de>; Thu, 11 Aug 2022 19:03:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236130AbiHKPhE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 11 Aug 2022 11:37:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58298 "EHLO
+        id S234638AbiHKRDd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 11 Aug 2022 13:03:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236126AbiHKPgZ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 11 Aug 2022 11:36:25 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49E599DF9E
-        for <linux-next@vger.kernel.org>; Thu, 11 Aug 2022 08:33:19 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id 130so16752223pfv.13
-        for <linux-next@vger.kernel.org>; Thu, 11 Aug 2022 08:33:19 -0700 (PDT)
+        with ESMTP id S238126AbiHKQzi (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 11 Aug 2022 12:55:38 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1550A9A997
+        for <linux-next@vger.kernel.org>; Thu, 11 Aug 2022 09:28:14 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id n4so20154473wrp.10
+        for <linux-next@vger.kernel.org>; Thu, 11 Aug 2022 09:28:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=sGProeHom9fEq63o7Ycx3Nip30ePXZJ0gg0Exlq4IDI=;
-        b=UMWdbwOjt2wwwtmQmLKCxuxZoFP3P+Kg+NZEMPhle2UxLYNCN6r3p6U/q91ejgdpgO
-         CcUAw61fWjwB7OkJVP+7zU8FtK6AR5mbcNGJ+/4yoLmXV694kCngxiAKxViCcEu3Awed
-         gqWbkxyvPlgPMgYg3EB8cBaSS1czINm1JHFPY=
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc;
+        bh=Zczd81LNv1xHVJW5LMHbnrfWpLWiMppZkaou/EB+Esg=;
+        b=CGz+bHAflj6Ox/CB01EJJWyj/OCmOrVJm/RB3qaD7hPKYjSeZvLrLY+a41cQokPVud
+         3Lw/ZochYRmPs1HzdXHCKwbwZjlR1GrAZFnPlbaQHKqwPeVz6R7b0TfloPHIap/n+Jjq
+         6gk3Ph6Wk7zD6fxTqwxlNdDRGueWTi1AjfXiuqUrzGQ5IKqGEBATREcPm+bdKra10hrv
+         p4L/v2sE1nCeQvKwiAr2qLr1XF0WsbJAIvyYryLZwBr+DgBHdI+cbaZN0KifCzOfW56+
+         Q/VD5IlwF5PipOX1eBYNWQ+f3RFm9Ryjh1c2jeclXE1lnhVjkzbwprKPr6i6REtMMmmo
+         hlTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=sGProeHom9fEq63o7Ycx3Nip30ePXZJ0gg0Exlq4IDI=;
-        b=mpXvGeK0Mfjah5Me72mZZr68MYH5HLJ2NQjakHPFhPW4EF6HLm67yL7zI8cUFZRIkS
-         EALoHOiITgo7ZoH6rCd13rnOIjqCJ/Z2902yI8NlVlxRcxiJTOGKSESkjUtzVSA6C2kR
-         cS4QO9N3JqDqRO+0e78WIdUlaA7pqtNxZm6VEBvl0l4DspIu2b3Fs9jrTNDA3QKKMrOJ
-         wPN7fwAgqxoUFHxkiEtlejoilka9flUgPfIhiJ4OHG8/3mWXsGnpmjGG0O7h01eCYgLo
-         KO9W/DLE/yjH0+HDmAXCfgjB8+1QVk3G0rnf80MwDRD5XvP1hlGVAOmZ1Gox0oxQ8muh
-         YWvQ==
-X-Gm-Message-State: ACgBeo3fXIo3xhuM+yGeBR0dxRtkCKdMxLTaOca/cbrxbfxEmbC1o/NN
-        rO+BQ4S+QcF5CydJ37pwOuZ8sA==
-X-Google-Smtp-Source: AA6agR4pxsxSK4xz4ubUfvq9BeOZLm6V+TodQzH/llWgScehFC+RV76gVNLXyA1gZQZcrMvvoubtTA==
-X-Received: by 2002:a63:eb4d:0:b0:41b:db07:8b33 with SMTP id b13-20020a63eb4d000000b0041bdb078b33mr26791093pgk.89.1660231998253;
-        Thu, 11 Aug 2022 08:33:18 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id d6-20020a170902654600b0016a3f9e4865sm15086863pln.148.2022.08.11.08.33.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Aug 2022 08:33:17 -0700 (PDT)
-Date:   Thu, 11 Aug 2022 08:33:16 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     ebiederm@xmission.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-next@vger.kernel.org, sfr@canb.auug.org.au,
-        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk,
-        syzbot <syzbot+3250d9c8925ef29e975f@syzkaller.appspotmail.com>,
-        Ira Weiny <ira.weiny@intel.com>
-Subject: Re: [syzbot] linux-next boot error: BUG: unable to handle kernel
- paging request in kernel_execve
-Message-ID: <202208110830.8F528D6737@keescook>
-References: <0000000000008c0ba505e5f22066@google.com>
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=Zczd81LNv1xHVJW5LMHbnrfWpLWiMppZkaou/EB+Esg=;
+        b=iNyCzQYZC1d3GioW3ks/2EevNz2VaG+GXVn+H/QN6Kk/hogAPoRiXsjZkQPaCwM4fB
+         vO9+gP07EqJPPt6cUVkwwM9CBYBiOE853/vDmaptZqlKTrl1acRYjo9IHhESMwbt2o0u
+         osvT4/3N4J1iSYd+QRvPKrntQw6rWnyK895EG+B0+tR9aI0cZ7GiN+EbbSaSpsoW9Y9A
+         2/TKVgmNGc7eS8yWI52r46KirExrAXvQCqlwSMiEb8pFT45A8sAF+oIYTlYkzMLKA7R4
+         8oROixvYUac0NIvKTnSBL+IjIqYLKlYUziz4mi4gsQbI1+gjn0qzvj7P6+87LpbR9i2c
+         kVbw==
+X-Gm-Message-State: ACgBeo0QFoCYVMB/6gdfaGayui6CwQAkePESFRY67BgHmPoIECcjyZni
+        yrhOaPT3i65fYm5q/OrJfIX5Jnuoe1H5UJq+pZw=
+X-Google-Smtp-Source: AA6agR6iZ9oe9s6F2xGf6jbGSXfGSldHPjrWOEw0vqoAFj0WpPXzJ5gBkXItb323xxiswUt3/yyzaj37sgU4cONuwwE=
+X-Received: by 2002:a5d:5949:0:b0:223:88d6:bcf1 with SMTP id
+ e9-20020a5d5949000000b0022388d6bcf1mr2757958wri.165.1660235286087; Thu, 11
+ Aug 2022 09:28:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0000000000008c0ba505e5f22066@google.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:6000:548:0:0:0:0 with HTTP; Thu, 11 Aug 2022 09:28:05
+ -0700 (PDT)
+Reply-To: ubabankdirector07@gmail.com
+From:   "Mr.Peter Usman" <toom72433@gmail.com>
+Date:   Thu, 11 Aug 2022 09:28:05 -0700
+Message-ID: <CAD+ThjanohL=hUX--_JBDN1dGe6J9ZpWj6R2i0ZfkyWi8sc4Cw@mail.gmail.com>
+Subject: ATM Card Owner
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:444 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [toom72433[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [ubabankdirector07[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [toom72433[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Fabio,
+Attn: Honorable Customer,
 
-It seems likely that the kmap change[1] might be causing this crash. Is
-there a boot-time setup race between kmap being available and early umh
-usage?
+This is to let you know that your Visa Card is ready now and the part
+payment has been credited already as IRS has signed it. So contact Mr
+Janny King of UBA for immediate mailing of your Visa card now. The
+amount is $10.5USD
 
--Kees
+Name: Mr.Janny King
+Email: (ubabankdirector07@gmail.com)
 
-[1] https://git.kernel.org/linus/c6e8e36c6ae4b11bed5643317afb66b6c3cadba8
-
-On Thu, Aug 11, 2022 at 12:29:34AM -0700, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    bc6c6584ffb2 Add linux-next specific files for 20220810
-> git tree:       linux-next
-> console output: https://syzkaller.appspot.com/x/log.txt?x=115034c3080000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=5784be4315a4403b
-> dashboard link: https://syzkaller.appspot.com/bug?extid=3250d9c8925ef29e975f
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+3250d9c8925ef29e975f@syzkaller.appspotmail.com
-> 
-> BUG: unable to handle page fault for address: ffffdc0000000000
-> #PF: supervisor read access in kernel mode
-> #PF: error_code(0x0000) - not-present page
-> PGD 11826067 P4D 11826067 PUD 0 
-> Oops: 0000 [#1] PREEMPT SMP KASAN
-> CPU: 0 PID: 1100 Comm: kworker/u4:5 Not tainted 5.19.0-next-20220810-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-> RIP: 0010:strnlen+0x3b/0x70 lib/string.c:504
-> Code: 74 3c 48 bb 00 00 00 00 00 fc ff df 49 89 fc 48 89 f8 eb 09 48 83 c0 01 48 39 e8 74 1e 48 89 c2 48 89 c1 48 c1 ea 03 83 e1 07 <0f> b6 14 1a 38 ca 7f 04 84 d2 75 11 80 38 00 75 d9 4c 29 e0 48 83
-> RSP: 0000:ffffc90005c5fe10 EFLAGS: 00010246
-> RAX: ffff000000000000 RBX: dffffc0000000000 RCX: 0000000000000000
-> RDX: 1fffe00000000000 RSI: 0000000000020000 RDI: ffff000000000000
-> RBP: ffff000000020000 R08: 0000000000000005 R09: 0000000000000000
-> R10: 0000000000000006 R11: 0000000000000000 R12: ffff000000000000
-> R13: ffff88814764cc00 R14: ffff000000000000 R15: ffff88814764cc00
-> FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: ffffdc0000000000 CR3: 000000000bc8e000 CR4: 00000000003506f0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  strnlen include/linux/fortify-string.h:119 [inline]
->  copy_string_kernel+0x26/0x250 fs/exec.c:616
->  copy_strings_kernel+0xb3/0x190 fs/exec.c:655
->  kernel_execve+0x377/0x500 fs/exec.c:1998
->  call_usermodehelper_exec_async+0x2e3/0x580 kernel/umh.c:112
->  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
->  </TASK>
-> Modules linked in:
-> CR2: ffffdc0000000000
-> ---[ end trace 0000000000000000 ]---
-> RIP: 0010:strnlen+0x3b/0x70 lib/string.c:504
-> Code: 74 3c 48 bb 00 00 00 00 00 fc ff df 49 89 fc 48 89 f8 eb 09 48 83 c0 01 48 39 e8 74 1e 48 89 c2 48 89 c1 48 c1 ea 03 83 e1 07 <0f> b6 14 1a 38 ca 7f 04 84 d2 75 11 80 38 00 75 d9 4c 29 e0 48 83
-> RSP: 0000:ffffc90005c5fe10 EFLAGS: 00010246
-> RAX: ffff000000000000 RBX: dffffc0000000000 RCX: 0000000000000000
-> RDX: 1fffe00000000000 RSI: 0000000000020000 RDI: ffff000000000000
-> RBP: ffff000000020000 R08: 0000000000000005 R09: 0000000000000000
-> R10: 0000000000000006 R11: 0000000000000000 R12: ffff000000000000
-> R13: ffff88814764cc00 R14: ffff000000000000 R15: ffff88814764cc00
-> FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: ffffdc0000000000 CR3: 000000000bc8e000 CR4: 00000000003506f0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> ----------------
-> Code disassembly (best guess):
->    0:	74 3c                	je     0x3e
->    2:	48 bb 00 00 00 00 00 	movabs $0xdffffc0000000000,%rbx
->    9:	fc ff df
->    c:	49 89 fc             	mov    %rdi,%r12
->    f:	48 89 f8             	mov    %rdi,%rax
->   12:	eb 09                	jmp    0x1d
->   14:	48 83 c0 01          	add    $0x1,%rax
->   18:	48 39 e8             	cmp    %rbp,%rax
->   1b:	74 1e                	je     0x3b
->   1d:	48 89 c2             	mov    %rax,%rdx
->   20:	48 89 c1             	mov    %rax,%rcx
->   23:	48 c1 ea 03          	shr    $0x3,%rdx
->   27:	83 e1 07             	and    $0x7,%ecx
-> * 2a:	0f b6 14 1a          	movzbl (%rdx,%rbx,1),%edx <-- trapping instruction
->   2e:	38 ca                	cmp    %cl,%dl
->   30:	7f 04                	jg     0x36
->   32:	84 d2                	test   %dl,%dl
->   34:	75 11                	jne    0x47
->   36:	80 38 00             	cmpb   $0x0,(%rax)
->   39:	75 d9                	jne    0x14
->   3b:	4c 29 e0             	sub    %r12,%rax
->   3e:	48                   	rex.W
->   3f:	83                   	.byte 0x83
-> 
-> 
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
-> 
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
--- 
-Kees Cook
+Thanks
+Mr.Peter Usman

@@ -2,108 +2,93 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53E67590558
-	for <lists+linux-next@lfdr.de>; Thu, 11 Aug 2022 19:03:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 577265905A4
+	for <lists+linux-next@lfdr.de>; Thu, 11 Aug 2022 19:17:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234638AbiHKRDd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 11 Aug 2022 13:03:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49432 "EHLO
+        id S235868AbiHKRRj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 11 Aug 2022 13:17:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238126AbiHKQzi (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 11 Aug 2022 12:55:38 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1550A9A997
-        for <linux-next@vger.kernel.org>; Thu, 11 Aug 2022 09:28:14 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id n4so20154473wrp.10
-        for <linux-next@vger.kernel.org>; Thu, 11 Aug 2022 09:28:14 -0700 (PDT)
+        with ESMTP id S235877AbiHKRRP (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 11 Aug 2022 13:17:15 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBF932AE9;
+        Thu, 11 Aug 2022 10:11:00 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id v5so9774869wmj.0;
+        Thu, 11 Aug 2022 10:11:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc;
-        bh=Zczd81LNv1xHVJW5LMHbnrfWpLWiMppZkaou/EB+Esg=;
-        b=CGz+bHAflj6Ox/CB01EJJWyj/OCmOrVJm/RB3qaD7hPKYjSeZvLrLY+a41cQokPVud
-         3Lw/ZochYRmPs1HzdXHCKwbwZjlR1GrAZFnPlbaQHKqwPeVz6R7b0TfloPHIap/n+Jjq
-         6gk3Ph6Wk7zD6fxTqwxlNdDRGueWTi1AjfXiuqUrzGQ5IKqGEBATREcPm+bdKra10hrv
-         p4L/v2sE1nCeQvKwiAr2qLr1XF0WsbJAIvyYryLZwBr+DgBHdI+cbaZN0KifCzOfW56+
-         Q/VD5IlwF5PipOX1eBYNWQ+f3RFm9Ryjh1c2jeclXE1lnhVjkzbwprKPr6i6REtMMmmo
-         hlTw==
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc;
+        bh=9lmCRb9w6uCDtNqUvz+VlG2tKHmhpYW/JN7ZTZ0wmWA=;
+        b=HueoZjS09HesHA6TCTd0JPvcBzWU0gb3xP9VW8Z/5Z/IKUTGcxCTFMAG6sdNrMVRPI
+         XnrC4DiqsP2rdQJP9mkDCIzGrBusm9Qc0UUy6mvDQvs1Y9D/odTmBhoAqjwVVT1PEP2a
+         JhvZLP7Y7ewJiwBLh9bNypUzht0ngPd3zFtQ3sgGLWOI4mqyM3Tb8e7fp8v1GuUb8mnW
+         BsIZT+UyxiocbCaiSIIB9NZf9tSMHiXuJipn0qbdhRIgFIWA+K/RWq1NdWpHZCzcCc+J
+         J1DEAaHrNGdyKVd4wCP6/y4ZMEMKdBfjcDWQwdB+WVDIpg0wcevdm6XgmJVtTgxQMo0t
+         WLBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc;
-        bh=Zczd81LNv1xHVJW5LMHbnrfWpLWiMppZkaou/EB+Esg=;
-        b=iNyCzQYZC1d3GioW3ks/2EevNz2VaG+GXVn+H/QN6Kk/hogAPoRiXsjZkQPaCwM4fB
-         vO9+gP07EqJPPt6cUVkwwM9CBYBiOE853/vDmaptZqlKTrl1acRYjo9IHhESMwbt2o0u
-         osvT4/3N4J1iSYd+QRvPKrntQw6rWnyK895EG+B0+tR9aI0cZ7GiN+EbbSaSpsoW9Y9A
-         2/TKVgmNGc7eS8yWI52r46KirExrAXvQCqlwSMiEb8pFT45A8sAF+oIYTlYkzMLKA7R4
-         8oROixvYUac0NIvKTnSBL+IjIqYLKlYUziz4mi4gsQbI1+gjn0qzvj7P6+87LpbR9i2c
-         kVbw==
-X-Gm-Message-State: ACgBeo0QFoCYVMB/6gdfaGayui6CwQAkePESFRY67BgHmPoIECcjyZni
-        yrhOaPT3i65fYm5q/OrJfIX5Jnuoe1H5UJq+pZw=
-X-Google-Smtp-Source: AA6agR6iZ9oe9s6F2xGf6jbGSXfGSldHPjrWOEw0vqoAFj0WpPXzJ5gBkXItb323xxiswUt3/yyzaj37sgU4cONuwwE=
-X-Received: by 2002:a5d:5949:0:b0:223:88d6:bcf1 with SMTP id
- e9-20020a5d5949000000b0022388d6bcf1mr2757958wri.165.1660235286087; Thu, 11
- Aug 2022 09:28:06 -0700 (PDT)
+        bh=9lmCRb9w6uCDtNqUvz+VlG2tKHmhpYW/JN7ZTZ0wmWA=;
+        b=5bEikKJo0oktgkE3/NnbDwa8v5RvNJkt5w7ybFFH0+FftiafE/zZFRPK5ODysowQxO
+         GYn5gDdA9yoLndzffqOJezh8O6u3UtPUoX6GjKuzjJ5jaxsCJ3ZsyNxlw5GuFYw1KAay
+         wNSjZ8UmLKMikICZuDwphSspbTo8cKMXoiqS9CzKYrjPCsXdnWltRwcpSz1yJLkum6g7
+         39ctZzR6yJd0qEj0yF1LWpzDvehg1p+Ic4Nk7WtUEsXHT1JWu6Ha9PNSXwvbb7XGU0lk
+         xAh2ATQ3MkgFKlxx2L5VMFYxP6r4OM4zvX226qDvem8JzcaABLaxK8kgqf9nIKBSUvvN
+         c+Qg==
+X-Gm-Message-State: ACgBeo22qLvlRgQEtzEKxCiFd7BwHNi+lCfRfnyfbAMDpNlJPYJ6n0yu
+        KmhpjoXrP/F4HaqdWKjI1toIvJfQLY0=
+X-Google-Smtp-Source: AA6agR68hJQ2kVu941cLF0W2MeedTSh595znTTi1zvBbU1seBZqoyPGDGJiGim5IewA7q2JgPbE7ew==
+X-Received: by 2002:a05:600c:4ed0:b0:3a3:3ef3:c8d1 with SMTP id g16-20020a05600c4ed000b003a33ef3c8d1mr6369177wmq.154.1660237859175;
+        Thu, 11 Aug 2022 10:10:59 -0700 (PDT)
+Received: from debian ([2405:201:8005:8149:e5c9:c0ac:4d82:e94b])
+        by smtp.gmail.com with ESMTPSA id m27-20020a05600c3b1b00b003a308e9a192sm7647413wms.30.2022.08.11.10.10.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Aug 2022 10:10:58 -0700 (PDT)
+Date:   Thu, 11 Aug 2022 18:10:48 +0100
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Alex Deucher <alexander.deucher@amd.com>,
+        Hamza Mahfooz <hamza.mahfooz@amd.com>,
+        Fangzhi Zuo <Jerry.Zuo@amd.com>
+Cc:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org
+Subject: build failure of next-20220811 due to b1a63a0b48ad
+ ("drm/amd/display: consider DSC pass-through during mode validation")
+Message-ID: <YvU4GD8HtZ1A4dhI@debian>
 MIME-Version: 1.0
-Received: by 2002:a05:6000:548:0:0:0:0 with HTTP; Thu, 11 Aug 2022 09:28:05
- -0700 (PDT)
-Reply-To: ubabankdirector07@gmail.com
-From:   "Mr.Peter Usman" <toom72433@gmail.com>
-Date:   Thu, 11 Aug 2022 09:28:05 -0700
-Message-ID: <CAD+ThjanohL=hUX--_JBDN1dGe6J9ZpWj6R2i0ZfkyWi8sc4Cw@mail.gmail.com>
-Subject: ATM Card Owner
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:444 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [toom72433[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [ubabankdirector07[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [toom72433[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Attn: Honorable Customer,
+Hi All,
 
-This is to let you know that your Visa Card is ready now and the part
-payment has been credited already as IRS has signed it. So contact Mr
-Janny King of UBA for immediate mailing of your Visa card now. The
-amount is $10.5USD
+Not sure if it has been reported, builds of riscv, alpha, s390, arm,
+arm64, xtensa, mips, csky allmodconfig have failed to build next-20220811
+with the error:
 
-Name: Mr.Janny King
-Email: (ubabankdirector07@gmail.com)
+ERROR: modpost: "dc_dsc_compute_bandwidth_range" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
+ERROR: modpost: "dc_dsc_get_policy_for_timing" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
 
-Thanks
-Mr.Peter Usman
+git bisect pointed to b1a63a0b48ad ("drm/amd/display: consider DSC pass-through during mode validation")
+And, reverting that commit has fixed the build failure.
+
+I will be happy to test any patch or provide any extra log if needed.
+
+
+--
+Regards
+Sudip

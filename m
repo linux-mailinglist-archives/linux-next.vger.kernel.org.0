@@ -1,171 +1,334 @@
 Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5C135907A2
-	for <lists+linux-next@lfdr.de>; Thu, 11 Aug 2022 23:01:05 +0200 (CEST)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.lfdr.de (Postfix) with ESMTP id 376D35908A7
+	for <lists+linux-next@lfdr.de>; Fri, 12 Aug 2022 00:16:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236111AbiHKVBF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 11 Aug 2022 17:01:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35148 "EHLO
+        id S235682AbiHKWOR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 11 Aug 2022 18:14:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235330AbiHKVBD (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 11 Aug 2022 17:01:03 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BD553207D
-        for <linux-next@vger.kernel.org>; Thu, 11 Aug 2022 14:01:02 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id o3so17951386ple.5
-        for <linux-next@vger.kernel.org>; Thu, 11 Aug 2022 14:01:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=lWnO1M/dZk+khdcoUQPWpNlUVOu1wZfObn0OsAZQlYM=;
-        b=V9LZbFMbnnJyDYc0rpjV/ChWjvtnWh+ePvVn/SP+LbwIcJ4Xdttmmyc/gItE5BgYmo
-         zCCvuQvaDvZyK+OiBAVZUMAdVDztrxKkFXnXhUewtrr8K1JijIMo13YQqM7nSfWqFAh9
-         tVor4+kI9QcbF/sCYWR3cdWd5idHKtq01tmoQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=lWnO1M/dZk+khdcoUQPWpNlUVOu1wZfObn0OsAZQlYM=;
-        b=j0JJpyaHwtDahnWRDGll+X619Ax1OEZYSHD6ZB2oUxzWx0DznioBTmlq2SAq3Td3vN
-         TSAT+JJBoIgceYB1WbyBpscZrg/P5cNFH9oqq0nzR23ao6AVh3Doq0PfcPiILmtaBXcP
-         kfgkBGID1vqv4+K3MfeguHr1HIWrycF+Aqxo2s7WlpJ/f7H5ELckDN7Vu/61Wsrc3RfL
-         pU79hSIToaOSYQK6iSLWSSR2TbOluvCi9mPiErcfwtHQcjlMULh6cJJ56RuUw3Q8KEh3
-         BoHDpf7svS8ZQCW3v6enW3YwWAyy3CFxEalMh0zmSiN8KqrR65jbpYZhDa+hjC2Euzl6
-         5OVA==
-X-Gm-Message-State: ACgBeo3Y8hNzLPdwhHcoxS0VE8netSVRBnZXUV4AGcKC4YSwXoplv3fc
-        LsB4WNt7UzVJRR6D66vjDiQWZQ==
-X-Google-Smtp-Source: AA6agR44dr1MfmhPd+9TrxTTBk9F8wZLKavuhV0JOxK+yOCG0NW8aR/qUetK1eh0ZVL0y8Y2x31TVA==
-X-Received: by 2002:a17:902:dac5:b0:16f:81c1:93d3 with SMTP id q5-20020a170902dac500b0016f81c193d3mr954362plx.70.1660251661554;
-        Thu, 11 Aug 2022 14:01:01 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id je2-20020a170903264200b0016dafeda062sm91816plb.232.2022.08.11.14.01.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Aug 2022 14:01:00 -0700 (PDT)
-Date:   Thu, 11 Aug 2022 14:00:59 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Ira Weiny <ira.weiny@intel.com>
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        ebiederm@xmission.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-next@vger.kernel.org, sfr@canb.auug.org.au,
-        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk,
-        syzbot <syzbot+3250d9c8925ef29e975f@syzkaller.appspotmail.com>
-Subject: Re: [syzbot] linux-next boot error: BUG: unable to handle kernel
- paging request in kernel_execve
-Message-ID: <202208111356.97951D32@keescook>
-References: <0000000000008c0ba505e5f22066@google.com>
- <202208110830.8F528D6737@keescook>
- <YvU+0UHrn9Ab4rR8@iweiny-desk3>
- <YvVPtuel8NMmiTKk@iweiny-desk3>
+        with ESMTP id S235205AbiHKWOQ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 11 Aug 2022 18:14:16 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C4C0A0335;
+        Thu, 11 Aug 2022 15:14:11 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4M3h0t6fVpz4wgv;
+        Fri, 12 Aug 2022 08:14:06 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1660256047;
+        bh=m6KjgOzbDaQ/Q0LqxhKfLlU33XvnbTQigjVbzGxvAFc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=GiV4fiXbYNJT7ByiAMgmHAyx+yQ3SjVEl6tnZUWoXTT0qJHi9ZpuiUcJfGeYFuXnM
+         iIXBm1lTBeB0uERNx1sjb4F6guFk5+hroZRmsiL14b72bUsPjRkFUCJUczPvx1BOSs
+         D6QWRwDkDP8xJX6fdANNWeqgJ9x3b8UM7yMJ0WMKv8Jr5ziswK1BD0frkgahMTuhT7
+         CsGKYT04ikgAqb8rJ8458DcmKSFJUrPJ5IG7/AVP5ry6GdEEz4g596XPZoFjlgdPJe
+         I3LqRX1lrcv8zfg9L8Oepg6HILYrY/CSOQiqK8sEMOwBZhsOxcAe3/K+fyBDqmME4x
+         Wj74QKN64H2bA==
+Date:   Fri, 12 Aug 2022 08:13:47 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the amdgpu tree
+Message-ID: <20220812081245.380c375f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YvVPtuel8NMmiTKk@iweiny-desk3>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/C4H4alhtg7UI0g=K7.saxGF";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Aug 11, 2022 at 11:51:34AM -0700, Ira Weiny wrote:
-> On Thu, Aug 11, 2022 at 10:39:29AM -0700, Ira wrote:
-> > On Thu, Aug 11, 2022 at 08:33:16AM -0700, Kees Cook wrote:
-> > > Hi Fabio,
-> > > 
-> > > It seems likely that the kmap change[1] might be causing this crash. Is
-> > > there a boot-time setup race between kmap being available and early umh
-> > > usage?
-> > 
-> > I don't see how this is a setup problem with the config reported here.
-> > 
-> > CONFIG_64BIT=y
-> > 
-> > ...and HIGHMEM is not set.
-> > ...and PREEMPT_RT is not set.
-> > 
-> > So the kmap_local_page() call in that stack should be a page_address() only.
-> > 
-> > I think the issue must be some sort of race which was being prevented because
-> > of the preemption and/or pagefault disable built into kmap_atomic().
-> > 
-> > Is this reproducable?
-> > 
-> > The hunk below will surely fix it but I think the pagefault_disable() is
-> > the only thing that is required.  It would be nice to test it.
-> 
-> Fabio and I discussed this.  And he also mentioned that pagefault_disable() is
-> all that is required.
+--Sig_/C4H4alhtg7UI0g=K7.saxGF
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Okay, sounds good.
+Hi all,
 
-> Do we have a way to test this?
+After merging the amdgpu tree, today's linux-next build (htmldocs)
+produced this warning:
 
-It doesn't look like syzbot has a reproducer yet, so its patch testing
-system[1] will not work. But if you can send me a patch, I could land it
-in -next and we could see if the reproduction frequency drops to zero.
-(Looking at the dashboard, it's seen 2 crashes, most recently 8 hours
-ago.)
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'always_scale' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'always_use_regamma' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'aux_wake_wa' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'avoid_vbios_exec_table' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'az_endpoint_mute_only' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'bandwidth_calcs_trace' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'bw_val_profile' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'clock_trace' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'cm_in_bypass' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'crb_alloc_policy' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'crb_alloc_policy_min_disp_count' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_48mhz_pwrdwn' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_clock_gate' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_dcc' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_dfs_bypass' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_dmcu' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_dpp_power_gate' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_dram_clock_change_vactive_support' not described in 'dc_debug_=
+options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_dsc' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_dsc_edp' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_dsc_power_gate' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_dtb_ref_clk_switch' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_fams' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_fec' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_fixed_vs_aux_timeout_wa' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_hubp_power_gate' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_idle_power_optimizations' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_mem_low_power' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_min_fclk' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_pplib_clock_request' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_pplib_wm_range' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_psr' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_stereo_support' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_stutter' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_timing_sync' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_uhbr' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_z10' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_z9_mpc' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'dmcub_emulation' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'dml_disallow_alternate_prefetch_modes' not described in 'dc_debug_opti=
+ons'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'dml_hostvm_override' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'dmub_command_table' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'dmub_offload_enabled' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'dpia_debug' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'dram_clock_change_latency_ns' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'dsc_bpp_increment_div' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'dsc_min_slice_height_override' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'dwb_fi_phase' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'edid_read_retry_times' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'enable_dmcub_surface_flip' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'enable_dmub_aux_for_legacy_ddc' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'enable_dp_dig_pixel_rate_div_policy' not described in 'dc_debug_option=
+s'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'enable_dram_clock_change_one_display_vactive' not described in 'dc_deb=
+ug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'enable_driver_sequence_debug' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'enable_mem_low_power' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'enable_single_display_2to1_odm_policy' not described in 'dc_debug_opti=
+ons'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'enable_sw_cntl_psr' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'enable_tri_buf' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'enable_z9_disable_interface' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'exit_idle_opt_for_cursor_updates' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'extended_blank_optimization' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'fec_enable_delay_in100us' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'fixed_vs_aux_delay_config_wa' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'force_abm_enable' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'force_clock_mode' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'force_disable_subvp' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'force_dp2_lt_fallback_method' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'force_dsc_edp_policy' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'force_fclk_khz' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'force_min_dcfclk_mhz' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'force_odm_combine' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'force_odm_combine_4to1' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'force_single_disp_pipe_split' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'force_subvp_mclk_switch' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'force_usr_allow' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'force_vblank_alignment' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'hdmi20_disable' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'hpo_optimization' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'ignore_cable_id' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'legacy_dp2_lt' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'mall_additional_timer_percent' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'mall_error_as_fatal' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'mall_size_override' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'max_disp_clk' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'max_downscale_src_width' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'min_disp_clk_khz' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'min_dpp_clk_khz' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'min_dram_clk_khz' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'mst_start_top_delay' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'native422_support' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'optimize_edp_link_rate' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'optimized_watermark' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'percent_of_ideal_drambw' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'performance_trace' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'pplib_wm_report_mode' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'psr_power_use_phy_fsm' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'pstate_enabled' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'recovery_enabled' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'root_clock_optimization' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'sanity_checks' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'scl_reset_length10' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'seamless_boot_odm_combine' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'set_mst_en_for_sst' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'skip_detection_link_training' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'sr_enter_plus_exit_time_dpm0_ns' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'sr_enter_plus_exit_time_ns' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'sr_exit_time_dpm0_ns' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'sr_exit_time_ns' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'surface_trace' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'timing_trace' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'underflow_assert_delay_us' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'urgent_latency_ns' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'usbc_combo_phy_reset_wa' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'use_legacy_soc_bb_mechanism' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'use_max_lb' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'validate_dml_output' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'validation_trace' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'visual_confirm' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'visual_confirm_rect_height' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'voltage_align_fclk' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'vsr_support' not described in 'dc_debug_options'
 
--Kees
+Introduced by commit
 
-[1] https://github.com/google/syzkaller/blob/master/docs/syzbot.md#testing-patches
+  a2b3b9d57bdb ("drm/amd/display: Document pipe split policy")
 
-> > > > syzbot found the following issue on:
-> > > > 
-> > > > HEAD commit:    bc6c6584ffb2 Add linux-next specific files for 20220810
-> > > > git tree:       linux-next
-> > > > console output: https://syzkaller.appspot.com/x/log.txt?x=115034c3080000
-> > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=5784be4315a4403b
-> > > > dashboard link: https://syzkaller.appspot.com/bug?extid=3250d9c8925ef29e975f
-> > > > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> > > > 
-> > > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > > > Reported-by: syzbot+3250d9c8925ef29e975f@syzkaller.appspotmail.com
-> > > > 
-> > > > BUG: unable to handle page fault for address: ffffdc0000000000
-> > > > #PF: supervisor read access in kernel mode
-> > > > #PF: error_code(0x0000) - not-present page
-> > > > PGD 11826067 P4D 11826067 PUD 0 
-> > > > Oops: 0000 [#1] PREEMPT SMP KASAN
-> > > > CPU: 0 PID: 1100 Comm: kworker/u4:5 Not tainted 5.19.0-next-20220810-syzkaller #0
-> > > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-> > > > RIP: 0010:strnlen+0x3b/0x70 lib/string.c:504
-> > > > Code: 74 3c 48 bb 00 00 00 00 00 fc ff df 49 89 fc 48 89 f8 eb 09 48 83 c0 01 48 39 e8 74 1e 48 89 c2 48 89 c1 48 c1 ea 03 83 e1 07 <0f> b6 14 1a 38 ca 7f 04 84 d2 75 11 80 38 00 75 d9 4c 29 e0 48 83
-> > > > RSP: 0000:ffffc90005c5fe10 EFLAGS: 00010246
-> > > > RAX: ffff000000000000 RBX: dffffc0000000000 RCX: 0000000000000000
-> > > > RDX: 1fffe00000000000 RSI: 0000000000020000 RDI: ffff000000000000
-> > > > RBP: ffff000000020000 R08: 0000000000000005 R09: 0000000000000000
-> > > > R10: 0000000000000006 R11: 0000000000000000 R12: ffff000000000000
-> > > > R13: ffff88814764cc00 R14: ffff000000000000 R15: ffff88814764cc00
-> > > > FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-> > > > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > > > CR2: ffffdc0000000000 CR3: 000000000bc8e000 CR4: 00000000003506f0
-> > > > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > > > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > > > Call Trace:
-> > > >  <TASK>
-> > > >  strnlen include/linux/fortify-string.h:119 [inline]
-> > > >  copy_string_kernel+0x26/0x250 fs/exec.c:616
-> > > >  copy_strings_kernel+0xb3/0x190 fs/exec.c:655
-> > > >  kernel_execve+0x377/0x500 fs/exec.c:1998
-> > > >  call_usermodehelper_exec_async+0x2e3/0x580 kernel/umh.c:112
-> > > >  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
-> > > >  </TASK>
-> [...]
-> > > > ---
-> > > > This report is generated by a bot. It may contain errors.
-> > > > See https://goo.gl/tpsmEJ for more information about syzbot.
-> > > > syzbot engineers can be reached at syzkaller@googlegroups.com.
-> > > > 
-> > > > syzbot will keep track of this issue. See:
-> > > > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+--=20
+Cheers,
+Stephen Rothwell
 
--- 
-Kees Cook
+--Sig_/C4H4alhtg7UI0g=K7.saxGF
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmL1fxsACgkQAVBC80lX
+0GwWOggAnP25ZIkMt8PF/zqr367R+5VdFSMJI6YZbMmOpiLMlDVf4GU9OU//lkqy
+t+OvoukPjjmNkSAYN5+dmDp1h6o3WTYUZNfpTrBrygaD0ZHS4RA8aaV/4+NDNi8j
+LfEurqlfsl3rc9B1RS6tEMocsnVfTyxNS+jRRoDYABL7+pr57tZtYN2Ezmkdhzsy
+rpN2B92YaWvSl/HaSo45tpiEA2N0QMXVuGdAmxTTehjNEC6E2DOEUt6S3zvSHLzF
+Ik6PFbRPECB2rkF1R3vHz+PcV+eaiKxJpyaQ3rrO5i+lyFjIRmL991S5Usthr4wW
+L4xKiPrRJUp+RJhTbMTzSkhtdtFzBg==
+=4TVX
+-----END PGP SIGNATURE-----
+
+--Sig_/C4H4alhtg7UI0g=K7.saxGF--

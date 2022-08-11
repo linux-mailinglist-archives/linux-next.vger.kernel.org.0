@@ -2,56 +2,70 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2AA3590794
-	for <lists+linux-next@lfdr.de>; Thu, 11 Aug 2022 22:54:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5C135907A2
+	for <lists+linux-next@lfdr.de>; Thu, 11 Aug 2022 23:01:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234706AbiHKUyo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 11 Aug 2022 16:54:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56972 "EHLO
+        id S236111AbiHKVBF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 11 Aug 2022 17:01:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234638AbiHKUyn (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 11 Aug 2022 16:54:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B43C014090;
-        Thu, 11 Aug 2022 13:54:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 66178B82293;
-        Thu, 11 Aug 2022 20:54:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77796C433C1;
-        Thu, 11 Aug 2022 20:54:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660251280;
-        bh=oebE/ZPJ9Yj7bSNVEycbEf7rL+LPEK7fxBeOLpOj3Tk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gnQJdahlCu9k6pVqo6O4Gq2KQcO6YKiDsub1ObEWjOeNSLYhRSdfoMW7WC26+hZtk
-         2Xnl+eZIbfkX3UoSr67jx+HZc1P31U0UD+ZEcXJkqQ2n7TTr74t4PDkvht6L8BP1XI
-         o19hxOMfdoZSrNZuez9F1qGYc+u6baPQGgth/ZaEwdy10bb/9lclxg+KwNog9Muvgu
-         nke1UNVIQC0AIAtBlKs/Aa2KhMs0MxZOvUXqJxJOm9YujHkc9yBCMmOw+RgxHJ33+/
-         9vpiGopWM931Ye7ovS3H7DXJDaH5eKFuDUpTEnG9YoBg57pHyTDcpNbsbfjWtg3Fcd
-         HoRmKKSaNvz4g==
-Date:   Thu, 11 Aug 2022 13:54:37 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-Cc:     Stefano Garzarella <sgarzare@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org,
-        clang-built-linux <llvm@lists.linux.dev>,
-        linux-next@vger.kernel.org
-Subject: Re: build failure of next-20220811 due to d79b32c2e4a4
- ("vdpa_sim_blk: add support for discard and write-zeroes")
-Message-ID: <YvVsjWAWRyJzQ2V7@dev-arch.thelio-3990X>
-References: <YvU67iF4z5gB4ZYk@debian>
- <YvVK+ZqO75QAYYnB@dev-arch.thelio-3990X>
+        with ESMTP id S235330AbiHKVBD (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 11 Aug 2022 17:01:03 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BD553207D
+        for <linux-next@vger.kernel.org>; Thu, 11 Aug 2022 14:01:02 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id o3so17951386ple.5
+        for <linux-next@vger.kernel.org>; Thu, 11 Aug 2022 14:01:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=lWnO1M/dZk+khdcoUQPWpNlUVOu1wZfObn0OsAZQlYM=;
+        b=V9LZbFMbnnJyDYc0rpjV/ChWjvtnWh+ePvVn/SP+LbwIcJ4Xdttmmyc/gItE5BgYmo
+         zCCvuQvaDvZyK+OiBAVZUMAdVDztrxKkFXnXhUewtrr8K1JijIMo13YQqM7nSfWqFAh9
+         tVor4+kI9QcbF/sCYWR3cdWd5idHKtq01tmoQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=lWnO1M/dZk+khdcoUQPWpNlUVOu1wZfObn0OsAZQlYM=;
+        b=j0JJpyaHwtDahnWRDGll+X619Ax1OEZYSHD6ZB2oUxzWx0DznioBTmlq2SAq3Td3vN
+         TSAT+JJBoIgceYB1WbyBpscZrg/P5cNFH9oqq0nzR23ao6AVh3Doq0PfcPiILmtaBXcP
+         kfgkBGID1vqv4+K3MfeguHr1HIWrycF+Aqxo2s7WlpJ/f7H5ELckDN7Vu/61Wsrc3RfL
+         pU79hSIToaOSYQK6iSLWSSR2TbOluvCi9mPiErcfwtHQcjlMULh6cJJ56RuUw3Q8KEh3
+         BoHDpf7svS8ZQCW3v6enW3YwWAyy3CFxEalMh0zmSiN8KqrR65jbpYZhDa+hjC2Euzl6
+         5OVA==
+X-Gm-Message-State: ACgBeo3Y8hNzLPdwhHcoxS0VE8netSVRBnZXUV4AGcKC4YSwXoplv3fc
+        LsB4WNt7UzVJRR6D66vjDiQWZQ==
+X-Google-Smtp-Source: AA6agR44dr1MfmhPd+9TrxTTBk9F8wZLKavuhV0JOxK+yOCG0NW8aR/qUetK1eh0ZVL0y8Y2x31TVA==
+X-Received: by 2002:a17:902:dac5:b0:16f:81c1:93d3 with SMTP id q5-20020a170902dac500b0016f81c193d3mr954362plx.70.1660251661554;
+        Thu, 11 Aug 2022 14:01:01 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id je2-20020a170903264200b0016dafeda062sm91816plb.232.2022.08.11.14.01.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Aug 2022 14:01:00 -0700 (PDT)
+Date:   Thu, 11 Aug 2022 14:00:59 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Ira Weiny <ira.weiny@intel.com>
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        ebiederm@xmission.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-next@vger.kernel.org, sfr@canb.auug.org.au,
+        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk,
+        syzbot <syzbot+3250d9c8925ef29e975f@syzkaller.appspotmail.com>
+Subject: Re: [syzbot] linux-next boot error: BUG: unable to handle kernel
+ paging request in kernel_execve
+Message-ID: <202208111356.97951D32@keescook>
+References: <0000000000008c0ba505e5f22066@google.com>
+ <202208110830.8F528D6737@keescook>
+ <YvU+0UHrn9Ab4rR8@iweiny-desk3>
+ <YvVPtuel8NMmiTKk@iweiny-desk3>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YvVK+ZqO75QAYYnB@dev-arch.thelio-3990X>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <YvVPtuel8NMmiTKk@iweiny-desk3>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,64 +74,98 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Aug 11, 2022 at 11:31:21AM -0700, Nathan Chancellor wrote:
-> On Thu, Aug 11, 2022 at 06:22:54PM +0100, Sudip Mukherjee (Codethink) wrote:
-> > Hi All,
+On Thu, Aug 11, 2022 at 11:51:34AM -0700, Ira Weiny wrote:
+> On Thu, Aug 11, 2022 at 10:39:29AM -0700, Ira wrote:
+> > On Thu, Aug 11, 2022 at 08:33:16AM -0700, Kees Cook wrote:
+> > > Hi Fabio,
+> > > 
+> > > It seems likely that the kmap change[1] might be causing this crash. Is
+> > > there a boot-time setup race between kmap being available and early umh
+> > > usage?
 > > 
-> > Not sure if it has been reported, builds of arm64 with clang failed to
-> > build next-20220811 with the error:
+> > I don't see how this is a setup problem with the config reported here.
 > > 
-> > drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:201:3: error: expected expression
-> >                 struct virtio_blk_discard_write_zeroes range;
-> >                 ^
-> > drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:204:25: error: use of undeclared identifier 'range'
-> >                 if (to_pull != sizeof(range)) {
-> >                                       ^
-> > drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:207:21: error: use of undeclared identifier 'range'
-> >                                 to_pull, sizeof(range));
-> >                                                 ^
-> > drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:212:60: error: use of undeclared identifier 'range'
-> >                 bytes = vringh_iov_pull_iotlb(&vq->vring, &vq->out_iov, &range,
-> >                                                                          ^
-> > drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:222:38: error: use of undeclared identifier 'range'
-> >                 sector = vdpasim64_to_cpu(vdpasim, range.sector);
-> >                                                    ^
-> > drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:224:43: error: use of undeclared identifier 'range'
-> >                 num_sectors = vdpasim32_to_cpu(vdpasim, range.num_sectors);
-> >                                                         ^
-> > drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:225:37: error: use of undeclared identifier 'range'
-> >                 flags = vdpasim32_to_cpu(vdpasim, range.flags);
-> >                                                   ^
-> > drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:202:7: error: mixing declarations and code is incompatible with standards before C99 [-Werror,-Wdeclaration-after-statement]
-> >                 u32 num_sectors, flags;
-> >                     ^
-> > 8 errors generated.
+> > CONFIG_64BIT=y
 > > 
+> > ...and HIGHMEM is not set.
+> > ...and PREEMPT_RT is not set.
 > > 
-> > git bisect pointed to d79b32c2e4a4 ("vdpa_sim_blk: add support for discard and write-zeroes").
-> > And, reverting that commit has fixed the build failure.
+> > So the kmap_local_page() call in that stack should be a page_address() only.
 > > 
-> > I will be happy to test any patch or provide any extra log if needed.
+> > I think the issue must be some sort of race which was being prevented because
+> > of the preemption and/or pagefault disable built into kmap_atomic().
+> > 
+> > Is this reproducable?
+> > 
+> > The hunk below will surely fix it but I think the pagefault_disable() is
+> > the only thing that is required.  It would be nice to test it.
 > 
-> I am very surprised GCC does not error out in the same way, since as far
-> as I understand it, labeled statements have to be followed by a
-> statement and a declaration is not a statement in C so braces are
-> needed. In fact, it seems like something changed (regressed?) between
-> GCC 10.x and 11.x?
-> 
-> https://godbolt.org/z/EYaGa1eE3
-> 
-> I am going to bisect GCC to find out whether or not that was
-> intentional.
+> Fabio and I discussed this.  And he also mentioned that pagefault_disable() is
+> all that is required.
 
-Just for the record, it was:
+Okay, sounds good.
 
-https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=8b7a9a249a63e066cff6e95db05a3158b4cc56cc
+> Do we have a way to test this?
 
-The clang developers are aware, it seems it will get implemented at some
-point:
+It doesn't look like syzbot has a reproducer yet, so its patch testing
+system[1] will not work. But if you can send me a patch, I could land it
+in -next and we could see if the reproduction frequency drops to zero.
+(Looking at the dashboard, it's seen 2 crashes, most recently 8 hours
+ago.)
 
-https://github.com/llvm/llvm-project/issues/56040
+-Kees
 
-Cheers,
-Nathan
+[1] https://github.com/google/syzkaller/blob/master/docs/syzbot.md#testing-patches
+
+> > > > syzbot found the following issue on:
+> > > > 
+> > > > HEAD commit:    bc6c6584ffb2 Add linux-next specific files for 20220810
+> > > > git tree:       linux-next
+> > > > console output: https://syzkaller.appspot.com/x/log.txt?x=115034c3080000
+> > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=5784be4315a4403b
+> > > > dashboard link: https://syzkaller.appspot.com/bug?extid=3250d9c8925ef29e975f
+> > > > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > > > 
+> > > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > > > Reported-by: syzbot+3250d9c8925ef29e975f@syzkaller.appspotmail.com
+> > > > 
+> > > > BUG: unable to handle page fault for address: ffffdc0000000000
+> > > > #PF: supervisor read access in kernel mode
+> > > > #PF: error_code(0x0000) - not-present page
+> > > > PGD 11826067 P4D 11826067 PUD 0 
+> > > > Oops: 0000 [#1] PREEMPT SMP KASAN
+> > > > CPU: 0 PID: 1100 Comm: kworker/u4:5 Not tainted 5.19.0-next-20220810-syzkaller #0
+> > > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+> > > > RIP: 0010:strnlen+0x3b/0x70 lib/string.c:504
+> > > > Code: 74 3c 48 bb 00 00 00 00 00 fc ff df 49 89 fc 48 89 f8 eb 09 48 83 c0 01 48 39 e8 74 1e 48 89 c2 48 89 c1 48 c1 ea 03 83 e1 07 <0f> b6 14 1a 38 ca 7f 04 84 d2 75 11 80 38 00 75 d9 4c 29 e0 48 83
+> > > > RSP: 0000:ffffc90005c5fe10 EFLAGS: 00010246
+> > > > RAX: ffff000000000000 RBX: dffffc0000000000 RCX: 0000000000000000
+> > > > RDX: 1fffe00000000000 RSI: 0000000000020000 RDI: ffff000000000000
+> > > > RBP: ffff000000020000 R08: 0000000000000005 R09: 0000000000000000
+> > > > R10: 0000000000000006 R11: 0000000000000000 R12: ffff000000000000
+> > > > R13: ffff88814764cc00 R14: ffff000000000000 R15: ffff88814764cc00
+> > > > FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+> > > > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > > > CR2: ffffdc0000000000 CR3: 000000000bc8e000 CR4: 00000000003506f0
+> > > > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> > > > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> > > > Call Trace:
+> > > >  <TASK>
+> > > >  strnlen include/linux/fortify-string.h:119 [inline]
+> > > >  copy_string_kernel+0x26/0x250 fs/exec.c:616
+> > > >  copy_strings_kernel+0xb3/0x190 fs/exec.c:655
+> > > >  kernel_execve+0x377/0x500 fs/exec.c:1998
+> > > >  call_usermodehelper_exec_async+0x2e3/0x580 kernel/umh.c:112
+> > > >  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+> > > >  </TASK>
+> [...]
+> > > > ---
+> > > > This report is generated by a bot. It may contain errors.
+> > > > See https://goo.gl/tpsmEJ for more information about syzbot.
+> > > > syzbot engineers can be reached at syzkaller@googlegroups.com.
+> > > > 
+> > > > syzbot will keep track of this issue. See:
+> > > > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+-- 
+Kees Cook

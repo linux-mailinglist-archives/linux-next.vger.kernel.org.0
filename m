@@ -2,52 +2,53 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86BB858F853
-	for <lists+linux-next@lfdr.de>; Thu, 11 Aug 2022 09:29:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E415458F851
+	for <lists+linux-next@lfdr.de>; Thu, 11 Aug 2022 09:29:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234296AbiHKH3i (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 11 Aug 2022 03:29:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34792 "EHLO
+        id S234253AbiHKH3h (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 11 Aug 2022 03:29:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234280AbiHKH3i (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 11 Aug 2022 03:29:38 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CA6A923EE
-        for <linux-next@vger.kernel.org>; Thu, 11 Aug 2022 00:29:35 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id f4-20020a5d8784000000b00684f917b026so5055476ion.12
-        for <linux-next@vger.kernel.org>; Thu, 11 Aug 2022 00:29:35 -0700 (PDT)
+        with ESMTP id S234224AbiHKH3h (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 11 Aug 2022 03:29:37 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1613923E9
+        for <linux-next@vger.kernel.org>; Thu, 11 Aug 2022 00:29:34 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id q20-20020a6bd214000000b00680799e0fbaso9276888iob.16
+        for <linux-next@vger.kernel.org>; Thu, 11 Aug 2022 00:29:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc;
-        bh=20C+yI2KibiJAbl2MuIQKwzDOwtmCdecHBfSm85T2W8=;
-        b=yV+mGpZleVXECN+0+uwqlwKZs9xaELSwjy64iOn9eaJs/OJ9aZfsnlmXjubwBXg7qK
-         HSAcYwT7K0+vmtW+xQsQHBvgye9eHamMx+7UMOGesDga2HII63KNtP5SOiYZW5nAF+8g
-         OfXod5qgjxnIiHXcdtuqyOW4ZjYbCixeAGc6y9XzvvG4NGbMmOzWoBHX8Nod91OUhQ/3
-         AiyFYRSXvnD+PuqLhAUcThphqFsXAWtQNpipnn46Z8g0tJfWlHhOgfgDzNhd0oRKjmHt
-         8hY3ahbhIvgIo48nlW59YrYLXxo/z6Yj5XcG3Ye5V9yUCGC8sVZkN7Adw8Pai/cKLniQ
-         wfTw==
-X-Gm-Message-State: ACgBeo1vmLCl1aQvPxM1XNkmMmMFPwTV73wCJwH2qz5e4w+GpCIt/SS3
-        VBFLSXMuHTa06vy+85TukCf7SS6e0rh1PaCP9GULQEFWjFa/
-X-Google-Smtp-Source: AA6agR6PB+VfsQk23BSrvL+l4uzYgFT52Ju6nZvXVRPY642t4ptNIm3tHcIvm+2oDFR74PKDVDHnTzD/qiOql0sysRf5ikjhh0GG
+        bh=/yFaxytgIiHOx+Ic1bXKL9Gku4rs+KBs+4RebWW1Oqw=;
+        b=jDlIvVFdYbdECBvbpaSbovXzc/YSfbPpK6iyk31c78YOxmIf5LYRFyPZx3TJwoy/V0
+         hKmigKML4fji+w4R8OffZAxs9Y/xaIoYcu+EXoUOBvgfHjBDdQgVclX1ediX1Ht1/M5T
+         XKNUDwUcd+Sj/F+8KpO3oenHYMHuxq0DApaJhRQVQb/II8l+Vaxz2e4rhoc7opXvhaQW
+         bb/A7XSODGOcG6Cf1Vqw/8cLcoXjo0QRwn4v36WCKblB5YmnvmVAEnlkCX5665yboQV+
+         C3NS5L1BXH77kjkO8mDXlaJtSRDkLrE2/H3Y0wRqdGfR6zw4E/7WJoA6jCbnTMUZwBME
+         NaJA==
+X-Gm-Message-State: ACgBeo2KMoDLRDsixUNhxDj58QixBigPaN2eGbjYll5z8PEAQ0lzswt/
+        2TnFsmmLXSm1vJluu3ZE5vh2M6r2neHhS6X7RUuJIlj+IMBS
+X-Google-Smtp-Source: AA6agR7QbnPgAxXbogoW+LXkYs4SKak5h1QOV8pgP/Zin+yh77BCgv+f6lsxKS//KxEqEm+vnHrYFnVoKMHRvqjsVHv0ArtJw6Fy
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:1654:b0:684:8736:dd00 with SMTP id
- y20-20020a056602165400b006848736dd00mr8777997iow.214.1660202974662; Thu, 11
+X-Received: by 2002:a05:6e02:1bad:b0:2dd:bc59:5078 with SMTP id
+ n13-20020a056e021bad00b002ddbc595078mr14145282ili.19.1660202974204; Thu, 11
  Aug 2022 00:29:34 -0700 (PDT)
 Date:   Thu, 11 Aug 2022 00:29:34 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000008f595005e5f2204f@google.com>
-Subject: [syzbot] linux-next boot error: BUG: unable to handle kernel paging
- request in proc_register
-From:   syzbot <syzbot+fa81ecc0eb36dcfb86bb@syzkaller.appspotmail.com>
-To:     linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com,
-        tglx@linutronix.de
+Message-ID: <000000000000885cee05e5f2204e@google.com>
+Subject: [syzbot] linux-next boot error: general protection fault in netdev_queue_update_kobjects
+From:   syzbot <syzbot+cf0ad9bc61d1fa5ef614@syzkaller.appspotmail.com>
+To:     atenart@kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, sfr@canb.auug.org.au,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,15 +60,15 @@ Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    40d43a7507e1 Add linux-next specific files for 20220811
+HEAD commit:    bc6c6584ffb2 Add linux-next specific files for 20220810
 git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=14516c0d080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a5ae8cfa8d7075d1
-dashboard link: https://syzkaller.appspot.com/bug?extid=fa81ecc0eb36dcfb86bb
+console output: https://syzkaller.appspot.com/x/log.txt?x=1518dbbb080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5784be4315a4403b
+dashboard link: https://syzkaller.appspot.com/bug?extid=cf0ad9bc61d1fa5ef614
 compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+fa81ecc0eb36dcfb86bb@syzkaller.appspotmail.com
+Reported-by: syzbot+cf0ad9bc61d1fa5ef614@syzkaller.appspotmail.com
 
 input: Sleep Button as /devices/LNXSYSTM:00/LNXSLPBN:00/input/input1
 ACPI: button: Sleep Button [SLPF]
@@ -119,43 +120,39 @@ wireguard: Copyright (C) 2015-2019 Jason A. Donenfeld <Jason@zx2c4.com>. All Rig
 eql: Equalizer2002: Simon Janes (simon@ncm.com) and David S. Miller (davem@redhat.com)
 MACsec IEEE 802.1AE
 tun: Universal TUN/TAP device driver, 1.6
-BUG: unable to handle page fault for address: ffffdc0000000004
-#PF: supervisor read access in kernel mode
-#PF: error_code(0x0000) - not-present page
-PGD 11826067 P4D 11826067 PUD 0 
-Oops: 0000 [#1] PREEMPT SMP KASAN
-CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.19.0-next-20220811-syzkaller #0
+general protection fault, probably for non-canonical address 0xffff000000000800: 0000 [#1] PREEMPT SMP KASAN
+KASAN: maybe wild-memory-access in range [0xfff8200000004000-0xfff8200000004007]
+CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.19.0-next-20220810-syzkaller #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-RIP: 0010:proc_match fs/proc/generic.c:48 [inline]
-RIP: 0010:pde_subdir_insert fs/proc/generic.c:101 [inline]
-RIP: 0010:proc_register+0x255/0x700 fs/proc/generic.c:375
-Code: 07 38 d0 7f 08 84 c0 0f 85 ab 03 00 00 48 8b 04 24 48 8d 7b 23 48 89 fa 83 e2 07 44 0f b6 a8 e3 00 00 00 48 89 f8 48 c1 e8 03 <42> 0f b6 04 30 45 89 ef 38 d0 7f 08 84 c0 0f 85 70 03 00 00 44 0f
-RSP: 0000:ffffc900000675d0 EFLAGS: 00010a02
-RAX: 1fffe00000000004 RBX: ffff000000000000 RCX: 0000000000000000
-RDX: 0000000000000003 RSI: ffffffff81fae17c RDI: ffff000000000023
-RBP: ffff888147325708 R08: 0000000000000004 R09: 0000000000000002
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-R13: 0000000000000002 R14: dffffc0000000000 R15: 0000000000000002
+RIP: 0010:freelist_dereference mm/slub.c:347 [inline]
+RIP: 0010:get_freepointer mm/slub.c:354 [inline]
+RIP: 0010:get_freepointer_safe mm/slub.c:368 [inline]
+RIP: 0010:slab_alloc_node mm/slub.c:3211 [inline]
+RIP: 0010:slab_alloc mm/slub.c:3251 [inline]
+RIP: 0010:kmem_cache_alloc_trace+0x164/0x3e0 mm/slub.c:3282
+Code: 8b 51 08 48 8b 01 48 83 79 10 00 48 89 44 24 08 0f 84 bf 01 00 00 48 85 c0 0f 84 b6 01 00 00 48 8b 7d 00 8b 4d 28 40 f6 c7 0f <48> 8b 1c 08 0f 85 c2 01 00 00 48 8d 4a 08 65 48 0f c7 0f 0f 94 c0
+RSP: 0000:ffffc90000067810 EFLAGS: 00010246
+RAX: ffff000000000000 RBX: 0000000000000000 RCX: 0000000000000800
+RDX: 0000000000002d18 RSI: 0000000000000dc0 RDI: 000000000003dce0
+RBP: ffff888011842140 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000000
+R13: 0000000000000dc0 R14: 0000000000000a20 R15: 0000000000000dc0
 FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
 CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffdc0000000004 CR3: 000000000bc8e000 CR4: 00000000003506f0
+CR2: ffff88823ffff000 CR3: 000000000bc8e000 CR4: 00000000003506f0
 DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
 DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 Call Trace:
  <TASK>
- _proc_mkdir fs/proc/generic.c:498 [inline]
- proc_mkdir_data fs/proc/generic.c:507 [inline]
- proc_mkdir+0x10b/0x170 fs/proc/generic.c:521
- register_irq_proc+0x156/0x390 kernel/irq/proc.c:360
- __setup_irq+0x10fd/0x1c90 kernel/irq/manage.c:1818
- request_threaded_irq+0x2b2/0x3e0 kernel/irq/manage.c:2198
- request_irq include/linux/interrupt.h:168 [inline]
- vp_find_vqs_msix+0x961/0xea0 drivers/virtio/virtio_pci_common.c:345
- vp_find_vqs+0x5a/0x540 drivers/virtio/virtio_pci_common.c:407
- virtio_find_vqs_ctx_size include/linux/virtio_config.h:252 [inline]
- virtnet_find_vqs+0x6cd/0xf00 drivers/net/virtio_net.c:3512
- init_vqs drivers/net/virtio_net.c:3600 [inline]
- virtnet_probe+0x11c0/0x2f30 drivers/net/virtio_net.c:3898
+ kmalloc include/linux/slab.h:600 [inline]
+ kzalloc include/linux/slab.h:733 [inline]
+ kobject_uevent_env+0x230/0x1640 lib/kobject_uevent.c:524
+ netdev_queue_add_kobject net/core/net-sysfs.c:1677 [inline]
+ netdev_queue_update_kobjects+0x3d1/0x4e0 net/core/net-sysfs.c:1718
+ register_queue_kobjects net/core/net-sysfs.c:1779 [inline]
+ netdev_register_kobject+0x330/0x400 net/core/net-sysfs.c:2019
+ register_netdevice+0xe01/0x1680 net/core/dev.c:10070
+ virtnet_probe+0x1378/0x2f30 drivers/net/virtio_net.c:3923
  virtio_dev_probe+0x577/0x870 drivers/virtio/virtio.c:305
  call_driver_probe drivers/base/dd.c:530 [inline]
  really_probe+0x249/0xb90 drivers/base/dd.c:609
@@ -175,45 +172,23 @@ Call Trace:
  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
  </TASK>
 Modules linked in:
-CR2: ffffdc0000000004
----[ end trace 0000000000000000 ]---
-RIP: 0010:proc_match fs/proc/generic.c:48 [inline]
-RIP: 0010:pde_subdir_insert fs/proc/generic.c:101 [inline]
-RIP: 0010:proc_register+0x255/0x700 fs/proc/generic.c:375
-Code: 07 38 d0 7f 08 84 c0 0f 85 ab 03 00 00 48 8b 04 24 48 8d 7b 23 48 89 fa 83 e2 07 44 0f b6 a8 e3 00 00 00 48 89 f8 48 c1 e8 03 <42> 0f b6 04 30 45 89 ef 38 d0 7f 08 84 c0 0f 85 70 03 00 00 44 0f
-RSP: 0000:ffffc900000675d0 EFLAGS: 00010a02
-RAX: 1fffe00000000004 RBX: ffff000000000000 RCX: 0000000000000000
-RDX: 0000000000000003 RSI: ffffffff81fae17c RDI: ffff000000000023
-RBP: ffff888147325708 R08: 0000000000000004 R09: 0000000000000002
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-R13: 0000000000000002 R14: dffffc0000000000 R15: 0000000000000002
-FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffdc0000000004 CR3: 000000000bc8e000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 ----------------
-Code disassembly (best guess), 1 bytes skipped:
-   0:	38 d0                	cmp    %dl,%al
-   2:	7f 08                	jg     0xc
-   4:	84 c0                	test   %al,%al
-   6:	0f 85 ab 03 00 00    	jne    0x3b7
-   c:	48 8b 04 24          	mov    (%rsp),%rax
-  10:	48 8d 7b 23          	lea    0x23(%rbx),%rdi
-  14:	48 89 fa             	mov    %rdi,%rdx
-  17:	83 e2 07             	and    $0x7,%edx
-  1a:	44 0f b6 a8 e3 00 00 	movzbl 0xe3(%rax),%r13d
-  21:	00
-  22:	48 89 f8             	mov    %rdi,%rax
-  25:	48 c1 e8 03          	shr    $0x3,%rax
-* 29:	42 0f b6 04 30       	movzbl (%rax,%r14,1),%eax <-- trapping instruction
-  2e:	45 89 ef             	mov    %r13d,%r15d
-  31:	38 d0                	cmp    %dl,%al
-  33:	7f 08                	jg     0x3d
-  35:	84 c0                	test   %al,%al
-  37:	0f 85 70 03 00 00    	jne    0x3ad
-  3d:	44                   	rex.R
-  3e:	0f                   	.byte 0xf
+Code disassembly (best guess):
+   0:	8b 51 08             	mov    0x8(%rcx),%edx
+   3:	48 8b 01             	mov    (%rcx),%rax
+   6:	48 83 79 10 00       	cmpq   $0x0,0x10(%rcx)
+   b:	48 89 44 24 08       	mov    %rax,0x8(%rsp)
+  10:	0f 84 bf 01 00 00    	je     0x1d5
+  16:	48 85 c0             	test   %rax,%rax
+  19:	0f 84 b6 01 00 00    	je     0x1d5
+  1f:	48 8b 7d 00          	mov    0x0(%rbp),%rdi
+  23:	8b 4d 28             	mov    0x28(%rbp),%ecx
+  26:	40 f6 c7 0f          	test   $0xf,%dil
+* 2a:	48 8b 1c 08          	mov    (%rax,%rcx,1),%rbx <-- trapping instruction
+  2e:	0f 85 c2 01 00 00    	jne    0x1f6
+  34:	48 8d 4a 08          	lea    0x8(%rdx),%rcx
+  38:	65 48 0f c7 0f       	cmpxchg16b %gs:(%rdi)
+  3d:	0f 94 c0             	sete   %al
 
 
 ---

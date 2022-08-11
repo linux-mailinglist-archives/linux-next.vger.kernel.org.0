@@ -2,68 +2,66 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 577265905A4
-	for <lists+linux-next@lfdr.de>; Thu, 11 Aug 2022 19:17:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E14335905B1
+	for <lists+linux-next@lfdr.de>; Thu, 11 Aug 2022 19:20:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235868AbiHKRRj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 11 Aug 2022 13:17:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44674 "EHLO
+        id S234335AbiHKRUZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 11 Aug 2022 13:20:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235877AbiHKRRP (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 11 Aug 2022 13:17:15 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBF932AE9;
-        Thu, 11 Aug 2022 10:11:00 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id v5so9774869wmj.0;
-        Thu, 11 Aug 2022 10:11:00 -0700 (PDT)
+        with ESMTP id S236491AbiHKRUI (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 11 Aug 2022 13:20:08 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46AC3BC2;
+        Thu, 11 Aug 2022 10:16:26 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id u14so13959148oie.2;
+        Thu, 11 Aug 2022 10:16:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc;
-        bh=9lmCRb9w6uCDtNqUvz+VlG2tKHmhpYW/JN7ZTZ0wmWA=;
-        b=HueoZjS09HesHA6TCTd0JPvcBzWU0gb3xP9VW8Z/5Z/IKUTGcxCTFMAG6sdNrMVRPI
-         XnrC4DiqsP2rdQJP9mkDCIzGrBusm9Qc0UUy6mvDQvs1Y9D/odTmBhoAqjwVVT1PEP2a
-         JhvZLP7Y7ewJiwBLh9bNypUzht0ngPd3zFtQ3sgGLWOI4mqyM3Tb8e7fp8v1GuUb8mnW
-         BsIZT+UyxiocbCaiSIIB9NZf9tSMHiXuJipn0qbdhRIgFIWA+K/RWq1NdWpHZCzcCc+J
-         J1DEAaHrNGdyKVd4wCP6/y4ZMEMKdBfjcDWQwdB+WVDIpg0wcevdm6XgmJVtTgxQMo0t
-         WLBw==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=KfbvK1kB8bEVX+Bg3v0uAmAH4X0cmlYYTnpUW0qFVPQ=;
+        b=TnkO0E874E+5j6klJFh8ek6SsnENd71jthFGsFpua2yYT5NQw0Pv81Jxt31gT4bW9s
+         LGjKTwHL4DnMsXhZGXPm7oRcS1kxvSfp9nPTnkDeRFvTFAEvAEL91hOJjq1rtDMOIFfb
+         s0fRKqkufOEOskCOyspzuYGiEfIItVxs2JEQUq/WJcHWwk+196JVL/HUR2MwC4pMNx+j
+         Msb5XcCNOW/JcgNCVUdQpR8GgZWFNKvkmC42KDjfxols2OkYZTqs+8xeN8BtGI+8+Ic9
+         EStOeW5RQE2g8nWdb71bmJELef5l4vE55QoC9yf4CSX2xmLd81W6QP/uq10mflmWZMfH
+         zHCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc;
-        bh=9lmCRb9w6uCDtNqUvz+VlG2tKHmhpYW/JN7ZTZ0wmWA=;
-        b=5bEikKJo0oktgkE3/NnbDwa8v5RvNJkt5w7ybFFH0+FftiafE/zZFRPK5ODysowQxO
-         GYn5gDdA9yoLndzffqOJezh8O6u3UtPUoX6GjKuzjJ5jaxsCJ3ZsyNxlw5GuFYw1KAay
-         wNSjZ8UmLKMikICZuDwphSspbTo8cKMXoiqS9CzKYrjPCsXdnWltRwcpSz1yJLkum6g7
-         39ctZzR6yJd0qEj0yF1LWpzDvehg1p+Ic4Nk7WtUEsXHT1JWu6Ha9PNSXwvbb7XGU0lk
-         xAh2ATQ3MkgFKlxx2L5VMFYxP6r4OM4zvX226qDvem8JzcaABLaxK8kgqf9nIKBSUvvN
-         c+Qg==
-X-Gm-Message-State: ACgBeo22qLvlRgQEtzEKxCiFd7BwHNi+lCfRfnyfbAMDpNlJPYJ6n0yu
-        KmhpjoXrP/F4HaqdWKjI1toIvJfQLY0=
-X-Google-Smtp-Source: AA6agR68hJQ2kVu941cLF0W2MeedTSh595znTTi1zvBbU1seBZqoyPGDGJiGim5IewA7q2JgPbE7ew==
-X-Received: by 2002:a05:600c:4ed0:b0:3a3:3ef3:c8d1 with SMTP id g16-20020a05600c4ed000b003a33ef3c8d1mr6369177wmq.154.1660237859175;
-        Thu, 11 Aug 2022 10:10:59 -0700 (PDT)
-Received: from debian ([2405:201:8005:8149:e5c9:c0ac:4d82:e94b])
-        by smtp.gmail.com with ESMTPSA id m27-20020a05600c3b1b00b003a308e9a192sm7647413wms.30.2022.08.11.10.10.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Aug 2022 10:10:58 -0700 (PDT)
-Date:   Thu, 11 Aug 2022 18:10:48 +0100
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Alex Deucher <alexander.deucher@amd.com>,
-        Hamza Mahfooz <hamza.mahfooz@amd.com>,
-        Fangzhi Zuo <Jerry.Zuo@amd.com>
-Cc:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org
-Subject: build failure of next-20220811 due to b1a63a0b48ad
- ("drm/amd/display: consider DSC pass-through during mode validation")
-Message-ID: <YvU4GD8HtZ1A4dhI@debian>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=KfbvK1kB8bEVX+Bg3v0uAmAH4X0cmlYYTnpUW0qFVPQ=;
+        b=vYDL4WbuAsQXRpS2Pj3px78pyP+09QHED2SrO1OauXTKd64lUI8pSdQ5SnwVDvgOmq
+         zM+kPKZZeBPmGceVXbypBwoS52qiDR4td1/okkt7qswQTjvzJx7o8DM8fFbNxCxpoSqL
+         owuzjc2lAigT6REWfiXOVb+2E0j8H4ovs9atRdIJzZbiYUzuovc6K14//M1Swxxml9Qc
+         VYD+XP1Y4gp1ydVES56gK/A7Adv3pznMTLR9Hp5fWCPAur1Wxn5Km/Cp7inNOXeudV83
+         CdJ4dmPeSFyX14JleVOsKbN/1jiq7U+uDyciwQdbv6j9xSAI1xEyNcYKrje84Vwlx+Op
+         lhVQ==
+X-Gm-Message-State: ACgBeo0MyrBoCzqy6FkVs75PgJibFERjwy1jXaN6F80cp8BEHImY75Zx
+        SBDaYrrM9ggSzeCqWb1RVq3WJd3jgqA0ai5B/kA=
+X-Google-Smtp-Source: AA6agR4Bzynj5rmJ8wCQm3W9k/cxzVFKyJgGxa2jF7SPAmi/iTivBeW/gA2Idukm9kGS55zj0zOhNVtOD/B82NJlMXc=
+X-Received: by 2002:a05:6808:19a3:b0:33e:1525:3fb4 with SMTP id
+ bj35-20020a05680819a300b0033e15253fb4mr106057oib.106.1660238185376; Thu, 11
+ Aug 2022 10:16:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <YvU4GD8HtZ1A4dhI@debian>
+In-Reply-To: <YvU4GD8HtZ1A4dhI@debian>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Thu, 11 Aug 2022 13:16:14 -0400
+Message-ID: <CADnq5_PwbwjmvvKedpZeeQHk7N+kawKpXywjNGqa=1jSKRcw0A@mail.gmail.com>
+Subject: Re: build failure of next-20220811 due to b1a63a0b48ad
+ ("drm/amd/display: consider DSC pass-through during mode validation")
+To:     "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+Cc:     Alex Deucher <alexander.deucher@amd.com>,
+        Hamza Mahfooz <hamza.mahfooz@amd.com>,
+        Fangzhi Zuo <Jerry.Zuo@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-next@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -74,21 +72,29 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi All,
+On Thu, Aug 11, 2022 at 1:11 PM Sudip Mukherjee (Codethink)
+<sudipm.mukherjee@gmail.com> wrote:
+>
+> Hi All,
+>
+> Not sure if it has been reported, builds of riscv, alpha, s390, arm,
+> arm64, xtensa, mips, csky allmodconfig have failed to build next-20220811
+> with the error:
+>
+> ERROR: modpost: "dc_dsc_compute_bandwidth_range" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
+> ERROR: modpost: "dc_dsc_get_policy_for_timing" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
+>
+> git bisect pointed to b1a63a0b48ad ("drm/amd/display: consider DSC pass-through during mode validation")
+> And, reverting that commit has fixed the build failure.
+>
+> I will be happy to test any patch or provide any extra log if needed.
 
-Not sure if it has been reported, builds of riscv, alpha, s390, arm,
-arm64, xtensa, mips, csky allmodconfig have failed to build next-20220811
-with the error:
+https://patchwork.freedesktop.org/patch/497116/
 
-ERROR: modpost: "dc_dsc_compute_bandwidth_range" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
-ERROR: modpost: "dc_dsc_get_policy_for_timing" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
+Alex
 
-git bisect pointed to b1a63a0b48ad ("drm/amd/display: consider DSC pass-through during mode validation")
-And, reverting that commit has fixed the build failure.
-
-I will be happy to test any patch or provide any extra log if needed.
-
-
---
-Regards
-Sudip
+>
+>
+> --
+> Regards
+> Sudip

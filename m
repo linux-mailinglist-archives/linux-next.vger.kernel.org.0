@@ -2,72 +2,51 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2258590AEE
-	for <lists+linux-next@lfdr.de>; Fri, 12 Aug 2022 06:09:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 113A9590BFF
+	for <lists+linux-next@lfdr.de>; Fri, 12 Aug 2022 08:31:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236625AbiHLEJt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 12 Aug 2022 00:09:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34060 "EHLO
+        id S235079AbiHLGbY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 12 Aug 2022 02:31:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230271AbiHLEJs (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 12 Aug 2022 00:09:48 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CE92A0302;
-        Thu, 11 Aug 2022 21:09:47 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id g5so31201274ybg.11;
-        Thu, 11 Aug 2022 21:09:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=VElpo/hJHfw2RvZvud8eiJu3fb0VVkH8EWFL092LbyM=;
-        b=blP25JnLo2TmHjHag2bR+teBEK87Mz7SHz967KGBmFf1p5xgNeulgtkLNaOZsvHcFj
-         QTk4BI80mvvcE3TIP29g7aY4kmQ2qzqwYi98tdOyIcC9kPFx894zioqG/H5KiYSsm11b
-         1vOiScZd46PL3CMmNCrAhbxDa0dElvnru66liMq8I7HbUnqTWSibq9LDSmmxNh5AjdHp
-         jW4QKqsb5GiJX3ivYl19mwURClKJAgisYLz2AkCKMnyDPKfMmzC9vuByhCuFMtubmnUM
-         tEvwW/AK9qAKyhe2AAgc4blnry8Ish4U7kal/2L8VJL7cx3q1k5yffy9/pBPbnNcgDGy
-         +cXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=VElpo/hJHfw2RvZvud8eiJu3fb0VVkH8EWFL092LbyM=;
-        b=DqcRAAKJGZWl2phrrHPrTgrRy7tveR+2T17ngEJbZcGxGrmau6+HGbaWKiG72a6gTN
-         m8zX4cibP4auDY3KhLoGKWUwTrnd81+YIXbnYkuNZivow2n4fgegOEbc5to+vfaWpkXi
-         7pgG5FVq1cKknSe3SS9S/E5K4AGXeueBStPIFwGsx5XqvkADapSll/YyPv7dZihgIiej
-         aix4cTeYHeD7FyLyd5DxCPdORMTthntsq5xsZ+x1TEz7qRzILNP8vjVvS3mvN9wzfgBU
-         JfgZsWiPaZnXQvw2Tk2MDUEDyahR6bT0ULeYJyP+3eTf/+sb3jv3NBz19WoU99CiiUvH
-         g06g==
-X-Gm-Message-State: ACgBeo1ZysUrCmCVhW0WUp7iGNl4U1HmE7U/B9Q95mtbQOFlrMy0T66f
-        AjUgrrWfk5Q0eHipkS7Atfj81iR9Z9dMNRN1aaE=
-X-Google-Smtp-Source: AA6agR7aS8A13CrYgjl8GiA4yxSMSh8285o1W6Z9Itk2qso727yl4VcHZ225ZGHVW28V8MpIdpTrAfpF1lIigRh3rhI=
-X-Received: by 2002:a25:da13:0:b0:672:6a10:a033 with SMTP id
- n19-20020a25da13000000b006726a10a033mr2082818ybf.617.1660277386448; Thu, 11
- Aug 2022 21:09:46 -0700 (PDT)
+        with ESMTP id S229524AbiHLGbY (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 12 Aug 2022 02:31:24 -0400
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85B8F6EF3B;
+        Thu, 11 Aug 2022 23:31:20 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VM0V5ZR_1660285871;
+Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VM0V5ZR_1660285871)
+          by smtp.aliyun-inc.com;
+          Fri, 12 Aug 2022 14:31:13 +0800
+Date:   Fri, 12 Aug 2022 14:31:11 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     Huacai Chen <chenhuacai@kernel.org>, Baoquan He <bhe@redhat.com>,
+        Zhang Boyang <zhangboyang.id@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-next <linux-next@vger.kernel.org>, song@kernel.org,
+        wei.liu@kernel.org, jszhang@kernel.org,
+        Guo Ren <guoren@kernel.org>, xiang@kernel.org, chao@kernel.org,
+        ming.lei@redhat.com, Waiman Long <longman@redhat.com>,
+        wqu@suse.com, yhs@fb.com, haoluo@google.com, decui@microsoft.com,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Dave Young <dyoung@redhat.com>
+Subject: Re: [RESEND] Please consider name next Linux release "I love Linux"
+ (Re: Linux 5.19)
+Message-ID: <YvXzr11YP6uwzT0n@B-P7TQMD6M-0146.local>
+References: <CAHk-=wgrz5BBk=rCz7W28Fj_o02s0Xi0OEQ3H1uQgOdFvHgx0w@mail.gmail.com>
+ <61d77412-af1a-5b00-9754-f156b1c63a74@gmail.com>
+ <20220812023950.GF373960@MiWiFi-R3L-srv>
+ <CAAhV-H7tCsyyNgDJWE5qDCXadF+V6k3GtZtf_yLVj6BZiPND2Q@mail.gmail.com>
 MIME-Version: 1.0
-References: <YvVQEDs75pxSgxjM@debian> <20220811124637.4cdb84f1@kernel.org>
-In-Reply-To: <20220811124637.4cdb84f1@kernel.org>
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Date:   Fri, 12 Aug 2022 05:09:10 +0100
-Message-ID: <CADVatmPQxgQoQ5o_9PhRphekhnmjndq2jd+0yXnDc1OuUphdpA@mail.gmail.com>
-Subject: Re: build failure of next-20220811 due to 332f1795ca20 ("Bluetooth:
- L2CAP: Fix l2cap_global_chan_by_psm regression")
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>, linux-bluetooth@vger.kernel.org,
-        linux-next <linux-next@vger.kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips <linux-mips@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAAhV-H7tCsyyNgDJWE5qDCXadF+V6k3GtZtf_yLVj6BZiPND2Q@mail.gmail.com>
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,62 +54,84 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Aug 11, 2022 at 8:46 PM Jakub Kicinski <kuba@kernel.org> wrote:
->
-> On Thu, 11 Aug 2022 19:53:04 +0100 Sudip Mukherjee (Codethink) wrote:
-> > Not sure if it has been reported, builds of csky and mips allmodconfig
-> > failed to build next-20220811 with gcc-12.
->
-> I can't repro with the cross compiler from kernel.org.
-> Can you test something like this?
+On Fri, Aug 12, 2022 at 11:28:12AM +0800, Huacai Chen wrote:
+> Hi, all,
+> 
+> On Fri, Aug 12, 2022 at 10:40 AM Baoquan He <bhe@redhat.com> wrote:
+> >
+> > Hi Boyang,
+> >
+> > On 08/11/22 at 10:02pm, Zhang Boyang wrote:
+> > > Hi,
+> > >
+> > > On 2022/8/1 05:43, Linus Torvalds wrote:
+> > > > (*) I'll likely call it 6.0 since I'm starting to worry about getting
+> > > > confused by big numbers again.
+> > >
+> > > Could you please consider name the next Linux release (5.20 or 6.0) "I love
+> > > linux" ? The number "5.20" is a wordplay in Chinese, which means "I love
+> > > you" [1], thus "Linux 5.20" can be read as "I love Linux" in Chinese.
+> > >
+> > > Even if next kernel version is 6.0, I think it's probably a good idea for
+> > > both Chinese-speakers and non-Chinese speakers to express our love to Linux
+> > > Kernel.
+> >
+> > Interesting idea, LOL.
+> >
+> > Yes, 520 means 'I love you' in chinese since it has the similar pronunciation
+> > with '我爱你'. I even don't remember since when May 20th becomes another
+> > holiday similar to Valentine's day in China. While I have complicated feeling
+> > about 520. It means on each May 20th, I also need prepare gift for my wife. I
+> > am not a romantic person, preparing gift to lover is always a torture to me.
+> > So almost each May 20th day, Valentine's day, double seventh festival which is
+> > a traditional Valentine's day, I will become nervous, and it ends up
+> > with a satisfactory gift, or a bunch of flower and a digital red envelope with
+> > 520￥ and then complainment and blame in next two weeks.
+> >
+> > So, for naming next release as '5.20', I will vote for it w/o hesitance. No need
+> > to prepare gift, and can express our love to Linux kernel, it sounds
+> > awesome.
+> >
+> > Meanwhile, I would remind people to take it easy. Whether the suggestion
+> > is accepted or not, it doesn't impact the fact that linux may have
+> > become part of our life, not just our work, considering many kernel developers
+> > are workoing form home. But if you have boasted to your girlfriend
+> > or wife, and want to take this as a gift to her, you should try harder to
+> > convince Linus.
+> >
+> > Thanks
+> > Baoquan
+> Frankly, I agree with Boyang and Baoquan. :)
 
-With this patch I get new failure:
++1, I'm fine with either approach.  If there is a 5.20 version, that is
+fine.
 
-In file included from net/bluetooth/l2cap_core.c:37:
-./include/net/bluetooth/bluetooth.h: In function 'ba_is_any':
-./include/net/bluetooth/bluetooth.h:346:16: error: returning 'void *'
-from a function with return type 'int' makes integer from pointer
-without a cast [-Werror=int-conversion]
-  346 |         return memchr_inv(ba, sizeof(*ba), 0);
+The traditional Valentine's day of China is `Qixi Festival` which is the seventh
+day of the seventh lunisolar month on the Chinese lunisolar calendar [1].
 
-So for a quick test, I modified it a little (just a typecast) which worked.
+There are also other somewhat special days in China such as `Programmer day`
+(Oct, 24 each year), yet I'm not sure if anyone out of China heard of it.
 
-diff --git a/include/net/bluetooth/bluetooth.h
-b/include/net/bluetooth/bluetooth.h
-index e72f3b247b5e..19bdd2520070 100644
---- a/include/net/bluetooth/bluetooth.h
-+++ b/include/net/bluetooth/bluetooth.h
-@@ -341,6 +341,11 @@ static inline bool bdaddr_type_is_le(u8 type)
- #define BDADDR_ANY  (&(bdaddr_t) {{0, 0, 0, 0, 0, 0}})
- #define BDADDR_NONE (&(bdaddr_t) {{0xff, 0xff, 0xff, 0xff, 0xff, 0xff}})
+Personally I think 521 (yi vs ni) sounds more similar to "我爱你" in Mandarin
+Chinese and who knows how many special days for couples -- since I'm single. ;)
 
-+static inline int ba_is_any(const bdaddr_t *ba)
-+{
-+       return (int) memchr_inv(ba, sizeof(*ba), 0);
-+}
-+
- /* Copy, swap, convert BD Address */
- static inline int bacmp(const bdaddr_t *ba1, const bdaddr_t *ba2)
- {
-diff --git a/net/bluetooth/l2cap_core.c b/net/bluetooth/l2cap_core.c
-index cbe0cae73434..67c5d923bc6c 100644
---- a/net/bluetooth/l2cap_core.c
-+++ b/net/bluetooth/l2cap_core.c
-@@ -2000,8 +2000,8 @@ static struct l2cap_chan
-*l2cap_global_chan_by_psm(int state, __le16 psm,
-                        }
+[1] https://en.wikipedia.org/wiki/Qixi_Festival
 
-                        /* Closest match */
--                       src_any = !bacmp(&c->src, BDADDR_ANY);
--                       dst_any = !bacmp(&c->dst, BDADDR_ANY);
-+                       src_any = !ba_is_any(&c->src);
-+                       dst_any = !ba_is_any(&c->dst);
-                        if ((src_match && dst_any) || (src_any && dst_match) ||
-                            (src_any && dst_any))
-                                c1 = c;
+Thanks,
+Gao Xiang 
 
-
-
--- 
-Regards
-Sudip
+> 
+> Huacai
+> >
+> > >
+> > > The name of Linux kernel release has a long history of play-on-words [2].
+> > > For example, 5.15 is named "Trick or Treat" and 5.17 is named "Superb Owl".
+> > >
+> > > [1] https://en.wikipedia.org/wiki/Chinese_Internet_slang
+> > >
+> > > [2] https://en.wikipedia.org/wiki/Linux_kernel_version_history
+> > >
+> > > Thanks and regards,
+> > > Zhang Boyang
+> > >
+> >

@@ -2,102 +2,158 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2608590CA6
-	for <lists+linux-next@lfdr.de>; Fri, 12 Aug 2022 09:40:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E3AA590D4F
+	for <lists+linux-next@lfdr.de>; Fri, 12 Aug 2022 10:23:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237316AbiHLHka (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 12 Aug 2022 03:40:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43396 "EHLO
+        id S237337AbiHLIXQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 12 Aug 2022 04:23:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237401AbiHLHk2 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 12 Aug 2022 03:40:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A5B4E2ED6E
-        for <linux-next@vger.kernel.org>; Fri, 12 Aug 2022 00:40:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660290026;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VzyQdT5cmtTht8IqFKMXiM9jaigfovrsBI7GWxuwi5g=;
-        b=btAis+lm55EztGmrySSx56AE9Kz+lFlJmbdhdvo2TjEkAglPxJbsHgPry/rDyFoN65mY3P
-        U7PNwE1H5b6TVLRDVBM7GzasDsUewe0k//DQNIONvBNKfID5tsGW8DWGa/Fd1DKXT7WVUS
-        ouyqGHHMx/mQohyMeMTFzOkodNiPhdU=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-16-i6pL7AiqMTWYhBEA4vlNXA-1; Fri, 12 Aug 2022 03:40:22 -0400
-X-MC-Unique: i6pL7AiqMTWYhBEA4vlNXA-1
-Received: by mail-ed1-f71.google.com with SMTP id h6-20020a05640250c600b0043d9964d2ceso177932edb.4
-        for <linux-next@vger.kernel.org>; Fri, 12 Aug 2022 00:40:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=VzyQdT5cmtTht8IqFKMXiM9jaigfovrsBI7GWxuwi5g=;
-        b=QGMaLX+K6bFH6kmZhuRxtTZAw9/rYTLb41V8zHgBM/ZPCSBgnY6rvhEUSeBkHgyjO/
-         L4v0YCS334FYBly+GF4SH0rVV2PE5w3+m61TLBu1Rql/f0DnLz3x/phPTxbbo9UOAa5p
-         A+wuxRsnssNwdbGRLFK0upSCdB9GV+FJDJCmkPIPWrHR68wrXfdkQVT5b3jhaP9kcpjG
-         WTwHkIQqNP7QgZDqEmi3dgOSbcXUKL17tXfwSe5Q0Ei3BtE4wStclVaH0EbfCtLKk9I1
-         NCyhatoNnzSFy+p85yPW9DxbyIURXUwCar0vHfi6S87WlalyIOimUD2Wy9GaLvnjTcuQ
-         zCfw==
-X-Gm-Message-State: ACgBeo3EhUEiLe3+3bBmMZ7Qfw0qVa0lwIStKSYTYVofE6NhWUJyYJvW
-        9US5L3+aYyN+CwQe5iXrK4tpMXwBgFxciYV1DCQUYLIkOwO8PQwu5QDFS/HbAIAoGWbXvfvZRsy
-        2xccvnUFVRNN5yYCN+CStMA==
-X-Received: by 2002:a17:907:6d8c:b0:731:6c60:eced with SMTP id sb12-20020a1709076d8c00b007316c60ecedmr1908918ejc.266.1660290021442;
-        Fri, 12 Aug 2022 00:40:21 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4+bs0ZA+sprvMn0/Ivf+3NRpmtrSL/ddfi5tjpVofxW6oWzVLkn3yetOTpHRI1HpZv21KQlQ==
-X-Received: by 2002:a17:907:6d8c:b0:731:6c60:eced with SMTP id sb12-20020a1709076d8c00b007316c60ecedmr1908903ejc.266.1660290021233;
-        Fri, 12 Aug 2022 00:40:21 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:1c09:f536:3de6:228c? ([2001:b07:6468:f312:1c09:f536:3de6:228c])
-        by smtp.googlemail.com with ESMTPSA id a26-20020a17090682da00b006ff0b457cdasm507155ejy.53.2022.08.12.00.40.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Aug 2022 00:40:20 -0700 (PDT)
-Message-ID: <d858ba66-422b-2bce-dafe-bc6586803e5f@redhat.com>
-Date:   Fri, 12 Aug 2022 09:40:19 +0200
+        with ESMTP id S230033AbiHLIXP (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 12 Aug 2022 04:23:15 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 261D09BB76;
+        Fri, 12 Aug 2022 01:23:13 -0700 (PDT)
+Received: from [192.168.100.8] (unknown [112.20.110.237])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxQM_dDfZiDhcPAA--.40391S3;
+        Fri, 12 Aug 2022 16:22:54 +0800 (CST)
+Message-ID: <27095658-32a8-8012-c533-0b000a3fead3@loongson.cn>
+Date:   Fri, 12 Aug 2022 16:22:53 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.12.0
-Subject: Re: [PATCH next 0/2] Documentation: KVM:
- KVM_CAP_VM_DISABLE_NX_HUGE_PAGES documentation fixes
-Content-Language: en-US
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     linux-doc@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
-        kvm@vger.kernel.org, linux-next@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220811063601.195105-1-pbonzini@redhat.com>
- <1db2a0cd-bef1-213c-a411-3d39d378743a@gmail.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <1db2a0cd-bef1-213c-a411-3d39d378743a@gmail.com>
+Subject: Re: [RESEND] Please consider name next Linux release "I love Linux"
+ (Re: Linux 5.19)
+To:     Gao Xiang <hsiangkao@linux.alibaba.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Baoquan He <bhe@redhat.com>,
+        Zhang Boyang <zhangboyang.id@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-next <linux-next@vger.kernel.org>, song@kernel.org,
+        wei.liu@kernel.org, jszhang@kernel.org,
+        Guo Ren <guoren@kernel.org>, xiang@kernel.org, chao@kernel.org,
+        ming.lei@redhat.com, Waiman Long <longman@redhat.com>,
+        wqu@suse.com, yhs@fb.com, haoluo@google.com, decui@microsoft.com,
+        Dave Young <dyoung@redhat.com>
+References: <CAHk-=wgrz5BBk=rCz7W28Fj_o02s0Xi0OEQ3H1uQgOdFvHgx0w@mail.gmail.com>
+ <61d77412-af1a-5b00-9754-f156b1c63a74@gmail.com>
+ <20220812023950.GF373960@MiWiFi-R3L-srv>
+ <CAAhV-H7tCsyyNgDJWE5qDCXadF+V6k3GtZtf_yLVj6BZiPND2Q@mail.gmail.com>
+ <YvXzr11YP6uwzT0n@B-P7TQMD6M-0146.local>
+From:   YanTeng Si <siyanteng@loongson.cn>
+In-Reply-To: <YvXzr11YP6uwzT0n@B-P7TQMD6M-0146.local>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9DxQM_dDfZiDhcPAA--.40391S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxCFWxJF13Kw13GFyxuw1rJFb_yoW5ur1DpF
+        W7Z3WUKF48Jw1vy3Wvyw1jqF4Fk3yfGr45Xrn8WryDAr1q9r1ft3sFg3yY9as8urn5KFy0
+        va1UWr93ZF15Ca7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9lb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwV
+        C2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
+        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr
+        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7
+        Mxk0xIA0c2IEe2xFo4CEbIxvr21lc2xSY4AK67AK6r43MxAIw28IcxkI7VAKI48JMxC20s
+        026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_
+        JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14
+        v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xva
+        j40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r
+        4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUgEfODUUUU
+X-CM-SenderInfo: pvl1t0pwhqwqxorr0wxvrqhubq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 8/11/22 15:30, Bagas Sanjaya wrote:
-> On 8/11/22 13:36, Paolo Bonzini wrote:
->> Queued, thanks.
->>
->> Paolo
->>
->>
-> 
-> Thanks for picking this up. However, Stephen noted that the issue is
-> already showed up on mainline [1]. Maybe this series should be queued
-> for 6.0 release (as -rc fixes), right?
 
-Yes, it's in Linus's tree already.  Thanks for replying to Stephen.
+在 2022/8/12 14:31, Gao Xiang 写道:
+> On Fri, Aug 12, 2022 at 11:28:12AM +0800, Huacai Chen wrote:
+>> Hi, all,
+>>
+>> On Fri, Aug 12, 2022 at 10:40 AM Baoquan He <bhe@redhat.com> wrote:
+>>> Hi Boyang,
+>>>
+>>> On 08/11/22 at 10:02pm, Zhang Boyang wrote:
+>>>> Hi,
+>>>>
+>>>> On 2022/8/1 05:43, Linus Torvalds wrote:
+>>>>> (*) I'll likely call it 6.0 since I'm starting to worry about getting
+>>>>> confused by big numbers again.
+>>>> Could you please consider name the next Linux release (5.20 or 6.0) "I love
+>>>> linux" ? The number "5.20" is a wordplay in Chinese, which means "I love
+>>>> you" [1], thus "Linux 5.20" can be read as "I love Linux" in Chinese.
+>>>>
+>>>> Even if next kernel version is 6.0, I think it's probably a good idea for
+>>>> both Chinese-speakers and non-Chinese speakers to express our love to Linux
+>>>> Kernel.
+>>> Interesting idea, LOL.
+>>>
+>>> Yes, 520 means 'I love you' in chinese since it has the similar pronunciation
+>>> with '我爱你'. I even don't remember since when May 20th becomes another
+>>> holiday similar to Valentine's day in China. While I have complicated feeling
+>>> about 520. It means on each May 20th, I also need prepare gift for my wife. I
+>>> am not a romantic person, preparing gift to lover is always a torture to me.
+>>> So almost each May 20th day, Valentine's day, double seventh festival which is
+>>> a traditional Valentine's day, I will become nervous, and it ends up
+>>> with a satisfactory gift, or a bunch of flower and a digital red envelope with
+>>> 520￥ and then complainment and blame in next two weeks.
+>>>
+>>> So, for naming next release as '5.20', I will vote for it w/o hesitance. No need
+>>> to prepare gift, and can express our love to Linux kernel, it sounds
+>>> awesome.
+>>>
+>>> Meanwhile, I would remind people to take it easy. Whether the suggestion
+>>> is accepted or not, it doesn't impact the fact that linux may have
+>>> become part of our life, not just our work, considering many kernel developers
+>>> are workoing form home. But if you have boasted to your girlfriend
+>>> or wife, and want to take this as a gift to her, you should try harder to
+>>> convince Linus.
+>>>
+>>> Thanks
+>>> Baoquan
+>> Frankly, I agree with Boyang and Baoquan. :)
+> +1, I'm fine with either approach.  If there is a 5.20 version, that is
+> fine.
+>
+> The traditional Valentine's day of China is `Qixi Festival` which is the seventh
+> day of the seventh lunisolar month on the Chinese lunisolar calendar [1].
+>
+> There are also other somewhat special days in China such as `Programmer day`
+> (Oct, 24 each year), yet I'm not sure if anyone out of China heard of it.
+>
+> Personally I think 521 (yi vs ni) sounds more similar to "我爱你" in Mandarin
+> Chinese and who knows how many special days for couples -- since I'm single. ;)
+>
+> [1] https://en.wikipedia.org/wiki/Qixi_Festival
 
-Paolo
+How romantic! I agree to all the abrove.
+
+
+Thanks,
+
+Yanteng
+
+>
+> Thanks,
+> Gao Xiang
+>
+>> Huacai
+>>>> The name of Linux kernel release has a long history of play-on-words [2].
+>>>> For example, 5.15 is named "Trick or Treat" and 5.17 is named "Superb Owl".
+>>>>
+>>>> [1] https://en.wikipedia.org/wiki/Chinese_Internet_slang
+>>>>
+>>>> [2] https://en.wikipedia.org/wiki/Linux_kernel_version_history
+>>>>
+>>>> Thanks and regards,
+>>>> Zhang Boyang
+>>>>
 

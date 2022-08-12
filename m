@@ -2,193 +2,147 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80560590E12
-	for <lists+linux-next@lfdr.de>; Fri, 12 Aug 2022 11:30:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7500590E37
+	for <lists+linux-next@lfdr.de>; Fri, 12 Aug 2022 11:36:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237341AbiHLJaA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 12 Aug 2022 05:30:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42478 "EHLO
+        id S238082AbiHLJgb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 12 Aug 2022 05:36:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232732AbiHLJ37 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 12 Aug 2022 05:29:59 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40DE6A99E3
-        for <linux-next@vger.kernel.org>; Fri, 12 Aug 2022 02:29:58 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id j3so434133ljo.0
-        for <linux-next@vger.kernel.org>; Fri, 12 Aug 2022 02:29:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=92ou/u14nlAhRLAjyH+K5VTnxlst6DGZsroJdwVOovQ=;
-        b=BYUOxr06BCh8L+j+0kdrblTLsfOAc/S1qPRVrIOUjSIteDptTVgc3VdOuPlNx8LkCE
-         7HL2VOP0xS7+FoFkFpGkV/2J62IDmuPMsY3+3zCsuSBJ/or6VNQAAOTVXj3RMINn3H7L
-         VL2qIe3Z2mCX6vXter3C+GKO0XkjbhdppPRoRdPMKvVHG0EFp1ff508s8QqKCEQ8960l
-         FGCxlwJNlnJRYyrpBQZdIr55z5UyDM3M/yL4Rfxr8HH5vIuvKOUaNXEcZ7cFA9GvA4wj
-         egjarR98yKRN6RZPLnyEmnljddhDPuWpMH5ffg9hGkG034uwDBRtap6niExmB3h+RrUj
-         VAbQ==
+        with ESMTP id S238066AbiHLJga (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 12 Aug 2022 05:36:30 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CF6F979D9
+        for <linux-next@vger.kernel.org>; Fri, 12 Aug 2022 02:36:29 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id p123-20020a6bbf81000000b00674f66cf13aso268555iof.23
+        for <linux-next@vger.kernel.org>; Fri, 12 Aug 2022 02:36:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=92ou/u14nlAhRLAjyH+K5VTnxlst6DGZsroJdwVOovQ=;
-        b=FsNx96syUsUKu8WQEzXm0uXeBkhH1sfUKWfYl9dSj46fBDl8Yxm1BuPmuSxhFeJsqE
-         nQQdyy2PQn0e94FH0SjrQn9ZHgIq6FcuXbSGIAih9SfYrYq6Jaz3+nDbhy8ldwlJBVFM
-         sqBJoYZqqa7ICsI7H7vfWq316htYWtuyENzPLmya9SgOnF6dQylneYPim2MlXKviqt5q
-         ukaO2D27sEjr4PlNibZdvlsaS01q7G06+HDAUQFGvibfWCYDdnHr0Ndiki0gsWhsCBmf
-         mz6IgKz0o9r1/8sjRXx4nFegJIFVyMKSZF+qXw1NFbUZP9Mllpj+BhQai7zMYQCxh1kt
-         JDrA==
-X-Gm-Message-State: ACgBeo3oqsToI2gHBE7OblgMD5H8br1uWLfXg3+7FlwmUVDdkvSbVgE9
-        BLaSYu8xyjk5POVdLaZphNCsGg1dMeOd/HP1PO8NSA==
-X-Google-Smtp-Source: AA6agR6tYzV/IQQ/OxLEjd+jk1f2ZSvYtf5ruKBh0ui0nUtixe61EgEuG7yugxxBKG9qC5S4CehK8y+rA0CaaMZcuSc=
-X-Received: by 2002:a2e:a5ca:0:b0:25e:1c49:70f4 with SMTP id
- n10-20020a2ea5ca000000b0025e1c4970f4mr988263ljp.4.1660296596373; Fri, 12 Aug
- 2022 02:29:56 -0700 (PDT)
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=bPYi2L+v51JCGntT1zZ6lVPE53BP8c9+iw/NkBv0V6I=;
+        b=Lr7j+8kFihW9I0NPqeJup9aHmHRNMQNZNlsIPhAQ6zG7eHhiodgLEtYm5LP/mxiZUl
+         1IHhEXlytQgGyu4GRpPJkzgAEnF6jIwlVLXy2GsLUzLTvmcgfL0u1F3AWrTXjs/VS4ua
+         C+3Eeg3yT1YvQ/HSMoUW0BDQxxnSAa4IzEHzWO3ml8TI9RPE+NI54IlQ/kepHFpKCK78
+         D9wu93iWzJRt5xg9liS0MiBlOT/7Rgvbx4YeHpsizsQ8gD2uGX2ibqQVAiqBtS94sQUX
+         IiFk3p8QNlXCcY3zPEeD6NtU3BWmbjjuTLHAlVJZNTeiXd2jf5IoJq8A0pBRX8QfEgJs
+         SnhQ==
+X-Gm-Message-State: ACgBeo3xePT6yLocaXWACsDH/cQvBelyuovZpbd1uHRVjFUMXpZVT7ke
+        R3EjoAhwG4Aw0QfQZhWU0hpfLYDBOUsJNbmyplDeciCYeH0T
+X-Google-Smtp-Source: AA6agR5VPjqtXl+grCuz01B7ohQPXFQoqRK3BQMiAZRWGjdZ0ZL+ZtYXNONbTw2/Ubtp0Y66pSvJbbhLCChKUsIe422uBS9cEh1Q
 MIME-Version: 1.0
-References: <0000000000008c0ba505e5f22066@google.com> <202208110830.8F528D6737@keescook>
- <YvU+0UHrn9Ab4rR8@iweiny-desk3> <YvVPtuel8NMmiTKk@iweiny-desk3>
- <202208111356.97951D32@keescook> <YvWaqhLGsBp9ynIq@iweiny-desk3>
-In-Reply-To: <YvWaqhLGsBp9ynIq@iweiny-desk3>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Fri, 12 Aug 2022 11:29:44 +0200
-Message-ID: <CACT4Y+bBNJsFobK28impL5bPGE9meQt-RE6xyDF=yxsmcR8ySw@mail.gmail.com>
-Subject: Re: [syzbot] linux-next boot error: BUG: unable to handle kernel
- paging request in kernel_execve
-To:     Ira Weiny <ira.weiny@intel.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        ebiederm@xmission.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-next@vger.kernel.org, sfr@canb.auug.org.au,
-        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk,
-        syzbot <syzbot+3250d9c8925ef29e975f@syzkaller.appspotmail.com>
+X-Received: by 2002:a05:6638:380a:b0:343:5bad:bf8d with SMTP id
+ i10-20020a056638380a00b003435badbf8dmr1606271jav.206.1660296988622; Fri, 12
+ Aug 2022 02:36:28 -0700 (PDT)
+Date:   Fri, 12 Aug 2022 02:36:28 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000003a85f505e60804db@google.com>
+Subject: [syzbot] linux-next boot error: kernel BUG in __phys_addr
+From:   syzbot <syzbot+c257efdd53a617c7caf7@syzkaller.appspotmail.com>
+To:     bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+        fw@strlen.de, harshit.m.mogalapalli@oracle.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com, sfr@canb.auug.org.au,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, 12 Aug 2022 at 02:11, Ira Weiny <ira.weiny@intel.com> wrote:
->
-> On Thu, Aug 11, 2022 at 02:00:59PM -0700, Kees Cook wrote:
-> > On Thu, Aug 11, 2022 at 11:51:34AM -0700, Ira Weiny wrote:
-> > > On Thu, Aug 11, 2022 at 10:39:29AM -0700, Ira wrote:
-> > > > On Thu, Aug 11, 2022 at 08:33:16AM -0700, Kees Cook wrote:
-> > > > > Hi Fabio,
-> > > > >
-> > > > > It seems likely that the kmap change[1] might be causing this crash. Is
-> > > > > there a boot-time setup race between kmap being available and early umh
-> > > > > usage?
-> > > >
-> > > > I don't see how this is a setup problem with the config reported here.
-> > > >
-> > > > CONFIG_64BIT=y
-> > > >
-> > > > ...and HIGHMEM is not set.
-> > > > ...and PREEMPT_RT is not set.
-> > > >
-> > > > So the kmap_local_page() call in that stack should be a page_address() only.
-> > > >
-> > > > I think the issue must be some sort of race which was being prevented because
-> > > > of the preemption and/or pagefault disable built into kmap_atomic().
-> > > >
-> > > > Is this reproducable?
-> > > >
-> > > > The hunk below will surely fix it but I think the pagefault_disable() is
-> > > > the only thing that is required.  It would be nice to test it.
-> > >
-> > > Fabio and I discussed this.  And he also mentioned that pagefault_disable() is
-> > > all that is required.
-> >
-> > Okay, sounds good.
-> >
-> > > Do we have a way to test this?
-> >
-> > It doesn't look like syzbot has a reproducer yet, so its patch testing
-> > system[1] will not work. But if you can send me a patch, I could land it
-> > in -next and we could see if the reproduction frequency drops to zero.
-> > (Looking at the dashboard, it's seen 2 crashes, most recently 8 hours
-> > ago.)
->
-> Patch sent.
->
-> https://lore.kernel.org/lkml/20220812000919.408614-1-ira.weiny@intel.com/
->
-> But I'm more confused after looking at this again.
+Hello,
 
-There is splat of random crashes in linux-next happened at the same time:
+syzbot found the following issue on:
 
-https://groups.google.com/g/syzkaller-bugs/search?q=%22linux-next%20boot%20error%3A%22
+HEAD commit:    7bb4fa8a025a Add linux-next specific files for 20220812
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=15ddd587080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a5ae8cfa8d7075d1
+dashboard link: https://syzkaller.appspot.com/bug?extid=c257efdd53a617c7caf7
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-There are 10 different crashes in completely random places.
-I would assume they have the same root cause, some silent memory
-corruption or something similar.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+c257efdd53a617c7caf7@syzkaller.appspotmail.com
+
+udevd[2975]: starting eudev-3.2.10
+------------[ cut here ]------------
+kernel BUG at arch/x86/mm/physaddr.c:28!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 2975 Comm: udevd Not tainted 5.19.0-next-20220812-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+RIP: 0010:__phys_addr+0xd3/0x140 arch/x86/mm/physaddr.c:28
+Code: e3 44 89 e9 31 ff 48 d3 eb 48 89 de e8 56 21 45 00 48 85 db 75 0f e8 6c 24 45 00 4c 89 e0 5b 5d 41 5c 41 5d c3 e8 5d 24 45 00 <0f> 0b e8 56 24 45 00 48 c7 c0 10 50 cb 8b 48 ba 00 00 00 00 00 fc
+RSP: 0018:ffffc90002dbf8b8 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: ffff000000000000 RCX: 0000000000000000
+RDX: ffff88807cd11d80 RSI: ffffffff8136e1c3 RDI: 0000000000000006
+RBP: ffff000080000000 R08: 0000000000000006 R09: ffff000080000000
+R10: ffff778000000000 R11: 0000000000000000 R12: ffff778000000000
+R13: ffffc90002dbf920 R14: ffff000000000000 R15: 0000000000000000
+FS:  00007f9b90cd2840(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000055e07825a388 CR3: 000000002641b000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ virt_to_folio include/linux/mm.h:856 [inline]
+ virt_to_slab mm/kasan/../slab.h:175 [inline]
+ qlink_to_cache mm/kasan/quarantine.c:131 [inline]
+ qlist_free_all+0x86/0x170 mm/kasan/quarantine.c:184
+ kasan_quarantine_reduce+0x180/0x200 mm/kasan/quarantine.c:294
+ __kasan_slab_alloc+0xa2/0xc0 mm/kasan/common.c:447
+ kasan_slab_alloc include/linux/kasan.h:224 [inline]
+ slab_post_alloc_hook mm/slab.h:727 [inline]
+ slab_alloc_node mm/slub.c:3243 [inline]
+ kmem_cache_alloc_node+0x2b1/0x3f0 mm/slub.c:3293
+ __alloc_skb+0x210/0x2f0 net/core/skbuff.c:418
+ alloc_skb include/linux/skbuff.h:1257 [inline]
+ netlink_alloc_large_skb net/netlink/af_netlink.c:1191 [inline]
+ netlink_sendmsg+0x9a2/0xe10 net/netlink/af_netlink.c:1896
+ sock_sendmsg_nosec net/socket.c:714 [inline]
+ sock_sendmsg+0xcf/0x120 net/socket.c:734
+ ____sys_sendmsg+0x6eb/0x810 net/socket.c:2482
+ ___sys_sendmsg+0x110/0x1b0 net/socket.c:2536
+ __sys_sendmsg+0xf3/0x1c0 net/socket.c:2565
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f9b90935163
+Code: 64 89 02 48 c7 c0 ff ff ff ff eb b7 66 2e 0f 1f 84 00 00 00 00 00 90 64 8b 04 25 18 00 00 00 85 c0 75 14 b8 2e 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 55 c3 0f 1f 40 00 48 83 ec 28 89 54 24 1c 48
+RSP: 002b:00007ffd32cf5c38 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+RAX: ffffffffffffffda RBX: 000055e078203db0 RCX: 00007f9b90935163
+RDX: 0000000000000000 RSI: 00007ffd32cf5c48 RDI: 0000000000000004
+RBP: 000055e0782390e0 R08: 0000000000000001 R09: 000055e07822f540
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 0000000000000070 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:__phys_addr+0xd3/0x140 arch/x86/mm/physaddr.c:28
+Code: e3 44 89 e9 31 ff 48 d3 eb 48 89 de e8 56 21 45 00 48 85 db 75 0f e8 6c 24 45 00 4c 89 e0 5b 5d 41 5c 41 5d c3 e8 5d 24 45 00 <0f> 0b e8 56 24 45 00 48 c7 c0 10 50 cb 8b 48 ba 00 00 00 00 00 fc
+RSP: 0018:ffffc90002dbf8b8 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: ffff000000000000 RCX: 0000000000000000
+RDX: ffff88807cd11d80 RSI: ffffffff8136e1c3 RDI: 0000000000000006
+RBP: ffff000080000000 R08: 0000000000000006 R09: ffff000080000000
+R10: ffff778000000000 R11: 0000000000000000 R12: ffff778000000000
+R13: ffffc90002dbf920 R14: ffff000000000000 R15: 0000000000000000
+FS:  00007f9b90cd2840(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000055d17224b028 CR3: 000000002641b000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-
-> > [1] https://github.com/google/syzkaller/blob/master/docs/syzbot.md#testing-patches
-> >
-> > > > > > syzbot found the following issue on:
-> > > > > >
-> > > > > > HEAD commit:    bc6c6584ffb2 Add linux-next specific files for 20220810
-> > > > > > git tree:       linux-next
-> > > > > > console output: https://syzkaller.appspot.com/x/log.txt?x=115034c3080000
-> > > > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=5784be4315a4403b
-> > > > > > dashboard link: https://syzkaller.appspot.com/bug?extid=3250d9c8925ef29e975f
-> > > > > > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> > > > > >
-> > > > > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > > > > > Reported-by: syzbot+3250d9c8925ef29e975f@syzkaller.appspotmail.com
-> > > > > >
-> > > > > > BUG: unable to handle page fault for address: ffffdc0000000000
-> > > > > > #PF: supervisor read access in kernel mode
-> > > > > > #PF: error_code(0x0000) - not-present page
-> > > > > > PGD 11826067 P4D 11826067 PUD 0
-> > > > > > Oops: 0000 [#1] PREEMPT SMP KASAN
-> > > > > > CPU: 0 PID: 1100 Comm: kworker/u4:5 Not tainted 5.19.0-next-20220810-syzkaller #0
-> > > > > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-> > > > > > RIP: 0010:strnlen+0x3b/0x70 lib/string.c:504
-> > > > > > Code: 74 3c 48 bb 00 00 00 00 00 fc ff df 49 89 fc 48 89 f8 eb 09 48 83 c0 01 48 39 e8 74 1e 48 89 c2 48 89 c1 48 c1 ea 03 83 e1 07 <0f> b6 14 1a 38 ca 7f 04 84 d2 75 11 80 38 00 75 d9 4c 29 e0 48 83
-> > > > > > RSP: 0000:ffffc90005c5fe10 EFLAGS: 00010246
-> > > > > > RAX: ffff000000000000 RBX: dffffc0000000000 RCX: 0000000000000000
-> > > > > > RDX: 1fffe00000000000 RSI: 0000000000020000 RDI: ffff000000000000
-> > > > > > RBP: ffff000000020000 R08: 0000000000000005 R09: 0000000000000000
-> > > > > > R10: 0000000000000006 R11: 0000000000000000 R12: ffff000000000000
-> > > > > > R13: ffff88814764cc00 R14: ffff000000000000 R15: ffff88814764cc00
-> > > > > > FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-> > > > > > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > > > > > CR2: ffffdc0000000000 CR3: 000000000bc8e000 CR4: 00000000003506f0
-> > > > > > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > > > > > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > > > > > Call Trace:
-> > > > > >  <TASK>
-> > > > > >  strnlen include/linux/fortify-string.h:119 [inline]
-> > > > > >  copy_string_kernel+0x26/0x250 fs/exec.c:616
-> > > > > >  copy_strings_kernel+0xb3/0x190 fs/exec.c:655
-> > > > > >  kernel_execve+0x377/0x500 fs/exec.c:1998
-> > > > > >  call_usermodehelper_exec_async+0x2e3/0x580 kernel/umh.c:112
-> > > > > >  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
-> > > > > >  </TASK>
-> > > [...]
-> > > > > > ---
-> > > > > > This report is generated by a bot. It may contain errors.
-> > > > > > See https://goo.gl/tpsmEJ for more information about syzbot.
-> > > > > > syzbot engineers can be reached at syzkaller@googlegroups.com.
-> > > > > >
-> > > > > > syzbot will keep track of this issue. See:
-> > > > > > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> >
-> > --
-> > Kees Cook
->
-> --
-> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/YvWaqhLGsBp9ynIq%40iweiny-desk3.
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

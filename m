@@ -2,94 +2,93 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51F23591942
-	for <lists+linux-next@lfdr.de>; Sat, 13 Aug 2022 09:31:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E91265919F2
+	for <lists+linux-next@lfdr.de>; Sat, 13 Aug 2022 12:55:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237931AbiHMHbT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 13 Aug 2022 03:31:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52102 "EHLO
+        id S239361AbiHMKzA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 13 Aug 2022 06:55:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233812AbiHMHbS (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 13 Aug 2022 03:31:18 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C7381694;
-        Sat, 13 Aug 2022 00:31:16 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id 24so2534630pgr.7;
-        Sat, 13 Aug 2022 00:31:16 -0700 (PDT)
+        with ESMTP id S239359AbiHMKy6 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 13 Aug 2022 06:54:58 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B071C57235
+        for <linux-next@vger.kernel.org>; Sat, 13 Aug 2022 03:54:57 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id t5so4046590edc.11
+        for <linux-next@vger.kernel.org>; Sat, 13 Aug 2022 03:54:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=D3wy9rQ7cVpBfdR+lwwp9TClhnX1lnTP3s5LxPW1Yu8=;
-        b=fVkeznOkbaH9RNgock2tBYZXVMctqT5XvVUD0hz9bkDz+kT1421d5dJzqIFxKtXGqb
-         wLdpC3igAwJus28SqqO64YgpdNt8uY7RgK1dF4tjRRFM3cDbSQYmKqYM5ghUcfom2Tt9
-         Ai+RG5ryo2vTXcNKwTGGmymH8m8CjPY56Sb6WC3Q2v4cX1yd4vPdGd/DPgWUCkDsqvwj
-         hKrggSHKLALs+ndQymUNMedE9y+m0HjwTpJDIeMA8v0Jg1lnZ7FQgico5SJAQBMAk/4B
-         I2cw5ESo6GRFOmUnpjqc9roiC166S6o5FcoHzMQBrm6p6qhMwCBKB0FEAUHGydtrhX3n
-         W5eA==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=T80P74qbpj5vnMOr57txdNOpWY9dQuakWIHmQmaO0bo=;
+        b=vz43f7IsrsmFgS0prhQY7gZi2KYVbGQ1NRKidNZSyuaKi3iz4+uqkAeN9lEgNHcD+h
+         mL6sdzVe9vdHQSpCNbZ/8+mmryxjZQy62rgIFI64fy6EB1ItGHn6knn7IcaxmQWKIpZJ
+         cAAg06Wo9RXL0fs8Rw8M/XA0/SxS9f1lQcYeNxgG6C1Ttt59q4oIWCyIaLCJw93OEyYa
+         ozTC4cXBaIIEuad4jRNcVs35lRUtDbyK87uXOHga+TIVmO5Phle8KkldZTeoqY6bFGi6
+         fOYGt8kQ1mqqyXVKRlFYEtqqBGxS+4skaBPdlEmLu1Erb7PC3M1kRW9EXH6mroH9c/zx
+         wKQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=D3wy9rQ7cVpBfdR+lwwp9TClhnX1lnTP3s5LxPW1Yu8=;
-        b=4vZttjx4KGm04BIMN7tXJJe8wTseBUSYa2GCh7yZnF7kb+SYs5RfA3+vItzT+pqaIn
-         FeEUhamSxrNvu6NIGspm0xA1Jp6T9oeHCuVEdggh15EUgw7Jhb8WPQSnqj9bGpqrULRM
-         87ZIERoOl5NhBhwIt3bGVAzi1bmvxfyiPYN7UKrwmcsCyP0DXb7jsPVN1yQanaORTkju
-         uxRYimd36k0Xb4XetFkuE+GLbE9cIDgAePHejoLl9fkSXYkGvS5jbAciGr8LWZFBp1Yv
-         Rt1EzAGjVIN9DqHuJRMKcOJq6EHRazLqqbb9iDHCrseibbfwZh919o9Y0go/eYcfcTEn
-         d7Jg==
-X-Gm-Message-State: ACgBeo0/0bSPYcVqmXLVE8pXhCwZxmI0a0vtQf24Dwq0UyEkwBt7STKs
-        Z1jAcJUZ6U751qURJM0seTTy0El+GfQ=
-X-Google-Smtp-Source: AA6agR6brHizXhbnfNUznEA5ff0ffpS+SnQzhopJT/fnX3ibin+NJ1tOtwGZ3sb1wJJ0em862xx40g==
-X-Received: by 2002:a05:6a00:2181:b0:51b:560b:dd30 with SMTP id h1-20020a056a00218100b0051b560bdd30mr7467073pfi.44.1660375876363;
-        Sat, 13 Aug 2022 00:31:16 -0700 (PDT)
-Received: from [192.168.43.80] (subs03-180-214-233-18.three.co.id. [180.214.233.18])
-        by smtp.gmail.com with ESMTPSA id z7-20020a17090a170700b001f7613a9d0dsm939367pjd.52.2022.08.13.00.31.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 13 Aug 2022 00:31:15 -0700 (PDT)
-Message-ID: <d9931783-c70a-2ac5-5028-1ea0b79ea982@gmail.com>
-Date:   Sat, 13 Aug 2022 14:31:09 +0700
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=T80P74qbpj5vnMOr57txdNOpWY9dQuakWIHmQmaO0bo=;
+        b=RWuy6naxwB3LNIhZbaZIQ/YHrL8OZcqFuPN7EI3JAg4A6VccG+8UYZZB+qP88A9Pv8
+         EyhEjUhjfnP2lT5dSREQYrZd7IRJc3KXzUNg+No4fXIIJCUbdSmMkgcaVbfYBgvMTfrP
+         oMpbU2vcS7AeS9u5V2xlgM+PmOfr5JOE5FCJfM/fyUocOQT2DUq3tQFrwjrXtdZRZqcv
+         71BVaASj22lwIm7hiu3GkXBykI+cVAxAz0vDW9F8/yFviCNxNJ9viD8k15KXKbmtQhq2
+         tSE/ezlS0xp+O6R+2xIWqq5Orw15+Dov6My5BgkCzXydw7vR3A8pVbDCj3eds07H+MI1
+         C3wQ==
+X-Gm-Message-State: ACgBeo0K93KWjeEmCap2/8nUvkHPXn704qK6HECZghN3B0qK0qTyZTfI
+        /rQuMrV5KSq+Tq/lXsh8CMHDOVZ3MfXMGneKcq4GIQ==
+X-Google-Smtp-Source: AA6agR5Sp7DIrEkdUIGRTVjCP5YraoJlt0EehiCtwAuXGuwm2/AhpZCyJmlO50m0eSeYVRXGcuTkEIWEZqv5BUBFX1s=
+X-Received: by 2002:aa7:c70d:0:b0:440:432a:5f9e with SMTP id
+ i13-20020aa7c70d000000b00440432a5f9emr6865623edq.110.1660388096101; Sat, 13
+ Aug 2022 03:54:56 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH next 0/2] Documentation: KVM:
- KVM_CAP_VM_DISABLE_NX_HUGE_PAGES documentation fixes
-Content-Language: en-US
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-doc@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
-        kvm@vger.kernel.org, linux-next@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220811063601.195105-1-pbonzini@redhat.com>
- <1db2a0cd-bef1-213c-a411-3d39d378743a@gmail.com>
- <d858ba66-422b-2bce-dafe-bc6586803e5f@redhat.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <d858ba66-422b-2bce-dafe-bc6586803e5f@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <CA+G9fYt_cc5SiNv1Vbse=HYY_+uc+9OYPZuJ-x59bROSaLN6fw@mail.gmail.com>
+ <CAGETcx8bGwDkPP=d2MtcY69YmTyckUSa8xAwNVOPOyTR8jPk=A@mail.gmail.com>
+ <CA+G9fYv0DFZi2rMPQTHvK8yD7g0LZTxN76iKZxP4pi4+8Rstxg@mail.gmail.com> <CAGETcx9Fae8tVhf+JrbYTnau5njLmjz75u-gJGkT6f7wjVdCyg@mail.gmail.com>
+In-Reply-To: <CAGETcx9Fae8tVhf+JrbYTnau5njLmjz75u-gJGkT6f7wjVdCyg@mail.gmail.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Sat, 13 Aug 2022 16:24:44 +0530
+Message-ID: <CA+G9fYvhyqErxfAqjxLW33wuknWsoxgCWEq-EAHujdz5Rih4iA@mail.gmail.com>
+Subject: Re: [next] arm: PM: domains: Delete usage of driver_deferred_probe_check_state()
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 8/12/22 14:40, Paolo Bonzini wrote:
->>
->> Thanks for picking this up. However, Stephen noted that the issue is
->> already showed up on mainline [1]. Maybe this series should be queued
->> for 6.0 release (as -rc fixes), right?
-> 
-> Yes, it's in Linus's tree already.  Thanks for replying to Stephen.
-> 
+Hi Saravana,
 
-Thanks.
+On Sat, 13 Aug 2022 at 06:23, Saravana Kannan <saravanak@google.com> wrote:
+>
+> On Wed, Jul 27, 2022 at 10:35 PM Naresh Kamboju
+> <naresh.kamboju@linaro.org> wrote:
+>
+> Ah, I forgot to CC you on a series that might fix this. Can you give
+> this a shot please?
 
--- 
-An old man doll... just what I always wanted! - Clara
+I have tested your patch and boot is successful on x15 device.
+
+>
+> https://lore.kernel.org/lkml/20220810060040.321697-1-saravanak@google.com/
+
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Tested-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+
+- Naresh
+PS: Add these tested by tags in the main thread.
+
+- Naresh

@@ -2,124 +2,129 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0657759205D
-	for <lists+linux-next@lfdr.de>; Sun, 14 Aug 2022 17:22:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96ACC5926E6
+	for <lists+linux-next@lfdr.de>; Mon, 15 Aug 2022 01:05:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231252AbiHNPWb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 14 Aug 2022 11:22:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59920 "EHLO
+        id S229463AbiHNXFZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 14 Aug 2022 19:05:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231136AbiHNPWa (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 14 Aug 2022 11:22:30 -0400
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3DC65E4;
-        Sun, 14 Aug 2022 08:22:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1660490541; bh=5yiku09NgtJhz8C8AAOMeXdl/tTwjzjyBlCJ4pl0Sm4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=H254bgyaRTEaidBt878YsbVLpkRm0S/3/dv9AHeMBTw9tG5dsi2GdDTxU0Z4yREy/
-         q0HQ1aBO9yNBTEROefNFp3Sjaf5nb0PZwpRhKP4aJsjKvDYGH8tVMkTCpJCuHXshSe
-         +4qKFDkbm96i9YvlZsK78V7NsRfhPqYgIsWSWHYg=
-Received: from [192.168.9.172] (unknown [101.88.24.16])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        with ESMTP id S229450AbiHNXFY (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 14 Aug 2022 19:05:24 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B74DF1;
+        Sun, 14 Aug 2022 16:05:17 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id D65926061B;
-        Sun, 14 Aug 2022 23:22:20 +0800 (CST)
-Message-ID: <f76c7bbc-1253-bdda-4d56-8e9185e6f29a@xen0n.name>
-Date:   Sun, 14 Aug 2022 23:22:19 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:105.0) Gecko/20100101
- Thunderbird/105.0a1
-Subject: Re: [RESEND] Please consider name next Linux release "I love Linux"
- (Re: Linux 5.19)
-To:     Baoquan He <bhe@redhat.com>,
-        Zhang Boyang <zhangboyang.id@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4M5Y0S72x7z4x1G;
+        Mon, 15 Aug 2022 09:05:12 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1660518313;
+        bh=1Sa4mWFQEDxd8hQqHgDOoUF/H5e9qr+gyg8EiZjPs3I=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=IKUUJuTROZJO1A+c3K10m1R/X9iiLlWyaTAQb1fdb4hcLkCpmZKy0PpuoI+xda8SE
+         toi3WKMIEyc+JcY0VkJZkc2zDzFL2gDtI1H2FU98lvf+iU8LXXn12CzQgTt2NonquR
+         CQJhnw3GDXUagiDP9H3CPqTDZSXUHCryOTNjv+/SmsiYphiKHd1u0H681GdKzkACyz
+         ZenEVOfHJB4Pf3DsU1h7xz5MWWBs9Q+7tGC+TMB+xHJQFRkGSQiwxiHpeBtFvY9Kn4
+         /ER4ZwwFbatwuE0SWPNiAi7A6lQc+MfhdUPqT3flJTNbs7Gi+sS77GTyZz6W3CIBdt
+         asm1T1+aTj7Dg==
+Date:   Mon, 15 Aug 2022 09:04:35 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-next@vger.kernel.org, song@kernel.org, wei.liu@kernel.org,
-        jszhang@kernel.org, chenhuacai@kernel.org, guoren@kernel.org,
-        xiang@kernel.org, chao@kernel.org, ming.lei@redhat.com,
-        longman@redhat.com, wqu@suse.com, yhs@fb.com, haoluo@google.com,
-        decui@microsoft.com, siyanteng@loongson.cn, dyoung@redhat.com
-References: <CAHk-=wgrz5BBk=rCz7W28Fj_o02s0Xi0OEQ3H1uQgOdFvHgx0w@mail.gmail.com>
- <61d77412-af1a-5b00-9754-f156b1c63a74@gmail.com>
- <20220812023950.GF373960@MiWiFi-R3L-srv>
-Content-Language: en-US
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <20220812023950.GF373960@MiWiFi-R3L-srv>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the loongarch tree with the
+ irqchip-fixes tree
+Message-ID: <20220815090435.09409f18@canb.auug.org.au>
+In-Reply-To: <20220811091701.1dfd4e6c@canb.auug.org.au>
+References: <20220811091701.1dfd4e6c@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/y_T9Hb8KRsEVelOotiaRk5f";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 8/12/22 10:39, Baoquan He wrote:
-> Hi Boyang,
->
-> On 08/11/22 at 10:02pm, Zhang Boyang wrote:
->> Hi,
->>
->> On 2022/8/1 05:43, Linus Torvalds wrote:
->>> (*) I'll likely call it 6.0 since I'm starting to worry about getting
->>> confused by big numbers again.
->> Could you please consider name the next Linux release (5.20 or 6.0) "I love
->> linux" ? The number "5.20" is a wordplay in Chinese, which means "I love
->> you" [1], thus "Linux 5.20" can be read as "I love Linux" in Chinese.
->>
->> Even if next kernel version is 6.0, I think it's probably a good idea for
->> both Chinese-speakers and non-Chinese speakers to express our love to Linux
->> Kernel.
-> Interesting idea, LOL.
->
-> Yes, 520 means 'I love you' in chinese since it has the similar pronunciation
-> with '我爱你'. I even don't remember since when May 20th becomes another
-> holiday similar to Valentine's day in China. While I have complicated feeling
-> about 520. It means on each May 20th, I also need prepare gift for my wife. I
-> am not a romantic person, preparing gift to lover is always a torture to me.
-> So almost each May 20th day, Valentine's day, double seventh festival which is
-> a traditional Valentine's day, I will become nervous, and it ends up
-> with a satisfactory gift, or a bunch of flower and a digital red envelope with
-> 520￥ and then complainment and blame in next two weeks.
->
-> So, for naming next release as '5.20', I will vote for it w/o hesitance. No need
-> to prepare gift, and can express our love to Linux kernel, it sounds
-> awesome.
->
-> Meanwhile, I would remind people to take it easy. Whether the suggestion
-> is accepted or not, it doesn't impact the fact that linux may have
-> become part of our life, not just our work, considering many kernel developers
-> are workoing form home. But if you have boasted to your girlfriend
-> or wife, and want to take this as a gift to her, you should try harder to
-> convince Linus.
+--Sig_/y_T9Hb8KRsEVelOotiaRk5f
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Woah. This is some of the larger-scale "cultural export" I've ever seen, 
-and probably the first time on LKML. I'd remember the few dry laughs 
-when I tried to explain the "Superb Owl" meme to my teammates, 
-unfamiliar with (US) English memes in general, so I could even 
-sympathize with those of you not knowing Chinese Internet memes...
+Hi all,
 
-One thing is for sure, if the next Linux version is to be kept 5.20 and 
-codenamed "Linux I love you" or something like that, it would certainly 
-make headlines on Chinese tech news sites for a while, more specifically 
-both after rc1 and the final release; but anyway, as Baoquan already 
-pointed out, our collective love for Linux and the open-source ideals 
-behind the whole thing is not going anywhere, no matter what the 
-Makefile says. (You may find it useful to make your partner happy using 
-the 520/521 meme too, if applicable; but from my own experience, better 
-not bring up Linux if your partner is not interested in that topic!)
+On Thu, 11 Aug 2022 09:17:01 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>=20
+> Today's linux-next merge of the loongarch tree got a conflict in:
+>=20
+>   arch/loongarch/include/asm/irq.h
+>=20
+> between commit:
+>=20
+>   fda7409a8fcf ("irqchip/loongson-pch-pic: Move find_pch_pic() into CONFI=
+G_ACPI")
+>=20
+> from the irqchip-fixes tree and commit:
+>=20
+>   4e9fa7e1c08d ("LoongArch: Parse MADT to get multi-processor information=
+")
+>=20
+> from the loongarch tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+> --=20
+> Cheers,
+> Stephen Rothwell
+>=20
+> diff --cc arch/loongarch/include/asm/irq.h
+> index 093aee99167d,4b130199ceae..000000000000
+> --- a/arch/loongarch/include/asm/irq.h
+> +++ b/arch/loongarch/include/asm/irq.h
+> @@@ -81,8 -81,7 +81,6 @@@ extern struct acpi_vector_group msi_gro
+>   #define GSI_MIN_PCH_IRQ		LOONGSON_PCH_IRQ_BASE
+>   #define GSI_MAX_PCH_IRQ		(LOONGSON_PCH_IRQ_BASE + 256 - 1)
+>  =20
+> - extern int eiointc_get_node(int id);
+> -=20
+>  -extern int find_pch_pic(u32 gsi);
+>   struct acpi_madt_lio_pic;
+>   struct acpi_madt_eio_pic;
+>   struct acpi_madt_ht_pic;
 
-(And, pun semi-intended for that "bringing up". ;-)
+This is now a conflict between the irqchip-fixes tree and Linus' tree.
 
--- 
-WANG "xen0n" Xuerui
+--=20
+Cheers,
+Stephen Rothwell
 
-Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
+--Sig_/y_T9Hb8KRsEVelOotiaRk5f
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmL5f4MACgkQAVBC80lX
+0GzOugf7Btc3WzcKkagnfXNU3QUa7I2juUezKt1Id/k4OXVLRkhekgGF2jnkOm58
+Z6O7ttjVwjSMN7MJdzLCMGcqDDhr5ScTJ+B6SpLEJNImmcNgBTpQyb/bF5Pk+9e0
+CgqOKgF6sCF5zqZCOhqDmKMp4PbwF1nHmxzgEvshD5O2SUKTtmAY/Sl87Re4hGoq
+FX/7I+/7FLJyQ73iVB9TPQRucHEL/2SNLSvLNszQ7Qr6m7ygl7ybQYi7sPCH+/rZ
+Exv4xN/WzRd+W5l7QFhLcZPTASv+uNMlhtdw5PNi0hbLMszI6z5zHcw41fjYDQ3O
+3QEApEOnv+x3ABE5O4pgpVSMCqNSbg==
+=jFSJ
+-----END PGP SIGNATURE-----
+
+--Sig_/y_T9Hb8KRsEVelOotiaRk5f--

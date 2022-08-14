@@ -2,65 +2,47 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBD5B5926E8
-	for <lists+linux-next@lfdr.de>; Mon, 15 Aug 2022 01:08:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E78755926ED
+	for <lists+linux-next@lfdr.de>; Mon, 15 Aug 2022 01:20:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229824AbiHNXId (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 14 Aug 2022 19:08:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48040 "EHLO
+        id S229818AbiHNXUx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 14 Aug 2022 19:20:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiHNXIc (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 14 Aug 2022 19:08:32 -0400
+        with ESMTP id S229450AbiHNXUw (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 14 Aug 2022 19:20:52 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F60CB1FE;
-        Sun, 14 Aug 2022 16:08:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D13DD55;
+        Sun, 14 Aug 2022 16:20:51 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4M5Y4B0fBRz4x1G;
-        Mon, 15 Aug 2022 09:08:26 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4M5YLR2kL7z4xD2;
+        Mon, 15 Aug 2022 09:20:47 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1660518510;
-        bh=Oyz83mtuuG52OS165AXQn0ZnNd5GcGQA+FkNBjyXstM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=XQI88QAPudFhKI+cmgAyWtOVvU+4TmriMDmTtUYKDqRy/WhtZCP5zC+ScnnVKdo6J
-         I0iXJxRi+EXzBH2OAFuuWM28WEj5GAabe0rNAtyxA+730VBkOLOl284JEn8Vz9BDaZ
-         g8uVKauQRLYIemgXoIeKiUQZWEd7xM775IaTWIPhlnp7Ci/NRXc889+R71ZbpMu6l/
-         ZeqVXXFY9ZnX6fo8vwNhAD+qcQzM22rnfiOb305UzIjRHBrsTmNc2mSYJnedqqpXyZ
-         ekP82OCOnvd6QI88g4joun6Y3h0Bmp9HDf1Vp9RnzK2IsjMlf2eG4jQGagq8WAGj2I
-         0ofl0pnJkA+YA==
-Date:   Mon, 15 Aug 2022 09:08:24 +1000
+        s=201702; t=1660519249;
+        bh=dZBjGIr+Z5C+hlv3yZPMValSeXkKaf6abWdDH55WeXU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=FfdT8vc83/c6VghkPrpdUEg5dJVVQezzAh44vU7v6Pn7SXF+DMcGH+9dRHkIorw8r
+         hqa3O+j0tjEAIcoVi2Y+XY3HFmWknkYkhwINUJvPRh9IJsOpHLpthjwTQo//ZFAC5C
+         sDvlAKkSWEiGv16XxZ9OXh2xKIL9UJhEayRKkCniSgKW8CCMFGkjcTxbV3NNp94opY
+         lLSdEocuEJXn93gLNFsCC/jrLVaF48CxiPgPa4L+G6oDVWCQwNoMLH7RZCmX5lCLWg
+         b63ttCO6ZCvhYQP0LCPcKq0I/gmLf1UDBJPs3+YtySgZD+j0BAER2X7ZfF0jHFhggL
+         RwvB4o0WzhWtQ==
+Date:   Mon, 15 Aug 2022 09:20:46 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     broonie@kernel.org, Adam Bratschi-Kaye <ark.email@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Antonio Terceiro <antonio.terceiro@linaro.org>,
-        =?UTF-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Boris-Chengbiao Zhou <bobo1239@web.de>,
-        Daniel Xu <dxu@dxuuu.xyz>,
-        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
-        David Gow <davidgow@google.com>,
-        Douglas Su <d0u9.su@outlook.com>, Finn Behrens <me@kloenk.de>,
-        Gary Guo <gary@garyguo.net>,
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Ido Schimmel <idosch@nvidia.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Miguel Cano <macanroj@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Tiago Lam <tiagolam@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>
-Subject: Re: linux-next: manual merge of the rust tree with the kbuild tree
-Message-ID: <20220815090824.340d44bb@canb.auug.org.au>
-In-Reply-To: <20220802233844.2613013-1-broonie@kernel.org>
-References: <20220802233844.2613013-1-broonie@kernel.org>
+        Vadim Pasternak <vadimp@nvidia.com>
+Subject: linux-next: manual merge of the thermal tree with Linus' tree
+Message-ID: <20220815092046.644a0afa@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/JEMC6Aj/fh_YdWBJhKc5r7G";
+Content-Type: multipart/signed; boundary="Sig_/hdJQg1IQYyF/k9OIEDMBcV+";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
@@ -71,94 +53,84 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/JEMC6Aj/fh_YdWBJhKc5r7G
+--Sig_/hdJQg1IQYyF/k9OIEDMBcV+
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Wed,  3 Aug 2022 00:38:44 +0100 broonie@kernel.org wrote:
->
-> Today's linux-next merge of the rust tree got a conflict in:
->=20
->   Makefile
->=20
-> between commit:
->=20
->   a6036a41bffba ("kbuild: drop support for CONFIG_CC_OPTIMIZE_FOR_PERFORM=
-ANCE_O3")
->=20
-> from the kbuild tree and commit:
->=20
->   fe24902ba8765 ("Kbuild: add Rust support")
->=20
-> from the rust tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->=20
-> diff --cc Makefile
-> index 60a7e3e8b4787,cd1d545f316bc..0000000000000
-> --- a/Makefile
-> +++ b/Makefile
-> @@@ -758,10 -819,20 +822,17 @@@ KBUILD_CFLAGS	+=3D $(call cc-disable-warn
->  =20
->   ifdef CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE
->   KBUILD_CFLAGS +=3D -O2
-> + KBUILD_RUSTFLAGS +=3D -Copt-level=3D2
->  -else ifdef CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE_O3
->  -KBUILD_CFLAGS +=3D -O3
->  -KBUILD_RUSTFLAGS +=3D -Copt-level=3D3
->   else ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
->   KBUILD_CFLAGS +=3D -Os
-> + KBUILD_RUSTFLAGS +=3D -Copt-level=3Ds
->   endif
->  =20
-> + # Always set `debug-assertions` and `overflow-checks` because their def=
-ault
-> + # depends on `opt-level` and `debug-assertions`, respectively.
-> + KBUILD_RUSTFLAGS +=3D -Cdebug-assertions=3D$(if $(CONFIG_RUST_DEBUG_ASS=
-ERTIONS),y,n)
-> + KBUILD_RUSTFLAGS +=3D -Coverflow-checks=3D$(if $(CONFIG_RUST_OVERFLOW_C=
-HECKS),y,n)
-> +=20
->   # Tell gcc to never replace conditional load with a non-conditional one
->   ifdef CONFIG_CC_IS_GCC
->   # gcc-10 renamed --param=3Dallow-store-data-races=3D0 to
-> @@@ -1098,7 -1178,7 +1178,8 @@@ export MODULES_NSDEPS :=3D $(extmod_prefi
->   ifeq ($(KBUILD_EXTMOD),)
->   core-y			+=3D kernel/ certs/ mm/ fs/ ipc/ security/ crypto/
->   core-$(CONFIG_BLOCK)	+=3D block/
->  +core-$(CONFIG_IO_URING)	+=3D io_uring/
-> + core-$(CONFIG_RUST)	+=3D rust/
->  =20
->   vmlinux-dirs	:=3D $(patsubst %/,%,$(filter %/, \
->   		     $(core-y) $(core-m) $(drivers-y) $(drivers-m) \
+Today's linux-next merge of the thermal tree got a conflict in:
 
-This is now a conflict between the rust tree and Linus' tree.
+  drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
+
+between commits:
+
+  03978fb88b06 ("mlxsw: core_thermal: Use common define for thermal zone na=
+me length")
+  ef0df4fa324a ("mlxsw: core_thermal: Extend internal structures to support=
+ multi thermal areas")
+
+from Linus' tree and commit:
+
+  9b5e2c897cd1 ("Revert "mlxsw: core: Add the hottest thermal zone detectio=
+n"")
+
+from the thermal tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/JEMC6Aj/fh_YdWBJhKc5r7G
+diff --cc drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
+index 3548fe1df7c8,373a77c3da02..000000000000
+--- a/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
++++ b/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
+@@@ -21,7 -21,7 +21,6 @@@
+  #define MLXSW_THERMAL_ASIC_TEMP_HOT	105000	/* 105C */
+  #define MLXSW_THERMAL_HYSTERESIS_TEMP	5000	/* 5C */
+  #define MLXSW_THERMAL_MODULE_TEMP_SHIFT	(MLXSW_THERMAL_HYSTERESIS_TEMP * =
+2)
+- #define MLXSW_THERMAL_TEMP_SCORE_MAX	GENMASK(31, 0)
+ -#define MLXSW_THERMAL_ZONE_MAX_NAME	16
+  #define MLXSW_THERMAL_MAX_STATE	10
+  #define MLXSW_THERMAL_MIN_STATE	2
+  #define MLXSW_THERMAL_MAX_DUTY	255
+@@@ -101,9 -91,10 +100,7 @@@ struct mlxsw_thermal=20
+  	struct thermal_cooling_device *cdevs[MLXSW_MFCR_PWMS_MAX];
+  	u8 cooling_levels[MLXSW_THERMAL_MAX_STATE + 1];
+  	struct mlxsw_thermal_trip trips[MLXSW_THERMAL_NUM_TRIPS];
+- 	unsigned int tz_highest_score;
+- 	struct thermal_zone_device *tz_highest_dev;
+ -	struct mlxsw_thermal_module *tz_module_arr;
+ -	u8 tz_module_num;
+ -	struct mlxsw_thermal_module *tz_gearbox_arr;
+ -	u8 tz_gearbox_num;
+ +	struct mlxsw_thermal_area line_cards[];
+  };
+ =20
+  static inline u8 mlxsw_state_to_duty(int state)
+
+--Sig_/hdJQg1IQYyF/k9OIEDMBcV+
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmL5gGgACgkQAVBC80lX
-0GwSzQf/YPRCFxeF8VLi7d28SuVfithkyRx7IgBILJuqQWq7LmrApvkMgyOlK/j0
-5OTuL/1jdIV4vp5yxcI0Ui+WoDmEwAmOpzDizByiJOWxEhEZ6EMkOrMlPwkmWdGm
-2tOGZtvtDHKxWDUyrjva7Xbm+vLIQffuTJXb3SSuL0TP1enNODiK1d3edOemCPgJ
-EhQwsa/wTYuIvLGNKbBprQPQLTVpIVGFju703jJwIhQT5GeomH/OFIbcUQJrmdNP
-wcPF/PiEXNU3+VBssECfOYFthAxERxJjgd9+vkqdiOknG88khiVrAsQxQkyw8XOT
-UVxx9k/GQiHv1SGaT8Kxc4peNtbafA==
-=M+SV
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmL5g04ACgkQAVBC80lX
+0GxpFAf+NqVTf19Fn5sYyjTwNW+xOEScAjKqShJWwX6kBuvmXCpk6TcV5dIdKFmQ
+KKB6TFmi+4ixDPmbodu9jo3pzyJ5YsxbKmZPuYD5pz0D3ygy50UJXipTW+UwzXs0
+FsD0mWmruIWlcpKM1cfRtnQAQ2B9KVO9pKSSh50VfYeC//4W8lULVEsXcaQo0Kxh
+8qcFCWt2uwvsqFEbQmE3T9qSd0eVwwnCcSm1aeeQeSVyplmT+O2BSvnJ0YHZGrl4
+VbIJpbOrL4bXmW9yOfgdw1AzkG4LTWdXmzd8Y+N9+TcEg3iC/PvHCOnrBtwh7KeX
+ugu5rG7fS/9bUbT+Ch8YM6kd2o2K/Q==
+=g7L7
 -----END PGP SIGNATURE-----
 
---Sig_/JEMC6Aj/fh_YdWBJhKc5r7G--
+--Sig_/hdJQg1IQYyF/k9OIEDMBcV+--

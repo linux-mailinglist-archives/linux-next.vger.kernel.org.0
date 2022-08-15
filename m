@@ -2,96 +2,90 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F4CB594E99
-	for <lists+linux-next@lfdr.de>; Tue, 16 Aug 2022 04:21:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E82959522A
+	for <lists+linux-next@lfdr.de>; Tue, 16 Aug 2022 07:44:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232306AbiHPCVZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 15 Aug 2022 22:21:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42804 "EHLO
+        id S232052AbiHPFoT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 16 Aug 2022 01:44:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232420AbiHPCVG (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 15 Aug 2022 22:21:06 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8266025AA46;
-        Mon, 15 Aug 2022 15:34:13 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id pm17so8131971pjb.3;
-        Mon, 15 Aug 2022 15:34:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=RIRgbOfmnMxz3+lha/dyKocjcfm0idLPDlwhRmwh3o4=;
-        b=ZWp3Wr4rnHKazFw6TyQh3esqxfaP20y34f8wp+a5nQUJp3cGBgMK89CzF6gIxgocrs
-         dLyXmFM1SpWVYDBLEbd99RceoQk7KAWE2lVhuN96FD/A7UD6I/z8rf3Uh9UCdOcVR/oD
-         FPpWrfG0qouk6xCtpRUpeMsw9MasdyhgWbk63m4eNwpjIULb3Cl3NSDpwQ9S+oO/npKg
-         XCRx4IwhE6o7M2U9hyzE3LfsxvAhu2YJaEZ+IjAmsR+pUN3qtZYsywPJiF1LUTn7bRur
-         YLDO/bl0LRpJQEiP/y4VeQA49jUBGdB42EC/8C/1Uyf5v2URU3rgzHhLCbkkH9g5o/b9
-         v9Sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=RIRgbOfmnMxz3+lha/dyKocjcfm0idLPDlwhRmwh3o4=;
-        b=YMrEA37zH3sZPmPTrmvDU8bimyEBCCo3ruoRTChT4tCQJNP6M0EYRWmo4/T5FC9NTx
-         bJyaCFo7/oEKCWVn/7hynui7OHsKKk6JtgQ6lQMzYa77Bc8YGE/aZ9L6ZvUw+tUCcJkx
-         CfUPX3dJwgYSp/FH9dn0GcSpQEhdkNiQ8hlbNtgXdXrew5SRlQUVm0c66mhcbRbmfW1i
-         2yTJ94S5UPyWQmfjOjOG2O+/dEwxENG8jKtD90S/NWcOVd0Uvp13ax7OMLlCJY1uma1+
-         VK54xsltggnLLj7AlwUAv80/yvbYTrkr9oWVFam1BcAfIaYwWasM8UxOgtQ5vmulmHhC
-         QU3w==
-X-Gm-Message-State: ACgBeo3xPwdxtHiXCY4eB0vfG3tEOhIM6T9DTXtpA8tjnPM2DE/2Cjnw
-        ops6KPcPUxZmDkPJwxjfxPY=
-X-Google-Smtp-Source: AA6agR568ZXgAQRnpf/PgTylaDaCeITV2FSj7U3ur/+1N+e2+H7/bIzmlxTz4+9cG9xmpYnfNR5LKg==
-X-Received: by 2002:a17:902:e750:b0:16f:3f32:6f5c with SMTP id p16-20020a170902e75000b0016f3f326f5cmr19105668plf.106.1660602848140;
-        Mon, 15 Aug 2022 15:34:08 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:3a69])
-        by smtp.gmail.com with ESMTPSA id p4-20020a1709026b8400b001712c008f99sm7502732plk.11.2022.08.15.15.34.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Aug 2022 15:34:07 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 15 Aug 2022 12:34:06 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
+        with ESMTP id S230376AbiHPFnz (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 16 Aug 2022 01:43:55 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5644254A68;
+        Mon, 15 Aug 2022 15:33:00 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4M68Dl4Xdzz4xcR;
+        Tue, 16 Aug 2022 08:32:55 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1660602775;
+        bh=Y1hgtDii/vNed4mKC6W7wNfhq2enxkj3lR421N7PvlI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=n6zenz19snzObCw+b25c3+TEbmd/ixqiPNDSRElRnSiAwX/H9NxoF2f6wg3QZF2bu
+         AooAl+Sa0g2Cwm46guPu5OZipVPzblv1+HypLTT+hUw3Q2MkEMUh8GtwWMPAcleX2/
+         mt/huH43Bb2FdjcwdTh+XEthsl9kSOt3sIJ54+zoX5IPHiBwGf3EYjphOFVnD7a93B
+         /fmSWoZdtsjTRPBT16WllT33EehWFSxz2o/Oqn2WiltZi6KXsMMBnpgT9OalHwRHeu
+         F2ox7ixSfnW7spi4nicsMaKWIANUCJ2AsvaRPO4WgeRpBvzahxxduM/DPy4/yBZhSY
+         0Z8H3XDUJXAxQ==
+Date:   Tue, 16 Aug 2022 08:32:38 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Tejun Heo <tj@kernel.org>
 Cc:     Hao Jia <jiahao.os@bytedance.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the cgroup tree
-Message-ID: <YvrJ3lk/caqJ4Zkf@slm.duckdns.org>
-References: <20220816083238.0aa28080@canb.auug.org.au>
+Subject: linux-next: Fixes tag needs some work in the cgroup tree
+Message-ID: <20220816083238.0aa28080@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220816083238.0aa28080@canb.auug.org.au>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/YSKHpO==7.b2z.qN0AXBYwg";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hello, Stephen.
+--Sig_/YSKHpO==7.b2z.qN0AXBYwg
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Aug 16, 2022 at 08:32:38AM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> In commit
-> 
->   6d73ba7928c0 ("sched/psi: Zero the memory of struct psi_group")
-> 
-> Fixes tag
-> 
->   Fixes: commit 5f69a6577bc3 ("psi: dont alloc memory for psi by default")
-> 
-> has these problem(s):
-> 
->   - leading word 'commit' unexpected.
+Hi all,
 
-Oops, lemme fix up the tree.
+In commit
 
-Thanks.
+  6d73ba7928c0 ("sched/psi: Zero the memory of struct psi_group")
 
--- 
-tejun
+Fixes tag
+
+  Fixes: commit 5f69a6577bc3 ("psi: dont alloc memory for psi by default")
+
+has these problem(s):
+
+  - leading word 'commit' unexpected.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/YSKHpO==7.b2z.qN0AXBYwg
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmL6yYcACgkQAVBC80lX
+0GzR4gf9EWeEspws2yRCpYNBEMiSi5JdZRl6ESTbcQMV/Yfu8mx3MERI52HBWRu3
+fpqOlIsMTzaaHhVOmZ6uOggQsBjHK2zHFuGmqFvLV1y/bAriIuk4HiBKPzTiy0us
+IgMQcVnVy5/UMi5jxiEE/exsx/V+Cm4D1Xwl4RUR+PV/FeBWPTLJs2vsOL+jB5Mn
+5coKieEtTXQzOaYLxUSsGbQoXB3N9ZdPenWq9mk0KxPhhPNFAXreOJpLFTeOTyZo
+j9ubanjc2sQDRR63ZeVqXp1imsU3Jqan4CDxlPQ66dUBuwSq/q9ZrLVr0R4/ixQB
+yBgipwjOYale/ufSwaxCJvEqM8m6sw==
+=3w1i
+-----END PGP SIGNATURE-----
+
+--Sig_/YSKHpO==7.b2z.qN0AXBYwg--

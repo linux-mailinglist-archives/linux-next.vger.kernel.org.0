@@ -2,85 +2,96 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 283A2592C8F
-	for <lists+linux-next@lfdr.de>; Mon, 15 Aug 2022 12:52:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F4CB594E99
+	for <lists+linux-next@lfdr.de>; Tue, 16 Aug 2022 04:21:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241742AbiHOJWX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 15 Aug 2022 05:22:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46970 "EHLO
+        id S232306AbiHPCVZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 15 Aug 2022 22:21:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241986AbiHOJWA (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 15 Aug 2022 05:22:00 -0400
-Received: from a8-35.smtp-out.amazonses.com (a8-35.smtp-out.amazonses.com [54.240.8.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C873C2A7;
-        Mon, 15 Aug 2022 02:21:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=r5f3hr7pzmhv6xwu5spgpns3mj2fddpz; d=linaro.org; t=1660555316;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=xFqraFA6lGmUu0wYMye/OBvTkGaFcGmFu9hbEp/wo44=;
-        b=Gncdjke6xFirgu+vxM5ciR105bzITV0i01UzWOa2vTwjMiLSAVIlpd8alPGE0mH+
-        LswfP8SJWiXEcIhL9Y+nzrQ8P7dL8dVVyxKevnusDHUNGejDzJhLeTNTRHeDCMzUTZi
-        zF+NpaP8CFnKCGLBWmwV1YNlt2zWk4Fl3ADyKu90=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=6gbrjpgwjskckoa6a5zn6fwqkn67xbtw; d=amazonses.com; t=1660555316;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=xFqraFA6lGmUu0wYMye/OBvTkGaFcGmFu9hbEp/wo44=;
-        b=Uvfz+oldhTD9PkJn3Bxry/aRBMLXlfO7xVy6WeqxQOq0b8F0vKPJB0nCDGLqFsIj
-        WLB0jx4OWxBFzT9Bwkq4yVIORLPxWuKVGAdUGImP3MxQEKkTcy+Yl9SWv9E6hAxeSbz
-        jwkvA1bhzEgvAcrnTzFx1yVurBQBcF51i6l6TWAo=
-From:   lkft@linaro.org
-To:     lkft@linaro.org
-Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
-        linux-next@vger.kernel.org, shuah@kernel.org
-Subject: lkft kselftest for next-20220815
+        with ESMTP id S232420AbiHPCVG (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 15 Aug 2022 22:21:06 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8266025AA46;
+        Mon, 15 Aug 2022 15:34:13 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id pm17so8131971pjb.3;
+        Mon, 15 Aug 2022 15:34:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=RIRgbOfmnMxz3+lha/dyKocjcfm0idLPDlwhRmwh3o4=;
+        b=ZWp3Wr4rnHKazFw6TyQh3esqxfaP20y34f8wp+a5nQUJp3cGBgMK89CzF6gIxgocrs
+         dLyXmFM1SpWVYDBLEbd99RceoQk7KAWE2lVhuN96FD/A7UD6I/z8rf3Uh9UCdOcVR/oD
+         FPpWrfG0qouk6xCtpRUpeMsw9MasdyhgWbk63m4eNwpjIULb3Cl3NSDpwQ9S+oO/npKg
+         XCRx4IwhE6o7M2U9hyzE3LfsxvAhu2YJaEZ+IjAmsR+pUN3qtZYsywPJiF1LUTn7bRur
+         YLDO/bl0LRpJQEiP/y4VeQA49jUBGdB42EC/8C/1Uyf5v2URU3rgzHhLCbkkH9g5o/b9
+         v9Sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=RIRgbOfmnMxz3+lha/dyKocjcfm0idLPDlwhRmwh3o4=;
+        b=YMrEA37zH3sZPmPTrmvDU8bimyEBCCo3ruoRTChT4tCQJNP6M0EYRWmo4/T5FC9NTx
+         bJyaCFo7/oEKCWVn/7hynui7OHsKKk6JtgQ6lQMzYa77Bc8YGE/aZ9L6ZvUw+tUCcJkx
+         CfUPX3dJwgYSp/FH9dn0GcSpQEhdkNiQ8hlbNtgXdXrew5SRlQUVm0c66mhcbRbmfW1i
+         2yTJ94S5UPyWQmfjOjOG2O+/dEwxENG8jKtD90S/NWcOVd0Uvp13ax7OMLlCJY1uma1+
+         VK54xsltggnLLj7AlwUAv80/yvbYTrkr9oWVFam1BcAfIaYwWasM8UxOgtQ5vmulmHhC
+         QU3w==
+X-Gm-Message-State: ACgBeo3xPwdxtHiXCY4eB0vfG3tEOhIM6T9DTXtpA8tjnPM2DE/2Cjnw
+        ops6KPcPUxZmDkPJwxjfxPY=
+X-Google-Smtp-Source: AA6agR568ZXgAQRnpf/PgTylaDaCeITV2FSj7U3ur/+1N+e2+H7/bIzmlxTz4+9cG9xmpYnfNR5LKg==
+X-Received: by 2002:a17:902:e750:b0:16f:3f32:6f5c with SMTP id p16-20020a170902e75000b0016f3f326f5cmr19105668plf.106.1660602848140;
+        Mon, 15 Aug 2022 15:34:08 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:3a69])
+        by smtp.gmail.com with ESMTPSA id p4-20020a1709026b8400b001712c008f99sm7502732plk.11.2022.08.15.15.34.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Aug 2022 15:34:07 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 15 Aug 2022 12:34:06 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Hao Jia <jiahao.os@bytedance.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Fixes tag needs some work in the cgroup tree
+Message-ID: <YvrJ3lk/caqJ4Zkf@slm.duckdns.org>
+References: <20220816083238.0aa28080@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-Message-ID: <01000182a0cf4b92-f1608483-7e1c-4b32-93c9-5c1dfe12c9c2-000000@email.amazonses.com>
-Date:   Mon, 15 Aug 2022 09:21:56 +0000
-Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2022.08.15-54.240.8.35
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        TO_EQ_FM_DIRECT_MX,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220816083238.0aa28080@canb.auug.org.au>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-## Build
-* kernel: 5.19.0
-* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-* git branch: master
-* git commit: fa96acf505e0e5f4774e273d97cee65fffcf53e6
-* git describe: next-20220815
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220815
+Hello, Stephen.
 
-## Test Regressions (compared to next-20220812)
-No test regressions found.
+On Tue, Aug 16, 2022 at 08:32:38AM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> In commit
+> 
+>   6d73ba7928c0 ("sched/psi: Zero the memory of struct psi_group")
+> 
+> Fixes tag
+> 
+>   Fixes: commit 5f69a6577bc3 ("psi: dont alloc memory for psi by default")
+> 
+> has these problem(s):
+> 
+>   - leading word 'commit' unexpected.
 
-## Metric Regressions (compared to next-20220812)
-No metric regressions found.
+Oops, lemme fix up the tree.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Thanks.
 
-
-## Test Fixes (compared to next-20220812)
-No test fixes found.
-
-## Metric Fixes (compared to next-20220812)
-No metric fixes found.
-
-## Test result summary
-total: 0, pass: 0, fail: 0, skip: 0, xfail: 0
-
-## Build Summary
-
-## Test suites summary
-
---
-Linaro LKFT
-https://lkft.linaro.org
+-- 
+tejun

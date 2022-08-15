@@ -2,47 +2,49 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E78755926ED
-	for <lists+linux-next@lfdr.de>; Mon, 15 Aug 2022 01:20:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD803592724
+	for <lists+linux-next@lfdr.de>; Mon, 15 Aug 2022 02:54:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229818AbiHNXUx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 14 Aug 2022 19:20:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54564 "EHLO
+        id S229571AbiHOAya (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 14 Aug 2022 20:54:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiHNXUw (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 14 Aug 2022 19:20:52 -0400
+        with ESMTP id S229379AbiHOAy3 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 14 Aug 2022 20:54:29 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D13DD55;
-        Sun, 14 Aug 2022 16:20:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD5E7658;
+        Sun, 14 Aug 2022 17:54:27 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4M5YLR2kL7z4xD2;
-        Mon, 15 Aug 2022 09:20:47 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4M5bQQ04dcz4x1V;
+        Mon, 15 Aug 2022 10:54:21 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1660519249;
-        bh=dZBjGIr+Z5C+hlv3yZPMValSeXkKaf6abWdDH55WeXU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=FfdT8vc83/c6VghkPrpdUEg5dJVVQezzAh44vU7v6Pn7SXF+DMcGH+9dRHkIorw8r
-         hqa3O+j0tjEAIcoVi2Y+XY3HFmWknkYkhwINUJvPRh9IJsOpHLpthjwTQo//ZFAC5C
-         sDvlAKkSWEiGv16XxZ9OXh2xKIL9UJhEayRKkCniSgKW8CCMFGkjcTxbV3NNp94opY
-         lLSdEocuEJXn93gLNFsCC/jrLVaF48CxiPgPa4L+G6oDVWCQwNoMLH7RZCmX5lCLWg
-         b63ttCO6ZCvhYQP0LCPcKq0I/gmLf1UDBJPs3+YtySgZD+j0BAER2X7ZfF0jHFhggL
-         RwvB4o0WzhWtQ==
-Date:   Mon, 15 Aug 2022 09:20:46 +1000
+        s=201702; t=1660524863;
+        bh=0Tch3PtuAnv8LMLwmFQ59clZK8afE4VSbddG6E/Jf3M=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Owc+TpwmJyj3pbtUDmsxtHQVoO+I8rmZ+tX/RGety4zJBmeNqOEjpINtkbAvCiGWm
+         T1TpqFzFynBZcc0/COAiXBAtCZHXQQ6cfoJPsSWbi1MvHy/ZPcKZgVVAZMq86pbzpg
+         0Dym5AKRoJuJYfaANj0B8spiQBroXl7d7hy8BH/1dVL8kNuqp4PCSLGHOTvXmqyPDV
+         Vd/NUfROvQsi4d2UIYz7feq+YURFBYW+vQI6wBEm+MZ2znSluP+HLe7WEF7mBdoAiV
+         hlfR7ntjgZ+cIoOEpCJmL6IwnIT7puXMvycLs2IFk1MgQIPRlc1G4musBaKESLIjJK
+         QxHZQuQIxu5Ag==
+Date:   Mon, 15 Aug 2022 10:54:19 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Ido Schimmel <idosch@nvidia.com>,
+To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Vadim Pasternak <vadimp@nvidia.com>
-Subject: linux-next: manual merge of the thermal tree with Linus' tree
-Message-ID: <20220815092046.644a0afa@canb.auug.org.au>
+        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>
+Subject: Re: linux-next: build warnings after merge of the broadcom tree
+Message-ID: <20220815105419.4df1005b@canb.auug.org.au>
+In-Reply-To: <df8f4765-a804-cb50-bbb5-475925ba2036@milecki.pl>
+References: <20220725095913.31e859ec@canb.auug.org.au>
+        <df8f4765-a804-cb50-bbb5-475925ba2036@milecki.pl>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/hdJQg1IQYyF/k9OIEDMBcV+";
+Content-Type: multipart/signed; boundary="Sig_/I9PXC9.HQfrFk_d/f=ErhCk";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
@@ -53,84 +55,84 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/hdJQg1IQYyF/k9OIEDMBcV+
-Content-Type: text/plain; charset=US-ASCII
+--Sig_/I9PXC9.HQfrFk_d/f=ErhCk
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the thermal tree got a conflict in:
+On Mon, 25 Jul 2022 12:33:48 +0200 Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.p=
+l> wrote:
+>
+> On 25.07.2022 01:59, Stephen Rothwell wrote:
+> > After merging the broadcom tree, today's linux-next build (arm
+> > multi_v7_defconfig) produced these warnings:
+> >=20
+> > arch/arm/boot/dts/bcm5301x.dtsi:240.21-246.5: Warning (pci_bridge): /ax=
+i@18000000/pcie@12000: missing ranges for PCI bridge (or not a bridge)
+> > arch/arm/boot/dts/bcm5301x.dtsi:248.21-254.5: Warning (pci_bridge): /ax=
+i@18000000/pcie@13000: missing ranges for PCI bridge (or not a bridge)
+> > arch/arm/boot/dts/bcm5301x.dtsi:256.21-262.5: Warning (pci_bridge): /ax=
+i@18000000/pcie@14000: missing ranges for PCI bridge (or not a bridge) =20
+>=20
+> This is expected. My commit ef126d3f58d25 ("ARM: dts: BCM5301X: Add
+> basic PCI controller properties") reduced following warnings:
+>=20
+> arch/arm/boot/dts/bcm47081-buffalo-wzr-600dhp2.dtb: pcie@12000: 'device_t=
+ype' is a required property
+>          From schema: /lib/python3.9/site-packages/dtschema/schemas/pci/p=
+ci-bus.yaml
+> arch/arm/boot/dts/bcm47081-buffalo-wzr-600dhp2.dtb: pcie@12000: 'ranges' =
+is a required property
+>          From schema: /lib/python3.9/site-packages/dtschema/schemas/pci/p=
+ci-bus.yaml
+> arch/arm/boot/dts/bcm47081-buffalo-wzr-600dhp2.dtb: pcie@12000: '#address=
+-cells' is a required property
+>          From schema: /lib/python3.9/site-packages/dtschema/schemas/pci/p=
+ci-bus.yaml
+> arch/arm/boot/dts/bcm47081-buffalo-wzr-600dhp2.dtb: pcie@12000: '#size-ce=
+lls' is a required property
+>          From schema: /lib/python3.9/site-packages/dtschema/schemas/pci/p=
+ci-bus.yaml
+>=20
+>=20
+> down to this one:
+>=20
+> arch/arm/boot/dts/bcm47081-buffalo-wzr-600dhp2.dtb: pcie@12000: 'ranges' =
+is a required property
+>          From schema: /lib/python3.9/site-packages/dtschema/schemas/pci/p=
+ci-bus.yaml
+>=20
+>=20
+> and basically does the right thing (adds required properties).
+>=20
+>=20
+> I'm fully aware "ranges" need to be added (it's mentioned in the commit)
+> and it's one of next things on my BCM5301X list.
+>=20
+> So while my commits triggers that problem it also reduces warnings so
+> I'd say it's acceptable.
 
-  drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
-
-between commits:
-
-  03978fb88b06 ("mlxsw: core_thermal: Use common define for thermal zone na=
-me length")
-  ef0df4fa324a ("mlxsw: core_thermal: Extend internal structures to support=
- multi thermal areas")
-
-from Linus' tree and commit:
-
-  9b5e2c897cd1 ("Revert "mlxsw: core: Add the hottest thermal zone detectio=
-n"")
-
-from the thermal tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+So, is something being done about these introduced warnings?
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
-index 3548fe1df7c8,373a77c3da02..000000000000
---- a/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
-+++ b/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
-@@@ -21,7 -21,7 +21,6 @@@
-  #define MLXSW_THERMAL_ASIC_TEMP_HOT	105000	/* 105C */
-  #define MLXSW_THERMAL_HYSTERESIS_TEMP	5000	/* 5C */
-  #define MLXSW_THERMAL_MODULE_TEMP_SHIFT	(MLXSW_THERMAL_HYSTERESIS_TEMP * =
-2)
-- #define MLXSW_THERMAL_TEMP_SCORE_MAX	GENMASK(31, 0)
- -#define MLXSW_THERMAL_ZONE_MAX_NAME	16
-  #define MLXSW_THERMAL_MAX_STATE	10
-  #define MLXSW_THERMAL_MIN_STATE	2
-  #define MLXSW_THERMAL_MAX_DUTY	255
-@@@ -101,9 -91,10 +100,7 @@@ struct mlxsw_thermal=20
-  	struct thermal_cooling_device *cdevs[MLXSW_MFCR_PWMS_MAX];
-  	u8 cooling_levels[MLXSW_THERMAL_MAX_STATE + 1];
-  	struct mlxsw_thermal_trip trips[MLXSW_THERMAL_NUM_TRIPS];
-- 	unsigned int tz_highest_score;
-- 	struct thermal_zone_device *tz_highest_dev;
- -	struct mlxsw_thermal_module *tz_module_arr;
- -	u8 tz_module_num;
- -	struct mlxsw_thermal_module *tz_gearbox_arr;
- -	u8 tz_gearbox_num;
- +	struct mlxsw_thermal_area line_cards[];
-  };
- =20
-  static inline u8 mlxsw_state_to_duty(int state)
-
---Sig_/hdJQg1IQYyF/k9OIEDMBcV+
+--Sig_/I9PXC9.HQfrFk_d/f=ErhCk
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmL5g04ACgkQAVBC80lX
-0GxpFAf+NqVTf19Fn5sYyjTwNW+xOEScAjKqShJWwX6kBuvmXCpk6TcV5dIdKFmQ
-KKB6TFmi+4ixDPmbodu9jo3pzyJ5YsxbKmZPuYD5pz0D3ygy50UJXipTW+UwzXs0
-FsD0mWmruIWlcpKM1cfRtnQAQ2B9KVO9pKSSh50VfYeC//4W8lULVEsXcaQo0Kxh
-8qcFCWt2uwvsqFEbQmE3T9qSd0eVwwnCcSm1aeeQeSVyplmT+O2BSvnJ0YHZGrl4
-VbIJpbOrL4bXmW9yOfgdw1AzkG4LTWdXmzd8Y+N9+TcEg3iC/PvHCOnrBtwh7KeX
-ugu5rG7fS/9bUbT+Ch8YM6kd2o2K/Q==
-=g7L7
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmL5mTsACgkQAVBC80lX
+0GywBgf/V3IfTKQEZs5t4RTle/SwJMMD9WOIndkxZlv9ZXJvInL96WgTmF6Mb8h0
+WXQoXjDb9BkEvvCywjvHH4E75XQ/R7Gd0hfxSdEwBM7SKgCU0bKOejTbZ3C1vv45
+TuKcChEUQt8LXCYZnHcsvZFB0Cfa/SINTFuh80b/vKAFO1QsrLE1RDLX8rL7Ibow
+t1pG/kgvzszb5QbmCeo1hqPEjACBO89MiqJXmBGPrl+GgtUoyJ9rSUozFJWAqMbE
+G6c88btYZgHbxMfr4ApEI5DqRkdF3NM17pI/mbC+sFistBldrtJFwTJCBY0bsk1a
+DT9ux2NalDxYnmUTUB7C50Jeq6EiXQ==
+=lRWN
 -----END PGP SIGNATURE-----
 
---Sig_/hdJQg1IQYyF/k9OIEDMBcV+--
+--Sig_/I9PXC9.HQfrFk_d/f=ErhCk--

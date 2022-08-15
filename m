@@ -2,179 +2,85 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA0D15927E1
-	for <lists+linux-next@lfdr.de>; Mon, 15 Aug 2022 04:50:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 283A2592C8F
+	for <lists+linux-next@lfdr.de>; Mon, 15 Aug 2022 12:52:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232927AbiHOCuY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 14 Aug 2022 22:50:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40758 "EHLO
+        id S241742AbiHOJWX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 15 Aug 2022 05:22:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232915AbiHOCuX (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 14 Aug 2022 22:50:23 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FB62B60;
-        Sun, 14 Aug 2022 19:50:22 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4M5f0D3yr7z4x1V;
-        Mon, 15 Aug 2022 12:50:20 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1660531820;
-        bh=vOhiXzqBfOmR7g4Mf/Cu4wIfgONUWNBZryBJGgBbSTQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Xke5Y+Y6RI+UBEBI4MYEZfmJwjqS6nu+8FbF0t6sFX8OVvd3xFGzOPJkrVR39J9nb
-         gn5TZg/jV/9SfRIySgODLHYQXhLZp/WWGAEbMzmIS+nux4NobykkYTtUtD6MB9a21y
-         hAeCInPdn0CyRfrfiC/Npyo7WzXHdiF4Xd0nsial+tlDpBcop5Kyq93gA2OlfQBHPX
-         qbcQqAZ43g6rneu+0vXS9LBZR7SolykwuC0mTuSrLnNb0WkwNnB7ETxYpw9G7o0YbV
-         lISR2VqsIhQeENsopSZSUjb2ELT+NXG3CfrYFynmxEPWXnn2jbVakrb5+ZOsPCwlzl
-         gU8n6mBRO1mBg==
-Date:   Mon, 15 Aug 2022 12:50:19 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: stats (Was: Linux 6.0-rc1)
-Message-ID: <20220815125019.4a307a44@canb.auug.org.au>
-In-Reply-To: <CAHk-=wgRFjPHV-Y_eKP9wQMLFDgG+dEUHiv5wC17OQHsG5z7BA@mail.gmail.com>
-References: <CAHk-=wgRFjPHV-Y_eKP9wQMLFDgG+dEUHiv5wC17OQHsG5z7BA@mail.gmail.com>
+        with ESMTP id S241986AbiHOJWA (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 15 Aug 2022 05:22:00 -0400
+Received: from a8-35.smtp-out.amazonses.com (a8-35.smtp-out.amazonses.com [54.240.8.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C873C2A7;
+        Mon, 15 Aug 2022 02:21:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=r5f3hr7pzmhv6xwu5spgpns3mj2fddpz; d=linaro.org; t=1660555316;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+        bh=xFqraFA6lGmUu0wYMye/OBvTkGaFcGmFu9hbEp/wo44=;
+        b=Gncdjke6xFirgu+vxM5ciR105bzITV0i01UzWOa2vTwjMiLSAVIlpd8alPGE0mH+
+        LswfP8SJWiXEcIhL9Y+nzrQ8P7dL8dVVyxKevnusDHUNGejDzJhLeTNTRHeDCMzUTZi
+        zF+NpaP8CFnKCGLBWmwV1YNlt2zWk4Fl3ADyKu90=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=6gbrjpgwjskckoa6a5zn6fwqkn67xbtw; d=amazonses.com; t=1660555316;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+        bh=xFqraFA6lGmUu0wYMye/OBvTkGaFcGmFu9hbEp/wo44=;
+        b=Uvfz+oldhTD9PkJn3Bxry/aRBMLXlfO7xVy6WeqxQOq0b8F0vKPJB0nCDGLqFsIj
+        WLB0jx4OWxBFzT9Bwkq4yVIORLPxWuKVGAdUGImP3MxQEKkTcy+Yl9SWv9E6hAxeSbz
+        jwkvA1bhzEgvAcrnTzFx1yVurBQBcF51i6l6TWAo=
+From:   lkft@linaro.org
+To:     lkft@linaro.org
+Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        linux-next@vger.kernel.org, shuah@kernel.org
+Subject: lkft kselftest for next-20220815
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/NcWLchgtKMbD_x4vPVLwaah";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Message-ID: <01000182a0cf4b92-f1608483-7e1c-4b32-93c9-5c1dfe12c9c2-000000@email.amazonses.com>
+Date:   Mon, 15 Aug 2022 09:21:56 +0000
+Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
+X-SES-Outgoing: 2022.08.15-54.240.8.35
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        TO_EQ_FM_DIRECT_MX,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/NcWLchgtKMbD_x4vPVLwaah
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+## Build
+* kernel: 5.19.0
+* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+* git branch: master
+* git commit: fa96acf505e0e5f4774e273d97cee65fffcf53e6
+* git describe: next-20220815
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220815
 
-Hi all,
+## Test Regressions (compared to next-20220812)
+No test regressions found.
 
-As usual, the executive friendly graph is at
-http://neuling.org/linux-next-size.html :-)
+## Metric Regressions (compared to next-20220812)
+No metric regressions found.
 
-(No merge commits counted, next-20220802 was the first linux-next after
-the merge window opened.)
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Commits in v6.0-rc1 (relative to v5.19):           13543
-Commits in next-20220802:                          13109
-Commits with the same SHA1:                        12468
-Commits with the same patch_id:                      309 (1)
-Commits with the same subject line:                   12 (1)
 
-(1) not counting those in the lines above.
+## Test Fixes (compared to next-20220812)
+No test fixes found.
 
-So commits in -rc1 that were in next-20220802:     12789 94%
+## Metric Fixes (compared to next-20220812)
+No metric fixes found.
 
-Some breakdown of the list of extra commits (relative to next-20220802)
-in -rc1:
+## Test result summary
+total: 0, pass: 0, fail: 0, skip: 0, xfail: 0
 
-Top ten first word of commit summary:
+## Build Summary
 
-     95 perf
-     33 dt-bindings
-     30 tools
-     25 net
-     24 kvm
-     23 virtio_ring
-     19 riscv
-     19 cxl
-     19 ceph
-     18 bpf
+## Test suites summary
 
-Top ten authors:
-
-     43 xuanzhuo@linux.alibaba.com
-     25 irogers@google.com
-     17 krzysztof.kozlowski@linaro.org
-     15 conor.dooley@microchip.com
-     14 leo.yan@linaro.org
-     13 xiubli@redhat.com
-     13 dan.j.williams@intel.com
-     11 zhengjun.xing@linux.intel.com
-     11 namhyung@kernel.org
-     10 snitzer@kernel.org
-
-Top ten commiters:
-
-    107 acme@redhat.com
-     78 mst@redhat.com
-     58 kuba@kernel.org
-     43 palmer@rivosinc.com
-     26 pbonzini@redhat.com
-     24 idryomov@gmail.com
-     20 dan.j.williams@intel.com
-     18 ast@kernel.org
-     17 tiwai@suse.de
-     17 len.brown@intel.com
-
-There are also 320 commits in next-20220802 that didn't make it into
-v6.0-rc1.
-
-Top ten first word of commit summary:
-
-     29 tools
-     27 thermal
-     22 arm
-     20 mm
-     20 fs
-     15 arm64
-     14 soc
-     13 dt-bindings
-     10 rust
-      9 btrfs
-
-Top ten authors:
-
-     29 paulmck@kernel.org
-     19 ojeda@kernel.org
-     18 zokeefe@google.com
-     11 marex@denx.de
-     10 daniel.lezcano@linexp.org
-      8 windhl@126.com
-      8 wedsonaf@google.com
-      7 iangelak@fb.com
-      7 daniel.lezcano@linaro.org
-      7 broonie@kernel.org
-
-Top ten commiters:
-
-     43 daniel.lezcano@linaro.org
-     32 ojeda@kernel.org
-     32 akpm@linux-foundation.org
-     29 paulmck@kernel.org
-     18 almaz.alexandrovich@paragon-software.com
-     13 geert+renesas@glider.be
-     12 alexandre.torgue@foss.st.com
-     11 broonie@kernel.org
-      9 srinivas.kandagatla@linaro.org
-      8 treding@nvidia.com
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/NcWLchgtKMbD_x4vPVLwaah
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmL5tGsACgkQAVBC80lX
-0GzjBgf9FRWLsdV1UJC8mmH1HsQ0bVjozA+2L1wB/f8qDJa1hEJFlLE3Lf6dDXGF
-rkvjKnqNs01d0YW6PsRLM1WHUAhV4hsUYIjuwzpcNdS4Qx+XRXYGDzIgUpxILe5N
-b3YYJCzgIumWi6NchmGKyxaaPcyxF9NUcroIcu9gmU3LAgyTa01FO/ORhBGuf4hm
-MVHkQD+Kk7TsIR1mclYgluL36tsOiD+O+ic0kKNgjdsVTWNGkw9cigw8gH6Y8PDM
-V4QDVcLMV0PvPEjffX3EDkNtnFnjJj5jumfGJIeZhyXM7MCCNJHAW/YKoDwbzXIe
-FHfIB7GY7nTtIb5PYbMeWI2Wm4iNZQ==
-=/Jyo
------END PGP SIGNATURE-----
-
---Sig_/NcWLchgtKMbD_x4vPVLwaah--
+--
+Linaro LKFT
+https://lkft.linaro.org

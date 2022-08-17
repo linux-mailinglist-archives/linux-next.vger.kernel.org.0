@@ -2,58 +2,62 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F98F59671C
-	for <lists+linux-next@lfdr.de>; Wed, 17 Aug 2022 04:01:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A626596727
+	for <lists+linux-next@lfdr.de>; Wed, 17 Aug 2022 04:04:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237039AbiHQCBC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 16 Aug 2022 22:01:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34638 "EHLO
+        id S238423AbiHQCDF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 16 Aug 2022 22:03:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232908AbiHQCBC (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 16 Aug 2022 22:01:02 -0400
-Received: from gimli.rothwell.id.au (gimli.rothwell.id.au [103.230.158.156])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F1637822A;
-        Tue, 16 Aug 2022 19:01:00 -0700 (PDT)
-Received: from authenticated.rothwell.id.au (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.rothwell.id.au (Postfix) with ESMTPSA id 4M6rpD6n0HzyZr;
-        Wed, 17 Aug 2022 12:00:52 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rothwell.id.au;
-        s=201702; t=1660701655;
-        bh=dtW8+2kRTTd1rXIAqfFHietP1JcPVL/dXFAV5Z7/924=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=B3gicvIbPhiksqYFbDzbrusCOR+IfJfi01CCVe2eHg+IpqhRZTc7FfsNrrGwzN+ny
-         zizJAeprJ2hMEi0W4b49akWqiUKlhYT3ySc8mUoZj+LEGuxbelkebrreTAtCljksnt
-         VKNSAhGz5ERwPWm5vbbAEUtoPW+CNhIlPZVr9MuBgtF5Rg7I1gIBa0C8Fxhh1279aA
-         vSsoUsAFbV+T9f3+3gZdtvMgQD/GFgfjV8iQ9Y9urIHBlkMEVZ/jnWgcZja+/aIo58
-         yEhxinFYBcoIxIWEAo6E4gEQUHhfx9vNRmwelGAJlyqnWD5QzbOOiwppYM/cypbtbM
-         GkpPulwQSjMTg==
-Date:   Wed, 17 Aug 2022 12:00:51 +1000
-From:   Stephen Rothwell <sfr@rothwell.id.au>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, regressions@lists.linux.dev,
-        lkft-triage@lists.linaro.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <christian.brauner@ubuntu.com>
-Subject: Re: [next] arm64: kernel BUG at fs/inode.c:622 - Internal error:
- Oops - BUG: 0 - pc : clear_inode
-Message-ID: <20220817120051.20a39b52@oak.ozlabs.ibm.com>
-In-Reply-To: <CA+G9fYuLvTmVbyEpU3vrw58QaWfN=Eg8VdrdRei_jmu2Y2OzOg@mail.gmail.com>
-References: <CA+G9fYv2Wof_Z4j8wGYapzngei_NjtnGUomb7y34h4VDjrQDBA@mail.gmail.com>
-        <CAHk-=wj=u9+0kitx6Z=efRDrGVu_OSUieenyK4ih=TFjZdyMYQ@mail.gmail.com>
-        <CA+G9fYuLvTmVbyEpU3vrw58QaWfN=Eg8VdrdRei_jmu2Y2OzOg@mail.gmail.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; aarch64-unknown-linux-gnu)
+        with ESMTP id S237900AbiHQCDD (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 16 Aug 2022 22:03:03 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE16485FEE
+        for <linux-next@vger.kernel.org>; Tue, 16 Aug 2022 19:03:02 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id v10so12256064ljh.9
+        for <linux-next@vger.kernel.org>; Tue, 16 Aug 2022 19:03:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc;
+        bh=zwISn8wdVLRMx4eihcM5TNekfJsbrZ4Xl+DqPJtSy8k=;
+        b=Vd3kZ5LQY/tHUqKhqhU7/fREASLyr52RwxpGX337OriC6pyeobuTc26YajBPzaXrQ0
+         O637ft9b4CZW/CPcB8eEKyEoo+3Xb1cJuDiZM22fgR9G0LDoYr0i788azWghtaGQ2RFM
+         oqZrxuMt8kWFKedPsQHPZBYLPGOsV8/6GJFZiZIuGr0Knh3IhLRncL8rCTyLg2MeEzAj
+         L4H2IWwWIXvhCA8BUDE5hbMmPiRL8vXl7Yf9pbz6nKgrV0ZA9yOTgYw02agGUD9IAqpm
+         4bqnXub5r4LABufcHI1njfSo1cfOubj47Em38VgikRS8dZAHMspB3tt04vRpV8Ji6JKV
+         448A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=zwISn8wdVLRMx4eihcM5TNekfJsbrZ4Xl+DqPJtSy8k=;
+        b=1tDjBh04epyp2vxUFh9AY45bG2NiA0AJQC167Dux9+c5GMlTKebfhtGoCTc14dJygM
+         isKwMfm+P+q5RdDzgaheqSByf2QJTfkmY44hLJVOm/dhxYDMUkdaVBSfgzG7GEjA1a50
+         n1YtI+bEohPGl9+ixYOHV2M2tq93MOMIdJazivhX7aXPr3ae3KGPPGjz5mKRAo6oLeAU
+         60nezldKwKExjMhtz/IPpXGNQ52opEoJ+V4YZgo6+oPJ7VPR+a41L2b4pBVGo4a6oURY
+         K3lMCILHBnu/0AkUeJayhxos/xFkucFUnyzy7zbKW7a9AL6jNz+3v4GajqPR81UGf0nm
+         qanw==
+X-Gm-Message-State: ACgBeo2YXxFYtdfDhTBQcRhaCaOK/uIYHxl7xgD2LpXpJYOcJTnz4Jmc
+        aN50YzpjujQyM7hoR0R0rOJdlMfSFG9RWZYeWn0=
+X-Google-Smtp-Source: AA6agR6zFzmCrxnEqD2w+UWVrITUVzOYS4hi3aH6ioV6AgSO4c9wfd/k77DCkH61CXXYcVPpl/s5ZQ0XTDiIEu07ZIg=
+X-Received: by 2002:a2e:8090:0:b0:25e:5916:ddf4 with SMTP id
+ i16-20020a2e8090000000b0025e5916ddf4mr6831295ljg.11.1660701781053; Tue, 16
+ Aug 2022 19:03:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/p7uJ_iQfq=MtmPXdTyKBMw9";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+Sender: sgtkaylmanthey612@gmail.com
+Received: by 2002:aa6:da8c:0:b0:1fa:b1fc:86c4 with HTTP; Tue, 16 Aug 2022
+ 19:03:00 -0700 (PDT)
+From:   Kayla Manthey <sgtkaylamanthey612@gmail.com>
+Date:   Wed, 17 Aug 2022 02:03:00 +0000
+X-Google-Sender-Auth: HH_PSQbVSO0tz_Ij7Rfifs0s0U4
+Message-ID: <CALwsdYFG7Hmnb2w8o9G8_bt=QdNxWxK8Mt=Xm+jUzaDdEKohJw@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,79 +65,6 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/p7uJ_iQfq=MtmPXdTyKBMw9
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi Naresh,
-
-On Wed, 17 Aug 2022 01:09:40 +0530 Naresh Kamboju <naresh.kamboju@linaro.or=
-g> wrote:
->
-> On Wed, 17 Aug 2022 at 00:40, Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
-> >
-> > On Tue, Aug 16, 2022 at 12:00 PM Naresh Kamboju
-> > <naresh.kamboju@linaro.org> wrote: =20
-> > >
-> > > Following kernel BUG found while booting arm64 Qcom dragonboard 410c =
-with
-> > > Linux next-20220816 kernel Image. =20
-> >
-> > What kind of environment is this?
-> >
-> > Havign that inode list corruption makes it smell a *bit* like the
-> > crazy memory corruption that we saw with the google cloud instances,
-> > but that would only happen wif you actually use VIRTIO for your
-> > environment? =20
->=20
-> This is a physical hardware db410c device.
-> Following VIRTIO configs enabled.
->=20
-> CONFIG_BLK_MQ_VIRTIO=3Dy
-> CONFIG_NET_9P_VIRTIO=3Dy
-> CONFIG_VIRTIO_BLK=3Dy
-> CONFIG_SCSI_VIRTIO=3Dy
-> CONFIG_VIRTIO_NET=3Dy
-> CONFIG_VIRTIO_CONSOLE=3Dy
-> CONFIG_VIRTIO_ANCHOR=3Dy
-> CONFIG_VIRTIO=3Dy
-> CONFIG_VIRTIO_PCI_LIB=3Dy
-> CONFIG_VIRTIO_PCI_LIB_LEGACY=3Dy
-> CONFIG_VIRTIO_MENU=3Dy
-> CONFIG_VIRTIO_PCI=3Dy
-> CONFIG_VIRTIO_PCI_LEGACY=3Dy
-> CONFIG_VIRTIO_BALLOON=3Dy
-> CONFIG_VIRTIO_MMIO=3Dy
-> CONFIG_CRYPTO_DEV_VIRTIO=3Dy
->=20
->=20
-> >
-> > Do you see the same issue with plain v6.0-rc1? =20
->=20
-> Nope. I do not notice reported BUG on v6.0-rc1.
-
-Is it reliable enough that you could possibly do a bisection between
-v6.0-rc1 and next-20220816?
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/p7uJ_iQfq=MtmPXdTyKBMw9
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmL8S9MACgkQAVBC80lX
-0GzZAQf7Bsp+3irXdvFTPbeYTsFim8hgA9o1L4+3TfIVF5sd1bGcCdpcN20fck2P
-7viuEA5w5CXL1S2W6wzMmgKu7TwkhXHvbAGgPIGACHtGaCRjZXdix+sxlO/qX+ly
-HdhuvbqFkRW2ed+fj09Ww4KJgGP8/l0zwFemnBOrqao+cwIuNfKsQdbGVyzM43hr
-5PttxYZwGZvHar5BjSCqUM2MJ93i5s6frfJkreYg20gWCGaDOx3eZ468gSGPNw4t
-e6G/sdlX8e2aB0hhOuF4Fjn09vp5paWMelkEjEPbBlsgRsV04PmvNjEg0nKn8haJ
-0Ymh4ddoHGM2pz1ODoXplzCO8ap7uQ==
-=q9S1
------END PGP SIGNATURE-----
-
---Sig_/p7uJ_iQfq=MtmPXdTyKBMw9--
+Hi, how are you? I hope you're OK. I'm still looking forward to
+hearing from you in regards to my previous emails, please check and
+reply me.

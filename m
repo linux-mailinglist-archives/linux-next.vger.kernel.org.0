@@ -2,64 +2,69 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F82F598CA6
-	for <lists+linux-next@lfdr.de>; Thu, 18 Aug 2022 21:36:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ACA5598E61
+	for <lists+linux-next@lfdr.de>; Thu, 18 Aug 2022 22:57:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239359AbiHRTey (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 18 Aug 2022 15:34:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44458 "EHLO
+        id S245165AbiHRU4N (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 18 Aug 2022 16:56:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230500AbiHRTex (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 18 Aug 2022 15:34:53 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE229CE47B;
-        Thu, 18 Aug 2022 12:34:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=eQTG/989/DAu6Exi05B4ixu+5J4EP6ThaWhb/xNoy+s=; b=Xf4Ah/68SvKJXBUh3t+EzcI/kl
-        p0SaEWsgfgYL4IeuEygr6avs8qZMXojf5td0sD+sqXd0PjU+5Wp324p1dQEG59JiMaCV9jYqBhk5x
-        tKdsy7i29Vixdm2oe2vuctWNtujThsTu4TcEuoKxdAsLtNPQWe9Am+KylYFNWVErk+6SQDxXi/tVh
-        3DIsSAN1x/v2RipIg5LRRH8Gm/03DpxvzJdT/t43hmlUaAkWMHAoJXkSubNqBPtTO+oma6YUAcVYV
-        UwV4JGX7IyuLLckngrOo5vh/XVkh+vQM0X3RlMSfUJme6tsYaWWTWkhhUCHQMYni9V/kAPNvzJo/8
-        vHEtPcxQ==;
-Received: from [2601:1c0:6280:3f0::a6b3]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oOlHz-008gDy-TP; Thu, 18 Aug 2022 19:34:48 +0000
-Message-ID: <df284479-9981-9983-7775-81d7d7875dac@infradead.org>
-Date:   Thu, 18 Aug 2022 12:34:46 -0700
+        with ESMTP id S1345644AbiHRU4M (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 18 Aug 2022 16:56:12 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59BD4D023F
+        for <linux-next@vger.kernel.org>; Thu, 18 Aug 2022 13:56:11 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id dc19so5374988ejb.12
+        for <linux-next@vger.kernel.org>; Thu, 18 Aug 2022 13:56:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=5AqMTUOafuor9bD+L7lV88ZEJ/jKLotcwTHvR2YIZ54=;
+        b=d6rI5yBNn0HKXzLQQzJICy5/Ucwg1kVprijxc1ueN4xCG6rnpFDv2sJw4c9gn0pFb/
+         oxK8vBM1d9KVBz3PmQobsROfOdNSb8ttqmJAF6coEGldZZ3YWfYgH8ajrUfSFLcf49sq
+         5rXnDKt5muPjVmilXrq2WH8beyBFahPcNQUAi3eotyAiK69lQ3apFPLDgF+YadMzikP2
+         J+8rQOuh3NuH8tqcivIj0DpVByKsZqLZ8G4bMeS1Rg5F/YFgJVLRhRqXCYHUgsLDvjHs
+         dVGgifndGmF8hE7VnXfgNV4jRVZI1iGTkr2KV3iYNzWi1qtHmPzxHJ2awfJHqEKNHGTo
+         yE1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=5AqMTUOafuor9bD+L7lV88ZEJ/jKLotcwTHvR2YIZ54=;
+        b=BgHa+DtF1u690DaTTcwo1+bMlqqKDY5ihS9JHtowzxgy2LpjLEVdBw0gudYW9HILgo
+         UnEd3WyDx8uOKw4xXGYu0gEGROzjPJVPUX6OGP8Q70IrvfBcvA5XZUg8ncB5AwMJyNka
+         CtfgvaRT6oJTCwY5NyL64xHhj+dJk/yUos7Q+zotd9EbYe99uSkisyAZ2mjWQ51HrfrD
+         4pPhZOMkyF1OyiFPW1vZNvzbbukstg9/qaZ48JVAMo3+Z0rcUloyN8Tmcni8A7loDwNZ
+         wCK2S4rdLLROhrdgP4qhKPoIbnnPvBarybjDfh8aGv3Da8lktJ2sgxxxrfutiUnwE63A
+         cjLA==
+X-Gm-Message-State: ACgBeo2jHqrcidAQWq9kz9n1fQ3S7YmE5iadMEEEh3i5QsB3bAEwCoHA
+        f4521+T6ml3hNWEgPMECTDUF2E8YDgtKswQjKaZQ5Q==
+X-Google-Smtp-Source: AA6agR58/DAV1ANOlNLb25KqUSUGUGVdB5p/Jno2SsFbpj6puinYHLXnUxIYqTgyMu+ZChTf2K2ZM7EwYIdqRIxmDSI=
+X-Received: by 2002:a17:906:58c8:b0:6fe:91d5:18d2 with SMTP id
+ e8-20020a17090658c800b006fe91d518d2mr3031706ejs.190.1660856169872; Thu, 18
+ Aug 2022 13:56:09 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: build failure of next-20220817 for amdgpu due to 7bc913085765
- ("drm/amdkfd: Try to schedule bottom half on same core")
-Content-Language: en-US
-To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>
-Cc:     Alex Deucher <alexdeucher@gmail.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        linux-next <linux-next@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        amd-gfx mailing list <amd-gfx@lists.freedesktop.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <Yv1lepjhg/6QKyQl@debian>
- <CADnq5_Od9W1iuzYpsmODOB=Xem97ogeH_t0JrjWC-S8h0XM9fA@mail.gmail.com>
- <5638aaf1-b808-bdc6-d84a-820f24facea6@infradead.org>
- <CADVatmNA6-qCJEHNn-gRO6Nx88SsTrPsJn_F5J0NiFhyvijNxA@mail.gmail.com>
- <c1869a4b-ead1-2ae5-c9ec-61834b578216@infradead.org>
- <CADVatmPCd5KQ0mAfQGHvqVGFJtK+fyQPB4XUktgfc3fzYJvyCg@mail.gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <CADVatmPCd5KQ0mAfQGHvqVGFJtK+fyQPB4XUktgfc3fzYJvyCg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <Yv4hhoTTcRuk/2Kl@debian>
+In-Reply-To: <Yv4hhoTTcRuk/2Kl@debian>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 18 Aug 2022 22:55:58 +0200
+Message-ID: <CACRpkda1-FBa5Pg1WxaPYGYgaYWz-nEAiN01twouJ4AeKpnMWQ@mail.gmail.com>
+Subject: Re: build failure of next-20220818 due to 81c0386c1376 ("regmap:
+ mmio: Support accelerared noinc operations")
+To:     "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        linux-alpha@vger.kernel.org,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,80 +72,14 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi--
+On Thu, Aug 18, 2022 at 1:24 PM Sudip Mukherjee (Codethink)
+<sudipm.mukherjee@gmail.com> wrote:
 
-On 8/18/22 12:15, Sudip Mukherjee wrote:
-> On Thu, Aug 18, 2022 at 4:10 PM Randy Dunlap <rdunlap@infradead.org> wrote:
->>
->>
->>
->> On 8/18/22 03:43, Sudip Mukherjee wrote:
->>> On Thu, Aug 18, 2022 at 3:09 AM Randy Dunlap <rdunlap@infradead.org> wrote:
->>>>
->>>>
->>>>
->>>> On 8/17/22 19:01, Alex Deucher wrote:
->>>>> On Wed, Aug 17, 2022 at 6:03 PM Sudip Mukherjee (Codethink)
->>>>> <sudipm.mukherjee@gmail.com> wrote:
->>>>>>
->>>>>> Hi All,
->>>>>>
->>>>>> Not sure if it has been reported, build of next-20220817 fails with the
->>>>>> error:
->>>>>>
->>>>>> ERROR: modpost: "cpu_smallcore_map" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
->>>>>>
->>>>>> Trying to do a git bisect to find out the offending commit.
->>>>>>
->>>>>
->>>>> Thanks.  I don't see that symbol in the driver at all.  Not sure where
->>>>> it is coming from.
->>>>>
->>>>
->>>> It's powerpc only.
->>>>
->>>> Sudip, is it non-CONFIG_SMP by any chance?
->>>
->>> Ohhh.. really sorry for the incomplete report. I should not try to
->>> mail while travelling.
->>>
->>> The error is seen with powerpc allmodconfig and it has CONFIG_SMP=y.
->>
->> OK, I see that also, but it doesn't make any sense (to me).
->>
->> I did 'objdump' on the code file (amdgpu.o) and it's listed as
->> undefined but there are no code references to it.
-> 
-> cpu_smt_mask() is called by drivers/gpu/drm/amd/amdkfd/kfd_device.c.
-> and cpu_smt_mask() is an inline function in
-> arch/powerpc/include/asm/smp.h which is doing "return
-> per_cpu(cpu_smallcore_map, cpu);"
-> 
-> So, the offending commit is 7bc913085765 ("drm/amdkfd: Try to schedule
-> bottom half on same core").
+> Not sure if it has been reported, builds of alpha allmodconfig have
+> failed to build next-20220818 with the error:
 
-Thanks for digging that up.
+Patch has been sent already:
+https://lore.kernel.org/linux-arch/CAK8P3a1x52F8Ya3ShQ+v6x_jANfUsEq0E55u+pOBNaYniRO7cA@mail.gmail.com/T/#t
 
-It just needs to have that symbol exported I think.
-This builds cleanly now.
-I can submit it or one of the AMD gfx developers can do so.
-
-
----
- arch/powerpc/kernel/smp.c |    1 +
- 1 file changed, 1 insertion(+)
-
---- a/arch/powerpc/kernel/smp.c
-+++ b/arch/powerpc/kernel/smp.c
-@@ -86,6 +86,7 @@ DEFINE_PER_CPU(cpumask_var_t, cpu_core_m
- static DEFINE_PER_CPU(cpumask_var_t, cpu_coregroup_map);
- 
- EXPORT_PER_CPU_SYMBOL(cpu_sibling_map);
-+EXPORT_PER_CPU_SYMBOL(cpu_smallcore_map);
- EXPORT_PER_CPU_SYMBOL(cpu_l2_cache_map);
- EXPORT_PER_CPU_SYMBOL(cpu_core_map);
- EXPORT_SYMBOL_GPL(has_big_cores);
-
-
--- 
-~Randy
+Yours,
+Linus Walleij

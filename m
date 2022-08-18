@@ -2,99 +2,96 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55997597B34
-	for <lists+linux-next@lfdr.de>; Thu, 18 Aug 2022 03:54:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1703597B4A
+	for <lists+linux-next@lfdr.de>; Thu, 18 Aug 2022 04:06:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239291AbiHRBxl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 17 Aug 2022 21:53:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59678 "EHLO
+        id S242370AbiHRCB7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 17 Aug 2022 22:01:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234003AbiHRBxk (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 17 Aug 2022 21:53:40 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 082D0DFBA;
-        Wed, 17 Aug 2022 18:53:37 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4M7SbH5Y6hz4x1d;
-        Thu, 18 Aug 2022 11:53:31 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1660787612;
-        bh=WCDa6lDwZpaaukzC/fCvtuvGLQ5zzB7/SPUXlj6aLLY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=NWDxSxU6qwo3rh8jFIg9+/naoTb69OY+Q0cLikz4qbnH+hnVt6a0wYGKbiFVlgEAb
-         RtFrtUNxFX6lbat19d2UF2gD++2TrdI8TE4i63ZfK431L6LISpDrTf5KymcdPcMyJD
-         JcL5nN3NqoplBihEIv6Uokp4SORhuFxobiqYfHapx9dVahIigGAlbYzC0i4Ap4wQSg
-         TQAoYHRLiKEaB3ZuHuGuwJQupKp8CB1lDy+gQ7mMs0C+JvRJ/NYB055WXG2k00nR9p
-         iXWX1IljY9R/X6S26WzN9rz4q6ucvKq5adZSWz59xNExnR6kgVwKQhV7rPwPYbQyWQ
-         Mz/rvMWRfqyTw==
-Date:   Thu, 18 Aug 2022 11:53:26 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Georgi Djakov <djakov@kernel.org>
-Cc:     Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the icc tree
-Message-ID: <20220818115326.407aa3e0@canb.auug.org.au>
+        with ESMTP id S236002AbiHRCB6 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 17 Aug 2022 22:01:58 -0400
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 133CFA5C7A;
+        Wed, 17 Aug 2022 19:01:58 -0700 (PDT)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-11c5ee9bf43so320236fac.5;
+        Wed, 17 Aug 2022 19:01:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=S/5XKfr/1Laii/jvtSToZop43NduFSge4r6M3yzcyjw=;
+        b=b6NrriDxkguKdMxIx5EHPF92Ex0lVfeC4m9fKjxD5xVtw7GaFu8tLhqFfiHzAZcMd3
+         YF0WmvOmWuC7l5BY5QkUp0bR6r0xoJD93h+rLZnYrlvP1RNzzVDH3TV6wgC8DBXxRzzI
+         iUchu8J4g6JALFwchiea1CJBaqnLlrjn0nD8SqvSpkyrIRd6Kn//SGtaNZK4m4BSBVV2
+         z3ygs9rpj+TQJ1DH2hET9EJ2k+Gcsz6efSeDKjZGTwq79f6sXOctW2/8pGUKfXaJXYeN
+         05KT1OPNd/m9w4wYZ4d8ikKRhjTyT2IlaaAvpqhhpeVMrF8ygdo7QW3AnL28pSugNc3r
+         oHFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=S/5XKfr/1Laii/jvtSToZop43NduFSge4r6M3yzcyjw=;
+        b=Njdd649TtaxyjqCzqQMKFmlwfldo20DVHZiVCOVewj20H+crbw5CE7Lqk6c9a5IYSz
+         jMG2R4uS/x6SE45rWsHBw1YQUDj+A59F9mFT3QL1Y3UOxQVrAUCkVWk/w07scDcp4Cue
+         c68bZYG4EQ7IM50ht/b004oUMqB0PlbkuN17riYu95f9SC6b71SnND95FceosyoFuQSU
+         hFOZQP/P9NsK90f0CYIhWmTKWQJByo/ur6Pr9HIyE2ZGHGFJwuuGRzjv0okGI3BjmiIT
+         ZZLiuMTlTonpR9qtB74yhodkGTfnvYvKmqeWF4Rrh8zdKsga2DVBJgRdZ2LP5sPimR9s
+         FosQ==
+X-Gm-Message-State: ACgBeo0E+fYq8YNQzp0oku4PprrrKfBHCYaV9m9ILZFh+0Dh4eGaqhM+
+        3hCWcKpRJouD251YKbTftzu9br/58w3+05tWblw=
+X-Google-Smtp-Source: AA6agR5xyQe78Urmto57ircyi6EeHV+S2tnoOsF5QZuLcPzMKlnYvHKY05ZlT9jJ8u4iccYRJY5jEBIysxyi2jCzGas=
+X-Received: by 2002:a05:6870:3398:b0:113:7f43:d0e9 with SMTP id
+ w24-20020a056870339800b001137f43d0e9mr359862oae.33.1660788117392; Wed, 17 Aug
+ 2022 19:01:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/TiqgLJk9=M38NphCtopWxKl";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <Yv1lepjhg/6QKyQl@debian>
+In-Reply-To: <Yv1lepjhg/6QKyQl@debian>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Wed, 17 Aug 2022 22:01:45 -0400
+Message-ID: <CADnq5_Od9W1iuzYpsmODOB=Xem97ogeH_t0JrjWC-S8h0XM9fA@mail.gmail.com>
+Subject: Re: build failure of next-20220817 for amdgpu
+To:     "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+Cc:     Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-next@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/TiqgLJk9=M38NphCtopWxKl
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Aug 17, 2022 at 6:03 PM Sudip Mukherjee (Codethink)
+<sudipm.mukherjee@gmail.com> wrote:
+>
+> Hi All,
+>
+> Not sure if it has been reported, build of next-20220817 fails with the
+> error:
+>
+> ERROR: modpost: "cpu_smallcore_map" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
+>
+> Trying to do a git bisect to find out the offending commit.
+>
 
-Hi all,
+Thanks.  I don't see that symbol in the driver at all.  Not sure where
+it is coming from.
 
-After merging the icc tree, today's linux-next build (x86_64 allmodconfig)
-failed like this:
+Alex
 
-drivers/interconnect/imx/imx8mp.c: In function 'imx8mp_icc_remove':
-drivers/interconnect/imx/imx8mp.c:245:16: error: void value not ignored as =
-it ought to be
-  245 |         return imx_icc_unregister(pdev);
-      |                ^~~~~~~~~~~~~~~~~~~~~~~~
-drivers/interconnect/imx/imx8mp.c:246:1: error: control reaches end of non-=
-void function [-Werror=3Dreturn-type]
-  246 | }
-      | ^
 
-Caused by commit
-
-  d761e0e9c8f2 ("interconnect: imx: Make imx_icc_unregister() return void")
-
-I have used the icc tree from next-20220817 for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/TiqgLJk9=M38NphCtopWxKl
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmL9m5YACgkQAVBC80lX
-0GwyjAf7BEiMq1C4FsM2quJmn1VIpNU6Wajrt5n1RajvxAwT2FN4IqaiybseftYe
-ZLeu+14uKER4ncbjgEqgvt/h16VFe/Ko937JYyXKaq8XvICXEl7o4L9eedTgkRrO
-OZBd/farxd7y3wAJq3Tft+vVM6HNWcduv6CovGuvIr19bB+8Cvf5Adz5fby7IOx9
-9mJ9TmJdc+N5mG7pQu+PEgr2k4iPrFOfb+2PXgWmkbP5WOJqboGCsHEQfav1UnzP
-BH1Opo4pElX65Q83qWtmLJulDhCVov1eJNylUaXvIzScuM5O0THzV0ol3ZUoehth
-a6WYJzVu4VeLC2IqMFmkxv5bDGJgSg==
-=Lmuj
------END PGP SIGNATURE-----
-
---Sig_/TiqgLJk9=M38NphCtopWxKl--
+> I will be happy to test any patch or provide any extra log if needed.
+>
+>
+> --
+> Regards
+> Sudip

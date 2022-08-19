@@ -2,178 +2,214 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7E6F59A104
-	for <lists+linux-next@lfdr.de>; Fri, 19 Aug 2022 18:34:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ECCF59A564
+	for <lists+linux-next@lfdr.de>; Fri, 19 Aug 2022 20:39:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240909AbiHSPqE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 19 Aug 2022 11:46:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38514 "EHLO
+        id S1350312AbiHSSNi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 19 Aug 2022 14:13:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349799AbiHSPp7 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 19 Aug 2022 11:45:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B835A13D7F;
-        Fri, 19 Aug 2022 08:45:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5CE0EB8280D;
-        Fri, 19 Aug 2022 15:45:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72441C433D6;
-        Fri, 19 Aug 2022 15:45:54 +0000 (UTC)
-Date:   Fri, 19 Aug 2022 17:44:24 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Liam Howlett <liam.howlett@oracle.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the char-misc.current tree with the
- mm-hotfixes tree
-Message-ID: <Yv+v2GlKbT9iutr3@kroah.com>
-References: <20220819082714.5313827d@canb.auug.org.au>
- <Yv8vZQB25NE0r/uN@kroah.com>
- <20220819184027.7b3fda3e@canb.auug.org.au>
- <Yv9QArukYhIgg3R7@kroah.com>
- <20220819133458.eqshbr5xp4yr3xws@revolver>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+        with ESMTP id S1350336AbiHSSNS (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 19 Aug 2022 14:13:18 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2068.outbound.protection.outlook.com [40.107.94.68])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0BBA11DF7F;
+        Fri, 19 Aug 2022 11:04:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GDndBKJjKZ41P4Bq4fREUrPQomE5PMlRW5pDjUb6O1XlI4u7PgzS0uFuIV3HVMzhNOwU50o5t9ujwpihwh/oQ0NI3Y55yzhd0ckV7G+kzLOAH1tMR8fbEB3cc2BEWfu2P1QOCkoboHbieJ8FX09B0IyjM/SoXQe1yKxV2M5M6gl4R0hxmpW/YEFOuoe8re6ZDGd+6r+sBi+/dlGAUZBiTDMFrRr1bxFFfVu6/dmafl9JZhFnm/hhX6ikXDF/+43gg9yUkZKPCk6m+PXjsS3rsOg+jAeEp6BqZmQYed6QKIhTq00JcIcFc1JBGv5H4zFd7OI6o/L0yjqO4ZgesO62Fw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JJXwSyFad+tbsnBRxF2tJgMn9TatYadIYFXvO04DJ6Y=;
+ b=nVTCpVmFeZ3g2X/8FTztmqfImURbs9Jdi39O84k9vYx+R35ZnyIGeoLjewVhhQs6MWVyIk2pfJoootJz/b4t2WCMfKz3jUpvsAoTihKlcacdmlpXMWxkfFp4gsPjHi5ifLRWCNwvN/pUiHnWYEBIpXPFopfEb+hh9iUdb995yb5FnFkeZIkbKbVZ6QvkUjZKNYfj9gkFHaoRCyBzpkpsB7YyNcycspAaPAi65AS/pQtn7Afj+tpgueET2HvEFUeLZJx++hoRTk+A/LzEgd6sSvVy352T/mv8JHhZ18pqEwZlejuXbGwTSxe4nFPg7dow/u+Wh2S5f1Llg7FaA9bPVg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JJXwSyFad+tbsnBRxF2tJgMn9TatYadIYFXvO04DJ6Y=;
+ b=OfMxU6RVn3s/JXMWZgsitntm6oLTjFkqW3JZosDaJQaRky/mI873UfUEfyArUz6dUqMXfaGTN1+UBMZ0tKhz3FGJqYm6e3rcvmAoZ8AEx9MsH6kg46ra8mwjMeDD1wR13gfcFaVEXdztRR3qfO0p2JCJjzMA8W3VRxkD0lsC9h8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN9PR12MB5115.namprd12.prod.outlook.com (2603:10b6:408:118::14)
+ by DM4PR12MB6136.namprd12.prod.outlook.com (2603:10b6:8:a9::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.16; Fri, 19 Aug
+ 2022 18:04:55 +0000
+Received: from BN9PR12MB5115.namprd12.prod.outlook.com
+ ([fe80::406d:afb5:d2d7:8115]) by BN9PR12MB5115.namprd12.prod.outlook.com
+ ([fe80::406d:afb5:d2d7:8115%5]) with mapi id 15.20.5525.019; Fri, 19 Aug 2022
+ 18:04:55 +0000
+Message-ID: <b6d4ae2e-9cc0-a94c-f862-9b2698cf6640@amd.com>
+Date:   Fri, 19 Aug 2022 14:04:53 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: build failure of next-20220817 for amdgpu due to 7bc913085765
+ ("drm/amdkfd: Try to schedule bottom half on same core")
+Content-Language: en-US
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Alex Deucher <alexander.deucher@amd.com>
+Cc:     Alex Deucher <alexdeucher@gmail.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        linux-next <linux-next@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        amd-gfx mailing list <amd-gfx@lists.freedesktop.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <Yv1lepjhg/6QKyQl@debian>
+ <CADnq5_Od9W1iuzYpsmODOB=Xem97ogeH_t0JrjWC-S8h0XM9fA@mail.gmail.com>
+ <5638aaf1-b808-bdc6-d84a-820f24facea6@infradead.org>
+ <CADVatmNA6-qCJEHNn-gRO6Nx88SsTrPsJn_F5J0NiFhyvijNxA@mail.gmail.com>
+ <c1869a4b-ead1-2ae5-c9ec-61834b578216@infradead.org>
+ <CADVatmPCd5KQ0mAfQGHvqVGFJtK+fyQPB4XUktgfc3fzYJvyCg@mail.gmail.com>
+ <df284479-9981-9983-7775-81d7d7875dac@infradead.org>
+From:   Felix Kuehling <felix.kuehling@amd.com>
+Organization: AMD Inc.
+In-Reply-To: <df284479-9981-9983-7775-81d7d7875dac@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220819133458.eqshbr5xp4yr3xws@revolver>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: CH2PR20CA0010.namprd20.prod.outlook.com
+ (2603:10b6:610:58::20) To BN9PR12MB5115.namprd12.prod.outlook.com
+ (2603:10b6:408:118::14)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: e7cd0d41-00df-49d5-b4e8-08da820d5223
+X-MS-TrafficTypeDiagnostic: DM4PR12MB6136:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: s1Tm+baAzzR7uaFS0tK86iGl+fagJFEIifR3ZO+fbGU0v76AMDvutybXMN+GZrCecSLyvduBPwOSsBL4mhOABqKDMbt2QI3cg60m34y3OFSWBg2by9xPmnghTI8bn8StUnsGlRzyu/C/MoSO2Oz8DZgXuMm2z8KjC6MOb+ErYzxkKkrk3YVZyigUpsz2IH9Ur0vhsCQhVj3IYyF2m06HnQnLYrl3T9yoM0ANhkNR4H1t5Wc1bubg7Nhz+k5/JaldBMMBIr21UTY/s/qBORa5OxhhxgbKuOWcMln5c5eQsA5VSVyKIlvxgj7lQ69kvW2k6qPXHn4vGfiT1wrgggk+MsMUPWOQ6edQlQB2F5bDO4i/XNvInVB4UhQnfjUeEkSiCcm+RUlp3qlyH09wOYEqUoBCzyvOgCrFG6e4FUCl/dGXNa9oz9au8nnlNVji5F82x6GoLfAt1OyAZSyM/Ex7Ul/fm8hvMAP1LivzQdAgjhWE5HDGPL3tbTUhhvBLA0S+v5gHBPffDCVUKhPL5hp12ExpmuxEHpUUToVoMeE1GA1sabSJZyWNQxYJa9pbrqS2i044cZYpN1cIwr9CTJi2v0OB/ndaMNSKCIFMOmKVzqjBvMSD78ZhJkC4SO1wyQq52fnbqELHAsXviAs7LppbC2IhEQBKH37uMiSpXxRJsM8hKPMd9xHRQ3vgf25AuH+8A+bVBmOWdQ0GNOwP7W3EKltsfuT9gElcxV9aq6QFBDvMViEzVii3/kOFp1Cg/RpNtGSwdUaWw1yhz13qY+DpRck91znVSR5SLB/SoeUxyQI=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5115.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(39860400002)(136003)(376002)(396003)(366004)(186003)(2616005)(38100700002)(5660300002)(8936002)(44832011)(4326008)(8676002)(66946007)(2906002)(86362001)(66556008)(478600001)(26005)(36916002)(6486002)(6506007)(6512007)(53546011)(41300700001)(54906003)(316002)(6636002)(66476007)(31686004)(31696002)(110136005)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Q1RHbVY5bWdTV21zRTdtRGJnUDRKamp1RExiTS9oRnZISXFWSWhGamc1U3Ez?=
+ =?utf-8?B?NnNvOFkyY2ljVDFUYXl3UFVzUUgxWVBUTVZDU0NCZGFnemVDczhmOThLYzh1?=
+ =?utf-8?B?UGNuSVNiT0ZKZWhMeW5ScG5pSjdWdWRvU1FyUDU2VTdrcEM4UnFDTXh1dC92?=
+ =?utf-8?B?WUU1dVkrK3FxZEhGeVNVZVBzTDYwcU9uNjY1d0RFVUU5eGVpMFNZZkNETmlq?=
+ =?utf-8?B?YmIrb2FyVEwxSDIwTk1iK0JWNUQyQVF0MXFUeUhDQUJ0c0ErVEd2WDBUc2tH?=
+ =?utf-8?B?TnJ6ODBCaFlxams5M0JhQUZTQTEzdE1wVEM3NU9lWE9NaFpMRmI0UjduMHkz?=
+ =?utf-8?B?STRtcTAralF2ZDZBWDc1WGxWNWZPNm5iVVF2STZ4QUUxVjN3OUtWOHBhelNv?=
+ =?utf-8?B?MWtmbFdzeFZsSkxqUmwvenE2MFg4QWI3TVlvaXVmekZKd0tMenlCeVQxcVZL?=
+ =?utf-8?B?K29xaTdRR0diR09QclN0NGJQdEZPMlF4cnFUdDlOTy9CMGNpdXBya050SG9S?=
+ =?utf-8?B?aXhJMjNDS3p0eU0rYlduUmZTcDU1aU5LN3BHeVVub0FPV3l1Z1hpSzZlS09z?=
+ =?utf-8?B?OWNRMzVUM21PdG5GMW9kZnZtUVk0V0UwYXAvclNuWGsvTDE4aWJJaUlTN0tj?=
+ =?utf-8?B?bExkSlkwTkFmTWFCa2dJczI4OVhBeXpRYndQSmljQnVGbFpscjJqY2NUMEJC?=
+ =?utf-8?B?M1RRWUtuNXBHR3ZZQXcrNm1uVjZ3bndFK1hPZytOU3VOVVJmSXlPZWc4R0RW?=
+ =?utf-8?B?QzMzTnp0a2p5WnpzYWlFKzlLUmlsczV4TFBDYmhsRDFyM0FxckNGckYyQlRQ?=
+ =?utf-8?B?YlQySllvWnQvQWtTcVBMeFRyK29MZTJnaS9jRWE0bWo0RzNXRVVSR3NQQjYy?=
+ =?utf-8?B?U3dIMmNpTEVHVzE0ZmR6NWJJdlovaEFlWmN2TnFSVWs4eDd2L1N4eUN1QWMy?=
+ =?utf-8?B?SHRsbnJkZEFXcGh4czhYcmtzZEVWaHQxYStrdGwxMlJHcTB4YVBUbnpHTjJj?=
+ =?utf-8?B?OE0waU5OWHRTSStwUmR2ejl4dUwzV2ZoN1JiTkpEREQxQUpMQkkyUWlIbjlJ?=
+ =?utf-8?B?WURramRFMWVCRUJ3d1ZlWktoall3UDQrZEhQS1RZbTJ1U1JFWHJIL3NEL1ZK?=
+ =?utf-8?B?UHo5aXV6eEZBeGtTclFnNlZsaGF5OCtieDlTT1JmOEJLR0Y5WDBKK0xnaXlC?=
+ =?utf-8?B?bHU2R1ExeXV5dDEyWGtNQTZKZlVQdmVyRkJWVFdRclVEM1hsdmI2QmtFcDh0?=
+ =?utf-8?B?c1kwRDA0NXUvYXExMzhVK1VoVEFTam9PRmFVc0NuVExyNEZudnI3SGpaMTV2?=
+ =?utf-8?B?eHVWU0d2K1F2VTBvQ2VVWlZ5b2htREFxMU9QdEhDT3YrRmpIZmdRWW5JQTll?=
+ =?utf-8?B?aWt5NGpmS1NHZEMyYWJxMzFUbXh0TlVSWitFR1NLU3QzQU03M2tjcDc5NXlS?=
+ =?utf-8?B?aTM2T09jb0pHelo3MjMwVURjVUU5T3llc3gxcG1Ca1gyODNBVnRmdFhyTDVm?=
+ =?utf-8?B?MzVIRjVFTDBrc2dBV3M5Y1ZlYmROR3ZSb3VVRk1xZWh0TE5VcjRYTy9RdUU1?=
+ =?utf-8?B?cWlFV1I0TllGbzZEa1gvYjdUQVJkcWJFME9GZU9wNXJFb1FKUjFoYS9sbHZq?=
+ =?utf-8?B?N2NrUU5xVzBscTlWODFHUG5wUzJKc05YaTlQYmtXaFBLR3N0SU4yaVBkbm51?=
+ =?utf-8?B?UDdrdzJ1NmpCSWdMUithS3dySnpWakI2WnZvRGxkZER3RVk1cUtoOVRZa3ZP?=
+ =?utf-8?B?SnNWb2F1WnZReWUvS3lvcnVDZ1lLa0hGeGR1bGFQWDRxY09nMXpLaTJTUFZw?=
+ =?utf-8?B?UEZqZTViVk9zTmVtRzVPdmlZT1V0N3ZIdWdMOU11UmFOcVhZUkFvNlREQWVM?=
+ =?utf-8?B?VUhJT0ZZMEJJcE1ZUHN6elMyNXo5UWxIcXo1RFcrWkwyUFZuY255OVRydzdv?=
+ =?utf-8?B?NkpTTjdCUTEwZ2R2M3NMSi9UVkZnTlI1ZUNVQjdmSnJXYmtMS0l6eWZKSFFR?=
+ =?utf-8?B?M2drVXJrakg1WXBaekNkZG9rb3h0VHNDOWI5MXRDOWV6aUVZWk5rSjZMM0dU?=
+ =?utf-8?B?QnM2a09XUmNMUHJhSXVRTGJzYWRNamg3Tks4QnZJR2JJSkdVbUxnNGw5SnJT?=
+ =?utf-8?Q?p0zOk7RxvzpFFUSGLKfsoC8GA?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e7cd0d41-00df-49d5-b4e8-08da820d5223
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5115.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Aug 2022 18:04:55.2301
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: GYvbcxaRI7j5uN9UdH1N6eGtnu+ahl2ZpxF8/OWKlSeoQuNOvEYOvLHfRy6VJBA+cFR6SEqB7YiGgaL0zRGPjQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6136
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 01:35:04PM +0000, Liam Howlett wrote:
-> * Greg KH <greg@kroah.com> [220819 04:55]:
-> > On Fri, Aug 19, 2022 at 06:40:27PM +1000, Stephen Rothwell wrote:
-> > > Hi Greg,
-> > > 
-> > > On Fri, 19 Aug 2022 08:36:21 +0200 Greg KH <greg@kroah.com> wrote:
-> > > >
-> > > > On Fri, Aug 19, 2022 at 08:28:18AM +1000, Stephen Rothwell wrote:
-> > > > > 
-> > > > > Today's linux-next merge of the char-misc.current tree got a conflict in:
-> > > > > 
-> > > > >   drivers/android/binder_alloc.c
-> > > > > 
-> > > > > between commit:
-> > > > > 
-> > > > >   b3bb668f3dc6 ("binder_alloc: add missing mmap_lock calls when using the VMA")
-> > > > > 
-> > > > > from the mm-hotfixes tree and commit:
-> > > > > 
-> > > > >   d6f35446d076 ("binder_alloc: Add missing mmap_lock calls when using the VMA")
-> > > > > 
-> > > > > from the char-misc.current tree.
-> > > > > 
-> > > > > I fixed it up (I used the latter as it was committed later even though
-> > > > > the author times were the same) and can carry the fix as necessary. This
-> > > > > is now fixed as far as linux-next is concerned, but any non trivial
-> > > > > conflicts should be mentioned to your upstream maintainer when your tree
-> > > > > is submitted for merging.  You may also want to consider cooperating
-> > > > > with the maintainer of the conflicting tree to minimise any particularly
-> > > > > complex conflicts.  
-> > > > 
-> > > > These should be identical, if not, something went wrong :(
-> > > 
-> > > Something went wrong :-)
-> > > 
-> > > $ git range-diff b3bb668f3dc6^..b3bb668f3dc6 d6f35446d076^..d6f35446d076
-> > > 1:  b3bb668f3dc6 ! 1:  d6f35446d076 binder_alloc: add missing mmap_lock calls when using the VMA
-> > >     @@ Metadata
-> > >      Author: Liam Howlett <liam.howlett@oracle.com>
-> > >      
-> > >       ## Commit message ##
-> > >     -    binder_alloc: add missing mmap_lock calls when using the VMA
-> > >     +    binder_alloc: Add missing mmap_lock calls when using the VMA
-> > >      
-> > >     -    Take the mmap_read_lock() when using the VMA in binder_alloc_print_pages()
-> > >     -    and when checking for a VMA in binder_alloc_new_buf_locked().
-> > >     +    Take the mmap_read_lock() when using the VMA in
-> > >     +    binder_alloc_print_pages() and when checking for a VMA in
-> > >     +    binder_alloc_new_buf_locked().
-> > >      
-> > >          It is worth noting binder_alloc_new_buf_locked() drops the VMA read lock
-> > >     -    after it verifies a VMA exists, but may be taken again deeper in the call
-> > >     -    stack, if necessary.
-> > >     +    after it verifies a VMA exists, but may be taken again deeper in the
-> > >     +    call stack, if necessary.
-> > >      
-> > >     -    Link: https://lkml.kernel.org/r/20220810160209.1630707-1-Liam.Howlett@oracle.com
-> > >     -    Fixes: a43cfc87caaf ("android: binder: stop saving a pointer to the VMA")
-> > >     -    Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
-> > >     +    Fixes: a43cfc87caaf (android: binder: stop saving a pointer to the VMA)
-> > >     +    Cc: stable <stable@kernel.org>
-> > >          Reported-by: Ondrej Mosnacek <omosnace@redhat.com>
-> > >     -    Reported-by: <syzbot+a7b60a176ec13cafb793@syzkaller.appspotmail.com>
-> > >     -    Acked-by: Carlos Llamas <cmllamas@google.com>
-> > >     +    Reported-by: syzbot+a7b60a176ec13cafb793@syzkaller.appspotmail.com
-> > >          Tested-by: Ondrej Mosnacek <omosnace@redhat.com>
-> > >     -    Cc: Minchan Kim <minchan@kernel.org>
-> > >     -    Cc: Christian Brauner (Microsoft) <brauner@kernel.org>
-> > >     -    Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > >     -    Cc: Hridya Valsaraju <hridya@google.com>
-> > >     -    Cc: Joel Fernandes <joel@joelfernandes.org>
-> > >     -    Cc: Martijn Coenen <maco@android.com>
-> > >     -    Cc: Suren Baghdasaryan <surenb@google.com>
-> > >     -    Cc: Todd Kjos <tkjos@android.com>
-> > >     -    Cc: Matthew Wilcox (Oracle) <willy@infradead.org>
-> > >     -    Cc: "Arve Hjønnevåg" <arve@android.com>
-> > >     -    Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-> > >     +    Acked-by: Carlos Llamas <cmllamas@google.com>
-> > >     +    Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
-> > >     +    Link: https://lore.kernel.org/r/20220810160209.1630707-1-Liam.Howlett@oracle.com
-> > >     +    Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > >      
-> > >       ## drivers/android/binder_alloc.c ##
-> > >      @@ drivers/android/binder_alloc.c: static struct binder_buffer *binder_alloc_new_buf_locked(
-> > >     @@ drivers/android/binder_alloc.c: void binder_alloc_print_pages(struct seq_file *m
-> > >      -		}
-> > >      +
-> > >      +	mmap_read_lock(alloc->vma_vm_mm);
-> > >     -+	if (binder_alloc_get_vma(alloc) == NULL)
-> > >     ++	if (binder_alloc_get_vma(alloc) == NULL) {
-> > >     ++		mmap_read_unlock(alloc->vma_vm_mm);
-> > >      +		goto uninitialized;
-> > >     + 	}
-> > >      +
-> > >     ++	mmap_read_unlock(alloc->vma_vm_mm);
-> > >      +	for (i = 0; i < alloc->buffer_size / PAGE_SIZE; i++) {
-> > >      +		page = &alloc->pages[i];
-> > >      +		if (!page->page_ptr)
-> > >     @@ drivers/android/binder_alloc.c: void binder_alloc_print_pages(struct seq_file *m
-> > >      +			active++;
-> > >      +		else
-> > >      +			lru++;
-> > >     - 	}
-> > >     ++	}
-> > >      +
-> > >      +uninitialized:
-> > >     -+	mmap_read_unlock(alloc->vma_vm_mm);
-> > >       	mutex_unlock(&alloc->mutex);
-> > >       	seq_printf(m, "  pages: %d:%d:%d\n", active, lru, free);
-> > >       	seq_printf(m, "  pages high watermark: %zu\n", alloc->pages_high);
-> > > 
-> > 
-> > Oh wow, ok, I'll go drop my version and assume that Andrew's is the more
-> > correct one and let it come through his tree.
-> > 
-> 
-> b3bb668f3dc6 is the older v1 of the patch [1]. d6f35446d076 from
-> mm-hotfixes is the correct v2 version [2], although I don't think that's
-> currently in mm-hotfixes-unstable.  It looks like version 1 is now in
-> mm-hotfixes-unstable as well.
-> 
-> 1: https://lore.kernel.org/linux-mm/20220809160618.1052539-1-Liam.Howlett@oracle.com/
-> 2: https://lore.kernel.org/linux-mm/20220810160209.1630707-1-Liam.Howlett@oracle.com/
+On 2022-08-18 15:34, Randy Dunlap wrote:
+> Hi--
+>
+> On 8/18/22 12:15, Sudip Mukherjee wrote:
+>> On Thu, Aug 18, 2022 at 4:10 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+>>>
+>>> On 8/18/22 03:43, Sudip Mukherjee wrote:
+>>>> On Thu, Aug 18, 2022 at 3:09 AM Randy Dunlap <rdunlap@infradead.org> wrote:
+>>>>>
+>>>>> On 8/17/22 19:01, Alex Deucher wrote:
+>>>>>> On Wed, Aug 17, 2022 at 6:03 PM Sudip Mukherjee (Codethink)
+>>>>>> <sudipm.mukherjee@gmail.com> wrote:
+>>>>>>> Hi All,
+>>>>>>>
+>>>>>>> Not sure if it has been reported, build of next-20220817 fails with the
+>>>>>>> error:
+>>>>>>>
+>>>>>>> ERROR: modpost: "cpu_smallcore_map" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
+>>>>>>>
+>>>>>>> Trying to do a git bisect to find out the offending commit.
+>>>>>>>
+>>>>>> Thanks.  I don't see that symbol in the driver at all.  Not sure where
+>>>>>> it is coming from.
+>>>>>>
+>>>>> It's powerpc only.
+>>>>>
+>>>>> Sudip, is it non-CONFIG_SMP by any chance?
+>>>> Ohhh.. really sorry for the incomplete report. I should not try to
+>>>> mail while travelling.
+>>>>
+>>>> The error is seen with powerpc allmodconfig and it has CONFIG_SMP=y.
+>>> OK, I see that also, but it doesn't make any sense (to me).
+>>>
+>>> I did 'objdump' on the code file (amdgpu.o) and it's listed as
+>>> undefined but there are no code references to it.
+>> cpu_smt_mask() is called by drivers/gpu/drm/amd/amdkfd/kfd_device.c.
+>> and cpu_smt_mask() is an inline function in
+>> arch/powerpc/include/asm/smp.h which is doing "return
+>> per_cpu(cpu_smallcore_map, cpu);"
+>>
+>> So, the offending commit is 7bc913085765 ("drm/amdkfd: Try to schedule
+>> bottom half on same core").
+> Thanks for digging that up.
+>
+> It just needs to have that symbol exported I think.
+> This builds cleanly now.
+> I can submit it or one of the AMD gfx developers can do so.
 
-I'll let you and Andrew fight this one out :)
+I'm not sure where I would need to submit this. And I'm not familiar 
+with Powerpc code at all. I'm OK if you submit this wherever it needs to go.
 
+Thanks,
+ Â  Felix
+
+
+>
+>
+> ---
+>   arch/powerpc/kernel/smp.c |    1 +
+>   1 file changed, 1 insertion(+)
+>
+> --- a/arch/powerpc/kernel/smp.c
+> +++ b/arch/powerpc/kernel/smp.c
+> @@ -86,6 +86,7 @@ DEFINE_PER_CPU(cpumask_var_t, cpu_core_m
+>   static DEFINE_PER_CPU(cpumask_var_t, cpu_coregroup_map);
+>   
+>   EXPORT_PER_CPU_SYMBOL(cpu_sibling_map);
+> +EXPORT_PER_CPU_SYMBOL(cpu_smallcore_map);
+>   EXPORT_PER_CPU_SYMBOL(cpu_l2_cache_map);
+>   EXPORT_PER_CPU_SYMBOL(cpu_core_map);
+>   EXPORT_SYMBOL_GPL(has_big_cores);
+>
+>

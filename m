@@ -2,48 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8F0859B722
-	for <lists+linux-next@lfdr.de>; Mon, 22 Aug 2022 03:01:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1E9359B884
+	for <lists+linux-next@lfdr.de>; Mon, 22 Aug 2022 06:46:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230378AbiHVBBy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 21 Aug 2022 21:01:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33294 "EHLO
+        id S230526AbiHVEqV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 22 Aug 2022 00:46:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229948AbiHVBBw (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 21 Aug 2022 21:01:52 -0400
+        with ESMTP id S229562AbiHVEqV (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 22 Aug 2022 00:46:21 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15ABE201A8;
-        Sun, 21 Aug 2022 18:01:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76DB11E3C0;
+        Sun, 21 Aug 2022 21:46:19 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4M9vFj6wXxz4x1N;
-        Mon, 22 Aug 2022 11:01:45 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MB0Dn1HLPz4wgn;
+        Mon, 22 Aug 2022 14:46:16 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1661130106;
-        bh=6l9j7X22BBA4N65+/fw8NpRm9wwmtmsASnaDP6DcOUQ=;
+        s=201702; t=1661143577;
+        bh=PRPjNL9OqgsyzZoS7vFE/y8nJQbhGK73LvTpUznB0Ic=;
         h=Date:From:To:Cc:Subject:From;
-        b=bXna29IRdNDjYgbgweAkj+3drBgKC84AYZtQcJvHH/Fl2Uz9gFjWoMuQ7yLk+h/WW
-         EEIwu+SOYK7bcKQ43iemROLVuUyxtylobUTXUBxlzZvctplP4n/ipFJmAFZ/URXtYd
-         0G3iVyb7SmUnQ9VxGFZRBZC9YA0uYsRhDMOs4oYTRECDMk6p5wvuFX/po8DVbytfLA
-         3wkcRqyAk6pUqQEYT/9SF5OqP9dbiHwD+WpgqZIo3GGYoOfZbphtWSTpQjVjMfOqcB
-         YCZPw5oiBk+E4wH+EYZvHgjSBbROhYoxnbVKFvCjplssPGZMpyNomOc1Xqk2yP/0Ou
-         acfClBBLHYmzg==
-Date:   Mon, 22 Aug 2022 11:01:44 +1000
+        b=ODXXdh0O1XZJXeyHhIQqyWglRStXAltYiSwRNyd2Bai/J15jbTmGejgjdNM//goeA
+         ssyvgHTns0b1+CBmr0tDW+T2aPu9epwUQqsAwmhg6mYGLjUkaMVS4lj9N0a2FjERjT
+         K4xla1IzXdrENMsBKmM5fTvYj8234EQCrqS3SQMj29PO29Biou7e/NTEmmFZSmFFpk
+         FM8+mA7binC6/Wn5ibEn/yiLK/xswuE0P2Sa6aPA2rpDgsYaz9hS6twGJS81TZSgKj
+         GRoZploS5Pr8SR/zJgPVULmpdSeI7WhEmHWm4pEmpAWKG1xvsjBIJuyKK40rOcHQf4
+         fDgTw/gjbCfJw==
+Date:   Mon, 22 Aug 2022 14:46:13 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Daniel =?UTF-8?B?TcO8bGxlcg==?= <deso@posteo.net>,
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Bart Van Assche <bvanassche@acm.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>
-Subject: linux-next: manual merge of the bpf-next tree with the bpf tree
-Message-ID: <20220822110144.199455d6@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the block tree
+Message-ID: <20220822144613.6e6ce950@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/np7iLFcswnasyimVYWlLVVK";
+Content-Type: multipart/signed; boundary="Sig_/qRNm9vP81sVp7B8pV3z+oRm";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -54,66 +50,105 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/np7iLFcswnasyimVYWlLVVK
+--Sig_/qRNm9vP81sVp7B8pV3z+oRm
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the bpf-next tree got a conflict in:
+After merging the block tree, today's linux-next build (sparc defconfig)
+failed like this:
 
-  tools/testing/selftests/bpf/DENYLIST.s390x
+drivers/scsi/qlogicpti.c: In function 'qpti_map_queues':
+drivers/scsi/qlogicpti.c:828:24: error: 'return' with a value, in function =
+returning void [-Werror=3Dreturn-type]
+  828 |                 return -1;
+      |                        ^
+drivers/scsi/qlogicpti.c:817:13: note: declared here
+  817 | static void qpti_map_queues(struct qlogicpti *qpti)
+      |             ^~~~~~~~~~~~~~~
+drivers/scsi/qlogicpti.c:839:24: error: 'return' with a value, in function =
+returning void [-Werror=3Dreturn-type]
+  839 |                 return -1;
+      |                        ^
+drivers/scsi/qlogicpti.c:817:13: note: declared here
+  817 | static void qpti_map_queues(struct qlogicpti *qpti)
+      |             ^~~~~~~~~~~~~~~
+drivers/scsi/qlogicpti.c: In function 'qpti_sbus_probe':
+drivers/scsi/qlogicpti.c:1394:1: warning: label 'fail_free_irq' defined but=
+ not used [-Wunused-label]
+ 1394 | fail_free_irq:
+      | ^~~~~~~~~~~~~
+cc1: some warnings being treated as errors
 
-between commit:
+Caused by commit
 
-  27e23836ce22 ("selftests/bpf: Add lru_bug to s390x deny list")
+  f19f2c966b2f ("block: Change the return type of blk_mq_map_queues() into =
+void")
 
-from the bpf tree and commit:
+I have applied the following fix up patch for today.
 
-  b979f005d9b1 ("selftest/bpf: Add setget_sockopt to DENYLIST.s390x")
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Mon, 22 Aug 2022 14:40:02 +1000
+Subject: [PATCH] fix up for "block: Change the return type of blk_mq_map_qu=
+eues() into void"
 
-from the bpf-next tree.
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/scsi/qlogicpti.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+diff --git a/drivers/scsi/qlogicpti.c b/drivers/scsi/qlogicpti.c
+index a5aa716e9086..5bddfe0233b2 100644
+--- a/drivers/scsi/qlogicpti.c
++++ b/drivers/scsi/qlogicpti.c
+@@ -825,7 +825,7 @@ static void qpti_map_queues(struct qlogicpti *qpti)
+ 	if (qpti->res_cpu =3D=3D NULL ||
+ 	    qpti->res_dvma =3D=3D 0) {
+ 		printk("QPTI: Cannot map response queue.\n");
+-		return -1;
++		return;
+ 	}
+=20
+ 	qpti->req_cpu =3D dma_alloc_coherent(&op->dev,
+@@ -836,7 +836,7 @@ static void qpti_map_queues(struct qlogicpti *qpti)
+ 		dma_free_coherent(&op->dev, QSIZE(RES_QUEUE_LEN),
+ 				  qpti->res_cpu, qpti->res_dvma);
+ 		printk("QPTI: Cannot map request queue.\n");
+-		return -1;
++		return;
+ 	}
+ 	memset(qpti->res_cpu, 0, QSIZE(RES_QUEUE_LEN));
+ 	memset(qpti->req_cpu, 0, QSIZE(QLOGICPTI_REQ_QUEUE_LEN));
+@@ -1391,7 +1391,6 @@ static int qpti_sbus_probe(struct platform_device *op)
+ 			  qpti->req_cpu, qpti->req_dvma);
+ #undef QSIZE
+=20
+-fail_free_irq:
+ 	free_irq(qpti->irq, qpti);
+=20
+ fail_unmap_regs:
+--=20
+2.35.1
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc tools/testing/selftests/bpf/DENYLIST.s390x
-index 5cadfbdadf36,a708c3dcc154..000000000000
---- a/tools/testing/selftests/bpf/DENYLIST.s390x
-+++ b/tools/testing/selftests/bpf/DENYLIST.s390x
-@@@ -65,4 -65,4 +65,5 @@@ send_signa
-  select_reuseport                         # intermittently fails on new s3=
-90x setup
-  xdp_synproxy                             # JIT does not support calling k=
-ernel function                                (kfunc)
-  unpriv_bpf_disabled                      # fentry
- +lru_bug                                  # prog 'printk': failed to auto-=
-attach: -524
-+ setget_sockopt                           # attach unexpected error: -524 =
-                                              (trampoline)
-
---Sig_/np7iLFcswnasyimVYWlLVVK
+--Sig_/qRNm9vP81sVp7B8pV3z+oRm
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMC1XgACgkQAVBC80lX
-0GxfMAf/RpVbYOcDE3iGxTsojuJZ4d8t7OgQZu7trQZwAc2EtWXxtP09bwURSe2D
-s9Ah3TD2guoOHKEeQ4mDCMMryITDJ/E1qY2H/shn1XbGerBThC+hJwQ1Lx19OkDr
-57Yp4/wDnQ5oSnXb4Pb6z5LAtF5KkleQ5yl5vnxa/6xsYKRF+fn6ufpBCrPPdkWP
-b+g8embFhny5mEfvjYwQ9QPcceCH9QfDJSUSYwK9HxHbdV5zMzJX4nwCXSxuAJgs
-vXd/Of9ZE3Gf5ocoglptg2xJ21hx0nkE6USg1Y9u55OxOIsaq7cyqc6P57cd1gAu
-lhuHI8jgKce4U4NgqIf3tM51zNmwoQ==
-=hvXH
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMDChUACgkQAVBC80lX
+0Gxxwgf/bZgcmGzBLWoulYmJvl6HdNI8D1gF6mze7dOxQBsCuIPY7wkb2WGCtnYO
+9jqpD82TQ6we0Q0W7QtjNhmk0I+r6kNPKnkQNjgpKyw6gWSvNDK0hQtwxjA8Hy/C
+sdOEhDuo04GzlnCs2eNr2UZwXMley7vG8fDbyXKZvL55jx9J9kUYGzgAOrE+vSZD
+8kU26wmFpvP/8+T7RPdkaRsOTBfvufsUVudKDZwqjgLdeZCC37a4BPj9kjmCYj5u
+gMQ83E2Ij91PeE5suEmo9bC6XB/Z5j3On9DlWD14JundbHB5sWwFAvOHd+VE1jAC
+o11TXt83N++yZj2urezErYluDjDFlw==
+=7my4
 -----END PGP SIGNATURE-----
 
---Sig_/np7iLFcswnasyimVYWlLVVK--
+--Sig_/qRNm9vP81sVp7B8pV3z+oRm--

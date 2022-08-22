@@ -2,63 +2,63 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F22059C841
-	for <lists+linux-next@lfdr.de>; Mon, 22 Aug 2022 21:13:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7460B59C8F9
+	for <lists+linux-next@lfdr.de>; Mon, 22 Aug 2022 21:34:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238258AbiHVTNk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 22 Aug 2022 15:13:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33230 "EHLO
+        id S238828AbiHVTeK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 22 Aug 2022 15:34:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238439AbiHVTNN (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 22 Aug 2022 15:13:13 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58F95219
-        for <linux-next@vger.kernel.org>; Mon, 22 Aug 2022 12:12:58 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id x19so10791376plc.5
-        for <linux-next@vger.kernel.org>; Mon, 22 Aug 2022 12:12:58 -0700 (PDT)
+        with ESMTP id S238844AbiHVTdv (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 22 Aug 2022 15:33:51 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1FA726FF
+        for <linux-next@vger.kernel.org>; Mon, 22 Aug 2022 12:33:33 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id e19so10766310pju.1
+        for <linux-next@vger.kernel.org>; Mon, 22 Aug 2022 12:33:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernelci-org.20210112.gappssmtp.com; s=20210112;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:from:to:cc;
-        bh=KtpSh+ykCjty/nSm2KFDDP8d4Zyk0oQPgAwhS8HaWZ4=;
-        b=DAQwENZsCbNjN0Q/WzmJ4vysi/TA8GZk/Ppf/Ml9PX+ldUJCYMmfUYPVmN8o7YVo0I
-         9tV62wgDkluhaK/foWM2r8iHhybOty9QaJPDvkYzcPHZiU1c/z+IAU6gQ9+iakXpRFWf
-         +qTXuPr4P7IcEho/GfMip7Hh0pO2yqQjzY0cR/CwdGBCy2YaA3LSe5uyAsLgt22Wjlxg
-         TYjK9/1xBZopP8shkXuPZSRoCbvB3wb78skCwCl7wHfSmZREooxjTvZ25RNjUCS666ji
-         9L/YOsevvZDyPAFyKSOQkJJdz0wms9KurpijD/cctrp9VH/xqyUOBmtNH1ttkE0wUy/P
-         IVlA==
+        bh=C8wA/0GHONsH5U7sNGS8SRcsE+bbFmrAtxKlnxImaRs=;
+        b=O+18bLDay2Rugc9O2dNd0tl0o/ThkD2mLkVMkiS8G4fS5J0ZHwYa5sP3QUcKH9XCg1
+         yuDPNdyudeC6Y4tG9iN9XtLbovgCkzWoV3w8lV+FUM45JWLy82QNSwzRgkDD+KFqDSiY
+         N4Ciz3kx6wfWMzw7kneHlHQYF6bFD50r9kXjjm1TC2p580+fWJewCdpXeZ2dYU68le96
+         ax02AVnIh+6XuOpu9WwOpSK4Nl3hZTMZG6P0pC/7AgCNhTkVvu42EhTXEXWIxLp2V4i1
+         HrV2hkpJ3jLO6DEljEbq1c2VUD3RHzWCbhQ1x6+7GeaGozFP5xzVSX5dai0alVadWnqB
+         tj7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:x-gm-message-state:from:to:cc;
-        bh=KtpSh+ykCjty/nSm2KFDDP8d4Zyk0oQPgAwhS8HaWZ4=;
-        b=NZetTlqI8SQEMG07q3QFQXEtpXZHZwm62UAFn+YfRX4twsKOcLfEPIFvSH+MVaA8D6
-         6Q2uMJCRHXvW1/1qHeidNHaesjy6wqQ7zi3pZZQN7BsnlpB0SYIqOuPDnB0/8zx+aOuT
-         M82pkL9ngV99LFVekXqOmyMEyEUkuto8U8eVNq9cIx76sRLtCzMNuc7db+9sIHvA/XBW
-         aLFhPLH7IPedgOBjr307UeXgMMyHPo6QcfPt7m0xBYUMgVrzL8s11YCh5yoht16Y49lJ
-         D30w2vrUBranMU4VTYveAAYBw3l3hqPh4rtT6GSsEtkn/13IqkpCiQNrY3qnvZTXsunA
-         Wgmg==
-X-Gm-Message-State: ACgBeo32oRkJfc5V/dTZBncI5+CMmofAUiFmHdX3H/wdqkngij+Y68d7
-        wpZXLJL/3onTi/kAii6x6f5W9/ivymF2M2Te
-X-Google-Smtp-Source: AA6agR4WToe/7ChWFcQ9UK2Piyx3N03CaFbeK+VW7Jm17+DJ1DYPQbo1GTyJl+6ZkL9h3vgBDXq2YQ==
-X-Received: by 2002:a17:902:ef45:b0:170:8b19:4e0f with SMTP id e5-20020a170902ef4500b001708b194e0fmr21842307plx.120.1661195577082;
-        Mon, 22 Aug 2022 12:12:57 -0700 (PDT)
+        bh=C8wA/0GHONsH5U7sNGS8SRcsE+bbFmrAtxKlnxImaRs=;
+        b=CP6UwZFb/HID1Au6P0qx+uFppey+mvfJ7iAzOoM87nFWTmNuwBq0Y8YA6zgLjdJ6Xo
+         PdritgMfRtevHHAY5mC8188pkNy/lgXVJpmWIdXM77gOI+H0dCSBQcp4djyuNO/gzDTU
+         6B8/40xTglxuJz0WOQkMN9oOIZ3U1OgtXayFvoPQdZURZoGVwR7+O7290594EWrYaxXv
+         ZgigMZVobyGmiBR5ocOQTewLszOjGmUdYMGzlM/gzZqQ9WWl6bZ8i1ai1JAAoL49+TQN
+         ugVxbneC79DuSC6pfuXS2YRCF0zBzOfSaMjjCK5AB85yxrjrLh9R6/qceSjtzhN1y2KV
+         TKeg==
+X-Gm-Message-State: ACgBeo15Q5YWwd+MxDmhbZlFHpJAUFG387tYoMje0dh7KfL5U7WvPqS6
+        jBTG202Kykqr9DEczxSNTgWgB95g/xJ+mWJk
+X-Google-Smtp-Source: AA6agR7ngOeEl4pEifyFvMj1+no4zMWY5cS1SItI/p1QlexPRF8t8lV+J7HqftSAYkpL1RpFnptslw==
+X-Received: by 2002:a17:902:db11:b0:16f:342:a439 with SMTP id m17-20020a170902db1100b0016f0342a439mr21131775plx.13.1661196812408;
+        Mon, 22 Aug 2022 12:33:32 -0700 (PDT)
 Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id 36-20020a630a24000000b0042ad3214a88sm1044220pgk.74.2022.08.22.12.12.54
+        by smtp.gmail.com with ESMTPSA id p9-20020a1709027ec900b001690d398401sm8744812plb.88.2022.08.22.12.33.31
         for <linux-next@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Aug 2022 12:12:54 -0700 (PDT)
-Message-ID: <6303d536.630a0220.360e7.1f31@mx.google.com>
-Date:   Mon, 22 Aug 2022 12:12:54 -0700 (PDT)
+        Mon, 22 Aug 2022 12:33:32 -0700 (PDT)
+Message-ID: <6303da0c.170a0220.16c35.f2e3@mx.google.com>
+Date:   Mon, 22 Aug 2022 12:33:32 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: pending-fixes
+X-Kernelci-Branch: master
 X-Kernelci-Tree: next
 X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: v6.0-rc1-607-g72d0e40cc07e
-Subject: next/pending-fixes build: 201 builds: 2 failed, 199 passed, 6 errors,
- 19 warnings (v6.0-rc1-607-g72d0e40cc07e)
+X-Kernelci-Kernel: next-20220822
+Subject: next/master build: 217 builds: 7 failed, 210 passed, 18 errors,
+ 67 warnings (next-20220822)
 To:     linux-next@vger.kernel.org
 From:   "kernelci.org bot" <bot@kernelci.org>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -70,40 +70,56 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes build: 201 builds: 2 failed, 199 passed, 6 errors, 19 wa=
-rnings (v6.0-rc1-607-g72d0e40cc07e)
+next/master build: 217 builds: 7 failed, 210 passed, 18 errors, 67 warnings=
+ (next-20220822)
 
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v6.0-rc1-607-g72d0e40cc07e/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20220822/
 
 Tree: next
-Branch: pending-fixes
-Git Describe: v6.0-rc1-607-g72d0e40cc07e
-Git Commit: 72d0e40cc07e06e5b11ddcf74ba68f7e04eacb16
+Branch: master
+Git Describe: next-20220822
+Git Commit: cc2986f4dc67df7e6209e0cd74145fffbd30d693
 Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
 Built: 8 unique architectures
 
 Build Failures Detected:
 
+arm64:
+    allmodconfig: (clang-16) FAIL
+
 arm:
+    allmodconfig: (clang-16) FAIL
     rpc_defconfig: (gcc-10) FAIL
+
+i386:
+    allmodconfig: (clang-16) FAIL
 
 mips:
     decstation_64_defconfig: (gcc-10) FAIL
+
+riscv:
+    allnoconfig: (clang-16) FAIL
+    defconfig+CONFIG_EFI=3Dn: (clang-16) FAIL
 
 Errors and Warnings Detected:
 
 arc:
 
 arm64:
+    allmodconfig (clang-16): 4 errors, 4 warnings
 
 arm:
+    allmodconfig (clang-16): 1 error, 13 warnings
     aspeed_g4_defconfig (gcc-10): 1 warning
+    aspeed_g5_defconfig (clang-16): 12 warnings
     aspeed_g5_defconfig (gcc-10): 1 warning
+    multi_v7_defconfig (clang-16): 10 warnings
     rpc_defconfig (gcc-10): 2 errors
     u8500_defconfig (gcc-10): 2 warnings
 
 i386:
+    allmodconfig (clang-16): 7 errors, 5 warnings
 
 mips:
     32r2el_defconfig (gcc-10): 1 warning
@@ -116,6 +132,7 @@ mips:
     rb532_defconfig (gcc-10): 1 warning
 
 riscv:
+    defconfig+CONFIG_EFI=3Dn (clang-16): 4 warnings
 
 sparc:
     allnoconfig (gcc-10): 1 warning
@@ -131,6 +148,28 @@ Errors summary:
 
     4    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=
 =80=98-mhard-float=E2=80=99
+    2    sound/soc/codecs/src4xxx.c:280:3: error: variable 'pj' is used uni=
+nitialized whenever switch default is taken [-Werror,-Wsometimes-uninitiali=
+zed]
+    2    sound/soc/codecs/src4xxx.c:280:3: error: variable 'jd' is used uni=
+nitialized whenever switch default is taken [-Werror,-Wsometimes-uninitiali=
+zed]
+    2    sound/soc/codecs/src4xxx.c:280:3: error: variable 'd' is used unin=
+itialized whenever switch default is taken [-Werror,-Wsometimes-uninitializ=
+ed]
+    2    drivers/net/wireless/realtek/rtw88/main.c:731:2: error: variable '=
+primary_channel_idx' is used uninitialized whenever switch default is taken=
+ [-Werror,-Wsometimes-uninitialized]
+    1    ld.lld: error: undefined symbol: __aeabi_uldivmod
+    1    drivers/platform/x86/amd/pmf/sps.c:96:2: error: variable 'mode' is=
+ used uninitialized whenever switch default is taken [-Werror,-Wsometimes-u=
+ninitialized]
+    1    drivers/net/ethernet/mellanox/mlx5/core/en_main.c:3431:12: error: =
+stack frame size (1072) exceeds limit (1024) in 'mlx5e_setup_tc' [-Werror,-=
+Wframe-larger-than]
+    1    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_7_ppt.c:142=
+5:12: error: stack frame size (1028) exceeds limit (1024) in 'smu_v13_0_7_g=
+et_power_profile_mode' [-Werror,-Wframe-larger-than]
     1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
 =3D0x'
     1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
@@ -138,24 +177,48 @@ Errors summary:
 
 Warnings summary:
 
+    22   clang: warning: argument unused during compilation: '-march=3Darmv=
+6k' [-Wunused-command-line-argument]
+    10   clang: warning: argument unused during compilation: '-march=3Darmv=
+7-a' [-Wunused-command-line-argument]
     10   <stdin>:1517:2: warning: #warning syscall clone3 not implemented [=
 -Wcpp]
     3    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
 e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
 ted "0,0"
+    2    sound/soc/codecs/src4xxx.c:223:20: note: initialize the variable '=
+d' to silence this warning
+    2    sound/soc/codecs/src4xxx.c:223:17: note: initialize the variable '=
+jd' to silence this warning
+    2    sound/soc/codecs/src4xxx.c:223:13: note: initialize the variable '=
+pj' to silence this warning
     2    kernel/trace/ftrace.c:3149:1: warning: =E2=80=98ops_references_rec=
 =E2=80=99 defined but not used [-Wunused-function]
+    2    drivers/net/wireless/realtek/rtw88/main.c:687:24: note: initialize=
+ the variable 'primary_channel_idx' to silence this warning
+    2    1 warning generated.
+    1    printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
+    1    kernel/trace/ftrace.c:3149:1: warning: unused function 'ops_refere=
+nces_rec' [-Wunused-function]
     1    drivers/power/supply/ab8500_chargalg.c:493:13: warning: =E2=80=98a=
 b8500_chargalg_ex_ac_enable_toggle=E2=80=99 defined but not used [-Wunused-=
 variable]
     1    drivers/power/supply/ab8500_chargalg.c:493:13: warning: unused var=
 iable =E2=80=98ab8500_chargalg_ex_ac_enable_toggle=E2=80=99 [-Wunused-varia=
 ble]
+    1    drivers/platform/x86/amd/pmf/sps.c:84:9: note: initialize the vari=
+able 'mode' to silence this warning
     1    cc1: warning: result of =E2=80=98-117440512 << 16=E2=80=99 require=
 s 44 bits to represent, but =E2=80=98int=E2=80=99 only has 32 bits [-Wshift=
 -overflow=3D]
+    1    arch/riscv/mm/dma-noncoherent.c:87:18: note: initialize the variab=
+le 'cbom_hartid' to silence this warning
+    1    arch/riscv/mm/dma-noncoherent.c:107:6: warning: variable 'cbom_har=
+tid' is uninitialized when used here [-Wuninitialized]
     1    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
 tion failed, symbol will not be versioned.
+    1    : warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
 
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
@@ -196,8 +259,107 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
+allmodconfig (arm, clang-16) =E2=80=94 FAIL, 1 error, 13 warnings, 0 sectio=
+n mismatches
+
+Errors:
+    ld.lld: error: undefined symbol: __aeabi_uldivmod
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    : warning: argument unused during compilation: '-march=3Darmv6k' [-Wunu=
+sed-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (i386, clang-16) =E2=80=94 FAIL, 7 errors, 5 warnings, 0 secti=
+on mismatches
+
+Errors:
+    sound/soc/codecs/src4xxx.c:280:3: error: variable 'd' is used uninitial=
+ized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
+    sound/soc/codecs/src4xxx.c:280:3: error: variable 'jd' is used uninitia=
+lized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
+    sound/soc/codecs/src4xxx.c:280:3: error: variable 'pj' is used uninitia=
+lized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
+    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_7_ppt.c:1425:12:=
+ error: stack frame size (1028) exceeds limit (1024) in 'smu_v13_0_7_get_po=
+wer_profile_mode' [-Werror,-Wframe-larger-than]
+    drivers/platform/x86/amd/pmf/sps.c:96:2: error: variable 'mode' is used=
+ uninitialized whenever switch default is taken [-Werror,-Wsometimes-uninit=
+ialized]
+    drivers/net/wireless/realtek/rtw88/main.c:731:2: error: variable 'prima=
+ry_channel_idx' is used uninitialized whenever switch default is taken [-We=
+rror,-Wsometimes-uninitialized]
+    drivers/net/ethernet/mellanox/mlx5/core/en_main.c:3431:12: error: stack=
+ frame size (1072) exceeds limit (1024) in 'mlx5e_setup_tc' [-Werror,-Wfram=
+e-larger-than]
+
+Warnings:
+    sound/soc/codecs/src4xxx.c:223:20: note: initialize the variable 'd' to=
+ silence this warning
+    sound/soc/codecs/src4xxx.c:223:17: note: initialize the variable 'jd' t=
+o silence this warning
+    sound/soc/codecs/src4xxx.c:223:13: note: initialize the variable 'pj' t=
+o silence this warning
+    drivers/platform/x86/amd/pmf/sps.c:84:9: note: initialize the variable =
+'mode' to silence this warning
+    drivers/net/wireless/realtek/rtw88/main.c:687:24: note: initialize the =
+variable 'primary_channel_idx' to silence this warning
+
+---------------------------------------------------------------------------=
+-----
 allmodconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
 mismatches
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, clang-16) =E2=80=94 FAIL, 4 errors, 4 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    sound/soc/codecs/src4xxx.c:280:3: error: variable 'd' is used uninitial=
+ized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
+    sound/soc/codecs/src4xxx.c:280:3: error: variable 'jd' is used uninitia=
+lized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
+    sound/soc/codecs/src4xxx.c:280:3: error: variable 'pj' is used uninitia=
+lized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
+    drivers/net/wireless/realtek/rtw88/main.c:731:2: error: variable 'prima=
+ry_channel_idx' is used uninitialized whenever switch default is taken [-We=
+rror,-Wsometimes-uninitialized]
+
+Warnings:
+    sound/soc/codecs/src4xxx.c:223:20: note: initialize the variable 'd' to=
+ silence this warning
+    sound/soc/codecs/src4xxx.c:223:17: note: initialize the variable 'jd' t=
+o silence this warning
+    sound/soc/codecs/src4xxx.c:223:13: note: initialize the variable 'pj' t=
+o silence this warning
+    drivers/net/wireless/realtek/rtw88/main.c:687:24: note: initialize the =
+variable 'primary_channel_idx' to silence this warning
 
 ---------------------------------------------------------------------------=
 -----
@@ -206,8 +368,8 @@ ismatches
 
 ---------------------------------------------------------------------------=
 -----
-allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
+allnoconfig (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -221,6 +383,21 @@ Warnings:
 -----
 allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
 n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, clang-16) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (riscv, clang-16) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 secti=
+on mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -240,6 +417,36 @@ ction mismatches
 Warnings:
     kernel/trace/ftrace.c:3149:1: warning: =E2=80=98ops_references_rec=E2=
 =80=99 defined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, clang-16) =E2=80=94 PASS, 0 errors, 12 warnings, =
+0 section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    kernel/trace/ftrace.c:3149:1: warning: unused function 'ops_references_=
+rec' [-Wunused-function]
+    1 warning generated.
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
 
 ---------------------------------------------------------------------------=
 -----
@@ -412,8 +619,31 @@ ismatches
 
 ---------------------------------------------------------------------------=
 -----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-16) =E2=80=94 PASS, 0 er=
+rors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
 defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
 s, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_EFI=3Dn (riscv, clang-16) =E2=80=94 FAIL, 0 errors, 4 warn=
+ings, 0 section mismatches
+
+Warnings:
+    arch/riscv/mm/dma-noncoherent.c:107:6: warning: variable 'cbom_hartid' =
+is uninitialized when used here [-Wuninitialized]
+    printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
+    arch/riscv/mm/dma-noncoherent.c:87:18: note: initialize the variable 'c=
+bom_hartid' to silence this warning
+    1 warning generated.
 
 ---------------------------------------------------------------------------=
 -----
@@ -432,12 +662,17 @@ rs, 0 warnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig+debug (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
+defconfig+crypto (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
 
 ---------------------------------------------------------------------------=
 -----
 defconfig+debug (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+debug (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
 tion mismatches
 
 ---------------------------------------------------------------------------=
@@ -543,6 +778,11 @@ n mismatches
 -----
 hsdk_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
 n mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, clang-16) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -768,6 +1008,11 @@ ection mismatches
 
 ---------------------------------------------------------------------------=
 -----
+multi_v5_defconfig (arm, clang-16) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
 multi_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
 ction mismatches
 
@@ -775,6 +1020,33 @@ ction mismatches
 -----
 multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
 ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, clang-16) =E2=80=94 PASS, 0 errors, 10 warnings, 0=
+ section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
 
 ---------------------------------------------------------------------------=
 -----
@@ -798,13 +1070,8 @@ multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
 
 ---------------------------------------------------------------------------=
 -----
-multi_v7_defconfig+crypto (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+ima (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
+multi_v7_defconfig+debug (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -950,6 +1217,11 @@ flow=3D]
 -----
 rbtx49xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
 ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+realview_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1115,13 +1387,13 @@ on mismatches
 
 ---------------------------------------------------------------------------=
 -----
-tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
+tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
 
 ---------------------------------------------------------------------------=
 -----
-tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
+tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1185,6 +1457,11 @@ on mismatches
 
 ---------------------------------------------------------------------------=
 -----
+vocore2_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
 vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
 0 section mismatches
 
@@ -1192,6 +1469,11 @@ vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
 -----
 x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
 ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1222,6 +1504,11 @@ nings, 0 section mismatches
 -----
 x86_64_defconfig+x86-chromebook (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, =
 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 e=
+rrors, 0 warnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----

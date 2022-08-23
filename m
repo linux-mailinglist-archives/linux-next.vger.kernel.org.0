@@ -2,63 +2,63 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B77759D1DF
-	for <lists+linux-next@lfdr.de>; Tue, 23 Aug 2022 09:20:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9236D59D2E2
+	for <lists+linux-next@lfdr.de>; Tue, 23 Aug 2022 10:06:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235448AbiHWHTA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 23 Aug 2022 03:19:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52616 "EHLO
+        id S229760AbiHWIB7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 23 Aug 2022 04:01:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239169AbiHWHS7 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 23 Aug 2022 03:18:59 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB3C02B1B7
-        for <linux-next@vger.kernel.org>; Tue, 23 Aug 2022 00:18:56 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id e19so12025603pju.1
-        for <linux-next@vger.kernel.org>; Tue, 23 Aug 2022 00:18:56 -0700 (PDT)
+        with ESMTP id S241482AbiHWIB6 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 23 Aug 2022 04:01:58 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D843659D0
+        for <linux-next@vger.kernel.org>; Tue, 23 Aug 2022 01:01:54 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id ds12-20020a17090b08cc00b001fae6343d9fso1011295pjb.0
+        for <linux-next@vger.kernel.org>; Tue, 23 Aug 2022 01:01:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernelci-org.20210112.gappssmtp.com; s=20210112;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:from:to:cc;
-        bh=i0bYqJ0YBJ0PXcY/YaRW/7JkMRSw2ortaI22iLkqbb4=;
-        b=N5w6L/CQQDxIXEvb3r7Ur/e4a/+OYizdN6Ora7U8zXno7oyOjRmed7xonIfJLs/bLJ
-         Q90rWthxlkvyvIEgobuZrUQBzgujBvjPWxCnd1Gng5AzF/8nT9Ai2H6JTzMykJEYltiu
-         OJH6ehcY4wze0eS6jk5bBwXN3qX03YH982A5ZrOFXbaxcYjZpqzfRsy6g2qwvVbmkg3O
-         Zq0CUJ6jHjw+RfCO6OIE0gZHy5Xo5Ot55cF7KZxcWZVe2qwVbK7MH2H/16uN7pcvCK95
-         cuaRUZKrHKkZKcCKmFu2XvPUwg23/kCoAXrCrwK51hNaRsteYmYHmjfQgVogpxcOEhVf
-         ExkA==
+        bh=0xEOaeAanXB3rHkv+pdjkVR4AAgvcpvL8IwwUlUT8G8=;
+        b=AkHAzg2KXeuVKbk1FyhhgLl9ZkkCQAmynEtnBZkauSBRBYZjE7y5WCUwHlA58Fb3XB
+         D6S2g2KNIgvFiNiKULIlocyM7aeRtjCxRXx0CbiYbGwJEThJ2P7fP4iswvbrJgekhluv
+         JRsnRh/ITV6RZKIQKoWQ8N5ATxzcKoEPA98UeyCkxmMqv9i7ity+gHvlUBl4IfCtDTLd
+         n2aHqhIEkDo/pXIe8ABVpwkrn0caIgd8xmp3XUmQZW+OlOrAawcFWrbqhKbik0nKzYFZ
+         21dLIlfoJe5DN7WhKJyNfD7+iUkoVSTK3BXbG8XnbVVhid/Nh0Vc5EHd8upwoTyAzDYG
+         uXNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:x-gm-message-state:from:to:cc;
-        bh=i0bYqJ0YBJ0PXcY/YaRW/7JkMRSw2ortaI22iLkqbb4=;
-        b=E3z2aTbbjJdUiGYHcQDcOrUhulPmQc+IPH5/lNkm6TuWVzO2fUQCXxFCtnrtXZ0nP9
-         K9aLPE2XSiMyo2oid0QXBELiwbxA946+C5j8JaLvlBoK7i1+2zN/Ud6CmqemBozakxsV
-         E2e7HafaFGFpRGBS60Wj2lbGdr/6CUl7+8ZfPRb4V+XPBcPmhSO/N1NYB6LRh+cA82xy
-         Rr8Mi19S2LY11woArYhdQKNd78iQ4YvQuvVwjye3po+3KipeOi8s5I3QeddCS3fJXpY0
-         OW41N6nNQnOAx9nApw7vPyx7t7RRFiTBR5sEMJjMyDg4AGN127xIwBdcZHe/Q0SG4zOs
-         PwOg==
-X-Gm-Message-State: ACgBeo3UjCgmUGfjRY185DZHGwy926ofUnUr0bTRit1ERKxNQWDqnvej
-        0plqnyve6JDZUoZhnrcpFwc0LCrR5UolIpQv
-X-Google-Smtp-Source: AA6agR671hpiRomcdXLiBv5oz/diIMJCABVGj0YlEWcXiLv7zFl5IoHMcAZAZb3mZJEx9Hh/uFbl+A==
-X-Received: by 2002:a17:90b:1e4e:b0:1fa:bab4:d24f with SMTP id pi14-20020a17090b1e4e00b001fabab4d24fmr2012968pjb.185.1661239135497;
-        Tue, 23 Aug 2022 00:18:55 -0700 (PDT)
+        bh=0xEOaeAanXB3rHkv+pdjkVR4AAgvcpvL8IwwUlUT8G8=;
+        b=6WdTdf5ck6s3bYUDMLfGk1hnbqzKNNpJd2UUkl40aam7rarewlwItxigDN2hK11zch
+         +KZXsUlavRpmZqaCQJfUgDEi8n/gI2rrCYpI7uBbyZ0If0dgYtNAeGyMpmmkxFuLK1+x
+         Vr7C/AlPk36q09FV1JcGT20lk0Evtx/5r7vgAzKpulGt7lIW/yFQ97yvnetXw1Etm7nR
+         uIibMnbUFFASwhN3LRmGQQMTo+0yrVgl82+DmwybPE9/NCQIj4dYZVWx3pgVPotdhkrm
+         0QC2rcY7DLqV3lRwjMitDu+0LP9+lbKMufRojkLaJPKvTR6ukRDlxglao7heNJ7+GUxS
+         bMmg==
+X-Gm-Message-State: ACgBeo04dsPAnPr6r+Dw7byifq1RMdq2SX8OjoOq982W0MjJd01xxpUM
+        t8GRaAeWD62pXzJ8U03j6sGQOt+W/hsyoiOJ
+X-Google-Smtp-Source: AA6agR4ZVCxjmFS0j0YyKKYrDs8bqYK75goGN8MseeGSt74mCxfo1MUX4DhDkE4ocad2ykBy/cjjAQ==
+X-Received: by 2002:a17:903:489:b0:172:abe8:fed1 with SMTP id jj9-20020a170903048900b00172abe8fed1mr23706776plb.71.1661241712455;
+        Tue, 23 Aug 2022 01:01:52 -0700 (PDT)
 Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id h15-20020a056a00000f00b005367ef405e0sm4326259pfk.85.2022.08.23.00.18.52
+        by smtp.gmail.com with ESMTPSA id t14-20020a63444e000000b0042a06dc9a75sm8399018pgk.13.2022.08.23.01.01.51
         for <linux-next@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 00:18:53 -0700 (PDT)
-Message-ID: <63047f5d.050a0220.4319b.7a38@mx.google.com>
-Date:   Tue, 23 Aug 2022 00:18:53 -0700 (PDT)
+        Tue, 23 Aug 2022 01:01:51 -0700 (PDT)
+Message-ID: <6304896f.630a0220.6ca31.edf0@mx.google.com>
+Date:   Tue, 23 Aug 2022 01:01:51 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: pending-fixes
+X-Kernelci-Branch: master
 X-Kernelci-Tree: next
 X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: v6.0-rc2-232-gffc62c393637
-Subject: next/pending-fixes build: 205 builds: 2 failed, 203 passed, 6 errors,
- 19 warnings (v6.0-rc2-232-gffc62c393637)
+X-Kernelci-Kernel: next-20220823
+Subject: next/master build: 232 builds: 20 failed, 212 passed, 32 errors,
+ 94 warnings (next-20220823)
 To:     linux-next@vger.kernel.org
 From:   "kernelci.org bot" <bot@kernelci.org>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -70,40 +70,94 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes build: 205 builds: 2 failed, 203 passed, 6 errors, 19 wa=
-rnings (v6.0-rc2-232-gffc62c393637)
+next/master build: 232 builds: 20 failed, 212 passed, 32 errors, 94 warning=
+s (next-20220823)
 
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v6.0-rc2-232-gffc62c393637/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20220823/
 
 Tree: next
-Branch: pending-fixes
-Git Describe: v6.0-rc2-232-gffc62c393637
-Git Commit: ffc62c393637b22662b3022f7534815098c84fdf
+Branch: master
+Git Describe: next-20220823
+Git Commit: 05477f3653b82d8b3bcf39d2937d9893124976db
 Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
 Built: 8 unique architectures
 
 Build Failures Detected:
 
+arm64:
+    cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config: (clang-13) =
+FAIL
+    cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chrome=
+book: (clang-13) FAIL
+    cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chr=
+omebook: (clang-13) FAIL
+
 arm:
+    allmodconfig: (clang-16) FAIL
+    davinci_all_defconfig: (gcc-10) FAIL
+    keystone_defconfig: (gcc-10) FAIL
+    omap2plus_defconfig: (gcc-10) FAIL
     rpc_defconfig: (gcc-10) FAIL
+
+i386:
+    allmodconfig: (clang-16) FAIL
+    i386_defconfig: (clang-16) FAIL
 
 mips:
     decstation_64_defconfig: (gcc-10) FAIL
+
+riscv:
+    allnoconfig: (clang-16) FAIL
+    defconfig+CONFIG_EFI=3Dn: (clang-16) FAIL
+
+x86_64:
+    cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86=
+-chromebook: (clang-13) FAIL
+    cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-=
+chromebook: (clang-13) FAIL
+    cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config: (clang-13=
+) FAIL
+    cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chrome=
+book: (clang-13) FAIL
+    x86_64_defconfig+x86-chromebook: (clang-13) FAIL
+    allmodconfig: (clang-16) FAIL
+    x86_64_defconfig: (clang-16) FAIL
 
 Errors and Warnings Detected:
 
 arc:
 
 arm64:
+    cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (clang-13): =
+1 error, 1 warning
+    cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chrome=
+book (clang-13): 1 error, 1 warning
+    cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chr=
+omebook (clang-13): 1 error, 1 warning
+    defconfig (clang-16): 3 warnings
+    defconfig+CONFIG_ARM64_64K_PAGES=3Dy (clang-16): 3 warnings
+    defconfig+arm64-chromebook (clang-13): 3 warnings
 
 arm:
+    allmodconfig (clang-16): 1 error, 13 warnings
     aspeed_g4_defconfig (gcc-10): 1 warning
     aspeed_g5_defconfig (gcc-10): 1 warning
+    aspeed_g5_defconfig (clang-16): 12 warnings
+    cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (clang-13): 6 =
+warnings
+    cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (clang-13=
+): 6 warnings
+    davinci_all_defconfig (gcc-10): 3 errors
+    keystone_defconfig (gcc-10): 4 errors
+    multi_v7_defconfig (clang-16): 10 warnings
+    omap2plus_defconfig (gcc-10): 4 errors
     rpc_defconfig (gcc-10): 2 errors
     u8500_defconfig (gcc-10): 2 warnings
 
 i386:
+    allmodconfig (clang-16): 1 error, 1 warning
+    i386_defconfig (clang-16): 1 error, 1 warning
 
 mips:
     32r2el_defconfig (gcc-10): 1 warning
@@ -116,6 +170,7 @@ mips:
     rb532_defconfig (gcc-10): 1 warning
 
 riscv:
+    defconfig+CONFIG_EFI=3Dn (clang-16): 7 warnings
 
 sparc:
     allnoconfig (gcc-10): 1 warning
@@ -126,11 +181,42 @@ sparc:
     tinyconfig (gcc-10): 1 warning
 
 x86_64:
+    allmodconfig (clang-16): 1 error, 1 warning
+    cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86=
+-chromebook (clang-13): 1 error, 1 warning
+    cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-=
+chromebook (clang-13): 1 error, 1 warning
+    cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (clang-13)=
+: 2 errors, 1 warning
+    cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chrome=
+book (clang-13): 2 errors, 1 warning
+    x86_64_defconfig (clang-16): 1 error, 1 warning
+    x86_64_defconfig+x86-chromebook (clang-13): 1 error, 1 warning
 
 Errors summary:
 
+    7    drivers/net/wireless/realtek/rtw88/main.c:731:2: error: variable '=
+primary_channel_idx' is used uninitialized whenever switch default is taken=
+ [-Werror,-Wsometimes-uninitialized]
+    5    mm/pagewalk.c:318:12: error: variable 'err' is used uninitialized =
+whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
     4    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=
 =80=98-mhard-float=E2=80=99
+    2    sound/soc/intel/skylake/skl.c:729:18: error: unused variable 'skl'=
+ [-Werror,-Wunused-variable]
+    2    /tmp/kci/linux/build/../drivers/net/ethernet/ti/davinci_mdio.c:649=
+: undefined reference to `free_mdio_bitbang'
+    2    /tmp/kci/linux/build/../drivers/net/ethernet/ti/davinci_mdio.c:545=
+: undefined reference to `alloc_mdio_bitbang'
+    2    /tmp/kci/linux/build/../drivers/net/ethernet/ti/davinci_mdio.c:253=
+: undefined reference to `mdiobb_write'
+    2    /tmp/kci/linux/build/../drivers/net/ethernet/ti/davinci_mdio.c:236=
+: undefined reference to `mdiobb_read'
+    1    ld.lld: error: undefined symbol: __aeabi_uldivmod
+    1    davinci_mdio.c:(.text+0x8f4): undefined reference to `mdiobb_write'
+    1    davinci_mdio.c:(.text+0x844): undefined reference to `mdiobb_read'
+    1    davinci_mdio.c:(.text+0x1ec): undefined reference to `free_mdio_bi=
+tbang'
     1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
 =3D0x'
     1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
@@ -138,13 +224,27 @@ Errors summary:
 
 Warnings summary:
 
+    23   clang: warning: argument unused during compilation: '-march=3Darmv=
+6k' [-Wunused-command-line-argument]
+    22   clang: warning: argument unused during compilation: '-march=3Darmv=
+7-a' [-Wunused-command-line-argument]
     10   <stdin>:1517:2: warning: #warning syscall clone3 not implemented [=
 -Wcpp]
+    9    mm/pagewalk.c:311:10: note: initialize the variable 'err' to silen=
+ce this warning
+    7    drivers/net/wireless/realtek/rtw88/main.c:687:24: note: initialize=
+ the variable 'primary_channel_idx' to silence this warning
+    6    1 warning generated.
+    4    mm/pagewalk.c:318:12: warning: variable 'err' is used uninitialize=
+d whenever 'if' condition is false [-Wsometimes-uninitialized]
     3    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
 e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
 ted "0,0"
     2    kernel/trace/ftrace.c:3159:1: warning: =E2=80=98ops_references_rec=
 =E2=80=99 defined but not used [-Wunused-function]
+    1    printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
+    1    kernel/trace/ftrace.c:3159:1: warning: unused function 'ops_refere=
+nces_rec' [-Wunused-function]
     1    drivers/power/supply/ab8500_chargalg.c:493:13: warning: =E2=80=98a=
 b8500_chargalg_ex_ac_enable_toggle=E2=80=99 defined but not used [-Wunused-=
 variable]
@@ -154,6 +254,10 @@ ble]
     1    cc1: warning: result of =E2=80=98-117440512 << 16=E2=80=99 require=
 s 44 bits to represent, but =E2=80=98int=E2=80=99 only has 32 bits [-Wshift=
 -overflow=3D]
+    1    arch/riscv/mm/dma-noncoherent.c:87:18: note: initialize the variab=
+le 'cbom_hartid' to silence this warning
+    1    arch/riscv/mm/dma-noncoherent.c:107:6: warning: variable 'cbom_har=
+tid' is uninitialized when used here [-Wuninitialized]
     1    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
 tion failed, symbol will not be versioned.
 
@@ -196,6 +300,68 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
+allmodconfig (x86_64, clang-16) =E2=80=94 FAIL, 1 error, 1 warning, 0 secti=
+on mismatches
+
+Errors:
+    mm/pagewalk.c:318:12: error: variable 'err' is used uninitialized whene=
+ver 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+
+Warnings:
+    mm/pagewalk.c:311:10: note: initialize the variable 'err' to silence th=
+is warning
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, clang-16) =E2=80=94 FAIL, 1 error, 13 warnings, 0 sectio=
+n mismatches
+
+Errors:
+    ld.lld: error: undefined symbol: __aeabi_uldivmod
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (i386, clang-16) =E2=80=94 FAIL, 1 error, 1 warning, 0 section=
+ mismatches
+
+Errors:
+    mm/pagewalk.c:318:12: error: variable 'err' is used uninitialized whene=
+ver 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+
+Warnings:
+    mm/pagewalk.c:311:10: note: initialize the variable 'err' to silence th=
+is warning
+
+---------------------------------------------------------------------------=
+-----
 allmodconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
 mismatches
 
@@ -206,8 +372,13 @@ n mismatches
 
 ---------------------------------------------------------------------------=
 -----
-allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
+allnoconfig (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -224,8 +395,18 @@ n mismatches
 
 ---------------------------------------------------------------------------=
 -----
-allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
+allnoconfig (i386, clang-16) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (riscv, clang-16) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 secti=
+on mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -254,6 +435,36 @@ ction mismatches
 Warnings:
     kernel/trace/ftrace.c:3159:1: warning: =E2=80=98ops_references_rec=E2=
 =80=99 defined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, clang-16) =E2=80=94 PASS, 0 errors, 12 warnings, =
+0 section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    kernel/trace/ftrace.c:3159:1: warning: unused function 'ops_references_=
+rec' [-Wunused-function]
+    1 warning generated.
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
 
 ---------------------------------------------------------------------------=
 -----
@@ -372,6 +583,168 @@ on mismatches
 
 ---------------------------------------------------------------------------=
 -----
+cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (arm64, clang-13=
+) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mismatches
+
+Errors:
+    drivers/net/wireless/realtek/rtw88/main.c:731:2: error: variable 'prima=
+ry_channel_idx' is used uninitialized whenever switch default is taken [-We=
+rror,-Wsometimes-uninitialized]
+
+Warnings:
+    drivers/net/wireless/realtek/rtw88/main.c:687:24: note: initialize the =
+variable 'primary_channel_idx' to silence this warning
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chromebook=
+ (arm64, clang-13) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mismatches
+
+Errors:
+    drivers/net/wireless/realtek/rtw88/main.c:731:2: error: variable 'prima=
+ry_channel_idx' is used uninitialized whenever switch default is taken [-We=
+rror,-Wsometimes-uninitialized]
+
+Warnings:
+    drivers/net/wireless/realtek/rtw88/main.c:687:24: note: initialize the =
+variable 'primary_channel_idx' to silence this warning
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mismatc=
+hes
+
+Errors:
+    drivers/net/wireless/realtek/rtw88/main.c:731:2: error: variable 'prima=
+ry_channel_idx' is used uninitialized whenever switch default is taken [-We=
+rror,-Wsometimes-uninitialized]
+
+Warnings:
+    drivers/net/wireless/realtek/rtw88/main.c:687:24: note: initialize the =
+variable 'primary_channel_idx' to silence this warning
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
+tches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-chrom=
+ebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
+matches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
+=E2=80=94 PASS, 0 errors, 6 warnings, 0 section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
+3) =E2=80=94 PASS, 0 errors, 6 warnings, 0 section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86-chr=
+omebook (x86_64, clang-13) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mi=
+smatches
+
+Errors:
+    drivers/net/wireless/realtek/rtw88/main.c:731:2: error: variable 'prima=
+ry_channel_idx' is used uninitialized whenever switch default is taken [-We=
+rror,-Wsometimes-uninitialized]
+
+Warnings:
+    drivers/net/wireless/realtek/rtw88/main.c:687:24: note: initialize the =
+variable 'primary_channel_idx' to silence this warning
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86-chr=
+omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-chro=
+mebook (x86_64, clang-13) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mis=
+matches
+
+Errors:
+    drivers/net/wireless/realtek/rtw88/main.c:731:2: error: variable 'prima=
+ry_channel_idx' is used uninitialized whenever switch default is taken [-We=
+rror,-Wsometimes-uninitialized]
+
+Warnings:
+    drivers/net/wireless/realtek/rtw88/main.c:687:24: note: initialize the =
+variable 'primary_channel_idx' to silence this warning
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (x86_64, clang=
+-13) =E2=80=94 FAIL, 2 errors, 1 warning, 0 section mismatches
+
+Errors:
+    sound/soc/intel/skylake/skl.c:729:18: error: unused variable 'skl' [-We=
+rror,-Wunused-variable]
+    drivers/net/wireless/realtek/rtw88/main.c:731:2: error: variable 'prima=
+ry_channel_idx' is used uninitialized whenever switch default is taken [-We=
+rror,-Wsometimes-uninitialized]
+
+Warnings:
+    drivers/net/wireless/realtek/rtw88/main.c:687:24: note: initialize the =
+variable 'primary_channel_idx' to silence this warning
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chromebook=
+ (x86_64, clang-13) =E2=80=94 FAIL, 2 errors, 1 warning, 0 section mismatch=
+es
+
+Errors:
+    sound/soc/intel/skylake/skl.c:729:18: error: unused variable 'skl' [-We=
+rror,-Wunused-variable]
+    drivers/net/wireless/realtek/rtw88/main.c:731:2: error: variable 'prima=
+ry_channel_idx' is used uninitialized whenever switch default is taken [-We=
+rror,-Wsometimes-uninitialized]
+
+Warnings:
+    drivers/net/wireless/realtek/rtw88/main.c:687:24: note: initialize the =
+variable 'primary_channel_idx' to silence this warning
+
+---------------------------------------------------------------------------=
+-----
 cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
  section mismatches
 
@@ -382,8 +755,13 @@ cu1830-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
 
 ---------------------------------------------------------------------------=
 -----
-davinci_all_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+davinci_all_defconfig (arm, gcc-10) =E2=80=94 FAIL, 3 errors, 0 warnings, 0=
  section mismatches
+
+Errors:
+    davinci_mdio.c:(.text+0x1ec): undefined reference to `free_mdio_bitbang'
+    davinci_mdio.c:(.text+0x844): undefined reference to `mdiobb_read'
+    davinci_mdio.c:(.text+0x8f4): undefined reference to `mdiobb_write'
 
 ---------------------------------------------------------------------------=
 -----
@@ -417,8 +795,60 @@ ismatches
 
 ---------------------------------------------------------------------------=
 -----
+defconfig (arm64, clang-16) =E2=80=94 PASS, 0 errors, 3 warnings, 0 section=
+ mismatches
+
+Warnings:
+    mm/pagewalk.c:318:12: warning: variable 'err' is used uninitialized whe=
+never 'if' condition is false [-Wsometimes-uninitialized]
+    mm/pagewalk.c:311:10: note: initialize the variable 'err' to silence th=
+is warning
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_16K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-16) =E2=80=94 PASS, 0 er=
+rors, 3 warnings, 0 section mismatches
+
+Warnings:
+    mm/pagewalk.c:318:12: warning: variable 'err' is used uninitialized whe=
+never 'if' condition is false [-Wsometimes-uninitialized]
+    mm/pagewalk.c:311:10: note: initialize the variable 'err' to silence th=
+is warning
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
 defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
 s, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_EFI=3Dn (riscv, clang-16) =E2=80=94 FAIL, 0 errors, 7 warn=
+ings, 0 section mismatches
+
+Warnings:
+    arch/riscv/mm/dma-noncoherent.c:107:6: warning: variable 'cbom_hartid' =
+is uninitialized when used here [-Wuninitialized]
+    printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
+    arch/riscv/mm/dma-noncoherent.c:87:18: note: initialize the variable 'c=
+bom_hartid' to silence this warning
+    1 warning generated.
+    mm/pagewalk.c:318:12: warning: variable 'err' is used uninitialized whe=
+never 'if' condition is false [-Wsometimes-uninitialized]
+    mm/pagewalk.c:311:10: note: initialize the variable 'err' to silence th=
+is warning
+    1 warning generated.
 
 ---------------------------------------------------------------------------=
 -----
@@ -429,6 +859,23 @@ s, 0 warnings, 0 section mismatches
 -----
 defconfig+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
 ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 3 wa=
+rnings, 0 section mismatches
+
+Warnings:
+    mm/pagewalk.c:318:12: warning: variable 'err' is used uninitialized whe=
+never 'if' condition is false [-Wsometimes-uninitialized]
+    mm/pagewalk.c:311:10: note: initialize the variable 'err' to silence th=
+is warning
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -551,6 +998,19 @@ n mismatches
 
 ---------------------------------------------------------------------------=
 -----
+i386_defconfig (i386, clang-16) =E2=80=94 FAIL, 1 error, 1 warning, 0 secti=
+on mismatches
+
+Errors:
+    mm/pagewalk.c:318:12: error: variable 'err' is used uninitialized whene=
+ver 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+
+Warnings:
+    mm/pagewalk.c:311:10: note: initialize the variable 'err' to silence th=
+is warning
+
+---------------------------------------------------------------------------=
+-----
 i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
 on mismatches
 
@@ -621,8 +1081,18 @@ section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-keystone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+keystone_defconfig (arm, gcc-10) =E2=80=94 FAIL, 4 errors, 0 warnings, 0 se=
 ction mismatches
+
+Errors:
+    /tmp/kci/linux/build/../drivers/net/ethernet/ti/davinci_mdio.c:649: und=
+efined reference to `free_mdio_bitbang'
+    /tmp/kci/linux/build/../drivers/net/ethernet/ti/davinci_mdio.c:545: und=
+efined reference to `alloc_mdio_bitbang'
+    /tmp/kci/linux/build/../drivers/net/ethernet/ti/davinci_mdio.c:236: und=
+efined reference to `mdiobb_read'
+    /tmp/kci/linux/build/../drivers/net/ethernet/ti/davinci_mdio.c:253: und=
+efined reference to `mdiobb_write'
 
 ---------------------------------------------------------------------------=
 -----
@@ -773,6 +1243,11 @@ ection mismatches
 
 ---------------------------------------------------------------------------=
 -----
+multi_v5_defconfig (arm, clang-16) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
 multi_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
 ction mismatches
 
@@ -780,6 +1255,33 @@ ction mismatches
 -----
 multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
 ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, clang-16) =E2=80=94 PASS, 0 errors, 10 warnings, 0=
+ section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
 
 ---------------------------------------------------------------------------=
 -----
@@ -800,21 +1302,6 @@ multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0=
 -----
 multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
  errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+crypto (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+debug (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+ima (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -873,8 +1360,18 @@ s, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-omap2plus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+omap2plus_defconfig (arm, gcc-10) =E2=80=94 FAIL, 4 errors, 0 warnings, 0 s=
 ection mismatches
+
+Errors:
+    /tmp/kci/linux/build/../drivers/net/ethernet/ti/davinci_mdio.c:649: und=
+efined reference to `free_mdio_bitbang'
+    /tmp/kci/linux/build/../drivers/net/ethernet/ti/davinci_mdio.c:545: und=
+efined reference to `alloc_mdio_bitbang'
+    /tmp/kci/linux/build/../drivers/net/ethernet/ti/davinci_mdio.c:236: und=
+efined reference to `mdiobb_read'
+    /tmp/kci/linux/build/../drivers/net/ethernet/ti/davinci_mdio.c:253: und=
+efined reference to `mdiobb_write'
 
 ---------------------------------------------------------------------------=
 -----
@@ -1130,6 +1627,11 @@ on mismatches
 
 ---------------------------------------------------------------------------=
 -----
+tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
 tinyconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
 ismatches
 
@@ -1138,18 +1640,13 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
 tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
  mismatches
 
 ---------------------------------------------------------------------------=
 -----
-tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
+tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1167,11 +1664,6 @@ Warnings:
     drivers/power/supply/ab8500_chargalg.c:493:13: warning: =E2=80=98ab8500=
 _chargalg_ex_ac_enable_toggle=E2=80=99 defined but not used [-Wunused-varia=
 ble]
-
----------------------------------------------------------------------------=
------
-vdk_hs38_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1210,6 +1702,19 @@ vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
 
 ---------------------------------------------------------------------------=
 -----
+x86_64_defconfig (x86_64, clang-16) =E2=80=94 FAIL, 1 error, 1 warning, 0 s=
+ection mismatches
+
+Errors:
+    mm/pagewalk.c:318:12: error: variable 'err' is used uninitialized whene=
+ver 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+
+Warnings:
+    mm/pagewalk.c:311:10: note: initialize the variable 'err' to silence th=
+is warning
+
+---------------------------------------------------------------------------=
+-----
 x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
 ection mismatches
 
@@ -1242,6 +1747,19 @@ nings, 0 section mismatches
 -----
 x86_64_defconfig+x86-chromebook (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, =
 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 FAIL, 1 error,=
+ 1 warning, 0 section mismatches
+
+Errors:
+    mm/pagewalk.c:318:12: error: variable 'err' is used uninitialized whene=
+ver 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+
+Warnings:
+    mm/pagewalk.c:311:10: note: initialize the variable 'err' to silence th=
+is warning
 
 ---------------------------------------------------------------------------=
 -----

@@ -2,52 +2,99 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3062759F2D8
-	for <lists+linux-next@lfdr.de>; Wed, 24 Aug 2022 06:53:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F6B859F2DC
+	for <lists+linux-next@lfdr.de>; Wed, 24 Aug 2022 07:01:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229954AbiHXEx1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 24 Aug 2022 00:53:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57184 "EHLO
+        id S231516AbiHXFBB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 24 Aug 2022 01:01:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiHXEx1 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 24 Aug 2022 00:53:27 -0400
-X-Greylist: delayed 496 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 23 Aug 2022 21:53:26 PDT
-Received: from h2889736.stratoserver.net (h2889736.stratoserver.net [85.214.161.107])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA318FD69
-        for <linux-next@vger.kernel.org>; Tue, 23 Aug 2022 21:53:26 -0700 (PDT)
-Received: from h2889736.stratoserver.net (localhost [127.0.0.1])
-        by h2889736.stratoserver.net (Postfix) with ESMTP id 508DE84017
-        for <linux-next@vger.kernel.org>; Wed, 24 Aug 2022 06:45:09 +0200 (CEST)
-X-Spam-Score: -1.911
-X-Spam-Level: 
-X-Spam-Status: No, score=2.1 required=5.0 tests=BAYES_50,RCVD_IN_VALIDITY_RPBL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
-Received: from h2889736.stratoserver.net ([127.0.0.1])
-        by h2889736.stratoserver.net (h2889736.stratoserver.net [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 8qaTZts627Z1 for <linux-next@vger.kernel.org>;
-        Wed, 24 Aug 2022 06:45:09 +0200 (CEST)
-Received: by h2889736.stratoserver.net (Postfix, from userid 10002)
-        id 100678401A; Wed, 24 Aug 2022 06:45:09 +0200 (CEST)
-To:     linux-next@vger.kernel.org
-Subject: =?us-ascii?Q?"Daily_News:_Mude_von_Arbeit_und_Schulden=3F_Ra?=  =?us-ascii?Q?us_aus_dieser_Scheie=3F"?=
-Date:   Wed, 24 Aug 2022 04:45:08 +0000
-From:   DouglasGet <info@nazandermacare.com>
-Reply-To: linux-next@vger.kernel.org
-Message-ID: <TMTG4TWMQLI1MACLNboJfS7VIEz9npvwV24sBUdbIto@nazandermacare.com>
-X-Mailer: PHPMailer 6.6.0 (https://github.com/PHPMailer/PHPMailer)
+        with ESMTP id S229445AbiHXFBA (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 24 Aug 2022 01:01:00 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E92B31CFEA;
+        Tue, 23 Aug 2022 22:00:57 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MCDSh5hxmz4x3w;
+        Wed, 24 Aug 2022 15:00:52 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1661317253;
+        bh=V2ilpx+/EsqvKqbwObJy2UqScwcG7aG1Mhl1qA8pYzI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=OM4s5ZrOEVhFLWFxGyPgqQLyk4FDkogZ+LvEyZIcRmfEW62mgU+uKp8nFu+9io0Z7
+         5aXlGTthUH6UsS7FPutnr0hTjMlKBaWMIqmVXD3TD6aUd7rO1SllKm1Bk8Po0Vq3GW
+         iz3mSsfo2r/92205QM0pfHqrvyZnQesSxWIY/aga/asOZLW7SOr5tBlzop5sQlZNiW
+         VulDVuUB7e3aohoAYrT7cepa/xKhbe2OQwq/5hp1DfaEGwUGjyNBAubd4XPeSVQoTE
+         GbMrqg/pf3aC6yyrKghSVQ1ZYN3gFygmaBJJwpBTV8Yz3QJ52G5l5IKSMwPEeY435Q
+         z90wJ5mdw3zpQ==
+Date:   Wed, 24 Aug 2022 15:00:51 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the bpf-next tree
+Message-ID: <20220824150051.54eb7748@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Spam-Level: **
+Content-Type: multipart/signed; boundary="Sig_/e82=/_G4ZCTNQ1yvnJ+SXwy";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-From: DouglasGet <linux-next@vger.kernel.org>
-Subject: Daily News: Mude von Arbeit und Schulden? Raus aus dieser Scheie?
+--Sig_/e82=/_G4ZCTNQ1yvnJ+SXwy
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Message:
-Nicht genug Geld fur irgendetwas? Es gibt einen Ausgang http://news-6-30-22.beersec.com/DW-8178
+Hi all,
 
+In commit
+
+  2e5e0e8ede02 ("bpf: Fix reference state management for synchronous callba=
+cks")
+
+Fixes tag
+
+  Fixes: 69c87ba6225 ("bpf: Add bpf_for_each_map_elem() helper")
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: 69c087ba6225 ("bpf: Add bpf_for_each_map_elem() helper")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/e82=/_G4ZCTNQ1yvnJ+SXwy
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMFsIMACgkQAVBC80lX
+0Gwn/Qf/YynmSHmle53V+9cdHuxUwPON+9vpRfj36MmdOYqEHDuZOJpFqECYo5OQ
+PcNC9AM8b5E6BmLlwHX4H3JGK5heGt2USj2uIRcWkbQ0nhNmwvWyh/AImNSDXoI9
+/9IK295MTGOWn89cfxLudTlTVVDW/emnS3qooISTq7BNVnjJg5n50nDwFErHn44F
+DTl1uY22rWjkvOqyOXsqYd6w/A25rnB5zpGE+CccmqQq6+2fp91xo4WI/R/LXfpc
+hw+8MxfR7+IGiRtfDEZiEyuqCGWeJDy6aPzmpgPE1LnYmzJ8FWHXHsq5Ql+pvp6k
+qxwBzbGzodidqfmf7DMvAfpjhAFv4Q==
+=LNUe
+-----END PGP SIGNATURE-----
+
+--Sig_/e82=/_G4ZCTNQ1yvnJ+SXwy--

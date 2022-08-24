@@ -2,88 +2,90 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C14259F3AA
-	for <lists+linux-next@lfdr.de>; Wed, 24 Aug 2022 08:40:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86FDD59FAB0
+	for <lists+linux-next@lfdr.de>; Wed, 24 Aug 2022 14:59:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234853AbiHXGjq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 24 Aug 2022 02:39:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45644 "EHLO
+        id S237649AbiHXM7g (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 24 Aug 2022 08:59:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235081AbiHXGjo (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 24 Aug 2022 02:39:44 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3400D85A9F;
-        Tue, 23 Aug 2022 23:39:42 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        with ESMTP id S237622AbiHXM7f (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 24 Aug 2022 08:59:35 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BCFC97B05;
+        Wed, 24 Aug 2022 05:59:34 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MCGfd0TzQz4xV3;
-        Wed, 24 Aug 2022 16:39:37 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1661323177;
-        bh=ygTl1pJvQIzdFVJN/ciTlCWRUmAOLnv2z9yb0eiXs9w=;
-        h=Date:From:To:Cc:Subject:From;
-        b=ucQsOpvFj10VuSDPeXa9gl2EIiouvaM3xr61tA3iHhhx7dZxphTBJnrjVVrESvECl
-         7ieDF4K8vUXKMjfwHFtWLiQMQlWSELkzLYiZaNSfckDZ6pDhtcoN7DgladJt64/dok
-         Zo8CNKq6Dz7w9SYmmQaCTUg4bf/nVw0AvLCHr5GsrU71+H/xixdZ4d/orlk7VSE9+j
-         GhR9dkMf1UbAyytcO8+25flxJWUegaPS34BGXh9en8YgNWKCMT+gcWFZlw+vpbFVGP
-         eLTla0ebFB2BeJ4LzdHFGosE6Z86r8VzbcgP8gV78ob5UM4qwqcA9LInUg1VJ6Teas
-         AlAak4sSjH2Gg==
-Date:   Wed, 24 Aug 2022 16:39:36 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Steve French <smfrench@gmail.com>,
-        CIFS <linux-cifs@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the cifs tree
-Message-ID: <20220824163936.58b58ad3@canb.auug.org.au>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id D2409207D7;
+        Wed, 24 Aug 2022 12:59:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1661345972; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3Sc8yPIrn2lPmz4U/qGCYgSl43TnthOC7R6vNmH5QSs=;
+        b=1RZtKWvRxQ6nAOERd7yoidX0z3KFExoGW9rmskgRWxSXd/4HmZAe1s0ijBEjFa2F7j9pUU
+        /qN212si0kmDkfT5VeuUFl6wvBxF9MBUmZjekT2dZ+u9FnLnrFHV8Olw+eDIVGM4VwOZzw
+        wDnkXBdo03SqRkaIV/WCvKTDM4uX3Ww=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1661345972;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3Sc8yPIrn2lPmz4U/qGCYgSl43TnthOC7R6vNmH5QSs=;
+        b=fMn0z1UvcAsxKzSctW1SUJflag/1GTvE7d5KKAQXy4ksC1Nwn04tLE4/ItzVvpLJw8SITK
+        lx5jHns4N1LXkhDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A12D213780;
+        Wed, 24 Aug 2022 12:59:32 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 6YhOJrQgBmM/XwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Wed, 24 Aug 2022 12:59:32 +0000
+Message-ID: <cc07df7a-d13f-faa2-d0b8-48e15951de66@suse.cz>
+Date:   Wed, 24 Aug 2022 14:59:32 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/WMI/cBj40r1E_9qNYIN89FW";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: linux-next: build warnings after merge of the slab tree
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20220824134530.1b10e768@canb.auug.org.au>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20220824134530.1b10e768@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/WMI/cBj40r1E_9qNYIN89FW
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 8/24/22 05:45, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the slab tree, today's linux-next build (htmldocs) produced
+> these warnings:
+> 
+> mm/slab_common.c:964: warning: Function parameter or member 'object' not described in 'kfree'
+> mm/slab_common.c:964: warning: Excess function parameter 'objp' description in 'kfree'
+> 
+> Introduced by commit
+> 
+>    79c7527b9805 ("mm/sl[au]b: generalize kmalloc subsystem")
+> 
 
-Hi all,
-
-Commit
-
-  b044b4dd6048 ("smb3: fix temporary data corruption in insert range")
-
-is missing a Signed-off-by from its author.
-
-This is another case of a mailing list munging the From: header of
-an email.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/WMI/cBj40r1E_9qNYIN89FW
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMFx6gACgkQAVBC80lX
-0Gx/TAf/eXgGchlzOKnpGvV2eXjbK67Y/NbFfdIflwqP8TcgoVIrKydA7eTBXw7S
-ZAHVzgMN1P874BMmLDxxo/cVzY7RAUy37Hbq2r85HvFuyZe6agEZFxYTVqm6HnT4
-kfJpawdcKdzmkyjsM3TZQWGW4SI8t3AG0SCgsY34el3H/qofnTi/JkQIvCTsnNrZ
-3fckQr7na1z8Ik6J8iDbAhswXyDW58xD2P4C5OkVLagp7l/QmzvcKKec3t3Shqjk
-Uzmqgsu+vaMBnhN0oCX+OfRoh3uq3MDZ/SFG5vl2jUocQeFCNP2uEXreC/X1Dehe
-6yGXlRCmW/eWsFzkNhp/i3pK0x2MWQ==
-=4htj
------END PGP SIGNATURE-----
-
---Sig_/WMI/cBj40r1E_9qNYIN89FW--
+Thanks, should be fixed in the new for-next I just pushed.

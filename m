@@ -2,90 +2,98 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86FDD59FAB0
-	for <lists+linux-next@lfdr.de>; Wed, 24 Aug 2022 14:59:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C14D159FD21
+	for <lists+linux-next@lfdr.de>; Wed, 24 Aug 2022 16:24:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237649AbiHXM7g (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 24 Aug 2022 08:59:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33790 "EHLO
+        id S237648AbiHXOYL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 24 Aug 2022 10:24:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237622AbiHXM7f (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 24 Aug 2022 08:59:35 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BCFC97B05;
-        Wed, 24 Aug 2022 05:59:34 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id D2409207D7;
-        Wed, 24 Aug 2022 12:59:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1661345972; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3Sc8yPIrn2lPmz4U/qGCYgSl43TnthOC7R6vNmH5QSs=;
-        b=1RZtKWvRxQ6nAOERd7yoidX0z3KFExoGW9rmskgRWxSXd/4HmZAe1s0ijBEjFa2F7j9pUU
-        /qN212si0kmDkfT5VeuUFl6wvBxF9MBUmZjekT2dZ+u9FnLnrFHV8Olw+eDIVGM4VwOZzw
-        wDnkXBdo03SqRkaIV/WCvKTDM4uX3Ww=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1661345972;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3Sc8yPIrn2lPmz4U/qGCYgSl43TnthOC7R6vNmH5QSs=;
-        b=fMn0z1UvcAsxKzSctW1SUJflag/1GTvE7d5KKAQXy4ksC1Nwn04tLE4/ItzVvpLJw8SITK
-        lx5jHns4N1LXkhDA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A12D213780;
-        Wed, 24 Aug 2022 12:59:32 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 6YhOJrQgBmM/XwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 24 Aug 2022 12:59:32 +0000
-Message-ID: <cc07df7a-d13f-faa2-d0b8-48e15951de66@suse.cz>
-Date:   Wed, 24 Aug 2022 14:59:32 +0200
+        with ESMTP id S236884AbiHXOYK (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 24 Aug 2022 10:24:10 -0400
+Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D12F28E10;
+        Wed, 24 Aug 2022 07:24:10 -0700 (PDT)
+Received: by mail-ua1-x936.google.com with SMTP id c1so1786505uat.13;
+        Wed, 24 Aug 2022 07:24:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=ZFk1t9VG25n4eXd4e+kwVH24IY/dKmhk3oRuZM9LUvE=;
+        b=DMXSp2qwyIjCGmxLUmRI9fhR7KLBJGZ7rYdGmPten7xdVxqk7PUW7RfJUQgA6Usspm
+         dMey3zj7A8QpPPVirLs7PQBmsupnhq5z9ULrBASMUW8xgg5nBP/x35FTB8D7hBVQx11A
+         Xy4ZIBiTaombwyP/o5hfUrSRfoO/K2pRaHxXyPTIq9Mmnm6PSczzANNi3qGHazUbm2yo
+         7um1CkMFD/JBEr283TI8iZa8x+b1WN1kE4kD9IqCKu71oeDU3IbyNK6aGhJXW9QTuedS
+         f0kcLuOeJKxqT99HlyURevem1bMyTSi7HktYNUUaYYxBwrYxdctC0GmAnyG5ZAbkKDbJ
+         7Bxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=ZFk1t9VG25n4eXd4e+kwVH24IY/dKmhk3oRuZM9LUvE=;
+        b=J8skqmmxVSpJqq1ba7rIl/T5Xgu6y/YAoc4xY4ZcWwjritXIxrZvKn9XuQXw+jUUL8
+         Ge7RKnGpIh//KxVUtIIyRQsw9jOdtSR0Sgo5037IBMJeCQE+n01kcInvFMtmaEd/BXNW
+         GqdhvUqR5h5GVPI/wXykkGj5dJX4nemghdM+aZ66DXamloZLH7AuTQScwgDeINHZwCDq
+         FfyVvtCmkSg4zZnfL541wYNHf803GyWlaudZpagw9cY1YhqwhagKScPa5lJmbAByJhy1
+         CmP0DLLrDMYrWUt03AGPCNUBlSWGSDOULKrv3vP+jZVWQbQob+namPZlkKxVLJlhghd4
+         ySeg==
+X-Gm-Message-State: ACgBeo13iZ8yqfebaftxEqrosqREJ5F5cpAoJFX9DytL8H1iOcT2N8wK
+        2H8wINEbm0Kedzk0oP7oSwgy9yHNdtFjTKKuOZPB09KaEIo=
+X-Google-Smtp-Source: AA6agR44mu8GqKOoeLHDCUQ8Uo/pNiCoFFJsyQl9y+XnHMTUTBezEAuJwt5YEL+hZmG9OXA/rRS1YzYinWcJ+p75uXo=
+X-Received: by 2002:ab0:45c4:0:b0:39f:a73:fb3f with SMTP id
+ u62-20020ab045c4000000b0039f0a73fb3fmr5111484uau.4.1661351048908; Wed, 24 Aug
+ 2022 07:24:08 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: linux-next: build warnings after merge of the slab tree
-Content-Language: en-US
+References: <20220824163754.1c082f1a@canb.auug.org.au>
+In-Reply-To: <20220824163754.1c082f1a@canb.auug.org.au>
+From:   Steve French <smfrench@gmail.com>
+Date:   Wed, 24 Aug 2022 09:23:58 -0500
+Message-ID: <CAH2r5msrqKnGC3FLBhs-HgS+_V7r-dixvx1+t+PeWZ6Fs87Tig@mail.gmail.com>
+Subject: Re: linux-next: Fixes tag needs some work in the cifs tree
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+Cc:     CIFS <linux-cifs@vger.kernel.org>,
+        David Howells <dhowells@redhat.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220824134530.1b10e768@canb.auug.org.au>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20220824134530.1b10e768@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 8/24/22 05:45, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the slab tree, today's linux-next build (htmldocs) produced
-> these warnings:
-> 
-> mm/slab_common.c:964: warning: Function parameter or member 'object' not described in 'kfree'
-> mm/slab_common.c:964: warning: Excess function parameter 'objp' description in 'kfree'
-> 
-> Introduced by commit
-> 
->    79c7527b9805 ("mm/sl[au]b: generalize kmalloc subsystem")
-> 
+typo corrected and updated cifs-2.6.git for-next
 
-Thanks, should be fixed in the new for-next I just pushed.
+On Wed, Aug 24, 2022 at 1:38 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> In commit
+>
+>   b044b4dd6048 ("smb3: fix temporary data corruption in insert range")
+>
+> Fixes tag
+>
+>   Fixes: 7fe6fe95b9360 ("cifs: FALLOC_FL_INSERT_RANGE support")
+>
+> has these problem(s):
+>
+>   - Subject does not match target commit subject
+>     Just use
+>         git log -1 --format='Fixes: %h ("%s")'
+>
+> --
+> Cheers,
+> Stephen Rothwell
+
+
+
+-- 
+Thanks,
+
+Steve

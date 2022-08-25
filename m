@@ -2,108 +2,122 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AE405A0E5D
-	for <lists+linux-next@lfdr.de>; Thu, 25 Aug 2022 12:49:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 716E95A0EB0
+	for <lists+linux-next@lfdr.de>; Thu, 25 Aug 2022 13:07:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241278AbiHYKtB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 25 Aug 2022 06:49:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44532 "EHLO
+        id S233935AbiHYLHc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 25 Aug 2022 07:07:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241243AbiHYKs4 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 25 Aug 2022 06:48:56 -0400
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DF53A2634
-        for <linux-next@vger.kernel.org>; Thu, 25 Aug 2022 03:48:55 -0700 (PDT)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-11d08d7ece2so17657086fac.0
-        for <linux-next@vger.kernel.org>; Thu, 25 Aug 2022 03:48:55 -0700 (PDT)
+        with ESMTP id S232454AbiHYLHc (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 25 Aug 2022 07:07:32 -0400
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A7EAACA15
+        for <linux-next@vger.kernel.org>; Thu, 25 Aug 2022 04:07:31 -0700 (PDT)
+Received: by mail-qk1-x732.google.com with SMTP id g21so14829506qka.5
+        for <linux-next@vger.kernel.org>; Thu, 25 Aug 2022 04:07:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc;
-        bh=8yezS67UjohYjkR2uYPnl+2W/QH+CI5jH+JmDR2etME=;
-        b=cBjJDG+O1Z5ulYzna6FATto9ambYkbLRB41H+alqYu6I9gbtY3lQuyqQ88fLmttp6n
-         K0ayucRoib1hlI4UOdr54fAkwV+QfkIcKVFgVUT8cqtfeDXQ50nsF/Ka1nPJIU+VitTX
-         F7n6jxrVphemL6oQrdfcnaua7jgDfp7/MauuWBLEuyXZVRIfdHinou7/Fnh31EFcwD32
-         3ck7JFJzLY28Oy/AVrQvvxaVlXDiicsPIg1tYT57wphUU+hyKg0ibDg3Q6qelrXJlU/V
-         mLiJHmNH4r0ZUtxydUgKV1zHsngveb5INiEUsEwx9/+jn1qh39g2uBMXui/M73NUsKX7
-         m4qQ==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=NFLgYkCaEI5s4PbUxMHY3+5s8XqDi7XgHlnjcMfnmFM=;
+        b=EjFCQyIwTjWf3QQFss/peM3xmIAfM1QI/FpiaFOZH3MDcn8eQ/vD7BNZdsW0F/o2Zp
+         Xkx25BADn8V6xRArayGRfDlFumP7yr9KsB/6Awnrf5/89Th7AcswlHItjX8AKnPTI8ml
+         ty2ttCErQVm6iIacMIqxtY5HGXz4y9IdzFUck5fWSdTbMRRrippJE7ZsGJTPRmDEVfYK
+         RKBCbwIV+h1Bea4Lm+9IchfPiYJ6fYAS1K49Mq60OCqStd1unXf87gkMi7fgSnRuAu+Y
+         5H0IpHvN3ITbhcAnEPYEzGsOdoBL6S/xydBUDMldcg8ngt1JMrqFpWK9QYPshmhIFIZ5
+         iIHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=8yezS67UjohYjkR2uYPnl+2W/QH+CI5jH+JmDR2etME=;
-        b=BF8Y3i1PZwGMwe9Ox6piImOur48OzK8kbxOeRtJeXjzm+HZuEsdQSzIvPCEpEo4Ed8
-         Js57utxbiQ4oWj9avVBxvtISuFkUWL+6wyMQMYvkeHwxTpyv1H4AoO9I5mI3JQW/oM8r
-         GgZANl/9KYGnFcEqGtEUPLwh0vhbjQfRgENY3EEABtoAWXZPpLqQtccyiQmu/Fm2ahqu
-         57Dh7Qe0LhmAH1LNgayXx0q4eYFwGmZyEB3o/ucJQPulTEgKC2IoKkTrTTwXnd2SxJ/D
-         gfyFpzraWKU/jOUXTkdjdavtDAG464xiTXbQpu9YO4ZloKEPaVTJdNW6ywqir/qHAcS7
-         YhWg==
-X-Gm-Message-State: ACgBeo1qCouQ66E6NPrw60C4qr6u/OvIEeSk1xOvoIO7/gmI9Cq0bVkg
-        gV4d8Oysj8TCctP274VKEKF03El4YU7qKJJgZ9j/CQ==
-X-Google-Smtp-Source: AA6agR78Trz7cKkr6hrmRkMhJNnHKdXi0bmX/cF+W43D3720j2E8BabHK1UIMZcPxUEyCAyKdJBjPmgtEwfUbHjymtk=
-X-Received: by 2002:a05:6870:a18c:b0:118:5b96:1cc4 with SMTP id
- a12-20020a056870a18c00b001185b961cc4mr1599384oaf.290.1661424534425; Thu, 25
- Aug 2022 03:48:54 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=NFLgYkCaEI5s4PbUxMHY3+5s8XqDi7XgHlnjcMfnmFM=;
+        b=mgAtQPZy6p9KcpWHV0FPLo7QYkrnTj7SQnq4vYfuH8bhYwee7KP6ELqMeiEYG2PGLh
+         qS66ZEglPMVyMww000H/F/uyUvs1OcqqfSMmXB58PUvNfy1qKy2rwOMjBZno+4WeHJuO
+         OAu0dThOqby0ERp7+MB2ZrVqVrXW7LRIyO1wS2QW3CEoLhvIe9FdwA1VyzkKzALAvPHn
+         XmW4eCDcfbhyiWERuNP+mljfHICfSTb/bilEqyaEUL7rJ+1E5By86ZTvkDPUMMR8FzaZ
+         Jrjayo8c1LOxRcfCOFxdRN+5/dBCmOPQQhMilC4eOQdYNCIH5j01jShOzzcpYa+RTtX9
+         PAjQ==
+X-Gm-Message-State: ACgBeo2oKRrxE6e6HCcRybr2FqDm9nm6TfQrkQMjLL+UamCzcC4FTwoo
+        AFz27fYsFnDbsqnuzJvH5CIqix15aBP5W/BpBQo=
+X-Google-Smtp-Source: AA6agR77tGQAQAwf1DpfAy4TV+DnFug5v7sbHYdetgTRO0PHI9Um7Ub2YFnFEwFcZX4K2Kue83ASqE7ElO7U2TNPWz8=
+X-Received: by 2002:a05:620a:2587:b0:6a7:ee6f:bf2a with SMTP id
+ x7-20020a05620a258700b006a7ee6fbf2amr2570783qko.542.1661425650405; Thu, 25
+ Aug 2022 04:07:30 -0700 (PDT)
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 25 Aug 2022 16:18:43 +0530
-Message-ID: <CA+G9fYvHLy63+jV3qMtHtQLufoeEpAjrteQ7+2Dvdt8CcGk9MA@mail.gmail.com>
-Subject: [next] kernel/smpboot.c:435:6: error: variable 'oldstate' is used
+References: <CA+G9fYvHLy63+jV3qMtHtQLufoeEpAjrteQ7+2Dvdt8CcGk9MA@mail.gmail.com>
+In-Reply-To: <CA+G9fYvHLy63+jV3qMtHtQLufoeEpAjrteQ7+2Dvdt8CcGk9MA@mail.gmail.com>
+From:   Uros Bizjak <ubizjak@gmail.com>
+Date:   Thu, 25 Aug 2022 13:07:19 +0200
+Message-ID: <CAFULd4bT4UrdQctUdJHSV9rjpRb02PHGRwxXcg=PZF9eiAfnXg@mail.gmail.com>
+Subject: Re: [next] kernel/smpboot.c:435:6: error: variable 'oldstate' is used
  uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
-To:     Uros Bizjak <ubizjak@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
         regressions@lists.linux.dev, lkft-triage@lists.linaro.org,
         clang-built-linux <clang-built-linux@googlegroups.com>,
-        Nathan Chancellor <nathan@kernel.org>
-Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
         "Longpeng(Mike)" <longpeng2@huawei.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-The x86_64 and i386 clang builds failed due to these warnings / errors
-on Linux next-20220825.
+On Thu, Aug 25, 2022 at 12:48 PM Naresh Kamboju
+<naresh.kamboju@linaro.org> wrote:
+>
+> The x86_64 and i386 clang builds failed due to these warnings / errors
+> on Linux next-20220825.
+>
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>
+> kernel/smpboot.c:435:6: error: variable 'oldstate' is used
+> uninitialized whenever 'if' condition is true
+> [-Werror,-Wsometimes-uninitialized]
+>         if (atomic_read(&per_cpu(cpu_hotplug_state, cpu)) == CPU_DEAD)
+>             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> kernel/smpboot.c:449:6: note: uninitialized use occurs here
+>         if (oldstate == CPU_DEAD) {
+>             ^~~~~~~~
+> kernel/smpboot.c:435:2: note: remove the 'if' if its condition is always false
+>         if (atomic_read(&per_cpu(cpu_hotplug_state, cpu)) == CPU_DEAD)
+>         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> kernel/smpboot.c:428:14: note: initialize the variable 'oldstate' to
+> silence this warning
+>         int oldstate;
+>                     ^
+>                      = 0
+> 1 error generated.
+> make[2]: *** [scripts/Makefile.build:250: kernel/smpboot.o] Error 1
+>
+> Build link: https://builds.tuxbuild.com/2Dpvef6uVvzHMztbfQRmxJfPXZT/
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Please see
 
-kernel/smpboot.c:435:6: error: variable 'oldstate' is used
-uninitialized whenever 'if' condition is true
-[-Werror,-Wsometimes-uninitialized]
-        if (atomic_read(&per_cpu(cpu_hotplug_state, cpu)) == CPU_DEAD)
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-kernel/smpboot.c:449:6: note: uninitialized use occurs here
-        if (oldstate == CPU_DEAD) {
-            ^~~~~~~~
-kernel/smpboot.c:435:2: note: remove the 'if' if its condition is always false
-        if (atomic_read(&per_cpu(cpu_hotplug_state, cpu)) == CPU_DEAD)
-        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-kernel/smpboot.c:428:14: note: initialize the variable 'oldstate' to
-silence this warning
-        int oldstate;
-                    ^
-                     = 0
-1 error generated.
-make[2]: *** [scripts/Makefile.build:250: kernel/smpboot.o] Error 1
+https://lore.kernel.org/lkml/CAFULd4bgdGosQ3byMW9S+ov0uDO9iK3jCmZ-fkZQbCGOpfUvXQ@mail.gmail.com/
 
-Build link: https://builds.tuxbuild.com/2Dpvef6uVvzHMztbfQRmxJfPXZT/
+for the fix.
 
-Steps to reproduce:
--------------------
-# To install tuxmake on your system globally:
-# sudo pip3 install -U tuxmake
+Uros.
 
-tuxmake --runtime podman --target-arch x86_64 --toolchain clang-14
---kconfig https://builds.tuxbuild.com/2Dpvef6uVvzHMztbfQRmxJfPXZT/config
-LLVM=1 LLVM_IAS=1
-
---
-Linaro LKFT
-https://lkft.linaro.org
+> Steps to reproduce:
+> -------------------
+> # To install tuxmake on your system globally:
+> # sudo pip3 install -U tuxmake
+>
+> tuxmake --runtime podman --target-arch x86_64 --toolchain clang-14
+> --kconfig https://builds.tuxbuild.com/2Dpvef6uVvzHMztbfQRmxJfPXZT/config
+> LLVM=1 LLVM_IAS=1
+>
+> --
+> Linaro LKFT
+> https://lkft.linaro.org

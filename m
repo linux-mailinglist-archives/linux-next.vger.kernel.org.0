@@ -2,88 +2,108 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CCD85A0B2F
-	for <lists+linux-next@lfdr.de>; Thu, 25 Aug 2022 10:20:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AE405A0E5D
+	for <lists+linux-next@lfdr.de>; Thu, 25 Aug 2022 12:49:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239612AbiHYIUc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 25 Aug 2022 04:20:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41924 "EHLO
+        id S241278AbiHYKtB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 25 Aug 2022 06:49:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239604AbiHYIUc (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 25 Aug 2022 04:20:32 -0400
-X-Greylist: delayed 900 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 25 Aug 2022 01:20:17 PDT
-Received: from mail10.tencent.com (mail10.tencent.com [14.18.183.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB8A471739;
-        Thu, 25 Aug 2022 01:20:17 -0700 (PDT)
-Received: from EX-SZ022.tencent.com (unknown [10.28.6.88])
-        by mail10.tencent.com (Postfix) with ESMTP id D55DBD46BD;
-        Thu, 25 Aug 2022 15:55:36 +0800 (CST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tencent.com;
-        s=s202002; t=1661414136;
-        bh=cXR/p7SatqK54AtwJOaWVlrYZCN2ej8Vbu9R6UgHa7o=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To;
-        b=eb69BX9fx8nBjcqmR+oHI6qoh7CZgbo3Lhs58xR2pjS9qqBSwylUQuRL7P4Z+3VOX
-         wdGxpAPK5gILJ0t8bk1QgthqEiYjjaBdPy9FHtu0bjeWX7egVFyWkjamgUKQNvIwpZ
-         SdKzgIC4VPdvovtY6pjpZGJ68JpACz5DkLw/VFqc=
-Received: from EX-SZ086.tencent.com (10.28.6.127) by EX-SZ022.tencent.com
- (10.28.6.88) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.4; Thu, 25 Aug
- 2022 15:55:36 +0800
-Received: from EX-SZ079.tencent.com (10.28.6.51) by EX-SZ086.tencent.com
- (10.28.6.127) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.4; Thu, 25 Aug
- 2022 15:55:36 +0800
-Received: from EX-SZ079.tencent.com ([fe80::9139:f467:e23f:e2b7]) by
- EX-SZ079.tencent.com ([fe80::9139:f467:e23f:e2b7%3]) with mapi id
- 15.01.2242.008; Thu, 25 Aug 2022 15:55:36 +0800
-From:   =?utf-8?B?aW1hZ2Vkb25nKOiRo+aipum+mSk=?= <imagedong@tencent.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Linux Next Mailing List" <linux-next@vger.kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Subject: Re: [Internet]linux-next: build warning after merge of the net-next
- tree
-Thread-Topic: [Internet]linux-next: build warning after merge of the net-next
- tree
-Thread-Index: AQHYuEVTMflASOI/8Ey1NaP00fjp5K2/P5MA
-Date:   Thu, 25 Aug 2022 07:55:36 +0000
-Message-ID: <07263247-4906-4A72-A1A2-CAB41F115EB7@tencent.com>
-References: <20220825154105.534d78ab@canb.auug.org.au>
-In-Reply-To: <20220825154105.534d78ab@canb.auug.org.au>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [9.218.225.5]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <97D0694AA2B3404BA5BB7FA6EDEC218A@tencent.com>
-Content-Transfer-Encoding: base64
+        with ESMTP id S241243AbiHYKs4 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 25 Aug 2022 06:48:56 -0400
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DF53A2634
+        for <linux-next@vger.kernel.org>; Thu, 25 Aug 2022 03:48:55 -0700 (PDT)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-11d08d7ece2so17657086fac.0
+        for <linux-next@vger.kernel.org>; Thu, 25 Aug 2022 03:48:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc;
+        bh=8yezS67UjohYjkR2uYPnl+2W/QH+CI5jH+JmDR2etME=;
+        b=cBjJDG+O1Z5ulYzna6FATto9ambYkbLRB41H+alqYu6I9gbtY3lQuyqQ88fLmttp6n
+         K0ayucRoib1hlI4UOdr54fAkwV+QfkIcKVFgVUT8cqtfeDXQ50nsF/Ka1nPJIU+VitTX
+         F7n6jxrVphemL6oQrdfcnaua7jgDfp7/MauuWBLEuyXZVRIfdHinou7/Fnh31EFcwD32
+         3ck7JFJzLY28Oy/AVrQvvxaVlXDiicsPIg1tYT57wphUU+hyKg0ibDg3Q6qelrXJlU/V
+         mLiJHmNH4r0ZUtxydUgKV1zHsngveb5INiEUsEwx9/+jn1qh39g2uBMXui/M73NUsKX7
+         m4qQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=8yezS67UjohYjkR2uYPnl+2W/QH+CI5jH+JmDR2etME=;
+        b=BF8Y3i1PZwGMwe9Ox6piImOur48OzK8kbxOeRtJeXjzm+HZuEsdQSzIvPCEpEo4Ed8
+         Js57utxbiQ4oWj9avVBxvtISuFkUWL+6wyMQMYvkeHwxTpyv1H4AoO9I5mI3JQW/oM8r
+         GgZANl/9KYGnFcEqGtEUPLwh0vhbjQfRgENY3EEABtoAWXZPpLqQtccyiQmu/Fm2ahqu
+         57Dh7Qe0LhmAH1LNgayXx0q4eYFwGmZyEB3o/ucJQPulTEgKC2IoKkTrTTwXnd2SxJ/D
+         gfyFpzraWKU/jOUXTkdjdavtDAG464xiTXbQpu9YO4ZloKEPaVTJdNW6ywqir/qHAcS7
+         YhWg==
+X-Gm-Message-State: ACgBeo1qCouQ66E6NPrw60C4qr6u/OvIEeSk1xOvoIO7/gmI9Cq0bVkg
+        gV4d8Oysj8TCctP274VKEKF03El4YU7qKJJgZ9j/CQ==
+X-Google-Smtp-Source: AA6agR78Trz7cKkr6hrmRkMhJNnHKdXi0bmX/cF+W43D3720j2E8BabHK1UIMZcPxUEyCAyKdJBjPmgtEwfUbHjymtk=
+X-Received: by 2002:a05:6870:a18c:b0:118:5b96:1cc4 with SMTP id
+ a12-20020a056870a18c00b001185b961cc4mr1599384oaf.290.1661424534425; Thu, 25
+ Aug 2022 03:48:54 -0700 (PDT)
 MIME-Version: 1.0
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 25 Aug 2022 16:18:43 +0530
+Message-ID: <CA+G9fYvHLy63+jV3qMtHtQLufoeEpAjrteQ7+2Dvdt8CcGk9MA@mail.gmail.com>
+Subject: [next] kernel/smpboot.c:435:6: error: variable 'oldstate' is used
+ uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+To:     Uros Bizjak <ubizjak@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        regressions@lists.linux.dev, lkft-triage@lists.linaro.org,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Nathan Chancellor <nathan@kernel.org>
+Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        "Longpeng(Mike)" <longpeng2@huawei.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        T_SPF_HELO_TEMPERROR,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-DQpIZWxsbywNCg0KT24gMjAyMi84LzI1IDEzOjQx77yM4oCcU3RlcGhlbiBSb3Rod2VsbOKAnTxz
-ZnJAY2FuYi5hdXVnLm9yZy5hdT4gd3JpdGU6DQoNCj4gSGkgYWxsLA0KPiANCj4gQWZ0ZXIgbWVy
-Z2luZyB0aGUgbmV0LW5leHQgdHJlZSwgdG9kYXkncyBsaW51eC1uZXh0IGJ1aWxkIChodG1sZG9j
-cykNCj4gcHJvZHVjZWQgdGhpcyB3YXJuaW5nOg0KPiANCj4gRG9jdW1lbnRhdGlvbi9uZXR3b3Jr
-aW5nL2thcGk6MjY6IG5ldC9jb3JlL3NrYnVmZi5jOjc4MDogV0FSTklORzogRXJyb3IgaW4gZGVj
-bGFyYXRvciBvciBwYXJhbWV0ZXJzDQo+IEludmFsaWQgQyBkZWNsYXJhdGlvbjogRXhwZWN0aW5n
-ICIoIiBpbiBwYXJhbWV0ZXJzLiBbZXJyb3IgYXQgMTldDQo+ICAgdm9pZCBfX2ZpeF9hZGRyZXNz
-IGtmcmVlX3NrYl9yZWFzb24gKHN0cnVjdCBza19idWZmICpza2IsIGVudW0gc2tiX2Ryb3BfcmVh
-c29uIHJlYXNvbikNCj4gICAtLS0tLS0tLS0tLS0tLS0tLS0tXg0KPiANCj4gSW50cm9kdWNlZCBi
-eSBjb21taXQNCj4gDQo+ICAgYzIwNWNjNzUzNGE5ICgibmV0OiBza2I6IHByZXZlbnQgdGhlIHNw
-bGl0IG9mIGtmcmVlX3NrYl9yZWFzb24oKSBieSBnY2MiKQ0KPiANCg0KWWVhaCwgSSBjb21taXRl
-ZCB0aGlzIHBhdGNoLiBNYXkgSSBhc2sgd2hhdCBjb21tYW5kIGRpZCB5b3UgdXNlIHRvDQpwcm9k
-dWNlIHRoaXMgd2FybmluZz8gSSB0cmllZCB0aGUgZm9sbG93aW5nIGNvbW1hbmQsIGJ1dCBub3Qg
-c3VjY2VzczoNCg0KICBtYWtlIFY9MiBTUEhJTlhESVJTPSJuZXR3b3JraW5nIiBodG1sZG9jcw0K
-DQpIbW0uLi4uLi4ud2hhdCBkb2VzIHRoaXMgd2FybmluZyBtZWFucz8gRG9lcyBpdCBkb24ndCBs
-aWtlIHRoaXMNCmZ1bmN0aW9uIGF0dHJpYnV0ZT8NCg0KVGhhbmtzIQ0KTWVuZ2xvbmcgRG9uZw0K
-DQo+IC0tIA0KPiBDaGVlcnMsDQo+IFN0ZXBoZW4gUm90aHdlbGwNCg0K
+The x86_64 and i386 clang builds failed due to these warnings / errors
+on Linux next-20220825.
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+kernel/smpboot.c:435:6: error: variable 'oldstate' is used
+uninitialized whenever 'if' condition is true
+[-Werror,-Wsometimes-uninitialized]
+        if (atomic_read(&per_cpu(cpu_hotplug_state, cpu)) == CPU_DEAD)
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+kernel/smpboot.c:449:6: note: uninitialized use occurs here
+        if (oldstate == CPU_DEAD) {
+            ^~~~~~~~
+kernel/smpboot.c:435:2: note: remove the 'if' if its condition is always false
+        if (atomic_read(&per_cpu(cpu_hotplug_state, cpu)) == CPU_DEAD)
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+kernel/smpboot.c:428:14: note: initialize the variable 'oldstate' to
+silence this warning
+        int oldstate;
+                    ^
+                     = 0
+1 error generated.
+make[2]: *** [scripts/Makefile.build:250: kernel/smpboot.o] Error 1
+
+Build link: https://builds.tuxbuild.com/2Dpvef6uVvzHMztbfQRmxJfPXZT/
+
+Steps to reproduce:
+-------------------
+# To install tuxmake on your system globally:
+# sudo pip3 install -U tuxmake
+
+tuxmake --runtime podman --target-arch x86_64 --toolchain clang-14
+--kconfig https://builds.tuxbuild.com/2Dpvef6uVvzHMztbfQRmxJfPXZT/config
+LLVM=1 LLVM_IAS=1
+
+--
+Linaro LKFT
+https://lkft.linaro.org

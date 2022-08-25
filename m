@@ -2,98 +2,88 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40F375A089A
-	for <lists+linux-next@lfdr.de>; Thu, 25 Aug 2022 08:00:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CCD85A0B2F
+	for <lists+linux-next@lfdr.de>; Thu, 25 Aug 2022 10:20:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232970AbiHYF7p (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 25 Aug 2022 01:59:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32830 "EHLO
+        id S239612AbiHYIUc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 25 Aug 2022 04:20:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233321AbiHYF7o (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 25 Aug 2022 01:59:44 -0400
-Received: from gandalf.ozlabs.org (unknown [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4CDA9F779;
-        Wed, 24 Aug 2022 22:59:41 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MCsjz4LPtz4xDn;
-        Thu, 25 Aug 2022 15:59:35 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1661407176;
-        bh=POsJV3a/Z8MX+zPOO3Iy3ED/REn0HtuttgOVgg5uNoQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=LjyApFDXSBkBU7Th4okxow694BJlIEXx0Li/zgR4LLTgyuCgqW9qZ3lZR0cgw2Fig
-         2uoBMzfMqWkPTotffrFsB9huvfXGtPOaV2JfZ+ncSGXQeGtRDlmn9QftLi8qWl3XSn
-         mxH4rvvR7+gh7zo/4C+oW4pZcPWT6Rfplrn5HXN6cGBVVMj/f/IsPvgKyz8S9/ZkTy
-         3oPcSc/qeBpSqffaXhTMrc7c7kId5VAJPmvbcDv8NHmlbU3eMhMPchjnC/QbdOwlw1
-         SGqT13pE51bILqNpBvay+je/1GkrletdW6DD+bTDir66GiIhhVlS6cX/QHsWA4fE8O
-         GVBxND7NK+ZCw==
-Date:   Thu, 25 Aug 2022 15:59:34 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>
-Cc:     Networking <netdev@vger.kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the net tree
-Message-ID: <20220825155934.0e983733@canb.auug.org.au>
+        with ESMTP id S239604AbiHYIUc (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 25 Aug 2022 04:20:32 -0400
+X-Greylist: delayed 900 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 25 Aug 2022 01:20:17 PDT
+Received: from mail10.tencent.com (mail10.tencent.com [14.18.183.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB8A471739;
+        Thu, 25 Aug 2022 01:20:17 -0700 (PDT)
+Received: from EX-SZ022.tencent.com (unknown [10.28.6.88])
+        by mail10.tencent.com (Postfix) with ESMTP id D55DBD46BD;
+        Thu, 25 Aug 2022 15:55:36 +0800 (CST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tencent.com;
+        s=s202002; t=1661414136;
+        bh=cXR/p7SatqK54AtwJOaWVlrYZCN2ej8Vbu9R6UgHa7o=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To;
+        b=eb69BX9fx8nBjcqmR+oHI6qoh7CZgbo3Lhs58xR2pjS9qqBSwylUQuRL7P4Z+3VOX
+         wdGxpAPK5gILJ0t8bk1QgthqEiYjjaBdPy9FHtu0bjeWX7egVFyWkjamgUKQNvIwpZ
+         SdKzgIC4VPdvovtY6pjpZGJ68JpACz5DkLw/VFqc=
+Received: from EX-SZ086.tencent.com (10.28.6.127) by EX-SZ022.tencent.com
+ (10.28.6.88) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.4; Thu, 25 Aug
+ 2022 15:55:36 +0800
+Received: from EX-SZ079.tencent.com (10.28.6.51) by EX-SZ086.tencent.com
+ (10.28.6.127) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.4; Thu, 25 Aug
+ 2022 15:55:36 +0800
+Received: from EX-SZ079.tencent.com ([fe80::9139:f467:e23f:e2b7]) by
+ EX-SZ079.tencent.com ([fe80::9139:f467:e23f:e2b7%3]) with mapi id
+ 15.01.2242.008; Thu, 25 Aug 2022 15:55:36 +0800
+From:   =?utf-8?B?aW1hZ2Vkb25nKOiRo+aipum+mSk=?= <imagedong@tencent.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Linux Next Mailing List" <linux-next@vger.kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Subject: Re: [Internet]linux-next: build warning after merge of the net-next
+ tree
+Thread-Topic: [Internet]linux-next: build warning after merge of the net-next
+ tree
+Thread-Index: AQHYuEVTMflASOI/8Ey1NaP00fjp5K2/P5MA
+Date:   Thu, 25 Aug 2022 07:55:36 +0000
+Message-ID: <07263247-4906-4A72-A1A2-CAB41F115EB7@tencent.com>
+References: <20220825154105.534d78ab@canb.auug.org.au>
+In-Reply-To: <20220825154105.534d78ab@canb.auug.org.au>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [9.218.225.5]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <97D0694AA2B3404BA5BB7FA6EDEC218A@tencent.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/epF2YdGp_uvJAA_Spic0v1U";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RDNS_NONE,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        T_SPF_HELO_TEMPERROR,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/epF2YdGp_uvJAA_Spic0v1U
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi all,
-
-In commit
-
-  00cd7bf9f9e0 ("netfilter: nf_defrag_ipv6: allow nf_conntrack_frag6_high_t=
-hresh increases")
-
-Fixes tag
-
-  Fixes: 8db3d41569bb ("netfilter: nf_defrag_ipv6: use net_generic infra")
-
-has these problem(s):
-
-  - Target SHA1 does not exist
-
-Maybe you meant
-
-Fixes: 8b0adbe3e38d ("netfilter: nf_defrag_ipv6: use net_generic infra")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/epF2YdGp_uvJAA_Spic0v1U
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMHD8YACgkQAVBC80lX
-0Gz34AgAg9pJWLHRzLwJdnIl2hBZp7/K8UVa9GEAamLQHkfV4NMnGconkiZbOsHA
-MnvE/7iOW9saibYLbEjRhJHWg2n2w7R82AZ8PmEH7oSlyKn2OFcxpcJDcuYY3624
-b5DN4wvEqCf7RsxDDY8yfk9YDFNC5KA52rOdebk1pbKqWsD5k29vFDPT7KMwItcd
-0u0vvVGkMEYdBaf4NNnqo8x+0Z6E9/r75baJnCo4vPHgORNcDNvrG+F/lFZSTPB2
-TCefu8YlwUpmLe2W+BvhYkH6WvvSNtf5KFPp5zcwFsz/EoKSlZ6FRx1j3xKK6cM0
-70EEH4dDonK0XC2rSgmrI710v1zfUg==
-=ZmRj
------END PGP SIGNATURE-----
-
---Sig_/epF2YdGp_uvJAA_Spic0v1U--
+DQpIZWxsbywNCg0KT24gMjAyMi84LzI1IDEzOjQx77yM4oCcU3RlcGhlbiBSb3Rod2VsbOKAnTxz
+ZnJAY2FuYi5hdXVnLm9yZy5hdT4gd3JpdGU6DQoNCj4gSGkgYWxsLA0KPiANCj4gQWZ0ZXIgbWVy
+Z2luZyB0aGUgbmV0LW5leHQgdHJlZSwgdG9kYXkncyBsaW51eC1uZXh0IGJ1aWxkIChodG1sZG9j
+cykNCj4gcHJvZHVjZWQgdGhpcyB3YXJuaW5nOg0KPiANCj4gRG9jdW1lbnRhdGlvbi9uZXR3b3Jr
+aW5nL2thcGk6MjY6IG5ldC9jb3JlL3NrYnVmZi5jOjc4MDogV0FSTklORzogRXJyb3IgaW4gZGVj
+bGFyYXRvciBvciBwYXJhbWV0ZXJzDQo+IEludmFsaWQgQyBkZWNsYXJhdGlvbjogRXhwZWN0aW5n
+ICIoIiBpbiBwYXJhbWV0ZXJzLiBbZXJyb3IgYXQgMTldDQo+ICAgdm9pZCBfX2ZpeF9hZGRyZXNz
+IGtmcmVlX3NrYl9yZWFzb24gKHN0cnVjdCBza19idWZmICpza2IsIGVudW0gc2tiX2Ryb3BfcmVh
+c29uIHJlYXNvbikNCj4gICAtLS0tLS0tLS0tLS0tLS0tLS0tXg0KPiANCj4gSW50cm9kdWNlZCBi
+eSBjb21taXQNCj4gDQo+ICAgYzIwNWNjNzUzNGE5ICgibmV0OiBza2I6IHByZXZlbnQgdGhlIHNw
+bGl0IG9mIGtmcmVlX3NrYl9yZWFzb24oKSBieSBnY2MiKQ0KPiANCg0KWWVhaCwgSSBjb21taXRl
+ZCB0aGlzIHBhdGNoLiBNYXkgSSBhc2sgd2hhdCBjb21tYW5kIGRpZCB5b3UgdXNlIHRvDQpwcm9k
+dWNlIHRoaXMgd2FybmluZz8gSSB0cmllZCB0aGUgZm9sbG93aW5nIGNvbW1hbmQsIGJ1dCBub3Qg
+c3VjY2VzczoNCg0KICBtYWtlIFY9MiBTUEhJTlhESVJTPSJuZXR3b3JraW5nIiBodG1sZG9jcw0K
+DQpIbW0uLi4uLi4ud2hhdCBkb2VzIHRoaXMgd2FybmluZyBtZWFucz8gRG9lcyBpdCBkb24ndCBs
+aWtlIHRoaXMNCmZ1bmN0aW9uIGF0dHJpYnV0ZT8NCg0KVGhhbmtzIQ0KTWVuZ2xvbmcgRG9uZw0K
+DQo+IC0tIA0KPiBDaGVlcnMsDQo+IFN0ZXBoZW4gUm90aHdlbGwNCg0K

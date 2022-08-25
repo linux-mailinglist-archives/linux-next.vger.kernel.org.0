@@ -2,106 +2,98 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 380E45A0574
-	for <lists+linux-next@lfdr.de>; Thu, 25 Aug 2022 03:00:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1D8B5A06FF
+	for <lists+linux-next@lfdr.de>; Thu, 25 Aug 2022 03:57:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbiHYBAr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 24 Aug 2022 21:00:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34690 "EHLO
+        id S236463AbiHYB5Q (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 24 Aug 2022 21:57:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229802AbiHYBAq (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 24 Aug 2022 21:00:46 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67E44474F7;
-        Wed, 24 Aug 2022 18:00:43 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S232020AbiHYB47 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 24 Aug 2022 21:56:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FCF0A1D0D;
+        Wed, 24 Aug 2022 18:51:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MCl550YM9z4x1G;
-        Thu, 25 Aug 2022 11:00:41 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1661389241;
-        bh=AYiOBWb08mU0nHDWsMSihOkyrHhYlKh5jSDYiWjyYpE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=cN+Bcij5a+N9U2JxmpAfvldFOTjMSr8xHhqr8CrWbCM0DPb8ZgwOobDJV7PFCQGZS
-         UCMrnDPz6OpnBGaFRCS90JZwA9grTYcd2xhT+87rrsNvFESv4SsAd+VjShkXd3SbV3
-         AXAMegUdn8i4MTaHnoLCB3HKzXoi6fHKObPbsdxNWa6M+fCLS/RYtGg29vULxs77wQ
-         w4cDz1xRUc3JWQmn9ck03tC8wA8ZWMvy2MD1yWmPy/gNwcGUBH4Y4+hHYkhsT4lb49
-         TQ9Ct4ntshL0bUE2rAeUgo2jHjHXy/WOvKxFNC+BAZwdzXzgahwq+E5WxsbxqJo2XL
-         Yk5vzxvBH8/gA==
-Date:   Thu, 25 Aug 2022 11:00:39 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>
-Subject: linux-next: manual merge of the bpf-next tree with the net tree
-Message-ID: <20220825110039.2e398527@canb.auug.org.au>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 05EA760DE4;
+        Thu, 25 Aug 2022 01:50:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 60A95C4347C;
+        Thu, 25 Aug 2022 01:50:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661392214;
+        bh=pcOqHJ5OtoMjIvOh0M9GjMirUSz25xmeL8d2/yf+u+c=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=qtioLEhDnng4MZcBkq1rYE1rzQ2a3Ixn7F0HvxMX3vlGxeaat3FvF8NN1+uRe+zdF
+         argS+1rxX1+r4bxiEFcYtV2PhU8D+ynLqfqVHR+1H0aq4CxgEWOGbRZC/2CJbkQ22s
+         plXd9hbGLUtMC+2Nl+rAPMWHDzq29kPiqV3nDoB0BSCfdNFgoBc45xilCLAbCGxsS+
+         aJF5WrIv6oqQpwBA7Q5S5wqlfbNsy+bLIuOekVUYov9lwqdh3psdyWvupKaZR+jYTQ
+         kGwNMAYYNqDTH3Akn8UfDBZcx1MS7tuhFpa0irpkpJfFZNETPHWRUnNx/k7UwmqOet
+         cP9YHOjkHDyDA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 48110C0C3EC;
+        Thu, 25 Aug 2022 01:50:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/JS48schjlrZViXtwXqiHQaS";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next] Documentation: sysctl: align cells in second content
+ column
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166139221428.11258.13872554797501208069.git-patchwork-notify@kernel.org>
+Date:   Thu, 25 Aug 2022 01:50:14 +0000
+References: <20220824035804.204322-1-bagasdotme@gmail.com>
+In-Reply-To: <20220824035804.204322-1-bagasdotme@gmail.com>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     linux-doc@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        corbet@lwn.net, davem@davemloft.net, kuba@kernel.org,
+        edumazet@google.com, hmukos@yandex-team.ru, lucien.xin@gmail.com,
+        stephen@networkplumber.org, atenart@kernel.org,
+        razor@blackwall.org, dsahern@kernel.org, sfr@canb.auug.org.au
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/JS48schjlrZViXtwXqiHQaS
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hello:
 
-Hi all,
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Today's linux-next merge of the bpf-next tree got a conflict in:
+On Wed, 24 Aug 2022 10:58:04 +0700 you wrote:
+> Stephen Rothwell reported htmldocs warning when merging net-next tree:
+> 
+> Documentation/admin-guide/sysctl/net.rst:37: WARNING: Malformed table.
+> Text in column margin in table line 4.
+> 
+> ========= =================== = ========== ==================
+> Directory Content               Directory  Content
+> ========= =================== = ========== ==================
+> 802       E802 protocol         mptcp     Multipath TCP
+> appletalk Appletalk protocol    netfilter Network Filter
+> ax25      AX25                  netrom     NET/ROM
+> bridge    Bridging              rose      X.25 PLP layer
+> core      General parameter     tipc      TIPC
+> ethernet  Ethernet protocol     unix      Unix domain sockets
+> ipv4      IP version 4          x25       X.25 protocol
+> ipv6      IP version 6
+> ========= =================== = ========== ==================
+> 
+> [...]
 
-  net/core/filter.c
+Here is the summary with links:
+  - [net-next] Documentation: sysctl: align cells in second content column
+    https://git.kernel.org/netdev/net-next/c/1faa34672f8a
 
-between commit:
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-  1227c1771dd2 ("net: Fix data-races around sysctl_[rw]mem_(max|default).")
 
-from the net tree and commit:
-
-  29003875bd5b ("bpf: Change bpf_setsockopt(SOL_SOCKET) to reuse sk_setsock=
-opt()")
-
-from the bpf-next tree.
-
-I fixed it up (I dropped the former patches changes to this file) and
-can carry the fix as necessary. This is now fixed as far as linux-next
-is concerned, but any non trivial conflicts should be mentioned to your
-upstream maintainer when your tree is submitted for merging.  You may
-also want to consider cooperating with the maintainer of the conflicting
-tree to minimise any particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/JS48schjlrZViXtwXqiHQaS
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMGybcACgkQAVBC80lX
-0GyJ+wf8DqH1iGWmAN71OauMREBYz5Y8LhdWk43zTRiKqchRo/tVBHFJpXWxK6qJ
-zFkq+ZBMccgyZ676JBTMrm+nIdL90nwYrwfLVacY0f7yWiDy1RM0tG2IunHWvVHa
-Dsmm6hRVjJh6qqxrV3oan0PYlghpMzYeTDbR2kI23sU0jJ5RVAgfvN66jcfns8XJ
-+CTZTBvcd+1ZLYt3+YgwtlfstvJuYvdSp12/GXG3ybUerFilyWBHXJNpayyN7BsE
-sEwtMGkGPzTvQL5mlIxvOZs2QDDzzih3KlWucxdyt3SzSk2uNJ+JWx0u8kaS8r0K
-G0bFUJebIaVa7IvS2KKQalOJQYEMzQ==
-=GXmx
------END PGP SIGNATURE-----
-
---Sig_/JS48schjlrZViXtwXqiHQaS--

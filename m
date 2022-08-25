@@ -2,71 +2,95 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45E7A5A17BF
-	for <lists+linux-next@lfdr.de>; Thu, 25 Aug 2022 19:12:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CAA65A1813
+	for <lists+linux-next@lfdr.de>; Thu, 25 Aug 2022 19:42:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236250AbiHYRMi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 25 Aug 2022 13:12:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38190 "EHLO
+        id S242791AbiHYRmO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 25 Aug 2022 13:42:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230523AbiHYRMh (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 25 Aug 2022 13:12:37 -0400
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB7FBB1BB2
-        for <linux-next@vger.kernel.org>; Thu, 25 Aug 2022 10:12:36 -0700 (PDT)
-Received: by mail-oi1-x22b.google.com with SMTP id u14so24071843oie.2
-        for <linux-next@vger.kernel.org>; Thu, 25 Aug 2022 10:12:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :reply-to:mime-version:from:to:cc;
-        bh=LcowEz/MHN6VIwZyVyshjW7bqzLnX3nnurMOL1MyeF0=;
-        b=cKkmbBix+N3cbmFgCBhnjLIvuq5g14yJ904Eln2mxC6ZlF14pz0erECWCP4txp3xs8
-         7S8mpHAkjHlV2vxSqEHaxHMCa8QAgVq4bzsgV5ul5AL+lwU2YSbizVxnl/Bso5/sb0yS
-         oOE5GhU30f9zhtX3UCX7n2OJ6l7JUt1vRLYl2VZg6L0y1XmnrouwXeMqe8ACF3YJm+SS
-         DnGKiy54WOS5O36rsO4xJ+5eoZnXCTHxTjpGXwP3KAtodAlZSRusSg0VRNWHb4EkSZWG
-         xo07mL+XN5RL6uCEcPMBe/C3qF2RmDFAcZ6T29yxbqIXsYigFnF3G0MgFt89mfc7lWgG
-         6zMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :reply-to:mime-version:x-gm-message-state:from:to:cc;
-        bh=LcowEz/MHN6VIwZyVyshjW7bqzLnX3nnurMOL1MyeF0=;
-        b=uz2h2gRzXKLw5RDpXlw8fz41HfRU4niQ6BzWGJGazQ6WC8U3Qqg/x58MAroj+TpJou
-         mTT0fk7PrQyyFkC2tHGq6s6uT5evQlIU3uLGkcsO4TX0dCMF3cm3F+6acl1Kr00TcFBW
-         W1cl6kelnjwhSry0lo3AhecIQGTiDfG1JSMW5nCPe9rjONwM4fbp31PdUPZGZXXigX1b
-         hJzIAvUFAlqz3XvHNtFzGEBK6Q7hHq9zdOxQXGi1XDir+7XjJWsjA5bET4KjUOfTvwIr
-         gI5LVDKIv63hdB2LfEgW6OdcgSkwezj031OJx/vRP8ErGYSKVuX5bCTvltkiQ6VcaDeU
-         VlFg==
-X-Gm-Message-State: ACgBeo1CdoMMW6Jkd23lb4X7t4cmzbgwE3uAAgr6L37kil1QJVRS4KEZ
-        DjP8/2Mj0ji8QkSHKqxJI4sMhy3ozkpzM57f9qk=
-X-Google-Smtp-Source: AA6agR6041ReGowM8y0wztP239SBgQurxNqCOQY3ObWzoJ3F/EOopGhKFI5Vs09LDDeAPO4eGI//4yQH208NchXxpKc=
-X-Received: by 2002:aca:1c03:0:b0:345:161:b011 with SMTP id
- c3-20020aca1c03000000b003450161b011mr50053oic.40.1661447556213; Thu, 25 Aug
- 2022 10:12:36 -0700 (PDT)
+        with ESMTP id S234681AbiHYRmN (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 25 Aug 2022 13:42:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CE44B2D9E;
+        Thu, 25 Aug 2022 10:42:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B1D92B82A68;
+        Thu, 25 Aug 2022 17:42:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E607C433C1;
+        Thu, 25 Aug 2022 17:42:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661449329;
+        bh=w857NjmZvn15PF0UZAGRqvuU5wVMAAdo1gnTqJ7Yi4w=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=qU0rnAnuAnH9bxn1gEwWsMcPXK5ez7TiLi22yFvOmtIqE5w+j7wt81NPs4bqgFJ3u
+         0oJ+NDqTVLAdbjjxWF6qQ06pGsM/PuXFhHYV5UyDgAZ6ZA0h/I2RRDJqZSPcUuNMmy
+         +RvTBk6VwWuKo4OAw8/0b2+JZnv1G8LZjTrgmrAW3muFEb9YncoJo1r08qaKyXBjCf
+         xQeWYfDZ8ytZGauhjSawjYcHv2BQatl77q3oBsNlH2saUFurp9XgcbQoF3dLQbb0Ob
+         HrRL1kQPz7MT3UJUTHNsRywx4TP5jShjmjWvQFxJE1NPXZphYtqAk2g6tg7jYB/NhP
+         s4/rDNnZsqL/g==
+Date:   Thu, 25 Aug 2022 10:42:08 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     "=?UTF-8?B?aW1hZ2Vkb25n?=(=?UTF-8?B?6JGj5qKm6b6Z?=)" 
+        <imagedong@tencent.com>, linux-doc@vger.kernel.org
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Linux Next Mailing List" <linux-next@vger.kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: Re: [Internet]linux-next: build warning after merge of the net-next
+ tree
+Message-ID: <20220825104208.592a2df2@kernel.org>
+In-Reply-To: <07263247-4906-4A72-A1A2-CAB41F115EB7@tencent.com>
+References: <20220825154105.534d78ab@canb.auug.org.au>
+        <07263247-4906-4A72-A1A2-CAB41F115EB7@tencent.com>
 MIME-Version: 1.0
-Reply-To: sgtkaylama@gmail.com
-Sender: salifzouli4@gmail.com
-Received: by 2002:a05:6838:bac4:0:0:0:0 with HTTP; Thu, 25 Aug 2022 10:12:35
- -0700 (PDT)
-From:   sgtkaylama <sgtkaylama@gmail.com>
-Date:   Thu, 25 Aug 2022 17:12:35 +0000
-X-Google-Sender-Auth: w3QtPfX5IUfmDSH-J_2gO1fZ5yM
-Message-ID: <CAFFHfojJZsdbFTbxnGAiX80jZnf7Ewz5EOcPKd-=LtFXwYuoeA@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Ol=C3=A1, voc=C3=AA recebeu minhas duas mensagens anteriores? por favor
-verifique e me responda
+On Thu, 25 Aug 2022 07:55:36 +0000 imagedong(=E8=91=A3=E6=A2=A6=E9=BE=99) w=
+rote:
+> > After merging the net-next tree, today's linux-next build (htmldocs)
+> > produced this warning:
+> >=20
+> > Documentation/networking/kapi:26: net/core/skbuff.c:780: WARNING: Error=
+ in declarator or parameters
+> > Invalid C declaration: Expecting "(" in parameters. [error at 19]
+> >   void __fix_address kfree_skb_reason (struct sk_buff *skb, enum skb_dr=
+op_reason reason)
+> >   -------------------^
+> >=20
+> > Introduced by commit
+> >=20
+> >   c205cc7534a9 ("net: skb: prevent the split of kfree_skb_reason() by g=
+cc")
+> >  =20
+>=20
+> Yeah, I commited this patch. May I ask what command did you use to
+> produce this warning? I tried the following command, but not success:
+>=20
+>   make V=3D2 SPHINXDIRS=3D"networking" htmldocs
+>=20
+> Hmm.......what does this warning means? Does it don't like this
+> function attribute?
+
+It popped up for me on a clean build of
+
+	make htmldocs
+
+There's a lot of other warnings but you should see this one, too.
+
+I think you need to add the new keyword to one of the tables in
+Documentation/conf.py

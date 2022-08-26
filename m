@@ -2,86 +2,93 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F09A05A2270
-	for <lists+linux-next@lfdr.de>; Fri, 26 Aug 2022 09:56:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2601D5A2288
+	for <lists+linux-next@lfdr.de>; Fri, 26 Aug 2022 10:01:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245712AbiHZH4z (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 26 Aug 2022 03:56:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43114 "EHLO
+        id S236733AbiHZIB4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 26 Aug 2022 04:01:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245554AbiHZH4z (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 26 Aug 2022 03:56:55 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1AB2D4182;
-        Fri, 26 Aug 2022 00:56:52 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MDXGl1R1mz4xD1;
-        Fri, 26 Aug 2022 17:56:47 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1661500608;
-        bh=0PtRSPSI3FdpeLeDi8zlNlfYXLY3SQCY0hLwkYka4DE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Vebr0+jBUilJWfK8CqbAhmFbYm6TlMZ5bfy6tK3/iIJnfVU3gUjDRr8DsnjW8iri0
-         ekekQloN9nYZ4kU0LE2GJ2GMfjsSkxN7Uw7ngSlS72x8ByM44QPa/qB6ntIT8BYAJH
-         liRn74/SoXXMIpN7V+msHt7E5+Qhbhjkob1juI4RRzyDNL75qwotOxRoabRxHP7nEm
-         mH6hDmX7h0oYOBQ6tBMdiEgJudbGVHV+zZrzS2E/Go3yUax/BCtyZXohY3nv3lYrsz
-         gbq+xcKQUSj+E3BB1UGu4F3IvcmoELOVeizmBqKJpRyl8RYJxq2lD/U6PFRAZZQ5Jm
-         2y0pV7oCiWGgw==
-Date:   Fri, 26 Aug 2022 17:56:46 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>
-Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
+        with ESMTP id S241772AbiHZIBz (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 26 Aug 2022 04:01:55 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53266D4751
+        for <linux-next@vger.kernel.org>; Fri, 26 Aug 2022 01:01:52 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id t5so1126461edc.11
+        for <linux-next@vger.kernel.org>; Fri, 26 Aug 2022 01:01:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=tWIs8cEPcFM8qOdbk90dp96g6UtdbhFONDoS8mVkd8Y=;
+        b=kTBkZ/vJ5n2n97pr3kT81obP3hfsaezJ6KFMEJTL1lsNXFKhKzemQUQdgcdRNbzyTZ
+         s0HWMKsbc+lbyQDjhFij+Cp2TS2lUir7QmbYUJJbFIBEwTNB7adCi0QzywlXhPfYs8s2
+         SQdE03uMV25M1ok9gNeKENF0H6S/jqSw+Ndac2t6yXHqvPtYaTokRd+r/eDg6DIaXOTv
+         OaADBgD0JfADnq+jT76Cp3WZcNBPQ0aT5cHGaD4KjqzxPr24IRohzL371KJ72NXcLs+g
+         Nz0tqT8QLidJhxQgFiuIi4h4YJxshl+nNhA1mGcu0C4N+SmDNQKBxJrD8hH8wP5zSrv4
+         GyXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=tWIs8cEPcFM8qOdbk90dp96g6UtdbhFONDoS8mVkd8Y=;
+        b=1joWCwiUuEh2KaN4ypRGjsc7w3HdVmCSt3pUv84DjjPkLeqPQzxmSMtsnxoYYi/2qw
+         mHOkyPkv/U1Ze34IIa1Ghx/Bx2kiPoCPdnbKkal+C7T9YOV8+Sv3NcZ4veG8qfVcK15M
+         dIPxFE7UQGj8Tmw3Chdj4lzzXnKBgXDPZ5fL2eW9Vuu7FdlOwI01HciVLuu1HKexWOeT
+         Qwcrru/r+VieYuxjgHH6im3b09b9guGIBCCWNpviEBuqeBdV8ygRHk5skuaRuDiKNVd7
+         Ro4cjExDC8mpitK+qdFqVUqW9OQfQl88eukUtxfezkDtE56maCSMjtFpAmVgDZRz/1U7
+         D0fA==
+X-Gm-Message-State: ACgBeo0g/NY6oVE+tuJRnsYFTx4QQqkejcoekju9wIw0/RV2c0sKcQdD
+        Aiha70yi/ruDnNI+Mev4B/RJiG5GGFQ84jsTQiSykA==
+X-Google-Smtp-Source: AA6agR46aDo68kfNYLpzXurqLX2JUxoPuwhHyxbf0HWbQkstABaXM8HF7+f5S1ulK2ZyQnwOMdOgwGAxQUVpUedU7FI=
+X-Received: by 2002:a05:6402:4517:b0:443:7fe1:2d60 with SMTP id
+ ez23-20020a056402451700b004437fe12d60mr5913742edb.133.1661500911209; Fri, 26
+ Aug 2022 01:01:51 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220826152650.2c55e482@canb.auug.org.au>
+In-Reply-To: <20220826152650.2c55e482@canb.auug.org.au>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 26 Aug 2022 10:01:40 +0200
+Message-ID: <CACRpkdYZOK9NhEqqU4Wkg1XHCHEQk=AR6w9730qo_tHmgGrorA@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the pinctrl tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Wolfram Sang <wsa@the-dreams.de>
+Cc:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Wolfram Sang <wsa@kernel.org>,
+        Naresh Solanki <naresh.solanki@9elements.com>,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the risc-v-fixes
- tree
-Message-ID: <20220826175646.77554fff@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/TL.IjyQn36rp3=Jb4Xs3rTi";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/TL.IjyQn36rp3=Jb4Xs3rTi
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, Aug 26, 2022 at 7:26 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-Hi all,
+> After merging the pinctrl tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+(...)
+> Caused by commit
+>
+>   e6cbbe42944d ("pinctrl: Add Cypress cy8c95x0 support")
+>
+> interacting with commit
+>
+>   ed5c2f5fd10d ("i2c: Make remove callback return void")
+>
+> from the i2c tree.
 
-Commit
+How typical, the ideal way to resolve it is if there is an immutable
+branch with the
+basic changes I can pull in from the i2c tree and apply Stephen's fix on top,
+or we can just wait for the merge window and let Torvalds sort it out?
 
-  5024d917e5f6 ("MAINTAINERS: add the Polarfire SoC's i2c driver")
-
-is missing a Signed-off-by from its committer.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/TL.IjyQn36rp3=Jb4Xs3rTi
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMIfL4ACgkQAVBC80lX
-0GyzqQf9EPKo1dFYEwetRlbb79RiNMd420WA6fkjQTXZinwx+qUP3wg3TnJEYXLF
-hR5pnD3+tuZo+6It/7zEByysxywMpcXNpnPFCSRHnuGkzrEDXxaV6eBUeISuMpth
-zm+4ytfAdLAisJlYM7evp5NulZBWxbURVCPofiUFTdDW9Gc6ofWVLsWwAXk+A+PV
-xg6z4hQU1xMyEZxP6lU/vUzvsv3IiU6hTZXoynwuP/eiK4ypWLwE6OOkAUXcmEyz
-AZQqmKGoOOhxhoJpVdGTbXJCjkb/y4jPjXKSc2/dA3xeyJYB8A73VIZ4eYb1CD3M
-wjGS28bUoDXR5pvzCGA49LsMAPmZkg==
-=HtIw
------END PGP SIGNATURE-----
-
---Sig_/TL.IjyQn36rp3=Jb4Xs3rTi--
+Yours,
+Linus Walleij

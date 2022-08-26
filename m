@@ -2,48 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30C9E5A204B
-	for <lists+linux-next@lfdr.de>; Fri, 26 Aug 2022 07:27:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC0DB5A2174
+	for <lists+linux-next@lfdr.de>; Fri, 26 Aug 2022 09:10:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234047AbiHZF05 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 26 Aug 2022 01:26:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55912 "EHLO
+        id S245162AbiHZHKc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 26 Aug 2022 03:10:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbiHZF04 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 26 Aug 2022 01:26:56 -0400
+        with ESMTP id S245203AbiHZHK3 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 26 Aug 2022 03:10:29 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30122A6C6C;
-        Thu, 25 Aug 2022 22:26:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 892569FE9;
+        Fri, 26 Aug 2022 00:10:24 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MDSxl4tL1z4wgv;
-        Fri, 26 Aug 2022 15:26:51 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MDWFB6HCGz4xDB;
+        Fri, 26 Aug 2022 17:10:22 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1661491613;
-        bh=6fcG9onYyD/Nbqd1jqnGyknew1f2WvEwaGM1fgFYeW8=;
+        s=201702; t=1661497823;
+        bh=D+/iLaa6H3WpuuFlEI1h7i9kslU9mWhl3oJwRjhaFbA=;
         h=Date:From:To:Cc:Subject:From;
-        b=TTgmdJAamCSPtPeFQAdhHqHYH8UcAaDNXo8lejbtHTo2RTAeDUPgcnrY0CYcj5cBh
-         AmRg/wu601NbjIuamd8Ql0iuqTS77ykdBNrVFzVR0uV355QELJlNMpBf5SQ3xs/7sN
-         VZVBrJr8ceamH8IqGExLAA82Lk3mQEF5ujElT0YThZhFzO7mPQ+5XbgP9JvGUan5oN
-         49VqFQCM5V/R3O6O9oCSbV0I8340KgJf2MdkmUMrCAenZVjfTZCATvpBwWVK36aZnv
-         Zx452KOvMp6ud+fMczfXzEfsadZPWLSKIJFDoXeH2n3NHajVk9ihpgRwV+Ls06jypn
-         /kqqvTcGIch/Q==
-Date:   Fri, 26 Aug 2022 15:26:50 +1000
+        b=Pl1wHrL1X+J/6AUUTr4RvDnqDP23RXFE08dHv0HJYVLtMM6SZvHdjMHM0vKD1VDvd
+         FaEHdM3QTxGdoP7jGcxMasziyuzDxGwd1vQUXVN8WDlTts4/bikDxdpYUR6Ovqi231
+         SvzrIpQkBDljyTpndonrYWN5lBb69OZwtDXs9JSQphKZC0yyp0qN5dCIKYPmHMg8gd
+         BTyJ45cUXjOdxCYshMczxI9DHUbsBJK9ag+srphepmpHjZTwK2oXgJn/xBm7arwj2d
+         IP00hbagfQt++2pd8MSjF7nP2A7wep6evPrxvofONws5PoNHSzXqpsJuUqRAT+1CSf
+         ndLi9n3gqRzDA==
+Date:   Fri, 26 Aug 2022 17:10:20 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Wolfram Sang <wsa@the-dreams.de>
-Cc:     Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
-        <u.kleine-koenig@pengutronix.de>, Wolfram Sang <wsa@kernel.org>,
-        Naresh Solanki <naresh.solanki@9elements.com>,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Michal Hocko <mhocko@suse.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the pinctrl tree
-Message-ID: <20220826152650.2c55e482@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the mm tree
+Message-ID: <20220826171020.5772e600@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Pt.EyoV_KiVpO//lk/pLu.E";
+Content-Type: multipart/signed; boundary="Sig_/opxvO9zRt8XjfN2.HWoyqVY";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -54,86 +50,50 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Pt.EyoV_KiVpO//lk/pLu.E
+--Sig_/opxvO9zRt8XjfN2.HWoyqVY
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the pinctrl tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+After merging the mm tree, today's linux-next build (powerpc
+ppc64_defconfig) failed like this:
 
-drivers/pinctrl/pinctrl-cy8c95x0.c:1371:27: error: initialization of 'void =
-(*)(struct i2c_client *)' from incompatible pointer type 'int (*)(struct i2=
-c_client *)' [-Werror=3Dincompatible-pointer-types]
- 1371 |         .remove         =3D cy8c95x0_remove,
-      |                           ^~~~~~~~~~~~~~~
-drivers/pinctrl/pinctrl-cy8c95x0.c:1371:27: note: (near initialization for =
-'cy8c95x0_driver.remove')
+arch/powerpc/xmon/xmon.c: In function 'cmds':
+arch/powerpc/xmon/xmon.c:1089:33: error: too few arguments to function 'sho=
+w_mem'
+ 1089 |                                 show_mem(0, NULL);
+      |                                 ^~~~~~~~
+In file included from arch/powerpc/xmon/xmon.c:14:
+include/linux/mm.h:2585:13: note: declared here
+ 2585 | extern void show_mem(unsigned int flags, nodemask_t *nodemask, gfp_=
+t gfp_mask);
+      |             ^~~~~~~~
 
 Caused by commit
 
-  e6cbbe42944d ("pinctrl: Add Cypress cy8c95x0 support")
+  9ea9abc5cd7e ("mm: reduce noise in show_mem for lowmem allocations")
 
-interacting with commit
-
-  ed5c2f5fd10d ("i2c: Make remove callback return void")
-
-from the i2c tree.
-
-I have applied the following merge fix patch:
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Fri, 26 Aug 2022 15:20:29 +1000
-Subject: [PATCH] pinctrl: fixup for "i2c: Make remove callback return void"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/pinctrl/pinctrl-cy8c95x0.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/drivers/pinctrl/pinctrl-cy8c95x0.c b/drivers/pinctrl/pinctrl-c=
-y8c95x0.c
-index a29df0920f4f..05791212822e 100644
---- a/drivers/pinctrl/pinctrl-cy8c95x0.c
-+++ b/drivers/pinctrl/pinctrl-cy8c95x0.c
-@@ -1352,14 +1352,12 @@ static int cy8c95x0_probe(struct i2c_client *client)
- 	return ret;
- }
-=20
--static int cy8c95x0_remove(struct i2c_client *client)
-+static void cy8c95x0_remove(struct i2c_client *client)
- {
- 	struct cy8c95x0_pinctrl *chip =3D i2c_get_clientdata(client);
-=20
- 	if (!IS_ERR_OR_NULL(chip->regulator))
- 		regulator_disable(chip->regulator);
--
--	return 0;
- }
-=20
- static struct i2c_driver cy8c95x0_driver =3D {
---=20
-2.35.1
+I have reverted that commit for today (and the following fix).
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/Pt.EyoV_KiVpO//lk/pLu.E
+--Sig_/opxvO9zRt8XjfN2.HWoyqVY
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMIWZoACgkQAVBC80lX
-0GwyoQf+K3lskLtGcSNNWW/fgt95/GEUcAe2L9+WXziZvSey4Dqb3fSgaqQWbUS+
-t9IrQ2ZF3POCdycx9Op43EEcCGDj59v5IWOgXV03NfClztoRkqVUIZ9X7Xvyh3Hl
-dX68zlbAurHPmsROF4BCLKFmyo7YzrKGhavoKAtApu8H5DcRvuq8HN4crzhqQB3o
-GVM9xTGcgRzhO+ZP7yJ+8VEWJLKjNfQnVjJrEazy58EBiNwvawUBGcikferuIcWb
-LZzWGbXX4UxwcWQSiI+60V9cyo8+4yAGQaCxEW6ldaHhUsawiu1CB9dTYsUtjn/2
-z7ZdDF3GQ2ikOuJf0D0wfOoXLVzSCA==
-=Kel7
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMIcdwACgkQAVBC80lX
+0GzCMwf+PnWcLkXisg6lJpJbV21L74GRxm2EH9N/g9QNeNbx0fr0z3X87m7yOw5Q
+YNil6x/XGP7u/bHAM3b8UM0jep/0LZtWiTiIC2FwrGcsbZE+AtU/w0dytzYHPgvE
+BvEKZwWcjEvv2TlgxgWjmZV1RP/KyNf+h0Omm6oy1r7qyK8uRb7ovv7G4eovKIra
+9d9+3c20MH/KqU/BG4VINUdpfbnC2EDWq7hzsmc0gdNHfzbYWSIM8O3OvwvEIrH3
+E4AMmf0+QY3BwHunRsdDYUwzHCuM0IOtzDwKn0CUwVYL7+JknkrjmWHOcU2rf0AD
+JZYgYHhDQ5XTB/dBmAcGGakroDvhXA==
+=OSep
 -----END PGP SIGNATURE-----
 
---Sig_/Pt.EyoV_KiVpO//lk/pLu.E--
+--Sig_/opxvO9zRt8XjfN2.HWoyqVY--

@@ -2,68 +2,50 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 130005A3D24
-	for <lists+linux-next@lfdr.de>; Sun, 28 Aug 2022 12:15:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F04695A401C
+	for <lists+linux-next@lfdr.de>; Mon, 29 Aug 2022 00:57:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229520AbiH1KPA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 28 Aug 2022 06:15:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44920 "EHLO
+        id S229464AbiH1W54 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 28 Aug 2022 18:57:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiH1KO7 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 28 Aug 2022 06:14:59 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8587C13F90;
-        Sun, 28 Aug 2022 03:14:57 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id m17-20020a7bce11000000b003a5bedec07bso6693376wmc.0;
-        Sun, 28 Aug 2022 03:14:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=K4m+AVo1CT485UUYwfaOl51yrQiPjw00bO34cVu9dLQ=;
-        b=StfpQQmdFNPy18AzJHZlT2b9/ytPedwCAmHpp5cuu9SAp0HxOMkFOB6HqhNZsjKjRU
-         1dnl1PJum0wA/2rowouCdA+21m1VupPLTqgH6vAQWBtABHixidY6ruK7vfX7E2jR6Ha8
-         cPCFJa8X74MS0jzPUE5QwvE1y5gKvU8ltuJKhfXEgNH1iXHzoKhlRc3ugWTYamdJt1F5
-         I6JnuACKRm0H43buhWIptSsZ5JfpFQ4pUaqIHPaWABaa8gMAUzcOzQc6zODDY1vafHcb
-         Mz9zovk/a/IH1rnlSw+L9v14zreo3msaJOAkmQYs/+k0nwAQUavSBvfOJpdOrG0Xo+Vj
-         o3vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=K4m+AVo1CT485UUYwfaOl51yrQiPjw00bO34cVu9dLQ=;
-        b=cr+Bqe/aHKlrZCSAwECh1izXs52OLk3b4/a7bDxQkQX6YFiXenMElXNqXewuXNPGXM
-         /kOZwcF+lKBPq6mNy2WSh9QQgOpu5nnSZjJj/+H7aTognFU6Gi3Y+g7Y+Bh8DbgvPSDx
-         BTYaPSLQXsl8oNOOwqhX6cCDbhkyz26Qcesz5dzZc65xHb9BuSowqxnu8FNpgk6oxKIE
-         bxwXC/DPQEWLsOabF/4xOU9Yi5m6SqYbITfL3CvBTYd1Mduhx+HtAvvoOMXBdK0T2IDF
-         ZbghxloctN/4QJpxShjJE7gnZjYgzmFWeQ6tn+lz7Y79sFzq1iS4nDl87oby25Dm25em
-         8TJw==
-X-Gm-Message-State: ACgBeo0xRmdNx0HHYbvCKYrBJI4/SDbrBm/9qMAqi5RhAc5+daV5NYWd
-        4iDRiXbGWwt1EuJFwri9vOk=
-X-Google-Smtp-Source: AA6agR6So3mQ3numtJZ8feUGhHgOildtKqFv+k4qDvQeERw/D8dnaF3IqgsFSNBY1lgBm18fC69vHA==
-X-Received: by 2002:a05:600c:4e4b:b0:3a5:d36e:8349 with SMTP id e11-20020a05600c4e4b00b003a5d36e8349mr4345585wmq.44.1661681696059;
-        Sun, 28 Aug 2022 03:14:56 -0700 (PDT)
-Received: from elementary ([94.73.32.249])
-        by smtp.gmail.com with ESMTPSA id p12-20020a05600c430c00b003a60bc8ae8fsm5202518wme.21.2022.08.28.03.14.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Aug 2022 03:14:55 -0700 (PDT)
-Date:   Sun, 28 Aug 2022 12:14:50 +0200
-From:   =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        with ESMTP id S229468AbiH1W5z (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 28 Aug 2022 18:57:55 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DBA22497C;
+        Sun, 28 Aug 2022 15:57:52 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MG89Q0nXwz4xDB;
+        Mon, 29 Aug 2022 08:57:45 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1661727467;
+        bh=Yqo8XRJXmrZ78DGccIiqAtUBDk2Wkswb2Q63M32n5EU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=jtN3I0NChKbLAcov4XASmzL7eG9qnsjRo3P777ZOVqX8xxT4yN27sJH06Ha9MTgQL
+         hsNcx2tOxUyPMI6/9nprUPKWr29IqoORisrdAl9q14WmJPVoVJQYLtwJMt0zE8SWij
+         BLiZML7cDQg3b9xDbMOGzcgp78oF8ioeoxhsX0WNV6iXqak3AD8l22F4vrInB3X4vj
+         UHm3w5JBL7PgCaQEYSSF4cVobZNB5ZurbwQqrq0fYgx8aCrL4R6lsc6lXLgPYWCOAK
+         G9YfqYXMsd2WwkrsW01I3g2leqf1mlzouWjAbPQYiMbmj/tikn+ulXWUqV5EvjvMA7
+         fsJaBE0Tyfk1Q==
+Date:   Mon, 29 Aug 2022 08:57:30 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the hid tree
-Message-ID: <20220828101450.GA183368@elementary>
-References: <20220826095647.2484954f@canb.auug.org.au>
+Subject: linux-next: Signed-off-by missing for commit in the tip tree
+Message-ID: <20220829085730.142da032@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220826095647.2484954f@canb.auug.org.au>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Type: multipart/signed; boundary="Sig_/EDWs8V67X9A1mMFOOGLjJQT";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,32 +53,37 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi,
+--Sig_/EDWs8V67X9A1mMFOOGLjJQT
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Aug 26, 2022 at 09:56:47AM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> In commit
-> 
->   609174edeb75 ("HID: uclogic: Fix warning in uclogic_rdesc_template_apply")
-> 
-> Fixes tag
-> 
->   Fixes: 08177f4 ("HID: uclogic: merge hid-huion driver in hid-uclogic")
+Hi all,
 
-Sorry about that, checkpatch didn't catch this one. This should read:
+Commit
 
-Fixes: 08177f40bd00 ("HID: uclogic: merge hid-huion driver in hid-uclogic")
- 
-> has these problem(s):
-> 
->   - SHA1 should be at least 12 digits long
->     This can be fixed for the future by setting core.abbrev to 12 (or
->     more) or (for git v2.11 or later) just making sure it is not set
->     (or set to "auto").
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
+  6bc72375dd93 ("perf: Add system error and not in transaction branch types=
+")
 
+is missing a Signed-off-by from its author.
 
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/EDWs8V67X9A1mMFOOGLjJQT
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmML8toACgkQAVBC80lX
+0GzUwAgAhe5V5isNZiywJseAON4f5QffYj9GJCMPUwpRBe215J9On1SJHAJHBaHW
+6VIOeKEHHdKCkYk4WdTafRO/BCPN50YJKGLInoTl2WoudhrzB9vHiehoGllxUN2H
+aurwOp0c150JQRhif+q+r0kLN8WSk28F/UCsGq+11PyPplfSGECVYAUzGTg4VaGy
+ML0nkry7ApfCosbspTrmsiiiyxYW++SlbwzLmhAnBWL5HtVDD11v7izR084GdrsX
+6gE6UOUWuXwBB5OHj/sJup+H9xRrv0cZ9oY0uHmjLZOsGDxBojokrorN0YVNtV0f
+2A8zw1emIzkQQUC3v6kk1BLgH2rn2A==
+=SvqJ
+-----END PGP SIGNATURE-----
+
+--Sig_/EDWs8V67X9A1mMFOOGLjJQT--

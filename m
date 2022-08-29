@@ -2,117 +2,156 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 319B65A41A1
-	for <lists+linux-next@lfdr.de>; Mon, 29 Aug 2022 06:00:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8035F5A420C
+	for <lists+linux-next@lfdr.de>; Mon, 29 Aug 2022 06:55:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229546AbiH2EAL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 29 Aug 2022 00:00:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34910 "EHLO
+        id S229484AbiH2EzB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 29 Aug 2022 00:55:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbiH2EAK (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 29 Aug 2022 00:00:10 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70605D98;
-        Sun, 28 Aug 2022 21:00:08 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id x80so3024860pgx.0;
-        Sun, 28 Aug 2022 21:00:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc;
-        bh=xORpSpkCLQjB00fE/w41wxtlc3w+yIV5elX70E62Eso=;
-        b=KiwyJmOUs55sjpXqlc+BHYz3sI41VDESyMnkSIVReWpVFP3s1pwXaTLA9LURs/q6dW
-         DPQY4CRZaZHELQpA8MxUf+Qlih8jhsew0X1tjoml3+BIuKFafa1i6qwla7W3MufJ88sz
-         r3Ua+lsaR8A3cxvlhYrR5i3I82MkZ16wxsb822x7upPhexjbgJPVIWSHo72yb57xKVrX
-         CoKvxGjSY1howJWGreAlSixBHMgp7zDySDCaXp4CrXql62yaHHdUn09oIHUIdfZYCTBV
-         +9ZAyGJDSvpS3oyE/dELfVlsDlMRZubVg4OK43r92PdsgLYMCndYL9wfYueizcAjGo1j
-         RBXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc;
-        bh=xORpSpkCLQjB00fE/w41wxtlc3w+yIV5elX70E62Eso=;
-        b=SeSjRNOR9DLbiOdKcnMyRHdOiv3qc+LBFmRGAZaw2uKrp7qYU2AH/c1R9OrR+q3vi4
-         U9cUzs39mF/9glCdKLLiWGWytoWmShX/Xc9WGyZ9VjbsZkYU6OrHAUWKoxnWoE0dB+jl
-         3LAYxLmCC4hqY3O4l+sSdJq0D80CNbkVUrDgzf+6bclQs9vdr79c9mVkvk6IkMTldPdN
-         nQbYllucfTg8TM/Jqx674JQAUhaLT81WHCfz54zdTbuywP1ZEyJFHpNNGAhzAASbm3oL
-         UEjj1xy9R6HNbSFGIxwldc5LL4M1/5R9nhmCjsFYFKTNT6Myd6hiKro+GrQ37zLViI47
-         AzMw==
-X-Gm-Message-State: ACgBeo2nfaETG65rBI3qUgC6H+jaazSX5H6QAeocgS9ED/jYoIi5oACW
-        prn07yGDZwXXQHFGpC6M492W4HW6OII=
-X-Google-Smtp-Source: AA6agR6T4gw1ISYuhbsh+KEBBKJmZqe27oNtaCUsYEohqHIcwLPcTS8iK5Lm3i+xa7QtOc5JuGBUog==
-X-Received: by 2002:a65:6cca:0:b0:427:17e6:b32b with SMTP id g10-20020a656cca000000b0042717e6b32bmr12041050pgw.349.1661745607343;
-        Sun, 28 Aug 2022 21:00:07 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id b10-20020a62a10a000000b00538116bab6fsm2356394pff.213.2022.08.28.21.00.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Aug 2022 21:00:06 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Sun, 28 Aug 2022 18:00:05 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        with ESMTP id S229488AbiH2EzA (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 29 Aug 2022 00:55:00 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B83E033;
+        Sun, 28 Aug 2022 21:54:58 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MGJ5T18Gkz4wgr;
+        Mon, 29 Aug 2022 14:54:53 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1661748893;
+        bh=xFQ7zfJRnQWJoRz960vXmdbXNSKrViSHnR9p/nXzFB0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Obr3Qa0DgFtB8KMxZ9dNlwIc4V9R63OD+FmZ6/DR3uAXgPpXwU62Sv8EKtjIfAQ0x
+         BAC/PJ511xbooNXOKw5B70sTW6tK/v/EGYUGsAHQPPH+0Lqgs2IENEhSPsk6VQU9AB
+         L3zk8T4vEAtrmEpHF+VJJjdPiC2AiuLNGd/1OrdAM5BfE9UqXz42mVhbkDN1C4K7Gc
+         yB/BRnB4lbN1va7Rkti4f67mfg4qyLvb9Z3bkbh5tS7IN13/S+GamJ0j+WUeCasKwH
+         gJCyYtCintqC+7jujuGx52llpBWybvS0cvKM0hP2xZEGJJXDLrA36ost4JS1Jp0NzZ
+         Nfjcx5sm6j+EA==
+Date:   Mon, 29 Aug 2022 14:54:51 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        cgroups@vger.kernel.org
-Subject: [PATCH] cgroup: Fix build failure when CONFIG_SHRINKER_DEBUG
-Message-ID: <Yww5xZtKLgBFCuY2@slm.duckdns.org>
-References: <20220829132951.1f175865@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the scsi-mkp tree
+Message-ID: <20220829145451.388505a3@canb.auug.org.au>
+In-Reply-To: <20220824115057.107e3d42@canb.auug.org.au>
+References: <20220824115057.107e3d42@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220829132951.1f175865@canb.auug.org.au>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/G.zbZoIa+fZo/1ILOd/r7Dn";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-From c0f2df49cf2471289d5aabf16f50ac26eb268f7d Mon Sep 17 00:00:00 2001
-From: Tejun Heo <tj@kernel.org>
-Date: Sun, 28 Aug 2022 17:54:15 -1000
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+--Sig_/G.zbZoIa+fZo/1ILOd/r7Dn
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-fa7e439cf90b ("cgroup: Homogenize cgroup_get_from_id() return value") broken
-build when CONFIG_SHRINKER_DEBUG by trying to return an errno from
-mem_cgroup_get_from_ino() which returns struct mem_cgroup *. Fix by using
-ERR_CAST() instead.
+Hi all,
 
-Signed-off-by: Tejun Heo <tj@kernel.org>
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Michal Koutný <mkoutny@suse.com>f
-Fixes: fa7e439cf90b ("cgroup: Homogenize cgroup_get_from_id() return value")
----
-Sorry about that. Applied this fix to cgroup/for-6.1.
+On Wed, 24 Aug 2022 11:50:57 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>=20
+> After merging the scsi-mkp tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+>=20
+> In file included from include/linux/bitmap.h:9,
+>                  from include/linux/cpumask.h:12,
+>                  from arch/x86/include/asm/cpumask.h:5,
+>                  from arch/x86/include/asm/msr.h:11,
+>                  from arch/x86/include/asm/processor.h:22,
+>                  from arch/x86/include/asm/cpufeature.h:5,
+>                  from arch/x86/include/asm/thread_info.h:53,
+>                  from include/linux/thread_info.h:60,
+>                  from arch/x86/include/asm/preempt.h:7,
+>                  from include/linux/preempt.h:78,
+>                  from include/linux/spinlock.h:55,
+>                  from include/linux/wait.h:9,
+>                  from include/linux/wait_bit.h:8,
+>                  from include/linux/fs.h:6,
+>                  from include/linux/highmem.h:5,
+>                  from include/linux/bvec.h:10,
+>                  from include/linux/blk_types.h:10,
+>                  from include/linux/blkdev.h:9,
+>                  from drivers/scsi/mpi3mr/mpi3mr.h:13,
+>                  from drivers/scsi/mpi3mr/mpi3mr_transport.c:10:
+> drivers/scsi/mpi3mr/mpi3mr_transport.c: In function 'mpi3mr_update_mr_sas=
+_port':
+> include/linux/find.h:40:23: error: array subscript 'long unsigned int[0]'=
+ is partly outside array bounds of 'u32[1]' {aka 'unsigned int[1]'} [-Werro=
+r=3Darray-bounds]
+>    40 |                 val =3D *addr & GENMASK(size - 1, offset);
+>       |                       ^~~~~
+> drivers/scsi/mpi3mr/mpi3mr_transport.c:1610:27: note: while referencing '=
+phys_to_be_added'
+>  1610 |         u32 phy_mask_xor, phys_to_be_added, phys_to_be_removed;
+>       |                           ^~~~~~~~~~~~~~~~
+> In file included from include/linux/bitmap.h:9,
+>                  from include/linux/cpumask.h:12,
+>                  from arch/x86/include/asm/cpumask.h:5,
+>                  from arch/x86/include/asm/msr.h:11,
+>                  from arch/x86/include/asm/processor.h:22,
+>                  from arch/x86/include/asm/cpufeature.h:5,
+>                  from arch/x86/include/asm/thread_info.h:53,
+>                  from include/linux/thread_info.h:60,
+>                  from arch/x86/include/asm/preempt.h:7,
+>                  from include/linux/preempt.h:78,
+>                  from include/linux/spinlock.h:55,
+>                  from include/linux/wait.h:9,
+>                  from include/linux/wait_bit.h:8,
+>                  from include/linux/fs.h:6,
+>                  from include/linux/highmem.h:5,
+>                  from include/linux/bvec.h:10,
+>                  from include/linux/blk_types.h:10,
+>                  from include/linux/blkdev.h:9,
+>                  from drivers/scsi/mpi3mr/mpi3mr.h:13,
+>                  from drivers/scsi/mpi3mr/mpi3mr_transport.c:10:
+> include/linux/find.h:40:23: error: array subscript 'long unsigned int[0]'=
+ is partly outside array bounds of 'u32[1]' {aka 'unsigned int[1]'} [-Werro=
+r=3Darray-bounds]
+>    40 |                 val =3D *addr & GENMASK(size - 1, offset);
+>       |                       ^~~~~
+> drivers/scsi/mpi3mr/mpi3mr_transport.c:1610:45: note: while referencing '=
+phys_to_be_removed'
+>  1610 |         u32 phy_mask_xor, phys_to_be_added, phys_to_be_removed;
+>       |                                             ^~~~~~~~~~~~~~~~~~
+> cc1: all warnings being treated as errors
+>=20
+> Caused by commit
+>=20
+>   434726c4b89c ("scsi: mpi3mr: Refresh SAS ports during soft reset")
+>=20
+> I have used the scsi-mkp tree from next-20220823 for today.
 
-Thanks.
+I am still seeing this failure.
 
- mm/memcontrol.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--=20
+Cheers,
+Stephen Rothwell
 
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index 86f5ca8c6fa6..e9fc364d5e96 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -5111,7 +5111,7 @@ struct mem_cgroup *mem_cgroup_get_from_ino(unsigned long ino)
- 
- 	cgrp = cgroup_get_from_id(ino);
- 	if (IS_ERR(cgrp))
--		return PTR_ERR(cgrp);
-+		return ERR_CAST(cgrp);
- 
- 	css = cgroup_get_e_css(cgrp, &memory_cgrp_subsys);
- 	if (css)
--- 
-2.37.2
+--Sig_/G.zbZoIa+fZo/1ILOd/r7Dn
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMMRpsACgkQAVBC80lX
+0GyClwf/SzyY9E0qGYHpaxsCYUaaV5Dlnlt3PeuCCul4q5RSHzAZSCcYfDYmn8/l
+A7LtSx8Exh8ygk2QoAu0HJGH/HdYW7D0GET+wzsxrnQbci5qjMmIttfxvnxLigmo
+/U8W0lRMilT2LXPBqQQHr6iIkyIumIZxnLTbB/mNsyR32OsZfmyhcxkAhJ+vi9AS
+psW3Mkf4aRVjmemt9eP0StAXGzLdphAlFYzn53jH6wn2jN7lalp/rk+ywhHUpCgE
+DSZibETN8zF9jf/wynyk0bpLoXNzJ6fkyJa7VuMOrmlCuA52Z11PWSepQ9zvIGyu
+Sf8ejxzzz7MZLTn8JWEQ/wY4uNZCmA==
+=fFQu
+-----END PGP SIGNATURE-----
+
+--Sig_/G.zbZoIa+fZo/1ILOd/r7Dn--

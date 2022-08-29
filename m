@@ -2,88 +2,71 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F04695A401C
-	for <lists+linux-next@lfdr.de>; Mon, 29 Aug 2022 00:57:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BD455A412B
+	for <lists+linux-next@lfdr.de>; Mon, 29 Aug 2022 04:54:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229464AbiH1W54 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 28 Aug 2022 18:57:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38632 "EHLO
+        id S229549AbiH2CyX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 28 Aug 2022 22:54:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiH1W5z (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 28 Aug 2022 18:57:55 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DBA22497C;
-        Sun, 28 Aug 2022 15:57:52 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MG89Q0nXwz4xDB;
-        Mon, 29 Aug 2022 08:57:45 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1661727467;
-        bh=Yqo8XRJXmrZ78DGccIiqAtUBDk2Wkswb2Q63M32n5EU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=jtN3I0NChKbLAcov4XASmzL7eG9qnsjRo3P777ZOVqX8xxT4yN27sJH06Ha9MTgQL
-         hsNcx2tOxUyPMI6/9nprUPKWr29IqoORisrdAl9q14WmJPVoVJQYLtwJMt0zE8SWij
-         BLiZML7cDQg3b9xDbMOGzcgp78oF8ioeoxhsX0WNV6iXqak3AD8l22F4vrInB3X4vj
-         UHm3w5JBL7PgCaQEYSSF4cVobZNB5ZurbwQqrq0fYgx8aCrL4R6lsc6lXLgPYWCOAK
-         G9YfqYXMsd2WwkrsW01I3g2leqf1mlzouWjAbPQYiMbmj/tikn+ulXWUqV5EvjvMA7
-         fsJaBE0Tyfk1Q==
-Date:   Mon, 29 Aug 2022 08:57:30 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>,
+        with ESMTP id S229463AbiH2CyX (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 28 Aug 2022 22:54:23 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F11ED3CBFF;
+        Sun, 28 Aug 2022 19:54:21 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B768D23A;
+        Sun, 28 Aug 2022 19:54:27 -0700 (PDT)
+Received: from [10.162.40.15] (unknown [10.162.40.15])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0EE733F882;
+        Sun, 28 Aug 2022 19:54:18 -0700 (PDT)
+Message-ID: <f6919bbc-e332-8d93-dffa-0cbe70463542@arm.com>
+Date:   Mon, 29 Aug 2022 08:24:15 +0530
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: linux-next: Signed-off-by missing for commit in the tip tree
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>,
         "H. Peter Anvin" <hpa@zytor.com>,
         Peter Zijlstra <peterz@infradead.org>
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the tip tree
-Message-ID: <20220829085730.142da032@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/EDWs8V67X9A1mMFOOGLjJQT";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220829085730.142da032@canb.auug.org.au>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <20220829085730.142da032@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/EDWs8V67X9A1mMFOOGLjJQT
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Stephen,
 
-Hi all,
+The original posted patch had author's 'Signed-off-by'. Seems like the tip
+extraction have cut out portions of the commit message as well, apart from
+just dropping the "Signed-off-by" :) We should keep the commit message in
+the original form. Could you please fix that ?
 
-Commit
+Original patch: https://lore.kernel.org/lkml/20220824044822.70230-2-anshuman.khandual@arm.com/
+Tip extraction: https://lore.kernel.org/lkml/166155215090.401.870330359879147742.tip-bot2@tip-bot2/
 
-  6bc72375dd93 ("perf: Add system error and not in transaction branch types=
-")
+- Anshuman
 
-is missing a Signed-off-by from its author.
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/EDWs8V67X9A1mMFOOGLjJQT
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmML8toACgkQAVBC80lX
-0GzUwAgAhe5V5isNZiywJseAON4f5QffYj9GJCMPUwpRBe215J9On1SJHAJHBaHW
-6VIOeKEHHdKCkYk4WdTafRO/BCPN50YJKGLInoTl2WoudhrzB9vHiehoGllxUN2H
-aurwOp0c150JQRhif+q+r0kLN8WSk28F/UCsGq+11PyPplfSGECVYAUzGTg4VaGy
-ML0nkry7ApfCosbspTrmsiiiyxYW++SlbwzLmhAnBWL5HtVDD11v7izR084GdrsX
-6gE6UOUWuXwBB5OHj/sJup+H9xRrv0cZ9oY0uHmjLZOsGDxBojokrorN0YVNtV0f
-2A8zw1emIzkQQUC3v6kk1BLgH2rn2A==
-=SvqJ
------END PGP SIGNATURE-----
-
---Sig_/EDWs8V67X9A1mMFOOGLjJQT--
+On 8/29/22 04:27, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Commit
+> 
+>   6bc72375dd93 ("perf: Add system error and not in transaction branch types")
+> 
+> is missing a Signed-off-by from its author.
+> 

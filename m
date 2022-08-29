@@ -2,127 +2,105 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8DF95A477C
-	for <lists+linux-next@lfdr.de>; Mon, 29 Aug 2022 12:47:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE78E5A57BD
+	for <lists+linux-next@lfdr.de>; Tue, 30 Aug 2022 01:42:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229549AbiH2Krr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 29 Aug 2022 06:47:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55476 "EHLO
+        id S229524AbiH2Xmw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 29 Aug 2022 19:42:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbiH2Krq (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 29 Aug 2022 06:47:46 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFFEA5B781;
-        Mon, 29 Aug 2022 03:47:45 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-333a4a5d495so184372247b3.10;
-        Mon, 29 Aug 2022 03:47:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=kSieKOlo1/WXICMwAgDNVpDovck1uNqjYZr77DgkzKg=;
-        b=HxFupa1nz/7jnMJaXoUkalkcUiimSoG9gFuCoxaCaUCWO1XeKfJjotPNX/ld43NZV+
-         xb9fofqFTbBB/m57w3kc8/VpE5FHKXIpTiXitBbscwLOjUS+PcSwh4B7+pVwnlHb6Ixr
-         OyAlUxp49g5ZsZD2zR0yZf7syBmJ/2d249ax05/nlTgDAm6W2Z9gpIfJEGwkpHv4VmfE
-         f6cOwXn93ePgjvTfxkoMmFn/GJ3OUTW6MPTmRn2qmv1sW77uoO/ZNnS0+beMWIFga/a6
-         cQ6vB+lbrghQ1z5y5NmzA9xjtjl1UL3VW7hJ1hW/lM5PtNhIZ6tewoBopKHTFPn0J2Xm
-         te3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=kSieKOlo1/WXICMwAgDNVpDovck1uNqjYZr77DgkzKg=;
-        b=AWCxutxFgggjF6KhkfGGUZz/Vcc+whMMzUOVfAbFk7825GELiqdeKws+qJxEXGaMQE
-         DmR71kjOELGnaKXAlnpqSjHHgxZm9tVwXQtgdrhnMMD7bFst8XNDkKNWPJLt/ul9MZ2c
-         jOsMarmX8zS2XSykzIk5YBLwzfPu+KdtS3pSqR48b1u2INe6Sc2BcEcmhPXH0oXZ0h9W
-         MxkzEwZ+s6bP9yi1ZOl5eKyj9cV+V+uDC/xwTR+Gf4jCT6KBgCSR8mEuY4iaAeyDgKee
-         283ncm8UTbPRpRnZpV6Bl477hvB8g1PTgbnE5/S+XyYQUN266BnkSX+F4aVMcWtCDV68
-         Lw8A==
-X-Gm-Message-State: ACgBeo3My2fAeCNpIqUpYe4jioqBrOhI/pIWwfPC4AGYhQiEniLVanrb
-        hqjHsMrORK2q39fOdEX6Ym+r7/FPjX0qh9bhdBk=
-X-Google-Smtp-Source: AA6agR6JcTZw4epIOLkyhUxCjBwgxCGzrkYktQOOZ2cfKa/x8rbYWOImx4JDCrqVO/hXWrcwsNVGLCJpt6uwMl3sqlw=
-X-Received: by 2002:a81:7882:0:b0:339:802b:b4c0 with SMTP id
- t124-20020a817882000000b00339802bb4c0mr9521292ywc.488.1661770064718; Mon, 29
- Aug 2022 03:47:44 -0700 (PDT)
+        with ESMTP id S229475AbiH2Xmv (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 29 Aug 2022 19:42:51 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91B0B832DE;
+        Mon, 29 Aug 2022 16:42:49 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MGn6v2FWSz4xFv;
+        Tue, 30 Aug 2022 09:42:47 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1661816567;
+        bh=eS2NUppRYcx/Qav//pzH5RKfexvonoglAigO/qZeDFg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=CV80bENd61839LszQIEWwJ3Nug9Tn+Sj49ppyYRuDziHIizMy4MIyqmFgXHHuA6l8
+         U1Vk8nHvtNb1JHxkwNA+dhmWG140Wu4+ds8DFtKniQow9aVGVHpY+brNum3O26SO08
+         jZqgjUpIuEeXzOfI/xjs2GGVV0zXYVoDrXi+Z5ZVB19P9Ojv9TzTa3qE2HZ7CsUSdq
+         sSQfKBz2JalCoMRdWgR9r6PIyMtRpsDguiYKNJ7dt0YPqzQJKay8YE3bTabHAFnPZ4
+         7Ff7lOEY/zm+yJ2imp378tnuiX/UMIYsJWAI0q/98WrcmLoicYzVycoHwT5nBfCO1s
+         j+pphnQJ4JZvg==
+Date:   Tue, 30 Aug 2022 09:42:30 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        " =?UTF-8?B?TsOtY29sYXM=?= F. R. A. Prado" <nfraprado@collabora.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the mediatek tree
+Message-ID: <20220830094230.18c76615@canb.auug.org.au>
 MIME-Version: 1.0
-References: <YwyORp72cuDrVYdA@debian> <TY2PR06MB321356F6EB09D3D59D37B53F80769@TY2PR06MB3213.apcprd06.prod.outlook.com>
-In-Reply-To: <TY2PR06MB321356F6EB09D3D59D37B53F80769@TY2PR06MB3213.apcprd06.prod.outlook.com>
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Date:   Mon, 29 Aug 2022 11:47:08 +0100
-Message-ID: <CADVatmMevKbZ+gHfG-7kuy3s=K2_Qe1OOVrL92OUiTMeoK7ViA@mail.gmail.com>
-Subject: Re: build failure of next-20220829 due to 108713a713c7 ("crypto:
- aspeed - Add HACE hash driver")
-To:     Neal Liu <neal_liu@aspeedtech.com>
-Cc:     Johnny Huang <johnny_huang@aspeedtech.com>,
-        Dhananjay Phadke <dphadke@linux.microsoft.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/YQosNvvXEXip9TFwjxJXq.x";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 11:04 AM Neal Liu <neal_liu@aspeedtech.com> wrote:
->
-> > -----Original Message-----
-> > From: Sudip Mukherjee (Codethink) <sudipm.mukherjee@gmail.com>
-> > Sent: Monday, August 29, 2022 6:01 PM
-> > To: Neal Liu <neal_liu@aspeedtech.com>; Johnny Huang
-> > <johnny_huang@aspeedtech.com>; Dhananjay Phadke
-> > <dphadke@linux.microsoft.com>; Herbert Xu <herbert@gondor.apana.org.au>
-> > Cc: David S. Miller <davem@davemloft.net>; Joel Stanley <joel@jms.id.au>;
-> > Andrew Jeffery <andrew@aj.id.au>; linux-aspeed@lists.ozlabs.org;
-> > linux-crypto@vger.kernel.org; linux-arm-kernel@lists.infradead.org;
-> > linux-kernel@vger.kernel.org; linux-next@vger.kernel.org
-> > Subject: build failure of next-20220829 due to 108713a713c7 ("crypto: aspeed
-> > - Add HACE hash driver")
-> >
-> > Hi All,
-> >
-> > The builds of arm allmodconfig have failed to build next-20220829 with the
-> > error:
-> >
-> > ERROR: modpost: "aspeed_register_hace_hash_algs"
-> > [drivers/crypto/aspeed/aspeed_crypto.ko] undefined!
-> > ERROR: modpost: "aspeed_unregister_hace_crypto_algs"
-> > [drivers/crypto/aspeed/aspeed_crypto.ko] undefined!
-> > ERROR: modpost: "aspeed_register_hace_crypto_algs"
-> > [drivers/crypto/aspeed/aspeed_crypto.ko] undefined!
-> > ERROR: modpost: "aspeed_unregister_hace_hash_algs"
-> > [drivers/crypto/aspeed/aspeed_crypto.ko] undefined!
-> >
-> >
-> > git bisect pointed to 108713a713c7 ("crypto: aspeed - Add HACE hash driver")
-> >
-> > I will be happy to test any patch or provide any extra log if needed.
-> >
-> >
-> > --
-> > Regards
-> > Sudip
->
-> Hi Sudip,
->
-> I already sent another patch to fix this build error, could you give it a try?
-> https://lkml.org/lkml/2022/8/29/131
+--Sig_/YQosNvvXEXip9TFwjxJXq.x
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks, that has fixed the failure.
+Hi all,
 
+After merging the mediatek tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
--- 
-Regards
-Sudip
+drivers/soc/mediatek/mtk-svs.c: In function 'svs_get_bank_volts_v3':
+drivers/soc/mediatek/mtk-svs.c:887:47: error: implicit declaration of funct=
+ion 'FIELD_GET'; did you mean 'FOLL_GET'? [-Werror=3Dimplicit-function-decl=
+aration]
+  887 |                         svsb->volt[turn_pt] =3D FIELD_GET(SVSB_VOPS=
+_FLD_VOP0_4, vop30);
+      |                                               ^~~~~~~~~
+      |                                               FOLL_GET
+drivers/soc/mediatek/mtk-svs.c: In function 'svs_set_bank_freq_pct_v2':
+drivers/soc/mediatek/mtk-svs.c:1073:25: error: implicit declaration of func=
+tion 'FIELD_PREP' [-Werror=3Dimplicit-function-declaration]
+ 1073 |         freqpct74_val =3D FIELD_PREP(SVSB_FREQPCTS_FLD_PCT0_4, svsb=
+->freq_pct[8]) |
+      |                         ^~~~~~~~~~
+
+Caused by commit
+
+  a92438c5a30a ("soc: mediatek: mtk-svs: Use bitfield access macros where p=
+ossible")
+
+I have used the mediatek tree from next-20220829 for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/YQosNvvXEXip9TFwjxJXq.x
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMNTuYACgkQAVBC80lX
+0GzvLgf+Mfr7ScZ2wUWrRFzOzRAdlGiGCFwIc53S2cJlfbMIZN8P04u9qxePjskp
+zVTMhd04/RWTtLE3qoSS2kxirs8BYyCMk6cyZoLOvcaSz8O36UklKEPp/KcRaqTC
+HtTLpFrvll0wtXqg4sdM6cyuj7GvnwxE7TQkEgvrNGATrYnfmhO/BM7Ad5wLty78
+nXGiFZqviT1Te9y+CCQ08dDK3rpLjKNmcfjcXmftTKaegrc2U6cJmL7ReJl3OKxH
+OymVuL48X+VS64fsIxkM0vQAZ6cAaVEXzmv39IhiqB2IxhmkmyxaQ7jzbhpWWQ9G
+IYPmnVcpDQiKRZxaNvI963dwKs3Y7Q==
+=QOqd
+-----END PGP SIGNATURE-----
+
+--Sig_/YQosNvvXEXip9TFwjxJXq.x--

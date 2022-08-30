@@ -2,65 +2,64 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B83155A5F1A
-	for <lists+linux-next@lfdr.de>; Tue, 30 Aug 2022 11:18:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A89785A5F5E
+	for <lists+linux-next@lfdr.de>; Tue, 30 Aug 2022 11:27:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231537AbiH3JS5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 30 Aug 2022 05:18:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50012 "EHLO
+        id S231731AbiH3J1A (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 30 Aug 2022 05:27:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231384AbiH3JSw (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 30 Aug 2022 05:18:52 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F29AAD5701;
-        Tue, 30 Aug 2022 02:18:47 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id d12-20020a05600c34cc00b003a83d20812fso4159288wmq.1;
-        Tue, 30 Aug 2022 02:18:47 -0700 (PDT)
+        with ESMTP id S231229AbiH3J0v (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 30 Aug 2022 05:26:51 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB312DAB9B;
+        Tue, 30 Aug 2022 02:26:49 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id k17so5474777wmr.2;
+        Tue, 30 Aug 2022 02:26:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :from:to:cc;
-        bh=AGaSWYBJDgKfuNXBk/rMpd9HzYqxQJNCfvux8aOnciU=;
-        b=OkWDZIa6FOObDPg4K064OvXgsu/npv0Y459BFnvrGpjZtayryIOXm//bV7VtE+O6Ku
-         Z6wd2miesiJN/ppW2YMSP9cBRqmBKexlGpHQAjEv+y2Eu6lkXXKdYMdSo3EKWztpsW5n
-         LDeMJBGtmITWQY6Ini2sc9A4VU7633IBYInTPbSFNVnazdFOhBgmWg49tISF8q2xXT3L
-         zZhoSBvCa4634fkQJ++bWj41wbFXDwaxLDCo1mbSHQSoFPQTMB9SDOth0gHv/HUV/AWQ
-         VsZZGRgDrYBEB/ip4uuvUBsJkrOnk9bvsp/Dtd8p6BMdIvup4DP62ymW9/8+WGIDGIxX
-         zRzg==
+        bh=axxTKJ7DNo641E2twsxzvKctjEb3pjQ9d136e4ccTvM=;
+        b=DHONYFv1wc5Tw4S3juE3P2HD9IDrjg0lt0flsqynuIqGbI6bge+1ruqe36WiSCEDr2
+         0H3ptNVwHqD6uKBwm8FPyhT7MkXLPwIOwJ0Hz0jEn/FjzI0/TEypVKuL5LlAub9yNZoy
+         SBVYJtK7+/b45IVoHxz25pnFhUFEijNUmTRd7a5qlHlTjRi4IpbQKOdBsNyY9eIWo3VW
+         xsHPeqGQ/uFx+C4jBal9XrxWFrEJTUo47WZNpX6S0ujyyrhKKpV6ckFK4fLDpKOGbvW8
+         ZGoL/7yEODMBQNajjZzy6SmZOI7g7LC5bEb5A9/jdpiunK6JpXM/LmwZPTYT1vlqS2wI
+         sGVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc;
-        bh=AGaSWYBJDgKfuNXBk/rMpd9HzYqxQJNCfvux8aOnciU=;
-        b=truJ8s3yLhtpS5qCWbrtXoEDl1SQ/kw7Lj8gQ8lquEl1chVEm1VUYv5U/tvIt1C94l
-         q6njMxU8Pb09dEJoQy02U2FmkUbZ4Jvdmyc5+GlQ7osfORvzk4Sjv4iigPRS7sM1poZY
-         oWTTE7bas8KYniKQnYtZ+GVERbIIsIyFdnYIuGDYBpPtgA24ymd3m0hrcPxWh0zfFNPX
-         awdqN+g1i0WOSwiiZAjlsi0JqF29DyLHEd3nUsYEk4CXzOG2t4n5jlyOr209a/8w5I2o
-         QmonfXta3ibp++Gx1x2QVk2JxbxHh0W7yy4p0i3lkA0x682wAiYr6fPtLP/tzEQsqG+d
-         IVAg==
-X-Gm-Message-State: ACgBeo3aK1Jnv139HH+CV/YfL5Nu4Uvq4ZPFePl3xiOsvrb5MYV6lGzb
-        /p1FQdLg4AiWQFDgNVsNqHs=
-X-Google-Smtp-Source: AA6agR5QPnPnzmdDQ8z8WSYvFsJyyoFZG9CQ43BYjg2K03qhgWNqHPOigcjYhoX/TqbT6IEa4NyRmQ==
-X-Received: by 2002:a05:600c:1f05:b0:3a5:c789:1d9c with SMTP id bd5-20020a05600c1f0500b003a5c7891d9cmr9138971wmb.26.1661851125988;
-        Tue, 30 Aug 2022 02:18:45 -0700 (PDT)
+        bh=axxTKJ7DNo641E2twsxzvKctjEb3pjQ9d136e4ccTvM=;
+        b=Tnkmqnj71TFxXL1Um1+P/9VlPNVz1ZO7w52eUHnOlXnfoIYHHw9LFx9220O4GmAObk
+         tlsaIuLojkY6UwBQ+DHl9KqmBAorZZsjCCK0Ay2Z1HKAwLykT2KBpdWG4TPSmil4ip79
+         n5r2L9twHGrl78NMOYbXMuKSV9ak0ToHu4aax2u4TAEnEiPXHZPJNUDSm3IELiB5fwCx
+         4FD/wscURMJzeGycChocbl4SSxWH5HlTntLzD4mUa6ZXsWgoLBdDMPn9R5QMeTkp96Dh
+         RcorK4bNQNlyfUosz1eidXSzpQhgA3WZd559MhSnANMzuof/pwETOyHhjPBqbMaO7HWL
+         PJqg==
+X-Gm-Message-State: ACgBeo10J3pven6ZGiAFM7iK8Le9QeAIQGFTWJRIDlQoInfMpvR/zsqE
+        s6wcHFrplK+X6nM1CJj1qq0=
+X-Google-Smtp-Source: AA6agR5IAuFYfHhAO6qh8YCCB9V90SvltG7bBAxDuted7ULWu4ttx+OK4nWASSKVxqVVVU+LLuIjFA==
+X-Received: by 2002:a05:600c:1906:b0:3a5:fe9c:4dcf with SMTP id j6-20020a05600c190600b003a5fe9c4dcfmr9227557wmq.118.1661851608031;
+        Tue, 30 Aug 2022 02:26:48 -0700 (PDT)
 Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
-        by smtp.gmail.com with ESMTPSA id h15-20020a5d548f000000b0020e6ce4dabdsm9040737wrv.103.2022.08.30.02.18.44
+        by smtp.gmail.com with ESMTPSA id s10-20020a05600c384a00b003a5f54e3bbbsm11181949wmr.38.2022.08.30.02.26.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Aug 2022 02:18:45 -0700 (PDT)
-Date:   Tue, 30 Aug 2022 10:18:43 +0100
+        Tue, 30 Aug 2022 02:26:47 -0700 (PDT)
+Date:   Tue, 30 Aug 2022 10:26:45 +0100
 From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>
-Subject: build failure of next-20220830 due to 5f8cdece42ff ("drm/msm/dsi:
- switch to DRM_PANEL_BRIDGE")
-Message-ID: <Yw3V8yJgAnPD8o6P@debian>
+To:     Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     Alexander Aring <alex.aring@gmail.com>,
+        Stefan Schmidt <stefan@datenfreihafen.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-wpan@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org
+Subject: build failure of next-20220830 due to 9c5d03d36251 ("genetlink:
+ start to validate reserved header bytes")
+Message-ID: <Yw3X1cB1j+r8uj7W@debian>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -76,18 +75,15 @@ X-Mailing-List: linux-next@vger.kernel.org
 
 Hi All,
 
-The builds of arm64 allmodconfig with clang have failed to build
-next-20220830 with the error:
+The builds of arm pxa_defconfig have failed to build next-20220830 with
+the error:
 
-drivers/gpu/drm/msm/dsi/dsi_host.c:1903:14: error: variable 'device_node' is uninitialized when used here [-Werror,-Wuninitialized]
-        of_node_put(device_node);
-                    ^~~~~~~~~~~
-drivers/gpu/drm/msm/dsi/dsi_host.c:1870:44: note: initialize the variable 'device_node' to silence this warning
-        struct device_node *endpoint, *device_node;
-                                                  ^
-                                                   = NULL
+net/ieee802154/nl802154.c:2503:26: error: 'NL802154_CMD_DEL_SEC_LEVEL' undeclared here (not in a function); did you mean 'NL802154_CMD_SET_CCA_ED_LEVEL'?
+ 2503 |         .resv_start_op = NL802154_CMD_DEL_SEC_LEVEL + 1,
+      |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                          NL802154_CMD_SET_CCA_ED_LEVEL
 
-git bisect pointed to 5f8cdece42ff ("drm/msm/dsi: switch to DRM_PANEL_BRIDGE")
+git bisect pointed to 9c5d03d36251 ("genetlink: start to validate reserved header bytes")
 
 I will be happy to test any patch or provide any extra log if needed.
 

@@ -2,795 +2,1543 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4BC75A5C58
-	for <lists+linux-next@lfdr.de>; Tue, 30 Aug 2022 09:02:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0717F5A5DC2
+	for <lists+linux-next@lfdr.de>; Tue, 30 Aug 2022 10:09:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230369AbiH3HBx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 30 Aug 2022 03:01:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55612 "EHLO
+        id S229543AbiH3IJg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 30 Aug 2022 04:09:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230370AbiH3HBd (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 30 Aug 2022 03:01:33 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0BF7A6C1D;
-        Tue, 30 Aug 2022 00:01:27 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MGyry1V39z4xG7;
-        Tue, 30 Aug 2022 17:01:22 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1661842882;
-        bh=eLnd5f10vlKZo6QtQHAW9865YabqEODykwR9gGTUN38=;
-        h=Date:From:To:Cc:Subject:From;
-        b=P/qlOPAsBseas/SdqdOe+rEbB18iDoJc5/x/Tv1k0ai3TUTxDhgmqbAx3JycKEktd
-         zSL8fKIvs21yTiuJ8Jeh9YKATbDtMZr+HcZ1LZYkHIb/Vko0H0RLWghy4NDYis5Cc8
-         JnjqiIf5y9n6Nmud+c+klVztcgCEx6xN7LQbS447/f4Q0wDQFfhO6KN+ahj3UPn2AO
-         8bPRWYLmzxvnr11AmdXM07JCMBEWMf/iH7nKDa0CqMrF6A1eSD9xx65OTRCZRD+YbV
-         CJRz6rpZe3cJY5JrtFt9z7LJWV0uSC+Ra3rj25JaAaI48fJ/umE61L+twjvyvHNb8q
-         u8Wi0Vwl7TyXw==
-Date:   Tue, 30 Aug 2022 17:01:21 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Tree for Aug 30
-Message-ID: <20220830170121.74e5ed54@canb.auug.org.au>
+        with ESMTP id S229752AbiH3IJc (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 30 Aug 2022 04:09:32 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 032D2A1D62
+        for <linux-next@vger.kernel.org>; Tue, 30 Aug 2022 01:09:29 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id c66so339009pfc.10
+        for <linux-next@vger.kernel.org>; Tue, 30 Aug 2022 01:09:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc;
+        bh=uV+4Dvf/PsVLbeZWNFdCnUKCLne+Ye/Y6Uvpm2le+LA=;
+        b=5/3ba2B6On/NL48XBnFSI7K3WDFCjmLPZT47DGibGtufnwqiI2KDcQ/WPiWr2xNaU+
+         LEJymU+V7KgGoA1R6JXaqMJgcSQi+213TUyBN2e/f13FojYSlfKq28aWMCeV+vsNgO9w
+         5efN1laHUojnNyACc2MV9ZCcGy5dVkvNIjzU0+QlK9bR8B4fGTT76tFS6LPc+Dw4FD8Y
+         bp2hAXQpKVZnUIraTsgRD9NgAC4LCtoJ0qqRwj3L99qdkJjVgILewOiHp1C34CG+60au
+         1V/dUhDULTzdgYNfs6sJVkFOMwxFE3R51pUJyTvU7PGCrhq+LKyZl8CIAiALFyN8lJiD
+         39HA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc;
+        bh=uV+4Dvf/PsVLbeZWNFdCnUKCLne+Ye/Y6Uvpm2le+LA=;
+        b=n//IkJKLqRxuo6XqlRmRug27VEaM9eXdXD3fxsiqCekdHejcnZHuEINDDYNc+LDAB/
+         UU3wv04dlwBSeMuACpIxmn1N20GVDh7l/zPUNFF0dy8GZSONSlvVT8gqIvYLGJ2lIk+X
+         j/zhxagmAp5MpwjlTcMFvavYccfoCFAYOQ0f3C2fBq5YVEPYfrc7ZS8g8XHqYHwKTkNw
+         R5QLjy/hYxVPcKeayBNndfp+Tt5csMU7zzVXD1E94Go0MklRIq4YDQlxu4l2DJQjnQj6
+         KCYHItINhbJsbJUwC/ekSBO17r0xWHm/GQKWypkqy0Ss+Xew3wt9B9msQqVAOYwHBP0R
+         bVaQ==
+X-Gm-Message-State: ACgBeo2qx4V5LEtt+iO1ox+KEPOBp8z5MySbmDNdtAfemfwkdGxv4oBq
+        puEbtBdz2dAKUe0xnpEH8TboqVjgWl/w8Ym2gTw=
+X-Google-Smtp-Source: AA6agR5Ntt5O4MEr2UORBsqtpWKcSz3yTrQ3TJdXvj/IC0Ew7QRWDd5F1QFtk9mnfUhcIkpYP8P6yA==
+X-Received: by 2002:a63:90c7:0:b0:42b:6b68:3655 with SMTP id a190-20020a6390c7000000b0042b6b683655mr16785891pge.335.1661846967135;
+        Tue, 30 Aug 2022 01:09:27 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id 126-20020a620484000000b0053617cbe2d2sm8607789pfe.168.2022.08.30.01.09.26
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Aug 2022 01:09:26 -0700 (PDT)
+Message-ID: <630dc5b6.620a0220.cb394.f459@mx.google.com>
+Date:   Tue, 30 Aug 2022 01:09:26 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/GJ.4DqwOi1Dr6UhVY8TruXN";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,LOCALPART_IN_SUBJECT,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: next-20220830
+Subject: next/master build: 155 builds: 12 failed, 143 passed, 27 errors,
+ 66 warnings (next-20220830)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/GJ.4DqwOi1Dr6UhVY8TruXN
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/master build: 155 builds: 12 failed, 143 passed, 27 errors, 66 warning=
+s (next-20220830)
 
-Hi all,
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20220830/
 
-Changes since 20220829:
+Tree: next
+Branch: master
+Git Describe: next-20220830
+Git Commit: 282342f2dc97ccf54254c5de51bcc1101229615f
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 8 unique architectures
 
-The mediatek tree gained a build failure so I used the version from
-next-20220829.
+Build Failures Detected:
 
-The amdgpu tree gained a build failure so I used the version from
-next-20220829.
+arm64:
+    cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config: (clang-13) =
+FAIL
+    cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chrome=
+book: (clang-13) FAIL
+    cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chr=
+omebook: (clang-13) FAIL
 
-The cgroup tree lost its build failure.
+arm:
+    allmodconfig: (clang-16) FAIL
+    pxa_defconfig: (gcc-10) FAIL
+    rpc_defconfig: (gcc-10) FAIL
 
-The scsi-mkp tree still had its build failure so I used the version from
-next-20220823.
+mips:
+    decstation_64_defconfig: (gcc-10) FAIL
 
-The mm tree gained a conflict against the kspp tree.
+riscv:
+    allnoconfig: (clang-16) FAIL
+    defconfig+CONFIG_EFI=3Dn: (clang-16) FAIL
 
-Non-merge commits (relative to Linus' tree): 3454
- 5174 files changed, 187522 insertions(+), 74640 deletions(-)
+x86_64:
+    cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config: (clang-13=
+) FAIL
+    cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chrome=
+book: (clang-13) FAIL
+    allmodconfig: (clang-16) FAIL
 
-----------------------------------------------------------------------------
+Errors and Warnings Detected:
 
-I have created today's linux-next tree at
-git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
-are tracking the linux-next tree using git, you should not use "git pull"
-to do so as that will try to merge the new linux-next release with the
-old one.  You should use "git fetch" and checkout or reset to the new
-master.
+arc:
 
-You can see which trees have been included by looking in the Next/Trees
-file in the source.  There are also quilt-import.log and merge.log
-files in the Next directory.  Between each merge, the tree was built
-with a ppc64_defconfig for powerpc, an allmodconfig for x86_64, a
-multi_v7_defconfig for arm and a native build of tools/perf. After
-the final fixups (if any), I do an x86_64 modules_install followed by
-builds for x86_64 allnoconfig, powerpc allnoconfig (32 and 64 bit),
-ppc44x_defconfig, allyesconfig and pseries_le_defconfig and i386,
-arm64, sparc and sparc64 defconfig and htmldocs. And finally, a simple
-boot test of the powerpc pseries_le_defconfig kernel in qemu (with and
-without kvm enabled).
+arm64:
+    cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (clang-13): =
+1 error, 1 warning
+    cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chrome=
+book (clang-13): 1 error, 1 warning
+    cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chr=
+omebook (clang-13): 1 error, 1 warning
+    defconfig+arm64-chromebook (clang-13): 6 warnings
 
-Below is a summary of the state of the merge.
+arm:
+    allmodconfig (clang-16): 1 error, 13 warnings
+    cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (clang-13): 6 =
+warnings
+    cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (clang-13=
+): 6 warnings
+    pxa_defconfig (gcc-10): 1 error
+    rpc_defconfig (gcc-10): 2 errors
+    u8500_defconfig (gcc-10): 2 warnings
 
-I am currently merging 358 trees (counting Linus' and 98 trees of bug
-fix patches pending for the current merge release).
+i386:
 
-Stats about the size of the tree over time can be seen at
-http://neuling.org/linux-next-size.html .
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
+    32r2el_defconfig+debug (gcc-10): 1 warning
+    32r2el_defconfig+kselftest (gcc-10): 1 warning
+    fuloong2e_defconfig (gcc-10): 1 error
+    lemote2f_defconfig (gcc-10): 1 error
+    loongson2k_defconfig (gcc-10): 1 error
+    rb532_defconfig (gcc-10): 1 warning
 
-Status of my local build tests will be at
-http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
-advice about cross compilers/configs that work, we are always open to add
-more builds.
+riscv:
+    allnoconfig (clang-16): 2 errors, 1 warning
+    defconfig+CONFIG_EFI=3Dn (clang-16): 8 errors, 8 warnings
 
-Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
-Gortmaker for triage and bug fixes.
+sparc:
+    allnoconfig (gcc-10): 1 warning
+    sparc32_defconfig (gcc-10): 2 warnings
+    sparc64_defconfig+debug (gcc-10): 2 warnings
+    sparc64_defconfig+kselftest (gcc-10): 2 warnings
+    tinyconfig (gcc-10): 1 warning
 
---=20
-Cheers,
-Stephen Rothwell
+x86_64:
+    allmodconfig (clang-16): 5 errors, 9 warnings
+    cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (clang-13)=
+: 1 error
+    cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chrome=
+book (clang-13): 1 error
 
-$ git checkout master
-$ git reset --hard stable
-Merging origin/master (dcf8e5633e2e tracing: Define the is_signed_type() ma=
-cro once)
-Merging fixes/fixes (1c23f9e627a7 Linux 6.0-rc2)
-Merging mm-hotfixes/mm-hotfixes-unstable (c96f54505da2 mm/memory-failure: f=
-all back to vma_address() when ->notify_failure() fails)
-Merging kbuild-current/fixes (c11efc57d4cc scripts/extract-ikconfig: add zs=
-td compression support)
-Merging arc-current/for-curr (952deecb065e arc: dts: Harmonize EHCI/OHCI DT=
- nodes name)
-Merging arm-current/fixes (ec85bd369fd2 ARM: findbit: fix overflowing offse=
-t)
-Merging arm64-fixes/for-next/fixes (714f3cbd70a4 arm64/sme: Don't flush SVE=
- register state when handling SME traps)
-Merging arm-soc-fixes/arm/fixes (251e5d715e4b ARM: ixp4xx: fix typos in com=
-ments)
-Merging drivers-memory-fixes/fixes (568035b01cfb Linux 6.0-rc1)
-Merging tee-fixes/fixes (98268f2a2a9f Merge branch 'optee_ffa_probe_fix_for=
-_v5.18' into fixes)
-Merging m68k-current/for-linus (b508128bb0d1 m68k: defconfig: Update defcon=
-figs for v5.19-rc1)
-Merging powerpc-fixes/fixes (91926d8b7e71 powerpc/rtas: Fix RTAS MSR[HV] ha=
-ndling for Cell)
-Merging s390-fixes/fixes (41ac42f13708 s390/mm: do not trigger write fault =
-when vma does not allow VM_WRITE)
-Merging sparc/master (05a59d79793d Merge git://git.kernel.org:/pub/scm/linu=
-x/kernel/git/netdev/net)
-Merging fscrypt-current/for-stable (80f6e3080bfc fs-verity: fix signed inte=
-ger overflow with i_size near S64_MAX)
-Merging net/master (cb10b0f91c5f Merge branch 'u64_stats-fixups')
-Merging bpf/master (2e085ec0e2d7 Merge git://git.kernel.org/pub/scm/linux/k=
-ernel/git/bpf/bpf)
-Merging ipsec/master (ebe5555c2f34 nfp: flower: fix ingress police using ma=
-tchall filter)
-Merging netfilter/master (7fb0269720d7 Merge tag 'for-net-2022-05-23' of gi=
-t://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth)
-Merging ipvs/master (7fb0269720d7 Merge tag 'for-net-2022-05-23' of git://g=
-it.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth)
-Merging wireless/for-next (fa3fbe640378 wifi: mt76: mt7921e: fix crash in c=
-hip reset fail)
-Merging rdma-fixes/for-rc (ead54ced6321 RDMA/irdma: Fix drain SQ hang with =
-no completion)
-Merging sound-current/for-linus (5f3d9e8161bb ALSA: usb-audio: Add quirk fo=
-r LH Labs Geek Out HD Audio 1V5)
-Merging sound-asoc-fixes/for-linus (b1cd3fd42db7 ASoC: fsl_aud2htx: Add err=
-or handler for pm_runtime_enable)
-Merging regmap-fixes/for-linus (f5723cfc0193 regmap: spi: Reserve space for=
- register address/padding)
-Merging regulator-fixes/for-linus (78e1e867f44e regulator: pfuze100: Fix th=
-e global-out-of-bounds access in pfuze100_regulator_probe())
-Merging spi-fixes/for-linus (9ee5b6d53b8c spi: cadence-quadspi: Disable irq=
-s during indirect reads)
-Merging pci-current/for-linus (0e1fa5155a36 MAINTAINERS: Add Mahesh J Salga=
-onkar as EEH maintainer)
-Merging driver-core.current/driver-core-linus (a4f124908617 Revert "iommu/o=
-f: Delete usage of driver_deferred_probe_check_state()")
-Merging tty.current/tty-linus (b5a5b9d5f28d serial: document start_rx membe=
-r at struct uart_ops)
-Merging usb.current/usb-linus (8531aa1659f7 Revert "xhci: turn off port pow=
-er in shutdown")
-Merging usb-gadget-fixes/fixes (e49d033bddf5 Linux 5.12-rc6)
-Merging usb-serial-fixes/usb-linus (8ffe20d08f2c USB: serial: option: add s=
-upport for Cinterion MV32-WA/WB RmNet mode)
-Merging phy/fixes (568035b01cfb Linux 6.0-rc1)
-Merging staging.current/staging-linus (e01f5c8d6af2 staging: r8188eu: Add R=
-osewill USB-N150 Nano to device tables)
-Merging iio-fixes/fixes-togreg (0096fc879358 iio: light: cm32181: make cm32=
-181_pm_ops static)
-Merging counter-fixes/fixes-togreg (568035b01cfb Linux 6.0-rc1)
-Merging char-misc.current/char-misc-linus (a582123d6f4c Merge tag 'iio-fixe=
-s-for-6.0a' of https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio in=
-to char-misc-linus)
-Merging soundwire-fixes/fixes (c6e50787889c soundwire: qcom: remove duplica=
-te reset control get)
-Merging thunderbolt-fixes/fixes (93a3c0d4e8bf thunderbolt: Check router gen=
-eration before connecting xHCI)
-Merging input-current/for-linus (9c9c71168f79 Input: iforce - add support f=
-or Boeder Force Feedback Wheel)
-Merging crypto-current/master (874b301985ef crypto: lib - remove unneeded s=
-election of XOR_BLOCKS)
-Merging vfio-fixes/for-linus (afe4e376ac5d vfio: Move IOMMU_CAP_CACHE_COHER=
-ENCY test to after we know we have a group)
-Merging kselftest-fixes/fixes (bdbf0617bbc3 selftests/vm: fix inability to =
-build any vm tests)
-Merging modules-fixes/modules-linus (e69a66147d49 module: kallsyms: Ensure =
-preemption in add_kallsyms() with PREEMPT_RT)
-Merging dmaengine-fixes/fixes (568035b01cfb Linux 6.0-rc1)
-Merging backlight-fixes/for-backlight-fixes (a38fd8748464 Linux 5.12-rc2)
-Merging mtd-fixes/mtd/fixes (0fddf9ad06fd mtd: rawnand: gpmi: Set WAIT_FOR_=
-READY timeout based on program/erase times)
-Merging mfd-fixes/for-mfd-fixes (a61f4661fba4 mfd: intel_quark_i2c_gpio: Re=
-vert "Constify static struct resources")
-Merging v4l-dvb-fixes/fixes (3d59142ad94c media: dvb-usb: dib0700_devices: =
-use an enum for the device number)
-Merging reset-fixes/reset/fixes (a57f68ddc886 reset: Fix devm bulk optional=
- exclusive control getter)
-Merging mips-fixes/mips-fixes (35508d242409 MIPS: loongson32: ls1c: Fix han=
-g during startup)
-Merging at91-fixes/at91-fixes (ef0324b6415d ARM: dts: lan966x: fix sys_clk =
-frequency)
-Merging omap-fixes/fixes (2eb502f496f7 ARM: dts: am33xx: Fix MMCHS0 dma pro=
-perties)
-Merging kvm-fixes/master (372d07084593 KVM: selftests: Fix ambiguous mov in=
- KVM_ASM_SAFE())
-Merging kvms390-fixes/master (ca922fecda6c KVM: s390: pci: Hook to access K=
-VM lowlevel from VFIO)
-Merging hwmon-fixes/hwmon (ed3590561f5d hwmon: (pmbus) Fix vout margin cach=
-ing)
-Merging nvdimm-fixes/libnvdimm-fixes (17d9c15c9b9e fsdax: Fix infinite loop=
- in dax_iomap_rw())
-Merging cxl-fixes/fixes (e35f5718903b cxl/mbox: Fix missing variable payloa=
-d checks in cmd size validation)
-Merging btrfs-fixes/next-fixes (af39011ec0c7 Merge branch 'misc-5.19' into =
-next-fixes)
-Merging vfs-fixes/fixes (3f61631d47f1 take care to handle NULL ->proc_lseek=
-())
-Merging dma-mapping-fixes/for-linus (3be4562584bb dma-direct: use the corre=
-ct size for dma_set_encrypted())
-Merging i3c-fixes/i3c/fixes (fe07bfda2fb9 Linux 5.12-rc1)
-Merging drivers-x86-fixes/fixes (343b62048ba4 platform/x86: thinkpad_acpi: =
-Explicitly set to balanced mode on startup)
-Merging samsung-krzk-fixes/fixes (568035b01cfb Linux 6.0-rc1)
-Merging pinctrl-samsung-fixes/fixes (568035b01cfb Linux 6.0-rc1)
-Merging devicetree-fixes/dt/linus (40bfe7a86d84 of/device: Fix up of_dma_co=
-nfigure_id() stub)
-Merging dt-krzk-fixes/fixes (568035b01cfb Linux 6.0-rc1)
-Merging scsi-fixes/fixes (785538bfdd68 scsi: sd: Revert "Rework asynchronou=
-s resume support")
-Merging drm-fixes/drm-fixes (100d0ae82b5c Merge tag 'amd-drm-fixes-6.0-2022=
--08-25' of https://gitlab.freedesktop.org/agd5f/linux into drm-fixes)
-Merging amdgpu-fixes/drm-fixes (2c409ba81be2 drm/radeon: fix si_enable_smc_=
-cac() failed issue)
-Merging drm-intel-fixes/for-linux-next-fixes (0211c2a0ea60 drm/i915: Skip w=
-m/ddb readout for disabled pipes)
-Merging mmc-fixes/fixes (63f1560930e4 mmc: core: Fix inconsistent sd3_bus_m=
-ode at UHS-I SD voltage switch failure)
-Merging rtc-fixes/rtc-fixes (568035b01cfb Linux 6.0-rc1)
-Merging gnss-fixes/gnss-linus (a111daf0c53a Linux 5.19-rc3)
-Merging hyperv-fixes/hyperv-fixes (f15f39fabed2 tools: hv: Remove an extran=
-eous "the")
-Merging soc-fsl-fixes/fix (4b0986a3613c Linux 5.18)
-Merging risc-v-fixes/fixes (1709c70c31e0 Merge branch 'riscv-variable_fixes=
-_without_kvm' of git://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux=
-.git into fixes)
-Merging risc-v-mc-fixes/dt-fixes (e4009c5fa77b riscv: dts: microchip: mpfs:=
- remove pci axi address translation property)
-Merging pidfd-fixes/fixes (03ba0fe4d09f file: simplify logic in __close_ran=
-ge())
-Merging fpga-fixes/fixes (568035b01cfb Linux 6.0-rc1)
-Merging spdx/spdx-linus (568035b01cfb Linux 6.0-rc1)
-Merging gpio-brgl-fixes/gpio/for-current (303e6da99429 gpio: mockup: remove=
- gpio debugfs when remove device)
-Merging gpio-intel-fixes/fixes (b93a8b2c5161 gpio: dln2: make irq_chip immu=
-table)
-Merging pinctrl-intel-fixes/fixes (1c23f9e627a7 Linux 6.0-rc2)
-Merging erofs-fixes/fixes (8b1ac84dcf2c Documentation/ABI: sysfs-fs-erofs: =
-Fix Sphinx errors)
-Merging integrity-fixes/fixes (843385694721 evm: Fix a small race in init_d=
-esc())
-Merging kunit-fixes/kunit-fixes (41a55567b9e3 module: kunit: Load .kunit_te=
-st_suites section when CONFIG_KUNIT=3Dm)
-Merging ubifs-fixes/fixes (c3c07fc25f37 ubi: fastmap: Return error code if =
-memory allocation fails in add_aeb())
-Merging memblock-fixes/fixes (c94afc46cae7 memblock: use kfree() to release=
- kmalloced memblock regions)
-Merging cel-fixes/for-rc (6930bcbfb6ce lockd: detect and reject lock argume=
-nts that overflow)
-Merging irqchip-fixes/irq/irqchip-fixes (c3e88d91e409 irqchip/stm32-exti: R=
-emove check on always false condition)
-Merging renesas-fixes/fixes (ab2866f12ca1 arm64: dts: renesas: r8a779g0: Fi=
-x HSCIF0 interrupt number)
-Merging broadcom-fixes/fixes (b6fa04765857 Merge branch 'drivers/fixes' int=
-o fixes)
-Merging perf-current/perf/urgent (b90cb1053190 Linux 6.0-rc3)
-Merging efi-fixes/urgent (1a3887924a7e efi: libstub: Disable struct randomi=
-zation)
-Merging zstd-fixes/zstd-linus (88a309465b3f lib: zstd: clean up double word=
- in comment.)
-Merging battery-fixes/fixes (568035b01cfb Linux 6.0-rc1)
-Merging drm-misc-fixes/for-linux-next-fixes (a3f7c10a269d dma-buf/dma-resv:=
- check if the new fence is really later)
-Merging kbuild/for-next (144cec848740 nios2: move core-y in arch/nios2/Make=
-file to arch/nios2/Kbuild)
-Merging clang-format/clang-format (781121a7f6d1 clang-format: Fix space aft=
-er for_each macros)
-Merging perf/perf/core (a91ff4d2d6ca perf build: Enable -Wthread-safety wit=
-h clang)
-Merging compiler-attributes/compiler-attributes (7c00621dcaee compiler_type=
-s: mark __compiletime_assert failure as __noreturn)
-Merging dma-mapping/for-next (5c850d31880e swiotlb: fix passing local varia=
-ble to debugfs_create_ulong())
-Merging asm-generic/master (82dc270146a8 Merge branch 'asm-generic-fixes' i=
-nto asm-generic)
-Merging arc/for-next (f2906aa86338 Linux 5.19-rc1)
-Merging arm/for-next (3eaecd0677e1 Merge branches 'misc' and 'fixes' into f=
-or-next)
-Merging arm64/for-next/core (b90cb1053190 Linux 6.0-rc3)
-Merging arm-perf/for-next/perf (aaaee7b55c9e docs: perf: Include hns3-pmu.r=
-st in toctree to fix 'htmldocs' WARNING)
-Merging arm-soc/for-next (2c77db2b9086 Merge branch 'arm/fixes' into for-ne=
-xt)
-Merging actions/for-next (444d018d8d38 ARM: dts: owl-s500-roseapplepi: Add =
-ATC2603C PMIC)
-Merging amlogic/for-next (d735ce6cafa3 Merge branch 'v6.1/dt64' into for-ne=
-xt)
-Merging aspeed/for-next (7bc156fbb726 ARM: config: aspeed_g5: Enable PECI)
-Merging at91/at91-next (38b729bf1ee6 Merge branch 'at91-dt' into at91-next)
-Merging broadcom/next (122de0c73256 Merge branch 'maintainers/next' into ne=
-xt)
-Merging drivers-memory/for-next (cf4b4433946c Merge branch 'for-v6.1/brcm-s=
-tb' into for-next)
-Merging imx-mxs/for-next (a554a9e72736 Merge branch 'imx/dt64' into for-nex=
-t)
-Merging keystone/next (cb293d3b430e Merge branch 'for_5.15/drivers-soc' int=
-o next)
-Merging mediatek/for-next (f6e3cf62d9fe Merge branch 'v6.0-next/soc' into f=
-or-next)
-$ git reset --hard HEAD^
-Merging next-20220829 version of mediatek
-Merging mvebu/for-next (bc50bfd4f018 Merge branch 'mvebu/dt64' into mvebu/f=
-or-next)
-Merging omap/for-next (ad2fe4582c48 Merge branches 'omap-for-v5.20/omap1', =
-'omap-for-v5.20/ti-sysc' and 'omap-for-v5.20/soc' into for-next)
-Merging qcom/for-next (b90225f25c40 Merge branches 'arm64-defconfig-for-6.1=
-', 'arm64-for-6.1', 'clk-for-6.1', 'defconfig-for-6.1', 'drivers-for-6.1', =
-'dts-for-6.1' and 'arm64-fixes-for-6.0' into for-next)
-Merging raspberrypi/for-next (c5915b53d4c2 dt-bindings: soc: bcm: Convert b=
-rcm,bcm2835-vchiq to json-schema)
-Merging renesas/next (43507165562b Merge branches 'renesas-arm-defconfig-fo=
-r-v6.1' and 'renesas-arm-dt-for-v6.1' into renesas-next)
-Merging reset/reset/next (d985db836226 reset: tps380x: Fix spelling mistake=
- "Voltags" -> "Voltage")
-Merging rockchip/for-next (583fa77c68b4 Merge branch 'v6.1-armsoc/dts64' in=
-to for-next)
-Merging samsung-krzk/for-next (9990f043d543 Merge branch 'next/dt64' into f=
-or-next)
-Merging scmi/for-linux-next (2cdcbfae5be5 Merge tag 'scmi-fixes-6.0' of git=
-://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux into for-linu=
-x-next)
-Merging stm32/stm32-next (0c8d51cb3762 ARM: dts: stm32: Create separate pin=
-mux for qspi cs pin in stm32mp15-pinctrl.dtsi)
-Merging sunxi/sunxi/for-next (3930624c3936 clk: sunxi-ng: d1: Limit PLL rat=
-es to stable ranges)
-Merging tee/next (db30e53bf897 Merge branch 'tee_cleanup_for_v5.19' into ne=
-xt)
-Merging tegra/for-next (393c6c3a6152 Merge branch for-5.20/arm64/defconfig =
-into for-next)
-Merging ti/ti-next (568035b01cfb Linux 6.0-rc1)
-Merging xilinx/for-next (0413dd4d95da ARM: dts: zynq: add QSPI controller n=
-ode)
-Merging clk/clk-next (434874fefcd8 Merge branch 'clk-cleanup' into clk-next)
-Merging clk-imx/for-next (c196175acdd3 clk: imx: clk-fracn-gppll: Add more =
-freq config for video pll)
-Merging clk-renesas/renesas-clk (644814c1070d clk: renesas: r8a779f0: Add M=
-SIOF clocks)
-Merging clk-samsung/for-next (b35f27fe73d8 clk: samsung: exynosautov9: add =
-cmu_peric1 clock support)
-Merging csky/linux-next (45fef4c4b9c9 csky: abiv1: Fixup compile error)
-Merging loongarch/loongarch-next (568035b01cfb Linux 6.0-rc1)
-Merging m68k/for-next (1afdc013672b m68k: Move from strlcpy with unused ret=
-val to strscpy)
-Merging m68knommu/for-next (1c23f9e627a7 Linux 6.0-rc2)
-Merging microblaze/next (568035b01cfb Linux 6.0-rc1)
-Merging mips/mips-next (568035b01cfb Linux 6.0-rc1)
-Merging nios2/for-next (7f7bc20bc41a nios2: Don't use _end for calculating =
-min_low_pfn)
-Merging openrisc/for-next (52e0ea900202 openrisc: io: Define iounmap argume=
-nt as volatile)
-Merging parisc-hd/for-next (b3b4f321a9ca parisc: ccio-dma: Add missing ioun=
-map in error path in ccio_probe())
-Merging powerpc/next (fd20b60aea6a powerpc/82xx: remove spidev node from mg=
-coge)
-Merging soc-fsl/next (4b0986a3613c Linux 5.18)
-Merging risc-v/for-next (82c75dca6f95 riscv: enable CD-ROM file systems in =
-defconfig)
-Merging risc-v-mc/dt-for-next (7eac0081a8e9 riscv: dts: microchip: add qspi=
- compatible fallback)
-Merging s390/for-next (67a933343b48 Merge branch 'fixes' into for-next)
-Merging sh/for-next (8518e694203d sh: pgtable-3level: Fix cast to pointer f=
-rom integer of different size)
-Merging sparc-next/master (dd0d718152e4 Merge tag 'spi-fix-v5.8-rc2' of git=
-://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi)
-Merging uml/linux-next (af3e16101cee um: include sys/types.h for size_t)
-Merging xtensa/xtensa-for-next (0847d167d0f9 xtensa: enable ARCH_HAS_GCOV_P=
-ROFILE_ALL)
-Merging pidfd/for-next (6a857ab5b57c Merge branch 'fs.idmapped.overlay.acl'=
- into for-next)
-Merging vfs-idmapping/for-next (985b4f6faa27 Merge branch 'fixes' into for-=
-next)
-Merging fscrypt/master (deb4c809d7e8 fscrypt: work on block_devices instead=
- of request_queues)
-Merging fscache/fscache-next (0885eacdc81f Merge tag 'nfsd-5.19-1' of git:/=
-/git.kernel.org/pub/scm/linux/kernel/git/cel/linux)
-Merging afs/afs-next (26291c54e111 Linux 5.17-rc2)
-Merging btrfs/for-next (00535da77b92 Merge branch 'for-next-next-v6.0-20220=
-823' into for-next-20220823)
-CONFLICT (content): Merge conflict in fs/btrfs/block-group.c
-CONFLICT (content): Merge conflict in fs/btrfs/root-tree.c
-Merging ceph/master (a8af0d682ae0 libceph: clean up ceph_osdc_start_request=
- prototype)
-Merging cifs/for-next (9c8b7a293f50 smb3: fix temporary data corruption in =
-insert range)
-Merging configfs/for-next (84ec758fb2da configfs: fix a race in configfs_{,=
-un}register_subsystem())
-Merging ecryptfs/next (682a8e2b41ef Merge tag 'ecryptfs-5.13-rc1-updates' o=
-f git://git.kernel.org/pub/scm/linux/kernel/git/tyhicks/ecryptfs)
-Merging erofs/dev (0d53d2e882f9 erofs: avoid the potentially wrong m_plen f=
-or big pcluster)
-Merging exfat/dev (bb2bfc5e0772 exfat: fix overflow for large capacity part=
-ition)
-Merging ext3/for_next (5b02b6900c8d Pull fsnotify typo fix.)
-Merging ext4/dev (d95efb14c0b8 ext4: add ioctls to get/set the ext4 superbl=
-ock uuid)
-Merging f2fs/dev (4d9d33dd0c3f f2fs: fix missing mapping caused by the moun=
-t/umount race)
-Merging fsverity/fsverity (8377e8a24bba fs-verity: use kmap_local_page() in=
-stead of kmap())
-Merging fuse/for-next (247861c325c2 fuse: retire block-device-based superbl=
-ock on force unmount)
-Merging gfs2/for-next (204c0300c4e9 gfs2: Switch from strlcpy to strscpy)
-Merging jfs/jfs-next (e471e5942c00 fs/jfs: Remove dead code)
-Merging ksmbd/ksmbd-for-next (8c9073fa857c ksmbd: constify struct path)
-Merging nfs/linux-next (ed06fce0b034 SUNRPC: RPC level errors should set ta=
-sk->tk_rpc_status)
-Merging nfs-anna/linux-next (4f40a5b55446 NFSv4: Add an fattr allocation to=
- _nfs4_discover_trunking())
-Merging nfsd/for-next (deb33fa8542e NFSD enforce filehandle check for sourc=
-e file in COPY)
-Merging ntfs3/master (3b06a2755758 Merge tag 'ntfs3_for_6.0' of https://git=
-hub.com/Paragon-Software-Group/linux-ntfs3)
-Merging orangefs/for-next (40a74870b2d1 orangefs: Fix the size of a memory =
-allocation in orangefs_bufmap_alloc())
-Merging overlayfs/overlayfs-next (4f1196288dfb ovl: fix spelling mistakes)
-Merging ubifs/next (8c03a1c21d72 ubi: ubi_create_volume: Fix use-after-free=
- when volume creation failed)
-Merging v9fs/9p-next (aa7aeee16948 net/9p: Initialize the iounit field duri=
-ng fid creation)
-Merging xfs/for-next (031d166f968e xfs: fix inode reservation space for rem=
-oving transaction)
-Merging zonefs/for-next (6bac30bb8ff8 zonefs: Call page_address() on page a=
-cquired with GFP_KERNEL flag)
-Merging iomap/iomap-for-next (478af190cb6c iomap: remove iomap_writepage)
-Merging djw-vfs/vfs-for-next (49df34221804 fs: fix an infinite loop in ioma=
-p_fiemap)
-Merging file-locks/locks-next (072e51356cd5 Merge tag 'nfs-for-5.20-2' of g=
-it://git.linux-nfs.org/projects/trondmy/linux-nfs)
-Merging vfs/for-next (0a97e98ab197 Merge branches 'work.path' and 'work.fil=
-e_inode' into for-next)
-Merging printk/for-next (c0a684057235 Merge branch 'for-6.1/trivial' into f=
-or-next)
-Merging pci/next (c918c1a14084 Merge branch 'remotes/lorenzo/pci/qcom')
-Merging pstore/for-next/pstore (2c09d1443b9b pstore/zone: cleanup "rcnt" ty=
-pe)
-Merging hid/for-next (1f21e5bfbac7 Merge branch 'for-6.0/upstream-fixes' in=
-to for-next)
-Merging i2c/i2c/for-next (e847867330ea Merge branch 'i2c/for-mergewindow' i=
-nto i2c/for-next)
-Merging i3c/i3c/next (568035b01cfb Linux 6.0-rc1)
-Merging dmi/dmi-for-next (d2139dfca361 firmware: dmi: Use the proper access=
-or for the version field)
-Merging hwmon-staging/hwmon-next (2b3fb63eeb94 pwm: core: Make of_pwm_get()=
- static)
-Merging jc_docs/docs-next (7ebeef22dcc2 Merge branch 'docs-mw' into docs-ne=
-xt)
-Merging v4l-dvb/master (568035b01cfb Linux 6.0-rc1)
-Merging v4l-dvb-next/master (3e9ad662e34e media: av7110: move to staging/me=
-dia/deprecated/saa7146)
-Merging pm/linux-next (f6e954bc9f2b Merge branches 'pm-cpufreq' and 'pm-cpu=
-freq-next' into linux-next)
-Merging cpufreq-arm/cpufreq/arm/linux-next (0612d928b7ff cpufreq: Add SM611=
-5 to cpufreq-dt-platdev blocklist)
-Merging cpupower/cpupower (568035b01cfb Linux 6.0-rc1)
-Merging devfreq/devfreq-next (68831c5f94cb PM / devfreq: mtk-cci: Handle sr=
-am regulator probe deferral)
-Merging opp/opp/linux-next (c7e31e36d8a2 dt-bindings: opp: Add missing (une=
-valuated|additional)Properties on child nodes)
-Merging thermal/thermal/linux-next (06f360551217 Revert "mlxsw: core: Add t=
-he hottest thermal zone detection")
-Merging ieee1394/for-next (54b3bd99f094 firewire: nosy: switch from 'pci_' =
-to 'dma_' API)
-Merging dlm/next (56171e0db23a fs: dlm: const void resource name parameter)
-Merging rdma/for-next (3d67e7e236ad RDMA/hns: Support MR's restrack raw ops=
- for hns driver)
-Merging net-next/master (f97e971dbdc7 Merge branch 'sparx5-mrouter')
-Merging bpf-next/for-next (2eb680401df6 selftests/bpf: Fix connect4_prog tc=
-p/socket header type conflict)
-CONFLICT (content): Merge conflict in net/core/filter.c
-CONFLICT (content): Merge conflict in tools/testing/selftests/bpf/DENYLIST.=
-s390x
-Merging ipsec-next/master (0de1978852df xfrm: Drop unused argument)
-Merging mlx5-next/mlx5-next (b0bb369ee451 net/mlx5: fs, allow flow table cr=
-eation with a UID)
-Merging netfilter-next/master (677fb7525331 Merge git://git.kernel.org/pub/=
-scm/linux/kernel/git/netdev/net)
-Merging ipvs-next/master (677fb7525331 Merge git://git.kernel.org/pub/scm/l=
-inux/kernel/git/netdev/net)
-Merging bluetooth/master (b828854871f6 Bluetooth: hci_sync: hold hdev->lock=
- when cleanup hci_conn)
-Merging wireless-next/for-next (7c13844c3b76 wifi: mac80211: fix potential =
-deadlock in ieee80211_key_link())
-Merging mtd/mtd/next (7ec4cdb32173 mtd: core: check partition before derefe=
-rence)
-Merging nand/nand/next (e16eceea863b mtd: rawnand: arasan: Fix clock rate i=
-n NV-DDR)
-Merging spi-nor/spi-nor/next (f8cd9f632f44 mtd: spi-nor: fix spi_nor_spimem=
-_setup_op() call in spi_nor_erase_{sector,chip}())
-Merging crypto/master (a9a98d49da52 crypto: Kconfig - simplify compression/=
-RNG entries)
-Merging drm/drm-next (2c2d7a67defa Merge tag 'drm-intel-gt-next-2022-08-24'=
- of git://anongit.freedesktop.org/drm/drm-intel into drm-next)
-Merging drm-misc/for-linux-next (55453c0914d9 drm/bridge: ps8640: Add doubl=
-e reset T4 and T5 to power-on sequence)
-CONFLICT (content): Merge conflict in drivers/gpu/drm/tiny/simpledrm.c
-CONFLICT (content): Merge conflict in drivers/gpu/drm/vc4/vc4_hdmi.c
-Merging amdgpu/drm-next (b3235e8635e1 drm/amd/display: clean up some incons=
-istent indentings)
-CONFLICT (content): Merge conflict in drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c
-CONFLICT (content): Merge conflict in drivers/gpu/drm/amd/pm/swsmu/inc/pmfw=
-_if/smu13_driver_if_v13_0_0.h
-CONFLICT (content): Merge conflict in drivers/gpu/drm/amd/pm/swsmu/inc/smu_=
-v13_0.h
-$ git reset --hard HEAD^
-Merging next-20220829 version of amdgpu
-Merging drm-intel/for-linux-next (917bda9ab155 Merge drm/drm-next into drm-=
-intel-next)
-CONFLICT (content): Merge conflict in drivers/gpu/drm/i915/display/icl_dsi.c
-CONFLICT (content): Merge conflict in drivers/gpu/drm/i915/display/vlv_dsi.c
-Merging drm-tegra/for-next (135f4c551d51 drm/tegra: vic: Use devm_platform_=
-ioremap_resource())
-Merging drm-msm/msm-next (1c23f9e627a7 Linux 6.0-rc2)
-Merging drm-msm-lumag/msm-next-lumag (d4c4099d4d6f Merge branches 'msm-next=
--lumag-core', 'msm-next-lumag-dpu', 'msm-next-lumag-dp', 'msm-next-lumag-ds=
-i' and 'msm-next-lumag-hdmi' into msm-next-lumag)
-Merging imx-drm/imx-drm/next (927d8fd465ad drm/imx: ipuv3-plane: Remove red=
-undant color encoding and range initialisation)
-Merging etnaviv/etnaviv/next (332f847212e4 drm/etnaviv: reap idle mapping i=
-f it doesn't match the softpin address)
-Merging fbdev/for-next (1c23f9e627a7 Linux 6.0-rc2)
-Merging regmap/for-next (1bfa8e736383 Merge remote-tracking branch 'regmap/=
-for-6.1' into regmap-next)
-Merging sound/for-next (384c687fb4ad Merge branch 'topic/memalloc-cleanup' =
-into for-next)
-Merging sound-asoc/for-next (13353516658b Merge remote-tracking branch 'aso=
-c/for-6.1' into asoc-next)
-Merging modules/modules-next (554694ba120b module: Replace kmap() with kmap=
-_local_page())
-Merging input/next (a9da7251ac8b Input: gameport - move from strlcpy with u=
-nused retval to strscpy)
-Merging block/for-next (a31f1e638b8a Merge branch 'for-6.1/block' into for-=
-next)
-Merging device-mapper/for-next (e3a7c2947b9e dm bufio: fix some cases where=
- the code sleeps with spinlock held)
-Merging libata/for-next (e9892dce44f2 ata: pata_macio: Remove unneeded word=
- in comments)
-Merging pcmcia/pcmcia-next (2ef4bb24ff39 pcmcia: Use platform_get_irq() to =
-get the interrupt)
-Merging mmc/next (ca93b1faebab mmc: meson-gx: add SDIO interrupt support)
-Merging mfd/for-mfd-next (3d021aaca7c7 dt-bindings: mfd: mt8195: Add bindin=
-gs for MediaTek SCPSYS)
-CONFLICT (modify/delete): drivers/mfd/intel_soc_pmic_core.c deleted in mfd/=
-for-mfd-next and modified in HEAD.  Version HEAD of drivers/mfd/intel_soc_p=
-mic_core.c left in tree.
-$ git rm -f drivers/mfd/intel_soc_pmic_core.c
-Applying: mfd: fix up for "i2c: Make remove callback return void"
-Merging backlight/for-backlight-next (fe201f6fa4cf MAINTAINERS: Use Lee Jon=
-es' kernel.org address for Backlight submissions)
-Merging battery/for-next (568035b01cfb Linux 6.0-rc1)
-Merging regulator/for-next (dfefc85e5560 Merge remote-tracking branch 'regu=
-lator/for-6.1' into regulator-next)
-Merging security/next (ed5d44d42c95 selinux: Implement userns_create hook)
-Merging apparmor/apparmor-next (79eb2711c919 apparmor: correct config refer=
-ence to intended one)
-Merging integrity/next-integrity (88b61b130334 Merge remote-tracking branch=
- 'linux-integrity/kexec-keyrings' into next-integrity)
-Merging keys/keys-next (2d743660786e Merge branch 'fixes' of git://git.kern=
-el.org/pub/scm/linux/kernel/git/viro/vfs)
-Merging safesetid/safesetid-next (64b634830c91 LSM: SafeSetID: add setgroup=
-s() testing to selftest)
-Merging selinux/next (568035b01cfb Linux 6.0-rc1)
-Merging smack/next (b50503990d88 smack: Remove the redundant lsm_inode_allo=
-c)
-Merging tomoyo/master (05fe531eb3f1 kernel/hung_task: show backtrace of tas=
-ks with locks held)
-Merging tpmdd/next (863ed94c589f tpm: Add check for Failure mode for TPM2 m=
-odules)
-Merging watchdog/master (b90cb1053190 Linux 6.0-rc3)
-Merging iommu/next (c10100a416c1 Merge branches 'arm/exynos', 'arm/mediatek=
-', 'arm/msm', 'arm/smmu', 'virtio', 'x86/vt-d', 'x86/amd' and 'core' into n=
-ext)
-Merging audit/next (501e4bb102ee audit: use time_after to compare time)
-Merging devicetree/for-next (a536208da6f7 dt-bindings: crypto: ti,sa2ul: dr=
-op dma-coherent property)
-Merging dt-krzk/for-next (568035b01cfb Linux 6.0-rc1)
-Merging mailbox/mailbox-for-next (8a8dc2b9596e mailbox: imx: clear pending =
-interrupts)
-Merging spi/for-next (f31e7f9af760 Merge remote-tracking branch 'spi/for-6.=
-1' into spi-next)
-Merging tip/master (9663c372f277 Merge branch 'WIP.fixes')
-Merging clockevents/timers/drivers/next (c19e18637d89 clocksource/drivers/s=
-un4i: Remove unnecessary (void*) conversions)
-Merging edac/edac-for-next (35636db93725 Merge edac-misc into for-next)
-Merging irqchip/irq/irqchip-next (2bd1753e8c43 Merge branch irq/misc-5.20 i=
-nto irq/irqchip-next)
-Merging ftrace/for-next (07a451dae367 Merge branch 'trace/for-next-core' in=
-to trace/for-next)
-Merging rcu/rcu/next (97a2c50e702a rcutorture: Verify NUM_ACTIVE_RCU_POLL_O=
-LDSTATE)
-Merging kvm/next (372d07084593 KVM: selftests: Fix ambiguous mov in KVM_ASM=
-_SAFE())
-Merging kvm-arm/next (0982c8d859f8 Merge branch kvm-arm64/nvhe-stacktrace i=
-nto kvmarm-master/next)
-Merging kvms390/next (f5ecfee94493 KVM: s390: resetting the Topology-Change=
--Report)
-Merging xen-tip/linux-next (c5deb27895e0 xen/privcmd: fix error exit of pri=
-vcmd_ioctl_dm_op())
-Merging percpu/for-next (a111daf0c53a Linux 5.19-rc3)
-Merging workqueues/for-next (c0feea594e05 workqueue: don't skip lockdep wor=
-k dependency in cancel_work_sync())
-Merging drivers-x86/for-next (c35c7b980597 platform/x86: msi-laptop: Add ms=
-i_scm_disable_hw_fn_handling() helper)
-Merging chrome-platform/for-next (8a07b45fd3c2 platform/chrome: fix memory =
-corruption in ioctl)
-Merging hsi/for-next (551e325bbd3f HSI: omap_ssi_port: Fix dma_map_sg error=
- check)
-Merging leds/for-next (568035b01cfb Linux 6.0-rc1)
-Merging ipmi/for-next (4aebcc9059d8 dt-binding: ipmi: add fallback to npcm8=
-45 compatible)
-Merging driver-core/driver-core-next (1c23f9e627a7 Linux 6.0-rc2)
-Merging usb/usb-next (4dce3b375179 usb/hcd: Fix dma_map_sg error check)
-Merging thunderbolt/next (32249fd8c8cc thunderbolt: Add support for Intel M=
-eteor Lake)
-Merging usb-gadget/next (e49d033bddf5 Linux 5.12-rc6)
-Merging usb-serial/usb-next (1c23f9e627a7 Linux 6.0-rc2)
-Merging tty/tty-next (568035b01cfb Linux 6.0-rc1)
-Merging char-misc/char-misc-next (568035b01cfb Linux 6.0-rc1)
-Merging coresight/next (04d1edb0ecf2 coresight: etm4x: docs: Add documentat=
-ion for 'ts_source' sysfs interface)
-Merging fpga/for-next (e167b2c3a0e6 dt-bindings: fpga: microchip,mpf-spi-fp=
-ga-mgr: use spi-peripheral-props.yaml)
-Merging icc/icc-next (aff72c797ff0 Merge branch 'icc-ignore-return-val' int=
-o icc-next)
-Merging iio/togreg (682ca76bc60a iio: Avoid multiple line dereference for m=
-ask)
-Merging phy-next/next (568035b01cfb Linux 6.0-rc1)
-Merging soundwire/next (63198aaa91ac soundwire: intel: remove use of __func=
-__ in dev_dbg)
-Merging extcon/extcon-next (822a6200734c extcon: usbc-tusb320: Add USB TYPE=
--C support)
-Merging gnss/gnss-next (c0c725d7350e gnss: replace ida_simple API)
-Merging vfio/next (0f3e72b5c8cf vfio: Move vfio.c to vfio_main.c)
-Merging staging/staging-next (dba908967df5 staging: r8188eu: remove unneces=
-sary null check)
-CONFLICT (content): Merge conflict in drivers/staging/r8188eu/os_dep/os_int=
-fs.c
-Merging mux/for-next (0fcfb00b28c0 Linux 5.16-rc4)
-Merging dmaengine/next (568035b01cfb Linux 6.0-rc1)
-Merging cgroup/for-next (5214a36f9afe Merge branch 'for-6.1' into for-next)
-Merging scsi/for-next (785538bfdd68 scsi: sd: Revert "Rework asynchronous r=
-esume support")
-Merging scsi-mkp/for-next (8750aa54da43 scsi: megaraid_sas: Use struct_size=
-() in code related to struct MR_PD_CFG_SEQ_NUM_SYNC)
-$ git reset --hard HEAD^
-Merging next-20220823 version of scsi-mkp
-Merging vhost/linux-next (8f113a4ad40d virtio: drop vp_legacy_set_queue_siz=
-e)
-Merging rpmsg/for-next (729c16326b7f remoteproc: imx_dsp_rproc: fix argumen=
-t 2 of rproc_mem_entry_init)
-Merging gpio/for-next (e73f0f0ee754 Linux 5.14-rc1)
-Merging gpio-brgl/gpio/for-next (1e65d136d956 dt-bindings: gpio: fairchild,=
-74hc595: use spi-peripheral-props.yaml)
-Merging gpio-intel/for-next (9c3c24f08289 gpiolib: acpi: Add a quirk for As=
-us UM325UAZ)
-Merging gpio-sim/gpio/gpio-sim (0fcfb00b28c0 Linux 5.16-rc4)
-Merging pinctrl/for-next (98f0c2fc1fa3 Merge branch 'devel' into for-next)
-Merging pinctrl-intel/for-next (1c23f9e627a7 Linux 6.0-rc2)
-Merging pinctrl-renesas/renesas-pinctrl (96355be8f0a2 dt-bindings: pinctrl:=
- renesas: Document RZ/Five SoC)
-Merging pinctrl-samsung/for-next (9d9292576810 dt-bindings: pinctrl: samsun=
-g: deprecate header with register constants)
-Merging pwm/for-next (8933d30c5f46 pwm: lpc18xx: Fix period handling)
-Merging userns/for-next (a0b88362d2c7 Merge of ucount-rlimits-cleanups-for-=
-v5.19, interrupting_kthread_stop-for-v5.20, signal-for-v5.20, and retire_mq=
-_sysctls-for-v5.19 for testing in linux-next)
-Merging ktest/for-next (170f4869e662 ktest.pl: Fix the logic for truncating=
- the size of the log file for email)
-Merging kselftest/next (997fdfc6b9c0 Documentation: amd-pstate: Add unit te=
-st introduction)
-Merging livepatching/for-next (df44b1ee72f4 Merge branch 'for-5.20/selftest=
-s-fixes' into for-next)
-Merging rtc/rtc-next (509451ac03eb rtc: gamecube: Always reset HW_SRNPROT a=
-fter read)
-Merging nvdimm/libnvdimm-for-next (53fc59511fc4 nvdimm/namespace: drop unne=
-eded temporary variable in size_store())
-Merging at24/at24/for-next (568035b01cfb Linux 6.0-rc1)
-Merging ntb/ntb-next (568035b01cfb Linux 6.0-rc1)
-Merging seccomp/for-next/seccomp (4e92863862d1 Merge branch 'for-linus/secc=
-omp' into for-next/seccomp)
-Merging cisco/for-next (9e98c678c2d6 Linux 5.1-rc1)
-Merging fsi/next (04823dd2af87 fsi: master-ast-cf: Fix missing of_node_put =
-in fsi_master_acf_probe)
-Merging slimbus/for-next (568035b01cfb Linux 6.0-rc1)
-Merging nvmem/for-next (47c88c8216cf nvmem: brcm_nvram: Use kzalloc for all=
-ocating only one element)
-Merging xarray/main (69cb69ea5542 ida: Remove assertions that an ID was all=
-ocated)
-Merging hyperv/hyperv-next (d180e0a1be6c Drivers: hv: Create debugfs file w=
-ith hyper-v balloon usage information)
-Merging auxdisplay/auxdisplay (13de23494f38 auxdisplay: lcd2s: Use array si=
-ze explicitly in lcd2s_gotoxy())
-Merging kgdb/kgdb/for-next (c1cb81429df4 kdb: Fix the putarea helper functi=
-on)
-Merging hmm/hmm (568035b01cfb Linux 6.0-rc1)
-Merging kunit/test (568035b01cfb Linux 6.0-rc1)
-Merging cfi/cfi/next (312310928417 Linux 5.18-rc1)
-Merging kunit-next/kunit (568035b01cfb Linux 6.0-rc1)
-Merging trivial/for-next (081c8919b02b Documentation: remove trivial tree)
-Merging mhi/mhi-next (acc5495bf764 bus: mhi: host: Fix up null pointer acce=
-ss in mhi_irq_handler)
-Merging memblock/for-next (8f6e32c6bd09 memblock tests: update reference to=
- obsolete build option in comments)
-Merging init/init-user-pointers (38b082236e77 initramfs: use vfs_utimes in =
-do_copy)
-Merging counters/counters (e71ba9452f0b Linux 5.11-rc2)
-Merging cxl/next (1cd8a2537eb0 cxl/hdm: Fix skip allocations vs multiple pm=
-em allocations)
-Merging folio-iomap/folio-iomap (4d7bd0eb72e5 iomap: Inline __iomap_zero_it=
-er into its caller)
-Merging zstd/zstd-next (88a309465b3f lib: zstd: clean up double word in com=
-ment.)
-Merging efi/next (bb45d2db8492 Merge tag 'efi-loongarch-for-v6.1' into efi/=
-next)
-Merging unicode/for-next (b500d6d7243d unicode: Handle memory allocation fa=
-ilures in mkutf8data)
-Merging slab/for-next (68704dd63c5e Merge branch 'slab/for-6.1/slub_validat=
-ion_locking' into slab/for-next)
-Merging random/master (4e23eeebb2e5 Merge tag 'bitmap-6.0-rc1' of https://g=
-ithub.com/norov/linux)
-Merging landlock/next (485573b33eef Merge branch 'landlock-next-truncate' i=
-nto landlock-next)
-Merging rust/rust-next (07a3263c2554 init/Kconfig: Specify the interpreter =
-for rust_is_available.sh)
-CONFLICT (content): Merge conflict in Makefile
-Merging sysctl/sysctl-next (374a723c7448 kernel/sysctl.c: Remove trailing w=
-hite space)
-Merging folio/for-next (03b33c09ea22 fs: remove the NULL get_block case in =
-mpage_writepages)
-Merging execve/for-next/execve (1c23f9e627a7 Linux 6.0-rc2)
-Merging bitmap/bitmap-for-next (5d7fef0804b0 lib/cpumask_kunit: add tests f=
-ile to MAINTAINERS)
-Merging hte/hte/for-next (85ff37e302ef gpiolib: cdev: Fix kernel doc for st=
-ruct line)
-Merging kspp/for-next/kspp (6bf7edc1e6f0 overflow, tracing: Define the is_s=
-igned_type() macro once)
-Merging kspp-gustavo/for-next/kspp (568035b01cfb Linux 6.0-rc1)
-Merging mm-stable/mm-stable (ec6624452e36 Merge branch 'linus')
-Merging mm-nonmm-stable/mm-nonmm-stable (ec6624452e36 Merge branch 'linus')
-Merging mm/mm-everything (3a7a31a4c99c Merge branch 'mm-nonmm-unstable' int=
-o mm-everything)
-CONFLICT (content): Merge conflict in lib/Makefile
-$ git rm -f lib/is_signed_type_test.c
+Errors summary:
 
---Sig_/GJ.4DqwOi1Dr6UhVY8TruXN
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+    5    clang: error: clang frontend command failed with exit code 70 (use=
+ -v to see invocation)
+    4    drivers/gpu/drm/msm/dsi/dsi_host.c:1903:14: error: variable 'devic=
+e_node' is uninitialized when used here [-Werror,-Wuninitialized]
+    3    fatal error: error in backend: unable to write nop sequence of 7 b=
+ytes
+    3    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=
+=80=98-mhard-float=E2=80=99
+    2    sound/soc/intel/skylake/skl.c:729:18: error: unused variable 'skl'=
+ [-Werror,-Wunused-variable]
+    2    fatal error: error in backend: unable to write nop sequence of 3 b=
+ytes
+    1    net/ieee802154/nl802154.c:2503:19: error: =E2=80=98NL802154_CMD_DE=
+L_SEC_LEVEL=E2=80=99 undeclared here (not in a function); did you mean =E2=
+=80=98NL802154_CMD_SET_CCA_ED_LEVEL=E2=80=99?
+    1    ld.lld: error: undefined symbol: __aeabi_uldivmod
+    1    drivers/net/ethernet/mellanox/mlx5/core/en_rep.c:481:6: error: var=
+iable 'err' is used uninitialized whenever 'if' condition is false [-Werror=
+,-Wsometimes-uninitialized]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vb=
+a_32.c:1721:6: error: stack frame size (2160) exceeds limit (2048) in 'dml3=
+2_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_mode_vb=
+a_31.c:3908:6: error: stack frame size (2216) exceeds limit (2048) in 'dml3=
+1_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn30/display_mode_vb=
+a_30.c:3542:6: error: stack frame size (2200) exceeds limit (2048) in 'dml3=
+0_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
+=3D0x'
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
+=3D0x'
 
------BEGIN PGP SIGNATURE-----
+Warnings summary:
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMNtcEACgkQAVBC80lX
-0GxJ3Af9ErQ13C7CXzylco4hLrMXGbDE8F+AA3XI28qtAg1XFwcPcO4Ljyw/C2BM
-5ou9Zi8Nb9WM58Yqrb8I9b408YaAQaBgS5OpeChCmHkDKVrFzKP9sV7kx6VclSjQ
-C1ZY3wEZCdjkAxe0DSZ/kj3v/ehMNtmWQEdEOZkVKMrJ6RvxLw4kbBvedDrOMo6T
-nScx6zSnGbphKcDybv8kpCkCqjk3QybsXjCUxO63c6AwOVJtGN1n3Pg/HgAB54mQ
-m+0yboo5pg0hI6QQNAONih28ZEAGz6fHBElgNDDjmooko8bhF5+WJzGNWVkzAoz7
-SHoWoH9qdrMpoptuaHPR4EwbSyyM5g==
-=3MbH
------END PGP SIGNATURE-----
+    12   clang: warning: argument unused during compilation: '-march=3Darmv=
+7-a' [-Wunused-command-line-argument]
+    12   clang: warning: argument unused during compilation: '-march=3Darmv=
+6k' [-Wunused-command-line-argument]
+    8    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    5    drivers/gpu/drm/msm/dsi/dsi_host.c:1870:44: note: initialize the v=
+ariable 'device_node' to silence this warning
+    3    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+    3    1 warning generated.
+    2    drivers/net/ethernet/mellanox/mlx5/core/en_rep.c:474:9: note: init=
+ialize the variable 'err' to silence this warning
+    1    vmlinux.o: warning: objtool: vc_switch_off_ist+0xbe: call to memcp=
+y() leaves .noinstr.text section
+    1    vmlinux.o: warning: objtool: sync_regs+0x24: call to memcpy() leav=
+es .noinstr.text section
+    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x31: relocation to=
+ !ENDBR: machine_kexec_prepare+0x487
+    1    vmlinux.o: warning: objtool: fixup_bad_iret+0x36: call to memset()=
+ leaves .noinstr.text section
+    1    vmlinux.o: warning: objtool: __sev_put_ghcb+0x35: call to memcpy()=
+ leaves .noinstr.text section
+    1    vmlinux.o: warning: objtool: __sev_get_ghcb+0xaa: call to memcpy()=
+ leaves .noinstr.text section
+    1    printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
+    1    drivers/power/supply/ab8500_chargalg.c:493:13: warning: =E2=80=98a=
+b8500_chargalg_ex_ac_enable_toggle=E2=80=99 defined but not used [-Wunused-=
+variable]
+    1    drivers/power/supply/ab8500_chargalg.c:493:13: warning: unused var=
+iable =E2=80=98ab8500_chargalg_ex_ac_enable_toggle=E2=80=99 [-Wunused-varia=
+ble]
+    1    drivers/net/ethernet/mellanox/mlx5/core/en_rep.c:481:6: warning: v=
+ariable 'err' is used uninitialized whenever 'if' condition is false [-Wsom=
+etimes-uninitialized]
+    1    drivers/media/i2c/m5mols/m5mols.o: warning: objtool: m5mols_set_fm=
+t() falls through to next function m5mols_get_frame_desc()
+    1    drivers/gpu/drm/msm/dsi/dsi_host.c:1903:14: warning: variable 'dev=
+ice_node' is uninitialized when used here [-Wuninitialized]
+    1    cc1: warning: result of =E2=80=98-117440512 << 16=E2=80=99 require=
+s 44 bits to represent, but =E2=80=98int=E2=80=99 only has 32 bits [-Wshift=
+-overflow=3D]
+    1    arch/riscv/mm/dma-noncoherent.c:87:18: note: initialize the variab=
+le 'cbom_hartid' to silence this warning
+    1    arch/riscv/mm/dma-noncoherent.c:107:6: warning: variable 'cbom_har=
+tid' is uninitialized when used here [-Wuninitialized]
+    1    : warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    1    0.	Program arguments: /usr/lib/llvm-16/bin/clang -Wp,-MMD,kernel/r=
+cu/.tree.o.d -nostdinc -I../arch/riscv/include -I./arch/riscv/include/gener=
+ated -I../include -I./include -I../arch/riscv/include/uapi -I./arch/riscv/i=
+nclude/generated/uapi -I../include/uapi -I./include/generated/uapi -include=
+ ../include/linux/compiler-version.h -include ../include/linux/kconfig.h -i=
+nclude ../include/linux/compiler_types.h -D__KERNEL__ -Qunused-arguments -f=
+macro-prefix-map=3D../=3D -Wall -Wundef -Werror=3Dstrict-prototypes -Wno-tr=
+igraphs -fno-strict-aliasing -fno-common -fshort-wchar -fno-PIE -Werror=3Di=
+mplicit-function-declaration -Werror=3Dimplicit-int -Werror=3Dreturn-type -=
+Wno-format-security -std=3Dgnu11 --target=3Driscv64-linux-gnu -fintegrated-=
+as -Werror=3Dunknown-warning-option -Werror=3Dignored-optimization-argument=
+ -mabi=3Dlp64 -march=3Drv64imac_zicbom_zihintpause -mno-save-restore -DCONF=
+IG_PAGE_OFFSET=3D0xff60000000000000 -mcmodel=3Dmedany -fno-omit-frame-point=
+er -fno-delete-null-pointer-checks -Wno-frame-address -Wno-address-of-packe=
+d-member -O2 -Wframe-larger-than=3D2048 -fstack-protector-strong -Wimplicit=
+-fallthrough -Wno-gnu -Wno-unused-but-set-variable -Wno-unused-const-variab=
+le -fno-omit-frame-pointer -fno-optimize-sibling-calls -ftrivial-auto-var-i=
+nit=3Dzero -enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-fr=
+om-clang -fno-stack-clash-protection -Wdeclaration-after-statement -Wvla -W=
+no-pointer-sign -Wcast-function-type -fno-strict-overflow -fno-stack-check =
+-Werror=3Ddate-time -Werror=3Dincompatible-pointer-types -Wno-initializer-o=
+verrides -Wno-format -Wno-sign-compare -Wno-pointer-to-enum-cast -Wno-tauto=
+logical-constant-out-of-range-compare -Wno-unaligned-access -I ../kernel/rc=
+u -I ./kernel/rcu -DKBUILD_MODFILE=3D\"kernel/rcu/tree\" -DKBUILD_BASENAME=
+=3D\"tree\" -DKBUILD_MODNAME=3D\"tree\" -D__KBUILD_MODNAME=3Dkmod_tree -c -=
+o kernel/rcu/tree.o ../kernel/rcu/tree.c
+    1    0.	Program arguments: /usr/lib/llvm-16/bin/clang -Wp,-MMD,kernel/p=
+rintk/.printk.o.d -nostdinc -I../arch/riscv/include -I./arch/riscv/include/=
+generated -I../include -I./include -I../arch/riscv/include/uapi -I./arch/ri=
+scv/include/generated/uapi -I../include/uapi -I./include/generated/uapi -in=
+clude ../include/linux/compiler-version.h -include ../include/linux/kconfig=
+.h -include ../include/linux/compiler_types.h -D__KERNEL__ -Qunused-argumen=
+ts -fmacro-prefix-map=3D../=3D -Wall -Wundef -Werror=3Dstrict-prototypes -W=
+no-trigraphs -fno-strict-aliasing -fno-common -fshort-wchar -fno-PIE -Werro=
+r=3Dimplicit-function-declaration -Werror=3Dimplicit-int -Werror=3Dreturn-t=
+ype -Wno-format-security -std=3Dgnu11 --target=3Driscv64-linux-gnu -fintegr=
+ated-as -Werror=3Dunknown-warning-option -Werror=3Dignored-optimization-arg=
+ument -mabi=3Dlp64 -march=3Drv64imac_zicbom_zihintpause -mno-save-restore -=
+DCONFIG_PAGE_OFFSET=3D0xff60000000000000 -mcmodel=3Dmedany -fno-omit-frame-=
+pointer -fno-delete-null-pointer-checks -Wno-frame-address -Wno-address-of-=
+packed-member -O2 -Wframe-larger-than=3D2048 -fstack-protector-strong -Wimp=
+licit-fallthrough -Wno-gnu -Wno-unused-but-set-variable -Wno-unused-const-v=
+ariable -fno-omit-frame-pointer -fno-optimize-sibling-calls -ftrivial-auto-=
+var-init=3Dzero -enable-trivial-auto-var-init-zero-knowing-it-will-be-remov=
+ed-from-clang -fno-stack-clash-protection -Wdeclaration-after-statement -Wv=
+la -Wno-pointer-sign -Wcast-function-type -fno-strict-overflow -fno-stack-c=
+heck -Werror=3Ddate-time -Werror=3Dincompatible-pointer-types -Wno-initiali=
+zer-overrides -Wno-format -Wno-sign-compare -Wno-pointer-to-enum-cast -Wno-=
+tautological-constant-out-of-range-compare -Wno-unaligned-access -I ../kern=
+el/printk -I ./kernel/printk -DKBUILD_MODFILE=3D\"kernel/printk/printk\" -D=
+KBUILD_BASENAME=3D\"printk\" -DKBUILD_MODNAME=3D\"printk\" -D__KBUILD_MODNA=
+ME=3Dkmod_printk -c -o kernel/printk/printk.o ../kernel/printk/printk.c
+    1    0.	Program arguments: /usr/lib/llvm-16/bin/clang -Wp,-MMD,init/.ma=
+in.o.d -nostdinc -I../arch/riscv/include -I./arch/riscv/include/generated -=
+I../include -I./include -I../arch/riscv/include/uapi -I./arch/riscv/include=
+/generated/uapi -I../include/uapi -I./include/generated/uapi -include ../in=
+clude/linux/compiler-version.h -include ../include/linux/kconfig.h -include=
+ ../include/linux/compiler_types.h -D__KERNEL__ -Qunused-arguments -fmacro-=
+prefix-map=3D../=3D -Wall -Wundef -Werror=3Dstrict-prototypes -Wno-trigraph=
+s -fno-strict-aliasing -fno-common -fshort-wchar -fno-PIE -Werror=3Dimplici=
+t-function-declaration -Werror=3Dimplicit-int -Werror=3Dreturn-type -Wno-fo=
+rmat-security -std=3Dgnu11 --target=3Driscv64-linux-gnu -fintegrated-as -We=
+rror=3Dunknown-warning-option -Werror=3Dignored-optimization-argument -mabi=
+=3Dlp64 -march=3Drv64imac_zicbom_zihintpause -mno-save-restore -DCONFIG_PAG=
+E_OFFSET=3D0xff60000000000000 -mcmodel=3Dmedany -fno-omit-frame-pointer -fn=
+o-delete-null-pointer-checks -Wno-frame-address -Wno-address-of-packed-memb=
+er -O2 -Wframe-larger-than=3D2048 -fstack-protector-strong -Wimplicit-fallt=
+hrough -Wno-gnu -Wno-unused-but-set-variable -Wno-unused-const-variable -fn=
+o-omit-frame-pointer -fno-optimize-sibling-calls -ftrivial-auto-var-init=3D=
+zero -enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-cla=
+ng -fno-stack-clash-protection -Wdeclaration-after-statement -Wvla -Wno-poi=
+nter-sign -Wcast-function-type -fno-strict-overflow -fno-stack-check -Werro=
+r=3Ddate-time -Werror=3Dincompatible-pointer-types -Wno-initializer-overrid=
+es -Wno-format -Wno-sign-compare -Wno-pointer-to-enum-cast -Wno-tautologica=
+l-constant-out-of-range-compare -Wno-unaligned-access -fno-function-section=
+s -fno-data-sections -I ../init -I ./init -DKBUILD_MODFILE=3D\"init/main\" =
+-DKBUILD_BASENAME=3D\"main\" -DKBUILD_MODNAME=3D\"main\" -D__KBUILD_MODNAME=
+=3Dkmod_main -c -o init/main.o ../init/main.c
+    1    0.	Program arguments: /usr/lib/llvm-16/bin/clang -Wp,-MMD,init/.ma=
+in.o.d -nostdinc -I../arch/riscv/include -I./arch/riscv/include/generated -=
+I../include -I./include -I../arch/riscv/include/uapi -I./arch/riscv/include=
+/generated/uapi -I../include/uapi -I./include/generated/uapi -include ../in=
+clude/linux/compiler-version.h -include ../include/linux/kconfig.h -include=
+ ../include/linux/compiler_types.h -D__KERNEL__ -Qunused-arguments -fmacro-=
+prefix-map=3D../=3D -Wall -Wundef -Werror=3Dstrict-prototypes -Wno-trigraph=
+s -fno-strict-aliasing -fno-common -fshort-wchar -fno-PIE -Werror=3Dimplici=
+t-function-declaration -Werror=3Dimplicit-int -Werror=3Dreturn-type -Wno-fo=
+rmat-security -std=3Dgnu11 --target=3Driscv64-linux-gnu -fintegrated-as -We=
+rror=3Dunknown-warning-option -Werror=3Dignored-optimization-argument -mabi=
+=3Dlp64 -march=3Drv64imac_zicbom_zihintpause -mno-save-restore -DCONFIG_PAG=
+E_OFFSET=3D0xff60000000000000 -mcmodel=3Dmedany -fno-delete-null-pointer-ch=
+ecks -Wno-frame-address -Wno-address-of-packed-member -O2 -Wframe-larger-th=
+an=3D2048 -fno-stack-protector -Wimplicit-fallthrough -Wno-gnu -Wno-unused-=
+but-set-variable -Wno-unused-const-variable -fomit-frame-pointer -ftrivial-=
+auto-var-init=3Dzero -enable-trivial-auto-var-init-zero-knowing-it-will-be-=
+removed-from-clang -fno-stack-clash-protection -Wdeclaration-after-statemen=
+t -Wvla -Wno-pointer-sign -Wcast-function-type -fno-strict-overflow -fno-st=
+ack-check -Werror=3Ddate-time -Werror=3Dincompatible-pointer-types -Wno-ini=
+tializer-overrides -Wno-format -Wno-sign-compare -Wno-pointer-to-enum-cast =
+-Wno-tautological-constant-out-of-range-compare -Wno-unaligned-access -fno-=
+function-sections -fno-data-sections -I ../init -I ./init -DKBUILD_MODFILE=
+=3D\"init/main\" -DKBUILD_BASENAME=3D\"main\" -DKBUILD_MODNAME=3D\"main\" -=
+D__KBUILD_MODNAME=3Dkmod_main -c -o init/main.o ../init/main.c
+    1    0.	Program arguments: /usr/lib/llvm-16/bin/clang -Wp,-MMD,init/.do=
+_mounts_initrd.o.d -nostdinc -I../arch/riscv/include -I./arch/riscv/include=
+/generated -I../include -I./include -I../arch/riscv/include/uapi -I./arch/r=
+iscv/include/generated/uapi -I../include/uapi -I./include/generated/uapi -i=
+nclude ../include/linux/compiler-version.h -include ../include/linux/kconfi=
+g.h -include ../include/linux/compiler_types.h -D__KERNEL__ -Qunused-argume=
+nts -fmacro-prefix-map=3D../=3D -Wall -Wundef -Werror=3Dstrict-prototypes -=
+Wno-trigraphs -fno-strict-aliasing -fno-common -fshort-wchar -fno-PIE -Werr=
+or=3Dimplicit-function-declaration -Werror=3Dimplicit-int -Werror=3Dreturn-=
+type -Wno-format-security -std=3Dgnu11 --target=3Driscv64-linux-gnu -finteg=
+rated-as -Werror=3Dunknown-warning-option -Werror=3Dignored-optimization-ar=
+gument -mabi=3Dlp64 -march=3Drv64imac_zicbom_zihintpause -mno-save-restore =
+-DCONFIG_PAGE_OFFSET=3D0xff60000000000000 -mcmodel=3Dmedany -fno-omit-frame=
+-pointer -fno-delete-null-pointer-checks -Wno-frame-address -Wno-address-of=
+-packed-member -O2 -Wframe-larger-than=3D2048 -fstack-protector-strong -Wim=
+plicit-fallthrough -Wno-gnu -Wno-unused-but-set-variable -Wno-unused-const-=
+variable -fno-omit-frame-pointer -fno-optimize-sibling-calls -ftrivial-auto=
+-var-init=3Dzero -enable-trivial-auto-var-init-zero-knowing-it-will-be-remo=
+ved-from-clang -fno-stack-clash-protection -Wdeclaration-after-statement -W=
+vla -Wno-pointer-sign -Wcast-function-type -fno-strict-overflow -fno-stack-=
+check -Werror=3Ddate-time -Werror=3Dincompatible-pointer-types -Wno-initial=
+izer-overrides -Wno-format -Wno-sign-compare -Wno-pointer-to-enum-cast -Wno=
+-tautological-constant-out-of-range-compare -Wno-unaligned-access -fno-func=
+tion-sections -fno-data-sections -I ../init -I ./init -DKBUILD_MODFILE=3D\"=
+init/mounts\" -DKBUILD_BASENAME=3D\"do_mounts_initrd\" -DKBUILD_MODNAME=3D\=
+"mounts\" -D__KBUILD_MODNAME=3Dkmod_mounts -c -o init/do_mounts_initrd.o ..=
+/init/do_mounts_initrd.c
 
---Sig_/GJ.4DqwOi1Dr6UhVY8TruXN--
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+debug (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, =
+0 section mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+kselftest (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warni=
+ng, 0 section mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (x86_64, clang-16) =E2=80=94 FAIL, 5 errors, 9 warnings, 0 sec=
+tion mismatches
+
+Errors:
+    drivers/gpu/drm/msm/dsi/dsi_host.c:1903:14: error: variable 'device_nod=
+e' is uninitialized when used here [-Werror,-Wuninitialized]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn30/display_mode_vba_30.=
+c:3542:6: error: stack frame size (2200) exceeds limit (2048) in 'dml30_Mod=
+eSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.=
+c:1721:6: error: stack frame size (2160) exceeds limit (2048) in 'dml32_Mod=
+eSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_mode_vba_31.=
+c:3908:6: error: stack frame size (2216) exceeds limit (2048) in 'dml31_Mod=
+eSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+    drivers/net/ethernet/mellanox/mlx5/core/en_rep.c:481:6: error: variable=
+ 'err' is used uninitialized whenever 'if' condition is false [-Werror,-Wso=
+metimes-uninitialized]
+
+Warnings:
+    vmlinux.o: warning: objtool: sync_regs+0x24: call to memcpy() leaves .n=
+oinstr.text section
+    vmlinux.o: warning: objtool: vc_switch_off_ist+0xbe: call to memcpy() l=
+eaves .noinstr.text section
+    vmlinux.o: warning: objtool: fixup_bad_iret+0x36: call to memset() leav=
+es .noinstr.text section
+    vmlinux.o: warning: objtool: __sev_get_ghcb+0xaa: call to memcpy() leav=
+es .noinstr.text section
+    vmlinux.o: warning: objtool: __sev_put_ghcb+0x35: call to memcpy() leav=
+es .noinstr.text section
+    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x31: relocation to !END=
+BR: machine_kexec_prepare+0x487
+    drivers/media/i2c/m5mols/m5mols.o: warning: objtool: m5mols_set_fmt() f=
+alls through to next function m5mols_get_frame_desc()
+    drivers/gpu/drm/msm/dsi/dsi_host.c:1870:44: note: initialize the variab=
+le 'device_node' to silence this warning
+    drivers/net/ethernet/mellanox/mlx5/core/en_rep.c:474:9: note: initializ=
+e the variable 'err' to silence this warning
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, clang-16) =E2=80=94 FAIL, 1 error, 13 warnings, 0 sectio=
+n mismatches
+
+Errors:
+    ld.lld: error: undefined symbol: __aeabi_uldivmod
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    : warning: argument unused during compilation: '-march=3Darmv6k' [-Wunu=
+sed-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
+-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, clang-16) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (riscv, clang-16) =E2=80=94 FAIL, 2 errors, 1 warning, 0 sectio=
+n mismatches
+
+Errors:
+    fatal error: error in backend: unable to write nop sequence of 7 bytes
+    clang: error: clang frontend command failed with exit code 70 (use -v t=
+o see invocation)
+
+Warnings:
+    0.	Program arguments: /usr/lib/llvm-16/bin/clang -Wp,-MMD,init/.main.o.=
+d -nostdinc -I../arch/riscv/include -I./arch/riscv/include/generated -I../i=
+nclude -I./include -I../arch/riscv/include/uapi -I./arch/riscv/include/gene=
+rated/uapi -I../include/uapi -I./include/generated/uapi -include ../include=
+/linux/compiler-version.h -include ../include/linux/kconfig.h -include ../i=
+nclude/linux/compiler_types.h -D__KERNEL__ -Qunused-arguments -fmacro-prefi=
+x-map=3D../=3D -Wall -Wundef -Werror=3Dstrict-prototypes -Wno-trigraphs -fn=
+o-strict-aliasing -fno-common -fshort-wchar -fno-PIE -Werror=3Dimplicit-fun=
+ction-declaration -Werror=3Dimplicit-int -Werror=3Dreturn-type -Wno-format-=
+security -std=3Dgnu11 --target=3Driscv64-linux-gnu -fintegrated-as -Werror=
+=3Dunknown-warning-option -Werror=3Dignored-optimization-argument -mabi=3Dl=
+p64 -march=3Drv64imac_zicbom_zihintpause -mno-save-restore -DCONFIG_PAGE_OF=
+FSET=3D0xff60000000000000 -mcmodel=3Dmedany -fno-delete-null-pointer-checks=
+ -Wno-frame-address -Wno-address-of-packed-member -O2 -Wframe-larger-than=
+=3D2048 -fno-stack-protector -Wimplicit-fallthrough -Wno-gnu -Wno-unused-bu=
+t-set-variable -Wno-unused-const-variable -fomit-frame-pointer -ftrivial-au=
+to-var-init=3Dzero -enable-trivial-auto-var-init-zero-knowing-it-will-be-re=
+moved-from-clang -fno-stack-clash-protection -Wdeclaration-after-statement =
+-Wvla -Wno-pointer-sign -Wcast-function-type -fno-strict-overflow -fno-stac=
+k-check -Werror=3Ddate-time -Werror=3Dincompatible-pointer-types -Wno-initi=
+alizer-overrides -Wno-format -Wno-sign-compare -Wno-pointer-to-enum-cast -W=
+no-tautological-constant-out-of-range-compare -Wno-unaligned-access -fno-fu=
+nction-sections -fno-data-sections -I ../init -I ./init -DKBUILD_MODFILE=3D=
+\"init/main\" -DKBUILD_BASENAME=3D\"main\" -DKBUILD_MODNAME=3D\"main\" -D__=
+KBUILD_MODNAME=3Dkmod_main -c -o init/main.o ../init/main.c
+
+---------------------------------------------------------------------------=
+-----
+ar7_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+assabet_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+at91_dt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath25_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath79_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axm55xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm2835_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm47xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+bigsur_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bmips_be_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+cavium_octeon_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ci20_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+cm_x300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+collie_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (arm64, clang-13=
+) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mismatches
+
+Errors:
+    drivers/gpu/drm/msm/dsi/dsi_host.c:1903:14: error: variable 'device_nod=
+e' is uninitialized when used here [-Werror,-Wuninitialized]
+
+Warnings:
+    drivers/gpu/drm/msm/dsi/dsi_host.c:1870:44: note: initialize the variab=
+le 'device_node' to silence this warning
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chromebook=
+ (arm64, clang-13) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mismatches
+
+Errors:
+    drivers/gpu/drm/msm/dsi/dsi_host.c:1903:14: error: variable 'device_nod=
+e' is uninitialized when used here [-Werror,-Wuninitialized]
+
+Warnings:
+    drivers/gpu/drm/msm/dsi/dsi_host.c:1870:44: note: initialize the variab=
+le 'device_node' to silence this warning
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
+tches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mismatc=
+hes
+
+Errors:
+    drivers/gpu/drm/msm/dsi/dsi_host.c:1903:14: error: variable 'device_nod=
+e' is uninitialized when used here [-Werror,-Wuninitialized]
+
+Warnings:
+    drivers/gpu/drm/msm/dsi/dsi_host.c:1870:44: note: initialize the variab=
+le 'device_node' to silence this warning
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-chrom=
+ebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
+matches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
+=E2=80=94 PASS, 0 errors, 6 warnings, 0 section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
+3) =E2=80=94 PASS, 0 errors, 6 warnings, 0 section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86-chr=
+omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86-chr=
+omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-chro=
+mebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (x86_64, clang=
+-13) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section mismatches
+
+Errors:
+    sound/soc/intel/skylake/skl.c:729:18: error: unused variable 'skl' [-We=
+rror,-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chromebook=
+ (x86_64, clang-13) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section mismatch=
+es
+
+Errors:
+    sound/soc/intel/skylake/skl.c:729:18: error: unused variable 'skl' [-We=
+rror,-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cu1830-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+db1xxx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_64_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_16K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_EFI=3Dn (riscv, clang-16) =E2=80=94 FAIL, 8 errors, 8 warn=
+ings, 0 section mismatches
+
+Errors:
+    fatal error: error in backend: unable to write nop sequence of 7 bytes
+    clang: error: clang frontend command failed with exit code 70 (use -v t=
+o see invocation)
+    fatal error: error in backend: unable to write nop sequence of 7 bytes
+    clang: error: clang frontend command failed with exit code 70 (use -v t=
+o see invocation)
+    fatal error: error in backend: unable to write nop sequence of 3 bytes
+    clang: error: clang frontend command failed with exit code 70 (use -v t=
+o see invocation)
+    fatal error: error in backend: unable to write nop sequence of 3 bytes
+    clang: error: clang frontend command failed with exit code 70 (use -v t=
+o see invocation)
+
+Warnings:
+    0.	Program arguments: /usr/lib/llvm-16/bin/clang -Wp,-MMD,init/.do_moun=
+ts_initrd.o.d -nostdinc -I../arch/riscv/include -I./arch/riscv/include/gene=
+rated -I../include -I./include -I../arch/riscv/include/uapi -I./arch/riscv/=
+include/generated/uapi -I../include/uapi -I./include/generated/uapi -includ=
+e ../include/linux/compiler-version.h -include ../include/linux/kconfig.h -=
+include ../include/linux/compiler_types.h -D__KERNEL__ -Qunused-arguments -=
+fmacro-prefix-map=3D../=3D -Wall -Wundef -Werror=3Dstrict-prototypes -Wno-t=
+rigraphs -fno-strict-aliasing -fno-common -fshort-wchar -fno-PIE -Werror=3D=
+implicit-function-declaration -Werror=3Dimplicit-int -Werror=3Dreturn-type =
+-Wno-format-security -std=3Dgnu11 --target=3Driscv64-linux-gnu -fintegrated=
+-as -Werror=3Dunknown-warning-option -Werror=3Dignored-optimization-argumen=
+t -mabi=3Dlp64 -march=3Drv64imac_zicbom_zihintpause -mno-save-restore -DCON=
+FIG_PAGE_OFFSET=3D0xff60000000000000 -mcmodel=3Dmedany -fno-omit-frame-poin=
+ter -fno-delete-null-pointer-checks -Wno-frame-address -Wno-address-of-pack=
+ed-member -O2 -Wframe-larger-than=3D2048 -fstack-protector-strong -Wimplici=
+t-fallthrough -Wno-gnu -Wno-unused-but-set-variable -Wno-unused-const-varia=
+ble -fno-omit-frame-pointer -fno-optimize-sibling-calls -ftrivial-auto-var-=
+init=3Dzero -enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-f=
+rom-clang -fno-stack-clash-protection -Wdeclaration-after-statement -Wvla -=
+Wno-pointer-sign -Wcast-function-type -fno-strict-overflow -fno-stack-check=
+ -Werror=3Ddate-time -Werror=3Dincompatible-pointer-types -Wno-initializer-=
+overrides -Wno-format -Wno-sign-compare -Wno-pointer-to-enum-cast -Wno-taut=
+ological-constant-out-of-range-compare -Wno-unaligned-access -fno-function-=
+sections -fno-data-sections -I ../init -I ./init -DKBUILD_MODFILE=3D\"init/=
+mounts\" -DKBUILD_BASENAME=3D\"do_mounts_initrd\" -DKBUILD_MODNAME=3D\"moun=
+ts\" -D__KBUILD_MODNAME=3Dkmod_mounts -c -o init/do_mounts_initrd.o ../init=
+/do_mounts_initrd.c
+    0.	Program arguments: /usr/lib/llvm-16/bin/clang -Wp,-MMD,init/.main.o.=
+d -nostdinc -I../arch/riscv/include -I./arch/riscv/include/generated -I../i=
+nclude -I./include -I../arch/riscv/include/uapi -I./arch/riscv/include/gene=
+rated/uapi -I../include/uapi -I./include/generated/uapi -include ../include=
+/linux/compiler-version.h -include ../include/linux/kconfig.h -include ../i=
+nclude/linux/compiler_types.h -D__KERNEL__ -Qunused-arguments -fmacro-prefi=
+x-map=3D../=3D -Wall -Wundef -Werror=3Dstrict-prototypes -Wno-trigraphs -fn=
+o-strict-aliasing -fno-common -fshort-wchar -fno-PIE -Werror=3Dimplicit-fun=
+ction-declaration -Werror=3Dimplicit-int -Werror=3Dreturn-type -Wno-format-=
+security -std=3Dgnu11 --target=3Driscv64-linux-gnu -fintegrated-as -Werror=
+=3Dunknown-warning-option -Werror=3Dignored-optimization-argument -mabi=3Dl=
+p64 -march=3Drv64imac_zicbom_zihintpause -mno-save-restore -DCONFIG_PAGE_OF=
+FSET=3D0xff60000000000000 -mcmodel=3Dmedany -fno-omit-frame-pointer -fno-de=
+lete-null-pointer-checks -Wno-frame-address -Wno-address-of-packed-member -=
+O2 -Wframe-larger-than=3D2048 -fstack-protector-strong -Wimplicit-fallthrou=
+gh -Wno-gnu -Wno-unused-but-set-variable -Wno-unused-const-variable -fno-om=
+it-frame-pointer -fno-optimize-sibling-calls -ftrivial-auto-var-init=3Dzero=
+ -enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang -=
+fno-stack-clash-protection -Wdeclaration-after-statement -Wvla -Wno-pointer=
+-sign -Wcast-function-type -fno-strict-overflow -fno-stack-check -Werror=3D=
+date-time -Werror=3Dincompatible-pointer-types -Wno-initializer-overrides -=
+Wno-format -Wno-sign-compare -Wno-pointer-to-enum-cast -Wno-tautological-co=
+nstant-out-of-range-compare -Wno-unaligned-access -fno-function-sections -f=
+no-data-sections -I ../init -I ./init -DKBUILD_MODFILE=3D\"init/main\" -DKB=
+UILD_BASENAME=3D\"main\" -DKBUILD_MODNAME=3D\"main\" -D__KBUILD_MODNAME=3Dk=
+mod_main -c -o init/main.o ../init/main.c
+    0.	Program arguments: /usr/lib/llvm-16/bin/clang -Wp,-MMD,kernel/printk=
+/.printk.o.d -nostdinc -I../arch/riscv/include -I./arch/riscv/include/gener=
+ated -I../include -I./include -I../arch/riscv/include/uapi -I./arch/riscv/i=
+nclude/generated/uapi -I../include/uapi -I./include/generated/uapi -include=
+ ../include/linux/compiler-version.h -include ../include/linux/kconfig.h -i=
+nclude ../include/linux/compiler_types.h -D__KERNEL__ -Qunused-arguments -f=
+macro-prefix-map=3D../=3D -Wall -Wundef -Werror=3Dstrict-prototypes -Wno-tr=
+igraphs -fno-strict-aliasing -fno-common -fshort-wchar -fno-PIE -Werror=3Di=
+mplicit-function-declaration -Werror=3Dimplicit-int -Werror=3Dreturn-type -=
+Wno-format-security -std=3Dgnu11 --target=3Driscv64-linux-gnu -fintegrated-=
+as -Werror=3Dunknown-warning-option -Werror=3Dignored-optimization-argument=
+ -mabi=3Dlp64 -march=3Drv64imac_zicbom_zihintpause -mno-save-restore -DCONF=
+IG_PAGE_OFFSET=3D0xff60000000000000 -mcmodel=3Dmedany -fno-omit-frame-point=
+er -fno-delete-null-pointer-checks -Wno-frame-address -Wno-address-of-packe=
+d-member -O2 -Wframe-larger-than=3D2048 -fstack-protector-strong -Wimplicit=
+-fallthrough -Wno-gnu -Wno-unused-but-set-variable -Wno-unused-const-variab=
+le -fno-omit-frame-pointer -fno-optimize-sibling-calls -ftrivial-auto-var-i=
+nit=3Dzero -enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-fr=
+om-clang -fno-stack-clash-protection -Wdeclaration-after-statement -Wvla -W=
+no-pointer-sign -Wcast-function-type -fno-strict-overflow -fno-stack-check =
+-Werror=3Ddate-time -Werror=3Dincompatible-pointer-types -Wno-initializer-o=
+verrides -Wno-format -Wno-sign-compare -Wno-pointer-to-enum-cast -Wno-tauto=
+logical-constant-out-of-range-compare -Wno-unaligned-access -I ../kernel/pr=
+intk -I ./kernel/printk -DKBUILD_MODFILE=3D\"kernel/printk/printk\" -DKBUIL=
+D_BASENAME=3D\"printk\" -DKBUILD_MODNAME=3D\"printk\" -D__KBUILD_MODNAME=3D=
+kmod_printk -c -o kernel/printk/printk.o ../kernel/printk/printk.c
+    0.	Program arguments: /usr/lib/llvm-16/bin/clang -Wp,-MMD,kernel/rcu/.t=
+ree.o.d -nostdinc -I../arch/riscv/include -I./arch/riscv/include/generated =
+-I../include -I./include -I../arch/riscv/include/uapi -I./arch/riscv/includ=
+e/generated/uapi -I../include/uapi -I./include/generated/uapi -include ../i=
+nclude/linux/compiler-version.h -include ../include/linux/kconfig.h -includ=
+e ../include/linux/compiler_types.h -D__KERNEL__ -Qunused-arguments -fmacro=
+-prefix-map=3D../=3D -Wall -Wundef -Werror=3Dstrict-prototypes -Wno-trigrap=
+hs -fno-strict-aliasing -fno-common -fshort-wchar -fno-PIE -Werror=3Dimplic=
+it-function-declaration -Werror=3Dimplicit-int -Werror=3Dreturn-type -Wno-f=
+ormat-security -std=3Dgnu11 --target=3Driscv64-linux-gnu -fintegrated-as -W=
+error=3Dunknown-warning-option -Werror=3Dignored-optimization-argument -mab=
+i=3Dlp64 -march=3Drv64imac_zicbom_zihintpause -mno-save-restore -DCONFIG_PA=
+GE_OFFSET=3D0xff60000000000000 -mcmodel=3Dmedany -fno-omit-frame-pointer -f=
+no-delete-null-pointer-checks -Wno-frame-address -Wno-address-of-packed-mem=
+ber -O2 -Wframe-larger-than=3D2048 -fstack-protector-strong -Wimplicit-fall=
+through -Wno-gnu -Wno-unused-but-set-variable -Wno-unused-const-variable -f=
+no-omit-frame-pointer -fno-optimize-sibling-calls -ftrivial-auto-var-init=
+=3Dzero -enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-=
+clang -fno-stack-clash-protection -Wdeclaration-after-statement -Wvla -Wno-=
+pointer-sign -Wcast-function-type -fno-strict-overflow -fno-stack-check -We=
+rror=3Ddate-time -Werror=3Dincompatible-pointer-types -Wno-initializer-over=
+rides -Wno-format -Wno-sign-compare -Wno-pointer-to-enum-cast -Wno-tautolog=
+ical-constant-out-of-range-compare -Wno-unaligned-access -I ../kernel/rcu -=
+I ./kernel/rcu -DKBUILD_MODFILE=3D\"kernel/rcu/tree\" -DKBUILD_BASENAME=3D\=
+"tree\" -DKBUILD_MODNAME=3D\"tree\" -D__KBUILD_MODNAME=3Dkmod_tree -c -o ke=
+rnel/rcu/tree.o ../kernel/rcu/tree.c
+    arch/riscv/mm/dma-noncoherent.c:107:6: warning: variable 'cbom_hartid' =
+is uninitialized when used here [-Wuninitialized]
+    printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
+    arch/riscv/mm/dma-noncoherent.c:87:18: note: initialize the variable 'c=
+bom_hartid' to silence this warning
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 6 wa=
+rnings, 0 section mismatches
+
+Warnings:
+    drivers/gpu/drm/msm/dsi/dsi_host.c:1903:14: warning: variable 'device_n=
+ode' is uninitialized when used here [-Wuninitialized]
+    drivers/gpu/drm/msm/dsi/dsi_host.c:1870:44: note: initialize the variab=
+le 'device_node' to silence this warning
+    1 warning generated.
+    drivers/net/ethernet/mellanox/mlx5/core/en_rep.c:481:6: warning: variab=
+le 'err' is used uninitialized whenever 'if' condition is false [-Wsometime=
+s-uninitialized]
+    drivers/net/ethernet/mellanox/mlx5/core/en_rep.c:474:9: note: initializ=
+e the variable 'err' to silence this warning
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+defconfig+crypto (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+ima (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+exynos_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ezx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+footbridge_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+fuloong2e_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 s=
+ection mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+h3600_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+hisi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, clang-16) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+debug (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v4_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+imxrt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip22_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip27_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip28_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip32_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+jazz_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+lart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+lemote2f_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 se=
+ction mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+loongson1b_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson1c_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson2k_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 =
+section mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+lpc18xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpc32xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpd270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lubbock_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+magician_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mainstone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_kvm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_eva_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_xpa_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mini2440_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mmp2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+moxart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mps2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+mtx1_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0=
+ warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
+ errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mxs_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+neponset_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+netwinder_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+omega2p_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+orion5x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+oxnas_v6_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+pcm027_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pleb_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa255-idp_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa910_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section =
+mismatches
+
+Errors:
+    net/ieee802154/nl802154.c:2503:19: error: =E2=80=98NL802154_CMD_DEL_SEC=
+_LEVEL=E2=80=99 undeclared here (not in a function); did you mean =E2=80=98=
+NL802154_CMD_SET_CCA_ED_LEVEL=E2=80=99?
+
+---------------------------------------------------------------------------=
+-----
+qcom_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+rb532_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    cc1: warning: result of =E2=80=98-117440512 << 16=E2=80=99 requires 44 =
+bits to represent, but =E2=80=98int=E2=80=99 only has 32 bits [-Wshift-over=
+flow=3D]
+
+---------------------------------------------------------------------------=
+-----
+realview_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+rm200_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rpc_defconfig (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 section=
+ mismatches
+
+Errors:
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=3D0x'
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=3D0x'
+
+---------------------------------------------------------------------------=
+-----
+rs90_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+rt305x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s3c2410_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s3c6400_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sb1250_swarm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+shannon_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+shmobile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+simpad_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sp7021_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc32_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig+debug (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warning=
+s, 0 section mismatches
+
+Warnings:
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig+kselftest (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 war=
+nings, 0 section mismatches
+
+Warnings:
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+spear6xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+stm32_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sunxi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+tct_hammer_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
+ismatches
+
+Warnings:
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+trizeps4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+u8500_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    drivers/power/supply/ab8500_chargalg.c:493:13: warning: unused variable=
+ =E2=80=98ab8500_chargalg_ex_ac_enable_toggle=E2=80=99 [-Wunused-variable]
+    drivers/power/supply/ab8500_chargalg.c:493:13: warning: =E2=80=98ab8500=
+_chargalg_ex_ac_enable_toggle=E2=80=99 defined but not used [-Wunused-varia=
+ble]
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+versatile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+vexpress_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vf610m4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+viper_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+crypto (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors=
+, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook+kselftest (x86_64, gcc-10) =E2=80=94 PASS, =
+0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86_kvm_guest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0=
+ warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+zeus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---
+For more info write to <info@kernelci.org>

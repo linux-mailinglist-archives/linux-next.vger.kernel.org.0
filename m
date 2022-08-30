@@ -2,57 +2,51 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE1BA5A63AC
-	for <lists+linux-next@lfdr.de>; Tue, 30 Aug 2022 14:40:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE1705A6C25
+	for <lists+linux-next@lfdr.de>; Tue, 30 Aug 2022 20:29:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbiH3Mkp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 30 Aug 2022 08:40:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52324 "EHLO
+        id S230519AbiH3S3f (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 30 Aug 2022 14:29:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbiH3Mkk (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 30 Aug 2022 08:40:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEF83644E;
-        Tue, 30 Aug 2022 05:40:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8B7A8B81B24;
-        Tue, 30 Aug 2022 12:40:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 820DCC433D6;
-        Tue, 30 Aug 2022 12:40:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661863237;
-        bh=t8U5J96q76hll8fwIHsLi3w7JfANN/JKd9/p9ZRTFoM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MXUXVmUJqlXbVkVBL9QUxwUBEBL0sXZGetfWReG71xVpIAKzVRGheFwjB0wuCzA08
-         gr/o4o4/l2rjvdri/WPPyCAZPluJpi5FAWlg024WkJx8VH67IRkbTxJESvqD7raWey
-         ctASO0JBeqQOTyOM0NQQzAiA4ehDEyg4JaOoNJliqHSeTV6d1ZGcfyW6cmU/XVW63L
-         NaWrQKJAF61xCfzBXCFIfQH8rYKGCo0b+K8KvXs6e/gdnZxbcp6BZ5297Ew1FA6nmq
-         5f1ZtYOGO1QGQDNnKZPYB5kLXgrS9fncE4/wjsYoN4Q/o/9FKFCny7z9Fl/MUTcRW5
-         J5cXH3EZHTnxw==
-Date:   Tue, 30 Aug 2022 05:40:34 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        clang-built-linux <llvm@lists.linux.dev>
-Subject: Re: build failure of next-20220830 due to 5f8cdece42ff
- ("drm/msm/dsi: switch to DRM_PANEL_BRIDGE")
-Message-ID: <Yw4FQm6V7d3MuMKG@dev-arch.thelio-3990X>
-References: <Yw3V8yJgAnPD8o6P@debian>
+        with ESMTP id S230166AbiH3S3e (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 30 Aug 2022 14:29:34 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B3BB606B0;
+        Tue, 30 Aug 2022 11:29:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=UYQek+qMCToSnQsPHyu58B7DsB3xgc4kYQ4E/F+X1Yg=; b=iwhsstQSgNuQeT2obw6YbDQbow
+        /Z8XJYKHFp7BZ/adrMoekoeTPIi/AXS2k0dQGCt0n61y29e+3ryMkr9KXhd0COFBLGfK4iqxYleBd
+        7uL8HN+itar8OFux6DO0y8BwbMTYU1Gmr9nXP7pb27k4e0hWG/9sR55fYgZ7/I0ZEfu8EHlE7rS2t
+        KzbTj6DTfy+pcUKscMY/y32BhrnSWEhKnZCaZ+ah5QxLiZ8/pHwzeW98S3JQGpeNDQICKGF3e1M0M
+        +j+ACvY2O4mivtvCwA3Umu5l6oiPSuK3srW/LQ3UeUjeaPX8XiiOmt7RvXpnrWJ/VnbcNldrbUC04
+        7bTFnpvQ==;
+Received: from [2601:1c0:6280:3f0::a6b3]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oT5zQ-001CSx-Gi; Tue, 30 Aug 2022 18:29:32 +0000
+Message-ID: <3d308d17-1c00-39ab-eb47-8fe1f62f9e7f@infradead.org>
+Date:   Tue, 30 Aug 2022 11:29:31 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yw3V8yJgAnPD8o6P@debian>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: linux-next: Tree for Aug 30 (net/ieee802154/nl802154.c:)
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>
+References: <20220830170121.74e5ed54@canb.auug.org.au>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220830170121.74e5ed54@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,30 +54,23 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Sudip,
 
-On Tue, Aug 30, 2022 at 10:18:43AM +0100, Sudip Mukherjee (Codethink) wrote:
-> Hi All,
-> 
-> The builds of arm64 allmodconfig with clang have failed to build
-> next-20220830 with the error:
-> 
-> drivers/gpu/drm/msm/dsi/dsi_host.c:1903:14: error: variable 'device_node' is uninitialized when used here [-Werror,-Wuninitialized]
->         of_node_put(device_node);
->                     ^~~~~~~~~~~
-> drivers/gpu/drm/msm/dsi/dsi_host.c:1870:44: note: initialize the variable 'device_node' to silence this warning
->         struct device_node *endpoint, *device_node;
->                                                   ^
->                                                    = NULL
-> 
-> git bisect pointed to 5f8cdece42ff ("drm/msm/dsi: switch to DRM_PANEL_BRIDGE")
-> 
-> I will be happy to test any patch or provide any extra log if needed.
 
-Thanks for the report. I noticed this yesterday and sent a patch:
+On 8/30/22 00:01, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Changes since 20220829:
+> 
 
-https://lore.kernel.org/20220829165450.217628-1-nathan@kernel.org/
-https://github.com/ClangBuiltLinux/linux/issues/1700
+on i386 or x86_64:
 
-Cheers,
-Nathan
+when # CONFIG_IEEE802154_NL802154_EXPERIMENTAL is not set
+
+../net/ieee802154/nl802154.c:2503:26: error: ‘NL802154_CMD_DEL_SEC_LEVEL’ undeclared here (not in a function); did you mean ‘NL802154_CMD_SET_CCA_ED_LEVEL’?
+ 2503 |         .resv_start_op = NL802154_CMD_DEL_SEC_LEVEL + 1,
+      |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                          NL802154_CMD_SET_CCA_ED_LEVEL
+
+
+-- 
+~Randy

@@ -2,71 +2,185 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD6F15A9A95
-	for <lists+linux-next@lfdr.de>; Thu,  1 Sep 2022 16:39:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC7F15AA090
+	for <lists+linux-next@lfdr.de>; Thu,  1 Sep 2022 22:00:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234951AbiIAOhr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 1 Sep 2022 10:37:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56406 "EHLO
+        id S231589AbiIAT74 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 1 Sep 2022 15:59:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234457AbiIAOhb (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 1 Sep 2022 10:37:31 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id C0D2C7E330
-        for <linux-next@vger.kernel.org>; Thu,  1 Sep 2022 07:37:11 -0700 (PDT)
-Received: (qmail 235714 invoked by uid 1000); 1 Sep 2022 10:36:34 -0400
-Date:   Thu, 1 Sep 2022 10:36:34 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     USB mailing list <linux-usb@vger.kernel.org>,
+        with ESMTP id S234764AbiIAT7y (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 1 Sep 2022 15:59:54 -0400
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689906314
+        for <linux-next@vger.kernel.org>; Thu,  1 Sep 2022 12:59:51 -0700 (PDT)
+Received: by mail-il1-x131.google.com with SMTP id e7so43910ilc.5
+        for <linux-next@vger.kernel.org>; Thu, 01 Sep 2022 12:59:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=ekynf+/BSh/SSLKbRbwHtlCTZ6yGYWXyonn9Bv5B8Bc=;
+        b=SkX7tOUcaATU7cJVXxyr9eimSNbrsSgQAivI4QMSQOiXuRj0XvDIl716g23uG0rDBK
+         Tot2KOcKVaz1Vmkf7Hc+ulgsBCzQAMBZGsOtL4BeJnulNeN3CPqgwNKhR8tqsN/cS2DM
+         Gdf2rNbG+qQ8jgS0bMS8rXzrp9Sxryg8iog8jquadAF9DwPm8RByST8m/5Ul7r20LYSF
+         nZHXj8ufx6beh6I0LRKXT8IqeD9m2kEmqA2LUC9a0i64fHo31b2zGDnHE+p12smhriLi
+         A6ZzOgIUwbSnX1iiWZ7LuUV/9bRKXEuZQ6uj7ZBs8XLkY5d4WLeVeTRlMrRrBI5ahNsR
+         Egpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=ekynf+/BSh/SSLKbRbwHtlCTZ6yGYWXyonn9Bv5B8Bc=;
+        b=KMwIg0ohnKhkeuyoeEdPsjYQgQCObL2TZjW4ImWTnPLhHvBx+49OuUxlL+9z2LXC4O
+         0BOU81ggnh5MKcu2CQ/8PYlWlU1s+qn3jzEmLJBhXVcVKBVGzTveMJPgfk6j3QZHGzAO
+         bAXvAJNoXWPk4guYp4mkgCh/FHiuzA5q+nPUpRIlEN7GpSufL1UB+9U+Teah5yBwiSy+
+         CNibBVBjDjmxlvQ+i2CfPFf0H/OoRh8q178ZIz9RuZhx8p78smQs6nvQnIB1q937hudX
+         ezGFMTj0xhtSyJAUDHrkxc1nNBTxeL2hG93Rlcosd6JTnMBs8SBls9BMbZNzWAD6lNqn
+         mNGQ==
+X-Gm-Message-State: ACgBeo3oPOx/cscpXCL3Qwu+1D1zDyKtJ1/Qbp7v7VEu/2YX1OlrQrnK
+        oG3ftFdiWzxCK/J6tU7rvk8xmzxHNX7A2+jXSwYtIA==
+X-Google-Smtp-Source: AA6agR49NPfEJI4FfVSTP4h6PGe2YxY4wjxg6NOvPXrQ5XwPJyXndWzskiAsxBlViqFWenXpXCk7Z0ld77R3caQiLEQ=
+X-Received: by 2002:a92:da0d:0:b0:2eb:3361:c58c with SMTP id
+ z13-20020a92da0d000000b002eb3361c58cmr8430258ilm.247.1662062390589; Thu, 01
+ Sep 2022 12:59:50 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220901105512.177ed27d@canb.auug.org.au>
+In-Reply-To: <20220901105512.177ed27d@canb.auug.org.au>
+From:   Axel Rasmussen <axelrasmussen@google.com>
+Date:   Thu, 1 Sep 2022 12:59:14 -0700
+Message-ID: <CAJHvVciosP4fJ-uP-NknAcfoYt0awd5KzDwmG+d+zRiyps5mAA@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the net-next tree with the net tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Joanne Koong <joannelkoong@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: [PATCH] USB: core: Fix RST error in hub.c
-Message-ID: <YxDDcsLtRZ7c20pq@rowland.harvard.edu>
-References: <20220831152458.56059e42@canb.auug.org.au>
- <Yw9vYaqczVlWzONt@rowland.harvard.edu>
- <20220901075048.7b281231@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220901075048.7b281231@canb.auug.org.au>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-A recent commit added an invalid RST expression to a kerneldoc comment
-in hub.c.  The fix is trivial.
+On Wed, Aug 31, 2022 at 5:55 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> Today's linux-next merge of the net-next tree got a conflict in:
+>
+>   tools/testing/selftests/net/.gitignore
+>
+> between commit:
+>
+>   5a3a59981027 ("selftests: net: sort .gitignore file")
+>
+> from the net tree and commits:
+>
+>   c35ecb95c448 ("selftests/net: Add test for timing a bind request to a port with a populated bhash entry")
+>   1be9ac87a75a ("selftests/net: Add sk_bind_sendto_listen and sk_connect_zero_addr")
+>
+> from the net-next tree.
+>
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-Fixes: 9c6d778800b9 ("USB: core: Prevent nested device-reset calls")
-Cc: <stable@vger.kernel.org>
+Thanks Stephen, and sorry for the trouble.
 
----
+For what it's worth, I talked about the potential for conflicts with
+Jakub in this thread [1]. For next time, is calling it out in the
+commit message explicitly the right thing to do?
 
+[1]: https://patchwork.kernel.org/project/netdevbpf/patch/20220819190558.477166-1-axelrasmussen@google.com/
 
-[as1987]
-
-
- drivers/usb/core/hub.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-Index: usb-devel/drivers/usb/core/hub.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/hub.c
-+++ usb-devel/drivers/usb/core/hub.c
-@@ -6039,7 +6039,7 @@ re_enumerate:
-  *
-  * Return: The same as for usb_reset_and_verify_device().
-  * However, if a reset is already in progress (for instance, if a
-- * driver doesn't have pre_ or post_reset() callbacks, and while
-+ * driver doesn't have pre_reset() or post_reset() callbacks, and while
-  * being unbound or re-bound during the ongoing reset its disconnect()
-  * or probe() routine tries to perform a second, nested reset), the
-  * routine returns -EINPROGRESS.
+>
+> --
+> Cheers,
+> Stephen Rothwell
+>
+> diff --cc tools/testing/selftests/net/.gitignore
+> index de7d5cc15f85,bec5cf96984c..000000000000
+> --- a/tools/testing/selftests/net/.gitignore
+> +++ b/tools/testing/selftests/net/.gitignore
+> @@@ -1,15 -1,7 +1,16 @@@
+>   # SPDX-License-Identifier: GPL-2.0-only
+> ++bind_bhash
+>  +cmsg_sender
+>  +fin_ack_lat
+>  +gro
+>  +hwtstamp_config
+>  +ioam6_parser
+>  +ip_defrag
+>   ipsec
+>  +ipv6_flowlabel
+>  +ipv6_flowlabel_mgr
+>   msg_zerocopy
+>  -socket
+>  +nettest
+>   psock_fanout
+>   psock_snd
+>   psock_tpacket
+> @@@ -20,23 -11,35 +21,25 @@@ reuseport_bp
+>   reuseport_bpf_cpu
+>   reuseport_bpf_numa
+>   reuseport_dualstack
+>  -reuseaddr_conflict
+>  -tcp_mmap
+>  -udpgso
+>  -udpgso_bench_rx
+>  -udpgso_bench_tx
+>  -tcp_inq
+>  -tls
+>  -txring_overwrite
+>  -ip_defrag
+>  -ipv6_flowlabel
+>  -ipv6_flowlabel_mgr
+>  -so_txtime
+>  -tcp_fastopen_backup_key
+>  -nettest
+>  -fin_ack_lat
+>  -reuseaddr_ports_exhausted
+>  -hwtstamp_config
+>   rxtimestamp
+> - socket
+>  -timestamping
+>  -txtimestamp
+> ++sk_bind_sendto_listen
+> ++sk_connect_zero_addr
+>   so_netns_cookie
+>  +so_txtime
+> ++socket
+>  +stress_reuseport_listen
+>  +tap
+>  +tcp_fastopen_backup_key
+>  +tcp_inq
+>  +tcp_mmap
+>   test_unix_oob
+>  -gro
+>  -ioam6_parser
+>  +timestamping
+>  +tls
+>   toeplitz
+>   tun
+>  -cmsg_sender
+>  +txring_overwrite
+>  +txtimestamp
+>  +udpgso
+>  +udpgso_bench_rx
+>  +udpgso_bench_tx
+>   unix_connect
+>  -tap
+>  -bind_bhash
+>  -sk_bind_sendto_listen
+>  -sk_connect_zero_addr

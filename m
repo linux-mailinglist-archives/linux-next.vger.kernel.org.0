@@ -2,112 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F02755ACA47
-	for <lists+linux-next@lfdr.de>; Mon,  5 Sep 2022 08:05:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67FA25ADAE7
+	for <lists+linux-next@lfdr.de>; Mon,  5 Sep 2022 23:38:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235782AbiIEGFF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 5 Sep 2022 02:05:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36900 "EHLO
+        id S230204AbiIEViD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 5 Sep 2022 17:38:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231883AbiIEGFD (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 5 Sep 2022 02:05:03 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 660341A3AE;
-        Sun,  4 Sep 2022 23:05:02 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 2DFA75C00D9;
-        Mon,  5 Sep 2022 02:04:59 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Mon, 05 Sep 2022 02:04:59 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1662357899; x=1662444299; bh=9rwen180LD
-        zZkPZ/tp66Cb5V6hBq8lpuh4wpolRlS8c=; b=ABO7UC5o2e3QKa8CtyH2uXGZlu
-        ReZDE8KAxS31qGLIN1mjNT3QJhxJRv54KPK++zu1+2nBjsyFrEew1cOlrSVqJIyL
-        669ujOAT/C08Sv8wl6PDxGLubmULkcyXDEWqBD80ZMeRBq1MeETTg17E0wkdp6Jr
-        ea6fvlgKUmmqZ0UZy1gfQqNhaSQtLF43i/4vVfmQEZ4N4KbT/ANBS5SnGJeXIVoI
-        1SFKW9lJ8TfDUMpjCVVxDlgBt1aFq6iHw/ic1fGsiyfkCydpuh8o1BRhpWCB1iuj
-        UTcaMwO3E/eKAYcWbV62YGQB2q00Zd6SVTW18316dtZD03Fs4R+E0pUGWYfA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1662357899; x=1662444299; bh=9rwen180LDzZkPZ/tp66Cb5V6hBq
-        8lpuh4wpolRlS8c=; b=A74SvdjwRTYL2Z4LHuR7BagTAvo5/gA49tM0888usoFF
-        iHacArVvNH+ilEqByFNjNcdwfpeXwvldx9EkVvYLQ2DlF9okXOGirl+/VQzdEURP
-        h2zQuu9QCsKpVIuc29uTu3zoq6q2Pm0T3GUG2oXPhqnRmmsBQQUL60QYpLEDJYd6
-        YJPC8pN3FLaAcNwYC0qmM+DuNBTFIt9G/2pHPrUwbuRtv52TXTz0RFUFUceMO/6b
-        1h9c82EGueRJ/ye3PAFPYsptAt0gg0reQdJfL+ouSgegk3/17QTqsDIFXlwGA+/w
-        FpomSU53TMS2PbXG0jR+CtHEN+sR9mGSCYAc9h5eIg==
-X-ME-Sender: <xms:ipEVYyQtiCZOqSH9_wv5HDM5rtBVLV3ITFCQrnWe7zLwIkKK_2-krQ>
-    <xme:ipEVY3ysr91yR-p6HRfIAhpTuiuxcrLWzDiac7akjy0v9JH8zIz8fVA7uFHRbyL8P
-    OusZiPafYuPRw>
-X-ME-Received: <xmr:ipEVY_0wdLqmoe2mu9syalj5_alS6SyqqO2wZ_BJ_zXwSpvpm8dIuS3PeZUgbMnf9XuEPoJ7NSl9w0tvVOLFwXIdghK4_1eQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdelhedguddtfecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgv
-    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehge
-    dvvedvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhu
-    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhroh
-    grhhdrtghomh
-X-ME-Proxy: <xmx:ipEVY-CVm5uKh1Vfyh-brQ79OLxU2OYpOo8Zx_UaSRIxIFB5vUuHvg>
-    <xmx:ipEVY7jUqbAmPLBHvteT-lQM9ksDh68FJQOGdy2Pn5sgKuLLs2pCzw>
-    <xmx:ipEVY6p-8_dpWoHhfVxwlPaA2t8moxwcdIGcI5qBjavnCmT88fXSZQ>
-    <xmx:i5EVY2Ujq3gQuV6418EUV3c3J_zUGqHiJJuX4CFrw4q_fH7ySyCmog>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 5 Sep 2022 02:04:58 -0400 (EDT)
-Date:   Mon, 5 Sep 2022 08:04:55 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>
-Subject: Re: linux-next: manual merge of the usb tree with the usb.current
- tree
-Message-ID: <YxWRh434D2FIE+WX@kroah.com>
-References: <20220901135230.37584d32@canb.auug.org.au>
+        with ESMTP id S230074AbiIEViC (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 5 Sep 2022 17:38:02 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B440E45993;
+        Mon,  5 Sep 2022 14:37:59 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MM21d6q4lz4xG3;
+        Tue,  6 Sep 2022 07:37:57 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1662413878;
+        bh=vDNiX+BpvfYT2D33EpbXur3PHESzRNwtOPIB4VLff4U=;
+        h=Date:From:To:Cc:Subject:From;
+        b=oxFX1EDLgFfR12rYZQAHnVyPi5NSjAvyYAf096pTJg4XFcJgDnqTq/zpxJrNULQkb
+         jI5mGaPwjb4kOOiv/wFt16nZNlKfTWjfym7FK/KgspB9GX495DW3pTt+PQcD2EVrx8
+         AFLMD+W41e11Oqc9NbzdI6SZlfC1WzTeehv6x8yeSda337GvCVPfDspRsNgS/w0t/Z
+         rfJdGYIGMZ/Mz8RclEl2bHu/JnxqMiy6Tg0XKmemZ5aWLCt67rSFNXrGcrDQhWOJLr
+         N5MLj2YOCAISMKX2NVkHC7KQnw9zXtjyzLmVoD5Fewtch+g+SRO2dF5hv0q5Fy4GWy
+         DeGk4OOzebXQA==
+Date:   Tue, 6 Sep 2022 07:37:46 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Shawn Guo <shawnguo@kernel.org>
+Cc:     Philippe Schenker <philippe.schenker@toradex.com>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the imx-mxs tree
+Message-ID: <20220906073746.1f2713f7@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220901135230.37584d32@canb.auug.org.au>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/ywu2rSJw.=gq2boginXcdaL";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 01:52:30PM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the usb tree got a conflict in:
-> 
->   drivers/usb/dwc3/gadget.c
-> 
-> between commit:
-> 
->   040f2dbd2010 ("usb: dwc3: gadget: Avoid duplicate requests to enable Run/Stop")
-> 
-> from the usb.current tree and commit:
-> 
->   9711c67de748 ("usb: dwc3: gadget: Synchronize IRQ between soft connect/disconnect")
-> 
-> from the usb tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+--Sig_/ywu2rSJw.=gq2boginXcdaL
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Now fixed up in my tree as well, thanks!
+Hi all,
 
-greg k-h
+In commit
+
+  47170487f674 ("arm64: dts: imx8mm-verdin: extend pmic voltages")
+
+Fixes tag
+
+  Fixes: commit 6a57f224f734 ("arm64: dts: freescale: add initial support f=
+or verdin imx8m mini")
+
+has these problem(s):
+
+  - leading word 'commit' unexpected
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/ywu2rSJw.=gq2boginXcdaL
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMWbCoACgkQAVBC80lX
+0Gw+pQf+Piz1IAsM24sF7Bpqx8eykEQYmB+O9g8NlUevh+hKZlto8JCwRoOXjyrb
+qeJZsWJDpMR87iPNpKEyfcGpliu79esT5et/UPqnDvQZML9krjO89BkByrZmlazx
+2yG52RMFUoO1n9HrmC9Ii4/+gGq+3qmXSimzL/oSVbyd7gAxS2V3htfpCtGh4LFJ
++8y2HX2lkxp9FcSiN7plt/lem/34xounjd09DM1c2kJTKhNxodNwdXKVmm6Wm9yL
+50AqAPrUGc4DPrwwbJl/nTDGFBUMcWekVlB59WNn8wkQTSuFXks9FjCoVO1dCI9Z
+ajupZhZI8iVAS1hVOHPFSVHc92ua8A==
+=AWrC
+-----END PGP SIGNATURE-----
+
+--Sig_/ywu2rSJw.=gq2boginXcdaL--

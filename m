@@ -2,92 +2,112 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03CB05AC902
-	for <lists+linux-next@lfdr.de>; Mon,  5 Sep 2022 05:13:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F02755ACA47
+	for <lists+linux-next@lfdr.de>; Mon,  5 Sep 2022 08:05:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235964AbiIEDNQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 4 Sep 2022 23:13:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59778 "EHLO
+        id S235782AbiIEGFF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 5 Sep 2022 02:05:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235884AbiIEDNK (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 4 Sep 2022 23:13:10 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C85412D1E7;
-        Sun,  4 Sep 2022 20:13:07 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id d12so7277747plr.6;
-        Sun, 04 Sep 2022 20:13:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=CFVA3mdW30a9MgHuLYsBSSEVijzUz21uQ97fTAkKvfU=;
-        b=FeD+322Y0Cr7vdrETnHD2xt7HsYO8FiZ90h6dsQTZd88JW1kA92JT08xxVGOzIr6Tt
-         1HokuoUlvDWIUsrFAzDIXsYBQ50inmpIfz87DiDgTx+8jD/V4UWhjBve+KxuBAO/ze0g
-         XykAkIwXKErszseznAsdBpxkTptWTM3u1QtOwjVGPmxGKRcSPRO4/iLwzAnJfDWxZrxC
-         IMP9YyMiHZJEpjGQmsJnstBanB2fJvyb6fPpClzg6w78Mh3pO67epVCC+Q8XrQSoFOzn
-         /7h76WbGr1qoFCzHA+k/JS0BHd1BvS7ytQED14RwWaE3xWNeeu5gVCGZtFZsDXaMzHF0
-         MEyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=CFVA3mdW30a9MgHuLYsBSSEVijzUz21uQ97fTAkKvfU=;
-        b=YQqsXSpGjdl+BOQ3gJwdGInwF0DeGNl6lcwKu0jPgttVw+aiKr7/o/5Rn5KWXT6TiX
-         IROg8Eo/SE74NKTAGdVXJzppYYT9gIOOkadCAxAFnhF9p0/ZAskH+6FJ6gHsm8l3uQDY
-         3E+cx85u7cUfwuClrpWfVPQskW33p4DX1P/y3UYxfY/BgbpJN4PbbjEug4RbEbSn2so8
-         I9JNOiiW2ASrr2qwq82AcLnVrSXflsSHyt2qfe027eSWfAmOHEtNnBDLCbcAZ6M45zQs
-         U81v4eoyWTqwxku47r96iuVU0ug6JHqJllcv7IM6zLRr69FIjlowTBDnbBlFdRGTOQEN
-         SKyQ==
-X-Gm-Message-State: ACgBeo0f8A4EGIpQ+DkqGH6BsE60SD0WXOwyFHuXr0H+KQx+rZCQScIG
-        GUWK36JyegyUhaWCmIbHLVND+6N1dvc=
-X-Google-Smtp-Source: AA6agR48L+VhLtsmD6/6q2FLF6zYwai8Q/N37m3D6iaYkUVceRQLKEz9b5zfljwOYReGziemqnpTCg==
-X-Received: by 2002:a17:90b:4b81:b0:1fd:bc88:680b with SMTP id lr1-20020a17090b4b8100b001fdbc88680bmr17247735pjb.19.1662347586589;
-        Sun, 04 Sep 2022 20:13:06 -0700 (PDT)
-Received: from [192.168.43.80] (subs28-116-206-12-34.three.co.id. [116.206.12.34])
-        by smtp.gmail.com with ESMTPSA id s8-20020a170902ea0800b001755f43bc22sm6119538plg.175.2022.09.04.20.13.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 04 Sep 2022 20:13:06 -0700 (PDT)
-Message-ID: <d7932ec2-f3ee-8ea4-2723-5a281919e301@gmail.com>
-Date:   Mon, 5 Sep 2022 10:13:02 +0700
+        with ESMTP id S231883AbiIEGFD (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 5 Sep 2022 02:05:03 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 660341A3AE;
+        Sun,  4 Sep 2022 23:05:02 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 2DFA75C00D9;
+        Mon,  5 Sep 2022 02:04:59 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Mon, 05 Sep 2022 02:04:59 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1662357899; x=1662444299; bh=9rwen180LD
+        zZkPZ/tp66Cb5V6hBq8lpuh4wpolRlS8c=; b=ABO7UC5o2e3QKa8CtyH2uXGZlu
+        ReZDE8KAxS31qGLIN1mjNT3QJhxJRv54KPK++zu1+2nBjsyFrEew1cOlrSVqJIyL
+        669ujOAT/C08Sv8wl6PDxGLubmULkcyXDEWqBD80ZMeRBq1MeETTg17E0wkdp6Jr
+        ea6fvlgKUmmqZ0UZy1gfQqNhaSQtLF43i/4vVfmQEZ4N4KbT/ANBS5SnGJeXIVoI
+        1SFKW9lJ8TfDUMpjCVVxDlgBt1aFq6iHw/ic1fGsiyfkCydpuh8o1BRhpWCB1iuj
+        UTcaMwO3E/eKAYcWbV62YGQB2q00Zd6SVTW18316dtZD03Fs4R+E0pUGWYfA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1662357899; x=1662444299; bh=9rwen180LDzZkPZ/tp66Cb5V6hBq
+        8lpuh4wpolRlS8c=; b=A74SvdjwRTYL2Z4LHuR7BagTAvo5/gA49tM0888usoFF
+        iHacArVvNH+ilEqByFNjNcdwfpeXwvldx9EkVvYLQ2DlF9okXOGirl+/VQzdEURP
+        h2zQuu9QCsKpVIuc29uTu3zoq6q2Pm0T3GUG2oXPhqnRmmsBQQUL60QYpLEDJYd6
+        YJPC8pN3FLaAcNwYC0qmM+DuNBTFIt9G/2pHPrUwbuRtv52TXTz0RFUFUceMO/6b
+        1h9c82EGueRJ/ye3PAFPYsptAt0gg0reQdJfL+ouSgegk3/17QTqsDIFXlwGA+/w
+        FpomSU53TMS2PbXG0jR+CtHEN+sR9mGSCYAc9h5eIg==
+X-ME-Sender: <xms:ipEVYyQtiCZOqSH9_wv5HDM5rtBVLV3ITFCQrnWe7zLwIkKK_2-krQ>
+    <xme:ipEVY3ysr91yR-p6HRfIAhpTuiuxcrLWzDiac7akjy0v9JH8zIz8fVA7uFHRbyL8P
+    OusZiPafYuPRw>
+X-ME-Received: <xmr:ipEVY_0wdLqmoe2mu9syalj5_alS6SyqqO2wZ_BJ_zXwSpvpm8dIuS3PeZUgbMnf9XuEPoJ7NSl9w0tvVOLFwXIdghK4_1eQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdelhedguddtfecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgv
+    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehge
+    dvvedvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhu
+    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhroh
+    grhhdrtghomh
+X-ME-Proxy: <xmx:ipEVY-CVm5uKh1Vfyh-brQ79OLxU2OYpOo8Zx_UaSRIxIFB5vUuHvg>
+    <xmx:ipEVY7jUqbAmPLBHvteT-lQM9ksDh68FJQOGdy2Pn5sgKuLLs2pCzw>
+    <xmx:ipEVY6p-8_dpWoHhfVxwlPaA2t8moxwcdIGcI5qBjavnCmT88fXSZQ>
+    <xmx:i5EVY2Ujq3gQuV6418EUV3c3J_zUGqHiJJuX4CFrw4q_fH7ySyCmog>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 5 Sep 2022 02:04:58 -0400 (EDT)
+Date:   Mon, 5 Sep 2022 08:04:55 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>
+Subject: Re: linux-next: manual merge of the usb tree with the usb.current
+ tree
+Message-ID: <YxWRh434D2FIE+WX@kroah.com>
+References: <20220901135230.37584d32@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH] USB: core: Fix RST error in hub.c
-Content-Language: en-US
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     USB mailing list <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220831152458.56059e42@canb.auug.org.au>
- <Yw9vYaqczVlWzONt@rowland.harvard.edu>
- <20220901075048.7b281231@canb.auug.org.au>
- <YxDDcsLtRZ7c20pq@rowland.harvard.edu>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <YxDDcsLtRZ7c20pq@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220901135230.37584d32@canb.auug.org.au>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 9/1/22 21:36, Alan Stern wrote:
-> A recent commit added an invalid RST expression to a kerneldoc comment
-> in hub.c.  The fix is trivial.
->
+On Thu, Sep 01, 2022 at 01:52:30PM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the usb tree got a conflict in:
+> 
+>   drivers/usb/dwc3/gadget.c
+> 
+> between commit:
+> 
+>   040f2dbd2010 ("usb: dwc3: gadget: Avoid duplicate requests to enable Run/Stop")
+> 
+> from the usb.current tree and commit:
+> 
+>   9711c67de748 ("usb: dwc3: gadget: Synchronize IRQ between soft connect/disconnect")
+> 
+> from the usb tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-htmldocs warning at that file successfully fixed, thanks!
+Now fixed up in my tree as well, thanks!
 
-Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
-
--- 
-An old man doll... just what I always wanted! - Clara
+greg k-h

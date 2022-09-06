@@ -2,107 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E201E5AF4B3
-	for <lists+linux-next@lfdr.de>; Tue,  6 Sep 2022 21:47:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 095015AF769
+	for <lists+linux-next@lfdr.de>; Tue,  6 Sep 2022 23:54:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229650AbiIFTrR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 6 Sep 2022 15:47:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33528 "EHLO
+        id S229627AbiIFVx4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 6 Sep 2022 17:53:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbiIFTrM (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 6 Sep 2022 15:47:12 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF08D86B76;
-        Tue,  6 Sep 2022 12:47:10 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        with ESMTP id S229536AbiIFVxz (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 6 Sep 2022 17:53:55 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC2C985B9;
+        Tue,  6 Sep 2022 14:53:53 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 5E6AD1FA09;
-        Tue,  6 Sep 2022 19:47:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1662493629;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DwH1ufYcHzC/feIIZGsKI+YtePgH8+k2pybBbAJK9J0=;
-        b=uaHr6eqCoS75A2c6MQDXSTw5AZoFT92trHaxq/GbXJ9Ecsa+NFk5yaelb8reeG4wNpVFtv
-        ilgmc9vlfL7gU7oa7uhO4ekX3xUgALDLHi1NpPNaf1Dhxm0xh1SNNR0nMyAf+C8zGJV4i6
-        sZxMN6ffSp9/un8JYQ3Fd7xtTZzuijE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1662493629;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DwH1ufYcHzC/feIIZGsKI+YtePgH8+k2pybBbAJK9J0=;
-        b=jCEZ9xumltgwPiq5/DORbUlZuKzdXlkOSnzC1ZozjfEr/KZ05Yb63+/rampBPcLVXl+Z/8
-        f0KhDT35/G7VQhAw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 259C113A7A;
-        Tue,  6 Sep 2022 19:47:09 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Ymw9CL2jF2NeCAAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Tue, 06 Sep 2022 19:47:09 +0000
-Date:   Tue, 6 Sep 2022 21:41:46 +0200
-From:   David Sterba <dsterba@suse.cz>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     David Sterba <dsterba@suse.com>,
-        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
-        Josef Bacik <josef@toxicpanda.com>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MMfKS3l9sz4xGG;
+        Wed,  7 Sep 2022 07:53:48 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1662501228;
+        bh=P1UZW97JpfiJjJNwh5Z/whP3vo9XvHY8OmNfyz0LgNs=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Oz25eLLPtUcfrKiZPZ4zDIBgAHP8fAJHdSZVrCKyTnUrvyK+EV6fVQWxZ2wIdnqlV
+         wLcvrP+FdLpupJ/5Z9Tdu2g1TLu77tJ1cgSXgc/snpD+QyvUN/zYyB+0KVbm4X/r3r
+         sFck5g8IXzn/GHCiyVMkas3Nkyv/maGs70m3UNiX58+MqCeoDb4xvNenqaV3z6ZHTf
+         2JT1shxbPyZsCX3Dfjnbr+F/XIAC6p3U2PMOLhZl2XedyKfu89ZDRWw19yhLoZ98YF
+         KvlZicyDOcpkmsKcqu0VKSg5smlfIJjTu8BxyB/yGxtsXEkai1vmtR6qZ6bfNg7a3V
+         1E1k69kmh4/2w==
+Date:   Wed, 7 Sep 2022 03:31:42 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Mark Brown <broonie@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the btrfs tree with the btrfs-fixes
- tree
-Message-ID: <20220906194146.GV13489@suse.cz>
-Reply-To: dsterba@suse.cz
-References: <20220906095055.498d90ea@canb.auug.org.au>
- <20220906101549.1cfee0d4@canb.auug.org.au>
+Subject: linux-next: Signed-off-by missing for commit in the arm64 tree
+Message-ID: <20220907033142.1fe410e2@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220906101549.1cfee0d4@canb.auug.org.au>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/6l6AviH5J5QVXm+_yHv5Bmg";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 10:15:49AM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> On Tue, 6 Sep 2022 09:50:55 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >
-> > Today's linux-next merge of the btrfs tree got a conflict in:
-> > 
-> >   fs/btrfs/zoned.c
-> > 
-> > between commit:
-> > 
-> >   6ca64ac27631 ("btrfs: zoned: fix mounting with conventional zones")
-> > 
-> > from the btrfs-fixes tree and commit:
-> > 
-> >   e5182af66852 ("btrfs: convert block group bit field to use bit helpers")
-> > 
-> > from the btrfs tree.
-> > 
-> > I fixed it up (the former removed some of the code modified by the latter)
-> > and can carry the fix as necessary. This is now fixed as far as linux-next
-> > is concerned, but any non trivial conflicts should be mentioned to your
-> > upstream maintainer when your tree is submitted for merging.  You may
-> > also want to consider cooperating with the maintainer of the conflicting
-> > tree to minimise any particularly complex conflicts.
-> 
-> Actually the fix up is below ...
+--Sig_/6l6AviH5J5QVXm+_yHv5Bmg
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks, looks correct to me. I've pushed a new for-next snapshot that
-has the conflict resolved too.
+Hi all,
+
+Commit
+
+  000aef672bf2 ("kselftest/arm64: Install signal handlers before output in =
+FP stress tests")
+
+is missing a Signed-off-by from its author.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/6l6AviH5J5QVXm+_yHv5Bmg
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMXg/8ACgkQAVBC80lX
+0GwjQAf/dappteMw8xgyyIJ265ILHV+qYAdKHBX2FgdfRSxfrC4TH3bFEvl1Y3Q5
+Vayh/D6oCvGGQIzh/BoG1FV83ajYuVAq6aVOgsXdfdu0c6eY4qNit4PX6jhtNAKi
+Jgs5JmBL5Ao+/RpwcNip57798466ekorXRU7f5vOiSDaav+XNbSZEhaaITWrpRsF
+s3ruxO6fCoGxoKccDGL5OCOArsHmM/t+jWL6MLVUEM+iWZuZBilNsjNHqOGpifkQ
+yRP8t5l+wOpIQoZsO/QKVYtVAZGE4IwGYTMgt/vnHGaquccqnK6ApLi7RqHX/BUL
+Xl4Sjklm0u5mc/MyljZBm85sFyNfeA==
+=6GX7
+-----END PGP SIGNATURE-----
+
+--Sig_/6l6AviH5J5QVXm+_yHv5Bmg--

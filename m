@@ -2,106 +2,108 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D8A25AF69C
-	for <lists+linux-next@lfdr.de>; Tue,  6 Sep 2022 23:08:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FB8D5AF6BC
+	for <lists+linux-next@lfdr.de>; Tue,  6 Sep 2022 23:26:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230026AbiIFVIc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 6 Sep 2022 17:08:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40200 "EHLO
+        id S229804AbiIFV0k (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 6 Sep 2022 17:26:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbiIFVIb (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 6 Sep 2022 17:08:31 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 238B3AED92;
-        Tue,  6 Sep 2022 14:08:30 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id 202so14022898ybe.13;
-        Tue, 06 Sep 2022 14:08:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=cu3bbUPtP+jBi/cFz3i2WPazSy2LXGAfisSIYw2jC8c=;
-        b=mFb9NxsTnWbsNwhgwiyfL7sHR8iVAJ6uDpo8W6AgzT6kFow0ZBsOLppnubKSNRreyB
-         bjT9LhDIRDd0WmVKhGEMt+Oa/JOyLELd1UOxcvBWUp6d3DYyfAGvhpRmp3c4XEF0FyT1
-         Xw25mUyNkFTGFJ8RQypdvf99t87MfU9hM2JT9fDdXavVwO1cfKqorVnov6vzKPAlqW3d
-         yzH0/TTjfuXMmti3q5f6/Yvyt2npm5mIV6VFl5cZdgrGEX0GU5KvgmdS4aPOu7oSh+i8
-         hwwRCnsoWF9MImgxUYOPI51k23oX/r9fp6cZ3QlUqEhmkqgDxoUHsqsgChWwIf0RZp48
-         /lPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=cu3bbUPtP+jBi/cFz3i2WPazSy2LXGAfisSIYw2jC8c=;
-        b=k1Pba4QohjRNOSGCCfDyIgMLa1nryDXHBNm1+VHV6wtQKIBKRnGz1vd1c54qKQEqLy
-         6hyLs6QPcht7hOIRZrdOnufe4R3Rp3GCRLlppqW44gSe16wtmJ94BYpuH1qvgNXt45RQ
-         kEq/WWXpPINcJ3upmi2aFAjUcr1KG8suLOfjHRGXPOb5YeMumfjbwq47TFl5yiATg4r3
-         yIXnnS00K4d5dxJUyVHvZdmtrDLewFDGY8zUkoQubYR0E98ZYT+yszVfGSfASIxKF4iL
-         fWy7jdf8daBziIyAtRJVwcc3UufuUkZ7J+zcHaeSM3R7c1ifepne45/MJf4uqEkMDsnw
-         4mew==
-X-Gm-Message-State: ACgBeo0KAf/MAn5k9+8NFlwzEpGJCCkq0jjIm0teWDWhcrG71qRHA7YK
-        zLo1wnCkfFV/eLlbF9HrkRT8CPJjCv9k2U2REu8=
-X-Google-Smtp-Source: AA6agR7mZaY1q5EDdX6KV7aSfI3VU5ox6ayZ2YEGO043m8/HfxeoJ6phjyUBRgdQu2FzO+VAoCNpJ4zxXmSvEFPWLAM=
-X-Received: by 2002:a25:3b46:0:b0:69c:a60e:2e57 with SMTP id
- i67-20020a253b46000000b0069ca60e2e57mr429668yba.364.1662498509364; Tue, 06
- Sep 2022 14:08:29 -0700 (PDT)
-MIME-Version: 1.0
-References: <YxdX2l88PSFGe1r4@debian> <YxeAOgEoUffHudv/@kroah.com>
-In-Reply-To: <YxeAOgEoUffHudv/@kroah.com>
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Date:   Tue, 6 Sep 2022 22:07:53 +0100
-Message-ID: <CADVatmNSGSZZNXF7k7YmMqfcoOAiM6JhEfksjoVqoBOLUXfbPQ@mail.gmail.com>
-Subject: Re: build failure of next-20220906 due to 4ec7ac90ff39 ("misc:
- microchip: pci1xxxx: Add power management functions - suspend & resume handlers.")
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-gpio@vger.kernel.org,
+        with ESMTP id S229580AbiIFV0i (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 6 Sep 2022 17:26:38 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 640DDB517B;
+        Tue,  6 Sep 2022 14:26:37 -0700 (PDT)
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 286EKHq3026593;
+        Tue, 6 Sep 2022 14:26:34 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=date : from : to :
+ cc : subject : in-reply-to : message-id : references : mime-version :
+ content-type; s=pfpt0220; bh=OTjnHPepJNwapVtBZoQl2SJwt6fD6Cr+0YUCTUwrH+o=;
+ b=kpPzIBU5yqiRQ+iMiksiItIOiQYhtto30rgb82XE9u9NduwMDZRp27TCRCwqAIkffN+Z
+ ne2KOvnLCQDuZQhT1Bs5zGLwt9p05FlyeMQURia+wCEeYX7PG+CN2esKZOCrmhDAsHPv
+ lk4ZPvhjlMgnAXnf/kA8DEjqrUErZg0wvjrdQJo1OXZFp1eOcC7m9iwKsCi5DgK6LJK6
+ +PoiSuxQ4CzTqoa671TPV2H8ydMpDq3zaplZY+tbAwB2hkF2huYpKYfG2HXLgNLrc5cP
+ BXNoCzbc6YZbdK2oIoV62tCB6nEVJfol/yIbuhudBDPN8yKvPjavkrRH9DVCTpwkcPGu nw== 
+Received: from dc5-exch01.marvell.com ([199.233.59.181])
+        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3jdxjekuq4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Tue, 06 Sep 2022 14:26:34 -0700
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 6 Sep
+ 2022 14:26:32 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 6 Sep 2022 14:26:32 -0700
+Received: from mvluser05.qlc.com (unknown [10.112.10.135])
+        by maili.marvell.com (Postfix) with ESMTP id 9E3DD3F70D3;
+        Tue,  6 Sep 2022 14:26:32 -0700 (PDT)
+Received: from localhost (aeasi@localhost)
+        by mvluser05.qlc.com (8.14.4/8.14.4/Submit) with ESMTP id 286LQVT6024067;
+        Tue, 6 Sep 2022 14:26:32 -0700
+X-Authentication-Warning: mvluser05.qlc.com: aeasi owned process doing -bs
+Date:   Tue, 6 Sep 2022 14:26:31 -0700
+From:   Arun Easi <aeasi@marvell.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+CC:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        <GR-QLogic-Storage-Upstream@marvell.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        <linux-scsi@vger.kernel.org>,
         linux-kernel <linux-kernel@vger.kernel.org>,
         linux-next <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [EXT] build failure of next-20220906 due to 8bfc149ba24c ("scsi:
+ qla2xxx: Enhance driver tracing with separate tunable and more")
+In-Reply-To: <20220906170346.52c3f592@gandalf.local.home>
+Message-ID: <e9f5eb5e-3830-d19b-dcb0-05f7a36fcb2d@marvell.com>
+References: <YxdZ/9XOsWilvVSd@debian>
+ <44fe9ca0-e1d7-1e4f-9fd8-0f48a84dca72@marvell.com>
+ <CADVatmMsYk+tgJDASx2uoskLzY=b4m7SNo+3R6SXT=0vEnu+vA@mail.gmail.com>
+ <20220906170346.52c3f592@gandalf.local.home>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="US-ASCII"
+X-Proofpoint-GUID: Xmult1u7VXTD-L5qnqYPqxtqIsR50XE5
+X-Proofpoint-ORIG-GUID: Xmult1u7VXTD-L5qnqYPqxtqIsR50XE5
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-06_09,2022-09-06_02,2022-06-22_01
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Greg,
+On Tue, 6 Sep 2022, 2:03pm, Steven Rostedt wrote:
 
-On Tue, Sep 6, 2022 at 6:15 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Tue, Sep 06, 2022 at 03:23:22PM +0100, Sudip Mukherjee (Codethink) wrote:
-> > Hi All,
-> >
-> > The builds of riscv, s390, csky, alpha and loongarch allmodconfig have
-> > failed to build next-20220906 with the error:
-> >
-> >
-> > drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c:311:12: error: 'pci1xxxx_gpio_resume' defined but not used [-Werror=unused-function]
-> >   311 | static int pci1xxxx_gpio_resume(struct device *dev)
-> >       |            ^~~~~~~~~~~~~~~~~~~~
-> > drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c:295:12: error: 'pci1xxxx_gpio_suspend' defined but not used [-Werror=unused-function]
-> >   295 | static int pci1xxxx_gpio_suspend(struct device *dev)
-> >       |            ^~~~~~~~~~~~~~~~~~~~~
-> >
-> >
-> > git bisect pointed to 4ec7ac90ff39 ("misc: microchip: pci1xxxx: Add power management functions - suspend & resume handlers.").
-> >
-> > I will be happy to test any patch or provide any extra log if needed.
->
-> Hopefully this commit will fix this:
->         https://lore.kernel.org/r/20220906124951.696776-1-kumaravel.thiagarajan@microchip.com
+> On Tue, 6 Sep 2022 21:57:10 +0100
+> Sudip Mukherjee <sudipm.mukherjee@gmail.com> wrote:
+> 
+> > Thanks, that fixed the build for me. The patch did not apply directly
+> > on next-20220906, so I had to modify it a little bit.
+> > 
+> > Tested-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+> 
+> Well, the change needs to go into include/linux/trace.h though.
+> 
 
-No, it didn't.  :(
+Steve, I was thinking both the fixes stay at least for a short 
+term the one in qla2xxx to avoid tree dependencies.
 
-Looking at other drivers which uses SIMPLE_DEV_PM_OPS, I think
-pci1xxxx_gpio_suspend() and pci1xxxx_gpio_resume() needs to be under
-"#ifdef CONFIG_PM_SLEEP".
+Since, the qla_def.h change goes as:
 
++#ifndef CONFIG_TRACING
++#ifndef trace_array_get_by_name
 
--- 
-Regards
-Sudip
+..it should co-exist when the "#define trace_array_get_by_name" gets 
+merged in include/linux/trace.h. BTW, I will send out the changes to 
+trace.h today.
+
+Other alternatives/suggestions welcome.
+
+Regards,
+-Arun

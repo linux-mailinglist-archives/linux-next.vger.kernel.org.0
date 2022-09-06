@@ -2,177 +2,93 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8812F5AE964
-	for <lists+linux-next@lfdr.de>; Tue,  6 Sep 2022 15:21:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41D095AEE61
+	for <lists+linux-next@lfdr.de>; Tue,  6 Sep 2022 17:11:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239122AbiIFNVm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 6 Sep 2022 09:21:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36202 "EHLO
+        id S233188AbiIFPLo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 6 Sep 2022 11:11:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234497AbiIFNVl (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 6 Sep 2022 09:21:41 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F38C402E1
-        for <linux-next@vger.kernel.org>; Tue,  6 Sep 2022 06:21:40 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id i27-20020a056e021d1b00b002eb5eb4d200so9523440ila.21
-        for <linux-next@vger.kernel.org>; Tue, 06 Sep 2022 06:21:40 -0700 (PDT)
+        with ESMTP id S232688AbiIFPLX (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 6 Sep 2022 11:11:23 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC948E0C9;
+        Tue,  6 Sep 2022 07:25:05 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id b5so15726468wrr.5;
+        Tue, 06 Sep 2022 07:25:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date;
+        bh=SgtOK7Fn4Mn363pk9vnglySkFAC3yWrEKhbc32lNaz8=;
+        b=YlVnWF4LgR3y6Snjsvnp04yzajW/gwUKlwo2+XX/q0Ea7VAIevZwQ8sFDh4ZHiwvUc
+         kHvEagoYzB36/BpNKOLar8DqVaw3THj8NmY0MaxFnnR7FTiZKpy/8NCMPwWuQ6cnXHi8
+         xa7I7l9fS8K/S8NvDmRTsndMZpp2SI0IUJgYRzsqgBbOz6mi/j4TGt/0FixOeuQ8NaBk
+         OvUxJ/J1lNJMdjCsfpWRvxvwrx+uH7WpSerL41we3LUv09QAZKx5X9sm9Y55XCxgUWet
+         hz5mAbIdp3j/varJBXAR/OVSRBVVcBZ7ckAgLAG+Ad+VGW9zaw/iU5HzriZhOdU8m/ER
+         wqLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=tjShcthE4HE0+ubf529nLA4jv+DWpJkiBnPmb+mmp0U=;
-        b=WyzNwTYtwAq9HprjGiHny2YUfIlH4PsP2mNufStx5PdxPZk/pZyONWCQ/Nfst6U9Y5
-         bzGEsgjq2t3QDRYpodHq+oVrtEJPlz8kRjt+IHFq2TgQU3bjfH9UDsW5mIwNVOJ61QTW
-         1pcBsm1kRDEewEHdM9mtsbrj6pLNq3yGnnNxAhoenz4MntNZ3H6hk8AyZwppG0hfeRT+
-         NFVrQJwhDlg9Vf5KgMWw3h23iWDAcyWliAg5vVyQ6JdcUuLzLsgQ4lxdqrzMaizK7ltd
-         QamPt9FYex4wzU+TY/v7SbN2nDZZWV4lTAQZQLsp9pe1+t6OyayBufUUTpd15enxxr8V
-         OMHg==
-X-Gm-Message-State: ACgBeo3jYEcLWtY1XklqgpOgw9eyqZxI1AidO+OWyemuoDD6eGdtVVsj
-        vgqSO9kwDAD8ax+Tgj1jY3iKCVpVAhxMfHqbGNH3pj7saakM
-X-Google-Smtp-Source: AA6agR6EytlyX2yXt4GDjjmswrcLALpLr9X4ZzZ4DL9yfBADQS0aqXG1JOHLeqgyOn1oO3ja33mX01J6FBhSFBlzygypfnneMkap
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=SgtOK7Fn4Mn363pk9vnglySkFAC3yWrEKhbc32lNaz8=;
+        b=v6taoyKq9fKoypYtrH9Eax7smQU59ARcJVaYef+04++0A30Ypl4oof/MsmzopiLJdN
+         +f5Dox/LGEyNo3Rtl1/YELKnWA30m+q0Pam2wc3IDVBln4foXTSUT6igNsfbjONqQWnr
+         yHH4ssIEANyyJzp2sosHMocTn8NUZl3dtqsnJginxpsT9fjnJPYb1+Kbbd7J4f+XYMdP
+         OYTHin3Yq08ODSMpW5nsIqzZW/qfQ5KmT83rKnm0Zhfd9cPrpZdL0ryxcMgo5tq1OmsT
+         HRGNqMVdXXT6Q8U8FSBTnSjqdf8XxIxQC5HQolhydZ76h275+ZMg6j940SwXbmzhupDZ
+         KwSw==
+X-Gm-Message-State: ACgBeo2lQZgvCvVRDkonWkZZLWiJTNjVeOECwpaupjLuS5o9VZSMUQ+Q
+        lVrp829LcnVfJAFR+B3o8rA=
+X-Google-Smtp-Source: AA6agR7gHjucsKxwTur3SuarsEltaanUAYG1Nve9kz4+jV7e28o9DzXbkUmxKJcJWkQtvBwr7hMTpA==
+X-Received: by 2002:a5d:6484:0:b0:226:dd0e:b09c with SMTP id o4-20020a5d6484000000b00226dd0eb09cmr23452887wri.388.1662474204810;
+        Tue, 06 Sep 2022 07:23:24 -0700 (PDT)
+Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
+        by smtp.gmail.com with ESMTPSA id l27-20020a05600c2cdb00b003a5c7a942edsm22880578wmc.28.2022.09.06.07.23.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Sep 2022 07:23:24 -0700 (PDT)
+Date:   Tue, 6 Sep 2022 15:23:22 +0100
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+Subject: build failure of next-20220906 due to 4ec7ac90ff39 ("misc:
+ microchip: pci1xxxx: Add power management functions - suspend & resume
+ handlers.")
+Message-ID: <YxdX2l88PSFGe1r4@debian>
 MIME-Version: 1.0
-X-Received: by 2002:a92:c247:0:b0:2eb:9874:dddf with SMTP id
- k7-20020a92c247000000b002eb9874dddfmr15072679ilo.189.1662470499812; Tue, 06
- Sep 2022 06:21:39 -0700 (PDT)
-Date:   Tue, 06 Sep 2022 06:21:39 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000974e2805e802137e@google.com>
-Subject: [syzbot] linux-next boot error: KASAN: slab-out-of-bounds Read in _find_next_bit
-From:   syzbot <syzbot+08ca1fa706a22cc17efe@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-next@vger.kernel.org,
-        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hello,
+Hi All,
 
-syzbot found the following issue on:
-
-HEAD commit:    840126e36e8f Add linux-next specific files for 20220906
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=1216969b080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=239c4c4e44185526
-dashboard link: https://syzkaller.appspot.com/bug?extid=08ca1fa706a22cc17efe
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/1b9017e387a8/disk-840126e3.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/12182558f88d/vmlinux-840126e3.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+08ca1fa706a22cc17efe@syzkaller.appspotmail.com
-
-==================================================================
-BUG: KASAN: slab-out-of-bounds in _find_next_bit+0x143/0x160 lib/find_bit.c:109
-Read of size 8 at addr ffff8880175766b8 by task kworker/1:1/26
-
-CPU: 1 PID: 26 Comm: kworker/1:1 Not tainted 6.0.0-rc4-next-20220906-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-Workqueue: events pcpu_balance_workfn
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:287 [inline]
- print_report+0x164/0x463 mm/kasan/report.c:398
- kasan_report+0xbb/0x1f0 mm/kasan/report.c:486
- _find_next_bit+0x143/0x160 lib/find_bit.c:109
- find_next_bit include/linux/find.h:55 [inline]
- pcpu_balance_populated mm/percpu.c:2086 [inline]
- pcpu_balance_workfn+0x6c0/0xea0 mm/percpu.c:2246
- process_one_work+0x991/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2e4/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
- </TASK>
-
-Allocated by task 26:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:45
- kasan_set_track+0x21/0x30 mm/kasan/common.c:52
- ____kasan_kmalloc mm/kasan/common.c:371 [inline]
- ____kasan_kmalloc mm/kasan/common.c:330 [inline]
- __kasan_kmalloc+0xa1/0xb0 mm/kasan/common.c:380
- kasan_kmalloc include/linux/kasan.h:211 [inline]
- __do_kmalloc_node mm/slab_common.c:931 [inline]
- __kmalloc+0x54/0xc0 mm/slab_common.c:944
- kmalloc include/linux/slab.h:565 [inline]
- kzalloc include/linux/slab.h:696 [inline]
- pcpu_mem_zalloc+0x70/0xa0 mm/percpu.c:514
- pcpu_alloc_chunk mm/percpu.c:1446 [inline]
- pcpu_create_chunk+0x23/0x930 mm/percpu-vm.c:338
- pcpu_balance_populated mm/percpu.c:2108 [inline]
- pcpu_balance_workfn+0xc4e/0xea0 mm/percpu.c:2246
- process_one_work+0x991/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2e4/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
-
-The buggy address belongs to the object at ffff888017576600
- which belongs to the cache kmalloc-192 of size 192
-The buggy address is located 184 bytes inside of
- 192-byte region [ffff888017576600, ffff8880175766c0)
-
-The buggy address belongs to the physical page:
-page:ffffea00005d5d80 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x17576
-flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000000200 ffff888011841a00 dead000000000122 0000000000000000
-raw: 0000000000000000 0000000080100010 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x12cc0(GFP_KERNEL|__GFP_NOWARN|__GFP_NORETRY), pid 1, tgid 1 (swapper/0), ts 2455007664, free_ts 0
- prep_new_page mm/page_alloc.c:2544 [inline]
- get_page_from_freelist+0x109b/0x2ce0 mm/page_alloc.c:4294
- __alloc_pages+0x1c7/0x510 mm/page_alloc.c:5552
- alloc_page_interleave+0x1e/0x200 mm/mempolicy.c:2113
- alloc_pages+0x22f/0x270 mm/mempolicy.c:2275
- alloc_slab_page mm/slub.c:1734 [inline]
- allocate_slab+0x213/0x300 mm/slub.c:1879
- new_slab mm/slub.c:1932 [inline]
- ___slab_alloc+0xad0/0x1440 mm/slub.c:3113
- __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3211
- slab_alloc_node mm/slub.c:3296 [inline]
- __kmem_cache_alloc_node+0x18a/0x3d0 mm/slub.c:3369
- __do_kmalloc_node mm/slab_common.c:930 [inline]
- __kmalloc_node_track_caller+0x45/0xc0 mm/slab_common.c:951
- __do_krealloc mm/slab_common.c:1324 [inline]
- krealloc+0x8c/0xf0 mm/slab_common.c:1357
- add_sysfs_param+0xca/0x960 kernel/params.c:651
- kernel_add_sysfs_param kernel/params.c:812 [inline]
- param_sysfs_builtin kernel/params.c:851 [inline]
- param_sysfs_init+0x301/0x43b kernel/params.c:970
- do_one_initcall+0xfe/0x650 init/main.c:1307
- do_initcall_level init/main.c:1382 [inline]
- do_initcalls init/main.c:1398 [inline]
- do_basic_setup init/main.c:1417 [inline]
- kernel_init_freeable+0x6ff/0x788 init/main.c:1637
- kernel_init+0x1a/0x1d0 init/main.c:1525
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
-page_owner free stack trace missing
-
-Memory state around the buggy address:
- ffff888017576580: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
- ffff888017576600: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->ffff888017576680: 00 00 00 00 00 00 00 fc fc fc fc fc fc fc fc fc
-                                        ^
- ffff888017576700: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff888017576780: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-==================================================================
+The builds of riscv, s390, csky, alpha and loongarch allmodconfig have
+failed to build next-20220906 with the error:
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c:311:12: error: 'pci1xxxx_gpio_resume' defined but not used [-Werror=unused-function]
+  311 | static int pci1xxxx_gpio_resume(struct device *dev)
+      |            ^~~~~~~~~~~~~~~~~~~~
+drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c:295:12: error: 'pci1xxxx_gpio_suspend' defined but not used [-Werror=unused-function]
+  295 | static int pci1xxxx_gpio_suspend(struct device *dev)
+      |            ^~~~~~~~~~~~~~~~~~~~~
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+git bisect pointed to 4ec7ac90ff39 ("misc: microchip: pci1xxxx: Add power management functions - suspend & resume handlers.").
+
+I will be happy to test any patch or provide any extra log if needed.
+
+
+-- 
+Regards
+Sudip

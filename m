@@ -2,136 +2,113 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41F3F5AE195
-	for <lists+linux-next@lfdr.de>; Tue,  6 Sep 2022 09:49:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD8EB5AE19F
+	for <lists+linux-next@lfdr.de>; Tue,  6 Sep 2022 09:54:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232891AbiIFHtz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 6 Sep 2022 03:49:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52130 "EHLO
+        id S239020AbiIFHx7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 6 Sep 2022 03:53:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234061AbiIFHtx (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 6 Sep 2022 03:49:53 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D91EB17AA7;
-        Tue,  6 Sep 2022 00:49:50 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        with ESMTP id S238599AbiIFHxf (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 6 Sep 2022 03:53:35 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA3074DD9;
+        Tue,  6 Sep 2022 00:53:33 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MMHbb4yDfz4xGD;
-        Tue,  6 Sep 2022 17:49:47 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1662450588;
-        bh=ZkmYQ2PqBE137l1VRN7e9H+W7zy0IhuEctYp3R9mOSw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=RkMHhKhgyGdS7u6fcN6YonCtRyTQI9+jEE4sXuiU+/lEcQRjhDCpFz7sejxATzmJh
-         3kS9I7txPClyRhNDZ1376S2wk9kp/B6JRgF2qfKjdpFxHGt5AyFQg6qoKYTGq96Xca
-         g0prl5JMbEi/NGiOxVoDXLomMvTJvaPrSu3n6MFGbtjGMOaDDxV1PRjZQ/86CWTRfB
-         kGO86D2nXS9zYGlFiMnbE36NVUdIypt2oTijHpig91gDFkkvDB7N46R/ClyAfAteTS
-         xUt/iw2PPNgNcQ88UHsFDjuJhiM70uiIEI0vNd1Uw2tXVLUpUqgHIzGxoy7W1idruV
-         /wZsvzjs8SWrg==
-Date:   Tue, 6 Sep 2022 17:49:46 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Kees Cook <keescook@chromium.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 718C31F96A;
+        Tue,  6 Sep 2022 07:53:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1662450812; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=e3QUGRmGqEl6xPagnkOR/JexF9yw1PltCqI7wAdRJxg=;
+        b=szOuRIs0cCBK1H6PKsUsPpAeNxWI1rQoZXD8JHcTFx4Pd4FbY7Zaow4t6VKG/eCu28Uykw
+        08koAlFpwrqRPIvX38x8DqEATR+CgzjdatCWvZqWD9zJUc9QEGvodSEKfvbHt+mPuOUIAC
+        d4uII081ZhK5cB5AQX5syr5K/Cq58DM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1662450812;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=e3QUGRmGqEl6xPagnkOR/JexF9yw1PltCqI7wAdRJxg=;
+        b=LbJNw5OZF+aS6zamEygbmkEhapLIQEGf++3G6rX+mlhq4ujGasckDo8OXslkEh1swKvhC7
+        MzjHTvKXXrH4vpDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2DEE313A7A;
+        Tue,  6 Sep 2022 07:53:32 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Qs4TCnz8FmOnQAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 06 Sep 2022 07:53:32 +0000
+Message-ID: <dab10759-c059-2254-116b-8360bc240e57@suse.cz>
+Date:   Tue, 6 Sep 2022 09:53:31 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: linux-next: build failure after merge of the slab tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Marco Elver <elver@google.com>
-Subject: linux-next: manual merge of the kspp tree with the tip tree
-Message-ID: <20220906174946.61819060@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/sp=cXDFOcebNKKIpMUPGYwG";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220906165131.59f395a9@canb.auug.org.au>
+Content-Language: en-US
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20220906165131.59f395a9@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/sp=cXDFOcebNKKIpMUPGYwG
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 9/6/22 08:51, Stephen Rothwell wrote:
+> Hi all,
 
-Hi all,
+Hi,
 
-Today's linux-next merge of the kspp tree got a conflict in:
+> After merging the slab tree, today's linux-next build (powerpc
+> ppc64_defconfig) failed like this:
+> 
+> kernel/bpf/memalloc.c: In function 'bpf_mem_free':
+> kernel/bpf/memalloc.c:613:33: error: implicit declaration of function '__ksize'; did you mean 'ksize'? [-Werror=implicit-function-declaration]
+>    613 |         idx = bpf_mem_cache_idx(__ksize(ptr - LLIST_NODE_SZ));
+>        |                                 ^~~~~~~
+>        |                                 ksize
 
-  lib/Kconfig.debug
+Could you use ksize() here? I'm guessing you picked __ksize() because 
+kasan_unpoison_element() in mm/mempool.c did, but that's to avoid 
+kasan_unpoison_range() in ksize() as this caller does it differently.
+AFAICS your function doesn't handle kasan differently, so ksize() should 
+be fine.
 
-between commit:
+> Caused by commit
+> 
+>    8dfa9d554061 ("mm/slab_common: move declaration of __ksize() to mm/slab.h")
+> 
+> interacting with commit
+> 
+>    7c8199e24fa0 ("bpf: Introduce any context BPF specific memory allocator.")
+> 
+> from the bpf-next tree.
+> 
+> I have reverted the slab tree commit for today.
+> 
 
-  724c299c6a0e ("perf/hw_breakpoint: Add KUnit test for constraints account=
-ing")
-
-from the tip tree and commit:
-
-  bb26bbd0a067 ("fortify: Add KUnit test for FORTIFY_SOURCE internals")
-
-from the kspp tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc lib/Kconfig.debug
-index e40550a5bdd3,1f267c0ddffd..000000000000
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@@ -2533,16 -2542,15 +2545,25 @@@ config STACKINIT_KUNIT_TES
-  	  CONFIG_GCC_PLUGIN_STRUCTLEAK, CONFIG_GCC_PLUGIN_STRUCTLEAK_BYREF,
-  	  or CONFIG_GCC_PLUGIN_STRUCTLEAK_BYREF_ALL.
- =20
- +config HW_BREAKPOINT_KUNIT_TEST
- +	bool "Test hw_breakpoint constraints accounting" if !KUNIT_ALL_TESTS
- +	depends on HAVE_HW_BREAKPOINT
- +	depends on KUNIT=3Dy
- +	default KUNIT_ALL_TESTS
- +	help
- +	  Tests for hw_breakpoint constraints accounting.
- +
- +	  If unsure, say N.
- +
-+ config FORTIFY_KUNIT_TEST
-+ 	tristate "Test fortified str*() and mem*() function internals at runtime=
-" if !KUNIT_ALL_TESTS
-+ 	depends on KUNIT && FORTIFY_SOURCE
-+ 	default KUNIT_ALL_TESTS
-+ 	help
-+ 	  Builds unit tests for checking internals of FORTIFY_SOURCE as used
-+ 	  by the str*() and mem*() family of functions. For testing runtime
-+ 	  traps of FORTIFY_SOURCE, see LKDTM's "FORTIFY_*" tests.
-+=20
-  config TEST_UDELAY
-  	tristate "udelay test driver"
-  	help
-
---Sig_/sp=cXDFOcebNKKIpMUPGYwG
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMW+5oACgkQAVBC80lX
-0GyA1Af8DzWPSckiL++ldBVfvWwMRtj/iwCV2e2ykXVo5kqrXirY/aWEPxRKtSrI
-SKLXhPheZufg2Uyf2nYUy6HxrKvfRnsrpqfuWHOybZi6ni/iVwQ7hvlfx7nBesCg
-mIeqs/a+0G02YEbrt4sZ1KsKydnVbfAX/IL1lJbq3vlKhukha5HO0XDxqoyW3QPl
-4AeqKuSPbVwBn2q0/ep9dz1kfp/na0q79CxNSojAbMYNz68MXxH4SgxbhM7/y5dV
-D0B4kPI1sta3cQZn5jq8yqnKcrIFIrAxFHQDgI1GfseMIvqTBXkPujxREWm6X7n3
-MViWBYX+Qsyt0Q/gaXtCCOe2DakDUw==
-=AGFo
------END PGP SIGNATURE-----
-
---Sig_/sp=cXDFOcebNKKIpMUPGYwG--

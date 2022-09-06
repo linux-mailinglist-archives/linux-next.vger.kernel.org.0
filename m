@@ -2,96 +2,107 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7766D5AF3C9
-	for <lists+linux-next@lfdr.de>; Tue,  6 Sep 2022 20:39:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E201E5AF4B3
+	for <lists+linux-next@lfdr.de>; Tue,  6 Sep 2022 21:47:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229481AbiIFSiS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 6 Sep 2022 14:38:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40330 "EHLO
+        id S229650AbiIFTrR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 6 Sep 2022 15:47:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbiIFSiN (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 6 Sep 2022 14:38:13 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA18880039;
-        Tue,  6 Sep 2022 11:38:12 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id gh9so3374724ejc.8;
-        Tue, 06 Sep 2022 11:38:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=2vJ8FGNUWqNGrwFrjilO8GSXb55Nwy+/cJ8JAN+vf/Q=;
-        b=SUKr1jsDOLNqamb/0igyvl0avGj607M0DPUstfTFcJTLuWl4LanT0/YoRCYm9eA69u
-         1kj4fVTiWUjtqCnFI0C6ZoFg5/RqkmqAv98TqohWLkwkUomyZAcUp1dsGY+pQq6u+q+w
-         tOjNN1cBakyHjgUr+MPj1XXwywhuJ1z6JmzTF5sqGB4jAMUH7+BLZy8fOn3pCu3NXQQg
-         z33jqnAPLObqF8syJeAU1+viuExfeIdnfLvhtgx1RKxaa+ywUEk/vuS7cVplJK7ofQIb
-         MDZX3vYfbZSTXO77p6gMRjdYdm+gKaNqZ0+Iv4tRrwj9ndqopTptF6xzlsPY6BHhmmq2
-         q14A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=2vJ8FGNUWqNGrwFrjilO8GSXb55Nwy+/cJ8JAN+vf/Q=;
-        b=v7Aq+IXoJFIKs/LNQOjaK/M8PE9V9c+BG7Rr9AdDgyV4UPVCJ0NVbOnfIe1c6Kgllh
-         hhiAgfOBjigE+4JZ/C+Jj3dBXj09G/DSvNPajeenpashYRprFSebwSCmhLRR8qErUwxh
-         s7VD7QTL4cK1O3hgp11TQUMaaf0wx0Ug9y66m0usUiRFXWuLLzAsz+yRhE2XKdiFyOiR
-         bOEsx7piXmF+SPyHSxsNHtl18yd+6eLItM1lAw8zRbh4zlWe/HmaOkb+lkgf+Y2VaAlN
-         /KBzanoz1dlZIJso+TQlx5kS6OOTGOSY/UfiLIE7oN1vMJwh3VDuan2fyWJqmB7LgmoR
-         n+qA==
-X-Gm-Message-State: ACgBeo0Wn+9lSw2Kyfo852YK/5FSAoVtnmhhqgCIwQ5CekIZHAmFN8u6
-        XrFWhIC2n441Ab98i+5lwaNgQHqh335XrBLc56s=
-X-Google-Smtp-Source: AA6agR6Fao8GdRMU9Boeo6RrjyWxi8jemda0qoa7GZAmSudyHUWqHOtxrprir6nYy7TaNbFl5BgDhJcydhPRqP6/mJY=
-X-Received: by 2002:a17:906:58d1:b0:76d:af13:5ae3 with SMTP id
- e17-20020a17090658d100b0076daf135ae3mr6712594ejs.708.1662489491088; Tue, 06
- Sep 2022 11:38:11 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220906165131.59f395a9@canb.auug.org.au> <dab10759-c059-2254-116b-8360bc240e57@suse.cz>
-In-Reply-To: <dab10759-c059-2254-116b-8360bc240e57@suse.cz>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 6 Sep 2022 11:37:59 -0700
-Message-ID: <CAADnVQJTDdA=vpQhrbAbX7oEQ=uaPXwAmjMzpW4Nk2Xi9f2JLA@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the slab tree
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        with ESMTP id S229611AbiIFTrM (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 6 Sep 2022 15:47:12 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF08D86B76;
+        Tue,  6 Sep 2022 12:47:10 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 5E6AD1FA09;
+        Tue,  6 Sep 2022 19:47:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1662493629;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DwH1ufYcHzC/feIIZGsKI+YtePgH8+k2pybBbAJK9J0=;
+        b=uaHr6eqCoS75A2c6MQDXSTw5AZoFT92trHaxq/GbXJ9Ecsa+NFk5yaelb8reeG4wNpVFtv
+        ilgmc9vlfL7gU7oa7uhO4ekX3xUgALDLHi1NpPNaf1Dhxm0xh1SNNR0nMyAf+C8zGJV4i6
+        sZxMN6ffSp9/un8JYQ3Fd7xtTZzuijE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1662493629;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DwH1ufYcHzC/feIIZGsKI+YtePgH8+k2pybBbAJK9J0=;
+        b=jCEZ9xumltgwPiq5/DORbUlZuKzdXlkOSnzC1ZozjfEr/KZ05Yb63+/rampBPcLVXl+Z/8
+        f0KhDT35/G7VQhAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 259C113A7A;
+        Tue,  6 Sep 2022 19:47:09 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Ymw9CL2jF2NeCAAAMHmgww
+        (envelope-from <dsterba@suse.cz>); Tue, 06 Sep 2022 19:47:09 +0000
+Date:   Tue, 6 Sep 2022 21:41:46 +0200
+From:   David Sterba <dsterba@suse.cz>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     David Sterba <dsterba@suse.com>,
+        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
+        Josef Bacik <josef@toxicpanda.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Marco Elver <elver@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the btrfs tree with the btrfs-fixes
+ tree
+Message-ID: <20220906194146.GV13489@suse.cz>
+Reply-To: dsterba@suse.cz
+References: <20220906095055.498d90ea@canb.auug.org.au>
+ <20220906101549.1cfee0d4@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220906101549.1cfee0d4@canb.auug.org.au>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Sep 6, 2022 at 12:53 AM Vlastimil Babka <vbabka@suse.cz> wrote:
->
-> On 9/6/22 08:51, Stephen Rothwell wrote:
-> > Hi all,
->
-> Hi,
->
-> > After merging the slab tree, today's linux-next build (powerpc
-> > ppc64_defconfig) failed like this:
+On Tue, Sep 06, 2022 at 10:15:49AM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> On Tue, 6 Sep 2022 09:50:55 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 > >
-> > kernel/bpf/memalloc.c: In function 'bpf_mem_free':
-> > kernel/bpf/memalloc.c:613:33: error: implicit declaration of function '__ksize'; did you mean 'ksize'? [-Werror=implicit-function-declaration]
-> >    613 |         idx = bpf_mem_cache_idx(__ksize(ptr - LLIST_NODE_SZ));
-> >        |                                 ^~~~~~~
-> >        |                                 ksize
->
-> Could you use ksize() here? I'm guessing you picked __ksize() because
-> kasan_unpoison_element() in mm/mempool.c did, but that's to avoid
-> kasan_unpoison_range() in ksize() as this caller does it differently.
-> AFAICS your function doesn't handle kasan differently, so ksize() should
-> be fine.
+> > Today's linux-next merge of the btrfs tree got a conflict in:
+> > 
+> >   fs/btrfs/zoned.c
+> > 
+> > between commit:
+> > 
+> >   6ca64ac27631 ("btrfs: zoned: fix mounting with conventional zones")
+> > 
+> > from the btrfs-fixes tree and commit:
+> > 
+> >   e5182af66852 ("btrfs: convert block group bit field to use bit helpers")
+> > 
+> > from the btrfs tree.
+> > 
+> > I fixed it up (the former removed some of the code modified by the latter)
+> > and can carry the fix as necessary. This is now fixed as far as linux-next
+> > is concerned, but any non trivial conflicts should be mentioned to your
+> > upstream maintainer when your tree is submitted for merging.  You may
+> > also want to consider cooperating with the maintainer of the conflicting
+> > tree to minimise any particularly complex conflicts.
+> 
+> Actually the fix up is below ...
 
-Ok. Will change to use ksize().
+Thanks, looks correct to me. I've pushed a new for-next snapshot that
+has the conflict resolved too.

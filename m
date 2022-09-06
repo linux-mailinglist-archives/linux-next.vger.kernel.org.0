@@ -2,61 +2,62 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41D095AEE61
-	for <lists+linux-next@lfdr.de>; Tue,  6 Sep 2022 17:11:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E70B15AEE8B
+	for <lists+linux-next@lfdr.de>; Tue,  6 Sep 2022 17:21:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233188AbiIFPLo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 6 Sep 2022 11:11:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50424 "EHLO
+        id S238835AbiIFPVh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 6 Sep 2022 11:21:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232688AbiIFPLX (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 6 Sep 2022 11:11:23 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC948E0C9;
-        Tue,  6 Sep 2022 07:25:05 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id b5so15726468wrr.5;
-        Tue, 06 Sep 2022 07:25:05 -0700 (PDT)
+        with ESMTP id S234161AbiIFPVN (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 6 Sep 2022 11:21:13 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41B94979F7;
+        Tue,  6 Sep 2022 07:33:08 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id t7so10737973wrm.10;
+        Tue, 06 Sep 2022 07:33:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :from:to:cc:subject:date;
-        bh=SgtOK7Fn4Mn363pk9vnglySkFAC3yWrEKhbc32lNaz8=;
-        b=YlVnWF4LgR3y6Snjsvnp04yzajW/gwUKlwo2+XX/q0Ea7VAIevZwQ8sFDh4ZHiwvUc
-         kHvEagoYzB36/BpNKOLar8DqVaw3THj8NmY0MaxFnnR7FTiZKpy/8NCMPwWuQ6cnXHi8
-         xa7I7l9fS8K/S8NvDmRTsndMZpp2SI0IUJgYRzsqgBbOz6mi/j4TGt/0FixOeuQ8NaBk
-         OvUxJ/J1lNJMdjCsfpWRvxvwrx+uH7WpSerL41we3LUv09QAZKx5X9sm9Y55XCxgUWet
-         hz5mAbIdp3j/varJBXAR/OVSRBVVcBZ7ckAgLAG+Ad+VGW9zaw/iU5HzriZhOdU8m/ER
-         wqLg==
+        bh=CacYXd80H/4iKUtP95NJ2HU11T1upV6JWfF7yq6PmMI=;
+        b=aBWi3NdcEgEfbb+sbSbJsDEhXSSi/Uc0bU5gUbGUqwm9DvOrujbfJl6FtG2sByYOnX
+         9mndiYwLC5LYSobUzh0rdwoe2FRZSWFl3Vb+B5ySe4ckI4k93NFQIYNDWmY3/2mLnkl+
+         yVa/ZL0P4yS6SqI+vET+0v1tyrJWtVhk7F24JVgbjvXDIqsuAmZaI+z0dHqqxsYUwINZ
+         zOiVrY8YQP4bS13G9Y6KuLAZjEvVufRKbFemwGT4JdoPaASZW+ibFUutv1Gx1OUpOTZC
+         JbRTSO0iwPtEvHYmMLBI6aAe4jFloe6UZvDvQcJ7VDpLM3TURBW3x3wG1bzF2oSy535t
+         lBRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=SgtOK7Fn4Mn363pk9vnglySkFAC3yWrEKhbc32lNaz8=;
-        b=v6taoyKq9fKoypYtrH9Eax7smQU59ARcJVaYef+04++0A30Ypl4oof/MsmzopiLJdN
-         +f5Dox/LGEyNo3Rtl1/YELKnWA30m+q0Pam2wc3IDVBln4foXTSUT6igNsfbjONqQWnr
-         yHH4ssIEANyyJzp2sosHMocTn8NUZl3dtqsnJginxpsT9fjnJPYb1+Kbbd7J4f+XYMdP
-         OYTHin3Yq08ODSMpW5nsIqzZW/qfQ5KmT83rKnm0Zhfd9cPrpZdL0ryxcMgo5tq1OmsT
-         HRGNqMVdXXT6Q8U8FSBTnSjqdf8XxIxQC5HQolhydZ76h275+ZMg6j940SwXbmzhupDZ
-         KwSw==
-X-Gm-Message-State: ACgBeo2lQZgvCvVRDkonWkZZLWiJTNjVeOECwpaupjLuS5o9VZSMUQ+Q
-        lVrp829LcnVfJAFR+B3o8rA=
-X-Google-Smtp-Source: AA6agR7gHjucsKxwTur3SuarsEltaanUAYG1Nve9kz4+jV7e28o9DzXbkUmxKJcJWkQtvBwr7hMTpA==
-X-Received: by 2002:a5d:6484:0:b0:226:dd0e:b09c with SMTP id o4-20020a5d6484000000b00226dd0eb09cmr23452887wri.388.1662474204810;
-        Tue, 06 Sep 2022 07:23:24 -0700 (PDT)
+        bh=CacYXd80H/4iKUtP95NJ2HU11T1upV6JWfF7yq6PmMI=;
+        b=6BWYF5W/osqiopwsL9aKPXeBgXhOyQGuZvaasnIeUxaJPPrXm+KX6IbPcN2DdbTx32
+         RIQ8nV69utSpPZgaUDjmDucP5AEZCRGRcVXh0wT8r3Bpyqpo3g5gUorWB02c8k6/ES4z
+         E0pdLOoc3nTQBx9yzLF1bv/OOG/UTYOFEsushZWo8uWhE1QuJnWhhXFBAURepvDmWt8u
+         +xe9/2S0MjkcXvEr3qngn7vDGDD6muNWFIOCGcBsQFNnyGfFnM4pxF1k54s/4e/hvaAO
+         wxFQRHIVhPgGfnol+bjC8Z+BFbN1/dsgDSLLhGdm8kn9scy39eQuMjUVuJ9xPWxm+JeI
+         7Mow==
+X-Gm-Message-State: ACgBeo1XahLD/wom4HmRfiECCwEgdmPCTmCyY/Wb0EjLu/MsU3ffy4Cz
+        1EE4nZurED5B9lIvNqPV750=
+X-Google-Smtp-Source: AA6agR6BR0GaenA77FNVG6e4NdISUtIGSsIuV4W47D+6BjCDGMjbEyR0LsAa8UX8fzSaB7HPKealRQ==
+X-Received: by 2002:a5d:4805:0:b0:228:db70:6641 with SMTP id l5-20020a5d4805000000b00228db706641mr1684859wrq.377.1662474753900;
+        Tue, 06 Sep 2022 07:32:33 -0700 (PDT)
 Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
-        by smtp.gmail.com with ESMTPSA id l27-20020a05600c2cdb00b003a5c7a942edsm22880578wmc.28.2022.09.06.07.23.23
+        by smtp.gmail.com with ESMTPSA id k2-20020a5d6d42000000b00226f0a00348sm12738493wri.111.2022.09.06.07.32.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 07:23:24 -0700 (PDT)
-Date:   Tue, 6 Sep 2022 15:23:22 +0100
+        Tue, 06 Sep 2022 07:32:33 -0700 (PDT)
+Date:   Tue, 6 Sep 2022 15:32:31 +0100
 From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
-Subject: build failure of next-20220906 due to 4ec7ac90ff39 ("misc:
- microchip: pci1xxxx: Add power management functions - suspend & resume
- handlers.")
-Message-ID: <YxdX2l88PSFGe1r4@debian>
+To:     Arun Easi <aeasi@marvell.com>, Nilesh Javali <njavali@marvell.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     GR-QLogic-Storage-Upstream@marvell.com,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org
+Subject: build failure of next-20220906 due to 8bfc149ba24c ("scsi: qla2xxx:
+ Enhance driver tracing with separate tunable and more")
+Message-ID: <YxdZ/9XOsWilvVSd@debian>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -72,23 +73,26 @@ X-Mailing-List: linux-next@vger.kernel.org
 
 Hi All,
 
-The builds of riscv, s390, csky, alpha and loongarch allmodconfig have
-failed to build next-20220906 with the error:
+The builds of loongarch loongson3_defconfig have failed to build
+next-20220906 with the error:
+
+drivers/scsi/qla2xxx/qla_os.c: In function 'qla_trace_init':
+drivers/scsi/qla2xxx/qla_os.c:2854:25: error: implicit declaration of function 'trace_array_get_by_name'; did you mean 'trace_array_set_clr_event'? [-Werror=implicit-function-declaration]
+ 2854 |         qla_trc_array = trace_array_get_by_name("qla2xxx");
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~
+      |                         trace_array_set_clr_event
+
+drivers/scsi/qla2xxx/qla_os.c: In function 'qla_trace_uninit':
+drivers/scsi/qla2xxx/qla_os.c:2869:9: error: implicit declaration of function 'trace_array_put' [-Werror=implicit-function-declaration]
+ 2869 |         trace_array_put(qla_trc_array);
+      |         ^~~~~~~~~~~~~~~
 
 
-drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c:311:12: error: 'pci1xxxx_gpio_resume' defined but not used [-Werror=unused-function]
-  311 | static int pci1xxxx_gpio_resume(struct device *dev)
-      |            ^~~~~~~~~~~~~~~~~~~~
-drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c:295:12: error: 'pci1xxxx_gpio_suspend' defined but not used [-Werror=unused-function]
-  295 | static int pci1xxxx_gpio_suspend(struct device *dev)
-      |            ^~~~~~~~~~~~~~~~~~~~~
-
-
-git bisect pointed to 4ec7ac90ff39 ("misc: microchip: pci1xxxx: Add power management functions - suspend & resume handlers.").
+git bisect pointed to 8bfc149ba24c ("scsi: qla2xxx: Enhance driver tracing with separate tunable and more").
 
 I will be happy to test any patch or provide any extra log if needed.
 
 
--- 
+--
 Regards
 Sudip

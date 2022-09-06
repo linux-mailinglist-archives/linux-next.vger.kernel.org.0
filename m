@@ -2,113 +2,135 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD8EB5AE19F
-	for <lists+linux-next@lfdr.de>; Tue,  6 Sep 2022 09:54:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2D315AE35B
+	for <lists+linux-next@lfdr.de>; Tue,  6 Sep 2022 10:46:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239020AbiIFHx7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 6 Sep 2022 03:53:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56732 "EHLO
+        id S239489AbiIFIqS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 6 Sep 2022 04:46:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238599AbiIFHxf (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 6 Sep 2022 03:53:35 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA3074DD9;
-        Tue,  6 Sep 2022 00:53:33 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 718C31F96A;
-        Tue,  6 Sep 2022 07:53:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1662450812; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=e3QUGRmGqEl6xPagnkOR/JexF9yw1PltCqI7wAdRJxg=;
-        b=szOuRIs0cCBK1H6PKsUsPpAeNxWI1rQoZXD8JHcTFx4Pd4FbY7Zaow4t6VKG/eCu28Uykw
-        08koAlFpwrqRPIvX38x8DqEATR+CgzjdatCWvZqWD9zJUc9QEGvodSEKfvbHt+mPuOUIAC
-        d4uII081ZhK5cB5AQX5syr5K/Cq58DM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1662450812;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=e3QUGRmGqEl6xPagnkOR/JexF9yw1PltCqI7wAdRJxg=;
-        b=LbJNw5OZF+aS6zamEygbmkEhapLIQEGf++3G6rX+mlhq4ujGasckDo8OXslkEh1swKvhC7
-        MzjHTvKXXrH4vpDA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2DEE313A7A;
-        Tue,  6 Sep 2022 07:53:32 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Qs4TCnz8FmOnQAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Tue, 06 Sep 2022 07:53:32 +0000
-Message-ID: <dab10759-c059-2254-116b-8360bc240e57@suse.cz>
-Date:   Tue, 6 Sep 2022 09:53:31 +0200
+        with ESMTP id S239506AbiIFIqA (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 6 Sep 2022 04:46:00 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5914F7CAAB
+        for <linux-next@vger.kernel.org>; Tue,  6 Sep 2022 01:41:54 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-324ec5a9e97so89136637b3.7
+        for <linux-next@vger.kernel.org>; Tue, 06 Sep 2022 01:41:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=YtFrslcd7VroEKijkv+M1ZLM7ZldrFv64ctwlB1wWHE=;
+        b=ZE32UXObWue7HNp0BR21IQMNooFVkUhN7dwgZRzIe5ybmvovLToWKWu1j8YmW/khSH
+         pHIaNgZuNTBTcDWUOpfjHB7WYm7gK48OfMrqPyJ339BpsEOfV9UFKmxqXTmZK2kCH7g8
+         dIN0V+opKFW6/pR/ofARA3H4ckyeG3iEZ+ZWPuT6udPAalt2x4cZriJUMm1sT2K4DJNR
+         fPBJns3aBeDgpf0q5C7FAbp0LqJOhSls2JXSSRSTnKBhdV807mLtEhEWg5lTN3FbiNIS
+         uGQZhscSNbRDZqz3W+WNNobLhHXBTOqrk4q3Vb6eT+goN5EtaIBE+P9xlNpcXyFdNITD
+         CZMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=YtFrslcd7VroEKijkv+M1ZLM7ZldrFv64ctwlB1wWHE=;
+        b=SnwQ5NlDAUj1LA7A5UClHQ4ER1q7XrqATLH9S2CzZA/H91LGH0Ddb2spdw9jE8w3h0
+         tly17/zzewQ0lctBcRmXjw/8jDmk83EMln8sISBpw4kob734Dgy5+rRgvELJ5JhCoItS
+         8ASeh8lYHEs02lh4zvbzTmD16CD0dQ1uO4wbYGOZP30d7u2VHXJYdD2bJyLlDFiKqnR+
+         Bx/7zUq6vLyLphWPoYiDy3uPPmmmmisQSt7voeD8xq4jtcV+83myGuwIC6qbCEoHVl/G
+         CJwe8smjDS9wOKDpFyON522WXvFwPNJKy5gpjtlC9XN04SiOfAgXzt6YaP7+zs1EfZ8W
+         I1cQ==
+X-Gm-Message-State: ACgBeo1M1PT5AWS0BEoAp1XmE/4tsQURjHkBXkvNV7c4PHemYaMxaDuZ
+        mTE3cW9d6x66gkuRGoe5YFDBptgzyn+OAjaHdilP1g==
+X-Google-Smtp-Source: AA6agR5vg5o9a1hpAhKt50VBUZ6F8E2KCroqiblK7POTlRF0Kohm1W38ZPcFxsoUJ+Xn13nVfWHDM0t4Qba1AFb4dK0=
+X-Received: by 2002:a81:bb41:0:b0:328:fd1b:5713 with SMTP id
+ a1-20020a81bb41000000b00328fd1b5713mr42992802ywl.238.1662453707138; Tue, 06
+ Sep 2022 01:41:47 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: linux-next: build failure after merge of the slab tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+References: <20220906174946.61819060@canb.auug.org.au>
+In-Reply-To: <20220906174946.61819060@canb.auug.org.au>
+From:   Marco Elver <elver@google.com>
+Date:   Tue, 6 Sep 2022 10:41:11 +0200
+Message-ID: <CANpmjNPuG+=qoiZ6M3UzZNfXq3tpS59GPrH358md+q5gxZzTRg@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the kspp tree with the tip tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Marco Elver <elver@google.com>
-References: <20220906165131.59f395a9@canb.auug.org.au>
-Content-Language: en-US
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20220906165131.59f395a9@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 9/6/22 08:51, Stephen Rothwell wrote:
+On Tue, 6 Sept 2022 at 09:49, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
 > Hi all,
+>
+> Today's linux-next merge of the kspp tree got a conflict in:
+>
+>   lib/Kconfig.debug
+>
+> between commit:
+>
+>   724c299c6a0e ("perf/hw_breakpoint: Add KUnit test for constraints accounting")
+>
+> from the tip tree and commit:
+>
+>   bb26bbd0a067 ("fortify: Add KUnit test for FORTIFY_SOURCE internals")
+>
+> from the kspp tree.
+>
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>
+> --
+> Cheers,
+> Stephen Rothwell
+>
+> diff --cc lib/Kconfig.debug
+> index e40550a5bdd3,1f267c0ddffd..000000000000
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@@ -2533,16 -2542,15 +2545,25 @@@ config STACKINIT_KUNIT_TES
+>           CONFIG_GCC_PLUGIN_STRUCTLEAK, CONFIG_GCC_PLUGIN_STRUCTLEAK_BYREF,
+>           or CONFIG_GCC_PLUGIN_STRUCTLEAK_BYREF_ALL.
+>
+>  +config HW_BREAKPOINT_KUNIT_TEST
+>  +      bool "Test hw_breakpoint constraints accounting" if !KUNIT_ALL_TESTS
+>  +      depends on HAVE_HW_BREAKPOINT
+>  +      depends on KUNIT=y
+>  +      default KUNIT_ALL_TESTS
+>  +      help
+>  +        Tests for hw_breakpoint constraints accounting.
+>  +
+>  +        If unsure, say N.
+>  +
+> + config FORTIFY_KUNIT_TEST
+> +       tristate "Test fortified str*() and mem*() function internals at runtime" if !KUNIT_ALL_TESTS
+> +       depends on KUNIT && FORTIFY_SOURCE
+> +       default KUNIT_ALL_TESTS
+> +       help
+> +         Builds unit tests for checking internals of FORTIFY_SOURCE as used
+> +         by the str*() and mem*() family of functions. For testing runtime
+> +         traps of FORTIFY_SOURCE, see LKDTM's "FORTIFY_*" tests.
+> +
+>   config TEST_UDELAY
+>         tristate "udelay test driver"
+>         help
 
-Hi,
+Looks good to me, thanks!
 
-> After merging the slab tree, today's linux-next build (powerpc
-> ppc64_defconfig) failed like this:
-> 
-> kernel/bpf/memalloc.c: In function 'bpf_mem_free':
-> kernel/bpf/memalloc.c:613:33: error: implicit declaration of function '__ksize'; did you mean 'ksize'? [-Werror=implicit-function-declaration]
->    613 |         idx = bpf_mem_cache_idx(__ksize(ptr - LLIST_NODE_SZ));
->        |                                 ^~~~~~~
->        |                                 ksize
-
-Could you use ksize() here? I'm guessing you picked __ksize() because 
-kasan_unpoison_element() in mm/mempool.c did, but that's to avoid 
-kasan_unpoison_range() in ksize() as this caller does it differently.
-AFAICS your function doesn't handle kasan differently, so ksize() should 
-be fine.
-
-> Caused by commit
-> 
->    8dfa9d554061 ("mm/slab_common: move declaration of __ksize() to mm/slab.h")
-> 
-> interacting with commit
-> 
->    7c8199e24fa0 ("bpf: Introduce any context BPF specific memory allocator.")
-> 
-> from the bpf-next tree.
-> 
-> I have reverted the slab tree commit for today.
-> 
-
+Reviewed-by: Marco Elver <elver@google.com>

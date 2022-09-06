@@ -2,109 +2,112 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E96E5AF7B7
-	for <lists+linux-next@lfdr.de>; Wed,  7 Sep 2022 00:12:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33DA15AF874
+	for <lists+linux-next@lfdr.de>; Wed,  7 Sep 2022 01:36:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229487AbiIFWMd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 6 Sep 2022 18:12:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34076 "EHLO
+        id S229447AbiIFXgI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 6 Sep 2022 19:36:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiIFWMc (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 6 Sep 2022 18:12:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A70889F0D4;
-        Tue,  6 Sep 2022 15:12:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 48479615B0;
-        Tue,  6 Sep 2022 22:12:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EDA6C433C1;
-        Tue,  6 Sep 2022 22:12:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662502350;
-        bh=YLor/aNRqp6Ff9o1HUmyK/bQsNc6c5Q+mE1K1VOmqBk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TFGcimLmrqBAShEGqbUXWvHVTCjY5gvJXjNwfW4HiMg+FVpHHMJn0ovDTHjI+IP90
-         +C4bdFBMXs8h+R344F9i8e6BbQ3EjzL/criSDPIEq1k9h0EaEa45+TcIc3cojMUvAJ
-         8ZXD6BMBhdNa6ka00KuHwbr1T83kAwK/bcUWg7vBYcXWTPufoBflv5GfTLgNZ6p/Ov
-         Sv0/BrQZk9QcEkHzsfJGBPwPM4Zq2PNj2yXhlVv/7hGDohgUSjWE7JaBIixLSoDJah
-         ztYz774d8UNL/qUfkcAUHUk0903HQRn5Mvq/C2W4so+T7jXj7VRnrKUlkI2B9obZSz
-         J1jQZCpFdJiJw==
-Date:   Tue, 6 Sep 2022 15:12:28 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Linux Crypto List <linux-crypto@vger.kernel.org>,
-        Alexander Potapenko <glider@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Robert Elliott <elliott@hpe.com>
-Subject: Re: linux-next: manual merge of the mm tree with the crypto tree
-Message-ID: <YxfFzGObDWsylCK+@quark>
-References: <20220906202017.5093fd23@canb.auug.org.au>
+        with ESMTP id S229485AbiIFXgH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 6 Sep 2022 19:36:07 -0400
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E52674DF5;
+        Tue,  6 Sep 2022 16:36:07 -0700 (PDT)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-12243fcaa67so32033892fac.8;
+        Tue, 06 Sep 2022 16:36:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=7fI7GSQEqzfTbxrtg0p1r0owGwfzmjJSW9DpLrWCgIc=;
+        b=d9TLgsDmvl68FCD/rIKT+9o+eHronhkechLJbLPFu0/PmQ2az8Yi+kDsA2+lJReMRj
+         7wI3BCJGIvDKg3YsvpdhbBtQP4r9PIl5YohE1C6cO7Y0SNNurt+6o7QGugTfNzvhHcxr
+         bRxbKNfSozmNHBJLbkvXkwuDfSQ5Wa+QX2N6cGNLs5NTRozcTQ5UDnwFBbcd4a/tJ9Gk
+         E5osJPfJJUbVDHVZsxQRsDl42IwvvNH0Nmm+7VsHAuJt4BiHELS3S/T+jHhyltYOL6wp
+         6HeEQDWSyuxj1n/rB3o/Jhyfb7iSOd1pnZQFG5H4L/fjLo9AfWfvgmzfTFHUUMIRJZWa
+         heBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=7fI7GSQEqzfTbxrtg0p1r0owGwfzmjJSW9DpLrWCgIc=;
+        b=FxxsBdwgNW5lgrzLQ3gWV59XZxFnEsuUYWQ4aD8yYlUCFv50u6NVMlInvNTtwgRKdM
+         P8NeHwl1P5aVk6P9govBXt/lxNL+49P2uv+veAQP4jp7R66i3APuOs0jkpd9CYlz9HzJ
+         j549le6N6YhW9ssFeMO3md0jGRLYhjgn2xTLPt4u+sQkSyuO4WXvmtDvpWB5GB7zGm+v
+         L4Rr5ZHkyCJ/42XKUVYmTR2jgBJsD8XsgkPggamGAPBF0Mf0yb0ApUnBySc8Taviuo/7
+         hQ06OmNtH/TFtfoyxntzZJ73aahzLnPxd8e+jA5+qjmgPrIU4j6l+pI4WESjK73TGuXk
+         mNOQ==
+X-Gm-Message-State: ACgBeo0BxTGRJLu4RxcpcsMNb7WB9XJvQaPipQxlQLQ9iKZhgohoVbp6
+        +nuY89OXS0hg24PP35zqLEA=
+X-Google-Smtp-Source: AA6agR7zZb77ZwaCfAlECdF3kNlSriboTt5SSacEBTaPERsG+TCNe0XQVOt1ni6Y2tZrTzaz5UGcag==
+X-Received: by 2002:a05:6808:1389:b0:345:fde:79eb with SMTP id c9-20020a056808138900b003450fde79ebmr10790885oiw.21.1662507366364;
+        Tue, 06 Sep 2022 16:36:06 -0700 (PDT)
+Received: from ?IPV6:2804:431:c7f5:f684:ee06:25a5:3122:5cd3? ([2804:431:c7f5:f684:ee06:25a5:3122:5cd3])
+        by smtp.gmail.com with ESMTPSA id x2-20020a9d3782000000b00639443424f8sm6405852otb.8.2022.09.06.16.36.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Sep 2022 16:36:05 -0700 (PDT)
+Message-ID: <8e4350df-0c73-6ca2-a25f-28a40a1856db@gmail.com>
+Date:   Tue, 6 Sep 2022 20:35:49 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220906202017.5093fd23@canb.auug.org.au>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: build failure of next-20220906 due to 396369d67549 ("drm: vkms:
+ Add support to the RGB565 format")
+Content-Language: en-US
+To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Melissa Wen <melissa.srw@gmail.com>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-next <linux-next@vger.kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Haneen Mohammed <hamohammed.sa@gmail.com>
+References: <YxducgSzR6/zyHD7@debian>
+ <CADVatmNfc1YT02v5-FaMoGN==MOx5ZJ=o8YMQAH19Gvf91betA@mail.gmail.com>
+From:   Igor Matheus Andrade Torrente <igormtorrente@gmail.com>
+In-Reply-To: <CADVatmNfc1YT02v5-FaMoGN==MOx5ZJ=o8YMQAH19Gvf91betA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 08:20:17PM +1000, Stephen Rothwell wrote:
-> diff --git a/arch/x86/crypto/Kconfig b/arch/x86/crypto/Kconfig
-> index 9bb0f7939c6b..856f5d8ca65f 100644
-> --- a/arch/x86/crypto/Kconfig
-> +++ b/arch/x86/crypto/Kconfig
-> @@ -5,6 +5,7 @@ menu "Accelerated Cryptographic Algorithms for CPU (x86)"
->  config CRYPTO_CURVE25519_X86
->  	tristate "Public key crypto: Curve25519 (ADX)"
->  	depends on X86 && 64BIT
-> +	depends on !KMSAN # avoid false positives from assembly
->  	select CRYPTO_LIB_CURVE25519_GENERIC
->  	select CRYPTO_ARCH_HAVE_LIB_CURVE25519
->  	help
-> @@ -16,6 +17,7 @@ config CRYPTO_CURVE25519_X86
->  config CRYPTO_AES_NI_INTEL
->  	tristate "Ciphers: AES, modes: ECB, CBC, CTS, CTR, XTR, XTS, GCM (AES-NI)"
->  	depends on X86
-> +	depends on !KMSAN # avoid false positives from assembly
->  	select CRYPTO_AEAD
->  	select CRYPTO_LIB_AES
->  	select CRYPTO_ALGAPI
-> @@ -32,6 +34,7 @@ config CRYPTO_AES_NI_INTEL
->  config CRYPTO_BLOWFISH_X86_64
->  	tristate "Ciphers: Blowfish, modes: ECB, CBC"
->  	depends on X86 && 64BIT
-> +	depends on !KMSAN # avoid false positives from assembly
->  	select CRYPTO_SKCIPHER
->  	select CRYPTO_BLOWFISH_COMMON
->  	imply CRYPTO_CTR
-> @@ -44,6 +47,7 @@ config CRYPTO_BLOWFISH_X86_64
->  config CRYPTO_CAMELLIA_X86_64
->  	tristate "Ciphers: Camellia with modes: ECB, CBC"
->  	depends on X86 && 64BIT
-> +	depends on !KMSAN # avoid false positives from assembly
->  	select CRYPTO_SKCIPHER
->  	imply CRYPTO_CTR
->  	help
-> @@ -55,6 +59,7 @@ config CRYPTO_CAMELLIA_X86_64
->  config CRYPTO_CAMELLIA_AESNI_AVX_X86_64
->  	tristate "Ciphers: Camellia with modes: ECB, CBC (AES-NI/AVX)"
->  	depends on X86 && 64BIT
-> +	depends on !KMSAN # avoid false positives from assembly
->  	select CRYPTO_SKCIPHER
->  	select CRYPTO_CAMELLIA_X86_64
->  	select CRYPTO_SIMD
+On 9/6/22 18:26, Sudip Mukherjee wrote:
+> On Tue, Sep 6, 2022 at 4:59 PM Sudip Mukherjee (Codethink)
+> <sudipm.mukherjee@gmail.com> wrote:
+>>
+>> Hi All,
+>>
+>> The builds of next-20220906 fails for mips, xtensa and arm allmodconfig.
+>>
+>> The errors in mips and xtensa are:
+>>
+>> ERROR: modpost: "__divdi3" [drivers/gpu/drm/vkms/vkms.ko] undefined!
+>> ERROR: modpost: "__udivdi3" [drivers/gpu/drm/vkms/vkms.ko] undefined!
+>>
+>> The error in arm is:
+>>
+>> ERROR: modpost: "__aeabi_uldivmod" [drivers/gpu/drm/vkms/vkms.ko] undefined!
+>> ERROR: modpost: "__aeabi_ldivmod" [drivers/gpu/drm/vkms/vkms.ko] undefined!
+>>
+>>
+>> Trying to do a git bisect to find out the offending commit.
+> 
+> git bisect points to 396369d67549 ("drm: vkms: Add support to the
+> RGB565 format")
 
-Are there any options in arch/x86/crypto/Kconfig that *don't* need a dependency
-on !KMSAN?  If not, this could be done in a much simpler way.
+Are these architectures incapable of doing 64bits int division?
 
-- Eric
+> 
+> 
+

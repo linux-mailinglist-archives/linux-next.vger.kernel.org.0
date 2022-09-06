@@ -2,65 +2,80 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 907B85AF0E0
-	for <lists+linux-next@lfdr.de>; Tue,  6 Sep 2022 18:45:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FD5F5AF261
+	for <lists+linux-next@lfdr.de>; Tue,  6 Sep 2022 19:26:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232036AbiIFQoQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 6 Sep 2022 12:44:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59266 "EHLO
+        id S229538AbiIFR0y (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 6 Sep 2022 13:26:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232678AbiIFQnR (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 6 Sep 2022 12:43:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 490C262C0;
-        Tue,  6 Sep 2022 09:21:16 -0700 (PDT)
+        with ESMTP id S229544AbiIFR0k (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 6 Sep 2022 13:26:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C450181;
+        Tue,  6 Sep 2022 10:15:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B5BC614AA;
-        Tue,  6 Sep 2022 16:21:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C70F9C433C1;
-        Tue,  6 Sep 2022 16:21:14 +0000 (UTC)
-Date:   Tue, 6 Sep 2022 12:21:53 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Arun Easi <aeasi@marvell.com>
-Cc:     "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        <GR-QLogic-Storage-Upstream@marvell.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-next@vger.kernel.org>
-Subject: Re: [EXT] build failure of next-20220906 due to 8bfc149ba24c
- ("scsi: qla2xxx: Enhance driver tracing with separate tunable and more")
-Message-ID: <20220906122153.2756a601@gandalf.local.home>
-In-Reply-To: <44fe9ca0-e1d7-1e4f-9fd8-0f48a84dca72@marvell.com>
-References: <YxdZ/9XOsWilvVSd@debian>
-        <44fe9ca0-e1d7-1e4f-9fd8-0f48a84dca72@marvell.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 17F50B81908;
+        Tue,  6 Sep 2022 17:15:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 746DFC433D6;
+        Tue,  6 Sep 2022 17:15:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1662484541;
+        bh=chbnuCa5iR1flzzST7+Bhisoa0M0TbUwZ1XxFilkS3I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tzmurZ8cDqzbHyeMC6UQ6znqE8oyOsYpvRRrmdC2gugJt7u420/ogeXIQ1NYOYvM/
+         tQAARfZt2ulAOO8qvl+CzWtiYA5M7SC2n5ovWwRZPq0IhpXbIXKjiz1I+unRdg543R
+         NWZdQhE9txjFoX+K2weyySLIaXU/la4B1QY5HfJQ=
+Date:   Tue, 6 Sep 2022 19:15:38 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+Cc:     Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+Subject: Re: build failure of next-20220906 due to 4ec7ac90ff39 ("misc:
+ microchip: pci1xxxx: Add power management functions - suspend & resume
+ handlers.")
+Message-ID: <YxeAOgEoUffHudv/@kroah.com>
+References: <YxdX2l88PSFGe1r4@debian>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YxdX2l88PSFGe1r4@debian>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, 6 Sep 2022 09:05:38 -0700
-Arun Easi <aeasi@marvell.com> wrote:
-
-> This looks like is happening due to CONFIG_TRACING not being enabled (same 
-> as what kernel test bot reported). Could you try out the fix attached?
+On Tue, Sep 06, 2022 at 03:23:22PM +0100, Sudip Mukherjee (Codethink) wrote:
+> Hi All,
 > 
-> @Steven, please see the patch attached. Do you think the fix belongs 
-> better in linux/trace.h ?
+> The builds of riscv, s390, csky, alpha and loongarch allmodconfig have
+> failed to build next-20220906 with the error:
+> 
+> 
+> drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c:311:12: error: 'pci1xxxx_gpio_resume' defined but not used [-Werror=unused-function]
+>   311 | static int pci1xxxx_gpio_resume(struct device *dev)
+>       |            ^~~~~~~~~~~~~~~~~~~~
+> drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c:295:12: error: 'pci1xxxx_gpio_suspend' defined but not used [-Werror=unused-function]
+>   295 | static int pci1xxxx_gpio_suspend(struct device *dev)
+>       |            ^~~~~~~~~~~~~~~~~~~~~
+> 
+> 
+> git bisect pointed to 4ec7ac90ff39 ("misc: microchip: pci1xxxx: Add power management functions - suspend & resume handlers.").
+> 
+> I will be happy to test any patch or provide any extra log if needed.
 
-Yes, of course. Feel free to send me a patch.
+Hopefully this commit will fix this:
+	https://lore.kernel.org/r/20220906124951.696776-1-kumaravel.thiagarajan@microchip.com
 
-Thanks!
 
--- Steve
+thanks,
+
+greg k-h

@@ -2,44 +2,48 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEA845ADCE2
-	for <lists+linux-next@lfdr.de>; Tue,  6 Sep 2022 03:30:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77DD15ADCF6
+	for <lists+linux-next@lfdr.de>; Tue,  6 Sep 2022 03:38:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232079AbiIFBaS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 5 Sep 2022 21:30:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35128 "EHLO
+        id S230446AbiIFBiX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 5 Sep 2022 21:38:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbiIFBaS (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 5 Sep 2022 21:30:18 -0400
+        with ESMTP id S229817AbiIFBiX (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 5 Sep 2022 21:38:23 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6B8D4C601;
-        Mon,  5 Sep 2022 18:30:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C17040BF3;
+        Mon,  5 Sep 2022 18:38:22 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MM79f11SGz4xG6;
-        Tue,  6 Sep 2022 11:30:14 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MM7M02TR7z4xD3;
+        Tue,  6 Sep 2022 11:38:20 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1662427814;
-        bh=OGm8FbMx/rVmQR6RSZSoIPcAE0Xg1UA0h2SDNoahiOI=;
+        s=201702; t=1662428301;
+        bh=EP4v0HVtzqr4OhiGfzW++iM6gOALpxsstR02odUX3Jc=;
         h=Date:From:To:Cc:Subject:From;
-        b=RL5qxQa11wjwhrCNFJUGlJKE2c7bWLSD8VViQ+HhKled+DafuXXAD3RczEwb1YAsT
-         Vq31JJ4N12n2ab6sAT4gtMANrUV4Vg6B0Q5Fa5skocGOasujghD5zYEa0KJl7bp43c
-         Eb4TmGjdM0wVyK01kbmpAykjLmSCFM1zYm8pA4s5jmw5D2h5GInHncxfU5G+DjjcEM
-         2dZ7BkJBdvTrhEYFR1dJzzflWexGAkiTD/krLOWF1nwUpP2M+TBDYfWvv56vgxBNh4
-         jQurUG91nQbWbzsK2Z+m2hVEzmFaqyiw2Wa5ukPPfhC85ugdYXWLXjuKMkurv5E8p5
-         tbAifAppBcHsg==
-Date:   Tue, 6 Sep 2022 11:30:12 +1000
+        b=Y+xLeyFGikQ1ePNQCUggqfDU6pUG1RTb74hPbXimJ2NJe+1qdngX02Rq18cXRx/ij
+         yRNDxPbs7qc2AOcBkeOP14EqWa/e+mZuHm0sWeJY1oy6G7boEkYteQR1tGgJvnW9GN
+         2tZV+JJq+VcH8v5oeyd6Geuk++opglvxISfUqfnDD7IcFHSm9Hlx2wM/7lhiC+csnN
+         OO1OOmMVRGy2e5X/3Se//PDNt0E3+dxZCsIaMgwG9Avvfk/Kwc1hh8YAzhvU42CpeN
+         DzHviGaG3zt/s0HPegpriT+2Tu8IyRyqC04QY3EQyC8hxuxVLQz3om96jUKZUbI0Dr
+         N2wdZxyBKiiOQ==
+Date:   Tue, 6 Sep 2022 11:38:19 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Herbert Xu <herbert@gondor.apana.org.au>,
-        Linux Crypto List <linux-crypto@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the crypto tree
-Message-ID: <20220906113012.447fc7f4@canb.auug.org.au>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Sean Paul <seanpaul@chromium.org>
+Cc:     Jilin Yuan <yuanjilin@cdjrlc.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Rob Clark <robdclark@chromium.org>
+Subject: linux-next: manual merge of the drm-msm-lumag tree with the drm-msm
+ tree
+Message-ID: <20220906113819.1abecef0@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/BLImpwYhLV.gavsNcajwkZg";
+Content-Type: multipart/signed; boundary="Sig_/b3BY9fikNfi30pYXQU722Fh";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -50,48 +54,51 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/BLImpwYhLV.gavsNcajwkZg
+--Sig_/b3BY9fikNfi30pYXQU722Fh
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the crypto tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+Today's linux-next merge of the drm-msm-lumag tree got a conflict in:
 
-ERROR: modpost: "aspeed_register_hace_hash_algs" [drivers/crypto/aspeed/asp=
-eed_crypto.ko] undefined!
-ERROR: modpost: "aspeed_unregister_hace_crypto_algs" [drivers/crypto/aspeed=
-/aspeed_crypto.ko] undefined!
-ERROR: modpost: "aspeed_register_hace_crypto_algs" [drivers/crypto/aspeed/a=
-speed_crypto.ko] undefined!
-ERROR: modpost: "aspeed_unregister_hace_hash_algs" [drivers/crypto/aspeed/a=
-speed_crypto.ko] undefined!
+  drivers/gpu/drm/msm/msm_gem.h
 
-Exposed by commit
+between commit:
 
-  31b39755e325 ("crypto: aspeed - Enable compile testing")
+  b352ba54a820 ("drm/msm/gem: Convert to using drm_gem_lru")
 
-I have used the crypto tree from next-20220901 for today.
+from the drm-msm tree and commit:
+
+  aabc003330ed ("drm/msm: fix repeated words in comments")
+
+from the drm-msm-lumag tree.
+
+I fixed it up (the former removed the comment updated by the latter) and
+can carry the fix as necessary. This is now fixed as far as linux-next
+is concerned, but any non trivial conflicts should be mentioned to your
+upstream maintainer when your tree is submitted for merging.  You may
+also want to consider cooperating with the maintainer of the conflicting
+tree to minimise any particularly complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/BLImpwYhLV.gavsNcajwkZg
+--Sig_/b3BY9fikNfi30pYXQU722Fh
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMWoqQACgkQAVBC80lX
-0GwLVwf8CZG3HaGdmOv9YClgzsgMYuu2mOR8dPePl/zLiGl2AKs5KMmvniLhqe9g
-CEmXzl2LuyuqUwoFGZTsIFd927f/iAP0m7ff25Zm1YeBkpO0gGiofeu4fDo2ayo5
-cilKi3FO49r8abZjC9NAVFLQ6vBqblAY9R4kP36R2MFNPUON08FReKvR+Eh2Z6NK
-BTdStOFIwP/gDtxM7eTll7lJccdOeqMaAmOHYW4oTkX4WuCM82tv/JShZMDIEjIo
-ec46MVsEVPxbHneTfkba2GRIA3gLBHQXMLQwHgpHuqGmqzgvgXbp/9SciKrtgFD+
-DDlUnFGzicDazOYXyYrTNpD5jaKR6Q==
-=JXHU
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMWpIsACgkQAVBC80lX
+0GyrBggAkMNs+ErNLGwBN0icVa04IcdlcCNbNHeIAfy4AHMEPa0zzCIsTR64EI+E
+gczZXin8CnzFuPRqAwlhQgLGR4VvBo/ypa3Mk6+xcCRUO6spV7/HvbOxL1clwSDc
+1F+p6XbE/KedCTzRZn+4ZySiK5tmew9Pyj/Am4EMCmNvSc8Yr/rh1FHXT5B0nYrv
+2WOxMjziJCOYiGM05RQx2yb6ZSlKSrdIVmEaXLmNHWRd6mYkllxQLyh/NWMVgy5i
+pVN2ulHdHNOuH2nSVrSMVss9pOVMzdHH9QlN4nRRKEgC9030Rd2ofg69lnQ1P1eh
+sYfM6wLDeE6buimEL+H3k0W0Qwv/CA==
+=R88x
 -----END PGP SIGNATURE-----
 
---Sig_/BLImpwYhLV.gavsNcajwkZg--
+--Sig_/b3BY9fikNfi30pYXQU722Fh--

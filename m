@@ -2,133 +2,112 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E77215AFDCB
-	for <lists+linux-next@lfdr.de>; Wed,  7 Sep 2022 09:45:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00C525AFFC5
+	for <lists+linux-next@lfdr.de>; Wed,  7 Sep 2022 11:01:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229837AbiIGHpq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 7 Sep 2022 03:45:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38080 "EHLO
+        id S229959AbiIGJBG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 7 Sep 2022 05:01:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiIGHpp (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 7 Sep 2022 03:45:45 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB2037FFAC;
-        Wed,  7 Sep 2022 00:45:42 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MMvSM48Bmz4wgr;
-        Wed,  7 Sep 2022 17:45:39 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1662536741;
-        bh=bhsJcQEgyb5vhXPUdvUG6IM1FjPRH71usf9pZQ22R1M=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=cYRv60Mn0VD9/sCRd9f51WWo2eCrDCXr4Bzs0uDkG19XgmBhgzXAvmFA1Snjc2s+X
-         0bpBYSJ//f6SITYk+MhxISXGg/B0muwWFUbuBJQPE8Nwei7j+JNdpgArKGL+89TXLm
-         pPm0hF6l9GRDS0MTstX6c1YOEz5kj3XKKQXQZTthbl0PmpJZDDuPRe2aQrC5DJUxZW
-         4NYauY4Apix4awRLXlM4FkAkew2C0fT1c73vdBhBmXL6f0zh2jr3vCsNLg4TWnYDLc
-         4pBx0nRaXQb2HYytzoPAGqek89313v0+w0LrRQP+Idu48OWA4YYIyd5Tqm2ipBA2Ie
-         GJkcm0Gk9A8dQ==
-Date:   Wed, 7 Sep 2022 17:45:35 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Vlastimil Babka <vbabka@suse.cz>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Marco Elver <elver@google.com>
-Subject: Re: linux-next: build failure after merge of the slab tree
-Message-ID: <20220907174535.4852e7da@canb.auug.org.au>
-In-Reply-To: <CAADnVQKJORAcV75CHE1yG6_+c8qnoOj6gf=zJG9vnWwR5+4SqQ@mail.gmail.com>
-References: <20220906165131.59f395a9@canb.auug.org.au>
-        <dab10759-c059-2254-116b-8360bc240e57@suse.cz>
-        <CAADnVQJTDdA=vpQhrbAbX7oEQ=uaPXwAmjMzpW4Nk2Xi9f2JLA@mail.gmail.com>
-        <CAADnVQKJORAcV75CHE1yG6_+c8qnoOj6gf=zJG9vnWwR5+4SqQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/IMql38jc4ngYXPwtr.DpjJM";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229437AbiIGJBF (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 7 Sep 2022 05:01:05 -0400
+X-Greylist: delayed 601 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 07 Sep 2022 02:01:03 PDT
+Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9325A9E2E2;
+        Wed,  7 Sep 2022 02:01:02 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.west.internal (Postfix) with ESMTP id A66422B058C3;
+        Wed,  7 Sep 2022 04:42:01 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Wed, 07 Sep 2022 04:42:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1662540121; x=1662543721; bh=CwqfKMH8rF
+        Jq0n8MfKf64/LLnkipF2ZC6faLaJQYssI=; b=iFbH69DPSIHen642gkFD6Df4Zc
+        hvxltbsETwdEtCI7uJxGWG+E58xlt1mLUM87ZlfIr0xQJzkQ6GpwL/1C79P+hFUG
+        HGAoRqamU1F5k7ZsvRELKOYF3gcAFccsMlCE2x+aLBGWBOLiWXrKi7OUyX2eNbkN
+        COTBF7g7lS4s8LbLwWHQ6L1IvxOBrZJtRajiEa7Meq8kMxaVBjqIf3bsOA6VYinz
+        vKnWur+5+2McBsE2hcSxYXJZ6mut+T4mrdAl0LgNyTBd1uHl9hqR6AkpEn9vgkmC
+        Ou1+WiIR6PUE3FcaPPIO3NKoDs43b9fe4E6R4atR/ghDap5NcAQPvaQAukVA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1662540121; x=1662543721; bh=CwqfKMH8rFJq0n8MfKf64/LLnkip
+        F2ZC6faLaJQYssI=; b=CAy84ntWnJCf1x+Ik4W8I4eDBhM+IJW3yRGscigfGxPp
+        sW8yEM1pXDHGQF13EEiCUYVA4+FlkhsiUPNmBWrswZhfl+VKcVtz/E/drabhO3eJ
+        be5rk6oBtaOj99sElD/uTu1VszaGsykIlDFRrUcQbQJLlvDaF5wK1iAQ1tz9uMK9
+        zFR9+r+q4s+MtbS+90jrBqvQrAA5H1T6Yw68M2GVORmJY9VCmVAT/XA9Cn63yj7P
+        bs9/v+uj1kxrEC45xHlXEzEmeNfzdM5hUiI6XyNQ2Rad4uU+qWt6dvK9J0NI7JOr
+        rlq2LR3ZgTD2//XD3Z2J6I05QxVQEw4N/vsw3hLL7g==
+X-ME-Sender: <xms:WFkYY_5WoLxuHstEPz3dFmgk10HXsMyVhQMMQL2NS7d0qfH_XMTtyg>
+    <xme:WFkYY05aixySBJZI-F8Rf34EiYtu70hbvwnpr3sPTJDde15-BLUEEN01elG8qIuaE
+    cQwvKy33ekME1RCqYI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedttddgtdehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:WFkYY2ffvzUcraSjfGbccJpOVIRcEkKF_nU2nhNkUkDYWHdSBT3d7Q>
+    <xmx:WFkYYwIVQM8sUZ18dCbyqQbmz3KXMzOJ3olYkeYBpGTeV28kJlhe7Q>
+    <xmx:WFkYYzKCRCcmFzWivKUssrV0smQau_QWIvLEsuz05FY4PiwSY9LkhA>
+    <xmx:WVkYY700gHe4BIxy75yuW2HAWAom3WMC6vVUqJZq9PbYGR7MVF-Zmoze08g>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id C7651B60083; Wed,  7 Sep 2022 04:42:00 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-927-gf4c98c8499-fm-20220826.002-gf4c98c84
+Mime-Version: 1.0
+Message-Id: <77b0aa7b-3183-4a05-85ff-b278aa7f8f11@www.fastmail.com>
+In-Reply-To: <CADVatmNSGSZZNXF7k7YmMqfcoOAiM6JhEfksjoVqoBOLUXfbPQ@mail.gmail.com>
+References: <YxdX2l88PSFGe1r4@debian> <YxeAOgEoUffHudv/@kroah.com>
+ <CADVatmNSGSZZNXF7k7YmMqfcoOAiM6JhEfksjoVqoBOLUXfbPQ@mail.gmail.com>
+Date:   Wed, 07 Sep 2022 10:41:39 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Sudip Mukherjee" <sudipm.mukherjee@gmail.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     "Kumaravel Thiagarajan" <kumaravel.thiagarajan@microchip.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-next <linux-next@vger.kernel.org>
+Subject: Re: build failure of next-20220906 due to 4ec7ac90ff39 ("misc: microchip:
+ pci1xxxx: Add power management functions - suspend & resume handlers.")
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/IMql38jc4ngYXPwtr.DpjJM
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi all,
-
-On Tue, 6 Sep 2022 20:05:44 -0700 Alexei Starovoitov <alexei.starovoitov@gm=
-ail.com> wrote:
+On Tue, Sep 6, 2022, at 11:07 PM, Sudip Mukherjee wrote:
+> On Tue, Sep 6, 2022 at 6:15 PM Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+>> On Tue, Sep 06, 2022 at 03:23:22PM +0100, Sudip Mukherjee (Codethink) wrote:
+>> >
+>> > drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c:311:12: error: 'pci1xxxx_gpio_resume' defined but not used [-Werror=unused-function]
+>> >   311 | static int pci1xxxx_gpio_resume(struct device *dev)
+>> >       |            ^~~~~~~~~~~~~~~~~~~~
+>> > drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c:295:12: error: 'pci1xxxx_gpio_suspend' defined but not used [-Werror=unused-function]
+>> >   295 | static int pci1xxxx_gpio_suspend(struct device *dev)
+>> >       |            ^~~~~~~~~~~~~~~~~~~~~
+>> >
+>> >
+>> > git bisect pointed to 4ec7ac90ff39 ("misc: microchip: pci1xxxx: Add power management functions - suspend & resume handlers.").
+>> >
 >
-> On Tue, Sep 6, 2022 at 11:37 AM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Tue, Sep 6, 2022 at 12:53 AM Vlastimil Babka <vbabka@suse.cz> wrote:=
- =20
-> > >
-> > > On 9/6/22 08:51, Stephen Rothwell wrote: =20
-> > > > Hi all, =20
-> > >
-> > > Hi,
-> > > =20
-> > > > After merging the slab tree, today's linux-next build (powerpc
-> > > > ppc64_defconfig) failed like this:
-> > > >
-> > > > kernel/bpf/memalloc.c: In function 'bpf_mem_free':
-> > > > kernel/bpf/memalloc.c:613:33: error: implicit declaration of functi=
-on '__ksize'; did you mean 'ksize'? [-Werror=3Dimplicit-function-declaratio=
-n]
-> > > >    613 |         idx =3D bpf_mem_cache_idx(__ksize(ptr - LLIST_NODE=
-_SZ));
-> > > >        |                                 ^~~~~~~
-> > > >        |                                 ksize =20
-> > >
-> > > Could you use ksize() here? I'm guessing you picked __ksize() because
-> > > kasan_unpoison_element() in mm/mempool.c did, but that's to avoid
-> > > kasan_unpoison_range() in ksize() as this caller does it differently.
-> > > AFAICS your function doesn't handle kasan differently, so ksize() sho=
-uld
-> > > be fine. =20
-> >
-> > Ok. Will change to use ksize(). =20
->=20
-> Just pushed the following commit to address the issue:
-> https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/commit/?=
-id=3D1e660f7ebe0ff6ac65ee0000280392d878630a67
->=20
-> It will get to net-next soon.
+> Looking at other drivers which uses SIMPLE_DEV_PM_OPS, I think
+> pci1xxxx_gpio_suspend() and pci1xxxx_gpio_resume() needs to be under
+> "#ifdef CONFIG_PM_SLEEP".
 
-I replaced my revert with that patch for today (and will discard that
-when it arrives via some other tree).
+That would work, but a better fix is to use DEFINE_SIMPLE_DEV_PM_OPS()
+in place of the deprecated SIMPLE_DEV_PM_OPS().
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/IMql38jc4ngYXPwtr.DpjJM
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMYTB8ACgkQAVBC80lX
-0GyK6Qf/QTHmLJ5Q68YznFmFD9sOrzRpxcX1pruMX5LvK7xzTn3NoGEmaFSNPT1i
-2ikd8XlTRk8YIbW+k80qPoHHWJy7hfmYEEwznigEOPfgq1a/HfmUbhc4tYjRffTD
-KBwk2urFFvs59tjKt2PgH0aS2Jr7Ze/1LaY1eYnJ9mS6+wY8b6OeBarl+0qbuAop
-Ia4q0N6/Z1Nf1NrAAo+7llUdda26Ly30iJCrS9prkOfvWYy6k/B6ehgbFwDg5sV5
-1gfz3aZokZXvb5XAKVmwnQHJPq094gZ7qr59OjIkNLKQ1ZkD6pOddWzCmcuqrhQY
-mOoX0BJ/H/c5ez5x43XtgYgMwZrTYQ==
-=tqs4
------END PGP SIGNATURE-----
-
---Sig_/IMql38jc4ngYXPwtr.DpjJM--
+     Arnd

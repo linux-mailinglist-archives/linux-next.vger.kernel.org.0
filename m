@@ -2,122 +2,401 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62CC55B05CD
-	for <lists+linux-next@lfdr.de>; Wed,  7 Sep 2022 15:55:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AB8F5B071C
+	for <lists+linux-next@lfdr.de>; Wed,  7 Sep 2022 16:38:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229503AbiIGNzk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 7 Sep 2022 09:55:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40874 "EHLO
+        id S229437AbiIGOix (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 7 Sep 2022 10:38:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbiIGNzj (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 7 Sep 2022 09:55:39 -0400
-X-Greylist: delayed 108 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 07 Sep 2022 06:55:38 PDT
-Received: from condef-04.nifty.com (condef-04.nifty.com [202.248.20.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D93D3112C;
-        Wed,  7 Sep 2022 06:55:37 -0700 (PDT)
-Received: from conssluserg-02.nifty.com ([10.126.8.81])by condef-04.nifty.com with ESMTP id 287DoWWs003029;
-        Wed, 7 Sep 2022 22:50:32 +0900
-Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54]) (authenticated)
-        by conssluserg-02.nifty.com with ESMTP id 287Do0XI007532;
-        Wed, 7 Sep 2022 22:50:00 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 287Do0XI007532
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1662558601;
-        bh=gAIPR8Y06LZL5uermVk23B9ei5OC6Y1Yhw9VAHpRQZw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=TA5H1P++AqAV1O5HW+czAVaSv+tMvJt33re/AjUdgeYOAz9w4VyiRPwR4hYTZRRle
-         tLY1LFix/SwTdcl+bxX4Wy9n089UzI++gzxvxM4dO8hF6JZVvfhRz6J3aJvnJC7WFl
-         rrpmo7qfiDGQ7YjpI9sOgLZGJvHokZAi0Lj5YFMkM6TReAQaTbdd53+BKsBeW3uA/l
-         5Nu5r8+TnS/f8zdDFOhp4DFAPRH8pjsCwRj66gobpG8lKz8Wf9l2qeINeoBUPClQIu
-         7k/eYSoFF/ag9TJqaxDpaPC5MRPJBpfjBDLiOw77WR7SvMgkqdf3+ZQjQjtM5xEVdQ
-         d+UISRgSY9zZQ==
-X-Nifty-SrcIP: [209.85.210.54]
-Received: by mail-ot1-f54.google.com with SMTP id l5-20020a05683004a500b0063707ff8244so10277576otd.12;
-        Wed, 07 Sep 2022 06:50:00 -0700 (PDT)
-X-Gm-Message-State: ACgBeo0VvoL74c0Tv877pAinXtMroJDy+k2Jh4fg7H7HA5xm8fPVEXKb
-        1J5LS8gjFyASwY11LETU3WOs+0C3t9zvxlrv1Jg=
-X-Google-Smtp-Source: AA6agR5PIeipmDoynoOEseujglN7M9iPc9mEEa16XHWK2DxJ5TrbiMG/i9TgzaLBhqriez+BXzcfsYEEyIZKhfN/9Ws=
-X-Received: by 2002:a05:6830:658b:b0:63b:3501:7167 with SMTP id
- cn11-20020a056830658b00b0063b35017167mr1458523otb.343.1662558599703; Wed, 07
- Sep 2022 06:49:59 -0700 (PDT)
+        with ESMTP id S230240AbiIGOif (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 7 Sep 2022 10:38:35 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F31BC786CB
+        for <linux-next@vger.kernel.org>; Wed,  7 Sep 2022 07:38:33 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id h188so13754836pgc.12
+        for <linux-next@vger.kernel.org>; Wed, 07 Sep 2022 07:38:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date;
+        bh=743VHPMNlv/2YMNeoUlcbGarrylDNFLQ63buGRpYve4=;
+        b=u0mgN9ciUaQltJ9rG/+6A53QIBYxizqmKvKkw74W/1d9BPPEmZwDOQAgUa3zLvvpSA
+         sEWaWxDZ5N5M4JwITugiW0L7lbgBApYXUP7tpy+tfZ9md7sTCnxQ65DGpaW7MtMuUItV
+         ekdhtQpICgV0NShb7QrPekOBiHlE8+Ye3FRQwbs3hDnX0gp4X8W5xLrDqJ7jerx+JCZ6
+         dsAZTPc81i1EAjdQAIS1NelZiWTwDeoMh0X7NsjCBNK7lg2wvUfPVQfmZaUL/TJKqUbJ
+         iPzVQLDPkmlCyAKf39TLTFwkNtc03gDa5QeICxNs86luyEfiRhlebHDHzT3yiWCILmCF
+         lJgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=743VHPMNlv/2YMNeoUlcbGarrylDNFLQ63buGRpYve4=;
+        b=lIPSAeal4QX0M3SGgfLNufkErg0/m7V+JSLLRTTVbi+JpCF5ryZWyp1B33Fn7xf0r1
+         JrQw0E8Nh8DRy5Foom6C+F1iMTjo0zhv2BQgA+Nksc19pBc9w1dQXYsU4T6lzhkT25k1
+         mnOm0Wiw2sPWuzprAaQSfEYywbnerMCbftfURC3JAE0ee8d9B9SMMQk3pWWgBn9ycaeA
+         7kjqgdLVdLOno0dji1UE09viBNuceCwvxr+XYI2ei9SYBK9nIBcUEAqfSzPQmaflxjcy
+         nyZ4/afLZCeQGgkx4+0bFskBHjQ1WLqndngvzTjjpwkliomqp8PuaWj0R9RmjcZ02ndO
+         cyDw==
+X-Gm-Message-State: ACgBeo24K8f204/kAdpshNZOjOvW4D/T94lPnLJnLpVllFYfPW1kTmvD
+        jbtlM9qZArsJxa7AdOnCP5RHhiFLJzNjeDNJvkU=
+X-Google-Smtp-Source: AA6agR7rwTPVaebXY7F2YtkH5lU4vkjnnPhomyVX58Eqq5qRk0sqj3upqCmYAwSq6Df290azPhkDCA==
+X-Received: by 2002:a05:6a00:1a91:b0:52f:29e7:c32c with SMTP id e17-20020a056a001a9100b0052f29e7c32cmr4276638pfv.10.1662561513155;
+        Wed, 07 Sep 2022 07:38:33 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id k4-20020a654344000000b00419b66846fcsm10576059pgq.91.2022.09.07.07.38.32
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Sep 2022 07:38:32 -0700 (PDT)
+Message-ID: <6318ace8.650a0220.86634.f9ce@mx.google.com>
+Date:   Wed, 07 Sep 2022 07:38:32 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20220907223452.7f781217@canb.auug.org.au>
-In-Reply-To: <20220907223452.7f781217@canb.auug.org.au>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Wed, 7 Sep 2022 22:49:23 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARqNU07UEEG_2ff6xTr+MAW-7Ez-7kKLXHd4n8n_0nrgQ@mail.gmail.com>
-Message-ID: <CAK7LNARqNU07UEEG_2ff6xTr+MAW-7Ez-7kKLXHd4n8n_0nrgQ@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the kbuild tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: next-20220907
+Subject: next/master build: 37 builds: 4 failed, 33 passed, 4 errors,
+ 13 warnings (next-20220907)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Sep 7, 2022 at 9:35 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> After merging the kbuild tree, today's linux-next build (powerpc
-> ppc44x_defconfig) failed like this:
->
-> /home/sfr/next/next/scripts/mkuboot.sh: line 23: 153700 Bus error               ${MKIMAGE} "$@"
->
-> Caused by commit
->
->   c4a7f46f7105 ("kbuild: build init/built-in.a just once")
->
-> Reverting that commit (and the following ones) fixes the problem. It
-> looks like UIMAGE_NAME gets corrupted in scripts/Makefile.lib as the
-> arguments to mkuboot.sh change from
->
-> A ppc -O linux -T kernel -C gzip -a 0x00700000 -e 0x007015a4 -n Linux-6.0.0-rc4 -d arch/powerpc/boot/cuImage.sam440ep.gz arch/powerpc/boot/cuImage.sam440ep
->
-> to
->
-> -A ppc -O linux -T kernel -C gzip -a 0x00700000 -e 0x007015a4 -n Linux-6.0.0-rc4 6.0.0-rc4 -d arch/powerpc/boot/cuImage.sam440ep.gz arch/powerpc/boot/cuImage.sam440ep
->
-> (note the extra "6.0.0-rc4") when the above commit is present.
->
-> So I have reverted commit c4a7f46f7105 and all the following commits in
-> the kbuild tree for today.
->
-> I had to do the above build with -j40 to make it consistently fail.
->
-> --
-> Cheers,
-> Stephen Rothwell
+next/master build: 37 builds: 4 failed, 33 passed, 4 errors, 13 warnings (n=
+ext-20220907)
 
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20220907/
 
-Thanks.
-arch/powerpc/boot/wrapper searches for the version string in vmlinux,
-but now it gets two lines.
+Tree: next
+Branch: master
+Git Describe: next-20220907
+Git Commit: 5957ac6635a1a12d4aa2661bbf04d3085a73372a
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 6 unique architectures
 
-I will fix up as follows:
+Build Failures Detected:
 
+arm:
+    rpc_defconfig: (gcc-10) FAIL
 
-diff --git a/arch/powerpc/boot/wrapper b/arch/powerpc/boot/wrapper
-index 55978f32fa77..5bdd4dd20bbb 100755
---- a/arch/powerpc/boot/wrapper
-+++ b/arch/powerpc/boot/wrapper
-@@ -433,7 +433,7 @@ fi
- # Extract kernel version information, some platforms want to include
- # it in the image header
- version=`${CROSS}strings "$kernel" | grep '^Linux version [-0-9.]' | \
--    cut -d' ' -f3`
-+    head -n1 | cut -d' ' -f3`
- if [ -n "$version" ]; then
-     uboot_version="-n Linux-$version"
- fi
+riscv:
+    allnoconfig: (clang-16) FAIL
 
+x86_64:
+    cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config: (clang-13=
+) FAIL
+    cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chrome=
+book: (clang-13) FAIL
 
--- 
-Best Regards
-Masahiro Yamada
+Errors and Warnings Detected:
+
+arc:
+
+arm64:
+
+arm:
+    cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (clang-13): 6 =
+warnings
+    cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (clang-13=
+): 6 warnings
+    rpc_defconfig (gcc-10): 2 errors
+
+mips:
+    rb532_defconfig (gcc-10): 1 warning
+
+riscv:
+
+x86_64:
+    cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (clang-13)=
+: 1 error
+    cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chrome=
+book (clang-13): 1 error
+
+Errors summary:
+
+    2    sound/soc/intel/skylake/skl.c:729:18: error: unused variable 'skl'=
+ [-Werror,-Wunused-variable]
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
+=3D0x'
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
+=3D0x'
+
+Warnings summary:
+
+    12   clang: warning: argument unused during compilation: '-march=3Darmv=
+7-a' [-Wunused-command-line-argument]
+    1    cc1: warning: result of =E2=80=98-117440512 << 16=E2=80=99 require=
+s 44 bits to represent, but =E2=80=98int=E2=80=99 only has 32 bits [-Wshift=
+-overflow=3D]
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (riscv, clang-16) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ar7_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm63xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+collie_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (arm64, clang-13=
+) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chromebook=
+ (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatch=
+es
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
+tches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
+tches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-chrom=
+ebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
+matches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
+=E2=80=94 PASS, 0 errors, 6 warnings, 0 section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
+3) =E2=80=94 PASS, 0 errors, 6 warnings, 0 section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86-chr=
+omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86-chr=
+omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-chro=
+mebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (x86_64, clang=
+-13) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section mismatches
+
+Errors:
+    sound/soc/intel/skylake/skl.c:729:18: error: unused variable 'skl' [-We=
+rror,-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chromebook=
+ (x86_64, clang-13) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section mismatch=
+es
+
+Errors:
+    sound/soc/intel/skylake/skl.c:729:18: error: unused variable 'skl' [-We=
+rror,-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 wa=
+rnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+gpr_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson1b_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+moxart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+netwinder_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+pcm027_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa255-idp_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa910_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rb532_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    cc1: warning: result of =E2=80=98-117440512 << 16=E2=80=99 requires 44 =
+bits to represent, but =E2=80=98int=E2=80=99 only has 32 bits [-Wshift-over=
+flow=3D]
+
+---------------------------------------------------------------------------=
+-----
+rpc_defconfig (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 section=
+ mismatches
+
+Errors:
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=3D0x'
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=3D0x'
+
+---------------------------------------------------------------------------=
+-----
+s3c6400_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+simpad_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+stm32_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+vf610m4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors=
+, 0 warnings, 0 section mismatches
+
+---
+For more info write to <info@kernelci.org>

@@ -2,87 +2,97 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B44E25AF9DD
-	for <lists+linux-next@lfdr.de>; Wed,  7 Sep 2022 04:31:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20F6C5AF9FB
+	for <lists+linux-next@lfdr.de>; Wed,  7 Sep 2022 04:38:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229446AbiIGCbl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 6 Sep 2022 22:31:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50402 "EHLO
+        id S229679AbiIGCiR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 6 Sep 2022 22:38:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiIGCbk (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 6 Sep 2022 22:31:40 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 193D88E0E0;
-        Tue,  6 Sep 2022 19:31:38 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DC3DF1042;
-        Tue,  6 Sep 2022 19:31:44 -0700 (PDT)
-Received: from [10.162.40.15] (unknown [10.162.40.15])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2CD4F3F534;
-        Tue,  6 Sep 2022 19:31:36 -0700 (PDT)
-Message-ID: <29e096e8-4ede-df66-4606-4bd0e5bda755@arm.com>
-Date:   Wed, 7 Sep 2022 08:01:34 +0530
+        with ESMTP id S229531AbiIGCiQ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 6 Sep 2022 22:38:16 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB9595AF9;
+        Tue,  6 Sep 2022 19:38:16 -0700 (PDT)
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 286N60Xf029176;
+        Tue, 6 Sep 2022 19:38:13 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : subject
+ : date : message-id : mime-version : content-type; s=pfpt0220;
+ bh=ECePbD2fJWepM7h2Dm/bje6gLJSq0e2F+Na65094WFQ=;
+ b=jS/CluztLYIUHJ1tNeY7IJB+nGEmiPSb1M0uo/q+Hl5ZzL7IEuKlVL2g6FBNu5NLHiUu
+ hG7CtWy9N78QeawvGT1vQ+JEH89VgpFj3iwgDx+CjERnFJsL+Dwh2AyCdBtfjy2+QkrM
+ 64tmomIsqnr5d+uI0+9vi+K3PZeDEfFqA5TXfzhrEd3ZDaafZurj30Iqn+lg5G4+YDEK
+ AE6NRxIJYkcbHd5vZNZ2kgIeJ/4Js3IR7wLr5yl15dcDf5jhLJkWXCPFA73qQDVNly2r
+ 1+EANgJsIRrskEjJQVVTY4hthdQAKB7hFiBLthsy+sDddL/yFXBv4w/Fu9T5r6PZCSQg Pw== 
+Received: from dc5-exch02.marvell.com ([199.233.59.182])
+        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3jdxjemwt1-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Tue, 06 Sep 2022 19:38:13 -0700
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Tue, 6 Sep
+ 2022 19:38:11 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
+ Transport; Tue, 6 Sep 2022 19:38:11 -0700
+Received: from dut6246.localdomain (unknown [10.112.88.36])
+        by maili.marvell.com (Postfix) with ESMTP id 532113F70E8;
+        Tue,  6 Sep 2022 19:38:11 -0700 (PDT)
+Received: by dut6246.localdomain (Postfix, from userid 0)
+        id 3C48688D32E; Tue,  6 Sep 2022 19:38:11 -0700 (PDT)
+From:   Arun Easi <aeasi@marvell.com>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Martin Petersen <martin.petersen@oracle.com>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-next@vger.kernel.org>,
+        <GR-QLogic-Storage-Upstream@marvell.com>,
+        Arun Easi <aeasi@marvell.com>
+Subject: [PATCH 0/1] Tracing: Compile error with qla2xxx
+Date:   Tue, 6 Sep 2022 19:37:59 -0700
+Message-ID: <20220907023800.4095-1-aeasi@marvell.com>
+X-Mailer: git-send-email 2.9.5
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: linux-next: build failure after merge of the perf tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220831083452.2fc938cf@canb.auug.org.au>
- <20220907050535.243e5030@canb.auug.org.au>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <20220907050535.243e5030@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Proofpoint-GUID: pQKOhnM2KODPjLwe-GVtUZjdzJNUrDA-
+X-Proofpoint-ORIG-GUID: pQKOhnM2KODPjLwe-GVtUZjdzJNUrDA-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-06_11,2022-09-06_02,2022-06-22_01
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+Hi Steve, et.al,
 
+Please find a patch to fix compile error coming from qla2xxx driver
+when CONFIG_TRACING is disabled. Perhaps not all of the functions
+need to be "#define-d" out, but I just did it for completeness.
 
-On 9/7/22 00:35, Stephen Rothwell wrote:
-> Hi all,
-> 
-> On Wed, 31 Aug 2022 08:34:52 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->>
->> After merging the perf tree, today's linux-next build (native perf)
->> failed like this:
->>
->> In file included from /usr/include/stdio.h:866,
->>                  from /home/sfr/next/next/tools/perf/util/branch.h:9,
->>                  from util/branch.c:2:
->> In function 'fprintf',
->>     inlined from 'branch_type_stat_display' at util/branch.c:152:4:
->> /usr/include/powerpc64le-linux-gnu/bits/stdio2.h:105:10: error: '%8s' directive argument is null [-Werror=format-overflow=]
->>   105 |   return __fprintf_chk (__stream, __USE_FORTIFY_LEVEL - 1, __fmt,
->>       |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>   106 |                         __va_arg_pack ());
->>       |                         ~~~~~~~~~~~~~~~~~
->> cc1: all warnings being treated as errors
->>
->> Presumably caused by commit
->>
->>   9781e500dcb8 ("perf branch: Extend branch type classification")
->>
->> "native" here is PowerPC64 LE.
->> $ gcc --version
->> gcc (Debian 11.2.0-10) 11.2.0
->>
->> I have used the perf tree from next-20220830 for today.
-> 
-> I am still seeing this build failure.
+Hi Martin,
 
-But did you apply the fix patch from Arnaldo that removes -Wno-format-overflow
-compiler option for the file util/branch.c ?
+Please apply this patch to the SCSI tree once Steve approves it. Here
+is a link to the discussion:
+    https://lore.kernel.org/linux-scsi/YxdZ%2F9XOsWilvVSd@debian/T/#m6efb601ed65c907124a03cfd5f3f38f1eb8c5925
 
-https://lore.kernel.org/all/YxJBh3wvAGol+Ekq@kernel.org/
+Regards,
+-Arun
 
-- Anshuman
+Arun Easi (1):
+  tracing: Fix compile error in trace_array calls when TRACING is
+    disabled
+
+ include/linux/trace.h | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+-- 
+2.9.5
+
+base-commit: e699bb9765cd447ab477e9e888ddbab347dcf35a

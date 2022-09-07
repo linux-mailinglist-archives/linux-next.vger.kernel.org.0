@@ -2,278 +2,98 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8EE75B0D22
-	for <lists+linux-next@lfdr.de>; Wed,  7 Sep 2022 21:23:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77FFA5B0D32
+	for <lists+linux-next@lfdr.de>; Wed,  7 Sep 2022 21:27:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229495AbiIGTXJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 7 Sep 2022 15:23:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34690 "EHLO
+        id S229723AbiIGT1j (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 7 Sep 2022 15:27:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbiIGTXI (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 7 Sep 2022 15:23:08 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5292DBFEAC;
-        Wed,  7 Sep 2022 12:23:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=Q60A7O2cwDRGmCCMAGlOcenDecqVyG/8lkpDi3chEWI=; b=AK1o1uQKOcjjQNe+I5TIpp6toP
-        lNTmMu/E2WkOyC0WcER+i3nprmeTaZYYPPtGvthpbnNxJeY+EM6E+v4JRyZIAoyrq/XmcBInJTxkc
-        cxkn+Pm8VOelRq7UIJOup6jDusS8jZTy5pIjnisk6AFE0TlijpEwkeWmqVnXll3zffrlrlBB39U7H
-        Z1KPMrCqwkgcnXcVBqgem3izDEssY4pHIN/bf90z2uzTHjLxUV/8aVibKe9FrDSs/CR73YpOdZgFN
-        N+LGOoWy374qjP5jA5DA3Y+3SO17VXKJH4VOyqBN9QgTt4vCeZXsrt5uS72o2FBuqe2sunJHGex9t
-        EG5O2iYg==;
-Received: from [38.44.74.92] (helo=mail.igalia.com)
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1oW0da-00CtuV-Pc; Wed, 07 Sep 2022 21:23:02 +0200
-Date:   Wed, 7 Sep 2022 18:22:50 -0100
-From:   Melissa Wen <mwen@igalia.com>
-To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Cc:     Igor Torrente <igormtorrente@gmail.com>,
-        Melissa Wen <melissa.srw@gmail.com>,
-        Haneen Mohammed <hamohammed.sa@gmail.com>,
-        Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-next <linux-next@vger.kernel.org>
-Subject: Re: build failure of next-20220906 due to 396369d67549 ("drm: vkms:
- Add support to the RGB565 format")
-Message-ID: <20220907192250.jfkpwaq54f2h7stf@mail.igalia.com>
-References: <YxducgSzR6/zyHD7@debian>
- <CADVatmNfc1YT02v5-FaMoGN==MOx5ZJ=o8YMQAH19Gvf91betA@mail.gmail.com>
- <20220907170451.efhz62nkxybqxtaa@mail.igalia.com>
- <CADVatmNodAV4PB5jjARnowu=VGbgMWgBYDWPuwJe-f1WFaS8ow@mail.gmail.com>
+        with ESMTP id S229713AbiIGT1i (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 7 Sep 2022 15:27:38 -0400
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B425B9C23C;
+        Wed,  7 Sep 2022 12:27:37 -0700 (PDT)
+Received: by mail-pj1-f42.google.com with SMTP id z9-20020a17090a468900b001ffff693b27so14448845pjf.2;
+        Wed, 07 Sep 2022 12:27:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=+cTrbJ2TImjXO9+/sDbso3elnuRkmLBrBB8v3kbBqJw=;
+        b=xPHocj+VEjtadV0gVUm+FUzmkZaIcXwCKLdfuLknWAMgUo4xam7EnsG2AgOMhgF2CD
+         qfqpYBdAMjRdAJAnnMVe6AwXRNR+ifSMpDxaXybR4Or5zeSzrm5gyHqAxh4gmbBBt1Ij
+         KDU7lT9jN1Dc1GzvmQPh/IfCNFqYC5w3OZtnzyBnQ+j+1AhueGb8EJVLVcMihwPdvqU7
+         xckG+EBri6CDc1kFaKN8Vy12O5CcrQay0Coh5fdR7dJAAS36m+2O5d8SJdsQ71W4xuuJ
+         n/upDCDPA8R5PT34s140c593WrHQtyKPSFdBbfP1ioJfhXpC2/Q+dyyPQ+xyNPSNXMqT
+         JjrA==
+X-Gm-Message-State: ACgBeo1J9OVEwEvAxGsuQkfAABcK9+Eu1PdEvTHKnrC0wHY2F970Urp5
+        1pkijz+TiPuhG/lvxXoVuxQDSVZGHz4=
+X-Google-Smtp-Source: AA6agR4viDHpwIxrS1F4soYchr2Lep+3b51frp7/TgfneVVxFVli5I3nJmz9e8JJ64AgtxVJMy4+jQ==
+X-Received: by 2002:a17:902:bd08:b0:16d:4230:cb45 with SMTP id p8-20020a170902bd0800b0016d4230cb45mr5460043pls.59.1662578857142;
+        Wed, 07 Sep 2022 12:27:37 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:899e:cff7:8f51:a7ba? ([2620:15c:211:201:899e:cff7:8f51:a7ba])
+        by smtp.gmail.com with ESMTPSA id a2-20020a170902ecc200b00177e4a26d9fsm1566488plh.204.2022.09.07.12.27.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Sep 2022 12:27:36 -0700 (PDT)
+Message-ID: <60870376-3518-896b-7a6b-a4b9ea05264f@acm.org>
+Date:   Wed, 7 Sep 2022 12:27:33 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ts6kcvki5ecf2bf5"
-Content-Disposition: inline
-In-Reply-To: <CADVatmNodAV4PB5jjARnowu=VGbgMWgBYDWPuwJe-f1WFaS8ow@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 1/1] tracing: Fix compile error in trace_array calls
+ when TRACING is disabled
+Content-Language: en-US
+To:     Arun Easi <aeasi@marvell.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Martin Petersen <martin.petersen@oracle.com>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org, GR-QLogic-Storage-Upstream@marvell.com
+References: <20220907185745.14382-1-aeasi@marvell.com>
+ <20220907185745.14382-2-aeasi@marvell.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20220907185745.14382-2-aeasi@marvell.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+On 9/7/22 11:57, Arun Easi wrote:
+> +#else	/* CONFIG_TRACING */
+> +static inline int register_ftrace_export(struct trace_export *export)
+> +{
+> +	return -EINVAL;
+> +}
+> +static inline int unregister_ftrace_export(struct trace_export *export)
+> +{
+> +	return 0;
+> +}
 
---ts6kcvki5ecf2bf5
-Content-Type: multipart/mixed; boundary="kga24fbvtfkl572e"
-Content-Disposition: inline
+Isn't it recommended to leave a blank line between function definitions?
 
+> +static inline int
+> +trace_array_printk(struct trace_array *tr, unsigned long ip,
+> +		       const char *fmt, ...)
 
---kga24fbvtfkl572e
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This is not the recommended way to format a function definition. 
+Consider running git clang-format HEAD^.
 
-On 09/07, Sudip Mukherjee wrote:
-> Hi Melissa,
->=20
-> On Wed, Sep 7, 2022 at 6:05 PM Melissa Wen <mwen@igalia.com> wrote:
-> >
-> > On 09/06, Sudip Mukherjee wrote:
-> > > On Tue, Sep 6, 2022 at 4:59 PM Sudip Mukherjee (Codethink)
-> > > <sudipm.mukherjee@gmail.com> wrote:
-> > > >
-> > > > Hi All,
-> > > >
-> > > > The builds of next-20220906 fails for mips, xtensa and arm allmodco=
-nfig.
-> > > >
-> > > > The errors in mips and xtensa are:
-> > > >
-> > > > ERROR: modpost: "__divdi3" [drivers/gpu/drm/vkms/vkms.ko] undefined!
-> > > > ERROR: modpost: "__udivdi3" [drivers/gpu/drm/vkms/vkms.ko] undefine=
-d!
-> > > >
-> > > > The error in arm is:
-> > > >
-> > > > ERROR: modpost: "__aeabi_uldivmod" [drivers/gpu/drm/vkms/vkms.ko] u=
-ndefined!
-> > > > ERROR: modpost: "__aeabi_ldivmod" [drivers/gpu/drm/vkms/vkms.ko] un=
-defined!
-> > > >
-> > > >
-> > > > Trying to do a git bisect to find out the offending commit.
-> > >
-> > > git bisect points to 396369d67549 ("drm: vkms: Add support to the
-> > > RGB565 format")
-> >
-> > Hi Sudip,
-> >
-> > Thanks for pointing out this issue.
-> >
-> > I think we can replace the macros that are triggering those compilation
-> > error by functions in drm/drm_fixed.h that do the same calculation.
-> >
-> > I checked those errors when building for arm and i386 and the issues are
-> > fixed after applying the patch below. I appreciate if you can test.
->=20
-> Sorry, could not test as the downloaded mbox is saying patch is
-> corrupted and could not be applied. Can you please attach the patch or
-> maybe send using git send-email.
+> +static inline struct trace_array *
+> +trace_array_get_by_name(const char *name)
 
-Sorry, my bad. It's attached. Let me know if goes smoothly.
+Same comment here.
 
-Thanks again,
+Thanks,
 
-Melissa
->=20
->=20
-> --=20
-> Regards
-> Sudip
-
---kga24fbvtfkl572e
-Content-Type: text/x-diff; charset=us-ascii
-Content-Disposition: attachment;
-	filename="0001-drm-vkms-fix-32-bits-compilation-error-by-replacing-.patch"
-Content-Transfer-Encoding: quoted-printable
-
-=46rom d52824abf4d3913dfd82a927f320ad4f670545d1 Mon Sep 17 00:00:00 2001
-=46rom: Melissa Wen <mwen@igalia.com>
-Date: Wed, 7 Sep 2022 15:14:31 -0100
-Subject: [PATCH] drm/vkms: fix 32 bits compilation error by replacing macros
-
-Replace vkms_formats macro for fixed-point operations with functions
-=66rom drm/drm_fixed.h to do the same job and fix 32-bits compilation
-errors.
-
-Fixes: a19c2ac9858 ("drm: vkms: Add support to the RGB565 format")
-Reported-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Melissa Wen <mwen@igalia.com>
----
- drivers/gpu/drm/vkms/vkms_formats.c | 53 +++++++++++------------------
- 1 file changed, 19 insertions(+), 34 deletions(-)
-
-diff --git a/drivers/gpu/drm/vkms/vkms_formats.c b/drivers/gpu/drm/vkms/vkm=
-s_formats.c
-index 300abb4d1dfe..ddcd3cfeeaac 100644
---- a/drivers/gpu/drm/vkms/vkms_formats.c
-+++ b/drivers/gpu/drm/vkms/vkms_formats.c
-@@ -1,27 +1,12 @@
- // SPDX-License-Identifier: GPL-2.0+
-=20
--#include <drm/drm_rect.h>
-+#include <linux/kernel.h>
- #include <linux/minmax.h>
-+#include <drm/drm_rect.h>
-+#include <drm/drm_fixed.h>
-=20
- #include "vkms_formats.h"
-=20
--/* The following macros help doing fixed point arithmetic. */
--/*
-- * With Fixed-Point scale 15 we have 17 and 15 bits of integer and fractio=
-nal
-- * parts respectively.
-- *  | 0000 0000 0000 0000 0.000 0000 0000 0000 |
-- * 31                                          0
-- */
--#define SHIFT 15
--
--#define INT_TO_FIXED(a) ((a) << SHIFT)
--#define FIXED_MUL(a, b) ((s32)(((s64)(a) * (b)) >> SHIFT))
--#define FIXED_DIV(a, b) ((s32)(((s64)(a) << SHIFT) / (b)))
--/* This macro converts a fixed point number to int, and round half up it */
--#define FIXED_TO_INT_ROUND(a) (((a) + (1 << (SHIFT - 1))) >> SHIFT)
--#define INT_TO_FIXED_DIV(a, b) (FIXED_DIV(INT_TO_FIXED(a), INT_TO_FIXED(b)=
-))
--#define INT_TO_FIXED_DIV(a, b) (FIXED_DIV(INT_TO_FIXED(a), INT_TO_FIXED(b)=
-))
--
- static size_t pixel_offset(const struct vkms_frame_info *frame_info, int x=
-, int y)
- {
- 	return frame_info->offset + (y * frame_info->pitch)
-@@ -137,19 +122,19 @@ static void RGB565_to_argb_u16(struct line_buffer *st=
-age_buffer,
- 	int x_limit =3D min_t(size_t, drm_rect_width(&frame_info->dst),
- 			       stage_buffer->n_pixels);
-=20
--	s32 fp_rb_ratio =3D INT_TO_FIXED_DIV(65535, 31);
--	s32 fp_g_ratio =3D INT_TO_FIXED_DIV(65535, 63);
-+	s32 fp_rb_ratio =3D drm_fixp_div(drm_int2fixp(65535), 31);
-+	s32 fp_g_ratio =3D drm_fixp_div(drm_int2fixp(65535), 63);
-=20
- 	for (size_t x =3D 0; x < x_limit; x++, src_pixels++) {
- 		u16 rgb_565 =3D le16_to_cpu(*src_pixels);
--		s32 fp_r =3D INT_TO_FIXED((rgb_565 >> 11) & 0x1f);
--		s32 fp_g =3D INT_TO_FIXED((rgb_565 >> 5) & 0x3f);
--		s32 fp_b =3D INT_TO_FIXED(rgb_565 & 0x1f);
-+		s32 fp_r =3D drm_int2fixp((rgb_565 >> 11) & 0x1f);
-+		s32 fp_g =3D drm_int2fixp((rgb_565 >> 5) & 0x3f);
-+		s32 fp_b =3D drm_int2fixp(rgb_565 & 0x1f);
-=20
- 		out_pixels[x].a =3D (u16)0xffff;
--		out_pixels[x].r =3D FIXED_TO_INT_ROUND(FIXED_MUL(fp_r, fp_rb_ratio));
--		out_pixels[x].g =3D FIXED_TO_INT_ROUND(FIXED_MUL(fp_g, fp_g_ratio));
--		out_pixels[x].b =3D FIXED_TO_INT_ROUND(FIXED_MUL(fp_b, fp_rb_ratio));
-+		out_pixels[x].r =3D drm_fixp2int(drm_fixp_mul(fp_r, fp_rb_ratio));
-+		out_pixels[x].g =3D drm_fixp2int(drm_fixp_mul(fp_g, fp_g_ratio));
-+		out_pixels[x].b =3D drm_fixp2int(drm_fixp_mul(fp_b, fp_rb_ratio));
- 	}
- }
-=20
-@@ -248,17 +233,17 @@ static void argb_u16_to_RGB565(struct vkms_frame_info=
- *frame_info,
- 	int x_limit =3D min_t(size_t, drm_rect_width(&frame_info->dst),
- 			    src_buffer->n_pixels);
-=20
--	s32 fp_rb_ratio =3D INT_TO_FIXED_DIV(65535, 31);
--	s32 fp_g_ratio =3D INT_TO_FIXED_DIV(65535, 63);
-+	s32 fp_rb_ratio =3D drm_fixp_div(drm_int2fixp(65535), 31);
-+	s32 fp_g_ratio =3D drm_fixp_div(drm_int2fixp(65535), 63);
-=20
- 	for (size_t x =3D 0; x < x_limit; x++, dst_pixels++) {
--		s32 fp_r =3D INT_TO_FIXED(in_pixels[x].r);
--		s32 fp_g =3D INT_TO_FIXED(in_pixels[x].g);
--		s32 fp_b =3D INT_TO_FIXED(in_pixels[x].b);
-+		s32 fp_r =3D drm_int2fixp(in_pixels[x].r);
-+		s32 fp_g =3D drm_int2fixp(in_pixels[x].g);
-+		s32 fp_b =3D drm_int2fixp(in_pixels[x].b);
-=20
--		u16 r =3D FIXED_TO_INT_ROUND(FIXED_DIV(fp_r, fp_rb_ratio));
--		u16 g =3D FIXED_TO_INT_ROUND(FIXED_DIV(fp_g, fp_g_ratio));
--		u16 b =3D FIXED_TO_INT_ROUND(FIXED_DIV(fp_b, fp_rb_ratio));
-+		u16 r =3D drm_fixp2int(drm_fixp_div(fp_r, fp_rb_ratio));
-+		u16 g =3D drm_fixp2int(drm_fixp_div(fp_g, fp_g_ratio));
-+		u16 b =3D drm_fixp2int(drm_fixp_div(fp_b, fp_rb_ratio));
-=20
- 		*dst_pixels =3D cpu_to_le16(r << 11 | g << 5 | b);
- 	}
---=20
-2.35.1
-
-
---kga24fbvtfkl572e--
-
---ts6kcvki5ecf2bf5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEd8WOo/JViG+Tu+XIwqF3j0dLehwFAmMY74EACgkQwqF3j0dL
-ehx1kBAAoJIU5Tami+4a1gE3yNrKeqUEdxsBoaVs97kcDGqtKXSdzM3SU7k39QTw
-4+pnq20IOHQnCcZZqgs97WLKdNJCy8X5Qr9DB9qGQzE4sanecWmD44iP7unHRRVv
-J31pCGJLY9DSdmFR2T4zx06gV1y1JJ99HMx90IlgKYVERAn+O9bUP5iMEu/nPN+z
-gtgZQLj9ijvmyhiA4kkoQD488iM+Jkj2q4mmCIUvThjpWIodwWrocGtMLpzHtZmp
-zzDAJ3IFXuaeQbLpa83hBtiaJ4ucYYW+b0T5OaNj1qXFzoUZrZS79EPjl1gXLo31
-RfSQiMtHRFwQuHscZSZZYFVoLNCL62X800Eb5uCHYcUZ9Vp3fA7urMOPwH76Wrbg
-Bb1I8ErvuHg5HdP0pglchLS+4WzK91hP/+mQ/XImAo2Io2J22Ywdsgv0oUOBxqvq
-RTinKVQ0UlfZ3RsIGLp1FvztESsVzpZPEDD++UY7Jl5E82OWtPmEzM9AbfQxNf7m
-+sHo9iXdXFzQ1lMh/lxnIRUxAfRsN8bK9F/aquzdDAgKNYr9+sp7Ld4Ui9GNtsVy
-SEOjX5DkSCZKxYtqT2uS7ArlivmGxYPC+o4XRnlHtOx1O49Zaxryvvdntdz+tsZn
-pSZCfUZfro5+IY+MM7VCGUVxMqCeIlGo45bRe3kjKFr3TwZSb2s=
-=5FWC
------END PGP SIGNATURE-----
-
---ts6kcvki5ecf2bf5--
+Bart.

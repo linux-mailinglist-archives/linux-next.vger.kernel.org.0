@@ -2,118 +2,145 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 243EB5AFCAB
-	for <lists+linux-next@lfdr.de>; Wed,  7 Sep 2022 08:41:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 923E85AFD42
+	for <lists+linux-next@lfdr.de>; Wed,  7 Sep 2022 09:17:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229920AbiIGGlF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 7 Sep 2022 02:41:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33546 "EHLO
+        id S229817AbiIGHRn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 7 Sep 2022 03:17:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229944AbiIGGlA (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 7 Sep 2022 02:41:00 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 394899D8D9;
-        Tue,  6 Sep 2022 23:40:44 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 0D9B92007D;
-        Wed,  7 Sep 2022 06:40:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1662532803; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SjrZzo9p8a85Q0L8sl+EU5f88G92ZV1ZI1cJAQMHJA0=;
-        b=XVQX+0RiFfWpoLO7zW1jCZDKZe3/aN7KHUBoPDydHdPjgys0cXOTBsvpz/FFgcCEN/97HC
-        T8/mWhr2qP0KTg4ZnrwIXuNbME87+MlQH74L5uEMnm01ePbsECG7CFQMuBAoeqc0UkeuK9
-        friSOn+eCJ5743taMMwQ2aOcVl3hDdc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1662532803;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SjrZzo9p8a85Q0L8sl+EU5f88G92ZV1ZI1cJAQMHJA0=;
-        b=EqciqleFaRRsKidl0vESVYZNcA2ePQ4yqAYrz7QZCJZ03JjtWSbekoLQigQAKgQh2CvJ6+
-        LjHzPqspdWGLnyDA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DA38213486;
-        Wed,  7 Sep 2022 06:40:02 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id SvKGNMI8GGNbZQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 07 Sep 2022 06:40:02 +0000
-Message-ID: <c0343d88-d41c-80ed-342e-8b4055cd7082@suse.cz>
-Date:   Wed, 7 Sep 2022 08:40:02 +0200
+        with ESMTP id S229811AbiIGHRl (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 7 Sep 2022 03:17:41 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51FADA3479
+        for <linux-next@vger.kernel.org>; Wed,  7 Sep 2022 00:17:38 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id v6so1499098ljj.0
+        for <linux-next@vger.kernel.org>; Wed, 07 Sep 2022 00:17:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=89+MkwCQRLAHkFEhXocRBmWuzdBCcd8GcaLlx6vSdK4=;
+        b=mWUos+G4meLEIpM5B5tSJgqfGT5qpSbpn+rdZVeadkZnBWLelim7TPaMEtKqFnCb5x
+         qaQW4+1W6y5PwSJsJP64h6SkRokfUsQdjuIXt2Bij29/dOMLg/gQeohNaCdr7nzHmfZV
+         Fdk75ophPXB+Bwugz3NNgr4gm51+NMBslWWEShVW08npuscO1IaDvOHL55rQrp71rEK4
+         3hldg8EwPFDOB05fqVcITdL8Zrx0NKe7zHfQdX0kNTFlbfwfrdu4CYqCM68eMo/vqwcO
+         jbzJJT5GRMI8YXbkiTJUHzQO/4gQU1XAXIRyGIq7HnR3D942NJCM+51TcEX/Mp1VNhF6
+         qH7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=89+MkwCQRLAHkFEhXocRBmWuzdBCcd8GcaLlx6vSdK4=;
+        b=fMvh7jsismnANxvlDfz4gbIuP6AJ+fV6+KbD8mfEUX81EJ01Jjv6DJ+HbcTYuvkl5u
+         ypZ8miTR39DhKdkRj1xnVOu9c3QoV4kGLjughJXgWkfoAXf6AbguUreThrboFG/rLtbw
+         n4D6ZPtf2Au0rZuJkJff3LK94yiv97LwbjoJBh2h86O+uy9zvX/GMx11V54kMV1XyZFL
+         ToSwZNF7ugz5ajW1V1KFkluvJwOM+MSX3Ve9V/f0hjHTM44jCgG1sL2ZQUwfVm/PZGEd
+         AXTYMfpocMGY8T7JCKBAhkvAZ/UKtSGuaBZkWAKqvzTGmc2my/mgfUSKBZLs19kYAt+s
+         OTNw==
+X-Gm-Message-State: ACgBeo1H7m5h3QEOLyMjLXKmxHnljwZBYMIqJrZiedOG9HC5L4i9pqMA
+        lySzIr4kSq8qqMyr73xwj+Eug82X2f/KOAxqtofQ5g==
+X-Google-Smtp-Source: AA6agR71di9AUXjm1EUAWrxZPkPvbGJ5UTGC0woWSGfCPIomzzbd6bY/6fvZKlDkb7mw8EwP1pyMQz6gziNPl5xaI/o=
+X-Received: by 2002:a2e:a589:0:b0:261:b223:488b with SMTP id
+ m9-20020a2ea589000000b00261b223488bmr592996ljp.33.1662535056337; Wed, 07 Sep
+ 2022 00:17:36 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: linux-next: build failure after merge of the slab tree
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Marco Elver <elver@google.com>
-References: <20220906165131.59f395a9@canb.auug.org.au>
- <dab10759-c059-2254-116b-8360bc240e57@suse.cz>
- <CAADnVQJTDdA=vpQhrbAbX7oEQ=uaPXwAmjMzpW4Nk2Xi9f2JLA@mail.gmail.com>
- <CAADnVQKJORAcV75CHE1yG6_+c8qnoOj6gf=zJG9vnWwR5+4SqQ@mail.gmail.com>
-Content-Language: en-US
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <CAADnVQKJORAcV75CHE1yG6_+c8qnoOj6gf=zJG9vnWwR5+4SqQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <000000000000974e2805e802137e@google.com> <20220906173154.6f2664c8fc6b83470c5dfea1@linux-foundation.org>
+ <YxfpkzZhJ7GfRuKd@yury-laptop> <20220906225312.263c4493a744cbcb66288283@linux-foundation.org>
+In-Reply-To: <20220906225312.263c4493a744cbcb66288283@linux-foundation.org>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Wed, 7 Sep 2022 09:17:24 +0200
+Message-ID: <CACT4Y+bXks8ohNAxdJ7gGOc=tg7bC7Pz+nBJi_J9zHa5Jhta9w@mail.gmail.com>
+Subject: Re: [syzbot] linux-next boot error: KASAN: slab-out-of-bounds Read in _find_next_bit
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Yury Norov <yury.norov@gmail.com>,
+        syzbot <syzbot+08ca1fa706a22cc17efe@syzkaller.appspotmail.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-next@vger.kernel.org, sfr@canb.auug.org.au,
+        syzkaller-bugs@googlegroups.com,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 9/7/22 05:05, Alexei Starovoitov wrote:
-> On Tue, Sep 6, 2022 at 11:37 AM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
->>
->> On Tue, Sep 6, 2022 at 12:53 AM Vlastimil Babka <vbabka@suse.cz> wrote:
->> >
->> > On 9/6/22 08:51, Stephen Rothwell wrote:
->> > > Hi all,
->> >
->> > Hi,
->> >
->> > > After merging the slab tree, today's linux-next build (powerpc
->> > > ppc64_defconfig) failed like this:
->> > >
->> > > kernel/bpf/memalloc.c: In function 'bpf_mem_free':
->> > > kernel/bpf/memalloc.c:613:33: error: implicit declaration of function '__ksize'; did you mean 'ksize'? [-Werror=implicit-function-declaration]
->> > >    613 |         idx = bpf_mem_cache_idx(__ksize(ptr - LLIST_NODE_SZ));
->> > >        |                                 ^~~~~~~
->> > >        |                                 ksize
->> >
->> > Could you use ksize() here? I'm guessing you picked __ksize() because
->> > kasan_unpoison_element() in mm/mempool.c did, but that's to avoid
->> > kasan_unpoison_range() in ksize() as this caller does it differently.
->> > AFAICS your function doesn't handle kasan differently, so ksize() should
->> > be fine.
->>
->> Ok. Will change to use ksize().
-> 
-> Just pushed the following commit to address the issue:
-> https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/commit/?id=1e660f7ebe0ff6ac65ee0000280392d878630a67
-> 
-> It will get to net-next soon.
+On Wed, 7 Sept 2022 at 07:53, Andrew Morton <akpm@linux-foundation.org> wrote:
+> > > > The buggy address belongs to the object at ffff888017576600
+> > > >  which belongs to the cache kmalloc-192 of size 192
+> > > > The buggy address is located 184 bytes inside of
+> > > >  192-byte region [ffff888017576600, ffff8880175766c0)
+> > >
+> > > At offset 184 of a 192-byte region.
+> > >
+> > > So what's wrong with doing that?  Does KASAN have an off-by-one?
+> >
+> > Hi Andrew, all,
+> >
+> > This is a bug in FIND_NEXT_BIT(). It should be
+> >   if (idx >= sz / BITS_PER_LONG)                                   \
+> >           goto out;                                                \
+> >
+> > instead of
+> >   if (idx > sz / BITS_PER_LONG)                                    \
+> >           goto out;                                                \
+> >
+> > The fix is in bitmap-for-next, expected to be in -next by tomorrow.
+> > Sorry for the noise.
+>
+> OK... but why is KASAN reporting a bad access from an area
+> which appears to be OK?
 
-Thanks!
+Hi Andrew,
+
+Good point. Filed https://bugzilla.kernel.org/show_bug.cgi?id=216457 for this.
+Copy-pasting description below:
+
+KASAN says:
+
+==================================================================
+BUG: KASAN: slab-out-of-bounds in _find_next_bit+0x143/0x160 lib/find_bit.c:109
+Read of size 8 at addr ffff8880175766b8 by task kworker/1:1/26
+...
+The buggy address belongs to the object at ffff888017576600
+ which belongs to the cache kmalloc-192 of size 192
+The buggy address is located 184 bytes inside of
+ 192-byte region [ffff888017576600, ffff8880175766c0)
+...
+Memory state around the buggy address:
+>ffff888017576680: 00 00 00 00 00 00 00 fc fc fc fc fc fc fc fc fc
+                                        ^
+==================================================================
+
+This "address is located 184 bytes inside of 192-byte region" is
+confusing b/c it does not look like an out-of-bounds access.
+
+What happens here is that the allocation request was for 184 bytes, so
+the last 8 bytes in the 192-byte slab are poisoned. But KASAN does not
+store the requested size in the object header, so it just prints the
+full slab size everywhere.
+
+User-space ASAN does store 48-bit requested size in the header. But
+KASAN uses additional bytes in the header for:
+
+struct kasan_alloc_meta {
+depot_stack_handle_t aux_stack[2];
+
+So we don't have space for requested size w/o increasing header size
+(currently should be 16 bytes).
+
+We could either try to infer requested size from the shadow (count
+poisoned bytes at the end); or improve wording of the message at least
+to make it clear that 192 is just full slab size.
+
+For context see:
+https://lore.kernel.org/all/20220906173154.6f2664c8fc6b83470c5dfea1@linux-foundation.org/

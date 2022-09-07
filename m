@@ -2,140 +2,128 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBFA05AFB10
-	for <lists+linux-next@lfdr.de>; Wed,  7 Sep 2022 06:22:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AD4C5AFBEE
+	for <lists+linux-next@lfdr.de>; Wed,  7 Sep 2022 07:47:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbiIGEWz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 7 Sep 2022 00:22:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48934 "EHLO
+        id S229498AbiIGFrp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 7 Sep 2022 01:47:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiIGEWy (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 7 Sep 2022 00:22:54 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0A29B89916;
-        Tue,  6 Sep 2022 21:22:52 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C33871042;
-        Tue,  6 Sep 2022 21:22:58 -0700 (PDT)
-Received: from [10.162.40.15] (unknown [10.162.40.15])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2F22D3F534;
-        Tue,  6 Sep 2022 21:22:50 -0700 (PDT)
-Message-ID: <e091ed53-d5d0-101d-92a6-a215350e482e@arm.com>
-Date:   Wed, 7 Sep 2022 09:52:48 +0530
+        with ESMTP id S229480AbiIGFro (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 7 Sep 2022 01:47:44 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A6C66FA16
+        for <linux-next@vger.kernel.org>; Tue,  6 Sep 2022 22:47:36 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id bj12so27845014ejb.13
+        for <linux-next@vger.kernel.org>; Tue, 06 Sep 2022 22:47:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date;
+        bh=YtQGFFP4vhfdUxZhJrZK2jqmDRC5K71pRjy06kzufEA=;
+        b=D4MSYe3HuhjfTCnhlWTUWIOL1gN6qSsC/IeXJ+WxDvobPcnhhWhthaLWp0Je7KM9C9
+         xxNzLsp/6fSpM6Eo3j+14h/npT0wAePR8BbgHcgnA0v9OHztxQZcZ2kh5hfdkdywI7gT
+         OoVvmsCvGYfkaVg+Um+yGHT49wN9zNqGX2DyA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=YtQGFFP4vhfdUxZhJrZK2jqmDRC5K71pRjy06kzufEA=;
+        b=kodf+31xsnaDQCaJG6JGBw6AFlQORtW+PA7jYD/+Ew+YBbSkqbVNqB/b0r1ymQbRN5
+         vBO02XZFSG0ZwE008T75qWDXP76nCLX5G2Dm6kyn6o+PwT4dPV67MLnc72O5RcAQhtFs
+         0n42OwkeCrTCETLzB+jb2vWR+crh6yC4Qz5EvgltuPOsFRlQXIlgVOEjNBNeYKzgYYbI
+         L0b0NMKDrvF7XdLG5hjgU2EnJhSxOWGMbEdvmCTIEqGAqvSCzWNmnUocr7Ch0MVevrqU
+         kffWH4XB3ONhutvXrlNcEXtGLqMLA2imSaYVKjeCUr0Z+x9d0GPVX5oqfm904hZVBOse
+         2TVA==
+X-Gm-Message-State: ACgBeo3bi6R8oKthktoggSvBVbzTcgNPoDniRD40+lEyknf8Co5kytt0
+        22wa68xB9ZB1Ln6jitW4416ZLg==
+X-Google-Smtp-Source: AA6agR6l0Nv5Ojf99/mgkxk+bfFH+4lR+cupi/L8llhX+dNx0PezxjkLx3qkT51MqwmWQ0AJP9vECQ==
+X-Received: by 2002:a17:907:6d8a:b0:73b:d9e4:e628 with SMTP id sb10-20020a1709076d8a00b0073bd9e4e628mr1189348ejc.75.1662529654688;
+        Tue, 06 Sep 2022 22:47:34 -0700 (PDT)
+Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
+        by smtp.gmail.com with ESMTPSA id e10-20020a1709062d4a00b0073dafb227c0sm7799536eji.161.2022.09.06.22.47.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Sep 2022 22:47:34 -0700 (PDT)
+Date:   Wed, 7 Sep 2022 07:47:32 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Igor Matheus Andrade Torrente <igormtorrente@gmail.com>
+Cc:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Melissa Wen <melissa.srw@gmail.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-next <linux-next@vger.kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Haneen Mohammed <hamohammed.sa@gmail.com>
+Subject: Re: build failure of next-20220906 due to 396369d67549 ("drm: vkms:
+ Add support to the RGB565 format")
+Message-ID: <YxgwdGtNTnDdIqAv@phenom.ffwll.local>
+Mail-Followup-To: Igor Matheus Andrade Torrente <igormtorrente@gmail.com>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Melissa Wen <melissa.srw@gmail.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-next <linux-next@vger.kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Haneen Mohammed <hamohammed.sa@gmail.com>
+References: <YxducgSzR6/zyHD7@debian>
+ <CADVatmNfc1YT02v5-FaMoGN==MOx5ZJ=o8YMQAH19Gvf91betA@mail.gmail.com>
+ <8e4350df-0c73-6ca2-a25f-28a40a1856db@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: linux-next: build failure after merge of the perf tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220831083452.2fc938cf@canb.auug.org.au>
- <20220907050535.243e5030@canb.auug.org.au>
- <29e096e8-4ede-df66-4606-4bd0e5bda755@arm.com>
- <20220907130011.32818436@canb.auug.org.au>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <20220907130011.32818436@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8e4350df-0c73-6ca2-a25f-28a40a1856db@gmail.com>
+X-Operating-System: Linux phenom 5.18.0-4-amd64 
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
+        T_SPF_TEMPERROR autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-
-
-On 9/7/22 08:30, Stephen Rothwell wrote:
-> Hi all,
+On Tue, Sep 06, 2022 at 08:35:49PM -0300, Igor Matheus Andrade Torrente wrote:
+> On 9/6/22 18:26, Sudip Mukherjee wrote:
+> > On Tue, Sep 6, 2022 at 4:59 PM Sudip Mukherjee (Codethink)
+> > <sudipm.mukherjee@gmail.com> wrote:
+> > > 
+> > > Hi All,
+> > > 
+> > > The builds of next-20220906 fails for mips, xtensa and arm allmodconfig.
+> > > 
+> > > The errors in mips and xtensa are:
+> > > 
+> > > ERROR: modpost: "__divdi3" [drivers/gpu/drm/vkms/vkms.ko] undefined!
+> > > ERROR: modpost: "__udivdi3" [drivers/gpu/drm/vkms/vkms.ko] undefined!
+> > > 
+> > > The error in arm is:
+> > > 
+> > > ERROR: modpost: "__aeabi_uldivmod" [drivers/gpu/drm/vkms/vkms.ko] undefined!
+> > > ERROR: modpost: "__aeabi_ldivmod" [drivers/gpu/drm/vkms/vkms.ko] undefined!
+> > > 
+> > > 
+> > > Trying to do a git bisect to find out the offending commit.
+> > 
+> > git bisect points to 396369d67549 ("drm: vkms: Add support to the
+> > RGB565 format")
 > 
-> On Wed, 7 Sep 2022 08:01:34 +0530 Anshuman Khandual <anshuman.khandual@arm.com> wrote:
->>
->> On 9/7/22 00:35, Stephen Rothwell wrote:
->>> Hi all,
->>>
->>> On Wed, 31 Aug 2022 08:34:52 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:  
->>>>
->>>> After merging the perf tree, today's linux-next build (native perf)
->>>> failed like this:
->>>>
->>>> In file included from /usr/include/stdio.h:866,
->>>>                  from /home/sfr/next/next/tools/perf/util/branch.h:9,
->>>>                  from util/branch.c:2:
->>>> In function 'fprintf',
->>>>     inlined from 'branch_type_stat_display' at util/branch.c:152:4:
->>>> /usr/include/powerpc64le-linux-gnu/bits/stdio2.h:105:10: error: '%8s' directive argument is null [-Werror=format-overflow=]
->>>>   105 |   return __fprintf_chk (__stream, __USE_FORTIFY_LEVEL - 1, __fmt,
->>>>       |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>>>   106 |                         __va_arg_pack ());
->>>>       |                         ~~~~~~~~~~~~~~~~~
->>>> cc1: all warnings being treated as errors
->>>>
->>>> Presumably caused by commit
->>>>
->>>>   9781e500dcb8 ("perf branch: Extend branch type classification")
->>>>
->>>> "native" here is PowerPC64 LE.
->>>> $ gcc --version
->>>> gcc (Debian 11.2.0-10) 11.2.0
->>>>
->>>> I have used the perf tree from next-20220830 for today.  
->>>
->>> I am still seeing this build failure.  
->>
->> But did you apply the fix patch from Arnaldo that removes -Wno-format-overflow
->> compiler option for the file util/branch.c ?
->>
->> https://lore.kernel.org/all/YxJBh3wvAGol+Ekq@kernel.org/
-> 
-> No, I expected a fix to be in the perf tree ...
-> 
-> Also note that the following fixes the problem for me:
-> 
-> diff --git a/tools/perf/util/branch.c b/tools/perf/util/branch.c
-> index d40776c44b06..b7b898f2872e 100644
-> --- a/tools/perf/util/branch.c
-> +++ b/tools/perf/util/branch.c
-> @@ -88,7 +88,8 @@ const char *branch_type_name(int type)
->  		"ERET",
->  		"IRQ",
->  		"SERROR",
-> -		"NO_TX"
-> +		"NO_TX",
-> +		""
->  	};
->  
->  	if (type >= 0 && type < PERF_BR_MAX)
+> Are these architectures incapable of doing 64bits int division?
 
-This looks right, makes sense.
+Yeah 32bit archs in general can't do that, and you have to use the right
+macros because otherwise gcc falls back to its own built-ins, and those
+don't exist in the kernel since the kernel isn't (cannot!) linked against
+any userspace library.
 
-> 
-> 
-> PERF_BR_MAX has been increased by one (when PERF_BR_EXTEND_ABI was
-> added), but a new string has not been added to the array ...
+For pretty much this reasons it's really good to build test against 32bit
+x86, or probably more relevant these days, 32bit arm.
 
-Right, even though new branch_new_names[] array gets queried on when type
-value is PERF_BR_EXTEND_ABI, branch_names[] should still contain an empty
-string "" just to match the now incremented PERF_BR_MAX which extends the
-array size as well. I guess the compiler detects this mismatch here and
-just complains about it.
-
-Hello Arnaldo,
-
-As adding empty string to the array solves the build problem, I guess we
-should fold this fix instead, rather than trying to drop the compiler
-option itself, as discussed earlier.
-
-The above fix should be folded into the following commit
-
-9781e500dcb8 ("perf branch: Extend branch type classification")
-
-in the following perf tree - branch.
-
-git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git (perf/core)
-
-- Anshuman
+Cheers, Daniel
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

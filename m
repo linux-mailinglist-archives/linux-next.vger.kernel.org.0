@@ -2,51 +2,70 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 868B25AFA56
-	for <lists+linux-next@lfdr.de>; Wed,  7 Sep 2022 05:00:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 802165AFA62
+	for <lists+linux-next@lfdr.de>; Wed,  7 Sep 2022 05:06:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbiIGDA0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 6 Sep 2022 23:00:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46398 "EHLO
+        id S229574AbiIGDGC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 6 Sep 2022 23:06:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229875AbiIGDAV (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 6 Sep 2022 23:00:21 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB5511EEC4;
-        Tue,  6 Sep 2022 20:00:15 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MMn710t0Pz4xDK;
-        Wed,  7 Sep 2022 13:00:12 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1662519613;
-        bh=AWrG22HsG40nFWEUvbc9CiDwEjFs/Llqm0vlEFXRFA8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=gaoYIDfRJ9UCJHb31CKusDYxzY+a5mYX995fC1QLu1Ehf55PXp9X4RMvzW9Tcjenc
-         f7CF3uTfXjGMOKAP6vRK+bNs4wj3ddVxKVqEE6CMMZ4sfDiXgSyRxd6OkDPL1Dg4Hg
-         LIAEdb7xeH9pijEikyFeh+Emd//dQ1pOmbujE1ApYxYnnAlyIWrYHPoEmLHd8w2fQL
-         blAykyGF4JYyrnMFAWiImBr9u+8XSTNSPft6kb+kk1Q7r4yuiKNoF9m6p5TIa2FO0W
-         /W1jEVI1DS6EWCLYiuNUfERRMU+V7JZ7yJbhzY8tH+AB0KpLLXjLYol6v3B4relRre
-         xaNeuXm1WFbpw==
-Date:   Wed, 7 Sep 2022 13:00:11 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the perf tree
-Message-ID: <20220907130011.32818436@canb.auug.org.au>
-In-Reply-To: <29e096e8-4ede-df66-4606-4bd0e5bda755@arm.com>
-References: <20220831083452.2fc938cf@canb.auug.org.au>
-        <20220907050535.243e5030@canb.auug.org.au>
-        <29e096e8-4ede-df66-4606-4bd0e5bda755@arm.com>
+        with ESMTP id S229523AbiIGDF6 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 6 Sep 2022 23:05:58 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D35F886B75;
+        Tue,  6 Sep 2022 20:05:56 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id w2so17800006edc.0;
+        Tue, 06 Sep 2022 20:05:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=lZhl4GKNh72f6ovup18O37psKeuslqnMIGiRFdPU76Q=;
+        b=RCD3CfGkzkX2ogxVqAP1o0I0iO4u63lKMab7CUkWxpafhcP/27B/CzHvw89JugQLCE
+         oviELWoh5CqMn+DaAkfeKeCSti6hEuOGl47tgpOZDRlMwHTmSRGnCg/5fPFo/rGAWoE9
+         AxXKE5FZJ01NTgbgIidsTJaKudhIdVIbNnjrO/aTIDWdHRY/YGg3safFxLdG/HDrNnr1
+         IAzuyILjxPMoWV27PelaY/9cHlX4Tf2PvZnoeslJmQIvh+KxqrG2XG6JE5DR7F6Btt5b
+         Oo+7Fd1h9WLSlgRA2KvbZm2e8IpZT+DUMiC+XxPMa5zzGKgFK0LvmDrcoxH+z7aGqKkC
+         mm6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=lZhl4GKNh72f6ovup18O37psKeuslqnMIGiRFdPU76Q=;
+        b=4Wfy97KwE52eaRB+6AduykI03l7D469AVr91IP9TF5yV4Fq65ho8yezpilh8Y2cpP/
+         My5dg5Ei0rsCFLO8EOLZKWB28ohYfPCX5GpJh4o4A3xlyEEHAbII4LZ8OlApFyP1Me2h
+         CDEFWoMEj33RNVGNZYFNDC+ZsXiYk+etxdxi0tg9J/v1RL/bAU9x3i0tUm6PUswMQpDD
+         WIHqLtImxuQCWQ/QX5Pt73Xx5vg5xPMKX/Fqh1wZNm+G5RZlTppVNblc1wqeO22ttHwX
+         KliLMxMGGuTdRmyqDoe0aUMkYzGhbSUQ4LvRzwu79YkytshioNNAr6rjyPTV8Y7wC5+9
+         5Mmg==
+X-Gm-Message-State: ACgBeo063cfJcZVFZPHnFse2pZQJyNepWHlBfXbrS+7dGy9gGprjFdfw
+        nAJ2UVx6jCnEpmZUXT7aGKjvom0hPkQkwxfp1x8=
+X-Google-Smtp-Source: AA6agR5ZyoPwvG4+3ilgfNPiu54CYFcndyQtTG6z0EA+LSXSC2vH24jLhLuCSEb3R1/8KW2rWqQJYD7UCOjtmPLyMj0=
+X-Received: by 2002:a05:6402:28cd:b0:448:3856:41a3 with SMTP id
+ ef13-20020a05640228cd00b00448385641a3mr1275640edb.6.1662519955333; Tue, 06
+ Sep 2022 20:05:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/JVAmzB6om6HkpojjuskFSzT";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220906165131.59f395a9@canb.auug.org.au> <dab10759-c059-2254-116b-8360bc240e57@suse.cz>
+ <CAADnVQJTDdA=vpQhrbAbX7oEQ=uaPXwAmjMzpW4Nk2Xi9f2JLA@mail.gmail.com>
+In-Reply-To: <CAADnVQJTDdA=vpQhrbAbX7oEQ=uaPXwAmjMzpW4Nk2Xi9f2JLA@mail.gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 6 Sep 2022 20:05:44 -0700
+Message-ID: <CAADnVQKJORAcV75CHE1yG6_+c8qnoOj6gf=zJG9vnWwR5+4SqQ@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the slab tree
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Marco Elver <elver@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,97 +73,34 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/JVAmzB6om6HkpojjuskFSzT
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi all,
-
-On Wed, 7 Sep 2022 08:01:34 +0530 Anshuman Khandual <anshuman.khandual@arm.=
-com> wrote:
+On Tue, Sep 6, 2022 at 11:37 AM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 >
-> On 9/7/22 00:35, Stephen Rothwell wrote:
-> > Hi all,
-> >=20
-> > On Wed, 31 Aug 2022 08:34:52 +1000 Stephen Rothwell <sfr@canb.auug.org.=
-au> wrote: =20
-> >>
-> >> After merging the perf tree, today's linux-next build (native perf)
-> >> failed like this:
-> >>
-> >> In file included from /usr/include/stdio.h:866,
-> >>                  from /home/sfr/next/next/tools/perf/util/branch.h:9,
-> >>                  from util/branch.c:2:
-> >> In function 'fprintf',
-> >>     inlined from 'branch_type_stat_display' at util/branch.c:152:4:
-> >> /usr/include/powerpc64le-linux-gnu/bits/stdio2.h:105:10: error: '%8s' =
-directive argument is null [-Werror=3Dformat-overflow=3D]
-> >>   105 |   return __fprintf_chk (__stream, __USE_FORTIFY_LEVEL - 1, __f=
-mt,
-> >>       |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~
-> >>   106 |                         __va_arg_pack ());
-> >>       |                         ~~~~~~~~~~~~~~~~~
-> >> cc1: all warnings being treated as errors
-> >>
-> >> Presumably caused by commit
-> >>
-> >>   9781e500dcb8 ("perf branch: Extend branch type classification")
-> >>
-> >> "native" here is PowerPC64 LE.
-> >> $ gcc --version
-> >> gcc (Debian 11.2.0-10) 11.2.0
-> >>
-> >> I have used the perf tree from next-20220830 for today. =20
-> >=20
-> > I am still seeing this build failure. =20
->=20
-> But did you apply the fix patch from Arnaldo that removes -Wno-format-ove=
-rflow
-> compiler option for the file util/branch.c ?
->=20
-> https://lore.kernel.org/all/YxJBh3wvAGol+Ekq@kernel.org/
+> On Tue, Sep 6, 2022 at 12:53 AM Vlastimil Babka <vbabka@suse.cz> wrote:
+> >
+> > On 9/6/22 08:51, Stephen Rothwell wrote:
+> > > Hi all,
+> >
+> > Hi,
+> >
+> > > After merging the slab tree, today's linux-next build (powerpc
+> > > ppc64_defconfig) failed like this:
+> > >
+> > > kernel/bpf/memalloc.c: In function 'bpf_mem_free':
+> > > kernel/bpf/memalloc.c:613:33: error: implicit declaration of function '__ksize'; did you mean 'ksize'? [-Werror=implicit-function-declaration]
+> > >    613 |         idx = bpf_mem_cache_idx(__ksize(ptr - LLIST_NODE_SZ));
+> > >        |                                 ^~~~~~~
+> > >        |                                 ksize
+> >
+> > Could you use ksize() here? I'm guessing you picked __ksize() because
+> > kasan_unpoison_element() in mm/mempool.c did, but that's to avoid
+> > kasan_unpoison_range() in ksize() as this caller does it differently.
+> > AFAICS your function doesn't handle kasan differently, so ksize() should
+> > be fine.
+>
+> Ok. Will change to use ksize().
 
-No, I expected a fix to be in the perf tree ...
+Just pushed the following commit to address the issue:
+https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/commit/?id=1e660f7ebe0ff6ac65ee0000280392d878630a67
 
-Also note that the following fixes the problem for me:
-
-diff --git a/tools/perf/util/branch.c b/tools/perf/util/branch.c
-index d40776c44b06..b7b898f2872e 100644
---- a/tools/perf/util/branch.c
-+++ b/tools/perf/util/branch.c
-@@ -88,7 +88,8 @@ const char *branch_type_name(int type)
- 		"ERET",
- 		"IRQ",
- 		"SERROR",
--		"NO_TX"
-+		"NO_TX",
-+		""
- 	};
-=20
- 	if (type >=3D 0 && type < PERF_BR_MAX)
-
-
-PERF_BR_MAX has been increased by one (when PERF_BR_EXTEND_ABI was
-added), but a new string has not been added to the array ...
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/JVAmzB6om6HkpojjuskFSzT
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMYCTsACgkQAVBC80lX
-0GyyqAf/T1LM5r9YpZaFxgEvJ/8Q4rMacCoXmNDz9ptU7STW8JzpiE1l6sK5Qtpc
-1E7CKauRkOst9sNygxXO7SU3BI/LedD5h+pYDob0inSF87CR4Pz39KDMcqtUp7+7
-rR9lw8Gbxz90tGZe67gQ2JwY1YTtg3idCgG0qwNEuu+Jm0yxjTHg50+1rHbXpGa8
-VwV4u90yqIiqfhruAT3IJEK3T0qd+g1GS4TzspXSx7/wekEPou0uKZQbRA3AuvXR
-SaOr8bnfCW/A+FXfrb9T2IP8TEZi4a86wBXxJbQECQuuWsBJ3QDrW368gq1BXxy/
-Q1n/EZlOamk3St56m91gUIWWxkGjWg==
-=oWZ1
------END PGP SIGNATURE-----
-
---Sig_/JVAmzB6om6HkpojjuskFSzT--
+It will get to net-next soon.

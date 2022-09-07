@@ -2,132 +2,88 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA33C5AFBF2
-	for <lists+linux-next@lfdr.de>; Wed,  7 Sep 2022 07:51:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2452E5AFC01
+	for <lists+linux-next@lfdr.de>; Wed,  7 Sep 2022 07:53:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229601AbiIGFvA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 7 Sep 2022 01:51:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58496 "EHLO
+        id S229449AbiIGFxZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 7 Sep 2022 01:53:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiIGFu7 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 7 Sep 2022 01:50:59 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E4C95C950
-        for <linux-next@vger.kernel.org>; Tue,  6 Sep 2022 22:50:48 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id gb36so27884150ejc.10
-        for <linux-next@vger.kernel.org>; Tue, 06 Sep 2022 22:50:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date;
-        bh=485XNaRuLgo/QNXREYEE3jQFUNZFYuPUp6wyA324/uM=;
-        b=lXKB2dOByaXJeWp6iOGRoZ4RmLPZsu3HxzhaDnY3VxlB4vCBN7dn35f8/Kl/9WVfZp
-         RnVffudQwdTclZc8hX0wTIQ3eNqmQ/74gM+x+8fG1kkqBpBy6mPY35LZJNh1ZW/Ea3k5
-         cuJP2GV1youCGhJ4/XV1pgAiMBhenRllw1BzY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=485XNaRuLgo/QNXREYEE3jQFUNZFYuPUp6wyA324/uM=;
-        b=pcMaEJfAAggUf0uNHoj4GmHwbxnBnmxMATMf5TiMKZs/eXsGHk5OeBKwlJ9v2uj564
-         aYvCEBQSziinZSVPxDvyuNVWvhnH4byDzi/KAZc0blgdSpvBxkkWuYoPhNeJzJYmkDTa
-         LRRgZSjJe0k2mWhL0u2u57B3UJkMZA2er9jvj1ZpGQYdP8dapEG9AZKaFsAEJIr+Iwuy
-         1n5rQejURYUKPGMDWWPOd7mbG7UDPlefqqLYi3VV/7SKDNtFBN9m6ewqqtj/WGoBa60w
-         Z/U6CmvlVNVL+CafxfJv87UZhFOTjXrgSqKyDxT/Fywfqm5q3IXwYDGt5PDAgfJIYbEA
-         wD9w==
-X-Gm-Message-State: ACgBeo3CNpHeuYWVtdQzNVVYvM9wOg8aGv/wPSWKKrzqPcvX/X375hbY
-        Zptm0Sh7raDeIl63x6jMG3RFyw==
-X-Google-Smtp-Source: AA6agR6IS7WtWkmlIgHja/YyJbP8C4ZcmZo3NwhtbPvtpZSOQuctBQnsweC1nqC8Sxd6HQmJa9tQkQ==
-X-Received: by 2002:a17:907:2e01:b0:731:1eb0:b9ff with SMTP id ig1-20020a1709072e0100b007311eb0b9ffmr1237025ejc.728.1662529846962;
-        Tue, 06 Sep 2022 22:50:46 -0700 (PDT)
-Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
-        by smtp.gmail.com with ESMTPSA id eh13-20020a0564020f8d00b0044f0c01196esm887979edb.65.2022.09.06.22.50.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 22:50:46 -0700 (PDT)
-Date:   Wed, 7 Sep 2022 07:50:44 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Igor Matheus Andrade Torrente <igormtorrente@gmail.com>
-Cc:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Melissa Wen <melissa.srw@gmail.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-next <linux-next@vger.kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Haneen Mohammed <hamohammed.sa@gmail.com>
-Subject: Re: build failure of next-20220906 due to 396369d67549 ("drm: vkms:
- Add support to the RGB565 format")
-Message-ID: <YxgxNPYl5LhKpHrk@phenom.ffwll.local>
-Mail-Followup-To: Igor Matheus Andrade Torrente <igormtorrente@gmail.com>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Melissa Wen <melissa.srw@gmail.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-next <linux-next@vger.kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Haneen Mohammed <hamohammed.sa@gmail.com>
-References: <YxducgSzR6/zyHD7@debian>
- <CADVatmNfc1YT02v5-FaMoGN==MOx5ZJ=o8YMQAH19Gvf91betA@mail.gmail.com>
- <8e4350df-0c73-6ca2-a25f-28a40a1856db@gmail.com>
- <YxgwdGtNTnDdIqAv@phenom.ffwll.local>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YxgwdGtNTnDdIqAv@phenom.ffwll.local>
-X-Operating-System: Linux phenom 5.18.0-4-amd64 
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,NO_DNS_FOR_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=no autolearn_force=no
-        version=3.4.6
+        with ESMTP id S229604AbiIGFxY (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 7 Sep 2022 01:53:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 947A689CE9;
+        Tue,  6 Sep 2022 22:53:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 304F861771;
+        Wed,  7 Sep 2022 05:53:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 284F1C433D6;
+        Wed,  7 Sep 2022 05:53:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1662529993;
+        bh=ibfwkQ32Rbq5M69B5f3aQ0rXWs/oLVhNIkRFnLi89jw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=f1eAqZIOAFZFsl9R6/RqDMfeNu3ixnPwl2rPr/8Tp/4RfCtrwxxlMnP2U+KM6fqQQ
+         g16x38RJEw2jZug00rcCi1ZhCYXIiqtMBsz3WllmfR3CvTAmxg+gGabxuToW0rmhPO
+         GP91hN4ovuNOHh60JbH0tpk7qKs/9XIEzBk76fr8=
+Date:   Tue, 6 Sep 2022 22:53:12 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     syzbot <syzbot+08ca1fa706a22cc17efe@syzkaller.appspotmail.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-next@vger.kernel.org, sfr@canb.auug.org.au,
+        syzkaller-bugs@googlegroups.com,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>
+Subject: Re: [syzbot] linux-next boot error: KASAN: slab-out-of-bounds Read
+ in _find_next_bit
+Message-Id: <20220906225312.263c4493a744cbcb66288283@linux-foundation.org>
+In-Reply-To: <YxfpkzZhJ7GfRuKd@yury-laptop>
+References: <000000000000974e2805e802137e@google.com>
+        <20220906173154.6f2664c8fc6b83470c5dfea1@linux-foundation.org>
+        <YxfpkzZhJ7GfRuKd@yury-laptop>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Sep 07, 2022 at 07:47:32AM +0200, Daniel Vetter wrote:
-> On Tue, Sep 06, 2022 at 08:35:49PM -0300, Igor Matheus Andrade Torrente wrote:
-> > On 9/6/22 18:26, Sudip Mukherjee wrote:
-> > > On Tue, Sep 6, 2022 at 4:59 PM Sudip Mukherjee (Codethink)
-> > > <sudipm.mukherjee@gmail.com> wrote:
-> > > > 
-> > > > Hi All,
-> > > > 
-> > > > The builds of next-20220906 fails for mips, xtensa and arm allmodconfig.
-> > > > 
-> > > > The errors in mips and xtensa are:
-> > > > 
-> > > > ERROR: modpost: "__divdi3" [drivers/gpu/drm/vkms/vkms.ko] undefined!
-> > > > ERROR: modpost: "__udivdi3" [drivers/gpu/drm/vkms/vkms.ko] undefined!
-> > > > 
-> > > > The error in arm is:
-> > > > 
-> > > > ERROR: modpost: "__aeabi_uldivmod" [drivers/gpu/drm/vkms/vkms.ko] undefined!
-> > > > ERROR: modpost: "__aeabi_ldivmod" [drivers/gpu/drm/vkms/vkms.ko] undefined!
-> > > > 
-> > > > 
-> > > > Trying to do a git bisect to find out the offending commit.
-> > > 
-> > > git bisect points to 396369d67549 ("drm: vkms: Add support to the
-> > > RGB565 format")
-> > 
-> > Are these architectures incapable of doing 64bits int division?
-> 
-> Yeah 32bit archs in general can't do that, and you have to use the right
-> macros because otherwise gcc falls back to its own built-ins, and those
-> don't exist in the kernel since the kernel isn't (cannot!) linked against
-> any userspace library.
-> 
-> For pretty much this reasons it's really good to build test against 32bit
-> x86, or probably more relevant these days, 32bit arm.
+On Tue, 6 Sep 2022 17:45:07 -0700 Yury Norov <yury.norov@gmail.com> wrote:
 
-Forgot to add: include/math.h for all your division needs.
--Daniel
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+> > > The buggy address belongs to the object at ffff888017576600
+> > >  which belongs to the cache kmalloc-192 of size 192
+> > > The buggy address is located 184 bytes inside of
+> > >  192-byte region [ffff888017576600, ffff8880175766c0)
+> > 
+> > At offset 184 of a 192-byte region.
+> > 
+> > So what's wrong with doing that?  Does KASAN have an off-by-one?
+> 
+> Hi Andrew, all,
+> 
+> This is a bug in FIND_NEXT_BIT(). It should be 
+>   if (idx >= sz / BITS_PER_LONG)                                   \
+>           goto out;                                                \
+> 
+> instead of 
+>   if (idx > sz / BITS_PER_LONG)                                    \
+>           goto out;                                                \
+> 
+> The fix is in bitmap-for-next, expected to be in -next by tomorrow.
+> Sorry for the noise.
+
+OK... but why is KASAN reporting a bad access from an area
+which appears to be OK?

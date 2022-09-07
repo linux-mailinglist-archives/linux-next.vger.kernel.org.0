@@ -2,57 +2,52 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2452E5AFC01
-	for <lists+linux-next@lfdr.de>; Wed,  7 Sep 2022 07:53:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A1EC5AFC21
+	for <lists+linux-next@lfdr.de>; Wed,  7 Sep 2022 08:08:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229449AbiIGFxZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 7 Sep 2022 01:53:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60720 "EHLO
+        id S229551AbiIGGIq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 7 Sep 2022 02:08:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbiIGFxY (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 7 Sep 2022 01:53:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 947A689CE9;
-        Tue,  6 Sep 2022 22:53:14 -0700 (PDT)
+        with ESMTP id S229478AbiIGGIp (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 7 Sep 2022 02:08:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87E578E0D8;
+        Tue,  6 Sep 2022 23:08:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 304F861771;
-        Wed,  7 Sep 2022 05:53:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 284F1C433D6;
-        Wed,  7 Sep 2022 05:53:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1662529993;
-        bh=ibfwkQ32Rbq5M69B5f3aQ0rXWs/oLVhNIkRFnLi89jw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=f1eAqZIOAFZFsl9R6/RqDMfeNu3ixnPwl2rPr/8Tp/4RfCtrwxxlMnP2U+KM6fqQQ
-         g16x38RJEw2jZug00rcCi1ZhCYXIiqtMBsz3WllmfR3CvTAmxg+gGabxuToW0rmhPO
-         GP91hN4ovuNOHh60JbH0tpk7qKs/9XIEzBk76fr8=
-Date:   Tue, 6 Sep 2022 22:53:12 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     syzbot <syzbot+08ca1fa706a22cc17efe@syzkaller.appspotmail.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-next@vger.kernel.org, sfr@canb.auug.org.au,
-        syzkaller-bugs@googlegroups.com,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>
-Subject: Re: [syzbot] linux-next boot error: KASAN: slab-out-of-bounds Read
- in _find_next_bit
-Message-Id: <20220906225312.263c4493a744cbcb66288283@linux-foundation.org>
-In-Reply-To: <YxfpkzZhJ7GfRuKd@yury-laptop>
-References: <000000000000974e2805e802137e@google.com>
-        <20220906173154.6f2664c8fc6b83470c5dfea1@linux-foundation.org>
-        <YxfpkzZhJ7GfRuKd@yury-laptop>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 23B7D61782;
+        Wed,  7 Sep 2022 06:08:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF127C433C1;
+        Wed,  7 Sep 2022 06:08:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1662530923;
+        bh=kNR6NCZtiz1Pg0QU7X3KhMGimxuSd3dvW5bEpDRYuEw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Y/z+gLSJ5Zai8tyfDUqhcVnGOqx3jdO7/H2M1S5ibIaEnO9E3uxqAFRWGNkLkrxF+
+         NfM6KDNu/XbXZB8wm43UjabrfG/+9BlqBO8MkZ4d8T0Lst0DTYuz83rFHwZRrhBRbB
+         ksd5ryAHNMHklyjc7tKccnugAR461T5+tM0dt7cY=
+Date:   Wed, 7 Sep 2022 08:08:39 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-gpio@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-next <linux-next@vger.kernel.org>
+Subject: Re: build failure of next-20220906 due to 4ec7ac90ff39 ("misc:
+ microchip: pci1xxxx: Add power management functions - suspend & resume
+ handlers.")
+Message-ID: <Yxg1Z6YoFiCE8ORo@kroah.com>
+References: <YxdX2l88PSFGe1r4@debian>
+ <YxeAOgEoUffHudv/@kroah.com>
+ <CADVatmNSGSZZNXF7k7YmMqfcoOAiM6JhEfksjoVqoBOLUXfbPQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CADVatmNSGSZZNXF7k7YmMqfcoOAiM6JhEfksjoVqoBOLUXfbPQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,29 +56,42 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, 6 Sep 2022 17:45:07 -0700 Yury Norov <yury.norov@gmail.com> wrote:
+On Tue, Sep 06, 2022 at 10:07:53PM +0100, Sudip Mukherjee wrote:
+> Hi Greg,
+> 
+> On Tue, Sep 6, 2022 at 6:15 PM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Tue, Sep 06, 2022 at 03:23:22PM +0100, Sudip Mukherjee (Codethink) wrote:
+> > > Hi All,
+> > >
+> > > The builds of riscv, s390, csky, alpha and loongarch allmodconfig have
+> > > failed to build next-20220906 with the error:
+> > >
+> > >
+> > > drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c:311:12: error: 'pci1xxxx_gpio_resume' defined but not used [-Werror=unused-function]
+> > >   311 | static int pci1xxxx_gpio_resume(struct device *dev)
+> > >       |            ^~~~~~~~~~~~~~~~~~~~
+> > > drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c:295:12: error: 'pci1xxxx_gpio_suspend' defined but not used [-Werror=unused-function]
+> > >   295 | static int pci1xxxx_gpio_suspend(struct device *dev)
+> > >       |            ^~~~~~~~~~~~~~~~~~~~~
+> > >
+> > >
+> > > git bisect pointed to 4ec7ac90ff39 ("misc: microchip: pci1xxxx: Add power management functions - suspend & resume handlers.").
+> > >
+> > > I will be happy to test any patch or provide any extra log if needed.
+> >
+> > Hopefully this commit will fix this:
+> >         https://lore.kernel.org/r/20220906124951.696776-1-kumaravel.thiagarajan@microchip.com
+> 
+> No, it didn't.  :(
+> 
+> Looking at other drivers which uses SIMPLE_DEV_PM_OPS, I think
+> pci1xxxx_gpio_suspend() and pci1xxxx_gpio_resume() needs to be under
+> "#ifdef CONFIG_PM_SLEEP".
 
-> > > The buggy address belongs to the object at ffff888017576600
-> > >  which belongs to the cache kmalloc-192 of size 192
-> > > The buggy address is located 184 bytes inside of
-> > >  192-byte region [ffff888017576600, ffff8880175766c0)
-> > 
-> > At offset 184 of a 192-byte region.
-> > 
-> > So what's wrong with doing that?  Does KASAN have an off-by-one?
-> 
-> Hi Andrew, all,
-> 
-> This is a bug in FIND_NEXT_BIT(). It should be 
->   if (idx >= sz / BITS_PER_LONG)                                   \
->           goto out;                                                \
-> 
-> instead of 
->   if (idx > sz / BITS_PER_LONG)                                    \
->           goto out;                                                \
-> 
-> The fix is in bitmap-for-next, expected to be in -next by tomorrow.
-> Sorry for the noise.
+Great, Kumaravel, can you send a fixup patch for this?
 
-OK... but why is KASAN reporting a bad access from an area
-which appears to be OK?
+thanks,
+
+greg k-h

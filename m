@@ -2,145 +2,133 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 923E85AFD42
-	for <lists+linux-next@lfdr.de>; Wed,  7 Sep 2022 09:17:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E77215AFDCB
+	for <lists+linux-next@lfdr.de>; Wed,  7 Sep 2022 09:45:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229817AbiIGHRn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 7 Sep 2022 03:17:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42888 "EHLO
+        id S229837AbiIGHpq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 7 Sep 2022 03:45:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbiIGHRl (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 7 Sep 2022 03:17:41 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51FADA3479
-        for <linux-next@vger.kernel.org>; Wed,  7 Sep 2022 00:17:38 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id v6so1499098ljj.0
-        for <linux-next@vger.kernel.org>; Wed, 07 Sep 2022 00:17:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=89+MkwCQRLAHkFEhXocRBmWuzdBCcd8GcaLlx6vSdK4=;
-        b=mWUos+G4meLEIpM5B5tSJgqfGT5qpSbpn+rdZVeadkZnBWLelim7TPaMEtKqFnCb5x
-         qaQW4+1W6y5PwSJsJP64h6SkRokfUsQdjuIXt2Bij29/dOMLg/gQeohNaCdr7nzHmfZV
-         Fdk75ophPXB+Bwugz3NNgr4gm51+NMBslWWEShVW08npuscO1IaDvOHL55rQrp71rEK4
-         3hldg8EwPFDOB05fqVcITdL8Zrx0NKe7zHfQdX0kNTFlbfwfrdu4CYqCM68eMo/vqwcO
-         jbzJJT5GRMI8YXbkiTJUHzQO/4gQU1XAXIRyGIq7HnR3D942NJCM+51TcEX/Mp1VNhF6
-         qH7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=89+MkwCQRLAHkFEhXocRBmWuzdBCcd8GcaLlx6vSdK4=;
-        b=fMvh7jsismnANxvlDfz4gbIuP6AJ+fV6+KbD8mfEUX81EJ01Jjv6DJ+HbcTYuvkl5u
-         ypZ8miTR39DhKdkRj1xnVOu9c3QoV4kGLjughJXgWkfoAXf6AbguUreThrboFG/rLtbw
-         n4D6ZPtf2Au0rZuJkJff3LK94yiv97LwbjoJBh2h86O+uy9zvX/GMx11V54kMV1XyZFL
-         ToSwZNF7ugz5ajW1V1KFkluvJwOM+MSX3Ve9V/f0hjHTM44jCgG1sL2ZQUwfVm/PZGEd
-         AXTYMfpocMGY8T7JCKBAhkvAZ/UKtSGuaBZkWAKqvzTGmc2my/mgfUSKBZLs19kYAt+s
-         OTNw==
-X-Gm-Message-State: ACgBeo1H7m5h3QEOLyMjLXKmxHnljwZBYMIqJrZiedOG9HC5L4i9pqMA
-        lySzIr4kSq8qqMyr73xwj+Eug82X2f/KOAxqtofQ5g==
-X-Google-Smtp-Source: AA6agR71di9AUXjm1EUAWrxZPkPvbGJ5UTGC0woWSGfCPIomzzbd6bY/6fvZKlDkb7mw8EwP1pyMQz6gziNPl5xaI/o=
-X-Received: by 2002:a2e:a589:0:b0:261:b223:488b with SMTP id
- m9-20020a2ea589000000b00261b223488bmr592996ljp.33.1662535056337; Wed, 07 Sep
- 2022 00:17:36 -0700 (PDT)
+        with ESMTP id S229602AbiIGHpp (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 7 Sep 2022 03:45:45 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB2037FFAC;
+        Wed,  7 Sep 2022 00:45:42 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MMvSM48Bmz4wgr;
+        Wed,  7 Sep 2022 17:45:39 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1662536741;
+        bh=bhsJcQEgyb5vhXPUdvUG6IM1FjPRH71usf9pZQ22R1M=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=cYRv60Mn0VD9/sCRd9f51WWo2eCrDCXr4Bzs0uDkG19XgmBhgzXAvmFA1Snjc2s+X
+         0bpBYSJ//f6SITYk+MhxISXGg/B0muwWFUbuBJQPE8Nwei7j+JNdpgArKGL+89TXLm
+         pPm0hF6l9GRDS0MTstX6c1YOEz5kj3XKKQXQZTthbl0PmpJZDDuPRe2aQrC5DJUxZW
+         4NYauY4Apix4awRLXlM4FkAkew2C0fT1c73vdBhBmXL6f0zh2jr3vCsNLg4TWnYDLc
+         4pBx0nRaXQb2HYytzoPAGqek89313v0+w0LrRQP+Idu48OWA4YYIyd5Tqm2ipBA2Ie
+         GJkcm0Gk9A8dQ==
+Date:   Wed, 7 Sep 2022 17:45:35 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Vlastimil Babka <vbabka@suse.cz>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Marco Elver <elver@google.com>
+Subject: Re: linux-next: build failure after merge of the slab tree
+Message-ID: <20220907174535.4852e7da@canb.auug.org.au>
+In-Reply-To: <CAADnVQKJORAcV75CHE1yG6_+c8qnoOj6gf=zJG9vnWwR5+4SqQ@mail.gmail.com>
+References: <20220906165131.59f395a9@canb.auug.org.au>
+        <dab10759-c059-2254-116b-8360bc240e57@suse.cz>
+        <CAADnVQJTDdA=vpQhrbAbX7oEQ=uaPXwAmjMzpW4Nk2Xi9f2JLA@mail.gmail.com>
+        <CAADnVQKJORAcV75CHE1yG6_+c8qnoOj6gf=zJG9vnWwR5+4SqQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <000000000000974e2805e802137e@google.com> <20220906173154.6f2664c8fc6b83470c5dfea1@linux-foundation.org>
- <YxfpkzZhJ7GfRuKd@yury-laptop> <20220906225312.263c4493a744cbcb66288283@linux-foundation.org>
-In-Reply-To: <20220906225312.263c4493a744cbcb66288283@linux-foundation.org>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Wed, 7 Sep 2022 09:17:24 +0200
-Message-ID: <CACT4Y+bXks8ohNAxdJ7gGOc=tg7bC7Pz+nBJi_J9zHa5Jhta9w@mail.gmail.com>
-Subject: Re: [syzbot] linux-next boot error: KASAN: slab-out-of-bounds Read in _find_next_bit
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Yury Norov <yury.norov@gmail.com>,
-        syzbot <syzbot+08ca1fa706a22cc17efe@syzkaller.appspotmail.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-next@vger.kernel.org, sfr@canb.auug.org.au,
-        syzkaller-bugs@googlegroups.com,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/IMql38jc4ngYXPwtr.DpjJM";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, 7 Sept 2022 at 07:53, Andrew Morton <akpm@linux-foundation.org> wrote:
-> > > > The buggy address belongs to the object at ffff888017576600
-> > > >  which belongs to the cache kmalloc-192 of size 192
-> > > > The buggy address is located 184 bytes inside of
-> > > >  192-byte region [ffff888017576600, ffff8880175766c0)
-> > >
-> > > At offset 184 of a 192-byte region.
-> > >
-> > > So what's wrong with doing that?  Does KASAN have an off-by-one?
-> >
-> > Hi Andrew, all,
-> >
-> > This is a bug in FIND_NEXT_BIT(). It should be
-> >   if (idx >= sz / BITS_PER_LONG)                                   \
-> >           goto out;                                                \
-> >
-> > instead of
-> >   if (idx > sz / BITS_PER_LONG)                                    \
-> >           goto out;                                                \
-> >
-> > The fix is in bitmap-for-next, expected to be in -next by tomorrow.
-> > Sorry for the noise.
+--Sig_/IMql38jc4ngYXPwtr.DpjJM
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi all,
+
+On Tue, 6 Sep 2022 20:05:44 -0700 Alexei Starovoitov <alexei.starovoitov@gm=
+ail.com> wrote:
 >
-> OK... but why is KASAN reporting a bad access from an area
-> which appears to be OK?
+> On Tue, Sep 6, 2022 at 11:37 AM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> >
+> > On Tue, Sep 6, 2022 at 12:53 AM Vlastimil Babka <vbabka@suse.cz> wrote:=
+ =20
+> > >
+> > > On 9/6/22 08:51, Stephen Rothwell wrote: =20
+> > > > Hi all, =20
+> > >
+> > > Hi,
+> > > =20
+> > > > After merging the slab tree, today's linux-next build (powerpc
+> > > > ppc64_defconfig) failed like this:
+> > > >
+> > > > kernel/bpf/memalloc.c: In function 'bpf_mem_free':
+> > > > kernel/bpf/memalloc.c:613:33: error: implicit declaration of functi=
+on '__ksize'; did you mean 'ksize'? [-Werror=3Dimplicit-function-declaratio=
+n]
+> > > >    613 |         idx =3D bpf_mem_cache_idx(__ksize(ptr - LLIST_NODE=
+_SZ));
+> > > >        |                                 ^~~~~~~
+> > > >        |                                 ksize =20
+> > >
+> > > Could you use ksize() here? I'm guessing you picked __ksize() because
+> > > kasan_unpoison_element() in mm/mempool.c did, but that's to avoid
+> > > kasan_unpoison_range() in ksize() as this caller does it differently.
+> > > AFAICS your function doesn't handle kasan differently, so ksize() sho=
+uld
+> > > be fine. =20
+> >
+> > Ok. Will change to use ksize(). =20
+>=20
+> Just pushed the following commit to address the issue:
+> https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/commit/?=
+id=3D1e660f7ebe0ff6ac65ee0000280392d878630a67
+>=20
+> It will get to net-next soon.
 
-Hi Andrew,
+I replaced my revert with that patch for today (and will discard that
+when it arrives via some other tree).
 
-Good point. Filed https://bugzilla.kernel.org/show_bug.cgi?id=216457 for this.
-Copy-pasting description below:
+--=20
+Cheers,
+Stephen Rothwell
 
-KASAN says:
+--Sig_/IMql38jc4ngYXPwtr.DpjJM
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-==================================================================
-BUG: KASAN: slab-out-of-bounds in _find_next_bit+0x143/0x160 lib/find_bit.c:109
-Read of size 8 at addr ffff8880175766b8 by task kworker/1:1/26
-...
-The buggy address belongs to the object at ffff888017576600
- which belongs to the cache kmalloc-192 of size 192
-The buggy address is located 184 bytes inside of
- 192-byte region [ffff888017576600, ffff8880175766c0)
-...
-Memory state around the buggy address:
->ffff888017576680: 00 00 00 00 00 00 00 fc fc fc fc fc fc fc fc fc
-                                        ^
-==================================================================
+-----BEGIN PGP SIGNATURE-----
 
-This "address is located 184 bytes inside of 192-byte region" is
-confusing b/c it does not look like an out-of-bounds access.
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMYTB8ACgkQAVBC80lX
+0GyK6Qf/QTHmLJ5Q68YznFmFD9sOrzRpxcX1pruMX5LvK7xzTn3NoGEmaFSNPT1i
+2ikd8XlTRk8YIbW+k80qPoHHWJy7hfmYEEwznigEOPfgq1a/HfmUbhc4tYjRffTD
+KBwk2urFFvs59tjKt2PgH0aS2Jr7Ze/1LaY1eYnJ9mS6+wY8b6OeBarl+0qbuAop
+Ia4q0N6/Z1Nf1NrAAo+7llUdda26Ly30iJCrS9prkOfvWYy6k/B6ehgbFwDg5sV5
+1gfz3aZokZXvb5XAKVmwnQHJPq094gZ7qr59OjIkNLKQ1ZkD6pOddWzCmcuqrhQY
+mOoX0BJ/H/c5ez5x43XtgYgMwZrTYQ==
+=tqs4
+-----END PGP SIGNATURE-----
 
-What happens here is that the allocation request was for 184 bytes, so
-the last 8 bytes in the 192-byte slab are poisoned. But KASAN does not
-store the requested size in the object header, so it just prints the
-full slab size everywhere.
-
-User-space ASAN does store 48-bit requested size in the header. But
-KASAN uses additional bytes in the header for:
-
-struct kasan_alloc_meta {
-depot_stack_handle_t aux_stack[2];
-
-So we don't have space for requested size w/o increasing header size
-(currently should be 16 bytes).
-
-We could either try to infer requested size from the shadow (count
-poisoned bytes at the end); or improve wording of the message at least
-to make it clear that 192 is just full slab size.
-
-For context see:
-https://lore.kernel.org/all/20220906173154.6f2664c8fc6b83470c5dfea1@linux-foundation.org/
+--Sig_/IMql38jc4ngYXPwtr.DpjJM--

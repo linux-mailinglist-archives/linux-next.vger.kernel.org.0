@@ -2,157 +2,115 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B30555B1242
-	for <lists+linux-next@lfdr.de>; Thu,  8 Sep 2022 03:59:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81F745B137D
+	for <lists+linux-next@lfdr.de>; Thu,  8 Sep 2022 06:23:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229842AbiIHB72 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 7 Sep 2022 21:59:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37810 "EHLO
+        id S229614AbiIHEXz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 8 Sep 2022 00:23:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbiIHB71 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 7 Sep 2022 21:59:27 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0851CB18;
-        Wed,  7 Sep 2022 18:59:22 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MNMkD69YTz4xD3;
-        Thu,  8 Sep 2022 11:59:16 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1662602358;
-        bh=WQMypIQOXO6oFTr6CtsUzHPJrofSi4/VF3WEKPql46Y=;
-        h=Date:From:To:Cc:Subject:From;
-        b=oSh+TKlbIv9LRKLxRquA2TzOo4W3OdzwUNPL5uv7b+piKZ4Bpj5FcuoXuM88VQ7EZ
-         7/71PyQfM2W5RKMvl9yrjIL8Qa05PiwcPmRDqiQrcy0iGmY8tFHZUPxJcnoUleil1R
-         cf6qS86ego8ocxZDKlKm/Ih2230trTafvt1yl7tcb1AnxspqGSAt3Djk/DKu7dU//3
-         0zQntMYD8BJayloVZk0WYuDuJrp453fX1IoS6LpCzBT5MEa6ju+HBr/QFc13+oi6dm
-         rcdN0+fFGWbNpWOLFGg4pff6xzFgg6l/hzMQ9T0s9fQMpLZxz0QC7efZk2mppFdNm/
-         nYxzk/TGvW3Jg==
-Date:   Thu, 8 Sep 2022 11:59:14 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Steffen Klassert <steffen.klassert@secunet.com>,
-        David Miller <davem@davemloft.net>
-Cc:     Networking <netdev@vger.kernel.org>,
-        Eyal Birger <eyal.birger@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Lior Nahmanson <liorna@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>
-Subject: linux-next: manual merge of the ipsec-next tree with the net-next
- tree
-Message-ID: <20220908115914.69ed4771@canb.auug.org.au>
+        with ESMTP id S229512AbiIHEXy (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 8 Sep 2022 00:23:54 -0400
+Received: from condef-09.nifty.com (condef-09.nifty.com [202.248.20.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 433FF55B1;
+        Wed,  7 Sep 2022 21:23:52 -0700 (PDT)
+Received: from conssluserg-05.nifty.com ([10.126.8.84])by condef-09.nifty.com with ESMTP id 2884KxhN021311;
+        Thu, 8 Sep 2022 13:20:59 +0900
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45]) (authenticated)
+        by conssluserg-05.nifty.com with ESMTP id 2884FQjq022129;
+        Thu, 8 Sep 2022 13:15:27 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 2884FQjq022129
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1662610527;
+        bh=hG2PazrVhLlnat0uCOQ2YIFXDukWCkG/oTELTZNVU3I=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=OP+HGzr47XzbkOsimr8OEe7+JEX+eKh/NcPe4EWgpsjWSe6Lo2vVpN6+4JW8uiHF3
+         AwdYBKw+meTj+oyXEuqobUqlFyRowTDcZ+G7Ovrxf+oHL95g3ewiSnkyWQfZmDNLvV
+         OeaGq43g5Oatt7STxbkME7PAVEevT6rtomDmCIG2GhZR1hFfRH2wdPT5tmEAyOiII0
+         8IDg5D3Sz3yR/JRJyNTdhjoRnGaQu4IfK7jSBtpKH4maXmfTP2+Vl2sYN6OuRA11kT
+         +2pYJpHAyqrjtyIIYxEOrVMhiR7ALMu9E+kPtsfHV58rigHXE5Jx9xmE/rtxGAOB91
+         Q3x1j9+nyY7ag==
+X-Nifty-SrcIP: [209.85.160.45]
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-1225219ee46so41349220fac.2;
+        Wed, 07 Sep 2022 21:15:27 -0700 (PDT)
+X-Gm-Message-State: ACgBeo0SwiPrWhw3BD/2N620Dfy+rnESQ8UHnBZga8PEEc07THRYepS+
+        3lH+mHExG17EP6Y0BE9R3UCCp94YTklAQA5qpRc=
+X-Google-Smtp-Source: AA6agR7qmE9QSqbKQ8hYPB1iPqmm5jQGeoGPz9NvoB5OwvYIIcjgFMCsoLUlhUuRSMPUfv6gpGyn6mkLqDJ++VHaYf0=
+X-Received: by 2002:a05:6870:c58b:b0:10b:d21d:ad5e with SMTP id
+ ba11-20020a056870c58b00b0010bd21dad5emr853669oab.287.1662610526426; Wed, 07
+ Sep 2022 21:15:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_//MNlCg_j4vK0.DfBhen4Xg_";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220908100646.4cb5f02e@canb.auug.org.au>
+In-Reply-To: <20220908100646.4cb5f02e@canb.auug.org.au>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Thu, 8 Sep 2022 13:14:50 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARzFmJjpyUciy1LRvaFo72aZcqRbzY-63ArpeszC+HfmQ@mail.gmail.com>
+Message-ID: <CAK7LNARzFmJjpyUciy1LRvaFo72aZcqRbzY-63ArpeszC+HfmQ@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the kbuild tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_//MNlCg_j4vK0.DfBhen4Xg_
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, Sep 8, 2022 at 9:06 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> After merging the kbuild tree, today's linux-next build (powerpc
+> ppc64_defconfig) failed like this:
+>
+> ld: vmlinux.a: member arch/powerpc/kernel/prom_init_check in archive is not an object
+> make[2]: *** [scripts/Makefile.vmlinux_o:61: vmlinux.o] Error 1
+> make[1]: *** [Makefile:1166: vmlinux.o] Error 2
+> make: *** [Makefile:222: __sub-make] Error 2
+> Command exited with non-zero status 2
+>
+> I don't know what caused this.
+>
+> I have used the kbuild tree from next-20220907 with the top 4 commits
+> reverted again.
+>
+> --
+> Cheers,
+> Stephen Rothwell
 
-Hi all,
 
-Today's linux-next merge of the ipsec-next tree got a conflict in:
 
-  include/net/dst_metadata.h
+Sorry, it was a mis-conversion.
+I will fix it up as follows:
 
-between commit:
 
-  0a28bfd4971f ("net/macsec: Add MACsec skb_metadata_dst Tx Data path suppo=
-rt")
 
-from the net-next tree and commit:
 
-  5182a5d48c3d ("net: allow storing xfrm interface metadata in metadata_dst=
-")
 
-from the ipsec-next tree.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+diff --git a/arch/powerpc/kernel/Makefile b/arch/powerpc/kernel/Makefile
+index f264d9b2cb63..ad3decb9f20b 100644
+--- a/arch/powerpc/kernel/Makefile
++++ b/arch/powerpc/kernel/Makefile
+@@ -203,7 +203,7 @@ obj-$(CONFIG_ALTIVEC)               += vector.o
+ obj-$(CONFIG_PPC64)            += entry_64.o
+ obj-$(CONFIG_PPC_OF_BOOT_TRAMPOLINE)   += prom_init.o
 
---=20
-Cheers,
-Stephen Rothwell
+-obj-$(CONFIG_PPC_OF_BOOT_TRAMPOLINE)   += prom_init_check
++extra-$(CONFIG_PPC_OF_BOOT_TRAMPOLINE) += prom_init_check
 
-diff --cc include/net/dst_metadata.h
-index 22a6924bf6da,57f75960fa28..000000000000
---- a/include/net/dst_metadata.h
-+++ b/include/net/dst_metadata.h
-@@@ -10,7 -9,7 +10,8 @@@
-  enum metadata_type {
-  	METADATA_IP_TUNNEL,
-  	METADATA_HW_PORT_MUX,
- +	METADATA_MACSEC,
-+ 	METADATA_XFRM,
-  };
- =20
-  struct hw_port_info {
-@@@ -18,17 -17,18 +19,23 @@@
-  	u32 port_id;
-  };
- =20
- +struct macsec_info {
- +	sci_t sci;
- +};
- +
-+ struct xfrm_md_info {
-+ 	u32 if_id;
-+ 	int link;
-+ };
-+=20
-  struct metadata_dst {
-  	struct dst_entry		dst;
-  	enum metadata_type		type;
-  	union {
-  		struct ip_tunnel_info	tun_info;
-  		struct hw_port_info	port_info;
- +		struct macsec_info	macsec_info;
-+ 		struct xfrm_md_info	xfrm_info;
-  	} u;
-  };
- =20
-@@@ -89,9 -110,9 +117,12 @@@ static inline int skb_metadata_dst_cmp(
-  		return memcmp(&a->u.tun_info, &b->u.tun_info,
-  			      sizeof(a->u.tun_info) +
-  					 a->u.tun_info.options_len);
- +	case METADATA_MACSEC:
- +		return memcmp(&a->u.macsec_info, &b->u.macsec_info,
- +			      sizeof(a->u.macsec_info));
-+ 	case METADATA_XFRM:
-+ 		return memcmp(&a->u.xfrm_info, &b->u.xfrm_info,
-+ 			      sizeof(a->u.xfrm_info));
-  	default:
-  		return 1;
-  	}
+ quiet_cmd_prom_init_check = PROMCHK $@
+       cmd_prom_init_check = $(CONFIG_SHELL) $< "$(NM)"
+$(obj)/prom_init.o; touch $@
 
---Sig_//MNlCg_j4vK0.DfBhen4Xg_
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMZTHIACgkQAVBC80lX
-0Gz5gwf8CPfl/S8PoQzhBTW3z3C+pZdJ4NhXFkTTv6JMeWiJ0VNSlAbYFI0G7WAv
-Tp8Bq2zWsrMzg1UM0U+KZ0+JUcZ6fKSXE5iHfqOYEmu1f8XvxIKJLIWx3veUiaeP
-8JDgJ3ruQs90PC27KgzKUJqp9sE1ZAcGerOu1ozL+emv885ldG/mRA4m+AJZPuox
-dt4Rf18Iu6YHTdExmcOXLUNhipDu6eie6hy7TPGRL237bgaVrl0A207D2SXqu+y4
-TC7jiGHZmtSyTDJvYKcDN49wukE6KF67K9mxQTrVLe1c20Zqvqmbt4oKcv5b1emR
-YUnhjUqEmOnwRb6vccP9A0gHBg+jww==
-=1GGK
------END PGP SIGNATURE-----
 
---Sig_//MNlCg_j4vK0.DfBhen4Xg_--
+
+-- 
+Best Regards
+Masahiro Yamada

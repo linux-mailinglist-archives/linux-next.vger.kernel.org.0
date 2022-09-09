@@ -2,113 +2,348 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B16155B31A9
-	for <lists+linux-next@lfdr.de>; Fri,  9 Sep 2022 10:27:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C74305B34BC
+	for <lists+linux-next@lfdr.de>; Fri,  9 Sep 2022 11:59:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230494AbiIII0Y (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 9 Sep 2022 04:26:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53818 "EHLO
+        id S229813AbiIIJ6z (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 9 Sep 2022 05:58:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230236AbiIII0X (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 9 Sep 2022 04:26:23 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 951861282E5;
-        Fri,  9 Sep 2022 01:26:22 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MP8GP0B6qz4xPB;
-        Fri,  9 Sep 2022 18:26:20 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1662711981;
-        bh=bwrIORF/AtRjaLf9xPfPXgnz5crku/Tbu2ksFz07DUk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=P8TIbeV9zhCAichVK//+wgALZhYfhoCJAUMIVqjTlUH/ECgK4WpftP5X6uQCn3HnG
-         p9y0z/HzqPaAEX0IJwlhgp7TgrUQRWzRjKewuhsKYaJXZZfOHtSYw4eubcSbslL0Vr
-         agC8T+/bdj9ToZ9p5D0LsjhBk7MwdAcAA5I2ddGVLOnWJ0dsC/4VKGP6JkStbBsxhi
-         3sAzEFB31UcSVbFLIUX90DR+vv3k0xXBAgAZN+kbxQufTmRBl2rpiXmUPGOvJ69LA+
-         yfR2FD6DnhGZXWCIvrmOTiQp8lUCFzzPTwqqkXagatjggJ2IeippYlsLa9j1XC+y4y
-         7vXq24gnok33A==
-Date:   Fri, 9 Sep 2022 18:26:19 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the kbuild tree
-Message-ID: <20220909182619.4e66cb5c@canb.auug.org.au>
-In-Reply-To: <CAK7LNATR0-Y_yHTcD62J4N36T-_4G=-N1me8EWYNTNYbwXerDw@mail.gmail.com>
-References: <20220909090024.47458048@canb.auug.org.au>
-        <CAK7LNARPX2Ov-nLAT6mPWbgqQMDCuoW84VN_C2sS1CJkR_n8YQ@mail.gmail.com>
-        <20220909152453.5400cf7e@canb.auug.org.au>
-        <20220909161354.2c94a495@canb.auug.org.au>
-        <CAK7LNATR0-Y_yHTcD62J4N36T-_4G=-N1me8EWYNTNYbwXerDw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/bSUUPCxNGxaSRkN.HfOHQDM";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229812AbiIIJ6V (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 9 Sep 2022 05:58:21 -0400
+Received: from mail-ej1-x64a.google.com (mail-ej1-x64a.google.com [IPv6:2a00:1450:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0F2D12A327
+        for <linux-next@vger.kernel.org>; Fri,  9 Sep 2022 02:58:18 -0700 (PDT)
+Received: by mail-ej1-x64a.google.com with SMTP id qw34-20020a1709066a2200b00730ca5a94bfso767913ejc.3
+        for <linux-next@vger.kernel.org>; Fri, 09 Sep 2022 02:58:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date;
+        bh=D6OG8U2ohhx6yvxRPlrU4RT77Zc+3Pmhd2b2KcPfT9w=;
+        b=spZi2W4U/Rx+sTAsHn53CdqexM1clzV0ZHlZptJcpDDwp0KWal+DUcEHgRsDUwRam6
+         ATPzdiKsSAM2QrCTFeMI1kbXjVuY+gRlNIV/Y5pRusnWt+ze+ghyGWaw5JNiOJQdmD1x
+         VlvgoRCtpUd7TSVHO4wXsqpN6XdCoXWdsKvTmk4GhVw00DAWlub10ZVyVG10FntDWxEP
+         tnyo8oAVYlcCvFD7Vv69z4dS+JgwJHpUg2RtsIrgyP2XRf08bjVu/9lG0d/7gJn6y1Av
+         FkCrhzMBIPuYrDtLgFCzxL+wh/2AYPtd1IqJh49J3CZGmAbNvdleee8vB2Q8oucKbpHW
+         7e3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=D6OG8U2ohhx6yvxRPlrU4RT77Zc+3Pmhd2b2KcPfT9w=;
+        b=2FTGEs0mTFiSGsOviaJbN9/xjQ/IZiHKBtTM/8/X1Oq7SDGFzkcU8DmqSRfQ612our
+         LHX+HHaWjd3YxPVT07slRpiTxCVBepPJjuKsERKOUnwR4Zf8txqk6b4G9RrUymhyKV/F
+         e+rRY2IY4I0BNQ8+H5q0NxmTawYAO2rVfXXux/KVwRzq4ViKq6pLqmzaPsdfvUDADpdm
+         aCZvBo1MmsJnOpo4mtrGh16e1DQm1whcZzQUABQzKdH5PYTQEHddbmpG2ORT6Qz9YEp1
+         XHTt+gOFuF7AdOSs8jXLrKQ8uqEbT5Wh8X+U6pB3+Itj4TMZaC7+fMQDyIz4UJc6VrT/
+         aa2A==
+X-Gm-Message-State: ACgBeo2E0IToYKJCLUfcVrYidKIhGKZVXtOmErGKSxzCWYHx/oQONWoa
+        OWq+7ZSGNq3DAZ/V0YWNFZtcGWDBRLQ=
+X-Google-Smtp-Source: AA6agR5xUE32vDAhEEeGFXTiC3m3EpIsxNHrqIOoevdf2nuCsw9gz5fezE9V3Mg4YaFhFbtiJGeY/5vXOpE=
+X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:eaa4:a143:fbdd:a2d1])
+ (user=glider job=sendgmr) by 2002:a05:6402:524b:b0:448:6824:8788 with SMTP id
+ t11-20020a056402524b00b0044868248788mr11090103edd.227.1662717496935; Fri, 09
+ Sep 2022 02:58:16 -0700 (PDT)
+Date:   Fri,  9 Sep 2022 11:58:10 +0200
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
+Message-ID: <20220909095811.2166073-1-glider@google.com>
+Subject: [PATCH -next 1/2] x86: crypto: kmsan: revert !KMSAN dependencies
+From:   Alexander Potapenko <glider@google.com>
+To:     glider@google.com
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Robert Elliott <elliott@hpe.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/bSUUPCxNGxaSRkN.HfOHQDM
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+This patch reverts "crypto: Kconfig: fix up for "crypto: kmsan: disable
+accelerated configs under KMSAN" used by Stephen Rothwell to cleanly
+merge KMSAN patches into linux-next.
 
-Hi,
+Because now arch-specific crypto configs reside in a separate Kconfig
+file, we can disable them all by adding a single !KMSAN before including
+that file (done in the following patch).
 
-On Fri, 9 Sep 2022 15:48:55 +0900 Masahiro Yamada <masahiroy@kernel.org> wr=
-ote:
->
-> > $ make ARCH=3Dx86_64 CROSS_COMPILE=3Dx86_64-linux-gnu- O=3D../obj -j15 =
--O
-> > make[1]: Entering directory '/home/sfr/kernels/obj'
-> >   GEN     Makefile
-> > make[1]: Leaving directory '/home/sfr/kernels/obj'
-> > make[1]: Entering directory '/home/sfr/kernels/obj'
-> >   UPD     include/generated/compile.h
-> > make[1]: Leaving directory '/home/sfr/kernels/obj' =20
->=20
->=20
-> Weird 'Entering/Leaving directory' logs.
+Among others, this patch reverts !KMSAN check for
+CONFIG_CRYPTO_AEGIS128_SIMD, which is ARM-only and is hence unnecessary,
+because KMSAN does not support ARM yet.
 
-That is because I pass -O to make.
+Signed-off-by: Alexander Potapenko <glider@google.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Eric Biggers <ebiggers@kernel.org>
+Cc: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: Robert Elliott <elliott@hpe.com>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: linux-crypto@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-next@vger.kernel.org
+---
+ arch/x86/crypto/Kconfig | 29 -----------------------------
+ crypto/Kconfig          |  1 -
+ 2 files changed, 30 deletions(-)
 
-Without -O, I get:
+diff --git a/arch/x86/crypto/Kconfig b/arch/x86/crypto/Kconfig
+index 856f5d8ca65f5..9bb0f7939c6bc 100644
+--- a/arch/x86/crypto/Kconfig
++++ b/arch/x86/crypto/Kconfig
+@@ -5,7 +5,6 @@ menu "Accelerated Cryptographic Algorithms for CPU (x86)"
+ config CRYPTO_CURVE25519_X86
+ 	tristate "Public key crypto: Curve25519 (ADX)"
+ 	depends on X86 && 64BIT
+-	depends on !KMSAN # avoid false positives from assembly
+ 	select CRYPTO_LIB_CURVE25519_GENERIC
+ 	select CRYPTO_ARCH_HAVE_LIB_CURVE25519
+ 	help
+@@ -17,7 +16,6 @@ config CRYPTO_CURVE25519_X86
+ config CRYPTO_AES_NI_INTEL
+ 	tristate "Ciphers: AES, modes: ECB, CBC, CTS, CTR, XTR, XTS, GCM (AES-NI)"
+ 	depends on X86
+-	depends on !KMSAN # avoid false positives from assembly
+ 	select CRYPTO_AEAD
+ 	select CRYPTO_LIB_AES
+ 	select CRYPTO_ALGAPI
+@@ -34,7 +32,6 @@ config CRYPTO_AES_NI_INTEL
+ config CRYPTO_BLOWFISH_X86_64
+ 	tristate "Ciphers: Blowfish, modes: ECB, CBC"
+ 	depends on X86 && 64BIT
+-	depends on !KMSAN # avoid false positives from assembly
+ 	select CRYPTO_SKCIPHER
+ 	select CRYPTO_BLOWFISH_COMMON
+ 	imply CRYPTO_CTR
+@@ -47,7 +44,6 @@ config CRYPTO_BLOWFISH_X86_64
+ config CRYPTO_CAMELLIA_X86_64
+ 	tristate "Ciphers: Camellia with modes: ECB, CBC"
+ 	depends on X86 && 64BIT
+-	depends on !KMSAN # avoid false positives from assembly
+ 	select CRYPTO_SKCIPHER
+ 	imply CRYPTO_CTR
+ 	help
+@@ -59,7 +55,6 @@ config CRYPTO_CAMELLIA_X86_64
+ config CRYPTO_CAMELLIA_AESNI_AVX_X86_64
+ 	tristate "Ciphers: Camellia with modes: ECB, CBC (AES-NI/AVX)"
+ 	depends on X86 && 64BIT
+-	depends on !KMSAN # avoid false positives from assembly
+ 	select CRYPTO_SKCIPHER
+ 	select CRYPTO_CAMELLIA_X86_64
+ 	select CRYPTO_SIMD
+@@ -74,7 +69,6 @@ config CRYPTO_CAMELLIA_AESNI_AVX_X86_64
+ config CRYPTO_CAMELLIA_AESNI_AVX2_X86_64
+ 	tristate "Ciphers: Camellia with modes: ECB, CBC (AES-NI/AVX2)"
+ 	depends on X86 && 64BIT
+-	depends on !KMSAN # avoid false positives from assembly
+ 	select CRYPTO_CAMELLIA_AESNI_AVX_X86_64
+ 	help
+ 	  Length-preserving ciphers: Camellia with ECB and CBC modes
+@@ -86,7 +80,6 @@ config CRYPTO_CAMELLIA_AESNI_AVX2_X86_64
+ config CRYPTO_CAST5_AVX_X86_64
+ 	tristate "Ciphers: CAST5 with modes: ECB, CBC (AVX)"
+ 	depends on X86 && 64BIT
+-	depends on !KMSAN # avoid false positives from assembly
+ 	select CRYPTO_SKCIPHER
+ 	select CRYPTO_CAST5
+ 	select CRYPTO_CAST_COMMON
+@@ -104,7 +97,6 @@ config CRYPTO_CAST5_AVX_X86_64
+ config CRYPTO_CAST6_AVX_X86_64
+ 	tristate "Ciphers: CAST6 with modes: ECB, CBC (AVX)"
+ 	depends on X86 && 64BIT
+-	depends on !KMSAN # avoid false positives from assembly
+ 	select CRYPTO_SKCIPHER
+ 	select CRYPTO_CAST6
+ 	select CRYPTO_CAST_COMMON
+@@ -123,7 +115,6 @@ config CRYPTO_CAST6_AVX_X86_64
+ config CRYPTO_DES3_EDE_X86_64
+ 	tristate "Ciphers: Triple DES EDE with modes: ECB, CBC"
+ 	depends on X86 && 64BIT
+-	depends on !KMSAN # avoid false positives from assembly
+ 	select CRYPTO_SKCIPHER
+ 	select CRYPTO_LIB_DES
+ 	imply CRYPTO_CTR
+@@ -138,7 +129,6 @@ config CRYPTO_DES3_EDE_X86_64
+ config CRYPTO_SERPENT_SSE2_X86_64
+ 	tristate "Ciphers: Serpent with modes: ECB, CBC (SSE2)"
+ 	depends on X86 && 64BIT
+-	depends on !KMSAN # avoid false positives from assembly
+ 	select CRYPTO_SKCIPHER
+ 	select CRYPTO_SERPENT
+ 	select CRYPTO_SIMD
+@@ -155,7 +145,6 @@ config CRYPTO_SERPENT_SSE2_X86_64
+ config CRYPTO_SERPENT_SSE2_586
+ 	tristate "Ciphers: Serpent with modes: ECB, CBC (32-bit with SSE2)"
+ 	depends on X86 && !64BIT
+-	depends on !KMSAN # avoid false positives from assembly
+ 	select CRYPTO_SKCIPHER
+ 	select CRYPTO_SERPENT
+ 	select CRYPTO_SIMD
+@@ -172,7 +161,6 @@ config CRYPTO_SERPENT_SSE2_586
+ config CRYPTO_SERPENT_AVX_X86_64
+ 	tristate "Ciphers: Serpent with modes: ECB, CBC (AVX)"
+ 	depends on X86 && 64BIT
+-	depends on !KMSAN # avoid false positives from assembly
+ 	select CRYPTO_SKCIPHER
+ 	select CRYPTO_SERPENT
+ 	select CRYPTO_SIMD
+@@ -190,7 +178,6 @@ config CRYPTO_SERPENT_AVX_X86_64
+ config CRYPTO_SERPENT_AVX2_X86_64
+ 	tristate "Ciphers: Serpent with modes: ECB, CBC (AVX2)"
+ 	depends on X86 && 64BIT
+-	depends on !KMSAN # avoid false positives from assembly
+ 	select CRYPTO_SERPENT_AVX_X86_64
+ 	help
+ 	  Length-preserving ciphers: Serpent cipher algorithm
+@@ -258,7 +245,6 @@ config CRYPTO_TWOFISH_586
+ config CRYPTO_TWOFISH_X86_64
+ 	tristate "Ciphers: Twofish"
+ 	depends on (X86 || UML_X86) && 64BIT
+-	depends on !KMSAN # avoid false positives from assembly
+ 	select CRYPTO_ALGAPI
+ 	select CRYPTO_TWOFISH_COMMON
+ 	imply CRYPTO_CTR
+@@ -270,7 +256,6 @@ config CRYPTO_TWOFISH_X86_64
+ config CRYPTO_TWOFISH_X86_64_3WAY
+ 	tristate "Ciphers: Twofish with modes: ECB, CBC (3-way parallel)"
+ 	depends on X86 && 64BIT
+-	depends on !KMSAN # avoid false positives from assembly
+ 	select CRYPTO_SKCIPHER
+ 	select CRYPTO_TWOFISH_COMMON
+ 	select CRYPTO_TWOFISH_X86_64
+@@ -286,7 +271,6 @@ config CRYPTO_TWOFISH_X86_64_3WAY
+ config CRYPTO_TWOFISH_AVX_X86_64
+ 	tristate "Ciphers: Twofish with modes: ECB, CBC (AVX)"
+ 	depends on X86 && 64BIT
+-	depends on !KMSAN # avoid false positives from assembly
+ 	select CRYPTO_SKCIPHER
+ 	select CRYPTO_SIMD
+ 	select CRYPTO_TWOFISH_COMMON
+@@ -305,7 +289,6 @@ config CRYPTO_TWOFISH_AVX_X86_64
+ config CRYPTO_CHACHA20_X86_64
+ 	tristate "Ciphers: ChaCha20, XChaCha20, XChaCha12 (SSSE3/AVX2/AVX-512VL)"
+ 	depends on X86 && 64BIT
+-	depends on !KMSAN # avoid false positives from assembly
+ 	select CRYPTO_SKCIPHER
+ 	select CRYPTO_LIB_CHACHA_GENERIC
+ 	select CRYPTO_ARCH_HAVE_LIB_CHACHA
+@@ -321,7 +304,6 @@ config CRYPTO_CHACHA20_X86_64
+ config CRYPTO_AEGIS128_AESNI_SSE2
+ 	tristate "AEAD ciphers: AEGIS-128 (AES-NI/SSE2)"
+ 	depends on X86 && 64BIT
+-	depends on !KMSAN # avoid false positives from assembly
+ 	select CRYPTO_AEAD
+ 	select CRYPTO_SIMD
+ 	help
+@@ -334,7 +316,6 @@ config CRYPTO_AEGIS128_AESNI_SSE2
+ config CRYPTO_NHPOLY1305_SSE2
+ 	tristate "Hash functions: NHPoly1305 (SSE2)"
+ 	depends on X86 && 64BIT
+-	depends on !KMSAN # avoid false positives from assembly
+ 	select CRYPTO_NHPOLY1305
+ 	help
+ 	  NHPoly1305 hash function for Adiantum
+@@ -345,7 +326,6 @@ config CRYPTO_NHPOLY1305_SSE2
+ config CRYPTO_NHPOLY1305_AVX2
+ 	tristate "Hash functions: NHPoly1305 (AVX2)"
+ 	depends on X86 && 64BIT
+-	depends on !KMSAN # avoid false positives from assembly
+ 	select CRYPTO_NHPOLY1305
+ 	help
+ 	  NHPoly1305 hash function for Adiantum
+@@ -356,7 +336,6 @@ config CRYPTO_NHPOLY1305_AVX2
+ config CRYPTO_BLAKE2S_X86
+ 	bool "Hash functions: BLAKE2s (SSSE3/AVX-512)"
+ 	depends on X86 && 64BIT
+-	depends on !KMSAN # avoid false positives from assembly
+ 	select CRYPTO_LIB_BLAKE2S_GENERIC
+ 	select CRYPTO_ARCH_HAVE_LIB_BLAKE2S
+ 	help
+@@ -379,7 +358,6 @@ config CRYPTO_POLYVAL_CLMUL_NI
+ config CRYPTO_POLY1305_X86_64
+ 	tristate "Hash functions: Poly1305 (SSE2/AVX2)"
+ 	depends on X86 && 64BIT
+-	depends on !KMSAN # avoid false positives from assembly
+ 	select CRYPTO_LIB_POLY1305_GENERIC
+ 	select CRYPTO_ARCH_HAVE_LIB_POLY1305
+ 	help
+@@ -392,7 +370,6 @@ config CRYPTO_POLY1305_X86_64
+ config CRYPTO_SHA1_SSSE3
+ 	tristate "Hash functions: SHA-1 (SSSE3/AVX/AVX2/SHA-NI)"
+ 	depends on X86 && 64BIT
+-	depends on !KMSAN # avoid false positives from assembly
+ 	select CRYPTO_SHA1
+ 	select CRYPTO_HASH
+ 	help
+@@ -407,7 +384,6 @@ config CRYPTO_SHA1_SSSE3
+ config CRYPTO_SHA256_SSSE3
+ 	tristate "Hash functions: SHA-224 and SHA-256 (SSSE3/AVX/AVX2/SHA-NI)"
+ 	depends on X86 && 64BIT
+-	depends on !KMSAN # avoid false positives from assembly
+ 	select CRYPTO_SHA256
+ 	select CRYPTO_HASH
+ 	help
+@@ -422,7 +398,6 @@ config CRYPTO_SHA256_SSSE3
+ config CRYPTO_SHA512_SSSE3
+ 	tristate "Hash functions: SHA-384 and SHA-512 (SSSE3/AVX/AVX2)"
+ 	depends on X86 && 64BIT
+-	depends on !KMSAN # avoid false positives from assembly
+ 	select CRYPTO_SHA512
+ 	select CRYPTO_HASH
+ 	help
+@@ -449,7 +424,6 @@ config CRYPTO_SM3_AVX_X86_64
+ config CRYPTO_GHASH_CLMUL_NI_INTEL
+ 	tristate "Hash functions: GHASH (CLMUL-NI)"
+ 	depends on X86 && 64BIT
+-	depends on !KMSAN # avoid false positives from assembly
+ 	select CRYPTO_CRYPTD
+ 	help
+ 	  GCM GHASH hash function (NIST SP800-38D)
+@@ -460,7 +434,6 @@ config CRYPTO_GHASH_CLMUL_NI_INTEL
+ config CRYPTO_CRC32C_INTEL
+ 	tristate "CRC32c (SSE4.2/PCLMULQDQ)"
+ 	depends on X86
+-	depends on !KMSAN # avoid false positives from assembly
+ 	select CRYPTO_HASH
+ 	help
+ 	  CRC32c CRC algorithm with the iSCSI polynomial (RFC 3385 and RFC 3720)
+@@ -472,7 +445,6 @@ config CRYPTO_CRC32C_INTEL
+ config CRYPTO_CRC32_PCLMUL
+ 	tristate "CRC32 (PCLMULQDQ)"
+ 	depends on X86
+-	depends on !KMSAN # avoid false positives from assembly
+ 	select CRYPTO_HASH
+ 	select CRC32
+ 	help
+@@ -484,7 +456,6 @@ config CRYPTO_CRC32_PCLMUL
+ config CRYPTO_CRCT10DIF_PCLMUL
+ 	tristate "CRCT10DIF (PCLMULQDQ)"
+ 	depends on X86 && 64BIT && CRC_T10DIF
+-	depends on !KMSAN # avoid false positives from assembly
+ 	select CRYPTO_HASH
+ 	help
+ 	  CRC16 CRC algorithm used for the T10 (SCSI) Data Integrity Field (DIF)
+diff --git a/crypto/Kconfig b/crypto/Kconfig
+index 1dfe0583f302c..40423a14f86f5 100644
+--- a/crypto/Kconfig
++++ b/crypto/Kconfig
+@@ -796,7 +796,6 @@ config CRYPTO_AEGIS128
+ config CRYPTO_AEGIS128_SIMD
+ 	bool "AEGIS-128 (arm NEON, arm64 NEON)"
+ 	depends on CRYPTO_AEGIS128 && ((ARM || ARM64) && KERNEL_MODE_NEON)
+-	depends on !KMSAN # avoid false positives from assembly
+ 	default y
+ 	help
+ 	  AEGIS-128 AEAD algorithm
+-- 
+2.37.2.789.g6183377224-goog
 
-$ make ARCH=3Dx86_64 CROSS_COMPILE=3Dx86_64-linux-gnu- O=3D../obj -j15
-make[1]: Entering directory '/home/sfr/kernels/obj'
-  GEN     Makefile
-  DESCEND objtool
-make[2]: *** No rule to make target 'objtool/objtool'.  Stop.
-make[1]: *** [/home/sfr/kernels/test/Makefile:1351: tools/objtool/objtool] =
-Error 2
-make[1]: *** Waiting for unfinished jobs....
-make[1]: Leaving directory '/home/sfr/kernels/obj'
-make: *** [Makefile:222: __sub-make] Error 2
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/bSUUPCxNGxaSRkN.HfOHQDM
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMa+KsACgkQAVBC80lX
-0GyyBQf/eLkBIl5Z5SRSqcM3RTbXjyqxuFjR2bXSOSTa15XPO3zmOZg8e4/VsPin
-v8SpEqEQ4T/t6FKhtGpSwFjOu9VR84ERXBvGaVicYcDslXPnnP29yVldgQsNtRag
-hvTL+yp1XFaKTVi3aNWA6nhV5fZEK5ZuQ3xcNa1hbNqH7TyYyMciFA68Pcb6qdkN
-GQih13yTr8H6EEFidLWKcYGVhNwIgOvaLZzaVrZeU26Ixex6ql5fVqfylYNMngnD
-PgoqLPCQy+KaBioSgWEC2e+VpehR2yE50a3GjkBmOHa8yRwZV6FYmAzXed3Chur0
-vgDlHSbdTEHHGpBDyfI7zCHf6A7T8g==
-=Qc9m
------END PGP SIGNATURE-----
-
---Sig_/bSUUPCxNGxaSRkN.HfOHQDM--

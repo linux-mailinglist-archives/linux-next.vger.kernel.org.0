@@ -2,144 +2,114 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BBE15B2DA5
-	for <lists+linux-next@lfdr.de>; Fri,  9 Sep 2022 06:44:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4968C5B2DF8
+	for <lists+linux-next@lfdr.de>; Fri,  9 Sep 2022 07:11:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229507AbiIIEox (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 9 Sep 2022 00:44:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60414 "EHLO
+        id S229569AbiIIFK7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 9 Sep 2022 01:10:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbiIIEov (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 9 Sep 2022 00:44:51 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D18A3A15C;
-        Thu,  8 Sep 2022 21:44:49 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MP3Lg1lZnz4xG8;
-        Fri,  9 Sep 2022 14:44:43 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1662698684;
-        bh=sm+WWIzGsWI5u8r+ZBU+o3ckddyGFvWK/U7hSkwsZxk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=WbNqRXoBBsHOKrFuO15zdQLi0ugJX2sr0mDpnLffaQkCCoOCDk2ltDa1xSVR2hdo5
-         jFOIUs8IcZfZ0TdLHZDHJ7/uJKVUFrMsvvaT5SBygakBw92M5Pl1pJUPfu405MjnMh
-         ELOKnMWYI6+PoVb2mUrsrvKGaUvEdtuGlIbrsg30c8nbq+CU0mxtkkIpkXPt45iJm1
-         1mV+nVfzYs2iA8x+21n/SRVYG+oI5PYCLbrAXZYIxXjlp0rlxzjkluldkVK81Kxm4i
-         +5E6XM1efGslVwepE/j2SU9d2uizDrNGRXwbx3/w5hjnDe0MVg6J2vVJyYYejSBgQ2
-         odAEmNFnZ9KDw==
-Date:   Fri, 9 Sep 2022 14:44:36 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Williamson <alex.williamson@redhat.com>,
-        David Miller <davem@davemloft.net>
-Cc:     Networking <netdev@vger.kernel.org>,
-        Leon Romanovsky <leon@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Lior Nahmanson <liorna@nvidia.com>,
-        Raed Salem <raeds@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Yishai Hadas <yishaih@nvidia.com>
-Subject: linux-next: manual merge of the vfio tree with the net-next tree
-Message-ID: <20220909144436.6c08b042@canb.auug.org.au>
+        with ESMTP id S229626AbiIIFK6 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 9 Sep 2022 01:10:58 -0400
+X-Greylist: delayed 141625 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 08 Sep 2022 22:10:57 PDT
+Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1E9BC59E3;
+        Thu,  8 Sep 2022 22:10:56 -0700 (PDT)
+Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52]) (authenticated)
+        by conssluserg-04.nifty.com with ESMTP id 2895Ahiw020701;
+        Fri, 9 Sep 2022 14:10:44 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 2895Ahiw020701
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1662700244;
+        bh=Cf30ickxz8oHveT9Mo7QIyuz73tFj/0Da4C1/WMN0qY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=gktZQJTF8WNoxxUlnbMx74o+NJvLOOoot/39hpmnjRRkjC7dePuAJLOFqyxwJVO7B
+         /stEyEw8okTFRUBcdVnB3IKTxKfK4KHQRJx6EsKfgqmFrA+U+QZVNKtiE4EUmX4UgE
+         S9WS3vpk7ksD+8y6T1flbiVoFRaS1Mb5/b0vIn+dYn0KKKWSa4phFIwkX7Is4AJRkU
+         yNErRza1glLeC0KiboU2TSoc/oqu8z8Pl/6xp7xLdxdf5qN6sFHzmHoibd1gKzcgtO
+         MS28v0oCt9rr7TbE/jA9ArAYxfB5rGVoLsFjnGoh4rjrEquo3lBj5yMQo6njEws5QQ
+         GZLCoFXW7NX8A==
+X-Nifty-SrcIP: [209.85.160.52]
+Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-11eab59db71so1175296fac.11;
+        Thu, 08 Sep 2022 22:10:44 -0700 (PDT)
+X-Gm-Message-State: ACgBeo3qIXUrmaKqb/BgHPFD/H0aIRWYYdUzkNnnhnkEc3yVMVzM25ft
+        rCRsqkmiQajVSQ8OWmWN4Q/Z7RvX2Y+c7bAFFTA=
+X-Google-Smtp-Source: AA6agR4wCAOPoePZj7f7sc9FEjARZo2ozA5Fjx+ewWZ7NNDn4/RHrQA8zOBwtDY3Meb+ggLvbmSX9gySzvfxkaFiJmg=
+X-Received: by 2002:a05:6870:c58b:b0:10b:d21d:ad5e with SMTP id
+ ba11-20020a056870c58b00b0010bd21dad5emr3812627oab.287.1662700243127; Thu, 08
+ Sep 2022 22:10:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/V.6.KXDO5sCncmq/FpTf_Dp";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220909090024.47458048@canb.auug.org.au>
+In-Reply-To: <20220909090024.47458048@canb.auug.org.au>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Fri, 9 Sep 2022 14:10:06 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARPX2Ov-nLAT6mPWbgqQMDCuoW84VN_C2sS1CJkR_n8YQ@mail.gmail.com>
+Message-ID: <CAK7LNARPX2Ov-nLAT6mPWbgqQMDCuoW84VN_C2sS1CJkR_n8YQ@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the kbuild tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/V.6.KXDO5sCncmq/FpTf_Dp
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, Sep 9, 2022 at 8:00 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> After merging the kbuild tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
 
-Hi all,
 
-Today's linux-next merge of the vfio tree got conflicts in:
 
-  drivers/net/ethernet/mellanox/mlx5/core/fw.c
-  drivers/net/ethernet/mellanox/mlx5/core/main.c
+Hmm, I am testing allmodconfig in my tree,
+but it is not reproducible so far.
 
-between commit:
+Do you have any more hint?
+(which commit exactly?, and what build command did you use? etc.)
 
-  8ff0ac5be144 ("net/mlx5: Add MACsec offload Tx command support")
 
-from the net-next tree and commit:
 
-  939838632b91 ("net/mlx5: Query ADV_VIRTUALIZATION capabilities")
+> make[2]: *** No rule to make target 'objtool/objtool'.  Stop.
 
-from the vfio tree.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+Presumably, it is failing in tools/Makefile,
+but I do not know how this can happen...
 
---=20
-Cheers,
-Stephen Rothwell
 
-diff --cc drivers/net/ethernet/mellanox/mlx5/core/fw.c
-index c63ce03e79e0,483a51870505..000000000000
---- a/drivers/net/ethernet/mellanox/mlx5/core/fw.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/fw.c
-@@@ -273,13 -273,12 +273,19 @@@ int mlx5_query_hca_caps(struct mlx5_cor
-  			return err;
-  	}
- =20
- +	if (MLX5_CAP_GEN_64(dev, general_obj_types) &
- +	    MLX5_GENERAL_OBJ_TYPES_CAP_MACSEC_OFFLOAD) {
- +		err =3D mlx5_core_get_caps(dev, MLX5_CAP_MACSEC);
- +		if (err)
- +			return err;
- +	}
- +
-+ 	if (MLX5_CAP_GEN(dev, adv_virtualization)) {
-+ 		err =3D mlx5_core_get_caps(dev, MLX5_CAP_ADV_VIRTUALIZATION);
-+ 		if (err)
-+ 			return err;
-+ 	}
-+=20
-  	return 0;
-  }
- =20
-diff --cc drivers/net/ethernet/mellanox/mlx5/core/main.c
-index b45cef89370e,de9c315a85fc..000000000000
---- a/drivers/net/ethernet/mellanox/mlx5/core/main.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/main.c
-@@@ -1507,7 -1488,7 +1507,8 @@@ static const int types[] =3D=20
-  	MLX5_CAP_IPSEC,
-  	MLX5_CAP_PORT_SELECTION,
-  	MLX5_CAP_DEV_SHAMPO,
- +	MLX5_CAP_MACSEC,
-+ 	MLX5_CAP_ADV_VIRTUALIZATION,
-  };
- =20
-  static void mlx5_hca_caps_free(struct mlx5_core_dev *dev)
 
---Sig_/V.6.KXDO5sCncmq/FpTf_Dp
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMaxLQACgkQAVBC80lX
-0GwXkAf/T/ctlhzVwkBDFkrltaOcAu9kCrwx0bG9/GtSqRfhfRHdkOBDCWWKtpmL
-Q5K5vj5wPSM/PxSNg1cNL3fNCXSK87M+AtwxEfISPJpGrAbJKSwR/pAsRCR7I5KQ
-/wZJ2QSLGNQkKShdqZo6a896XmWGt3UCPttUwTTAy/HDdthxeXz2+vRSVtmuykcs
-rB6Nl/EIqFlmeHSm5VCAeMue9W63N1M2Orx1Y8a3s46n+tEeoGibudiYkuxsXcaP
-9LXjAcfkN8OxTbfUpRe8tZuNZJ5frrgsRvMH43DMNnJKnpRpDWqfzAAu4TrHSR3V
-klGVNDHoN7FH0Gvh9ZZbLYsLIK91vA==
-=Mm/o
------END PGP SIGNATURE-----
 
---Sig_/V.6.KXDO5sCncmq/FpTf_Dp--
+> make[1]: *** [/home/sfr/next/next/Makefile:1361: tools/objtool/objtool] Error 2
+> make[1]: *** Waiting for unfinished jobs....
+> make: *** [Makefile:222: __sub-make] Error 2
+>
+> I have used the kbuild tree from next-20220907 again (with the last 4
+> commits reverted).
+>
+> --
+> Cheers,
+> Stephen Rothwell
+
+
+
+
+
+
+
+
+
+
+
+
+
+--
+Best Regards
+Masahiro Yamada

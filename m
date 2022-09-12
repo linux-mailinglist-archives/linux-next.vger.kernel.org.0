@@ -2,122 +2,129 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7038E5B5356
-	for <lists+linux-next@lfdr.de>; Mon, 12 Sep 2022 07:07:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B5E65B539E
+	for <lists+linux-next@lfdr.de>; Mon, 12 Sep 2022 07:42:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229566AbiILFG6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 12 Sep 2022 01:06:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36906 "EHLO
+        id S229468AbiILFme (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 12 Sep 2022 01:42:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiILFG6 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 12 Sep 2022 01:06:58 -0400
-Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 442E92872A;
-        Sun, 11 Sep 2022 22:06:55 -0700 (PDT)
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52]) (authenticated)
-        by conssluserg-04.nifty.com with ESMTP id 28C56bav015148;
-        Mon, 12 Sep 2022 14:06:38 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 28C56bav015148
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1662959198;
-        bh=JhHj8C0h27R6ov/QSDBAulzjoWe55R1PvENaiYyWYsk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=c/KXSJ9qSqa67+xNqUvZHQxPr5ww9pKZKh1+5CrLcuf3iqFeKQFENWiIcpeQZB3vy
-         4cCL8LUsbE1FIzpRWitwOkUg6UVa91x+U+3txCvB8oep86DATkJS87JuVHs5ELUOyA
-         SbtfDIQ2CZsLA7uNHrq7lxhYZyRRrVi5+zz2blc9xtmWFadGeFnokA6Cqf9qEe/VCM
-         4Rabn/Id5P+Bg8I68cE6H+9AfhGbrPBPghEntN/zF1YFAB6nHwPBvFudvBcuj+Ncqs
-         +TW5184V/bPMdV2BR7HABGS7FxkG7dYfmqEKkX4/lrQpqXQ/X/cxbAUDea+hpVb8o9
-         FM11s7fTemikg==
-X-Nifty-SrcIP: [209.85.160.52]
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-12803ac8113so20481347fac.8;
-        Sun, 11 Sep 2022 22:06:38 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3tUTihnywY0fphUn9T+sI1wZWFvMploJAaZYOoKT5lhNPodyQ4
-        QHnwLtZvv+PdcwD1OFsoj9LEnaXYi5/Mz2CdCh4=
-X-Google-Smtp-Source: AA6agR7RI6peqGquiKTA+DIWY4wXWAPeqqx4HPFvu7GhGMU/0N0J8lGDz3uQiVUHhgqCFSnq+AMtHUP5S3denw95608=
-X-Received: by 2002:a05:6870:c58b:b0:10b:d21d:ad5e with SMTP id
- ba11-20020a056870c58b00b0010bd21dad5emr10746548oab.287.1662959197332; Sun, 11
- Sep 2022 22:06:37 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220909090024.47458048@canb.auug.org.au> <CAK7LNARPX2Ov-nLAT6mPWbgqQMDCuoW84VN_C2sS1CJkR_n8YQ@mail.gmail.com>
- <20220909152453.5400cf7e@canb.auug.org.au> <20220909161354.2c94a495@canb.auug.org.au>
- <CAK7LNATR0-Y_yHTcD62J4N36T-_4G=-N1me8EWYNTNYbwXerDw@mail.gmail.com>
- <20220909174904.0342dcb8@canb.auug.org.au> <CAK7LNARiW66Hk5JJgRYb-edkb6sgTWPbNr1iETkq-RASCo-YkA@mail.gmail.com>
- <20220912095559.26de75c9@canb.auug.org.au>
-In-Reply-To: <20220912095559.26de75c9@canb.auug.org.au>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Mon, 12 Sep 2022 14:06:01 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARiGrDcnkFFH8fZMpAVyUePRr58Zz_=nUf7nicfiKoQyg@mail.gmail.com>
-Message-ID: <CAK7LNARiGrDcnkFFH8fZMpAVyUePRr58Zz_=nUf7nicfiKoQyg@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the kbuild tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        with ESMTP id S229531AbiILFmd (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 12 Sep 2022 01:42:33 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2326C1B7A0;
+        Sun, 11 Sep 2022 22:42:31 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MQwTq1Wf4z4xDK;
+        Mon, 12 Sep 2022 15:42:23 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1662961345;
+        bh=FUlwZvf0AqBJmNJhvyP/tZHWBYHMhvn55UsXTMROtKA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=XOFU04HgE6VmS10QCnapoP+sQZHQifv4NkoMsiIR0g1c5gtEtEOWV/6CBHyrw0Yjq
+         Ow9pfHEfUcVHjyp5s+lc8iDjxcYS3zp+M8VxmT5yixdx2QgN43iZiHBfYa6dg245Zm
+         +LQr8ECnZDTtNgYnGP27q7Nx8wHzL0+1wRINquDyp5rINkHhbC9mfd/Az8Bo1CMtIC
+         LEi+dCh2gEZObytpN4ByJTOK5yRiuyOG93gDH9nJDcSrbzVZPuhVU7ewxTuozCnTMZ
+         8PmgAXOhZeAFrfbgo+ELH3PzcnfSKf3M4w+5VdxXT16wnic2ATLvu889XZh7RblB+F
+         s9qXC1hR02zAA==
+Date:   Mon, 12 Sep 2022 15:42:19 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Joerg Roedel <joro@8bytes.org>
+Cc:     Joerg Roedel <jroedel@suse.de>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Subject: linux-next: build failure after merge of the coresight tree
+Message-ID: <20220912154219.162eb9d3@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/IuiIRRo5jrrAH9ebJeOiukO";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 8:59 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi Masahiro,
->
-> On Fri, 9 Sep 2022 19:30:24 +0900 Masahiro Yamada <masahiroy@kernel.org> wrote:
-> >
-> > The following fix will make it working again.
-> >
->  diff --git a/Makefile b/Makefile
-> > index b459e3d0fc5a..c8fba03ec93c 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -1151,7 +1151,6 @@ quiet_cmd_autoksyms_h = GEN     $@
-> >  $(autoksyms_h):
-> >         $(call cmd,autoksyms_h)
-> >
-> > -targets += vmlinux.o
-> >  vmlinux.o: autoksyms_recursive $(KBUILD_VMLINUX_OBJS)
-> > $(KBUILD_VMLINUX_LIBS) FORCE
-> >         $(Q)$(MAKE) -f $(srctree)/scripts/Makefile.vmlinux_o
->
-> Thank you.  The kbuild tree merge builds fine again.
->
-> --
-> Cheers,
-> Stephen Rothwell
+--Sig_/IuiIRRo5jrrAH9ebJeOiukO
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
+After merging the coresight tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-That is good news.
+drivers/hwtracing/ptt/hisi_ptt.c:13:10: fatal error: linux/dma-iommu.h: No =
+such file or directory
+   13 | #include <linux/dma-iommu.h>
+      |          ^~~~~~~~~~~~~~~~~~~
 
+Caused by commit
 
+  ff0de066b463 ("hwtracing: hisi_ptt: Add trace function support for HiSili=
+con PCIe Tune and Trace device")
 
+interacting with commit
 
-BTW, as you may have noticed already,
-sub-directories are now listed in ./Kbuild.
+  f2042ed21da7 ("iommu/dma: Make header private")
 
+from the iommu tree.
 
-So, you will need to move the rust/ entry accordingly.
+Since the public interfaces in dna-iommu.h were moved to iommu.h, I have
+applied the following merge fix patch:
 
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Mon, 12 Sep 2022 15:35:37 +1000
+Subject: [PATCH] hwtracing: hihi_ptt: fix up for "iommu/dma: Make header pr=
+ivate"
 
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/hwtracing/ptt/hisi_ptt.c | 1 -
+ 1 file changed, 1 deletion(-)
 
+diff --git a/drivers/hwtracing/ptt/hisi_ptt.c b/drivers/hwtracing/ptt/hisi_=
+ptt.c
+index 666a0f14b6c4..5d5526aa60c4 100644
+--- a/drivers/hwtracing/ptt/hisi_ptt.c
++++ b/drivers/hwtracing/ptt/hisi_ptt.c
+@@ -10,7 +10,6 @@
+ #include <linux/bitops.h>
+ #include <linux/cpuhotplug.h>
+ #include <linux/delay.h>
+-#include <linux/dma-iommu.h>
+ #include <linux/dma-mapping.h>
+ #include <linux/interrupt.h>
+ #include <linux/io.h>
+--=20
+2.35.1
 
-obj-$(CONFIG_IO_URING)  += io_uring/
-obj-$(CONFIG_RUST)      += rust/              <--- Move from Makefile
-obj-y                   += drivers/
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/IuiIRRo5jrrAH9ebJeOiukO
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
 
-I have not tested the merge result, though.
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMexrsACgkQAVBC80lX
+0GzZvQf+PVGBGB26JJw4JuUv5x9upExpqUgGD4aLhn4JlYfAqk7AGXx5KkmeAx99
+bbzjfVX+BtgMqvSgmMayKW1UqDUlA7ALEV25QSiJGI0azxhDvr1McTrRMI+UmXal
+MnR3OQCmtB2hai9uqWTIaTj4/31UFFHWT5d4Wu2YpoH2WuiQpkmjsqA0suELyasl
+xqt7UU3Z3cirnoyJOH20VSj9JQFOkWlxdWzgAOLhipLs4TNMklM50W7oXOlQgePu
+fyF3ywadH5pOvivALcvBqMKXa5ds4fvkhY/DjudLnVdeoclK2BIfA5WWuPDiE9YA
+S2K5UX8nzRSvkzsZ9nIR1TGWrhshdA==
+=Jhdr
+-----END PGP SIGNATURE-----
 
-
-
-
-
-
---
-Best Regards
-Masahiro Yamada
+--Sig_/IuiIRRo5jrrAH9ebJeOiukO--

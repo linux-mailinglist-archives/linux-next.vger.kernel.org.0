@@ -2,128 +2,71 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58D275B5565
-	for <lists+linux-next@lfdr.de>; Mon, 12 Sep 2022 09:35:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F2635B556C
+	for <lists+linux-next@lfdr.de>; Mon, 12 Sep 2022 09:39:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbiILHfO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 12 Sep 2022 03:35:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58930 "EHLO
+        id S229555AbiILHjY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 12 Sep 2022 03:39:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbiILHfM (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 12 Sep 2022 03:35:12 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F44213F05
-        for <linux-next@vger.kernel.org>; Mon, 12 Sep 2022 00:35:11 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oXdyB-0004uo-Rf; Mon, 12 Sep 2022 09:35:03 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oXdyC-000FzI-AF; Mon, 12 Sep 2022 09:35:02 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oXdyA-000KQB-3I; Mon, 12 Sep 2022 09:35:02 +0200
-Date:   Mon, 12 Sep 2022 09:34:55 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+        with ESMTP id S229539AbiILHjX (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 12 Sep 2022 03:39:23 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCA212AC7F;
+        Mon, 12 Sep 2022 00:39:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=+OAxmEm1T5J6vPtIEq+6pqcyk6deyOQGMlnazsf+tkY=; b=UNFOjkjXRAR6GWbSloLeWIFve6
+        Re+70yddduqrLnzFk/dhuvc4L3GejzX4v9ml8UkgB4SOiSsKPBBvXa0IfgjYdjmSjN7YfYYLxXCUb
+        58PQpT7ySp9WTe4nhp96yiKe4uDlICAvIJk1hfuhV+2LNIicLh4PPPnytlKqpf6l1y/jw2sjsVaOh
+        v6dJoYtNGAdlZCpsYO/F+f1ni9zGjqhRJSF0vuDgVkf3R4mZ/cz8JzR4zmSF3Y2V1uRBPCVybps9s
+        ka50aIt44JcWXm1lNI2UaaKI1t5yx40nQXsjLjbICN09oeP3ALlrcB5wtVe1HLdo26sFaCK5WVBZk
+        AjljIoFA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oXe23-00FiGc-Nv; Mon, 12 Sep 2022 07:39:03 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 935C33002AE;
+        Mon, 12 Sep 2022 09:38:58 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 448332029F86F; Mon, 12 Sep 2022 09:38:58 +0200 (CEST)
+Date:   Mon, 12 Sep 2022 09:38:58 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
+Cc:     Tejun Heo <tj@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Chengming Zhou <zhouchengming@bytedance.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Wolfram Sang <wsa@kernel.org>
-Subject: Re: linux-next: manual merge of the battery tree with the i2c tree
-Message-ID: <20220912073455.rlqf6q4rsgydk46h@pengutronix.de>
-References: <20220912130344.2e635cd5@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the cgroup tree
+Message-ID: <Yx7iEv/wy5Olgu0M@hirez.programming.kicks-ass.net>
+References: <20220912161812.072aaa3b@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="blckbo5i5mv4j6kq"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220912130344.2e635cd5@canb.auug.org.au>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-next@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220912161812.072aaa3b@canb.auug.org.au>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-
---blckbo5i5mv4j6kq
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hello,
-
-On Mon, Sep 12, 2022 at 01:03:44PM +1000, Stephen Rothwell wrote:
+On Mon, Sep 12, 2022 at 04:18:12PM +1000, Stephen Rothwell wrote:
 > Hi all,
 >=20
-> Today's linux-next merge of the battery tree got a conflict in:
->=20
->   drivers/power/supply/cw2015_battery.c
->=20
-> between commit:
->=20
->   ed5c2f5fd10d ("i2c: Make remove callback return void")
->=20
-> from the i2c tree and commit:
->=20
->   ed5c2f5fd10d ("i2c: Make remove callback return void")
->=20
-> from the battery tree.
+> After merging the cgroup tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
 
-The commit from the battery tree is
-
-	0cb172a4918e ("power: supply: cw2015: Use device managed API to simplify t=
-he code")
-
-> I fixed it up (the latter removed the code modified by the former, so
-> I just did that)
-
-I don't see today's tag in git yet, but removing the code sounds right.
-
-> and can carry the fix as necessary. This is now fixed as far as
-> linux-next is concerned, but any non trivial conflicts should be
-> mentioned to your upstream maintainer when your tree is submitted for
-> merging.  You may also want to consider cooperating with the
-> maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-
-@Sebastian: You might want to pull
-
-	https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux i2c/make_remove_=
-callback_void-immutable
-
-into your tree to prepare a smooth merging experience for Linus.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---blckbo5i5mv4j6kq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmMe4QoACgkQwfwUeK3K
-7AmmwAf/VOi5lCUUa3xbiG0QAST1k1xoG020R0+rYgbT6/n6fN69wri6wLImLRBC
-myCx7URUQVvH5kMnt/vrD+Kfoy4MAsUKXz5nnYtVHoWakdVD+qo5BMjjkFUweZGK
-budPINOnCwdHtKUy7RTuDnawvFxPhyQpV9gOpmarnGgr2On10+Yu+j1iLSoOpSpM
-FkzKBjp8HtrsjxvSiicysK+etZjGaCvtga07cvZWtcZQ0ix1iwL+kYffYvUW6CV5
-CeUpNLM3rXoteybClqHG8vwgLxc6ygQSu+I+ZK9Nva5saHHlKNAPhFWwz9pwYXUy
-HE622WjH1mNGIKPgf4uIJVHC0uCMkg==
-=CQOX
------END PGP SIGNATURE-----
-
---blckbo5i5mv4j6kq--
+Hmm,. TJ should I base sched/psi on top of drivers-core-next and your
+cgroup tree?

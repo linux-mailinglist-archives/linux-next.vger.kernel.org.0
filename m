@@ -2,141 +2,128 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FA515B554F
-	for <lists+linux-next@lfdr.de>; Mon, 12 Sep 2022 09:25:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58D275B5565
+	for <lists+linux-next@lfdr.de>; Mon, 12 Sep 2022 09:35:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229456AbiILHZc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 12 Sep 2022 03:25:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41268 "EHLO
+        id S229819AbiILHfO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 12 Sep 2022 03:35:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230217AbiILHZD (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 12 Sep 2022 03:25:03 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B55ACE3F;
-        Mon, 12 Sep 2022 00:24:44 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MQylt02bPz4xD3;
-        Mon, 12 Sep 2022 17:24:41 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1662967482;
-        bh=XuJdmswV2c9gKv/M+vCiUz1quQEgRWkwa2BIYu3NDuo=;
-        h=Date:From:To:Cc:Subject:From;
-        b=QbmNV3BPYi9EDMrxTPhR1fDKDDEUXd0Gjr+PUYrETCVRfSPEHf3koN6KfeGc0Y03G
-         OjsO8WIj2/de8SifY+ta0B3z/WTMW5lSMFQLysCipJTn1nyqSbbB2yzhGJulSMgEi4
-         lvF9WBkz8PPClJw437dieITljr3da6IfjRw4kxR1M+r+7m/eKFe9ozrGgfMPscXUPi
-         6Ty7RhyS6duAIpt4sN6qFeLlSCZqRrOB603HqcHv0oJv7gmbuFVd/zair4XUn2+pWP
-         b0wWcby3OpRAB38D+YrjPMg43D4UqvXVDn50eGl2wFnGCb+V5O9OtsgRCl7AVz8eDD
-         SgWhckxHSL3sA==
-Date:   Mon, 12 Sep 2022 17:24:40 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
+        with ESMTP id S229630AbiILHfM (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 12 Sep 2022 03:35:12 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F44213F05
+        for <linux-next@vger.kernel.org>; Mon, 12 Sep 2022 00:35:11 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oXdyB-0004uo-Rf; Mon, 12 Sep 2022 09:35:03 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oXdyC-000FzI-AF; Mon, 12 Sep 2022 09:35:02 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oXdyA-000KQB-3I; Mon, 12 Sep 2022 09:35:02 +0200
+Date:   Mon, 12 Sep 2022 09:34:55 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Wolfram Sang <wsa@the-dreams.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Subject: linux-next: manual merge of the rust tree with Linus' tree
-Message-ID: <20220912172440.76a19053@canb.auug.org.au>
+        Wolfram Sang <wsa@kernel.org>
+Subject: Re: linux-next: manual merge of the battery tree with the i2c tree
+Message-ID: <20220912073455.rlqf6q4rsgydk46h@pengutronix.de>
+References: <20220912130344.2e635cd5@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/2GXH_jUKqkbhs2pRA7wngih";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="blckbo5i5mv4j6kq"
+Content-Disposition: inline
+In-Reply-To: <20220912130344.2e635cd5@canb.auug.org.au>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-next@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/2GXH_jUKqkbhs2pRA7wngih
-Content-Type: text/plain; charset=UTF-8
+
+--blckbo5i5mv4j6kq
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hello,
 
-Today's linux-next merge of the rust tree got a conflict in:
+On Mon, Sep 12, 2022 at 01:03:44PM +1000, Stephen Rothwell wrote:
+> Hi all,
+>=20
+> Today's linux-next merge of the battery tree got a conflict in:
+>=20
+>   drivers/power/supply/cw2015_battery.c
+>=20
+> between commit:
+>=20
+>   ed5c2f5fd10d ("i2c: Make remove callback return void")
+>=20
+> from the i2c tree and commit:
+>=20
+>   ed5c2f5fd10d ("i2c: Make remove callback return void")
+>=20
+> from the battery tree.
 
-  MAINTAINERS
+The commit from the battery tree is
 
-between commit:
+	0cb172a4918e ("power: supply: cw2015: Use device managed API to simplify t=
+he code")
 
-  fa4b9df00af4 ("MAINTAINERS: Add Runtime Verification (RV) entry")
+> I fixed it up (the latter removed the code modified by the former, so
+> I just did that)
 
-from Linus' tree and commit:
+I don't see today's tag in git yet, but removing the code sounds right.
 
-  fa4b9df00af4 ("MAINTAINERS: Add Runtime Verification (RV) entry")
+> and can carry the fix as necessary. This is now fixed as far as
+> linux-next is concerned, but any non trivial conflicts should be
+> mentioned to your upstream maintainer when your tree is submitted for
+> merging.  You may also want to consider cooperating with the
+> maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-from the rust tree.
+@Sebastian: You might want to pull
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+	https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux i2c/make_remove_=
+callback_void-immutable
+
+into your tree to prepare a smooth merging experience for Linus.
+
+Best regards
+Uwe
 
 --=20
-Cheers,
-Stephen Rothwell
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-diff --cc MAINTAINERS
-index cfb38ad66cfc,263ff9abca0b..000000000000
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@@ -17806,17 -17477,24 +17806,35 @@@ L:	linux-rdma@vger.kernel.or
-  S:	Maintained
-  F:	drivers/infiniband/ulp/rtrs/
- =20
- +RUNTIME VERIFICATION (RV)
- +M:	Daniel Bristot de Oliveira <bristot@kernel.org>
- +M:	Steven Rostedt <rostedt@goodmis.org>
- +L:	linux-trace-devel@vger.kernel.org
- +S:	Maintained
- +F:	Documentation/trace/rv/
- +F:	include/linux/rv.h
- +F:	include/rv/
- +F:	kernel/trace/rv/
- +F:	tools/verification/
- +
-+ RUST
-+ M:	Miguel Ojeda <ojeda@kernel.org>
-+ M:	Alex Gaynor <alex.gaynor@gmail.com>
-+ M:	Wedson Almeida Filho <wedsonaf@google.com>
-+ R:	Boqun Feng <boqun.feng@gmail.com>
-+ R:	Gary Guo <gary@garyguo.net>
-+ R:	Bj=C3=B6rn Roy Baron <bjorn3_gh@protonmail.com>
-+ L:	rust-for-linux@vger.kernel.org
-+ S:	Supported
-+ W:	https://github.com/Rust-for-Linux/linux
-+ B:	https://github.com/Rust-for-Linux/linux/issues
-+ T:	git https://github.com/Rust-for-Linux/linux.git rust-next
-+ F:	Documentation/rust/
-+ F:	rust/
-+ F:	samples/rust/
-+ F:	scripts/*rust*
-+ K:	\b(?i:rust)\b
-+=20
-  RXRPC SOCKETS (AF_RXRPC)
-  M:	David Howells <dhowells@redhat.com>
-  M:	Marc Dionne <marc.dionne@auristor.com>
-
---Sig_/2GXH_jUKqkbhs2pRA7wngih
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+--blckbo5i5mv4j6kq
+Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMe3rgACgkQAVBC80lX
-0GxwEgf/R7sUyZ5yiq3lioy/9hDtNZM/JsAWJ5QDnOzMUzlW0g3cac7X1kqkIrbT
-e+l6RsqPv4ebUdbaxK2/8Ig+rT4l/yvpAPciOPtrRu/KWB/A5pXJg/qcYYByp0Vl
-lrHz1Yrs++2cPGNFFIAkCgVNGKEHgD/GH7aBh6JBUuSyXLoF13E1qdlhPjYiRb+t
-rzDkeMjFQ48LLPeqlpZhdy5zfsoYQu3Ws7QgXWoHPITn1+/DtVCoUelt9wKDivnA
-YqhjadaYb2yD4RcPNeIy08xzKG0CICvEWi2LryAhow5Ep24u8oHtcSOMLORS9w6A
-ecSNAqPAWYxzPFTE9e8MAhhtmHaAQw==
-=WnIv
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmMe4QoACgkQwfwUeK3K
+7AmmwAf/VOi5lCUUa3xbiG0QAST1k1xoG020R0+rYgbT6/n6fN69wri6wLImLRBC
+myCx7URUQVvH5kMnt/vrD+Kfoy4MAsUKXz5nnYtVHoWakdVD+qo5BMjjkFUweZGK
+budPINOnCwdHtKUy7RTuDnawvFxPhyQpV9gOpmarnGgr2On10+Yu+j1iLSoOpSpM
+FkzKBjp8HtrsjxvSiicysK+etZjGaCvtga07cvZWtcZQ0ix1iwL+kYffYvUW6CV5
+CeUpNLM3rXoteybClqHG8vwgLxc6ygQSu+I+ZK9Nva5saHHlKNAPhFWwz9pwYXUy
+HE622WjH1mNGIKPgf4uIJVHC0uCMkg==
+=CQOX
 -----END PGP SIGNATURE-----
 
---Sig_/2GXH_jUKqkbhs2pRA7wngih--
+--blckbo5i5mv4j6kq--

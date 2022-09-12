@@ -2,83 +2,107 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 377425B5257
-	for <lists+linux-next@lfdr.de>; Mon, 12 Sep 2022 02:54:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6F555B526E
+	for <lists+linux-next@lfdr.de>; Mon, 12 Sep 2022 03:25:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229607AbiILAyZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 11 Sep 2022 20:54:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35530 "EHLO
+        id S229665AbiILBZH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 11 Sep 2022 21:25:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiILAyX (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 11 Sep 2022 20:54:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF6927CF5;
-        Sun, 11 Sep 2022 17:54:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S229510AbiILBZG (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 11 Sep 2022 21:25:06 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1CF1B843;
+        Sun, 11 Sep 2022 18:25:03 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4F007B80C68;
-        Mon, 12 Sep 2022 00:54:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09F45C433D6;
-        Mon, 12 Sep 2022 00:54:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662944059;
-        bh=WDVtmnzEsaEU55TuvLxBRymxTuYaVUC9hgjRIe0bHt0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZoxnvrqSSY20wV65g7z6/rwjE02vykYR2j0xgsMFiTFS3wcFoXQgc7ddRv8HVfb3f
-         Kwr6X2fw2mafz42Qbx5YdEIQQnsRulU5GDprmsG01tejmSwgFvr4Jx1B47ZL2SiCcG
-         Eyn7qIRIzb0YqpOmcociLL5XyxfDzbh0zkynyL7M0TA1icIoVgkGtGXOVtBvjI1oIN
-         Iw8cbqxwN+hQUZueBTkmVgQV2RAaCxx5KdzDrA5EkbLK7xfUqnQisUx0ldrLzg3M1r
-         oaH/BIP5FZbUDfOMoORvOPkiaFMoOUQT1g/YGC/jN8fIFwm06y/Lc3y+CcDBzZnAwH
-         78iOtWwzF2Ivg==
-Date:   Sun, 11 Sep 2022 19:54:12 -0500
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>, linux-next@vger.kernel.org
-Cc:     linux-block@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, linux-xfs@vger.kernel.org,
-        Keith Busch <kbusch@kernel.org>, linux-fscrypt@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH v5 0/8] make statx() return DIO alignment information
-Message-ID: <Yx6DNIorJ86IWk5q@quark>
-References: <20220827065851.135710-1-ebiggers@kernel.org>
- <YxfE8zjqkT6Zn+Vn@quark>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MQpmr6v4rz4xG7;
+        Mon, 12 Sep 2022 11:25:00 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1662945902;
+        bh=RKaxzaDfRsE6qw1SpYVOvckFVrA9MlVhRpCNQTHNX1g=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=u3CtstPynUvHLxd5qkzWQccXerdzjsrkFoklkjfC/0o7cr6f5buM3mLNuKi1EnXxN
+         HyNpY1dydn4uyUaNyr+FKTB70++bmq12GwlL3Bd1vELVJ4hWm3b+znC0S/XXhivig7
+         RKNkqMFMl6UZ3oWQuo3zB8lShb9pWQJOhNbtL88R/uTieAXC7hhLupOFl0Q888Wdhx
+         pg2nJznqF0WcrvAIIcWMwI8fqFWKakR7yHFpAkxbOpsspRDOxQr2N1tes+CiD0/m7F
+         8SxMrv+qAG9Ter0dxuYr02fAXc/FtfymBf6obkKOlvrR5nuaWDz1wwbW+fWviqEwDg
+         Ohd7l7Aat6+6Q==
+Date:   Mon, 12 Sep 2022 11:24:58 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Williamson <alex.williamson@redhat.com>,
+        David Miller <davem@davemloft.net>
+Cc:     Networking <netdev@vger.kernel.org>,
+        Leon Romanovsky <leon@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Lior Nahmanson <liorna@nvidia.com>,
+        Raed Salem <raeds@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Yishai Hadas <yishaih@nvidia.com>
+Subject: Re: linux-next: manual merge of the vfio tree with the net-next
+ tree
+Message-ID: <20220912112458.525b054e@canb.auug.org.au>
+In-Reply-To: <20220909144436.6c08b042@canb.auug.org.au>
+References: <20220909144436.6c08b042@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YxfE8zjqkT6Zn+Vn@quark>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/hQ+IlOqPMDeRclybwi.gJsM";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 03:08:51PM -0700, Eric Biggers wrote:
-> On Fri, Aug 26, 2022 at 11:58:43PM -0700, Eric Biggers wrote:
-> > This patchset makes the statx() system call return direct I/O (DIO)
-> > alignment information.  This allows userspace to easily determine
-> > whether a file supports DIO, and if so with what alignment restrictions.
-> 
-> Al, any thoughts on this patchset, and do you plan to apply it for 6.1?  Ideally
-> this would go through the VFS tree.  If not, I suppose I'll need to have it
-> added to linux-next and send the pull request myself.
-> 
-> - Eric
+--Sig_/hQ+IlOqPMDeRclybwi.gJsM
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Seems that it's up to me, then.
+Hi all,
 
-Stephen, can you add my git branch for this patchset to linux-next?
+On Fri, 9 Sep 2022 14:44:36 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>
+> Today's linux-next merge of the vfio tree got conflicts in:
+>=20
+>   drivers/net/ethernet/mellanox/mlx5/core/fw.c
+>   drivers/net/ethernet/mellanox/mlx5/core/main.c
+>=20
+> between commit:
+>=20
+>   8ff0ac5be144 ("net/mlx5: Add MACsec offload Tx command support")
+>=20
+> from the net-next tree and commit:
+>=20
+>   939838632b91 ("net/mlx5: Query ADV_VIRTUALIZATION capabilities")
+>=20
+> from the vfio tree.
 
-URL: https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git
-Branch: statx-dioalign
+This latter commit is now also in the mlx5 tree.
 
-This is targeting the 6.1 merge window with a pull request to Linus.
+--=20
+Cheers,
+Stephen Rothwell
 
-Thanks!
+--Sig_/hQ+IlOqPMDeRclybwi.gJsM
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-- Eric
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMeimoACgkQAVBC80lX
+0Gz0Hwf9HVRsGpauW0eaFRprs8Bcxqj7zip7PLv96BaItfvtyEfbEnysZuQpxh8E
+WByCdm3ZyPDEo2w5iRJgTodttWPGi83yKYniXqEHyhrADGMz+qpU3/FHJ99xdaQv
++bT4z2z3bkiJMIqWYyR06Xk8cXLUypfE91YkBJtwo0ylw/SGfcOJ8C5Qy3BMhjMg
+E4XDOZzD3lMyVg3poCTe6K5gw7X3JZJZmnsY7/+/X02SZl6nFpq3A4BbqN0LfHrO
+B1i7n+/vlMKZCBkhl8IyQBSoCJJwmxFi4Br8to8bJ/+NrpudOs/3LdE4WXITd/mL
+TX48a5/cVGDdwmrtnm933/ELAV54Jw==
+=R90H
+-----END PGP SIGNATURE-----
+
+--Sig_/hQ+IlOqPMDeRclybwi.gJsM--

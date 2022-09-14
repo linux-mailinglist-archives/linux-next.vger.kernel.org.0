@@ -2,139 +2,111 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30E2D5B7E09
-	for <lists+linux-next@lfdr.de>; Wed, 14 Sep 2022 02:55:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B16CC5B7EC7
+	for <lists+linux-next@lfdr.de>; Wed, 14 Sep 2022 03:59:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbiINAzo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 13 Sep 2022 20:55:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55356 "EHLO
+        id S229713AbiINB7p (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 13 Sep 2022 21:59:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbiINAzn (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 13 Sep 2022 20:55:43 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2799425581
-        for <linux-next@vger.kernel.org>; Tue, 13 Sep 2022 17:55:42 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id j12so13317468pfi.11
-        for <linux-next@vger.kernel.org>; Tue, 13 Sep 2022 17:55:42 -0700 (PDT)
+        with ESMTP id S229788AbiINB7n (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 13 Sep 2022 21:59:43 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F0596330;
+        Tue, 13 Sep 2022 18:59:38 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id b23so13435284pfp.9;
+        Tue, 13 Sep 2022 18:59:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date;
-        bh=5vV4CilzLiWjPs5xReufWS8ipvCGneLgr8C9TBkLjw0=;
-        b=nhcftbz0F+5FieX2xbd8segHsRucGIuOwKvgYMu9lmxrssK8PpwDOXEh1Rw+Esp+dz
-         MilZoQWwJc4vabWLbqbTFAMTOE7qQ9msTC0w/k0ZfPeJCRS1vgzLelZxU3M2p0uFJ5QU
-         Cx6QDJlBXVOWNqdDgdJ4l/sQx4KTcvP2b1hrc=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=MBMoUjs1/LRqBPqtJw8QUCIFN2AxXmsOdyU31zMj8Qo=;
+        b=VBXE1s30H4C5zDJ+8Zsaf/BEkL8GJBxe78wCKCHLzsPHPPPlGefbeRo+L99ns+KMDG
+         PPFe151cmLEGo4ugIpQBSB+nF6/g3Tf8wxWtt1vRn52QAyaWyMHFMiA8rt3GTwd1Ti1b
+         2ElO2EvzQvMZqlYjngu6sBH5RrbB6SA2ZuTrm/xnNNDyV+UeuktuKx+Do8SKyKbpyoAj
+         2Vee6FgDrT2LKtvaTei4jUqs6iHlr4IwLNWqRITlYyZAmIuCDBEu1bEQ4/48KCChlf/y
+         dQcEeXsiBkxL2QbeBztIg+3G9riiIVckypWkON2394bshz1bNX0fQDvWzSORRPrRpKJQ
+         w06Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=5vV4CilzLiWjPs5xReufWS8ipvCGneLgr8C9TBkLjw0=;
-        b=WgWDPGKKPwXLElbzOCHAJCLO8MNFGqkRHrDuBvU0i48NeGzTrsI9K6jS7NuaNlFkXE
-         xtb+toefOZs0gVNluy7GD2+sBrmc62ts0xriarMVeaCMr38dWs018z/tJHcd/fx+Vckr
-         XeKLBRgU1zwJHkmkMPxBdFTlXo0gox71BUQ8Lff57g/0EU3r0e3wfRYjxcu6QV5PTeDk
-         LR3HzflVTZxt6Ch97lwGGak7fU3QTiIVBaVU2lABE+i257BCTGbsgs7Gvfc3bIVsQLWd
-         893cVih/LkdYbFjkOdBKHr2CmBEt7A1kYp9OGxJ7toLhl9hR+1/pIXqpMYfeO0JPJFV+
-         5SkA==
-X-Gm-Message-State: ACgBeo22ROMZBlQcN6NZJeMzOaZ+ULmrR8uKVxpF4NYxmXAbpAUHpZgP
-        BPpYT0uNNzPZAqWKrll+GQ/S0A==
-X-Google-Smtp-Source: AA6agR48k91enu7+uh/AQ4joZbHAihyt0j9hntaWvaNHhQzbmNpt+4siuaaNR8At8OdvW016llHErg==
-X-Received: by 2002:a63:fb0e:0:b0:434:efad:10c8 with SMTP id o14-20020a63fb0e000000b00434efad10c8mr28905882pgh.316.1663116941537;
-        Tue, 13 Sep 2022 17:55:41 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id i32-20020a17090a3da300b001fbb0f0b00fsm7846674pjc.35.2022.09.13.17.55.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Sep 2022 17:55:40 -0700 (PDT)
-Date:   Tue, 13 Sep 2022 17:55:39 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Jason@zx2c4.com
-Cc:     syzbot <syzbot+a448cda4dba2dac50de5@syzkaller.appspotmail.com>,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com, sfr@canb.auug.org.au,
-        syzkaller-bugs@googlegroups.com, wireguard@lists.zx2c4.com
-Subject: Re: [syzbot] linux-next test error: WARNING in set_peer
-Message-ID: <202209131753.D1BDA803@keescook>
-References: <00000000000060a74405e8945759@google.com>
+        bh=MBMoUjs1/LRqBPqtJw8QUCIFN2AxXmsOdyU31zMj8Qo=;
+        b=zyb3uF3ZuzbUcxFVkj/Qma2EAcomPW6zeOklwsFCuwJwwsU7pqPX8WTPzJtb2+wVjs
+         O5ctX53ngMiJBJ0k/VeOKzDYgLKCL0U5aOO4bni1VNiGhKoJpQcGBZDXHsTrTgY9tuu+
+         fzqCU5RN9/9YJ5oyWUPorh5QQUzFYkuho0q9w6H1K7RvGCNIuuNnQi3uKYATQloD7IAg
+         SNHTQqWMp5/1iwtJFAao1a8phuxni7gYZjx2xh+2ozd6KUWYf2ULTaqPtjLkmMmsX1OA
+         p+7jfjgkCxzyXN7D/t84Zg/b2ibnUwFduf8iNKjV5zBFOQW4Yfo77WC97q373U9ebR4a
+         V9OQ==
+X-Gm-Message-State: ACgBeo36mPmS0dvLxyyV9HrkmJiSBsQkluiIUiYo+vrbTZJeu6KrKt+m
+        y9DXNch9edJGXugbpGM7j9o=
+X-Google-Smtp-Source: AA6agR4u3WENglYh7kF/L2nouFheMKGNZeIS1UoTSAW+q8V0bFwC4eQTSs2u2oyGbrcMOdxBoV7fmw==
+X-Received: by 2002:a63:8a4a:0:b0:434:c99c:6fd4 with SMTP id y71-20020a638a4a000000b00434c99c6fd4mr29301515pgd.24.1663120778134;
+        Tue, 13 Sep 2022 18:59:38 -0700 (PDT)
+Received: from [192.168.43.80] (subs02-180-214-232-75.three.co.id. [180.214.232.75])
+        by smtp.gmail.com with ESMTPSA id w2-20020a1709026f0200b0017808db132bsm9210355plk.137.2022.09.13.18.59.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Sep 2022 18:59:37 -0700 (PDT)
+Message-ID: <db2fdc22-44b8-1e81-ace2-c83c143ac20e@gmail.com>
+Date:   Wed, 14 Sep 2022 08:59:33 +0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <00000000000060a74405e8945759@google.com>
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH char-misc-next] misc: microchip: pci1xxxx: use
+ DEFINE_SIMPLE_DEV_PM_OPS() in place of the SIMPLE_DEV_PM_OPS() in pci1xxxx's
+ gpio driver
+Content-Language: en-US
+To:     Kumaravel.Thiagarajan@microchip.com, linux-kernel@vger.kernel.org,
+        sudipm.mukherjee@gmail.com, arnd@arndb.de,
+        linux-gpio@vger.kernel.org, linux-next@vger.kernel.org,
+        gregkh@linuxfoundation.org
+References: <20220912113634.167820-1-kumaravel.thiagarajan@microchip.com>
+ <d34d9264-1f0b-d465-bc1d-75f8c736a35b@gmail.com>
+ <BN8PR11MB3668C9D5BD38AECBE160D013E9479@BN8PR11MB3668.namprd11.prod.outlook.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <BN8PR11MB3668C9D5BD38AECBE160D013E9479@BN8PR11MB3668.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Sep 13, 2022 at 12:51:42PM -0700, syzbot wrote:
-> memcpy: detected field-spanning write (size 28) of single field "&endpoint.addr" at drivers/net/wireguard/netlink.c:446 (size 16)
+On 9/14/22 01:27, Kumaravel.Thiagarajan@microchip.com wrote:
+>> On 9/12/22 18:36, Kumaravel Thiagarajan wrote:
+>>> build errors listed below and reported for the builds of riscv, s390,
+>>> csky, alpha and loongarch allmodconfig are fixed in this patch.
+>>>
+>>> drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c:311:12: error:
+>> 'pci1xxxx_gpio_resume' defined but not used [-Werror=unused-function]
+>>>   311 | static int pci1xxxx_gpio_resume(struct device *dev)
+>>>       |            ^~~~~~~~~~~~~~~~~~~~
+>>> drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c:295:12: error:
+>> 'pci1xxxx_gpio_suspend' defined but not used [-Werror=unused-function]
+>>>   295 | static int pci1xxxx_gpio_suspend(struct device *dev)
+>>>       |            ^~~~~~~~~~~~~~~~~~~~~
+>>>
+>>
+>> What about this description?:
+>>
+>> "Sudip reported unused function errors on riscv, s390, cksy, alpha, and
+>> loongarch (allmodconfig):
+>> <pci1xxxx_gpio_* errors>...
+>>
+>> Fix these errors by using DEFINE_SIMPLE_DEV_PM_OPS."
+> It looks good even though it does not include all the details.
+> But is not how much of detail good enough subjective?
+> I thought some might be looking for more information and chose this way.
+> Do you think I need to change this? Please let me know.
 
-This is one way to fix it:
-
-diff --git a/drivers/net/wireguard/netlink.c b/drivers/net/wireguard/netlink.c
-index 0c0644e762e5..dbbeba216530 100644
---- a/drivers/net/wireguard/netlink.c
-+++ b/drivers/net/wireguard/netlink.c
-@@ -434,16 +434,16 @@ static int set_peer(struct wg_device *wg, struct nlattr **attrs)
- 	}
- 
- 	if (attrs[WGPEER_A_ENDPOINT]) {
--		struct sockaddr *addr = nla_data(attrs[WGPEER_A_ENDPOINT]);
-+		struct endpoint *raw = nla_data(attrs[WGPEER_A_ENDPOINT]);
- 		size_t len = nla_len(attrs[WGPEER_A_ENDPOINT]);
- 
- 		if ((len == sizeof(struct sockaddr_in) &&
--		     addr->sa_family == AF_INET) ||
-+		     raw->addr.sa_family == AF_INET) ||
- 		    (len == sizeof(struct sockaddr_in6) &&
--		     addr->sa_family == AF_INET6)) {
-+		     raw->addr.sa_family == AF_INET6)) {
- 			struct endpoint endpoint = { { { 0 } } };
- 
--			memcpy(&endpoint.addr, addr, len);
-+			memcpy(&endpoint.addrs, &raw->addrs, len);
- 			wg_socket_set_peer_endpoint(peer, &endpoint);
- 		}
- 	}
-diff --git a/drivers/net/wireguard/peer.h b/drivers/net/wireguard/peer.h
-index 76e4d3128ad4..4fbe7940828b 100644
---- a/drivers/net/wireguard/peer.h
-+++ b/drivers/net/wireguard/peer.h
-@@ -19,11 +19,13 @@
- struct wg_device;
- 
- struct endpoint {
--	union {
--		struct sockaddr addr;
--		struct sockaddr_in addr4;
--		struct sockaddr_in6 addr6;
--	};
-+	struct_group(addrs,
-+		union {
-+			struct sockaddr addr;
-+			struct sockaddr_in addr4;
-+			struct sockaddr_in6 addr6;
-+		};
-+	);
- 	union {
- 		struct {
- 			struct in_addr src4;
-
-
-diffoscope shows the bounds check gets updated to the full union size:
-│ -     cmp    $0x11,%edx
-│ +     cmp    $0x1d,%edx
-
-and the field name changes in the warning:
-$ strings clang/drivers/net/wireguard/netlink.o.after | grep ^field
-field "&endpoint.addrs" at drivers/net/wireguard/netlink.c:446
-
+Yes, with full error text as Sudip had reported.
 
 -- 
-Kees Cook
+An old man doll... just what I always wanted! - Clara

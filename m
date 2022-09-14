@@ -2,83 +2,81 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 661425B7C71
-	for <lists+linux-next@lfdr.de>; Tue, 13 Sep 2022 23:05:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC1655B7DFB
+	for <lists+linux-next@lfdr.de>; Wed, 14 Sep 2022 02:52:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229560AbiIMVFh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 13 Sep 2022 17:05:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50950 "EHLO
+        id S229768AbiINAwV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 13 Sep 2022 20:52:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiIMVFg (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 13 Sep 2022 17:05:36 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F2613E9F;
-        Tue, 13 Sep 2022 14:05:34 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S229806AbiINAwP (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 13 Sep 2022 20:52:15 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32A1A3E75B;
+        Tue, 13 Sep 2022 17:52:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MRwwY1C4Vz4xD1;
-        Wed, 14 Sep 2022 07:05:33 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1663103133;
-        bh=GBoVCfnsdgQmNgiCC44VsqCHsq/DK04wIqze0IJdQbY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=oVC3RtDx8yZ6j7NbpM1WtHTSiBQFpsDGWZFeHEiPt4vPJbmnh1qPkPwt2r7rqs2PB
-         YWNG5ImUDscMX1HqVRt6gCBCtpYrJh54nzKsCe3jhcN7lAfDMlBuGOnbj1P4UeCYx7
-         BtA7zXXGSSCknIehNcxokgc2wIC5832jadDIEipcQoDpE0tuZJjnYlSK/5fJaIOxtA
-         sw6istEFkyLOmpGiDbtpMVbmfe51MmZO1ok7JYiIrKy33/CFw2cx2tZ7EICx5F4P2c
-         9vdjIA6HimbFlP4UunQfSYF25PBecPTw5tJRrFE3HJlEgPIn/DSwP1wn2tW1o3Kkg/
-         DANTDsMRkP4jA==
-Date:   Wed, 14 Sep 2022 07:05:14 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the kbuild tree
-Message-ID: <20220914070514.3a2718b2@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/wNltMeyZv2DZMen/BPodXaL";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        by sin.source.kernel.org (Postfix) with ESMTPS id 43F29CE1382;
+        Wed, 14 Sep 2022 00:52:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49906C433C1;
+        Wed, 14 Sep 2022 00:52:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1663116731;
+        bh=HhfvOX/urEKCqD/galW5El2921ZPvKAuj3jSUQUgd0c=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=LtUyuDbx4rnXrkrCZ5oYFM/E73o1qDkpaZK4tlkv0/4OEtTHYGMiqt8uicQCfwdI2
+         tc5xXrvEGcLozpTNqgMMnaPdivZl2ZcwIvUK2lNGfovt4M4i0QVrmfHCc/I5wJtZQQ
+         jHDF8U1rcBcvlSKgfoY4R7J5MIOf5KD06k0b2agU=
+Date:   Tue, 13 Sep 2022 17:52:10 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Alexander Potapenko <glider@google.com>
+Cc:     Eric Biggers <ebiggers@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Robert Elliott <elliott@hpe.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org
+Subject: Re: [PATCH -next 1/2] x86: crypto: kmsan: revert !KMSAN
+ dependencies
+Message-Id: <20220913175210.50945edb0738bf95300dc500@linux-foundation.org>
+In-Reply-To: <20220909095811.2166073-1-glider@google.com>
+References: <20220909095811.2166073-1-glider@google.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/wNltMeyZv2DZMen/BPodXaL
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri,  9 Sep 2022 11:58:10 +0200 Alexander Potapenko <glider@google.com> wrote:
 
-Hi all,
+> This patch reverts "crypto: Kconfig: fix up for "crypto: kmsan: disable
+> accelerated configs under KMSAN" used by Stephen Rothwell to cleanly
+> merge KMSAN patches into linux-next.
+> 
+> Because now arch-specific crypto configs reside in a separate Kconfig
+> file, we can disable them all by adding a single !KMSAN before including
+> that file (done in the following patch).
+> 
+> Among others, this patch reverts !KMSAN check for
+> CONFIG_CRYPTO_AEGIS128_SIMD, which is ARM-only and is hence unnecessary,
+> because KMSAN does not support ARM yet.
 
-Commit
+As I understand it, these patches are against linux-next and only
+linux-next because they pertain to linux-next's resolution of conflicts
+between the MM tree and the crypto tree?
 
-  78b161ba86dd ("Kconfig: remove unused function 'menu_get_root_menu'")
+I'm not sure how to handle that, even if anyone wants to.  How about
+you send an update to
+git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm's mm-unstable
+branch so the code which is there makes sense?  Then we'll ask Stephen
+to redo the crypto tree resolution?
 
-is missing a Signed-off-by from its committer.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/wNltMeyZv2DZMen/BPodXaL
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMg8IoACgkQAVBC80lX
-0GwODQf9F2UDAcUQvUhVlL1u2xvnOZowgWl6JCE5Xj7orAs5OW6jiHbrIQ33/L9A
-Kbr9QpSGHgSODcCP7vzqFbHj0K0/zGqIcg10Uap7mSBcApk2pBG51F0XtOIiO1Yh
-oOJc9rg7dYJwsA8AkShUzUmDut+PepwyDykMBZZtKErOOtjzAuewLM9g0qumARFV
-s9DYfrgZZDczs4i0rdwCz6olPT8Cmza6EiTuvIybQISSajqDOuLEZ4q49eV804qa
-JTMyIFS69MC2dsuEaPJfkj6El6L6IUCBgcVpb8X80jUX9HndlQ3+2kjFLDc2QjHM
-8/Y5anpIMev/8mBp8r21dsTtdoa2eg==
-=UnrZ
------END PGP SIGNATURE-----
-
---Sig_/wNltMeyZv2DZMen/BPodXaL--

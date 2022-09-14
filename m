@@ -2,111 +2,87 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B16CC5B7EC7
-	for <lists+linux-next@lfdr.de>; Wed, 14 Sep 2022 03:59:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FCDB5B7FAE
+	for <lists+linux-next@lfdr.de>; Wed, 14 Sep 2022 05:49:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229713AbiINB7p (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 13 Sep 2022 21:59:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54394 "EHLO
+        id S229585AbiINDs7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 13 Sep 2022 23:48:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229788AbiINB7n (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 13 Sep 2022 21:59:43 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F0596330;
-        Tue, 13 Sep 2022 18:59:38 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id b23so13435284pfp.9;
-        Tue, 13 Sep 2022 18:59:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=MBMoUjs1/LRqBPqtJw8QUCIFN2AxXmsOdyU31zMj8Qo=;
-        b=VBXE1s30H4C5zDJ+8Zsaf/BEkL8GJBxe78wCKCHLzsPHPPPlGefbeRo+L99ns+KMDG
-         PPFe151cmLEGo4ugIpQBSB+nF6/g3Tf8wxWtt1vRn52QAyaWyMHFMiA8rt3GTwd1Ti1b
-         2ElO2EvzQvMZqlYjngu6sBH5RrbB6SA2ZuTrm/xnNNDyV+UeuktuKx+Do8SKyKbpyoAj
-         2Vee6FgDrT2LKtvaTei4jUqs6iHlr4IwLNWqRITlYyZAmIuCDBEu1bEQ4/48KCChlf/y
-         dQcEeXsiBkxL2QbeBztIg+3G9riiIVckypWkON2394bshz1bNX0fQDvWzSORRPrRpKJQ
-         w06Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=MBMoUjs1/LRqBPqtJw8QUCIFN2AxXmsOdyU31zMj8Qo=;
-        b=zyb3uF3ZuzbUcxFVkj/Qma2EAcomPW6zeOklwsFCuwJwwsU7pqPX8WTPzJtb2+wVjs
-         O5ctX53ngMiJBJ0k/VeOKzDYgLKCL0U5aOO4bni1VNiGhKoJpQcGBZDXHsTrTgY9tuu+
-         fzqCU5RN9/9YJ5oyWUPorh5QQUzFYkuho0q9w6H1K7RvGCNIuuNnQi3uKYATQloD7IAg
-         SNHTQqWMp5/1iwtJFAao1a8phuxni7gYZjx2xh+2ozd6KUWYf2ULTaqPtjLkmMmsX1OA
-         p+7jfjgkCxzyXN7D/t84Zg/b2ibnUwFduf8iNKjV5zBFOQW4Yfo77WC97q373U9ebR4a
-         V9OQ==
-X-Gm-Message-State: ACgBeo36mPmS0dvLxyyV9HrkmJiSBsQkluiIUiYo+vrbTZJeu6KrKt+m
-        y9DXNch9edJGXugbpGM7j9o=
-X-Google-Smtp-Source: AA6agR4u3WENglYh7kF/L2nouFheMKGNZeIS1UoTSAW+q8V0bFwC4eQTSs2u2oyGbrcMOdxBoV7fmw==
-X-Received: by 2002:a63:8a4a:0:b0:434:c99c:6fd4 with SMTP id y71-20020a638a4a000000b00434c99c6fd4mr29301515pgd.24.1663120778134;
-        Tue, 13 Sep 2022 18:59:38 -0700 (PDT)
-Received: from [192.168.43.80] (subs02-180-214-232-75.three.co.id. [180.214.232.75])
-        by smtp.gmail.com with ESMTPSA id w2-20020a1709026f0200b0017808db132bsm9210355plk.137.2022.09.13.18.59.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Sep 2022 18:59:37 -0700 (PDT)
-Message-ID: <db2fdc22-44b8-1e81-ace2-c83c143ac20e@gmail.com>
-Date:   Wed, 14 Sep 2022 08:59:33 +0700
+        with ESMTP id S229500AbiINDs6 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 13 Sep 2022 23:48:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8224C6EF3F;
+        Tue, 13 Sep 2022 20:48:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1DB3AB811FE;
+        Wed, 14 Sep 2022 03:48:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E966FC433C1;
+        Wed, 14 Sep 2022 03:48:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663127334;
+        bh=855EMhqG1F4Yb2lULbhbBeru9HWHtEAnJPYMA3ndzwg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MdfAdmLK3701NSj4dsjukqEnEYr6a9XbGsva8cRebxG2/eCbE1Op4FkiIFkgxYtZ0
+         8TSXHYb/aWFcPxWmKw5SaIr+g5mI2dpwJNqp9uMspNPtVznUbWr7W6EgI7sc84NcjO
+         PJ1PonsKhAQPfk/rAb2yiXv0NnFpUkreC27hvg0wlq9G0XEEqqI6rTQq/RYWR8K65X
+         NOpCbSmDzWX+x9u3iUNDTI+8lZSJCuzFrrGJPxxlcrMNmEleVI6YyIIRWX+I59EmW6
+         9JBiz6VLzCOjY5NRynpjkkoaxdN39s9RU58H7YyCIu6NH/OBQIO0cWx7+MB4yzu9hq
+         bOnp4JPTvcpIA==
+Date:   Wed, 14 Sep 2022 11:48:49 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Tim Harvey <tharvey@gateworks.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Fixes tag needs some work in the imx-mxs tree
+Message-ID: <20220914034849.GI1728671@dragon>
+References: <20220913201557.2513488f@canb.auug.org.au>
+ <CAJ+vNU2naFP=X1B3HwPCRez7Phft3OGA0sM6TMZUXJ78S5s6Aw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH char-misc-next] misc: microchip: pci1xxxx: use
- DEFINE_SIMPLE_DEV_PM_OPS() in place of the SIMPLE_DEV_PM_OPS() in pci1xxxx's
- gpio driver
-Content-Language: en-US
-To:     Kumaravel.Thiagarajan@microchip.com, linux-kernel@vger.kernel.org,
-        sudipm.mukherjee@gmail.com, arnd@arndb.de,
-        linux-gpio@vger.kernel.org, linux-next@vger.kernel.org,
-        gregkh@linuxfoundation.org
-References: <20220912113634.167820-1-kumaravel.thiagarajan@microchip.com>
- <d34d9264-1f0b-d465-bc1d-75f8c736a35b@gmail.com>
- <BN8PR11MB3668C9D5BD38AECBE160D013E9479@BN8PR11MB3668.namprd11.prod.outlook.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <BN8PR11MB3668C9D5BD38AECBE160D013E9479@BN8PR11MB3668.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJ+vNU2naFP=X1B3HwPCRez7Phft3OGA0sM6TMZUXJ78S5s6Aw@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 9/14/22 01:27, Kumaravel.Thiagarajan@microchip.com wrote:
->> On 9/12/22 18:36, Kumaravel Thiagarajan wrote:
->>> build errors listed below and reported for the builds of riscv, s390,
->>> csky, alpha and loongarch allmodconfig are fixed in this patch.
->>>
->>> drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c:311:12: error:
->> 'pci1xxxx_gpio_resume' defined but not used [-Werror=unused-function]
->>>   311 | static int pci1xxxx_gpio_resume(struct device *dev)
->>>       |            ^~~~~~~~~~~~~~~~~~~~
->>> drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c:295:12: error:
->> 'pci1xxxx_gpio_suspend' defined but not used [-Werror=unused-function]
->>>   295 | static int pci1xxxx_gpio_suspend(struct device *dev)
->>>       |            ^~~~~~~~~~~~~~~~~~~~~
->>>
->>
->> What about this description?:
->>
->> "Sudip reported unused function errors on riscv, s390, cksy, alpha, and
->> loongarch (allmodconfig):
->> <pci1xxxx_gpio_* errors>...
->>
->> Fix these errors by using DEFINE_SIMPLE_DEV_PM_OPS."
-> It looks good even though it does not include all the details.
-> But is not how much of detail good enough subjective?
-> I thought some might be looking for more information and chose this way.
-> Do you think I need to change this? Please let me know.
+On Tue, Sep 13, 2022 at 10:08:16AM -0700, Tim Harvey wrote:
+> On Tue, Sep 13, 2022 at 3:16 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >
+> > Hi all,
+> >
+> > In commit
+> >
+> >   c1f84a75babe ("arm64: dts: imx8mp-venice-gw74xx: fix port/phy validation")
+> >
+> > Fixes tag
+> >
+> >   Fixes: 7899eb6cb15d ("arm64: dts: imx: Add i.MX8M Plus Gateworks gw7400
+> >
+> > has these problem(s):
+> >
+> >   - Subject has leading but no trailing parentheses
+> >   - Subject has leading but no trailing quotes
+> >
+> > Please do not split Fixes tags over more than one line.
+> >
+> 
+> Stephen,
+> 
+> Sorry, that was my fault with my editor's word-wrap getting in the
+> way. I will be more careful in the future.
+> 
+> Is there anything that I can and should do at this point to result this one?
 
-Yes, with full error text as Sudip had reported.
+I fixed it up.
 
--- 
-An old man doll... just what I always wanted! - Clara
+Shawn

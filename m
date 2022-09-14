@@ -2,97 +2,143 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1B8D5B81F5
-	for <lists+linux-next@lfdr.de>; Wed, 14 Sep 2022 09:23:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D889C5B82CE
+	for <lists+linux-next@lfdr.de>; Wed, 14 Sep 2022 10:19:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229949AbiINHXk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 14 Sep 2022 03:23:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47858 "EHLO
+        id S229709AbiINITC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 14 Sep 2022 04:19:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230127AbiINHXj (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 14 Sep 2022 03:23:39 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 304D54DB70;
-        Wed, 14 Sep 2022 00:23:38 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MSBdg5NDdz4x1T;
-        Wed, 14 Sep 2022 17:23:35 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1663140216;
-        bh=PuqeKAEOp4fOu0sMwEauEi1UeWSNBz356aK1LLvMod8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=chJeCu/kVusOCTktV3zc5SwNHxMzazlMdLSqN3G8u3RDAwWPbA2+nWyNyVXCYHf1h
-         rDg2itpuey3DRKsY5qPU6399nMWdyTdK32X6QQJ40/MoUK4XuZNWLtoNOPdAqsNCG4
-         8zZRcLxle3/4AoKdiFxlfRcF+8TJ7z3Sb04LORwvpyF7ka+Og3iHbBRL+CbGrqPioJ
-         EhE7/lrUZvB0C9zIwK/ucTebQALOtUnhbmNLMKGKrLNH1I93ZEhU+WRuH0pzD9/4we
-         cz+aWJWrMAxHVWfHQbieljFJBJPkks+gRnbazl55JVFFjMS+ef5P33c9dRcddNTgu4
-         D6VHF4zk+/cPw==
-Date:   Wed, 14 Sep 2022 17:23:34 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andy Gross <agross@kernel.org>
-Cc:     Dang Huynh <danct12@riseup.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the qcom tree
-Message-ID: <20220914172334.39b3730f@canb.auug.org.au>
+        with ESMTP id S229472AbiINITB (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 14 Sep 2022 04:19:01 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 223A757E2B
+        for <linux-next@vger.kernel.org>; Wed, 14 Sep 2022 01:19:00 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id a67so21537593ybb.3
+        for <linux-next@vger.kernel.org>; Wed, 14 Sep 2022 01:19:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=HuIXq0gxsLhtrekbIwvVhrdsOJWyOZiMwcr+S3al2lw=;
+        b=cAprc2ENkwAzsA1ScDy+/sr6d/3f9p0nPP8Mc6N0iDX/hEs+T1BUfS8BVAHrFx8MBJ
+         HgdkV+kfd0A7J7ZkjA4pAMF35RkIlAimda9FEzqjxzOjqbAqi6UcEzmg80AYkWzJLeXI
+         zCakpoSPHtw0VWKrXcAwGiT2kHvjFGxiv1LWCO1x3nMcoFAgS40VLpeBMd2E2Sq2drcS
+         dOMWDCuymV7EHVprME2crDl+J9zBU+jt+l8DKpJSeYYBkVBy0Hjq4GnKe8WMKbvghvh6
+         wixA88tuAYTRq3++zVPDafixpOW89tYSoKU9nEYwEn2VMSK/OfJ9UcfIWE7GZqM+8IAZ
+         WeeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=HuIXq0gxsLhtrekbIwvVhrdsOJWyOZiMwcr+S3al2lw=;
+        b=rnML8+FQ/lc5iB6zQ7o3cKzfgK3htxpRTGsDyItefW/qxHLhQrYgzr82EbwKF+g0mC
+         dbQLOAFEZyzWgk2xe/JfrNdv1OFpWNqv2kMCVeegt2tEFrIPX6wgDyXi4b4hhd4xd8Z0
+         nf8byTE9fBl5upaLsEtCYhuF1Rjvl5S5DfAVTwXCmDRAAyhxgkAHQKFJZ+FobPlM4a6n
+         knJzu/k2Z/I5P9NuMiAQsNSI5q7js/hP1jcuHykbu6ujKfIcWTNj1b/sSpTIYjfQPhJj
+         VskRGTGsAC3Q1vcvMv7+AEnhyXIHZjnBoIYxhWbr8zHugxAEZ25jIYmPg1zfmKawLd/V
+         eM9g==
+X-Gm-Message-State: ACrzQf0RroG/YSfFKzJ6fPdQnPh/xhhPQlvgjRzJJS2knBK3PkXAygDQ
+        3hxfHQg0d5LV1iOXFXOrr/gobXrTWNSVadyRkxONuQ==
+X-Google-Smtp-Source: AMsMyM4gAetVuxJCy5rc8GccIvL8xPemtsGubVjAx9z1OYMfS0WxwpXd1nfRIx3By7x7exkAz6pnQPQ/bPRykgvkaz0=
+X-Received: by 2002:a25:3f03:0:b0:6af:f33f:7711 with SMTP id
+ m3-20020a253f03000000b006aff33f7711mr2350646yba.376.1663143538967; Wed, 14
+ Sep 2022 01:18:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/=gtO1y.DRmM/DhFDjfte1_P";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220909095811.2166073-1-glider@google.com> <20220913175210.50945edb0738bf95300dc500@linux-foundation.org>
+In-Reply-To: <20220913175210.50945edb0738bf95300dc500@linux-foundation.org>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Wed, 14 Sep 2022 10:18:22 +0200
+Message-ID: <CAG_fn=XsmcKNi1Sg-HgP9Hh98mf910o0Uo4fCpwijiS_3adgyQ@mail.gmail.com>
+Subject: Re: [PATCH -next 1/2] x86: crypto: kmsan: revert !KMSAN dependencies
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Eric Biggers <ebiggers@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Robert Elliott <elliott@hpe.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Crypto List <linux-crypto@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-next <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/=gtO1y.DRmM/DhFDjfte1_P
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Sep 14, 2022 at 2:52 AM Andrew Morton <akpm@linux-foundation.org> w=
+rote:
+>
+> On Fri,  9 Sep 2022 11:58:10 +0200 Alexander Potapenko <glider@google.com=
+> wrote:
+>
+> > This patch reverts "crypto: Kconfig: fix up for "crypto: kmsan: disable
+> > accelerated configs under KMSAN" used by Stephen Rothwell to cleanly
+> > merge KMSAN patches into linux-next.
+> >
+> > Because now arch-specific crypto configs reside in a separate Kconfig
+> > file, we can disable them all by adding a single !KMSAN before includin=
+g
+> > that file (done in the following patch).
+> >
+> > Among others, this patch reverts !KMSAN check for
+> > CONFIG_CRYPTO_AEGIS128_SIMD, which is ARM-only and is hence unnecessary=
+,
+> > because KMSAN does not support ARM yet.
+>
+> As I understand it, these patches are against linux-next and only
+> linux-next because they pertain to linux-next's resolution of conflicts
+> between the MM tree and the crypto tree?
 
-Hi all,
+The thing is that this patch only makes sense with its counterpart
+that adds a !KMSAN condition on "source arch/x86/crypto/Kconfig", and
+the latter file is missing in the -mm tree.
 
-In commit
+> I'm not sure how to handle that, even if anyone wants to.  How about
+> you send an update to
+> git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm's mm-unstable
+> branch so the code which is there makes sense?  Then we'll ask Stephen
+> to redo the crypto tree resolution?
 
-  50ee65dc512b ("clk: qcom: sm6115: Select QCOM_GDSC")
+Because the crypto tree is moving code crypto/Kconfig to
+arch/x86/crypto/Kconfig, we'll still need to apply these two patches
+to the result of the crypto tree merge.
 
-Fixes tag
+I was going to send out the updated patch series anyway (there are
+minor improvements to the core which let us drop "kmsan: unpoison @tlb
+in arch_tlb_gather_mmu()", also there's a new test case).
+I could drop "crypto: kmsan: disable accelerated configs under KMSAN"
+from it, so that it would be possible to enable accelerated configs
+under KMSAN at the cost of false positives (which are only visible if
+one builds with KMSAN).
+Then, once arch/x86/crypto/Kconfig hits -mm, I can send the remaining
+patch that disables accelerated crypto under KMSAN:
+https://lore.kernel.org/all/20220909095811.2166073-2-glider@google.com/
 
-  Fixes: cbe63bfdc54f ("clk: qcom: Add Global Clock controller (GCC)
+Or I could just send v7 patches against mm-unstable and ask Stephen to
+apply both https://lore.kernel.org/all/20220909095811.2166073-2-glider@goog=
+le.com/
+and https://lore.kernel.org/all/20220909095811.2166073-2-glider@google.com/
+at merge time.
 
-has these problem(s):
+Which option is better?
 
-  - Subject has leading but no trailing quotes
 
-It should have been:
+--
+Alexander Potapenko
+Software Engineer
 
-Fixes: cbe63bfdc54f ("clk: qcom: Add Global Clock controller (GCC) driver f=
-or SM6115")
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
 
-(no truncation or wrapping).
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/=gtO1y.DRmM/DhFDjfte1_P
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMhgXYACgkQAVBC80lX
-0Gw9RQf/XU48rdwqVb68RQfOLo7ADOOURDAiMdfPo4eHNWMJLVEA0RnwS5Q7GWuQ
-mZG1yj85LUotaZ+XazSi76Wz4+XlQbSCvGOiUC1ybJ7xzqfW1ySAFf7SroZNdlvn
-R64pYtJZrV0sDL17bmdmGv2ThTG5Cvrt3qMTnWeNayciW5QnoCZYwGFbEsGveHdP
-04snwPDQm80Y2BWcH89BR/+zHgxAOFbZ5tRGPAH3pRGIb48/HJkJIsL3vR2C6ltP
-N06cgYB6GO64peQ66dtWo4ObtG1c+HcWzWB6EemQAdWpO9iY3OTYhgnz9pEjSgcb
-g7DFs8uz+B3nLsuYO3AFGPrP80p+jA==
-=1Gii
------END PGP SIGNATURE-----
-
---Sig_/=gtO1y.DRmM/DhFDjfte1_P--
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg

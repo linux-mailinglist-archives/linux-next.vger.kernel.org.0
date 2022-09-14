@@ -2,65 +2,55 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 740B05B879E
-	for <lists+linux-next@lfdr.de>; Wed, 14 Sep 2022 13:55:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 020D95B87BD
+	for <lists+linux-next@lfdr.de>; Wed, 14 Sep 2022 14:01:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbiINLzK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 14 Sep 2022 07:55:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46254 "EHLO
+        id S229533AbiINMBL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 14 Sep 2022 08:01:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbiINLzI (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 14 Sep 2022 07:55:08 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59FDB17041;
-        Wed, 14 Sep 2022 04:55:07 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id az6so11436213wmb.4;
-        Wed, 14 Sep 2022 04:55:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date;
-        bh=SyPBTrJvHzMyaHLtvwyxvW+j90fbMR931wFMQdu37/o=;
-        b=BWHcjgqBlG2T3NBIzOfGGpZmejALUegR++FTvrF6X0D3HK8XJD04xKg9SN/VicszsD
-         yEu18tlS4LVLHvsP+1+w1ZSlWCCUft/xk38vFKFomHB55CPeQFzJd8wFJYJNGGrWJAui
-         6ifXPxDExUaYiYRJZhpgZlFeObvj76DWwHt/E8a/Y4mUKRuuGL0CubY3N2FItO5r4284
-         UFg4UEtGnJ6hLWVZ3S3h4RH9QiLA6xfqgvdM+82GhScwlbi22Pt5OxofzGDwVAuhT2a9
-         psCrmRLCu8NB0xZZyP1IONNj91J3WvPeRAruZkXvd43nEoHMVzDQQf47dLsZvvlFuepb
-         zEXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=SyPBTrJvHzMyaHLtvwyxvW+j90fbMR931wFMQdu37/o=;
-        b=VAnjeW9IJRmSN3qFh9nk6ifmnlz/l4+KwhRr32pgY6lLgmfGWjkbY5hnc/7417R30Q
-         u6hr2pwxJuJc0qtDFiaFNxmRcQu/X2aiXmd6nGSImDphq7QIiTmCKVUkjw9Q+6yhKKJj
-         aFO5Tmad7uPYq/75IsTwrnKVRz5ZgIhDgnOodFOe/wbs+URfK216VPjeX09iGjtMF0Ho
-         0UO3EYnIZXl3UDST7SdSsWDNSQXK18kAtPfVMmWK94isYQ1LmVQ743+8BRBLkXNUng2D
-         3AA6xUduQ+zJTrAPIMkPq6P5YWK2zlzEm8pokfkQww9HqMOo2pcS6xWQhhmikble6ekh
-         IS1Q==
-X-Gm-Message-State: ACgBeo348A0Glh2Sng2Q2loplVa1ucZq5UBZVizuprjQ1ITt6whlZ6fD
-        2YdqU+pbuy/1VcFkqtYwfUc=
-X-Google-Smtp-Source: AA6agR7HMGDwDBAbBTgUT/pwa8dlEi72q6ixKfarSZZfGWkX7uH9vOdKskGexIeULnCicwW5B9SFbg==
-X-Received: by 2002:a05:600c:4a9a:b0:3b4:78ab:bae5 with SMTP id b26-20020a05600c4a9a00b003b478abbae5mr2918176wmp.114.1663156505798;
-        Wed, 14 Sep 2022 04:55:05 -0700 (PDT)
-Received: from debian ([167.98.27.226])
-        by smtp.gmail.com with ESMTPSA id l4-20020a05600c47c400b003a541d893desm15968258wmo.38.2022.09.14.04.55.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Sep 2022 04:55:04 -0700 (PDT)
-Date:   Wed, 14 Sep 2022 12:55:03 +0100
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Chao Yu <chao@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>
+        with ESMTP id S230043AbiINMBG (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 14 Sep 2022 08:01:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9544D7D7BF;
+        Wed, 14 Sep 2022 05:00:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C18A961CBE;
+        Wed, 14 Sep 2022 12:00:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7541C433C1;
+        Wed, 14 Sep 2022 12:00:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663156858;
+        bh=oKRFavWenN+ytzY8AzXRM7VfgxqFkGOUkxfCZUfKgBg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=o8nmeF529De22eXTKQaRKmKJsE7Bsv7cH3fuLKVz7WSV1Fyx0+lvGz0gbNX6S8lGN
+         ie4eMBKADmJz5FD5xp4WNiPbk7K+lCBY0O7Pz7jwCNzyflHNupE28Bu1Ldxwr4QjiR
+         dqJAJ9dVvfxlPV3HepIGKJPHBGtzDVKTct6zebdTxXuYRfRQm4NZ2xH0HfEAnS9e84
+         cu0hwuyqjmqZZSWUfz8P6v9WL38xQ+4oMTjfEof2OFw9jP8M11uAw0NnDZvnSHCnfQ
+         pCyBUO7UKYTq7r82+YjKjOVCyxppNgcbx9kvi2nDjn1Yk7T6Aobo/JY93cQMY3SHRg
+         r1OT49LAe2/7w==
+Message-ID: <8cf54dbe-46af-44ed-8f52-321074912a15@kernel.org>
+Date:   Wed, 14 Sep 2022 20:00:52 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: build failure of next-20220914 due to 64c11570d64d ("f2fs: fix to
+ do sanity check on summary info")
+Content-Language: en-US
+To:     "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>
 Cc:     linux-next@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
         linux-kernel@vger.kernel.org
-Subject: build failure of next-20220914 due to 64c11570d64d ("f2fs: fix to do
- sanity check on summary info")
-Message-ID: <YyHBF99sC/vQdI3v@debian>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <YyHBF99sC/vQdI3v@debian>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <YyHBF99sC/vQdI3v@debian>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,28 +58,14 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi All,
+On 2022/9/14 19:55, Sudip Mukherjee (Codethink) wrote:
+> Hi All,
+> 
+> The builds of arm64 allmodconfig with clang have failed to build
+> next-20220914 with the error:
 
-The builds of arm64 allmodconfig with clang have failed to build
-next-20220914 with the error:
+My bad, I've fixed this issue in v2:
 
-fs/f2fs/recovery.c:509:17: error: variable 'ino' is uninitialized when used here [-Werror,-Wuninitialized]
-                        ofs_in_node, ino, nid, max_addrs);
-                                     ^~~
-fs/f2fs/f2fs.h:2376:35: note: expanded from macro 'f2fs_err'
-        f2fs_printk(sbi, KERN_ERR fmt, ##__VA_ARGS__)
-                                         ^~~~~~~~~~~
-fs/f2fs/recovery.c:475:11: note: initialize the variable 'ino' to silence this warning
-        nid_t ino, nid;
-                 ^
-                  = 0
-1 error generated.
+https://lore.kernel.org/linux-f2fs-devel/20220914115151.2994632-1-chao@kernel.org/T/#u
 
-git bisect pointed to 64c11570d64d ("f2fs: fix to do sanity check on summary info").
-
-I will be happy to test any patch or provide any extra log if needed.
-
-
--- 
-Regards
-Sudip
+Thanks,

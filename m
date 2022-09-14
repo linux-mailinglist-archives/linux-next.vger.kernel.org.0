@@ -2,87 +2,122 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FCDB5B7FAE
-	for <lists+linux-next@lfdr.de>; Wed, 14 Sep 2022 05:49:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D15875B8122
+	for <lists+linux-next@lfdr.de>; Wed, 14 Sep 2022 07:55:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbiINDs7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 13 Sep 2022 23:48:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32780 "EHLO
+        id S229963AbiINFzy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 14 Sep 2022 01:55:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiINDs6 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 13 Sep 2022 23:48:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8224C6EF3F;
-        Tue, 13 Sep 2022 20:48:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S229918AbiINFzp (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 14 Sep 2022 01:55:45 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 999255B7B9;
+        Tue, 13 Sep 2022 22:55:41 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1DB3AB811FE;
-        Wed, 14 Sep 2022 03:48:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E966FC433C1;
-        Wed, 14 Sep 2022 03:48:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663127334;
-        bh=855EMhqG1F4Yb2lULbhbBeru9HWHtEAnJPYMA3ndzwg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MdfAdmLK3701NSj4dsjukqEnEYr6a9XbGsva8cRebxG2/eCbE1Op4FkiIFkgxYtZ0
-         8TSXHYb/aWFcPxWmKw5SaIr+g5mI2dpwJNqp9uMspNPtVznUbWr7W6EgI7sc84NcjO
-         PJ1PonsKhAQPfk/rAb2yiXv0NnFpUkreC27hvg0wlq9G0XEEqqI6rTQq/RYWR8K65X
-         NOpCbSmDzWX+x9u3iUNDTI+8lZSJCuzFrrGJPxxlcrMNmEleVI6YyIIRWX+I59EmW6
-         9JBiz6VLzCOjY5NRynpjkkoaxdN39s9RU58H7YyCIu6NH/OBQIO0cWx7+MB4yzu9hq
-         bOnp4JPTvcpIA==
-Date:   Wed, 14 Sep 2022 11:48:49 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Tim Harvey <tharvey@gateworks.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MS8h751hKz4xD1;
+        Wed, 14 Sep 2022 15:55:35 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1663134936;
+        bh=NfEmZq6Sx6fDVfmEUSsnlkgd0Drx7kbKPxREj7cu23A=;
+        h=Date:From:To:Cc:Subject:From;
+        b=IoXztMp6nijyIXeFz+yu4shv7yVmgvKVHaQryeCyPOWhVOpY4ggK7Qjl5SMeAihZP
+         jy3oGpDc2kVAhA9VWGtj1avdgeFeoklvlA7dpexVAAMv3NXD1DD/7B58m41V8iR/BO
+         4i9sOyYdHTwOhDPo6A31I1piiLr+tf7fFX9cJp64DFUSfiDRAOtFb2HDVzFKmJBc+q
+         j8oUXEo339Stf9QrEwXd3vojiQtsz2NzLsC/qyv7Nhr+8XHa5vQUvdjjC6zlA/MZq8
+         p7aJQOnKAemQ/++YcHfTTnGpvYy+0AfcvEWUXtckbCGf5fiS1vt0i+HH5yZU5YbQ73
+         6UDpxuDs2FY2w==
+Date:   Wed, 14 Sep 2022 15:55:33 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>
+Cc:     Andrei Vagin <avagin@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the imx-mxs tree
-Message-ID: <20220914034849.GI1728671@dragon>
-References: <20220913201557.2513488f@canb.auug.org.au>
- <CAJ+vNU2naFP=X1B3HwPCRez7Phft3OGA0sM6TMZUXJ78S5s6Aw@mail.gmail.com>
+Subject: linux-next: manual merge of the mm tree with the execve tree
+Message-ID: <20220914155533.70c10493@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJ+vNU2naFP=X1B3HwPCRez7Phft3OGA0sM6TMZUXJ78S5s6Aw@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/p._F.fVWJ=gm4OzKmoZmt6Y";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Sep 13, 2022 at 10:08:16AM -0700, Tim Harvey wrote:
-> On Tue, Sep 13, 2022 at 3:16 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >
-> > Hi all,
-> >
-> > In commit
-> >
-> >   c1f84a75babe ("arm64: dts: imx8mp-venice-gw74xx: fix port/phy validation")
-> >
-> > Fixes tag
-> >
-> >   Fixes: 7899eb6cb15d ("arm64: dts: imx: Add i.MX8M Plus Gateworks gw7400
-> >
-> > has these problem(s):
-> >
-> >   - Subject has leading but no trailing parentheses
-> >   - Subject has leading but no trailing quotes
-> >
-> > Please do not split Fixes tags over more than one line.
-> >
-> 
-> Stephen,
-> 
-> Sorry, that was my fault with my editor's word-wrap getting in the
-> way. I will be more careful in the future.
-> 
-> Is there anything that I can and should do at this point to result this one?
+--Sig_/p._F.fVWJ=gm4OzKmoZmt6Y
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I fixed it up.
+Hi all,
 
-Shawn
+Today's linux-next merge of the mm tree got a conflict in:
+
+  fs/exec.c
+
+between commit:
+
+  33a2d6bc3480 ("Revert "fs/exec: allow to unshare a time namespace on vfor=
+k+exec"")
+
+from the execve tree and commit:
+
+  33a2d6bc3480 ("Revert "fs/exec: allow to unshare a time namespace on vfor=
+k+exec"")
+
+from the mm tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc fs/exec.c
+index 3f69e5c1a622,afe55d0c3bcf..000000000000
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@@ -1023,9 -1029,12 +1026,9 @@@ static int exec_mmap(struct mm_struct *
+  	activate_mm(active_mm, mm);
+  	if (IS_ENABLED(CONFIG_ARCH_WANT_IRQS_OFF_ACTIVATE_MM))
+  		local_irq_enable();
+- 	tsk->mm->vmacache_seqnum =3D 0;
+- 	vmacache_flush(tsk);
+  	task_unlock(tsk);
++ 	lru_gen_use_mm(mm);
++=20
+ -	if (vfork)
+ -		timens_on_fork(tsk->nsproxy, tsk);
+ -
+  	if (old_mm) {
+  		mmap_read_unlock(old_mm);
+  		BUG_ON(active_mm !=3D old_mm);
+
+--Sig_/p._F.fVWJ=gm4OzKmoZmt6Y
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMhbNUACgkQAVBC80lX
+0GzTAAf+JMjF0JAOaFmsc7XY38c81PJBCnKsganJrIS4B6tuqBRe34UTkF7flP4u
+Ffd3E9tNRnKcovsczVcspnfhUagw7AevXy/xoZMZtmlxMkrDULUe7CftQSEhg09K
+zLMxrxILtO+AVSyooche4131G/GtMItzUXLU7GnMtuMDMxMn1ZSUS8R/6FgXtxfv
+GKh4EAT+ZEe+mg4uFRD0n1rwZwqetsk2MuHqM3rqxjY2GS0Ua4zUEFThc6Da6nID
+2YXIa0mwfEiVsOsa6kRpQPJuTjjyFsokaRGTfcnoTPnUIM0Rk5ubMKsv438LogpV
+LEIucL8uKGkSMxNsKr/mhwW2VddEow==
+=DZx5
+-----END PGP SIGNATURE-----
+
+--Sig_/p._F.fVWJ=gm4OzKmoZmt6Y--

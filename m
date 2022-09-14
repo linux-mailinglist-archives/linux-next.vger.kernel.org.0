@@ -2,45 +2,47 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D15875B8122
-	for <lists+linux-next@lfdr.de>; Wed, 14 Sep 2022 07:55:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 669875B8179
+	for <lists+linux-next@lfdr.de>; Wed, 14 Sep 2022 08:21:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbiINFzy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 14 Sep 2022 01:55:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58844 "EHLO
+        id S229590AbiINGVH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 14 Sep 2022 02:21:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229918AbiINFzp (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 14 Sep 2022 01:55:45 -0400
+        with ESMTP id S229758AbiINGVG (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 14 Sep 2022 02:21:06 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 999255B7B9;
-        Tue, 13 Sep 2022 22:55:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B7771739;
+        Tue, 13 Sep 2022 23:21:03 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MS8h751hKz4xD1;
-        Wed, 14 Sep 2022 15:55:35 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MS9FT0GQ1z4xD1;
+        Wed, 14 Sep 2022 16:21:00 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1663134936;
-        bh=NfEmZq6Sx6fDVfmEUSsnlkgd0Drx7kbKPxREj7cu23A=;
-        h=Date:From:To:Cc:Subject:From;
-        b=IoXztMp6nijyIXeFz+yu4shv7yVmgvKVHaQryeCyPOWhVOpY4ggK7Qjl5SMeAihZP
-         jy3oGpDc2kVAhA9VWGtj1avdgeFeoklvlA7dpexVAAMv3NXD1DD/7B58m41V8iR/BO
-         4i9sOyYdHTwOhDPo6A31I1piiLr+tf7fFX9cJp64DFUSfiDRAOtFb2HDVzFKmJBc+q
-         j8oUXEo339Stf9QrEwXd3vojiQtsz2NzLsC/qyv7Nhr+8XHa5vQUvdjjC6zlA/MZq8
-         p7aJQOnKAemQ/++YcHfTTnGpvYy+0AfcvEWUXtckbCGf5fiS1vt0i+HH5yZU5YbQ73
-         6UDpxuDs2FY2w==
-Date:   Wed, 14 Sep 2022 15:55:33 +1000
+        s=201702; t=1663136461;
+        bh=s8fMUb9zGfi7piJxreN/Y3Vnb/N+scSkvNoUAV1BKB8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=iCrIdvtScY16V9gEhU4wFS0rB5zzQ6lewsGlZFcBy6IftRUUjwi/B+mCOkCMPMdbx
+         9d9nmN10ZlVrr+m1mF84MxSZK5nLQXv8xCx1ZvLcHmJD1UkbwT9uH7eLMTvhWLCRdM
+         8Im2ejl783RXrxTMReANCeCEv8sF+B/3ZlapsDRi87zhAGxTB9qIWuPtpq52lPklYt
+         JHfmLqX4LXtC8LBZi3NL1Q42xRN3mo6UvN0nxxAYkcKzgX7rFGo3XIFrovs8XWiBXH
+         p1WdT0bMhukXe2r9rtgZIuTEskCqeuFj8phA7ibZBPVlu5QLJfapszv0najnR6lhrG
+         UzzRyXzs3syVg==
+Date:   Wed, 14 Sep 2022 16:20:59 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>
-Cc:     Andrei Vagin <avagin@gmail.com>,
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Kees Cook <keescook@chromium.org>, Andrei Vagin <avagin@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the mm tree with the execve tree
-Message-ID: <20220914155533.70c10493@canb.auug.org.au>
+Subject: Re: linux-next: manual merge of the mm tree with the execve tree
+Message-ID: <20220914162059.731b0461@canb.auug.org.au>
+In-Reply-To: <20220913230302.00a8c826a2d4ae9a6ef2a90d@linux-foundation.org>
+References: <20220914155533.70c10493@canb.auug.org.au>
+        <20220913230302.00a8c826a2d4ae9a6ef2a90d@linux-foundation.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/p._F.fVWJ=gm4OzKmoZmt6Y";
+Content-Type: multipart/signed; boundary="Sig_/KPkTiEwoE0n1ic_=ht096hX";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
@@ -51,73 +53,62 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/p._F.fVWJ=gm4OzKmoZmt6Y
+--Sig_/KPkTiEwoE0n1ic_=ht096hX
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Andrew,
 
-Today's linux-next merge of the mm tree got a conflict in:
+[Readded cc's]
 
-  fs/exec.c
+On Tue, 13 Sep 2022 23:03:02 -0700 Andrew Morton <akpm@linux-foundation.org=
+> wrote:
+>
+> On Wed, 14 Sep 2022 15:55:33 +1000 Stephen Rothwell <sfr@canb.auug.org.au=
+> wrote:
+>=20
+> > Today's linux-next merge of the mm tree got a conflict in:
+> >=20
+> >   fs/exec.c
+> >=20
+> > between commit:
+> >=20
+> >   33a2d6bc3480 ("Revert "fs/exec: allow to unshare a time namespace on =
+vfork+exec"")
+> >=20
+> > from the execve tree and commit:
+> >=20
+> >   33a2d6bc3480 ("Revert "fs/exec: allow to unshare a time namespace on =
+vfork+exec"")
+> >=20
+> > from the mm tree. =20
+>=20
+> Confused.  They're the same commit?
 
-between commit:
+Sorry about that (still getting used to copy/paste in a VM on a Mac :-()
 
-  33a2d6bc3480 ("Revert "fs/exec: allow to unshare a time namespace on vfor=
-k+exec"")
+The latter one should have been:
 
-from the execve tree and commit:
-
-  33a2d6bc3480 ("Revert "fs/exec: allow to unshare a time namespace on vfor=
-k+exec"")
-
-from the mm tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+  65d31cfbc445 ("mm: multi-gen LRU: support page table walks")
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc fs/exec.c
-index 3f69e5c1a622,afe55d0c3bcf..000000000000
---- a/fs/exec.c
-+++ b/fs/exec.c
-@@@ -1023,9 -1029,12 +1026,9 @@@ static int exec_mmap(struct mm_struct *
-  	activate_mm(active_mm, mm);
-  	if (IS_ENABLED(CONFIG_ARCH_WANT_IRQS_OFF_ACTIVATE_MM))
-  		local_irq_enable();
-- 	tsk->mm->vmacache_seqnum =3D 0;
-- 	vmacache_flush(tsk);
-  	task_unlock(tsk);
-+ 	lru_gen_use_mm(mm);
-+=20
- -	if (vfork)
- -		timens_on_fork(tsk->nsproxy, tsk);
- -
-  	if (old_mm) {
-  		mmap_read_unlock(old_mm);
-  		BUG_ON(active_mm !=3D old_mm);
-
---Sig_/p._F.fVWJ=gm4OzKmoZmt6Y
+--Sig_/KPkTiEwoE0n1ic_=ht096hX
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMhbNUACgkQAVBC80lX
-0GzTAAf+JMjF0JAOaFmsc7XY38c81PJBCnKsganJrIS4B6tuqBRe34UTkF7flP4u
-Ffd3E9tNRnKcovsczVcspnfhUagw7AevXy/xoZMZtmlxMkrDULUe7CftQSEhg09K
-zLMxrxILtO+AVSyooche4131G/GtMItzUXLU7GnMtuMDMxMn1ZSUS8R/6FgXtxfv
-GKh4EAT+ZEe+mg4uFRD0n1rwZwqetsk2MuHqM3rqxjY2GS0Ua4zUEFThc6Da6nID
-2YXIa0mwfEiVsOsa6kRpQPJuTjjyFsokaRGTfcnoTPnUIM0Rk5ubMKsv438LogpV
-LEIucL8uKGkSMxNsKr/mhwW2VddEow==
-=DZx5
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMhcssACgkQAVBC80lX
+0GxMuAf+IX2p+j/qM0JF0IUR1G5vup6LlgQnsoaagfGVym3hC2J+cSTU162bXmkG
+rY7DCgjM3AiQFCCFTQnpPR0wflIlW8iMvooL6NdD95CHD2KXY5L4K63eeoxeQOmb
+Vf0m2gTtGEbusc+4L+yjApZcIytydOcjATkr8COT9aop7anAVlZu1sukWXotWnqz
+6pl2//YbqDjWzjin7ct2ThWOfgVzW7KihMSh55GekATH6aP87aoGhUeVHpyj3oC2
+2b7U/SUS95R/0kRDAnBIJOR/oxoeRLAwZpZmFXB5nVZi5foEFdT7pZt1Fo55KUZN
+91D+NzFGFhOTvmSyMzfGwfnkNxTMxA==
+=JaIK
 -----END PGP SIGNATURE-----
 
---Sig_/p._F.fVWJ=gm4OzKmoZmt6Y--
+--Sig_/KPkTiEwoE0n1ic_=ht096hX--

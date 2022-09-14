@@ -2,106 +2,115 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A81465B8B79
-	for <lists+linux-next@lfdr.de>; Wed, 14 Sep 2022 17:12:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 569625B8E54
+	for <lists+linux-next@lfdr.de>; Wed, 14 Sep 2022 19:49:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbiINPMO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 14 Sep 2022 11:12:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39790 "EHLO
+        id S229627AbiINRtE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 14 Sep 2022 13:49:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230052AbiINPMM (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 14 Sep 2022 11:12:12 -0400
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9440E73926
-        for <linux-next@vger.kernel.org>; Wed, 14 Sep 2022 08:12:10 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-1280590722dso41851005fac.1
-        for <linux-next@vger.kernel.org>; Wed, 14 Sep 2022 08:12:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=dUULFqmfRMWFPRG0w2HpAhvn+lZZWbVqFSA6+Wlte24=;
-        b=HNkYUrvMZ5EJ4Sbw3sERd4HJQ9JZ9Heu49ozVEtWK2TLowpnC9+ZKK/JYmMJHZljJF
-         eCP7JYblTz8DCfYLgW4dQ6zplj88RiC/tTgo07TDQI24yNljOY07JYYACCf8TN6b41IF
-         d6sU6lN6PC5eyj7RS2B6Gwc3rdsI8tyqttJb3KlRlE2l6y04W1BxTmrX/6QOaRsu5fZ4
-         jyyrKzOGBulrvyjcPPHRIiXrf2SU+ZNvGvL2MzMF8gNdTkbDHZs+u9pRCgm88ouzkAVE
-         eiGjlYQfMewPImiVyimyuUuXyU/y/Lhm78Yrtzz6kevHSARR4rCI5kJ9J5DzoTYaTZXS
-         1kNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=dUULFqmfRMWFPRG0w2HpAhvn+lZZWbVqFSA6+Wlte24=;
-        b=Hnv416qIMlAfH04GQC7hkZSk6wvEPejne7kMxbIYT2TQ3WpH6TRBeQMUhSNKLrCtZw
-         STnqubLGqwKPD8oIOhdaNfaNM9aSshhTMrbWB2fPKL4OvQGE/FgChAmGslx7bYJW2cRA
-         IN7uz4jUwh5l+c0vOjPTxFTQXzhB+Rsp4Vjhz9xULe6O6sUTFdgb2tr5vlT2VYoGOaRq
-         hSgv+uPOAAFQ2Vb2+gxaMFfzqnGF3SRGeUxAgWw+pkvbn3TL7m75WP5ZSxWMbsic9p/U
-         3t2raK8AcggEZzTzsp+OzDbdCkf4KkBWRqcxk8CW7HmZtQITbge8U5mPZgn6CsVpVXFJ
-         pz6Q==
-X-Gm-Message-State: ACgBeo3B2lPVi8ZGAvP/VTPNFfHaJGiLP3En+haOmV5YBXB9QU10Kfko
-        DUuF4w9g9lxoEgQWrkEf5RxFmGk6XjSRl0Taaj4craPcFULXag==
-X-Google-Smtp-Source: AA6agR7lcWlo4UE+O269BoSyaeq0Ixm5EemFaeVO1H4uKxcbf+SS4CBTdqozGifeOADC54JI2Bw7dVeIIW0ZQQutDZE=
-X-Received: by 2002:a05:6870:2488:b0:10c:3362:17ff with SMTP id
- s8-20020a056870248800b0010c336217ffmr2500649oaq.33.1663168329805; Wed, 14 Sep
- 2022 08:12:09 -0700 (PDT)
+        with ESMTP id S229592AbiINRtD (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 14 Sep 2022 13:49:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5841E30543;
+        Wed, 14 Sep 2022 10:49:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E00A761D12;
+        Wed, 14 Sep 2022 17:49:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1192AC433C1;
+        Wed, 14 Sep 2022 17:48:59 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="hJMsYj5/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1663177737;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=F0iTYrs7mVlDybHNBhoUliYhRxu2aTv3ffXeBOI1/I4=;
+        b=hJMsYj5/Z0wWbkJBVJOUnImi6RgWweL0qRlunmtvKFedlscGDb8WXxPUOke7kqJ2JfPegv
+        4luRogQgJd3fkB5kS0ThYN7kNVlEeEBA7UHPy+ly0nxYQIZHBBjCbV5sdvh6lwg9JPEKAa
+        p6HpyFOLXOXuuKWR5fKqosNOzixqr40=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id fc52c724 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Wed, 14 Sep 2022 17:48:57 +0000 (UTC)
+Date:   Wed, 14 Sep 2022 18:48:52 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     syzbot <syzbot+a448cda4dba2dac50de5@syzkaller.appspotmail.com>,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com, sfr@canb.auug.org.au,
+        syzkaller-bugs@googlegroups.com, wireguard@lists.zx2c4.com
+Subject: Re: [syzbot] linux-next test error: WARNING in set_peer
+Message-ID: <YyIUBKYWJBilWK3A@zx2c4.com>
+References: <00000000000060a74405e8945759@google.com>
+ <202209131753.D1BDA803@keescook>
 MIME-Version: 1.0
-References: <20220913201557.2513488f@canb.auug.org.au> <CAJ+vNU2naFP=X1B3HwPCRez7Phft3OGA0sM6TMZUXJ78S5s6Aw@mail.gmail.com>
- <20220914034849.GI1728671@dragon>
-In-Reply-To: <20220914034849.GI1728671@dragon>
-From:   Tim Harvey <tharvey@gateworks.com>
-Date:   Wed, 14 Sep 2022 08:11:58 -0700
-Message-ID: <CAJ+vNU1vR8rTCR3m_7EhVaixB+MoZy_HbHZnvQAPD4=Vm8KFcQ@mail.gmail.com>
-Subject: Re: linux-next: Fixes tag needs some work in the imx-mxs tree
-To:     Shawn Guo <shawnguo@kernel.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <202209131753.D1BDA803@keescook>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Sep 13, 2022 at 8:48 PM Shawn Guo <shawnguo@kernel.org> wrote:
->
-> On Tue, Sep 13, 2022 at 10:08:16AM -0700, Tim Harvey wrote:
-> > On Tue, Sep 13, 2022 at 3:16 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> > >
-> > > Hi all,
-> > >
-> > > In commit
-> > >
-> > >   c1f84a75babe ("arm64: dts: imx8mp-venice-gw74xx: fix port/phy validation")
-> > >
-> > > Fixes tag
-> > >
-> > >   Fixes: 7899eb6cb15d ("arm64: dts: imx: Add i.MX8M Plus Gateworks gw7400
-> > >
-> > > has these problem(s):
-> > >
-> > >   - Subject has leading but no trailing parentheses
-> > >   - Subject has leading but no trailing quotes
-> > >
-> > > Please do not split Fixes tags over more than one line.
-> > >
-> >
-> > Stephen,
-> >
-> > Sorry, that was my fault with my editor's word-wrap getting in the
-> > way. I will be more careful in the future.
-> >
-> > Is there anything that I can and should do at this point to result this one?
->
-> I fixed it up.
->
-> Shawn
+I think I'll open code it like below. I'll include this in my next push
+to net.
 
-Thanks Shawn!
+From 19fb26af00a8266df65b706dc02727c6a608b1b6 Mon Sep 17 00:00:00 2001
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date: Wed, 14 Sep 2022 18:42:00 +0100
+Subject: [PATCH] wireguard: netlink: avoid variable-sized memcpy on sockaddr
 
-I guess this would be a nice thing for checkpatch to catch.
+Doing a variable-sized memcpy is slower, and the compiler isn't smart
+enough to turn this into a constant-size assignment.
 
-Tim
+Further, Kees' latest fortified memcpy will actually bark, because the
+destination pointer is type sockaddr, not explicitly sockaddr_in or
+sockaddr_in6, so it thinks there's an overflow:
+
+    memcpy: detected field-spanning write (size 28) of single field
+    "&endpoint.addr" at drivers/net/wireguard/netlink.c:446 (size 16)
+
+Fix this by just assigning by using explicit casts for each checked
+case.
+
+Cc: Kees Cook <keescook@chromium.org>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ drivers/net/wireguard/netlink.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/net/wireguard/netlink.c b/drivers/net/wireguard/netlink.c
+index d0f3b6d7f408..5c804bcabfe6 100644
+--- a/drivers/net/wireguard/netlink.c
++++ b/drivers/net/wireguard/netlink.c
+@@ -436,14 +436,13 @@ static int set_peer(struct wg_device *wg, struct nlattr **attrs)
+ 	if (attrs[WGPEER_A_ENDPOINT]) {
+ 		struct sockaddr *addr = nla_data(attrs[WGPEER_A_ENDPOINT]);
+ 		size_t len = nla_len(attrs[WGPEER_A_ENDPOINT]);
++		struct endpoint endpoint = { { { 0 } } };
+
+-		if ((len == sizeof(struct sockaddr_in) &&
+-		     addr->sa_family == AF_INET) ||
+-		    (len == sizeof(struct sockaddr_in6) &&
+-		     addr->sa_family == AF_INET6)) {
+-			struct endpoint endpoint = { { { 0 } } };
+-
+-			memcpy(&endpoint.addr, addr, len);
++		if (len == sizeof(struct sockaddr_in) && addr->sa_family == AF_INET) {
++			endpoint.addr4 = *(struct sockaddr_in *)addr;
++			wg_socket_set_peer_endpoint(peer, &endpoint);
++		} else if (len == sizeof(struct sockaddr_in6) && addr->sa_family == AF_INET6) {
++			endpoint.addr6 = *(struct sockaddr_in6 *)addr;
+ 			wg_socket_set_peer_endpoint(peer, &endpoint);
+ 		}
+ 	}
+--
+2.37.3

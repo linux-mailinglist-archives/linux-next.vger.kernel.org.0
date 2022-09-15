@@ -2,63 +2,85 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E3635BA1B7
-	for <lists+linux-next@lfdr.de>; Thu, 15 Sep 2022 22:06:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5C7C5BA25A
+	for <lists+linux-next@lfdr.de>; Thu, 15 Sep 2022 23:34:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229581AbiIOUGo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 15 Sep 2022 16:06:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54246 "EHLO
+        id S229635AbiIOVen (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 15 Sep 2022 17:34:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbiIOUGn (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 15 Sep 2022 16:06:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 270E83FA3D;
-        Thu, 15 Sep 2022 13:06:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S229616AbiIOVeh (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 15 Sep 2022 17:34:37 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C51D760EC;
+        Thu, 15 Sep 2022 14:34:33 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AC04162651;
-        Thu, 15 Sep 2022 20:06:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4C0DC433D6;
-        Thu, 15 Sep 2022 20:06:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1663272401;
-        bh=de7jzm93A3T+Xyc6RXxLW+F0i/C5VJ38aJEFDi9L3so=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=qgiRHoEIAC0V5qvPL+C0yZCzzWDEHEFYgKtbkuTkKy03ayJTMrK5oFhtrqnEqqevV
-         +1/MGnvKkzvj3yCAFJ4rPAL2PUHLfpA6NXfL5GO096QeI+cBQEJQ0HUYi3dHUC4o32
-         U5heB67UUVl2haE/M/lsGD6c0hoRMZ+h7olYvxx4=
-Date:   Thu, 15 Sep 2022 13:06:40 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MT9Sz6VVrz4xD1;
+        Fri, 16 Sep 2022 07:34:27 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1663277668;
+        bh=LSmaAmh9KrhbKRY1s1jz/z4n8M0Db/WSfWLH1jkQcxI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=j+nmB/qEHJfv5eTHeBgN7y/rohXX7BiOfdn5mTMuTgaJC63cU+ggl+GoZc8nQXUaW
+         BrTH0UZ9TTLjHhzf3vMxuKV1zBe5mMP8pXYjFak8ohHATyKdkybmUKPN7X2Kyhl+XX
+         9K1mqCMhwd/kIAX60/KDFkf+0ouFWOjegM4BLp3MInFknp+CWnfSdpELHUsNapGXTb
+         FP7/yjWp9Oh2Vnvt9r4bI23X9bt3MmVtZQpm1QCjFyY6fzvRob3LgJK5g3JOB739ga
+         c7XlSNgZpKsjUjh6YVsD3tX0Tu5+GNAihYncJLHz0yElOMogHBtKPOsAGOoxDs+ecH
+         rMVYUocY/sJ9Q==
+Date:   Fri, 16 Sep 2022 07:34:10 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Colin Cross <ccross@android.com>, Olof Johansson <olof@lixom.net>,
+        Thierry Reding <treding@nvidia.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the mm tree
-Message-Id: <20220915130640.cec443b3ffb6650e16d9e610@linux-foundation.org>
-In-Reply-To: <YyNUtA1vRASOE4+M@monkey>
-References: <20220915170758.71068f92@canb.auug.org.au>
-        <YyNUtA1vRASOE4+M@monkey>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: linux-next: Signed-off-by missing for commit in the tegra tree
+Message-ID: <20220916073410.3fda3f0d@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/ik/u0Pwws54a0Y9FX6fpUYd";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, 15 Sep 2022 09:37:08 -0700 Mike Kravetz <mike.kravetz@oracle.com> wrote:
+--Sig_/ik/u0Pwws54a0Y9FX6fpUYd
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> Andrew, the following change to 47bc61e7caf9 ("hugetlb: add vma based lock for
-> pmd sharing") will fix the issue.  Would you like to just add the fix, or
-> would you like another version of 47bc61e7caf9, or perhaps another version of
-> the series?  Happy to do whatever is easier for you.
+Hi all,
 
-This simple fix is easiest for me.  More importantly, I think it's
-easier for reviewers, who don't have to plough through a whole new
-series unsure what might have changed.
+Commit
+
+  2254182807fc ("soc/tegra: fuse: Drop Kconfig dependency on TEGRA20_APB_DM=
+A")
+
+is missing a Signed-off-by from its committer.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/ik/u0Pwws54a0Y9FX6fpUYd
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMjmlMACgkQAVBC80lX
+0GxO3wgAl2JLfW2MQXPUgliK3Vxl5fHCXF1has6udSVDBGDmJ7K8q6U7s3OOcAy9
+126ZVzjqYECPhSoyKwapDTZKaQR1B9s/QDPPxjXwXf1s/AHUtBFPdVjgQmudrsv4
+KYC0doHDSYjZ0k1bXkRtYm05dppqoAy/opSvpmLUpr8TsGjs1TjV8Hp/6VugCNR1
+xZ7QDthTlWdmi9STx56Tvj9vgJk3nlsa9mcsrv8ym9ShLGjZ3A0WeSvcZGuAybV4
+djuCZ3L7qyf85LsHhLi3DHUm+7nAufTl4GzD+tbD8hE5lecVYC8Cck1leGOmzmlN
+pG9o1Gkfbyc8xhffqQGZueT+0EsdUQ==
+=bpnw
+-----END PGP SIGNATURE-----
+
+--Sig_/ik/u0Pwws54a0Y9FX6fpUYd--

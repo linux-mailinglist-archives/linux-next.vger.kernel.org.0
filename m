@@ -2,120 +2,102 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FC065B947E
-	for <lists+linux-next@lfdr.de>; Thu, 15 Sep 2022 08:33:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8683E5B950E
+	for <lists+linux-next@lfdr.de>; Thu, 15 Sep 2022 09:08:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229512AbiIOGdO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 15 Sep 2022 02:33:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36914 "EHLO
+        id S229536AbiIOHIJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 15 Sep 2022 03:08:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiIOGdN (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 15 Sep 2022 02:33:13 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEC1795AD9;
-        Wed, 14 Sep 2022 23:33:10 -0700 (PDT)
+        with ESMTP id S229497AbiIOHII (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 15 Sep 2022 03:08:08 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA35E40E29;
+        Thu, 15 Sep 2022 00:08:04 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MSnSx2Bhxz4x1F;
-        Thu, 15 Sep 2022 16:33:05 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MSpFD49GHz4x1T;
+        Thu, 15 Sep 2022 17:08:00 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1663223585;
-        bh=wK9zZIrn0GSvSUQK4l4LOTF9pgexwJPX7pO19gTWnlA=;
+        s=201702; t=1663225680;
+        bh=2tY+Yyhd6zapgrI07PnfswA0Gv6Oi8UT9ebEdaEHFjg=;
         h=Date:From:To:Cc:Subject:From;
-        b=lo1DubyyM7oDnig14KQnzqiWN92Nmw7++NY97BPxlIoGXV1yegWaAr0yUx2YfFave
-         O1SHvoLb55rMFOYAmi/fEcTCaOzls147TiNyxmVhucdkkgyNMp4EJmIb8RJ10zo7cP
-         5R1bZiA3vdO2qEPe9JKRUj4eHTXZ/1Uu4/7tlgRzzEAE6NdoVlWLDQpbXLYw0Oku0F
-         hcY9E8K9yWNd6SIz3WK03O+8BtDdznU0YOCNctgVeVo7XDAD5auyAaRp5FgzBhtmZC
-         K6PJJ9oePbR4kqNcP83GHZhvnzkZQEZUGyj+Z7EE7vMbVhrkYHWhFznUeJhTYYRIpY
-         bLLJnXHOnumhQ==
-Date:   Thu, 15 Sep 2022 16:33:01 +1000
+        b=KSi3F+BkUqdIAtotQcjZbVqOAYsMrerdQq51stbC0wz0Hy/7j8FjSU9YILjPSiiiv
+         j+L4XOXfY/qND5Va+j7idarp01y0yMF5QdrL9yfMXshEoHC6j4fLuz1yKonF4FtTLx
+         EaZvr3AnVWUXVqXF3cD35Xm8JXpPqdb6qXVPYcn1gDkyiAXgxPu0MAiQb0zzQzdExR
+         cLBqAyzw28Tn9qZjmHv1McS5UcPAb00DhtNr6unJ2dhmrNnvg3CN6YM3tG5UrJ8A3E
+         zPoV6Lgro8AYsrV5C28wW4dBP56QjxDdOm/d7Gml69rZsiMAACrrCaBnW6iYNNOt1T
+         sp3kj9jDFJosA==
+Date:   Thu, 15 Sep 2022 17:07:58 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Alistair Popple <apopple@nvidia.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Subject: linux-next: manual merge of the mm tree with the kselftest tree
-Message-ID: <20220915163301.1c8803bc@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the mm tree
+Message-ID: <20220915170758.71068f92@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/yca8PNeg1hzOn6qyYHw=22U";
+Content-Type: multipart/signed; boundary="Sig_/XomWJ2eUt6W.gc/e1gPSvGt";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/yca8PNeg1hzOn6qyYHw=22U
+--Sig_/XomWJ2eUt6W.gc/e1gPSvGt
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the mm tree got a conflict in:
+After merging the mm tree, today's linux-next build (powerpc
+ppc64_defconfig) failed like this:
 
-  tools/testing/selftests/vm/hmm-tests.c
+ld: warning: discarding dynamic section .glink
+ld: warning: discarding dynamic section .plt
+ld: linkage table error against `hugetlb_vma_lock_release'
+ld: stubs don't match calculated size
+ld: can not build stubs: bad value
+ld: fs/hugetlbfs/inode.o: in function `.remove_inode_hugepages':
+inode.c:(.text+0x2538): undefined reference to `.hugetlb_vma_lock_release'
+ld: inode.c:(.text+0x25f4): undefined reference to `.hugetlb_vma_lock_relea=
+se'
 
-between commit:
+Caused by commits
 
-  ab7039dbcc61 ("selftests/vm: use top_srcdir instead of recomputing relati=
-ve paths")
+  d56100904028 ("hugetlb: use new vma_lock for pmd sharing synchronization")
+  47bc61e7caf9 ("hugetlb: add vma based lock for pmd sharing")
 
-from the kselftest tree and commit:
+The definition of hugetlb_vma_lock_release() is guarded by
+CONFIG_ARCH_WANT_HUGE_PMD_SHARE, but the usage in fs/hugetlbfs/inode.c
+is not.
 
-  223e3150a0d8 ("hmm-tests: fix migrate_dirty_page test")
-
-from the mm tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
+I have reverted commit d56100904028 (and the following commit) for
+today.
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc tools/testing/selftests/vm/hmm-tests.c
-index 7d722265dcd7,96eb73f37904..000000000000
---- a/tools/testing/selftests/vm/hmm-tests.c
-+++ b/tools/testing/selftests/vm/hmm-tests.c
-@@@ -31,8 -31,9 +31,9 @@@
-   * This is a private UAPI to the kernel test module so it isn't exported
-   * in the usual include/uapi/... directory.
-   */
- -#include "../../../../lib/test_hmm_uapi.h"
- -#include "../../../../mm/gup_test.h"
- +#include <lib/test_hmm_uapi.h>
- +#include <mm/gup_test.h>
-+ #include "vm_util.h"
- =20
-  struct hmm_buffer {
-  	void		*ptr;
-
---Sig_/yca8PNeg1hzOn6qyYHw=22U
+--Sig_/XomWJ2eUt6W.gc/e1gPSvGt
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMixx0ACgkQAVBC80lX
-0GzOmAf/Z/qdfb0WQt9V/j5/HHy5XrgAQ/hTAxmcOoWNEEVopAhgagX3SRfdmGo2
-bQBRFO6v2PwdiQBInotRIWswg5lkOzgnQW6nz65hPIP6+mrIAkHlHa10mJDbP6u3
-wIpvJ7IRgvpw+oYl7PoVWgjEoqpUrzwS/hln5tdNNFQo1oB0p8wm7gGBtcB6q3pB
-cv1FhNzhZQMQynShvoGaUMlIk7Q2aUhouoN99QncAE+sV12XQ5Yk0dTlI0LG20QH
-Dx3Uql72IGY5yhtd3FETbltWm4lVOsSVbMtkGf+b/VxLzfeADY5QctzJ3zRHn6ln
-agZoTaDqSiLSQiv1ED4CcnADgmeCCA==
-=713r
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMiz08ACgkQAVBC80lX
+0Gw9zgf7BuNat4sGhMU7ate/FPgZIzMpucMo76LE5e/FiI+HNkmTB81Fn9RziUzt
+leblGfodaeNLA2Fepn/O4xx3K34K5G02askynu5pOU4MuXvDpaghQUtRiZJTynLJ
+a0Nr4A4J4c0MXXLWfQJdl+FfDTmCGIsaDN7FQIAhYo4YhBOzxRC2qRU36/vwsuya
+5x3UT3+sImBDwBqmFhOl33aayu+UDh6cLykwFNdX9swF/O0VeJw6D/zsQlWMAfhF
+X9FzsIqAYVvBpgw90GcyctHco5WcFQzsEDhV5z+P+/oO7qFA9I/PHdl4Hfub2Kbv
+hC9K57Ni/dz/hwt3AaEEo3r2s6nqkQ==
+=YLZk
 -----END PGP SIGNATURE-----
 
---Sig_/yca8PNeg1hzOn6qyYHw=22U--
+--Sig_/XomWJ2eUt6W.gc/e1gPSvGt--

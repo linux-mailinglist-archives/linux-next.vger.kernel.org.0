@@ -2,57 +2,55 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9153F5BC052
-	for <lists+linux-next@lfdr.de>; Mon, 19 Sep 2022 00:13:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE9545BC062
+	for <lists+linux-next@lfdr.de>; Mon, 19 Sep 2022 00:21:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229599AbiIRWNH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 18 Sep 2022 18:13:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37224 "EHLO
+        id S229568AbiIRWVN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 18 Sep 2022 18:21:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbiIRWNF (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 18 Sep 2022 18:13:05 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2A3517ABD;
-        Sun, 18 Sep 2022 15:13:02 -0700 (PDT)
+        with ESMTP id S229563AbiIRWVM (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 18 Sep 2022 18:21:12 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9E9F63F0;
+        Sun, 18 Sep 2022 15:21:11 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MW2B46Lltz4xG5;
-        Mon, 19 Sep 2022 08:13:00 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MW2MR2Y0kz4x1K;
+        Mon, 19 Sep 2022 08:21:07 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1663539181;
-        bh=BZX022bh+nPw/hwDWob48F2NZDzNbTSK9yDNkN0pEYw=;
+        s=201702; t=1663539667;
+        bh=GUjelDUNuF5JmYEBOEh92wQAU7AdehKpMo1OUDlswUs=;
         h=Date:From:To:Cc:Subject:From;
-        b=MWvsaGSqKQ/cwQvGuGwRguUNMOrslR7g1goWIu2sns7wIAYe5HQAeIQ1FDYPq2m8N
-         dnRgp3RV6BPj+/rZ7plQJiQ3tbZ0YMR16KFR+J6fgEot8yV1HdcGYF1Fq8Gyyz0h0D
-         AQicC8uwenMk7xXURuBmW2nQMTbavg8RmxvVoal7vXEL7AAq4LNkAGgNyAhyWa6vDq
-         0NpWzcjq45vEu7nm94utPbx8neJyL4NqmZ46uZV3vtp2yPCmhRLZvhEo5I5UwRapw1
-         8e+JmE0LWf678BHa2nsc4S2vpnFKUjciIPvHNmbDo4tFiOJPxjgmoF5QW0avaq6uMq
-         9oqDoTm6zbHYg==
-Date:   Mon, 19 Sep 2022 08:12:59 +1000
+        b=dYb8Hfz+DNMnBLD88RslJBUKOo3+qo/paDOuX4NkJdV8BN4grmxppNZqCaabLMl7o
+         w+pAqXoeQciABMZv7Rb+081IJ8UXv00VNzLeBulh7gsoCm0W97AJfs499GMOPt/Tdl
+         mgrpbWxUus/zDmCgQGfiIcTaXrk7J1jX/MfzuRYgoNaKl7EMgcDFiOLCk+E/r0fVdh
+         5iPD5XBoqf3rHn6Qfq3+Lu8o0k3a069xNjdDmWUxd+Bp8wu+URR/X57M87NcIa2FAK
+         boKraRtTRZ2OLfAqXM+nj/NGdUqMdpdJ8XbGBMbVWizIlOIZn4nMw2MfzMQYLg6wF6
+         +unxaeBOFyA5w==
+Date:   Mon, 19 Sep 2022 08:21:05 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Herbert Xu <herbert@gondor.apana.org.au>,
-        Linux Crypto List <linux-crypto@vger.kernel.org>
-Cc:     Damian Muszynski <damian.muszynski@intel.com>,
-        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Zach O'Keefe <zokeefe@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the crypto tree
-Message-ID: <20220919081259.714b81f8@canb.auug.org.au>
+Subject: linux-next: Fixes tag needs some work in the mm tree
+Message-ID: <20220919082105.73c0e270@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Bu+ro+KfrWd+.tE29xPJY5g";
+Content-Type: multipart/signed; boundary="Sig_/B3/7P8vGP3vpqtf0UTgI5kx";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Bu+ro+KfrWd+.tE29xPJY5g
+--Sig_/B3/7P8vGP3vpqtf0UTgI5kx
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -60,37 +58,47 @@ Hi all,
 
 In commit
 
-  cf5bb835b7c8 ("crypto: qat - fix DMA transfer direction")
+  3a41f36f7083 ("selftests/vm: fix "add thp collapse file and tmpfs testing=
+" for tmpfs")
 
 Fixes tag
 
-  Fixes: d370cec ("crypto: qat - Intel(R) QAT crypto interface")
+  Fixes: 64b9fb1fa904 ("selftests/vm: add thp collapse file and tmpfs testi=
+ng")
 
 has these problem(s):
 
-  - SHA1 should be at least 12 digits long
-    This can be fixed for the future by setting core.abbrev to 12 (or
-    more) or (for git v2.11 or later) just making sure it is not set
-    (or set to "auto").
+  - Subject does not match target commit subject
+    Just use
+	git log -1 --format=3D'Fixes: %h ("%s")'
+
+So
+
+Fixes: 64b9fb1fa904 ("selftests/vm: add thp collapse shmem testing")
+
+or maybe
+
+Fixes: 465c955b7343 ("selftests/vm: add thp collapse file and tmpfs testing=
+")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/Bu+ro+KfrWd+.tE29xPJY5g
+--Sig_/B3/7P8vGP3vpqtf0UTgI5kx
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMnl+sACgkQAVBC80lX
-0GwFPgf9FVAwfShK+/u6ZLHQ/NrqlNng6CHgdfvsRzwfuWeIWEvEeVT+T83s43Nr
-/SSoiU0nYWVjd0L2ayKhNoGNaPebMt2ecgTQZqHj2deuylm+1mfTTjhXRiAmqPL6
-XDxTF3ePg4GJprfV0ObyZEHiiQnInsO/GtKtCGffYqdtpWH8biYbQuCEacO/Ig7z
-hEyO6k74V6kYyB/hrDbV4kUVzpRTIyD92NvKM2I3kbneRHvHld8ho8+CoX692W8l
-su8Tnt2beT7NJAlJxUzrrX6qOeKZq/aRTUy0HqGLPconXohk0BG+kMgsssrqW7ih
-xcmJVQ5UBUWm17CU2XWHEGnsopC3qg==
-=5YEk
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMnmdEACgkQAVBC80lX
+0Gw9Ygf7B1g9UAqfFef5dZZ3DGefEkCK2IvWM12SmmAF5psGMQE3q4Ny7NYZq314
+zWs/IRWZ0H4Gfb9qGbdRBB4N+FOlXxK0ML2QBBgYIjjJo/uIg5NiOR9r6OlFvsyX
+NgXfL9ghT+RfpEHyX3XJDBIsWGxLLtjgJfQNbL/1HAzn3g6DRnsXJPLL6SPTwyL8
+8ZtReWVKtLhYzhJ1S4cAD1iCrwj6qunz6JT2y0l1cXFypcQSwZ+cIozFLgNjL0oD
+kWwwEofs8zStfLMlPaNltt07KGFLUKVHhipAbTdK1sFrrNfYXLc11yhlCymFrl+w
+/9kjeTh3l5iY9zdWf71d8+jzjqCKcw==
+=VISl
 -----END PGP SIGNATURE-----
 
---Sig_/Bu+ro+KfrWd+.tE29xPJY5g--
+--Sig_/B3/7P8vGP3vpqtf0UTgI5kx--

@@ -2,144 +2,87 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8CAC5BC4F9
-	for <lists+linux-next@lfdr.de>; Mon, 19 Sep 2022 11:06:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0943D5BC501
+	for <lists+linux-next@lfdr.de>; Mon, 19 Sep 2022 11:09:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229768AbiISJGj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 19 Sep 2022 05:06:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43698 "EHLO
+        id S229869AbiISJJx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 19 Sep 2022 05:09:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229762AbiISJGi (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 19 Sep 2022 05:06:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 312337679;
-        Mon, 19 Sep 2022 02:06:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S229934AbiISJJu (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 19 Sep 2022 05:09:50 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72FF22DDC;
+        Mon, 19 Sep 2022 02:09:43 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E201AB80B17;
-        Mon, 19 Sep 2022 09:06:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80776C433C1;
-        Mon, 19 Sep 2022 09:06:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663578394;
-        bh=dTBQ7T1QioQLJ8cwIP5KWmbjaen9neD2VS2nvDARryw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=qXXZoYJcoNLSIxyFydSIf4PXN9j8G46Eg4wvruqpVOjsvxFW60YcyiCiTX1zpGNiN
-         GU0FrXt4rB3ykDU3/oahFgG/KojGqNFEABHfscNst7lsyZFsXGHMMzj65KAcWcdzXD
-         DDh+glhfp6wiZjbDEyZ9mxRgo2D+OQnJo2uD5QZQTsuhxpCf+DWfKeFK1lZ96AlBFs
-         rKQ3mRE0Mo+YFA76CAWJsGQheFEiuL3PR8RIGvrbyWGy8JtKXauKfUaPDmMmTmUiSu
-         L+usZiXLhQZU511Qr8HOEJ7bLp8PRK0ku3/ZlWfR8lxS4mUMT1fshSxrtQzF7S0db0
-         lQMmR2sXUj9aA==
-Received: from 185-176-101-241.host.sccbroadband.ie ([185.176.101.241] helo=wait-a-minute.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1oaChb-00B1Vp-Nh;
-        Mon, 19 Sep 2022 10:06:32 +0100
-Date:   Mon, 19 Sep 2022 10:04:30 +0100
-Message-ID: <87fsgnlopt.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Christoffer Dall <cdall@cs.columbia.edu>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MWJln4vpKz4xD1;
+        Mon, 19 Sep 2022 19:09:41 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1663578581;
+        bh=hToJl6MYbUVsAp3AfAZbgEG6Dva/oSxS4elHy1hck8Q=;
+        h=Date:From:To:Cc:Subject:From;
+        b=CMgX2HNL1P0FHu7eWFXKRl2eBwW34wsDTi1Xt0rC5G1D3CjP5mig1G5jzXuXY/ATP
+         r0hUINndWFmL/G+P72L8EhL+T7BhdEo0fAUC7n3je/EfmG1iZfkwO9R3mljR6EKnwl
+         YEqHGx6X4NGAEz8ZFqfYITcRTpkU58t3A9bMYugYzBbparHPu4wu6/a+PcwTm/lCS3
+         HyiU4RhW4+fjDniTnRwCiRjPyEpGEZK/FHaKVPrtwkKl7BbyFVbakmYVyE9Ck5r2+U
+         TiSSFSikn5kQaney0OTqfYRaOau+d1+TXLuh5UY5XM6JjCVB8q6w+0FC8MNcMu7qHF
+         RwI8Znr4wofJA==
+Date:   Mon, 19 Sep 2022 19:09:38 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Miaohe Lin <linmiaohe@huawei.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>
-Subject: Re: linux-next: manual merge of the kvm-arm tree with the arm64 tree
-In-Reply-To: <20220919140531.3741d146@canb.auug.org.au>
-References: <20220919140531.3741d146@canb.auug.org.au>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
- (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.176.101.241
-X-SA-Exim-Rcpt-To: catalin.marinas@arm.com, will@kernel.org, sfr@canb.auug.org.au, cdall@cs.columbia.edu, linux-kernel@vger.kernel.org, linux-next@vger.kernel.org, broonie@kernel.org, oliver.upton@linux.dev
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the mm tree
+Message-ID: <20220919190938.0948bd0e@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/2ShRTJQp.ZA==wy0kPfgwht";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+--Sig_/2ShRTJQp.ZA==wy0kPfgwht
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for the heads up.
+Hi all,
 
-On Mon, 19 Sep 2022 05:05:31 +0100,
-Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> 
-> Hi all,
-> 
-> Today's linux-next merge of the kvm-arm tree got a conflict in:
-> 
->   arch/arm64/kvm/sys_regs.c
-> 
-> between commit:
-> 
->   55adc08d7e64 ("arm64/sysreg: Add _EL1 into ID_AA64PFR0_EL1 definition names")
-> 
-> from the arm64 tree and commit:
-> 
->   cdd5036d048c ("KVM: arm64: Drop raz parameter from read_id_reg()")
-> 
-> from the kvm-arm tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
-> 
-> diff --cc arch/arm64/kvm/sys_regs.c
-> index 2ef1121ab844,9569772cf09a..000000000000
-> --- a/arch/arm64/kvm/sys_regs.c
-> +++ b/arch/arm64/kvm/sys_regs.c
-> @@@ -1208,9 -1210,9 +1210,9 @@@ static int set_id_aa64pfr0_el1(struct k
->   		return -EINVAL;
->   
->   	/* We can only differ with CSV[23], and anything else is an error */
-> - 	val ^= read_id_reg(vcpu, rd, false);
-> + 	val ^= read_id_reg(vcpu, rd);
->  -	val &= ~((0xFUL << ID_AA64PFR0_CSV2_SHIFT) |
->  -		 (0xFUL << ID_AA64PFR0_CSV3_SHIFT));
->  +	val &= ~((0xFUL << ID_AA64PFR0_EL1_CSV2_SHIFT) |
->  +		 (0xFUL << ID_AA64PFR0_EL1_CSV3_SHIFT));
->   	if (val)
->   		return -EINVAL;
+After merging the mm tree, today's linux-next build (htmldocs) produced
+this warning:
 
-Catalin, Will: in order to avoid further conflicts, I've taken the
-liberty to merge the arm64/for-next/sysreg branch into kvmarm/next.
-Let me know if that's a problem.
+include/linux/gfp.h:1: warning: no structured comments found
 
-Also, I've resolved the conflict in a slightly different way. Not that
-the above was wrong in any way, but we might as well fix it in a more
-idiomatic way:
+Introduced by commit
 
- 	/* We can only differ with CSV[23], and anything else is an error */
- 	val ^= read_id_reg(vcpu, rd);
--	val &= ~((0xFUL << ID_AA64PFR0_CSV2_SHIFT) |
--		 (0xFUL << ID_AA64PFR0_CSV3_SHIFT));
-+	val &= ~(ARM64_FEATURE_MASK(ID_AA64PFR0_EL1_CSV2) |
-+		 ARM64_FEATURE_MASK(ID_AA64PFR0_EL1_CSV3));
- 	if (val)
- 		return -EINVAL;
+  4f57293dcaaa ("mm/page_alloc: remove obsolete gfpflags_normal_context()")
 
-Thanks,
+--=20
+Cheers,
+Stephen Rothwell
 
-	M.
+--Sig_/2ShRTJQp.ZA==wy0kPfgwht
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
--- 
-Without deviation from the norm, progress is not possible.
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMoMdIACgkQAVBC80lX
+0GxGUAf7BxSWQg58/XZv9KgpQwQd9A/hwCMfS+XuApMRGRWpy3T98XZYuD8I4aEF
+E9HiUtcpZc2H2JFSCo4pBfWfWT5xwA8NZC2NV2DDhgkFQWvBva68gBkxzACPB1IJ
+SdnNy8CW3QdKRLsvEH1HM6sZgP6cN4+gD8wP6bFJ+/pS0Lk/ksxpHzbh1p0JzTfG
+5a8GMHuATVhd4PLU25zOxauRDHjFdRhZNdkL3CioDc5+v4DcMrK09aj/P0Rl1547
+1TNKST4KZitb3C4fVuOoWq/K7d6aBEaebtZ6yRHN39LMx5O/Z/ANViJyslwl3B7X
+b5qIeZAmON8LXcao3JoMvmBWb4bFvQ==
+=v2Ap
+-----END PGP SIGNATURE-----
+
+--Sig_/2ShRTJQp.ZA==wy0kPfgwht--

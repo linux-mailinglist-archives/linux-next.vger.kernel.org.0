@@ -2,123 +2,144 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08CBF5BC414
-	for <lists+linux-next@lfdr.de>; Mon, 19 Sep 2022 10:13:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8CAC5BC4F9
+	for <lists+linux-next@lfdr.de>; Mon, 19 Sep 2022 11:06:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbiISINI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 19 Sep 2022 04:13:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56274 "EHLO
+        id S229768AbiISJGj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 19 Sep 2022 05:06:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229852AbiISINH (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 19 Sep 2022 04:13:07 -0400
-Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 047ED1F611
-        for <linux-next@vger.kernel.org>; Mon, 19 Sep 2022 01:13:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1663575186; x=1695111186;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=QOSBZSc9dzIuGWpOOaX6YfZf7Xdxte9azBq14tzI/IQ=;
-  b=oG0TPqneZfRVWtzvEwfTQwBRrqC8Y7L4LDWob1S+FmNuCuN+LmLyR0g4
-   Gtsw0mzT+15uDMIyDUumTWIi7eiO+ZF+lrBi9aYeq3aK2dJkAdpl15d1e
-   pDhi3RXOgMvBLS2u5wXMe/72U/k5snEU4bpnjL+seW13G6xKRdudUasbx
-   H1TAFSuUCLdRUvXro16kv1KafVZ1byWy0plDjtcyp6MAIECOgTGRWCzKQ
-   JrhMn0h3oc9kJXZFDkF3KopvBMTlii5TPDbN0SKNB0FzgBq5u+LzDkNT3
-   vRqrusBSe0O0k0mUJ6U8ksOkR76/GVyCpt7KhXHeBMDWacUU0IdYs6k1u
-   w==;
-X-IronPort-AV: E=Sophos;i="5.93,327,1654531200"; 
-   d="scan'208";a="210081627"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 19 Sep 2022 16:13:05 +0800
-IronPort-SDR: Gzh0uZ5MCkszwOR5fwOPJBjCmS32Z53jMdo27k3CjyP9/+OvZC88jEDkFibLXCRc6pjpNl/wtq
- 034weyEWKAhVvBGtB8MLEiW4SaMQCxAqKtXa4jjHb/97WVQneAT9jJw4b3vDmvkyzG28GDT/rS
- O6yXvbCeMMxnW2TsAQHwhl7JhobUcuhqkWO1kGVp46lFOjzq8qcLxn1eIA6hxvO+QS7pPA1SSd
- +cXPGLSUOQqROgrVuQ0OMDBXsujkLOK61XidcD2+Wlcis8OudzQp5UOQ4ZDsrQlprw/9gIaL6D
- 87w7wMOVtf07PKush7lV8lAu
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 19 Sep 2022 00:27:43 -0700
-IronPort-SDR: VEvUFetF8sM/9JGnP9NITnIfBIpt1OmxzqmBjWEu/rwgIupqro8408a6JZtaFdkN2JEEa3Atg0
- MElPN6SXhxrLGyXbII6YSnGgoRH8LyjM06ogry63MtjC87O9oBuuCMK8gHrywjFBqae1iaDPYi
- 0OWoqBbbfem+ZiddRMtlDAmHGTTraKEFFwdUeHU+KQb4FLnCfiRWwTocv5p3LcuixphRgh6O/o
- LO5fcby4TnAY1FOl4Fa71CwUPNM5KsmmySIyWATEQJ6/2Z/W8RH4mn6fuqiFX/LXrPFYN4ZEwm
- llU=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 19 Sep 2022 01:13:06 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4MWHFL2HGxz1RvTr
-        for <linux-next@vger.kernel.org>; Mon, 19 Sep 2022 01:01:42 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:content-language:references:to
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1663574502; x=1666166503; bh=QOSBZSc9dzIuGWpOOaX6YfZf7Xdxte9azBq
-        14tzI/IQ=; b=N/oqFP8VCXIWVhCpfik9OSZiScAQ4M+81VAmFu77/3LgC95P9Ln
-        KyPoIaSUS5qQISB+hfvD7YC2QVLdPZnYKRHH/MlzEwAKojwKo7PPqhga3gGwKGg5
-        MAbgEP1wzQkS9MZoLfL+zpBiJRVGrdNurOM8OPme4Y3VHA2jhKGNpmGvxmSftOfM
-        bT01e+Fm8+jFnX/OscAetT5TfPFrMSlSNono93kQnHudqZsbukFM8thjnbtRIN7Z
-        ODOC6d8mLHCtYiC5oW4ovY/2TiBYT+M8Y0mq62gY1OU2NsIglQ8VDEog0K3IOw3k
-        RADZ2Jtfa/XV+dS1TTdPcOhjR7WhlWDOx+g==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id ofHCRtzIuFfc for <linux-next@vger.kernel.org>;
-        Mon, 19 Sep 2022 01:01:42 -0700 (PDT)
-Received: from [10.225.163.80] (unknown [10.225.163.80])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4MWHFJ4Rp8z1RvLy;
-        Mon, 19 Sep 2022 01:01:40 -0700 (PDT)
-Message-ID: <e58c02dc-1560-84db-d9cc-a16f47426b7d@opensource.wdc.com>
-Date:   Mon, 19 Sep 2022 17:01:38 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: linux-next: build warning after merge of the libata tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        with ESMTP id S229762AbiISJGi (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 19 Sep 2022 05:06:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 312337679;
+        Mon, 19 Sep 2022 02:06:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E201AB80B17;
+        Mon, 19 Sep 2022 09:06:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80776C433C1;
+        Mon, 19 Sep 2022 09:06:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663578394;
+        bh=dTBQ7T1QioQLJ8cwIP5KWmbjaen9neD2VS2nvDARryw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=qXXZoYJcoNLSIxyFydSIf4PXN9j8G46Eg4wvruqpVOjsvxFW60YcyiCiTX1zpGNiN
+         GU0FrXt4rB3ykDU3/oahFgG/KojGqNFEABHfscNst7lsyZFsXGHMMzj65KAcWcdzXD
+         DDh+glhfp6wiZjbDEyZ9mxRgo2D+OQnJo2uD5QZQTsuhxpCf+DWfKeFK1lZ96AlBFs
+         rKQ3mRE0Mo+YFA76CAWJsGQheFEiuL3PR8RIGvrbyWGy8JtKXauKfUaPDmMmTmUiSu
+         L+usZiXLhQZU511Qr8HOEJ7bLp8PRK0ku3/ZlWfR8lxS4mUMT1fshSxrtQzF7S0db0
+         lQMmR2sXUj9aA==
+Received: from 185-176-101-241.host.sccbroadband.ie ([185.176.101.241] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oaChb-00B1Vp-Nh;
+        Mon, 19 Sep 2022 10:06:32 +0100
+Date:   Mon, 19 Sep 2022 10:04:30 +0100
+Message-ID: <87fsgnlopt.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Christoffer Dall <cdall@cs.columbia.edu>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220919124034.58670a27@canb.auug.org.au>
-Content-Language: en-US
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20220919124034.58670a27@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>
+Subject: Re: linux-next: manual merge of the kvm-arm tree with the arm64 tree
+In-Reply-To: <20220919140531.3741d146@canb.auug.org.au>
+References: <20220919140531.3741d146@canb.auug.org.au>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.176.101.241
+X-SA-Exim-Rcpt-To: catalin.marinas@arm.com, will@kernel.org, sfr@canb.auug.org.au, cdall@cs.columbia.edu, linux-kernel@vger.kernel.org, linux-next@vger.kernel.org, broonie@kernel.org, oliver.upton@linux.dev
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 9/19/22 11:40, Stephen Rothwell wrote:
+Hi Stephen,
+
+Thanks for the heads up.
+
+On Mon, 19 Sep 2022 05:05:31 +0100,
+Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> 
 > Hi all,
 > 
-> After merging the libata tree, today's linux-next build (arm
-> multi_v7_defconfig) produced this warning:
+> Today's linux-next merge of the kvm-arm tree got a conflict in:
 > 
-> drivers/ata/ahci_st.c: In function 'st_ahci_probe':
-> drivers/ata/ahci_st.c:147:24: warning: unused variable 'dev' [-Wunused-variable]
->   147 |         struct device *dev = &pdev->dev;
->       |                        ^~~
+>   arch/arm64/kvm/sys_regs.c
 > 
-> Introduced by commit
+> between commit:
 > 
->   3f74cd046fbe ("ata: libahci_platform: Parse ports-implemented property in resources getter")
+>   55adc08d7e64 ("arm64/sysreg: Add _EL1 into ID_AA64PFR0_EL1 definition names")
 > 
+> from the arm64 tree and commit:
+> 
+>   cdd5036d048c ("KVM: arm64: Drop raz parameter from read_id_reg()")
+> 
+> from the kvm-arm tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
+> 
+> diff --cc arch/arm64/kvm/sys_regs.c
+> index 2ef1121ab844,9569772cf09a..000000000000
+> --- a/arch/arm64/kvm/sys_regs.c
+> +++ b/arch/arm64/kvm/sys_regs.c
+> @@@ -1208,9 -1210,9 +1210,9 @@@ static int set_id_aa64pfr0_el1(struct k
+>   		return -EINVAL;
+>   
+>   	/* We can only differ with CSV[23], and anything else is an error */
+> - 	val ^= read_id_reg(vcpu, rd, false);
+> + 	val ^= read_id_reg(vcpu, rd);
+>  -	val &= ~((0xFUL << ID_AA64PFR0_CSV2_SHIFT) |
+>  -		 (0xFUL << ID_AA64PFR0_CSV3_SHIFT));
+>  +	val &= ~((0xFUL << ID_AA64PFR0_EL1_CSV2_SHIFT) |
+>  +		 (0xFUL << ID_AA64PFR0_EL1_CSV3_SHIFT));
+>   	if (val)
+>   		return -EINVAL;
 
-Serge,
+Catalin, Will: in order to avoid further conflicts, I've taken the
+liberty to merge the arm64/for-next/sysreg branch into kvmarm/next.
+Let me know if that's a problem.
 
-Can you send an incremental fix for this ? If not possible, I will do it.
+Also, I've resolved the conflict in a slightly different way. Not that
+the above was wrong in any way, but we might as well fix it in a more
+idiomatic way:
+
+ 	/* We can only differ with CSV[23], and anything else is an error */
+ 	val ^= read_id_reg(vcpu, rd);
+-	val &= ~((0xFUL << ID_AA64PFR0_CSV2_SHIFT) |
+-		 (0xFUL << ID_AA64PFR0_CSV3_SHIFT));
++	val &= ~(ARM64_FEATURE_MASK(ID_AA64PFR0_EL1_CSV2) |
++		 ARM64_FEATURE_MASK(ID_AA64PFR0_EL1_CSV3));
+ 	if (val)
+ 		return -EINVAL;
+
+Thanks,
+
+	M.
 
 -- 
-Damien Le Moal
-Western Digital Research
-
+Without deviation from the norm, progress is not possible.

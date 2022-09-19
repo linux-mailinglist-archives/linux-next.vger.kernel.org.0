@@ -2,82 +2,67 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1985D5BC354
-	for <lists+linux-next@lfdr.de>; Mon, 19 Sep 2022 09:05:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A1EC5BC3CA
+	for <lists+linux-next@lfdr.de>; Mon, 19 Sep 2022 09:58:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229808AbiISHFb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 19 Sep 2022 03:05:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45840 "EHLO
+        id S229959AbiISH6R (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 19 Sep 2022 03:58:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229898AbiISHF3 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 19 Sep 2022 03:05:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99E2E1DA45
-        for <linux-next@vger.kernel.org>; Mon, 19 Sep 2022 00:05:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663571127;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dzu0/4LiBGuBQ2PgM+YBVwCYyhPRMflqMBg4YukJ2vk=;
-        b=Id5C/3mtsuOMghRDNmft97D/ccx99q5GTj6kGYiqyXhru5Skyevv+s13ifMkm3g3FYUFAu
-        ywhlRBChna9DCpKbGrZlI/iM38gP5Kovyvza0wJf1jgcNX23jfLVCPJTmt4WeEoEQdc7nl
-        DxxWu9X5pBKDuhlw5vTeQvh91nmyleg=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-527-Ju_VFSR2OTGCm9fN1c-pHw-1; Mon, 19 Sep 2022 03:05:26 -0400
-X-MC-Unique: Ju_VFSR2OTGCm9fN1c-pHw-1
-Received: by mail-ed1-f69.google.com with SMTP id w20-20020a05640234d400b00450f24c8ca6so19568717edc.13
-        for <linux-next@vger.kernel.org>; Mon, 19 Sep 2022 00:05:26 -0700 (PDT)
+        with ESMTP id S229898AbiISH6Q (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 19 Sep 2022 03:58:16 -0400
+Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 367171EEF8;
+        Mon, 19 Sep 2022 00:58:15 -0700 (PDT)
+Received: by mail-qv1-f52.google.com with SMTP id l14so12858596qvq.8;
+        Mon, 19 Sep 2022 00:58:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=dzu0/4LiBGuBQ2PgM+YBVwCYyhPRMflqMBg4YukJ2vk=;
-        b=0Y9Fft8gqGVvf1EEkp0mx8vkAN6LCVIrqNl63Z86Ac2pLHfQleIvN03ER3q7hKjGN1
-         3ppsMLGTvcrkzk6jPFr557rGHORa60lD/EpS/vuVwHq0FNWjS4gWsEOO5mBjxXMYSeN0
-         wuAt5BFy9O+KWu4El5OIeE+lksuYEmg6xoKaYITtLkM5XAG4mAAe2rsn/PB+aoo34eFR
-         dzg3Hr+jo6o4mlhOtsiA6lfJWeOSejQIpUWB/XdR5DwaCl0FTM54rcjxNzA7B5rGnLKX
-         EmYgBilbmSVLX7sNgYsPfCzC+pb/fWfqhh51snnlPhOdNOazbTVAK4ge/G9tTLQHnQ0m
-         EKuQ==
-X-Gm-Message-State: ACrzQf1Ljl14j8BsaSFwHiQ3TvBQCpzt3oLBXso8/CPme/iMXwgIuIG7
-        Qco9rcG7eZBJXI1Seyxvjj447+dDefM9uuUQiz7/B+jkofQBZ1sKxSKaJai31TywKa6RH4ueaaX
-        szwKT9uLoR7IBMD0wS4zaBA==
-X-Received: by 2002:a05:6402:5246:b0:452:76a7:934d with SMTP id t6-20020a056402524600b0045276a7934dmr14503029edd.137.1663571125197;
-        Mon, 19 Sep 2022 00:05:25 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7MbiKpiMPN+cCV5ZGAhQ5AwR8wGdOwAUwtxLXCykjgsEwsBElxbTJ7RfL3LOFgLz+PouFmpA==
-X-Received: by 2002:a05:6402:5246:b0:452:76a7:934d with SMTP id t6-20020a056402524600b0045276a7934dmr14503015edd.137.1663571124990;
-        Mon, 19 Sep 2022 00:05:24 -0700 (PDT)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id t11-20020aa7d4cb000000b0044e8774914esm20115482edr.35.2022.09.19.00.05.24
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=KKxwW22QapRcZpKvTVaesc2qXSXnP+OfFDAXgdUxUEQ=;
+        b=Q+jR8uW5jtw7QssRCfQjrVvgHZc9j7f75pvbmUSspp0aqU4bpNQ4eq6Y8SxicoIAhV
+         Jp+9sX19PPId0PaNQvYfW66HK97w2po7E5xdRiBTmS51kCDppXo72qqbI30DMlDvrPBz
+         zx5g4Z/zQ3CU4rPCWHrnvgE/QqKLY/64kA8EsiDtPPG6p5hymdM/9P68v3okzncoKYoI
+         +F1+Gsr7e68c3nHqpuCPBnkj4ANU4yokGlkN21o4+eSKduWVIH58HVwPIpZwktG4/stE
+         hTIPT8t/s8GqGY0V9dQTiyyLYfEgDQ/vLqYSJa8furmNIW/k+j7j/fdgb2S4PBqnHBBi
+         eH/g==
+X-Gm-Message-State: ACrzQf0/HZDCqU82UdDDeiErPC7fay+EO0dqO/gTGMrmFxW2Fls9E/4D
+        yl3R5KlRcYx8AM2T7kI1ny1OFMsZvcSQBQ==
+X-Google-Smtp-Source: AMsMyM6Dm/E7NPv4Ku1nXM/6vdKuP3hxC5P+9txaY2TG7AVa+dB1ETFEkqE2PXhGgq9bWNV7K3jGfQ==
+X-Received: by 2002:a05:6214:2a89:b0:4ac:8360:6c65 with SMTP id jr9-20020a0562142a8900b004ac83606c65mr13159334qvb.110.1663574293776;
+        Mon, 19 Sep 2022 00:58:13 -0700 (PDT)
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
+        by smtp.gmail.com with ESMTPSA id u18-20020a05622a011200b0035ba4e53500sm10409139qtw.56.2022.09.19.00.58.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Sep 2022 00:05:24 -0700 (PDT)
-Message-ID: <cb5df3a5-016d-60bf-5a77-1261e67fe24a@redhat.com>
-Date:   Mon, 19 Sep 2022 08:05:23 +0100
+        Mon, 19 Sep 2022 00:58:13 -0700 (PDT)
+Received: by mail-yb1-f172.google.com with SMTP id 130so41330301ybw.8;
+        Mon, 19 Sep 2022 00:58:13 -0700 (PDT)
+X-Received: by 2002:a25:8e84:0:b0:696:466c:baa with SMTP id
+ q4-20020a258e84000000b00696466c0baamr12533972ybl.604.1663574293041; Mon, 19
+ Sep 2022 00:58:13 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: linux-next: manual merge of the drivers-x86 tree with the pm tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Mark Gross <markgross@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Arvid Norlander <lkml@vorpal.se>,
+References: <20220919105839.496f1b72@canb.auug.org.au>
+In-Reply-To: <20220919105839.496f1b72@canb.auug.org.au>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 19 Sep 2022 09:58:01 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVQmG6hjyw0g8L2AAuUSoQ9xH=C9zrV=QUoVWp_HM62BQ@mail.gmail.com>
+Message-ID: <CAMuHMdVQmG6hjyw0g8L2AAuUSoQ9xH=C9zrV=QUoVWp_HM62BQ@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the drm tree with Linus' tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Dave Airlie <airlied@redhat.com>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Hamza Mahfooz <hamza.mahfooz@amd.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-References: <20220919142017.77555449@canb.auug.org.au>
-Content-Language: en-US
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220919142017.77555449@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Nathan Chancellor <nathan@kernel.org>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -86,40 +71,119 @@ X-Mailing-List: linux-next@vger.kernel.org
 
 Hi Stephen,
 
-On 9/19/22 05:20, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the drivers-x86 tree got a conflict in:
-> 
->   drivers/acpi/acpi_video.c
-> 
+On Mon, Sep 19, 2022 at 3:07 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> Today's linux-next merge of the drm tree got a conflict in:
+>
+>   drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c
+>
 > between commit:
-> 
->   574160b8548d ("ACPI: video: Add Toshiba Satellite/Portege Z830 quirk")
-> 
-> from the pm tree and commit:
-> 
->   c5b94f5b7819 ("ACPI: video: Change disable_backlight_sysfs_if quirks to acpi_backlight=native")
-> 
-> from the drivers-x86 tree.
-> 
-> I fixed it up (the latter change seems to incoporate the former)
+>
+>   41012d715d5d ("drm/amd/display: Mark dml30's UseMinimumDCFCLK() as noinline for stack usage")
+>
+> from Linus' tree and commit:
+>
+>   a0f7e7f759cf ("drm/amd/display: fix i386 frame size warning")
+>
+> from the drm tree.
+>
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>
+> --
+> Cheers,
+> Stephen Rothwell
+>
+> diff --cc drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c
+> index 1cb858dd6ea0,b7fa003ffe06..000000000000
+> --- a/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c
+> @@@ -6610,66 -6497,11 +6497,11 @@@ static double CalculateUrgentLatency
+>         return ret;
+>   }
+>
+>  -static void UseMinimumDCFCLK(
+>  +static noinline_for_stack void UseMinimumDCFCLK(
 
-Correct, the c5b94f5b7819 commit supersedes the 574160b8548d one.
+While this looks like the correct merge resolution, it does mean that
+both stack size mitigations are now applied, and probably one of them
+can be dropped?
 
-Thanks you.
+>                 struct display_mode_lib *mode_lib,
+> -               int MaxInterDCNTileRepeaters,
+> +               struct vba_vars_st *v,
+>                 int MaxPrefetchMode,
+> -               double FinalDRAMClockChangeLatency,
+> -               double SREnterPlusExitTime,
+> -               int ReturnBusWidth,
+> -               int RoundTripPingLatencyCycles,
+> -               int ReorderingBytes,
+> -               int PixelChunkSizeInKByte,
+> -               int MetaChunkSize,
+> -               bool GPUVMEnable,
+> -               int GPUVMMaxPageTableLevels,
+> -               bool HostVMEnable,
+> -               int NumberOfActivePlanes,
+> -               double HostVMMinPageSize,
+> -               int HostVMMaxNonCachedPageTableLevels,
+> -               bool DynamicMetadataVMEnabled,
+> -               enum immediate_flip_requirement ImmediateFlipRequirement,
+> -               bool ProgressiveToInterlaceUnitInOPP,
+> -               double MaxAveragePercentOfIdealSDPPortBWDisplayCanUseInNormalSystemOperation,
+> -               double PercentOfIdealDRAMFabricAndSDPPortBWReceivedAfterUrgLatencyPixelMixedWithVMData,
+> -               double PercentOfIdealDRAMFabricAndSDPPortBWReceivedAfterUrgLatencyVMDataOnly,
+> -               double PercentOfIdealDRAMFabricAndSDPPortBWReceivedAfterUrgLatencyPixelDataOnly,
+> -               int VTotal[],
+> -               int VActive[],
+> -               int DynamicMetadataTransmittedBytes[],
+> -               int DynamicMetadataLinesBeforeActiveRequired[],
+> -               bool Interlace[],
+> -               double RequiredDPPCLK[][2][DC__NUM_DPP__MAX],
+> -               double RequiredDISPCLK[][2],
+> -               double UrgLatency[],
+> -               unsigned int NoOfDPP[][2][DC__NUM_DPP__MAX],
+> -               double ProjectedDCFCLKDeepSleep[][2],
+> -               double MaximumVStartup[][2][DC__NUM_DPP__MAX],
+> -               double TotalVActivePixelBandwidth[][2],
+> -               double TotalVActiveCursorBandwidth[][2],
+> -               double TotalMetaRowBandwidth[][2],
+> -               double TotalDPTERowBandwidth[][2],
+> -               unsigned int TotalNumberOfActiveDPP[][2],
+> -               unsigned int TotalNumberOfDCCActiveDPP[][2],
+> -               int dpte_group_bytes[],
+> -               double PrefetchLinesY[][2][DC__NUM_DPP__MAX],
+> -               double PrefetchLinesC[][2][DC__NUM_DPP__MAX],
+> -               unsigned int swath_width_luma_ub_all_states[][2][DC__NUM_DPP__MAX],
+> -               unsigned int swath_width_chroma_ub_all_states[][2][DC__NUM_DPP__MAX],
+> -               int BytePerPixelY[],
+> -               int BytePerPixelC[],
+> -               int HTotal[],
+> -               double PixelClock[],
+> -               double PDEAndMetaPTEBytesPerFrame[][2][DC__NUM_DPP__MAX],
+> -               double DPTEBytesPerRow[][2][DC__NUM_DPP__MAX],
+> -               double MetaRowBytes[][2][DC__NUM_DPP__MAX],
+> -               bool DynamicMetadataEnable[],
+> -               double VActivePixelBandwidth[][2][DC__NUM_DPP__MAX],
+> -               double VActiveCursorBandwidth[][2][DC__NUM_DPP__MAX],
+> -               double ReadBandwidthLuma[],
+> -               double ReadBandwidthChroma[],
+> -               double DCFCLKPerState[],
+> -               double DCFCLKState[][2])
+> +               int ReorderingBytes)
+>   {
+>         double   NormalEfficiency = 0;
+>         double   PTEEfficiency = 0;
 
-Regards,
+Gr{oetje,eeting}s,
 
-Hans
+                        Geert
 
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-
-> and
-> can carry the fix as necessary. This is now fixed as far as linux-next
-> is concerned, but any non trivial conflicts should be mentioned to your
-> upstream maintainer when your tree is submitted for merging.  You may
-> also want to consider cooperating with the maintainer of the conflicting
-> tree to minimise any particularly complex conflicts.
-> 
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

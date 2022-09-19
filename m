@@ -2,61 +2,63 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9904E5BCC14
-	for <lists+linux-next@lfdr.de>; Mon, 19 Sep 2022 14:44:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A049A5BCCC2
+	for <lists+linux-next@lfdr.de>; Mon, 19 Sep 2022 15:17:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229927AbiISMoL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 19 Sep 2022 08:44:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52392 "EHLO
+        id S230257AbiISNRQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 19 Sep 2022 09:17:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230285AbiISMnt (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 19 Sep 2022 08:43:49 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D2E2F03B;
-        Mon, 19 Sep 2022 05:43:43 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id y5so3773522wrh.3;
-        Mon, 19 Sep 2022 05:43:42 -0700 (PDT)
+        with ESMTP id S229733AbiISNRP (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 19 Sep 2022 09:17:15 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D55C927CCF;
+        Mon, 19 Sep 2022 06:17:13 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id y5so3926244wrh.3;
+        Mon, 19 Sep 2022 06:17:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :from:to:cc:subject:date;
-        bh=oXWgWaZsc822Q0ES3rj4eUwa/2EGT0461kz7ecX1tRE=;
-        b=Edus4t6gzW0NKtAnKX9Z9Fbg0McLpg4JEkXwQBvm0W5Mom/ZtGI3S//hvLLeJhk6WI
-         HJn+walUkx+0q2hxuGprZJeYrrCMd+1L2bR+sgOS+3SeY5bEH930rlP74ILCxlPSoNsy
-         TNxQxJxfXDaoWXTzS/jBtjBZe1kKUmX+OSdJ97vf4Hl1PAsQkuMONfhRWsKVbHDl62qO
-         wXS4PgJKDp5VyJWIRMHZASZuNLgOGPcs8cw2AWrKGjrwFM3YmDmlZh0XMD4zCfCE4EXc
-         H7RLDI9dHeABgkoAsDo31ARgRkb4Eh5W/nEDlRCf1bnt1mVBmwz9r1MeYyzGOT2xurKy
-         V8iw==
+        bh=JQnXUuOJXq/53Yv1BXw4BU5ty1+Q8lF8nWyvKAwQnVk=;
+        b=djAwBlz4IYY0rUhhPbPSWE5HYq9S/iI4r09rzmHuXTKMoHBZMEbHVraoH+31PHYC8W
+         PaI/qr4jI1tuIYiX1rsMt6zZdteqBWUbeY3RFJyCDsmRoojctjj6aWgWtG+eU3zNfJ/j
+         4HtGVnaYijO5BQSDfHs5bRDpBwD0vKSK36ElNPTndJE7sRjJS6t+SHMySFr2/HV+nL2H
+         h8EG24wZj0tfl/hWpfNNnglczOVpb9DH/iPHBqOvQ8fV5rrg43c6K5lNUD4mentn42qM
+         D9Zue07KaQgYuofW/9kXCvBGBqaeyX+/X+lwPzyJnQgoFyb2UvttuEAlWFZ8ekNqIUD3
+         k3dg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=oXWgWaZsc822Q0ES3rj4eUwa/2EGT0461kz7ecX1tRE=;
-        b=NLChga3AzGOC0vd3a0L+RQGyAY+V/LItSmmerUegqcwd7CoEcgbXm4VcnUFEO6TXYb
-         w/UMAag3HZRzR5Qgookt65VRIFJgG5ZKBaJ9uQHnygP9SaeG2ofIqXoFu1lmMlyijdEW
-         IKmjONrq/4MiPTw3AMliQlS+Rxgi/h4gIsvrN1v8MLXkf7lz4xe8bhkIdzuk+KUkd2RT
-         5ShvdIjDSv0SceHmUyO7f7ZzxjvyUQqt+otMYrOuoIiyEaxNJEX6V/HrBJz8AbFHt11a
-         zS12aROZMlnd3C8/nC1W5HUd2UyLQVJIOtmETfNEOz7eT/P9GmGoXNgGBUt8gsTBZsnE
-         P28g==
-X-Gm-Message-State: ACrzQf0BA1GwbPvorsf2bBm9G1hriwco3lXlE9vq4kfTo5yNhhAvUwVp
-        d20Z9sZ5nLOZh5T8BYmCpFQ=
-X-Google-Smtp-Source: AMsMyM6dm9Y7MpEZZDT4IY9gaQPS/o6y+5OjHwyWUooII0Hg5HjhF6d0L8efsR2qgYW1/lOw1wuytw==
-X-Received: by 2002:adf:d1cc:0:b0:22a:47d5:8a22 with SMTP id b12-20020adfd1cc000000b0022a47d58a22mr10490469wrd.481.1663591421435;
-        Mon, 19 Sep 2022 05:43:41 -0700 (PDT)
+        bh=JQnXUuOJXq/53Yv1BXw4BU5ty1+Q8lF8nWyvKAwQnVk=;
+        b=T31GtAK8gUSq9nHSGxbk1yyoPQMYpF3u8cmZEk1KypGpkCGXi3DkALr/wKG590ILEP
+         LFb8HUGPl2I3F75ONSQaaaBKRpPEHfTFk6t/Q9wYrQy0l16eOGJykkAhJPrX5cj7Z9y8
+         zUym8w5fZRS67dppZ7T/WauYE770coayD/sVeUWKvAxIFz8b8wegxAym40kXK8fLt2CA
+         qfAYnV6DPurp8qw+AhTaWxlC7AfvuNLAIHd38+7rg/Q5VlUPPvXQ04uriPLqEs/SGr2W
+         9PkoLtKRANE9Emuuz+J4ZRzgwg9+9gCV1gyDqCiVZBq7iaJ2keK2B49JBU4ot0Iavbp3
+         ILeA==
+X-Gm-Message-State: ACrzQf0tx+BwMndwZBDe+ce8ucEf3at3Qs11HrL7RU2PoDDH3rpaQitm
+        lmftxbgHART1ZdEMcP4AO2c=
+X-Google-Smtp-Source: AMsMyM6At6wZZKE3giXauF/PxG0cXvEkzICAJxueaR/qWjhvyI9oPNaCyMGvp6xsR2W7eU60d1x3ug==
+X-Received: by 2002:a5d:6c6f:0:b0:22a:7778:6ea2 with SMTP id r15-20020a5d6c6f000000b0022a77786ea2mr11104709wrz.15.1663593431937;
+        Mon, 19 Sep 2022 06:17:11 -0700 (PDT)
 Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
-        by smtp.gmail.com with ESMTPSA id c11-20020adffb0b000000b00228d52b935asm13905566wrr.71.2022.09.19.05.43.40
+        by smtp.gmail.com with ESMTPSA id p5-20020a05600c358500b003a6125562e1sm14346610wmq.46.2022.09.19.06.17.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Sep 2022 05:43:40 -0700 (PDT)
-Date:   Mon, 19 Sep 2022 13:43:38 +0100
+        Mon, 19 Sep 2022 06:17:11 -0700 (PDT)
+Date:   Mon, 19 Sep 2022 14:17:09 +0100
 From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org
-Subject: build failure of next-20220919 due to c0357a73fa4a ("arm64/sysreg:
- Align field names in ID_AA64DFR0_EL1 with architecture")
-Message-ID: <Yyhj+gqfS6mdRnGv@debian>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Cc:     Patrice Chotard <patrice.chotard@foss.st.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-arm-kernel@lists.infradead.org, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+Subject: build failure of next-20220919 due to 3f74cd046fbe ("ata:
+ libahci_platform: Parse ports-implemented property in resources getter")
+Message-ID: <Yyhr1VW3Kn30E/Jv@debian>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -72,27 +74,16 @@ X-Mailing-List: linux-next@vger.kernel.org
 
 Hi All,
 
-The builds of arm64 allmodconfig have failed to build next-20220919
+The builds of arm allmodconfig have failed to build next-20220919
 with the error:
 
-drivers/perf/arm_spe_pmu.c: In function 'arm_spe_pmsevfr_res0':
-drivers/perf/arm_spe_pmu.c:679:14: error: 'ID_AA64DFR0_PMSVER_8_2' undeclared (first use in this function); did you mean 'ID_AA64DFR0_EL1_PMSVer_IMP'?
-  679 |         case ID_AA64DFR0_PMSVER_8_2:
-      |              ^~~~~~~~~~~~~~~~~~~~~~
-      |              ID_AA64DFR0_EL1_PMSVer_IMP
-drivers/perf/arm_spe_pmu.c:679:14: note: each undeclared identifier is reported only once for each function it appears in
-drivers/perf/arm_spe_pmu.c:681:14: error: 'ID_AA64DFR0_PMSVER_8_3' undeclared (first use in this function); did you mean 'ID_AA64DFR0_EL1_PMSVer_IMP'?
-  681 |         case ID_AA64DFR0_PMSVER_8_3:
-      |              ^~~~~~~~~~~~~~~~~~~~~~
-      |              ID_AA64DFR0_EL1_PMSVer_IMP
-drivers/perf/arm_spe_pmu.c: In function '__arm_spe_pmu_dev_probe':
-drivers/perf/arm_spe_pmu.c:963:52: error: 'ID_AA64DFR0_PMSVER_SHIFT' undeclared (first use in this function); did you mean 'ID_AA64DFR0_EL1_PMSVer_SHIFT'?
-  963 |                                                    ID_AA64DFR0_PMSVER_SHIFT);
-      |                                                    ^~~~~~~~~~~~~~~~~~~~~~~~
-      |                                                    ID_AA64DFR0_EL1_PMSVer_SHIFT
+drivers/ata/ahci_st.c: In function 'st_ahci_probe':
+drivers/ata/ahci_st.c:147:24: error: unused variable 'dev' [-Werror=unused-variable]
+  147 |         struct device *dev = &pdev->dev;
+      |                        ^~~
 
 
-git bisect pointed to c0357a73fa4a ("arm64/sysreg: Align field names in ID_AA64DFR0_EL1 with architecture").
+git bisect pointed to 3f74cd046fbe ("ata: libahci_platform: Parse ports-implemented property in resources getter")
 
 I will be happy to test any patch or provide any extra log if needed.
 
@@ -100,3 +91,4 @@ I will be happy to test any patch or provide any extra log if needed.
 -- 
 Regards
 Sudip
+

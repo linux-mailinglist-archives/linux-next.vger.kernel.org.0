@@ -2,67 +2,73 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78A035BE0C9
-	for <lists+linux-next@lfdr.de>; Tue, 20 Sep 2022 10:53:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9782B5BE4E4
+	for <lists+linux-next@lfdr.de>; Tue, 20 Sep 2022 13:47:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230196AbiITIxw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 20 Sep 2022 04:53:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45554 "EHLO
+        id S229779AbiITLr4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 20 Sep 2022 07:47:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231348AbiITIxm (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 20 Sep 2022 04:53:42 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E75462AA4
-        for <linux-next@vger.kernel.org>; Tue, 20 Sep 2022 01:53:41 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id o70-20020a17090a0a4c00b00202f898fa86so1801375pjo.2
-        for <linux-next@vger.kernel.org>; Tue, 20 Sep 2022 01:53:41 -0700 (PDT)
+        with ESMTP id S229609AbiITLrz (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 20 Sep 2022 07:47:55 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD93A167E3;
+        Tue, 20 Sep 2022 04:47:53 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id n35-20020a05600c502300b003b4924c6868so739236wmr.1;
+        Tue, 20 Sep 2022 04:47:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date;
-        bh=r1v7ElTstuO/70pAkzC4AXanYX81zUdE4f+lG0SnU2Y=;
-        b=R7LluskfF/eJcKQ9yjpFPllO5Oayn9emy9nsSrZ8DpWugtWFR7PGAmmI0vlNG3exb/
-         xiVlBscFxvTlQpek+ATMX+t6KZIWNhbZhnYwvPgfvK16FFccV+jHoXAUx0PLABmFdEwj
-         PRDi1Mp4IZ6oMSn8MyWoAVhBSUGYmmUI4swMuOqIoNQolLqTi+9aLsm/eOHIewaTVJuc
-         S0o7WxSSG5SJPrkvzykohd2d4/kzusa3R3i97RA+WCX9V82+7M5Zfct2nORKC2uRlfju
-         KxFjRuovuoEKwcpAQsJv+3Iu44fpvk0myKF87VDN7MaX/EX4vXZI8udUKMWPPRTrhLka
-         jJ2w==
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date;
+        bh=Uzqu4x3ReJl2swGfEJj67Pd2unDJ3Dv2X7PfUeAMFlU=;
+        b=CmXkA8qIbaFNouX5UDIP2EtzvEpNmgRhb/8rznaJhGMNUuwBOFHghs3gJQS4uomnZr
+         YDcqkjuEvJ4vCka5cONnCHVRV6iQInH+8o7Zq6VeC/3C8HUmiQ31Tc1D7RqHoZMY0+gl
+         DpJVgqTY9VSsYXVMFHySjCx4npqW7qGsRD7k6vyHOfIxIklfFsHo9utUqClMbHOH7nzv
+         xKq4OLNK7WWtv23lHrNAz+KZYWDVjodkcEtoVo4NkPp0a/0giowcL+JsMfRSnh9PfBq2
+         GPBjK8DY/TfnAMRV+kChdRhMBeamsBENpwI9RfDCDpHENBnE3x1TJgyEn6gEeFu9Vrxg
+         wbYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=r1v7ElTstuO/70pAkzC4AXanYX81zUdE4f+lG0SnU2Y=;
-        b=h/k10kZeaKASCRr15sso86tHiVl7nK9E4QNW8gjFE+Hi7g06REcHZcc0lan+JNCVs+
-         ejOWxH/q9REaPQ4SdlaOkl+I9kmJafAlHgXNBaJDluZbS4KDBFJ1EhVjHhUyisg/y7Rf
-         tE8G88EtSI/xJUJkhJYeoKwcNRN5AwYq6PyJHlGXFtxLMFFSutAaOxHFGFpMP/t0RjeD
-         QHpXg3Eva/NejDlrW3iTq6Ewc67jjB9GR+XfuKz0aSKWmO7qceWUe1vOIQRDCBkNpXBa
-         Df0rN2bu/9ReJZBtJi4AHIE7g13u3alOTOCHa3wCF69CjWo5dpW2bDIz4caPiO4ZQZk+
-         trGQ==
-X-Gm-Message-State: ACrzQf0JzwgP/afpET9QFU0JcWobtSSyTuTbJi1KnWdjHTzRnDHvFKjP
-        2/3JN1+HH4AWbTFOZT/ejs3MGxYemUMKih1pb/U=
-X-Google-Smtp-Source: AMsMyM6f/XCX4nbzd1OsxsgX572WSW4yTvh1sfrNBgeMdVMz3Ij5pH9dF0fZe6YaeImBz9hN1hLTVQ==
-X-Received: by 2002:a17:902:f684:b0:178:84d:ddc5 with SMTP id l4-20020a170902f68400b00178084dddc5mr3945747plg.62.1663664020367;
-        Tue, 20 Sep 2022 01:53:40 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id m10-20020a654c8a000000b004390b40b4a1sm1037369pgt.23.2022.09.20.01.53.39
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=Uzqu4x3ReJl2swGfEJj67Pd2unDJ3Dv2X7PfUeAMFlU=;
+        b=b0t0o0tnomuG0WVnkPaW8/gsv2uImBvvGHdop01M56YS+66H9VL0DidCooeadI5CL3
+         54gFqZQaCfylODjIJ3RfWfHN2eoLgs34+yvLSwRm+rns1d/Rxfh4tHut51cotIOT+VmP
+         6xf9u4HVOkcY85M8X806RY/IW/Dq7C3UgG+cjV91lNabinKrn7fMJY1KJBIiP3Nw7gIP
+         yL//6okjn/joSNTNCycG1YhkeulPHtQ1q1zjDVdrJf1miGtM8oElfd40YuvLor/PKaIt
+         VI1I7GnUb+2IgaOxSI/8UZfjCi1RDSKIvm83BPLRUnFnxgmBh8S8mKjJZGsxX8I0H8wR
+         VAQg==
+X-Gm-Message-State: ACrzQf3e8Igm5QFbppmKNEZeH3vPrTkeLogQ1lrwh80cOrMEkIaqFf/u
+        JNlqI/AjE9num05p5fAwl756H/IvOz7wqg==
+X-Google-Smtp-Source: AMsMyM4aBYcaHzJkBzdvhpxsTIJL1CmLJ4dHjh82nS5T2kmR/xQCQfB8ki9IGbZoXjIWTpnN0yGzMA==
+X-Received: by 2002:a1c:f009:0:b0:3b4:9398:49c9 with SMTP id a9-20020a1cf009000000b003b4939849c9mr2085385wmb.174.1663674472131;
+        Tue, 20 Sep 2022 04:47:52 -0700 (PDT)
+Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
+        by smtp.gmail.com with ESMTPSA id b20-20020a05600c4e1400b003b33de17577sm2254667wmq.13.2022.09.20.04.47.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 01:53:39 -0700 (PDT)
-Message-ID: <63297f93.650a0220.c608c.182b@mx.google.com>
-Date:   Tue, 20 Sep 2022 01:53:39 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 20 Sep 2022 04:47:51 -0700 (PDT)
+Date:   Tue, 20 Sep 2022 12:47:49 +0100
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>
+Cc:     "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Philip Yang <Philip.Yang@amd.com>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org, linux-next@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev
+Subject: build failure of next-20220920 due to c2b08e7a6d27 ("drm/amdgpu:
+ move entity selection and job init earlier during CS")
+Message-ID: <YymoZR0jHR7seGyU@debian>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v6.0-rc6-212-g9e152597d89ac
-Subject: next/pending-fixes baseline: 166 runs,
- 2 regressions (v6.0-rc6-212-g9e152597d89ac)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,103 +76,26 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes baseline: 166 runs, 2 regressions (v6.0-rc6-212-g9e15259=
-7d89ac)
+Hi All,
 
-Regressions Summary
--------------------
+The builds of arm64 allmodconfig with clang failed to build next-20220920
+with the error:
 
-platform           | arch | lab             | compiler | defconfig         =
-           | regressions
--------------------+------+-----------------+----------+-------------------=
------------+------------
-imx6ul-pico-hobbit | arm  | lab-pengutronix | gcc-10   | multi_v7_defconfig=
-           | 1          =
-
-imx6ul-pico-hobbit | arm  | lab-pengutronix | gcc-10   | multi_v7_defc...MB=
-2_KERNEL=3Dy | 1          =
+drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c:1190:3: error: variable 'r' is uninitialized when used here [-Werror,-Wuninitialized]
+                r |= !amdgpu_ttm_tt_get_user_pages_done(bo->tbo.ttm);
+                ^
+drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c:1171:7: note: initialize the variable 'r' to silence this warning
+        int r;
+             ^
+              = 0
+1 error generated.
 
 
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v6.0-rc6-212-g9e152597d89ac/plan/baseline/
+git bisect pointed to c2b08e7a6d27 ("drm/amdgpu: move entity selection and job init earlier during CS")
 
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v6.0-rc6-212-g9e152597d89ac
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      9e152597d89ac9ca06385594634eddda9b0c2e7e =
+I will be happy to test any patch or provide any extra log if needed.
 
 
-
-Test Regressions
----------------- =
-
-
-
-platform           | arch | lab             | compiler | defconfig         =
-           | regressions
--------------------+------+-----------------+----------+-------------------=
------------+------------
-imx6ul-pico-hobbit | arm  | lab-pengutronix | gcc-10   | multi_v7_defconfig=
-           | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/63294f6cb3882ae0d8355671
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.0-rc6-21=
-2-g9e152597d89ac/arm/multi_v7_defconfig/gcc-10/lab-pengutronix/baseline-imx=
-6ul-pico-hobbit.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.0-rc6-21=
-2-g9e152597d89ac/arm/multi_v7_defconfig/gcc-10/lab-pengutronix/baseline-imx=
-6ul-pico-hobbit.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220805.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/63294f6cb3882ae0d8355=
-672
-        failing since 86 days (last pass: v5.19-rc3-373-gd317111b3b1ae, fir=
-st fail: v5.19-rc3-470-g4fc9c7cb4051) =
-
- =
-
-
-
-platform           | arch | lab             | compiler | defconfig         =
-           | regressions
--------------------+------+-----------------+----------+-------------------=
------------+------------
-imx6ul-pico-hobbit | arm  | lab-pengutronix | gcc-10   | multi_v7_defc...MB=
-2_KERNEL=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/632952c9869b4af315355677
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.0-rc6-21=
-2-g9e152597d89ac/arm/multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab=
--pengutronix/baseline-imx6ul-pico-hobbit.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.0-rc6-21=
-2-g9e152597d89ac/arm/multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab=
--pengutronix/baseline-imx6ul-pico-hobbit.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220805.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/632952c9869b4af315355=
-678
-        failing since 112 days (last pass: v5.16-rc4-356-ga119cd39dcbf, fir=
-st fail: v5.18-11575-gceccc06b624ed) =
-
- =20
+-- 
+Regards
+Sudip

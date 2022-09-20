@@ -2,85 +2,85 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63E4B5BEDC5
-	for <lists+linux-next@lfdr.de>; Tue, 20 Sep 2022 21:29:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A44435BF01B
+	for <lists+linux-next@lfdr.de>; Wed, 21 Sep 2022 00:31:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbiITT3Q (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 20 Sep 2022 15:29:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49018 "EHLO
+        id S231258AbiITWbG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 20 Sep 2022 18:31:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230220AbiITT3O (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 20 Sep 2022 15:29:14 -0400
-Received: from mail.baikalelectronics.com (mail.baikalelectronics.com [87.245.175.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1F25175FFA;
-        Tue, 20 Sep 2022 12:29:06 -0700 (PDT)
-Received: from mail (mail.baikal.int [192.168.51.25])
-        by mail.baikalelectronics.com (Postfix) with ESMTP id D663DDB1;
-        Tue, 20 Sep 2022 22:33:14 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com D663DDB1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baikalelectronics.ru; s=mail; t=1663702395;
-        bh=as0KC7NBvrB4OZ1kNVjsd0hqYCjlENHq273u9PL1SvU=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To:From;
-        b=jFuYssRYoOU+j+p09piC6uAmZXovXl5BNplZfYNKsAKTfxVbu5RtSSzNQziw1CN1/
-         8eL6fWSAr8+SNXpohbgTRA/NxLLHjle58fNUtagdP8qgQOb7jY3XzL4MryJtLAqOfJ
-         qjBxDbmJY1cxo4eaE0Vfs4/t1T1kHy3Ku+welqAo=
-Received: from mobilestation (192.168.168.10) by mail (192.168.51.25) with
- Microsoft SMTP Server (TLS) id 15.0.1395.4; Tue, 20 Sep 2022 22:29:04 +0300
-Date:   Tue, 20 Sep 2022 22:29:04 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-CC:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-ide@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-next@vger.kernel.org>
-Subject: Re: build failure of next-20220919 due to 3f74cd046fbe ("ata:
- libahci_platform: Parse ports-implemented property in resources getter")
-Message-ID: <20220920192904.oxa7y35qwrs3ncbp@mobilestation>
-References: <Yyhr1VW3Kn30E/Jv@debian>
+        with ESMTP id S231309AbiITWah (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 20 Sep 2022 18:30:37 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD615FF49;
+        Tue, 20 Sep 2022 15:30:25 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MXGTB014Nz4xGC;
+        Wed, 21 Sep 2022 08:30:21 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1663713022;
+        bh=qk4XgG2mzxcKbrNJ8FlRuD3pj6kHAOuNVoW4BlDXlJw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=f81RY+b/quqLOFIx8N9MIzxrhHymvetFzNarhofNuYMHB9w5sBeefH3PeqwTgwNo6
+         6d2C9hMTU9PtKi2gy7JGRJuUzxr4s0NgYaMJpSshv5t3NewUYYaLoYnod0iYh9ElfJ
+         ykfRIEjdO3kAeov1RefqbcWkFmhhUzh2ysqBsZHVLPwyWQWM86eYUcMp382WlSt/1K
+         SUeItz4cn4/nKpsALw2Rgxka3/ndSxFSAd2msYEQdDt252n3RKy7I42kKa1VAVhvxJ
+         HfEZfCmw/jXB/7Pm+MRPMBG7vhYTda7Lu0d/spRzQdGhlf7/hxt7SaRgfE5nsNb+Pz
+         xrJI1KLzahxBA==
+Date:   Wed, 21 Sep 2022 08:30:20 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>
+Cc:     Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the bluetooth tree
+Message-ID: <20220921083020.6c046d27@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <Yyhr1VW3Kn30E/Jv@debian>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/_zjlSnq9o4G_7A3n7Zn9mli";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Sudip
+--Sig_/_zjlSnq9o4G_7A3n7Zn9mli
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Sep 19, 2022 at 02:17:09PM +0100, Sudip Mukherjee (Codethink) wrote:
-> Hi All,
-> 
-> The builds of arm allmodconfig have failed to build next-20220919
-> with the error:
-> 
-> drivers/ata/ahci_st.c: In function 'st_ahci_probe':
-> drivers/ata/ahci_st.c:147:24: error: unused variable 'dev' [-Werror=unused-variable]
->   147 |         struct device *dev = &pdev->dev;
->       |                        ^~~
-> 
-> 
-> git bisect pointed to 3f74cd046fbe ("ata: libahci_platform: Parse ports-implemented property in resources getter")
-> 
-> I will be happy to test any patch or provide any extra log if needed.
+Hi all,
 
-Thanks for submitting the report. The fix has been already provided by
-Damien:
-https://lore.kernel.org/all/6f9b5fd7-8a8a-619e-f758-216cadd8ea08@opensource.wdc.com/
+Commit
 
--Sergey
+  239491111238 ("Bluetooth: MGMT: fix zalloc-simple.cocci warnings")
 
-> 
-> 
-> -- 
-> Regards
-> Sudip
-> 
+is missing a Signed-off-by from its committer.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/_zjlSnq9o4G_7A3n7Zn9mli
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMqPvwACgkQAVBC80lX
+0GyzXwgAg3vvs5U2kqAow1jJgjbShphCclwj8V20W/32g/bcPXfNVSdjAZqcchTK
+3HeENwAFtV/Eqy7kIHhfBYbtseZ0rNJkYS1uRcHcWPPgsglgQ5GzSpvjfqiKleq5
+UrIocL8CgkwBwCIWSv9sNYBSVsIHLTzLetwj9cpg5K3CRkgFehMiYtWQcByiWs3C
+5O8qd9794HDET9Ou8L5Hq6RE2//WGcjI+nHnK/7YqQx1p+5cxuJ22sqHJgJoBQBw
+1E6W2TK7lG1sU16GjWOVxkxBwGO+4lfVJVKoXxDlEXycFMZ/7yc/88aW4A1F32FS
+XO8hFWvbvYmRKz0HIAKqUmZrtP2BWQ==
+=ALgB
+-----END PGP SIGNATURE-----
+
+--Sig_/_zjlSnq9o4G_7A3n7Zn9mli--

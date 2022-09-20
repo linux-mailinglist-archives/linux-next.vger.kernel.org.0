@@ -2,95 +2,93 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35BCA5BDD2A
-	for <lists+linux-next@lfdr.de>; Tue, 20 Sep 2022 08:29:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DF5C5BDF67
+	for <lists+linux-next@lfdr.de>; Tue, 20 Sep 2022 10:12:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230371AbiITG3p (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 20 Sep 2022 02:29:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34968 "EHLO
+        id S231341AbiITIM0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 20 Sep 2022 04:12:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230355AbiITG3m (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 20 Sep 2022 02:29:42 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05C20B84E;
-        Mon, 19 Sep 2022 23:29:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1663655378; x=1695191378;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8n3877gQYlPKXInE5qx6m7J9WFLruUZo33OceC1bcYU=;
-  b=JfB3JWQtRgTcyR9qnwdTE4kHmJ3B2jwfm9h1cP4m0v+E1dSre5n8lQ6R
-   SyRRljQjAUPv9nUeeuBHF/OBxfVJgeZHTVg5xHoRQLSBibWYoiKuqdjQv
-   GF//C+8buMQpIHtjmW8r0txgwl06pBTXmjisgmyjYFhpy6BlIqFu2Y8GZ
-   DeeD4HmpEVd/zEfc2xnP9SuIZlknNCKMFdx0rjutCf5Udjiiz33I3tenl
-   p/hIRrHz3iUA6s91nRXXuJGjFmmbWYeojKK2FBqmA3CHZpLWVy0Dy7ZBP
-   Y1IeYl2AgLwCDl+CZeTdLQCkFyEmrnIAGTqsnObrlv6kxaOmkXcgjaaNp
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.93,329,1654585200"; 
-   d="scan'208";a="181086171"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 19 Sep 2022 23:29:35 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Mon, 19 Sep 2022 23:29:34 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
- Transport; Mon, 19 Sep 2022 23:29:34 -0700
-Date:   Tue, 20 Sep 2022 07:29:13 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        with ESMTP id S230438AbiITIME (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 20 Sep 2022 04:12:04 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EB96658F;
+        Tue, 20 Sep 2022 01:08:45 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MWvLz5Cd8z4xGC;
+        Tue, 20 Sep 2022 18:08:43 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1663661323;
+        bh=B8qq/233/Cde8M31dwO1JUWi4jzNoEdF+KLmylEybiQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=JDSfWxOm64Dcztj0AuZ2D3jdLX1D04jbx5eoWyNnsuO04IiOGD+eiDL1wmMD1Xypr
+         g2iJzAX73dyU4STkhnmcbqpPkY946m9YfJAFJCAR9/sEhzLpLMWEXJGnlexPbuzYJg
+         bKzibvEbUaWD6d9PEQglkPuF+5pW0IQ3jY9qKz52rVm5sepvahDOjCwkxim0oedWR9
+         foqlJJqtoQ4Xz4ScnwKmAA5bI76SaaHWEW113GYnwg4WMqT2JIpHebBW7TNs9J8A6K
+         LFf83OyIyTfWz4OQ2yJD1mgC0Uce2XvDrgIH70JqzqHkf/2/RIoO2NhKy3rl7y8EaL
+         9jtkLIMWxJXgg==
+Date:   Tue, 20 Sep 2022 18:08:39 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the risc-v-mc tree with Linus' tree
-Message-ID: <YylduXa12mtakuHT@wendy>
-References: <20220920051905.500a52ce@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the bitmap tree
+Message-ID: <20220920180839.79870ef4@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220920051905.500a52ce@canb.auug.org.au>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/8AR6AaCQKj__XkhCm2gEw93";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 05:19:05AM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the risc-v-mc tree got a conflict in:
-> 
->   arch/riscv/boot/dts/microchip/mpfs.dtsi
-> 
-> between commits:
-> 
->   3f67e6997603 ("riscv: dts: microchip: mpfs: fix incorrect pcie child node name")
->   e4009c5fa77b ("riscv: dts: microchip: mpfs: remove pci axi address translation property")
-> 
-> from Linus' tree and commit:
-> 
->   2ad0883d86c8 ("riscv: dts: microchip: move the mpfs' pci node to -fabric.dtsi")
-> 
-> from the risc-v-mc tree.
-> 
-> I fixed it up (the latter change seems to include the other 2) and can
+--Sig_/8AR6AaCQKj__XkhCm2gEw93
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Yup, I test merged it after applying and that was my resolution too.
-Thanks Stephen.
+Hi all,
 
-> carry the fix as necessary. This is now fixed as far as linux-next is
-> concerned, but any non trivial conflicts should be mentioned to your
-> upstream maintainer when your tree is submitted for merging.  You may
-> also want to consider cooperating with the maintainer of the conflicting
-> tree to minimise any particularly complex conflicts.
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
+After merging the bitmap tree, today's linux-next build (powerpc
+allyesconfig) failed like this:
 
+ld: arch/powerpc/kernel/head_64.o: in function `generic_secondary_common_in=
+it':
+(.text+0x545e): undefined reference to `nr_cpu_ids'
 
+Caused by commit
+
+  c90c5bd9f2d6 ("lib/cpumask: add FORCE_NR_CPUS config option")
+
+This build has CONFIG_FORCE_NR_CPUS set but the (assembler) code expects
+nr_cpu_ids to be a variable ...
+
+I have reverted that commit for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/8AR6AaCQKj__XkhCm2gEw93
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMpdQcACgkQAVBC80lX
+0GwKUQf+I+fabUjO88xgqDZHCQTDKzWvZ6s3CRACQSPSKQsSyVUUWFPCzgUUNdAL
+43lfsrSlWPXnZtwtmP7OINHbm5BeBkEGC6LI8bL9oBlcQVGXszKX3ZwURZY4kgSj
+NrDssdd4z3fJBUxnhAjaGMkPakl0SXbfvg9g9Gd1NMn3Z5kSOvujsEzBrLJgk4k0
+dKiLWPwkL28UgwLGRdcNWyHXukNGj4+lDxQxea2us41764h2gxbU9Mi9kE/ALC/a
+mJRZ3iMp18TgeNrvqY/y3VBV5hgqoVriPYetimVoqUsxivmapCAF7xCTzEiyev94
+XAf4AUvmZlm2OhVaotwi086xUX9E+A==
+=Bmpz
+-----END PGP SIGNATURE-----
+
+--Sig_/8AR6AaCQKj__XkhCm2gEw93--

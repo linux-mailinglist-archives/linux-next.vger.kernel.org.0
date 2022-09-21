@@ -2,65 +2,66 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40F6A5BFD5B
-	for <lists+linux-next@lfdr.de>; Wed, 21 Sep 2022 13:54:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 816225BFDA0
+	for <lists+linux-next@lfdr.de>; Wed, 21 Sep 2022 14:17:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229521AbiIULye (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 21 Sep 2022 07:54:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43322 "EHLO
+        id S229814AbiIUMRw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 21 Sep 2022 08:17:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbiIULyd (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 21 Sep 2022 07:54:33 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 881A9115C;
-        Wed, 21 Sep 2022 04:54:31 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id n12so9433144wrx.9;
-        Wed, 21 Sep 2022 04:54:31 -0700 (PDT)
+        with ESMTP id S229562AbiIUMRv (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 21 Sep 2022 08:17:51 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69E5990182;
+        Wed, 21 Sep 2022 05:17:50 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id jm5so4468248plb.13;
+        Wed, 21 Sep 2022 05:17:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date;
-        bh=Gm0rzX0C2VtueedqY6oyqUEL0KO+3EFqhigkVvANuMY=;
-        b=m716+RhwFQujGe+RzkJCE1Od2LTIec4PvVl6l4NfPom4melvVT3xQ6pXvAeU933Pb+
-         ASrqpe67ibMWf0b+aKwQK5+LQ1e1G+JC146clhdx6j3XQevv/FWssty6+bwYpe61Oy7a
-         YcKV7V8NBYrKy4DoamDp+dPNfbELR8kCVMOJH0UfThJc7A/CAV+QLWqeILuLRA8aiRBd
-         fAvJrBDaMv57YBu4jI/AGY7Gb1Eirm7JQzT2FzH8XQH3B1IMf5sd6tyuEPV/eBvAOM6y
-         wGFNjAGo/CB58aD18But9zZHUrXvBnI2aRV5Majkdrq/ZFtuG19yZROqq58N3UEQveUB
-         tAsA==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=yQEQl106UxCLNDrRU5Ec0fakVuZzSSZ95YXKXbXMwDI=;
+        b=llHpFpWMl542oRidTrh3Q2V8sA/X51X4hBZgSGBcG232OBZw+DHDbnSTGqGnJ9W+64
+         wx1uWlASvDfG7s0ytLl21nMhBXc+Rj0UZCH8hfwTmrfeZIYJ7CRsWoEAcfmMVkvMorUg
+         Z9CrNO6Zg63Yfs665u84X0FbZ+gkr7bz2BGsNVioV7x4iMB/XOmVn3X9Ta1O++4/J+qu
+         EzfgSW1HTvoqTkr6f4/u1D2BLfAH0YP3/NTNqHerktA3Ama/SpP2+qhWglius5/548QZ
+         6WyswJx+oSXwODejaHtfQffQv3c/OjEXyPWidbUunoj5doSvEk7DYna/Bxjk/HqF+FLQ
+         tr2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=Gm0rzX0C2VtueedqY6oyqUEL0KO+3EFqhigkVvANuMY=;
-        b=DMBEvmZc2qMWTxSrKw6GmIlMfrTvb/3masl6k95JXHpvuBo9wkoS3BcXgB/WLQB+J0
-         1JvsKVJ6RQZRNUyjyPcvBM6RG1Fg9tEjW4JMZovQvcUPDPSChO4EXsPZy+IJznbbKdyR
-         aMyCiFIZMu0jh2z1UydYjH5EvNVhgzQyJXmFj+1pKk3ApJNVpUCTiRCk1+xnXu0nsdE+
-         03N9dHd+joVMneCgZ0Kmi9mSCDKWzpjfEuYqfV9FZtILAq79wTWJyCMKfK24kYRUnfRG
-         08qZ0HGWw2fC5nE96pzk2tFn8Sa3KCdD3t9/ZawlN4b1GVG7ifMKO++9OFKwztBYdlT+
-         /ISQ==
-X-Gm-Message-State: ACrzQf2QRRqk7c2CwWhFcxKwLpYO7Phwjop+tQeGzFAcCmzCXSqc+P5m
-        GbrW/VuPwUeIEaqdmm3hhm9xtokXnOA=
-X-Google-Smtp-Source: AMsMyM6+bLaCCLfq2Y5Gvku94ch4fAR7cPcVVUAclbpniaRgBr/TItFM9zB1YWmXyaAc/ycMQLLlcQ==
-X-Received: by 2002:a5d:59c8:0:b0:22b:237c:3e1b with SMTP id v8-20020a5d59c8000000b0022b237c3e1bmr1636584wry.635.1663761269897;
-        Wed, 21 Sep 2022 04:54:29 -0700 (PDT)
-Received: from debian ([167.98.27.226])
-        by smtp.gmail.com with ESMTPSA id y15-20020a05600c364f00b003b31c560a0csm2487422wmq.12.2022.09.21.04.54.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Sep 2022 04:54:29 -0700 (PDT)
-Date:   Wed, 21 Sep 2022 12:54:27 +0100
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Eliav Farber <farbere@amazon.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org
-Subject: build failure of next-20220921 due to 94c025b6f735 ("hwmon:
- (mr75203) modify the temperature equation according to series 5 datasheet")
-Message-ID: <Yyr7c4IjjcnWZ3mr@debian>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=yQEQl106UxCLNDrRU5Ec0fakVuZzSSZ95YXKXbXMwDI=;
+        b=1eZuQ6a5E9fENpPT4ihJTdhtts53aRM2+tHkJ1G1OauNNczkhTT/Vzh8ZB0BG5UGZ9
+         rT1M7nhpUJtFak58CHES+7vO2YfiWpBA/NaUy1g7Bw/h23ise9KIoOd0Sph85ccXou40
+         jM4PzhOM8pBoCALAHqaRhoP8Yz2807wCw/Y86jlP2ccx63CQhnAaoM75iMiY2NvVj4ct
+         aO6QedB2xaKGgey4DEldPdKMYclRFQn6YFQX98Q9NSSt+J47dyV2+Cuszq3RWrI7kDJE
+         UkMZmt4kSurB+KzarNFrVtt8BL6D6qmMrSgYQkeJlJC1j0CrWNV/gVdZqVzD8Scw7Ats
+         TS1A==
+X-Gm-Message-State: ACrzQf2i0r+peDiiGg8S/oJ709GDiFWOUPOhCuDPPbTO5rXfbxYtIW11
+        BtLLGTfZZbu5wPQmcYD2JCa+nbg4YgkmIvf3yFo=
+X-Google-Smtp-Source: AMsMyM570xNfwvPtv3OXPugB5tTGKMp1/BSAJewVFxjd/V+wkejWeW5hiQ5/qDeiHxpn0b3C50gG2EHCDx7GLqsFtAg=
+X-Received: by 2002:a17:902:eb82:b0:176:c0e0:55c1 with SMTP id
+ q2-20020a170902eb8200b00176c0e055c1mr4497109plg.168.1663762669881; Wed, 21
+ Sep 2022 05:17:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <632a0af0.170a0220.966bf.0c66@mx.google.com> <CAOMZO5BCGpKVr75qDncDW4-eVLWeDJoPZft5Lh4_ikVHGLb1wQ@mail.gmail.com>
+ <6354cef8-7740-cd13-1683-eca68f9ec332@collabora.com>
+In-Reply-To: <6354cef8-7740-cd13-1683-eca68f9ec332@collabora.com>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Wed, 21 Sep 2022 09:17:38 -0300
+Message-ID: <CAOMZO5BObC4MwcA=XdtRVmhtZdH4m++vLRoerDhbdw18KNnA+g@mail.gmail.com>
+Subject: Re: next/master baseline: 539 runs, 389 regressions (next-20220920)
+To:     Guillaume Tucker <guillaume.tucker@collabora.com>
+Cc:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Collabora Kernel ML <kernel@collabora.com>,
+        "kernelci@groups.io" <kernelci@groups.io>,
+        "kernelci-results@groups.io" <kernelci-results@groups.io>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -71,24 +72,44 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi All,
+Hi Guillaume,
 
-The builds of arm, mips and xtensa allmodconfig have failed to build
-next-20220921.
+On Wed, Sep 21, 2022 at 6:18 AM Guillaume Tucker
+<guillaume.tucker@collabora.com> wrote:
+>
+> On 21/09/2022 04:48, Fabio Estevam wrote:
+> > Hi,
+> >
+> > On Tue, Sep 20, 2022 at 3:48 PM kernelci.org bot <bot@kernelci.org> wrote:
+> >>
+> >> next/master baseline: 539 runs, 389 regressions (next-20220920)
+> >
+> > Does anyone know which commit caused such a massive regression?
+> >
+> > Looks like it is gpiod_get_index related.
+>
+> There's a bisection report, does it look like it?
 
-Error from xtensa and mips build:
-ERROR: modpost: "__udivdi3" [drivers/hwmon/mr75203.ko] undefined!
-ERROR: modpost: "__divdi3" [drivers/hwmon/mr75203.ko] undefined!
+Sorry, I missed the git-bisect results in the original email.
 
-Error from arm build:
-ERROR: modpost: "__aeabi_uldivmod" [drivers/hwmon/mr75203.ko] undefined!
-ERROR: modpost: "__aeabi_ldivmod" [drivers/hwmon/mr75203.ko] undefined!
+Just noticed a fix for this problem on today's linux-next, so we are
+all good, thanks:
 
-git bisect pointed to 94c025b6f735 ("hwmon: (mr75203) modify the temperature equation according to series 5 datasheet")
+commit 8b10ca2f7551e024b60ab5e27d3e3630c029000a
+Author: Michael Walle <michael@walle.cc>
+Date:   Fri Sep 16 13:01:18 2022 +0200
 
-I will be happy to test any patch or provide any extra log if needed.
+    gpiolib: fix OOB access in quirk callbacks
 
+    Commit a2b5e207cade ("gpiolib: rework quirk handling in of_find_gpio()")
+    introduced an array of quirk functions which get iterated over. But a
+    sentinal value is missing. Add it.
 
--- 
-Regards
-Sudip
+    Fixes: a2b5e207cade ("gpiolib: rework quirk handling in of_find_gpio()")
+    Signed-off-by: Michael Walle <michael@walle.cc>
+    Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+    Tested-by: Conor Dooley <conor.dooley@microchip.com>
+    Reviewed-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+    Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+    Tested-by: Biju Das <biju.das.jz@bp.renesas.com>
+    Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>

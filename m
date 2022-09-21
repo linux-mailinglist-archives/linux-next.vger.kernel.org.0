@@ -2,98 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 519515BFDB0
-	for <lists+linux-next@lfdr.de>; Wed, 21 Sep 2022 14:20:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C06E95BFEB8
+	for <lists+linux-next@lfdr.de>; Wed, 21 Sep 2022 15:13:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229988AbiIUMT6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 21 Sep 2022 08:19:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44370 "EHLO
+        id S229862AbiIUNNK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 21 Sep 2022 09:13:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230002AbiIUMTp (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 21 Sep 2022 08:19:45 -0400
-Received: from smtp-fw-9102.amazon.com (smtp-fw-9102.amazon.com [207.171.184.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8478D111E;
-        Wed, 21 Sep 2022 05:19:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1663762785; x=1695298785;
-  h=message-id:date:mime-version:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:subject;
-  bh=SXknPu8p6P5GCLG1lEIpEVchBPddZY3bhhgvk01JZqw=;
-  b=r1ZR6Mf8bM16yiGwJiQxa/xL0W8TPGxrYWhNo58SVu884g76mWSwplvC
-   L4GXOPG2Fy4qlPFzvT9mP/woWKA6k63JLBlzRJg55p12/FB61O6nn3HxB
-   pkxwQhmmnOoJ6xHgOJzT5cXmJT8NuymBY7eGgsmdfpL5hyutulk60Gnzs
-   k=;
-X-IronPort-AV: E=Sophos;i="5.93,333,1654560000"; 
-   d="scan'208";a="261732813"
-Subject: Re: build failure of next-20220921 due to 94c025b6f735 ("hwmon: (mr75203)
- modify the temperature equation according to series 5 datasheet")
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2a-11a39b7d.us-west-2.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-9102.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 12:19:45 +0000
-Received: from EX13MTAUEE002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2a-11a39b7d.us-west-2.amazon.com (Postfix) with ESMTPS id BA32D4546C;
-        Wed, 21 Sep 2022 12:19:43 +0000 (UTC)
-Received: from EX19D014UEC002.ant.amazon.com (10.252.135.185) by
- EX13MTAUEE002.ant.amazon.com (10.43.62.24) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Wed, 21 Sep 2022 12:19:43 +0000
-Received: from EX13MTAUEE002.ant.amazon.com (10.43.62.24) by
- EX19D014UEC002.ant.amazon.com (10.252.135.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
- Wed, 21 Sep 2022 12:19:43 +0000
-Received: from [192.168.151.220] (10.85.143.178) by mail-relay.amazon.com
- (10.43.62.224) with Microsoft SMTP Server id 15.0.1497.38 via Frontend
- Transport; Wed, 21 Sep 2022 12:19:41 +0000
-Message-ID: <04cb2084-7023-2a0b-ef31-ce25a54132cf@amazon.com>
-Date:   Wed, 21 Sep 2022 15:19:41 +0300
+        with ESMTP id S229814AbiIUNNK (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 21 Sep 2022 09:13:10 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC5C382752;
+        Wed, 21 Sep 2022 06:13:07 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MXf3k1QZlz4xG9;
+        Wed, 21 Sep 2022 23:13:06 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1663765986;
+        bh=TeiuUTqhylaxbG26Vkxwskt7S9E7Di1Y1ogWtwqFpLI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=WZ6Odkc8579eE9eGk1ygkEhagBvkolmEXkh4yV4z20KWP+FEExfT/X61ZaqgWra6Y
+         8Cl0DwzcVgAbbTxWcHCbuONAWzWid+Fw8fR17N9uK9XGO/uSqCELIXr40bHdlCy/3D
+         kTJ+/g2xfk4dF49aMtDx7GybVCH5jY1sYJQS9MbxuOnxpI0wisqTX0/bdImOdcKbu6
+         GXGMeV+Hf+CzgQ6wE+hWf/FePcA/vnpkGDnxR7SQGKT9KEN8bzsyg4IBHYF90LwmlV
+         ZtEhOCkQiIuo3kc5mvK9D3pQxaoSiaOwXmF3gXJFCUzOyf1oD8Ub0nx2zuxH+vd65U
+         LtiB/ftAA1CuA==
+Date:   Wed, 21 Sep 2022 23:13:04 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: Tree for Sep 21
+Message-ID: <20220921231304.5a5d0624@canb.auug.org.au>
+In-Reply-To: <20220921185740.6e19ee1e@canb.auug.org.au>
+References: <20220921185740.6e19ee1e@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-To:     "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>
-CC:     Jean Delvare <jdelvare@suse.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-next@vger.kernel.org>
-References: <Yyr7c4IjjcnWZ3mr@debian>
-Content-Language: en-US
-From:   "Farber, Eliav" <farbere@amazon.com>
-In-Reply-To: <Yyr7c4IjjcnWZ3mr@debian>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-18.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/NPRJe6Mb+a72t65YBDPIDdX";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 9/21/2022 2:54 PM, Sudip Mukherjee (Codethink) wrote:
-> Hi All,
->
-> The builds of arm, mips and xtensa allmodconfig have failed to build
-> next-20220921.
->
-> Error from xtensa and mips build:
-> ERROR: modpost: "__udivdi3" [drivers/hwmon/mr75203.ko] undefined!
-> ERROR: modpost: "__divdi3" [drivers/hwmon/mr75203.ko] undefined!
->
-> Error from arm build:
-> ERROR: modpost: "__aeabi_uldivmod" [drivers/hwmon/mr75203.ko] undefined!
-> ERROR: modpost: "__aeabi_ldivmod" [drivers/hwmon/mr75203.ko] undefined!
->
-> git bisect pointed to 94c025b6f735 ("hwmon: (mr75203) modify the 
-> temperature equation according to series 5 datasheet")
->
-> I will be happy to test any patch or provide any extra log if needed. 
+--Sig_/NPRJe6Mb+a72t65YBDPIDdX
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I just provided two potential fixes.
-One is an incremental patch on top of the previous series of patches.
-Second, I reworked it into the original series and modified two of the
-patches.
-You are recipient to both.
+Hi all,
 
---
-Regards, Eliav
+On Wed, 21 Sep 2022 18:57:40 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> Changes since 20220920:
+
+I forgot to mention that there will be no linux-next release tomorrow
+(while all Aussies remember their Queen) or next week.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/NPRJe6Mb+a72t65YBDPIDdX
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMrDeAACgkQAVBC80lX
+0GyG6Qf+NEH4vx7QEhgPxHbWzjaK4uWsV8u9y+Pn/GS6UywukXIxjiFmRUm8cTUS
+/MTNz9KH45sMriaAZzU1BnDmdq1nynw0cEW3yBYHQtOWJcQc3A9zz2IOSKVrlMvy
+4qL/mNXu8RlVfpj4MVhzocKBCP3qYmgJ7jtauvI1iko1TR7YCsZKWMThwB3ZfWsF
+GYWOCcZONFzUqf5L2PhgOL7lRFWPrO4iYJ8uaqJGIV2G3Dv2yVeXLlFepYTQ0Nw4
+FY7rsN5HkBn94hn0lXUEN8yYmOZLZVZTfC7FGMsZv5OeOu6Xp7WDz4fi7IA/XtaA
+otRoY5oSCmp/8GeBaY3/PEF+4tmQrQ==
+=coar
+-----END PGP SIGNATURE-----
+
+--Sig_/NPRJe6Mb+a72t65YBDPIDdX--

@@ -2,54 +2,54 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 341435E6752
-	for <lists+linux-next@lfdr.de>; Thu, 22 Sep 2022 17:40:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 623815E6C86
+	for <lists+linux-next@lfdr.de>; Thu, 22 Sep 2022 22:00:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbiIVPkQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 22 Sep 2022 11:40:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49118 "EHLO
+        id S232723AbiIVUAb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 22 Sep 2022 16:00:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230038AbiIVPkP (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 22 Sep 2022 11:40:15 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39EB3B5156;
-        Thu, 22 Sep 2022 08:40:13 -0700 (PDT)
+        with ESMTP id S232777AbiIVUAC (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 22 Sep 2022 16:00:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C963410D65D;
+        Thu, 22 Sep 2022 12:59:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id D7582CE21C9;
-        Thu, 22 Sep 2022 15:40:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A17CC433D6;
-        Thu, 22 Sep 2022 15:40:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0562D6115C;
+        Thu, 22 Sep 2022 19:59:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D93D5C433D6;
+        Thu, 22 Sep 2022 19:59:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663861210;
-        bh=CjXzU/QKPi6MbdicAsACYEjce6oRRvoaOkrD96MRx4k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tRWME4Hzf2sruEkbYrvgvqdR+Fv0OL+SZlH+hF6UTJeP3qv9zY1EWTUrlR/UUL5g8
-         jctg0+io9B+URiN4yNV65uoYp7gBGfpk4O+RpUFJWTVkMlByCw5G4QtMqfqmQ93o88
-         6YDJF6CQ+cbnBE1oSR6BiAb+k76fT71LepY1GA2P5pVUG8Ktn4Y+G3x0/6hH80zYeo
-         cOwToJT7JfBVdmiaAAqDRyVorhjdxWkLoRMFMFFNysHbcAqVJIUP4J91WxEKYOkz7k
-         6X4TRXFOnt6S4yqskdtl9B/qQOH57gBhcDvKG09H0XC50JHxYInn6xtUY1WpGO2a52
-         ujWnh/0e70Xdw==
-Date:   Thu, 22 Sep 2022 16:40:05 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>,
-        linux-kernel@vger.kernel.org, sudipm.mukherjee@gmail.com,
-        arnd@arndb.de, linux-gpio@vger.kernel.org,
-        linux-next@vger.kernel.org, bagasdotme@gmail.com,
-        zengheng4@huawei.com
-Subject: Re: [PATCH v2 char-misc-next] misc: microchip: pci1xxxx: use
- DEFINE_SIMPLE_DEV_PM_OPS() in place  of the SIMPLE_DEV_PM_OPS() in
- pci1xxxx's gpio driver
-Message-ID: <YyyB1at426/JLB3V@spud>
-References: <20220915094729.646185-1-kumaravel.thiagarajan@microchip.com>
- <YytAbfmMfxNsIjcy@spud>
- <Yyx3AMaETK2GsBHl@kroah.com>
+        s=k20201202; t=1663876750;
+        bh=8JkOYZR01lEo18px3jH97GFzQcOf/gCjHG8IRSVX1fU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=XqD4FqSFIjqiAe81OoGf1PfmzuoB+cr3bVp1YYPbi5L7/NcHt9anCQ67kDQQCCJ0O
+         ryrAXvo7W1bx18KmSkfb49iKDOjlxsUJ2MKc2l/see7ALYK2Oikc7CNnrZyUdcIpQr
+         eu5wEeYyzJ9PquSp/IiVSpHz4za5WmoKO1q4Zd2adv8bA2kv9+hqHLOaXp5EeHSMMR
+         BQFAgqM8xIv7SXj6A8Ff/aTfCCYLpqbBnRhFRPsBXU0H8GARpX9yraG3KX9mDd6YEy
+         15V9wdyQCzgn70Hg+aD8dg88ZYT/R18FrRnh/wh1eAxJ388FbYhffAck14JVroy3gT
+         kqy3+K9synnAg==
+Date:   Thu, 22 Sep 2022 12:59:08 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Matthieu Baerts <matthieu.baerts@tessares.net>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Benjamin Poirier <bpoirier@nvidia.com>,
+        Hangbin Liu <liuhangbin@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        MPTCP Upstream <mptcp@lists.linux.dev>
+Subject: Re: linux-next: manual merge of the net-next tree with the net tree
+Message-ID: <20220922125908.28efd4b4@kernel.org>
+In-Reply-To: <2b4722a2-04cd-5e8f-ee09-c01c55aee7a7@tessares.net>
+References: <20220921110437.5b7dbd82@canb.auug.org.au>
+        <2b4722a2-04cd-5e8f-ee09-c01c55aee7a7@tessares.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yyx3AMaETK2GsBHl@kroah.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,31 +59,50 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 04:53:52PM +0200, Greg KH wrote:
-> On Wed, Sep 21, 2022 at 05:48:45PM +0100, Conor Dooley wrote:
-> > On Thu, Sep 15, 2022 at 03:17:29PM +0530, Kumaravel Thiagarajan wrote:
-> > > misc: microchip: pci1xxxx: use DEFINE_SIMPLE_DEV_PM_OPS() in place  of the SIMPLE_DEV_PM_OPS() in pci1xxxx's gpio driver
-> >                                                                     ^^
-> > FYI, double space in the subject here, rather a mouthful though and
-> > surely everything after SIMPLE_DEV_PM_OPS() is redundant?
-> > 
-> > > build errors listed below and reported by Sudip Mukherjee
-> > > <sudipm.mukherjee@gmail.com> for the builds of
-> > > riscv, s390, csky, alpha and loongarch allmodconfig are fixed in
-> > > this patch.
-> > 
-> > allmodconfig has been broken for a while now, and this patch appears
-> > to have been sitting for a week & a second fix has shown up at:
-> > https://lore.kernel.org/all/20220919094250.858716-1-zengheng4@huawei.com/
-> > 
-> > I do note that Zeng Hang's patch does slightly more than this one does,
-> > but idk about about the PM APIs /shrug.
-> > 
-> > Has this just slipped under the radar since so many of us were
-> > attending conferences etc the last while or are you looking for
-> > Kumaravel to do something more here?
+On Wed, 21 Sep 2022 11:18:17 +0200 Matthieu Baerts wrote:
+> Hi Stephen,
 > 
-> I've taken this change now, sorry for the delay.  Was not looking at
-> patches while at conferences.
+> On 21/09/2022 03:04, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > Today's linux-next merge of the net-next tree got a conflict in:
+> > 
+> >   tools/testing/selftests/drivers/net/bonding/Makefile
+> > 
+> > between commit:
+> > 
+> >   bbb774d921e2 ("net: Add tests for bonding and team address list management")
+> > 
+> > from the net tree and commit:
+> > 
+> >   152e8ec77640 ("selftests/bonding: add a test for bonding lladdr target")
+> > 
+> > from the net-next tree.
+> > 
+> > I fixed it up (see below) and can carry the fix as necessary.  
+> Thank you for sharing this fix (and all the others!).
+> 
+> I also had this conflict on my side[1] and I resolved it differently,
+> more like what is done in the -net tree I think, please see the patch
+> attached to this email.
+> 
+> I guess I should probably use your version. It is just I saw it after
+> having resolved the conflict on my side :)
+> I will check later how the network maintainers will resolve this
+> conflict and update my tree if needed.
 
-Great, thanks Greg!
+I took this opportunity to sort 'em:
+
+- TEST_PROGS := bond-break-lacpdu-tx.sh
+- TEST_PROGS += bond-lladdr-target.sh
+ -TEST_PROGS := bond-break-lacpdu-tx.sh \
+ -            dev_addr_lists.sh \
+ -            bond-arp-interval-causes-panic.sh
+++TEST_PROGS := \
+++      bond-arp-interval-causes-panic.sh \
+++      bond-break-lacpdu-tx.sh \
+++      dev_addr_lists.sh
++ 
++ TEST_FILES := lag_lib.sh
+
+Here's to hoping there are no more bond selftests before final..

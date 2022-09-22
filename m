@@ -2,142 +2,217 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9BB95E5994
-	for <lists+linux-next@lfdr.de>; Thu, 22 Sep 2022 05:22:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9C305E5AB7
+	for <lists+linux-next@lfdr.de>; Thu, 22 Sep 2022 07:29:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbiIVDWl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 21 Sep 2022 23:22:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35152 "EHLO
+        id S229916AbiIVF3v (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 22 Sep 2022 01:29:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231207AbiIVDWA (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 21 Sep 2022 23:22:00 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8F1B24961;
-        Wed, 21 Sep 2022 20:20:31 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MY0mw6xrnzWgqh;
-        Thu, 22 Sep 2022 11:16:32 +0800 (CST)
-Received: from [10.174.179.163] (10.174.179.163) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 22 Sep 2022 11:20:29 +0800
-Message-ID: <c0dc4f59-c563-908b-e135-298366372857@huawei.com>
-Date:   Thu, 22 Sep 2022 11:20:28 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH v2 char-misc-next] misc: microchip: pci1xxxx: use
- DEFINE_SIMPLE_DEV_PM_OPS() in place of the SIMPLE_DEV_PM_OPS() in pci1xxxx's
- gpio driver
-To:     Conor Dooley <conor@kernel.org>,
-        Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
-CC:     <linux-kernel@vger.kernel.org>, <sudipm.mukherjee@gmail.com>,
-        <arnd@arndb.de>, <linux-gpio@vger.kernel.org>,
-        <linux-next@vger.kernel.org>, <gregkh@linuxfoundation.org>,
-        <bagasdotme@gmail.com>
-References: <20220915094729.646185-1-kumaravel.thiagarajan@microchip.com>
- <YytAbfmMfxNsIjcy@spud>
-From:   Zeng Heng <zengheng4@huawei.com>
-In-Reply-To: <YytAbfmMfxNsIjcy@spud>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.163]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500022.china.huawei.com (7.185.36.162)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229825AbiIVF3u (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 22 Sep 2022 01:29:50 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D62F31229;
+        Wed, 21 Sep 2022 22:29:47 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28M4eE9R003145;
+        Thu, 22 Sep 2022 05:29:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=content-type :
+ mime-version : subject : from : in-reply-to : date : cc :
+ content-transfer-encoding : message-id : references : to; s=pp1;
+ bh=onCbqLp8wm+Z6OjTP02Ay3zCXQgaBksEKDZPTkzLOqQ=;
+ b=Ac215hGADXTytsYU7/4+TBvPTTlbmGWAhrAUg3pR/JBAVTIYJJOonzUuuKU9hH3YBi9W
+ J7I+041tZwQKpcI/IuGiEvqj7xU0SDq9/vJqndksZs0vghXvXgOpXaf+gnO4obGC+vMB
+ oGE5qKl5QNVqjVcVp84sMrRD/+ccEno+/+I5HVN0I6rskFtgzFdVtYhOz7OuzVrAEtqW
+ 3/kmsgXUyug2PLKJp77Rfhz4OPlsmXtqLzbxR6/HdzMfyP4klIeA4GS2eLkmG8ybA7tq
+ QDScM3B1407JwiusQNqR2TwYvJlAg/vTynAUD5i3cH7cFxK6WpFsTth7TLGWI0ofvApy MA== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jrg6a9qsc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Sep 2022 05:29:41 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28M5LmJP006984;
+        Thu, 22 Sep 2022 05:29:39 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma03ams.nl.ibm.com with ESMTP id 3jn5v9649v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Sep 2022 05:29:39 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28M5TbHg37880294
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 22 Sep 2022 05:29:37 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0DB08A4051;
+        Thu, 22 Sep 2022 05:29:37 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 02D91A4040;
+        Thu, 22 Sep 2022 05:29:36 +0000 (GMT)
+Received: from smtpclient.apple (unknown [9.43.104.67])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 22 Sep 2022 05:29:35 +0000 (GMT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
+Subject: Re: [powerpc] memcpy warning drivers/scsi/scsi_transport_fc.c:581
+ (next-20220921)
+From:   Sachin Sant <sachinp@linux.ibm.com>
+In-Reply-To: <202209211250.3049C29@keescook>
+Date:   Thu, 22 Sep 2022 10:59:34 +0530
+Cc:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-scsi@vger.kernel.org, linux-next@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <941B194C-3BB4-453B-822C-7280778AB3D0@linux.ibm.com>
+References: <42404B5E-198B-4FD3-94D6-5E16CF579EF3@linux.ibm.com>
+ <202209211250.3049C29@keescook>
+To:     Kees Cook <keescook@chromium.org>
+X-Mailer: Apple Mail (2.3696.120.41.1.1)
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: CzI29J32q84GGrJpMa3XLWEaX2k6dc36
+X-Proofpoint-GUID: CzI29J32q84GGrJpMa3XLWEaX2k6dc36
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-22_02,2022-09-20_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
+ suspectscore=0 mlxlogscore=999 priorityscore=1501 spamscore=0 bulkscore=0
+ clxscore=1015 impostorscore=0 phishscore=0 adultscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
+ definitions=main-2209220032
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-在 2022/9/22 0:48, Conor Dooley 写道:
-> On Thu, Sep 15, 2022 at 03:17:29PM +0530, Kumaravel Thiagarajan wrote:
->> misc: microchip: pci1xxxx: use DEFINE_SIMPLE_DEV_PM_OPS() in place  of the SIMPLE_DEV_PM_OPS() in pci1xxxx's gpio driver
->                                                                      ^^
-> FYI, double space in the subject here, rather a mouthful though and
-> surely everything after SIMPLE_DEV_PM_OPS() is redundant?
->
->> build errors listed below and reported by Sudip Mukherjee
->> <sudipm.mukherjee@gmail.com> for the builds of
->> riscv, s390, csky, alpha and loongarch allmodconfig are fixed in
->> this patch.
-> allmodconfig has been broken for a while now, and this patch appears
-> to have been sitting for a week & a second fix has shown up at:
-> https://lore.kernel.org/all/20220919094250.858716-1-zengheng4@huawei.com/
->
-> I do note that Zeng Hang's patch does slightly more than this one does,
-> but idk about about the PM APIs /shrug.
-
-Using 'pm_sleep_ptr' here just for telling compiler to optimize the 
-struct pci1xxxx_gpio_pm_ops,
-
-which is located in ro_data section.
-
-~~~
-
-0000000000000770 t pci1xxxx_gpio_irq_set_mask
-00000000000008b2 t pci1xxxx_gpio_irq_unmask
-0000000000000080 r pci1xxxx_gpio_pm_ops        <--
-0000000000000000 t pci1xxxx_gpio_probe
-0000000000000636 t pci1xxxx_gpio_set
-
-~~~
-
-> Has this just slipped under the radar since so many of us were
-> attending conferences etc the last while or are you looking for
-> Kumaravel to do something more here?
-
-Just my fault about double check similar patch emails in the concerned area,
-
-or maybe I would pass the warning and not send the patch.
-
-Thanks all.
 
 
-Best regards,
+> On 22-Sep-2022, at 2:13 AM, Kees Cook <keescook@chromium.org> wrote:
+>=20
+> On Wed, Sep 21, 2022 at 09:21:52PM +0530, Sachin Sant wrote:
+>> While booting recent linux-next kernel on a Power server following
+>> warning is seen:
+>>=20
+>> [    6.427054] lpfc 0022:01:00.0: 0:6468 Set host date / time: Status =
+x10:
+>> [    6.471457] lpfc 0022:01:00.0: 0:6448 Dual Dump is enabled
+>> [    7.432161] ------------[ cut here ]------------
+>> [    7.432178] memcpy: detected field-spanning write (size 8) of =
+single field "&event->event_data" at =
+drivers/scsi/scsi_transport_fc.c:581 (size 4)
+>=20
+> Interesting!
+>=20
+> The memcpy() is this one:
+>=20
+>                memcpy(&event->event_data, data_buf, data_len);
+>=20
+> The struct member, "event_data" is defined as u32:
+>=20
+> ...
+> * Note: if Vendor Unique message, &event_data will be  start of
+> * Note: if Vendor Unique message, event_data_flex will be start of
+> *      vendor unique payload, and the length of the payload is
+> *       per event_datalen
+> ...
+> struct fc_nl_event {
+>        struct scsi_nl_hdr snlh;                /* must be 1st element =
+!  */
+>        __u64 seconds;
+>        __u64 vendor_id;
+>        __u16 host_no;
+>        __u16 event_datalen;
+>        __u32 event_num;
+>        __u32 event_code;
+>        __u32 event_data;
+> } __attribute__((aligned(sizeof(__u64))));
+>=20
+> The warning says memcpy is trying to write 8 bytes into the 4 byte
+> member, so the compiler is seeing it "correctly", but I think this is
+> partially a false positive. It looks like there is also a small bug in
+> the allocation size calculation and therefore a small leak of kernel
+> heap memory contents. My notes:
+>=20
+> void
+> fc_host_post_fc_event(struct Scsi_Host *shost, u32 event_number,
+>                enum fc_host_event_code event_code,
+>                u32 data_len, char *data_buf, u64 vendor_id)
+> {
+> 	...
+>        struct fc_nl_event *event;
+> 	...
+>        if (!data_buf || data_len < 4)
+>                data_len =3D 0;
+>=20
+> This wants a data_buf and a data_len >=3D 4, so it does look like it's
+> expected to be variable sized. There does appear to be an alignment
+> and padding expectation, though:
+>=20
+> /* macro to round up message lengths to 8byte boundary */
+> #define FC_NL_MSGALIGN(len)             (((len) + 7) & ~7)
+>=20
+> 	...
+>        len =3D FC_NL_MSGALIGN(sizeof(*event) + data_len);
+>=20
+> But this is immediately suspicious: sizeof(*event) _includes_ =
+event_data,
+> so the alignment is going to be bumped up incorrectly. Note that
+> struct fc_nl_event is 8 * 5 =3D=3D 40 bytes, which allows for 4 bytes =
+in
+> event_data. But setting data_len to 4 (i.e. no "overflow") means we're
+> asking for 44 bytes, which is aligned to 48.
+>=20
+> So, in all cases, there is uninitialized memory being sent...
+>=20
+>        skb =3D nlmsg_new(len, GFP_KERNEL);
+> 	...
+>        nlh =3D nlmsg_put(skb, 0, 0, SCSI_TRANSPORT_MSG, len, 0);
+> 	...
+>        event =3D nlmsg_data(nlh);
+> 	...
+>        event->event_datalen =3D data_len;        /* bytes */
+>=20
+> Comments in the struct say this is counting from start of event_data.
+>=20
+> 	...
+>        if (data_len)
+>                memcpy(&event->event_data, data_buf, data_len);
+>=20
+> And here is the reported memcpy().
+>=20
+> The callers of fc_host_post_fc_event() are:
+>=20
+>        fc_host_post_fc_event(shost, event_number, event_code,
+>                (u32)sizeof(u32), (char *)&event_data, 0);
+>=20
+> Fixed-size of 4 bytes: no "overflow".
+>=20
+>        fc_host_post_fc_event(shost, event_number, =
+FCH_EVT_VENDOR_UNIQUE,
+>                data_len, data_buf, vendor_id);
+>=20
+>        fc_host_post_fc_event(shost, fc_get_event_number(),
+>                                FCH_EVT_LINK_FPIN, fpin_len, fpin_buf, =
+0);
+>=20
+> These two appear to be of arbitrary length, but I didn't look more
+> deeply.
+>=20
+> Given that the only user of struct fc_nl_event is =
+fc_host_post_fc_event()
+> in drivers/scsi/scsi_transport_fc.c, it looks safe to say that =
+changing
+> the struct to use a flexible array is the thing to do in the kernel, =
+but
+> we can't actually change the size or layout because it's a UAPI =
+header.
+>=20
+> Are you able to test this patch:
 
-Zeng Heng
+Thank you for the detailed analysis.
+With this patch applied I don=E2=80=99t see the warning.
 
->
-> Thanks,
-> Conor.
->
->> drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c:311:12: error: 'pci1xxxx_gpio_resume' defined but not used [-Werror=unused-function]
->>    311 | static int pci1xxxx_gpio_resume(struct device *dev)
->>        |            ^~~~~~~~~~~~~~~~~~~~
->> drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c:295:12: error: 'pci1xxxx_gpio_suspend' defined but not used [-Werror=unused-function]
->>    295 | static int pci1xxxx_gpio_suspend(struct device *dev)
->>        |            ^~~~~~~~~~~~~~~~~~~~~
->>
->> Fixes: 4ec7ac90ff39 ("misc: microchip: pci1xxxx: Add power management functions - suspend & resume handlers.")
->> Reported-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
->> Signed-off-by: Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
->> ---
->> Changes in v2:
->>    - Mention as Sudip had reported in the commit description
->>      as suggested by Bagas Sanjaya <bagasdotme@gmail.com>
->> ---
->>   drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c b/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c
->> index 9cc771c604ed..4cd541166b0c 100644
->> --- a/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c
->> +++ b/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c
->> @@ -405,7 +405,7 @@ static int pci1xxxx_gpio_probe(struct auxiliary_device *aux_dev,
->>   	return devm_gpiochip_add_data(&aux_dev->dev, &priv->gpio, priv);
->>   }
->>   
->> -static SIMPLE_DEV_PM_OPS(pci1xxxx_gpio_pm_ops, pci1xxxx_gpio_suspend, pci1xxxx_gpio_resume);
->> +static DEFINE_SIMPLE_DEV_PM_OPS(pci1xxxx_gpio_pm_ops, pci1xxxx_gpio_suspend, pci1xxxx_gpio_resume);
->>   
->>   static const struct auxiliary_device_id pci1xxxx_gpio_auxiliary_id_table[] = {
->>   	{.name = "mchp_pci1xxxx_gp.gp_gpio"},
->> -- 
->> 2.25.1
->>
->>
+Thanks
+- Sachin
+

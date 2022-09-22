@@ -2,107 +2,84 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 623815E6C86
-	for <lists+linux-next@lfdr.de>; Thu, 22 Sep 2022 22:00:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E1635E6D80
+	for <lists+linux-next@lfdr.de>; Thu, 22 Sep 2022 23:01:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232723AbiIVUAb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 22 Sep 2022 16:00:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33292 "EHLO
+        id S230099AbiIVVBN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 22 Sep 2022 17:01:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232777AbiIVUAC (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 22 Sep 2022 16:00:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C963410D65D;
-        Thu, 22 Sep 2022 12:59:11 -0700 (PDT)
+        with ESMTP id S229810AbiIVVBJ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 22 Sep 2022 17:01:09 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D8E2D69F5;
+        Thu, 22 Sep 2022 14:01:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0562D6115C;
-        Thu, 22 Sep 2022 19:59:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D93D5C433D6;
-        Thu, 22 Sep 2022 19:59:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663876750;
-        bh=8JkOYZR01lEo18px3jH97GFzQcOf/gCjHG8IRSVX1fU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=XqD4FqSFIjqiAe81OoGf1PfmzuoB+cr3bVp1YYPbi5L7/NcHt9anCQ67kDQQCCJ0O
-         ryrAXvo7W1bx18KmSkfb49iKDOjlxsUJ2MKc2l/see7ALYK2Oikc7CNnrZyUdcIpQr
-         eu5wEeYyzJ9PquSp/IiVSpHz4za5WmoKO1q4Zd2adv8bA2kv9+hqHLOaXp5EeHSMMR
-         BQFAgqM8xIv7SXj6A8Ff/aTfCCYLpqbBnRhFRPsBXU0H8GARpX9yraG3KX9mDd6YEy
-         15V9wdyQCzgn70Hg+aD8dg88ZYT/R18FrRnh/wh1eAxJ388FbYhffAck14JVroy3gT
-         kqy3+K9synnAg==
-Date:   Thu, 22 Sep 2022 12:59:08 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Matthieu Baerts <matthieu.baerts@tessares.net>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Benjamin Poirier <bpoirier@nvidia.com>,
-        Hangbin Liu <liuhangbin@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        MPTCP Upstream <mptcp@lists.linux.dev>
-Subject: Re: linux-next: manual merge of the net-next tree with the net tree
-Message-ID: <20220922125908.28efd4b4@kernel.org>
-In-Reply-To: <2b4722a2-04cd-5e8f-ee09-c01c55aee7a7@tessares.net>
-References: <20220921110437.5b7dbd82@canb.auug.org.au>
-        <2b4722a2-04cd-5e8f-ee09-c01c55aee7a7@tessares.net>
+        by sin.source.kernel.org (Postfix) with ESMTPS id A1248CE2346;
+        Thu, 22 Sep 2022 21:01:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CEF7C433D6;
+        Thu, 22 Sep 2022 21:01:01 +0000 (UTC)
+Date:   Thu, 22 Sep 2022 17:02:04 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Arun Easi <aeasi@marvell.com>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-next@vger.kernel.org>,
+        <GR-QLogic-Storage-Upstream@marvell.com>
+Subject: Re: [PATCH v3 1/1] tracing: Fix compile error in trace_array calls
+ when TRACING is disabled
+Message-ID: <20220922170204.08f91a68@gandalf.local.home>
+In-Reply-To: <yq15yho3y0s.fsf@ca-mkp.ca.oracle.com>
+References: <20220907233308.4153-1-aeasi@marvell.com>
+        <20220907233308.4153-2-aeasi@marvell.com>
+        <yq15yho3y0s.fsf@ca-mkp.ca.oracle.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, 21 Sep 2022 11:18:17 +0200 Matthieu Baerts wrote:
-> Hi Stephen,
-> 
-> On 21/09/2022 03:04, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > Today's linux-next merge of the net-next tree got a conflict in:
-> > 
-> >   tools/testing/selftests/drivers/net/bonding/Makefile
-> > 
-> > between commit:
-> > 
-> >   bbb774d921e2 ("net: Add tests for bonding and team address list management")
-> > 
-> > from the net tree and commit:
-> > 
-> >   152e8ec77640 ("selftests/bonding: add a test for bonding lladdr target")
-> > 
-> > from the net-next tree.
-> > 
-> > I fixed it up (see below) and can carry the fix as necessary.  
-> Thank you for sharing this fix (and all the others!).
-> 
-> I also had this conflict on my side[1] and I resolved it differently,
-> more like what is done in the -net tree I think, please see the patch
-> attached to this email.
-> 
-> I guess I should probably use your version. It is just I saw it after
-> having resolved the conflict on my side :)
-> I will check later how the network maintainers will resolve this
-> conflict and update my tree if needed.
+On Thu, 15 Sep 2022 21:32:59 -0400
+"Martin K. Petersen" <martin.petersen@oracle.com> wrote:
 
-I took this opportunity to sort 'em:
+> Steven,
+> 
+> Can you please review Arun's patch?
 
-- TEST_PROGS := bond-break-lacpdu-tx.sh
-- TEST_PROGS += bond-lladdr-target.sh
- -TEST_PROGS := bond-break-lacpdu-tx.sh \
- -            dev_addr_lists.sh \
- -            bond-arp-interval-causes-panic.sh
-++TEST_PROGS := \
-++      bond-arp-interval-causes-panic.sh \
-++      bond-break-lacpdu-tx.sh \
-++      dev_addr_lists.sh
-+ 
-+ TEST_FILES := lag_lib.sh
+Sorry, was busy running a conference ;-)
 
-Here's to hoping there are no more bond selftests before final..
+> 
+> > Fix this compilation error seen when CONFIG_TRACING is not enabled:
+> >
+> > drivers/scsi/qla2xxx/qla_os.c: In function 'qla_trace_init':
+> > drivers/scsi/qla2xxx/qla_os.c:2854:25: error: implicit declaration of function
+> > 'trace_array_get_by_name'; did you mean 'trace_array_set_clr_event'?
+> > [-Werror=implicit-function-declaration]
+> >  2854 |         qla_trc_array = trace_array_get_by_name("qla2xxx");
+> >       |                         ^~~~~~~~~~~~~~~~~~~~~~~
+> >       |                         trace_array_set_clr_event
+> >
+> > drivers/scsi/qla2xxx/qla_os.c: In function 'qla_trace_uninit':
+> > drivers/scsi/qla2xxx/qla_os.c:2869:9: error: implicit declaration of function
+> > 'trace_array_put' [-Werror=implicit-function-declaration]
+> >  2869 |         trace_array_put(qla_trc_array);
+> >       |         ^~~~~~~~~~~~~~~
+> >  
+> 
+
+The patch looks good to me.
+
+Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+
+-- Steve

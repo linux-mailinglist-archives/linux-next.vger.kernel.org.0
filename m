@@ -2,72 +2,51 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4FC85E58B8
-	for <lists+linux-next@lfdr.de>; Thu, 22 Sep 2022 04:43:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9BB95E5994
+	for <lists+linux-next@lfdr.de>; Thu, 22 Sep 2022 05:22:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229459AbiIVCnW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 21 Sep 2022 22:43:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44878 "EHLO
+        id S229819AbiIVDWl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 21 Sep 2022 23:22:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbiIVCnV (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 21 Sep 2022 22:43:21 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD27AAC272
-        for <linux-next@vger.kernel.org>; Wed, 21 Sep 2022 19:43:20 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id e5so7919254pfl.2
-        for <linux-next@vger.kernel.org>; Wed, 21 Sep 2022 19:43:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=OtLhPCmrBbgG6Ta6nZY1k4zR6lFQhJZyrPCPPbSiPh8=;
-        b=eFZAHm/C2Y0mQ6YuQA1eEGnSfo9hr1SWa/BeXa3oq/xsQ8E1RVIi6HJdAnkiaBRZ0V
-         XdlUkox4cJgW58rY1u0o60Irh78P2QTtuEDEon0EVtv743ZLKfqETH4WSpzbiDWUiYvi
-         5ulBaRQ+qYyzoi+g0z3sxmoFd/gHTcRXkNHfPX8wD+QC84aG8gbNHMcndIC0FetdCu61
-         CzUOzzPzcyQ+5tOBwZG1GEN3mc2BnNdCW9Me12dMVQr84TcMNWb4eaiFSgTv8zBu0adI
-         GkamwX0qAFIF6nNV/UKN83Fl9v/CDOQb/yYetp48jZErn5BFFU9Swj86rJzE+BZAgAee
-         8dBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=OtLhPCmrBbgG6Ta6nZY1k4zR6lFQhJZyrPCPPbSiPh8=;
-        b=RreBNHL8X3pvAREFvT0SEqGT9xbJnSwcNmeKqsnYbXMS0YkNiM+KjF9I1zLeePBv7R
-         XHUgC49r08Kn/4ccqmGyEs4QaGvpjujRJml+Sm/cE+YLx+I8GDK/wyuuG8DaHXp+rsoL
-         HzrVBu6o/ckmeuIg5ISreKmiLwrZMjmpskAwdrr2Mv09LqYqXYMoHkd5ymEmeaC9mjw5
-         Tqpc68+OdCncswEmTEE11AuY4hK9Q7XLKRtu1iqqZIunFV4wgE+K+TduRrd2BssD4Cjb
-         bK+OUDleh142KbO8GxdX8dG4guUUsmjuN/gnv+dgZbmzVQ0vfG766PdkhwTylFgW1myW
-         pekw==
-X-Gm-Message-State: ACrzQf2toVhibSHtVMxMkCd011+S0rKYRYd+nSx1aimldsFoAO9O8qX7
-        SagpLk/WimkQVP8kiE+TSbgMZLlkLco=
-X-Google-Smtp-Source: AMsMyM6Wsp28El83ItRe5adEemGqYwj28lvqB09Edm0d2zeFBUyilpHzZD6p5qiXF5cqn+p44ooI9w==
-X-Received: by 2002:a63:84c6:0:b0:439:4687:b63f with SMTP id k189-20020a6384c6000000b004394687b63fmr1143385pgd.532.1663814600147;
-        Wed, 21 Sep 2022 19:43:20 -0700 (PDT)
-Received: from [192.168.43.80] (subs28-116-206-12-54.three.co.id. [116.206.12.54])
-        by smtp.gmail.com with ESMTPSA id t4-20020a1709027fc400b00176dd41320dsm2680746plb.119.2022.09.21.19.43.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Sep 2022 19:43:19 -0700 (PDT)
-Message-ID: <14fa2a39-b5e6-f878-2b87-2dd86b450920@gmail.com>
-Date:   Thu, 22 Sep 2022 09:43:13 +0700
+        with ESMTP id S231207AbiIVDWA (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 21 Sep 2022 23:22:00 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8F1B24961;
+        Wed, 21 Sep 2022 20:20:31 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MY0mw6xrnzWgqh;
+        Thu, 22 Sep 2022 11:16:32 +0800 (CST)
+Received: from [10.174.179.163] (10.174.179.163) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 22 Sep 2022 11:20:29 +0800
+Message-ID: <c0dc4f59-c563-908b-e135-298366372857@huawei.com>
+Date:   Thu, 22 Sep 2022 11:20:28 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: What is the difference between linux-next and linux-kernel
- mailing lists?
-Content-Language: en-US
-To:     Turritopsis Dohrnii Teo En Ming <teo.en.ming@protonmail.com>,
-        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>
-Cc:     "ceo@teo-en-ming-corp.com" <ceo@teo-en-ming-corp.com>
-References: <3eqrFna3vX_qv5tM9LT_0Mqf7zyT1B5OPa8UcwIvO_CW9eFNly54zZmShglkINpHxXCNo-nDdeabRQ2VkPTwvizp_atYq7LsiuMKqGERug0=@protonmail.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <3eqrFna3vX_qv5tM9LT_0Mqf7zyT1B5OPa8UcwIvO_CW9eFNly54zZmShglkINpHxXCNo-nDdeabRQ2VkPTwvizp_atYq7LsiuMKqGERug0=@protonmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH v2 char-misc-next] misc: microchip: pci1xxxx: use
+ DEFINE_SIMPLE_DEV_PM_OPS() in place of the SIMPLE_DEV_PM_OPS() in pci1xxxx's
+ gpio driver
+To:     Conor Dooley <conor@kernel.org>,
+        Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
+CC:     <linux-kernel@vger.kernel.org>, <sudipm.mukherjee@gmail.com>,
+        <arnd@arndb.de>, <linux-gpio@vger.kernel.org>,
+        <linux-next@vger.kernel.org>, <gregkh@linuxfoundation.org>,
+        <bagasdotme@gmail.com>
+References: <20220915094729.646185-1-kumaravel.thiagarajan@microchip.com>
+ <YytAbfmMfxNsIjcy@spud>
+From:   Zeng Heng <zengheng4@huawei.com>
+In-Reply-To: <YytAbfmMfxNsIjcy@spud>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.163]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500022.china.huawei.com (7.185.36.162)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,30 +54,90 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 9/16/22 21:25, Turritopsis Dohrnii Teo En Ming wrote:
-> Subject: What is the difference between linux-next and linux-kernel mailing lists?
-> 
-> Good day from Singapore,
-> 
-> What is the difference between linux-next and linux-kernel mailing lists?
-> 
-> What goes into linux-next mailing list and what goes into linux-kernel mailing list?
-> 
+在 2022/9/22 0:48, Conor Dooley 写道:
+> On Thu, Sep 15, 2022 at 03:17:29PM +0530, Kumaravel Thiagarajan wrote:
+>> misc: microchip: pci1xxxx: use DEFINE_SIMPLE_DEV_PM_OPS() in place  of the SIMPLE_DEV_PM_OPS() in pci1xxxx's gpio driver
+>                                                                      ^^
+> FYI, double space in the subject here, rather a mouthful though and
+> surely everything after SIMPLE_DEV_PM_OPS() is redundant?
+>
+>> build errors listed below and reported by Sudip Mukherjee
+>> <sudipm.mukherjee@gmail.com> for the builds of
+>> riscv, s390, csky, alpha and loongarch allmodconfig are fixed in
+>> this patch.
+> allmodconfig has been broken for a while now, and this patch appears
+> to have been sitting for a week & a second fix has shown up at:
+> https://lore.kernel.org/all/20220919094250.858716-1-zengheng4@huawei.com/
+>
+> I do note that Zeng Hang's patch does slightly more than this one does,
+> but idk about about the PM APIs /shrug.
 
-Hi,
+Using 'pm_sleep_ptr' here just for telling compiler to optimize the 
+struct pci1xxxx_gpio_pm_ops,
 
-LKML is mailing list for Linux kernel development. There, general discussions
-as well as patch submissions and reviews take place.
+which is located in ro_data section.
 
-linux-next mailing list is for linux-next tree, where all subsystems tree
-are merged (excluding stable kernel tree). It is a snapshot for what next
-kernel release will look like.
+~~~
 
-If you'd like to contribute, see Documentation/process/submitting-patches.rst.
+0000000000000770 t pci1xxxx_gpio_irq_set_mask
+00000000000008b2 t pci1xxxx_gpio_irq_unmask
+0000000000000080 r pci1xxxx_gpio_pm_ops        <--
+0000000000000000 t pci1xxxx_gpio_probe
+0000000000000636 t pci1xxxx_gpio_set
 
-And don't forget DON'T top post; reply inline instead.
+~~~
 
-Thanks.
+> Has this just slipped under the radar since so many of us were
+> attending conferences etc the last while or are you looking for
+> Kumaravel to do something more here?
 
--- 
-An old man doll... just what I always wanted! - Clara
+Just my fault about double check similar patch emails in the concerned area,
+
+or maybe I would pass the warning and not send the patch.
+
+Thanks all.
+
+
+Best regards,
+
+Zeng Heng
+
+>
+> Thanks,
+> Conor.
+>
+>> drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c:311:12: error: 'pci1xxxx_gpio_resume' defined but not used [-Werror=unused-function]
+>>    311 | static int pci1xxxx_gpio_resume(struct device *dev)
+>>        |            ^~~~~~~~~~~~~~~~~~~~
+>> drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c:295:12: error: 'pci1xxxx_gpio_suspend' defined but not used [-Werror=unused-function]
+>>    295 | static int pci1xxxx_gpio_suspend(struct device *dev)
+>>        |            ^~~~~~~~~~~~~~~~~~~~~
+>>
+>> Fixes: 4ec7ac90ff39 ("misc: microchip: pci1xxxx: Add power management functions - suspend & resume handlers.")
+>> Reported-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+>> Signed-off-by: Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
+>> ---
+>> Changes in v2:
+>>    - Mention as Sudip had reported in the commit description
+>>      as suggested by Bagas Sanjaya <bagasdotme@gmail.com>
+>> ---
+>>   drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c b/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c
+>> index 9cc771c604ed..4cd541166b0c 100644
+>> --- a/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c
+>> +++ b/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c
+>> @@ -405,7 +405,7 @@ static int pci1xxxx_gpio_probe(struct auxiliary_device *aux_dev,
+>>   	return devm_gpiochip_add_data(&aux_dev->dev, &priv->gpio, priv);
+>>   }
+>>   
+>> -static SIMPLE_DEV_PM_OPS(pci1xxxx_gpio_pm_ops, pci1xxxx_gpio_suspend, pci1xxxx_gpio_resume);
+>> +static DEFINE_SIMPLE_DEV_PM_OPS(pci1xxxx_gpio_pm_ops, pci1xxxx_gpio_suspend, pci1xxxx_gpio_resume);
+>>   
+>>   static const struct auxiliary_device_id pci1xxxx_gpio_auxiliary_id_table[] = {
+>>   	{.name = "mchp_pci1xxxx_gp.gp_gpio"},
+>> -- 
+>> 2.25.1
+>>
+>>

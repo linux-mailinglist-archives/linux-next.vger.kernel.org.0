@@ -2,96 +2,97 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 400675E5FB6
-	for <lists+linux-next@lfdr.de>; Thu, 22 Sep 2022 12:20:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D493E5E6325
+	for <lists+linux-next@lfdr.de>; Thu, 22 Sep 2022 15:05:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbiIVKUp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 22 Sep 2022 06:20:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39456 "EHLO
+        id S230263AbiIVNFs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 22 Sep 2022 09:05:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231391AbiIVKUp (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 22 Sep 2022 06:20:45 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E80B2D8C;
-        Thu, 22 Sep 2022 03:20:44 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MYBBL0pPCz4xG5;
-        Thu, 22 Sep 2022 20:20:41 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1663842042;
-        bh=isWspzlR4F4+tBY1FRpoKraSXHtPSMkwmApxBzjChiU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Zvj6xOgnRrw2gm7zi78LqxK4VcpFtH7rSEVW7RpxK1GyO6zFr4XjbYiAErDFTRwcJ
-         Kh12uM2OFi4FQll0FopFKApCDLjC+ybML1rrQfaehnM2lizXFFa0FPAH/Uvc7dtkDI
-         g3NJoL74F+BdiDzlvEDvCJ55sS9q8g4JXK7nfXx5KPuIka7fLYBff6dwjEMeiqxnSY
-         dZxq68LqLEiEf++RDMf6z48Zlp7Q0fmnwX3WMo3fBB48Q+UpTmeNjL7ECpp6IWgiRw
-         JPI7uSma6Dvj6iudMo+ugM6DW5rdGxSZfhtJ4V+ABhbrRFuW1A04BfaaXA3cwaoRCB
-         Rl9ShCT4yAa/w==
-Date:   Thu, 22 Sep 2022 20:20:39 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Eliav Farber <farbere@amazon.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the hwmon-staging tree
-Message-ID: <20220922202039.211372a6@canb.auug.org.au>
+        with ESMTP id S229673AbiIVNFq (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 22 Sep 2022 09:05:46 -0400
+Received: from smtp-fw-33001.amazon.com (smtp-fw-33001.amazon.com [207.171.190.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F448E6A3E;
+        Thu, 22 Sep 2022 06:05:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1663851946; x=1695387946;
+  h=message-id:date:mime-version:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:subject;
+  bh=jde3lYab1cgEqi5kdLQjfYu3v4kqudgRikp9yDWVE8U=;
+  b=QJhtmfftJPUIkpCaiVm1P9XylPESbOuG//+iDFUqYdIpR2ML/qD+1VjQ
+   fzzsTv1zVRirj7eGePZlvdovyicLVwFuuK7OUhM7nkAMnHbuJFtrpuwSV
+   p5h0X0qsp0oV9QPxzkQT1Hx2cGCh5xFMKTHKyui31hCW3at41a8oLF02Y
+   M=;
+X-IronPort-AV: E=Sophos;i="5.93,335,1654560000"; 
+   d="scan'208";a="227801747"
+Subject: Re: linux-next: Fixes tag needs some work in the hwmon-staging tree
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2b-1f9d5b26.us-west-2.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-33001.sea14.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 13:05:30 +0000
+Received: from EX13D43EUA002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2b-1f9d5b26.us-west-2.amazon.com (Postfix) with ESMTPS id 5E53745444;
+        Thu, 22 Sep 2022 13:05:29 +0000 (UTC)
+Received: from EX19D044EUA001.ant.amazon.com (10.252.50.83) by
+ EX13D43EUA002.ant.amazon.com (10.43.165.108) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Thu, 22 Sep 2022 13:05:28 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (10.43.161.207) by
+ EX19D044EUA001.ant.amazon.com (10.252.50.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
+ Thu, 22 Sep 2022 13:05:27 +0000
+Received: from [10.220.236.67] (10.220.236.67) by mail-relay.amazon.com
+ (10.43.161.249) with Microsoft SMTP Server id 15.0.1497.38 via Frontend
+ Transport; Thu, 22 Sep 2022 13:05:25 +0000
+Message-ID: <4e81be21-b027-cdaf-be69-423e32976269@amazon.com>
+Date:   Thu, 22 Sep 2022 16:05:24 +0300
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/GVc9ufpE6PA.IYfdVf6oaJt";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Guenter Roeck <linux@roeck-us.net>
+CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Linux Next Mailing List" <linux-next@vger.kernel.org>,
+        "Farber, Eliav" <farbere@amazon.com>
+References: <20220922202039.211372a6@canb.auug.org.au>
+From:   "Farber, Eliav" <farbere@amazon.com>
+In-Reply-To: <20220922202039.211372a6@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-13.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/GVc9ufpE6PA.IYfdVf6oaJt
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 9/22/2022 1:20 PM, Stephen Rothwell wrote:
+> Hi all,
+>
+> In commit
+>
+>  103974b11176 ("hwmon: (mr75203) fix undefined reference to `__divdi3'")
+>
+> Fixes tag
+>
+>  Fixes: 381a86c545f1 ("hwmon: (mr75203) modify the temperature 
+> equation according to series 5 datasheet")
+>
+> has these problem(s):
+>
+>  - Target SHA1 does not exist
+>
+> Maybe you meant:
+>
+> Fixes: 94c025b6f735 ("hwmon: (mr75203) modify the temperature equation 
+> according to series 5 datasheet")
 
-Hi all,
 
-In commit
+Correct, it should be 94c025b6f73.
 
-  103974b11176 ("hwmon: (mr75203) fix undefined reference to `__divdi3'")
+--
+Regards, Eliav
 
-Fixes tag
 
-  Fixes: 381a86c545f1 ("hwmon: (mr75203) modify the temperature equation ac=
-cording to series 5 datasheet")
-
-has these problem(s):
-
-  - Target SHA1 does not exist
-
-Maybe you meant:
-
-Fixes: 94c025b6f735 ("hwmon: (mr75203) modify the temperature equation acco=
-rding to series 5 datasheet")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/GVc9ufpE6PA.IYfdVf6oaJt
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMsNvcACgkQAVBC80lX
-0GwlLgf/ZzjY2cMzz41Tzi/P1cJiWZYpV9/hc3uitQr9gpOcjbK7Ya0peV/RJnKJ
-r2KRL5wBRQaCTF6WRn82pmrY6E70sYf91c34+roN/wWS433tsFtLMTcdGzSiTrbM
-Nre/17UyrDCfaep8LFKAKSUi6KnlC3ujw+xpu0TgWDFfKwo7Dy+1sWlTsMk1pLCs
-5xxI3T6wud0UUgsf+pxTy4WG1ksyl9ZmEGouWpIH8SlsXtr87cqBf23q2qeoN/7O
-pxgt7XQGAosqV5amvo+FPyBq8hd58rXbcC4ZOtboRIKDrvf9bEzEKOMNEiqpUTzo
-C1dCoka2TzZw9PQ8qjLzwgk3LyJ2bg==
-=R+7Y
------END PGP SIGNATURE-----
-
---Sig_/GVc9ufpE6PA.IYfdVf6oaJt--

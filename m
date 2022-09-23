@@ -2,103 +2,88 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECD1F5E78FD
-	for <lists+linux-next@lfdr.de>; Fri, 23 Sep 2022 13:02:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BB6E5E79D6
+	for <lists+linux-next@lfdr.de>; Fri, 23 Sep 2022 13:42:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231168AbiIWLCD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 23 Sep 2022 07:02:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47174 "EHLO
+        id S230163AbiIWLmp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 23 Sep 2022 07:42:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231652AbiIWLBz (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 23 Sep 2022 07:01:55 -0400
-Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC23D8251;
-        Fri, 23 Sep 2022 04:01:52 -0700 (PDT)
-Date:   Fri, 23 Sep 2022 20:01:44 +0900
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1663930910;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CzTqdtOB2X4wc0DpIuKM08/B89OG1P8P6SGFQopNwSY=;
-        b=TRYOC6RhzxleRuqmDK5iERb3eo0j9NNehNKHClbd2hkk2bqGazUtPjFPVho5lEU5KV1hBd
-        8BWTuvyFiuo7HONDXqE25umWKagS8RZVzdkmazGgyd9+QVcMGIxhJp7v1TteEzYRtokbav
-        bckRxKimgcYYuGpbvIqnonpD5w9CpVg=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Naoya Horiguchi <naoya.horiguchi@linux.dev>
-To:     Michael Walle <michael@walle.cc>
-Cc:     sfr@canb.auug.org.au, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        naoya.horiguchi@nec.com
-Subject: Re: linux-next: build failure after merge of the mm tree
-Message-ID: <20220923110144.GA1413812@ik1-406-35019.vs.sakura.ne.jp>
-References: <20220923175554.59431f7b@canb.auug.org.au>
- <20220923095013.1151252-1-michael@walle.cc>
+        with ESMTP id S230359AbiIWLmm (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 23 Sep 2022 07:42:42 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BA6B139430;
+        Fri, 23 Sep 2022 04:42:41 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id g3so19955693wrq.13;
+        Fri, 23 Sep 2022 04:42:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date;
+        bh=qInd8OshU6iSqvY25zhNaMe3YYc1iLfJiCD+P5Z80PY=;
+        b=NknAA532T2w2I12EWWoVE0IuVNlt0YadBipCxkk3Ope2yQ0W6Wyyu2LuIncxTuFOkk
+         Li/n9zJVTkGncwR/zWPt3uN2Q5y1oNUJ14gWD376d8XTHA5P2zMlGdmfQ0cBHSpztyxP
+         VUXKcUvNdXO35E38CaxmdLeDjFpqYrkPpUodZ/1IJk5fBfB4oeSiZwiQOKsZoRmWrKTh
+         Z6v3KWfpbGMeYAX9LeDQlETM9a/KZ5M3A9R8ZQfa6wTLAEFUtnVP71IzUDT8FIKQgYOF
+         h18vIDou369nrWST5DRrb7CiapqsDMT6McMXnsK8A+qTmxjftsdTiJeAHX2I+li5vkRH
+         qS/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=qInd8OshU6iSqvY25zhNaMe3YYc1iLfJiCD+P5Z80PY=;
+        b=v6m7o4uK0rxYO7jiM6iyjZkC6CjtJMYHGS+2HQnj88o1yRESK6qyP94xT2/+RhgKZj
+         Q1l+wlHMDEFyElv02JwXcJnRpG64eN28Ans0Oiqy1218D/rbtAGpeXUmKbX+bgAOfECo
+         36MmOTo/jUk4SKLZL5d4nv4RIK0iqx1WsZklj+HSMqoI2125TPXx602nQTZJbWYVZiOH
+         6PLwSrltZmH2UOwb+1CFbYgEld4ADQA5SJ8Zh23ULVbYfB42QJsgKdp919YT4gemiE7X
+         TpXxqRXf5hOb4NaM5oV+SlSNwVXIMGWUNqggbDet5tLIiauge7AOfPqTFhgsdMKxql4s
+         gF/w==
+X-Gm-Message-State: ACrzQf2k/2O6lV0t72S7gWpzKRf25ENO1XaAq3beQnupSb80moVwue87
+        kUSzWC4DkiY0fHKL01nCtS4=
+X-Google-Smtp-Source: AMsMyM42pwRjd6ykyQSHUhJseiAJeHfZDyk7MCvtj7lm3nQnnqHmG83zdL5DA+11iBZmFzt0kCkgXA==
+X-Received: by 2002:adf:f00b:0:b0:22a:906d:358d with SMTP id j11-20020adff00b000000b0022a906d358dmr5033191wro.464.1663933359634;
+        Fri, 23 Sep 2022 04:42:39 -0700 (PDT)
+Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
+        by smtp.gmail.com with ESMTPSA id p21-20020a1c5455000000b003b27f644488sm2231717wmi.29.2022.09.23.04.42.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Sep 2022 04:42:39 -0700 (PDT)
+Date:   Fri, 23 Sep 2022 12:42:37 +0100
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     James Clark <james.clark@arm.com>, Mark Brown <broonie@kernel.org>,
+        Will Deacon <will@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org
+Subject: build failure of next-20220923 due to cbb0c02caf4b ("perf: arm64:
+ Add SVE vector granule register to user regs")
+Message-ID: <Yy2braL3vc0SYDGl@debian>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220923095013.1151252-1-michael@walle.cc>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Sep 23, 2022 at 11:50:13AM +0200, Michael Walle wrote:
-> Hi,
-> 
-> > After merging the mm tree, today's linux-next build (powerpc
-> > ppc64_defconfig) failed like this:
-> > 
-> > drivers/base/memory.c: In function 'memory_block_online':
-> > drivers/base/memory.c:186:34: error: 'struct memory_block' has no member na=
-> > med 'nr_hwpoison'
-> >   186 |         if (atomic_long_read(&mem->nr_hwpoison))
-> >       |                                  ^~
-> > drivers/base/memory.c: In function 'remove_memory_block_devices':
-> > drivers/base/memory.c:870:61: error: 'struct memory_block' has no member na=
-> > med 'nr_hwpoison'
-> >   870 |                 clear_hwpoisoned_pages(atomic_long_read(&mem->nr_hw=
-> > poison));
-> >       |                                                             ^~
-> > 
-> > Caused by commit
-> > 
-> >   69b496f03bb4 ("mm/hwpoison: introduce per-memory_block hwpoison counter")
-> > 
-> > This build has CONFIG_MEMORY_FAILURE not set.
+Hi All,
 
-Sorry for inconvenience, I submitted a possible fix hours ago,
-https://lore.kernel.org/linux-mm/20220923081827.GA1357512@ik1-406-35019.vs.sakura.ne.jp/T/#t
-I think the above build error should be fixed by this.
+A native build of next-20220923 on arm64 host has failed with the error:
 
-(the updated patch is here https://lore.kernel.org/linux-mm/20220923082613.GB1357512@ik1-406-35019.vs.sakura.ne.jp/T/#u)
+./usr/include/asm/perf_regs.h:42:26: error: C++ style comments are not allowed in ISO C90
+   42 |  PERF_REG_ARM64_VG = 46, // SVE Vector Granule
+      |                          ^
+./usr/include/asm/perf_regs.h:42:26: note: (this will be reported only once per input file)
 
-But ...
+I have not bisected but I think it will be from cbb0c02caf4b ("perf: arm64: Add SVE vector granule register to user regs").
 
-> 
-> There also seems be more missing stubs. I'm getting:
-> 
-> aarch64-linux-gnu-ld: mm/memory-failure.o: in function `unpoison_memory':
-> memory-failure.c:(.text+0x1c38): undefined reference to `memblk_nr_poison_sub'
-> aarch64-linux-gnu-ld: mm/memory-failure.o: in function `num_poisoned_pages_inc':
-> memory-failure.c:(.text+0x2c8c): undefined reference to `memblk_nr_poison_inc'
-> aarch64-linux-gnu-ld: memory-failure.c:(.text+0x2cbc): undefined reference to `memblk_nr_poison_inc'
-> 
-> On a board where CONFIG_MEMORY_HOTPLUG is not set, but
-> CONFIG_MEMORY_FAILURE is. So either there are stubs missing or
-> MEMORY_FAILURE should depend MEMORY_HOTPLUG (?!).
+I will be happy to test any patch or provide any extra log if needed.
 
-Yes, the new field ->nr_hwpoison is meaningful only when both settings are
-enabled, so I need/will update #ifdef condition to check MEMORY_HOTPLUG.
-In x86, CONFIG_MEMORY_HOTPLUG=n and CONFIG_MEMORY_FAILURE=y does not show
-this error.  So this error might be caused by arch dependency.
-Anyway I'll update the patch again soon.
-Thank you for the report.
 
-- Naoya Horiguchi
+-- 
+Regards
+Sudip

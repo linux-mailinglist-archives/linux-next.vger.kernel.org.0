@@ -2,134 +2,480 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F2C75E7304
-	for <lists+linux-next@lfdr.de>; Fri, 23 Sep 2022 06:37:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DD935E7317
+	for <lists+linux-next@lfdr.de>; Fri, 23 Sep 2022 06:48:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbiIWEhd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 23 Sep 2022 00:37:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34230 "EHLO
+        id S229531AbiIWEr6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 23 Sep 2022 00:47:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiIWEhc (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 23 Sep 2022 00:37:32 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D340122062;
-        Thu, 22 Sep 2022 21:37:30 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MYfWq1D80z4xG7;
-        Fri, 23 Sep 2022 14:37:27 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1663907848;
-        bh=r79Fi2q7vDH+4keyU++nq/5BtRLQ9PuF+L6MJWPj3QM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Cc+9A/dbHjikYLgZgV2EX+JUlweOwI8rF9z+3xvzkV+rnJUyJsgNuAY3wcrK4rUK4
-         P6MybwJORNSUJO2IBaaxFmU3DFpjggFubBBv0pZ4zuTLukGmt6ExDCmV4UC25rrJgv
-         9Q2JR0De/bbmLjuVNMw2zSlWtkQADPJE19zGkeF8rqcLaBDh0Pbirep4k23gYfvuQ+
-         iZZez8LMxH1cK6NYcji9FG70ou5IB6UAFGGsvQy+anLLwg9wrXYE/Y5LABWBZcNxbT
-         ZPRkoO62wiv62jQRkHyMHzKiS8kMV4o120+MKxKM1UbQS/ZV1e8YZlB4azSeu18KxZ
-         eRS5hwGLdScEA==
-Date:   Fri, 23 Sep 2022 14:37:25 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Corey Minyard <cminyard@mvista.com>,
-        Wolfram Sang <wsa@the-dreams.de>
-Cc:     Corey Minyard <minyard@acm.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
-        <u.kleine-koenig@pengutronix.de>, Wolfram Sang <wsa@kernel.org>
-Subject: linux-next: manual merge of the ipmi tree with the i2c tree
-Message-ID: <20220923143725.0641ee4f@canb.auug.org.au>
+        with ESMTP id S229499AbiIWEr4 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 23 Sep 2022 00:47:56 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78CA01257B7
+        for <linux-next@vger.kernel.org>; Thu, 22 Sep 2022 21:47:54 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id fv3so11875514pjb.0
+        for <linux-next@vger.kernel.org>; Thu, 22 Sep 2022 21:47:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date;
+        bh=9U+01EiCDZEnUlCXDHjTE0yZKLOq0WF/99k4QrlOm7s=;
+        b=4SYk8x+5ihgW6+qLD9uJw3jmdLGoCwB5LTHep26BJZb+IiqPvivhplcRXoywaRgacx
+         SK3R1xiCGkepEvN/9I6h6sXRfIxLFA4MY3XAerK11wPecu3C7+XHBRWmfQWfiEkEr+OE
+         vwyzNXLSm4aFIslWnuq+ZhUG6HvETCQAv8KoidWO+MyWX4hf0IimpHtsqHifzyzm4f96
+         zdB3UKvM/5vEm9WK+g3VqqWDIhnNKEqZnY7LGu7Ms+o7cUa0BWOMIHVkIcZbzGy4cXfF
+         K0oJShxZvoZpho3LY5p5R8tSyZZdosk5rXP0Ax5xpBcm80h7zagFrHeUdGBK5HT4eEof
+         bK5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=9U+01EiCDZEnUlCXDHjTE0yZKLOq0WF/99k4QrlOm7s=;
+        b=Tq1QABQszhprpXiMSghLtM007JSzHv3f1PWAOr1L/QDmDmD/J25Yz5g2Pc18EauIx3
+         WtfE7z+tkOj9nmrbhTeiI5vTrfWr16YjZ6i/W0cADAaUEKVSZtu5lmFCGKUwhS/ZtQH/
+         diSwwmlTaD+4djAQ9lXaAqDrrOGJuK9aed5LKMY7fNa1iWogCH6KluWopIWG2ly0cJrl
+         UWwrpRstcKSk7O06Axn8RN/Qlx2aL9Lomg8I6gLttjlwUQ7DrYmUeaqCLUtxKAaXgY+8
+         xpxwcoeECp39Hjr9ms2+ZcgUaMsiU0zSY3U+z8cWL17nlpspF8+MB8ecFBd6XlJZlxao
+         m+uw==
+X-Gm-Message-State: ACrzQf0pU+S6rBUcrE4g+2FeB7+448n5S47WbQnxPlCDb15MqJa5dajb
+        k6qWGIto8pJYGwYaCSQRK7r2MXYaWNbO8/3nVc8=
+X-Google-Smtp-Source: AMsMyM7s6i+UEw4RfUcnp1EiaMWCsCPOwjAnlNvRipNPcEq1cFJFLUDxdzMFeMNL2MZxPZ9bhCMvaw==
+X-Received: by 2002:a17:903:11c5:b0:178:af17:e930 with SMTP id q5-20020a17090311c500b00178af17e930mr6750991plh.95.1663908473683;
+        Thu, 22 Sep 2022 21:47:53 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id q4-20020a170902bd8400b001782580ce9csm4886963pls.249.2022.09.22.21.47.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Sep 2022 21:47:53 -0700 (PDT)
+Message-ID: <632d3a79.170a0220.8fdd1.a156@mx.google.com>
+Date:   Thu, 22 Sep 2022 21:47:53 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_//tpbQMaQotCsAyBILEyG5e3";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+X-Kernelci-Report-Type: test
+X-Kernelci-Kernel: v6.0-rc6-387-gffc6a8abc59d
+Subject: next/pending-fixes baseline: 464 runs,
+ 12 regressions (v6.0-rc6-387-gffc6a8abc59d)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_//tpbQMaQotCsAyBILEyG5e3
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/pending-fixes baseline: 464 runs, 12 regressions (v6.0-rc6-387-gffc6a8=
+abc59d)
 
-Hi all,
+Regressions Summary
+-------------------
 
-Today's linux-next merge of the ipmi tree got a conflict in:
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+da850-lcdk                   | arm   | lab-baylibre  | gcc-10   | davinci_a=
+ll_defconfig        | 1          =
 
-  drivers/char/ipmi/ipmi_ipmb.c
+hifive-unleashed-a00         | riscv | lab-baylibre  | gcc-10   | defconfig=
+                    | 1          =
 
-between commit:
+imx7ulp-evk                  | arm   | lab-nxp       | gcc-10   | multi_v7_=
+defc...MB2_KERNEL=3Dy | 1          =
 
-  ed5c2f5fd10d ("i2c: Make remove callback return void")
+imx7ulp-evk                  | arm   | lab-nxp       | gcc-10   | multi_v7_=
+defconfig+ima       | 1          =
 
-from the i2c tree and commit:
+imx7ulp-evk                  | arm   | lab-nxp       | gcc-10   | multi_v7_=
+defconfig+crypto    | 1          =
 
-  80d98a33008c ("ipmi:ipmb: Don't call ipmi_unregister_smi() on a register =
-failure")
+mt8183-kukui-...uniper-sku16 | arm64 | lab-collabora | gcc-10   | defconfig=
++arm64-chromebook   | 1          =
 
-from the ipmi tree.
+qemu_mips-malta              | mips  | lab-collabora | gcc-10   | malta_def=
+config              | 1          =
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+rk3399-gru-kevin             | arm64 | lab-collabora | gcc-10   | defconfig=
++arm64-chromebook   | 4          =
 
-Also, from Uwe:
+sc7180-trogdo...zor-limozeen | arm64 | lab-collabora | gcc-10   | defconfig=
++arm64-chromebook   | 1          =
 
-"There is an immutable tag that can be merged into your tree to
-resolve the conflict before you send your changes to Linux at
 
-	https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/make_rem=
-ove_callback_void-immutable"
+  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
+v6.0-rc6-387-gffc6a8abc59d/plan/baseline/
 
---=20
-Cheers,
-Stephen Rothwell
+  Test:     baseline
+  Tree:     next
+  Branch:   pending-fixes
+  Describe: v6.0-rc6-387-gffc6a8abc59d
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      ffc6a8abc59d09b5d193b2a464b234670aae6f66 =
 
-diff --cc drivers/char/ipmi/ipmi_ipmb.c
-index 25c010c9ec25,740dc0f824e0..000000000000
---- a/drivers/char/ipmi/ipmi_ipmb.c
-+++ b/drivers/char/ipmi/ipmi_ipmb.c
-@@@ -436,8 -434,16 +434,14 @@@ static void ipmi_ipmb_cleanup(struct ip
-  	iidev->slave =3D NULL;
-  	iidev->client =3D NULL;
-  	ipmi_ipmb_stop_thread(iidev);
-+ }
-+=20
- -static int ipmi_ipmb_remove(struct i2c_client *client)
-++static void ipmi_ipmb_remove(struct i2c_client *client)
-+ {
-+ 	struct ipmi_ipmb_dev *iidev =3D i2c_get_clientdata(client);
+
+
+Test Regressions
+---------------- =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+da850-lcdk                   | arm   | lab-baylibre  | gcc-10   | davinci_a=
+ll_defconfig        | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/632d00a25b0965c21e355651
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: davinci_all_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.0-rc6-38=
+7-gffc6a8abc59d/arm/davinci_all_defconfig/gcc-10/lab-baylibre/baseline-da85=
+0-lcdk.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.0-rc6-38=
+7-gffc6a8abc59d/arm/davinci_all_defconfig/gcc-10/lab-baylibre/baseline-da85=
+0-lcdk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220919.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/632d00a25b0965c=
+21e355659
+        failing since 242 days (last pass: v5.16-11577-gffd79fec234d, first=
+ fail: v5.17-rc1-180-g86539e2bdb99)
+        3 lines
+
+    2022-09-23T00:40:36.025592  <8><LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Dcri=
+t RESULT=3Dpass UNITS=3Dlines MEASUREMENT=3D0>
+    2022-09-23T00:40:36.143056  kern  :alert : BUG: Bad page state in proce=
+ss kworker/u2:0  pfn:c3000
+    2022-09-23T00:40:36.143336  kern  :alert : BUG: Bad page state in proce=
+ss kworker/u2:0  pfn:c3400
+    2022-09-23T00:40:36.146411  kern  :alert : BUG: Bad page state in proce=
+ss kworker/u2:0  pfn:c3800
+    2022-09-23T00:40:36.190013  <8><LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Dale=
+rt RESULT=3Dfail UNITS=3Dlines MEASUREMENT=3D3>   =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+hifive-unleashed-a00         | riscv | lab-baylibre  | gcc-10   | defconfig=
+                    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/632cff702ec6bce1a0355670
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (riscv64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.0-rc6-38=
+7-gffc6a8abc59d/riscv/defconfig/gcc-10/lab-baylibre/baseline-hifive-unleash=
+ed-a00.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.0-rc6-38=
+7-gffc6a8abc59d/riscv/defconfig/gcc-10/lab-baylibre/baseline-hifive-unleash=
+ed-a00.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220919.0/riscv/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/632cff702ec6bce1a0355=
+671
+        failing since 23 days (last pass: v6.0-rc3-304-gd62f6b276548, first=
+ fail: v6.0-rc3-353-g0c97ffa2a016) =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+imx7ulp-evk                  | arm   | lab-nxp       | gcc-10   | multi_v7_=
+defc...MB2_KERNEL=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/632d03b110243f73bf3556ca
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.0-rc6-38=
+7-gffc6a8abc59d/arm/multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab-=
+nxp/baseline-imx7ulp-evk.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.0-rc6-38=
+7-gffc6a8abc59d/arm/multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy/gcc-10/lab-=
+nxp/baseline-imx7ulp-evk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220919.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/632d03b110243f73bf355=
+6cb
+        new failure (last pass: v6.0-rc6-280-g7faf69694280) =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+imx7ulp-evk                  | arm   | lab-nxp       | gcc-10   | multi_v7_=
+defconfig+ima       | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/632d0519a052370218355642
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+ima
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.0-rc6-38=
+7-gffc6a8abc59d/arm/multi_v7_defconfig+ima/gcc-10/lab-nxp/baseline-imx7ulp-=
+evk.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.0-rc6-38=
+7-gffc6a8abc59d/arm/multi_v7_defconfig+ima/gcc-10/lab-nxp/baseline-imx7ulp-=
+evk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220919.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/632d0519a052370218355=
+643
+        new failure (last pass: v6.0-rc5-224-g269f27f24a11) =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+imx7ulp-evk                  | arm   | lab-nxp       | gcc-10   | multi_v7_=
+defconfig+crypto    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/632d0696b0f7a9f2ef355652
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+crypto
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.0-rc6-38=
+7-gffc6a8abc59d/arm/multi_v7_defconfig+crypto/gcc-10/lab-nxp/baseline-imx7u=
+lp-evk.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.0-rc6-38=
+7-gffc6a8abc59d/arm/multi_v7_defconfig+crypto/gcc-10/lab-nxp/baseline-imx7u=
+lp-evk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220919.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/632d0696b0f7a9f2ef355=
+653
+        new failure (last pass: v6.0-rc5-224-g269f27f24a11) =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+mt8183-kukui-...uniper-sku16 | arm64 | lab-collabora | gcc-10   | defconfig=
++arm64-chromebook   | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/632d0527a052370218355666
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.0-rc6-38=
+7-gffc6a8abc59d/arm64/defconfig+arm64-chromebook/gcc-10/lab-collabora/basel=
+ine-mt8183-kukui-jacuzzi-juniper-sku16.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.0-rc6-38=
+7-gffc6a8abc59d/arm64/defconfig+arm64-chromebook/gcc-10/lab-collabora/basel=
+ine-mt8183-kukui-jacuzzi-juniper-sku16.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220919.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/632d0527a052370218355=
+667
+        failing since 48 days (last pass: v5.19-8283-ga8bc7f656e322, first =
+fail: v5.19-11387-gd91170a44a94) =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+qemu_mips-malta              | mips  | lab-collabora | gcc-10   | malta_def=
+config              | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/632cfe22a3e06f27bf355679
+
+  Results:     4 PASS, 1 FAIL, 2 SKIP
+  Full config: malta_defconfig
+  Compiler:    gcc-10 (mips-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.0-rc6-38=
+7-gffc6a8abc59d/mips/malta_defconfig/gcc-10/lab-collabora/baseline-qemu_mip=
+s-malta.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.0-rc6-38=
+7-gffc6a8abc59d/mips/malta_defconfig/gcc-10/lab-collabora/baseline-qemu_mip=
+s-malta.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220919.0/mipsel/rootfs.cpio.gz =
+
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/632cfe22a3e06f2=
+7bf355681
+        new failure (last pass: v6.0-rc5-197-ga6a750a2f4166)
+        1 lines
+
+    2022-09-23T00:30:10.212674  kern  :alert : CPU 0 Unable to handle kerne=
+l paging request at virtual address 6e07b164, epc =3D=3D 802401e0, ra =3D=
+=3D 802401c4
+    2022-09-23T00:30:10.255810  <8><LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Dale=
+rt RESULT=3Dfail UNITS=3Dlines MEASUREMENT=3D1>   =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+rk3399-gru-kevin             | arm64 | lab-collabora | gcc-10   | defconfig=
++arm64-chromebook   | 4          =
+
+
+  Details:     https://kernelci.org/test/plan/id/632d06fea2032c18353556bd
+
+  Results:     85 PASS, 7 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.0-rc6-38=
+7-gffc6a8abc59d/arm64/defconfig+arm64-chromebook/gcc-10/lab-collabora/basel=
+ine-rk3399-gru-kevin.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.0-rc6-38=
+7-gffc6a8abc59d/arm64/defconfig+arm64-chromebook/gcc-10/lab-collabora/basel=
+ine-rk3399-gru-kevin.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220919.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.rockchip-i2s1-probed: https://kernelci.org/test/case/id=
+/632d06fea2032c18353556df
+        failing since 206 days (last pass: v5.17-rc5-244-gd77a1b37f796, fir=
+st fail: v5.17-rc6-176-gb4e03e0dde48)
+
+    2022-09-23T01:07:59.894613  <8>[   35.810259] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Drockchip-i2s0-probed RESULT=3Dpass>
+    2022-09-23T01:08:00.925168  /lava-7351151/1/../bin/lava-test-case   =
+
+
+  * baseline.bootrr.cros-ec-sensors-gyro0-probed: https://kernelci.org/test=
+/case/id/632d06fea2032c1835355702
+        failing since 115 days (last pass: v5.18-5613-ge079cf8f6817, first =
+fail: v5.18-11575-gceccc06b624ed)
+
+    2022-09-23T01:07:58.689695  /lava-7351151/1/../bin/lava-test-case
+    2022-09-23T01:07:58.701267  <8>[   34.617875] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dcros-ec-sensors-gyro0-probed RESULT=3Dfail>   =
+
+
+  * baseline.bootrr.cros-ec-sensors-accel1-probed: https://kernelci.org/tes=
+t/case/id/632d06fea2032c1835355703
+        failing since 115 days (last pass: v5.18-5613-ge079cf8f6817, first =
+fail: v5.18-11575-gceccc06b624ed)
+
+    2022-09-23T01:07:57.652309  /lava-7351151/1/../bin/lava-test-case
+    2022-09-23T01:07:57.662736  <8>[   33.579116] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dcros-ec-sensors-accel1-probed RESULT=3Dfail>   =
+
+
+  * baseline.bootrr.cros-ec-sensors-accel0-probed: https://kernelci.org/tes=
+t/case/id/632d06fea2032c1835355704
+        failing since 115 days (last pass: v5.18-5613-ge079cf8f6817, first =
+fail: v5.18-11575-gceccc06b624ed)
+
+    2022-09-23T01:07:55.562887  <8>[   31.477886] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dcros-ec-sensors-driver-present RESULT=3Dpass>
+    2022-09-23T01:07:56.612791  /lava-7351151/1/../bin/lava-test-case
+    2022-09-23T01:07:56.623650  <8>[   32.540030] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dcros-ec-sensors-accel0-probed RESULT=3Dfail>   =
+
+ =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | regressions
+-----------------------------+-------+---------------+----------+----------=
+--------------------+------------
+sc7180-trogdo...zor-limozeen | arm64 | lab-collabora | gcc-10   | defconfig=
++arm64-chromebook   | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/632d043087bd8846c5355681
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+arm64-chromebook
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v6.0-rc6-38=
+7-gffc6a8abc59d/arm64/defconfig+arm64-chromebook/gcc-10/lab-collabora/basel=
+ine-sc7180-trogdor-lazor-limozeen.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v6.0-rc6-38=
+7-gffc6a8abc59d/arm64/defconfig+arm64-chromebook/gcc-10/lab-collabora/basel=
+ine-sc7180-trogdor-lazor-limozeen.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220919.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/632d043087bd8846c5355=
+682
+        failing since 7 days (last pass: v6.0-rc5-168-ga477b3dec64f2, first=
+ fail: v6.0-rc5-197-ga6a750a2f4166) =
+
  =20
-+ 	ipmi_ipmb_cleanup(iidev);
-  	ipmi_unregister_smi(iidev->intf);
- -
- -	return 0;
-  }
- =20
-  static int ipmi_ipmb_probe(struct i2c_client *client)
-
---Sig_//tpbQMaQotCsAyBILEyG5e3
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMtOAUACgkQAVBC80lX
-0GwluQgApUUUI8r+mZFQ3RHr5guB1j0F9VPrsbuevJTX77cxvIk5ucVHNUm7Iyin
-M35smueQxpKjeCGoJNOu+6cnBpG6/ZLy3wNlWr3MVoeXwXXUIIW3b4Ydpk1uB7tf
-tcnncerI+rMDGCXvuFv/n2+NKs1vmMdiy+D0MinlbPSi03TJ0kQVoUF/p0PYM99N
-T1T9MvzfaPi4i8vxMw4b7svsdacKbBCUbiv/NW9I5cgudJrJVi/KZ9b0exNe/3OQ
-TrAKQplZo5olCKVvKKX8MrImL9JdmPjSo+RclPzUFm5hA5V+rhjS41jjOO0ffdRg
-QEbuxrIkxSz7E9XJQ/WOQ+TapFCooQ==
-=foYZ
------END PGP SIGNATURE-----
-
---Sig_//tpbQMaQotCsAyBILEyG5e3--

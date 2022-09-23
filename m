@@ -2,51 +2,45 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 284685E77A2
-	for <lists+linux-next@lfdr.de>; Fri, 23 Sep 2022 11:50:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A35F85E7842
+	for <lists+linux-next@lfdr.de>; Fri, 23 Sep 2022 12:27:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230241AbiIWJu2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 23 Sep 2022 05:50:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50722 "EHLO
+        id S229991AbiIWK1G (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 23 Sep 2022 06:27:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230064AbiIWJu0 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 23 Sep 2022 05:50:26 -0400
-Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A01542F646;
-        Fri, 23 Sep 2022 02:50:23 -0700 (PDT)
-Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        with ESMTP id S231253AbiIWK04 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 23 Sep 2022 06:26:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1352B128883;
+        Fri, 23 Sep 2022 03:26:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id CEEA01250;
-        Fri, 23 Sep 2022 11:50:19 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1663926620;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rsjnwaPBUJPxsfvMj/cndZRq66fUnmrOrL2fxzRC6eM=;
-        b=Vo/KwCDEpx4d40kwWFj++T4igYTLUw9NzlU2K1j6bQCcPM1bDONFO0p0SdHvB15ph73J5+
-        ljXz7N5HJuJQbLXYxoYUN54ohBOjysdyQF3yVM3BsPZC9rorCg6hABoPxsAnTYup5yiXug
-        T0D0FgvjxrI0iuZr09OgUs0UKDHA5/+b54VFiCrNQdkJF8D8UStNpcu6ROLR7i0ic2oZjm
-        sxqrNAKm70I51CL6hiM4JpwlI9ULLO+imFkBFHiAV12naDwWmehQZMomlcS+DzN6j8eYWv
-        tUWgjDh4kteHN/ud1yuB1WOyP15OgfD/ANhT3bh2kmORbw+JHgj/eTCn7nP9HA==
-From:   Michael Walle <michael@walle.cc>
-To:     sfr@canb.auug.org.au
-Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org, naoya.horiguchi@nec.com,
-        Michael Walle <michael@walle.cc>
-Subject: Re: linux-next: build failure after merge of the mm tree
-Date:   Fri, 23 Sep 2022 11:50:13 +0200
-Message-Id: <20220923095013.1151252-1-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220923175554.59431f7b@canb.auug.org.au>
-References: <20220923175554.59431f7b@canb.auug.org.au>
+        by ams.source.kernel.org (Postfix) with ESMTPS id C584EB82190;
+        Fri, 23 Sep 2022 10:26:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA4FBC433C1;
+        Fri, 23 Sep 2022 10:26:50 +0000 (UTC)
+Date:   Fri, 23 Sep 2022 11:26:47 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Will Deacon <will@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Christoffer Dall <cdall@cs.columbia.edu>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>
+Subject: Re: linux-next: manual merge of the kvm-arm tree with the arm64 tree
+Message-ID: <Yy2J52TLL7i2laSZ@arm.com>
+References: <20220919140531.3741d146@canb.auug.org.au>
+ <87fsgnlopt.wl-maz@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87fsgnlopt.wl-maz@kernel.org>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,39 +48,43 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi,
+On Mon, Sep 19, 2022 at 10:04:30AM +0100, Marc Zyngier wrote:
+> On Mon, 19 Sep 2022 05:05:31 +0100,
+> Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> > Today's linux-next merge of the kvm-arm tree got a conflict in:
+> > 
+> >   arch/arm64/kvm/sys_regs.c
+> > 
+> > between commit:
+> > 
+> >   55adc08d7e64 ("arm64/sysreg: Add _EL1 into ID_AA64PFR0_EL1 definition names")
+> > 
+> > from the arm64 tree and commit:
+> > 
+> >   cdd5036d048c ("KVM: arm64: Drop raz parameter from read_id_reg()")
+> > 
+> > from the kvm-arm tree.
+[...]
+> Catalin, Will: in order to avoid further conflicts, I've taken the
+> liberty to merge the arm64/for-next/sysreg branch into kvmarm/next.
+> Let me know if that's a problem.
 
-> After merging the mm tree, today's linux-next build (powerpc
-> ppc64_defconfig) failed like this:
+No problem.
+
+> Also, I've resolved the conflict in a slightly different way. Not that
+> the above was wrong in any way, but we might as well fix it in a more
+> idiomatic way:
 > 
-> drivers/base/memory.c: In function 'memory_block_online':
-> drivers/base/memory.c:186:34: error: 'struct memory_block' has no member na=
-> med 'nr_hwpoison'
->   186 |         if (atomic_long_read(&mem->nr_hwpoison))
->       |                                  ^~
-> drivers/base/memory.c: In function 'remove_memory_block_devices':
-> drivers/base/memory.c:870:61: error: 'struct memory_block' has no member na=
-> med 'nr_hwpoison'
->   870 |                 clear_hwpoisoned_pages(atomic_long_read(&mem->nr_hw=
-> poison));
->       |                                                             ^~
-> 
-> Caused by commit
-> 
->   69b496f03bb4 ("mm/hwpoison: introduce per-memory_block hwpoison counter")
-> 
-> This build has CONFIG_MEMORY_FAILURE not set.
+>  	/* We can only differ with CSV[23], and anything else is an error */
+>  	val ^= read_id_reg(vcpu, rd);
+> -	val &= ~((0xFUL << ID_AA64PFR0_CSV2_SHIFT) |
+> -		 (0xFUL << ID_AA64PFR0_CSV3_SHIFT));
+> +	val &= ~(ARM64_FEATURE_MASK(ID_AA64PFR0_EL1_CSV2) |
+> +		 ARM64_FEATURE_MASK(ID_AA64PFR0_EL1_CSV3));
+>  	if (val)
+>  		return -EINVAL;
 
-There also seems be more missing stubs. I'm getting:
+It looks fine, thanks.
 
-aarch64-linux-gnu-ld: mm/memory-failure.o: in function `unpoison_memory':
-memory-failure.c:(.text+0x1c38): undefined reference to `memblk_nr_poison_sub'
-aarch64-linux-gnu-ld: mm/memory-failure.o: in function `num_poisoned_pages_inc':
-memory-failure.c:(.text+0x2c8c): undefined reference to `memblk_nr_poison_inc'
-aarch64-linux-gnu-ld: memory-failure.c:(.text+0x2cbc): undefined reference to `memblk_nr_poison_inc'
-
-On a board where CONFIG_MEMORY_HOTPLUG is not set, but
-CONFIG_MEMORY_FAILURE is. So either there are stubs missing or
-MEMORY_FAILURE should depend MEMORY_HOTPLUG (?!).
-
--michael
+-- 
+Catalin

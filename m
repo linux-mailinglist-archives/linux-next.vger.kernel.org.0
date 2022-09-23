@@ -2,100 +2,97 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D0555E728E
-	for <lists+linux-next@lfdr.de>; Fri, 23 Sep 2022 05:48:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 681645E72F1
+	for <lists+linux-next@lfdr.de>; Fri, 23 Sep 2022 06:31:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231823AbiIWDsp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 22 Sep 2022 23:48:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36906 "EHLO
+        id S229484AbiIWEbs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 23 Sep 2022 00:31:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231297AbiIWDso (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 22 Sep 2022 23:48:44 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DEFC1176C1;
-        Thu, 22 Sep 2022 20:48:41 -0700 (PDT)
+        with ESMTP id S229436AbiIWEbr (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 23 Sep 2022 00:31:47 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7777A11F11F;
+        Thu, 22 Sep 2022 21:31:45 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MYdRS2ypNz4x3w;
-        Fri, 23 Sep 2022 13:48:36 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MYfP8392zz4x3w;
+        Fri, 23 Sep 2022 14:31:39 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1663904916;
-        bh=VtdR5hwowx1KIlCnmYDYg+Y1PETcT1fhbtss9DIIuYc=;
+        s=201702; t=1663907500;
+        bh=6RZSy8XkO3TVmI9kNqvZVcymc4bSnP8YYuNa6Wnieco=;
         h=Date:From:To:Cc:Subject:From;
-        b=FggEd3wtSm5tCTmPKdTngLcGy6/Xzw89F4AWGtReV1s4A5CRtZS0W6KCeELevLs2n
-         R341Q4pzrOOav7Qx4V0+WoO4l4jIxWc+v9PD4LZEgUnuqwadz2qU1TqRZOMUyTKEZJ
-         cB3mB0kHEurJ5hp6bROk92NxE9PLpQxoOnBQiVh+hWD7JRFnNz53StPdi0Jte0AeZL
-         aGIWu8K65qju54V3ArxRobHoLv3TVacYGb7uHslfr1L6/nMO1OXlkaaFCjJaG4ZGsp
-         Tq0N2WOkQyf3sWyRW3mFQNTCUCqzZWdXiEVvlIVArzN8dVnU5INbYPrNtuY3tyXul3
-         syBO/j/8eLfAg==
-Date:   Fri, 23 Sep 2022 13:48:34 +1000
+        b=Af77s9pyLLWwKseYikKWP5S6/Vmg/t/j3sKeKmY2LgqjhLEoSCndDHX+aKyADegY7
+         /SjjC2oM3RfuBOSGK8upF35DHQYM1tG82qPg3TSIZl61Mr0gdbmtt4StkEGo2mESaf
+         +GK6KEVl2iaAo0DnCa63Vhj1VkgMoj24+4B12ddBECPj9hXtpAFKggh2Mlaj/2Kz9N
+         doK1eDkBVPAoguODRpEtHQdXf+LT5P9xDIZbqv9a12h86x2KRMaTp3xRJ+7d9bw0vV
+         uo3E3f/pA3jSl/BXZui9Ytu8HvC9JullB2+HFWM5+TMfRB++XngUa0gf3aWrH5v9Xo
+         yzfPLwdvue0Hg==
+Date:   Fri, 23 Sep 2022 14:31:38 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     Akhil Raj <lf32.dev@gmail.com>,
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     Bernardo Rodrigues <bernardocrodrigues@live.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the rcu tree with the jc_docs tree
-Message-ID: <20220923134834.299646cd@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the leds tree
+Message-ID: <20220923143138.71765678@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/3ryg6fuO7mJ+bI4n2LP8dIj";
+Content-Type: multipart/signed; boundary="Sig_/11IT.UHIXgDjJmKkZyWk+pc";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/3ryg6fuO7mJ+bI4n2LP8dIj
+--Sig_/11IT.UHIXgDjJmKkZyWk+pc
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the rcu tree got a conflict in:
+After merging the leds tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-  Documentation/RCU/checklist.rst
+drivers/leds/leds-pca963x.c: In function 'pca963x_register_leds':
+drivers/leds/leds-pca963x.c:355:17: error: this 'if' clause does not guard.=
+.. [-Werror=3Dmisleading-indentation]
+  355 |                 if (hw_blink)
+      |                 ^~
+drivers/leds/leds-pca963x.c:357:25: note: ...this statement, but the latter=
+ is misleadingly indented as if it were guarded by the 'if'
+  357 |                         led->blinking =3D false;
+      |                         ^~~
 
-between commit:
+Caused by commit
 
-  712e1dea2e4f ("Delete duplicate words from kernel docs")
+  fd6dd9584ed3 ("leds: pca963x: fix blink with hw acceleration")
 
-from the jc_docs tree and commit:
-
-  1f0e704eea04 ("doc: Update checklist.txt")
-
-from the rcu tree.
-
-I fixed it up (I just used the latter since it removed the words removed
-by the former) and can carry the fix as necessary. This is now fixed as
-far as linux-next is concerned, but any non trivial conflicts should be
-mentioned to your upstream maintainer when your tree is submitted for
-merging.  You may also want to consider cooperating with the maintainer
-of the conflicting tree to minimise any particularly complex conflicts.
+I have used the version of the leds tree from next-20220921 for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/3ryg6fuO7mJ+bI4n2LP8dIj
+--Sig_/11IT.UHIXgDjJmKkZyWk+pc
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMtLJIACgkQAVBC80lX
-0Gxa7gf/S9zDyk7aEKTk9tiAUz9shJ3mMSjFgNYRG+8StWxCTGrf00kz7G75wNDE
-WtUE+T8sDTBGJgm1DXNRE8smbWolRB1Jzg+75zCvGBPMVA5g/HomO1I9TE5/HI9w
-BgMNXhDwRQeX1cgKO0TIr2wp6FUbxc/C2s0zVriz1i4rRuRcMrzAM32RuiRneDXp
-4zUe/lwqq2FtrZ8mw+p6lMzF5vKVgObi8N5mxEzgKCSQfODyHUDx+y3ZQUFMTak6
-oyYkzuh1l6W9p7mgxMWWp6+nQmPfU13HA40ND7m+uT2/oO7WZa6PImP6zhUZSGsJ
-Gj9uquPKQvqKZ+0Ps8ng6cE6SxeQ8A==
-=Kyfn
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMtNqoACgkQAVBC80lX
+0GwI/Af8D2nDCMiAj0jbPyExIvmgUFgMj+VrmtU81hp9tyg5DQ38S4uayI1bUiMV
+bKHRa3JqJ5q4UJlynOQRubrRBXlxX/PdPtptaX4ICqfWv4ylFnrBiS4QG3Mpabja
+aQ3svVRpM392fhfZxbEtKv9FfrY0rW5THCFxgJmrz252XZ3c0c13O3vLZavAw8nr
+c1HOELYapFP8V2PlXC9WGWrhSYjG8kMqh+XcdlgSbf4VzRgmeMpbD1+rxHGRZcQI
+0tAmBtoNw6pQBjo4Oxi39VUTydYhPTNzjKZIvpfV0eQqIXjyPepWzbvjaVhi1W0F
+IatkPlciH/N4bED3As6coZ6ax2/zZQ==
+=ZsWV
 -----END PGP SIGNATURE-----
 
---Sig_/3ryg6fuO7mJ+bI4n2LP8dIj--
+--Sig_/11IT.UHIXgDjJmKkZyWk+pc--

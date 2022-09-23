@@ -2,61 +2,62 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BB6E5E79D6
-	for <lists+linux-next@lfdr.de>; Fri, 23 Sep 2022 13:42:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D726C5E79FC
+	for <lists+linux-next@lfdr.de>; Fri, 23 Sep 2022 13:49:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230163AbiIWLmp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 23 Sep 2022 07:42:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54258 "EHLO
+        id S231836AbiIWLto (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 23 Sep 2022 07:49:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230359AbiIWLmm (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 23 Sep 2022 07:42:42 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BA6B139430;
-        Fri, 23 Sep 2022 04:42:41 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id g3so19955693wrq.13;
-        Fri, 23 Sep 2022 04:42:41 -0700 (PDT)
+        with ESMTP id S231851AbiIWLtl (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 23 Sep 2022 07:49:41 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 318BE23BE4;
+        Fri, 23 Sep 2022 04:49:39 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id cc5so20062246wrb.6;
+        Fri, 23 Sep 2022 04:49:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :from:to:cc:subject:date;
-        bh=qInd8OshU6iSqvY25zhNaMe3YYc1iLfJiCD+P5Z80PY=;
-        b=NknAA532T2w2I12EWWoVE0IuVNlt0YadBipCxkk3Ope2yQ0W6Wyyu2LuIncxTuFOkk
-         Li/n9zJVTkGncwR/zWPt3uN2Q5y1oNUJ14gWD376d8XTHA5P2zMlGdmfQ0cBHSpztyxP
-         VUXKcUvNdXO35E38CaxmdLeDjFpqYrkPpUodZ/1IJk5fBfB4oeSiZwiQOKsZoRmWrKTh
-         Z6v3KWfpbGMeYAX9LeDQlETM9a/KZ5M3A9R8ZQfa6wTLAEFUtnVP71IzUDT8FIKQgYOF
-         h18vIDou369nrWST5DRrb7CiapqsDMT6McMXnsK8A+qTmxjftsdTiJeAHX2I+li5vkRH
-         qS/w==
+        bh=c7Tx9HKxUWh0xGhkeNMbuTm7Bc6XNgbJWQ+SJrtDyPc=;
+        b=Xs+GlJ/gwSWKKlmvldlFRVntIBYxuC/LRSV1n0pYgLzLkUtitrnv1nnNThNBdNEmiC
+         TJVAPoAQA29rD1HMsN4pB7ufm6O7K/7GzDwEoR5zQSo/5yX7OCod64nMONy/qkuO/Cwf
+         wI4VRAU/pGyEcH+xvBvNTQsP8UX2uvPAI8Nm5n7KcgZvoHz0EyAF0tRG55eRjHkREShA
+         1hTbCkIyde7X6NIYhaCm2uSt9kgTnp2c3k5oZZstGBYALUqI5wr/gBcmCGUcIMMu55Fa
+         BRU2co7lqjj6WY88Ky2TeUY+J9lhvLRcjrgJLkAcdVLE8E5KTpO1EXOOymvuIGrpiUJB
+         xcZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=qInd8OshU6iSqvY25zhNaMe3YYc1iLfJiCD+P5Z80PY=;
-        b=v6m7o4uK0rxYO7jiM6iyjZkC6CjtJMYHGS+2HQnj88o1yRESK6qyP94xT2/+RhgKZj
-         Q1l+wlHMDEFyElv02JwXcJnRpG64eN28Ans0Oiqy1218D/rbtAGpeXUmKbX+bgAOfECo
-         36MmOTo/jUk4SKLZL5d4nv4RIK0iqx1WsZklj+HSMqoI2125TPXx602nQTZJbWYVZiOH
-         6PLwSrltZmH2UOwb+1CFbYgEld4ADQA5SJ8Zh23ULVbYfB42QJsgKdp919YT4gemiE7X
-         TpXxqRXf5hOb4NaM5oV+SlSNwVXIMGWUNqggbDet5tLIiauge7AOfPqTFhgsdMKxql4s
-         gF/w==
-X-Gm-Message-State: ACrzQf2k/2O6lV0t72S7gWpzKRf25ENO1XaAq3beQnupSb80moVwue87
-        kUSzWC4DkiY0fHKL01nCtS4=
-X-Google-Smtp-Source: AMsMyM42pwRjd6ykyQSHUhJseiAJeHfZDyk7MCvtj7lm3nQnnqHmG83zdL5DA+11iBZmFzt0kCkgXA==
-X-Received: by 2002:adf:f00b:0:b0:22a:906d:358d with SMTP id j11-20020adff00b000000b0022a906d358dmr5033191wro.464.1663933359634;
-        Fri, 23 Sep 2022 04:42:39 -0700 (PDT)
+        bh=c7Tx9HKxUWh0xGhkeNMbuTm7Bc6XNgbJWQ+SJrtDyPc=;
+        b=rK2HMiBj1A3zHwQE3ro9/ymHdhBhdVvYh8XxxC+odwzzoFjXVuJ2dndlGxWZW1UvJ/
+         bs7/qGwBKSpEzcljKPWDcw52P+wKlqiuTThkHDYtegB82GFU5A3+oiTm88uGKVr7pxKE
+         mxF28GuH3AC1R7CFIXSGjTz2vVA1RFsUQo1rYCMq4NH7xdAycE2yrP3ODZfyYpB9eEBf
+         wLZVXDfL4N3LxkRBnx4n4yI5WEZhD9XIXtq4yv5SuIXHLIZuqLAVrgOj3YG7P8iplVek
+         fxKUOBoPoRMSY+mgi5Mjmri0c0z5+MgMUxl2hEmC63ELXYu8DwkGbHR/J7NVZiypjokt
+         VMDQ==
+X-Gm-Message-State: ACrzQf3grTosBSt6jbEcDMZBnVkeP8QaFoQFhMQrjjts+CZ2SI8Nleo9
+        FKwTUxe3yc6fzBkPO1RQhJ0=
+X-Google-Smtp-Source: AMsMyM6EBH2GR4oCpp4cub1DEuj58J47hRZrr5TBo+wPaCXGfmyrEJ0Mdp959I4dFUOt5Ug3zqLlwA==
+X-Received: by 2002:a5d:6245:0:b0:225:3e24:e5b1 with SMTP id m5-20020a5d6245000000b002253e24e5b1mr5084277wrv.698.1663933778281;
+        Fri, 23 Sep 2022 04:49:38 -0700 (PDT)
 Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
-        by smtp.gmail.com with ESMTPSA id p21-20020a1c5455000000b003b27f644488sm2231717wmi.29.2022.09.23.04.42.38
+        by smtp.gmail.com with ESMTPSA id bt24-20020a056000081800b0022a9246c853sm7623449wrb.41.2022.09.23.04.49.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Sep 2022 04:42:39 -0700 (PDT)
-Date:   Fri, 23 Sep 2022 12:42:37 +0100
+        Fri, 23 Sep 2022 04:49:37 -0700 (PDT)
+Date:   Fri, 23 Sep 2022 12:49:35 +0100
 From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     James Clark <james.clark@arm.com>, Mark Brown <broonie@kernel.org>,
-        Will Deacon <will@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org
-Subject: build failure of next-20220923 due to cbb0c02caf4b ("perf: arm64:
- Add SVE vector granule register to user regs")
-Message-ID: <Yy2braL3vc0SYDGl@debian>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev
+Subject: build failure of next-20220923 due to f6f6f9a01374
+ ("thermal/intel/int340x: Replace parameter to simplify")
+Message-ID: <Yy2dT5bKGc4aOJIl@debian>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -72,14 +73,25 @@ X-Mailing-List: linux-next@vger.kernel.org
 
 Hi All,
 
-A native build of next-20220923 on arm64 host has failed with the error:
+The builds of x86_64 allmodconfig with clang failed to build next-20220923
+with the error:
 
-./usr/include/asm/perf_regs.h:42:26: error: C++ style comments are not allowed in ISO C90
-   42 |  PERF_REG_ARM64_VG = 46, // SVE Vector Granule
-      |                          ^
-./usr/include/asm/perf_regs.h:42:26: note: (this will be reported only once per input file)
+drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c:222:6: error: variable 'ret' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+        if (!int34x_thermal_zone->ops)
+            ^~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c:279:17: note: uninitialized use occurs here
+        return ERR_PTR(ret);
+                       ^~~
+drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c:222:2: note: remove the 'if' if its condition is always false
+        if (!int34x_thermal_zone->ops)
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c:211:9: note: initialize the variable 'ret' to silence this warning
+        int ret;
+               ^
+                = 0
+1 error generated.
 
-I have not bisected but I think it will be from cbb0c02caf4b ("perf: arm64: Add SVE vector granule register to user regs").
+git bisect pointed to f6f6f9a01374 ("thermal/intel/int340x: Replace parameter to simplify").
 
 I will be happy to test any patch or provide any extra log if needed.
 

@@ -2,43 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BBC65EA8B3
-	for <lists+linux-next@lfdr.de>; Mon, 26 Sep 2022 16:41:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DE345EAA30
+	for <lists+linux-next@lfdr.de>; Mon, 26 Sep 2022 17:19:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235139AbiIZOlN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 26 Sep 2022 10:41:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37536 "EHLO
+        id S234577AbiIZPTW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 26 Sep 2022 11:19:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234914AbiIZOko (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 26 Sep 2022 10:40:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F2BDF186E;
-        Mon, 26 Sep 2022 06:01:43 -0700 (PDT)
+        with ESMTP id S236181AbiIZPSl (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 26 Sep 2022 11:18:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D31417285C;
+        Mon, 26 Sep 2022 07:05:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 817D56068C;
-        Mon, 26 Sep 2022 13:01:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7F00C433D6;
-        Mon, 26 Sep 2022 13:01:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6FB5860DD7;
+        Mon, 26 Sep 2022 14:05:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92A6CC433D6;
+        Mon, 26 Sep 2022 14:05:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664197301;
-        bh=Cn6NBU74rUDa6kJ/DEloWl+kpXHAM3ZSRRMJ12LdkuU=;
+        s=k20201202; t=1664201126;
+        bh=PthIOKqjN3mlliP1rI72KfnGTjV0zECJS+IIHp5GcEo=;
         h=From:To:Cc:Subject:Date:From;
-        b=DUYNg1rjx00K7VTRnD+WrtW9FXv8xIZOIP+aswOECf7q4iShxvwTQxeG/WqDPHf2/
-         XBX4fXsRywKxcKAqWaV099YI886FI0Y0mhX+jv9Y9JozkTFlaJMAR5rVebPbgujCgc
-         BuOVaPHdwIbefGa8lmwtLHNoJAtz7bNgiX+TYpcBg7PJ8Dq0qy+g4wMpPctma3i9Yp
-         G2oxyfHbfIy3JYEsYHUklvZBhfLCqtCqVmtchmfDgn9vJlOTvHh0iQ/LpB9s0YbCbv
-         QLd9k7ZvHm9cnC6afroqPX2an6wlNwH3sxUcj4pYxGgCNT4ismKHY+RvuLkpOG0Pbr
-         Tl1+fe7yBSnXg==
+        b=WpNe7FWcQrju4iGTD2gG3vL+ziRoa6k0+rCVsen9lYKLfGYbBTKN5qNm8wAaSN8wu
+         32ozia/8t95DSTyeItIlnrXZJia5vbgt6/tGtrpiL/ehDd9zI2b5hty0FcFGAp1ubv
+         PaslDZzwS5j2OG+MD1n242QTWAS3OrqWtxG4Fg1yhRC/IADPZm6uKng/DXYQ6USgzJ
+         Xwm+tVHfFRtc3PhvkhdBJwGxt/hUnGCZOPDPumUP2d1ExnxdkCu/Y+yWfCYjtddBJU
+         dfb9/wwdQz9DGRFD0AlBSPbrt5l8KX0aYUpRmDpRE1nR1EQ9eGpZ8p2oTZl2b/drwT
+         MGPWlQNnA95bw==
 From:   broonie@kernel.org
-To:     Al Viro <viro@ZenIV.linux.org.uk>
-Cc:     Gaosheng Cui <cuigaosheng1@huawei.com>, Jan Kara <jack@suse.cz>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the vfs tree with the ext3 tree
-Date:   Mon, 26 Sep 2022 14:01:37 +0100
-Message-Id: <20220926130137.105900-1-broonie@kernel.org>
+To:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+Subject: linux-next: manual merge of the bluetooth tree with the net tree
+Date:   Mon, 26 Sep 2022 15:05:22 +0100
+Message-Id: <20220926140522.109472-1-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -53,19 +54,19 @@ X-Mailing-List: linux-next@vger.kernel.org
 
 Hi all,
 
-Today's linux-next merge of the vfs tree got a conflict in:
+Today's linux-next merge of the bluetooth tree got a conflict in:
 
-  fs/notify/fanotify/fanotify.h
+  net/bluetooth/mgmt.c
 
 between commit:
 
-  7a80bf902d2bc ("fanotify: Remove obsoleted fanotify_event_has_path()")
+  23b72814da1a0 ("Bluetooth: MGMT: Fix Get Device Flags")
 
-from the ext3 tree and commit:
+from the net tree and commit:
 
-  d5bf88895f246 ("fs/notify: constify path")
+  529d4492aed7c ("Bluetooth: MGMT: Fix Get Device Flags")
 
-from the vfs tree.
+from the bluetooth tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -74,22 +75,7 @@ is submitted for merging.  You may also want to consider cooperating
 with the maintainer of the conflicting tree to minimise any particularly
 complex conflicts.
 
-diff --cc fs/notify/fanotify/fanotify.h
-index b34246c6ec87e,bf6d4d38afa04..0000000000000
---- a/fs/notify/fanotify/fanotify.h
-+++ b/fs/notify/fanotify/fanotify.h
-@@@ -452,7 -452,13 +452,7 @@@ static inline bool fanotify_is_error_ev
-  	return mask & FAN_FS_ERROR;
-  }
-  
-- static inline struct path *fanotify_event_path(struct fanotify_event *event)
- -static inline bool fanotify_event_has_path(struct fanotify_event *event)
- -{
- -	return event->type == FANOTIFY_EVENT_TYPE_PATH ||
- -		event->type == FANOTIFY_EVENT_TYPE_PATH_PERM;
- -}
- -
-+ static inline const struct path *fanotify_event_path(struct fanotify_event *event)
-  {
-  	if (event->type == FANOTIFY_EVENT_TYPE_PATH)
-  		return &FANOTIFY_PE(event)->path;
+diff --cc net/bluetooth/mgmt.c
+index 72e6595a71cc0,a92e7e485feba..0000000000000
+--- a/net/bluetooth/mgmt.c
++++ b/net/bluetooth/mgmt.c

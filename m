@@ -2,62 +2,55 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B10D35EB52E
-	for <lists+linux-next@lfdr.de>; Tue, 27 Sep 2022 01:13:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E9515EB5EB
+	for <lists+linux-next@lfdr.de>; Tue, 27 Sep 2022 01:44:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229505AbiIZXNB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 26 Sep 2022 19:13:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48694 "EHLO
+        id S229936AbiIZXoY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 26 Sep 2022 19:44:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230298AbiIZXM7 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 26 Sep 2022 19:12:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3512DABF36;
-        Mon, 26 Sep 2022 16:12:59 -0700 (PDT)
+        with ESMTP id S230408AbiIZXoV (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 26 Sep 2022 19:44:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 243A98A1E4;
+        Mon, 26 Sep 2022 16:44:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AD9BD614B9;
-        Mon, 26 Sep 2022 23:12:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8218C433D6;
-        Mon, 26 Sep 2022 23:12:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 87313B81675;
+        Mon, 26 Sep 2022 23:44:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FBFBC433B5;
+        Mon, 26 Sep 2022 23:44:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664233978;
-        bh=i+4cYWvvbX6eB0hVVJ0oMScoDAoRVCjurrZ2ldB88mI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=EXll/xeeQCl+YhmYZ6UqxFaW/iha5aafiybSf8zR9XSfb+TYeKvsKHt0v35nZDvrf
-         pKzPxYe/iRJ299NKHCGS40Cj6wVGkQ/hq49Pu9X0MrSJTppWoE1hEYGU9CZ9HtBdMs
-         rGbjCMzhKZR+j/+0QeI+37zgIo3wgACx0tIS3fHTzZqJX9x22CxBJOVIq0EJzI+Fvr
-         Bzk5+cfJuBgZj6i/C84k4DSrMAdBqteleTWMWKWbUGRQjsGoDwkWDPsocH8Erqen1N
-         Q28/YGaWQaC6fJtTWEkHKGSjPgbM+QbHeHeKaidGwpJ6HIgw6WGeZl0ykOvQu3dzKe
-         eUDfBo7qwcB3Q==
-From:   broonie@kernel.org
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     Adam Bratschi-Kaye <ark.email@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Antonio Terceiro <antonio.terceiro@linaro.org>,
-        =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Boris-Chengbiao Zhou <bobo1239@web.de>,
-        Daniel Xu <dxu@dxuuu.xyz>,
-        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
-        Douglas Su <d0u9.su@outlook.com>, Finn Behrens <me@kloenk.de>,
-        Gary Guo <gary@garyguo.net>,
+        s=k20201202; t=1664235855;
+        bh=P3ZX6MyCUs30QoR+fwBF0Oe7I7wz9oH6lnFboQXIXug=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eSeg1vTws9rAUOU6BPDEzJ6gG5eJ79hc/HHIVRdjTZKUI7QlQTrWCjLMvX5U5L2Si
+         wPDJRLHBw1NS4p71xhMv6bEjk1yEF7FTqqho4cp30E38kuFivxvV6FN5xz24IlwO5n
+         A3y4sxZb0q+MzXYUnCfoMsR4rmKrcDzGO/8noYdsX7cfRHY0EM7yB6/tiPcQOcBLtk
+         +0cSNSGBK8Znx6Ie9UkdaQ+jwPUjRIERh2eonA7Fl0EyjUwdGOJouX2SQlUigeb7sL
+         zo8Wrs742yadMtRdybzmxQQ/S9wX5N9DU9x3fd8oPMbif8hR2dFjRBJrUN2hHm6Xe3
+         7PMCLkDplgjaA==
+Date:   Tue, 27 Sep 2022 00:44:10 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     =?utf-8?B?0L3QsNCx?= <nabijaczleweli@nabijaczleweli.xyz>
+Cc:     Greg KH <greg@kroah.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>
-Subject: linux-next: manual merge of the rust tree with the kbuild tree
-Date:   Tue, 27 Sep 2022 00:12:46 +0100
-Message-Id: <20220926231246.1140133-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        Manfred Spraul <manfred.spraul@de.bosch.com>
+Subject: Re: linux-next: manual merge of the driver-core tree with the
+ jc_docs tree
+Message-ID: <YzI5SmGq9sK4gnFT@sirena.org.uk>
+References: <20220926210631.657728-1-broonie@kernel.org>
+ <20220926224621.47llaskp6mihi4dd@tarta.nabijaczleweli.xyz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="PxdvaDtjhg1lVtwt"
+Content-Disposition: inline
+In-Reply-To: <20220926224621.47llaskp6mihi4dd@tarta.nabijaczleweli.xyz>
+X-Cookie: You may be recognized soon.  Hide.
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -67,46 +60,68 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi all,
 
-FIXME: Add owner of second tree to To:
-       Add author(s)/SOB of conflicting commits.
+--PxdvaDtjhg1lVtwt
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Today's linux-next merge of the rust tree got a conflict in:
+On Tue, Sep 27, 2022 at 12:46:21AM +0200, =D0=BD=D0=B0=D0=B1 wrote:
 
-  Makefile
+> If I'm reading the merge right (very much not a given!),
+> it seems that the NBD_REPLY_MAGIC (and LO_MAGIC?) constant(s) survived:
+> they both need to go for reasons listed in
+>   bd5926220ffe0: LO_MAGIC doesn't exist
+>   82805818898dd: NBD_REPLY_MAGIC is part of the line protocol,
+>                  not a magic number=20
 
-between commit:
+> This also reveals that I missed NBD_REQUEST_MAGIC
+> (needs to go, same reason as NBD_REPLY_MAGIC)
+> in the first pass, but that's unrelated here.
 
-  a6036a41bffba ("kbuild: drop support for CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE_O3")
+I preserved NBD_REPLY_MAGIC since the conflict was due to it being
+updated by the NBD maintainer, I went with their logic instead.  IIRC
+they'd also moved it within the file which might make the resolution
+harder to read.  LO_MAGIC is gone.
 
-from the kbuild tree and commit:
+It's not at all clear from what's in the file that your logic about not
+including magic numbers defined elsewhere means we shouldn't include
+them in the table here, though the commit messages are rather brief so
+perhaps there is more to it.  It's certainly a very strong definition of
+need as far as I can tell.
 
-  4f6a738b5c348 ("Kbuild: add Rust support")
+> The process here is unclear to me; I assume the "linux-next" here is
+>   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/
+> but the latest update to the default branch appears to be from
+> 4 days ago (and pending-fixes at 7h old has this file last modified in
+>  2021), so I can't really validate if this merge is as I read it
 
-from the rust tree.
+I'm still in the process of building today's tree, all being well it
+will be updated soonish (or I'll give up and hopefully things will go
+more smoothly tomorrow).
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+> (or, indeed, if it does include... the conflict markers?
+>  because it does appear to introduce them
+>  (or, at least, if I leave in the conflict markers and commit a merge,
+>   it sure looks like what's represented below)?),
+> so idk.
 
-diff --cc Makefile
-index 2dba99828e893,a105cb893b4ca..0000000000000
---- a/Makefile
-+++ b/Makefile
-@@@ -757,10 -819,20 +821,17 @@@ KBUILD_CFLAGS	+= $(call cc-disable-warn
-  
-  ifdef CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE
-  KBUILD_CFLAGS += -O2
-+ KBUILD_RUSTFLAGS += -Copt-level=2
- -else ifdef CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE_O3
- -KBUILD_CFLAGS += -O3
- -KBUILD_RUSTFLAGS += -Copt-level=3
-  else ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
-  KBUILD_CFLAGS += -Os
-+ KBUILD_RUSTFLAGS += -Copt-level=s
-  endif
-  
+I skipped out on resolving the conflicts in the translated copies of the
+file but messed up on resetting the to the base state.
+
+--PxdvaDtjhg1lVtwt
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMyOUkACgkQJNaLcl1U
+h9DoYQf9G2EDMkaLBy7A2oDuLPgpdJjAlrLe/YoIu8uG9dXRUt2uF3uGmWdBQbK+
+iQTnwc06FQ9QVCEMfuq7ympDDAfgLEf0rJeww7gEgWb9C0w5Ru9SlyDSuTSNG7CZ
+QKltddDcJQLbnxBR4KbYvBv8HzQ+cuvC3NV0mfUyBZXUHzxc0kN0kyx4CQwunajw
+30Ja+g6jH/q/3YctVZb5NCGlpvfz0qvFUl6AGnQB1xZUNV5RMvudBeRyGrJuMkji
+uAAgqUgPeiVFe3JMc83O1Pn/5NWgj7uNB6eyIoEhNA0ogNm6i/Lb4n4A7A1EmFSs
++EQTwBvaJGNxWFg9G+57RsmrU123SQ==
+=IPE7
+-----END PGP SIGNATURE-----
+
+--PxdvaDtjhg1lVtwt--

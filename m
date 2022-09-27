@@ -2,66 +2,60 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5193F5EB65D
-	for <lists+linux-next@lfdr.de>; Tue, 27 Sep 2022 02:40:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AC505EB66F
+	for <lists+linux-next@lfdr.de>; Tue, 27 Sep 2022 02:47:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229512AbiI0AkD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 26 Sep 2022 20:40:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39492 "EHLO
+        id S229555AbiI0ArC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 26 Sep 2022 20:47:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiI0AkB (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 26 Sep 2022 20:40:01 -0400
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB1B71A23D;
-        Mon, 26 Sep 2022 17:39:59 -0700 (PDT)
-Received: by mail-oi1-x235.google.com with SMTP id c81so10276675oif.3;
-        Mon, 26 Sep 2022 17:39:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=QK6s3qWgSzcfpcdtH25aSluRGCB5Dal9WKGY9WgXnoY=;
-        b=A+LoIsFX52NYi2E4snRfYJDUCYS7ukrKgEjVAWhG2E4ltzMpil6FOgQ10ECOR/VAsE
-         EALHMGcluPmiGF/5Ca0kHxGatmwgjXx/t+/8aNwG5eaU6TJmTCmX0u1Zudo8MrPmLaok
-         Ope7nOj9/sjvVk1Ge4OP1wr1CTQhez6nPAmRY/TFdFLlVQEE6Xit3FvlYf5cShRHPJ5W
-         Qhvt0Z5oZp/0zEWw778pIa/YuPkpaIFwI1KuD503lCBILScTwguySu0defhTYWpddep+
-         sTZUXQQ3J/EPL8xgjStFh1yjC9Kx6akqkPIjrCVbGvWAs62YRzC5PfqUNfptj/3l97ci
-         /xQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=QK6s3qWgSzcfpcdtH25aSluRGCB5Dal9WKGY9WgXnoY=;
-        b=b74Gcsz18k0XzPJf/dxuyyFuMaW4zxJqDIAg50KNX9tLICKDlnzADQekSV37h+aZ1p
-         Gzh5FOegoBdlXqioRtVO99ygLAWnUsU6mJDQGdLDEAbCpQBHMtQZVgb5e6cjZfpOBKlj
-         oiMrt01sV97w6APivC2gBlcsohWGvHcUfrkSnHNDOSPBrcOedkzYD5v3pYm0gRJxzMqg
-         p3Phk75aO2iT5GF1eAMxDud4aKEQGyY4ZQulNd8q+PZaFTelaSQB0ORTiWb1a5PhNC7y
-         D8KYR3INYeg/6w99FLb95YFn6TieWU2nh81ohAWzChS/jHsKzRImlfQgt9vWfxaY2zrv
-         YQdQ==
-X-Gm-Message-State: ACrzQf0EnPzXgK743BSoUmGAejTx1w+wAGsh2viXEhcTEXMN7rUIHlZ2
-        T+akLbVojNYIH6MmleJw/Vtgxjy+tXQ=
-X-Google-Smtp-Source: AMsMyM6Hebx4KfgsUvEYqtv3W940TqkjSJ9T9yRRN1UqLwb4B/3Np5aPTbHn9YROliZkJpiQSu30gQ==
-X-Received: by 2002:a05:6808:1c07:b0:34f:5d29:f597 with SMTP id ch7-20020a0568081c0700b0034f5d29f597mr645843oib.275.1664239197402;
-        Mon, 26 Sep 2022 17:39:57 -0700 (PDT)
-Received: from localhost ([12.97.180.36])
-        by smtp.gmail.com with ESMTPSA id y123-20020a4a4581000000b00472874bc2ffsm55719ooa.28.2022.09.26.17.39.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 17:39:57 -0700 (PDT)
-Date:   Mon, 26 Sep 2022 17:37:46 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     broonie@kernel.org
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the bitmap tree
-Message-ID: <YzJF2hx4O6vnkVKC@yury-laptop>
-References: <20220926235348.1269963-1-broonie@kernel.org>
+        with ESMTP id S229459AbiI0ArB (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 26 Sep 2022 20:47:01 -0400
+Received: from tarta.nabijaczleweli.xyz (unknown [139.28.40.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1F92DDE84;
+        Mon, 26 Sep 2022 17:47:00 -0700 (PDT)
+Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
+        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id 81AA5AE4;
+        Tue, 27 Sep 2022 02:46:18 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
+        s=202205; t=1664239578;
+        bh=wSCmoahme/wBO9azmqpH+7KdgABDfd0O10sTNVFQMxs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dpc2wT+V6SjuHtqfoU5ZFjexa5Aahr35WX0+p7fRP5umzpZ5FzBVPQocDisMDSdC2
+         w1t7ng3+S1p/pWKu0j4fyag/Npjoz8eZcUqZihyN3rxfgR98PtgFWnMYZOZRS492ZV
+         shDVeT7LfYTMqO8Efj4XJCGvj438D1ugoKy9g2E4gUsHZT185i67hDAiC/Km9fH4Zn
+         zMYDrJC2LltYfWolndN79lZST9A17523To/LAbsov0JlrTgZlYSMxv+74FzncUsUAo
+         rhaiIKYVofjoAE0NbijnBdlhrM7KWDICYzsjL1gqEdho1r6Hau5R0QO48fP7miNyBp
+         f2JCK0mdezpPuq1LzHunB99KFnf6JtM4uN099zqzd2cPcF1DrbMRSz6TKJviiPhjMH
+         qoRzqRy+n7a92SfTp+oQeUVJVPe4a5QRSZ+sn00wd8kHYUD+Fn1TECGRNdqsOyzpFq
+         zrTJ0xwneOOKZyGYhWou1+2exwau/r2eODcncszB2QjBQ1ADZogsDznlVPCtd9ig8K
+         24XORnKXUnQ3OVdmXoJcYwkeZ6BvlfBik4TwnmW8fXLEvk/1LnO6OX3eIRmUWb3D9Z
+         YHAIGw3Xw1hJFE2tjxrinhTppHnPr5aWqnNdYk20zlHdAS9eXSYciLiH8p7dBg+3VM
+         oDzqlpvTYYC2GG7sFnqKIMI0=
+Date:   Tue, 27 Sep 2022 02:46:17 +0200
+From:   =?utf-8?B?0L3QsNCx?= <nabijaczleweli@nabijaczleweli.xyz>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Greg KH <greg@kroah.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Manfred Spraul <manfred.spraul@de.bosch.com>
+Subject: Re: linux-next: manual merge of the driver-core tree with the
+ jc_docs tree
+Message-ID: <20220927004617.xwlicwiwekxp2dna@tarta.nabijaczleweli.xyz>
+References: <20220926210631.657728-1-broonie@kernel.org>
+ <20220926224621.47llaskp6mihi4dd@tarta.nabijaczleweli.xyz>
+ <YzI5SmGq9sK4gnFT@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="okozqc7em33lbxec"
 Content-Disposition: inline
-In-Reply-To: <20220926235348.1269963-1-broonie@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <YzI5SmGq9sK4gnFT@sirena.org.uk>
+User-Agent: NeoMutt/20220429
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,T_PDS_OTHER_BAD_TLD autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,82 +63,69 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 12:53:48AM +0100, broonie@kernel.org wrote:
-> Hi all,
-> 
-> After merging the bitmap tree, today's linux-next build (x86
-> allmodconfig) failed like this:
 
-Hmm, this weird. I checked the next-20220923, and the drivers' code
-mentioned in the log differs from what I see, and looks correct.
-bitmap_weight() definition hasn't been changed in bitmap-for-next
-patches.
+--okozqc7em33lbxec
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Allmodconfig build looks good to me.
+On Tue, Sep 27, 2022 at 12:44:10AM +0100, Mark Brown wrote:
+> On Tue, Sep 27, 2022 at 12:46:21AM +0200, =D0=BD=D0=B0=D0=B1 wrote:
+>=20
+> > If I'm reading the merge right (very much not a given!),
+> > it seems that the NBD_REPLY_MAGIC (and LO_MAGIC?) constant(s) survived:
+> > they both need to go for reasons listed in
+> >   bd5926220ffe0: LO_MAGIC doesn't exist
+> >   82805818898dd: NBD_REPLY_MAGIC is part of the line protocol,
+> >                  not a magic number=20
+>=20
+> > This also reveals that I missed NBD_REQUEST_MAGIC
+> > (needs to go, same reason as NBD_REPLY_MAGIC)
+> > in the first pass, but that's unrelated here.
+>=20
+> I preserved NBD_REPLY_MAGIC since the conflict was due to it being
+> updated by the NBD maintainer, I went with their logic instead.  IIRC
+> they'd also moved it within the file which might make the resolution
+> harder to read.  LO_MAGIC is gone.
+>=20
+> It's not at all clear from what's in the file that your logic about not
+> including magic numbers defined elsewhere means we shouldn't include
+> them in the table here, though the commit messages are rather brief so
+> perhaps there is more to it.  It's certainly a very strong definition of
+> need as far as I can tell.
+>
+> > (or, indeed, if it does include... the conflict markers?
+> >  because it does appear to introduce them
+> >  (or, at least, if I leave in the conflict markers and commit a merge,
+> >   it sure looks like what's represented below)?),
+> > so idk.
+>=20
+> I skipped out on resolving the conflicts in the translated copies of the
+> file but messed up on resetting the to the base state.
 
-Check what I see in next-20220923 below.
+It seems I've overestimated the degree to which this matters
+in this case, my b. Put me down as "don't care".
 
-Thanks,
-Yury
- 
-> /tmp/next/build/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c:492:3: note: in expansion of macro 'dev_err'
->   492 |   dev_err(rvu->dev, "%s: No space in id bitmap (%lu)\n",
->       |   ^~~~~~~
-> /tmp/next/build/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c:492:51: note: format string is defined here
->   492 |   dev_err(rvu->dev, "%s: No space in id bitmap (%lu)\n",
->       |                                                 ~~^
->       |                                                   |
->       |                                                   long unsigned int
->       |                                                 %u
+=D0=BD=D0=B0=D0=B1
 
-                dev_err(rvu->dev, "%s: No space in id bitmap (%d)\n",
-                        __func__, bitmap_weight(table->id_bmap, table->tot_ids));
+--okozqc7em33lbxec
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> /tmp/next/build/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c:525:22: error: format '%lu' expects argument of type 'long unsigned int', but argument 4 has type 'unsigned int' [-Werror=format=]
->   525 |   dev_info(rvu->dev, "%s: No space in exact cam table, weight=%lu\n", __func__,
->       |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-----BEGIN PGP SIGNATURE-----
 
-                dev_info(rvu->dev, "%s: No space in exact cam table, weight=%u\n", __func__,
-                         bitmap_weight(table->cam_table.bmap, table->cam_table.depth));jj
+iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmMyR9kACgkQvP0LAY0m
+WPG28Q//cxas1ROh5VTtMbi01t/T1Qsa3qWSvN4sIUI3AcRJaoEGqMsnMguXz7LR
+3DjQ5tZbc6lYjuU0vGrCtsVzdYDitH1FkNpovpUJ5GEq6E5qtbJCj8wYyAEdd4cl
+JqCD+W7WgMM9FYiHIKTpsS7yYhdbjBp2a+8SNXqFZlf/99CeGMmYEW07V8slZFMq
+Sl7KUZHuw9VsgjE703z3gpD3dL6AFQd9iEClUscyUeiUek+OipI2gTXsGVXQCoH4
+A8FgYqHxKV0vbBSeVverMI8lTwOU4J4uYZpNORyc1o2QlzyXgji2Wh1ThAEkrPbt
+HMnB3919YUj7zBYZOoRbhanqdRhH0SaP7hAq2R+4z5TH/wrXsS6vGps00U9gJ9ej
+YHmjSCj35R0gDJ70Kg+2YqYVS8/OhrKnLU/sOVXHb+SegCR4tW7WWWhwkDeI+09g
+4B4RYIC6/bec/RBIqstfjxBsHoo1LMzM7kqDMPOj2ZNqEgKQjMC6jzHtWi10ISm/
+kqKw5OnA8H31LFERYP7QxmCSQOrusgicFan2j4DWW8f4WMNycjqrnBIht5ZrIqSI
+EQ09I6ZugKHatpWhAIHPLrYkyvO1XFsDrKgqpuuhyhURWWvR0P36kBR3NC/Ng1aC
+2EewTL9obhBmN8viZSFbc6GV7aqlFSvDXGMb5GPTLhQutwy3Gw0=
+=3Zoq
+-----END PGP SIGNATURE-----
 
-> /tmp/next/build/drivers/gpu/drm/i915/gt/intel_sseu.c:867:39: error: format '%lu' expects argument of type 'long unsigned int', but argument 4 has type 'unsigned int' [-Werror=format=]
->   867 |   seq_printf(m, "  %s Geometry DSS: %lu\n", type,
->       |                                     ~~^
->       |                                       |
->       |                                       long unsigned int
->       |                                     %u
->   868 |       bitmap_weight(sseu->geometry_subslice_mask.xehp,
->       |       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->       |       |
->       |       unsigned int
->   869 |       XEHP_BITMAP_BITS(sseu->geometry_subslice_mask)));
-
-                seq_printf(m, "  %s Geometry DSS: %u\n", type,
-                           bitmap_weight(sseu->geometry_subslice_mask.xehp,
-                                         XEHP_BITMAP_BITS(sseu->geometry_subslice_mask)));
-
-
->       |       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> /tmp/next/build/drivers/gpu/drm/i915/gt/intel_sseu.c:870:38: error: format '%lu' expects argument of type 'long unsigned int', but argument 4 has type 'unsigned int' [-Werror=format=]
->   870 |   seq_printf(m, "  %s Compute DSS: %lu\n", type,
->       |                                    ~~^
->       |                                      |
->       |                                      long unsigned int
->       |                                    %u
->   871 |       bitmap_weight(sseu->compute_subslice_mask.xehp,
->       |       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->       |       |
->       |       unsigned int
->   872 |       XEHP_BITMAP_BITS(sseu->compute_subslice_mask)));
-
-                           bitmap_weight(sseu->compute_subslice_mask.xehp,
-                                         XEHP_BITMAP_BITS(sseu->compute_subslice_mask)));
-
->       |       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> cc1: all warnings being treated as errors
-> 
-> These look like they have probably been there for a while but I've used
-> a slightly different compiler version to Stephen so they're showing up
-> now once the bitmap tree is merged.  I will have a proper look tomorrow
-> hopefully but for now I've dropped the bitmap tree as it's getting very
-> late and it is likely I'll not finish the -next run today at all.
+--okozqc7em33lbxec--

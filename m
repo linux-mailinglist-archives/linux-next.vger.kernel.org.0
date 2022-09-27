@@ -2,61 +2,50 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 024155ECC01
-	for <lists+linux-next@lfdr.de>; Tue, 27 Sep 2022 20:17:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEC055ECC76
+	for <lists+linux-next@lfdr.de>; Tue, 27 Sep 2022 20:56:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231640AbiI0SQ6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 27 Sep 2022 14:16:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57214 "EHLO
+        id S230321AbiI0S4P (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 27 Sep 2022 14:56:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232349AbiI0SQ4 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 27 Sep 2022 14:16:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EBCA7DF73;
-        Tue, 27 Sep 2022 11:16:55 -0700 (PDT)
+        with ESMTP id S229631AbiI0S4O (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 27 Sep 2022 14:56:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC249108082;
+        Tue, 27 Sep 2022 11:56:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F0B5061ADE;
-        Tue, 27 Sep 2022 18:16:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71636C433C1;
-        Tue, 27 Sep 2022 18:16:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DA5A0B81D16;
+        Tue, 27 Sep 2022 18:56:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B65ADC433D6;
+        Tue, 27 Sep 2022 18:56:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664302614;
-        bh=yBmLVeYuwO9SPGn3sVc/WFiOlCFKTla9PdQObzOz11Y=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Yqoyza1RJIbYJKx0MOumj/Yr/WHVG1sepV9t85gBanYExG3tsXR49qmhUAI/d5OLs
-         ApHLJA2f37Gq8GBnEnoqpwbZX9waP4D4Zy96LhTGZafucT3jTynUov4DflKYt+LzQo
-         wTpo5DDjrW/UcY8xcWb9Ki8CZfAtIOxxq+p44dZc4lhqRirdj2scaTZ3ATyLlBjV5w
-         tj6Vp7+VhjeGGN8oLrWVJqp0bshi8o9naoSUvDzv6j/azES50Avj3NRIwrsmPX8qBT
-         kml4z8++hEzqKMNrS/tTZ1nLReIYJlOOY6cu1HwE/2uYFU2m542sfm57pKCQSQwxI4
-         6KBuFgnE2xRCQ==
-From:   broonie@kernel.org
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     Adam Bratschi-Kaye <ark.email@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Antonio Terceiro <antonio.terceiro@linaro.org>,
-        =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Boris-Chengbiao Zhou <bobo1239@web.de>,
-        Daniel Xu <dxu@dxuuu.xyz>,
-        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
-        Douglas Su <d0u9.su@outlook.com>, Finn Behrens <me@kloenk.de>,
-        Gary Guo <gary@garyguo.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>
-Subject: linux-next: manual merge of the rust tree with the kbuild tree
-Date:   Tue, 27 Sep 2022 19:16:47 +0100
-Message-Id: <20220927181647.487727-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        s=k20201202; t=1664304970;
+        bh=HGeVjbiYpPP4sCGDrfvtvA1zLFNV5aRj7HXgPohKZLQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QLXHqfTyq+MVxdikgquIhYXcjuRva7NE3ztgxneY+6gFqyBVHSNmEjDIhkVkWHh07
+         QQsdP32Egskccqe0JDCzhVBzxOPnbISCLDxGgBUSMHkK9FMqDmtF1dq8lh+5Iz8jFs
+         Cmu2jfHwbUWGDlDFWnMrm5ZRyQadXSFLgR2qgW4H02NAHP7e9HtuXMvjgGY3VYoItR
+         FJ8+eYlpRqoKP54kC9lkCKOfcOfdPDXkqRDn+akWi7AJVN22HFDnEQcI0eJ7KIWh09
+         poBJJwLrRwJr1LkxW/jMS8NR/pzRii5CxnUebOxevlbnCrfN6cPZWHE2QrAdUP9vUr
+         UeL4Y86vqb+3A==
+Date:   Tue, 27 Sep 2022 19:56:06 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the bitmap tree
+Message-ID: <YzNHRs2+qvLMOX6l@sirena.org.uk>
+References: <20220926235348.1269963-1-broonie@kernel.org>
+ <YzJF2hx4O6vnkVKC@yury-laptop>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="2s8fUrKXh5fcqHWA"
+Content-Disposition: inline
+In-Reply-To: <YzJF2hx4O6vnkVKC@yury-laptop>
+X-Cookie: Vote anarchist.
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -66,88 +55,65 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi all,
 
-FIXME: Add owner of second tree to To:
-       Add author(s)/SOB of conflicting commits.
+--2s8fUrKXh5fcqHWA
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Today's linux-next merge of the rust tree got a conflict in:
+On Mon, Sep 26, 2022 at 05:37:46PM -0700, Yury Norov wrote:
+> On Tue, Sep 27, 2022 at 12:53:48AM +0100, broonie@kernel.org wrote:
 
-  Makefile
+> > After merging the bitmap tree, today's linux-next build (x86
+> > allmodconfig) failed like this:
 
-between commit:
+> Hmm, this weird. I checked the next-20220923, and the drivers' code
+> mentioned in the log differs from what I see, and looks correct.
+> bitmap_weight() definition hasn't been changed in bitmap-for-next
+> patches.
 
-  0cc1b22fa606e ("kbuild: list sub-directories in ./Kbuild")
-  ca5f20da2ffcb ("kbuild: move .vmlinux.objs rule to Makefile.modpost")
+> Allmodconfig build looks good to me.
 
-from the kbuild tree and commit:
+> Check what I see in next-20220923 below.
 
-  d64ddbd68af8f ("Kbuild: add Rust support")
+I'm seeing the same issue again today, the driver hasn't changed here -
+the=20
 
-from the rust tree.
+> > /tmp/next/build/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.=
+c:492:3: note: in expansion of macro 'dev_err'
+> >   492 |   dev_err(rvu->dev, "%s: No space in id bitmap (%lu)\n",
+> >       |   ^~~~~~~
+> > /tmp/next/build/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.=
+c:492:51: note: format string is defined here
+> >   492 |   dev_err(rvu->dev, "%s: No space in id bitmap (%lu)\n",
+> >       |                                                 ~~^
+> >       |                                                   |
+> >       |                                                   long unsigned=
+ int
+> >       |                                                 %u
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+>                 dev_err(rvu->dev, "%s: No space in id bitmap (%d)\n",
+>                         __func__, bitmap_weight(table->id_bmap, table->to=
+t_ids));
 
-diff --cc Makefile
-index 2b4980490ecb2,c759ee3152544..0000000000000
---- a/Makefile
-+++ b/Makefile
-@@@ -789,7 -862,11 +861,10 @@@ KBUILD_CFLAGS += $(stackp-flags-y
-  
-  KBUILD_CFLAGS-$(CONFIG_WERROR) += -Werror
-  KBUILD_CFLAGS-$(CONFIG_CC_NO_ARRAY_BOUNDS) += -Wno-array-bounds
- -KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
-  
-+ KBUILD_RUSTFLAGS-$(CONFIG_WERROR) += -Dwarnings
-+ KBUILD_RUSTFLAGS += $(KBUILD_RUSTFLAGS-y)
-+ 
-  ifdef CONFIG_CC_IS_CLANG
-  KBUILD_CPPFLAGS += -Qunused-arguments
-  # The kernel builds with '-std=gnu11' so use of GNU extensions is acceptable.
-@@@ -1098,9 -1182,16 +1179,8 @@@ export MODORDER := $(extmod_prefix)modu
-  export MODULES_NSDEPS := $(extmod_prefix)modules.nsdeps
-  
-  ifeq ($(KBUILD_EXTMOD),)
- -core-y			+= kernel/ certs/ mm/ fs/ ipc/ security/ crypto/
- -core-$(CONFIG_BLOCK)	+= block/
- -core-$(CONFIG_IO_URING)	+= io_uring/
- -core-$(CONFIG_RUST)	+= rust/
- -
- -vmlinux-dirs	:= $(patsubst %/,%,$(filter %/, \
- -		     $(core-y) $(core-m) $(drivers-y) $(drivers-m) \
- -		     $(libs-y) $(libs-m)))
---
- -vmlinux-alldirs	:= $(sort $(vmlinux-dirs) Documentation \
- +build-dir	:= .
- +clean-dirs	:= $(sort . Documentation \
-  		     $(patsubst %/,%,$(filter %/, $(core-) \
-  			$(drivers-) $(libs-))))
-  
-@@@ -1497,7 -1585,7 +1581,8 @@@ endif # CONFIG_MODULE
-  # Directories & files removed with 'make clean'
-  CLEAN_FILES += include/ksym vmlinux.symvers modules-only.symvers \
-  	       modules.builtin modules.builtin.modinfo modules.nsdeps \
-- 	       compile_commands.json .thinlto-cache .vmlinux.objs
- -	       compile_commands.json .thinlto-cache rust/test rust/doc
-++	       compile_commands.json .thinlto-cache .vmlinux.objs \
-++	       rust/test rust/doc
-  
-  # Directories & files removed with 'make mrproper'
-  MRPROPER_FILES += include/config include/generated          \
-diff --git a/Kbuild b/Kbuild
-index 8a37584d1fd6b..5f4a23fc87b63 100644
---- a/Kbuild
-+++ b/Kbuild
-@@ -91,6 +91,7 @@ obj-$(CONFIG_BLOCK)	+= block/
- obj-$(CONFIG_IO_URING)	+= io_uring/
- obj-y			+= $(ARCH_LIB)
- obj-y			+= drivers/
-+obj-$(CONFIG_RUST)	+= rust/
- obj-y			+= sound/
- obj-$(CONFIG_SAMPLES)	+= samples/
- obj-$(CONFIG_NET)	+= net/
+This is coming from a patch Stephen had in his tree "fix up for
+bitmap_weight return value changing" which had been in -next, apparently
+fixing some other issue which had been in your tree.  With that removed
+things seem fine.
+
+--2s8fUrKXh5fcqHWA
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMzR0UACgkQJNaLcl1U
+h9CDpAf+JJss5+Ogh/R1JZDYOB9qss0vqzDdg64JTt/Cg0/l+uvIDaanrxrLHLYH
+P0d4YOGC6KSgiVNE3kA/sdalsUNs5rlOEvauv2k11EoNnPH5lddtArscIt6z/ql7
+4P8OkFFOYZLnNSX/mVHnjIGPH8SkBOxagFlCBD5qe3QaQQzSJYcvGvNcfHeq1vPA
+AaYU2PR1FNnmsiYopdnzMJGYrYk8zJddzUt/PRveHhk3o4e71yrx0SFp+2ZrcNWT
++cdgw65nWaKOmW1MIUCdJ6KVzAb0cW4cdKY0w/1MeH5MLhz5apmpOIPJMxiC8Qb2
+MmBpjklaayaCWHTQV+/8vojjTjqYgg==
+=QM7F
+-----END PGP SIGNATURE-----
+
+--2s8fUrKXh5fcqHWA--

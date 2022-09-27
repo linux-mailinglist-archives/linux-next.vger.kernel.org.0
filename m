@@ -2,99 +2,183 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6448B5ECF50
-	for <lists+linux-next@lfdr.de>; Tue, 27 Sep 2022 23:33:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B21F15ECF6D
+	for <lists+linux-next@lfdr.de>; Tue, 27 Sep 2022 23:44:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231428AbiI0VdY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 27 Sep 2022 17:33:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36614 "EHLO
+        id S231666AbiI0Vol (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 27 Sep 2022 17:44:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbiI0VdX (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 27 Sep 2022 17:33:23 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87CAC105D5E;
-        Tue, 27 Sep 2022 14:33:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=H7YtPOYhV29gP4WdkjcppH5vTdIvl+SSSIWTHEeQBx4=; b=4BVQpJgnjA+og9uC0hy0fjpk3y
-        1OlXuoXdUF+e/x47FLLo6Zzsy7FEnaSk3t3LrhyeOr3ZYarIOHcR9T3X54KTUwBIf4HfxFfhb6EeY
-        vbTRwOMGm1OnA7tyDObWHiufHqMLwI4MCAUIv1nH2+SJuLmGPFcsw0xFjWfmDGa6gWNfll6W2brfs
-        iM4xlX6OdiYO4ARFGAA/momuSmCr+gJGbmnmel63sDH5x/Mf1eA3Tr4UWC16CA//6tNswNfkekn/n
-        GtNoMnYhp8X9aXzd9MBHVB6WRiMXrs6EpS34oTGU9QRDgVUgqn/3TIAUZ8XtsDVP7xjWiK0E8eQMa
-        GV0fcXBw==;
-Received: from [2601:1c2:d80:3110::a2e7]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1odICe-00CjXe-VF; Tue, 27 Sep 2022 21:33:21 +0000
-Message-ID: <1d54d4ff-c8a3-145a-7ec5-f32107eda21e@infradead.org>
-Date:   Tue, 27 Sep 2022 14:33:19 -0700
+        with ESMTP id S230509AbiI0Vok (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 27 Sep 2022 17:44:40 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41B50B1E9
+        for <linux-next@vger.kernel.org>; Tue, 27 Sep 2022 14:44:36 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id f4-20020a056e020b4400b002f6681cca5bso8533641ilu.14
+        for <linux-next@vger.kernel.org>; Tue, 27 Sep 2022 14:44:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=BF3XUngDcIBJnnbKFZBr9nsqTXYVSoA/orwVCnB+sGo=;
+        b=4u2nAgR0bcalDUlxT/OuvsdsT2LriVitfc+x+X5gHATNOVQdLPwFRbrfbPqINZ59xR
+         3IZQ2YNZy8+bAS0XnnXW5gGaBkImr/Xm1BZK3+e+497pDzDZp7IxLzY6SarHJ/l8Qcem
+         aFpsquND2SrTuZSgZ0sqhJnpip29oo0N91UT4YE9Wnn+T/qzos5k+RnZnOwhOY143eqn
+         /UGGViNrd1tT206xTq2wrpZLUtRb3NKeDNCYCaSpSH3Gx8QgrlE3YgebgwWLKLGfu+Cr
+         lrnzEKe3S/hNzVhS018pfB+94QUXOIHf2vRF+sBTesgq7pVmJ84HdaPA4kql6WvNbqQt
+         Jnvw==
+X-Gm-Message-State: ACrzQf1o/qFnOG7g3HgfFwbF0vuZJRflXwgX+hMyuIACEW5UVVErBlEi
+        2VpZVozTqxt0vY6kPZVweC31W8C6XtOxNDnTAf9is0+Mklk1
+X-Google-Smtp-Source: AMsMyM7Svt6a95pqmdWaeYSt1Uck7z5F7aXg6SxHu2YVCkdM7dH7O99HEvh3K1hy1Iv0v5ezNcsRy12R6kSBtrF1VSahlpgthwnw
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: linux-next: Tree for Sep 27 (uml 64-bit or 32-bit: tinyconfig)
-Content-Language: en-US
-To:     paulmck@kernel.org
-Cc:     broonie@kernel.org,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-um <linux-um@lists.infradead.org>
-References: <20220927201053.518736-1-broonie@kernel.org>
- <f1b22431-074d-32f1-b67a-34c51e4d072a@infradead.org>
- <20220927212821.GX4196@paulmck-ThinkPad-P17-Gen-1>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220927212821.GX4196@paulmck-ThinkPad-P17-Gen-1>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:144f:b0:35a:6828:680d with SMTP id
+ l15-20020a056638144f00b0035a6828680dmr16269987jad.286.1664315075567; Tue, 27
+ Sep 2022 14:44:35 -0700 (PDT)
+Date:   Tue, 27 Sep 2022 14:44:35 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000dfa4f105e9af8c54@google.com>
+Subject: [syzbot] linux-next boot error: WARNING in cpumask_next_wrap
+From:   syzbot <syzbot+21da700f3c9f0bc40150@syzkaller.appspotmail.com>
+To:     ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
+        davem@davemloft.net, edumazet@google.com, hawk@kernel.org,
+        jasowang@redhat.com, john.fastabend@gmail.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        mst@redhat.com, netdev@vger.kernel.org, pabeni@redhat.com,
+        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com,
+        virtualization@lists.linux-foundation.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    1bd8b75fe6ad Add linux-next specific files for 20220927
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=109d3404880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=fab8618a7c989c9d
+dashboard link: https://syzkaller.appspot.com/bug?extid=21da700f3c9f0bc40150
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/b150a04debdc/disk-1bd8b75f.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/2bf7d4b812bc/vmlinux-1bd8b75f.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+21da700f3c9f0bc40150@syzkaller.appspotmail.com
+
+ACPI: button: Sleep Button [SLPF]
+ACPI: \_SB_.LNKC: Enabled at IRQ 11
+virtio-pci 0000:00:03.0: virtio_pci: leaving for legacy driver
+ACPI: \_SB_.LNKD: Enabled at IRQ 10
+virtio-pci 0000:00:04.0: virtio_pci: leaving for legacy driver
+ACPI: \_SB_.LNKB: Enabled at IRQ 10
+virtio-pci 0000:00:06.0: virtio_pci: leaving for legacy driver
+virtio-pci 0000:00:07.0: virtio_pci: leaving for legacy driver
+N_HDLC line discipline registered with maxframe=4096
+Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
+00:03: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
+00:04: ttyS1 at I/O 0x2f8 (irq = 3, base_baud = 115200) is a 16550A
+00:05: ttyS2 at I/O 0x3e8 (irq = 6, base_baud = 115200) is a 16550A
+00:06: ttyS3 at I/O 0x2e8 (irq = 7, base_baud = 115200) is a 16550A
+Non-volatile memory driver v1.3
+Linux agpgart interface v0.103
+ACPI: bus type drm_connector registered
+[drm] Initialized vgem 1.0.0 20120112 for vgem on minor 0
+[drm] Initialized vkms 1.0.0 20180514 for vkms on minor 1
+Console: switching to colour frame buffer device 128x48
+platform vkms: [drm] fb0: vkmsdrmfb frame buffer device
+usbcore: registered new interface driver udl
+brd: module loaded
+loop: module loaded
+zram: Added device: zram0
+null_blk: disk nullb0 created
+null_blk: module loaded
+Guest personality initialized and is inactive
+VMCI host device registered (name=vmci, major=10, minor=119)
+Initialized host personality
+usbcore: registered new interface driver rtsx_usb
+usbcore: registered new interface driver viperboard
+usbcore: registered new interface driver dln2
+usbcore: registered new interface driver pn533_usb
+nfcsim 0.2 initialized
+usbcore: registered new interface driver port100
+usbcore: registered new interface driver nfcmrvl
+Loading iSCSI transport class v2.0-870.
+scsi host0: Virtio SCSI HBA
+st: Version 20160209, fixed bufsize 32768, s/g segs 256
+Rounding down aligned max_sectors from 4294967295 to 4294967288
+db_root: cannot open: /etc/target
+slram: not enough parameters.
+ftl_cs: FTL header not found.
+wireguard: WireGuard 1.0.0 loaded. See www.wireguard.com for information.
+wireguard: Copyright (C) 2015-2019 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
+eql: Equalizer2002: Simon Janes (simon@ncm.com) and David S. Miller (davem@redhat.com)
+MACsec IEEE 802.1AE
+tun: Universal TUN/TAP device driver, 1.6
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 1 at include/linux/cpumask.h:110 cpu_max_bits_warn include/linux/cpumask.h:110 [inline]
+WARNING: CPU: 0 PID: 1 at include/linux/cpumask.h:110 cpumask_check include/linux/cpumask.h:117 [inline]
+WARNING: CPU: 0 PID: 1 at include/linux/cpumask.h:110 cpumask_next include/linux/cpumask.h:178 [inline]
+WARNING: CPU: 0 PID: 1 at include/linux/cpumask.h:110 cpumask_next_wrap+0x139/0x1d0 lib/cpumask.c:27
+Modules linked in:
+CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.0.0-rc7-next-20220927-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
+RIP: 0010:cpu_max_bits_warn include/linux/cpumask.h:110 [inline]
+RIP: 0010:cpumask_check include/linux/cpumask.h:117 [inline]
+RIP: 0010:cpumask_next include/linux/cpumask.h:178 [inline]
+RIP: 0010:cpumask_next_wrap+0x139/0x1d0 lib/cpumask.c:27
+Code: df e8 1b 07 3e f8 39 eb 77 64 e8 c2 0a 3e f8 41 8d 6c 24 01 89 de 89 ef e8 04 07 3e f8 39 dd 0f 82 54 ff ff ff e8 a7 0a 3e f8 <0f> 0b e9 48 ff ff ff e8 9b 0a 3e f8 48 c7 c2 00 ae e1 8d 48 b8 00
+RSP: 0000:ffffc90000067920 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000002 RCX: 0000000000000000
+RDX: ffff88813fe50000 RSI: ffffffff893e3c59 RDI: 0000000000000004
+RBP: 0000000000000002 R08: 0000000000000004 R09: 0000000000000002
+R10: 0000000000000002 R11: 0000000000000000 R12: 0000000000000001
+R13: 0000000000000000 R14: 0000000000000002 R15: ffffffff8de1ac10
+FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffff88823ffff000 CR3: 000000000bc8e000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ virtnet_set_affinity+0x35a/0x750 drivers/net/virtio_net.c:2300
+ init_vqs drivers/net/virtio_net.c:3578 [inline]
+ init_vqs drivers/net/virtio_net.c:3564 [inline]
+ virtnet_probe+0x110f/0x2ea0 drivers/net/virtio_net.c:3868
+ virtio_dev_probe+0x577/0x870 drivers/virtio/virtio.c:305
+ call_driver_probe drivers/base/dd.c:560 [inline]
+ really_probe+0x249/0xb90 drivers/base/dd.c:639
+ __driver_probe_device+0x1df/0x4d0 drivers/base/dd.c:778
+ driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:808
+ __driver_attach+0x1d0/0x550 drivers/base/dd.c:1190
+ bus_for_each_dev+0x147/0x1d0 drivers/base/bus.c:301
+ bus_add_driver+0x4c9/0x640 drivers/base/bus.c:618
+ driver_register+0x220/0x3a0 drivers/base/driver.c:246
+ virtio_net_driver_init+0x93/0xd2 drivers/net/virtio_net.c:4074
+ do_one_initcall+0x13d/0x780 init/main.c:1306
+ do_initcall_level init/main.c:1381 [inline]
+ do_initcalls init/main.c:1397 [inline]
+ do_basic_setup init/main.c:1416 [inline]
+ kernel_init_freeable+0x6ff/0x788 init/main.c:1636
+ kernel_init+0x1a/0x1d0 init/main.c:1524
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+ </TASK>
 
 
-On 9/27/22 14:28, Paul E. McKenney wrote:
-> On Tue, Sep 27, 2022 at 02:13:29PM -0700, Randy Dunlap wrote:
->>
->>
->> On 9/27/22 13:10, broonie@kernel.org wrote:
->>> Hi all,
->>>
->>> Changes since 20220923:
->>>
->>
->> In file included from ../include/linux/notifier.h:16,
->>                  from ../include/linux/memory_hotplug.h:7,
->>                  from ../include/linux/mmzone.h:1244,
->>                  from ../include/linux/gfp.h:7,
->>                  from ../include/linux/slab.h:15,
->>                  from ../include/linux/crypto.h:20,
->>                  from ../arch/x86/um/shared/sysdep/kernel-offsets.h:5,
->>                  from ../arch/um/kernel/asm-offsets.c:1:
->> ../include/linux/srcu.h: In function ‘srcu_read_lock_nmisafe’:
->> ../include/linux/srcu.h:181:26: error: implicit declaration of function ‘__srcu_read_lock_nmisafe’; did you mean ‘srcu_read_lock_nmisafe’? [-Werror=implicit-function-declaration]
->>   181 |                 retval = __srcu_read_lock_nmisafe(ssp, true);
->>       |                          ^~~~~~~~~~~~~~~~~~~~~~~~
->>       |                          srcu_read_lock_nmisafe
->> ../include/linux/srcu.h: In function ‘srcu_read_unlock_nmisafe’:
->> ../include/linux/srcu.h:226:17: error: implicit declaration of function ‘__srcu_read_unlock_nmisafe’; did you mean ‘srcu_read_unlock_nmisafe’? [-Werror=implicit-function-declaration]
->>   226 |                 __srcu_read_unlock_nmisafe(ssp, idx, true);
->>       |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~
->>       |                 srcu_read_unlock_nmisafe
-> 
-> Could you please send your .config or tell me how you generated it?
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-
-For x86_64 SUBARCH, ARCH=um:
-
-mkdir UML64
-make ARCH=um SUBARCH=x86_64 O=UML64 tinyconfig
-make ARCH=um SUBARCH=x86_64 O=UML64 all
-
-
--- 
-~Randy
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

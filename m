@@ -2,52 +2,55 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCC7E5EB613
-	for <lists+linux-next@lfdr.de>; Tue, 27 Sep 2022 02:02:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C03595EB61F
+	for <lists+linux-next@lfdr.de>; Tue, 27 Sep 2022 02:12:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbiI0ACH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 26 Sep 2022 20:02:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36998 "EHLO
+        id S229699AbiI0AMW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 26 Sep 2022 20:12:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbiI0ACF (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 26 Sep 2022 20:02:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 153FA9F194;
-        Mon, 26 Sep 2022 17:02:04 -0700 (PDT)
+        with ESMTP id S229542AbiI0AMV (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 26 Sep 2022 20:12:21 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C28A2A2617;
+        Mon, 26 Sep 2022 17:12:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BF4456116E;
-        Tue, 27 Sep 2022 00:02:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E603EC433D6;
-        Tue, 27 Sep 2022 00:02:00 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 299B0CE11EA;
+        Tue, 27 Sep 2022 00:12:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04C95C433C1;
+        Tue, 27 Sep 2022 00:12:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664236922;
-        bh=ZdXYo6em+HlkUDfGbNHS0iWVRZqCG576sXLjR0nNhsw=;
+        s=k20201202; t=1664237537;
+        bh=yJTEwalXAj1ZcOxSPqdSxW64r1dUrfta6pJjhKY+Tq0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gA7/k/dUl4T5FQxoUSKD1VS2619ryVOXQxt/mIZ7Fk+vey2WTkfWfQh+0BP2QPrj+
-         LTGWID1L++5fNxohctqOtyzCc8HVDWNrT9snCldg7EHUO6spOn1ljMxur6Q3kaczV3
-         +ORoIdE5yfNkGtZogaNpapBaFyoeoyWEpTSPtCBXq0wylT54eKerhtVk54g+AwX3Xt
-         sDdwBzAYyKcLmYVGYCKp9LPlgMbwy9bmVJZbvWp77L8q1TGDSdrzdGsGNRudnsn/at
-         11BK6UdBvfW2ng3KVQwo8vZ4xZ+S3I/6dLAT3SFQVcQU7460Ok+OvhPB70qjo2p5VD
-         EWURNpJNW/3mw==
-Date:   Tue, 27 Sep 2022 01:01:57 +0100
+        b=CHx5HL8v/5bO/aYAEsadexy7YLwfs42LwiBLPiYy4rMXI1FglqRvP3XDVGG0M6TWh
+         osDik7ZxzeRdkhNBED8VJl4n9wzfGm/05vTJCAS4+0gmWCd6vMairWnKW35IAc/PL8
+         HzwM9l6NXbRJC475duQPJ5qN1WaYLRqhys5i+DOVlDDL7Yt51G8LPMTYiiu7rvC2l4
+         /gy6GyNH8pTbJA9NXQcA85Hf/bx+YrgGCcr9oacZC9BjEPPDCuaNAKePkahcst3ptX
+         ue0nS3pG06A3YvRDcax+oj8NbYDmCLwxTO/RtPV1bk1LVdjrkb/N0U64G4iUIp1zxS
+         KCmNxPgQRC8bw==
+Date:   Tue, 27 Sep 2022 01:12:12 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     =?utf-8?B?0L3QsNCx?= <nabijaczleweli@nabijaczleweli.xyz>
-Cc:     Greg KH <greg@kroah.com>,
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     =?utf-8?B?0L3QsNCx?= <nabijaczleweli@nabijaczleweli.xyz>,
+        Greg KH <greg@kroah.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the tty tree with the drivers-misc
- tree
-Message-ID: <YzI9dTLick7jAXdv@sirena.org.uk>
-References: <20220926213414.792065-1-broonie@kernel.org>
- <20220926231111.grxrydvfksyyk6t3@tarta.nabijaczleweli.xyz>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Manfred Spraul <manfred.spraul@de.bosch.com>
+Subject: Re: linux-next: manual merge of the driver-core tree with the
+ jc_docs tree
+Message-ID: <YzI/3MjHgbXFHoHG@sirena.org.uk>
+References: <20220926210631.657728-1-broonie@kernel.org>
+ <20220926224621.47llaskp6mihi4dd@tarta.nabijaczleweli.xyz>
+ <878rm5rbka.fsf@meer.lwn.net>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="QLXosb7uQZuyUgdl"
+        protocol="application/pgp-signature"; boundary="2xIGPcpkILOvyfyN"
 Content-Disposition: inline
-In-Reply-To: <20220926231111.grxrydvfksyyk6t3@tarta.nabijaczleweli.xyz>
+In-Reply-To: <878rm5rbka.fsf@meer.lwn.net>
 X-Cookie: You may be recognized soon.  Hide.
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -59,36 +62,37 @@ List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
 
---QLXosb7uQZuyUgdl
+--2xIGPcpkILOvyfyN
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Sep 27, 2022 at 01:11:11AM +0200, =D0=BD=D0=B0=D0=B1 wrote:
+On Mon, Sep 26, 2022 at 04:54:45PM -0600, Jonathan Corbet wrote:
+> =D0=BD=D0=B0=D0=B1 <nabijaczleweli@nabijaczleweli.xyz> writes:
 
-> Similar situation as
->   https://lore.kernel.org/all/20220926210631.657728-1-broonie@kernel.org/t
-> but the merge appears horribly broken only in the non-english files,
-> the english diff seems mostly fine.
+> > This also reveals that I missed NBD_REQUEST_MAGIC
+> > (needs to go, same reason as NBD_REPLY_MAGIC)
+> > in the first pass, but that's unrelated here.
 
-The non-English files just carried on the prior merge problem (in
-general I default to skipping out on merge conflicts in documentation in
-languages I can't read, admittedly this is usually also in non-latin
-scripts).
+> I've been trying to make sense of that merge myself.  Is the right
+> solution that I should just drop 32ba63d4b2e1a ?  Manfred, thoughts on
+> that?
 
---QLXosb7uQZuyUgdl
+That'd certainly be a viable option too.
+
+--2xIGPcpkILOvyfyN
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMyPXQACgkQJNaLcl1U
-h9DsiQf/RH/M+341fn7zo+v8/U0Jyfb6xvKzowwuWqSPPaImjIQsqNV9PVaF/5ls
-yjIABgsCz/3HtjjIyg70EgT3SNmXdo3F595a8AieJwVC9FBM9kp4x7al/7PZxvGc
-ExapevQ90oi+7aEXfu6HmtfqbTrASsVqwE8CCV9EEP57awmmPQlFDQEAn4D3GuHQ
-IDUUYmoWUVm7ENgUobp1oQLl9h5t+G2dVLAbjNebTCPwrN5uNwETQj7Dz6nq6jCA
-NHoShtjPl7dgHceAHPvYJCYQU4Fo30lvAA+R0tuRM5ph3WAzWxrGTDafRVTtZlpu
-V1VhWXyUCoHKTgUM7llLTlKXM+F6pA==
-=aJos
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMyP9sACgkQJNaLcl1U
+h9Dqfwf8DrT/gFo1CSOWg6xhBl30XSPHqZqYYSQ4lSxI4MdyrMaMzPd71vChA+RF
+4iKb3kJmWMXLiojv20iWmNlp14K4uPpxjnoTym8EEy6wLhL3hYbQBM6rmnr3E7oW
+uG5iLpWwfLLPNCcnbVos4gk4Oi0j/6iI8ABNYLHnTntM7ImifoofFGjgoN3/bdn6
+XXHM6DjAAfNmYFk6gjxn8b+1N9vQhaQW6bVL2bxLUHeSV977ekXzYle5AJfvpTXL
+F6hyHvBNo8QvDIbiVn2RvJ7P0+uiB/Bx9MLlV5csupKdoqP0Zb0Gb2Nxfkhl81OY
+lKzT4b7jqZRnd3ndMmwrnJP31DGtFA==
+=+UIy
 -----END PGP SIGNATURE-----
 
---QLXosb7uQZuyUgdl--
+--2xIGPcpkILOvyfyN--

@@ -2,100 +2,117 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25AB95ECD44
-	for <lists+linux-next@lfdr.de>; Tue, 27 Sep 2022 21:56:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F27965ECE0A
+	for <lists+linux-next@lfdr.de>; Tue, 27 Sep 2022 22:12:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232053AbiI0T4J (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 27 Sep 2022 15:56:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45618 "EHLO
+        id S232972AbiI0UMZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 27 Sep 2022 16:12:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232120AbiI0T4G (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 27 Sep 2022 15:56:06 -0400
+        with ESMTP id S232608AbiI0ULm (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 27 Sep 2022 16:11:42 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB19C1FCC5;
-        Tue, 27 Sep 2022 12:56:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E17251EAD44;
+        Tue, 27 Sep 2022 13:10:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8EFA1B81D55;
-        Tue, 27 Sep 2022 19:56:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1097AC433D6;
-        Tue, 27 Sep 2022 19:55:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 89EFFB81D31;
+        Tue, 27 Sep 2022 20:10:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67611C433C1;
+        Tue, 27 Sep 2022 20:10:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664308559;
-        bh=EF7wmptVLAJkpup0OcLZZFmmWTKTxo8+yH58pvODRKI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=m3PZekIjaNG0TswF2/wEU4dzt9BwBZffWPpFeJdFR2vnp6qbAHB/ZcaTEQJZPscpd
-         c0S4VnfTToe+BGKjBtdVEjf0G/IwJ1sNZIa+Q6lCtImXBnwsErgmgXhwVJS4xHIUru
-         i9zCNd0t523+oni0uwR/a7QNd0OQYR0+93wtsYeza9AuqyUeiEbQpWvS3AbXu671+Q
-         SusgD8tNL4CTKkCv4xd/5bMDX7hX7qjfyhiGNa3PsdlSYsfSrYJOAuyxHoKOAlyEwd
-         pvoLEuXfDt1ZYyroxYM+bfEQkoRN5QOGqU8qVjmm23rc9O7hrqDXKlVFXFgIYe1R0x
-         O0hCx19siZDSw==
-Date:   Tue, 27 Sep 2022 20:55:54 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the mm-stable tree with the bitmap
- tree
-Message-ID: <YzNVSkwN1miK4xmB@sirena.org.uk>
-References: <20220927192650.516143-1-broonie@kernel.org>
- <YzNRIep0dLbT2HGr@yury-laptop>
+        s=k20201202; t=1664309457;
+        bh=GDU6ovrr2pSsr59p7jPLM3pt5taNbU6kNiIARZ8H3GQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=XrvUqTAHKWkv4uZMt7yQqOkZwo4yiCI5mC4JZqBAy2Mesg0rtuT3ktMwdAaK21umZ
+         spLn1yRqYEkWBNlQ0BjpLUGgaw6MWEKutoNvDSoXYwmkHxZuNf31UXhrrZ+pAR/GCO
+         EesmMA8ezNMda/GO+fEZrouKsLnI+tlUV6UWaW6e7TTGv9FaxDpwIzbQ3L+REcOhj5
+         YhSJccu3RYB3CTCQYzJslcKe1pVwUHjlwObVfeP9RF5czmsy0iBVNoPUduUfLebyhl
+         Ht5Vl6rxRXb5mASjcA0j7A3Q9rSjy3GYhz6MhkDquTVFq25Co52VafgR2sERA3Vhqj
+         wb1z6DjP4/f8w==
+From:   broonie@kernel.org
+To:     Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: Tree for Sep 27
+Date:   Tue, 27 Sep 2022 21:10:53 +0100
+Message-Id: <20220927201053.518736-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="coEENREKAlvo84zQ"
-Content-Disposition: inline
-In-Reply-To: <YzNRIep0dLbT2HGr@yury-laptop>
-X-Cookie: Vote anarchist.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        LOCALPART_IN_SUBJECT,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+Hi all,
 
---coEENREKAlvo84zQ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Changes since 20220923:
 
-On Tue, Sep 27, 2022 at 12:38:09PM -0700, Yury Norov wrote:
-> On Tue, Sep 27, 2022 at 08:26:49PM +0100, broonie@kernel.org wrote:
+The vfs tree gained a conflict with the ext3 tree.
 
-> >=20
-> >   97848c10f9f8a ("lib/bitmap: remove bitmap_ord_to_pos")
-> >=20
-> > from the bitmap tree and commit:
-> >=20
-> >   3e061d924fe9c ("lib/nodemask: optimize node_random for nodemask with =
-single NUMA node")
-> >=20
-> > from the mm-stable tree.
->=20
-> The fix is correct. I sent the updated patch to Stephen, and
-> apparently had to CC you. Thanks.
+The bluetooth tree gained conflict with the net tree.
 
-Normally it's Stephen, but he's off most of this week so I'm trying
-provide some cover.
+The various DRM trees gained even more conflicts with each other.
 
---coEENREKAlvo84zQ
-Content-Type: application/pgp-signature; name="signature.asc"
+The drivers-misc tree gained a conflict against the jc_docs tree.
 
------BEGIN PGP SIGNATURE-----
+The drivers-misc tree gained a conflict against the drm tree.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMzVUkACgkQJNaLcl1U
-h9CVYgf/QUbH83rX9EpXEiBU8VlvMwfffinvv2YYZazmapumygHqXMsrk6BssPCM
-SkkjZ+movqsKMwwAxKu7ohhvzqhF0V7VMI07Luqs5QQQ3N7VDphxsQtN3BrZV4Gq
-YQcv1estpl5MUqPmj3szcMG+3ouJEn37u+mU96v2u+Cb2fFnqsuw+DdLGDKBryLY
-oSeEs3U8GarCC/+N+9FPHuadRD0NB1g73HzLBSVTMBiwHMGlCFZyruwY4CuZB7qT
-bJWPChmkYuB3wYdcO9tjlrZ2UmxrYeYzRZJ3om1Ej8bNYwTS2o62muk3maVr+I1H
-jvxZkw4MfdSB02AyicEZLxpkkADwFg==
-=ptWL
------END PGP SIGNATURE-----
+The v4l tree gained a conflict with the v4l-dvb-fixes tree.
 
---coEENREKAlvo84zQ--
+The net-next tree gained a conflict against the i2c tree.
+
+The kspp tree gained a conflict against the arm64 tree.
+
+The kspp tree gained a conflict against the arm64-fixes tree.
+
+The kspp tree gained a conflict against the bpf-next tree.
+
+The mm-stable tree gained a conflict against the bitmap tree.
+
+Non-merge commits (relative to Linus' tree): 9849
+ 10393 files changed, 558039 insertions(+), 213574 deletions(-)
+
+----------------------------------------------------------------------------
+
+I have created today's linux-next tree at
+git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
+are tracking the linux-next tree using git, you should not use "git pull"
+to do so as that will try to merge the new linux-next release with the
+old one.  You should use "git fetch" and checkout or reset to the new
+master.
+
+You can see which trees have been included by looking in the Next/Trees
+file in the source.  There are also quilt-import.log and merge.log
+files in the Next directory.  Between each merge, the tree was built
+with a ppc64_defconfig for powerpc, an allmodconfig for x86_64, a
+multi_v7_defconfig for arm and a native build of tools/perf. After
+the final fixups (if any), I do an x86_64 modules_install followed by
+builds for x86_64 allnoconfig, powerpc allnoconfig (32 and 64 bit),
+ppc44x_defconfig, allyesconfig and pseries_le_defconfig and i386,
+arm64, sparc and sparc64 defconfig and htmldocs. And finally, a simple
+boot test of the powerpc pseries_le_defconfig kernel in qemu (with and
+without kvm enabled).
+
+Below is a summary of the state of the merge.
+
+I am currently merging 362 trees (counting Linus' and 100 trees of bug
+fix patches pending for the current merge release).
+
+Stats about the size of the tree over time can be seen at
+http://neuling.org/linux-next-size.html .
+
+Status of my local build tests will be at
+http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
+advice about cross compilers/configs that work, we are always open to add
+more builds.
+
+Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
+Gortmaker for triage and bug fixes.

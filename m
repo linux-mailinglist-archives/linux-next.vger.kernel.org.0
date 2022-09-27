@@ -2,91 +2,99 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D1B95ECF4A
-	for <lists+linux-next@lfdr.de>; Tue, 27 Sep 2022 23:28:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6448B5ECF50
+	for <lists+linux-next@lfdr.de>; Tue, 27 Sep 2022 23:33:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229940AbiI0V20 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 27 Sep 2022 17:28:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56356 "EHLO
+        id S231428AbiI0VdY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 27 Sep 2022 17:33:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbiI0V2Z (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 27 Sep 2022 17:28:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 688BA1E76B7;
-        Tue, 27 Sep 2022 14:28:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2B5DAB81D56;
-        Tue, 27 Sep 2022 21:28:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DABCDC433D6;
-        Tue, 27 Sep 2022 21:28:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664314101;
-        bh=d0UanoNnAmTntsMEuZV5ezz6v34yl/2kzaNX7qZacZc=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=KrgUZUxnx8wgUKCqb/Ygr8YlM/Y+drVwBc+0TJwWPghXDKrpsNSauZlhP/+OQaO6z
-         kkQMAa3+xymynDgnp87RpTLdmGBavANgJZwG6OjhjzB/TbtiKTL2qOK7KK7AY7cH74
-         RSV8pl8PPyVRIjKI7EmCZlaOFxbLsmWfdKItErS68U5OtM2yCj7aKmjVx6lvg+b0Ey
-         0SK3J8VKJL00Iu0WDJ/mzv2FBztWB/fPHApA+WS3zzWF/nlmR9oLJ5h2+F7AmeZDSi
-         2FKxnC/tegFtvOM1v241lHJwZSZT4QsQmjxiTgX03vkak815xyJ5fTl22bNzd0yuZ6
-         EGLJs3r4/y3AQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 742BE5C0AC7; Tue, 27 Sep 2022 14:28:21 -0700 (PDT)
-Date:   Tue, 27 Sep 2022 14:28:21 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
+        with ESMTP id S229779AbiI0VdX (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 27 Sep 2022 17:33:23 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87CAC105D5E;
+        Tue, 27 Sep 2022 14:33:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=H7YtPOYhV29gP4WdkjcppH5vTdIvl+SSSIWTHEeQBx4=; b=4BVQpJgnjA+og9uC0hy0fjpk3y
+        1OlXuoXdUF+e/x47FLLo6Zzsy7FEnaSk3t3LrhyeOr3ZYarIOHcR9T3X54KTUwBIf4HfxFfhb6EeY
+        vbTRwOMGm1OnA7tyDObWHiufHqMLwI4MCAUIv1nH2+SJuLmGPFcsw0xFjWfmDGa6gWNfll6W2brfs
+        iM4xlX6OdiYO4ARFGAA/momuSmCr+gJGbmnmel63sDH5x/Mf1eA3Tr4UWC16CA//6tNswNfkekn/n
+        GtNoMnYhp8X9aXzd9MBHVB6WRiMXrs6EpS34oTGU9QRDgVUgqn/3TIAUZ8XtsDVP7xjWiK0E8eQMa
+        GV0fcXBw==;
+Received: from [2601:1c2:d80:3110::a2e7]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1odICe-00CjXe-VF; Tue, 27 Sep 2022 21:33:21 +0000
+Message-ID: <1d54d4ff-c8a3-145a-7ec5-f32107eda21e@infradead.org>
+Date:   Tue, 27 Sep 2022 14:33:19 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: linux-next: Tree for Sep 27 (uml 64-bit or 32-bit: tinyconfig)
+Content-Language: en-US
+To:     paulmck@kernel.org
 Cc:     broonie@kernel.org,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-um <linux-um@lists.infradead.org>
-Subject: Re: linux-next: Tree for Sep 27 (uml 64-bit or 32-bit: tinyconfig)
-Message-ID: <20220927212821.GX4196@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
 References: <20220927201053.518736-1-broonie@kernel.org>
  <f1b22431-074d-32f1-b67a-34c51e4d072a@infradead.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+ <20220927212821.GX4196@paulmck-ThinkPad-P17-Gen-1>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220927212821.GX4196@paulmck-ThinkPad-P17-Gen-1>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <f1b22431-074d-32f1-b67a-34c51e4d072a@infradead.org>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 02:13:29PM -0700, Randy Dunlap wrote:
-> 
-> 
-> On 9/27/22 13:10, broonie@kernel.org wrote:
-> > Hi all,
-> > 
-> > Changes since 20220923:
-> > 
-> 
-> In file included from ../include/linux/notifier.h:16,
->                  from ../include/linux/memory_hotplug.h:7,
->                  from ../include/linux/mmzone.h:1244,
->                  from ../include/linux/gfp.h:7,
->                  from ../include/linux/slab.h:15,
->                  from ../include/linux/crypto.h:20,
->                  from ../arch/x86/um/shared/sysdep/kernel-offsets.h:5,
->                  from ../arch/um/kernel/asm-offsets.c:1:
-> ../include/linux/srcu.h: In function ‘srcu_read_lock_nmisafe’:
-> ../include/linux/srcu.h:181:26: error: implicit declaration of function ‘__srcu_read_lock_nmisafe’; did you mean ‘srcu_read_lock_nmisafe’? [-Werror=implicit-function-declaration]
->   181 |                 retval = __srcu_read_lock_nmisafe(ssp, true);
->       |                          ^~~~~~~~~~~~~~~~~~~~~~~~
->       |                          srcu_read_lock_nmisafe
-> ../include/linux/srcu.h: In function ‘srcu_read_unlock_nmisafe’:
-> ../include/linux/srcu.h:226:17: error: implicit declaration of function ‘__srcu_read_unlock_nmisafe’; did you mean ‘srcu_read_unlock_nmisafe’? [-Werror=implicit-function-declaration]
->   226 |                 __srcu_read_unlock_nmisafe(ssp, idx, true);
->       |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~
->       |                 srcu_read_unlock_nmisafe
 
-Could you please send your .config or tell me how you generated it?
 
-							Thanx, Paul
+On 9/27/22 14:28, Paul E. McKenney wrote:
+> On Tue, Sep 27, 2022 at 02:13:29PM -0700, Randy Dunlap wrote:
+>>
+>>
+>> On 9/27/22 13:10, broonie@kernel.org wrote:
+>>> Hi all,
+>>>
+>>> Changes since 20220923:
+>>>
+>>
+>> In file included from ../include/linux/notifier.h:16,
+>>                  from ../include/linux/memory_hotplug.h:7,
+>>                  from ../include/linux/mmzone.h:1244,
+>>                  from ../include/linux/gfp.h:7,
+>>                  from ../include/linux/slab.h:15,
+>>                  from ../include/linux/crypto.h:20,
+>>                  from ../arch/x86/um/shared/sysdep/kernel-offsets.h:5,
+>>                  from ../arch/um/kernel/asm-offsets.c:1:
+>> ../include/linux/srcu.h: In function ‘srcu_read_lock_nmisafe’:
+>> ../include/linux/srcu.h:181:26: error: implicit declaration of function ‘__srcu_read_lock_nmisafe’; did you mean ‘srcu_read_lock_nmisafe’? [-Werror=implicit-function-declaration]
+>>   181 |                 retval = __srcu_read_lock_nmisafe(ssp, true);
+>>       |                          ^~~~~~~~~~~~~~~~~~~~~~~~
+>>       |                          srcu_read_lock_nmisafe
+>> ../include/linux/srcu.h: In function ‘srcu_read_unlock_nmisafe’:
+>> ../include/linux/srcu.h:226:17: error: implicit declaration of function ‘__srcu_read_unlock_nmisafe’; did you mean ‘srcu_read_unlock_nmisafe’? [-Werror=implicit-function-declaration]
+>>   226 |                 __srcu_read_unlock_nmisafe(ssp, idx, true);
+>>       |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~
+>>       |                 srcu_read_unlock_nmisafe
+> 
+> Could you please send your .config or tell me how you generated it?
+
+
+For x86_64 SUBARCH, ARCH=um:
+
+mkdir UML64
+make ARCH=um SUBARCH=x86_64 O=UML64 tinyconfig
+make ARCH=um SUBARCH=x86_64 O=UML64 all
+
+
+-- 
+~Randy
